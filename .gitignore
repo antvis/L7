@@ -87,3 +87,4 @@ packages/district/src/data
 .umi-production/
 .umi/
 docs-dist
+/packages/leaflet

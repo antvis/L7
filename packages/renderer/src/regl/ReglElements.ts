@@ -10,7 +10,6 @@ export default class ReglElements implements IElements {
 
   constructor(reGl: regl.Regl, options: IElementsInitializationOptions) {
     const { data, usage, type, count } = options;
-
     this.elements = reGl.elements({
       data,
       usage: usageMap[usage || gl.STATIC_DRAW],

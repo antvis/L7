@@ -2,14 +2,14 @@
 
 ```tsx
 import { Marker, MarkerLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [105, 30.258134],
         zoom: 3,
       }),
@@ -43,8 +43,8 @@ export default () => {
     )
       .then((res) => res.json())
       .then((nodes) => {
-        const markerLayer = new MarkerLayer();
-        for (let i = 0; i < 400; i++) {
+        const markerLayer = new MarkerLayer({ cluster: true });
+        for (let i = 0; i < 1000; i++) {
           const { coordinates } = nodes.features[i].geometry;
           const el = document.createElement('label');
           el.textContent = coordinates[1];
