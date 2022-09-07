@@ -40,6 +40,7 @@ export default class ReglModel implements IModel {
   constructor(reGl: regl.Regl, options: IModelInitializationOptions) {
     this.reGl = reGl;
     const {
+      pick = true,
       vs,
       fs,
       attributes,
@@ -97,14 +98,17 @@ export default class ReglModel implements IModel {
 
     this.drawCommand = reGl(drawParams);
 
-    const pickDrawParams = cloneDeep(drawParams);
+    if(pick) {
+      console.log('pick')
+      const pickDrawParams = cloneDeep(drawParams);
 
-    pickDrawParams.blend = {
-      ...pickDrawParams.blend,
-      enable: false,
-    };
-
-    this.drawPickCommand = reGl(pickDrawParams);
+      pickDrawParams.blend = {
+        ...pickDrawParams.blend,
+        enable: false,
+      };
+  
+      this.drawPickCommand = reGl(pickDrawParams);
+    }
     this.drawParams = drawParams;
   }
 
@@ -120,13 +124,15 @@ export default class ReglModel implements IModel {
     this.drawParams.elements = (elements as ReglElements).get();
 
     this.drawCommand = this.reGl(this.drawParams);
-    const pickDrawParams = cloneDeep(this.drawParams);
-    pickDrawParams.blend = {
-      ...pickDrawParams.blend,
-      enable: false,
-    };
-
-    this.drawPickCommand = this.reGl(pickDrawParams);
+    if(this.options.pick) {
+      const pickDrawParams = cloneDeep(this.drawParams);
+      pickDrawParams.blend = {
+        ...pickDrawParams.blend,
+        enable: false,
+      };
+  
+      this.drawPickCommand = this.reGl(pickDrawParams);
+    }
   }
 
   public updateAttributes(attributes: { [key: string]: IAttribute }) {
@@ -137,14 +143,16 @@ export default class ReglModel implements IModel {
     this.drawParams.attributes = reglAttributes;
     this.drawCommand = this.reGl(this.drawParams);
 
-    const pickDrawParams = cloneDeep(this.drawParams);
+    if(this.options.pick) {
+      const pickDrawParams = cloneDeep(this.drawParams);
 
-    pickDrawParams.blend = {
-      ...pickDrawParams.blend,
-      enable: false,
-    };
-
-    this.drawPickCommand = this.reGl(pickDrawParams);
+      pickDrawParams.blend = {
+        ...pickDrawParams.blend,
+        enable: false,
+      };
+  
+      this.drawPickCommand = this.reGl(pickDrawParams);
+    }
   }
 
   public addUniforms(uniforms: { [key: string]: IUniform }) {
@@ -199,7 +207,7 @@ export default class ReglModel implements IModel {
     if (!pick) {
       this.drawCommand(reglDrawProps);
     } else {
-      this.drawPickCommand(reglDrawProps);
+      this.drawPickCommand && this.drawPickCommand(reglDrawProps);
     }
     // this.drawCommand(reglDrawProps);
     // this.drawPickCommand(reglDrawProps);

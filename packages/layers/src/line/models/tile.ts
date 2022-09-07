@@ -57,6 +57,7 @@ export default class LineModel extends BaseModel {
         blend: this.getBlend(),
         depth: { enable: depth },
         stencil: getMask(mask, maskInside),
+        pick: usage !== 'basemap'
       })
       .then((model) => {
         callbackModel([model]);

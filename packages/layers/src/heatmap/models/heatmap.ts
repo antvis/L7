@@ -177,6 +177,7 @@ export default class HeatMapModel extends BaseModel {
           dstAlpha: 1,
         },
       },
+      pick: false
     });
     return model;
   }
@@ -201,6 +202,7 @@ export default class HeatMapModel extends BaseModel {
       createModel,
     } = this.rendererService;
     return createModel({
+      pick: false,
       vs,
       fs,
       attributes: {

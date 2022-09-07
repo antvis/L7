@@ -62,6 +62,7 @@ export default class FillModel extends BaseModel {
   public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       workerEnabled = false,
+      usage
     } = this.layer.getLayerConfig() as Partial<
       ILayerConfig & IPointLayerStyleOptions
     >;
@@ -82,6 +83,7 @@ export default class FillModel extends BaseModel {
         workerOptions: {
           modelType: 'pointTile',
         },
+        pick: usage !== 'basemap'
       })
       .then((model) => {
         callbackModel([model]);

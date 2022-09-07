@@ -46,6 +46,7 @@ export default class MaskModel extends BaseModel {
             zpass: gl.REPLACE,
           },
         },
+        pick: false
       })
       .then((model) => {
         callbackModel([model]);

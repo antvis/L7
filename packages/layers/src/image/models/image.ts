@@ -79,6 +79,7 @@ export default class ImageModel extends BaseModel {
         },
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);

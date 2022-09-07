@@ -159,6 +159,7 @@ export default class TextModel extends BaseModel {
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
+        pick: usage !== 'basemap'
       })
       .then((model) => {
         callbackModel([model]);
@@ -416,6 +417,7 @@ export default class TextModel extends BaseModel {
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
+        pick: usage !== 'basemap'
       })
       .then((model) => {
         this.layer.models = [model];

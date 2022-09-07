@@ -122,6 +122,7 @@ export default class WindModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         blend: this.getBlend(),
+        pick: false,
       })
       .then((model) => {
         this.colorModel = model;

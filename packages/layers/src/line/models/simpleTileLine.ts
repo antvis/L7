@@ -49,6 +49,7 @@ export default class SimpleTileLineModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
