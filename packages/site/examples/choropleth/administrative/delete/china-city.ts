@@ -76,3 +76,12 @@ scene.on('loaded', () => {
       choropleth.addToScene(scene);
     });
 });
+
+// {
+//   "filename": "china-city.ts",
+//   "title": {
+//     "zh": "中国市级地图",
+//     "en": "China Citys Map"
+//   },
+//   "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/GN35RftkmZ/c53bc5ab-189f-42a2-9288-7b34f616f18d.png"
+// },

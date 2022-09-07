@@ -69,3 +69,12 @@ const choropleth = new Choropleth({
 scene.on('loaded', () => {
   choropleth.addToScene(scene);
 });
+
+// {
+//   "filename": "world-map.ts",
+//   "title": {
+//     "zh": "世界地图",
+//     "en": "World Map"
+//   },
+//   "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/2W6xl7Y3wm/e7590fc4-f49b-43c0-ba3b-8b40a9ac3b39.png"
+// },

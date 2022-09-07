@@ -139,3 +139,9 @@ scene.on('loaded', () => {
     scene.addLayer(flyLine);
   });
 });
+
+// {
+//   "filename": "plane_animate.js",
+//   "title": "航向图",
+//   "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*8h-QSqDgzxYAAAAAAAAAAAAAARQnAQ"
+// },

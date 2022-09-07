@@ -57,3 +57,8 @@ scene.on('loaded', () => {
       scene.addLayer(layer2);
     });
 });
+// {
+//   "filename": "china_linear_in.js",
+//   "title": "中国地图-径向渐变",
+//   "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SgKRRKJ1w-EAAAAAAAAAAAAAARQnAQ"
+// },

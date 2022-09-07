@@ -161,3 +161,12 @@ function AdministrativeSwitch() {
 }
 
 ReactDOM.render(<AdministrativeSwitch />, document.getElementById('map'));
+
+    // {
+    //   "filename": "administrative-switch.tsx",
+    //   "title": {
+    //     "zh": "行政区域切换",
+    //     "en": "Administrative Switch"
+    //   },
+    //   "screenshot": "https://gw.alipayobjects.com/zos/antfincdn/qSFaP32j8q/4428acf4-9362-4705-90c9-de950be5a177.png"
+    // }

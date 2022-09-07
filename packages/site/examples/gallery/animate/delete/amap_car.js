@@ -242,3 +242,10 @@ function setMaterial(object) {
     object.material.side = THREE.DoubleSide;
   }
 }
+
+
+// {
+//   "filename": "amap_car.js",
+//   "title": "旅行轨迹",
+//   "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ghmURqau13sAAAAAAAAAAAAAARQnAQ"
+// },
