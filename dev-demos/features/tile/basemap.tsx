@@ -19,7 +19,8 @@ export default () => {
       map: new Map({
         center: [121.268, 29],
         // zoom: 12,
-        zoom: 7,
+        // zoom: 7,
+        zoom: 6,
       }),
     });
 
@@ -56,9 +57,8 @@ export default () => {
       })
         .source(source)
         .shape('simple')
-        .style({
-          color: '#696969',
-        });
+        .color('#696969');
+     
       scene.addLayer(admin);
 
       const road = new LineLayer({
@@ -67,14 +67,23 @@ export default () => {
       })
         .source(source)
         .shape('simple')
-        .style({
-          color: '#FFA500',
-          size: 2,
-        });
+        .color('#FFA500')
       scene.addLayer(road);
+
+      const poiLabel = new PointLayer({
+        sourceLayer: 'poi_label',
+        usage: 'basemap',
+        zIndex: 1
+      })
+        .source(source)
+        .shape('name', 'text')
+        .color('#000')
+        .size(10)
+      scene.addLayer(poiLabel);
 
       // const landuse_overlay = new PolygonLayer({
       //   sourceLayer: 'landuse_overlay',
+      //   usage: 'basemap',
       // })
       //   .source(source)
       //   .color('#f00');
@@ -82,14 +91,17 @@ export default () => {
 
       // const waterway = new LineLayer({
       //   sourceLayer: 'waterway',
+      //   usage: 'basemap',
       // })
       //   .source(source)
       //   .shape('simple')
-      //   .color('#87CEFA');
+      //   // .color('#87CEFA');
+      //   .color('#f00');
       // scene.addLayer(waterway);
 
       // const tunnel = new LineLayer({
       //   sourceLayer: 'tunnel',
+      //    usage: 'basemap',
       // })
       //   .source(source)
       //   .shape('simple')
@@ -102,9 +114,7 @@ export default () => {
         usage: 'basemap',
       })
         .source(source)
-        .style({
-          color: '#90EE90',
-        });
+        .color('#90EE90');
       scene.addLayer(landuse);
 
       const state_label = new PointLayer({
@@ -114,15 +124,14 @@ export default () => {
       })
         .source(source)
         .shape('name', 'text')
-        .style({
-          color: '#000',
-          size: 16,
-        });
+        .color('#000')
+        .size(12);
       scene.addLayer(state_label);
 
       // const placeLabel = new PointLayer({
       //   sourceLayer: 'place_label',
       //   zIndex: 1,
+      //   usage: 'basemap',
       // })
       //   .source(source)
       //   .shape('name', 'text')
@@ -130,16 +139,16 @@ export default () => {
       //   .size(8);
       // scene.addLayer(placeLabel);
 
-      // const marineLabel = new PointLayer({
-      //   sourceColor: 'marine_label',
-      //   zIndex: 1,
-      //   // usage: 'basemap'
-      // })
-      //   .source(source)
-      //   .shape('name', 'text')
-      //   .color('#0ff')
-      //   .size(15);
-      // scene.addLayer(marineLabel);
+      const marineLabel = new PointLayer({
+        sourceColor: 'marine_label',
+        zIndex: 1,
+        usage: 'basemap'
+      })
+        .source(source)
+        .shape('name', 'text')
+        .color('#0ff')
+        .size(15);
+      scene.addLayer(marineLabel);
 
       // const countryLabel = new PointLayer({
       //   sourceLayer: 'country_label',
@@ -157,9 +166,7 @@ export default () => {
         usage: 'basemap',
       })
         .source(source)
-        .style({
-          color: '#87CEFA',
-        });
+        .color('#87CEFA');
       scene.addLayer(water);
 
       const debugerLayer = new TileDebugLayer();

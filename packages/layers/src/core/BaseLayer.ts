@@ -488,16 +488,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    // 设置 color、size、shape、style 时由于场景服务尚未完成（并没有调用 scene.addLayer），因此暂时加入待更新属性列表
+    if(this.rawConfig.usage === 'basemap') {
+      this.style({
+        // @ts-ignore
+        color: field
+      })
+      return this;
+    }
+
     this.updateStyleAttribute('color', field, values, updateOptions);
 
-    // this.pendingStyleAttributes.push({
-    //   attributeName: 'color',
-    //   attributeField: field,
-    //   attributeValues: values,
-    //   defaultName: 'colors',
-    //   updateOptions,
-    // });
     return this;
   }
 
@@ -524,6 +524,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+    if(this.rawConfig.usage === 'basemap') {
+      // @ts-ignore
+      this.style({
+        size: field
+      })
+      return this;
+    }
     this.updateStyleAttribute('size', field, values, updateOptions);
     return this;
   }
