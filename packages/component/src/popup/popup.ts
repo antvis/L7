@@ -16,6 +16,8 @@ import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { createL7Icon } from '../utils/icon';
 
+export { Popup };
+
 export default class Popup<O extends IPopupOption = IPopupOption>
   extends EventEmitter
   implements IPopup {
