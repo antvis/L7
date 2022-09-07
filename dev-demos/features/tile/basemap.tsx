@@ -81,13 +81,13 @@ export default () => {
         .size(10);
       scene.addLayer(poiLabel);
 
-      // const landuse_overlay = new PolygonLayer({
-      //   sourceLayer: 'landuse_overlay',
-      //   usage: 'basemap',
-      // })
-      //   .source(source)
-      //   .color('#f00');
-      // scene.addLayer(landuse_overlay);
+      const landuse_overlay = new PolygonLayer({
+        sourceLayer: 'landuse_overlay',
+        usage: 'basemap',
+      })
+        .source(source)
+        .color('#f00');
+      scene.addLayer(landuse_overlay);
 
       // const waterway = new LineLayer({
       //   sourceLayer: 'waterway',
@@ -99,15 +99,15 @@ export default () => {
       //   .color('#f00');
       // scene.addLayer(waterway);
 
-      // const tunnel = new LineLayer({
-      //   sourceLayer: 'tunnel',
-      //    usage: 'basemap',
-      // })
-      //   .source(source)
-      //   .shape('simple')
-      //   // .color('#A9A9A9');
-      //   .color('#f00');
-      // scene.addLayer(tunnel);
+      const tunnel = new LineLayer({
+        sourceLayer: 'tunnel',
+         usage: 'basemap',
+      })
+        .source(source)
+        .shape('simple')
+        // .color('#A9A9A9');
+        .color('#f00');
+      scene.addLayer(tunnel);
 
       const landuse = new PolygonLayer({
         sourceLayer: 'landuse',
@@ -150,16 +150,16 @@ export default () => {
         .size(15);
       scene.addLayer(marineLabel);
 
-      // const countryLabel = new PointLayer({
-      //   sourceLayer: 'country_label',
-      //   zIndex: 2,
-      //   // usage: 'basemap'
-      // })
-      //   .source(source)
-      //   .shape('name', 'text')
-      //   .color('#f00')
-      //   .size(20);
-      // scene.addLayer(countryLabel);
+      const countryLabel = new PointLayer({
+        sourceLayer: 'country_label',
+        zIndex: 2,
+        usage: 'basemap'
+      })
+        .source(source)
+        .shape('name', 'text')
+        .color('#f00')
+        .size(15);
+      scene.addLayer(countryLabel);
 
       const water = new PolygonLayer({
         sourceLayer: 'water',
