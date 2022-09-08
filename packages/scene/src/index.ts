@@ -64,7 +64,7 @@ class Scene
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, canvas, hasBaseMap, } = config;
+    const { id, map, canvas, hasBaseMap } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
@@ -321,6 +321,10 @@ class Scene
 
   public addPopup(popup: IPopup) {
     this.popupService.addPopup(popup);
+  }
+
+  public removePopup(popup: IPopup) {
+    this.popupService.removePopup(popup);
   }
 
   public on(type: string, handle: (...args: any[]) => void): void {

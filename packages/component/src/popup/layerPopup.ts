@@ -116,7 +116,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       }
       const source = layer.getSource();
       const onSourceUpdate = this.onSourceUpdate.bind(this, layer);
-      source.on('update', onSourceUpdate);
+      source?.on('update', onSourceUpdate);
       layerInfo.onSourceUpdate = onSourceUpdate;
 
       this.layerConfigMap.set(layer, layerInfo);
@@ -146,7 +146,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
         layer.off('click', onClick);
       }
       if (onSourceUpdate) {
-        layer?.getSource().off('update', onSourceUpdate);
+        layer?.getSource()?.off('update', onSourceUpdate);
       }
     });
   }
