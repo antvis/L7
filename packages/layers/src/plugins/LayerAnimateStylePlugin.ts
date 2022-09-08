@@ -22,8 +22,9 @@ export default class LayerAnimateStylePlugin implements ILayerPlugin {
 
     // })
     layer.hooks.beforeRender.tap('LayerAnimateStylePlugin', () => {
-      // 重新计算坐标系参数
-      layer.models.forEach((model: IModel) => {
+      // @ts-ignore
+      const aniamateStatus = layer.aniamateStatus;
+      aniamateStatus && layer.models.forEach((model: IModel) => {
         model.addUniforms({
           ...layer.layerModel.getAnimateUniforms(),
         });

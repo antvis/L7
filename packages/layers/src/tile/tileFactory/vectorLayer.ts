@@ -118,6 +118,18 @@ export default class VectorLayer extends BaseLayer<
     return this;
   }
 
+  public renderModels(isPicking?: boolean) {
+    this.models.forEach((model) => {
+      model.draw(
+        {
+          uniforms: this.layerModel.getUninforms(),
+        },
+        isPicking,
+      );
+    });
+    return this;
+  }
+
   protected sourceEvent = () => {
     // Tip: vector 不支持 autoFit
     this.dataState.dataSourceNeedUpdate = true;
