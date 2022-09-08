@@ -77,6 +77,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public selectedFeatureID: number | null = null;
   public styleNeedUpdate: boolean = false;
   public rendering: boolean;
+  public forceRender: boolean = false;
   public clusterZoom: number = 0; // 聚合等级标记
   public layerType?: string | undefined;
   public triangulation?: Triangulation | undefined;
@@ -696,10 +697,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.tileLayer.render();
       return this;
     }
-    // TODO: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.getEncodedData() && this.getEncodedData().length !== 0) {
-      this.renderModels();
-    }
+    if(this.encodeDataLength <= 0 && !this.forceRender) return this;
+    // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
+    this.renderModels();
     return this;
   }
 
@@ -707,16 +707,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * renderMultiPass 专门用于渲染支持 multipass 的 layer
    */
   public async renderMultiPass() {
-    if (this.getEncodedData() && this.getEncodedData().length !== 0) {
-      if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
-        // multi render 开始执行 multiPassRender 的渲染流程
-        await this.multiPassRenderer.render();
-      } else if (this.multiPassRenderer) {
-        // renderPass 触发的渲染
-        this.renderModels();
-      } else {
-        this.renderModels();
-      }
+    if(this.encodeDataLength <= 0 && !this.forceRender) return;
+    if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
+      // multi render 开始执行 multiPassRender 的渲染流程
+      await this.multiPassRenderer.render();
+    } else if (this.multiPassRenderer) {
+      // renderPass 触发的渲染
+      this.renderModels();
+    } else {
+      this.renderModels();
     }
   }
 
@@ -1078,8 +1077,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.scaleOptions;
   }
 
+  public encodeDataLength: number = 0;
   public setEncodedData(encodedData: IEncodeFeature[]) {
     this.encodedData = encodedData;
+    this.encodeDataLength = encodedData.length;
   }
   public getEncodedData() {
     return this.encodedData;
@@ -1294,27 +1295,27 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.getEncodedData() && this.getEncodedData().length > 0) {
-      if (this.layerModelNeedUpdate && this.layerModel) {
-        this.layerModel.buildModels((models: IModel[]) => {
-          this.models = models;
-          this.hooks.beforeRender.call();
-          this.layerModelNeedUpdate = false;
-        });
-      }
-      if (this?.layerModel?.renderUpdate) {
-        this.layerModel.renderUpdate();
-      }
-
-      this.models.forEach((model) => {
-        model.draw(
-          {
-            uniforms: this.layerModel.getUninforms(),
-          },
-          isPicking,
-        );
+    if(this.encodeDataLength <= 0 && !this.forceRender) return this;
+    
+    if (this.layerModelNeedUpdate && this.layerModel) {
+      this.layerModel.buildModels((models: IModel[]) => {
+        this.models = models;
+        this.hooks.beforeRender.call();
+        this.layerModelNeedUpdate = false;
       });
     }
+    if (this?.layerModel?.renderUpdate) {
+      this.layerModel.renderUpdate();
+    }
+
+    this.models.forEach((model) => {
+      model.draw(
+        {
+          uniforms: this.layerModel.getUninforms(),
+        },
+        isPicking,
+      );
+    });
     return this;
   }
 

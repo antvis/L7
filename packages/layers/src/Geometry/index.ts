@@ -6,6 +6,18 @@ export default class GeometryLayer extends BaseLayer<
   IGeometryLayerStyleOptions
 > {
   public type: string = 'GeometryLayer';
+  public defaultSourceConfig = {
+    data: [
+      {x: 0, y: 0}
+    ],
+    options: {
+      parser: {
+        type: 'json',
+        x: 'x',
+        y: 'y',
+      },
+    },
+  };
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new GeometryModels[modelType](this);

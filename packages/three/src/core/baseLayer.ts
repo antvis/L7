@@ -39,6 +39,7 @@ export default class ThreeJSLayer
       },
     },
   };
+  public forceRender: boolean = true;
 
   public setUpdate(callback: () => void) {
     this.update = callback;
@@ -168,6 +169,7 @@ export default class ThreeJSLayer
     }
   }
   public renderModels() {
+    if(!this.threeRenderService) return this;
     if (this.isUpdate && this.update) {
       this.update();
     }
