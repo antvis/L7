@@ -24,11 +24,12 @@ export default class LayerAnimateStylePlugin implements ILayerPlugin {
     layer.hooks.beforeRender.tap('LayerAnimateStylePlugin', () => {
       // @ts-ignore
       const aniamateStatus = layer.aniamateStatus;
-      aniamateStatus && layer.models.forEach((model: IModel) => {
-        model.addUniforms({
-          ...layer.layerModel.getAnimateUniforms(),
+      aniamateStatus &&
+        layer.models.forEach((model: IModel) => {
+          model.addUniforms({
+            ...layer.layerModel.getAnimateUniforms(),
+          });
         });
-      });
     });
   }
 }

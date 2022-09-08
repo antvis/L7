@@ -9,7 +9,7 @@ import {
   IInteractionTarget,
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { ILayer, ILayerService } from '../layer/ILayerService';
+import { ILayer, ILayerService, RenderType } from '../layer/ILayerService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
@@ -322,22 +322,27 @@ export default class PickingService implements IPickingService {
     }
   }
   private async pickingAllLayer(target: IInteractionTarget) {
-    if (
-      // TODO: this.alreadyInPicking 避免多次重复拾取
-      this.alreadyInPicking ||
-      // TODO: this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
-      this.layerService.alreadyInRendering ||
-      // Tip: this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
-      this.interactionService.indragging ||
-      // TODO: 判断当前 是都进行 shader pick 拾取判断
-      !this.layerService.getShaderPickStat()
-    ) {
-      return;
-    }
+    // 判断是否进行拾取操作
+    if (!this.isPickingAllLayer()) return;
+
     this.alreadyInPicking = true;
-    await this.pickingLayers(target);
-    this.layerService.renderLayers();
+    await this.pickingLayers(target); 
+    this.layerService.renderLayers(RenderType.PickingAllLayer);
     this.alreadyInPicking = false;
+  }
+
+  private isPickingAllLayer() {
+    // this.alreadyInPicking 避免多次重复拾取
+    if(this.alreadyInPicking) return false;
+    // this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
+    if(this.layerService.alreadyInRendering) return false;
+    // this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
+    if(this.interactionService.indragging) return false;
+    // 判断当前进行 shader pick 拾取判断
+    if(!this.layerService.getShaderPickStat()) return false;
+
+    // 进行拾取
+    return true;
   }
 
   private resizePickingFBO() {
@@ -359,10 +364,8 @@ export default class PickingService implements IPickingService {
   }
   private async pickingLayers(target: IInteractionTarget) {
     const {
-      getViewportSize,
       useFramebuffer,
       clear,
-      getContainer,
     } = this.rendererService;
     this.resizePickingFBO();
 

@@ -584,6 +584,12 @@ export interface ILayerConfig {
 /**
  * 提供 Layer 管理服务
  */
+
+export enum RenderType{
+  PickingAllLayer = 'PickingAllLayer',
+  ThrottleRender = 'ThrottleRender',
+  ReRender = 'ReRender',
+}
 export interface ILayerService {
   pickedLayerId: number;
   clock: Clock;
@@ -612,7 +618,7 @@ export interface ILayerService {
   updateLayerRenderList(): void;
   reRender(): void;
   throttleRenderLayers(): void;
-  renderLayers(type?: string): void;
+  renderLayers(type?: RenderType): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
 

@@ -7,7 +7,7 @@ import Clock from '../../utils/clock';
 import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayerService } from './ILayerService';
+import { ILayerService, RenderType } from './ILayerService';
 import { throttle } from 'lodash';
 
 @injectable()
@@ -44,11 +44,11 @@ export default class LayerService implements ILayerService {
 
   public reRender =  throttle(() => {
     this.updateLayerRenderList();
-    this.renderLayers();
+    this.renderLayers(RenderType.ReRender);
   }, 32)
 
   public throttleRenderLayers = throttle(() => {
-    this.renderLayers();
+    this.renderLayers(RenderType.ThrottleRender);
   }, 16)
   
 
@@ -103,8 +103,7 @@ export default class LayerService implements ILayerService {
       this.layers.splice(layerIndex, 1);
     }
     if (refresh) {
-      this.updateLayerRenderList();
-      this.renderLayers();
+      this.throttleRenderLayers();
     }
   }
 
@@ -123,7 +122,6 @@ export default class LayerService implements ILayerService {
     }
     this.updateLayerRenderList();
     layer.destroy();
-    this.renderLayers();
   }
 
   public removeAllLayers() {
@@ -134,14 +132,26 @@ export default class LayerService implements ILayerService {
     this.enableRender = flag;
   }
 
-  public async renderLayers() {
-    if (this.alreadyInRendering || !this.enableRender) {
+  private getRenderLayerList(type?: RenderType) {
+    switch(type) {
+      case RenderType.PickingAllLayer:
+        return this.layerList.filter(layer => layer.getLayerConfig().usage !== 'basemap');
+      default: 
+        return this.layerList;
+    }
+  }
+
+  public async renderLayers(type?: RenderType) {
+    
+    const renderLayerList = this.getRenderLayerList(type);
+    
+    if (this.alreadyInRendering || renderLayerList.length === 0 || !this.enableRender) {
       return;
     }
     this.alreadyInRendering = true;
     this.clear();
 
-    for (const layer of this.layerList) {
+    for (const layer of renderLayerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
 
@@ -168,18 +178,11 @@ export default class LayerService implements ILayerService {
       }
       layer.hooks.afterRender.call();
     }
-
-    // this.layerList.forEach((layer) => {
-    //   layer.hooks.beforeRenderData.call();
-    //   layer.hooks.beforeRender.call();
-    //   layer.render();
-    //   layer.hooks.afterRender.call();
-    // });
     this.alreadyInRendering = false;
   }
 
   public updateLayerRenderList() {
-    // TODO: 每次更新都是从 layers 重新构建
+    // Tip: 每次更新都是从 layers 重新构建
     this.layerList = [];
     this.layers
       .filter((layer) => layer.inited)

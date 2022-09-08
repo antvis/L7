@@ -77,7 +77,7 @@ export default () => {
       })
         .source(source)
         .shape('name', 'text')
-        .color('#000')
+        .color('#ccc')
         .size(10);
       scene.addLayer(poiLabel);
 
