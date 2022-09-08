@@ -84,7 +84,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public defaultSourceConfig: {
     data: any[];
     options: ISourceCFG | undefined;
+  }={
+    data: [],
+    options: {
+      parser: {
+        type: 'json',
+      },
+    },
   };
+
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
