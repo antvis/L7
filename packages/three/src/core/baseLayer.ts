@@ -1,4 +1,4 @@
-import { ILayer, IMercator,ISourceCFG } from '@antv/l7-core';
+import { ILayer, IMercator, ISourceCFG } from '@antv/l7-core';
 import { BaseLayer } from '@antv/l7-layers';
 import {
   AnimationMixer,
@@ -31,14 +31,14 @@ export default class ThreeJSLayer
   public defaultSourceConfig: {
     data: any[];
     options: ISourceCFG | undefined;
-  } ={
-    data:[],
-    options:{
-      parser:{
-        type:'json'
-      }
-    }
-  }
+  } = {
+    data: [],
+    options: {
+      parser: {
+        type: 'json',
+      },
+    },
+  };
 
   public setUpdate(callback: () => void) {
     this.update = callback;

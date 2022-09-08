@@ -2,7 +2,7 @@ import BaseLayer from '../core/BaseLayer';
 import EarthAtomSphereModel from './models/atmosphere';
 import BaseEarthModel from './models/base';
 import EarthBloomSphereModel from './models/bloomsphere';
-import {  ISourceCFG } from '@antv/l7-core';
+import { ISourceCFG } from '@antv/l7-core';
 
 interface IEarthLayerStyleOptions {
   opacity: number;
@@ -24,14 +24,14 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
   public defaultSourceConfig: {
     data: any[];
     options: ISourceCFG | undefined;
-  } ={
-    data:[],
-    options:{
-      parser:{
-        type:'json'
-      }
-    }
-  }
+  } = {
+    data: [],
+    options: {
+      parser: {
+        type: 'json',
+      },
+    },
+  };
 
   public buildModels() {
     const shape = this.getModelType();
