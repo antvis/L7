@@ -1,6 +1,6 @@
 ---
-title: LayerPopup
+title: 图层气泡
 order: 2
 ---
 
-<code src="./popup.tsx" compact defaultShowCode></code>
+<code src="./layerPopup.tsx" compact defaultShowCode></code>

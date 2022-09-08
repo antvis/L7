@@ -1,9 +1,9 @@
 import {
   GaodeMap,
+  LayerPopup,
   PointLayer,
-  Popup,
   Scene,
-  Fullscreen,
+  LineLayer,
   // anchorType,
 } from '@antv/l7';
 import { featureCollection, point } from '@turf/turf';
@@ -13,7 +13,7 @@ import { FunctionComponent, useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);
-  const [popup, setPopup] = useState<Popup | null>(null);
+  const [popup, setPopup] = useState<LayerPopup | null>(null);
 
   useEffect(() => {
     const newScene = new Scene({
@@ -28,29 +28,73 @@ const Demo: FunctionComponent = () => {
     });
 
     newScene.on('loaded', () => {
-      const newPopup = new Popup({
-        closeOnClick: true,
-        closeOnEsc: true,
-        lngLat: {
-          lng: 120.104697,
-          lat: 30.260704,
-        },
-        html: 'fldksja  jdklfaj  jdfklas d skljf as lkfdsa f adsfa fsd alfk',
+      const pointLayer = new PointLayer({
+        name: 'pointLayer',
       });
-      newScene.addPopup(newPopup);
-
-      const pointLayer = new PointLayer();
       pointLayer
-        .source(featureCollection([point([120.104697, 30.260704])]))
+        .source(
+          featureCollection([
+            point([120.104697, 30.260704], {
+              name: '1',
+            }),
+            point([120.104697, 30.261715], {
+              name: '2',
+            }),
+          ]),
+        )
         .color('#ff0000')
         .size(10);
-
+      const lineString = new LineLayer({
+        name: 'lineLayer',
+      });
+      lineString
+        .source(
+          featureCollection([
+            {
+              type: 'Feature',
+              properties: {
+                name: 'luelue',
+              },
+              geometry: {
+                type: 'LineString',
+                coordinates: [
+                  [120.103615, 30.262026],
+                  [120.103172, 30.261771],
+                  [120.102697, 30.261934],
+                ],
+              },
+            },
+          ]),
+        )
+        .size(6)
+        .color('#00ff00');
       newScene.addLayer(pointLayer);
+      newScene.addLayer(lineString);
+      const newPopup = new LayerPopup({
+        config: [
+          {
+            layer: 'pointLayer',
+            fields: [
+              {
+                field: 'name',
+                fieldFormat: (key) => {
+                  return '名称';
+                },
+                valueFormat: (value) => {
+                  return '12345';
+                },
+              },
+            ],
+          },
+          {
+            layer: 'lineLayer',
+            fields: ['name'],
+          },
+        ],
+        trigger: 'click',
+      });
+      newScene.addPopup(newPopup);
       setPopup(newPopup);
-
-      const fullscreen = new Fullscreen();
-      newScene.addControl(fullscreen);
-
       setScene(newScene);
     });
   }, []);

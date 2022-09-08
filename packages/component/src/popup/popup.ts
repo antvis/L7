@@ -90,7 +90,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   constructor(cfg?: Partial<O>) {
     super();
     this.popupOption = {
-      ...this.getDefault(),
+      ...this.getDefault(cfg ?? {}),
       ...cfg,
     };
     const { lngLat } = this.popupOption;
@@ -127,7 +127,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   }
 
   // 移除popup
-  public remove = () => {
+  public remove() {
     if (!this.isOpen()) {
       return;
     }
@@ -153,7 +153,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     this.emit('close');
     return this;
-  };
+  }
 
   /**
    * 获取 option 配置
@@ -223,14 +223,24 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   }
 
   public show() {
-    DOM.removeClass(this.container, 'l7-popup-hide');
+    if (this.isShow) {
+      return;
+    }
+    if (this.container) {
+      DOM.removeClass(this.container, 'l7-popup-hide');
+    }
     this.isShow = true;
     this.emit('show');
     return this;
   }
 
   public hide() {
-    DOM.addClass(this.container, 'l7-popup-hide');
+    if (!this.isShow) {
+      return;
+    }
+    if (this.container) {
+      DOM.addClass(this.container, 'l7-popup-hide');
+    }
     this.isShow = false;
     this.emit('hide');
     return this;
@@ -332,7 +342,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.setPopupPosition(x, y);
   };
 
-  protected getDefault(): O {
+  protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
       closeButton: true,
@@ -464,7 +474,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     if (!this.container && popupContainer) {
       this.container = DOM.create(
         'div',
-        `l7-popup ${className ?? ''}`,
+        `l7-popup ${className ?? ''} ${!this.isShow ? 'l7-popup-hide' : ''}`,
         popupContainer as HTMLElement,
       );
 
@@ -506,9 +516,11 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @protected
    */
   protected setPopupPosition(left: number, top: number) {
-    const { offsets } = this.popupOption;
-    this.container.style.left = left + offsets[0] + 'px';
-    this.container.style.top = top - offsets[1] + 'px';
+    if (this.container) {
+      const { offsets } = this.popupOption;
+      this.container.style.left = left + offsets[0] + 'px';
+      this.container.style.top = top - offsets[1] + 'px';
+    }
   }
 
   /**
@@ -521,6 +533,11 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     return keys.some((key) => key in option);
   }
 
+  /**
+   * 根据参数 HTML 片段返回对应的 Fragment
+   * @param html
+   * @protected
+   */
   protected getPopupHTMLFragment(html: PopupHTML) {
     const frag = window.document.createDocumentFragment();
     const temp = window.document.createElement('body');

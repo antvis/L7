@@ -1,6 +1,5 @@
 import Marker from './marker';
 import MarkerLayer from './marker-layer';
-import { createL7Icon } from './utils/icon';
 
 // 引入样式
 import './css/index.less';
@@ -16,7 +15,8 @@ export * from './control/mouseLocation';
 export * from './control/zoom';
 export * from './control/scale';
 export * from './popup/popup';
+export * from './popup/layerPopup';
 
-export { Marker, MarkerLayer, createL7Icon };
+export { Marker, MarkerLayer };
 
 export * from './interface';
