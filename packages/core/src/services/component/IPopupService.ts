@@ -82,6 +82,11 @@ export interface IPopupOption {
   html?: PopupHTML;
 
   /**
+   * Popup 气泡的标题
+   */
+  title?: PopupHTML;
+
+  /**
    * 初始的经纬度位置
    */
   lngLat?: ILngLat;

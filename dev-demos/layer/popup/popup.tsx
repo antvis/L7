@@ -36,16 +36,9 @@ const Demo: FunctionComponent = () => {
           lng: 120.104697,
           lat: 30.260704,
         },
+        title: '123456',
         html: 'fldksja  jdklfaj  jdfklas d skljf as lkfdsa f adsfa fsd alfk',
       });
-      // newPopup.setLnglat({
-      //   lng: 120.104697,
-      //   lat: 30.260704,
-      // });
-      // const dom = document.createElement('div');
-      // dom.innerHTML = 'fadslifjsalkfjasdk';
-      // // newPopup.setHTML(dom);
-      // newPopup.setText('fdksajfl');
       newScene.addPopup(newPopup);
 
       const pointLayer = new PointLayer();
@@ -222,6 +215,15 @@ const Demo: FunctionComponent = () => {
           }}
         >
           lngLat
+        </button>
+        <button
+          onClick={() => {
+            popup?.setOptions({
+              title: undefined,
+            });
+          }}
+        >
+          title
         </button>
         <button
           onClick={() => {

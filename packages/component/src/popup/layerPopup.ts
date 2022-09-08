@@ -14,7 +14,7 @@ export type LayerItemConfig = {
 };
 
 export interface ILayerPopupOption extends IPopupOption {
-  config: LayerItemConfig[];
+  config: Array<ILayer | LayerItemConfig>;
   trigger: 'hover' | 'click';
 }
 
@@ -23,4 +23,33 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
   //   const result = super.addTo(scene);
   //   return result;
   // }
+
+  protected bindLayerEvent() {
+    const { config } = this.popupOption;
+    config.map(this.getLayer).map((layer) => {
+      layer.on('mousemove', this.onLayerMouseMove);
+      layer.on('mouseout', this.onLayerMouseOut);
+      layer.on('click', this.onLayerClick);
+    });
+  }
+
+  protected unbindLayerEvent() {
+    const { config } = this.popupOption;
+    config.map(this.getLayer).map((layer) => {
+      layer.off('mousemove', this.onLayerMouseMove);
+      layer.off('mouseout', this.onLayerMouseOut);
+      layer.off('click', this.onLayerClick);
+    });
+  }
+
+  protected onLayerMouseMove = (e: any) => {};
+
+  protected onLayerMouseOut = (e: any) => {};
+
+  protected onLayerClick = (e: any) => {};
+
+  protected getLayer(config: ILayer | LayerItemConfig): ILayer {
+    // @ts-ignore
+    return config.layer || config;
+  }
 }

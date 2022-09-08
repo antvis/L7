@@ -1,9 +1,11 @@
 import {
+  ILayerService,
   ILngLat,
   IMapService,
   IPopup,
   IPopupOption,
   ISceneService,
+  PopupHTML,
   TYPES,
 } from '@antv/l7-core';
 import {
@@ -28,6 +30,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected popupOption: O;
   protected mapsService: IMapService;
   protected sceneService: ISceneService;
+  protected layerService: ILayerService;
   protected scene: Container;
 
   /**
@@ -49,10 +52,28 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected container: HTMLElement;
 
   /**
-   * popup 内容容器
+   * popup 气泡容器
    * @protected
    */
   protected content: HTMLElement;
+
+  /**
+   * popup 气泡标题
+   * @protected
+   */
+  protected contentTitle?: HTMLElement;
+
+  /**
+   * popup 内容容器
+   * @protected
+   */
+  protected contentPanel: HTMLElement;
+
+  /**
+   * popup 内容标题
+   * @protected
+   */
+  protected title: HTMLElement;
 
   /**
    * 气泡箭头对应的 DOM
@@ -85,6 +106,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   public addTo(scene: Container) {
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     this.sceneService = scene.get<ISceneService>(TYPES.ISceneService);
+    this.layerService = scene.get<ILayerService>(TYPES.ILayerService);
     this.mapsService.on('camerachange', this.update);
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
@@ -156,6 +178,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
         'style',
         'lngLat',
         'offsets',
+        'title',
       ])
     ) {
       if (this.container) {
@@ -217,26 +240,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * 设置 HTML 内容
    * @param html
    */
-  public setHTML(html: string | HTMLElement | HTMLElement[]) {
-    const frag = window.document.createDocumentFragment();
-    const temp = window.document.createElement('body');
-    let child: ChildNode | null;
-    if (typeof html === 'string') {
-      temp.innerHTML = html;
-    } else if (Array.isArray(html)) {
-      temp.append(...html);
-    } else if (html instanceof HTMLElement) {
-      temp.append(html);
-    }
-    while (true) {
-      child = temp.firstChild;
-      if (!child) {
-        break;
-      }
-      frag.appendChild(child);
-    }
+  public setHTML(html: PopupHTML) {
     this.popupOption.html = html;
-    return this.setDOMContent(frag);
+    return this.setDOMContent(this.getPopupHTMLFragment(html));
   }
 
   /**
@@ -348,7 +354,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    */
   protected setDOMContent(htmlNode: ChildNode | DocumentFragment) {
     this.createContent();
-    this.content.appendChild(htmlNode);
+    this.contentPanel.appendChild(htmlNode);
     this.update();
     return this;
   }
@@ -394,6 +400,20 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       DOM.remove(this.content);
     }
     this.content = DOM.create('div', 'l7-popup-content', this.container);
+
+    if (this.popupOption.title) {
+      this.contentTitle = DOM.create(
+        'div',
+        'l7-popup-content__title',
+        this.content,
+      );
+      this.contentTitle?.append(
+        this.getPopupHTMLFragment(this.popupOption.title),
+      );
+    } else {
+      this.contentTitle = undefined;
+    }
+
     if (this.popupOption.closeButton) {
       const closeButton = createL7Icon('l7-icon-guanbi l7-popup-close-button');
       this.content.appendChild(closeButton);
@@ -412,6 +432,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     } else {
       this.closeButton = undefined;
     }
+
+    this.contentPanel = DOM.create(
+      'div',
+      'l7-popup-content__panel',
+      this.content,
+    );
   }
 
   protected onCloseButtonClick = (e: Event) => {
@@ -493,5 +519,26 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    */
   protected checkUpdateOption(option: Partial<O>, keys: Array<keyof O>) {
     return keys.some((key) => key in option);
+  }
+
+  protected getPopupHTMLFragment(html: PopupHTML) {
+    const frag = window.document.createDocumentFragment();
+    const temp = window.document.createElement('body');
+    let child: ChildNode | null;
+    if (typeof html === 'string') {
+      temp.innerHTML = html;
+    } else if (Array.isArray(html)) {
+      temp.append(...html);
+    } else if (html instanceof HTMLElement) {
+      temp.append(html);
+    }
+    while (true) {
+      child = temp.firstChild;
+      if (!child) {
+        break;
+      }
+      frag.appendChild(child);
+    }
+    return frag;
   }
 }
