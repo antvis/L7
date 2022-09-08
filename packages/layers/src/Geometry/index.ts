@@ -7,9 +7,7 @@ export default class GeometryLayer extends BaseLayer<
 > {
   public type: string = 'GeometryLayer';
   public defaultSourceConfig = {
-    data: [
-      {x: 0, y: 0}
-    ],
+    data: [{ x: 0, y: 0 }],
     options: {
       parser: {
         type: 'json',

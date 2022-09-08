@@ -85,7 +85,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public defaultSourceConfig: {
     data: any[];
     options: ISourceCFG | undefined;
-  }={
+  } = {
     data: [],
     options: {
       parser: {
@@ -93,7 +93,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       },
     },
   };
-
 
   public dataState: IDataState = {
     dataSourceNeedUpdate: false,
@@ -697,7 +696,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.tileLayer.render();
       return this;
     }
-    if(this.encodeDataLength <= 0 && !this.forceRender) return this;
+    if (this.encodeDataLength <= 0 && !this.forceRender) return this;
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     this.renderModels();
     return this;
@@ -707,7 +706,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * renderMultiPass 专门用于渲染支持 multipass 的 layer
    */
   public async renderMultiPass() {
-    if(this.encodeDataLength <= 0 && !this.forceRender) return;
+    if (this.encodeDataLength <= 0 && !this.forceRender) return;
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       // multi render 开始执行 multiPassRender 的渲染流程
       await this.multiPassRenderer.render();
@@ -1295,8 +1294,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if(this.encodeDataLength <= 0 && !this.forceRender) return this;
-    
+    if (this.encodeDataLength <= 0 && !this.forceRender) return this;
+
     if (this.layerModelNeedUpdate && this.layerModel) {
       this.layerModel.buildModels((models: IModel[]) => {
         this.models = models;

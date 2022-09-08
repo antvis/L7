@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
-  
     const scene = new Scene({
       id: 'map',
       map: new Earth({
@@ -14,8 +13,6 @@ export default () => {
         zoom: 3,
       }),
     });
-
-  
 
     const earthlayer = new EarthLayer()
       .source(
@@ -56,8 +53,6 @@ export default () => {
 
       earthlayer.setEarthTime(4.0);
     });
-
-      
   }, []);
   return (
     <div
