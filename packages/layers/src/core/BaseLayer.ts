@@ -1260,7 +1260,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public needPick(type: string): boolean {
     // 地图图层的判断
-    if(this.rawConfig.usage === 'basemap') return false;
+    if (this.rawConfig.usage === 'basemap') return false;
 
     const {
       enableHighlight = true,
