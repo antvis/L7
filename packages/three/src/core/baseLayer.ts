@@ -1,4 +1,4 @@
-import { ILayer, IMercator } from '@antv/l7-core';
+import { ILayer, IMercator, ISourceCFG } from '@antv/l7-core';
 import { BaseLayer } from '@antv/l7-layers';
 import {
   AnimationMixer,
@@ -28,6 +28,17 @@ export default class ThreeJSLayer
   private animateMixer: AnimationMixer[] = [];
   // 地图中点墨卡托坐标
   private center: IMercator;
+  public defaultSourceConfig: {
+    data: any[];
+    options: ISourceCFG | undefined;
+  } = {
+    data: [],
+    options: {
+      parser: {
+        type: 'json',
+      },
+    },
+  };
 
   public setUpdate(callback: () => void) {
     this.update = callback;
