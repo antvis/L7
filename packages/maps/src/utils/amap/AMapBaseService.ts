@@ -29,7 +29,7 @@ import { toPaddingOptions } from '../utils';
 import { Version } from '../../version';
 import Viewport from '../Viewport';
 import './logo.css';
-import { MapTheme } from '../theme';
+import { MapTheme } from './theme';
 let mapdivCount = 0;
 // @ts-ignore
 window.forceWebGL = true;
