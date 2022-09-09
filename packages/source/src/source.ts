@@ -31,7 +31,6 @@ function mergeCustomizer(objValue: any, srcValue: any) {
     return srcValue;
   }
 }
-export const tileParserTypes = ['mvt', 'geojsonvt', 'testTile', 'rasterTile'];
 
 export default class Source extends EventEmitter implements ISource {
   public inited: boolean = false;
@@ -253,10 +252,8 @@ export default class Source extends EventEmitter implements ISource {
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
 
-    if(tileParserTypes.indexOf(type) >= 0) {
-      // 为瓦片图层的父图层创建数据瓦片金字塔管理器
-      this.tileset = this.initTileset();
-    }
+    // 为瓦片图层的父图层创建数据瓦片金字塔管理器
+    this.tileset = this.initTileset();
 
     // 判断当前 source 是否需要计算范围
     if(parser.cancelExtent) return;
