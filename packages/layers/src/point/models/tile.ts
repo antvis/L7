@@ -69,7 +69,7 @@ export default class FillModel extends BaseModel {
     this.layer.triangulation = PointFillTriangulation;
     this.layer
       .buildLayerModel({
-        moduleName: 'pointTile',
+        moduleName: 'pointTile_' + usage,
         vertexShader: point_tile_vert,
         fragmentShader: point_tile_frag,
         triangulation: PointFillTriangulation,

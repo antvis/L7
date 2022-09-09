@@ -9,7 +9,7 @@ import {
   IInteractionTarget,
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { ILayer, ILayerService, RenderType } from '../layer/ILayerService';
+import { ILayer, ILayerService, ITileLayer, RenderType } from '../layer/ILayerService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
@@ -303,7 +303,7 @@ export default class PickingService implements IPickingService {
           .getLayers()
           .filter((l) => l.tileLayer)
           .map((l) => {
-            l.tileLayer.clearPickState();
+            (l.tileLayer as ITileLayer).clearPickState();
           });
       }
     }
@@ -390,12 +390,12 @@ export default class PickingService implements IPickingService {
             });
           // Tip: clear last picked tilelayer state
           this.pickedTileLayers.map((pickedTileLayer) =>
-            pickedTileLayer.tileLayer?.clearPick(target.type),
+            (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
           );
 
           // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
-          if (layer.tileLayer) {
-            return layer.tileLayer.pickLayers(target);
+          if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
+            return (layer.tileLayer as ITileLayer).pickLayers(target);
           }
 
           layer.hooks.beforePickingEncode.call();

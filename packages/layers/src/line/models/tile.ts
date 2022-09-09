@@ -50,7 +50,7 @@ export default class LineModel extends BaseModel {
 
     this.layer
       .buildLayerModel({
-        moduleName: 'lineTile' + usage,
+        moduleName: 'lineTile_' + usage,
         vertexShader: usage === 'basemap' ? line_tile_map_vert : line_tile_vert,
         fragmentShader: usage === 'basemap' ? line_tile_map_frag : line_tile_frag,
         triangulation: LineTriangulation,

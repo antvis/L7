@@ -62,7 +62,6 @@ export default class BaseTileLayer implements ITileLayer {
       mapService,
       rendererService,
       pickingService,
-      layerService,
       transforms
     );
 

@@ -1,51 +1,32 @@
 import {
-  IInteractionTarget,
   ILayer,
-  ILayerService,
   IMapService,
-  IPickingService,
   IRendererService,
   ISubLayerInitOptions,
-  ITileLayerManager,
-  ITilePickManager,
-  ITransform,
+  IBaseTileLayerManager,
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp, Tile } from '@antv/l7-utils';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';
-import TilePickManager from './tilePickerManager';
-export class BaseMapTileLayerManager implements ITileLayerManager {
+export class BaseMapTileLayerManager implements IBaseTileLayerManager {
   public sourceLayer: string;
   public parent: ILayer;
   public children: ILayer[];
   public mapService: IMapService;
   public rendererService: IRendererService;
-  public tilePickManager: ITilePickManager;
   private tileFactory: ITileFactory;
   private initOptions: ISubLayerInitOptions;
   private rampColorsData: any;
-  private transforms: ITransform[];
   constructor(
     parent: ILayer,
     mapService: IMapService,
     rendererService: IRendererService,
-    pickingService: IPickingService,
-    layerService: ILayerService,
-    transforms: ITransform[]
   ) {
     this.parent = parent;
     this.children = parent.layerChildren;
     this.mapService = mapService;
     this.rendererService = rendererService;
-    this.transforms = transforms;
 
-    this.tilePickManager = new TilePickManager(
-      parent,
-      rendererService,
-      pickingService,
-      this.children,
-      layerService,
-    );
 
     this.setSubLayerInitOptipn();
     this.initTileFactory();
@@ -119,11 +100,29 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
   }
 
   public render(): void {
-    this.tilePickManager?.normalRender(this.children);
-  }
-
-  public pickLayers(target: IInteractionTarget) {
-    return false;
+    this.children
+    .filter((layer) => layer.inited)
+    .filter((layer) => layer.isVisible())
+    .map((layer) => {
+      layer.hooks.beforeRenderData.call();
+      layer.hooks.beforeRender.call();
+      if (layer.masks.length > 0) {
+        // 清除上一次的模版缓存
+        this.rendererService.clear({
+          stencil: 0,
+          depth: 1,
+          framebuffer: null,
+        });
+        layer.masks.map((m: ILayer) => {
+          m.hooks.beforeRenderData.call();
+          m.hooks.beforeRender.call();
+          m.render();
+          m.hooks.afterRender.call();
+        });
+      }
+      layer.render();
+      layer.hooks.afterRender.call();
+    });
   }
 
   private setSubLayerInitOptipn() {
@@ -177,7 +176,6 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
     this.initOptions = {
       usage: 'basemap',
       layerType: this.parent.type,
-      transforms: this.transforms,
       shape: layerShape,
       zIndex,
       opacity,

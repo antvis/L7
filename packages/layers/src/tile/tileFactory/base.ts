@@ -71,7 +71,7 @@ export default class TileFactory implements ITileFactory {
   }
 
   public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { sourceLayer, featureId, transforms, layerType, shape, usage } = initOptions;
+    const { sourceLayer, featureId, transforms = [], layerType, shape, usage } = initOptions;
     if (!sourceLayer) {
       return EMPTY_FEATURE_DATA;
     }

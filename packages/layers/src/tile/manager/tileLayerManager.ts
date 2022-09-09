@@ -1,7 +1,6 @@
 import {
   IInteractionTarget,
   ILayer,
-  ILayerService,
   IMapService,
   IPickingService,
   IRendererService,
@@ -33,7 +32,6 @@ export class TileLayerManager implements ITileLayerManager {
     mapService: IMapService,
     rendererService: IRendererService,
     pickingService: IPickingService,
-    layerService: ILayerService,
     transforms: ITransform[]
   ) {
     this.parent = parent;
@@ -47,7 +45,6 @@ export class TileLayerManager implements ITileLayerManager {
       rendererService,
       pickingService,
       this.children,
-      layerService,
     );
     this.tileConfigManager = new TileConfigManager();
 

@@ -153,7 +153,7 @@ export default class TextModel extends BaseModel {
     const { usage } = this.layer.getLayerConfig();
     this.layer
       .buildLayerModel({
-        moduleName: 'pointTileText' + usage,
+        moduleName: 'pointTileText_' + usage,
         vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
         fragmentShader: usage === 'basemap' ? text_map_frag : text_frag,
         triangulation: TextTriangulation.bind(this),
@@ -411,7 +411,7 @@ export default class TextModel extends BaseModel {
     this.filterGlyphs();
     this.layer
       .buildLayerModel({
-        moduleName: 'pointTileText' + usage,
+        moduleName: 'pointTileText_' + usage,
         vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
         fragmentShader: usage === 'basemap' ? text_map_frag : text_frag,
         triangulation: TextTriangulation.bind(this),

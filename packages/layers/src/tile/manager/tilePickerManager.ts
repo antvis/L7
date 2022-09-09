@@ -1,7 +1,6 @@
 import {
   IInteractionTarget,
   ILayer,
-  ILayerService,
   IPickingService,
   IRendererService,
   ITilePickManager,
@@ -12,7 +11,6 @@ export default class TilePickManager extends EventEmitter
   public isLastPicked: boolean = false;
   private rendererService: IRendererService;
   private pickingService: IPickingService;
-  private layerService: ILayerService;
   private children: ILayer[];
   private parent: ILayer;
 
@@ -21,13 +19,11 @@ export default class TilePickManager extends EventEmitter
     rendererService: IRendererService,
     pickingService: IPickingService,
     children: ILayer[],
-    layerService: ILayerService,
   ) {
     super();
     this.parent = parent;
     this.rendererService = rendererService;
     this.pickingService = pickingService;
-    this.layerService = layerService;
     this.children = children;
   }
 

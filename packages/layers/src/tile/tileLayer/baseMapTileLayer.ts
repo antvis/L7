@@ -1,18 +1,17 @@
 import {
-  IInteractionTarget,
   ILayer,
   ILayerService,
   IMapService,
   ISource,
-  ITileLayer,
-  ITileLayerManager,
+  IBaseTileLayer,
+  IBaseTileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
 import { Tile, TilesetManager } from '@antv/l7-utils';
 import { BaseMapTileLayerManager } from '../manager/baseMapTileLayerManager';
 import { debounce } from 'lodash';
 
-export default class BaseTileLayer implements ITileLayer {
+export default class BaseTileLayer implements IBaseTileLayer {
   public get children() {
     return this.tileLayerManager.children;
   }
@@ -23,7 +22,7 @@ export default class BaseTileLayer implements ITileLayer {
   public initedTileset: boolean = false;
   // 瓦片数据管理器
   public tilesetManager: TilesetManager | undefined;
-  public tileLayerManager: ITileLayerManager;
+  public tileLayerManager: IBaseTileLayerManager;
   public scaleField: any;
 
   private lastViewStates: {
@@ -39,8 +38,6 @@ export default class BaseTileLayer implements ITileLayer {
     rendererService,
     mapService,
     layerService,
-    pickingService,
-    transforms
   }: ITileLayerOPtions) {
     const parentSource = parent.getSource();
     const { sourceLayer } =
@@ -54,9 +51,6 @@ export default class BaseTileLayer implements ITileLayer {
       parent,
       mapService,
       rendererService,
-      pickingService,
-      layerService,
-      transforms
     );
 
     this.initTileSetManager();
@@ -69,24 +63,6 @@ export default class BaseTileLayer implements ITileLayer {
     if (this.tileLayerManager) {
       this.tileLayerManager.render();
     }
-  }
-
-  public clearPick(type: string) {
-  }
-
-  /**
-   * 清除 select 的选中状态
-   */
-  public clearPickState() {
-  }
-
-  /**
-   * 瓦片图层独立的拾取逻辑
-   * @param target
-   * @returns
-   */
-  public pickLayers(target: IInteractionTarget) {
-    return false;
   }
 
   public tileLoaded(tile: Tile) {

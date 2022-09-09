@@ -39,7 +39,7 @@ export default class FillModel extends BaseModel {
     this.layer.triangulation = polygonTriangulation;
     this.layer
       .buildLayerModel({
-        moduleName: 'polygonTile' + usage,
+        moduleName: 'polygonTile_' + usage,
         vertexShader: usage === 'basemap' ? polygon_tile_map_vert : polygon_tile_vert,
         fragmentShader: usage === 'basemap' ? polygon_tile_map_frag : polygon_tile_frag,
         triangulation: polygonTriangulation,

@@ -137,7 +137,7 @@ export interface ISubLayerStyles {
 export interface ISubLayerInitOptions {
   usage: string|undefined;
   layerType: string;
-  transforms: ITransform[];
+  transforms?: ITransform[];
   shape?: string | string[] | IScaleValue;
   // options
   zIndex: number;
@@ -185,11 +185,10 @@ export interface ITilePickManager {
   pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
 }
 
-export interface ITileLayerManager {
+export interface IBaseTileLayerManager {
   sourceLayer: string;
   parent: ILayer;
   children: ILayer[];
-  tilePickManager: ITilePickManager;
 
   createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
 
@@ -201,21 +200,26 @@ export interface ITileLayerManager {
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;
-
-  pickLayers(target: IInteractionTarget): boolean;
-
   updateLayersConfig(layers: ILayer[], key: string, value: any): void;
 }
 
-export interface ITileLayer {
+export interface ITileLayerManager extends IBaseTileLayerManager{
+  tilePickManager: ITilePickManager;
+  pickLayers(target: IInteractionTarget): boolean;
+}
+
+export interface IBaseTileLayer {
   type: string;
   sourceLayer: string;
   parent: ILayer;
-  tileLayerManager: ITileLayerManager;
+  tileLayerManager: IBaseTileLayerManager;
   tilesetManager: TilesetManager | undefined;
   children: ILayer[];
   scaleField: any;
   render(isPicking?: boolean): void;
+}
+export interface ITileLayer extends IBaseTileLayer{
+  tileLayerManager: ITileLayerManager;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
   clearPickState(): void;
@@ -263,7 +267,7 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
-  tileLayer: ITileLayer;
+  tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
