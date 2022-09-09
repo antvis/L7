@@ -24,7 +24,6 @@ export default class DataSourcePlugin implements ILayerPlugin {
           this.updateClusterData(layer);
         });
       }
-      // this.updateClusterData(layer);
     });
 
     // 检测数据是否需要更新
@@ -37,6 +36,8 @@ export default class DataSourcePlugin implements ILayerPlugin {
   }
 
   private updateClusterData(layer: ILayer): boolean {
+    // Tip: 矢量瓦片不需要进行聚合操作
+    if(layer.isTileLayer || layer.tileLayer) return false;
     const source = layer.getSource();
     const cluster = source.cluster;
     const { zoom = 0 } = source.clusterOptions;

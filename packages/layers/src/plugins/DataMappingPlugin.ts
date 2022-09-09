@@ -1,7 +1,6 @@
 import {
   IEncodeFeature,
   IFontService,
-  IGlobalConfigService,
   ILayer,
   ILayerPlugin,
   IMapService,
@@ -20,8 +19,6 @@ import { ILineLayerStyleOptions } from '../core/interface';
 
 @injectable()
 export default class DataMappingPlugin implements ILayerPlugin {
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
 
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
@@ -58,8 +55,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           this.generateMaping(layer, { styleAttributeService });
         });
       }
-
-      // this.generateMaping(layer, { styleAttributeService });
 
       return true;
     });

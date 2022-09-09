@@ -104,7 +104,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
+        update: (feature: IEncodeFeature) => {
           const { filter } = feature;
           return filter ? [1] : [0];
         },
@@ -127,7 +127,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
           type: gl.FLOAT,
         },
         size: 4,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
+        update: (feature: IEncodeFeature) => {
           const { color } = feature;
           return !color || !color.length ? [1, 1, 1, 1] : color;
         },
@@ -154,8 +154,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           return [featureIdx];
         },
