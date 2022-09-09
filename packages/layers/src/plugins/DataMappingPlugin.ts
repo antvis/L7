@@ -229,7 +229,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
-
       usedAttributes.forEach((attribute: IStyleAttribute) => {
         if (
           attribute.name === 'shape' &&

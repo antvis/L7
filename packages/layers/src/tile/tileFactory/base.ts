@@ -141,12 +141,14 @@ export default class TileFactory implements ITileFactory {
       ...this.getLayerInitOption(initOptions),
     });
 
+    if(layerType) layer.type = layerType;
+
     // Tip: sign tile layer
     layer.isTileLayer = true; // vector 、raster
-    // vector layer set config
-    if (layer.isVector) {
+    
+    // vector layer set event
+    if (layer.isVector && usage !== 'basemap') {
       this.emitEvent([layer]);
-      layer.type = layerType;
       layer.select(true);
     }
 

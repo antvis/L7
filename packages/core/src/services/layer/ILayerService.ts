@@ -588,8 +588,6 @@ export interface ILayerConfig {
 
 export enum RenderType{
   PickingAllLayer = 'PickingAllLayer',
-  ThrottleRender = 'ThrottleRender',
-  ReRender = 'ReRender',
 }
 export interface ILayerService {
   pickedLayerId: number;

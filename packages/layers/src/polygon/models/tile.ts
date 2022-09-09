@@ -4,9 +4,9 @@ import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 
-import polygon_tile_frag from '../../tile/shader/minify_picking_frag.glsl';
+import polygon_tile_frag from '../../shader/minify_picking_frag.glsl';
 import polygon_tile_vert from '../shaders/tile/polygon_tile_vert.glsl';
-import polygon_tile_map_frag from '../../tile/shader/minify_frag.glsl';
+import polygon_tile_map_frag from '../../shader/minify_frag.glsl';
 import polygon_tile_map_vert from '../shaders/tile/polygon_tile_map_vert.glsl';
 export default class FillModel extends BaseModel {
   public getUninforms() {

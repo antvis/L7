@@ -44,15 +44,15 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       return;
     }
 
-    if (layer.isTileLayer) {
-      this.registerPositionAttribute(styleAttributeService);
-      this.registerColorAttribute(styleAttributeService);
-      return;
-    }
-
     const { usage } = layer.getLayerConfig();
     if (usage === 'basemap ') {
       this.registerPositionAttribute(styleAttributeService);
+      return;
+    }
+
+    if (layer.isTileLayer) {
+      this.registerPositionAttribute(styleAttributeService);
+      this.registerColorAttribute(styleAttributeService);
       return;
     }
 

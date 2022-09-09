@@ -496,16 +496,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    if (this.rawConfig.usage === 'basemap') {
-      this.style({
-        // @ts-ignore
-        color: field,
-      });
-      return this;
-    }
-
     this.updateStyleAttribute('color', field, values, updateOptions);
-
     return this;
   }
 
@@ -532,13 +523,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    if (this.rawConfig.usage === 'basemap') {
-      // @ts-ignore
-      this.style({
-        size: field,
-      });
-      return this;
-    }
     this.updateStyleAttribute('size', field, values, updateOptions);
     return this;
   }
@@ -698,7 +682,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public render(): ILayer {
-    if (this.tileLayer !== undefined) {
+    if (this.tileLayer) {
       // 瓦片图层执行单独的 render 渲染队列
       this.tileLayer.render();
       return this;
@@ -848,10 +832,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public hide(): ILayer {
-    if (this.type === 'CanvasLayer' && this.layerModel.clearCanvas) {
-      // 对 canvasLayer 的 hide 操作做特殊处理
-      this.layerModel.clearCanvas();
-    }
     this.updateLayerConfig({
       visible: false,
     });
@@ -1393,15 +1373,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (layerConfig && layerConfig.autoFit) {
       this.fitBounds(layerConfig.fitBoundsOptions);
     }
-    // 对外暴露事件 迁移到 DataMappingPlugin generateMapping，保证在重新重新映射后触发
-    // this.emit('dataUpdate');
     this.reRender();
   };
 
   protected reRender() {
-    if (this.inited) {
-      this.layerService.reRender();
-    }
+    this.inited && this.layerService.reRender();
   }
   protected splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],

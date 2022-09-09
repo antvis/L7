@@ -4,7 +4,6 @@ import 'reflect-metadata';
 import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
-import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayerService, RenderType } from './ILayerService';
@@ -39,16 +38,13 @@ export default class LayerService implements ILayerService {
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-
-  public reRender =  throttle(() => {
+  public reRender = throttle(() => {
     this.updateLayerRenderList();
-    this.renderLayers(RenderType.ReRender);
+    this.renderLayers();
   }, 32)
 
   public throttleRenderLayers = throttle(() => {
-    this.renderLayers(RenderType.ThrottleRender);
+    this.renderLayers();
   }, 16)
   
 
@@ -142,7 +138,6 @@ export default class LayerService implements ILayerService {
   }
 
   public async renderLayers(type?: RenderType) {
-    
     const renderLayerList = this.getRenderLayerList(type);
     
     if (this.alreadyInRendering || renderLayerList.length === 0 || !this.enableRender) {

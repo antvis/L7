@@ -8,10 +8,10 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { TileSimpleLineTriangulation } from '../../core/triangulation';
-import simple_line_frag from '../../tile/shader/minify_frag.glsl';
+import simple_line_frag from '../../shader/minify_frag.glsl';
 import simple_line_vert from '../shaders/tile/simpleline_vert.glsl';
 
-import simple_line_map_frag from '../../tile/shader/minify_frag.glsl';
+import simple_line_map_frag from '../../shader/minify_frag.glsl';
 import simple_line_map_vert from '../shaders/tile/simpleline_map_vert.glsl';
 export default class SimpleTileLineModel extends BaseModel {
   public getUninforms(): IModelUniform {

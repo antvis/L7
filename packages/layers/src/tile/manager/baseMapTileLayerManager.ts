@@ -148,7 +148,6 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
         ],
         positions: [0, 0.25, 0.5, 0.75, 1.0],
       },
-      featureId = 'id',
       workerEnabled = false,
       sourceLayer,
 
@@ -157,15 +156,17 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
       pixelConstantG = 256,
       pixelConstantB = 1,
       pixelConstantRGB = 0.1,
-
-      usage,
-      color,
-      size
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
    
     const source = this.parent.getSource();
     const parentParserType = source.getParserType();
 
+  
+    const colorAttribute = this.parent.getAttribute('color');
+    const basemapColor = (colorAttribute?.scale?.field || '#fff') as string;
+    const sizeAttribute = this.parent.getAttribute('size');
+    const basemapSize = (sizeAttribute?.scale?.field || 1) as number;
+ 
     const layerShape = getLayerShape(this.parent.type, this.parent);
 
     if (rampColors) {
@@ -174,16 +175,16 @@ export class BaseMapTileLayerManager implements ITileLayerManager {
     }
 
     this.initOptions = {
-      usage,
+      usage: 'basemap',
       layerType: this.parent.type,
       transforms: this.transforms,
       shape: layerShape,
       zIndex,
       opacity,
       sourceLayer: this.getSourceLayer(parentParserType, sourceLayer),
-      featureId,
-      basemapColor: color as unknown as string,
-      basemapSize: size as unknown as number,
+      featureId: undefined,
+      basemapColor,
+      basemapSize,
       mask: getMaskValue(this.parent.type, mask),
       stroke,
       strokeWidth,

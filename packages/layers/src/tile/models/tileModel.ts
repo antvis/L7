@@ -7,11 +7,20 @@ export default class TileModel extends BaseModel {
     return {};
   }
 
+  private getTileLayer(usage?: string) {
+    switch(usage) {
+      case 'basemap':
+        return TMSBaseMapTileLayer;
+      default:
+        return TMSTileLayer;
+    }
+  }
+
   public initModels() {
     const source = this.layer.getSource();
     const { usage } = this.layer.getLayerConfig();
     if (source?.data.isTile && !this.layer.tileLayer) {
-      const tileLayer = (usage === 'basemap' ? TMSBaseMapTileLayer : TMSTileLayer);
+      const tileLayer = this.getTileLayer(usage);
       this.layer.tileLayer = new tileLayer({
         parent: this.layer,
         rendererService: this.rendererService,

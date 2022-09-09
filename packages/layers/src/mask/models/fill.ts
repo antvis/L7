@@ -4,7 +4,7 @@ import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IMaskLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
-import mask_frag from '../shaders/mask_frag.glsl';
+import mask_frag from '../../shader/minify_frag.glsl';
 import mask_vert from '../shaders/mask_vert.glsl';
 
 export default class MaskModel extends BaseModel {

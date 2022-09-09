@@ -1,4 +1,5 @@
 import BaseLayer from '../core/BaseLayer';
+import { ILayer } from '@antv/l7-core';
 import { ICanvasLayerStyleOptions } from '../core/interface';
 import CanvasModels, { CanvasModelType } from './models/index';
 export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
@@ -18,6 +19,18 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
       this.emit('modelLoaded', null);
     });
   }
+
+  public hide(): ILayer {
+    // 清除画布
+    this.layerModel.clearCanvas && this.layerModel?.clearCanvas();
+
+    this.updateLayerConfig({
+      visible: false,
+    });
+    this.reRender();
+    return this;
+  }
+
   protected getConfigSchema() {
     return {
       properties: {
