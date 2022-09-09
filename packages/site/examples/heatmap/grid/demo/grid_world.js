@@ -1,9 +1,9 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
+  map: new GaodeMap({
     style: 'blank',
     pitch: 0,
     center: [ 110.097892, 33.853662 ],
