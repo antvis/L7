@@ -272,6 +272,7 @@ export interface ILayer {
     data: any[],
     options: ISourceCFG | undefined,
   },
+  encodeDataLength: number;
   pickedFeatureID: number | null;
   hooks: {
     init: SyncBailHook;
