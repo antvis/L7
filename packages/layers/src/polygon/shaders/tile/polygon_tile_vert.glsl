@@ -7,13 +7,13 @@ uniform mat4 u_Mvp;
 // uniform vec2 u_tileOrigin;
 // uniform float u_coord;
 
-varying vec4 v_Color;
+varying vec4 v_color;
 
 #pragma include "projection"
 #pragma include "picking"
 
 void main() {
-  v_Color = a_Color;
+  v_color = a_Color;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
 
   // if(u_coord > 0.0) {

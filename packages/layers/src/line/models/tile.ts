@@ -10,9 +10,9 @@ import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 
-import line_tile_frag from '../shaders/tile/line_tile_frag.glsl';
+import line_tile_frag from '../../tile/shader/minify_picking_frag.glsl';
 import line_tile_vert from '../shaders/tile/line_tile_vert.glsl';
-import line_tile_map_frag from '../shaders/tile/line_tile_map_frag.glsl'
+import line_tile_map_frag from '../../tile/shader/minify_frag.glsl';
 import line_tile_map_vert from '../shaders/tile/line_tile_map_vert.glsl'
 
 export default class LineModel extends BaseModel {
