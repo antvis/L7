@@ -40,7 +40,8 @@ export default class TestTile extends TileFactory {
       parser: {
         type: 'json',
         x: 'textLng',
-        y: 'textLat'
+        y: 'textLat',
+        cancelExtent: true,
       }
     })
     .shape('key', 'text')
@@ -55,6 +56,11 @@ export default class TestTile extends TileFactory {
     .source({
       type: 'FeatureCollection',
       features: features,
+    }, {
+      parser: {
+        type: 'geojson',
+        cancelExtent: true,
+      }
     })
     .shape('simple')
     .style({

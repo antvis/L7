@@ -109,6 +109,7 @@ export default class TileFactory implements ITileFactory {
             type: 'geojson',
             featureId,
             usage,
+            cancelExtent: true
           },
           transforms
         },
@@ -174,6 +175,11 @@ export default class TileFactory implements ITileFactory {
         .source({
           type: 'FeatureCollection',
           features: [tile.bboxPolygon],
+        }, {
+          parser: {
+            type: 'geojson',
+            cancelExtent: true
+          }
         });
 
       layers.push(masklayer as VectorLayer);
