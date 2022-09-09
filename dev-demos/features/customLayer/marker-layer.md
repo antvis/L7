@@ -14,11 +14,12 @@ export default () => {
         zoom: 3,
       }),
     });
-    // addMarkers1(scene);
-    addMarkers2(scene);
+    // addMarkers(scene);
+    testRemoveMarkerLayer(scene);
+    // testClearMarkerLayer(scene);
   }, []);
 
-  const addMarkers1 = (scene) => {
+  const addMarkers = (scene) => {
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
     )
@@ -37,29 +38,67 @@ export default () => {
       });
   };
 
-  const addMarkers2 = (scene) => {
+  // bugfix验证：执行scene.removeMarkerLayer后，缩放图层marker数据还原
+  const testRemoveMarkerLayer = (scene) => {
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
     )
       .then((res) => res.json())
       .then((nodes) => {
-        const markerLayer = new MarkerLayer({ cluster: true });
-        for (let i = 0; i < 1000; i++) {
+        const markerLayer = new MarkerLayer({
+          cluster: true,
+        });
+        for (let i = 0; i < nodes.features.length; i++) {
           const { coordinates } = nodes.features[i].geometry;
-          const el = document.createElement('label');
-          el.textContent = coordinates[1];
-          el.style.background = getColor(coordinates[1]);
-          el.style.borderColor = getColor(coordinates[1]);
-
-          const marker = new Marker({
-            element: el,
-          }).setLnglat({
+          const marker = new Marker().setLnglat({
             lng: coordinates[0],
             lat: coordinates[1],
           });
           markerLayer.addMarker(marker);
         }
         scene.addMarkerLayer(markerLayer);
+        // 3秒后删除图层
+        setTimeout(() => {
+          scene.removeMarkerLayer(markerLayer);
+        }, 3000);
+      });
+  };
+
+  // bugfix验证：执行markerLayer.clear后，图层聚合能力失效
+  const testClearMarkerLayer = (scene) => {
+    fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
+    )
+      .then((res) => res.json())
+      .then((nodes) => {
+        const markerLayer = new MarkerLayer({
+          cluster: true,
+        });
+
+        for (let i = 0; i < nodes.features.length; i++) {
+          const { coordinates } = nodes.features[i].geometry;
+          const marker = new Marker().setLnglat({
+            lng: coordinates[0],
+            lat: coordinates[1],
+          });
+          markerLayer.addMarker(marker);
+        }
+        scene.addMarkerLayer(markerLayer);
+
+        setTimeout(() => {
+          if (markerLayer.getMarkers().length > 0) {
+            markerLayer.clear();
+          }
+
+          for (let i = 0; i < 200; i++) {
+            const { coordinates } = nodes.features[i].geometry;
+            const marker = new Marker().setLnglat({
+              lng: coordinates[0],
+              lat: coordinates[1],
+            });
+            markerLayer.addMarker(marker);
+          }
+        }, 3 * 1000);
       });
   };
 
