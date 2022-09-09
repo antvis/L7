@@ -39,7 +39,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * AMapService
  */
 @injectable()
-export default abstract class BaeMapService<T> implements IMapService<Map & T> {
+export default abstract class BaseMapService<T> implements IMapService<Map & T> {
   public version: string = Version.L7MAP;
   public map: Map & T;
   protected viewport: IViewport | unknown;

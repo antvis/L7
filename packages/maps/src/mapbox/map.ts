@@ -10,7 +10,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import 'reflect-metadata';
 import { IMapboxInstance } from '../../typings/index';
 import Viewport from './Viewport';
-import BaeMapService from '../utils/BaeMapService';
+import BaseMapService from '../utils/BaseMapService';
 window.mapboxgl = mapboxgl;
 
 let mapdivCount = 0;
@@ -20,7 +20,7 @@ const MAPBOX_API_KEY =
  * AMapService
  */
 @injectable()
-export default class MapboxService extends BaeMapService<
+export default class MapboxService extends BaseMapService<
   Map & IMapboxInstance
 > {
   // get mapStatus method

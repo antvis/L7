@@ -8,14 +8,14 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
 import Viewport from '../utils/Viewport';
-import BaeMapService from '../utils/BaeMapService';
+import BaseMapService from '../utils/BaseMapService';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * AMapService
  */
 @injectable()
-export default class L7MapService extends BaeMapService<Map> {
+export default class L7MapService extends BaseMapService<Map> {
   public lngLatToMercator(
     _lnglat: [number, number],
     _altitude: number,

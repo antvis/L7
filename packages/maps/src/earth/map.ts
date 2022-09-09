@@ -13,7 +13,7 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
 import Viewport from './Viewport';
-import BaeMapService from '../utils/BaeMapService';
+import BaseMapService from '../utils/BaseMapService';
 const EventMap: {
   [key: string]: any;
 } = {
@@ -28,7 +28,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * EarthService
  */
 @injectable()
-export default class L7EarthService extends BaeMapService<Map>
+export default class L7EarthService extends BaseMapService<Map>
   implements IEarthService {
   public lngLatToMercator(
     lnglat: [number, number],
