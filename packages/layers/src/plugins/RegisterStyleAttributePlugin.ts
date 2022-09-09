@@ -151,10 +151,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number) => {
           return [featureIdx];
         },
       },

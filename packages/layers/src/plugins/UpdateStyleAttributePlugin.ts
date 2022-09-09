@@ -32,10 +32,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
   ) {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
-    if (
-      filter &&
-      filter.needRegenerateVertices
-    ) {
+    if (filter && filter.needRegenerateVertices) {
       layer.layerModelNeedUpdate = true;
       attributes.forEach((attr) => (attr.needRegenerateVertices = false));
       return;

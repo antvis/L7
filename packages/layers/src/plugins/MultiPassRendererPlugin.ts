@@ -24,7 +24,6 @@ import { createMultiPassRenderer } from '../utils/multiPassRender';
  */
 @injectable()
 export default class MultiPassRendererPlugin implements ILayerPlugin {
-
   private enabled: boolean;
 
   public apply(

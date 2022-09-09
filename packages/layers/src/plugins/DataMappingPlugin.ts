@@ -19,7 +19,6 @@ import { ILineLayerStyleOptions } from '../core/interface';
 
 @injectable()
 export default class DataMappingPlugin implements ILayerPlugin {
-
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 

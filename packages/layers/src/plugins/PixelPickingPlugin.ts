@@ -82,7 +82,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       'PixelPickingPlugin',
       (pickedColor: number[]) => {
         const { highlightColor, activeMix = 0 } = layer.getLayerConfig();
-   
+
         const highlightColorInArray =
           typeof highlightColor === 'string'
             ? rgb2arr(highlightColor)
