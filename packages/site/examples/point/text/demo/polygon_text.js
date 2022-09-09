@@ -1,10 +1,9 @@
 import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
-    pitch: 0,
+  map: new GaodeMap({
     style: 'light',
     center: [ -96, 37.8 ],
     zoom: 3

@@ -1,9 +1,9 @@
-import { Mapbox, Scene } from '@antv/l7';
+import { GaodeMap, Scene } from '@antv/l7';
 import { Choropleth } from '@antv/l7plot';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
+  map: new GaodeMap({
     style: 'blank',
     center: [120.19382669582967, 30.258134],
     zoom: 3,

@@ -1,28 +1,13 @@
 /* eslint-disable no-eval */
 import { Scene, LineLayer, PointLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
+  map: new GaodeMap({
     pitch: 40,
-    style: {
-      version: 8,
-      sprite: 'https://lzxue.github.io/font-glyphs/sprite/sprite',
-      glyphs:
-        'https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf',
-      sources: {},
-      layers: [
-        {
-          id: 'background',
-          type: 'background',
-          paint: {
-            'background-color': '#2b2b3a'
-          }
-        }
-      ]
-    },
     center: [ 40, 40.16797 ],
+    style: 'dark',
     zoom: 2.5
   })
 });
