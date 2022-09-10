@@ -237,11 +237,8 @@ export default class Marker extends EventEmitter {
     const { lng, lat } = this.lngLat;
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
     if (element) {
-      element.style.display = 'block';
-      element.style.whiteSpace = 'nowrap';
-      const { containerHeight, containerWidth, bounds } =
+       const { containerHeight, containerWidth, bounds } =
         this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
-
       if (!bounds) return;
       // 当前可视区域包含跨日界线
       if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
@@ -256,6 +253,7 @@ export default class Marker extends EventEmitter {
           pos.x = newPos.x;
         }
       }
+      
       // 不在当前可视区域内隐藏点
       if (
         pos.x > containerWidth ||
@@ -263,10 +261,13 @@ export default class Marker extends EventEmitter {
         pos.y > containerHeight ||
         pos.y < 0
       ) {
-        element.style.display = 'none';
+        element.style.display !== 'none'&& (element.style.display='none')
+      }else{
+        element.style.display = 'block';
+        element.style.whiteSpace = 'nowrap';
+        element.style.left = pos.x + offsets[0] + 'px';
+        element.style.top = pos.y - offsets[1] + 'px';
       }
-      element.style.left = pos.x + offsets[0] + 'px';
-      element.style.top = pos.y - offsets[1] + 'px';
     }
   }
 

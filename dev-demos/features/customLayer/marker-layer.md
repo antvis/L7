@@ -45,9 +45,7 @@ export default () => {
     )
       .then((res) => res.json())
       .then((nodes) => {
-        const markerLayer = new MarkerLayer({
-          cluster: true,
-        });
+        const markerLayer = new MarkerLayer()
         for (let i = 0; i < nodes.features.length; i++) {
           const { coordinates } = nodes.features[i].geometry;
           const marker = new Marker().setLnglat({
@@ -56,11 +54,7 @@ export default () => {
           });
           markerLayer.addMarker(marker);
         }
-        scene.addMarkerLayer(markerLayer);
-        // 3秒后删除图层
-        setTimeout(() => {
-          scene.removeMarkerLayer(markerLayer);
-        }, 3000);
+        scene.addMarkerLayer(markerLayer)
       });
   };
 
