@@ -91,7 +91,6 @@ export default () => {
       }),
     });
 
-
     const multipolygon = {
       type: 'Feature',
       geometry: {
