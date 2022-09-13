@@ -3,7 +3,6 @@ import * as React from 'react';
 
 import PointExtrue from './components/PointsExtrude';
 import PointsNormal from './components/PointsNormal';
-import PointIconFont from './components/PointsIconFont';
 import PointRader from './components/PointsRadar';
 
 import PointEarthFill from './components/PointsEarthFill';
@@ -18,7 +17,6 @@ import LineGreatCircle from './components/LineGreatCircle';
 import LineWall from './components/LineWall';
 import LineEarthArc3D from './components/LineEarthArc3D';
 
-import PolygonFill from './components/Polygon';
 import PolygonExtrude from './components/PolygonExtrude';
 import PolygonOcean from './components/PolygonOcean';
 import PolygonWater from './components/PolygonWater';
@@ -42,7 +40,6 @@ import SourceTest from './components/SourceTest';
 storiesOf('图层渲染流程改造', module)
   .add('PointExtrue', () => <PointExtrue />)
   .add('PointsNormal', () => <PointsNormal />)
-  .add('PointIconFont', () => <PointIconFont />)
   .add('PointRader', () => <PointRader />)
   .add('PointEarthFill', () => <PointEarthFill />)
   .add('PointEarthExtrude', () => <PointEarthExtrude />)
@@ -56,7 +53,6 @@ storiesOf('图层渲染流程改造', module)
   .add('LineWall', () => <LineWall />)
   .add('LineEarthArc3D', () => <LineEarthArc3D />)
 
-  .add('PolygonFill', () => <PolygonFill />)
   .add('PolygonExtrude', () => <PolygonExtrude />)
   .add('PolygonOcean', () => <PolygonOcean />)
   .add('PolygonWater', () => <PolygonWater />)

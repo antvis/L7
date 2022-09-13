@@ -7,7 +7,6 @@ import Amapdemo_extrude from './components/amapdemo_extrude'
 
 import Amap2demo_winds from "./components/amap2demo_winds"
 
-import Amap2demo_polygon from './components/amap2demo_polygon'
 import Amap2demo_polygon_extrude from './components/amap2demo_polygon_extrude'
 
 import Amap2demo_arcLine from "./components/amap2demo_arcLine"
@@ -42,8 +41,6 @@ import Amap2demo_instance from "./components/amap2demo_instance"
 
 import Amap2demo_drawControl from "./components/amap2demo_drawControl"
 
-import Amap2demo_mesh from "./components/amap2demo_mesh"
-import Amap2demo_mesh2 from "./components/amap2demo_mesh2"
 import Amap2demo_meshStyleMap from './components/amap2demo_meshStyleMap';
 
 import Amap2demo_styleMap from "./components/amap2demo_styleMap" 
@@ -67,7 +64,6 @@ storiesOf('地图方法', module)
         .add('高德地图 point/extrude', () => <Amapdemo_extrude />)
         .add('高德地图2.0 point/extrude', () => <Amap2demo_extrude />)
 
-        .add('高德地图2.0 polygon', () => <Amap2demo_polygon />)
         .add('高德地图2.0 polygon_extrude', () => <Amap2demo_polygon_extrude />)
 
         .add('高德地图2.0 line_arc', () => <Amap2demo_arcLine />)
@@ -105,8 +101,6 @@ storiesOf('地图方法', module)
 
         .add('高德地图2.0 drawControl实例', () => <Amap2demo_drawControl />)
 
-        .add('高德地图2.0 mesh实例', () => <Amap2demo_mesh />)
-        .add('高德地图2.0 mesh实例2', () => <Amap2demo_mesh2 />)
         .add('高德地图 mesh 样式数据映射', () => <Amap2demo_meshStyleMap/>)
 
         .add('高德地图 样式数据映射', () => <Amap2demo_styleMap/>)
