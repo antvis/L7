@@ -109,10 +109,10 @@ export default class BaseTileLayer implements IBaseTileLayer {
       const { visible } = this.parent.getLayerConfig();
       if (zoom < 3 && visible) {
         this.parent.updateLayerConfig({ visible: false });
-        this.layerService.updateLayerRenderList();
+        this.layerService.reRender();
       } else if (zoom >= 3 && !visible) {
         this.parent.updateLayerConfig({ visible: true });
-        this.layerService.updateLayerRenderList();
+        this.layerService.reRender();
       }
     }
 
