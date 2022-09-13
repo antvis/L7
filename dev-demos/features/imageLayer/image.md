@@ -1,2 +1,2 @@
-### 图片图层
+### Image Layer
 <code src="./image.tsx"></code>

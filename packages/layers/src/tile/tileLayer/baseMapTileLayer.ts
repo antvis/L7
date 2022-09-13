@@ -65,6 +65,7 @@ export default class BaseTileLayer implements IBaseTileLayer {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public tileLoaded(tile: Tile) {
     //
   }
@@ -133,6 +134,7 @@ export default class BaseTileLayer implements IBaseTileLayer {
       return;
     }
     // 瓦片数据加载成功
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.tilesetManager.on('tile-loaded', (tile: Tile) => {
       // 将事件抛出，图层上可以监听使用
     });

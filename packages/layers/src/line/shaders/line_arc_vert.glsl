@@ -8,7 +8,7 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
 
 uniform float u_lineDir: 1.0;

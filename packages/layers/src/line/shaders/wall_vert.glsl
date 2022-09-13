@@ -12,7 +12,7 @@ attribute float a_Distance;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
 uniform float u_icon_step: 100;
 uniform float u_heightfixed;
 

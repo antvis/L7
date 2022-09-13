@@ -7,7 +7,7 @@ varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
 uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
 
 #pragma include "sdf_2d"
 #pragma include "picking"
