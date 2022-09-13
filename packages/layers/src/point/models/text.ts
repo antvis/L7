@@ -231,6 +231,7 @@ export default class TextModel extends BaseModel {
       this.reBuildModel();
       return true;
     }
+    
     return false;
   }
 
@@ -253,9 +254,6 @@ export default class TextModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { rotate = 0 } = feature;
           return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
@@ -278,7 +276,6 @@ export default class TextModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[5], vertex[6]];
         },
@@ -300,9 +297,6 @@ export default class TextModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 12 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -327,7 +321,6 @@ export default class TextModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

@@ -22,7 +22,6 @@ import PolygonDemo from './components/polygon';
 import Polygon3D from './components/Polygon3D';
 import WorldDemo from './components/polygon_line';
 import RasterLayerDemo from './components/RasterLayer';
-import TextLayerDemo from './components/Text';
 
 // @ts-ignore
 storiesOf('图层', module)
@@ -32,7 +31,6 @@ storiesOf('图层', module)
   .add('数据更新', () => <DataUpdate />)
   .add('点动画', () => <AnimatePoint />)
   .add('3D点', () => <Point3D />)
-  .add('文字', () => <TextLayerDemo />)
   .add('Column', () => <Column />)
   .add('图片标注', () => <PointImage />)
   .add('面3d图层', () => <Polygon3D />)

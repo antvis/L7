@@ -1,6 +1,5 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
   IModel,
@@ -134,20 +133,11 @@ export default class NormalModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
-  }
-
-  private defaultStyleOptions(): Partial<IPointLayerStyleOptions> {
-    return {
-      blend: BlendType.additive,
-    };
   }
 }

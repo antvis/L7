@@ -6,7 +6,6 @@ import Amap2demo_destroy from './components/amap2demo_destroy';
 import Amap2demo_extrude from './components/amap2demo_extrude'
 import Amapdemo_extrude from './components/amapdemo_extrude'
 import Amap2demo_text from './components/amap2demo_text'
-import Amap2demo_textSelect from './components/amap2demo_textSelect'
 import Amap2demo_iconfont from './components/amap2demo_iconfont';
 import Amap2demo_image from './components/amap2demo_image'
 
@@ -31,21 +30,15 @@ import Amap2demo_lineLinear from './components/amap2demo_lineLinear';
 import Amap2demo_road2 from './components/amap2demo_road2';
 import LineBlur from './components/lineBlur';
 
-import Amap2demo_heatmap from "./components/amap2demo_heatmap"
 import Amap2demo_heatmap3D from "./components/amap2demo_heatmap3D"
 import Amap2demo_heatmap_hexagon from "./components/amap2demo_heatmap_hexagon"
 import Amap2demo_heatmap_hexagon_world from './components/amap2demo_heatmap_hexagon_world';
 import Amap2demo_heatmap_grid from "./components/amap2demo_heatmap_grid"
 
-import Amap2demo_imageLayer from "./components/amap2demo_imagelayer"
-
 import Amap2demo_rasterLayer from "./components/amap2demo_rasterlayer"
-
-import Amap2demo_citybuilding from "./components/amap2demo_citybuilding"
 
 import Amap2demo_drilldown from "./components/amap2demo_drilldown"
 
-import Amap2demo_markerlayer from "./components/amap2demo_markerlayer"
 import Amap2demo_markerPopup from './components/amap2demo_markerPopup';
 import Amap2demo_clustermarker from './components/amap2demo_clustermarker';
 
@@ -59,8 +52,6 @@ import Amap2demo_meshStyleMap from './components/amap2demo_meshStyleMap';
 
 import Amap2demo_styleMap from "./components/amap2demo_styleMap" 
 
-import Amap2demo_textOffset from "./components/amap2demo_textOffset"
-
 import ShapeUpdate from './components/shapeUpdate'
 import BusLine from './components/busline'
 import AmapPlugin from './components/plugin'
@@ -68,10 +59,7 @@ import DestroyClear from './components/destroyClear'
 import PlaneLine from './components/planeLine'
 import Slider from './components/slider'
 import WindMap from './components/amap2demo_wind'
-import SimplePoint from './components/simplePoint';
 import LineWall from './components/linewall'
-import GridTile from './components/gridTile'
-import SimpleLine from './components/simpleLine'
 import Cluster from './components/cluster'
 import Mask from './components/mask'
 import PolygonExteudeTex from './components/polygon_extrudeTex';
@@ -85,7 +73,6 @@ storiesOf('地图方法', module)
         .add('高德地图 point/extrude', () => <Amapdemo_extrude />)
         .add('高德地图2.0 point/extrude', () => <Amap2demo_extrude />)
         .add('高德地图2.0 point/text', () => <Amap2demo_text />)
-        .add('高德地图2.0 point/textSelect', () => <Amap2demo_textSelect />)
         .add('高德地图2.0 point/iconfont', () => <Amap2demo_iconfont />)
         .add('高德地图2.0 point/image', () => <Amap2demo_image />)
 
@@ -111,20 +98,15 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 road2', () => <Amap2demo_road2 />)
         .add('LineBlur', () => <LineBlur />)
 
-        .add('高德地图2.0 heatmap', () => <Amap2demo_heatmap />)
         .add('高德地图2.0 heatmap3D', () => <Amap2demo_heatmap3D />)
         .add('高德地图2.0 heatmap3D/hexagon', () => <Amap2demo_heatmap_hexagon />)
         .add('高德地图2.0 heatmap/hexagon/world', () => <Amap2demo_heatmap_hexagon_world />)
         .add('高德地图2.0 heatmap3D/grid', () => <Amap2demo_heatmap_grid />)
 
-        .add('高德地图2.0 imageLayer', () => <Amap2demo_imageLayer />)
-
         .add('高德地图2.0 rasterLayer', () => <Amap2demo_rasterLayer />)
-        .add('高德地图2.0 citybuildLayer', () => <Amap2demo_citybuilding />)
 
         .add('高德地图2.0 点击下钻', () => <Amap2demo_drilldown />)
 
-        .add('高德地图2.0 Marker图层', () => <Amap2demo_markerlayer />)
         .add('marker popup', () => <Amap2demo_markerPopup/>)
         .add('高德地图2.0 clusterMarker图层', () => <Amap2demo_clustermarker />)
 
@@ -137,7 +119,6 @@ storiesOf('地图方法', module)
         .add('高德地图 mesh 样式数据映射', () => <Amap2demo_meshStyleMap/>)
 
         .add('高德地图 样式数据映射', () => <Amap2demo_styleMap/>)
-        .add('高德地图 样式映射 文字偏移', () => <Amap2demo_textOffset/>)
 
         .add('测试销毁', () => <Amap2demo_destroy/>)
 
@@ -148,11 +129,8 @@ storiesOf('地图方法', module)
         .add('DestroyClear', () => <DestroyClear/>)
         .add('PlaneLine', () => <PlaneLine/>)
         .add('Slider', () => <Slider/>)
-        .add('SimplePoint', () => <SimplePoint/>)
         .add('LineWall', () => <LineWall/>)
         .add('BusLine', () => <BusLine/>)
-        .add('GridTile', () => <GridTile/>)
-        .add('SimpleLine', () => <SimpleLine/>)
         .add('Cluster', () => <Cluster/>)
         .add('Mask', () => <Mask/>)
         .add('PolygonExteudeTex', () => <PolygonExteudeTex/>)
