@@ -1,4 +1,4 @@
-import { AMapScene, Marker, PointLayer } from '@antv/l7-react';
+import { AMapScene, Marker } from '@antv/l7-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import './index.less';

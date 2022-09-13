@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * AMapService
  */
@@ -5,32 +6,21 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import {
   Bounds,
   CoordinateSystem,
-  ICameraOptions,
-  ICoordinateSystemService,
-  IGlobalConfigService,
-  ILngLat,
-  IMapConfig,
-  IMapService,
-  IMercator,
   IPoint,
-  IStatusOptions,
   IViewport,
-  MapServiceEvent,
-  TYPES,
+  IMapCamera,
 } from '@antv/l7-core';
 import { amap2Project, DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapInstance } from '../../typings/index';
-import { SimpleMapCoord } from '../simpleMapCoord';
-import { toPaddingOptions } from '../utils';
 import { Version } from '../version';
 import './logo.css';
 import { MapTheme } from './theme';
 import Viewport from './Viewport';
+import AMapBaseService from '../utils/amap/AMapBaseService';
 
-let mapdivCount = 0;
 // @ts-ignore
 window.forceWebGL = true;
 
@@ -38,10 +28,7 @@ window.forceWebGL = true;
 const AMAP_API_KEY: string = 'ff533602d57df6f8ab3b0fea226ae52f';
 // const AMAP_VERSION: string = '1.4.15';
 const AMAP_VERSION: string = '2.0.5';
-/**
- * 确保多个场景只引入一个高德地图脚本
- */
-const AMAP_SCRIPT_ID: string = 'amap-script';
+
 /**
  * 高德地图脚本是否加载完毕
  */
@@ -55,14 +42,8 @@ let pendingResolveQueue: Array<() => void> = [];
  * AMapService
  */
 @injectable()
-export default class AMapService
-  implements IMapService<AMap.Map & IAMapInstance> {
+export default class AMapService extends AMapBaseService {
   public version: string = Version['GAODE2.x'];
-  public simpleMapCoord: SimpleMapCoord = new SimpleMapCoord();
-  /**
-   * 原始地图实例
-   */
-  public map: AMap.Map & IAMapInstance;
 
   /**
    * 用于 customCooords 数据的计算
@@ -70,30 +51,7 @@ export default class AMapService
   public sceneCenter!: [number, number]; // 一般使用用户数据的第一个
   public sceneCenterMKT!: [number, number]; // 莫卡托
 
-  // 背景色
-  public bgColor: string = 'rgba(0, 0, 0, 0)';
-
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-
-  @inject(TYPES.MapConfig)
-  private readonly config: Partial<IMapConfig>;
-
-  @inject(TYPES.ICoordinateSystemService)
-  private readonly coordinateSystemService: ICoordinateSystemService;
-
-  @inject(TYPES.IEventEmitter)
-  private eventEmitter: any;
-
-  private markerContainer: HTMLElement;
-  private $mapContainer: HTMLElement | null;
-
-  private viewport: Viewport;
-
-  private cameraChangedCallback: (viewport: IViewport) => void;
-  public setBgColor(color: string) {
-    this.bgColor = color;
-  }
+  protected viewport: Viewport;
 
   /**
    *   设置数据的绘制中心 高德2.0
@@ -182,116 +140,25 @@ export default class AMapService
       // amap2 的 amap-maps 新增 z-index=0; 样式，让 marker 中 zIndex 失效
       amap.style.zIndex = 'auto';
       this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
-      // this.markerContainer = DOM.create(
-      //   'div',
-      //   'l7-marker-container2',
-      //   mapContainer,
-      // );
-      // this.markerContainer = mapContainer;
-    }
-  }
-  public getMarkerContainer(): HTMLElement {
-    return this.markerContainer;
-  }
-
-  //  map event
-  public on(type: string, handler: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.on(type, handler);
-    } else {
-      this.map.on(type, handler);
-    }
-  }
-  public off(type: string, handler: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.off(type, handler);
-    } else {
-      this.map.off(type, handler);
     }
   }
 
-  public getContainer(): HTMLElement | null {
-    return this.map.getContainer();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public updateView(_viewOption: Partial<IMapCamera>): void {}
+
+  public getOverlayContainer(): HTMLElement | undefined {
+    return undefined;
   }
 
-  public getMapCanvasContainer(): HTMLElement {
-    return this.map
-      .getContainer()
-      ?.getElementsByClassName('amap-maps')[0] as HTMLElement;
-  }
-
-  public getSize(): [number, number] {
-    const size = this.map.getSize();
-    return [size.getWidth(), size.getHeight()];
+  protected getMapStyle(name: string): string {
+    return MapTheme[name] ? MapTheme[name] : name;
   }
 
   public getType() {
     return 'amap2';
   }
-  public getZoom(): number {
-    // 统一返回 Mapbox 缩放等级
-    return this.map.getZoom() - 1;
-  }
-
-  public setZoom(zoom: number): void {
-    // 统一设置 Mapbox 缩放等级
-    return this.map.setZoom(zoom + 1);
-  }
-
-  public getCenter(options?: ICameraOptions): ILngLat {
-    if (options?.padding) {
-      const originCenter = this.getCenter();
-      const [w, h] = this.getSize();
-      const padding = toPaddingOptions(options.padding);
-      const px = this.lngLatToPixel([originCenter.lng, originCenter.lat]);
-      const offsetPx = [
-        (padding.right - padding.left) / 2,
-        (padding.bottom - padding.top) / 2,
-      ];
-
-      const newCenter = this.pixelToLngLat([
-        px.x - offsetPx[0],
-        px.y - offsetPx[1],
-      ]);
-      return newCenter;
-    }
-    const center = this.map.getCenter();
-    return {
-      lng: center.getLng(),
-      lat: center.getLat(),
-    };
-  }
-  public setCenter(lnglat: [number, number], options?: ICameraOptions): void {
-    if (options?.padding) {
-      const padding = toPaddingOptions(options.padding);
-      const px = this.lngLatToPixel(lnglat);
-      const offsetPx = [
-        (padding.right - padding.left) / 2,
-        (padding.bottom - padding.top) / 2,
-      ];
-      const newCenter = this.pixelToLngLat([
-        px.x + offsetPx[0],
-        px.y + offsetPx[1],
-      ]);
-      this.map.setCenter([newCenter.lng, newCenter.lat]);
-    } else {
-      this.map.setCenter(lnglat);
-    }
-  }
-  public getPitch(): number {
-    return this.map.getPitch();
-  }
-
-  public getRotation(): number {
-    // 统一返回逆时针旋转角度
-    return 360 - this.map.getRotation();
-  }
 
   public getBounds(): Bounds {
-    // @ts-ignore
-    // const amapBound = this.map.getBounds().toBounds();
-    // const NE = amapBound.getNorthEast();
-    // const SW = amapBound.getSouthWest();
     const bounds = this.map.getBounds();
 
     // @ts-ignore
@@ -323,61 +190,7 @@ export default class AMapService
     const zooms = this.map.getZooms() as [number, number];
     return zooms[1] - 1;
   }
-  public setRotation(rotation: number): void {
-    return this.map.setRotation(rotation);
-  }
 
-  public setPitch(pitch: number) {
-    return this.map.setPitch(pitch);
-  }
-  public zoomIn(): void {
-    this.map.zoomIn();
-  }
-
-  public zoomOut(): void {
-    this.map.zoomOut();
-  }
-
-  public panTo(p: [number, number]): void {
-    this.map.panTo(p);
-  }
-  public panBy(x: number = 0, y: number = 0): void {
-    this.map.panBy(x, y);
-  }
-  public fitBounds(extent: Bounds): void {
-    this.map.setBounds(
-      new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
-    );
-  }
-  public setZoomAndCenter(zoom: number, center: [number, number]): void {
-    this.map.setZoomAndCenter(zoom + 1, center);
-  }
-  public setMapStyle(style: string): void {
-    this.map.setMapStyle(this.getMapStyle(style));
-  }
-
-  public setMapStatus(option: Partial<IStatusOptions>): void {
-    this.map.setStatus(option);
-  }
-  public pixelToLngLat(pixel: [number, number]): ILngLat {
-    const lngLat = this.map.pixelToLngLat(new AMap.Pixel(pixel[0], pixel[1]));
-    return { lng: lngLat.getLng(), lat: lngLat.getLat() };
-  }
-  public lngLatToPixel(lnglat: [number, number]): IPoint {
-    const p = this.map.lnglatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
-    return {
-      x: p.getX(),
-      y: p.getY(),
-    };
-  }
-  public containerToLngLat(pixel: [number, number]): ILngLat {
-    const ll = new AMap.Pixel(pixel[0], pixel[1]);
-    const lngLat = this.map.containerToLngLat(ll);
-    return {
-      lng: lngLat?.getLng(),
-      lat: lngLat?.getLat(),
-    };
-  }
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     const pixel = this.map.lngLatToContainer(lnglat);
     return {
@@ -386,23 +199,11 @@ export default class AMapService
     };
   }
 
-  public lngLatToMercator(
-    lnglat: [number, number],
-    altitude: number,
-  ): IMercator {
-    return {
-      x: 0,
-      y: 0,
-      z: 0,
-    };
-  }
-
   public getModelMatrix(
     lnglat: [number, number],
     altitude: number,
     rotate: [number, number, number],
     scale: [number, number, number] = [1, 1, 1],
-    origin: IMercator = { x: 0, y: 0, z: 0 },
   ): number[] {
     // const flat = this.viewport.projectFlat(lnglat);
     // @ts-ignore
@@ -465,7 +266,7 @@ export default class AMapService
             resolve();
           }, 30);
         } else {
-          this.$mapContainer = this.creatAmapContainer(
+          this.$mapContainer = this.creatMapContainer(
             id as string | HTMLDivElement,
           );
           const mapConstructorOptions = {
@@ -527,55 +328,7 @@ export default class AMapService
         }
       }
     });
-  }
-
-  public meterToCoord(center: [number, number], outer: [number, number]) {
-    // 统一根据经纬度来转化
-    // Tip: 实际米距离 unit meter
-    const meterDis = AMap.GeometryUtil.distance(
-      new AMap.LngLat(...center),
-      new AMap.LngLat(...outer),
-    );
-
-    // Tip: 三维世界坐标距离
-    const [x1, y1] = this.lngLatToCoord(center);
-    const [x2, y2] = this.lngLatToCoord(outer);
-    const coordDis = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-
-    return coordDis / meterDis;
-  }
-
-  public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.getContainer()?.getElementsByClassName(
-      'amap-layer',
-    )[0] as HTMLCanvasElement;
-    const layersPng =
-      type === 'jpg'
-        ? (renderCanvas?.toDataURL('image/jpeg') as string)
-        : (renderCanvas?.toDataURL('image/png') as string);
-    return layersPng;
-  }
-
-  public emit(name: string, ...args: any[]) {
-    this.eventEmitter.emit(name, ...args);
-  }
-
-  public once(name: string, ...args: any[]) {
-    this.eventEmitter.once(name, ...args);
-  }
-
-  public destroy() {
-    this.map.destroy();
-
-    // 销毁地图可视化层的容器
-    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
-
-    // @ts-ignore
-    delete window.initAMap;
-    const $jsapi = document.getElementById(AMAP_SCRIPT_ID);
-    if ($jsapi) {
-      document.head.removeChild($jsapi);
-    }
+    this.initViewPort();
   }
 
   public getMapContainer() {
@@ -586,7 +339,7 @@ export default class AMapService
     this.cameraChangedCallback = callback;
   }
 
-  public initViewPort() {
+  private initViewPort() {
     // @ts-ignore
     const {
       // @ts-ignore
@@ -699,25 +452,4 @@ export default class AMapService
       this.cameraChangedCallback(this.viewport);
     }
   };
-
-  private getMapStyle(name: string): string {
-    return MapTheme[name] ? MapTheme[name] : name;
-  }
-
-  private creatAmapContainer(id: string | HTMLDivElement) {
-    let $wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      $wrapper = document.getElementById(id) as HTMLDivElement;
-    }
-    const $amapdiv = document.createElement('div');
-    $amapdiv.style.cssText += `
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 100%;
-    `;
-    $amapdiv.id = 'l7_amap_div' + mapdivCount++;
-    $wrapper.appendChild($amapdiv);
-    return $amapdiv;
-  }
 }
