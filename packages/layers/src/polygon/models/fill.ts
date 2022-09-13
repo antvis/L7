@@ -135,10 +135,7 @@ export default class FillModel extends BaseModel {
             feature: IEncodeFeature,
             featureIdx: number,
             vertex: number[],
-            attributeIdx: number,
-            normal: number[],
           ) => {
-            // center[0] center[1] radius
             return [vertex[3], vertex[4], vertex[5]];
           },
         },
