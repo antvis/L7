@@ -196,6 +196,21 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   pixelConstantRGB?: number;
 }
 
+export interface ICityBuildLayerStyleOptions {
+  opacity: number;
+  baseColor: string;
+  brightColor: string;
+  windowColor: string;
+  time: number;
+  sweep: {
+    enable: boolean;
+    sweepRadius: number;
+    sweepColor: string;
+    sweepSpeed: number;
+    sweepCenter?: [number, number];
+  };
+}
+
 export interface IGeometryLayerStyleOptions extends IBaseLayerStyleOptions {
   mapTexture?: string;
   terrainTexture?: string;
