@@ -63,10 +63,8 @@ export default class HeatMapModel extends BaseModel {
   public async initModels(callbackModel: (models: IModel[]) => void) {
     const {
       createFramebuffer,
-      clear,
       getViewportSize,
       createTexture2D,
-      useFramebuffer,
     } = this.rendererService;
     const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
       'shape',

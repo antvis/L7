@@ -5,10 +5,11 @@ import {
   ISubLayerInitOptions,
   IBaseTileLayerManager,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp, Tile } from '@antv/l7-utils';
+import { Tile } from '@antv/l7-utils';
 import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
 import { getLayerShape, getMaskValue } from '../utils';
 export class BaseMapTileLayerManager implements IBaseTileLayerManager {
+  // only support vector layer
   public sourceLayer: string;
   public parent: ILayer;
   public children: ILayer[];
@@ -16,7 +17,6 @@ export class BaseMapTileLayerManager implements IBaseTileLayerManager {
   public rendererService: IRendererService;
   private tileFactory: ITileFactory;
   private initOptions: ISubLayerInitOptions;
-  private rampColorsData: any;
   constructor(
     parent: ILayer,
     mapService: IMapService,
@@ -133,45 +133,20 @@ export class BaseMapTileLayerManager implements IBaseTileLayerManager {
       stroke = '#fff',
       strokeWidth = 0,
       strokeOpacity = 1,
-
-      clampLow = true,
-      clampHigh = true,
-      domain = [0, 1],
-      rampColors = {
-        colors: [
-          'rgb(166,97,26)',
-          'rgb(223,194,125)',
-          'rgb(245,245,245)',
-          'rgb(128,205,193)',
-          'rgb(1,133,113)',
-        ],
-        positions: [0, 0.25, 0.5, 0.75, 1.0],
-      },
+ 
       workerEnabled = false,
       sourceLayer,
-
-      pixelConstant = 0,
-      pixelConstantR = 256 * 256,
-      pixelConstantG = 256,
-      pixelConstantB = 1,
-      pixelConstantRGB = 0.1,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
    
     const source = this.parent.getSource();
     const parentParserType = source.getParserType();
-
   
     const colorAttribute = this.parent.getAttribute('color');
     const basemapColor = (colorAttribute?.scale?.field || '#fff') as string;
     const sizeAttribute = this.parent.getAttribute('size');
     const basemapSize = (sizeAttribute?.scale?.field || 1) as number;
- 
-    const layerShape = getLayerShape(this.parent.type, this.parent);
 
-    if (rampColors) {
-      // 构建统一的色带贴图
-      this.rampColorsData = generateColorRamp(rampColors as IColorRamp);
-    }
+    const layerShape = getLayerShape(this.parent.type, this.parent);
 
     this.initOptions = {
       usage: 'basemap',
@@ -180,27 +155,14 @@ export class BaseMapTileLayerManager implements IBaseTileLayerManager {
       zIndex,
       opacity,
       sourceLayer: this.getSourceLayer(parentParserType, sourceLayer),
-      featureId: undefined,
       basemapColor,
       basemapSize,
       mask: getMaskValue(this.parent.type, mask),
       stroke,
       strokeWidth,
       strokeOpacity,
-      // raster tiff
-      clampLow,
-      clampHigh,
-      domain,
-      rampColors,
-      rampColorsData: this.rampColorsData,
       // worker
       workerEnabled,
-
-      pixelConstant,
-      pixelConstantR,
-      pixelConstantG,
-      pixelConstantB,
-      pixelConstantRGB,
     };
   }
 

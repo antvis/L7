@@ -135,7 +135,7 @@ export interface ISubLayerStyles {
  * For tile subLayer
  */
 export interface ISubLayerInitOptions {
-  usage: string|undefined;
+  usage?: string|undefined;
   layerType: string;
   transforms?: ITransform[];
   shape?: string | string[] | IScaleValue;

@@ -514,12 +514,15 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public needUpdate(): boolean {
     return false;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public buildModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public initModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public clearModels(refresh = true) {
     return;
   }

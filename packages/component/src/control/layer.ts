@@ -125,11 +125,11 @@ export default class Layers extends Control {
   }
   private initLayers() {
     const { baseLayers = {}, overlayers = {} } = this.controlOption;
-    Object.keys(baseLayers).forEach((name: string, index: number) => {
+    Object.keys(baseLayers).forEach((name: string) => {
       // baseLayers[name].once('inited', this.update);
       this.addLayer(baseLayers[name], name, false);
     });
-    Object.keys(overlayers).forEach((name: any, index: number) => {
+    Object.keys(overlayers).forEach((name: any) => {
       // overlayers[name].once('inited', this.update);
       this.addLayer(overlayers[name], name, true);
     });

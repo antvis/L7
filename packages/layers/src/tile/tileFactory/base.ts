@@ -63,6 +63,7 @@ export default class TileFactory implements ITileFactory {
     this.tilesetManager = source.tileset as TilesetManager;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
     return {
       layers: [] as ILayer[],
@@ -71,7 +72,7 @@ export default class TileFactory implements ITileFactory {
   }
 
   public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const { sourceLayer, featureId, transforms = [], layerType, shape, usage } = initOptions;
+    const { sourceLayer, featureId, transforms = [], layerType, shape } = initOptions;
     if (!sourceLayer) {
       return EMPTY_FEATURE_DATA;
     }
@@ -108,7 +109,6 @@ export default class TileFactory implements ITileFactory {
           parser: {
             type: 'geojson',
             featureId,
-            usage,
             cancelExtent: true
           },
           transforms

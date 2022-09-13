@@ -160,8 +160,6 @@ export class TileLayerManager implements ITileLayerManager {
       pixelConstantG = 256,
       pixelConstantB = 1,
       pixelConstantRGB = 0.1,
-      
-      usage,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileConfigManager.getAttributeScale(
@@ -185,7 +183,6 @@ export class TileLayerManager implements ITileLayerManager {
 
 
     this.initOptions = {
-      usage,
       layerType: this.parent.type,
       transforms: this.transforms,
       shape: layerShape,
