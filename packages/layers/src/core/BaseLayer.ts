@@ -687,6 +687,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.tileLayer.render();
       return this;
     }
+    
     if (this.encodeDataLength <= 0 && !this.forceRender) return this;
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     this.renderModels();
@@ -1285,6 +1286,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public renderModels(isPicking?: boolean) {
+    
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) return this;
     if (this.layerModelNeedUpdate && this.layerModel) {
@@ -1293,10 +1295,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         this.hooks.beforeRender.call();
         this.layerModelNeedUpdate = false;
       });
-    }
-
-    if (this?.layerModel?.renderUpdate) {
-      this.layerModel.renderUpdate();
     }
 
     this.models.forEach((model) => {

@@ -4,6 +4,7 @@ import { ICanvasLayerStyleOptions } from '../core/interface';
 import CanvasModels, { CanvasModelType } from './models/index';
 export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
   public type: string = 'CanvasLayer';
+  public forceRender: boolean = true;
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new CanvasModels[modelType](this);
@@ -28,6 +29,22 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
       visible: false,
     });
     this.reRender();
+    return this;
+  }
+
+  public renderModels() {
+    if (this?.layerModel?.renderUpdate) {
+      this.layerModel.renderUpdate();
+    }
+
+    this.models.forEach((model) => {
+      model.draw(
+        {
+          uniforms: this.layerModel.getUninforms(),
+        },
+        false,
+      );
+    });
     return this;
   }
 
