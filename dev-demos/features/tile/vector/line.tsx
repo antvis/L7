@@ -1,18 +1,18 @@
-// @ts-nocheck
 // @ts-ignore
-import { Scene, Source } from '@antv/l7';
-import { LineLayer } from '@antv/l7-layers';
-import { GaodeMap } from '@antv/l7-maps';
-import * as React from 'react';
+import { Scene, LineLayer } from '@antv/l7';
+// @ts-ignore
+import { Mapbox } from '@antv/l7-maps';
+import React, { useEffect } from 'react';
 
-export default class Demo extends React.Component {
-  public async componentDidMount() {
+export default () => {
+  useEffect(() => {
     const scene = new Scene({
-      id: 'map',
+      id: 'line',
       stencil: true,
-      map: new GaodeMap({
-        center: [110.19382669582967, 30.258134],
+      map: new Mapbox({
+        center: [121.268, 30.3628],
         pitch: 0,
+        style: 'blank',
         zoom: 4,
       }),
     });
@@ -20,7 +20,6 @@ export default class Demo extends React.Component {
     const layer = new LineLayer({
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
-      workerEnabled: true,
     });
     layer
       .source(
@@ -35,27 +34,25 @@ export default class Demo extends React.Component {
           },
         },
       )
+      // .shape('simple')
       .color('COLOR')
       .size(2)
       .select(true);
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      layer.on('click', (e) => {
+        console.log(e);
+      });
     });
-  }
-
-  public render() {
-    return (
-      <div
-        id="map"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      ></div>
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="line"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};

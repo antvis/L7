@@ -138,13 +138,15 @@ export default class LayerService implements ILayerService {
   }
 
   public async renderLayers(type?: RenderType) {
+    // clear current L7 webgl context
+    this.clear();
+
     const renderLayerList = this.getRenderLayerList(type);
     
     if (this.alreadyInRendering || renderLayerList.length === 0 || !this.enableRender) {
       return;
     }
     this.alreadyInRendering = true;
-    this.clear();
 
     for (const layer of renderLayerList) {
       layer.hooks.beforeRenderData.call();

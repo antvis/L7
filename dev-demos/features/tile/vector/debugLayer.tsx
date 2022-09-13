@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 export default () => {
   useEffect(() => {
     const scene = new Scene({
-      id: 'map',
+      id: 'test',
       // stencil: true,
       map: new Mapbox({
         center: [121.268, 30.3628],
@@ -23,7 +23,7 @@ export default () => {
   }, []);
   return (
     <div
-      id="map"
+      id="test"
       style={{
         height: '500px',
         position: 'relative',

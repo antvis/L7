@@ -10,8 +10,7 @@ import PointsFillImage from './components/PointsFillImage';
 import PointImage from './components/PointsImage';
 import PointIconFont from './components/PointsIconFont';
 import PointRader from './components/PointsRadar';
-import PointTile from './components/PointsTile';
-import PointsTextTile from './components/PointsTextTile';
+
 import PointEarthFill from './components/PointsEarthFill';
 import PointEarthExtrude from './components/PointsEarthExtrude';
 
@@ -24,13 +23,11 @@ import LineHalf from './components/LineHalf';
 import LineGreatCircle from './components/LineGreatCircle';
 import LineWall from './components/LineWall';
 import LineEarthArc3D from './components/LineEarthArc3D';
-import LineTile from './components/LineTile';
 
 import PolygonFill from './components/Polygon';
 import PolygonExtrude from './components/PolygonExtrude';
 import PolygonOcean from './components/PolygonOcean';
 import PolygonWater from './components/PolygonWater';
-import PolygonTile from './components/PolygonTile';
 
 import Heatmap from './components/Heatmap';
 import Heatmap3d from './components/Heatmap3d';
@@ -49,9 +46,6 @@ import Sprite from './components/Sprite';
 import Plane from './components/Plane';
 
 import Wind from './components/Wind';
-
-import RasterImageTile from './components/RasterImageTile';
-import RasterDataTile from './components/RasterDataTile';
 
 import SourceTest from './components/SourceTest';
 
@@ -100,12 +94,5 @@ storiesOf('图层渲染流程改造', module)
   .add('Plane', () => <Plane />)
 
   .add('Wind', () => <Wind />)
-
-  .add('TilePoint', () => <PointTile />)
-  .add('TileLine', () => <LineTile />)
-  .add('TilePolygon', () => <PolygonTile />)
-  .add('TilePointText', () => <PointsTextTile />)
-  .add('TileRasterImage', () => <RasterImageTile />)
-  .add('TileRasterData', () => <RasterDataTile />)
 
   .add('SourceTest', () => <SourceTest />)

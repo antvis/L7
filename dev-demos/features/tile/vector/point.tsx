@@ -58,7 +58,7 @@ const list = [
 export default () => {
   useEffect(() => {
     const scene = new Scene({
-      id: 'map',
+      id: 'point',
       stencil: true,
       map: new Mapbox({
         center: [121.268, 30.3628],
@@ -108,7 +108,7 @@ export default () => {
   }, []);
   return (
     <div
-      id="map"
+      id="point"
       style={{
         height: '500px',
         position: 'relative',

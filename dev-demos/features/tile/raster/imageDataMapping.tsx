@@ -1,11 +1,13 @@
+//@ts-ignore
 import { Scene, RasterLayer } from '@antv/l7';
+//@ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
-      id: 'map',
+      id: 'map2',
       map: new Map({
         center: [130, 30],
         pitch: 0,
@@ -22,7 +24,6 @@ export default () => {
             parser: {
               type: 'rasterTile',
               tileSize: 256,
-
               zoomOffset: 0,
               updateStrategy: 'overlap',
             },
@@ -32,7 +33,6 @@ export default () => {
         .style({
           clampLow: false,
           clampHigh: false,
-          // opacity: 0.8,
           domain: [0, 8000],
           rampColors: {
             colors: [
@@ -58,7 +58,7 @@ export default () => {
   }, []);
   return (
     <div
-      id="map"
+      id="map2"
       style={{
         height: '500px',
         position: 'relative',

@@ -23,7 +23,7 @@ export default defineConfig({
     ie: 11,
   },
   mode: 'site',
-  esbuild:false,
+  esbuild: false,
   chainWebpack:(memo, { env, webpack, createCSSRule })=> {
     // 设置 alias
     memo.module

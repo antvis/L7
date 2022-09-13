@@ -1,14 +1,13 @@
-// @ts-nocheck
-// @ts-ignore
-import { Scene, Source } from '@antv/l7';
-import { RasterLayer } from '@antv/l7-layers';
+//@ts-ignore
+import { Scene, RasterLayer } from '@antv/l7';
+//@ts-ignore
 import { Map } from '@antv/l7-maps';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 
-export default class Demo extends React.Component {
-  public async componentDidMount() {
+export default () => {
+  useEffect(() => {
     const scene = new Scene({
-      id: 'map',
+      id: 'map2',
       map: new Map({
         center: [105.732421875, 32.24997445586331],
         pitch: 0,
@@ -20,17 +19,14 @@ export default class Demo extends React.Component {
     const canvas = document.createElement('canvas');
     canvas.width = 256;
     canvas.height = 256;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
     scene.on('loaded', () => {
       const layer = new RasterLayer();
       layer
         .source(
-          // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          // 'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{zoom}/{x}/{y}.pngraw?sku=YOUR_MAPBOX_SKU_TOKEN&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
-          'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ',
-          // 'https://s2downloads.eox.at/demo/EOxCloudless/2019/rgb/{z}/{y}/{x}.tif',
-          // 'http://rd1yhmrzc.hn-bkt.clouddn.com/Mapnik/{z}/{x}/{y}.png',
+          'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w3dHk3dnN4MDYzaDNycDkyMDl2bzh6NiJ9.YIrG9kwUpayLj01f6W23Gw',
+        
           {
             parser: {
               type: 'rasterTile',
@@ -46,8 +42,8 @@ export default class Demo extends React.Component {
                 const img = await createImageBitmap(blob);
                 ctx.clearRect(0, 0, 256, 256);
                 ctx.drawImage(img, 0, 0, 256, 256);
-                let imgData = ctx.getImageData(0, 0, 256, 256).data;
-                let arr = [];
+                const imgData = ctx.getImageData(0, 0, 256, 256).data;
+                const arr: number[] = [];
                 for (let i = 0; i < imgData.length; i += 4) {
                   const R = imgData[i];
                   const G = imgData[i + 1];
@@ -83,22 +79,18 @@ export default class Demo extends React.Component {
           },
         });
 
-      scene.addLayer(layer);
+      scene.addLayer(layer)
+    
     });
-  }
+  }, []);
 
-  public render() {
-    return (
-      <div
-        id="map"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      ></div>
-    );
-  }
-}
+  return (
+    <div
+      id="map2"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};
