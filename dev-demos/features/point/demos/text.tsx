@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 export default () => {
     useEffect( () => {
         const scene = new Scene({
-            id: 'map',
+            id: 'text',
             map: new GaodeMap({
               center: [ 110, 36 ],
               style: 'light',
@@ -48,7 +48,7 @@ export default () => {
     }, []);
     return (
       <div
-        id="map"
+        id="text"
         style={{
           height: '500px',
           position: 'relative',

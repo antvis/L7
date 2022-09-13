@@ -1,13 +1,9 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import MapCenter from './components/mapCenter';
-import Amap2demo from './components/amap2demo'
 import Amap2demo_destroy from './components/amap2demo_destroy';
 import Amap2demo_extrude from './components/amap2demo_extrude'
 import Amapdemo_extrude from './components/amapdemo_extrude'
-import Amap2demo_text from './components/amap2demo_text'
-import Amap2demo_iconfont from './components/amap2demo_iconfont';
-import Amap2demo_image from './components/amap2demo_image'
 
 import Amap2demo_winds from "./components/amap2demo_winds"
 
@@ -64,17 +60,12 @@ import Cluster from './components/cluster'
 import Mask from './components/mask'
 import PolygonExteudeTex from './components/polygon_extrudeTex';
 import DataImagelayer from './components/dataImagelayer';
-import BugFix from './components/bugfix'
 
 // @ts-ignore
 storiesOf('地图方法', module)
         .add('高德地图 point/demo', () => <MapCenter />)
-        .add('高德地图2.0 point/demo', () => <Amap2demo />)
         .add('高德地图 point/extrude', () => <Amapdemo_extrude />)
         .add('高德地图2.0 point/extrude', () => <Amap2demo_extrude />)
-        .add('高德地图2.0 point/text', () => <Amap2demo_text />)
-        .add('高德地图2.0 point/iconfont', () => <Amap2demo_iconfont />)
-        .add('高德地图2.0 point/image', () => <Amap2demo_image />)
 
         .add('高德地图2.0 polygon', () => <Amap2demo_polygon />)
         .add('高德地图2.0 polygon_extrude', () => <Amap2demo_polygon_extrude />)
@@ -135,4 +126,4 @@ storiesOf('地图方法', module)
         .add('Mask', () => <Mask/>)
         .add('PolygonExteudeTex', () => <PolygonExteudeTex/>)
         .add('DataImagelayer', () => <DataImagelayer/>)
-        .add('BugFix', () => <BugFix/>)
+        
