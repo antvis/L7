@@ -6,7 +6,7 @@ import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayerService, RenderType } from './ILayerService';
+import { ILayerService } from './ILayerService';
 import { throttle } from 'lodash';
 
 @injectable()
@@ -128,27 +128,17 @@ export default class LayerService implements ILayerService {
     this.enableRender = flag;
   }
 
-  private getRenderLayerList(type?: RenderType) {
-    switch(type) {
-      case RenderType.PickingAllLayer:
-        return this.layerList.filter(layer => layer.getLayerConfig().usage !== 'basemap');
-      default: 
-        return this.layerList;
-    }
-  }
-
-  public async renderLayers(type?: RenderType) {
+  public async renderLayers() {
     // clear current L7 webgl context
     this.clear();
-
-    const renderLayerList = this.getRenderLayerList(type);
-    
-    if (this.alreadyInRendering || renderLayerList.length === 0 || !this.enableRender) {
+ 
+    if (this.alreadyInRendering || !this.enableRender) {
       return;
     }
+
     this.alreadyInRendering = true;
 
-    for (const layer of renderLayerList) {
+    for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
 

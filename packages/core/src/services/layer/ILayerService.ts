@@ -590,9 +590,6 @@ export interface ILayerConfig {
  * 提供 Layer 管理服务
  */
 
-export enum RenderType{
-  PickingAllLayer = 'PickingAllLayer',
-}
 export interface ILayerService {
   pickedLayerId: number;
   clock: Clock;
@@ -621,7 +618,7 @@ export interface ILayerService {
   updateLayerRenderList(): void;
   reRender(): void;
   throttleRenderLayers(): void;
-  renderLayers(type?: RenderType): void;
+  renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
 

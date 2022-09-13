@@ -304,16 +304,12 @@ export default class BaseTileLayer implements ITileLayer {
     const { latLonBounds, zoom } = this.getCurrentView();
 
     if (this.mapService.version === 'GAODE1.x') {
-      // console.log('****')
       const { visible } = this.parent.getLayerConfig();
       if (zoom < 3 && visible) {
-        console.log('****')
         this.parent.updateLayerConfig({ visible: false });
-        // this.layerService.updateLayerRenderList();
         this.layerService.reRender();
       } else if (zoom >= 3 && !visible) {
         this.parent.updateLayerConfig({ visible: true });
-        // this.layerService.updateLayerRenderList();
         this.layerService.reRender();
       }
     }

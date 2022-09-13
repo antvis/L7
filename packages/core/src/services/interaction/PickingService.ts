@@ -9,7 +9,7 @@ import {
   IInteractionTarget,
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { ILayer, ILayerService, ITileLayer, RenderType } from '../layer/ILayerService';
+import { ILayer, ILayerService, ITileLayer } from '../layer/ILayerService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
@@ -327,7 +327,7 @@ export default class PickingService implements IPickingService {
 
     this.alreadyInPicking = true;
     await this.pickingLayers(target); 
-    this.layerService.renderLayers(RenderType.PickingAllLayer);
+    this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
 
