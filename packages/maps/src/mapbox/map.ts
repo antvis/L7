@@ -5,6 +5,7 @@ import { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import mapboxgl, { Map } from 'mapbox-gl';
+import { Version } from '../version';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'reflect-metadata';
@@ -23,6 +24,7 @@ const MAPBOX_API_KEY =
 export default class MapboxService extends BaseMapService<
   Map & IMapboxInstance
 > {
+  public version: string = Version.MAPBOX;
   // get mapStatus method
 
   public viewport: Viewport;
