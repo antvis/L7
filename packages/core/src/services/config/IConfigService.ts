@@ -18,11 +18,7 @@ export interface ISceneConfig extends IRenderConfig {
   stencil?: boolean;
 }
 
-// interface IValidateResult {
-//   valid: boolean;
-//   errors: Ajv.ErrorObject[] | null | undefined;
-//   errorText: string | null;
-// }
+
 
 export interface IGlobalConfigService {
   /**

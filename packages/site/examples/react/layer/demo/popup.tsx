@@ -2,7 +2,6 @@ import {
   AMapScene,
   LayerEvent,
   LineLayer,
-  MapboxScene,
   PolygonLayer,
   Popup,
 } from '@antv/l7-react';

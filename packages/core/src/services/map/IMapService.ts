@@ -49,12 +49,12 @@ export interface IMapService<RawMap = {}> {
   setBgColor(color: string): void;
   init(): void;
   initMiniMap?(): void;
-  initViewPort?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map
   addMarkerContainer(): void;
   getMarkerContainer(): HTMLElement;
+  getOverlayContainer(): HTMLElement | undefined;
   // MapEvent // 定义事件类型
 
   on(type: string, handler: (...args: any[]) => void): void;
@@ -89,6 +89,7 @@ export interface IMapService<RawMap = {}> {
   setZoom(zoom: number): void;
   setMapStyle(style: any): void;
   setMapStatus(option: Partial<IStatusOptions>): void;
+  updateView(viewOption:Partial<IMapCamera>):void // 更新地图视野
 
   // coordinates methods
   meterToCoord(center: number[], lnglat: number[]): number;
@@ -129,7 +130,6 @@ export interface IEarthService<RawMap = {}> {
   bgColor: string;
   setBgColor(color: string): void;
   init(): void;
-  initViewPort?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map
@@ -266,6 +266,8 @@ export interface IMapConfig<RawMap = {}> {
   offsetCoordinate?: boolean;
 
   offsetZoom?: number;
+
+  interactive: boolean;// 
 
   [key: string]: any;
 }
