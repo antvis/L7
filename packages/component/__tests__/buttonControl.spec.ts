@@ -40,8 +40,6 @@ describe('buttonControl', () => {
     const container = control.getContainer();
     expect(container.classList).toContain('l7-button-control');
     expect(container.getAttribute('title')).toContain('导出图片');
-    const icon = container.querySelector('i');
-    expect(icon?.classList ?? []).toContain('l7-icon-tupian');
     const textContainer = container.querySelector('.l7-button-control__text')!;
     expect(textContainer).toBeInstanceOf(HTMLElement);
 
@@ -52,7 +50,5 @@ describe('buttonControl', () => {
     });
 
     expect(container.getAttribute('title')).toBeFalsy();
-    const icon1 = container.querySelector('i');
-    expect(icon1?.classList ?? []).toContain('l7-icon-tupian1');
   });
 });

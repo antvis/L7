@@ -43,7 +43,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * 关闭按钮对应的 DOM
    * @protected
    */
-  protected closeButton?: HTMLElement;
+  protected closeButton?: HTMLElement | SVGElement;
 
   /**
    * Popup 的总容器 DOM，包含 content 和 tip

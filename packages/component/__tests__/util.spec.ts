@@ -6,12 +6,10 @@ describe('util', () => {
   it('icon', () => {
     const testClassName = 'l7-test-icon';
     const testIcon = createL7Icon(testClassName);
-    expect(testIcon).toBeInstanceOf(HTMLElement);
-    expect(testIcon.tagName.toLowerCase()).toEqual('i');
+    expect(testIcon).toBeInstanceOf(SVGElement);
+    expect(testIcon.tagName.toLowerCase()).toEqual('svg');
     const classList = testIcon.classList;
     expect(classList).toContain('l7-iconfont');
-    expect(classList).toContain(testClassName);
-    expect(classList.length).toEqual(2);
   });
 
   it('popper', () => {

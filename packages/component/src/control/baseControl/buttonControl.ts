@@ -4,7 +4,7 @@ import Control, { IControlOption } from './control';
 export { ButtonControl };
 
 export interface IButtonControlOption extends IControlOption {
-  btnIcon?: HTMLElement;
+  btnIcon?: HTMLElement | SVGElement;
   btnText?: string;
   title?: string;
 }
@@ -34,7 +34,7 @@ export default abstract class ButtonControl<
    * 按钮中图标对应的 DOM
    * @protected
    */
-  protected buttonIcon?: HTMLElement;
+  protected buttonIcon?: HTMLElement | SVGElement;
 
   /**
    * 设置当前按钮

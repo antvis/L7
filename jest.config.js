@@ -53,6 +53,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>jest/setupTests.ts'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   coverageReporters: ['html'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageThreshold: {
     global: {
       branches: 12,

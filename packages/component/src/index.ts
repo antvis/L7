@@ -1,6 +1,7 @@
 import Marker from './marker';
 import MarkerLayer from './marker-layer';
 
+import './assets/iconfont/iconfont.js';
 // 引入样式
 import './css/index.less';
 
