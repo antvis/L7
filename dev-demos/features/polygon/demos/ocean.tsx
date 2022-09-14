@@ -1,12 +1,15 @@
-// @ts-nocheck
-// @ts-ignore
-import { Scene, Source } from '@antv/l7';
-import { PolygonLayer } from '@antv/l7-layers';
-import { GaodeMap } from '@antv/l7-maps';
-import * as React from 'react';
 
-export default class Demo extends React.Component {
-  public async componentDidMount() {
+import {
+  Scene,
+  PolygonLayer,
+  // @ts-ignore
+} from '@antv/l7';
+// @ts-ignore
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import React, { useEffect } from 'react';
+
+export default () => {
+  useEffect(() => {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -46,20 +49,14 @@ export default class Demo extends React.Component {
     scene.on('loaded', () => {
       scene.addLayer(layer);
     });
-  }
-
-  public render() {
-    return (
-      <div
-        id="map"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      ></div>
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};

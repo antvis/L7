@@ -18,8 +18,6 @@ import LineWall from './components/LineWall';
 import LineEarthArc3D from './components/LineEarthArc3D';
 
 import PolygonExtrude from './components/PolygonExtrude';
-import PolygonOcean from './components/PolygonOcean';
-import PolygonWater from './components/PolygonWater';
 
 import Heatmap3d from './components/Heatmap3d';
 import HeatmapGrid from './components/HeatmapGrid';
@@ -52,8 +50,6 @@ storiesOf('图层渲染流程改造', module)
   .add('LineEarthArc3D', () => <LineEarthArc3D />)
 
   .add('PolygonExtrude', () => <PolygonExtrude />)
-  .add('PolygonOcean', () => <PolygonOcean />)
-  .add('PolygonWater', () => <PolygonWater />)
 
   .add('Heatmap3d', () => <Heatmap3d />)
   .add('HeatmapGrid', () => <HeatmapGrid />)
