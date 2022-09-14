@@ -29,8 +29,6 @@ import HeatmapHexagon from './components/HeatmapHexagon';
 
 import RasterLayer from './components/RasterLayer';
 
-import Billboard from './components/Billboard';
-import Sprite from './components/Sprite';
 import Plane from './components/Plane';
 
 import Wind from './components/Wind';
@@ -64,8 +62,6 @@ storiesOf('图层渲染流程改造', module)
 
   .add('RasterLayer', () => <RasterLayer />)
 
-  .add('Billboard', () => <Billboard />)
-  .add('Sprite', () => <Sprite />)
   .add('Plane', () => <Plane />)
 
   .add('Wind', () => <Wind />)

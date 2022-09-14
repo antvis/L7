@@ -8,7 +8,6 @@ import Plane from './components/plane';
 import PlaneTerrain from './components/planeTerrain';
 import Cursor from './components/cursor';
 import Arrow from './components/arrow';
-import BillBoard from './components/billboard';
 
 storiesOf('Object', module)
         .add('water', () => <Water />)
@@ -16,7 +15,6 @@ storiesOf('Object', module)
         .add('Taifong', () => <Taifong />)
         .add('Radar', () => <Radar/>)
         .add('Plane', () => <Plane/>)
-        .add('BillBoard', () => <BillBoard/>)
         .add('PlaneTerrain', () => <PlaneTerrain/>)
         .add('Cursor', () => <Cursor/>)
         .add('Arrow', () => <Arrow/>)
