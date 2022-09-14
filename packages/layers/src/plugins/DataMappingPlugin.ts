@@ -195,12 +195,12 @@ export default class DataMappingPlugin implements ILayerPlugin {
         // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
         const coords = encodeRecord.coordinates as Position[];
         // @ts-ignore
-        if(!layer.arrowInsert) {
+        if (!layer.arrowInsert) {
           // Tip: arrowInsert 的判断用于确保 arrow 的属性点只会被植入一次
           const arrowPoint = this.getArrowPoints(coords[0], coords[1]);
           encodeRecord.coordinates.splice(1, 0, arrowPoint, arrowPoint);
-           // @ts-ignore
-          layer.arrowInsert = true
+          // @ts-ignore
+          layer.arrowInsert = true;
         }
       }
       return encodeRecord;

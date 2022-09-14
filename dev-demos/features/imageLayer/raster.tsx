@@ -58,10 +58,9 @@ async function addLayer() {
   return layer;
 }
 
-
 export default () => {
   useEffect(() => {
-    (async() => {
+    (async () => {
       const scene = new Scene({
         id: 'map',
         map: new GaodeMap({
@@ -69,13 +68,13 @@ export default () => {
           zoom: 3,
         }),
       });
-      
+
       const layer = await addLayer();
-  
+
       scene.on('loaded', () => {
         scene.addLayer(layer);
       });
-    })()
+    })();
   }, []);
   return (
     <div
