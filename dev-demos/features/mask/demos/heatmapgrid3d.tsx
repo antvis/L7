@@ -1,22 +1,11 @@
-import {
-  LineLayer,
-  Scene,
-  MaskLayer,
-  HeatmapLayer,
-  PointLayer,
-} from '@antv/l7';
+// @ts-ignore
+import { Scene, HeatmapLayer } from '@antv/l7';
+// @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 
-export default class MaskPoints extends React.Component {
-  // @ts-ignore
-  private scene: Scene;
-
-  public componentWillUnmount() {
-    this.scene.destroy();
-  }
-
-  public async componentDidMount() {
+export default () => {
+  useEffect(() => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
@@ -28,7 +17,6 @@ export default class MaskPoints extends React.Component {
         zoom: 12.47985,
       }),
     });
-    this.scene = scene;
     scene.addImage(
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
@@ -62,7 +50,6 @@ export default class MaskPoints extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          // const layer = new HeatmapLayer({ mask: true })
           const layer = new HeatmapLayer({
             mask: true,
             maskInside: false,
@@ -105,22 +92,14 @@ export default class MaskPoints extends React.Component {
           scene.addLayer(layer);
         });
     });
-  }
-
-  public render() {
-    return (
-      <>
-        <div
-          id="map"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        />
-      </>
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};

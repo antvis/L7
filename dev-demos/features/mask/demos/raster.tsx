@@ -1,38 +1,34 @@
-import { LineLayer, Scene, MaskLayer, RasterLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
-import * as React from 'react';
 // @ts-ignore
+import { Scene, RasterLayer } from '@antv/l7';
+// @ts-ignore
+import { GaodeMap } from '@antv/l7-maps';
+import React, { useEffect } from 'react';
+
 import * as GeoTIFF from 'geotiff';
 
-export default class MaskPoints extends React.Component {
+async function getTiffData() {
+  const response = await fetch(
+    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+    // 'https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tiff',
+  );
+  const arrayBuffer = await response.arrayBuffer();
+  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+  const image = await tiff.getImage();
+  const width = image.getWidth();
+  const height = image.getHeight();
+  const values = await image.readRasters();
+  return {
+    data: values[0],
+    width,
+    height,
+    min: 0,
+    max: 8000,
+  };
+}
+
+export default () => {
   // @ts-ignore
-  private scene: Scene;
-
-  private async getTiffData() {
-    const response = await fetch(
-      'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
-      // 'https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tiff',
-    );
-    const arrayBuffer = await response.arrayBuffer();
-    const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
-    const image = await tiff.getImage();
-    const width = image.getWidth();
-    const height = image.getHeight();
-    const values = await image.readRasters();
-    return {
-      data: values[0],
-      width,
-      height,
-      min: 0,
-      max: 8000,
-    };
-  }
-
-  public componentWillUnmount() {
-    this.scene.destroy();
-  }
-
-  public async componentDidMount() {
+  useEffect( async () => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
@@ -43,13 +39,12 @@ export default class MaskPoints extends React.Component {
         style: 'dark',
       }),
     });
-    this.scene = scene;
     scene.addImage(
       '00',
       'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
     );
 
-    const tiffdata = await this.getTiffData();
+    const tiffdata = await getTiffData();
 
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
@@ -57,7 +52,6 @@ export default class MaskPoints extends React.Component {
       .then((res) => res.json())
       .then((maskData) => {
         const layer = new RasterLayer({ mask: true, maskfence: maskData });
-        // const layer = new RasterLayer({ mask: true, maskInside: false });
         const mindata = -0;
         const maxdata = 8000;
         layer
@@ -91,22 +85,14 @@ export default class MaskPoints extends React.Component {
           });
         scene.addLayer(layer);
       });
-  }
-
-  public render() {
-    return (
-      <>
-        <div
-          id="map"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        />
-      </>
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};
