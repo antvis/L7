@@ -27,8 +27,6 @@ import RasterLayer from './components/RasterLayer';
 
 import Plane from './components/Plane';
 
-import Wind from './components/Wind';
-
 import SourceTest from './components/SourceTest';
 
 storiesOf('图层渲染流程改造', module)
@@ -55,7 +53,5 @@ storiesOf('图层渲染流程改造', module)
   .add('RasterLayer', () => <RasterLayer />)
 
   .add('Plane', () => <Plane />)
-
-  .add('Wind', () => <Wind />)
 
   .add('SourceTest', () => <SourceTest />)

@@ -7,7 +7,7 @@ import {
   ITexture2D,
   Point,
 } from '@antv/l7-core';
-import { FrequencyController } from '@antv/l7-utils';
+import { FrequencyController, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -121,6 +121,7 @@ export default class WindModel extends BaseModel {
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
+        stencil: getMask(mask, maskInside),
         blend: this.getBlend(),
         pick: false,
       })
@@ -188,7 +189,6 @@ export default class WindModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

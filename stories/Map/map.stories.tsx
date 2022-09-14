@@ -5,8 +5,6 @@ import Amap2demo_destroy from './components/amap2demo_destroy';
 import Amap2demo_extrude from './components/amap2demo_extrude'
 import Amapdemo_extrude from './components/amapdemo_extrude'
 
-import Amap2demo_winds from "./components/amap2demo_winds"
-
 import Amap2demo_polygon_extrude from './components/amap2demo_polygon_extrude'
 
 import Amap2demo_arcLine from "./components/amap2demo_arcLine"
@@ -51,7 +49,6 @@ import AmapPlugin from './components/plugin'
 import DestroyClear from './components/destroyClear'
 import PlaneLine from './components/planeLine'
 import Slider from './components/slider'
-import WindMap from './components/amap2demo_wind'
 import LineWall from './components/linewall'
 import Cluster from './components/cluster'
 import Mask from './components/mask'
@@ -79,7 +76,6 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 line_arcLinear', () => <Amap2demo_arcLineLinear />)
         .add('高德地图2.0 line_arc3DTex', () => <Amap2demo_arcLine3DTex />)
 
-        .add('高德地图2.0 line_winds', () => <Amap2demo_winds />)
         .add('高德地图2.0 line_Street', () => <Amap2demo_lineStreet />)
         .add('高德地图2.0 line_Linear', () => <Amap2demo_lineLinear />)
         .add('高德地图2.0 road2', () => <Amap2demo_road2 />)
@@ -109,7 +105,6 @@ storiesOf('地图方法', module)
 
         .add('ShapeUpdate', () => <ShapeUpdate/>)
 
-        .add('WindMap', () => <WindMap/>)
         .add('AmapPlugin', () => <AmapPlugin/>)
         .add('DestroyClear', () => <DestroyClear/>)
         .add('PlaneLine', () => <PlaneLine/>)
