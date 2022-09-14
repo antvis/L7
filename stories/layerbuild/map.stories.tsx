@@ -2,7 +2,6 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 import PointExtrue from './components/PointsExtrude';
-import PointsNormal from './components/PointsNormal';
 
 import PointEarthFill from './components/PointsEarthFill';
 import PointEarthExtrude from './components/PointsEarthExtrude';
@@ -34,7 +33,6 @@ import SourceTest from './components/SourceTest';
 
 storiesOf('图层渲染流程改造', module)
   .add('PointExtrue', () => <PointExtrue />)
-  .add('PointsNormal', () => <PointsNormal />)
   .add('PointEarthFill', () => <PointEarthFill />)
   .add('PointEarthExtrude', () => <PointEarthExtrude />)
 
