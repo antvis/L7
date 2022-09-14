@@ -3,7 +3,6 @@ import * as React from 'react';
 import Amap2demo_destroy from './components/amap2demo_destroy';
 
 import Amap2demo_arcLine from "./components/amap2demo_arcLine"
-import Amap2demo_arcLine3d from "./components/amap2demo_arcLine3d"
 import Amap2demo_arcLine3dLinear from './components/amap2demo_arcLine3dLinear';
 import Amap2demo_arcLine_greatCircle from "./components/amap2demo_arcLine_greatCircle"
 import Amap2demo_arcLine_greatCircleTex from "./components/amap2demo_arcLine_greatCircleTex"
@@ -14,7 +13,6 @@ import Amap2demo_arcLine3DTex from './components/amap2demo_arcLine3DTex';
 import Amap2demo_lineStreet from './components/amap2demo_lineStreet';
 import Amap2demo_road2 from './components/amap2demo_road2';
 
-import Amap2demo_heatmap3D from "./components/amap2demo_heatmap3D"
 import Amap2demo_heatmap_hexagon from "./components/amap2demo_heatmap_hexagon"
 import Amap2demo_heatmap_hexagon_world from './components/amap2demo_heatmap_hexagon_world';
 import Amap2demo_heatmap_grid from "./components/amap2demo_heatmap_grid"
@@ -39,8 +37,6 @@ import BusLine from './components/busline'
 import AmapPlugin from './components/plugin'
 import DestroyClear from './components/destroyClear'
 import PlaneLine from './components/planeLine'
-import Slider from './components/slider'
-import LineWall from './components/linewall'
 import Cluster from './components/cluster'
 import Mask from './components/mask'
 import PolygonExteudeTex from './components/polygon_extrudeTex';
@@ -50,7 +46,6 @@ import DataImagelayer from './components/dataImagelayer';
 storiesOf('地图方法', module)
 
         .add('高德地图2.0 line_arc', () => <Amap2demo_arcLine />)
-        .add('高德地图2.0 line_arc3d_demo', () => <Amap2demo_arcLine3d />)
         .add('高德地图2.0 line_arc3d_linear_demo', () => <Amap2demo_arcLine3dLinear />)
         .add('高德地图2.0 line_arc_greatCircle', () => <Amap2demo_arcLine_greatCircle />)
         .add('高德地图2.0 line_arc_greatCircleTex', () => <Amap2demo_arcLine_greatCircleTex />)
@@ -63,7 +58,6 @@ storiesOf('地图方法', module)
         .add('高德地图2.0 line_Street', () => <Amap2demo_lineStreet />)
         .add('高德地图2.0 road2', () => <Amap2demo_road2 />)
 
-        .add('高德地图2.0 heatmap3D', () => <Amap2demo_heatmap3D />)
         .add('高德地图2.0 heatmap3D/hexagon', () => <Amap2demo_heatmap_hexagon />)
         .add('高德地图2.0 heatmap/hexagon/world', () => <Amap2demo_heatmap_hexagon_world />)
         .add('高德地图2.0 heatmap3D/grid', () => <Amap2demo_heatmap_grid />)
@@ -90,8 +84,6 @@ storiesOf('地图方法', module)
         .add('AmapPlugin', () => <AmapPlugin/>)
         .add('DestroyClear', () => <DestroyClear/>)
         .add('PlaneLine', () => <PlaneLine/>)
-        .add('Slider', () => <Slider/>)
-        .add('LineWall', () => <LineWall/>)
         .add('BusLine', () => <BusLine/>)
         .add('Cluster', () => <Cluster/>)
         .add('Mask', () => <Mask/>)

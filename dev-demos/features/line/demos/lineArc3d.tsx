@@ -1,16 +1,16 @@
-import { PointLayer, LineLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
-import * as React from 'react';
-
-export default class Amap2demo_arcLine3d extends React.Component {
+// @ts-ignore
+import {
+  LineLayer,
+  Scene,
+  PointLayer,
   // @ts-ignore
-  private scene: Scene;
+} from '@antv/l7';
+// @ts-ignore
+import { GaodeMap } from '@antv/l7-maps';
+import React, { useEffect } from 'react';
 
-  public componentWillUnmount() {
-    this.scene.destroy();
-  }
-
-  public async componentDidMount() {
+export default () => {
+  useEffect(() => {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
@@ -21,7 +21,6 @@ export default class Amap2demo_arcLine3d extends React.Component {
         style: 'dark',
       }),
     });
-    this.scene = scene;
 
     scene.on('loaded', () => {
       scene.addImage(
@@ -123,22 +122,14 @@ export default class Amap2demo_arcLine3d extends React.Component {
         scene.addLayer(flyLine);
       });
     });
-  }
-
-  public render() {
-    return (
-      <>
-        <div
-          id="map"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        />
-      </>
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};

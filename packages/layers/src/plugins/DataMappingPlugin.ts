@@ -41,7 +41,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           this.generateMaping(layer, { styleAttributeService });
         });
       }
-      // this.generateMaping(layer, { styleAttributeService });
     });
 
     layer.hooks.beforeRenderData.tap('DataMappingPlugin', () => {
@@ -164,18 +163,15 @@ export default class DataMappingPlugin implements ILayerPlugin {
         ...preRecord,
       };
       usedAttributes.forEach((attribute: IStyleAttribute) => {
-        // console.log('record', record)
         let values = this.applyAttributeMapping(
           attribute,
           record,
           minimumColor,
         );
-        // console.log('values', values)
         attribute.needRemapping = false;
 
         // TODO: 支持每个属性配置 postprocess
         if (attribute.name === 'color') {
-          // console.log('attribute', attribute)
           values = values.map((c: unknown) => {
             return rgb2arr(c as string);
           });
@@ -198,8 +194,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
       ) {
         // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
         const coords = encodeRecord.coordinates as Position[];
-        const arrowPoint = this.getArrowPoints(coords[0], coords[1]);
-        encodeRecord.coordinates.splice(1, 0, arrowPoint, arrowPoint);
+        // @ts-ignore
+        if(!layer.arrowInsert) {
+          // Tip: arrowInsert 的判断用于确保 arrow 的属性点只会被植入一次
+          const arrowPoint = this.getArrowPoints(coords[0], coords[1]);
+          encodeRecord.coordinates.splice(1, 0, arrowPoint, arrowPoint);
+           // @ts-ignore
+          layer.arrowInsert = true
+        }
       }
       return encodeRecord;
     }) as IEncodeFeature[];

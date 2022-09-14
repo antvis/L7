@@ -1,4 +1,6 @@
+// @ts-ignore
 import { LineLayer, Scene } from '@antv/l7';
+// @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
@@ -10,7 +12,6 @@ export default () => {
         center: [116.3956, 39.9392],
         zoom: 10,
         style: 'amap://styles/wine',
-        // viewMode: '2D',
       }),
     });
 

@@ -1,22 +1,26 @@
-import { LineLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-import * as React from 'react';
-
-export default class LineDemo extends React.Component {
+// @ts-ignore
+import {
+  LineLayer,
+  Scene,
+  Source,
+  lineAtOffset,
+  lineAtOffsetAsyc,
+  PointLayer,
   // @ts-ignore
-  private scene: Scene;
+} from '@antv/l7';
+// @ts-ignore
+import { GaodeMap } from '@antv/l7-maps';
+import React, { useEffect } from 'react';
 
-  public componentWillUnmount() {
-    this.scene.destroy();
-  }
-
-  public async componentDidMount() {
+export default () => {
+  // @ts-ignore
+  useEffect(async () => {
     const response = await fetch(
       'https://gw.alipayobjects.com/os/basement_prod/49a796db-944b-4c35-aa97-1015f0a407f1.json',
     );
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMap({
         center: [110.19382669582967, 40.258134],
         pitch: 0,
         zoom: 3,
@@ -53,21 +57,14 @@ export default class LineDemo extends React.Component {
       .render();
     lineLayer.fitBounds();
     scene.addLayer(lineLayer);
-    this.scene = scene;
-  }
-
-  public render() {
-    return (
-      <div
-        id="map"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};
