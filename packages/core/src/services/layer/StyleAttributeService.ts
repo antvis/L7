@@ -19,10 +19,6 @@ import {
 } from './IStyleAttributeService';
 import StyleAttribute from './StyleAttribute';
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 const bytesPerElementMap = {
   [gl.FLOAT]: 4,
   [gl.UNSIGNED_BYTE]: 1,

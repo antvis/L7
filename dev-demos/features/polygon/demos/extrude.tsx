@@ -1,35 +1,26 @@
-import { PolygonLayer, Scene, LineLayer, PointLayer } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
-import * as React from 'react';
 
-export default class Amap2demo_polygon_extrude extends React.Component {
-  private gui: dat.GUI;
-  private $stats: Node;
+import {
+  Scene,
+  PolygonLayer,
+  PointLayer,
+  LineLayer,
   // @ts-ignore
-  private scene: Scene;
+} from '@antv/l7';
+// @ts-ignore
+import { GaodeMap } from '@antv/l7-maps';
+import React, { useEffect } from 'react';
 
-  public componentWillUnmount() {
-    this.scene.destroy();
-  }
-
-  public async componentDidMount() {
-    // const response = await fetch(
-    //   // 'https://gw.alipayobjects.com/os/basement_prod/f79485d8-d86f-4bb3-856d-537b586be06e.json',
-    //   // 'https://gw.alipayobjects.com/os/basement_prod/619a6f16-ecb0-4fca-9f9a-b06b67f6f02b.json',
-    //   'https://gw.alipayobjects.com/os/bmw-prod/93a55259-328e-4e8b-8dc2-35e05844ed31.json'
-    // );
+export default () => {
+  useEffect(() => {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        // map: new GaodeMapV2({
-        // map: new Mapbox({
         style: 'dark',
         center: [120, 29.732983],
         zoom: 6.2,
         pitch: 60,
       }),
     });
-    this.scene = scene;
 
     const wavePoints = new PointLayer({ zIndex: 2 })
       .source(
@@ -70,7 +61,6 @@ export default class Amap2demo_polygon_extrude extends React.Component {
 
     scene.on('loaded', () => {
       scene.addLayer(wavePoints);
-      // @ts-ignore
       let lineDown, lineUp, textLayer;
 
       fetch('https://geo.datav.aliyun.com/areas_v3/bound/330000_full.json')
@@ -148,9 +138,6 @@ export default class Amap2demo_polygon_extrude extends React.Component {
             .size(150000)
             .shape('extrude')
             .color('#0DCCFF')
-            // .active({
-            //   color: 'rgb(100,230,255)',
-            // })
             .style({
               heightfixed: true,
               pickLight: true,
@@ -176,58 +163,16 @@ export default class Amap2demo_polygon_extrude extends React.Component {
               sidesurface: false,
             });
           scene.addLayer(provincelayerTop);
-
-          // provincelayer.on('mousemove', () => {
-          //   provincelayer.style({
-          //     raisingHeight: 200000 + 100000,
-          //   });
-          //   // @ts-ignore
-          //   lineDown.style({
-          //     raisingHeight: 200000 + 100000,
-          //   });
-          //   // @ts-ignore
-          //   lineUp.style({
-          //     raisingHeight: 200000 + 150000 + 100000,
-          //   });
-          //   // @ts-ignore
-          //   textLayer.style({
-          //     raisingHeight: 200000 + 150000 + 10000 + 100000,
-          //   });
-          // });
-
-          // provincelayer.on('unmousemove', () => {
-          //   provincelayer.style({
-          //     raisingHeight: 200000,
-          //   });
-          //   // @ts-ignore
-          //   lineDown.style({
-          //     raisingHeight: 200000,
-          //   });
-          //   // @ts-ignore
-          //   lineUp.style({
-          //     raisingHeight: 200000 + 150000,
-          //   });
-          //   // @ts-ignore
-          //   textLayer.style({
-          //     raisingHeight: 200000 + 150000 + 10000,
-          //   });
-          // });
         });
     });
-  }
-
-  public render() {
-    return (
-      <div
-        id="map"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
-    );
-  }
-}
+  }, []);
+  return (
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
+  );
+};

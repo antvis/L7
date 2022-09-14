@@ -1,2 +1,2 @@
-### Simple Line
-<code src="./simpleline.tsx"></code>
+### Line - simple 
+<code src="./demos/simpleline.tsx"></code>

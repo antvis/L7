@@ -6,6 +6,7 @@ import {
   lineAtOffset,
   lineAtOffsetAsyc,
   PointLayer,
+  // @ts-ignore
 } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
@@ -18,7 +19,6 @@ export default () => {
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,
-        // pitch: 60
       }),
     });
 

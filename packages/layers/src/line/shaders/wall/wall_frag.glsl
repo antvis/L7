@@ -1,36 +1,32 @@
 #define Animate 0.0
 #define LineTexture 1.0
 
-uniform float u_opacity : 1.0;
-uniform float u_textureBlend;
-uniform float u_iconStepCount;
-
-varying vec4 v_color;
-
 // line texture
 uniform float u_line_texture;
 uniform sampler2D u_texture;
 uniform vec2 u_textSize;
-
-varying vec2 v_iconMapUV;
-varying float v_blur;
-
 uniform float u_linearColor: 0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
-
-#pragma include "picking"
-
+uniform float u_opacity : 1.0;
+uniform float u_textureBlend;
+uniform float u_iconStepCount;
 uniform float u_time;
 uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ]; // 控制运动
 
-varying mat4 styleMappingMat;
-// [animate, duration, interval, trailLength],
+varying vec2 v_iconMapUV;
+varying float v_blur;
+varying float v_radio;
+varying vec4 v_color;
+varying vec4 v_dataset;
+
+#pragma include "picking"
+
 void main() {
-  float opacity = styleMappingMat[0][0];
+  float opacity = u_opacity;
   float animateSpeed = 0.0; // 运动速度
-  float d_distance_ratio = styleMappingMat[3].r; // 当前点位距离占线总长的比例
-  float v = styleMappingMat[3].a;
+  float d_distance_ratio = v_dataset.r; // 当前点位距离占线总长的比例
+  float v = v_dataset.a;
 
   if(u_linearColor == 1.0) { // 使用渐变颜色
     gl_FragColor = mix(u_sourceColor, u_targetColor, v);
@@ -48,10 +44,10 @@ void main() {
   }
 
   if(u_line_texture == LineTexture) { // while load texture
-    float aDistance = styleMappingMat[3].g;      // 当前顶点的距离
-    float d_texPixelLen = styleMappingMat[3].b;  // 贴图的像素长度，根据地图层级缩放
+    float aDistance = v_dataset.g;      // 当前顶点的距离
+    float d_texPixelLen = v_dataset.b;  // 贴图的像素长度，根据地图层级缩放
     float u = fract(mod(aDistance, d_texPixelLen)/d_texPixelLen - animateSpeed);
-    float v = styleMappingMat[3].a;  // 线图层贴图部分的 v 坐标值
+    float v = v_dataset.a;  // 线图层贴图部分的 v 坐标值
 
     // 计算纹理间隔 start
     float flag = 0.0;

@@ -1,2 +1,2 @@
-### GreatCircle Line
-<code src="./greatcircleline.tsx"></code>
+### Line - greatCircle 
+<code src="./demos/greatcircleline.tsx"></code>
