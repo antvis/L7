@@ -3,7 +3,6 @@ import * as React from 'react';
 
 import PointExtrue from './components/PointsExtrude';
 import PointsNormal from './components/PointsNormal';
-import PointRader from './components/PointsRadar';
 
 import PointEarthFill from './components/PointsEarthFill';
 import PointEarthExtrude from './components/PointsEarthExtrude';
@@ -36,7 +35,6 @@ import SourceTest from './components/SourceTest';
 storiesOf('图层渲染流程改造', module)
   .add('PointExtrue', () => <PointExtrue />)
   .add('PointsNormal', () => <PointsNormal />)
-  .add('PointRader', () => <PointRader />)
   .add('PointEarthFill', () => <PointEarthFill />)
   .add('PointEarthExtrude', () => <PointEarthExtrude />)
 
