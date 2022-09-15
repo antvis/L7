@@ -34,6 +34,7 @@ import { MaskLayer } from '@antv/l7-layers';
 import { ReglRendererService } from '@antv/l7-renderer';
 import { DOM, isMini } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import BoxSelect, { BoxSelectEventList } from './boxSelect';
 import ILayerManager from './ILayerManager';
 import IMapController from './IMapController';
 import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
@@ -61,6 +62,7 @@ class Scene
   private popupService: IPopupService;
   private fontService: IFontService;
   private interactionService: IInteractionService;
+  private boxSelect: BoxSelect;
   private container: Container;
 
   public constructor(config: ISceneConfig) {
@@ -96,6 +98,9 @@ class Scene
       TYPES.IInteractionService,
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
+    this.boxSelect = new BoxSelect(this, {
+      className: config.selectBoxClassName,
+    });
 
     if (isMini) {
       this.sceneService.initMiniScene(config);
@@ -328,21 +333,33 @@ class Scene
   }
 
   public on(type: string, handle: (...args: any[]) => void): void {
-    SceneEventList.indexOf(type) === -1
-      ? this.mapService.on(type, handle)
-      : this.sceneService.on(type, handle);
+    if (BoxSelectEventList.includes(type)) {
+      this.boxSelect?.on(type, handle);
+    } else if (SceneEventList.includes(type)) {
+      this.sceneService.on(type, handle);
+    } else {
+      this.mapService.on(type, handle);
+    }
   }
 
   public once(type: string, handle: (...args: any[]) => void): void {
-    SceneEventList.indexOf(type) === -1
-      ? this.mapService.once(type, handle)
-      : this.sceneService.once(type, handle);
+    if (BoxSelectEventList.includes(type)) {
+      this.boxSelect?.once(type, handle);
+    } else if (SceneEventList.includes(type)) {
+      this.sceneService.once(type, handle);
+    } else {
+      this.mapService.once(type, handle);
+    }
   }
 
   public off(type: string, handle: (...args: any[]) => void): void {
-    SceneEventList.indexOf(type) === -1
-      ? this.mapService.off(type, handle)
-      : this.sceneService.off(type, handle);
+    if (BoxSelectEventList.includes(type)) {
+      this.boxSelect?.off(type, handle);
+    } else if (SceneEventList.includes(type)) {
+      this.sceneService.off(type, handle);
+    } else {
+      this.mapService.off(type, handle);
+    }
   }
 
   // implements IMapController
@@ -463,6 +480,19 @@ class Scene
 
   public diasbleShaderPick() {
     this.layerService.disableShaderPick();
+  }
+
+  public enableBoxSelect(once = true) {
+    this.boxSelect.enable();
+    if (once) {
+      this.boxSelect.once('selectend', () => {
+        this.disableBoxSelect();
+      });
+    }
+  }
+
+  public disableBoxSelect() {
+    this.boxSelect.disable();
   }
 
   // get current point size info
