@@ -173,6 +173,7 @@ export default class LineModel extends BaseModel {
       enablePicking,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
+    // console.log(frag)
     this.layer.triangulation = LineTriangulation;
     this.layer
       .buildLayerModel({
