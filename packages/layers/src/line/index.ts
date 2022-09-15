@@ -5,6 +5,7 @@ import { isVectorTile } from '../tile/utils';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
+  public arrowInsertCount: number = 0;
   public defaultSourceConfig = {
     data: [
       {
