@@ -1,5 +1,5 @@
 require('./site/css/demo.css');
-require('../component/src/css/l7.css');
+require('../component/src/css/index.css');
 require('antd/dist/antd.less');
 window.geotiff = require('geotiff');
 window.lerc = require('lerc');

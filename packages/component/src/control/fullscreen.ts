@@ -1,6 +1,6 @@
 import { DOM } from '@antv/l7-utils';
-import ScreenFull from 'screenfull';
 import { createL7Icon } from '../utils/icon';
+import ScreenFull from '../utils/screenfull';
 import ButtonControl, {
   IButtonControlOption,
 } from './baseControl/buttonControl';

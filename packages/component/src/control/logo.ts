@@ -1,6 +1,4 @@
 import { DOM } from '@antv/l7-utils';
-// @ts-ignore
-import AntvImg from '../images/logo.png';
 import { Control, IControlOption, PositionType } from './baseControl';
 
 export interface ILogoControlOption extends IControlOption {
@@ -18,7 +16,8 @@ export default class Logo extends Control<ILogoControlOption> {
       position: PositionType.BOTTOMLEFT,
       name: 'logo',
       href: 'https://l7.antv.vision/',
-      img: AntvImg,
+      img:
+        'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GRb1TKp4HcMAAAAAAAAAAAAAARQnAQ',
     };
   }
 

@@ -3,7 +3,7 @@ import MarkerLayer from './marker-layer';
 
 import './assets/iconfont/iconfont.js';
 // 引入样式
-import './css/index.less';
+import './css/index.css';
 
 export * from './control/baseControl';
 export * from './control/logo';
