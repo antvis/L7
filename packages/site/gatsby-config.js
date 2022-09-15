@@ -208,6 +208,14 @@ module.exports = {
         order: 8,
       },
       {
+        slug: 'api/control',
+        title: {
+          zh: '控件 Control',
+          en: 'Control',
+        },
+        order: 8,
+      },
+      {
         slug: 'api/renderer',
         title: {
           zh: '第三方引擎接入',
