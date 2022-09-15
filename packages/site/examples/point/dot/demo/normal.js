@@ -6,7 +6,6 @@ const scene = new Scene({
   map: new GaodeMap({
     style: 'dark',
     center: [ 121.417463, 31.215175 ],
-    pitch: 0,
     zoom: 11
   })
 });
@@ -23,10 +22,7 @@ scene.on('loaded', () => {
           }
         })
         .size(0.5)
-        .color('#080298')
-        .style({
-          opacity: 1
-        });
+        .color('#080298');
 
       scene.addLayer(pointLayer);
     });

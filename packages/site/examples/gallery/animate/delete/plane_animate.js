@@ -71,10 +71,7 @@ scene.on('loaded', () => {
       .shape('circle')
       .color('rgb(22,119,255)')
       .animate(true)
-      .size(40)
-      .style({
-        opacity: 1.0
-      });
+      .size(40);
     const flyLine = new LineLayer({
       blend: 'additive',
       zIndex: 2
@@ -98,7 +95,6 @@ scene.on('loaded', () => {
         textureBlend: 'replace',
         lineTexture: true, // 开启线的贴图功能
         iconStep: 8, // 设置贴图纹理的间距
-        opacity: 1
       });
 
     const flyLine2 = new LineLayer()

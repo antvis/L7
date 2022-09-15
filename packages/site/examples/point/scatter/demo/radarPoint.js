@@ -4,7 +4,6 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 0,
     center: [ 120, 30 ],
     zoom: 13
   })

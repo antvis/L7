@@ -30,10 +30,7 @@ const earthlayer = new EarthLayer()
 
 const atomLayer = new EarthLayer()
   .color('#2E8AE6')
-  .shape('atomSphere')
-  .style({
-    opacity: 1
-  });
+  .shape('atomSphere');
 
 const bloomLayer = new EarthLayer().color('#fff').shape('bloomSphere')
   .style({
@@ -66,7 +63,6 @@ scene.on('loaded', () => {
           duration: 1
         })
         .style({
-          opacity: 1,
           segmentNumber: 60,
           globalArcHeight: 20
         });

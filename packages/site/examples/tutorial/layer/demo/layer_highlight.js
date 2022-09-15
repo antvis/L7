@@ -4,7 +4,6 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'light',
-    pitch: 0,
     center: [ 118.7368, 32.0560 ],
     zoom: 9
   })
@@ -20,10 +19,7 @@ scene.on('loaded', () => {
       })
         .source(data)
         .shape('fill')
-        .color('unit_price', [ '#f0f9e8', '#ccebc5', '#a8ddb5', '#7bccc4', '#43a2ca', '#0868ac' ])
-        .style({
-          opacity: 1
-        });
+        .color('unit_price', [ '#f0f9e8', '#ccebc5', '#a8ddb5', '#7bccc4', '#43a2ca', '#0868ac' ]);
       const linelayer = new LineLayer({
         zIndex: 1,
         name: 'line'
@@ -45,10 +41,7 @@ scene.on('loaded', () => {
         })
         .shape('line')
         .size(2)
-        .color('red')
-        .style({
-          opacity: 1
-        });
+        .color('red');
       scene.addLayer(filllayer);
       scene.addLayer(linelayer);
       scene.addLayer(hightLayer);

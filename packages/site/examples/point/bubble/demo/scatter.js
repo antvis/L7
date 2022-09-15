@@ -4,7 +4,6 @@ import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 0,
     style: 'dark',
     center: [ 112, 23.69 ],
     zoom: 2.5
@@ -28,10 +27,7 @@ scene.on('loaded', () => {
         .active(true)
         .animate(true)
         .size(56)
-        .color('#4cfd47')
-        .style({
-          opacity: 1
-        });
+        .color('#4cfd47');
 
       scene.addLayer(pointLayer);
     });
