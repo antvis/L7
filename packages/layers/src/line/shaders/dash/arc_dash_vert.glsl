@@ -48,6 +48,8 @@ vec2 midPoint(vec2 source, vec2 target, float arcThetaOffset) {
   // return mid;
 }
 float getSegmentRatio(float index) {
+  // dash: index / (segmentNumber - 1.);
+  // normal: smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
   return index / (segmentNumber - 1.);
 }
 vec2 interpolate (vec2 source, vec2 target, float t, float arcThetaOffset) {
