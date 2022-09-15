@@ -18,7 +18,7 @@ export const polygonFillModel = async ({
     a_Position,
     filter: a_filter,
     a_vertexId,
-    a_PickingColor: (feature: IEncodeFeature, featureIdx: number) => {
+    a_PickingColor: (feature: IEncodeFeature,) => {
       const { id } = feature;
       return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
     },
@@ -88,7 +88,7 @@ export const polygonFillModel = async ({
         vertexIndex = indexes[vertexIdx];
       }
 
-      descriptors.forEach((descriptor, attributeIdx: number) => {
+      descriptors.forEach((descriptor) => {
         // @ts-ignore
         if (descriptor && updateFuncs[descriptor.name]) {
           // @ts-ignore

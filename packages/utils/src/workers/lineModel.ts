@@ -20,7 +20,7 @@ export const lineModel = async ({
     a_Position,
     filter: a_filter,
     a_vertexId,
-    a_PickingColor: (feature: IEncodeFeature, featureIdx: number) => {
+    a_PickingColor: (feature: IEncodeFeature,) => {
       const { id } = feature;
       return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
     },
@@ -48,9 +48,6 @@ export const lineModel = async ({
     },
     a_Size: (
       feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
     ) => {
       const { size: pointSize = 1 } = feature;
       return Array.isArray(pointSize)
@@ -70,15 +67,11 @@ export const lineModel = async ({
       feature: IEncodeFeature,
       featureIdx: number,
       vertex: number[],
-      attributeIdx: number,
     ) => {
       return [vertex[4]];
     },
     a_iconMapUV: (
       feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
     ) => {
       const { texture } = feature;
       const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
@@ -147,7 +140,7 @@ export const lineModel = async ({
         vertexIndex = indexes[vertexIdx];
       }
 
-      descriptors.forEach((descriptor, attributeIdx: number) => {
+      descriptors.forEach((descriptor) => {
         // @ts-ignore
         if (descriptor && updateFuncs[descriptor.name]) {
           // @ts-ignore

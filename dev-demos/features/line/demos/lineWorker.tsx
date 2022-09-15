@@ -18,7 +18,7 @@ export default () => {
         zoom: 2,
       }),
     });
-    const layer = new LineLayer({ workerEnabled: false })
+    const layer = new LineLayer({ workerEnabled: true })
       .source({
         type: 'FeatureCollection',
         features: [

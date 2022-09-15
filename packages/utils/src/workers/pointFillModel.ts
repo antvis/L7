@@ -20,7 +20,7 @@ export const pointFillModel = async ({
     a_Position,
     filter: a_filter,
     a_vertexId,
-    a_PickingColor: (feature: IEncodeFeature, featureIdx: number) => {
+    a_PickingColor: (feature: IEncodeFeature,) => {
       const { id } = feature;
       return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
     },
@@ -28,9 +28,6 @@ export const pointFillModel = async ({
     // pointFill feature func
     a_Shape: (
       feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number[],
-      attributeIdx: number,
     ) => {
       const { shape = 2 } = feature;
       const shapeIndex = shape2d.indexOf(shape as string);
@@ -52,9 +49,6 @@ export const pointFillModel = async ({
     },
     a_Size: (
       feature: IEncodeFeature,
-      featureIdx: number,
-      vertex: number,
-      attributeIdx: number[],
     ) => {
       const { size: pointSize = 5 } = feature;
       return Array.isArray(pointSize) ? [pointSize[0]] : [pointSize];
@@ -122,7 +116,7 @@ export const pointFillModel = async ({
         vertexIndex = indexes[vertexIdx];
       }
 
-      descriptors.forEach((descriptor, attributeIdx: number) => {
+      descriptors.forEach((descriptor) => {
         // @ts-ignore
         if (descriptor && updateFuncs[descriptor.name]) {
           // @ts-ignore
