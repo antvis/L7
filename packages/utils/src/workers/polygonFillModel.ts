@@ -18,7 +18,7 @@ export const polygonFillModel = async ({
     a_Position,
     filter: a_filter,
     a_vertexId,
-    a_PickingColor: (feature: IEncodeFeature,) => {
+    a_PickingColor: (feature: IEncodeFeature) => {
       const { id } = feature;
       return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
     },

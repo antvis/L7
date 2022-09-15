@@ -20,15 +20,13 @@ export const pointFillModel = async ({
     a_Position,
     filter: a_filter,
     a_vertexId,
-    a_PickingColor: (feature: IEncodeFeature,) => {
+    a_PickingColor: (feature: IEncodeFeature) => {
       const { id } = feature;
       return enablePicking ? encodePickingColor(id as number) : [0, 0, 0];
     },
 
     // pointFill feature func
-    a_Shape: (
-      feature: IEncodeFeature,
-    ) => {
+    a_Shape: (feature: IEncodeFeature) => {
       const { shape = 2 } = feature;
       const shapeIndex = shape2d.indexOf(shape as string);
       return [shapeIndex];
@@ -47,9 +45,7 @@ export const pointFillModel = async ({
         extrude[extrudeIndex + 2],
       ];
     },
-    a_Size: (
-      feature: IEncodeFeature,
-    ) => {
+    a_Size: (feature: IEncodeFeature) => {
       const { size: pointSize = 5 } = feature;
       return Array.isArray(pointSize) ? [pointSize[0]] : [pointSize];
     },
