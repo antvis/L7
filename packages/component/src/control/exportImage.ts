@@ -25,7 +25,7 @@ export default class ExportImage extends ButtonControl<
     return {
       ...super.getDefault(option),
       title: '导出图片',
-      btnIcon: createL7Icon('l7-icon-tupian'),
+      btnIcon: createL7Icon('l7-icon-export-picture'),
       imageType: 'png',
     };
   }

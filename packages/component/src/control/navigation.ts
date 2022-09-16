@@ -21,7 +21,7 @@ export default class Navigation extends ButtonControl<
     return {
       ...super.getDefault(option),
       title: '定位',
-      btnIcon: createL7Icon('l7-icon-gps-fixed'),
+      btnIcon: createL7Icon('l7-icon-reposition'),
       zoom: -1,
     };
   }

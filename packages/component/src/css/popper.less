@@ -6,6 +6,7 @@
   justify-content: center;
   align-items: center;
   z-index: 5;
+  color: @l7-control-font-color;
   &.l7-popper-hide {
     display: none;
   }
@@ -13,6 +14,7 @@
     min-height: @l7-btn-control-size;
     background: @l7-popper-control-bg-color;
     border-radius: @l7-btn-control-border-radius;
+    box-shadow: @l7-control-shadow;
   }
   .l7-popper-arrow {
     width: 0;
@@ -23,6 +25,7 @@
     border-bottom-color: transparent;
     border-left-color: transparent;
     border-right-color: transparent;
+    box-shadow: @l7-control-shadow;
   }
   &.l7-popper-left {
     flex-direction: row;

@@ -7,6 +7,7 @@ export interface IButtonControlOption extends IControlOption {
   btnIcon?: HTMLElement | SVGElement;
   btnText?: string;
   title?: string;
+  vertical?: boolean;
 }
 
 export default abstract class ButtonControl<
@@ -121,6 +122,11 @@ export default abstract class ButtonControl<
    * @param newText
    */
   public setBtnText(newText: O['btnText']) {
+    if (!this.button) {
+      return;
+    }
+    DOM.removeClass(this.button, 'l7-button-control--row');
+    DOM.removeClass(this.button, 'l7-button-control--column');
     if (newText) {
       let btnText = this.buttonText;
       if (!btnText) {
@@ -129,6 +135,12 @@ export default abstract class ButtonControl<
         this.buttonText = btnText;
       }
       btnText.innerText = newText;
+      DOM.addClass(
+        this.button,
+        this.controlOption.vertical
+          ? 'l7-button-control--column'
+          : 'l7-button-control--row',
+      );
     } else if (!newText && this.buttonText) {
       DOM.remove(this.buttonText);
       this.buttonText = undefined;

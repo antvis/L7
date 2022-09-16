@@ -62,7 +62,7 @@ const Demo: FunctionComponent = () => {
           .then((res) => res.json())
           .then((data) => {
             const chinaPolygonLayer = new PolygonLayer({
-              name: '中国填充图层',
+              name: '中国填充',
               autoFit: true,
             })
               .source(data)
@@ -79,7 +79,7 @@ const Demo: FunctionComponent = () => {
               });
             //  图层边界
             const layer2 = new LineLayer({
-              name: '中国边框图层',
+              name: '中国边框',
               zIndex: 2,
             })
               .source(data)

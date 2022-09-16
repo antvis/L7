@@ -1,10 +1,11 @@
 import { DOM } from '@antv/l7-utils';
+import { createL7Icon } from '../utils/icon';
 import { Control, IControlOption } from './baseControl';
 
 export interface IZoomControlOption extends IControlOption {
-  zoomInText: string;
+  zoomInText: Element | string;
   zoomInTitle: string;
-  zoomOutText: string;
+  zoomOutText: Element | string;
   zoomOutTitle: string;
 }
 
@@ -19,9 +20,9 @@ export default class Zoom extends Control<IZoomControlOption> {
     return {
       ...super.getDefault(option),
       name: 'zoom',
-      zoomInText: '+',
+      zoomInText: createL7Icon('l7-icon-enlarge'),
       zoomInTitle: 'Zoom in',
-      zoomOutText: '&#x2212;',
+      zoomOutText: createL7Icon('l7-icon-narrow'),
       zoomOutTitle: 'Zoom out',
     };
   }
@@ -102,14 +103,18 @@ export default class Zoom extends Control<IZoomControlOption> {
   };
 
   private createButton(
-    html: string,
+    html: Element | string,
     tile: string,
     className: string,
     container: HTMLElement,
     fn: (...arg: any[]) => any,
   ) {
     const link = DOM.create('button', className, container) as HTMLLinkElement;
-    link.innerHTML = html;
+    if (typeof html === 'string') {
+      link.innerHTML = html;
+    } else {
+      link.append(html);
+    }
     link.title = tile;
     link.addEventListener('click', fn);
     return link;

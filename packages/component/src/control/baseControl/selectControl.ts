@@ -109,8 +109,11 @@ export default abstract class SelectControl<
     const isImageOptions = this.isImageOptions();
     const content = DOM.create(
       'div',
-      isImageOptions ? 'l7-select-control-image' : 'l7-select-control-normal',
+      isImageOptions ? 'l7-select-control--image' : 'l7-select-control--normal',
     ) as HTMLElement;
+    if (this.getIsMultiple()) {
+      DOM.addClass(content, 'l7-select-control--multiple');
+    }
     const optionsDOMList = options.map((option, optionIndex) => {
       const optionDOM = isImageOptions
         ? // @ts-ignore

@@ -22,7 +22,7 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
     return {
       ...super.getDefault(option),
       title: '图层控制',
-      btnIcon: createL7Icon('l7-icon-tuceng'),
+      btnIcon: createL7Icon('l7-icon-layer'),
       options: [],
     };
   }
