@@ -34,7 +34,7 @@ export default class EarthBloomSphereModel extends BaseModel {
   }
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
-    // TODO: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
+    // Tip: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
     this.layer.zIndex = -999;
     this.layer
       .buildLayerModel({
@@ -55,14 +55,12 @@ export default class EarthBloomSphereModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -70,9 +68,6 @@ export default class EarthBloomSphereModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -86,7 +81,6 @@ export default class EarthBloomSphereModel extends BaseModel {
       descriptor: {
         name: 'a_Normal',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -110,7 +104,6 @@ export default class EarthBloomSphereModel extends BaseModel {
       descriptor: {
         name: 'a_Uv',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -120,7 +113,6 @@ export default class EarthBloomSphereModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

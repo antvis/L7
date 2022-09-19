@@ -19,6 +19,7 @@ import {
   IPostProcessingPass,
 } from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
+import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
 import { ISource, ISourceCFG, ITransform } from '../source/ISourceService';
 import {
@@ -122,7 +123,7 @@ export interface ILegendClassificaItem {
 // 图层图例
 export type LegendItems = ILegendSegmentItem[] | ILegendClassificaItem[];
 
-export interface IAttrubuteAndElements {
+export interface IAttributeAndElements {
   attributes: any;
   elements: any;
 }
@@ -159,6 +160,7 @@ export interface ISubLayerInitOptions {
   clampLow?: boolean;
   clampHigh?: boolean;
   rampColors?: IColorRamp;
+  colorTexture?: ITexture2D;
   // 在初始化的时候使用
   rampColorsData?: ImageData | IImagedata;
 
@@ -316,7 +318,7 @@ export interface ILayer {
   threeRenderService?: any;
 
   getShaderPickStat: () => boolean;
-  updateModelData(data: IAttrubuteAndElements): void;
+  updateModelData(data: IAttributeAndElements): void;
 
   addMaskLayer(maskLayer: ILayer): void;
   removeMaskLayer(maskLayer: ILayer): void;
@@ -339,7 +341,7 @@ export interface ILayer {
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): Promise<IModel>;
-  createAttrubutes(
+  createAttributes(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): {
@@ -575,7 +577,7 @@ export interface ILayerConfig {
   /**
    * 地球模式参数
    */
-  globelOtions: any;
+   globalOptions: any;
   /**
    * layer point text 是否是 iconfont 模式
    */
