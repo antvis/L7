@@ -5,7 +5,6 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'light',
-    pitch: 0,
     center: [ 104.995156, 31.450658 ],
     zoom: 3.79
   })
@@ -31,7 +30,6 @@ scene.on('loaded', () => {
         .style({
           coverage: 0.9,
           angle: 0,
-          opacity: 1.0
         })
         .color(
           'sum',

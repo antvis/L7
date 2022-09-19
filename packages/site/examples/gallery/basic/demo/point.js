@@ -30,10 +30,7 @@ scene.on('loaded', () => {
           '#A6E1E0',
           '#B8EFE2',
           '#D7F9F0'
-        ])
-        .style({
-          opacity: 1
-        });
+        ]);
 
       scene.addLayer(pointLayer);
     });

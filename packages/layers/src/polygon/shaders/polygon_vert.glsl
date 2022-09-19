@@ -7,7 +7,7 @@ uniform mat4 u_Mvp;
 uniform float u_opacity: 1.0;
 uniform float u_raisingHeight: 0.0;
 
-varying vec4 v_Color;
+varying vec4 v_color;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
 #pragma include "styleMapping"
@@ -43,7 +43,7 @@ styleMappingMat = mat4(
   textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
 
-  v_Color = a_Color;
+  v_color = a_Color;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 

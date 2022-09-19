@@ -33,7 +33,6 @@ scene.on('loaded', () => {
         .style({
           coverage: 0.8,
           angle: 0,
-          opacity: 1.0
         })
         .color(
           'sum',

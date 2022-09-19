@@ -1,2 +1,2 @@
 ### Line
-<code src="./line.tsx"></code>
+<code src="./demos/line.tsx"></code>

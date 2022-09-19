@@ -5,8 +5,6 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     center: [ 110, 30 ],
-    pitch: 0,
-    // style: 'light',
     style: 'amap://styles/453e2f8e11603fc8f7548fe18959e9e9',
     zoom: 5
   })

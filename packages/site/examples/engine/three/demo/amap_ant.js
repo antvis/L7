@@ -39,65 +39,48 @@ scene.on('loaded', () => {
       loader.load(
         'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
         gltf => {
-          // 根据 GeoJSON 数据放置模型
-          layer.getSource().data.dataArray.forEach(({ coordinates }) => {
-            const gltfScene = gltf.scene;
-            setDouble(gltfScene);
-            layer.adjustMeshToMap(gltfScene);
-            // gltfScene.scale.set(1000, 1000, 1000)
-            layer.setMeshScale(gltfScene, 1000, 1000, 1000);
+          const gltfScene = gltf.scene;
+          setDouble(gltfScene);
+          layer.adjustMeshToMap(gltfScene);
+          // gltfScene.scale.set(1000, 1000, 1000)
+          layer.setMeshScale(gltfScene, 1000, 1000, 1000);
 
+          layer.setObjectLngLat(
+            gltfScene,
+            [ center.lng, center.lat ],
+            0
+          );
+
+          const animations = gltf.animations;
+          if (animations && animations.length) {
+            const mixer = new THREE.AnimationMixer(gltfScene);
+
+            const animation = animations[2];
+
+            const action = mixer.clipAction(animation);
+
+            action.play();
+            layer.addAnimateMixer(mixer);
+          }
+          // layer.setObjectLngLat(gltfScene, [center.lng + 0.05, center.lat] as ILngLat, 0)
+          let t = 0;
+          setInterval(() => {
+            t += 0.01;
             layer.setObjectLngLat(
               gltfScene,
-              [ coordinates[0] + 0.02, coordinates[1] ],
+              [ center.lng, center.lat + Math.sin(t) * 0.1 ],
               0
             );
+          }, 16);
 
-            const animations = gltf.animations;
-            if (animations && animations.length) {
-              const mixer = new THREE.AnimationMixer(gltfScene);
-
-              const animation = animations[2];
-
-              const action = mixer.clipAction(animation);
-
-              action.play();
-              layer.addAnimateMixer(mixer);
-            }
-            // layer.setObjectLngLat(gltfScene, [center.lng + 0.05, center.lat] as ILngLat, 0)
-            let t = 0;
-            setInterval(() => {
-              t += 0.01;
-              layer.setObjectLngLat(
-                gltfScene,
-                [ center.lng, center.lat + Math.sin(t) * 0.1 ],
-                0
-              );
-            }, 16);
-
-            // 向场景中添加模型
-            threeScene.add(gltfScene);
-          });
+          // 向场景中添加模型
+          threeScene.add(gltfScene);
           // 重绘图层
           layer.render();
         }
       );
     }
-  })
-    .source({
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [ 111.4453125, 32.84267363195431 ]
-          }
-        }
-      ]
-    })
-    .animate(true);
+  }).animate(true);
   scene.addLayer(threeJSLayer);
 });
 

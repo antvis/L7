@@ -183,7 +183,7 @@ export default class ImageModel extends BaseModel {
         mipmap: true,
       });
       // TODO: 更新完纹理后在更新的图层的时候需要更新所有的图层
-      this.layer.renderLayers();
+      this.layerService.throttleRenderLayers();
       return;
     }
     this.texture = createTexture2D({

@@ -1,2 +1,2 @@
-### Line Blur
-<code src="./lineblur.tsx"></code>
+### Line - blur
+<code src="./demos/lineblur.tsx"></code>

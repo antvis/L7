@@ -35,32 +35,49 @@ export default class TestTile extends TileFactory {
     
     const properties = features[0].properties;
     
-    const text = new VectorLayer({ layerType: 'PointLayer' })
+    const text = new VectorLayer({ layerType: 'PointLayer', usage: 'basemap' })
     .source([properties], {
       parser: {
         type: 'json',
         x: 'textLng',
-        y: 'textLat'
+        y: 'textLat',
+        cancelExtent: true,
       }
     })
     .shape('key', 'text')
-    .size(20)
-    .color('#000')
     .style({
+      size: 20,
+      color: '#000',
       stroke: '#fff',
       strokeWidth: 2
-    })
+    });
 
-    const line = new VectorLayer({ layerType: 'LineLayer' })
+    const line = new VectorLayer({ layerType: 'LineLayer', usage: 'basemap' })
     .source({
       type: 'FeatureCollection',
       features: features,
+    }, {
+      parser: {
+        type: 'geojson',
+        cancelExtent: true,
+      }
     })
     .shape('simple')
-    .color('#000')
+    .style({
+      color: '#000'
+    });
+
+    // Tip: sign tile layer
+    text.isTileLayer = true;
+    line.isTileLayer = true;
 
     registerLayers(this.parentLayer, [line, text]);
-
+    text.once('modelLoaded', () => {
+      tile.layerLoad();
+    })
+    line.once('modelLoaded', () => {
+      tile.layerLoad();
+    })
     return {
       layers: [line, text],
       layerIDList: [line.id, text.id],

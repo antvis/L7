@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * MapboxService
  */
@@ -16,6 +17,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  */
 @injectable()
 export default class L7MapService extends BaseMapService<Map> {
+  public version: string = Version.L7MAP;
   public lngLatToMercator(
     _lnglat: [number, number],
     _altitude: number,
@@ -140,7 +142,7 @@ export default class L7MapService extends BaseMapService<Map> {
     return layersPng;
   }
 
-  // TODO: 处理小程序中有底图模式下的相机跟新
+  // 处理小程序中有底图模式下的相机跟新
   private handleMiniCameraChanged = (
     lng: number,
     lat: number,

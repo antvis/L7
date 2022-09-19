@@ -11,11 +11,11 @@ const scene = new Scene({
     zoom: 2.5
   })
 });
+scene.addImage(
+  'plane',
+  'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg'
+);
 scene.on('loaded', () => {
-  scene.addImage(
-    'plane',
-    'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg'
-  );
   Promise.all([
     fetch(
       'https://gw.alipayobjects.com/os/bmw-prod/2960e1fc-b543-480f-a65e-d14c229dd777.json'
@@ -59,10 +59,7 @@ scene.on('loaded', () => {
       .shape('circle')
       .color('#ffed11')
       .animate(true)
-      .size(40)
-      .style({
-        opacity: 1.0
-      });
+      .size(40);
     const flyLine = new LineLayer({ blend: 'normal' })
       .source(flydata, {
         parser: {
@@ -73,7 +70,7 @@ scene.on('loaded', () => {
       .color('#ff6b34')
       .texture('plane')
       .shape('arc')
-      .size(20)
+      .size(15)
       .animate({
         duration: 1,
         interval: 0.2,
@@ -82,8 +79,7 @@ scene.on('loaded', () => {
       .style({
         textureBlend: 'replace',
         lineTexture: true, // 开启线的贴图功能
-        iconStep: 6, // 设置贴图纹理的间距
-        opacity: 1
+        iconStep: 10, // 设置贴图纹理的间距
       });
 
     const flyLine2 = new LineLayer()
@@ -95,9 +91,7 @@ scene.on('loaded', () => {
       })
       .color('#ff6b34')
       .shape('arc')
-      // .shape('arc')
       .size(1)
-      // .active(true)
       .style({
         lineType: 'dash',
         dashArray: [ 5, 5 ],

@@ -272,14 +272,6 @@ module.exports = {
         order: 12,
       },
       {
-        slug: 'api/react',
-        title: {
-          zh: 'React 组件',
-          en: 'React Component',
-        },
-        order: 13,
-      },
-      {
         slug: 'api/mini/demos',
         title: {
           zh: '案例集合',

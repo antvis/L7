@@ -39,7 +39,8 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * AMapService
  */
 @injectable()
-export default abstract class BaseMapService<T> implements IMapService<Map & T> {
+export default abstract class BaseMapService<T>
+  implements IMapService<Map & T> {
   public version: string = Version.L7MAP;
   public map: Map & T;
   protected viewport: IViewport | unknown;
@@ -229,6 +230,7 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     this.map.setStyle(this.getMapStyle(style));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public meterToCoord(center: [number, number], outer: [number, number]) {
     return 1.0;
   }
@@ -294,6 +296,7 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     this.cameraChangedCallback = callback;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected handleCameraChanged = (e?: any) => {
     const { lat, lng } = this.map.getCenter();
     // Tip: 统一触发地图变化事件

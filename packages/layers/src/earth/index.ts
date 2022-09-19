@@ -38,7 +38,8 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
     this.layerModel = new EarthModels[shape](this);
     this.layerModel.initModels((models) => {
       this.models = models;
-      this.renderLayers();
+      this.emit('modelLoaded', null);
+      this.layerService.throttleRenderLayers();
     });
   }
 

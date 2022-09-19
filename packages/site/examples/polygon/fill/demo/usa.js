@@ -25,10 +25,7 @@ scene.on('loaded', () => {
           'density', color
         )
         .shape('fill')
-        .active(true)
-        .style({
-          opacity: 1.0
-        });
+        .active(true);
       const layer2 = new LineLayer({
         zIndex: 2
       })
@@ -39,7 +36,6 @@ scene.on('loaded', () => {
         .style({
           lineType: 'dash',
           dashArray: [ 2, 2 ],
-          opacity: 1
         });
       scene.addLayer(layer);
       scene.addLayer(layer2);

@@ -204,14 +204,12 @@ const threeJSLayer = new ThreeLayer({
           const mixer = new THREE.AnimationMixer(antModel);
           const animation = animations[1];
           const action = mixer.clipAction(animation);
-          action.timeScale = 5;
+          action.timeScale = 1;
           action.play();
           layer.addAnimateMixer(mixer);
         }
         antModel.rotation.y = Math.PI;
-        // 向场景中添加模型
         threeScene.add(antModel);
-        // 重绘图层
         layer.render();
         return '';
       }
@@ -312,7 +310,6 @@ img.onload = function() {
   const data = getImageData(img);
   const rData = getR(data.data);
   const d1 = getLngData(rData);
-
   const d2 = getLatData(rData);
   const geoData = {
     type: 'FeatureCollection',
@@ -346,15 +343,23 @@ img.onload = function() {
     });
   scene.addLayer(layer);
 };
-
+const pointData = [
+  { lng: 113, lat: 29, size: 10000 },
+  { lng: 113.5, lat: 29.5, size: 30000 },
+  { lng: 110.23681640625, lat: 29.64509464986076, size: 74020.50373907911 }, 
+  { lng: 115.01586914062499, lat: 26.88777988202911, size: 22908.885529976185 }, 
+  { lng: 111.181640625, lat: 28.724313406473463, size: 73359.37302978932 }, 
+  { lng: 112.686767578125, lat: 29.257648503615542, size: 18500.90838085843 }, 
+  { lng: 114.664306640625, lat: 28.98892237190413, size: 20293.183968726793 }, 
+  { lng: 113.90075683593749, lat: 28.17855984939698, size: 18051.412077639496 }, 
+  { lng: 111.51123046875, lat: 27.45466493898314, size: 37645.94186119526 }, 
+  { lng: 110.67626953125, lat: 28.004101830368654, size: 4214.588023703825 }, 
+  { lng: 114.43359375, lat: 29.477861195816843, size: 61722.01580332115 }, 
+  { lng: 110.445556640625, lat: 26.96124577052697, size: 70806.75519747598 }, 
+  { lng: 113.75244140624999, lat: 27.88278388425912, size: 70930.24993464859 }
+];
 const waveLayer = new PointLayer({ zIndex: 2, blend: 'additive' })
-  .source(
-    [
-      { lng: 113, lat: 29, size: 10000 },
-      { lng: 113.5, lat: 29.5, size: 30000 },
-
-      { lng: 110.23681640625, lat: 29.64509464986076, size: 74020.50373907911 }, { lng: 115.01586914062499, lat: 26.88777988202911, size: 22908.885529976185 }, { lng: 111.181640625, lat: 28.724313406473463, size: 73359.37302978932 }, { lng: 112.686767578125, lat: 29.257648503615542, size: 18500.90838085843 }, { lng: 114.664306640625, lat: 28.98892237190413, size: 20293.183968726793 }, { lng: 113.90075683593749, lat: 28.17855984939698, size: 18051.412077639496 }, { lng: 111.51123046875, lat: 27.45466493898314, size: 37645.94186119526 }, { lng: 110.67626953125, lat: 28.004101830368654, size: 4214.588023703825 }, { lng: 114.43359375, lat: 29.477861195816843, size: 61722.01580332115 }, { lng: 110.445556640625, lat: 26.96124577052697, size: 70806.75519747598 }, { lng: 113.75244140624999, lat: 27.88278388425912, size: 70930.24993464859 }
-    ],
+  .source(pointData,
     {
       parser: {
         type: 'json',
@@ -372,13 +377,7 @@ const waveLayer = new PointLayer({ zIndex: 2, blend: 'additive' })
   });
 
 const barLayer = new PointLayer({ zIndex: 2, depth: false })
-  .source(
-    [
-      { lng: 113, lat: 29, size: 10000 },
-      { lng: 113.5, lat: 29.5, size: 30000 },
-
-      { lng: 110.23681640625, lat: 29.64509464986076, size: 74020.50373907911 }, { lng: 115.01586914062499, lat: 26.88777988202911, size: 22908.885529976185 }, { lng: 111.181640625, lat: 28.724313406473463, size: 73359.37302978932 }, { lng: 112.686767578125, lat: 29.257648503615542, size: 18500.90838085843 }, { lng: 114.664306640625, lat: 28.98892237190413, size: 20293.183968726793 }, { lng: 113.90075683593749, lat: 28.17855984939698, size: 18051.412077639496 }, { lng: 111.51123046875, lat: 27.45466493898314, size: 37645.94186119526 }, { lng: 110.67626953125, lat: 28.004101830368654, size: 4214.588023703825 }, { lng: 114.43359375, lat: 29.477861195816843, size: 61722.01580332115 }, { lng: 110.445556640625, lat: 26.96124577052697, size: 70806.75519747598 }, { lng: 113.75244140624999, lat: 27.88278388425912, size: 70930.24993464859 }
-    ],
+  .source(pointData,
     {
       parser: {
         type: 'json',
@@ -393,8 +392,8 @@ const barLayer = new PointLayer({ zIndex: 2, depth: false })
   .animate(true)
   .style({
     opacityLinear: {
-      enable: true, // true - false
-      dir: 'up' // up - down
+      enable: true,
+      dir: 'up'
     },
     lightEnable: false
   });

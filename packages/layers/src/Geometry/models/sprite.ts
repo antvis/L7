@@ -100,7 +100,7 @@ export default class SpriteModel extends BaseModel {
     this.layer.models.map((m) => {
       m.updateAttributes(attributes);
     });
-    this.layer.renderLayers();
+    this.layerService.throttleRenderLayers();
 
     this.timer = requestAnimationFrame(this.updateModel);
   };
@@ -213,8 +213,7 @@ export default class SpriteModel extends BaseModel {
           wrapS: gl.CLAMP_TO_EDGE,
           wrapT: gl.CLAMP_TO_EDGE,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
+        this.layerService.reRender();
       };
       img.src = mapTexture;
     } else {

@@ -26,7 +26,9 @@ export default class RasterTile extends TileFactory {
       initOptions,
       source,
     });
-
+    layer.once('modelLoaded', () => {
+      tile.layerLoad();
+    })
     return {
       layers: [layer],
       layerIDList: [layer.id],

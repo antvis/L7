@@ -5,7 +5,6 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     center: [ 110, 36 ],
-    pitch: 0,
     style: 'light',
     zoom: 3
   })
@@ -24,9 +23,6 @@ scene.on('loaded', () => {
         })
         .shape('m', 'text')
         .size(12)
-        // .rotate("j",()=>{
-        //   return  Math.random()*3*(Math.random()>0.5?1:-1)
-        // })
         .color('w', [ '#0e0030', '#0e0030', '#0e0030' ])
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left

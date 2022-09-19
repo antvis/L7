@@ -8,8 +8,8 @@ import {
 } from '@antv/l7-core';
 import {
   calculateCentroid,
-  getMask,
   padBounds,
+  rgb2arr
 } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
@@ -20,8 +20,10 @@ import {
   IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
-import textFrag from '../shaders/text_frag.glsl';
-import textVert from '../shaders/text_vert.glsl';
+import text_frag from '../shaders/tile/text_frag.glsl';
+import text_vert from '../shaders/tile/text_vert.glsl';
+import text_map_frag from '../shaders/tile/text_map_frag.glsl';
+import text_map_vert from '../shaders/tile/text_map_vert.glsl';
 
 export function TextTriangulation(feature: IEncodeFeature) {
   // @ts-ignore
@@ -80,7 +82,6 @@ export function TextTriangulation(feature: IEncodeFeature) {
     size: 7,
   };
 }
-
 export default class TextModel extends BaseModel {
   public glyphInfo: IEncodeFeature[];
   public glyphInfoMap: {
@@ -105,7 +106,9 @@ export default class TextModel extends BaseModel {
       textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
-      raisingHeight = 0,
+      usage,
+      color = '#fff',
+      size = 1
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const { canvas, mapping } = this.fontService;
     if (Object.keys(mapping).length !== this.textCount) {
@@ -117,53 +120,7 @@ export default class TextModel extends BaseModel {
       textAllowOverlap,
     };
 
-    if (
-      this.dataTextureTest &&
-      this.dataTextureNeedUpdate({
-        opacity,
-        strokeWidth,
-        stroke,
-      })
-    ) {
-      this.judgeStyleAttributes({
-        opacity,
-        strokeWidth,
-        stroke,
-      });
-
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
-
     return {
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
-      u_raisingHeight: Number(raisingHeight),
-
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
       u_stroke_color: this.getStrokeColor(stroke),
@@ -172,11 +129,13 @@ export default class TextModel extends BaseModel {
       u_halo_blur: halo,
       u_gamma_scale: gamma,
       u_sdf_map_size: [canvas.width, canvas.height],
+
+      u_color: usage === 'basemap' ? rgb2arr(color): [0, 0, 0, 0],
+      u_size: usage === 'basemap' ? size : 1
     };
   }
 
   public initModels(callbackModel: (models: IModel[]) => void) {
-    this.layer.on('remapping', this.mapping);
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -190,21 +149,17 @@ export default class TextModel extends BaseModel {
   }
 
   public buildModels = async (callbackModel: (models: IModel[]) => void) => {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.mapping();
-
+    const { usage } = this.layer.getLayerConfig();
     this.layer
       .buildLayerModel({
-        moduleName: 'pointText',
-        vertexShader: textVert,
-        fragmentShader: textFrag,
+        moduleName: 'pointTileText_' + usage,
+        vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
+        fragmentShader: usage === 'basemap' ? text_map_frag : text_frag,
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
+        pick: usage !== 'basemap'
       })
       .then((model) => {
         callbackModel([model]);
@@ -217,39 +172,15 @@ export default class TextModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
-    this.dataTexture?.destroy();
-    this.layer.off('remapping', this.mapping);
   }
   protected registerBuiltinAttributes() {
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'rotate',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Rotate',
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { rotate = 0 } = feature;
-          return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
-        },
-      },
-    });
+    const { usage } = this.layer.getLayerConfig();
     this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_textOffsets',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -266,32 +197,32 @@ export default class TextModel extends BaseModel {
       },
     });
 
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
+    if(usage !== 'basemap') {
+      this.styleAttributeService.registerStyleAttribute({
+        name: 'size',
+        type: AttributeType.Attribute,
+        descriptor: {
+          name: 'a_Size',
+          buffer: {
+            // give the WebGL driver a hint that this buffer may change
+            usage: gl.DYNAMIC_DRAW,
+            data: [],
+            type: gl.FLOAT,
+          },
+          size: 1,
+          update: (
+            feature: IEncodeFeature,
+            featureIdx: number,
+            vertex: number[],
+            attributeIdx: number,
+          ) => {
+            const { size = 12 } = feature;
+            return Array.isArray(size) ? [size[0]] : [size as number];
+          },
         },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const { size = 12 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
-    // point layer size;
+      });
+    }
+    
     this.styleAttributeService.registerStyleAttribute({
       name: 'textUv',
       type: AttributeType.Attribute,
@@ -355,35 +286,9 @@ export default class TextModel extends BaseModel {
   }
 
   /**
-   * 生成 iconfont 纹理字典
-   */
-  private initIconFontTex() {
-    const {
-      fontWeight = '400',
-      fontFamily = 'sans-serif',
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const data = this.layer.getEncodedData();
-    const characterSet: string[] = [];
-    data.forEach((item: IEncodeFeature) => {
-      let { shape = '' } = item;
-      shape = `${shape}`;
-      if (characterSet.indexOf(shape) === -1) {
-        characterSet.push(shape);
-      }
-    });
-    this.fontService.setFontOptions({
-      characterSet,
-      fontWeight,
-      fontFamily,
-      iconfont: true,
-    });
-  }
-
-  /**
    * 生成文字布局（对照文字纹理字典提取对应文字的位置很好信息）
    */
-  private generateGlyphLayout(iconfont: boolean) {
-    // TODO:更新文字布局
+  private generateGlyphLayout() {
     const { mapping } = this.fontService;
     const {
       spacing = 2,
@@ -403,7 +308,7 @@ export default class TextModel extends BaseModel {
         'left',
         spacing,
         textOffset,
-        iconfont,
+        false,
       );
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);
       feature.shaping = shaping;
@@ -459,7 +364,6 @@ export default class TextModel extends BaseModel {
         anchorPointY: pixels.y,
       });
       if (box && box.length) {
-        // TODO：featureIndex
         collisionIndex.insertCollisionBox(box, id);
         return true;
       } else {
@@ -475,12 +379,11 @@ export default class TextModel extends BaseModel {
    * 初始化文字布局
    */
   private initGlyph() {
-    const { iconfont = false } = this.layer.getLayerConfig();
-    // 1.生成文字纹理（或是生成 iconfont）
-    iconfont ? this.initIconFontTex() : this.initTextFont();
+    // 1.生成文字纹理
+    this.initTextFont();
 
     // 2.生成文字布局
-    this.generateGlyphLayout(iconfont);
+    this.generateGlyphLayout();
   }
   /**
    * 更新文字纹理
@@ -503,24 +406,22 @@ export default class TextModel extends BaseModel {
   }
 
   private reBuildModel() {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { usage } = this.layer.getLayerConfig();
+    
     this.filterGlyphs();
     this.layer
       .buildLayerModel({
-        moduleName: 'pointTileText',
-        vertexShader: textVert,
-        fragmentShader: textFrag,
+        moduleName: 'pointTileText_' + usage,
+        vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
+        fragmentShader: usage === 'basemap' ? text_map_frag : text_frag,
         triangulation: TextTriangulation.bind(this),
         depth: { enable: false },
         blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
+        pick: usage !== 'basemap'
       })
       .then((model) => {
         this.layer.models = [model];
-        this.layer.renderLayers();
+        this.layerService.throttleRenderLayers();
       })
       .catch((err) => {
         console.warn(err);

@@ -944,7 +944,7 @@ export default class Transform {
     const nearZ = this.height / 50;
 
     // matrix for conversion from location to GL coordinates (-1 .. 1)
-    // TODO: 使用 Float64Array 的原因是为了避免计算精度问题、 mat4.create() 默认使用 Float32Array
+    // 使用 Float64Array 的原因是为了避免计算精度问题、 mat4.create() 默认使用 Float32Array
     let m = new Float64Array(16);
     // @ts-ignore
     mat4.perspective(m, this._fov, this.width / this.height, nearZ, farZ);

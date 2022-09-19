@@ -1,2 +1,2 @@
 ### sprite
-<code src="./sprite.tsx"></code>
+<code src="./demos/sprite.tsx"></code>

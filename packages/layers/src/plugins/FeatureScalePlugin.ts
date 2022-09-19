@@ -1,5 +1,4 @@
 import {
-  IGlobalConfigService,
   ILayer,
   ILayerPlugin,
   IScale,
@@ -10,14 +9,13 @@ import {
   ScaleTypeName,
   ScaleTypes,
   StyleScaleType,
-  TYPES,
   IParserData,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
 import { extent } from 'd3-array';
 import * as d3interpolate from 'd3-interpolate';
 import * as d3 from 'd3-scale';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { isNil, isString, uniq } from 'lodash';
 import 'reflect-metadata';
 
@@ -42,13 +40,6 @@ const scaleMap = {
  */
 @injectable()
 export default class FeatureScalePlugin implements ILayerPlugin {
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-  // key = field_attribute name
-  private scaleCache: {
-    [field: string]: IStyleScale;
-  } = {};
-
   private scaleOptions: IScaleOptions = {};
 
   private getSourceData(layer: ILayer, callback: (data: IParserData) => void) {
@@ -79,14 +70,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           this.caculateScalesForAttributes(attributes || [], dataArray);
         }
       });
-      // const { dataArray } = layer.getSource().data;
-      // if (dataArray.length === 0) {
-      //   return;
-      // }
-      // this.caculateScalesForAttributes(
-      //   attributes || [],
-      //   dataArray as IParseDataItem[],
-      // );
     });
 
     // 检测数据是否需要更新
@@ -101,15 +84,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         this.caculateScalesForAttributes(attributes || [], dataArray);
         layer.layerModelNeedUpdate = true;
       });
-      // const { dataArray } = layer.getSource().data;
-      // if (dataArray.length === 0) {
-      //   return;
-      // }
-      // this.caculateScalesForAttributes(
-      //   attributes || [],
-      //   dataArray
-      // );
-      // layer.layerModelNeedUpdate = true;
       return true;
     });
 
@@ -131,20 +105,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
             this.caculateScalesForAttributes(attributesToRescale, dataArray);
           }
         });
-
-        // const { dataArray } = layer.getSource().data;
-        // if (dataArray.length === 0) {
-        //   return;
-        // }
-        // const attributesToRescale = attributes.filter(
-        //   (attribute) => attribute.needRescale,
-        // );
-        // if (attributesToRescale.length) {
-        //   this.caculateScalesForAttributes(
-        //     attributesToRescale,
-        //     dataArray,
-        //   );
-        // }
       }
     });
   }
@@ -156,7 +116,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     attributes: IStyleAttribute[],
     dataArray: IParseDataItem[],
   ) {
-    this.scaleCache = {};
     attributes.forEach((attribute) => {
       if (attribute.scale) {
         // 创建Scale
