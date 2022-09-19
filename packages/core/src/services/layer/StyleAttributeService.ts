@@ -19,10 +19,6 @@ import {
 } from './IStyleAttributeService';
 import StyleAttribute from './StyleAttribute';
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 const bytesPerElementMap = {
   [gl.FLOAT]: 4,
   [gl.UNSIGNED_BYTE]: 1,
@@ -351,7 +347,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
                 vertexIdx, // 当前顶点所在feature索引
                 normal,
                 vertexIndex,
-                // TODO: 传入顶点索引 vertexIdx
+                // 传入顶点索引 vertexIdx
               ),
             );
           } // end if
@@ -475,7 +471,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
                 vertexIdx, // 当前顶点所在feature索引
                 normal,
                 vertexIndex,
-                // TODO: 传入顶点索引 vertexIdx
+                // 传入顶点索引 vertexIdx
               ),
             );
           } // end if

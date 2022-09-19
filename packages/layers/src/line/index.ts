@@ -5,6 +5,7 @@ import { isVectorTile } from '../tile/utils';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
+  public arrowInsertCount: number = 0;
   public defaultSourceConfig = {
     data: [
       {
@@ -30,11 +31,15 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     this.layerModel = new LineModels[shape](this);
     this.layerModel.initModels((models) => {
       this.models = models;
-      this.renderLayers();
+      this.emit('modelLoaded', null);
+      this.layerService.throttleRenderLayers();
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.models = models;
+      this.emit('modelLoaded', null);
+    });
   }
 
   protected getConfigSchema() {

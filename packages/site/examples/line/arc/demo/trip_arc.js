@@ -30,7 +30,6 @@ scene.on('loaded', () => {
         .shape('arc3d')
         .color('#0C47BF')
         .style({
-          opacity: 1,
           blur: 0.9
         });
       scene.addLayer(layer);

@@ -19,7 +19,7 @@ varying vec2 v_iconMapUV;
 #pragma include "picking"
 
 uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ]; // 控制运动
+uniform vec4 u_aimate: [ 1, 2., 1.0, 0.2 ]; // 控制运动
 
 varying mat4 styleMappingMat;
 // [animate, duration, interval, trailLength],
@@ -95,6 +95,5 @@ void main() {
     gl_FragColor.a *= mix(u_blur.g, u_blur.b, (blurV - 0.5)/0.5);
   }
   
-
   gl_FragColor = filterColor(gl_FragColor);
 }

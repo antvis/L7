@@ -7,7 +7,7 @@ import {
 } from '@antv/l7-utils';
 import {
   VectorTile,
-  VectorTileFeature,
+  // VectorTileFeature,
   VectorTileLayer,
 } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
@@ -21,7 +21,7 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   zoomOffset: 0,
 };
 
-const TILE_SIZE = 512;
+// const TILE_SIZE = 512;
 
 export function osmTileXY2LonLat(x: number, y: number, zoom: number) {
   const lon = (x / Math.pow(2, zoom)) * 360 - 180;
@@ -30,123 +30,123 @@ export function osmTileXY2LonLat(x: number, y: number, zoom: number) {
   return [lon, lat];
 }
 
-function signedArea(ring: any[]) {
-  let sum = 0;
-  for (let i = 0, len = ring.length, j = len - 1, p1, p2; i < len; j = i++) {
-    p1 = ring[i];
-    p2 = ring[j];
-    sum += (p2.x - p1.x) * (p1.y + p2.y);
-  }
-  return sum;
-}
+// function signedArea(ring: any[]) {
+//   let sum = 0;
+//   for (let i = 0, len = ring.length, j = len - 1, p1, p2; i < len; j = i++) {
+//     p1 = ring[i];
+//     p2 = ring[j];
+//     sum += (p2.x - p1.x) * (p1.y + p2.y);
+//   }
+//   return sum;
+// }
 
-function classifyRings(rings: any[]) {
-  const len = rings.length;
+// function classifyRings(rings: any[]) {
+//   const len = rings.length;
 
-  if (len <= 1) {
-    return [rings];
-  }
+//   if (len <= 1) {
+//     return [rings];
+//   }
 
-  const polygons: any = [];
-  let polygon: any;
-  let ccw;
+//   const polygons: any = [];
+//   let polygon: any;
+//   let ccw;
 
-  for (let i = 0; i < len; i++) {
-    const area = signedArea(rings[i]);
-    if (area === 0) {
-      continue;
-    }
+//   for (let i = 0; i < len; i++) {
+//     const area = signedArea(rings[i]);
+//     if (area === 0) {
+//       continue;
+//     }
 
-    if (ccw === undefined) {
-      ccw = area < 0;
-    }
+//     if (ccw === undefined) {
+//       ccw = area < 0;
+//     }
 
-    if (ccw === area < 0) {
-      if (polygon) {
-        polygons.push(polygon);
-      }
-      polygon = [rings[i]];
-    } else {
-      polygon.push(rings[i]);
-    }
-  }
-  if (polygon) {
-    polygons.push(polygon);
-  }
+//     if (ccw === area < 0) {
+//       if (polygon) {
+//         polygons.push(polygon);
+//       }
+//       polygon = [rings[i]];
+//     } else {
+//       polygon.push(rings[i]);
+//     }
+//   }
+//   if (polygon) {
+//     polygons.push(polygon);
+//   }
 
-  return polygons;
-}
+//   return polygons;
+// }
 
-const VectorTileFeatureTypes = ['Unknown', 'Point', 'LineString', 'Polygon'];
-function GetGeoJSON(z: number, vectorTileFeature: VectorTileFeature) {
-  const extent = vectorTileFeature.extent;
-  let coords = vectorTileFeature.loadGeometry() as any;
-  const currenType = vectorTileFeature.type;
-  const currentProperties = vectorTileFeature.properties;
-  const currentId = vectorTileFeature.id;
+// const VectorTileFeatureTypes = ['Unknown', 'Point', 'LineString', 'Polygon'];
+// function GetGeoJSON(z: number, vectorTileFeature: VectorTileFeature) {
+//   const extent = vectorTileFeature.extent;
+//   let coords = vectorTileFeature.loadGeometry() as any;
+//   const currenType = vectorTileFeature.type;
+//   const currentProperties = vectorTileFeature.properties;
+//   const currentId = vectorTileFeature.id;
 
-  const size = extent * Math.pow(2, z);
+//   const size = extent * Math.pow(2, z);
 
-  let type = VectorTileFeatureTypes[currenType];
-  let i;
-  let j;
+//   let type = VectorTileFeatureTypes[currenType];
+//   let i;
+//   let j;
 
-  function project(line: any[]) {
-    for (let index = 0; index < line.length; index++) {
-      const point = line[index];
-      line[index] = [
-        (point.x / size) * TILE_SIZE,
-        (point.y / size) * TILE_SIZE,
-      ];
-    }
-  }
+//   function project(line: any[]) {
+//     for (let index = 0; index < line.length; index++) {
+//       const point = line[index];
+//       line[index] = [
+//         (point.x / size) * TILE_SIZE,
+//         (point.y / size) * TILE_SIZE,
+//       ];
+//     }
+//   }
 
-  switch (currenType) {
-    case 1:
-      const points = [];
-      for (i = 0; i < coords.length; i++) {
-        points[i] = coords[i][0];
-      }
-      coords = points;
-      project(coords);
-      break;
+//   switch (currenType) {
+//     case 1:
+//       const points = [];
+//       for (i = 0; i < coords.length; i++) {
+//         points[i] = coords[i][0];
+//       }
+//       coords = points;
+//       project(coords);
+//       break;
 
-    case 2:
-      for (i = 0; i < coords.length; i++) {
-        project(coords[i]);
-      }
-      break;
+//     case 2:
+//       for (i = 0; i < coords.length; i++) {
+//         project(coords[i]);
+//       }
+//       break;
 
-    case 3:
-      coords = classifyRings(coords);
-      for (i = 0; i < coords.length; i++) {
-        for (j = 0; j < coords[i].length; j++) {
-          project(coords[i][j]);
-        }
-      }
-      break;
-  }
+//     case 3:
+//       coords = classifyRings(coords);
+//       for (i = 0; i < coords.length; i++) {
+//         for (j = 0; j < coords[i].length; j++) {
+//           project(coords[i][j]);
+//         }
+//       }
+//       break;
+//   }
 
-  if (coords.length === 1) {
-    coords = coords[0];
-  } else {
-    type = 'Multi' + type;
-  }
+//   if (coords.length === 1) {
+//     coords = coords[0];
+//   } else {
+//     type = 'Multi' + type;
+//   }
 
-  const result = {
-    type: 'Feature',
-    geometry: {
-      type,
-      coordinates: coords,
-    },
-    properties: currentProperties,
-    id: currentId,
-    tileOrigin: [0, 0],
-    coord: '',
-  };
+//   const result = {
+//     type: 'Feature',
+//     geometry: {
+//       type,
+//       coordinates: coords,
+//     },
+//     properties: currentProperties,
+//     id: currentId,
+//     tileOrigin: [0, 0],
+//     coord: '',
+//   };
 
-  return result;
-}
+//   return result;
+// }
 
 export type MapboxVectorTile = {
   layers: { [_: string]: VectorTileLayer & { features: Feature[] } };
@@ -156,7 +156,7 @@ const getVectorTile = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: Tile,
-  coord: string,
+  // coord: string,
 ): Promise<MapboxVectorTile> => {
   const tileUrl = getURLFromTemplate(url, tileParams);
 
@@ -172,32 +172,32 @@ const getVectorTile = async (
         // check tile source layer
         // console.log(vectorTile)
 
-        const tileOrigin = osmTileXY2LonLat(
-          tileParams.x,
-          tileParams.y,
-          tileParams.z,
-        );
-        const zoom = tileParams.z;
+        // const tileOrigin = osmTileXY2LonLat(
+        //   tileParams.x,
+        //   tileParams.y,
+        //   tileParams.z,
+        // );
+        // const zoom = tileParams.z;
 
         for (const sourceLayer of Object.keys(vectorTile.layers)) {
           const features = [];
           const vectorTileLayer = vectorTile.layers[sourceLayer];
           for (let i = 0; i < vectorTile.layers[sourceLayer].length; i++) {
             const vectorTileFeature = vectorTile.layers[sourceLayer].feature(i);
-            let feature;
-            if (coord === 'lnglat') {
-              feature = vectorTileFeature.toGeoJSON(
-                tileParams.x,
-                tileParams.y,
-                tileParams.z,
-              );
-            } else {
-              feature = GetGeoJSON(zoom, vectorTileFeature);
-              // @ts-ignore
-              vectorTileLayer.l7TileOrigin = tileOrigin;
-              // @ts-ignore
-              vectorTileLayer.l7TileCoord = coord;
-            }
+            // let feature;
+            // if (coord === 'lnglat') {
+            const feature = vectorTileFeature.toGeoJSON(
+              tileParams.x,
+              tileParams.y,
+              tileParams.z,
+            );
+            // } else {
+            //   feature = GetGeoJSON(zoom, vectorTileFeature);
+            //   // @ts-ignore
+            //   vectorTileLayer.l7TileOrigin = tileOrigin;
+            //   // @ts-ignore
+            //   vectorTileLayer.l7TileCoord = coord;
+            // }
 
             features.push(feature);
           }
@@ -216,9 +216,11 @@ export default function mapboxVectorTile(
   data: string | string[],
   cfg?: ITileParserCFG,
 ): IParserData {
-  const coord = cfg?.coord || 'lnglat'; // lnglat - offset
+  // const coord = cfg?.coord || 'lnglat'; // lnglat - offset
   const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
-    getVectorTile(data, tileParams, tile, coord);
+    getVectorTile(data, tileParams, tile);
+  // getVectorTile(data, tileParams, tile, coord);
+
   const tilesetOptions = {
     ...DEFAULT_CONFIG,
     ...cfg,

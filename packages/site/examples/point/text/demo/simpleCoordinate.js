@@ -5,7 +5,6 @@ const scene = new Scene({
   id: 'map',
   map: new Map({
     center: [ 500, 500 ],
-    pitch: 0,
     zoom: 3,
     version: 'SIMPLE',
     mapSize: 1000,

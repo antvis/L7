@@ -5,7 +5,6 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     center: [ 105, 35 ],
-    pitch: 0,
     style: 'dark',
     zoom: 2.5
   })
@@ -50,10 +49,7 @@ scene.on('loaded', () => {
           '#CF1D49'
         ])
         .shape('line')
-        .select(true)
-        .style({
-          opacity: 1.0
-        });
+        .select(true);
       scene.addLayer(layer2);
     });
 });

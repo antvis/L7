@@ -1,7 +1,6 @@
 import {
   IInteractionTarget,
   ILayer,
-  ILayerService,
   IMapService,
   IPickingService,
   IRendererService,
@@ -33,7 +32,6 @@ export class TileLayerManager implements ITileLayerManager {
     mapService: IMapService,
     rendererService: IRendererService,
     pickingService: IPickingService,
-    layerService: ILayerService,
     transforms: ITransform[]
   ) {
     this.parent = parent;
@@ -47,7 +45,6 @@ export class TileLayerManager implements ITileLayerManager {
       rendererService,
       pickingService,
       this.children,
-      layerService,
     );
     this.tileConfigManager = new TileConfigManager();
 
@@ -178,10 +175,18 @@ export class TileLayerManager implements ITileLayerManager {
     const parentParserType = source.getParserType();
 
     const layerShape = getLayerShape(this.parent.type, this.parent);
-
+    let colorTexture = undefined;
     if (rampColors) {
       // 构建统一的色带贴图
+      const { createTexture2D } = this.rendererService;
       this.rampColorsData = generateColorRamp(rampColors as IColorRamp);
+      const imageData = generateColorRamp(rampColors as IColorRamp);
+      colorTexture = createTexture2D({
+        data: this.rampColorsData.data,
+        width: imageData.width,
+        height: imageData.height,
+        flipY: false,
+      });
     }
 
 
@@ -206,6 +211,7 @@ export class TileLayerManager implements ITileLayerManager {
       domain,
       rampColors,
       rampColorsData: this.rampColorsData,
+      colorTexture,
       // worker
       workerEnabled,
 

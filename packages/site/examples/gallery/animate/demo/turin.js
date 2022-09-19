@@ -5,7 +5,6 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     center: [ 7.65, 45.053 ],
-    pitch: 0,
     zoom: 12,
     style: 'dark'
   })
@@ -64,10 +63,6 @@ scene.on('loaded', () => {
           default:
             return '#FFE3E3';
           }
-          // return v < 0 ? 'rgb(60,255,255)' : 'rgb(255,255,60)';
-        })
-        .style({
-          opacity: 1
         })
         .animate({
           interval: 1, // 间隔

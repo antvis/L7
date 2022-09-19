@@ -5,7 +5,6 @@ import * as GeoTIFF from 'geotiff';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 0,
     style: 'dark',
     center: [ 105, 37.5 ],
     zoom: 2.5
@@ -45,7 +44,6 @@ async function addLayer() {
       }
     })
     .style({
-      opacity: 1.0,
       clampLow: false,
       clampHigh: false,
       domain: [ 0, 90 ],

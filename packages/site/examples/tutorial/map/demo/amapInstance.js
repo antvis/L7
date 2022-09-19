@@ -4,7 +4,6 @@ import { GaodeMap } from '@antv/l7-maps';
 window.onLoad = function() {
   const map = new AMap.Map('map', {
     viewMode: '3D',
-    pitch: 0,
     mapStyle: 'amap://styles/darkblue',
     center: [ 121.435159, 31.256971 ],
     zoom: 14.89,

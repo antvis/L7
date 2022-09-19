@@ -7,7 +7,7 @@ attribute vec4 a_Instance;
 attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
 varying vec2 v_normal;
 

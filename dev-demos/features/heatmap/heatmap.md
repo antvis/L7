@@ -1,2 +1,2 @@
 ### Heatmap
-<code src="./heatmap.tsx"></code>
+<code src="./demos/heatmap.tsx"></code>

@@ -8,11 +8,15 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     this.layerModel = new ImageModels[modelType](this);
     this.layerModel.initModels((models) => {
       this.models = models;
-      this.renderLayers();
+      this.emit('modelLoaded', null);
+      this.layerService.throttleRenderLayers();
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.models = models;
+      this.emit('modelLoaded', null);
+    });
   }
   protected getConfigSchema() {
     return {
@@ -30,6 +34,7 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     const defaultConfig = {
       image: {},
       dataImage: {},
+      tileDataImage: {},
     };
     return defaultConfig[type];
   }
@@ -43,6 +48,8 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
       return 'dataImage';
     } else if (shape === 'image') {
       return 'image';
+    } else if (shape === 'tileDataImage') {
+      return 'tileDataImage';
     } else {
       return 'image';
     }

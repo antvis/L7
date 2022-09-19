@@ -142,8 +142,7 @@ export default class BillBoardModel extends BaseModel {
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
       });
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     }
   }
 

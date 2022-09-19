@@ -6,9 +6,7 @@ import { DrawControl } from '@antv/l7-draw';
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 0,
     style: 'light',
-    layers: [],
     center: [ 116.1608, 40.1119 ],
     zoom: 15
   })

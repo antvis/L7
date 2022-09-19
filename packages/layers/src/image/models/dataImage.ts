@@ -6,7 +6,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp, isMini } from '@antv/l7-utils';
+import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { isEqual } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IImageLayerStyleOptions } from '../../core/interface';
@@ -70,35 +70,16 @@ export default class ImageDataModel extends BaseModel {
       width: 0,
     });
 
-    if (isMini) {
-      // @ts-ignore
-      const canvas = this.layerService.sceneService.getSceneConfig().canvas;
-      const img = canvas.createImage();
-      img.crossOrigin = 'anonymous';
-      img.src = source.data.originData;
-
-      img.onload = () => {
+    source.data.images.then(
+      (imageData: Array<HTMLImageElement | ImageBitmap>) => {
         this.texture = createTexture2D({
-          data: img,
-          width: img.width,
-          height: img.height,
+          data: imageData[0],
+          width: imageData[0].width,
+          height: imageData[0].height,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
-      };
-    } else {
-      source.data.images.then(
-        (imageData: Array<HTMLImageElement | ImageBitmap>) => {
-          this.texture = createTexture2D({
-            data: imageData[0],
-            width: imageData[0].width,
-            height: imageData[0].height,
-          });
-          this.layerService.updateLayerRenderList();
-          this.layerService.renderLayers();
-        },
-      );
-    }
+        this.layerService.reRender();
+      },
+    );
 
     const rampImageData = rampColorsData
       ? rampColorsData
@@ -120,6 +101,7 @@ export default class ImageDataModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
@@ -152,14 +134,12 @@ export default class ImageDataModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -169,7 +149,6 @@ export default class ImageDataModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

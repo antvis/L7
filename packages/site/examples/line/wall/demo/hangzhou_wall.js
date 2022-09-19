@@ -1,5 +1,3 @@
-// Data Source https://busrouter.sg/visualization/
-
 import { Scene, LineLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 
@@ -7,8 +5,8 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     center: [ 119.297868, 29.732983 ],
-    zoom: 7.109999999999999,
-    rotation: 1.2200000000000273,
+    zoom: 7.11,
+    rotation: 1.22,
     pitch: 45.42056074766357,
     style: 'dark'
   })

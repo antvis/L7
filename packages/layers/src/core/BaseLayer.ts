@@ -139,10 +139,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values: any;
   };
 
-  // TODO: 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
+  // 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
   public sceneContainer: Container | undefined;
   public tileLayer: any | undefined;
-  // TODO: 用于保存子图层对象
+  // 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
   // Tip: 用于标识矢量图层
@@ -187,7 +187,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   /**
    * 图层容器
    */
-  private container: Container;
+  protected container: Container;
 
   private encodedData: IEncodeFeature[];
 
@@ -195,14 +195,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private currentPickId: number | null = null;
 
-  private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
+  protected rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
   private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
   /**
    * 待更新样式属性，在初始化阶段完成注册
    */
-  private pendingStyleAttributes: Array<{
+  protected pendingStyleAttributes: Array<{
     attributeName: string;
     attributeField: StyleAttributeField;
     attributeValues?: StyleAttributeOption;
@@ -216,7 +216,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private aniamateStatus: boolean = false;
 
-  // TODO: layer 保底颜色
+  // Tip: layer 保底颜色
   private bottomColor = 'rgba(0, 0, 0, 0)';
 
   private isDestroied: boolean = false;
@@ -496,16 +496,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    // 设置 color、size、shape、style 时由于场景服务尚未完成（并没有调用 scene.addLayer），因此暂时加入待更新属性列表
     this.updateStyleAttribute('color', field, values, updateOptions);
-
-    // this.pendingStyleAttributes.push({
-    //   attributeName: 'color',
-    //   attributeField: field,
-    //   attributeValues: values,
-    //   defaultName: 'colors',
-    //   updateOptions,
-    // });
     return this;
   }
 
@@ -559,7 +550,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       values,
     };
     this.updateStyleAttribute('shape', field, values, updateOptions);
-    // TODO: 根据 shape 判断是否需要更新 model
+    // Tip: 根据 shape 判断是否需要更新 model
     if (!this.tileLayer) {
       updateShape(this, lastShape, currentShape);
     }
@@ -691,11 +682,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public render(): ILayer {
-    if (this.tileLayer !== undefined) {
+    if (this.tileLayer) {
       // 瓦片图层执行单独的 render 渲染队列
       this.tileLayer.render();
       return this;
     }
+
     if (this.encodeDataLength <= 0 && !this.forceRender) return this;
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     this.renderModels();
@@ -841,10 +833,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public hide(): ILayer {
-    if (this.type === 'CanvasLayer' && this.layerModel.clearCanvas) {
-      // 对 canvasLayer 的 hide 操作做特殊处理
-      this.layerModel.clearCanvas();
-    }
     this.updateLayerConfig({
       visible: false,
     });
@@ -981,19 +969,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     // remove child layer
-    this.layerChildren.map((child: ILayer) => child.destroy());
+    this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
 
     // remove mask list
-    this.masks.map((mask: ILayer) => mask.destroy());
+    this.masks.map((mask: ILayer) => mask.destroy(false));
     this.masks = [];
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件
     this.layerSource.off('sourceUpdate', this.sourceEvent);
 
-    this.multiPassRenderer.destroy();
-    // console.log(this.styleAttributeService.getAttributes())
+    this.multiPassRenderer?.destroy();
+
     // 清除所有属性以及关联的 vao == 销毁所有 => model this.models.forEach((model) => model.destroy());
     this.styleAttributeService.clearAllAttributes();
 
@@ -1001,8 +989,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.hooks.afterDestroy.call();
 
-    // TODO: 清除各个图层自定义的 models 资源
-    this.layerModel?.clearModels();
+    // Tip: 清除各个图层自定义的 models 资源
+    this.layerModel?.clearModels(refresh);
 
     this.models = [];
 
@@ -1170,56 +1158,58 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
     return new Promise((resolve, reject) => {
-      // filter supported worker & worker enabled layer
-      if (
-        workerOptions &&
-        workerOptions.modelType in WorkerSourceMap &&
-        workerEnabled
-      ) {
-        this.styleAttributeService
-          .createAttributesAndIndicesAscy(
+      setTimeout(() => {
+        // filter supported worker & worker enabled layer
+        if (
+          workerOptions &&
+          workerOptions.modelType in WorkerSourceMap &&
+          workerEnabled
+        ) {
+          this.styleAttributeService
+            .createAttributesAndIndicesAscy(
+              this.encodedData,
+              segmentNumber,
+              workerOptions,
+            )
+            .then(({ attributes, elements }) => {
+              const m = createModel({
+                attributes,
+                uniforms,
+                fs,
+                vs,
+                elements,
+                blend: BlendTypes[BlendType.normal],
+                ...rest,
+              });
+              resolve(m);
+            })
+            .catch((err) => reject(err));
+        } else {
+          const {
+            attributes,
+            elements,
+            count,
+          } = this.styleAttributeService.createAttributesAndIndices(
             this.encodedData,
+            triangulation,
             segmentNumber,
-            workerOptions,
-          )
-          .then(({ attributes, elements }) => {
-            const m = createModel({
-              attributes,
-              uniforms,
-              fs,
-              vs,
-              elements,
-              blend: BlendTypes[BlendType.normal],
-              ...rest,
-            });
-            resolve(m);
-          })
-          .catch((err) => reject(err));
-      } else {
-        const {
-          attributes,
-          elements,
-          count,
-        } = this.styleAttributeService.createAttributesAndIndices(
-          this.encodedData,
-          triangulation,
-          segmentNumber,
-        );
-        const modeloptions = {
-          attributes,
-          uniforms,
-          fs,
-          vs,
-          elements,
-          blend: BlendTypes[BlendType.normal],
-          ...rest,
-        };
-        if (count) {
-          modeloptions.count = count;
+          );
+          const modeloptions = {
+            attributes,
+            uniforms,
+            fs,
+            vs,
+            elements,
+            blend: BlendTypes[BlendType.normal],
+            ...rest,
+          };
+          if (count) {
+            modeloptions.count = count;
+          }
+          const m = createModel(modeloptions);
+          resolve(m);
         }
-        const m = createModel(modeloptions);
-        resolve(m);
-      }
+      });
     });
   }
 
@@ -1258,6 +1248,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public needPick(type: string): boolean {
+    // 地图图层的判断
+    if (this.rawConfig.usage === 'basemap') return false;
+
     const {
       enableHighlight = true,
       enableSelect = true,
@@ -1295,16 +1288,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) return this;
-
     if (this.layerModelNeedUpdate && this.layerModel) {
       this.layerModel.buildModels((models: IModel[]) => {
         this.models = models;
         this.hooks.beforeRender.call();
         this.layerModelNeedUpdate = false;
       });
-    }
-    if (this?.layerModel?.renderUpdate) {
-      this.layerModel.renderUpdate();
     }
 
     this.models.forEach((model) => {
@@ -1360,6 +1349,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 继承空方法
    * @param time
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setEarthTime(time: number) {
     console.warn('empty fn');
   }
@@ -1375,24 +1365,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return {};
   }
 
-  private sourceEvent = () => {
+  protected sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
     const layerConfig = this.getLayerConfig();
     if (layerConfig && layerConfig.autoFit) {
       this.fitBounds(layerConfig.fitBoundsOptions);
     }
-    // 对外暴露事件 迁移到 DataMappingPlugin generateMapping，保证在重新重新映射后触发
-    // this.emit('dataUpdate');
     this.reRender();
   };
 
-  private reRender() {
-    if (this.inited) {
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
-    }
+  protected reRender() {
+    this.inited && this.layerService.reRender();
   }
-  private splitValuesAndCallbackInAttribute(
+  protected splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],
     defaultValues?: unknown[],
   ) {

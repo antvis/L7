@@ -135,3 +135,33 @@ export function readPixel(
   });
   return pickedColors;
 }
+
+export function isTileLoaded(tile: Tile) {
+  return tile.layerIDList.length === tile.loadedLayers;
+}
+
+export function isTileChildLoaded(tile: Tile) {
+  const childs = tile.children;
+  return childs.filter((child) => isTileLoaded(child)).length === childs.length;
+}
+
+export function isTileParentLoaded(tile: Tile) {
+  const parent = tile.parent;
+  if (!parent) {
+    return true;
+  } else {
+    return isTileLoaded(parent);
+  }
+}
+
+export function tileAllLoad(tile: Tile, callback: () => void) {
+  const timer = window.setInterval(() => {
+    const tileLoaded = isTileLoaded(tile);
+    const tileChildLoaded = isTileChildLoaded(tile);
+    const tileParentLoaded = isTileParentLoaded(tile);
+    if (tileLoaded && tileChildLoaded && tileParentLoaded) {
+      callback();
+      window.clearInterval(timer);
+    }
+  }, 36);
+}

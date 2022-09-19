@@ -9,6 +9,7 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
     options: {
       parser: {
         type: 'testTile',
+        cancelExtent: true,
       },
     },
   };
@@ -16,7 +17,7 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
     this.layerModel = new TileModel(this);
     this.layerModel.initModels((models) => {
       this.models = models;
-      this.renderLayers();
+      this.emit('modelLoaded', null);
     });
   }
 }

@@ -25,7 +25,6 @@ scene.on('loaded', () => {
         .style({
           intensity: 5,
           radius: 10,
-          opacity: 1.0,
           rampColors: {
             colors: [
               '#2E8AE6',

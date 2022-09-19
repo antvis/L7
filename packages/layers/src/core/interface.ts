@@ -1,4 +1,4 @@
-import { IAnimateOption, IMapService } from '@antv/l7-core';
+import { IAnimateOption, IMapService, ITexture2D } from '@antv/l7-core';
 import { IColorRamp, IImagedata } from '@antv/l7-utils';
 import { styleOffset } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
@@ -41,6 +41,10 @@ export interface IBaseLayerStyleOptions {
   // 蒙层
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
+
+  usage?: string;
+  color?: string;
+  size?: number;
 }
 
 export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
@@ -159,6 +163,7 @@ export interface IRasterTileLayerStyleOptions extends IBaseLayerStyleOptions {
 export interface IMaskLayerStyleOptions extends IBaseLayerStyleOptions {
   // define
   opacity: number;
+  color: string;
 }
 
 export interface IWindLayerStyleOptions extends IBaseLayerStyleOptions {
@@ -184,11 +189,27 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   clampHigh?: boolean;
   rampColors?: IColorRamp;
   rampColorsData?: ImageData | IImagedata;
+  colorTexture?: ITexture2D;
   pixelConstant?: number;
   pixelConstantR?: number;
   pixelConstantG?: number;
   pixelConstantB?: number;
   pixelConstantRGB?: number;
+}
+
+export interface ICityBuildLayerStyleOptions {
+  opacity: number;
+  baseColor: string;
+  brightColor: string;
+  windowColor: string;
+  time: number;
+  sweep: {
+    enable: boolean;
+    sweepRadius: number;
+    sweepColor: string;
+    sweepSpeed: number;
+    sweepCenter?: [number, number];
+  };
 }
 
 export interface IGeometryLayerStyleOptions extends IBaseLayerStyleOptions {

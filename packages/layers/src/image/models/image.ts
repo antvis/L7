@@ -49,8 +49,7 @@ export default class ImageModel extends BaseModel {
           width: img.width,
           height: img.height,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
+        this.layerService.reRender();
       };
     } else {
       source.data.images.then(
@@ -62,8 +61,7 @@ export default class ImageModel extends BaseModel {
             mag: gl.LINEAR,
             min: gl.LINEAR,
           });
-          this.layerService.updateLayerRenderList();
-          this.layerService.renderLayers();
+          this.layerService.reRender();
         },
       );
     }
@@ -81,6 +79,7 @@ export default class ImageModel extends BaseModel {
         },
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);

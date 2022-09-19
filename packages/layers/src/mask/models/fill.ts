@@ -1,18 +1,21 @@
 import { gl, IModel } from '@antv/l7-core';
+import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IMaskLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
-import mask_frag from '../shaders/mask_frag.glsl';
+import mask_frag from '../../shader/minify_frag.glsl';
 import mask_vert from '../shaders/mask_vert.glsl';
 
 export default class MaskModel extends BaseModel {
   public getUninforms() {
     const {
       opacity = 0,
+      color = '#000'
     } = this.layer.getLayerConfig() as IMaskLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 0.0,
+      u_color: rgb2arr(color),
     };
   }
 
@@ -43,6 +46,7 @@ export default class MaskModel extends BaseModel {
             zpass: gl.REPLACE,
           },
         },
+        pick: false
       })
       .then((model) => {
         callbackModel([model]);
@@ -53,9 +57,8 @@ export default class MaskModel extends BaseModel {
       });
   }
 
-  public clearModels() {
-    this.dataTexture?.destroy();
-    this.layerService.clear();
+  public clearModels(refresh = true) {
+    refresh && this.layerService.clear();
   }
 
   protected registerBuiltinAttributes() {

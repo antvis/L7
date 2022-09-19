@@ -267,7 +267,6 @@ export class TilesetManager extends EventEmitter {
   private getTile(x: number, y: number, z: number) {
     const tileId = this.getTileId(x, y, z);
     const tile = this.cacheTiles.get(tileId);
-
     return tile;
   }
 

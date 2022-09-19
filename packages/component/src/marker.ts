@@ -54,7 +54,7 @@ export default class Marker extends EventEmitter {
     this.scene = scene;
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
-    const { element, draggable } = this.markerOption;
+    const { element } = this.markerOption;
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
@@ -189,6 +189,7 @@ export default class Marker extends EventEmitter {
     return this.markerOption.offsets;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setDraggable(draggable: boolean) {
     throw new Error('Method not implemented.');
   }
@@ -214,6 +215,7 @@ export default class Marker extends EventEmitter {
     DOM.setTransform(element as HTMLElement, `${anchorTranslate[anchor]}`);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onMapClick(e: MouseEvent) {
     const { element } = this.markerOption;
     if (this.popup && element) {
@@ -344,10 +346,13 @@ export default class Marker extends EventEmitter {
       lngLat: this.lngLat,
     });
   };
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onUp(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }

@@ -7,7 +7,6 @@ const scene = new Scene({
     style: 'blank',
     center: [120.19382669582967, 30.258134],
     zoom: 3,
-    pitch: 0,
   }),
 });
 
