@@ -225,12 +225,4 @@ export default class ThreeJSLayer
   public addAnimateMixer(mixer: AnimationMixer) {
     this.animateMixer.push(mixer);
   }
-
-  public setBottomColor(color: string): void {
-    console.warn('empty function');
-  }
-
-  public getBottomColor() {
-    return 'rgba(0, 0, 0, 0)';
-  }
 }

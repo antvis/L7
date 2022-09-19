@@ -17,7 +17,7 @@ module.exports = {
     },
     plugins: ['@typescript-eslint',"unused-imports"],
     rules: {
-        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-imports": 0,
         '@typescript-eslint/no-loss-of-precision':0,
         '@typescript-eslint/no-inferrable-types': 0,
         'no-constant-condition': 0,

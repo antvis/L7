@@ -110,7 +110,6 @@ function unProjectCoordinates(coordinates: any, mapService: IMapService) {
 function applyAttributeMapping(
   attribute: IStyleAttribute,
   record: { [key: string]: unknown },
-  minimumColor?: string,
 ) {
   if (!attribute.scale) {
     return [];
@@ -126,9 +125,6 @@ function applyAttributeMapping(
   });
 
   const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
-  if (attribute.name === 'color' && !isColor(mappingResult[0])) {
-    return [minimumColor];
-  }
   return mappingResult;
 }
 
@@ -137,7 +133,6 @@ function mapping(
   data: IParseDataItem[],
   fontService: IFontService,
   mapService: IMapService,
-  minimumColor?: string,
   layer?: ILayer,
 ): IEncodeFeature[] {
   const {
@@ -154,7 +149,7 @@ function mapping(
     attributes
       .filter((attribute) => attribute.scale !== undefined)
       .forEach((attribute: IStyleAttribute) => {
-        let values = applyAttributeMapping(attribute, record, minimumColor);
+        let values = applyAttributeMapping(attribute, record);
 
         attribute.needRemapping = false;
 
@@ -202,7 +197,6 @@ export function calculateData(
   options: ISourceCFG | undefined,
 ): IEncodeFeature[] {
   const source = new Source(data, options);
-  const bottomColor = layer.getBottomColor();
   const attributes = styleAttributeService.getLayerStyleAttributes() || [];
   const { dataArray } = source.data;
   const filterData = dataArray;
@@ -212,7 +206,6 @@ export function calculateData(
     filterData,
     fontService,
     mapService,
-    bottomColor,
     layer,
   );
   source.destroy();

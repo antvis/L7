@@ -311,3 +311,7 @@ scene.addLayer(imageLayer);
   }
 }
 ```
+
+### getScale 
+
+获取scale 方法

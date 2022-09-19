@@ -19,9 +19,6 @@ import {
 } from './IStyleAttributeService';
 import StyleAttribute from './StyleAttribute';
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 const bytesPerElementMap = {
   [gl.FLOAT]: 4,
@@ -113,6 +110,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
   public getLayerAttributeScale(name: string) {
     const attribute = this.getLayerStyleAttribute(name);
+   
     const scale = attribute?.scale?.scalers as IAttributeScale[];
     if (scale && scale[0]) {
       return scale[0].func;

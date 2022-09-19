@@ -43,7 +43,7 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
       normalPassFactory: (name: string) => IPass<unknown>;
     },
   ) {
-    layer.hooks.init.tap('MultiPassRendererPlugin', () => {
+    layer.hooks.init.tapPromise('MultiPassRendererPlugin', async () => {
       const { enableMultiPassRenderer, passes = [] } = layer.getLayerConfig();
 
       // SceneConfig 的 enableMultiPassRenderer 配置项可以统一关闭

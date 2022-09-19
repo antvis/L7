@@ -1,5 +1,10 @@
 // @ts-ignore
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import {
+  SyncBailHook,
+  SyncHook,
+  SyncWaterfallHook,
+  AsyncSeriesBailHook,
+} from '@antv/async-hook';
 import {
   BlendType,
   IActiveOption,
@@ -103,7 +108,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   };
   // 生命周期钩子
   public hooks = {
-    init: new SyncBailHook(),
+    init: new AsyncSeriesBailHook(),
     afterInit: new SyncBailHook(),
     beforeRender: new SyncBailHook(),
     beforeRenderData: new SyncWaterfallHook(),
@@ -191,8 +196,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private encodedData: IEncodeFeature[];
 
-  private configSchema: object;
-
   private currentPickId: number | null = null;
 
   private rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
@@ -215,9 +218,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   private animateStartTime: number;
 
   private aniamateStatus: boolean = false;
-
-  // TODO: layer 保底颜色
-  private bottomColor = 'rgba(0, 0, 0, 0)';
 
   private isDestroied: boolean = false;
 
@@ -295,14 +295,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.container;
   }
 
-  public setBottomColor(color: string) {
-    this.bottomColor = color;
-  }
-
-  public getBottomColor() {
-    return this.bottomColor;
-  }
-
   public addPlugin(plugin: ILayerPlugin): ILayer {
     // TODO: 控制插件注册顺序
     // @example:
@@ -313,7 +305,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
 
-  public init() {
+  public async init() {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     // 初始化图层配置项
@@ -411,10 +403,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     // 触发 init 生命周期插件
-    this.hooks.init.call();
+    await this.hooks.init.promise();
+    console.log('初始化完成');
     // this.pickingPassRender = this.normalPassFactory('pixelPicking');
     // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
+    console.log('初始化完成，后处理');
+
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,

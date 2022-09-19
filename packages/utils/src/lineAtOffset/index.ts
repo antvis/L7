@@ -19,14 +19,8 @@ export function lineAtOffset(source: Source, option: ILineAtOffset) {
 }
 
 export function lineAtOffsetAsyc(source: Source, option: ILineAtOffset) {
-  return new Promise((resolve, reject) => {
-    if (source.inited) {
-      resolve(lineAtOffset(source, option));
-    } else {
-      source.once('sourceUpdate', () => {
-        resolve(lineAtOffset(source, option));
-      });
-    }
+  return new Promise((resolve) => {
+    resolve(lineAtOffset(source, option));
   });
 }
 

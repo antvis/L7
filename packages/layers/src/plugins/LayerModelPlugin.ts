@@ -28,23 +28,14 @@ export default class LayerModelPlugin implements ILayerPlugin {
   }
 
   public apply(layer: ILayer) {
-    layer.hooks.init.tap('LayerModelPlugin', () => {
+    layer.hooks.init.tapPromise('LayerModelPlugin', () => {
       layer.inited = true;
-      const source = layer.getSource();
-      if (source.inited) {
-        this.initLayerModel(layer);
-      }
+      this.initLayerModel(layer);
     });
 
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
-      const source = layer.getSource();
-      if (source.inited) {
-        this.prepareLayerModel(layer);
-      } else {
-        source.once('sourceUpdate', () => {
-          this.prepareLayerModel(layer);
-        });
-      }
+      this.prepareLayerModel(layer);
+
       return false;
     });
   }

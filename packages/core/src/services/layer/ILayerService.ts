@@ -1,5 +1,5 @@
 // @ts-ignore
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import { SyncBailHook, SyncHook, SyncWaterfallHook,AsyncSeriesBailHook} from '@antv/async-hook';
 import { IColorRamp, IImagedata, Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
@@ -272,7 +272,7 @@ export interface ILayer {
   encodeDataLength: number;
   pickedFeatureID: number | null;
   hooks: {
-    init: SyncBailHook;
+    init: AsyncSeriesBailHook;
     afterInit: SyncBailHook;
     beforeRenderData: SyncWaterfallHook;
     beforeRender: SyncBailHook;
@@ -315,8 +315,6 @@ export interface ILayer {
   needPick(type: string): boolean;
   getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
-  setBottomColor(color: string): void;
-  getBottomColor(): string;
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
@@ -343,7 +341,7 @@ export interface ILayer {
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ): void;
-  init(): ILayer;
+  init(): Promise<ILayer>;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;

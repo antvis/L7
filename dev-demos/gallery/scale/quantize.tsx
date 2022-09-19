@@ -1,5 +1,5 @@
 import { PolygonLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { useData, addLayers } from './useLine';
 
@@ -8,12 +8,14 @@ export default () => {
 
   useEffect(() => {
     const scene = new Scene({
-      id: 'map',
-      map: new Mapbox({
+      id: 'map5',
+      map: new Map({
         pitch: 0,
         style: 'light',
         center: [-96, 37.8],
         zoom: 3,
+        minZoom: 4,
+        maxZoom: 5,
       }),
     });
     if (geoData) {
@@ -47,7 +49,7 @@ export default () => {
 
   return (
     <div
-      id="map"
+      id="map5"
       style={{
         height: '500px',
         position: 'relative',

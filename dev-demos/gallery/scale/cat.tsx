@@ -1,14 +1,14 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
-import { useData, addLayers } from './useLine';
+import { useData } from './useLine';
 
 export default () => {
   const { geoData } = useData();
 
   useEffect(() => {
     const scene = new Scene({
-      id: 'map',
+      id: 'map1',
       map: new Map({
         pitch: 0,
         style: 'light',
@@ -28,17 +28,30 @@ export default () => {
             },
           ],
         })
-        .scale('rate', {
-          type: 'quantile',
-        })
         .shape('fill')
-        .color('rate', ['#ffffcc', '#b6e2b6', '#64c1c0', '#338cbb', '#253494'])
+        .color('name', [
+          '#a6cee3',
+          '#1f78b4',
+          '#b2df8a',
+          '#33a02c',
+          '#fb9a99',
+          '#e31a1c',
+          '#fdbf6f',
+          '#ff7f00',
+          '#cab2d6',
+          '#6a3d9a',
+          '#ffff99',
+          '#b15928',
+        ])
         .style({
           opacity: 1,
         });
 
       scene.addLayer(layer);
-      addLayers(geoData, scene, layer);
+      layer.on('inited', () => {
+        scene.render();
+      });
+      // addLayers(geoData, scene, layer);
     }
     return () => {
       scene.destroy();
@@ -47,7 +60,7 @@ export default () => {
 
   return (
     <div
-      id="map"
+      id="map1"
       style={{
         height: '500px',
         position: 'relative',

@@ -8,7 +8,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
   protected mapService: IMapService;
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
-    layer.hooks.init.tap('DataSourcePlugin', () => {
+    layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
       let source = layer.getSource();
       if (!source) {
         // Tip: 用户没有传入 source 的时候使用图层的默认数据
@@ -20,11 +20,13 @@ export default class DataSourcePlugin implements ILayerPlugin {
       if (source.inited) {
         this.updateClusterData(layer);
       } else {
-        source.once('sourceUpdate', () => {
-          this.updateClusterData(layer);
+        await new Promise((resolve) => {
+          source.once('sourceUpdate', () => {
+            this.updateClusterData(layer);
+            resolve(null);
+          });
         });
       }
-      // this.updateClusterData(layer);
     });
 
     // 检测数据是否需要更新
