@@ -165,7 +165,6 @@ export default class BillBoardModel extends BaseModel {
       descriptor: {
         name: 'a_Extrude',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -187,14 +186,12 @@ export default class BillBoardModel extends BaseModel {
         },
       },
     });
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -204,7 +201,6 @@ export default class BillBoardModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[2], vertex[3]];
         },

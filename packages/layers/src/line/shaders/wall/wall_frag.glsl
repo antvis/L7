@@ -12,7 +12,7 @@ uniform float u_opacity : 1.0;
 uniform float u_textureBlend;
 uniform float u_iconStepCount;
 uniform float u_time;
-uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ]; // 控制运动
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ]; // 控制运动
 
 varying vec2 v_iconMapUV;
 varying float v_blur;
@@ -35,10 +35,10 @@ void main() {
   }
 
   gl_FragColor.a *= opacity; // 全局透明度
-  if(u_aimate.x == Animate) {
-      animateSpeed = u_time / u_aimate.y;
-       float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + animateSpeed);
-      alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
+  if(u_animate.x == Animate) {
+      animateSpeed = u_time / u_animate.y;
+       float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_animate.z)* (1.0/ u_animate.z) + animateSpeed);
+      alpha = (alpha + u_animate.w -1.0) / u_animate.w;
       alpha = smoothstep(0., 1., alpha);
       gl_FragColor.a *= alpha;
   }

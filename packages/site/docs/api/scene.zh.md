@@ -486,7 +486,7 @@ scene.zoomIn();
 地图缩小一级
 
 ```javascript
-scene.ZoomOut();
+scene.zoomOut();
 ```
 
 ### panTo 地图移动到

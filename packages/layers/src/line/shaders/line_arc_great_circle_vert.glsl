@@ -10,9 +10,8 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
-// varying vec2 v_normal;
 
 varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
@@ -172,7 +171,7 @@ void main() {
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / total_Distance;
   }
 
-  if(u_aimate.x == Animate) {
+  if(u_animate.x == Animate) {
       v_distance_ratio = segmentIndex / segmentNumber;
   }
 

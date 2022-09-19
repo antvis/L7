@@ -29,7 +29,7 @@ export default () => {
             },
           },
         )
-        .shape('dataImage')
+        .shape('tileDataImage')
         .style({
           clampLow: false,
           clampHigh: false,

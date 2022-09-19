@@ -63,14 +63,12 @@ export default class GridModel extends BaseModel {
       descriptor: {
         name: 'a_Pos',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
         size: 3,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
-          // const coordinates = feature.coordinates as number[];
+        update: (feature: IEncodeFeature) => {
           const coordinates = (feature.version === 'GAODE2.x'
             ? feature.originCoordinates
             : feature.coordinates) as number[];
