@@ -20,7 +20,7 @@ uniform float segmentNumber;
 varying vec2 v_iconMapUV;
 
 uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
 
 varying mat4 styleMappingMat;
 

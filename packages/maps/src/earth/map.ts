@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * MapboxService
  */
@@ -105,7 +106,7 @@ export default class L7EarthService extends BaseMapService<Map>
   }
 
   public destroy() {
-    // TODO: 销毁地图可视化层的容器
+    // 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
 
     this.eventEmitter.removeAllListeners();

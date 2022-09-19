@@ -8,7 +8,7 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
 
 uniform float u_lineDir: 1.0;
@@ -52,8 +52,10 @@ vec2 midPoint(vec2 source, vec2 target, float arcThetaOffset) {
   // return mid;
 }
 float getSegmentRatio(float index) {
-    // return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
-     return index / (segmentNumber - 1.);
+    // dash: index / (segmentNumber - 1.);
+    // normal: smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+    return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+    //  return index / (segmentNumber - 1.);
 }
 vec2 interpolate (vec2 source, vec2 target, float t, float arcThetaOffset) {
   // if the angularDist is PI, linear interpolation is applied. otherwise, use spherical interpolation

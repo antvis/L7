@@ -125,6 +125,7 @@ export const lazyMultiInject = (
     original.call(this, proto, key);
     if (descriptor) {
       // return link to proto, so own value wont be 'undefined' after component's creation
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       descriptor!.initializer = () => {
         return proto[key];
       };

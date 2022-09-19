@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * AMapService
  */
@@ -102,7 +103,7 @@ export default class AMapService extends AMapBaseService
             ...rest,
           };
           if (mapConstructorOptions.zoom) {
-            // TODO: 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
+            // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
             mapConstructorOptions.zoom += 1;
           }
           // @ts-ignore

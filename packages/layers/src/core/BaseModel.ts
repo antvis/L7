@@ -259,7 +259,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    * @returns
    */
   public dataTextureNeedUpdate(options: {
-    // TODO: thetaOffset 目前只有 lineLayer/arc 使用
+    // thetaOffset 目前只有 lineLayer/arc 使用
     thetaOffset?: styleSingle;
     opacity?: styleSingle;
     strokeOpacity?: styleSingle;
@@ -514,13 +514,16 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public needUpdate(): boolean {
     return false;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public buildModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public initModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
-  public clearModels() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public clearModels(refresh = true) {
     return;
   }
   public getAttribute(): {

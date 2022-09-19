@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * AMapService
  */
@@ -136,12 +137,13 @@ export default class AMapService extends AMapBaseService {
       const amap = mapContainer.getElementsByClassName(
         'amap-maps',
       )[0] as HTMLElement;
-      // TODO: amap2 的 amap-maps 新增 z-index=0; 样式，让 marker 中 zIndex 失效
+      // amap2 的 amap-maps 新增 z-index=0; 样式，让 marker 中 zIndex 失效
       amap.style.zIndex = 'auto';
       this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public updateView(_viewOption: Partial<IMapCamera>): void {}
 
   public getOverlayContainer(): HTMLElement | undefined {
@@ -274,7 +276,7 @@ export default class AMapService extends AMapBaseService {
             ...rest,
           };
           if (mapConstructorOptions.zoom) {
-            // TODO: 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
+            // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
             mapConstructorOptions.zoom += 1;
           }
           // @ts-ignore

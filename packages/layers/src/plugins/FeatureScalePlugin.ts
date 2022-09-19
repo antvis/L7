@@ -1,5 +1,4 @@
 import {
-  IGlobalConfigService,
   ILayer,
   ILayerPlugin,
   IScale,
@@ -16,7 +15,7 @@ import { IParseDataItem } from '@antv/l7-source';
 import { extent } from 'd3-array';
 import * as d3interpolate from 'd3-interpolate';
 import * as d3 from 'd3-scale';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { isNil, isString, uniq } from 'lodash';
 import 'reflect-metadata';
 
@@ -41,13 +40,6 @@ const scaleMap = {
  */
 @injectable()
 export default class FeatureScalePlugin implements ILayerPlugin {
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-  // key = field_attribute name
-  private scaleCache: {
-    [field: string]: IStyleScale;
-  } = {};
-
   private scaleOptions: IScaleOptions = {};
   public apply(
     layer: ILayer,
@@ -77,6 +69,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       this.caculateScalesForAttributes(attributes || [], dataArray);
       layer.layerModelNeedUpdate = true;
+
       return true;
     });
 
@@ -110,7 +103,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     attributes: IStyleAttribute[],
     dataArray: IParseDataItem[],
   ) {
-    this.scaleCache = {};
     attributes.forEach((attribute) => {
       if (attribute.scale) {
         // 创建Scale

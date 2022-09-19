@@ -8,11 +8,15 @@ export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
     this.layerModel = new WindModels[modelType](this);
     this.layerModel.initModels((models) => {
       this.models = models;
-      this.renderLayers();
+      this.emit('modelLoaded', null);
+      this.layerService.throttleRenderLayers();
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.models = models;
+      this.emit('modelLoaded', null);
+    });
   }
 
   public renderModels() {

@@ -1,4 +1,4 @@
-### point circle
+### point - circle
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';

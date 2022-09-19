@@ -1,2 +1,2 @@
-### Linear Line
-<code src="./linearline.tsx"></code>
+### Line - linear 
+<code src="./demos/linearline.tsx"></code>

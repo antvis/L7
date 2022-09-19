@@ -19,6 +19,7 @@ import {
   IPostProcessingPass,
 } from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
+import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
 import { ISource, ISourceCFG, ITransform } from '../source/ISourceService';
 import {
@@ -82,7 +83,7 @@ export interface ILayerModel {
   buildModels(callbackModel: (models: IModel[]) => void): void;
   initModels(callbackModel: (models: IModel[]) => void): void;
   needUpdate(): boolean;
-  clearModels(): void;
+  clearModels(refresh?: boolean): void;
 
   // canvasLayer
   clearCanvas?(): void;
@@ -135,8 +136,9 @@ export interface ISubLayerStyles {
  * For tile subLayer
  */
 export interface ISubLayerInitOptions {
+  usage?: string|undefined;
   layerType: string;
-  transforms: ITransform[];
+  transforms?: ITransform[];
   shape?: string | string[] | IScaleValue;
   // options
   zIndex: number;
@@ -149,13 +151,16 @@ export interface ISubLayerInitOptions {
 
   opacity: number;
   color?: IScaleValue;
+  basemapColor?: string;
   size?: IScaleValue;
+  basemapSize?: number;
 
   // raster tiff
   domain?: [number, number];
   clampLow?: boolean;
   clampHigh?: boolean;
   rampColors?: IColorRamp;
+  colorTexture?: ITexture2D;
   // 在初始化的时候使用
   rampColorsData?: ImageData | IImagedata;
 
@@ -182,11 +187,10 @@ export interface ITilePickManager {
   pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
 }
 
-export interface ITileLayerManager {
+export interface IBaseTileLayerManager {
   sourceLayer: string;
   parent: ILayer;
   children: ILayer[];
-  tilePickManager: ITilePickManager;
 
   createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
 
@@ -198,21 +202,26 @@ export interface ITileLayerManager {
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;
-
-  pickLayers(target: IInteractionTarget): boolean;
-
   updateLayersConfig(layers: ILayer[], key: string, value: any): void;
 }
 
-export interface ITileLayer {
+export interface ITileLayerManager extends IBaseTileLayerManager{
+  tilePickManager: ITilePickManager;
+  pickLayers(target: IInteractionTarget): boolean;
+}
+
+export interface IBaseTileLayer {
   type: string;
   sourceLayer: string;
   parent: ILayer;
-  tileLayerManager: ITileLayerManager;
+  tileLayerManager: IBaseTileLayerManager;
   tilesetManager: TilesetManager | undefined;
   children: ILayer[];
   scaleField: any;
   render(isPicking?: boolean): void;
+}
+export interface ITileLayer extends IBaseTileLayer{
+  tileLayerManager: ITileLayerManager;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
   clearPickState(): void;
@@ -260,7 +269,7 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
-  tileLayer: ITileLayer;
+  tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
@@ -295,6 +304,7 @@ export interface ILayer {
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
   isVector?: boolean;
+  isTileLayer?: boolean;
   triangulation?: Triangulation | undefined;
 
   /**
@@ -523,6 +533,7 @@ export interface ILayerConfig {
   cursorEnabled?: boolean;
   cursor?: string;
   forward: boolean; // 正方向
+  usage?: string; // 指定图层的使用类型 - 用户地图底图绘制的优化
 
   /**
    * 开启拾取
@@ -578,6 +589,7 @@ export interface ILayerConfig {
 /**
  * 提供 Layer 管理服务
  */
+
 export interface ILayerService {
   pickedLayerId: number;
   clock: Clock;
@@ -604,7 +616,9 @@ export interface ILayerService {
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;
-  renderLayers(type?: string): void;
+  reRender(): void;
+  throttleRenderLayers(): void;
+  renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
 

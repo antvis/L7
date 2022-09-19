@@ -147,7 +147,15 @@ export function LineTriangulation(feature: IEncodeFeature) {
 export function SimpleLineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const pos: any[] = [];
-
+  if (!Array.isArray(coordinates[0])) {
+    return {
+      vertices: [],
+      indices: [],
+      normals: [],
+      size: 6,
+      count: 0,
+    };
+  }
   const { results, totalDistance } = getSimpleLineVertices(
     coordinates as IPosition[],
   );
@@ -164,17 +172,43 @@ export function SimpleLineTriangulation(feature: IEncodeFeature) {
   };
 }
 
+export function TileSimpleLineTriangulation(feature: IEncodeFeature) {
+  const { coordinates } = feature;
+  const pos: any[] = [];
+  if (!Array.isArray(coordinates[0])) {
+    return {
+      vertices: [],
+      indices: [],
+      size: 4,
+      count: 0,
+    };
+  }
+  const { results } = getTileSimpleLineVertices(coordinates as IPosition[]);
+  results.map((point) => {
+    pos.push(point[0], point[1], point[2], point[3]);
+  });
+
+  return {
+    vertices: pos,
+    indices: [],
+    size: 4,
+    count: results.length,
+  };
+}
+
 function lineSegmentDistance(b1: number[], a1: number[]) {
   const dx = a1[0] - b1[0];
   const dy = a1[1] - b1[1];
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-function pushDis(point: number[], n: number) {
+function pushDis(point: number[], n?: number) {
   if (point.length < 3) {
     point.push(0);
   }
-  point.push(n);
+  if (n !== undefined) {
+    point.push(n);
+  }
   return point;
 }
 
@@ -212,6 +246,28 @@ function getSimpleLineVertices(points: number[][]) {
   }
 }
 
+function getTileSimpleLineVertices(points: number[][]) {
+  if (points.length < 2) {
+    return {
+      results: points,
+    };
+  } else {
+    const results: number[][] = [];
+    const point = pushDis(points[0]);
+    results.push(point);
+
+    for (let i = 1; i < points.length - 1; i++) {
+      const mulPoint = pushDis(points[i]);
+      results.push(mulPoint);
+      results.push(mulPoint);
+    }
+    results.push(pushDis(points[points.length - 1]));
+    return {
+      results,
+    };
+  }
+}
+
 export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
@@ -223,7 +279,7 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   };
 }
 
-// TODO：构建几何图形（带有中心点和大小）
+// 构建几何图形（带有中心点和大小）
 export function polygonTriangulationWithCenter(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);

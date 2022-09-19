@@ -318,19 +318,6 @@ scene.on('loaded', () => {
       );
     }
   })
-    .source({
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [ 111.4453125, 32.84267363195431 ]
-          }
-        }
-      ]
-    })
     .animate(true);
   scene.addLayer(threeJSLayer);
   // @ts-ignore

@@ -23,20 +23,14 @@ scene.on('loaded', () => {
           'name',
           [ '#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15' ]
         )
-        .shape('fill')
-        .style({
-          opacity: 1
-        });
+        .shape('fill');
       //  图层边界
       const layer2 = new LineLayer({
         zIndex: 2
       })
         .source(data)
         .color('#fff')
-        .size(0.5)
-        .style({
-          opacity: 1
-        });
+        .size(0.5);
 
       scene.addLayer(chinaPolygonLayer);
       scene.addLayer(layer2);
@@ -51,10 +45,7 @@ scene.on('loaded', () => {
       })
         .source(data)
         .color('rgb(93,112,146)')
-        .size(0.6)
-        .style({
-          opacity: 1
-        });
+        .size(0.6);
 
       scene.addLayer(boundaries);
     });
@@ -76,7 +67,6 @@ scene.on('loaded', () => {
         .shape('name', 'text')
         .size(12)
         .style({
-          opacity: 1,
           stroke: '#fff',
           strokeWidth: 0,
           padding: [ 5, 5 ],

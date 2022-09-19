@@ -1,5 +1,7 @@
+import { ILayer } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
+import { tileAllLoad } from './utils';
 
 export class TMSTileLayer extends BaseTileLayer {
   public type: string = 'TMS';
@@ -35,20 +37,35 @@ export class TMSTileLayer extends BaseTileLayer {
             return;
           }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.tileLayerManager.updateLayersConfig(
-            layers,
-            'visible',
-            tile.isVisible,
-          );
+          this.updateTileVisible(tile, layers);
           this.setPickState(layers);
         }
       });
-
-    this.parent.renderLayers();
 
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
+  }
+
+  private emitTileVisibleEvent(tile: Tile, callback: () => void) {
+    if (tile.isVisible) {
+      callback();
+    } else {
+      tileAllLoad(tile, () => {
+        callback();
+      });
+    }
+  }
+
+  private updateTileVisible(tile: Tile, layers: ILayer[]) {
+    this.emitTileVisibleEvent(tile, () => {
+      this.tileLayerManager.updateLayersConfig(
+        layers,
+        'visible',
+        tile.isVisible,
+      );
+      this.layerService.reRender();
+    });
   }
 }

@@ -29,13 +29,25 @@ export default class ThreeJSLayer
   // 地图中点墨卡托坐标
   private center: IMercator;
   public defaultSourceConfig: {
-    data: any[];
+    data: any;
     options: ISourceCFG | undefined;
   } = {
-    data: [],
+    data: {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [0, 0],
+          },
+        },
+      ],
+    },
     options: {
       parser: {
-        type: 'json',
+        type: 'geojson',
       },
     },
   };
@@ -119,8 +131,8 @@ export default class ThreeJSLayer
    * @param object
    * @returns
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getObjectLngLat(object: Object3D) {
-    const coord = [object.position.x, object.position.y];
     return [0, 0] as ILngLat;
   }
 
@@ -187,7 +199,6 @@ export default class ThreeJSLayer
 
     // 获取相机 （不同的地图获取对应的方式不同）
     const camera = this.threeRenderService.getRenderCamera();
-
     renderer.render(this.scene, camera);
 
     this.rendererService.setState();

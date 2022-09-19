@@ -57,7 +57,7 @@ export default class BaseEarthModel extends BaseModel {
     this.sunX = Math.cos(this.earthTime) * (this.sunRadius - this.sunY);
     this.sunZ = Math.sin(this.earthTime) * (this.sunRadius - this.sunY);
 
-    this.layerService.renderLayers();
+    this.layerService.throttleRenderLayers();
   }
 
   public initModels(callbackModel: (models: IModel[]) => void) {
@@ -78,8 +78,7 @@ export default class BaseEarthModel extends BaseModel {
         width: imageData[0].width,
         height: imageData[0].height,
       });
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     });
 
     this.buildModels(callbackModel);

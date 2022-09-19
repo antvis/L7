@@ -18,11 +18,6 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       console.log('UpdateStyleAttributePlugin');
     });
 
-    // layer.hooks.beforeRenderData.tap('styleAttributeService', () => {
-    //   // layer.layerModelNeedUpdate = true;
-    //   return true;
-    // });
-
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
       if (layer.layerModelNeedUpdate) {
         return;
@@ -38,12 +33,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
   ) {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
-    const shape = styleAttributeService.getLayerStyleAttribute('shape');
-    if (
-      filter &&
-      filter.needRegenerateVertices // ||
-      // (shape && shape.needRegenerateVertices) // TODO:Shape 更新重新build
-    ) {
+    if (filter && filter.needRegenerateVertices) {
       layer.layerModelNeedUpdate = true;
       attributes.forEach((attr) => (attr.needRegenerateVertices = false));
       return;

@@ -224,8 +224,7 @@ export default class PlaneModel extends BaseModel {
           wrapS: gl.CLAMP_TO_EDGE,
           wrapT: gl.CLAMP_TO_EDGE,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
+        this.layerService.reRender();
       };
       img.src = mapTexture;
     } else {
@@ -299,7 +298,7 @@ export default class PlaneModel extends BaseModel {
       },
     );
     this.layer.updateModelData(modelData as IAttrubuteAndElements);
-    this.layerService.renderLayers();
+    this.layerService.throttleRenderLayers();
   }
 
   /**

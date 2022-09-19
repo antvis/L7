@@ -4,20 +4,7 @@ import BaseModel from '../../core/BaseModel';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import buildFrag from '../shaders/build_frag.glsl';
 import buildVert from '../shaders/build_vert.glsl';
-interface ICityBuildLayerStyleOptions {
-  opacity: number;
-  baseColor: string;
-  brightColor: string;
-  windowColor: string;
-  time: number;
-  sweep: {
-    enable: boolean;
-    sweepRadius: number;
-    sweepColor: string;
-    sweepSpeed: number;
-    sweepCenter?: [number, number];
-  };
-}
+import { ICityBuildLayerStyleOptions } from '../../core/interface';
 export default class CityBuildModel extends BaseModel {
   private cityCenter: [number, number];
   private cityMinSize: number;
@@ -145,9 +132,6 @@ export default class CityBuildModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 10 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -170,9 +154,7 @@ export default class CityBuildModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
-          const { size } = feature;
           return [vertex[3], vertex[4]];
         },
       },

@@ -5,7 +5,6 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     center: [ 120.19382669582967, 30.258134 ],
-    pitch: 0,
     style: 'dark',
     zoom: 3
   })
@@ -35,7 +34,6 @@ scene.on('loaded', () => {
         .active(true)
         .color('rgb(73,167,86)')
         .style({
-          opacity: 1,
           strokeWidth: 1,
           stroke: '#fff'
         });
@@ -50,10 +48,8 @@ scene.on('loaded', () => {
         .active(true)
         .color('#fff')
         .style({
-          opacity: 1,
           strokeWidth: 0,
           stroke: '#fff'
-
         });
 
       scene.addLayer(pointLayer);

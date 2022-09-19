@@ -8,7 +8,7 @@ export interface IEarthCamera {
 }
 
 export default class Viewport implements IViewport {
-  // TODO: 初始化相机的姿态 看向地球
+  // 初始化相机的姿态 看向地球
   private xzReg: number = -Math.PI * 0.6;
   private yReg: number = Math.PI * 0.2;
   // 默认的地球相机半径、地球相机缩放层级

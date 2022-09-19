@@ -179,7 +179,7 @@ export default class ArcModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-
+    //
     this.layer
       .buildLayerModel({
         moduleName: 'lineArc2d' + type,

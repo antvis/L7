@@ -56,7 +56,7 @@ vec4 filterPickingColor(vec4 color) {
  * highlight color if this item is selected, otherwise unmodified argument.
  */
 vec4 filterColor(vec4 color) {
-  // TODO: 过滤多余的 shader 计算
+  // 过滤多余的 shader 计算
   // return color;
   if(u_shaderPick < 0.5) {
     return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
@@ -67,7 +67,7 @@ vec4 filterColor(vec4 color) {
 }
 
 vec4 filterColorAlpha(vec4 color, float alpha) {
-  // TODO: 过滤多余的 shader 计算
+  // 过滤多余的 shader 计算
   // return color;
   if(u_shaderPick < 0.5) {
     return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题

@@ -19,11 +19,15 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     this.layerModel = new PolygonModels[shape](this);
     this.layerModel.initModels((models) => {
       this.models = models;
-      this.renderLayers();
+      this.emit('modelLoaded', null);
+      this.layerService.throttleRenderLayers();
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.models = models;
+      this.emit('modelLoaded', null);
+    });
   }
   protected getConfigSchema() {
     return {

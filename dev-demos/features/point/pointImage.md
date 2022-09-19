@@ -1,4 +1,4 @@
-### point image
+### point - image
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
@@ -6,12 +6,10 @@ import React, { useEffect } from 'react';
 
 export default () => {
     useEffect(() => {
-        
         const scene = new Scene({
             id: 'point_fillImage',
             map: new Mapbox({
                 style: 'light',
-
                 center: [120, 30],
                 pitch: 60,
                 zoom: 14
