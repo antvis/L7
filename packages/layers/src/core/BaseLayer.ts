@@ -151,7 +151,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
 
-
   protected shaderModuleService: IShaderModuleService;
   protected cameraService: ICameraService;
 
