@@ -48,7 +48,7 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
       return 'dataImage';
     } else if (shape === 'image') {
       return 'image';
-    } else if(shape === 'tileDataImage') {
+    } else if (shape === 'tileDataImage') {
       return 'tileDataImage';
     } else {
       return 'image';
