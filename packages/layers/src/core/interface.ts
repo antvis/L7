@@ -1,4 +1,4 @@
-import { IAnimateOption, IMapService } from '@antv/l7-core';
+import { IAnimateOption, IMapService, ITexture2D } from '@antv/l7-core';
 import { IColorRamp, IImagedata } from '@antv/l7-utils';
 import { styleOffset } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
@@ -189,6 +189,7 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   clampHigh?: boolean;
   rampColors?: IColorRamp;
   rampColorsData?: ImageData | IImagedata;
+  colorTexture?: ITexture2D;
   pixelConstant?: number;
   pixelConstantR?: number;
   pixelConstantG?: number;

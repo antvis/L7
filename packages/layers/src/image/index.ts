@@ -34,6 +34,7 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     const defaultConfig = {
       image: {},
       dataImage: {},
+      tileDataImage: {},
     };
     return defaultConfig[type];
   }
@@ -47,6 +48,8 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
       return 'dataImage';
     } else if (shape === 'image') {
       return 'image';
+    } else if(shape === 'tileDataImage') {
+      return 'tileDataImage';
     } else {
       return 'image';
     }

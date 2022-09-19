@@ -19,6 +19,7 @@ import {
   IPostProcessingPass,
 } from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
+import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
 import { ISource, ISourceCFG, ITransform } from '../source/ISourceService';
 import {
@@ -159,6 +160,7 @@ export interface ISubLayerInitOptions {
   clampLow?: boolean;
   clampHigh?: boolean;
   rampColors?: IColorRamp;
+  colorTexture?: ITexture2D;
   // 在初始化的时候使用
   rampColorsData?: ImageData | IImagedata;
 

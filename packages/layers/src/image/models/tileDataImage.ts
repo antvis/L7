@@ -6,8 +6,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
-import { isEqual } from 'lodash';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -16,17 +15,19 @@ import ImageVert from '../shaders/image_vert.glsl';
 
 export default class ImageDataModel extends BaseModel {
   protected texture: ITexture2D;
-  protected colorTexture: ITexture2D;
-  private rampColors: any;
   public getUninforms(): IModelUniform {
+    const { createTexture2D } = this.rendererService;
     const {
       opacity,
       clampLow = true,
       clampHigh = true,
       noDataValue = -9999999,
       domain = [0, 1],
-      rampColors,
 
+      colorTexture = createTexture2D({
+        height: 0,
+        width: 0,
+      }),
       pixelConstant = 0.0,
       pixelConstantR = 256 * 256,
       pixelConstantG = 256,
@@ -34,10 +35,6 @@ export default class ImageDataModel extends BaseModel {
       pixelConstantRGB = 0.1,
     } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
 
-    if (!isEqual(this.rampColors, rampColors)) {
-      this.updateColorTexure();
-      this.rampColors = rampColors;
-    }
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
@@ -52,15 +49,13 @@ export default class ImageDataModel extends BaseModel {
       u_clampLow: clampLow,
       u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
       u_noDataValue: noDataValue,
-      u_colorTexture: this.colorTexture,
+      u_colorTexture: colorTexture,
     };
   }
   public initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
-      rampColorsData,
-      rampColors,
     } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
 
     const source = this.layer.getSource();
@@ -80,20 +75,11 @@ export default class ImageDataModel extends BaseModel {
         this.layerService.reRender();
       },
     );
-
-    const rampImageData = rampColorsData
-      ? rampColorsData
-      : generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: rampImageData.data,
-      width: rampImageData.width,
-      height: rampImageData.height,
-      flipY: false,
-    });
+   
 
     this.layer
       .buildLayerModel({
-        moduleName: 'RasterImage',
+        moduleName: 'RasterTileDataImage',
         vertexShader: ImageVert,
         fragmentShader: ImageFrag,
         triangulation: RasterImageTriangulation,
@@ -114,7 +100,6 @@ export default class ImageDataModel extends BaseModel {
 
   public clearModels(): void {
     this.texture?.destroy();
-    this.colorTexture?.destroy();
   }
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
@@ -153,20 +138,6 @@ export default class ImageDataModel extends BaseModel {
           return [vertex[3], vertex[4]];
         },
       },
-    });
-  }
-
-  private updateColorTexure() {
-    const { createTexture2D } = this.rendererService;
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
-    const imageData = generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: false,
     });
   }
 }
