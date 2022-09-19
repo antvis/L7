@@ -243,9 +243,6 @@ export default class FillImageModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { rotate = 0 } = feature;
           return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
@@ -266,9 +263,6 @@ export default class FillImageModel extends BaseModel {
         size: 2,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const iconMap = this.iconService.getIconMap();
           const { shape } = feature;
@@ -323,9 +317,6 @@ export default class FillImageModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size)
@@ -345,8 +336,7 @@ export default class FillImageModel extends BaseModel {
         min: 'linear mipmap nearest',
         mipmap: true,
       });
-      // this.layer.render();
-      // TODO: 更新完纹理后在更新的图层的时候需要更新所有的图层
+      // 更新完纹理后在更新的图层的时候需要更新所有的图层
       this.layerService.throttleRenderLayers();
       return;
     }

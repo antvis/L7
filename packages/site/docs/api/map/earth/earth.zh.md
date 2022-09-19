@@ -64,7 +64,7 @@ const earthlayer = new EarthLayer()
   .style({
     opacity: 1.0,
     radius: 40,
-    globelOtions: {
+    globalOptions: {
       ambientRatio: 0.6, // 环境光
       diffuseRatio: 0.4, // 漫反射
       specularRatio: 0.1, // 高光反射
@@ -153,7 +153,7 @@ scene.on('loaded', () => {
 
   当用户的 `shape` 参数不被识别时，自动降级为 `base` 类型
 
-- globelOtions: 图层样式
+- globalOptions: 图层样式
   - ambientRatio: 环境光
   - diffuseRatio: 漫反射
   - specularRatio: 高光反射
@@ -170,7 +170,7 @@ const earthlayer = new EarthLayer()
   )
   .shape('base')
   .style({
-    globelOtions: {
+    globalOptions: {
       ambientRatio: 0.6, // 环境光
       diffuseRatio: 0.4, // 漫反射
       specularRatio: 0.1, // 高光反射

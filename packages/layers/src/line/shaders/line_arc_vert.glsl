@@ -8,7 +8,7 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
 
 uniform float u_lineDir: 1.0;
@@ -123,7 +123,7 @@ void main() {
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   float d_distance_ratio;
   
-  if(u_aimate.x == Animate) {
+  if(u_animate.x == Animate) {
       d_distance_ratio = segmentIndex / segmentNumber;
       if(u_lineDir != 1.0) {
         d_distance_ratio = 1.0 - d_distance_ratio;
