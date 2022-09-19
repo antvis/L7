@@ -163,9 +163,6 @@ export default class GreatCircleModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -188,7 +185,6 @@ export default class GreatCircleModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4], vertex[5], vertex[6]];
         },
@@ -209,13 +205,9 @@ export default class GreatCircleModel extends BaseModel {
         size: 2,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;
-          // console.log('icon feature', feature)
           const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
           return [x, y];
         },
