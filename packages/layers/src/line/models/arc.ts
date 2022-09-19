@@ -124,7 +124,7 @@ export default class ArcModel extends BaseModel {
   public getAnimateUniforms(): IModelUniform {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     return {
-      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
@@ -201,7 +201,6 @@ export default class ArcModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
@@ -216,9 +215,6 @@ export default class ArcModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -241,7 +237,6 @@ export default class ArcModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4], vertex[5], vertex[6]];
         },
@@ -262,9 +257,6 @@ export default class ArcModel extends BaseModel {
         size: 2,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;

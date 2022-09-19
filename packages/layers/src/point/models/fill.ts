@@ -13,7 +13,6 @@ import { $window, getMask, PointFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
-// import { PointFillTriangulation } from '../../core/triangulation';
 // animate pointLayer shader - support animate
 import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate
@@ -24,7 +23,7 @@ import { Version } from '@antv/l7-maps';
 
 export default class FillModel extends BaseModel {
   private meter2coord: number = 1;
-  private meteryScale: number = 1; // 兼容 mapbox
+  private meterYScale: number = 1; // 兼容 mapbox
   private isMeter: boolean = false;
 
   private unit: string = 'l7size';
@@ -94,7 +93,7 @@ export default class FillModel extends BaseModel {
       u_heightfixed: Number(heightfixed),
 
       u_meter2coord: this.meter2coord,
-      u_meteryScale: this.meteryScale,
+      u_meteryScale: this.meterYScale,
       u_isMeter: Number(this.isMeter),
       u_blur: blur,
 
@@ -116,7 +115,7 @@ export default class FillModel extends BaseModel {
       animateOption = { enable: false },
     } = this.layer.getLayerConfig() as ILayerConfig;
     return {
-      u_aimate: this.animateOption2Array(animateOption),
+      u_animate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
@@ -172,7 +171,7 @@ export default class FillModel extends BaseModel {
 
       this.meter2coord = center[0] - westLnglat.lng;
 
-      this.meteryScale = (southLnglat.lat - center[1]) / this.meter2coord;
+      this.meterYScale = (southLnglat.lat - center[1]) / this.meter2coord;
       return;
     }
 
@@ -314,9 +313,6 @@ export default class FillModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size];
@@ -339,9 +335,6 @@ export default class FillModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
           const shapeIndex = shape2d.indexOf(shape as string);

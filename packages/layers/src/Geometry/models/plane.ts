@@ -1,7 +1,7 @@
 import {
   AttributeType,
   gl,
-  IAttrubuteAndElements,
+  IAttributeAndElements,
   IEncodeFeature,
   IModel,
   IModelUniform,
@@ -267,10 +267,10 @@ export default class PlaneModel extends BaseModel {
     const gridY1 = gridY + 1;
 
     const widthStep = imgWidth / gridX;
-    const heihgtStep = imgHeight / gridY;
+    const heightStep = imgHeight / gridY;
 
     for (let iy = 0; iy < gridY1; iy++) {
-      const imgIndexY = Math.floor(iy * heihgtStep);
+      const imgIndexY = Math.floor(iy * heightStep);
       const imgLen = imgIndexY * imgWidth;
 
       for (let ix = 0; ix < gridX1; ix++) {
@@ -297,7 +297,7 @@ export default class PlaneModel extends BaseModel {
         };
       },
     );
-    this.layer.updateModelData(modelData as IAttrubuteAndElements);
+    this.layer.updateModelData(modelData as IAttributeAndElements);
     this.layerService.throttleRenderLayers();
   }
 
@@ -386,7 +386,6 @@ export default class PlaneModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

@@ -11,7 +11,7 @@ attribute float a_Distance;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 uniform float u_icon_step: 100;
 uniform float u_heightfixed;
 uniform float u_linearColor: 0;
@@ -43,7 +43,7 @@ void main() {
     d_texPixelLen *= 10.0;
   }
 
-  if(u_aimate.x == Animate || u_linearColor == 1.0) {
+  if(u_animate.x == Animate || u_linearColor == 1.0) {
       d_distance_ratio = a_Distance / a_Total_Distance;
   }
 
