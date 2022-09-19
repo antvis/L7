@@ -2,7 +2,7 @@ import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
 
 export type RequestParameters = {
-  url: string;
+  url: string | string[];
   headers?: any;
   method?: 'GET' | 'POST' | 'PUT';
   body?: string;
@@ -53,7 +53,8 @@ function makeFetchRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
 ) {
-  const request = new Request(requestParameters.url, {
+  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
+  const request = new Request(url, {
     method: requestParameters.method || 'GET',
     body: requestParameters.body,
     credentials: requestParameters.credentials,
@@ -94,7 +95,7 @@ function makeFetchRequest(
             new AJAXError(
               response.status,
               response.statusText,
-              requestParameters.url,
+              url,
               body,
             ),
           ),
@@ -110,8 +111,9 @@ function makeXMLHttpRequest(
   callback: ResponseCallback<any>,
 ) {
   const xhr = new $XMLHttpRequest();
+  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
 
-  xhr.open(requestParameters.method || 'GET', requestParameters.url, true);
+  xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
     xhr.responseType = 'arraybuffer';
   }
@@ -153,13 +155,73 @@ function makeXMLHttpRequest(
         type: xhr.getResponseHeader('Content-Type'),
       });
       callback(
-        new AJAXError(xhr.status, xhr.statusText, requestParameters.url, body),
+        new AJAXError(xhr.status, xhr.statusText, url, body),
       );
     }
   };
   xhr.send(requestParameters.body);
 
   return xhr;
+}
+
+export interface IXHRReustResuit {
+  err: Error|null;
+  data: ArrayBuffer;
+  xhr: any;
+}
+export function makeXMLHttpRequestPromise(
+  requestParameters: RequestParameters,
+): Promise<IXHRReustResuit> {
+  return new Promise((resolve, reject) => {
+    const xhr = new $XMLHttpRequest();
+    xhr.open(requestParameters.method || 'GET', requestParameters.url, true);
+    if (requestParameters.type === 'arrayBuffer') {
+      xhr.responseType = 'arraybuffer';
+    }
+    for (const k in requestParameters.headers) {
+      if (requestParameters.headers.hasOwnProperty(k)) {
+        xhr.setRequestHeader(k, requestParameters.headers[k]);
+      }
+    }
+    if (requestParameters.type === 'json') {
+      xhr.responseType = 'text';
+      xhr.setRequestHeader('Accept', 'application/json');
+    }
+    xhr.withCredentials = requestParameters.credentials === 'include';
+    xhr.onerror = () => {
+      reject(new Error(xhr.statusText));
+    };
+    xhr.onload = () => {
+      if (
+        ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0) &&
+        xhr.response !== null
+      ) {
+        let data: unknown = xhr.response;
+        if (requestParameters.type === 'json') {
+          // We're manually parsing JSON here to get better error messages.
+          try {
+            data = JSON.parse(xhr.response);
+          } catch (err) {
+            return reject({res: err as Error});
+          }
+        }
+        resolve({
+          err: null,
+          // @ts-ignore
+          data ,
+          cacheControl: xhr.getResponseHeader('Cache-Control'),
+          expires: xhr.getResponseHeader('Expires'),
+          xhr,
+        });
+      } else {
+        const body = new Blob([xhr.response], {
+          type: xhr.getResponseHeader('Content-Type'),
+        });
+        reject({res: new AJAXError(xhr.status, xhr.statusText, requestParameters.url.toString(), body)});
+      }
+    };
+    xhr.send(requestParameters.body);
+  })
 }
 
 function makeRequest(
@@ -271,7 +333,7 @@ export const getImage = (
   });
 };
 
-const arrayBufferToTiffImage = async (
+export const arrayBufferToTiffImage = async (
   data: ArrayBuffer,
   callback: (err?: Error | null, image?: any) => void,
   rasterParser: any,
@@ -305,3 +367,9 @@ export const getTiffImage = (
     }
   });
 };
+
+export interface IRasterParser {
+  rasterData: HTMLImageElement | ImageBitmap | null | undefined;
+  width: number;
+  height: number;
+}

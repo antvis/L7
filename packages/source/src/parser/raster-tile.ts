@@ -1,6 +1,11 @@
 import { Tile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
 import { IParserData, ITileParserCFG, RasterTileType } from '../interface';
-import { defaultFormat, getTileBuffer, getTileImage } from '../utils/getTile';
+import {
+  defaultFormat,
+  getTileBuffer,
+  getMultiTileBuffer,
+  getTileImage,
+} from '../utils/getTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -9,21 +14,36 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   zoomOffset: 0,
 };
 
+export const rasterDataTypes = [
+  RasterTileType.ARRAYBUFFER,
+  RasterTileType.MultiArrayBuffer,
+];
+
 export default function rasterTile(
   data: string | string[],
   cfg?: ITileParserCFG,
 ): IParserData {
   const tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
-    if (tileDataType === RasterTileType.IMAGE) {
-      return getTileImage(data, tileParams, tile);
-    } else {
-      return getTileBuffer(
-        data,
-        tileParams,
-        tile,
-        cfg?.format || defaultFormat,
-      );
+    switch (tileDataType) {
+      case RasterTileType.IMAGE:
+        return getTileImage(data, tileParams, tile);
+      case RasterTileType.ARRAYBUFFER:
+        return getTileBuffer(
+          data as string,
+          tileParams,
+          tile,
+          cfg?.format || defaultFormat,
+        );
+      case RasterTileType.MultiArrayBuffer:
+        return getMultiTileBuffer(
+          data as string[],
+          tileParams,
+          tile,
+          cfg?.format || defaultFormat,
+        );
+      default:
+        return getTileImage(data, tileParams, tile);
     }
   };
 

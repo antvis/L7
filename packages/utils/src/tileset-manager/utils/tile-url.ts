@@ -29,3 +29,21 @@ export function getURLFromTemplate(
     .replace(/\{z\}/g, z.toString())
     .replace(/\{-y\}/g, (Math.pow(2, z) - y - 1).toString());
 }
+
+export function getMultiURLFromTemplate(
+  templates: string[],
+  properties: { x: number; y: number; z: number },
+) {
+  if (!templates || !templates.length) {
+    throw new Error('url is not allowed to be empty');
+  }
+
+  const { x, y, z } = properties;
+  return templates.map(template => {
+    return template
+    .replace(/\{x\}/g, x.toString())
+    .replace(/\{y\}/g, y.toString())
+    .replace(/\{z\}/g, z.toString())
+    .replace(/\{-y\}/g, (Math.pow(2, z) - y - 1).toString());
+  }) 
+}

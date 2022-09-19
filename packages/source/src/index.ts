@@ -6,7 +6,7 @@ import json from './parser/json';
 import mapboxVectorTile from './parser/mvt';
 import geojsonVTTile from './parser/geojsonvt';
 import raster from './parser/raster';
-import rasterTile from './parser/raster-tile';
+import rasterTile, { rasterDataTypes } from './parser/raster-tile';
 import testTile from './parser/testTile';
 import Source from './source';
 import { cluster } from './transform/cluster';
@@ -32,6 +32,9 @@ registerTransform('map', map);
 registerTransform('grid', aggregatorToGrid);
 registerTransform('hexagon', pointToHexbin);
 
+export {
+  rasterDataTypes,
+}
 export {
   getTransform,
   registerTransform,
