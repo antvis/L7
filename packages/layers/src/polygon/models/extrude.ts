@@ -176,8 +176,6 @@ export default class ExtrudeModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
-          normal: number[],
         ) => {
           const lng = vertex[0];
           const lat = vertex[1];
@@ -185,7 +183,6 @@ export default class ExtrudeModel extends BaseModel {
         },
       },
     });
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
@@ -216,7 +213,6 @@ export default class ExtrudeModel extends BaseModel {
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -224,9 +220,6 @@ export default class ExtrudeModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 10 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];

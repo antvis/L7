@@ -1,4 +1,4 @@
-import { IAttrubuteAndElements } from '@antv/l7-core';
+import { IAttributeAndElements } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IHeatMapLayerStyleOptions } from '../core/interface';
 import HeatMapModels, { HeatMapModelType } from './models';
@@ -31,8 +31,6 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     }
     if (this.layerModelNeedUpdate) {
       this.layerModel.buildModels((models) => (this.models = models));
-      // @ts-ignore
-      // this.models = this.layerModel.buildModels();
       this.layerModelNeedUpdate = false;
     }
     this.models.forEach((model) =>
@@ -43,7 +41,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     return this;
   }
 
-  public updateModelData(data: IAttrubuteAndElements) {
+  public updateModelData(data: IAttributeAndElements) {
     if (data.attributes && data.elements) {
       this.models[0].updateAttributesAndElements(
         data.attributes,

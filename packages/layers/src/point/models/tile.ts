@@ -134,7 +134,6 @@ export default class FillModel extends BaseModel {
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -142,9 +141,6 @@ export default class FillModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size)
@@ -168,9 +164,6 @@ export default class FillModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
           const shape2d = this.layer.getLayerConfig().shape2d as string[];

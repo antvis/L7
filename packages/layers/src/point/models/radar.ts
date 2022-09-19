@@ -42,7 +42,7 @@ export default class RadarModel extends BaseModel {
       animateOption = { enable: false },
     } = this.layer.getLayerConfig() as ILayerConfig;
     return {
-      u_aimate: this.animateOption2Array(animateOption),
+      u_animate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }

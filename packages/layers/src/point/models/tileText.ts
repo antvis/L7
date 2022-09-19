@@ -190,7 +190,6 @@ export default class TextModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[5], vertex[6]];
         },
@@ -204,7 +203,6 @@ export default class TextModel extends BaseModel {
         descriptor: {
           name: 'a_Size',
           buffer: {
-            // give the WebGL driver a hint that this buffer may change
             usage: gl.DYNAMIC_DRAW,
             data: [],
             type: gl.FLOAT,
@@ -212,9 +210,6 @@ export default class TextModel extends BaseModel {
           size: 1,
           update: (
             feature: IEncodeFeature,
-            featureIdx: number,
-            vertex: number[],
-            attributeIdx: number,
           ) => {
             const { size = 12 } = feature;
             return Array.isArray(size) ? [size[0]] : [size as number];
@@ -229,7 +224,6 @@ export default class TextModel extends BaseModel {
       descriptor: {
         name: 'a_tex',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -239,7 +233,6 @@ export default class TextModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
