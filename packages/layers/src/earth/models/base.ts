@@ -25,7 +25,7 @@ export default class BaseEarthModel extends BaseModel {
   );
 
   public getUninforms(): IModelUniform {
-    const { animateOption, globelOtions } = this.layer.getLayerConfig();
+    const { animateOption, globalOptions } = this.layer.getLayerConfig();
     if (animateOption?.enable) {
       // @ts-ignore
       // T: rotateY 方法只有在地球模式下存在
@@ -40,10 +40,9 @@ export default class BaseEarthModel extends BaseModel {
     }
 
     return {
-      u_ambientRatio: globelOtions?.ambientRatio || 0.6, // 环境光
-      u_diffuseRatio: globelOtions?.diffuseRatio || 0.4, // 漫反射
-      u_specularRatio: globelOtions?.specularRatio || 0.1, // 高光反射
-      // u_sunLight: [120, 120, 120],
+      u_ambientRatio: globalOptions?.ambientRatio || 0.6, // 环境光
+      u_diffuseRatio: globalOptions?.diffuseRatio || 0.4, // 漫反射
+      u_specularRatio: globalOptions?.specularRatio || 0.1, // 高光反射
       u_sunLight: [this.sunX, this.sunY, this.sunZ],
 
       u_texture: this.texture,
@@ -61,9 +60,9 @@ export default class BaseEarthModel extends BaseModel {
   }
 
   public initModels(callbackModel: (models: IModel[]) => void) {
-    const { globelOtions } = this.layer.getLayerConfig();
-    if (globelOtions?.earthTime !== undefined) {
-      this.setEarthTime(globelOtions.earthTime);
+    const { globalOptions } = this.layer.getLayerConfig();
+    if (globalOptions?.earthTime !== undefined) {
+      this.setEarthTime(globalOptions.earthTime);
     }
 
     const source = this.layer.getSource();
@@ -89,7 +88,7 @@ export default class BaseEarthModel extends BaseModel {
   }
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
-    // TODO: 调整图层的绘制顺序 地球大气层
+    // Tip: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -998;
 
     this.layer
@@ -111,14 +110,12 @@ export default class BaseEarthModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -126,9 +123,6 @@ export default class BaseEarthModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -142,7 +136,6 @@ export default class BaseEarthModel extends BaseModel {
       descriptor: {
         name: 'a_Normal',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -176,7 +169,6 @@ export default class BaseEarthModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

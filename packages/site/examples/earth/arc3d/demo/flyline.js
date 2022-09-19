@@ -20,7 +20,7 @@ const earthlayer = new EarthLayer()
   .color('#2E8AE6')
   .shape('fill')
   .style({
-    globelOtions: {
+    globalOptions: {
       ambientRatio: 0.6, // 环境光
       diffuseRatio: 0.4, // 漫反射
       specularRatio: 0.1 // 高光反射

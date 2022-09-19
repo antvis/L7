@@ -80,7 +80,7 @@ layer.on('terrainImageLoaded', () => {
 ```
 
 [在线案例](/zh/examples/geometry/geometry#terrain)
-### updateModelData(data: IAttrubuteAndElements)
+### updateModelData(data: IAttributeAndElements)
 - data 是通过 createModelData 方法生成的图层的标准模型数据。        
 
 我们通过这个方法可以实时更新图层的模型数据。        

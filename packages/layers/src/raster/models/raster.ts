@@ -26,7 +26,7 @@ export default class RasterModel extends BaseModel {
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     if (!isEqual(this.rampColors, rampColors)) {
-      this.updateColorTexure();
+      this.updateColorTexture();
       this.rampColors = rampColors;
     }
 
@@ -123,7 +123,7 @@ export default class RasterModel extends BaseModel {
     });
   }
 
-  private updateColorTexure() {
+  private updateColorTexture() {
     const { createTexture2D } = this.rendererService;
     const {
       rampColors,
