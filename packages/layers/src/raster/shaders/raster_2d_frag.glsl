@@ -23,6 +23,4 @@ void main() {
     gl_FragColor = color;
     gl_FragColor.a =  gl_FragColor.a * u_opacity ;
   }
-
-
 }

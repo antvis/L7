@@ -1,7 +1,7 @@
 import { ILayer } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
-import { tileAllLoad } from './utils';
+import { tileAllLoad, updateLayersConfig } from './utils';
 
 export class TMSTileLayer extends BaseTileLayer {
   public type: string = 'TMS';
@@ -60,11 +60,7 @@ export class TMSTileLayer extends BaseTileLayer {
 
   private updateTileVisible(tile: Tile, layers: ILayer[]) {
     this.emitTileVisibleEvent(tile, () => {
-      this.tileLayerManager.updateLayersConfig(
-        layers,
-        'visible',
-        tile.isVisible,
-      );
+      updateLayersConfig(layers, 'visible', tile.isVisible);
       this.layerService.reRender();
     });
   }

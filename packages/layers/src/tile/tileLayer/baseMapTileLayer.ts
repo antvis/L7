@@ -176,4 +176,8 @@ export default class BaseTileLayer implements IBaseTileLayer {
 
     return { latLonBounds, zoom };
   }
+
+  public destroy() {
+    this.tilesetManager?.destroy();
+  }
 }
