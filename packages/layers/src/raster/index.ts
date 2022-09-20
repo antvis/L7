@@ -50,6 +50,5 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       default:
         return 'raster';
     }
-    // return 'raster';
   }
 }

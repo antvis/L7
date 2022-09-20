@@ -5,98 +5,24 @@ import {
   ISubLayerInitOptions,
   IBaseTileLayerManager,
 } from '@antv/l7-core';
-import { Tile } from '@antv/l7-utils';
-import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
+import { TileManager } from './baseTileManager';
 import { getLayerShape, getMaskValue } from '../utils';
-export class BaseMapTileLayerManager implements IBaseTileLayerManager {
+export class BaseMapTileLayerManager extends TileManager implements IBaseTileLayerManager {
   // only support vector layer
-  public sourceLayer: string;
-  public parent: ILayer;
-  public children: ILayer[];
-  public mapService: IMapService;
-  public rendererService: IRendererService;
-  private tileFactory: ITileFactory;
-  private initOptions: ISubLayerInitOptions;
   constructor(
     parent: ILayer,
     mapService: IMapService,
     rendererService: IRendererService,
   ) {
+    super();
     this.parent = parent;
     this.children = parent.layerChildren;
     this.mapService = mapService;
     this.rendererService = rendererService;
 
 
-    this.setSubLayerInitOptipn();
+    this.setSubLayerInitOption();
     this.initTileFactory();
-  }
-
-  public createTile(tile: Tile) {
-    return this.tileFactory.createTile(tile, this.initOptions);
-  }
-
-  public updateLayersConfig(layers: ILayer[], key: string, value: any) {
-    layers.map((layer) => {
-      if (key === 'mask') {
-        // Tip: 栅格瓦片生效、设置全局的 mask、瓦片被全局的 mask 影响
-        layer.style({
-          mask: value,
-        });
-      } else {
-        layer.updateLayerConfig({
-          [key]: value,
-        });
-      }
-    });
-  }
-
-  public addChild(layer: ILayer) {
-    this.children.push(layer);
-  }
-
-  public addChilds(layers: ILayer[]) {
-    this.children.push(...layers);
-  }
-
-  public removeChilds(layerIDList: string[], refresh = true) {
-    const remveLayerList: ILayer[] = [];
-    const cacheLayerList: ILayer[] = [];
-    this.children.filter((child) => {
-      layerIDList.includes(child.id)
-        ? remveLayerList.push(child)
-        : cacheLayerList.push(child);
-    });
-    remveLayerList.map((layer) => layer.destroy(refresh));
-    this.children = cacheLayerList;
-  }
-
-  public removeChild(layer: ILayer) {
-    const layerIndex = this.children.indexOf(layer);
-    if (layerIndex > -1) {
-      this.children.splice(layerIndex, 1);
-    }
-    layer.destroy();
-  }
-
-  public getChilds(layerIDList: string[]) {
-    return this.children.filter((child) => layerIDList.includes(child.id));
-  }
-
-  public getChild(layerID: string) {
-    return this.children.filter((child) => child.id === layerID)[0];
-  }
-
-  public clearChild() {
-    this.children.forEach((layer: any) => {
-      layer.destroy();
-    });
-
-    this.children.slice(0, this.children.length);
-  }
-
-  public hasChild(layer: ILayer) {
-    return this.children.includes(layer);
   }
 
   public render(): void {
@@ -125,7 +51,7 @@ export class BaseMapTileLayerManager implements IBaseTileLayerManager {
     });
   }
 
-  private setSubLayerInitOptipn() {
+  private setSubLayerInitOption() {
     const {
       zIndex = 0,
       opacity = 1,
@@ -166,26 +92,4 @@ export class BaseMapTileLayerManager implements IBaseTileLayerManager {
     };
   }
 
-  private getSourceLayer(parentParserType: string, sourceLayer: string|undefined) {
-    if(parentParserType === 'geojsonvt') {
-      return 'geojsonvt';
-    } else if(parentParserType === 'testTile') {
-      return 'testTile';
-    } else {
-      return sourceLayer;
-    }
-  }
-
-  private initTileFactory() {
-    const source = this.parent.getSource();
-    const TileFactory = getTileFactory(
-      this.parent.type as TileType,
-      source.parser,
-    );
-    this.tileFactory = new TileFactory({
-      parent: this.parent,
-      mapService: this.mapService,
-      rendererService: this.rendererService,
-    });
-  }
 }
