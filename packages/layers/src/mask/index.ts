@@ -100,20 +100,14 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
     return this;
   }
 
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
-    this.layerModel = new MaskModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+    await this.initModel(new MaskModels[shape](this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
+
   protected getConfigSchema() {
     return {
       properties: {

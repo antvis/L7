@@ -55,7 +55,7 @@ export default class RasterTiffTile extends TileFactory {
     this.emitEvent([layer], false);
 
     registerLayers(this.parentLayer, [layer]);
-    layer.once('modelLoaded', () => {
+    layer.once('inited', () => {
       tile.layerLoad();
     })
     return {

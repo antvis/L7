@@ -170,7 +170,7 @@ export default class ThreeJSLayer
     object.applyMatrix4(scaleMatrix);
   }
 
-  public buildModels() {
+  public async buildModels() {
     // @ts-ignore
     this.threeRenderService = this.getContainer().get<IThreeRenderService>(
       ThreeRenderServiceType,

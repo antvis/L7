@@ -335,6 +335,7 @@ export interface ILayer {
   renderModels(isPicking?: boolean): void;
   buildModels(): void;
   rebuildModels(): void;
+  initModel(models: ILayerModel):Promise<void>;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,

@@ -72,10 +72,10 @@ export default class TestTile extends TileFactory {
     line.isTileLayer = true;
 
     registerLayers(this.parentLayer, [line, text]);
-    text.once('modelLoaded', () => {
+    text.once('inited', () => {
       tile.layerLoad();
     })
-    line.once('modelLoaded', () => {
+    line.once('inited', () => {
       tile.layerLoad();
     })
     return {

@@ -6,21 +6,13 @@ export default class RasterTiffLayer extends BaseLayer<
   Partial<IRasterLayerStyleOptions>
 > {
   public type: string = this.layerType as string;
-  public buildModels() {
+  public async buildModels() {
     const model = this.getModelType();
-    this.layerModel = new model(this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
-  }
+    await this.initModel(new model(this))
 
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  }
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
   protected getModelType() {

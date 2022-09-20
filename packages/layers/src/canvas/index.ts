@@ -5,20 +5,13 @@ import CanvasModels, { CanvasModelType } from './models/index';
 export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
   public type: string = 'CanvasLayer';
   public forceRender: boolean = true;
-  public buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new CanvasModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+
+  public async buildModels() {
+    const shape = this.getModelType();
+    await this.initModel(new CanvasModels[shape](this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
   public hide(): ILayer {

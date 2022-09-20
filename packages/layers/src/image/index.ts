@@ -3,31 +3,12 @@ import { IImageLayerStyleOptions } from '../core/interface';
 import ImageModels, { ImageModelType } from './models/index';
 export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
   public type: string = 'ImageLayer';
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
-    this.layerModel = new ImageModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+    await this.initModel(new ImageModels[modelType](this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
-  }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
+  public async rebuildModels() {
+    await this.buildModels();
   }
   protected getDefaultConfig() {
     const type = this.getModelType();

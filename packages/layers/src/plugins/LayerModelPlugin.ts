@@ -6,27 +6,27 @@ import 'reflect-metadata';
  */
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
-  public initLayerModel(layer: ILayer) {
+  public async initLayerModel(layer: ILayer) {
     // 更新Model 配置项
     layer.prepareBuildModel();
     // 初始化 Model
-    layer.buildModels();
+    await layer.buildModels();
     layer.styleNeedUpdate = false;
   }
 
-  public prepareLayerModel(layer: ILayer) {
+  public async prepareLayerModel(layer: ILayer) {
     // 更新Model 配置项
     layer.prepareBuildModel();
     layer.clearModels();
     // 初始化 Model
-    layer.buildModels();
+    await layer.buildModels();
     layer.layerModelNeedUpdate = false;
   }
 
   public apply(layer: ILayer) {
-    layer.hooks.init.tapPromise('LayerModelPlugin', () => {
+    layer.hooks.init.tapPromise('LayerModelPlugin', async () => {
       layer.inited = true;
-      this.initLayerModel(layer);
+      await this.initLayerModel(layer);
     });
 
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {

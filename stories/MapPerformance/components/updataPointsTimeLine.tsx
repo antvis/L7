@@ -86,7 +86,7 @@ export default class Demo extends React.Component {
           scene.addLayer(layer);
           this.layer = layer;
 
-          layer.on('modelLoaded', () => {
+          layer.on('inited', () => {
             this.getModelDatas(layer, originData, times, parser);
           });
 

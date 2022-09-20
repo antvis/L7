@@ -3,20 +3,14 @@ import CityBuildModel from './models/build';
 
 export default class CityBuildingLayer extends BaseLayer {
   public type: string = 'CityBuildingLayer';
-  public buildModels() {
-    this.layerModel = new CityBuildModel(this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+
+  public async buildModels() {
+    await this.initModel(new CityBuildModel(this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
+
   public setLight(t: number) {
     this.updateLayerConfig({
       time: t,

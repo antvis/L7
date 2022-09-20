@@ -311,7 +311,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
-
       await this.initPromise; // 初始化地图和渲染
       if (this.destroyed) {
         this.destroy();
@@ -327,6 +326,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           console.warn(e);
         }
       }
+   
 
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.layerService.initLayers();
@@ -337,6 +337,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     }
 
     // 尝试初始化未初始化的图层
+
     this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
 

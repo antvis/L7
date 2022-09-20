@@ -5,22 +5,15 @@ import HeatMapModels, { HeatMapModelType } from './models';
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
 
-  public buildModels() {
-    const shape = this.getModelType();
-    this.layerModel = new HeatMapModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+  public async buildModels() {
+    const modelType = this.getModelType();
+    await this.initModel(new HeatMapModels[modelType](this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
   public renderModels() {
+    console.log('renderModels');
     const shape = this.getModelType();
     if (shape === 'heatmap') {
       if (this.layerModel) {

@@ -14,20 +14,12 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       };
     };
   };
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
-    this.layerModel = new PolygonModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+    await this.initModel(new PolygonModels[shape](this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
   protected getConfigSchema() {
     return {

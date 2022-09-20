@@ -16,20 +16,13 @@ export default class GeometryLayer extends BaseLayer<
       },
     },
   };
-  public buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new GeometryModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+
+  public async buildModels() {
+    const shape = this.getModelType();
+    await this.initModel(new GeometryModels[shape](this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
   protected getConfigSchema() {

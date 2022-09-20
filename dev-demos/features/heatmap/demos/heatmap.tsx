@@ -43,6 +43,12 @@ export default () => {
               },
             });
           scene.addLayer(layer);
+          // setTimeout(()=>{
+          //   scene.render();
+          // },100)
+      
+          // 
+  
         });
     });
   }, []);

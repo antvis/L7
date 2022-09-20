@@ -17,21 +17,12 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     },
   };
 
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
-    this.layerModel = new PointModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.layerService.updateLayerRenderList();
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+    await this.initModel(new PointModels[modelType](this));
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
   /**

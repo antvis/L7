@@ -44,6 +44,7 @@ export default () => {
             });
   
           scene.addLayer(pointLayer);
+      
         });
           
     }, []);

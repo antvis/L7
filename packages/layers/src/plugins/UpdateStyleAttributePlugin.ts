@@ -15,7 +15,6 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
   ) {
     layer.hooks.init.tapPromise('UpdateStyleAttributePlugin', async () => {
       this.initStyleAttribute(layer, { styleAttributeService });
-      console.log('UpdateStyleAttributePlugin');
     });
 
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {

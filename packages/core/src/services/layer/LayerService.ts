@@ -49,11 +49,16 @@ export default class LayerService implements ILayerService {
   
 
   public add(layer: ILayer) {
+    this.layers.push(layer);
+    layer.on('inited',()=>{
+      setTimeout(() => {
+        this.reRender();
+      }, 100);
+
+    })
     if (this.sceneInited) {
       layer.init();
     }
-
-    this.layers.push(layer);
     this.updateLayerRenderList();
   }
 

@@ -404,12 +404,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // 触发 init 生命周期插件
     await this.hooks.init.promise();
-    console.log('初始化完成');
+
     // this.pickingPassRender = this.normalPassFactory('pixelPicking');
     // this.pickingPassRender.init(this);
     this.hooks.afterInit.call();
-    console.log('初始化完成，后处理');
-
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
@@ -1269,11 +1267,23 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.isVisible() && isPick;
   }
 
-  public buildModels() {
+  public async buildModels() {
     throw new Error('Method not implemented.');
   }
-  public rebuildModels() {
+  public async rebuildModels() {
     throw new Error('Method not implemented.');
+  }
+
+  public async initModel(models: ILayerModel): Promise<void> {
+    this.layerModel = models;
+    await new Promise((resolve) => {
+      this.layerModel.initModels((models) => {
+        this.models = models;
+        resolve(null);
+      });
+    });
+
+    this.layerService.reRender();
   }
 
   public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {

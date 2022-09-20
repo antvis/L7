@@ -143,23 +143,15 @@ export default class VectorLayer extends BaseLayer<
   public setPickID() {
     return this.pickedID;
   }
-
-  public buildModels() {
+  public async buildModels() {
     const model = this.getModelType();
-    this.layerModel = new model(this);
-    this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
-    });
+    await this.initModel(new model(this))
+
+  }
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-    });
-  }
 
   protected getModelType() {
     switch (this.layerType) {

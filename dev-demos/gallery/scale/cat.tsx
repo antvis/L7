@@ -48,9 +48,7 @@ export default () => {
         });
 
       scene.addLayer(layer);
-      layer.on('inited', () => {
-        scene.render();
-      });
+
       // addLayers(geoData, scene, layer);
     }
     return () => {

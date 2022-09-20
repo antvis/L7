@@ -48,7 +48,7 @@ scene.on('loaded', () => {
 
       scene.addLayer(layer);
 
-      layer.on('modelLoaded', () => {
+      layer.on('inited', () => {
         getModelDatas(originData);
 
         run();
