@@ -304,14 +304,12 @@ export default class TextModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'textUv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_tex',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,

@@ -110,7 +110,6 @@ export default class HeatMapModel extends BaseModel {
       descriptor: {
         name: 'a_Dir',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -120,14 +119,12 @@ export default class HeatMapModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
@@ -142,9 +139,6 @@ export default class HeatMapModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return [size as number];
@@ -226,7 +220,6 @@ export default class HeatMapModel extends BaseModel {
         enable: false,
       },
       blend: this.getBlend(),
-      // count: 6,
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],
         type: gl.UNSIGNED_INT,

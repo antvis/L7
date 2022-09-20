@@ -67,7 +67,6 @@ export default class SpriteModel extends BaseModel {
       spriteBottom = -100000,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     const updateZ = this.spriteUpdate;
-    // const bottomZ = -100000;
     const bottomZ = spriteBottom;
     const topZ = this.spriteTop;
 
@@ -94,7 +93,7 @@ export default class SpriteModel extends BaseModel {
 
   public updateModel = () => {
     // @ts-ignore
-    const attributes = this.layer.createAttrubutes({
+    const attributes = this.layer.createAttributes({
       triangulation: this.planeGeometryUpdateTriangulation,
     });
     this.layer.models.map((m) => {

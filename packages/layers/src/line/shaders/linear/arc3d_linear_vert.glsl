@@ -6,6 +6,7 @@ attribute vec3 a_Position;
 attribute vec4 a_Instance;
 attribute vec4 a_Color;
 attribute float a_Size;
+attribute vec2 a_iconMapUV;
 
 uniform float u_globel;
 uniform float u_globel_radius;
@@ -13,22 +14,20 @@ uniform float u_global_height: 10;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 1., 2., 1.0, 0.2 ];
-varying vec4 v_color;
-// varying vec2 v_normal;
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+
 uniform float u_line_type: 0.0;
 uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-varying vec4 v_dash_array;
-
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
-varying float v_segmentIndex;
-
-attribute vec2 a_iconMapUV;
-varying vec2 v_iconMapUV;
-
 uniform float u_opacity: 1.0;
+
+varying vec4 v_dash_array;
+varying vec4 v_color;
+varying float v_segmentIndex;
+varying vec2 v_iconMapUV;
 varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
+
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
@@ -146,7 +145,7 @@ void main() {
     float total_Distance = pixelDistance(s, t) / 2.0 * PI;
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
   }
-    if(u_aimate.x == Animate) {
+    if(u_animate.x == Animate) {
       d_distance_ratio = segmentIndex / segmentNumber;
   }
   styleMappingMat[3].g = d_distance_ratio; // 当前点位距离占线总长的比例

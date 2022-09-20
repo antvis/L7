@@ -35,7 +35,7 @@ export default class ImageDataModel extends BaseModel {
     } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
 
     if (!isEqual(this.rampColors, rampColors)) {
-      this.updateColorTexure();
+      this.updateColorTexture();
       this.rampColors = rampColors;
     }
     return {
@@ -156,7 +156,7 @@ export default class ImageDataModel extends BaseModel {
     });
   }
 
-  private updateColorTexure() {
+  private updateColorTexture() {
     const { createTexture2D } = this.rendererService;
     const {
       rampColors,

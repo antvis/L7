@@ -9,7 +9,7 @@ import {
   BlendType,
   IActiveOption,
   IAnimateOption,
-  IAttrubuteAndElements,
+  IAttributeAndElements,
   ICameraService,
   ICoordinateSystemService,
   IDataState,
@@ -156,9 +156,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
 
-  // @lazyInject(TYPES.IShaderModuleService)
-  // protected readonly shaderModuleService: IShaderModuleService;
-
   protected shaderModuleService: IShaderModuleService;
   protected cameraService: ICameraService;
 
@@ -217,9 +214,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private animateStartTime: number;
 
-  private aniamateStatus: boolean = false;
+  private animateStatus: boolean = false;
 
-  private isDestroied: boolean = false;
+  private isDestroyed: boolean = false;
 
   // private pickingPassRender: IPass<'pixelPicking'>;
 
@@ -296,11 +293,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public addPlugin(plugin: ILayerPlugin): ILayer {
-    // TODO: 控制插件注册顺序
-    // @example:
-    // pointLayer.addPlugin(new MyCustomPlugin(), {
-    //   before: 'L7BuiltinPlugin'
-    // });
     this.plugins.push(plugin);
     return this;
   }
@@ -421,7 +413,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
 
-  public updateModelData(data: IAttrubuteAndElements) {
+  public updateModelData(data: IAttributeAndElements) {
     if (data.attributes && data.elements) {
       this.models.map((m) => {
         m.updateAttributesAndElements(data.attributes, data.elements);
@@ -481,7 +473,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { animateOption } = this.getLayerConfig();
     if (animateOption?.enable) {
       this.layerService.startAnimate();
-      this.aniamateStatus = true;
+      this.animateStatus = true;
     }
   }
   public color(
@@ -576,7 +568,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.updateLayerConfig({
       animateOption: rawAnimate,
     });
-    // this.animateOptions = options;
     return this;
   }
 
@@ -957,7 +948,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public destroy(refresh = true) {
-    if (this.isDestroied) {
+    if (this.isDestroyed) {
       return;
     }
 
@@ -1003,7 +994,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // 解绑图层容器中的服务
     // this.container.unbind(TYPES.IStyleAttributeService);
 
-    this.isDestroied = true;
+    this.isDestroyed = true;
   }
   public clear() {
     this.styleAttributeService.clearAllAttributes();
@@ -1187,7 +1178,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
             triangulation,
             segmentNumber,
           );
-          const modeloptions = {
+          const modelOptions = {
             attributes,
             uniforms,
             fs,
@@ -1197,16 +1188,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
             ...rest,
           };
           if (count) {
-            modeloptions.count = count;
+            modelOptions.count = count;
           }
-          const m = createModel(modeloptions);
+          const m = createModel(modelOptions);
           resolve(m);
         }
       });
     });
   }
 
-  public createAttrubutes(
+  public createAttributes(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ) {
@@ -1226,9 +1217,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.animateStartTime = this.layerService.clock.getElapsedTime();
   }
   public stopAnimate() {
-    if (this.aniamateStatus) {
+    if (this.animateStatus) {
       this.layerService.stopAnimate();
-      this.aniamateStatus = false;
+      this.animateStatus = false;
       this.updateLayerConfig({
         animateOption: {
           enable: false,
