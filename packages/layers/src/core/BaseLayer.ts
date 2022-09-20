@@ -977,9 +977,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // 执行每个图层单独的 clearModels 方法 （清除一些额外的 texture、program、buffer 等）
 
     this.hooks.afterDestroy.call();
-
     // Tip: 清除各个图层自定义的 models 资源
     this.layerModel?.clearModels(refresh);
+
+    this.tileLayer?.destroy();
 
     this.models = [];
 

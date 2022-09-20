@@ -1,6 +1,6 @@
 import BaseLayer from '../../core/BaseLayer';
 import { IRasterLayerStyleOptions } from '../../core/interface';
-import RasterModel from '../../raster/models/raster';
+import RasterModel from '../../raster/models/rasterTile';
 
 export default class RasterTiffLayer extends BaseLayer<
   Partial<IRasterLayerStyleOptions>

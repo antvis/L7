@@ -109,6 +109,7 @@ export default class BaseTileLayer implements ITileLayer {
     return this.tileLayerManager.pickLayers(target);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public tileLoaded(tile: Tile) {
     //
   }
@@ -331,6 +332,7 @@ export default class BaseTileLayer implements ITileLayer {
       return;
     }
     // 瓦片数据加载成功
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.tilesetManager.on('tile-loaded', (tile: Tile) => {
       // 将事件抛出，图层上可以监听使用
     });
@@ -342,6 +344,7 @@ export default class BaseTileLayer implements ITileLayer {
     });
 
     // 瓦片数据加载失败
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.tilesetManager.on('tile-error', (error, tile: Tile) => {
       // 将事件抛出，图层上可以监听使用
       this.tileError(error);
@@ -371,5 +374,10 @@ export default class BaseTileLayer implements ITileLayer {
     const zoom = this.mapService.getZoom();
 
     return { latLonBounds, zoom };
+  }
+
+  public destroy() {
+    this.tilesetManager?.destroy();
+    this.tileLayerManager.destroy();
   }
 }

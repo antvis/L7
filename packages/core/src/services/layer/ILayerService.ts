@@ -1,6 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
-import { IColorRamp, IImagedata, Tile, TilesetManager } from '@antv/l7-utils';
+import { IColorRamp, Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
@@ -37,10 +37,6 @@ import {
   Triangulation,
 } from './IStyleAttributeService';
 
-// import {
-//   IStyleAttributeUpdateOptions,
-//   StyleAttributeField,
-// } from '@antv/l7-core';y
 export enum BlendType {
   normal = 'normal',
   additive = 'additive',
@@ -162,7 +158,6 @@ export interface ISubLayerInitOptions {
   rampColors?: IColorRamp;
   colorTexture?: ITexture2D;
   // 在初始化的时候使用
-  rampColorsData?: ImageData | IImagedata;
 
   pixelConstant?: number;
   pixelConstantR?: number;
@@ -185,6 +180,7 @@ export interface ITilePickManager {
   beforeSelect(pickedColors: any): void;
   clearPick(): void;
   pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
+  destroy(): void;
 }
 
 export interface IBaseTileLayerManager {
@@ -202,12 +198,13 @@ export interface IBaseTileLayerManager {
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;
-  updateLayersConfig(layers: ILayer[], key: string, value: any): void;
+  destroy(): void;
 }
 
 export interface ITileLayerManager extends IBaseTileLayerManager{
   tilePickManager: ITilePickManager;
   pickLayers(target: IInteractionTarget): boolean;
+  destroy(): void;
 }
 
 export interface IBaseTileLayer {
@@ -219,12 +216,14 @@ export interface IBaseTileLayer {
   children: ILayer[];
   scaleField: any;
   render(isPicking?: boolean): void;
+  destroy(): void;
 }
 export interface ITileLayer extends IBaseTileLayer{
   tileLayerManager: ITileLayerManager;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
   clearPickState(): void;
+  destroy(): void;
 }
 
 export interface ITileLayerOPtions {
