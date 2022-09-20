@@ -60,11 +60,7 @@ export class TMSTileLayer extends BaseTileLayer {
 
   private updateTileVisible(tile: Tile, layers: ILayer[]) {
     this.emitTileVisibleEvent(tile, () => {
-      updateLayersConfig(
-        layers,
-        'visible',
-        tile.isVisible,
-      );
+      updateLayersConfig(layers, 'visible', tile.isVisible);
       this.layerService.reRender();
     });
   }
