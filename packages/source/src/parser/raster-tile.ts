@@ -3,7 +3,6 @@ import { IParserData, ITileParserCFG, RasterTileType } from '../interface';
 import {
   defaultFormat,
   getTileBuffer,
-  getMultiTileBuffer,
   getTileImage,
 } from '../utils/getTile';
 
@@ -16,9 +15,13 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
 
 export const rasterDataTypes = [
   RasterTileType.ARRAYBUFFER,
-  RasterTileType.MultiArrayBuffer,
 ];
-
+/**
+ * 
+ * @param data 
+ * @param cfg 
+ * @returns 
+ */
 export default function rasterTile(
   data: string | string[],
   cfg?: ITileParserCFG,
@@ -31,13 +34,6 @@ export default function rasterTile(
       case RasterTileType.ARRAYBUFFER:
         return getTileBuffer(
           data as string,
-          tileParams,
-          tile,
-          cfg?.format || defaultFormat,
-        );
-      case RasterTileType.MultiArrayBuffer:
-        return getMultiTileBuffer(
-          data as string[],
           tileParams,
           tile,
           cfg?.format || defaultFormat,

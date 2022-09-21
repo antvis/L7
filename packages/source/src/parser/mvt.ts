@@ -153,7 +153,7 @@ export type MapboxVectorTile = {
 };
 
 const getVectorTile = async (
-  url: string | string[],
+  url: string,
   tileParams: TileLoadParams,
   tile: Tile,
   // coord: string,
@@ -216,9 +216,12 @@ export default function mapboxVectorTile(
   data: string | string[],
   cfg?: ITileParserCFG,
 ): IParserData {
+  // TODO: 后续考虑支持多服务
+  const url = Array.isArray(data) ? data[0] : data;
+
   // const coord = cfg?.coord || 'lnglat'; // lnglat - offset
   const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
-    getVectorTile(data, tileParams, tile);
+    getVectorTile(url, tileParams, tile);
   // getVectorTile(data, tileParams, tile, coord);
 
   const tilesetOptions = {
@@ -228,7 +231,7 @@ export default function mapboxVectorTile(
   };
 
   return {
-    data,
+    data: url,
     dataArray: [],
     tilesetOptions,
     isTile: true,

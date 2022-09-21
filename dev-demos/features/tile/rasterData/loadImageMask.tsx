@@ -32,7 +32,7 @@ export default () => {
           });
           layer
             .source(
-              'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
               {
                 parser: {
                   type: 'rasterTile',

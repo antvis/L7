@@ -88,7 +88,7 @@ export default () => {
             {
               parser: {
                 type: 'rasterTile',
-                dataType: 'multiarraybuffer',
+                dataType: 'arraybuffer',
                 tileSize: 256,
                 maxZoom: 13.1,
                 format: async data => {
@@ -109,7 +109,7 @@ export default () => {
                   const r =  rasterData.map((d, i) => {
 
                     const d2 = rasterData2[i]
-                    return d/2 + d2/2
+                    return d/2 + d2/3
                   })
                   
                   return { rasterData: r, width, height };

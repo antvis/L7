@@ -13,10 +13,11 @@ export type RequestParameters = {
 };
 
 export type ResponseCallback<T> = (
-  error?: Error | null,
+  error?: Error | Error[] | null,
   data?: T | null,
   cacheControl?: string | null,
   expires?: string | null,
+  xhr?: any,
 ) => void;
 
 export class AJAXError extends Error {
@@ -149,6 +150,7 @@ function makeXMLHttpRequest(
         data,
         xhr.getResponseHeader('Cache-Control'),
         xhr.getResponseHeader('Expires'),
+        xhr,
       );
     } else {
       const body = new Blob([xhr.response], {
@@ -164,63 +166,34 @@ function makeXMLHttpRequest(
   return xhr;
 }
 
-export interface IXHRReustResuit {
-  err: Error|null;
-  data: ArrayBuffer;
-  xhr: any;
+export interface IXhrRequestResult {
+  err?: Error | Error[] | null,
+  data?: any | null,
+  cacheControl?: string | null,
+  expires?: string | null,
+  xhr?: any;
 }
 export function makeXMLHttpRequestPromise(
   requestParameters: RequestParameters,
-): Promise<IXHRReustResuit> {
+): Promise<IXhrRequestResult> {
   return new Promise((resolve, reject) => {
-    const xhr = new $XMLHttpRequest();
-    xhr.open(requestParameters.method || 'GET', requestParameters.url, true);
-    if (requestParameters.type === 'arrayBuffer') {
-      xhr.responseType = 'arraybuffer';
-    }
-    for (const k in requestParameters.headers) {
-      if (requestParameters.headers.hasOwnProperty(k)) {
-        xhr.setRequestHeader(k, requestParameters.headers[k]);
-      }
-    }
-    if (requestParameters.type === 'json') {
-      xhr.responseType = 'text';
-      xhr.setRequestHeader('Accept', 'application/json');
-    }
-    xhr.withCredentials = requestParameters.credentials === 'include';
-    xhr.onerror = () => {
-      reject(new Error(xhr.statusText));
-    };
-    xhr.onload = () => {
-      if (
-        ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0) &&
-        xhr.response !== null
-      ) {
-        let data: unknown = xhr.response;
-        if (requestParameters.type === 'json') {
-          // We're manually parsing JSON here to get better error messages.
-          try {
-            data = JSON.parse(xhr.response);
-          } catch (err) {
-            return reject({res: err as Error});
-          }
-        }
-        resolve({
-          err: null,
-          // @ts-ignore
-          data ,
-          cacheControl: xhr.getResponseHeader('Cache-Control'),
-          expires: xhr.getResponseHeader('Expires'),
-          xhr,
+    makeXMLHttpRequest(requestParameters, (error, data, cacheControl, expires, xhr) => {
+      if(error) {
+        reject({
+          err: error,
+          data: null,
+          xhr
         });
       } else {
-        const body = new Blob([xhr.response], {
-          type: xhr.getResponseHeader('Content-Type'),
+        resolve({
+          err: null,
+          data ,
+          cacheControl,
+          expires,
+          xhr,
         });
-        reject({res: new AJAXError(xhr.status, xhr.statusText, requestParameters.url.toString(), body)});
       }
-    };
-    xhr.send(requestParameters.body);
+    })
   })
 }
 

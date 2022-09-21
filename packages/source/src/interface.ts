@@ -26,7 +26,6 @@ export interface IParserData {
 export enum RasterTileType {
   IMAGE = 'image',
   ARRAYBUFFER = 'arraybuffer',
-  MultiArrayBuffer = 'multiarraybuffer',
 }
 
 export interface IGeojsonvtOptions {
