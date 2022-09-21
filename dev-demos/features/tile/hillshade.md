@@ -1,3 +1,3 @@
 ### Raster - HillShade
-山坡阴影
-<code src="./rasterData/hillShade.tsx"></code>
+山体阴影
+<code src="./rasterData/hillshade.tsx"></code>

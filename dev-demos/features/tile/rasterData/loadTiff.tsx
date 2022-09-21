@@ -109,6 +109,16 @@ export default () => {
             });
     
           scene.addLayer(layer);
+
+          // setTimeout(() => {
+          //   layer.style({
+          //     rampColors: {
+          //       colors: ['#f00', '#ff0'],
+          //       positions: [0, 1]
+          //     }
+          //   });
+          //   scene.render()
+          // }, 2000)
         });
     });
     

@@ -272,6 +272,7 @@ export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {
 }
 
 export interface IRasterLayerStyleOptions extends IBaseLayerStyleOptions {
+  colorTexture?: ITexture2D;
   domain: [number, number];
   noDataValue: number;
   clampLow: boolean;

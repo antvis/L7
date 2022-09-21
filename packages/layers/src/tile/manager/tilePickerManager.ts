@@ -162,4 +162,8 @@ export default class TilePickManager extends EventEmitter
       layer.hooks.afterRender.call();
     }
   }
+
+  public destroy(): void {
+    this.removeAllListeners();
+  }
 }
