@@ -1,4 +1,5 @@
 import { IParserCfg } from '@antv/l7-core';
+import { rasterDataTypes } from '@antv/l7-source';
 import VectorLineTile from './line';
 import VectorPointLayer from './point';
 import VectorPolygonTile from './polygon';
@@ -24,7 +25,7 @@ export function getTileFactory(tileType: TileType, parser: IParserCfg) {
     case 'TileDebugLayer': 
       return TestTile;
     case 'RasterLayer':
-      if (parser.dataType === 'arraybuffer') {
+      if(rasterDataTypes.includes(parser.dataType)) {
         return RasterDataFactory;
       } else {
         return RasterTileFactory;
