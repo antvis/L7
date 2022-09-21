@@ -13,7 +13,6 @@ const scene = new Scene({
 scene.on('loaded', () => {
 
   fetch(
-    // 'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
     'https://gw.alipayobjects.com/os/bmw-prod/ecd1aaac-44c0-4232-b66c-c0ced76d5c7d.json'
   )
     .then(res => res.json())
@@ -25,7 +24,7 @@ scene.on('loaded', () => {
         maskfence: data
       });
       baseLayer.source(
-        'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+        'https://webst0{1-3}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
         {
           parser: {
             type: 'rasterTile',
@@ -44,15 +43,11 @@ scene.on('loaded', () => {
     zIndex: 2
   });
   annotionLayer.source(
-    'https://webst01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}',
+    'https://webst0{1-3}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}',
     {
       parser: {
         type: 'rasterTile',
         tileSize: 256,
-        // minZoom: 6,
-        // maxZoom: 15,
-        zoomOffset: 0
-        // extent: [-180, -85.051129, 179, 85.051129],
       }
     }
   );

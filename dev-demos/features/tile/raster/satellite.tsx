@@ -19,8 +19,7 @@ export default () => {
       zIndex: 1,
     });
     layerTile.source(
-      '//t3.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=f1f2021a42d110057042177cd22d856f',
-      // 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      '//t{0-4}.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=f1f2021a42d110057042177cd22d856f',
       {
         parser: {
           type: 'rasterTile',
@@ -35,7 +34,7 @@ export default () => {
       zIndex: 0,
     });
     layerTile2.source(
-      'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
       {
         parser: {
           type: 'rasterTile',

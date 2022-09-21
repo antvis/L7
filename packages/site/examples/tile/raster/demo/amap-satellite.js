@@ -15,12 +15,7 @@ scene.on('loaded', () => {
     zIndex: 1
   });
   baseLayer.source(
-    [
-      'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-      'https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-      'https://webst03.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-      'https://webst04.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}'
-    ],
+    'https://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
     {
       parser: {
         type: 'rasterTile',
@@ -38,7 +33,7 @@ scene.on('loaded', () => {
     zIndex: 2
   });
   annotionLayer.source(
-    'https://webst01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}',
+    'https://webst0{1-3}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}',
     {
       parser: {
         type: 'rasterTile',

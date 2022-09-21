@@ -2,7 +2,7 @@ import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
 
 export type RequestParameters = {
-  url: string;
+  url: string | string[];
   headers?: any;
   method?: 'GET' | 'POST' | 'PUT';
   body?: string;
@@ -13,10 +13,11 @@ export type RequestParameters = {
 };
 
 export type ResponseCallback<T> = (
-  error?: Error | null,
+  error?: Error | Error[] | null,
   data?: T | null,
   cacheControl?: string | null,
   expires?: string | null,
+  xhr?: any,
 ) => void;
 
 export class AJAXError extends Error {
@@ -53,7 +54,8 @@ function makeFetchRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
 ) {
-  const request = new Request(requestParameters.url, {
+  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
+  const request = new Request(url, {
     method: requestParameters.method || 'GET',
     body: requestParameters.body,
     credentials: requestParameters.credentials,
@@ -94,7 +96,7 @@ function makeFetchRequest(
             new AJAXError(
               response.status,
               response.statusText,
-              requestParameters.url,
+              url,
               body,
             ),
           ),
@@ -110,8 +112,9 @@ function makeXMLHttpRequest(
   callback: ResponseCallback<any>,
 ) {
   const xhr = new $XMLHttpRequest();
+  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
 
-  xhr.open(requestParameters.method || 'GET', requestParameters.url, true);
+  xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
     xhr.responseType = 'arraybuffer';
   }
@@ -147,19 +150,51 @@ function makeXMLHttpRequest(
         data,
         xhr.getResponseHeader('Cache-Control'),
         xhr.getResponseHeader('Expires'),
+        xhr,
       );
     } else {
       const body = new Blob([xhr.response], {
         type: xhr.getResponseHeader('Content-Type'),
       });
       callback(
-        new AJAXError(xhr.status, xhr.statusText, requestParameters.url, body),
+        new AJAXError(xhr.status, xhr.statusText, url, body),
       );
     }
   };
   xhr.send(requestParameters.body);
 
   return xhr;
+}
+
+export interface IXhrRequestResult {
+  err?: Error | Error[] | null,
+  data?: any | null,
+  cacheControl?: string | null,
+  expires?: string | null,
+  xhr?: any;
+}
+export function makeXMLHttpRequestPromise(
+  requestParameters: RequestParameters,
+): Promise<IXhrRequestResult> {
+  return new Promise((resolve, reject) => {
+    makeXMLHttpRequest(requestParameters, (error, data, cacheControl, expires, xhr) => {
+      if(error) {
+        reject({
+          err: error,
+          data: null,
+          xhr
+        });
+      } else {
+        resolve({
+          err: null,
+          data ,
+          cacheControl,
+          expires,
+          xhr,
+        });
+      }
+    })
+  })
 }
 
 function makeRequest(
@@ -271,7 +306,7 @@ export const getImage = (
   });
 };
 
-const arrayBufferToTiffImage = async (
+export const arrayBufferToTiffImage = async (
   data: ArrayBuffer,
   callback: (err?: Error | null, image?: any) => void,
   rasterParser: any,
@@ -305,3 +340,9 @@ export const getTiffImage = (
     }
   });
 };
+
+export interface IRasterParser {
+  rasterData: HTMLImageElement | ImageBitmap | null | undefined;
+  width: number;
+  height: number;
+}
