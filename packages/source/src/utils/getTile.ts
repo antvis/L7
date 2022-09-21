@@ -25,7 +25,7 @@ export const getTileBuffer = async (
   tileParams: TileLoadParams,
   tile: Tile,
   rasterParser: (imageData: ArrayBuffer) => Promise<IRasterParser>,
-  operation?: IBandsOperation
+  operation?: IBandsOperation,
 ): Promise<HTMLImageElement | ImageBitmap> => {
   const requestParameters = {
     url: getTileUrl(url, tileParams),
@@ -43,11 +43,10 @@ export const getTileBuffer = async (
         }
       },
       rasterParser,
-      operation
+      operation,
     );
   });
 };
-
 
 type IBandsOperation = ((bands: IRasterParser[]) => IRasterParser) | any[];
 
@@ -86,10 +85,12 @@ const getTiffImage = async (
       return;
     }
     // bands 是获取的波段集合
-    const bands = await Promise.all(imageDataList.map(imageData => rasterParser(imageData))) as IRasterParser[];
+    const bands = (await Promise.all(
+      imageDataList.map((imageData) => rasterParser(imageData)),
+    )) as IRasterParser[];
     const { width, height } = bands[0];
     let rasterData: any = [];
-    switch(typeof operation) {
+    switch (typeof operation) {
       case 'function':
         rasterData = operation(bands);
         break;
@@ -106,8 +107,6 @@ const getTiffImage = async (
       default:
         rasterData = bands[0].rasterData;
     }
-  
-
 
     const defaultMIN = 0;
     const defaultMAX = 8000;

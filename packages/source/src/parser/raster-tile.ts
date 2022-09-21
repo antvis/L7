@@ -31,7 +31,7 @@ export default function rasterTile(
           tileParams,
           tile,
           cfg?.format || defaultFormat,
-          cfg?.operation
+          cfg?.operation,
         );
       default:
         return getTileImage(data, tileParams, tile);
