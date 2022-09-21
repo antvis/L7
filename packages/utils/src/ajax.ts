@@ -342,7 +342,7 @@ export const getTiffImage = (
 };
 
 export interface IRasterParser {
-  rasterData: HTMLImageElement | ImageBitmap | null | undefined;
+  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
   width: number;
   height: number;
 }

@@ -25,6 +25,7 @@ export const getTileBuffer = async (
   tileParams: TileLoadParams,
   tile: Tile,
   rasterParser: (imageData: ArrayBuffer) => Promise<IRasterParser>,
+  operation?: IBandsOperation
 ): Promise<HTMLImageElement | ImageBitmap> => {
   const requestParameters = {
     url: getTileUrl(url, tileParams),
@@ -42,15 +43,20 @@ export const getTileBuffer = async (
         }
       },
       rasterParser,
+      operation
     );
   });
 };
+
+
+type IBandsOperation = ((bands: IRasterParser[]) => IRasterParser) | any[];
 
 const getTiffImage = async (
   tile: Tile,
   requestParameters: RequestParameters,
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
-  rasterParser: any,
+  rasterParser: (imageData: ArrayBuffer) => Promise<IRasterParser>,
+  operation?: IBandsOperation,
 ) => {
   if (Array.isArray(requestParameters.url)) {
     const imageDataList = [];
@@ -79,8 +85,30 @@ const getTiffImage = async (
       callback(errList as Error[], null);
       return;
     }
+    // bands 是获取的波段集合
+    const bands = await Promise.all(imageDataList.map(imageData => rasterParser(imageData))) as IRasterParser[];
+    const { width, height } = bands[0];
+    let rasterData: any = [];
+    switch(typeof operation) {
+      case 'function':
+        rasterData = operation(bands);
+        break;
+      case 'object':
+        // 波段计算表达式 - operation
+        // const bandExpress = [
+        //   '+',
+        //   ['*', ['bands', 0], ['number', 1/2]],
+        //   ['*', ['bands', 1], ['number', 1/3]]
+        // ];
 
-    const { rasterData, width, height } = await rasterParser(imageDataList);
+        rasterData = bands[0].rasterData;
+        break;
+      default:
+        rasterData = bands[0].rasterData;
+    }
+  
+
+
     const defaultMIN = 0;
     const defaultMAX = 8000;
     callback(null, {

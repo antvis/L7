@@ -92,27 +92,29 @@ export default () => {
                 tileSize: 256,
                 maxZoom: 13.1,
                 format: async data => {
-                  
-                  const tiff = await GeoTIFF.fromArrayBuffer(data[0]);
+                  const tiff = await GeoTIFF.fromArrayBuffer(data);
                   const image = await tiff.getImage();
                   const width = image.getWidth();
                   const height = image.getHeight();
                   const values = await image.readRasters();
                   const rasterData = values[0];
-                 
-
-                  const tiff2 = await GeoTIFF.fromArrayBuffer(data[1]);
-                  const image2 = await tiff2.getImage();
-                  const values2 = await image2.readRasters();
-                  const rasterData2 = values2[0];
-
-                  const r =  rasterData.map((d, i) => {
-
-                    const d2 = rasterData2[i]
-                    return d/2 + d2/3
-                  })
                   
-                  return { rasterData: r, width, height };
+                  return { rasterData, width, height };
+                },
+                operation: (bands) => {
+                  const rasterData: number[] = [];
+                  const { width, height } = bands[0];
+                  const length = width * height;
+                  const band0 = bands[0];
+                  const band1 = bands[1];
+                  
+                  for(let i = 0;i < length; i++) {
+                    const v1 = band0.rasterData[i] | 0;
+                    const v2 = band1.rasterData[i] | 0;
+                    rasterData.push(v1 * (1/2) + v2 * (1/2))
+                  }
+                  return rasterData;
+                  // return bands[0].rasterData;
                 }
               }
             });

@@ -58,6 +58,7 @@ export interface ITileParserCFG {
   geojsonvtOptions?: IGeojsonvtOptions;
 
   format?: any;
+  operation?: any;
 }
 
 export interface IJsonItem {
