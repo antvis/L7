@@ -46,7 +46,7 @@ export class TMSBaseMapTileLayer extends BaseTileLayer {
     }
   }
 
-  private emitTileVisibleEvent(tile: Tile, callback: () => void) {
+  private dispatchTileVisibleChange(tile: Tile, callback: () => void) {
     if (tile.isVisible) {
       callback();
     } else {
@@ -57,7 +57,7 @@ export class TMSBaseMapTileLayer extends BaseTileLayer {
   }
 
   private updateTileVisible(tile: Tile, layers: ILayer[]) {
-    this.emitTileVisibleEvent(tile, () => {
+    this.dispatchTileVisibleChange(tile, () => {
       updateLayersConfig(layers, 'visible', tile.isVisible);
       this.layerService.reRender();
     });

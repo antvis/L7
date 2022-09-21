@@ -27,7 +27,7 @@ export default function rasterTile(
         return getTileImage(data, tileParams, tile);
       case RasterTileType.ARRAYBUFFER:
         return getTileBuffer(
-          data as string,
+          data,
           tileParams,
           tile,
           cfg?.format || defaultFormat,
