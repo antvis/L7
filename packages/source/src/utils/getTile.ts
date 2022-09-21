@@ -29,11 +29,11 @@ export const getTileBuffer = async (
   const requestParameters = {
     url: getTileUrl(url, tileParams),
   };
-  
+
   return new Promise((resolve, reject) => {
     getTiffImage(
       tile,
-      requestParameters ,
+      requestParameters,
       (err, img) => {
         if (err) {
           reject(err);
@@ -52,12 +52,12 @@ const getTiffImage = async (
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
   rasterParser: any,
 ) => {
-  if(Array.isArray(requestParameters.url)) {
+  if (Array.isArray(requestParameters.url)) {
     const imageDataList = [];
     const xhrList: any[] = [];
     const errList = [];
     const urls = requestParameters.url;
-    
+
     for (let i = 0; i < urls.length; i++) {
       const params = {
         ...requestParameters,
@@ -73,8 +73,8 @@ const getTiffImage = async (
       xhrList.push(xhr);
       imageDataList.push(data);
     }
-    setTileXHRCancelFunc(tile, xhrList)
-  
+    setTileXHRCancelFunc(tile, xhrList);
+
     if (errList.length > 0) {
       callback(errList as Error[], null);
       return;
@@ -91,7 +91,6 @@ const getTiffImage = async (
       min: defaultMIN,
       max: defaultMAX,
     });
-    
   } else {
     const xhr = getArrayBuffer(requestParameters, (err, imgData) => {
       if (err) {
@@ -113,8 +112,8 @@ function setTileXHRCancelFunc(tile: Tile, xhrList: any[]) {
 }
 
 function getTileUrl(url: string | string[], tileParams: TileLoadParams) {
-  if(Array.isArray(url)) {
-    return url.map(src => getURLFromTemplate(src, tileParams));
+  if (Array.isArray(url)) {
+    return url.map((src) => getURLFromTemplate(src, tileParams));
   } else {
     return getURLFromTemplate(url, tileParams);
   }
@@ -126,7 +125,10 @@ export const getTileImage = async (
   tile: Tile,
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
-  const imgUrl = getURLFromTemplate(Array.isArray(url) ? url[0] : url, tileParams);
+  const imgUrl = getURLFromTemplate(
+    Array.isArray(url) ? url[0] : url,
+    tileParams,
+  );
 
   return new Promise((resolve, reject) => {
     const xhr = getImage({ url: imgUrl }, (err, img) => {

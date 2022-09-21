@@ -1,10 +1,6 @@
 import { Tile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
 import { IParserData, ITileParserCFG, RasterTileType } from '../interface';
-import {
-  defaultFormat,
-  getTileBuffer,
-  getTileImage,
-} from '../utils/getTile';
+import { defaultFormat, getTileBuffer, getTileImage } from '../utils/getTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -13,14 +9,12 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   zoomOffset: 0,
 };
 
-export const rasterDataTypes = [
-  RasterTileType.ARRAYBUFFER,
-];
+export const rasterDataTypes = [RasterTileType.ARRAYBUFFER];
 /**
- * 
- * @param data 
- * @param cfg 
- * @returns 
+ *
+ * @param data
+ * @param cfg
+ * @returns
  */
 export default function rasterTile(
   data: string | string[],
