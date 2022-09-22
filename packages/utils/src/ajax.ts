@@ -1,8 +1,13 @@
 import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
 
+export interface ITileBands {
+  url: string;
+  bands: number|[];
+}
+
 export type RequestParameters = {
-  url: string | string[];
+  url: string | string[] | ITileBands;
   headers?: any;
   method?: 'GET' | 'POST' | 'PUT';
   body?: string;
@@ -55,7 +60,7 @@ function makeFetchRequest(
   callback: ResponseCallback<any>,
 ) {
   const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
-  const request = new Request(url, {
+  const request = new Request(url as string, {
     method: requestParameters.method || 'GET',
     body: requestParameters.body,
     credentials: requestParameters.credentials,
@@ -96,7 +101,7 @@ function makeFetchRequest(
             new AJAXError(
               response.status,
               response.statusText,
-              url,
+              url.toString(),
               body,
             ),
           ),
@@ -157,7 +162,7 @@ function makeXMLHttpRequest(
         type: xhr.getResponseHeader('Content-Type'),
       });
       callback(
-        new AJAXError(xhr.status, xhr.statusText, url, body),
+        new AJAXError(xhr.status, xhr.statusText, url.toString(), body),
       );
     }
   };
@@ -305,14 +310,23 @@ export const getImage = (
     }
   });
 };
+export interface IRasterData {
+  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
+  width: number;
+  height: number;
+}
+export type IRasterFormat = (imageData: ArrayBuffer, bands: number[]) => Promise<IRasterData|IRasterData[]>;
 
 export const arrayBufferToTiffImage = async (
   data: ArrayBuffer,
   callback: (err?: Error | null, image?: any) => void,
-  rasterParser: any,
+  rasterFormat: IRasterFormat,
 ) => {
   try {
-    const { rasterData, width, height } = await rasterParser(data);
+    // 单文件场景，默认选取 0 号波段
+    let formatResult = await rasterFormat(data, [0]);
+    formatResult = Array.isArray(formatResult)?formatResult[0]:formatResult;
+    const { rasterData, width, height } = formatResult;
     const defaultMIN = 0;
     const defaultMAX = 8000;
     callback(null, {
@@ -327,22 +341,3 @@ export const arrayBufferToTiffImage = async (
   }
 };
 
-export const getTiffImage = (
-  requestParameters: RequestParameters,
-  callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
-  rasterParser: any,
-) => {
-  return getArrayBuffer(requestParameters, (err, imgData) => {
-    if (err) {
-      callback(err);
-    } else if (imgData) {
-      arrayBufferToTiffImage(imgData, callback, rasterParser);
-    }
-  });
-};
-
-export interface IRasterParser {
-  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
-  width: number;
-  height: number;
-}

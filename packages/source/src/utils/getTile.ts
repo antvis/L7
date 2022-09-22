@@ -2,7 +2,9 @@ import {
   getImage,
   makeXMLHttpRequestPromise,
   ResponseCallback,
-  IRasterParser,
+  IRasterData,
+  ITileBands,
+  IRasterFormat,
   arrayBufferToTiffImage,
   RequestParameters,
   getArrayBuffer,
@@ -17,20 +19,19 @@ import {
  * @param url
  * @param tileParams
  * @param tile
- * @param rasterParser
+ * @param rasterFormat
  * @returns
  */
 export const getTileBuffer = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: Tile,
-  rasterParser: (imageData: ArrayBuffer) => Promise<IRasterParser>,
+  rasterFormat: IRasterFormat,
   operation?: IBandsOperation,
 ): Promise<HTMLImageElement | ImageBitmap> => {
   const requestParameters = {
     url: getTileUrl(url, tileParams),
   };
-
   return new Promise((resolve, reject) => {
     getTiffImage(
       tile,
@@ -42,32 +43,36 @@ export const getTileBuffer = async (
           resolve(img);
         }
       },
-      rasterParser,
+      rasterFormat,
       operation,
     );
   });
 };
 
-type IBandsOperation = ((bands: IRasterParser[]) => IRasterParser) | any[];
-
+type IBandsOperation = ((bands: IRasterData[]) => IRasterData) | any[];
 const getTiffImage = async (
   tile: Tile,
   requestParameters: RequestParameters,
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
-  rasterParser: (imageData: ArrayBuffer) => Promise<IRasterParser>,
+  rasterFormat: IRasterFormat,
   operation?: IBandsOperation,
 ) => {
   if (Array.isArray(requestParameters.url)) {
-    const imageDataList = [];
+    const imageDataList: {
+      data: ArrayBuffer,
+      bands: number[],
+    }[] = [];
     const xhrList: any[] = [];
     const errList = [];
     const urls = requestParameters.url;
-
     for (let i = 0; i < urls.length; i++) {
       const params = {
         ...requestParameters,
-        url: urls[i],
+        // @ts-ignore
+        url: typeof urls[i] === 'string'? urls[i]: urls[i].url,
       };
+      // @ts-ignore
+      const bands = (typeof urls[i] === 'string' ? [0] : urls[i].bands)
       const { err, data, xhr } = await makeXMLHttpRequestPromise({
         ...params,
         type: 'arrayBuffer',
@@ -76,7 +81,10 @@ const getTiffImage = async (
         errList.push(err);
       }
       xhrList.push(xhr);
-      imageDataList.push(data);
+      imageDataList.push({
+        data,
+        bands
+      });
     }
     setTileXHRCancelFunc(tile, xhrList);
 
@@ -85,9 +93,15 @@ const getTiffImage = async (
       return;
     }
     // bands 是获取的波段集合
-    const bands = (await Promise.all(
-      imageDataList.map((imageData) => rasterParser(imageData)),
-    )) as IRasterParser[];
+    let bands = (await Promise.all(
+      imageDataList.map(({
+        data,
+        bands
+      }) => rasterFormat(data, bands)),
+    )) as IRasterData[];
+    // @ts-ignore
+    bands = bands.flat();
+  
     const { width, height } = bands[0];
     let rasterData: any = [];
     switch (typeof operation) {
@@ -123,7 +137,7 @@ const getTiffImage = async (
       if (err) {
         callback(err);
       } else if (imgData) {
-        arrayBufferToTiffImage(imgData, callback, rasterParser);
+        arrayBufferToTiffImage(imgData, callback, rasterFormat);
       }
     });
     setTileXHRCancelFunc(tile, [xhr]);
@@ -138,9 +152,20 @@ function setTileXHRCancelFunc(tile: Tile, xhrList: any[]) {
   };
 }
 
-function getTileUrl(url: string | string[], tileParams: TileLoadParams) {
+function getTileUrl(url: string | string[] | ITileBands[], tileParams: TileLoadParams) {
   if (Array.isArray(url)) {
-    return url.map((src) => getURLFromTemplate(src, tileParams));
+    if(typeof url[0] === 'object') {
+      return (url as ITileBands[]).map((o) => {
+        return {
+          url: getURLFromTemplate(o.url, tileParams),
+          bands: o.bands || [0]
+        }
+      }) as unknown as ITileBands
+    } else {
+      return (url as string[]).map((src) => getURLFromTemplate(src, tileParams));
+    }
+
+    
   } else {
     return getURLFromTemplate(url, tileParams);
   }

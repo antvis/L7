@@ -1,4 +1,6 @@
+// @ts-ignore
 import { RasterLayer, Scene, Source } from '@antv/l7';
+// @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
@@ -80,9 +82,18 @@ export default () => {
             maskfence: maskData
           });
     
+          // const urls = [
+          //   'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+          //   'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+          // ]
           const urls = [
-            'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
-            'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+            {
+              url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+              bands: [0]
+            },
+            {
+              url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff'
+            }
           ]
           const tileSource = new Source(urls,
             {
@@ -91,22 +102,26 @@ export default () => {
                 dataType: 'arraybuffer',
                 tileSize: 256,
                 maxZoom: 13.1,
-                format: async data => {
+                format: async (data, bands) => {
+                
+
                   const tiff = await GeoTIFF.fromArrayBuffer(data);
-                  const image = await tiff.getImage();
+                  const image = await tiff.getImage(bands[0]);
                   const width = image.getWidth();
                   const height = image.getHeight();
                   const values = await image.readRasters();
                   const rasterData = values[0];
                   
-                  return { rasterData, width, height };
+                 
+                  
+                  return [{ rasterData, width, height }];
                 },
-                operation: (bands) => {
+                operation: (allBands) => {
                   const rasterData: number[] = [];
-                  const { width, height } = bands[0];
+                  const { width, height } = allBands[0];
                   const length = width * height;
-                  const band0 = bands[0];
-                  const band1 = bands[1];
+                  const band0 = allBands[0];
+                  const band1 = allBands[1];
                   
                   for(let i = 0;i < length; i++) {
                     const v1 = band0.rasterData[i] | 0;
