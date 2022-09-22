@@ -59,8 +59,8 @@ const getTiffImage = async (
 ) => {
   if (Array.isArray(requestParameters.url)) {
     const imageDataList: {
-      data: ArrayBuffer,
-      bands: number[],
+      data: ArrayBuffer;
+      bands: number[];
     }[] = [];
     const xhrList: any[] = [];
     const errList = [];
@@ -69,10 +69,10 @@ const getTiffImage = async (
       const params = {
         ...requestParameters,
         // @ts-ignore
-        url: typeof urls[i] === 'string'? urls[i]: urls[i].url,
+        url: typeof urls[i] === 'string' ? urls[i] : urls[i].url,
       };
       // @ts-ignore
-      const bands = (typeof urls[i] === 'string' ? [0] : urls[i].bands)
+      const bands = typeof urls[i] === 'string' ? [0] : urls[i].bands;
       const { err, data, xhr } = await makeXMLHttpRequestPromise({
         ...params,
         type: 'arrayBuffer',
@@ -83,7 +83,7 @@ const getTiffImage = async (
       xhrList.push(xhr);
       imageDataList.push({
         data,
-        bands
+        bands,
       });
     }
     setTileXHRCancelFunc(tile, xhrList);
@@ -94,14 +94,11 @@ const getTiffImage = async (
     }
     // bands 是获取的波段集合
     let bands = (await Promise.all(
-      imageDataList.map(({
-        data,
-        bands
-      }) => rasterFormat(data, bands)),
+      imageDataList.map(({ data, bands }) => rasterFormat(data, bands)),
     )) as IRasterData[];
     // @ts-ignore
     bands = bands.flat();
-  
+
     const { width, height } = bands[0];
     let rasterData: any = [];
     switch (typeof operation) {
@@ -152,20 +149,23 @@ function setTileXHRCancelFunc(tile: Tile, xhrList: any[]) {
   };
 }
 
-function getTileUrl(url: string | string[] | ITileBands[], tileParams: TileLoadParams) {
+function getTileUrl(
+  url: string | string[] | ITileBands[],
+  tileParams: TileLoadParams,
+) {
   if (Array.isArray(url)) {
-    if(typeof url[0] === 'object') {
-      return (url as ITileBands[]).map((o) => {
+    if (typeof url[0] === 'object') {
+      return ((url as ITileBands[]).map((o) => {
         return {
           url: getURLFromTemplate(o.url, tileParams),
-          bands: o.bands || [0]
-        }
-      }) as unknown as ITileBands
+          bands: o.bands || [0],
+        };
+      }) as unknown) as ITileBands;
     } else {
-      return (url as string[]).map((src) => getURLFromTemplate(src, tileParams));
+      return (url as string[]).map((src) =>
+        getURLFromTemplate(src, tileParams),
+      );
     }
-
-    
   } else {
     return getURLFromTemplate(url, tileParams);
   }
