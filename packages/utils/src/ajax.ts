@@ -1,13 +1,13 @@
 import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
 
-export interface ITileBands {
+export interface ITileBand {
   url: string;
-  bands: number|[];
+  bands: number[];
 }
 
 export type RequestParameters = {
-  url: string | string[] | ITileBands;
+  url: string | string[] | ITileBand[];
   headers?: any;
   method?: 'GET' | 'POST' | 'PUT';
   body?: string;
@@ -310,34 +310,3 @@ export const getImage = (
     }
   });
 };
-export interface IRasterData {
-  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
-  width: number;
-  height: number;
-}
-export type IRasterFormat = (imageData: ArrayBuffer, bands: number[]) => Promise<IRasterData|IRasterData[]>;
-
-export const arrayBufferToTiffImage = async (
-  data: ArrayBuffer,
-  callback: (err?: Error | null, image?: any) => void,
-  rasterFormat: IRasterFormat,
-) => {
-  try {
-    // 单文件场景，默认选取 0 号波段
-    let formatResult = await rasterFormat(data, [0]);
-    formatResult = Array.isArray(formatResult)?formatResult[0]:formatResult;
-    const { rasterData, width, height } = formatResult;
-    const defaultMIN = 0;
-    const defaultMAX = 8000;
-    callback(null, {
-      data: rasterData,
-      width,
-      height,
-      min: defaultMIN,
-      max: defaultMAX,
-    });
-  } catch (err) {
-    callback(null, new Error('' + err));
-  }
-};
-
