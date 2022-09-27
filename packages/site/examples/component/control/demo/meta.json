@@ -1,0 +1,48 @@
+{
+  "title": {
+    "zh": "分类",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "zoom.ts",
+      "title": {
+        "zh": "Zoom",
+        "en": "Zoom"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ubU4QaQne7QAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "scale.ts",
+      "title": {
+        "zh": "Scale",
+        "en": "Scale"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KZr4S4AcVAIAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "fullscreen.ts",
+      "title": {
+        "zh": "Fullscreen",
+        "en": "Fullscreen"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GOcVSqyqlsIAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "geoLocate.ts",
+      "title": {
+        "zh": "GeoLocate",
+        "en": "GeoLocate"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GOcVSqyqlsIAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "exportImage.ts",
+      "title": {
+        "zh": "ExportImage",
+        "en": "ExportImage"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GOcVSqyqlsIAAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}

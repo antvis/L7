@@ -84,10 +84,10 @@ export default abstract class PopperControl<
     });
     this.popper
       .on('show', () => {
-        this.emit('popperShow');
+        this.emit('popperShow', this);
       })
       .on('hide', () => {
-        this.emit('popperHide');
+        this.emit('popperHide', this);
       });
     return this.popper;
   }

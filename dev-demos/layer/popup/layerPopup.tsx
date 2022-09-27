@@ -35,10 +35,14 @@ const Demo: FunctionComponent = () => {
         .source(
           featureCollection([
             point([120.104697, 30.260704], {
-              name: '1',
+              name: '测试点1',
+              lng: 120.104697,
+              lat: 30.260704,
             }),
             point([120.104697, 30.261715], {
-              name: '2',
+              name: '测试点2',
+              lng: 120.104697,
+              lat: 30.261715,
             }),
           ]),
         )
@@ -53,7 +57,7 @@ const Demo: FunctionComponent = () => {
             {
               type: 'Feature',
               properties: {
-                name: 'luelue',
+                name: '测试线3',
               },
               geometry: {
                 type: 'LineString',
@@ -77,13 +81,12 @@ const Demo: FunctionComponent = () => {
             fields: [
               {
                 field: 'name',
-                fieldFormat: (key) => {
+                formatField: (key) => {
                   return '名称';
                 },
-                valueFormat: (value) => {
-                  return '12345';
-                },
               },
+              'lng',
+              'lat',
             ],
           },
           {
@@ -91,7 +94,7 @@ const Demo: FunctionComponent = () => {
             fields: ['name'],
           },
         ],
-        trigger: 'click',
+        trigger: 'hover',
       });
       newScene.addPopup(newPopup);
       setPopup(newPopup);

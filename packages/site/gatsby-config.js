@@ -208,7 +208,7 @@ module.exports = {
         order: 8,
       },
       {
-        slug: 'api/control',
+        slug: 'api/component/control',
         title: {
           zh: '控件 Control',
           en: 'Control',
@@ -403,6 +403,15 @@ module.exports = {
           en: 'other engine',
         },
         order: 8,
+      },
+      {
+        slug: 'component',
+        icon: 'map',
+        title: {
+          zh: '组件',
+          en: 'Component',
+        },
+        order: 9,
       },
       {
         slug: 'react',

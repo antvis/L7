@@ -1,4 +1,5 @@
-import { GaodeMapV2, Scene, Navigation } from '@antv/l7';
+import { GaodeMapV2, GeoLocate, Scene } from '@antv/l7';
+import gcoord from 'gcoord';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -23,7 +24,11 @@ const Demo: FunctionComponent = () => {
     });
 
     newScene.on('loaded', () => {
-      const newControl = new Navigation({});
+      const newControl = new GeoLocate({
+        transform: (position) => {
+          return gcoord.transform(position, gcoord.WGS84, gcoord.GCJ02);
+        },
+      });
       newScene.addControl(newControl);
     });
   }, []);

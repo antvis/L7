@@ -36,8 +36,9 @@ const Demo: FunctionComponent = () => {
           lng: 120.104697,
           lat: 30.260704,
         },
-        title: '123456',
-        html: 'fldksja  jdklfaj  jdfklas d skljf as lkfdsa f adsfa fsd alfk',
+        anchor: 'bottom-right',
+        title: 'Popup Title',
+        html: 'Popup Content',
       });
       newScene.addPopup(newPopup);
 

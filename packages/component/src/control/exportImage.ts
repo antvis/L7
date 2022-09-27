@@ -30,11 +30,15 @@ export default class ExportImage extends ButtonControl<
     };
   }
 
-  protected onClick = async () => {
-    const { onExport } = this.controlOption;
+  public getImage() {
     const mapImage = this.mapsService.exportMap('png');
     const layerImage = this.scene.exportPng('png');
-    onExport?.(await this.mergeImage(mapImage, layerImage));
+    return this.mergeImage(mapImage, layerImage);
+  }
+
+  protected onClick = async () => {
+    const { onExport } = this.controlOption;
+    onExport?.(await this.getImage());
   };
 
   /**

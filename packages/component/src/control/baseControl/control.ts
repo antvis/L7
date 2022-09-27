@@ -152,7 +152,7 @@ export default abstract class Control<O extends IControlOption = IControlOption>
    */
   public show() {
     const container = this.container;
-    DOM.removeClass(container, 'l7-control-hide');
+    DOM.removeClass(container, 'l7-control--hide');
     this.isShow = true;
     this.emit('show', this);
   }
@@ -162,7 +162,7 @@ export default abstract class Control<O extends IControlOption = IControlOption>
    */
   public hide() {
     const container = this.container;
-    DOM.addClass(container, 'l7-control-hide');
+    DOM.addClass(container, 'l7-control--hide');
     this.isShow = false;
     this.emit('hide', this);
   }
@@ -243,12 +243,10 @@ export default abstract class Control<O extends IControlOption = IControlOption>
    */
   public setStyle(style?: string | null) {
     const container = this.container;
-    const { style: oldStyle } = this.controlOption;
-    if (oldStyle) {
-      DOM.removeStyle(container, oldStyle);
-    }
     if (style) {
-      DOM.addStyle(container, style);
+      container.setAttribute('style', style);
+    } else {
+      container.removeAttribute('style');
     }
   }
 

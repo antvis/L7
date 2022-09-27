@@ -15,10 +15,10 @@ type ImageOptionItem = BaseOptionItem & {
   img: string;
 };
 
-export type OptionItem = ImageOptionItem | NormalOptionItem;
+export type ControlOptionItem = ImageOptionItem | NormalOptionItem;
 
 export interface ISelectControlOption extends IPopperControlOption {
-  options: OptionItem[];
+  options: ControlOptionItem[];
   defaultValue?: string | string[];
 }
 
@@ -105,7 +105,7 @@ export default abstract class SelectControl<
    */
   protected abstract getIsMultiple(): boolean;
 
-  protected getPopperContent(options: OptionItem[]): HTMLElement {
+  protected getPopperContent(options: ControlOptionItem[]): HTMLElement {
     const isImageOptions = this.isImageOptions();
     const content = DOM.create(
       'div',
@@ -191,7 +191,7 @@ export default abstract class SelectControl<
     return checkboxDOM;
   }
 
-  protected onItemClick = (item: OptionItem) => {
+  protected onItemClick = (item: ControlOptionItem) => {
     if (this.getIsMultiple()) {
       const targetIndex = this.selectValue.findIndex(
         (value) => value === item.value,

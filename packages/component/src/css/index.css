@@ -66,7 +66,7 @@
   /* IE 9-10 doesn't have auto */
   pointer-events: auto;
 }
-.l7-control-container .l7-control.l7-control-hide {
+.l7-control-container .l7-control.l7-control--hide {
   display: none;
 }
 .l7-control-container .l7-top {
@@ -76,7 +76,7 @@
   z-index: 1000;
   pointer-events: none;
 }
-.l7-control-container .l7-top .l7-control {
+.l7-control-container .l7-top .l7-control:not(.l7-control--hide) {
   margin-top: 8px;
 }
 .l7-control-container .l7-right {
@@ -86,7 +86,7 @@
   z-index: 1000;
   pointer-events: none;
 }
-.l7-control-container .l7-right .l7-control {
+.l7-control-container .l7-right .l7-control:not(.l7-control--hide) {
   margin-right: 8px;
 }
 .l7-control-container .l7-bottom {
@@ -96,7 +96,7 @@
   z-index: 1000;
   pointer-events: none;
 }
-.l7-control-container .l7-bottom .l7-control {
+.l7-control-container .l7-bottom .l7-control:not(.l7-control--hide) {
   margin-bottom: 8px;
 }
 .l7-control-container .l7-left {
@@ -106,7 +106,7 @@
   z-index: 1000;
   pointer-events: none;
 }
-.l7-control-container .l7-left .l7-control {
+.l7-control-container .l7-left .l7-control:not(.l7-control--hide) {
   margin-left: 8px;
 }
 .l7-control-container .l7-center {
@@ -191,19 +191,19 @@
   background-color: #f3f3f3;
 }
 .l7-button-control:disabled {
-  background-color: #fbfbfb;
-  color: #bbbbbb;
+  background-color: #fafafa;
+  color: #bdbdbd;
   cursor: not-allowed;
 }
 .l7-button-control:disabled .l7-iconfont {
-  fill: #bbbbbb;
-  color: #bbbbbb;
+  fill: #bdbdbd;
+  color: #bdbdbd;
 }
 .l7-button-control:disabled:hover {
-  background-color: #fbfbfb;
+  background-color: #fafafa;
 }
 .l7-button-control:disabled:active {
-  background-color: #fbfbfb;
+  background-color: #fafafa;
 }
 .l7-popper {
   position: absolute;
@@ -348,6 +348,7 @@
 .l7-control-logo {
   width: 89px;
   height: 16px;
+  user-select: none;
 }
 .l7-control-logo img {
   height: 100%;
@@ -559,4 +560,10 @@
 }
 .l7-map:active .l7-popup-track-pointer {
   display: none;
+}
+.l7-layer-popup__row {
+  font-size: 12px;
+}
+.l7-layer-popup__row + .l7-layer-popup__row {
+  margin-top: 4px;
 }

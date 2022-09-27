@@ -2,22 +2,24 @@ import { ILayer, IPopupOption } from '@antv/l7-core';
 import { BaseLayer } from '@antv/l7-layers';
 import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import { get } from 'lodash';
 // import { Container } from 'inversify';
 import Popup from './popup';
 
 export type LayerField = {
   field: string;
-  fieldFormat?: (field: string) => string;
-  valueFormat?: (value: any) => string;
+  formatField?: (field: string) => string;
+  formatValue?: (value: any) => string;
+  getValue?: (feature: any) => string;
 };
 
-export type LayerPopupConfigFieldItem = {
+export type LayerPopupConfigItem = {
   layer: BaseLayer | string;
   fields: Array<LayerField | string>;
 };
 
 export interface ILayerPopupOption extends IPopupOption {
-  config: LayerPopupConfigFieldItem[];
+  config: LayerPopupConfigItem[];
   trigger: 'hover' | 'click';
 }
 
@@ -26,7 +28,7 @@ type LayerMapInfo = {
   onMouseOut?: (layer: BaseLayer, e: any) => void;
   onClick?: (layer: BaseLayer, e: any) => void;
   onSourceUpdate?: (layer: BaseLayer) => void;
-} & Partial<LayerPopupConfigFieldItem>;
+} & Partial<LayerPopupConfigItem>;
 
 export { LayerPopup };
 
@@ -215,14 +217,14 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       }
       const { fields } = layerInfo;
       fields?.forEach((fieldConfig) => {
-        const { field, fieldFormat, valueFormat } =
+        const { field, formatField, formatValue, getValue } =
           typeof fieldConfig === 'string'
             ? ({ field: fieldConfig } as any)
             : fieldConfig;
         const row = DOM.create('div', 'l7-layer-popup__row');
-        const value = feature[field];
-        row.innerHTML = `${fieldFormat ? fieldFormat(field) : field}: ${
-          valueFormat ? valueFormat(value) : value
+        const value = getValue ? getValue(e.feature) : get(feature, field);
+        row.innerHTML = `${formatField ? formatField(field) : field}: ${
+          formatValue ? formatValue(value) : value
         }`;
         frag.appendChild(row);
       });
@@ -235,9 +237,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * @param config
    * @protected
    */
-  protected getLayerByConfig(
-    config: LayerPopupConfigFieldItem,
-  ): ILayer | undefined {
+  protected getLayerByConfig(config: LayerPopupConfigItem): ILayer | undefined {
     const layer = config.layer;
     if (layer instanceof BaseLayer) {
       return layer;

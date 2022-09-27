@@ -1,3 +1,4 @@
+import { PositionType } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { createL7Icon } from '../utils/icon';
 import { Control, IControlOption } from './baseControl';
@@ -19,6 +20,7 @@ export default class Zoom extends Control<IZoomControlOption> {
   public getDefault(option: Partial<IZoomControlOption>) {
     return {
       ...super.getDefault(option),
+      position: PositionType.BOTTOMRIGHT,
       name: 'zoom',
       zoomInText: createL7Icon('l7-icon-enlarge'),
       zoomInTitle: 'Zoom in',
@@ -65,6 +67,24 @@ export default class Zoom extends Control<IZoomControlOption> {
     return this;
   }
 
+  public zoomIn = () => {
+    if (
+      !this.disabled &&
+      this.mapsService.getZoom() < this.mapsService.getMaxZoom()
+    ) {
+      this.mapsService.zoomIn();
+    }
+  };
+
+  public zoomOut = () => {
+    if (
+      !this.disabled &&
+      this.mapsService.getZoom() > this.mapsService.getMinZoom()
+    ) {
+      this.mapsService.zoomOut();
+    }
+  };
+
   private resetButtonGroup(container: HTMLElement) {
     DOM.clearChildren(container);
     this.zoomInButton = this.createButton(
@@ -83,24 +103,6 @@ export default class Zoom extends Control<IZoomControlOption> {
     );
     this.updateDisabled();
   }
-
-  private zoomIn = () => {
-    if (
-      !this.disabled &&
-      this.mapsService.getZoom() < this.mapsService.getMaxZoom()
-    ) {
-      this.mapsService.zoomIn();
-    }
-  };
-
-  private zoomOut = () => {
-    if (
-      !this.disabled &&
-      this.mapsService.getZoom() > this.mapsService.getMinZoom()
-    ) {
-      this.mapsService.zoomOut();
-    }
-  };
 
   private createButton(
     html: Element | string,

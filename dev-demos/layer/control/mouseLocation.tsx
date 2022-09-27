@@ -1,4 +1,4 @@
-import { GaodeMapV2, Scene, MouseLocation, Zoom } from '@antv/l7';
+import { GaodeMapV2, Scene, MouseLocation } from '@antv/l7';
 import React from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -19,10 +19,10 @@ const Demo: FunctionComponent = () => {
     newScene.on('loaded', () => {
       const newControl = new MouseLocation({});
       newScene.addControl(newControl);
-      const zoom = new Zoom({
-        position: 'topright',
-      });
-      newScene.addControl(zoom);
+      // const zoom = new Zoom({
+      //   position: 'topright',
+      // });
+      // newScene.addControl(zoom);
     });
   }, []);
 

@@ -1,5 +1,5 @@
 import { TestScene } from '@antv/l7-test-utils';
-import Navigation from '../src/control/navigation';
+import Navigation from '../src/control/geoLocate';
 
 describe('navigation', () => {
   const scene = TestScene();

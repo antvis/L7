@@ -75,10 +75,14 @@ export default class Fullscreen extends ButtonControl<
     };
   }
 
-  protected onClick = async () => {
+  public toggleFullscreen = async () => {
     if (ScreenFull.isEnabled) {
       await ScreenFull.toggle(this.mapContainer);
     }
+  };
+
+  protected onClick = () => {
+    this.toggleFullscreen();
   };
 
   protected onFullscreenChange = () => {
@@ -102,6 +106,6 @@ export default class Fullscreen extends ButtonControl<
       this.setBtnIcon(btnIcon);
     }
 
-    this.emit('fullscreenchange', this.isFullscreen);
+    this.emit('fullscreenChange', this.isFullscreen);
   };
 }

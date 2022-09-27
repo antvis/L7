@@ -1,4 +1,4 @@
-import { Mapbox, Scene, ExportImage, PointLayer } from '@antv/l7';
+import { GaodeMapV2, Scene, ExportImage, PointLayer } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -11,15 +11,14 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',
-      map: new Mapbox({
+      map: new GaodeMapV2({
         style: 'normal',
         center: [120, 30],
         pitch: 0,
         zoom: 6.45,
-        preserveDrawingBuffer: true,
-        // WebGLParams: {
-        //   preserveDrawingBuffer: true,
-        // },
+        WebGLParams: {
+          preserveDrawingBuffer: true,
+        },
       }),
       // logoVisible: false,
     });
@@ -63,7 +62,7 @@ const Demo: FunctionComponent = () => {
       <button
         onClick={() => {
           control?.setOptions({
-            imageType: 'jpg',
+            imageType: 'jpeg',
           });
         }}
       >

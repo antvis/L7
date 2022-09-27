@@ -41,10 +41,10 @@ describe('control', () => {
     const control = new TestControl();
     scene.addControl(control);
     control.hide();
-    expect(control.getContainer().classList).toContain('l7-control-hide');
+    expect(control.getContainer().classList).toContain('l7-control--hide');
     expect(control.getIsShow()).toEqual(false);
     control.show();
-    expect(control.getContainer().classList).not.toContain('l7-control-hide');
+    expect(control.getContainer().classList).not.toContain('l7-control--hide');
     expect(control.getIsShow()).toEqual(true);
   });
 

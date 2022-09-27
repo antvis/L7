@@ -13,7 +13,7 @@
     pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
     pointer-events: auto;
 
-    &.l7-control-hide {
+    &.l7-control--hide {
       display: none;
     }
   }
@@ -25,7 +25,7 @@
       position: absolute;
       z-index: 1000;
       pointer-events: none;
-      .l7-control {
+      .l7-control:not(.l7-control--hide) {
         margin-@{value}: @l7-control-space;
       }
     }

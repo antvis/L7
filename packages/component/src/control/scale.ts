@@ -15,8 +15,9 @@ export default class Scale extends Control<IScaleControlOption> {
   private mScale: HTMLElement;
   private iScale: HTMLElement;
 
-  public getDefault() {
+  public getDefault(option: Partial<IScaleControlOption>) {
     return {
+      ...super.getDefault(option),
       name: 'scale',
       position: PositionType.BOTTOMLEFT,
       maxWidth: 100,

@@ -34,12 +34,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected scene: Container;
 
   /**
-   * 当前气泡所在经纬度
-   * @protected
-   */
-  protected lngLat: ILngLat;
-
-  /**
    * 关闭按钮对应的 DOM
    * @protected
    */
@@ -86,6 +80,19 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @protected
    */
   protected isShow: boolean = true;
+
+  protected get lngLat() {
+    return (
+      this.popupOption.lngLat ?? {
+        lng: 0,
+        lat: 0,
+      }
+    );
+  }
+
+  protected set lngLat(newLngLat: ILngLat) {
+    this.popupOption.lngLat = newLngLat;
+  }
 
   constructor(cfg?: Partial<O>) {
     super();
@@ -275,11 +282,15 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     return this;
   }
 
+  public setLngLat(lngLat: ILngLat | [number, number]): this {
+    return this.setLnglat(lngLat);
+  }
+
   /**
    * 设置 Popup 所在经纬度
    * @param lngLat
    */
-  public setLnglat(lngLat: ILngLat | number[]): this {
+  public setLnglat(lngLat: ILngLat | [number, number]): this {
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {
@@ -288,8 +299,10 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       };
     }
     if (this.mapsService) {
+      // 防止事件重复监听
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
+
       this.mapsService.on('camerachange', this.update);
       this.mapsService.on('viewchange', this.update);
     }
@@ -425,7 +438,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
 
     if (this.popupOption.closeButton) {
-      const closeButton = createL7Icon('l7-icon-guanbi l7-popup-close-button');
+      const closeButton = createL7Icon('l7-icon-guanbi');
+      DOM.addClass(closeButton, 'l7-popup-close-button');
       this.content.appendChild(closeButton);
 
       if (this.popupOption.closeButtonOffsets) {

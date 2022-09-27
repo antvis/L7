@@ -2,7 +2,7 @@ import { ILayer } from '@antv/l7-core';
 import { createL7Icon } from '../utils/icon';
 import SelectControl, {
   ISelectControlOption,
-  OptionItem,
+  ControlOptionItem,
 } from './baseControl/selectControl';
 
 export interface ILayerControlOption extends ISelectControlOption {
@@ -37,7 +37,7 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
       });
   }
 
-  public getLayerOptions(): OptionItem[] {
+  public getLayerOptions(): ControlOptionItem[] {
     return this.layers.map((layer: ILayer) => {
       return {
         text: layer.name,
@@ -47,9 +47,13 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
   }
 
   public setOptions(option: Partial<ILayerControlOption>) {
+    const isLayerChange = this.checkUpdateOption(option, ['layers']);
+    if (isLayerChange) {
+      this.unbindLayerVisibleCallback();
+    }
     super.setOptions(option);
-    if (this.checkUpdateOption(option, ['layers'])) {
-      this.layers.forEach(this.bindLayerVisibleCallback);
+    if (isLayerChange) {
+      this.bindLayerVisibleCallback();
       this.selectValue = this.getLayerVisible();
       this.controlOption.options = this.getLayerOptions();
       this.popper.setContent(this.getPopperContent(this.controlOption.options));
@@ -65,24 +69,28 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
     }
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);
-    this.layers.forEach(this.bindLayerVisibleCallback);
+    this.bindLayerVisibleCallback();
     return super.onAdd();
   }
 
-  public bindLayerVisibleCallback = (layer: ILayer) => {
-    layer.off('show', this.onLayerVisibleChane);
-    layer.off('hide', this.onLayerVisibleChane);
-    layer.on('show', this.onLayerVisibleChane);
-    layer.on('hide', this.onLayerVisibleChane);
+  public bindLayerVisibleCallback = () => {
+    this.layers.forEach((layer) => {
+      layer.on('show', this.onLayerVisibleChane);
+      layer.on('hide', this.onLayerVisibleChane);
+    });
+  };
+
+  public unbindLayerVisibleCallback = () => {
+    this.layers.forEach((layer) => {
+      layer.off('show', this.onLayerVisibleChane);
+      layer.off('hide', this.onLayerVisibleChane);
+    });
   };
 
   public onRemove() {
     this.off('selectChange', this.onSelectChange);
     this.layerService.off('layerChange', this.onLayerChange);
-    this.layers.forEach((layer) => {
-      layer.off('show', this.onLayerVisibleChane);
-      layer.off('hide', this.onLayerVisibleChane);
-    });
+    this.unbindLayerVisibleCallback();
   }
 
   protected onLayerChange = () => {

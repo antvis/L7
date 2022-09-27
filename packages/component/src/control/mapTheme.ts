@@ -2,7 +2,7 @@ import { GaodeMapStyleConfig, MapboxMapStyleConfig } from '../constants';
 import { createL7Icon } from '../utils/icon';
 import SelectControl, {
   ISelectControlOption,
-  OptionItem,
+  ControlOptionItem,
 } from './baseControl/selectControl';
 
 export { MapTheme };
@@ -19,7 +19,7 @@ export default class MapTheme extends SelectControl<ISelectControlOption> {
     };
   }
 
-  public getStyleOptions(): OptionItem[] {
+  public getStyleOptions(): ControlOptionItem[] {
     const mapStyleConfig =
       this.mapsService.getType() === 'mapbox'
         ? MapboxMapStyleConfig

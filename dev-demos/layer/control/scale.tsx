@@ -1,4 +1,4 @@
-import { Mapbox, Scene, Scale, Zoom } from '@antv/l7';
+import { GaodeMapV2, Scene, Scale } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -14,10 +14,11 @@ const Demo: FunctionComponent = () => {
       //   pitch: 0,
       //   zoom: 6.45,
       // }),
-      map: new Mapbox({
+      map: new GaodeMapV2({
         center: [120, 30],
         pitch: 0,
         zoom: 6.45,
+        style: 'normal',
       }),
     });
 
@@ -27,11 +28,11 @@ const Demo: FunctionComponent = () => {
         position: 'rightbottom',
         // imperial: true,
       });
-      const zoom = new Zoom({
-        position: 'rightbottom',
-      });
+      // const zoom = new Zoom({
+      //   position: 'rightbottom',
+      // });
       newScene.addControl(scale);
-      newScene.addControl(zoom);
+      // newScene.addControl(zoom);
       setControl(scale);
     });
   }, []);

@@ -39,7 +39,7 @@ export interface IPopupOption {
   /**
    * 气泡相对偏移
    */
-  offsets: number[];
+  offsets: [number, number];
 
   /**
    * 气泡上的所有鼠标事件是否关闭事件冒泡
