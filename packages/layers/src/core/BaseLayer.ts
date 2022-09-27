@@ -120,6 +120,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   // 待渲染 model 列表
   public models: IModel[] = [];
+  public modelLoaded: boolean = false;
 
   // 每个 Layer 都有一个
   public multiPassRenderer: IMultiPassRenderer;
@@ -1363,6 +1364,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
     this.reRender();
   };
+
+  protected dispatchModelLoad(models: IModel[]) {
+    this.models = models;
+    this.emit('modelLoaded', null);
+    this.modelLoaded = true;
+    this.layerService.throttleRenderLayers();
+  }
 
   protected reRender() {
     this.inited && this.layerService.reRender();

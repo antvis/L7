@@ -30,15 +30,12 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     const shape = this.getModelType();
     this.layerModel = new LineModels[shape](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
     this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
+      this.dispatchModelLoad(models);
     });
   }
 

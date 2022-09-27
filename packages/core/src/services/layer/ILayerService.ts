@@ -267,6 +267,7 @@ export interface ILayer {
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
+  modelLoaded: boolean;
   layerModel: ILayerModel;
   tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层

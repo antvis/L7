@@ -60,6 +60,29 @@ export default () => {
         }
       ]
     };
+
+    const geo2 = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            color: "#f00",
+            name: "杭州"
+          },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [113.8623046875, 31.031055426540206],
+                [116.3232421875, 32.031055426540206],
+                [116.3232421875, 32.590574094954192]
+              ]
+            ]
+          }
+        },
+      ]
+    };
     
     const layer = new PolygonLayer()
       .source(geo, {
@@ -79,7 +102,7 @@ export default () => {
       scene.addLayer(layer);
     
       setTimeout(() => {
-        layer.setData(geo, {
+        layer.setData(geo2, {
           transforms: [
             {
               type: "join",
@@ -88,7 +111,8 @@ export default () => {
               data: dataList2
             }
           ]
-        });
+        })
+        .color("data", (c) => c);
       }, 2000);
     });
     

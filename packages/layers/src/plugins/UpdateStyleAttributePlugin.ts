@@ -21,7 +21,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       if (layer.layerModelNeedUpdate) {
         return;
       }
-      this.updateStyleAtrribute(layer, { styleAttributeService });
+      layer.modelLoaded && this.updateStyleAtrribute(layer, { styleAttributeService });
     });
   }
   private updateStyleAtrribute(
