@@ -19,7 +19,11 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
 
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
       const { usage } = layer.getLayerConfig();
-      if (layer.layerModelNeedUpdate || layer.tileLayer || usage === 'basemap') {
+      if (
+        layer.layerModelNeedUpdate ||
+        layer.tileLayer ||
+        usage === 'basemap'
+      ) {
         return;
       }
       this.updateStyleAtrribute(layer, { styleAttributeService });

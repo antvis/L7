@@ -194,19 +194,22 @@ function dispatchTileVisibleChange(tile: Tile, callback: () => void) {
 
 function layersNeedListen(layers: ILayer[]) {
   let needListen = false;
-  layers.map(layer => {
-    if(layer.type !== 'PointLayer' || 'vectorLayer') {
+  layers.map((layer) => {
+    if (layer.type !== 'PointLayer' || 'vectorLayer') {
       needListen = true;
     }
-  })
+  });
   return needListen;
 }
 
-export function updateTileVisible(tile: Tile, layers: ILayer[], layerService: ILayerService) {
-  
-  if(layers.length === 0) return;
-  
-  if(!layersNeedListen(layers)) {
+export function updateTileVisible(
+  tile: Tile,
+  layers: ILayer[],
+  layerService: ILayerService,
+) {
+  if (layers.length === 0) return;
+
+  if (!layersNeedListen(layers)) {
     updateLayersConfig(layers, 'visible', tile.isVisible);
     layerService.reRender();
     return;

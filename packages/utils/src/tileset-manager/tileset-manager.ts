@@ -13,7 +13,7 @@ import {
   isLatLonBoundsContains,
 } from './utils/bound-buffer';
 import { getTileIndices } from './utils/lonlat-tile';
-import { throttle } from 'lodash'
+import { throttle } from 'lodash';
 
 /**
  * 管理瓦片数据
@@ -71,8 +71,8 @@ export class TilesetManager extends EventEmitter {
   }
 
   public throttleUpdate = throttle((zoom, latLonBounds) => {
-    this.update(zoom, latLonBounds)
-  }, 16)
+    this.update(zoom, latLonBounds);
+  }, 16);
 
   // 更新
   // 1.瓦片序号发生改变 2.瓦片新增 3.瓦片显隐控制
