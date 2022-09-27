@@ -16,8 +16,7 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
   public buildModels() {
     this.layerModel = new TileModel(this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
+      this.dispatchModelLoad(models);
     });
   }
 }

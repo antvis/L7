@@ -131,6 +131,7 @@ export default class TileFactory implements ITileFactory {
       initOptions,
       vectorTileLayer,
       source,
+      needListen = true,
     } = tileLayerOption;
     const { mask, color, layerType, size, shape, usage, basemapColor, basemapSize } = initOptions;
     const FactoryTileLayer = L7Layer ? L7Layer : VectorLayer;
@@ -138,6 +139,7 @@ export default class TileFactory implements ITileFactory {
       visible: tile.isVisible,
       tileOrigin: vectorTileLayer?.l7TileOrigin,
       coord: vectorTileLayer?.l7TileCoord,
+      needListen,
       ...this.getLayerInitOption(initOptions),
     });
 

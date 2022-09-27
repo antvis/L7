@@ -27,9 +27,10 @@ import polygonFillModel from '../../polygon/models/tile';
 
 export default class VectorLayer extends BaseLayer<
   Partial<
-    IPolygonLayerStyleOptions & ILineLayerStyleOptions & IPointLayerStyleOptions
+    IPolygonLayerStyleOptions & ILineLayerStyleOptions & IPointLayerStyleOptions & {needListen: boolean;}
   >
 > {
+  public needListen: boolean = true;
   public isVector: boolean = true;
   public type: string = this.layerType as string || 'vectorLayer';
   // Tip: 单独被 tile 瓦片的渲染链路使用（用于优化性能）
@@ -148,16 +149,13 @@ export default class VectorLayer extends BaseLayer<
     const model = this.getModelType();
     this.layerModel = new model(this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
+      this.dispatchModelLoad(models);
     });
   }
 
   public rebuildModels() {
     this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
+      this.dispatchModelLoad(models);
     });
   }
 

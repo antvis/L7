@@ -26,6 +26,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.init.tap('LayerModelPlugin', () => {
       layer.inited = true;
+      layer.modelLoaded = false;
       const source = layer.getSource();
       if (source.inited) {
         this.initLayerModel(layer);
@@ -34,6 +35,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
 
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
       const source = layer.getSource();
+      layer.modelLoaded = false;
       if (source.inited) {
         this.prepareLayerModel(layer);
       } else {

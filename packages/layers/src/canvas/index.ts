@@ -9,15 +9,12 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
     const modelType = this.getModelType();
     this.layerModel = new CanvasModels[modelType](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
-      this.layerService.throttleRenderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
     this.layerModel.buildModels((models) => {
-      this.models = models;
-      this.emit('modelLoaded', null);
+      this.dispatchModelLoad(models);
     });
   }
 
