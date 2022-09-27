@@ -116,21 +116,22 @@ export default () => {
                   
                   return [{ rasterData, width, height }];
                 },
-                operation: (allBands) => {
-                  const rasterData: number[] = [];
-                  const { width, height } = allBands[0];
-                  const length = width * height;
-                  const band0 = allBands[0];
-                  const band1 = allBands[1];
+                operation: ['', ['band', 0], 2],
+                // operation: (allBands) => {
+                //   const rasterData: number[] = [];
+                //   const { width, height } = allBands[0];
+                //   const length = width * height;
+                //   const band0 = allBands[0];
+                //   const band1 = allBands[1];
                   
-                  for(let i = 0;i < length; i++) {
-                    const v1 = band0.rasterData[i] | 0;
-                    const v2 = band1.rasterData[i] | 0;
-                    rasterData.push(v1 * (1/2) + v2 * (1/2))
-                  }
-                  return rasterData;
-                  // return bands[0].rasterData;
-                }
+                //   for(let i = 0;i < length; i++) {
+                //     const v1 = band0.rasterData[i] | 0;
+                //     const v2 = band1.rasterData[i] | 0;
+                //     rasterData.push(v1 * (1/2) + v2 * (1/2))
+                //   }
+                //   return rasterData;
+                //   // return bands[0].rasterData;
+                // }
               }
             });
     

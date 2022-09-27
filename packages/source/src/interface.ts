@@ -67,6 +67,7 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
+  isRasterData?: boolean;
   rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
   width: number;
   height: number;
