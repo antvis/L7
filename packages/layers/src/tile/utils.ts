@@ -192,14 +192,14 @@ function dispatchTileVisibleChange(tile: Tile, callback: () => void) {
   }
 }
 
-function layersNeedListen(layers: ILayer[]) {
-  let needListen = false;
+function updateImmediately(layers: ILayer[]) {
+  let immediately = true;
   layers.map((layer) => {
-    if (layer.type !== 'PointLayer' || 'vectorLayer') {
-      needListen = true;
+    if (layer.type !== 'PointLayer') {
+      immediately = false;
     }
   });
-  return needListen;
+  return immediately;
 }
 
 export function updateTileVisible(
@@ -209,7 +209,7 @@ export function updateTileVisible(
 ) {
   if (layers.length === 0) return;
 
-  if (!layersNeedListen(layers)) {
+  if (updateImmediately(layers)) {
     updateLayersConfig(layers, 'visible', tile.isVisible);
     layerService.reRender();
     return;
