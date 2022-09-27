@@ -33,6 +33,7 @@ export interface ILayerTileConfig {
   initOptions: ISubLayerInitOptions;
   vectorTileLayer?: any;
   source: ISource;
+  needListen?: boolean;
 }
 
 export interface ITileFactory {
