@@ -26,10 +26,11 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       ) {
         return;
       }
-      this.updateStyleAtrribute(layer, { styleAttributeService });
+      layer.modelLoaded &&
+        this.updateStyleAttribute(layer, { styleAttributeService });
     });
   }
-  private updateStyleAtrribute(
+  private updateStyleAttribute(
     layer: ILayer,
     {
       styleAttributeService,
