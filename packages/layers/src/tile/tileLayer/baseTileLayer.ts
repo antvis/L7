@@ -324,7 +324,7 @@ export default class BaseTileLayer implements ITileLayer {
     }
     this.lastViewStates = { zoom, latLonBounds };
 
-    this.tilesetManager?.update(zoom, latLonBounds);
+    this.tilesetManager?.throttleUpdate(zoom, latLonBounds);
   }
 
   private bindTilesetEvent() {
