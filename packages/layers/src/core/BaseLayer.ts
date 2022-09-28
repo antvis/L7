@@ -1366,6 +1366,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   };
 
   protected dispatchModelLoad(models: IModel[]) {
+    this.models.forEach((model) => model.destroy());
+    this.models = [];
+
     this.models = models;
     this.emit('modelLoaded', null);
     this.modelLoaded = true;
