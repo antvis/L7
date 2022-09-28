@@ -184,7 +184,7 @@ module.exports = {
         order: 6,
       },
       {
-        slug: 'api/imagelayer',
+        slug: 'api/imageLayer',
         title: {
           zh: '图片图层',
           en: 'ImageLayer',
