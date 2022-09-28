@@ -3,6 +3,7 @@ import {
   ILayer,
   IMapService,
   IRendererService,
+  ILayerService,
 } from '@antv/l7-core';
 import { DOM, Tile } from '@antv/l7-utils';
 import { Container } from 'inversify';
@@ -178,5 +179,44 @@ export function updateLayersConfig(layers: ILayer[], key: string, value: any) {
         [key]: value,
       });
     }
+  });
+}
+
+function dispatchTileVisibleChange(tile: Tile, callback: () => void) {
+  if (tile.isVisible) {
+    callback();
+  } else {
+    tileAllLoad(tile, () => {
+      callback();
+    });
+  }
+}
+
+function updateImmediately(layers: ILayer[]) {
+  let immediately = true;
+  layers.map((layer) => {
+    if (layer.type !== 'PointLayer') {
+      immediately = false;
+    }
+  });
+  return immediately;
+}
+
+export function updateTileVisible(
+  tile: Tile,
+  layers: ILayer[],
+  layerService: ILayerService,
+) {
+  if (layers.length === 0) return;
+
+  if (updateImmediately(layers)) {
+    updateLayersConfig(layers, 'visible', tile.isVisible);
+    layerService.reRender();
+    return;
+  }
+
+  dispatchTileVisibleChange(tile, () => {
+    updateLayersConfig(layers, 'visible', tile.isVisible);
+    layerService.reRender();
   });
 }

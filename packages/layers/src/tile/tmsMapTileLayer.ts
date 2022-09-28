@@ -1,7 +1,6 @@
-import { ILayer } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseMapTileLayer';
-import { tileAllLoad, updateLayersConfig } from './utils';
+import { updateTileVisible } from './utils';
 
 export class TMSBaseMapTileLayer extends BaseTileLayer {
   public type: string = 'BaseMapTMS';
@@ -36,7 +35,7 @@ export class TMSBaseMapTileLayer extends BaseTileLayer {
             return;
           }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.updateTileVisible(tile, layers);
+          updateTileVisible(tile, layers, this.layerService);
         }
       });
 
@@ -44,22 +43,5 @@ export class TMSBaseMapTileLayer extends BaseTileLayer {
       // 将事件抛出，图层上可以使用瓦片
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
-  }
-
-  private dispatchTileVisibleChange(tile: Tile, callback: () => void) {
-    if (tile.isVisible) {
-      callback();
-    } else {
-      tileAllLoad(tile, () => {
-        callback();
-      });
-    }
-  }
-
-  private updateTileVisible(tile: Tile, layers: ILayer[]) {
-    this.dispatchTileVisibleChange(tile, () => {
-      updateLayersConfig(layers, 'visible', tile.isVisible);
-      this.layerService.reRender();
-    });
   }
 }
