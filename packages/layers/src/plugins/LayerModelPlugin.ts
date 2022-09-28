@@ -17,7 +17,8 @@ export default class LayerModelPlugin implements ILayerPlugin {
   public prepareLayerModel(layer: ILayer) {
     // 更新Model 配置项
     layer.prepareBuildModel();
-    layer.clearModels();
+    // clear layerModel resource
+    layer.layerModel?.clearModels();
     // 初始化 Model
     layer.buildModels();
     layer.layerModelNeedUpdate = false;
