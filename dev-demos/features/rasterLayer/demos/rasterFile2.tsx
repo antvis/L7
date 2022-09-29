@@ -10,18 +10,7 @@ async function getTiffData() {
     'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
   );
   const arrayBuffer = await response.arrayBuffer();
-  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
-  const image = await tiff.getImage();
-  const width = image.getWidth();
-  const height = image.getHeight();
-  const values = await image.readRasters();
-  return {
-    data: values[0],
-    width,
-    height,
-    min: 0,
-    max: 8000,
-  };
+  return arrayBuffer
 }
 
 export default () => {
@@ -35,15 +24,33 @@ export default () => {
     });
 
     scene.on('loaded', async () => {
-      const tiffdata = await getTiffData();
 
-      const layer = new RasterLayer({});
-      layer
-        .source(tiffdata.data, {
+      const tiffdata = await getTiffData();
+      // const rasterData = { data: tiffdata }
+      const rasterData = [
+        { data: tiffdata },
+        { data: tiffdata }
+      ];
+
+      const layer = new RasterLayer({})
+      layer.source(rasterData, {
           parser: {
             type: 'raster',
-            width: tiffdata.width,
-            height: tiffdata.height,
+            format: async (data, bands) => {
+              // console.log('bands', bands)
+              const tiff = await GeoTIFF.fromArrayBuffer(data);
+              const image = await tiff.getImage();
+              const width = image.getWidth();
+              const height = image.getHeight();
+              const values = await image.readRasters();
+              return { rasterData: values[0], width, height };
+             
+            },
+            // operation: (allBands) => {
+            //   console.log(allBands)
+            //   return allBands[0].rasterData;
+            // },
+            operation: ['*', ['band', 0], 1],
             min: 0,
             max: 80,
             extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
@@ -52,7 +59,7 @@ export default () => {
         .style({
           heightRatio: 100,
           opacity: 0.8,
-          domain: [0, 2000],
+          domain: [0, 4000],
           rampColors: {
             colors: [
               '#FF4818',
@@ -67,7 +74,9 @@ export default () => {
         });
 
       scene.addLayer(layer);
+      
     });
+    
   }, []);
   return (
     <div
