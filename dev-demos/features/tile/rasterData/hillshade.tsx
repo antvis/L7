@@ -12,7 +12,6 @@ export default () => {
         center: [-119.5591, 37.715],
         zoom: 9,
         style: 'mapbox://styles/mapbox/cjaudgl840gn32rnrepcb9b9g',
-        
         token: 'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w3dHk3dnN4MDYzaDNycDkyMDl2bzh6NiJ9.YIrG9kwUpayLj01f6W23Gw'
       }),
     });
