@@ -67,7 +67,6 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
-  isRasterData?: boolean;
   rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
   width: number;
   height: number;
@@ -78,3 +77,15 @@ export interface IRasterFileData {
   bands: number[];
 }
 export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[];
+
+export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
+
+export interface IRasterCfg {
+  format?: IRasterFormat;
+  operation?: IBandsOperation;
+  extent: [number, number, number, number];
+  width: number;
+  height: number;
+  max: number;
+  min: number;
+}

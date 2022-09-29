@@ -1,42 +1,25 @@
-import { IRasterFileData, IRasterFormat, IBandsOperation, IRasterData } from '../../interface';
+import { IRasterFileData, IRasterLayerData, IRasterFormat, IBandsOperation, IRasterData } from '../../interface';
 
 export async function bandsOperation(imageDataList: IRasterFileData[], rasterFormat: IRasterFormat, operation: IBandsOperation|undefined) {
-    let bandData = (await Promise.all(
-    imageDataList.map(({ data, bands }) => rasterFormat(data, bands)),
+    let bandsData = (await Promise.all(
+    imageDataList.map(({ data, bands = [0] }) => rasterFormat(data, bands)),
     )) as IRasterData[];
     // @ts-ignore 
-    bandData = bandData.flat();
-    bandData.map(band => band.isRasterData = true)
+    bandsData = bandsData.flat();
     // Tip: rasterFormat 返回值 rasterData|rasterData[]
 
-    const { width, height } = bandData[0];
+    const { width, height } = bandsData[0];
     let rasterData: HTMLImageElement | Uint8Array | ImageBitmap | null | undefined;
     switch (typeof operation) {
       case 'function':
-        rasterData = operation(bandData) as Uint8Array;
+        rasterData = operation(bandsData) as Uint8Array;
         break;
       case 'object':
-        // console.log('operation bandExpress', operation)
-        // calExpress(operation, bandData)
         // 波段计算表达式 - operation
-        // const bandExpress = [
-        //   '+',
-        //   ['*', ['bands', 0], ['number', 1/2]],
-        //   ['*', ['bands', 1], ['number', 1/3]]
-        // ];
-
-        const testexpress = [
-            '+', 
-            // ['band', 0], 
-            ['*', ['band', 0], 0.5],
-            ['*', ['band', 1], 0.5]
-        ]
-
-        rasterData = calExpress(operation, bandData)
-
+        rasterData = calExpress(operation, bandsData) ;
         break;
       default:
-        rasterData = bandData[0].rasterData;
+        rasterData = bandsData[0].rasterData;
     }
     return {
         rasterData,
@@ -44,24 +27,24 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
         height
     }
 }
-
 /**
  * 根据表达式计算
  * @param express 
- * @param bandData 
+ * @param bandsData 
  */
-function calExpress(express: any[], bandData: IRasterData[]) {
-    const {width, height} = bandData[0];
-    const dataArray = bandData.map(band => band.rasterData) as Uint8Array[];
+function calExpress(express: any[], bandsData: IRasterData[]) {
+    const {width, height} = bandsData[0];
+    const dataArray = bandsData.map(band => band.rasterData) as Uint8Array[];
     const length = width * height;
-    const rasterData = new Uint8Array(length);
+    const rasterData = [];
 
     for(let i = 0;i < length; i++) {
         const exp = JSON.parse(JSON.stringify(express));
         replaceBand(exp, dataArray, i);
-        rasterData[i] = parseExpress(exp) as number;
+        rasterData.push(parseExpress(exp) as number)
+        
     }
-    return rasterData;
+    return rasterData as unknown as Uint8Array;
 }
 
 type IExpress = any[];
@@ -72,7 +55,7 @@ type IExpress = any[];
  * @param dataArray 
  * @param index 
  */
-function replaceBand(express: any[], dataArray: Uint8Array[], index: number) {
+function replaceBand(express: IExpress, dataArray: Uint8Array[], index: number) {
     express.map((e, i) => {
         if(Array.isArray(e)) {
             if(e[0] === 'band') {
@@ -84,11 +67,18 @@ function replaceBand(express: any[], dataArray: Uint8Array[], index: number) {
     })
 }
 
-function checkExpress() {
-
+function checkExpress(express: IExpress) {
+    const [symbol1, symbol2, symbol3] = express;
+    if(symbol1 === undefined || symbol2 === undefined || symbol3 === undefined) {
+        console.warn('Express err!')
+        return false;
+    }
+    return true;
 }
 
-function parseExpress(express: any[]) {
+function parseExpress(express: IExpress) {
+    // if express err，return 0
+    if(!checkExpress(express)) return 0;
     const str = express[0];
     let left = express[1];
     let right = express[2];
@@ -114,5 +104,40 @@ function calNum(str: string, n1: number, n2: number) {
         default:
             console.warn('Calculate symbol err! Return default 0');
             return 0;
+    }
+}
+
+export function isNumberArray(data: IRasterLayerData) {
+    if(Array.isArray(data)) {
+        if(data.length === 0) return true;
+        if(typeof data[0] === 'number') {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    return false;
+}
+
+export function isRasterFileData(data?: IRasterLayerData) {
+    if(data === undefined) return false;
+    if(!Array.isArray(data) && data.data !== undefined) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function isRasterFileDataArray(data: IRasterLayerData) {
+    if(Array.isArray(data)) {
+        if(data.length === 0) return false;
+        if(isRasterFileData(data[0] as IRasterFileData)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 }
