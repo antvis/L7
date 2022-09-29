@@ -116,7 +116,7 @@ export default () => {
                   
                   return [{ rasterData, width, height }];
                 },
-                operation: ['', ['band', 0], 2],
+                operation: ['*', ['band', 0], 2],
                 // operation: (allBands) => {
                 //   const rasterData: number[] = [];
                 //   const { width, height } = allBands[0];

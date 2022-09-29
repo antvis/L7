@@ -16,7 +16,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
         rasterData = operation(bandData) as Uint8Array;
         break;
       case 'object':
-        // console.log('operation bandExpress')
+        // console.log('operation bandExpress', operation)
         // calExpress(operation, bandData)
         // 波段计算表达式 - operation
         // const bandExpress = [
@@ -32,7 +32,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
             ['*', ['band', 1], 0.5]
         ]
 
-        rasterData = calExpress(testexpress, bandData)
+        rasterData = calExpress(operation, bandData)
 
         break;
       default:
@@ -64,6 +64,14 @@ function calExpress(express: any[], bandData: IRasterData[]) {
     return rasterData;
 }
 
+type IExpress = any[];
+
+/**
+ * 将表达式中的指定波段替换为对应波段的栅格数据
+ * @param express 
+ * @param dataArray 
+ * @param index 
+ */
 function replaceBand(express: any[], dataArray: Uint8Array[], index: number) {
     express.map((e, i) => {
         if(Array.isArray(e)) {
@@ -76,10 +84,15 @@ function replaceBand(express: any[], dataArray: Uint8Array[], index: number) {
     })
 }
 
+function checkExpress() {
+
+}
+
 function parseExpress(express: any[]) {
     const str = express[0];
     let left = express[1];
     let right = express[2];
+    
     if(Array.isArray(left)) {
         left = parseExpress(express[1])
     }
@@ -90,10 +103,16 @@ function parseExpress(express: any[]) {
 }
 
 function calNum(str: string, n1: number, n2: number) {
-    switch(str) {
+    // remove spacing - get calculate symbol
+    const symbol = str.replace(/\s+/g, '');
+    
+    switch(symbol) {
         case '+': return n1 + n2;
         case '-': return n1 - n2;
         case '*': return n1 * n2;
         case '/': return n1 / n2;
+        default:
+            console.warn('Calculate symbol err! Return default 0');
+            return 0;
     }
 }
