@@ -11,7 +11,7 @@
   "license": "ISC",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "unpkg": "dist/l7-tree.js",
+  "unpkg": "dist/l7-three.min.js",
   "types": "es/index.d.ts",
   "directories": {
     "lib": "lib",

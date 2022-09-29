@@ -6,6 +6,9 @@ export default {
   cjs: {
     output:'lib'
   },
+  umd: {
+    output: 'dist',
+  },
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
   },
