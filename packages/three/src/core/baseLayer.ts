@@ -1,5 +1,4 @@
-import { ILayer, IMercator, ISourceCFG } from '@antv/l7-core';
-import { BaseLayer } from '@antv/l7-layers';
+import { ILayer, IMercator, ISourceCFG, BaseLayer } from '@antv/l7';
 import {
   AnimationMixer,
   Matrix4,

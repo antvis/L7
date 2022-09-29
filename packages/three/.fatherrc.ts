@@ -8,6 +8,10 @@ export default {
   },
   umd: {
     output: 'dist',
+    externals: {
+      "@antv/l7": "L7",
+      "three": "Three"
+    },
   },
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
