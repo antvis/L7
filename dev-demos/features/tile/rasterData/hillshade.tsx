@@ -12,7 +12,8 @@ export default () => {
         center: [-119.5591, 37.715],
         zoom: 9,
         style: 'mapbox://styles/mapbox/cjaudgl840gn32rnrepcb9b9g',
-        token: 'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w4bXNyeHgzMGl0cjNvbXlmeHFjeDBwZCJ9.05W7JfyT6BVkpu12dYL58w'
+        
+        token: 'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w3dHk3dnN4MDYzaDNycDkyMDl2bzh6NiJ9.YIrG9kwUpayLj01f6W23Gw'
       }),
     });
 
@@ -26,7 +27,7 @@ export default () => {
       layer
         .source(
           // 'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w3dHk3dnN4MDYzaDNycDkyMDl2bzh6NiJ9.YIrG9kwUpayLj01f6W23Gw',
-          'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{z}/{x}/{y}.webp?sku=101xrmKJip7uQ&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w4bXNyeHgzMGl0cjNvbXlmeHFjeDBwZCJ9.05W7JfyT6BVkpu12dYL58w',
+          'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{z}/{x}/{y}.webp?sku=101xrmKJip7uQ&access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w3dHk3dnN4MDYzaDNycDkyMDl2bzh6NiJ9.YIrG9kwUpayLj01f6W23Gw',
           // 'https://b.tiles.mapbox.com/v3/aj.sf-dem/12/657/1589.png',
           // https://b.tiles.mapbox.com/v3/aj.sf-dem/12/659/1589.png
           {
