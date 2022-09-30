@@ -4,8 +4,6 @@ import { ILayer } from '../layer/ILayerService';
 export interface ISceneService {
   destroyed: boolean;
   loaded: boolean;
-  fontFamily: string;
-  loadFont: boolean;
   on(type: string, handle: (...args: any[]) => void): void;
   once(type: string, handle: (...args: any[]) => void): void;
   off(type: string, handle: (...args: any[]) => void): void;

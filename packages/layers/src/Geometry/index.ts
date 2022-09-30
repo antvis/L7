@@ -20,6 +20,7 @@ export default class GeometryLayer extends BaseLayer<
     const modelType = this.getModelType();
     this.layerModel = new GeometryModels[modelType](this);
     this.layerModel.initModels((models) => {
+      
       this.models = models;
       this.emit('modelLoaded', null);
       this.layerService.throttleRenderLayers();

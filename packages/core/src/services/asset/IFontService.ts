@@ -56,6 +56,7 @@ export interface IFontService {
   init(): void;
   addIconGlyphs(glyphs: IIconFontGlyph[]): void;
   addIconFont(name: string, fontUnicode: string): void;
+  addFontFace(fontname: string, fontpath: string): void;
   getIconFontKey(name: string): string;
   getGlyph(name: string): string;
   setFontOptions(option: Partial<IFontOptions>): void;
