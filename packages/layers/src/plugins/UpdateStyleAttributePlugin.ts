@@ -18,13 +18,19 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
     });
 
     layer.hooks.beforeRender.tap('UpdateStyleAttributePlugin', () => {
-      if (layer.layerModelNeedUpdate) {
+      const { usage } = layer.getLayerConfig();
+      if (
+        layer.layerModelNeedUpdate ||
+        layer.tileLayer ||
+        usage === 'basemap'
+      ) {
         return;
       }
-      this.updateStyleAtrribute(layer, { styleAttributeService });
+      layer.modelLoaded &&
+        this.updateStyleAttribute(layer, { styleAttributeService });
     });
   }
-  private updateStyleAtrribute(
+  private updateStyleAttribute(
     layer: ILayer,
     {
       styleAttributeService,

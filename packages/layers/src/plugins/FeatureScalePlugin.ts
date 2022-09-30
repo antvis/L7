@@ -88,7 +88,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
-      if (layer.layerModelNeedUpdate) {
+      const { usage } = layer.getLayerConfig();
+      if (layer.layerModelNeedUpdate || usage === 'basemap') {
         return;
       }
       this.scaleOptions = layer.getScaleOptions();

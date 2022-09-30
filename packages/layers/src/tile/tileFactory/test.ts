@@ -35,7 +35,7 @@ export default class TestTile extends TileFactory {
     
     const properties = features[0].properties;
     
-    const text = new VectorLayer({ layerType: 'PointLayer', usage: 'basemap' })
+    const text = new VectorLayer({ layerType: 'PointLayer', usage: 'basemap', needListen: false })
     .source([properties], {
       parser: {
         type: 'json',
@@ -52,7 +52,7 @@ export default class TestTile extends TileFactory {
       strokeWidth: 2
     });
 
-    const line = new VectorLayer({ layerType: 'LineLayer', usage: 'basemap' })
+    const line = new VectorLayer({ layerType: 'LineLayer', usage: 'basemap', needListen: false })
     .source({
       type: 'FeatureCollection',
       features: features,

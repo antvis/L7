@@ -17,7 +17,8 @@ export default class LayerModelPlugin implements ILayerPlugin {
   public prepareLayerModel(layer: ILayer) {
     // 更新Model 配置项
     layer.prepareBuildModel();
-    layer.clearModels();
+    // clear layerModel resource
+    layer.layerModel?.clearModels();
     // 初始化 Model
     layer.buildModels();
     layer.layerModelNeedUpdate = false;
@@ -26,6 +27,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.init.tap('LayerModelPlugin', () => {
       layer.inited = true;
+      layer.modelLoaded = false;
       const source = layer.getSource();
       if (source.inited) {
         this.initLayerModel(layer);
@@ -34,6 +36,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
 
     layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
       const source = layer.getSource();
+      layer.modelLoaded = false;
       if (source.inited) {
         this.prepareLayerModel(layer);
       } else {
