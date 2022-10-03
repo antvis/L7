@@ -249,6 +249,7 @@ export default class BaseTileLayer implements ITileLayer {
      * layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
      */
     this.parent.on('subLayerClick', (e) => {
+      console.log('subLayerClick')
       this.parent.emit('click', { ...e });
     });
     this.parent.on('subLayerMouseMove', (e) =>
