@@ -5,10 +5,8 @@ import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
 
-async function getTiffData() {
-  const response = await fetch(
-    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
-  );
+async function getTiffData(url: string) {
+  const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
   return arrayBuffer
 }
@@ -18,18 +16,22 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        center: [121.268, 30.3628],
+        center: [110, 30.3628],
         zoom: 3,
       }),
     });
 
     scene.on('loaded', async () => {
-
-      const tiffdata = await getTiffData();
+      // 
+      const url1 = 'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat';
+      // 全国夜光图
+      const url2 = 'https://gw.alipayobjects.com/zos/antvdemo/assets/light_clip/lightF182013.tiff'
+      const tiffdata = await getTiffData(url1);
+      const tiffdata2 = await getTiffData(url2);
       // const rasterData = { data: tiffdata }
       const rasterData = [
         { data: tiffdata },
-        { data: tiffdata }
+        { data: tiffdata2 }
       ];
 
       const layer = new RasterLayer({})
@@ -52,7 +54,7 @@ export default () => {
             //   console.log(allBands)
             //   return allBands[0].rasterData;
             // },
-            operation: ['*', ['band', 0], 1],
+            operation: ['+', ['+', ['band', 0], 90], ['*', ['band', 1], 50]],
             min: 0,
             max: 80,
             extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
@@ -67,9 +69,9 @@ export default () => {
               '#FF4818',
               '#F7B74A',
               '#FFF598',
-              '#91EABC',
-              '#2EA9A1',
-              '#206C7C',
+              '#333',
+              '#222',
+              '#000',
             ].reverse(),
             positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
           },
