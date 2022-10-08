@@ -3,10 +3,12 @@ import { PositionName } from '../component/IControlService';
 import { ILayerConfig } from '../layer/ILayerService';
 import { IMapWrapper } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
+import { RequestParameters } from '@antv/l7-utils';
+
 export interface ISceneConfig extends IRenderConfig {
   id: string | HTMLDivElement;
   canvas?: HTMLCanvasElement;
-  gl?: any,
+  gl?: any;
   hasBaseMap?: boolean;
   map: IMapWrapper;
   logoPosition?: PositionName;
@@ -16,9 +18,10 @@ export interface ISceneConfig extends IRenderConfig {
   pickBufferScale?: number;
   // TODO: 场景是否支持 stencil mask
   stencil?: boolean;
+  transformRequest?: (
+    requestParameters: Partial<RequestParameters>,
+  ) => RequestParameters;
 }
-
-
 
 export interface IGlobalConfigService {
   /**

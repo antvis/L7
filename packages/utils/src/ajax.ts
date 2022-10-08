@@ -54,7 +54,9 @@ function makeFetchRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
 ) {
-  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
+  const url = Array.isArray(requestParameters.url)
+    ? requestParameters.url[0]
+    : requestParameters.url;
   const request = new Request(url, {
     method: requestParameters.method || 'GET',
     body: requestParameters.body,
@@ -93,12 +95,7 @@ function makeFetchRequest(
         .blob()
         .then((body) =>
           callback(
-            new AJAXError(
-              response.status,
-              response.statusText,
-              url,
-              body,
-            ),
+            new AJAXError(response.status, response.statusText, url, body),
           ),
         );
     })
@@ -112,7 +109,12 @@ function makeXMLHttpRequest(
   callback: ResponseCallback<any>,
 ) {
   const xhr = new $XMLHttpRequest();
-  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
+  // 自定义修改request参数
+  transformRequestConfig?.callback(requestParameters);
+
+  const url = Array.isArray(requestParameters.url)
+    ? requestParameters.url[0]
+    : requestParameters.url;
 
   xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
@@ -156,9 +158,7 @@ function makeXMLHttpRequest(
       const body = new Blob([xhr.response], {
         type: xhr.getResponseHeader('Content-Type'),
       });
-      callback(
-        new AJAXError(xhr.status, xhr.statusText, url, body),
-      );
+      callback(new AJAXError(xhr.status, xhr.statusText, url, body));
     }
   };
   xhr.send(requestParameters.body);
@@ -167,34 +167,37 @@ function makeXMLHttpRequest(
 }
 
 export interface IXhrRequestResult {
-  err?: Error | Error[] | null,
-  data?: any | null,
-  cacheControl?: string | null,
-  expires?: string | null,
+  err?: Error | Error[] | null;
+  data?: any | null;
+  cacheControl?: string | null;
+  expires?: string | null;
   xhr?: any;
 }
 export function makeXMLHttpRequestPromise(
   requestParameters: RequestParameters,
 ): Promise<IXhrRequestResult> {
   return new Promise((resolve, reject) => {
-    makeXMLHttpRequest(requestParameters, (error, data, cacheControl, expires, xhr) => {
-      if(error) {
-        reject({
-          err: error,
-          data: null,
-          xhr
-        });
-      } else {
-        resolve({
-          err: null,
-          data ,
-          cacheControl,
-          expires,
-          xhr,
-        });
-      }
-    })
-  })
+    makeXMLHttpRequest(
+      requestParameters,
+      (error, data, cacheControl, expires, xhr) => {
+        if (error) {
+          reject({
+            err: error,
+            data: null,
+            xhr,
+          });
+        } else {
+          resolve({
+            err: null,
+            data,
+            cacheControl,
+            expires,
+            xhr,
+          });
+        }
+      },
+    );
+  });
 }
 
 function makeRequest(
@@ -346,3 +349,12 @@ export interface IRasterParser {
   width: number;
   height: number;
 }
+
+/**
+ * @description 修改默认request中url、header等参数，返回修改后的参数
+ * @property {function} callback 回调函数
+ */
+export const transformRequestConfig = {
+  callback: (requestParameters: RequestParameters): RequestParameters =>
+    requestParameters,
+};
