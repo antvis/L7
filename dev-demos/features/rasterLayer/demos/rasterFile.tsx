@@ -8,6 +8,7 @@ import * as GeoTIFF from 'geotiff';
 async function getTiffData() {
   const response = await fetch(
     'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+    // 'http://127.0.0.1:3333/p.tif',
   );
   const arrayBuffer = await response.arrayBuffer();
   return arrayBuffer
@@ -39,6 +40,9 @@ export default () => {
             format: async (data, bands) => {
 
               const tiff = await GeoTIFF.fromArrayBuffer(data);
+              const imageCount = await tiff.getImageCount();
+              console.log('imageCount', imageCount)
+
               const image = await tiff.getImage();
               const width = image.getWidth();
               const height = image.getHeight();
