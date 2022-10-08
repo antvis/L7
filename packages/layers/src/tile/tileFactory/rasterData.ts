@@ -46,6 +46,7 @@ export default class RasterTiffTile extends TileFactory {
       .style({
         colorTexture,
         opacity,
+        // TODO: 目前从 domain 从父瓦片图层的 style 进行配置，后续考虑从每个时机请求的栅格文件中进行配置
         domain,
         clampHigh,
         clampLow,

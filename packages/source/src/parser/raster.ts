@@ -1,10 +1,9 @@
 import { IParserData } from '@antv/l7-core';
 import { IRasterLayerData, IRasterCfg, IRasterFileData } from '../interface';
 import {
-  isNumberArray,
-  isRasterFileDataArray,
   bandsOperation,
 } from '../utils/bandOperation/bands';
+import { isNumberArray, isRasterFileDataArray } from '../utils/util';
 
 export default function raster(
   data: IRasterLayerData,

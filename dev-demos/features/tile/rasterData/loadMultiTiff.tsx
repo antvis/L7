@@ -93,6 +93,7 @@ export default () => {
             },
             {
               url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff'
+              // default bands: [0]
             }
           ]
           const tileSource = new Source(urls,
@@ -103,7 +104,8 @@ export default () => {
                 tileSize: 256,
                 maxZoom: 13.1,
                 format: async (data, bands) => {
-                
+                  // current raster file bands
+                  console.log('bands', bands)
 
                   const tiff = await GeoTIFF.fromArrayBuffer(data);
                   const image = await tiff.getImage(bands[0]);
@@ -112,10 +114,11 @@ export default () => {
                   const values = await image.readRasters();
                   const rasterData = values[0];
                   
-                 
-                  
-                  return [{ rasterData, width, height }];
+                  // return bandData | bandData[]
+                  // return [{ rasterData, width, height }];
+                  return { rasterData, width, height };
                 },
+                 // bands: [0, 1]
                 operation: ['*', ['band', 0], 2],
                 // operation: (allBands) => {
                 //   const rasterData: number[] = [];
