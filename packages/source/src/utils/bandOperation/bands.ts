@@ -12,6 +12,14 @@ import {
  * @returns 
  */
 export async function bandsOperation(imageDataList: IRasterFileData[], rasterFormat: IRasterFormat, operation: IBandsOperation|undefined) {
+    if(imageDataList.length === 0) {
+      return {
+        rasterData: [0],
+        width: 1,
+        heigh: 1
+      }
+    }
+
     let bandsData = (await Promise.all(
     imageDataList.map(({ data, bands = [0] }) => rasterFormat(data, bands)),
     )) as IRasterData[];
@@ -19,6 +27,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
     bandsData = bandsData.flat();
     // Tip: rasterFormat 返回值 rasterData|rasterData[]
 
+    // 多个栅格数据必须是相同大小才能进行相互之间的运算
     const { width, height } = bandsData[0];
     let rasterData: HTMLImageElement | Uint8Array | ImageBitmap | null | undefined;
     switch (typeof operation) {
