@@ -37,7 +37,7 @@ export default () => {
           parser: {
             type: 'raster',
             format: async (data, bands) => {
-              // console.log('bands', bands)
+              console.log('bands', bands)
               const tiff = await GeoTIFF.fromArrayBuffer(data);
               const image = await tiff.getImage();
               const width = image.getWidth();
