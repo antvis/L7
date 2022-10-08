@@ -5,7 +5,7 @@ import {
   Tile,
   TileLoadParams,
 } from '@antv/l7-utils';
-import { getTileUrl } from './url';
+import { getTileUrl } from './request';
 import { IRasterFormat, IBandsOperation } from '../../interface';
 import { getRasterFile } from './getRasterData';
 
@@ -26,6 +26,7 @@ export const getTileBuffer = async (
   operation?: IBandsOperation,
 ): Promise<HTMLImageElement | ImageBitmap> => {
   const requestParameters = {
+    // getTileUrl 将原始的 url 路径进行转化（多服务器）
     url: getTileUrl(url, tileParams),
   };
   return new Promise((resolve, reject) => {

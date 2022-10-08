@@ -1,5 +1,30 @@
 import { IRasterFileData, IRasterLayerData, IRasterFormat, IBandsOperation, IRasterData } from '../../interface';
 import { mathematical } from './math';
+import {
+    ResponseCallback,
+} from '@antv/l7-utils';
+
+
+/**
+ * 处理每个请求得到的栅格文件数据
+ */
+export async function handleRasterFiles(
+    rasterFiles: IRasterFileData[], 
+    rasterFormat: IRasterFormat, 
+    operation: IBandsOperation | undefined, 
+    callback: ResponseCallback<any>
+) {
+    const { rasterData, width, height } = await bandsOperation(rasterFiles, rasterFormat, operation)
+    const defaultMIN = 0;
+    const defaultMAX = 8000;
+    callback(null, {
+      data: rasterData,
+      width,
+      height,
+      min: defaultMIN,
+      max: defaultMAX,
+    });
+  }
 
 export async function bandsOperation(imageDataList: IRasterFileData[], rasterFormat: IRasterFormat, operation: IBandsOperation|undefined) {
     let bandsData = (await Promise.all(
