@@ -15,17 +15,16 @@ export default class RasterTiffTile extends TileFactory {
 
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
     const {
+      colorTexture,
       opacity,
       domain,
       clampHigh,
       clampLow,
-      rampColors,
-      rampColorsData,
       mask,
     } = initOptions;
 
-    const rasterdata = tile.data;
-    if (!rasterdata.data) {
+    const rasterData = tile.data;
+    if (!rasterData.data) {
       console.warn('raster data not exist!');
       return {
         layers: [],
@@ -36,26 +35,27 @@ export default class RasterTiffTile extends TileFactory {
       visible: tile.isVisible,
       mask,
     })
-      .source(rasterdata.data, {
+      .source(rasterData.data, {
         parser: {
           type: 'raster',
-          width: rasterdata.width,
-          height: rasterdata.height,
+          width: rasterData.width,
+          height: rasterData.height,
           extent: tile.bboxPolygon.bbox,
         },
       })
       .style({
+        colorTexture,
         opacity,
         domain,
         clampHigh,
         clampLow,
-        rampColors,
-        rampColorsData,
       });
     this.emitEvent([layer], false);
 
     registerLayers(this.parentLayer, [layer]);
-
+    layer.once('modelLoaded', () => {
+      tile.layerLoad();
+    })
     return {
       layers: [layer],
       layerIDList: [layer.id],

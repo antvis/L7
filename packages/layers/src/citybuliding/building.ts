@@ -6,12 +6,13 @@ export default class CityBuildingLayer extends BaseLayer {
   public buildModels() {
     this.layerModel = new CityBuildModel(this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   public setLight(t: number) {
     this.updateLayerConfig({

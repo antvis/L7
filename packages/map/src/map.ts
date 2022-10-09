@@ -121,7 +121,7 @@ export class Map extends Camera {
   public resize(eventData?: any) {
     const [width, height] = this.containerDimensions();
     this.transform.resize(width, height);
-    // TODO: 小程序环境不需要执行后续动作
+    // 小程序环境不需要执行后续动作
     if (isMini) {
       return this;
     }

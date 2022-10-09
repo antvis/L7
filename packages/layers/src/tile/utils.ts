@@ -3,9 +3,17 @@ import {
   ILayer,
   IMapService,
   IRendererService,
+  ILayerService,
 } from '@antv/l7-core';
 import { DOM, Tile } from '@antv/l7-utils';
 import { Container } from 'inversify';
+
+export const tileVectorParser = ['mvt', 'geojsonvt', 'testTile'];
+
+export function isVectorTile(parserType: string) {
+  return tileVectorParser.indexOf(parserType) >= 0;
+}
+
 export function registerLayers(parentLayer: ILayer, layers: ILayer[]) {
   layers.map((layer) => {
     const container = createLayerContainer(
@@ -127,4 +135,88 @@ export function readPixel(
     data: new Uint8Array(1 * 1 * 4),
   });
   return pickedColors;
+}
+
+export function isTileLoaded(tile: Tile) {
+  return tile.layerIDList.length === tile.loadedLayers;
+}
+
+export function isTileChildLoaded(tile: Tile) {
+  const childs = tile.children;
+  return childs.filter((child) => isTileLoaded(child)).length === childs.length;
+}
+
+export function isTileParentLoaded(tile: Tile) {
+  const parent = tile.parent;
+  if (!parent) {
+    return true;
+  } else {
+    return isTileLoaded(parent);
+  }
+}
+
+export function tileAllLoad(tile: Tile, callback: () => void) {
+  const timer = window.setInterval(() => {
+    const tileLoaded = isTileLoaded(tile);
+    const tileChildLoaded = isTileChildLoaded(tile);
+    const tileParentLoaded = isTileParentLoaded(tile);
+    if (tileLoaded && tileChildLoaded && tileParentLoaded) {
+      callback();
+      window.clearInterval(timer);
+    }
+  }, 36);
+}
+
+export function updateLayersConfig(layers: ILayer[], key: string, value: any) {
+  layers.map((layer) => {
+    if (key === 'mask') {
+      // Tip: 栅格瓦片生效、设置全局的 mask、瓦片被全局的 mask 影响
+      layer.style({
+        mask: value,
+      });
+    } else {
+      layer.updateLayerConfig({
+        [key]: value,
+      });
+    }
+  });
+}
+
+function dispatchTileVisibleChange(tile: Tile, callback: () => void) {
+  if (tile.isVisible) {
+    callback();
+  } else {
+    tileAllLoad(tile, () => {
+      callback();
+    });
+  }
+}
+
+function updateImmediately(layers: ILayer[]) {
+  let immediately = true;
+  layers.map((layer) => {
+    if (layer.type !== 'PointLayer') {
+      immediately = false;
+    }
+  });
+  return immediately;
+}
+
+export function updateTileVisible(
+  tile: Tile,
+  layers: ILayer[],
+  layerService: ILayerService,
+) {
+  if (layers.length === 0) return;
+
+  if (updateImmediately(layers)) {
+    updateLayersConfig(layers, 'visible', tile.isVisible);
+    layerService.reRender();
+    return;
+  }
+
+  dispatchTileVisibleChange(tile, () => {
+    updateLayersConfig(layers, 'visible', tile.isVisible);
+    layerService.reRender();
+  });
 }

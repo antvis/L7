@@ -5,7 +5,7 @@ const scene = new Scene({
   map: new Earth({})
 });
 
-// TODO: 地球模式下背景色默认为 #000 通过 setBgColor 方法我们可以设置可视化层的背景色
+// 地球模式下背景色默认为 #000 通过 setBgColor 方法我们可以设置可视化层的背景色
 scene.setBgColor('#333');
 
 const earthlayer = new EarthLayer()
@@ -20,7 +20,7 @@ const earthlayer = new EarthLayer()
   .color('#2E8AE6')
   .shape('fill')
   .style({
-    globelOtions: {
+    globalOptions: {
       ambientRatio: 0.6, // 环境光
       diffuseRatio: 0.4, // 漫反射
       specularRatio: 0.1 // 高光反射
@@ -30,10 +30,7 @@ const earthlayer = new EarthLayer()
 
 const atomLayer = new EarthLayer()
   .color('#2E8AE6')
-  .shape('atomSphere')
-  .style({
-    opacity: 1
-  });
+  .shape('atomSphere');
 
 const bloomLayer = new EarthLayer().color('#fff').shape('bloomSphere')
   .style({
@@ -66,7 +63,6 @@ scene.on('loaded', () => {
           duration: 1
         })
         .style({
-          opacity: 1,
           segmentNumber: 60,
           globalArcHeight: 20
         });

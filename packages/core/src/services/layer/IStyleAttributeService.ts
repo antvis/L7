@@ -184,10 +184,6 @@ export interface IStyleAttributeUpdateOptions {
 }
 
 export interface IStyleAttributeService {
-  // registerDefaultStyleOptions(
-  //   layerName: string,
-  //   options: ILayerStyleOptions,
-  // ): void;
   attributesAndIndices: {
     attributes: {
       [attributeName: string]: IAttribute;

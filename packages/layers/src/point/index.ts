@@ -2,20 +2,32 @@ import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IPointLayerStyleOptions } from '../core/interface';
 import PointModels, { PointType } from './models/index';
+import { isVectorTile } from '../tile/utils';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
+  public defaultSourceConfig = {
+    data: [],
+    options: {
+      parser: {
+        type: 'json',
+        x: 'lng',
+        y: 'lat',
+      },
+    },
+  };
+
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.layerService.updateLayerRenderList();
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
 
   /**
@@ -25,7 +37,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public getModelTypeWillEmptyData(): PointType {
     if (this.shapeOption) {
       const { field, values } = this.shapeOption;
-      const { shape2d, shape3d } = this.getLayerConfig();
+      const { shape2d } = this.getLayerConfig();
 
       const iconMap = this.iconService.getIconMap();
 
@@ -69,8 +81,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       text: {
         blend: 'normal',
       },
-      vectorpoint: {},
+      vectorPoint: {},
       tile: {},
+      tileText: {},
       earthFill: {},
       earthExtrude: {},
     };
@@ -78,25 +91,10 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected getModelType(): PointType {
-    const PointTypes = [
-      'fillImage',
-      'fill',
-      'radar',
-      'image',
-      'normal',
-      'simplePoint',
-      'extrude',
-      'text',
-      'vectorpoint',
-      'tile',
-      'earthFill',
-      'earthExtrude',
-    ];
-    if (this.layerSource.parser.type === 'mvt') {
-      return 'vectorpoint';
+    const parserType = this.layerSource.getParserType();
+    if (isVectorTile(parserType)) {
+      return 'vectorPoint';
     }
-
-    // pointlayer
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
     const { shape2d, shape3d } = this.getLayerConfig();

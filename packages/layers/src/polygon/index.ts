@@ -5,16 +5,25 @@ import PolygonModels, { PolygonModelType } from './models/';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
+  public defaultSourceConfig: {
+    data: [];
+    options: {
+      parser: {
+        type: 'geojson';
+      };
+    };
+  };
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new PolygonModels[shape](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   protected getConfigSchema() {
     return {

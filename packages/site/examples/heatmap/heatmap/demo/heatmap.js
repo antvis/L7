@@ -1,11 +1,10 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
+  map: new GaodeMap({
     style: 'dark',
-    pitch: 0,
     center: [ 127.5671666579043, 7.445038892195569 ],
     zoom: 2.632456779444394
   })
@@ -23,7 +22,6 @@ scene.on('loaded', () => {
         .style({
           intensity: 2,
           radius: 20,
-          opacity: 1.0,
           rampColors: {
             colors: [
               '#FF4818',

@@ -50,9 +50,9 @@ module.exports = {
     '\\.(less|css)$': 'jest-less-loader',
     '\\.png$': 'jest-file-loader',
   },
-  setupFilesAfterEnv: ['<rootDir>jest/setupTests.ts'],
-  snapshotSerializers: ['enzyme-to-json/serializer'],
-  coverageReporters: ['html'],
+  setupFilesAfterEnv: [ '<rootDir>jest/setupTests.ts' ],
+  snapshotSerializers: [ 'enzyme-to-json/serializer' ],
+  coverageReporters: ['html', 'lcov', 'clover'],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageThreshold: {
     global: {

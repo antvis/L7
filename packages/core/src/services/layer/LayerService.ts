@@ -4,10 +4,10 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
-import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
+import { throttle } from 'lodash';
 
 @injectable()
 export default class LayerService extends EventEmitter<LayerServiceEvent>
@@ -39,8 +39,15 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
+  public reRender = throttle(() => {
+    this.updateLayerRenderList();
+    this.renderLayers();
+  }, 32)
+
+  public throttleRenderLayers = throttle(() => {
+    this.renderLayers();
+  }, 16)
+
 
   public add(layer: ILayer) {
     if (this.sceneInited) {
@@ -94,8 +101,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
       this.layers.splice(layerIndex, 1);
     }
     if (refresh) {
-      this.updateLayerRenderList();
-      this.renderLayers();
+      this.throttleRenderLayers();
     }
     this.emit('layerChange', this.layers);
   }
@@ -161,18 +167,11 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
       }
       layer.hooks.afterRender.call();
     }
-
-    // this.layerList.forEach((layer) => {
-    //   layer.hooks.beforeRenderData.call();
-    //   layer.hooks.beforeRender.call();
-    //   layer.render();
-    //   layer.hooks.afterRender.call();
-    // });
     this.alreadyInRendering = false;
   }
 
   public updateLayerRenderList() {
-    // TODO: 每次更新都是从 layers 重新构建
+    // Tip: 每次更新都是从 layers 重新构建
     this.layerList = [];
     this.layers
       .filter((layer) => layer.inited)

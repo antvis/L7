@@ -1,4 +1,4 @@
-### point fillImage
+### point - fillImage
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';

@@ -1,11 +1,10 @@
 import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
+  map: new GaodeMap({
     center: [ 7.65, 45.053 ],
-    pitch: 0,
     zoom: 12,
     style: 'dark'
   })
@@ -64,10 +63,6 @@ scene.on('loaded', () => {
           default:
             return '#FFE3E3';
           }
-          // return v < 0 ? 'rgb(60,255,255)' : 'rgb(255,255,60)';
-        })
-        .style({
-          opacity: 1
         })
         .animate({
           interval: 1, // 间隔

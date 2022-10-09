@@ -4,17 +4,38 @@ import LineModels, { LineModelType } from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
+  public arrowInsertCount: number = 0;
+  public defaultSourceConfig = {
+    data: [
+      {
+        lng1: 100,
+        lat1: 30.0,
+        lng2: 130,
+        lat2: 30,
+      },
+    ],
+    options: {
+      parser: {
+        type: 'json',
+        x: 'lng1',
+        y: 'lat1',
+        x1: 'lng2',
+        y1: 'lat2',
+      },
+    },
+  };
 
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new LineModels[shape](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
 
   protected getConfigSchema() {

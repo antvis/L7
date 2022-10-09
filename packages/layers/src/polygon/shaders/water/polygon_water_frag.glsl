@@ -5,8 +5,6 @@ uniform float u_opacity: 1.0;
 
 varying vec4 v_Color;
 varying vec2 v_uv;
-varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
-
 
 float rand(vec2 n) { return 0.5 + 0.5 * fract(sin(dot(n.xy, vec2(12.9898, 78.233)))* 43758.5453); }
 
@@ -64,7 +62,7 @@ float calSpc() {
 }
 
 void main() {
-  float opacity = styleMappingMat[0][0];
+  float opacity = u_opacity;
   gl_FragColor = v_Color;
   gl_FragColor.a *= opacity;
 

@@ -85,7 +85,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           u_DevicePixelRatio: $window.devicePixelRatio,
           // u_ModelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
-          // TODO: 当前地图是否在拖动
+          // Tip: 当前地图是否在拖动
           u_shaderPick: Number(layer.getShaderPickStat()),
         });
       });

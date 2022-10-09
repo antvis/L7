@@ -34,7 +34,7 @@ function adjustData2Amap2Coordinates(
       // 单个的点数据
       // @ts-ignore
       mappedData
-        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        // 避免经纬度被重复计算导致坐标位置偏移
         .filter((d) => !d.originCoordinates)
         .map((d) => {
           d.version = Version['GAODE2.x'];
@@ -47,7 +47,7 @@ function adjustData2Amap2Coordinates(
       // 连续的线、面数据
       // @ts-ignore
       mappedData
-        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        // 避免经纬度被重复计算导致坐标位置偏移
         .filter((d) => !d.originCoordinates)
         .map((d) => {
           d.version = Version['GAODE2.x'];

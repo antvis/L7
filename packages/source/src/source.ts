@@ -245,18 +245,22 @@ export default class Source extends EventEmitter implements ISource {
     //   c++
     // }
     // console.log('t', new Date().getTime() - t)
-
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
+
+    // 为瓦片图层的父图层创建数据瓦片金字塔管理器
+    this.tileset = this.initTileset();
+
+    // 判断当前 source 是否需要计算范围
+    if(parser.cancelExtent) return;
+
     // 计算范围
     this.extent = extent(this.data.dataArray);
     this.setCenter(this.extent);
     this.invalidExtent =
       this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
-    // 瓦片数据
-    this.tileset = this.initTileset();
   }
 
   private setCenter(bbox: BBox) {

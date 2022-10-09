@@ -1,40 +1,25 @@
-### markerLayer
+### marker-layer
 
 ```tsx
 import { Marker, MarkerLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
-    const gaodeV1Scene = new Scene({
-      id: 'gaodeV1',
-      map: new GaodeMap({
+    const scene = new Scene({
+      id: 'map',
+      map: new GaodeMapV2({
         center: [105, 30.258134],
-        zoom: 2,
+        zoom: 3,
       }),
     });
-    // const gaodeV2Scene = new Scene({
-    //   id: 'gaodeV2',
-    //   map: new GaodeMapV2({
-    //     center: [105, 30.258134],
-    //     zoom: 3,
-    //   }),
-    // });
-    const mapboxScene = new Scene({
-      id: 'mapbox',
-      map: new Mapbox({
-        center: [120, 30],
-        zoom: 2,
-      }),
-    });
-
-    addMarkers(gaodeV1Scene);
-    // addMarkers(gaodeV2Scene);
-    addMarkers(mapboxScene);
+    // addMarkers(scene);
+    testRemoveMarkerLayer(scene);
+    // testClearMarkerLayer(scene);
   }, []);
 
-  const addMarkers = (s) => {
+  const addMarkers = (scene) => {
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
     )
@@ -43,20 +28,77 @@ export default () => {
         const markerLayer = new MarkerLayer();
         for (let i = 0; i < 400; i++) {
           const { coordinates } = nodes.features[i].geometry;
-          const el = document.createElement('label');
-          el.textContent = coordinates[1];
-          el.style.background = getColor(coordinates[1]);
-          el.style.borderColor = getColor(coordinates[1]);
-
-          const marker = new Marker({
-            element: el,
-          }).setLnglat({
+          const marker = new Marker().setLnglat({
             lng: coordinates[0],
             lat: coordinates[1],
           });
           markerLayer.addMarker(marker);
         }
-        s.addMarkerLayer(markerLayer);
+        scene.addMarkerLayer(markerLayer);
+      });
+  };
+
+  // bugfix验证：执行scene.removeMarkerLayer后，缩放图层marker数据还原
+  const testRemoveMarkerLayer = (scene) => {
+    fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
+    )
+      .then((res) => res.json())
+      .then((nodes) => {
+        const markerLayer = new MarkerLayer({
+          cluster: true,
+        });
+        for (let i = 0; i < nodes.features.length; i++) {
+          const { coordinates } = nodes.features[i].geometry;
+          const marker = new Marker().setLnglat({
+            lng: coordinates[0],
+            lat: coordinates[1],
+          });
+          markerLayer.addMarker(marker);
+        }
+        scene.addMarkerLayer(markerLayer);
+        // 3秒后删除图层
+        setTimeout(() => {
+          scene.removeMarkerLayer(markerLayer);
+        }, 3000);
+      });
+  };
+
+  // bugfix验证：执行markerLayer.clear后，图层聚合能力失效
+  const testClearMarkerLayer = (scene) => {
+    fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
+    )
+      .then((res) => res.json())
+      .then((nodes) => {
+        const markerLayer = new MarkerLayer({
+          cluster: true,
+        });
+
+        for (let i = 0; i < nodes.features.length; i++) {
+          const { coordinates } = nodes.features[i].geometry;
+          const marker = new Marker().setLnglat({
+            lng: coordinates[0],
+            lat: coordinates[1],
+          });
+          markerLayer.addMarker(marker);
+        }
+        scene.addMarkerLayer(markerLayer);
+
+        setTimeout(() => {
+          if (markerLayer.getMarkers().length > 0) {
+            markerLayer.clear();
+          }
+
+          for (let i = 0; i < 200; i++) {
+            const { coordinates } = nodes.features[i].geometry;
+            const marker = new Marker().setLnglat({
+              lng: coordinates[0],
+              lat: coordinates[1],
+            });
+            markerLayer.addMarker(marker);
+          }
+        }, 3 * 1000);
       });
   };
 
@@ -89,15 +131,13 @@ export default () => {
   };
 
   return (
-    <>
-      <h2>400 个节点测试</h2>
-
-      <h4>高德V1</h4>
-      <div id="gaodeV1" style={{ height: '500px', position: 'relative' }} />
-
-      <h4>Mapbox</h4>
-      <div id="mapbox" style={{ height: '500px', position: 'relative' }} />
-    </>
+    <div
+      id="map"
+      style={{
+        height: '500px',
+        position: 'relative',
+      }}
+    />
   );
 };
 ```

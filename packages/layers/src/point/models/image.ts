@@ -135,9 +135,6 @@ export default class ImageModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -182,8 +179,8 @@ export default class ImageModel extends BaseModel {
         min: 'linear mipmap nearest',
         mipmap: true,
       });
-      // TODO: 更新完纹理后在更新的图层的时候需要更新所有的图层
-      this.layer.renderLayers();
+      // 更新完纹理后在更新的图层的时候需要更新所有的图层
+      this.layerService.throttleRenderLayers();
       return;
     }
     this.texture = createTexture2D({

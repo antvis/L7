@@ -1,26 +1,15 @@
 
 uniform float u_additive;
-
-varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
+uniform float u_opacity: 1.0;
 
 varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
-
+varying vec2 v_exteude;
 #pragma include "sdf_2d"
 #pragma include "picking"
 
 void main() {
-  int shape = int(floor(v_data.w + 0.5));
-
-  vec4 textrueStroke = vec4(
-    styleMappingMat[1][0],
-    styleMappingMat[1][1],
-    styleMappingMat[1][2],
-    styleMappingMat[1][3]
-  );
-
-  float opacity = styleMappingMat[0][0];
 
   lowp float antialiasblur = v_data.z;
   float r = v_radius / (v_radius);
@@ -30,7 +19,7 @@ void main() {
 
   float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
-  gl_FragColor = vec4(v_color.rgb, v_color.a * opacity);
+  gl_FragColor = vec4(v_color.rgb, v_color.a * u_opacity);
 
   if(u_additive > 0.0) {
     gl_FragColor *= opacity_t;
@@ -42,7 +31,7 @@ void main() {
     gl_FragColor = filterColor(gl_FragColor);
   }
 
-  vec2 extrude =  styleMappingMat[2].ba;
+  vec2 extrude =  v_exteude;
   vec2 dir = normalize(extrude);
   vec2 baseDir = vec2(1.0, 0.0);
   float pi = 3.14159265359;

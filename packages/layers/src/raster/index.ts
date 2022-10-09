@@ -7,12 +7,13 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     const modelType = this.getModelType();
     this.layerModel = new RasterModels[modelType](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   protected getConfigSchema() {
     return {
@@ -45,6 +46,5 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       default:
         return 'raster';
     }
-    // return 'raster';
   }
 }

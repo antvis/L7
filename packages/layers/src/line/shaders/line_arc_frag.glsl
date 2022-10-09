@@ -11,7 +11,7 @@ varying vec4 v_dash_array;
 varying vec4 v_color;
 
 uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 
 uniform float u_line_texture;
 uniform sampler2D u_texture;
@@ -34,10 +34,10 @@ void main() {
   
   gl_FragColor.a *= opacity;
 
-  if(u_aimate.x == Animate && u_line_texture != LineTexture) {
-      animateSpeed = u_time / u_aimate.y;
-      float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
-      alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
+  if(u_animate.x == Animate && u_line_texture != LineTexture) {
+      animateSpeed = u_time / u_animate.y;
+      float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_animate.z)* (1.0/ u_animate.z) + u_time / u_animate.y);
+      alpha = (alpha + u_animate.w -1.0) / u_animate.w;
       // alpha = smoothstep(0., 1., alpha);
       alpha = clamp(alpha, 0.0, 1.0);
       gl_FragColor.a *= alpha;
@@ -51,8 +51,8 @@ void main() {
     float count = styleMappingMat[3].g; // 贴图在弧线上重复的数量
 
     float time = 0.0;
-    if(u_aimate.x == Animate) {
-      time = u_time / u_aimate.y;
+    if(u_animate.x == Animate) {
+      time = u_time / u_animate.y;
     }
     float redioCount = arcRadio * count;
 
@@ -62,9 +62,9 @@ void main() {
 
     vec4 pattern = texture2D(u_texture, uv);
 
-    if(u_aimate.x == Animate) {
+    if(u_animate.x == Animate) {
       float currentPlane = floor(redioCount - time);
-      float textureStep = floor(count * u_aimate.z);
+      float textureStep = floor(count * u_animate.z);
       float a = mod(currentPlane, textureStep);
       if(a < textureStep - 1.0) {
         pattern = vec4(0.0);
@@ -85,5 +85,4 @@ void main() {
   } else {
      gl_FragColor = filterColor(gl_FragColor);
   }
-  // gl_FragColor = filterColor(gl_FragColor);
 }

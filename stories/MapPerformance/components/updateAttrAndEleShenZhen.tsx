@@ -82,23 +82,7 @@ export default class Demo extends React.Component {
               y: 'lat',
             },
           };
-          // const layer = new PointLayer({  })
-          // .source(data0, parser)
-          // .size('v', v => Math.pow(v, 2))
-          // .color('v', [
-          //   '#ffffb2',
-          //   '#fed976',
-          //   '#feb24c',
-          //   '#fd8d3c',
-          //   '#f03b20',
-          //   '#bd0026',
-          // ])
-          // // .shape('circle')
-          // .shape('simple')
-          // .style({
-          //   opacity: 0.2
-          // })
-          // .shape('dot')
+     
           const layer = new HeatmapLayer()
             .source(data0, parser)
             .size('v', [0, 0.2, 0.4, 0.6, 0.8, 1])

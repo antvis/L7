@@ -184,7 +184,7 @@ module.exports = {
         order: 6,
       },
       {
-        slug: 'api/imagelayer',
+        slug: 'api/imageLayer',
         title: {
           zh: '图片图层',
           en: 'ImageLayer',
@@ -294,14 +294,6 @@ module.exports = {
           en: 'Draw Component',
         },
         order: 12,
-      },
-      {
-        slug: 'api/react',
-        title: {
-          zh: 'React 组件',
-          en: 'React Component',
-        },
-        order: 13,
       },
       {
         slug: 'api/mini/demos',

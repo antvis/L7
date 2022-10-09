@@ -23,15 +23,6 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
     canvas?: HTMLCanvasElement,
     hasBaseMap?: boolean,
   ) {
-    // // 首先使用全局配置服务校验地图参数
-    // const { valid, errorText } = this.configService.validateMapConfig(
-    //   this.config,
-    // );
-
-    // if (!valid) {
-    //   this.logger.error(errorText || '');
-    //   return;
-    // }
     // 绑定用户传入的原始地图参数
     sceneContainer.bind<Partial<IMapConfig>>(TYPES.MapConfig).toConstantValue({
       ...this.config,

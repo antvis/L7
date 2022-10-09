@@ -193,8 +193,8 @@ class Scene
         const maskInstance = new MaskLayer()
           .source(maskfence)
           .shape('fill')
-          .color(maskColor)
           .style({
+            color: maskColor,
             opacity: maskOpacity,
           });
 

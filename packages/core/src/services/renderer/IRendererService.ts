@@ -17,7 +17,7 @@ export interface IRenderConfig {
   passes?: Array<IPass<unknown>>;
   antialias?: boolean;
   preserveDrawingBuffer?: boolean;
-  // TODO: 场景是否支持 stencil mask
+  // Tip: 场景是否支持 stencil mask
   stencil?: boolean;
 }
 

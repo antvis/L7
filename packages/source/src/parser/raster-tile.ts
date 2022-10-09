@@ -13,21 +13,31 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   zoomOffset: 0,
 };
 
+export const rasterDataTypes = [RasterTileType.ARRAYBUFFER];
+/**
+ *
+ * @param data
+ * @param cfg
+ * @returns
+ */
 export default function rasterTile(
   data: string | string[],
   cfg?: IRasterTileParserCFG,
 ): IParserData {
   const tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
-    if (tileDataType === RasterTileType.IMAGE) {
-      return getTileImage(data, tileParams, tile);
-    } else {
-      return getTileBuffer(
-        data,
-        tileParams,
-        tile,
-        cfg?.format || defaultFormat,
-      );
+    switch (tileDataType) {
+      case RasterTileType.IMAGE:
+        return getTileImage(data, tileParams, tile);
+      case RasterTileType.ARRAYBUFFER:
+        return getTileBuffer(
+          data,
+          tileParams,
+          tile,
+          cfg?.format || defaultFormat,
+        );
+      default:
+        return getTileImage(data, tileParams, tile);
     }
   };
 

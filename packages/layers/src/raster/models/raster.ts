@@ -26,7 +26,7 @@ export default class RasterModel extends BaseModel {
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     if (!isEqual(this.rampColors, rampColors)) {
-      this.updateColorTexure();
+      this.updateColorTexture();
       this.rampColors = rampColors;
     }
 
@@ -78,6 +78,7 @@ export default class RasterModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
@@ -115,7 +116,6 @@ export default class RasterModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
@@ -123,7 +123,7 @@ export default class RasterModel extends BaseModel {
     });
   }
 
-  private updateColorTexure() {
+  private updateColorTexture() {
     const { createTexture2D } = this.rendererService;
     const {
       rampColors,

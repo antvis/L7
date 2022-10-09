@@ -58,14 +58,12 @@ export default class Grid3DModel extends BaseModel {
       });
   }
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -73,9 +71,6 @@ export default class Grid3DModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -83,14 +78,12 @@ export default class Grid3DModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -113,18 +106,15 @@ export default class Grid3DModel extends BaseModel {
       descriptor: {
         name: 'a_Pos',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
         size: 3,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
+        update: (feature: IEncodeFeature) => {
           const coordinates = (feature.version === 'GAODE2.x'
             ? feature.originCoordinates
             : feature.coordinates) as number[];
-          // const coordinates = feature.coordinates as number[];
-          // const coordinates = feature.originCoordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

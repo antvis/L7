@@ -1,5 +1,3 @@
-// @ts-ignore
-
 export function heatMap3DTriangulation(width: number, height: number) {
   const indices = [];
   const vertices = [];

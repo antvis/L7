@@ -6,12 +6,12 @@ import {
   TileOptions,
 } from './types';
 import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
-
+import { EventEmitter } from 'eventemitter3';
 /**
  * 单个瓦片
  * 负责瓦片数据加载、缓存数据、缓存图层
  */
-export class Tile {
+export class Tile extends EventEmitter {
   // 瓦片索引
   public x: number;
   public y: number;
@@ -26,10 +26,13 @@ export class Tile {
   public isVisibleChange = false;
   public parentLayerIDList: string[] = [];
   public layerIDList: string[] = [];
+  public loadedLayers: number = 0;
+
   // 瓦片的父级瓦片
   public parent: Tile | null = null;
   // 瓦片的子级瓦片
   public children: Tile[] = [];
+  public loadedChilds: number = 0;
   // 瓦片数据
   public data: any = null;
   // 瓦片属性
@@ -44,6 +47,7 @@ export class Tile {
   private loadDataId = 0;
 
   constructor(options: TileOptions) {
+    super();
     const { x, y, z, tileSize } = options;
     this.x = x;
     this.y = y;
@@ -111,6 +115,10 @@ export class Tile {
     return key;
   }
 
+  public layerLoad() {
+    this.loadedLayers++;
+    this.emit('layerLoaded');
+  }
   // 请求瓦片数据
   public async loadData({ getData, onLoad, onError }: TileLoadDataOptions) {
     this.loadDataId++;

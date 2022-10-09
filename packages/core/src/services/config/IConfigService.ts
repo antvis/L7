@@ -19,11 +19,7 @@ export interface ISceneConfig extends IRenderConfig {
   selectBoxClassName?: string;
 }
 
-// interface IValidateResult {
-//   valid: boolean;
-//   errors: Ajv.ErrorObject[] | null | undefined;
-//   errorText: string | null;
-// }
+
 
 export interface IGlobalConfigService {
   /**

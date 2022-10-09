@@ -1,6 +1,6 @@
 import BaseLayer from '../../core/BaseLayer';
 import { IRasterLayerStyleOptions } from '../../core/interface';
-import RasterModel from '../../raster/models/raster';
+import RasterModel from '../../raster/models/rasterTile';
 
 export default class RasterTiffLayer extends BaseLayer<
   Partial<IRasterLayerStyleOptions>
@@ -10,13 +10,14 @@ export default class RasterTiffLayer extends BaseLayer<
     const model = this.getModelType();
     this.layerModel = new model(this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
 
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
 
   protected getModelType() {

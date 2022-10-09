@@ -39,10 +39,7 @@ scene.on('loaded', () => {
           '#7BE39E',
           '#A1EDB8',
           '#CEF8D6'
-        ])
-        .style({
-          opacity: 1.0
-        });
+        ]);
       scene.addLayer(pointLayer);
     });
 });

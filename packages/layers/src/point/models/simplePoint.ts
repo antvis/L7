@@ -1,6 +1,5 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
   IModel,
@@ -129,14 +128,12 @@ export default class SimplePointModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -144,20 +141,11 @@ export default class SimplePointModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
-  }
-
-  private defaultStyleOptions(): Partial<IPointLayerStyleOptions> {
-    return {
-      blend: BlendType.additive,
-    };
   }
 }
