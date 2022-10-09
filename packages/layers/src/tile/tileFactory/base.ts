@@ -277,7 +277,7 @@ export default class TileFactory implements ITileFactory {
 
   protected emitEvent(layers: ILayer[], isVector?: boolean) {
     layers.map((layer) => {
-      layer.once('inited', () => {
+      layer.once('modelLoaded', () => {
         layer.on('click', (e) => {
           this.eventCache.click = 1;
           if (this.parentLayer.type === 'RasterLayer') {
