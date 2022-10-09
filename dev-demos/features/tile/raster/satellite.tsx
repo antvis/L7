@@ -48,7 +48,7 @@ export default () => {
         return requestParams;
       },
       // @ts-ignore
-      resCallback: (response: Object) =>  Base64toArrayBuffer(response?.anttech_ai_cv_rs_xytile_get_response?.image || '')
+      resCallback: (response: Object) => Base64toArrayBuffer(response?.anttech_ai_cv_rs_xytile_get_response?.image || '')
     });
 
     const Base64toArrayBuffer = (base64Data) => {

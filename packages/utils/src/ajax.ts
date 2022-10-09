@@ -370,5 +370,5 @@ export interface IRasterParser {
 export const transformRequestConfig = {
   callback: (requestParameters: RequestParameters): RequestParameters =>
     requestParameters,
-  resCallback: (response: any) => new Uint8Array(response),
+  resCallback: (response: any) => new ArrayBuffer(response),
 };
