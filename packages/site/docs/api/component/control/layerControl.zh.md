@@ -13,6 +13,8 @@ order: 8
 
 # 使用
 
+[示例](/zh/examples/component/control#layercontrol)
+
 ```ts
 import { Scene, LayerControl } from '@antv/l7';
 

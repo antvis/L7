@@ -221,5 +221,7 @@
   "tnpm": {
     "mode": "yarn"
   },
-  "dependencies": {}
+  "dependencies": {
+    "gcoord": "^0.3.2"
+  }
 }

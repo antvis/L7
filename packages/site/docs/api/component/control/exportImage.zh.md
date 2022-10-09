@@ -9,6 +9,8 @@ order: 7
 
 # 说明
 
+[示例](/zh/examples/component/control#exportimage)
+
 截图时被截取的目标仅包含：
 
 - 地图底图

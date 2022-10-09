@@ -9,6 +9,8 @@ order: 5
 
 # 使用
 
+[示例](/zh/examples/component/control#fullscreen)
+
 ```ts
 import { Scene, Fullscreen } from '@antv/l7';
 

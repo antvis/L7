@@ -455,9 +455,6 @@
   cursor: pointer;
   font-size: 14px;
 }
-.l7-popup .l7-popup-content .l7-popup-close-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
 .l7-popup .l7-popup-tip {
   z-index: 1;
   width: 0;

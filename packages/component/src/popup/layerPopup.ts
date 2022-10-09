@@ -9,8 +9,8 @@ import Popup from './popup';
 export type LayerField = {
   field: string;
   formatField?: (field: string) => string;
-  formatValue?: (value: any) => string;
-  getValue?: (feature: any) => string;
+  formatValue?: (value: any) => any;
+  getValue?: (feature: any) => any;
 };
 
 export type LayerPopupConfigItem = {

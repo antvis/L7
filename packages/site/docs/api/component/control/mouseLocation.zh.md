@@ -9,6 +9,8 @@ order: 9
 
 # 使用
 
+[示例](/zh/examples/component/control#mouselocation)
+
 ```ts
 import { Scene, MouseLocation } from '@antv/l7';
 

@@ -1,4 +1,4 @@
-import { Scene, GaodeMapV2, Zoom } from '@antv/l7';
+import { Scene, GaodeMapV2, Logo } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
@@ -8,8 +8,9 @@ const scene = new Scene({
     center: [120.154672, 30.241095],
     zoom: 12,
   }),
+  logoVisible: false,
 });
 scene.on('loaded', () => {
-  const zoom = new Zoom();
-  scene.addControl(zoom);
+  const logo = new Logo();
+  scene.addControl(logo);
 });

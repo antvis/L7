@@ -202,7 +202,7 @@ module.exports = {
       {
         slug: 'api/component',
         title: {
-          zh: '组件 Component',
+          zh: '组件',
           en: 'Component',
         },
         order: 8,
@@ -210,10 +210,26 @@ module.exports = {
       {
         slug: 'api/component/control',
         title: {
-          zh: '控件 Control',
+          zh: '控件类型',
           en: 'Control',
         },
-        order: 8,
+        order: 1,
+      },
+      {
+        slug: 'api/component/popup',
+        title: {
+          zh: '气泡类型',
+          en: 'Popup',
+        },
+        order: 2,
+      },
+      {
+        slug: 'api/component/marker',
+        title: {
+          zh: 'Marker 类型',
+          en: 'Marker',
+        },
+        order: 3,
       },
       {
         slug: 'api/renderer',

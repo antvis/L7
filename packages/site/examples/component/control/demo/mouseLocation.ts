@@ -1,4 +1,4 @@
-import { Scene, GaodeMapV2, Zoom } from '@antv/l7';
+import { Scene, GaodeMapV2, LayerControl, MouseLocation } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
@@ -10,6 +10,8 @@ const scene = new Scene({
   }),
 });
 scene.on('loaded', () => {
-  const zoom = new Zoom();
-  scene.addControl(zoom);
+  const mouseLocation = new MouseLocation({
+    position: 'bottomright',
+  });
+  scene.addControl(mouseLocation);
 });

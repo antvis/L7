@@ -13,6 +13,8 @@ MapTheme 会根据当前地图底图类型（如 Mapbox、GaodeMapV2），默认
 
 # 使用
 
+[示例](/zh/examples/component/control#maptheme)
+
 ```ts
 import { Scene, MapTheme } from '@antv/l7';
 
@@ -28,8 +30,8 @@ scene.on('loaded', () => {
 
 # 配置
 
-| 名称    | 说明                                                               | 类型                        |
-| ------- |------------------------------------------------------------------| --------------------------- |
+| 名称    | 说明                                                                                   | 类型                        |
+| ------- | -------------------------------------------------------------------------------------- | --------------------------- |
 | options | 用户自定义的地图主题选项，每个选项的类型可见 [IControlOptionItem](#icontroloptionitem) | `Array<IControlOptionItem>` |
 
 ## IControlOptionItem

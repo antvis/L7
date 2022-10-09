@@ -9,6 +9,8 @@ order: 3
 
 # 使用
 
+[示例](/zh/examples/component/control#zoom)
+
 ```ts
 import { Scene, Zoom } from '@antv/l7';
 

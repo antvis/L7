@@ -5,12 +5,20 @@
   },
   "demos": [
     {
+      "filename": "logo.ts",
+      "title": {
+        "zh": "Logo",
+        "en": "Logo"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*XgipRbN_k3wAAAAAAAAAAAAAARQnAQ"
+    },
+    {
       "filename": "zoom.ts",
       "title": {
         "zh": "Zoom",
         "en": "Zoom"
       },
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ubU4QaQne7QAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PRkHRonRENYAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "scale.ts",
@@ -18,7 +26,7 @@
         "zh": "Scale",
         "en": "Scale"
       },
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KZr4S4AcVAIAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*5dWeRaRpOHEAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "fullscreen.ts",
@@ -26,7 +34,7 @@
         "zh": "Fullscreen",
         "en": "Fullscreen"
       },
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GOcVSqyqlsIAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*fqJlQ5vJVicAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "geoLocate.ts",
@@ -34,7 +42,7 @@
         "zh": "GeoLocate",
         "en": "GeoLocate"
       },
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GOcVSqyqlsIAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*aElZR7bPFGAAAAAAAAAAAAAAARQnAQ"
     },
     {
       "filename": "exportImage.ts",
@@ -42,7 +50,31 @@
         "zh": "ExportImage",
         "en": "ExportImage"
       },
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GOcVSqyqlsIAAAAAAAAAAAAAARQnAQ"
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*at1HRbHfipUAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "mouseLocation.ts",
+      "title": {
+        "zh": "MouseLocation",
+        "en": "MouseLocation"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*sJF1S4JaPx8AAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "layerControl.ts",
+      "title": {
+        "zh": "LayerControl",
+        "en": "LayerControl"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*gWO_T6xpVtwAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "mapTheme.ts",
+      "title": {
+        "zh": "MapTheme",
+        "en": "MapTheme"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*byM3QZbjqScAAAAAAAAAAAAAARQnAQ"
     }
   ]
 }

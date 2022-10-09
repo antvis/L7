@@ -9,6 +9,8 @@ order: 6
 
 # 说明
 
+[示例](/zh/examples/component/control#geolocate)
+
 **注意：**
 
 - 在使用该能力时，会需要用户对浏览器打开位置感知能力进行鉴权。
