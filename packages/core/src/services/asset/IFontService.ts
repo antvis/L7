@@ -1,3 +1,4 @@
+import EventEmitter from 'eventemitter3';
 export interface IFontOptions {
   fontFamily: string;
   fontWeight: string;
@@ -47,7 +48,9 @@ export interface IIconFontGlyph {
   unicode: string;
   [key: string]: any;
 }
-export interface IFontService {
+export interface IFontService extends EventEmitter {
+  // on(event: string, fn: EventEmitter.ListenerFn, context?: any): this;
+  // off(event: string, fn: EventEmitter.ListenerFn, context?: any): this;
   mapping: IFontMapping;
   iconFontMap: Map<string, string>;
   fontAtlas: IFontAtlas;
