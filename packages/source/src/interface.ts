@@ -27,7 +27,20 @@ export enum RasterTileType {
   IMAGE = 'image',
   ARRAYBUFFER = 'arraybuffer',
 }
-export interface IRasterTileParserCFG {
+
+export interface IGeojsonvtOptions {
+  maxZoom: number;          // max zoom to preserve detail on
+  indexMaxZoom: number;     // max zoom in the tile index
+  indexMaxPoints: number;   // max number of points per tile in the tile index
+  tolerance: number;        // simplification tolerance (higher means simpler)
+  extent: number;           // tile extent
+  buffer: number;           // tile buffer on each side
+  lineMetrics: boolean;     // whether to calculate line metrics
+  promoteId: null;          // name of a feature property to be promoted to feature.id
+  generateId: boolean;      // whether to generate feature ids. Cannot be used with promoteId
+  debug: number;            // logging level (0, 1 or 2)
+}
+export interface ITileParserCFG {
   tileSize?: number;
   minZoom?: number;
   maxZoom?: number;
@@ -41,6 +54,8 @@ export interface IRasterTileParserCFG {
   coord?: string;
   // 指定栅格瓦片的类型
   dataType?: RasterTileType;
+
+  geojsonvtOptions?: IGeojsonvtOptions;
 
   format?: any;
 }

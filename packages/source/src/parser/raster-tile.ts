@@ -1,9 +1,5 @@
 import { Tile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
-import {
-  IParserData,
-  IRasterTileParserCFG,
-  RasterTileType,
-} from '../interface';
+import { IParserData, ITileParserCFG, RasterTileType } from '../interface';
 import { defaultFormat, getTileBuffer, getTileImage } from '../utils/getTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
@@ -22,7 +18,7 @@ export const rasterDataTypes = [RasterTileType.ARRAYBUFFER];
  */
 export default function rasterTile(
   data: string | string[],
-  cfg?: IRasterTileParserCFG,
+  cfg?: ITileParserCFG,
 ): IParserData {
   const tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {

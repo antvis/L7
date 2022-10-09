@@ -80,6 +80,7 @@
     "cz-conventional-changelog": "^3.0.2",
     "dat.gui": "^0.7.2",
     "dumi": "^1.1.0",
+    "element-remove": "^1.0.4",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.0.0-beta6",

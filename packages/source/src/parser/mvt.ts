@@ -12,7 +12,7 @@ import {
 } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
 import Protobuf from 'pbf';
-import { IParserData, IRasterTileParserCFG } from '../interface';
+import { IParserData, ITileParserCFG } from '../interface';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -214,7 +214,7 @@ const getVectorTile = async (
 
 export default function mapboxVectorTile(
   data: string | string[],
-  cfg?: IRasterTileParserCFG,
+  cfg?: ITileParserCFG,
 ): IParserData {
   // TODO: 后续考虑支持多服务
   const url = Array.isArray(data) ? data[0] : data;

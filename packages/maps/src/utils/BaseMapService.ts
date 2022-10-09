@@ -15,15 +15,17 @@ import {
   IStatusOptions,
   IViewport,
   MapServiceEvent,
-  MapStyle,
+  MapStyleConfig,
+  MapStyleName,
   TYPES,
 } from '@antv/l7-core';
 import { Map } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { ISimpleMapCoord, SimpleMapCoord } from './simpleMapCoord';
 import { Version } from '../version';
+import { ISimpleMapCoord, SimpleMapCoord } from './simpleMapCoord';
+import { MapTheme } from './theme';
 const EventMap: {
   [key: string]: any;
 } = {
@@ -32,7 +34,6 @@ const EventMap: {
   zoomchange: 'zoom',
   dragging: 'drag',
 };
-import { MapTheme } from './theme';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
@@ -43,10 +44,10 @@ export default abstract class BaseMapService<T>
   implements IMapService<Map & T> {
   public version: string = Version.L7MAP;
   public map: Map & T;
-  protected viewport: IViewport | unknown;
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   // 背景色
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
+  protected viewport: IViewport | unknown;
 
   @inject(TYPES.MapConfig)
   protected readonly config: Partial<IMapConfig>;
@@ -227,7 +228,7 @@ export default abstract class BaseMapService<T>
   }
 
   public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyle(style));
+    this.map.setStyle(this.getMapStyleValue(style));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -264,6 +265,28 @@ export default abstract class BaseMapService<T>
     origin: IMercator,
   ): number[];
 
+  public getMapStyle(): string {
+    try {
+      // @ts-ignore
+      const styleUrl = this.map.getStyle().sprite ?? '';
+      // 将 Mapbox 返回的样式字符串转成传入 style 保持一致
+      if (/^mapbox:\/\/sprites\/zcxduo\/\w+\/\w+$/.test(styleUrl)) {
+        return styleUrl?.replace(/\/\w+$/, '').replace(/sprites/, 'styles');
+      }
+      return styleUrl;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  public getMapStyleConfig(): MapStyleConfig {
+    return MapTheme;
+  }
+
+  public getMapStyleValue(name: MapStyleName): any {
+    return this.getMapStyleConfig()[name] ?? name;
+  }
+
   public abstract init(): Promise<void>;
 
   public destroy() {
@@ -296,6 +319,24 @@ export default abstract class BaseMapService<T>
     this.cameraChangedCallback = callback;
   }
 
+  public updateView(viewOption: Partial<IMapCamera>) {
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
+    // resync
+    (this.viewport as IViewport).syncWithMapCamera({
+      bearing: viewOption.bearing,
+      center: viewOption.center,
+      viewportHeight: viewOption.viewportHeight,
+      pitch: viewOption.pitch,
+      viewportWidth: viewOption.viewportWidth,
+      zoom: viewOption.zoom,
+      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
+      cameraHeight: 0,
+    });
+    this.updateCoordinateSystemService();
+    this.cameraChangedCallback(this.viewport as IViewport);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected handleCameraChanged = (e?: any) => {
     const { lat, lng } = this.map.getCenter();
@@ -324,23 +365,6 @@ export default abstract class BaseMapService<T>
     }
     return $wrapper;
   }
-  public updateView(viewOption: Partial<IMapCamera>) {
-    // Tip: 统一触发地图变化事件
-    this.emit('mapchange');
-    // resync
-    (this.viewport as IViewport).syncWithMapCamera({
-      bearing: viewOption.bearing,
-      center: viewOption.center,
-      viewportHeight: viewOption.viewportHeight,
-      pitch: viewOption.pitch,
-      viewportWidth: viewOption.viewportWidth,
-      zoom: viewOption.zoom,
-      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
-      cameraHeight: 0,
-    });
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback(this.viewport as IViewport);
-  }
 
   protected updateCoordinateSystemService() {
     const { offsetCoordinate = true } = this.config;
@@ -355,12 +379,5 @@ export default abstract class BaseMapService<T>
     } else {
       this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
     }
-  }
-
-  protected getMapStyle(name: MapStyle) {
-    if (typeof name !== 'string') {
-      return name;
-    }
-    return MapTheme[name] ? MapTheme[name] : name;
   }
 }

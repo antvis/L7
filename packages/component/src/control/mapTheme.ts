@@ -1,8 +1,8 @@
 import { GaodeMapStyleConfig, MapboxMapStyleConfig } from '../constants';
 import { createL7Icon } from '../utils/icon';
 import SelectControl, {
-  ISelectControlOption,
   ControlOptionItem,
+  ISelectControlOption,
 } from './baseControl/selectControl';
 
 export { MapTheme };

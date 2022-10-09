@@ -83,8 +83,10 @@ export interface IMapService<RawMap = {}> {
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
   getMapCanvasContainer(): HTMLElement;
-  getMapStyleConfig(): MapStyleConfig;
-  getMapStyleValue(name: string): string;
+  getMapStyleConfig(): MapStyleConfig; // 获取当前地图类型默认的样式配置
+  getMapStyleValue(name: MapStyleName): string | any; // 获取当前地图类型key值对应的样式 value，可能为字符串，也可能为对象
+  getMapStyle(): MapStyleName | any; // 获取当期地图
+  setMapStyle(style: MapStyleName | any): void;
 
   // control with raw map
   setRotation(rotation: number): void;
@@ -97,9 +99,8 @@ export interface IMapService<RawMap = {}> {
   setCenter(center: [number, number], option?: ICameraOptions): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
-  setMapStyle(style: any): void;
   setMapStatus(option: Partial<IStatusOptions>): void;
-  updateView(viewOption:Partial<IMapCamera>):void // 更新地图视野
+  updateView(viewOption: Partial<IMapCamera>): void; // 更新地图视野
 
   // coordinates methods
   meterToCoord(center: number[], lnglat: number[]): number;
@@ -278,7 +279,7 @@ export interface IMapConfig<RawMap = {}> {
 
   offsetZoom?: number;
 
-  interactive: boolean;//
+  interactive: boolean; //
 
   [key: string]: any;
 }

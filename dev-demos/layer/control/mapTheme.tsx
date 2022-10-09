@@ -13,7 +13,7 @@ const Demo: FunctionComponent = () => {
         center: [120, 30],
         pitch: 0,
         zoom: 6.45,
-        style: 'mapbox://styles/zcxduo/ck241p6413s0b1cpayzldv7x7',
+        style: 'normal',
       }),
       // map: new GaodeMapV2({
       //   style: 'dark',
