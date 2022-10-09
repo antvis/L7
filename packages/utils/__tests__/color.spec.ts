@@ -37,18 +37,6 @@ describe('utils/color', () => {
     })
     expect(imageData2.width).toEqual(256);
     expect(imageData2.height).toEqual(1);
-
-    (() => {
-      // @ts-ignore
-      window.isMini = true;
-      const imageData3 = generateColorRamp({
-        weights: [0.5, 0.5],
-        colors: ['#fff', '#000'],
-        positions: [0, 1]
-      })
-      expect(imageData3.width).toEqual(256);
-      expect(imageData3.height).toEqual(1);
-    })()
    
   });
 });
