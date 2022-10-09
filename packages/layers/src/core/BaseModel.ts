@@ -27,9 +27,8 @@ import {
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
-import { color } from 'd3-color';
-import { isEqual, isNumber, isString } from 'lodash';
+import { rgb2arr, isColor } from '@antv/l7-utils';
+import { isEqual, isNumber } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 
 export type styleSingle =
@@ -339,7 +338,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       this.cellLength += 1;
     }
 
-    if (options.stroke !== undefined && !this.isStaticColor(options.stroke)) {
+    if (options.stroke !== undefined && !isColor(options.stroke)) {
       // 数据映射
       this.cellProperties.push({ attr: 'stroke', count: 4 });
       this.stylePropertiesExist.hasStroke = 1;
@@ -365,27 +364,12 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   }
 
   /**
-   * 判断变量 stroke 是否是常量值
-   * @param stroke
-   * @returns
-   */
-  public isStaticColor(stroke: styleColor): boolean {
-    if (isString(stroke)) {
-      if (color(stroke)) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }
-  /**
    * 获取 stroke 颜色并做兼容处理
    * @param stroke
    * @returns
    */
   public getStrokeColor(stroke: styleColor) {
-    if (this.isStaticColor(stroke)) {
+    if (isColor(stroke)) {
       const strokeColor = rgb2arr(stroke as string);
       strokeColor[0] = strokeColor[0] ? strokeColor[0] : 0;
       strokeColor[1] = strokeColor[1] ? strokeColor[1] : 0;

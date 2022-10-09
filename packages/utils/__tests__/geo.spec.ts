@@ -1,10 +1,7 @@
 import {
-  aProjectFlat,
   boundsContains,
   IBounds,
-  lngLatToMeters,
   padBounds,
-  project,
 } from '../src/geo';
 
 describe('geo', () => {
