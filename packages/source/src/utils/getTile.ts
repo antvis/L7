@@ -123,6 +123,7 @@ export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: Tile,
+  responseType?: 'string' | 'json' | 'arrayBuffer',
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
   const imgUrl = getURLFromTemplate(
@@ -131,7 +132,7 @@ export const getTileImage = async (
   );
 
   return new Promise((resolve, reject) => {
-    const xhr = getImage({ url: imgUrl }, (err, img) => {
+    const xhr = getImage({ url: imgUrl, type: responseType }, (err, img) => {
       if (err) {
         reject(err);
       } else if (img) {

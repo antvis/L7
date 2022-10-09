@@ -141,6 +141,9 @@ export default class GlobalConfigService implements IGlobalConfigService {
     if (config.transformRequest) {
       transformRequestConfig.callback = config.transformRequest;
     }
+    if (config.resCallback) {
+      transformRequestConfig.resCallback = config.resCallback;
+    }
   }
 
   // public validateSceneConfig(data: object) {

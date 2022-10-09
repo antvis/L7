@@ -126,7 +126,7 @@ function makeXMLHttpRequest(
     }
   }
   if (requestParameters.type === 'json') {
-    xhr.responseType = 'text';
+    xhr.responseType = 'json';
     xhr.setRequestHeader('Accept', 'application/json');
   }
   xhr.withCredentials = requestParameters.credentials === 'include';
@@ -142,7 +142,11 @@ function makeXMLHttpRequest(
       if (requestParameters.type === 'json') {
         // We're manually parsing JSON here to get better error messages.
         try {
-          data = JSON.parse(xhr.response);
+          if (transformRequestConfig.resCallback) {
+            data = transformRequestConfig.resCallback(xhr.response);
+          } else {
+            data = JSON.parse(xhr.response);
+          }
         } catch (err) {
           return callback(err as Error);
         }
@@ -295,7 +299,10 @@ export const getImage = (
 ) => {
   // request the image with XHR to work around caching issues
   // see https://github.com/mapbox/mapbox-gl-js/issues/1470
-  return getArrayBuffer(requestParameters, (err, imgData) => {
+  const optionFunc = (
+    err?: Error | Error[] | null,
+    imgData?: ArrayBuffer | null,
+  ) => {
     if (err) {
       callback(err);
     } else if (imgData) {
@@ -306,7 +313,13 @@ export const getImage = (
         arrayBufferToImage(imgData, callback);
       }
     }
-  });
+  };
+
+  if (requestParameters.type === 'json') {
+    return getJSON(requestParameters, optionFunc);
+  } else {
+    return getArrayBuffer(requestParameters, optionFunc);
+  }
 };
 
 export const arrayBufferToTiffImage = async (
@@ -357,4 +370,5 @@ export interface IRasterParser {
 export const transformRequestConfig = {
   callback: (requestParameters: RequestParameters): RequestParameters =>
     requestParameters,
+  resCallback: (response: any) => new Uint8Array(response),
 };

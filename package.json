@@ -222,5 +222,8 @@
   "tnpm": {
     "mode": "yarn"
   },
-  "dependencies": {}
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "jsencrypt": "^3.2.1"
+  }
 }

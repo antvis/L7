@@ -21,6 +21,7 @@ export interface ISceneConfig extends IRenderConfig {
   transformRequest?: (
     requestParameters: Partial<RequestParameters>,
   ) => RequestParameters;
+  resCallback?: (response: Object) => Uint8Array;
 }
 
 export interface IGlobalConfigService {
