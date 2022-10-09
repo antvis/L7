@@ -1,13 +1,13 @@
 import { $window, rgb2arr } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
+import { throttle } from 'lodash';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
-import { throttle } from 'lodash';
 
 @injectable()
 export default class LayerService extends EventEmitter<LayerServiceEvent>
@@ -42,11 +42,11 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   public reRender = throttle(() => {
     this.updateLayerRenderList();
     this.renderLayers();
-  }, 32)
+  }, 32);
 
   public throttleRenderLayers = throttle(() => {
     this.renderLayers();
-  }, 16)
+  }, 16);
 
 
   public add(layer: ILayer) {

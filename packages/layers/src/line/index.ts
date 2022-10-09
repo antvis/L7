@@ -1,6 +1,7 @@
 import BaseLayer from '../core/BaseLayer';
 import { ILineLayerStyleOptions } from '../core/interface';
 import LineModels, { LineModelType } from './models';
+import { isVectorTile } from '../tile/utils';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
@@ -70,9 +71,11 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     if (this.layerType) {
       return this.layerType as LineModelType;
     }
-    if (this.layerSource.parser.type === 'mvt') {
+    const parserType = this.layerSource.getParserType();
+    if (isVectorTile(parserType)) {
       return 'vectorline';
     }
+
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

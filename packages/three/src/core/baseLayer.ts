@@ -11,7 +11,6 @@ import {
   IThreeRenderService,
   ThreeRenderServiceType,
 } from './threeRenderService';
-const DEG2RAD = Math.PI / 180;
 type ILngLat = [number, number];
 export default class ThreeJSLayer
   extends BaseLayer<{

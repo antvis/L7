@@ -176,11 +176,6 @@ export class Map extends Camera {
   public setStyle(style: any) {
     return;
   }
-
-  public getStyle() {
-    return '';
-  }
-
   public setMinZoom(minZoom?: number) {
     minZoom =
       minZoom === null || minZoom === undefined ? defaultMinZoom : minZoom;
@@ -374,7 +369,7 @@ export class Map extends Camera {
       } else {
         width = this.container.clientWidth;
         height = this.container.clientHeight;
-        width = width == 0 ? 400 : width;
+        width = width === 0 ? 400 : width;
         height = height === 0 ? 300 : height;
       }
     }

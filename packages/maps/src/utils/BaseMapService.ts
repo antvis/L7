@@ -319,24 +319,6 @@ export default abstract class BaseMapService<T>
     this.cameraChangedCallback = callback;
   }
 
-  public updateView(viewOption: Partial<IMapCamera>) {
-    // Tip: 统一触发地图变化事件
-    this.emit('mapchange');
-    // resync
-    (this.viewport as IViewport).syncWithMapCamera({
-      bearing: viewOption.bearing,
-      center: viewOption.center,
-      viewportHeight: viewOption.viewportHeight,
-      pitch: viewOption.pitch,
-      viewportWidth: viewOption.viewportWidth,
-      zoom: viewOption.zoom,
-      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
-      cameraHeight: 0,
-    });
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback(this.viewport as IViewport);
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected handleCameraChanged = (e?: any) => {
     const { lat, lng } = this.map.getCenter();
@@ -364,6 +346,23 @@ export default abstract class BaseMapService<T>
       $wrapper = document.getElementById(id) as HTMLDivElement;
     }
     return $wrapper;
+  }
+  public updateView(viewOption: Partial<IMapCamera>) {
+    // Tip: 统一触发地图变化事件
+    this.emit('mapchange');
+    // resync
+    (this.viewport as IViewport).syncWithMapCamera({
+      bearing: viewOption.bearing,
+      center: viewOption.center,
+      viewportHeight: viewOption.viewportHeight,
+      pitch: viewOption.pitch,
+      viewportWidth: viewOption.viewportWidth,
+      zoom: viewOption.zoom,
+      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
+      cameraHeight: 0,
+    });
+    this.updateCoordinateSystemService();
+    this.cameraChangedCallback(this.viewport as IViewport);
   }
 
   protected updateCoordinateSystemService() {

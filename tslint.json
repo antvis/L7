@@ -19,7 +19,8 @@
     "no-implicit-dependencies": [true, "dev"],
     "interface-over-type-literal": false,
     "no-this-assignment": false,
-    "no-submodule-imports": false
+    "no-submodule-imports": false,
+    "member-ordering": false
   },
   "globals": {
     "AMap": true

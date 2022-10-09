@@ -56,10 +56,10 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageThreshold: {
     global: {
-      branches: 12,
-      functions: 16,
-      lines: 20,
-      statements: 20,
+      branches: 9,
+      functions: 11.5,
+      lines: 15,
+      statements: 15,
     },
   },
 };
