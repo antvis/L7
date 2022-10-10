@@ -1,7 +1,8 @@
 import { DOM } from '@antv/l7-utils';
-import { bbox, featureCollection, lineString } from '@turf/turf';
 import { EventEmitter } from 'eventemitter3';
 import { Scene } from './index';
+import bbox from '@turf/bbox';
+import { featureCollection, lineString } from '@turf/helpers';
 
 export const BoxSelectEventList = ['selectstart', 'selecting', 'selectend'];
 
