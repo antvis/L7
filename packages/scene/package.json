@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-scene",
-  "version": "2.9.31",
+  "version": "2.9.32-alpha.2",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -23,12 +23,12 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-component": "2.9.31",
-    "@antv/l7-core": "2.9.31",
-    "@antv/l7-layers": "2.9.31",
-    "@antv/l7-maps": "2.9.31",
-    "@antv/l7-renderer": "2.9.31",
-    "@antv/l7-utils": "2.9.31",
+    "@antv/l7-component": "2.9.32-alpha.2",
+    "@antv/l7-core": "2.9.32-alpha.2",
+    "@antv/l7-layers": "2.9.32-alpha.2",
+    "@antv/l7-maps": "2.9.32-alpha.2",
+    "@antv/l7-renderer": "2.9.32-alpha.2",
+    "@antv/l7-utils": "2.9.32-alpha.2",
     "@babel/runtime": "^7.7.7",
     "@turf/turf": "^6.5.0",
     "eventemitter3": "^4.0.7",
@@ -37,7 +37,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.9.31"
+    "@antv/l7-test-utils": "2.9.32-alpha.2"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {
