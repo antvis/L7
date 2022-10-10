@@ -1,6 +1,7 @@
 import BaseLayer from '../../core/BaseLayer';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import RasterModel from '../../raster/models/rasterTile';
+import RasterRgbModel from '../../raster/models/rasterRgb';
 
 export default class RasterTiffLayer extends BaseLayer<
   Partial<IRasterLayerStyleOptions>
@@ -21,7 +22,11 @@ export default class RasterTiffLayer extends BaseLayer<
   }
 
   protected getModelType() {
-    return RasterModel;
+    if(this.layerSource.parser.type === 'rasterRgb') {
+      return RasterRgbModel;
+    } else {
+      return RasterModel;
+    }
   }
   protected getConfigSchema() {
     return {

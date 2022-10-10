@@ -54,9 +54,16 @@ export function calculate(express: any[], bandsData: IRasterData[]) {
     for(let i = 0;i < length; i++) {
         const exp = JSON.parse(originExp);
         // 将表达式中的 ['band', 0]、['band', 1] 等替换为实际的栅格数据
-        spellExpress(exp, dataArray, i);
-        const result = calculateExpress(exp);
-        rasterData.push(result);
+        const expResult = spellExpress(exp, dataArray, i);
+        if(typeof expResult === 'number') {
+            // exp: ['band', 0] => exp: 2 ...
+            // exp 直接指定了波段值，替换完后直接就是数值了，无需计算
+            rasterData.push(expResult);
+        } else {
+            const result = calculateExpress(exp);
+            rasterData.push(result);
+        }
+       
     }
     return rasterData as unknown as Uint8Array;
 }
@@ -70,6 +77,17 @@ type IExpress = any[];
  * @param index 
  */
 export function spellExpress(express: IExpress, dataArray: Uint8Array[], index: number) {
+    /**
+     * 用户直接指定波段数值，无需计算
+     */
+    if(express.length === 2 && express[0] === 'band' && typeof express[1] === 'number') {
+        try {
+            return dataArray[express[1]][index];
+        } catch(err) {
+            console.warn('Raster Data err!');
+            return 0;
+        }
+    }
     express.map((e, i) => {
         if(Array.isArray(e) && e.length > 0) {
             switch(e[0]) {

@@ -32,27 +32,25 @@ export default () => {
         {
           data: tiffdata,
           bands: [0],
-          channels: ['r']
         },
         {
           data: tiffdata2,
           bands: [0],
-          channels: ['g']
         }
       ], {
           parser: {
             type: 'rasterRgb',
-            format: async (data, bands, channels) => {
+            format: async (data, bands) => {
               // console.log(bands, )
               const tiff = await GeoTIFF.fromArrayBuffer(data);
               const imageCount = await tiff.getImageCount();
-              console.log('imageCount', imageCount, bands, channels)
+              console.log('imageCount', imageCount, bands)
 
               const image = await tiff.getImage();
               const width = image.getWidth();
               const height = image.getHeight();
               const values = await image.readRasters();
-              return { rasterData: values[0], width, height, channel: channels[0] };
+              return { rasterData: values[0], width, height };
             },
             // operation: (allBands) => {
             //   return allBands[0].rasterData;

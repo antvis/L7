@@ -18,7 +18,7 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   zoomOffset: 0,
 };
 
-export const rasterDataTypes = [RasterTileType.ARRAYBUFFER];
+export const rasterDataTypes = [RasterTileType.ARRAYBUFFER, RasterTileType.RGB];
 
 function isUrlError(url: string | string[] | ITileBand[]) {
   if (Array.isArray(url) && url.length === 0) return true;
@@ -37,7 +37,9 @@ export default function rasterTile(
 ): IParserData {
   if (isUrlError(data)) throw new Error('tile server url is error');
 
-  const tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
+  let tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
+  // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
+  if(tileDataType === RasterTileType.RGB) tileDataType = RasterTileType.ARRAYBUFFER;
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
     switch (tileDataType) {
       case RasterTileType.IMAGE:

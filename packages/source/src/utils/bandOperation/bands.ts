@@ -21,7 +21,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
     }
 
     let bandsData = (await Promise.all(
-    imageDataList.map(({ data, bands = [0], channels = [] }) => rasterFormat(data, bands, channels)),
+    imageDataList.map(({ data, bands = [0] }) => rasterFormat(data, bands)),
     )) as IRasterData[];
     // @ts-ignore 
     bandsData = bandsData.flat();
