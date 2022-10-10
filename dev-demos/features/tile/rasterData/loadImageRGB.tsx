@@ -75,22 +75,6 @@ export default () => {
           },
         )
         .style({
-          domain: [0, 255],
-          clampLow: true,
-          rampColors: {
-            colors: [
-              '#f7fcf5',
-              '#e5f5e0',
-              '#c7e9c0',
-              '#a1d99b',
-              '#74c476',
-              '#41ab5d',
-              '#238b45',
-              '#006d2c',
-              '#00441b',
-            ],
-            positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
-          },
         });
 
       scene.addLayer(layer)

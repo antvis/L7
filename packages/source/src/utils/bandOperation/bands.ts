@@ -82,9 +82,9 @@ function getRgbBands(operation: IRgbOperation, bandsData: IRasterData[]) {
   if(operation.r === undefined) console.warn('Channel R lost in Operation! Use band[0] to fill!');
   if(operation.g === undefined) console.warn('Channel G lost in Operation! Use band[0] to fill!');
   if(operation.b === undefined) console.warn('Channel B lost in Operation! Use band[0] to fill!');
-  const r = calculate(operation.r || ['*', ['band', 0], 1], bandsData);
-  const g = calculate(operation.g || ['*', ['band', 0], 1], bandsData);
-  const b = calculate(operation.b || ['*', ['band', 0], 1], bandsData);
+  const r = calculate(operation.r || ['band', 0], bandsData);
+  const g = calculate(operation.g || ['band', 0], bandsData);
+  const b = calculate(operation.b || ['band', 0], bandsData);
   return [r, g, b];
 }
 
