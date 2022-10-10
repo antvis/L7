@@ -39,7 +39,8 @@ export default function rasterTile(
 
   let tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
-  if(tileDataType === RasterTileType.RGB) tileDataType = RasterTileType.ARRAYBUFFER;
+  if (tileDataType === RasterTileType.RGB)
+    tileDataType = RasterTileType.ARRAYBUFFER;
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
     switch (tileDataType) {
       case RasterTileType.IMAGE:
