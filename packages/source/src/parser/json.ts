@@ -20,30 +20,43 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
     };
   }
 
+  // GeoJson geometry 数据
+  if (geometry) {
+    data
+      .filter((item: Record<string, any>) => {
+        return (
+          item[geometry] &&
+          item[geometry].type &&
+          item[geometry].coordinates &&
+          item[geometry].coordinates.length > 0
+        );
+      })
+      .forEach((col, index) => {
+        const _geometry = { ...col[geometry] };
+        const rewindGeometry = rewind(_geometry, true);
+        // multi feature 情况拆分
+        flattenEach(
+          rewindGeometry,
+          (currentFeature: Feature<Geometries, Properties>) => {
+            const coord = getCoords(currentFeature);
+            const dataItem = {
+              ...col,
+              _id: index,
+              coordinates: coord,
+            };
+
+            resultData.push(dataItem);
+          },
+        );
+      });
+
+    return {
+      dataArray: resultData,
+    };
+  }
+
   for (let featureIndex = 0; featureIndex < data.length; featureIndex++) {
     const col = data[featureIndex];
-
-    // GeoJson geometry 数据
-    if (geometry) {
-      const _geometry = { ...col[geometry] };
-      const rewindGeometry = rewind(_geometry, true);
-      // multi feature 情况拆分
-      flattenEach(
-        rewindGeometry,
-        (currentFeature: Feature<Geometries, Properties>) => {
-          const coord = getCoords(currentFeature);
-          const dataItem = {
-            ...col,
-            _id: featureIndex,
-            coordinates: coord,
-          };
-
-          resultData.push(dataItem);
-        },
-      );
-      continue;
-    }
-
     let coords = [];
 
     // GeoJson coordinates 数据
