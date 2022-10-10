@@ -1,4 +1,6 @@
 import { ILayer, IPopupOption } from '@antv/l7-core';
+// @ts-ignore
+// tslint:disable-next-line:no-implicit-dependencies
 import { BaseLayer } from '@antv/l7-layers';
 import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
@@ -239,7 +241,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    */
   protected getLayerByConfig(config: LayerPopupConfigItem): ILayer | undefined {
     const layer = config.layer;
-    if (layer instanceof BaseLayer) {
+    if (layer instanceof Object) {
       return layer;
     }
     if (typeof layer === 'string') {
