@@ -35,6 +35,7 @@ export default () => {
     });
 
     scene.on('loaded', async () => {
+
       const tiffdata = await getTiffData();
 
       const layer = new RasterLayer({});
@@ -67,7 +68,9 @@ export default () => {
         });
 
       scene.addLayer(layer);
+      
     });
+    
   }, []);
   return (
     <div

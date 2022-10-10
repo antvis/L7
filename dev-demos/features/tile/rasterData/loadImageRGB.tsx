@@ -29,12 +29,14 @@ export default () => {
           {
             parser: {
               type: 'rasterTile',
-              dataType: 'arraybuffer',
+              // dataType: 'arraybuffer',
+              dataType: 'rgb',
               tileSize: 256,
               zoomOffset: 0,
               extent: [-180, -85.051129, 179, 85.051129],
               minZoom: 0,
-              format: async (data: any) => {
+              format: async (data: any, bands) => {
+                // console.log(bands)
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',
                 });
@@ -42,37 +44,37 @@ export default () => {
                 ctx.clearRect(0, 0, 256, 256);
                 ctx.drawImage(img, 0, 0, 256, 256);
                 const imgData = ctx.getImageData(0, 0, 256, 256).data;
-                const arr: number[] = [];
+                const channelR: number[] = [];
+                const channelG: number[] = [];
+                const channelB: number[] = [];
                 for (let i = 0; i < imgData.length; i += 4) {
                   const R = imgData[i];
-                  arr.push(R);
+                  const G = imgData[i + 1];
+                  const B = imgData[i + 2];
+                  channelR.push(R);
+                  channelG.push(G);
+                  channelB.push(B);
                 }
-                return {
-                  rasterData: arr,
-                  width: 256,
-                  height: 256,
-                };
+                return [
+                  { rasterData: channelR, width: 256, height: 256 },
+                  { rasterData: channelG, width: 256, height: 256 },
+                  { rasterData: channelB, width: 256, height: 256 }
+                ]
               },
+              // operation: ['band', 0]
+              // operation: (allBands) => {
+              //   // console.log(allBands)
+              //   return allBands[0].rasterData
+              // }
+              operation: {
+                r: ['band', 0],
+                g: ['band', 1],
+                b: ['band', 2],
+              }
             },
           },
         )
         .style({
-          domain: [0, 255],
-          clampLow: true,
-          rampColors: {
-            colors: [
-              '#f7fcf5',
-              '#e5f5e0',
-              '#c7e9c0',
-              '#a1d99b',
-              '#74c476',
-              '#41ab5d',
-              '#238b45',
-              '#006d2c',
-              '#00441b',
-            ],
-            positions: [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
-          },
         });
 
       scene.addLayer(layer)

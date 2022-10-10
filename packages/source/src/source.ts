@@ -33,6 +33,7 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 }
 
 export default class Source extends EventEmitter implements ISource {
+  public type: string = 'source';
   public inited: boolean = false;
   public data: IParserData;
   public center: [number, number];

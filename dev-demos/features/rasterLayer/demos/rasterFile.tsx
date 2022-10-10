@@ -8,20 +8,10 @@ import * as GeoTIFF from 'geotiff';
 async function getTiffData() {
   const response = await fetch(
     'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+    // 'http://127.0.0.1:3333/p.tif',
   );
   const arrayBuffer = await response.arrayBuffer();
-  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
-  const image = await tiff.getImage();
-  const width = image.getWidth();
-  const height = image.getHeight();
-  const values = await image.readRasters();
-  return {
-    data: values[0],
-    width,
-    height,
-    min: 0,
-    max: 8000,
-  };
+  return arrayBuffer
 }
 
 export default () => {
@@ -35,15 +25,35 @@ export default () => {
     });
 
     scene.on('loaded', async () => {
+
       const tiffdata = await getTiffData();
 
-      const layer = new RasterLayer({});
-      layer
-        .source(tiffdata.data, {
+      const layer = new RasterLayer({})
+      layer.source({
+          data: tiffdata,
+          bands: [0]
+        }, {
           parser: {
             type: 'raster',
-            width: tiffdata.width,
-            height: tiffdata.height,
+            // width: tiffdata.width,
+            // height: tiffdata.height,
+            format: async (data, bands) => {
+
+              const tiff = await GeoTIFF.fromArrayBuffer(data);
+              const imageCount = await tiff.getImageCount();
+              console.log('imageCount', imageCount)
+
+              const image = await tiff.getImage();
+              const width = image.getWidth();
+              const height = image.getHeight();
+              const values = await image.readRasters();
+              return { rasterData: values[0], width, height };
+             
+            },
+            // operation: (allBands) => {
+            //   return allBands[0].rasterData;
+            // },
+            operation: ['+', ['band', 0], 1],
             min: 0,
             max: 80,
             extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
@@ -67,7 +77,9 @@ export default () => {
         });
 
       scene.addLayer(layer);
+      
     });
+    
   }, []);
   return (
     <div

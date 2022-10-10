@@ -5,39 +5,31 @@ import {
   IModel,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
-import { isEqual } from 'lodash';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import rasterFrag from '../shaders/raster_2d_frag.glsl';
+import rasterFrag from '../shaders/raster_rgb_frag.glsl';
 import rasterVert from '../shaders/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
-  protected colorTexture: ITexture2D;
-  private rampColors: any;
+  protected channelRMax: number = 256;
+  protected channelGMax: number = 256;
+  protected channelBMax: number = 256;
+
   public getUninforms() {
     const {
       opacity = 1,
-      clampLow = true,
-      clampHigh = true,
-      noDataValue = -9999999,
-      domain = [0, 1],
-      rampColors,
+      channelRMax,
+      channelGMax,
+      channelBMax
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    if (!isEqual(this.rampColors, rampColors)) {
-      this.updateColorTexture();
-      this.rampColors = rampColors;
-    }
-
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
-      u_domain: domain,
-      u_clampLow: clampLow,
-      u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
-      u_noDataValue: noDataValue,
-      u_colorTexture: this.colorTexture,
+      u_channelRMax: channelRMax !== undefined ? channelRMax : this.channelRMax,
+      u_channelGMax: channelGMax !== undefined ? channelGMax : this.channelGMax,
+      u_channelBMax: channelBMax !== undefined ? channelBMax : this.channelBMax,
     };
   }
 
@@ -51,7 +43,11 @@ export default class RasterModel extends BaseModel {
       }
     } else {
       // 多波段形式、需要进行处理
-      const { rasterData, width, height } = await parserDataItem.data;
+      // 支持彩色栅格（多通道）
+      const { rasterData, width, height, channelR, channelG, channelB } = await parserDataItem.data;
+      this.channelRMax = channelR;
+      this.channelGMax = channelG;
+      this.channelBMax = channelB;
       return {
         data: Array.from(rasterData),
         width,
@@ -64,36 +60,24 @@ export default class RasterModel extends BaseModel {
     const {
       mask = false,
       maskInside = true,
-      rampColorsData,
-      rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
 
     const {data, width, height} = await this.getRasterData(parserDataItem);
-    
     this.texture = createTexture2D({
+      // @ts-ignore
       data,
       width,
       height,
-      format: gl.LUMINANCE,
+      format: gl.RGB,
       type: gl.FLOAT,
-      // aniso: 4,
-    });
-    const imageData = rampColorsData
-      ? rampColorsData
-      : generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: false,
     });
 
     this.layer
       .buildLayerModel({
-        moduleName: 'rasterImageData',
+        moduleName: 'rasterImageDataRGBA',
         vertexShader: rasterVert,
         fragmentShader: rasterFrag,
         triangulation: RasterImageTriangulation,
@@ -117,7 +101,6 @@ export default class RasterModel extends BaseModel {
 
   public clearModels(): void {
     this.texture?.destroy();
-    this.colorTexture?.destroy();
   }
 
   protected registerBuiltinAttributes() {
@@ -142,20 +125,6 @@ export default class RasterModel extends BaseModel {
           return [vertex[3], vertex[4]];
         },
       },
-    });
-  }
-
-  private updateColorTexture() {
-    const { createTexture2D } = this.rendererService;
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    const imageData = generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: false,
     });
   }
 }

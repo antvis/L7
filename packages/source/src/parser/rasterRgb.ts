@@ -3,7 +3,7 @@ import { IRasterLayerData, IRasterCfg, IRasterFileData } from '../interface';
 import { bandsOperation } from '../utils/bandOperation/bands';
 import { isNumberArray } from '../utils/util';
 
-export default function raster(
+export default function rasterRgb(
   data: IRasterLayerData,
   cfg: IRasterCfg,
 ): IParserData {

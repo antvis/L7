@@ -579,7 +579,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public source(data: any, options?: ISourceCFG): ILayer {
-    if (data?.data) {
+    if (data?.type === 'source') {
       // 判断是否为source
       this.setSource(data);
       return this;
