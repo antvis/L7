@@ -1,5 +1,6 @@
 import { $window, LRUCache } from '@antv/l7-utils';
 import { injectable } from 'inversify';
+import { EventEmitter } from 'eventemitter3';
 import TinySDF from 'l7-tiny-sdf';
 import 'reflect-metadata';
 import { buildMapping } from '../../utils/font_util';
@@ -60,7 +61,7 @@ function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
 }
 
 @injectable()
-export default class FontService implements IFontService {
+export default class FontService extends EventEmitter implements IFontService {
   public get scale() {
     return HEIGHT_SCALE;
   }
@@ -137,7 +138,6 @@ export default class FontService implements IFontService {
       ...this.fontOptions,
       ...option,
     };
-    // const oldKey = this.key;
     this.key = this.getKey();
 
     const charSet = this.getNewChars(this.key, this.fontOptions.characterSet);
@@ -157,7 +157,44 @@ export default class FontService implements IFontService {
     // update cache
     this.cache.set(this.key, fontAtlas);
   }
+  /**
+   * 用户自定义添加第三方字体 （用户使用 layer/point/text/iconfont 的前提需要加载第三方字体文件）
+   * @param fontFamily
+   * @param fontPath
+   */
+   public addFontFace(fontFamily: string, fontPath: string): void {
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerText = `
+        @font-face{
+            font-family: '${fontFamily}';
+            src: url('${fontPath}') format('woff2'),
+            url('${fontPath}') format('woff'),
+            url('${fontPath}') format('truetype');
+        }`;
+        style.onload=()=>{
+          if ( document.fonts) {
+            try {
+              // @ts-ignore
+            document.fonts.load(`24px ${fontFamily}`, 'L7text');
+            document.fonts.ready.then(()=>{
+              this.emit('fontloaded',{
+                fontFamily
+              })
+            })
+          
+            } catch (e) {
+              console.warn('当前环境不支持 document.fonts !');
+              console.warn('当前环境不支持 iconfont !');
+              console.warn(e);
+            }
+          }
+    
+        }
+    document.getElementsByTagName('head')[0].appendChild(style);
 
+    
+  }
   public destroy(): void {
     this.cache.clear();
     this.iconFontMap.clear();

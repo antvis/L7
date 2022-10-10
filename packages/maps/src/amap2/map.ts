@@ -96,6 +96,12 @@ export default class AMapService extends AMapBaseService {
     });
   }
 
+  public setCoordCenter(center: [number, number]) {
+    // @ts-ignore
+    this.map.customCoords.setCenter(center);
+    this.setCustomCoordCenter(center);
+  }
+
   /**
    * 根据数据的绘制中心转换经纬度数据 高德2.0
    */
