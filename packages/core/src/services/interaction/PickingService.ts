@@ -43,9 +43,6 @@ export default class PickingService implements IPickingService {
 
   private pickBufferScale: number = 1.0;
 
-  // Tip: 记录当前拾取中的 layers
-  private pickedLayers: ILayer[] = [];
-
   public init(id: string) {
     const {
       createTexture2D,
@@ -252,7 +249,6 @@ export default class PickingService implements IPickingService {
         // trigger onHover/Click callback on layer
         isPicked = true;
         layer.setCurrentPickId(pickedFeatureIdx);
-        this.pickedLayers = [layer];
         this.triggerHoverOnLayer(layer, layerTarget); // 触发拾取事件
       }
     } else {
@@ -275,7 +271,6 @@ export default class PickingService implements IPickingService {
       });
       this.triggerHoverOnLayer(layer, layerTarget);
       layer.setCurrentPickId(null);
-      this.pickedLayers = [];
     }
 
     if (enableHighlight) {
@@ -382,12 +377,6 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
 
-          // Tip: clear last picked layer state
-          this.pickedLayers
-            .filter((pickedlayer) => !pickedlayer.isVector)
-            .map((pickedlayer) => {
-              this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
-            });
           // Tip: clear last picked tilelayer state
           this.pickedTileLayers.map((pickedTileLayer) =>
             (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),

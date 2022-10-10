@@ -19,13 +19,11 @@ export default () => {
       // 指定 iconfont 字体文件
       const fontPath =
         '//at.alicdn.com/t/font_2534097_fcae9o2mxbv.woff2?t=1622200439140';
-      // 全局添加资源
-      scene.addFontFace(fontFamily, fontPath);
-      // 全局添加 iconfont 字段的映射;
-      scene.addIconFont('icon1', '&#xe6d4;');
+    
       
       scene.on('loaded', () => {
-        const imageLayer = new PointLayer()
+        scene.once('fontloaded',(e)=>{
+          const imageLayer = new PointLayer()
           .source(
             [
               {
@@ -45,7 +43,7 @@ export default () => {
               },
             },
           )
-          .color('#44ff00')
+          .color('#f00')
           .shape('icon', 'text')
           .size(30)
           .style({
@@ -57,7 +55,22 @@ export default () => {
             iconfont: true,
             textAllowOverlap: true,
           });
-        scene.addLayer(imageLayer);
+      
+            scene.addLayer(imageLayer);
+          // }
+          
+        })
+
+ 
+        scene.addFontFace(fontFamily, fontPath);     
+        scene.addIconFont('icon1', '&#xe6d4;');
+   
+          // 全局添加资源
+
+      // 全局添加 iconfont 字段的映射;
+
+        
+       
       });
 
     }, []);
