@@ -279,4 +279,8 @@ export interface IRasterLayerStyleOptions extends IBaseLayerStyleOptions {
   clampHigh: boolean;
   rampColors: IColorRamp;
   rampColorsData?: ImageData | IImagedata;
+
+  channelRMax?: number;
+  channelGMax?: number;
+  channelBMax?: number;
 }

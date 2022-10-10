@@ -67,16 +67,25 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
+  channel?: string;
   rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
   width: number;
   height: number;
 }
-export type IRasterFormat = (imageData: ArrayBuffer, bands: number[]) => Promise<IRasterData|IRasterData[]>;
+export type IRasterFormat = (imageData: ArrayBuffer, bands: number[], channels?: string[]) => Promise<IRasterData|IRasterData[]>;
 export interface IRasterFileData {
   data: ArrayBuffer;
   bands: number[];
+  channels?: string[];
 }
-export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[];
+
+export type IRgbOperation = {
+  r?: any[];
+  g?: any[]
+  b?: any[]
+};
+
+export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation;
 
 export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
 
