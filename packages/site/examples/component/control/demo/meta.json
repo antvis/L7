@@ -15,7 +15,7 @@
     {
       "filename": "zoom.ts",
       "title": {
-        "zh": "Zoom",
+        "zh": "Zoom 缩放",
         "en": "Zoom"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PRkHRonRENYAAAAAAAAAAAAAARQnAQ"
@@ -23,7 +23,7 @@
     {
       "filename": "scale.ts",
       "title": {
-        "zh": "Scale",
+        "zh": "Scale 比例尺",
         "en": "Scale"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*5dWeRaRpOHEAAAAAAAAAAAAAARQnAQ"
@@ -31,7 +31,7 @@
     {
       "filename": "fullscreen.ts",
       "title": {
-        "zh": "Fullscreen",
+        "zh": "Fullscreen 全屏",
         "en": "Fullscreen"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*fqJlQ5vJVicAAAAAAAAAAAAAARQnAQ"
@@ -39,7 +39,7 @@
     {
       "filename": "geoLocate.ts",
       "title": {
-        "zh": "GeoLocate",
+        "zh": "GeoLocate 定位",
         "en": "GeoLocate"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*aElZR7bPFGAAAAAAAAAAAAAAARQnAQ"
@@ -47,7 +47,7 @@
     {
       "filename": "exportImage.ts",
       "title": {
-        "zh": "ExportImage",
+        "zh": "ExportImage 导出图片",
         "en": "ExportImage"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*at1HRbHfipUAAAAAAAAAAAAAARQnAQ"
@@ -55,7 +55,7 @@
     {
       "filename": "mouseLocation.ts",
       "title": {
-        "zh": "MouseLocation",
+        "zh": "MouseLocation 鼠标经纬度",
         "en": "MouseLocation"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*sJF1S4JaPx8AAAAAAAAAAAAAARQnAQ"
@@ -63,7 +63,7 @@
     {
       "filename": "layerControl.ts",
       "title": {
-        "zh": "LayerControl",
+        "zh": "LayerControl 图层显隐控制",
         "en": "LayerControl"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*gWO_T6xpVtwAAAAAAAAAAAAAARQnAQ"
@@ -71,7 +71,7 @@
     {
       "filename": "mapTheme.ts",
       "title": {
-        "zh": "MapTheme",
+        "zh": "MapTheme 地图样式切换",
         "en": "MapTheme"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*byM3QZbjqScAAAAAAAAAAAAAARQnAQ"

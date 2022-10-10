@@ -4,7 +4,7 @@
 | className | 自定义样式名                                                                                   | `string`              |
 | style     | 自定义样式                                                                                     | `string`              |
 
-## Position
+### Position
 
 ```ts
 export type Position =

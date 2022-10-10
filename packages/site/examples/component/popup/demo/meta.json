@@ -7,7 +7,7 @@
     {
       "filename": "popup.ts",
       "title": {
-        "zh": "基础气泡",
+        "zh": "Popup 基础气泡",
         "en": "Popup"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*cNMlSLwgjboAAAAAAAAAAAAAARQnAQ"
@@ -15,7 +15,7 @@
     {
       "filename": "layerPopup.ts",
       "title": {
-        "zh": "图层气泡",
+        "zh": "LayerPopup 图层气泡",
         "en": "LayerPopup"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*HbyzRqv6JZcAAAAAAAAAAAAAARQnAQ"

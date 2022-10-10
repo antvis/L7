@@ -1,4 +1,4 @@
-import { Scene, GaodeMapV2, ExportImage } from '@antv/l7';
+import { Scene, GaodeMapV2, ExportImage, PolygonLayer } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
@@ -13,6 +13,34 @@ const scene = new Scene({
   }),
 });
 scene.on('loaded', () => {
+  const polygonLayer = new PolygonLayer({});
+  polygonLayer
+    .source({
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [120.143575, 30.239811],
+                [120.143575, 30.247856],
+                [120.151213, 30.247856],
+                [120.151213, 30.239811],
+                [120.143575, 30.239811],
+              ],
+            ],
+          },
+        },
+      ],
+    })
+    .color('#ff0000')
+    .style({
+      opacity: 0.5,
+    });
+  scene.addLayer(polygonLayer);
   const exportImage = new ExportImage({
     onExport: (base64) => {
       alert(base64);

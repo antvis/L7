@@ -7,11 +7,11 @@ order: 11
 
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*xb29TawbZDgAAAAAAAAAAAAAARQnAQ" width="400"/>
 
-# 说明
+## 说明
 
 MapTheme 会根据当前地图底图类型（如 Mapbox、GaodeMapV2），默认展示相对应的默认主题选项，用于也可以传入自定义的主题选项
 
-# 使用
+## 使用
 
 [示例](/zh/examples/component/control#maptheme)
 
@@ -28,7 +28,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称    | 说明                                                                                   | 类型                        |
 | ------- | -------------------------------------------------------------------------------------- | --------------------------- |
@@ -38,11 +38,11 @@ scene.on('loaded', () => {
 
 ```ts
 export type IControlOptionItem = {
-  // 选项对应的文本
+  // 主题选项对应的文本
   text: string;
-  // 选项对应地图主题 style 的 key 值
+  // 主题选项对应地图主题 style 的 key 值
   value: string;
-  // 选项对应展示的图片
+  // 主题选项对应展示的图片
   img?: string;
 };
 ```
@@ -53,11 +53,11 @@ export type IControlOptionItem = {
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 `markdown:docs/common/control/event.md`
 

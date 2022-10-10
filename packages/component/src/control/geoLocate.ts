@@ -6,7 +6,7 @@ import ButtonControl, {
 } from './baseControl/buttonControl';
 
 export interface IGeoLocateOption extends IButtonControlOption {
-  transform: (position: Point) => Point;
+  transform: (position: Point) => Point | Promise<Point>;
 }
 
 export { GeoLocate };
@@ -48,8 +48,8 @@ export default class GeoLocate extends ButtonControl<IGeoLocateOption> {
             reject();
           }
         },
-        () => {
-          reject();
+        (e) => {
+          reject(e);
         },
       );
     });
@@ -64,7 +64,7 @@ export default class GeoLocate extends ButtonControl<IGeoLocateOption> {
     const currentZoom = this.mapsService.getZoom();
     this.mapsService.setZoomAndCenter(
       currentZoom > 15 ? currentZoom : 15,
-      transform ? transform(position) : position,
+      transform ? await transform(position) : position,
     );
   };
 }

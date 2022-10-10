@@ -7,7 +7,7 @@ Popup 是用于在地图上指定经纬度位置，展示自定义内容的气�
 
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*N2hWTq-m-8EAAAAAAAAAAAAAARQnAQ" width="300"/>
 
-# 说明
+## 说明
 
 Popup 的锚点位置是由经纬度来表达的，当地图缩放/平移时，Popup 会自动计算相对于当前地图的坐标并且自动位移。换句话说，如果开发者需要在地图的**指定经纬度位置**展示信息气泡，可以考虑使用 Popup 组件来实现对应效果。
 
@@ -16,7 +16,7 @@ Popup 的锚点位置是由经纬度来表达的，当地图缩放/平移时，P
 - 纯文本可以通过 `text` 配置或者 `setText` 方法控制 Popup 的展示文本。
 - 自定义 DOM 可以通过 `html` 配置或者 `setHTML` 方法，支持传入 HTML 字符串或者 DOM 元素或数组的方式控制 Popup 的展示内容。
 
-# 使用
+## 使用
 
 [示例](/zh/examples/component/popup#popup)
 
@@ -55,7 +55,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称               | 说明                                                                     | 类型                                   | 默认值     |
 | ------------------ | ------------------------------------------------------------------------ | -------------------------------------- | ---------- |
@@ -75,7 +75,7 @@ scene.on('loaded', () => {
 | closeButtonOffsets | 关闭 Popup 图标的相对偏移                                                | `[number, number]`                     | -          |
 | stopPropagation    | Popup 上的鼠标事件是否要阻止其冒泡                                       | `boolean`                              | `true`     |
 
-## AnchorType
+### AnchorType
 
 ```ts
 export type AnchorType =
@@ -90,7 +90,7 @@ export type AnchorType =
   | 'right';
 ```
 
-# 方法
+## 方法
 
 | 名称       | 说明                        | 类型                                                                |
 | ---------- | --------------------------- | ------------------------------------------------------------------- |
@@ -104,7 +104,7 @@ export type AnchorType =
 | setLngLat  | 设置 Popup 锚点所在经纬度   | `(lngLat: { lng: number; lat: number } | [number, number]) => this` |
 | panToPopup | 将地图平移至当前 Popup 位置 | `() => this`                                                        |
 
-# 事件
+## 事件
 
 | 名称  | 说明               | 类型         |
 | ----- | ------------------ | ------------ |

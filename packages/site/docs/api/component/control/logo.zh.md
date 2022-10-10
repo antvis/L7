@@ -7,7 +7,7 @@ order: 2
 
 ![](https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*CbdSRLizMLIAAAAAAAAAAAAAARQnAQ)
 
-# 说明
+## 说明
 
 当前 L7 会默认在地图左下角展示该控件，如需隐藏可以在 Scene 实例化时配置：
 
@@ -15,12 +15,14 @@ order: 2
 import { Scene } from '@antv/l7';
 
 const scene = new Scene({
-  id: 'map',
+  // ...
+
+  // 关闭默认 L7 Logo
   logoVisible: false,
 });
 ```
 
-# 使用
+## 使用
 
 [示例](/zh/examples/component/control#logo)
 
@@ -29,11 +31,12 @@ import { Scene, Logo } from '@antv/l7';
 
 const scene = new Scene({
   //...
+  logoVisible: false,
 });
 
 scene.on('loaded', () => {
   const logo = new Logo({
-    // Logo url
+    // 图片 url
     img:
       'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GRb1TKp4HcMAAAAAAAAAAAAAARQnAQ',
     // 跳转地址
@@ -43,7 +46,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称 | 说明                                                 | 类型     |
 | ---- | ---------------------------------------------------- | -------- |
@@ -52,10 +55,10 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 `markdown:docs/common/control/event.md`

@@ -7,7 +7,7 @@ order: 4
 
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*r3iSQI4SekYAAAAAAAAAAAAAARQnAQ" width="400"/>
 
-# 使用
+## 使用
 
 [示例](/zh/examples/component/control#scale)
 
@@ -27,7 +27,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称           | 说明                                 | 类型      | 默认值  |
 | -------------- | ------------------------------------ | --------- | ------- |
@@ -39,10 +39,10 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 `markdown:docs/common/control/event.md`

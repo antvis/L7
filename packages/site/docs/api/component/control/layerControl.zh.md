@@ -5,13 +5,13 @@ order: 8
 
 用于控制目标图层组的**显示**和**隐藏**操作。
 
-<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*8OCiRYL29CcAAAAAAAAAAAAAARQnAQ" width="400"/>
+<img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*SiQWT5RnMDYAAAAAAAAAAAAAARQnAQ" width="400"/>
 
-# 说明
+## 说明
 
 **注意**： 在控件中展示的图层名称会默认读取图层的 `name` 属性，因此需要用户在初始化图层时传入图层对应的名称。
 
-# 使用
+## 使用
 
 [示例](/zh/examples/component/control#layercontrol)
 
@@ -35,7 +35,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称   | 说明                                                          | 类型            |
 | ------ | ------------------------------------------------------------- | --------------- |
@@ -47,11 +47,11 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 `markdown:docs/common/control/event.md`
 

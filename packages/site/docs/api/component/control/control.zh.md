@@ -7,7 +7,7 @@ order: 1
 
 ![](https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*zgFeTocc-_oAAAAAAAAAAAAAARQnAQ)
 
-# 使用
+## 使用
 
 ```ts
 import { Scene, Zoom } from '@antv/l7';
@@ -28,7 +28,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 更新配置
+## 更新配置
 
 在控件实例化之后，如果需要更新配置，可以调用控件实例的 `setOptions` 方法，同时传入需要更新的配置对象即可。
 
@@ -45,7 +45,7 @@ const onPositionChange = () => {
 };
 ```
 
-# 插槽
+## 插槽
 
 当前 L7 中的控件支持插入到地图的**左上、左下、右上、右下、上、左、下、右**八个位置的控件插槽中，并且在同一插槽中的多个控件支持**横向**和**纵向**排列。
 
@@ -53,14 +53,14 @@ const onPositionChange = () => {
 
 ![](https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*BfG1TI231ysAAAAAAAAAAAAAARQnAQ)
 
-# 配置
+## 配置
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 `markdown:docs/common/control/event.md`

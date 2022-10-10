@@ -73,7 +73,7 @@ scene.on('loaded', () => {
       ],
     })
     .color('#700000')
-    .size(4);
+    .size(2);
   scene.addLayer(lineLayer);
 
   const layerControl = new LayerControl({

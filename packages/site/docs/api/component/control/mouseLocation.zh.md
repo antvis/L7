@@ -7,7 +7,7 @@ order: 9
 
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*i4F5QZ4K650AAAAAAAAAAAAAARQnAQ" width="400"/>
 
-# 使用
+## 使用
 
 [示例](/zh/examples/component/control#mouselocation)
 
@@ -28,7 +28,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称      | 说明                         | 类型                                               |
 | --------- | ---------------------------- | -------------------------------------------------- |
@@ -36,11 +36,11 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 | 名称           | 说明                         | 类型                                   |
 | -------------- | ---------------------------- | -------------------------------------- |

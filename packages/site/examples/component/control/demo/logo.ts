@@ -8,6 +8,7 @@ const scene = new Scene({
     center: [120.154672, 30.241095],
     zoom: 12,
   }),
+  // 关闭默认 L7 Logo
   logoVisible: false,
 });
 scene.on('loaded', () => {

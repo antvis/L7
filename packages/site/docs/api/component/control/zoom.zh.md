@@ -7,7 +7,7 @@ order: 3
 
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*CJx3Tby-XlEAAAAAAAAAAAAAARQnAQ" width="400"/>
 
-# 使用
+## 使用
 
 [示例](/zh/examples/component/control#zoom)
 
@@ -27,7 +27,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称         | 说明                    | 类型                      |
 | ------------ | ----------------------- | ------------------------- |
@@ -38,7 +38,7 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 | 名称    | 说明     | 类型         |
 | ------- | -------- | ------------ |
@@ -47,6 +47,6 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 `markdown:docs/common/control/event.md`

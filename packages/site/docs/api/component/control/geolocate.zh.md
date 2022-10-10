@@ -7,7 +7,7 @@ order: 6
 
 <img src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*BOsBRJyYeMEAAAAAAAAAAAAAARQnAQ" width="400"/>
 
-# 说明
+## 说明
 
 [示例](/zh/examples/component/control#geolocate)
 
@@ -16,7 +16,7 @@ order: 6
 - 在使用该能力时，会需要用户对浏览器打开位置感知能力进行鉴权。
 - 当前浏览器获取到的坐标是 `WGS84` 地理坐标系，在高德地图上使用会有偏差，可以使用 `transform` 配置进行坐标系的转换。
 
-# 使用
+## 使用
 
 ```ts
 import { Scene, GeoLocate } from '@antv/l7';
@@ -37,7 +37,7 @@ scene.on('loaded', () => {
 });
 ```
 
-# 配置
+## 配置
 
 | 名称      | 说明                                                                    | 类型                                               |
 | --------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
@@ -47,7 +47,7 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/api.md`
 
-# 方法
+## 方法
 
 | 名称           | 说明                   | 类型                                |
 | -------------- | ---------------------- |-----------------------------------|
@@ -55,6 +55,6 @@ scene.on('loaded', () => {
 
 `markdown:docs/common/control/method.md`
 
-# 事件
+## 事件
 
 `markdown:docs/common/control/event.md`
