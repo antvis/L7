@@ -68,7 +68,6 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
-  channel?: string;
   rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
   width: number;
   height: number;
@@ -77,7 +76,6 @@ export type IRasterFormat = (imageData: ArrayBuffer, bands: number[], channels?:
 export interface IRasterFileData {
   data: ArrayBuffer;
   bands: number[];
-  channels?: string[];
 }
 
 export type IRgbOperation = {
