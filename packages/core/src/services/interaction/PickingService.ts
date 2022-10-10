@@ -321,20 +321,20 @@ export default class PickingService implements IPickingService {
     if (!this.isPickingAllLayer()) return;
 
     this.alreadyInPicking = true;
-    await this.pickingLayers(target); 
+    await this.pickingLayers(target);
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
 
   private isPickingAllLayer() {
     // this.alreadyInPicking 避免多次重复拾取
-    if(this.alreadyInPicking) return false;
+    if (this.alreadyInPicking) return false;
     // this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
-    if(this.layerService.alreadyInRendering) return false;
+    if (this.layerService.alreadyInRendering) return false;
     // this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
-    if(this.interactionService.indragging) return false;
+    if (this.interactionService.indragging) return false;
     // 判断当前进行 shader pick 拾取判断
-    if(!this.layerService.getShaderPickStat()) return false;
+    if (!this.layerService.getShaderPickStat()) return false;
 
     // 进行拾取
     return true;
@@ -358,10 +358,7 @@ export default class PickingService implements IPickingService {
     }
   }
   private async pickingLayers(target: IInteractionTarget) {
-    const {
-      useFramebuffer,
-      clear,
-    } = this.rendererService;
+    const { useFramebuffer, clear } = this.rendererService;
     this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
