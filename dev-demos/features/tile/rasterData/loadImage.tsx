@@ -25,8 +25,7 @@ export default () => {
       const layer = new RasterLayer();
       layer
         .source(
-          'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w3dHk3dnN4MDYzaDNycDkyMDl2bzh6NiJ9.YIrG9kwUpayLj01f6W23Gw',
-        
+          'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           {
             parser: {
               type: 'rasterTile',
@@ -46,10 +45,7 @@ export default () => {
                 const arr: number[] = [];
                 for (let i = 0; i < imgData.length; i += 4) {
                   const R = imgData[i];
-                  const G = imgData[i + 1];
-                  const B = imgData[i + 2];
-                  const d = -10000 + (R * 256 * 256 + G * 256 + B) * 0.1;
-                  arr.push(d);
+                  arr.push(R);
                 }
                 return {
                   rasterData: arr,
@@ -61,7 +57,7 @@ export default () => {
           },
         )
         .style({
-          domain: [0, 1014],
+          domain: [0, 255],
           clampLow: true,
           rampColors: {
             colors: [

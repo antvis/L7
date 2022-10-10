@@ -256,6 +256,7 @@ class Scene
    * @param name
    */
   public addIconFont(name: string, fontUnicode: string): void {
+   
     this.fontService.addIconFont(name, fontUnicode);
   }
 
@@ -270,7 +271,10 @@ class Scene
    * @param fontPath
    */
   public addFontFace(fontFamily: string, fontPath: string): void {
-    this.sceneService.addFontFace(fontFamily, fontPath);
+    this.fontService.once('fontloaded', (e)=>{
+      this.emit('fontloaded',e)
+    });
+    this.fontService.addFontFace(fontFamily, fontPath);
   }
 
   public addImage(id: string, img: IImage) {
@@ -279,7 +283,6 @@ class Scene
     } else {
       this.iconService.addImageMini(id, img, this.sceneService);
     }
-    // this.iconService.addImage(id, img);
   }
 
   public hasImage(id: string) {
@@ -351,6 +354,12 @@ class Scene
       this.mapService.once(type, handle);
     }
   }
+  public emit(type: string, handle: (...args: any[]) => void): void {
+    SceneEventList.indexOf(type) === -1
+      ? this.mapService.on(type, handle)
+      : this.sceneService.emit(type, handle);
+  }
+
 
   public off(type: string, handle: (...args: any[]) => void): void {
     if (BoxSelectEventList.includes(type)) {

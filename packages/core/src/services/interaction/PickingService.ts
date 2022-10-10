@@ -43,9 +43,6 @@ export default class PickingService implements IPickingService {
 
   private pickBufferScale: number = 1.0;
 
-  // Tip: 记录当前拾取中的 layers
-  private pickedLayers: ILayer[] = [];
-
   public init(id: string) {
     const {
       createTexture2D,
@@ -252,7 +249,6 @@ export default class PickingService implements IPickingService {
         // trigger onHover/Click callback on layer
         isPicked = true;
         layer.setCurrentPickId(pickedFeatureIdx);
-        this.pickedLayers = [layer];
         this.triggerHoverOnLayer(layer, layerTarget); // 触发拾取事件
       }
     } else {
@@ -275,7 +271,6 @@ export default class PickingService implements IPickingService {
       });
       this.triggerHoverOnLayer(layer, layerTarget);
       layer.setCurrentPickId(null);
-      this.pickedLayers = [];
     }
 
     if (enableHighlight) {
@@ -326,20 +321,20 @@ export default class PickingService implements IPickingService {
     if (!this.isPickingAllLayer()) return;
 
     this.alreadyInPicking = true;
-    await this.pickingLayers(target); 
+    await this.pickingLayers(target);
     this.layerService.renderLayers();
     this.alreadyInPicking = false;
   }
 
   private isPickingAllLayer() {
     // this.alreadyInPicking 避免多次重复拾取
-    if(this.alreadyInPicking) return false;
+    if (this.alreadyInPicking) return false;
     // this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
-    if(this.layerService.alreadyInRendering) return false;
+    if (this.layerService.alreadyInRendering) return false;
     // this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
-    if(this.interactionService.indragging) return false;
+    if (this.interactionService.indragging) return false;
     // 判断当前进行 shader pick 拾取判断
-    if(!this.layerService.getShaderPickStat()) return false;
+    if (!this.layerService.getShaderPickStat()) return false;
 
     // 进行拾取
     return true;
@@ -363,10 +358,7 @@ export default class PickingService implements IPickingService {
     }
   }
   private async pickingLayers(target: IInteractionTarget) {
-    const {
-      useFramebuffer,
-      clear,
-    } = this.rendererService;
+    const { useFramebuffer, clear } = this.rendererService;
     this.resizePickingFBO();
 
     useFramebuffer(this.pickingFBO, () => {
@@ -382,12 +374,6 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
 
-          // Tip: clear last picked layer state
-          this.pickedLayers
-            .filter((pickedlayer) => !pickedlayer.isVector)
-            .map((pickedlayer) => {
-              this.selectFeature(pickedlayer, new Uint8Array([0, 0, 0, 0]));
-            });
           // Tip: clear last picked tilelayer state
           this.pickedTileLayers.map((pickedTileLayer) =>
             (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),

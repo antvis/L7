@@ -66,6 +66,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string = `${layerIdCounter}`;
+  public coordCenter: number[];
   public type: string;
   public visible: boolean = true;
   public zIndex: number = 0;
@@ -578,7 +579,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public source(data: any, options?: ISourceCFG): ILayer {
-    if (data?.data) {
+    if (data?.type === 'source') {
       // 判断是否为source
       this.setSource(data);
       return this;
@@ -1046,6 +1047,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
     // this.layerSource.inited 为 true 后，sourceUpdate 事件不会再触发
     this.layerSource.on('sourceUpdate', () => {
+      if (this.coordCenter === undefined) {
+        const layerCenter = this.layerSource.center;
+        this.coordCenter = layerCenter;
+        this.mapService.setCoordCenter &&
+          this.mapService.setCoordCenter(layerCenter);
+        // // @ts-ignore
+        // this.mapService.map.customCoords.setCenter(layerCenter);
+        // // @ts-ignore
+        // this.mapService.setCustomCoordCenter(layerCenter);
+      }
       this.sourceEvent();
     });
   }
@@ -1178,6 +1189,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
             })
             .catch((err) => reject(err));
         } else {
+          // console.log(this.encodedData[1].originCoordinates[0])
+          // console.log(this.encodedData[1].coordinates[0])
           const {
             attributes,
             elements,

@@ -22,7 +22,6 @@ export default class RasterTiffTile extends TileFactory {
       clampLow,
       mask,
     } = initOptions;
-
     const rasterData = tile.data;
     if (!rasterData.data) {
       console.warn('raster data not exist!');
@@ -31,13 +30,15 @@ export default class RasterTiffTile extends TileFactory {
         layerIDList: [],
       };
     }
+    const dataType = this.parentLayer?.getSource()?.parser?.dataType;
     const layer = new RasterDataLayer({
       visible: tile.isVisible,
       mask,
     })
       .source(rasterData.data, {
         parser: {
-          type: 'raster',
+          // 数据栅格分为单通道栅格和多通道彩色栅格
+          type: dataType === 'rgb' ? 'rasterRgb': 'raster',
           width: rasterData.width,
           height: rasterData.height,
           extent: tile.bboxPolygon.bbox,
@@ -46,6 +47,7 @@ export default class RasterTiffTile extends TileFactory {
       .style({
         colorTexture,
         opacity,
+        // TODO: 目前从 domain 从父瓦片图层的 style 进行配置，后续考虑从每个时机请求的栅格文件中进行配置
         domain,
         clampHigh,
         clampLow,

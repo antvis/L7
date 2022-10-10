@@ -54,6 +54,7 @@ export interface IMapService<RawMap = {}> {
   simpleMapCoord: ISimpleMapCoord;
   map: RawMap;
   bgColor: string;
+  setCoordCenter?(center: number[]): void;
   setBgColor(color: string): void;
   init(): void;
   initMiniMap?(): void;

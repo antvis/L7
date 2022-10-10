@@ -33,6 +33,7 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 }
 
 export default class Source extends EventEmitter implements ISource {
+  public type: string = 'source';
   public inited: boolean = false;
   public data: IParserData;
   public center: [number, number];
@@ -130,7 +131,7 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getFeatureById(id: number): unknown {
-    const { type = 'geojson' } = this.parser;
+    const { type = 'geojson', geometry } = this.parser;
     if (type === 'geojson' && !this.cluster) {
       const feature =
         id < this.originData.features.length
@@ -138,7 +139,10 @@ export default class Source extends EventEmitter implements ISource {
           : 'null';
       const newFeature = cloneDeep(feature);
 
-      if (newFeature?.properties && (this.transforms.length !== 0 || this.dataArrayChanged)) {
+      if (
+        newFeature?.properties &&
+        (this.transforms.length !== 0 || this.dataArrayChanged)
+      ) {
         // 如果数据进行了transforms 属性会发生改变 或者数据dataArray发生更新
         const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
           return dataItem._id === id;
@@ -146,6 +150,8 @@ export default class Source extends EventEmitter implements ISource {
         newFeature.properties = item;
       }
       return newFeature;
+    } else if (type === 'json' && geometry) {
+      return this.data.dataArray.find((dataItem) => dataItem._id === id);
     } else {
       return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
     }
@@ -256,7 +262,7 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset = this.initTileset();
 
     // 判断当前 source 是否需要计算范围
-    if(parser.cancelExtent) return;
+    if (parser.cancelExtent) return;
 
     // 计算范围
     this.extent = extent(this.data.dataArray);
