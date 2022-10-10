@@ -172,26 +172,27 @@ export default class FontService extends EventEmitter implements IFontService {
             url('${fontPath}') format('woff'),
             url('${fontPath}') format('truetype');
         }`;
-    document.getElementsByTagName('head')[0].appendChild(style);
-    style.onload=()=>{
-      if ( document.fonts) {
-        try {
-          // @ts-ignore
-        document.fonts.load(`24px ${fontFamily}`, 'L7text');
-        document.fonts.ready.then(()=>{
-          this.emit('fontloaded',{
-            fontFamily
-          })
-        })
-      
-        } catch (e) {
-          console.warn('当前环境不支持 document.fonts !');
-          console.warn('当前环境不支持 iconfont !');
-          console.warn(e);
+        style.onload=()=>{
+          if ( document.fonts) {
+            try {
+              // @ts-ignore
+            document.fonts.load(`24px ${fontFamily}`, 'L7text');
+            document.fonts.ready.then(()=>{
+              this.emit('fontloaded',{
+                fontFamily
+              })
+            })
+          
+            } catch (e) {
+              console.warn('当前环境不支持 document.fonts !');
+              console.warn('当前环境不支持 iconfont !');
+              console.warn(e);
+            }
+          }
+    
         }
-      }
+    document.getElementsByTagName('head')[0].appendChild(style);
 
-    }
     
   }
   public destroy(): void {
