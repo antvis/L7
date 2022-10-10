@@ -35,10 +35,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
   public loaded: boolean = false;
-  // loadFont 判断用户当前是否添加自定义字体
-  public loadFont: boolean = false;
-  // fontFamily 用户当前自己添加的字体的名称
-  public fontFamily: string = '';
+
 
   @inject(TYPES.SceneID)
   private readonly id: string;
@@ -134,6 +131,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.iconService.on('imageUpdate', () => this.render());
     // 字体资源
     this.fontService.init();
+  
 
     /**
      * 初始化底图
@@ -316,17 +314,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       if (this.destroyed) {
         this.destroy();
       }
-      // @ts-ignore
-      if (this.loadFont && document.fonts) {
-        try {
-          // @ts-ignore
-          await document.fonts.load(`24px ${this.fontFamily}`, 'L7text');
-        } catch (e) {
-          console.warn('当前环境不支持 document.fonts !');
-          console.warn('当前环境不支持 iconfont !');
-          console.warn(e);
-        }
-      }
 
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.layerService.initLayers();
@@ -350,18 +337,7 @@ export default class Scene extends EventEmitter implements ISceneService {
    * @param fontPath
    */
   public addFontFace(fontFamily: string, fontPath: string): void {
-    this.fontFamily = fontFamily;
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerText = `
-        @font-face{
-            font-family: '${fontFamily}';
-            src: url('${fontPath}') format('woff2'),
-            url('${fontPath}') format('woff'),
-            url('${fontPath}') format('truetype');
-        }`;
-    document.getElementsByTagName('head')[0].appendChild(style);
-    this.loadFont = true;
+    this.fontService.addFontFace(fontFamily,fontPath)
   }
 
   public getSceneContainer(): HTMLDivElement {
