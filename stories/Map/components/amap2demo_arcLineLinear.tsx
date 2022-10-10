@@ -15,7 +15,7 @@ export default class Amap2demo_arcLineLinear extends React.Component {
       id: 'map',
       map: new GaodeMapV2({
         pitch: 40,
-        center: [107.77791556935472, 35.443286920228644],
+        center: [60, 40],
         zoom: 2.9142882493605033,
         viewMode: '3D',
         style: 'dark',
@@ -25,11 +25,6 @@ export default class Amap2demo_arcLineLinear extends React.Component {
     this.scene = scene;
 
     scene.on('loaded', () => {
-      scene.addImage(
-        '02',
-        'https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg',
-      );
-
       let data = [
         {
           lng1: 75.76171875,
@@ -38,7 +33,6 @@ export default class Amap2demo_arcLineLinear extends React.Component {
           lat2: 52.802761415419674,
         },
       ];
-      // @ts-ignore
       const layer = new LineLayer({
         blend: 'normal',
       })
@@ -54,10 +48,9 @@ export default class Amap2demo_arcLineLinear extends React.Component {
         .size(20)
         .shape('arc')
         .color('#f00')
+        .active(true)
         .style({
           // forward: false,
-          lineTexture: true, // 开启线的贴图功能
-          iconStep: 30, // 设置贴图纹理的间距
           // opacity: 0.5,
           // opacity: 0.2,
           // lineType: 'dash',
@@ -74,6 +67,10 @@ export default class Amap2demo_arcLineLinear extends React.Component {
       //   trailLength: 0.1,
       // });
       scene.addLayer(layer);
+
+      layer.on('click', (e) => {
+        console.log(e);
+      });
     });
   }
 

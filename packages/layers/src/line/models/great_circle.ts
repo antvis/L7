@@ -8,13 +8,11 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
+import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-// import line_arc_frag from '../shaders/line_arc_frag.glsl';
 import line_arc_frag from '../shaders/line_arc_great_circle_frag.glsl';
 import line_arc2d_vert from '../shaders/line_arc_great_circle_vert.glsl';
 const lineStyleObj: { [key: string]: number } = {
@@ -26,7 +24,7 @@ export default class GreatCircleModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -36,7 +34,6 @@ export default class GreatCircleModel extends BaseModel {
       iconStep = 100,
       segmentNumber = 30,
     } = this.layer.getLayerConfig() as Partial<ILineLayerStyleOptions>;
-    // console.log('opacity', opacity)
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
@@ -88,7 +85,7 @@ export default class GreatCircleModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity === undefined ? 1 : opacity,
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
@@ -110,16 +107,16 @@ export default class GreatCircleModel extends BaseModel {
   public getAnimateUniforms(): IModelUniform {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     return {
-      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -128,17 +125,28 @@ export default class GreatCircleModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'arc2dline',
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    this.layer
+      .buildLayerModel({
+        moduleName: 'lineGreatCircle',
         vertexShader: line_arc2d_vert,
         fragmentShader: line_arc_frag,
         triangulation: LineArcTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

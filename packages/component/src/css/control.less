@@ -1,0 +1,71 @@
+@import 'variables.less';
+
+.l7-control-container {
+  font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+  .l7-control {
+    position: relative;
+    z-index: 800;
+    float: left;
+    clear: both;
+    color: @l7-control-font-color;
+    font-size: @l7-control-font-size;
+    pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+    pointer-events: auto;
+
+    &.l7-control--hide {
+      display: none;
+    }
+  }
+
+  each(@position-list,{
+    .l7-@{value} {
+        @{value}: 0;
+      display: flex;
+      position: absolute;
+      z-index: 1000;
+      pointer-events: none;
+      .l7-control:not(.l7-control--hide) {
+        margin-@{value}: @l7-control-space;
+      }
+    }
+  });
+
+  .l7-center {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    &.l7-top,
+    &.l7-bottom {
+      width: 100%;
+    }
+    &.l7-left,
+    &.l7-right {
+      height: 100%;
+    }
+    .l7-control {
+      margin-right: @l7-control-space;
+      margin-bottom: @l7-control-space;
+    }
+  }
+
+  .l7-row {
+    flex-direction: row;
+    &.l7-top {
+      align-items: flex-start;
+    }
+    &.l7-bottom {
+      align-items: flex-end;
+    }
+  }
+
+  .l7-column {
+    flex-direction: column;
+    &.l7-left {
+      align-items: flex-start;
+    }
+    &.l7-right {
+      align-items: flex-end;
+    }
+  }
+}

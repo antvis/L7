@@ -2,33 +2,20 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
   IModel,
-  IModelUniform,
-  IRasterParserDataItem,
-  IStyleAttributeService,
   ITexture2D,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
+import { isEqual } from 'lodash';
 import BaseModel from '../../core/BaseModel';
+import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import rasterFrag from '../shaders/raster_2d_frag.glsl';
 import rasterVert from '../shaders/raster_2d_vert.glsl';
-
-interface IRasterLayerStyleOptions {
-  opacity: number;
-  domain: [number, number];
-  noDataValue: number;
-  clampLow: boolean;
-  clampHigh: boolean;
-  rampColors: IColorRamp;
-}
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
+  private rampColors: any;
   public getUninforms() {
     const {
       opacity = 1,
@@ -36,8 +23,13 @@ export default class RasterModel extends BaseModel {
       clampHigh = true,
       noDataValue = -9999999,
       domain = [0, 1],
+      rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    this.updateColorTexure();
+    if (!isEqual(this.rampColors, rampColors)) {
+      this.updateColorTexture();
+      this.rampColors = rampColors;
+    }
+
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
@@ -49,7 +41,13 @@ export default class RasterModel extends BaseModel {
     };
   }
 
-  public initModels() {
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      mask = false,
+      maskInside = true,
+      rampColorsData,
+      rampColors,
+    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
@@ -61,32 +59,45 @@ export default class RasterModel extends BaseModel {
       type: gl.FLOAT,
       // aniso: 4,
     });
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    const imageData = generateColorRamp(rampColors as IColorRamp);
+    const imageData = rampColorsData
+      ? rampColorsData
+      : generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
       data: imageData.data,
       width: imageData.width,
       height: imageData.height,
       flipY: false,
     });
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'RasterImageData',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'rasterImageData',
         vertexShader: rasterVert,
         fragmentShader: rasterFrag,
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
-        blend: this.getBlend(),
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+        pick: false,
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
-  public buildModels() {
-    return this.initModels();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
+
+  public clearModels(): void {
+    this.texture?.destroy();
+    this.colorTexture?.destroy();
+  }
+
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
@@ -105,7 +116,6 @@ export default class RasterModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
@@ -113,7 +123,7 @@ export default class RasterModel extends BaseModel {
     });
   }
 
-  private updateColorTexure() {
+  private updateColorTexture() {
     const { createTexture2D } = this.rendererService;
     const {
       rampColors,

@@ -18,14 +18,16 @@ uniform float u_activeMix: 0;
  * Returns highlight color if this item is selected.
  */
 vec4 filterHighlightColor(vec4 color, float weight) {
-  float selected = v_PickingResult.a;
+  // float selected = v_PickingResult.a;
+  bool selected = bool(v_PickingResult.a);
 
-  if (selected == SELECT) {
-    // 点击选中状态
-    vec4 selectColor = u_SelectColor * COLOR_SCALE;
-    return selectColor;
-  } else if (selected == HIGHLIGHT) {
-    // hover 高亮状态
+  // if (selected == SELECT) {
+  if (selected) {
+  //   // 点击选中状态
+  //   vec4 selectColor = u_SelectColor * COLOR_SCALE;
+  //   return selectColor;
+  // } else if (selected == HIGHLIGHT) {
+  //   // hover 高亮状态
     vec4 highLightColor = u_HighlightColor * COLOR_SCALE;
 
     float highLightAlpha = highLightColor.a;
@@ -54,7 +56,7 @@ vec4 filterPickingColor(vec4 color) {
  * highlight color if this item is selected, otherwise unmodified argument.
  */
 vec4 filterColor(vec4 color) {
-  // TODO: 过滤多余的 shader 计算
+  // 过滤多余的 shader 计算
   // return color;
   if(u_shaderPick < 0.5) {
     return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
@@ -64,23 +66,13 @@ vec4 filterColor(vec4 color) {
   
 }
 
-// TODO: 优化水波点 blend additive 模式下有的拾取效果 
-vec4 filterColorAnimate(vec4 color) {
-  // TODO: 过滤多余的 shader 计算
-  if(u_shaderPick < 0.5) {
-    return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
-  } else {
-    return filterPickingColor(filterHighlightColor(color, color.a));
-  }
-}
-
-vec4 filterColorWithLight(vec4 color, float lightWeight) {
-  // TODO: 过滤多余的 shader 计算
+vec4 filterColorAlpha(vec4 color, float alpha) {
+  // 过滤多余的 shader 计算
   // return color;
   if(u_shaderPick < 0.5) {
     return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
   } else {
-    return filterPickingColor(filterHighlightColor(color, lightWeight));
+    return filterPickingColor(filterHighlightColor(color, alpha));
   }
 }
 

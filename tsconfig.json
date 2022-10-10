@@ -7,7 +7,7 @@
     "jsx": "react",
     "target": "es5",
     "lib": ["es6", "dom"],
-    "types": ["reflect-metadata", "jest", "node"],
+    "types": ["reflect-metadata", "jest", "node","offscreencanvas"],
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -29,16 +29,13 @@
       "@antv/l7-source": ["packages/source/src"],
       "@antv/l7-mini": ["packages/mini/src"],
       "@antv/l7-utils": ["packages/utils/src"],
+      "@antv/l7-test-utils":["packages/test-utils/src"],
       "@antv/l7": ["packages/l7/src"],
+      "@antv/l7-leaflet": ["packages/leaflet/src"],
       "*": ["packages", "typings/*"]
-    },
-  },
-  "awesomeTypescriptLoaderOptions": {
-    "useBabel": true,
-    "babelCore": "@babel/core",
-    "useCache": false
+    }
   },
   "include": ["packages"],
-  "exclude": ["node_modules", "packages/**/dist"]
+  "exclude": ["node_modules", "packages/**/dist","packages/site","packages/leaflet/**",]
 
 }

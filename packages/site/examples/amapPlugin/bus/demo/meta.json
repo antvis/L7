@@ -1,0 +1,23 @@
+{
+  "title": {
+    "zh": "高德地图插件",
+    "en": "other engine"
+  },
+  "demos": [
+    {
+      "filename": "busStop.js",
+      "title": "公交线路插件",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*9MHrRZTvaiAAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "xyzTile.js",
+      "title": "xyz瓦片地图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ydN_QpzVraQAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "satellite.js",
+      "title": "卫星地图",
+      "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*bYbdT6N6IGwAAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}

@@ -48,44 +48,51 @@ export default class ReglRendererService implements IRendererService {
   public async init(
     canvas: HTMLCanvasElement,
     cfg: IRenderConfig,
+    gl?: regl.Regl,
   ): Promise<void> {
     // this.$container = $container;
     this.canvas = canvas;
-    // tslint:disable-next-line:typedef
-    this.gl = await new Promise((resolve, reject) => {
-      regl({
-        canvas: this.canvas,
-        attributes: {
-          alpha: true,
-          // use TAA instead of MSAA
-          // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
-          antialias: cfg.antialias,
-          premultipliedAlpha: true,
-          preserveDrawingBuffer: cfg.preserveDrawingBuffer,
-        },
-        // TODO: use extensions
-        extensions: [
-          'OES_element_index_uint',
-          'OES_standard_derivatives', // wireframe
-          'ANGLE_instanced_arrays', // VSM shadow map
-        ],
-        optionalExtensions: [
-          'oes_texture_float_linear',
-          'OES_texture_float',
-          'EXT_texture_filter_anisotropic',
-          'EXT_blend_minmax',
-          'WEBGL_depth_texture',
-        ],
-        profile: true,
-        onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
-          if (err || !r) {
-            reject(err);
-          }
-          // @ts-ignore
-          resolve(r);
-        },
+    if (gl) {
+      this.gl = gl;
+    } else {
+      // tslint:disable-next-line:typedef
+      this.gl = await new Promise((resolve, reject) => {
+        regl({
+          canvas: this.canvas,
+          attributes: {
+            alpha: true,
+            // use TAA instead of MSAA
+            // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
+            antialias: cfg.antialias,
+            premultipliedAlpha: true,
+            preserveDrawingBuffer: cfg.preserveDrawingBuffer,
+
+            stencil: cfg.stencil,
+          },
+          // TODO: use extensions
+          extensions: [
+            'OES_element_index_uint',
+            'OES_standard_derivatives', // wireframe
+            'ANGLE_instanced_arrays', // VSM shadow map
+          ],
+          optionalExtensions: [
+            'oes_texture_float_linear',
+            'OES_texture_float',
+            'EXT_texture_filter_anisotropic',
+            'EXT_blend_minmax',
+            'WEBGL_depth_texture',
+          ],
+          profile: true,
+          onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
+            if (err || !r) {
+              reject(err);
+            }
+            // @ts-ignore
+            resolve(r);
+          },
+        });
       });
-    });
+    }
 
     this.extensionObject = {
       OES_texture_float: this.testExtension('OES_texture_float'),
@@ -145,7 +152,7 @@ export default class ReglRendererService implements IRendererService {
         ? framebuffer
         : (framebuffer as ReglFramebuffer).get();
 
-    this.gl.clear(reglClearOptions);
+    this.gl?.clear(reglClearOptions);
   };
 
   public viewport = ({
@@ -261,7 +268,17 @@ export default class ReglRendererService implements IRendererService {
   }
 
   public destroy = () => {
+    // this.canvas = null 清除对 webgl 实例的引用
+    // @ts-ignore
+    this.canvas = null;
+
+    // make sure release webgl context
+    this.gl?._gl?.getExtension('WEBGL_lose_context')?.loseContext();
+
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up
     this.gl.destroy();
+
+    // @ts-ignore
+    this.gl = null;
   };
 }

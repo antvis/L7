@@ -1,4 +1,3 @@
-import { ILayer } from '../layer/ILayerService';
 import { IAttribute, IAttributeInitializationOptions } from './IAttribute';
 import { IBuffer, IBufferInitializationOptions } from './IBuffer';
 import { IElements, IElementsInitializationOptions } from './IElements';
@@ -7,7 +6,7 @@ import {
   IFramebufferInitializationOptions,
 } from './IFramebuffer';
 import { IModel, IModelInitializationOptions } from './IModel';
-import { IMultiPassRenderer, IPass } from './IMultiPassRenderer';
+import { IPass } from './IMultiPassRenderer';
 import { ITexture2D, ITexture2DInitializationOptions } from './ITexture2D';
 
 export interface IRenderConfig {
@@ -18,6 +17,8 @@ export interface IRenderConfig {
   passes?: Array<IPass<unknown>>;
   antialias?: boolean;
   preserveDrawingBuffer?: boolean;
+  // Tip: 场景是否支持 stencil mask
+  stencil?: boolean;
 }
 
 export interface IClearOptions {
@@ -47,7 +48,7 @@ export interface IExtensions {
 
 export interface IRendererService {
   extensionObject: IExtensions;
-  init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void>;
+  init(canvas: HTMLCanvasElement, cfg: IRenderConfig,gl: any): Promise<void>;
   testExtension(name: string): boolean;
   clear(options: IClearOptions): void;
   createModel(options: IModelInitializationOptions): IModel;

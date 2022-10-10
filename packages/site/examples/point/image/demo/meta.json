@@ -1,0 +1,28 @@
+{
+  "title": {
+    "zh": "中文分类",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "image.js",
+      "title": "符号图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*uzwBSLxwZGMAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "locate.js",
+      "title": "精确符号",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*rkFFQYBOJt4AAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "weather.js",
+      "title": "天气",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*CC5YRp2OY3gAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "monsoon.js",
+      "title": "季风分布",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Zq5ZTKNeU6sAAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}

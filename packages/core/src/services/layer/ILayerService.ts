@@ -1,9 +1,13 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import { IColorRamp, Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
+import { IInteractionTarget } from '../interaction/IInteractionService';
+import { IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
+import { IAttribute } from '../renderer/IAttribute';
 import {
   IBlendOptions,
   IModel,
@@ -15,26 +19,24 @@ import {
   IPostProcessingPass,
 } from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
+import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
-import { ISource, ISourceCFG } from '../source/ISourceService';
+import { ISource, ISourceCFG, ITransform } from '../source/ISourceService';
 import {
   IAnimateOption,
   IEncodeFeature,
   IScale,
   IScaleOptions,
+  IScaleValue,
+  IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
-  ScaleAttributeType,
   StyleAttrField,
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
 
-// import {
-//   IStyleAttributeUpdateOptions,
-//   StyleAttributeField,
-// } from '@antv/l7-core';y
 export enum BlendType {
   normal = 'normal',
   additive = 'additive',
@@ -53,26 +55,38 @@ export interface IDataState {
   featureScaleNeedUpdate: boolean;
   StyleAttrNeedUpdate: boolean;
 }
+
+export interface IWorkerOption {
+  modelType: string;
+  [key: string]: any;
+}
 export interface ILayerModelInitializationOptions {
   moduleName: string;
   vertexShader: string;
   fragmentShader: string;
   triangulation: Triangulation;
   segmentNumber?: number;
+  workerEnabled?: boolean;
+  workerOptions?: IWorkerOption;
 }
 
 export interface ILayerModel {
   render(): void;
+  renderUpdate?(): void;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
-  buildModels(): IModel[];
-  initModels(): IModel[];
+  buildModels(callbackModel: (models: IModel[]) => void): void;
+  initModels(callbackModel: (models: IModel[]) => void): void;
   needUpdate(): boolean;
-  clearModels(): void;
+  clearModels(refresh?: boolean): void;
+
+  // canvasLayer
+  clearCanvas?(): void;
 
   // earth mode
   setEarthTime?(time: number): void;
+  createModelData?(options?: any): any;
 }
 export interface IModelUniform {
   [key: string]: IUniform;
@@ -92,6 +106,159 @@ export interface IActiveOption {
 
 type ILngLat = [number, number];
 
+// 分段图例
+export interface ILegendSegmentItem {
+  value: [number, number];
+  [key: string]: any;
+}
+// 分类图例
+export interface ILegendClassificaItem {
+  value: number | string;
+  [key: string]: any;
+}
+// 图层图例
+export type LegendItems = ILegendSegmentItem[] | ILegendClassificaItem[];
+
+export interface IAttributeAndElements {
+  attributes: any;
+  elements: any;
+}
+
+export interface ISubLayerStyles {
+  opacity: number;
+}
+
+/**
+ * For tile subLayer
+ */
+export interface ISubLayerInitOptions {
+  usage?: string|undefined;
+  layerType: string;
+  transforms?: ITransform[];
+  shape?: string | string[] | IScaleValue;
+  // options
+  zIndex: number;
+  mask: boolean;
+  // source
+  // style
+  stroke?: string;
+  strokeWidth?: number;
+  strokeOpacity?: number;
+
+  opacity: number;
+  color?: IScaleValue;
+  basemapColor?: string;
+  size?: IScaleValue;
+  basemapSize?: number;
+
+  // raster tiff
+  domain?: [number, number];
+  clampLow?: boolean;
+  clampHigh?: boolean;
+  rampColors?: IColorRamp;
+  colorTexture?: ITexture2D;
+  // 在初始化的时候使用
+
+  pixelConstant?: number;
+  pixelConstantR?: number;
+  pixelConstantG?: number;
+  pixelConstantB?: number;
+  pixelConstantRGB?: number;
+
+  coords?: string;
+  sourceLayer?: string;
+  featureId?: string;
+
+  workerEnabled?: boolean;
+}
+
+export interface ITilePickManager {
+  isLastPicked: boolean;
+  on(type: string, cb: (option: any) => void): void;
+  normalRender(layers: ILayer[]): void;
+  beforeHighlight(pickedColors: any): void;
+  beforeSelect(pickedColors: any): void;
+  clearPick(): void;
+  pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
+  destroy(): void;
+}
+
+export interface IBaseTileLayerManager {
+  sourceLayer: string;
+  parent: ILayer;
+  children: ILayer[];
+
+  createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
+
+  addChild(layer: ILayer): void;
+  addChilds(layers: ILayer[]): void;
+  getChilds(layerIDList: string[]): ILayer[];
+  removeChild(layer: ILayer): void;
+  removeChilds(layerIDList: string[], refresh?: boolean): void;
+  clearChild(): void;
+  hasChild(layer: ILayer): boolean;
+  render(isPicking?: boolean): void;
+  destroy(): void;
+}
+
+export interface ITileLayerManager extends IBaseTileLayerManager{
+  tilePickManager: ITilePickManager;
+  pickLayers(target: IInteractionTarget): boolean;
+  destroy(): void;
+}
+
+export interface IBaseTileLayer {
+  type: string;
+  sourceLayer: string;
+  parent: ILayer;
+  tileLayerManager: IBaseTileLayerManager;
+  tilesetManager: TilesetManager | undefined;
+  children: ILayer[];
+  scaleField: any;
+  render(isPicking?: boolean): void;
+  destroy(): void;
+}
+export interface ITileLayer extends IBaseTileLayer{
+  tileLayerManager: ITileLayerManager;
+  pickLayers(target: IInteractionTarget): boolean;
+  clearPick(type: string): void;
+  clearPickState(): void;
+  destroy(): void;
+}
+
+export interface ITileLayerOPtions {
+  parent: ILayer;
+  rendererService: IRendererService;
+  mapService: IMapService;
+  layerService: ILayerService;
+  pickingService: IPickingService;
+  transforms: ITransform[];
+}
+
+export type LayerEventType =
+  | 'inited'
+  | 'add'
+  | 'remove'
+  | 'destroy'
+  | 'contextmenu'
+  | 'uncontextmenu'
+  | 'unpick'
+  | 'mousedown'
+  | 'unmousedown'
+  | 'unclick'
+  | 'undblclick'
+  | 'unmouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | 'click'
+  | 'dblclick'
+  | 'mouseenter'
+  | 'unmousemove'
+  | 'mouseout'
+  | 'show'
+  | 'hide'
+  | any;
+
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
@@ -102,10 +269,18 @@ export interface ILayer {
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
+  modelLoaded: boolean;
   layerModel: ILayerModel;
+  tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
+  masks: ILayer[]; // 图层的 mask 列表
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
+  defaultSourceConfig: {
+    data: any[],
+    options: ISourceCFG | undefined,
+  },
+  encodeDataLength: number;
   pickedFeatureID: number | null;
   hooks: {
     init: SyncBailHook;
@@ -128,6 +303,11 @@ export interface ILayer {
     options?: ISourceCFG;
   };
   multiPassRenderer: IMultiPassRenderer;
+  // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
+  layerType?: string | undefined;
+  isVector?: boolean;
+  isTileLayer?: boolean;
+  triangulation?: Triangulation | undefined;
 
   /**
    * threejs 适配兼容相关的方法
@@ -140,7 +320,12 @@ export interface ILayer {
   threeRenderService?: any;
 
   getShaderPickStat: () => boolean;
+  updateModelData(data: IAttributeAndElements): void;
+
+  addMaskLayer(maskLayer: ILayer): void;
+  removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
+  getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
   setBottomColor(color: string): void;
   getBottomColor(): string;
@@ -157,7 +342,13 @@ export interface ILayer {
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
-  ): IModel;
+  ): Promise<IModel>;
+  createAttributes(
+    options: ILayerModelInitializationOptions &
+      Partial<IModelInitializationOptions>,
+  ): {
+    [attributeName: string]: IAttribute;
+  };
   updateStyleAttribute(
     type: string,
     field: StyleAttributeField,
@@ -166,8 +357,10 @@ export interface ILayer {
   ): void;
   init(): ILayer;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
+  getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
+  rotate(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -184,10 +377,11 @@ export interface ILayer {
     id: number | { x: number; y: number },
     option?: IActiveOption,
   ): void;
+  setAutoFit(autoFit: boolean): void;
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
-  getLegendItems(name: string): any;
+  getLegendItems(name: string): LegendItems;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
@@ -195,13 +389,21 @@ export interface ILayer {
   getMinZoom(): number;
   getMaxZoom(): number;
   get(name: string): number;
-  setBlend(type: keyof typeof BlendType): void;
+  setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
+
+  setMultiPass(
+    multipass: boolean,
+    passes?: Array<string | [string, { [key: string]: unknown }]>,
+  ): ILayer;
   renderLayers(): void;
   render(): ILayer;
+
+  renderMultiPass(): any;
+
   clear(): void;
   clearModels(): void;
-  destroy(): void;
+  destroy(refresh?: boolean): void;
   source(data: any, option?: ISourceCFG): ILayer;
   setData(data: any, option?: ISourceCFG): ILayer;
   fitBounds(fitBoundsOptions?: unknown): ILayer;
@@ -219,10 +421,10 @@ export interface ILayer {
   /**
    * 事件
    */
-  on(type: string, handler: (...args: any[]) => void): void;
-  off(type: string, handler: (...args: any[]) => void): void;
-  emit(type: string, handler: unknown): void;
-  once(type: string, handler: (...args: any[]) => void): void;
+  on(type: LayerEventType, handler: (...args: any[]) => void): void;
+  off(type: LayerEventType, handler: (...args: any[]) => void): void;
+  emit(type: LayerEventType, handler: unknown): void;
+  once(type: LayerEventType, handler: (...args: any[]) => void): void;
 
   isDirty(): boolean;
   /**
@@ -301,6 +503,12 @@ export interface ILayerPlugin {
  * Layer 初始化参数
  */
 export interface ILayerConfig {
+  mask: boolean;
+  maskInside: boolean;
+  maskfence: any;
+  maskColor: string;
+  maskOpacity: number;
+
   colors: string[];
   size: number;
   shape: string;
@@ -324,7 +532,12 @@ export interface ILayerConfig {
   enableMultiPassRenderer: boolean;
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
+  // layerType 指定 shape 的类型
+  layerType?: string | undefined;
+  cursorEnabled?: boolean;
+  cursor?: string;
   forward: boolean; // 正方向
+  usage?: string; // 指定图层的使用类型 - 用户地图底图绘制的优化
 
   /**
    * 开启拾取
@@ -366,43 +579,57 @@ export interface ILayerConfig {
   /**
    * 地球模式参数
    */
-  globelOtions: any;
+   globalOptions: any;
   /**
    * layer point text 是否是 iconfont 模式
    */
   iconfont: boolean;
+
+  workerEnabled?: boolean;
   onHover(pickedFeature: IPickedFeature): void;
   onClick(pickedFeature: IPickedFeature): void;
 }
 
+export type LayerServiceEvent = 'layerChange';
+
 /**
  * 提供 Layer 管理服务
  */
+
 export interface ILayerService {
+  pickedLayerId: number;
   clock: Clock;
   alreadyInRendering: boolean;
   sceneService?: any;
-
   // 控制着色器颜色拾取计算
   enableShaderPick: () => void;
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
+
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
+  // 清除画布
+  clear(): void;
   add(layer: ILayer): void;
+  addMask(mask: ILayer): void;
   initLayers(): void;
   startAnimate(): void;
   stopAnimate(): void;
+  getSceneInited(): boolean;
   getLayers(): ILayer[];
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
-  cleanRemove(layer: ILayer, parentLayer?: ILayer): void;
+  cleanRemove(layer: ILayer, refresh?: boolean): void;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;
-  renderLayers(type?: string): void;
+  reRender(): void;
+  throttleRenderLayers(): void;
+  renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
-  isMapDragging(): boolean;
 
   destroy(): void;
 }

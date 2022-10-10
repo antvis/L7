@@ -53,6 +53,7 @@ export default class LngLatBounds {
       }
     } else {
       if (Array.isArray(obj)) {
+        //@ts-ignore
         if (obj.length === 4 || obj.every(Array.isArray)) {
           const lngLatBoundsObj = obj as LngLatBoundsLike;
           return this.extend(LngLatBounds.convert(lngLatBoundsObj));

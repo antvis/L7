@@ -5,16 +5,12 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
 import heatmapGridVert from '../shaders/hexagon_vert.glsl';
-
-interface IHeatMapLayerStyleOptions {
-  opacity: number;
-  coverage: number;
-  angle: number;
-}
 
 export default class HexagonModel extends BaseModel {
   public getUninforms(): IModelUniform {
@@ -34,22 +30,33 @@ export default class HexagonModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'hexagonheatmap',
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    this.layer
+      .buildLayerModel({
+        moduleName: 'heatmapHexagon',
         vertexShader: heatmapGridVert,
         fragmentShader: heatmapGridFrag,
         triangulation: HeatmapGridTriangulation,
         depth: { enable: false },
         primitive: gl.TRIANGLES,
         blend: this.getBlend(),
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -58,19 +65,15 @@ export default class HexagonModel extends BaseModel {
       descriptor: {
         name: 'a_Pos',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
         size: 3,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
-          // const coordinates = (feature.verison==='GAODE2.x'?feature.originoordinates:feature.coordinates) as number[];
+        update: (feature: IEncodeFeature) => {
           const coordinates = (feature.version === 'GAODE2.x'
             ? feature.originCoordinates
             : feature.coordinates) as number[];
-          // const coordinates = feature.coordinates as number[];
-          // const coordinates = feature.originCoordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

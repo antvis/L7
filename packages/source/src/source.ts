@@ -2,24 +2,20 @@
 import { SyncHook } from '@antv/async-hook';
 import {
   IClusterOptions,
-  IMapService,
   IParseDataItem,
   IParserCfg,
   IParserData,
   ISource,
   ISourceCFG,
   ITransform,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
-import { bBoxToBounds, extent, padBounds } from '@antv/l7-utils';
 import {
-  BBox,
-  Feature,
-  FeatureCollection,
-  Geometries,
-  Properties,
-} from '@turf/helpers';
+  bBoxToBounds,
+  extent,
+  padBounds,
+  TilesetManager,
+} from '@antv/l7-utils';
+import { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
 // @ts-ignore
@@ -37,8 +33,9 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 }
 
 export default class Source extends EventEmitter implements ISource {
+  public inited: boolean = false;
   public data: IParserData;
-
+  public center: [number, number];
   // 数据范围
   public extent: BBox;
   // 生命周期钩子
@@ -56,9 +53,13 @@ export default class Source extends EventEmitter implements ISource {
     zoom: -99,
     method: 'count',
   };
-  private readonly mapService: IMapService;
+
+  // 瓦片数据管理器
+  public tileset: TilesetManager | undefined;
   // 是否有效范围
   private invalidExtent: boolean = false;
+
+  private dataArrayChanged: boolean = false;
 
   // 原始数据
   private originData: any;
@@ -73,31 +74,21 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     this.initCfg(cfg);
 
-    this.hooks.init.tap('parser', () => {
-      this.excuteParser();
-    });
-    this.hooks.init.tap('cluster', () => {
-      this.initCluster();
-    });
-    this.hooks.init.tap('transform', () => {
-      this.executeTrans();
-    });
     this.init();
   }
 
-  public setData(data: any, options?: ISourceCFG) {
-    this.rawData = data;
-    this.originData = data;
-    this.initCfg(options);
-    this.init();
-    this.emit('update');
-  }
   public getClusters(zoom: number): any {
     return this.clusterIndex.getClusters(this.caculClusterExtent(2), zoom);
   }
+
   public getClustersLeaves(id: number): any {
     return this.clusterIndex.getLeaves(id, Infinity);
   }
+
+  public getParserType() {
+    return this.parser.type;
+  }
+
   public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
     let data = this.clusterIndex.getClusters(
@@ -137,6 +128,7 @@ export default class Source extends EventEmitter implements ISource {
     });
     this.executeTrans();
   }
+
   public getFeatureById(id: number): unknown {
     const { type = 'geojson' } = this.parser;
     if (type === 'geojson' && !this.cluster) {
@@ -145,7 +137,9 @@ export default class Source extends EventEmitter implements ISource {
           ? this.originData.features[id]
           : 'null';
       const newFeature = cloneDeep(feature);
-      if (this.transforms.length !== 0) {
+
+      if (newFeature?.properties && (this.transforms.length !== 0 || this.dataArrayChanged)) {
+        // 如果数据进行了transforms 属性会发生改变 或者数据dataArray发生更新
         const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
           return dataItem._id === id;
         });
@@ -157,11 +151,37 @@ export default class Source extends EventEmitter implements ISource {
     }
   }
 
+  public updateFeaturePropertiesById(
+    id: number,
+    properties: Record<string, any>,
+  ) {
+    this.data.dataArray = this.data.dataArray.map(
+      (dataItem: IParseDataItem) => {
+        if (dataItem._id === id) {
+          return {
+            ...dataItem,
+            ...properties,
+          };
+        }
+        return dataItem;
+      },
+    );
+    this.dataArrayChanged = true;
+    this.emit('update');
+  }
+
   public getFeatureId(field: string, value: any): number | undefined {
     const feature = this.data.dataArray.find((dataItem: IParseDataItem) => {
-      return dataItem[field] === name;
+      return dataItem[field] === value;
     });
     return feature?._id;
+  }
+
+  public setData(data: any, options?: ISourceCFG) {
+    this.originData = data;
+    this.dataArrayChanged = false;
+    this.initCfg(options);
+    this.init();
   }
 
   public destroy() {
@@ -170,18 +190,20 @@ export default class Source extends EventEmitter implements ISource {
     this.clusterIndex = null;
     // @ts-ignore
     this.data = null;
+    this.tileset?.destroy();
   }
 
-  private caculClusterExtent(bufferRatio: number): any {
-    let newBounds = [
-      [-Infinity, -Infinity],
-      [Infinity, Infinity],
-    ];
-
-    if (!this.invalidExtent) {
-      newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
-    }
-    return newBounds[0].concat(newBounds[1]);
+  private handleData() {
+    return new Promise((resolve, reject) => {
+      try {
+        this.excuteParser();
+        this.initCluster();
+        this.executeTrans();
+        resolve({});
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   private initCfg(option?: ISourceCFG) {
@@ -204,24 +226,74 @@ export default class Source extends EventEmitter implements ISource {
       }
     }
   }
+
+  private init() {
+    // this.hooks.init.call(this);
+    this.inited = false;
+    this.handleData().then(() => {
+      this.inited = true;
+      this.emit('sourceUpdate');
+    });
+  }
+
+  /**
+   * 数据解析
+   */
   private excuteParser(): void {
+    // 耗时计算测试
+    // let t = new Date().getTime();
+    // let c = 0
+    // while(c < 100000000) {
+    //   c++
+    // }
+    // console.log('t', new Date().getTime() - t)
     const parser = this.parser;
     const type: string = parser.type || 'geojson';
-    // TODO: 图片瓦片地图组件只需要使用 url 参数
-    if (type === 'imagetile') {
-      this.data = {
-        tileurl: this.originData,
-        dataArray: [],
-      };
-      return;
-    }
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
+
+    // 为瓦片图层的父图层创建数据瓦片金字塔管理器
+    this.tileset = this.initTileset();
+
+    // 判断当前 source 是否需要计算范围
+    if(parser.cancelExtent) return;
+
     // 计算范围
     this.extent = extent(this.data.dataArray);
+    this.setCenter(this.extent);
     this.invalidExtent =
       this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
   }
+
+  private setCenter(bbox: BBox) {
+    this.center = [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2];
+    if (isNaN(this.center[0]) || isNaN(this.center[1])) {
+      // this.center = [NaN, NaN] // Infinity - Infinity = NaN
+      // 默认设置为大地原点
+      this.center = [108.92361111111111, 34.54083333333333];
+    }
+  }
+
+  /**
+   * 瓦片数据管理器
+   */
+  private initTileset() {
+    const { tilesetOptions } = this.data;
+    if (!tilesetOptions) {
+      return;
+    }
+
+    if (this.tileset) {
+      this.tileset.updateOptions(tilesetOptions);
+      return this.tileset;
+    }
+
+    const tileset = new TilesetManager({
+      ...tilesetOptions,
+    });
+    return tileset;
+  }
+
   /**
    * 数据统计
    */
@@ -235,6 +307,9 @@ export default class Source extends EventEmitter implements ISource {
     });
   }
 
+  /**
+   * 数据聚合
+   */
   private initCluster() {
     if (!this.cluster) {
       return;
@@ -244,7 +319,15 @@ export default class Source extends EventEmitter implements ISource {
     this.clusterIndex = cluster(this.data, clusterOptions);
   }
 
-  private init() {
-    this.hooks.init.call(this);
+  private caculClusterExtent(bufferRatio: number): any {
+    let newBounds = [
+      [-Infinity, -Infinity],
+      [Infinity, Infinity],
+    ];
+
+    if (!this.invalidExtent) {
+      newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
+    }
+    return newBounds[0].concat(newBounds[1]);
   }
 }

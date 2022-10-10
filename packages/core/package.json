@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.7.1",
+  "version": "2.9.32-alpha.4",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -14,7 +14,8 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.build.json",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "build": "run-p build:*",
+    "b": "father build",
+    "build": "father build",
     "build:cjs": "cross-env BABEL_ENV=cjs NODE_ENV=production  babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "cross-env BABEL_ENV=esm NODE_ENV=production  babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "watch": "cross-env BABEL_ENV=cjs NODE_ENV=production babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
@@ -23,17 +24,18 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/async-hook": "^2.1.0",
-    "@antv/l7-utils": "^2.7.1",
+    "@antv/async-hook": "^2.2.2",
+    "@antv/l7-utils": "2.9.32-alpha.4",
     "@babel/runtime": "^7.7.7",
+    "@turf/helpers": "^6.1.4",
     "ajv": "^6.10.2",
     "element-resize-event": "^3.0.3",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
-    "l7-tiny-sdf": "^0.0.2",
-    "l7hammerjs": "^0.0.6",
+    "l7-tiny-sdf": "^0.0.3",
+    "l7hammerjs": "^0.0.7",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
     "viewport-mercator-project": "^6.2.1"
@@ -43,7 +45,8 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/hammerjs": "^2.0.36",
     "@types/lodash": "^4.14.138",
-    "@types/viewport-mercator-project": "^6.1.0"
+    "@types/viewport-mercator-project": "^6.1.0",
+    "father-build": "^1.17.2"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {

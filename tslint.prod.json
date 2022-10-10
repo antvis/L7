@@ -2,9 +2,22 @@
 {
   "extends": ["./tslint.json"],
   "rules": {
-    "no-implicit-dependencies": false
+    "no-implicit-dependencies": [true, "dev"]
   },
   "linterOptions": {
-    "exclude": ["packages/l7/node_modules/**","**/*.d.ts", "**/data/*.ts", "**/*.{test,story}.ts{,x}", "node_modules/**/*.d.ts"]
+    "exclude": [
+      "stories/**",
+      "packages/l7/node_modules/**",
+      "**/*.d.ts", 
+      "**/data/*.ts",
+      "**/*.{test,story}.ts{,x}",
+      "node_modules/**/*.d.ts",
+      "packages/site/**",
+      "packages/leaflet/**",
+      "packages/site/node_modules/**"
+    ],
+    "include":[
+      "packages/**/src/**/*.ts{,x}"
+    ]
   }
 }

@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
 import * as React from 'react';
 export default class Amap2demo_styleMap extends React.Component {
   // @ts-ignore
@@ -26,7 +26,7 @@ export default class Amap2demo_styleMap extends React.Component {
       )
         .then((res) => res.json())
         .then((data) => {
-          let layer = new PointLayer()
+          let layer = new PointLayer({ workerEnabled: true }) // blend: "additive"
             .source(data, {
               parser: {
                 type: 'json',
@@ -38,12 +38,15 @@ export default class Amap2demo_styleMap extends React.Component {
             .color('color')
             .size('value', (v) => 5 + 15 * v)
             .style({
+              // blur: 2.5,
+
               stroke: 'strokeColor',
               // stroke: ['strokeColor', (d: any) => {
               //   return d
               // }],
 
               strokeWidth: 'strokeWidth',
+              // strokeWidth: 0,
               // strokeWidth: ["strokeWidth", (d: any) => {
               //   return d * 2
               // }],

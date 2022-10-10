@@ -1,30 +1,19 @@
 import BaseLayer from '../core/BaseLayer';
+import { IWindLayerStyleOptions } from '../core/interface';
 import WindModels, { WindModelType } from './models';
-interface IWindLayerStyleOptions {
-  uMin?: number;
-  uMax?: number;
-  vMin?: number;
-  vMax?: number;
-  fadeOpacity?: number;
-  speedFactor?: number;
-  dropRate?: number;
-  dropRateBump?: number;
-  opacity?: number;
-  numParticles?: number;
-  rampColors?: {
-    [key: number]: string;
-  };
-  sizeScale?: number;
-}
 export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
   public type: string = 'WindLayer';
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new WindModels[modelType](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
 
   public renderModels() {

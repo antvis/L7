@@ -36,7 +36,10 @@ export default class ScaleComponent extends React.Component {
           });
           return { coord: [latlng1, latlng2] };
         });
-        const flyLine = new LineLayer({ blend: 'normal' })
+        const flyLine = new LineLayer({
+          blend: 'normal',
+          layerType: 'earthArc3d',
+        })
           .source(flydata, {
             parser: {
               type: 'json',
@@ -71,7 +74,7 @@ export default class ScaleComponent extends React.Component {
       )
       .shape('base')
       .style({
-        globelOtions: {
+        globalOptions: {
           ambientRatio: 0.6, // 环境光
           diffuseRatio: 0.4, // 漫反射
           specularRatio: 0.1, // 高光反射

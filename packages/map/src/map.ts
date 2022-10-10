@@ -53,6 +53,8 @@ const DefaultOptions: IMapOptions = {
   pitchWithRotate: true,
   trackResize: true,
   renderWorldCopies: true,
+  pitchEnabled: true,
+  rotateEnabled: true,
 };
 export class Map extends Camera {
   public doubleClickZoom: DoubleClickZoomHandler;
@@ -117,12 +119,9 @@ export class Map extends Camera {
   }
 
   public resize(eventData?: any) {
-    const dimensions = this.containerDimensions();
-    const width = dimensions[0];
-    const height = dimensions[1];
-
+    const [width, height] = this.containerDimensions();
     this.transform.resize(width, height);
-    // TODO: 小程序环境不需要执行后续动作
+    // 小程序环境不需要执行后续动作
     if (isMini) {
       return this;
     }
@@ -280,6 +279,9 @@ export class Map extends Camera {
   }
 
   public remove() {
+    this.container.removeChild(this.canvasContainer);
+    // @ts-ignore
+    this.canvasContainer = null;
     if (this.frame) {
       this.frame.cancel();
       this.frame = null;
@@ -367,6 +369,8 @@ export class Map extends Camera {
       } else {
         width = this.container.clientWidth;
         height = this.container.clientHeight;
+        width = width === 0 ? 400 : width;
+        height = height === 0 ? 300 : height;
       }
     }
     return [width, height];

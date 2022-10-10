@@ -1,12 +1,10 @@
-import { IMapService, IMercator, IRendererService, TYPES } from '@antv/l7-core';
+import { IMapService, IMercator, IRendererService, TYPES } from '@antv/l7';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 
 import {
-  AnimationMixer,
   Camera,
   Matrix4,
-  PCFSoftShadowMap,
   PerspectiveCamera,
   Scene as ThreeScene,
   WebGLRenderer,

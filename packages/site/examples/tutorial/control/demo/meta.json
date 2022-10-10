@@ -1,0 +1,13 @@
+{
+  "title": {
+    "zh": "地图",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "amap.js",
+      "title": "高德底图组件",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*4Jj2RJQIQTAAAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}

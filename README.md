@@ -12,6 +12,8 @@
 
 L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。L7 中的 L 代表 Location，7 代表世界七大洲，寓意能为全球位置数据提供可视分析的能力。L7 专注数据可视化化表达，通过颜色、大小、纹理，方向，体积等视觉变量设置实现从数据到信息清晰，有效的表达。
 
+[官网地址](https://l7.antv.vision/zh)
+
 L7 能够满足常见的地图图表，BI 系统的可视化分析、以及 GIS，交通，电力，国土，农业，城市等领域的空间信息管理，分析等应用系统开发需求。
 
 ![L7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
@@ -124,7 +126,7 @@ scene.addLayer(pointLayer);
 - [L7Plot](https://github.com/antvis/L7Plot)
 - [L7 React](https://github.com/antvis/L7-React)
 - [L7 Boundary](https://github.com/antvis/L7-boundary)
-- [L7 draw](https://github.com/antvis/L7-draw)
+- [L7Draw](https://github.com/antvis/L7Draw)
 
 ## ✅ License
 

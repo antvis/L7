@@ -1,6 +1,6 @@
 import { $window } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { buildIconMaping } from '../../utils/font_util';
 import { ITexture2D } from '../renderer/ITexture2D';
@@ -9,7 +9,6 @@ import {
   IIcon,
   IICONMap,
   IIconService,
-  IIconValue,
   IImage,
 } from './IIconService';
 const BUFFER = 3;
@@ -121,8 +120,28 @@ export default class IconService extends EventEmitter implements IIconService {
     }
   }
   public destroy(): void {
+    // 在销毁的时候清除所有注册的监听
+    this.removeAllListeners('imageUpdate');
     this.iconData = [];
     this.iconMap = {};
+  }
+
+  public loadImage(url: IImage) {
+    return new Promise((resolve, reject) => {
+      if (url instanceof HTMLImageElement) {
+        resolve(url);
+        return;
+      }
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = () => {
+        reject(new Error('Could not load image at ' + url));
+      };
+      image.src = url instanceof File ? URL.createObjectURL(url) : url;
+    });
   }
   private update() {
     this.updateIconMap();
@@ -168,24 +187,6 @@ export default class IconService extends EventEmitter implements IIconService {
     );
     this.iconMap = mapping;
     this.canvasHeight = canvasHeight;
-  }
-
-  private loadImage(url: IImage) {
-    return new Promise((resolve, reject) => {
-      if (url instanceof HTMLImageElement) {
-        resolve(url);
-        return;
-      }
-      const image = new Image();
-      image.crossOrigin = 'anonymous';
-      image.onload = () => {
-        resolve(image);
-      };
-      image.onerror = () => {
-        reject(new Error('Could not load image at ' + url));
-      };
-      image.src = url instanceof File ? URL.createObjectURL(url) : url;
-    });
   }
 
   /**

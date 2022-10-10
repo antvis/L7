@@ -8,7 +8,7 @@ void main() {
 
 
     float intensity =  - dot(normalize(vVertexNormal), normalize(u_CameraPosition));
-    // TODO: 去除背面
+    // 去除背面
     if(intensity > 1.0) intensity = 0.0;
 
     gl_FragColor = vec4(v_Color.rgb, v_Color.a * intensity * u_opacity);

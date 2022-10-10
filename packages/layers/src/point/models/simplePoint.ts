@@ -1,31 +1,18 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, {
-  styleColor,
-  styleOffset,
-  styleSingle,
-} from '../../core/BaseModel';
-import { BlendTypes } from '../../utils/blend';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
+
 import simplePointFrag from '../shaders/simplePoint_frag.glsl';
 import simplePointVert from '../shaders/simplePoint_vert.glsl';
-interface IPointLayerStyleOptions {
-  opacity: styleSingle;
-  offsets: styleOffset;
-  blend: string;
-  strokeOpacity: styleSingle;
-  strokeWidth: styleSingle;
-  stroke: styleColor;
-}
+
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
   return {
@@ -36,7 +23,7 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 
 export default class SimplePointModel extends BaseModel {
-  public getDefaultStyle(): Partial<IPointLayerStyleOptions & ILayerConfig> {
+  public getDefaultStyle(): Partial<IPointLayerStyleOptions> {
     return {
       blend: 'additive',
     };
@@ -100,27 +87,40 @@ export default class SimplePointModel extends BaseModel {
         ? (offsets as [number, number])
         : [0, 0],
       u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
-      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 0.0,
+      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
       u_stroke_color: this.getStrokeColor(stroke),
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'simplepoint',
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    this.layer.triangulation = PointTriangulation;
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'pointSimple',
         vertexShader: simplePointVert,
         fragmentShader: simplePointFrag,
         triangulation: PointTriangulation,
         depth: { enable: false },
         primitive: gl.POINTS,
         blend: this.getBlend(),
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {
@@ -128,14 +128,12 @@ export default class SimplePointModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -143,22 +141,11 @@ export default class SimplePointModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
-  }
-
-  private defaultStyleOptions(): Partial<
-    IPointLayerStyleOptions & ILayerConfig
-  > {
-    return {
-      blend: BlendType.additive,
-    };
   }
 }

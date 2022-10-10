@@ -6,6 +6,7 @@ import { IRenderConfig } from '../renderer/IRendererService';
 export interface ISceneConfig extends IRenderConfig {
   id: string | HTMLDivElement;
   canvas?: HTMLCanvasElement;
+  gl?: any;
   hasBaseMap?: boolean;
   map: IMapWrapper;
   logoPosition?: PositionName;
@@ -13,13 +14,12 @@ export interface ISceneConfig extends IRenderConfig {
   animate?: boolean;
   fitBoundsOptions?: unknown;
   pickBufferScale?: number;
+  // TODO: 场景是否支持 stencil mask
+  stencil?: boolean;
+  selectBoxClassName?: string;
 }
 
-// interface IValidateResult {
-//   valid: boolean;
-//   errors: Ajv.ErrorObject[] | null | undefined;
-//   errorText: string | null;
-// }
+
 
 export interface IGlobalConfigService {
   /**

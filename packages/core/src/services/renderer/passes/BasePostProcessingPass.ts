@@ -10,6 +10,7 @@ import quad from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import { IPostProcessingPass, PassType } from '../IMultiPassRenderer';
+import { ITexture2D } from '../ITexture2D';
 import { IUniform } from '../IUniform';
 
 /**
@@ -20,7 +21,7 @@ import { IUniform } from '../IUniform';
 @injectable()
 export default class BasePostProcessingPass<InitializationOptions = {}>
   implements IPostProcessingPass<InitializationOptions> {
-  // @inject(TYPES.IShaderModuleService)
+  @inject(TYPES.IShaderModuleService)
   protected shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
@@ -106,7 +107,7 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
     });
   }
 
-  public render(layer: ILayer) {
+  public render(layer: ILayer, tex?: ITexture2D) {
     const postProcessor = layer.multiPassRenderer.getPostProcessor();
     const { useFramebuffer, getViewportSize, clear } = this.rendererService;
     const { width, height } = getViewportSize();
@@ -119,12 +120,20 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
           depth: 1,
           stencil: 0,
         });
+
+        const uniformOptions: { [key: string]: any } = {
+          u_BloomFinal: 0.0,
+          u_Texture: postProcessor.getReadFBO(),
+          // u_Texture: tex ? tex : postProcessor.getReadFBO(),
+          u_ViewportSize: [width, height],
+          ...this.convertOptionsToUniforms(this.optionsToUpdate),
+        };
+        if (tex) {
+          uniformOptions.u_BloomFinal = 1.0;
+          uniformOptions.u_Texture2 = tex;
+        }
         this.model.draw({
-          uniforms: {
-            u_Texture: postProcessor.getReadFBO(),
-            u_ViewportSize: [width, height],
-            ...this.convertOptionsToUniforms(this.optionsToUpdate),
-          },
+          uniforms: uniformOptions,
         });
       },
     );

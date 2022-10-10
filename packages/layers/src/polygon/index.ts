@@ -1,21 +1,30 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import { PointType } from '../point/models/';
+import { IPolygonLayerStyleOptions } from '../core/interface';
 import PolygonModels, { PolygonModelType } from './models/';
-
-interface IPolygonLayerStyleOptions {
-  opacity: number;
-}
+import { isVectorTile } from '../tile/utils';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
+  public defaultSourceConfig: {
+    data: [];
+    options: {
+      parser: {
+        type: 'geojson';
+      };
+    };
+  };
   public buildModels() {
     const shape = this.getModelType();
     this.layerModel = new PolygonModels[shape](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   protected getConfigSchema() {
     return {
@@ -30,6 +39,11 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   }
 
   protected getModelType(): PolygonModelType {
+    const parserType = this.layerSource.getParserType();
+    if (isVectorTile(parserType)) {
+      return 'vectorpolygon';
+    }
+
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
@@ -38,8 +52,14 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       return 'fill';
     } else if (shape === 'extrude') {
       return 'extrude';
+    } else if (shape === 'water') {
+      return 'water';
+    } else if (shape === 'ocean') {
+      return 'ocean';
     } else if (shape === 'line') {
       return 'line';
+    } else if (shape === 'tile') {
+      return 'tile';
     } else {
       return this.getPointModelType();
     }

@@ -1,49 +1,64 @@
 import PointLayer from '../';
-import { Mapbox } from '../../../../maps/src';
-import { Scene } from '../../../../scene/src';
+import extrudePolygon from '../shape/extrude';
 describe('pointLayer', () => {
-  const el = document.createElement('div');
-  el.id = 'test-div-id';
-  el.style.width = '500px';
-  el.style.height = '500px';
-  document.querySelector('body')?.appendChild(el);
+  const layer = new PointLayer({
+    name: 'layer',
+  })
+    .source(
+      [
+        {
+          lng: 120,
+          lat: 30,
+        },
+      ],
+      {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      },
+    )
+    .shape('circle')
+    .size(10);
 
-  const pointdata = {
-    type: 'FeatureCollection',
-    features: [],
-  };
+  const extrude = extrudePolygon([
+    // @ts-ignore
+    [0, 1, 1],
+    // @ts-ignore
+    [0, 1, 0],
+  ]);
+
   it('init', () => {
-    const scene = new Scene({
-      id: 'test-div-id',
-      map: new Mapbox({
-        style: 'dark',
-        center: [110.19382669582967, 30.258134],
-        pitch: 0,
-        zoom: 3,
-      }),
+    expect(extrude).toEqual({
+      positions: [
+        undefined,
+        undefined,
+        1,
+        undefined,
+        undefined,
+        1,
+        undefined,
+        undefined,
+        0,
+        undefined,
+        undefined,
+        0,
+        undefined,
+        undefined,
+        1,
+        undefined,
+        undefined,
+        1,
+        undefined,
+        undefined,
+        0,
+        undefined,
+        undefined,
+        0,
+      ],
+      index: [1, 2, 0, 3, 2, 1, 5, 6, 4, 7, 6, 5],
     });
-    scene.on('loaded', () => {
-      const layer = new PointLayer()
-        .source(pointdata)
-        .color('red')
-        .shape('circle')
-        .size(5);
-      scene.addLayer(layer);
-      scene.render();
-      layer.setData({
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Point',
-              coordinates: [99.84374999999999, 32.54681317351514],
-            },
-          },
-        ],
-      });
-      expect(layer.getEncodedData().length).toBe(1);
-    });
+    expect(layer.type).toEqual('PointLayer');
   });
 });

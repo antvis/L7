@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PolygonLayer, Scene } from '@antv/l7';
+import { PolygonLayer, PointLayer, Scene } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 import * as React from 'react';
@@ -35,8 +35,10 @@ export default class ColorHalftone extends React.Component {
       }),
     });
     const layer = new PolygonLayer({
-      enablePicking: true,
-      enableHighlight: true,
+      // enablePicking: true,
+      enablePicking: false,
+      // enableHighlight: true,
+      enableMultiPassRenderer: true,
       passes: [
         [
           'colorHalftone',
@@ -50,6 +52,7 @@ export default class ColorHalftone extends React.Component {
     layer
       .source(data)
       .size('name', [0, 10000, 50000, 30000, 100000])
+      .active(true)
       .color('name', [
         '#2E8AE6',
         '#69D1AB',
@@ -64,6 +67,19 @@ export default class ColorHalftone extends React.Component {
       });
 
     scene.addLayer(layer);
+
+    let pointLayer = new PointLayer({ zIndex: 2 })
+      .source([{ lng: 130, lat: 30 }], {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(20)
+      .color('red');
+    scene.addLayer(pointLayer);
 
     this.scene = scene;
 

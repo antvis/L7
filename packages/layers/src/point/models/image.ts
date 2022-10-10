@@ -2,28 +2,27 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
   IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
+import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
-interface IImageLayerStyleOptions {
-  opacity: styleSingle;
-  offsets: styleOffset;
-}
 export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       offsets = [0, 0],
-    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+      raisingHeight = 0,
+      heightfixed = false,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
@@ -67,13 +66,14 @@ export default class ImageModel extends BaseModel {
             });
     }
     return {
+      u_raisingHeight: Number(raisingHeight),
+      u_heightfixed: Number(heightfixed),
+
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
-      // u_opacity: opacity || 1.0,
-      // u_offsets: [-offsets[0], offsets[1]],
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
@@ -81,11 +81,11 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.registerBuiltinAttributes();
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -94,18 +94,30 @@ export default class ImageModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
-    return [
-      this.layer.buildLayerModel({
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+
+    this.layer
+      .buildLayerModel({
         moduleName: 'pointImage',
         vertexShader: pointImageVert,
         fragmentShader: pointImageFrag,
         triangulation: PointImageTriangulation,
-        primitive: gl.POINTS,
         depth: { enable: false },
+        primitive: gl.POINTS,
         blend: this.getBlend(),
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
     // point layer size;
@@ -123,9 +135,6 @@ export default class ImageModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -170,15 +179,13 @@ export default class ImageModel extends BaseModel {
         min: 'linear mipmap nearest',
         mipmap: true,
       });
-      // this.layer.render();
-      // TODO: 更新完纹理后在更新的图层的时候需要更新所有的图层
-      this.layer.renderLayers();
+      // 更新完纹理后在更新的图层的时候需要更新所有的图层
+      this.layerService.throttleRenderLayers();
       return;
     }
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.LINEAR,
-      // min: gl.LINEAR,
       min: gl.LINEAR_MIPMAP_LINEAR,
       premultiplyAlpha: false,
       width: 1024,

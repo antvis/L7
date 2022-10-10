@@ -1,5 +1,3 @@
-#define LineTypeSolid 0.0
-#define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
 
@@ -10,14 +8,10 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
-// varying vec2 v_normal;
 
-uniform float u_line_type: 0.0;
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform float u_lineDir: 1.0;
-varying vec4 v_dash_array;
 
 uniform float u_thetaOffset: 0.314;
 uniform float u_icon_step: 100;
@@ -58,7 +52,10 @@ vec2 midPoint(vec2 source, vec2 target, float arcThetaOffset) {
   // return mid;
 }
 float getSegmentRatio(float index) {
+    // dash: index / (segmentNumber - 1.);
+    // normal: smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
     return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+    //  return index / (segmentNumber - 1.);
 }
 vec2 interpolate (vec2 source, vec2 target, float t, float arcThetaOffset) {
   // if the angularDist is PI, linear interpolation is applied. otherwise, use spherical interpolation
@@ -125,22 +122,8 @@ void main() {
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   float d_distance_ratio;
-  if(u_line_type == LineTypeDash) {
-      d_distance_ratio = segmentIndex / segmentNumber;
-
-      vec2 s = source;
-      vec2 t = target;
-      
-      if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-        s = unProjCustomCoord(source);
-        t = unProjCustomCoord(target);
-      }
-      float total_Distance = pixelDistance(s, t) / 2.0 * PI;
-      // float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
-      v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
-  }
   
-  if(u_aimate.x == Animate) {
+  if(u_animate.x == Animate) {
       d_distance_ratio = segmentIndex / segmentNumber;
       if(u_lineDir != 1.0) {
         d_distance_ratio = 1.0 - d_distance_ratio;
@@ -150,8 +133,9 @@ void main() {
    styleMappingMat[3].b = d_distance_ratio;
 
   // styleMappingMat[0][1] - arcThetaOffset
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
-  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
+  float arcThetaOffset = styleMappingMat[0][1];
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, arcThetaOffset), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, arcThetaOffset), 0.0, 1.0));
   // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   //unProjCustomCoord
   

@@ -51,6 +51,7 @@ import {
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
+import BloomPass from './services/renderer/passes/post-processing/BloomPass';
 import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
 import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
 import ColorHalfTonePass from './services/renderer/passes/post-processing/ColorHalfTonePass';
@@ -124,6 +125,7 @@ export const lazyMultiInject = (
     original.call(this, proto, key);
     if (descriptor) {
       // return link to proto, so own value wont be 'undefined' after component's creation
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       descriptor!.initializer = () => {
         return proto[key];
       };
@@ -221,6 +223,10 @@ export function createSceneContainer() {
     .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
     .to(CopyPass)
     .whenTargetNamed('copy');
+  sceneContainer
+    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
+    .to(BloomPass)
+    .whenTargetNamed('bloom');
   sceneContainer
     .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
     .to(BlurHPass)

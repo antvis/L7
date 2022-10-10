@@ -5,16 +5,12 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { aProjectFlat, Satistics, unProjectFlat } from '@antv/l7-utils';
+import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import heatmapGrid3dVert from '../shaders/hexagon_3d_vert.glsl';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
-interface IHeatMapLayerStyleOptions {
-  opacity: number;
-  coverage: number;
-  angle: number;
-}
 export default class Grid3DModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
@@ -33,31 +29,41 @@ export default class Grid3DModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'grid3dheatmap',
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    this.layer
+      .buildLayerModel({
+        moduleName: 'heatmapGrid3d',
         vertexShader: heatmapGrid3dVert,
         fragmentShader: heatmapGridFrag,
         triangulation: PointExtrudeTriangulation,
+        primitive: gl.TRIANGLES,
         depth: { enable: true },
         blend: this.getBlend(),
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -65,9 +71,6 @@ export default class Grid3DModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -75,14 +78,12 @@ export default class Grid3DModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -105,18 +106,15 @@ export default class Grid3DModel extends BaseModel {
       descriptor: {
         name: 'a_Pos',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
         size: 3,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
+        update: (feature: IEncodeFeature) => {
           const coordinates = (feature.version === 'GAODE2.x'
             ? feature.originCoordinates
             : feature.coordinates) as number[];
-          // const coordinates = feature.coordinates as number[];
-          // const coordinates = feature.originCoordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

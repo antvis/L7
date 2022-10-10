@@ -1,15 +1,13 @@
 import {
   AttributeType,
-  BlendType,
   gl,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 
-import BaseModel, { styleOffset, styleSingle } from '../../core/BaseModel';
+import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 
 import baseFrag from '../shaders/base_frag.glsl';
@@ -27,7 +25,7 @@ export default class BaseEarthModel extends BaseModel {
   );
 
   public getUninforms(): IModelUniform {
-    const { animateOption, globelOtions } = this.layer.getLayerConfig();
+    const { animateOption, globalOptions } = this.layer.getLayerConfig();
     if (animateOption?.enable) {
       // @ts-ignore
       // T: rotateY 方法只有在地球模式下存在
@@ -42,10 +40,9 @@ export default class BaseEarthModel extends BaseModel {
     }
 
     return {
-      u_ambientRatio: globelOtions?.ambientRatio || 0.6, // 环境光
-      u_diffuseRatio: globelOtions?.diffuseRatio || 0.4, // 漫反射
-      u_specularRatio: globelOtions?.specularRatio || 0.1, // 高光反射
-      // u_sunLight: [120, 120, 120],
+      u_ambientRatio: globalOptions?.ambientRatio || 0.6, // 环境光
+      u_diffuseRatio: globalOptions?.diffuseRatio || 0.4, // 漫反射
+      u_specularRatio: globalOptions?.specularRatio || 0.1, // 高光反射
       u_sunLight: [this.sunX, this.sunY, this.sunZ],
 
       u_texture: this.texture,
@@ -59,13 +56,13 @@ export default class BaseEarthModel extends BaseModel {
     this.sunX = Math.cos(this.earthTime) * (this.sunRadius - this.sunY);
     this.sunZ = Math.sin(this.earthTime) * (this.sunRadius - this.sunY);
 
-    this.layerService.renderLayers();
+    this.layerService.throttleRenderLayers();
   }
 
-  public initModels(): IModel[] {
-    const { globelOtions } = this.layer.getLayerConfig();
-    if (globelOtions?.earthTime !== undefined) {
-      this.setEarthTime(globelOtions.earthTime);
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    const { globalOptions } = this.layer.getLayerConfig();
+    if (globalOptions?.earthTime !== undefined) {
+      this.setEarthTime(globalOptions.earthTime);
     }
 
     const source = this.layer.getSource();
@@ -80,41 +77,45 @@ export default class BaseEarthModel extends BaseModel {
         width: imageData[0].width,
         height: imageData[0].height,
       });
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     });
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(): IModel[] {
-    // TODO: 调整图层的绘制顺序 地球大气层
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    // Tip: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -998;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'baseEarth',
+
+    this.layer
+      .buildLayerModel({
+        moduleName: 'earthBase',
         vertexShader: baseVert,
         fragmentShader: baseFrag,
         triangulation: earthTriangulation,
         depth: { enable: true },
         blend: this.getBlend(),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -122,9 +123,6 @@ export default class BaseEarthModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -138,7 +136,6 @@ export default class BaseEarthModel extends BaseModel {
       descriptor: {
         name: 'a_Normal',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -172,7 +169,6 @@ export default class BaseEarthModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

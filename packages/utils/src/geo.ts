@@ -1,21 +1,13 @@
 import {
   BBox,
-  Coord,
   degreesToRadians,
-  isObject,
   radiansToLength,
   Units,
 } from '@turf/helpers';
+import { isNumber } from './math';
 
 export type IBounds = [[number, number], [number, number]];
-interface ILngLat {
-  lng: number;
-  lat: number;
-}
-interface IPoint {
-  x: number;
-  y: number;
-}
+
 const originShift = (2 * Math.PI * 6378137) / 2.0;
 type Point = number[];
 /**
@@ -186,6 +178,28 @@ export function unProjectFlat(px: number[]): [number, number] {
   const lng = x / d;
   return [lng, lat];
 }
+
+export function amap2Project(lng: number, lat: number): [number, number] {
+  const r = 85.0511287798;
+  const Rg = Math.PI / 180;
+  const Tg = 6378137;
+
+  lat = Math.max(Math.min(r, lat), -r);
+  lng *= Rg;
+  lat *= Rg;
+  lat = Math.log(Math.tan(Math.PI / 4 + lat / 2));
+  return [lng * Tg, lat * Tg];
+}
+
+export function amap2UnProject(x: number, y: number): [number, number] {
+  const Rg = Math.PI / 180;
+  const Tg = 6378137;
+
+  const lng = (x/Tg) / Rg;
+  const lat = (2 * (Math.atan(Math.exp((y / Tg))) - Math.PI/4))/Rg;
+  return [lng, lat];
+}
+
 export function lnglatDistance(
   coordinates1: [number, number],
   coordinates2: [number, number],
@@ -240,7 +254,7 @@ export function boundsContains(b1: IBounds, b2: IBounds): boolean {
   );
 }
 /**
- * bbox 转换为Bounds
+ * bbox转换为Bounds
  * @param b1 bbox
  *
  */
@@ -249,6 +263,11 @@ export function bBoxToBounds(b1: BBox): IBounds {
     [b1[0], b1[1]],
     [b1[2], b1[3]],
   ];
+}
+
+export function normalize(v: Point) {
+  const len = calDistance(v, [0, 0]);
+  return [v[0] / len, v[1] / len];
 }
 
 export function calDistance(p1: Point, p2: Point) {
@@ -338,4 +357,67 @@ export function flow(coords: Point[], time: number = 100) {
     point.duration = time * (point.dis / totalDis);
   });
   return path;
+}
+
+type Position = number[];
+
+export function calculateCentroid(
+  coord: Position | Position[] | Position[][],
+): Position {
+  // let pos = coord as Position;
+  if (isNumber(coord[0])) {
+    return coord as Position;
+    // @ts-ignore
+  } else if (isNumber(coord[0][0])) {
+    throw new Error('当前数据不支持标注');
+    // @ts-ignore
+  } else if (isNumber(coord[0][0][0])) {
+    const coords = coord as Position[][];
+    let xSum = 0;
+    let ySum = 0;
+    let len = 0;
+    coords.forEach((coor: Position[]) => {
+      coor.forEach((pos) => {
+        xSum += pos[0];
+        ySum += pos[1];
+        len++;
+      });
+    });
+    return [xSum / len, ySum / len, 0];
+  } else {
+    throw new Error('当前数据不支持标注');
+  }
+}
+
+/**
+ * 计算
+ * @param points
+ * @returns
+ */
+export function calculatePointsCenterAndRadius(points: number[]) {
+  let maxX = points[0];
+  let maxY = points[1];
+  let minX = points[0];
+  let minY = points[1];
+  let xCount = 0;
+  let yCount = 0;
+  let pCount = 0;
+
+  for (let i = 0; i < points.length; i += 2) {
+    const x = points[i];
+    const y = points[i + 1];
+    if (x && y) {
+      maxX = Math.max(x, maxX);
+      maxY = Math.max(y, maxY);
+      minX = Math.min(x, minX);
+      minY = Math.min(y, minY);
+      xCount += x;
+      yCount += y;
+      pCount++;
+    }
+  }
+  return {
+    center: [xCount / pCount, yCount / pCount],
+    radius: Math.sqrt(Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2)) / 2,
+  };
 }

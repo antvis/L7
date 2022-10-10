@@ -2,36 +2,23 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerModel,
-  ILayerPlugin,
+  ILayerConfig,
   IModel,
-  IStyleAttributeService,
-  lazyInject,
-  TYPES,
+  Triangulation,
 } from '@antv/l7-core';
+import { getMask, polygonFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
-import BaseModel, { styleSingle } from '../../core/BaseModel';
-import {
-  polygonTriangulation,
-  polygonTriangulationWithCenter,
-} from '../../core/triangulation';
+import BaseModel from '../../core/BaseModel';
+import { IPolygonLayerStyleOptions } from '../../core/interface';
+import { polygonTriangulationWithCenter } from '../../core/triangulation';
 import polygon_frag from '../shaders/polygon_frag.glsl';
 import polygon_linear_frag from '../shaders/polygon_linear_frag.glsl';
 import polygon_linear_vert from '../shaders/polygon_linear_vert.glsl';
 import polygon_vert from '../shaders/polygon_vert.glsl';
-
-interface IPolygonLayerStyleOptions {
-  opacity: styleSingle;
-
-  opacityLinear: {
-    enable: boolean;
-    dir: string;
-  };
-}
 export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
+      raisingHeight = 0,
       opacity = 1,
       opacityLinear = {
         enable: false,
@@ -70,7 +57,9 @@ export default class FillModel extends BaseModel {
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
-      // u_opacity: opacity,
+
+      u_raisingHeight: Number(raisingHeight),
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
 
       u_opacitylinear: Number(opacityLinear.enable),
@@ -78,32 +67,44 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    const { frag, vert, triangulation, type } = this.getModelParams();
     const {
-      opacityLinear = {
-        enable: false,
-        dir: 'in',
-      },
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'polygon',
-        vertexShader: opacityLinear.enable ? polygon_linear_vert : polygon_vert,
-        fragmentShader: opacityLinear.enable
-          ? polygon_linear_frag
-          : polygon_frag,
-        // triangulation: polygonTriangulation,
-        triangulation: opacityLinear.enable
-          ? polygonTriangulationWithCenter
-          : polygonTriangulation,
-        blend: this.getBlend(),
+      mask = false,
+      maskInside = true,
+      workerEnabled = false,
+      enablePicking,
+    } = this.layer.getLayerConfig() as Partial<
+      ILayerConfig & IPolygonLayerStyleOptions
+    >;
+    this.layer.triangulation = triangulation;
+    this.layer
+      .buildLayerModel({
+        moduleName: type,
+        vertexShader: vert,
+        fragmentShader: frag,
+        triangulation,
+        primitive: gl.TRIANGLES,
         depth: { enable: false },
-      }),
-    ];
+        blend: this.getBlend(),
+        stencil: getMask(mask, maskInside),
+        workerEnabled,
+        workerOptions: {
+          modelType: type,
+          enablePicking,
+        },
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   public clearModels() {
@@ -134,14 +135,39 @@ export default class FillModel extends BaseModel {
             feature: IEncodeFeature,
             featureIdx: number,
             vertex: number[],
-            attributeIdx: number,
-            normal: number[],
           ) => {
-            // center[0] center[1] radius
             return [vertex[3], vertex[4], vertex[5]];
           },
         },
       });
+    }
+  }
+
+  private getModelParams(): {
+    frag: string;
+    vert: string;
+    type: string;
+    triangulation: Triangulation;
+  } {
+    const {
+      opacityLinear = {
+        enable: false,
+      },
+    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    if (opacityLinear.enable) {
+      return {
+        frag: polygon_linear_frag,
+        vert: polygon_linear_vert,
+        type: 'polygonLinear',
+        triangulation: polygonTriangulationWithCenter,
+      };
+    } else {
+      return {
+        frag: polygon_frag,
+        vert: polygon_vert,
+        type: 'polygonFill',
+        triangulation: polygonFillTriangulation,
+      };
     }
   }
 }

@@ -1,4 +1,4 @@
-import { mat3, mat4, vec3, vec4 } from 'gl-matrix';
+import { vec3, vec4 } from 'gl-matrix';
 
 export function getAngle(angle: number | undefined) {
   if (angle === undefined) {

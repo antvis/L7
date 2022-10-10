@@ -17,6 +17,7 @@ import {
   IMapService,
   IModel,
   IModelUniform,
+  IPickingService,
   IRendererService,
   IShaderModuleService,
   IStyleAttributeService,
@@ -28,7 +29,7 @@ import {
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { color } from 'd3-color';
-import { isArray, isEqual, isFunction, isNumber, isString } from 'lodash';
+import { isEqual, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 
 export type styleSingle =
@@ -80,7 +81,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected cellLength: number; // 单个 cell 的长度
   protected cellProperties: ICellProperty[]; // 需要进行数据映射的属性集合
   protected cellTypeLayout: number[];
-  protected stylePropertyesExist: {
+  protected stylePropertiesExist: {
     // 记录 style 属性是否存在的中间变量
     hasThetaOffset: number;
     hasOpacity: number;
@@ -110,6 +111,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected mapService: IMapService;
   protected cameraService: ICameraService;
   protected layerService: ILayerService;
+  protected pickingService: IPickingService;
 
   // style texture data mapping
 
@@ -118,6 +120,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.rendererService = layer
       .getContainer()
       .get<IRendererService>(TYPES.IRendererService);
+    this.pickingService = layer
+      .getContainer()
+      .get<IPickingService>(TYPES.IPickingService);
+
     this.shaderModuleService = layer
       .getContainer()
       .get<IShaderModuleService>(TYPES.IShaderModuleService);
@@ -158,7 +164,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       stroke: undefined,
       offsets: undefined,
     };
-    this.stylePropertyesExist = {
+    this.stylePropertiesExist = {
       hasThetaOffset: 0,
       hasOpacity: 0,
       hasStrokeOpacity: 0,
@@ -170,7 +176,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     // 只有在不支持数据纹理的情况下进行赋值
     if (!this.dataTextureTest) {
       this.dataTexture = this.createTexture2D({
-        data: new Uint8ClampedArray(4),
+        // data: new Uint8ClampedArray(4),
+        // 使用 Uint8ClampedArray 在 支付宝 环境中可能存在问题 UC 内核对格式有要求 L7 v2.7.18 版本发现
+        // Uint8ClampedArray 和 Uint8Array 没有实质性的区别
+        data: new Uint8Array(4),
         mag: gl.NEAREST,
         min: gl.NEAREST,
         width: 1,
@@ -187,7 +196,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public clearLastCalRes() {
     this.cellProperties = []; // 清空上一次计算的需要进行数据映射的属性集合
     this.cellLength = 0; // 清空上一次计算的 cell 的长度
-    this.stylePropertyesExist = {
+    this.stylePropertiesExist = {
       // 全量清空上一次是否需要对 style 属性进行数据映射的判断
       hasThetaOffset: 0,
       hasOpacity: 0,
@@ -207,13 +216,13 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         0.0,
         0.0,
         // 1
-        this.stylePropertyesExist.hasOpacity, // cell 中是否存在 opacity
-        this.stylePropertyesExist.hasStrokeOpacity, // cell 中是否存在 strokeOpacity
-        this.stylePropertyesExist.hasStrokeWidth, // cell 中是否存在 strokeWidth
-        this.stylePropertyesExist.hasStroke, // cell 中是否存在 stroke
+        this.stylePropertiesExist.hasOpacity, // cell 中是否存在 opacity
+        this.stylePropertiesExist.hasStrokeOpacity, // cell 中是否存在 strokeOpacity
+        this.stylePropertiesExist.hasStrokeWidth, // cell 中是否存在 strokeWidth
+        this.stylePropertiesExist.hasStroke, // cell 中是否存在 stroke
         // 2
-        this.stylePropertyesExist.hasOffsets, // cell 中是否存在 offsets
-        this.stylePropertyesExist.hasThetaOffset, // cell 中是否存在 thetaOffset
+        this.stylePropertiesExist.hasOffsets, // cell 中是否存在 offsets
+        this.stylePropertiesExist.hasThetaOffset, // cell 中是否存在 thetaOffset
         0.0,
         0.0,
         // 3
@@ -250,7 +259,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    * @returns
    */
   public dataTextureNeedUpdate(options: {
-    // TODO: thetaOffset 目前只有 lineLayer/arc 使用
+    // thetaOffset 目前只有 lineLayer/arc 使用
     thetaOffset?: styleSingle;
     opacity?: styleSingle;
     strokeOpacity?: styleSingle;
@@ -296,7 +305,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    * @param options
    */
   public judgeStyleAttributes(options: {
-    // TODO: 目前 thetaOffset 只有 lineLayer/arc 使用
+    // Tip: 目前 thetaOffset 只有 lineLayer/arc 使用
     thetaOffset?: styleSingle;
     opacity?: styleSingle;
     strokeOpacity?: styleSingle;
@@ -309,7 +318,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     if (options.opacity !== undefined && !isNumber(options.opacity)) {
       // 数据映射
       this.cellProperties.push({ attr: 'opacity', count: 1 });
-      this.stylePropertyesExist.hasOpacity = 1;
+      this.stylePropertiesExist.hasOpacity = 1;
       this.cellLength += 1;
     }
 
@@ -319,21 +328,21 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     ) {
       // 数据映射
       this.cellProperties.push({ attr: 'strokeOpacity', count: 1 });
-      this.stylePropertyesExist.hasStrokeOpacity = 1;
+      this.stylePropertiesExist.hasStrokeOpacity = 1;
       this.cellLength += 1;
     }
 
     if (options.strokeWidth !== undefined && !isNumber(options.strokeWidth)) {
       // 数据映射
       this.cellProperties.push({ attr: 'strokeWidth', count: 1 });
-      this.stylePropertyesExist.hasStrokeWidth = 1;
+      this.stylePropertiesExist.hasStrokeWidth = 1;
       this.cellLength += 1;
     }
 
     if (options.stroke !== undefined && !this.isStaticColor(options.stroke)) {
       // 数据映射
       this.cellProperties.push({ attr: 'stroke', count: 4 });
-      this.stylePropertyesExist.hasStroke = 1;
+      this.stylePropertiesExist.hasStroke = 1;
       this.cellLength += 4;
     }
 
@@ -343,17 +352,16 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     ) {
       // 数据映射
       this.cellProperties.push({ attr: 'offsets', count: 2 });
-      this.stylePropertyesExist.hasOffsets = 1;
+      this.stylePropertiesExist.hasOffsets = 1;
       this.cellLength += 2;
     }
 
     if (options.thetaOffset !== undefined && !isNumber(options.thetaOffset)) {
       // 数据映射
       this.cellProperties.push({ attr: 'thetaOffset', count: 1 });
-      this.stylePropertyesExist.hasThetaOffset = 1;
+      this.stylePropertiesExist.hasThetaOffset = 1;
       this.cellLength += 1;
     }
-    // console.log('this.cellLength', this.cellLength)
   }
 
   /**
@@ -396,7 +404,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
    */
   public isOffsetStatic(offsets: styleOffset) {
     if (
-      isArray(offsets) &&
+      Array.isArray(offsets) &&
       offsets.length === 2 &&
       isNumber(offsets[0]) &&
       isNumber(offsets[1])
@@ -505,13 +513,16 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public needUpdate(): boolean {
     return false;
   }
-  public buildModels(): IModel[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public buildModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
-  public initModels(): IModel[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public initModels(callbackModel: (models: IModel[]) => void): void {
     throw new Error('Method not implemented.');
   }
-  public clearModels() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public clearModels(refresh = true) {
     return;
   }
   public getAttribute(): {

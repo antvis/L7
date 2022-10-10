@@ -1,0 +1,13 @@
+{
+  "title": {
+    "zh": "地图",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "amap.js",
+      "title": "添加默认Marker",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*VEy6S6UrAV8AAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}

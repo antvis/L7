@@ -1,6 +1,6 @@
 // @ts-ignore
 import { BasePostProcessingPass, PolygonLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox, GaodeMap, GaodeMapV2 } from '@antv/l7-maps';
 import * as dat from 'dat.gui';
 import * as React from 'react';
 
@@ -88,8 +88,14 @@ export default class CustomPostProcessing extends React.Component {
     const data = await response.json();
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        style: 'mapbox://styles/mapbox/streets-v9',
+      // map: new Mapbox({
+      //   style: 'mapbox://styles/mapbox/streets-v9',
+      //   center: [110.19382669582967, 50.258134],
+      //   pitch: 0,
+      //   zoom: 3,
+      // }),
+      map: new GaodeMap({
+        // style: 'mapbox://styles/mapbox/streets-v9',
         center: [110.19382669582967, 50.258134],
         pitch: 0,
         zoom: 3,
@@ -99,8 +105,7 @@ export default class CustomPostProcessing extends React.Component {
     // 注册自定义后处理效果
     scene.registerPostProcessingPass(DotScreenEffect, 'dotScreenEffect');
     const layer = new PolygonLayer({
-      enablePicking: true,
-      enableHighlight: true,
+      enableMultiPassRenderer: true,
       passes: [
         [
           'dotScreenEffect',
@@ -123,6 +128,7 @@ export default class CustomPostProcessing extends React.Component {
         '#FF7A45',
         '#CF1D49',
       ])
+      .active(true)
       .shape('fill')
       .style({
         opacity: 0.8,

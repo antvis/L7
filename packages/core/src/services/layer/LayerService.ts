@@ -1,16 +1,19 @@
 import { $window, rgb2arr } from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
+import { throttle } from 'lodash';
 import 'reflect-metadata';
-import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
-import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayerModel, ILayerService } from './ILayerService';
+import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 
 @injectable()
-export default class LayerService implements ILayerService {
+export default class LayerService extends EventEmitter<LayerServiceEvent>
+  implements ILayerService {
+  // pickedLayerId 参数用于指定当前存在被选中的 layer
+  public pickedLayerId: number = -1;
   public clock = new Clock();
 
   public alreadyInRendering: boolean = false;
@@ -36,15 +39,30 @@ export default class LayerService implements ILayerService {
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
+  public reRender = throttle(() => {
+    this.updateLayerRenderList();
+    this.renderLayers();
+  }, 32);
+
+  public throttleRenderLayers = throttle(() => {
+    this.renderLayers();
+  }, 16);
+
 
   public add(layer: ILayer) {
     if (this.sceneInited) {
       layer.init();
     }
+
     this.layers.push(layer);
     this.updateLayerRenderList();
+    this.emit('layerChange', this.layers);
+  }
+
+  public addMask(mask: ILayer) {
+    if (this.sceneInited) {
+      mask.init();
+    }
   }
 
   public initLayers() {
@@ -55,6 +73,10 @@ export default class LayerService implements ILayerService {
       }
     });
     this.updateLayerRenderList();
+  }
+
+  public getSceneInited() {
+    return this.sceneInited;
   }
 
   public getRenderList(): ILayer[] {
@@ -73,21 +95,15 @@ export default class LayerService implements ILayerService {
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public cleanRemove(layer: ILayer, parentLayer?: ILayer) {
-    // Tip: layer.layerChildren 当 layer 存在子图层的情况
-    if (parentLayer) {
-      const layerIndex = parentLayer.layerChildren.indexOf(layer);
-      if (layerIndex > -1) {
-        parentLayer.layerChildren.splice(layerIndex, 1);
-      }
-    } else {
-      const layerIndex = this.layers.indexOf(layer);
-      if (layerIndex > -1) {
-        this.layers.splice(layerIndex, 1);
-      }
+  public cleanRemove(layer: ILayer, refresh = true) {
+    const layerIndex = this.layers.indexOf(layer);
+    if (layerIndex > -1) {
+      this.layers.splice(layerIndex, 1);
     }
-    this.updateLayerRenderList();
-    this.renderLayers();
+    if (refresh) {
+      this.throttleRenderLayers();
+    }
+    this.emit('layerChange', this.layers);
   }
 
   public remove(layer: ILayer, parentLayer?: ILayer): void {
@@ -106,6 +122,7 @@ export default class LayerService implements ILayerService {
     this.updateLayerRenderList();
     layer.destroy();
     this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public removeAllLayers() {
@@ -116,58 +133,66 @@ export default class LayerService implements ILayerService {
     this.enableRender = flag;
   }
 
-  public renderLayers() {
+  public async renderLayers() {
     if (this.alreadyInRendering || !this.enableRender) {
       return;
     }
     this.alreadyInRendering = true;
     this.clear();
 
-    this.layerList.forEach((layer) => {
+    for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
-      layer.render();
+
+      if (layer.masks.length > 0) {
+        // 清除上一次的模版缓存
+        this.renderService.clear({
+          stencil: 0,
+          depth: 1,
+          framebuffer: null,
+        });
+        layer.masks.map((m: ILayer) => {
+          m.hooks.beforeRenderData.call();
+          m.hooks.beforeRender.call();
+          m.render();
+          m.hooks.afterRender.call();
+        });
+      }
+
+      if (layer.getLayerConfig().enableMultiPassRenderer) {
+        // multiPassRender 不是同步渲染完成的
+        await layer.renderMultiPass();
+      } else {
+        layer.render();
+      }
       layer.hooks.afterRender.call();
-    });
+    }
     this.alreadyInRendering = false;
   }
 
   public updateLayerRenderList() {
-    // TODO: 每次更新都是从 layers 重新构建
+    // Tip: 每次更新都是从 layers 重新构建
     this.layerList = [];
     this.layers
       .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
+      .sort((pre: ILayer, next: ILayer) => {
+        // 根据 zIndex 对渲染顺序进行排序
+        return pre.zIndex - next.zIndex;
+      })
       .forEach((layer) => {
         this.layerList.push(layer);
-
-        // Tip: 渲染 layer 的子图层 默认 layerChildren 为空数组 表示没有子图层 目前只有 ImageTileLayer 有子图层
-        layer.layerChildren
-          .filter((childlayer) => childlayer.inited)
-          .filter((childlayer) => childlayer.isVisible())
-          .forEach((childlayer) => {
-            this.layerList.push(childlayer);
-          });
       });
-
-    // 根据 zIndex 对渲染顺序进行排序
-    this.layerList.sort((pre: ILayer, next: ILayer) => {
-      return pre.zIndex - next.zIndex;
-    });
   }
 
   public destroy() {
     this.layers.forEach((layer) => {
-      // Tip: layer.layerChildren 当 layer 存在子图层的情况
-      if (layer.layerChildren) {
-        layer.layerChildren.forEach((child) => child.destroy());
-        layer.layerChildren = [];
-      }
       layer.destroy();
     });
     this.layers = [];
     this.layerList = [];
     this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public startAnimate() {
@@ -188,11 +213,6 @@ export default class LayerService implements ILayerService {
     return this.renderService.extensionObject.OES_texture_float;
   }
 
-  // TODO: 判断地图是否正在被拖动
-  public isMapDragging() {
-    return this.mapService.dragging;
-  }
-
   // 控制着色器颜色拾取计算
   public enableShaderPick() {
     this.shaderPicking = true;
@@ -206,14 +226,7 @@ export default class LayerService implements ILayerService {
     return this.shaderPicking;
   }
 
-  private runRender() {
-    this.renderLayers();
-    this.layerRenderID = $window.requestAnimationFrame(
-      this.runRender.bind(this),
-    );
-  }
-
-  private clear() {
+  public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
       number,
       number,
@@ -226,6 +239,13 @@ export default class LayerService implements ILayerService {
       stencil: 0,
       framebuffer: null,
     });
+  }
+
+  private runRender() {
+    this.renderLayers();
+    this.layerRenderID = $window.requestAnimationFrame(
+      this.runRender.bind(this),
+    );
   }
 
   private stopRender() {

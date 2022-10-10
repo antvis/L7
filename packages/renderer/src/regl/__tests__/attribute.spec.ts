@@ -6,7 +6,7 @@ import ReglAttribute from '../ReglAttribute';
 import ReglBuffer from '../ReglBuffer';
 import ReglModel from '../ReglModel';
 import checkPixels from './utils/check-pixels';
-import createContext from './utils/create-context';
+import { createContext } from '@antv/l7-test-utils';
 
 describe('ReglAttribute', () => {
   let context;

@@ -1,5 +1,5 @@
-import { IParserCfg, ITransform } from '@antv/l7-core';
 import { IParserData } from './interface';
+
 type ParserFunction = (data: any, cfg?: any) => IParserData;
 type transformFunction = (data: IParserData, cfg?: any) => IParserData;
 const TRANSFORMS: {

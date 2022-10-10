@@ -1,3 +1,5 @@
+import { TilesetManager } from '@antv/l7-utils';
+import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
 export interface IParserCfg {
   type: string;
@@ -6,6 +8,7 @@ export interface IParserCfg {
   x1?: string;
   y1?: string;
   coordinates?: string;
+  geometry?: string;
   [key: string]: any;
 }
 type CallBack = (...args: any[]) => any;
@@ -58,15 +61,31 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface ISource {
+  inited: boolean;
   data: IParserData;
+  center: [number, number];
+  parser: IParserCfg;
+  transforms: ITransform[];
   cluster: boolean;
   clusterOptions: Partial<IClusterOptions>;
-  setData(data: any): void;
+  extent: BBox;
+  tileset: TilesetManager | undefined;
+  setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;
   getFeatureId(field: string, value: any): number | undefined;
+  getParserType(): string;
   getClusters(zoom: number): any;
   getClustersLeaves(id: number): any;
+  updateFeaturePropertiesById(
+    id: number,
+    properties: Record<string, any>,
+  ): void;
+  destroy(): void;
+  // Event
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

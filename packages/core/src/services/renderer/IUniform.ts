@@ -12,4 +12,5 @@ export type IUniform =
   | boolean
   | IFramebuffer
   | ITexture2D
-  | IStruct;
+  | IStruct
+  | null;

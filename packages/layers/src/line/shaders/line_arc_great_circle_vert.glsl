@@ -10,9 +10,8 @@ attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
-// varying vec2 v_normal;
 
 varying float v_distance_ratio;
 uniform float u_line_type: 0.0;
@@ -40,7 +39,7 @@ float maps (float value, float start1, float stop1, float start2, float stop2) {
 }
 
 float getSegmentRatio(float index) {
-    return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+    return index / (segmentNumber - 1.);
 }
 
 float paraboloid(vec2 source, vec2 target, float ratio) {
@@ -157,6 +156,7 @@ void main() {
   float segmentIndex = a_Position.x;
   float segmentRatio = getSegmentRatio(segmentIndex);
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
+
   if(u_line_type == LineTypeDash) {
     v_distance_ratio = segmentIndex / segmentNumber;
     vec2 s = source;
@@ -167,13 +167,14 @@ void main() {
       t = unProjCustomCoord(target);
     }
     float total_Distance = pixelDistance(s, t) / 2.0 * PI;
-    total_Distance = total_Distance*8.0;
-    // float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba);
-    v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
+    total_Distance = total_Distance*16.0; // total_Distance*16.0 调整默认的效果
+    v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / total_Distance;
   }
-  if(u_aimate.x == Animate) {
+
+  if(u_animate.x == Animate) {
       v_distance_ratio = segmentIndex / segmentNumber;
   }
+
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   v_distance_ratio = segmentIndex / segmentNumber;
   vec4 curr = project_position(vec4(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0, 1.0));

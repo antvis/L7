@@ -110,6 +110,10 @@ type BlendingFunctionSeparate = Partial<{
 
 export interface IModelInitializationOptions {
   /**
+   * 该 model 是否支持拾取
+   */
+  pick?: boolean;
+  /**
    * Shader 字符串，假设此时已经经过 ShaderLib 处理
    */
   vs: string;
@@ -243,6 +247,11 @@ export interface IModelDrawOptions {
  * * 销毁资源，例如 buffer texture 等
  */
 export interface IModel {
+  updateAttributes(attributes: { [key: string]: IAttribute }): void;
+  updateAttributesAndElements(
+    attributes: { [key: string]: IAttribute },
+    elements: IElements,
+  ): void;
   addUniforms(uniforms: { [key: string]: IUniform }): void;
   draw(options: IModelDrawOptions, pick?: boolean): void;
   destroy(): void;

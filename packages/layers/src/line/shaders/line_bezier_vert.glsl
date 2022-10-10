@@ -7,7 +7,7 @@ attribute vec4 a_Instance;
 attribute float a_Size;
 uniform mat4 u_ModelMatrix;
 uniform float segmentNumber;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
 varying vec2 v_normal;
 
@@ -72,7 +72,7 @@ void main() {
       float total_Distance = pixelDistance(a_Instance.rg, a_Instance.ba) / 2.0 * PI;
       v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
     }
-  if(u_aimate.x == Animate) {
+  if(u_animate.x == Animate) {
       v_distance_ratio = segmentIndex / segmentNumber;
   }
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio), 0.0, 1.0));

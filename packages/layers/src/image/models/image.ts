@@ -2,25 +2,17 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
   IModel,
   IModelUniform,
-  IRasterParserDataItem,
-  IStyleAttributeService,
   ITexture2D,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
-import { isMini } from '@antv/l7-utils';
+import { getMask, isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/image_frag.glsl';
 import ImageVert from '../shaders/image_vert.glsl';
 
-interface IImageLayerStyleOptions {
-  opacity: number;
-}
 export default class ImageModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
@@ -30,7 +22,13 @@ export default class ImageModel extends BaseModel {
       u_texture: this.texture,
     };
   }
-  public initModels() {
+
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
@@ -42,7 +40,6 @@ export default class ImageModel extends BaseModel {
       // @ts-ignore
       const canvas = this.layerService.sceneService.getSceneConfig().canvas;
       const img = canvas.createImage();
-      // let img = new Image()
       img.crossOrigin = 'anonymous';
       img.src = source.data.originData;
 
@@ -52,35 +49,53 @@ export default class ImageModel extends BaseModel {
           width: img.width,
           height: img.height,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
+        this.layerService.reRender();
       };
     } else {
-      source.data.images.then((imageData: HTMLImageElement[]) => {
-        this.texture = createTexture2D({
-          data: imageData[0],
-          width: imageData[0].width,
-          height: imageData[0].height,
-        });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
-      });
+      source.data.images.then(
+        (imageData: Array<HTMLImageElement | ImageBitmap>) => {
+          this.texture = createTexture2D({
+            data: imageData[0],
+            width: imageData[0].width,
+            height: imageData[0].height,
+            mag: gl.LINEAR,
+            min: gl.LINEAR,
+          });
+          this.layerService.reRender();
+        },
+      );
     }
 
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'RasterImage',
+    this.layer
+      .buildLayerModel({
+        moduleName: 'rasterImage',
         vertexShader: ImageVert,
         fragmentShader: ImageFrag,
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
+        blend: {
+          // Tip: 优化显示效果
+          enable: true,
+        },
         depth: { enable: false },
-        blend: this.getBlend(),
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+        pick: false,
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
-  public buildModels() {
-    return this.initModels();
+
+  public clearModels(): void {
+    this.texture?.destroy();
+  }
+
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   protected getConfigSchema() {
@@ -96,14 +111,12 @@ export default class ImageModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -113,7 +126,6 @@ export default class ImageModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

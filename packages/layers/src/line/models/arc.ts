@@ -8,14 +8,20 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, lineStyleType } from '../../core/interface';
+import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-import line_arc_frag from '../shaders/line_arc_frag.glsl';
-import line_arc2d_vert from '../shaders/line_arc_vert.glsl';
+// arc dash line
+import arc_dash_frag from '../shaders/dash/arc_dash_frag.glsl';
+import arc_dash_vert from '../shaders/dash/arc_dash_vert.glsl';
+// arc normal line
+import arc_line_frag from '../shaders/line_arc_frag.glsl';
+import arc_line_vert from '../shaders/line_arc_vert.glsl';
+// arc linear line
+import arc_linear_frag from '../shaders/linear/arc_linear_frag.glsl';
+import arc_linear_vert from '../shaders/linear/arc_linear_vert.glsl';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
@@ -24,7 +30,7 @@ export default class ArcModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity,
+      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -93,6 +99,7 @@ export default class ArcModel extends BaseModel {
       u_cellTypeLayout: this.getCellTypeLayout(),
 
       u_thetaOffset: isNumber(thetaOffset) ? thetaOffset : 0.0,
+      // u_thetaOffset:  0.0,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
@@ -116,18 +123,17 @@ export default class ArcModel extends BaseModel {
 
   public getAnimateUniforms(): IModelUniform {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-    // console.log('animateOption', animateOption)
     return {
-      u_aimate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
 
-  public initModels(): IModel[] {
+  public initModels(callbackModel: (models: IModel[]) => void) {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    return this.buildModels();
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
@@ -136,26 +142,65 @@ export default class ArcModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(): IModel[] {
+  public getShaders(): { frag: string; vert: string; type: string } {
+    const {
+      sourceColor,
+      targetColor,
+      lineType,
+    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (lineType === 'dash') {
+      return {
+        frag: arc_dash_frag,
+        vert: arc_dash_vert,
+        type: 'Dash',
+      };
+    }
+
+    if (sourceColor && targetColor) {
+      // 分离 linear 功能
+      return {
+        frag: arc_linear_frag,
+        vert: arc_linear_vert,
+        type: 'Linear',
+      };
+    } else {
+      return {
+        frag: arc_line_frag,
+        vert: arc_line_vert,
+        type: '',
+      };
+    }
+  }
+
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     const {
       segmentNumber = 30,
+      mask = false,
+      maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
-    return [
-      this.layer.buildLayerModel({
-        moduleName: 'arc2dline',
-        vertexShader: line_arc2d_vert,
-        fragmentShader: line_arc_frag,
+    const { frag, vert, type } = this.getShaders();
+    //
+    this.layer
+      .buildLayerModel({
+        moduleName: 'lineArc2d' + type,
+        vertexShader: vert,
+        fragmentShader: frag,
         triangulation: LineArcTriangulation,
         depth: { enable: false },
         blend: this.getBlend(),
         segmentNumber,
-      }),
-    ];
+        stencil: getMask(mask, maskInside),
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
@@ -170,9 +215,6 @@ export default class ArcModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -195,7 +237,6 @@ export default class ArcModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4], vertex[5], vertex[6]];
         },
@@ -216,9 +257,6 @@ export default class ArcModel extends BaseModel {
         size: 2,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;

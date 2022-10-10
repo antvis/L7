@@ -1,23 +1,19 @@
-import { IColorRamp } from '@antv/l7-utils';
 import BaseLayer from '../core/BaseLayer';
+import { IRasterLayerStyleOptions } from '../core/interface';
 import RasterModels, { RasterModelType } from './models/index';
-interface IRasterLayerStyleOptions {
-  opacity: number;
-  domain: [number, number];
-  noDataValue: number;
-  clampLow: boolean;
-  clampHigh: boolean;
-  rampColors: IColorRamp;
-}
 export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
   public buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new RasterModels[modelType](this);
-    this.models = this.layerModel.initModels();
+    this.layerModel.initModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   public rebuildModels() {
-    this.models = this.layerModel.buildModels();
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   protected getConfigSchema() {
     return {
@@ -35,11 +31,21 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     const defaultConfig = {
       raster: {},
       raster3d: {},
+      rasterTile: {},
     };
     return defaultConfig[type];
   }
 
   protected getModelType(): RasterModelType {
-    return 'raster';
+    // 根据 source 的类型判断 model type
+    const parserType = this.layerSource.getParserType();
+    switch (parserType) {
+      case 'raster':
+        return 'raster';
+      case 'rasterTile':
+        return 'rasterTile';
+      default:
+        return 'raster';
+    }
   }
 }

@@ -1,8 +1,7 @@
 // @ts-ignore
 import { EarthMap } from '../earthmap';
-import Point from '../geo/point';
 import { Map } from '../map';
-import { MapMouseEvent, MapTouchEvent, MapWheelEvent } from './events';
+import { MapMouseEvent } from './events';
 export default class BlockableMapEventHandler {
   private map: Map | EarthMap;
   private delayContextMenu: boolean;

@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { uniq } from 'lodash';
 import 'reflect-metadata';
 import { extractUniforms } from '../../utils/shader-module';
@@ -22,7 +22,7 @@ import styleMappingCalThetaOffset from '../../shaders/styleMappingCalThetaOffset
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
   '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
-const includeRegExp = /#pragma include (["^+"]?["\ "[a-zA-Z_0-9](.*)"]*?)/g;
+const includeRegExp = /#pragma include (["^+"]?["[a-zA-Z_0-9](.*)"]*?)/g;
 
 @injectable()
 export default class ShaderModuleService implements IShaderModuleService {

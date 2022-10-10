@@ -1,11 +1,5 @@
-import {
-  ILayer,
-  ILayerPlugin,
-  ILngLat,
-  IMapService,
-  TYPES,
-} from '@antv/l7-core';
-import Source, { DEFAULT_DATA, DEFAULT_PARSER } from '@antv/l7-source';
+import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
+import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 
@@ -15,17 +9,21 @@ export default class DataSourcePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     layer.hooks.init.tap('DataSourcePlugin', () => {
-      const source = layer.getSource();
+      let source = layer.getSource();
       if (!source) {
-        // TODO: 允许用户不使用 layer 的 source 方法，在这里传入一个默认的替换的默认数据
-        const { data, options } = layer.sourceOption || {
-          data: DEFAULT_DATA,
-          options: DEFAULT_PARSER,
-        };
-        layer.setSource(new Source(data, options));
+        // Tip: 用户没有传入 source 的时候使用图层的默认数据
+        const { data, options } =
+          layer.sourceOption || layer.defaultSourceConfig;
+        source = new Source(data, options);
+        layer.setSource(source);
       }
-
-      this.updateClusterData(layer);
+      if (source.inited) {
+        this.updateClusterData(layer);
+      } else {
+        source.once('sourceUpdate', () => {
+          this.updateClusterData(layer);
+        });
+      }
     });
 
     // 检测数据是否需要更新
@@ -38,20 +36,21 @@ export default class DataSourcePlugin implements ILayerPlugin {
   }
 
   private updateClusterData(layer: ILayer): boolean {
+    // Tip: 矢量瓦片不需要进行聚合操作
+    if (layer.isTileLayer || layer.tileLayer) return false;
     const source = layer.getSource();
     const cluster = source.cluster;
-    const { zoom = 0, maxZoom = 16 } = source.clusterOptions;
+    const { zoom = 0 } = source.clusterOptions;
     const newZoom = this.mapService.getZoom() - 1;
     const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
+    if (cluster && dataSourceNeedUpdate) {
+      // 数据发生更新
+      source.updateClusterData(Math.floor(newZoom));
+    }
     // 如果 dataSource 有更新，跳过 zoom 的判断，直接更新一次
-    if (
-      cluster &&
-      (dataSourceNeedUpdate || Math.abs(layer.clusterZoom - newZoom) >= 1) &&
-      maxZoom > layer.clusterZoom
-    ) {
-      // TODO 判断数据是否更新
+    if (cluster && Math.abs(layer.clusterZoom - newZoom) >= 1) {
       if (zoom !== Math.floor(newZoom)) {
-        source.updateClusterData(Math.round(newZoom));
+        source.updateClusterData(Math.floor(newZoom));
       }
       layer.clusterZoom = newZoom;
       return true;

@@ -7,26 +7,29 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import {
+  generateColorRamp,
+  getCullFace,
+  getMask,
+  IColorRamp,
+} from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseModel from '../../core/BaseModel';
+import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapTriangulation } from '../../core/triangulation';
 import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';
 import heatmap3DVert from '../shaders/heatmap_3d_vert.glsl';
+
+// 绘制平面热力的 shader
 import heatmapColorFrag from '../shaders/heatmap_frag.glsl';
+import heatmapColorVert from '../shaders/heatmap_vert.glsl';
+
 import heatmapFramebufferFrag from '../shaders/heatmap_framebuffer_frag.glsl';
 import heatmapFramebufferVert from '../shaders/heatmap_framebuffer_vert.glsl';
-import heatmapColorVert from '../shaders/heatmap_vert.glsl';
+
 import { heatMap3DTriangulation } from '../triangulation';
-interface IHeatMapLayerStyleOptions {
-  opacity: number;
-  intensity: number;
-  radius: number;
-  angle: number;
-  rampColors: IColorRamp;
-}
 @injectable()
 export default class HeatMapModel extends BaseModel {
   protected texture: ITexture2D;
@@ -57,13 +60,11 @@ export default class HeatMapModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public initModels(): IModel[] {
+  public async initModels(callbackModel: (models: IModel[]) => void) {
     const {
       createFramebuffer,
-      clear,
       getViewportSize,
       createTexture2D,
-      useFramebuffer,
     } = this.rendererService;
     const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
@@ -71,7 +72,7 @@ export default class HeatMapModel extends BaseModel {
     const shapeType = shapeAttr?.scale?.field || 'heatmap';
     this.shapeType = shapeType as string;
     // 生成热力图密度图
-    this.intensityModel = this.buildHeatMapIntensity();
+    this.intensityModel = await this.buildHeatMapIntensity();
     // 渲染到屏幕
     this.colorModel =
       shapeType === 'heatmap'
@@ -95,11 +96,11 @@ export default class HeatMapModel extends BaseModel {
 
     this.updateColorTexture();
 
-    return [this.intensityModel, this.colorModel];
+    callbackModel([this.intensityModel, this.colorModel]);
   }
 
-  public buildModels(): IModel[] {
-    return this.initModels();
+  public buildModels(callbackModel: (models: IModel[]) => void) {
+    this.initModels(callbackModel);
   }
 
   protected registerBuiltinAttributes() {
@@ -109,7 +110,6 @@ export default class HeatMapModel extends BaseModel {
       descriptor: {
         name: 'a_Dir',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -119,14 +119,12 @@ export default class HeatMapModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
@@ -141,9 +139,6 @@ export default class HeatMapModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return [size as number];
@@ -151,14 +146,19 @@ export default class HeatMapModel extends BaseModel {
       },
     });
   }
-  private buildHeatMapIntensity(): IModel {
-    return this.layer.buildLayerModel({
-      moduleName: 'heatmapintensity',
+  private async buildHeatMapIntensity() {
+    this.layer.triangulation = HeatmapTriangulation;
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'heatmapIntensity',
       vertexShader: heatmapFramebufferVert,
       fragmentShader: heatmapFramebufferFrag,
       triangulation: HeatmapTriangulation,
       depth: {
         enable: false,
+      },
+      cull: {
+        enable: true,
+        face: getCullFace(this.mapService.version),
       },
       blend: {
         enable: true,
@@ -169,10 +169,16 @@ export default class HeatMapModel extends BaseModel {
           dstAlpha: 1,
         },
       },
+      pick: false
     });
+    return model;
   }
 
   private buildHeatmapColor(): IModel {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.shaderModuleService.registerModule('heatmapColor', {
       vs: heatmapColorVert,
       fs: heatmapColorFrag,
@@ -188,6 +194,7 @@ export default class HeatMapModel extends BaseModel {
       createModel,
     } = this.rendererService;
     return createModel({
+      pick: false,
       vs,
       fs,
       attributes: {
@@ -213,12 +220,12 @@ export default class HeatMapModel extends BaseModel {
         enable: false,
       },
       blend: this.getBlend(),
-      count: 6,
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],
         type: gl.UNSIGNED_INT,
         count: 6,
       }),
+      stencil: getMask(mask, maskInside),
     });
   }
 
@@ -228,7 +235,7 @@ export default class HeatMapModel extends BaseModel {
       intensity = 10,
       radius = 5,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    this.intensityModel.draw({
+    this.intensityModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_radius: radius,
@@ -241,7 +248,7 @@ export default class HeatMapModel extends BaseModel {
     const {
       opacity,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    this.colorModel.draw({
+    this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_colorTexture: this.colorTexture,
@@ -268,7 +275,7 @@ export default class HeatMapModel extends BaseModel {
       this.cameraService.getViewProjectionMatrixUncentered() as mat4,
     );
 
-    this.colorModel.draw({
+    this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_colorTexture: this.colorTexture,
@@ -279,6 +286,10 @@ export default class HeatMapModel extends BaseModel {
     });
   }
   private build3dHeatMap() {
+    const {
+      mask = false,
+      maskInside = true,
+    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
     const triangulation = heatMap3DTriangulation(width / 4.0, height / 4.0);
@@ -336,6 +347,7 @@ export default class HeatMapModel extends BaseModel {
         type: gl.UNSIGNED_INT,
         count: triangulation.indices.length,
       }),
+      stencil: getMask(mask, maskInside),
     });
   }
   private updateStyle() {

@@ -1,5 +1,6 @@
 import { ILayer } from '../layer/ILayerService';
 import { IFramebuffer } from './IFramebuffer';
+import { ITexture2D } from './ITexture2D';
 
 export enum PassType {
   Normal = 'normal',
@@ -16,7 +17,7 @@ export interface IPass<InitializationOptions> {
   getName(): string;
   getType(): PassType;
   init(layer: ILayer, config?: Partial<InitializationOptions>): void;
-  render(layer: ILayer): void;
+  render(layer: ILayer, tex?: ITexture2D): void;
 }
 
 /**

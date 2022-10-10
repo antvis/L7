@@ -1,4 +1,4 @@
-import { IMapCamera, IViewport } from '@antv/l7-core';
+import { IViewport } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import WebMercatorViewport from 'viewport-mercator-project';
 
@@ -8,7 +8,7 @@ export interface IEarthCamera {
 }
 
 export default class Viewport implements IViewport {
-  // TODO: 初始化相机的姿态 看向地球
+  // 初始化相机的姿态 看向地球
   private xzReg: number = -Math.PI * 0.6;
   private yReg: number = Math.PI * 0.2;
   // 默认的地球相机半径、地球相机缩放层级
@@ -17,7 +17,7 @@ export default class Viewport implements IViewport {
 
   private cameraPosition: vec3 = vec3.create();
 
-  private viewport: WebMercatorViewport;
+  protected viewport: WebMercatorViewport;
 
   private projectionMatrix: mat4 = mat4.create();
   private modelMatrix: mat4 = mat4.create();

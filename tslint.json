@@ -1,7 +1,6 @@
 {
   "extends": [
     "tslint:latest",
-    "tslint-react",
     "tslint-plugin-prettier",
     "tslint-config-prettier"
   ],
@@ -17,16 +16,18 @@
     "no-bitwise": false,
     "no-console": [true, "log"],
     "object-literal-sort-keys": false,
-    "no-implicit-dependencies": [
-      true,
-      "dev"
-    ]
+    "no-implicit-dependencies": [true, "dev"],
+    "interface-over-type-literal": false,
+    "no-this-assignment": false,
+    "no-submodule-imports": false,
+    "member-ordering": false
   },
   "globals": {
     "AMap": true
   },
   "linterOptions": {
     "exclude": [
+      "stories/**",
       "**/*.d.ts",
       "**/data/*.ts",
       "**/*.{test,story}.ts{,x}",

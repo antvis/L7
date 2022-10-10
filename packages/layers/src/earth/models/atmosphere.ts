@@ -11,7 +11,7 @@ import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 import atmoSphereFrag from '../shaders/atmosphere_frag.glsl';
 import atmoSphereVert from '../shaders/atmosphere_vert.glsl';
-interface IAtmoLayerStyleOptions {
+interface IAtmoSphereLayerStyleOptions {
   opacity: number;
 }
 
@@ -19,35 +19,39 @@ export default class EarthAtomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
-    } = this.layer.getLayerConfig() as IAtmoLayerStyleOptions;
+    } = this.layer.getLayerConfig() as IAtmoSphereLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
 
-  public initModels(): IModel[] {
-    return this.buildModels();
+  public initModels(callbackModel: (models: IModel[]) => void) {
+    this.buildModels(callbackModel);
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(): IModel[] {
+  public buildModels(callbackModel: (models: IModel[]) => void) {
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -997;
-    return [
-      this.layer.buildLayerModel({
+    this.layer
+      .buildLayerModel({
         moduleName: 'earthAtmoSphere',
         vertexShader: atmoSphereVert,
         fragmentShader: atmoSphereFrag,
         triangulation: earthTriangulation,
-        depth: {
-          enable: false,
-        },
+        depth: { enable: false },
         blend: this.getBlend(),
-      }),
-    ];
+      })
+      .then((model) => {
+        callbackModel([model]);
+      })
+      .catch((err) => {
+        console.warn(err);
+        callbackModel([]);
+      });
   }
 
   protected registerBuiltinAttributes() {
@@ -58,7 +62,6 @@ export default class EarthAtomSphereModel extends BaseModel {
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -66,9 +69,6 @@ export default class EarthAtomSphereModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -82,7 +82,6 @@ export default class EarthAtomSphereModel extends BaseModel {
       descriptor: {
         name: 'a_Normal',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -106,7 +105,6 @@ export default class EarthAtomSphereModel extends BaseModel {
       descriptor: {
         name: 'a_Uv',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -116,7 +114,6 @@ export default class EarthAtomSphereModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

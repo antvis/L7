@@ -1,5 +1,4 @@
 import {
-  IGlobalConfigService,
   ILayer,
   ILayerPlugin,
   IScale,
@@ -10,12 +9,13 @@ import {
   ScaleTypeName,
   ScaleTypes,
   StyleScaleType,
-  TYPES,
+  IParserData,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
-import { extent, ticks } from 'd3-array';
+import { extent } from 'd3-array';
+import * as d3interpolate from 'd3-interpolate';
 import * as d3 from 'd3-scale';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { isNil, isString, uniq } from 'lodash';
 import 'reflect-metadata';
 
@@ -26,11 +26,13 @@ const scaleMap = {
   [ScaleTypes.POWER]: d3.scalePow,
   [ScaleTypes.LOG]: d3.scaleLog,
   [ScaleTypes.IDENTITY]: d3.scaleIdentity,
+  [ScaleTypes.SEQUENTIAL]: d3.scaleSequential,
   [ScaleTypes.TIME]: d3.scaleTime,
   [ScaleTypes.QUANTILE]: d3.scaleQuantile,
   [ScaleTypes.QUANTIZE]: d3.scaleQuantize,
   [ScaleTypes.THRESHOLD]: d3.scaleThreshold,
   [ScaleTypes.CAT]: d3.scaleOrdinal,
+  [ScaleTypes.DIVERGING]: d3.scaleDiverging,
 };
 
 /**
@@ -38,14 +40,18 @@ const scaleMap = {
  */
 @injectable()
 export default class FeatureScalePlugin implements ILayerPlugin {
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-  // key = field_attribute name
-  private scaleCache: {
-    [field: string]: IStyleScale;
-  } = {};
-
   private scaleOptions: IScaleOptions = {};
+
+  private getSourceData(layer: ILayer, callback: (data: IParserData) => void) {
+    const source = layer.getSource();
+    if (source.inited) {
+      callback(source.data);
+    } else {
+      source.once('sourceUpdate', () => {
+        callback(source.data);
+      });
+    }
+  }
 
   public apply(
     layer: ILayer,
@@ -56,40 +62,50 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      if (dataArray.length === 0) {
-        return;
-      }
-      this.caculateScalesForAttributes(attributes || [], dataArray);
+
+      this.getSourceData(layer, ({ dataArray }) => {
+        if (Array.isArray(dataArray) && dataArray.length === 0) {
+          return;
+        } else {
+          this.caculateScalesForAttributes(attributes || [], dataArray);
+        }
+      });
     });
 
     // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      this.caculateScalesForAttributes(attributes || [], dataArray);
-      layer.layerModelNeedUpdate = true;
+
+      this.getSourceData(layer, ({ dataArray }) => {
+        if (Array.isArray(dataArray) && dataArray.length === 0) {
+          return;
+        }
+        this.caculateScalesForAttributes(attributes || [], dataArray);
+        layer.layerModelNeedUpdate = true;
+      });
       return true;
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
-      if (layer.layerModelNeedUpdate) {
+      const { usage } = layer.getLayerConfig();
+      if (layer.layerModelNeedUpdate || usage === 'basemap') {
         return;
       }
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
-        const { dataArray } = layer.getSource().data;
-        if (dataArray.length === 0) {
-          return;
-        }
-        const attributesToRescale = attributes.filter(
-          (attribute) => attribute.needRescale,
-        );
-        if (attributesToRescale.length) {
-          this.caculateScalesForAttributes(attributesToRescale, dataArray);
-        }
+        this.getSourceData(layer, ({ dataArray }) => {
+          if (dataArray.length === 0) {
+            return;
+          }
+          const attributesToRescale = attributes.filter(
+            (attribute) => attribute.needRescale,
+          );
+          if (attributesToRescale.length) {
+            this.caculateScalesForAttributes(attributesToRescale, dataArray);
+          }
+        });
       }
     });
   }
@@ -101,40 +117,68 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     attributes: IStyleAttribute[],
     dataArray: IParseDataItem[],
   ) {
-    this.scaleCache = {};
     attributes.forEach((attribute) => {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
-        const type = attribute.name;
         attributeScale.names = this.parseFields(attribute!.scale!.field || []);
         const scales: IStyleScale[] = [];
+        // 为每个字段创建 Scale
         attributeScale.names.forEach((field: string | number) => {
-          scales.push(this.getOrCreateScale(field, attribute, dataArray));
+          scales.push(
+            this.createScale(
+              field,
+              attribute.name,
+              attribute.scale?.values,
+              dataArray,
+            ),
+          );
         });
 
-        // 为scales 设置值区间
+        // 为scales 设置值区间 Range
         if (scales.some((scale) => scale.type === StyleScaleType.VARIABLE)) {
           attributeScale.type = StyleScaleType.VARIABLE;
           scales.forEach((scale) => {
-            // 如果设置了回调, 这不需要设置让range
-            if (!attributeScale.callback) {
-              if (attributeScale.values && attributeScale.values !== 'text') {
-                if (
-                  scale.option?.type === 'linear' &&
-                  attributeScale.values.length > 2
-                ) {
-                  const tick = scale.scale.ticks(attributeScale.values.length);
-                  if (type === 'color') {
+            // 如果设置了回调, 这不需要设置range
+            if (!attributeScale.callback && attributeScale.values !== 'text') {
+              switch (scale.option?.type) {
+                case ScaleTypes.LOG:
+                case ScaleTypes.LINEAR:
+                case ScaleTypes.POWER:
+                  if (
+                    attributeScale.values &&
+                    attributeScale.values.length > 2
+                  ) {
+                    const tick = scale.scale.ticks(
+                      attributeScale.values.length,
+                    );
                     scale.scale.domain(tick);
                   }
-                }
-                scale.scale.range(attributeScale.values); // 判断常量, 默认值
-              } else if (scale.option?.type === 'cat') {
-                // 如果没有设置初值且 类型为cat，range ==domain;
-
-                scale.scale.range(scale.option.domain);
+                  attributeScale.values
+                    ? scale.scale.range(attributeScale.values)
+                    : scale.scale.range(scale.option.domain);
+                  break;
+                case ScaleTypes.QUANTILE:
+                case ScaleTypes.QUANTIZE:
+                case ScaleTypes.THRESHOLD:
+                  scale.scale.range(attributeScale.values); //
+                  break;
+                case ScaleTypes.CAT:
+                  attributeScale.values
+                    ? scale.scale.range(attributeScale.values)
+                    : scale.scale.range(scale.option.domain);
+                  break;
+                case ScaleTypes.DIVERGING:
+                case ScaleTypes.SEQUENTIAL:
+                  scale.scale.interpolator(
+                    // @ts-ignore
+                    d3interpolate.interpolateRgbBasis(attributeScale.values),
+                  );
+                  break;
               }
+            }
+            if (attributeScale.values === 'text') {
+              scale.scale.range(scale.option?.domain);
             }
           });
         } else {
@@ -156,25 +200,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
     });
   }
-  private getOrCreateScale(
-    field: string | number,
-    attribute: IStyleAttribute,
-    dataArray: IParseDataItem[],
-  ) {
-    const scalekey = [field, attribute.name].join('_');
-    const values = attribute.scale?.values;
-    // if (this.scaleCache[scalekey]) {
-    //   return this.scaleCache[scalekey];
-    // }
-    const styleScale = this.createScale(
-      field,
-      attribute.name,
-      values,
-      dataArray,
-    );
-    // this.scaleCache[scalekey] = styleScale;
-    return styleScale;
-  }
 
   /**
    * @example
@@ -182,7 +207,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
    * 'w' => ['w']
    */
   private parseFields(
-    field: string[] | string | number[],
+    field: string[] | string | number[] | number,
   ): string[] | number[] {
     if (Array.isArray(field)) {
       return field;
@@ -202,7 +227,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     // scale 支持根据视觉通道和字段
     const scaleOption: IScale | undefined =
       this.scaleOptions[name] && this.scaleOptions[name]?.field === field
-        ? this.scaleOptions[name]
+        ? this.scaleOptions[name] // TODO  zi
         : this.scaleOptions[field];
     const styleScale: IStyleScale = {
       field,
@@ -233,8 +258,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         // text 为内置变 如果是文本则为cat
         type = ScaleTypes.CAT;
       }
-      const cfg = this.createDefaultScaleConfig(type, field, data);
-      Object.assign(cfg, scaleOption);
+      const cfg = this.createScaleConfig(type, field, scaleOption, data);
+
       styleScale.scale = this.createDefaultScale(cfg);
       styleScale.option = cfg;
     }
@@ -248,32 +273,56 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     }
     return type;
   }
-
-  private createDefaultScaleConfig(
+  // 生成Scale 默认配置
+  private createScaleConfig(
     type: ScaleTypeName,
     field: string | number,
+    scaleOption: IScale | undefined,
     data?: IParseDataItem[],
   ) {
     const cfg: IScale = {
       type,
     };
     const values = data?.map((item) => item[field]) || [];
-    // 默认类型为 Quantile Scales https://github.com/d3/d3-scale#quantile-scales
-    if (type !== ScaleTypes.CAT && type !== ScaleTypes.QUANTILE) {
+    if (scaleOption?.domain) {
+      cfg.domain = scaleOption?.domain;
+    } else if (
+      type !== ScaleTypes.CAT &&
+      type !== ScaleTypes.QUANTILE &&
+      type !== ScaleTypes.DIVERGING
+    ) {
+      // linear/
       cfg.domain = extent(values);
     } else if (type === ScaleTypes.CAT) {
       cfg.domain = uniq(values);
     } else if (type === ScaleTypes.QUANTILE) {
       cfg.domain = values;
+    } else if (type === ScaleTypes.DIVERGING) {
+      const minMax = extent(values);
+      const neutral =
+        scaleOption?.neutral !== undefined
+          ? scaleOption?.neutral
+          : (minMax[0] + minMax[1]) / 2;
+      cfg.domain = [minMax[0], neutral, minMax[1]];
     }
-    return cfg;
+    return { ...cfg, ...scaleOption };
   }
 
-  private createDefaultScale({ type, domain }: IScale) {
+  // 创建Scale 实例
+  private createDefaultScale({ type, domain, unknown, clamp, nice }: IScale) {
     // @ts-ignore
     const scale = scaleMap[type]();
-    if (domain) {
+    if (domain && scale.domain) {
       scale.domain(domain);
+    }
+    if (unknown) {
+      scale.unknown(unknown);
+    }
+    if (clamp !== undefined && scale.clamp) {
+      scale.clamp(clamp);
+    }
+    if (nice !== undefined && scale.nice) {
+      scale.nice(nice);
     }
     // TODO 其他属性支持
     return scale;

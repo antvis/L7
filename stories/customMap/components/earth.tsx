@@ -277,7 +277,9 @@ export default class ScaleComponent extends React.Component {
       { lng: 127.657407, lat: 49.76027 },
     ];
 
-    let pointlayer = new PointLayer()
+    // let pointlayer = new PointLayer({ layerType: 'earthFill' })
+    // let pointlayer = new PointLayer({ })
+    let pointlayer = new PointLayer({ layerType: 'earthExtrude' })
       .source(
         d,
         // [
@@ -396,7 +398,7 @@ export default class ScaleComponent extends React.Component {
       )
       .shape('base')
       .style({
-        globelOtions: {
+        globalOptions: {
           ambientRatio: 0.6, // 环境光
           diffuseRatio: 0.4, // 漫反射
           specularRatio: 0.1, // 高光反射

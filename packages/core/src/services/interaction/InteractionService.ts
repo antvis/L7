@@ -1,7 +1,7 @@
 import { $window, isMini } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
 import { inject, injectable } from 'inversify';
-import Hammer from 'l7hammerjs'; // l7 - mini
+import Hammer from 'l7hammerjs';
 import 'reflect-metadata';
 // @ts-ignore
 import { TYPES } from '../../types';
@@ -20,6 +20,7 @@ const DragEventMap: { [key: string]: string } = {
 @injectable()
 export default class InteractionService extends EventEmitter
   implements IInteractionService {
+  public indragging: boolean = false;
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
   // @ts-ignore
@@ -106,7 +107,7 @@ export default class InteractionService extends EventEmitter
         this.hammertime = hammertime;
       }
 
-      // // TODO: 根据场景注册事件到 L7 canvas 上
+      // Tip: 根据场景注册事件到 L7 canvas 上
     }
   }
   private removeEventListenerOnMap() {
@@ -119,7 +120,7 @@ export default class InteractionService extends EventEmitter
       const $containter = this.mapService.getMapContainer();
       if ($containter) {
         $containter.removeEventListener('mousemove', this.onHover);
-        // this.hammertime.off('dblclick click', this.onHammer);
+        this.hammertime.off('dblclick click', this.onHammer);
         this.hammertime.off('panstart panmove panend pancancel', this.onDrag);
         // $containter.removeEventListener('touchstart', this.onTouch);
         // $containter.removeEventListener('click', this.onHover);
@@ -134,6 +135,9 @@ export default class InteractionService extends EventEmitter
   private onDrag = (target: any) => {
     const interactionTarget = this.interactionEvent(target);
     interactionTarget.type = DragEventMap[interactionTarget.type];
+    interactionTarget.type === 'dragging'
+      ? (this.indragging = true)
+      : (this.indragging = false);
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
 
