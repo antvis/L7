@@ -1,6 +1,8 @@
+import type {
+  IControlOption
+} from '@antv/l7-core';
 import {
   IControl,
-  IControlOption,
   IControlService,
   IGlobalConfigService,
   ILayerService,
