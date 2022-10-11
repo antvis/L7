@@ -1388,10 +1388,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // Tip: setTimeout 用于延迟绘制，可以让拖动图层时连续的 setData 更加平滑 - L7Draw
     setTimeout(() => {
-      
       // Tip: 使用 renderLayers 而不是 throttleRenderLayers，让图层之间的 setData 更新绘制不存在延迟
-      this.layerService.renderLayers(); 
-    }, 32)
+      this.layerService.renderLayers();
+    }, 32);
   }
 
   protected reRender() {
