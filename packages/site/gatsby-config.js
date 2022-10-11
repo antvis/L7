@@ -28,7 +28,7 @@ module.exports = {
         redirect: 'api/l7',
       },
       {
-        slug: 'docs/tutorial',
+        slug: 'docs/tutorial/quickstart',
         title: {
           zh: '教程',
           en: 'Tutorial',
@@ -82,6 +82,14 @@ module.exports = {
     docs: [
       // ****** tutorial
       // quickStart 0
+      {
+        slug: 'tutorial/quickstart',
+        title: {
+          zh: '快速上手',
+          en: 'quickStart',
+        },
+        order: 0,
+      },
       // demo 1
       // data 2
       {
@@ -106,6 +114,15 @@ module.exports = {
         title: {
           zh: '教程示例',
           en: 'Tutorial demo',
+        },
+        order: 5,
+      },
+      {
+        slug: 'tutorial/point',
+        icon: 'map',
+        title: {
+          zh: '点图层',
+          en: 'PointLayer',
         },
         order: 5,
       },
