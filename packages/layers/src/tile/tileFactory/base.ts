@@ -9,7 +9,7 @@ import {
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { osmLonLat2TileXY, Tile, TilesetManager } from '@antv/l7-utils';
-import MaskLayer from '../../mask';
+
 import {
   getLayerShape,
   readRasterValue,
@@ -175,7 +175,7 @@ export default class TileFactory implements ITileFactory {
     // set mask
     const layers = [layer];
     if (mask && layer.isVector) {
-      const masklayer = new MaskLayer()
+      const masklayer = new VectorLayer({layerType: "MaskLayer"})
         .source({
           type: 'FeatureCollection',
           features: [tile.bboxPolygon],
@@ -198,11 +198,12 @@ export default class TileFactory implements ITileFactory {
     return layer;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public updateStyle(styles: ITileStyles) {
     return '';
   }
 
-  public getDefautStyleAttributeField(layer: ILayer, type: string) {
+  public getDefaultStyleAttributeField(layer: ILayer, type: string) {
     switch (type) {
       case 'size':
         return 1;
@@ -229,7 +230,7 @@ export default class TileFactory implements ITileFactory {
       layer[type](value);
       return;
     }
-    const defaultValue = this.getDefautStyleAttributeField(layer, type);
+    const defaultValue = this.getDefaultStyleAttributeField(layer, type);
     if (!value) {
       layer[type](defaultValue);
       return layer;

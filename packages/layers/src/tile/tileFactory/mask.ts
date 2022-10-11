@@ -3,7 +3,8 @@ import Source from '@antv/l7-source';
 import { Tile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
-export default class VectorLineTile extends TileFactory {
+
+export default class VectorMaskTile extends TileFactory {
   public parentLayer: ILayer;
 
   constructor(option: ITileFactoryOptions) {
@@ -22,12 +23,12 @@ export default class VectorLineTile extends TileFactory {
         layerIDList: [],
       };
     }
-
     const layer = this.createLayer({
       tile,
       initOptions,
       vectorTileLayer,
       source: source as Source,
+      needListen: false
     });
     layer.once('modelLoaded', () => {
       tile.layerLoad();

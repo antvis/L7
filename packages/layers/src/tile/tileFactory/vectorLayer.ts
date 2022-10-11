@@ -17,6 +17,7 @@ import {
   ILineLayerStyleOptions,
   IPointLayerStyleOptions,
   IPolygonLayerStyleOptions,
+  IMaskLayerStyleOptions,
 } from '../../core/interface';
 import lineFillModel from '../../line/models/tile';
 import lineSimpleModel from '../../line/models/simpleTileLine';
@@ -25,9 +26,13 @@ import pointTextModel from '../../point/models/tileText';
 import pointFillModel from '../../point/models/tile';
 import polygonFillModel from '../../polygon/models/tile';
 
+import maskModel from '../../mask/models/fill';
+
+type ILayerStyleOptions = IPolygonLayerStyleOptions & ILineLayerStyleOptions & IPointLayerStyleOptions & IMaskLayerStyleOptions;
+
 export default class VectorLayer extends BaseLayer<
   Partial<
-    IPolygonLayerStyleOptions & ILineLayerStyleOptions & IPointLayerStyleOptions & {needListen: boolean;}
+  ILayerStyleOptions & {needListen: boolean;}
   >
 > {
   public needListen: boolean = true;
@@ -167,6 +172,8 @@ export default class VectorLayer extends BaseLayer<
         return this.getLineModel();
       case 'PointLayer':
         return this.getPointModel();
+      case 'MaskLayer':
+          return maskModel;
       default:
         return pointFillModel;
     }
