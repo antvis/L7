@@ -46,6 +46,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       this.coordinateSystemService.refresh(offset);
 
       if (version === 'GAODE2.x') {
+        this.setLayerCenter(layer);
         // @ts-ignore
         mvp = this.mapService.map.customCoords.getMVPMatrix();
         // mvp = amapCustomCoords.getMVPMatrix()
@@ -89,8 +90,12 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     });
   }
 
-  private getLayerCenter(layer: ILayer) {
-    const source = layer.getSource();
-    return source.center;
+  /**
+   * 对于每个 layer 都有不同的几何中心点，因此在绘制每个 layer 的时候都需要重新设置
+   * @param layer 
+   */
+  private setLayerCenter(layer: ILayer) {
+    if(layer.coordCenter === undefined) layer.coordCenter = layer.getSource().center; 
+    this.mapService.setCoordCenter && this.mapService.setCoordCenter(layer.coordCenter);
   }
 }
