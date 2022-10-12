@@ -40,7 +40,6 @@ export default () => {
             },
           ],
         })
-
         .shape('fill')
         .color('name', colors[0])
         .style({
