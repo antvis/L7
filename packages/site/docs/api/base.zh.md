@@ -1,10 +1,8 @@
 ---
+
 title: 图层基类
 order: 1
-
----
-
-`markdown:docs/common/style.md`
+---`markdown:docs/common/style.md`
 
 # 简介
 
