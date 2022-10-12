@@ -7,7 +7,19 @@ redirect_from:
 
 `markdown:docs/common/style.md`
 
-# 简介
+场景对象 `scene` 是包含地图、地图控件、组件、加载资源的全局对象，通过 `scene` 场景对象，我们可以获取到操作地图需要的所有内容。
+## options
+
+创建场景对象的时候需要传入一些参数用于进行初始化操作。
+
+| 名称       | 类型                        |  说明                                            | 是否必填  |
+| --------- | --------------------------- | ---------------------------------------------- | ----------|
+| id        | `string` ｜ `HTMLDivElement`| 地图在页面上的 `DOM` 容器，需传入 dom 容器或者容器 id | `required`|
+| map       | `IMapWrapper`               | L7 地图实例                                     | `required`|
+| logoPosition | `PositionName`           | 地图 Logo 的位置                                | `optional`|
+| logoVisible  | `boolean`                | 地图 Logo 的可见                                | `optional`|
+| antialias       | `boolean`               | 是否开启抗锯齿                                | `optional`|
+| stencil       | `boolean`               |   是否开启裁减                                  | `optional`|
 
 ```javascript
 // Module 引用
