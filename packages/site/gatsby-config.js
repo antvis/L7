@@ -20,12 +20,20 @@ module.exports = {
     showAPIDoc: true, // 是否在demo页展示API文档
     navs: [
       {
+        slug: 'docs/introduce',
+        title: {
+          zh: '介绍',
+          en: 'Introduce',
+        },
+        redirect: 'introduce/l7',
+      },
+      {
         slug: 'docs/api',
         title: {
           zh: '文档',
           en: 'Document',
         },
-        redirect: 'api/l7',
+        redirect: 'api/scene',
       },
       {
         slug: 'docs/tutorial/quickstart',
@@ -33,6 +41,7 @@ module.exports = {
           zh: '教程',
           en: 'Tutorial',
         },
+        redirect: 'api/quickstart',
       },
       {
         slug: 'examples',
@@ -126,8 +135,51 @@ module.exports = {
         },
         order: 5,
       },
-
+      {
+        slug: 'tutorial/line',
+        icon: 'map',
+        title: {
+          zh: '线图层',
+          en: 'LineLayer',
+        },
+        order: 5,
+      },
+      {
+        slug: 'tutorial/polygon',
+        icon: 'map',
+        title: {
+          zh: '面图层',
+          en: 'PolygonLayer',
+        },
+        order: 5,
+      },
+      {
+        slug: 'tutorial/heatmap',
+        icon: 'map',
+        title: {
+          zh: '热力图层',
+          en: 'HeatmapLayer',
+        },
+        order: 6,
+      },
+      {
+        slug: 'tutorial/tile',
+        icon: 'map',
+        title: {
+          zh: '瓦片图层',
+          en: 'TileLayer',
+        },
+        order: 6,
+      },
       // ****** api
+      {
+        slug: 'api/scene',
+        title: {
+          zh: '场景',
+          en: 'Scene',
+        },
+        order: 0,
+      },
       {
         slug: 'api/map',
         title: {
@@ -136,14 +188,14 @@ module.exports = {
         },
         order: 1,
       },
-      {
-        slug: 'api/map/earth',
-        title: {
-          zh: '地球模式',
-          en: 'Earth Mode',
+        {
+          slug: 'api/map/earth',
+          title: {
+            zh: '地球模式',
+            en: 'Earth Mode',
+          },
+          order: 3,
         },
-        order: 3,
-      },
       {
         slug: 'api/base',
         title: {
@@ -158,7 +210,7 @@ module.exports = {
           zh: '数据 Source',
           en: 'Source',
         },
-        order: 2,
+        order: 3,
       },
       {
         slug: 'api/point_layer',
@@ -193,10 +245,10 @@ module.exports = {
         order: 6,
       },
       {
-        slug: 'api/geometry_layer',
+        slug: 'api/other',
         title: {
-          zh: '几何体图层',
-          en: 'GeometryLayer',
+          zh: '其他图层',
+          en: 'Other Layers',
         },
         order: 6,
       },
@@ -225,84 +277,44 @@ module.exports = {
         order: 8,
       },
       {
-        slug: 'api/renderer',
-        title: {
-          zh: '第三方引擎接入',
-          en: 'import other gl',
-        },
-        order: 8,
-      },
-      {
         slug: 'api/tile',
         title: {
-          zh: '瓦片',
+          zh: '瓦片图层',
           en: 'tile',
         },
         order: 8,
       },
-      {
-        slug: 'api/cityBuilding',
-        title: {
-          zh: '城市图层',
-          en: 'CityBuildLayer',
-        },
-        order: 9,
-      },
-      {
-        slug: 'api/wind',
-        title: {
-          zh: '风场图层',
-          en: 'WindLayer',
-        },
-        order: 9,
-      },
-      {
-        slug: 'api/mini',
-        title: {
-          zh: '小程序',
-          en: 'mini',
-        },
-        order: 9,
-      },
-      {
-        slug: 'api/pass',
-        title: {
-          zh: '后处理模块',
-          en: 'MultiPass',
-        },
-        order: 10,
-      },
-      {
-        slug: 'api/district',
-        title: {
-          zh: '行政区划',
-          en: 'District',
-        },
-        order: 11,
-      },
-      {
-        slug: 'api/draw',
-        title: {
-          zh: '绘制组件',
-          en: 'Draw Component',
-        },
-        order: 12,
-      },
-      {
-        slug: 'api/mini/demos',
-        title: {
-          zh: '案例集合',
-          en: 'demos',
-        },
-        order: 14,
-      },
+      // {
+      //   slug: 'api/mini',
+      //   title: {
+      //     zh: '小程序',
+      //     en: 'mini',
+      //   },
+      //   order: 9,
+      // },
+      // {
+      //   slug: 'api/mini/demos',
+      //   title: {
+      //     zh: '案例集合',
+      //     en: 'demos',
+      //   },
+      //   order: 14,
+      // },
       {
         slug: 'api/experiment',
         title: {
           zh: '实验特性',
           en: 'experiment',
         },
-        order: 15,
+        order: 9,
+      },
+      {
+        slug: 'api/changelog',
+        title: {
+          zh: '发布日志',
+          en: 'changelog',
+        },
+        order: 10,
       },
     ],
     examples: [
