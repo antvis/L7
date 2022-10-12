@@ -92,10 +92,12 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
 
   /**
    * 对于每个 layer 都有不同的几何中心点，因此在绘制每个 layer 的时候都需要重新设置
-   * @param layer 
+   * @param layer
    */
   private setLayerCenter(layer: ILayer) {
-    if(layer.coordCenter === undefined) layer.coordCenter = layer.getSource().center; 
-    this.mapService.setCoordCenter && this.mapService.setCoordCenter(layer.coordCenter);
+    if (layer.coordCenter === undefined)
+      layer.coordCenter = layer.getSource().center;
+    this.mapService.setCoordCenter &&
+      this.mapService.setCoordCenter(layer.coordCenter);
   }
 }
