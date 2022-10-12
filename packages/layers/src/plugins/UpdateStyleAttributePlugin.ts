@@ -52,6 +52,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
           layer.getEncodedData(), // 获取经过 mapping 最新的数据
           attribute.featureRange.startIndex,
           attribute.featureRange.endIndex,
+          layer
         );
         attribute.needRegenerateVertices = false;
       });

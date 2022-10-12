@@ -4,6 +4,7 @@ import {
 } from '../renderer/IAttribute';
 import { IBufferInitializationOptions } from '../renderer/IBuffer';
 import { IElements } from '../renderer/IElements';
+import { ILayer } from './ILayerService';
 
 /**
  * 1. 提供各个 Layer 样式属性初始值的注册服务
@@ -225,6 +226,7 @@ export interface IStyleAttributeService {
     features: IEncodeFeature[],
     startFeatureIdx?: number,
     endFeatureIdx?: number,
+    layer?: ILayer
   ): void;
   /**
    * 清除当前管理的所有属性
