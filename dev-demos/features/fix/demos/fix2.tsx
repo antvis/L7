@@ -2,7 +2,6 @@ import { Scene, PointLayer, LineLayer, Source } from "@antv/l7";
 // import { DrawEvent, DrawLine } from "@antv/l7-draw";
 import { GaodeMapV2, GaodeMap, Map, Mapbox } from "@antv/l7-maps";
 import { coordAll, Feature, featureCollection, LineString, point } from "@turf/turf";
-import { debounce, throttle } from "lodash";
 import React, { useEffect } from 'react';
 
 const lineList: Feature<LineString>[] = [
@@ -93,20 +92,6 @@ const lineList: Feature<LineString>[] = [
   },
 ];
 
-const getPointFeatureCollection = (lineList: Feature<LineString>[]) => {
-  const data = featureCollection(
-    coordAll(featureCollection([...lineList])).map((item) => point(item))
-  );
-  // console.log(data)
-  return data
-  // return {type: 'FeatureCollection', features: [
-  //   {
-  //     type: "Feature",
-  //     properties: {},
-  //     geometry: {type: 'Point', coordinates: lineList[0].geometry.coordinates[0]}
-  //   }
-  // ]}
-};
 
 export default () => {
   useEffect(() => {
@@ -118,88 +103,24 @@ export default () => {
         zoom: 10
       })
     });
+
+    const source = new Source(featureCollection(
+      lineList.map((item, index) => {
+        item.properties = {
+          index
+        };
+        return item;
+      })
+    ))
     scene.on("loaded", () => {
       const lineLayer = new LineLayer();
       lineLayer
-        .source(
-          featureCollection(
-            lineList.map((item, index) => {
-              item.properties = {
-                index
-              };
-              return item;
-            })
-          )
-        )
+        .source(source)
         .size(4)
         .color("#f00");
-      const pointLayer = new PointLayer({});
-      pointLayer
-        .source(getPointFeatureCollection(lineList))
-        .size(6)
-        .shape("circle")
-        .style({
-          stroke: "#00f",
-          strokeWidth: 3
-        });
+    
         
       scene.addLayer(lineLayer);
-      scene.addLayer(pointLayer);
-
-      let isDrag = false;
-      let dragFeature: Feature<LineString> | null = null;
-      let prePosition = [0, 0];
-
-      lineLayer.on("mousedown", (e) => {
-        const { lng, lat } = e.lngLat;
-        prePosition = [lng, lat];
-
-        isDrag = true;
-        // scene.setMapStatus({
-        //   dragEnable: false
-        // });
-        dragFeature = e.feature;
-      });
-
-      scene.setMapStatus({
-        dragEnable: false
-      });
-
-      scene.on("mousemove", (e) => {
-          
-        if (isDrag && lineLayer.modelLoaded && pointLayer.modelLoaded) {
-          // if (isDrag ) {
-          // requestAnimationFrame(() => {
-            
-              const { lng, lat } = e.lnglat;
-              const [lastLng, lastLat] = prePosition;
-              if (dragFeature) {
-                const positions = coordAll(dragFeature);
-                positions.forEach((position) => {
-                  position[0] += lng - lastLng;
-                  position[1] += lat - lastLat;
-                });
-                dragFeature.geometry.coordinates = positions;
-                lineList[dragFeature.properties?.index] = dragFeature;
-              }
-              prePosition = [lng, lat];
-              const lineData = featureCollection([...lineList]);
-              const pointData = getPointFeatureCollection([...lineList]);
-
-      
-              lineLayer.setData(lineData);
-              pointLayer.setData(pointData);
-    
-          // })
-        }
-      } );
-
-      scene.on("mouseup", (e) => {
-        isDrag = false;
-        // scene.setMapStatus({
-        //   dragEnable: true
-        // });
-      });
     });
   }, []);
   return (
