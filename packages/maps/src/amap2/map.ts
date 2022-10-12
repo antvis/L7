@@ -69,7 +69,8 @@ export default class AMapService extends AMapBaseService {
     lnglat: [number, number],
     layerCenter: [number, number],
   ) {
-    const layerCenterFlat = amap2Project(...layerCenter);
+    const center = layerCenter || this.sceneCenter;
+    const layerCenterFlat = amap2Project(...center);
     return this._sub(amap2Project(lnglat[0], lnglat[1]), layerCenterFlat);
   }
 
