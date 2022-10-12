@@ -1,6 +1,6 @@
 ---
 title: Shape
-order: 0
+order: 3
 ---
 
 `markdown:docs/common/style.md`

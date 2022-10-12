@@ -1,6 +1,6 @@
 ---
 title: Texture
-order: 0
+order: 6
 ---
 
 `markdown:docs/common/style.md`

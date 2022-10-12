@@ -1,6 +1,6 @@
 ---
 title: Shape
-order: 0
+order: 3
 ---
 
 `markdown:docs/api/heatmap_layer/options.zh.md`

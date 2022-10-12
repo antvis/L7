@@ -1,6 +1,6 @@
 ---
 title: Size
-order: 0
+order: 5
 ---
 
 `markdown:docs/common/style.md`

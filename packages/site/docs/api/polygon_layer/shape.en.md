@@ -1,6 +1,6 @@
 ---
 title: Shape
-order: 1
+order: 3
 ---
 
 `markdown:docs/api/polygon_layer/shape.zh.md`

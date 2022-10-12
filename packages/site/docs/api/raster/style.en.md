@@ -1,6 +1,6 @@
 ---
 title: Style
-order: 0
+order: 4
 ---
 
 `markdown:docs/api/raster/style.zh.md`

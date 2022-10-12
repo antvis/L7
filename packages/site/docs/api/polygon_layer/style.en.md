@@ -1,6 +1,6 @@
 ---
 title: Style
-order: 1
+order: 4
 ---
 
 `markdown:docs/api/polygon_layer/style.zh.md`
