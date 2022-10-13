@@ -64,7 +64,6 @@ export default class RasterModel extends BaseModel {
         triangulation: RasterImageTriangulation,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        pick: false,
       })
       .then((model) => {
         callbackModel([model]);

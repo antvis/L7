@@ -12,7 +12,7 @@ import {
   getLatLonBoundsBuffer,
   isLatLonBoundsContains,
 } from './utils/bound-buffer';
-import { getTileIndices } from './utils/lonlat-tile';
+import { getTileIndices, osmLonLat2TileXY } from './utils/lonlat-tile';
 import { throttle } from 'lodash';
 
 /**
@@ -168,6 +168,14 @@ export class TilesetManager extends EventEmitter {
       const tile = abortCandidates.shift()!;
       tile.abortLoad();
     }
+  }
+
+  public getTileByLngLat(lng: number, lat: number, zoom: number) {
+    const { zoomOffset } = this.options;
+    const z = Math.ceil(zoom) + zoomOffset;
+    const xy = osmLonLat2TileXY(lng, lat, z);
+    const tiles = this.tiles.filter((t) => t.key === `${xy[0]},${xy[1]},${z}`);
+    return tiles[0];
   }
 
   // 摧毁

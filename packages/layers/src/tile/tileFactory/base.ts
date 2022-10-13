@@ -6,7 +6,7 @@ import {
   ISubLayerInitOptions,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { osmLonLat2TileXY, Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile, TilesetManager } from '@antv/l7-utils';
 import { setStyleAttributeField, setScale } from '../style/utils';
 import { registerLayers } from '../utils';
 import { readRasterValue } from '../interaction/getRasterData';
@@ -24,6 +24,8 @@ import {
   ITileStyles,
   Timeout,
 } from '../interface';
+
+type IEvent = { lngLat: {lng: number, lat: number}, x: number, y: number, value: any};
 
 const EMPTY_FEATURE_DATA = {
   features: [],
@@ -197,100 +199,103 @@ export default class TileFactory implements ITileFactory {
 
   protected getTile(lng: number, lat: number) {
     const zoom = this.mapService.getZoom();
-    const z = Math.ceil(zoom) + this.zoomOffset;
-    const xy = osmLonLat2TileXY(lng, lat, z);
-
-    const tiles = this.tilesetManager.tiles.filter(
-      (t) => t.key === `${xy[0]},${xy[1]},${z}`,
-    );
-    return tiles[0];
+    return this.tilesetManager.getTileByLngLat(lng, lat, zoom);
   }
 
-  protected emitEvent(layers: ILayer[], isVector?: boolean) {
+  private bindVectorEvent(layer: ILayer) {
+    layer.on('click', (e) => {
+      this.eventCache.click = 1;
+      this.getFeatureAndEmitEvent('subLayerClick', e);
+    });
+    layer.on('mousemove', (e) => {
+      this.eventCache.mousemove = 1;
+      this.getFeatureAndEmitEvent('subLayerMouseMove', e);
+    });
+    layer.on('mouseenter', (e) => {
+      this.getFeatureAndEmitEvent('subLayerMouseEnter', e);
+    });
+  }
+
+  
+  private readRasterTile(e: IEvent, name: string) {
+    const { lng, lat } = e.lngLat;
+    const tile = this.getTile(lng, lat);
+    if(!tile) return;
+    const data = readRasterValue(tile, this.mapService, e.x, e.y);
+    e.value = data;
+    this.parentLayer.emit(name, e);
+  }
+
+  private bindRasterEvent(layer: ILayer) {
+    layer.on('click', (e) => {
+      this.eventCache.click = 1;
+      this.readRasterTile(e, 'subLayerClick');
+    });
+    layer.on('mousemove', (e) => {
+      this.eventCache.mousemove = 1;
+      this.readRasterTile(e, 'subLayerMouseMove');
+    });
+    layer.on('mouseenter', (e) => {
+      this.readRasterTile(e, 'subLayerMouseMove');
+    });
+  }
+
+  private bindCommonEvent(layer: ILayer) {
+    layer.on('mouseup', (e) => {
+      this.eventCache.mouseup = 1;
+      this.getFeatureAndEmitEvent('subLayerMouseUp', e);
+    });
+   
+    layer.on('mouseout', (e) => {
+      this.getFeatureAndEmitEvent('subLayerMouseOut', e);
+    });
+    layer.on('mousedown', (e) => {
+      this.eventCache.mousedown = 1;
+      this.getFeatureAndEmitEvent('subLayerMouseDown', e);
+    });
+    layer.on('contextmenu', (e) => {
+      this.eventCache.contextmenu = 1;
+      this.getFeatureAndEmitEvent('subLayerContextmenu', e);
+    });
+
+    // out side
+    layer.on('unclick', (e) =>
+      this.handleOutsideEvent('click', 'subLayerUnClick', layer, e),
+    );
+    layer.on('unmouseup', (e) =>
+      this.handleOutsideEvent('mouseup', 'subLayerUnMouseUp', layer, e),
+    );
+    layer.on('unmousedown', (e) =>
+      this.handleOutsideEvent('mousedown', 'subLayerUnMouseDown', layer, e),
+    );
+    layer.on('uncontextmenu', (e) =>
+      this.handleOutsideEvent(
+        'contextmenu',
+        'subLayerUnContextmenu',
+        layer,
+        e,
+      ),
+    );
+  }
+
+  protected emitEvent(layers: ILayer[]) {
     layers.map((layer) => {
       layer.once('modelLoaded', () => {
-        layer.on('click', (e) => {
-          this.eventCache.click = 1;
-          if (this.parentLayer.type === 'RasterLayer') {
-            const { lng, lat } = e.lngLat;
-            const tile = this.getTile(lng, lat);
-            tile && this.getFeatureAndEmitEvent(
-              layer,
-              'subLayerClick',
-              e,
-              isVector,
-              tile,
-            );
-          } else {
-            this.getFeatureAndEmitEvent(layer, 'subLayerClick', e);
-          }
-        });
+        this.bindVectorEvent(layer);
 
-        layer.on('mousemove', (e) => {
-          this.eventCache.mousemove = 1;
-          if (this.parentLayer.type === 'RasterLayer') {
-            const { lng, lat } = e.lngLat;
-            const tile = this.getTile(lng, lat);
-            tile && this.getFeatureAndEmitEvent(
-              layer,
-              'subLayerMouseMove',
-              e,
-              isVector,
-              tile,
-            );
-          } else {
-            this.getFeatureAndEmitEvent(layer, 'subLayerMouseMove', e);
-          }
-        });
-        layer.on('mouseup', (e) => {
-          this.eventCache.mouseup = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseUp', e);
-        });
-        layer.on('mouseenter', (e) => {
-          if (this.parentLayer.type === 'RasterLayer') {
-            const { lng, lat } = e.lngLat;
-            const tile = this.getTile(lng, lat);
-            tile && this.getFeatureAndEmitEvent(
-              layer,
-              'subLayerMouseMove',
-              e,
-              isVector,
-              tile,
-            );
-          } else {
-            this.getFeatureAndEmitEvent(layer, 'subLayerMouseEnter', e);
-          }
-        });
-        layer.on('mouseout', (e) => {
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseOut', e);
-        });
-        layer.on('mousedown', (e) => {
-          this.eventCache.mousedown = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerMouseDown', e);
-        });
-        layer.on('contextmenu', (e) => {
-          this.eventCache.contextmenu = 1;
-          this.getFeatureAndEmitEvent(layer, 'subLayerContextmenu', e);
-        });
+        this.bindCommonEvent(layer);
+        
+      });
+    });
+  }
 
-        // out side
-        layer.on('unclick', (e) =>
-          this.handleOutsideEvent('click', 'subLayerUnClick', layer, e),
-        );
-        layer.on('unmouseup', (e) =>
-          this.handleOutsideEvent('mouseup', 'subLayerUnMouseUp', layer, e),
-        );
-        layer.on('unmousedown', (e) =>
-          this.handleOutsideEvent('mousedown', 'subLayerUnMouseDown', layer, e),
-        );
-        layer.on('uncontextmenu', (e) =>
-          this.handleOutsideEvent(
-            'contextmenu',
-            'subLayerUnContextmenu',
-            layer,
-            e,
-          ),
-        );
+  protected emitRasterEvent(layers: ILayer[]) {
+    layers.map((layer) => {
+      layer.once('modelLoaded', () => {
+        
+        this.bindRasterEvent(layer);
+      
+        this.bindCommonEvent(layer);
       });
     });
   }
@@ -314,28 +319,18 @@ export default class TileFactory implements ITileFactory {
   }
 
   protected getFeatureAndEmitEvent(
-    layer: ILayer,
     eventName: string,
     e: any,
-    isVector?: boolean,
-    tile?: any,
   ) {
-    if (isVector === false) {
-      // raster tile get rgb
-      // e.pickedColors = readPixel(e.x, e.y, this.rendererService);
-      // raster tile origin value
-      e.value = readRasterValue(tile, this.mapService, e.x, e.y);
-    } else {
-      // VectorLayer
-      const featureId = e.featureId;
-      const features = this.getAllFeatures(featureId);
-      try {
-        e.feature = this.getCombineFeature(features);
-      } catch (err) {
-        console.warn('Combine Featuer Err! Return First Feature!');
-        e.feature = features[0];
-      }
+    const featureId = e.featureId;
+    const features = this.getAllFeatures(featureId);
+    try {
+      e.feature = this.getCombineFeature(features);
+    } catch (err) {
+      console.warn('Combine Featuer Err! Return First Feature!');
+      e.feature = features[0];
     }
+    
     this.parentLayer.emit(eventName, e);
   }
 
@@ -378,7 +373,7 @@ export default class TileFactory implements ITileFactory {
       if (this.eventCache[type] > 0) {
         this.eventCache[type] = 0;
       } else {
-        this.getFeatureAndEmitEvent(layer, emitType, e);
+        this.getFeatureAndEmitEvent(emitType, e);
       }
     }, 64);
   }

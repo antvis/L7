@@ -8,7 +8,7 @@ import {
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { isTileLayer } from '../tile/utils';
+import { isTileGroup } from '../tile/utils';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
@@ -23,8 +23,8 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
   ) {
     layer.hooks.init.tap('RegisterStyleAttributePlugin', () => {
       // 过滤 tileGroup layer （瓦片图层不需要注册）
-      if(isTileLayer(layer)) return;
-      
+      if (isTileGroup(layer)) return;
+
       this.registerBuiltinAttributes(styleAttributeService, layer);
     });
   }
