@@ -29,20 +29,13 @@ export type PositionName =
   | 'leftbottom'
   | 'rightbottom';
 
-export interface IControlOption {
-  name: string;
-  position: PositionName;
-  className?: string;
-  style?: string;
-  [key: string]: any;
-}
 export interface IControlServiceCfg {
   container: HTMLElement;
 }
 export interface IControlCorners {
   [key: string]: HTMLElement;
 }
-export interface IControl<O extends IControlOption = any> {
+export interface IControl<O = any> {
   controlOption: O;
   setOptions: (newOption: Partial<O>) => void;
   addTo(sceneContainer: Container): void;

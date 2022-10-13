@@ -103,7 +103,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     if (refresh) {
       this.throttleRenderLayers();
     }
-    this.emit('layerChange', this.layers);
   }
 
   public remove(layer: ILayer, parentLayer?: ILayer): void {

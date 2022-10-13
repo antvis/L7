@@ -1,6 +1,5 @@
 import {
   IControl,
-  IControlOption,
   IControlService,
   IGlobalConfigService,
   ILayerService,
@@ -18,7 +17,15 @@ import { ControlEvent } from '../../interface';
 
 export { PositionType } from '@antv/l7-core';
 
-export { Control, IControlOption };
+export { Control };
+
+export interface IControlOption {
+  name: string;
+  position: PositionName;
+  className?: string;
+  style?: string;
+  [key: string]: any;
+}
 
 export default class Control<O extends IControlOption = IControlOption>
   extends EventEmitter<ControlEvent>
