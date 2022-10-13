@@ -21,13 +21,11 @@ export class TileManager {
       //  // regist layer
       //  registerLayers(this.parent, layerCollections.layers);
 
-      layerCollections.layers.map(layer => [
-       
-
+      layerCollections.layers.map(layer => {
         layer.once('modelLoaded', () => {
           tile.layerLoad();
         })
-      ])
+      })
       return layerCollections;
     }
 
@@ -35,11 +33,11 @@ export class TileManager {
         this.children.push(layer);
     }
 
-    public addChilds(layers: ILayer[]) {
+    public addChildren(layers: ILayer[]) {
         this.children.push(...layers);
     }
 
-    public removeChilds(layerIDList: string[], refresh = true) {
+    public removeChildren(layerIDList: string[], refresh = true) {
         const remveLayerList: ILayer[] = [];
         const cacheLayerList: ILayer[] = [];
         this.children.filter((child) => {
@@ -59,7 +57,7 @@ export class TileManager {
         layer.destroy();
     }
 
-    public getChilds(layerIDList: string[]) {
+    public getChildren(layerIDList: string[]) {
         return this.children.filter((child) => layerIDList.includes(child.id));
     }
 

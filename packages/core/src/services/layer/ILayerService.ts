@@ -180,10 +180,10 @@ export interface IBaseTileLayerManager {
   createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
 
   addChild(layer: ILayer): void;
-  addChilds(layers: ILayer[]): void;
-  getChilds(layerIDList: string[]): ILayer[];
+  addChildren(layers: ILayer[]): void;
+  getChildren(layerIDList: string[]): ILayer[];
   removeChild(layer: ILayer): void;
-  removeChilds(layerIDList: string[], refresh?: boolean): void;
+  removeChildren(layerIDList: string[], refresh?: boolean): void;
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;

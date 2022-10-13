@@ -134,7 +134,7 @@ export class Base {
       }
 
       public tileUnLoad(tile: Tile) {
-        this.tileLayerManager.removeChilds(tile.layerIDList, false);
+        this.tileLayerManager.removeChildren(tile.layerIDList, false);
       }
     
       public tileUpdate() {
@@ -159,13 +159,13 @@ export class Base {
               tile.parentLayerIDList.push(this.parent.id);
               tile.layerIDList.push(...layerIDList);
     
-              this.tileLayerManager.addChilds(layers);
+              this.tileLayerManager.addChildren(layers);
               this.setPickState(layers)
             } else {
               if (!tile.isVisibleChange) {
                 return;
               }
-              const layers = this.tileLayerManager.getChilds(tile.layerIDList);
+              const layers = this.tileLayerManager.getChildren(tile.layerIDList);
               updateTileVisible(tile, layers, this.layerService);
               this.setPickState(layers)
             }

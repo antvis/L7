@@ -60,6 +60,29 @@ export function setHighlight(layers: ILayer[], pickedColors: any) {
     });
 }
 
+export function setPickState(layers: ILayer[], pickColors: { select: any, active: any }) {
+  if (pickColors.select) {
+    layers.map((layer) => {
+      // if(layer.modelLoaded) {
+      //   selectFeature(layer, this.pickColors.select);
+      // } else {
+      //   layer.once('modelLoaded', () => {
+      //     selectFeature(layer, this.pickColors.select);
+      //   })
+      // }
+      selectFeature(layer, pickColors.select);
+    });
+  }
+
+  if (pickColors.active) {
+    layers
+      .filter((layer) => layer.inited && layer.isVisible())
+      .map((layer) => {
+        layer.hooks.beforeHighlight.call(pickColors.active);
+      });
+  }
+}
+
 export function selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;

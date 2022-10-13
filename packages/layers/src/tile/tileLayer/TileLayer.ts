@@ -5,10 +5,9 @@ import {
   ITileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
-import { decodePickingColor } from '@antv/l7-utils';
 import { TileLayerManager } from '../manager/layerManager';
 import { Base } from './base';
-import { setSelect, setHighlight, selectFeature } from '../interaction/utils';
+import { setSelect, setHighlight, setPickState, clearPickState } from '../interaction/utils';
 
 export class TileLayer extends Base implements ITileLayer {
   public get children() {
@@ -57,6 +56,7 @@ export class TileLayer extends Base implements ITileLayer {
   }
 
   public clearPick(type: string) {
+    // Tip: 瓦片只有在 mousemove 的时候需要设置清除
     if (type === 'mousemove') {
       this.tileLayerManager.tilePickService.clearPick();
     }
@@ -66,13 +66,7 @@ export class TileLayer extends Base implements ITileLayer {
    * 清除 select 的选中状态
    */
   public clearPickState() {
-    this.children
-      .filter((child) => child.inited && child.isVisible())
-      .filter((child) => child.getCurrentSelectedId() !== null)
-      .map((child) => {
-        selectFeature(child, new Uint8Array([0, 0, 0, 0]));
-        child.setCurrentSelectedId(null);
-      });
+    clearPickState(this.children)
   }
 
   /**
@@ -85,23 +79,7 @@ export class TileLayer extends Base implements ITileLayer {
   }
 
   public setPickState(layers: ILayer[]) {
-    if (this.pickColors.select) {
-      const selectedId = decodePickingColor(this.pickColors.select);
-      layers.map((layer) => {
-        selectFeature(layer, this.pickColors.select);
-        layer.setCurrentSelectedId(selectedId);
-      });
-    }
-
-    if (this.pickColors.active) {
-      const selectedId = decodePickingColor(this.pickColors.active);
-      layers
-        .filter((layer) => layer.inited && layer.isVisible())
-        .map((layer) => {
-          layer.hooks.beforeHighlight.call(this.pickColors.active);
-          layer.setCurrentPickId(selectedId);
-        });
-    }
+    setPickState(layers, this.pickColors);
   }
 
   private bindSubLayerPick() {

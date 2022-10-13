@@ -143,8 +143,8 @@ export function isTileLoaded(tile: Tile) {
 }
 
 export function isTileChildLoaded(tile: Tile) {
-  const childs = tile.children;
-  return childs.filter((child) => isTileLoaded(child)).length === childs.length;
+  const children = tile.children;
+  return children.filter((child) => isTileLoaded(child)).length === children.length;
 }
 
 export function isTileParentLoaded(tile: Tile) {
