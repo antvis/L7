@@ -9,7 +9,7 @@ varying vec4 v_dash_array;
 #pragma include "picking"
 
 uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ]; // 控制运动
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ]; // 控制运动
 
 varying mat4 styleMappingMat;
 // [animate, duration, interval, trailLength],

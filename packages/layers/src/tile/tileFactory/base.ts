@@ -9,10 +9,9 @@ import {
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { osmLonLat2TileXY, Tile, TilesetManager } from '@antv/l7-utils';
-import MaskLayer from '../../mask';
+
 import {
   getLayerShape,
-  readPixel,
   readRasterValue,
   registerLayers,
 } from '../utils';
@@ -20,6 +19,8 @@ import VectorLayer from './vectorLayer';
 
 import * as turf from '@turf/helpers';
 import union from '@turf/union';
+import clone from '@turf/clone';
+import polygonToLineString from '@turf/polygon-to-line';
 import {
   CacheEvent,
   ILayerTileConfig,
@@ -29,6 +30,12 @@ import {
   Timeout,
 } from '../interface';
 
+const EMPTY_FEATURE_DATA = {
+  features: [],
+  featureId: null,
+  vectorTileLayer: null,
+  source: null,
+};
 export default class TileFactory implements ITileFactory {
   public type: string;
   public parentLayer: ILayer;
@@ -56,6 +63,7 @@ export default class TileFactory implements ITileFactory {
     this.tilesetManager = source.tileset as TilesetManager;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
     return {
       layers: [] as ILayer[],
@@ -64,36 +72,51 @@ export default class TileFactory implements ITileFactory {
   }
 
   public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
-    const emptyData = {
-      features: [],
-      featureId: null,
-      vectorTileLayer: null,
-      source: null,
-    };
-    const { sourceLayer, featureId } = initOptions;
+    const { sourceLayer, featureId, transforms = [], layerType, shape } = initOptions;
     if (!sourceLayer) {
-      return emptyData;
+      return EMPTY_FEATURE_DATA;
     }
     const vectorTileLayer = tile.data.layers[sourceLayer];
     const features = vectorTileLayer?.features;
     if (!(Array.isArray(features) && features.length > 0)) {
-      return emptyData;
+      return EMPTY_FEATURE_DATA;
     } else {
+      let geofeatures = [];
+      if(layerType === 'LineLayer' && shape === 'simple') {
+        features.map(feature => {
+          const cloneFeature = clone(feature);
+          if(cloneFeature.geometry.type === 'MultiPolygon') {
+            // @ts-ignore
+            const linefeatures = polygonToLineString(cloneFeature).features
+            geofeatures.push(...linefeatures)
+          } else if(cloneFeature.geometry.type === 'Polygon') {
+            cloneFeature.geometry.type = 'MultiLineString'
+            geofeatures.push(cloneFeature);
+          } else {
+            geofeatures.push(cloneFeature);
+          }
+        })
+      } else {
+        geofeatures = features;
+      }
+     
       const source = new Source(
         {
           type: 'FeatureCollection',
-          features,
+          features: geofeatures,
         },
         {
           parser: {
             type: 'geojson',
             featureId,
+            cancelExtent: true
           },
+          transforms
         },
       );
 
       return {
-        features,
+        features: geofeatures,
         featureId,
         vectorTileLayer,
         source,
@@ -108,42 +131,60 @@ export default class TileFactory implements ITileFactory {
       initOptions,
       vectorTileLayer,
       source,
+      needListen = true,
     } = tileLayerOption;
-    const { mask, color, layerType, size, shape } = initOptions;
+    const { mask, color, layerType, size, shape, usage, basemapColor, basemapSize } = initOptions;
     const FactoryTileLayer = L7Layer ? L7Layer : VectorLayer;
     const layer = new FactoryTileLayer({
       visible: tile.isVisible,
       tileOrigin: vectorTileLayer?.l7TileOrigin,
       coord: vectorTileLayer?.l7TileCoord,
+      needListen,
       ...this.getLayerInitOption(initOptions),
     });
-    // vector layer set config
-    if (layer.isVector) {
+
+    if(layerType) layer.type = layerType;
+
+    // Tip: sign tile layer
+    layer.isTileLayer = true; // vector 、raster
+    
+    // vector layer set event
+    if (layer.isVector && usage !== 'basemap') {
       this.emitEvent([layer]);
-      layer.type = layerType;
       layer.select(true);
     }
 
     // set source
     layer.source(source);
 
-    // set scale
-    this.setScale(layer);
-
     // set scale attribute field
     this.setStyleAttributeField(layer, 'shape', shape);
-    this.setStyleAttributeField(layer, 'color', color);
-    this.setStyleAttributeField(layer, 'size', size);
+    if(usage !== 'basemap') {
+       // set scale
+      this.setScale(layer);
+
+      this.setStyleAttributeField(layer, 'color', color);
+      this.setStyleAttributeField(layer, 'size', size);
+    } else {
+      layer.style({
+        color: basemapColor,
+        size: basemapSize
+      })
+    }
 
     // set mask
     const layers = [layer];
     if (mask && layer.isVector) {
-      const masklayer = new MaskLayer()
+      const masklayer = new VectorLayer({layerType: "MaskLayer"})
         .source({
           type: 'FeatureCollection',
           features: [tile.bboxPolygon],
-        })
-        .shape('fill');
+        }, {
+          parser: {
+            type: 'geojson',
+            cancelExtent: true
+          }
+        });
 
       layers.push(masklayer as VectorLayer);
 
@@ -157,14 +198,15 @@ export default class TileFactory implements ITileFactory {
     return layer;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public updateStyle(styles: ITileStyles) {
     return '';
   }
 
-  public getDefautStyleAttributeField(layer: ILayer, type: string) {
+  public getDefaultStyleAttributeField(layer: ILayer, type: string) {
     switch (type) {
       case 'size':
-        return 2;
+        return 1;
       case 'color':
         return '#fff';
       case 'shape':
@@ -188,7 +230,7 @@ export default class TileFactory implements ITileFactory {
       layer[type](value);
       return;
     }
-    const defaultValue = this.getDefautStyleAttributeField(layer, type);
+    const defaultValue = this.getDefaultStyleAttributeField(layer, type);
     if (!value) {
       layer[type](defaultValue);
       return layer;
@@ -231,19 +273,18 @@ export default class TileFactory implements ITileFactory {
     const tiles = this.tilesetManager.tiles.filter(
       (t) => t.key === `${xy[0]},${xy[1]},${z}`,
     );
-    const tile = tiles[0];
-    return tile;
+    return tiles[0];
   }
 
   protected emitEvent(layers: ILayer[], isVector?: boolean) {
     layers.map((layer) => {
-      layer.once('inited', () => {
+      layer.once('modelLoaded', () => {
         layer.on('click', (e) => {
           this.eventCache.click = 1;
           if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
-            this.getFeatureAndEmitEvent(
+            tile && this.getFeatureAndEmitEvent(
               layer,
               'subLayerClick',
               e,
@@ -260,7 +301,7 @@ export default class TileFactory implements ITileFactory {
           if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
-            this.getFeatureAndEmitEvent(
+            tile && this.getFeatureAndEmitEvent(
               layer,
               'subLayerMouseMove',
               e,
@@ -279,7 +320,7 @@ export default class TileFactory implements ITileFactory {
           if (this.parentLayer.type === 'RasterLayer') {
             const { lng, lat } = e.lngLat;
             const tile = this.getTile(lng, lat);
-            this.getFeatureAndEmitEvent(
+            tile && this.getFeatureAndEmitEvent(
               layer,
               'subLayerMouseMove',
               e,

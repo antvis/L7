@@ -1,22 +1,13 @@
 import {
   BBox,
-  Coord,
   degreesToRadians,
-  isObject,
   radiansToLength,
   Units,
 } from '@turf/helpers';
 import { isNumber } from './math';
 
 export type IBounds = [[number, number], [number, number]];
-interface ILngLat {
-  lng: number;
-  lat: number;
-}
-interface IPoint {
-  x: number;
-  y: number;
-}
+
 const originShift = (2 * Math.PI * 6378137) / 2.0;
 type Point = number[];
 /**
@@ -200,6 +191,15 @@ export function amap2Project(lng: number, lat: number): [number, number] {
   return [lng * Tg, lat * Tg];
 }
 
+export function amap2UnProject(x: number, y: number): [number, number] {
+  const Rg = Math.PI / 180;
+  const Tg = 6378137;
+
+  const lng = (x/Tg) / Rg;
+  const lat = (2 * (Math.atan(Math.exp((y / Tg))) - Math.PI/4))/Rg;
+  return [lng, lat];
+}
+
 export function lnglatDistance(
   coordinates1: [number, number],
   coordinates2: [number, number],
@@ -254,7 +254,7 @@ export function boundsContains(b1: IBounds, b2: IBounds): boolean {
   );
 }
 /**
- * bbox 转换为Bounds
+ * bbox转换为Bounds
  * @param b1 bbox
  *
  */

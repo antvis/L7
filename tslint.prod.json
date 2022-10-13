@@ -13,6 +13,7 @@
       "**/*.{test,story}.ts{,x}",
       "node_modules/**/*.d.ts",
       "packages/site/**",
+      "packages/leaflet/**",
       "packages/site/node_modules/**"
     ],
     "include":[

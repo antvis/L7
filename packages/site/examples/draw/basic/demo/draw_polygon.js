@@ -96,7 +96,6 @@ const polygon = {
 const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
-    pitch: 0,
     style: 'light',
     center: [ 116.30470275878906, 39.88352811449648 ],
     zoom: 12

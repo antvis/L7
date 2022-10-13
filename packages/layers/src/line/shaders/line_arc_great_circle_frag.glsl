@@ -13,7 +13,7 @@ varying float v_distance_ratio;
 varying vec4 v_color;
 
 uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 
 uniform float u_line_texture: 0.0;
 uniform sampler2D u_texture;
@@ -58,10 +58,10 @@ void main() {
   }
 
   // 设置弧线的动画模式
-  if(u_aimate.x == Animate) {
-      animateSpeed = u_time / u_aimate.y;
-      float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
-      alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
+  if(u_animate.x == Animate) {
+      animateSpeed = u_time / u_animate.y;
+      float alpha =1.0 - fract( mod(1.0- v_distance_ratio, u_animate.z)* (1.0/ u_animate.z) + u_time / u_animate.y);
+      alpha = (alpha + u_animate.w -1.0) / u_animate.w;
       alpha = smoothstep(0., 1., alpha);
       gl_FragColor.a *= alpha;
   }
@@ -73,7 +73,7 @@ void main() {
     float count = styleMappingMat[3].b; // 贴图在弧线上重复的数量
     float u = fract(arcRadio * count - animateSpeed * count);
     // float u = fract(arcRadio * count - animateSpeed);
-    if(u_aimate.x == Animate) {
+    if(u_animate.x == Animate) {
       u = gl_FragColor.a/opacity;
     }
 

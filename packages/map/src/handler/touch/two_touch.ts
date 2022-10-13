@@ -16,6 +16,7 @@ export default class TwoTouchHandler {
 
   public reset() {
     this.active = false;
+        //@ts-ignore
     delete this.firstTwoTouches;
   }
   public start(points: [Point, Point]) {

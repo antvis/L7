@@ -110,8 +110,7 @@ export default class WindModel extends BaseModel {
         height: imageHeight,
       });
 
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     });
 
     this.layer
@@ -122,7 +121,9 @@ export default class WindModel extends BaseModel {
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
+        stencil: getMask(mask, maskInside),
         blend: this.getBlend(),
+        pick: false,
       })
       .then((model) => {
         this.colorModel = model;
@@ -188,7 +189,6 @@ export default class WindModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
@@ -241,7 +241,7 @@ export default class WindModel extends BaseModel {
       this.wind.dropRateBump = dropRateBump;
 
       const { d, w, h } = this.wind.draw();
-      // TODO: 恢复 L7 渲染流程中 gl 状态
+      // 恢复 L7 渲染流程中 gl 状态
       this.rendererService.setBaseState();
       this.texture.update({
         data: d,

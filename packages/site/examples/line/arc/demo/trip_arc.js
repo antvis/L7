@@ -1,11 +1,10 @@
 import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
+  map: new GaodeMap({
     pitch: 60,
-    type: 'mapbox',
     style: 'light',
     center: [ -74.06967, 40.720399 ],
     zoom: 12.45977
@@ -31,7 +30,6 @@ scene.on('loaded', () => {
         .shape('arc3d')
         .color('#0C47BF')
         .style({
-          opacity: 1,
           blur: 0.9
         });
       scene.addLayer(layer);

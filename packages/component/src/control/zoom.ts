@@ -1,48 +1,53 @@
-import { bindAll, DOM } from '@antv/l7-utils';
-import { IZoomControlOption } from '../interface';
-import Control, { PositionType } from './baseControl';
+import { PositionType } from '@antv/l7-core';
+import { DOM } from '@antv/l7-utils';
+import { ELType } from '@antv/l7-utils/src/dom';
+import { createL7Icon } from '../utils/icon';
+import { Control, IControlOption } from './baseControl';
 
-export default class Zoom extends Control {
+export interface IZoomControlOption extends IControlOption {
+  zoomInText: ELType | string;
+  zoomInTitle: string;
+  zoomOutText: ELType | string;
+  zoomOutTitle: string;
+}
+
+export { Zoom };
+
+export default class Zoom extends Control<IZoomControlOption> {
   private disabled: boolean;
   private zoomInButton: HTMLElement;
   private zoomOutButton: HTMLElement;
 
-  constructor(cfg?: Partial<IZoomControlOption>) {
-    super(cfg);
-    bindAll(['updateDisabled', 'zoomIn', 'zoomOut'], this);
-  }
-  public getDefault() {
+  public getDefault(option: Partial<IZoomControlOption>) {
     return {
-      position: PositionType.TOPLEFT,
-      zoomInText: '+',
-      zoomInTitle: 'Zoom in',
-      zoomOutText: '&#x2212;',
-      zoomOutTitle: 'Zoom out',
+      ...super.getDefault(option),
+      position: PositionType.BOTTOMRIGHT,
       name: 'zoom',
+      zoomInText: createL7Icon('l7-icon-enlarge'),
+      zoomInTitle: 'Zoom in',
+      zoomOutText: createL7Icon('l7-icon-narrow'),
+      zoomOutTitle: 'Zoom out',
     };
+  }
+  public setOptions(newOptions: Partial<IZoomControlOption>) {
+    super.setOptions(newOptions);
+    if (
+      this.checkUpdateOption(newOptions, [
+        'zoomInText',
+        'zoomInTitle',
+        'zoomOutText',
+        'zoomOutTitle',
+      ])
+    ) {
+      this.resetButtonGroup(this.container);
+    }
   }
 
   public onAdd(): HTMLElement {
-    const zoomName = 'l7-control-zoom';
-    const container = DOM.create('div', zoomName + ' l7-bar');
-
-    this.zoomInButton = this.createButton(
-      this.controlOption.zoomInText,
-      this.controlOption.zoomInTitle,
-      zoomName + '-in',
-      container,
-      this.zoomIn,
-    );
-    this.zoomOutButton = this.createButton(
-      this.controlOption.zoomOutText,
-      this.controlOption.zoomOutTitle,
-      zoomName + '-out',
-      container,
-      this.zoomOut,
-    );
+    const container = DOM.create('div', 'l7-control-zoom');
+    this.resetButtonGroup(container);
     this.mapsService.on('zoomend', this.updateDisabled);
     this.mapsService.on('zoomchange', this.updateDisabled);
-    this.updateDisabled();
     return container;
   }
 
@@ -63,46 +68,70 @@ export default class Zoom extends Control {
     return this;
   }
 
-  private zoomIn() {
+  public zoomIn = () => {
     if (
       !this.disabled &&
       this.mapsService.getZoom() < this.mapsService.getMaxZoom()
     ) {
       this.mapsService.zoomIn();
     }
-  }
-  private zoomOut() {
+  };
+
+  public zoomOut = () => {
     if (
       !this.disabled &&
       this.mapsService.getZoom() > this.mapsService.getMinZoom()
     ) {
       this.mapsService.zoomOut();
     }
+  };
+
+  private resetButtonGroup(container: HTMLElement) {
+    DOM.clearChildren(container);
+    this.zoomInButton = this.createButton(
+      this.controlOption.zoomInText,
+      this.controlOption.zoomInTitle,
+      'l7-button-control',
+      container,
+      this.zoomIn,
+    );
+    this.zoomOutButton = this.createButton(
+      this.controlOption.zoomOutText,
+      this.controlOption.zoomOutTitle,
+      'l7-button-control',
+      container,
+      this.zoomOut,
+    );
+    this.updateDisabled();
   }
+
   private createButton(
-    html: string,
+    html: ELType | string,
     tile: string,
     className: string,
     container: HTMLElement,
     fn: (...arg: any[]) => any,
   ) {
-    const link = DOM.create('a', className, container) as HTMLLinkElement;
-    link.innerHTML = html;
+    const link = DOM.create('button', className, container) as HTMLLinkElement;
+    if (typeof html === 'string') {
+      link.innerHTML = html;
+    } else {
+      link.append(html);
+    }
     link.title = tile;
-    link.href = 'javascript:void(0)';
     link.addEventListener('click', fn);
     return link;
   }
-  private updateDisabled() {
+
+  private updateDisabled = () => {
     const mapsService = this.mapsService;
-    const className = 'l7-disabled';
-    DOM.removeClass(this.zoomInButton, className);
-    DOM.removeClass(this.zoomOutButton, className);
+    this.zoomInButton.removeAttribute('disabled');
+    this.zoomOutButton.removeAttribute('disabled');
     if (this.disabled || mapsService.getZoom() <= mapsService.getMinZoom()) {
-      DOM.addClass(this.zoomOutButton, className);
+      this.zoomOutButton.setAttribute('disabled', 'true');
     }
     if (this.disabled || mapsService.getZoom() >= mapsService.getMaxZoom()) {
-      DOM.addClass(this.zoomInButton, className);
+      this.zoomInButton.setAttribute('disabled', 'true');
     }
-  }
+  };
 }

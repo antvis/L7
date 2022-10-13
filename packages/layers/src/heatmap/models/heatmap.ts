@@ -14,7 +14,7 @@ import {
   IColorRamp,
 } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseModel from '../../core/BaseModel';
 import { IHeatMapLayerStyleOptions } from '../../core/interface';
@@ -63,10 +63,8 @@ export default class HeatMapModel extends BaseModel {
   public async initModels(callbackModel: (models: IModel[]) => void) {
     const {
       createFramebuffer,
-      clear,
       getViewportSize,
       createTexture2D,
-      useFramebuffer,
     } = this.rendererService;
     const shapeAttr = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
@@ -112,7 +110,6 @@ export default class HeatMapModel extends BaseModel {
       descriptor: {
         name: 'a_Dir',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -122,14 +119,12 @@ export default class HeatMapModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
@@ -144,9 +139,6 @@ export default class HeatMapModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 1 } = feature;
           return [size as number];
@@ -177,6 +169,7 @@ export default class HeatMapModel extends BaseModel {
           dstAlpha: 1,
         },
       },
+      pick: false
     });
     return model;
   }
@@ -201,6 +194,7 @@ export default class HeatMapModel extends BaseModel {
       createModel,
     } = this.rendererService;
     return createModel({
+      pick: false,
       vs,
       fs,
       attributes: {
@@ -226,7 +220,6 @@ export default class HeatMapModel extends BaseModel {
         enable: false,
       },
       blend: this.getBlend(),
-      count: 6,
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],
         type: gl.UNSIGNED_INT,

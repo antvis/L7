@@ -1,5 +1,5 @@
 // @ts-ignore
-import { AsyncParallelHook } from '@antv/async-hook';
+import { AsyncSeriesHook  } from '@antv/async-hook';
 import { $window, DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
@@ -22,7 +22,7 @@ import {
 } from '../interaction/IInteractionService';
 import { IPickingService } from '../interaction/IPickingService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
-import { IMapCamera, IMapConfig, IMapService } from '../map/IMapService';
+import { IMapService } from '../map/IMapService';
 import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
@@ -35,10 +35,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
   public loaded: boolean = false;
-  // loadFont 判断用户当前是否添加自定义字体
-  public loadFont: boolean = false;
-  // fontFamily 用户当前自己添加的字体的名称
-  public fontFamily: string = '';
+
 
   @inject(TYPES.SceneID)
   private readonly id: string;
@@ -106,7 +103,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   private markerContainer: HTMLElement;
 
   private hooks: {
-    init: AsyncParallelHook;
+    init: AsyncSeriesHook;
   };
 
   public constructor() {
@@ -119,7 +116,7 @@ export default class Scene extends EventEmitter implements ISceneService {
        * 2. initRenderer：初始化渲染引擎
        * 3. initWorker：初始化 Worker
        */
-      init: new AsyncParallelHook(),
+      init: new AsyncSeriesHook(),
     };
   }
 
@@ -134,6 +131,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.iconService.on('imageUpdate', () => this.render());
     // 字体资源
     this.fontService.init();
+  
 
     /**
      * 初始化底图
@@ -144,31 +142,15 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.map.onCameraChanged((viewport: IViewport) => {
           this.cameraService.init();
           this.cameraService.update(viewport);
-          if (this.map.version !== 'GAODE2.x') {
-            // not amap2
-            resolve();
-          }
-        });
-
-        if (this.map.version !== 'GAODE2.x') {
-          // not amap2
-          this.map.init();
-        } else {
-          // amap2
           resolve();
-        }
+        });
+        this.map.init();
       });
-
-      if (this.map.version === 'GAODE2.x' && this.map.initViewPort) {
-        // amap2
-        await this.map.init();
-        this.map.initViewPort();
-      }
-
+    
+      
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.map.addMarkerContainer();
-
       // 初始化未加载的marker;
       this.markerService.addMarkers();
       this.markerService.addMarkerLayers();
@@ -185,22 +167,31 @@ export default class Scene extends EventEmitter implements ISceneService {
      * 初始化渲染引擎
      */
     this.hooks.init.tapPromise('initRenderer', async () => {
+      const renderContainer = this.map.getOverlayContainer();
+
+      if(renderContainer) {
+        this.$container = renderContainer as HTMLDivElement;
+      } else {
+        this.$container = createRendererContainer(
+          this.configService.getSceneConfig(this.id).id || '',
+        );
+        
+      }
+
+  
       // 创建底图之上的 container
-      const $container = createRendererContainer(
-        this.configService.getSceneConfig(this.id).id || '',
-      );
+     
 
-      // 添加marker container;
-      this.$container = $container;
-
-      if ($container) {
-        this.canvas = DOM.create('canvas', '', $container) as HTMLCanvasElement;
+      if (this.$container) {
+        this.canvas = DOM.create('canvas', '', this.$container) as HTMLCanvasElement;
         this.setCanvas();
         await this.rendererService.init(
           // @ts-ignore
           this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
+          sceneConfig.gl
         );
+        this.initContainer()
 
         elementResizeEvent(
           this.$container as HTMLDivElement,
@@ -284,6 +275,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           // @ts-ignore
           sceneConfig.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
+          undefined,
         );
       } else {
         console.error('容器 id 不存在');
@@ -318,21 +310,11 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 还未初始化完成需要等待
 
-      await this.initPromise;
+      await this.initPromise; // 初始化地图和渲染
       if (this.destroyed) {
         this.destroy();
       }
-      // @ts-ignore
-      if (this.loadFont && document.fonts) {
-        try {
-          // @ts-ignore
-          await document.fonts.load(`24px ${this.fontFamily}`, 'L7text');
-        } catch (e) {
-          console.warn('当前环境不支持 document.fonts !');
-          console.warn('当前环境不支持 iconfont !');
-          console.warn(e);
-        }
-      }
+
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       this.layerService.initLayers();
       this.controlService.addControls();
@@ -355,18 +337,7 @@ export default class Scene extends EventEmitter implements ISceneService {
    * @param fontPath
    */
   public addFontFace(fontFamily: string, fontPath: string): void {
-    this.fontFamily = fontFamily;
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerText = `
-        @font-face{
-            font-family: '${fontFamily}';
-            src: url('${fontPath}') format('woff2'),
-            url('${fontPath}') format('woff'),
-            url('${fontPath}') format('truetype');
-        }`;
-    document.getElementsByTagName('head')[0].appendChild(style);
-    this.loadFont = true;
+    this.fontService.addFontFace(fontFamily,fontPath)
   }
 
   public getSceneContainer(): HTMLDivElement {
@@ -435,7 +406,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.fontService.destroy();
     this.iconService.destroy();
 
-    // TODO: 销毁 container 容器
+    // 销毁 container 容器
     this.$container?.parentNode?.removeChild(this.$container);
 
     this.removeAllListeners();

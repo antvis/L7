@@ -6,6 +6,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { Version } from '@antv/l7-maps';
 import { getMask, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
@@ -23,43 +24,13 @@ export default class OceanModel extends BaseModel {
       watercolor = '#6D99A8',
       watercolor2 = '#0F121C',
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
-      this.judgeStyleAttributes({ opacity });
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
+   
     return {
       u_texture1: this.texture1,
       u_texture2: this.texture2,
       u_texture3: this.texture3,
       u_watercolor: rgb2arr(watercolor),
       u_watercolor2: rgb2arr(watercolor2),
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
@@ -89,6 +60,7 @@ export default class OceanModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
@@ -103,7 +75,6 @@ export default class OceanModel extends BaseModel {
     this.texture1?.destroy();
     this.texture2?.destroy();
     this.texture3?.destroy();
-    this.dataTexture?.destroy();
   }
 
   protected registerBuiltinAttributes() {
@@ -129,9 +100,9 @@ export default class OceanModel extends BaseModel {
           featureIdx: number,
           vertex: number[],
           attributeIdx: number,
-          normal: number[],
         ) => {
-          const [lng, lat] = vertex;
+          const v = (feature.version === Version['GAODE2.x'] ? feature.originCoordinates[0][attributeIdx] : vertex)
+          const [lng, lat] = v;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },
       },
@@ -151,8 +122,7 @@ export default class OceanModel extends BaseModel {
       this.texture1 = initTex(images[0]);
       this.texture2 = initTex(images[1]);
       this.texture3 = initTex(images[2]);
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     });
 
     function initImage(callback: (loadedImages: HTMLImageElement[]) => void) {

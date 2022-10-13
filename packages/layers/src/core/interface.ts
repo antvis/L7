@@ -1,6 +1,6 @@
-import { IAnimateOption, IMapService } from '@antv/l7-core';
+import { IAnimateOption, IMapService, ITexture2D } from '@antv/l7-core';
 import { IColorRamp, IImagedata } from '@antv/l7-utils';
-import { styleOffset, styleSingle } from '../core/BaseModel';
+import { styleOffset } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
@@ -24,16 +24,37 @@ export enum TextureBlend {
   REPLACE = 'replace',
 }
 
-export interface ILineLayerStyleOptions {
+/**
+ * 基础图层类型定义
+ */
+export interface IBaseLayerStyleOptions {
+  opacity?: number;
+
+  depth?: boolean; // 是否开启深度检测
+  blend?: string; // 混合方式
+
+  raisingHeight?: number; // 抬升高度
+  heightfixed?: boolean; // 高度是否固定
+
+  zIndex?: number;
+
+  // 蒙层
+  mask?: boolean; // 可选参数 时候允许蒙层
+  maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
+
+  usage?: string;
+  color?: string;
+  size?: number;
+}
+
+export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
   tileOrigin?: number[];
   coord?: string;
 
-  opacity: styleSingle;
   lineType?: keyof typeof lineStyleType; // 可选参数、线类型(all - dash/solid)
   dashArray?: [number, number]; //  可选参数、虚线间隔
   segmentNumber?: number;
 
-  depth?: boolean;
   forward?: boolean; // 可选参数、是否反向(arcLine)
   lineTexture?: boolean; // 可选参数、是否开启纹理贴图功能(all)
   iconStep?: number; // 可选参数、纹理贴图步长(all)
@@ -52,12 +73,6 @@ export interface ILineLayerStyleOptions {
   borderWidth?: number; // 可选参数 线边框宽度
   borderColor?: string; // 可选参数 线边框颜色
 
-  heightfixed?: boolean; // 可选参数 高度是否固定
-  raisingHeight?: number; // 线图层抬升高度
-
-  mask?: boolean; // 可选参数 时候允许蒙层
-  maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
-
   blur?: [number, number, number]; // 配置线图层的 blur 分布
 
   arrow?: ILineArrow;
@@ -69,10 +84,10 @@ export interface ILineLayerStyleOptions {
   workerEnabled?: boolean;
 }
 
-export interface IPointLayerStyleOptions {
+export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   tileOrigin?: number[];
   coord?: string;
-  opacity: number;
+
   strokeOpacity: number;
   strokeWidth: number;
   stroke: string;
@@ -90,11 +105,9 @@ export interface IPointLayerStyleOptions {
   fontFamily?: string;
   textAllowOverlap?: boolean;
 
-  raisingHeight?: number; // 线图层抬升高度
-
   // cylinder
   pickLight?: boolean;
-  depth?: boolean;
+
   sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
   targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
   opacityLinear?: {
@@ -102,13 +115,10 @@ export interface IPointLayerStyleOptions {
     dir: string;
   };
   lightEnable: boolean;
-  heightfixed?: boolean; // 圆柱体高度是否固定（不随 zoom 发生变化）
 
   offsets?: styleOffset;
-  blend?: string;
+
   unit?: string;
-  mask?: boolean;
-  maskInside?: boolean;
 
   rotation?: number; // angle
   speed?: number;
@@ -116,11 +126,9 @@ export interface IPointLayerStyleOptions {
   sourceLayer?: string;
 }
 
-export interface IPolygonLayerStyleOptions {
+export interface IPolygonLayerStyleOptions extends IBaseLayerStyleOptions {
   tileOrigin?: number[];
   coord?: string;
-  opacity?: number;
-
   opacityLinear?: {
     enable: boolean;
     dir: string;
@@ -130,14 +138,11 @@ export interface IPolygonLayerStyleOptions {
   sidesurface?: boolean;
 
   mapTexture?: string; // 挤出几何体顶面贴图
-  raisingHeight?: number; // 挤出几何体抬升高度
+
   sourceColor?: string; // 可选参数、设置渐变色的起始颜色(all)
   targetColor?: string; // 可选参数、设置渐变色的终点颜色(all)
-  heightfixed?: boolean; // 挤出几何体高度是否固定（不随 zoom 发生变化）
 
   pickLight: boolean;
-  mask?: boolean;
-  maskInside?: boolean;
 
   // water
   waterTexture?: string;
@@ -151,16 +156,18 @@ export interface IPolygonLayerStyleOptions {
 }
 
 // 栅格瓦片图层
-export interface IRasterTileLayerStyleOptions {
-  // TODO: define
-  zIndex?: number;
-  opacity?: number;
+export interface IRasterTileLayerStyleOptions extends IBaseLayerStyleOptions {
+  // define
+  opacity: number;
 }
-export interface IMaskLayerStyleOptions {
-  opacity: styleSingle;
+export interface IMaskLayerStyleOptions extends IBaseLayerStyleOptions {
+  // define
+  opacity: number;
+  color: string;
+  sourceLayer?: string;
 }
 
-export interface IWindLayerStyleOptions {
+export interface IWindLayerStyleOptions extends IBaseLayerStyleOptions {
   uMin?: number;
   uMax?: number;
   vMin?: number;
@@ -169,28 +176,21 @@ export interface IWindLayerStyleOptions {
   speedFactor?: number;
   dropRate?: number;
   dropRateBump?: number;
-  opacity?: number;
   numParticles?: number;
   rampColors?: {
     [key: number]: string;
   };
   sizeScale?: number;
-
-  mask?: boolean;
-  maskInside?: boolean;
 }
 
-export interface IImageLayerStyleOptions {
-  opacity: number;
-  mask?: boolean;
-  maskInside?: boolean;
-
+export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   domain?: [number, number];
   noDataValue?: number;
   clampLow?: boolean;
   clampHigh?: boolean;
   rampColors?: IColorRamp;
   rampColorsData?: ImageData | IImagedata;
+  colorTexture?: ITexture2D;
   pixelConstant?: number;
   pixelConstantR?: number;
   pixelConstantG?: number;
@@ -198,11 +198,22 @@ export interface IImageLayerStyleOptions {
   pixelConstantRGB?: number;
 }
 
-export interface IGeometryLayerStyleOptions {
+export interface ICityBuildLayerStyleOptions {
   opacity: number;
-  mask?: boolean;
-  maskInside?: boolean;
+  baseColor: string;
+  brightColor: string;
+  windowColor: string;
+  time: number;
+  sweep: {
+    enable: boolean;
+    sweepRadius: number;
+    sweepColor: string;
+    sweepSpeed: number;
+    sweepCenter?: [number, number];
+  };
+}
 
+export interface IGeometryLayerStyleOptions extends IBaseLayerStyleOptions {
   mapTexture?: string;
   terrainTexture?: string;
 
@@ -218,7 +229,6 @@ export interface IGeometryLayerStyleOptions {
   rgb2height?: (r: number, g: number, b: number) => number;
 
   // billboard
-  raisingHeight?: number; // 抬升高度
   canvasWidth?: number;
   canvasHeight?: number;
   drawCanvas?: (canvas: HTMLCanvasElement) => void;
@@ -253,26 +263,25 @@ export interface ICanvasLayerStyleOptions {
   drawingOnCanvas: (option: IDrawingOnCanvas) => void;
 }
 
-export interface IHeatMapLayerStyleOptions {
-  opacity: number;
+export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {
   intensity: number;
   radius: number;
   angle: number;
   rampColors: IColorRamp;
-  mask?: boolean;
-  maskInside?: boolean;
 
   coverage?: number;
 }
 
-export interface IRasterLayerStyleOptions {
-  opacity: number;
+export interface IRasterLayerStyleOptions extends IBaseLayerStyleOptions {
+  colorTexture?: ITexture2D;
   domain: [number, number];
   noDataValue: number;
   clampLow: boolean;
   clampHigh: boolean;
   rampColors: IColorRamp;
-  mask?: boolean;
-  maskInside?: boolean;
   rampColorsData?: ImageData | IImagedata;
+
+  channelRMax?: number;
+  channelGMax?: number;
+  channelBMax?: number;
 }

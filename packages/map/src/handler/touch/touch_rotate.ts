@@ -1,6 +1,5 @@
 // @ts-ignore
 import Point from '../../geo/point';
-import DOM from '../../utils/dom';
 import TwoTouchHandler from './two_touch';
 
 const ROTATION_THRESHOLD = 25; // pixels along circumference of touch circle
@@ -14,8 +13,11 @@ export default class TouchRotateHandler extends TwoTouchHandler {
 
   public reset() {
     super.reset();
+    //@ts-ignore
     delete this.minDiameter;
+    //@ts-ignore
     delete this.startVector;
+    //@ts-ignore
     delete this.vector;
   }
 

@@ -36,10 +36,7 @@ scene.on('loaded', () => {
         .size('unit_price', h => {
           return [ 6, 6, h / 500 ];
         })
-        .color('name', [ '#739DFF', '#61FCBF', '#FFDE74', '#FF896F' ])
-        .style({
-          opacity: 1.0
-        });
+        .color('name', [ '#739DFF', '#61FCBF', '#FFDE74', '#FF896F' ]);
 
       scene.addLayer(pointLayer);
     });

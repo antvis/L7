@@ -1,9 +1,9 @@
 import { Scene, HeatmapLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
+  map: new GaodeMap({
     style: 'dark',
     pitch: 43,
     center: [ 120.13383079335335, 29.651873105004427 ],
@@ -33,13 +33,12 @@ scene.on('loaded', () => {
           ]
         })
         .size('sum', sum => {
-          return sum * 200;
+          return sum * 1000000;
         })
         .shape('hexagonColumn')
         .style({
           coverage: 0.8,
           angle: 0,
-          opacity: 1.0
         })
         .color('sum', [
           '#094D4A',

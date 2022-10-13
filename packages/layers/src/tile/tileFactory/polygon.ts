@@ -1,7 +1,7 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { Tile } from '@antv/l7-utils';
-import { ITileFactoryOptions, ITileStyles } from '../interface';
+import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
 export default class VectorPolygonTile extends TileFactory {
   public parentLayer: ILayer;
@@ -29,7 +29,9 @@ export default class VectorPolygonTile extends TileFactory {
       vectorTileLayer,
       source: source as Source,
     });
-
+    layer.once('modelLoaded', () => {
+      tile.layerLoad();
+    })
     return {
       layers: [layer],
       layerIDList: [layer.id],

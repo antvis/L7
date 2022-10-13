@@ -7,12 +7,13 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     const modelType = this.getModelType();
     this.layerModel = new RasterModels[modelType](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   protected getConfigSchema() {
     return {
@@ -29,6 +30,7 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     const type = this.getModelType();
     const defaultConfig = {
       raster: {},
+      rasterRgb: {},
       raster3d: {},
       rasterTile: {},
     };
@@ -37,14 +39,16 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
 
   protected getModelType(): RasterModelType {
     // 根据 source 的类型判断 model type
-    switch (this.layerSource.parser.type) {
+    const parserType = this.layerSource.getParserType();
+    switch (parserType) {
       case 'raster':
         return 'raster';
+      case 'rasterRgb':
+        return 'rasterRgb';
       case 'rasterTile':
         return 'rasterTile';
       default:
         return 'raster';
     }
-    // return 'raster';
   }
 }

@@ -24,7 +24,15 @@ export interface IStatusOptions {
   zoomEnable: boolean;
   rotateEnable: boolean;
 }
-export type MapStyle = string | { [key: string]: any };
+
+export type MapStyleName = 'normal' | 'light' | 'dark' | string;
+
+export type MapStyleConfig = {
+  [key: MapStyleName]: string | any;
+};
+
+export type MapStyle = MapStyleName | any;
+
 export interface IMapWrapper {
   setContainer(
     container: Container,
@@ -46,15 +54,16 @@ export interface IMapService<RawMap = {}> {
   simpleMapCoord: ISimpleMapCoord;
   map: RawMap;
   bgColor: string;
+  setCoordCenter?(center: number[]): void;
   setBgColor(color: string): void;
   init(): void;
   initMiniMap?(): void;
-  initViewPort?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map
   addMarkerContainer(): void;
   getMarkerContainer(): HTMLElement;
+  getOverlayContainer(): HTMLElement | undefined;
   // MapEvent // 定义事件类型
 
   on(type: string, handler: (...args: any[]) => void): void;
@@ -75,6 +84,10 @@ export interface IMapService<RawMap = {}> {
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
   getMapCanvasContainer(): HTMLElement;
+  getMapStyleConfig(): MapStyleConfig; // 获取当前地图类型默认的样式配置
+  getMapStyleValue(name: MapStyleName): string | any; // 获取当前地图类型key值对应的样式 value，可能为字符串，也可能为对象
+  getMapStyle(): MapStyleName | any; // 获取当期地图
+  setMapStyle(style: MapStyleName | any): void;
 
   // control with raw map
   setRotation(rotation: number): void;
@@ -87,8 +100,8 @@ export interface IMapService<RawMap = {}> {
   setCenter(center: [number, number], option?: ICameraOptions): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
-  setMapStyle(style: any): void;
   setMapStatus(option: Partial<IStatusOptions>): void;
+  updateView(viewOption: Partial<IMapCamera>): void; // 更新地图视野
 
   // coordinates methods
   meterToCoord(center: number[], lnglat: number[]): number;
@@ -129,7 +142,6 @@ export interface IEarthService<RawMap = {}> {
   bgColor: string;
   setBgColor(color: string): void;
   init(): void;
-  initViewPort?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map
@@ -155,6 +167,7 @@ export interface IEarthService<RawMap = {}> {
   getBounds(): Bounds;
   getMapContainer(): HTMLElement | null;
   getMapCanvasContainer(): HTMLElement;
+  getMapStyleConfig(): MapStyleConfig;
 
   // control with raw map
   setRotation(rotation: number): void;
@@ -266,6 +279,8 @@ export interface IMapConfig<RawMap = {}> {
   offsetCoordinate?: boolean;
 
   offsetZoom?: number;
+
+  interactive: boolean; //
 
   [key: string]: any;
 }

@@ -13,6 +13,7 @@ import {
   isLatLonBoundsContains,
 } from './utils/bound-buffer';
 import { getTileIndices } from './utils/lonlat-tile';
+import { throttle } from 'lodash';
 
 /**
  * 管理瓦片数据
@@ -68,6 +69,10 @@ export class TilesetManager extends EventEmitter {
         : Math.floor(options.maxZoom);
     this.options = { ...this.options, ...options, minZoom, maxZoom };
   }
+
+  public throttleUpdate = throttle((zoom, latLonBounds) => {
+    this.update(zoom, latLonBounds);
+  }, 16);
 
   // 更新
   // 1.瓦片序号发生改变 2.瓦片新增 3.瓦片显隐控制
@@ -267,7 +272,6 @@ export class TilesetManager extends EventEmitter {
   private getTile(x: number, y: number, z: number) {
     const tileId = this.getTileId(x, y, z);
     const tile = this.cacheTiles.get(tileId);
-
     return tile;
   }
 

@@ -1,12 +1,9 @@
 import {
-  gl,
   ILayer,
   IStyleAttributeUpdateOptions,
-  ITexture2D,
   StyleAttributeField,
   StyleAttributeOption,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
 import { isFunction, isNumber, isString } from 'lodash';
 /**
  * 该文件中的工具方法主要用于对 style 中的属性进行 数据映射
@@ -47,6 +44,9 @@ function registerStyleAttribute(
  * @param layer
  */
 function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
+  // 瓦片图层不需要进行样式数据映射
+  if (layer.tileLayer || layer.isTileLayer) return;
+
   if (configToUpdate.opacity) {
     // 处理 style 中 opacity 属性的数据映射
     handleStyleFloat('opacity', layer, configToUpdate.opacity);

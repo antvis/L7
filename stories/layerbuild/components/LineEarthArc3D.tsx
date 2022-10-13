@@ -47,7 +47,7 @@ export default class Demo extends React.Component {
       )
       .shape('base')
       .style({
-        globelOtions: {
+        globalOptions: {
           ambientRatio: 0.6, // 环境光
           diffuseRatio: 0.4, // 漫反射
           specularRatio: 0.1, // 高光反射

@@ -67,14 +67,14 @@ export const $document = {
   head: null,
   body: null,
   documentElement: {
-    style: [] as any[] ,
+    style: [] as any[],
   },
   createElement(tagName) {
     tagName = tagName.toLowerCase();
     if (tagName === 'canvas') {
       // return getCanvas();
       // @ts-ignore
-      return my.createOffscreenCanvas(1024, 128, '2d')
+      return my.createOffscreenCanvas(1024, 128, '2d');
     } else if (tagName === 'img') {
       return new Image();
     } else if (tagName === 'video') {

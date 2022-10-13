@@ -1,10 +1,9 @@
 import { Scene, PolygonLayer, LineLayer, Popup } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  map: new Mapbox({
-    pitch: 0,
+  map: new GaodeMap({
     style: 'light',
     center: [ -96, 37.8 ],
     zoom: 3
@@ -26,10 +25,7 @@ scene.on('loaded', () => {
           'density', color
         )
         .shape('fill')
-        .active(true)
-        .style({
-          opacity: 1.0
-        });
+        .active(true);
       const layer2 = new LineLayer({
         zIndex: 2
       })
@@ -40,7 +36,6 @@ scene.on('loaded', () => {
         .style({
           lineType: 'dash',
           dashArray: [ 2, 2 ],
-          opacity: 1
         });
       scene.addLayer(layer);
       scene.addLayer(layer2);

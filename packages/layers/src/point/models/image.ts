@@ -20,6 +20,8 @@ export default class ImageModel extends BaseModel {
     const {
       opacity = 1,
       offsets = [0, 0],
+      raisingHeight = 0,
+      heightfixed = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (this.rendererService.getDirty()) {
       this.texture.bind();
@@ -64,6 +66,9 @@ export default class ImageModel extends BaseModel {
             });
     }
     return {
+      u_raisingHeight: Number(raisingHeight),
+      u_heightfixed: Number(heightfixed),
+
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
 
@@ -130,9 +135,6 @@ export default class ImageModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -177,8 +179,8 @@ export default class ImageModel extends BaseModel {
         min: 'linear mipmap nearest',
         mipmap: true,
       });
-      // TODO: 更新完纹理后在更新的图层的时候需要更新所有的图层
-      this.layer.renderLayers();
+      // 更新完纹理后在更新的图层的时候需要更新所有的图层
+      this.layerService.throttleRenderLayers();
       return;
     }
     this.texture = createTexture2D({

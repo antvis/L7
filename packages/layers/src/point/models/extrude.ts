@@ -15,7 +15,7 @@ import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
 
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
-  private raiserepeat: number = 0;
+  private raiseRepeat: number = 0;
   public getUninforms() {
     const {
       animateOption = {
@@ -87,14 +87,14 @@ export default class ExtrudeModel extends BaseModel {
       useLinearColor = 1;
     }
 
-    if (this.raiseCount < 1 && this.raiserepeat > 0) {
+    if (this.raiseCount < 1 && this.raiseRepeat > 0) {
       if (animateOption.enable) {
-        const { speed = 0.01, repeat = false } = animateOption;
+        const { speed = 0.01 } = animateOption;
         this.raiseCount += speed;
         if (this.raiseCount >= 1) {
-          if (this.raiserepeat > 1) {
+          if (this.raiseRepeat > 1) {
             this.raiseCount = 0;
-            this.raiserepeat--;
+            this.raiseRepeat--;
           } else {
             this.raiseCount = 1;
           }
@@ -107,7 +107,7 @@ export default class ExtrudeModel extends BaseModel {
       // 圆柱体是否固定高度
       u_heightfixed: Number(heightfixed),
 
-      u_r: animateOption.enable && this.raiserepeat > 0 ? this.raiseCount : 1.0,
+      u_r: animateOption.enable && this.raiseRepeat > 0 ? this.raiseCount : 1.0,
 
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
@@ -137,7 +137,7 @@ export default class ExtrudeModel extends BaseModel {
       depth = true,
       animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as ILayerConfig;
-    this.raiserepeat = repeat;
+    this.raiseRepeat = repeat;
 
     this.layer
       .buildLayerModel({
@@ -173,7 +173,6 @@ export default class ExtrudeModel extends BaseModel {
       descriptor: {
         name: 'a_Size',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -181,9 +180,6 @@ export default class ExtrudeModel extends BaseModel {
         size: 3,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size } = feature;
           if (size) {
@@ -239,7 +235,7 @@ export default class ExtrudeModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
+        update: (feature: IEncodeFeature) => {
           const coordinates = calculateCentroid(feature.coordinates);
           return [coordinates[0], coordinates[1], 0];
         },

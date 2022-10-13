@@ -1,4 +1,9 @@
-import { IMapService, IMarker, TYPES } from '@antv/l7-core';
+import {
+  IMapService,
+  IMarker,
+  IMarkerContainerAndBounds,
+  TYPES,
+} from '@antv/l7-core';
 import {
   bindAll,
   boundsContains,
@@ -23,17 +28,17 @@ interface IPointFeature {
   };
   properties: any;
 }
-
 export default class MarkerLayer extends EventEmitter {
-  private markers: IMarker[] = [];
+  private markers: IMarker[] = []; // 原始的marker列表
   private markerLayerOption: IMarkerLayerOption;
   private clusterIndex: Supercluster;
   private points: IPointFeature[] = [];
-  private clusterMarkers: IMarker[] = [];
+  private clusterMarkers: IMarker[] = []; // 聚合后的marker列表
   private mapsService: IMapService<unknown>;
   private scene: Container;
   private zoom: number;
   private bbox: IBounds;
+  private containerSize: IMarkerContainerAndBounds;
 
   constructor(option?: Partial<IMarkerLayerOption>) {
     super();
@@ -41,6 +46,7 @@ export default class MarkerLayer extends EventEmitter {
     bindAll(['update'], this);
     this.zoom = this.markerLayerOption.clusterOption?.zoom || -99;
   }
+
   public getDefault() {
     return {
       cluster: false,
@@ -54,6 +60,8 @@ export default class MarkerLayer extends EventEmitter {
       },
     };
   }
+
+  // 执行scene.addMarkerLayer时调用
   public addTo(scene: Container) {
     // this.remove();
     this.scene = scene;
@@ -65,11 +73,33 @@ export default class MarkerLayer extends EventEmitter {
       this.mapsService.on('camerachange', this.update); // amap1.x 更新事件
       this.mapsService.on('viewchange', this.update); // amap2.0 更新事件
     }
+    this.mapsService.on('camerachange', this.setContainerSize.bind(this)); // amap1.x 更新事件
+    this.mapsService.on('viewchange', this.setContainerSize.bind(this)); // amap2.0 更新事件
     this.addMarkers();
     return this;
   }
+
+  // 设置容器大小
+  private setContainerSize() {
+    if (!this.mapsService) return;
+    const container = this.mapsService.getContainer();
+    this.containerSize = {
+      containerWidth: container?.scrollWidth || 0,
+      containerHeight: container?.scrollHeight || 0,
+      bounds: this.mapsService.getBounds(),
+    };
+  }
+
+  // 获取容器尺寸
+  private getContainerSize() {
+    return this.containerSize;
+  }
+
+  // 在图层添加单个marker
   public addMarker(marker: IMarker) {
     const cluster = this.markerLayerOption.cluster;
+    marker.getMarkerLayerContainerSize = this.getContainerSize.bind(this);
+
     if (cluster) {
       this.addPoint(marker, this.markers.length);
       if (this.mapsService) {
@@ -118,16 +148,20 @@ export default class MarkerLayer extends EventEmitter {
     });
   }
 
+  // 返回当下的markers数据，有聚合图时返回聚合的marker列表，否则返回原始maerker列表
   public getMarkers() {
     const cluster = this.markerLayerOption.cluster;
     return cluster ? this.clusterMarkers : this.markers;
   }
 
+  // 批量添加marker到scene
   public addMarkers() {
     this.getMarkers().forEach((marker: IMarker) => {
       marker.addTo(this.scene);
     });
   }
+
+  // 清除图层里的marker
   public clear() {
     this.markers.forEach((marker: IMarker) => {
       marker.remove();
@@ -135,16 +169,22 @@ export default class MarkerLayer extends EventEmitter {
     this.clusterMarkers.forEach((clusterMarker: IMarker) => {
       clusterMarker.remove();
     });
-    this.mapsService.off('camerachange', this.update);
+
     this.markers = [];
+    this.points = [];
     this.clusterMarkers = [];
   }
 
   public destroy() {
     this.clear();
     this.removeAllListeners();
+    this.mapsService.off('camerachange', this.update);
+    this.mapsService.off('viewchange', this.update);
+    this.mapsService.off('camerachange', this.setContainerSize.bind(this));
+    this.mapsService.off('viewchange', this.setContainerSize.bind(this));
   }
 
+  // 将marker数据保存在point中
   private addPoint(marker: IMarker, id: number) {
     const { lng, lat } = marker.getLnglat();
     const feature: IPointFeature = {
@@ -168,8 +208,11 @@ export default class MarkerLayer extends EventEmitter {
     if (!this.markerLayerOption.cluster) {
       return;
     }
-    const { radius, minZoom = 0, maxZoom } = this.markerLayerOption
-      .clusterOption as IMarkerStyleOption;
+    const {
+      radius,
+      minZoom = 0,
+      maxZoom,
+    } = this.markerLayerOption.clusterOption;
     this.clusterIndex = new Supercluster({
       radius,
       minZoom,
@@ -189,7 +232,7 @@ export default class MarkerLayer extends EventEmitter {
     clusterPoint.forEach((feature: any) => {
       const { field, method } = this.markerLayerOption.clusterOption;
       // 处理聚合数据
-      if (feature.properties && feature.properties?.cluster_id) {
+      if (feature.properties?.cluster_id) {
         const clusterData = this.getLeaves(feature.properties?.cluster_id);
         feature.properties.clusterData = clusterData;
         if (field && method) {
@@ -210,6 +253,7 @@ export default class MarkerLayer extends EventEmitter {
       marker.addTo(this.scene);
     });
   }
+
   private getLeaves(
     clusterId: number,
     limit: number = Infinity,
@@ -220,6 +264,7 @@ export default class MarkerLayer extends EventEmitter {
     }
     return this.clusterIndex.getLeaves(clusterId, limit, offset);
   }
+
   private clusterMarker(feature: any) {
     const clusterOption = this.markerLayerOption.clusterOption;
 
@@ -234,17 +279,20 @@ export default class MarkerLayer extends EventEmitter {
     });
     return marker;
   }
+
   private normalMarker(feature: any) {
     const marker_id = feature.properties.marker_id;
     return this.markers[marker_id];
   }
 
   private update() {
-    if (!this.mapsService) {
-      return;
-    }
+    if (!this.mapsService) return;
+    // 当图层中无marker时，无需更新
+    if (this.markers.length === 0) return;
+
     const zoom = this.mapsService.getZoom();
     const bbox = this.mapsService.getBounds();
+
     if (
       !this.bbox ||
       Math.abs(zoom - this.zoom) >= 1 ||

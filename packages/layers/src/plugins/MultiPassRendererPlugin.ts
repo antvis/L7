@@ -1,13 +1,11 @@
 import {
-  IGlobalConfigService,
   ILayer,
   ILayerPlugin,
   IPass,
   IPostProcessingPass,
   IRendererService,
-  TYPES,
 } from '@antv/l7-core';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { createMultiPassRenderer } from '../utils/multiPassRender';
 
@@ -26,9 +24,6 @@ import { createMultiPassRenderer } from '../utils/multiPassRender';
  */
 @injectable()
 export default class MultiPassRendererPlugin implements ILayerPlugin {
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-
   private enabled: boolean;
 
   public apply(

@@ -1,9 +1,5 @@
 import {
-  AttributeType,
   gl,
-  IAnimateOption,
-  IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,
@@ -71,7 +67,6 @@ export default class SpriteModel extends BaseModel {
       spriteBottom = -100000,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     const updateZ = this.spriteUpdate;
-    // const bottomZ = -100000;
     const bottomZ = spriteBottom;
     const topZ = this.spriteTop;
 
@@ -98,13 +93,13 @@ export default class SpriteModel extends BaseModel {
 
   public updateModel = () => {
     // @ts-ignore
-    const attributes = this.layer.createAttrubutes({
+    const attributes = this.layer.createAttributes({
       triangulation: this.planeGeometryUpdateTriangulation,
     });
     this.layer.models.map((m) => {
       m.updateAttributes(attributes);
     });
-    this.layer.renderLayers();
+    this.layerService.throttleRenderLayers();
 
     this.timer = requestAnimationFrame(this.updateModel);
   };
@@ -217,8 +212,7 @@ export default class SpriteModel extends BaseModel {
           wrapS: gl.CLAMP_TO_EDGE,
           wrapT: gl.CLAMP_TO_EDGE,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
+        this.layerService.reRender();
       };
       img.src = mapTexture;
     } else {

@@ -5,37 +5,42 @@ export default defineConfig({
   favicon: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   outputPath: 'docs-dist',
-  devServer:{
-    port:'6006'
+  base: '/',
+  devServer: {
+    port: '6006',
   },
   resolve: {
-    includes: ['dev-demos']
+    includes: ['dev-demos'],
+  },
+  polyfill: {
+    imports: ['element-remove', 'babel-polyfill'],
   },
   targets: {
     chrome: 58,
     ie: 11,
   },
   mode: 'site',
-  esbuild:false,
-  extraBabelPresets:[
-    '@babel/preset-typescript'
+  esbuild: false,
+  chainWebpack: (memo, { env, webpack, createCSSRule }) => {
+    // 设置 alias
+    memo.module
+      .rule('lint')
+      .test(/\.glsl$/)
+      .use('babel')
+      .loader('ts-shader-loader');
+    // 还可以创建具名use (loaders)
+  },
+  extraBabelPresets: ['@babel/preset-typescript'],
+  extraBabelIncludes: [
+    '@umijs/preset-dumi',
+    'split-on-first',
+    'query-string',
+    'strict-uri-encode',
+    'copy-text-to-clipboard',
   ],
   extraBabelPlugins: [
-        // 开发模式下以原始文本引入，便于调试
-    [
-      // import glsl as raw text
-      'babel-plugin-inline-import',
-      {
-        extensions: [
-          // 由于使用了 TS 的 resolveJsonModule 选项，JSON 可以直接引入，不需要当作纯文本
-          // '.json',
-          '.glsl'
-        ]
-      }
-    ],
-    [
-      'transform-import-css-l7'
-    ],
+    ['transform-import-css-l7'],
+    ['babel-plugin-inline-import', { extensions: ['.worker.js'] }],
   ],
   navs: [
     null,
@@ -49,11 +54,15 @@ export default defineConfig({
     'react-dom': 'window.ReactDOM',
     antd: 'window.antd',
     lodash: '_',
+    fetch: 'window.fetch',
   },
   links: ['https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd.css'],
   scripts: [
-    'https://gw.alipayobjects.com/os/lib/react/17.0.1/umd/react.development.js',
-    'https://gw.alipayobjects.com/os/lib/react-dom/17.0.1/umd/react-dom.development.js',
+    'https://gw.alipayobjects.com/os/lib/whatwg-fetch/3.6.2/dist/fetch.umd.js',
+    'https://gw.alipayobjects.com/os/lib/react/17.0.2/umd/react.profiling.min.js',
+    'https://gw.alipayobjects.com/os/lib/react-dom/17.0.2/umd/react-dom.profiling.min.js',
+    'https://gw.alipayobjects.com/os/lib/react/17.0.2/umd/react.production.min.js',
+    'https://gw.alipayobjects.com/os/lib/react-dom/17.0.2/umd/react-dom.production.min.js',
     // 'https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd-with-locales.js',
     'https://gw.alipayobjects.com/os/lib/antd/4.19.4/dist/antd.js',
     /** lodash */

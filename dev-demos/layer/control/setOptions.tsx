@@ -16,7 +16,7 @@ const Demo: FunctionComponent = () => {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        style: 'normal',
+        style: 'dark',
         center: [120, 30],
         pitch: 0,
         zoom: 6.45,

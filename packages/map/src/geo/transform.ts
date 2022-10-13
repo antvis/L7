@@ -1,10 +1,8 @@
 // @ts-ignore
 import { isMini } from '@antv/l7-utils';
-import { mat2, mat4, vec3, vec4 } from 'gl-matrix';
-import Point, { PointLike } from '../geo/point';
+import { mat2, mat4, vec4 } from 'gl-matrix';
+import Point from '../geo/point';
 import { clamp, interpolate, wrap } from '../util';
-import Aabb from '../utils/Aabb';
-import Frustum from '../utils/primitives';
 import EdgeInsets, { IPaddingOptions } from './edge_insets';
 import LngLat from './lng_lat';
 import LngLatBounds from './lng_lat_bounds';
@@ -946,7 +944,7 @@ export default class Transform {
     const nearZ = this.height / 50;
 
     // matrix for conversion from location to GL coordinates (-1 .. 1)
-    // TODO: 使用 Float64Array 的原因是为了避免计算精度问题、 mat4.create() 默认使用 Float32Array
+    // 使用 Float64Array 的原因是为了避免计算精度问题、 mat4.create() 默认使用 Float32Array
     let m = new Float64Array(16);
     // @ts-ignore
     mat4.perspective(m, this._fov, this.width / this.height, nearZ, farZ);

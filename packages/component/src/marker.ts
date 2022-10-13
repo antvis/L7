@@ -1,6 +1,7 @@
 import {
   ILngLat,
   IMapService,
+  IMarkerContainerAndBounds,
   IMarkerOption,
   IPoint,
   IPopup,
@@ -16,7 +17,6 @@ import {
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-
 //  marker 支持 dragger 未完成
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
@@ -27,6 +27,8 @@ export default class Marker extends EventEmitter {
   private lngLat: ILngLat;
   private scene: Container;
   private added: boolean = false;
+  public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
+
   constructor(option?: Partial<IMarkerOption>) {
     super();
     this.markerOption = {
@@ -52,7 +54,7 @@ export default class Marker extends EventEmitter {
     this.scene = scene;
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
-    const { element, draggable } = this.markerOption;
+    const { element } = this.markerOption;
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
@@ -187,6 +189,7 @@ export default class Marker extends EventEmitter {
     return this.markerOption.offsets;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setDraggable(draggable: boolean) {
     throw new Error('Method not implemented.');
   }
@@ -212,6 +215,7 @@ export default class Marker extends EventEmitter {
     DOM.setTransform(element as HTMLElement, `${anchorTranslate[anchor]}`);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onMapClick(e: MouseEvent) {
     const { element } = this.markerOption;
     if (this.popup && element) {
@@ -219,25 +223,28 @@ export default class Marker extends EventEmitter {
     }
   }
 
+  private getCurrentContainerSize() {
+    const container = this.mapsService.getContainer();
+    return {
+      containerHeight: container?.scrollHeight || 0,
+      containerWidth: container?.scrollWidth || 0,
+      bounds: this.mapsService.getBounds(),
+    };
+  }
   private updatePosition() {
     if (!this.mapsService) {
       return;
     }
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
-    const bounds = this.mapsService.getBounds();
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
-
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
-      const container = this.mapsService.getContainer();
-      let containerWidth = 0;
-      let containerHeight = 0;
-      if (container) {
-        containerWidth = container.scrollWidth;
-        containerHeight = container.scrollHeight;
-      }
+      const { containerHeight, containerWidth, bounds } =
+        this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
+
+      if (!bounds) return;
       // 当前可视区域包含跨日界线
       if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
         if (pos.x > containerWidth) {
@@ -339,10 +346,13 @@ export default class Marker extends EventEmitter {
       lngLat: this.lngLat,
     });
   };
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onUp(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }

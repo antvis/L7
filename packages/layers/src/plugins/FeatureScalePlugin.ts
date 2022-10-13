@@ -1,5 +1,4 @@
 import {
-  IGlobalConfigService,
   ILayer,
   ILayerPlugin,
   IScale,
@@ -10,13 +9,13 @@ import {
   ScaleTypeName,
   ScaleTypes,
   StyleScaleType,
-  TYPES,
+  IParserData,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
-import { extent, ticks } from 'd3-array';
+import { extent } from 'd3-array';
 import * as d3interpolate from 'd3-interpolate';
 import * as d3 from 'd3-scale';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { isNil, isString, uniq } from 'lodash';
 import 'reflect-metadata';
 
@@ -41,14 +40,18 @@ const scaleMap = {
  */
 @injectable()
 export default class FeatureScalePlugin implements ILayerPlugin {
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-  // key = field_attribute name
-  private scaleCache: {
-    [field: string]: IStyleScale;
-  } = {};
-
   private scaleOptions: IScaleOptions = {};
+
+  private getSourceData(layer: ILayer, callback: (data: IParserData) => void) {
+    const source = layer.getSource();
+    if (source.inited) {
+      callback(source.data);
+    } else {
+      source.once('sourceUpdate', () => {
+        callback(source.data);
+      });
+    }
+  }
 
   public apply(
     layer: ILayer,
@@ -59,40 +62,50 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     layer.hooks.init.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      if (dataArray.length === 0) {
-        return;
-      }
-      this.caculateScalesForAttributes(attributes || [], dataArray);
+
+      this.getSourceData(layer, ({ dataArray }) => {
+        if (Array.isArray(dataArray) && dataArray.length === 0) {
+          return;
+        } else {
+          this.caculateScalesForAttributes(attributes || [], dataArray);
+        }
+      });
     });
 
     // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-      const { dataArray } = layer.getSource().data;
-      this.caculateScalesForAttributes(attributes || [], dataArray);
-      layer.layerModelNeedUpdate = true;
+
+      this.getSourceData(layer, ({ dataArray }) => {
+        if (Array.isArray(dataArray) && dataArray.length === 0) {
+          return;
+        }
+        this.caculateScalesForAttributes(attributes || [], dataArray);
+        layer.layerModelNeedUpdate = true;
+      });
       return true;
     });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
-      if (layer.layerModelNeedUpdate) {
+      const { usage } = layer.getLayerConfig();
+      if (layer.layerModelNeedUpdate || usage === 'basemap') {
         return;
       }
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       if (attributes) {
-        const { dataArray } = layer.getSource().data;
-        if (dataArray.length === 0) {
-          return;
-        }
-        const attributesToRescale = attributes.filter(
-          (attribute) => attribute.needRescale,
-        );
-        if (attributesToRescale.length) {
-          this.caculateScalesForAttributes(attributesToRescale, dataArray);
-        }
+        this.getSourceData(layer, ({ dataArray }) => {
+          if (dataArray.length === 0) {
+            return;
+          }
+          const attributesToRescale = attributes.filter(
+            (attribute) => attribute.needRescale,
+          );
+          if (attributesToRescale.length) {
+            this.caculateScalesForAttributes(attributesToRescale, dataArray);
+          }
+        });
       }
     });
   }
@@ -104,12 +117,10 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     attributes: IStyleAttribute[],
     dataArray: IParseDataItem[],
   ) {
-    this.scaleCache = {};
     attributes.forEach((attribute) => {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
-        const type = attribute.name;
         attributeScale.names = this.parseFields(attribute!.scale!.field || []);
         const scales: IStyleScale[] = [];
         // 为每个字段创建 Scale

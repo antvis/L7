@@ -49,8 +49,7 @@ export default class ImageModel extends BaseModel {
           width: img.width,
           height: img.height,
         });
-        this.layerService.updateLayerRenderList();
-        this.layerService.renderLayers();
+        this.layerService.reRender();
       };
     } else {
       source.data.images.then(
@@ -59,9 +58,10 @@ export default class ImageModel extends BaseModel {
             data: imageData[0],
             width: imageData[0].width,
             height: imageData[0].height,
+            mag: gl.LINEAR,
+            min: gl.LINEAR,
           });
-          this.layerService.updateLayerRenderList();
-          this.layerService.renderLayers();
+          this.layerService.reRender();
         },
       );
     }
@@ -73,8 +73,13 @@ export default class ImageModel extends BaseModel {
         fragmentShader: ImageFrag,
         triangulation: RasterImageTriangulation,
         primitive: gl.TRIANGLES,
+        blend: {
+          // Tip: 优化显示效果
+          enable: true,
+        },
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
@@ -106,14 +111,12 @@ export default class ImageModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -123,7 +126,6 @@ export default class ImageModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },

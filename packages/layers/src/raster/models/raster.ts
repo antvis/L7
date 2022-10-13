@@ -4,8 +4,6 @@ import {
   IEncodeFeature,
   IModel,
   ITexture2D,
-  lazyInject,
-  TYPES,
 } from '@antv/l7-core';
 import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
 import { isEqual } from 'lodash';
@@ -28,7 +26,7 @@ export default class RasterModel extends BaseModel {
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     if (!isEqual(this.rampColors, rampColors)) {
-      this.updateColorTexure();
+      this.updateColorTexture();
       this.rampColors = rampColors;
     }
 
@@ -43,7 +41,26 @@ export default class RasterModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  private async getRasterData(parserDataItem: any) {
+    if(Array.isArray(parserDataItem.data)) {
+      // 直接传入波段数据
+      return {
+        data: parserDataItem.data,
+        width: parserDataItem.width,
+        height: parserDataItem.height,
+      }
+    } else {
+      // 多波段形式、需要进行处理
+      const { rasterData, width, height } = await parserDataItem.data;
+      return {
+        data: Array.from(rasterData),
+        width,
+        height
+      }
+    }
+  }
+
+  public async initModels(callbackModel: (models: IModel[]) => void) {
     const {
       mask = false,
       maskInside = true,
@@ -53,10 +70,13 @@ export default class RasterModel extends BaseModel {
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
+
+    const {data, width, height} = await this.getRasterData(parserDataItem);
+    
     this.texture = createTexture2D({
-      data: parserDataItem.data,
-      width: parserDataItem.width,
-      height: parserDataItem.height,
+      data,
+      width,
+      height,
       format: gl.LUMINANCE,
       type: gl.FLOAT,
       // aniso: 4,
@@ -80,6 +100,7 @@ export default class RasterModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
@@ -117,7 +138,6 @@ export default class RasterModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
@@ -125,7 +145,7 @@ export default class RasterModel extends BaseModel {
     });
   }
 
-  private updateColorTexure() {
+  private updateColorTexture() {
     const { createTexture2D } = this.rendererService;
     const {
       rampColors,

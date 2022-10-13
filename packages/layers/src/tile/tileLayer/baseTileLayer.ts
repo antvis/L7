@@ -3,8 +3,6 @@ import {
   ILayer,
   ILayerService,
   IMapService,
-  IScale,
-  IScaleOptions,
   ISource,
   ITileLayer,
   ITileLayerManager,
@@ -12,6 +10,7 @@ import {
 } from '@antv/l7-core';
 import { decodePickingColor, Tile, TilesetManager } from '@antv/l7-utils';
 import { TileLayerManager } from '../manager/tileLayerManager';
+import { debounce } from 'lodash';
 
 export default class BaseTileLayer implements ITileLayer {
   public get children() {
@@ -32,9 +31,8 @@ export default class BaseTileLayer implements ITileLayer {
     latLonBounds: [number, number, number, number];
   };
 
-  private timer: any;
-  private mapService: IMapService;
-  private layerService: ILayerService;
+  protected mapService: IMapService;
+  protected layerService: ILayerService;
   private pickColors: {
     select: any;
     active: any;
@@ -49,9 +47,10 @@ export default class BaseTileLayer implements ITileLayer {
     mapService,
     layerService,
     pickingService,
+    transforms
   }: ITileLayerOPtions) {
     const parentSource = parent.getSource();
-    const { sourceLayer, coords, featureId } =
+    const { sourceLayer } =
       parentSource?.data?.tilesetOptions || {};
     this.sourceLayer = sourceLayer;
     this.parent = parent;
@@ -63,7 +62,7 @@ export default class BaseTileLayer implements ITileLayer {
       mapService,
       rendererService,
       pickingService,
-      layerService,
+      transforms
     );
 
     this.initTileSetManager();
@@ -110,6 +109,7 @@ export default class BaseTileLayer implements ITileLayer {
     return this.tileLayerManager.pickLayers(target);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public tileLoaded(tile: Tile) {
     //
   }
@@ -127,28 +127,6 @@ export default class BaseTileLayer implements ITileLayer {
     if (!this.tilesetManager) {
       return;
     }
-
-    this.tilesetManager.tiles
-      .filter((tile) => tile.isLoaded)
-      .map((tile) => {
-        if (tile.layerIDList.length === 0) {
-          const { layers, layerIDList } = this.tileLayerManager.createTile(
-            tile,
-          );
-          tile.layerIDList = layerIDList;
-          this.tileLayerManager.addChilds(layers);
-        } else {
-          if (!tile.isVisibleChange) {
-            return;
-          }
-          const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.tileLayerManager.updateLayersConfig(
-            layers,
-            'visible',
-            tile.isVisible,
-          );
-        }
-      });
 
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片
@@ -330,10 +308,10 @@ export default class BaseTileLayer implements ITileLayer {
       const { visible } = this.parent.getLayerConfig();
       if (zoom < 3 && visible) {
         this.parent.updateLayerConfig({ visible: false });
-        this.layerService.updateLayerRenderList();
+        this.layerService.reRender();
       } else if (zoom >= 3 && !visible) {
         this.parent.updateLayerConfig({ visible: true });
-        this.layerService.updateLayerRenderList();
+        this.layerService.reRender();
       }
     }
 
@@ -346,14 +324,7 @@ export default class BaseTileLayer implements ITileLayer {
     }
     this.lastViewStates = { zoom, latLonBounds };
 
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
-
-    // this.timer = setTimeout(() => {
-    this.tilesetManager?.update(zoom, latLonBounds);
-    // }, 250);
+    this.tilesetManager?.throttleUpdate(zoom, latLonBounds);
   }
 
   private bindTilesetEvent() {
@@ -361,19 +332,21 @@ export default class BaseTileLayer implements ITileLayer {
       return;
     }
     // 瓦片数据加载成功
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.tilesetManager.on('tile-loaded', (tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
+      // 将事件抛出，图层上可以监听使用
     });
 
     // 瓦片数据从缓存删除或被执行重新加载
     this.tilesetManager.on('tile-unload', (tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
+      // 将事件抛出，图层上可以监听使用
       this.tileUnLoad(tile);
     });
 
     // 瓦片数据加载失败
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.tilesetManager.on('tile-error', (error, tile: Tile) => {
-      // todo: 将事件抛出，图层上可以监听使用
+      // 将事件抛出，图层上可以监听使用
       this.tileError(error);
     });
 
@@ -383,9 +356,12 @@ export default class BaseTileLayer implements ITileLayer {
     });
 
     // 地图视野发生改变
-    this.mapService.on('zoomend', () => this.mapchange());
-    this.mapService.on('moveend', () => this.mapchange());
+    this.mapService.on('zoomend', () => this.viewchange());
+    this.mapService.on('moveend', () => this.viewchange());
   }
+
+  //  防抖操作
+  viewchange = debounce(this.mapchange, 200)
 
   private getCurrentView() {
     const bounds = this.mapService.getBounds();
@@ -398,5 +374,10 @@ export default class BaseTileLayer implements ITileLayer {
     const zoom = this.mapService.getZoom();
 
     return { latLonBounds, zoom };
+  }
+
+  public destroy() {
+    this.tilesetManager?.destroy();
+    this.tileLayerManager.destroy();
   }
 }

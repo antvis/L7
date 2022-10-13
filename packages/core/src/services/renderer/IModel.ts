@@ -110,6 +110,10 @@ type BlendingFunctionSeparate = Partial<{
 
 export interface IModelInitializationOptions {
   /**
+   * 该 model 是否支持拾取
+   */
+  pick?: boolean;
+  /**
    * Shader 字符串，假设此时已经经过 ShaderLib 处理
    */
   vs: string;

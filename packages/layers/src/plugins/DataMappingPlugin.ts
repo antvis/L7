@@ -1,10 +1,8 @@
 import {
   IEncodeFeature,
   IFontService,
-  IGlobalConfigService,
   ILayer,
   ILayerPlugin,
-  ILngLat,
   IMapService,
   IParseDataItem,
   IStyleAttribute,
@@ -13,7 +11,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { isColor, normalize, rgb2arr, unProjectFlat } from '@antv/l7-utils';
+import { isColor, normalize, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
 import 'reflect-metadata';
@@ -21,9 +19,6 @@ import { ILineLayerStyleOptions } from '../core/interface';
 
 @injectable()
 export default class DataMappingPlugin implements ILayerPlugin {
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
-
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
@@ -46,7 +41,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           this.generateMaping(layer, { styleAttributeService });
         });
       }
-      // this.generateMaping(layer, { styleAttributeService });
     });
 
     layer.hooks.beforeRenderData.tap('DataMappingPlugin', () => {
@@ -60,13 +54,13 @@ export default class DataMappingPlugin implements ILayerPlugin {
         });
       }
 
-      // this.generateMaping(layer, { styleAttributeService });
-
       return true;
     });
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
+      const { usage } = layer.getLayerConfig();
+      if (usage === 'basemap') return;
       const source = layer.getSource();
       if (layer.layerModelNeedUpdate || !source || !source.inited) {
         return;
@@ -91,20 +85,24 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (attributesToRemapping.length) {
         // 过滤数据
         if (filter?.needRemapping) {
-          layer.setEncodedData(
-            this.mapping(layer, attributes, filterData, undefined, bottomColor),
+          const encodeData = this.mapping(
+            layer,
+            attributes,
+            filterData,
+            undefined,
+            bottomColor,
           );
+          layer.setEncodedData(encodeData);
           filter.needRemapping = false;
         } else {
-          layer.setEncodedData(
-            this.mapping(
-              layer,
-              attributesToRemapping,
-              filterData,
-              layer.getEncodedData(),
-              bottomColor,
-            ),
+          const encodeData = this.mapping(
+            layer,
+            attributesToRemapping,
+            filterData,
+            layer.getEncodedData(),
+            bottomColor,
           );
+          layer.setEncodedData(encodeData);
         }
         // 处理文本更新
         layer.emit('remapping', null);
@@ -128,21 +126,16 @@ export default class DataMappingPlugin implements ILayerPlugin {
         return this.applyAttributeMapping(filter, record, bottomColor)[0];
       });
     }
-    layer.setEncodedData(
-      this.mapping(layer, attributes, filterData, undefined, bottomColor),
+    const encodeData = this.mapping(
+      layer,
+      attributes,
+      filterData,
+      undefined,
+      bottomColor,
     );
+    layer.setEncodedData(encodeData);
     // 对外暴露事件
     layer.emit('dataUpdate', null);
-  }
-
-  private getArrowPoints(p1: Position, p2: Position) {
-    const dir = [p2[0] - p1[0], p2[1] - p1[1]];
-    const normalizeDir = normalize(dir);
-    const arrowPoint = [
-      p1[0] + normalizeDir[0] * 0.0001,
-      p1[1] + normalizeDir[1] * 0.0001,
-    ];
-    return arrowPoint;
   }
 
   private mapping(
@@ -156,7 +149,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
       arrow = {
         enable: false,
       },
+      usage,
     } = layer.getLayerConfig() as ILineLayerStyleOptions;
+    if (usage === 'basemap') {
+      return this.mapLayerMapping(layer, attributes, data, predata);
+    }
+    const usedAttributes = attributes.filter(
+      (attribute) => attribute.scale !== undefined,
+    );
     const mappedData = data.map((record: IParseDataItem, i) => {
       const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
@@ -164,25 +164,88 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
-      attributes
-        .filter((attribute) => attribute.scale !== undefined)
-        .forEach((attribute: IStyleAttribute) => {
-          // console.log('record', record)
-          let values = this.applyAttributeMapping(
-            attribute,
-            record,
-            minimumColor,
+      usedAttributes.forEach((attribute: IStyleAttribute) => {
+        let values = this.applyAttributeMapping(
+          attribute,
+          record,
+          minimumColor,
+        );
+        attribute.needRemapping = false;
+
+        // TODO: 支持每个属性配置 postprocess
+        if (attribute.name === 'color') {
+          values = values.map((c: unknown) => {
+            return rgb2arr(c as string);
+          });
+        }
+        // @ts-ignore
+        encodeRecord[attribute.name] =
+          Array.isArray(values) && values.length === 1 ? values[0] : values;
+
+        // 增加对 layer/text/iconfont unicode 映射的解析
+        if (attribute.name === 'shape') {
+          encodeRecord.shape = this.fontService.getIconFontKey(
+            encodeRecord[attribute.name] as string,
           );
-          // console.log('values', values)
+        }
+      });
+
+      if (
+        arrow.enable &&
+        (encodeRecord.shape === 'line' || encodeRecord.shape === 'halfLine')
+      ) {
+        // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
+        const coords = encodeRecord.coordinates as Position[];
+        // @ts-ignore
+        if (layer.arrowInsertCount < layer.encodeDataLength) {
+          // Tip: arrowInsert 的判断用于确保每一条线数据 arrow 的属性点只会被植入一次
+          const arrowPoint = this.getArrowPoints(coords[0], coords[1]);
+          encodeRecord.coordinates.splice(1, 0, arrowPoint, arrowPoint);
+          // @ts-ignore
+          layer.arrowInsertCount++;
+        }
+      }
+      return encodeRecord;
+    }) as IEncodeFeature[];
+
+    // 调整数据兼容 Amap2.0
+    this.adjustData2Amap2Coordinates(mappedData, layer);
+
+    // 调整数据兼容 SimpleCoordinates
+    this.adjustData2SimpleCoordinates(mappedData);
+
+    return mappedData;
+  }
+
+  private mapLayerMapping(
+    layer: ILayer,
+    attributes: IStyleAttribute[],
+    data: IParseDataItem[],
+    predata?: IEncodeFeature[],
+  ): IEncodeFeature[] {
+    const usedAttributes = attributes.filter(
+      (attribute) => attribute.scale !== undefined,
+    );
+    const mappedData = data.map((record: IParseDataItem, i) => {
+      const preRecord = predata ? predata[i] : {};
+      const encodeRecord: IEncodeFeature = {
+        id: record._id,
+        coordinates: record.coordinates,
+        ...preRecord,
+      };
+      usedAttributes.forEach((attribute: IStyleAttribute) => {
+        if (
+          attribute.name === 'shape' &&
+          // @ts-ignore
+          layer.shapeOption?.field === 'simple'
+        ) {
+          encodeRecord[attribute.name] = 'simple';
+          attribute.needRemapping = false;
+        } else {
+          const values = this.applyMapLayerAttributeMapping(attribute, record);
+
           attribute.needRemapping = false;
 
-          // TODO: 支持每个属性配置 postprocess
-          if (attribute.name === 'color') {
-            // console.log('attribute', attribute)
-            values = values.map((c: unknown) => {
-              return rgb2arr(c as string);
-            });
-          }
           // @ts-ignore
           encodeRecord[attribute.name] =
             Array.isArray(values) && values.length === 1 ? values[0] : values;
@@ -193,26 +256,18 @@ export default class DataMappingPlugin implements ILayerPlugin {
               encodeRecord[attribute.name] as string,
             );
           }
-        });
+        }
+      });
 
-      if (
-        arrow.enable &&
-        (encodeRecord.shape === 'line' || encodeRecord.shape === 'halfLine')
-      ) {
-        // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
-        const coords = encodeRecord.coordinates as Position[];
-        const arrowPoint = this.getArrowPoints(coords[0], coords[1]);
-        encodeRecord.coordinates.splice(1, 0, arrowPoint, arrowPoint);
+      if (encodeRecord.size === undefined) {
+        // in case not set size
+        encodeRecord.size = 1;
       }
       return encodeRecord;
     }) as IEncodeFeature[];
-    // console.log('mappedData', mappedData)
 
     // 调整数据兼容 Amap2.0
     this.adjustData2Amap2Coordinates(mappedData, layer);
-
-    // 调整数据兼容 SimpleCoordinates
-    this.adjustData2SimpleCoordinates(mappedData);
 
     return mappedData;
   }
@@ -226,7 +281,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       mappedData.length > 0 &&
       this.mapService.version === Version['GAODE2.x']
     ) {
-      const layerCenter = this.getLayerCenter(layer);
+      const layerCenter = layer.coordCenter || layer.getSource().center;
       if (typeof mappedData[0].coordinates[0] === 'number') {
         // 单个的点数据
         // @ts-ignore
@@ -246,7 +301,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           });
       } else {
         // 连续的线、面数据
-        // @ts-ignore
         mappedData
           // TODO: 避免经纬度被重复计算导致坐标位置偏移
           .filter((d) => !d.originCoordinates)
@@ -263,11 +317,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           });
       }
     }
-  }
-
-  private getLayerCenter(layer: ILayer) {
-    const source = layer.getSource();
-    return source.center;
   }
 
   private adjustData2SimpleCoordinates(mappedData: IEncodeFeature[]) {
@@ -338,8 +387,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
         params.push(record[field]);
       }
     });
-    // console.log('params', params)
-    // console.log('attribute', attribute)
 
     const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
     if (attribute.name === 'color' && !isColor(mappingResult[0])) {
@@ -347,5 +394,38 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }
     return mappingResult;
     // return attribute.mapping ? attribute.mapping(params) : [];
+  }
+
+  private applyMapLayerAttributeMapping(
+    attribute: IStyleAttribute,
+    record: { [key: string]: unknown },
+  ) {
+    if (!attribute.scale) {
+      return [];
+    }
+    const scalers = attribute?.scale?.scalers || [];
+    const params: unknown[] = [];
+
+    scalers.forEach(({ field }) => {
+      if (
+        record.hasOwnProperty(field) ||
+        attribute.scale?.type === 'variable'
+      ) {
+        params.push(record[field]);
+      }
+    });
+
+    const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
+    return mappingResult;
+  }
+
+  private getArrowPoints(p1: Position, p2: Position) {
+    const dir = [p2[0] - p1[0], p2[1] - p1[1]];
+    const normalizeDir = normalize(dir);
+    const arrowPoint = [
+      p1[0] + normalizeDir[0] * 0.0001,
+      p1[1] + normalizeDir[1] * 0.0001,
+    ];
+    return arrowPoint;
   }
 }

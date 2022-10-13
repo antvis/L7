@@ -1,5 +1,6 @@
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { Tile } from '@antv/l7-utils';
 import BaseTileLayer from './tileLayer/baseTileLayer';
+import { updateTileVisible } from './utils';
 
 export class TMSTileLayer extends BaseTileLayer {
   public type: string = 'TMS';
@@ -35,16 +36,10 @@ export class TMSTileLayer extends BaseTileLayer {
             return;
           }
           const layers = this.tileLayerManager.getChilds(tile.layerIDList);
-          this.tileLayerManager.updateLayersConfig(
-            layers,
-            'visible',
-            tile.isVisible,
-          );
+          updateTileVisible(tile, layers, this.layerService);
           this.setPickState(layers);
         }
       });
-
-    this.parent.renderLayers();
 
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片

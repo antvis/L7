@@ -29,7 +29,6 @@ fetch(
       .size(40)
       .color('#ffa842')
       .style({
-        opacity: 1,
         offsets: [ 40, 40 ]
       });
     const pointLayer2 = new PointLayer({})
@@ -44,10 +43,7 @@ fetch(
       .active(true)
       .animate(true)
       .size(50)
-      .color('#f00')
-      .style({
-        opacity: 1
-      });
+      .color('#f00');
 
     scene.addLayer(pointLayer);
     scene.addLayer(pointLayer2);

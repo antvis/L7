@@ -8,7 +8,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import regl from 'l7regl';
-import { cloneDeep, extend, isPlainObject, isTypedArray } from 'lodash';
+import { cloneDeep, isPlainObject, isTypedArray } from 'lodash';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -40,6 +40,7 @@ export default class ReglModel implements IModel {
   constructor(reGl: regl.Regl, options: IModelInitializationOptions) {
     this.reGl = reGl;
     const {
+      pick = true,
       vs,
       fs,
       attributes,
@@ -81,12 +82,12 @@ export default class ReglModel implements IModel {
       drawParams.instances = instances;
     }
 
+    // Tip:
     // elements 中可能包含 count，此时不应传入
+    // count 和 elements 相比、count 优先
     if (count) {
       drawParams.count = count;
-    }
-
-    if (elements) {
+    } else if (elements) {
       drawParams.elements = (elements as ReglElements).get();
     }
 
@@ -97,14 +98,16 @@ export default class ReglModel implements IModel {
 
     this.drawCommand = reGl(drawParams);
 
-    const pickDrawParams = cloneDeep(drawParams);
+    if (pick) {
+      const pickDrawParams = cloneDeep(drawParams);
 
-    pickDrawParams.blend = {
-      ...pickDrawParams.blend,
-      enable: false,
-    };
+      pickDrawParams.blend = {
+        ...pickDrawParams.blend,
+        enable: false,
+      };
 
-    this.drawPickCommand = reGl(pickDrawParams);
+      this.drawPickCommand = reGl(pickDrawParams);
+    }
     this.drawParams = drawParams;
   }
 
@@ -120,13 +123,15 @@ export default class ReglModel implements IModel {
     this.drawParams.elements = (elements as ReglElements).get();
 
     this.drawCommand = this.reGl(this.drawParams);
-    const pickDrawParams = cloneDeep(this.drawParams);
-    pickDrawParams.blend = {
-      ...pickDrawParams.blend,
-      enable: false,
-    };
+    if (this.options.pick) {
+      const pickDrawParams = cloneDeep(this.drawParams);
+      pickDrawParams.blend = {
+        ...pickDrawParams.blend,
+        enable: false,
+      };
 
-    this.drawPickCommand = this.reGl(pickDrawParams);
+      this.drawPickCommand = this.reGl(pickDrawParams);
+    }
   }
 
   public updateAttributes(attributes: { [key: string]: IAttribute }) {
@@ -137,14 +142,16 @@ export default class ReglModel implements IModel {
     this.drawParams.attributes = reglAttributes;
     this.drawCommand = this.reGl(this.drawParams);
 
-    const pickDrawParams = cloneDeep(this.drawParams);
+    if (this.options.pick) {
+      const pickDrawParams = cloneDeep(this.drawParams);
 
-    pickDrawParams.blend = {
-      ...pickDrawParams.blend,
-      enable: false,
-    };
+      pickDrawParams.blend = {
+        ...pickDrawParams.blend,
+        enable: false,
+      };
 
-    this.drawPickCommand = this.reGl(pickDrawParams);
+      this.drawPickCommand = this.reGl(pickDrawParams);
+    }
   }
 
   public addUniforms(uniforms: { [key: string]: IUniform }) {
@@ -195,11 +202,11 @@ export default class ReglModel implements IModel {
           | ReglTexture2D).get();
       }
     });
-    // TODO: 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
+    // 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
     if (!pick) {
       this.drawCommand(reglDrawProps);
     } else {
-      this.drawPickCommand(reglDrawProps);
+      this.drawPickCommand && this.drawPickCommand(reglDrawProps);
     }
     // this.drawCommand(reglDrawProps);
     // this.drawPickCommand(reglDrawProps);
@@ -207,11 +214,11 @@ export default class ReglModel implements IModel {
 
   public destroy() {
     // @ts-ignore
-    this.drawParams.elements.destroy();
+    this.drawParams?.elements?.destroy();
     if (this.options.attributes) {
       Object.values(this.options.attributes).forEach((attr: any) => {
         // @ts-ignore
-        (attr as ReglAttribute).destroy();
+        (attr as ReglAttribute)?.destroy();
       });
     }
     this.destroyed = true;

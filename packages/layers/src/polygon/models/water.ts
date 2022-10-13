@@ -6,6 +6,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
+import { Version } from '@antv/l7-maps';
 import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
@@ -20,39 +21,8 @@ export default class WaterModel extends BaseModel {
       opacity = 1,
       speed = 0.5,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
-      this.judgeStyleAttributes({ opacity });
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
     return {
       u_texture: this.texture,
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
       u_speed: speed,
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
@@ -83,6 +53,7 @@ export default class WaterModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
+        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
@@ -95,7 +66,6 @@ export default class WaterModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
-    this.dataTexture?.destroy();
   }
 
   protected registerBuiltinAttributes() {
@@ -120,10 +90,10 @@ export default class WaterModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
-          normal: number[],
+          attributeIdx: number
         ) => {
-          const [lng, lat] = vertex;
+          const v = (feature.version === Version['GAODE2.x'] ? feature.originCoordinates[0][attributeIdx] : vertex)
+          const [lng, lat] = v;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },
       },
@@ -164,8 +134,7 @@ export default class WaterModel extends BaseModel {
         min: gl.LINEAR,
         mag: gl.LINEAR,
       });
-      this.layerService.updateLayerRenderList();
-      this.layerService.renderLayers();
+      this.layerService.reRender();
     };
   }
 }

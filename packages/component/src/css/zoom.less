@@ -1,0 +1,21 @@
+@import 'variables';
+
+@zoom-icon-size: 14px;
+
+.l7-control-zoom {
+  box-shadow: @l7-control-shadow;
+  border-radius: @l7-btn-control-border-radius;
+  overflow: hidden;
+  .l7-button-control {
+    box-shadow: 0 0 0;
+    border-radius: 0;
+    font-size: @l7-btn-icon-size;
+    .l7-iconfont {
+      width: @zoom-icon-size;
+      height: @zoom-icon-size;
+    }
+    &:first-child {
+      border-bottom: 1px solid @l7-btn-border-color;
+    }
+  }
+}

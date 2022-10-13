@@ -1,7 +1,8 @@
 import { pull } from 'lodash';
-import { $window, isMini } from './mini-adapter';
+import { $window } from './mini-adapter';
 
-type ELType = HTMLElement | SVGElement;
+export type ELType = HTMLElement | SVGElement;
+
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
   if (typeof domId === 'string') {
@@ -39,7 +40,9 @@ export function create(
   container?: HTMLElement,
 ) {
   const el = $window.document.createElement(tagName);
-  el.className = className || '';
+  if (className) {
+    el.className = className || '';
+  }
 
   if (container) {
     container.appendChild(el);
@@ -173,7 +176,7 @@ export function getViewPortScale() {
 export const DPR = getViewPortScale() < 1 ? 1 : $window.devicePixelRatio;
 
 export function addStyle(el: ELType, style: string) {
-  el.setAttribute('style', `${el.style}; ${style}`);
+  el.setAttribute('style', `${el.style.cssText}${style}`);
 }
 
 export function getStyleList(style: string): string[] {
@@ -187,5 +190,38 @@ export function removeStyle(el: ELType, style: string) {
   const oldStyleList = getStyleList(el.getAttribute('style') ?? '');
   const targetStyleList = getStyleList(style);
   const newStyleList = pull(oldStyleList, ...targetStyleList);
-  el.setAttribute('style', newStyleList.join('; '));
+  el.setAttribute('style', newStyleList.join(';'));
+}
+
+export function css2Style(obj: any) {
+  return Object.entries(obj)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(';');
+}
+
+export function getDiffRect(dom1Rect: any, dom2Rect: any) {
+  return {
+    left: dom1Rect.left - dom2Rect.left,
+    top: dom1Rect.top - dom2Rect.top,
+    right: dom2Rect.left + dom2Rect.width - dom1Rect.left - dom1Rect.width,
+    bottom: dom2Rect.top + dom2Rect.height - dom1Rect.top - dom1Rect.height,
+  };
+}
+
+export function setChecked(el: ELType, value: boolean) {
+  // @ts-ignore
+  el.checked = value;
+  if (value) {
+    el.setAttribute('checked', 'true');
+  } else {
+    el.removeAttribute('checked');
+  }
+}
+
+export function clearChildren(el: ELType) {
+  el.innerHTML = '';
+}
+
+export function setUnDraggable(el: ELType) {
+  el.setAttribute('draggable', 'false');
 }

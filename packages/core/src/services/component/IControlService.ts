@@ -42,9 +42,9 @@ export interface IControlServiceCfg {
 export interface IControlCorners {
   [key: string]: HTMLElement;
 }
-export interface IControl {
-  controlOption: IControlOption;
-  setOptions: (newOption: Partial<IControlOption>) => void;
+export interface IControl<O extends IControlOption = any> {
+  controlOption: O;
+  setOptions: (newOption: Partial<O>) => void;
   addTo(sceneContainer: Container): void;
   onAdd(): HTMLElement;
   onRemove(): void;

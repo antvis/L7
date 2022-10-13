@@ -776,6 +776,7 @@ export const WebGLRenderingContext = {
   TEXTURE_WRAP_S: 0x2802,
   TEXTURE_WRAP_T: 0x2803,
   TIMEOUT_EXPIRED_APPLE: 0x911b,
+  /* eslint-disable @typescript-eslint/no-loss-of-precision */
   TIMEOUT_IGNORED_APPLE: 0xffffffffffffffff,
   TRANSLATED_SHADER_SOURCE_LENGTH_ANGLE: 0x93a0,
   TRIANGLES: 0x4,

@@ -13,6 +13,7 @@ import { Version } from '@antv/l7-maps';
 import Source from '@antv/l7-source';
 import { isColor, normalize, rgb2arr } from '@antv/l7-utils';
 import { ILineLayerStyleOptions } from '../core/interface';
+import { cloneDeep } from 'lodash';
 
 function getArrowPoints(p1: Position, p2: Position) {
   const dir = [p2[0] - p1[0], p2[1] - p1[1]];
@@ -27,34 +28,44 @@ function getArrowPoints(p1: Position, p2: Position) {
 function adjustData2Amap2Coordinates(
   mappedData: IEncodeFeature[],
   mapService: IMapService,
+  layer: ILayer,
 ) {
   // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
   if (mappedData.length > 0 && mapService.version === Version['GAODE2.x']) {
+    const layerCenter = layer.coordCenter;
     if (typeof mappedData[0].coordinates[0] === 'number') {
       // 单个的点数据
       // @ts-ignore
       mappedData
-        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        // 避免经纬度被重复计算导致坐标位置偏移
         .filter((d) => !d.originCoordinates)
         .map((d) => {
           d.version = Version['GAODE2.x'];
           // @ts-ignore
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
           // @ts-ignore
-          d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
+          // d.coordinates = mapService.lngLatToCoord(d.coordinates);
+          d.coordinates = mapService.lngLatToCoordByLayer(
+            d.coordinates,
+            layerCenter,
+          );
         });
     } else {
       // 连续的线、面数据
       // @ts-ignore
       mappedData
-        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        // 避免经纬度被重复计算导致坐标位置偏移
         .filter((d) => !d.originCoordinates)
         .map((d) => {
           d.version = Version['GAODE2.x'];
           // @ts-ignore
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
           // @ts-ignore
-          d.coordinates = this.mapService.lngLatToCoords(d.coordinates);
+          // d.coordinates = mapService.lngLatToCoords(d.coordinates);
+          d.coordinates = mapService.lngLatToCoordsByLayer(
+            d.coordinates,
+            layerCenter,
+          );
         });
     }
   }
@@ -185,7 +196,7 @@ function mapping(
     return encodeRecord;
   }) as IEncodeFeature[];
   // 调整数据兼容 Amap2.0
-  adjustData2Amap2Coordinates(mappedData, mapService);
+  adjustData2Amap2Coordinates(mappedData, mapService, layer as ILayer);
 
   // 调整数据兼容 SimpleCoordinates
   adjustData2SimpleCoordinates(mappedData, mapService);

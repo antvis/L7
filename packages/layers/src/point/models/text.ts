@@ -231,6 +231,7 @@ export default class TextModel extends BaseModel {
       this.reBuildModel();
       return true;
     }
+    
     return false;
   }
 
@@ -253,9 +254,6 @@ export default class TextModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { rotate = 0 } = feature;
           return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
@@ -278,7 +276,6 @@ export default class TextModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[5], vertex[6]];
         },
@@ -300,9 +297,6 @@ export default class TextModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 12 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -310,14 +304,12 @@ export default class TextModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'textUv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_tex',
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -327,7 +319,6 @@ export default class TextModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number,
         ) => {
           return [vertex[3], vertex[4]];
         },
@@ -402,7 +393,7 @@ export default class TextModel extends BaseModel {
    * 生成文字布局（对照文字纹理字典提取对应文字的位置很好信息）
    */
   private generateGlyphLayout(iconfont: boolean) {
-    // TODO:更新文字布局
+    // 更新文字布局
     const { mapping } = this.fontService;
     const {
       spacing = 2,
@@ -483,7 +474,6 @@ export default class TextModel extends BaseModel {
         anchorPointY: pixels.y,
       });
       if (box && box.length) {
-        // TODO：featureIndex
         collisionIndex.insertCollisionBox(box, id);
         return true;
       } else {
@@ -546,7 +536,7 @@ export default class TextModel extends BaseModel {
       })
       .then((model) => {
         this.layer.models = [model];
-        this.layer.renderLayers();
+        this.layerService.throttleRenderLayers();
       })
       .catch((err) => {
         console.warn(err);

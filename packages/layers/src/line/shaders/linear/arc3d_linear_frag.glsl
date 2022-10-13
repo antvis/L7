@@ -6,9 +6,8 @@ uniform float u_blur : 0.9;
 varying float v_segmentIndex;
 uniform float segmentNumber;
 
-
 uniform float u_time;
-uniform vec4 u_aimate: [ 0, 2., 1.0, 0.2 ];
+uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 
 uniform float u_linearColor: 0;
 uniform vec4 u_sourceColor;
@@ -27,16 +26,16 @@ void main() {
 
   gl_FragColor.a *= opacity;
 
-  if(u_aimate.x == Animate) {
-      animateSpeed = u_time / u_aimate.y;
-      float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_aimate.z)* (1.0/ u_aimate.z) + u_time / u_aimate.y);
+  if(u_animate.x == Animate) {
+      animateSpeed = u_time / u_animate.y;
+      float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_animate.z)* (1.0/ u_animate.z) + u_time / u_animate.y);
 
-      alpha = (alpha + u_aimate.w -1.0) / u_aimate.w;
+      alpha = (alpha + u_animate.w -1.0) / u_animate.w;
       // alpha = smoothstep(0., 1., alpha);
       alpha = clamp(alpha, 0.0, 1.0);
       gl_FragColor.a *= alpha;
 
-      // u_aimate 
+      // u_animate 
       // x enable
       // y duration
       // z interval

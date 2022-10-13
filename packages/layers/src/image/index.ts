@@ -7,12 +7,13 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     const modelType = this.getModelType();
     this.layerModel = new ImageModels[modelType](this);
     this.layerModel.initModels((models) => {
-      this.models = models;
-      this.renderLayers();
+      this.dispatchModelLoad(models);
     });
   }
   public rebuildModels() {
-    this.layerModel.buildModels((models) => (this.models = models));
+    this.layerModel.buildModels((models) => {
+      this.dispatchModelLoad(models);
+    });
   }
   protected getConfigSchema() {
     return {
@@ -30,6 +31,7 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     const defaultConfig = {
       image: {},
       dataImage: {},
+      tileDataImage: {},
     };
     return defaultConfig[type];
   }
@@ -43,6 +45,8 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
       return 'dataImage';
     } else if (shape === 'image') {
       return 'image';
+    } else if (shape === 'tileDataImage') {
+      return 'tileDataImage';
     } else {
       return 'image';
     }

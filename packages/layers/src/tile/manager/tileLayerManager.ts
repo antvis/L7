@@ -1,121 +1,49 @@
 import {
   IInteractionTarget,
   ILayer,
-  ILayerService,
   IMapService,
   IPickingService,
   IRendererService,
   ISubLayerInitOptions,
   ITileLayerManager,
   ITilePickManager,
+  ITransform,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp, Tile } from '@antv/l7-utils';
-import { getTileFactory, ITileFactory, TileType } from '../tileFactory';
-import { getLayerShape, getMaskValue } from '../utils';
+import { TileManager } from './baseTileManager';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import { getLayerShape, getMaskValue, updateLayersConfig } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
-export class TileLayerManager implements ITileLayerManager {
-  public sourceLayer: string;
-  public parent: ILayer;
-  public children: ILayer[];
-  public mapService: IMapService;
-  public rendererService: IRendererService;
+export class TileLayerManager extends TileManager implements ITileLayerManager {
   public tilePickManager: ITilePickManager;
   public tileConfigManager: ITileConfigManager;
-  private tileFactory: ITileFactory;
-  private initOptions: ISubLayerInitOptions;
-  private rampColorsData: any;
+  private transforms: ITransform[];
   constructor(
     parent: ILayer,
     mapService: IMapService,
     rendererService: IRendererService,
     pickingService: IPickingService,
-    layerService: ILayerService,
+    transforms: ITransform[]
   ) {
+    super();
     this.parent = parent;
     this.children = parent.layerChildren;
     this.mapService = mapService;
     this.rendererService = rendererService;
+    this.transforms = transforms;
+
     this.tilePickManager = new TilePickManager(
       parent,
       rendererService,
       pickingService,
       this.children,
-      layerService,
     );
     this.tileConfigManager = new TileConfigManager();
 
-    this.setSubLayerInitOptipn();
+    this.setSubLayerInitOption();
     this.setConfigListener();
     this.initTileFactory();
-  }
-
-  public createTile(tile: Tile) {
-    return this.tileFactory.createTile(tile, this.initOptions);
-  }
-
-  public updateLayersConfig(layers: ILayer[], key: string, value: any) {
-    layers.map((layer) => {
-      if (key === 'mask') {
-        // Tip: 栅格瓦片生效、设置全局的 mask、瓦片被全局的 mask 影响
-        layer.style({
-          mask: value,
-        });
-      } else {
-        layer.updateLayerConfig({
-          [key]: value,
-        });
-      }
-    });
-  }
-
-  public addChild(layer: ILayer) {
-    this.children.push(layer);
-  }
-
-  public addChilds(layers: ILayer[]) {
-    this.children.push(...layers);
-  }
-
-  public removeChilds(layerIDList: string[], refresh = true) {
-    const remveLayerList: ILayer[] = [];
-    const cacheLayerList: ILayer[] = [];
-    this.children.filter((child) => {
-      layerIDList.includes(child.id)
-        ? remveLayerList.push(child)
-        : cacheLayerList.push(child);
-    });
-    remveLayerList.map((layer) => layer.destroy(refresh));
-    this.children = cacheLayerList;
-  }
-
-  public removeChild(layer: ILayer) {
-    const layerIndex = this.children.indexOf(layer);
-    if (layerIndex > -1) {
-      this.children.splice(layerIndex, 1);
-    }
-    layer.destroy();
-  }
-
-  public getChilds(layerIDList: string[]) {
-    return this.children.filter((child) => layerIDList.includes(child.id));
-  }
-
-  public getChild(layerID: string) {
-    return this.children.filter((child) => child.id === layerID)[0];
-  }
-
-  public clearChild() {
-    this.children.forEach((layer: any) => {
-      layer.destroy();
-    });
-
-    this.children.slice(0, this.children.length);
-  }
-
-  public hasChild(layer: ILayer) {
-    return this.children.includes(layer);
   }
 
   public render(): void {
@@ -127,7 +55,7 @@ export class TileLayerManager implements ITileLayerManager {
     return this.tilePickManager?.pickRender(this.children, target);
   }
 
-  private setSubLayerInitOptipn() {
+  private setSubLayerInitOption() {
     const {
       zIndex = 0,
       opacity = 1,
@@ -170,20 +98,18 @@ export class TileLayerManager implements ITileLayerManager {
     );
     const source = this.parent.getSource();
     const { coords } = source?.data?.tilesetOptions || {};
+    const parentParserType = source.getParserType();
 
     const layerShape = getLayerShape(this.parent.type, this.parent);
 
-    if (rampColors) {
-      // 构建统一的色带贴图
-      this.rampColorsData = generateColorRamp(rampColors as IColorRamp);
-    }
 
     this.initOptions = {
       layerType: this.parent.type,
+      transforms: this.transforms,
       shape: layerShape,
       zIndex,
       opacity,
-      sourceLayer,
+      sourceLayer: this.getSourceLayer(parentParserType, sourceLayer),
       coords,
       featureId,
       color: colorValue,
@@ -197,7 +123,6 @@ export class TileLayerManager implements ITileLayerManager {
       clampHigh,
       domain,
       rampColors,
-      rampColorsData: this.rampColorsData,
       // worker
       workerEnabled,
 
@@ -207,6 +132,18 @@ export class TileLayerManager implements ITileLayerManager {
       pixelConstantB,
       pixelConstantRGB,
     };
+    if (rampColors) {
+      // 构建统一的色带贴图
+      const { createTexture2D } = this.rendererService;
+      const imageData = generateColorRamp(rampColors as IColorRamp) as ImageData;
+      const colorTexture = createTexture2D({
+        data: imageData.data,
+        width: imageData.width,
+        height: imageData.height,
+        flipY: false,
+      });
+      this.initOptions.colorTexture = colorTexture;
+    }
   }
 
   private setConfigListener() {
@@ -303,25 +240,24 @@ export class TileLayerManager implements ITileLayerManager {
       // @ts-ignore
       const config = layerConfig[style];
       updateValue = config;
-      this.updateLayersConfig(this.children, style, config);
+      updateLayersConfig(this.children, style, config);
       if (style === 'rampColors' && config) {
-        this.rampColorsData = generateColorRamp(config as IColorRamp);
+        const { createTexture2D } = this.rendererService;
+        const imageData = generateColorRamp(config as IColorRamp) as ImageData;
+        this.initOptions.colorTexture = createTexture2D({
+          data: imageData.data,
+          width: imageData.width,
+          height: imageData.height,
+          flipY: false,
+        });
+        updateLayersConfig(this.children, 'colorTexture', this.initOptions.colorTexture);
       }
     }
     // @ts-ignore
     this.initOptions[style] = updateValue;
   }
 
-  private initTileFactory() {
-    const source = this.parent.getSource();
-    const TileFactory = getTileFactory(
-      this.parent.type as TileType,
-      source.parser,
-    );
-    this.tileFactory = new TileFactory({
-      parent: this.parent,
-      mapService: this.mapService,
-      rendererService: this.rendererService,
-    });
+  public destroy(): void {
+    this.tilePickManager.destroy();
   }
 }

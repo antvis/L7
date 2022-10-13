@@ -17,7 +17,7 @@ const getGlobalThis = (): any => {
 };
 l7globalThis = getGlobalThis();
 
-// TODO: 解决 gastby 服务端构建过程中没有 window 全局变量的问题
+// 解决 gastby 服务端构建过程中没有 window 全局变量的问题
 let globalWindow: Window & typeof l7globalThis;
 
 if (typeof window === 'undefined') {

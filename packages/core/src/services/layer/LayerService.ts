@@ -1,16 +1,17 @@
 import { $window, rgb2arr } from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
+import { throttle } from 'lodash';
 import 'reflect-metadata';
-import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
-import { IGlobalConfigService } from '../config/IConfigService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayerModel, ILayerService } from './ILayerService';
+import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 
 @injectable()
-export default class LayerService implements ILayerService {
+export default class LayerService extends EventEmitter<LayerServiceEvent>
+  implements ILayerService {
   // pickedLayerId 参数用于指定当前存在被选中的 layer
   public pickedLayerId: number = -1;
   public clock = new Clock();
@@ -38,8 +39,15 @@ export default class LayerService implements ILayerService {
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
+  public reRender = throttle(() => {
+    this.updateLayerRenderList();
+    this.renderLayers();
+  }, 32);
+
+  public throttleRenderLayers = throttle(() => {
+    this.renderLayers();
+  }, 16);
+
 
   public add(layer: ILayer) {
     if (this.sceneInited) {
@@ -48,6 +56,7 @@ export default class LayerService implements ILayerService {
 
     this.layers.push(layer);
     this.updateLayerRenderList();
+    this.emit('layerChange', this.layers);
   }
 
   public addMask(mask: ILayer) {
@@ -92,9 +101,9 @@ export default class LayerService implements ILayerService {
       this.layers.splice(layerIndex, 1);
     }
     if (refresh) {
-      this.updateLayerRenderList();
-      this.renderLayers();
+      this.throttleRenderLayers();
     }
+    this.emit('layerChange', this.layers);
   }
 
   public remove(layer: ILayer, parentLayer?: ILayer): void {
@@ -113,6 +122,7 @@ export default class LayerService implements ILayerService {
     this.updateLayerRenderList();
     layer.destroy();
     this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public removeAllLayers() {
@@ -157,18 +167,11 @@ export default class LayerService implements ILayerService {
       }
       layer.hooks.afterRender.call();
     }
-
-    // this.layerList.forEach((layer) => {
-    //   layer.hooks.beforeRenderData.call();
-    //   layer.hooks.beforeRender.call();
-    //   layer.render();
-    //   layer.hooks.afterRender.call();
-    // });
     this.alreadyInRendering = false;
   }
 
   public updateLayerRenderList() {
-    // TODO: 每次更新都是从 layers 重新构建
+    // Tip: 每次更新都是从 layers 重新构建
     this.layerList = [];
     this.layers
       .filter((layer) => layer.inited)
@@ -189,6 +192,7 @@ export default class LayerService implements ILayerService {
     this.layers = [];
     this.layerList = [];
     this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public startAnimate() {

@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.9.23",
+  "version": "2.9.32-alpha.4",
   "description": "three for L7 ",
   "keywords": [
     "3D",
@@ -11,7 +11,7 @@
   "license": "ISC",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "unpkg": "dist/l7-tree.js",
+  "unpkg": "dist/l7-three.min.js",
   "types": "es/index.d.ts",
   "directories": {
     "lib": "lib",
@@ -44,18 +44,15 @@
   },
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
-    "@antv/l7-core": "2.9.23",
-    "@antv/l7-layers": "2.9.23",
-    "@antv/l7-scene": "2.9.23",
+    "@antv/l7": "2.9.32-alpha.4",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",
-    "rollup": "^2.3.3",
-    "rollup-plugin-less": "^1.1.2",
-    "three": "^0.115.0"
+    "three": "0.115.0"
   },
   "devDependencies": {
-    "three": "^0.115.0"
+    "rollup": "^2.3.3",
+    "rollup-plugin-less": "^1.1.2"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {

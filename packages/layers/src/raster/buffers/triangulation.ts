@@ -1,8 +1,8 @@
-import { IEncodeFeature, IParseDataItem } from '@antv/l7-core';
+import { IParseDataItem } from '@antv/l7-core';
 // @ts-ignore
 import Martini from '@mapbox/martini';
 export function RasterTriangulation(parserData: IParseDataItem) {
-  const { coordinates, data, min, max, width, height } = parserData;
+  const { data,width, height } = parserData;
   const maxlength = Math.max(width, height);
   const gridSize = Math.pow(2, Math.ceil(Math.log2(maxlength))) + 1;
   const terrain = new Float32Array(gridSize * gridSize);

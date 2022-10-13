@@ -16,7 +16,7 @@ export default class Demo extends React.Component {
       }),
     });
 
-    const pointlayer = new PointLayer({})
+    const pointLayer = new PointLayer({})
       .source(
         [
           { lng: 121.61865234375, lat: 25.29437116258816 },
@@ -49,7 +49,7 @@ export default class Demo extends React.Component {
       .color('#f00')
       .size(20)
       .active(true);
-    const earthlayer = new EarthLayer()
+    const earthLayer = new EarthLayer()
       .source(
         'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ',
         {
@@ -60,7 +60,7 @@ export default class Demo extends React.Component {
       )
       .shape('base')
       .style({
-        globelOtions: {
+        globalOptions: {
           ambientRatio: 0.6, // 环境光
           diffuseRatio: 0.4, // 漫反射
           specularRatio: 0.1, // 高光反射
@@ -79,13 +79,13 @@ export default class Demo extends React.Component {
     const bloomLayer = new EarthLayer().color('#fff').shape('bloomSphere');
 
     scene.on('loaded', () => {
-      scene.addLayer(earthlayer);
-      scene.addLayer(pointlayer);
+      scene.addLayer(earthLayer);
+      scene.addLayer(pointLayer);
 
       scene.addLayer(atomLayer);
       scene.addLayer(bloomLayer);
 
-      earthlayer.setEarthTime(4.0);
+      earthLayer.setEarthTime(4.0);
     });
   }
 

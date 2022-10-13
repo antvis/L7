@@ -24,6 +24,7 @@ uniform vec2 u_offsets;
 
 uniform float u_blur : 0.0;
 uniform float u_raisingHeight: 0.0;
+uniform float u_heightfixed: 0.0;
 
 #pragma include "styleMapping"
 #pragma include "styleMappingCalOpacity"
@@ -129,7 +130,6 @@ void main() {
   // radius(16-bit)
   v_radius = newSize;
 
-  // TODO: billboard
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / newSize, u_blur);
@@ -164,16 +164,22 @@ void main() {
   vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
-  float raiseHeight = u_raisingHeight;
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-    float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
-    raiseHeight = u_raisingHeight * mapboxZoomScale;
+  float raisingHeight = u_raisingHeight;
+
+  if(u_heightfixed < 1.0) { // false
+    raisingHeight = project_pixel(u_raisingHeight);
+  } else {
+     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+      float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
+      raisingHeight = u_raisingHeight * mapboxZoomScale;
+    }
   }
+ 
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raiseHeight, 1.0);
+    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raisingHeight, 1.0);
   } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, u_raisingHeight, 1.0));
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
   }
  
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));

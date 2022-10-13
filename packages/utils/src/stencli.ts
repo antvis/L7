@@ -1,4 +1,4 @@
-// TODO: 提供模版配置
+// 提供模版配置
 export function getMask(mask: boolean, maskInside: boolean) {
   return {
     enable: mask,
