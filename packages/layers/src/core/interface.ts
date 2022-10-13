@@ -164,6 +164,7 @@ export interface IMaskLayerStyleOptions extends IBaseLayerStyleOptions {
   // define
   opacity: number;
   color: string;
+  sourceLayer?: string;
 }
 
 export interface IWindLayerStyleOptions extends IBaseLayerStyleOptions {

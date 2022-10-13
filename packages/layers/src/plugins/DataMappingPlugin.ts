@@ -281,7 +281,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       mappedData.length > 0 &&
       this.mapService.version === Version['GAODE2.x']
     ) {
-      const layerCenter = layer.coordCenter;
+      const layerCenter = layer.coordCenter || layer.getSource().center;
       if (typeof mappedData[0].coordinates[0] === 'number') {
         // 单个的点数据
         // @ts-ignore
