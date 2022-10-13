@@ -135,9 +135,25 @@ const size2 = sizeScale('n2'); // 20
 获取图例配置
 
 - type 图例类型
+- index 可选 默认
 
 ```javascript
 layer.getLegendItems('color');
 
 layer.getLegendItems('size');
+```
+
+### getLegend(type: string)
+获取图例 getLegendItems 加强版返回更多信息
+
+返回值
+- type 图例类型
+- field 映射字段
+- items 图例项
+
+
+```javascript
+layer.getLegend('color');
+
+layer.getLegend('size');
 ```

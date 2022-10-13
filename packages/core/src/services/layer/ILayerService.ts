@@ -31,6 +31,7 @@ import {
   IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
+  ScaleTypeName,
   StyleAttrField,
   StyleAttributeField,
   StyleAttributeOption,
@@ -107,6 +108,7 @@ export interface IActiveOption {
 type ILngLat = [number, number];
 
 export interface ILegend  {
+  type: ScaleTypeName | undefined
   field: StyleAttributeField | undefined;
   items:LegendItems
 }
@@ -243,6 +245,7 @@ export interface ITileLayerOPtions {
 
 export type LayerEventType =
   | 'inited'
+  | 'legend'
   | 'legend:color'
   | 'legend:size'
   | 'add'
@@ -388,8 +391,8 @@ export interface ILayer {
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
-  getLegendItems(name: string): LegendItems;
-  getLegend(name: string):ILegend
+  getLegendItems(name: string,index?: number): LegendItems;
+  getLegend(name: string):ILegend;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;

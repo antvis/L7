@@ -1082,7 +1082,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public getLegend(name: string): ILegend {
     const attribute = this.styleAttributeService.getLayerStyleAttribute(name);
+    const scales = attribute?.scale?.scalers || [];
+
     return {
+      type: scales[0].option?.type,
       field: attribute?.scale?.field,
       items: this.getLegendItems(name),
     };
