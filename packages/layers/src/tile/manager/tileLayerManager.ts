@@ -15,6 +15,7 @@ import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import { getLayerShape, getMaskValue, updateLayersConfig } from '../utils';
 import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
 import TilePickManager from './tilePickerManager';
+// TODO: 命名问题，基类和父类看不出关联性 tile-tilelayer 概念混淆
 export class TileLayerManager extends TileManager implements ITileLayerManager {
   public tilePickManager: ITilePickManager;
   public tileConfigManager: ITileConfigManager;

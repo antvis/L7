@@ -21,12 +21,12 @@ export default class RasterTile extends TileFactory {
     });
 
     const layer = this.createLayer({
-      L7Layer: ImageLayer,
+      L7Layer: ImageLayer, 
       tile,
       initOptions,
       source,
     });
-    layer.once('modelLoaded', () => {
+    layer.on('inited', () => {
       tile.layerLoad();
     })
     return {

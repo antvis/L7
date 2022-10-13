@@ -13,7 +13,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('UpdateStyleAttributePlugin', () => {
+    layer.hooks.init.tapPromise('UpdateStyleAttributePlugin', () => {
       this.initStyleAttribute(layer, { styleAttributeService });
     });
 
@@ -22,7 +22,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       if (
         layer.layerModelNeedUpdate ||
         layer.tileLayer ||
-        usage === 'basemap'
+        usage === 'basemap' // TODO: Chore 不走该流程 应从外部统一控制，而不是打补丁
       ) {
         return;
       }

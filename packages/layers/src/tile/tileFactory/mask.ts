@@ -30,7 +30,7 @@ export default class VectorMaskTile extends TileFactory {
       source: source as Source,
       needListen: false
     });
-    layer.once('modelLoaded', () => {
+    layer.on('inited', () => {
       tile.layerLoad();
     })
     return {

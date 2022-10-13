@@ -26,7 +26,7 @@ export default class TilePickManager extends EventEmitter
     this.pickingService = pickingService;
     this.children = children;
   }
-
+  // TODO:chore: 命名问题什么叫normal render
   /**
    *
    * @param layers

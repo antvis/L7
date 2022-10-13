@@ -167,6 +167,7 @@ export function tileAllLoad(tile: Tile, callback: () => void) {
   }, 36);
 }
 
+// TODO 类方法 不是util
 export function updateLayersConfig(layers: ILayer[], key: string, value: any) {
   layers.map((layer) => {
     if (key === 'mask') {
@@ -201,7 +202,6 @@ function updateImmediately(layers: ILayer[]) {
   });
   return immediately;
 }
-
 export function updateTileVisible(
   tile: Tile,
   layers: ILayer[],

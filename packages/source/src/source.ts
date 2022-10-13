@@ -75,7 +75,10 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     this.initCfg(cfg);
 
-    this.init();
+    this.init().then(()=>{
+      this.inited = true;
+      this.emit('inited')
+    });
   }
 
   public getClusters(zoom: number): any {
@@ -187,7 +190,10 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     this.dataArrayChanged = false;
     this.initCfg(options);
-    this.init();
+    this.init().then(()=>{
+      this.emit('sourceUpdate')
+    });
+
   }
 
   public destroy() {
@@ -199,7 +205,7 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset?.destroy();
   }
 
-  private handleData() {
+  private async handleData() {
     return new Promise((resolve, reject) => {
       try {
         this.excuteParser();
@@ -233,13 +239,10 @@ export default class Source extends EventEmitter implements ISource {
     }
   }
 
-  private init() {
+  private async init() {
     // this.hooks.init.call(this);
     this.inited = false;
-    this.handleData().then(() => {
-      this.inited = true;
-      this.emit('sourceUpdate');
-    });
+    await this.handleData();
   }
 
   /**

@@ -49,12 +49,23 @@ export default class LayerService implements ILayerService {
   
 
   public add(layer: ILayer) {
+    // if (this.sceneInited) {
+    //   layer.init();
+    // }
+    // todo 
     if (this.sceneInited) {
+      layer.on('inited',()=>{
+        this.updateLayerRenderList();
+        this.renderLayers();
+      })
       layer.init();
+      
     }
-
     this.layers.push(layer);
-    this.updateLayerRenderList();
+    
+    // this.updateLayerRenderList();
+
+   
   }
 
   public addMask(mask: ILayer) {
@@ -63,14 +74,15 @@ export default class LayerService implements ILayerService {
     }
   }
 
-  public initLayers() {
+  public async initLayers() {
     this.sceneInited = true;
-    this.layers.forEach((layer) => {
+    this.layers.forEach(async (layer) => {
       if (!layer.inited) {
-        layer.init();
+        await layer.init();
+        this.updateLayerRenderList();
       }
     });
-    this.updateLayerRenderList();
+   
   }
 
   public getSceneInited() {
@@ -134,7 +146,6 @@ export default class LayerService implements ILayerService {
     }
     this.alreadyInRendering = true;
     this.clear();
-
     for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
@@ -168,8 +179,7 @@ export default class LayerService implements ILayerService {
   public updateLayerRenderList() {
     // Tip: 每次更新都是从 layers 重新构建
     this.layerList = [];
-    this.layers
-      .filter((layer) => layer.inited)
+    this.layers.filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .sort((pre: ILayer, next: ILayer) => {
         // 根据 zIndex 对渲染顺序进行排序

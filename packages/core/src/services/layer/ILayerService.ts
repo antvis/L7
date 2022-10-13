@@ -1,5 +1,5 @@
 // @ts-ignore
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
+import { SyncBailHook, SyncHook, SyncWaterfallHook,AsyncSeriesBailHook } from '@antv/async-hook';
 import { IColorRamp, Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
@@ -282,7 +282,7 @@ export interface ILayer {
   encodeDataLength: number;
   pickedFeatureID: number | null;
   hooks: {
-    init: SyncBailHook;
+    init: AsyncSeriesBailHook;
     afterInit: SyncBailHook;
     beforeRenderData: SyncWaterfallHook;
     beforeRender: SyncBailHook;
@@ -354,7 +354,7 @@ export interface ILayer {
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ): void;
-  init(): ILayer;
+  init(): Promise<void>;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -607,7 +607,7 @@ export interface ILayerService {
   clear(): void;
   add(layer: ILayer): void;
   addMask(mask: ILayer): void;
-  initLayers(): void;
+  initLayers(): Promise<void>;
   startAnimate(): void;
   stopAnimate(): void;
   getSceneInited(): boolean;

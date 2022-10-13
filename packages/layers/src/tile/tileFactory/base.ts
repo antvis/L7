@@ -84,6 +84,7 @@ export default class TileFactory implements ITileFactory {
       let geofeatures = [];
       if(layerType === 'LineLayer' && shape === 'simple') {
         features.map(feature => {
+
           const cloneFeature = clone(feature);
           if(cloneFeature.geometry.type === 'MultiPolygon') {
             // @ts-ignore
@@ -190,7 +191,8 @@ export default class TileFactory implements ITileFactory {
 
       layer.addMaskLayer(masklayer);
     }
-    // regist layer
+  
+    // regist layer 
     registerLayers(this.parentLayer, layers);
 
     this.layers = [layer];
@@ -278,7 +280,7 @@ export default class TileFactory implements ITileFactory {
 
   protected emitEvent(layers: ILayer[], isVector?: boolean) {
     layers.map((layer) => {
-      layer.once('modelLoaded', () => {
+      layer.on('inited', () => {
         layer.on('click', (e) => {
           this.eventCache.click = 1;
           if (this.parentLayer.type === 'RasterLayer') {
@@ -390,6 +392,7 @@ export default class TileFactory implements ITileFactory {
     isVector?: boolean,
     tile?: any,
   ) {
+  
     if (isVector === false) {
       // raster tile get rgb
       // e.pickedColors = readPixel(e.x, e.y, this.rendererService);

@@ -25,8 +25,9 @@ export default class LayerModelPlugin implements ILayerPlugin {
   }
 
   public apply(layer: ILayer) {
-    layer.hooks.init.tap('LayerModelPlugin', () => {
-      layer.inited = true;
+    layer.hooks.init.tapPromise('LayerModelPlugin', () => {
+      // TODO
+      // layer.inited = true;
       layer.modelLoaded = false;
       const source = layer.getSource();
       if (source.inited) {

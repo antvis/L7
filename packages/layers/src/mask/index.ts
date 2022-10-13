@@ -24,7 +24,7 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
     };
   };
 
-  public init() {
+  public async init(): Promise<void> {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
 
@@ -95,10 +95,11 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
     }
 
     // 触发 init 生命周期插件
-    this.hooks.init.call();
+    await this.hooks.init.promise();
     this.hooks.afterInit.call();
-
-    return this;
+    this.inited = true;
+    this.emit('inited');
+    // TODO
   }
 
   public buildModels() {

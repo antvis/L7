@@ -10,7 +10,6 @@ import {
 import { Tile, TilesetManager } from '@antv/l7-utils';
 import { BaseMapTileLayerManager } from '../manager/baseMapTileLayerManager';
 import { debounce } from 'lodash';
-
 export default class BaseTileLayer implements IBaseTileLayer {
   public get children() {
     return this.tileLayerManager.children;

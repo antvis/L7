@@ -8,20 +8,28 @@ export default class DataSourcePlugin implements ILayerPlugin {
   protected mapService: IMapService;
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
-    layer.hooks.init.tap('DataSourcePlugin', () => {
+    layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
       let source = layer.getSource();
       if (!source) {
         // Tip: 用户没有传入 source 的时候使用图层的默认数据
         const { data, options } =
           layer.sourceOption || layer.defaultSourceConfig;
         source = new Source(data, options);
-        layer.setSource(source);
+        await new Promise((resolve) => {
+          source.on('inited', () => {
+            layer.setSource(source);
+            resolve(null);
+          });
+        });
       }
       if (source.inited) {
         this.updateClusterData(layer);
       } else {
-        source.once('sourceUpdate', () => {
-          this.updateClusterData(layer);
+        await new Promise((resolve) => {
+          source.on('inited', () => {
+            this.updateClusterData(layer);
+            resolve(null);
+          });
         });
       }
     });

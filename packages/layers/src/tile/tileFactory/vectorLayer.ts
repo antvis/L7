@@ -42,7 +42,7 @@ export default class VectorLayer extends BaseLayer<
   private pickedID: number | null = null;
 
 
-  public init() {
+  public async init(): Promise<void> {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
@@ -118,10 +118,18 @@ export default class VectorLayer extends BaseLayer<
     }
 
     // 触发 init 生命周期插件
-    this.hooks.init.call();
+    await this.hooks.init.promise();
+    this.inited = true;
     this.hooks.afterInit.call();
+    this.emit('inited', {
+      target: this,
+      type: 'inited',
+    });
+    this.emit('add', {
+      target: this,
+      type: 'add',
+    });
 
-    return this;
   }
 
   public renderModels(isPicking?: boolean) {
@@ -213,7 +221,6 @@ export default class VectorLayer extends BaseLayer<
       return pointFillModel;
     }
   }
-
   protected getConfigSchema() {
     return {
       properties: {

@@ -1,6 +1,7 @@
 import { TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
+export type SourceEventType = 'inited' | 'sourceUpdate'
 export interface IParserCfg {
   type: string;
   x?: string;
@@ -83,9 +84,9 @@ export interface ISource {
   ): void;
   destroy(): void;
   // Event
-  on(type: string, handler: (...args: any[]) => void): void;
-  off(type: string, handler: (...args: any[]) => void): void;
-  once(type: string, handler: (...args: any[]) => void): void;
+  on(type: SourceEventType | string, handler: (...args: any[]) => void): void;
+  off(type: SourceEventType | string, handler: (...args: any[]) => void): void;
+  once(type: SourceEventType | string, handler: (...args: any[]) => void): void;
 }
 export interface IRasterCfg {
   extent: [number, number, number, number];

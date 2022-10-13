@@ -29,7 +29,7 @@ export default class VectorPolygonTile extends TileFactory {
       vectorTileLayer,
       source: source as Source,
     });
-    layer.once('modelLoaded', () => {
+    layer.on('inited', () => {
       tile.layerLoad();
     })
     return {

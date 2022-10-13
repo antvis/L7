@@ -55,6 +55,7 @@ export default () => {
                         });
 
                     scene.addLayer(pointLayer);
+                    scene.render();
                 },
                 )
         })

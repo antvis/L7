@@ -314,9 +314,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       if (this.destroyed) {
         this.destroy();
       }
-
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
-      this.layerService.initLayers();
+      await this.layerService.initLayers();
       this.controlService.addControls();
       this.loaded = true;
       this.emit('loaded');
@@ -324,6 +323,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     }
 
     // 尝试初始化未初始化的图层
+    this.layerService.initLayers();
     this.layerService.updateLayerRenderList();
     this.layerService.renderLayers();
 

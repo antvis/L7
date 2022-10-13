@@ -28,7 +28,6 @@ export class TMSTileLayer extends BaseTileLayer {
           );
           tile.parentLayerIDList.push(this.parent.id);
           tile.layerIDList.push(...layerIDList);
-
           this.tileLayerManager.addChilds(layers);
           this.setPickState(layers);
         } else {
