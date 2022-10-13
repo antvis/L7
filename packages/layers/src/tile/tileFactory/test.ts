@@ -2,10 +2,7 @@ import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
-import VectorLayer from './vectorLayer';
-import {
-  registerLayers,
-} from '../utils';
+import VectorLayer from './layers/vectorLayer';
 
 export default class TestTile extends TileFactory {
   public parentLayer: ILayer;
@@ -71,13 +68,6 @@ export default class TestTile extends TileFactory {
     text.isTileLayer = true;
     line.isTileLayer = true;
 
-    registerLayers(this.parentLayer, [line, text]);
-    text.once('modelLoaded', () => {
-      tile.layerLoad();
-    })
-    line.once('modelLoaded', () => {
-      tile.layerLoad();
-    })
     return {
       layers: [line, text],
       layerIDList: [line.id, text.id],

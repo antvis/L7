@@ -12,21 +12,21 @@ import {
   IShaderModuleService,
   IStyleAttributeService,
 } from '@antv/l7-core';
-import BaseLayer from '../../core/BaseLayer';
+import BaseLayer from '../../../core/BaseLayer';
 import {
   ILineLayerStyleOptions,
   IPointLayerStyleOptions,
   IPolygonLayerStyleOptions,
   IMaskLayerStyleOptions,
-} from '../../core/interface';
-import lineFillModel from '../../line/models/tile';
-import lineSimpleModel from '../../line/models/simpleTileLine';
+} from '../../../core/interface';
+import lineFillModel from '../../../line/models/tile';
+import lineSimpleModel from '../../../line/models/simpleTileLine';
 
-import pointTextModel from '../../point/models/tileText';
-import pointFillModel from '../../point/models/tile';
-import polygonFillModel from '../../polygon/models/tile';
+import pointTextModel from '../../../point/models/tileText';
+import pointFillModel from '../../../point/models/tile';
+import polygonFillModel from '../../../polygon/models/tile';
 
-import maskModel from '../../mask/models/fill';
+import maskModel from '../../../mask/models/fill';
 
 type ILayerStyleOptions = IPolygonLayerStyleOptions & ILineLayerStyleOptions & IPointLayerStyleOptions & IMaskLayerStyleOptions;
 

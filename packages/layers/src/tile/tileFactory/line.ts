@@ -29,9 +29,6 @@ export default class VectorLineTile extends TileFactory {
       vectorTileLayer,
       source: source as Source,
     });
-    layer.once('modelLoaded', () => {
-      tile.layerLoad();
-    })
     return {
       layers: [layer],
       layerIDList: [layer.id],

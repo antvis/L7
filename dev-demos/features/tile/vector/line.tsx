@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Scene, LineLayer } from '@antv/l7';
 // @ts-ignore
-import { Mapbox } from '@antv/l7-maps';
+import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,10 +9,8 @@ export default () => {
     const scene = new Scene({
       id: 'line',
       stencil: true,
-      map: new Mapbox({
+      map: new Map({
         center: [121.268, 30.3628],
-        pitch: 0,
-        style: 'blank',
         zoom: 4,
       }),
     });

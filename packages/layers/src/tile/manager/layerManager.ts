@@ -6,18 +6,24 @@ import {
   IRendererService,
   ISubLayerInitOptions,
   ITileLayerManager,
-  ITilePickManager,
+  ITilePickService,
+  ITileRenderService,
   ITransform,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import { TileManager } from './baseTileManager';
+import { TileManager } from './base';
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
-import { getLayerShape, getMaskValue, updateLayersConfig } from '../utils';
-import TileConfigManager, { ITileConfigManager } from './tileConfigManager';
-import TilePickManager from './tilePickerManager';
+import { getLayerShape, getMaskValue } from '../utils';
+import { TileStyleService, ITileStyleService } from '../style/TileStyleService';
+import { TilePickService } from '../interaction/TilePickService';
+
+import { TileRenderService } from '../render/TileRenderService';
+import { styles, IStyles, Attributes } from '../style/constants';
+import { updateTexture, updateLayersConfig, setStyleAttributeField } from '../style/utils';
 export class TileLayerManager extends TileManager implements ITileLayerManager {
-  public tilePickManager: ITilePickManager;
-  public tileConfigManager: ITileConfigManager;
+  public tilePickService: ITilePickService;
+  public tileStyleService: ITileStyleService;
+  public tileRenderService: ITileRenderService
   private transforms: ITransform[];
   constructor(
     parent: ILayer,
@@ -33,13 +39,16 @@ export class TileLayerManager extends TileManager implements ITileLayerManager {
     this.rendererService = rendererService;
     this.transforms = transforms;
 
-    this.tilePickManager = new TilePickManager(
+    this.tileRenderService = new TileRenderService(rendererService);
+
+    this.tilePickService = new TilePickService(
       parent,
       rendererService,
       pickingService,
       this.children,
+      this.tileRenderService
     );
-    this.tileConfigManager = new TileConfigManager();
+    this.tileStyleService = new TileStyleService();
 
     this.setSubLayerInitOption();
     this.setConfigListener();
@@ -47,12 +56,12 @@ export class TileLayerManager extends TileManager implements ITileLayerManager {
   }
 
   public render(): void {
-    this.tileConfigManager?.checkConfig(this.parent);
-    this.tilePickManager?.normalRender(this.children);
+    this.tileStyleService.checkConfig(this.parent);
+    this.tileRenderService.render(this.children);
   }
 
   public pickLayers(target: IInteractionTarget) {
-    return this.tilePickManager?.pickRender(this.children, target);
+    return this.tilePickService.pick(this.children, target);
   }
 
   private setSubLayerInitOption() {
@@ -88,11 +97,11 @@ export class TileLayerManager extends TileManager implements ITileLayerManager {
       pixelConstantRGB = 0.1,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
-    const colorValue = this.tileConfigManager.getAttributeScale(
+    const colorValue = this.tileStyleService.getAttributeScale(
       this.parent,
       'color',
     );
-    const sizeValue = this.tileConfigManager.getAttributeScale(
+    const sizeValue = this.tileStyleService.getAttributeScale(
       this.parent,
       'size',
     );
@@ -146,92 +155,55 @@ export class TileLayerManager extends TileManager implements ITileLayerManager {
     }
   }
 
-  private setConfigListener() {
-    // RasterLayer PolygonLayer LineLayer PointLayer
-    // All Tile Layer Need Listen
-    this.tileConfigManager.setConfig('opacity', this.initOptions.opacity);
-    this.tileConfigManager.setConfig('zIndex', this.initOptions.zIndex);
-    this.tileConfigManager.setConfig('mask', this.initOptions.mask);
-
-    if (this.parent.type === 'RasterLayer') {
-      // Raster Tile Layer Need Listen
-      this.tileConfigManager.setConfig(
-        'rampColors',
-        this.initOptions.rampColors,
-      );
-      this.tileConfigManager.setConfig('domain', this.initOptions.domain);
-      this.tileConfigManager.setConfig('clampHigh', this.initOptions.clampHigh);
-      this.tileConfigManager.setConfig('clampLow', this.initOptions.clampLow);
-
-      this.tileConfigManager.setConfig(
-        'pixelConstant',
-        this.initOptions.pixelConstant,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantR',
-        this.initOptions.pixelConstantR,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantG',
-        this.initOptions.pixelConstantG,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantB',
-        this.initOptions.pixelConstantB,
-      );
-      this.tileConfigManager.setConfig(
-        'pixelConstantRGB',
-        this.initOptions.pixelConstantRGB,
-      );
-    } else {
-      // Vector Tile Layer Need Listen
-      this.tileConfigManager.setConfig('stroke', this.initOptions.stroke);
-      this.tileConfigManager.setConfig(
-        'strokeWidth',
-        this.initOptions.strokeWidth,
-      );
-      this.tileConfigManager.setConfig(
-        'strokeOpacity',
-        this.initOptions.strokeOpacity,
-      );
-      this.tileConfigManager.setConfig(
-        'color',
-        this.parent.getAttribute('color')?.scale,
-      );
-      this.tileConfigManager.setConfig(
-        'shape',
-        this.parent.getAttribute('shape')?.scale,
-      );
-      this.tileConfigManager.setConfig(
-        'size',
-        this.parent.getAttribute('size')?.scale,
-      );
+  private getInitOptionValue(field: string) {
+    switch(field) {
+      case 'color': return this.parent.getAttribute('color')?.scale;
+      case 'shape': return this.parent.getAttribute('shape')?.scale;
+      case 'size': return this.parent.getAttribute('size')?.scale;
+      // @ts-ignore
+      default: return this.initOptions[field];
     }
+  }
 
-    this.tileConfigManager.on('updateConfig', (updateConfigs) => {
+  private setInitOptionValue(field: string, value: any) {
+    // @ts-ignore
+    this.initOptions[field] = value;
+  }
+
+  private setConfigListener() {
+    const styleConfigs = styles[this.parent.type as IStyles] || [];
+    styleConfigs.map(style => {
+      this.tileStyleService.setConfig(style, this.getInitOptionValue(style));
+    })
+
+    this.tileStyleService.on('updateConfig', (updateConfigs) => {
       updateConfigs.map((key: string) => {
-        this.updateStyle(key);
-        return '';
+        return this.updateStyle(key);
       });
     });
   }
 
-  private updateStyle(style: string) {
-    let updateValue = null;
-    if (['size', 'color', 'shape'].includes(style)) {
+  private updateAttribute(style: string) {
+    if(Attributes.includes(style)) {
       const scaleValue = this.parent.getAttribute(style)?.scale;
       if (!scaleValue) {
         return;
       }
-      updateValue = scaleValue;
       this.children.map((child) => {
-        this.tileFactory.setStyleAttributeField(
+        return setStyleAttributeField(
           child,
+          this.parent,
           style as ScaleAttributeType,
           scaleValue,
         );
-        return '';
       });
+    }
+  }
+
+  private updateStyle(style: string) {
+    let updateValue = null;
+    if (Attributes.includes(style)) {
+      this.updateAttribute(style);
     } else {
       const layerConfig = this.parent.getLayerConfig() as ISubLayerInitOptions;
       if (!(style in layerConfig)) {
@@ -240,24 +212,20 @@ export class TileLayerManager extends TileManager implements ITileLayerManager {
       // @ts-ignore
       const config = layerConfig[style];
       updateValue = config;
-      updateLayersConfig(this.children, style, config);
-      if (style === 'rampColors' && config) {
-        const { createTexture2D } = this.rendererService;
-        const imageData = generateColorRamp(config as IColorRamp) as ImageData;
-        this.initOptions.colorTexture = createTexture2D({
-          data: imageData.data,
-          width: imageData.width,
-          height: imageData.height,
-          flipY: false,
-        });
-        updateLayersConfig(this.children, 'colorTexture', this.initOptions.colorTexture);
+      switch(style) {
+        case 'rampColors': 
+          const texture = updateTexture(config,  this.children, this.rendererService)
+          this.initOptions.colorTexture = texture;
+          break;
+        default: 
+          updateLayersConfig(this.children, style, config);
       }
     }
-    // @ts-ignore
-    this.initOptions[style] = updateValue;
+   
+    this.setInitOptionValue(style, updateValue);
   }
 
   public destroy(): void {
-    this.tilePickManager.destroy();
+    this.tilePickService.destroy();
   }
 }
