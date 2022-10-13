@@ -30,7 +30,7 @@ enum SelectControlConstant {
   OptionIndexAttrKey = 'data-option-index',
 }
 
-export default abstract class SelectControl<
+export default class SelectControl<
   O extends ISelectControlOption = ISelectControlOption
 > extends PopperControl<O> {
   /**
@@ -103,7 +103,9 @@ export default abstract class SelectControl<
    * 是否为多选
    * @protected
    */
-  protected abstract getIsMultiple(): boolean;
+  protected getIsMultiple() {
+    return false;
+  }
 
   protected getPopperContent(options: ControlOptionItem[]): HTMLElement {
     const isImageOptions = this.isImageOptions();

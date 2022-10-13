@@ -1,8 +1,6 @@
-import type {
-  IControlOption
-} from '@antv/l7-core';
 import {
   IControl,
+  IControlOption,
   IControlService,
   IGlobalConfigService,
   ILayerService,
@@ -22,7 +20,7 @@ export { PositionType } from '@antv/l7-core';
 
 export { Control, IControlOption };
 
-export default abstract class Control<O extends IControlOption = IControlOption>
+export default class Control<O extends IControlOption = IControlOption>
   extends EventEmitter<ControlEvent>
   implements IControl<O> {
   /**
@@ -142,12 +140,15 @@ export default abstract class Control<O extends IControlOption = IControlOption>
   /**
    * Control 被添加的时候被调用，返回 Control 对应的 DOM 容器
    */
-  public abstract onAdd(): HTMLElement;
+  public onAdd(): HTMLElement {
+    return DOM.create('div');
+  }
 
   /**
    * Control 被移除时调用
    */
-  public abstract onRemove(): void;
+  // tslint:disable-next-line:no-empty
+  public onRemove() {}
 
   /**
    * 显示控件时触发

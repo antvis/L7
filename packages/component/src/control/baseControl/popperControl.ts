@@ -25,7 +25,7 @@ const PopperPlacementMap: Record<PositionName, PopperPlacement> = {
   rightbottom: 'top-end',
 };
 
-export default abstract class PopperControl<
+export default class PopperControl<
   O extends IPopperControlOption = IPopperControlOption
 > extends ButtonControl<O> {
   /**

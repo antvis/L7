@@ -1,12 +1,13 @@
 import { PositionType } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
+import { ELType } from '@antv/l7-utils/src/dom';
 import { createL7Icon } from '../utils/icon';
 import { Control, IControlOption } from './baseControl';
 
 export interface IZoomControlOption extends IControlOption {
-  zoomInText: Element | string;
+  zoomInText: ELType | string;
   zoomInTitle: string;
-  zoomOutText: Element | string;
+  zoomOutText: ELType | string;
   zoomOutTitle: string;
 }
 
@@ -105,7 +106,7 @@ export default class Zoom extends Control<IZoomControlOption> {
   }
 
   private createButton(
-    html: Element | string,
+    html: ELType | string,
     tile: string,
     className: string,
     container: HTMLElement,

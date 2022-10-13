@@ -11,7 +11,7 @@ export interface IButtonControlOption extends IControlOption {
   vertical?: boolean;
 }
 
-export default abstract class ButtonControl<
+export default class ButtonControl<
   O extends IButtonControlOption = IButtonControlOption
 > extends Control<O> {
   /**
