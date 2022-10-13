@@ -165,6 +165,7 @@ export class TilesetManager extends EventEmitter {
     }
 
     while (abortCandidates.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const tile = abortCandidates.shift()!;
       tile.abortLoad();
     }

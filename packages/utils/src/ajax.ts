@@ -234,7 +234,7 @@ export const postData = (
   return makeRequest({ ...requestParameters, method: 'POST' }, callback);
 };
 
-function sameOrigin(url: string) {
+export function sameOrigin(url: string) {
   const a = $window.document.createElement('a');
   a.href = url;
   return (
