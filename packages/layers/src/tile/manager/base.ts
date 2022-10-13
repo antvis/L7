@@ -6,7 +6,7 @@ import {
   } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import { ITileFactory, getTileFactory, TileType } from '../tileFactory';
-// import { registerLayers } from '../utils';
+import { registerLayers } from '../utils';
 export class TileManager {
     public sourceLayer: string;
     public parent: ILayer;
@@ -19,7 +19,7 @@ export class TileManager {
     public createTile(tile: Tile) {
       const layerCollections = this.tileFactory.createTile(tile, this.initOptions);
       //  // regist layer
-      //  registerLayers(this.parent, layerCollections.layers);
+       registerLayers(this.parent, layerCollections.layers);
 
       layerCollections.layers.map(layer => {
         layer.once('modelLoaded', () => {

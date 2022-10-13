@@ -97,6 +97,7 @@ export class Base {
     });
 
     // 瓦片数据加载失败
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.tilesetManager.on('tile-error', (error, tile: Tile) => {
         // 将事件抛出，图层上可以监听使用
         this.tileError(error);

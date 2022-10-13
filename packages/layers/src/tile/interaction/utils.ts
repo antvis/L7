@@ -1,5 +1,5 @@
 import {
-    ILayer
+    ILayer,
   } from '@antv/l7-core';
 import { decodePickingColor } from '@antv/l7-utils';
 
@@ -11,7 +11,7 @@ export function clearPickState(layers: ILayer[]) {
         selectFeature(layer, new Uint8Array([0, 0, 0, 0]));
         layer.setCurrentSelectedId(null);
       });
-  }
+}
 
 export function setSelect(layers: ILayer[], pickedColors: any, renderList: ILayer[]) {
     const selectedId = decodePickingColor(pickedColors);
@@ -45,7 +45,7 @@ export function setSelect(layers: ILayer[], pickedColors: any, renderList: ILaye
         layer.setCurrentSelectedId(null);
       });
     return pickColor;
-  }
+}
 
 export function setHighlight(layers: ILayer[], pickedColors: any) {
     const pickId = decodePickingColor(pickedColors);

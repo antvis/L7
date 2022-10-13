@@ -3,9 +3,6 @@ import { Tile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
 import VectorLayer from './layers/vectorLayer';
-import {
-  registerLayers,
-} from '../utils';
 
 export default class TestTile extends TileFactory {
   public parentLayer: ILayer;
@@ -71,7 +68,6 @@ export default class TestTile extends TileFactory {
     text.isTileLayer = true;
     line.isTileLayer = true;
 
-    registerLayers(this.parentLayer, [line, text]);
     return {
       layers: [line, text],
       layerIDList: [line.id, text.id],

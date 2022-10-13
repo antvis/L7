@@ -3,18 +3,13 @@ import {
   IMapService,
   IParseDataItem,
   IRendererService,
-  IScaleValue,
   ISubLayerInitOptions,
-  ScaleAttributeType,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { osmLonLat2TileXY, Tile, TilesetManager } from '@antv/l7-utils';
-
-import {
-  getLayerShape,
-  readRasterValue,
-  registerLayers,
-} from '../utils';
+import { setStyleAttributeField, setScale } from '../style/utils';
+import { registerLayers } from '../utils';
+import { readRasterValue } from '../interaction/getRasterData';
 import VectorLayer from './layers/vectorLayer';
 
 import * as turf from '@turf/helpers';
@@ -72,6 +67,7 @@ export default class TileFactory implements ITileFactory {
   }
 
   public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
+ 
     const { sourceLayer, featureId, transforms = [], layerType, shape } = initOptions;
     if (!sourceLayer) {
       return EMPTY_FEATURE_DATA;
@@ -144,7 +140,6 @@ export default class TileFactory implements ITileFactory {
     });
 
     if(layerType) layer.type = layerType;
-
     // Tip: sign tile layer
     layer.isTileLayer = true; // vector 、raster
     
@@ -158,13 +153,13 @@ export default class TileFactory implements ITileFactory {
     layer.source(source);
 
     // set scale attribute field
-    this.setStyleAttributeField(layer, 'shape', shape);
+    setStyleAttributeField(layer, this.parentLayer, 'shape', shape);
     if(usage !== 'basemap') {
        // set scale
-      this.setScale(layer);
+      setScale(layer, this.parentLayer);
 
-      this.setStyleAttributeField(layer, 'color', color);
-      this.setStyleAttributeField(layer, 'size', size);
+      setStyleAttributeField(layer, this.parentLayer, 'color', color);
+      setStyleAttributeField(layer, this.parentLayer, 'size', size);
     } else {
       layer.style({
         color: basemapColor,
@@ -173,7 +168,6 @@ export default class TileFactory implements ITileFactory {
     }
 
     // set mask
-    const layers = [layer];
     if (mask && layer.isVector) {
       const masklayer = new VectorLayer({layerType: "MaskLayer"})
         .source({
@@ -186,12 +180,10 @@ export default class TileFactory implements ITileFactory {
           }
         });
 
-      layers.push(masklayer as VectorLayer);
+      registerLayers(this.parentLayer, [masklayer]);
 
       layer.addMaskLayer(masklayer);
     }
-    // regist layer
-    registerLayers(this.parentLayer, layers);
 
     this.layers = [layer];
 
@@ -201,68 +193,6 @@ export default class TileFactory implements ITileFactory {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public updateStyle(styles: ITileStyles) {
     return '';
-  }
-
-  public getDefaultStyleAttributeField(layer: ILayer, type: string) {
-    switch (type) {
-      case 'size':
-        return 1;
-      case 'color':
-        return '#fff';
-      case 'shape':
-        return getLayerShape(this.parentLayer.type, layer);
-      default:
-        return '';
-    }
-  }
-
-  public setStyleAttributeField(
-    layer: ILayer,
-    type: ScaleAttributeType,
-    value: IScaleValue | undefined | string | string[],
-  ) {
-    if (Array.isArray(value)) {
-      // @ts-ignore
-      layer[type](...value);
-      return;
-    }
-    if (typeof value === 'string') {
-      layer[type](value);
-      return;
-    }
-    const defaultValue = this.getDefaultStyleAttributeField(layer, type);
-    if (!value) {
-      layer[type](defaultValue);
-      return layer;
-    }
-    const params = this.parseScaleValue(value, type);
-    if (params.length === 0) {
-      layer[type](defaultValue);
-    } else {
-      // @ts-ignore
-      layer[type](...params);
-    }
-  }
-
-  protected parseScaleValue(value: IScaleValue | string, type: string) {
-    if (type === 'shape') {
-      if (typeof value === 'string') {
-        return [value];
-      } else if (value?.field) {
-        return [value?.field];
-      } else {
-        return [];
-      }
-    }
-    const { field, values, callback } = value as IScaleValue;
-    if (field && values && Array.isArray(values)) {
-      return [field, values];
-    } else if (field && callback) {
-      return [field, callback];
-    } else if (field) {
-      return [field];
-    }
-    return [];
   }
 
   protected getTile(lng: number, lat: number) {
@@ -407,14 +337,6 @@ export default class TileFactory implements ITileFactory {
       }
     }
     this.parentLayer.emit(eventName, e);
-  }
-
-  private setScale(layer: ILayer) {
-    const scaleOptions = this.parentLayer.tileLayer.scaleField;
-    const scaleKeys = Object.keys(scaleOptions);
-    scaleKeys.map((key) => {
-      layer.scale(key, scaleOptions[key]);
-    });
   }
 
   private getAllFeatures(featureId: number) {

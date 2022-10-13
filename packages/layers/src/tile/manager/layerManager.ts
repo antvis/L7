@@ -19,7 +19,7 @@ import { TilePickService } from '../interaction/TilePickService';
 
 import { TileRenderService } from '../render/TileRenderService';
 import { styles, IStyles, Attributes } from '../style/constants';
-import { updateTexture, updateLayersConfig } from '../style/utils';
+import { updateTexture, updateLayersConfig, setStyleAttributeField } from '../style/utils';
 export class TileLayerManager extends TileManager implements ITileLayerManager {
   public tilePickService: ITilePickService;
   public tileStyleService: ITileStyleService;
@@ -190,7 +190,7 @@ export class TileLayerManager extends TileManager implements ITileLayerManager {
         return;
       }
       this.children.map((child) => {
-        return this.tileStyleService.setStyleAttributeField(
+        return setStyleAttributeField(
           child,
           this.parent,
           style as ScaleAttributeType,
