@@ -3,7 +3,7 @@ import { Tile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import { registerLayers } from '../utils';
 import TileFactory from './base';
-import RasterDataLayer from './rasterDataLayer';
+import RasterDataLayer from './layers/rasterDataLayer';
 
 export default class RasterTiffTile extends TileFactory {
   public parentLayer: ILayer;

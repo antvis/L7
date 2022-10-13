@@ -15,7 +15,7 @@ import {
   readRasterValue,
   registerLayers,
 } from '../utils';
-import VectorLayer from './vectorLayer';
+import VectorLayer from './layers/vectorLayer';
 
 import * as turf from '@turf/helpers';
 import union from '@turf/union';

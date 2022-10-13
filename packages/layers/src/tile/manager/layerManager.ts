@@ -11,14 +11,15 @@ import {
   ITransform,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import { TileManager } from './baseTileManager';
+import { TileManager } from './base';
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
-import { getLayerShape, getMaskValue, updateLayersConfig } from '../utils';
+import { getLayerShape, getMaskValue } from '../utils';
 import { TileStyleService, ITileStyleService } from '../style/TileStyleService';
 import { TilePickService } from '../interaction/TilePickService';
 
 import { TileRenderService } from '../render/TileRenderService';
 import { styles, IStyles, Attributes } from '../style/constants';
+import { updateTexture, updateLayersConfig } from '../style/utils';
 export class TileLayerManager extends TileManager implements ITileLayerManager {
   public tilePickService: ITilePickService;
   public tileStyleService: ITileStyleService;
@@ -211,21 +212,16 @@ export class TileLayerManager extends TileManager implements ITileLayerManager {
       // @ts-ignore
       const config = layerConfig[style];
       updateValue = config;
-      updateLayersConfig(this.children, style, config);
-      if (style === 'rampColors' && config) {
-        const { createTexture2D } = this.rendererService;
-        const imageData = generateColorRamp(config as IColorRamp) as ImageData;
-        this.initOptions.colorTexture = createTexture2D({
-          data: imageData.data,
-          width: imageData.width,
-          height: imageData.height,
-          flipY: false,
-        });
-        updateLayersConfig(this.children, 'colorTexture', this.initOptions.colorTexture);
+      switch(style) {
+        case 'rampColors': 
+          const texture = updateTexture(config,  this.children, this.rendererService)
+          this.initOptions.colorTexture = texture;
+          break;
+        default: 
+          updateLayersConfig(this.children, style, config);
       }
     }
    
-
     this.setInitOptionValue(style, updateValue);
   }
 

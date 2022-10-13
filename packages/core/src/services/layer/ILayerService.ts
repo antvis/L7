@@ -213,7 +213,6 @@ export interface ITileLayerManager extends IBaseTileLayerManager{
 }
 
 export interface IBaseTileLayer {
-  type: string;
   sourceLayer: string;
   parent: ILayer;
   tileLayerManager: IBaseTileLayerManager;

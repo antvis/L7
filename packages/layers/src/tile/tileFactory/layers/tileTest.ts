@@ -1,6 +1,6 @@
-import BaseLayer from '../core/BaseLayer';
-import { IBaseLayerStyleOptions } from '../core/interface';
-import TileModel from './models/tileModel';
+import BaseLayer from '../../../core/BaseLayer';
+import { IBaseLayerStyleOptions } from '../../../core/interface';
+import TileModel from '../../models/tileModel';
 
 export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
   public type: string = 'TileDebugLayer';

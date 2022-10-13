@@ -28,6 +28,8 @@ export class TilePickService extends EventEmitter{
         this.children = children;
         this.tileRenderService = tileRenderService;
     }
+    
+
 
     public pick(layers: ILayer[], target: IInteractionTarget) {
         // Tip: 在进行拾取渲染的时候也需要先渲染一遍父组件然后再渲染子组件
@@ -87,34 +89,34 @@ export class TilePickService extends EventEmitter{
         }
         this.isLastPicked = isPicked;
         return isPicked;
-      }
-    
-      public clearPick() {
-        this.children
-          .filter((child) => child.inited && child.isVisible())
-          .map((layer) => {
-            layer.hooks.beforeSelect.call([0, 0, 0]);
-          });
-        this.pickingService.pickedTileLayers = [];
-      }
-    
-      public beforeHighlight(pickedColors: any) {
-        this.children
-          .filter((child) => child.inited && child.isVisible())
-          .map((child) => {
-            child.hooks.beforeHighlight.call(pickedColors);
-          });
-      }
-    
-      public beforeSelect(pickedColors: any) {
-        this.children
-          .filter((child) => child.inited && child.isVisible())
-          .map((layer) => {
-            layer.hooks.beforeSelect.call(pickedColors);
-          });
-      }
+    }
+  
+    public clearPick() {
+      this.children
+        .filter((child) => child.inited && child.isVisible())
+        .map((layer) => {
+          layer.hooks.beforeSelect.call([0, 0, 0]);
+        });
+      this.pickingService.pickedTileLayers = [];
+    }
+  
+    public beforeHighlight(pickedColors: any) {
+      this.children
+        .filter((child) => child.inited && child.isVisible())
+        .map((child) => {
+          child.hooks.beforeHighlight.call(pickedColors);
+        });
+    }
+  
+    public beforeSelect(pickedColors: any) {
+      this.children
+        .filter((child) => child.inited && child.isVisible())
+        .map((layer) => {
+          layer.hooks.beforeSelect.call(pickedColors);
+        });
+    }
 
-      public destroy(): void {
-        this.removeAllListeners();
-      }
+    public destroy(): void {
+      this.removeAllListeners();
+    }
 }

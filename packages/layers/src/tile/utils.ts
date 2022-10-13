@@ -7,6 +7,7 @@ import {
 } from '@antv/l7-core';
 import { DOM, Tile } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import { updateLayersConfig } from './style/utils';
 
 export const tileVectorParser = ['mvt', 'geojsonvt', 'testTile'];
 
@@ -165,21 +166,6 @@ export function tileAllLoad(tile: Tile, callback: () => void) {
       window.clearInterval(timer);
     }
   }, 36);
-}
-
-export function updateLayersConfig(layers: ILayer[], key: string, value: any) {
-  layers.map((layer) => {
-    if (key === 'mask') {
-      // Tip: 栅格瓦片生效、设置全局的 mask、瓦片被全局的 mask 影响
-      layer.style({
-        mask: value,
-      });
-    } else {
-      layer.updateLayerConfig({
-        [key]: value,
-      });
-    }
-  });
 }
 
 function dispatchTileVisibleChange(tile: Tile, callback: () => void) {

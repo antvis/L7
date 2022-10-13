@@ -2,7 +2,7 @@ import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
-import VectorLayer from './vectorLayer';
+import VectorLayer from './layers/vectorLayer';
 import {
   registerLayers,
 } from '../utils';
