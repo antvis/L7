@@ -83,7 +83,7 @@ export default class BaseTileLayer implements ITileLayer {
 
   public clearPick(type: string) {
     if (type === 'mousemove') {
-      this.tileLayerManager.tilePickManager.clearPick();
+      this.tileLayerManager.tilePickService.clearPick();
     }
   }
 
@@ -155,7 +155,7 @@ export default class BaseTileLayer implements ITileLayer {
   }
 
   private bindSubLayerPick() {
-    this.tileLayerManager.tilePickManager.on('pick', (e) => {
+    this.tileLayerManager.tilePickService.on('pick', (e) => {
       // @ts-ignore
       const [r, g, b] = e.pickedColors;
 
@@ -171,7 +171,7 @@ export default class BaseTileLayer implements ITileLayer {
       }
     });
 
-    this.tileLayerManager.tilePickManager.on('unpick', () => {
+    this.tileLayerManager.tilePickService.on('unpick', () => {
       this.pickColors.active = null;
     });
   }

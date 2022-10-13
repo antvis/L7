@@ -172,17 +172,6 @@ export interface ISubLayerInitOptions {
   workerEnabled?: boolean;
 }
 
-export interface ITilePickManager {
-  isLastPicked: boolean;
-  on(type: string, cb: (option: any) => void): void;
-  normalRender(layers: ILayer[]): void;
-  beforeHighlight(pickedColors: any): void;
-  beforeSelect(pickedColors: any): void;
-  clearPick(): void;
-  pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
-  destroy(): void;
-}
-
 export interface IBaseTileLayerManager {
   sourceLayer: string;
   parent: ILayer;
@@ -201,8 +190,24 @@ export interface IBaseTileLayerManager {
   destroy(): void;
 }
 
+export interface ITileRenderService {
+  render(layers: ILayer[]): void;
+  renderMask(layers: ILayer): void;
+}
+
+export interface ITilePickService {
+  isLastPicked: boolean;
+  on(type: string, cb: (option: any) => void): void;
+  beforeHighlight(pickedColors: any): void;
+  beforeSelect(pickedColors: any): void;
+  clearPick(): void;
+  pick(layers: ILayer[], target: IInteractionTarget): boolean;
+  destroy(): void;
+}
+
+
 export interface ITileLayerManager extends IBaseTileLayerManager{
-  tilePickManager: ITilePickManager;
+  tilePickService: ITilePickService;
   pickLayers(target: IInteractionTarget): boolean;
   destroy(): void;
 }
