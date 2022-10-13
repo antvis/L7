@@ -22,7 +22,7 @@ const MAX_CANVAS_WIDTH = 1024;
 const BASELINE_SCALE = 1.0;
 const HEIGHT_SCALE = 1.0;
 const CACHE_LIMIT = 3;
-const VALID_PROPS = [
+export const VALID_PROPS = [
   'fontFamily',
   'fontWeight',
   'characterSet',

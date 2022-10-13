@@ -19,9 +19,6 @@ interface IConfigToUpdate {
   textOffset?: any;
 }
 
-// 画布默认的宽度
-const WIDTH = 1024;
-
 /**
  * 当 style 中使用的 opacity 不是常数的时候根据数据进行映射
  * @param field

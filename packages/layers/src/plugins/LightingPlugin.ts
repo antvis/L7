@@ -82,7 +82,7 @@ export function generateLightingUniforms(
   if (!lights || !lights.length) {
     lights = [DEFAULT_LIGHT];
   }
-  lights.forEach(({ type = 'directional', ...rest }, i) => {
+  lights.forEach(({ type = 'directional', ...rest }) => {
     const lightsUniformName = lightTypeUniformMap[type].lights;
     const lightsNumUniformName = lightTypeUniformMap[type].num;
 

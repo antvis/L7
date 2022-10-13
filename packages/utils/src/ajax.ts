@@ -55,6 +55,7 @@ export class AJAXError extends Error {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function makeFetchRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,

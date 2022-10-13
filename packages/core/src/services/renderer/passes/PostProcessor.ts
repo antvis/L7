@@ -51,7 +51,7 @@ export default class PostProcessor implements IPostProcessor {
    */
   public getReadFBOTex() {
     const { useFramebuffer } = this.rendererService;
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       useFramebuffer(this.readFBO, async () => {
         resolve(this.getCurrentFBOTex());
       });

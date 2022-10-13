@@ -9,6 +9,7 @@ export function greatCircleLineAtOffset(
   offset: number,
   thetaOffset: number | undefined,
   mapVersion: Version | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   segmentNumber: number = 30,
   autoFit: boolean,
 ) {

@@ -79,7 +79,7 @@ export default class PickingService implements IPickingService {
     box: [number, number, number, number],
     cb: (...args: any[]) => void,
   ): Promise<any> {
-    const { useFramebuffer, clear, getContainer } = this.rendererService;
+    const { useFramebuffer, clear } = this.rendererService;
     this.resizePickingFBO();
     useFramebuffer(this.pickingFBO, () => {
       clear({
