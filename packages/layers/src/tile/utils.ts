@@ -5,6 +5,11 @@ import { updateLayersConfig } from './style/utils';
 
 export const tileVectorParser = ['mvt', 'geojsonvt', 'testTile'];
 
+export function isTileLayer(layer: ILayer) {
+  const source = layer.getSource();
+  return tileVectorParser.includes(source.parser.type)
+}
+
 export function isVectorTile(parserType: string) {
   return tileVectorParser.indexOf(parserType) >= 0;
 }
