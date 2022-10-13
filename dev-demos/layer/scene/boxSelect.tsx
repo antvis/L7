@@ -15,7 +15,6 @@ const Demo: FunctionComponent = () => {
         pitch: 0,
         zoom: 15,
       }),
-      selectBoxClassName: 'l7-test-class',
       // logoVisible: false,
     });
 

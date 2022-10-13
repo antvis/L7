@@ -98,9 +98,7 @@ class Scene
       TYPES.IInteractionService,
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
-    this.boxSelect = new BoxSelect(this, {
-      className: config.selectBoxClassName,
-    });
+    this.boxSelect = new BoxSelect(this, {});
 
     if (isMini) {
       this.sceneService.initMiniScene(config);
@@ -256,7 +254,6 @@ class Scene
    * @param name
    */
   public addIconFont(name: string, fontUnicode: string): void {
-   
     this.fontService.addIconFont(name, fontUnicode);
   }
 
@@ -271,8 +268,8 @@ class Scene
    * @param fontPath
    */
   public addFontFace(fontFamily: string, fontPath: string): void {
-    this.fontService.once('fontloaded', (e)=>{
-      this.emit('fontloaded',e)
+    this.fontService.once('fontloaded', (e) => {
+      this.emit('fontloaded', e);
     });
     this.fontService.addFontFace(fontFamily, fontPath);
   }
@@ -359,7 +356,6 @@ class Scene
       ? this.mapService.on(type, handle)
       : this.sceneService.emit(type, handle);
   }
-
 
   public off(type: string, handle: (...args: any[]) => void): void {
     if (BoxSelectEventList.includes(type)) {
