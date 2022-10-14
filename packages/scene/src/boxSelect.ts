@@ -1,8 +1,6 @@
-import { DOM } from '@antv/l7-utils';
+import { DOM, getBBoxFromPoints } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Scene } from './index';
-import bbox from '@turf/bbox';
-import { featureCollection, lineString } from '@turf/helpers';
 
 export const BoxSelectEventList = ['selectstart', 'selecting', 'selectend'];
 
@@ -116,13 +114,9 @@ export default class BoxSelect extends EventEmitter {
     const {
       lngLat: { lng: lng2, lat: lat2 },
     } = this.endEvent;
-    return bbox(
-      featureCollection([
-        lineString([
-          [lng1, lat1],
-          [lng2, lat2],
-        ]),
-      ]),
-    );
+    return getBBoxFromPoints([
+      [lng1, lat1],
+      [lng2, lat2],
+    ]);
   }
 }
