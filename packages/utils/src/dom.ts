@@ -162,7 +162,7 @@ export function getViewPortScale() {
   }
   const contentItems = (meta as any).content?.split(',');
   const scale = contentItems.find((item: string) => {
-    const [key, value] = item.split('=');
+    const [key] = item.split('=');
     return key === 'initial-scale';
   });
   return scale ? scale.split('=')[1] * 1 : 1;

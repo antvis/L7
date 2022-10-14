@@ -15,7 +15,7 @@ export default class ReglFramebuffer implements IFramebuffer {
   private framebuffer: regl.Framebuffer;
 
   constructor(reGl: regl.Regl, options: IFramebufferInitializationOptions) {
-    const { width, height, color, colors, depth, stencil } = options;
+    const { width, height, color, colors } = options;
 
     const framebufferOptions: regl.FramebufferOptions = {
       width,

@@ -56,6 +56,7 @@ export interface ICellProperty {
   count: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class BaseModel<ChildLayerStyleOptions = {}>
   implements ILayerModel {
   public triangulation: Triangulation;

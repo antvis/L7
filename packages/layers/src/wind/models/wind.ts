@@ -123,7 +123,6 @@ export default class WindModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
         blend: this.getBlend(),
-        pick: false,
       })
       .then((model) => {
         this.colorModel = model;

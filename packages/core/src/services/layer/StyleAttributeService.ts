@@ -151,6 +151,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
               vertexIdx++
             ) {
               const normal = normals
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 ? normals!.slice(vertexIdx * 3, vertexIdx * 3 + 3)
                 : [];
               featureData.push(
@@ -222,6 +223,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
             (descriptor: IVertexAttributeDescriptor, attributeIdx: number) => {
               if (descriptor) {
                 // IAttribute 参数透传
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { buffer, update, name, ...rest } = descriptor;
 
                 const vertexAttribute = createAttribute({
@@ -282,8 +284,10 @@ export default class StyleAttributeService implements IStyleAttributeService {
     });
     let verticesNum = 0;
     let vecticesCount = 0; // 在不使用 element 的时候记录顶点、图层所有顶点的总数
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const vertices: number[] = [];
     const indices: number[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const normals: number[] = [];
     let size = 3;
     features.forEach((feature, featureIdx) => {
@@ -336,7 +340,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         if (indexes && indexes[vertexIdx] !== undefined) {
           vertexIndex = indexes[vertexIdx];
         }
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
             (descriptor.buffer.data as number[]).push(
@@ -366,6 +370,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     descriptors.forEach((descriptor, attributeIdx) => {
       if (descriptor) {
         // IAttribute 参数透传
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { buffer, update, name, ...rest } = descriptor;
 
         const vertexAttribute = createAttribute({
@@ -460,7 +465,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         if (indexes && indexes[vertexIdx] !== undefined) {
           vertexIndex = indexes[vertexIdx];
         }
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
             (descriptor.buffer.data as number[]).push(
@@ -486,6 +491,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     descriptors.forEach((descriptor, attributeIdx) => {
       if (descriptor) {
         // IAttribute 参数透传
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { buffer, update, name, ...rest } = descriptor;
 
         const vertexAttribute = createAttribute({

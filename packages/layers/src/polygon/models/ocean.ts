@@ -60,7 +60,6 @@ export default class OceanModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        pick: false,
       })
       .then((model) => {
         callbackModel([model]);

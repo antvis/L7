@@ -64,10 +64,6 @@ export default class TestTile extends TileFactory {
       color: '#000'
     });
 
-    // Tip: sign tile layer
-    text.isTileLayer = true;
-    line.isTileLayer = true;
-
     return {
       layers: [line, text],
       layerIDList: [line.id, text.id],

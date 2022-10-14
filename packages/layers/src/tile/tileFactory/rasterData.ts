@@ -51,8 +51,7 @@ export default class RasterTiffTile extends TileFactory {
         clampHigh,
         clampLow,
       });
-    this.emitEvent([layer], false);
-
+      this.emitRasterEvent([layer]);
     return {
       layers: [layer],
       layerIDList: [layer.id],

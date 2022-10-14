@@ -211,7 +211,6 @@ export default class ThreeJSLayer
   }
 
   public renderAMapModels() {
-    const gl = this.rendererService.getGLContext();
     // gl.frontFace(gl.CCW);
     // gl.enable(gl.CULL_FACE);
     // gl.cullFace(gl.BACK);
@@ -236,6 +235,7 @@ export default class ThreeJSLayer
     this.animateMixer.push(mixer);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setBottomColor(color: string): void {
     console.warn('empty function');
   }
