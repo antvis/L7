@@ -63,8 +63,7 @@ export default class TileFactory implements ITileFactory {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
     return {
-      layers: [] as ILayer[],
-      layerIDList: [] as string[],
+      layers: [] as ILayer[]
     };
   }
 

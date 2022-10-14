@@ -26,7 +26,6 @@ export default class RasterTiffTile extends TileFactory {
       console.warn('raster data not exist!');
       return {
         layers: [],
-        layerIDList: [],
       };
     }
     const dataType = this.parentLayer?.getSource()?.parser?.dataType;
@@ -53,7 +52,6 @@ export default class RasterTiffTile extends TileFactory {
       this.emitRasterEvent([layer]);
     return {
       layers: [layer],
-      layerIDList: [layer.id],
     };
   }
 }

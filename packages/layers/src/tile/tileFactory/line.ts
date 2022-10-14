@@ -19,7 +19,6 @@ export default class VectorLineTile extends TileFactory {
     if (features.length === 0) {
       return {
         layers: [],
-        layerIDList: [],
       };
     }
 
@@ -30,8 +29,7 @@ export default class VectorLineTile extends TileFactory {
       source: source as Source,
     });
     return {
-      layers: [layer],
-      layerIDList: [layer.id],
+      layers: [layer]
     };
   }
 }

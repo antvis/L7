@@ -17,7 +17,6 @@ export default class TestTile extends TileFactory {
     if (!sourceLayer) {
       return {
         layers: [],
-        layerIDList: [],
       };
     }
     const vectorTileLayer = tile.data.layers[sourceLayer];
@@ -26,7 +25,6 @@ export default class TestTile extends TileFactory {
     if (features.length === 0) {
       return {
         layers: [],
-        layerIDList: [],
       };
     }
     
@@ -66,7 +64,6 @@ export default class TestTile extends TileFactory {
 
     return {
       layers: [line, text],
-      layerIDList: [line.id, text.id],
     };
   }
 }

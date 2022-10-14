@@ -19,7 +19,6 @@ export default class VectorPolygonTile extends TileFactory {
     if (features.length === 0) {
       return {
         layers: [],
-        layerIDList: [],
       };
     }
 
@@ -31,7 +30,6 @@ export default class VectorPolygonTile extends TileFactory {
     });
     return {
       layers: [layer],
-      layerIDList: [layer.id],
     };
   }
 }
