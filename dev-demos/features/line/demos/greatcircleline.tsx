@@ -76,7 +76,7 @@ export default () => {
         // thetaOffset: 0.5,
       });
 
-    source.on('sourceUpdate', () => {
+    source.on('update', () => {
       // console.log(scene.getMapService().version)
       // const midPoints = lineAtOffset(source, 0.3, 'arc', 'offset');
       const midPoints = lineAtOffset(source, {

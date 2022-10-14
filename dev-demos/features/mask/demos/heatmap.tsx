@@ -68,7 +68,7 @@ export default () => {
     .shape('circle')
     .size(20)
     .color('#f00');
-    // scene.addLayer(point)
+    scene.addLayer(point)
 
     scene.on('loaded', () => {
       // const point = new PointLayer({
@@ -90,7 +90,7 @@ export default () => {
       // .size(20)
       // .color('#f00');
       // scene.addLayer(point)
-
+      // point.on('update', ( ) =>point.renderLayers())
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
       )
@@ -145,6 +145,12 @@ export default () => {
               },
             });
             scene.addLayer(heatmapLayer);
+
+            // scene.render()
+            // setTimeout(() =>{
+            //   scene.render();
+            // }, 1000)
+            // console.log('rrr')
           
         });
     });

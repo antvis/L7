@@ -25,11 +25,8 @@ export default class DataSourcePlugin implements ILayerPlugin {
       if (source.inited) {
         this.updateClusterData(layer);
       } else {
-        await new Promise((resolve) => {
-          source.on('inited', () => {
-            this.updateClusterData(layer);
-            resolve(null);
-          });
+        source.once('update', () => {
+          this.updateClusterData(layer);
         });
       }
     });

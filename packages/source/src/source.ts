@@ -240,9 +240,11 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private async init() {
-    // this.hooks.init.call(this);
     this.inited = false;
-    await this.handleData();
+    this.handleData().then(() => {
+      this.inited = true;
+      this.emit('update');
+    });
   }
 
   /**

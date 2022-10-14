@@ -106,27 +106,6 @@ protected setupShaders() {
 }
 ```
 
-### 配置项校验服务
-
-开发者不需要显式调用该服务。
-
-Layer 子类可以通过重载 `getConfigSchema()` 方法定义自身的特有属性。例如 `PolygonLayer` 需要定义透明度，详见[ConfigSchemaValidation 使用方法](ConfigSchemaValidation.md)：
-```typescript
-protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-```
-
-以上就是供开发者使用的常见全局服务，下面我们将介绍场景容器及其内部服务。
-
 ## Scene 容器
 
 场景可以承载多个图层，与地图底图一一对应。每个场景都有自己独立的容器确保多个场景间服务不会互相干扰，同时继承全局容器以便访问全局服务。容器内服务包括：

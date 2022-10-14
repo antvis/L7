@@ -223,18 +223,6 @@ export default class SpriteModel extends BaseModel {
     }
   }
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
   protected registerBuiltinAttributes() {
     return '';
   }

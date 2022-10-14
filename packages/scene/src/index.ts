@@ -175,32 +175,39 @@ class Scene
     layer.setContainer(layerContainer, this.container);
     this.sceneService.addLayer(layer);
 
-    const layerConfig = layer.getLayerConfig();
-    if (layerConfig) {
-      // 若 layer 未初始化成功，则 layerConfig 为 undefined （scene loaded 尚未执行完成）
-      const {
-        mask,
-        maskfence,
-        maskColor = '#000',
-        maskOpacity = 0,
-      } = layerConfig;
-      if (mask && maskfence) {
-        const maskInstance = new MaskLayer()
-          .source(maskfence)
-          .shape('fill')
-          .style({
-            color: maskColor,
-            opacity: maskOpacity,
-          });
-
-        this.addMask(maskInstance, layer.id);
-      }
+    // mask 在 scene loaded 之后执行
+    if (layer.inited) {
+      const maskInstance = this.initMask(layer);
+      this.addMask(maskInstance as ILayer, layer.id);
     } else {
-      console.warn('addLayer should run after scene loaded!');
+      layer.on('inited', () => {
+        const maskInstance = this.initMask(layer);
+        this.addMask(maskInstance as ILayer, layer.id);
+      })
     }
   }
 
+  public initMask(layer: ILayer) {
+    const {
+      mask,
+      maskfence,
+      maskColor = '#000',
+      maskOpacity = 0,
+    }  = layer.getLayerConfig();
+    if(!mask) return undefined;
+
+    const maskInstance = new MaskLayer()
+    .source(maskfence)
+    .shape('fill')
+    .style({
+      color: maskColor,
+      opacity: maskOpacity,
+    });
+    return maskInstance;
+  }
+
   public addMask(mask: ILayer, layerId: string) {
+    if(!mask) return;
     const parent = this.getLayer(layerId);
     if (parent) {
       const layerContainer = createLayerContainer(this.container);

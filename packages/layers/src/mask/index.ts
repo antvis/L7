@@ -114,17 +114,6 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
       this.dispatchModelLoad(models);
     });
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
 
   protected getModelType(): MaskModelType {
     const parserType = this.layerSource.getParserType();

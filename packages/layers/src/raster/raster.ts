@@ -66,17 +66,6 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
 
     return this;
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
 
   private buildRasterModel() {
     const source = this.getSource();
