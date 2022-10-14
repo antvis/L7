@@ -157,9 +157,6 @@ export default class ImageModel extends BaseModel {
         size: 2,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const iconMap = this.iconService.getIconMap();
           const { shape } = feature;

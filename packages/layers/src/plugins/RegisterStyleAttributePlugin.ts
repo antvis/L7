@@ -8,6 +8,7 @@ import {
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
+import { isTileGroup } from '../tile/utils';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
@@ -21,6 +22,9 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tapPromise('RegisterStyleAttributePlugin', () => {
+      // 过滤 tileGroup layer （瓦片图层不需要注册）
+      if (isTileGroup(layer)) return;
+
       this.registerBuiltinAttributes(styleAttributeService, layer);
     });
   }
@@ -29,23 +33,15 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     styleAttributeService: IStyleAttributeService,
     layer: ILayer,
   ) {
-    // 过滤 tileGroup layer （瓦片图层）
-    const source = layer.getSource();
-    switch (source.parser.type) {
-      case 'mvt':
-      case 'testTile':
-      case 'rasterTile':
-        // layer 仅作为 group 使用
-        return;
-    }
-
+    // MaskLayer 只需要注册 a_Position
     if (layer.type === 'MaskLayer') {
       this.registerPositionAttribute(styleAttributeService);
       return;
     }
 
+    // 用途为 basemap 的 Layer 也只需要注册 a_Position
     const { usage } = layer.getLayerConfig();
-    if (usage === 'basemap ') {
+    if (usage === 'basemap') {
       this.registerPositionAttribute(styleAttributeService);
       return;
     }

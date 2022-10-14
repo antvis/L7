@@ -141,6 +141,7 @@ export class EarthMap extends Camera {
     this.transform.setMaxBounds(LngLatBounds.convert(bounds));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setStyle(style: any) {
     return;
   }

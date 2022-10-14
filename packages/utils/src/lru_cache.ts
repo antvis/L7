@@ -80,6 +80,7 @@ export class LRUCache {
   private appendOrder(key: string) {
     this.order.push(key);
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private defaultDestroy(value: any, key: string) {
     return null;
   }

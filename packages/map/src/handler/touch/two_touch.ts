@@ -19,12 +19,16 @@ export default class TwoTouchHandler {
         //@ts-ignore
     delete this.firstTwoTouches;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public start(points: [Point, Point]) {
     return;
   } // eslint-disable-line
   public move(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     points: [Point, Point],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     pinchAround: Point | null,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     e: TouchEvent,
   ) {
     return;

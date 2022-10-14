@@ -5,7 +5,7 @@ import {
   ISubLayerInitOptions,
   IBaseTileLayerManager,
 } from '@antv/l7-core';
-import { TileManager } from './baseTileManager';
+import { TileManager } from './base';
 import { getLayerShape, getMaskValue } from '../utils';
 export class BaseMapTileLayerManager extends TileManager implements IBaseTileLayerManager {
   // only support vector layer
@@ -91,5 +91,4 @@ export class BaseMapTileLayerManager extends TileManager implements IBaseTileLay
       workerEnabled,
     };
   }
-
 }

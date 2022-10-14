@@ -30,10 +30,6 @@ export default class VectorPointTile extends TileFactory {
       source: source as Source,
       needListen: false
     });
-    // layer.once('modelLoaded', ()
-    layer.on('inited', () => {
-      tile.layerLoad();
-    })
     return {
       layers: [layer],
       layerIDList: [layer.id],

@@ -54,6 +54,7 @@ export default class BaseNormalPass<InitializationOptions = {}>
       .get<IShaderModuleService>(TYPES.IShaderModuleService);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public render(layer: ILayer) {
     //
   }

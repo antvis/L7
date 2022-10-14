@@ -1,9 +1,8 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
-import { registerLayers } from '../utils';
 import TileFactory from './base';
-import RasterDataLayer from './rasterDataLayer';
+import RasterDataLayer from './layers/rasterDataLayer';
 
 export default class RasterTiffTile extends TileFactory {
   public parentLayer: ILayer;
@@ -51,12 +50,7 @@ export default class RasterTiffTile extends TileFactory {
         clampHigh,
         clampLow,
       });
-    this.emitEvent([layer], false);
-
-    registerLayers(this.parentLayer, [layer]);
-    layer.on('inited', () => {
-      tile.layerLoad();
-    })
+      this.emitRasterEvent([layer]);
     return {
       layers: [layer],
       layerIDList: [layer.id],

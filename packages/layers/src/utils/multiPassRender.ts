@@ -25,7 +25,7 @@ export function createMultiPassRenderer(
   normalPassFactory: (name: string) => IPass<unknown>,
 ) {
   const multiPassRenderer = layer.multiPassRenderer;
-  const { enablePicking, enableTAA } = layer.getLayerConfig();
+  const { enableTAA } = layer.getLayerConfig();
 
   // picking pass if enabled
   // if (enablePicking) {
