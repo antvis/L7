@@ -19,6 +19,7 @@ import {
   ILayerModelInitializationOptions,
   ILayerPlugin,
   ILayerService,
+  ILegend,
   ILegendClassificaItem,
   ILegendSegmentItem,
   IMapService,
@@ -1075,9 +1076,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.styleAttributeService.getLayerAttributeScale(name);
   }
 
+  public getLegend(name: string): ILegend {
+    const attribute = this.styleAttributeService.getLayerStyleAttribute(name);
+    const scales = attribute?.scale?.scalers || [];
+
+    return {
+      type: scales[0].option?.type,
+      field: attribute?.scale?.field,
+      items: this.getLegendItems(name),
+    };
+  }
+
   public getLegendItems(name: string): LegendItems {
     const scale = this.styleAttributeService.getLayerAttributeScale(name);
-
     // 函数自定义映射，没有 scale 返回为空数组
     if (!scale) {
       return [];

@@ -31,6 +31,7 @@ import {
   IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
+  ScaleTypeName,
   StyleAttrField,
   StyleAttributeField,
   StyleAttributeOption,
@@ -106,8 +107,15 @@ export interface IActiveOption {
 
 type ILngLat = [number, number];
 
+export interface ILegend  {
+  type: ScaleTypeName | undefined
+  field: StyleAttributeField | undefined;
+  items:LegendItems
+}
+
 // 分段图例
 export interface ILegendSegmentItem {
+  field:string;// 图例字段
   value: [number, number];
   [key: string]: any;
 }
@@ -241,6 +249,9 @@ export interface ITileLayerOPtions {
 
 export type LayerEventType =
   | 'inited'
+  | 'legend'
+  | 'legend:color'
+  | 'legend:size'
   | 'add'
   | 'remove'
   | 'destroy'
@@ -384,7 +395,8 @@ export interface ILayer {
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
-  getLegendItems(name: string): LegendItems;
+  getLegendItems(name: string,index?: number): LegendItems;
+  getLegend(name: string):ILegend;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
