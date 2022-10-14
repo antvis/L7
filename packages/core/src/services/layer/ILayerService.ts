@@ -185,7 +185,7 @@ export interface IBaseTileLayerManager {
   parent: ILayer;
   children: ILayer[];
 
-  addTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
+  addTile(tile: Tile):Promise<{ layers: ILayer[]; layerIDList: string[] }>;
 
   addChild(layer: ILayer): void;
   addChildren(layers: ILayer[]): void;

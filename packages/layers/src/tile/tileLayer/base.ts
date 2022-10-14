@@ -138,17 +138,17 @@ export class Base {
       this.tileLayerManager.removeTile(tile);
     }
   
-    public tileUpdate() {
+    public async tileUpdate() {
       if (!this.tilesetManager) {
         return;
       }
       this.tilesetManager.tiles
         .filter((tile: Tile) => tile.isLoaded)
-        .map((tile: Tile) => {
+        .map(async (tile: Tile) => {
           if(!this.isTileReady(tile)) return;
 
           if (!this.tileLayerManager.hasTile(tile)) {
-            const { layers } = this.tileLayerManager.addTile(tile);
+            const { layers } = await this.tileLayerManager.addTile(tile);
             this.setPickState(layers)
           } else {
             if (!tile.isVisibleChange) {

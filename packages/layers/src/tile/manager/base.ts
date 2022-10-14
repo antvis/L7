@@ -3,10 +3,11 @@ import {
     IRendererService,
     IMapService,
     ISubLayerInitOptions,
+    createLayerContainer,
   } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
+import { Container } from 'inversify';
 import { ITileFactory, getTileFactory, TileType } from '../tileFactory';
-import { registerLayers } from '../utils';
 export class Base {
     public sourceLayer: string;
     public parent: ILayer;
@@ -17,12 +18,26 @@ export class Base {
     protected initOptions: ISubLayerInitOptions;
 
     private tileCache: Map<string, Tile> = new Map()
+
+    private  async initTileLayers(layers: ILayer[],tile:Tile) {
+      layers.map(async (layer) => {
+        const container = createLayerContainer(
+          this.parent.sceneContainer as Container,
+        );
+        layer.setContainer(container, this.parent.sceneContainer as Container);
+         await layer.init();
+         this.addChild(layer);
+         tile.layerLoad();
+
+      });
+
+    }
     
     public hasTile(tile: Tile){
       return !!this.tileCache.has(tile.key);
     }
 
-    public addTile(tile: Tile) {
+    public async addTile(tile: Tile) {
       // oldTile 存在的时候暂时直接结束
       // TODO：合并不存在的时候
       if(this.hasTile(tile)) return {
@@ -35,19 +50,9 @@ export class Base {
       // 创建 tile 对应的 layers
       const layerCollections = this.tileFactory.createTile(tile, this.initOptions);
       
-      // regist layer 将创建出来的 layer 进行注册初始化操作
-      registerLayers(this.parent, layerCollections.layers);
-
       tile.layerIDList.push(...layerCollections.layerIDList);
-
-      // add layer into layerGroup
-      this.addChildren(layerCollections.layers);
-
-      layerCollections.layers.map(layer => {
-        layer.once('inited', () => {
-          tile.layerLoad();
-        })
-      })
+      // 初始化图层
+      await this.initTileLayers(layerCollections.layers,tile);
       return layerCollections;
     }
 
