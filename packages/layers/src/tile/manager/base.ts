@@ -148,17 +148,18 @@ export class Base {
     }
 
     public listenLoad(tile:Tile, callback:() => void) {
-      tile.on('layerLoaded', () =>{
+      
+      tile.once('layerLoaded', () =>{
         callback();
       })
 
       tile.children.map(childTile => {
-        childTile.on('layerLoaded', () => {
+        childTile.once('layerLoaded', () => {
           callback();
         })
       })
 
-      tile.parent?.on('layerLoaded', () => {
+      tile.parent?.once('layerLoaded', () => {
         callback();
       })
     }
