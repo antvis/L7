@@ -126,57 +126,58 @@ export class Base {
     }
 
     public tileError(error: Error) {
-    console.warn('error:', error);
+      console.warn('error:', error);
     }
 
     public destroy() {
-        this.tilesetManager?.destroy();
-        this.tileLayerManager.destroy();
-      }
+      this.tilesetManager?.destroy();
+      this.tileLayerManager.destroy();
+    }
 
-      public tileUnLoad(tile: Tile) {
-        this.tileLayerManager.removeChildren(tile.layerIDList, false);
+    public tileUnLoad(tile: Tile) {
+      this.tileLayerManager.removeTile(tile);
+    }
+  
+    public tileUpdate() {
+      if (!this.tilesetManager) {
+        return;
       }
-    
-      public tileUpdate() {
-        if (!this.tilesetManager) {
-          return;
-        }
-        this.tilesetManager.tiles
-          .filter((tile: Tile) => tile.isLoaded)
-          .map((tile: Tile) => {
-            if (tile.data?.layers && this.sourceLayer) {
-              // vector
-              const vectorTileLayer = tile.data.layers[this.sourceLayer];
-              const features = vectorTileLayer?.features;
-              if (!(Array.isArray(features) && features.length > 0)) {
-                return;
-              }
+      this.tilesetManager.tiles
+        .filter((tile: Tile) => tile.isLoaded)
+        .map((tile: Tile) => {
+          if(!this.isTileReady(tile)) return;
+
+          if (!this.tileLayerManager.hasTile(tile)) {
+            const { layers } = this.tileLayerManager.addTile(tile);
+            this.setPickState(layers)
+          } else {
+            if (!tile.isVisibleChange) {
+              return;
             }
-            if (!tile.parentLayerIDList.includes(this.parent.id)) {
-              const { layers, layerIDList } = this.tileLayerManager.createTile(
-                tile,
-              );
-              tile.parentLayerIDList.push(this.parent.id);
-              tile.layerIDList.push(...layerIDList);
-    
-              this.tileLayerManager.addChildren(layers);
-              this.setPickState(layers)
-            } else {
-              if (!tile.isVisibleChange) {
-                return;
-              }
-              const layers = this.tileLayerManager.getChildren(tile.layerIDList);
-              updateTileVisible(tile, layers, this.layerService);
-              this.setPickState(layers)
-            }
-          });
-    
-        if (this.tilesetManager.isLoaded) {
-          // 将事件抛出，图层上可以使用瓦片
-          this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
+            const layers = this.tileLayerManager.getChildren(tile.layerIDList);
+            updateTileVisible(tile, layers, this.layerService);
+            this.setPickState(layers)
+          }
+        });
+  
+      if (this.tilesetManager.isLoaded) {
+        // 将事件抛出，图层上可以使用瓦片
+        this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
+      }
+    }
+
+    public isTileReady(tile:Tile){
+      if (tile.data?.layers && this.sourceLayer) {
+        // vector
+        const vectorTileLayer = tile.data.layers[this.sourceLayer];
+        const features = vectorTileLayer?.features;
+        if (!(Array.isArray(features) && features.length > 0)) {
+          return false;
         }
       }
+     
+      return true;  
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public setPickState(layers: ILayer[]) {}
