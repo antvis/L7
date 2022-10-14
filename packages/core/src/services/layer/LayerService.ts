@@ -141,7 +141,6 @@ export default class LayerService implements ILayerService {
     }
     this.alreadyInRendering = true;
     this.clear();
-    console.time('t')
     for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
@@ -170,7 +169,6 @@ export default class LayerService implements ILayerService {
       layer.hooks.afterRender.call();
     }
     this.alreadyInRendering = false;
-    console.timeEnd('t')
   }
 
   public updateLayerRenderList() {

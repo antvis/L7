@@ -1,7 +1,7 @@
 import { TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
-export type SourceEventType = 'inited' | 'sourceUpdate'
+export type SourceEventType = 'inited' | 'sourceUpdate' | 'update'
 export interface IParserCfg {
   type: string;
   x?: string;
