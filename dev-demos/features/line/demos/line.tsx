@@ -78,7 +78,7 @@ export default () => {
       .color('#f00')
       .style({});
 
-    source.on('sourceUpdate', () => {
+    source.on('update', () => {
       console.log(source);
       const midPoints = lineAtOffset(source, {
         offset: 0.1,

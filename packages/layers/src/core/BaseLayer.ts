@@ -969,7 +969,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件
-    this.layerSource.off('sourceUpdate', this.sourceEvent);
+    this.layerSource.off('update', this.sourceEvent);
 
     this.multiPassRenderer?.destroy();
 
@@ -1028,7 +1028,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public setSource(source: Source) {
     // 清除旧 sources 事件
     if (this.layerSource) {
-      this.layerSource.off('sourceUpdate', this.sourceEvent);
+      this.layerSource.off('update', this.sourceEvent);
     }
 
     this.layerSource = source;
@@ -1043,17 +1043,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.layerSource.inited) {
       this.sourceEvent();
     }
-    // this.layerSource.inited 为 true 后，sourceUpdate 事件不会再触发
-    this.layerSource.on('sourceUpdate', () => {
+    // this.layerSource.inited 为 true update 事件不会再触发
+    this.layerSource.on('update', () => {
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        this.mapService.setCoordCenter &&
+        this.mapService?.setCoordCenter &&
           this.mapService.setCoordCenter(layerCenter);
-        // // @ts-ignore
-        // this.mapService.map.customCoords.setCenter(layerCenter);
-        // // @ts-ignore
-        // this.mapService.setCustomCoordCenter(layerCenter);
       }
       this.sourceEvent();
     });
