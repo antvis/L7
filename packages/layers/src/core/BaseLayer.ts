@@ -589,6 +589,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.setSource(data);
       return this;
     }
+    // 设置source 配置
     this.sourceOption = {
       data,
       options,
@@ -606,7 +607,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         if (!currentSource) {
           // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
           this.source(new Source(data, options));
-          this.sourceEvent();
         } else {
           this.layerSource.setData(data, options);
         }
@@ -1031,7 +1031,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setSource(source: Source) {
-    // 清除旧 sources 事件
+    // 解除原 sources 事件
     if (this.layerSource) {
       this.layerSource.off('sourceUpdate', this.sourceEvent);
     }
@@ -1047,6 +1047,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // source 可能会复用，会在其它layer被修改
     if (this.layerSource.inited) {
       this.sourceEvent();
+    } else {
+      source.on('inited', () => {
+        this.sourceEvent();
+      });
     }
     // this.layerSource.inited 为 true 后，sourceUpdate 事件不会再触发
     this.layerSource.on('sourceUpdate', () => {
@@ -1055,10 +1059,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         this.coordCenter = layerCenter;
         this.mapService.setCoordCenter &&
           this.mapService.setCoordCenter(layerCenter);
-        // // @ts-ignore
-        // this.mapService.map.customCoords.setCenter(layerCenter);
-        // // @ts-ignore
-        // this.mapService.setCustomCoordCenter(layerCenter);
       }
       this.sourceEvent();
     });

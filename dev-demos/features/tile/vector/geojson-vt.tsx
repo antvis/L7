@@ -46,7 +46,7 @@ export default () => {
         })
           .source(source)
           .color('COLOR')
-          .active(true)
+          .select(true)
           .style({
             opacity: 0.6,
           });

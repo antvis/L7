@@ -176,7 +176,7 @@ export default class Source extends EventEmitter implements ISource {
       },
     );
     this.dataArrayChanged = true;
-    this.emit('update');
+    this.emit('sourceUpdate');
   }
 
   public getFeatureId(field: string, value: any): number | undefined {

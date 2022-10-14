@@ -18,6 +18,7 @@ export class TMSTileLayer extends BaseTileLayer {
           // vector
           const vectorTileLayer = tile.data.layers[this.sourceLayer];
           const features = vectorTileLayer?.features;
+          console.log(features);
           if (!(Array.isArray(features) && features.length > 0)) {
             return;
           }
