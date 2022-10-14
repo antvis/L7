@@ -183,6 +183,10 @@ export class Base extends EventEmitter{
 
       // empty
       if (!layers || layers.length === 0) return;
+
+      // updateLayersConfig(layers, 'visible', tile.isVisible);
+      // layerService.reRender();
+      // return;
     
       // 1. 有些图层可以直接更新 如 点图层
       // 2. 当 tile 瓦片 visible 为 true 的时候直接执行
@@ -192,6 +196,10 @@ export class Base extends EventEmitter{
         return;
       }
 
+      // updateLayersConfig(layers, 'visible', tile.isVisible);
+      // layerService.reRender();
+      // return;
+
       /** 不连续层级的切换 */
       // parent 不存在、children 不显示
       if(!tile.parent && tile.children.length > 0 && !tile.children[0].isVisible) {
@@ -199,6 +207,7 @@ export class Base extends EventEmitter{
         layerService.reRender();
         return;
       }
+
       // parent children 都不存在
       if(!tile.parent && tile.children.length === 0) {
         updateLayersConfig(layers, 'visible', tile.isVisible);
@@ -217,10 +226,12 @@ export class Base extends EventEmitter{
         layerService.reRender();
         return;
       }
+      
 
       /** 连续层级的切换 */
       // 隐藏当前层级、显示下一层级的瓦片
       if(tile.children.length > 0 && tile.children[0].isVisible) {
+
         const layers = this.tileLayerCache.get(tile.key) || [];
         this.waitChildren(tile, () => {
           updateLayersConfig(layers, 'visible', tile.isVisible);
@@ -228,7 +239,7 @@ export class Base extends EventEmitter{
         })
         return;
       }
-      // 隐藏当前层级、显示栅格一层级的瓦片
+      // 隐藏当前层级、显示上一层级的瓦片
       if(tile.parent && tile.parent.isVisible) {
         this.waitParent(tile, () => {
           updateLayersConfig(layers, 'visible', tile.isVisible);
@@ -236,8 +247,9 @@ export class Base extends EventEmitter{
         });
         return;
       }
+      
 
-      // console.log('parent', tile.parent, tile.children)
+      // console.log('parent', tile.parent, tile, tile.children)
       // TODO: 兜底更新、在瓦片优化完毕后去除
       this.tileAllLoad(tile, () => {
         updateLayersConfig(layers, 'visible', tile.isVisible);
@@ -251,8 +263,11 @@ export class Base extends EventEmitter{
         callback();
       } else {
         this.on('layerLoad', (updateTile: Tile) => {
-          if(updateTile.key === tile.key && this.isTileChildLoaded(tile)) {
-            callback();
+          // 需要监听 children 的更新和自身的更新
+          if(tile.children.filter(child => child.key === updateTile.key).length > 0 || updateTile.key === tile.key) {
+            if(this.isTileChildLoaded(tile)) {
+              callback();
+            }
           }
         })
       }
