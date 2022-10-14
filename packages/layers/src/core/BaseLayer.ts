@@ -1354,10 +1354,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     console.warn('empty fn');
   }
 
-  protected getConfigSchema() {
-    throw new Error('Method not implemented.');
-  }
-
   protected getModelType(): unknown {
     throw new Error('Method not implemented.');
   }

@@ -28,17 +28,6 @@ export default class RasterTiffLayer extends BaseLayer<
       return RasterModel;
     }
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
 
   protected getDefaultConfig() {
     return {};
