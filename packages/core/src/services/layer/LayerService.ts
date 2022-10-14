@@ -49,10 +49,7 @@ export default class LayerService implements ILayerService {
   
 
   public add(layer: ILayer) {
-    // if (this.sceneInited) {
-    //   layer.init();
-    // }
-    // todo 
+ 
     if (this.sceneInited) {
       layer.on('inited',()=>{
         this.updateLayerRenderList();
@@ -63,8 +60,6 @@ export default class LayerService implements ILayerService {
     }
     this.layers.push(layer);
     
-    // this.updateLayerRenderList();
-
    
   }
 
@@ -146,6 +141,7 @@ export default class LayerService implements ILayerService {
     }
     this.alreadyInRendering = true;
     this.clear();
+    console.time('t')
     for (const layer of this.layerList) {
       layer.hooks.beforeRenderData.call();
       layer.hooks.beforeRender.call();
@@ -174,6 +170,7 @@ export default class LayerService implements ILayerService {
       layer.hooks.afterRender.call();
     }
     this.alreadyInRendering = false;
+    console.timeEnd('t')
   }
 
   public updateLayerRenderList() {
