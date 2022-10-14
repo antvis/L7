@@ -26,8 +26,7 @@ export class Tile extends EventEmitter {
   public isVisibleChange = false;
 
   public loadedLayers: number = 0;
-  public isLoad: boolean = false;
-  public isChildLoad: boolean = false;
+
   // 瓦片的父级瓦片
   public parent: Tile | null = null;
   // 瓦片的子级瓦片

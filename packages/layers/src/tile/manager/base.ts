@@ -21,8 +21,9 @@ export class Base {
 
     private tileCache: Map<string, Tile> = new Map();
     private tileLayerCache: Map<string, ILayer[]> = new Map();
+    private tileLayerState: Map<string, number> = new Map();
 
-    private  async initTileLayers(layers: ILayer[],tile:Tile) {
+    private  async initTileLayers(layers: ILayer[], tile:Tile) {
       layers.map(async (layer) => {
         const container = createLayerContainer(
           this.parent.sceneContainer as Container,
@@ -30,10 +31,15 @@ export class Base {
         layer.setContainer(container, this.parent.sceneContainer as Container);
          await layer.init();
          this.addChild(layer);
-         tile.layerLoad();
-
+        //  tile.layerLoad();
+          this.layerLoad(tile);
       });
+    }
 
+    public layerLoad(tile: Tile){
+      let count = this.tileLayerState.get(tile.key);
+      if(count === undefined) count = 0;
+      this.tileLayerState.set(tile.key, count + 1);
     }
     
     public hasTile(tile: Tile){
@@ -51,8 +57,10 @@ export class Base {
 
       // 创建 tile 对应的 layers
       const layerCollections = this.tileFactory.createTile(tile, this.initOptions);
+      const layers = layerCollections.layers
       
-      this.tileLayerCache.set(tile.key, layerCollections.layers);
+      this.tileLayerCache.set(tile.key, layers);
+      this.tileLayerState.set(tile.key, -layers.length); // -2、-1、0
       // 初始化图层
       await this.initTileLayers(layerCollections.layers,tile);
       return layerCollections;
@@ -142,9 +150,21 @@ export class Base {
         return;
       }
      
+      // tile.once('layerLoaded', () =>{
+      //   const tileLoaded = this.isTileLoaded(tile);
+      //   tileLoaded && updateLayersConfig(layers, 'visible', tile.isVisible);
+      // })
       this.listenLoad(tile, () => {
         this.isTileAllLoad(tile) && updateLayersConfig(layers, 'visible', tile.isVisible);
       })
+      // updateLayersConfig(layers, 'visible', tile.isVisible);
+      // const timer = setInterval(() =>{
+      //   const isLoaded = this.isTileAllLoad(tile)
+      //   if(isLoaded) {
+      //     window.clearInterval(timer);
+      //     updateLayersConfig(layers, 'visible', tile.isVisible);
+      //   }
+      // }, 32)
     }
 
     public listenLoad(tile:Tile, callback:() => void) {
@@ -165,17 +185,14 @@ export class Base {
     }
 
     public isTileLoaded(tile: Tile) {
-      if(tile.isLoad) return true;
-      const isLoad = this.getLayers(tile).length === tile.loadedLayers;
-      tile.isLoad = isLoad;
-      return isLoad;
+      const count = this.tileLayerState.get(tile.key);
+      if(count === undefined) return true;
+      return count >= 0;
     }
 
     public isTileChildLoaded(tile: Tile) {
-      if(tile.isChildLoad) return true;
       const children = tile.children;
       const isLoad = children.filter((child) => this.isTileLoaded(child)).length === children.length;
-      tile.isChildLoad = isLoad;
       return isLoad;
     }
     public isTileParentLoaded(tile: Tile) {
