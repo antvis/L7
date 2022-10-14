@@ -20,23 +20,15 @@ module.exports = {
     showAPIDoc: true, // 是否在demo页展示API文档
     navs: [
       {
-        slug: 'docs/introduce',
-        title: {
-          zh: '介绍',
-          en: 'Introduce',
-        },
-        redirect: 'introduce/l7',
-      },
-      {
         slug: 'docs/api',
         title: {
-          zh: '文档',
+          zh: 'API 文档',
           en: 'Document',
         },
         redirect: 'api/scene',
       },
       {
-        slug: 'docs/tutorial/quickstart',
+        slug: 'docs/tutorial/l7',
         title: {
           zh: '教程',
           en: 'Tutorial',
@@ -92,12 +84,20 @@ module.exports = {
       // ****** tutorial
       // quickStart 0
       {
+        slug: 'tutorial/l7',
+        title: {
+          zh: '简介',
+          en: 'introduce',
+        },
+        order: 1,
+      },
+      {
         slug: 'tutorial/quickstart',
         title: {
           zh: '快速上手',
           en: 'quickStart',
         },
-        order: 0,
+        order: 2,
       },
       // demo 1
       // data 2
@@ -307,14 +307,6 @@ module.exports = {
           en: 'experiment',
         },
         order: 9,
-      },
-      {
-        slug: 'api/changelog',
-        title: {
-          zh: '发布日志',
-          en: 'changelog',
-        },
-        order: 10,
       },
     ],
     examples: [

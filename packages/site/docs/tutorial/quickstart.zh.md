@@ -1,8 +1,6 @@
 ---
 title: 快速上手
-order: 0
-redirect_from:
-  - /zh/docs/tutorial
+order: 1
 ---
 `markdown:docs/common/style.md`
 
