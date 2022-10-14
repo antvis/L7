@@ -23,7 +23,7 @@ export function lineAtOffsetAsyc(source: Source, option: ILineAtOffset) {
     if (source.inited) {
       resolve(lineAtOffset(source, option));
     } else {
-      source.once('sourceUpdate', () => {
+      source.once('update', () => {
         resolve(lineAtOffset(source, option));
       });
     }

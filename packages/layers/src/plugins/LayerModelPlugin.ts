@@ -40,7 +40,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
       if (source.inited) {
         this.prepareLayerModel(layer);
       } else {
-        source.once('sourceUpdate', () => {
+        source.once('update', () => {
           this.prepareLayerModel(layer);
         });
       }

@@ -47,7 +47,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     if (source.inited) {
       callback(source.data);
     } else {
-      source.once('sourceUpdate', () => {
+      source.once('update', () => {
         callback(source.data);
       });
     }

@@ -77,7 +77,7 @@ export default () => {
         thetaOffset: 0.5,
       });
 
-    source.on('sourceUpdate', () => {
+    source.on('update', () => {
       const midPoints = lineAtOffset(source, {
         offset: 0.1,
         shape: 'arc',

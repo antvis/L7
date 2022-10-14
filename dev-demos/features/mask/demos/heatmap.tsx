@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, HeatmapLayer } from '@antv/l7';
+import { Scene, HeatmapLayer, PointLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -49,18 +49,81 @@ export default () => {
       ],
     };
 
+   
+    const point = new PointLayer({
+      // mask: true,
+      // maskInside: false,
+      // maskfence: maskData,
+      // maskColor: '#fff',
+      // maskOpacity: 0.5,
+    }).source([{
+      lng:120, lat:30
+    }], {
+      parser: {
+        type: 'json',
+        x: 'lng',
+        y: 'lat'
+      }
+    })
+    .shape('circle')
+    .size(20)
+    .color('#f00');
+    scene.addLayer(point)
+
     scene.on('loaded', () => {
+      // const point = new PointLayer({
+      //   mask: true,
+      //   maskInside: false,
+      //   maskfence: maskData,
+      //   maskColor: '#fff',
+      //   maskOpacity: 0.5,
+      // }).source([{
+      //   lng:120, lat:30
+      // }], {
+      //   parser: {
+      //     type: 'json',
+      //     x: 'lng',
+      //     y: 'lat'
+      //   }
+      // })
+      // .shape('circle')
+      // .size(20)
+      // .color('#f00');
+      // scene.addLayer(point)
+      // point.on('update', ( ) =>point.renderLayers())
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
       )
         .then((res) => res.json())
         .then((data) => {
+
+
+          // const point = new PointLayer({
+          //   // mask: true,
+          //   // maskInside: false,
+          //   // maskfence: maskData,
+          //   // maskColor: '#fff',
+          //   // maskOpacity: 0.5,
+          // }).source([{
+          //   lng:130, lat:30
+          // }], {
+          //   parser: {
+          //     type: 'json',
+          //     x: 'lng',
+          //     y: 'lat'
+          //   }
+          // })
+          // .shape('circle')
+          // .size(20)
+          // .color('#f00');
+          // scene.addLayer(point)
+
           const heatmapLayer = new HeatmapLayer({
-            mask: true,
-            maskInside: false,
-            maskfence: maskData,
-            maskColor: '#fff',
-            maskOpacity: 0.5,
+            // mask: true,
+            // maskInside: false,
+            // maskfence: maskData,
+            // maskColor: '#fff',
+            // maskOpacity: 0.5,
           })
             .source(data)
             .shape('heatmap3D') // heatmap3D heatmap
@@ -81,7 +144,14 @@ export default () => {
                 positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
               },
             });
-          scene.addLayer(heatmapLayer);
+            scene.addLayer(heatmapLayer);
+
+            // scene.render()
+            // setTimeout(() =>{
+            //   scene.render();
+            // }, 1000)
+            // console.log('rrr')
+          
         });
     });
   }, []);
