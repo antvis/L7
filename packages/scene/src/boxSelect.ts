@@ -8,6 +8,7 @@ export type BoxSelectOptions = {
   className?: string;
 };
 
+// TODO: 将 BoxSelect 模块放在哪里比较合适
 export default class BoxSelect extends EventEmitter {
   protected scene: Scene;
   protected options: BoxSelectOptions;
