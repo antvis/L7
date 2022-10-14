@@ -28,7 +28,6 @@ export default class RasterTile extends TileFactory {
     });
     return {
       layers: [layer],
-      layerIDList: [layer.id],
     };
   }
 }

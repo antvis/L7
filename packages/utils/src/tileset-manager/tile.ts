@@ -24,14 +24,11 @@ export class Tile extends EventEmitter {
   public isCurrent = false;
   // 是否可以见发生变化
   public isVisibleChange = false;
-  public layerIDList: string[] = [];
-  public loadedLayers: number = 0;
 
   // 瓦片的父级瓦片
   public parent: Tile | null = null;
   // 瓦片的子级瓦片
   public children: Tile[] = [];
-  public loadedChilds: number = 0;
   // 瓦片数据
   public data: any = null;
   // 瓦片属性
@@ -114,10 +111,6 @@ export class Tile extends EventEmitter {
     return key;
   }
 
-  public layerLoad() {
-    this.loadedLayers++;
-    this.emit('layerLoaded');
-  }
   // 请求瓦片数据
   public async loadData({ getData, onLoad, onError }: TileLoadDataOptions) {
     this.loadDataId++;

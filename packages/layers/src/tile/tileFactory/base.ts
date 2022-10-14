@@ -64,7 +64,6 @@ export default class TileFactory implements ITileFactory {
   public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
     return {
       layers: [] as ILayer[],
-      layerIDList: [] as string[],
     };
   }
 
