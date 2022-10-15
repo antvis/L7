@@ -6,7 +6,7 @@ import {
   } from '@antv/l7-core';
 import { Tile, TilesetManager } from '@antv/l7-utils';
 import { debounce } from 'lodash';
-// import { updateTileVisible } from '../utils';
+import { updateTileVisible } from '../utils';
 
 export class Base {
     public tileLayerManager: any;
@@ -148,16 +148,17 @@ export class Base {
           if(!this.isTileReady(tile)) return; // 是否有数据
  
           if (!this.tileLayerManager.hasTile(tile)) {
-             await this.tileLayerManager.addTile(tile);
-            // this.setPickState(layers)
+            const {layers} = await this.tileLayerManager.addTile(tile);
+            this.setPickState(layers)
           } else {
-            // if (!tile.isVisibleChange) {
-            //   return;
-            // }
-            // const layers = this.tileLayerManager.getChildren(tile.layerIDList);
+            if (!tile.isVisibleChange) {
+              return;
+            }
+            const layers = this.tileLayerManager.getChildren(tile.layerIDList);
             // this.updateTileLayerVisible(layers)
 
-            // updateTileVisible(tile, layers, this.layerService);
+            updateTileVisible(tile, layers, this.layerService);
+            this.setPickState(layers)
          
           }
         });
@@ -170,7 +171,6 @@ export class Base {
 
     public updateTileLayerVisible(layers: ILayer) {
 
-      console.log(layers)
 
     }
 
