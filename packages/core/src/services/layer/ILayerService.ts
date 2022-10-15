@@ -185,13 +185,11 @@ export interface IBaseTileLayerManager {
   parent: ILayer;
   children: ILayer[];
 
-  addTile(tile: Tile):Promise<{ layers: ILayer[]; layerIDList: string[] }>;
+  addTile(tile: Tile):Promise<{ layers: ILayer[]; }>;
 
   addChild(layer: ILayer): void;
   addChildren(layers: ILayer[]): void;
-  getChildren(layerIDList: string[]): ILayer[];
   removeChild(layer: ILayer): void;
-  removeChildren(layerIDList: string[], refresh?: boolean): void;
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;

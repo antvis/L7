@@ -20,7 +20,6 @@ export default class VectorPointTile extends TileFactory {
     if (features.length === 0) {
       return {
         layers: [],
-        layerIDList: [],
       };
     }
     const layer = this.createLayer({
@@ -32,7 +31,6 @@ export default class VectorPointTile extends TileFactory {
     });
     return {
       layers: [layer],
-      layerIDList: [layer.id],
     };
   }
 }

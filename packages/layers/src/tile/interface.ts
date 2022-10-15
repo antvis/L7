@@ -40,7 +40,6 @@ export interface ITileFactory {
     initOptions: ISubLayerInitOptions,
   ): {
     layers: ILayer[];
-    layerIDList: string[];
   };
 
   createLayer(option: ILayerTileConfig): ILayer;

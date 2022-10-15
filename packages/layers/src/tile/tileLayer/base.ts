@@ -6,7 +6,6 @@ import {
   } from '@antv/l7-core';
 import { Tile, TilesetManager } from '@antv/l7-utils';
 import { debounce } from 'lodash';
-import { updateTileVisible } from '../utils';
 
 export class Base {
     public tileLayerManager: any;
@@ -154,10 +153,8 @@ export class Base {
             if (!tile.isVisibleChange) {
               return;
             }
-            const layers = this.tileLayerManager.getChildren(tile.layerIDList);
-            // this.updateTileLayerVisible(layers)
-
-            updateTileVisible(tile, layers, this.layerService);
+            this.tileLayerManager.updateTileVisible(tile, this.layerService);
+            const layers = this.tileLayerManager.getLayers();
             this.setPickState(layers)
          
           }
