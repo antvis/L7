@@ -19,7 +19,7 @@ export default () => {
         fetch('https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt')
           .then(res => res.text())
           .then(data => {
-            const pointLayer = new PointLayer({})
+            const pointLayer = new PointLayer({blend:'additive'})
               .source(data, {
                 parser: {
                   type: 'csv',

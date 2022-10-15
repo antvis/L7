@@ -48,13 +48,14 @@ export default class LayerService implements ILayerService {
   }, 16);
 
   public add(layer: ILayer) {
+    this.layers.push(layer);
     if (this.sceneInited) {
       layer.init().then(() => {
-        this.layers.push(layer);
         this.updateLayerRenderList();
         this.renderLayers();
       });
-    }
+    } 
+  
   }
 
   public addMask(mask: ILayer) {
@@ -66,7 +67,7 @@ export default class LayerService implements ILayerService {
   public async initLayers() {
     this.sceneInited = true;
     this.layers.forEach(async (layer) => {
-      if (!layer.inited) {
+      if (!layer.statrtInit) {
         await layer.init();
         this.updateLayerRenderList();
       }

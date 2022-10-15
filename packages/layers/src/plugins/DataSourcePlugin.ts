@@ -16,8 +16,10 @@ export default class DataSourcePlugin implements ILayerPlugin {
           layer.sourceOption || layer.defaultSourceConfig;
         source = new Source(data, options);
         await new Promise((resolve) => {
-          source.on('inited', () => {
-            layer.setSource(source);
+          source.on('update', (e) => {
+            if (e.type === 'inited') {
+              layer.initSource(source);
+            }
             resolve(null);
           });
         });

@@ -96,7 +96,7 @@ class Scene
       TYPES.IInteractionService,
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
-
+   
     if (isMini) {
       this.sceneService.initMiniScene(config);
     } else {

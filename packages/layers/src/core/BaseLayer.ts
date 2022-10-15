@@ -135,6 +135,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   // 注入插件集
   public plugins: ILayerPlugin[];
 
+  public statrtInit: boolean = false;
+
   public sourceOption: {
     data: any;
     options?: ISourceCFG;
@@ -263,7 +265,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         this.rawConfig[key] = configToUpdate[key];
       }
     });
-    if (!this.inited) {
+    if (!this.statrtInit) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
         ...configToUpdate,
@@ -314,6 +316,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public async init(): Promise<void> {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
+    this.statrtInit = true;
     // 初始化图层配置项
     // const { enableMultiPassRenderer = false } = this.rawConfig;
     // this.configService.setLayerConfig(sceneId, this.id, {
@@ -410,11 +413,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // 触发 init 生命周期插件
     await this.hooks.init.promise();
-
-    // this.pickingPassRender = this.normalPassFactory('pixelPicking');
-    // this.pickingPassRender.init(this);
-    this.hooks.afterInit.call();
     this.inited = true;
+
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
@@ -424,6 +424,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       target: this,
       type: 'add',
     });
+    this.hooks.afterInit.call();
   }
 
   public updateModelData(data: IAttributeAndElements) {
@@ -479,6 +480,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.updateLayerConfig({
       ...(this.getDefaultConfig() as object),
       ...this.rawConfig,
+      ...this.needUpdateConfig,
     });
 
     // 启动动画
@@ -1027,7 +1029,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         attribute.needRegenerateVertices,
     ).length;
   }
-
+  // 外部初始化Source
   public setSource(source: Source) {
     // 解除原 sources 事件
     if (this.layerSource) {
@@ -1042,13 +1044,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       const zoom = this.mapService.getZoom();
       this.layerSource.updateClusterData(zoom);
     }
-    // source 可能会复用，会在其它layer被修改
     if (this.layerSource.inited) {
       this.sourceEvent();
-    } else {
-      source.on('inited', () => {
-        this.sourceEvent();
-      });
     }
     // this.layerSource.inited 为 true update 事件不会再触发
     this.layerSource.on('update', () => {
@@ -1061,8 +1058,26 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.sourceEvent();
     });
   }
+  // layer 初始化source
+  public initSource(source: Source) {
+    this.layerSource = source;
+    this.clusterZoom = 0;
+    this.addSourceEvent();
+  }
   public getSource() {
     return this.layerSource;
+  }
+  // 注册source 更新事件
+  private addSourceEvent() {
+    this.layerSource.on('update', () => {
+      if (this.coordCenter === undefined) {
+        const layerCenter = this.layerSource.center;
+        this.coordCenter = layerCenter;
+        this.mapService?.setCoordCenter &&
+          this.mapService.setCoordCenter(layerCenter);
+      }
+      this.sourceEvent();
+    });
   }
 
   public getScaleOptions() {
@@ -1199,8 +1214,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           })
           .catch((err) => reject(err));
       } else {
-        // console.log(this.encodedData[1].originCoordinates[0])
-        // console.log(this.encodedData[1].coordinates[0])
         const {
           attributes,
           elements,
@@ -1386,7 +1399,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
     const autoRender = this.layerSource.getSourceCfg().autoRender;
     if (autoRender) {
-      this.layerService.throttleRenderLayers();
+      this.reRender();
     }
   };
 

@@ -235,11 +235,7 @@ export default class Demo extends React.Component {
       scene.addLayer(imagelayer);
 
       scene.addLayer(textlayer);
-      // console.log(scene.mapService.getSize())
-      // setTimeout(() => {
-      //   console.log(scene.mapService.getSize())
-      // }, 2000 )
-      // console.log(scene.mapService.getCenter());
+    
     });
   }
 

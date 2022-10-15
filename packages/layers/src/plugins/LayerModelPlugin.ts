@@ -25,11 +25,10 @@ export default class LayerModelPlugin implements ILayerPlugin {
 
   public apply(layer: ILayer) {
     layer.hooks.init.tapPromise('LayerModelPlugin', async () => {
-      this.initLayerModel(layer);
+      await this.initLayerModel(layer);
     });
 
     layer.hooks.beforeRenderData.tapPromise('DataSourcePlugin', async () => {
-      console.log('update');
       await this.prepareLayerModel(layer);
       return false;
     });

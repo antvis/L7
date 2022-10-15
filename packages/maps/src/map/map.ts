@@ -65,13 +65,18 @@ export default class L7MapService extends BaseMapService<Map> {
       });
     }
 
-    this.map.on('load', this.handleCameraChanged);
+    this.map.on('load', () => {
+      this.handleCameraChanged();
+    });
     if (interactive) {
       // L7 作为第三方地图插件时关闭重绘
       this.map.on('move', this.handleCameraChanged);
     }
 
     // 不同于高德地图，需要手动触发首次渲染
+    // setTimeout(()=>{
+    //   this.handleCameraChanged();
+    // },100)
     this.handleCameraChanged();
   }
 

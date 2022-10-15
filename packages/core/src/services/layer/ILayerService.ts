@@ -279,6 +279,7 @@ export interface ILayer {
   coordCenter: number[];
   name: string; //
   inited: boolean; // 是否初始化完成
+  statrtInit: boolean // 是否开始初始化;
   zIndex: number;
   clusterZoom: number;
   plugins: ILayerPlugin[];
@@ -430,6 +431,7 @@ export interface ILayer {
   addPlugin(plugin: ILayerPlugin): ILayer;
   getSource(): ISource;
   setSource(source: ISource): void;
+  initSource(source: ISource): void;
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];
   getScaleOptions(): IScaleOptions;

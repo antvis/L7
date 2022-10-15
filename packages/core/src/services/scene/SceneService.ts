@@ -140,7 +140,9 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.map.onCameraChanged((viewport: IViewport) => {
           this.cameraService.init();
           this.cameraService.update(viewport);
+         
           resolve();
+         
         });
         this.map.init();
       });
@@ -175,7 +177,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       }
 
       // 创建底图之上的 container
-
       if (this.$container) {
         this.canvas = DOM.create(
           'canvas',
@@ -205,11 +206,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       }
       this.pickingService.init(this.id);
     });
-    // TODO：init worker, fontAtlas...
-
-    // 执行异步并行初始化任务
-    // @ts-ignore
-    this.initPromise = this.hooks.init.promise();
+   
     this.render();
   }
 
@@ -308,7 +305,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 还未初始化完成需要等待
 
-      await this.initPromise; // 初始化地图和渲染
+      await this.hooks.init.promise(); // 初始化地图和渲染
       if (this.destroyed) {
         this.destroy();
       }

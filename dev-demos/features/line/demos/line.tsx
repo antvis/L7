@@ -124,7 +124,8 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      scene.render();
+      
+  
     });
   }, []);
   return (
