@@ -42,6 +42,7 @@ export class TileLayer extends Base implements ITileLayer {
 
     this.tileLayerManager = new TileLayerManager(
       parent,
+      layerService,
       mapService,
       rendererService,
       pickingService,

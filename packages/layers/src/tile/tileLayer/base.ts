@@ -153,9 +153,9 @@ export class Base {
             if (!tile.isVisibleChange) {
               return;
             }
-            
+
             const layers = this.tileLayerManager.getLayers(tile);
-            this.tileLayerManager.updateTileVisible(tile, this.layerService);
+            this.tileLayerManager.updateTileVisible(tile);
             this.setPickState(layers)
           }
         });

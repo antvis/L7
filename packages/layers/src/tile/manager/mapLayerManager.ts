@@ -4,6 +4,7 @@ import {
   IRendererService,
   ISubLayerInitOptions,
   IBaseTileLayerManager,
+  ILayerService,
 } from '@antv/l7-core';
 import { Base } from './base';
 import { getLayerShape, getMaskValue } from '../utils';
@@ -11,11 +12,13 @@ export class BaseMapTileLayerManager extends Base implements IBaseTileLayerManag
   // only support vector layer
   constructor(
     parent: ILayer,
+    layerService: ILayerService,
     mapService: IMapService,
     rendererService: IRendererService,
   ) {
     super();
     this.parent = parent;
+    this.layerService = layerService;
     this.children = parent.layerChildren;
     this.mapService = mapService;
     this.rendererService = rendererService;

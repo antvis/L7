@@ -26,6 +26,7 @@ export class MapTileLayer extends Base implements IBaseTileLayer {
 
     this.tileLayerManager = new BaseMapTileLayerManager(
       parent,
+      layerService,
       mapService,
       rendererService,
     );

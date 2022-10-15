@@ -1,6 +1,7 @@
 import {
   IInteractionTarget,
   ILayer,
+  ILayerService,
   IMapService,
   IPickingService,
   IRendererService,
@@ -27,6 +28,7 @@ export class TileLayerManager extends Base implements ITileLayerManager {
   private transforms: ITransform[];
   constructor(
     parent: ILayer,
+    layerService:ILayerService,
     mapService: IMapService,
     rendererService: IRendererService,
     pickingService: IPickingService,
@@ -34,6 +36,7 @@ export class TileLayerManager extends Base implements ITileLayerManager {
   ) {
     super();
     this.parent = parent;
+    this.layerService = layerService;
     this.children = parent.layerChildren;
     this.mapService = mapService;
     this.rendererService = rendererService;
