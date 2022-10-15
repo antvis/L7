@@ -52,6 +52,7 @@ export class TilesetManager extends EventEmitter {
       zoomOffset: 0,
       extent: DEFAULT_EXTENT,
       getTileData: NOOP,
+      warp: true,
       updateStrategy: UpdateTileStrategy.Replace,
     };
     this.updateOptions(options);
@@ -287,7 +288,13 @@ export class TilesetManager extends EventEmitter {
   // 创建瓦片
   private createTile(x: number, y: number, z: number) {
     const tileId = this.getTileId(x, y, z);
-    const tile = new Tile({ x, y, z, tileSize: this.options.tileSize });
+    const tile = new Tile({
+      x,
+      y,
+      z,
+      tileSize: this.options.tileSize,
+      warp: this.options.warp,
+    });
 
     this.cacheTiles.set(tileId, tile);
     tile.loadData({

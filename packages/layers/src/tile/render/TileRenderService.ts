@@ -14,7 +14,7 @@ export class TileRenderService implements ITileRenderService{
           .filter((layer) => layer.inited)
           .filter((layer) => layer.isVisible())
           .map((layer) => {
-            layer.hooks.beforeRenderData.call();
+            layer.hooks.beforeRenderData.promise();
             layer.hooks.beforeRender.call();
             if (layer.masks.length > 0) {
               // 清除上一次的模版缓存
@@ -24,7 +24,7 @@ export class TileRenderService implements ITileRenderService{
                 framebuffer: null,
               });
               layer.masks.map((m: ILayer) => {
-                m.hooks.beforeRenderData.call();
+                m.hooks.beforeRenderData.promise();
                 m.hooks.beforeRender.call();
                 m.render();
                 m.hooks.afterRender.call();

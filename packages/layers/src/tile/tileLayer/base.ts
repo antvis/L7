@@ -6,7 +6,7 @@ import {
   } from '@antv/l7-core';
 import { Tile, TilesetManager } from '@antv/l7-utils';
 import { debounce } from 'lodash';
-import { updateTileVisible } from '../utils';
+// import { updateTileVisible } from '../utils';
 
 export class Base {
     public tileLayerManager: any;
@@ -145,18 +145,20 @@ export class Base {
       this.tilesetManager.tiles
         .filter((tile: Tile) => tile.isLoaded)
         .map(async (tile: Tile) => {
-          if(!this.isTileReady(tile)) return;
-
+          if(!this.isTileReady(tile)) return; // 是否有数据
+ 
           if (!this.tileLayerManager.hasTile(tile)) {
-            const { layers } = await this.tileLayerManager.addTile(tile);
-            this.setPickState(layers)
+             await this.tileLayerManager.addTile(tile);
+            // this.setPickState(layers)
           } else {
-            if (!tile.isVisibleChange) {
-              return;
-            }
-            const layers = this.tileLayerManager.getChildren(tile.layerIDList);
-            updateTileVisible(tile, layers, this.layerService);
-            this.setPickState(layers)
+            // if (!tile.isVisibleChange) {
+            //   return;
+            // }
+            // const layers = this.tileLayerManager.getChildren(tile.layerIDList);
+            // this.updateTileLayerVisible(layers)
+
+            // updateTileVisible(tile, layers, this.layerService);
+         
           }
         });
   
@@ -166,7 +168,14 @@ export class Base {
       }
     }
 
+    public updateTileLayerVisible(layers: ILayer) {
+
+      console.log(layers)
+
+    }
+
     public isTileReady(tile:Tile){
+
       if (tile.data?.layers && this.sourceLayer) {
         // vector
         const vectorTileLayer = tile.data.layers[this.sourceLayer];

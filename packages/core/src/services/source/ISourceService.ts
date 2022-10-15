@@ -22,6 +22,7 @@ export interface ITransform {
 export interface ISourceCFG {
   cluster?: boolean;
   clusterOptions?: Partial<IClusterOptions>;
+  autoRender?:boolean,
   parser?: IParserCfg;
   transforms?: ITransform[];
 }
@@ -71,6 +72,7 @@ export interface ISource {
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
   tileset: TilesetManager | undefined;
+  getSourceCfg(): any;
   setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;
   getFeatureById(id: number): unknown;

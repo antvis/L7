@@ -71,10 +71,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
+    layer.hooks.beforeRenderData.tapPromise('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-
       this.getSourceData(layer, ({ dataArray }) => {
         if (Array.isArray(dataArray) && dataArray.length === 0) {
           return;

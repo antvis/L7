@@ -13,7 +13,13 @@ export enum UpdateTileStrategy {
   Replace = 'replace',
 }
 
-export type TileOptions = { x: number; y: number; z: number; tileSize: number };
+export type TileOptions = {
+  x: number;
+  y: number;
+  z: number;
+  tileSize: number;
+  warp?: boolean;
+};
 
 export type TileLoadParams = TileOptions & {
   bounds: TileBounds;
@@ -35,6 +41,7 @@ export enum LoadTileDataStatus {
 
 export type TilesetManagerOptions = {
   tileSize: number;
+  warp: boolean;
   zoomOffset: number;
   minZoom: number;
   maxZoom: number;

@@ -242,7 +242,7 @@ export default class WindModel extends BaseModel {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
 
     this.layer.masks.map((m) => {
-      m.hooks.beforeRenderData.call();
+      m.hooks.beforeRenderData.promise();
       m.hooks.beforeRender.call();
       m.render();
       m.hooks.afterRender.call();

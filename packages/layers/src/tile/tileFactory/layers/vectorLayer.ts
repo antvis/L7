@@ -148,6 +148,7 @@ export default class VectorLayer extends BaseLayer<
   protected sourceEvent = () => {
     // Tip: vector 不支持 autoFit
     this.dataState.dataSourceNeedUpdate = true;
+    console.log('render')
     this.reRender();
   };
 

@@ -32,10 +32,9 @@ export class TileLayer extends Base implements ITileLayer {
     transforms
   }: ITileLayerOPtions) {
     super();
-    const parentSource = parent.getSource();
-    const { sourceLayer } =
-      parentSource?.data?.tilesetOptions || {};
-    this.sourceLayer = sourceLayer;
+
+
+    this.sourceLayer = parent.getLayerConfig()?.sourceLayer as string;
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;

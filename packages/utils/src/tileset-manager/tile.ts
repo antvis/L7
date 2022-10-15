@@ -16,6 +16,8 @@ export class Tile extends EventEmitter {
   public x: number;
   public y: number;
   public z: number;
+  // 循环加载瓦片
+  public warp: boolean;
   // 瓦片大小
   public tileSize = 256;
   // 是否可以见
@@ -47,10 +49,11 @@ export class Tile extends EventEmitter {
 
   constructor(options: TileOptions) {
     super();
-    const { x, y, z, tileSize } = options;
+    const { x, y, z, tileSize, warp } = options;
     this.x = x;
     this.y = y;
     this.z = z;
+    this.warp = warp || true;
     this.tileSize = tileSize;
   }
 
@@ -133,11 +136,11 @@ export class Tile extends EventEmitter {
     let tileData = null;
     let error;
     try {
-      const { x, y, z, bounds, tileSize } = this;
+      const { x, y, z, bounds, tileSize, warp } = this;
       // wrap
-      const { warpX, warpY } = getTileWarpXY(x, y, z);
+      const { warpX, warpY } = getTileWarpXY(x, y, z, warp);
       const { signal } = this.abortController;
-      const params = { x: warpX, y: warpY, z, bounds, tileSize, signal };
+      const params = { x: warpX, y: warpY, z, bounds, tileSize, signal, warp };
 
       tileData = await getData(params, this);
     } catch (err) {

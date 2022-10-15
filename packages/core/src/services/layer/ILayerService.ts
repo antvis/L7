@@ -1,5 +1,5 @@
 // @ts-ignore
-import { SyncBailHook, SyncHook, SyncWaterfallHook,AsyncSeriesBailHook } from '@antv/async-hook';
+import { SyncBailHook, SyncHook, AsyncSeriesBailHook, AsyncWaterfallHook} from '@antv/async-hook';
 import { IColorRamp, Tile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
@@ -77,8 +77,8 @@ export interface ILayerModel {
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
-  buildModels(callbackModel: (models: IModel[]) => void): void;
-  initModels(callbackModel: (models: IModel[]) => void): void;
+  buildModels(): Promise<IModel[]>;
+  initModels(): Promise<IModel[]>;
   needUpdate(): boolean;
   clearModels(refresh?: boolean): void;
 
@@ -273,6 +273,7 @@ export type LayerEventType =
   | any;
 
 export interface ILayer {
+  sourceLayer?: string;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
   coordCenter: number[];
@@ -297,9 +298,9 @@ export interface ILayer {
   encodeDataLength: number;
   pickedFeatureID: number | null;
   hooks: {
-    init: AsyncSeriesBailHook;
+    init:AsyncSeriesBailHook;
     afterInit: SyncBailHook;
-    beforeRenderData: SyncWaterfallHook;
+    beforeRenderData: AsyncWaterfallHook ;
     beforeRender: SyncBailHook;
     afterRender: SyncHook;
     beforePickingEncode: SyncHook;
@@ -523,6 +524,7 @@ export interface ILayerConfig {
   maskfence: any;
   maskColor: string;
   maskOpacity: number;
+  sourceLayer:string;
 
   colors: string[];
   size: number;

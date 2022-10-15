@@ -1,5 +1,5 @@
 // @ts-ignore
-import { AsyncSeriesHook  } from '@antv/async-hook';
+import { AsyncSeriesHook } from '@antv/async-hook';
 import { $window, DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
@@ -35,7 +35,6 @@ export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
   public loaded: boolean = false;
-
 
   @inject(TYPES.SceneID)
   private readonly id: string;
@@ -131,7 +130,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.iconService.on('imageUpdate', () => this.render());
     // 字体资源
     this.fontService.init();
-  
 
     /**
      * 初始化底图
@@ -146,8 +144,7 @@ export default class Scene extends EventEmitter implements ISceneService {
         });
         this.map.init();
       });
-    
-      
+
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.map.addMarkerContainer();
@@ -169,29 +166,30 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.hooks.init.tapPromise('initRenderer', async () => {
       const renderContainer = this.map.getOverlayContainer();
 
-      if(renderContainer) {
+      if (renderContainer) {
         this.$container = renderContainer as HTMLDivElement;
       } else {
         this.$container = createRendererContainer(
           this.configService.getSceneConfig(this.id).id || '',
         );
-        
       }
 
-  
       // 创建底图之上的 container
-     
 
       if (this.$container) {
-        this.canvas = DOM.create('canvas', '', this.$container) as HTMLCanvasElement;
+        this.canvas = DOM.create(
+          'canvas',
+          '',
+          this.$container,
+        ) as HTMLCanvasElement;
         this.setCanvas();
         await this.rendererService.init(
           // @ts-ignore
           this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
-          sceneConfig.gl
+          sceneConfig.gl,
         );
-        this.initContainer()
+        this.initContainer();
 
         elementResizeEvent(
           this.$container as HTMLDivElement,
@@ -316,16 +314,17 @@ export default class Scene extends EventEmitter implements ISceneService {
       }
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       await this.layerService.initLayers();
+
+      this.layerService.renderLayers();
       this.controlService.addControls();
       this.loaded = true;
       this.emit('loaded');
       this.inited = true;
+    } else {
+      // 尝试初始化未初始化的图层
+      this.layerService.initLayers();
+      this.layerService.renderLayers();
     }
-
-    // 尝试初始化未初始化的图层
-    this.layerService.initLayers();
-    this.layerService.updateLayerRenderList();
-    this.layerService.renderLayers();
 
     // 组件需要等待layer 初始化完成之后添加
     this.rendering = false;
@@ -337,7 +336,7 @@ export default class Scene extends EventEmitter implements ISceneService {
    * @param fontPath
    */
   public addFontFace(fontFamily: string, fontPath: string): void {
-    this.fontService.addFontFace(fontFamily,fontPath)
+    this.fontService.addFontFace(fontFamily, fontPath);
   }
 
   public getSceneContainer(): HTMLDivElement {

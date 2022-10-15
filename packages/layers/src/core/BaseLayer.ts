@@ -2,7 +2,7 @@
 import {
   SyncBailHook,
   SyncHook,
-  SyncWaterfallHook,
+  AsyncWaterfallHook,
   AsyncSeriesBailHook,
 } from '@antv/async-hook';
 import {
@@ -113,7 +113,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     init: new AsyncSeriesBailHook(),
     afterInit: new SyncBailHook(),
     beforeRender: new SyncBailHook(),
-    beforeRenderData: new SyncWaterfallHook(),
+    beforeRenderData: new AsyncWaterfallHook(),
     afterRender: new SyncHook(),
     beforePickingEncode: new SyncHook(),
     afterPickingEncode: new SyncHook(),
@@ -476,7 +476,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * Model初始化前需要更新Model样式
    */
   public prepareBuildModel() {
-    this.inited = true;
     this.updateLayerConfig({
       ...(this.getDefaultConfig() as object),
       ...this.rawConfig,
@@ -614,7 +613,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         // this.layerSource.setData(data, options);
       });
     }
-
     return this;
   }
   public style(
@@ -645,14 +643,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.updateLayerConfig(this.rawConfig);
       this.styleNeedUpdate = true;
     }
-
+    // TODO style model 更新
     // @ts-ignore
-    if (lastConfig && lastConfig.mask === true && options.mask === false) {
-      this.clearModels();
-      this.layerModel.buildModels((models) => {
-        this.models = models;
-      });
-    }
+    // if (lastConfig && lastConfig.mask === true && options.mask === false) {
+    //   this.clearModels();
+    //   this.layerModel.buildModels((models) => {
+    //     this.models = models;
+    //   });
+    // }
     return this;
   }
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
@@ -1154,7 +1152,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.pickingService.boxPickLayer(this, box, cb);
   }
 
-  public buildLayerModel(
+  public async buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): Promise<IModel> {
@@ -1175,61 +1173,59 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // filter supported worker & worker enabled layer
-        if (
-          workerOptions &&
-          workerOptions.modelType in WorkerSourceMap &&
-          workerEnabled
-        ) {
-          this.styleAttributeService
-            .createAttributesAndIndicesAscy(
-              this.encodedData,
-              segmentNumber,
-              workerOptions,
-            )
-            .then(({ attributes, elements }) => {
-              const m = createModel({
-                attributes,
-                uniforms,
-                fs,
-                vs,
-                elements,
-                blend: BlendTypes[BlendType.normal],
-                ...rest,
-              });
-              resolve(m);
-            })
-            .catch((err) => reject(err));
-        } else {
-          // console.log(this.encodedData[1].originCoordinates[0])
-          // console.log(this.encodedData[1].coordinates[0])
-          const {
-            attributes,
-            elements,
-            count,
-          } = this.styleAttributeService.createAttributesAndIndices(
+    return await new Promise((resolve, reject) => {
+      // filter supported worker & worker enabled layer
+      if (
+        workerOptions &&
+        workerOptions.modelType in WorkerSourceMap &&
+        workerEnabled
+      ) {
+        this.styleAttributeService
+          .createAttributesAndIndicesAscy(
             this.encodedData,
-            triangulation,
             segmentNumber,
-          );
-          const modelOptions = {
-            attributes,
-            uniforms,
-            fs,
-            vs,
-            elements,
-            blend: BlendTypes[BlendType.normal],
-            ...rest,
-          };
-          if (count) {
-            modelOptions.count = count;
-          }
-          const m = createModel(modelOptions);
-          resolve(m);
+            workerOptions,
+          )
+          .then(({ attributes, elements }) => {
+            const m = createModel({
+              attributes,
+              uniforms,
+              fs,
+              vs,
+              elements,
+              blend: BlendTypes[BlendType.normal],
+              ...rest,
+            });
+            resolve(m as IModel);
+          })
+          .catch((err) => reject(err));
+      } else {
+        // console.log(this.encodedData[1].originCoordinates[0])
+        // console.log(this.encodedData[1].coordinates[0])
+        const {
+          attributes,
+          elements,
+          count,
+        } = this.styleAttributeService.createAttributesAndIndices(
+          this.encodedData,
+          triangulation,
+          segmentNumber,
+        );
+        const modelOptions = {
+          attributes,
+          uniforms,
+          fs,
+          vs,
+          elements,
+          blend: BlendTypes[BlendType.normal],
+          ...rest,
+        };
+        if (count) {
+          modelOptions.count = count;
         }
-      });
+        const m = createModel(modelOptions);
+        resolve(m);
+      }
     });
   }
 
@@ -1308,13 +1304,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) return this;
-    if (this.layerModelNeedUpdate && this.layerModel) {
-      this.layerModel.buildModels((models: IModel[]) => {
-        this.models = models;
-        this.hooks.beforeRender.call();
-        this.layerModelNeedUpdate = false;
-      });
-    }
+    // if (this.layerModelNeedUpdate && this.layerModel) {
+
+    //   this.layerModel.buildModels((models: IModel[]) => {
+    //     this.models = models;
+    //     this.hooks.beforeRender.call();
+    //     this.layerModelNeedUpdate = false;
+    //   });
+    // }
 
     this.models.forEach((model) => {
       model.draw(
@@ -1387,22 +1384,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (layerConfig && layerConfig.autoFit) {
       this.fitBounds(layerConfig.fitBoundsOptions);
     }
-    this.reRender();
+    const autoRender = this.layerSource.getSourceCfg().autoRender;
+    if (autoRender) {
+      this.layerService.throttleRenderLayers();
+    }
   };
 
-  protected dispatchModelLoad(models: IModel[]) {
+  protected async initLayerModels() {
     this.models.forEach((model) => model.destroy());
     this.models = [];
-
-    this.models = models;
-    this.emit('modelLoaded', null);
-    this.modelLoaded = true;
-
-    // Tip: setTimeout 用于延迟绘制，可以让拖动图层时连续的 setData 更加平滑 - L7Draw
-    setTimeout(() => {
-      // Tip: 使用 renderLayers 而不是 throttleRenderLayers，让图层之间的 setData 更新绘制不存在延迟
-      this.layerService.renderLayers();
-    }, 32);
+    this.models = await this.layerModel.initModels();
   }
 
   protected reRender() {

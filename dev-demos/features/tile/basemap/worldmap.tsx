@@ -3,6 +3,7 @@ import {
     Scene,
     Source,
     PolygonLayer,
+    TileDebugLayer
   } from '@antv/l7';
   // @ts-ignore
   import { Map } from '@antv/l7-maps';
@@ -14,9 +15,9 @@ import {
         id: 'map',
         stencil: true,
         map: new Map({
-          center: [121.268, 30.3628],
+          center: [0, 0],
           // zoom: 12,
-          zoom: 4,
+          zoom: 0,
         }),
       });
   
@@ -26,6 +27,7 @@ import {
         parser: {
           type: 'mvt',
           tileSize: 256,
+          warp: false,
         },
       });
       
@@ -41,6 +43,9 @@ import {
           .color('#9fd7fc');
   
         scene.addLayer(water_surface);
+        console.log(water_surface)
+        const debugerLayer = new TileDebugLayer({ usage: 'basemap' });
+        scene.addLayer(debugerLayer);
       });
     }, []);
     return (

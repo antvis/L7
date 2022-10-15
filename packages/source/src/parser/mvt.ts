@@ -19,6 +19,7 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   minZoom: 0,
   maxZoom: Infinity,
   zoomOffset: 0,
+  warp: true,
 };
 
 // const TILE_SIZE = 512;

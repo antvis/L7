@@ -41,26 +41,20 @@ export default class LayerService implements ILayerService {
   public reRender = throttle(() => {
     this.updateLayerRenderList();
     this.renderLayers();
-  }, 32)
+  }, 32);
 
   public throttleRenderLayers = throttle(() => {
     this.renderLayers();
-  }, 16)
-  
+  }, 16);
 
   public add(layer: ILayer) {
- 
     if (this.sceneInited) {
-      layer.on('inited',()=>{
+      layer.init().then(() => {
+        this.layers.push(layer);
         this.updateLayerRenderList();
         this.renderLayers();
-      })
-      layer.init();
-      
+      });
     }
-    this.layers.push(layer);
-    
-   
   }
 
   public addMask(mask: ILayer) {
@@ -77,7 +71,6 @@ export default class LayerService implements ILayerService {
         this.updateLayerRenderList();
       }
     });
-   
   }
 
   public getSceneInited() {
@@ -142,7 +135,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      layer.hooks.beforeRenderData.call();
+      layer.hooks.beforeRenderData.promise();
       layer.hooks.beforeRender.call();
 
       if (layer.masks.length > 0) {
@@ -153,7 +146,7 @@ export default class LayerService implements ILayerService {
           framebuffer: null,
         });
         layer.masks.map((m: ILayer) => {
-          m.hooks.beforeRenderData.call();
+          m.hooks.beforeRenderData.promise();
           m.hooks.beforeRender.call();
           m.render();
           m.hooks.afterRender.call();
@@ -174,7 +167,8 @@ export default class LayerService implements ILayerService {
   public updateLayerRenderList() {
     // Tip: 每次更新都是从 layers 重新构建
     this.layerList = [];
-    this.layers.filter((layer) => layer.inited)
+    this.layers
+      .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .sort((pre: ILayer, next: ILayer) => {
         // 根据 zIndex 对渲染顺序进行排序

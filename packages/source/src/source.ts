@@ -43,7 +43,9 @@ export default class Source extends EventEmitter implements ISource {
   public hooks = {
     init: new SyncHook(),
   };
-
+  public getSourceCfg() {
+    return this.cfg;
+  }
   public parser: IParserCfg = { type: 'geojson' };
   public transforms: ITransform[] = [];
   public cluster: boolean = false;
@@ -65,7 +67,9 @@ export default class Source extends EventEmitter implements ISource {
   // 原始数据
   private originData: any;
   private rawData: any;
-  private cfg: any = {};
+  private cfg: Partial<ISourceCFG> = {
+    autoRender: true
+  };
 
   private clusterIndex: Supercluster;
 

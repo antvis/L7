@@ -16,6 +16,7 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   minZoom: 0,
   maxZoom: Infinity,
   zoomOffset: 0,
+  warp: true,
 };
 
 export const rasterDataTypes = [RasterTileType.ARRAYBUFFER, RasterTileType.RGB];
