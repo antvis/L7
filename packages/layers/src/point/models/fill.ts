@@ -201,7 +201,7 @@ export default class FillModel extends BaseModel {
     const { frag, vert, type } = this.getShaders(animateOption);
 
     this.layer.triangulation = PointFillTriangulation;
-    const model =  await this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: type,
         vertexShader: vert,

@@ -176,7 +176,7 @@ export default class TextModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels():Promise<IModel[]>  {
     this.layer.on('remapping', this.mapping);
     this.extent = this.textExtent();
     const {
@@ -187,17 +187,17 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
-  public buildModels = async (callbackModel: (models: IModel[]) => void) => {
+  public async buildModels():Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.mapping();
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
@@ -206,15 +206,10 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
       });
-  };
+      return [model]
+       
+  }
   public needUpdate() {
     const {
       textAllowOverlap = false,
@@ -228,6 +223,7 @@ export default class TextModel extends BaseModel {
       (!textAllowOverlap && (Math.abs(this.currentZoom - zoom) > 1 || !flag)) ||
       textAllowOverlap !== this.preTextStyle.textAllowOverlap
     ) {
+      // TODO this.mapping
       this.reBuildModel();
       return true;
     }
@@ -238,6 +234,7 @@ export default class TextModel extends BaseModel {
   public clearModels() {
     this.texture?.destroy();
     this.dataTexture?.destroy();
+    // TODO this.mapping
     this.layer.off('remapping', this.mapping);
   }
   protected registerBuiltinAttributes() {
@@ -326,12 +323,13 @@ export default class TextModel extends BaseModel {
     });
   }
 
-  private mapping = () => {
+  private mapping = async(): Promise<void> =>{
     this.initGlyph();
     this.updateTexture();
     this.filterGlyphs();
-    this.reBuildModel();
-  };
+    await this.reBuildModel();
+  }
+
   private textExtent(): [[number, number], [number, number]] {
     const bounds = this.mapService.getBounds();
     return padBounds(bounds, 0.5);
@@ -518,13 +516,13 @@ export default class TextModel extends BaseModel {
     });
   }
 
-  private reBuildModel() {
+  private async reBuildModel() {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointText',
         vertexShader: textVert,
@@ -533,14 +531,9 @@ export default class TextModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      })
-      .then((model) => {
-        this.layer.models = [model];
-        this.layerService.throttleRenderLayers();
-      })
-      .catch((err) => {
-        console.warn(err);
-        this.layer.models = [];
       });
+      // TODO 渲染流程待修改
+      this.layer.models = [model];
+      this.layerService.throttleRenderLayers();
   }
 }

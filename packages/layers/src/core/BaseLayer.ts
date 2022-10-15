@@ -618,7 +618,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public style(
     options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
   ): ILayer {
-    const lastConfig = this.getLayerConfig();
     const { passes, ...rest } = options;
 
     // passes 特殊处理

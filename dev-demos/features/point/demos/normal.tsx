@@ -8,7 +8,7 @@ export default () => {
     useEffect( () => {
       const scene = new Scene({
         id: 'map',
-        map: new GaodeMap({
+        map: new GaodeMapV2({
           style: 'dark',
           center: [ 121.417463, 31.215175 ],
           pitch: 0,

@@ -49,7 +49,7 @@ export class Tile extends EventEmitter {
 
   constructor(options: TileOptions) {
     super();
-    const { x, y, z, tileSize, warp } = options;
+    const { x, y, z, tileSize, warp = true } = options;
     this.x = x;
     this.y = y;
     this.z = z;
