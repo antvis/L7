@@ -60,7 +60,7 @@ export default class HeatMapModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public async initModels(callbackModel: (models: IModel[]) => void) {
+   public async initModels(): Promise<IModel[]> {
     const {
       createFramebuffer,
       getViewportSize,
@@ -95,12 +95,12 @@ export default class HeatMapModel extends BaseModel {
     });
 
     this.updateColorTexture();
+    return [this.intensityModel, this.colorModel]
 
-    callbackModel([this.intensityModel, this.colorModel]);
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   protected registerBuiltinAttributes() {

@@ -55,7 +55,7 @@ export default class ImageDataModel extends BaseModel {
       u_colorTexture: this.colorTexture,
     };
   }
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -91,7 +91,7 @@ export default class ImageDataModel extends BaseModel {
       flipY: false,
     });
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'RasterImage',
         vertexShader: ImageVert,
@@ -102,13 +102,7 @@ export default class ImageDataModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   public clearModels(): void {
@@ -116,8 +110,8 @@ export default class ImageDataModel extends BaseModel {
     this.colorTexture?.destroy();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   protected registerBuiltinAttributes() {

@@ -62,16 +62,16 @@ export default class CityBuildModel extends BaseModel {
     }
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     this.calCityGeo();
 
     this.startModelAnimate();
 
-    this.buildModels(callbackModel);
+      return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.layer
+ public async buildModels():Promise<IModel[]> {
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'cityBuilding',
         vertexShader: buildVert,
@@ -83,13 +83,7 @@ export default class CityBuildModel extends BaseModel {
           face: gl.BACK,
         },
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   protected registerBuiltinAttributes() {

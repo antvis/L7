@@ -13,10 +13,8 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
       },
     },
   };
-  public buildModels() {
+  public async buildModels() {
     this.layerModel = new TileModel(this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 }

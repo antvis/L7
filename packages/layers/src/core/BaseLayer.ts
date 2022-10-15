@@ -1289,11 +1289,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.isVisible() && isPick;
   }
 
-  public buildModels() {
+  public async buildModels() {
     throw new Error('Method not implemented.');
   }
-  public rebuildModels() {
-    throw new Error('Method not implemented.');
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
   public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {
@@ -1303,6 +1303,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) return this;
+    // TODO 待评估
     // if (this.layerModelNeedUpdate && this.layerModel) {
 
     //   this.layerModel.buildModels((models: IModel[]) => {

@@ -25,18 +25,18 @@ export default class EarthAtomSphereModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -997;
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'earthAtmoSphere',
         vertexShader: atmoSphereVert,
@@ -45,13 +45,7 @@ export default class EarthAtomSphereModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   protected registerBuiltinAttributes() {

@@ -50,7 +50,7 @@ export default class WindModel extends BaseModel {
     throw new Error('Method not implemented.');
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       uMin = -21.32,
       uMax = 26.8,
@@ -113,7 +113,7 @@ export default class WindModel extends BaseModel {
       this.layerService.reRender();
     });
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'wind',
         vertexShader: WindVert,
@@ -124,14 +124,8 @@ export default class WindModel extends BaseModel {
         stencil: getMask(mask, maskInside),
         blend: this.getBlend(),
       })
-      .then((model) => {
-        this.colorModel = model;
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+      this.colorModel = model;
+      return [model];
   }
 
   public getWindSize() {
@@ -149,8 +143,8 @@ export default class WindModel extends BaseModel {
     return { imageWidth, imageHeight };
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   public clearModels(): void {

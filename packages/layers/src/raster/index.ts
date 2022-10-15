@@ -3,17 +3,10 @@ import { IRasterLayerStyleOptions } from '../core/interface';
 import RasterModels, { RasterModelType } from './models/index';
 export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new RasterModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
   protected getDefaultConfig() {
