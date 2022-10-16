@@ -53,6 +53,8 @@ export class Base extends EventEmitter{
         layer.once('modelLoaded', () => {
           this.tileLayerLoad(tile);
           this.emit('layerLoad', tile);
+
+          // this.isTileChildLoaded(tile) && this.emit('tileChildLoad', tile)
         })
       })
       return layerCollections;
@@ -176,7 +178,7 @@ export class Base extends EventEmitter{
       return immediately;
     }
 
-    public updateTileVisible(
+    public async updateTileVisible(
       tile: Tile,
     ) {
       const layers = this.tileLayerCache.get(tile.key);
@@ -186,43 +188,47 @@ export class Base extends EventEmitter{
     
       // // 1. 有些图层可以直接更新 如 点图层
       // // 2. 当 tile 瓦片 visible 为 true 的时候直接执行
-      if (this.updateImmediately(layers) || tile.isVisible ) {
-      // if (this.updateImmediately(layers) ) {
-        this.updateLayersVisible(layers, tile.isVisible);
-        return;
-      }
+      // if (this.updateImmediately(layers) || tile.isVisible ) {
+      // // if (this.updateImmediately(layers) ) {
+        // this.updateLayersVisible(layers, tile.isVisible);
+      //   return;
+      // }
 
-      /** tile 不显示 */
-      // parent 不存在、children 存在但是不显示
-      if(!tile.parent && tile.children.length > 0 && !tile.children[0].isVisible) {
-        this.updateLayersVisible(layers, tile.isVisible);
-        return;
-      }
+      // /** 不连续层级的切换 */
+      // // parent 不存在、children 不显示
+      // if(!tile.parent && tile.children.length > 0 && !tile.children[0].isVisible) {
+        // this.updateLayersVisible(layers, tile.isVisible);
+      //   return;
+      // }
 
-      // parent children 都不存在
-      if(!tile.parent && tile.children.length === 0) {
-        this.updateLayersVisible(layers, tile.isVisible);
-        return;
-      }
-      // parent 存在但是不显示、children 不存在
-      if(tile.parent && !tile.parent.isVisible && tile.children.length === 0) {
-        this.updateLayersVisible(layers, tile.isVisible);
-        return;
-      }
-      // parent 存在、children 存在但是不显示
-      if(tile.parent && !tile.parent.isVisible && tile.children.length > 0 && !tile.children[0].isVisible) {
-        this.updateLayersVisible(layers, tile.isVisible);
-        return;
-      }
+      // // parent children 都不存在
+      // if(!tile.parent && tile.children.length === 0) {
+        // this.updateLayersVisible(layers, tile.isVisible);
+      //   return;
+      // }
+      // // parent 存在但是不显示、children 不存在
+      // if(tile.parent && !tile.parent.isVisible && tile.children.length === 0) {
+        // this.updateLayersVisible(layers, tile.isVisible);
+      //   return;
+      // }
+      // // parent、children 都存在但是不显示
+      // if(tile.parent && !tile.parent.isVisible && tile.children.length > 0 && !tile.children[0].isVisible) {
+        // this.updateLayersVisible(layers, tile.isVisible);
+      //   return;
+      // }
       
-      // 隐藏当前层级、显示下一层级的瓦片 地图放大（zoom++）
+
+      // 隐藏当前层级、显示下一层级的瓦片
       if(tile.children.length > 0 && tile.children[0].isVisible) {
-        this.renderChildren(tile);
+        const layers = this.tileLayerCache.get(tile.key) || [];
+        await this.waitChildren(tile);
+        this.updateLayersVisible(layers, tile.isVisible);
         return;
       }
-      // 隐藏当前层级、显示上一层级的瓦片 地图缩小（zoom--）
+      // 隐藏当前层级、显示上一层级的瓦片
       if(tile.parent && tile.parent.isVisible) {
-        this.renderParent(tile);
+        await this.waitParent(tile);
+        this.updateLayersVisible(layers, tile.isVisible);
         return;
       }
 
@@ -231,47 +237,46 @@ export class Base extends EventEmitter{
       // console.log('parent', tile.parent, tile, tile.children)
       // TODO: 兜底更新、在瓦片优化完毕后去除
       // this.tileAllLoad(tile, () => {
-      //   this.updateLayersVisible(layers, tile.isVisible);
+      //   updateLayersConfig(layers, 'visible', tile.isVisible);
+      //   layerService.reRender();
       // });
+    
     }
 
     public updateLayersVisible(layers: ILayer[], visible: boolean){
       updateLayersConfig(layers, 'visible', visible);
-      // this.layerService.throttleRenderLayers();
-      this.layerService.renderLayers();
+      this.layerService.throttleRenderLayers();
     }
 
-    public renderChildren(tile: Tile) {
-      const layers = this.tileLayerCache.get(tile.key) || [];
-      const update = (updateTile: Tile) => {
-        // 需要监听 children 的更新和自身的更新
-        if(tile.children.filter(child => child.key === updateTile.key).length > 0 || updateTile.key === tile.key) {
-          if(this.isTileChildLoaded(tile)) {
-            this.updateLayersVisible(layers, tile.isVisible);
-            this.off('layerLoad', update);
-          }
+    public waitChildren(tile: Tile) {
+      return new Promise((resolve) =>{
+        if(this.isTileChildLoaded(tile)) {
+          resolve(tile);
+        } else {
+          this.on('layerLoad', (updateTile: Tile) => {
+            // 需要监听 children 的更新和自身的更新
+            if(tile.children.filter(child => child.key === updateTile.key).length > 0 || updateTile.key === tile.key) {
+              if(this.isTileChildLoaded(tile)) {
+                resolve(tile);
+              }
+            }
+          })
         }
-      }
-      if(this.isTileChildLoaded(tile)) {
-        this.updateLayersVisible(layers, tile.isVisible);
-      } else {
-        this.on('layerLoad', update);
-      }
+      })
     }
 
-    public renderParent(tile: Tile) {
-      const layers = this.tileLayerCache.get(tile.key) || [];
-      const update = (updateTile: Tile) => {
-        if(updateTile.key ===  tile.parent?.key && this.isTileParentLoaded(tile)) {
-          this.updateLayersVisible(layers, tile.isVisible);
-          this.off('layerLoad', update);
+    public waitParent(tile: Tile) {
+      return new Promise((resolve) =>{
+        if(this.isTileParentLoaded(tile)) {
+          resolve(tile);
+        } else {
+          this.on('layerLoad', (updateTile: Tile) => {
+            if(updateTile.key ===  tile.parent?.key && this.isTileParentLoaded(tile)) {
+              resolve(tile);
+            }
+          })
         }
-      }
-      if(this.isTileParentLoaded(tile)) {
-        this.updateLayersVisible(layers, false);
-      } else {
-        this.on('layerLoad', update);
-      }
+      })
     }
 
     public destroy(): void {
