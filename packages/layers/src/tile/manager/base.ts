@@ -178,9 +178,7 @@ export class Base extends EventEmitter{
       return immediately;
     }
 
-    public async updateTileVisible(
-      tile: Tile,
-    ) {
+    public updateTileVisible( tile: Tile, ) {
       const layers = this.tileLayerCache.get(tile.key);
 
       // empty
@@ -220,15 +218,12 @@ export class Base extends EventEmitter{
 
       // 隐藏当前层级、显示下一层级的瓦片
       if(tile.children.length > 0 && tile.children[0].isVisible) {
-        const layers = this.tileLayerCache.get(tile.key) || [];
-        await this.waitChildren(tile);
-        this.updateLayersVisible(layers, tile.isVisible);
+        this.waitChildren(tile);
         return;
       }
       // 隐藏当前层级、显示上一层级的瓦片
       if(tile.parent && tile.parent.isVisible) {
-        await this.waitParent(tile);
-        this.updateLayersVisible(layers, tile.isVisible);
+        this.waitParent(tile);
         return;
       }
 
@@ -249,34 +244,32 @@ export class Base extends EventEmitter{
     }
 
     public waitChildren(tile: Tile) {
-      return new Promise((resolve) =>{
-        if(this.isTileChildLoaded(tile)) {
-          resolve(tile);
-        } else {
-          this.on('layerLoad', (updateTile: Tile) => {
-            // 需要监听 children 的更新和自身的更新
-            if(tile.children.filter(child => child.key === updateTile.key).length > 0 || updateTile.key === tile.key) {
-              if(this.isTileChildLoaded(tile)) {
-                resolve(tile);
-              }
+      const layers = this.tileLayerCache.get(tile.key) || [];
+      if(this.isTileChildLoaded(tile)) {
+        this.updateLayersVisible(layers, false);
+      } else {
+        this.on('layerLoad', (updateTile: Tile) => {
+          // 需要监听 children 的更新和自身的更新
+          if(tile.children.filter(child => child.key === updateTile.key).length > 0 || updateTile.key === tile.key) {
+            if(this.isTileChildLoaded(tile)) {
+              this.updateLayersVisible(layers, false);
             }
-          })
-        }
-      })
+          }
+        })
+      }
     }
 
     public waitParent(tile: Tile) {
-      return new Promise((resolve) =>{
-        if(this.isTileParentLoaded(tile)) {
-          resolve(tile);
-        } else {
-          this.on('layerLoad', (updateTile: Tile) => {
-            if(updateTile.key ===  tile.parent?.key && this.isTileParentLoaded(tile)) {
-              resolve(tile);
-            }
-          })
-        }
-      })
+      const layers = this.tileLayerCache.get(tile.key) || [];
+      if(this.isTileParentLoaded(tile)) {
+        this.updateLayersVisible(layers, false);
+      } else {
+        this.on('layerLoad', (updateTile: Tile) => {
+          if(updateTile.key ===  tile.parent?.key && this.isTileParentLoaded(tile)) {
+            this.updateLayersVisible(layers, false);
+          }
+        })
+      }
     }
 
     public destroy(): void {
