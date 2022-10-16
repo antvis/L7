@@ -108,7 +108,7 @@ export class Base {
     });
 
     // 地图视野发生改变
-    this.mapService.on('zoomend', () => this.viewchange());
+    this.mapService.on('zoomend', () => this.mapchange());
     this.mapService.on('moveend', () => this.viewchange());
     }
 
@@ -117,7 +117,7 @@ export class Base {
     }
 
     //  防抖操作
-    viewchange = debounce(this.mapchange, 200)
+    viewchange = debounce(this.mapchange, 24)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public tileLoaded(tile: Tile) {
@@ -142,20 +142,18 @@ export class Base {
         return;
       }
       this.tilesetManager.tiles
-        .filter((tile: Tile) => tile.isLoaded)
+        .filter((tile: Tile) => tile.isLoaded)// 过滤未加载完成的
+        .filter((tile: Tile) => tile.isVisibleChange)// 过滤未发生变化的
+        .filter((tile: Tile) => this.isTileReady(tile))// 过滤未发生变化的
         .map(async (tile: Tile) => {
-          if(!this.isTileReady(tile)) return; // 是否有数据
- 
           if (!this.tileLayerManager.hasTile(tile)) {
             const {layers} = await this.tileLayerManager.addTile(tile);
-            this.setPickState(layers)
+            // this.setPickState(layers)
           } else {
-            if (!tile.isVisibleChange) {
-              return;
-            }
             this.tileLayerManager.updateTileVisible(tile, this.layerService);
             const layers = this.tileLayerManager.getLayers();
-            this.setPickState(layers)
+            this.layerService.reRender()
+            // this.setPickState(layers)
          
           }
         });
@@ -164,11 +162,6 @@ export class Base {
         // 将事件抛出，图层上可以使用瓦片
         this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
       }
-    }
-
-    public updateTileLayerVisible(layers: ILayer) {
-
-
     }
 
     public isTileReady(tile:Tile){

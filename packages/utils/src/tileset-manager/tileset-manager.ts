@@ -53,7 +53,8 @@ export class TilesetManager extends EventEmitter {
       extent: DEFAULT_EXTENT,
       getTileData: NOOP,
       warp: true,
-      updateStrategy: UpdateTileStrategy.Replace,
+      // TODO 更新策略
+      updateStrategy: UpdateTileStrategy.Overlap,
     };
     this.updateOptions(options);
   }
@@ -105,7 +106,6 @@ export class TilesetManager extends EventEmitter {
 
     let isAddTile = false;
     const tileIndices = this.getTileIndices(verifyZoom, latLonBoundsBuffer);
-
     this.currentTiles = tileIndices.map(({ x, y, z }) => {
       let tile = this.getTile(x, y, z);
       if (tile) {
@@ -119,7 +119,6 @@ export class TilesetManager extends EventEmitter {
         }
         return tile;
       }
-
       tile = this.createTile(x, y, z);
       isAddTile = true;
       return tile;
@@ -128,10 +127,7 @@ export class TilesetManager extends EventEmitter {
     if (isAddTile) {
       // 更新缓存
       this.resizeCacheTiles();
-      // 重新瓦片树
-      this.rebuildTileTree();
     }
-
     // 更新瓦片显示状态
     this.updateTileVisible();
     // 取消滞留请求中的瓦片
@@ -323,6 +319,8 @@ export class TilesetManager extends EventEmitter {
         }
       }
     }
+    // 缓存更新重新计算瓦片树
+    this.rebuildTileTree();
   }
 
   // 重新计算瓦片树

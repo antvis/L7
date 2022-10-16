@@ -76,6 +76,7 @@ export class BaseMapTileLayerManager extends Base implements IBaseTileLayerManag
 
     this.initOptions = {
       usage: 'basemap',
+      visible: true,
       layerType: this.parent.type,
       shape: layerShape,
       zIndex,

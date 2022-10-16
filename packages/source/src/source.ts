@@ -301,7 +301,6 @@ export default class Source extends EventEmitter implements ISource {
     if (!tilesetOptions) {
       return;
     }
-
     if (this.tileset) {
       this.tileset.updateOptions(tilesetOptions);
       return this.tileset;

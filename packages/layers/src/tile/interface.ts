@@ -35,6 +35,8 @@ export interface ILayerTileConfig {
 }
 
 export interface ITileFactory {
+  loaded: boolean;
+  layers: ILayer[];
   createTile(
     tile: Tile,
     initOptions: ISubLayerInitOptions,

@@ -6,7 +6,7 @@ import VectorPolygonTile from './polygon';
 import VectorMask from './mask'
 import RasterTileFactory from './raster';
 import RasterDataFactory from './rasterData';
-import TestTile from './test';
+import DebugTile from './debug';
 
 export type TileType =
   | 'PolygonLayer'
@@ -27,7 +27,7 @@ export function getTileFactory(tileType: TileType, parser: IParserCfg) {
     case 'MaskLayer':
       return VectorMask;
     case 'TileDebugLayer': 
-      return TestTile;
+      return DebugTile;
     case 'RasterLayer':
       if(rasterDataTypes.includes(parser.dataType)) {
         return RasterDataFactory;

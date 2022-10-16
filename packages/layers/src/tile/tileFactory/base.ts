@@ -41,7 +41,8 @@ export default class TileFactory implements ITileFactory {
   public outSideEventTimer: Timeout | null = null;
   protected zoomOffset: number;
   protected tilesetManager: TilesetManager;
-  protected layers: ILayer[];
+  public layers: ILayer[];
+  public loaded: false;
   // 用于记录图层内事件，辅助判断图层外事件逻辑
   private eventCache = {
     click: 0,
@@ -134,11 +135,12 @@ export default class TileFactory implements ITileFactory {
     const { mask, color, layerType, size, shape, usage, basemapColor, basemapSize } = initOptions;
     const FactoryTileLayer = L7Layer ? L7Layer : VectorLayer;
     const layer = new FactoryTileLayer({
-      visible: tile.isVisible,
+  
       tileOrigin: vectorTileLayer?.l7TileOrigin,
       coord: vectorTileLayer?.l7TileCoord,
       needListen,
       ...this.getLayerInitOption(initOptions),
+      visible: tile.isVisible,
     });
 
     if(layerType) layer.type = layerType;

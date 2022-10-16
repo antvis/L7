@@ -28,6 +28,8 @@ export class Tile extends EventEmitter {
   public isVisibleChange = false;
 
   public loadedLayers: number = 0;
+
+  public isLayerLoaded: boolean = false;
   public isLoad: boolean = false;
   public isChildLoad: boolean = false;
   // 瓦片的父级瓦片
@@ -70,6 +72,10 @@ export class Tile extends EventEmitter {
   // 是否瓦片请求失败
   public get isFailure() {
     return this.loadStatus === LoadTileDataStatus.Failure;
+  }
+
+  public setTileLayerLoaded() {
+    this.isLayerLoaded = true;
   }
 
   // 是否瓦片请求被取消
@@ -141,7 +147,6 @@ export class Tile extends EventEmitter {
       const { warpX, warpY } = getTileWarpXY(x, y, z, warp);
       const { signal } = this.abortController;
       const params = { x: warpX, y: warpY, z, bounds, tileSize, signal, warp };
-
       tileData = await getData(params, this);
     } catch (err) {
       error = err;

@@ -67,7 +67,7 @@ export default class LayerService implements ILayerService {
   public async initLayers() {
     this.sceneInited = true;
     this.layers.forEach(async (layer) => {
-      if (!layer.statrtInit) {
+      if (!layer.startInit) {
         await layer.init();
         this.updateLayerRenderList();
       }

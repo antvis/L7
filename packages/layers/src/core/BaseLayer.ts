@@ -135,7 +135,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   // 注入插件集
   public plugins: ILayerPlugin[];
 
-  public statrtInit: boolean = false;
+  public startInit: boolean = false;
 
   public sourceOption: {
     data: any;
@@ -265,7 +265,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         this.rawConfig[key] = configToUpdate[key];
       }
     });
-    if (!this.statrtInit) {
+    if (!this.startInit) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
         ...configToUpdate,
@@ -275,7 +275,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
       // @ts-ignore
       handleStyleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
-
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,
@@ -316,7 +315,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public async init(): Promise<void> {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
-    this.statrtInit = true;
+    this.startInit = true;
     // 初始化图层配置项
     // const { enableMultiPassRenderer = false } = this.rawConfig;
     // this.configService.setLayerConfig(sceneId, this.id, {

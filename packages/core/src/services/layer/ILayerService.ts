@@ -143,6 +143,7 @@ export interface ISubLayerInitOptions {
   usage?: string|undefined;
   layerType: string;
   transforms?: ITransform[];
+  visible: boolean,
   shape?: string | string[] | IScaleValue;
   // options
   zIndex: number;
@@ -277,7 +278,7 @@ export interface ILayer {
   coordCenter: number[];
   name: string; //
   inited: boolean; // 是否初始化完成
-  statrtInit: boolean // 是否开始初始化;
+  startInit: boolean // 是否开始初始化;
   zIndex: number;
   clusterZoom: number;
   plugins: ILayerPlugin[];
