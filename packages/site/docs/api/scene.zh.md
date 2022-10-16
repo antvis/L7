@@ -18,6 +18,7 @@ redirect_from:
 <description> _string | HTMLElement_ **必选** </description>
 
 需传入 dom 容器或者容器 id
+
 ### map
 
 <description> MapInstance **必选** </description>
@@ -83,7 +84,6 @@ L7 Logo 的显示位置 默认左下角
 <description> _boolean_ **可选** _default: false_ </description>
 
 是否保留缓冲区数据 `boolean` `false`
-
 
 ## Layer 方法
 
@@ -740,6 +740,7 @@ scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
 ```
+
 ## 实验参数
 
 参数可能会废弃

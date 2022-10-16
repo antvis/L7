@@ -167,9 +167,6 @@ const scene = new Scene({
 
 地图是否可旋转 {Boolean} default true
 
-
-
-
 ## 注册使用高德插件
 
 ```javascript
