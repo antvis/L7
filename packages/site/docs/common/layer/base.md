@@ -1,6 +1,9 @@
-`markdown:docs/common/style.md`
+
+## options
 
 `markdown:docs/common/layer/options.md`
+
+## 数据方法
 
 `markdown:docs/common/layer/layer_encode.md`
 

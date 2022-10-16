@@ -4,7 +4,6 @@ order: 1
 ---
 `markdown:docs/common/style.md`
 
-## L7 简介
 L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。L7 中的 L 代表 Location，7 代表世界七大洲，寓意能为全球位置数据提供可视分析的能力。L7 专注数据可视化化表达，通过颜色、大小、纹理，方向，体积等视觉变量设置实现从数据到信息清晰，有效的表达。
 
 ### 接入 L7 
@@ -26,7 +25,21 @@ npm install --save @antv/l7-maps;
 <script src = 'https://unpkg.com/@antv/l7@2.0.11'></script>
 </head>
 ```
-Cdn 引用 在使用时通过 L7 命名空间获取所有对象并初始化，如 L7.scene、L7.GaodeMap
+CDN 引用 在使用时通过 L7 命名空间获取所有对象并初始化，如 L7.scene、L7.GaodeMap
+
+```javascript
+import { Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
+const scene = new L7.Scene({
+  id: 'map',
+  map: new L7.GaodeMap({
+    style: 'dark',
+    center: [110.770672, 34.159869],
+    pitch: 45,
+  }),
+});
+```
 
 ## 基础教程
 ###   地图组件使用

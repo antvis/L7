@@ -1,5 +1,5 @@
 ---
-title: 本地运行demo
+title: 本地运行
 order: 1
 ---
 `markdown:docs/common/style.md`
@@ -7,7 +7,7 @@ order: 1
 ### 一、打开L7demo页面
 
 
- 选择一个任意一个你想看的demo
+选择一个任意一个你想看的demo
 
 
 <img src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*bKT5TrlYlGEAAAAAAAAAAABkARQnAQ" alt="L7 地理可视化" width = "50%" height = "100%">

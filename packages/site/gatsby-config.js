@@ -173,30 +173,6 @@ module.exports = {
       },
       // ****** api
       {
-        slug: 'api/scene',
-        title: {
-          zh: '场景',
-          en: 'Scene',
-        },
-        order: 0,
-      },
-      {
-        slug: 'api/map',
-        title: {
-          zh: '地图 Map',
-          en: 'Map',
-        },
-        order: 1,
-      },
-        {
-          slug: 'api/map/earth',
-          title: {
-            zh: '地球模式',
-            en: 'Earth Mode',
-          },
-          order: 3,
-        },
-      {
         slug: 'api/base',
         title: {
           zh: '图层 base',
@@ -283,6 +259,14 @@ module.exports = {
           en: 'tile',
         },
         order: 8,
+      },
+      {
+        slug: 'api/experiment/earth',
+        title: {
+          zh: '地球模式',
+          en: 'Earth Mode',
+        },
+        order: 0,
       },
       // {
       //   slug: 'api/mini',

@@ -1,6 +1,6 @@
 ---
 title: 场景 Scene
-order: 1
+order: 0
 redirect_from:
   - /zh/docs/api
 ---
@@ -9,56 +9,18 @@ redirect_from:
 
 场景对象 `scene` 是包含地图、地图控件、组件、加载资源的全局对象，通过 `scene` 场景对象，我们可以获取到操作地图需要的所有内容。
 
-## options
-
-创建场景对象的时候需要传入一些参数用于进行初始化操作。
-
-| 名称         | 类型                         | 说明                                                  | 是否必填   |
-| ------------ | ---------------------------- | ----------------------------------------------------- | ---------- |
-| id           | `string` ｜ `HTMLDivElement` | 地图在页面上的 `DOM` 容器，需传入 dom 容器或者容器 id | `required` |
-| map          | `IMapWrapper`                | L7 地图实例                                           | `required` |
-| logoPosition | `PositionName`               | 地图 Logo 的位置                                      | `optional` |
-| logoVisible  | `boolean`                    | 地图 Logo 的可见                                      | `optional` |
-| antialias    | `boolean`                    | 是否开启抗锯齿                                        | `optional` |
-| stencil      | `boolean`                    | 是否开启裁减                                          | `optional` |
-
-```javascript
-// Module 引用
-import { Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
-const scene = new Scene({
-  id: 'map',
-  map: new GaodeMap({
-    style: 'dark',
-    center: [110.770672, 34.159869],
-    pitch: 45,
-  }),
-});
-
-// CDN 使用方法
-const scene = new L7.Scene({
-  id: 'map',
-  map: new L7.GaodeMap({
-    style: 'dark',
-    center: [110.770672, 34.159869],
-    pitch: 45,
-  }),
-});
-```
-
-## Map
-
-L7 地理可视化侧重于地理数据的可视化表达，地图层需要依赖第三方地图，第三方地图通过 Scene 统一创建，创建管理
-只需要通过 Scene 传入地图配置项即可。
-
-目前 L7 支持两种地图底图
-
-- 高德地图 国内业务场景 合规中国地图
-- MapBox 国际业务，或者内网离线部署场景
-
 <img width="100%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*3wMCR7vIlCwAAAAAAAAAAAAAARQnAQ'>
 
+## options
+
+### id
+
+<description> _string | HTMLElement_ **必选** </description>
+
+需传入 dom 容器或者容器 id
 ### map
+
+<description> MapInstance **必选** </description>
 
 可以通过 scene map 属性获取 map 实例
 
@@ -80,20 +42,6 @@ const scene = new L7.Scene({
   }),
 });
 ```
-
-### 构造函数
-
-**Scene**
-
-## 配置项
-
-### 地图配置项
-
-### id
-
-<description> _string | HTMLElement_ **必选** </description>
-
-需传入 dom 容器或者容器 id
 
 ### logoPosition
 
@@ -136,64 +84,6 @@ L7 Logo 的显示位置 默认左下角
 
 是否保留缓冲区数据 `boolean` `false`
 
-## Map 配置项
-
-### zoom 初始化缩放等级
-
-<description> _number_ </description>
-
-地图初始显示级别 {number} Mapbox （0-24） 高德 （2-19）
-
-### center 地图中心
-
-地图初始中心经纬度 {Lnglat}
-
-### pitch 地图倾角
-
-地图初始俯仰角度 {number}  default 0
-
-### style 地图图样式
-
-简化地图样式设置，L7 内置了三种主题默认样式 高德，mapbox 都可以使用
-
-- dark
-- light
-- normal
-- blank 无底图
-
-除了内置的样式，你也可以传入自定义的其他属性。
-
-比如高德地图
-
-⚠️ 高德地图样式 增加 `isPublic=true` 参数
-
-```javascript
-{
-  style: 'amap://styles/2a09079c3daac9420ee53b67307a8006?isPublic=true'; // 设置方法和高德地图一致
-}
-```
-
-### minZoom 最小缩放等级
-
-地图最小缩放等级 {number}  default 0 Mapbox 0-24） 高德 （2-19）
-
-### maxZoom 最大缩放等级
-
-地图最大缩放等级 {number}  default 22 Mapbox（0-24） 高德 （2-19）
-
-### rotateEnable 是否允许旋转
-
-地图是否可旋转 {Boolean} default true
-
-## 实验参数
-
-参数可能会废弃
-
-### offsetCoordinate
-
-{ boolean } default true
-
-高德地图适用,是否关闭偏移坐标系
 
 ## Layer 方法
 
@@ -850,3 +740,12 @@ scene.on('dragstart', (ev) => {}); //开始拖拽地图时触发
 scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
 ```
+## 实验参数
+
+参数可能会废弃
+
+### offsetCoordinate
+
+{ boolean } default true
+
+高德地图适用,是否关闭偏移坐标系

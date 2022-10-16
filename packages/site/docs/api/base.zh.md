@@ -1,10 +1,8 @@
 ---
 
-title: 图层基类
+title: 图层基类 BaseLayer
 order: 1
 ---`markdown:docs/common/style.md`
-
-# 简介
 
 L7 Layer 接口设计遵循图形语法，所有图层都继承于基类（baseLayer）。
 

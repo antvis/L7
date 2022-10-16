@@ -1,16 +1,4 @@
 
-## options 配置项
-
-通过 options，我们可以在初始化的时候指定图层状态
-
-```javascript
-const options = {
-  name: 'xxx',
-  zIndex: 1,
-};
-const layer = new Layer(options);
-```
-
 ### name
 
 <description> _string_ **optional** _default:_ 自动数字编号</description>
