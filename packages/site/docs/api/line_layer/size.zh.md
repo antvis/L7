@@ -31,19 +31,19 @@ layer.size(2);
 
 ```js
 layer.source({
-      type: 'Feature',
-      properties: {
-        lineSize: 2
-      },
-      geometry: {
-        type: 'LineString',
-        coordinates: [
-          [119.988511, 30.269614],
-          [119.9851, 30.269323],
-          [119.99271, 30.22088],
-        ],
-      },
-    })
+  type: 'Feature',
+  properties: {
+    lineSize: 2,
+  },
+  geometry: {
+    type: 'LineString',
+    coordinates: [
+      [119.988511, 30.269614],
+      [119.9851, 30.269323],
+      [119.99271, 30.22088],
+    ],
+  },
+});
 layer.size('lineSize');
 ```
 
@@ -60,12 +60,12 @@ layer.size('type', [1, 2, 3]);
 `size` 方法支持回调函数的写法，将根据 `field` 作为 `callback` 方法的参数，`callback` 方法的返回值作为线图层实际的宽高。
 
 ```js
-layer.size('type', value => {
-    switch(value) {
-        case 'path': return 1;
-        case 'road': return 2;
-    }
+layer.size('type', (value) => {
+  switch (value) {
+    case 'path':
+      return 1;
+    case 'road':
+      return 2;
+  }
 });
 ```
-
-
