@@ -12,21 +12,27 @@ order: 2
 ```js
 // 传入 GeoJSON 类型数据 *** L7 默认支持，不需要 parser 解析
 var data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [120, 30],
-              ...
-            ]
-          },
-        },
-      ],
-    };
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.5234375,
+            57.51582286553883
+          ],
+          [
+            136.40625,
+            61.77312286453146
+          ]
+        ]
+      }
+    }
+  ]
+}
 
 var layer = new PointLayer()
 .source(data)
@@ -43,11 +49,13 @@ var data = `from,to,value,type,lng1,lat1,lng2,lat2
 鎷夎惃,鍖椾含,2.05,move_out,91.111891,29.662557,116.395645,39.929986
 ...`;
 
-var layer = new PointLayer().source(data, {
+new LineLayer().source(data, {
   parser: {
     type: 'csv',
     x: 'lng1',
     y: 'lat1',
+    x1: 'lng2',
+    y1: 'lat2',
   },
 });
 ```
@@ -59,17 +67,21 @@ var layer = new PointLayer().source(data, {
 var data = [
   {
     lng: 120,
-    lat: 30
+    lat: 30,
+    lng1: 125,
+    lat1: 30
   },
   ...
 ]
 
-var layer = new PointLayer()
+var layer = new LineLayer()
 .source(data, {
   parser: {
     type: 'json',
     x: 'lng',
     y: 'lat',
+    x1: 'lng1',
+    y1: 'lat1'
   }
 })
 ```

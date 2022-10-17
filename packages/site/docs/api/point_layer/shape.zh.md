@@ -7,26 +7,26 @@ order: 3
 
 `shape` 方法用于指定点图层绘制什么样的图形，如绘制三角形或者是正方形，还是文字、图标之类的。
 
-### 2D 符号图
+### shape(fillShape: IFillShape)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ'>
 
-```
-'circle', 'square', 'hexagon', 'triangle'，  'pentagon',  'octogon', 'hexagram','rhombus',  'vesica',
+```js
+type IFillShape = 'circle' | 'square' | 'hexagon' | 'triangle' | 'pentagon' | 'octogon' | 'hexagram' | 'rhombus' | 'vesica';
 ```
 
 ```js
 layer.shape('circle');
 ```
 
-🌟 若是使用简单的圆点图层，建议使用 simple 代替 circle 以获得更好的性能
+🌟 若是使用简单的圆点图层，建议使用 `simple` 代替 `circle` 以获得更好的性能。
 
-### 3D 柱图
+### shape(column: IColumn)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*tvpvQZLv_xYAAAAAAAAAAABkARQnAQ'>
 
-```
-'cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'
+```js
+type IColumn = 'cylinder' | 'triangleColumn' | 'hexagonColumn' | 'squareColumn';
 ```
 
 ```js
@@ -36,18 +36,25 @@ layer.shape('hexagonColumn');
 layer.shape('squareColumn');
 ```
 
-### 点精灵
+### shape('simple')
 
-`shape` 为 `simple`， `dot` 点精灵是特殊的点图层，始终面向相机，且大小受到设备的限制。
+`simple` 点精灵是特殊的点图层，始终面向相机，且大小受到设备的限制。
 
 ```js
 layer.shape('simple');
+```
+
+### shape('dot')
+
+`dot` 点精灵是特殊的点图层，始终面向相机，且大小受到设备的限制。
+
+```js
 layer.shape('dot');
 ```
 
-### 文字
+### shape(field: string, 'text')
 
-`shape(field, ‘text’)` 绘制文字，第一个参数为数值中的字段，第二个参数固定为 `text`。
+绘制文字，第一个参数为数值中的字段，第二个参数固定为 `text`。
 
 ```js
 const point = new PointLayer()
@@ -59,7 +66,7 @@ const point = new PointLayer()
   .shape('test', 'text');
 ```
 
-### 图标
+### shape(iconName: string)
 
 `shape` 的值为 `scene.addImage` 全局添加的图片资源的名称。
 
@@ -119,30 +126,25 @@ const imageLayer2 = new PointLayer()
 scene.addLayer(imageLayer2);
 ```
 
-### 雷达图
+### shape('radar')
 
 ```js
 const layer = new PointLayer()
-  .source(
-    [
-      {
+  .source([{
         lng: 120,
         lat: 30,
-        t: 'text1',
-      },
-    ],
+      },],
     {
       parser: {
         type: 'json',
         x: 'lng',
         y: 'lat',
       },
-    },
-  )
+    })
   .size(25)
   .color('#f00')
   .shape('radar')
   .animate(true);
 ```
 
-🌟 雷达图需要设置 animate 为 `true`
+🌟 雷达图需要设置 `animate` 为 `true`

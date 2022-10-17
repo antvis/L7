@@ -5,54 +5,60 @@ order: 3
 
 `markdown:docs/common/style.md`
 
-### shape
+`shape` 方法用于指定线图层绘制什么样的线。
 
-线图层支持 5 种 shape
+### shape('line')
 
-- line 绘制路径图，
-- arc 绘制弧线 通过贝塞尔曲线算法技术弧线
-- greatcircle 大圆航线，地图两个点的最近距离不是两个点连线，而是大圆航线
-- arc3d 3d 弧线地图 3D 视角
-- wall 基于线图层的一种特殊形式
+绘制路径图。
 
-⚠️ 弧线只需要设置起止点坐标即可
+`line` 路径是最普通的线图层，支持配置宽度和高度。
 
-```javascript
-new LineLayer().source(data, {
-  parser: {
-    type: 'csv',
-    x: 'lng1',
-    y: 'lat1',
-    x1: 'lng2',
-    y1: 'lat2',
-  },
-});
+```js
+layer.shape('line');
 ```
 
-如果 geojson 数据绘制弧线图 coordinates 第一对坐标为起点，第二对为终点
+### shape('arc')
 
-```javascript
-{
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            106.5234375,
-            57.51582286553883
-          ],
-          [
-            136.40625,
-            61.77312286453146
-          ]
-        ]
-      }
-    }
-  ]
-}
+绘制弧线 通过贝塞尔曲线算法技术弧线
 
+`line` 路径是最普通的线图层，支持配置宽度和高度。
+
+```js
+layer.shape('line');
+```
+
+### shape('arc3d')
+
+3d 弧线地图 3D 视角
+
+`line` 路径是最普通的线图层，支持配置宽度和高度。
+
+```js
+layer.shape('line');
+```
+
+### shape('greatcircle')
+
+大圆航线，地图两个点的最近距离不是两个点连线，而是大圆航线
+
+`line` 路径是最普通的线图层，支持配置宽度和高度。
+
+```js
+layer.shape('line');
+```
+
+### shape('wall')
+
+`simple` 路径是最普通的线图层，支持配置宽度和高度。
+
+```js
+layer.shape('simple');
+```
+
+### shape('simple')
+
+`simple` 路径是最普通的线图层，支持配置宽度和高度。
+
+```js
+layer.shape('simple');
 ```
