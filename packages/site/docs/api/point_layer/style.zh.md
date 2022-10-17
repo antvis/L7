@@ -13,7 +13,7 @@ layer.style({
 });
 ```
 
-#### common style
+### common style
 
 通用 `style` 参数，所有图形都支持的参数。
 
@@ -24,6 +24,8 @@ layer.style({
 ### 2D symbol style
 
 平面 2D 图形、如三角形、正方形等支持的样式。
+
+- [IFillShape](/zh/docs/api/point_layer/shape#shapefillshape-ifillshape)
 
 | style         | 类型               | 描述 & 生效图层 | 默认值   |
 | ------------- | ------------------ | --------------- | -------- |
@@ -65,6 +67,8 @@ const layer = PointLayer()
 
 3D 柱图支持的样式。
 
+- [IColumn](/zh/docs/api/point_layer/shape#shapecolumn-icolumn)
+
 | style         | 类型            | 描述 & 生效图层      | 默认值  |
 | ------------- | --------------- | -------------------- | ------- |
 | depth         | `boolean`       | 图形是否开启深度检测 | `true`  |
@@ -94,6 +98,8 @@ interface IOpcityLinear = {
 ### text style
 
 文字图形支持的样式。
+
+- [text](http://localhost:8000/zh/docs/api/point_layer/shape#shapefield-string-text)
 
 | style            | 类型                                                    | 描述 & 生效图层            | 默认值       |
 | ---------------- | ------------------------------------------------------- | -------------------------- | ------------ |
@@ -128,9 +134,20 @@ export enum anchorType {
 }
 ```
 
+#### font
+
+css fontFamily。
+
+```js
+const font = 'sans-serif';
+const font2 = 'Times New Roman';
+```
+
 ### simple style
 
 简单点图形（精灵）支持的样式。
+
+- [simple](http://localhost:8000/zh/docs/api/point_layer/shape#shapesimple)
 
 | style         | 类型               | 描述 & 生效图层 | 默认值   |
 | ------------- | ------------------ | --------------- | -------- |
@@ -141,7 +158,9 @@ export enum anchorType {
 
 ### icon style
 
-[图标的样式](/zh/docs/api/point_layer/shape#图标)
+图标类型的点图层。
+
+- [icon](http://localhost:8000/zh/docs/api/point_layer/shape#shapeiconname-string)
 
 | style         | 类型               | 描述 & 生效图层            | 默认值   |
 | ------------- | ------------------ | -------------------------- | -------- |
@@ -149,23 +168,6 @@ export enum anchorType {
 | raisingHeight | `number`           | 抬升高度                   | `0`      |
 | heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `0`      |
 | rotation      | `number`           | 图标的偏移                 | `0`      |
-
-### radar style
-
-雷达图支持的样式。
-
-| style | 类型     | 描述 & 生效图层  | 默认值 |
-| ----- | -------- | ---------------- | ------ |
-| speed | `number` | 雷达图旋转的速度 | `1`    |
-
-#### font
-
-css fontFamily。
-
-```js
-const font = 'sans-serif';
-const font2 = 'Times New Roman';
-```
 
 #### rotation
 
@@ -186,3 +188,15 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
     rotation: 0,
   });
 ```
+
+### radar style
+
+雷达图支持的样式。
+
+- [radar](http://localhost:8000/zh/docs/api/point_layer/shape#shaperadar)
+
+| style | 类型     | 描述 & 生效图层  | 默认值 |
+| ----- | -------- | ---------------- | ------ |
+| speed | `number` | 雷达图旋转的速度 | `1`    |
+
+
