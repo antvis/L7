@@ -12,7 +12,16 @@ order: 3
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ'>
 
 ```js
-type IFillShape = 'circle' | 'square' | 'hexagon' | 'triangle' | 'pentagon' | 'octogon' | 'hexagram' | 'rhombus' | 'vesica';
+type IFillShape =
+  | 'circle'
+  | 'square'
+  | 'hexagon'
+  | 'triangle'
+  | 'pentagon'
+  | 'octogon'
+  | 'hexagram'
+  | 'rhombus'
+  | 'vesica';
 ```
 
 ```js
@@ -130,17 +139,21 @@ scene.addLayer(imageLayer2);
 
 ```js
 const layer = new PointLayer()
-  .source([{
+  .source(
+    [
+      {
         lng: 120,
         lat: 30,
-      },],
+      },
+    ],
     {
       parser: {
         type: 'json',
         x: 'lng',
         y: 'lat',
       },
-    })
+    },
+  )
   .size(25)
   .color('#f00')
   .shape('radar')

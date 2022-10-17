@@ -12,30 +12,23 @@ order: 2
 ```js
 // 传入 GeoJSON 类型数据 *** L7 默认支持，不需要 parser 解析
 var data = {
-  "type": "FeatureCollection",
-  "features": [
+  type: 'FeatureCollection',
+  features: [
     {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            106.5234375,
-            57.51582286553883
-          ],
-          [
-            136.40625,
-            61.77312286453146
-          ]
-        ]
-      }
-    }
-  ]
-}
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [106.5234375, 57.51582286553883],
+          [136.40625, 61.77312286453146],
+        ],
+      },
+    },
+  ],
+};
 
-var layer = new PointLayer()
-.source(data)
+var layer = new PointLayer().source(data);
 ```
 
 ### CSV
