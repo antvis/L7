@@ -14,11 +14,11 @@ Raster 图层主要实现栅格数据的可视化，栅格数据主要来源是�
 - width 数据宽度
 - height 数据高度
 
-根据图片的经纬度范围，将图片添加到地图上。
+根据栅格数据的经纬度范围，将其添加到地图上。
 
 ```javascript
 layer.source(
-  'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
+  rasterData,
   {
     parser: {
       type: 'raster',

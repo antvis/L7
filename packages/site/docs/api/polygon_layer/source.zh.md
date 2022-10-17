@@ -5,133 +5,70 @@ order: 2
 
 `markdown:docs/common/style.md`
 
-### shape
+`markdown:docs/common/layer/source.md`
 
-`PolygonLayer` 填充图支持 3 种 shape
+### GeoJSON
+```js
+// 传入 GeoJSON 类型数据 *** L7 默认支持，不需要 parser 解析
+var data = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [120, 30],
+              ...
+            ]
+          },
+        },
+      ],
+    };
 
-**填充面**
-
-- fill 绘制填充面 不支持数据映射
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*v5dZT4Q1dgsAAAAAAAAAAAAAARQnAQ">
-
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('red')
-        .shape('fill')
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
+var layer = new PointLayer()
+.source(data)
 ```
 
-**填充图描边**
+### CSV
+```js
+// 传入 txt 类型数据
+var data = `from,to,value,type,lng1,lat1,lng2,lat2
+鎷夎惃,娴疯タ,6.91,move_out,91.111891,29.662557,97.342625,37.373799
+鎷夎惃,鎴愰兘,4.79,move_out,91.111891,29.662557,104.067923,30.679943
+鎷夎惃,閲嶅簡,2.41,move_out,91.111891,29.662557,106.530635,29.544606
+鎷夎惃,鍖椾含,2.05,move_out,91.111891,29.662557,116.395645,39.929986
+...`
 
-- line 绘制填充图描边 不支持数据映射
+var layer = new PointLayer()
+.source(data, {
+   parser: {
+      type: 'csv',
+      x: 'lng1',
+      y: 'lat1',
+   }
+})
+```
+### JSON
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KSlPQ6MCu4sAAAAAAAAAAAAAARQnAQ">
+```js
+// 传入 JSON 类型的数据
+var data = [
+  {
+    lng: 120,
+    lat: 30
+  },
+  ...
+]
 
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('#000')
-        .shape('line')
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
+var layer = new PointLayer()
+.source(data, {
+  parser: {
+    type: 'json',
+    x: 'lng',
+    y: 'lat',
+  }
+})
 ```
 
-**3D 填充图**
-
-- extrude 对填充图 3D 拉伸 不支持数据映射
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*vcN8TptUA1cAAAAAAAAAAAAAARQnAQ">
-
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('name', [
-          'rgb(239,243,255)',
-          'rgb(189,215,231)',
-          'rgb(107,174,214)',
-          'rgb(49,130,189)',
-          'rgb(8,81,156)',
-        ])
-        .shape('extrude')
-        .size('childrenNum', (num) => num * 10000)
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
-```
