@@ -39,6 +39,18 @@ const Demo: FunctionComponent = () => {
       </button>
       <button
         onClick={() => {
+          control?.setOptions({
+            zoomInText: undefined,
+            zoomInTitle: undefined,
+            zoomOutText: undefined,
+            zoomOutTitle: undefined,
+          });
+        }}
+      >
+        还原配置
+      </button>
+      <button
+        onClick={() => {
           control?.enable();
         }}
       >

@@ -79,6 +79,14 @@ export default class Control<O extends IControlOption = IControlOption>
    * @param newOptions
    */
   public setOptions(newOptions: Partial<O>): void {
+    const defaultOptions = this.getDefault(newOptions);
+    (Object.entries(newOptions) as Array<[keyof O, any]>).forEach(
+      ([key, value]) => {
+        if (value === undefined) {
+          newOptions[key] = defaultOptions[key];
+        }
+      },
+    );
     if ('position' in newOptions) {
       this.setPosition(newOptions.position);
     }
