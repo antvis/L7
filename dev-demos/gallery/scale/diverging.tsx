@@ -5,10 +5,10 @@ import { useEuropeData, addEuropeLayers } from './useLine';
 
 export default () => {
   const { geoData } = useEuropeData();
-  const [scene,setScene] = useState<Scene>();
+  const [scene, setScene] = useState<Scene>();
 
   useEffect(() => {
-    if(!scene) {
+    if (!scene) {
       const mapScene = new Scene({
         id: 'map',
         map: new Map({
@@ -18,9 +18,9 @@ export default () => {
           zoom: 3,
         }),
       });
-      setScene(mapScene)
+      setScene(mapScene);
     }
-    
+
     if (geoData && scene) {
       const layer = new PolygonLayer({
         autoFit: true,
