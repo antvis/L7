@@ -5,7 +5,7 @@ import Control, { IControlOption } from './control';
 export { ButtonControl };
 
 export interface IButtonControlOption extends IControlOption {
-  btnIcon?: ELType;
+  btnIcon?: ELType | DocumentFragment;
   btnText?: string;
   title?: string;
   vertical?: boolean;
@@ -36,7 +36,7 @@ export default class ButtonControl<
    * 按钮中图标对应的 DOM
    * @protected
    */
-  protected buttonIcon?: ELType;
+  protected buttonIcon?: ELType | DocumentFragment;
 
   /**
    * 设置当前按钮

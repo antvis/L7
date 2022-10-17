@@ -51,7 +51,7 @@ export function create(
 }
 // @function remove(el: HTMLElement)
 // Removes `el` from its parent element
-export function remove(el: ELType) {
+export function remove(el: ELType | DocumentFragment) {
   const parent = el.parentNode;
   if (parent) {
     parent.removeChild(el);
