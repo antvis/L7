@@ -93,7 +93,7 @@ export default class L7EarthService extends BaseMapService<Map>
     // @ts-ignore
     this.map = new EarthMap({
       container: this.$mapContainer,
-      style: this.getMapStyle(style),
+      style: this.getMapStyleValue(style),
       bearing: rotation,
       ...rest,
     });

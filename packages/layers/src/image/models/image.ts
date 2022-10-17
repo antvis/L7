@@ -79,7 +79,6 @@ export default class ImageModel extends BaseModel {
         },
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        pick: false,
       })
       .then((model) => {
         callbackModel([model]);
@@ -96,18 +95,6 @@ export default class ImageModel extends BaseModel {
 
   public buildModels(callbackModel: (models: IModel[]) => void) {
     this.initModels(callbackModel);
-  }
-
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
   }
 
   protected registerBuiltinAttributes() {

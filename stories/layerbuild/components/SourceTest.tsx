@@ -96,7 +96,7 @@ export default class Demo extends React.Component {
         },
       },
     );
-    source.on('sourceUpdate', () => {
+    source.on('update', () => {
       const layer = new PointLayer();
       layer.source(source);
       layer
@@ -309,7 +309,7 @@ export default class Demo extends React.Component {
       .shape('circle')
       .size(10)
       .color('#f00');
-    source.on('sourceUpdate', () => {
+    source.on('update', () => {
       layer.source(source);
     });
     this.scene.addLayer(layer);
@@ -356,7 +356,7 @@ export default class Demo extends React.Component {
       .shape('circle')
       .size(10)
       .color('#f00');
-    source.on('sourceUpdate', () => {
+    source.on('update', () => {
       setTimeout(() => {
         layer.source(source);
       }, 2000);
@@ -390,7 +390,7 @@ export default class Demo extends React.Component {
       .shape('circle')
       .size(10)
       .color('#f00');
-    source.on('sourceUpdate', () => {
+    source.on('update', () => {
       setTimeout(() => {
         layer.source(source);
       }, 2000);

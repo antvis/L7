@@ -79,9 +79,11 @@ export default class Camera extends EventEmitter {
       renderWorldCopies,
     );
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public requestRenderFrame(cb: CallBack): number {
     return 0;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public cancelRenderFrame(_: number): void {
     return;
   }

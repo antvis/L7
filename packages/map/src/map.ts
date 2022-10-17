@@ -173,6 +173,7 @@ export class Map extends Camera {
     this.transform.setMaxBounds(LngLatBounds.convert(bounds));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setStyle(style: any) {
     return;
   }
@@ -369,9 +370,8 @@ export class Map extends Camera {
       } else {
         width = this.container.clientWidth;
         height = this.container.clientHeight;
-        width = width == 0 ? 400 : width;
+        width = width === 0 ? 400 : width;
         height = height === 0 ? 300 : height;
-       
       }
     }
     return [width, height];

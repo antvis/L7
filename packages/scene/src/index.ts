@@ -34,6 +34,7 @@ import { MaskLayer } from '@antv/l7-layers';
 import { ReglRendererService } from '@antv/l7-renderer';
 import { DOM, isMini } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import BoxSelect, { BoxSelectEventList } from './boxSelect';
 import ILayerManager from './ILayerManager';
 import IMapController from './IMapController';
 import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
@@ -61,10 +62,11 @@ class Scene
   private popupService: IPopupService;
   private fontService: IFontService;
   private interactionService: IInteractionService;
+  private boxSelect: BoxSelect;
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, canvas, hasBaseMap, } = config;
+    const { id, map, canvas, hasBaseMap } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
@@ -96,6 +98,7 @@ class Scene
       TYPES.IInteractionService,
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
+    this.boxSelect = new BoxSelect(this, {});
 
     if (isMini) {
       this.sceneService.initMiniScene(config);
@@ -175,32 +178,39 @@ class Scene
     layer.setContainer(layerContainer, this.container);
     this.sceneService.addLayer(layer);
 
-    const layerConfig = layer.getLayerConfig();
-    if (layerConfig) {
-      // 若 layer 未初始化成功，则 layerConfig 为 undefined （scene loaded 尚未执行完成）
-      const {
-        mask,
-        maskfence,
-        maskColor = '#000',
-        maskOpacity = 0,
-      } = layerConfig;
-      if (mask && maskfence) {
-        const maskInstance = new MaskLayer()
-          .source(maskfence)
-          .shape('fill')
-          .style({
-            color: maskColor,
-            opacity: maskOpacity,
-          });
-
-        this.addMask(maskInstance, layer.id);
-      }
+    // mask 在 scene loaded 之后执行
+    if (layer.inited) {
+      const maskInstance = this.initMask(layer);
+      this.addMask(maskInstance as ILayer, layer.id);
     } else {
-      console.warn('addLayer should run after scene loaded!');
+      layer.on('inited', () => {
+        const maskInstance = this.initMask(layer);
+        this.addMask(maskInstance as ILayer, layer.id);
+      })
     }
   }
 
+  public initMask(layer: ILayer) {
+    const {
+      mask,
+      maskfence,
+      maskColor = '#000',
+      maskOpacity = 0,
+    }  = layer.getLayerConfig();
+    if(!mask) return undefined;
+
+    const maskInstance = new MaskLayer()
+    .source(maskfence)
+    .shape('fill')
+    .style({
+      color: maskColor,
+      opacity: maskOpacity,
+    });
+    return maskInstance;
+  }
+
   public addMask(mask: ILayer, layerId: string) {
+    if(!mask) return;
     const parent = this.getLayer(layerId);
     if (parent) {
       const layerContainer = createLayerContainer(this.container);
@@ -251,7 +261,6 @@ class Scene
    * @param name
    */
   public addIconFont(name: string, fontUnicode: string): void {
-   
     this.fontService.addIconFont(name, fontUnicode);
   }
 
@@ -266,8 +275,8 @@ class Scene
    * @param fontPath
    */
   public addFontFace(fontFamily: string, fontPath: string): void {
-    this.fontService.once('fontloaded', (e)=>{
-      this.emit('fontloaded',e)
+    this.fontService.once('fontloaded', (e) => {
+      this.emit('fontloaded', e);
     });
     this.fontService.addFontFace(fontFamily, fontPath);
   }
@@ -326,16 +335,28 @@ class Scene
     this.popupService.addPopup(popup);
   }
 
+  public removePopup(popup: IPopup) {
+    this.popupService.removePopup(popup);
+  }
+
   public on(type: string, handle: (...args: any[]) => void): void {
-    SceneEventList.indexOf(type) === -1
-      ? this.mapService.on(type, handle)
-      : this.sceneService.on(type, handle);
+    if (BoxSelectEventList.includes(type)) {
+      this.boxSelect?.on(type, handle);
+    } else if (SceneEventList.includes(type)) {
+      this.sceneService.on(type, handle);
+    } else {
+      this.mapService.on(type, handle);
+    }
   }
 
   public once(type: string, handle: (...args: any[]) => void): void {
-    SceneEventList.indexOf(type) === -1
-      ? this.mapService.once(type, handle)
-      : this.sceneService.once(type, handle);
+    if (BoxSelectEventList.includes(type)) {
+      this.boxSelect?.once(type, handle);
+    } else if (SceneEventList.includes(type)) {
+      this.sceneService.once(type, handle);
+    } else {
+      this.mapService.once(type, handle);
+    }
   }
   public emit(type: string, handle: (...args: any[]) => void): void {
     SceneEventList.indexOf(type) === -1
@@ -343,11 +364,14 @@ class Scene
       : this.sceneService.emit(type, handle);
   }
 
-
   public off(type: string, handle: (...args: any[]) => void): void {
-    SceneEventList.indexOf(type) === -1
-      ? this.mapService.off(type, handle)
-      : this.sceneService.off(type, handle);
+    if (BoxSelectEventList.includes(type)) {
+      this.boxSelect?.off(type, handle);
+    } else if (SceneEventList.includes(type)) {
+      this.sceneService.off(type, handle);
+    } else {
+      this.mapService.off(type, handle);
+    }
   }
 
   // implements IMapController
@@ -468,6 +492,19 @@ class Scene
 
   public diasbleShaderPick() {
     this.layerService.disableShaderPick();
+  }
+
+  public enableBoxSelect(once = true) {
+    this.boxSelect.enable();
+    if (once) {
+      this.boxSelect.once('selectend', () => {
+        this.disableBoxSelect();
+      });
+    }
+  }
+
+  public disableBoxSelect() {
+    this.boxSelect.disable();
   }
 
   // get current point size info

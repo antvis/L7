@@ -123,7 +123,6 @@ export default class WindModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
         blend: this.getBlend(),
-        pick: false,
       })
       .then((model) => {
         this.colorModel = model;
@@ -157,18 +156,6 @@ export default class WindModel extends BaseModel {
   public clearModels(): void {
     this.texture?.destroy();
     this.wind?.destroy();
-  }
-
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
   }
 
   protected registerBuiltinAttributes() {

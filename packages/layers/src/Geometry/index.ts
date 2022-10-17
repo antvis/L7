@@ -29,17 +29,6 @@ export default class GeometryLayer extends BaseLayer<
     });
   }
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
   protected getDefaultConfig() {
     const type = this.getModelType();
     const defaultConfig = {

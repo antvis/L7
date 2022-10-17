@@ -79,20 +79,3 @@ export default {
 
 如果传入了错误的配置项则会在控制台给出提示。
 
-## Layer 子类配置项 Schema
-
-Layer 子类可以通过重载 `getConfigSchema()` 方法定义自身的特有属性。例如 `PolygonLayer` 需要定义透明度：
-
-```javascript
-protected getConfigSchema() {
-  return {
-    properties: {
-      opacity: {
-        type: 'number',
-        minimum: 0,
-        maximum: 1,
-      },
-    },
-  };
-}
-```

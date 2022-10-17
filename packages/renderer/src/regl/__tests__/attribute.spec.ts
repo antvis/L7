@@ -57,9 +57,6 @@ describe('ReglAttribute', () => {
   });
 
   it('should update buffer correctly', () => {
-    const buffer = new ReglBuffer(reGL, {
-      data: [-4, -4, 4, -4, 0, 4],
-    });
 
     const attribute = new ReglAttribute(reGL, {
       buffer: new ReglBuffer(reGL, {

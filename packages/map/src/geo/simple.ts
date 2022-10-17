@@ -8,7 +8,7 @@ const earthCircumfrence = 2 * Math.PI * earthRadius; // meters
 /*
  * The circumference at a line of latitude in meters.
  */
-function circumferenceAtLatitude(latitude: number) {
+export function circumferenceAtLatitude(latitude: number) {
   return earthCircumfrence * Math.cos((latitude * Math.PI) / 180);
 }
 
@@ -20,6 +20,7 @@ export function mercatorYfromLat(lat: number) {
   return lat;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function mercatorZfromAltitude(altitude: number, lat: number) {
   return altitude;
 }
@@ -32,6 +33,7 @@ export function latFromMercatorY(y: number) {
   return y;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function altitudeFromMercatorZ(z: number, y: number) {
   return z;
 }
@@ -46,6 +48,7 @@ export function altitudeFromMercatorZ(z: number, y: number) {
  * @returns {number} scale factor
  * @private
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function mercatorScale(lat: number) {
   return 1;
 }

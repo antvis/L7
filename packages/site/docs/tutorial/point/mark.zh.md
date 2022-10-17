@@ -14,6 +14,6 @@ import { MarkerLayer, Marker } from '@antv/l7';
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*2vBbRYT2bgIAAAAAAAAAAABkARQnAQ'>
 
-[Marker 文档](/zh/docs/api/component/marker)
+[Marker 文档](../component/marker/marker)
 
-[MarkerLayer 文档](/zh/docs/api/component/markerLayer)
+[MarkerLayer 文档](../component/marker/markerLayer)

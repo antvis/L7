@@ -19,17 +19,6 @@ export default class CityBuildingLayer extends BaseLayer {
       time: t,
     });
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
 
   protected getModelType(): string {
     return 'citybuilding';

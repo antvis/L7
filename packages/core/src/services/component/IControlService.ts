@@ -1,4 +1,5 @@
 import { Container } from 'inversify';
+
 export enum PositionType {
   'TOPRIGHT' = 'topright',
   'TOPLEFT' = 'topleft',
@@ -8,6 +9,10 @@ export enum PositionType {
   'BOTTOMCENTER' = 'bottomcenter',
   'LEFTCENTER' = 'leftcenter',
   'RIGHTCENTER' = 'rightcenter',
+  'LEFTTOP' = 'lefttop',
+  'RIGHTTOP' = 'righttop',
+  'LEFTBOTTOM' = 'leftbottom',
+  'RIGHTBOTTOM' = 'rightbottom',
 }
 
 export type PositionName =
@@ -18,21 +23,21 @@ export type PositionName =
   | 'topcenter'
   | 'bottomcenter'
   | 'leftcenter'
-  | 'rightcenter';
-export interface IControlOption {
-  name: string;
-  position: PositionName;
-  [key: string]: any;
-}
+  | 'rightcenter'
+  | 'lefttop'
+  | 'righttop'
+  | 'leftbottom'
+  | 'rightbottom';
+
 export interface IControlServiceCfg {
   container: HTMLElement;
 }
 export interface IControlCorners {
   [key: string]: HTMLElement;
 }
-export interface IControl {
-  controlOption: IControlOption;
-  setPosition(pos: PositionType): void;
+export interface IControl<O = any> {
+  controlOption: O;
+  setOptions: (newOption: Partial<O>) => void;
   addTo(sceneContainer: Container): void;
   onAdd(): HTMLElement;
   onRemove(): void;

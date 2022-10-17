@@ -5,6 +5,7 @@ export enum anchorType {
   'TOP-RIGHT' = 'top-right',
   'BOTTOM' = 'bottom',
   'BOTTOM-LEFT' = 'bottom-left',
+  'BOTTOM-RIGHT' = 'bottom-right',
   'LEFT' = 'left',
   'RIGHT' = 'right',
 }

@@ -55,17 +55,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     }
     return 'normal';
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
+
   protected getDefaultConfig() {
     const type = this.getModelType();
     const defaultConfig = {
