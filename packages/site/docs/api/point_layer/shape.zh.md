@@ -5,44 +5,9 @@ order: 3
 
 `markdown:docs/common/style.md`
 
-### shape
+`shape` 方法用于指定点图层绘制什么样的图形，如绘制三角形或者是正方形，还是文字、图标之类的。
 
-`shape` 枚举值
-
-| shape          | 类型     | 描述                                                       |
-| -------------- | -------- | ---------------------------------------------------------- |
-| circle         | 圆形     | 贴地显示                                                   |
-| triangle       | 三角形   | 贴地显示                                                   |
-| square         | 正方形   | 贴地显示                                                   |
-| pentagon       | 五边形   | 贴地显示                                                   |
-| hexagon        | 六边形   | 贴地显示                                                   |
-| octogon        | 八边形   | 贴地显示                                                   |
-| hexagram       | 六角星形 | 贴地显示                                                   |
-| rhombus        | 斜方形   | 贴地显示                                                   |
-| vesica         | 椭圆形   | 贴地显示                                                   |
-| cylinder       | 圆柱     | 3D 圆柱                                                    |
-| triangleColumn | 三角柱   | 3D 三角柱                                                  |
-| squareColumn   | 四角柱   | 3D 四角柱                                                  |
-| hexagonColumn  | 六角柱   | 3D 六角柱                                                  |
-| dot            | 点精灵   | 正方形，始终面向相机，最大尺寸受限                         |
-| simple         | 圆形     | 始终面向相机，最大尺寸受限                                 |
-| radar          | 雷达图   | 贴地显示                                                   |
-| `iconName`     | 图标     | 点图层绘制图标，参数为 `scene.addImage` 全局添加的图片资源 |
-
-`shape` 方法
-使用 `shape` 方法来指定绘制 `text` 文字
-
-#### text
-
-`shape(field, ‘text’)` 绘制文字，第一个参数为数值中的字段，第二个参数固定为 `text`
-
-#### icon
-
-`shape(iconName)` 指定绘制图标名字（传入数据中的图标字段）  
-`shape(iconName, () => ...)` 绘制图标，第一个参数为数值中的字段，第二个参数为回调函数，返回值为图标名字  
-`shape(iconName, ['icon1', 'icon2', ...])` 绘制图标，第一个参数为数值中的字段，第二个参数映射的图标名字数组
-
-#### 2D 符号图
+### 2D 符号图
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ'>
 
@@ -51,12 +16,12 @@ order: 3
 ```
 
 ```js
-const point = new PointLayer().shape('circle');
+layer.shape('circle');
 ```
 
 🌟 若是使用简单的圆点图层，建议使用 simple 代替 circle 以获得更好的性能
 
-#### 3D 柱图
+### 3D 柱图
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*tvpvQZLv_xYAAAAAAAAAAABkARQnAQ'>
 
@@ -65,20 +30,24 @@ const point = new PointLayer().shape('circle');
 ```
 
 ```js
-const point = new PointLayer().shape('cylinder');
+layer.shape('cylinder');
+layer.shape('triangleColumn');
+layer.shape('hexagonColumn');
+layer.shape('squareColumn');
 ```
 
-#### 点精灵
+### 点精灵
 
-```
-'simple', 'dot',
-```
+`shape` 为 `simple`， `dot` 点精灵是特殊的点图层，始终面向相机，且大小受到设备的限制。
 
 ```js
-const point = new PointLayer().shape('simple');
+layer.shape('simple');
+layer.shape('dot');
 ```
 
-#### 文字
+### 文字
+
+`shape(field, ‘text’)` 绘制文字，第一个参数为数值中的字段，第二个参数固定为 `text`。
 
 ```js
 const point = new PointLayer()
@@ -90,7 +59,7 @@ const point = new PointLayer()
   .shape('test', 'text');
 ```
 
-#### 图标
+### 图标
 
 `shape` 的值为 `scene.addImage` 全局添加的图片资源的名称。
 
@@ -150,7 +119,7 @@ const imageLayer2 = new PointLayer()
 scene.addLayer(imageLayer2);
 ```
 
-#### 雷达图
+### 雷达图
 
 ```js
 const layer = new PointLayer()
