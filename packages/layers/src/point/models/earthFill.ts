@@ -206,9 +206,6 @@ export default class FillModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
@@ -231,9 +228,6 @@ export default class FillModel extends BaseModel {
         size: 1,
         update: (
           feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
         ) => {
           const { shape = 2 } = feature;
           const shape2d = this.layer.getLayerConfig().shape2d as string[];

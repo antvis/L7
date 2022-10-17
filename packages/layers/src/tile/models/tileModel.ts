@@ -1,7 +1,7 @@
 import { IModelUniform } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { TMSTileLayer } from '../tmsTileLayer';
-import { TMSBaseMapTileLayer } from '../tmsMapTileLayer';
+import { TileLayer } from '../tileLayer/TileLayer';
+import { MapTileLayer } from '../tileLayer/MapTileLayer';
 export default class TileModel extends BaseModel {
   public getUninforms(): IModelUniform {
     return {};
@@ -10,9 +10,9 @@ export default class TileModel extends BaseModel {
   private getTileLayer(usage?: string) {
     switch(usage) {
       case 'basemap':
-        return TMSBaseMapTileLayer;
+        return MapTileLayer;
       default:
-        return TMSTileLayer;
+        return TileLayer;
     }
   }
 

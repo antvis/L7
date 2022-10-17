@@ -1,14 +1,14 @@
 import { ILayer, IScaleValue, ISubLayerInitOptions } from '@antv/l7-core';
 import EventEmitter from 'eventemitter3';
 import { isEqual } from 'lodash';
-export interface ITileConfigManager {
+export interface ITileStyleService {
   setConfig(key: string, value: any): void;
   checkConfig(layer: ILayer): void;
   on(event: string, fn: (...args: any[]) => void): void;
   getAttributeScale(layer: ILayer, name: string): IScaleValue;
 }
 
-export default class TileConfigManager extends EventEmitter {
+export class TileStyleService extends EventEmitter {
   public cacheConfig: Map<string, any>;
   public checkConfigList: string[] = [];
   constructor() {

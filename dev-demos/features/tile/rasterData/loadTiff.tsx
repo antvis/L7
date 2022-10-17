@@ -105,10 +105,17 @@ export default () => {
               rampColors: {
                 colors: colorList,
                 positions
+                // colors: ['#f00', '#f00'],
+                // positions: [0, 1]
               }
             });
     
           scene.addLayer(layer);
+
+          layer.on('click', (e) => {
+            console.log('layer click')
+            console.log(e)
+          })
 
           // setTimeout(() => {
           //   layer.style({

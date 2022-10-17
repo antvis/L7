@@ -55,6 +55,7 @@ export class AJAXError extends Error {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function makeFetchRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
@@ -233,7 +234,7 @@ export const postData = (
   return makeRequest({ ...requestParameters, method: 'POST' }, callback);
 };
 
-function sameOrigin(url: string) {
+export function sameOrigin(url: string) {
   const a = $window.document.createElement('a');
   a.href = url;
   return (

@@ -53,7 +53,6 @@ export default class WaterModel extends BaseModel {
         primitive: gl.TRIANGLES,
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
-        pick: false,
       })
       .then((model) => {
         callbackModel([model]);

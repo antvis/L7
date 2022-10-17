@@ -47,7 +47,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     if (source.inited) {
       callback(source.data);
     } else {
-      source.once('sourceUpdate', () => {
+      source.once('update', () => {
         callback(source.data);
       });
     }
@@ -121,6 +121,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         attributeScale.names = this.parseFields(attribute!.scale!.field || []);
         const scales: IStyleScale[] = [];
         // 为每个字段创建 Scale
@@ -245,6 +246,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       return styleScale;
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const firstValue = data!.find((d) => !isNil(d[field]))?.[field];
     // 常量 Scale
     if (this.isNumber(field) || (isNil(firstValue) && !scaleOption)) {

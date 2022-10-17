@@ -35,7 +35,7 @@ export default () => {
               zoomOffset: 0,
               extent: [-180, -85.051129, 179, 85.051129],
               minZoom: 0,
-              format: async (data: any, bands) => {
+              format: async (data: any) => {
                 // console.log(bands)
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',

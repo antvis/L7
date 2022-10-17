@@ -6,7 +6,8 @@ import {
   } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 import { ITileFactory, getTileFactory, TileType } from '../tileFactory';
-export class TileManager {
+import { registerLayers } from '../utils';
+export class Base {
     public sourceLayer: string;
     public parent: ILayer;
     public children: ILayer[];
@@ -15,19 +16,55 @@ export class TileManager {
     protected tileFactory: ITileFactory;
     protected initOptions: ISubLayerInitOptions;
 
-    public createTile(tile: Tile) {
-        return this.tileFactory.createTile(tile, this.initOptions);
+    private tileCache: Map<string, Tile> = new Map()
+    
+    public hasTile(tile: Tile){
+      return !!this.tileCache.has(tile.key);
+    }
+
+    public addTile(tile: Tile) {
+      // oldTile 存在的时候暂时直接结束
+      // TODO：合并不存在的时候
+      if(this.hasTile(tile)) return {
+        layers: [],
+        layerIDList: [],
+      }
+      // 存储当前 tile
+      this.tileCache.set(tile.key, tile);
+
+      // 创建 tile 对应的 layers
+      const layerCollections = this.tileFactory.createTile(tile, this.initOptions);
+      
+      // regist layer 将创建出来的 layer 进行注册初始化操作
+      registerLayers(this.parent, layerCollections.layers);
+
+      tile.layerIDList.push(...layerCollections.layerIDList);
+
+      // add layer into layerGroup
+      this.addChildren(layerCollections.layers);
+
+      layerCollections.layers.map(layer => {
+        layer.once('modelLoaded', () => {
+          tile.layerLoad();
+        })
+      })
+      return layerCollections;
+    }
+
+    public removeTile(tile: Tile){
+      this.tileCache.delete(tile.key);
+      this.removeChildren(tile.layerIDList, false);
     }
 
     public addChild(layer: ILayer) {
         this.children.push(layer);
     }
 
-    public addChilds(layers: ILayer[]) {
+    public addChildren(layers: ILayer[]) {
         this.children.push(...layers);
     }
 
-    public removeChilds(layerIDList: string[], refresh = true) {
+    public removeChildren(layerIDList: string[], refresh = true) {
         const remveLayerList: ILayer[] = [];
         const cacheLayerList: ILayer[] = [];
         this.children.filter((child) => {
@@ -47,7 +84,7 @@ export class TileManager {
         layer.destroy();
     }
 
-    public getChilds(layerIDList: string[]) {
+    public getChildren(layerIDList: string[]) {
         return this.children.filter((child) => layerIDList.includes(child.id));
     }
 

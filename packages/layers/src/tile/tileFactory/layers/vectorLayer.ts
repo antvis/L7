@@ -12,21 +12,21 @@ import {
   IShaderModuleService,
   IStyleAttributeService,
 } from '@antv/l7-core';
-import BaseLayer from '../../core/BaseLayer';
+import BaseLayer from '../../../core/BaseLayer';
 import {
   ILineLayerStyleOptions,
   IPointLayerStyleOptions,
   IPolygonLayerStyleOptions,
   IMaskLayerStyleOptions,
-} from '../../core/interface';
-import lineFillModel from '../../line/models/tile';
-import lineSimpleModel from '../../line/models/simpleTileLine';
+} from '../../../core/interface';
+import lineFillModel from '../../../line/models/tile';
+import lineSimpleModel from '../../../line/models/simpleTileLine';
 
-import pointTextModel from '../../point/models/tileText';
-import pointFillModel from '../../point/models/tile';
-import polygonFillModel from '../../polygon/models/tile';
+import pointTextModel from '../../../point/models/tileText';
+import pointFillModel from '../../../point/models/tile';
+import polygonFillModel from '../../../polygon/models/tile';
 
-import maskModel from '../../mask/models/fill';
+import maskModel from '../../../mask/models/fill';
 
 type ILayerStyleOptions = IPolygonLayerStyleOptions & ILineLayerStyleOptions & IPointLayerStyleOptions & IMaskLayerStyleOptions;
 
@@ -37,6 +37,7 @@ export default class VectorLayer extends BaseLayer<
 > {
   public needListen: boolean = true;
   public isVector: boolean = true;
+  public isTileLayer: boolean = true;
   public type: string = this.layerType as string || 'vectorLayer';
   // Tip: 单独被 tile 瓦片的渲染链路使用（用于优化性能）
   private pickedID: number | null = null;
@@ -212,18 +213,6 @@ export default class VectorLayer extends BaseLayer<
     } else {
       return pointFillModel;
     }
-  }
-
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
   }
 
   protected getDefaultConfig() {

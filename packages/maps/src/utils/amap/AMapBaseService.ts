@@ -152,7 +152,6 @@ export default abstract class AMapBaseService
   public getCenter(options?: ICameraOptions): ILngLat {
     if (options?.padding) {
       const originCenter = this.getCenter();
-      const [w, h] = this.getSize();
       const padding = toPaddingOptions(options.padding);
       const px = this.lngLatToPixel([originCenter.lng, originCenter.lat]);
       const offsetPx = [
@@ -312,7 +311,9 @@ export default abstract class AMapBaseService
   }
 
   public lngLatToMercator(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     lnglat: [number, number],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     altitude: number,
   ): IMercator {
     return {
@@ -414,7 +415,7 @@ export default abstract class AMapBaseService
           version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
           plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
         })
-          .then((AMap) => {
+          .then(() => {
             resolveMap();
 
             if (pendingResolveQueue.length) {
@@ -453,6 +454,7 @@ export default abstract class AMapBaseService
     return coordDis / meterDis;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public updateView(viewOption: Partial<IMapCamera>): void {}
 
   public getOverlayContainer(): HTMLElement | undefined {
