@@ -198,5 +198,3 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
 | style | 类型     | 描述 & 生效图层  | 默认值 |
 | ----- | -------- | ---------------- | ------ |
 | speed | `number` | 雷达图旋转的速度 | `1`    |
-
-
