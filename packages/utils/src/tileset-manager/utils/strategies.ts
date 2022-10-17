@@ -1,4 +1,4 @@
-import { Tile } from '../tile';
+import { SourceTile } from '../tile';
 
 // 访问状态
 const TILE_STATE_DEFAULT = 0;
@@ -12,7 +12,7 @@ const TILE_STATE_VISIBLE = 2;
  * 当前视野 currentTile 请求到数据就立即显示
  * 请求中的数据不显示不填补，渲染留白
  */
-export function updateTileStateRealtime(tiles: Tile[]) {
+export function updateTileStateRealtime(tiles: SourceTile[]) {
   tiles.forEach((tile) => {
     if (tile.isCurrent) {
       tile.isVisible = tile.isLoaded;
@@ -26,7 +26,7 @@ export function updateTileStateRealtime(tiles: Tile[]) {
  * 用最近上级的瓦片作为占位符
  * 如果没有最近上级瓦片可用，用最近的子级瓦片作为占位符
  */
-export function updateTileStateOverlap(tiles: Tile[]) {
+export function updateTileStateOverlap(tiles: SourceTile[]) {
   tiles.forEach((tile) => {
     tile.properties.state = TILE_STATE_DEFAULT;
   });
@@ -44,7 +44,7 @@ export function updateTileStateOverlap(tiles: Tile[]) {
  * 瓦片更新状态策略 - 全部替换策略
  * 对于当前视野的所有 currentTile 瓦片在加载完成之前，使用最近的上级瓦片作为占位符
  */
-export function updateTileStateReplace(tiles: Tile[]) {
+export function updateTileStateReplace(tiles: SourceTile[]) {
   tiles.forEach((tile) => {
     tile.properties.state = TILE_STATE_DEFAULT;
   });
@@ -79,7 +79,7 @@ export function updateTileStateReplace(tiles: Tile[]) {
  * 查找上级已加载的瓦片作为占位符
  * 如果找到返回 true
  */
-function getPlaceholderInAncestors(tile: Tile | null) {
+function getPlaceholderInAncestors(tile: SourceTile | null) {
   while (tile) {
     if (tile.isLoaded) {
       // tile.properties.state = tile.properties.state | TILE_STATE_VISIBLE
@@ -94,7 +94,7 @@ function getPlaceholderInAncestors(tile: Tile | null) {
 /*
  * 递归查找将子级已加载瓦片作为占位符
  */
-function getPlaceholderInChildren(tile: Tile) {
+function getPlaceholderInChildren(tile: SourceTile) {
   tile.children.forEach((child) => {
     if (child.isLoaded) {
       child.properties.state |= TILE_STATE_VISIBLE;

@@ -4,8 +4,9 @@ import {
     ILayerService,
     ISource,
   } from '@antv/l7-core';
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { debounce } from 'lodash';
+import Tile from '../tileFactory/Tile'
 
 export class Base {
     public tileLayerManager: any;
@@ -85,19 +86,19 @@ export class Base {
     }
     // 瓦片数据加载成功
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    this.tilesetManager.on('tile-loaded', (tile: Tile) => {
+    this.tilesetManager.on('tile-loaded', (tile: SourceTile) => {
         // 将事件抛出，图层上可以监听使用
     });
 
     // 瓦片数据从缓存删除或被执行重新加载
-    this.tilesetManager.on('tile-unload', (tile: Tile) => {
+    this.tilesetManager.on('tile-unload', (tile: SourceTile) => {
         // 将事件抛出，图层上可以监听使用
         this.tileUnLoad(tile);
     });
 
     // 瓦片数据加载失败
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    this.tilesetManager.on('tile-error', (error, tile: Tile) => {
+    this.tilesetManager.on('tile-error', (error, tile: SourceTile) => {
         // 将事件抛出，图层上可以监听使用
         this.tileError(error);
     });
@@ -120,7 +121,7 @@ export class Base {
     viewchange = debounce(this.mapchange, 24)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public tileLoaded(tile: Tile) {
+    public tileLoaded(tile: SourceTile) {
     //
     }
 
@@ -133,7 +134,7 @@ export class Base {
       this.tileLayerManager.destroy();
     }
 
-    public tileUnLoad(tile: Tile) {
+    public tileUnLoad(tile: SourceTile) {
       this.tileLayerManager.removeTile(tile);
     }
   
@@ -142,29 +143,31 @@ export class Base {
         return;
       }
       this.tilesetManager.tiles
-        .filter((tile: Tile) => tile.isLoaded)// 过滤未加载完成的
-        .filter((tile: Tile) => tile.isVisibleChange)// 过滤未发生变化的
-        .filter((tile: Tile) => this.isTileReady(tile))// 过滤未发生变化的
-        .map(async (tile: Tile) => {
+        .filter((tile: SourceTile) => tile.isLoaded)// 过滤未加载完成的
+        .filter((tile: SourceTile) => tile.isVisibleChange)// 过滤未发生变化的
+        .filter((tile: SourceTile) => this.isTileReady(tile))// 过滤未发生变化的
+        .map(async (tile: SourceTile) => {
+           new Tile(tile,this.parent)
+          // console.log(`tile ${tile.x}_${tile.y}_${tile.z}`,tile)
           if (!this.tileLayerManager.hasTile(tile)) {
             const {layers} = await this.tileLayerManager.addTile(tile);
+   
             // this.setPickState(layers)
           } else {
             this.tileLayerManager.updateTileVisible(tile, this.layerService);
             const layers = this.tileLayerManager.getLayers();
-            this.layerService.reRender()
             // this.setPickState(layers)
          
           }
         });
-  
+        this.layerService.reRender()
       if (this.tilesetManager.isLoaded) {
         // 将事件抛出，图层上可以使用瓦片
         this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
       }
     }
 
-    public isTileReady(tile:Tile){
+    public isTileReady(tile:SourceTile){
 
       if (tile.data?.layers && this.sourceLayer) {
         // vector

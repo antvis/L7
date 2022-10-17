@@ -1,6 +1,6 @@
 // @ts-ignore
 import { SyncBailHook, SyncHook, AsyncSeriesBailHook, AsyncWaterfallHook} from '@antv/async-hook';
-import { IColorRamp, Tile, TilesetManager } from '@antv/l7-utils';
+import { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
@@ -186,7 +186,7 @@ export interface IBaseTileLayerManager {
   parent: ILayer;
   children: ILayer[];
 
-  addTile(tile: Tile):Promise<{ layers: ILayer[]; }>;
+  addTile(tile: SourceTile):Promise<{ layers: ILayer[]; }>;
 
   addChild(layer: ILayer): void;
   addChildren(layers: ILayer[]): void;
@@ -284,7 +284,6 @@ export interface ILayer {
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
-  modelLoaded: boolean;
   layerModel: ILayerModel;
   tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层

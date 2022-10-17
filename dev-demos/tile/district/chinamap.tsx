@@ -1,5 +1,11 @@
 // @ts-ignore
-import { Scene, Source, PolygonLayer, LineLayer } from '@antv/l7';
+import {
+  Scene,
+  Source,
+  PolygonLayer,
+  LineLayer,
+  TileDebugLayer,
+} from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -86,29 +92,29 @@ export default () => {
         .shape('fill')
         .color('adcode_pro', getColorByDGP);
 
-
-        const line = new LineLayer({
-            sourceLayer: 'CHN_Cities_L',
-            usage: 'basemap',
-        })
+      const line = new LineLayer({
+        sourceLayer: 'CHN_Cities_L',
+        usage: 'basemap',
+      })
         .source(source)
         .shape('simple')
         .color('#FFA500');
 
-        const line2 = new LineLayer({
-            sourceLayer: 'CHN_L',
-            usage: 'basemap',
-        })
+      const line2 = new LineLayer({
+        sourceLayer: 'CHN_L',
+        usage: 'basemap',
+      })
         .source(source)
         .shape('line')
         .size(0.6)
         .color('#053061');
+      const debugerLayer = new TileDebugLayer();
 
       scene.addLayer(fill);
       scene.addLayer(line);
       scene.addLayer(line2);
-      // const debugerLayer = new TileDebugLayer({ usage: 'basemap' });
-      // scene.addLayer(debugerLayer);
+
+      scene.addLayer(debugerLayer);
     });
   }, []);
   return (

@@ -1,4 +1,4 @@
-import { Tile, TilesetManagerOptions } from '@antv/l7-utils';
+import { SourceTile, TilesetManagerOptions } from '@antv/l7-utils';
 import { VectorTileLayer } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
 import { IParserData, ITileParserCFG } from '../interface';
@@ -14,7 +14,7 @@ export type MapboxVectorTile = {
   layers: { [_: string]: VectorTileLayer & { features: Feature[] } };
 };
 
-const getVectorTile = async (tile: Tile): Promise<MapboxVectorTile> => {
+const getVectorTile = async (tile: SourceTile): Promise<MapboxVectorTile> => {
   return new Promise((resolve) => {
     const [minLng, minLat, maxLng, maxLat] = tile.bounds;
     // minLng/maxLat ---- maxLng/maxLat
@@ -60,7 +60,7 @@ export default function mapboxVectorTile(
   data: string | string[],
   cfg?: ITileParserCFG,
 ): IParserData {
-  const getTileData = (tile: Tile) => getVectorTile(tile);
+  const getTileData = (tile: SourceTile) => getVectorTile(tile);
   const tilesetOptions = {
     ...DEFAULT_CONFIG,
     ...cfg,

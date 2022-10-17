@@ -149,12 +149,6 @@ export default class VectorLayer extends BaseLayer<
     return this;
   }
 
-  protected sourceEvent = () => {
-    // Tip: vector 不支持 autoFit
-    this.dataState.dataSourceNeedUpdate = true;
-    this.reRender();
-  };
-
   public getPickID() {
     return this.pickedID;
   }

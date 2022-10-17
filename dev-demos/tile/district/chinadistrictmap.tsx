@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
-
     const scene = new Scene({
       id: 'map',
       stencil: true,
@@ -42,7 +41,7 @@ export default () => {
       })
         .source(source)
         .shape('fill')
-        .color('adcode',getColorByAdcode);
+        .color('adcode', getColorByAdcode);
 
       const line = new LineLayer({
         sourceLayer: 'CHN_Districts_L',

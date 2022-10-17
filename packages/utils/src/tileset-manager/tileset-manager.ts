@@ -6,7 +6,7 @@ import {
   NOOP,
   UPDATE_TILE_STRATEGIES,
 } from './const';
-import { Tile } from './tile';
+import { SourceTile } from './tile';
 import { TilesetManagerOptions, UpdateTileStrategy } from './types';
 import {
   getLatLonBoundsBuffer,
@@ -31,11 +31,11 @@ export class TilesetManager extends EventEmitter {
     return tiles;
   }
   // 当前层级的瓦片
-  public currentTiles: Tile[] = [];
+  public currentTiles: SourceTile[] = [];
   // 配置项
   protected options: TilesetManagerOptions;
   // 缓存的瓦片，key 为 {z}-{x}-{y}
-  private cacheTiles = new Map<string, Tile>();
+  private cacheTiles = new Map<string, SourceTile>();
   // 上一次视野状态
   private lastViewStates?: {
     zoom: number;
@@ -105,7 +105,14 @@ export class TilesetManager extends EventEmitter {
     };
 
     let isAddTile = false;
-    const tileIndices = this.getTileIndices(verifyZoom, latLonBoundsBuffer);
+    const tileIndices = this.getTileIndices(
+      verifyZoom,
+      latLonBoundsBuffer,
+    ).filter((tile) => {
+      return (
+        this.options.warp || (tile.x >= 0 && tile.x <= Math.pow(verifyZoom, 2))
+      );
+    }); // TODO  数据循环
     this.currentTiles = tileIndices.map(({ x, y, z }) => {
       let tile = this.getTile(x, y, z);
       if (tile) {
@@ -152,7 +159,7 @@ export class TilesetManager extends EventEmitter {
 
   // 取消滞留请求中的瓦片
   public pruneRequests() {
-    const abortCandidates: Tile[] = [];
+    const abortCandidates: SourceTile[] = [];
     for (const tile of this.cacheTiles.values()) {
       if (tile.isLoading) {
         if (!tile.isCurrent && !tile.isVisible) {
@@ -252,19 +259,19 @@ export class TilesetManager extends EventEmitter {
   }
 
   // 瓦片加载成功回调
-  private onTileLoad = (tile: Tile) => {
+  private onTileLoad = (tile: SourceTile) => {
     this.emit('tile-loaded', tile);
     this.updateTileVisible();
   };
 
   // 瓦片加载失败回调
-  private onTileError = (error: Error, tile: Tile) => {
+  private onTileError = (error: Error, tile: SourceTile) => {
     this.emit('tile-error', { error, tile });
     this.updateTileVisible();
   };
 
   // 瓦片被删除回调
-  private onTileUnload = (tile: Tile) => {
+  private onTileUnload = (tile: SourceTile) => {
     this.emit('tile-unload', tile);
   };
 
@@ -284,7 +291,7 @@ export class TilesetManager extends EventEmitter {
   // 创建瓦片
   private createTile(x: number, y: number, z: number) {
     const tileId = this.getTileId(x, y, z);
-    const tile = new Tile({
+    const tile = new SourceTile({
       x,
       y,
       z,

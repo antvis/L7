@@ -1,7 +1,7 @@
 import {
   getArrayBuffer,
   getURLFromTemplate,
-  Tile,
+  SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
@@ -156,7 +156,7 @@ export type MapboxVectorTile = {
 const getVectorTile = async (
   url: string,
   tileParams: TileLoadParams,
-  tile: Tile,
+  tile: SourceTile,
   // coord: string,
 ): Promise<MapboxVectorTile> => {
   const tileUrl = getURLFromTemplate(url, tileParams);
@@ -212,7 +212,7 @@ export default function mapboxVectorTile(
   const url = Array.isArray(data) ? data[0] : data;
 
   // const coord = cfg?.coord || 'lnglat'; // lnglat - offset
-  const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
+  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) =>
     getVectorTile(url, tileParams, tile);
   // getVectorTile(data, tileParams, tile, coord);
 

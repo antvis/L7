@@ -1,5 +1,11 @@
 // @ts-ignore
-import { Scene, Source, PolygonLayer,LineLayer } from '@antv/l7';
+import {
+  Scene,
+  Source,
+  PolygonLayer,
+  // LineLayer,
+  // TileDebugLayer,
+} from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -29,9 +35,12 @@ export default () => {
       },
     });
     function unicode2Char(name) {
-      const code = name.split('/').slice(1).map((c)=>{
-        return String.fromCharCode('0x'+c)
-      });
+      const code = name
+        .split('/')
+        .slice(1)
+        .map((c) => {
+          return String.fromCharCode('0x' + c);
+        });
       return code.join('');
     }
 
@@ -39,19 +48,19 @@ export default () => {
       // 绿地
       const water_surface = new PolygonLayer({
         sourceLayer: 'WLD',
+        zIndex: 1,
       })
         .source(source)
         .shape('fill')
         .color('NAME_CHN', (NAME_CHN) => {
-     
-          const namestr = unicode2Char(NAME_CHN)
+          const namestr = unicode2Char(NAME_CHN);
           const country = data.find((c) => {
             return c.name == namestr;
           });
           if (!country) {
             return '#fff';
           }
-          const qz = (country.qz as unknown as number)* 1;
+          const qz = ((country.qz as unknown) as number) * 1;
           if (qz > counts[0]) {
             return color[0];
           } else if (qz > counts[1]) {
@@ -64,26 +73,30 @@ export default () => {
             return color[4];
           }
         });
-     
-        const line = new LineLayer({
-          sourceLayer: 'WLD_L',
-      })
-      .source(source)
-      .shape('line')
-      .size(0.6)
-      .color('type',(t)=>{
-    
-        if (t === '0') {
-          return 'red';
-        }
-        if (t === '2') {
-          return '#09f';
-        }
-        return '#fc9272'
+
+      // const line = new LineLayer({
+      //   sourceLayer: 'WLD_L',
+      //   zIndex: 2,
+      // })
+      //   .source(source)
+      //   .shape('line')
+      //   .size(0.6)
+      //   .color('type', (t) => {
+      //     if (t === '0') {
+      //       return 'red';
+      //     }
+      //     if (t === '2') {
+      //       return '#09f';
+      //     }
+      //     return '#fc9272';
+      //   });
+
+      water_surface.on('click', (e) => {
+        console.log(e);
       });
 
       scene.addLayer(water_surface);
-      scene.addLayer(line);
+      // scene.addLayer(line);
       // const debugerLayer = new TileDebugLayer({ usage: 'basemap' });
       // scene.addLayer(debugerLayer);
     });

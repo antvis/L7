@@ -16,7 +16,7 @@ import EarthLayer from './earth';
 import MaskLayer from './mask';
 import WindLayer from './wind';
 
-import TileDebugLayer from './tile/tileFactory/layers/tileTest';
+import TileDebugLayer from './tile/tileFactory/layers/TileDebugLayer';
 
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';

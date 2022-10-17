@@ -5,7 +5,7 @@ import {
   ISource,
   ISubLayerInitOptions,
 } from '@antv/l7-core';
-import { Tile } from '@antv/l7-utils';
+import { SourceTile } from '@antv/l7-utils';
 
 export type Timeout = any;
 export type CacheEvent =
@@ -27,7 +27,7 @@ export interface ITileStyles {
 
 export interface ILayerTileConfig {
   L7Layer?: any;
-  tile: Tile;
+  tile: SourceTile;
   initOptions: ISubLayerInitOptions;
   vectorTileLayer?: any;
   source: ISource;
@@ -38,7 +38,7 @@ export interface ITileFactory {
   loaded: boolean;
   layers: ILayer[];
   createTile(
-    tile: Tile,
+    tile: SourceTile,
     initOptions: ISubLayerInitOptions,
   ): {
     layers: ILayer[];

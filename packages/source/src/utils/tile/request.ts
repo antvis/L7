@@ -2,7 +2,7 @@ import {
     ITileBand,
     getURLFromTemplate,
     TileLoadParams,
-    Tile
+    SourceTile
   } from '@antv/l7-utils';
 
 /**
@@ -89,7 +89,7 @@ export function getTileBandParams(urlBandParam: string | string[] | ITileBand[])
  * @param tile 
  * @param xhrList 
  */
-export function bindCancel(tile: Tile, xhrList: any[]) {
+export function bindCancel(tile: SourceTile, xhrList: any[]) {
   tile.xhrCancel = () => {
     xhrList.map((xhr) => {
       xhr.abort();

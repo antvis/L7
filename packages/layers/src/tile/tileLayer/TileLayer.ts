@@ -164,4 +164,5 @@ export class TileLayer extends Base implements ITileLayer {
       this.parent.emit('uncontextmenu', { ...e }),
     );
   }
+
 }

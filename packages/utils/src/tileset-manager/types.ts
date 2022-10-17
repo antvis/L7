@@ -1,4 +1,4 @@
-import { Tile } from './tile';
+import { SourceTile } from './tile';
 
 // Bounds [minLng, minLat, maxLng, maxLat]
 export type TileBounds = [number, number, number, number];
@@ -27,9 +27,9 @@ export type TileLoadParams = TileOptions & {
 };
 
 export type TileLoadDataOptions = {
-  getData: (params: TileLoadParams, tile: Tile) => Promise<any>;
-  onLoad: (tile: Tile) => void;
-  onError: (error: Error, tile: Tile) => void;
+  getData: (params: TileLoadParams, tile: SourceTile) => Promise<any>;
+  onLoad: (tile: SourceTile) => void;
+  onError: (error: Error, tile: SourceTile) => void;
 };
 
 export enum LoadTileDataStatus {
@@ -46,6 +46,6 @@ export type TilesetManagerOptions = {
   minZoom: number;
   maxZoom: number;
   extent: TileBounds;
-  getTileData: (params: TileLoadParams, tile: Tile) => any;
-  updateStrategy: UpdateTileStrategy | ((tiles: Tile[]) => void);
+  getTileData: (params: TileLoadParams, tile: SourceTile) => any;
+  updateStrategy: UpdateTileStrategy | ((tiles: SourceTile[]) => void);
 };

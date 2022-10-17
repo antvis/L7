@@ -6,11 +6,11 @@ import {
   ISubLayerInitOptions,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { setStyleAttributeField, setScale } from '../style/utils';
 import { registerLayers } from '../utils';
 import { readRasterValue } from '../interaction/getRasterData';
-import VectorLayer from './layers/vectorLayer';
+import VectorLayer from './layers/VectorLayer';
 
 import * as turf from '@turf/helpers';
 import union from '@turf/union';
@@ -62,13 +62,13 @@ export default class TileFactory implements ITileFactory {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
+  public createTile(tile: SourceTile, initOptions: ISubLayerInitOptions) {
     return {
       layers: [] as ILayer[]
     };
   }
 
-  public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
+  public getFeatureData(tile: SourceTile, initOptions: ISubLayerInitOptions) {
  
     const { sourceLayer, featureId, transforms = [], layerType, shape } = initOptions;
     if (!sourceLayer) {
@@ -152,7 +152,6 @@ export default class TileFactory implements ITileFactory {
       this.emitEvent([layer]);
       layer.select(true);
     }
-
     // set source
     layer.source(source);
 

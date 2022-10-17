@@ -11,7 +11,7 @@ import { EventEmitter } from 'eventemitter3';
  * 单个瓦片
  * 负责瓦片数据加载、缓存数据、缓存图层
  */
-export class Tile extends EventEmitter {
+export class SourceTile extends EventEmitter {
   // 瓦片索引
   public x: number;
   public y: number;
@@ -33,9 +33,9 @@ export class Tile extends EventEmitter {
   public isLoad: boolean = false;
   public isChildLoad: boolean = false;
   // 瓦片的父级瓦片
-  public parent: Tile | null = null;
+  public parent: SourceTile | null = null;
   // 瓦片的子级瓦片
-  public children: Tile[] = [];
+  public children: SourceTile[] = [];
   // 瓦片数据
   public data: any = null;
   // 瓦片属性
