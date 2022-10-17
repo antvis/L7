@@ -215,18 +215,6 @@ export default class VectorLayer extends BaseLayer<
     }
   }
 
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
-
   protected getDefaultConfig() {
     return {};
   }

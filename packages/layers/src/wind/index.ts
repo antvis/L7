@@ -23,17 +23,7 @@ export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
 
     return this;
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
+
   protected getDefaultConfig() {
     const type = this.getModelType();
     const defaultConfig = {

@@ -5,9 +5,9 @@ import {
   ISubLayerInitOptions,
   IBaseTileLayerManager,
 } from '@antv/l7-core';
-import { TileManager } from './base';
+import { Base } from './base';
 import { getLayerShape, getMaskValue } from '../utils';
-export class BaseMapTileLayerManager extends TileManager implements IBaseTileLayerManager {
+export class BaseMapTileLayerManager extends Base implements IBaseTileLayerManager {
   // only support vector layer
   constructor(
     parent: ILayer,

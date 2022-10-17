@@ -24,7 +24,6 @@ export class Tile extends EventEmitter {
   public isCurrent = false;
   // 是否可以见发生变化
   public isVisibleChange = false;
-  public parentLayerIDList: string[] = [];
   public layerIDList: string[] = [];
   public loadedLayers: number = 0;
 

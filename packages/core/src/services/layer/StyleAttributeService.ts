@@ -6,7 +6,7 @@ import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
-import { IWorkerOption } from './ILayerService';
+import { ILayer, IWorkerOption } from './ILayerService';
 import {
   IAttributeScale,
   IEncodeFeature,
@@ -121,6 +121,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     features: IEncodeFeature[],
     startFeatureIdx: number = 0,
     endFeatureIdx?: number,
+    layer?:ILayer
   ) {
     const attributeToUpdate = this.attributes.find(
       (attribute) => attribute.name === attributeName,
@@ -179,6 +180,11 @@ export default class StyleAttributeService implements IStyleAttributeService {
           data: updatedBufferData,
           offset: bufferOffsetInBytes,
         });
+        // size color 触发更新事件
+        layer?.emit(`legend:${attributeName}`,{
+          type:attributeName,
+          attr:attributeToUpdate
+        })
       }
     }
   }

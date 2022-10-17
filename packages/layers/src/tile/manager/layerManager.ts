@@ -11,7 +11,7 @@ import {
   ITransform,
   ScaleAttributeType,
 } from '@antv/l7-core';
-import { TileManager } from './base';
+import { Base } from './base';
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import { getLayerShape, getMaskValue } from '../utils';
 import { TileStyleService, ITileStyleService } from '../style/TileStyleService';
@@ -20,7 +20,7 @@ import { TilePickService } from '../interaction/TilePickService';
 import { TileRenderService } from '../render/TileRenderService';
 import { styles, IStyles, Attributes } from '../style/constants';
 import { updateTexture, updateLayersConfig, setStyleAttributeField } from '../style/utils';
-export class TileLayerManager extends TileManager implements ITileLayerManager {
+export class TileLayerManager extends Base implements ITileLayerManager {
   public tilePickService: ITilePickService;
   public tileStyleService: ITileStyleService;
   public tileRenderService: ITileRenderService
