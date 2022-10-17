@@ -14,20 +14,19 @@ order: 7
 `animate` 方法支持布尔值和对象传值。
 
 ```javascript
-layer.animate(true)
+layer.animate(true);
 
 layer.animate({
-  enable: true
-})
+  enable: true,
+});
 ```
 
 ### IAnimateOption
 
 ```javascript
 interface IAnimateOption {
-    enable: boolean;
-    speed: number;
-    rings: number;
+  enable: boolean;
+  speed: number;
+  rings: number;
 }
 ```
-
