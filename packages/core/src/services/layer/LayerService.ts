@@ -1,16 +1,17 @@
 import { $window, rgb2arr } from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
+import { throttle } from 'lodash';
 import 'reflect-metadata';
-import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayerService } from './ILayerService';
-import { throttle } from 'lodash';
+import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 
 @injectable()
-export default class LayerService implements ILayerService {
+export default class LayerService extends EventEmitter<LayerServiceEvent>
+  implements ILayerService {
   // pickedLayerId 参数用于指定当前存在被选中的 layer
   public pickedLayerId: number = -1;
   public clock = new Clock();
@@ -41,12 +42,12 @@ export default class LayerService implements ILayerService {
   public reRender = throttle(() => {
     this.updateLayerRenderList();
     this.renderLayers();
-  }, 32)
+  }, 32);
 
   public throttleRenderLayers = throttle(() => {
     this.renderLayers();
-  }, 16)
-  
+  }, 16);
+
 
   public add(layer: ILayer) {
     if (this.sceneInited) {
@@ -55,6 +56,7 @@ export default class LayerService implements ILayerService {
 
     this.layers.push(layer);
     this.updateLayerRenderList();
+    this.emit('layerChange', this.layers);
   }
 
   public addMask(mask: ILayer) {
@@ -118,6 +120,8 @@ export default class LayerService implements ILayerService {
     }
     this.updateLayerRenderList();
     layer.destroy();
+    this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public removeAllLayers() {
@@ -187,6 +191,7 @@ export default class LayerService implements ILayerService {
     this.layers = [];
     this.layerList = [];
     this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public startAnimate() {

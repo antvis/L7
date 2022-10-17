@@ -6,20 +6,19 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import {
   Bounds,
   CoordinateSystem,
+  IMapCamera,
   IPoint,
   IViewport,
-  IMapCamera,
 } from '@antv/l7-core';
 import { amap2Project, DOM } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapInstance } from '../../typings/index';
+import AMapBaseService from '../utils/amap/AMapBaseService';
 import { Version } from '../version';
 import './logo.css';
-import { MapTheme } from './theme';
 import Viewport from './Viewport';
-import AMapBaseService from '../utils/amap/AMapBaseService';
 
 // @ts-ignore
 window.forceWebGL = true;
@@ -151,14 +150,11 @@ export default class AMapService extends AMapBaseService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // tslint:disable-next-line:variable-name no-empty
   public updateView(_viewOption: Partial<IMapCamera>): void {}
 
   public getOverlayContainer(): HTMLElement | undefined {
     return undefined;
-  }
-
-  protected getMapStyle(name: string): string {
-    return MapTheme[name] ? MapTheme[name] : name;
   }
 
   public getType() {
@@ -277,7 +273,7 @@ export default class AMapService extends AMapBaseService {
             id as string | HTMLDivElement,
           );
           const mapConstructorOptions = {
-            mapStyle: this.getMapStyle(style as string),
+            mapStyle: this.getMapStyleValue(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,

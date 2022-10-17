@@ -9,6 +9,7 @@ import {
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
+  IMapCamera,
   IMapConfig,
   IMapService,
   IMercator,
@@ -16,20 +17,22 @@ import {
   IStatusOptions,
   IViewport,
   MapServiceEvent,
+  MapStyleConfig,
+  MapStyleName,
   TYPES,
-  IMapCamera,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../../typings/index';
+import { Version } from '../../version';
 import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
-import { Version } from '../../version';
 import Viewport from '../Viewport';
 import './logo.css';
 import { MapTheme } from './theme';
+
 let mapdivCount = 0;
 // @ts-ignore
 window.forceWebGL = true;
@@ -54,7 +57,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
  * AMapService
  */
 @injectable()
-export default class AMapBaseService
+export default abstract class AMapBaseService
   implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = Version['GAODE1.x'];
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
@@ -84,6 +87,7 @@ export default class AMapBaseService
   protected viewport: IViewport;
 
   protected cameraChangedCallback: (viewport: IViewport) => void;
+
   public setBgColor(color: string) {
     this.bgColor = color;
   }
@@ -252,13 +256,26 @@ export default class AMapBaseService
     this.map.setZoomAndCenter(zoom + 1, center);
   }
 
-  public setMapStyle(style: string): void {
-    this.map.setMapStyle(this.getMapStyle(style));
+  public setMapStyle(style: MapStyleName): void {
+    this.map.setMapStyle(this.getMapStyleValue(style));
   }
 
   public setMapStatus(option: Partial<IStatusOptions>): void {
     this.map.setStatus(option);
   }
+
+  public getMapStyleConfig(): MapStyleConfig {
+    return MapTheme;
+  }
+
+  public getMapStyleValue(name: MapStyleName) {
+    return this.getMapStyleConfig()[name] || name;
+  }
+
+  public getMapStyle(): string {
+    return this.map.getMapStyle();
+  }
+
   public pixelToLngLat(pixel: [number, number]): ILngLat {
     const lngLat = this.map.pixelToLngLat(new AMap.Pixel(pixel[0], pixel[1]));
     return { lng: lngLat.getLng(), lat: lngLat.getLat() };
@@ -311,7 +328,6 @@ export default class AMapBaseService
     altitude: number,
     rotate: [number, number, number],
     scale: [number, number, number] = [1, 1, 1],
-
   ): number[] {
     const flat = this.viewport.projectFlat(lnglat);
     // @ts-ignore
@@ -362,7 +378,7 @@ export default class AMapBaseService
             id as string | HTMLDivElement,
           );
           const mapConstructorOptions = {
-            mapStyle: this.getMapStyle(style as string),
+            mapStyle: this.getMapStyleValue(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
@@ -440,6 +456,7 @@ export default class AMapBaseService
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public updateView(viewOption: Partial<IMapCamera>): void {}
+
   public getOverlayContainer(): HTMLElement | undefined {
     return undefined;
   }
@@ -538,10 +555,6 @@ export default class AMapBaseService
       this.cameraChangedCallback(this.viewport);
     }
   };
-
-  protected getMapStyle(name: string): string {
-    return MapTheme[name] ? MapTheme[name] : name;
-  }
   protected creatMapContainer(id: string | HTMLDivElement) {
     let $wrapper = id as HTMLDivElement;
     if (typeof id === 'string') {

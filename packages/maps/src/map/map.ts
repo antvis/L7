@@ -59,7 +59,7 @@ export default class L7MapService extends BaseMapService<Map> {
       // @ts-ignore
       this.map = new Map({
         container: this.$mapContainer,
-        style: this.getMapStyle(style),
+        style: this.getMapStyleValue(style),
         bearing: rotation,
         ...rest,
       });
@@ -93,7 +93,7 @@ export default class L7MapService extends BaseMapService<Map> {
 
     this.map = new Map({
       container: this.$mapContainer as HTMLElement,
-      style: this.getMapStyle(style),
+      style: this.getMapStyleValue(style),
       bearing: rotation,
       // @ts-ignore
       canvas,

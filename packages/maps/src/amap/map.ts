@@ -5,9 +5,9 @@
 import AMapLoader from '@amap/amap-jsapi-loader';
 import {
   CoordinateSystem,
+  IMapCamera,
   IMapService,
   IViewport,
-  IMapCamera,
 } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
@@ -15,8 +15,8 @@ import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import { Version } from '../version';
 
-import Viewport from './Viewport';
 import AMapBaseService from '../utils/amap/AMapBaseService';
+import Viewport from './Viewport';
 // @ts-ignore
 window.forceWebGL = true;
 
@@ -97,7 +97,7 @@ export default class AMapService extends AMapBaseService
             id as string | HTMLDivElement,
           );
           const mapConstructorOptions = {
-            mapStyle: this.getMapStyle(style as string),
+            mapStyle: this.getMapStyleValue(style as string),
             zooms: [minZoom, maxZoom],
             viewMode: '3D',
             ...rest,
@@ -173,6 +173,7 @@ export default class AMapService extends AMapBaseService
     return coordDis / meterDis;
   }
 
+  // tslint:disable-next-line:no-empty
   public updateView(viewOption: Partial<IMapCamera>): void {}
 
   public getOverlayContainer(): HTMLElement | undefined {

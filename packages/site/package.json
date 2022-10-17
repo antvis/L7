@@ -39,6 +39,7 @@
     "@antv/gatsby-theme-antv": "1.1.15",
     "@antv/l7": "2.9.37",
     "@antv/util": "^2.0.9",
+    "@turf/turf": "^6.5.0",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "gatsby": "^2.24.40",

@@ -821,6 +821,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       visible: true,
     });
     this.reRender();
+    this.emit('show');
     return this;
   }
 
@@ -829,6 +830,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       visible: false,
     });
     this.reRender();
+    this.emit('hide');
     return this;
   }
   public setIndex(index: number): ILayer {
