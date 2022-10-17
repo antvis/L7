@@ -115,7 +115,7 @@ export default () => {
         const scene = new Scene({
         id: 'map',
         map: new GaodeMapV2({
-            style: 'fresh',
+            style: 'light',
             center: [ 115, 31 ],
             zoom: 5.0
         })
