@@ -7,6 +7,8 @@ order: 0
 
 ## 简介
 
+点图层支持设置平面点和 3D 的柱子，同时也支持配置图标和文字，用户通过 shape 参数可以定制点图层的功能。
+
 ```javascript
 import { PointLayer } from '@antv/l7';
 
