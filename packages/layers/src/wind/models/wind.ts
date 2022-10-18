@@ -235,8 +235,8 @@ export default class WindModel extends BaseModel {
   private drawColorMode() {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
 
-    this.layer.masks.map((m) => {
-      m.hooks.beforeRenderData.promise();
+    this.layer.masks.map(async (m) => {
+     await m.hooks.beforeRenderData.promise();
       m.hooks.beforeRender.call();
       m.render();
       m.hooks.afterRender.call();

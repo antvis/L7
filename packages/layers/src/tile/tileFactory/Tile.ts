@@ -1,24 +1,67 @@
-import { ILayer } from '@antv/l7-core';
+import {
+  ILayer,
+  createLayerContainer,
+  ILngLat
+  
+} from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
-export default class Tile {
+import { Container } from 'inversify';
+export default abstract class Tile {
   public x: number;
   public y: number;
   public z: number;
-  protected parent:ILayer;
+  public key: string;
+  protected parent: ILayer;
   protected sourceTile: SourceTile;
-  constructor(sourceTile: SourceTile,parent: ILayer) {
+  public visible: boolean  = true;
+  protected layers: ILayer[] = [];
+  public isLoaded: boolean = false;
+  constructor(sourceTile: SourceTile, parent: ILayer) {
     this.parent = parent;
-    this.sourceTile =sourceTile;
+    this.sourceTile = sourceTile;
     this.x = sourceTile.x;
     this.y = sourceTile.y;
-    this.z = sourceTile.z
-    this.initTileLayer()
+    this.z = sourceTile.z;
+    this.key = `${this.x}_${this.y}_${this.z}`;
+
+    // this.initTileLayer();
+  }
+  public getLayers() {
+    return this.layers;
+  }
+
+  public abstract initTileLayer():Promise<void>
+
+  public lnglatInBounds(lnglat: ILngLat): boolean {
+    const [minLng, minLat, maxLng, maxLat] = this.sourceTile.bounds;
+    const {lng ,lat} = lnglat;
+    return  lng>=minLng &&  lng <= maxLng && lat>= minLat &&  lng <= maxLat;
+
+  }
     
+  protected async addLayer(layer: ILayer) {
+    const container = createLayerContainer(
+      this.parent.sceneContainer as Container,
+    );
+    layer.setContainer(container, this.parent.sceneContainer as Container);
+    this.layers.push(layer);
+    await layer.init();
   }
 
-  protected initTileLayer() {
-    console.log(this.sourceTile);
-
+  public updateVisible(value: boolean) {
+    this.visible = value;
+    this.updateOptions('visible',value)
   }
 
+  public updateOptions(key: string, value: any) {
+    this.layers.forEach((l) => {
+      l.updateLayerConfig({
+        [key]: value,
+      });
+    });
+  }
+
+  public destroy() {
+    this.layers.forEach((layer) => layer.destroy());
+  }
 }

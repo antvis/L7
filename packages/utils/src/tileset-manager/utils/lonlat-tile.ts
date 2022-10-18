@@ -57,7 +57,6 @@ export function getTileIndices({
   tileSize: number;
 }) {
   let z = Math.ceil(zoom) + zoomOffset;
-
   // 如果当前 zoom 层级小于 minZoom
   if (Number.isFinite(minZoom) && z < minZoom) {
     return [];

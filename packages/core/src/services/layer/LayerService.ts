@@ -6,6 +6,9 @@ import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
+import {
+  IInteractionTarget,
+} from '../interaction/IInteractionService';
 import { ILayerService } from './ILayerService';
 import { throttle } from 'lodash';
 
@@ -148,8 +151,8 @@ export default class LayerService implements ILayerService {
           depth: 1,
           framebuffer: null,
         });
-        layer.masks.map((m: ILayer) => {
-          m.hooks.beforeRenderData.promise();
+        layer.masks.map(async (m: ILayer) => {
+          await m.hooks.beforeRenderData.promise();
           m.hooks.beforeRender.call();
           m.render();
           m.hooks.afterRender.call();
@@ -221,6 +224,27 @@ export default class LayerService implements ILayerService {
   public getShaderPickStat() {
     return this.shaderPicking;
   }
+  // 拾取绘制
+  public pickRender(layer: ILayer,target: IInteractionTarget) {
+    if(layer.tileLayer) {
+     return layer.tileLayer.pickRender(target)
+    }
+
+    layer.hooks.beforePickingEncode.call();
+
+    if (layer.masks.length > 0) {
+      // 若存在 mask，则在 pick 阶段的绘制也启用
+      layer.masks.map(async (m: ILayer) => {
+        m.hooks.beforeRenderData.promise();
+        m.hooks.beforeRender.call();
+        m.render();
+        m.hooks.afterRender.call();
+      });
+    }
+    layer.renderModels(true);
+    layer.hooks.afterPickingEncode.call();
+
+  }
 
   public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
@@ -247,4 +271,6 @@ export default class LayerService implements ILayerService {
   private stopRender() {
     $window.cancelAnimationFrame(this.layerRenderID);
   }
+
+
 }

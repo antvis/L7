@@ -119,7 +119,7 @@ export class SourceTile extends EventEmitter {
 
   // 瓦片的 key
   public get key() {
-    const key = `${this.x},${this.y},${this.z}`;
+    const key = `${this.x}_${this.y}_${this.z}`;
     return key;
   }
 

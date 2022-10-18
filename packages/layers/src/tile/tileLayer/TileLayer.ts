@@ -5,15 +5,20 @@ import {
   ITileLayerManager,
   ITileLayerOPtions,
 } from '@antv/l7-core';
-import { TileLayerManager } from '../manager/layerManager';
+import  { TileLayerService } from '../service/TileLayerService';
+import { TilePickService } from '../service/TilePickService'
 import { Base } from './base';
+
 import { setSelect, setHighlight, setPickState, clearPickState } from '../interaction/utils';
+
 
 export class TileLayer extends Base implements ITileLayer {
   public get children() {
     return this.tileLayerManager.children;
   }
   public tileLayerManager: ITileLayerManager;
+  public tilePickService:TilePickService;
+
 
   private pickColors: {
     select: any;
@@ -28,30 +33,35 @@ export class TileLayer extends Base implements ITileLayer {
     rendererService,
     mapService,
     layerService,
-    pickingService,
-    transforms
   }: ITileLayerOPtions) {
     super();
-
-
     this.sourceLayer = parent.getLayerConfig()?.sourceLayer as string;
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;
-
-    this.tileLayerManager = new TileLayerManager(
-      parent,
-      mapService,
+    // 初始化瓦片管理服务
+    this.tileLayerService = new TileLayerService({
       rendererService,
-      pickingService,
-      transforms
-    );
+    })
+    // 初始化拾取服务
+    this.tilePickService = new TilePickService({
+      tileLayerService:  this.tileLayerService,
+      layerService,
+    })
+
+    // this.tileLayerManager = new TileLayerManager(
+    //   parent,
+    //   mapService,
+    //   rendererService,
+    //   pickingService,
+    //   transforms
+    // );
 
     this.initTileSetManager();
-    this.bindSubLayerEvent();
-    this.bindSubLayerPick();
+    // this.bindSubLayerEvent();
+    // this.bindSubLayerPick();
 
-    this.scaleField = this.parent.getScaleOptions();
+    // this.scaleField = this.parent.getScaleOptions();
   }
 
   public clearPick(type: string) {
@@ -80,6 +90,7 @@ export class TileLayer extends Base implements ITileLayer {
   public setPickState(layers: ILayer[]) {
     setPickState(layers, this.pickColors);
   }
+
 
   private bindSubLayerPick() {
     this.tileLayerManager.tilePickService.on('pick', (e) => {
@@ -164,5 +175,7 @@ export class TileLayer extends Base implements ITileLayer {
       this.parent.emit('uncontextmenu', { ...e }),
     );
   }
+
+
 
 }

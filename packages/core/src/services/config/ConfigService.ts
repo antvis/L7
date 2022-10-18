@@ -2,9 +2,9 @@
 import { injectable } from 'inversify';
 import { merge } from 'lodash';
 import 'reflect-metadata';
-import { ILayerConfig } from '../layer/ILayerService';
+import { ILayerConfig,ILayerAttributesOption} from '../layer/ILayerService';
 import { IRenderConfig } from '../renderer/IRendererService';
-import { IGlobalConfigService, ISceneConfig } from './IConfigService';
+import { IGlobalConfigService, ISceneConfig, } from './IConfigService';
 import WarnInfo from './warnInfo';
 
 /**
@@ -68,7 +68,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   active: false,
   activeColor: '#2f54eb',
   enableHighlight: false,
-  enableSelect: false,
+  enableSelect: true,
   highlightColor: '#2f54eb',
   activeMix: 0,
   selectColor: 'blue',
@@ -115,6 +115,15 @@ export default class GlobalConfigService implements IGlobalConfigService {
    */
   private layerConfigCache: {
     [layerId: string]: Partial<ILayerConfig & ISceneConfig>;
+  } = {};
+
+
+  /**
+   * 数据映射缓存
+   */
+
+  private layerAttributeConfigCache: {
+    [layerId: string]: Partial<ILayerAttributesOption>
   } = {};
 
   /**
@@ -164,16 +173,18 @@ export default class GlobalConfigService implements IGlobalConfigService {
       ...merge({}, this.sceneConfigCache[sceneId], defaultLayerConfig, config),
     };
   }
+  
+   public getAttributeConfig(layerId: string,): Partial<ILayerAttributesOption> {
+    return this.layerAttributeConfigCache[layerId]
 
-  // public registerLayerConfigSchemaValidator(layerName: string, schema: object) {
-  //   if (!this.layerConfigValidatorCache[layerName]) {
-  //     this.layerConfigValidatorCache[layerName] = ajv.compile(schema);
-  //   }
-  // }
+   }
 
-  // public validateLayerConfig(layerName: string, data: object) {
-  //   return this.validate(this.layerConfigValidatorCache[layerName], data);
-  // }
+   public setAttributeConfig(layerId: string, attr: Partial<ILayerAttributesOption>) {
+      this.layerAttributeConfigCache[layerId] = {
+        ...this.layerAttributeConfigCache[layerId],
+        ...attr
+      }
+   }
 
   public clean() {
     this.sceneConfigCache = {};

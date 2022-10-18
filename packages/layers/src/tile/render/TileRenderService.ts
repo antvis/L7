@@ -13,7 +13,7 @@ export class TileRenderService implements ITileRenderService{
         layers
           .filter((layer) => layer.inited)
           .filter((layer) => layer.isVisible())
-          .map((layer) => {
+          .map(async (layer) => {
             layer.hooks.beforeRenderData.promise();
             layer.hooks.beforeRender.call();
             if (layer.masks.length > 0) {
@@ -23,8 +23,8 @@ export class TileRenderService implements ITileRenderService{
                 depth: 1,
                 framebuffer: null,
               });
-              layer.masks.map((m: ILayer) => {
-                m.hooks.beforeRenderData.promise();
+              layer.masks.map(async (m: ILayer) => {
+                await m.hooks.beforeRenderData.promise();
                 m.hooks.beforeRender.call();
                 m.render();
                 m.hooks.afterRender.call();

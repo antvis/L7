@@ -13,6 +13,7 @@ import {
   ICameraService,
   ICoordinateSystemService,
   IDataState,
+  ILayerAttributesOption,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -72,6 +73,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string = `${layerIdCounter}`;
+  public parent: ILayer;
   public coordCenter: number[];
   public type: string;
   public visible: boolean = true;
@@ -179,14 +181,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected mapService: IMapService;
 
-  protected styleAttributeService: IStyleAttributeService;
+  public styleAttributeService: IStyleAttributeService;
 
   protected layerSource: Source;
 
-  protected postProcessingPassFactory: (
+  public postProcessingPassFactory: (
     name: string,
   ) => IPostProcessingPass<unknown>;
-  protected normalPassFactory: (name: string) => IPass<unknown>;
+  public normalPassFactory: (name: string) => IPass<unknown>;
 
   protected animateOptions: IAnimateOption = { enable: false };
 
@@ -232,6 +234,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
+    this.parent = this;
   }
 
   public addMaskLayer(maskLayer: ILayer) {
@@ -250,8 +253,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.styleAttributeService.getLayerStyleAttribute(name);
   }
 
-  public getLayerConfig() {
-    return this.configService.getLayerConfig<ChildLayerStyleOptions>(this.id);
+  public getLayerConfig<T = any>() {
+    return this.configService.getLayerConfig<ChildLayerStyleOptions & T>(
+      this.id,
+    );
   }
 
   public updateLayerConfig(
@@ -1297,6 +1302,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     ) {
       isPick = true;
     }
+    if (type === 'click')
+      console.log('enableSelect', type, this.isVisible(), enableSelect, isPick);
     return this.isVisible() && isPick;
   }
 
@@ -1341,6 +1348,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+    // 存储 Attribute
+    this.configService.setAttributeConfig(this.id, {
+      [type]: {
+        field,
+        values,
+      },
+    });
     if (!this.inited) {
       this.pendingStyleAttributes.push({
         attributeName: type,
@@ -1367,6 +1381,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         updateOptions,
       );
     }
+  }
+
+  public getLayerAttributeConfig(): Partial<ILayerAttributesOption> {
+    return this.configService.getAttributeConfig(this.id);
   }
 
   public getShaderPickStat() {

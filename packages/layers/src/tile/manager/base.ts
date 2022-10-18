@@ -8,7 +8,7 @@ import {
 } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
-import { ITileFactory, getTileFactory, TileType } from '../tileFactory';
+import { getTileFactory, TileType } from '../tileFactory';
 import { updateLayersConfig } from '../style/utils';
 export class Base {
   public sourceLayer: string;
@@ -16,7 +16,7 @@ export class Base {
   public children: ILayer[];
   public mapService: IMapService;
   public rendererService: IRendererService;
-  protected tileFactory: ITileFactory;
+  protected tileFactory: any;
   protected initOptions: ISubLayerInitOptions;
 
   private tileCache: Map<string, SourceTile> = new Map();
@@ -125,13 +125,12 @@ export class Base {
     const source = this.parent.getSource();
     const TileFactory = getTileFactory(
       this.parent.type as TileType,
-      source.parser,
     );
-    this.tileFactory = new TileFactory({
-      parent: this.parent,
-      mapService: this.mapService,
-      rendererService: this.rendererService,
-    });
+    // this.tileFactory = new TileFactory({
+    //   parent: this.parent,
+    //   mapService: this.mapService,
+    //   rendererService: this.rendererService,
+    // });
   }
 
   public getSourceLayer(

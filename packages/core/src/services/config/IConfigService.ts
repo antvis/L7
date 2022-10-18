@@ -1,6 +1,6 @@
 // import Ajv from 'ajv';
 import { PositionName } from '../component/IControlService';
-import { ILayerConfig } from '../layer/ILayerService';
+import { ILayerConfig,ILayerAttributesOption } from '../layer/ILayerService';
 import { IMapWrapper } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
 export interface ISceneConfig extends IRenderConfig {
@@ -17,8 +17,6 @@ export interface ISceneConfig extends IRenderConfig {
   // TODO: 场景是否支持 stencil mask
   stencil?: boolean;
 }
-
-
 
 export interface IGlobalConfigService {
   /**
@@ -64,20 +62,18 @@ export interface IGlobalConfigService {
     layerId: string,
     config: Partial<ILayerConfig>,
   ): void;
-
-  /**
-   * 注册一个图层的配置项校验器
-   * @param layerName 图层名
-   * @param schema 校验规则描述
+    /**
+   * 获取数据映射
    */
-  // registerLayerConfigSchemaValidator(layerName: string, schema: object): void;
-
-  /**
-   * 校验用户传入的图层配置项
-   * @param data 图层配置项
-   */
-  // validateLayerConfig(layerName: string, data: object): IValidateResult;
-
+    getAttributeConfig(layerId: string,): Partial<ILayerAttributesOption>
+   
+   /**
+    * 设置数据映射
+    * @param layerId sh
+    * @param attr 
+    */
+    setAttributeConfig(layerId: string, attr: Partial<ILayerAttributesOption>):void
+   
   /**
    * 清除场景和图层配置项 Cache，但是需要保留校验器
    */

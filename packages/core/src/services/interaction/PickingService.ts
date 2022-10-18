@@ -9,7 +9,7 @@ import {
   IInteractionTarget,
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { ILayer, ILayerService, ITileLayer } from '../layer/ILayerService';
+import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
@@ -52,7 +52,7 @@ export default class PickingService implements IPickingService {
 
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
-    );
+    );      
     width *= DOM.DPR;
     height *= DOM.DPR;
     this.pickBufferScale =
@@ -292,15 +292,15 @@ export default class PickingService implements IPickingService {
         this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
       }
-      if (!layer.isVector) {
-        // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
-        this.layerService
-          .getLayers()
-          .filter((l) => l.tileLayer)
-          .map((l) => {
-            (l.tileLayer as ITileLayer).clearPickState();
-          });
-      }
+      // if (!layer.isVector) {
+      //   // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
+      //   this.layerService
+      //     .getLayers()
+      //     .filter((l) => l.tileLayer)
+      //     .map((l) => {
+      //       (l.tileLayer as ITileLayer).clearPickState();
+      //     });
+      // }
     }
     return isPicked;
   };
@@ -363,8 +363,10 @@ export default class PickingService implements IPickingService {
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getRenderList();
+      
       layers
-        .filter((layer) => layer.needPick(target.type))
+        .filter((layer) => {
+          return layer.needPick(target.type)})
         .reverse()
         .some((layer) => {
           clear({
@@ -375,28 +377,30 @@ export default class PickingService implements IPickingService {
           });
 
           // Tip: clear last picked tilelayer state
-          this.pickedTileLayers.map((pickedTileLayer) =>
-            (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
-          );
+          // this.pickedTileLayers.map((pickedTileLayer) =>
+          //   (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
+          // );
 
           // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
-          if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
-            return (layer.tileLayer as ITileLayer).pickLayers(target);
-          }
+          // if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
+          //   return (layer.tileLayer as ITileLayer).pickLayers(target);
+          // }
+        
+          this.layerService.pickRender(layer,target)
 
-          layer.hooks.beforePickingEncode.call();
+          // layer.hooks.beforePickingEncode.call();
 
-          if (layer.masks.length > 0) {
-            // 若存在 mask，则在 pick 阶段的绘制也启用
-            layer.masks.map((m: ILayer) => {
-              m.hooks.beforeRenderData.promise();
-              m.hooks.beforeRender.call();
-              m.render();
-              m.hooks.afterRender.call();
-            });
-          }
-          layer.renderModels(true);
-          layer.hooks.afterPickingEncode.call();
+          // if (layer.masks.length > 0) {
+          //   // 若存在 mask，则在 pick 阶段的绘制也启用
+          //   layer.masks.map(async (m: ILayer) => {
+          //     m.hooks.beforeRenderData.promise();
+          //     m.hooks.beforeRender.call();
+          //     m.render();
+          //     m.hooks.afterRender.call();
+          //   });
+          // }
+          // layer.renderModels(true);
+          // layer.hooks.afterPickingEncode.call();
 
           const isPicked = this.pickFromPickingFBO(layer, target);
 

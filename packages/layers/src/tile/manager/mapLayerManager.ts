@@ -29,8 +29,8 @@ export class BaseMapTileLayerManager extends Base implements IBaseTileLayerManag
     this.children
     .filter((layer) => layer.inited)
     .filter((layer) => layer.isVisible())
-    .map((layer) => {
-      layer.hooks.beforeRenderData.promise();
+    .map(async (layer) => {
+      await layer.hooks.beforeRenderData.promise();
       layer.hooks.beforeRender.call();
       if (layer.masks.length > 0) {
         // 清除上一次的模版缓存

@@ -89,6 +89,17 @@ export interface ILayerModel {
   setEarthTime?(time: number): void;
   createModelData?(options?: any): any;
 }
+
+export interface ILayerAttributesOption {
+  shape: IAttrbuteOptions,
+  color: IAttrbuteOptions,
+  texture:IAttrbuteOptions,
+  rotate:IAttrbuteOptions,
+  size:IAttrbuteOptions,
+  filter:IAttrbuteOptions,
+  label:IAttrbuteOptions,
+}
+
 export interface IModelUniform {
   [key: string]: IUniform;
 }
@@ -134,6 +145,11 @@ export interface IAttributeAndElements {
 
 export interface ISubLayerStyles {
   opacity: number;
+}
+
+export interface IAttrbuteOptions {
+  field: StyleAttrField,
+  values:StyleAttributeOption
 }
 
 /**
@@ -221,6 +237,7 @@ export interface ITileLayerManager extends IBaseTileLayerManager{
 
 export interface IBaseTileLayer {
   sourceLayer: string;
+  pickRender(target: IInteractionTarget):void;
   parent: ILayer;
   tileLayerManager: IBaseTileLayerManager;
   tilesetManager: TilesetManager | undefined;
@@ -230,6 +247,7 @@ export interface IBaseTileLayer {
   destroy(): void;
 }
 export interface ITileLayer extends IBaseTileLayer{
+
   tileLayerManager: ITileLayerManager;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
@@ -272,7 +290,9 @@ export type LayerEventType =
   | any;
 
 export interface ILayer {
+  styleAttributeService: IStyleAttributeService,
   sourceLayer?: string;
+  parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
   coordCenter: number[];
@@ -332,7 +352,10 @@ export interface ILayer {
    */
 
   threeRenderService?: any;
-
+  postProcessingPassFactory: (
+    name: string,
+  ) => IPostProcessingPass<unknown>;
+  normalPassFactory: (name: string) => IPass<unknown>;
   getShaderPickStat: () => boolean;
   updateModelData(data: IAttributeAndElements): void;
 
@@ -340,7 +363,8 @@ export interface ILayer {
   removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
   getAttribute(name: string): IStyleAttribute | undefined;
-  getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
+  getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
+  getLayerAttributeConfig():Partial<ILayerAttributesOption>
   setBottomColor(color: string): void;
   getBottomColor(): string;
   getContainer(): Container;
@@ -642,6 +666,7 @@ export interface ILayerService {
   renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
+  pickRender(layer: ILayer,target?: IInteractionTarget):void
 
   destroy(): void;
 }

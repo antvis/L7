@@ -80,7 +80,7 @@ export class TilesetManager extends EventEmitter {
   // 1.瓦片序号发生改变 2.瓦片新增 3.瓦片显隐控制
   public update(zoom: number, latLonBounds: [number, number, number, number]) {
     // 校验层级，向上取整
-    const verifyZoom = Math.ceil(zoom);
+    const verifyZoom = Math.floor(zoom);
     if (
       this.lastViewStates &&
       this.lastViewStates.zoom === verifyZoom &&
@@ -179,7 +179,7 @@ export class TilesetManager extends EventEmitter {
     const { zoomOffset } = this.options;
     const z = Math.ceil(zoom) + zoomOffset;
     const xy = osmLonLat2TileXY(lng, lat, z);
-    const tiles = this.tiles.filter((t) => t.key === `${xy[0]},${xy[1]},${z}`);
+    const tiles = this.tiles.filter((t) => t.key === `${xy[0]}_${xy[1]}_${z}`);
     return tiles[0];
   }
 
