@@ -45,7 +45,6 @@ export default () => {
 
       const line = new LineLayer({
         sourceLayer: 'CHN_Districts_L',
-        usage: 'basemap',
       })
         .source(source)
         .shape('simple')
@@ -53,7 +52,6 @@ export default () => {
 
       const line2 = new LineLayer({
         sourceLayer: 'CHN_Citys_L',
-        usage: 'basemap',
       })
         .source(source)
         .shape('line')
@@ -62,7 +60,6 @@ export default () => {
 
       const line3 = new LineLayer({
         sourceLayer: 'CHN_Provinces_L',
-        usage: 'basemap',
       })
         .source(source)
         .shape('line')
