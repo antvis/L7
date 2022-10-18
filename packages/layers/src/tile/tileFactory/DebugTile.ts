@@ -1,14 +1,36 @@
 import Tile from './Tile';
-import { LineLayer } from '@antv/l7-layers';
+import { LineLayer,PointLayer } from '@antv/l7-layers';
 export default class DebugTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const sourceOptions = this.getSourceOption();
+    
+    const pointData = sourceOptions.data.features[0].properties;
     const lineLayer = new LineLayer()
       .source(sourceOptions.data, sourceOptions.options)
       .size(1)
       .shape('line')
       .color('red');
+      const pointLayer = new PointLayer()
+      .source([pointData],{
+        parser: {
+          type: 'json',
+          x: 'textLng',
+          y: 'textLat',
+          cancelExtent: true,
+        }
+  
+      })
+      .size(20)
+      .color('red')
+      .shape(this.key)
+      .style({
+        stroke: '#fff',
+        strokeWidth: 2
+      });
+    
     await this.addLayer(lineLayer);
+    await this.addLayer(pointLayer);
+    
     this.isLoaded = true;
   }
 

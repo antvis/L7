@@ -1,7 +1,6 @@
-import { ILayer } from '@antv/l7-core';
-
 import VectorTile from './VectorTile2';
 import DebugTile from './DebugTile';
+import { ILayer } from '@antv/l7-core';
 import ImageTile from  './ImageTile';
 import RasterTile from './RasterTile';
 

@@ -94,15 +94,13 @@ export default () => {
 
       const line = new LineLayer({
         sourceLayer: 'CHN_Cities_L',
-        usage: 'basemap',
       })
         .source(source)
-        .shape('simple')
+        .shape('line')
         .color('#FFA500');
 
       const line2 = new LineLayer({
         sourceLayer: 'CHN_L',
-        usage: 'basemap',
       })
         .source(source)
         .shape('line')
