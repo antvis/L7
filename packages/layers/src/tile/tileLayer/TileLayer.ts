@@ -35,7 +35,9 @@ export class TileLayer extends Base implements ITileLayer {
     layerService,
   }: ITileLayerOPtions) {
     super();
+    
     this.sourceLayer = parent.getLayerConfig()?.sourceLayer as string;
+    
     this.parent = parent;
     this.mapService = mapService;
     this.layerService = layerService;

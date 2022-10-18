@@ -30,7 +30,7 @@ export default class TestTile extends TileFactory {
     const properties = features[0].properties;
     
     const text = new VectorLayer({
-        layerType: 'PointLayer',
+       layerType: 'PointLayer',
         minZoom: tile.z -1,
         maxZoom: tile.z +1,
         usage: 'basemap', 

@@ -8,7 +8,6 @@ import {
 } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
-import { getTileFactory, TileType } from '../tileFactory';
 import { updateLayersConfig } from '../style/utils';
 export class Base {
   public sourceLayer: string;
@@ -122,10 +121,7 @@ export class Base {
   }
 
   public initTileFactory() {
-    const source = this.parent.getSource();
-    const TileFactory = getTileFactory(
-      this.parent.type as TileType,
-    );
+ 
     // this.tileFactory = new TileFactory({
     //   parent: this.parent,
     //   mapService: this.mapService,

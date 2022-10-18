@@ -24,7 +24,6 @@ export default abstract class Tile {
     this.z = sourceTile.z;
     this.key = `${this.x}_${this.y}_${this.z}`;
 
-    // this.initTileLayer();
   }
   public getLayers() {
     return this.layers;

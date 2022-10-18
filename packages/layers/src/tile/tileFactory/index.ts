@@ -1,5 +1,10 @@
 import VectorTile from './VectorTile2';
 import DebugTile from './DebugTile';
+import { ILayer } from '@antv/l7-core';
+import ImageTile from  './ImageTile';
+
+
+
 
 export type TileType =
   | 'VectorTile'
@@ -8,10 +13,13 @@ export type TileType =
   | 'PointLayer'
   | 'LineLayer'
   | 'RasterLayer'
+  | 'image'
   | 'MaskLayer'
   | 'TileDebugLayer';
 
-export function getTileFactory(tileType: TileType) {
+export function getTileFactory(layer: ILayer) {
+  const tileType = layer.type;
+  
   switch (tileType) {
     case 'PolygonLayer':
       return VectorTile;
@@ -21,6 +29,13 @@ export function getTileFactory(tileType: TileType) {
       return VectorTile;
     case 'TileDebugLayer': 
       return DebugTile;
+    case 'RasterLayer':
+      const parser = layer.getSource().parser;
+      if(parser.type === 'rasterTile') {
+        return ImageTile;
+      } else {
+        return ImageTile
+      }
     default:
       return VectorTile
     // case 'MaskLayer':
