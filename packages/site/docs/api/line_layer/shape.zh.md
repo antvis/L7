@@ -11,7 +11,7 @@ order: 3
 
 绘制路径图。
 
-`line` 路径是最普通的线图层，支持配置宽度和高度。
+`line` 路径是最普通的线图层，支持配置宽度和高度，支持配置纹理和动画。
 
 ```js
 layer.shape('line');
@@ -19,45 +19,40 @@ layer.shape('line');
 
 ### shape('arc')
 
-绘制弧线 通过贝塞尔曲线算法技术弧线
-
-`line` 路径是最普通的线图层，支持配置宽度和高度。
+`arc` 弧线通过贝塞尔曲线算法计算出弧线的的路径，支持配置纹理和动画。
 
 ```js
-layer.shape('line');
+layer.shape('arc');
 ```
 
 ### shape('arc3d')
 
-3d 弧线地图 3D 视角
-
-`line` 路径是最普通的线图层，支持配置宽度和高度。
+`arc3d` 3d 弧线是在垂直地图两点之间的弧线，具有高度，支持配置纹理和动画。
 
 ```js
-layer.shape('line');
+layer.shape('arc3d');
 ```
 
 ### shape('greatcircle')
 
-大圆航线，地图两个点的最近距离不是两个点连线，而是大圆航线
+`greatcircle` 大圆航线是地图两个点最近距离的连线，支持配置纹理和动画。
 
-`line` 路径是最普通的线图层，支持配置宽度和高度。
 
 ```js
-layer.shape('line');
+layer.shape('greatcircle');
 ```
 
 ### shape('wall')
 
-`simple` 路径是最普通的线图层，支持配置宽度和高度。
+`wall` 是垂直地图的围墙，支持配置高度，纹理和动画。
 
 ```js
-layer.shape('simple');
+layer.shape('wall');
 ```
 
 ### shape('simple')
 
-`simple` 路径是最普通的线图层，支持配置宽度和高度。
+`simple` 线图层，宽度始终为 `1px`。
 
 ```js
 layer.shape('simple');

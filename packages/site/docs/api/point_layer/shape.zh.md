@@ -9,39 +9,49 @@ order: 3
 
 ### shape(fillShape: IFillShape)
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ'>
-
-```js
-type IFillShape =
-  | 'circle'
-  | 'square'
-  | 'hexagon'
-  | 'triangle'
-  | 'pentagon'
-  | 'octogon'
-  | 'hexagram'
-  | 'rhombus'
-  | 'vesica';
-```
-
-```js
-layer.shape('circle');
-```
+点图层的贴地的几何图形，如圆形、正方形、三角形等。    
 
 🌟 若是使用简单的圆点图层，建议使用 `simple` 代替 `circle` 以获得更好的性能。
 
-### shape(column: IColumn)
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*tvpvQZLv_xYAAAAAAAAAAABkARQnAQ'>
+<div>
+  <div style="width:40%;float:right; margin-left: 16px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*iN0nTYRDd3AAAAAAAAAAAABkARQnAQ'>
+  </div>
+</div>
 
 ```js
-type IColumn = 'cylinder' | 'triangleColumn' | 'hexagonColumn' | 'squareColumn';
+// shape 支持的各种形状
+type IFillShape = 'circle'|'square'|'hexagon'|'triangle'|'pentagon'|
+'octogon'|'hexagram'|'rhombus'|'vesica';
+
+
+layer.shape('circle');
+
 ```
 
+### shape(column: IColumn)
+
+点的类型为垂直地图的柱子。
+
+<div>
+  <div style="width:40%;float:right; margin-left: 16px;">
+    <img width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*tvpvQZLv_xYAAAAAAAAAAABkARQnAQ'>
+  </div>
+</div>
+
+
+
 ```js
+
+type IColumn = 'cylinder' | 'triangleColumn' | 
+'hexagonColumn' | 'squareColumn';
+
 layer.shape('cylinder');
+
 layer.shape('triangleColumn');
+
 layer.shape('hexagonColumn');
+
 layer.shape('squareColumn');
 ```
 
