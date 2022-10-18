@@ -1,14 +1,14 @@
 import {
   IBaseTileLayer,
   ITileLayerOPtions,
-  IBaseTileLayerManager,
+  // IBaseTileLayerManager,
 } from '@antv/l7-core';
 import { BaseMapTileLayerManager } from '../manager/mapLayerManager';
 
 import { Base } from './base';
 
 export class MapTileLayer extends Base implements IBaseTileLayer {
-  public tileLayerManager: IBaseTileLayerManager;
+  // public tileLayerManager: IBaseTileLayerManager;
   constructor({
     parent,
     rendererService,

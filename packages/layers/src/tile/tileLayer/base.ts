@@ -184,6 +184,13 @@ export class Base {
   public pickRender(target: IInteractionTarget) {
     this.tilePickService.pickRender(target);
   }
+  public selectFeature(pickedColors: Uint8Array | undefined) {
+    this.tilePickService.selectFeature(pickedColors)
+  }
+
+  public highlightPickedFeature(pickedColors: Uint8Array | undefined) {
+    this.tilePickService.highlightPickedFeature(pickedColors)
+  }
 
 
 }

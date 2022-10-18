@@ -237,18 +237,19 @@ export interface ITileLayerManager extends IBaseTileLayerManager{
 
 export interface IBaseTileLayer {
   sourceLayer: string;
-  pickRender(target: IInteractionTarget):void;
   parent: ILayer;
-  tileLayerManager: IBaseTileLayerManager;
+  tileLayerManager: ITileLayerManager;
   tilesetManager: TilesetManager | undefined;
+  pickRender(target: IInteractionTarget):void;
+  selectFeature(pickedColors: Uint8Array | undefined):void;
+  highlightPickedFeature(pickedColors: Uint8Array | undefined):void;
   children: ILayer[];
   scaleField: any;
   render(isPicking?: boolean): void;
   destroy(): void;
 }
 export interface ITileLayer extends IBaseTileLayer{
-
-  tileLayerManager: ITileLayerManager;
+  pickRender(target: IInteractionTarget):void;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
   clearPickState(): void;
@@ -667,6 +668,8 @@ export interface ILayerService {
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
   pickRender(layer: ILayer,target?: IInteractionTarget):void
+  selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined):void;
+  highlightPickedFeature(layer: ILayer, pickedColors: Uint8Array | undefined):void;
 
   destroy(): void;
 }

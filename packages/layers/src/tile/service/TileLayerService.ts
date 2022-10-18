@@ -28,7 +28,7 @@ export class TileLayerService {
     this.initGlobalResource();
   }
   get tiles():Tile[] {
-    return this.tiles;
+    return this._tiles;
   }
 
   // 初始化全局资源 - 所有瓦片共用的资源

@@ -1302,8 +1302,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     ) {
       isPick = true;
     }
-    if (type === 'click')
-      console.log('enableSelect', type, this.isVisible(), enableSelect, isPick);
     return this.isVisible() && isPick;
   }
 

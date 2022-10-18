@@ -183,6 +183,7 @@ export default class LayerService implements ILayerService {
       .forEach((layer) => {
         this.layerList.push(layer);
       });
+
   }
 
   public destroy() {
@@ -224,6 +225,9 @@ export default class LayerService implements ILayerService {
   public getShaderPickStat() {
     return this.shaderPicking;
   }
+  
+  // For Pick
+
   // 拾取绘制
   public pickRender(layer: ILayer,target: IInteractionTarget) {
     if(layer.tileLayer) {
@@ -244,6 +248,22 @@ export default class LayerService implements ILayerService {
     layer.renderModels(true);
     layer.hooks.afterPickingEncode.call();
 
+  }
+
+  public selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
+     
+    if(layer.tileLayer) {
+      return layer.tileLayer.selectFeature(pickedColors)
+     }
+    // @ts-ignore
+    const [r, g, b] = pickedColors;
+    layer.hooks.beforeSelect.call([r, g, b]);
+  }
+
+  public highlightPickedFeature(layer: ILayer,pickedColors: Uint8Array | undefined): void {
+    if(layer.tileLayer) {
+      return layer.tileLayer.highlightPickedFeature(pickedColors)
+     }
   }
 
   public clear() {
