@@ -148,7 +148,7 @@ export class Base {
       .map(async (tile: SourceTile) => {
         if (!this.tileLayerService.hasTile(tile.key)) {
           const tileInstance = getTileFactory(this.parent);
-          const tileLayer = new tileInstance(tile, this.parent);
+          const tileLayer = new tileInstance(tile, this.parent, this.tileLayerService);
           await tileLayer.initTileLayer();
           this.tileLayerService.addTile(tileLayer);
           this.layerService.reRender()

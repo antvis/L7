@@ -1,26 +1,42 @@
-import { ILayer, ILngLat, IRendererService } from '@antv/l7-core';
-import { SourceTile } from '@antv/l7-utils';
+import { ILayer, ILngLat, IRendererService, ITexture2D } from '@antv/l7-core';
+import { SourceTile, IColorRamp } from '@antv/l7-utils';
 import 'reflect-metadata';
 import Tile from '../tileFactory/Tile';
+import { createColorTexture } from '../style/utils';
 
 interface TileLayerServiceOptions {
   rendererService: IRendererService;
   parent:ILayer;
 }
 
+interface ITileLayerStyleOptions {
+  rampColors?: IColorRamp;
+}
+
+
 export class TileLayerService {
   private rendererService: IRendererService;
   private parent: ILayer;
+
+  public colorTexture: ITexture2D; // 颜色纹理，被栅格瓦片共用
 
   private _tiles: Tile[] = [];
   constructor({ rendererService, parent }: TileLayerServiceOptions) {
     this.rendererService = rendererService;
     this.parent = parent;
-
-    console.log(parent.masks)
+    // 初始化全局资源
+    this.initGlobalResource();
   }
   get tiles():Tile[] {
     return this.tiles;
+  }
+
+  // 初始化全局资源 - 所有瓦片共用的资源
+  initGlobalResource() {
+    const { rampColors } = this.parent.getLayerConfig() as ITileLayerStyleOptions;
+    if(rampColors) {
+      this.colorTexture = createColorTexture(rampColors, this.rendererService);
+    }
   }
 
   hasTile(tileKey: string): boolean {
