@@ -151,11 +151,11 @@ export class Base {
           const tileLayer = new tileInstance(tile, this.parent);
           await tileLayer.initTileLayer();
           this.tileLayerService.addTile(tileLayer);
-          this.render();
+ 
         } else {
           this.tileLayerService.updateTileVisible(tile);
-          this.render();
         }
+        this.layerService.reRender()
       });
  
     if (this.tilesetManager.isLoaded) {
