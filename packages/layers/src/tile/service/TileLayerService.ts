@@ -5,14 +5,19 @@ import Tile from '../tileFactory/Tile';
 
 interface TileLayerServiceOptions {
   rendererService: IRendererService;
+  parent:ILayer;
 }
 
 export class TileLayerService {
   private rendererService: IRendererService;
+  private parent: ILayer;
 
   private _tiles: Tile[] = [];
-  constructor({ rendererService }: TileLayerServiceOptions) {
+  constructor({ rendererService, parent }: TileLayerServiceOptions) {
     this.rendererService = rendererService;
+    this.parent = parent;
+
+    console.log(parent.masks)
   }
   get tiles():Tile[] {
     return this.tiles;
@@ -47,6 +52,17 @@ export class TileLayerService {
   }
 
   render() {
+    // this.rendererService.clear({
+    //   stencil: 0,
+    //   depth: 1,
+    //   framebuffer: null,
+    // });
+    // this.parent.masks.map( async(mask) =>{
+    //   await mask.hooks.beforeRenderData.promise();
+    //   mask.hooks.beforeRender.call();
+    //   mask.render();
+    //   mask.hooks.afterRender.call();
+    // })
     // TODO 渲染排序
     this._tiles.map((tile: Tile) => {
       const layers = tile.getLayers();
