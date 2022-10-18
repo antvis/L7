@@ -5,133 +5,77 @@ order: 3
 
 `markdown:docs/common/style.md`
 
-### shape
+`shape` 方法用于指定面图层绘制图形的类型，如填充图，填充线，挤出集合体等。
 
-`PolygonLayer` 填充图支持 3 种 shape
+### shape('fill')
 
-**填充面**
+`shape` 为 `fill` 几何图层用于绘制平面的几何图形。
 
-- fill 绘制填充面 不支持数据映射
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*v5dZT4Q1dgsAAAAAAAAAAAAAARQnAQ">
-
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('red')
-        .shape('fill')
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
+```js
+layer.shape('fill');
 ```
 
-**填充图描边**
+### shape('extrude')
 
-- line 绘制填充图描边 不支持数据映射
+`shape` 为 `extrude` 几何图层用于绘制 3D 的几何体。
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KSlPQ6MCu4sAAAAAAAAAAAAAARQnAQ">
+```js
+layer.shape('extrude');
+```
+### shape('water')
 
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+`shape` 为 `water` 几何图层用于绘制平面水体。
 
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('#000')
-        .shape('line')
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
+```js
+layer.shape('water');
 ```
 
-**3D 填充图**
+### shape('ocean')
 
-- extrude 对填充图 3D 拉伸 不支持数据映射
+`shape` 为 `ocean` 几何图层用于绘制平面海洋水体。
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*vcN8TptUA1cAAAAAAAAAAAAAARQnAQ">
+```js
+layer.shape('ocean');
+```
 
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+### shape('line')
 
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('name', [
-          'rgb(239,243,255)',
-          'rgb(189,215,231)',
-          'rgb(107,174,214)',
-          'rgb(49,130,189)',
-          'rgb(8,81,156)',
-        ])
-        .shape('extrude')
-        .size('childrenNum', (num) => num * 10000)
-        .style({
-          opacity: 1,
-        });
+`shape` 为 `line` 几何图层用于绘制线。
 
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
+```js
+layer.shape('line');
+```
+
+### shape('point_fill')
+
+
+`shape` 为 `point_fill` 几何图层用于绘制填充点。
+
+```js
+layer.shape('point_fill');
+```
+
+### shape('point_image')
+
+
+`shape` 为 `point_image` 几何图层用于绘制点图标。
+
+```js
+layer.shape('point_image');
+```
+
+### shape('point_extrude')
+
+`shape` 为 `point_extrude` 几何图层用于绘制柱子。
+
+```js
+layer.shape('point_extrude');
+```
+
+### shape('text')
+
+`shape` 为 `text` 几何图层用于绘制文字。
+
+```js
+layer.shape('text');
 ```
