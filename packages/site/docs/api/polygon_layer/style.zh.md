@@ -27,10 +27,10 @@ layer.style({
 
 - [fill](/zh/docs/api/polygon_layer/shape#shapefill)
 
-| style         | 类型               | 描述                       | 默认值   |
-| ------------- | ------------------ | ------------------------- | -------- |
-| raisingHeight | `number`           | 抬升高度                   | `0`      |
-| opacityLinear | `IOpacityLinear`   | 透明渐变                   | `/`      |
+| style         | 类型             | 描述     | 默认值 |
+| ------------- | ---------------- | -------- | ------ |
+| raisingHeight | `number`         | 抬升高度 | `0`    |
+| opacityLinear | `IOpacityLinear` | 透明渐变 | `/`    |
 
 #### opacityLinear
 
@@ -38,8 +38,8 @@ layer.style({
 type IDir = 'in' | 'out';
 
 interface IOpacityLinear {
-    enable: false;
-    dir: IDir;
+  enable: false;
+  dir: IDir;
 }
 ```
 
@@ -49,14 +49,14 @@ interface IOpacityLinear {
 
 - [extrude](/zh/docs/api/polygon_layer/shape#shapeextrude)
 
-| style         | 类型               | 描述                       | 默认值   |
-| ------------- | ------------------ | ------------------------- | -------- |
-| raisingHeight | `number`           | 抬升高度                   | `0`      |
-| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化   | `false`  |
-| topsurface    | `boolean`          | 顶部是否显示                | `true`   |
-| sidesurface   | `boolean`          | 侧面是否显示                | `true`   |
-| sourceColor   | `IColor`           | 侧面底部颜色                | `/`      |
-| targetColor   | `IColor`           | 侧面顶部颜色                | `/`      |
+| style         | 类型      | 描述                       | 默认值  |
+| ------------- | --------- | -------------------------- | ------- |
+| raisingHeight | `number`  | 抬升高度                   | `0`     |
+| heightfixed   | `boolean` | 抬升高度是否随 `zoom` 变化 | `false` |
+| topsurface    | `boolean` | 顶部是否显示               | `true`  |
+| sidesurface   | `boolean` | 侧面是否显示               | `true`  |
+| sourceColor   | `IColor`  | 侧面底部颜色               | `/`     |
+| targetColor   | `IColor`  | 侧面顶部颜色               | `/`     |
 
 #### linear
 
@@ -68,22 +68,23 @@ interface IOpacityLinear {
 
 - [water](/zh/docs/api/polygon_layer/shape#shapewater)
 
-| style         | 类型               | 描述                       | 默认值   |
-| ------------- | ------------------ | ------------------------- | -------- |
-| speed         | `number`           | 水波速度                   | `0.5`      |
-| waterTexture  | `string`           | 水面贴图                   | `0`      |
+| style        | 类型     | 描述     | 默认值 |
+| ------------ | -------- | -------- | ------ |
+| speed        | `number` | 水波速度 | `0.5`  |
+| waterTexture | `string` | 水面贴图 | `0`    |
 
 `waterTexture` 默认值为 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
+
 ### ocean
 
 `shape` 为海洋表面几何体。
 
 - [ocean](/zh/docs/api/polygon_layer/shape#shapeocean)
 
-| style         | 类型               | 描述                       | 默认值     |
-| ------------- | ------------------ | ------------------------- | --------- |
-| watercolor    | `IColor`           | 水面颜色                   | `#6D99A8` |
-| watercolor2   | `IColor`           | 水面颜色                   | `#0F121C` |
+| style       | 类型     | 描述     | 默认值    |
+| ----------- | -------- | -------- | --------- |
+| watercolor  | `IColor` | 水面颜色 | `#6D99A8` |
+| watercolor2 | `IColor` | 水面颜色 | `#0F121C` |
 
 ### other
 

@@ -22,6 +22,7 @@ layer.shape('fill');
 ```js
 layer.shape('extrude');
 ```
+
 ### shape('water')
 
 `shape` 为 `water` 几何图层用于绘制平面水体。
@@ -48,7 +49,6 @@ layer.shape('line');
 
 ### shape('point_fill')
 
-
 `shape` 为 `point_fill` 几何图层用于绘制填充点。
 
 ```js
@@ -56,7 +56,6 @@ layer.shape('point_fill');
 ```
 
 ### shape('point_image')
-
 
 `shape` 为 `point_image` 几何图层用于绘制点图标。
 
