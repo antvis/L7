@@ -9,7 +9,7 @@ order: 3
 
 ### shape(fillShape: IFillShape)
 
-点图层的贴地的几何图形，如圆形、正方形、三角形等。    
+点图层的贴地的几何图形，如圆形、正方形、三角形等。
 
 🌟 若是使用简单的圆点图层，建议使用 `simple` 代替 `circle` 以获得更好的性能。
 
@@ -21,12 +21,18 @@ order: 3
 
 ```js
 // shape 支持的各种形状
-type IFillShape = 'circle'|'square'|'hexagon'|'triangle'|'pentagon'|
-'octogon'|'hexagram'|'rhombus'|'vesica';
-
+type IFillShape =
+  | 'circle'
+  | 'square'
+  | 'hexagon'
+  | 'triangle'
+  | 'pentagon'
+  | 'octogon'
+  | 'hexagram'
+  | 'rhombus'
+  | 'vesica';
 
 layer.shape('circle');
-
 ```
 
 ### shape(column: IColumn)
@@ -39,12 +45,8 @@ layer.shape('circle');
   </div>
 </div>
 
-
-
 ```js
-
-type IColumn = 'cylinder' | 'triangleColumn' | 
-'hexagonColumn' | 'squareColumn';
+type IColumn = 'cylinder' | 'triangleColumn' | 'hexagonColumn' | 'squareColumn';
 
 layer.shape('cylinder');
 

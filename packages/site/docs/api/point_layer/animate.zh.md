@@ -13,7 +13,6 @@ order: 7
   </div>
 </div>
 
-
 ### animate(boolean | IAnimateOption)
 
 `animate` 方法支持布尔值和对象传值。

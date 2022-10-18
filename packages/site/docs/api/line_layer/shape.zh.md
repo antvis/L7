@@ -37,7 +37,6 @@ layer.shape('arc3d');
 
 `greatcircle` 大圆航线是地图两个点最近距离的连线，支持配置纹理和动画。
 
-
 ```js
 layer.shape('greatcircle');
 ```

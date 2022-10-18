@@ -17,9 +17,9 @@ layer.style({
 
 通用 `style` 参数，所有图形都支持的参数。
 
-| style   | 类型     | 描述             | 默认值 |
-| ------- | -------- | --------------- | ------ |
-| opacity | `number` | 图形的透明度      | `1`    |
+| style   | 类型     | 描述         | 默认值 |
+| ------- | -------- | ------------ | ------ |
+| opacity | `number` | 图形的透明度 | `1`    |
 
 ### 2D shape
 
@@ -27,15 +27,15 @@ layer.style({
 
 - [IFillShape](/zh/docs/api/point_layer/shape#shapefillshape-ifillshape)
 
-| style         | 类型               | 描述             | 默认值   |
-| ------------- | ------------------ | --------------- | -------- |
-| stroke        | `string`           | 图形边框颜色      | `#fff`   |
-| strokeWidth   | `number`           | 图形边框颜色      | `0`      |
-| strokeOpacity | `number`           | 图形边框宽度      | `1`      |
-| blur          | `number`           | 图形模糊半径      | `0`      |
-| offsets       | `[number, number]` | 点偏移           | `[0, 0]` |
-| raisingHeight | `number`           | 抬升高度         | `0`      |
-| unit          | `string`           | 点大小单位        | `l7size` |
+| style         | 类型               | 描述         | 默认值   |
+| ------------- | ------------------ | ------------ | -------- |
+| stroke        | `string`           | 图形边框颜色 | `#fff`   |
+| strokeWidth   | `number`           | 图形边框颜色 | `0`      |
+| strokeOpacity | `number`           | 图形边框宽度 | `1`      |
+| blur          | `number`           | 图形模糊半径 | `0`      |
+| offsets       | `[number, number]` | 点偏移       | `[0, 0]` |
+| raisingHeight | `number`           | 抬升高度     | `0`      |
+| unit          | `string`           | 点大小单位   | `l7size` |
 
 #### unit
 
@@ -65,11 +65,11 @@ const layer = PointLayer()
 
 ### 3D column
 
-`shape` 为3D 柱图。
+`shape` 为 3D 柱图。
 
 - [IColumn](/zh/docs/api/point_layer/shape#shapecolumn-icolumn)
 
-| style         | 类型            | 描述                  | 默认值  |
+| style         | 类型            | 描述                 | 默认值  |
 | ------------- | --------------- | -------------------- | ------- |
 | depth         | `boolean`       | 图形是否开启深度检测 | `true`  |
 | pickLight     | `boolean`       | 拾取高亮是否计算光照 | `false` |
@@ -149,12 +149,12 @@ const font2 = 'Times New Roman';
 
 - [simple](http://localhost:8000/zh/docs/api/point_layer/shape#shapesimple)
 
-| style         | 类型               | 描述             | 默认值   |
-| ------------- | ------------------ | --------------- | -------- |
-| stroke        | `string`           | 图形边框颜色    | `#fff`   |
-| strokeWidth   | `number`           | 图形边框颜色    | `0`      |
-| strokeOpacity | `number`           | 图形边框宽度    | `1`      |
-| offsets       | `[number, number]` | 点偏移          | `[0, 0]` |
+| style         | 类型               | 描述         | 默认值   |
+| ------------- | ------------------ | ------------ | -------- |
+| stroke        | `string`           | 图形边框颜色 | `#fff`   |
+| strokeWidth   | `number`           | 图形边框颜色 | `0`      |
+| strokeOpacity | `number`           | 图形边框宽度 | `1`      |
+| offsets       | `[number, number]` | 点偏移       | `[0, 0]` |
 
 ### icon
 
@@ -162,7 +162,7 @@ const font2 = 'Times New Roman';
 
 - [icon](http://localhost:8000/zh/docs/api/point_layer/shape#shapeiconname-string)
 
-| style         | 类型               | 描述                        | 默认值   |
+| style         | 类型               | 描述                       | 默认值   |
 | ------------- | ------------------ | -------------------------- | -------- |
 | offsets       | `[number, number]` | 点偏移                     | `[0, 0]` |
 | raisingHeight | `number`           | 抬升高度                   | `0`      |
@@ -195,6 +195,6 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
 
 - [radar](http://localhost:8000/zh/docs/api/point_layer/shape#shaperadar)
 
-| style | 类型     | 描述               | 默认值 |
+| style | 类型     | 描述             | 默认值 |
 | ----- | -------- | ---------------- | ------ |
-| speed | `number` | 雷达图旋转的速度    | `1`   |
+| speed | `number` | 雷达图旋转的速度 | `1`    |
