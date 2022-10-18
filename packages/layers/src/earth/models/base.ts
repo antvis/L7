@@ -59,7 +59,7 @@ export default class BaseEarthModel extends BaseModel {
     this.layerService.throttleRenderLayers();
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const { globalOptions } = this.layer.getLayerConfig();
     if (globalOptions?.earthTime !== undefined) {
       this.setEarthTime(globalOptions.earthTime);
@@ -80,18 +80,18 @@ export default class BaseEarthModel extends BaseModel {
       this.layerService.reRender();
     });
 
-    this.buildModels(callbackModel);
+      return await this.buildModels();
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     // Tip: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -998;
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'earthBase',
         vertexShader: baseVert,
@@ -100,13 +100,7 @@ export default class BaseEarthModel extends BaseModel {
         depth: { enable: true },
         blend: this.getBlend(),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   protected registerBuiltinAttributes() {

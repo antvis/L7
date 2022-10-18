@@ -33,12 +33,10 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
     },
   };
 
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
     this.layerModel = new EarthModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
   /**

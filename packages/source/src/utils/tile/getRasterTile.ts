@@ -2,7 +2,7 @@ import {
   getImage,
   ITileBand,
   getURLFromTemplate,
-  Tile,
+  SourceTile,
   TileLoadParams,
 } from '@antv/l7-utils';
 import { getTileUrl } from './request';
@@ -21,7 +21,7 @@ import { getRasterFile } from './getRasterData';
 export const getTileBuffer = async (
   url: string | string[] | ITileBand[],
   tileParams: TileLoadParams,
-  tile: Tile,
+  tile: SourceTile,
   rasterFormat: IRasterFormat,
   operation?: IBandsOperation,
 ): Promise<HTMLImageElement | ImageBitmap> => {
@@ -55,7 +55,7 @@ export const getTileBuffer = async (
 export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
-  tile: Tile,
+  tile: SourceTile,
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
   const imgUrl = getURLFromTemplate(

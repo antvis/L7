@@ -1,6 +1,6 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { Tile } from '@antv/l7-utils';
+import { SourceTile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
 
@@ -12,7 +12,7 @@ export default class VectorMaskTile extends TileFactory {
     this.parentLayer = option.parent;
   }
 
-  public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
+  public createTile(tile: SourceTile, initOptions: ISubLayerInitOptions) {
     const { features, vectorTileLayer, source } = this.getFeatureData(
       tile,
       initOptions,

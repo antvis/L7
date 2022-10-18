@@ -6,6 +6,9 @@ import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
+import {
+  IInteractionTarget,
+} from '../interaction/IInteractionService';
 import { ILayerService } from './ILayerService';
 import { throttle } from 'lodash';
 
@@ -41,26 +44,22 @@ export default class LayerService implements ILayerService {
   public reRender = throttle(() => {
     this.updateLayerRenderList();
     this.renderLayers();
-  }, 32)
+  }, 32);
 
   public throttleRenderLayers = throttle(() => {
     this.renderLayers();
-  }, 16)
-  
+  }, 16);
 
   public add(layer: ILayer) {
- 
+    this.layers.push(layer);
     if (this.sceneInited) {
-      layer.on('inited',()=>{
+      layer.init().then(() => {
         this.updateLayerRenderList();
         this.renderLayers();
-      })
-      layer.init();
-      
-    }
-    this.layers.push(layer);
-    
+      });
+    } 
    
+  
   }
 
   public addMask(mask: ILayer) {
@@ -71,13 +70,13 @@ export default class LayerService implements ILayerService {
 
   public async initLayers() {
     this.sceneInited = true;
+
     this.layers.forEach(async (layer) => {
-      if (!layer.inited) {
+      if (!layer.startInit) {
         await layer.init();
         this.updateLayerRenderList();
       }
     });
-   
   }
 
   public getSceneInited() {
@@ -142,7 +141,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      layer.hooks.beforeRenderData.call();
+      layer.hooks.beforeRenderData.promise();
       layer.hooks.beforeRender.call();
 
       if (layer.masks.length > 0) {
@@ -152,8 +151,8 @@ export default class LayerService implements ILayerService {
           depth: 1,
           framebuffer: null,
         });
-        layer.masks.map((m: ILayer) => {
-          m.hooks.beforeRenderData.call();
+        layer.masks.map(async (m: ILayer) => {
+          await m.hooks.beforeRenderData.promise();
           m.hooks.beforeRender.call();
           m.render();
           m.hooks.afterRender.call();
@@ -174,7 +173,8 @@ export default class LayerService implements ILayerService {
   public updateLayerRenderList() {
     // Tip: 每次更新都是从 layers 重新构建
     this.layerList = [];
-    this.layers.filter((layer) => layer.inited)
+    this.layers
+      .filter((layer) => layer.inited)
       .filter((layer) => layer.isVisible())
       .sort((pre: ILayer, next: ILayer) => {
         // 根据 zIndex 对渲染顺序进行排序
@@ -224,6 +224,27 @@ export default class LayerService implements ILayerService {
   public getShaderPickStat() {
     return this.shaderPicking;
   }
+  // 拾取绘制
+  public pickRender(layer: ILayer,target: IInteractionTarget) {
+    if(layer.tileLayer) {
+     return layer.tileLayer.pickRender(target)
+    }
+
+    layer.hooks.beforePickingEncode.call();
+
+    if (layer.masks.length > 0) {
+      // 若存在 mask，则在 pick 阶段的绘制也启用
+      layer.masks.map(async (m: ILayer) => {
+        m.hooks.beforeRenderData.promise();
+        m.hooks.beforeRender.call();
+        m.render();
+        m.hooks.afterRender.call();
+      });
+    }
+    layer.renderModels(true);
+    layer.hooks.afterPickingEncode.call();
+
+  }
 
   public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
@@ -250,4 +271,6 @@ export default class LayerService implements ILayerService {
   private stopRender() {
     $window.cancelAnimationFrame(this.layerRenderID);
   }
+
+
 }

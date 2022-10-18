@@ -32,4 +32,5 @@ export class MapTileLayer extends Base implements IBaseTileLayer {
 
     this.initTileSetManager();
   }
+
 }

@@ -67,11 +67,11 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
     const {
       mask = false,
@@ -82,7 +82,7 @@ export default class FillModel extends BaseModel {
       ILayerConfig & IPolygonLayerStyleOptions
     >;
     this.layer.triangulation = triangulation;
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
@@ -98,13 +98,7 @@ export default class FillModel extends BaseModel {
           enablePicking,
         },
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   public clearModels() {

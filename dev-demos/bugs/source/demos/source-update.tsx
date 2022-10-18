@@ -109,9 +109,14 @@ const Demo: React.FC = () => {
               lineList[dragFeature.properties?.index] = dragFeature;
             }
             prePosition = [lng, lat];
-            pointLayer.setData(getPointFeatureCollection([dragFeature]));
-            lineLayer.setData(featureCollection(lineList));
-            // scene.render();
+            pointLayer.setData(getPointFeatureCollection([dragFeature]),{
+              autoRender:false
+            });
+            lineLayer.setData(featureCollection(lineList),{
+              autoRender:false
+            });
+            scene.render()
+            
           }
         });
       });

@@ -60,7 +60,7 @@ export default class RasterModel extends BaseModel {
     }
   }
 
-  public async initModels(callbackModel: (models: IModel[]) => void) {
+   public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -91,7 +91,7 @@ export default class RasterModel extends BaseModel {
       flipY: false,
     });
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'rasterImageData',
         vertexShader: rasterVert,
@@ -101,17 +101,11 @@ export default class RasterModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   public clearModels(): void {

@@ -29,8 +29,8 @@ export class BaseMapTileLayerManager extends Base implements IBaseTileLayerManag
     this.children
     .filter((layer) => layer.inited)
     .filter((layer) => layer.isVisible())
-    .map((layer) => {
-      layer.hooks.beforeRenderData.call();
+    .map(async (layer) => {
+      await layer.hooks.beforeRenderData.promise();
       layer.hooks.beforeRender.call();
       if (layer.masks.length > 0) {
         // 清除上一次的模版缓存
@@ -40,7 +40,7 @@ export class BaseMapTileLayerManager extends Base implements IBaseTileLayerManag
           framebuffer: null,
         });
         layer.masks.map((m: ILayer) => {
-          m.hooks.beforeRenderData.call();
+          m.hooks.beforeRenderData.promise();
           m.hooks.beforeRender.call();
           m.render();
           m.hooks.afterRender.call();
@@ -76,6 +76,7 @@ export class BaseMapTileLayerManager extends Base implements IBaseTileLayerManag
 
     this.initOptions = {
       usage: 'basemap',
+      visible: true,
       layerType: this.parent.type,
       shape: layerShape,
       zIndex,

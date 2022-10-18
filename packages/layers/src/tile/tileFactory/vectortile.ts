@@ -1,9 +1,9 @@
 import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { Tile } from '@antv/l7-utils';
+import { SourceTile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
-export default class VectorLineTile extends TileFactory {
+export default class VectorTile extends TileFactory {
   public parentLayer: ILayer;
 
   constructor(option: ITileFactoryOptions) {
@@ -11,7 +11,7 @@ export default class VectorLineTile extends TileFactory {
     this.parentLayer = option.parent;
   }
 
-  public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
+  public createTile(tile: SourceTile, initOptions: ISubLayerInitOptions) {
     const { features, vectorTileLayer, source } = this.getFeatureData(
       tile,
       initOptions,
@@ -20,7 +20,7 @@ export default class VectorLineTile extends TileFactory {
       return {
         layers: [],
       };
-    }
+    }    
 
     const layer = this.createLayer({
       tile,
@@ -29,7 +29,7 @@ export default class VectorLineTile extends TileFactory {
       source: source as Source,
     });
     return {
-      layers: [layer]
+      layers: [layer],
     };
   }
 }

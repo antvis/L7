@@ -41,13 +41,17 @@ export default class VectorLayer extends BaseLayer<
   public type: string = this.layerType as string || 'vectorLayer';
   // Tip: 单独被 tile 瓦片的渲染链路使用（用于优化性能）
   private pickedID: number | null = null;
+  public startInit:boolean = false;
+  
 
 
   public async init(): Promise<void> {
+  
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
     this.layerType = this.rawConfig.layerType;
+    this.startInit = true;
 
     if(this.type === 'PointLayer') {
       // Tip: iconService 和 fontService 只有在矢量点图层中才会被使用
@@ -145,12 +149,6 @@ export default class VectorLayer extends BaseLayer<
     return this;
   }
 
-  protected sourceEvent = () => {
-    // Tip: vector 不支持 autoFit
-    this.dataState.dataSourceNeedUpdate = true;
-    this.reRender();
-  };
-
   public getPickID() {
     return this.pickedID;
   }
@@ -159,19 +157,13 @@ export default class VectorLayer extends BaseLayer<
     return this.pickedID;
   }
 
-  public buildModels() {
+  public async buildModels() {
     const model = this.getModelType();
     this.layerModel = new model(this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
+
 
   protected getModelType() {
     switch (this.layerType) {

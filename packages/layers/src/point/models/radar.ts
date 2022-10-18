@@ -59,7 +59,7 @@ export default class RadarModel extends BaseModel {
     );
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels():Promise<IModel[]>  {
     const {
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -73,7 +73,7 @@ export default class RadarModel extends BaseModel {
       this.calMeter2Coord();
     }
 
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
   /**
@@ -118,13 +118,13 @@ export default class RadarModel extends BaseModel {
     }
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]>  {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointRadar',
         vertexShader: pointFillVert,
@@ -134,13 +134,8 @@ export default class RadarModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+      return [model]
+       
   }
 
   public clearModels() {

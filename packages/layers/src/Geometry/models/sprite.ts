@@ -149,7 +149,7 @@ export default class SpriteModel extends BaseModel {
     this.texture?.destroy();
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       mapTexture,
       spriteTop = 5000000,
@@ -175,7 +175,7 @@ export default class SpriteModel extends BaseModel {
       this.updateModel();
     }, 100);
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'geometrySprite',
         vertexShader: spriteVert,
@@ -185,17 +185,11 @@ export default class SpriteModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   public updateTexture(mapTexture: string | undefined): void {

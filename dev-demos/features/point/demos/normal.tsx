@@ -8,7 +8,7 @@ export default () => {
     useEffect( () => {
       const scene = new Scene({
         id: 'map',
-        map: new GaodeMap({
+        map: new GaodeMapV2({
           style: 'dark',
           center: [ 121.417463, 31.215175 ],
           pitch: 0,
@@ -19,7 +19,7 @@ export default () => {
         fetch('https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt')
           .then(res => res.text())
           .then(data => {
-            const pointLayer = new PointLayer({})
+            const pointLayer = new PointLayer({blend:'additive'})
               .source(data, {
                 parser: {
                   type: 'csv',

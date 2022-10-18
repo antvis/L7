@@ -3,17 +3,10 @@ import { IWindLayerStyleOptions } from '../core/interface';
 import WindModels, { WindModelType } from './models';
 export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
   public type: string = 'WindLayer';
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new WindModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
   public renderModels() {

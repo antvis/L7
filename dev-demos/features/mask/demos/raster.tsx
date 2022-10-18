@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Scene, RasterLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 import * as GeoTIFF from 'geotiff';
@@ -32,7 +32,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [120.165, 30.26],
         pitch: 0,
         zoom: 2,

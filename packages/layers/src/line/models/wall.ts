@@ -71,11 +71,11 @@ export default class LineWallModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    this.buildModels(callbackModel);
+      return await this.buildModels();
   }
 
   public clearModels() {
@@ -83,8 +83,8 @@ export default class LineWallModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.layer
+ public async buildModels():Promise<IModel[]> {
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'lineWall',
         vertexShader: line_vert,
@@ -93,13 +93,7 @@ export default class LineWallModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

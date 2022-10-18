@@ -6,11 +6,11 @@ import {
   ISubLayerInitOptions,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { Tile, TilesetManager } from '@antv/l7-utils';
+import { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { setStyleAttributeField, setScale } from '../style/utils';
 import { registerLayers } from '../utils';
 import { readRasterValue } from '../interaction/getRasterData';
-import VectorLayer from './layers/vectorLayer';
+import VectorLayer from './layers/VectorLayer';
 
 import * as turf from '@turf/helpers';
 import union from '@turf/union';
@@ -41,7 +41,8 @@ export default class TileFactory implements ITileFactory {
   public outSideEventTimer: Timeout | null = null;
   protected zoomOffset: number;
   protected tilesetManager: TilesetManager;
-  protected layers: ILayer[];
+  public layers: ILayer[];
+  public loaded: false;
   // 用于记录图层内事件，辅助判断图层外事件逻辑
   private eventCache = {
     click: 0,
@@ -61,13 +62,13 @@ export default class TileFactory implements ITileFactory {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public createTile(tile: Tile, initOptions: ISubLayerInitOptions) {
+  public createTile(tile: SourceTile, initOptions: ISubLayerInitOptions) {
     return {
       layers: [] as ILayer[]
     };
   }
 
-  public getFeatureData(tile: Tile, initOptions: ISubLayerInitOptions) {
+  public getFeatureData(tile: SourceTile, initOptions: ISubLayerInitOptions) {
  
     const { sourceLayer, featureId, transforms = [], layerType, shape } = initOptions;
     if (!sourceLayer) {
@@ -134,11 +135,12 @@ export default class TileFactory implements ITileFactory {
     const { mask, color, layerType, size, shape, usage, basemapColor, basemapSize } = initOptions;
     const FactoryTileLayer = L7Layer ? L7Layer : VectorLayer;
     const layer = new FactoryTileLayer({
-      visible: tile.isVisible,
+  
       tileOrigin: vectorTileLayer?.l7TileOrigin,
       coord: vectorTileLayer?.l7TileCoord,
       needListen,
       ...this.getLayerInitOption(initOptions),
+      visible: tile.isVisible,
     });
 
     if(layerType) layer.type = layerType;
@@ -150,7 +152,6 @@ export default class TileFactory implements ITileFactory {
       this.emitEvent([layer]);
       layer.select(true);
     }
-
     // set source
     layer.source(source);
 
