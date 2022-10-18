@@ -1,18 +1,20 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
+import { ImageLayer} from '@antv/l7-layers'
 import Tile from './Tile';
-import { getTileLayer } from './util';
-export default class VectorTile extends Tile {
+export default class ImageTile extends Tile {
   public async initTileLayer(): Promise<void> {
+    
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig();
-    const vectorLayer = getTileLayer(this.parent.type);
+    
     const sourceOptions = this.getSourceOption();
-    const layer = new vectorLayer({...layerOptions}).source(
+    const layer = new ImageLayer({...layerOptions}).source(
       sourceOptions.data,
       sourceOptions.options,
     );
+
     // 初始化数据映射
-    Object.keys(attributes).forEach((type) => {
+    attributes && Object.keys(attributes).forEach((type) => {
       const attr = type as keyof ILayerAttributesOption;
       // @ts-ignore
       layer[attr](attributes[attr]?.field, attributes[attr]?.values);
@@ -23,20 +25,12 @@ export default class VectorTile extends Tile {
   }
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
-    const { sourceLayer, featureId } = this.parent.getLayerConfig<{
-      featureId: string;
-    }>();
-    const features = this.sourceTile.data.layers[sourceLayer as string]
-      .features;
     return {
-      data: {
-        type: 'FeatureCollection',
-        features,
-      },
+      data: this.sourceTile.data,
       options: {
         parser: {
-          type: 'geojson',
-          featureId,
+          type: 'image',
+          extent: this.sourceTile.bounds,
           cancelExtent: true,
         },
         transforms: rawSource.transforms,

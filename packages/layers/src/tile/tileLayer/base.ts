@@ -3,7 +3,7 @@ import { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { debounce } from 'lodash';
 import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
-import { getTileFactory,TileType } from '../tileFactory'
+import { getTileFactory } from '../tileFactory'
 
 export class Base {
   public tileLayerManager: any;
@@ -147,7 +147,7 @@ export class Base {
       .filter((tile: SourceTile) => this.isTileReady(tile)) // 过滤未发生变化的
       .map(async (tile: SourceTile) => {
         if (!this.tileLayerService.hasTile(tile.key)) {
-          const tileInstance = getTileFactory(this.parent.type as TileType)
+          const tileInstance = getTileFactory(this.parent);
           const tileLayer = new tileInstance(tile, this.parent);
           await tileLayer.initTileLayer();
           this.tileLayerService.addTile(tileLayer);
