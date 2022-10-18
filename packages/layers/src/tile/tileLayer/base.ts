@@ -153,6 +153,7 @@ export class Base {
           this.tileLayerService.addTile(tileLayer);
           this.layerService.reRender()
         } else {
+          
           this.tileLayerService.updateTileVisible(tile);
           this.layerService.reRender()
         }

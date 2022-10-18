@@ -16,8 +16,6 @@ export class TileLayerService {
   constructor({ rendererService, parent }: TileLayerServiceOptions) {
     this.rendererService = rendererService;
     this.parent = parent;
-
-    console.log(parent.masks)
   }
   get tiles():Tile[] {
     return this.tiles;
@@ -49,6 +47,7 @@ export class TileLayerService {
   updateTileVisible(sourceTile: SourceTile) {
     const tile = this.getTile(sourceTile.key);
     tile?.updateVisible(sourceTile.isVisible);
+
   }
 
   render() {
@@ -64,7 +63,8 @@ export class TileLayerService {
     //   mask.hooks.afterRender.call();
     // })
     // TODO 渲染排序
-    this._tiles.map((tile: Tile) => {
+    this._tiles.filter((t)=>t.visible && t.isLoaded)
+      .map((tile: Tile) => {
       const layers = tile.getLayers();
       layers.forEach(async (layer: ILayer) => {
         await layer.hooks.beforeRenderData.promise();
