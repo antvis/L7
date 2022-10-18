@@ -83,8 +83,7 @@ export class TileLayerService {
     this._tiles.map((tile: Tile) => {
       const layers = tile.getLayers();
       layers.forEach(async (layer: ILayer) => {
-        layer.hooks.beforeRenderData.promise();
-
+        await layer.hooks.beforeRenderData.promise();
         layer.hooks.beforeRender.call();
 
         if (layer.masks.length > 0) {

@@ -141,7 +141,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      layer.hooks.beforeRenderData.promise();
+      await layer.hooks.beforeRenderData.promise();
       layer.hooks.beforeRender.call();
 
       if (layer.masks.length > 0) {

@@ -28,9 +28,15 @@ export default class LayerModelPlugin implements ILayerPlugin {
       await this.initLayerModel(layer);
     });
 
-    layer.hooks.beforeRenderData.tapPromise('DataSourcePlugin', async () => {
-      await this.prepareLayerModel(layer);
-      return false;
-    });
+    layer.hooks.beforeRenderData.tapPromise(
+      'DataSourcePlugin',
+      async (flag: boolean) => {
+        if (!flag) {
+          return flag;
+        }
+        await this.prepareLayerModel(layer);
+        return false;
+      },
+    );
   }
 }
