@@ -2,7 +2,7 @@ import VectorTile from './VectorTile2';
 import DebugTile from './DebugTile';
 import { ILayer } from '@antv/l7-core';
 import ImageTile from  './ImageTile';
-
+import RasterTile from './RasterTile';
 
 
 
@@ -30,11 +30,13 @@ export function getTileFactory(layer: ILayer) {
     case 'TileDebugLayer': 
       return DebugTile;
     case 'RasterLayer':
-      const parser = layer.getSource().parser;
-      if(parser.type === 'rasterTile') {
-        return ImageTile;
-      } else {
-        return ImageTile
+      const { dataType } = layer.getSource().parser;
+      switch(dataType) {
+        case 'rgb':
+        case 'arraybuffer':
+          return RasterTile
+        default:
+          return ImageTile;
       }
     default:
       return VectorTile

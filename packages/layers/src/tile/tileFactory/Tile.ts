@@ -37,6 +37,10 @@ export default abstract class Tile {
     return  lng>=minLng &&  lng <= maxLng && lat>= minLat &&  lng <= maxLat;
 
   }
+
+  protected async addMask() {
+
+  }
     
   protected async addLayer(layer: ILayer) {
     const container = createLayerContainer(

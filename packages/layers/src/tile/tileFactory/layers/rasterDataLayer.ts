@@ -13,8 +13,6 @@ export default class RasterTiffLayer extends BaseLayer<
     await this.initLayerModels();
   }
 
-
-
   protected getModelType() {
     if(this.layerSource.parser.type === 'rasterRgb') {
       return RasterRgbModel;
