@@ -5,6 +5,8 @@ order: 1
 
 `markdown:docs/common/style.md`
 
+## 简介
+
 L7 地理可视化侧重于地理数据的可视化表达，地图层需要依赖第三方地图，第三方地图通过 Scene 统一创建，创建管理
 只需要通过 Scene 传入地图配置项即可。
 

@@ -6,6 +6,7 @@ redirect_from:
 ---
 
 `markdown:docs/common/style.md`
+## 简介
 
 场景对象 `scene` 是包含地图、地图控件、组件、加载资源的全局对象，通过 `scene` 场景对象，我们可以获取到操作地图需要的所有内容。
 
