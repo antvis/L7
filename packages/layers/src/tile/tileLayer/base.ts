@@ -151,10 +151,10 @@ export class Base {
           const tileLayer = new tileInstance(tile, this.parent);
           await tileLayer.initTileLayer();
           this.tileLayerService.addTile(tileLayer);
-          this.render();
+          this.layerService.reRender()
         } else {
           this.tileLayerService.updateTileVisible(tile);
-          this.render();
+          this.layerService.reRender()
         }
       });
  
