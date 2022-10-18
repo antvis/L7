@@ -76,7 +76,7 @@ export default () => {
         .then((maskData) => {
           const layer = new RasterLayer({
             mask: true,
-            maskfence: maskData
+            maskfence: maskData,
           });
 
           const tileSource = new Source(
