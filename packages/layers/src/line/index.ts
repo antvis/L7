@@ -26,17 +26,10 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     },
   };
 
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
     this.layerModel = new LineModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    this.initLayerModels();
   }
 
   protected getDefaultConfig() {

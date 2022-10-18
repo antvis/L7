@@ -1,7 +1,7 @@
 import {
   getArrayBuffer,
   getURLFromTemplate,
-  Tile,
+  SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
@@ -19,6 +19,7 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   minZoom: 0,
   maxZoom: Infinity,
   zoomOffset: 0,
+  warp: true,
 };
 
 // const TILE_SIZE = 512;
@@ -155,7 +156,7 @@ export type MapboxVectorTile = {
 const getVectorTile = async (
   url: string,
   tileParams: TileLoadParams,
-  tile: Tile,
+  tile: SourceTile,
   // coord: string,
 ): Promise<MapboxVectorTile> => {
   const tileUrl = getURLFromTemplate(url, tileParams);
@@ -170,15 +171,6 @@ const getVectorTile = async (
           new Protobuf(data),
         ) as MapboxVectorTile;
         // check tile source layer
-        // console.log(vectorTile)
-
-        // const tileOrigin = osmTileXY2LonLat(
-        //   tileParams.x,
-        //   tileParams.y,
-        //   tileParams.z,
-        // );
-        // const zoom = tileParams.z;
-
         for (const sourceLayer of Object.keys(vectorTile.layers)) {
           const features = [];
           const vectorTileLayer = vectorTile.layers[sourceLayer];
@@ -220,7 +212,7 @@ export default function mapboxVectorTile(
   const url = Array.isArray(data) ? data[0] : data;
 
   // const coord = cfg?.coord || 'lnglat'; // lnglat - offset
-  const getTileData = (tileParams: TileLoadParams, tile: Tile) =>
+  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) =>
     getVectorTile(url, tileParams, tile);
   // getVectorTile(data, tileParams, tile, coord);
 

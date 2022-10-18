@@ -43,7 +43,9 @@ export default class Source extends EventEmitter implements ISource {
   public hooks = {
     init: new SyncHook(),
   };
-
+  public getSourceCfg() {
+    return this.cfg;
+  }
   public parser: IParserCfg = { type: 'geojson' };
   public transforms: ITransform[] = [];
   public cluster: boolean = false;
@@ -65,7 +67,9 @@ export default class Source extends EventEmitter implements ISource {
   // 原始数据
   private originData: any;
   private rawData: any;
-  private cfg: any = {};
+  private cfg: Partial<ISourceCFG> = {
+    autoRender: true
+  };
 
   private clusterIndex: Supercluster;
 
@@ -77,7 +81,9 @@ export default class Source extends EventEmitter implements ISource {
 
     this.init().then(()=>{
       this.inited = true;
-      this.emit('inited')
+      this.emit('update',{
+        type: 'inited'
+      })
     });
   }
 
@@ -176,7 +182,9 @@ export default class Source extends EventEmitter implements ISource {
       },
     );
     this.dataArrayChanged = true;
-    this.emit('update');
+    this.emit('update',{
+      type: 'update'
+    });
   }
 
   public getFeatureId(field: string, value: any): number | undefined {
@@ -191,7 +199,9 @@ export default class Source extends EventEmitter implements ISource {
     this.dataArrayChanged = false;
     this.initCfg(options);
     this.init().then(()=>{
-      this.emit('update')
+      this.emit('update',{
+        type: 'update'
+      })
     });
 
   }
@@ -206,7 +216,7 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private async handleData() {
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       try {
         this.excuteParser();
         this.initCluster();
@@ -241,10 +251,8 @@ export default class Source extends EventEmitter implements ISource {
 
   private async init() {
     this.inited = false;
-    this.handleData().then(() => {
-      this.inited = true;
-      this.emit('update');
-    });
+    await this.handleData();
+    this.inited = true;
   }
 
   /**
@@ -293,7 +301,6 @@ export default class Source extends EventEmitter implements ISource {
     if (!tilesetOptions) {
       return;
     }
-
     if (this.tileset) {
       this.tileset.updateOptions(tilesetOptions);
       return this.tileset;

@@ -7,19 +7,13 @@ export default class RasterTiffLayer extends BaseLayer<
   Partial<IRasterLayerStyleOptions>
 > {
   public type: string = this.layerType as string;
-  public buildModels() {
+  public async buildModels() {
     const model = this.getModelType();
     this.layerModel = new model(this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
+
 
   protected getModelType() {
     if(this.layerSource.parser.type === 'rasterRgb') {

@@ -1,5 +1,5 @@
 import {
-  Tile,
+  SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
   ITileBand,
@@ -16,6 +16,7 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   minZoom: 0,
   maxZoom: Infinity,
   zoomOffset: 0,
+  warp: true,
 };
 
 export const rasterDataTypes = [RasterTileType.ARRAYBUFFER, RasterTileType.RGB];
@@ -41,7 +42,7 @@ export default function rasterTile(
   // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
   if (tileDataType === RasterTileType.RGB)
     tileDataType = RasterTileType.ARRAYBUFFER;
-  const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
+  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) => {
     switch (tileDataType) {
       case RasterTileType.IMAGE:
         return getTileImage(data as string | string[], tileParams, tile);

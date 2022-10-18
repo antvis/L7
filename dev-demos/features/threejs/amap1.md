@@ -1,7 +1,7 @@
 ### threejs - amap1
 ```tsx
 import { Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as THREE from 'three';
@@ -12,7 +12,7 @@ export default () => {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
-        map: new GaodeMap({
+        map: new GaodeMapV2({
           center: [111.4453125, 32.84267363195431],
           pitch: 45,
           rotation: 30,

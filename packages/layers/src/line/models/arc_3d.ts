@@ -123,11 +123,12 @@ export default class Arc3DModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
+  
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-    this.buildModels(callbackModel);
+      return await this.buildModels();
   }
 
   public clearModels() {
@@ -158,7 +159,7 @@ export default class Arc3DModel extends BaseModel {
     }
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     const {
       segmentNumber = 30,
       mask = false,
@@ -166,7 +167,7 @@ export default class Arc3DModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'lineArc3d' + type,
         vertexShader: vert,
@@ -176,13 +177,7 @@ export default class Arc3DModel extends BaseModel {
         segmentNumber,
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

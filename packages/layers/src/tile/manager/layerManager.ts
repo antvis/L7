@@ -95,6 +95,7 @@ export class TileLayerManager extends Base implements ITileLayerManager {
       pixelConstantG = 256,
       pixelConstantB = 1,
       pixelConstantRGB = 0.1,
+      visible,
     } = this.parent.getLayerConfig() as ISubLayerInitOptions;
 
     const colorValue = this.tileStyleService.getAttributeScale(
@@ -113,6 +114,7 @@ export class TileLayerManager extends Base implements ITileLayerManager {
 
 
     this.initOptions = {
+      visible,
       layerType: this.parent.type,
       transforms: this.transforms,
       shape: layerShape,

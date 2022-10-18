@@ -2,7 +2,7 @@
 import {
   SyncBailHook,
   SyncHook,
-  SyncWaterfallHook,
+  AsyncWaterfallHook,
   AsyncSeriesBailHook,
 } from '@antv/async-hook';
 import {
@@ -13,6 +13,7 @@ import {
   ICameraService,
   ICoordinateSystemService,
   IDataState,
+  ILayerAttributesOption,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -72,6 +73,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   implements ILayer {
   public id: string = `${layerIdCounter++}`;
   public name: string = `${layerIdCounter}`;
+  public parent: ILayer;
   public coordCenter: number[];
   public type: string;
   public visible: boolean = true;
@@ -113,7 +115,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     init: new AsyncSeriesBailHook(),
     afterInit: new SyncBailHook(),
     beforeRender: new SyncBailHook(),
-    beforeRenderData: new SyncWaterfallHook(),
+    beforeRenderData: new AsyncWaterfallHook(),
     afterRender: new SyncHook(),
     beforePickingEncode: new SyncHook(),
     afterPickingEncode: new SyncHook(),
@@ -127,13 +129,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   // 待渲染 model 列表
   public models: IModel[] = [];
-  public modelLoaded: boolean = false;
 
   // 每个 Layer 都有一个
   public multiPassRenderer: IMultiPassRenderer;
 
   // 注入插件集
   public plugins: ILayerPlugin[];
+
+  public startInit: boolean = false;
 
   public sourceOption: {
     data: any;
@@ -178,14 +181,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected mapService: IMapService;
 
-  protected styleAttributeService: IStyleAttributeService;
+  public styleAttributeService: IStyleAttributeService;
 
   protected layerSource: Source;
 
-  protected postProcessingPassFactory: (
+  public postProcessingPassFactory: (
     name: string,
   ) => IPostProcessingPass<unknown>;
-  protected normalPassFactory: (name: string) => IPass<unknown>;
+  public normalPassFactory: (name: string) => IPass<unknown>;
 
   protected animateOptions: IAnimateOption = { enable: false };
 
@@ -231,6 +234,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
+    this.parent = this;
   }
 
   public addMaskLayer(maskLayer: ILayer) {
@@ -249,8 +253,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.styleAttributeService.getLayerStyleAttribute(name);
   }
 
-  public getLayerConfig() {
-    return this.configService.getLayerConfig<ChildLayerStyleOptions>(this.id);
+  public getLayerConfig<T = any>() {
+    return this.configService.getLayerConfig<ChildLayerStyleOptions & T>(
+      this.id,
+    );
   }
 
   public updateLayerConfig(
@@ -263,7 +269,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         this.rawConfig[key] = configToUpdate[key];
       }
     });
-    if (!this.inited) {
+    if (!this.startInit) {
       this.needUpdateConfig = {
         ...this.needUpdateConfig,
         ...configToUpdate,
@@ -273,7 +279,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
       // @ts-ignore
       handleStyleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
-
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,
@@ -314,6 +319,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public async init(): Promise<void> {
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
+    this.startInit = true;
     // 初始化图层配置项
     // const { enableMultiPassRenderer = false } = this.rawConfig;
     // this.configService.setLayerConfig(sceneId, this.id, {
@@ -410,11 +416,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // 触发 init 生命周期插件
     await this.hooks.init.promise();
-
-    // this.pickingPassRender = this.normalPassFactory('pixelPicking');
-    // this.pickingPassRender.init(this);
-    this.hooks.afterInit.call();
     this.inited = true;
+
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
@@ -424,6 +427,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       target: this,
       type: 'add',
     });
+    this.hooks.afterInit.call();
   }
 
   public updateModelData(data: IAttributeAndElements) {
@@ -476,10 +480,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * Model初始化前需要更新Model样式
    */
   public prepareBuildModel() {
-    this.inited = true;
     this.updateLayerConfig({
       ...(this.getDefaultConfig() as object),
       ...this.rawConfig,
+      ...this.needUpdateConfig,
     });
 
     // 启动动画
@@ -614,13 +618,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         // this.layerSource.setData(data, options);
       });
     }
-
     return this;
   }
   public style(
     options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
   ): ILayer {
-    const lastConfig = this.getLayerConfig();
     const { passes, ...rest } = options;
 
     // passes 特殊处理
@@ -645,14 +647,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.updateLayerConfig(this.rawConfig);
       this.styleNeedUpdate = true;
     }
-
+    // TODO style model 更新
     // @ts-ignore
-    if (lastConfig && lastConfig.mask === true && options.mask === false) {
-      this.clearModels();
-      this.layerModel.buildModels((models) => {
-        this.models = models;
-      });
-    }
+    // if (lastConfig && lastConfig.mask === true && options.mask === false) {
+    //   this.clearModels();
+    //   this.layerModel.buildModels((models) => {
+    //     this.models = models;
+    //   });
+    // }
     return this;
   }
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
@@ -1030,7 +1032,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         attribute.needRegenerateVertices,
     ).length;
   }
-
+  // 外部初始化Source
   public setSource(source: Source) {
     // 解除原 sources 事件
     if (this.layerSource) {
@@ -1045,13 +1047,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       const zoom = this.mapService.getZoom();
       this.layerSource.updateClusterData(zoom);
     }
-    // source 可能会复用，会在其它layer被修改
     if (this.layerSource.inited) {
       this.sourceEvent();
-    } else {
-      source.on('inited', () => {
-        this.sourceEvent();
-      });
     }
     // this.layerSource.inited 为 true update 事件不会再触发
     this.layerSource.on('update', () => {
@@ -1064,8 +1061,26 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.sourceEvent();
     });
   }
+  // layer 初始化source
+  public initSource(source: Source) {
+    this.layerSource = source;
+    this.clusterZoom = 0;
+    this.addSourceEvent();
+  }
   public getSource() {
     return this.layerSource;
+  }
+  // 注册source 更新事件
+  private addSourceEvent() {
+    this.layerSource.on('update', () => {
+      if (this.coordCenter === undefined) {
+        const layerCenter = this.layerSource.center;
+        this.coordCenter = layerCenter;
+        this.mapService?.setCoordCenter &&
+          this.mapService.setCoordCenter(layerCenter);
+      }
+      this.sourceEvent();
+    });
   }
 
   public getScaleOptions() {
@@ -1154,7 +1169,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.pickingService.boxPickLayer(this, box, cb);
   }
 
-  public buildLayerModel(
+  public async buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
   ): Promise<IModel> {
@@ -1175,61 +1190,57 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // filter supported worker & worker enabled layer
-        if (
-          workerOptions &&
-          workerOptions.modelType in WorkerSourceMap &&
-          workerEnabled
-        ) {
-          this.styleAttributeService
-            .createAttributesAndIndicesAscy(
-              this.encodedData,
-              segmentNumber,
-              workerOptions,
-            )
-            .then(({ attributes, elements }) => {
-              const m = createModel({
-                attributes,
-                uniforms,
-                fs,
-                vs,
-                elements,
-                blend: BlendTypes[BlendType.normal],
-                ...rest,
-              });
-              resolve(m);
-            })
-            .catch((err) => reject(err));
-        } else {
-          // console.log(this.encodedData[1].originCoordinates[0])
-          // console.log(this.encodedData[1].coordinates[0])
-          const {
-            attributes,
-            elements,
-            count,
-          } = this.styleAttributeService.createAttributesAndIndices(
+    return await new Promise((resolve, reject) => {
+      // filter supported worker & worker enabled layer
+      if (
+        workerOptions &&
+        workerOptions.modelType in WorkerSourceMap &&
+        workerEnabled
+      ) {
+        this.styleAttributeService
+          .createAttributesAndIndicesAscy(
             this.encodedData,
-            triangulation,
             segmentNumber,
-          );
-          const modelOptions = {
-            attributes,
-            uniforms,
-            fs,
-            vs,
-            elements,
-            blend: BlendTypes[BlendType.normal],
-            ...rest,
-          };
-          if (count) {
-            modelOptions.count = count;
-          }
-          const m = createModel(modelOptions);
-          resolve(m);
+            workerOptions,
+          )
+          .then(({ attributes, elements }) => {
+            const m = createModel({
+              attributes,
+              uniforms,
+              fs,
+              vs,
+              elements,
+              blend: BlendTypes[BlendType.normal],
+              ...rest,
+            });
+            resolve(m as IModel);
+          })
+          .catch((err) => reject(err));
+      } else {
+        const {
+          attributes,
+          elements,
+          count,
+        } = this.styleAttributeService.createAttributesAndIndices(
+          this.encodedData,
+          triangulation,
+          segmentNumber,
+        );
+        const modelOptions = {
+          attributes,
+          uniforms,
+          fs,
+          vs,
+          elements,
+          blend: BlendTypes[BlendType.normal],
+          ...rest,
+        };
+        if (count) {
+          modelOptions.count = count;
         }
-      });
+        const m = createModel(modelOptions);
+        resolve(m);
+      }
     });
   }
 
@@ -1291,14 +1302,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     ) {
       isPick = true;
     }
+    if (type === 'click')
+      console.log('enableSelect', type, this.isVisible(), enableSelect, isPick);
     return this.isVisible() && isPick;
   }
 
-  public buildModels() {
+  public async buildModels() {
     throw new Error('Method not implemented.');
   }
-  public rebuildModels() {
-    throw new Error('Method not implemented.');
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
   public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {
@@ -1308,13 +1321,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) return this;
-    if (this.layerModelNeedUpdate && this.layerModel) {
-      this.layerModel.buildModels((models: IModel[]) => {
-        this.models = models;
-        this.hooks.beforeRender.call();
-        this.layerModelNeedUpdate = false;
-      });
-    }
+    // TODO 待评估
+    // if (this.layerModelNeedUpdate && this.layerModel) {
+
+    //   this.layerModel.buildModels((models: IModel[]) => {
+    //     this.models = models;
+    //     this.hooks.beforeRender.call();
+    //     this.layerModelNeedUpdate = false;
+    //   });
+    // }
 
     this.models.forEach((model) => {
       model.draw(
@@ -1333,6 +1348,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+    // 存储 Attribute
+    this.configService.setAttributeConfig(this.id, {
+      [type]: {
+        field,
+        values,
+      },
+    });
     if (!this.inited) {
       this.pendingStyleAttributes.push({
         attributeName: type,
@@ -1361,6 +1383,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
   }
 
+  public getLayerAttributeConfig(): Partial<ILayerAttributesOption> {
+    return this.configService.getAttributeConfig(this.id);
+  }
+
   public getShaderPickStat() {
     return this.layerService.getShaderPickStat();
   }
@@ -1387,22 +1413,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (layerConfig && layerConfig.autoFit) {
       this.fitBounds(layerConfig.fitBoundsOptions);
     }
-    this.reRender();
+    const autoRender = this.layerSource.getSourceCfg().autoRender;
+    if (autoRender) {
+      this.reRender();
+    }
   };
 
-  protected dispatchModelLoad(models: IModel[]) {
+  protected async initLayerModels() {
     this.models.forEach((model) => model.destroy());
     this.models = [];
-
-    this.models = models;
-    this.emit('modelLoaded', null);
-    this.modelLoaded = true;
-
-    // Tip: setTimeout 用于延迟绘制，可以让拖动图层时连续的 setData 更加平滑 - L7Draw
-    setTimeout(() => {
-      // Tip: 使用 renderLayers 而不是 throttleRenderLayers，让图层之间的 setData 更新绘制不存在延迟
-      this.layerService.renderLayers();
-    }, 32);
+    this.models = await this.layerModel.initModels();
   }
 
   protected reRender() {

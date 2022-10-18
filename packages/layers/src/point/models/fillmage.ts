@@ -131,7 +131,7 @@ export default class FillImageModel extends BaseModel {
     );
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels():Promise<IModel[]>  {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
@@ -148,7 +148,7 @@ export default class FillImageModel extends BaseModel {
       this.calMeter2Coord();
     }
 
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
   /**
@@ -193,13 +193,13 @@ export default class FillImageModel extends BaseModel {
     }
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]>  {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointFillImage',
         vertexShader: pointFillVert,
@@ -212,14 +212,9 @@ export default class FillImageModel extends BaseModel {
           enable: true,
           face: getCullFace(this.mapService.version),
         },
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
       });
+      return [model]
+       
   }
 
   public clearModels() {

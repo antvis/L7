@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Scene, WindLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [105.732421875, 32.24997445586331],
         pitch: 0,
         style: 'dark',

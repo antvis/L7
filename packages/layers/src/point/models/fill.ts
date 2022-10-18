@@ -132,9 +132,9 @@ export default class FillModel extends BaseModel {
     );
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     this.updateUnit('l7size');
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
   /**
@@ -187,7 +187,7 @@ export default class FillModel extends BaseModel {
     }
   }
 
-  public async buildModels(callbackModel: (models: IModel[]) => void) {
+  public async buildModels():Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -201,8 +201,7 @@ export default class FillModel extends BaseModel {
     const { frag, vert, type } = this.getShaders(animateOption);
 
     this.layer.triangulation = PointFillTriangulation;
-
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
@@ -217,14 +216,8 @@ export default class FillModel extends BaseModel {
           enablePicking,
           shape2d,
         },
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
       });
+      return [model];
   }
 
   /**

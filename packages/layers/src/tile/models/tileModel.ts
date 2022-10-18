@@ -37,7 +37,7 @@ export default class TileModel extends BaseModel {
   public clearModels(): void {
   }
 
-  public buildModels() {
+  public async buildModels() {
     return [];
   }
 

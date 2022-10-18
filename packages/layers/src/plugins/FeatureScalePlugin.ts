@@ -71,17 +71,17 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
+    layer.hooks.beforeRenderData.tapPromise('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
+      const dataArray = layer.getSource().data.dataArray;
 
-      this.getSourceData(layer, ({ dataArray }) => {
-        if (Array.isArray(dataArray) && dataArray.length === 0) {
-          return;
-        }
-        this.caculateScalesForAttributes(attributes || [], dataArray);
-        layer.layerModelNeedUpdate = true;
-      });
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      }
+      this.caculateScalesForAttributes(attributes || [], dataArray);
+      layer.layerModelNeedUpdate = true;
+
       return true;
     });
 
@@ -92,18 +92,18 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
+      const dataArray = layer.getSource().data.dataArray;
+
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      }
       if (attributes) {
-        this.getSourceData(layer, ({ dataArray }) => {
-          if (dataArray.length === 0) {
-            return;
-          }
-          const attributesToRescale = attributes.filter(
-            (attribute) => attribute.needRescale,
-          );
-          if (attributesToRescale.length) {
-            this.caculateScalesForAttributes(attributesToRescale, dataArray);
-          }
-        });
+        const attributesToRescale = attributes.filter(
+          (attribute) => attribute.needRescale,
+        );
+        if (attributesToRescale.length) {
+          this.caculateScalesForAttributes(attributesToRescale, dataArray);
+        }
       }
     });
   }

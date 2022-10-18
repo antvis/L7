@@ -27,6 +27,7 @@ export class TilePickService extends EventEmitter{
         this.pickingService = pickingService;
         this.children = children;
         this.tileRenderService = tileRenderService;
+        
     }
     
 

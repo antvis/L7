@@ -1,4 +1,4 @@
-import { Tile } from './tile';
+import { SourceTile } from './tile';
 
 // Bounds [minLng, minLat, maxLng, maxLat]
 export type TileBounds = [number, number, number, number];
@@ -13,7 +13,13 @@ export enum UpdateTileStrategy {
   Replace = 'replace',
 }
 
-export type TileOptions = { x: number; y: number; z: number; tileSize: number };
+export type TileOptions = {
+  x: number;
+  y: number;
+  z: number;
+  tileSize: number;
+  warp?: boolean;
+};
 
 export type TileLoadParams = TileOptions & {
   bounds: TileBounds;
@@ -21,9 +27,9 @@ export type TileLoadParams = TileOptions & {
 };
 
 export type TileLoadDataOptions = {
-  getData: (params: TileLoadParams, tile: Tile) => Promise<any>;
-  onLoad: (tile: Tile) => void;
-  onError: (error: Error, tile: Tile) => void;
+  getData: (params: TileLoadParams, tile: SourceTile) => Promise<any>;
+  onLoad: (tile: SourceTile) => void;
+  onError: (error: Error, tile: SourceTile) => void;
 };
 
 export enum LoadTileDataStatus {
@@ -35,10 +41,11 @@ export enum LoadTileDataStatus {
 
 export type TilesetManagerOptions = {
   tileSize: number;
+  warp: boolean;
   zoomOffset: number;
   minZoom: number;
   maxZoom: number;
   extent: TileBounds;
-  getTileData: (params: TileLoadParams, tile: Tile) => any;
-  updateStrategy: UpdateTileStrategy | ((tiles: Tile[]) => void);
+  getTileData: (params: TileLoadParams, tile: SourceTile) => any;
+  updateStrategy: UpdateTileStrategy | ((tiles: SourceTile[]) => void);
 };

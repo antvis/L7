@@ -16,8 +16,10 @@ export default class DataSourcePlugin implements ILayerPlugin {
           layer.sourceOption || layer.defaultSourceConfig;
         source = new Source(data, options);
         await new Promise((resolve) => {
-          source.on('inited', () => {
-            layer.setSource(source);
+          source.on('update', (e) => {
+            if (e.type === 'inited') {
+              layer.initSource(source);
+            }
             resolve(null);
           });
         });
@@ -32,7 +34,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tap('DataSourcePlugin', () => {
+    layer.hooks.beforeRenderData.tapPromise('DataSourcePlugin', async () => {
       const neeUpdateCluster = this.updateClusterData(layer);
       const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
       layer.dataState.dataSourceNeedUpdate = false;
@@ -42,7 +44,8 @@ export default class DataSourcePlugin implements ILayerPlugin {
 
   private updateClusterData(layer: ILayer): boolean {
     // Tip: 矢量瓦片不需要进行聚合操作
-    if (layer.isTileLayer || layer.tileLayer) return false;
+    if (layer.isTileLayer || layer.tileLayer || !layer.getSource())
+      return false;
     const source = layer.getSource();
     const cluster = source.cluster;
     const { zoom = 0 } = source.clusterOptions;
