@@ -32,7 +32,7 @@ const colorList = [
   '#a8ebff',
 
   '#616161', // Clouds
-  '#616161'
+  '#616161',
 ];
 const positions = [
   0.0,
@@ -54,69 +54,68 @@ const positions = [
   0.8,
   0.9,
   0.9,
-  1.0
+  1.0,
 ];
 export default () => {
-
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
       map: new Map({
-        center: [ 116, 27 ],
+        center: [116, 27],
         zoom: 6,
-        style: 'dark'
-      })
+        style: 'dark',
+      }),
     });
-    
+
     scene.on('loaded', () => {
       fetch(
-        'https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json'
+        'https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json',
       )
-        .then(res => res.json())
-        .then(maskData => {
+        .then((res) => res.json())
+        .then((maskData) => {
           const layer = new RasterLayer({
             // mask: true,
             // maskfence: maskData
           });
-    
-          const tileSource = new Source('https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+
+          const tileSource = new Source(
+            'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
             {
               parser: {
                 type: 'rasterTile',
                 dataType: 'arraybuffer',
                 tileSize: 256,
                 maxZoom: 13.1,
-                format: async data => {
-                  
+                format: async (data) => {
                   const tiff = await GeoTIFF.fromArrayBuffer(data);
                   const image = await tiff.getImage();
                   const width = image.getWidth();
                   const height = image.getHeight();
                   const values = await image.readRasters();
                   return { rasterData: values[0], width, height };
-                }
-              }
-            });
-    
-          layer.source(tileSource)
-            .style({
-              domain: [ 0.001, 11.001 ],
-              clampLow: false,
-              rampColors: {
-                colors: colorList,
-                positions
-                // colors: ['#f00', '#f00'],
-                // positions: [0, 1]
-              }
-            });
-    
+                },
+              },
+            },
+          );
+
+          layer.source(tileSource).style({
+            domain: [0.001, 11.001],
+            clampLow: false,
+            rampColors: {
+              colors: colorList,
+              positions,
+              // colors: ['#f00', '#f00'],
+              // positions: [0, 1]
+            },
+          });
+
           scene.addLayer(layer);
 
           layer.on('click', (e) => {
-            console.log('layer click')
-            console.log(e)
-          })
+            console.log('layer click');
+            console.log(e);
+          });
 
           // setTimeout(() => {
           //   layer.style({
@@ -129,9 +128,7 @@ export default () => {
           // }, 2000)
         });
     });
-    
 
-  
     return () => {
       scene.destroy();
     };
