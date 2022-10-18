@@ -12,6 +12,7 @@ layer.style({
   opacity: 0.5,
 });
 ```
+
 ### common
 
 通用 `style` 参数，所有图形都支持的参数。
@@ -30,13 +31,13 @@ layer.style({
 - [支持虚线](/zh/docs/api/line_layer/style#dash)
 - [支持箭头](/zh/docs/api/line_layer/style#arrow)
 
-| style         | 类型               | 描述         | 默认值   |
-| ------------- | ------------------ | ------------ | -------- |
-| borderColor   | `string`           | 图形边框颜色 | `#fff`   |
-| borderWidth   | `number`           | 图形边框半径 | `0`      |
-| blur          | `[number, number, number]` | 图形模糊分布 | `[1, 1, 1]` |
-| raisingHeight | `number`           | 抬升高度     | `0`      |
-| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `0`      |
+| style         | 类型                       | 描述                       | 默认值      |
+| ------------- | -------------------------- | -------------------------- | ----------- |
+| borderColor   | `string`                   | 图形边框颜色               | `#fff`      |
+| borderWidth   | `number`                   | 图形边框半径               | `0`         |
+| blur          | `[number, number, number]` | 图形模糊分布               | `[1, 1, 1]` |
+| raisingHeight | `number`                   | 抬升高度                   | `0`         |
+| heightfixed   | `boolean`                  | 抬升高度是否随 `zoom` 变化 | `0`         |
 
 ### arc
 
@@ -47,10 +48,10 @@ layer.style({
 - [支持纹理](/zh/docs/api/line_layer/style#texture)
 - [支持虚线](/zh/docs/api/line_layer/style#dash)
 
-| style         | 类型               | 描述         | 默认值   |
-| ------------- | ------------------ | ------------ | -------- |
-| segmentNumber | `number`           | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
-| thetaOffset   | `number`           | 弧线的弧度参数 | `0.314`   |
+| style         | 类型     | 描述                               | 默认值  |
+| ------------- | -------- | ---------------------------------- | ------- |
+| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 | `30`    |
+| thetaOffset   | `number` | 弧线的弧度参数                     | `0.314` |
 
 ### arc3d
 
@@ -61,9 +62,9 @@ layer.style({
 - [支持纹理](/zh/docs/api/line_layer/style#texture)
 - [支持虚线](/zh/docs/api/line_layer/style#dash)
 
-| style         | 类型               | 描述         | 默认值   |
-| ------------- | ------------------ | ------------ | -------- |
-| segmentNumber | `number`           | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
+| style         | 类型     | 描述                               | 默认值 |
+| ------------- | -------- | ---------------------------------- | ------ |
+| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
 
 ### greatcircle
 
@@ -74,9 +75,9 @@ layer.style({
 - [支持纹理](/zh/docs/api/line_layer/style#texture)
 - [支持虚线](/zh/docs/api/line_layer/style#dash)
 
-| style         | 类型               | 描述         | 默认值   |
-| ------------- | ------------------ | ------------ | -------- |
-| segmentNumber | `number`           | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
+| style         | 类型     | 描述                               | 默认值 |
+| ------------- | -------- | ---------------------------------- | ------ |
+| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
 
 ### wall
 
@@ -93,7 +94,6 @@ layer.style({
 - [simple](/zh/docs/api/line_layer/shape#shapesimple)
 - [支持渐变](/zh/docs/api/line_layer/style#linear)
 
-
 ### arrow
 
 - line
@@ -102,21 +102,21 @@ layer.style({
 
 ```js
 layer.style({
-    arrow: {
-        enable: true,
-        arrowWidth: 2,
-        arrowHeight: 3,
-        tailWidth: 1,
-    }
-})
+  arrow: {
+    enable: true,
+    arrowWidth: 2,
+    arrowHeight: 3,
+    tailWidth: 1,
+  },
+});
 ```
 
-| style   | 类型     | 描述         | 默认值 |
-| ------- | -------- | ------------ | ------ |
-| arrow   | `IArrowOption` | 箭头的样式 | `/` |
-| arrowWidth  | `number` | 箭头的宽度 | `2` |
-| arrowHeight | `number` | 箭头的长度 | `3` |
-| tailWidth   | `number` | 箭头尾部宽度 | `1` |
+| style       | 类型           | 描述         | 默认值 |
+| ----------- | -------------- | ------------ | ------ |
+| arrow       | `IArrowOption` | 箭头的样式   | `/`    |
+| arrowWidth  | `number`       | 箭头的宽度   | `2`    |
+| arrowHeight | `number`       | 箭头的长度   | `3`    |
+| tailWidth   | `number`       | 箭头尾部宽度 | `1`    |
 
 ### linear
 
@@ -124,11 +124,11 @@ layer.style({
 
 线图层支持配置渐变效果，在配置渐变效果后会覆盖 `layer.color` 方法设置的颜色。
 
-| style         | 类型               | 描述         | 默认值   |
-| ------------- | ------------------ | ----------- | -------- |
-| sourceColor   | `IColor`           | 线起始颜色    | `/`     |
-| targetColor   | `IColor`           | 线结尾颜色    | `/`     |
-| linearDir     | `ILinearDir`       | 线渐变方向    | `vertical` |
+| style       | 类型         | 描述       | 默认值     |
+| ----------- | ------------ | ---------- | ---------- |
+| sourceColor | `IColor`     | 线起始颜色 | `/`        |
+| targetColor | `IColor`     | 线结尾颜色 | `/`        |
+| linearDir   | `ILinearDir` | 线渐变方向 | `vertical` |
 
 #### IColor
 
@@ -152,11 +152,11 @@ type ILinearDir = 'vertical' | 'horizontal';
 
 线图层支持纹理以及纹理动画，纹理样式有自己的参数。
 
-| style         | 类型               | 描述         | 默认值   |
-| ------------- | ------------------| ------------ | -------- |
-| lineTexture   | `boolean`         | 时候开启纹理能力  | `false` |
-| textureBlend  | `ITextureBlend`   | 纹理混合方式      | `normal` |
-| iconStep      | `number`          | 纹理贴图在线图层上面排布的间隔 | `100` |
+| style        | 类型            | 描述                           | 默认值   |
+| ------------ | --------------- | ------------------------------ | -------- |
+| lineTexture  | `boolean`       | 时候开启纹理能力               | `false`  |
+| textureBlend | `ITextureBlend` | 纹理混合方式                   | `normal` |
+| iconStep     | `number`        | 纹理贴图在线图层上面排布的间隔 | `100`    |
 
 #### ITextureBlend
 
@@ -166,13 +166,13 @@ type ILinearDir = 'vertical' | 'horizontal';
 - replace 使用纹理替换线颜色
 
 ```js
-type ITextureBlend = 'normal' |'replace'
+type ITextureBlend = 'normal' | 'replace';
 ```
 
 #### texture advance
 
 ✨ animate  
-当线图层 (shape 为 arc/arc3d) 开启动画模式的时候，纹理在线图层上的分布还会和 animate 的参数相关     
+当线图层 (shape 为 arc/arc3d) 开启动画模式的时候，纹理在线图层上的分布还会和 animate 的参数相关
 
 线图层上排列的纹理的数量大致为 duration/interval
 
@@ -186,8 +186,8 @@ type ITextureBlend = 'normal' |'replace'
 // 此时 纹理贴图数量为  duration / interval = 5
 ```
 
-✨ textureBlend 参数    
-通过控制 style 方法中的 textureBlend 参数，我们可以控制纹理图层和线图层的混合情况  
+✨ textureBlend 参数  
+通过控制 style 方法中的 textureBlend 参数，我们可以控制纹理图层和线图层的混合情况
 
 - normal
 - replace
@@ -214,10 +214,10 @@ layer.style({
 })
 ```
 
-| style         | 类型               | 描述          | 默认值   |
-| ------------- | ------------------ | ------------ | -------- |
-| lineType      | `ILineType`        | 线的类别       | `solid`     |
-| dashArray     | `IDashArray`       | 虚线的间隔     | `/`     |
+| style     | 类型         | 描述       | 默认值  |
+| --------- | ------------ | ---------- | ------- |
+| lineType  | `ILineType`  | 线的类别   | `solid` |
+| dashArray | `IDashArray` | 虚线的间隔 | `/`     |
 
 #### ILineType
 

@@ -27,16 +27,16 @@ layer.style({
 
 - [IFillShape](/zh/docs/api/point_layer/shape#shapefillshape-ifillshape)
 
-| style         | 类型               | 描述         | 默认值   |
-| ------------- | ------------------ | ------------ | -------- |
-| stroke        | `string`           | 图形边框颜色 | `#fff`   |
-| strokeWidth   | `number`           | 图形边框宽度 | `0`      |
-| strokeOpacity | `number`           | 图形边框透明度 | `1`      |
-| blur          | `number`           | 图形模糊半径 | `0`      |
-| offsets       | `[number, number]` | 点偏移       | `[0, 0]` |
-| raisingHeight | `number`           | 抬升高度     | `0`      |
+| style         | 类型               | 描述                       | 默认值   |
+| ------------- | ------------------ | -------------------------- | -------- |
+| stroke        | `string`           | 图形边框颜色               | `#fff`   |
+| strokeWidth   | `number`           | 图形边框宽度               | `0`      |
+| strokeOpacity | `number`           | 图形边框透明度             | `1`      |
+| blur          | `number`           | 图形模糊半径               | `0`      |
+| offsets       | `[number, number]` | 点偏移                     | `[0, 0]` |
+| raisingHeight | `number`           | 抬升高度                   | `0`      |
 | heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `0`      |
-| unit          | `string`           | 点大小单位   | `l7size` |
+| unit          | `string`           | 点大小单位                 | `l7size` |
 
 #### unit
 
@@ -70,22 +70,21 @@ const layer = PointLayer()
 
 - [IColumn](/zh/docs/api/point_layer/shape#shapecolumn-icolumn)
 
-| style         | 类型            | 描述                 | 默认值  |
-| ------------- | --------------- | -------------------- | ------- |
-| depth         | `boolean`       | 图形是否开启深度检测 | `true`  |
-| pickLight     | `boolean`       | 拾取高亮是否计算光照 | `false` |
-| lightEnable   | `boolean`       | 颜色是否参与光照计算  | `true`  |
-
+| style       | 类型      | 描述                 | 默认值  |
+| ----------- | --------- | -------------------- | ------- |
+| depth       | `boolean` | 图形是否开启深度检测 | `true`  |
+| pickLight   | `boolean` | 拾取高亮是否计算光照 | `false` |
+| lightEnable | `boolean` | 颜色是否参与光照计算 | `true`  |
 
 ### 3D column linear
 
 柱图支持配置渐变色，在配置渐变效果后会覆盖 `layer.color` 方法设置的颜色。
 
-| style         | 类型            | 描述                 | 默认值  |
-| ------------- | --------------- | ------------------- | ------- |
-| sourceColor   | `color`         | 柱子底部颜色         | `/`     |
-| targetColor   | `color`         | 柱子顶部颜色         | `/`     |
-| opacityLinear | `IOpcityLinear` | 柱子的透明度渐变      | `/`     |
+| style         | 类型            | 描述             | 默认值 |
+| ------------- | --------------- | ---------------- | ------ |
+| sourceColor   | `color`         | 柱子底部颜色     | `/`    |
+| targetColor   | `color`         | 柱子顶部颜色     | `/`    |
+| opacityLinear | `IOpcityLinear` | 柱子的透明度渐变 | `/`    |
 
 #### color
 
