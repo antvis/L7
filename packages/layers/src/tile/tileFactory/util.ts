@@ -1,5 +1,5 @@
 
-import { PointLayer, PolygonLayer, LineLayer, RasterLayer} from '@antv/l7-layers'
+import { PointLayer, PolygonLayer, LineLayer} from '@antv/l7-layers'
 export function getTileLayer(type:string) {
     if(type === 'PolygonLayer') {
         return PolygonLayer;
@@ -9,9 +9,6 @@ export function getTileLayer(type:string) {
     }
     if(type === 'PointLayer') {
         return PointLayer
-    }
-    if(type === 'RasterLayer') {
-        return RasterLayer;
     }
     return PointLayer
 

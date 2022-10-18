@@ -6,18 +6,21 @@ import {
 } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import { TileLayerService } from '../service/TileLayerService';
 export default abstract class Tile {
   public x: number;
   public y: number;
   public z: number;
   public key: string;
   protected parent: ILayer;
+  protected tileLayerService: TileLayerService;
   protected sourceTile: SourceTile;
   public visible: boolean  = true;
   protected layers: ILayer[] = [];
   public isLoaded: boolean = false;
-  constructor(sourceTile: SourceTile, parent: ILayer) {
+  constructor(sourceTile: SourceTile, parent: ILayer, tileLayerService: TileLayerService) {
     this.parent = parent;
+    this.tileLayerService = tileLayerService;
     this.sourceTile = sourceTile;
     this.x = sourceTile.x;
     this.y = sourceTile.y;

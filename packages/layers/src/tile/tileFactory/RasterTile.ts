@@ -1,13 +1,16 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
-import { getTileLayer } from './util';
+import RasterLayer from './layers/rasterDataLayer';
 import Tile from './Tile';
 export default class RasterTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig();
-    const rasterLayer = getTileLayer(this.parent.type);
     const sourceOptions = this.getSourceOption();
-    const layer = new rasterLayer({...layerOptions}).source(
+    const layer = new RasterLayer({
+      ...layerOptions,
+      colorTexture: this.tileLayerService.colorTexture,
+    })
+    .source(
       sourceOptions.data,
       sourceOptions.options,
     );
