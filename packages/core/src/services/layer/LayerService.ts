@@ -141,7 +141,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      layer.hooks.beforeRenderData.promise();
+      await layer.hooks.beforeRenderData.promise();
       layer.hooks.beforeRender.call();
 
       if (layer.masks.length > 0) {
@@ -152,7 +152,7 @@ export default class LayerService implements ILayerService {
           framebuffer: null,
         });
         layer.masks.map(async (m: ILayer) => {
-          await m.hooks.beforeRenderData.promise();
+          m.hooks.beforeRenderData.promise();
           m.hooks.beforeRender.call();
           m.render();
           m.hooks.afterRender.call();

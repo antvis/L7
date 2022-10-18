@@ -36,12 +36,18 @@ export default class DataMappingPlugin implements ILayerPlugin {
       this.generateMaping(layer, { styleAttributeService });
     });
 
-    layer.hooks.beforeRenderData.tapPromise('DataMappingPlugin', async () => {
-      layer.dataState.dataMappingNeedUpdate = false;
-      this.generateMaping(layer, { styleAttributeService });
+    layer.hooks.beforeRenderData.tapPromise(
+      'DataMappingPlugin',
+      async (flag: boolean) => {
+        if (!flag) {
+          return flag;
+        }
+        layer.dataState.dataMappingNeedUpdate = false;
+        this.generateMaping(layer, { styleAttributeService });
 
-      return true;
-    });
+        return true;
+      },
+    );
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {

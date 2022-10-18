@@ -12,7 +12,6 @@ import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
-    const SOC = 'CHN';
     const colors = {};
     const GDPSpeed = {
       '520000': 10, //贵州
