@@ -19,7 +19,7 @@ export class TileLayerService {
     this.parent = parent;
   }
   get tiles():Tile[] {
-    return this.tiles;
+    return this._tiles;
   }
 
   hasTile(tileKey: string): boolean {

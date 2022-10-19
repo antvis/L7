@@ -4,6 +4,7 @@ import TileModel from '../../models/tileModel';
 
 export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
   public type: string = 'TileDebugLayer';
+  public zIndex:number = 10000;
   public defaultSourceConfig = {
     data: [],
     options: {

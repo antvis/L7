@@ -281,15 +281,16 @@ export default class PickingService implements IPickingService {
       type === 'click' &&
       pickedColors?.toString() !== [0, 0, 0, 0].toString()
     ) {
+
       const selectedId = decodePickingColor(pickedColors);
       if (
         layer.getCurrentSelectedId() === null ||
         selectedId !== layer.getCurrentSelectedId()
       ) {
-        this.selectFeature(layer, pickedColors);
+        this.layerService.selectFeature(layer, pickedColors);
         layer.setCurrentSelectedId(selectedId);
       } else {
-        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        this.layerService.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
       }
       // if (!layer.isVector) {

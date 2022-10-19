@@ -21,6 +21,7 @@ export default () => {
       map: new Map({
         center: [60, 30],
         // zoom: 12,
+        minZoom: 0,
         zoom: 1,
       }),
     });
@@ -51,6 +52,7 @@ export default () => {
         zIndex: 1,
       })
         .source(source)
+        .select(true)
         .shape('fill')
         .color('NAME_CHN', (NAME_CHN) => {
           const namestr = unicode2Char(NAME_CHN);

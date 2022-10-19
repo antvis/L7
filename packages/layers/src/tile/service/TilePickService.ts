@@ -1,6 +1,6 @@
 import { ILayerService } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
-import { ILayer, IInteractionTarget } from '@antv/l7-core';
+import { IInteractionTarget } from '@antv/l7-core';
 import Tile from '../tileFactory/Tile';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
@@ -20,10 +20,9 @@ export class TilePickService {
       this.layerService.pickRender(pickLayer);
     }
   }
-  selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
+  selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
     this.tileLayerService.tiles.map((tile: Tile) => {
       const layers = tile.getLayers();
       layers.forEach((layer) => {
@@ -31,10 +30,9 @@ export class TilePickService {
       });
     });
   }
-  highlightPickedFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
+  highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
     this.tileLayerService.tiles.map((tile: Tile) => {
       const layers = tile.getLayers();
       layers.forEach((layer) => {

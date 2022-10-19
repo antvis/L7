@@ -67,6 +67,7 @@ export default () => {
       stencil: true,
       map: new Map({
         center: [112, 30],
+
         // zoom: 12,
         zoom: 3,
       }),
