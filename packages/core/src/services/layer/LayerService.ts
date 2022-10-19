@@ -169,9 +169,17 @@ export default class LayerService implements ILayerService {
   }
   
   public async renderMask(masks:ILayer[]):Promise<void[]> {
+    const renderService = this.renderService;
    return Promise.all(masks.map(async (m: ILayer) => {
       await m.hooks.beforeRenderData.promise();
        m.hooks.beforeRender.call();
+
+       renderService.clear({
+        stencil: 0,
+        depth: 1,
+        framebuffer: null,
+      });
+
        m.render();
        m.hooks.afterRender.call();
       

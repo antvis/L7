@@ -68,17 +68,24 @@ export class TileLayerService {
           layer.hooks.beforeRender.call();
           if (layer.masks.length > 0) {
             // 清除上一次的模版缓存
+            // this.rendererService.clear({
+            //   stencil: 0,
+            //   depth: 1,
+            //   framebuffer: null,
+            // });
+            // await this.layerService.renderMask(layer.masks)
+            const m = layer.masks[0]
+            await m.hooks.beforeRenderData.promise();
+            m.hooks.beforeRender.call();
+
             this.rendererService.clear({
               stencil: 0,
               depth: 1,
               framebuffer: null,
             });
-            // await this.layerService.renderMask(layer.masks)
-              const m = layer.masks[0]
-           m.hooks.beforeRenderData.promise();
-          m.hooks.beforeRender.call();
-          m.render();
-          m.hooks.afterRender.call();
+            
+            m.render();
+            m.hooks.afterRender.call();
           }
           if (layer.getLayerConfig().enableMultiPassRenderer) {
             // multiPassRender 不是同步渲染完成的
@@ -97,12 +104,46 @@ export class TileLayerService {
           // m.hooks.afterRender.call();
 
       // const layers = this.getRenderLayers();
-      // const masks = this.getMaskLayers(layers);
-      // this.rendererService.clear({
-      //   stencil: 0,
-      //   depth: 1,
-      //   framebuffer: null,
-      // });
+      // // const masks = this.getMaskLayers(layers);
+      // // this.rendererService.clear({
+      // //   stencil: 0,
+      // //   depth: 1,
+      // //   framebuffer: null,
+      // // });
+
+      // layers.map(async layer =>{
+      //   console.log('***' + layer.id)
+        
+
+
+      //   await layer.hooks.beforeRenderData.promise();
+
+       
+      //     layer.hooks.beforeRender.call();
+         
+      //     if (layer.masks.length > 0) {
+            
+      //       const m = layer.masks[0]
+      //       await m.hooks.beforeRenderData.promise();
+            
+      //       m.hooks.beforeRender.call();
+            
+      //       console.log(layer.id + '----' + 'clear')
+      //       this.rendererService.clear({
+      //         stencil: 0,
+      //         depth: 1,
+      //         framebuffer: null,
+      //       });
+
+      //       console.log(layer.id + '----' + 'mask')
+
+      //       m.render();
+      //       m.hooks.afterRender.call();
+      //     }
+      //     console.log(layer.id + '----' + 'layer')
+      //     layer.render();
+      //     layer.hooks.afterRender.call();
+      // })
 
       // (async () => {
       //     this.rendererService.clear({
