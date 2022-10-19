@@ -163,18 +163,23 @@ export default class LayerService implements ILayerService {
     layer.hooks.beforeRender.call();
     if (layer.masks.length > 0) {
 
-      const m = layer.masks[0]
-      await m.hooks.beforeRenderData.promise();
-      m.hooks.beforeRender.call();
-
+      const masks: ILayer[] = [];
+      await Promise.all(layer.masks.map(async mask => {
+        await mask.hooks.beforeRenderData.promise();
+        masks.push(mask);
+      }))
+     
       this.renderService.clear({
         stencil: 0,
         depth: 1,
         framebuffer: null,
       });
 
-      m.render();
-      m.hooks.afterRender.call();
+      masks.map(m =>{
+        m.hooks.beforeRender.call();
+        m.render();
+        m.hooks.afterRender.call();
+      })
     }
     if (layer.getLayerConfig().enableMultiPassRenderer) {
       // multiPassRender 不是同步渲染完成的
@@ -182,6 +187,7 @@ export default class LayerService implements ILayerService {
     } else {
       layer.render();
     }
+
     layer.hooks.afterRender.call();
   }
 

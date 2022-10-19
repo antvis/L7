@@ -34,9 +34,9 @@ export default class VectorTile extends Tile {
             type: 'geojson',
           }
         })
-        .style({
-          opacity: 1
-        });
+        // .style({
+        //   opacity: 1
+        // });
       await this.addMask(layer, mask)
     }
 
