@@ -88,4 +88,4 @@ interface IOpacityLinear {
 
 ### other
 
-几何体图层支持的其他 `shape` 都有对应自己的样式参数。
+几何体图层支持的其他 `shape` 都有对应的图层，可以参考对应图层的样式参数。

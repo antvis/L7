@@ -7,6 +7,8 @@ order: 2
 
 `markdown:docs/common/layer/source.md`
 
+🌟 热力图的数据使用和点图层保持一致。
+
 ### GeoJSON
 
 ```js
@@ -28,7 +30,7 @@ var data = {
       ],
     };
 
-var layer = new PointLayer()
+var layer = new HeatmapLayer()
 .source(data)
 ```
 
@@ -43,7 +45,7 @@ var data = `from,to,value,type,lng1,lat1,lng2,lat2
 鎷夎惃,鍖椾含,2.05,move_out,91.111891,29.662557,116.395645,39.929986
 ...`;
 
-var layer = new PointLayer().source(data, {
+var layer = new HeatmapLayer().source(data, {
   parser: {
     type: 'csv',
     x: 'lng1',
@@ -64,7 +66,7 @@ var data = [
   ...
 ]
 
-var layer = new PointLayer()
+var layer = new HeatmapLayer()
 .source(data, {
   parser: {
     type: 'json',
