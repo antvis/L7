@@ -10,7 +10,7 @@ import { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { setStyleAttributeField, setScale } from '../style/utils';
 import { registerLayers } from '../utils';
 import { readRasterValue } from '../interaction/getRasterData';
-import VectorLayer from './layers/VectorLayer';
+import VectorLayer from './layers/vectorLayer';
 
 import * as turf from '@turf/helpers';
 import union from '@turf/union';

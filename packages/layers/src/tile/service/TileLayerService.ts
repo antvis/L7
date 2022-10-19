@@ -67,6 +67,10 @@ export class TileLayerService {
     tile?.updateVisible(sourceTile.isVisible);
 
   }
+  beforeRender() {
+    // TODO 统一处理状态更新 attribute style
+    
+  }
 
   render() {
     // this.rendererService.clear({
