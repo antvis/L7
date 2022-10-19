@@ -223,9 +223,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private animateStatus: boolean = false;
 
-  // Tip: layer 保底颜色
-  private bottomColor = 'rgba(0, 0, 0, 0)';
-
   private isDestroyed: boolean = false;
 
   // private pickingPassRender: IPass<'pixelPicking'>;
@@ -302,14 +299,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public getContainer() {
     return this.container;
-  }
-
-  public setBottomColor(color: string) {
-    this.bottomColor = color;
-  }
-
-  public getBottomColor() {
-    return this.bottomColor;
   }
 
   public addPlugin(plugin: ILayerPlugin): ILayer {

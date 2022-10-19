@@ -59,11 +59,10 @@ export class TileLayerService {
   }
 
   render() {
-   
     this._tiles.filter((t)=>t.visible && t.isLoaded)
-      .map((tile: Tile) => {
+      .map(async (tile: Tile) => {
       const layers = tile.getLayers();
-      Promise.all(layers.map(async (layer: ILayer) => {
+     await Promise.all(layers.map(async (layer: ILayer) => {
         await layer.hooks.beforeRenderData.promise();
         layer.hooks.beforeRender.call();
         if (layer.masks.length > 0) {

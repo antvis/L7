@@ -366,8 +366,6 @@ export interface ILayer {
   getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
   getLayerAttributeConfig():Partial<ILayerAttributesOption>
-  setBottomColor(color: string): void;
-  getBottomColor(): string;
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
