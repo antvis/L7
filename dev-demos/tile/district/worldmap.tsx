@@ -7,7 +7,7 @@ import {
   TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { data } from './data';
 
@@ -18,7 +18,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new Map({
+      map: new GaodeMap({
         center: [60, 30],
         // zoom: 12,
         minZoom: 0,

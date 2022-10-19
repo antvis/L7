@@ -41,7 +41,6 @@ export default class TestTile extends TileFactory {
         type: 'json',
         x: 'textLng',
         y: 'textLat',
-        cancelExtent: true,
       }
     })
     .shape(`${tile.x}/${tile.y}/${tile.z}`)
@@ -59,7 +58,6 @@ export default class TestTile extends TileFactory {
     }, {
       parser: {
         type: 'geojson',
-        cancelExtent: true,
       }
     })
     .shape('simple')
