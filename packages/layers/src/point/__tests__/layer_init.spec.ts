@@ -3,6 +3,13 @@ import { TestScene } from '@antv/l7-test-utils';
 import PointLayer from '../';
 
 describe('template', () => {
+
+  it('1', async () => {
+    
+   expect('1').toEqual('1')
+    
+  });
+
   const el = document.createElement('div');
   el.id = 'test-div-id';
   const body = document.querySelector('body') as HTMLBodyElement;
@@ -40,20 +47,20 @@ describe('template', () => {
     
   });
   it('scene layer text', async () => {
-    const layer = new PointLayer({name:'text'}).source(
-        testData,
-      {
-        parser: {
-          type: 'json',
-          x: 'x',
-          y: 'y',
-        },
-      },
-    ).shape('name','text')
-    .color('name',['red','blue'])
-    .size('v',[10,20])
-    scene.addLayer(layer)
-   expect(layer.name).toEqual('text')
+  //   const layer = new PointLayer({name:'text'}).source(
+  //       testData,
+  //     {
+  //       parser: {
+  //         type: 'json',
+  //         x: 'x',
+  //         y: 'y',
+  //       },
+  //     },
+  //   ).shape('name','text')
+  //   .color('name',['red','blue'])
+  //   .size('v',[10,20])
+  //   scene.addLayer(layer)
+  //  expect(layer.name).toEqual('text')
     
   });
 
