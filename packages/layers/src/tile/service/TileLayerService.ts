@@ -59,28 +59,96 @@ export class TileLayerService {
   }
 
   render() {
-    // TODO 渲染排序
+    
     this._tiles.filter((t)=>t.visible && t.isLoaded)
-      .map((tile: Tile) => {
-      const layers = tile.getLayers();
-      layers.forEach(async (layer: ILayer) => {
-        await layer.hooks.beforeRenderData.promise();
-        layer.hooks.beforeRender.call();
+      .map(async (tile: Tile) => {
+        const layers = tile.getLayers();
+        await Promise.all(layers.map(async (layer: ILayer) => {
+          await layer.hooks.beforeRenderData.promise();
+          layer.hooks.beforeRender.call();
+          if (layer.masks.length > 0) {
+            // 清除上一次的模版缓存
+            this.rendererService.clear({
+              stencil: 0,
+              depth: 1,
+              framebuffer: null,
+            });
+            // await this.layerService.renderMask(layer.masks)
+              const m = layer.masks[0]
+           m.hooks.beforeRenderData.promise();
+          m.hooks.beforeRender.call();
+          m.render();
+          m.hooks.afterRender.call();
+          }
+          if (layer.getLayerConfig().enableMultiPassRenderer) {
+            // multiPassRender 不是同步渲染完成的
+            await layer.renderMultiPass();
+          } else {
+            layer.render();
+          }
+          layer.hooks.afterRender.call();
+        }));
+      })
 
-        if (layer.masks.length > 0) {
-          // 清除上一次的模版缓存
-          this.rendererService.clear({
-            stencil: 0,
-            depth: 1,
-            framebuffer: null,
-          });
-          await this.layerService.renderMask(layer.masks);
-        }
-        layer.render();
-        layer.hooks.afterRender.call();
-      });
-    });
+     // const m = layer.masks[0]
+          // await m.hooks.beforeRenderData.promise();
+          // m.hooks.beforeRender.call();
+          // m.render();
+          // m.hooks.afterRender.call();
+
+      // const layers = this.getRenderLayers();
+      // const masks = this.getMaskLayers(layers);
+      // this.rendererService.clear({
+      //   stencil: 0,
+      //   depth: 1,
+      //   framebuffer: null,
+      // });
+
+      // (async () => {
+      //     this.rendererService.clear({
+      //       stencil: 0,
+      //       depth: 1,
+      //       framebuffer: null,
+      //     });
+      //   await this.layerService.renderMask(masks)
+      //   await this.layerService.renderMask(layers)
+      // })();
+
+      // [...masks, ...layers].map( layer => {
+      //    layer.hooks.beforeRenderData.promise();
+      //   layer.hooks.beforeRender.call();
+      //   // if (layer.masks.length > 0) {
+      //   //   // 清除上一次的模版缓存
+      //   //   this.rendererService.clear({
+      //   //     stencil: 0,
+      //   //     depth: 1,
+      //   //     framebuffer: null,
+      //   //   });
+      //   //   await this.layerService.renderMask(layer.masks)
+      //   // }
+      //   layer.render();
+      //   layer.hooks.afterRender.call();
+      // })
+      
+     
+    
   }
+
+  
+
+  getRenderLayers() {
+    const tileList = this._tiles.filter((t)=>t.visible && t.isLoaded);
+    const layers: ILayer[] = [];
+    tileList.map(tile => layers.push(...tile.getLayers()))
+    return layers;
+  }
+
+  getMaskLayers(layers: ILayer[]){
+    const masks: ILayer[] = [];
+    layers.map(layer => masks.push(...layer.masks));
+    return masks;
+  }
+
   destroy() {
     this._tiles.forEach((t) => t.destroy());
   }

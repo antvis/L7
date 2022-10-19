@@ -276,7 +276,7 @@ export function createSceneContainer() {
 export function createLayerContainer(sceneContainer: Container) {
   const layerContainer = new Container();
   layerContainer.parent = sceneContainer;
-
+  
   layerContainer
     .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
     .to(StyleAttributeService)

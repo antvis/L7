@@ -3,20 +3,20 @@ import { LineLayer,PointLayer } from '@antv/l7-layers';
 export default class DebugTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const sourceOptions = this.getSourceOption();
-    
     const pointData = sourceOptions.data.features[0].properties;
+
     const lineLayer = new LineLayer()
       .source(sourceOptions.data, sourceOptions.options)
       .size(1)
       .shape('line')
       .color('red');
+      console.log(lineLayer)
       const pointLayer = new PointLayer()
       .source([pointData],{
         parser: {
           type: 'json',
           x: 'textLng',
           y: 'textLat',
-          cancelExtent: true,
         }
   
       })
@@ -46,7 +46,6 @@ export default class DebugTile extends Tile {
       options: {
         parser: {
           type: 'geojson',
-          cancelExtent: true,
         },
         transforms: rawSource.transforms,
       },

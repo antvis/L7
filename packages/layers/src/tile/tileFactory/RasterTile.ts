@@ -34,7 +34,6 @@ export default class RasterTile extends Tile {
         parser: {
           type: 'raster',
           extent: this.sourceTile.bounds,
-          cancelExtent: true,
           width: this.sourceTile.data.width,
           height: this.sourceTile.data.height,
         },

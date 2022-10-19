@@ -35,7 +35,6 @@ export default () => {
         type: 'mvt',
         tileSize: 256,
         // extent: [-180, -85.051129, 179, 85.051129],
-        cancelExtent: true,
       },
     });
     /**

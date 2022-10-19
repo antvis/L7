@@ -31,7 +31,6 @@ export default class ImageTile extends Tile {
         parser: {
           type: 'image',
           extent: this.sourceTile.bounds,
-          cancelExtent: true,
         },
         transforms: rawSource.transforms,
       },
