@@ -7,18 +7,6 @@ import {
 
   import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 
-export function createColorTexture(config: IColorRamp, rendererService: IRendererService){
-  const { createTexture2D } = rendererService;
-  const imageData = generateColorRamp(config) as ImageData;
-  const texture =  createTexture2D({
-    data: imageData.data,
-    width: imageData.width,
-    height: imageData.height,
-    flipY: false,
-  });
-  return texture;
-}
-
 export function updateTexture(config: IColorRamp, layers: ILayer[], rendererService: IRendererService) {
     const { createTexture2D } = rendererService;
     const imageData = generateColorRamp(config) as ImageData;

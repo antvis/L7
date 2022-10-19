@@ -1,19 +1,12 @@
 import { ILayer, ILngLat, IRendererService, ITexture2D } from '@antv/l7-core';
-import { SourceTile, IColorRamp } from '@antv/l7-utils';
+import { SourceTile } from '@antv/l7-utils';
 import 'reflect-metadata';
 import Tile from '../tileFactory/Tile';
-import { createColorTexture } from '../style/utils';
 
 interface TileLayerServiceOptions {
   rendererService: IRendererService;
   parent:ILayer;
 }
-
-interface ITileLayerStyleOptions {
-  rampColors?: IColorRamp;
-}
-
-
 export class TileLayerService {
   private rendererService: IRendererService;
   private parent: ILayer;
@@ -24,19 +17,9 @@ export class TileLayerService {
   constructor({ rendererService, parent }: TileLayerServiceOptions) {
     this.rendererService = rendererService;
     this.parent = parent;
-    // 初始化全局资源
-    this.initGlobalResource();
   }
   get tiles():Tile[] {
     return this.tiles;
-  }
-
-  // 初始化全局资源 - 所有瓦片共用的资源
-  initGlobalResource() {
-    const { rampColors } = this.parent.getLayerConfig() as ITileLayerStyleOptions;
-    if(rampColors) {
-      this.colorTexture = createColorTexture(rampColors, this.rendererService);
-    }
   }
 
   hasTile(tileKey: string): boolean {

@@ -8,7 +8,8 @@ export default class RasterTile extends Tile {
     const sourceOptions = this.getSourceOption();
     const layer = new RasterLayer({
       ...layerOptions,
-      colorTexture: this.tileLayerService.colorTexture,
+      // @ts-ignore
+      colorTexture: this.parent.layerModel.colorTexture,
     })
     .source(
       sourceOptions.data,

@@ -152,7 +152,9 @@ export default class LayerService implements ILayerService {
           framebuffer: null,
         });
         layer.masks.map(async (m: ILayer) => {
+          // console.time('t')
           await m.hooks.beforeRenderData.promise();
+          // console.timeEnd('t')
           m.hooks.beforeRender.call();
           m.render();
           m.hooks.afterRender.call();
