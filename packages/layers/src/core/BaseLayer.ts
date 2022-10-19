@@ -52,7 +52,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { encodePickingColor, WorkerSourceMap, } from '@antv/l7-utils';
+import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
@@ -1401,7 +1401,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
   // 在各个 layer 中继承
-  public processData(filterData: IParseDataItem[]){
+  public processData(filterData: IParseDataItem[]) {
     return filterData;
   }
 
