@@ -10,7 +10,6 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
     options: {
       parser: {
         type: 'testTile',
-        cancelExtent: true,
       },
     },
   };

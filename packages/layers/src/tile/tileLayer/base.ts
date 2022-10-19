@@ -141,7 +141,7 @@ export class Base {
     if (!this.tilesetManager) {
       return;
     }
-    this.tilesetManager.tiles
+    await Promise.all(this.tilesetManager.tiles
       .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
       .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
       .filter((tile: SourceTile) => this.isTileReady(tile)) // 过滤未发生变化的
@@ -157,7 +157,7 @@ export class Base {
           this.tileLayerService.updateTileVisible(tile);
           this.layerService.reRender()
         }
-      });
+      }));
  
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片

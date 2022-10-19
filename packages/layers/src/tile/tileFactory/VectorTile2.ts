@@ -37,7 +37,6 @@ export default class VectorTile extends Tile {
         parser: {
           type: 'geojson',
           featureId,
-          cancelExtent: true,
         },
         transforms: rawSource.transforms,
       },
