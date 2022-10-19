@@ -15,12 +15,12 @@ order: 0
   </div>
 </div>
 
-
 ```javascript
-  layer.shape('heatmap')
+layer
+  .shape('heatmap')
   .size('mag', [0, 1.0]) // weight映射通道
   .style({
     radius: 20,
-    rampColors: rampColors
+    rampColors: rampColors,
   });
 ```

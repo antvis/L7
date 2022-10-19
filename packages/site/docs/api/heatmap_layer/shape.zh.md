@@ -18,4 +18,3 @@ order: 3
 ### transforms
 
 网格热力和蜂窝热力的实现依赖配置 `transforms` 的参数，[具体说明使用](/zh/docs/api/source/source/#transforms)。
-
