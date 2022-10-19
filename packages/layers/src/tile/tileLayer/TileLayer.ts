@@ -44,6 +44,7 @@ export class TileLayer extends Base implements ITileLayer {
     // 初始化瓦片管理服务
     this.tileLayerService = new TileLayerService({
       rendererService,
+      layerService,
       parent
     })
     // 初始化拾取服务

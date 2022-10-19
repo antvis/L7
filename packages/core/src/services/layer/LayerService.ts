@@ -64,7 +64,9 @@ export default class LayerService implements ILayerService {
 
   public addMask(mask: ILayer) {
     if (this.sceneInited) {
-      mask.init();
+      mask.init().then(() => {
+        this.renderLayers();
+      });
     }
   }
 
@@ -143,33 +145,37 @@ export default class LayerService implements ILayerService {
     for (const layer of this.layerList) {
       await layer.hooks.beforeRenderData.promise();
       layer.hooks.beforeRender.call();
-
-      if (layer.masks.length > 0) {
+      if (layer.masks.filter((m)=>m.inited).length > 0) {
         // 清除上一次的模版缓存
         this.renderService.clear({
           stencil: 0,
           depth: 1,
           framebuffer: null,
         });
-        layer.masks.map(async (m: ILayer) => {
-          // console.time('t')
-          await m.hooks.beforeRenderData.promise();
-          // console.timeEnd('t')
-          m.hooks.beforeRender.call();
-          m.render();
-          m.hooks.afterRender.call();
-        });
+       
       }
+      await this.renderMask(layer.masks)
 
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
       } else {
         layer.render();
+      
       }
       layer.hooks.afterRender.call();
     }
     this.alreadyInRendering = false;
+  }
+  
+  public async renderMask(masks:ILayer[]):Promise<void[]> {
+   return Promise.all(masks.map(async (m: ILayer) => {
+      await m.hooks.beforeRenderData.promise();
+       m.hooks.beforeRender.call();
+       m.render();
+       m.hooks.afterRender.call();
+      
+     }));
   }
 
   public updateLayerRenderList() {

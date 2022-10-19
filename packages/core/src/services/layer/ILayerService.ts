@@ -663,6 +663,7 @@ export interface ILayerService {
   removeAllLayers(): void;
   updateLayerRenderList(): void;
   reRender(): void;
+  renderMask(masks:ILayer[]):Promise<void[]>;
   throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;

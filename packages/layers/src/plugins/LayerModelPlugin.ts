@@ -29,13 +29,12 @@ export default class LayerModelPlugin implements ILayerPlugin {
     });
 
     layer.hooks.beforeRenderData.tapPromise(
-      'DataSourcePlugin',
+      'LayerModelPlugin',
       async (flag: boolean) => {
         if (!flag) {
-          return flag;
+          return false;
         }
         await this.prepareLayerModel(layer);
-        return false;
       },
     );
   }

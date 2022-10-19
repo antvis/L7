@@ -40,4 +40,8 @@ export class TilePickService {
       });
     });
   }
+  /** 从瓦片中根据数据 */
+  getFeatureById() {
+
+  }
 }

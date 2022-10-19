@@ -234,7 +234,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
-    this.parent = this;
+    // this.parent = this;
   }
 
   public addMaskLayer(maskLayer: ILayer) {
