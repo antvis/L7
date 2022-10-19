@@ -38,8 +38,13 @@ export default abstract class Tile {
 
   }
 
-  protected async addMask() {
-
+  protected async addMask(layer: ILayer, mask: ILayer) {
+    const container = createLayerContainer(
+      this.parent.sceneContainer as Container,
+    );
+    mask.setContainer(container, this.parent.sceneContainer as Container);
+    await mask.init();
+    layer.addMaskLayer(mask);
   }
     
   protected async addLayer(layer: ILayer) {
