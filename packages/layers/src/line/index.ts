@@ -1,4 +1,5 @@
 import BaseLayer from '../core/BaseLayer';
+import { IParseDataItem } from '@antv/l7-core';
 import { ILineLayerStyleOptions } from '../core/interface';
 import LineModels, { LineModelType } from './models';
 import { isVectorTile } from '../tile/utils';
@@ -63,5 +64,29 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     );
     const shape = shapeAttribute?.scale?.field as LineModelType;
     return shape || 'line';
+  }
+
+  public handleData(filterData: IParseDataItem[]) {
+    // simple line 在接受 multiPolygon 的数据进行绘制的时候需要对数据进行拆解
+    if (this.getModelType() !== 'simple') return filterData;
+    const dataArray: IParseDataItem[] = [];
+    filterData.map((data) => {
+      if (
+        Array.isArray(data.coordinates) &&
+        Array.isArray(data.coordinates[0]) &&
+        Array.isArray(data.coordinates[0][0])
+      ) {
+        const object = { ...data };
+        data.coordinates.map((d) => {
+          dataArray.push({
+            ...object,
+            coordinates: d,
+          });
+        });
+      } else {
+        dataArray.push(data);
+      }
+    });
+    return dataArray;
   }
 }

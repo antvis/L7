@@ -118,6 +118,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
         return this.applyAttributeMapping(filter, record, bottomColor)[0];
       });
     }
+    // Tip: layer 对数据做处理
+    if (layer.handleData) {
+      filterData = layer.handleData(filterData);
+    }
+
     const encodeData = this.mapping(
       layer,
       attributes,

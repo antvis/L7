@@ -30,23 +30,23 @@ describe('template', () => {
     },
   ];
 
-  it('scene layer fill', async () => {
-    const layer = new PointLayer().source(
-        testData,
-      {
-        parser: {
-          type: 'json',
-          x: 'x',
-          y: 'y',
-        },
-      },
-    ).shape('circle')
-    .color('red')
-    .size(10)
-    scene.addLayer(layer)
+  // it('scene layer fill', async () => {
+  //   const layer = new PointLayer().source(
+  //       testData,
+  //     {
+  //       parser: {
+  //         type: 'json',
+  //         x: 'x',
+  //         y: 'y',
+  //       },
+  //     },
+  //   ).shape('circle')
+  //   .color('red')
+  //   .size(10)
+  //   scene.addLayer(layer)
     
-  });
-  it('scene layer text', async () => {
+  // });
+  // it('scene layer text', async () => {
   //   const layer = new PointLayer({name:'text'}).source(
   //       testData,
   //     {
@@ -62,7 +62,7 @@ describe('template', () => {
   //   scene.addLayer(layer)
   //  expect(layer.name).toEqual('text')
     
-  });
+  // });
 
   it('scene layer extrude', async () => {
     const layer = new PointLayer().source(
