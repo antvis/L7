@@ -664,6 +664,8 @@ export interface ILayerService {
   updateLayerRenderList(): void;
   reRender(): void;
   renderMask(masks:ILayer[]):Promise<void[]>;
+  renderLayer(layer: ILayer): Promise<void>
+
   throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;

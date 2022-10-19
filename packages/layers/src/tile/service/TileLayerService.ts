@@ -59,36 +59,11 @@ export class TileLayerService {
   }
 
   render() {
-
     const layers = this.getRenderLayers();
     layers.map(async layer => {
-      await layer.hooks.beforeRenderData.promise();
-      layer.hooks.beforeRender.call();
-      if (layer.masks.length > 0) {
-
-        const m = layer.masks[0]
-        await m.hooks.beforeRenderData.promise();
-        m.hooks.beforeRender.call();
-
-        this.rendererService.clear({
-          stencil: 0,
-          depth: 1,
-          framebuffer: null,
-        });
-
-        m.render();
-        m.hooks.afterRender.call();
-      }
-      if (layer.getLayerConfig().enableMultiPassRenderer) {
-        // multiPassRender 不是同步渲染完成的
-        await layer.renderMultiPass();
-      } else {
-        layer.render();
-      }
-      layer.hooks.afterRender.call();
+      await this.layerService.renderLayer(layer);
     })    
   }
-
 
   getRenderLayers() {
     const tileList = this._tiles.filter((t)=>t.visible && t.isLoaded);

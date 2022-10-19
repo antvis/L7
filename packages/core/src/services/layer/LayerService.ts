@@ -143,27 +143,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      await layer.hooks.beforeRenderData.promise();
-      layer.hooks.beforeRender.call();
-      if (layer.masks.filter((m)=>m.inited).length > 0) {
-        // 清除上一次的模版缓存
-        this.renderService.clear({
-          stencil: 0,
-          depth: 1,
-          framebuffer: null,
-        });
-       
-      }
-      await this.renderMask(layer.masks)
-
-      if (layer.getLayerConfig().enableMultiPassRenderer) {
-        // multiPassRender 不是同步渲染完成的
-        await layer.renderMultiPass();
-      } else {
-        layer.render();
-      
-      }
-      layer.hooks.afterRender.call();
+      await this.renderLayer(layer)
     }
     this.alreadyInRendering = false;
   }
@@ -176,6 +156,33 @@ export default class LayerService implements ILayerService {
        m.hooks.afterRender.call();
       
      }));
+  }
+
+  async renderLayer(layer: ILayer){
+    await layer.hooks.beforeRenderData.promise();
+    layer.hooks.beforeRender.call();
+    if (layer.masks.length > 0) {
+
+      const m = layer.masks[0]
+      await m.hooks.beforeRenderData.promise();
+      m.hooks.beforeRender.call();
+
+      this.renderService.clear({
+        stencil: 0,
+        depth: 1,
+        framebuffer: null,
+      });
+
+      m.render();
+      m.hooks.afterRender.call();
+    }
+    if (layer.getLayerConfig().enableMultiPassRenderer) {
+      // multiPassRender 不是同步渲染完成的
+      await layer.renderMultiPass();
+    } else {
+      layer.render();
+    }
+    layer.hooks.afterRender.call();
   }
 
   public updateLayerRenderList() {
