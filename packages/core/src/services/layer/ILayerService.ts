@@ -343,7 +343,7 @@ export interface ILayer {
   isVector?: boolean;
   isTileLayer?: boolean;
   triangulation?: Triangulation | undefined;
-  handleData?(data: IParseDataItem[]): IParseDataItem[];
+  processData(data: IParseDataItem[]): IParseDataItem[];
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat

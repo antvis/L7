@@ -215,7 +215,7 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset?.destroy();
   }
 
-  private async handleData() {
+  private async processData() {
     return await new Promise((resolve, reject) => {
       try {
         this.excuteParser();
@@ -251,7 +251,7 @@ export default class Source extends EventEmitter implements ISource {
 
   private async init() {
     this.inited = false;
-    await this.handleData();
+    await this.processData();
     this.inited = true;
   }
 

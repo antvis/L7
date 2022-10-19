@@ -119,9 +119,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
       });
     }
     // Tip: layer 对数据做处理
-    if (layer.handleData) {
-      filterData = layer.handleData(filterData);
-    }
+    // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
+    // 在各个 layer 中继承
+    filterData = layer.processData(filterData);
 
     const encodeData = this.mapping(
       layer,

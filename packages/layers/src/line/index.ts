@@ -66,7 +66,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     return shape || 'line';
   }
 
-  public handleData(filterData: IParseDataItem[]) {
+  public processData(filterData: IParseDataItem[]) {
     // simple line 在接受 multiPolygon 的数据进行绘制的时候需要对数据进行拆解
     if (this.getModelType() !== 'simple') return filterData;
     const dataArray: IParseDataItem[] = [];
