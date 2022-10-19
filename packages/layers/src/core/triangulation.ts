@@ -212,7 +212,17 @@ function pushDis(point: number[], n?: number) {
   return point;
 }
 
-function getSimpleLineVertices(points: number[][]) {
+function getSimpleLineVertices(coordinates: number[][]) {
+  let points = coordinates;
+  if (
+    Array.isArray(points) &&
+    Array.isArray(points[0]) &&
+    Array.isArray(points[0][0])
+  ) {
+    // @ts-ignore
+    points = coordinates.flat();
+  }
+
   let distance = 0;
   if (points.length < 2) {
     return {

@@ -21,7 +21,7 @@ import {
 import { IRendererService } from '../renderer/IRendererService';
 import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
-import { ISource, ISourceCFG, ITransform } from '../source/ISourceService';
+import { ISource, ISourceCFG, ITransform, IParseDataItem } from '../source/ISourceService';
 import {
   IAnimateOption,
   IEncodeFeature,
@@ -343,7 +343,7 @@ export interface ILayer {
   isVector?: boolean;
   isTileLayer?: boolean;
   triangulation?: Triangulation | undefined;
-
+  processData(data: IParseDataItem[]): IParseDataItem[];
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
