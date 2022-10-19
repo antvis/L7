@@ -43,6 +43,7 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   LayerEventType,
+  IParseDataItem,
   lazyInject,
   LegendItems,
   StyleAttributeField,
@@ -1396,6 +1397,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setEarthTime(time: number) {
     console.warn('empty fn');
+  }
+
+  // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
+  // 在各个 layer 中继承
+  public processData(filterData: IParseDataItem[]) {
+    return filterData;
   }
 
   protected getModelType(): unknown {
