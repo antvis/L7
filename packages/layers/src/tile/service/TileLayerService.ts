@@ -1,21 +1,24 @@
-import { ILayer, ILngLat, IRendererService, ITexture2D } from '@antv/l7-core';
+import { ILayer, ILayerService, ILngLat, IRendererService, ITexture2D } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import 'reflect-metadata';
 import Tile from '../tileFactory/Tile';
 
 interface TileLayerServiceOptions {
   rendererService: IRendererService;
+  layerService: ILayerService
   parent:ILayer;
 }
 export class TileLayerService {
   private rendererService: IRendererService;
+  private   layerService: ILayerService;
   private parent: ILayer;
 
   public colorTexture: ITexture2D; // 颜色纹理，被栅格瓦片共用
 
   private _tiles: Tile[] = [];
-  constructor({ rendererService, parent }: TileLayerServiceOptions) {
+  constructor({ rendererService,layerService, parent }: TileLayerServiceOptions) {
     this.rendererService = rendererService;
+    this.layerService =layerService;
     this.parent = parent;
   }
   get tiles():Tile[] {
@@ -82,12 +85,7 @@ export class TileLayerService {
             depth: 1,
             framebuffer: null,
           });
-          layer.masks.map(async (m: ILayer) => {
-            await m.hooks.beforeRenderData.promise();
-            m.hooks.beforeRender.call();
-            m.render();
-            m.hooks.afterRender.call();
-          });
+          this.layerService.renderMask(layer.masks)
         }
         if (layer.getLayerConfig().enableMultiPassRenderer) {
           // multiPassRender 不是同步渲染完成的

@@ -22,7 +22,7 @@ export class Base {
   private tileLayerCache: Map<string, ILayer[]> = new Map();
 
   private async initTileLayers(layers: ILayer[], tile: SourceTile) {
-    layers.map(async (layer) => {
+   return Promise.all(layers.map(async (layer) => {
       const container = createLayerContainer(
         this.parent.sceneContainer as Container,
       );
@@ -31,7 +31,7 @@ export class Base {
       this.addChild(layer);
       tile.layerLoad();
       this.render()
-    });
+    }));
   }
 
   public render() {

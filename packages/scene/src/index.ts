@@ -213,7 +213,7 @@ class Scene
       const layerContainer = createLayerContainer(this.container);
       mask.setContainer(layerContainer, this.container);
       parent.addMaskLayer(mask);
-      this.sceneService.addLayer(mask);
+      this.sceneService.addMask(mask);
     } else {
       console.warn('parent layer not find!');
     }
