@@ -23,7 +23,7 @@ export default class TileModel extends BaseModel {
 
   public initModels() {
     const source = this.layer.getSource();
-    this.initGlobalResource();
+    this.initTileResource();
     const { usage } = this.layer.getLayerConfig();
     if (source?.data.isTile && !this.layer.tileLayer) {
       const tileLayer = this.getTileLayer(usage);
@@ -41,7 +41,7 @@ export default class TileModel extends BaseModel {
   }
 
   // 初始化全局资源 - 所有瓦片共用的资源
-  initGlobalResource() {
+  initTileResource() {
     const { rampColors } = this.layer.getLayerConfig() as ITileLayerStyleOptions;
     if(rampColors) {
       this.colorTexture = this.createColorTexture(rampColors, this.rendererService);
