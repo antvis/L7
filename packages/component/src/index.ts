@@ -11,7 +11,7 @@ export * from './control/fullscreen';
 export * from './control/exportImage';
 export * from './control/geoLocate';
 export * from './control/mapTheme';
-export * from './control/layerControl';
+export * from './control/layerSwitch';
 export * from './control/mouseLocation';
 export * from './control/zoom';
 export * from './control/scale';

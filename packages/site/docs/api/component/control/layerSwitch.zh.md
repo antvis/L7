@@ -1,5 +1,5 @@
 ---
-title: LayerControl 图层显隐
+title: LayerSwitch 图层显隐
 order: 8
 ---
 
@@ -13,10 +13,10 @@ order: 8
 
 ## 使用
 
-[示例](/zh/examples/component/control#layercontrol)
+[示例](/zh/examples/component/control#layerSwitch)
 
 ```ts
-import { Scene, LayerControl } from '@antv/l7';
+import { Scene, LayerSwitch } from '@antv/l7';
 
 const scene = new Scene({
   // ...
@@ -28,18 +28,18 @@ scene.on('loaded', () => {
   });
   scene.addLayer(layer);
 
-  const layerControl = new LayerControl({
+  const layerSwitch = new LayerSwitch({
     layers: [layer],
   });
-  scene.addControl(layerControl);
+  scene.addControl(layerSwitch);
 });
 ```
 
 ## 配置
 
-| 名称   | 说明                                                          | 类型            |
-| ------ | ------------------------------------------------------------- | --------------- |
-| layers | 需要被控制的 `layer` 数组，不传则默认读取当前 L7 中所有的图层 | `Array<ILayer>` |
+| 名称   | 说明                                                                                       | 类型                   |
+| ------ | ------------------------------------------------------------------------------------------ | ---------------------- |
+| layers | 需要被控制的 `layer` 数组，支持传入图层示例或者图层 id，不传则默认读取当前 L7 中所有的图层 | `Array<ILayer|string>` |
 
 `markdown:docs/common/control/popper-api.md`
 
