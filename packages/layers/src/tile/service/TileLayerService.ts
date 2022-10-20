@@ -1,4 +1,4 @@
-import { ILayer, ILayerService, ILngLat, IRendererService, ITexture2D } from '@antv/l7-core';
+import { ILayer, ILayerService, ILngLat, IRendererService } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import 'reflect-metadata';
 import Tile from '../tileFactory/Tile';
@@ -9,11 +9,14 @@ interface TileLayerServiceOptions {
   parent:ILayer;
 }
 export class TileLayerService {
+  /**
+   * tileResource 用于存储瓦片的全局资源
+   */
+  public tileResource = new Map();
   private rendererService: IRendererService;
-  private   layerService: ILayerService;
+  private layerService: ILayerService;
   private parent: ILayer;
 
-  public colorTexture: ITexture2D; // 颜色纹理，被栅格瓦片共用
 
   private _tiles: Tile[] = [];
   constructor({ rendererService,layerService, parent }: TileLayerServiceOptions) {
@@ -75,5 +78,6 @@ export class TileLayerService {
 
   destroy() {
     this._tiles.forEach((t) => t.destroy());
+    this.tileResource.clear();
   }
 }

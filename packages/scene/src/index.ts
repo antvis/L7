@@ -197,7 +197,7 @@ class Scene
       maskColor = '#000',
       maskOpacity = 0,
     }  = layer.getLayerConfig();
-    if(!mask) return undefined;
+    if(!mask || !maskfence) return undefined;
 
     const maskInstance = new MaskLayer()
     .source(maskfence)

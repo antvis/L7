@@ -2,7 +2,6 @@ import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IPointLayerStyleOptions } from '../core/interface';
 import PointModels, { PointType } from './models/index';
-import { isVectorTile } from '../tile/utils';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
@@ -67,7 +66,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       text: {
         blend: 'normal',
       },
-      vectorPoint: {},
       tile: {},
       tileText: {},
       earthFill: {},
@@ -77,10 +75,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
 
   protected getModelType(): PointType {
-    const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType)) {
-      return 'vectorPoint';
-    }
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
     const { shape2d, shape3d } = this.getLayerConfig();
