@@ -1,4 +1,4 @@
-import { Scene, GaodeMapV2, LayerControl, MouseLocation } from '@antv/l7';
+import { Scene, GaodeMapV2, MouseLocation } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

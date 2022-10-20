@@ -1,4 +1,4 @@
-import { Scene, GaodeMapV2, LayerControl, MapTheme } from '@antv/l7';
+import { Scene, GaodeMapV2, MapTheme } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
@@ -10,6 +10,6 @@ const scene = new Scene({
   }),
 });
 scene.on('loaded', () => {
-  const layerControl = new MapTheme();
-  scene.addControl(layerControl);
+  const mapTheme = new MapTheme();
+  scene.addControl(mapTheme);
 });
