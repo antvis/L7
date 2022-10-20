@@ -1,5 +1,4 @@
 import { ILayer } from '@antv/l7-core';
-import { BaseLayer } from '@antv/l7-layers';
 import { createL7Icon } from '../utils/icon';
 import SelectControl, {
   ControlOptionItem,
@@ -19,8 +18,8 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
     if (Array.isArray(layers) && layers.length) {
       const layerInstances: ILayer[] = [];
       layers.forEach((layer) => {
-        if (layer instanceof BaseLayer) {
-          layerInstances.push(layer);
+        if (layer instanceof Object) {
+          layerInstances.push(layer as ILayer);
         }
         if (typeof layer === 'string') {
           const targetLayer =
