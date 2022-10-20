@@ -64,6 +64,7 @@ export type IJsonData = IJsonItem[];
 
 export interface ISource {
   inited: boolean;
+  isTile: boolean
   data: IParserData;
   center: [number, number];
   parser: IParserCfg;

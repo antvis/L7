@@ -9,8 +9,13 @@ export default class VectorTile extends Tile {
     const vectorLayer = getTileLayer(this.parent.type);
     const maskLayer = getMaskLayer(this.parent.type);
     layerOptions.mask = !!maskLayer;
+  
     
     const sourceOptions = this.getSourceOption();
+    if(!sourceOptions){
+      this.isLoaded = true;
+      return
+    }
     const layer = new vectorLayer({...layerOptions}).source(
       sourceOptions.data,
       sourceOptions.options,
@@ -43,13 +48,21 @@ export default class VectorTile extends Tile {
     await this.addLayer(layer);
     this.isLoaded = true;
   }
+  // Todo 校验数据有效性
+  protected beforeInit() {
+
+  }
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
     const { sourceLayer, featureId } = this.parent.getLayerConfig<{
       featureId: string;
     }>();
-    const features = this.sourceTile.data.layers[sourceLayer as string]
-      .features;
+  
+    const vectorLayer = this.sourceTile.data.layers[sourceLayer as string]
+    if(!vectorLayer) {
+      return false
+    }
+    const features = vectorLayer.features;
     return {
       data: {
         type: 'FeatureCollection',

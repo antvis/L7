@@ -1,7 +1,7 @@
 import { IModelUniform, ITexture2D, IRendererService } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { TileLayer } from '../tileLayer/TileLayer';
-import { MapTileLayer } from '../tileLayer/MapTileLayer';
+import TileLayer from '../tileLayer/BaseLayer';
+// import { MapTileLayer } from '../tileLayer/MapTileLayer';
 import { IColorRamp, generateColorRamp } from '@antv/l7-utils';
 interface ITileLayerStyleOptions {
   rampColors?: IColorRamp;
@@ -12,29 +12,16 @@ export default class TileModel extends BaseModel {
     return {};
   }
 
-  private getTileLayer(usage?: string) {
-    switch(usage) {
-      case 'basemap':
-        return MapTileLayer;
-      default:
-        return TileLayer;
-    }
+  private getTileLayer() {
+    return TileLayer;
   }
 
   public initModels() {
     const source = this.layer.getSource();
     this.initTileResource();
-    const { usage } = this.layer.getLayerConfig();
     if (source?.data.isTile && !this.layer.tileLayer) {
-      const tileLayer = this.getTileLayer(usage);
-      this.layer.tileLayer = new tileLayer({
-        parent: this.layer,
-        rendererService: this.rendererService,
-        mapService: this.mapService,
-        layerService: this.layerService,
-        pickingService: this.pickingService,
-        transforms: source.transforms,
-      });
+      const tileLayer = this.getTileLayer();
+      this.layer.tileLayer = new tileLayer(this.layer);
     }
 
     return this.buildModels();

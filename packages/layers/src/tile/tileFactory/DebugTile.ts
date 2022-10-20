@@ -12,7 +12,6 @@ export default class DebugTile extends Tile {
       .size(1)
       .shape('line')
       .color('red');
-      console.log(lineLayer)
       const pointLayer = new PointLayer()
       .source([pointData],{
         parser: {

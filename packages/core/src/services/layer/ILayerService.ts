@@ -229,22 +229,13 @@ export interface ITilePickService {
 }
 
 
-export interface ITileLayerManager extends IBaseTileLayerManager{
-  tilePickService: ITilePickService;
-  pickLayers(target: IInteractionTarget): boolean;
-  destroy(): void;
-}
+
 
 export interface IBaseTileLayer {
-  sourceLayer: string;
-  parent: ILayer;
-  tileLayerManager: ITileLayerManager;
   tilesetManager: TilesetManager | undefined;
   pickRender(target: IInteractionTarget):void;
   selectFeature(pickedColors: Uint8Array | undefined):void;
   highlightPickedFeature(pickedColors: Uint8Array | undefined):void;
-  children: ILayer[];
-  scaleField: any;
   render(isPicking?: boolean): void;
   destroy(): void;
 }
@@ -368,8 +359,6 @@ export interface ILayer {
   getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
   getLayerAttributeConfig():Partial<ILayerAttributesOption>
-  setBottomColor(color: string): void;
-  getBottomColor(): string;
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
