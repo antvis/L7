@@ -11,7 +11,12 @@ redirect_from:
 
 场景对象 `scene` 是包含地图、地图控件、组件、加载资源的全局对象，通过 `scene` 场景对象，我们可以获取到操作地图需要的所有内容。
 
-<img width="100%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*3wMCR7vIlCwAAAAAAAAAAAAAARQnAQ'>
+<div>
+  <div style="width:40%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*3wMCR7vIlCwAAAAAAAAAAAAAARQnAQ'>
+  </div>
+</div>
+
 
 ## options
 

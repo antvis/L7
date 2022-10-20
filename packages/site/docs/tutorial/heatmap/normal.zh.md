@@ -44,6 +44,21 @@ heatmap 需要设置 color 方法，样式通过 style 设置
 
   ⚠️ color, position 的长度要相同
 
+#### rampColors
+
+🌟 数据栅格瓦片
+
+配置瓦片值域映射颜色的色带。
+
+```javascript
+layer.style({
+  rampColors: {
+    colors: ['#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C'],
+    positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+  },
+});
+```
+
 ### demo
 
 ```javascript

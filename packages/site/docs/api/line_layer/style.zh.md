@@ -96,7 +96,7 @@ layer.style({
 
 ### arrow
 
-- line
+- [line](/zh/docs/api/line_layer/shape#shapeline)
 
 线图层支持配置箭头，箭头有额外的样式。
 

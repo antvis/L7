@@ -221,14 +221,6 @@ module.exports = {
         order: 6,
       },
       {
-        slug: 'api/other',
-        title: {
-          zh: '其他图层',
-          en: 'Other Layers',
-        },
-        order: 6,
-      },
-      {
         slug: 'api/imageLayer',
         title: {
           zh: '图片图层',
@@ -245,12 +237,28 @@ module.exports = {
         order: 8,
       },
       {
+        slug: 'api/tile',
+        title: {
+          zh: '瓦片图层',
+          en: 'tile',
+        },
+        order: 9,
+      },
+      {
+        slug: 'api/other',
+        title: {
+          zh: '其他图层',
+          en: 'Other Layers',
+        },
+        order: 10,
+      },
+      {
         slug: 'api/component',
         title: {
           zh: '组件',
           en: 'Component',
         },
-        order: 8,
+        order: 11,
       },
       {
         slug: 'api/component/control',
@@ -275,14 +283,6 @@ module.exports = {
           en: 'Marker',
         },
         order: 3,
-      },
-      {
-        slug: 'api/tile',
-        title: {
-          zh: '瓦片图层',
-          en: 'tile',
-        },
-        order: 8,
       },
       {
         slug: 'api/experiment/earth',
@@ -314,7 +314,7 @@ module.exports = {
           zh: '实验特性',
           en: 'experiment',
         },
-        order: 9,
+        order: 12,
       },
     ],
     examples: [
