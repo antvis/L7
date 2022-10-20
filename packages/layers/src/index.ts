@@ -16,6 +16,8 @@ import EarthLayer from './earth';
 import MaskLayer from './mask';
 import WindLayer from './wind';
 
+import TileDebugLayer from './tile/tileFactory/layers/TileDebugLayer';
+
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
@@ -151,6 +153,7 @@ export {
   EarthLayer,
   WindLayer,
   MaskLayer,
+  TileDebugLayer,
 };
 
 export * from './core/interface';
