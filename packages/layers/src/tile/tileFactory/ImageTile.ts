@@ -1,5 +1,5 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
-import { ImageLayer} from '@antv/l7-layers'
+import ImageLayer from '../../image'
 import Tile from './Tile';
 export default class ImageTile extends Tile {
   public async initTileLayer(): Promise<void> {

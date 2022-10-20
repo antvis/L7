@@ -1,5 +1,9 @@
 
-import { PointLayer, PolygonLayer, LineLayer, MaskLayer} from '@antv/l7-layers'
+import PointLayer from '../../point/index';
+import LineLayer from '../../line';
+import PolygonLayer from '../../polygon';
+import MaskLayer from '../../mask';
+
 export function getTileLayer(type: string) {
     if(type === 'PolygonLayer') {
         return PolygonLayer;
