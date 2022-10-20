@@ -35,5 +35,4 @@ interface IAnimateOption {
 }
 ```
 
-
 `markdown:docs/api/line_layer/features/animate.zh.md`

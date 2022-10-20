@@ -12,6 +12,7 @@ source 地理数据处理模块，主要包含数据解析（parser)，和数据
 ```js
 const source = new Source(data, option);
 ```
+
 - data
 - option
   - cluster **boolean** 是否聚合
@@ -34,7 +35,15 @@ const source = new Source(data, option);
 - 瓦片服务 支持 mvt、rasterTile、geojsonvt
 
 ```js
-type IParserType = 'csv'|'json'|'geojson'|'image'|'raster'|'rasterTile'|'mvt'|'geojsonvt';
+type IParserType =
+  | 'csv'
+  | 'json'
+  | 'geojson'
+  | 'image'
+  | 'raster'
+  | 'rasterTile'
+  | 'mvt'
+  | 'geojsonvt';
 interface IParser {
   type: IParserType;
   x?: string;
@@ -46,6 +55,7 @@ interface IParser {
   [key: string]: any;
 }
 ```
+
 #### geojson
 
 [geojson](https://www.yuque.com/antv/l7/dm2zll) 数据为默认数据格式，可以 不设置 parser 参数
@@ -56,7 +66,7 @@ layer.source(data);
 
 ### transforms
 
-tranforms 处理的是的标准化之后的数据，进行数据转换，数据统计，网格布局，数据聚合等数据操作，处理完之后返回的也是标准数据。    
+tranforms 处理的是的标准化之后的数据，进行数据转换，数据统计，网格布局，数据聚合等数据操作，处理完之后返回的也是标准数据。  
 标准化之后的数据结构包括 coordinates 地理坐标字段，以及其他属性字段。
 
 ```json
@@ -175,7 +185,6 @@ layer
 
 [聚合图使用案例](/zh/examples/point/cluster#cluster)
 
-
 ## 方法
 
 ### getClustersLeaves(cluster_id)
@@ -271,4 +280,3 @@ layer.setData(data);
 #### image
 
 [Image 数据格式解析](./image)
-
