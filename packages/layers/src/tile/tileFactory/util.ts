@@ -2,7 +2,7 @@
 import PointLayer from '../../point/index';
 import LineLayer from '../../line';
 import PolygonLayer from '../../polygon';
-import MaskLayer from '../../mask';
+import MaskLayer from './layers/vectorLayer';
 
 export function getTileLayer(type: string) {
     if(type === 'PolygonLayer') {
