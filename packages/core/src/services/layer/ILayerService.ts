@@ -229,10 +229,14 @@ export interface ITilePickService {
 }
 
 
-
+export interface ITileLayerService {
+  tileResource: Map<string, any>;
+  hasTile(tileKey: string): boolean;
+}
 
 export interface IBaseTileLayer {
   tilesetManager: TilesetManager | undefined;
+  tileLayerService: ITileLayerService;
   pickRender(target: IInteractionTarget):void;
   selectFeature(pickedColors: Uint8Array | undefined):void;
   highlightPickedFeature(pickedColors: Uint8Array | undefined):void;
