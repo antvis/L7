@@ -16,14 +16,12 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   };
   public async buildModels() {
     const shape = this.getModelType();
-    console.log(shape,PolygonModels);
     this.layerModel = new PolygonModels[shape](this);
     await this.initLayerModels();
   }
 
   protected getModelType(): PolygonModelType {
     const parserType = this.layerSource.getParserType();
-  
     if (isVectorTile(parserType)) {
       return 'vectorpolygon';
     }

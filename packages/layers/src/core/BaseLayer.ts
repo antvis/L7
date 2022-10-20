@@ -1301,6 +1301,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     throw new Error('Method not implemented.');
   }
   public async rebuildModels() {
+    console.log('2222');
     await this.buildModels();
   }
 

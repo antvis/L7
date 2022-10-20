@@ -31,9 +31,10 @@ function mergeCustomizer(objValue: any, srcValue: any) {
     return srcValue;
   }
 }
-
+//
 export default class Source extends EventEmitter implements ISource {
   public type: string = 'source';
+  public isTile: boolean = false;
   public inited: boolean = false;
   public data: IParserData;
   public center: [number, number];
@@ -301,6 +302,7 @@ export default class Source extends EventEmitter implements ISource {
     if (!tilesetOptions) {
       return;
     }
+    this.isTile = true;
     if (this.tileset) {
       this.tileset.updateOptions(tilesetOptions);
       return this.tileset;

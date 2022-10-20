@@ -119,12 +119,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 在各个 layer 中继承
     filterData = layer.processData(filterData);
 
-    const encodeData = this.mapping(
-      layer,
-      attributes,
-      filterData,
-      undefined,
-    );
+    const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
     // 对外暴露事件
     layer.emit('dataUpdate', null);

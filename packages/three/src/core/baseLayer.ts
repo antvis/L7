@@ -234,5 +234,4 @@ export default class ThreeJSLayer
   public addAnimateMixer(mixer: AnimationMixer) {
     this.animateMixer.push(mixer);
   }
-
 }

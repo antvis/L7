@@ -1,8 +1,6 @@
 import {
     ILayer,
     IRendererService,
-    ScaleAttributeType,
-    IScaleValue
   } from '@antv/l7-core';
 
   import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
@@ -40,34 +38,6 @@ export function updateLayersConfig(layers: ILayer[], key: string, value: any) {
     });
   }
 
-export function setStyleAttributeField(
-  layer: ILayer,
-  parent: ILayer,
-  style: ScaleAttributeType,
-  value: IScaleValue | undefined | string | string[],
-) {
-  if (Array.isArray(value)) {
-    // @ts-ignore
-    layer[style](...value);
-    return;
-  }
-  if (typeof value === 'string') {
-    layer[style](value);
-    return;
-  }
-  const defaultValue = getDefaultStyleAttributeField(layer, parent.type, style);
-  if (!value) {
-    layer[style](defaultValue);
-    return layer;
-  }
-  const params = parseScaleValue(value, style);
-  if (params.length === 0) {
-    layer[style](defaultValue);
-  } else {
-    // @ts-ignore
-    layer[style](...params);
-  }
-}
 
 export function getDefaultStyleAttributeField(layer: ILayer, type: string, style: string) {
   switch (style) {
@@ -104,31 +74,3 @@ export function getLayerShape(layerType: string, layer: ILayer) {
   }
 }
 
-export function parseScaleValue(value: IScaleValue | string, type: string) {
-  if (type === 'shape') {
-    if (typeof value === 'string') {
-      return [value];
-    } else if (value?.field) {
-      return [value?.field];
-    } else {
-      return [];
-    }
-  }
-  const { field, values, callback } = value as IScaleValue;
-  if (field && values && Array.isArray(values)) {
-    return [field, values];
-  } else if (field && callback) {
-    return [field, callback];
-  } else if (field) {
-    return [field];
-  }
-  return [];
-}
-
-export function setScale(layer: ILayer, parent: ILayer) {
-  const scaleOptions = parent.tileLayer.scaleField;
-  const scaleKeys = Object.keys(scaleOptions);
-  scaleKeys.map((key) => {
-    layer.scale(key, scaleOptions[key]);
-  });
-}

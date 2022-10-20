@@ -1,32 +1,75 @@
-import { ILayer, IMapService, ILayerService, ISource,IInteractionTarget } from '@antv/l7-core';
+import {
+  ILayer,
+  IMapService,
+  ILayerService,
+  IRendererService,
+  TYPES,
+  ISource,
+  IPickingService,
+  IInteractionTarget
+} from '@antv/l7-core';
 import { SourceTile, TilesetManager } from '@antv/l7-utils';
-import { debounce } from 'lodash';
 import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
+import { debounce } from 'lodash';
 import { getTileFactory } from '../tileFactory'
 
-export class Base {
-  public tileLayerManager: any;
+export default class BaseTileLayer {
+  private parent: ILayer;
   public tileLayerService: TileLayerService;
-  public get children() {
-    return this.tileLayerManager.children;
-  }
-  public sourceLayer: string;
-  public parent: ILayer;
-  public initedTileset: boolean = false; // 瓦片是否加载成功
-
-  public tilesetManager: TilesetManager | undefined; // 瓦片数据管理器
-  public scaleField: any;
-
   protected mapService: IMapService;
   protected layerService: ILayerService;
-  protected tilePickService: TilePickService
+  protected rendererService: IRendererService;
+  protected pickingService:IPickingService;
+  protected tilePickService: TilePickService;
+  public tilesetManager: TilesetManager; // 瓦片数据管理器
+  public initedTileset: boolean = false; // 瓦片是否加载成功
 
   protected lastViewStates: {
     zoom: number;
     latLonBounds: [number, number, number, number];
   };
 
+  constructor(parent: ILayer) {
+    this.parent = parent;
+    const container = this.parent.getContainer();
+    this.rendererService = container.get<IRendererService>(
+      TYPES.IRendererService,
+    );
+    this.layerService = container.get<ILayerService>(TYPES.ILayerService);
+    this.mapService = container.get<IMapService>(TYPES.IMapService);
+    this.pickingService = container.get<IPickingService>(
+        TYPES.IPickingService,
+      );
+
+      // 初始化瓦片管理服务
+      this.tileLayerService = new TileLayerService({
+        rendererService: this.rendererService,
+        layerService:this.layerService,
+        parent
+      })
+      // 初始化拾取服务
+      this.tilePickService = new TilePickService({
+        tileLayerService:  this.tileLayerService,
+        layerService:this.layerService,
+      })
+
+      this.initTileSetManager();
+  
+  }
+
+  protected initTileSetManager() {
+    const source: ISource = this.parent.getSource();
+    this.tilesetManager = source.tileset as TilesetManager;
+
+    if (!this.initedTileset) {
+      this.bindTilesetEvent();
+      this.initedTileset = true;
+    }
+
+    const { latLonBounds, zoom } = this.getCurrentView();
+    this.tilesetManager?.update(zoom, latLonBounds);
+  }
   protected mapchange() {
     const { latLonBounds, zoom } = this.getCurrentView();
 
@@ -52,7 +95,6 @@ export class Base {
 
     this.tilesetManager?.throttleUpdate(zoom, latLonBounds);
   }
-
   protected getCurrentView() {
     const bounds = this.mapService.getBounds();
     const latLonBounds: [number, number, number, number] = [
@@ -66,23 +108,7 @@ export class Base {
     return { latLonBounds, zoom };
   }
 
-  protected initTileSetManager() {
-    const source: ISource = this.parent.getSource();
-    this.tilesetManager = source.tileset as TilesetManager;
-
-    if (!this.initedTileset) {
-      this.bindTilesetEvent();
-      this.initedTileset = true;
-    }
-
-    const { latLonBounds, zoom } = this.getCurrentView();
-    this.tilesetManager?.update(zoom, latLonBounds);
-  }
-
   private bindTilesetEvent() {
-    if (!this.tilesetManager) {
-      return;
-    }
     // 瓦片数据加载成功
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.tilesetManager.on('tile-loaded', (tile: SourceTile) => {
@@ -111,7 +137,7 @@ export class Base {
     this.mapService.on('zoomend', () => this.mapchange());
     this.mapService.on('moveend', () => this.viewchange());
   }
-
+ 
   public render() {
     this.tileLayerService.render();
   }
@@ -150,6 +176,10 @@ export class Base {
           const tileInstance = getTileFactory(this.parent);
           const tileLayer = new tileInstance(tile, this.parent);
           await tileLayer.initTileLayer();
+          if(tileLayer.getLayers().length!==0) {
+            this.tileLayerService.addTile(tileLayer);
+            this.layerService.reRender()
+          }
           this.tileLayerService.addTile(tileLayer);
           this.layerService.reRender()
         } else {
@@ -166,14 +196,15 @@ export class Base {
   }
 
   public isTileReady(tile: SourceTile) {
-    if (tile.data?.layers && this.sourceLayer) {
-      // vector
-      const vectorTileLayer = tile.data.layers[this.sourceLayer];
-      const features = vectorTileLayer?.features;
-      if (!(Array.isArray(features) && features.length > 0)) {
-        return false;
-      }
-    }
+    
+    // if (tile.data?.layers && this.sourceLayer) {
+    //   // vector
+    //   const vectorTileLayer = tile.data.layers[this.sourceLayer];
+    //   const features = vectorTileLayer?.features;
+    //   if (!(Array.isArray(features) && features.length > 0)) {
+    //     return false;
+    //   }
+    // }
 
     return true;
   }

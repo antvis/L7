@@ -3,8 +3,8 @@ import {
   Scene,
   Source,
   PolygonLayer,
-  LineLayer,
-  TileDebugLayer,
+  // LineLayer,
+  // TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';

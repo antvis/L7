@@ -229,22 +229,13 @@ export interface ITilePickService {
 }
 
 
-export interface ITileLayerManager extends IBaseTileLayerManager{
-  tilePickService: ITilePickService;
-  pickLayers(target: IInteractionTarget): boolean;
-  destroy(): void;
-}
+
 
 export interface IBaseTileLayer {
-  sourceLayer: string;
-  parent: ILayer;
-  tileLayerManager: ITileLayerManager;
   tilesetManager: TilesetManager | undefined;
   pickRender(target: IInteractionTarget):void;
   selectFeature(pickedColors: Uint8Array | undefined):void;
   highlightPickedFeature(pickedColors: Uint8Array | undefined):void;
-  children: ILayer[];
-  scaleField: any;
   render(isPicking?: boolean): void;
   destroy(): void;
 }
