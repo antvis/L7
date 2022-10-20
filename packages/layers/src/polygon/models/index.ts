@@ -1,10 +1,10 @@
+import PolygonTileModel from '../../tile/models/tileModel';
 import LineModel from '../../line/models/line';
 import PointExtrudeModel from '../../point/models/extrude';
 import PointFillModel from '../../point/models/fill';
 import IMageModel from '../../point/models/image';
 import NormalModel from '../../point/models/normal';
 import TextModel from '../../point/models/text';
-import PolygonTileModel from '../../tile/models/tileModel';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
 import Ocean from './ocean';
@@ -24,7 +24,6 @@ export type PolygonModelType =
   | 'ocean'
   | 'vectorpolygon'
   | 'tile';
-
 const PolygonModels: { [key in PolygonModelType]: any } = {
   fill: FillModel,
   line: LineModel,

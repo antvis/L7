@@ -59,31 +59,20 @@ export class TileLayerService {
   }
 
   render() {
-    this._tiles.filter((t)=>t.visible && t.isLoaded)
-      .map(async (tile: Tile) => {
-      const layers = tile.getLayers();
-     await Promise.all(layers.map(async (layer: ILayer) => {
-        await layer.hooks.beforeRenderData.promise();
-        layer.hooks.beforeRender.call();
-        if (layer.masks.length > 0) {
-          // 清除上一次的模版缓存
-          this.rendererService.clear({
-            stencil: 0,
-            depth: 1,
-            framebuffer: null,
-          });
-          await this.layerService.renderMask(layer.masks)
-        }
-        if (layer.getLayerConfig().enableMultiPassRenderer) {
-          // multiPassRender 不是同步渲染完成的
-          await layer.renderMultiPass();
-        } else {
-          layer.render();
-        }
-        layer.hooks.afterRender.call();
-      }));
-    });
+    const layers = this.getRenderLayers();
+    layers.map(async layer => {
+      await this.layerService.renderLayer(layer);
+    })    
   }
+
+  getRenderLayers() {
+    const tileList = this._tiles.filter((t)=>t.visible && t.isLoaded);
+    const layers: ILayer[] = [];
+    tileList.map(tile => layers.push(...tile.getLayers()))
+    return layers;
+  }
+
+
   destroy() {
     this._tiles.forEach((t) => t.destroy());
   }

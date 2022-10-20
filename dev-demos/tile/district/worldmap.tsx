@@ -76,22 +76,22 @@ export default () => {
           }
         });
 
-      const line = new LineLayer({
-        sourceLayer: 'WLD_L',
-        zIndex: 2,
-      })
-        .source(source)
-        .shape('line')
-        .size(0.6)
-        .color('type', (t) => {
-          if (t === '0') {
-            return 'red';
-          }
-          if (t === '2') {
-            return '#09f';
-          }
-          return '#fc9272';
-        });
+      // const line = new LineLayer({
+      //   sourceLayer: 'WLD_L',
+      //   zIndex: 2,
+      // })
+      //   .source(source)
+      //   .shape('line')
+      //   .size(0.6)
+      //   .color('type', (t) => {
+      //     if (t === '0') {
+      //       return 'red';
+      //     }
+      //     if (t === '2') {
+      //       return '#09f';
+      //     }
+      //     return '#fc9272';
+      //   });
 
       water_surface.on('click', (e) => {
         console.log(e);
@@ -101,9 +101,9 @@ export default () => {
         console.log(water_surface);
       });
       scene.addLayer(water_surface);
-      scene.addLayer(line);
-      const debugerLayer = new TileDebugLayer();
-      scene.addLayer(debugerLayer);
+      // scene.addLayer(line);
+      // const debugerLayer = new TileDebugLayer();
+      // scene.addLayer(debugerLayer);
     });
   }, []);
   return (

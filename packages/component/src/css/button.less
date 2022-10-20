@@ -1,0 +1,70 @@
+@import 'variables.less';
+
+.l7-button-control {
+  min-width: @l7-btn-control-size;
+  height: @l7-btn-control-size;
+  background-color: @l7-control-bg-color;
+  border-width: 0;
+  border-radius: @l7-btn-control-border-radius;
+  outline: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 ((@l7-btn-control-size - @l7-btn-icon-size) / 2);
+  box-shadow: @l7-control-shadow;
+  line-height: 16px;
+
+  .l7-iconfont {
+    fill: @l7-control-font-color;
+    color: @l7-control-font-color;
+    width: @l7-btn-icon-size;
+    height: @l7-btn-icon-size;
+  }
+
+  &.l7-button-control--row {
+    padding: 0 16px 0 13px;
+
+    * + .l7-button-control__text {
+      margin-left: 8px;
+    }
+  }
+
+  &.l7-button-control--column {
+    height: @l7-btn-column-height;
+    flex-direction: column;
+    .l7-iconfont {
+      margin-top: 3px;
+    }
+    .l7-button-control__text {
+      margin-top: 3px;
+      font-size: 10px;
+      transform: scale(0.83333);
+    }
+  }
+
+  &:not(:disabled) {
+    &:hover {
+      background-color: @l7-btn-control-bg-hover-color;
+    }
+    &:active {
+      background-color: @l7-btn-control-bg-active-color;
+    }
+  }
+  &:disabled {
+    background-color: @l7-btn-control-disabled-bg-color;
+    color: @l7-btn-control-disabled-font-color;
+    cursor: not-allowed;
+    .l7-iconfont {
+      fill: @l7-btn-control-disabled-font-color;
+      color: @l7-btn-control-disabled-font-color;
+    }
+    &:hover {
+      background-color: @l7-btn-control-disabled-bg-color;
+    }
+    &:active {
+      background-color: @l7-btn-control-disabled-bg-color;
+    }
+  }
+}

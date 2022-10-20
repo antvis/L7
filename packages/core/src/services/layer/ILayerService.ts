@@ -288,6 +288,8 @@ export type LayerEventType =
   | 'mouseenter'
   | 'unmousemove'
   | 'mouseout'
+  | 'show'
+  | 'hide'
   | any;
 
 export interface ILayer {
@@ -630,6 +632,8 @@ export interface ILayerConfig {
   onClick(pickedFeature: IPickedFeature): void;
 }
 
+export type LayerServiceEvent = 'layerChange';
+
 /**
  * 提供 Layer 管理服务
  */
@@ -644,6 +648,9 @@ export interface ILayerService {
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
 
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
   // 清除画布
   clear(): void;
   add(layer: ILayer): void;
@@ -662,6 +669,8 @@ export interface ILayerService {
   updateLayerRenderList(): void;
   reRender(): void;
   renderMask(masks:ILayer[]):Promise<void[]>;
+  renderLayer(layer: ILayer): Promise<void>
+
   throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;

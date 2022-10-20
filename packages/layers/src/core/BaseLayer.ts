@@ -57,7 +57,7 @@ import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
-import { handleStyleDataMapping } from '../utils/dataMappingStyle';
+import { styleDataMapping } from '../utils/dataMappingStyle';
 import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
@@ -276,7 +276,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       const sceneId = this.container.get<string>(TYPES.SceneID);
 
       // @ts-ignore
-      handleStyleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
+      styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,
@@ -818,6 +818,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       visible: true,
     });
     this.reRender();
+    this.emit('show');
     return this;
   }
 
@@ -826,6 +827,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       visible: false,
     });
     this.reRender();
+    this.emit('hide');
     return this;
   }
   public setIndex(index: number): ILayer {

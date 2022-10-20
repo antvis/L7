@@ -1,7 +1,8 @@
 import { $window, rgb2arr } from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
+import { throttle } from 'lodash';
 import 'reflect-metadata';
-import { ILayer } from '../..';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
@@ -9,11 +10,11 @@ import { IRendererService } from '../renderer/IRendererService';
 import {
   IInteractionTarget,
 } from '../interaction/IInteractionService';
-import { ILayerService } from './ILayerService';
-import { throttle } from 'lodash';
+import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 
 @injectable()
-export default class LayerService implements ILayerService {
+export default class LayerService extends EventEmitter<LayerServiceEvent>
+  implements ILayerService {
   // pickedLayerId 参数用于指定当前存在被选中的 layer
   public pickedLayerId: number = -1;
   public clock = new Clock();
@@ -126,6 +127,8 @@ export default class LayerService implements ILayerService {
     }
     this.updateLayerRenderList();
     layer.destroy();
+    this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public removeAllLayers() {
@@ -143,27 +146,7 @@ export default class LayerService implements ILayerService {
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      await layer.hooks.beforeRenderData.promise();
-      layer.hooks.beforeRender.call();
-      if (layer.masks.filter((m)=>m.inited).length > 0) {
-        // 清除上一次的模版缓存
-        this.renderService.clear({
-          stencil: 0,
-          depth: 1,
-          framebuffer: null,
-        });
-       
-      }
-      await this.renderMask(layer.masks)
-
-      if (layer.getLayerConfig().enableMultiPassRenderer) {
-        // multiPassRender 不是同步渲染完成的
-        await layer.renderMultiPass();
-      } else {
-        layer.render();
-      
-      }
-      layer.hooks.afterRender.call();
+      await this.renderLayer(layer)
     }
     this.alreadyInRendering = false;
   }
@@ -176,6 +159,39 @@ export default class LayerService implements ILayerService {
        m.hooks.afterRender.call();
       
      }));
+  }
+
+  async renderLayer(layer: ILayer){
+    await layer.hooks.beforeRenderData.promise();
+    layer.hooks.beforeRender.call();
+    if (layer.masks.length > 0) {
+
+      const masks: ILayer[] = [];
+      await Promise.all(layer.masks.map(async mask => {
+        await mask.hooks.beforeRenderData.promise();
+        masks.push(mask);
+      }))
+     
+      this.renderService.clear({
+        stencil: 0,
+        depth: 1,
+        framebuffer: null,
+      });
+
+      masks.map(m =>{
+        m.hooks.beforeRender.call();
+        m.render();
+        m.hooks.afterRender.call();
+      })
+    }
+    if (layer.getLayerConfig().enableMultiPassRenderer) {
+      // multiPassRender 不是同步渲染完成的
+      await layer.renderMultiPass();
+    } else {
+      layer.render();
+    }
+
+    layer.hooks.afterRender.call();
   }
 
   public updateLayerRenderList() {
@@ -201,6 +217,7 @@ export default class LayerService implements ILayerService {
     this.layers = [];
     this.layerList = [];
     this.renderLayers();
+    this.emit('layerChange', this.layers);
   }
 
   public startAnimate() {
