@@ -1,5 +1,7 @@
 import Tile from './Tile';
-import { LineLayer,PointLayer } from '@antv/l7-layers';
+import PointLayer from '../../point';
+import LineLayer from '../../line';
+
 export default class DebugTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const sourceOptions = this.getSourceOption();
