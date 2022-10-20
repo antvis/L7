@@ -64,12 +64,8 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
 
   public setOptions(option: Partial<ILayerSwitchOption>) {
     const isLayerChange = this.checkUpdateOption(option, ['layers']);
-    if (isLayerChange) {
-      this.unbindLayerVisibleCallback();
-    }
     super.setOptions(option);
     if (isLayerChange) {
-      this.bindLayerVisibleCallback();
       this.selectValue = this.getLayerVisible();
       this.controlOption.options = this.getLayerOptions();
       this.popper.setContent(this.getPopperContent(this.controlOption.options));
@@ -85,28 +81,12 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
     }
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);
-    this.bindLayerVisibleCallback();
     return super.onAdd();
   }
-
-  public bindLayerVisibleCallback = () => {
-    this.layers.forEach((layer) => {
-      layer.on('show', this.onLayerVisibleChane);
-      layer.on('hide', this.onLayerVisibleChane);
-    });
-  };
-
-  public unbindLayerVisibleCallback = () => {
-    this.layers.forEach((layer) => {
-      layer.off('show', this.onLayerVisibleChane);
-      layer.off('hide', this.onLayerVisibleChane);
-    });
-  };
 
   public onRemove() {
     this.off('selectChange', this.onSelectChange);
     this.layerService.off('layerChange', this.onLayerChange);
-    this.unbindLayerVisibleCallback();
   }
 
   protected onLayerChange = () => {
