@@ -54,13 +54,11 @@ export default class RasterTile extends Tile {
   }
 
   private initColorTexture(){
-    
     const tileLayerService = this.parent.tileLayer.tileLayerService;
     const colorTexture = tileLayerService.tileResource.get(COLOR_TEXTURE);
     if(colorTexture) {
       this.colorTexture = colorTexture;
     } else {
-      console.log('create')
       const container =  this.parent.getContainer();
       const rendererService = container.get<IRendererService>(
         TYPES.IRendererService,

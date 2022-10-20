@@ -15,7 +15,6 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       raster: {},
       rasterRgb: {},
       raster3d: {},
-      rasterTile: {},
     };
     return defaultConfig[type];
   }
@@ -28,8 +27,6 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
         return 'raster';
       case 'rasterRgb':
         return 'rasterRgb';
-      case 'rasterTile':
-        return 'rasterTile';
       default:
         return 'raster';
     }
