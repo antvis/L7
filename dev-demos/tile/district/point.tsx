@@ -32,9 +32,9 @@ export default () => {
           },
         },
       )
-      // .shape('simple')
+      .shape('circle')
       .color('COLOR')
-      .size(2)
+      .size(10)
       .select(true);
 
     scene.on('loaded', () => {

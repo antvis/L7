@@ -2,7 +2,6 @@ import BaseLayer from '../core/BaseLayer';
 import { IParseDataItem } from '@antv/l7-core';
 import { ILineLayerStyleOptions } from '../core/interface';
 import LineModels, { LineModelType } from './models';
-import { isVectorTile } from '../tile/utils';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
@@ -43,7 +42,6 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       arc3d: { blend: 'additive' },
       arc: { blend: 'additive' },
       greatcircle: { blend: 'additive' },
-      vectorline: {},
       tileLine: {},
       halfLine: {},
       earthArc3d: {},
@@ -53,10 +51,6 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   protected getModelType(): LineModelType {
     if (this.layerType) {
       return this.layerType as LineModelType;
-    }
-    const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType)) {
-      return 'vectorline';
     }
 
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
