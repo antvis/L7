@@ -202,10 +202,34 @@ module.exports = {
       {
         slug: 'api/component',
         title: {
-          zh: '组件 Component',
+          zh: '组件',
           en: 'Component',
         },
         order: 8,
+      },
+      {
+        slug: 'api/component/control',
+        title: {
+          zh: '控件类型',
+          en: 'Control',
+        },
+        order: 1,
+      },
+      {
+        slug: 'api/component/popup',
+        title: {
+          zh: '气泡类型',
+          en: 'Popup',
+        },
+        order: 2,
+      },
+      {
+        slug: 'api/component/marker',
+        title: {
+          zh: 'Marker 类型',
+          en: 'Marker',
+        },
+        order: 3,
       },
       {
         slug: 'api/renderer',
@@ -387,6 +411,15 @@ module.exports = {
           en: 'other engine',
         },
         order: 8,
+      },
+      {
+        slug: 'component',
+        icon: 'map',
+        title: {
+          zh: '组件',
+          en: 'Component',
+        },
+        order: 9,
       },
       {
         slug: 'react',

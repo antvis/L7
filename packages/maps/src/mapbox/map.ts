@@ -144,7 +144,7 @@ export default class MapboxService extends BaseMapService<
       // @ts-ignore
       this.map = new window.mapboxgl.Map({
         container: this.$mapContainer,
-        style: this.getMapStyle(style),
+        style: this.getMapStyleValue(style),
         attributionControl,
         bearing: rotation,
         ...rest,
