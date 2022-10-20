@@ -7,7 +7,7 @@ import SelectControl, {
 } from './baseControl/selectControl';
 
 export interface ILayerSwitchOption extends ISelectControlOption {
-  layers: Array<ILayer | string>;
+  layers: Array<ILayer>;
 }
 
 export { LayerSwitch };
