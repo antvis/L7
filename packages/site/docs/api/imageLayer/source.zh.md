@@ -5,7 +5,8 @@ order: 2
 
 `markdown:docs/common/style.md`
 
- `imagelayer` 通过提供在线图片的 `url` 指定数据，通过 `extent` 指定图片在地图上的位置。
+`imagelayer` 通过提供在线图片的 `url` 指定数据，通过 `extent` 指定图片在地图上的位置。
+
 ```js
 layer.source(
   'https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg',
