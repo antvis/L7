@@ -2,7 +2,7 @@ import { ILayer, ISubLayerInitOptions } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { ITileFactoryOptions } from '../interface';
 import TileFactory from './base';
-import VectorLayer from './layers/VectorLayer';
+import VectorLayer from './layers/vectorLayer';
 
 export default class TestTile extends TileFactory {
   public parentLayer: ILayer;
