@@ -32,6 +32,7 @@ export default () => {
         },
       )
       .color('COLOR')
+      .active(true)
       // .select(true)
 
       .style({

@@ -27,6 +27,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.init.tapPromise('LayerModelPlugin', async () => {
       if (layer.getSource().isTile) {
+        layer.prepareBuildModel();
         layer.tileLayer = new TileLayer(layer);
         return;
       }
