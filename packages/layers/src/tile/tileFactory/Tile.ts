@@ -1,9 +1,4 @@
-import {
-  ILayer,
-  createLayerContainer,
-  ILngLat
-  
-} from '@antv/l7-core';
+import { ILayer, createLayerContainer, ILngLat } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
 export default abstract class Tile {
@@ -12,8 +7,8 @@ export default abstract class Tile {
   public z: number;
   public key: string;
   protected parent: ILayer;
-  protected sourceTile: SourceTile;
-  public visible: boolean  = true;
+  public sourceTile: SourceTile;
+  public visible: boolean = true;
   protected layers: ILayer[] = [];
   public isLoaded: boolean = false;
   constructor(sourceTile: SourceTile, parent: ILayer) {
@@ -23,19 +18,17 @@ export default abstract class Tile {
     this.y = sourceTile.y;
     this.z = sourceTile.z;
     this.key = `${this.x}_${this.y}_${this.z}`;
-
   }
   public getLayers() {
     return this.layers;
   }
 
-  public abstract initTileLayer():Promise<void>
+  public abstract initTileLayer(): Promise<void>;
 
   public lnglatInBounds(lnglat: ILngLat): boolean {
     const [minLng, minLat, maxLng, maxLat] = this.sourceTile.bounds;
-    const {lng ,lat} = lnglat;
-    return  lng>=minLng &&  lng <= maxLng && lat>= minLat &&  lng <= maxLat;
-
+    const { lng, lat } = lnglat;
+    return lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat;
   }
 
   protected async addMask(layer: ILayer, mask: ILayer) {
@@ -46,7 +39,7 @@ export default abstract class Tile {
     await mask.init();
     layer.addMaskLayer(mask);
   }
-    
+
   protected async addLayer(layer: ILayer) {
     const container = createLayerContainer(
       this.parent.sceneContainer as Container,
@@ -58,7 +51,7 @@ export default abstract class Tile {
 
   public updateVisible(value: boolean) {
     this.visible = value;
-    this.updateOptions('visible',value)
+    this.updateOptions('visible', value);
   }
 
   public updateOptions(key: string, value: any) {

@@ -54,6 +54,9 @@ export default class BaseTileLayer {
         layerService:this.layerService,
       })
 
+      // 重置
+      this.parent.setLayerPickService(this.tilePickService);
+
       this.initTileSetManager();
   
   }

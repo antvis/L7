@@ -39,10 +39,10 @@ export class TileLayerService {
   getTile(tileKey: string): Tile | undefined {
     return this._tiles.find((tile) => tile.key === tileKey);
   }
-  getVisibleTileBylngLat(langLat: ILngLat): Tile | undefined {
+  getVisibleTileBylngLat(lngLat: ILngLat): Tile | undefined {
     // 加载完成 & 可见 & 鼠标选中
     return this._tiles.find(
-      (tile) => tile.isLoaded && tile.visible && tile.lnglatInBounds(langLat),
+      (tile) => tile.isLoaded && tile.visible && tile.lnglatInBounds(lngLat),
     );
   }
 

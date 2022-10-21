@@ -16,6 +16,7 @@ export class TilePickService {
   pickRender(target: IInteractionTarget) {
     const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
     if (tile) {
+      // TODO 多图层拾取
       const pickLayer = tile.getLayers()[0];
       this.layerService.pickRender(pickLayer);
     }

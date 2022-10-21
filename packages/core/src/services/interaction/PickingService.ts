@@ -134,7 +134,7 @@ export default class PickingService implements IPickingService {
       const color = pickedColors.slice(i * 4, i * 4 + 4);
       const pickedFeatureIdx = decodePickingColor(color);
       if (pickedFeatureIdx !== -1 && !featuresIdMap[pickedFeatureIdx]) {
-        const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+        const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
         features.push({
           // @ts-ignore
           ...rawFeature,
@@ -224,7 +224,7 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-      const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+      const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
         type === 'mousemove'
@@ -274,7 +274,7 @@ export default class PickingService implements IPickingService {
     }
 
     if (enableHighlight) {
-      this.highlightPickedFeature(layer, pickedColors);
+      layer.layerPickService.highlightPickedFeature(pickedColors);
     }
     if (
       enableSelect &&
@@ -287,10 +287,10 @@ export default class PickingService implements IPickingService {
         layer.getCurrentSelectedId() === null ||
         selectedId !== layer.getCurrentSelectedId()
       ) {
-        this.layerService.selectFeature(layer, pickedColors);
+        layer.layerPickService.selectFeature(pickedColors);
         layer.setCurrentSelectedId(selectedId);
       } else {
-        this.layerService.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        layer.layerPickService.selectFeature(new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
       }
       // if (!layer.isVector) {
@@ -387,7 +387,8 @@ export default class PickingService implements IPickingService {
           //   return (layer.tileLayer as ITileLayer).pickLayers(target);
           // }
         
-          this.layerService.pickRender(layer,target)
+          // this.layerService.p.pickRender(layer,target)
+          layer.layerPickService.pickRender(target);
 
           // layer.hooks.beforePickingEncode.call();
 
