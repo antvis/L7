@@ -4,7 +4,7 @@ import {
   Source,
   PolygonLayer,
   // LineLayer,
-  // TileDebugLayer,
+  TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
@@ -102,8 +102,8 @@ export default () => {
       });
       scene.addLayer(water_surface);
       // scene.addLayer(line);
-      // const debugerLayer = new TileDebugLayer();
-      // scene.addLayer(debugerLayer);
+      const debugerLayer = new TileDebugLayer({ zIndex: 1 });
+      scene.addLayer(debugerLayer);
     });
   }, []);
   return (

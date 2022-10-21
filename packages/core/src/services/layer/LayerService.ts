@@ -146,7 +146,28 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      await this.renderLayer(layer)
+      await layer.hooks.beforeRenderData.promise();
+      layer.hooks.beforeRender.call();
+      if (layer.masks.filter((m)=>m.inited).length > 0) {
+        // 清除上一次的模版缓存
+        this.renderService.clear({
+          stencil: 0,
+          depth: 1,
+          framebuffer: null,
+        });
+
+      }
+      await this.renderMask(layer.masks)
+
+      if (layer.getLayerConfig().enableMultiPassRenderer) {
+        // multiPassRender 不是同步渲染完成的
+        await layer.renderMultiPass();
+      } else {
+        layer.render();
+
+      }
+      layer.hooks.afterRender.call();
+      // await this.renderLayer(layer)
     }
     this.alreadyInRendering = false;
   }
