@@ -58,8 +58,8 @@ export default () => {
                 return [
                   { rasterData: channelR, width: 256, height: 256 },
                   { rasterData: channelG, width: 256, height: 256 },
-                  { rasterData: channelB, width: 256, height: 256 }
-                ]
+                  { rasterData: channelB, width: 256, height: 256 },
+                ];
               },
               // operation: ['band', 0]
               // operation: (allBands) => {
@@ -70,14 +70,13 @@ export default () => {
                 r: ['band', 0],
                 g: ['band', 1],
                 b: ['band', 2],
-              }
+              },
             },
           },
         )
-        .style({
-        });
+        .style({});
 
-      scene.addLayer(layer)
+      scene.addLayer(layer);
     });
   }, []);
   return (
