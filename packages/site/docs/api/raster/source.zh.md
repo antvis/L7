@@ -19,7 +19,9 @@ const source = new Source(data, {
 
 ```js
 async function getTiffData() {
-  const response = await fetch('https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat');
+  const response = await fetch(
+    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+  );
   const arrayBuffer = await response.arrayBuffer();
   const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
   const image = await tiff.getImage(); // 使用文件中的第一张图
@@ -34,13 +36,13 @@ async function getTiffData() {
 }
 const tiffdata = await getTiffData(); // 这是解析完的数据
 const layer = new RasterLayer({}).source(tiffdata.data, {
-    parser: {
-        type: 'raster',
-        width: tiffdata.width,
-        height: tiffdata.height,
-        extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
-    }
-})
+  parser: {
+    type: 'raster',
+    width: tiffdata.width,
+    height: tiffdata.height,
+    extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+  },
+});
 ```
 
 #### data
@@ -52,24 +54,27 @@ const layer = new RasterLayer({}).source(tiffdata.data, {
 指定使用栅格数据的参数。
 
 ##### type
+
 <description> _string_ **必选** </description>
 
 传入固定值为 raster
 
 ##### width
+
 <description> _number_ **必选** </description>
 
-栅格数据是二维的网格数据，`width` 参数用于指定网格的宽度。        
-`width` 参数一般在使用诸如 `geotiff.js` 等栅格数据解析库的时候会同时返回。      
-
+栅格数据是二维的网格数据，`width` 参数用于指定网格的宽度。  
+`width` 参数一般在使用诸如 `geotiff.js` 等栅格数据解析库的时候会同时返回。
 
 ##### height
+
 <description> _number_ **必选** </description>
 
-栅格数据是二维的网格数据，`height` 参数用于指定网格的宽度。        
-`width` 参数一般在使用诸如 `geotiff.js` 等栅格数据解析库的时候会同时返回。     
+栅格数据是二维的网格数据，`height` 参数用于指定网格的宽度。  
+`width` 参数一般在使用诸如 `geotiff.js` 等栅格数据解析库的时候会同时返回。
 
 ##### extent
+
 <description> _number[]_ **必选** </description>
 
 `extent` 描述的是栅格数据覆盖的地理区间，数值指定的是区域的经纬度区间（左下角和右上角）。
@@ -84,31 +89,38 @@ const extent = [minLng, minLat, maxLng, maxLat];
 
 ```js
 async function getTiffData() {
-  const response = await fetch('https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat');
+  const response = await fetch(
+    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+  );
   const arrayBuffer = await response.arrayBuffer();
-  return arrayBuffer
+  return arrayBuffer;
 }
 const tiffdata = await getTiffData();
-const layer = new RasterLayer({})
-layer.source([{
-    data: tiffdata,
-    bands: [0]
-}], {
-    parser: {
-        type: 'raster',
-        format: async (data, bands) => {
-            const tiff = await GeoTIFF.fromArrayBuffer(data);
-            const imageCount = await tiff.getImageCount();
-            const image = await tiff.getImage(bands[0]);
-            const width = image.getWidth();
-            const height = image.getHeight();
-            const values = await image.readRasters();
-            return { rasterData: values[0], width, height };
-        },
-        operation: ['+', ['band', 0], 1],
-        extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+const layer = new RasterLayer({});
+layer.source(
+  [
+    {
+      data: tiffdata,
+      bands: [0],
     },
-});
+  ],
+  {
+    parser: {
+      type: 'raster',
+      format: async (data, bands) => {
+        const tiff = await GeoTIFF.fromArrayBuffer(data);
+        const imageCount = await tiff.getImageCount();
+        const image = await tiff.getImage(bands[0]);
+        const width = image.getWidth();
+        const height = image.getHeight();
+        const values = await image.readRasters();
+        return { rasterData: values[0], width, height };
+      },
+      operation: ['+', ['band', 0], 1],
+      extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+    },
+  },
+);
 ```
 
 #### data: IBandsData[] | IBandsData
@@ -117,8 +129,8 @@ layer.source([{
 
 ```js
 interface IBandsData {
-    data: ArrayBuffer;  // 请求加载的栅格文件的二进制数据
-    bands?: number[];   // 指定加载该栅格文件的波段
+  data: ArrayBuffer; // 请求加载的栅格文件的二进制数据
+  bands?: number[]; // 指定加载该栅格文件的波段
 }
 ```
 
@@ -127,29 +139,35 @@ interface IBandsData {
 指定解析栅格数据和使用栅格数据的方法和参数。
 
 ##### type
+
 <description> _string_ **必选** </description>
 
 - 输出结果为单通道数据的时候值为 raster
 - 输出结果为多通道彩色的时候值为 rasterRgb
 
 ##### format: IRasterFormat
+
 <description> _IFormat_ **必选** </description>
 
 `format` 方法用于从传入的栅格文件二进制数据中提取波段数据，第一个参数是对应的栅格文件二进制数据，第二个参数是指定的该栅格文件中应该提取的波段，方法参数是我们通过[source](/zh/docs/api/raster/source#data-ibandsdata--ibandsdata) 参数传递的 `data` 数值。
 
 ```js
 interface IRasterData {
-  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
+  rasterData: HTMLImageElement | Uint8Array | ImageBitmap | null | undefined;
   width: number;
   height: number;
 }
-type IRasterFormat = (data: ArrayBuffer, bands: number[]) => Promise<IRasterData|IRasterData[]>
+type IRasterFormat = (
+  data: ArrayBuffer,
+  bands: number[],
+) => Promise<IRasterData | IRasterData[]>;
 ```
 
 1. `format` 方法的返回值为栅格数据（`rasterData`）以及表示大小的 `width`、`height` 参数。
 2. `format` 方法可以返回多份数据，表示从当前栅格文件中提取多份波段的数据。
 
 ##### operation: _IOperation_
+
 <description> _IOperation_ **可选** </description>
 
 在加载多波段数据的时候我们可以通过 `operation` 对数据进行运算。
@@ -158,25 +176,26 @@ type IRasterFormat = (data: ArrayBuffer, bands: number[]) => Promise<IRasterData
 
 1. `operation` 可以是一个函数，`allbands` 是我们从所有栅格文件中提取的所有波段数据的集合。
 
-  ```js
-  const parser = {
-    operation: (allBands) => {
-      // operation 可以是一个函数，allbands 是我们从所有栅格文件中提取的所有波段数据的集合，
-      // 在设立 allbands 就是 [band0]
-      // 函数的返回值是单纯的波段数据，在这里我们直接返回第一个波段的数据
-      return allBands[0].rasterData
-    }
-  }
-  ```
+```js
+const parser = {
+  operation: (allBands) => {
+    // operation 可以是一个函数，allbands 是我们从所有栅格文件中提取的所有波段数据的集合，
+    // 在设立 allbands 就是 [band0]
+    // 函数的返回值是单纯的波段数据，在这里我们直接返回第一个波段的数据
+    return allBands[0].rasterData;
+  },
+};
+```
 
 2. `operation` 可以是以数组形式存在的计算表达式.
 
-  ```js
-  // 下面表达式可以转述为 band1 * 0.5，表示将波段1 的值都乘上 0.5 并返回
-  const parser = {
-    operation: ['*', ['band', 1], 0.5]
-  }
-  ```
+```js
+// 下面表达式可以转述为 band1 * 0.5，表示将波段1 的值都乘上 0.5 并返回
+const parser = {
+  operation: ['*', ['band', 1], 0.5],
+};
+```
+
 3. `operation` 可以嵌套使用：`['+', ['*', ['band', 0], 0.2], ['band', 1]]]`，返回结果为：`band0 * 0.2 + band1`。
 
 4. `operation` 可以直接指定结果：`['band', 0]`。
@@ -203,6 +222,7 @@ type IRasterFormat = (data: ArrayBuffer, bands: number[]) => Promise<IRasterData
 ```
 
 ##### extent
+
 <description> _number[]_ **必选** </description>
 
 `extent` 描述的是栅格数据覆盖的地理区间，数值指定的是区域的经纬度区间（左下角和右上角）。
@@ -214,21 +234,25 @@ type IRasterFormat = (data: ArrayBuffer, bands: number[]) => Promise<IRasterData
 #### data: IBandsData[] | IBandsData
 
 绘制多通道影像的时候，需要加载[多波段数据](/zh/docs/api/raster/source#data-ibandsdata--ibandsdata)
+
 #### parser
 
 指定解析栅格数据和使用栅格数据的方法和参数。
 
 ##### type
+
 <description> _string_ **必选** </description>
 
 - 输出结果为多通道彩色的时候值为 rasterRgb
 
 ##### format: IRasterFormat
+
 <description> _IFormat_ **必选** </description>
 
 绘制多通道影像的时候，使用通用的[format](/zh/docs/api/raster/source#format-irasterformat)函数。
 
 ##### operation: _IOperation_
+
 <description> _IOperation_ **必选** </description>
 
 为了绘制多通道影像，我们必须要提供 `operation` 配置指定多通道数据。
@@ -242,7 +266,7 @@ const source = new Source(data, { // 彩色栅格和单通道栅格使用相同�
   parser: {
     type: 'rasterRgb', // 使用独立的 type 类型
     format: async (data, bands) {...}, // 彩色栅格和单通道栅格 format 使用相同
-    // operation 为对象，分别为 rgb 三通道指定计算表达式 
+    // operation 为对象，分别为 rgb 三通道指定计算表达式
     // operation 必须要配置
     operation: {
       r: ['*', ['band', 1], 0.5],
