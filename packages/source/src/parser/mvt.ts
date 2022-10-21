@@ -10,7 +10,7 @@ import {
   // VectorTileFeature,
   VectorTileLayer,
 } from '@mapbox/vector-tile';
-import { Feature } from '@turf/helpers';
+import { Feature, Properties } from '@turf/helpers';
 import Protobuf from 'pbf';
 import { IParserData, ITileParserCFG } from '../interface';
 
@@ -31,123 +31,6 @@ export function osmTileXY2LonLat(x: number, y: number, zoom: number) {
   return [lon, lat];
 }
 
-// function signedArea(ring: any[]) {
-//   let sum = 0;
-//   for (let i = 0, len = ring.length, j = len - 1, p1, p2; i < len; j = i++) {
-//     p1 = ring[i];
-//     p2 = ring[j];
-//     sum += (p2.x - p1.x) * (p1.y + p2.y);
-//   }
-//   return sum;
-// }
-
-// function classifyRings(rings: any[]) {
-//   const len = rings.length;
-
-//   if (len <= 1) {
-//     return [rings];
-//   }
-
-//   const polygons: any = [];
-//   let polygon: any;
-//   let ccw;
-
-//   for (let i = 0; i < len; i++) {
-//     const area = signedArea(rings[i]);
-//     if (area === 0) {
-//       continue;
-//     }
-
-//     if (ccw === undefined) {
-//       ccw = area < 0;
-//     }
-
-//     if (ccw === area < 0) {
-//       if (polygon) {
-//         polygons.push(polygon);
-//       }
-//       polygon = [rings[i]];
-//     } else {
-//       polygon.push(rings[i]);
-//     }
-//   }
-//   if (polygon) {
-//     polygons.push(polygon);
-//   }
-
-//   return polygons;
-// }
-
-// const VectorTileFeatureTypes = ['Unknown', 'Point', 'LineString', 'Polygon'];
-// function GetGeoJSON(z: number, vectorTileFeature: VectorTileFeature) {
-//   const extent = vectorTileFeature.extent;
-//   let coords = vectorTileFeature.loadGeometry() as any;
-//   const currenType = vectorTileFeature.type;
-//   const currentProperties = vectorTileFeature.properties;
-//   const currentId = vectorTileFeature.id;
-
-//   const size = extent * Math.pow(2, z);
-
-//   let type = VectorTileFeatureTypes[currenType];
-//   let i;
-//   let j;
-
-//   function project(line: any[]) {
-//     for (let index = 0; index < line.length; index++) {
-//       const point = line[index];
-//       line[index] = [
-//         (point.x / size) * TILE_SIZE,
-//         (point.y / size) * TILE_SIZE,
-//       ];
-//     }
-//   }
-
-//   switch (currenType) {
-//     case 1:
-//       const points = [];
-//       for (i = 0; i < coords.length; i++) {
-//         points[i] = coords[i][0];
-//       }
-//       coords = points;
-//       project(coords);
-//       break;
-
-//     case 2:
-//       for (i = 0; i < coords.length; i++) {
-//         project(coords[i]);
-//       }
-//       break;
-
-//     case 3:
-//       coords = classifyRings(coords);
-//       for (i = 0; i < coords.length; i++) {
-//         for (j = 0; j < coords[i].length; j++) {
-//           project(coords[i][j]);
-//         }
-//       }
-//       break;
-//   }
-
-//   if (coords.length === 1) {
-//     coords = coords[0];
-//   } else {
-//     type = 'Multi' + type;
-//   }
-
-//   const result = {
-//     type: 'Feature',
-//     geometry: {
-//       type,
-//       coordinates: coords,
-//     },
-//     properties: currentProperties,
-//     id: currentId,
-//     tileOrigin: [0, 0],
-//     coord: '',
-//   };
-
-//   return result;
-// }
 
 export type MapboxVectorTile = {
   layers: { [_: string]: VectorTileLayer & { features: Feature[] } };
@@ -172,7 +55,7 @@ const getVectorTile = async (
         ) as MapboxVectorTile;
         // check tile source layer
         for (const sourceLayer of Object.keys(vectorTile.layers)) {
-          const features = [];
+          const features: Feature<GeoJSON.Geometry, Properties>[] = [];
           const vectorTileLayer = vectorTile.layers[sourceLayer];
           for (let i = 0; i < vectorTile.layers[sourceLayer].length; i++) {
             const vectorTileFeature = vectorTile.layers[sourceLayer].feature(i);
@@ -183,15 +66,14 @@ const getVectorTile = async (
               tileParams.y,
               tileParams.z,
             );
-            // } else {
-            //   feature = GetGeoJSON(zoom, vectorTileFeature);
-            //   // @ts-ignore
-            //   vectorTileLayer.l7TileOrigin = tileOrigin;
-            //   // @ts-ignore
-            //   vectorTileLayer.l7TileCoord = coord;
-            // }
-
-            features.push(feature);
+            // TODO ID 统一编码
+            features.push({
+              ...feature,
+              properties: {
+                id: feature.id,
+                ...feature.properties,
+              },
+            });
           }
           // @ts-ignore
           vectorTileLayer.features = features;

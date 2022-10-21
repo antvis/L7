@@ -170,6 +170,7 @@ export default class BaseTileLayer {
     if (!this.tilesetManager) {
       return;
     }
+    console.log(this.tilesetManager.tiles)
     await Promise.all(this.tilesetManager.tiles
       .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
       .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
