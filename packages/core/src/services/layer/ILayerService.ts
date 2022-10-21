@@ -5,7 +5,7 @@ import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IInteractionTarget } from '../interaction/IInteractionService';
-import { IPickingService } from '../interaction/IPickingService';
+import { ILayerPickService, IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 import { IAttribute } from '../renderer/IAttribute';
 import {
@@ -289,6 +289,7 @@ export type LayerEventType =
 
 export interface ILayer {
   styleAttributeService: IStyleAttributeService,
+  layerPickService: ILayerPickService;
   sourceLayer?: string;
   parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
@@ -389,6 +390,7 @@ export interface ILayer {
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ): void;
+  setLayerPickService(layerPickService:ILayerPickService):void;
   init(): Promise<void>;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   getScale(name: string): any;

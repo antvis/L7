@@ -50,6 +50,7 @@ import {
   StyleAttributeOption,
   Triangulation,
   TYPES,
+  ILayerPickService,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
@@ -58,6 +59,7 @@ import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { styleDataMapping } from '../utils/dataMappingStyle';
+import LayerPickService from './LayerPickService';
 import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
@@ -91,6 +93,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public clusterZoom: number = 0; // 聚合等级标记
   public layerType?: string | undefined;
   public triangulation?: Triangulation | undefined;
+  public layerPickService: ILayerPickService;
 
   public defaultSourceConfig: {
     data: any[];
@@ -404,6 +407,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       });
     }
 
+    // 初始化其他服务
+    this.layerPickService = new LayerPickService(this);
+
     // 触发 init 生命周期插件
     await this.hooks.init.promise();
     this.inited = true;
@@ -449,6 +455,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         elements: undefined,
       };
     }
+  }
+  public setLayerPickService(layerPickService: ILayerPickService): void {
+    this.layerPickService = layerPickService;
   }
 
   public calculateEncodeData(data: any, option?: ISourceCFG) {

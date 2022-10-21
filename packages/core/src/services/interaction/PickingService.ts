@@ -387,7 +387,8 @@ export default class PickingService implements IPickingService {
           //   return (layer.tileLayer as ITileLayer).pickLayers(target);
           // }
         
-          this.layerService.pickRender(layer,target)
+          // this.layerService.p.pickRender(layer,target)
+          layer.layerPickService.pickRender(target);
 
           // layer.hooks.beforePickingEncode.call();
 
