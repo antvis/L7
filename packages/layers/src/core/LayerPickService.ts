@@ -38,7 +38,7 @@ export default class BaseLayerPickService implements ILayerPickService {
     const [r, g, b] = pickedColors;
     this.layer.hooks.beforeHighlight.call([r, g, b]);
   }
-  getFeatureById(pickedFeatureIdx: number):any {
+  getFeatureById(pickedFeatureIdx: number): any {
     return this.layer.getSource().getFeatureById(pickedFeatureIdx);
   }
 }
