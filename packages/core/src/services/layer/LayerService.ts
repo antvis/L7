@@ -277,9 +277,11 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   // 拾取绘制
   public pickRender(layer: ILayer,target: IInteractionTarget) {
     if(layer.tileLayer) {
+      // 瓦片图层（layerGroup）走独立的拾取渲染
      return layer.tileLayer.pickRender(target)
     }
 
+    // 普通瓦片（单个图层的拾取渲染）
     layer.hooks.beforePickingEncode.call();
 
     if (layer.masks.length > 0) {

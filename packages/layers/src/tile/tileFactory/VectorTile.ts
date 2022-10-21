@@ -5,7 +5,7 @@ import { getTileLayer, getMaskLayer } from './util';
 export default class VectorTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.parent.getLayerConfig();
+    const layerOptions = this.getInitOptions();
     const vectorLayer = getTileLayer(this.parent.type);
     const maskLayer = getMaskLayer(this.parent.type);
     layerOptions.mask = !!maskLayer;
