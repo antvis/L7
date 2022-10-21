@@ -4,10 +4,10 @@ import {
   Source,
   PolygonLayer,
   // LineLayer,
-  // TileDebugLayer,
+  TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { data } from './data';
 
@@ -18,7 +18,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new GaodeMap({
+      map: new Map({
         center: [60, 30],
         // zoom: 12,
         minZoom: 0,
@@ -102,8 +102,8 @@ export default () => {
       });
       scene.addLayer(water_surface);
       // scene.addLayer(line);
-      // const debugerLayer = new TileDebugLayer();
-      // scene.addLayer(debugerLayer);
+      const debugerLayer = new TileDebugLayer();
+      scene.addLayer(debugerLayer);
     });
   }, []);
   return (

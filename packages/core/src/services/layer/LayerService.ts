@@ -146,6 +146,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
+
       await this.renderLayer(layer)
     }
     this.alreadyInRendering = false;
