@@ -20,20 +20,20 @@ module.exports = {
     showAPIDoc: true, // 是否在demo页展示API文档
     navs: [
       {
+        slug: 'docs/tutorial/l7',
+        title: {
+          zh: '使用教程',
+          en: 'Tutorial',
+        },
+        redirect: 'api/quickstart',
+      },
+      {
         slug: 'docs/api',
         title: {
           zh: 'API 文档',
           en: 'Document',
         },
         redirect: 'api/scene',
-      },
-      {
-        slug: 'docs/tutorial/l7',
-        title: {
-          zh: '教程',
-          en: 'Tutorial',
-        },
-        redirect: 'api/quickstart',
       },
       {
         slug: 'examples',
@@ -130,7 +130,7 @@ module.exports = {
         slug: 'tutorial/point',
         icon: 'map',
         title: {
-          zh: '点图层',
+          zh: '点图层 PointLayer',
           en: 'PointLayer',
         },
         order: 5,
@@ -139,7 +139,7 @@ module.exports = {
         slug: 'tutorial/line',
         icon: 'map',
         title: {
-          zh: '线图层',
+          zh: '线图层 LineLayer',
           en: 'LineLayer',
         },
         order: 5,
@@ -148,7 +148,7 @@ module.exports = {
         slug: 'tutorial/polygon',
         icon: 'map',
         title: {
-          zh: '面图层',
+          zh: '面图层 PolygonLayer',
           en: 'PolygonLayer',
         },
         order: 5,
@@ -157,7 +157,7 @@ module.exports = {
         slug: 'tutorial/heatmap',
         icon: 'map',
         title: {
-          zh: '热力图层',
+          zh: '热力图层 HeatmapLayer',
           en: 'HeatmapLayer',
         },
         order: 6,
@@ -166,7 +166,7 @@ module.exports = {
         slug: 'tutorial/tile',
         icon: 'map',
         title: {
-          zh: '瓦片图层',
+          zh: '瓦片图层 TileLayer',
           en: 'TileLayer',
         },
         order: 6,
@@ -175,7 +175,7 @@ module.exports = {
       {
         slug: 'api/base',
         title: {
-          zh: '图层 base',
+          zh: '图层 BaseLayer',
           en: 'Layer',
         },
         order: 2,
@@ -191,7 +191,7 @@ module.exports = {
       {
         slug: 'api/point_layer',
         title: {
-          zh: '点图层',
+          zh: '点图层 PointLayer',
           en: 'PointLayer',
         },
         order: 3,
@@ -199,7 +199,7 @@ module.exports = {
       {
         slug: 'api/line_layer',
         title: {
-          zh: '线图层',
+          zh: '线图层 LineLayer',
           en: 'LineLayer',
         },
         order: 4,
@@ -207,7 +207,7 @@ module.exports = {
       {
         slug: 'api/polygon_layer',
         title: {
-          zh: '面图层',
+          zh: '面图层 PolygonLayer',
           en: 'PolygonLayer',
         },
         order: 5,
@@ -215,7 +215,7 @@ module.exports = {
       {
         slug: 'api/heatmap_layer',
         title: {
-          zh: '热力图层',
+          zh: '热力图层 HeatMapLayer',
           en: 'HeatMapLayer',
         },
         order: 6,
@@ -223,7 +223,7 @@ module.exports = {
       {
         slug: 'api/imageLayer',
         title: {
-          zh: '图片图层',
+          zh: '图片图层 ImageLayer',
           en: 'ImageLayer',
         },
         order: 7,
@@ -231,7 +231,7 @@ module.exports = {
       {
         slug: 'api/raster',
         title: {
-          zh: '栅格图层',
+          zh: '栅格图层 RasterLayer',
           en: 'RasterLayer',
         },
         order: 8,
@@ -239,7 +239,7 @@ module.exports = {
       {
         slug: 'api/tile',
         title: {
-          zh: '瓦片图层',
+          zh: '瓦片图层 TileLayer',
           en: 'tile',
         },
         order: 9,
@@ -247,7 +247,7 @@ module.exports = {
       {
         slug: 'api/other',
         title: {
-          zh: '其他图层',
+          zh: '其他图层 Other',
           en: 'Other Layers',
         },
         order: 10,
@@ -255,7 +255,7 @@ module.exports = {
       {
         slug: 'api/component',
         title: {
-          zh: '组件',
+          zh: '组件 Component',
           en: 'Component',
         },
         order: 11,
@@ -263,7 +263,7 @@ module.exports = {
       {
         slug: 'api/component/control',
         title: {
-          zh: '控件类型',
+          zh: '控件类型 Control',
           en: 'Control',
         },
         order: 1,
@@ -271,7 +271,7 @@ module.exports = {
       {
         slug: 'api/component/popup',
         title: {
-          zh: '气泡类型',
+          zh: '气泡类型 Popup',
           en: 'Popup',
         },
         order: 2,

@@ -16,7 +16,7 @@ const source = new Source(data, option);
 - data
 - option
   - cluster **boolean** 是否聚合
-  - clusterOption 聚合配置项
+  - clusterOptions 聚合配置项
   - parser 数据解析配置
   - transforms 数据处理配置
 
