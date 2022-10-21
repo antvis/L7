@@ -102,7 +102,7 @@ export default () => {
       });
       scene.addLayer(water_surface);
       // scene.addLayer(line);
-      const debugerLayer = new TileDebugLayer();
+      const debugerLayer = new TileDebugLayer({ zIndex: 1 });
       scene.addLayer(debugerLayer);
     });
   }, []);

@@ -1,5 +1,5 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
-import MaskLayer from './layers/vectorLayer';
+import MaskLayer from '../../mask';
 import Tile from './Tile';
 export default class MaskTile extends Tile {
   public async initTileLayer(): Promise<void> {
@@ -7,7 +7,7 @@ export default class MaskTile extends Tile {
     const layerOptions = this.parent.getLayerConfig();
     
     const sourceOptions = this.getSourceOption();
-    const layer = new MaskLayer({ ...layerOptions, layerType: 'MaskLayer'})
+    const layer = new MaskLayer({ ...layerOptions})
     .source(sourceOptions.data, sourceOptions.options);
 
     // 初始化数据映射

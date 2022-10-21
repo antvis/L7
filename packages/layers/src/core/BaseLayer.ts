@@ -672,7 +672,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public render(): ILayer {
     if (this.tileLayer) {
-      console.log('render')
       // 瓦片图层执行单独的 render 渲染队列
       this.tileLayer.render();
       return this;

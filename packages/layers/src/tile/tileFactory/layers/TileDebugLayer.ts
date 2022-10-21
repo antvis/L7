@@ -12,4 +12,6 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
       },
     },
   };
+  public async buildModels() {
+  }
 }

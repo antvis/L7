@@ -142,7 +142,6 @@ export {
   BaseModel,
   PointLayer,
   PolygonLayer,
-  TileDebugLayer,
   LineLayer,
   CityBuildingLayer,
   GeometryLayer,
@@ -153,6 +152,7 @@ export {
   EarthLayer,
   WindLayer,
   MaskLayer,
+  TileDebugLayer,
 };
 
 export * from './core/interface';
