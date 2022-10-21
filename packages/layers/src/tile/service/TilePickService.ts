@@ -18,7 +18,7 @@ export class TilePickService {
     if (tile) {
       // TODO 多图层拾取
       const pickLayer = tile.getLayers()[0];
-      this.layerService.pickRender(pickLayer);
+      pickLayer.layerPickService.pickRender(target)
     }
   }
   selectFeature(pickedColors: Uint8Array | undefined) {

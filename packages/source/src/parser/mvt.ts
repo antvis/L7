@@ -31,7 +31,6 @@ export function osmTileXY2LonLat(x: number, y: number, zoom: number) {
   return [lon, lat];
 }
 
-
 export type MapboxVectorTile = {
   layers: { [_: string]: VectorTileLayer & { features: Feature[] } };
 };
