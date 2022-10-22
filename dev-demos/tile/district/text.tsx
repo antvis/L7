@@ -18,6 +18,7 @@ export default () => {
     const layer = new PointLayer({
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
+      blend: 'normal',
     });
     layer
       .source(
@@ -34,6 +35,7 @@ export default () => {
       )
       .shape('COLOR', 'text')
       .color('COLOR')
+      // .color('#000')
       .size(10)
       .select(true);
 

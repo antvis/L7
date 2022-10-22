@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, PolygonLayer } from '@antv/l7';
+import { Scene, PolygonLayer, PointLayer } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -31,39 +31,47 @@ export default () => {
           },
         },
       )
+      .shape('line')
       .color('COLOR')
       .active(true)
+      .size(10)
       // .select(true)
 
       .style({
         // opacity: 0.3
       });
 
-    // const point = new PointLayer({ zIndex: 1 })
-    // .source([{
-    //   lng:120, lat:30
-    // }], {
-    //   parser:{
-    //     type:'json',
-    //     x: 'lng',
-    //     y: 'lat'
-    //   }
-    // })
-    // .shape('circle')
-    // .size(40)
-    // .active(true)
-    // .color('#f00')
+    const point = new PointLayer({ zIndex: 1 })
+      .source(
+        [
+          {
+            lng: 120,
+            lat: 30,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('circle')
+      .size(40)
+      .active(true)
+      .color('#f00');
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      layer.on('inited', () => {
-        console.log(
-          'layer.getLayerConfig().enableHighlight',
-          layer.getLayerConfig().enableHighlight,
-        );
-      });
+      // layer.on('inited', () => {
+      //   console.log(
+      //     'layer.getLayerConfig().enableHighlight',
+      //     layer.getLayerConfig().enableHighlight,
+      //   );
+      // });
 
-      // scene.addLayer(point);
+      scene.addLayer(point);
     });
   }, []);
   return (

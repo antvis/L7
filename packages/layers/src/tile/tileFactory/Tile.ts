@@ -40,12 +40,6 @@ export default abstract class Tile {
     layer.addMaskLayer(mask);
   }
 
-  protected getInitOptions() {
-    const config = this.parent.getLayerConfig();
-    // config.enableHighlight = true;
-    return config;
-  }
-
   protected async addLayer(layer: ILayer) {
     // set flag
     layer.isTileLayer = true;

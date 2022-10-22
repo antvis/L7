@@ -1328,6 +1328,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     //   });
     // }
 
+    this.hooks.beforeRender.call();
+
     this.models.forEach((model) => {
       model.draw(
         {
@@ -1336,6 +1338,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         isPicking,
       );
     });
+
+    this.hooks.afterRender.call();
     return this;
   }
 

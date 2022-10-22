@@ -4,6 +4,8 @@ import {
     IRendererService,
     IInteractionTarget,
     ITileRenderService,
+    ILayerService,
+    TYPES,
   } from '@antv/l7-core';
 import { EventEmitter } from 'eventemitter3';
 
@@ -11,6 +13,7 @@ export class TilePickService extends EventEmitter{
     public isLastPicked: boolean = false;
     private rendererService: IRendererService;
     private pickingService: IPickingService;
+    private layerService: ILayerService;
     private children: ILayer[];
     private parent: ILayer;
     private tileRenderService: ITileRenderService;
@@ -27,7 +30,8 @@ export class TilePickService extends EventEmitter{
         this.pickingService = pickingService;
         this.children = children;
         this.tileRenderService = tileRenderService;
-        
+        const container = this.parent.getContainer();
+        this.layerService = container.get<ILayerService>(TYPES.ILayerService);
     }
     
 
@@ -35,7 +39,8 @@ export class TilePickService extends EventEmitter{
     public pick(layers: ILayer[], target: IInteractionTarget) {
         // Tip: 在进行拾取渲染的时候也需要先渲染一遍父组件然后再渲染子组件
         //  如需要在 栅格瓦片存在 Mask 的时候发生的拾取，那么就需要先渲染父组件（渲染父组件的帧缓冲）
-        this.tileRenderService.renderMask(this.parent);
+        this.layerService.renderMask(this.parent.masks);
+        
         const isPicked = layers
           .filter(
             (layer) =>

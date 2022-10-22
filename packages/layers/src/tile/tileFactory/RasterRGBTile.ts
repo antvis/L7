@@ -5,7 +5,7 @@ import Tile from './Tile';
 export default class RasterTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.getInitOptions();
+    const layerOptions = this.parent.getLayerConfig()
     const sourceOptions = this.getSourceOption();
 
     const layer = new RasterLayer({

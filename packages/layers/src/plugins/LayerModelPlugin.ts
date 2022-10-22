@@ -32,6 +32,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
         return;
       }
       await this.initLayerModel(layer);
+      layer.renderLayers();
     });
 
     layer.hooks.beforeRenderData.tapPromise(
@@ -46,6 +47,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
           return;
         }
         await this.prepareLayerModel(layer);
+        layer.renderLayers();
       },
     );
   }
