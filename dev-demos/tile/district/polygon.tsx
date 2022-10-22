@@ -31,7 +31,7 @@ export default () => {
           },
         },
       )
-      .shape('line')
+      // .shape('line')
       .color('COLOR')
       .active(true)
       .size(10)
