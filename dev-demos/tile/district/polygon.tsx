@@ -75,7 +75,7 @@ export default () => {
 
         point.color('#ff0');
         scene.render();
-        console.log('update')
+        console.log('update');
       }, 3000);
       // layer.on('inited', () => {
       //   console.log(
