@@ -46,6 +46,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
           return;
         }
         await this.prepareLayerModel(layer);
+        return true;
       },
     );
   }
