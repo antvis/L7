@@ -53,6 +53,7 @@ export default () => {
       })
         .source(source)
         .select(true)
+        .active(true)
         .shape('fill')
         .color('NAME_CHN', (NAME_CHN) => {
           const namestr = unicode2Char(NAME_CHN);
