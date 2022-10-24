@@ -80,11 +80,11 @@ export default () => {
 
       setTimeout(() => {
         layer.style({
-          opacity: 0.5
-        })
+          opacity: 0.5,
+        });
         scene.render();
-        console.log('***')
-      }, 1500)
+        console.log('***');
+      }, 1500);
     });
   }, []);
   return (

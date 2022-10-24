@@ -136,11 +136,11 @@ export default () => {
               opacity: 0.6,
               rampColors: {
                 colors: ['#f00', '#ff0'],
-                positions: [0, 1]
-              }
+                positions: [0, 1],
+              },
             });
-            scene.render()
-          }, 2000)
+            scene.render();
+          }, 2000);
         });
     });
 

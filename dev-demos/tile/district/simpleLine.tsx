@@ -46,12 +46,12 @@ export default () => {
     scene.on('loaded', () => {
       scene.addLayer(layer);
       setTimeout(() => {
-        layer.color('#f00')
-        .size(1)
-        .animate(true)
+        layer
+          .color('#f00')
+          .size(1)
+          .animate(true);
         scene.render();
-      }, 3000)
-      
+      }, 3000);
     });
   }, []);
   return (
