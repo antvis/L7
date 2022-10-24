@@ -13,7 +13,7 @@ export default class RasterTile extends Tile {
   private colorTexture: ITexture2D;
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.parent.getLayerConfig();
+    const layerOptions = this.parent.getLayerConfig()
     const sourceOptions = this.getSourceOption();
 
     this.initColorTexture()

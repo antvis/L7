@@ -6,7 +6,7 @@ export class TileRenderService implements ITileRenderService{
     private rendererService: IRendererService;
 
     constructor(rendererService: IRendererService) {
-        this.rendererService = rendererService;
+        this.rendererService = rendererService; 
     }
 
     public render(layers: ILayer[]) {
@@ -14,8 +14,6 @@ export class TileRenderService implements ITileRenderService{
           .filter((layer) => layer.inited)
           .filter((layer) => layer.isVisible())
           .map(async (layer) => {
-            layer.hooks.beforeRenderData.promise();
-            layer.hooks.beforeRender.call();
             if (layer.masks.length > 0) {
               // 清除上一次的模版缓存
               this.rendererService.clear({
@@ -24,32 +22,10 @@ export class TileRenderService implements ITileRenderService{
                 framebuffer: null,
               });
               layer.masks.map(async (m: ILayer) => {
-                await m.hooks.beforeRenderData.promise();
-                m.hooks.beforeRender.call();
                 m.render();
-                m.hooks.afterRender.call();
               });
             }
             layer.render();
-            layer.hooks.afterRender.call();
           });
-    }
-
-    public renderMask(layer: ILayer) {
-       
-        if (layer.inited && layer.isVisible() && layer.masks.length > 0) {
-          layer.hooks.beforeRender.call();
-          this.rendererService.clear({
-            stencil: 0,
-            depth: 1,
-            framebuffer: null,
-          });
-          layer.masks.map((m: ILayer) => {
-            m.hooks.beforeRender.call();
-            m.render();
-            m.hooks.afterRender.call();
-          });
-          layer.hooks.afterRender.call();
-        }
     }
 }

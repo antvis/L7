@@ -387,7 +387,8 @@ export default class PickingService implements IPickingService {
           //   return (layer.tileLayer as ITileLayer).pickLayers(target);
           // }
         
-          // this.layerService.p.pickRender(layer,target)
+          // 将当前的 layer 绘制到 pickingFBO
+          // 普通图层和瓦片图层的 layerPickService 拥有不同的 pickRender 方法
           layer.layerPickService.pickRender(target);
 
           // layer.hooks.beforePickingEncode.call();
@@ -395,7 +396,6 @@ export default class PickingService implements IPickingService {
           // if (layer.masks.length > 0) {
           //   // 若存在 mask，则在 pick 阶段的绘制也启用
           //   layer.masks.map(async (m: ILayer) => {
-          //     m.hooks.beforeRenderData.promise();
           //     m.hooks.beforeRender.call();
           //     m.render();
           //     m.hooks.afterRender.call();
@@ -403,7 +403,6 @@ export default class PickingService implements IPickingService {
           // }
           // layer.renderModels(true);
           // layer.hooks.afterPickingEncode.call();
-
           const isPicked = this.pickFromPickingFBO(layer, target);
 
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;

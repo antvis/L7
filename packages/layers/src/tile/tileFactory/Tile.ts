@@ -41,6 +41,8 @@ export default abstract class Tile {
   }
 
   protected async addLayer(layer: ILayer) {
+    // set flag
+    layer.isTileLayer = true;
     const container = createLayerContainer(
       this.parent.sceneContainer as Container,
     );

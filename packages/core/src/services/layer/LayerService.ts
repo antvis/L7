@@ -145,9 +145,8 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     }
     this.alreadyInRendering = true;
     this.clear();
+    
     for (const layer of this.layerList) {
-      await layer.hooks.beforeRenderData.promise();
-      layer.hooks.beforeRender.call();
       if (layer.masks.filter((m)=>m.inited).length > 0) {
         // 清除上一次的模版缓存
         this.renderService.clear({
@@ -155,64 +154,54 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
           depth: 1,
           framebuffer: null,
         });
-
+        layer.masks.map(async (m: ILayer) => {
+          m.render();
+        })
       }
-      await this.renderMask(layer.masks)
 
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
       } else {
-        layer.render();
+        await layer.render();
 
       }
-      layer.hooks.afterRender.call();
-      // await this.renderLayer(layer)
     }
     this.alreadyInRendering = false;
   }
   
-  public async renderMask(masks:ILayer[]):Promise<void[]> {
-   return Promise.all(masks.map(async (m: ILayer) => {
-      await m.hooks.beforeRenderData.promise();
-       m.hooks.beforeRender.call();
-       m.render();
-       m.hooks.afterRender.call();
-      
-     }));
+  public renderMask(masks:ILayer[]) {
+    masks.filter(m => m.inited)
+    .map(m =>{
+      m.render();
+    })
+  }
+
+  public async beforeRenderData(layer: ILayer) {
+    const res = await layer.hooks.beforeRenderData.promise()
+    res && this.renderLayers();
   }
 
   async renderLayer(layer: ILayer){
-    await layer.hooks.beforeRenderData.promise();
-    layer.hooks.beforeRender.call();
-    if (layer.masks.length > 0) {
-
-      const masks: ILayer[] = [];
-      await Promise.all(layer.masks.map(async mask => {
-        await mask.hooks.beforeRenderData.promise();
-        masks.push(mask);
-      }))
-     
-      this.renderService.clear({
-        stencil: 0,
-        depth: 1,
-        framebuffer: null,
-      });
-
-      masks.map(m =>{
-        m.hooks.beforeRender.call();
-        m.render();
-        m.hooks.afterRender.call();
+    
+    if (layer.masks.filter((m)=>m.inited).length > 0) {
+      layer.masks.map(mask =>{
+          this.renderService.clear({
+            stencil: 0,
+            depth: 1,
+            framebuffer: null,
+          });
+          mask.render();  
       })
+
     }
     if (layer.getLayerConfig().enableMultiPassRenderer) {
       // multiPassRender 不是同步渲染完成的
       await layer.renderMultiPass();
     } else {
-      layer.render();
+      await layer.render();
     }
 
-    layer.hooks.afterRender.call();
   }
 
   public updateLayerRenderList() {
@@ -277,18 +266,17 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   // 拾取绘制
   public pickRender(layer: ILayer,target: IInteractionTarget) {
     if(layer.tileLayer) {
+      // 瓦片图层（layerGroup）走独立的拾取渲染
      return layer.tileLayer.pickRender(target)
     }
 
+    // 普通瓦片（单个图层的拾取渲染）
     layer.hooks.beforePickingEncode.call();
 
     if (layer.masks.length > 0) {
       // 若存在 mask，则在 pick 阶段的绘制也启用
       layer.masks.map(async (m: ILayer) => {
-        m.hooks.beforeRenderData.promise();
-        m.hooks.beforeRender.call();
         m.render();
-        m.hooks.afterRender.call();
       });
     }
     layer.renderModels(true);

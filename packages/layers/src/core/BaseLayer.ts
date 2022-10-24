@@ -1280,9 +1280,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public needPick(type: string): boolean {
-    // 地图图层的判断
-    if (this.rawConfig.usage === 'basemap') return false;
-
     const {
       enableHighlight = true,
       enableSelect = true,
@@ -1330,6 +1327,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     //     this.layerModelNeedUpdate = false;
     //   });
     // }
+    this.layerService.beforeRenderData(this);
+    this.hooks.beforeRender.call();
 
     this.models.forEach((model) => {
       model.draw(
@@ -1339,6 +1338,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         isPicking,
       );
     });
+
+    this.hooks.afterRender.call();
     return this;
   }
 
