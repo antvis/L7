@@ -6,13 +6,15 @@ export default class DebugTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const sourceOptions = this.getSourceOption();
     const pointData = sourceOptions.data.features[0].properties;
-
     const lineLayer = new LineLayer()
       .source(sourceOptions.data, sourceOptions.options)
       .size(1)
       .shape('line')
       .color('red');
-      const pointLayer = new PointLayer()
+      const pointLayer = new PointLayer({
+        minZoom:this.z-1,
+        maxZoom: this.z+1
+      })
       .source([pointData],{
         parser: {
           type: 'json',

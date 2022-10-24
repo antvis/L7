@@ -8,17 +8,18 @@ export default class RasterTiffLayer extends BaseLayer<
 > {
   public type: string = this.layerType as string;
   public async buildModels() {
-    const model = this.getModelType();
+    const model = this.getModel();
     this.layerModel = new model(this);
     await this.initLayerModels();
   }
 
-  protected getModelType() {
-    if(this.layerSource.parser.type === 'rasterRgb') {
-      return RasterRgbModel;
-    } else {
-      return RasterModel;
-    }
+  public getModel() {
+    const type = this.getModelType();
+    return type === 'rasterRgb' ?  RasterRgbModel :RasterModel;
+  }
+  public  getModelType():string {
+    return this.layerSource.parser.type === 'rasterRgb' ? 'rasterRgb' : 'raster'
+    
   }
 
   protected getDefaultConfig() {

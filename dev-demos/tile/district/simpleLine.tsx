@@ -11,7 +11,7 @@ export default () => {
       stencil: true,
       map: new Map({
         center: [112, 30],
-        zoom: 3,
+        zoom: 0,
       }),
     });
 
@@ -36,6 +36,12 @@ export default () => {
       .color('COLOR')
       .size(2)
       .select(true);
+    scene.on('click', () => {
+      console.log(scene.getZoom());
+      layer.tileLayer.tileLayerService.tiles.map((t) => {
+        console.log(t.layers[0].isVisible());
+      });
+    });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);

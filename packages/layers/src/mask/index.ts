@@ -18,7 +18,7 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
     await this.initLayerModels();
   }
 
-  protected getModelType(): MaskModelType {
+  public getModelType(): MaskModelType {
     return 'fill';
   }
 }

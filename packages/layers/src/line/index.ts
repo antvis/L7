@@ -48,7 +48,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     };
     return defaultConfig[type];
   }
-  protected getModelType(): LineModelType {
+  public getModelType(): LineModelType {
     if (this.layerType) {
       return this.layerType as LineModelType;
     }

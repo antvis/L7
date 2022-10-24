@@ -19,7 +19,7 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     return defaultConfig[type];
   }
 
-  protected getModelType(): ImageModelType {
+  public getModelType(): ImageModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

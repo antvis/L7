@@ -74,7 +74,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     return defaultConfig[type];
   }
 
-  protected getModelType(): PointType {
+  public getModelType(): PointType {
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
     const { shape2d, shape3d } = this.getLayerConfig();
