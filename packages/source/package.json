@@ -24,7 +24,7 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/async-hook": "^2.2.5",
+    "@antv/async-hook": "^2.2.6",
     "@antv/l7-core": "2.9.37",
     "@antv/l7-utils": "2.9.37",
     "@babel/runtime": "^7.7.7",

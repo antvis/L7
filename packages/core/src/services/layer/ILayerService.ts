@@ -665,7 +665,7 @@ export interface ILayerService {
   updateLayerRenderList(): void;
   reRender(): void;
 
-  beforeRenderData(layer: ILayer): Promise<any>;
+  beforeRenderData(layer: ILayer): void
   renderMask(masks:ILayer[]): void;
   renderLayer(layer: ILayer): Promise<void>
 

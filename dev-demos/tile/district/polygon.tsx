@@ -64,6 +64,18 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+
+      setTimeout(() =>{
+        point.setData([
+          {
+            lng: 123,
+            lat: 30,
+          },
+        ]);
+
+        point.color('#ff0');
+        scene.render();
+      }, 3000)
       // layer.on('inited', () => {
       //   console.log(
       //     'layer.getLayerConfig().enableHighlight',

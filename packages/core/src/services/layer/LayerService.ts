@@ -177,11 +177,11 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     })
   }
 
-  public async beforeRenderData(layer: ILayer) {
-    if(layer.layerModelNeedUpdate || layer.styleNeedUpdate) {
-      await layer.hooks.beforeRenderData.promise();
-      this.renderLayers();
-    }
+  public beforeRenderData(layer: ILayer) {
+      layer.hooks.beforeRenderData.promise()
+      .then((res: boolean) => {
+        res && this.renderLayers();
+      })
   }
 
   async renderLayer(layer: ILayer){
