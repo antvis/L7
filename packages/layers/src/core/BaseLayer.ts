@@ -1327,7 +1327,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     //     this.layerModelNeedUpdate = false;
     //   });
     // }
-
+    this.layerService.beforeRenderData(this);
     this.hooks.beforeRender.call();
 
     this.models.forEach((model) => {

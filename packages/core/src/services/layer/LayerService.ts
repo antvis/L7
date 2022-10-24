@@ -147,8 +147,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.clear();
     
     for (const layer of this.layerList) {
-       layer.hooks.beforeRenderData.promise();
-      
       if (layer.masks.filter((m)=>m.inited).length > 0) {
         // 清除上一次的模版缓存
         this.renderService.clear({
@@ -157,14 +155,9 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
           framebuffer: null,
         });
         layer.masks.map(async (m: ILayer) => {
-          m.hooks.beforeRenderData.promise();
           m.render();
-         
         })
       }
-
-      
-       
 
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
@@ -180,19 +173,17 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   public renderMask(masks:ILayer[]) {
     masks.filter(m => m.inited)
     .map(m =>{
-      m.hooks.beforeRenderData.promise();
       m.render();
     })
   }
 
+  public async beforeRenderData(layer: ILayer) {
+    await layer.hooks.beforeRenderData.promise()
+  }
+
   async renderLayer(layer: ILayer){
-     layer.hooks.beforeRenderData.promise();
     
     if (layer.masks.filter((m)=>m.inited).length > 0) {
-      layer.masks.map(async mask => {
-        mask.hooks.beforeRenderData.promise()
-      })
-
       layer.masks.map(mask =>{
           this.renderService.clear({
             stencil: 0,
@@ -201,7 +192,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
           });
           mask.render();  
       })
-     
 
     }
     if (layer.getLayerConfig().enableMultiPassRenderer) {
@@ -285,8 +275,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     if (layer.masks.length > 0) {
       // 若存在 mask，则在 pick 阶段的绘制也启用
       layer.masks.map(async (m: ILayer) => {
-        m.hooks.beforeRenderData.promise();
-        
         m.render();
       });
     }

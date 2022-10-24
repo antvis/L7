@@ -396,7 +396,6 @@ export default class PickingService implements IPickingService {
           // if (layer.masks.length > 0) {
           //   // 若存在 mask，则在 pick 阶段的绘制也启用
           //   layer.masks.map(async (m: ILayer) => {
-          //     m.hooks.beforeRenderData.promise();
           //     m.hooks.beforeRender.call();
           //     m.render();
           //     m.hooks.afterRender.call();

@@ -6,7 +6,7 @@ export class TileRenderService implements ITileRenderService{
     private rendererService: IRendererService;
 
     constructor(rendererService: IRendererService) {
-        this.rendererService = rendererService;
+        this.rendererService = rendererService; 
     }
 
     public render(layers: ILayer[]) {
@@ -14,7 +14,6 @@ export class TileRenderService implements ITileRenderService{
           .filter((layer) => layer.inited)
           .filter((layer) => layer.isVisible())
           .map(async (layer) => {
-            layer.hooks.beforeRenderData.promise();
             if (layer.masks.length > 0) {
               // 清除上一次的模版缓存
               this.rendererService.clear({
@@ -23,7 +22,6 @@ export class TileRenderService implements ITileRenderService{
                 framebuffer: null,
               });
               layer.masks.map(async (m: ILayer) => {
-                m.hooks.beforeRenderData.promise();
                 m.render();
               });
             }
