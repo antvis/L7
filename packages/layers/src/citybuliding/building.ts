@@ -14,7 +14,7 @@ export default class CityBuildingLayer extends BaseLayer {
     });
   }
 
-  protected getModelType(): string {
+  public getModelType(): string {
     return 'citybuilding';
   }
 }

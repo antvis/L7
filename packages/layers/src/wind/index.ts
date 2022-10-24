@@ -25,7 +25,7 @@ export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
     return defaultConfig[type];
   }
 
-  protected getModelType(): WindModelType {
+  public getModelType(): WindModelType {
     return 'wind';
   }
 }

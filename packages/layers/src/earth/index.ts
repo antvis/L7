@@ -51,7 +51,7 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
     }
   }
 
-  protected getModelType(): EarthModelType {
+  public getModelType(): EarthModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

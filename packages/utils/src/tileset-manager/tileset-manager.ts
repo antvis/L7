@@ -80,7 +80,7 @@ export class TilesetManager extends EventEmitter {
   // 1.瓦片序号发生改变 2.瓦片新增 3.瓦片显隐控制
   public update(zoom: number, latLonBounds: [number, number, number, number]) {
     // 校验层级，向上取整
-    const verifyZoom = Math.max(0,Math.floor(zoom));
+    const verifyZoom = Math.max(0, Math.floor(zoom));
     if (
       this.lastViewStates &&
       this.lastViewStates.zoom === verifyZoom &&

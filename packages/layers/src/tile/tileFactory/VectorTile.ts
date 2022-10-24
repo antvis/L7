@@ -1,4 +1,4 @@
-import { ILayerAttributesOption } from '@antv/l7-core';
+import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
 import Tile from './Tile';
 import { getTileLayer, getMaskLayer } from './util';
 
@@ -20,7 +20,7 @@ export default class VectorTile extends Tile {
       sourceOptions.data,
       sourceOptions.options,
     );
-   
+
     // 初始化数据映射
     Object.keys(attributes).forEach((type) => {
       const attr = type as keyof ILayerAttributesOption;
@@ -44,8 +44,8 @@ export default class VectorTile extends Tile {
         // });
       await this.addMask(layer, mask)
     }
-
     await this.addLayer(layer);
+    this.setLayerMinMaxZoom(layer);
     this.isLoaded = true;
   }
   // Todo 校验数据有效性
@@ -76,5 +76,16 @@ export default class VectorTile extends Tile {
         transforms: rawSource.transforms,
       },
     };
+  }
+
+  protected setLayerMinMaxZoom(layer: ILayer) {
+    // 文本图层设置，可见范围
+    if(layer.getModelType() === 'text') {
+      layer.updateLayerConfig({
+        maxZoom: this.z +1,
+        minZoom: this.z - 1
+      });
+    }
+
   }
 }

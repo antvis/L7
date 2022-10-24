@@ -46,7 +46,7 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
     return defaultConfig[type];
   }
 
-  protected getModelType(): CanvasModelType {
+  public getModelType(): CanvasModelType {
     return 'canvas';
   }
 }

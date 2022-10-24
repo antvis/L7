@@ -365,13 +365,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.styleAttributeService = this.container.get<IStyleAttributeService>(
       TYPES.IStyleAttributeService,
     );
-    if(enableMultiPassRenderer) { // 按需初始化 瓦片频繁报错 
+    if (enableMultiPassRenderer) {
+      // 按需初始化 瓦片频繁报错
       this.multiPassRenderer = this.container.get<IMultiPassRenderer>(
         TYPES.IMultiPassRenderer,
       );
       this.multiPassRenderer.setLayer(this);
     }
-   
 
     // 完成样式服务注册完成前添加的属性
     this.pendingStyleAttributes.forEach(
@@ -1408,7 +1408,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return filterData;
   }
 
-  protected getModelType(): unknown {
+  public getModelType(): string {
     throw new Error('Method not implemented.');
   }
   protected getDefaultConfig() {

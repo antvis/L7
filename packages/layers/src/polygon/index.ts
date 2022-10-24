@@ -19,7 +19,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     await this.initLayerModels();
   }
 
-  protected getModelType(): PolygonModelType {
+  public getModelType(): PolygonModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

@@ -36,13 +36,12 @@ export default () => {
       .color('COLOR')
       .size(2)
       .select(true);
-      scene.on("click",()=>{
-        console.log(scene.getZoom(),)
-        layer.tileLayer.tileLayerService.tiles.map((t)=>{
-         console.log(t.layers[0].isVisible())
-        })
-  
-      })
+    scene.on('click', () => {
+      console.log(scene.getZoom());
+      layer.tileLayer.tileLayerService.tiles.map((t) => {
+        console.log(t.layers[0].isVisible());
+      });
+    });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);

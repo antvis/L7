@@ -32,7 +32,7 @@ export default class GeometryLayer extends BaseLayer<
     return defaultConfig[type];
   }
 
-  protected getModelType(): GeometryModelType {
+  public getModelType(): GeometryModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
