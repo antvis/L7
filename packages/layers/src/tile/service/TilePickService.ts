@@ -30,7 +30,6 @@ export class TilePickService {
     // @ts-ignore
     const [r, g, b] = pickedColors;
     const id = this.clor2PickId(r, g, b);
-    console.log(id)
     this.tilePickID.set(SELECT, id);
     this.updateHighLight(r, g, b, SELECT);
   }
