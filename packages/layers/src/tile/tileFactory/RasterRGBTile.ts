@@ -1,5 +1,5 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
-import RasterLayer from './layers/rasterDataLayer';
+import RasterLayer from './layers/RasterDataLayer';
 import Tile from './Tile';
 
 export default class RasterTile extends Tile {
