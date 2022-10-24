@@ -227,15 +227,38 @@ export interface ITilePickService {
   destroy(): void;
 }
 
+export interface ITile {
+  x: number;
+  y: number;
+  z: number;
+  key: string;
+  sourceTile: SourceTile;
+  visible: boolean;
+  isLoaded: boolean;
+  getLayers(): ILayer[];
+  styleUpdate(...args: any): void;
+  initTileLayer(): Promise<void>;
+  lnglatInBounds(lnglat: {
+    lng: number;
+    lat: number;
+  }): boolean;
+  updateVisible(value: boolean): void;
+  updateOptions(key: string, value: any): void;
+  destroy(): void;
+}
 
 export interface ITileLayerService {
   tileResource: Map<string, any>;
   hasTile(tileKey: string): boolean;
+  getLayers(): ILayer[];
+  getTiles(): ITile[];
 }
 
 export interface IBaseTileLayer {
   tilesetManager: TilesetManager | undefined;
   tileLayerService: ITileLayerService;
+  getLayers(): ILayer[];
+  getTiles(): ITile[];
   pickRender(target: IInteractionTarget):void;
   selectFeature(pickedColors: Uint8Array | undefined):void;
   highlightPickedFeature(pickedColors: Uint8Array | undefined):void;
@@ -337,7 +360,6 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-  isVector?: boolean;
   isTileLayer?: boolean;
   triangulation?: Triangulation | undefined;
   processData(data: IParseDataItem[]): IParseDataItem[];

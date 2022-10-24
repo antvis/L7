@@ -112,20 +112,35 @@ export default () => {
 
           scene.addLayer(layer);
 
+          // setTimeout(() => {
+          //   layer.style({
+          //     opacity: 0.5,
+          //     // rampColors: {
+          //     //   // colors: colorList,
+          //     //   // positions,
+          //     //   colors: ['#f00', '#f00'],
+          //     //   positions: [0, 1]
+          //     // },
+          //   })
+          //   scene.render();
+          //   console.log('***')
+          // }, 2000)
+
           // layer.on('click', (e) => {
           //   console.log('layer click');
           //   console.log(e);
           // });
 
-          // setTimeout(() => {
-          //   layer.style({
-          //     rampColors: {
-          //       colors: ['#f00', '#ff0'],
-          //       positions: [0, 1]
-          //     }
-          //   });
-          //   scene.render()
-          // }, 2000)
+          setTimeout(() => {
+            layer.style({
+              opacity: 0.6,
+              rampColors: {
+                colors: ['#f00', '#ff0'],
+                positions: [0, 1]
+              }
+            });
+            scene.render()
+          }, 2000)
         });
     });
 

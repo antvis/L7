@@ -2,12 +2,18 @@ import { ILayerAttributesOption, TYPES, IRendererService, ITexture2D } from '@an
 import { IColorRamp, generateColorRamp } from '@antv/l7-utils';
 import RasterLayer from './layers/RasterDataLayer';
 import Tile from './Tile';
+import { isEqual } from 'lodash';
 
 interface ITileLayerStyleOptions {
   rampColors?: IColorRamp;
 }
 
 const COLOR_TEXTURE = 'raster-colorTexture';
+const COLOR_TEXTURE_OPTION = 'raster-colorTexture-option';
+const DEFAULT_COLOR_TEXTURE_OPTION = {
+  positions: [0, 1],
+  colors: ['#000', '#fff']
+};
 
 export default class RasterTile extends Tile {
   private colorTexture: ITexture2D;
@@ -15,7 +21,7 @@ export default class RasterTile extends Tile {
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig()
     const sourceOptions = this.getSourceOption();
-
+    
     this.initColorTexture()
     const layer = new RasterLayer({
       ...layerOptions,
@@ -53,9 +59,13 @@ export default class RasterTile extends Tile {
     };
   }
 
+  private getTileResource() {
+    return this.parent.tileLayer.tileLayerService.tileResource;
+  }
+
   private initColorTexture(){
-    const tileLayerService = this.parent.tileLayer.tileLayerService;
-    const colorTexture = tileLayerService.tileResource.get(COLOR_TEXTURE);
+    const tileResource = this.getTileResource();
+    const colorTexture = tileResource.get(COLOR_TEXTURE);
     if(colorTexture) {
       this.colorTexture = colorTexture;
     } else {
@@ -63,16 +73,36 @@ export default class RasterTile extends Tile {
       const rendererService = container.get<IRendererService>(
         TYPES.IRendererService,
       );
-      const { rampColors = {
-        positions: [0, 1],
-        colors: ['#000', '#fff']
-      } } = this.parent.getLayerConfig() as ITileLayerStyleOptions;
+      const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION } = this.parent.getLayerConfig() as ITileLayerStyleOptions;
+
       this.colorTexture = this.createColorTexture(rampColors, rendererService);
-      tileLayerService.tileResource.set(COLOR_TEXTURE, this.colorTexture)
+
+      tileResource.set(COLOR_TEXTURE, this.colorTexture);
+      tileResource.set(COLOR_TEXTURE_OPTION, rampColors);
     }
   }
 
-  createColorTexture(config: IColorRamp, rendererService: IRendererService){
+  private updateColorTexture(){
+    const tileResource = this.getTileResource();
+    tileResource.delete(COLOR_TEXTURE);
+    this.initColorTexture();
+  }
+
+  /**
+   * 用于 style 更新 colorTexture 的优化
+   * @param arg 
+   */
+  public styleUpdate(...arg: any): void {
+    const tileResource = this.getTileResource();
+    const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION } = arg;
+    const cacheRampColors = tileResource.get(COLOR_TEXTURE_OPTION);
+    if(!isEqual(rampColors, cacheRampColors)) {
+      this.updateColorTexture();
+    }
+    this.layers.forEach(layer => layer.style({ colorTexture: this.colorTexture }));
+  }
+
+  private createColorTexture(config: IColorRamp, rendererService: IRendererService){
     const { createTexture2D } = rendererService;
     const imageData = generateColorRamp(config) as ImageData;
     const texture =  createTexture2D({
@@ -85,7 +115,6 @@ export default class RasterTile extends Tile {
   }
 
   public destroy() {
-    this.colorTexture?.destroy();
     this.layers.forEach((layer) => layer.destroy());
   }
 }
