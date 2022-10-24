@@ -365,10 +365,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.styleAttributeService = this.container.get<IStyleAttributeService>(
       TYPES.IStyleAttributeService,
     );
-    this.multiPassRenderer = this.container.get<IMultiPassRenderer>(
-      TYPES.IMultiPassRenderer,
-    );
-    this.multiPassRenderer.setLayer(this);
+    if(enableMultiPassRenderer) { // 按需初始化 瓦片频繁报错 
+      this.multiPassRenderer = this.container.get<IMultiPassRenderer>(
+        TYPES.IMultiPassRenderer,
+      );
+      this.multiPassRenderer.setLayer(this);
+    }
+   
 
     // 完成样式服务注册完成前添加的属性
     this.pendingStyleAttributes.forEach(
@@ -1310,7 +1313,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     throw new Error('Method not implemented.');
   }
   public async rebuildModels() {
-    console.log('2222');
     await this.buildModels();
   }
 

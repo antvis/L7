@@ -6,7 +6,6 @@ export default class DebugTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const sourceOptions = this.getSourceOption();
     const pointData = sourceOptions.data.features[0].properties;
-
     const lineLayer = new LineLayer()
       .source(sourceOptions.data, sourceOptions.options)
       .size(1)

@@ -289,6 +289,5 @@ export function createLayerContainer(sceneContainer: Container) {
     .bind<IPostProcessor>(TYPES.IPostProcessor)
     .to(PostProcessor)
     .inSingletonScope();
-
   return layerContainer;
 }
