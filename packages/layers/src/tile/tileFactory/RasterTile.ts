@@ -1,6 +1,6 @@
 import { ILayerAttributesOption, TYPES, IRendererService, ITexture2D } from '@antv/l7-core';
 import { IColorRamp, generateColorRamp } from '@antv/l7-utils';
-import RasterLayer from './layers/rasterDataLayer';
+import RasterLayer from './layers/RasterDataLayer';
 import Tile from './Tile';
 
 interface ITileLayerStyleOptions {
