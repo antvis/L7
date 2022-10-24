@@ -3,7 +3,7 @@ import {
   Scene,
   Source,
   PolygonLayer,
-  // LineLayer,
+  LineLayer,
   TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
@@ -19,10 +19,10 @@ export default () => {
       id: 'map',
       stencil: true,
       map: new Map({
-        center: [60, 30],
+        center: [120, 30],
         // zoom: 12,
         minZoom: 0,
-        zoom: 1,
+        zoom: 3,
       }),
     });
 
@@ -53,7 +53,7 @@ export default () => {
       })
         .source(source)
         .select(true)
-        .active(true)
+        .active(false)
         .shape('fill')
         .color('NAME_CHN', (NAME_CHN) => {
           const namestr = unicode2Char(NAME_CHN);
@@ -77,22 +77,22 @@ export default () => {
           }
         });
 
-      // const line = new LineLayer({
-      //   sourceLayer: 'WLD_L',
-      //   zIndex: 2,
-      // })
-      //   .source(source)
-      //   .shape('line')
-      //   .size(0.6)
-      //   .color('type', (t) => {
-      //     if (t === '0') {
-      //       return 'red';
-      //     }
-      //     if (t === '2') {
-      //       return '#09f';
-      //     }
-      //     return '#fc9272';
-      //   });
+      const line = new LineLayer({
+        sourceLayer: 'WLD_L',
+        zIndex: 2,
+      })
+        .source(source)
+        .shape('line')
+        .size(0.6)
+        .color('type', (t) => {
+          if (t === '0') {
+            return 'red';
+          }
+          if (t === '2') {
+            return '#09f';
+          }
+          return '#fc9272';
+        });
 
       water_surface.on('click', (e) => {
         console.log(e);

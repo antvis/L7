@@ -29,7 +29,8 @@ export class TilePickService {
   selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    const id = this.initPickID(r, g, b);
+    const id = this.clor2PickId(r, g, b);
+    console.log(id)
     this.tilePickID.set(SELECT, id);
     this.updateHighLight(r, g, b, SELECT);
   }
@@ -37,7 +38,7 @@ export class TilePickService {
   highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    const id = this.initPickID(r, g, b);
+    const id = this.clor2PickId(r, g, b);
     this.tilePickID.set(ACTIVE, id);
     this.updateHighLight(r, g, b, ACTIVE);
   }
@@ -45,6 +46,7 @@ export class TilePickService {
   updateHighLight(r: number, g: number, b: number, type: string){
     this.tileLayerService.tiles.map((tile: Tile) => {
       const layers = tile.getLayers();
+      console.log(layers)
       layers.forEach((layer) => {
         switch(type) {
           case SELECT:
@@ -62,22 +64,22 @@ export class TilePickService {
     const selectColor = this.tilePickID.get(SELECT)
     const activeColor = this.tilePickID.get(ACTIVE)
     if(selectColor) {
-      const [r, g, b] = this.splitPickID(selectColor);
+      const [r, g, b] = this.pickId2Color(selectColor);
       this.updateHighLight(r, g, b, SELECT);
       return;
     }
     if(activeColor) {
-      const [r, g, b] = this.splitPickID(activeColor);
+      const [r, g, b] = this.pickId2Color(activeColor);
       this.updateHighLight(r, g, b, ACTIVE);
       return;
     }
   }
 
-  private initPickID (r: number, g: number, b: number){
+  private clor2PickId (r: number, g: number, b: number){
     return r + '-' + g + '-' + b;
   }
 
-  private splitPickID(str: string){
+  private pickId2Color(str: string){
     return str.split('-').map(n => +n)
   }
 
