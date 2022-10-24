@@ -46,12 +46,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       return;
     }
 
-    if (layer.isTileLayer) {
-      this.registerPositionAttribute(styleAttributeService);
-      this.registerColorAttribute(styleAttributeService);
-      return;
-    }
-
     // Tip: normal render layer
     this.registerPositionAttribute(styleAttributeService);
     this.registerFilterAttribute(styleAttributeService);

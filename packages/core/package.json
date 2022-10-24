@@ -24,7 +24,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/async-hook": "^2.2.2",
+    "@antv/async-hook": "^2.2.9",
     "@antv/l7-utils": "2.9.37",
     "@babel/runtime": "^7.7.7",
     "@turf/helpers": "^6.1.4",

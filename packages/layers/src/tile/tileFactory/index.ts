@@ -3,6 +3,7 @@ import VectorTile from './VectorTile';
 import DebugTile from './DebugTile';
 import ImageTile from  './ImageTile';
 import RasterTile from './RasterTile';
+import RasterRGBTile from './RasterRGBTile';
 import MaskLayer from './MaskTile';
 
 
@@ -19,7 +20,6 @@ export type TileType =
 
 export function getTileFactory(layer: ILayer) {
   const tileType = layer.type;
-  // console.log('tileType', tileType)
   switch (tileType) {
     case 'PolygonLayer':
       return VectorTile;
@@ -35,25 +35,14 @@ export function getTileFactory(layer: ILayer) {
       const { dataType } = layer.getSource().parser;
       switch(dataType) {
         case 'rgb':
+          return RasterRGBTile;
         case 'arraybuffer':
           return RasterTile
         default:
           return ImageTile;
       }
     default:
-      return VectorTile
-    // case 'MaskLayer':
-    //   return VectorMask;
- 
-    // case 'RasterLayer':
-    //   if(rasterDataTypes.includes(parser.dataType)) {
-    //     return RasterDataFactory;
-    //   } else {
-    //     return RasterTileFactory;
-    //   }
-    // default:
-    //   console.warn('Current Tile Not Exist!');
-    //   return RasterTileFactory;
+      return VectorTile;
   }
 }
 

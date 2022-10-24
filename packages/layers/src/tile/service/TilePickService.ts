@@ -6,14 +6,19 @@ export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
 }
+
+const SELECT = 'select';
+const ACTIVE = 'active';
 export class TilePickService {
   private layerService: ILayerService;
   private tileLayerService: TileLayerService;
+  private tilePickID = new Map();
   constructor({ layerService, tileLayerService }: ITilePickServiceOptions) {
     this.layerService = layerService;
     this.tileLayerService = tileLayerService;
   }
   pickRender(target: IInteractionTarget) {
+    // 一个 TileLayer 有多个 Tile，但是会同时触发事件的只有一个 Tile
     const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
     if (tile) {
       // TODO 多图层拾取
@@ -24,23 +29,58 @@ export class TilePickService {
   selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    this.tileLayerService.tiles.map((tile: Tile) => {
-      const layers = tile.getLayers();
-      layers.forEach((layer) => {
-        layer.hooks.beforeSelect.call([r, g, b]);
-      });
-    });
+    const id = this.initPickID(r, g, b);
+    this.tilePickID.set(SELECT, id);
+    this.updateHighLight(r, g, b, SELECT);
   }
+
   highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
+    const id = this.initPickID(r, g, b);
+    this.tilePickID.set(ACTIVE, id);
+    this.updateHighLight(r, g, b, ACTIVE);
+  }
+
+  updateHighLight(r: number, g: number, b: number, type: string){
     this.tileLayerService.tiles.map((tile: Tile) => {
       const layers = tile.getLayers();
       layers.forEach((layer) => {
-        layer.hooks.beforeHighlight.call([r, g, b]);
+        switch(type) {
+          case SELECT:
+            layer.hooks.beforeSelect.call([r, g, b]);
+            break;
+          case ACTIVE:
+            layer.hooks.beforeHighlight.call([r, g, b]);
+            break;
+        }
       });
     });
   }
+
+  setPickState() {
+    const selectColor = this.tilePickID.get(SELECT)
+    const activeColor = this.tilePickID.get(ACTIVE)
+    if(selectColor) {
+      const [r, g, b] = this.splitPickID(selectColor);
+      this.updateHighLight(r, g, b, SELECT);
+      return;
+    }
+    if(activeColor) {
+      const [r, g, b] = this.splitPickID(activeColor);
+      this.updateHighLight(r, g, b, ACTIVE);
+      return;
+    }
+  }
+
+  private initPickID (r: number, g: number, b: number){
+    return r + '-' + g + '-' + b;
+  }
+
+  private splitPickID(str: string){
+    return str.split('-').map(n => +n)
+  }
+
   /** 从瓦片中根据数据 */
   getFeatureById() {
 

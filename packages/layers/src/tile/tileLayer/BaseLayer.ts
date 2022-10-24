@@ -179,6 +179,7 @@ export default class BaseTileLayer {
           const tileInstance = getTileFactory(this.parent);
           const tileLayer = new tileInstance(tile, this.parent);
           await tileLayer.initTileLayer();
+          this.tilePickService.setPickState();
           if(tileLayer.getLayers().length!==0) {
             this.tileLayerService.addTile(tileLayer);
             this.layerService.reRender()
@@ -186,8 +187,8 @@ export default class BaseTileLayer {
           this.tileLayerService.addTile(tileLayer);
           this.layerService.reRender()
         } else {
-
           this.tileLayerService.updateTileVisible(tile);
+          this.tilePickService.setPickState();
           this.layerService.reRender()
         }
       }));

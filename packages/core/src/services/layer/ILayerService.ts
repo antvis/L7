@@ -215,7 +215,6 @@ export interface IBaseTileLayerManager {
 
 export interface ITileRenderService {
   render(layers: ILayer[]): void;
-  renderMask(layers: ILayer): void;
 }
 
 export interface ITilePickService {
@@ -666,7 +665,8 @@ export interface ILayerService {
   removeAllLayers(): void;
   updateLayerRenderList(): void;
   reRender(): void;
-  renderMask(masks:ILayer[]):Promise<void[]>;
+  beforeRenderData(layer: ILayer): Promise<void>;
+  renderMask(masks:ILayer[]): void;
   renderLayer(layer: ILayer): Promise<void>
 
   throttleRenderLayers(): void;

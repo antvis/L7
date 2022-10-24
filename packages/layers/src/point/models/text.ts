@@ -177,7 +177,8 @@ export default class TextModel extends BaseModel {
   }
 
   public async initModels():Promise<IModel[]>  {
-    this.layer.on('remapping', this.mapping);
+    // 绑定事件
+    this.bindEvent();
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -210,6 +211,7 @@ export default class TextModel extends BaseModel {
       return [model]
        
   }
+  
   public needUpdate() {
     const {
       textAllowOverlap = false,
@@ -237,6 +239,7 @@ export default class TextModel extends BaseModel {
     // TODO this.mapping
     this.layer.off('remapping', this.mapping);
   }
+
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'rotate',
@@ -321,6 +324,13 @@ export default class TextModel extends BaseModel {
         },
       },
     });
+  }
+
+  private bindEvent() {
+    if(!this.layer.isTileLayer) {
+      // console.log('mapping')
+      this.layer.on('remapping', this.mapping);
+    }
   }
 
   private mapping = async(): Promise<void> =>{

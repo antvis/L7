@@ -1,14 +1,17 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
-import ImageLayer from '../../image'
+import RasterLayer from './layers/rasterDataLayer';
 import Tile from './Tile';
-export default class ImageTile extends Tile {
+
+export default class RasterTile extends Tile {
   public async initTileLayer(): Promise<void> {
-    
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig()
-    
     const sourceOptions = this.getSourceOption();
-    const layer = new ImageLayer({...layerOptions}).source(
+
+    const layer = new RasterLayer({
+      ...layerOptions,
+    })
+    .source(
       sourceOptions.data,
       sourceOptions.options,
     );
@@ -23,14 +26,17 @@ export default class ImageTile extends Tile {
     await this.addLayer(layer);
     this.isLoaded = true;
   }
+
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
     return {
-      data: this.sourceTile.data,
+      data: this.sourceTile.data.data,
       options: {
         parser: {
-          type: 'image',
+          type: 'rasterRgb',
           extent: this.sourceTile.bounds,
+          width: this.sourceTile.data.width,
+          height: this.sourceTile.data.height,
         },
         transforms: rawSource.transforms,
       },
