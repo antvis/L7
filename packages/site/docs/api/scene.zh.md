@@ -35,7 +35,7 @@ redirect_from:
 const map = scene.map;
 ```
 
-为了统一不同底图之前的接口差异  `L7` 在 `Scene` 层对 `map` 的方法做了统一，因此一些地图的操作方法可以通过 `Scene` 调用，这样，切换不同底图时可以保证表现一致。
+为了统一不同底图之前的接口差异 `L7` 在 `Scene` 层对 `map` 的方法做了统一，因此一些地图的操作方法可以通过 `Scene` 调用，这样，切换不同底图时可以保证表现一致。
 
 示例代码
 
@@ -169,7 +169,6 @@ scene.addControl(ctl);
 
 移除用户添加的组件控件。
 
-
 - `ctl` 用户创建的控件对象。
 
 ```javascript
@@ -293,7 +292,7 @@ scene.getContainer();
 - dark
 - normal
 
-设置地图底图样式的方法。    
+设置地图底图样式的方法。
 
 ```javascript
 // 快捷名称设置
@@ -319,10 +318,10 @@ interface ICameraOptions {
     | number
     | [number, number, number, number]
     | {
-        top?: number;
-        bottom?: number;
-        right?: number;
-        left?: number;
+        top?: number,
+        bottom?: number,
+        right?: number,
+        left?: number,
       };
 }
 
@@ -418,7 +417,7 @@ scene.setPitch(pitch);
 用来设置地图的一些交互配置。
 
 ```javascript
- interface IStatusOptions {
+interface IStatusOptions {
   showIndoorMap: boolean;
   resizeEnable: boolean;
   dragEnable: boolean;
@@ -426,9 +425,9 @@ scene.setPitch(pitch);
   doubleClickZoom: boolean;
   zoomEnable: boolean;
   rotateEnable: boolean;
- }
+}
 
- scene.setMapStatus({ dragEnable: false });
+scene.setMapStatus({ dragEnable: false });
 ```
 
 ### fitBounds(bound: IBounds, options?: IOptions): void 设置地图缩放范围
@@ -464,6 +463,7 @@ interface ILngLat {
 
 scene.pixelToLngLat([10, 10]);
 ```
+
 ### lngLatToContainer(lnglat: ILngLat): IPoint 经纬度转画布坐标
 
 经纬度坐标转画布坐标。
@@ -478,7 +478,7 @@ interface IPoint {
 scene.lngLatToPixel([120, 10]);
 ```
 
-### pixelToLngLat(pixel: IPoint): ILngLat  像素坐标转经纬度
+### pixelToLngLat(pixel: IPoint): ILngLat 像素坐标转经纬度
 
 地图像素坐标转经纬度坐标，像素坐标地图上某点距离容器左上角的位置。
 
@@ -532,22 +532,27 @@ scene.addIconFont('icon1', '&#xe64b;');
 scene.addIconFont('icon2', '&#xe64c;');
 scene.addFontFace(fontFamily, fontPath);
 const pointIconFontLayer = new PointLayer({})
-  .source([{
+  .source(
+    [
+      {
         j: 140,
         w: 34,
         m: 'icon1',
-      },{
+      },
+      {
         j: 140,
         w: 36,
         m: 'icon2',
       },
-    ],{
+    ],
+    {
       parser: {
         type: 'json',
         x: 'j',
         y: 'w',
       },
-    })
+    },
+  )
   .shape('m', 'text')
   .size(12)
   .color('w', ['#f00', '#f00', '#0f0'])
@@ -557,6 +562,7 @@ const pointIconFontLayer = new PointLayer({})
     textAllowOverlap: true,
   });
 ```
+
 ### addIconFonts(option: IOption): void 同时传入多组 name - unicode 的键值对
 
 同时传入多组 `name - unicode` 的键值对。
@@ -627,6 +633,7 @@ scene.addFontFace(fontFamily, fontPath);
 ### off(eventName: string, handler: function): void
 
 移除在 `scene` 上绑定的事件监听。
+
 - `eventName` 事件名。
 - `handler` 事件回调函数。
 
@@ -697,7 +704,5 @@ scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖
 ```js
 const scene = new Scene({
   offsetCoordinate: true,
-})
+});
 ```
-
-
