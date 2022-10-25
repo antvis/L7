@@ -9,6 +9,7 @@ export const ProxyFuncs = [
     'color',
     'size',
     'style',
+    'animate',
     'filter',
     'rotate',
     'scale',
