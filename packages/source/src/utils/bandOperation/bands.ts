@@ -20,12 +20,15 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
       }
     }
 
-    let bandsData = (await Promise.all(
+    const formatData = (await Promise.all(
     imageDataList.map(({ data, bands = [0] }) => rasterFormat(data, bands)),
     )) as IRasterData[];
-    // @ts-ignore 
-    bandsData = bandsData.flat();
+    const bandsData: IRasterData[] = [];
     // Tip: rasterFormat 返回值 rasterData|rasterData[]
+    formatData.forEach(d =>{
+      Array.isArray(d) ? bandsData.push(...d): bandsData.push(d);
+    })
+    
 
     // 多个栅格数据必须是相同大小才能进行相互之间的运算
     const { width, height } = bandsData[0];
