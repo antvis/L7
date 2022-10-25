@@ -197,7 +197,6 @@ export default class TextModel extends BaseModel {
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.mapping();
-
    const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointText',

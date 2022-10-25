@@ -5,6 +5,7 @@ import {
   PolygonLayer,
   LineLayer,
   TileDebugLayer,
+  PointLayer,
 } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
@@ -94,6 +95,16 @@ export default () => {
           return '#fc9272';
         });
 
+      const text = new PointLayer({
+        sourceLayer: 'WLD',
+        // blend: 'normal',
+        zIndex: 10,
+      })
+        .source(source)
+        .shape('id', 'text')
+        .size(12)
+        .color('#000');
+
       water_surface.on('click', (e) => {
         console.log(e);
       });
@@ -101,7 +112,9 @@ export default () => {
       scene.on('zoomend', () => {
         console.log(water_surface);
       });
+
       scene.addLayer(water_surface);
+      scene.addLayer(text);
       // scene.addLayer(line);
       const debugerLayer = new TileDebugLayer({ zIndex: 1 });
       scene.addLayer(debugerLayer);

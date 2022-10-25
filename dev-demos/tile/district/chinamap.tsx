@@ -3,6 +3,7 @@ import {
   Scene,
   Source,
   PolygonLayer,
+  PointLayer,
   LineLayer,
   TileDebugLayer,
 } from '@antv/l7';
@@ -106,11 +107,22 @@ export default () => {
         .shape('line')
         .size(0.6)
         .color('#053061');
+
+      const text = new PointLayer({
+        sourceLayer: 'CHN_Cities',
+        blend: 'normal',
+      })
+        .source(source)
+        .shape('id', 'text')
+        .size(12)
+        .color('#000');
+
       const debugerLayer = new TileDebugLayer();
 
       scene.addLayer(fill);
       scene.addLayer(line);
       scene.addLayer(line2);
+      scene.addLayer(text);
 
       scene.addLayer(debugerLayer);
     });
