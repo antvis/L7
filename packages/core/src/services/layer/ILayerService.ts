@@ -213,17 +213,27 @@ export interface IBaseTileLayerManager {
   destroy(): void;
 }
 
-export interface ITileRenderService {
-  render(layers: ILayer[]): void;
+export interface ITilePickService {
+  pickRender(target: IInteractionTarget): void;
 }
 
-export interface ITilePickService {
-  isLastPicked: boolean;
-  on(type: string, cb: (option: any) => void): void;
-  beforeHighlight(pickedColors: any): void;
-  beforeSelect(pickedColors: any): void;
-  clearPick(): void;
-  pick(layers: ILayer[], target: IInteractionTarget): boolean;
+export interface ITile {
+  x: number;
+  y: number;
+  z: number;
+  key: string;
+  sourceTile: SourceTile;
+  visible: boolean;
+  isLoaded: boolean;
+  getLayers(): ILayer[];
+  styleUpdate(...args: any): void;
+  initTileLayer(): Promise<void>;
+  lnglatInBounds(lnglat: {
+    lng: number;
+    lat: number;
+  }): boolean;
+  updateVisible(value: boolean): void;
+  updateOptions(key: string, value: any): void;
   destroy(): void;
 }
 

@@ -13,11 +13,11 @@ import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
 import { debounce } from 'lodash';
 import { getTileFactory } from '../tileFactory';
-import { LayerStyleProxy } from '../style/style';
+import { ProxyFuncs } from '../style/constants';
 
 export default class BaseTileLayer {
   private parent: ILayer;
-  private layerStyleProxy: LayerStyleProxy;
+
   public tileLayerService: TileLayerService;
   protected mapService: IMapService;
   protected layerService: ILayerService;
@@ -34,7 +34,6 @@ export default class BaseTileLayer {
 
   constructor(parent: ILayer) {
     this.parent = parent;
-    this.layerStyleProxy = new LayerStyleProxy();
     const container = this.parent.getContainer();
     this.rendererService = container.get<IRendererService>(
       TYPES.IRendererService,
@@ -59,7 +58,7 @@ export default class BaseTileLayer {
 
       // 重置
       this.parent.setLayerPickService(this.tilePickService);
-      this.layerStyleProxy.proxy(this.parent);
+      this.proxy(parent);
 
       this.initTileSetManager();
   
@@ -239,6 +238,32 @@ export default class BaseTileLayer {
   public highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     this.tilePickService.highlightPickedFeature(pickedColors)
   }
+
+
+  /**
+   * 实现 TileLayer 对子图层方法的代理
+   * @param parent 
+   */
+  private proxy(parent: ILayer) {
+    ProxyFuncs.forEach(func => {
+      // @ts-ignore
+      const oldStyleFunc = parent[func].bind(parent);
+      // @ts-ignore
+      parent[func] = (...args: any) => {
+        oldStyleFunc(...args);
+        this.getLayers().map(child =>{
+            // @ts-ignore
+            child[func](...args);
+        })
+        // Tip: 目前在更新 RasterData 的 colorTexture 的时候需要额外优化
+        if(func === 'style') {
+            this.getTiles().forEach(tile => tile.styleUpdate(...args));
+        }
+        
+        return parent;
+      }
+    })
+}
 
 
 }

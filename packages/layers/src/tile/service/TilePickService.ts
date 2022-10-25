@@ -1,4 +1,4 @@
-import { ILayerService, ITile } from '@antv/l7-core';
+import { ILayerService, ITile, ITilePickService } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
 import { IInteractionTarget } from '@antv/l7-core';
 export interface ITilePickServiceOptions {
@@ -8,7 +8,7 @@ export interface ITilePickServiceOptions {
 
 const SELECT = 'select';
 const ACTIVE = 'active';
-export class TilePickService {
+export class TilePickService implements ITilePickService{
   private layerService: ILayerService;
   private tileLayerService: TileLayerService;
   private tilePickID = new Map();
