@@ -23,19 +23,19 @@ redirect_from:
 
 <description> _string | HTMLElement_ **必选** </description>
 
-需传入 dom 容器或者容器 id
+需传入 dom 容器或者容器 id。
 
 ### map
 
 <description> MapInstance **必选** </description>
 
-可以通过 scene map 属性获取 map 实例
+可以通过 scene map 属性获取 map 实例。
 
 ```javascript
 const map = scene.map;
 ```
 
-为了统一不同底图之前的接口差异 L7 在 scene 层对 map 的方法做了统一，因此一些地图的操作方法可以通过 scene 调用这样，切换不同底图时保证表现一致。
+为了统一不同底图之前的接口差异  `L7` 在 `Scene` 层对 `map` 的方法做了统一，因此一些地图的操作方法可以通过 `Scene` 调用，这样，切换不同底图时可以保证表现一致。
 
 示例代码
 
@@ -54,7 +54,7 @@ const scene = new L7.Scene({
 
 <description> _bottomleft_ **可选** </description>
 
-L7 Logo 的显示位置 默认左下角
+`L7` 默认提供的 `Logo` 可以配置显示位置，默认在左下角。
 
 - bottomright
 - topright
@@ -69,125 +69,116 @@ L7 Logo 的显示位置 默认左下角
 
 <description> _bottomleft_ **可选** _default: true_ </description>
 
-是否显示 L7 的 Logo {boolean} true
+配置 `L7` 的 `Logo` 是否显示，默认显示。
 
 ### antialias 是否开启抗锯齿
 
 <description> _boolean_ **可选** _default: true_ </description>
 
-是否开始前抗锯齿
+是否开始前抗锯齿。
 
 ### stencil 是否开启裁减
 
 <description> _boolean_ **可选** _default: false_ </description>
 
-是否开始开启裁剪
+是否开始开启裁剪。
 
-🌟 从 v2.7.2 版本开始支持
+🌟 从 v2.7.2 版本开始支持， 图层 `Mask` 掩模能力以及矢量瓦片需要开始该配置。
 
 ### preserveDrawingBuffer
 
 <description> _boolean_ **可选** _default: false_ </description>
 
-是否保留缓冲区数据 `boolean` `false`
+是否保留缓冲区数据 `boolean` `false`。
 
 ## Layer 方法
 
-### addLayer(layer) 增加图层对象
+### addLayer(layer): void 增加图层对象
 
-增加图层对象
+把图层添加到 `Scene` 场景中。
 
 参数 :
 
-- `layer` {ILayer} 图层对象
+- `layer` 图层对象
 
 ```javascript
 scene.addLayer(layer);
 ```
 
-### getLayer(id) 获取对应的图层对象
+### getLayer(id: string): ILayer 获取对应的图层对象
 
-获取对应的图层对象
-
-参数 :
-
-- `id` {string}
+获取对应的图层。
 
 ```javascript
 scene.getLayer('layerID');
 ```
 
-### getLayers() 获取所有的地图图层
+### getLayers(): ILayer[] 获取所有的地图图层
 
-获取所有的地图图层
+获取所有的地图图层。
 
 ```javascript
 scene.getLayers();
 ```
 
-### getLayerByName(name) 根据图层名称获取图层
+### getLayerByName(name: string): ILayer 根据图层名称获取图层
 
-根据图层名称获取图层
+根据图层名称获取图层。
 
-参数
+参数 :
 
-- `name` {string} layer 初始化可配置图层 name
+- `name` 图层在初始化的时候配置图层的 `name`。
 
 ```javascript
-scene.getLayerByName(name); // return Layer 图层对象
+scene.getLayerByName(name);
 ```
 
-### removeLayer 移除 layer 图层
+### removeLayer(layer: ILayer): void 移除 layer 图层
 
-移除 layer 图层
+移除 `layer` 图层。
 
 ```javascript
 scene.removeLayer(layer);
 ```
 
-参数 :
+🌟 移除的同时会将图层进行销毁。
 
-- `layer` {Layer}
+### removeAllLayer(): void 移除所有的图层对象
 
-### removeAllLayer() 移除所有的图层对象
-
-移除所有的图层对象
+移除所有的图层对象。
 
 ```javascript
 scene.removeAllLayer();
 ```
 
+🌟 移除的同时会将图层进行销毁。
+
 ## 控制组件方法
 
-### addControl(ctl) 添加组件控件
+### addControl(ctl: IControl): void 添加组件控件
 
-添加组件控件
+添加组件控件。
 
-参数 :
-
-- `crl` { IControl } 用户创建的控件对象
+- `crl` 用户创建的控件对象。
 
 ```javascript
 scene.addControl(ctl);
 ```
 
-### removeControl(ctr) 移除用户添加的组件控件
+### removeControl(ctr: IControl): void 移除用户添加的组件控件
 
-移除用户添加的组件控件
+移除用户添加的组件控件。
 
-参数 :
 
-- `ctl` { IControl } 用户创建的控件对象
+- `ctl` 用户创建的控件对象。
 
 ```javascript
 scene.removeControl(ctl);
 ```
 
-### getControlByName(name) 根据控件的名称来获取控件
+### getControlByName(name: string): IControl 根据控件的名称来获取控件
 
-根据控件的名称来获取控件
-
-- `name` { string }
+根据控件的名称来获取控件。
 
 ```javascript
 const zoomControl = new Zoom({
@@ -201,13 +192,11 @@ scene.getControlByName('z1');
 
 ## 标记方法
 
-### addMarker(maker) 添加标记
+### addMarker(maker: IMarker): void 添加标记
 
-往场景中添加标记对象
+往场景中添加标记对象，`Marker` 实例是用户自由控制的 `DOM`。
 
-参数 :
-
-- `maker` { IMarker } Marker 实例
+- `maker` 用户创建的 `Marker` 实例。
 
 ```javascript
 const marker = new Marker({
@@ -216,13 +205,11 @@ const marker = new Marker({
 scene.addMarker(marker);
 ```
 
-### addMarkerLayer(layer) 添加 Marker 统一管理图层
+### addMarkerLayer(layer: IMarkerLayer): void 添加 Marker 统一管理图层
 
-当用户需要添加许多个 Marker 实例时，为了方便管理可以使用 markerLayer 对象统一管理
+当用户需要添加许多个 `Marker` 实例时，为了方便管理可以使用 `MarkerLayer` 对象统一管理。
 
-参数 :
-
-- `layer` { IMarkerLayer } 标记图层对象
+- `layer` 标记图层对象。
 
 ```javascript
 const markerLayer = new MarkerLayer();
@@ -231,21 +218,19 @@ scene.addMarkerLayer(markerLayer);
 
 [示例地址](/zh/examples/point/marker#markerlayer)
 
-### removeMarkerLayer(layer) 移除标签图层
+### removeMarkerLayer(layer: IMarkerLayer): void 移除标签图层
 
-移除标签图层
+移除标签图层。
 
-参数 :
-
-- `layer` { IMarkerLayer } 标记图层对象
+- `layer` 标记图层对象。
 
 ```javascript
 scene.removeMarkerLayer(markerLayer);
 ```
 
-### removeAllMakers() 移除场景中所有的标签对象
+### removeAllMakers(): void 移除场景中所有的标签对象
 
-移除场景中所有的标签对象
+移除场景中所有的标签对象。
 
 ```javascript
 scene.removeAllMakers();
@@ -253,69 +238,65 @@ scene.removeAllMakers();
 
 ## 地图方法
 
-### getZoom 获取缩放等级
+### getZoom(): number 获取缩放等级
 
-获取当前缩放等级
+获取当前缩放等级。
 
 ```javascript
 scene.getZoom();
 ```
 
-return {float}   当前缩放等级
-
-### getCenter() 获取地图中心
+### getCenter(): ILngLat 获取地图中心
 
 获取地图中心点
 
 ```javascript
+interface ILngLat {
+  lng: number;
+  lat: number;
+}
+
 scene.getCenter();
 ```
 
-return {Lnglat} :地图中心点
+### getSize(): [number, number] 获取地图容器大小
 
-### getSize() 获取地图容器大小
-
-获取地图容器大小
+获取地图容器大小，width、height。
 
 ```javascript
 scene.getSize();
 ```
 
-return { Object } 地图容器的 width,height
+### getPitch(): number 获取地图倾角
 
-### getPitch() 获取地图倾角
-
-获取地图俯仰角
+获取地图俯仰角。
 
 ```javascript
 scene.getPitch();
 ```
 
-return {number} pitch
+### getContainer(): HTMLElement | null 获取地图容器
 
-### getContainer 获取地图容器
-
-获取地图容器 return htmlElement
+获取地图容器。
 
 ```javascript
 scene.getContainer();
 ```
 
-### setMapStyle 设置地图样式
+### setMapStyle(style: string): void 设置地图样式
 
-参数：`style` {string} 地图样式 具体样式格式和各底图设置方法一致
+参数 `style` 参数是字符串，可以选择内置的地图样式 具体样式格式和各底图设置方法一致。
 
-L7 内置了三种地图样式，AMAP 和 MapBox 都适用
+`L7` 内置了三种地图样式，`AMAP` 和 `MapBox` 都适用。
 
 - light
 - dark
 - normal
 
-设置地图底图样式的方法
+设置地图底图样式的方法。    
 
 ```javascript
 // 快捷名称设置
-
 scene.setMapStyle('light');
 
 // mapbox 主题设置
@@ -327,15 +308,25 @@ scene.setMapStyle(
 );
 ```
 
-### setCenter(center: [number, number], option?: ICameraOptions) 设置地图中心点
+### setCenter(center: ICenter, option?: ICameraOptions): void 设置地图中心点
 
-参数：`center` {LngLat} 地图中心点
+设置地图中心点坐标。`L7` 提供了 `setCenter` 方法，允许用户动态的设置地图的中心点位，同时允许通过可选的 `options` 属性设置偏移。
 
-设置地图中心点坐标。L7 提供了 setCenter 方法，允许用户动态的设置地图的中心点位，同时允许通过可选的 options 属性设置偏移。
+```js
+type ICenter = [number, number];
+interface ICameraOptions {
+  padding:
+    | number
+    | [number, number, number, number]
+    | {
+        top?: number;
+        bottom?: number;
+        right?: number;
+        left?: number;
+      };
+}
 
-```javascript
 scene.setCenter([lng, lat]);
-
 scene.setCenter([lng, lat], {
   padding: {
     top: 100,
@@ -343,7 +334,7 @@ scene.setCenter([lng, lat], {
 });
 ```
 
-padding 参数支持如下的三种传值方式，数值的单位是 px
+🌟 `padding` 参数支持如下的三种传值方式，数值的单位是 `px`，表示地图中心点距离容器边缘的偏移距离。
 
 ```javascript
 export interface ICameraOptions {
@@ -361,89 +352,73 @@ export interface ICameraOptions {
 
 [在线案例](/zh/examples/point/bubble#point)
 
-### setZoomAndCenter 设置地图缩放等级和中心点
+### setZoomAndCenter(zoom: number, center: ICenter): void 设置地图缩放等级和中心点
 
-设置地图等级和中心
+设置地图等级和中心。
 
 ```javascript
+type ICenter = [number, number];
 scene.setZoomAndCenter(zoom, center);
 ```
 
-参数：
+### setRotation(rotation: number): void 设置地图旋转
 
-- zoom {number}
-- center {LngLat}
-
-### setRotation 设置地图旋转
-
-设置地图顺时针旋转角度，旋转原点为地图容器中心点，取值范围 [0-360]
+设置地图顺时针旋转角度，旋转原点为地图容器中心点，取值范围 [0-360]。
 
 ```javascript
 scene.setRotation(rotation);
 ```
 
-参数： `rotation` {number}
+### zoomIn(); void 地图放大一级
 
-### zoomIn 地图放大一级
-
-地图放大一级
+地图放大一级。
 
 ```javascript
 scene.zoomIn();
 ```
 
-### zoomOut 地图缩小一级
+### zoomOut(): void 地图缩小一级
 
-地图缩小一级
+地图缩小一级。
 
 ```javascript
 scene.zoomOut();
 ```
 
-### panTo 地图移动到
+### panTo(lnglat: ILngLat): void 地图移动
 
-地图平移到指定的位置
+地图平移到指定的经纬度位置。
 
 ```javascript
+type ILngLat = [number, number];
 scene.panTo(LngLat);
 ```
 
-参数：
+### panBy(x: number, y: number): void 地图平移
 
-- `center` LngLat 中心位置坐标
+以像素为单位沿 X 方向和 Y 方向移动地图。
 
-### panBy 地图平移
-
-以像素为单位沿 X 方向和 Y 方向移动地图
+- `x` 水平方向移动像素 向右为正方向。
+- `y` 垂直方向移动像素 向下为正方向。
 
 ```javascript
 scene.panBy(x, y);
 ```
 
-参数：
+### setPitch(pitch: number): void 设置地图倾角
 
-- `x` {number} 水平方向移动像素 向右为正方向
-
-- `y` {number} 垂直方向移动像素 向下为正方向
-
-### setPitch 设置地图倾角
-
-设置地图仰俯角度
+设置地图仰俯角度。
 
 ```javascript
 scene.setPitch(pitch);
 ```
 
-### setMapStatus 设置地图状态
+### setMapStatus(statusOption: IStatusOptions): void 设置地图状态
 
-可用来关闭地图的一些交互操作
-
-可用来关闭地图的一些交互操作
-
-参数 :
+用来设置地图的一些交互配置。
 
 ```javascript
- IStatusOptions {
+ interface IStatusOptions {
   showIndoorMap: boolean;
   resizeEnable: boolean;
   dragEnable: boolean;
@@ -451,105 +426,96 @@ scene.setPitch(pitch);
   doubleClickZoom: boolean;
   zoomEnable: boolean;
   rotateEnable: boolean;
+ }
+
+ scene.setMapStatus({ dragEnable: false });
 ```
 
-```javascript
-scene.setMapStatus({ dragEnable: false });
-```
+### fitBounds(bound: IBounds, options?: IOptions): void 设置地图缩放范围
 
-- `pitch` {number}
+地图缩放到某个范围内。
 
-### setBgColor 设置场景的背景色
-
-设置场景的背景色
-
-参数 :
-
-- `color` {string}
+- `bound` 表示经纬度范围 [[minlng,minlat],[maxlng,maxlat]]。
+- `options` 用户传入，覆盖 `animate` 直接配置，覆盖 `Scene` 传入的配置项。
 
 ```javascript
-scene.setBgColor('#f00');
-```
+type IBounds = [[number, number], [number, number]];
+interface IOptions {
+  [key]: any;
+  animate: boolean;
+}
 
-### fitBounds 设置地图缩放范围
-
-地图缩放到某个范围内
-
-参数 :
-
-- `extent` { array} 经纬度范围 [[minlng,minlat],[maxlng,maxlat]]
-
-```javascript
 scene.fitBounds([
   [112, 32],
   [114, 35],
 ]);
 ```
 
-### containerToLngLat 画布坐标转经纬度
+### containerToLngLat(point: IPoint): ILngLat 画布坐标转经纬度
 
-画布坐标转经纬度坐标
-
-参数 :
-
-- `pixel` 画布的坐标 [x ,y ] {array }
+将画布坐标转经纬度坐标
 
 ```javascript
+type IPoint = [number, number];
+interface ILngLat {
+  lng: number;
+  lat: number;
+}
+
 scene.pixelToLngLat([10, 10]);
 ```
+### lngLatToContainer(lnglat: ILngLat): IPoint 经纬度转画布坐标
 
-### lngLatToContainer 经纬度转画布坐标
-
-经纬度坐标转画布坐标
-
-参数 :
-
-- `lnglat` 经纬度坐标 [lng,lat ] {array }
+经纬度坐标转画布坐标。
 
 ```javascript
+type ILngLat = [number, number];
+interface IPoint {
+  x: number;
+  y: number;
+}
+
 scene.lngLatToPixel([120, 10]);
 ```
 
-### pixelToLngLat 像素坐标转经纬度
+### pixelToLngLat(pixel: IPoint): ILngLat  像素坐标转经纬度
 
-像素坐标：不同级别下地图上某点的位置
-地图像素坐标转经纬度坐标
-
-参数 :
-
-- `pixel` 画布的坐标 [x ,y ] {array }
+地图像素坐标转经纬度坐标，像素坐标地图上某点距离容器左上角的位置。
 
 ```javascript
+type IPoint = [number, number];
+interface ILngLat {
+  lng: number;
+  lat: number;
+}
 scene.pixelToLngLat([10, 10]);
 ```
 
-### lngLatToPixel 经纬度转像素坐标
+### lngLatToPixel(lnglat: ILngLat): IPoint 经纬度转像素坐标
 
-经纬度坐标转像素坐标
-
-参数 :
-
-- `lnglat` 经纬度坐标 [lng,lat ] {array }
+经纬度坐标转像素坐标。
 
 ```javascript
+type ILngLat = [number, number];
+interface IPoint {
+  x: number;
+  y: number;
+}
 scene.lngLatToPixel([120, 10]);
 ```
 
-### exportMap 导出地图图片
+### exportMap(type?: IImage): string 导出
 
-导出地图，目前仅支持导出可视化层，不支持底图导出
-
-参数:
-
-- `type` `png|jpg` 默认 png
+导出地图，目前仅支持导出可视化层，不支持底图导出。
 
 ```javascript
+type IImage = 'png' | 'jpg';
 scene.exportMap('png');
 ```
 
-### destroy 场景销毁
+### destroy(): void 场景销毁
 
-scene 销毁方法，离开页面，或者不需要使用地图可以调用
+`scene` 销毁方法，离开页面，不需要使用地图的时候调用，调用后 `scene` 中的资源和都会被销毁。
 
 ```javascript
 scene.destroy();
@@ -557,41 +523,31 @@ scene.destroy();
 
 ## iconfont 映射支持
 
-### addIconFont(name, fontUnicode) 增加对数据中 unicode 的映射支持
+### addIconFont(name: string, unicode: string): void 增加映射支持
 
-支持对用户传入的数据进行 unicode 的映射，在内部维护一组名称和对应 key 的键值对
-
-参数 :
-
-- `name` {string}
-- `fontUnicode` {string}
+支持对用户传入的数据进行 `unicode` 的映射，在内部维护一组名称和对应 `key` 的键值对。
 
 ```javascript
 scene.addIconFont('icon1', '&#xe64b;');
 scene.addIconFont('icon2', '&#xe64c;');
 scene.addFontFace(fontFamily, fontPath);
 const pointIconFontLayer = new PointLayer({})
-  .source(
-    [
-      {
+  .source([{
         j: 140,
         w: 34,
         m: 'icon1',
-      },
-      {
+      },{
         j: 140,
         w: 36,
         m: 'icon2',
       },
-    ],
-    {
+    ],{
       parser: {
         type: 'json',
         x: 'j',
         y: 'w',
       },
-    },
-  )
+    })
   .shape('m', 'text')
   .size(12)
   .color('w', ['#f00', '#f00', '#0f0'])
@@ -600,18 +556,15 @@ const pointIconFontLayer = new PointLayer({})
     iconfont: true,
     textAllowOverlap: true,
   });
-scene.addLayer(pointIconFontLayer);
 ```
+### addIconFonts(option: IOption): void 同时传入多组 name - unicode 的键值对
 
-### addIconFonts(options) 同时传入多组 name - unicode 的键值对
-
-同时传入多组 name - unicode 的键值对
-
-参数 :
-
-- `options` { Array<[name, unicode]> }
+同时传入多组 `name - unicode` 的键值对。
 
 ```javascript
+type IKeyValue = [name: string, unicode: string];
+type IOption = Array<IKeyValue>;
+
 scene.addIconFonts([
   ['icon1', '&#xe64b;'],
   ['icon2', '&#xe64c;'],
@@ -620,56 +573,40 @@ scene.addIconFonts([
 
 ## 全局资源
 
-### addImage(id, img) 全局中添加的图片资源
+### addImage(id: string, img: IImage): void 添加全局资源
 
-在 L7 的图层对象可以使用在 scene 全局中添加的图片资源
-
-参数 :
-
-- `id` {string}
-- `img` {HTMLImageElement | File | string}
+在 `scene` 全局中添加 `L7` 的图层对象可以使用的图片资源在。
 
 ```javascript
-scene.addImage(
-  '02',
-  'https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg',
-);
+type IImage = HTMLImageElement | string | File；
+
+scene.addImage( '02','https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg');
 ```
 
 [示例地址](/zh/examples/gallery/animate#animate_path_texture)
 
-### hasImage(id) 判断全局图片资源
+### hasImage(id: string): boolean 判断全局图片资源
 
-判断是否已经在全局添加过相应的图片资源
-
-参数 :
-
-- `id` {string}
+判断是否已经在全局添加过相应的图片资源。
 
 ```javascript
 scene.hasImage('imageID');
 ```
 
-### removeImage(id) 全局删除图片资源
+### removeImage(id: string): void 全局删除图片资源
 
-从全局删除对应的图片资源
-
-参数 :
-
-- `id` {string}
+从全局删除对应的图片资源。
 
 ```javascript
 scene.removeImage('imageID');
 ```
 
-### addFontFace(fontFamily, fontPath) 添加字体文件
+### addFontFace(fontFamily: string, fontPath: string): void 添加字体文件
 
-添加字体文件
+添加 `iconfont` 字体文件。
 
-参数 :
-
-- `fontFamily` {string} 用户为自己定义的字体名称
-- `fontPath` {string} 导入的文件地址
+- `fontFamily` 用户为自己定义的字体名称
+- `fontPath` 导入的文件地址
 
 ```javascript
 let fontFamily = 'iconfont';
@@ -680,29 +617,31 @@ scene.addFontFace(fontFamily, fontPath);
 
 ## 事件
 
-### on
+### on(eventName: string, handler: function): void
 
-事件监听
+在 `scene` 上绑定事件监听。
 
-#### 参数
+- `eventName` 事件名。
+- `handler` 事件回调函数。
 
-`eventName` {string} 事件名
-`handler` {function } 事件回调函数
+### off(eventName: string, handler: function): void
 
-### off
-
-移除事件监听
-`eventName` {string} 事件名
-`handler` {function } 事件回调函数
+移除在 `scene` 上绑定的事件监听。
+- `eventName` 事件名。
+- `handler` 事件回调函数。
 
 ### 场景事件
 
+`scene` 会触发一些常见的场景事件，用户在需要的时候可以进行监听。
+
 #### loaded
 
-scene 初始化完成事件，scene 初始化完成添加 Layer
+`scene` 初始化完成事件，我们经常在 `scene` 初始化完成后添加 `Layer`。
 
 ```javascript
-scene.on('loaded', () => {});
+scene.on('loaded', () => {
+  scene.addLayer(layer);
+});
 ```
 
 #### resize
@@ -725,7 +664,7 @@ scene.on('zoomstart', () => {}); // 缩放开始时触发
 scene.on('zoomend', () => {}); // 缩放停止时触发
 ```
 
-其他地图事件可以查看相应底图的事件文档,地图事件也可以通过 Scene.map 进行设置
+其他地图事件可以查看相应底图的事件文档,地图事件也可以通过 `Scene.map` 进行设置。
 
 [Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/#map.event)
 [高德](https://lbs.amap.com/api/javascript-api/reference/map)
@@ -749,10 +688,16 @@ scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖
 
 ## 实验参数
 
-参数可能会废弃
+实验参数可能会废弃。
 
-### offsetCoordinate
+### offsetCoordinate: boolean
 
-{ boolean } default true
+高德地图适用，是否关闭偏移坐标系， 默认为 `true`。
 
-高德地图适用,是否关闭偏移坐标系
+```js
+const scene = new Scene({
+  offsetCoordinate: true,
+})
+```
+
+
