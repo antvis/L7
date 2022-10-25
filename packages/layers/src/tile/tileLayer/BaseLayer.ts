@@ -12,10 +12,12 @@ import { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
 import { debounce } from 'lodash';
-import { getTileFactory } from '../tileFactory'
+import { getTileFactory } from '../tileFactory';
+import { LayerStyleProxy } from '../style/style';
 
 export default class BaseTileLayer {
   private parent: ILayer;
+  private layerStyleProxy: LayerStyleProxy;
   public tileLayerService: TileLayerService;
   protected mapService: IMapService;
   protected layerService: ILayerService;
@@ -32,6 +34,7 @@ export default class BaseTileLayer {
 
   constructor(parent: ILayer) {
     this.parent = parent;
+    this.layerStyleProxy = new LayerStyleProxy();
     const container = this.parent.getContainer();
     this.rendererService = container.get<IRendererService>(
       TYPES.IRendererService,
@@ -56,6 +59,7 @@ export default class BaseTileLayer {
 
       // 重置
       this.parent.setLayerPickService(this.tilePickService);
+      this.layerStyleProxy.proxy(this.parent);
 
       this.initTileSetManager();
   
@@ -145,6 +149,14 @@ export default class BaseTileLayer {
     this.tileLayerService.render();
   }
 
+  public getLayers() {
+    return this.tileLayerService.getLayers();
+  }
+
+  public getTiles() {
+    return this.tileLayerService.getTiles();
+  }
+
   //  防抖操作
   viewchange = debounce(this.mapchange, 24);
 
@@ -199,6 +211,7 @@ export default class BaseTileLayer {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isTileReady(tile: SourceTile) {
     
     // if (tile.data?.layers && this.sourceLayer) {

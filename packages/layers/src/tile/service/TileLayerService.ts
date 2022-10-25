@@ -1,7 +1,6 @@
-import { ILayer, ILayerService, ILngLat, IRendererService } from '@antv/l7-core';
+import { ILayer, ILayerService, ILngLat, IRendererService, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import 'reflect-metadata';
-import Tile from '../tileFactory/Tile';
 
 interface TileLayerServiceOptions {
   rendererService: IRendererService;
@@ -18,13 +17,13 @@ export class TileLayerService {
   private parent: ILayer;
 
 
-  private _tiles: Tile[] = [];
+  private _tiles: ITile[] = [];
   constructor({ rendererService,layerService, parent }: TileLayerServiceOptions) {
     this.rendererService = rendererService;
     this.layerService =layerService;
     this.parent = parent;
   }
-  get tiles():Tile[] {
+  get tiles(): ITile[] {
     return this._tiles;
   }
 
@@ -32,14 +31,14 @@ export class TileLayerService {
     return this._tiles.some((tile) => tile.key === tileKey);
   }
 
-  addTile(tile: Tile) {
+  addTile(tile: ITile) {
     this._tiles.push(tile);
   }
 
-  getTile(tileKey: string): Tile | undefined {
+  getTile(tileKey: string): ITile | undefined {
     return this._tiles.find((tile) => tile.key === tileKey);
   }
-  getVisibleTileBylngLat(lngLat: ILngLat): Tile | undefined {
+  getVisibleTileBylngLat(lngLat: ILngLat): ITile | undefined {
     // 加载完成 & 可见 & 鼠标选中
     return this._tiles.find(
       (tile) => tile.isLoaded && tile.visible && tile.lnglatInBounds(lngLat),
@@ -73,6 +72,17 @@ export class TileLayerService {
     const layers: ILayer[] = [];
     tileList.map(tile => layers.push(...tile.getLayers()))
     return layers;
+  }
+
+  getLayers(){
+    const tileList = this._tiles.filter((t)=>t.isLoaded);
+    const layers: ILayer[] = [];
+    tileList.map(tile => layers.push(...tile.getLayers()))
+    return layers;
+  }
+
+  getTiles() {
+    return this._tiles;
   }
 
 

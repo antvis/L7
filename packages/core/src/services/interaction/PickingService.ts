@@ -293,15 +293,6 @@ export default class PickingService implements IPickingService {
         layer.layerPickService.selectFeature(new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
       }
-      // if (!layer.isVector) {
-      //   // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
-      //   this.layerService
-      //     .getLayers()
-      //     .filter((l) => l.tileLayer)
-      //     .map((l) => {
-      //       (l.tileLayer as ITileLayer).clearPickState();
-      //     });
-      // }
     }
     return isPicked;
   };

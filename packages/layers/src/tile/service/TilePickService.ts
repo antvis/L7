@@ -1,7 +1,6 @@
-import { ILayerService } from '@antv/l7-core';
+import { ILayerService, ITile } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
 import { IInteractionTarget } from '@antv/l7-core';
-import Tile from '../tileFactory/Tile';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
@@ -43,9 +42,8 @@ export class TilePickService {
   }
 
   updateHighLight(r: number, g: number, b: number, type: string){
-    this.tileLayerService.tiles.map((tile: Tile) => {
+    this.tileLayerService.tiles.map((tile: ITile) => {
       const layers = tile.getLayers();
-      console.log(layers)
       layers.forEach((layer) => {
         switch(type) {
           case SELECT:

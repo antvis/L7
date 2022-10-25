@@ -160,8 +160,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   // 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
-  // Tip: 用于标识矢量图层
-  public isVector: boolean = false;
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
