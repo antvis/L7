@@ -1,3 +1,4 @@
+import { tileToBounds} from './lonlat-tile'
 /*
  * 判断是否是一个合法的瓦片请求模版
  */
@@ -57,5 +58,6 @@ export function getURLFromTemplate(
     .replace(/\{x\}/g, x.toString())
     .replace(/\{y\}/g, y.toString())
     .replace(/\{z\}/g, z.toString())
+    .replace(/\{bbox\}/g,  tileToBounds(x,y,z).join(','))
     .replace(/\{-y\}/g, (Math.pow(2, z) - y - 1).toString());
 }

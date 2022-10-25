@@ -1,3 +1,5 @@
+import { RequestParameters } from "@antv/l7-utils";
+
 export type DataType = string | object[] | object;
 export interface IDictionary<TValue> {
   [key: string]: TValue;
@@ -47,6 +49,7 @@ export interface ITileParserCFG {
   maxZoom?: number;
   zoomOffset?: number;
   extent?: [number, number, number, number];
+  requestParameters: Partial<RequestParameters>
   updateStrategy?: 'overlap' | 'replace';
   // 指定 feature 编码 id
   featureId?: string;
@@ -57,6 +60,7 @@ export interface ITileParserCFG {
   dataType?: RasterTileType;
 
   geojsonvtOptions?: IGeojsonvtOptions;
+
 
   format?: any;
   operation?: any;
