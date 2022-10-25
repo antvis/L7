@@ -4,8 +4,10 @@ export default {
     output:'es'
   },
   cjs: {
+    
     output:'lib'
   },
+  platform:'browser',
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
   },

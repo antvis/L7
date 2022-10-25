@@ -26,6 +26,7 @@ export interface IParserData {
 export enum RasterTileType {
   IMAGE = 'image',
   ARRAYBUFFER = 'arraybuffer',
+  RGB = 'rgb',
 }
 
 export interface IGeojsonvtOptions {
@@ -58,9 +59,41 @@ export interface ITileParserCFG {
   format?: any;
   // 请求返回的数据类型
   responseType?: 'string' | 'json' | 'arrayBuffer';
+  operation?: any;
 }
 
 export interface IJsonItem {
   [key: string]: any;
 }
 export type IJsonData = IJsonItem[];
+
+export interface IRasterData {
+  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
+  width: number;
+  height: number;
+}
+export type IRasterFormat = (imageData: ArrayBuffer, bands: number[], channels?: string[]) => Promise<IRasterData|IRasterData[]>;
+export interface IRasterFileData {
+  data: ArrayBuffer;
+  bands: number[];
+}
+
+export type IRgbOperation = {
+  r?: any[];
+  g?: any[]
+  b?: any[]
+};
+
+export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation;
+
+export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
+
+export interface IRasterCfg {
+  format?: IRasterFormat;
+  operation?: IBandsOperation;
+  extent: [number, number, number, number];
+  width: number;
+  height: number;
+  max: number;
+  min: number;
+}

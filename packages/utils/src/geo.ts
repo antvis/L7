@@ -1,10 +1,13 @@
 import {
   BBox,
   degreesToRadians,
+  featureCollection,
+  lineString,
   radiansToLength,
   Units,
 } from '@turf/helpers';
 import { isNumber } from './math';
+import bbox from '@turf/bbox';
 
 export type IBounds = [[number, number], [number, number]];
 
@@ -195,8 +198,8 @@ export function amap2UnProject(x: number, y: number): [number, number] {
   const Rg = Math.PI / 180;
   const Tg = 6378137;
 
-  const lng = (x/Tg) / Rg;
-  const lat = (2 * (Math.atan(Math.exp((y / Tg))) - Math.PI/4))/Rg;
+  const lng = x / Tg / Rg;
+  const lat = (2 * (Math.atan(Math.exp(y / Tg)) - Math.PI / 4)) / Rg;
   return [lng, lat];
 }
 
@@ -215,6 +218,7 @@ export function lnglatDistance(
 
   return radiansToLength(
     2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (units = 'meters'),
   );
 }
@@ -420,4 +424,12 @@ export function calculatePointsCenterAndRadius(points: number[]) {
     center: [xCount / pCount, yCount / pCount],
     radius: Math.sqrt(Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2)) / 2,
   };
+}
+
+/**
+ * 获取经纬度点集对应的 bbox
+ * @param pointList
+ */
+export function getBBoxFromPoints(pointList: Position[]) {
+  return bbox(featureCollection([lineString(pointList)]));
 }

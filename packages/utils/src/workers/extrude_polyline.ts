@@ -1,6 +1,7 @@
 import { vec2, vec3 } from 'gl-matrix';
 import { aProjectFlat } from '../geo';
 const tmp = vec2.create();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const capEnd = vec2.create();
 const lineA = vec2.create();
 const lineB = vec2.create();
@@ -33,7 +34,7 @@ function isPointEqual(a: vec2, b: vec2) {
   return a[0] === b[0] && a[1] === b[1];
 }
 
-function getArrayUnique(matrix: number[][]) {
+export function getArrayUnique(matrix: number[][]) {
   const map = new Map();
   for (let i = 0; i < matrix.length; i++) {
     const key = matrix[0].toString() + '-' + matrix[1].toString();
@@ -267,6 +268,7 @@ export default class ExtrudePolyline {
     next: vec3,
     originLast: vec3,
     originCur: vec3,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     originNext: vec3,
   ) {
     let count = 0;

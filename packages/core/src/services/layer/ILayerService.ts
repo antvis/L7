@@ -31,6 +31,7 @@ import {
   IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
+  ScaleTypeName,
   StyleAttrField,
   StyleAttributeField,
   StyleAttributeOption,
@@ -106,8 +107,15 @@ export interface IActiveOption {
 
 type ILngLat = [number, number];
 
+export interface ILegend  {
+  type: ScaleTypeName | undefined
+  field: StyleAttributeField | undefined;
+  items:LegendItems
+}
+
 // 分段图例
 export interface ILegendSegmentItem {
+  field:string;// 图例字段
   value: [number, number];
   [key: string]: any;
 }
@@ -172,43 +180,47 @@ export interface ISubLayerInitOptions {
   workerEnabled?: boolean;
 }
 
-export interface ITilePickManager {
-  isLastPicked: boolean;
-  on(type: string, cb: (option: any) => void): void;
-  normalRender(layers: ILayer[]): void;
-  beforeHighlight(pickedColors: any): void;
-  beforeSelect(pickedColors: any): void;
-  clearPick(): void;
-  pickRender(layers: ILayer[], target: IInteractionTarget): boolean;
-  destroy(): void;
-}
-
 export interface IBaseTileLayerManager {
   sourceLayer: string;
   parent: ILayer;
   children: ILayer[];
 
-  createTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
+  addTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
 
   addChild(layer: ILayer): void;
-  addChilds(layers: ILayer[]): void;
-  getChilds(layerIDList: string[]): ILayer[];
+  addChildren(layers: ILayer[]): void;
+  getChildren(layerIDList: string[]): ILayer[];
   removeChild(layer: ILayer): void;
-  removeChilds(layerIDList: string[], refresh?: boolean): void;
+  removeChildren(layerIDList: string[], refresh?: boolean): void;
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;
   destroy(): void;
 }
 
+export interface ITileRenderService {
+  render(layers: ILayer[]): void;
+  renderMask(layers: ILayer): void;
+}
+
+export interface ITilePickService {
+  isLastPicked: boolean;
+  on(type: string, cb: (option: any) => void): void;
+  beforeHighlight(pickedColors: any): void;
+  beforeSelect(pickedColors: any): void;
+  clearPick(): void;
+  pick(layers: ILayer[], target: IInteractionTarget): boolean;
+  destroy(): void;
+}
+
+
 export interface ITileLayerManager extends IBaseTileLayerManager{
-  tilePickManager: ITilePickManager;
+  tilePickService: ITilePickService;
   pickLayers(target: IInteractionTarget): boolean;
   destroy(): void;
 }
 
 export interface IBaseTileLayer {
-  type: string;
   sourceLayer: string;
   parent: ILayer;
   tileLayerManager: IBaseTileLayerManager;
@@ -237,6 +249,9 @@ export interface ITileLayerOPtions {
 
 export type LayerEventType =
   | 'inited'
+  | 'legend'
+  | 'legend:color'
+  | 'legend:size'
   | 'add'
   | 'remove'
   | 'destroy'
@@ -255,11 +270,14 @@ export type LayerEventType =
   | 'mouseenter'
   | 'unmousemove'
   | 'mouseout'
+  | 'show'
+  | 'hide'
   | any;
 
 export interface ILayer {
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
+  coordCenter: number[];
   name: string; //
   inited: boolean; // 是否初始化完成
   zIndex: number;
@@ -379,7 +397,8 @@ export interface ILayer {
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
-  getLegendItems(name: string): LegendItems;
+  getLegendItems(name: string,index?: number): LegendItems;
+  getLegend(name: string):ILegend;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
@@ -588,6 +607,8 @@ export interface ILayerConfig {
   onClick(pickedFeature: IPickedFeature): void;
 }
 
+export type LayerServiceEvent = 'layerChange';
+
 /**
  * 提供 Layer 管理服务
  */
@@ -602,6 +623,9 @@ export interface ILayerService {
   disableShaderPick: () => void;
   getShaderPickStat: () => boolean;
 
+  on(type: string, handler: (...args: any[]) => void): void;
+  off(type: string, handler: (...args: any[]) => void): void;
+  once(type: string, handler: (...args: any[]) => void): void;
   // 清除画布
   clear(): void;
   add(layer: ILayer): void;

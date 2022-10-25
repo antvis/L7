@@ -26,17 +26,6 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       this.dispatchModelLoad(models);
     });
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
 
   protected getModelType(): PolygonModelType {
     const parserType = this.layerSource.getParserType();

@@ -37,7 +37,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (source.inited) {
         this.generateMaping(layer, { styleAttributeService });
       } else {
-        source.once('sourceUpdate', () => {
+        source.once('update', () => {
           this.generateMaping(layer, { styleAttributeService });
         });
       }
@@ -49,7 +49,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (source.inited) {
         this.generateMaping(layer, { styleAttributeService });
       } else {
-        source.once('sourceUpdate', () => {
+        source.once('update', () => {
           this.generateMaping(layer, { styleAttributeService });
         });
       }
@@ -281,7 +281,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       mappedData.length > 0 &&
       this.mapService.version === Version['GAODE2.x']
     ) {
-      const layerCenter = this.getLayerCenter(layer);
+      const layerCenter = layer.coordCenter || layer.getSource().center;
       if (typeof mappedData[0].coordinates[0] === 'number') {
         // 单个的点数据
         // @ts-ignore
@@ -301,7 +301,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           });
       } else {
         // 连续的线、面数据
-        // @ts-ignore
         mappedData
           // TODO: 避免经纬度被重复计算导致坐标位置偏移
           .filter((d) => !d.originCoordinates)
@@ -329,11 +328,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
         }
       });
     }
-  }
-
-  private getLayerCenter(layer: ILayer) {
-    const source = layer.getSource();
-    return source.center;
   }
 
   private unProjectCoordinates(coordinates: any) {

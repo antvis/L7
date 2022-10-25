@@ -164,6 +164,7 @@ export interface IMaskLayerStyleOptions extends IBaseLayerStyleOptions {
   // define
   opacity: number;
   color: string;
+  sourceLayer?: string;
 }
 
 export interface IWindLayerStyleOptions extends IBaseLayerStyleOptions {
@@ -279,4 +280,8 @@ export interface IRasterLayerStyleOptions extends IBaseLayerStyleOptions {
   clampHigh: boolean;
   rampColors: IColorRamp;
   rampColorsData?: ImageData | IImagedata;
+
+  channelRMax?: number;
+  channelGMax?: number;
+  channelBMax?: number;
 }

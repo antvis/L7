@@ -428,7 +428,6 @@ export function HeatmapTriangulation(feature: IEncodeFeature) {
   if (coordinates.length === 2) {
     coordinates.push(0);
   }
-  const size = feature.size as number;
   const dir = addDir(-1, 1);
   const dir1 = addDir(1, 1);
   const dir2 = addDir(-1, -1);
@@ -468,7 +467,7 @@ function getGeometry(shape: ShapeType3D, needFlat = false): IExtrudeGeomety {
   return geometry;
 }
 
-function computeVertexNormals(
+export function computeVertexNormals(
   positions: number[],
   indexArray: number[],
   dim: number = 3,
@@ -525,7 +524,7 @@ function normalizeNormals(normals: Float32Array) {
   }
 }
 
-function checkIsClosed(points: number[][][]) {
+export function checkIsClosed(points: number[][][]) {
   const p1 = points[0][0];
   const p2 = points[0][points[0].length - 1];
   return p1[0] === p2[0] && p1[1] === p2[1];

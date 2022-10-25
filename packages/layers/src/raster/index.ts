@@ -15,21 +15,12 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       this.dispatchModelLoad(models);
     });
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
+
   protected getDefaultConfig() {
     const type = this.getModelType();
     const defaultConfig = {
       raster: {},
+      rasterRgb: {},
       raster3d: {},
       rasterTile: {},
     };
@@ -42,6 +33,8 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     switch (parserType) {
       case 'raster':
         return 'raster';
+      case 'rasterRgb':
+        return 'rasterRgb';
       case 'rasterTile':
         return 'rasterTile';
       default:

@@ -1,8 +1,13 @@
 import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
 
+export interface ITileBand {
+  url: string;
+  bands: number[];
+}
+
 export type RequestParameters = {
-  url: string | string[];
+  url: string | string[] | ITileBand[];
   headers?: any;
   method?: 'GET' | 'POST' | 'PUT';
   body?: string;
@@ -50,6 +55,7 @@ export class AJAXError extends Error {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function makeFetchRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
@@ -57,7 +63,7 @@ function makeFetchRequest(
   const url = Array.isArray(requestParameters.url)
     ? requestParameters.url[0]
     : requestParameters.url;
-  const request = new Request(url, {
+  const request = new Request(url as string, {
     method: requestParameters.method || 'GET',
     body: requestParameters.body,
     credentials: requestParameters.credentials,
@@ -95,7 +101,12 @@ function makeFetchRequest(
         .blob()
         .then((body) =>
           callback(
-            new AJAXError(response.status, response.statusText, url, body),
+            new AJAXError(
+              response.status,
+              response.statusText,
+              url.toString(),
+              body,
+            ),
           ),
         );
     })
@@ -162,7 +173,7 @@ function makeXMLHttpRequest(
       const body = new Blob([xhr.response], {
         type: xhr.getResponseHeader('Content-Type'),
       });
-      callback(new AJAXError(xhr.status, xhr.statusText, url, body));
+      callback(new AJAXError(xhr.status, xhr.statusText, url.toString(), body));
     }
   };
   xhr.send(requestParameters.body);
@@ -235,7 +246,7 @@ export const postData = (
   return makeRequest({ ...requestParameters, method: 'POST' }, callback);
 };
 
-function sameOrigin(url: string) {
+export function sameOrigin(url: string) {
   const a = $window.document.createElement('a');
   a.href = url;
   return (
@@ -321,47 +332,6 @@ export const getImage = (
     return getArrayBuffer(requestParameters, optionFunc);
   }
 };
-
-export const arrayBufferToTiffImage = async (
-  data: ArrayBuffer,
-  callback: (err?: Error | null, image?: any) => void,
-  rasterParser: any,
-) => {
-  try {
-    const { rasterData, width, height } = await rasterParser(data);
-    const defaultMIN = 0;
-    const defaultMAX = 8000;
-    callback(null, {
-      data: rasterData,
-      width,
-      height,
-      min: defaultMIN,
-      max: defaultMAX,
-    });
-  } catch (err) {
-    callback(null, new Error('' + err));
-  }
-};
-
-export const getTiffImage = (
-  requestParameters: RequestParameters,
-  callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
-  rasterParser: any,
-) => {
-  return getArrayBuffer(requestParameters, (err, imgData) => {
-    if (err) {
-      callback(err);
-    } else if (imgData) {
-      arrayBufferToTiffImage(imgData, callback, rasterParser);
-    }
-  });
-};
-
-export interface IRasterParser {
-  rasterData: HTMLImageElement | ImageBitmap | null | undefined;
-  width: number;
-  height: number;
-}
 
 /**
  * @description 修改默认request中url、header等参数，返回修改后的参数

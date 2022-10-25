@@ -1,6 +1,7 @@
 import BaseLayer from '../core/BaseLayer';
 import { IMaskLayerStyleOptions } from '../core/interface';
 import MaskModels, { MaskModelType } from './models';
+import { isVectorTile } from '../tile/utils';
 import {
   TYPES,
   ICameraService,
@@ -112,19 +113,12 @@ export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
       this.dispatchModelLoad(models);
     });
   }
-  protected getConfigSchema() {
-    return {
-      properties: {
-        opacity: {
-          type: 'number',
-          minimum: 0,
-          maximum: 1,
-        },
-      },
-    };
-  }
 
   protected getModelType(): MaskModelType {
+    const parserType = this.layerSource.getParserType();
+    if (isVectorTile(parserType)) {
+      return 'vectorMask';
+    }
     return 'fill';
   }
 }

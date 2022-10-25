@@ -42,7 +42,6 @@ export const lineModel = async ({
       feature: IEncodeFeature,
       featureIdx: number,
       vertex: number[],
-      attributeIdx: number,
     ) => {
       return [vertex[5]];
     },

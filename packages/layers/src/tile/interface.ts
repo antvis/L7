@@ -2,10 +2,8 @@ import {
   ILayer,
   IMapService,
   IRendererService,
-  IScaleValue,
   ISource,
   ISubLayerInitOptions,
-  ScaleAttributeType,
 } from '@antv/l7-core';
 import { Tile } from '@antv/l7-utils';
 
@@ -48,9 +46,4 @@ export interface ITileFactory {
   createLayer(option: ILayerTileConfig): ILayer;
 
   updateStyle(styles: ITileStyles): string;
-  setStyleAttributeField(
-    layer: ILayer,
-    type: ScaleAttributeType,
-    value: IScaleValue,
-  ): void;
 }
