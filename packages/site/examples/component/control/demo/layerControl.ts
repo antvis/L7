@@ -1,6 +1,6 @@
 import {
   Scene,
-  GaodeMapV2,
+  GaodeMap,
   PolygonLayer,
   LayerControl,
   LineLayer,
@@ -8,7 +8,7 @@ import {
 
 const scene = new Scene({
   id: 'map',
-  map: new GaodeMapV2({
+  map: new GaodeMap({
     pitch: 0,
     style: 'normal',
     center: [120.154672, 30.241095],
