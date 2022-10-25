@@ -1,7 +1,7 @@
-import { ILayer, createLayerContainer, ILngLat } from '@antv/l7-core';
+import { ILayer, createLayerContainer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
-export default abstract class Tile {
+export default abstract class Tile implements ITile{
   public x: number;
   public y: number;
   public z: number;
@@ -22,6 +22,9 @@ export default abstract class Tile {
   public getLayers() {
     return this.layers;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public styleUpdate(...arg: any) {}
 
   public abstract initTileLayer(): Promise<void>;
 

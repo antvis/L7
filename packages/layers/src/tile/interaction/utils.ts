@@ -35,7 +35,6 @@ export function setSelect(layers: ILayer[], pickedColors: any, renderList: ILaye
       .filter(
         (layer) =>
           layer.inited &&
-          !layer.isVector &&
           layer.isVisible() &&
           layer.needPick('click'),
       )
@@ -49,8 +48,7 @@ export function setSelect(layers: ILayer[], pickedColors: any, renderList: ILaye
 
 export function setHighlight(layers: ILayer[], pickedColors: any) {
     const pickId = decodePickingColor(pickedColors);
-    layers.filter((layer) => layer.inited && layer.isVisible() && layer.isVector)
-    // Tip: 使用 vectorLayer 上的 pickID 优化高亮操作（过滤重复操作）
+    layers.filter((layer) => layer.inited && layer.isVisible())
     // @ts-ignore
     .filter((layer) => layer.getPickID() !== pickId)
     .map((layer) => {

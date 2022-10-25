@@ -11,7 +11,7 @@ export default () => {
       stencil: true,
       map: new Map({
         center: [112, 30],
-        zoom: 0,
+        zoom: 6,
       }),
     });
 
@@ -45,6 +45,13 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      setTimeout(() => {
+        layer
+          .color('#f00')
+          .size(1)
+          .animate(true);
+        scene.render();
+      }, 3000);
     });
   }, []);
   return (

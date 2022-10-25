@@ -77,6 +77,14 @@ export default () => {
         .style({});
 
       scene.addLayer(layer);
+
+      setTimeout(() => {
+        layer.style({
+          opacity: 0.5,
+        });
+        scene.render();
+        console.log('***');
+      }, 1500);
     });
   }, []);
   return (

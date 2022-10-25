@@ -14,10 +14,6 @@ export function isTileGroup(layer: ILayer) {
   return tileVectorParser.includes(source.parser.type);
 }
 
-export function isVectorTile(parserType: string) {
-  return tileVectorParser.indexOf(parserType) >= 0;
-}
-
 export function registerLayers(parentLayer: ILayer, layers: ILayer[]) {
   layers.map((layer) => {
     const container = createLayerContainer(
