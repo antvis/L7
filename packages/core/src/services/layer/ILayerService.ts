@@ -213,18 +213,8 @@ export interface IBaseTileLayerManager {
   destroy(): void;
 }
 
-export interface ITileRenderService {
-  render(layers: ILayer[]): void;
-}
-
 export interface ITilePickService {
-  isLastPicked: boolean;
-  on(type: string, cb: (option: any) => void): void;
-  beforeHighlight(pickedColors: any): void;
-  beforeSelect(pickedColors: any): void;
-  clearPick(): void;
-  pick(layers: ILayer[], target: IInteractionTarget): boolean;
-  destroy(): void;
+  pickRender(target: IInteractionTarget): void;
 }
 
 export interface ITile {
