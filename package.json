@@ -157,7 +157,9 @@
     "webpack-merge": "^4.1.4",
     "worker-loader": "^2.0.0",
     "yorkie": "^2.0.0",
-    "gcoord": "^0.3.2"
+    "gcoord": "^0.3.2",
+    "crypto-js": "^4.1.1",
+    "jsencrypt": "^3.2.1"
   },
   "scripts": {
     "dev": "npm run worker && dumi dev",
@@ -225,9 +227,5 @@
   },
   "tnpm": {
     "mode": "yarn"
-  },
-  "dependencies": {
-    "crypto-js": "^4.1.1",
-    "jsencrypt": "^3.2.1"
   }
 }
