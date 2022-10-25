@@ -1,7 +1,7 @@
 import {
   GaodeMapV2,
   Scene,
-  LayerControl,
+  LayerSwitch,
   ILayer,
   PointLayer,
   LineLayer,
@@ -15,7 +15,7 @@ const Demo: FunctionComponent = () => {
   const [layers, setLayers] = useState<ILayer[]>([]);
   const [scene, setScene] = useState<Scene | undefined>();
   const [newLayer, setNewLayer] = useState<ILayer | null>(null);
-  const [control, setControl] = useState<LayerControl | null>(null);
+  const [control, setControl] = useState<LayerSwitch | null>(null);
 
   useEffect(() => {
     const newScene = new Scene({
@@ -96,7 +96,7 @@ const Demo: FunctionComponent = () => {
             newLayers.push(chinaPolygonLayer, layer2);
           }),
       ]).then(() => {
-        const newControl = new LayerControl({
+        const newControl = new LayerSwitch({
           layers: newLayers,
         });
         setControl(newControl);

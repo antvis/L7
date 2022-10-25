@@ -1,24 +1,40 @@
 import { ILayer } from '@antv/l7-core';
 import { createL7Icon } from '../utils/icon';
 import SelectControl, {
-  ISelectControlOption,
   ControlOptionItem,
+  ISelectControlOption,
 } from './baseControl/selectControl';
 
-export interface ILayerControlOption extends ISelectControlOption {
-  layers: ILayer[];
+export interface ILayerSwitchOption extends ISelectControlOption {
+  layers: Array<ILayer | string>;
 }
 
-export { LayerControl };
+export { LayerSwitch };
 
-export default class LayerControl extends SelectControl<ILayerControlOption> {
-  protected get layers() {
-    return this.controlOption.layers || this.layerService.getLayers() || [];
+export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
+  protected get layers(): ILayer[] {
+    const layerService = this.layerService;
+    const { layers } = this.controlOption;
+    if (Array.isArray(layers) && layers.length) {
+      const layerInstances: ILayer[] = [];
+      layers.forEach((layer) => {
+        if (layer instanceof Object) {
+          layerInstances.push(layer as ILayer);
+        }
+        if (typeof layer === 'string') {
+          const targetLayer =
+            layerService.getLayer(layer) || layerService.getLayerByName(layer);
+          if (targetLayer) {
+            layerInstances.push(targetLayer);
+          }
+        }
+      });
+      return layerInstances;
+    }
+    return layerService.getLayers() || [];
   }
 
-  public getDefault(
-    option?: Partial<ILayerControlOption>,
-  ): ILayerControlOption {
+  public getDefault(option?: Partial<ILayerSwitchOption>): ILayerSwitchOption {
     return {
       ...super.getDefault(option),
       title: '图层控制',
@@ -46,14 +62,10 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
     });
   }
 
-  public setOptions(option: Partial<ILayerControlOption>) {
+  public setOptions(option: Partial<ILayerSwitchOption>) {
     const isLayerChange = this.checkUpdateOption(option, ['layers']);
-    if (isLayerChange) {
-      this.unbindLayerVisibleCallback();
-    }
     super.setOptions(option);
     if (isLayerChange) {
-      this.bindLayerVisibleCallback();
       this.selectValue = this.getLayerVisible();
       this.controlOption.options = this.getLayerOptions();
       this.popper.setContent(this.getPopperContent(this.controlOption.options));
@@ -69,28 +81,12 @@ export default class LayerControl extends SelectControl<ILayerControlOption> {
     }
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);
-    this.bindLayerVisibleCallback();
     return super.onAdd();
   }
-
-  public bindLayerVisibleCallback = () => {
-    this.layers.forEach((layer) => {
-      layer.on('show', this.onLayerVisibleChane);
-      layer.on('hide', this.onLayerVisibleChane);
-    });
-  };
-
-  public unbindLayerVisibleCallback = () => {
-    this.layers.forEach((layer) => {
-      layer.off('show', this.onLayerVisibleChane);
-      layer.off('hide', this.onLayerVisibleChane);
-    });
-  };
 
   public onRemove() {
     this.off('selectChange', this.onSelectChange);
     this.layerService.off('layerChange', this.onLayerChange);
-    this.unbindLayerVisibleCallback();
   }
 
   protected onLayerChange = () => {

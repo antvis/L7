@@ -10,6 +10,6 @@ const scene = new Scene({
   }),
 });
 scene.on('loaded', () => {
-  const layerControl = new MapTheme();
-  scene.addControl(layerControl);
+  const mapTheme = new MapTheme();
+  scene.addControl(mapTheme);
 });

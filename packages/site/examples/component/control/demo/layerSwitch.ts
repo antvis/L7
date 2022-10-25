@@ -2,7 +2,7 @@ import {
   Scene,
   GaodeMap,
   PolygonLayer,
-  LayerControl,
+  LayerSwitch,
   LineLayer,
 } from '@antv/l7';
 
@@ -76,8 +76,8 @@ scene.on('loaded', () => {
     .size(2);
   scene.addLayer(lineLayer);
 
-  const layerControl = new LayerControl({
+  const layerSwitch = new LayerSwitch({
     layers: [polygonLayer, lineLayer],
   });
-  scene.addControl(layerControl);
+  scene.addControl(layerSwitch);
 });
