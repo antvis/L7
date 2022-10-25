@@ -11,7 +11,9 @@ import {
 } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
 import { VectorTileLayer } from '@mapbox/vector-tile';
-import { IParserData, ITileParserCFG, IGeojsonvtOptions } from '../interface';
+import { IParserData } from '../interface';
+
+import {ITileParserCFG, IGeojsonvtOptions } from '@antv/l7-core'
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,

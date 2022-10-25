@@ -1,7 +1,8 @@
 import { SourceTile, TilesetManagerOptions } from '@antv/l7-utils';
 import { VectorTileLayer } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
-import { IParserData, ITileParserCFG } from '../interface';
+import { IParserData } from '../interface';
+import {ITileParserCFG } from '@antv/l7-core'
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,

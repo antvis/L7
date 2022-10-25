@@ -13,7 +13,8 @@ import {
 } from '@mapbox/vector-tile';
 import { Feature, Properties } from '@turf/helpers';
 import Protobuf from 'pbf';
-import { IParserData, ITileParserCFG } from '../interface';
+import { IParserData } from '../interface';
+import { ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
