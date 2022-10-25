@@ -10,6 +10,7 @@ const ProxyFuncs = [
     'size',
     'style',
     'filter',
+    'rotate',
     'scale',
     'setBlend',
     'setSelect',
