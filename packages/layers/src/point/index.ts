@@ -39,6 +39,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       if (field && shape2d?.indexOf(field as string) !== -1) {
         return 'fill';
       }
+      if (values === 'text') {
+        return 'text';
+      }
 
       if (values && values instanceof Array) {
         for (const v of values) {
@@ -82,7 +85,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     const item = layerData.find((fe: IEncodeFeature) => {
       return fe.hasOwnProperty('shape');
     });
-
     if (!item) {
       return this.getModelTypeWillEmptyData();
     } else {
