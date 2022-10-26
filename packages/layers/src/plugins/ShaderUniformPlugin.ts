@@ -95,8 +95,9 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
    * @param layer
    */
   private setLayerCenter(layer: ILayer) {
-    if (layer.coordCenter === undefined)
+    if (layer.coordCenter === undefined) {
       layer.coordCenter = layer.getSource().center;
+    }
     this.mapService.setCoordCenter &&
       this.mapService.setCoordCenter(layer.coordCenter);
   }

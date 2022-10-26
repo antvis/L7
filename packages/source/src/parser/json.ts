@@ -1,14 +1,15 @@
 // @ts-ignore
-import rewind from '@mapbox/geojson-rewind';
 import {
   IJsonData,
   IParseDataItem,
   IParserCfg,
   IParserData,
 } from '@antv/l7-core';
-import { flattenEach } from '@turf/meta';
-import { getCoords } from '@turf/invariant';
+// @ts-ignore
+import rewind from '@mapbox/geojson-rewind';
 import { Feature, Geometries, Properties } from '@turf/helpers';
+import { getCoords } from '@turf/invariant';
+import { flattenEach } from '@turf/meta';
 
 export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
   const { x, y, x1, y1, coordinates, geometry } = cfg;

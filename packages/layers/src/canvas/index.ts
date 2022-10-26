@@ -1,5 +1,5 @@
-import BaseLayer from '../core/BaseLayer';
 import { ILayer } from '@antv/l7-core';
+import BaseLayer from '../core/BaseLayer';
 import { ICanvasLayerStyleOptions } from '../core/interface';
 import CanvasModels, { CanvasModelType } from './models/index';
 export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {

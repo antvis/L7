@@ -12,8 +12,8 @@ import {
 import { Version } from '@antv/l7-maps';
 import Source from '@antv/l7-source';
 import { isColor, normalize, rgb2arr } from '@antv/l7-utils';
-import { ILineLayerStyleOptions } from '../core/interface';
 import { cloneDeep } from 'lodash';
+import { ILineLayerStyleOptions } from '../core/interface';
 
 function getArrowPoints(p1: Position, p2: Position) {
   const dir = [p2[0] - p1[0], p2[1] - p1[1]];

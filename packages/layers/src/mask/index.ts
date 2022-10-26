@@ -1,9 +1,4 @@
-import BaseLayer from '../core/BaseLayer';
-import { IMaskLayerStyleOptions } from '../core/interface';
-import MaskModels, { MaskModelType } from './models';
-import { isVectorTile } from '../tile/utils';
 import {
-  TYPES,
   ICameraService,
   ICoordinateSystemService,
   ILayerPlugin,
@@ -12,7 +7,12 @@ import {
   IRendererService,
   IShaderModuleService,
   IStyleAttributeService,
+  TYPES,
 } from '@antv/l7-core';
+import BaseLayer from '../core/BaseLayer';
+import { IMaskLayerStyleOptions } from '../core/interface';
+import { isVectorTile } from '../tile/utils';
+import MaskModels, { MaskModelType } from './models';
 export default class MaskLayer extends BaseLayer<IMaskLayerStyleOptions> {
   public type: string = 'MaskLayer';
   public defaultSourceConfig: {

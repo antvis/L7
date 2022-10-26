@@ -134,7 +134,9 @@ export function updateTileVisible(
   layers: ILayer[],
   layerService: ILayerService,
 ) {
-  if (layers.length === 0) return;
+  if (layers.length === 0) {
+    return;
+  }
 
   if (updateImmediately(layers)) {
     updateLayersConfig(layers, 'visible', tile.isVisible);
