@@ -1055,8 +1055,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        this.mapService?.setCoordCenter &&
+        if (this.mapService.setCoordCenter) {
           this.mapService.setCoordCenter(layerCenter);
+        }
       }
       this.sourceEvent();
     });
@@ -1407,7 +1408,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   protected reRender() {
-    this.inited && this.layerService.reRender();
+    if (this.inited) {
+      this.layerService.reRender();
+    }
   }
   protected splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],

@@ -43,13 +43,13 @@ function bezier3(arr: Point, t: number) {
 
 function getAngularDist(source: Point, target: Point) {
   const delta = [source[0] - target[0], source[1] - target[1]];
-  const sin_half_delta = [Math.sin(delta[0] / 2.0), Math.sin(delta[1] / 2.0)]; // Math.sin(delta / 2.0);
+  const sinHalfDelta = [Math.sin(delta[0] / 2.0), Math.sin(delta[1] / 2.0)]; // Math.sin(delta / 2.0);
   const a =
-    sin_half_delta[1] * sin_half_delta[1] +
+    sinHalfDelta[1] * sinHalfDelta[1] +
     Math.cos(source[1]) *
       Math.cos(target[1]) *
-      sin_half_delta[0] *
-      sin_half_delta[0];
+      sinHalfDelta[0] *
+      sinHalfDelta[0];
   return 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));
 }
 
@@ -77,15 +77,13 @@ export function interpolate(
     }
     const a = Math.sin((1.0 - offset) * angularDist) / Math.sin(angularDist);
     const b = Math.sin(offset * angularDist) / Math.sin(angularDist);
-    const sin_source = [Math.sin(source[0]), Math.sin(source[1])];
-    const cos_source = [Math.cos(source[0]), Math.cos(source[1])];
-    const sin_target = [Math.sin(target[0]), Math.sin(target[1])];
-    const cos_target = [Math.cos(target[0]), Math.cos(target[1])];
-    const x =
-      a * cos_source[1] * cos_source[0] + b * cos_target[1] * cos_target[0];
-    const y =
-      a * cos_source[1] * sin_source[0] + b * cos_target[1] * sin_target[0];
-    const z = a * sin_source[1] + b * sin_target[1];
+    const sinSource = [Math.sin(source[0]), Math.sin(source[1])];
+    const cosSource = [Math.cos(source[0]), Math.cos(source[1])];
+    const sinTarget = [Math.sin(target[0]), Math.sin(target[1])];
+    const cosTarget = [Math.cos(target[0]), Math.cos(target[1])];
+    const x = a * cosSource[1] * cosSource[0] + b * cosTarget[1] * cosTarget[0];
+    const y = a * cosSource[1] * sinSource[0] + b * cosTarget[1] * sinTarget[0];
+    const z = a * sinSource[1] + b * sinTarget[1];
     return [
       radiansToDegrees(Math.atan2(y, x)),
       radiansToDegrees(Math.atan2(z, Math.sqrt(x * x + y * y))),

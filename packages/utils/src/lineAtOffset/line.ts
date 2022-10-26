@@ -18,25 +18,25 @@ export function pathLineAtOffset(coords: Point[], offset: number) {
     });
   }
   const offsetDistance = totalDistance * offset;
-  let _lng, _lat;
-  for (let i = 0; i < cachePoints.length; i++) {
-    const currentDistance = cachePoints[i].totalDistance;
+  let lng;
+  let lat;
+  for (const point of cachePoints) {
+    const currentDistance = point.totalDistance;
     if (currentDistance > offsetDistance) {
-      const p1 = cachePoints[i].p1;
-      const p2 = cachePoints[i].p2;
+      const p1 = point.p1;
+      const p2 = point.p2;
       const radius =
-        (offsetDistance - cachePoints[i].lastTotalDistance) /
-        cachePoints[i].distance;
+        (offsetDistance - point.lastTotalDistance) / point.distance;
       const offsetPoint = mixPoint(p2, p1, radius);
-      _lng = offsetPoint[0];
-      _lat = offsetPoint[1];
+      lng = offsetPoint[0];
+      lat = offsetPoint[1];
       break;
     }
   }
   return {
-    _lng,
-    _lat,
-    _height: 0,
+    lng,
+    lat,
+    height: 0,
   };
 }
 

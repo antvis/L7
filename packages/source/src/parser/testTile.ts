@@ -23,7 +23,7 @@ const getVectorTile = async (tile: Tile): Promise<MapboxVectorTile> => {
     // |                    |
     // minLng/minLat --- maxLng/minLat
 
-    const vectorTile = {
+    const vectorTile: MapboxVectorTile = {
       layers: {
         // Tip: fixed SourceLayer Name
         testTile: ({
@@ -50,7 +50,7 @@ const getVectorTile = async (tile: Tile): Promise<MapboxVectorTile> => {
           features: Feature[];
         },
       },
-    } as MapboxVectorTile;
+    };
 
     resolve(vectorTile);
   });
