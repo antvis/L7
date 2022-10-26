@@ -2,6 +2,60 @@ import { TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
 export type SourceEventType = 'inited' | 'sourceUpdate' | 'update'
+import { RequestParameters } from "@antv/l7-utils";
+// 栅格瓦片解析配置项
+
+export enum RasterTileType {
+  IMAGE = 'image',
+  ARRAYBUFFER = 'arraybuffer',
+  RGB = 'rgb',
+}
+
+export interface IGeojsonvtOptions {
+  maxZoom: number;          // max zoom to preserve detail on
+  indexMaxZoom: number;     // max zoom in the tile index
+  indexMaxPoints: number;   // max number of points per tile in the tile index
+  tolerance: number;        // simplification tolerance (higher means simpler)
+  extent: number;           // tile extent
+  buffer: number;           // tile buffer on each side
+  lineMetrics: boolean;     // whether to calculate line metrics
+  promoteId: null;          // name of a feature property to be promoted to feature.id
+  generateId: boolean;      // whether to generate feature ids. Cannot be used with promoteId
+  debug: number;            // logging level (0, 1 or 2)
+}
+export interface ITileParserCFG {
+  type:string,
+  tileSize?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  zoomOffset?: number;
+  extent?: [number, number, number, number];
+  requestParameters: Partial<RequestParameters>
+  updateStrategy?: 'overlap' | 'replace';
+  // 指定 feature 编码 id
+  featureId?: string;
+  // 指定矢量瓦片的数据分类
+  sourceLayer?: string;
+  coord?: string;
+  // 指定栅格瓦片的类型
+  dataType?: RasterTileType;
+
+  geojsonvtOptions?: IGeojsonvtOptions;
+
+  wmtsOptions: IWMTSServiceOption
+  
+  format?: any;
+  operation?: any;
+}
+
+export interface IWMTSServiceOption {
+  layer: string;
+  version?: string;
+  style?: string;
+  format: string;
+  service?: string;
+  tileMatrixset: string;
+}
 export interface IParserCfg {
   type: string;
   x?: string;
@@ -23,7 +77,7 @@ export interface ISourceCFG {
   cluster?: boolean;
   clusterOptions?: Partial<IClusterOptions>;
   autoRender?:boolean,
-  parser?: IParserCfg;
+  parser?: IParserCfg | ITileParserCFG;
   transforms?: ITransform[];
 }
 export interface IClusterOptions {

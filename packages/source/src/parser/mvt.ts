@@ -4,6 +4,7 @@ import {
   SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
+  RequestParameters,
 } from '@antv/l7-utils';
 import {
   VectorTile,
@@ -12,7 +13,8 @@ import {
 } from '@mapbox/vector-tile';
 import { Feature, Properties } from '@turf/helpers';
 import Protobuf from 'pbf';
-import { IParserData, ITileParserCFG } from '../interface';
+import { IParserData } from '../interface';
+import { ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -39,48 +41,56 @@ const getVectorTile = async (
   url: string,
   tileParams: TileLoadParams,
   tile: SourceTile,
+  requestParameters?: Partial<RequestParameters>,
   // coord: string,
 ): Promise<MapboxVectorTile> => {
   const tileUrl = getURLFromTemplate(url, tileParams);
-
   return new Promise((resolve) => {
-    const xhr = getArrayBuffer({ url: tileUrl }, (err, data) => {
-      if (err || !data) {
-        // reject(err);
-        resolve({ layers: {} });
-      } else {
-        const vectorTile = new VectorTile(
-          new Protobuf(data),
-        ) as MapboxVectorTile;
-        // check tile source layer
-        for (const sourceLayer of Object.keys(vectorTile.layers)) {
-          const features: Feature<GeoJSON.Geometry, Properties>[] = [];
-          const vectorTileLayer = vectorTile.layers[sourceLayer];
-          for (let i = 0; i < vectorTile.layers[sourceLayer].length; i++) {
-            const vectorTileFeature = vectorTile.layers[sourceLayer].feature(i);
-            // let feature;
-            // if (coord === 'lnglat') {
-            const feature = vectorTileFeature.toGeoJSON(
-              tileParams.x,
-              tileParams.y,
-              tileParams.z,
-            );
-            // TODO ID 统一编码
-            features.push({
-              ...feature,
-              properties: {
-                id: feature.id,
-                ...feature.properties,
-              },
-            });
+    const xhr = getArrayBuffer(
+      {
+        ...requestParameters,
+        url: tileUrl,
+      },
+      (err, data) => {
+        if (err || !data) {
+          // reject(err);
+          resolve({ layers: {} });
+        } else {
+          const vectorTile = new VectorTile(
+            new Protobuf(data),
+          ) as MapboxVectorTile;
+          // check tile source layer
+          for (const sourceLayer of Object.keys(vectorTile.layers)) {
+            const features: Feature<GeoJSON.Geometry, Properties>[] = [];
+            const vectorTileLayer = vectorTile.layers[sourceLayer];
+            for (let i = 0; i < vectorTile.layers[sourceLayer].length; i++) {
+              const vectorTileFeature = vectorTile.layers[sourceLayer].feature(
+                i,
+              );
+              // let feature;
+              // if (coord === 'lnglat') {
+              const feature = vectorTileFeature.toGeoJSON(
+                tileParams.x,
+                tileParams.y,
+                tileParams.z,
+              );
+              // TODO ID 统一编码
+              features.push({
+                ...feature,
+                properties: {
+                  id: feature.id,
+                  ...feature.properties,
+                },
+              });
+            }
+            // @ts-ignore
+            vectorTileLayer.features = features;
           }
-          // @ts-ignore
-          vectorTileLayer.features = features;
-        }
 
-        resolve(vectorTile);
-      }
-    });
+          resolve(vectorTile);
+        }
+      },
+    );
     tile.xhrCancel = () => xhr.abort();
   });
 };
@@ -94,7 +104,7 @@ export default function mapboxVectorTile(
 
   // const coord = cfg?.coord || 'lnglat'; // lnglat - offset
   const getTileData = (tileParams: TileLoadParams, tile: SourceTile) =>
-    getVectorTile(url, tileParams, tile);
+    getVectorTile(url, tileParams, tile, cfg?.requestParameters);
   // getVectorTile(data, tileParams, tile, coord);
 
   const tilesetOptions = {

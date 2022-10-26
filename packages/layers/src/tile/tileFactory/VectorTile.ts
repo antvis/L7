@@ -2,6 +2,7 @@ import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
 import Tile from './Tile';
 import { getTileLayer, getMaskLayer } from './util';
 
+ 
 export default class VectorTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();

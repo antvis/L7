@@ -4,6 +4,7 @@ import {
   IClusterOptions,
   IParseDataItem,
   IParserCfg,
+  ITileParserCFG,
   IParserData,
   ISource,
   ISourceCFG,
@@ -47,7 +48,7 @@ export default class Source extends EventEmitter implements ISource {
   public getSourceCfg() {
     return this.cfg;
   }
-  public parser: IParserCfg = { type: 'geojson' };
+  public parser: IParserCfg | ITileParserCFG = { type: 'geojson' } ;
   public transforms: ITransform[] = [];
   public cluster: boolean = false;
   public clusterOptions: Partial<IClusterOptions> = {
@@ -141,7 +142,7 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getFeatureById(id: number): unknown {
-    const { type = 'geojson', geometry } = this.parser;
+    const { type = 'geojson', geometry } = this.parser as IParserCfg;
     if (type === 'geojson' && !this.cluster) {
       const feature =
         id < this.originData.features.length
@@ -267,7 +268,7 @@ export default class Source extends EventEmitter implements ISource {
     //   c++
     // }
     // console.log('t', new Date().getTime() - t)
-    const parser = this.parser;
+    const parser = this.parser as IParserCfg;
     const type: string = parser.type || 'geojson';
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);

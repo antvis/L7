@@ -2,10 +2,12 @@ import {
   getImage,
   ITileBand,
   getURLFromTemplate,
+  getWMTSURLFromTemplate,
   SourceTile,
   TileLoadParams,
 } from '@antv/l7-utils';
 import { getTileUrl } from './request';
+import { ITileParserCFG } from '@antv/l7-core'
 import { IRasterFormat, IBandsOperation } from '../../interface';
 import { getRasterFile } from './getRasterData';
 
@@ -56,15 +58,26 @@ export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: SourceTile,
+  cfg: Partial<ITileParserCFG>
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
-  const imgUrl = getURLFromTemplate(
-    Array.isArray(url) ? url[0] : url,
-    tileParams,
-  );
+  let imageUrl:string;
+  const templateUrl = Array.isArray(url) ? url[0] : url;
+  if(cfg.wmtsOptions) {
+    imageUrl = getWMTSURLFromTemplate(templateUrl, {
+       ...tileParams,
+      ...cfg.wmtsOptions
+    })
+  } else {
+    imageUrl = getURLFromTemplate(
+      Array.isArray(url) ? url[0] : url,
+      tileParams,
+    );
+  }
 
   return new Promise((resolve, reject) => {
-    const xhr = getImage({ url: imgUrl }, (err, img) => {
+    console.log(imageUrl);
+    const xhr = getImage({ url: imageUrl }, (err, img) => {
       if (err) {
         reject(err);
       } else if (img) {
