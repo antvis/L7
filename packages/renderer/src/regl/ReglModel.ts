@@ -206,7 +206,9 @@ export default class ReglModel implements IModel {
     if (!pick) {
       this.drawCommand(reglDrawProps);
     } else {
-      this.drawPickCommand && this.drawPickCommand(reglDrawProps);
+      if (this.drawPickCommand) {
+        this.drawPickCommand(reglDrawProps);
+      }
     }
     // this.drawCommand(reglDrawProps);
     // this.drawPickCommand(reglDrawProps);

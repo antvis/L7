@@ -33,8 +33,7 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
         );
       })
       .forEach((col, index) => {
-        const _geometry = { ...col[geometry] };
-        const rewindGeometry = rewind(_geometry, true);
+        const rewindGeometry = rewind({ ...col[geometry] }, true);
         // multi feature 情况拆分
         flattenEach(
           rewindGeometry,
@@ -70,11 +69,13 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
       if (Array.isArray(coordinates[0]) && !Array.isArray(coordinates[0][0])) {
         type = 'LineString';
       }
-      const geometry = {
-        type,
-        coordinates: [...col[coordinates]],
-      };
-      const rewindGeometry = rewind(geometry, true);
+      const rewindGeometry = rewind(
+        {
+          type,
+          coordinates: [...col[coordinates]],
+        },
+        true,
+      );
       coords = rewindGeometry.coordinates;
     } else if (x && y && x1 && y1) {
       // 起终点数据

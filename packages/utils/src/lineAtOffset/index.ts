@@ -7,7 +7,7 @@ export function lineAtOffset(source: Source, option: ILineAtOffset) {
   const { featureId } = option;
   let features = source.data.dataArray;
   if (typeof featureId === 'number') {
-    features = features.filter(({ _id }: { _id: number }) => _id === featureId);
+    features = features.filter(({ id }: { id: number }) => id === featureId);
   }
   return features.map((feature: any) => {
     const position = getLineOffsetPosition(feature, option);
@@ -46,12 +46,8 @@ function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
 
   const source = coordinates[0];
   const target = coordinates[1];
-  let linetheatOffset;
-  if (typeof thetaOffset === 'string') {
-    linetheatOffset = feature[thetaOffset] || 0;
-  } else {
-    linetheatOffset = thetaOffset;
-  }
+  const linetheatOffset =
+    typeof thetaOffset === 'string' ? feature[thetaOffset] || 0 : thetaOffset;
 
   let calFunc;
   switch (shape) {
@@ -75,8 +71,8 @@ function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
   );
 
   return {
-    _lng: lng,
-    _lat: lat,
-    _height: height,
+    lng,
+    lat,
+    height,
   };
 }

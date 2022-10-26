@@ -20,7 +20,9 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
 
   public hide(): ILayer {
     // 清除画布
-    this.layerModel.clearCanvas && this.layerModel?.clearCanvas();
+    if (this.layerModel.clearCanvas) {
+      this.layerModel.clearCanvas();
+    }
 
     this.updateLayerConfig({
       visible: false,
