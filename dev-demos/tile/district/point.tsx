@@ -33,9 +33,9 @@ export default () => {
         },
       )
       .shape('circle')
-      .color('COLOR')
-      .size(10)
-      .select(true);
+      .color('red')
+      .size(10);
+    // .select(true);
 
     scene.on('loaded', () => {
       scene.addLayer(layer);

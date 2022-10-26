@@ -13,7 +13,7 @@ import geojsonvt from 'geojson-vt';
 import { VectorTileLayer } from '@mapbox/vector-tile';
 import { IParserData } from '../interface';
 
-import {ITileParserCFG, IGeojsonvtOptions } from '@antv/l7-core'
+import { ITileParserCFG, IGeojsonvtOptions } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -167,22 +167,22 @@ const getVectorTile = async (
   return new Promise((resolve) => {
     const tileData = tileIndex.getTile(tile.z, tile.x, tile.y);
     // tileData
-    const features: any = [];
-    tileData.features.map((vectorTileFeature: any) => {
-      const feature = GetGeoJSON(
-        extent,
-        tileParams.x,
-        tileParams.y,
-        tileParams.z,
-        vectorTileFeature,
-      );
-      features.push(feature);
-    });
+    const features = tileData
+      ? tileData.features.map((vectorTileFeature: any) => {
+          return GetGeoJSON(
+            extent,
+            tileParams.x,
+            tileParams.y,
+            tileParams.z,
+            vectorTileFeature,
+          );
+        })
+      : [];
 
     const vectorTile = {
       layers: {
         // Tip: fixed SourceLayer Name
-        geojsonvt: {
+        default: {
           features,
         } as VectorTileLayer & {
           features: Feature[];

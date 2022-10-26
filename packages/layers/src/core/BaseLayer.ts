@@ -275,7 +275,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       };
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
-
       // @ts-ignore
       styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
       this.configService.setLayerConfig(sceneId, this.id, {
@@ -1350,12 +1349,25 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     // 存储 Attribute
-    this.configService.setAttributeConfig(this.id, {
-      [type]: {
-        field,
-        values,
-      },
-    });
+    if (
+      [
+        'color',
+        'size',
+        'texture',
+        'rotate',
+        'filter',
+        'label',
+        'shape',
+      ].indexOf(type) !== -1
+    ) {
+      this.configService.setAttributeConfig(this.id, {
+        [type]: {
+          field,
+          values,
+        },
+      });
+    }
+
     if (!this.inited) {
       this.pendingStyleAttributes.push({
         attributeName: type,
