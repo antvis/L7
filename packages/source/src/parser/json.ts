@@ -5,6 +5,7 @@ import {
   IParserCfg,
   IParserData,
 } from '@antv/l7-core';
+// @ts-ignore
 import rewind from '@mapbox/geojson-rewind';
 import { Feature, Geometries, Properties } from '@turf/helpers';
 import { getCoords } from '@turf/invariant';
