@@ -1,7 +1,7 @@
 import { Scene, RasterLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
-import { encodeParams, sign } from './signGenetator';
+import { encodeParams, sign } from './signGenerator';
 
 export default () => {
   useEffect(() => {
@@ -9,28 +9,19 @@ export default () => {
       id: 'map',
       pickBufferScale: 1.0,
       map: new GaodeMap({
-        center: [121.268, 30.3628],
+        center: [127.471855, 46.509622], // 绥化市-北林区
         pitch: 0,
         style: 'blank',
         zoom: 10,
       }),
-      transformRequest: (requestParams: any) => {
-        const { x, y, z } = getUrlQueryParams(requestParams.url);
-        const biz_content = {
-          x,
-          y,
-          z,
-          // x: '13945',
-          // y: '5791',
-          // z: '14',
-          index: '1001', // option.layerType,
-          date: '',
-          crow_type: '147',
-        };
+      transformRequest: (requestParams) => {
+        const { x, y, z, index, crow_type } = getUrlQueryParams(
+          requestParams.url,
+        );
+        const biz_content = { x, y, z, index, crow_type };
         const newUrl = sign('anttech.ai.cv.rs.xytile.get', biz_content, {
           charset: 'utf-8',
           version: '1.0',
-          appId: '2014060600164699',
         });
 
         const signStr = Object.keys(encodeParams(newUrl))
@@ -43,12 +34,10 @@ export default () => {
             return `${key}=${data}`;
           })
           .join('&');
-
-        requestParams.url = `http://openapi.stable.dl.alipaydev.com/gateway.do?${signStr}`;
+        requestParams.url = `https://openapi.alipay.com/gateway.do?${signStr}`; // 线上环境    
         return requestParams;
       },
-      // @ts-ignore
-      resCallback: (response: Object) => Base64toArrayBuffer(response?.anttech_ai_cv_rs_xytile_get_response?.image || '')
+      transformResponse: (response) => Base64toArrayBuffer(response?.anttech_ai_cv_rs_xytile_get_response?.image || '')
     });
 
     const Base64toArrayBuffer = (base64Data) => {
@@ -95,7 +84,8 @@ export default () => {
       zIndex: 0,
     });
     layerTile2.source(
-      'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      // 'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      `https://openapi.alipay.com/gateway.do?x={x}&y={y}&z={z}&index=1001&crow_type=101`,
       {
         parser: {
           type: 'rasterTile',
@@ -106,7 +96,7 @@ export default () => {
     );
 
     scene.on('loaded', () => {
-      scene.addLayer(layerTile);
+      // scene.addLayer(layerTile);
       scene.addLayer(layerTile2);
     });
   }, []);

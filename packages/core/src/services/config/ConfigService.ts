@@ -6,7 +6,7 @@ import { ILayerConfig } from '../layer/ILayerService';
 import { IRenderConfig } from '../renderer/IRendererService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import WarnInfo from './warnInfo';
-import { transformRequestConfig } from '@antv/l7-utils';
+import { transformXhr } from '@antv/l7-utils';
 
 /**
  * 场景默认配置项
@@ -139,10 +139,10 @@ export default class GlobalConfigService implements IGlobalConfigService {
       ...config,
     };
     if (config.transformRequest) {
-      transformRequestConfig.callback = config.transformRequest;
+      transformXhr.transformRequest = config.transformRequest;
     }
-    if (config.resCallback) {
-      transformRequestConfig.resCallback = config.resCallback;
+    if (config.transformResponse) {
+      transformXhr.transformResponse = config.transformResponse;
     }
   }
 

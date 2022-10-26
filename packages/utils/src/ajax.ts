@@ -120,8 +120,7 @@ function makeXMLHttpRequest(
   callback: ResponseCallback<any>,
 ) {
   const xhr = new $XMLHttpRequest();
-  // 自定义修改request参数
-  transformRequestConfig?.callback(requestParameters);
+  transformXhr?.transformRequest?.(requestParameters); // 修改request参数
 
   const url = Array.isArray(requestParameters.url)
     ? requestParameters.url[0]
@@ -153,8 +152,8 @@ function makeXMLHttpRequest(
       if (requestParameters.type === 'json') {
         // We're manually parsing JSON here to get better error messages.
         try {
-          if (transformRequestConfig.resCallback) {
-            data = transformRequestConfig.resCallback(xhr.response);
+          if (transformXhr?.transformResponse) {
+            data = transformXhr?.transformResponse?.(xhr.response);
           } else {
             data = JSON.parse(xhr.response);
           }
@@ -333,12 +332,10 @@ export const getImage = (
   }
 };
 
-/**
- * @description 修改默认request中url、header等参数，返回修改后的参数
- * @property {function} callback 回调函数
- */
-export const transformRequestConfig = {
-  callback: (requestParameters: RequestParameters): RequestParameters =>
-    requestParameters,
-  resCallback: (response: any) => new ArrayBuffer(response),
+export const transformXhr: {
+  transformRequest?: (request: RequestParameters) => RequestParameters;
+  transformResponse?: (response: Object) => any;
+} = {
+  transformRequest: (request) => request, // 修改默认request中url、header等参数，返回修改后的请求参数
+  transformResponse: (response) => response, // 修改默认处理请求返回数据的函数
 };
