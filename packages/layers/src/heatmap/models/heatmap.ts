@@ -233,6 +233,10 @@ export default class HeatMapModel extends BaseModel {
       intensity = 10,
       radius = 5,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+
+    this.layerService.beforeRenderData(this.layer);
+    this.layer.hooks.beforeRender.call();
+    
     this.intensityModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
@@ -240,6 +244,8 @@ export default class HeatMapModel extends BaseModel {
         u_intensity: intensity,
       },
     });
+
+    this.layer.hooks.afterRender.call();
   }
 
   private drawColorMode() {
