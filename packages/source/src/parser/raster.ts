@@ -1,5 +1,5 @@
 import { IParserData } from '@antv/l7-core';
-import { IRasterLayerData, IRasterCfg, IRasterFileData } from '../interface';
+import { IRasterCfg, IRasterFileData, IRasterLayerData } from '../interface';
 import { bandsOperation } from '../utils/bandOperation/bands';
 import { isNumberArray } from '../utils/util';
 

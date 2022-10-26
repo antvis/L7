@@ -1,4 +1,5 @@
 import bboxPolygon from '@turf/bbox-polygon';
+import { EventEmitter } from 'eventemitter3';
 import {
   LoadTileDataStatus,
   TileBounds,
@@ -6,7 +7,6 @@ import {
   TileOptions,
 } from './types';
 import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
-import { EventEmitter } from 'eventemitter3';
 /**
  * 单个瓦片
  * 负责瓦片数据加载、缓存数据、缓存图层

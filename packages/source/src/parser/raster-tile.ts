@@ -1,8 +1,8 @@
 import {
+  ITileBand,
   Tile,
   TileLoadParams,
   TilesetManagerOptions,
-  ITileBand,
 } from '@antv/l7-utils';
 import { IParserData, ITileParserCFG, RasterTileType } from '../interface';
 import {
@@ -21,8 +21,12 @@ const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
 export const rasterDataTypes = [RasterTileType.ARRAYBUFFER, RasterTileType.RGB];
 
 function isUrlError(url: string | string[] | ITileBand[]) {
-  if (Array.isArray(url) && url.length === 0) return true;
-  if (!Array.isArray(url) && typeof url !== 'string') return true;
+  if (Array.isArray(url) && url.length === 0) {
+    return true;
+  }
+  if (!Array.isArray(url) && typeof url !== 'string') {
+    return true;
+  }
   return false;
 }
 /**
@@ -35,12 +39,15 @@ export default function rasterTile(
   data: string | string[] | ITileBand[],
   cfg?: ITileParserCFG,
 ): IParserData {
-  if (isUrlError(data)) throw new Error('tile server url is error');
+  if (isUrlError(data)) {
+    throw new Error('tile server url is error');
+  }
 
   let tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
-  if (tileDataType === RasterTileType.RGB)
+  if (tileDataType === RasterTileType.RGB) {
     tileDataType = RasterTileType.ARRAYBUFFER;
+  }
   const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
     switch (tileDataType) {
       case RasterTileType.IMAGE:

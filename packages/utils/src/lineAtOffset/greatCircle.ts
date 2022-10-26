@@ -1,7 +1,7 @@
-import { Point } from './interface';
+import { degreesToRadians, radiansToDegrees } from '@turf/helpers';
 import { calDistance } from '../geo';
 import { Version } from '../interface/map';
-import { degreesToRadians, radiansToDegrees } from '@turf/helpers';
+import { Point } from './interface';
 // arc
 export function greatCircleLineAtOffset(
   source: Point,
@@ -23,7 +23,7 @@ export function greatCircleLineAtOffset(
 }
 
 function midPoint(source: Point, target: Point) {
-  const center = [target[0] - source[0], target[1] - source[1]]; //target - source;
+  const center = [target[0] - source[0], target[1] - source[1]]; // target - source;
   const r = calDistance(center, [0, 0]);
   const theta = Math.atan2(center[1], center[0]);
   const thetaOffset = 0.314;
@@ -43,7 +43,7 @@ function bezier3(arr: Point, t: number) {
 
 function getAngularDist(source: Point, target: Point) {
   const delta = [source[0] - target[0], source[1] - target[1]];
-  const sin_half_delta = [Math.sin(delta[0] / 2.0), Math.sin(delta[1] / 2.0)]; //Math.sin(delta / 2.0);
+  const sin_half_delta = [Math.sin(delta[0] / 2.0), Math.sin(delta[1] / 2.0)]; // Math.sin(delta / 2.0);
   const a =
     sin_half_delta[1] * sin_half_delta[1] +
     Math.cos(source[1]) *
