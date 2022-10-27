@@ -1,7 +1,16 @@
-import { GaodeMap, Logo, PositionName, Scale, Scene, Zoom } from '@antv/l7';
-import { FunctionComponent, useEffect } from 'react';
+import {
+  GaodeMap,
+  IControlOption,
+  Logo,
+  Scale,
+  Scene,
+  Zoom,
+} from '@antv/l7';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 
 const Demo: FunctionComponent = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
@@ -15,7 +24,7 @@ const Demo: FunctionComponent = () => {
     });
 
     scene.on('loaded', () => {
-      function createTestControl(position: PositionName) {
+      function createTestControl(position: IControlOption['position']) {
         scene.addControl(
           new Zoom({
             position,
@@ -48,16 +57,27 @@ const Demo: FunctionComponent = () => {
       createTestControl('leftcenter');
       createTestControl('rightcenter');
       createTestControl('bottomcenter');
+
+      if (containerRef.current) {
+        scene.addControl(
+          new Logo({
+            position: containerRef.current,
+          }),
+        );
+      }
     });
   }, []);
   return (
-    <div
-      id="map"
-      style={{
-        height: '500px',
-        position: 'relative',
-      }}
-    />
+    <>
+      <div ref={containerRef} />
+      <div
+        id="map"
+        style={{
+          height: '500px',
+          position: 'relative',
+        }}
+      />
+    </>
   );
 };
 

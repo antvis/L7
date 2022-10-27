@@ -21,7 +21,7 @@ export { Control };
 
 export interface IControlOption {
   name: string;
-  position: PositionName;
+  position: PositionName | Element;
   className?: string;
   style?: string;
   [key: string]: any;
@@ -226,7 +226,7 @@ export default class Control<O extends IControlOption = IControlOption>
    * @param position
    */
   public setPosition(
-    position: PositionType | PositionName = PositionType.TOPLEFT,
+    position: PositionType | IControlOption['position'] = PositionType.TOPLEFT,
   ) {
     // 考虑组件的自动布局，需要销毁重建
     const controlService = this.controlService;
@@ -273,13 +273,18 @@ export default class Control<O extends IControlOption = IControlOption>
    * @protected
    */
   protected insertContainer() {
-    const container = this.container;
     const position = this.controlOption.position;
-    const corner = this.controlService.controlCorners[position];
-    if (position.indexOf('bottom') !== -1) {
-      corner.insertBefore(container, corner.firstChild);
+    const container = this.container;
+
+    if (position instanceof Element) {
+      position.appendChild(container);
     } else {
-      corner.appendChild(container);
+      const corner = this.controlService.controlCorners[position];
+      if (position.indexOf('bottom') !== -1) {
+        corner.insertBefore(container, corner.firstChild);
+      } else {
+        corner.appendChild(container);
+      }
     }
   }
 
