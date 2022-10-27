@@ -52,7 +52,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
       const { usage } = layer.getLayerConfig();
-      if (usage === 'basemap') return;
+      if (usage === 'basemap') {
+        return;
+      }
       const source = layer.getSource();
       if (layer.layerModelNeedUpdate || !source || !source.inited) {
         return;

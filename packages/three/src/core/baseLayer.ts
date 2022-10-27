@@ -1,4 +1,4 @@
-import { ILayer, IMercator, ISourceCFG, BaseLayer } from '@antv/l7';
+import { BaseLayer, ILayer, IMercator, ISourceCFG } from '@antv/l7';
 import {
   AnimationMixer,
   Matrix4,
@@ -180,7 +180,9 @@ export default class ThreeJSLayer
     }
   }
   public renderModels() {
-    if (!this.threeRenderService) return this;
+    if (!this.threeRenderService) {
+      return this;
+    }
     if (this.isUpdate && this.update) {
       this.update();
     }

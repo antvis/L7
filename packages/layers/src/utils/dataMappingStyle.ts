@@ -42,7 +42,9 @@ function registerStyleAttribute(
  */
 function styleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
   // 瓦片图层不需要进行样式数据映射
-  if (layer.tileLayer || layer.isTileLayer) return;
+  if (layer.tileLayer || layer.isTileLayer) {
+    return;
+  }
 
   if (configToUpdate.opacity) {
     // 处理 style 中 opacity 属性的数据映射

@@ -686,7 +686,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return this;
     }
 
-    if (this.encodeDataLength <= 0 && !this.forceRender) return this;
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return this;
+    }
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     this.renderModels();
     return this;
@@ -696,7 +698,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * renderMultiPass 专门用于渲染支持 multipass 的 layer
    */
   public async renderMultiPass() {
-    if (this.encodeDataLength <= 0 && !this.forceRender) return;
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return;
+    }
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       // multi render 开始执行 multiPassRender 的渲染流程
       await this.multiPassRenderer.render();
@@ -1056,8 +1060,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        this.mapService?.setCoordCenter &&
+        if (this.mapService?.setCoordCenter) {
           this.mapService.setCoordCenter(layerCenter);
+        }
       }
       this.sourceEvent();
     });
@@ -1445,7 +1450,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   protected reRender() {
-    this.inited && this.layerService.reRender();
+    if (this.inited) {
+      this.layerService.reRender();
+    }
   }
   protected splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],

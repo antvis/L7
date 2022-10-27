@@ -8,12 +8,13 @@ export default class LayerAnimateStylePlugin implements ILayerPlugin {
     layer.hooks.beforeRender.tap('LayerAnimateStylePlugin', () => {
       // @ts-ignore
       const animateStatus = layer.animateStatus;
-      animateStatus &&
+      if (animateStatus) {
         layer.models.forEach((model: IModel) => {
           model.addUniforms({
             ...layer.layerModel.getAnimateUniforms(),
           });
         });
+      }
     });
   }
 }

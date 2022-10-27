@@ -11,8 +11,8 @@ import {
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 import Source from '@antv/l7-source';
-import { normalize, rgb2arr } from '@antv/l7-utils';
 import { ILineLayerStyleOptions } from '../core/interface';
+import { normalize, rgb2arr } from '@antv/l7-utils';
 import { cloneDeep } from 'lodash';
 
 function getArrowPoints(p1: Position, p2: Position) {

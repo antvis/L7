@@ -23,7 +23,9 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
   ) {
     layer.hooks.init.tapPromise('RegisterStyleAttributePlugin', () => {
       // 过滤 tileGroup layer （瓦片图层不需要注册）
-      if (isTileGroup(layer)) return;
+      if (isTileGroup(layer)) {
+        return;
+      }
 
       this.registerBuiltinAttributes(styleAttributeService, layer);
     });

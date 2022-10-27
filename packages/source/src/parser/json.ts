@@ -1,14 +1,15 @@
 // @ts-ignore
-import rewind from '@mapbox/geojson-rewind';
 import {
   IJsonData,
   IParseDataItem,
   IParserCfg,
   IParserData,
 } from '@antv/l7-core';
-import { flattenEach } from '@turf/meta';
-import { getCoords } from '@turf/invariant';
+// @ts-ignore
+import rewind from '@mapbox/geojson-rewind';
 import { Feature, Geometries, Properties } from '@turf/helpers';
+import { getCoords } from '@turf/invariant';
+import { flattenEach } from '@turf/meta';
 
 export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
   const { x, y, x1, y1, coordinates, geometry } = cfg;
@@ -32,8 +33,7 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
         );
       })
       .forEach((col, index) => {
-        const _geometry = { ...col[geometry] };
-        const rewindGeometry = rewind(_geometry, true);
+        const rewindGeometry = rewind({ ...col[geometry] }, true);
         // multi feature 情况拆分
         flattenEach(
           rewindGeometry,
@@ -69,11 +69,13 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
       if (Array.isArray(coordinates[0]) && !Array.isArray(coordinates[0][0])) {
         type = 'LineString';
       }
-      const geometry = {
-        type,
-        coordinates: [...col[coordinates]],
-      };
-      const rewindGeometry = rewind(geometry, true);
+      const rewindGeometry = rewind(
+        {
+          type,
+          coordinates: [...col[coordinates]],
+        },
+        true,
+      );
       coords = rewindGeometry.coordinates;
     } else if (x && y && x1 && y1) {
       // 起终点数据

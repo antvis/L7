@@ -1,6 +1,7 @@
 import {
   ILayer,
   ILayerPlugin,
+  IParserData,
   IScale,
   IScaleOptions,
   IStyleAttribute,
@@ -9,7 +10,6 @@ import {
   ScaleTypeName,
   ScaleTypes,
   StyleScaleType,
-  IParserData,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
 import { extent } from 'd3-array';
