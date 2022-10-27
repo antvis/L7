@@ -149,13 +149,9 @@ export default class MapboxService extends BaseMapService<
         bearing: rotation,
         ...rest,
       });
-      this.map.on('load', () => {
-        console.log('地图初始化完成');
-      });
     }
-    this.map.on('loaded', () => {
+    this.map.on('load', () => {
       this.handleCameraChanged();
-      console.log('loaded');
     });
     this.map.on('move', this.handleCameraChanged);
 
