@@ -16,8 +16,8 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * AMapService
  */
 @injectable()
-export default class L7MapService extends BaseMapService<Map> {
-  public version: string = Version.L7MAP;
+export default class DefaultMapService extends BaseMapService<Map> {
+  public version: string = Version.DEFUALT;
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
@@ -35,7 +35,7 @@ export default class L7MapService extends BaseMapService<Map> {
       style = 'light',
       rotation = 0,
       mapInstance,
-      version = 'L7MAP',
+      version = 'DEFAULTMAP',
       mapSize = 10000,
       interactive = true,
       ...rest
@@ -74,9 +74,9 @@ export default class L7MapService extends BaseMapService<Map> {
     }
 
     // 不同于高德地图，需要手动触发首次渲染
-    // setTimeout(()=>{
-    //   this.handleCameraChanged();
-    // },100)
+    setTimeout(() => {
+      this.handleCameraChanged();
+    }, 100);
     this.handleCameraChanged();
   }
 

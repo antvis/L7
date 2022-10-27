@@ -348,7 +348,7 @@ export default class FillModel extends BaseModel {
       if (
         this.unit !== 'meter' &&
         unit === 'meter' &&
-        version !== Version.L7MAP &&
+        version !== Version.DEFUALT &&
         version !== Version.GLOBEL
       ) {
         this.isMeter = true;

@@ -67,7 +67,6 @@ export default class VectorTile extends Tile {
     }
 
     const features = vectorLayer.features;
-    console.log(features)
     return {
       data: {
         type: 'FeatureCollection',
