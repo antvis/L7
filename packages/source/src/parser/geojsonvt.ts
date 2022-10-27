@@ -13,7 +13,7 @@ import geojsonvt from 'geojson-vt';
 import { VectorTileLayer } from '@mapbox/vector-tile';
 import { IParserData } from '../interface';
 
-import {ITileParserCFG, IGeojsonvtOptions } from '@antv/l7-core'
+import { ITileParserCFG, IGeojsonvtOptions } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
