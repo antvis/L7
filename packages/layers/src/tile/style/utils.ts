@@ -1,27 +1,4 @@
-import {
-    ILayer,
-    IRendererService,
-  } from '@antv/l7-core';
-
-  import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
-
-export function updateTexture(config: IColorRamp, layers: ILayer[], rendererService: IRendererService) {
-    const { createTexture2D } = rendererService;
-    const imageData = generateColorRamp(config) as ImageData;
-    const texture =  createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: false,
-    });
-    
-    layers.map(layer => {
-      layer.updateLayerConfig({
-        colorTexture: texture
-      });
-    })
-    return texture;
-}
+import { ILayer } from '@antv/l7-core';
 
 export function updateLayersConfig(layers: ILayer[], key: string, value: any) {
     layers.map((layer) => {
@@ -37,40 +14,4 @@ export function updateLayersConfig(layers: ILayer[], key: string, value: any) {
       }
     });
   }
-
-
-export function getDefaultStyleAttributeField(layer: ILayer, type: string, style: string) {
-  switch (style) {
-    case 'size':
-      return 1;
-    case 'color':
-      return '#fff';
-    case 'shape':
-      return getLayerShape(type, layer);
-    default:
-      return '';
-  }
-}
-
-export function getLayerShape(layerType: string, layer: ILayer) {
-  const layerShape = layer.getAttribute('shape');
-  if (layerShape && layerShape.scale?.field) {
-    if (layerShape.scale?.values === 'text') {
-      return [layerShape.scale.field, layerShape.scale.values] as string[];
-    }
-    return layerShape.scale.field as string;
-  }
-  switch (layerType) {
-    case 'PolygonLayer':
-      return 'fill';
-    case 'LineLayer':
-      return 'tileline';
-    case 'PointLayer':
-      return 'circle';
-    case 'RasterLayer':
-      return 'image';
-    default:
-      return '';
-  }
-}
 
