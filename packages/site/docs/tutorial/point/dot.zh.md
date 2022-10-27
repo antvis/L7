@@ -1,5 +1,5 @@
 ---
-title: 气泡图
+title: 亮度图
 order: 2
 ---
 `markdown:docs/common/style.md`

@@ -137,7 +137,7 @@ layer.color('t', ['red', 'white', 'blue']);
 const scaleColors = d3interpolate.interpolateRgbBasis(colors);
 ```
 
-### IScaleConfig
+#### IScaleConfig
 
 ```js
 interface IScaleConfig {
@@ -154,6 +154,28 @@ interface IScaleConfig {
 }
 ```
 
+### cluster
+
+我们在使用 `cluster` 配置聚合图之后就可以使用一些聚合方法来获取对应参数。
+#### getClusters(zoom: number): IFeatureCollection
+
+获取指定缩放等级的聚合数据
+
+- `zoom` 缩放等级
+
+#### getClustersLeaves(id: string): IFeatureCollection
+
+根据 `id` 获取聚合节点的数据，每个聚合节点会有一个唯一 `ID`。
+
+- `id` 聚合节点的 `id`
+
+```javascript
+const source = layer.getSource();
+source.getClustersLeaves(id);
+layer.on('click', (e) => {
+  console.log(source.getClustersLeaves(e.feature.cluster_id));
+});
+```
 ## 视觉编码方法
 
 可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。
