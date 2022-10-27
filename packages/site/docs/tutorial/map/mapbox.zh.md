@@ -1,5 +1,5 @@
 ---
-title: MapBox地图
+title: MapBox 地图
 order: 0
 ---
 `markdown:docs/common/style.md`

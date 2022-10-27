@@ -1,6 +1,6 @@
 ---
 title: Tile Vector
-order: 3
+order: 2
 ---
 
 `markdown:docs/tutorial/tile/vectorTile.zh.md`

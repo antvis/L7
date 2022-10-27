@@ -1,8 +1,6 @@
 ---
 title: 栅格瓦片
-order: 3
-redirect_from:
-  - /zh/docs/tutorial
+order: 1
 ---
 `markdown:docs/common/style.md`
 

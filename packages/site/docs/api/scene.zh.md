@@ -125,8 +125,6 @@ scene.getLayers();
 
 根据图层名称获取图层。
 
-参数 :
-
 - `name` 图层在初始化的时候配置图层的 `name`。
 
 ```javascript

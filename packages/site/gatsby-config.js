@@ -104,16 +104,16 @@ module.exports = {
       {
         slug: 'tutorial/map',
         title: {
-          zh: '地图',
-          en: 'Map',
+          zh: '地图使用',
+          en: 'Map Usage',
         },
         order: 3,
       },
       {
         slug: 'tutorial/interactive',
         title: {
-          zh: '交互',
-          en: 'interactive',
+          zh: '图层交互',
+          en: 'Layer Interactive',
         },
         order: 4,
       },
@@ -133,7 +133,7 @@ module.exports = {
           zh: '点图层 PointLayer',
           en: 'PointLayer',
         },
-        order: 5,
+        order: 6,
       },
       {
         slug: 'tutorial/line',
@@ -142,7 +142,7 @@ module.exports = {
           zh: '线图层 LineLayer',
           en: 'LineLayer',
         },
-        order: 5,
+        order: 7,
       },
       {
         slug: 'tutorial/polygon',
@@ -151,7 +151,7 @@ module.exports = {
           zh: '面图层 PolygonLayer',
           en: 'PolygonLayer',
         },
-        order: 5,
+        order: 8,
       },
       {
         slug: 'tutorial/heatmap',
@@ -160,7 +160,7 @@ module.exports = {
           zh: '热力图层 HeatmapLayer',
           en: 'HeatmapLayer',
         },
-        order: 6,
+        order: 9,
       },
       {
         slug: 'tutorial/tile',
@@ -169,7 +169,7 @@ module.exports = {
           zh: '瓦片图层 TileLayer',
           en: 'TileLayer',
         },
-        order: 6,
+        order: 10,
       },
       // ****** api
       {

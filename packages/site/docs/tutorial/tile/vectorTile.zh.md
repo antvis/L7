@@ -1,8 +1,6 @@
 ---
 title: 矢量瓦片
-order: 3
-redirect_from:
-  - /zh/docs/tutorial
+order: 2
 ---
 `markdown:docs/common/style.md`
 

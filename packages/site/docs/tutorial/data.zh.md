@@ -7,7 +7,7 @@ order: 2
 
 ## 数据
 
-目前L7支持的数据格式有 `GeoJSON`，`CSV`，`JSON` `Image`。
+目前L7支持的数据格式有 `GeoJSON`，`CSV`，`JSON`，`Image`。
 
 - `GeoJSON` 支持点、线、面等所有的标准空间数据格式。
 
