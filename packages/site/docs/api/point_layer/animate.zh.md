@@ -28,6 +28,7 @@ layer.animate({
   enable: true,
 });
 ```
+
 #### IAnimateOption
 
 ```javascript
@@ -56,6 +57,7 @@ interface IAnimateOptions: {
   repeat?: number = 1;
 }
 ```
+
 ```
 #### IAnimateOptions
 
@@ -66,3 +68,4 @@ interface IAnimateOptions: {
 - `enable` 是否开启动画，布尔值，默认为 `false`。
 - `speed` 生长速度，数值，默认为 `0.01`。
 - `repeat` 生长动画的播放次数，数值，默认为 `1`。
+```

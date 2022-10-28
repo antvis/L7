@@ -35,7 +35,7 @@ layer.style({
 | blur          | `number`           | 图形模糊半径               | `0`      |
 | offsets       | `[number, number]` | 点偏移                     | `[0, 0]` |
 | raisingHeight | `number`           | 抬升高度                   | `0`      |
-| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化  | `false`      |
+| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `false`  |
 | unit          | `string`           | 点大小单位                 | `l7size` |
 
 #### unit
@@ -75,7 +75,7 @@ const layer = PointLayer()
 | depth       | `boolean` | 图形是否开启深度检测 | `true`  |
 | pickLight   | `boolean` | 拾取高亮是否计算光照 | `false` |
 | lightEnable | `boolean` | 颜色是否参与光照计算 | `true`  |
-| heightfixed | `boolean` | 是否是固定高度      | `false` |
+| heightfixed | `boolean` | 是否是固定高度       | `false` |
 
 ### 3D column linear
 
@@ -124,7 +124,7 @@ interface IOpcityLinear = {
 | fontFamily       | [font](/zh/docs/api/point_layer/style#font)             | 字体                       | `sans-serif` |
 | textAllowOverlap | `boolean`                                               | 文字是否允许覆盖           | `false`      |
 | raisingHeight    | `number`                                                | 抬升高度                   | `0`          |
-| heightfixed      | `boolean`                                               | 抬升高度是否随 `zoom` 变化 | `false`          |
+| heightfixed      | `boolean`                                               | 抬升高度是否随 `zoom` 变化 | `false`      |
 
 #### anchorType
 
@@ -175,8 +175,8 @@ const font2 = 'Times New Roman';
 | ------------- | ------------------ | -------------------------- | -------- |
 | offsets       | `[number, number]` | 点偏移                     | `[0, 0]` |
 | raisingHeight | `number`           | 抬升高度                   | `0`      |
-| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化   | `false`      |
-| rotation      | `number`           | 图标的偏移                  | `0`      |
+| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `false`  |
+| rotation      | `number`           | 图标的偏移                 | `0`      |
 
 #### rotation
 

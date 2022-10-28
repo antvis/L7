@@ -33,11 +33,11 @@ layer.style({
 
 | style         | 类型                       | 描述                       | 默认值      |
 | ------------- | -------------------------- | -------------------------- | ----------- |
-| borderColor   | `string`                   | 图形边框颜色                 | `#fff`      |
-| borderWidth   | `number`                   | 图形边框半径                 | `0`         |
-| blur          | `[number, number, number]` | 图形模糊分布                 | `[1, 1, 1]` |
-| raisingHeight | `number`                   | 抬升高度                    | `0`         |
-| heightfixed   | `boolean`                  | 抬升高度是否随 `zoom` 变化    | `false`         |
+| borderColor   | `string`                   | 图形边框颜色               | `#fff`      |
+| borderWidth   | `number`                   | 图形边框半径               | `0`         |
+| blur          | `[number, number, number]` | 图形模糊分布               | `[1, 1, 1]` |
+| raisingHeight | `number`                   | 抬升高度                   | `0`         |
+| heightfixed   | `boolean`                  | 抬升高度是否随 `zoom` 变化 | `false`     |
 
 ### arc
 
