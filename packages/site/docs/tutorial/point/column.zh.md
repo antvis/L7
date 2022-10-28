@@ -1,138 +1,94 @@
 ---
 title: 3D 柱图
-order: 2
+order: 1
 ---
 `markdown:docs/common/style.md`
 
-3D 柱图地理区域上方会显示不同高度的柱体，主题的高度与其在数据集中的数值会成正比。
+`3D` 柱图是在地理区域上方显示的不同高度的柱体，柱子的高度与其在数据集中的数值会成正比。
 
-## 使用
+<div>
+  <div style="width:60%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RVw4QKTJe7kAAAAAAAAAAABkARQnAQ'>
+  </div>
+</div>
 
-3D 柱图通过 PointLayer 对象实例化，将 shape 设置成不同的 3Dshape
+### 实现
+
+下面我们来介绍如何绘制一个常见的 `3D` 柱图。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/column/#clumn_shape)
 
 ```javascript
-import { PointLayer } from '@antv/l7';
+import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    pitch: 66.02383,
+    center: [ 121.400257, 31.25287 ],
+    zoom: 14.55,
+    rotation: 134.95
+  })
+});
+fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json')
+  .then(res => res.json())
+  .then(data => {
+    const pointLayer = new PointLayer({})
+    .source(data, {
+      parser: {
+        type: 'json',
+        x: 'longitude',
+        y: 'latitude'
+      }
+    })
+    .shape('name', [ 'cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn' ])
+    .color('name', [ '#739DFF', '#61FCBF', '#FFDE74', '#FF896F' ]);
+    .size('unit_price', h => [ 6, 6, h / 500 ] 
+    scene.addLayer(pointLayer);
+  })
 ```
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*RVw4QKTJe7kAAAAAAAAAAABkARQnAQ'>
 
 ### shape
 
-3D Shape 支持
+`3D` 柱图 `shape` 方法支持以下参数：
 
-- cylinder
-- triangleColumn
-- hexagonColumn
-- squareColumn
+- `cylinder` 圆柱体
+- `triangleColumn` 三角柱
+- `hexagonColumn` 六角柱
+- `squareColumn` 四角柱
 
 ### size
 
-3D 柱图 size 需要设置三个维度 [w, l, z]
+`3D` 柱图的 `size` 支持设置三个维度 `[w, l, z]`：
 
-- w 宽
-- l 长
-- z 高度
+- `w` 宽
+- `l` 长
+- `z` 高度
 
-size 设置成常量
+1. `size` 设置常量
 
-```
+```js
  layer.size([2,2,3])
 ```
 
-size 回调函数设置
+2. `size` 设置回调函数
 
-```
- layer.size('unit_price', h => {
-        return [ 6, 6, h / 500 ];
-    })
-```
-
-```javascript
-const column = new PointLayer({})
-  .source(data)
-  .shape('name', [
-    'cylinder',
-    'triangleColumn',
-    'hexagonColumn',
-    'squareColumn',
-  ])
-  .size('unit_price', (h) => {
-    return [6, 6, h / 500];
-  })
-  .color('name', ['#5B8FF9', '#70E3B5', '#FFD458', '#FF7C6A'])
-  .style({
-    opacity: 1.0,
-  });
+```js
+layer.size('unit_price', h => {
+  return [ 6, 6, h / 500 ];
+})
 ```
 
 ### animate
 
-3D 柱图支持生长动画  
-animate 方法支持的布尔值和对象参数
+`3D` 柱图支持生长动画，通过 `animate` 方法进行设置，具体使用可以查看[详细文档](/zh/docs/api/point_layer/animate#生长动画)
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*l-SUQ5nU6n8AAAAAAAAAAAAAARQnAQ'>
+<div>
+  <div style="width:60%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*l-SUQ5nU6n8AAAAAAAAAAAAAARQnAQ'>
+  </div>
+</div>
 
-```javascript
-animate(true)
-animate(false)
+### style
 
-animate(animateOptions)
-
-animateOptions: {
-  enable: boolean;
-  speed?: number = 0.01;
-  repeat?: number = 1;
-}
-```
-
-## style
-
-- sourceColor 设置 3D 柱图起始颜色（3D 柱图设置颜色渐变时会覆盖 color 设置的颜色）
-
-- targetColor 设置 3D 柱图终止颜色
-
-- opacityLinear 设置 3D 柱图透明度渐变
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*oZWGSIceykwAAAAAAAAAAAAAARQnAQ'>
-
-```javascript
-style({
-  opacityLinear: {
-    enable: true, // true - false
-    dir: 'up', // up - down
-  },
-});
-```
-
-- lightEnable 是否开启光照
-
-```javascript
-layer.style({
-  opacity: 0.8,
-  sourceColor: 'red',
-  targetColor: 'yellow',
-});
-```
-
-[光标柱图](/zh/examples/point/column#column_light)  
-[渐变柱图](/zh/examples/point/column#column_linear)
-
-- heightFixed 设置 3D 柱体的高度固定（保持固定的笛卡尔高度而不是等像素高度）
-
-🌟 3D 柱图在设置 heightFixed 为 true 后柱子的半径也会固定，从 v2.7.12 版本开始支持
-
-```javascript
-style({
-  heightfixed: true, //  默认为 false
-});
-```
-
-- pickLight 设置 3D 柱体拾取高亮颜色是否支持光照计算
-
-🌟 3D 柱图支持通过设置 pickLight 来控制拾取高亮颜色的光照计算，从 v2.7.12 版本开始支持
-
-```javascript
-style({
-  pickLight: true, //  默认为 false
-});
-```
+`3D` 柱图有特殊的 `style` 属性，具体使用可以查找[详细文档](/zh/docs/api/point_layer/style#3d-column)

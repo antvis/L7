@@ -1,6 +1,6 @@
 ---
 title: 气泡图
-order: 2
+order: 0
 ---
 `markdown:docs/common/style.md`
 

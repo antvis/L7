@@ -51,8 +51,8 @@ interface IOpacityLinear {
 
 | style         | 类型      | 描述                       | 默认值  |
 | ------------- | --------- | -------------------------- | ------- |
-| raisingHeight | `number`  | 抬升高度                   | `0`     |
-| heightfixed   | `boolean` | 抬升高度是否随 `zoom` 变化 | `false` |
+| raisingHeight | `number`  | 抬升高度                  | `0`     |
+| heightfixed   | `boolean` | 抬升高度是否随 `zoom` 变化  | `false` |
 | topsurface    | `boolean` | 顶部是否显示               | `true`  |
 | sidesurface   | `boolean` | 侧面是否显示               | `true`  |
 | sourceColor   | `IColor`  | 侧面底部颜色               | `/`     |
