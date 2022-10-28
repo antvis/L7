@@ -21,7 +21,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
       if (layer.layerModelNeedUpdate) {
         return;
       }
-      if( layer.inited ) {
+      if (layer.inited) {
         this.updateStyleAttribute(layer, { styleAttributeService });
       }
     });
