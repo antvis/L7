@@ -1,4 +1,3 @@
-import { getReferrer } from './env';
 import { $window, $XMLHttpRequest } from './mini-adapter';
 
 export interface ITileBand {
@@ -53,64 +52,6 @@ export class AJAXError extends Error {
     this.url = url;
     this.body = body;
   }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function makeFetchRequest(
-  requestParameters: RequestParameters,
-  callback: ResponseCallback<any>,
-) {
-  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
-  const request = new Request(url as string, {
-    method: requestParameters.method || 'GET',
-    body: requestParameters.body,
-    credentials: requestParameters.credentials,
-    headers: requestParameters.headers,
-    referrer: getReferrer(),
-    signal: requestParameters?.signal,
-  });
-
-  if (requestParameters.type === 'json') {
-    request.headers.set('Accept', 'application/json');
-  }
-
-  return fetch(request)
-    .then((response) => {
-      if (response.ok) {
-        return (requestParameters.type === 'arrayBuffer'
-          ? response.arrayBuffer()
-          : requestParameters.type === 'json'
-          ? response.json()
-          : response.text()
-        )
-          .then((result) => {
-            callback(
-              null,
-              result,
-              response.headers.get('Cache-Control'),
-              response.headers.get('Expires'),
-            );
-          })
-          .catch((err) => {
-            callback(new Error(err.message));
-          });
-      }
-      return response
-        .blob()
-        .then((body) =>
-          callback(
-            new AJAXError(
-              response.status,
-              response.statusText,
-              url.toString(),
-              body,
-            ),
-          ),
-        );
-    })
-    .catch((error) => {
-      callback(new Error(error.message));
-    });
 }
 
 function makeXMLHttpRequest(
