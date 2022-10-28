@@ -3,7 +3,6 @@ import {
   Scene,
   Source,
   PolygonLayer,
-  LineLayer,
   TileDebugLayer,
   PointLayer,
 } from '@antv/l7';
@@ -78,22 +77,22 @@ export default () => {
           }
         });
 
-      const line = new LineLayer({
-        sourceLayer: 'WLD_L',
-        zIndex: 2,
-      })
-        .source(source)
-        .shape('line')
-        .size(0.6)
-        .color('type', (t) => {
-          if (t === '0') {
-            return 'red';
-          }
-          if (t === '2') {
-            return '#09f';
-          }
-          return '#fc9272';
-        });
+      // const line = new LineLayer({
+      //   sourceLayer: 'WLD_L',
+      //   zIndex: 2,
+      // })
+      //   .source(source)
+      //   .shape('line')
+      //   .size(0.6)
+      //   .color('type', (t) => {
+      //     if (t === '0') {
+      //       return 'red';
+      //     }
+      //     if (t === '2') {
+      //       return '#09f';
+      //     }
+      //     return '#fc9272';
+      //   });
 
       const text = new PointLayer({
         sourceLayer: 'WLD',

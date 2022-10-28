@@ -13,6 +13,7 @@ import { FunctionComponent, useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
   const [layers, setLayers] = useState<ILayer[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [scene, setScene] = useState<Scene | undefined>();
   const [newLayer, setNewLayer] = useState<ILayer | null>(null);
   const [control, setControl] = useState<LayerSwitch | null>(null);

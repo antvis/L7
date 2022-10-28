@@ -38,6 +38,7 @@ export class TileLayerService {
   getTile(tileKey: string): ITile | undefined {
     return this._tiles.find((tile) => tile.key === tileKey);
   }
+  
   getVisibleTileBylngLat(lngLat: ILngLat): ITile | undefined {
     // 加载完成 & 可见 & 鼠标选中
     return this._tiles.find(
