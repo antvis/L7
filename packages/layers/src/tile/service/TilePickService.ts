@@ -1,6 +1,5 @@
-import { ILayerService, ITile, ITilePickService } from '@antv/l7-core';
+import { ILayerService, ITile, ITilePickService, ILngLat, IInteractionTarget } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
-import { IInteractionTarget } from '@antv/l7-core';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
@@ -81,8 +80,30 @@ export class TilePickService implements ITilePickService{
   }
 
   /** 从瓦片中根据数据 */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getFeatureById(pickedFeatureIdx: number) {
-    // console.log('getFeatureById')
+  getFeatureById(pickedFeatureIdx: number, lngLat: ILngLat) {
+    const tile = this.tileLayerService.getVisibleTileBylngLat(lngLat)
+    if (!tile) {
+      return null;
+    }
+
+    const layers = tile.getLayers();
+    let features = null;
+    // 瓦片数据各自独立分布，没有完整的集合
+    // TODO: 合并瓦片矢量数据，返回完整的的数据集
+    layers.some(layer => {
+      // 图层的 originData 可能并没有 id，因此我们使用编码后的 dataArray
+      const data = layer.getSource().data.dataArray;
+
+      // _id 编码值可能根据字段进行编码，因此可能命中多个 feature
+      const pickedFeature = data.filter(d => d._id === pickedFeatureIdx)
+      
+      if(pickedFeature.length > 0) {
+        features = pickedFeature;
+        return true;
+      } else {
+        return false;
+      }
+    })
+    return features;
   }
 }
