@@ -11,11 +11,13 @@ import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
  * 单个瓦片
  * 负责瓦片数据加载、缓存数据、缓存图层
  */
-export class Tile extends EventEmitter {
+export class SourceTile extends EventEmitter {
   // 瓦片索引
   public x: number;
   public y: number;
   public z: number;
+  // 循环加载瓦片
+  public warp: boolean;
   // 瓦片大小
   public tileSize = 256;
   // 是否可以见
@@ -24,14 +26,16 @@ export class Tile extends EventEmitter {
   public isCurrent = false;
   // 是否可以见发生变化
   public isVisibleChange = false;
-  public layerIDList: string[] = [];
+
   public loadedLayers: number = 0;
 
+  public isLayerLoaded: boolean = false;
+  public isLoad: boolean = false;
+  public isChildLoad: boolean = false;
   // 瓦片的父级瓦片
-  public parent: Tile | null = null;
+  public parent: SourceTile | null = null;
   // 瓦片的子级瓦片
-  public children: Tile[] = [];
-  public loadedChilds: number = 0;
+  public children: SourceTile[] = [];
   // 瓦片数据
   public data: any = null;
   // 瓦片属性
@@ -47,10 +51,11 @@ export class Tile extends EventEmitter {
 
   constructor(options: TileOptions) {
     super();
-    const { x, y, z, tileSize } = options;
+    const { x, y, z, tileSize, warp = true } = options;
     this.x = x;
     this.y = y;
     this.z = z;
+    this.warp = warp || true;
     this.tileSize = tileSize;
   }
 
@@ -67,6 +72,10 @@ export class Tile extends EventEmitter {
   // 是否瓦片请求失败
   public get isFailure() {
     return this.loadStatus === LoadTileDataStatus.Failure;
+  }
+
+  public setTileLayerLoaded() {
+    this.isLayerLoaded = true;
   }
 
   // 是否瓦片请求被取消
@@ -110,7 +119,7 @@ export class Tile extends EventEmitter {
 
   // 瓦片的 key
   public get key() {
-    const key = `${this.x},${this.y},${this.z}`;
+    const key = `${this.x}_${this.y}_${this.z}`;
     return key;
   }
 
@@ -133,12 +142,11 @@ export class Tile extends EventEmitter {
     let tileData = null;
     let error;
     try {
-      const { x, y, z, bounds, tileSize } = this;
+      const { x, y, z, bounds, tileSize, warp } = this;
       // wrap
-      const { warpX, warpY } = getTileWarpXY(x, y, z);
+      const { warpX, warpY } = getTileWarpXY(x, y, z, warp);
       const { signal } = this.abortController;
-      const params = { x: warpX, y: warpY, z, bounds, tileSize, signal };
-
+      const params = { x: warpX, y: warpY, z, bounds, tileSize, signal, warp };
       tileData = await getData(params, this);
     } catch (err) {
       error = err;

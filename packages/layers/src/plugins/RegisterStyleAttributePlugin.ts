@@ -21,7 +21,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('RegisterStyleAttributePlugin', () => {
+    layer.hooks.init.tapPromise('RegisterStyleAttributePlugin', () => {
       // 过滤 tileGroup layer （瓦片图层不需要注册）
       if (isTileGroup(layer)) {
         return;
@@ -45,12 +45,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     const { usage } = layer.getLayerConfig();
     if (usage === 'basemap') {
       this.registerPositionAttribute(styleAttributeService);
-      return;
-    }
-
-    if (layer.isTileLayer) {
-      this.registerPositionAttribute(styleAttributeService);
-      this.registerColorAttribute(styleAttributeService);
       return;
     }
 

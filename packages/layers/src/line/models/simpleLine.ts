@@ -78,8 +78,8 @@ export default class SimpleLineModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
   public clearModels() {
@@ -107,7 +107,7 @@ export default class SimpleLineModel extends BaseModel {
     }
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -115,7 +115,7 @@ export default class SimpleLineModel extends BaseModel {
 
     const { frag, vert, type } = this.getShaders();
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
@@ -127,13 +127,7 @@ export default class SimpleLineModel extends BaseModel {
         stencil: getMask(mask, maskInside),
         pick: false,
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

@@ -19,12 +19,12 @@ export default class MaskModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
-  public async buildModels(callbackModel: (models: IModel[]) => void) {
-    this.layer
+  public async buildModels(): Promise<IModel[]>  {
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'mask',
         vertexShader: mask_vert,
@@ -48,13 +48,7 @@ export default class MaskModel extends BaseModel {
         },
         pick: false
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   public clearModels(refresh = true) {

@@ -31,31 +31,23 @@ export default class DataMappingPlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('DataMappingPlugin', () => {
+    layer.hooks.init.tapPromise('DataMappingPlugin', async () => {
       // 初始化重新生成 map
-      const source = layer.getSource();
-      if (source.inited) {
-        this.generateMaping(layer, { styleAttributeService });
-      } else {
-        source.once('update', () => {
-          this.generateMaping(layer, { styleAttributeService });
-        });
-      }
+      this.generateMaping(layer, { styleAttributeService });
     });
 
-    layer.hooks.beforeRenderData.tap('DataMappingPlugin', () => {
-      layer.dataState.dataMappingNeedUpdate = false;
-      const source = layer.getSource();
-      if (source.inited) {
+    layer.hooks.beforeRenderData.tapPromise(
+      'DataMappingPlugin',
+      async (flag: boolean) => {
+        if (!flag) {
+          return flag;
+        }
+        layer.dataState.dataMappingNeedUpdate = false;
         this.generateMaping(layer, { styleAttributeService });
-      } else {
-        source.once('update', () => {
-          this.generateMaping(layer, { styleAttributeService });
-        });
-      }
 
-      return true;
-    });
+        return true;
+      },
+    );
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
@@ -67,7 +59,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (layer.layerModelNeedUpdate || !source || !source.inited) {
         return;
       }
-      const bottomColor = layer.getBottomColor();
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const filter = styleAttributeService.getLayerStyleAttribute('filter');
       const { dataArray } = source.data;
@@ -80,7 +71,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       // 数据过滤完 再执行数据映射
       if (filter?.needRemapping && filter?.scale) {
         filterData = dataArray.filter((record: IParseDataItem) => {
-          return this.applyAttributeMapping(filter, record, bottomColor)[0];
+          return this.applyAttributeMapping(filter, record)[0];
         });
       }
 
@@ -92,7 +83,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
             attributes,
             filterData,
             undefined,
-            bottomColor,
           );
           layer.setEncodedData(encodeData);
           filter.needRemapping = false;
@@ -102,7 +92,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
             attributesToRemapping,
             filterData,
             layer.getEncodedData(),
-            bottomColor,
           );
           layer.setEncodedData(encodeData);
         }
@@ -117,7 +106,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    const bottomColor = layer.getBottomColor();
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
@@ -125,16 +113,15 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 数据过滤完 再执行数据映射
     if (filter?.scale) {
       filterData = dataArray.filter((record: IParseDataItem) => {
-        return this.applyAttributeMapping(filter, record, bottomColor)[0];
+        return this.applyAttributeMapping(filter, record)[0];
       });
     }
-    const encodeData = this.mapping(
-      layer,
-      attributes,
-      filterData,
-      undefined,
-      bottomColor,
-    );
+    // Tip: layer 对数据做处理
+    // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
+    // 在各个 layer 中继承
+    filterData = layer.processData(filterData);
+
+    const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
     // 对外暴露事件
     layer.emit('dataUpdate', null);

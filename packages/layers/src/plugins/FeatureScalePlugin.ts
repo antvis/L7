@@ -59,33 +59,37 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('FeatureScalePlugin', () => {
+    layer.hooks.init.tapPromise('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-
-      this.getSourceData(layer, ({ dataArray }) => {
-        if (Array.isArray(dataArray) && dataArray.length === 0) {
-          return;
-        } else {
-          this.caculateScalesForAttributes(attributes || [], dataArray);
-        }
-      });
+      const dataArray = layer.getSource()?.data.dataArray;
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      } else {
+        this.caculateScalesForAttributes(attributes || [], dataArray);
+      }
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
-      this.scaleOptions = layer.getScaleOptions();
-      const attributes = styleAttributeService.getLayerStyleAttributes();
+    layer.hooks.beforeRenderData.tapPromise(
+      'FeatureScalePlugin',
+      async (flag: boolean) => {
+        if (!flag) {
+          return flag;
+        }
+        this.scaleOptions = layer.getScaleOptions();
+        const attributes = styleAttributeService.getLayerStyleAttributes();
+        const dataArray = layer.getSource().data.dataArray;
 
-      this.getSourceData(layer, ({ dataArray }) => {
         if (Array.isArray(dataArray) && dataArray.length === 0) {
           return;
         }
         this.caculateScalesForAttributes(attributes || [], dataArray);
         layer.layerModelNeedUpdate = true;
-      });
-      return true;
-    });
+
+        return true;
+      },
+    );
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
       const { usage } = layer.getLayerConfig();
@@ -94,18 +98,18 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
+      const dataArray = layer.getSource().data.dataArray;
+
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      }
       if (attributes) {
-        this.getSourceData(layer, ({ dataArray }) => {
-          if (dataArray.length === 0) {
-            return;
-          }
-          const attributesToRescale = attributes.filter(
-            (attribute) => attribute.needRescale,
-          );
-          if (attributesToRescale.length) {
-            this.caculateScalesForAttributes(attributesToRescale, dataArray);
-          }
-        });
+        const attributesToRescale = attributes.filter(
+          (attribute) => attribute.needRescale,
+        );
+        if (attributesToRescale.length) {
+          this.caculateScalesForAttributes(attributesToRescale, dataArray);
+        }
       }
     });
   }

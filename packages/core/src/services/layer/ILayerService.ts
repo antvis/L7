@@ -1,11 +1,11 @@
 // @ts-ignore
-import { SyncBailHook, SyncHook, SyncWaterfallHook } from '@antv/async-hook';
-import { IColorRamp, Tile, TilesetManager } from '@antv/l7-utils';
+import { SyncBailHook, SyncHook, AsyncSeriesBailHook, AsyncWaterfallHook} from '@antv/async-hook';
+import { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IInteractionTarget } from '../interaction/IInteractionService';
-import { IPickingService } from '../interaction/IPickingService';
+import { ILayerPickService, IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 import { IAttribute } from '../renderer/IAttribute';
 import {
@@ -21,7 +21,7 @@ import {
 import { IRendererService } from '../renderer/IRendererService';
 import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
-import { ISource, ISourceCFG, ITransform } from '../source/ISourceService';
+import { ISource, ISourceCFG, ITransform, IParseDataItem } from '../source/ISourceService';
 import {
   IAnimateOption,
   IEncodeFeature,
@@ -77,8 +77,8 @@ export interface ILayerModel {
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
-  buildModels(callbackModel: (models: IModel[]) => void): void;
-  initModels(callbackModel: (models: IModel[]) => void): void;
+  buildModels(): Promise<IModel[]>;
+  initModels(): Promise<IModel[]>;
   needUpdate(): boolean;
   clearModels(refresh?: boolean): void;
 
@@ -89,6 +89,17 @@ export interface ILayerModel {
   setEarthTime?(time: number): void;
   createModelData?(options?: any): any;
 }
+
+export interface ILayerAttributesOption {
+  shape: IAttrbuteOptions,
+  color: IAttrbuteOptions,
+  texture:IAttrbuteOptions,
+  rotate:IAttrbuteOptions,
+  size:IAttrbuteOptions,
+  filter:IAttrbuteOptions,
+  label:IAttrbuteOptions,
+}
+
 export interface IModelUniform {
   [key: string]: IUniform;
 }
@@ -136,6 +147,11 @@ export interface ISubLayerStyles {
   opacity: number;
 }
 
+export interface IAttrbuteOptions {
+  field: StyleAttrField,
+  values:StyleAttributeOption
+}
+
 /**
  * For tile subLayer
  */
@@ -143,6 +159,7 @@ export interface ISubLayerInitOptions {
   usage?: string|undefined;
   layerType: string;
   transforms?: ITransform[];
+  visible: boolean,
   shape?: string | string[] | IScaleValue;
   // options
   zIndex: number;
@@ -185,53 +202,81 @@ export interface IBaseTileLayerManager {
   parent: ILayer;
   children: ILayer[];
 
-  addTile(tile: Tile): { layers: ILayer[]; layerIDList: string[] };
+  addTile(tile: SourceTile):Promise<{ layers: ILayer[]; }>;
 
   addChild(layer: ILayer): void;
   addChildren(layers: ILayer[]): void;
-  getChildren(layerIDList: string[]): ILayer[];
   removeChild(layer: ILayer): void;
-  removeChildren(layerIDList: string[], refresh?: boolean): void;
   clearChild(): void;
   hasChild(layer: ILayer): boolean;
   render(isPicking?: boolean): void;
   destroy(): void;
 }
 
-export interface ITileRenderService {
-  render(layers: ILayer[]): void;
-  renderMask(layers: ILayer): void;
-}
-
 export interface ITilePickService {
-  isLastPicked: boolean;
-  on(type: string, cb: (option: any) => void): void;
-  beforeHighlight(pickedColors: any): void;
-  beforeSelect(pickedColors: any): void;
-  clearPick(): void;
-  pick(layers: ILayer[], target: IInteractionTarget): boolean;
+  pickRender(target: IInteractionTarget): void;
+}
+
+export interface ITile {
+  x: number;
+  y: number;
+  z: number;
+  key: string;
+  sourceTile: SourceTile;
+  visible: boolean;
+  isLoaded: boolean;
+  getLayers(): ILayer[];
+  styleUpdate(...args: any): void;
+  initTileLayer(): Promise<void>;
+  lnglatInBounds(lnglat: {
+    lng: number;
+    lat: number;
+  }): boolean;
+  updateVisible(value: boolean): void;
+  updateOptions(key: string, value: any): void;
   destroy(): void;
 }
 
-
-export interface ITileLayerManager extends IBaseTileLayerManager{
-  tilePickService: ITilePickService;
-  pickLayers(target: IInteractionTarget): boolean;
+export interface ITile {
+  x: number;
+  y: number;
+  z: number;
+  key: string;
+  sourceTile: SourceTile;
+  visible: boolean;
+  isLoaded: boolean;
+  getLayers(): ILayer[];
+  styleUpdate(...args: any): void;
+  initTileLayer(): Promise<void>;
+  lnglatInBounds(lnglat: {
+    lng: number;
+    lat: number;
+  }): boolean;
+  updateVisible(value: boolean): void;
+  updateOptions(key: string, value: any): void;
   destroy(): void;
+}
+
+export interface ITileLayerService {
+  tileResource: Map<string, any>;
+  hasTile(tileKey: string): boolean;
+  getLayers(): ILayer[];
+  getTiles(): ITile[];
 }
 
 export interface IBaseTileLayer {
-  sourceLayer: string;
-  parent: ILayer;
-  tileLayerManager: IBaseTileLayerManager;
   tilesetManager: TilesetManager | undefined;
-  children: ILayer[];
-  scaleField: any;
+  tileLayerService: ITileLayerService;
+  getLayers(): ILayer[];
+  getTiles(): ITile[];
+  pickRender(target: IInteractionTarget):void;
+  selectFeature(pickedColors: Uint8Array | undefined):void;
+  highlightPickedFeature(pickedColors: Uint8Array | undefined):void;
   render(isPicking?: boolean): void;
   destroy(): void;
 }
 export interface ITileLayer extends IBaseTileLayer{
-  tileLayerManager: ITileLayerManager;
+  pickRender(target: IInteractionTarget):void;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
   clearPickState(): void;
@@ -275,17 +320,21 @@ export type LayerEventType =
   | any;
 
 export interface ILayer {
+  styleAttributeService: IStyleAttributeService,
+  layerPickService: ILayerPickService;
+  sourceLayer?: string;
+  parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
   coordCenter: number[];
   name: string; //
   inited: boolean; // 是否初始化完成
+  startInit: boolean // 是否开始初始化;
   zIndex: number;
   clusterZoom: number;
   plugins: ILayerPlugin[];
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
-  modelLoaded: boolean;
   layerModel: ILayerModel;
   tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
@@ -299,9 +348,9 @@ export interface ILayer {
   encodeDataLength: number;
   pickedFeatureID: number | null;
   hooks: {
-    init: SyncBailHook;
+    init:AsyncSeriesBailHook;
     afterInit: SyncBailHook;
-    beforeRenderData: SyncWaterfallHook;
+    beforeRenderData: AsyncWaterfallHook ;
     beforeRender: SyncBailHook;
     afterRender: SyncHook;
     beforePickingEncode: SyncHook;
@@ -321,10 +370,9 @@ export interface ILayer {
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-  isVector?: boolean;
   isTileLayer?: boolean;
   triangulation?: Triangulation | undefined;
-
+  processData(data: IParseDataItem[]): IParseDataItem[];
   /**
    * threejs 适配兼容相关的方法
    * @param lnglat
@@ -334,7 +382,10 @@ export interface ILayer {
    */
 
   threeRenderService?: any;
-
+  postProcessingPassFactory: (
+    name: string,
+  ) => IPostProcessingPass<unknown>;
+  normalPassFactory: (name: string) => IPass<unknown>;
   getShaderPickStat: () => boolean;
   updateModelData(data: IAttributeAndElements): void;
 
@@ -342,9 +393,8 @@ export interface ILayer {
   removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
   getAttribute(name: string): IStyleAttribute | undefined;
-  getLayerConfig(): Partial<ILayerConfig & ISceneConfig>;
-  setBottomColor(color: string): void;
-  getBottomColor(): string;
+  getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
+  getLayerAttributeConfig():Partial<ILayerAttributesOption>
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
@@ -355,6 +405,7 @@ export interface ILayer {
   renderModels(isPicking?: boolean): void;
   buildModels(): void;
   rebuildModels(): void;
+  getModelType():string;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
@@ -371,7 +422,8 @@ export interface ILayer {
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ): void;
-  init(): ILayer;
+  setLayerPickService(layerPickService:ILayerPickService):void;
+  init(): Promise<void>;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   getScale(name: string): any;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
@@ -431,6 +483,7 @@ export interface ILayer {
   addPlugin(plugin: ILayerPlugin): ILayer;
   getSource(): ISource;
   setSource(source: ISource): void;
+  initSource(source: ISource): void;
   setEncodedData(encodedData: IEncodeFeature[]): void;
   getEncodedData(): IEncodeFeature[];
   getScaleOptions(): IScaleOptions;
@@ -525,6 +578,7 @@ export interface ILayerConfig {
   maskfence: any;
   maskColor: string;
   maskOpacity: number;
+  sourceLayer:string;
 
   colors: string[];
   size: number;
@@ -630,7 +684,7 @@ export interface ILayerService {
   clear(): void;
   add(layer: ILayer): void;
   addMask(mask: ILayer): void;
-  initLayers(): void;
+  initLayers(): Promise<void>;
   startAnimate(): void;
   stopAnimate(): void;
   getSceneInited(): boolean;
@@ -643,10 +697,17 @@ export interface ILayerService {
   removeAllLayers(): void;
   updateLayerRenderList(): void;
   reRender(): void;
+  beforeRenderData(layer: ILayer): Promise<void>;
+  renderMask(masks:ILayer[]): void;
+  renderLayer(layer: ILayer): Promise<void>
+
   throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
+  pickRender(layer: ILayer,target?: IInteractionTarget):void
+  selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined):void;
+  highlightPickedFeature(layer: ILayer, pickedColors: Uint8Array | undefined):void;
 
   destroy(): void;
 }

@@ -1,10 +1,11 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
-import React, { useEffect } from 'react';
-import { useData, addLayers } from './useLine';
+import React, { useEffect, useState } from 'react';
+import { useData } from './useLine';
 
 export default () => {
   const { geoData } = useData();
+  const [mapScene, setMapScene] = useState<Scene>();
 
   useEffect(() => {
     const scene = new Scene({
@@ -16,7 +17,17 @@ export default () => {
         zoom: 3,
       }),
     });
-    if (geoData) {
+    scene.on('loaded', () => {
+      setMapScene(scene);
+    });
+    return () => {
+      mapScene?.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (geoData && mapScene) {
+      console.log(geoData, mapScene);
       const layer = new PolygonLayer({})
         .source(geoData.county, {
           transforms: [
@@ -37,19 +48,16 @@ export default () => {
           opacity: 1,
         });
 
-      scene.addLayer(layer);
-      addLayers(geoData, scene, layer);
+      mapScene.addLayer(layer);
+      // addLayers(geoData, scene, layer);
     }
-    return () => {
-      scene.destroy();
-    };
-  }, [geoData]);
+  }, [geoData, mapScene]);
 
   return (
     <div
       id="map"
       style={{
-        height: '500px',
+        height: '200px',
         position: 'relative',
       }}
     />

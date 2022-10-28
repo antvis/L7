@@ -25,18 +25,18 @@ export default class EarthBloomSphereModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
   public clearModels() {
     return '';
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     // Tip: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
     this.layer.zIndex = -999;
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'earthBloom',
         vertexShader: bloomSphereVert,
@@ -45,13 +45,7 @@ export default class EarthBloomSphereModel extends BaseModel {
         depth: { enable: false },
         blend: this.getBlend(),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   protected registerBuiltinAttributes() {

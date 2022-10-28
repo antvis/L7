@@ -1,7 +1,7 @@
 ### CanvasLayer - demo2
 ```tsx
 import { CanvasLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
  
 
@@ -9,8 +9,8 @@ export default () => {
     useEffect(() => {
        const scene = new Scene({
             id: 'map',
-            map: new GaodeMap({
-                style: 'fresh',
+            map: new GaodeMapV2({
+                style: 'normal',
                 center: [ 90, 31 ],
                 zoom: 2
             })

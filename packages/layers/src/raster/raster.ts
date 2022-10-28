@@ -23,7 +23,7 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     return {};
   }
 
-  public buildModels() {
+  public async buildModels() {
     const parserDataItem = this.getSource().data.dataArray[0];
     const { createTexture2D } = this.rendererService;
     this.rasterTexture = createTexture2D({

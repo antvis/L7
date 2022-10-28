@@ -1,6 +1,7 @@
 import BaseLayer from '../core/BaseLayer';
+import { IParseDataItem } from '@antv/l7-core';
 import { ILineLayerStyleOptions } from '../core/interface';
-import { isVectorTile } from '../tile/utils';
+
 import LineModels, { LineModelType } from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
@@ -26,17 +27,10 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     },
   };
 
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
     this.layerModel = new LineModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    this.initLayerModels();
   }
 
   protected getDefaultConfig() {
@@ -49,20 +43,15 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       arc3d: { blend: 'additive' },
       arc: { blend: 'additive' },
       greatcircle: { blend: 'additive' },
-      vectorline: {},
       tileLine: {},
       halfLine: {},
       earthArc3d: {},
     };
     return defaultConfig[type];
   }
-  protected getModelType(): LineModelType {
+  public getModelType(): LineModelType {
     if (this.layerType) {
       return this.layerType as LineModelType;
-    }
-    const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType)) {
-      return 'vectorline';
     }
 
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
@@ -70,5 +59,29 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     );
     const shape = shapeAttribute?.scale?.field as LineModelType;
     return shape || 'line';
+  }
+
+  public processData(filterData: IParseDataItem[]) {
+    // simple line 在接受 multiPolygon 的数据进行绘制的时候需要对数据进行拆解
+    if (this.getModelType() !== 'simple') return filterData;
+    const dataArray: IParseDataItem[] = [];
+    filterData.map((data) => {
+      if (
+        Array.isArray(data.coordinates) &&
+        Array.isArray(data.coordinates[0]) &&
+        Array.isArray(data.coordinates[0][0])
+      ) {
+        const object = { ...data };
+        data.coordinates.map((d) => {
+          dataArray.push({
+            ...object,
+            coordinates: d,
+          });
+        });
+      } else {
+        dataArray.push(data);
+      }
+    });
+    return dataArray;
   }
 }

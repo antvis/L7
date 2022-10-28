@@ -1,7 +1,6 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IPolygonLayerStyleOptions } from '../core/interface';
-import { isVectorTile } from '../tile/utils';
 import PolygonModels, { PolygonModelType } from './models/';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
@@ -14,25 +13,13 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       };
     };
   };
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
     this.layerModel = new PolygonModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
-  protected getModelType(): PolygonModelType {
-    const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType)) {
-      return 'vectorpolygon';
-    }
-
+  public getModelType(): PolygonModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

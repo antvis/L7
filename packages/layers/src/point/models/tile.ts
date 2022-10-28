@@ -54,12 +54,12 @@ export default class FillModel extends BaseModel {
     );
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels():Promise<IModel[]>  {
+    return await this.buildModels();
   }
 
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]>  {
     const {
       workerEnabled = false,
       usage
@@ -67,7 +67,7 @@ export default class FillModel extends BaseModel {
       ILayerConfig & IPointLayerStyleOptions
     >;
     this.layer.triangulation = PointFillTriangulation;
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointTile_' + usage,
         vertexShader: point_tile_vert,
@@ -85,13 +85,8 @@ export default class FillModel extends BaseModel {
         },
         pick: usage !== 'basemap'
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+       
+      return [model]
   }
 
   public clearModels() {

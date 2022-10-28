@@ -52,7 +52,7 @@ export default class ImageDataModel extends BaseModel {
       u_colorTexture: colorTexture,
     };
   }
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -77,7 +77,7 @@ export default class ImageDataModel extends BaseModel {
     );
    
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'RasterTileDataImage',
         vertexShader: ImageVert,
@@ -88,21 +88,15 @@ export default class ImageDataModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   public clearModels(): void {
     this.texture?.destroy();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   protected registerBuiltinAttributes() {

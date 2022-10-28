@@ -169,7 +169,7 @@ export default class ThreeJSLayer
     object.applyMatrix4(scaleMatrix);
   }
 
-  public buildModels() {
+  public async buildModels() {
     // @ts-ignore
     this.threeRenderService = this.getContainer().get<IThreeRenderService>(
       ThreeRenderServiceType,
@@ -235,14 +235,5 @@ export default class ThreeJSLayer
 
   public addAnimateMixer(mixer: AnimationMixer) {
     this.animateMixer.push(mixer);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setBottomColor(color: string): void {
-    console.warn('empty function');
-  }
-
-  public getBottomColor() {
-    return 'rgba(0, 0, 0, 0)';
   }
 }

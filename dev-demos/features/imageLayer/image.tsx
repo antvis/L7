@@ -1,5 +1,5 @@
 import { ImageLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -7,7 +7,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       pickBufferScale: 1.0,
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [121.268, 30.3628],
         pitch: 0,
         style: 'normal',

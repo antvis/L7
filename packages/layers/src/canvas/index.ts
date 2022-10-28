@@ -5,17 +5,10 @@ import CanvasModels, { CanvasModelType } from './models/index';
 export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
   public type: string = 'CanvasLayer';
   public forceRender: boolean = true;
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new CanvasModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
   public hide(): ILayer {
@@ -55,7 +48,7 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
     return defaultConfig[type];
   }
 
-  protected getModelType(): CanvasModelType {
+  public getModelType(): CanvasModelType {
     return 'canvas';
   }
 }

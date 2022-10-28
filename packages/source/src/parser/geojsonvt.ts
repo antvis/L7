@@ -1,5 +1,9 @@
-import { Tile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
-import { VectorTileLayer } from '@mapbox/vector-tile';
+
+import {
+  SourceTile,
+  TileLoadParams,
+  TilesetManagerOptions,
+} from '@antv/l7-utils';
 import {
   Feature,
   FeatureCollection,
@@ -7,7 +11,10 @@ import {
   Properties,
 } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
-import { IGeojsonvtOptions, IParserData, ITileParserCFG } from '../interface';
+import { VectorTileLayer } from '@mapbox/vector-tile';
+import { IParserData } from '../interface';
+
+import { ITileParserCFG, IGeojsonvtOptions } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -153,7 +160,7 @@ export type MapboxVectorTile = {
 };
 
 const getVectorTile = async (
-  tile: Tile,
+  tile: SourceTile,
   tileIndex: any,
   tileParams: TileLoadParams,
   extent: number,
@@ -223,7 +230,7 @@ export default function geojsonVTTile(
   const extent = geojsonOptions.extent || 4096;
   const tileIndex = geojsonvt(data, geojsonOptions);
 
-  const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
+  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) => {
     return getVectorTile(tile, tileIndex, tileParams, extent);
   };
 

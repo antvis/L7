@@ -119,7 +119,6 @@ function makeXMLHttpRequest(
 ) {
   const xhr = new $XMLHttpRequest();
   const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
-
   xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
     xhr.responseType = 'arraybuffer';
@@ -143,6 +142,7 @@ function makeXMLHttpRequest(
       xhr.response !== null
     ) {
       let data: unknown = xhr.response;
+
       if (requestParameters.type === 'json') {
         // We're manually parsing JSON here to get better error messages.
         try {

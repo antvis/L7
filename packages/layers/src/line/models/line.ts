@@ -151,11 +151,10 @@ export default class LineModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels():Promise<IModel[]>{
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
-
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
   public clearModels() {
@@ -164,7 +163,7 @@ export default class LineModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+  public async buildModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -175,29 +174,22 @@ export default class LineModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     // console.log(frag)
     this.layer.triangulation = LineTriangulation;
-    this.layer
-      .buildLayerModel({
-        moduleName: 'line' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: LineTriangulation,
-        depth: { enable: depth },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        workerEnabled,
-        workerOptions: {
-          modelType: 'line' + type,
-          enablePicking,
-          iconMap: this.iconService.getIconMap(),
-        },
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'line' + type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: LineTriangulation,
+      depth: { enable: depth },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      workerEnabled,
+      workerOptions: {
+        modelType: 'line' + type,
+        enablePicking,
+        iconMap: this.iconService.getIconMap(),
+      },
+    });
+    return [model];
   }
 
   /**
@@ -296,9 +288,7 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
         },
@@ -364,9 +354,7 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;
           const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };

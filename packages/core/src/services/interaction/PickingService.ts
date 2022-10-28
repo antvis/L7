@@ -9,7 +9,7 @@ import {
   IInteractionTarget,
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { ILayer, ILayerService, ITileLayer } from '../layer/ILayerService';
+import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
@@ -52,7 +52,7 @@ export default class PickingService implements IPickingService {
 
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
-    );
+    );      
     width *= DOM.DPR;
     height *= DOM.DPR;
     this.pickBufferScale =
@@ -134,7 +134,7 @@ export default class PickingService implements IPickingService {
       const color = pickedColors.slice(i * 4, i * 4 + 4);
       const pickedFeatureIdx = decodePickingColor(color);
       if (pickedFeatureIdx !== -1 && !featuresIdMap[pickedFeatureIdx]) {
-        const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+        const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
         features.push({
           // @ts-ignore
           ...rawFeature,
@@ -224,7 +224,7 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-      const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+      const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
         type === 'mousemove'
@@ -274,32 +274,24 @@ export default class PickingService implements IPickingService {
     }
 
     if (enableHighlight) {
-      this.highlightPickedFeature(layer, pickedColors);
+      layer.layerPickService.highlightPickedFeature(pickedColors);
     }
     if (
       enableSelect &&
       type === 'click' &&
       pickedColors?.toString() !== [0, 0, 0, 0].toString()
     ) {
+
       const selectedId = decodePickingColor(pickedColors);
       if (
         layer.getCurrentSelectedId() === null ||
         selectedId !== layer.getCurrentSelectedId()
       ) {
-        this.selectFeature(layer, pickedColors);
+        layer.layerPickService.selectFeature(pickedColors);
         layer.setCurrentSelectedId(selectedId);
       } else {
-        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        layer.layerPickService.selectFeature(new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
-      }
-      if (!layer.isVector) {
-        // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
-        this.layerService
-          .getLayers()
-          .filter((l) => l.tileLayer)
-          .map((l) => {
-            (l.tileLayer as ITileLayer).clearPickState();
-          });
       }
     }
     return isPicked;
@@ -363,8 +355,10 @@ export default class PickingService implements IPickingService {
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getRenderList();
+      
       layers
-        .filter((layer) => layer.needPick(target.type))
+        .filter((layer) => {
+          return layer.needPick(target.type)})
         .reverse()
         .some((layer) => {
           clear({
@@ -375,29 +369,31 @@ export default class PickingService implements IPickingService {
           });
 
           // Tip: clear last picked tilelayer state
-          this.pickedTileLayers.map((pickedTileLayer) =>
-            (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
-          );
+          // this.pickedTileLayers.map((pickedTileLayer) =>
+          //   (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
+          // );
 
           // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
-          if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
-            return (layer.tileLayer as ITileLayer).pickLayers(target);
-          }
+          // if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
+          //   return (layer.tileLayer as ITileLayer).pickLayers(target);
+          // }
+        
+          // 将当前的 layer 绘制到 pickingFBO
+          // 普通图层和瓦片图层的 layerPickService 拥有不同的 pickRender 方法
+          layer.layerPickService.pickRender(target);
 
-          layer.hooks.beforePickingEncode.call();
+          // layer.hooks.beforePickingEncode.call();
 
-          if (layer.masks.length > 0) {
-            // 若存在 mask，则在 pick 阶段的绘制也启用
-            layer.masks.map((m: ILayer) => {
-              m.hooks.beforeRenderData.call();
-              m.hooks.beforeRender.call();
-              m.render();
-              m.hooks.afterRender.call();
-            });
-          }
-          layer.renderModels(true);
-          layer.hooks.afterPickingEncode.call();
-
+          // if (layer.masks.length > 0) {
+          //   // 若存在 mask，则在 pick 阶段的绘制也启用
+          //   layer.masks.map(async (m: ILayer) => {
+          //     m.hooks.beforeRender.call();
+          //     m.render();
+          //     m.hooks.afterRender.call();
+          //   });
+          // }
+          // layer.renderModels(true);
+          // layer.hooks.afterPickingEncode.call();
           const isPicked = this.pickFromPickingFBO(layer, target);
 
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;

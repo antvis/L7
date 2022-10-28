@@ -5,18 +5,12 @@ import HeatMapModels, { HeatMapModelType } from './models';
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
 
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
     this.layerModel = new HeatMapModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
+
   public renderModels() {
     const shape = this.getModelType();
     if (shape === 'heatmap') {
@@ -27,8 +21,11 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
       return this;
     }
     if (this.layerModelNeedUpdate) {
-      this.layerModel.buildModels((models) => (this.models = models));
-      this.layerModelNeedUpdate = false;
+      // TODO 渲染流程修改
+      this.layerModel.buildModels().then((models) => {
+        this.models = models;
+        this.layerModelNeedUpdate = false;
+      });
     }
     this.models.forEach((model) =>
       model.draw({
@@ -49,7 +46,7 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     }
   }
 
-  protected getModelType(): HeatMapModelType {
+  public getModelType(): HeatMapModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );
