@@ -59,11 +59,13 @@ export default class VectorTile extends Tile {
       featureId: string;
     }>();
   
-    const vectorLayer = this.sourceTile.data.layers[sourceLayer as string]
-    if(!vectorLayer) {
-      return false
-    }
-    const features = vectorLayer.features;
+    // const vectorLayer = this.sourceTile.data.layers[sourceLayer as string]
+    // if(!vectorLayer) {
+    //   return false
+    // }
+    // const features = vectorLayer.features;
+
+    const features = this.getFeatures(sourceLayer)
     return {
       data: {
         type: 'FeatureCollection',

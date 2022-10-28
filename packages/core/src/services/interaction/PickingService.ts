@@ -179,6 +179,7 @@ export default class PickingService implements IPickingService {
     layer: ILayer,
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
+    // console.log('pickFromPickingFBO', type)
     let isPicked = false;
     const { readPixels, getContainer } = this.rendererService;
     let { width, height } = this.getContainerSize(
@@ -224,6 +225,7 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
+      // console.log('pickedFeatureIdx', pickedFeatureIdx)
       const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
@@ -394,6 +396,10 @@ export default class PickingService implements IPickingService {
           // }
           // layer.renderModels(true);
           // layer.hooks.afterPickingEncode.call();
+          // if(target.type === 'click') {
+          //   console.log(target.type)
+          //   console.log(layer)
+          // }
           const isPicked = this.pickFromPickingFBO(layer, target);
 
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;

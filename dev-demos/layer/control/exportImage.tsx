@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { FunctionComponent, useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [scene, setScene] = useState<Scene | undefined>();
   const [imgSrc, setImgSrc] = useState('');
   const [control, setControl] = useState<ExportImage | null>(null);

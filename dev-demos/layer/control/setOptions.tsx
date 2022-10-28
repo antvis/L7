@@ -6,6 +6,7 @@ import { FunctionComponent, useEffect } from 'react';
 const POSITION_LIST = Object.values(PositionType);
 
 const Demo: FunctionComponent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [zoom, setZoom] = useState(() => {
     return new Zoom({
       position: 'topleft',

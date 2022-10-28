@@ -84,6 +84,11 @@ export default () => {
       //   );
       // });
 
+      layer.on('click', (e) => {
+        console.log('click');
+        console.log(e);
+      });
+
       scene.addLayer(point);
     });
   }, []);

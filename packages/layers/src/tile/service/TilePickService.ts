@@ -81,7 +81,8 @@ export class TilePickService implements ITilePickService{
   }
 
   /** 从瓦片中根据数据 */
-  getFeatureById() {
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getFeatureById(pickedFeatureIdx: number) {
+    // console.log('getFeatureById')
   }
 }
