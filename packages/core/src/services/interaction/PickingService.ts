@@ -395,10 +395,6 @@ export default class PickingService implements IPickingService {
           // }
           // layer.renderModels(true);
           // layer.hooks.afterPickingEncode.call();
-          // if(target.type === 'click') {
-          //   console.log(target.type)
-          //   console.log(layer)
-          // }
           const isPicked = this.pickFromPickingFBO(layer, target);
 
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
