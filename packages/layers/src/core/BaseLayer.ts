@@ -1,10 +1,11 @@
 // @ts-ignore
 import {
+  AsyncSeriesBailHook,
+  AsyncWaterfallHook,
   SyncBailHook,
   SyncHook,
-  AsyncWaterfallHook,
-  AsyncSeriesBailHook,
 } from '@antv/async-hook';
+import { calculateData } from '../utils/layerData';
 import {
   BlendType,
   IActiveOption,
@@ -13,13 +14,13 @@ import {
   ICameraService,
   ICoordinateSystemService,
   IDataState,
-  ILayerAttributesOption,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
   IIconService,
   IInteractionService,
   ILayer,
+  ILayerAttributesOption,
   ILayerConfig,
   ILayerModel,
   ILayerModelInitializationOptions,
@@ -60,7 +61,6 @@ import { isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { styleDataMapping } from '../utils/dataMappingStyle';
 import LayerPickService from './LayerPickService';
-import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
   normalizePasses,
@@ -1083,8 +1083,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        this.mapService?.setCoordCenter &&
+        if (this.mapService?.setCoordCenter) {
           this.mapService.setCoordCenter(layerCenter);
+        }
       }
       this.sourceEvent();
     });
@@ -1197,7 +1198,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // filter supported worker & worker enabled layer
       if (
         workerOptions &&
@@ -1322,7 +1323,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.encodeDataLength <= 0 && !this.forceRender) return this;
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return this;
+    }
     // TODO 待评估
     // if (this.layerModelNeedUpdate && this.layerModel) {
 

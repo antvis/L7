@@ -1,15 +1,16 @@
 import {
+  ITileBand,
   SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
-import { IParserData } from '../interface';
-import { ITileParserCFG, RasterTileType } from '@antv/l7-core';
 import {
   defaultFormat,
   getTileBuffer,
   getTileImage,
 } from '../utils/tile/getRasterTile';
+import { IParserData } from '../interface';
+import { ITileParserCFG, RasterTileType } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -40,11 +41,15 @@ export default function rasterTile(
   data: string | string[] | ITileBand[],
   cfg: Partial<ITileParserCFG> = {},
 ): IParserData {
-  if (isUrlError(data)) throw new Error('tile server url is error');
+  if (isUrlError(data)) {
+    throw new Error('tile server url is error');
+  }
+
   let tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
   if (tileDataType === RasterTileType.RGB) {
     tileDataType = RasterTileType.ARRAYBUFFER;
+  }
   const getTileData = (tileParams: TileLoadParams, tile: SourceTile) => {
     switch (tileDataType) {
       case RasterTileType.IMAGE:

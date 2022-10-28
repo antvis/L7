@@ -1,4 +1,3 @@
-
 import BaseLayer from '../core/BaseLayer';
 import { IMaskLayerStyleOptions } from '../core/interface';
 

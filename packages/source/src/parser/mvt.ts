@@ -1,20 +1,20 @@
 import {
   getArrayBuffer,
   getURLFromTemplate,
+  RequestParameters,
   SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
-  RequestParameters,
 } from '@antv/l7-utils';
+import { Feature, Properties } from '@turf/helpers';
+import { IParserData } from '../interface';
+import { ITileParserCFG } from '@antv/l7-core';
+import Protobuf from 'pbf';
 import {
   VectorTile,
   // VectorTileFeature,
   VectorTileLayer,
 } from '@mapbox/vector-tile';
-import { Feature, Properties } from '@turf/helpers';
-import Protobuf from 'pbf';
-import { IParserData } from '../interface';
-import { ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -61,7 +61,7 @@ const getVectorTile = async (
           ) as MapboxVectorTile;
           // check tile source layer
           for (const sourceLayer of Object.keys(vectorTile.layers)) {
-            const features: Feature<GeoJSON.Geometry, Properties>[] = [];
+            const features: Array<Feature<GeoJSON.Geometry, Properties>> = [];
             const vectorTileLayer = vectorTile.layers[sourceLayer];
             for (let i = 0; i < vectorTile.layers[sourceLayer].length; i++) {
               const vectorTileFeature = vectorTile.layers[sourceLayer].feature(

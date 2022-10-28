@@ -44,8 +44,9 @@ export default class DataSourcePlugin implements ILayerPlugin {
 
   private updateClusterData(layer: ILayer): boolean {
     // Tip: 矢量瓦片不需要进行聚合操作
-    if (layer.isTileLayer || layer.tileLayer || !layer.getSource())
+    if (layer.isTileLayer || layer.tileLayer || !layer.getSource()) {
       return false;
+    }
     const source = layer.getSource();
     const cluster = source.cluster;
     const { zoom = 0 } = source.clusterOptions;

@@ -5,7 +5,7 @@ export default class BaseLayerPickService implements ILayerPickService {
   constructor(layer: ILayer) {
     this.layer = layer;
   }
-  pickRender(target: IInteractionTarget): void {
+  public pickRender(target: IInteractionTarget): void {
     const layer = this.layer;
     // 拾取绘制
     if (layer.tileLayer) {
@@ -24,18 +24,18 @@ export default class BaseLayerPickService implements ILayerPickService {
     layer.hooks.afterPickingEncode.call();
   }
 
-  selectFeature(pickedColors: Uint8Array | undefined): void {
+  public selectFeature(pickedColors: Uint8Array | undefined): void {
     const layer = this.layer;
     // @ts-ignore
     const [r, g, b] = pickedColors;
     layer.hooks.beforeSelect.call([r, g, b]);
   }
-  highlightPickedFeature(pickedColors: Uint8Array | undefined): void {
+  public highlightPickedFeature(pickedColors: Uint8Array | undefined): void {
     // @ts-ignore
     const [r, g, b] = pickedColors;
     this.layer.hooks.beforeHighlight.call([r, g, b]);
   }
-  getFeatureById(pickedFeatureIdx: number): any {
+  public getFeatureById(pickedFeatureIdx: number): any {
     return this.layer.getSource().getFeatureById(pickedFeatureIdx);
   }
 }
