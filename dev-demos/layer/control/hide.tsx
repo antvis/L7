@@ -1,11 +1,10 @@
-import { GaodeMap, PositionType, Scene, MapTheme } from '@antv/l7';
+import { GaodeMap, Scene, MapTheme } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
 
-const POSITION_LIST = Object.values(PositionType);
-
 const Demo: FunctionComponent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [zoom, setZoom] = useState(() => {
     return new MapTheme({
       position: 'topleft',

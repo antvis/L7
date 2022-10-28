@@ -33,9 +33,9 @@ export default () => {
       )
       // .shape('line')
       .color('COLOR')
-      .active(true)
+      // .active(true)
       .size(10)
-      // .select(true)
+      .select(true)
 
       .style({
         // opacity: 0.3
@@ -83,6 +83,11 @@ export default () => {
       //     layer.getLayerConfig().enableHighlight,
       //   );
       // });
+
+      layer.on('click', (e) => {
+        console.log('click');
+        console.log(e);
+      });
 
       scene.addLayer(point);
     });

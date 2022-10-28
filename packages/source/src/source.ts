@@ -142,6 +142,7 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getFeatureById(id: number): unknown {
+    
     const { type = 'geojson', geometry } = this.parser as IParserCfg;
     if (type === 'geojson' && !this.cluster) {
       const feature =
@@ -150,6 +151,7 @@ export default class Source extends EventEmitter implements ISource {
           : 'null';
       const newFeature = cloneDeep(feature);
 
+      
       if (
         newFeature?.properties &&
         (this.transforms.length !== 0 || this.dataArrayChanged)

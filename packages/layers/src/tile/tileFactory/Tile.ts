@@ -1,6 +1,7 @@
 import { ILayer, createLayerContainer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import { Feature, Properties } from '@turf/helpers';
 export default abstract class Tile implements ITile{
   public x: number;
   public y: number;
@@ -65,6 +66,26 @@ export default abstract class Tile implements ITile{
         [key]: value,
       });
     });
+  }
+
+  public getFeatures(sourceLayer: string | undefined){
+    if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) return [];
+
+    const vectorTile = this.sourceTile.data?.layers[sourceLayer];
+    const { x, y, z } = this.sourceTile;
+    const features: Feature<GeoJSON.Geometry, Properties>[] = [];
+    for( let i = 0; i < vectorTile.length; i++ ) {
+      const vectorTileFeature = vectorTile.feature(i);
+      const feature = vectorTileFeature.toGeoJSON(x, y, z);
+      features.push({
+        ...feature,
+        properties: {
+          id: feature.id,
+          ...feature.properties,
+        },
+      })
+    }
+    return features;
   }
 
   public destroy() {
