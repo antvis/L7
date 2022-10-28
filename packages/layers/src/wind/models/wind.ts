@@ -234,6 +234,10 @@ export default class WindModel extends BaseModel {
 
   private drawColorMode() {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
+
+    this.layerService.beforeRenderData(this.layer);
+    this.layer.hooks.beforeRender.call();
+
     this.layerService.renderMask(this.layer.masks)
 
     this.colorModel?.draw({
@@ -242,5 +246,7 @@ export default class WindModel extends BaseModel {
         u_texture: this.texture,
       },
     });
+
+    this.layer.hooks.afterRender.call();
   }
 }
