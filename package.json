@@ -224,6 +224,14 @@
   "resolutions": {
     "d3-array": "1",
     "monaco-editor-webpack-plugin": "2.0.0",
+    "@babel/types":"7.19.4",
+    "@babel/runtime":"7.19.4",
+    "@babel/parser":"7.19.4",
+    "@babel/standalone":"7.19.4",
+    "@babel/generator":"7.19.4",
+    "@babel/traverse":"7.19.4",
+    "@babel/plugin-proposal-decorators":"7.19.6",
+    "@babel/helper-skip-transparent-expression-wrappers":"7.18.9",
     "monaco-editor": "0.21.0"
   },
   "tnpm": {
