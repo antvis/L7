@@ -12,9 +12,9 @@ import {
 import { EarthMap, Map } from '@antv/l7-map';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
+import BaseMapService from '../utils/BaseMapService';
 import { Version } from '../version';
 import Viewport from './Viewport';
-import BaseMapService from '../utils/BaseMapService';
 const EventMap: {
   [key: string]: any;
 } = {

@@ -180,6 +180,7 @@ export default class GlobalConfigService implements IGlobalConfigService {
    }
 
    public setAttributeConfig(layerId: string, attr: Partial<ILayerAttributesOption>) {
+    // TODO
       this.layerAttributeConfigCache[layerId] = {
         ...this.layerAttributeConfigCache[layerId],
         ...attr

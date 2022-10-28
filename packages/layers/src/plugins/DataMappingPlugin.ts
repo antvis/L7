@@ -11,7 +11,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { isColor, normalize, rgb2arr } from '@antv/l7-utils';
+import { normalize, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
 import 'reflect-metadata';
@@ -52,7 +52,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
       const { usage } = layer.getLayerConfig();
-      if (usage === 'basemap') return;
+      if (usage === 'basemap') {
+        return;
+      }
       const source = layer.getSource();
       if (layer.layerModelNeedUpdate || !source || !source.inited) {
         return;
@@ -130,17 +132,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
     attributes: IStyleAttribute[],
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
-    minimumColor?: string,
   ): IEncodeFeature[] {
     const {
+      // TODO 单独的数据处理不应在此处
       arrow = {
         enable: false,
       },
-      usage,
     } = layer.getLayerConfig() as ILineLayerStyleOptions;
-    if (usage === 'basemap') {
-      return this.mapLayerMapping(layer, attributes, data, predata);
-    }
+
     const usedAttributes = attributes.filter(
       (attribute) => attribute.scale !== undefined,
     );
@@ -152,11 +151,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         ...preRecord,
       };
       usedAttributes.forEach((attribute: IStyleAttribute) => {
-        let values = this.applyAttributeMapping(
-          attribute,
-          record,
-          minimumColor,
-        );
+        let values = this.applyAttributeMapping(attribute, record);
         attribute.needRemapping = false;
 
         // TODO: 支持每个属性配置 postprocess
@@ -200,7 +195,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
-
     return mappedData;
   }
 
@@ -357,7 +351,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
   private applyAttributeMapping(
     attribute: IStyleAttribute,
     record: { [key: string]: unknown },
-    minimumColor?: string,
   ) {
     if (!attribute.scale) {
       return [];
@@ -376,9 +369,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     });
 
     const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
-    if (attribute.name === 'color' && !isColor(mappingResult[0])) {
-      return [minimumColor];
-    }
+
     return mappingResult;
     // return attribute.mapping ? attribute.mapping(params) : [];
   }

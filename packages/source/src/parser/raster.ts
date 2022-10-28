@@ -1,5 +1,5 @@
 import { IParserData } from '@antv/l7-core';
-import { IRasterLayerData, IRasterCfg, IRasterFileData } from '../interface';
+import { IRasterCfg, IRasterFileData, IRasterLayerData } from '../interface';
 import { bandsOperation } from '../utils/bandOperation/bands';
 import { isNumberArray } from '../utils/util';
 
@@ -8,7 +8,9 @@ export default function raster(
   cfg: IRasterCfg,
 ): IParserData {
   const { extent, width, height, min, max, format, operation } = cfg;
-  let bandData, rasterWidth, rasterHeight;
+  let bandData;
+  let rasterWidth;
+  let rasterHeight;
   if (format === undefined || isNumberArray(data)) {
     // 兼容写法 - 用户直接传入解析完的波段数据
     bandData = Array.from(data as number[]);

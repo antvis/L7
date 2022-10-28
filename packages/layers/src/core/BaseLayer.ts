@@ -1,9 +1,9 @@
 // @ts-ignore
 import {
+  AsyncSeriesBailHook,
+  AsyncWaterfallHook,
   SyncBailHook,
   SyncHook,
-  AsyncWaterfallHook,
-  AsyncSeriesBailHook,
 } from '@antv/async-hook';
 import {
   BlendType,
@@ -13,16 +13,17 @@ import {
   ICameraService,
   ICoordinateSystemService,
   IDataState,
-  ILayerAttributesOption,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
   IIconService,
   IInteractionService,
   ILayer,
+  ILayerAttributesOption,
   ILayerConfig,
   ILayerModel,
   ILayerModelInitializationOptions,
+  ILayerPickService,
   ILayerPlugin,
   ILayerService,
   ILegend,
@@ -32,6 +33,7 @@ import {
   IModel,
   IModelInitializationOptions,
   IMultiPassRenderer,
+  IParseDataItem,
   IPass,
   IPickingService,
   IPostProcessingPass,
@@ -43,14 +45,12 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   LayerEventType,
-  IParseDataItem,
   lazyInject,
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
   TYPES,
-  ILayerPickService,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
@@ -59,13 +59,13 @@ import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { styleDataMapping } from '../utils/dataMappingStyle';
-import LayerPickService from './LayerPickService';
 import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
   normalizePasses,
 } from '../utils/multiPassRender';
 import { updateShape } from '../utils/updateShape';
+import LayerPickService from './LayerPickService';
 /**
  * 分配 layer id
  */
@@ -275,7 +275,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       };
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
-
       // @ts-ignore
       styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
       this.configService.setLayerConfig(sceneId, this.id, {
@@ -687,7 +686,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return this;
     }
 
-    if (this.encodeDataLength <= 0 && !this.forceRender) return this;
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return this;
+    }
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     this.renderModels();
     return this;
@@ -697,7 +698,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * renderMultiPass 专门用于渲染支持 multipass 的 layer
    */
   public async renderMultiPass() {
-    if (this.encodeDataLength <= 0 && !this.forceRender) return;
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return;
+    }
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       // multi render 开始执行 multiPassRender 的渲染流程
       await this.multiPassRenderer.render();
@@ -1057,8 +1060,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        this.mapService?.setCoordCenter &&
+        if (this.mapService?.setCoordCenter) {
           this.mapService.setCoordCenter(layerCenter);
+        }
       }
       this.sourceEvent();
     });
@@ -1078,8 +1082,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        this.mapService?.setCoordCenter &&
+        if (this.mapService?.setCoordCenter) {
           this.mapService.setCoordCenter(layerCenter);
+        }
       }
       this.sourceEvent();
     });
@@ -1192,7 +1197,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // filter supported worker & worker enabled layer
       if (
         workerOptions &&
@@ -1317,7 +1322,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.encodeDataLength <= 0 && !this.forceRender) return this;
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return this;
+    }
     // TODO 待评估
     // if (this.layerModelNeedUpdate && this.layerModel) {
 
@@ -1350,12 +1357,25 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     // 存储 Attribute
-    this.configService.setAttributeConfig(this.id, {
-      [type]: {
-        field,
-        values,
-      },
-    });
+    if (
+      [
+        'color',
+        'size',
+        'texture',
+        'rotate',
+        'filter',
+        'label',
+        'shape',
+      ].indexOf(type) !== -1
+    ) {
+      this.configService.setAttributeConfig(this.id, {
+        [type]: {
+          field,
+          values,
+        },
+      });
+    }
+
     if (!this.inited) {
       this.pendingStyleAttributes.push({
         attributeName: type,
@@ -1433,7 +1453,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   protected reRender() {
-    this.inited && this.layerService.reRender();
+    if (this.inited) {
+      this.layerService.reRender();
+    }
   }
   protected splitValuesAndCallbackInAttribute(
     valuesOrCallback?: unknown[],
