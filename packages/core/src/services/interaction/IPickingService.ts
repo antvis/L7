@@ -1,6 +1,5 @@
 import { IInteractionTarget } from '../interaction/IInteractionService';
 import { ILayer } from '../layer/ILayerService';
-import { ILngLat } from '../map/IMapService';
 export interface IPickingService {
   pickedColors: Uint8Array | undefined;
   pickedTileLayers: ILayer[];
@@ -37,7 +36,7 @@ export interface ILayerPickService {
    * 获取选中的要素
    * @param id q
    */
-  getFeatureById(id: number, lngLat?: ILngLat):any
+  getFeatureById(id: number):any
 
 
 }

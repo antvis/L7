@@ -88,6 +88,26 @@ export default abstract class Tile implements ITile{
     return features;
   }
 
+  /**
+   * 在一个 Tile 中最多存在一个相同 ID 的 feature
+   * @param id 
+   * @returns 
+   */
+  public getFeatureById(id: number) {
+    let feature = null;
+    this.layers.some(layer => {
+      const dataArray = layer.getSource().data.dataArray;
+      dataArray.forEach(d => {
+        if(d._id === id) {
+          feature = d;
+          return true;
+        }
+      })
+      return false;
+    })
+    return feature;
+  }
+
   public destroy() {
     this.layers.forEach((layer) => layer.destroy());
   }

@@ -225,7 +225,7 @@ export default class PickingService implements IPickingService {
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
       
-      const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx, lngLat);
+      const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
         type === 'mousemove'
