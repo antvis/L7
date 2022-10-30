@@ -1,5 +1,5 @@
 ---
 title: Point Chart
-order: 2
+order: 6
 ---
 `markdown:docs/tutorial/point/chart.zh.md`

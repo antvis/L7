@@ -1,5 +1,5 @@
 ---
 title: Point Iconfont
-order: 2
+order: 7
 ---
 `markdown:docs/tutorial/point/iconfont.zh.md`

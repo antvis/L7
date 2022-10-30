@@ -1,5 +1,5 @@
 ---
 title: Point Custom Marker
-order: 2
+order: 8
 ---
 `markdown:docs/tutorial/point/mark.zh.md`

@@ -4,19 +4,63 @@ order: 2
 ---
 `markdown:docs/common/style.md`
 
-在地理区域上放置相等大小的圆点，用来表示地域上的空间布局或数据分布。
+散点图在地理区域上放置相等大小的圆点，用来表示地域上的空间布局或数据分布。
 
-## 使用
+<div>
+  <div style="width:60%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*LnlmQ7sFWigAAAAAAAAAAABkARQnAQ'>
+  </div>
+</div>
 
-散点图通过 PointLayer 对象实例化
+### 实现
+
 
 ```javascript
-import { PointLayer } from '@antv/l7';
+import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    style: 'light',
+    center: [ -121.24357, 37.58264 ],
+    zoom: 6.45
+  })
+});
+scene.on('loaded', () => {
+  fetch('https://gw.alipayobjects.com/os/basement_prod/6c4bb5f2-850b-419d-afc4-e46032fc9f94.csv')
+    .then(res => res.text())
+    .then(data => {
+      const pointLayer = new PointLayer({})
+        .source(data, {
+          parser: {
+            type: 'csv',
+            x: 'Longitude',
+            y: 'Latitude'
+          }
+        })
+        .shape('circle')
+        .size(4)
+        .color('Magnitude', [
+          '#0A3663',
+          '#1558AC',
+          '#3771D9',
+          '#4D89E5',
+          '#64A5D3',
+          '#72BED6',
+          '#83CED6',
+          '#A6E1E0',
+          '#B8EFE2',
+          '#D7F9F0'
+        ])
+      scene.addLayer(pointLayer);
+    });
+});
 ```
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*LnlmQ7sFWigAAAAAAAAAAABkARQnAQ'>
-
 ### shape
+
+散点图 `shape` 一般设置成常量，通常是 `2D` 的图表。
 
 - circle
 - square
@@ -28,38 +72,6 @@ import { PointLayer } from '@antv/l7';
 - rhombus
 - vesica
 
-散点图 shape 一般设置成常量
 
-### color
 
-color 可以根据数据的差异设置成不同颜色，表示数据的不同分类。
 
-### size
-
-散点图一般等大小的图形，size 一般设置成常量。
-
-```javascript
-const scatter = new PointLayer()
-  .source(data)
-  .shape(circle)
-  .size(5)
-  .color('red')
-  .style({
-    opacity: 0.3,
-    strokeWidth: 1,
-  });
-```
-
-[在线案例](/zh/examples/point/scatter#scatter)
-
-### style
-
-```javascript
-layer.style({
-  blur: 0.3,
-});
-```
-
-散点图的 style 样式支持配置 blur，调整模糊。
-
-[在线案例](/zh/examples/point/scatter#blur)

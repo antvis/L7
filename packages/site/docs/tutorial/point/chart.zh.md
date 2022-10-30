@@ -1,6 +1,6 @@
 ---
 title: 复合图表地图
-order: 2
+order: 6
 ---
 `markdown:docs/common/style.md`
 

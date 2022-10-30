@@ -1,5 +1,5 @@
 ---
 title: Point Wave
-order: 2
+order: 3
 ---
 `markdown:docs/tutorial/point/wave.zh.md`

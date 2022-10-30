@@ -1,18 +1,54 @@
 ---
 title: 水波图
-order: 2
+order: 3
 ---
 `markdown:docs/common/style.md`
 
 平面点图层在开启动画模式的情况下，是一种特殊的图层类型：水波点。图层由一圈圈向外扩散的圆环构成。
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*pcp3RKnNK1oAAAAAAAAAAAAAARQnAQ'>
 
-## 使用
+<div>
+  <div style="width:60%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*pcp3RKnNK1oAAAAAAAAAAAAAARQnAQ'>
+  </div>
+</div>
 
+### 实现
+
+根据下面的代码可以实现一个简单的水波点案例，具体的使用可以查看[详细文档](/zh/docs/api/point_layer/animate#水波点)。
+
+```js
+import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    style: 'light',
+    center: [ 112, 23.69 ],
+    zoom: 2.5
+  })
+});
+fetch('https://gw.alipayobjects.com/os/basement_prod/9078fd36-ce8d-4ee2-91bc-605db8315fdf.csv')
+  .then(res => res.text())
+  .then(data => {
+    const pointLayer = new PointLayer({})
+      .source(data, {
+        parser: {
+          type: 'csv',
+          x: 'Longitude',
+          y: 'Latitude'
+        }
+      })
+      .shape('circle')
+      .animate(true)
+      .size(40)
+      .color('#ffa842')
+    scene.addLayer(pointLayer);
+  });
+```
 ### shape
 
-- circle、triangle、square 等平面图形都可
+为了实现水波点，点图层的 `shape` 参数只要是 `circle`、`triangle`、`square` 等平面图形即可。
 
 ### animate
 
@@ -36,7 +72,3 @@ order: 2
 在水波点图层中，由于边缘透明的原因，点的大小看上去要比相同 size 的非水波点要小一些。
 
 [在线案例](/zh/examples/point/scatter#animatePoint)
-
-### style
-
-- raisingHeight 设置 3D 填充图的抬升高度

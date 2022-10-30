@@ -1,22 +1,61 @@
 ---
 title: 文本标注
-order: 2
+order: 6
 ---
 `markdown:docs/common/style.md`
 
-为图层添加文本标注
+点图层支持绘制文本标注。
 
-## 使用
+<div>
+  <div style="width:60%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7blvQ4v7Q1UAAAAAAAAAAABkARQnAQ'>
+  </div>
+</div>
 
-地图标注需要添加一个新的图层的实现
+### 实现
 
 ```javascript
-import { PointLayer } from '@antv/l7';
+import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
+
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    center: [ 110, 36 ],
+    style: 'light',
+    zoom: 3
+  })
+});
+scene.on('loaded', () => {
+  fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
+    .then(res => res.json())
+    .then(data => {
+      const pointLayer = new PointLayer({})
+        .source(data.list, {
+          parser: {
+            type: 'json',
+            x: 'j',
+            y: 'w'
+          }
+        })
+        .shape('m', 'text')
+        .size(12)
+        .color('w', [ '#0e0030', '#0e0030', '#0e0030' ])
+        .style({
+          textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [ 0, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
+          spacing: 2, // 字符间距
+          padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: '#ffffff', // 描边颜色
+          strokeWidth: 0.3, // 描边宽度
+        });
+      scene.addLayer(pointLayer);
+    });
+});
+
 ```
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*7blvQ4v7Q1UAAAAAAAAAAABkARQnAQ'>
-
-### shape
+### shape(field: name: shapeType: 'text'): ILayer
 
 - field 标注的字段名称
 - shapeType 'text'
@@ -38,6 +77,4 @@ layer.shape('name', 'text');
 - fontFamily `string` 字号
 - textOffset `[number, number]` 文本偏移量
 - textAllowOverlap: `boolean` 是否允许文字遮盖
-- raisingHeight 设置 3D 填充图的抬升高度
-
-[在线案例](/zh/examples/point/text#point_text)
+- raisingHeight 设置文本标注的抬升高度

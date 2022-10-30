@@ -1,5 +1,5 @@
 ---
 title: Point Dot
-order: 2
+order: 4
 ---
 `markdown:docs/tutorial/point/dot.zh.md`

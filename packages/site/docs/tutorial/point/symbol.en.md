@@ -1,5 +1,5 @@
 ---
 title: Point Symbol
-order: 2
+order: 5
 ---
 `markdown:docs/tutorial/point/symbol.zh.md`

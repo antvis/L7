@@ -1,6 +1,6 @@
 ---
 title: iconfont 标注
-order: 2
+order: 7
 ---
 `markdown:docs/common/style.md`
 
