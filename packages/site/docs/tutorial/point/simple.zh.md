@@ -1,6 +1,6 @@
 ---
 title: 简单点
-order: 2
+order: 9
 ---
 `markdown:docs/common/style.md`
 

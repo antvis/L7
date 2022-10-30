@@ -1,6 +1,6 @@
 ---
 title: 简单线图层
-order: 2
+order: 4
 ---
 `markdown:docs/common/style.md`
 

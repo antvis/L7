@@ -1,5 +1,5 @@
 ---
 title: Line Great Arc
-order: 2
+order: 3
 ---
 `markdown:docs/tutorial/line/greatcircle.zh.md`

@@ -1,5 +1,5 @@
 ---
 title: Heatmap Grid
-order: 2
+order: 1
 ---
 `markdown:docs/tutorial/heatmap/grid.zh.md`
