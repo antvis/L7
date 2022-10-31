@@ -37,7 +37,7 @@ export default class FillImageModel extends BaseModel {
     }
     /**
      *               rotateFlag
-     * L7MAP            1
+     * DEFAULT          1
      * MAPBOX           1
      * GAODE2.x         -1
      * GAODE1.x         -1
@@ -141,7 +141,7 @@ export default class FillImageModel extends BaseModel {
     const { version } = this.mapService;
     if (
       unit === 'meter' &&
-      version !== Version.L7MAP &&
+      version !== Version.DEFUALT &&
       version !== Version.GLOBEL
     ) {
       this.isMeter = true;

@@ -22,6 +22,7 @@ export default class VectorTile extends Tile {
       sourceOptions.options,
     );
 
+
     // 初始化数据映射
     Object.keys(attributes).forEach((type) => {
       const attr = type as keyof ILayerAttributesOption;
@@ -55,7 +56,8 @@ export default class VectorTile extends Tile {
   }
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
-    const { sourceLayer, featureId = 'id'} = this.parent.getLayerConfig<{
+  
+    const { sourceLayer = 'defaultLayer', featureId = 'id'} = this.parent.getLayerConfig<{
       featureId: string;
     }>();
     const features = this.getFeatures(sourceLayer)

@@ -1,5 +1,5 @@
-import BaseLayer from '../core/BaseLayer';
 import { IParseDataItem } from '@antv/l7-core';
+import BaseLayer from '../core/BaseLayer';
 import { ILineLayerStyleOptions } from '../core/interface';
 import LineModels, { LineModelType } from './models';
 
@@ -62,7 +62,10 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
 
   public processData(filterData: IParseDataItem[]) {
     // simple line 在接受 multiPolygon 的数据进行绘制的时候需要对数据进行拆解
-    if (this.getModelType() !== 'simple') return filterData;
+    if (this.getModelType() !== 'simple') {
+      return filterData;
+    }
+
     const dataArray: IParseDataItem[] = [];
     filterData.map((data) => {
       if (

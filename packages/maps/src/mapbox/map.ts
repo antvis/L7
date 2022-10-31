@@ -5,13 +5,13 @@ import { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import mapboxgl, { Map } from 'mapbox-gl';
-import { Version } from '../version';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'reflect-metadata';
 import { IMapboxInstance } from '../../typings/index';
-import Viewport from './Viewport';
 import BaseMapService from '../utils/BaseMapService';
+import { Version } from '../version';
+import Viewport from './Viewport';
 window.mapboxgl = mapboxgl;
 
 let mapdivCount = 0;
@@ -149,13 +149,9 @@ export default class MapboxService extends BaseMapService<
         bearing: rotation,
         ...rest,
       });
-      this.map.on('load', () => {
-        console.log('地图初始化完成');
-      });
     }
-    this.map.on('loaded', () => {
+    this.map.on('load', () => {
       this.handleCameraChanged();
-      console.log('loaded');
     });
     this.map.on('move', this.handleCameraChanged);
 

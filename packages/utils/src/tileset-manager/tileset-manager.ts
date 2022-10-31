@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3';
+import { throttle } from 'lodash';
 import {
   BOUNDS_BUFFER_SCALE,
   DEFAULT_CACHE_SCALE,
@@ -13,7 +14,6 @@ import {
   isLatLonBoundsContains,
 } from './utils/bound-buffer';
 import { getTileIndices, osmLonLat2TileXY } from './utils/lonlat-tile';
-import { throttle } from 'lodash';
 
 /**
  * 管理瓦片数据

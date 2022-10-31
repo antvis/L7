@@ -1,16 +1,16 @@
+import { ITileParserCFG } from '@antv/l7-core';
 import {
   getArrayBuffer,
   getURLFromTemplate,
+  RequestParameters,
   SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
-  RequestParameters,
 } from '@antv/l7-utils';
 import { VectorTile, VectorTileLayer } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
 import Protobuf from 'pbf';
 import { IParserData } from '../interface';
-import { ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
