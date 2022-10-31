@@ -51,9 +51,18 @@ layer.animate(true);
 
 ```js
 const rampColors = {
-  colors: ['#3288bd', '#66c2a5', '#abdda4', '#e6f598', '#fee08b', '#fdae61', '#f46d43', '#d53e4f'],
-  positions: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 1.0]
-}
+  colors: [
+    '#3288bd',
+    '#66c2a5',
+    '#abdda4',
+    '#e6f598',
+    '#fee08b',
+    '#fdae61',
+    '#f46d43',
+    '#d53e4f',
+  ],
+  positions: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 1.0],
+};
 ```
 
 #### rampColors

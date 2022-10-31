@@ -15,6 +15,7 @@ order: 0
 ### 直接绘制
 
 我们可以直接在外部计算出栅格的波段数据后传给栅格图层使用。
+
 - 不需要额外提供栅格数据的提取方法，在外部解析传入解析好的栅格数据。
 - 这种方式只支持对单波段数据进行染色，无法进行波段计算。
 
@@ -51,6 +52,7 @@ const layer = new RasterLayer({})
 ### 多波段计算
 
 我们可以将请求得到的栅格文件传给栅格图层使用。
+
 - 需要额外提供栅格数据的解析方法，不同格式的栅格文件有需要对应的方法，如 `tiff` 格式的文件我们一般借助 `geotiff.js` 进行解析。
 - 直接传入一（多）个栅格文件的时候，我们可以读取文件中包含的所有波段的栅格数据，同时支持对波段数据进行简单的数学运算。
 
@@ -66,15 +68,19 @@ const layer = new RasterLayer({})
 async function getTiffData(url: string) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
-  return arrayBuffer
+  return arrayBuffer;
 }
 // tiffdata 是请求到的二进制的栅格文件
-const tiffdata = await getTiffData('https: // xxx')
+const tiffdata = await getTiffData('https: // xxx');
 const layer = new RasterLayer({})
-  .source([{
-      data: tiffdata,
-      bands: [0, 1, 2, 3],
-    }],{
+  .source(
+    [
+      {
+        data: tiffdata,
+        bands: [0, 1, 2, 3],
+      },
+    ],
+    {
       parser: {
         type: 'raster',
         format: async (data, bands) => {

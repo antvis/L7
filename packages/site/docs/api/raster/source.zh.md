@@ -16,12 +16,15 @@ const source = new Source(data, {
 ### 加载解析完的栅格数据
 
 对栅格文件的解析，波段的提取需要用户自己完成，传入给栅格图层的是解析完成的数据。
+
 - 在这种形式下栅格图层只能绘制单一波段的数据。
 - 在这种形式下栅格图层不支持波段数据的计算。
 
 ```js
 async function getTiffData() {
-  const response = await fetch('https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat');
+  const response = await fetch(
+    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+  );
   const arrayBuffer = await response.arrayBuffer();
   const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
   const image = await tiff.getImage(); // 使用文件中的第一张图
@@ -115,16 +118,22 @@ const extent = [minLng, minLat, maxLng, maxLat];
 ```js
 // 对单波段数据进行运算
 async function getTiffData() {
-  const response = await fetch('https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat');
+  const response = await fetch(
+    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
+  );
   const arrayBuffer = await response.arrayBuffer();
   return arrayBuffer;
 }
 const tiffdata = await getTiffData();
 const layer = new RasterLayer({});
-layer.source([{
+layer.source(
+  [
+    {
       data: tiffdata,
       bands: [0],
-    }],{
+    },
+  ],
+  {
     parser: {
       type: 'raster',
       format: async (data, bands) => {
@@ -156,13 +165,13 @@ interface IBandsData {
   bands?: number[]; // 指定加载该栅格文件的波段
 }
 // 默认加载 0 波段的数据
-const source = new Source({ data: tiffData })
+const source = new Source({ data: tiffData });
 // 指定加载 tiffData 0 波段的数据
 // 指定加载 tiffData2 0、1 波段的数据
 const source2 = new Source([
   { data: tiffData, bands: [0] },
-  { data: tiffData2, bands: [0, 1] }
-])
+  { data: tiffData2, bands: [0, 1] },
+]);
 ```
 
 #### parser
