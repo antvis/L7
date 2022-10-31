@@ -68,10 +68,25 @@ export default abstract class Tile implements ITile{
     });
   }
 
-  public getFeatures(sourceLayer: string | undefined){
-    if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) return [];
+  /**
+   * 一个 Tile 可能有多个 layer，但是在发生拾取、点击事件的时候只有一个生效
+   */
+  public getMainLayer(): ILayer | undefined {
+    return this.layers[0];
+  }
 
+  public getFeatures(sourceLayer: string | undefined){
+    if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) {
+      return [];
+    }
+    
     const vectorTile = this.sourceTile.data?.layers[sourceLayer];
+
+    if(Array.isArray(vectorTile.features)) {
+      // 数据不需要被解析 geojson-vt 类型
+      return vectorTile.features;
+    }
+
     const { x, y, z } = this.sourceTile;
     const features: Feature<GeoJSON.Geometry, Properties>[] = [];
     for( let i = 0; i < vectorTile.length; i++ ) {
@@ -86,6 +101,19 @@ export default abstract class Tile implements ITile{
       })
     }
     return features;
+  }
+
+  /**
+   * 在一个 Tile 中可能存在一个相同 ID 的 feature
+   * @param id 
+   * @returns 
+   */
+  public getFeatureById(id: number) {
+    const layer = this.getMainLayer();
+    if (!layer) {
+      return [];
+    }
+    return layer.getSource().data.dataArray.filter(d => d._id === id);
   }
 
   public destroy() {

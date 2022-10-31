@@ -1,5 +1,6 @@
-import { ILayerService, ITile, ITilePickService, ILngLat, IInteractionTarget } from '@antv/l7-core';
+import { ILayerService, ITile, ITilePickService, IInteractionTarget } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
+import { TileSourceService } from './TileSourceService';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
@@ -10,18 +11,22 @@ const ACTIVE = 'active';
 export class TilePickService implements ITilePickService{
   private layerService: ILayerService;
   private tileLayerService: TileLayerService;
+  private tileSourceService: TileSourceService;
   private tilePickID = new Map();
   constructor({ layerService, tileLayerService }: ITilePickServiceOptions) {
     this.layerService = layerService;
     this.tileLayerService = tileLayerService;
+    this.tileSourceService = new TileSourceService();
   }
   pickRender(target: IInteractionTarget) {
     // 一个 TileLayer 有多个 Tile，但是会同时触发事件的只有一个 Tile
     const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
     if (tile) {
       // TODO 多图层拾取
-      const pickLayer = tile.getLayers()[0];
-      pickLayer.layerPickService.pickRender(target)
+      const pickLayer = tile.getMainLayer();
+      if (pickLayer) {
+        pickLayer.layerPickService.pickRender(target)
+      }
     }
   }
   selectFeature(pickedColors: Uint8Array | undefined) {
@@ -80,30 +85,20 @@ export class TilePickService implements ITilePickService{
   }
 
   /** 从瓦片中根据数据 */
-  getFeatureById(pickedFeatureIdx: number, lngLat: ILngLat) {
-    const tile = this.tileLayerService.getVisibleTileBylngLat(lngLat)
-    if (!tile) {
+  getFeatureById(pickedFeatureIdx: number) {
+    // 提取当前可见瓦片
+    const tiles = this.tileLayerService.getTiles().filter(tile => tile.visible);
+    // 提取当前可见瓦片中匹配 ID 的 feature 列表
+    const features: any[] = [];
+    tiles.map(tile => {
+      features.push(...tile.getFeatureById(pickedFeatureIdx));
+    })
+
+    if (features.length <= 0) {
       return null;
     }
-
-    const layers = tile.getLayers();
-    let features = null;
-    // 瓦片数据各自独立分布，没有完整的集合
-    // TODO: 合并瓦片矢量数据，返回完整的的数据集
-    layers.some(layer => {
-      // 图层的 originData 可能并没有 id，因此我们使用编码后的 dataArray
-      const data = layer.getSource().data.dataArray;
-
-      // _id 编码值可能根据字段进行编码，因此可能命中多个 feature
-      const pickedFeature = data.filter(d => d._id === pickedFeatureIdx)
-      
-      if(pickedFeature.length > 0) {
-        features = pickedFeature;
-        return true;
-      } else {
-        return false;
-      }
-    })
-    return features;
+    // 将 feature 列表合并后返回
+    // 统一返回成 polygon 的格式 点、线、面可以通用
+    return this.tileSourceService.getCombineFeature(features);
   }
 }

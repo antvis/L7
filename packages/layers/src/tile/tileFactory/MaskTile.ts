@@ -25,8 +25,7 @@ export default class MaskTile extends Tile {
     const { sourceLayer, featureId } = this.parent.getLayerConfig<{
       featureId: string;
     }>();
-    const features = this.sourceTile.data.layers[sourceLayer as string]
-      .features;
+    const features = this.getFeatures(sourceLayer)
     return {
       data: {
         type: 'FeatureCollection',
