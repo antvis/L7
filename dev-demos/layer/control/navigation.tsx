@@ -1,12 +1,10 @@
 import { GaodeMapV2, GeoLocate, Scene } from '@antv/l7';
 import gcoord from 'gcoord';
-import React, { useState } from 'react';
+import React from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
-  const [scene, setScene] = useState<Scene | undefined>();
-
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',

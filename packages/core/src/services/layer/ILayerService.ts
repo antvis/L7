@@ -225,27 +225,9 @@ export interface ITile {
   sourceTile: SourceTile;
   visible: boolean;
   isLoaded: boolean;
+  getMainLayer(): ILayer | undefined;
   getLayers(): ILayer[];
-  styleUpdate(...args: any): void;
-  initTileLayer(): Promise<void>;
-  lnglatInBounds(lnglat: {
-    lng: number;
-    lat: number;
-  }): boolean;
-  updateVisible(value: boolean): void;
-  updateOptions(key: string, value: any): void;
-  destroy(): void;
-}
-
-export interface ITile {
-  x: number;
-  y: number;
-  z: number;
-  key: string;
-  sourceTile: SourceTile;
-  visible: boolean;
-  isLoaded: boolean;
-  getLayers(): ILayer[];
+  getFeatureById(id: number): any;
   styleUpdate(...args: any): void;
   initTileLayer(): Promise<void>;
   lnglatInBounds(lnglat: {

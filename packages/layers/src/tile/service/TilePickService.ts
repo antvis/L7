@@ -1,6 +1,6 @@
-import { ILayerService, ITile, ITilePickService } from '@antv/l7-core';
+import { ILayerService, ITile, ITilePickService, IInteractionTarget } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
-import { IInteractionTarget } from '@antv/l7-core';
+import { TileSourceService } from './TileSourceService';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
@@ -11,18 +11,22 @@ const ACTIVE = 'active';
 export class TilePickService implements ITilePickService{
   private layerService: ILayerService;
   private tileLayerService: TileLayerService;
+  private tileSourceService: TileSourceService;
   private tilePickID = new Map();
   constructor({ layerService, tileLayerService }: ITilePickServiceOptions) {
     this.layerService = layerService;
     this.tileLayerService = tileLayerService;
+    this.tileSourceService = new TileSourceService();
   }
   pickRender(target: IInteractionTarget) {
     // 一个 TileLayer 有多个 Tile，但是会同时触发事件的只有一个 Tile
     const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
     if (tile) {
       // TODO 多图层拾取
-      const pickLayer = tile.getLayers()[0];
-      pickLayer.layerPickService.pickRender(target)
+      const pickLayer = tile.getMainLayer();
+      if (pickLayer) {
+        pickLayer.layerPickService.pickRender(target)
+      }
     }
   }
   selectFeature(pickedColors: Uint8Array | undefined) {
@@ -81,7 +85,20 @@ export class TilePickService implements ITilePickService{
   }
 
   /** 从瓦片中根据数据 */
-  getFeatureById() {
+  getFeatureById(pickedFeatureIdx: number) {
+    // 提取当前可见瓦片
+    const tiles = this.tileLayerService.getTiles().filter(tile => tile.visible);
+    // 提取当前可见瓦片中匹配 ID 的 feature 列表
+    const features: any[] = [];
+    tiles.map(tile => {
+      features.push(...tile.getFeatureById(pickedFeatureIdx));
+    })
 
+    if (features.length <= 0) {
+      return null;
+    }
+    // 将 feature 列表合并后返回
+    // 统一返回成 polygon 的格式 点、线、面可以通用
+    return this.tileSourceService.getCombineFeature(features);
   }
 }

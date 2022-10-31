@@ -355,6 +355,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.setPopupPosition(x, y);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
@@ -401,6 +402,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   }
 
   protected updateFollowCursor(onlyClear?: boolean) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const container = this.mapsService.getContainer()!;
     container.removeEventListener('mousemove', this.onMouseMove);
     if (this.popupOption.followCursor && !onlyClear) {
