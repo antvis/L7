@@ -13,21 +13,21 @@ order: 0
 
 栅格瓦片可以加载图片或者是栅格数据，同时也支持绘制彩色遥感影像。
 
-| 分类     | Layer         | parserType    | dataType      | 描述     |
-| ------- | ------------- | -------------- | ------------ | ---------|
-| 栅格瓦片 | `RasterLayer` | `rasterTile`   | `image`、`/`  | 图片栅格  |
-| 栅格瓦片 | `RasterLayer` | `rasterTile`   | `arraybuffer` | 数据栅格  |
-| 栅格瓦片 | `RasterLayer` | `rasterTile`   | `rgb`         | 彩色遥感影像栅格 |
+| 分类     | Layer         | parserType   | dataType      | 描述             |
+| -------- | ------------- | ------------ | ------------- | ---------------- |
+| 栅格瓦片 | `RasterLayer` | `rasterTile` | `image`、`/`  | 图片栅格         |
+| 栅格瓦片 | `RasterLayer` | `rasterTile` | `arraybuffer` | 数据栅格         |
+| 栅格瓦片 | `RasterLayer` | `rasterTile` | `rgb`         | 彩色遥感影像栅格 |
 
 矢量瓦片支持绘制点、线、面图层矢量瓦片的前端切片 `geojson-vt`。同时，矢量瓦片还支持 TileDebugLayer、掩模图层。
 
-| 分类    | Layer             | parserType           | 描述         |
-| ------- | ---------------- | --------------------- | ------------|
-| 矢量瓦片 | `PointLayer`     | parser of PointLayer、`geojsonvt`  | 矢量点图层    |
-| 矢量瓦片 | `LineLayer`      | parser of LineLayer、`geojsonvt`   | 矢量线图层    |
-| 矢量瓦片 | `PolygonLayer`   | parser of PolygonLayer、`geojsonvt`| 矢量几何体图层 |
-| 矢量瓦片 | `MaskLayer`      | parser of MaskLayer、`geojsonvt`   | 矢量掩模图层   |
-| 矢量瓦片 | `TileDebugLayer` | `/`                   | `TileDebugLayer` 不需要执行 `source` 方法 |
+| 分类     | Layer            | parserType                          | 描述                                      |
+| -------- | ---------------- | ----------------------------------- | ----------------------------------------- |
+| 矢量瓦片 | `PointLayer`     | parser of PointLayer、`geojsonvt`   | 矢量点图层                                |
+| 矢量瓦片 | `LineLayer`      | parser of LineLayer、`geojsonvt`    | 矢量线图层                                |
+| 矢量瓦片 | `PolygonLayer`   | parser of PolygonLayer、`geojsonvt` | 矢量几何体图层                            |
+| 矢量瓦片 | `MaskLayer`      | parser of MaskLayer、`geojsonvt`    | 矢量掩模图层                              |
+| 矢量瓦片 | `TileDebugLayer` | `/`                                 | `TileDebugLayer` 不需要执行 `source` 方法 |
 
 ### TileLayer
 
@@ -38,13 +38,15 @@ order: 0
 ```javascript
 import { RasterLayer } from '@antv/l7';
 // 图片瓦片图层 - 卫星图
-const layer = new RasterLayer()
-.source('http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+const layer = new RasterLayer().source(
+  'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+  {
     parser: {
-        type: 'rasterTile',
-        updateStrategy: 'overlap',
-    }
-});
+      type: 'rasterTile',
+      updateStrategy: 'overlap',
+    },
+  },
+);
 ```
 
 #### 图片栅格 - WMS
@@ -53,14 +55,14 @@ const layer = new RasterLayer()
 import { RasterLayer } from '@antv/l7';
 // 绘制 WMS 格式瓦片
 const url =
-    'https://pnr.sz.gov.cn/d-suplicmap/dynamap_1/rest/services/LAND_CERTAIN/MapServer/export?F=image&FORMAT=PNG32&TRANSPARENT=true&layers=show:1&SIZE=256,256&BBOX={bbox}&BBOXSR=4326&IMAGESR=3857&DPI=90';
+  'https://pnr.sz.gov.cn/d-suplicmap/dynamap_1/rest/services/LAND_CERTAIN/MapServer/export?F=image&FORMAT=PNG32&TRANSPARENT=true&layers=show:1&SIZE=256,256&BBOX={bbox}&BBOXSR=4326&IMAGESR=3857&DPI=90';
 
 const layer = new RasterLayer().source(url, {
-    parser: {
-        type: 'rasterTile',
-        tileSize: 256,
-        zoomOffset: 1,
-    },
+  parser: {
+    type: 'rasterTile',
+    tileSize: 256,
+    zoomOffset: 1,
+  },
 });
 ```
 
@@ -71,17 +73,17 @@ import { RasterLayer } from '@antv/l7';
 
 // 绘制 WMTS 格式瓦片
 const url1 =
-      'https://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&';
+  'https://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&';
 const layer1 = new RasterLayer().source(url1, {
-    parser: {
+  parser: {
     type: 'rasterTile',
     tileSize: 256,
     wmtsOptions: {
-        layer: 'img',
-        tileMatrixset: 'w',
-        format: 'tiles',
+      layer: 'img',
+      tileMatrixset: 'w',
+      format: 'tiles',
     },
-    },
+  },
 });
 ```
 
@@ -89,32 +91,33 @@ const layer1 = new RasterLayer().source(url1, {
 
 ```javascript
 import { RasterLayer } from '@antv/l7';
-const tileSource = new Source('https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
-{
+const tileSource = new Source(
+  'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+  {
     parser: {
-    type: 'rasterTile',
-    dataType: 'arraybuffer',
-    tileSize: 256,
-    maxZoom: 13.1,
-    format: async (data) => {
+      type: 'rasterTile',
+      dataType: 'arraybuffer',
+      tileSize: 256,
+      maxZoom: 13.1,
+      format: async (data) => {
         const tiff = await GeoTIFF.fromArrayBuffer(data);
         const image = await tiff.getImage();
         const width = image.getWidth();
         const height = image.getHeight();
         const values = await image.readRasters();
         return { rasterData: values[0], width, height };
+      },
     },
-    },
-},
+  },
 );
 
 layer.source(tileSource).style({
-    domain: [0.001, 11.001],
-    clampLow: false,
-    rampColors: {
-        colors: colorList,
-        positions,
-    },
+  domain: [0.001, 11.001],
+  clampLow: false,
+  rampColors: {
+    colors: colorList,
+    positions,
+  },
 });
 ```
 
@@ -172,44 +175,57 @@ scene.on('loaded', () => {
 
 ```javascript
 // 矢量瓦片图层
-import { PointLayer, LineLayer, PolygonLayer, TileDebugLayer, MaskLayer } from '@antv/l7';
+import {
+  PointLayer,
+  LineLayer,
+  PolygonLayer,
+  TileDebugLayer,
+  MaskLayer,
+} from '@antv/l7';
 
-const vectorSource = new Source('http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf', {
+const vectorSource = new Source(
+  'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+  {
     parser: {
-        type: 'mvt',
-        maxZoom: 9,
-        extent: [-180, -85.051129, 179, 85.051129],
-    },  
-})
+      type: 'mvt',
+      maxZoom: 9,
+      extent: [-180, -85.051129, 179, 85.051129],
+    },
+  },
+);
 
 // 矢量点图层
 const point = new PointLayer({
-    featureId: 'COLOR',
-    sourceLayer: 'ecoregions2', 
+  featureId: 'COLOR',
+  sourceLayer: 'ecoregions2',
 })
-.source(vectorSource)
-.shape('circle')
-.color('red')
-.size(10);
+  .source(vectorSource)
+  .shape('circle')
+  .color('red')
+  .size(10);
 
 // 矢量线图层
 const line = new LineLayer({
-    featureId: 'COLOR',
-    sourceLayer: 'ecoregions2',
+  featureId: 'COLOR',
+  sourceLayer: 'ecoregions2',
 })
-.source(vectorSource)
-.color('COLOR')
-.size(2);
+  .source(vectorSource)
+  .color('COLOR')
+  .size(2);
 
 // polygon 瓦片图层 - geojson-vt
-fetch('https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json')
-.then((d) => d.json())
-.then((data) => {
-    const source = new Source(data, { parser: { type: 'geojsonvt', maxZoom: 9 }});
+fetch(
+  'https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json',
+)
+  .then((d) => d.json())
+  .then((data) => {
+    const source = new Source(data, {
+      parser: { type: 'geojsonvt', maxZoom: 9 },
+    });
     const polygon = new PolygonLayer({ featureId: 'COLOR' })
-    .source(source)
-    .color('red');
-})
+      .source(source)
+      .color('red');
+  });
 ```
 
 #### 矢量栅格 - 掩模图层
@@ -231,6 +247,3 @@ const mask = new MaskLayer({sourceLayer: 'ecoregions2' }).source( 'http://ganos.
 // 测试瓦片图层
 const debugerLayer = new TileDebugLayer();
 ```
-
-
-
