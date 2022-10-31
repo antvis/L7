@@ -23,8 +23,10 @@ export class TilePickService implements ITilePickService{
     const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
     if (tile) {
       // TODO 多图层拾取
-      const pickLayer = tile.getLayers()[0];
-      pickLayer.layerPickService.pickRender(target)
+      const pickLayer = tile.getMainLayer();
+      if (pickLayer) {
+        pickLayer.layerPickService.pickRender(target)
+      }
     }
   }
   selectFeature(pickedColors: Uint8Array | undefined) {

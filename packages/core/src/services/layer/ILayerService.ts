@@ -225,6 +225,7 @@ export interface ITile {
   sourceTile: SourceTile;
   visible: boolean;
   isLoaded: boolean;
+  getMainLayer(): ILayer | undefined;
   getLayers(): ILayer[];
   getFeatureById(id: number): any;
   styleUpdate(...args: any): void;

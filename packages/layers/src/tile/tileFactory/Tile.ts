@@ -68,6 +68,13 @@ export default abstract class Tile implements ITile{
     });
   }
 
+  /**
+   * 一个 Tile 可能有多个 layer，但是在发生拾取、点击事件的时候只有一个生效
+   */
+  public getMainLayer(): ILayer | undefined {
+    return this.layers[0];
+  }
+
   public getFeatures(sourceLayer: string | undefined){
     if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) {
       return [];
@@ -97,21 +104,16 @@ export default abstract class Tile implements ITile{
   }
 
   /**
-   * 在一个 Tile 中最多存在一个相同 ID 的 feature
+   * 在一个 Tile 中可能存在一个相同 ID 的 feature
    * @param id 
    * @returns 
    */
   public getFeatureById(id: number) {
-    const features: any[] = [];
-    this.layers.forEach(layer => {
-      const dataArray = layer.getSource().data.dataArray;
-      dataArray.forEach(d => {
-        if(d._id === id) {
-          features.push(d);  
-        }
-      })
-    })
-    return features;
+    const layer = this.getMainLayer();
+    if (!layer) {
+      return [];
+    }
+    return layer.getSource().data.dataArray.filter(d => d._id === id);
   }
 
   public destroy() {
