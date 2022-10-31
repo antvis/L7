@@ -94,18 +94,16 @@ export default abstract class Tile implements ITile{
    * @returns 
    */
   public getFeatureById(id: number) {
-    let feature = null;
-    this.layers.some(layer => {
+    const features: any[] = [];
+    this.layers.forEach(layer => {
       const dataArray = layer.getSource().data.dataArray;
       dataArray.forEach(d => {
         if(d._id === id) {
-          feature = d;
-          return true;
+          features.push(d);  
         }
       })
-      return false;
     })
-    return feature;
+    return features;
   }
 
   public destroy() {
