@@ -14,6 +14,10 @@ order: 6
 
 ### 实现
 
+下面我们来介绍如何绘制一个常见的文本标注地图。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/text/#point_text)
+
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
@@ -52,13 +56,12 @@ scene.on('loaded', () => {
       scene.addLayer(pointLayer);
     });
 });
-
 ```
 
 ### shape(field: name: shapeType: 'text'): ILayer
 
-- field 标注的字段名称
-- shapeType 'text'
+- `field` 标注的字段名称。
+- `shapeType` 默认值为 `text`。
 
 ```javascript
 layer.shape('name', 'text');

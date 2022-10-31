@@ -14,6 +14,10 @@ order: 4
 
 ### 实现
 
+下面我们来介绍如何绘制一个简单的亮度图。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/gallery/basic#normal)
+
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
@@ -48,5 +52,3 @@ scene.on('loaded', () => {
 ### shape
 
 使用亮度图需要将 `shape` 的参数设置为 `dot`，或者不设置 `shape` 函数。
-
-[在线案例](/zh/examples/gallery/basic#normal)

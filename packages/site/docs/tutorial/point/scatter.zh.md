@@ -14,6 +14,10 @@ order: 2
 
 ### 实现
 
+下面我们来介绍如何绘制一个常见的散点图。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/scatter/#scatter)
+
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

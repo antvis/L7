@@ -14,6 +14,10 @@ order: 7
 
 ### 实现
 
+下面我们来介绍如何绘制一个简单的 `iconfont` 图标点图层。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/text#iconfont)
+
 ```javascript
 // 指定 iconfont 映射为字体样式的名称
 const fontFamily = 'iconfont';
@@ -69,6 +73,4 @@ layer.shape('iconfontField', 'text');
 
 我们在使用 `iconfont` 绘制简单图标的时候需要在 `style` 方法中将 `iconfont` 参数设置为 `true`。
 
-✨ iconfont 其他 style 参数的使用和普通的文本标注的参数保持一致
-
-[在线案例](/zh/examples/point/text#iconfont)
+✨ iconfont 其他 style 参数的使用和普通的文本标注的参数保持一致。

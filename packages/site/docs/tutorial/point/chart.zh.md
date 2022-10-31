@@ -14,6 +14,10 @@ order: 8
 
 ### 实现
 
+下面我们来介绍如何绘制一个简单的地图复合图表。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/chart#bar)
+
 
 ```javascript
 import { Scene, Marker } from '@antv/l7';
@@ -82,5 +86,3 @@ function addChart() {
     });
 }
 ```
-
-[在线案例](/zh/examples/point/chart#bar)

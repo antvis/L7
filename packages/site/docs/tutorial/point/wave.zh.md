@@ -15,7 +15,11 @@ order: 3
 
 ### 实现
 
-根据下面的代码可以实现一个简单的水波点案例，具体的使用可以查看[详细文档](/zh/docs/api/point_layer/animate#水波点)。
+根据下面的代码可以实现一个简单的水波点案例。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/scatter#animatePoint)。
+
+- 具体的使用可以查看[详细文档](/zh/docs/api/point_layer/animate#水波点)。
 
 ```js
 import { Scene, PointLayer } from '@antv/l7';
@@ -64,11 +68,9 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/9078fd36-ce8d-4ee2-91bc-605
 
 #### 水波配置项
 
-- speed 水波速度
-- rings 水波环数
+- `speed` 水波速度
+- `rings` 水波环数
 
 ### size
 
 在水波点图层中，由于边缘透明的原因，点的大小看上去要比相同 size 的非水波点要小一些。
-
-[在线案例](/zh/examples/point/scatter#animatePoint)

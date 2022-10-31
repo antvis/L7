@@ -14,6 +14,10 @@ order: 8
 
 ### 实现
 
+下面我们来介绍如何绘制一个简单的 `Marker` 图层。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/component/marker#marker)
+
 ```javascript
 import { Scene, Marker } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
@@ -35,9 +39,7 @@ function addMarkers() {
     .then(res => res.json())
     .then(nodes => {
       for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].g !== '1' || nodes[i].v === '') {
-          continue;
-        }
+        if (nodes[i].g !== '1' || nodes[i].v === '') { continue; }
         const el = document.createElement('label');
         el.className = 'labelclass';
         el.textContent = nodes[i].v + '℃';
@@ -50,7 +52,6 @@ function addMarkers() {
       }
     });
 }
-
 function getColor(v) {
   return v > 50
     ? '#800026'
@@ -68,7 +69,6 @@ function getColor(v) {
                 ? '#FED976'
                 : '#FFEDA0';
 }
-
 ```
 
 ### 使用文档

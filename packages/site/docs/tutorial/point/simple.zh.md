@@ -4,21 +4,53 @@ order: 9
 ---
 `markdown:docs/common/style.md`
 
-点图层除了贴地的模式之外还支持精灵模式（始终面向相机）。
+点图层支持精灵模式的简单点，精灵模式的点图层效率更高，点始终面向相机。
 
-## 使用
+<div>
+  <div style="width:60%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dVFmQIKh5TUAAAAAAAAAAAAAARQnAQ'>
+  </div>
+</div>
 
-气泡图通过 PointLayer 对象实例化，
+### 实现
+
+下面我们来介绍如何绘制一个简单点图层。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/simple#simple)
 
 ```javascript
-import { PointLayer } from '@antv/l7';
-```
+import { Scene, PointLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*dVFmQIKh5TUAAAAAAAAAAAAAARQnAQ'>
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    pitch: 20,
+    center: [ 120, 20 ],
+    zoom: 3
+  })
+});
+scene.on('loaded', () => {
+  fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json')
+    .then(res => res.json())
+    .then(data => {
+      const pointLayer = new PointLayer({})
+        .source(data)
+        .shape('simple')
+        .size(15)
+        .color('mag', mag =>  mag > 4.5 ? '#5B8FF9' : '#5CCEA1';)
+        .style({
+          opacity: 0.6,
+          strokeWidth: 3
+        });
+      scene.addLayer(pointLayer);
+    });
+});
+```
 
 ### shape
 
-- 简单点图层使用的 shape 参数是 simple
+简单点图层使用的 `shape` 参数固定为 `simple`。
 
 ### use
 
@@ -35,5 +67,3 @@ import { PointLayer } from '@antv/l7';
 
 scene.getPointSizeRange(); // Float32Array - [min, max]
 ```
-
-[在线案例](../../../examples/point/dot#normal2)
