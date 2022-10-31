@@ -65,7 +65,6 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     if (this.getModelType() !== 'simple') {
       return filterData;
     }
-
     const dataArray: IParseDataItem[] = [];
     filterData.map((data) => {
       if (
