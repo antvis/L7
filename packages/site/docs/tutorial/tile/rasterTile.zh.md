@@ -164,23 +164,22 @@ layer.style({
 
 #### domain: [number, number]
 
-🌟 数据栅格瓦片
-
 设置数据映射的定义域。  
 ps：固定值域为 `[0, 1]`，我们将传入的值（domain） 映射到值域 `[0, 1]` 后从 `rampColor` 构建的色带上取颜色。
 
 #### clampLow/clampHigh: boolean
-
-🌟 数据栅格瓦片
 
 `clampLow` 的默认值为 `false`，设置为 `true`，低于 `domain` 的数据将不显示。  
 `clampHigh` 的默认值为 `false`，设置为 `true`，高于 `domain` 的数据将不显示。
 
 #### rampColors
 
-🌟 数据栅格瓦片
+- colors  颜色数组
+- positions 数据区间
 
-配置瓦片值域映射颜色的色带。
+配置值域映射颜色的色带，值域的范围为 `[0 - 1]`, 对应的我们需要为每一个 `position` 位置设置一个颜色值。
+
+⚠️ colors, positions 的长度要相同
 
 ```javascript
 layer.style({

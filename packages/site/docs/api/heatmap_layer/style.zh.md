@@ -35,9 +35,12 @@ layer.style({
 
 #### rampColors
 
-🌟 数据栅格瓦片
+- colors  颜色数组
+- positions 数据区间
 
-配置瓦片值域映射颜色的色带。
+配置值域映射颜色的色带，值域的范围为 `[0 - 1]`, 对应的我们需要为每一个 `position` 位置设置一个颜色值。
+
+⚠️ colors, positions 的长度要相同
 
 ```javascript
 layer.style({
