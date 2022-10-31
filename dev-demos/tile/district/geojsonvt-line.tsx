@@ -17,7 +17,9 @@ export default () => {
     });
 
     // fetch('http://30.230.91.181:8080/water.geojson')
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json',)
+    fetch(
+      'https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json',
+    )
       .then((d) => d.json())
       .then((data) => {
         console.log(data);
