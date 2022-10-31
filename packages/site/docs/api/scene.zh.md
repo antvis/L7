@@ -619,6 +619,12 @@ let fontPath =
 scene.addFontFace(fontFamily, fontPath);
 ```
 
+## 其他
+
+### getPointSizeRange(): Float32Array
+
+获取当前设备支持绘制的 `WebGL` 点精灵的大小。
+
 ## 事件
 
 ### on(eventName: string, handler: function): void
