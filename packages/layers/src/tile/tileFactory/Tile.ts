@@ -69,9 +69,17 @@ export default abstract class Tile implements ITile{
   }
 
   public getFeatures(sourceLayer: string | undefined){
-    if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) return [];
-
+    if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) {
+      return [];
+    }
+    
     const vectorTile = this.sourceTile.data?.layers[sourceLayer];
+
+    if(Array.isArray(vectorTile.features)) {
+      // 数据不需要被解析 geojson-vt 类型
+      return vectorTile.features;
+    }
+
     const { x, y, z } = this.sourceTile;
     const features: Feature<GeoJSON.Geometry, Properties>[] = [];
     for( let i = 0; i < vectorTile.length; i++ ) {
