@@ -9,9 +9,9 @@ import {
   IStyleAttributeService,
   Position,
 } from '@antv/l7-core';
-import { cloneDeep } from 'lodash';
 import Source from '@antv/l7-source';
 import { normalize, rgb2arr } from '@antv/l7-utils';
+import { cloneDeep } from 'lodash';
 import { ILineLayerStyleOptions } from '../core/interface';
 import { Version } from '@antv/l7-maps';
 

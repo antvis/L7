@@ -66,6 +66,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       attributeToUpdate = new StyleAttribute(options);
       this.attributes.push(attributeToUpdate);
     }
+    
     return attributeToUpdate;
   }
 
@@ -81,6 +82,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
         name: attributeName,
       });
     }
+
+
     const { scale } = options;
     if (scale && attributeToUpdate) {
       // TODO: 需要比较新旧值确定是否需要 rescale
@@ -373,6 +376,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const attributes: {
       [attributeName: string]: IAttribute;
     } = {};
+
     descriptors.forEach((descriptor, attributeIdx) => {
       if (descriptor) {
         // IAttribute 参数透传

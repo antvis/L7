@@ -94,7 +94,7 @@ function floatStyleMapping(fieldName: string, layer: ILayer, styleFloat: any) {
     });
   } else if (isNumber(styleFloat)) {
     // 传入 number、默认值处理
-    registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
+    // registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
   } else if (Array.isArray(styleFloat) && styleFloat.length === 2) {
     // 传入的 styleFloat 是长度为 2 的数组
     if (isString(styleFloat[0]) && isFunction(styleFloat[1])) {
@@ -164,7 +164,7 @@ function offsetStyleMapping(
 function colorStyleMapping(fieldName: string, layer: ILayer, styleColor: any) {
   if (isString(styleColor)) {
     // 如果传入的 styleColor 是 string 类型，那么就认为其是颜色值
-    registerStyleAttribute(fieldName, layer, styleColor, undefined);
+    // registerStyleAttribute(fieldName, layer, styleColor, undefined);
   } else if (Array.isArray(styleColor) && styleColor.length === 2) {
     // 传入的 styleColor 是长度为 2 的数组
     if (isString(styleColor[0]) && isFunction(styleColor[1])) {

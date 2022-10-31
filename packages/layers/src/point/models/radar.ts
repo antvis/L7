@@ -66,7 +66,7 @@ export default class RadarModel extends BaseModel {
     const { version } = this.mapService;
     if (
       unit === 'meter' &&
-      version !== Version.L7MAP &&
+      version !== Version.DEFUALT &&
       version !== Version.GLOBEL
     ) {
       this.isMeter = true;

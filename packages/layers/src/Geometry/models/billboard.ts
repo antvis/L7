@@ -46,7 +46,7 @@ export default class BillBoardModel extends BaseModel {
 
     /**
      *               rotateFlag
-     * L7MAP            1
+     * DEFAULT            1
      * MAPBOX           1
      * GAODE2.x         -1
      * GAODE1.x         -1

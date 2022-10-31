@@ -3,6 +3,7 @@ import {
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
+import { VectorTileLayer } from '@mapbox/vector-tile';
 import {
   Feature,
   FeatureCollection,
@@ -11,8 +12,8 @@ import {
 } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
 import { IParserData } from '../interface';
-import { ITileParserCFG, IGeojsonvtOptions } from '@antv/l7-core';
-import { VectorTileLayer } from '@mapbox/vector-tile';
+
+import { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -154,7 +155,7 @@ function GetGeoJSON(
 }
 
 export type MapboxVectorTile = {
-  layers: { [_: string]: VectorTileLayer & { features: Feature[] } };
+  layers: { [key: string]: VectorTileLayer & { features: Feature[] } };
 };
 
 const getVectorTile = async (
@@ -166,29 +167,26 @@ const getVectorTile = async (
   return new Promise((resolve) => {
     const tileData = tileIndex.getTile(tile.z, tile.x, tile.y);
     // tileData
-    const features: any = [];
-    tileData.features.map((vectorTileFeature: any) => {
-      const feature = GetGeoJSON(
-        extent,
-        tileParams.x,
-        tileParams.y,
-        tileParams.z,
-        vectorTileFeature,
-      );
-      features.push(feature);
-    });
-    type IGeojsonVT = VectorTileLayer & {
-      features: Feature[];
-    };
-    // @ts-ignore
-    const featureCollection: IGeojsonVT = {
-      features,
-    };
+    const features = tileData
+      ? tileData.features.map((vectorTileFeature: any) => {
+          return GetGeoJSON(
+            extent,
+            tileParams.x,
+            tileParams.y,
+            tileParams.z,
+            vectorTileFeature,
+          );
+        })
+      : [];
 
     const vectorTile: MapboxVectorTile = {
       layers: {
-        // Tip: fixed SourceLayer Name
-        geojsonvt: featureCollection,
+        defaultLayer: {
+          // @ts-ignore
+          features,
+        } as VectorTileLayer & {
+          features: Feature[];
+        },
       },
     };
 

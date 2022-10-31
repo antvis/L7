@@ -40,14 +40,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       this.registerPositionAttribute(styleAttributeService);
       return;
     }
-
-    // 用途为 basemap 的 Layer 也只需要注册 a_Position
-    const { usage } = layer.getLayerConfig();
-    if (usage === 'basemap') {
-      this.registerPositionAttribute(styleAttributeService);
-      return;
-    }
-
     // Tip: normal render layer
     this.registerPositionAttribute(styleAttributeService);
     this.registerFilterAttribute(styleAttributeService);

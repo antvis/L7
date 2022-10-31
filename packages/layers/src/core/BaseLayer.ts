@@ -5,7 +5,6 @@ import {
   SyncBailHook,
   SyncHook,
 } from '@antv/async-hook';
-import { calculateData } from '../utils/layerData';
 import {
   BlendType,
   IActiveOption,
@@ -24,6 +23,7 @@ import {
   ILayerConfig,
   ILayerModel,
   ILayerModelInitializationOptions,
+  ILayerPickService,
   ILayerPlugin,
   ILayerService,
   ILegend,
@@ -33,6 +33,7 @@ import {
   IModel,
   IModelInitializationOptions,
   IMultiPassRenderer,
+  IParseDataItem,
   IPass,
   IPickingService,
   IPostProcessingPass,
@@ -44,14 +45,12 @@ import {
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   LayerEventType,
-  IParseDataItem,
   lazyInject,
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
   TYPES,
-  ILayerPickService,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
@@ -60,12 +59,13 @@ import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { styleDataMapping } from '../utils/dataMappingStyle';
-import LayerPickService from './LayerPickService';
+import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
   normalizePasses,
 } from '../utils/multiPassRender';
 import { updateShape } from '../utils/updateShape';
+import LayerPickService from './LayerPickService';
 /**
  * 分配 layer id
  */
@@ -275,7 +275,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       };
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
-
       // @ts-ignore
       styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
       this.configService.setLayerConfig(sceneId, this.id, {
@@ -1061,7 +1060,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        if (this.mapService.setCoordCenter) {
+        if (this.mapService?.setCoordCenter) {
           this.mapService.setCoordCenter(layerCenter);
         }
       }
@@ -1358,12 +1357,25 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     // 存储 Attribute
-    this.configService.setAttributeConfig(this.id, {
-      [type]: {
-        field,
-        values,
-      },
-    });
+    if (
+      [
+        'color',
+        'size',
+        'texture',
+        'rotate',
+        'filter',
+        'label',
+        'shape',
+      ].indexOf(type) !== -1
+    ) {
+      this.configService.setAttributeConfig(this.id, {
+        [type]: {
+          field,
+          values,
+        },
+      });
+    }
+
     if (!this.inited) {
       this.pendingStyleAttributes.push({
         attributeName: type,
