@@ -94,17 +94,80 @@ type UpdateTileStrategy = 'realtime' | 'overlap' | 'replace';
 
 - 图片栅格 - WMS
 
-| 参数        | 类型           | 值                    | 描述               |
-| ----------- | -------------- | --------------------- | ------------------ |
-| type        | `string`       | `rasterTile`          | 请求图片类型的瓦片 |
-| wmtsOptions | `IWmtsOptions` | `\`| 请求服务请求参数 |
+| 参数        | 类型           | 值               | 描述              |
+| ----------- | -------------- | -------------- | ----------------- |
+| type        | `string`       | `rasterTile`   | 请求图片类型的瓦片   |
+
 
 - 图片栅格 - WMTS
+
+| 参数        | 类型           | 值               | 描述              |
+| ----------- | -------------- | -------------- | ----------------- |
+| type        | `string`       | `rasterTile`   | 请求图片类型的瓦片   |
+| wmtsOptions | `IWmtsOptions` | `\`            | 设置请求参数        |
+
+
+`IWmtsOptions` 的参数用于拼接 `url`。
+
+```js
+interface IWmtsOptions {
+  layer: string;
+  version?: string;
+  style?: string;
+  format: string;
+  service?: string;
+  tileMatrixset: string;
+}
+```
+
 - 数据栅格 - arraybuffer
+
+| 参数        | 类型           | 值               | 描述              |
+| ----------- | -------------- | -------------- | ----------------- |
+| type        | `string`       | `rasterTile`   | 请求栅格类型的瓦片   |
+| dataType    | `RasterTileType` | `arraybuffer` | 栅格瓦片的类型     |
+
+```js
+enum RasterTileType {
+  ARRAYBUFFER = 'arraybuffer';
+  IMAGE = 'image';
+  RGB = 'rgb';
+}
+```
+
 - 数据栅格 - rgb
+
+| 参数        | 类型           | 值               | 描述              |
+| ----------- | -------------- | -------------- | ----------------- |
+| type        | `string`       | `rasterTile`   | 请求栅格类型的瓦片   |
+| dataType    | `RasterTileType` | `rgb`        | 栅格瓦片的类型     |
+
 - 矢量瓦片 - point、line、polygon
+
+| 参数        | 类型           | 值               | 描述              |
+| ----------- | -------------- | -------------- | ----------------- |
+| type        | `string`       | `mvt`          | 请求矢量瓦片   |
+
 - 矢量瓦片 - 掩模图层
+
+| 参数        | 类型           | 值               | 描述              |
+| ----------- | -------------- | -------------- | ----------------- |
+| type        | `string`       | `mvt`          | 请求矢量瓦片   |
+
 - 矢量瓦片 - 测试图层
+
+测试图层不需要设置 `source`。 
+
+### GeoJSON VT 前端瓦片切分
+
+瓦片在前端可以实现瓦片数据的切分，而不是依赖瓦片服务请求瓦片数据。
+
+| 参数        | 类型           | 值               | 描述              |
+| ----------- | -------------- | -------------- | ----------------- |
+| type        | `string`       | `mvt`          | 矢量瓦片           |
+| geojsonvtOptions | `IGeojsonvtOptions`        | `/` | 设置瓦片数据切分的参数 |
+
+
 
 ```javascript
 // 普通图层在 source 中直接传入数据，而瓦片图层则在 source 中设置瓦片服务
@@ -136,5 +199,3 @@ const VectorTileSource = new Source({
 // 设置矢量瓦片服务
 layer.source(VectorTileSource)
 ```
-
-### GeoJSON VT 前端瓦片切分
