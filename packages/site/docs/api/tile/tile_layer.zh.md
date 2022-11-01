@@ -9,7 +9,7 @@ order: 0
 
 <img width="100%" style="margin: 10px;display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*duYYQoVY8EYAAAAAAAAAAAAAARQnAQ'>
 
-### 瓦片方案
+### 分类
 
 栅格瓦片可以加载图片或者是栅格数据，同时也支持绘制彩色遥感影像。
 
@@ -29,7 +29,7 @@ order: 0
 | 矢量瓦片 | `MaskLayer`      | parser of MaskLayer、`geojsonvt`    | 矢量掩模图层                              |
 | 矢量瓦片 | `TileDebugLayer` | `/`                                 | `TileDebugLayer` 不需要执行 `source` 方法 |
 
-### TileLayer
+### 使用
 
 下面就介绍几种瓦片图层的简单使用。
 
@@ -171,7 +171,7 @@ scene.on('loaded', () => {
 }})
 ```
 
-#### 矢量栅格 - point、line、polygon
+#### 矢量瓦片 - point、line、polygon
 
 ```javascript
 // 矢量瓦片图层
@@ -228,7 +228,7 @@ fetch(
   });
 ```
 
-#### 矢量栅格 - 掩模图层
+#### 矢量瓦片 - 掩模图层
 
 ```js
 
@@ -241,7 +241,7 @@ const mask = new MaskLayer({sourceLayer: 'ecoregions2' }).source( 'http://ganos.
     }});
 ```
 
-#### 矢量栅格 - 测试图层
+#### 矢量瓦片 - 测试图层
 
 ```js
 // 测试瓦片图层
