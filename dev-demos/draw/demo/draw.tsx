@@ -24,6 +24,7 @@ const Demo: React.FC = () => {
         liveUpdate: true,
       });
       setPolygonDrawer(drawer);
+      console.log(drawer);
       drawer.enable();
     });
   }, []);

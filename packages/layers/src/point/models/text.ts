@@ -177,8 +177,12 @@ export default class TextModel extends BaseModel {
   }
 
   public async initModels():Promise<IModel[]>  {
+
     // 绑定事件
-    this.bindEvent();
+    if(!this.layer.inited) {
+      this.bindEvent();
+    }
+    
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -339,7 +343,7 @@ export default class TextModel extends BaseModel {
 
   private bindEvent() {
     if(!this.layer.isTileLayer) {
-      // console.log('mapping')
+      // 重新绑定
       this.layer.on('remapping', this.mapping);
     }
   }

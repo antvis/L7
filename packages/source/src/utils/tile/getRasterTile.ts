@@ -76,7 +76,6 @@ export const getTileImage = async (
   }
 
   return new Promise((resolve, reject) => {
-    console.log(imageUrl);
     const xhr = getImage({ url: imageUrl }, (err, img) => {
       if (err) {
         reject(err);

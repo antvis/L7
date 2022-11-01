@@ -28,7 +28,6 @@ export default class FillModel extends BaseModel {
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
-      console.log(encodeData)
       const { data, width, height } = this.calDataFrame(
         this.cellLength,
         encodeData,

@@ -75,6 +75,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     options: Partial<IStyleAttributeInitializationOptions>,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+
     let attributeToUpdate = this.getLayerStyleAttribute(attributeName);
     if (!attributeToUpdate) {
       attributeToUpdate = this.registerStyleAttribute({
@@ -82,8 +83,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
         name: attributeName,
       });
     }
-
-
     const { scale } = options;
     if (scale && attributeToUpdate) {
       // TODO: 需要比较新旧值确定是否需要 rescale

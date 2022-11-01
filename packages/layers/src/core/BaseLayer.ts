@@ -369,7 +369,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       );
       this.multiPassRenderer.setLayer(this);
     }
-
     // 完成样式服务注册完成前添加的属性
     this.pendingStyleAttributes.forEach(
       ({ attributeName, attributeField, attributeValues, updateOptions }) => {
@@ -685,7 +684,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return this;
     }
     this.layerService.beforeRenderData(this);
-
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
     }
@@ -1325,9 +1323,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    // if (this.encodeDataLength <= 0 && !this.forceRender) {
-    //   return this;
-    // }
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return this;
+    }
     this.hooks.beforeRender.call();
     this.models.forEach((model) => {
       model.draw(
@@ -1366,8 +1364,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         },
       });
     }
-
-    if (!this.inited) {
+    if (!this.startInit) {
+      // 开始初始化执行
       this.pendingStyleAttributes.push({
         attributeName: type,
         attributeField: field,
