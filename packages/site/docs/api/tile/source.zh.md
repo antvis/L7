@@ -19,14 +19,16 @@ const source = new Source(url, {
   parser: ...
 })
 ```
+
 #### url
 
 瓦片服务的 `url` 支持多种格式
 
 - 单服务器 向一台服务器请求瓦片数据
 - 多服务器 向多台服务器请求同一份服务的瓦片数据
+
   - 使用大括号的写法请求设置多服务器，如 `{1-3}`、`{a-c}`。
-  
+
 - 请求多文件 同时请求多份瓦片服务的瓦片数据
   - 使用数组的方式设置多服务
 
@@ -71,31 +73,31 @@ const source = new Source(url, {
 
 - 通用参数
 
-| 参数     | 类型      | 默认值   | 描述           |
-| -------- | -------- | ------- | ------------- |
-| tileSize | `number` | `256`   | 请求的瓦片尺寸   | 
-| minZoom  | `number` | `0`     | 请求瓦片的最小层级 | 
-| maxZoom  | `number` | `Infinity`| 请求瓦片的最大层级 |
-| zoomOffset  | `number` | `0`| 请求瓦片层级的偏移量 | 
-| extent  | `[number, number, number, number]` | `[-Infinity,-Infinity,Infinity,Infinity,]`| 请求瓦片的边界 | 
-| updateStrategy  | `UpdateTileStrategy` | `replace`| 瓦片的替换策略 | 
+| 参数           | 类型                               | 默认值                                     | 描述                 |
+| -------------- | ---------------------------------- | ------------------------------------------ | -------------------- |
+| tileSize       | `number`                           | `256`                                      | 请求的瓦片尺寸       |
+| minZoom        | `number`                           | `0`                                        | 请求瓦片的最小层级   |
+| maxZoom        | `number`                           | `Infinity`                                 | 请求瓦片的最大层级   |
+| zoomOffset     | `number`                           | `0`                                        | 请求瓦片层级的偏移量 |
+| extent         | `[number, number, number, number]` | `[-Infinity,-Infinity,Infinity,Infinity,]` | 请求瓦片的边界       |
+| updateStrategy | `UpdateTileStrategy`               | `replace`                                  | 瓦片的替换策略       |
 
 ```js
 type UpdateTileStrategy = 'realtime' | 'overlap' | 'replace';
- ```
+```
 
 - 图片栅格 - TMS
 
-| 参数     | 类型      | 值       | 描述          |
-| -------- | -------- | ------- | ------------- |
-| type     | `string` | `rasterTile`| 请求图片类型的瓦片 | 
+| 参数 | 类型     | 值           | 描述               |
+| ---- | -------- | ------------ | ------------------ |
+| type | `string` | `rasterTile` | 请求图片类型的瓦片 |
 
 - 图片栅格 - WMS
 
-| 参数     | 类型      | 值       | 描述          |
-| -------- | -------- | ------- | ------------- |
-| type     | `string` | `rasterTile`| 请求图片类型的瓦片 | 
-| wmtsOptions     | `IWmtsOptions` | `\`| 请求服务请求参数 | 
+| 参数        | 类型           | 值                    | 描述               |
+| ----------- | -------------- | --------------------- | ------------------ |
+| type        | `string`       | `rasterTile`          | 请求图片类型的瓦片 |
+| wmtsOptions | `IWmtsOptions` | `\`| 请求服务请求参数 |
 
 - 图片栅格 - WMTS
 - 数据栅格 - arraybuffer
