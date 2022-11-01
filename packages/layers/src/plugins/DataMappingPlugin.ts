@@ -51,10 +51,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
-      const { usage } = layer.getLayerConfig();
-      if (usage === 'basemap') {
-        return;
-      }
       const source = layer.getSource();
       if (layer.layerModelNeedUpdate || !source || !source.inited) {
         return;
@@ -62,12 +58,15 @@ export default class DataMappingPlugin implements ILayerPlugin {
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const filter = styleAttributeService.getLayerStyleAttribute('filter');
       const { dataArray } = source.data;
+      // TODO 数据为空的情况
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      }
 
       const attributesToRemapping = attributes.filter(
         (attribute) => attribute.needRemapping, // 如果filter变化
       );
       let filterData = dataArray;
-
       // 数据过滤完 再执行数据映射
       if (filter?.needRemapping && filter?.scale) {
         filterData = dataArray.filter((record: IParseDataItem) => {
@@ -95,8 +94,8 @@ export default class DataMappingPlugin implements ILayerPlugin {
           );
           layer.setEncodedData(encodeData);
         }
-        // 处理文本更新
-        layer.emit('remapping', null);
+        // 处理文本更新，更新文字形状
+        // layer.emit('remapping', null);
       }
     });
   }
@@ -195,61 +194,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
-    return mappedData;
-  }
-
-  private mapLayerMapping(
-    layer: ILayer,
-    attributes: IStyleAttribute[],
-    data: IParseDataItem[],
-    predata?: IEncodeFeature[],
-  ): IEncodeFeature[] {
-    const usedAttributes = attributes.filter(
-      (attribute) => attribute.scale !== undefined,
-    );
-    const mappedData = data.map((record: IParseDataItem, i) => {
-      const preRecord = predata ? predata[i] : {};
-      const encodeRecord: IEncodeFeature = {
-        id: record._id,
-        coordinates: record.coordinates,
-        ...preRecord,
-      };
-      usedAttributes.forEach((attribute: IStyleAttribute) => {
-        if (
-          attribute.name === 'shape' &&
-          // @ts-ignore
-          layer.shapeOption?.field === 'simple'
-        ) {
-          encodeRecord[attribute.name] = 'simple';
-          attribute.needRemapping = false;
-        } else {
-          const values = this.applyMapLayerAttributeMapping(attribute, record);
-
-          attribute.needRemapping = false;
-
-          // @ts-ignore
-          encodeRecord[attribute.name] =
-            Array.isArray(values) && values.length === 1 ? values[0] : values;
-
-          // 增加对 layer/text/iconfont unicode 映射的解析
-          if (attribute.name === 'shape') {
-            encodeRecord.shape = this.fontService.getIconFontKey(
-              encodeRecord[attribute.name] as string,
-            );
-          }
-        }
-      });
-
-      if (encodeRecord.size === undefined) {
-        // in case not set size
-        encodeRecord.size = 1;
-      }
-      return encodeRecord;
-    }) as IEncodeFeature[];
-
-    // 调整数据兼容 Amap2.0
-    this.adjustData2Amap2Coordinates(mappedData, layer);
-
     return mappedData;
   }
 
@@ -372,29 +316,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     return mappingResult;
     // return attribute.mapping ? attribute.mapping(params) : [];
-  }
-
-  private applyMapLayerAttributeMapping(
-    attribute: IStyleAttribute,
-    record: { [key: string]: unknown },
-  ) {
-    if (!attribute.scale) {
-      return [];
-    }
-    const scalers = attribute?.scale?.scalers || [];
-    const params: unknown[] = [];
-
-    scalers.forEach(({ field }) => {
-      if (
-        record.hasOwnProperty(field) ||
-        attribute.scale?.type === 'variable'
-      ) {
-        params.push(record[field]);
-      }
-    });
-
-    const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
-    return mappingResult;
   }
 
   private getArrowPoints(p1: Position, p2: Position) {

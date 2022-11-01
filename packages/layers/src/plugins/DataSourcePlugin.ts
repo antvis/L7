@@ -10,25 +10,32 @@ export default class DataSourcePlugin implements ILayerPlugin {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
       let source = layer.getSource();
+
       if (!source) {
         // Tip: 用户没有传入 source 的时候使用图层的默认数据
         const { data, options } =
           layer.sourceOption || layer.defaultSourceConfig;
         source = new Source(data, options);
-        await new Promise((resolve) => {
-          source.on('update', (e) => {
-            if (e.type === 'inited') {
-              layer.initSource(source);
-            }
-            resolve(null);
-          });
-        });
+        layer.setSource(source);
+        // await new Promise((resolve) => {
+        //   source.on('update', (e) => {
+        //     if (e.type === 'inited') {
+        //       layer.initSource(source);
+        //     }
+        //     resolve(null);
+        //   });
+        // });
       }
       if (source.inited) {
         this.updateClusterData(layer);
       } else {
-        source.once('update', () => {
-          this.updateClusterData(layer);
+        await new Promise((resolve) => {
+          source.on('update', (e) => {
+            if (e.type === 'inited') {
+              this.updateClusterData(layer);
+            }
+            resolve(null);
+          });
         });
       }
     });
@@ -36,6 +43,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
     // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tapPromise('DataSourcePlugin', async () => {
       const neeUpdateCluster = this.updateClusterData(layer);
+
       const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
       layer.dataState.dataSourceNeedUpdate = false;
       return neeUpdateCluster || dataSourceNeedUpdate;

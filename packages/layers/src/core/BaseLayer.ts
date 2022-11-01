@@ -673,7 +673,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    */
   public renderLayers(): void {
     this.rendering = true;
-
     this.layerService.renderLayers();
 
     this.rendering = false;
@@ -685,6 +684,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.tileLayer.render();
       return this;
     }
+    this.layerService.beforeRenderData(this);
 
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
@@ -698,9 +698,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * renderMultiPass 专门用于渲染支持 multipass 的 layer
    */
   public async renderMultiPass() {
-    if (this.encodeDataLength <= 0 && !this.forceRender) {
-      return;
-    }
+    // if (this.encodeDataLength <= 0 && !this.forceRender) {
+    //   return;
+    // }
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       // multi render 开始执行 multiPassRender 的渲染流程
       await this.multiPassRenderer.render();
@@ -1043,7 +1043,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.layerSource) {
       this.layerSource.off('update', this.sourceEvent);
     }
-
     this.layerSource = source;
     this.clusterZoom = 0;
 
@@ -1056,7 +1055,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.sourceEvent();
     }
     // this.layerSource.inited 为 true update 事件不会再触发
-    this.layerSource.on('update', () => {
+    this.layerSource.on('update', ({ type }) => {
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
@@ -1064,7 +1063,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           this.mapService.setCoordCenter(layerCenter);
         }
       }
-      this.sourceEvent();
+
+      if (type === 'update') {
+        // source 初始化不需要处理
+        this.sourceEvent();
+      }
     });
   }
   // layer 初始化source
@@ -1322,21 +1325,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public renderModels(isPicking?: boolean) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    if (this.encodeDataLength <= 0 && !this.forceRender) {
-      return this;
-    }
-    // TODO 待评估
-    // if (this.layerModelNeedUpdate && this.layerModel) {
-
-    //   this.layerModel.buildModels((models: IModel[]) => {
-    //     this.models = models;
-    //     this.hooks.beforeRender.call();
-    //     this.layerModelNeedUpdate = false;
-    //   });
+    // if (this.encodeDataLength <= 0 && !this.forceRender) {
+    //   return this;
     // }
-    this.layerService.beforeRenderData(this);
     this.hooks.beforeRender.call();
-
     this.models.forEach((model) => {
       model.draw(
         {
@@ -1345,7 +1337,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         isPicking,
       );
     });
-
     this.hooks.afterRender.call();
     return this;
   }

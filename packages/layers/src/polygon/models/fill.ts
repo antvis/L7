@@ -28,13 +28,13 @@ export default class FillModel extends BaseModel {
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
+      console.log(encodeData)
       const { data, width, height } = this.calDataFrame(
         this.cellLength,
         encodeData,
         this.cellProperties,
       );
       this.rowCount = height; // 当前数据纹理有多少行
-
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({

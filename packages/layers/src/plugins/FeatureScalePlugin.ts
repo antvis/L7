@@ -1,7 +1,6 @@
 import {
   ILayer,
   ILayerPlugin,
-  IParserData,
   IScale,
   IScaleOptions,
   IStyleAttribute,
@@ -42,17 +41,6 @@ const scaleMap = {
 export default class FeatureScalePlugin implements ILayerPlugin {
   private scaleOptions: IScaleOptions = {};
 
-  private getSourceData(layer: ILayer, callback: (data: IParserData) => void) {
-    const source = layer.getSource();
-    if (source.inited) {
-      callback(source.data);
-    } else {
-      source.once('update', () => {
-        callback(source.data);
-      });
-    }
-  }
-
   public apply(
     layer: ILayer,
     {
@@ -82,18 +70,16 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         const dataArray = layer.getSource().data.dataArray;
 
         if (Array.isArray(dataArray) && dataArray.length === 0) {
-          return;
+          return true;
         }
         this.caculateScalesForAttributes(attributes || [], dataArray);
         layer.layerModelNeedUpdate = true;
-
         return true;
       },
     );
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
-      const { usage } = layer.getLayerConfig();
-      if (layer.layerModelNeedUpdate || usage === 'basemap') {
+      if (layer.layerModelNeedUpdate) {
         return;
       }
       this.scaleOptions = layer.getScaleOptions();

@@ -21,7 +21,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
     // clear layerModel resource
     // 初始化 Model
     await layer.buildModels();
-    layer.layerModelNeedUpdate = false;
+    // layer.layerModelNeedUpdate = false;
   }
 
   public apply(layer: ILayer) {
@@ -43,7 +43,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
         }
         if (layer.getSource().isTile) {
           layer.tileLayer = new TileLayer(layer);
-          return;
+          return false;
         }
         await this.prepareLayerModel(layer);
         return true;
