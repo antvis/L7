@@ -54,6 +54,7 @@ export default class BaseTileLayer {
       this.tilePickService = new TilePickService({
         tileLayerService:  this.tileLayerService,
         layerService:this.layerService,
+        parent
       })
 
       // 重置

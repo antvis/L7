@@ -1,9 +1,11 @@
-import { ILayerService, ITile, ITilePickService, IInteractionTarget } from '@antv/l7-core';
+import { ILayerService, ITile, ITilePickService, IInteractionTarget, ILayer, IPickingService, TYPES } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
+import { lngLatInExtent } from '@antv/l7-utils';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
+  parent: ILayer;
 }
 
 const SELECT = 'select';
@@ -12,10 +14,12 @@ export class TilePickService implements ITilePickService{
   private layerService: ILayerService;
   private tileLayerService: TileLayerService;
   private tileSourceService: TileSourceService;
+  private parent: ILayer;
   private tilePickID = new Map();
-  constructor({ layerService, tileLayerService }: ITilePickServiceOptions) {
+  constructor({ layerService, tileLayerService, parent }: ITilePickServiceOptions) {
     this.layerService = layerService;
     this.tileLayerService = tileLayerService;
+    this.parent = parent;
     this.tileSourceService = new TileSourceService();
   }
   pickRender(target: IInteractionTarget) {
@@ -24,11 +28,37 @@ export class TilePickService implements ITilePickService{
     if (tile) {
       // TODO 多图层拾取
       const pickLayer = tile.getMainLayer();
+      
+      if(pickLayer?.type === 'RasterLayer') {
+        const extent = pickLayer.getSource().extent;
+        
+        return lngLatInExtent(target.lngLat, extent);
+      }
       if (pickLayer) {
         pickLayer.layerPickService.pickRender(target)
       }
     }
   }
+
+  public pick(layer: ILayer, target: IInteractionTarget) {
+    const container = this.parent.getContainer();
+    const pickingService = container.get<IPickingService>(
+      TYPES.IPickingService,
+    );
+    if(layer.type === 'RasterLayer') {
+
+      const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
+      if (tile && tile.getMainLayer() !== undefined) {
+        const pickLayer = tile.getMainLayer() as ILayer;
+        return pickLayer.layerPickService.pickRasterLayer(pickLayer, target, this.parent);
+      }
+      return false;
+    }
+    this.pickRender(target);
+    
+    return pickingService.pickFromPickingFBO(layer, target);
+  }
+
   selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
@@ -100,5 +130,11 @@ export class TilePickService implements ITilePickService{
     // 将 feature 列表合并后返回
     // 统一返回成 polygon 的格式 点、线、面可以通用
     return this.tileSourceService.getCombineFeature(features);
+  }
+
+  // Tip: for interface define
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public pickRasterLayer(layer: ILayer, target: IInteractionTarget, parent?: ILayer) {
+    return false;
   }
 }

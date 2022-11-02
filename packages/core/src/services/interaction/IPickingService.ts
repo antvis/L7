@@ -7,6 +7,16 @@ export interface IPickingService {
   init(id: string): void;
   pickFromPickingFBO(layer: ILayer, target: IInteractionTarget): boolean;
   pickBox(layer: ILayer, box: [number, number, number, number]): any[];
+  triggerHoverOnLayer(layer: ILayer,
+    target: {
+      x: number;
+      y: number;
+      type: string;
+      lngLat: ILngLat;
+      feature?: unknown;
+      featureId?: number | null;
+    }): void;
+
   boxPickLayer(
     layer: ILayer,
     box: [number, number, number, number],
@@ -16,6 +26,8 @@ export interface IPickingService {
 }
 
 export interface ILayerPickService {
+  pickRasterLayer(layer: ILayer, target: IInteractionTarget, parent?: ILayer): boolean;
+  pick(layer: ILayer, target: IInteractionTarget): boolean;
   /**
    * 绘制拾取图层
    * @param target 触发对象

@@ -67,6 +67,10 @@ export default () => {
           },
         });
 
+        layer.on('click', (e) => {
+          console.log(e)
+        })
+
       scene.addLayer(layer);
       
     });

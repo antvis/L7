@@ -126,10 +126,10 @@ export default () => {
           //   console.log('***')
           // }, 2000)
 
-          // layer.on('click', (e) => {
-          //   console.log('layer click');
-          //   console.log(e);
-          // });
+          layer.on('click', (e) => {
+            console.log('layer click');
+            console.log(e);
+          });
 
           setTimeout(() => {
             layer.style({

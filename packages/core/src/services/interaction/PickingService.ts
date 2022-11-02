@@ -199,7 +199,6 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
-
     const pickedColors: Uint8Array | undefined = readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
@@ -209,14 +208,6 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
-    this.pickedColors = pickedColors;
-
-    // let pickedColors = new Uint8Array(4)
-    // this.rendererService.getGLContext().readPixels(
-    //   Math.floor(xInDevicePixel / this.pickBufferScale),
-    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
-    //   1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pickedColors)
-    // console.log(pickedColors[0] == pixels[0] && pickedColors[1] == pixels[1] && pickedColors[2] == pixels[2])
 
     if (
       pickedColors[0] !== 0 ||
@@ -381,7 +372,7 @@ export default class PickingService implements IPickingService {
         
           // 将当前的 layer 绘制到 pickingFBO
           // 普通图层和瓦片图层的 layerPickService 拥有不同的 pickRender 方法
-          layer.layerPickService.pickRender(target);
+          // layer.layerPickService.pickRender(target);
 
           // layer.hooks.beforePickingEncode.call();
 
@@ -395,14 +386,18 @@ export default class PickingService implements IPickingService {
           // }
           // layer.renderModels(true);
           // layer.hooks.afterPickingEncode.call();
-          const isPicked = this.pickFromPickingFBO(layer, target);
+          // const isPicked = this.pickFromPickingFBO(layer, target);
+
+          const isPicked = layer.layerPickService.pick(layer, target)
+
+          // this.pickRasterLayer(layer, target)
 
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
     });
   }
-  private triggerHoverOnLayer(
+  public triggerHoverOnLayer(
     layer: ILayer,
     target: {
       x: number;
