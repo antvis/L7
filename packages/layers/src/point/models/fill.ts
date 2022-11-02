@@ -41,7 +41,6 @@ export default class FillModel extends BaseModel {
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.updateUnit(unit);
-
     if (
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
@@ -68,7 +67,6 @@ export default class FillModel extends BaseModel {
         this.cellProperties,
       );
       this.rowCount = height; // 当前数据纹理有多少行
-
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({

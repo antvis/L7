@@ -7,9 +7,6 @@ import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import {
-  IInteractionTarget,
-} from '../interaction/IInteractionService';
 import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 
 @injectable()
@@ -145,7 +142,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     }
     this.alreadyInRendering = true;
     this.clear();
-    
     for (const layer of this.layerList) {
       if (layer.masks.filter((m)=>m.inited).length > 0) {
         // 清除上一次的模版缓存
@@ -178,12 +174,15 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   }
 
   public async beforeRenderData(layer: ILayer) {
-    const res = await layer.hooks.beforeRenderData.promise()
-    res && this.renderLayers();
+    const flag = await layer.hooks.beforeRenderData.promise();
+    if(flag) {
+      this.renderLayers();
+    }
+    
   }
 
   async renderLayer(layer: ILayer){
-    
+
     if (layer.masks.filter((m)=>m.inited).length > 0) {
       layer.masks.map(mask =>{
           this.renderService.clear({
@@ -261,44 +260,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     return this.shaderPicking;
   }
   
-  // For Pick
-
-  // 拾取绘制
-  public pickRender(layer: ILayer,target: IInteractionTarget) {
-    if(layer.tileLayer) {
-      // 瓦片图层（layerGroup）走独立的拾取渲染
-     return layer.tileLayer.pickRender(target)
-    }
-
-    // 普通瓦片（单个图层的拾取渲染）
-    layer.hooks.beforePickingEncode.call();
-
-    if (layer.masks.length > 0) {
-      // 若存在 mask，则在 pick 阶段的绘制也启用
-      layer.masks.map(async (m: ILayer) => {
-        m.render();
-      });
-    }
-    layer.renderModels(true);
-    layer.hooks.afterPickingEncode.call();
-
-  }
-
-  public selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
-     
-    if(layer.tileLayer) {
-      return layer.tileLayer.selectFeature(pickedColors)
-     }
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
-  }
-
-  public highlightPickedFeature(layer: ILayer,pickedColors: Uint8Array | undefined): void {
-    if(layer.tileLayer) {
-      return layer.tileLayer.highlightPickedFeature(pickedColors)
-     }
-  }
 
   public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [

@@ -687,9 +687,6 @@ export interface ILayerService {
   renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
-  pickRender(layer: ILayer,target?: IInteractionTarget):void
-  selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined):void;
-  highlightPickedFeature(layer: ILayer, pickedColors: Uint8Array | undefined):void;
 
   destroy(): void;
 }

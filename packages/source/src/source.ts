@@ -202,6 +202,7 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     this.dataArrayChanged = false;
     this.initCfg(options);
+   
     this.init().then(()=>{
       this.emit('update',{
         type: 'update'
