@@ -1,7 +1,6 @@
 import { ILayerService, ITile, ITilePickService, IInteractionTarget, ILayer, IPickingService, TYPES } from '@antv/l7-core';
 import { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
-import { lngLatInExtent } from '@antv/l7-utils';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
@@ -28,12 +27,6 @@ export class TilePickService implements ITilePickService{
     if (tile) {
       // TODO 多图层拾取
       const pickLayer = tile.getMainLayer();
-      
-      if(pickLayer?.type === 'RasterLayer') {
-        const extent = pickLayer.getSource().extent;
-        
-        return lngLatInExtent(target.lngLat, extent);
-      }
       if (pickLayer) {
         pickLayer.layerPickService.pickRender(target)
       }
