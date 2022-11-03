@@ -39,11 +39,9 @@ export default class VectorTile extends Tile {
         }, {
           parser: {
             type: 'geojson',
+            featureId: 'id'
           }
         })
-        // .style({
-        //   opacity: 1
-        // });
       await this.addMask(layer, mask)
     }
     await this.addLayer(layer);

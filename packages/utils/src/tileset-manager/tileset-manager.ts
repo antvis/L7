@@ -113,7 +113,7 @@ export class TilesetManager extends EventEmitter {
       return (
         this.options.warp || (tile.x >= 0 && tile.x < Math.pow(2, verifyZoom))
       );
-    }); 
+    });
     this.currentTiles = tileIndices.map(({ x, y, z }) => {
       let tile = this.getTile(x, y, z);
       if (tile) {

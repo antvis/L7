@@ -368,33 +368,7 @@ export default class PickingService implements IPickingService {
             stencil: 0,
             depth: 1,
           });
-
-          // Tip: clear last picked tilelayer state
-          // this.pickedTileLayers.map((pickedTileLayer) =>
-          //   (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
-          // );
-
-          // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
-          // if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
-          //   return (layer.tileLayer as ITileLayer).pickLayers(target);
-          // }
-        
-          // 将当前的 layer 绘制到 pickingFBO
-          // 普通图层和瓦片图层的 layerPickService 拥有不同的 pickRender 方法
           layer.layerPickService.pickRender(target);
-
-          // layer.hooks.beforePickingEncode.call();
-
-          // if (layer.masks.length > 0) {
-          //   // 若存在 mask，则在 pick 阶段的绘制也启用
-          //   layer.masks.map(async (m: ILayer) => {
-          //     m.hooks.beforeRender.call();
-          //     m.render();
-          //     m.hooks.afterRender.call();
-          //   });
-          // }
-          // layer.renderModels(true);
-          // layer.hooks.afterPickingEncode.call();
           const isPicked = this.pickFromPickingFBO(layer, target);
 
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;

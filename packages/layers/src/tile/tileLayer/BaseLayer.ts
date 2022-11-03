@@ -195,8 +195,6 @@ export default class BaseTileLayer {
             this.tileLayerService.addTile(tileLayer);
             this.layerService.reRender()
           }
-          this.tileLayerService.addTile(tileLayer);
-          this.layerService.reRender()
         } else {
           this.tileLayerService.updateTileVisible(tile);
           this.tilePickService.setPickState();
