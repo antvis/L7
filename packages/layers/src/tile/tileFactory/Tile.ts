@@ -1,7 +1,6 @@
 import { ILayer, createLayerContainer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
-import { Feature, Properties } from '@turf/helpers';
 
 export default abstract class Tile implements ITile{
   public x: number;
@@ -76,47 +75,17 @@ export default abstract class Tile implements ITile{
     return this.layers[0];
   }
 
-  public getFeatures(sourceLayer: string | undefined){
-    if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) {
-      return [];
-    }
-    
-    const vectorTile = this.sourceTile.data?.layers[sourceLayer];
-
-    if(Array.isArray(vectorTile.features)) {
-      // 数据不需要被解析 geojson-vt 类型
-      return vectorTile.features;
-    }
-
-    const { x, y, z } = this.sourceTile;
-    const features: Feature<GeoJSON.Geometry, Properties>[] = [];
-    for( let i = 0; i < vectorTile.length; i++ ) {
-      const vectorTileFeature = vectorTile.feature(i);
-      const feature = vectorTileFeature.toGeoJSON(x, y, z);
-
-      features.push({
-        ...feature,
-        properties: {
-          id: feature.id,
-          ...feature.properties,
-        },
-      })
-    }
-   
-    return features;
+  public  getFeatures():any[] {
+    return []
   }
-
+    
   /**
    * 在一个 Tile 中可能存在一个相同 ID 的 feature
    * @param id 
    * @returns 
    */
-  public getFeatureById(id: number) {
-    const layer = this.getMainLayer();
-    if (!layer) {
-      return [];
-    }
-    return layer.getSource().data.dataArray.filter(d => d._id === id);
+  public getFeatureById():any[] {
+    return []
   }
 
   public destroy() {

@@ -209,14 +209,8 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
-    this.pickedColors = pickedColors;
 
-    // let pickedColors = new Uint8Array(4)
-    // this.rendererService.getGLContext().readPixels(
-    //   Math.floor(xInDevicePixel / this.pickBufferScale),
-    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
-    //   1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pickedColors)
-    // console.log(pickedColors[0] == pixels[0] && pickedColors[1] == pixels[1] && pickedColors[2] == pixels[2])
+    this.pickedColors = pickedColors;
 
     if (
       pickedColors[0] !== 0 ||
@@ -224,7 +218,7 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-      
+      // 瓦片数据获取性能问题需要优化
       const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
@@ -362,15 +356,16 @@ export default class PickingService implements IPickingService {
           return layer.needPick(target.type)})
         .reverse()
         .some((layer) => {
+        
           clear({
             framebuffer: this.pickingFBO,
             color: [0, 0, 0, 0],
             stencil: 0,
             depth: 1,
           });
+
           layer.layerPickService.pickRender(target);
           const isPicked = this.pickFromPickingFBO(layer, target);
-
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
@@ -396,31 +391,4 @@ export default class PickingService implements IPickingService {
     }
   }
 
-  /**
-   * highlight 如果直接修改选中 feature 的 buffer，存在两个问题：
-   * 1. 鼠标移走时无法恢复
-   * 2. 无法实现高亮颜色与原始原色的 alpha 混合
-   * 因此高亮还是放在 shader 中做比较好
-   * @example
-   * this.layer.color('name', ['#000000'], {
-   *  featureRange: {
-   *    startIndex: pickedFeatureIdx,
-   *    endIndex: pickedFeatureIdx + 1,
-   *  },
-   * });
-   */
-  private highlightPickedFeature(
-    layer: ILayer,
-    pickedColors: Uint8Array | undefined,
-  ) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeHighlight.call([r, g, b]);
-  }
-
-  private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
-  }
 }

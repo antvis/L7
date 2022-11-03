@@ -53,6 +53,7 @@ export class TileLayerService {
   }
   updateTileVisible(sourceTile: SourceTile) {
     const tile = this.getTile(sourceTile.key);
+    console.log()
     tile?.updateVisible(sourceTile.isVisible);
 
   }
