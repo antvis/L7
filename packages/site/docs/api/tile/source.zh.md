@@ -176,31 +176,32 @@ const source = new Source(data, {
 
 我们通过 `parser` 中的 `geojsonOptions` 参数透传 `geojson-vt` 插件的参数。其余参数和普通矢量瓦片的 `parser` 参数保持一致。
 
-| 参数             | 类型                | 值    | 描述                   |
-| ---------------- | ------------------- | ----- | ---------------------- |
-| type             | `string`            | `geojsonvt` | 矢量瓦片前端切分               |
-| geojsonvtOptions | `IGeojsonvtOptions` | `/`   | 设置瓦片数据切分的参数 |
+| 参数             | 类型                | 值          | 描述                   |
+| ---------------- | ------------------- | ----------- | ---------------------- |
+| type             | `string`            | `geojsonvt` | 矢量瓦片前端切分       |
+| geojsonvtOptions | `IGeojsonvtOptions` | `/`         | 设置瓦片数据切分的参数 |
 
 #### geojsonOptions: IGeojsonvtOptions
 
 `geojsonOptions` 支持如下参数：
 
-| 参数             | 类型      | 默认值  | 描述           |
-| ----------------| --------- | ----- | -------------- |
-| maxZoom         | `number`  | `14`  | max zoom to preserve detail on  |
-| indexMaxZoom    | `number`  | `5`   | max zoom in the tile index  |
-| indexMaxPoints  | `number`  | `100000`| max number of points per tile in the tile index  |
-| tolerance       | `number`  | `3`   | simplification tolerance (higher means simpler)  |
-| extent          | `number`  | `4096`| tile extent |
-| buffer          | `number`  | `64`  | tile buffer on each side |
-| lineMetrics     | `boolean` | `false` | whether to calculate line metrics |
-| promoteId       | `string|null` | `null`  | name of a feature property to be promoted to feature.id |
-| generateId      | `boolean` | `true`  | whether to generate feature ids. Cannot be used with promoteId |
-| debug           | `0, 1 or 2`| `0`    | logging level (0, 1 or 2) |
-
+| 参数           | 类型          | 默认值   | 描述                                                           |
+| -------------- | ------------- | -------- | -------------------------------------------------------------- |
+| maxZoom        | `number`      | `14`     | max zoom to preserve detail on                                 |
+| indexMaxZoom   | `number`      | `5`      | max zoom in the tile index                                     |
+| indexMaxPoints | `number`      | `100000` | max number of points per tile in the tile index                |
+| tolerance      | `number`      | `3`      | simplification tolerance (higher means simpler)                |
+| extent         | `number`      | `4096`   | tile extent                                                    |
+| buffer         | `number`      | `64`     | tile buffer on each side                                       |
+| lineMetrics    | `boolean`     | `false`  | whether to calculate line metrics                              |
+| promoteId      | `string|null` | `null`   | name of a feature property to be promoted to feature.id        |
+| generateId     | `boolean`     | `true`   | whether to generate feature ids. Cannot be used with promoteId |
+| debug          | `0, 1 or 2`   | `0`      | logging level (0, 1 or 2)                                      |
 
 ```javascript
- fetch('https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json')
+fetch(
+  'https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json',
+)
   .then((d) => d.json())
   .then((data) => {
     const source = new Source(data, {
