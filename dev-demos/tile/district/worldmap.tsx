@@ -7,7 +7,7 @@ import {
   PointLayer,
 } from '@antv/l7';
 // @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { data } from './data';
 
@@ -18,11 +18,11 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new Map({
-        center: [120, 30],
+      map: new GaodeMapV2({
+        center: [0, 30],
         // zoom: 12,
         minZoom: 0,
-        zoom: 3,
+        zoom: 1,
       }),
     });
 

@@ -25,6 +25,7 @@ export default class FillModel extends BaseModel {
         dir: 'in',
       },
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
@@ -52,7 +53,9 @@ export default class FillModel extends BaseModel {
               width: 1,
               height: 1,
             });
+
     }
+
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),

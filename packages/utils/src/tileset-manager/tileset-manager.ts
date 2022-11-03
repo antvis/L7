@@ -109,10 +109,11 @@ export class TilesetManager extends EventEmitter {
       verifyZoom,
       latLonBoundsBuffer,
     ).filter((tile) => {
+      // 处理数据 warp
       return (
-        this.options.warp || (tile.x >= 0 && tile.x <= Math.pow(verifyZoom, 2))
+        this.options.warp || (tile.x >= 0 && tile.x < Math.pow(2, verifyZoom))
       );
-    }); // TODO  数据循环
+    }); 
     this.currentTiles = tileIndices.map(({ x, y, z }) => {
       let tile = this.getTile(x, y, z);
       if (tile) {
