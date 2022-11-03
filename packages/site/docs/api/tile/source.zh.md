@@ -160,38 +160,63 @@ enum RasterTileType {
 
 瓦片在前端可以实现瓦片数据的切分，而不是依赖瓦片服务请求瓦片数据。
 
+```js
+const source = new Source(data, {
+  parser: {
+    type: 'geojsonvt',
+    geojsonOptions: {
+      maxZoom: 14
+    },
+    ...
+  }
+})
+```
+
+#### parser
+
+我们通过 `parser` 中的 `geojsonOptions` 参数透传 `geojson-vt` 插件的参数。其余参数和普通矢量瓦片的 `parser` 参数保持一致。
+
 | 参数             | 类型                | 值    | 描述                   |
 | ---------------- | ------------------- | ----- | ---------------------- |
-| type             | `string`            | `mvt` | 矢量瓦片               |
+| type             | `string`            | `geojsonvt` | 矢量瓦片前端切分               |
 | geojsonvtOptions | `IGeojsonvtOptions` | `/`   | 设置瓦片数据切分的参数 |
 
+#### geojsonOptions: IGeojsonvtOptions
+
+`geojsonOptions` 支持如下参数：
+
+| 参数             | 类型      | 默认值  | 描述           |
+| ----------------| --------- | ----- | -------------- |
+| maxZoom         | `number`  | `14`  | max zoom to preserve detail on  |
+| indexMaxZoom    | `number`  | `5`   | max zoom in the tile index  |
+| indexMaxPoints  | `number`  | `100000`| max number of points per tile in the tile index  |
+| tolerance       | `number`  | `3`   | simplification tolerance (higher means simpler)  |
+| extent          | `number`  | `4096`| tile extent |
+| buffer          | `number`  | `64`  | tile buffer on each side |
+| lineMetrics     | `boolean` | `false` | whether to calculate line metrics |
+| promoteId       | `string|null` | `null`  | name of a feature property to be promoted to feature.id |
+| generateId      | `boolean` | `true`  | whether to generate feature ids. Cannot be used with promoteId |
+| debug           | `0, 1 or 2`| `0`    | logging level (0, 1 or 2) |
+
+
 ```javascript
-// 普通图层在 source 中直接传入数据，而瓦片图层则在 source 中设置瓦片服务
+ fetch('https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json')
+  .then((d) => d.json())
+  .then((data) => {
+    const source = new Source(data, {
+      parser: {
+        type: 'geojsonvt',
+        maxZoom: 9,
+      },
+    });
 
-import { Source } from '@antv/l7'
-const source = new Source({
-  //  'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-  'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-  {
-    parser: {
-      type: 'rasterTile',
-      ...
-    }
-  }
-})
-
-// 设置栅格瓦片服务
-layer.source(RasterTileSource)
-
-const VectorTileSource = new Source({
-  'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
-  {
-    parser: {
-      type: 'mvt',
-      ...
-    }
-  }
-})
-// 设置矢量瓦片服务
-layer.source(VectorTileSource)
+    const polygon = new PolygonLayer({ featureId: 'COLOR' })
+      .source(source)
+      .color('COLOR')
+      .select(true)
+      .style({
+        opacity: 0.6,
+      });
+    scene.addLayer(polygon);
+  });
 ```
