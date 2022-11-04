@@ -1,17 +1,16 @@
 import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
 import Tile from './Tile';
-import { getTileLayer, getMaskLayer } from './util';
-import { Feature, Properties } from '@turf/helpers';
+import { getTileLayer, isNeedMask } from './util';
+import MaskLayer from '../../mask';
+import { VectorSource } from '@antv/l7-source'
  
 export default class VectorTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig()
+    layerOptions.mask = isNeedMask(this.parent.type);
     const vectorLayer = getTileLayer(this.parent.type);
-    const maskLayer = getMaskLayer(this.parent.type);
-    layerOptions.mask = !!maskLayer;
-  
-    
+
     const sourceOptions = this.getSourceOption();
     if(!sourceOptions){
       this.isLoaded = true;
@@ -21,7 +20,7 @@ export default class VectorTile extends Tile {
       sourceOptions.data,
       sourceOptions.options,
     );
-
+ 
 
     // 初始化数据映射
     Object.keys(attributes).forEach((type) => {
@@ -29,8 +28,17 @@ export default class VectorTile extends Tile {
       // @ts-ignore
       layer[attr](attributes[attr]?.field, attributes[attr]?.values);
     });
-    if (maskLayer) {
-      const mask = new maskLayer({layerType: "MaskLayer"})
+    if(isNeedMask(this.parent.type) || layerOptions.mask) {
+      await this.addTileMask(layer)
+    }
+
+    await this.addLayer(layer);
+    this.setLayerMinMaxZoom(layer);
+    this.isLoaded = true;
+  }
+  // Todo 校验数据有效性
+  protected async addTileMask(layer: ILayer) {
+    const mask = new MaskLayer({layerType: "MaskLayer"})
         .source({
           type: 'FeatureCollection',
           features: [
@@ -43,13 +51,6 @@ export default class VectorTile extends Tile {
           }
         })
       await this.addMask(layer, mask)
-    }
-    await this.addLayer(layer);
-    this.setLayerMinMaxZoom(layer);
-    this.isLoaded = true;
-  }
-  // Todo 校验数据有效性
-  protected beforeInit() {
 
   }
   protected getSourceOption() {
@@ -84,34 +85,9 @@ export default class VectorTile extends Tile {
     }
 
   }
-  public getFeatures(sourceLayer: string | undefined){
-    if(!sourceLayer || !this.sourceTile.data?.layers[sourceLayer]) {
-      return [];
-    }
-    
-    const vectorTile = this.sourceTile.data?.layers[sourceLayer];
-
-    if(Array.isArray(vectorTile.features)) {
-      // 数据不需要被解析 geojson-vt 类型
-      return vectorTile.features;
-    }
-
-    const { x, y, z } = this.sourceTile;
-    const features: Feature<GeoJSON.Geometry, Properties>[] = [];
-    for( let i = 0; i < vectorTile.length; i++ ) {
-      const vectorTileFeature = vectorTile.feature(i);
-      const feature = vectorTileFeature.toGeoJSON(x, y, z);
-
-      features.push({
-        ...feature,
-        properties: {
-          id: feature.id,
-          ...feature.properties,
-        },
-      })
-    }
-   
-    return features;
+  public getFeatures(sourceLayer: string){
+   const source = this.sourceTile.data as VectorSource;
+   return source.getTileData(sourceLayer);
   }
 
   /**

@@ -35,6 +35,7 @@ export default abstract class Tile implements ITile{
     return lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat;
   }
 
+
   protected async addMask(layer: ILayer, mask: ILayer) {
     const container = createLayerContainer(
       this.parent.sceneContainer as Container,
@@ -75,7 +76,7 @@ export default abstract class Tile implements ITile{
     return this.layers[0];
   }
 
-  public  getFeatures():any[] {
+  public  getFeatures(sourceLayer: string | undefined):any[] {
     return []
   }
     
@@ -84,7 +85,7 @@ export default abstract class Tile implements ITile{
    * @param id 
    * @returns 
    */
-  public getFeatureById():any[] {
+  public  getFeatureById(id: number):any[] {
     return []
   }
 

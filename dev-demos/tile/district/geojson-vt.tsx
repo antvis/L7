@@ -22,7 +22,6 @@ export default () => {
     )
       .then((d) => d.json())
       .then((data) => {
-        console.log(data);
         const source = new Source(data, {
           parser: {
             type: 'geojsonvt',

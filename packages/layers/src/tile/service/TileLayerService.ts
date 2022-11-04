@@ -53,15 +53,52 @@ export class TileLayerService {
   }
   updateTileVisible(sourceTile: SourceTile) {
     const tile = this.getTile(sourceTile.key);
-    console.log()
+    // if(sourceTile.isVisible) {
+    //   // 不可见 => 可见 兄弟节点加载完成
+    //   if(sourceTile.parent) {
+    //     const flag = this.isChildrenLoaded(sourceTile.parent)
+    //     tile?.updateVisible(flag);
+    //   } else {
+    //     tile?.updateVisible(true);
+    //   }
+        
+    // } else {
+    //    // 可见 => 不可见 兄弟节点加载完成
+    //    if(sourceTile.parent) {
+    //     const flag = this.isChildrenLoaded(sourceTile.parent)
+    //     tile?.updateVisible(!flag);
+    //   } else {
+    //     tile?.updateVisible(false);
+    //   }
+    // }
+ 
     tile?.updateVisible(sourceTile.isVisible);
 
   }
-  beforeRender() {
-    // TODO 统一处理状态更新 attribute style
-    
+  public isParentLoaded(sourceTile: SourceTile): boolean {
+    const parentTile = sourceTile.parent;
+    if(!parentTile) {
+      return true
+    }
+    const tile = this.getTile(parentTile?.key)
+    if(tile?.isLoaded) { // 递归父级
+      return true
+    }
+ 
+    return false
+
   }
 
+  public isChildrenLoaded(sourceTile: SourceTile):boolean {
+    const childrenTile = sourceTile?.children;
+    if(childrenTile.length === 0) {
+      return true
+    }
+   return childrenTile.some((tile:SourceTile)=>{
+      const tileLayer = this.getTile(tile?.key)
+      return tileLayer?.isLoaded === false
+    })
+  }
   async render() {
     const layers = this.getRenderLayers();
     layers.map(async layer => {

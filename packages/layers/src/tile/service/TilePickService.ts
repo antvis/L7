@@ -99,8 +99,8 @@ export class TilePickService implements ITilePickService{
     // 将 feature 列表合并后返回
     // 统一返回成 polygon 的格式 点、线、面可以通用
 
-    const data = this.tileSourceService.getCombineFeature(features);
+    // const data = this.tileSourceService.getCombineFeature(features);
 
-    return data
+    return []
   }
 }

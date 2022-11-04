@@ -181,10 +181,12 @@ export default class BaseTileLayer {
     if (!this.tilesetManager) {
       return;
     }
+    const minZoom = this.parent.getMinZoom();
+    const maxZoom = this.parent.getMaxZoom()
     await Promise.all(this.tilesetManager.tiles
       .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
       .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
-      .filter((tile: SourceTile) => this.isTileReady(tile)) // 过滤未发生变化的
+      .filter((tile: SourceTile) => tile.z>= minZoom && tile.z < maxZoom)
       .map(async (tile: SourceTile) => {
         if (!this.tileLayerService.hasTile(tile.key)) {
           const tileInstance = getTileFactory(this.parent);
@@ -193,9 +195,11 @@ export default class BaseTileLayer {
           this.tilePickService.setPickState();
           if(tileLayer.getLayers().length!==0) {
             this.tileLayerService.addTile(tileLayer);
+            this.tileLayerService.updateTileVisible(tile);
             this.layerService.reRender()
           }
-        } else {
+        } else {// 已加载瓦片
+          
           this.tileLayerService.updateTileVisible(tile);
           this.tilePickService.setPickState();
           this.layerService.reRender()
@@ -206,21 +210,6 @@ export default class BaseTileLayer {
       // 将事件抛出，图层上可以使用瓦片
       this.parent.emit('tiles-loaded', this.tilesetManager.currentTiles);
     }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isTileReady(tile: SourceTile) {
-    
-    // if (tile.data?.layers && this.sourceLayer) {
-    //   // vector
-    //   const vectorTileLayer = tile.data.layers[this.sourceLayer];
-    //   const features = vectorTileLayer?.features;
-    //   if (!(Array.isArray(features) && features.length > 0)) {
-    //     return false;
-    //   }
-    // }
-
-    return true;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

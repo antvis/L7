@@ -15,7 +15,14 @@ import { data } from './data';
 export default () => {
   useEffect(() => {
     const counts = [10000, 5000, 1000, 500, 100];
-    const color = ['#41ae76', '#99d8c9', '#ccece6', '#e5f5f9', '#f7fcfd'];
+    const color = [
+      '#e41a1c',
+      '#377eb8',
+      '#4daf4a',
+      '#984ea3',
+      '#ff7f00',
+      '#ffff33',
+    ];
     const scene = new Scene({
       id: 'map',
       stencil: true,
@@ -62,7 +69,7 @@ export default () => {
             return c.name == namestr;
           });
           if (!country) {
-            return '#fff';
+            return '#ffff33';
           }
           const qz = ((country.qz as unknown) as number) * 1;
           if (qz > counts[0]) {

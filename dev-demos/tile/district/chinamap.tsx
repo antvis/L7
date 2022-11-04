@@ -123,7 +123,6 @@ export default () => {
       scene.addLayer(line);
       scene.addLayer(line2);
       scene.addLayer(text);
-
       scene.addLayer(debugerLayer);
     });
   }, []);
