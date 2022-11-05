@@ -4,44 +4,54 @@ order: 2
 ---
 `markdown:docs/common/style.md`
 
-L7 瓦片图层提供了对图片栅格瓦片、数据栅格瓦片、矢量瓦片的支持，通过使用瓦片图层，用户可以更加自由的选择地图底图，同时使用瓦片图层作为底图意味着不会增加 `webgl` 实例，对需要同时使用多个地图图表的情形更加友好。
+矢量瓦片通常可以用于大数据量地理数据的渲染，借助瓦片的特性分布请求渲染数据，从而达到减少请求、加载时间的等待，优化使用体验的目的。同时，在不需要全量加载数据的场景下，通过矢量瓦片的形式可以在保证体验的前提下有效减少数据的渲染量，减少渲染压力。
 
-### layer
+### 使用
 
-L7 支持多种类型的矢量图层。
+`L7` 支持多种类型的矢量图层，同时为了减少降低新增概念，矢量瓦片图层和普通的图层保持相同的使用方法，只是在 `source` 数据类型上有所区别。以点图层为列，也就是说，`PointLayer` 既可以是普通的点图层，也可以是矢量点图层。
 
-```javascript
-// 矢量瓦片图层
-import { PointLayer } from '@antv/l7';
-import { LineLayer } from '@antv/l7';
-import { PolygonLayer } from '@antv/l7';
+```js
+// 普通点图层
+const layer = new PointLayer()
+.source([{lng: 120, lat: 30}], {parser: {
+  type: 'json',
+  x: 'lng',
+  y: 'lat',
+}})
+.shape('circle')
+.size(10)
+.color('#f00');
+// 矢量点图层瓦片
+const vectorTileLayer = new PointLayer()
+.source('http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+  {
+  parser: {
+    type: 'mvt',
+    maxZoom: 9,
+    extent: [-180, -85.051129, 179, 85.051129],
+  })
+.shape('circle')
+.size(10)
+.color('#f00');
 ```
-
-<img width="80%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*0yJ8QYqOhCMAAAAAAAAAAAAAARQnAQ'>
-
-[在线案例](/zh/examples/tile/vector#polygon)
 
 ### option
 
-矢量瓦片图层可以在初始化的时候传入 `zIndex` 配置图层的渲染顺序。  
-矢量瓦片图层需要在初始化的时候传入 `featureId` 和 `sourceLayer` 参数，`featureId` 用于指定瓦片的拾取高亮，`sourceLayer` 指定绘制矢量数据中那一图层数据。
+在初始化瓦片的时候，除了普通图层支持的 `options` 参数之外，还需要需要我们提前设置矢量数据相关的参数。
+- `featureId`: string
+  - 用于可以自定义指定。用于指定瓦片的拾取高亮。
+- `sourceLayer`: string
+  - 用于必须传入，且要在返回的矢量数据中存在，指定绘制矢量数据中那一图层数据。
 
 ```javascript
 const layer = new RasterLayer({
-  zIndex: 1,
   featureId: 'id',
   sourceLayer: 'water',
 });
 ```
-
-- featureId: string
-  用于可以自定义指定。
-- sourceLayer: string
-  用于必须传入，且要在返回的矢量数据中存在。
-
 ### source
 
-L7 的瓦片图层复用了原有的普通图层，在使用上通过 `source` 来进行区分。
+瓦片图层复用了原有的普通图层，在使用上通过 `source` 来进行区分。
 
 ```javascript
 // 普通图层在 source 中直接传入数据，而瓦片图层则在 source 中设置瓦片服务
@@ -91,42 +101,74 @@ ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要�
 
 ### style
 
-#### opacity: number
+矢量图层的 `style` 样式和普通图层保持一致。
 
-设置矢量图形的透明度。
-🌟 vector text、point、line、polygon
+### 特殊的矢量图层
 
-#### stroke: string
+#### MaskLayer
 
-设置边框的颜色值。
-🌟 vector text、point
+`MaskLayer` 一般用于对另外一个瓦片图层做掩模，`source` 接收数据类型为 `GeoJSON Polygon` 类型的瓦片服务。
 
-#### strokeWidth: number
+```js
+// 对卫星图做掩模
+const mask = new MaskLayer({ sourceLayer: 'ecoregions2'}).source(
+    'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+    {
+      parser: {
+        type: 'mvt',
+        tileSize: 256,
+        maxZoom: 9,
+        extent: [-180, -85.051129, 179, 85.051129],
+      },
+    },
+  )
 
-设置边框的宽度。
-🌟 vector text
+const satellite = new RasterLayer({ mask: true })
+  .source(
+    'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+    {
+      parser: {
+        type: 'rasterTile',
+        tileSize: 256,
+        zoomOffset: 0,
+        updateStrategy: 'overlap',
+      },
+    },
+  )
+```
+#### TileDebugLayer
 
-#### textAllowOverlap: boolean
+用于测试使用，用于展示瓦片金字塔，一般在开发时使用。
 
-是否允许文字覆盖。
-🌟 vector text
+```js
+const layer = new TileDebugLayer();
+scene.addLayer(layer);
+```
 
-#### textAnchor: 'center'
+### 前端瓦片切分方案
 
-文本相对锚点的位置 `center`|`left`|`right`|`top`|`bottom`|`top-left`。
-🌟 vector text
+矢量图层还支持以 `GeoJSON-VT` 的形式实现瓦片数据的前端切片，这就意味着瓦片图层不再依赖后端提供瓦片服务，可以很大程度上减少瓦片图层的使用限制。
 
-#### textOffset: [number, number]
+- `geojsonvt` 需要把 `parser` 的 `type` 类型设置为 `geojsonvt`。
 
-文本相对锚点的偏移量 [水平, 垂直]。
-🌟 vector text
+```js
+fetch( 'https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json')
+.then((d) => d.json())
+.then((data) => {
+  const source = new Source(data, {
+    parser: {
+      type: 'geojsonvt',
+      maxZoom: 9,
+    },
+  });
 
-#### spacing: number
-
-字符间距。
-🌟 vector text
-
-#### padding: [number, number]
-
-文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近。
-🌟 vector text
+  const polygon = new PolygonLayer({ featureId: 'COLOR' })
+    .source(source)
+    .color('COLOR')
+    .select(true)
+    .style({
+      opacity: 0.6,
+    });
+  scene.addLayer(polygon);
+})
+```

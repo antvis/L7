@@ -4,36 +4,192 @@ order: 1
 ---
 `markdown:docs/common/style.md`
 
-L7 的栅格瓦片图层支持了图片栅格瓦片和数据栅格瓦片，其中图片栅格加载普通的 png/jpg 图片，数据栅格可以用于加载 tiff/lerc 文件，也可以加载 png/jpg 等图片作为解析文件。
+栅格瓦片图层包括图片栅格和数据栅格，其中图片栅格通常加载 `png/jpg` 图片，数据栅格则加载 `tiff/lerc` 等栅格数据文件.
 
-## 栅格瓦片图层
-
-```javascript
-// 栅格瓦片图层
-import { RasterLayer } from '@antv/l7';
-```
 
 <img width="80%" style="display: block;margin: 0 auto;" alt="瓦片图层" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*V45WTKljz-YAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/zh/examples/tile/raster#amap-normal)
+### layer
 
-### option
-
-#### mask
-
-栅格瓦片图层可以在初始化的时候配置瓦片的掩模。
-
-```javascript
-const maskData = [...] // geojson
-const layer = new RasterLayer({
-  mask: true,
-  maskfence: maskData;
- });
-```
+栅格瓦片只通过  `RasterLayer` 来创建，同时我们需要根据不同的需求设置不同的 `source` 参数。
 
 ### source
 
-L7 瓦片图层统一在 `source` 中配置瓦片服务，同时用于区别普通的 L7 图层。
+栅格瓦片图层在使用图片栅格和数据栅格的时候需要使用不同的 `source` 参数。
+
+- 通用参数
+
+| 参数           | 类型                               | 默认值                                     | 描述                 |
+| -------------- | ---------------------------------- | ------------------------------------------ | -------------------- |
+| tileSize       | `number`                           | `256`                                      | 请求的瓦片尺寸       |
+| minZoom        | `number`                           | `0`                                        | 请求瓦片的最小层级   |
+| maxZoom        | `number`                           | `Infinity`                                 | 请求瓦片的最大层级   |
+| zoomOffset     | `number`                           | `0`                                        | 请求瓦片层级的偏移量 |
+| extent         | `[number, number, number, number]` | `[-Infinity,-Infinity,Infinity,Infinity,]` | 请求瓦片的边界       |
+| updateStrategy | `UpdateTileStrategy`               | `replace`                                  | 瓦片的替换策略       |
+
+```js
+type UpdateTileStrategy = 'realtime' | 'overlap' | 'replace';
+```
+
+#### 图片栅格 - TMS
+
+| 参数 | 类型     | 值           | 描述               |
+| ---- | -------- | ------------ | ------------------ |
+| type | `string` | `rasterTile` | 请求图片类型的瓦片 |
+
+```js
+const layer = new RasterLayer()
+.source('http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+  {
+    parser: {
+      type: 'rasterTile',
+      tileSize: 256,
+    },
+  },
+);
+```
+
+- 图片栅格 - WMS
+
+| 参数 | 类型     | 值           | 描述               |
+| ---- | -------- | ------------ | ------------------ |
+| type | `string` | `rasterTile` | 请求图片类型的瓦片 |
+
+```js
+const url =
+  'https://pnr.sz.gov.cn/d-suplicmap/dynamap_1/rest/services/LAND_CERTAIN/MapServer/export?F=image&FORMAT=PNG32&TRANSPARENT=true&layers=show:1&SIZE=256,256&BBOX={bbox}&BBOXSR=4326&IMAGESR=3857&DPI=90';
+
+const layer = new RasterLayer().source(url, {
+  parser: {
+    type: 'rasterTile',
+    tileSize: 256,
+    zoomOffset: 1,
+  },
+});
+```
+
+#### 图片栅格 - WMTS
+
+| 参数        | 类型           | 值                 | 描述               |
+| ----------- | -------------- | ------------------ | ------------------ |
+| type        | `string`       | `rasterTile`       | 请求图片类型的瓦片 |
+| wmtsOptions | `IWmtsOptions` | `\` | 设置请求参数 |
+
+`IWmtsOptions` 的参数用于拼接 `url`。
+
+```js
+interface IWmtsOptions {
+  layer: string;
+  version?: string;
+  style?: string;
+  format: string;
+  service?: string;
+  tileMatrixset: string;
+}
+const url1 = 'https://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&';
+const layer1 = new RasterLayer().source(url1, {
+  parser: {
+    type: 'rasterTile',
+    tileSize: 256,
+    wmtsOptions: {
+      layer: 'img',
+      tileMatrixset: 'w',
+      format: 'tiles',
+    },
+  },
+});
+```
+
+#### 数据栅格 - arraybuffer
+
+| 参数     | 类型             | 值            | 描述               |
+| -------- | ---------------- | ------------- | ------------------ |
+| type     | `string`         | `rasterTile`  | 请求栅格类型的瓦片 |
+| dataType | `RasterTileType` | `arraybuffer` | 栅格瓦片的类型     |
+
+```js
+enum RasterTileType {
+  ARRAYBUFFER = 'arraybuffer';
+  IMAGE = 'image';
+  RGB = 'rgb';
+}
+ const tileSource = new Source('https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',{
+    parser: {
+      type: 'rasterTile',
+      dataType: 'arraybuffer',
+      tileSize: 256,
+      maxZoom: 13.1,
+      format: async data => {
+        const tiff = await GeoTIFF.fromArrayBuffer(data);
+        const image = await tiff.getImage();
+        const width = image.getWidth();
+        const height = image.getHeight();
+        const values = await image.readRasters();
+        return { rasterData: values[0], width, height };
+      }
+    }
+  });
+  const layer = new RasterLayer().source(tileSource)
+  .style({
+    domain: [ 0.001, 11.001 ],
+    clampLow: false,
+    rampColors: {
+      colors: colorList,
+      positions
+    }
+  });
+```
+
+#### 数据栅格 - rgb
+
+| 参数     | 类型             | 值           | 描述               |
+| -------- | ---------------- | ------------ | ------------------ |
+| type     | `string`         | `rasterTile` | 请求栅格类型的瓦片 |
+| dataType | `RasterTileType` | `rgb`        | 栅格瓦片的类型     |
+
+```js
+const canvas = document.createElement('canvas');
+canvas.width = 256;
+canvas.height = 256;
+const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+  
+const layer = new RasterLayer().source('http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+  parser: {
+    type: 'rasterTile',
+    dataType: 'rgb',
+    format: async (data: any) => {
+      const blob: Blob = new Blob([new Uint8Array(data)], {type: 'image/png' });
+      const img = await createImageBitmap(blob);
+      ctx.clearRect(0, 0, 256, 256);
+      ctx.drawImage(img, 0, 0, 256, 256);
+      const imgData = ctx.getImageData(0, 0, 256, 256).data;
+      const channelR: number[] = [];
+      const channelG: number[] = [];
+      const channelB: number[] = [];
+      for (let i = 0; i < imgData.length; i += 4) {
+        const R = imgData[i];
+        const G = imgData[i + 1];
+        const B = imgData[i + 2];
+        channelR.push(R);
+        channelG.push(G);
+        channelB.push(B);
+      }
+      return [
+        { rasterData: channelR, width: 256, height: 256 },
+        { rasterData: channelG, width: 256, height: 256 },
+        { rasterData: channelB, width: 256, height: 256 }
+      ]
+    },
+    operation: {
+      r: ['band', 0],
+      g: ['band', 1],
+      b: ['band', 2],
+    }
+  },
+} )
+```
 
 #### parser
 
