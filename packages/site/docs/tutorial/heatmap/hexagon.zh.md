@@ -4,28 +4,93 @@ order: 2
 ---
 `markdown:docs/common/style.md`
 
-将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局
+将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局。
 
-## 使用
+<div>
+  <div style="width:60%;float:left; margin: 10px;">
+    <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SLcGSbvZoEwAAAAAAAAAAABkARQnAQ'>
+  </div>
+</div>
+
+### 实现
+
+下面我们来介绍如何绘制一个简单的蜂窝热力图。
+
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/heatmap/hexagon/#china)
 
 ```javascript
-import { HeatmapLayer } from '@antv/l7';
-```
+import { Scene, HeatmapLayer } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-maps';
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*SLcGSbvZoEwAAAAAAAAAAABkARQnAQ'>
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    style: 'dark',
+    pitch: 43,
+    center: [ 120.13383079335335, 29.651873105004427 ],
+    zoom: 7.068989519212174
+  })
+});
+scene.on('loaded', () => {
+  fetch('https://gw.alipayobjects.com/os/basement_prod/a1a8158d-6fe3-424b-8e50-694ccf61c4d7.csv')
+    .then(res => res.text())
+    .then(data => {
+      const layer = new HeatmapLayer({})
+        .source(data, {
+          parser: {
+            type: 'csv',
+            x: 'lng',
+            y: 'lat'
+          },
+          transforms: [
+            {
+              type: 'hexagon',
+              size: 2500,
+              field: 'v',
+              method: 'sum'
+            }
+          ]
+        })
+        .size('sum', sum => {
+          return sum * 200;
+        })
+        .shape('hexagonColumn')
+        .style({
+          coverage: 0.8,
+          angle: 0,
+        })
+        .color('sum', [
+          '#094D4A',
+          '#146968',
+          '#1D7F7E',
+          '#289899',
+          '#34B6B7',
+          '#4AC5AF',
+          '#5FD3A6',
+          '#7BE39E',
+          '#A1EDB8',
+          '#C3F9CC',
+          '#DEFAC0',
+          '#ECFFB1'
+        ]);
+      scene.addLayer(layer);
+    });
+});
+
+```
 
 ### source
 
-网格数据只支持点数据作为数据源，数据格式支持 csv、json、geojson.
+网格数据只支持点数据作为数据源，数据格式支持 `csv`、`json`、`geojson`。
 
 #### 设置网格聚合参数
 
-布局方法 通过 source 的 tansforms 属性配置
+布局方法 通过 `source` 的 `tansforms` 属性配置。
 
-- type  数据聚合类型 hexagon
-- size  网格半径 单位 米
-- field  聚合字段
-- method 聚合方法 count,max,min,sum,mean 5 个统计维度
+- type  数据聚合类型 `hexagon`。
+- size  网格半径 单位 米。
+- field  聚合字段。
+- method 聚合方法 `count`，`max`，`min`，`sum`，`mean` 5 个统计维度。
 
 ```javascript
 layer.source(data, {
@@ -87,10 +152,6 @@ layer.size('value', [10, 50]); // 根据value 字段映射大小
 layer.size('value', (value) => {}); // 回调函数设置高度
 ```
 
-### color
-
-同 layer color 方法
-
 ### style
 
 - coverage 网格覆盖度 0 - 1
@@ -104,33 +165,3 @@ layer.style({
   opacity: 1.0,
 });
 ```
-
-### 完整代码
-
-```javascript
-const layer = new HeatmapLayer({
-  zIndex: 2,
-})
-  .souce(data, {
-    parser: {
-      type: 'csv',
-      x: lng,
-      y: lat,
-    },
-    transforms: [
-      {
-        type: 'hexagon',
-        size: 1500,
-        field: 'count',
-        operation: 'sum',
-      },
-    ],
-  })
-  .shape('hexagon')
-  .color('sum')
-  .style({
-    coverage: 0.8,
-  });
-```
-
-[在线案例](/zh/examples/heatmap/hexagon#light)
