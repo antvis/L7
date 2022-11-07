@@ -129,18 +129,7 @@ export default () => {
           // layer.on('click', (e) => {
           //   console.log('layer click');
           //   console.log(e);
-          // });
-
-          setTimeout(() => {
-            layer.style({
-              opacity: 0.6,
-              rampColors: {
-                colors: ['#f00', '#ff0'],
-                positions: [0, 1],
-              },
-            });
-            scene.render();
-          }, 2000);
+          // })
         });
     });
 

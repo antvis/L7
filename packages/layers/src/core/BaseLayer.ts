@@ -870,7 +870,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       minZoom = -Infinity,
       maxZoom = Infinity,
     } = this.getLayerConfig();
-    return !!visible && zoom >= minZoom && zoom <= maxZoom;
+    return !!visible && zoom >= minZoom && zoom < maxZoom;
   }
 
   public setMultiPass(

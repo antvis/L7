@@ -105,6 +105,7 @@ export class SourceTile extends EventEmitter {
     const polygon = bboxPolygon(this.bounds as TileBounds, {
       properties: {
         key: this.key,
+        id: this.key,
         bbox: this.bounds,
         center,
         meta: `

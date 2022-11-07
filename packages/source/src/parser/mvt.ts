@@ -7,10 +7,10 @@ import {
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
-import { VectorTile, VectorTileLayer } from '@mapbox/vector-tile';
+import { VectorTileLayer } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
-import Protobuf from 'pbf';
 import { IParserData } from '../interface';
+import VectorSource from '../source/vector';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -29,7 +29,7 @@ const getVectorTile = async (
   tileParams: TileLoadParams,
   tile: SourceTile,
   requestParameters?: Partial<RequestParameters>,
-): Promise<MapboxVectorTile> => {
+): Promise<VectorSource | undefined> => {
   const tileUrl = getURLFromTemplate(url, tileParams);
   return new Promise((resolve) => {
     const xhr = getArrayBuffer(
@@ -39,12 +39,13 @@ const getVectorTile = async (
       },
       (err, data) => {
         if (err || !data) {
-          resolve({ layers: {} });
+          resolve(undefined);
         } else {
-          const vectorTile = new VectorTile(
-            new Protobuf(data),
-          ) as MapboxVectorTile;
-          resolve(vectorTile);
+          const vectorSource = new VectorSource(data, tile.x, tile.y, tile.z);
+          // const vectorTile = new VectorTile(
+          //   new Protobuf(data),
+          // ) as MapboxVectorTile;
+          resolve(vectorSource);
         }
       },
     );
