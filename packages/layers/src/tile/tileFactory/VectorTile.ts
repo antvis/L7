@@ -1,17 +1,16 @@
 import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
 import Tile from './Tile';
-import { getTileLayer, getMaskLayer } from './util';
-
+import { getTileLayer, isNeedMask } from './util';
+import MaskLayer from '../../mask';
+import { VectorSource } from '@antv/l7-source'
  
 export default class VectorTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig()
+    layerOptions.mask = isNeedMask(this.parent.type) ||layerOptions.mask;
     const vectorLayer = getTileLayer(this.parent.type);
-    const maskLayer = getMaskLayer(this.parent.type);
-    layerOptions.mask = !!maskLayer;
-  
-    
+
     const sourceOptions = this.getSourceOption();
     if(!sourceOptions){
       this.isLoaded = true;
@@ -21,7 +20,7 @@ export default class VectorTile extends Tile {
       sourceOptions.data,
       sourceOptions.options,
     );
-
+ 
 
     // 初始化数据映射
     Object.keys(attributes).forEach((type) => {
@@ -29,8 +28,17 @@ export default class VectorTile extends Tile {
       // @ts-ignore
       layer[attr](attributes[attr]?.field, attributes[attr]?.values);
     });
-    if (maskLayer) {
-      const mask = new maskLayer({layerType: "MaskLayer"})
+    if(layerOptions.mask ) {
+      await this.addTileMask(layer)
+    }
+
+    await this.addLayer(layer);
+    this.setLayerMinMaxZoom(layer);
+    this.isLoaded = true;
+  }
+  // Todo 校验数据有效性
+  protected async addTileMask(layer: ILayer) {
+    const mask = new MaskLayer({layerType: "MaskLayer"})
         .source({
           type: 'FeatureCollection',
           features: [
@@ -39,19 +47,10 @@ export default class VectorTile extends Tile {
         }, {
           parser: {
             type: 'geojson',
+            featureId: 'id'
           }
         })
-        // .style({
-        //   opacity: 1
-        // });
       await this.addMask(layer, mask)
-    }
-    await this.addLayer(layer);
-    this.setLayerMinMaxZoom(layer);
-    this.isLoaded = true;
-  }
-  // Todo 校验数据有效性
-  protected beforeInit() {
 
   }
   protected getSourceOption() {
@@ -86,4 +85,22 @@ export default class VectorTile extends Tile {
     }
 
   }
+  public getFeatures(sourceLayer: string){
+   const source = this.sourceTile.data as VectorSource;
+   return source.getTileData(sourceLayer);
+  }
+
+  /**
+   * 在一个 Tile 中可能存在一个相同 ID 的 feature
+   * @param id 
+   * @returns 
+   */
+  public getFeatureById(id: number) {
+    const layer = this.getMainLayer();
+    if (!layer) {
+      return [];
+    }
+    return layer.getSource().data.dataArray.filter(d => d._id === id);
+  }
+
 }

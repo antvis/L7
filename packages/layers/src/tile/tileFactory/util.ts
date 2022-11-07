@@ -2,7 +2,7 @@
 import PointLayer from '../../point/index';
 import LineLayer from '../../line';
 import PolygonLayer from '../../polygon';
-import MaskLayer from '../../mask';
+
 
 export function getTileLayer(type: string) {
     if(type === 'PolygonLayer') {
@@ -18,15 +18,6 @@ export function getTileLayer(type: string) {
 
 }
 
-export function getMaskLayer(type: string){
-   switch(type) {
-    case 'PolygonLayer':
-    case 'LineLayer':
-        return MaskLayer;
-    case 'PointLayer':
-    case 'RasterLayer':
-        return undefined;
-    default:
-        return undefined;
-   }
+export function isNeedMask(type: string) {
+   return ['PolygonLayer','LineLayer'].indexOf(type) !== -1
 }
