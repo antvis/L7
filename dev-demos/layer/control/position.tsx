@@ -1,11 +1,4 @@
-import {
-  GaodeMap,
-  IControlOption,
-  Logo,
-  Scale,
-  Scene,
-  Zoom,
-} from '@antv/l7';
+import { GaodeMap, IControlOption, Logo, Scale, Scene, Zoom } from '@antv/l7';
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 
 const Demo: FunctionComponent = () => {

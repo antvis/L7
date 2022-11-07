@@ -17,11 +17,11 @@ import { PolygonLayer } from '@antv/l7';
 
 ### shape
 
-`PolygonLayer` 填充图支持 3 种 shape
+`PolygonLayer` 填充图支持 3 种 shape，均不支持数据映射
 
 **填充面**
 
-- fill 绘制填充面 不支持数据映射
+- fill 绘制填充面
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*v5dZT4Q1dgsAAAAAAAAAAAAAARQnAQ">
 
@@ -61,7 +61,7 @@ scene.on('loaded', () => {
 
 **填充图描边**
 
-- line 绘制填充图描边 不支持数据映射
+- line 绘制填充图描边
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KSlPQ6MCu4sAAAAAAAAAAAAAARQnAQ">
 
@@ -101,7 +101,7 @@ scene.on('loaded', () => {
 
 **3D 填充图**
 
-- extrude 对填充图 3D 拉伸 不支持数据映射
+- extrude 对填充图 3D 拉伸
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*vcN8TptUA1cAAAAAAAAAAAAAARQnAQ">
 
