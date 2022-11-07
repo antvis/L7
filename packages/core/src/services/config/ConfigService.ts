@@ -68,7 +68,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   active: false,
   activeColor: '#2f54eb',
   enableHighlight: false,
-  enableSelect: true,
+  enableSelect: false,
   highlightColor: '#2f54eb',
   activeMix: 0,
   selectColor: 'blue',

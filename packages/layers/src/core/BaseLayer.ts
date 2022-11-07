@@ -696,9 +696,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * renderMultiPass 专门用于渲染支持 multipass 的 layer
    */
   public async renderMultiPass() {
-    // if (this.encodeDataLength <= 0 && !this.forceRender) {
-    //   return;
-    // }
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return;
+    }
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       // multi render 开始执行 multiPassRender 的渲染流程
       await this.multiPassRenderer.render();
@@ -870,7 +870,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       minZoom = -Infinity,
       maxZoom = Infinity,
     } = this.getLayerConfig();
-    return !!visible && zoom >= minZoom && zoom <= maxZoom;
+    return !!visible && zoom >= minZoom && zoom < maxZoom;
   }
 
   public setMultiPass(

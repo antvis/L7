@@ -3,26 +3,34 @@ import {
   Scene,
   Source,
   PolygonLayer,
+  LineLayer,
   TileDebugLayer,
   PointLayer,
 } from '@antv/l7';
 // @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { data } from './data';
 
 export default () => {
   useEffect(() => {
     const counts = [10000, 5000, 1000, 500, 100];
-    const color = ['#41ae76', '#99d8c9', '#ccece6', '#e5f5f9', '#f7fcfd'];
+    const color = [
+      '#e41a1c',
+      '#377eb8',
+      '#4daf4a',
+      '#984ea3',
+      '#ff7f00',
+      '#ffff33',
+    ];
     const scene = new Scene({
       id: 'map',
       stencil: true,
-      map: new Map({
-        center: [120, 30],
+      map: new GaodeMapV2({
+        center: [100, 30],
         // zoom: 12,
         minZoom: 0,
-        zoom: 3,
+        zoom: 2,
       }),
     });
 
@@ -61,7 +69,7 @@ export default () => {
             return c.name == namestr;
           });
           if (!country) {
-            return '#fff';
+            return '#ffff33';
           }
           const qz = ((country.qz as unknown) as number) * 1;
           if (qz > counts[0]) {
@@ -77,30 +85,32 @@ export default () => {
           }
         });
 
-      // const line = new LineLayer({
-      //   sourceLayer: 'WLD_L',
-      //   zIndex: 2,
-      // })
-      //   .source(source)
-      //   .shape('line')
-      //   .size(0.6)
-      //   .color('type', (t) => {
-      //     if (t === '0') {
-      //       return 'red';
-      //     }
-      //     if (t === '2') {
-      //       return '#09f';
-      //     }
-      //     return '#fc9272';
-      //   });
+      const line = new LineLayer({
+        sourceLayer: 'WLD_L',
+        zIndex: 2,
+      })
+        .source(source)
+        .shape('line')
+        .size(0.6)
+        .color('type', (t) => {
+          if (t === '0') {
+            return 'red';
+          }
+          if (t === '2') {
+            return '#09f';
+          }
+          return '#fc9272';
+        });
 
       const text = new PointLayer({
         sourceLayer: 'WLD',
-        // blend: 'normal',
+        blend: 'normal',
         zIndex: 10,
       })
         .source(source)
-        .shape('id', 'text')
+        .shape('NAME_CHN', (NAME_CHN) => {
+          return unicode2Char(NAME_CHN);
+        })
         .size(12)
         .color('#000');
 
@@ -114,8 +124,8 @@ export default () => {
 
       scene.addLayer(water_surface);
       scene.addLayer(text);
-      // scene.addLayer(line);
-      const debugerLayer = new TileDebugLayer({ zIndex: 1 });
+      scene.addLayer(line);
+      const debugerLayer = new TileDebugLayer();
       scene.addLayer(debugerLayer);
     });
   }, []);

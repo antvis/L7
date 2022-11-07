@@ -209,13 +209,15 @@ export default class PickingService implements IPickingService {
       framebuffer: this.pickingFBO,
     });
 
+    this.pickedColors = pickedColors;
+
     if (
       pickedColors[0] !== 0 ||
       pickedColors[1] !== 0 ||
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-      
+      // 瓦片数据获取性能问题需要优化
       const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
@@ -353,6 +355,7 @@ export default class PickingService implements IPickingService {
           return layer.needPick(target.type)})
         .reverse()
         .some((layer) => {
+        
           clear({
             framebuffer: this.pickingFBO,
             color: [0, 0, 0, 0],
@@ -360,38 +363,8 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
 
-          // Tip: clear last picked tilelayer state
-          // this.pickedTileLayers.map((pickedTileLayer) =>
-          //   (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
-          // );
-
-          // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
-          // if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
-          //   return (layer.tileLayer as ITileLayer).pickLayers(target);
-          // }
-        
-          // 将当前的 layer 绘制到 pickingFBO
-          // 普通图层和瓦片图层的 layerPickService 拥有不同的 pickRender 方法
-          // layer.layerPickService.pickRender(target);
-
-          // layer.hooks.beforePickingEncode.call();
-
-          // if (layer.masks.length > 0) {
-          //   // 若存在 mask，则在 pick 阶段的绘制也启用
-          //   layer.masks.map(async (m: ILayer) => {
-          //     m.hooks.beforeRender.call();
-          //     m.render();
-          //     m.hooks.afterRender.call();
-          //   });
-          // }
-          // layer.renderModels(true);
-          // layer.hooks.afterPickingEncode.call();
-          // const isPicked = this.pickFromPickingFBO(layer, target);
-
-          const isPicked = layer.layerPickService.pick(layer, target)
-
-          // this.pickRasterLayer(layer, target)
-
+          layer.layerPickService.pickRender(target);
+          const isPicked = this.pickFromPickingFBO(layer, target);
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
@@ -417,31 +390,4 @@ export default class PickingService implements IPickingService {
     }
   }
 
-  /**
-   * highlight 如果直接修改选中 feature 的 buffer，存在两个问题：
-   * 1. 鼠标移走时无法恢复
-   * 2. 无法实现高亮颜色与原始原色的 alpha 混合
-   * 因此高亮还是放在 shader 中做比较好
-   * @example
-   * this.layer.color('name', ['#000000'], {
-   *  featureRange: {
-   *    startIndex: pickedFeatureIdx,
-   *    endIndex: pickedFeatureIdx + 1,
-   *  },
-   * });
-   */
-  private highlightPickedFeature(
-    layer: ILayer,
-    pickedColors: Uint8Array | undefined,
-  ) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeHighlight.call([r, g, b]);
-  }
-
-  private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
-  }
 }

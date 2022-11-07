@@ -1,4 +1,5 @@
 import { ILayerService, ITile, ITilePickService, IInteractionTarget, ILayer, IPickingService, TYPES } from '@antv/l7-core';
+import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
 import { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
 export interface ITilePickServiceOptions {
@@ -27,9 +28,8 @@ export class TilePickService implements ITilePickService{
     if (tile) {
       // TODO 多图层拾取
       const pickLayer = tile.getMainLayer();
-      if (pickLayer) {
-        pickLayer.layerPickService.pickRender(target)
-      }
+      pickLayer?.layerPickService.pickRender(target)
+      
     }
   }
 
@@ -55,7 +55,7 @@ export class TilePickService implements ITilePickService{
   selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    const id = this.clor2PickId(r, g, b);
+    const id = this.color2PickId(r, g, b);
     this.tilePickID.set(SELECT, id);
     this.updateHighLight(r, g, b, SELECT);
   }
@@ -63,24 +63,23 @@ export class TilePickService implements ITilePickService{
   highlightPickedFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
-    const id = this.clor2PickId(r, g, b);
+    const id = this.color2PickId(r, g, b);
     this.tilePickID.set(ACTIVE, id);
     this.updateHighLight(r, g, b, ACTIVE);
   }
 
   updateHighLight(r: number, g: number, b: number, type: string){
     this.tileLayerService.tiles.map((tile: ITile) => {
-      const layers = tile.getLayers();
-      layers.forEach((layer) => {
+      const layer = tile.getMainLayer();
         switch(type) {
           case SELECT:
-            layer.hooks.beforeSelect.call([r, g, b]);
+            layer?.hooks.beforeSelect.call([r, g, b]);
             break;
           case ACTIVE:
-            layer.hooks.beforeHighlight.call([r, g, b]);
+            layer?.hooks.beforeHighlight.call([r, g, b]);
             break;
         }
-      });
+      
     });
   }
 
@@ -99,12 +98,12 @@ export class TilePickService implements ITilePickService{
     }
   }
 
-  private clor2PickId (r: number, g: number, b: number){
-    return r + '-' + g + '-' + b;
+  private color2PickId (r: number, g: number, b: number){
+    return decodePickingColor(new Uint8Array([r,g,b]))
   }
 
-  private pickId2Color(str: string){
-    return str.split('-').map(n => +n)
+  private pickId2Color(str: number){
+    return encodePickingColor(str )
   }
 
   /** 从瓦片中根据数据 */
@@ -122,7 +121,10 @@ export class TilePickService implements ITilePickService{
     }
     // 将 feature 列表合并后返回
     // 统一返回成 polygon 的格式 点、线、面可以通用
-    return this.tileSourceService.getCombineFeature(features);
+
+    // const data = this.tileSourceService.getCombineFeature(features);
+
+    return []
   }
 
   // Tip: for interface define
