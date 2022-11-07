@@ -18,7 +18,7 @@ export default () => {
       stencil: true,
       map: new Map({
         center: [-95.7548387434569, 44.82687715672517],
-        zoom: 10,
+        zoom: 9,
       }),
     });
 
@@ -39,24 +39,24 @@ export default () => {
         parser: {
           type: 'mvt',
           tileSize: 256,
-          minZoom: 8,
+          // minZoom: 9,
         },
       },
     );
-    const source2 = new Source(
-      'https://cdn.unfolded.ai/indigo/hexify_v5/{z}/{x}/{y}.pbf',
-      {
-        parser: {
-          type: 'mvt',
-          tileSize: 256,
-          maxZoom: 8,
-        },
-      },
-    );
+    // const source2 = new Source(
+    //   'https://cdn.unfolded.ai/indigo/hexify_v5/{z}/{x}/{y}.pbf',
+    //   {
+    //     parser: {
+    //       type: 'mvt',
+    //       tileSize: 256,
+    //       maxZoom: 9,
+    //     },
+    //   },
+    // );
     const layer = new PolygonLayer({
       featureId: 'id',
       zIndex: 3,
-      minZoom: 8,
+      minZoom: 9,
       sourceLayer: 'state_s10_27', // woods hillshade contour ecoregions ecoregions2 city
     })
       .source(source)
@@ -70,7 +70,7 @@ export default () => {
     const layer2 = new PolygonLayer({
       featureId: 'id',
       zIndex: 2,
-      minZoom: 8,
+      minZoom: 9,
       sourceLayer: 'state_s10_27', // woods hillshade contour ecoregions ecoregions2 city
     })
       .source(source)
@@ -93,11 +93,11 @@ export default () => {
     const layer3 = new PointLayer({
       featureId: 'id',
       zIndex: 2,
-      maxZoom: 8,
+      maxZoom: 9,
       mask: true,
       sourceLayer: 'parcel_pointgeojsonl', // woods hillshade contour ecoregions ecoregions2 city
     })
-      .source(source2)
+      .source(source)
       .shape('hexagon')
       .size(2)
       .scale('croptype', {
@@ -135,3 +135,5 @@ export default () => {
     />
   );
 };
+
+// https://pre-gridwise.alibaba-inc.com/tile/test?z=13&x=6746&y=3104

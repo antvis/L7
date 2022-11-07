@@ -8,7 +8,7 @@ export default class VectorTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig()
-    layerOptions.mask = isNeedMask(this.parent.type);
+    layerOptions.mask = isNeedMask(this.parent.type) ||layerOptions.mask;
     const vectorLayer = getTileLayer(this.parent.type);
 
     const sourceOptions = this.getSourceOption();
@@ -28,7 +28,7 @@ export default class VectorTile extends Tile {
       // @ts-ignore
       layer[attr](attributes[attr]?.field, attributes[attr]?.values);
     });
-    if(isNeedMask(this.parent.type) || layerOptions.mask) {
+    if(layerOptions.mask ) {
       await this.addTileMask(layer)
     }
 
@@ -60,6 +60,7 @@ export default class VectorTile extends Tile {
       featureId: string;
     }>();
     const features = this.getFeatures(sourceLayer)
+    console.log(features);
     return {
       data: {
         type: 'FeatureCollection',
