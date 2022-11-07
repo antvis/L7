@@ -1,10 +1,11 @@
-import { ILayerService, ITile, ITilePickService, IInteractionTarget } from '@antv/l7-core';
+import { ILayerService, ITile, ITilePickService, IInteractionTarget, ILayer, IPickingService, TYPES } from '@antv/l7-core';
 import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
 import { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
+  parent: ILayer;
 }
 
 const SELECT = 'select';
@@ -13,10 +14,12 @@ export class TilePickService implements ITilePickService{
   private layerService: ILayerService;
   private tileLayerService: TileLayerService;
   private tileSourceService: TileSourceService;
+  private parent: ILayer;
   private tilePickID = new Map();
-  constructor({ layerService, tileLayerService }: ITilePickServiceOptions) {
+  constructor({ layerService, tileLayerService, parent }: ITilePickServiceOptions) {
     this.layerService = layerService;
     this.tileLayerService = tileLayerService;
+    this.parent = parent;
     this.tileSourceService = new TileSourceService();
   }
   pickRender(target: IInteractionTarget) {
@@ -29,6 +32,26 @@ export class TilePickService implements ITilePickService{
       
     }
   }
+
+  public pick(layer: ILayer, target: IInteractionTarget) {
+    const container = this.parent.getContainer();
+    const pickingService = container.get<IPickingService>(
+      TYPES.IPickingService,
+    );
+    if(layer.type === 'RasterLayer') {
+
+      const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
+      if (tile && tile.getMainLayer() !== undefined) {
+        const pickLayer = tile.getMainLayer() as ILayer;
+        return pickLayer.layerPickService.pickRasterLayer(pickLayer, target, this.parent);
+      }
+      return false;
+    }
+    this.pickRender(target);
+    
+    return pickingService.pickFromPickingFBO(layer, target);
+  }
+
   selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
@@ -102,5 +125,11 @@ export class TilePickService implements ITilePickService{
     // const data = this.tileSourceService.getCombineFeature(features);
 
     return []
+  }
+
+  // Tip: for interface define
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public pickRasterLayer(layer: ILayer, target: IInteractionTarget, parent?: ILayer) {
+    return false;
   }
 }

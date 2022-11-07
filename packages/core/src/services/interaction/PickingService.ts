@@ -199,7 +199,6 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
-
     const pickedColors: Uint8Array | undefined = readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
@@ -371,7 +370,7 @@ export default class PickingService implements IPickingService {
         });
     });
   }
-  private triggerHoverOnLayer(
+  public triggerHoverOnLayer(
     layer: ILayer,
     target: {
       x: number;

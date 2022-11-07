@@ -6,7 +6,7 @@ import RasterRgbModel from '../../../raster/models/rasterRgb';
 export default class RasterTiffLayer extends BaseLayer<
   Partial<IRasterLayerStyleOptions>
 > {
-  public type: string = this.layerType as string;
+  public type: string = 'RasterLayer';
   public async buildModels() {
     const model = this.getModel();
     this.layerModel = new model(this);
