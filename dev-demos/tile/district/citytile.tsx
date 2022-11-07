@@ -1,10 +1,5 @@
 // @ts-ignore
-import {
-  Scene,
-  Source,
-  PolygonLayer,
-  LineLayer,
-} from '@antv/l7';
+import { Scene, Source, PolygonLayer, LineLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
