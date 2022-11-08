@@ -23,7 +23,7 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -66,7 +66,7 @@ export default class ImageModel extends BaseModel {
       );
     }
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'rasterImage',
         vertexShader: ImageVert,
@@ -80,21 +80,15 @@ export default class ImageModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   public clearModels(): void {
     this.texture?.destroy();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   protected registerBuiltinAttributes() {

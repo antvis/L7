@@ -37,7 +37,7 @@ export default class FillImageModel extends BaseModel {
     }
     /**
      *               rotateFlag
-     * L7MAP            1
+     * DEFAULT          1
      * MAPBOX           1
      * GAODE2.x         -1
      * GAODE1.x         -1
@@ -131,7 +131,7 @@ export default class FillImageModel extends BaseModel {
     );
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels():Promise<IModel[]>  {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
@@ -141,14 +141,14 @@ export default class FillImageModel extends BaseModel {
     const { version } = this.mapService;
     if (
       unit === 'meter' &&
-      version !== Version.L7MAP &&
+      version !== Version.DEFUALT &&
       version !== Version.GLOBEL
     ) {
       this.isMeter = true;
       this.calMeter2Coord();
     }
 
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
   /**
@@ -193,13 +193,13 @@ export default class FillImageModel extends BaseModel {
     }
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]>  {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointFillImage',
         vertexShader: pointFillVert,
@@ -212,14 +212,9 @@ export default class FillImageModel extends BaseModel {
           enable: true,
           face: getCullFace(this.mapService.version),
         },
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
       });
+      return [model]
+       
   }
 
   public clearModels() {

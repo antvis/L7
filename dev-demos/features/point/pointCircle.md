@@ -1,7 +1,7 @@
 ### point - circle
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
         const scene = new Scene({
             id: 'point_circle',
             pickBufferScale: 1.0,
-            map: new GaodeMap({
+            map: new GaodeMapV2({
                 style: 'light',
                 center: [-121.24357, 37.58264],
                 pitch: 0,
@@ -55,6 +55,7 @@ export default () => {
                         });
 
                     scene.addLayer(pointLayer);
+            
                 },
                 )
         })

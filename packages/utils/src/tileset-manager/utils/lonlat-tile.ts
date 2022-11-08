@@ -57,7 +57,6 @@ export function getTileIndices({
   tileSize: number;
 }) {
   let z = Math.ceil(zoom) + zoomOffset;
-
   // 如果当前 zoom 层级小于 minZoom
   if (Number.isFinite(minZoom) && z < minZoom) {
     return [];
@@ -101,25 +100,25 @@ export function getTileIndices({
 /**
  * Warp 瓦片索引，支持对称子午线瓦片连续
  */
-export const getTileWarpXY = (x: number, y: number, z: number) => {
+export const getTileWarpXY = (
+  x: number,
+  y: number,
+  z: number,
+  wrap: boolean = true,
+) => {
   const scale = Math.pow(2, z);
   const maxIndex = scale - 1;
   const distance = scale;
 
   let warpX = x;
   const warpY = y;
-
-  if (warpX < 0) {
-    warpX = warpX + distance;
-  } else if (warpX > maxIndex) {
-    warpX = warpX % distance;
+  if (wrap) {
+    if (warpX < 0) {
+      warpX = warpX + distance;
+    } else if (warpX > maxIndex) {
+      warpX = warpX % distance;
+    }
   }
-
-  // if (warpY < 0) {
-  //   warpY = warpY + distance;
-  // } else if (warpY > maxIndex) {
-  //   warpY = Math.abs(warpY % distance);
-  // }
 
   return { warpX, warpY };
 };

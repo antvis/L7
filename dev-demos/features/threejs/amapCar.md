@@ -1,7 +1,7 @@
 ### threejs - car
 ```tsx
 import { Scene, PolygonLayer, LineLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as THREE from 'three';
@@ -62,7 +62,7 @@ export default () => {
     useEffect(() => {
         const scene = new Scene({
             id: 'map',
-            map: new GaodeMap({
+            map: new GaodeMapV2({
                 center: [ 110, 35.39847 ],
                 pitch: 20,
                 style: 'dark',

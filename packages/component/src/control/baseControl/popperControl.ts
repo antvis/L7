@@ -49,10 +49,12 @@ export default class PopperControl<
    */
   public getDefault(option?: Partial<O>): O {
     const defaultOption = super.getDefault(option);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const position = option?.position ?? defaultOption.position!;
     return {
       ...super.getDefault(option),
-      popperPlacement: PopperPlacementMap[position],
+      popperPlacement:
+        position instanceof Element ? 'bottom' : PopperPlacementMap[position],
       popperTrigger: 'click',
     };
   }
@@ -73,8 +75,10 @@ export default class PopperControl<
       popperPlacement,
       popperTrigger,
     } = this.controlOption;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const popperContainer = this.mapsService.getMapContainer()!;
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.popper = new Popper(this.button!, {
       className: popperClassName,
       placement: popperPlacement,

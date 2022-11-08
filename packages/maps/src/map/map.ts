@@ -7,20 +7,20 @@ import { Map } from '@antv/l7-map';
 import { $window } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { Version } from '../version';
-import Viewport from '../utils/Viewport';
 import BaseMapService from '../utils/BaseMapService';
+import Viewport from '../utils/Viewport';
+import { Version } from '../version';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * AMapService
  */
 @injectable()
-export default class L7MapService extends BaseMapService<Map> {
-  public version: string = Version.L7MAP;
+export default class DefaultMapService extends BaseMapService<Map> {
+  public version: string = Version.DEFUALT;
   public lngLatToMercator(
-    _lnglat: [number, number],
-    _altitude: number,
+    lnglat: [number, number],
+    altitude: number,
   ): IMercator {
     throw new Error('Method not implemented.');
   }
@@ -35,7 +35,7 @@ export default class L7MapService extends BaseMapService<Map> {
       style = 'light',
       rotation = 0,
       mapInstance,
-      version = 'L7MAP',
+      version = 'DEFAULTMAP',
       mapSize = 10000,
       interactive = true,
       ...rest
@@ -65,13 +65,18 @@ export default class L7MapService extends BaseMapService<Map> {
       });
     }
 
-    this.map.on('load', this.handleCameraChanged);
+    this.map.on('load', () => {
+      this.handleCameraChanged();
+    });
     if (interactive) {
       // L7 作为第三方地图插件时关闭重绘
       this.map.on('move', this.handleCameraChanged);
     }
 
     // 不同于高德地图，需要手动触发首次渲染
+    setTimeout(() => {
+      this.handleCameraChanged();
+    }, 100);
     this.handleCameraChanged();
   }
 

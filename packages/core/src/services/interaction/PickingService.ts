@@ -9,7 +9,7 @@ import {
   IInteractionTarget,
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { ILayer, ILayerService, ITileLayer } from '../layer/ILayerService';
+import { ILayer, ILayerService } from '../layer/ILayerService';
 import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
@@ -52,7 +52,7 @@ export default class PickingService implements IPickingService {
 
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
-    );
+    );      
     width *= DOM.DPR;
     height *= DOM.DPR;
     this.pickBufferScale =
@@ -134,7 +134,7 @@ export default class PickingService implements IPickingService {
       const color = pickedColors.slice(i * 4, i * 4 + 4);
       const pickedFeatureIdx = decodePickingColor(color);
       if (pickedFeatureIdx !== -1 && !featuresIdMap[pickedFeatureIdx]) {
-        const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+        const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
         features.push({
           // @ts-ignore
           ...rawFeature,
@@ -199,7 +199,6 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
-
     const pickedColors: Uint8Array | undefined = readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
@@ -209,14 +208,8 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
-    this.pickedColors = pickedColors;
 
-    // let pickedColors = new Uint8Array(4)
-    // this.rendererService.getGLContext().readPixels(
-    //   Math.floor(xInDevicePixel / this.pickBufferScale),
-    //   Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
-    //   1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pickedColors)
-    // console.log(pickedColors[0] == pixels[0] && pickedColors[1] == pixels[1] && pickedColors[2] == pixels[2])
+    this.pickedColors = pickedColors;
 
     if (
       pickedColors[0] !== 0 ||
@@ -224,7 +217,8 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-      const rawFeature = layer.getSource().getFeatureById(pickedFeatureIdx);
+      // 瓦片数据获取性能问题需要优化
+      const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
         type === 'mousemove'
@@ -274,32 +268,24 @@ export default class PickingService implements IPickingService {
     }
 
     if (enableHighlight) {
-      this.highlightPickedFeature(layer, pickedColors);
+      layer.layerPickService.highlightPickedFeature(pickedColors);
     }
     if (
       enableSelect &&
       type === 'click' &&
       pickedColors?.toString() !== [0, 0, 0, 0].toString()
     ) {
+
       const selectedId = decodePickingColor(pickedColors);
       if (
         layer.getCurrentSelectedId() === null ||
         selectedId !== layer.getCurrentSelectedId()
       ) {
-        this.selectFeature(layer, pickedColors);
+        layer.layerPickService.selectFeature(pickedColors);
         layer.setCurrentSelectedId(selectedId);
       } else {
-        this.selectFeature(layer, new Uint8Array([0, 0, 0, 0])); // toggle select
+        layer.layerPickService.selectFeature(new Uint8Array([0, 0, 0, 0])); // toggle select
         layer.setCurrentSelectedId(null);
-      }
-      if (!layer.isVector) {
-        // Tip: 选中普通 layer 的时候将 tileLayer 的选中状态清除
-        this.layerService
-          .getLayers()
-          .filter((l) => l.tileLayer)
-          .map((l) => {
-            (l.tileLayer as ITileLayer).clearPickState();
-          });
       }
     }
     return isPicked;
@@ -363,10 +349,13 @@ export default class PickingService implements IPickingService {
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getRenderList();
+      
       layers
-        .filter((layer) => layer.needPick(target.type))
+        .filter((layer) => {
+          return layer.needPick(target.type)})
         .reverse()
         .some((layer) => {
+        
           clear({
             framebuffer: this.pickingFBO,
             color: [0, 0, 0, 0],
@@ -374,38 +363,14 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
 
-          // Tip: clear last picked tilelayer state
-          this.pickedTileLayers.map((pickedTileLayer) =>
-            (pickedTileLayer.tileLayer as ITileLayer)?.clearPick(target.type),
-          );
-
-          // Tip: 如果当前 layer 是瓦片图层，则走瓦片图层独立的拾取逻辑
-          if (layer.tileLayer && (layer.tileLayer as ITileLayer).pickLayers) {
-            return (layer.tileLayer as ITileLayer).pickLayers(target);
-          }
-
-          layer.hooks.beforePickingEncode.call();
-
-          if (layer.masks.length > 0) {
-            // 若存在 mask，则在 pick 阶段的绘制也启用
-            layer.masks.map((m: ILayer) => {
-              m.hooks.beforeRenderData.call();
-              m.hooks.beforeRender.call();
-              m.render();
-              m.hooks.afterRender.call();
-            });
-          }
-          layer.renderModels(true);
-          layer.hooks.afterPickingEncode.call();
-
+          layer.layerPickService.pickRender(target);
           const isPicked = this.pickFromPickingFBO(layer, target);
-
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
     });
   }
-  private triggerHoverOnLayer(
+  public triggerHoverOnLayer(
     layer: ILayer,
     target: {
       x: number;
@@ -425,31 +390,4 @@ export default class PickingService implements IPickingService {
     }
   }
 
-  /**
-   * highlight 如果直接修改选中 feature 的 buffer，存在两个问题：
-   * 1. 鼠标移走时无法恢复
-   * 2. 无法实现高亮颜色与原始原色的 alpha 混合
-   * 因此高亮还是放在 shader 中做比较好
-   * @example
-   * this.layer.color('name', ['#000000'], {
-   *  featureRange: {
-   *    startIndex: pickedFeatureIdx,
-   *    endIndex: pickedFeatureIdx + 1,
-   *  },
-   * });
-   */
-  private highlightPickedFeature(
-    layer: ILayer,
-    pickedColors: Uint8Array | undefined,
-  ) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeHighlight.call([r, g, b]);
-  }
-
-  private selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
-    // @ts-ignore
-    const [r, g, b] = pickedColors;
-    layer.hooks.beforeSelect.call([r, g, b]);
-  }
 }

@@ -4,6 +4,7 @@ import {
   IClusterOptions,
   IParseDataItem,
   IParserCfg,
+  ITileParserCFG,
   IParserData,
   ISource,
   ISourceCFG,
@@ -31,9 +32,10 @@ function mergeCustomizer(objValue: any, srcValue: any) {
     return srcValue;
   }
 }
-
+//
 export default class Source extends EventEmitter implements ISource {
   public type: string = 'source';
+  public isTile: boolean = false;
   public inited: boolean = false;
   public data: IParserData;
   public center: [number, number];
@@ -43,8 +45,10 @@ export default class Source extends EventEmitter implements ISource {
   public hooks = {
     init: new SyncHook(),
   };
-
-  public parser: IParserCfg = { type: 'geojson' };
+  public getSourceCfg() {
+    return this.cfg;
+  }
+  public parser: IParserCfg | ITileParserCFG = { type: 'geojson' } ;
   public transforms: ITransform[] = [];
   public cluster: boolean = false;
   public clusterOptions: Partial<IClusterOptions> = {
@@ -65,7 +69,9 @@ export default class Source extends EventEmitter implements ISource {
   // 原始数据
   private originData: any;
   private rawData: any;
-  private cfg: any = {};
+  private cfg: Partial<ISourceCFG> = {
+    autoRender: true
+  };
 
   private clusterIndex: Supercluster;
 
@@ -75,7 +81,12 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     this.initCfg(cfg);
 
-    this.init();
+    this.init().then(()=>{
+      this.inited = true;
+      this.emit('update',{
+        type: 'inited'
+      })
+    });
   }
 
   public getClusters(zoom: number): any {
@@ -131,7 +142,8 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getFeatureById(id: number): unknown {
-    const { type = 'geojson', geometry } = this.parser;
+    
+    const { type = 'geojson', geometry } = this.parser as IParserCfg;
     if (type === 'geojson' && !this.cluster) {
       const feature =
         id < this.originData.features.length
@@ -139,6 +151,7 @@ export default class Source extends EventEmitter implements ISource {
           : 'null';
       const newFeature = cloneDeep(feature);
 
+      
       if (
         newFeature?.properties &&
         (this.transforms.length !== 0 || this.dataArrayChanged)
@@ -173,7 +186,9 @@ export default class Source extends EventEmitter implements ISource {
       },
     );
     this.dataArrayChanged = true;
-    this.emit('update');
+    this.emit('update',{
+      type: 'update'
+    });
   }
 
   public getFeatureId(field: string, value: any): number | undefined {
@@ -187,7 +202,13 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     this.dataArrayChanged = false;
     this.initCfg(options);
-    this.init();
+   
+    this.init().then(()=>{
+      this.emit('update',{
+        type: 'update'
+      })
+    });
+
   }
 
   public destroy() {
@@ -199,8 +220,8 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset?.destroy();
   }
 
-  private handleData() {
-    return new Promise((resolve, reject) => {
+  private async processData() {
+    return await new Promise((resolve, reject) => {
       try {
         this.excuteParser();
         this.initCluster();
@@ -233,12 +254,10 @@ export default class Source extends EventEmitter implements ISource {
     }
   }
 
-  private init() {
+  private async init() {
     this.inited = false;
-    this.handleData().then(() => {
-      this.inited = true;
-      this.emit('update');
-    });
+    await this.processData();
+    this.inited = true;
   }
 
   /**
@@ -252,7 +271,7 @@ export default class Source extends EventEmitter implements ISource {
     //   c++
     // }
     // console.log('t', new Date().getTime() - t)
-    const parser = this.parser;
+    const parser = this.parser as IParserCfg;
     const type: string = parser.type || 'geojson';
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
@@ -287,7 +306,7 @@ export default class Source extends EventEmitter implements ISource {
     if (!tilesetOptions) {
       return;
     }
-
+    this.isTile = true;
     if (this.tileset) {
       this.tileset.updateOptions(tilesetOptions);
       return this.tileset;

@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-utils",
-  "version": "2.10.0",
+  "version": "2.10.3",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,6 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
+    "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/helpers": "^6.1.4",
     "d3-color": "^1.4.0",

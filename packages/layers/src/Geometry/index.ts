@@ -16,17 +16,10 @@ export default class GeometryLayer extends BaseLayer<
       },
     },
   };
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new GeometryModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
   protected getDefaultConfig() {
@@ -39,7 +32,7 @@ export default class GeometryLayer extends BaseLayer<
     return defaultConfig[type];
   }
 
-  protected getModelType(): GeometryModelType {
+  public getModelType(): GeometryModelType {
     const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
       'shape',
     );

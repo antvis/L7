@@ -1,9 +1,7 @@
-import { GaodeMap, PositionType, Scene, Zoom } from '@antv/l7';
+import { GaodeMap, Scene, Zoom } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
-
-const POSITION_LIST = Object.values(PositionType);
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);

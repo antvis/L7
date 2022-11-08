@@ -12,7 +12,9 @@ import React, { useState } from 'react';
 import { FunctionComponent, useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [scene, setScene] = useState<Scene | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [popup, setPopup] = useState<LayerPopup | null>(null);
 
   useEffect(() => {
@@ -81,7 +83,7 @@ const Demo: FunctionComponent = () => {
             fields: [
               {
                 field: 'name',
-                formatField: (key) => {
+                formatField: () => {
                   return '名称';
                 },
               },

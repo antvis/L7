@@ -2,7 +2,6 @@ import { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IPointLayerStyleOptions } from '../core/interface';
 import PointModels, { PointType } from './models/index';
-import { isVectorTile } from '../tile/utils';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
@@ -17,17 +16,13 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     },
   };
 
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new PointModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+  public async rebuildModels() {
+    await this.buildModels();
   }
 
   /**
@@ -43,6 +38,9 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
 
       if (field && shape2d?.indexOf(field as string) !== -1) {
         return 'fill';
+      }
+      if (values === 'text') {
+        return 'text';
       }
 
       if (values && values instanceof Array) {
@@ -71,7 +69,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       text: {
         blend: 'normal',
       },
-      vectorPoint: {},
       tile: {},
       tileText: {},
       earthFill: {},
@@ -80,11 +77,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     return defaultConfig[type];
   }
 
-  protected getModelType(): PointType {
-    const parserType = this.layerSource.getParserType();
-    if (isVectorTile(parserType)) {
-      return 'vectorPoint';
-    }
+  public getModelType(): PointType {
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
     const { shape2d, shape3d } = this.getLayerConfig();
@@ -92,7 +85,6 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     const item = layerData.find((fe: IEncodeFeature) => {
       return fe.hasOwnProperty('shape');
     });
-
     if (!item) {
       return this.getModelTypeWillEmptyData();
     } else {

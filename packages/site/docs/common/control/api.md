@@ -19,5 +19,6 @@ export type Position =
   | 'topcenter'     // ↑ 上方中央，横向排列
   | 'bottomcenter'  // ↓ 下方中间，横向排列
   | 'leftcenter'    // ← 左边中间，纵向排列
-  | 'rightcenter';  // → 右边中间，纵向排列
+  | 'rightcenter'   // → 右边中间，纵向排列
+  | Element;        // 传入 DOM 作为当前控件的容器
 ```

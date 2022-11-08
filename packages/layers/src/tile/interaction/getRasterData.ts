@@ -2,10 +2,10 @@ import {
     IMapService,
     IRendererService
   } from '@antv/l7-core';
-import { DOM, Tile } from '@antv/l7-utils';
+import { DOM, SourceTile } from '@antv/l7-utils';
 
 export function readRasterValue(
-    tile: Tile,
+    tile: SourceTile,
     mapService: IMapService,
     x: number,
     y: number,

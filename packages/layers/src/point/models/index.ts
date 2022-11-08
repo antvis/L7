@@ -1,4 +1,3 @@
-import PointTileModel from '../../tile/models/tileModel';
 import EarthExtrudeModel from './earthExtrude';
 // earth
 import EarthFillModel from './earthFill';
@@ -22,7 +21,6 @@ export type PointType =
   | 'simplePoint'
   | 'extrude'
   | 'text'
-  | 'vectorPoint'
   | 'tile'
   | 'tileText'
   | 'earthFill'
@@ -37,7 +35,6 @@ const PointModels: { [key in PointType]: any } = {
   simplePoint: SimplePoint,
   extrude: ExtrudeModel,
   text: TextModel,
-  vectorPoint: PointTileModel,
   tile: TileFillModel,
   tileText: TileTextModel,
   earthFill: EarthFillModel,

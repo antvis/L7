@@ -1,7 +1,4 @@
 import { ILayer, IPopupOption } from '@antv/l7-core';
-// @ts-ignore
-// tslint:disable-next-line:no-implicit-dependencies
-import { BaseLayer } from '@antv/l7-layers';
 import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import { get } from 'lodash';
@@ -16,7 +13,7 @@ export type LayerField = {
 };
 
 export type LayerPopupConfigItem = {
-  layer: BaseLayer | string;
+  layer: ILayer | string;
   fields: Array<LayerField | string>;
 };
 
@@ -26,10 +23,10 @@ export interface ILayerPopupOption extends IPopupOption {
 }
 
 type LayerMapInfo = {
-  onMouseMove?: (layer: BaseLayer, e: any) => void;
-  onMouseOut?: (layer: BaseLayer, e: any) => void;
-  onClick?: (layer: BaseLayer, e: any) => void;
-  onSourceUpdate?: (layer: BaseLayer) => void;
+  onMouseMove?: (layer: ILayer, e: any) => void;
+  onMouseOut?: (layer: ILayer, e: any) => void;
+  onClick?: (layer: ILayer, e: any) => void;
+  onSourceUpdate?: (layer: ILayer) => void;
 } & Partial<LayerPopupConfigItem>;
 
 export { LayerPopup };
@@ -170,6 +167,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onLayerMouseOut(layer: ILayer, e: any) {
     this.displayFeatureInfo = undefined;
     if (this.isShow) {

@@ -9,7 +9,7 @@ import {
   // @ts-ignore
 } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -20,7 +20,7 @@ export default () => {
     );
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [110.19382669582967, 40.258134],
         pitch: 0,
         zoom: 3,
@@ -36,6 +36,7 @@ export default () => {
     });
     const lineLayer = new LineLayer({
       blend: 'normal',
+      autoFit: true,
     });
     lineLayer
       .source(data)
@@ -44,7 +45,6 @@ export default () => {
       .color('saldo', (v) => {
         return v < 0 ? 'rgb(60,255,255)' : 'rgb(255,255,60)';
       })
-      // .color('red')
       .animate({
         enable: true,
         interval: 0.1,
@@ -54,9 +54,8 @@ export default () => {
       .style({
         opacity: 1,
       })
-      .render();
-    lineLayer.fitBounds();
     scene.addLayer(lineLayer);
+    // scene.render()
   }, []);
   return (
     <div

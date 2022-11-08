@@ -220,7 +220,7 @@ export default class FontService extends EventEmitter implements IFontService {
       canvas = $window.document.createElement('canvas');
       canvas.width = MAX_CANVAS_WIDTH;
     }
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
     setTextStyle(ctx, fontFamily, fontSize, fontWeight);
 
     // 1. build mapping

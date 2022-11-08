@@ -1,4 +1,4 @@
-import { IRasterLayerData, IRasterFileData } from '../interface';
+import { IRasterFileData, IRasterLayerData } from '../interface';
 
 interface IDataItem {
   [key: string]: any;
@@ -11,7 +11,9 @@ export function getColumn(data: IDataItem[], columnName: string) {
 }
 
 export function isRasterFileData(data?: IRasterLayerData) {
-  if (data === undefined) return false;
+  if (data === undefined) {
+    return false;
+  }
   if (!Array.isArray(data) && data.data !== undefined) {
     return true;
   } else {
@@ -21,7 +23,9 @@ export function isRasterFileData(data?: IRasterLayerData) {
 
 export function isRasterFileDataArray(data: IRasterLayerData) {
   if (Array.isArray(data)) {
-    if (data.length === 0) return false;
+    if (data.length === 0) {
+      return false;
+    }
     if (isRasterFileData(data[0] as IRasterFileData)) {
       return true;
     } else {
@@ -34,7 +38,9 @@ export function isRasterFileDataArray(data: IRasterLayerData) {
 
 export function isNumberArray(data: IRasterLayerData) {
   if (Array.isArray(data)) {
-    if (data.length === 0) return true;
+    if (data.length === 0) {
+      return true;
+    }
     if (typeof data[0] === 'number') {
       return true;
     } else {

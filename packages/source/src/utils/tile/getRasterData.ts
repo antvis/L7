@@ -6,12 +6,12 @@ import {
     ITileBand,
     RequestParameters,
     getArrayBuffer,
-    Tile,
+    SourceTile,
 } from '@antv/l7-utils';
 import { handleRasterFiles } from '../bandOperation/bands';
 
 export const getRasterFile = async (
-  tile: Tile,
+  tile: SourceTile,
   requestParameters: RequestParameters,
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
   rasterFormat: IRasterFormat,

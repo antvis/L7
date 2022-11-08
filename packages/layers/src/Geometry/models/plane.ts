@@ -135,7 +135,7 @@ export default class PlaneModel extends BaseModel {
     this.texture?.destroy();
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -151,7 +151,7 @@ export default class PlaneModel extends BaseModel {
 
     this.updateTexture(mapTexture);
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'geometryPlane',
         vertexShader: planeVert,
@@ -166,17 +166,11 @@ export default class PlaneModel extends BaseModel {
           face: gl.BACK, // gl.FRONT | gl.BACK;
         },
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   public createModelData(options?: any) {

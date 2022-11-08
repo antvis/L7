@@ -1,4 +1,5 @@
 {
+  "enable":true,
   "extends": [
     "tslint:latest",
     "tslint-plugin-prettier",
@@ -20,6 +21,7 @@
     "interface-over-type-literal": false,
     "no-this-assignment": false,
     "no-submodule-imports": false,
+    "no-object-literal-type-assertion": false,
     "member-ordering": false
   },
   "globals": {

@@ -19,6 +19,7 @@ import AMapBaseService from '../utils/amap/AMapBaseService';
 import { Version } from '../version';
 import './logo.css';
 import Viewport from './Viewport';
+const DEFAULTMAPCENTER = [108.92361, 34.54083];
 
 // @ts-ignore
 window.forceWebGL = true;
@@ -98,8 +99,8 @@ export default class AMapService extends AMapBaseService {
 
   public setCoordCenter(center: [number, number]) {
     // @ts-ignore
-    this.map.customCoords.setCenter(center);
-    this.setCustomCoordCenter(center);
+    this.map.customCoords.setCenter(center || DEFAULTMAPCENTER);
+    this.setCustomCoordCenter(center || DEFAULTMAPCENTER);
   }
 
   /**

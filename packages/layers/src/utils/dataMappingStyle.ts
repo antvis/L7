@@ -40,51 +40,53 @@ function registerStyleAttribute(
  * @param configToUpdate
  * @param layer
  */
-function handleStyleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
+function styleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
   // 瓦片图层不需要进行样式数据映射
-  if (layer.tileLayer || layer.isTileLayer) return;
+  if (layer.tileLayer || layer.isTileLayer) {
+    return;
+  }
 
   if (configToUpdate.opacity) {
     // 处理 style 中 opacity 属性的数据映射
-    handleStyleFloat('opacity', layer, configToUpdate.opacity);
+    floatStyleMapping('opacity', layer, configToUpdate.opacity);
   }
 
   if (configToUpdate.strokeWidth) {
     // 处理 style 中 strokeWidth 属性的数据映射
 
-    handleStyleFloat('strokeWidth', layer, configToUpdate.strokeWidth);
+    floatStyleMapping('strokeWidth', layer, configToUpdate.strokeWidth);
   }
 
   if (configToUpdate.strokeOpacity) {
     // 处理 style 中 strokeOpacity 属性的数据映射
-    handleStyleFloat('strokeOpacity', layer, configToUpdate.strokeOpacity);
+    floatStyleMapping('strokeOpacity', layer, configToUpdate.strokeOpacity);
   }
 
   if (configToUpdate.stroke) {
     // 处理 style 中 stroke (strokeColor) 属性的数据映射
-    handleStyleColor('stroke', layer, configToUpdate.stroke);
+    colorStyleMapping('stroke', layer, configToUpdate.stroke);
   }
 
   if (configToUpdate.offsets) {
     // 处理 style 中 offsets 属性的数据映射
-    handleStyleOffsets('offsets', layer, configToUpdate.offsets);
+    offsetStyleMapping('offsets', layer, configToUpdate.offsets);
   }
 
   if (configToUpdate.textOffset) {
     // 处理 style 中 textOffset 属性的数据映射
-    handleStyleOffsets('textOffset', layer, configToUpdate.textOffset);
+    offsetStyleMapping('textOffset', layer, configToUpdate.textOffset);
   }
 
   if (configToUpdate.thetaOffset) {
     // 处理 style 中 thetaOffset 属性的数据映射
-    handleStyleFloat('thetaOffset', layer, configToUpdate.thetaOffset);
+    floatStyleMapping('thetaOffset', layer, configToUpdate.thetaOffset);
   }
 }
 
 /**
  * 根据传入参数 float 的类型和值做相应的操作
  */
-function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
+function floatStyleMapping(fieldName: string, layer: ILayer, styleFloat: any) {
   if (isString(styleFloat)) {
     // 如果传入的 styleFloat 是 string 类型，那么就认为其对应的是传入数据的字段
     registerStyleAttribute(fieldName, layer, styleFloat, (value: any) => {
@@ -92,7 +94,7 @@ function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
     });
   } else if (isNumber(styleFloat)) {
     // 传入 number、默认值处理
-    registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
+    // registerStyleAttribute(fieldName, layer, [styleFloat], undefined);
   } else if (Array.isArray(styleFloat) && styleFloat.length === 2) {
     // 传入的 styleFloat 是长度为 2 的数组
     if (isString(styleFloat[0]) && isFunction(styleFloat[1])) {
@@ -121,7 +123,7 @@ function handleStyleFloat(fieldName: string, layer: ILayer, styleFloat: any) {
  * @param layer
  * @param styleOffsets
  */
-function handleStyleOffsets(
+function offsetStyleMapping(
   fieldName: string,
   layer: ILayer,
   styleOffsets: any,
@@ -159,10 +161,10 @@ function handleStyleOffsets(
  * @param layer
  * @param styleColor
  */
-function handleStyleColor(fieldName: string, layer: ILayer, styleColor: any) {
+function colorStyleMapping(fieldName: string, layer: ILayer, styleColor: any) {
   if (isString(styleColor)) {
     // 如果传入的 styleColor 是 string 类型，那么就认为其是颜色值
-    registerStyleAttribute(fieldName, layer, styleColor, undefined);
+    // registerStyleAttribute(fieldName, layer, styleColor, undefined);
   } else if (Array.isArray(styleColor) && styleColor.length === 2) {
     // 传入的 styleColor 是长度为 2 的数组
     if (isString(styleColor[0]) && isFunction(styleColor[1])) {
@@ -185,4 +187,4 @@ function handleStyleColor(fieldName: string, layer: ILayer, styleColor: any) {
   }
 }
 
-export { handleStyleDataMapping, handleStyleFloat, handleStyleColor };
+export { styleDataMapping, floatStyleMapping, colorStyleMapping };

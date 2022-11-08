@@ -45,7 +45,7 @@ export default () => {
               // const height = image.getHeight();
               // const value0 = await image.readRasters();
 
-              const image1 = await tiff.getImage(1);
+              const image1 = await tiff.getImage(2);
               const value1 = await image1.readRasters();
               // console.log(value1)
 
@@ -67,14 +67,43 @@ export default () => {
             operation: { 
               // blue green red nir
               // 标准真彩色 rgb
-              r: ['-', ['band', 2], 155],
-              g: ['-', ['band', 1], 184],
-              b: ['-', ['band', 0], 295],
+              // r: ['-', ['band', 2], 155],
+              // g: ['-', ['band', 1], 184],
+              // b: ['-', ['band', 0], 295],
 
-              // 标准假彩色 4，3，2
+              // // 标准假彩色 4，3，2
               // r: ['-', ['band', 3], 295],
               // g: ['-', ['band', 2], 184],
               // b: ['-', ['band', 1], 295],
+
+                // 标准假彩色 4，3，2
+                
+
+                // r: ['*', ['/', ['band', 3], 234], 255],
+                // g: ['*', ['/', ['band', 2], 296], 255],
+                // b: ['*', ['/', ['band', 1], 296], 255],
+
+                // r: ['-', ['band', 3], 234],
+                // g: ['-', ['band', 2], 296],
+                // b: ['-', ['band', 1], 296],
+
+              // r: ['/', ['band', 3], 234],
+              // g: ['/', ['band', 2], 296],
+              // b: ['/', ['band', 1], 296],
+
+
+              // r: ['/', ['band', 3], 2],
+              // g: ['/', ['band', 2], 2],
+              // b: ['/', ['band', 1], 2],
+
+
+              // r: ['band', 3],
+              // g: ['band', 2],
+              // b: ['band', 1],
+
+              r: ['-', ['band', 3], 113],
+              g: ['-', ['band', 2], 155],
+              b: ['-', ['band', 1], 184],
             },
             extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
           },
@@ -89,9 +118,17 @@ export default () => {
           // channelGMax: 131,
           // channelBMax: 141
 
-          // channelRMax: 256,
-          // channelGMax: 256,
-          // channelBMax: 256
+          // channelRMax: 234,
+          // channelGMax: 296,
+          // channelBMax: 296
+
+          channelRMax: 234 - 133,
+          channelGMax: 296 - 155,
+          channelBMax: 296 - 184
+
+          // channelRMax: 255,
+          // channelGMax: 255,
+          // channelBMax: 255
         });
       scene.addLayer(layer);
     });

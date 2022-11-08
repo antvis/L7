@@ -1,4 +1,9 @@
-import { Tile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
+import {
+  SourceTile,
+  TileLoadParams,
+  TilesetManagerOptions,
+} from '@antv/l7-utils';
+import { VectorTileLayer } from '@mapbox/vector-tile';
 import {
   Feature,
   FeatureCollection,
@@ -6,8 +11,9 @@ import {
   Properties,
 } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
-import { VectorTileLayer } from '@mapbox/vector-tile';
-import { IParserData, ITileParserCFG, IGeojsonvtOptions } from '../interface';
+import { IParserData } from '../interface';
+
+import { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -87,8 +93,8 @@ function GetGeoJSON(
   let j;
 
   function project(line: any[]) {
-    for (let j = 0; j < line.length; j++) {
-      const p = line[j];
+    for (let index = 0; index < line.length; index++) {
+      const p = line[index];
       if (p[3]) {
         // 避免重复计算
         break;
@@ -97,7 +103,7 @@ function GetGeoJSON(
       const lng = ((p[0] + x0) * 360) / size - 180;
       const lat =
         (360 / Math.PI) * Math.atan(Math.exp((y2 * Math.PI) / 180)) - 90;
-      line[j] = [lng, lat, 0, 1];
+      line[index] = [lng, lat, 0, 1];
     }
   }
 
@@ -149,11 +155,11 @@ function GetGeoJSON(
 }
 
 export type MapboxVectorTile = {
-  layers: { [_: string]: VectorTileLayer & { features: Feature[] } };
+  layers: { [key: string]: VectorTileLayer & { features: Feature[] } };
 };
 
 const getVectorTile = async (
-  tile: Tile,
+  tile: SourceTile,
   tileIndex: any,
   tileParams: TileLoadParams,
   extent: number,
@@ -161,34 +167,34 @@ const getVectorTile = async (
   return new Promise((resolve) => {
     const tileData = tileIndex.getTile(tile.z, tile.x, tile.y);
     // tileData
-    const features: any = [];
-    tileData.features.map((vectorTileFeature: any) => {
-      const feature = GetGeoJSON(
-        extent,
-        tileParams.x,
-        tileParams.y,
-        tileParams.z,
-        vectorTileFeature,
-      );
-      features.push(feature);
-    });
+    const features = tileData
+      ? tileData.features.map((vectorTileFeature: any) => {
+          return GetGeoJSON(
+            extent,
+            tileParams.x,
+            tileParams.y,
+            tileParams.z,
+            vectorTileFeature,
+          );
+        })
+      : [];
 
-    const vectorTile = {
+    const vectorTile: MapboxVectorTile = {
       layers: {
-        // Tip: fixed SourceLayer Name
-        geojsonvt: {
+        defaultLayer: {
+          // @ts-ignore
           features,
         } as VectorTileLayer & {
           features: Feature[];
         },
       },
-    } as MapboxVectorTile;
+    };
 
     resolve(vectorTile);
   });
 };
 
-function getGeoJSONVTOptions(cfg?: ITileParserCFG) {
+function getOption(cfg?: ITileParserCFG) {
   const defaultOptions = {
     // geojson-vt default options
     maxZoom: 14, // max zoom to preserve detail on
@@ -206,27 +212,7 @@ function getGeoJSONVTOptions(cfg?: ITileParserCFG) {
   if (cfg === undefined || typeof cfg.geojsonvtOptions === 'undefined') {
     return defaultOptions;
   } else {
-    cfg.geojsonvtOptions.maxZoom &&
-      (defaultOptions.maxZoom = cfg.geojsonvtOptions.maxZoom);
-    cfg.geojsonvtOptions.indexMaxZoom &&
-      (defaultOptions.indexMaxZoom = cfg.geojsonvtOptions.indexMaxZoom);
-    cfg.geojsonvtOptions.indexMaxPoints &&
-      (defaultOptions.indexMaxPoints = cfg.geojsonvtOptions.indexMaxPoints);
-    cfg.geojsonvtOptions.tolerance &&
-      (defaultOptions.tolerance = cfg.geojsonvtOptions.tolerance);
-    cfg.geojsonvtOptions.extent &&
-      (defaultOptions.extent = cfg.geojsonvtOptions.extent);
-    cfg.geojsonvtOptions.buffer &&
-      (defaultOptions.buffer = cfg.geojsonvtOptions.buffer);
-    cfg.geojsonvtOptions.lineMetrics &&
-      (defaultOptions.lineMetrics = cfg.geojsonvtOptions.lineMetrics);
-    cfg.geojsonvtOptions.promoteId &&
-      (defaultOptions.promoteId = cfg.geojsonvtOptions.promoteId);
-    cfg.geojsonvtOptions.generateId &&
-      (defaultOptions.generateId = cfg.geojsonvtOptions.generateId);
-    cfg.geojsonvtOptions.debug &&
-      (defaultOptions.debug = cfg.geojsonvtOptions.debug);
-    return defaultOptions;
+    return { ...defaultOptions, ...cfg.geojsonvtOptions };
   }
 }
 
@@ -234,13 +220,13 @@ export default function geojsonVTTile(
   data: FeatureCollection<Geometries, Properties>,
   cfg: ITileParserCFG,
 ): IParserData {
-  const geojsonOptions = getGeoJSONVTOptions(cfg) as geojsonvt.Options &
+  const geojsonOptions = getOption(cfg) as geojsonvt.Options &
     IGeojsonvtOptions;
 
   const extent = geojsonOptions.extent || 4096;
   const tileIndex = geojsonvt(data, geojsonOptions);
 
-  const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
+  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) => {
     return getVectorTile(tile, tileIndex, tileParams, extent);
   };
 

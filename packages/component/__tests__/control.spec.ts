@@ -1,6 +1,7 @@
 import { TestScene } from '@antv/l7-test-utils';
 import { DOM } from '@antv/l7-utils';
 import { Control } from '../src/control/baseControl';
+import { Zoom } from '../src/control/zoom';
 
 class TestControl extends Control {
   public onAdd(): HTMLElement {
@@ -64,5 +65,15 @@ describe('control', () => {
     expect(corner.classList).toContain('l7-bottom');
     expect(container.classList).toContain(className);
     expect(container.style.color).toEqual(color);
+  });
+
+  // 测试自定义位置
+  it('position', () => {
+    const dom = document.createElement('div');
+    const zoom = new Zoom({
+      position: dom,
+    });
+    scene.addControl(zoom);
+    expect(dom.firstChild).toEqual(zoom.getContainer());
   });
 });

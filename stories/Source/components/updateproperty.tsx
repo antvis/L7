@@ -89,7 +89,6 @@ export default class MultiPolygon extends React.Component {
         },
       ],
     };
-    // console.log(data.features[5]);
     // data.features = data.features.slice(6);
     const source = new Source(data);
     const layer = new PolygonLayer({

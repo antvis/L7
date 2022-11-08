@@ -9,7 +9,6 @@ import {
   ScaleTypeName,
   ScaleTypes,
   StyleScaleType,
-  IParserData,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
 import { extent } from 'd3-array';
@@ -42,70 +41,61 @@ const scaleMap = {
 export default class FeatureScalePlugin implements ILayerPlugin {
   private scaleOptions: IScaleOptions = {};
 
-  private getSourceData(layer: ILayer, callback: (data: IParserData) => void) {
-    const source = layer.getSource();
-    if (source.inited) {
-      callback(source.data);
-    } else {
-      source.once('update', () => {
-        callback(source.data);
-      });
-    }
-  }
-
   public apply(
     layer: ILayer,
     {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('FeatureScalePlugin', () => {
+    layer.hooks.init.tapPromise('FeatureScalePlugin', async () => {
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
-
-      this.getSourceData(layer, ({ dataArray }) => {
-        if (Array.isArray(dataArray) && dataArray.length === 0) {
-          return;
-        } else {
-          this.caculateScalesForAttributes(attributes || [], dataArray);
-        }
-      });
+      const dataArray = layer.getSource()?.data.dataArray;
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      } else {
+        this.caculateScalesForAttributes(attributes || [], dataArray);
+      }
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tap('FeatureScalePlugin', () => {
-      this.scaleOptions = layer.getScaleOptions();
-      const attributes = styleAttributeService.getLayerStyleAttributes();
+    layer.hooks.beforeRenderData.tapPromise(
+      'FeatureScalePlugin',
+      async (flag: boolean) => {
+        if (!flag) {
+          return flag;
+        }
+        this.scaleOptions = layer.getScaleOptions();
+        const attributes = styleAttributeService.getLayerStyleAttributes();
+        const dataArray = layer.getSource().data.dataArray;
 
-      this.getSourceData(layer, ({ dataArray }) => {
         if (Array.isArray(dataArray) && dataArray.length === 0) {
-          return;
+          return true;
         }
         this.caculateScalesForAttributes(attributes || [], dataArray);
         layer.layerModelNeedUpdate = true;
-      });
-      return true;
-    });
+        return true;
+      },
+    );
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
-      const { usage } = layer.getLayerConfig();
-      if (layer.layerModelNeedUpdate || usage === 'basemap') {
+      if (layer.layerModelNeedUpdate) {
         return;
       }
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
+      const dataArray = layer.getSource().data.dataArray;
+
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      }
       if (attributes) {
-        this.getSourceData(layer, ({ dataArray }) => {
-          if (dataArray.length === 0) {
-            return;
-          }
-          const attributesToRescale = attributes.filter(
-            (attribute) => attribute.needRescale,
-          );
-          if (attributesToRescale.length) {
-            this.caculateScalesForAttributes(attributesToRescale, dataArray);
-          }
-        });
+        const attributesToRescale = attributes.filter(
+          (attribute) => attribute.needRescale,
+        );
+        if (attributesToRescale.length) {
+          this.caculateScalesForAttributes(attributesToRescale, dataArray);
+        }
       }
     });
   }

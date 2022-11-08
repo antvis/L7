@@ -1,14 +1,14 @@
 // @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap,GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
   
 export default () => {
     useEffect( () => {
         const scene = new Scene({
             id: 'map',
-            map: new GaodeMap({
+            map: new GaodeMapV2({
               center: [ 110, 36 ],
               style: 'light',
               zoom: 3
@@ -39,8 +39,13 @@ export default () => {
                     strokeWidth: 0.3, // 描边宽度
                     strokeOpacity: 1.0
                   });
-          
+                  pointLayer.style({
+                    stroke: '#f00', // 描边颜色
+                    strokeWidth: 0.3, // 描边宽度
+                    strokeOpacity: 1.0
+                  })
                 scene.addLayer(pointLayer);
+                console.log(pointLayer)
               });
           
           });

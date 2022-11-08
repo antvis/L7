@@ -5,18 +5,18 @@ import { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import mapboxgl, { Map } from 'mapbox-gl';
-import { Version } from '../version';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'reflect-metadata';
 import { IMapboxInstance } from '../../typings/index';
-import Viewport from './Viewport';
 import BaseMapService from '../utils/BaseMapService';
+import { Version } from '../version';
+import Viewport from './Viewport';
 window.mapboxgl = mapboxgl;
 
 let mapdivCount = 0;
 const MAPBOX_API_KEY =
-  'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ';
+  '101MlGsZ2AmmA&access_token=pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2p0MG01MXRqMW45cjQzb2R6b2ptc3J4MSJ9.zA2W0IkI0c6KaAhJfk9bWg';
 /**
  * AMapService
  */
@@ -150,7 +150,9 @@ export default class MapboxService extends BaseMapService<
         ...rest,
       });
     }
-    this.map.on('load', this.handleCameraChanged);
+    this.map.on('load', () => {
+      this.handleCameraChanged();
+    });
     this.map.on('move', this.handleCameraChanged);
 
     // 不同于高德地图，需要手动触发首次渲染

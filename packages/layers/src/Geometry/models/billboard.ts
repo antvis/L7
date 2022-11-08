@@ -46,7 +46,7 @@ export default class BillBoardModel extends BaseModel {
 
     /**
      *               rotateFlag
-     * L7MAP            1
+     * DEFAULT            1
      * MAPBOX           1
      * GAODE2.x         -1
      * GAODE1.x         -1
@@ -81,7 +81,7 @@ export default class BillBoardModel extends BaseModel {
     this.texture?.destroy();
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -98,7 +98,7 @@ export default class BillBoardModel extends BaseModel {
       this.updateTexture(drawCanvas);
     }
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'geometryBillboard',
         vertexShader: planeVert,
@@ -109,17 +109,11 @@ export default class BillBoardModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   public updateTexture(drawCanvas: (canvas: HTMLCanvasElement) => void): void {

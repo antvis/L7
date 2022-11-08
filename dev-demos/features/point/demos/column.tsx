@@ -8,7 +8,7 @@ export default () => {
     useEffect( () => {
       const scene = new Scene({
         id: 'map',
-        map: new GaodeMap({
+        map: new GaodeMapV2({
           pitch: 66.02383,
           style: 'dark',
           center: [121.400257, 31.25287],
@@ -40,9 +40,9 @@ export default () => {
             })
             .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
             .style({
-              opacity: 1.0,
+              opacity:0.5
             });
-  
+          console.log(pointLayer);
           scene.addLayer(pointLayer);
         });
           
