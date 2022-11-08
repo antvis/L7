@@ -17,7 +17,7 @@ export default () => {
       id: 'map',
       map: new Map({
         center: [130.5, 47],
-        zoom: 12,
+        zoom: 10.5,
       }),
     });
 

@@ -8,7 +8,6 @@ import * as GeoTIFF from 'geotiff';
 async function getTiffData() {
   const response = await fetch(
     'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
-    // 'http://127.0.0.1:3333/p.tif',
   );
   const arrayBuffer = await response.arrayBuffer();
   return arrayBuffer;
@@ -37,25 +36,14 @@ export default () => {
           {
             parser: {
               type: 'raster',
-              // width: tiffdata.width,
-              // height: tiffdata.height,
               format: async (data, bands) => {
                 const tiff = await GeoTIFF.fromArrayBuffer(data);
-                const imageCount = await tiff.getImageCount();
-                console.log('imageCount', imageCount);
-
                 const image = await tiff.getImage();
                 const width = image.getWidth();
                 const height = image.getHeight();
                 const values = await image.readRasters();
                 return { rasterData: values[0], width, height };
               },
-              // operation: (allBands) => {
-              //   return allBands[0].rasterData;
-              // },
-              operation: ['+', ['band', 0], 1],
-              min: 0,
-              max: 80,
               extent: [
                 73.482190241,
                 3.82501784112,
@@ -66,7 +54,6 @@ export default () => {
           },
         )
         .style({
-          heightRatio: 100,
           opacity: 0.8,
           domain: [0, 2000],
           rampColors: {

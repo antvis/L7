@@ -31,12 +31,6 @@ export default () => {
         'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*sV6gSYSdpl4AAAAAAAAAAAAAARQnAQ';
       const tiffdata = await getTiffData(url1);
 
-      // Gray = R*0.299 + G*0.587 + B*0.114
-      const grayExp = [
-        '+',
-        ['*', ['band', 0], 0.299],
-        ['+', ['*', ['band', 1], 0.587], ['*', ['band', 2], 0.114]],
-      ];
       const layer = new RasterLayer({});
       layer
         .source(
@@ -90,20 +84,10 @@ export default () => {
                   },
                 ];
               },
-              // operation: (allBands) => {
-              //   return allBands[0].rasterData;
-              // },
-              // operation: ['+', ['band', 0], 1],
               operation: {
                 r: ['band', 0],
                 g: ['band', 1],
                 b: ['band', 2],
-                // r: ['*', ['band', 0], 1],
-                // g: ['*', ['band', 1], 1],
-                // b: ['*', ['band', 2], 1],
-                // r: grayExp,
-                // g: grayExp,
-                // b: grayExp,
               },
               extent: [
                 73.482190241,

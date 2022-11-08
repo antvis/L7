@@ -46,8 +46,6 @@ export default () => {
             type: 'raster',
             width: tiffdata.width,
             height: tiffdata.height,
-            min: 0,
-            max: 80,
             extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
           },
         })

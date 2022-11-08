@@ -46,21 +46,13 @@ export default () => {
             parser: {
               type: 'rasterRgb',
               format: async (data, bands) => {
-                // console.log(bands, )
                 const tiff = await GeoTIFF.fromArrayBuffer(data);
-                const imageCount = await tiff.getImageCount();
-                console.log('imageCount', imageCount, bands);
-
                 const image = await tiff.getImage();
                 const width = image.getWidth();
                 const height = image.getHeight();
                 const values = await image.readRasters();
                 return { rasterData: values[0], width, height };
               },
-              // operation: (allBands) => {
-              //   return allBands[0].rasterData;
-              // },
-              // operation: ['+', ['band', 0], 1],
               operation: {
                 r: ['*', ['band', 1], 1],
                 g: ['*', ['band', 1], 1],

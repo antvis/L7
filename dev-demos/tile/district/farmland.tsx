@@ -5,6 +5,7 @@ import {
   PolygonLayer,
   TileDebugLayer,
   RasterLayer,
+  LineLayer,
   PointLayer,
 } from '@antv/l7';
 // @ts-ignore
@@ -53,14 +54,14 @@ export default () => {
     //     },
     //   },
     // );
-    const layer = new PolygonLayer({
+    const layer = new LineLayer({
       featureId: 'id',
       zIndex: 3,
       minZoom: 9,
       sourceLayer: 'state_s10_27', // woods hillshade contour ecoregions ecoregions2 city
     })
       .source(source)
-      .shape('line')
+      .shape('simple')
       .color('#000')
       .size(0.3)
       .style({

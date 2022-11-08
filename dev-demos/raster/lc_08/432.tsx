@@ -4,7 +4,7 @@ import { Select } from 'antd';
 import 'antd/es/select/style/index';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
 
 async function getTiffData(url: string) {
@@ -13,18 +13,16 @@ async function getTiffData(url: string) {
   return arrayBuffer;
 }
 
+// console.log(metersToLngLat([14504979.7235,5917159.8828993]));
+// console.log(metersToLngLat([14571644.4264000,5981299.2233999]))
 export default () => {
-  const [type, setType] = useState('4,3,2');
-  const handleChange = (value: string) => {
-    setType(value);
-    console.log(`selected ${value}`);
-  };
+
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
       map: new Map({
         center: [130.5, 47],
-        zoom: 10,
+        zoom: 10.5,
       }),
     });
 
@@ -66,6 +64,7 @@ export default () => {
                 const tiff = await GeoTIFF.fromArrayBuffer(data);
                 const image1 = await tiff.getImage();
                 const value = await image1.readRasters();
+              
                 return bands.map((band) => {
                   return {
                     rasterData: value[band],
@@ -93,58 +92,58 @@ export default () => {
 
   return (
     <>
-      <p>
-        <Select
-          value={type}
-          style={{ width: 120, zIndex: 10 }}
-          onChange={handleChange}
-          options={[
-            {
-              value: '3,2,1',
-              label: '真彩色图像',
-            },
-            {
-              value: '4,3,2',
-              label: '自然真彩色',
-            },
-            {
-              value: '7,6,4',
-              label: '城市',
-            },
-            {
-              value: '5,4,3',
-              label: '标准假彩色图像',
-            },
-            {
-              value: '6,5,2',
-              label: '农业',
-            },
-            {
-              value: '5,6,2',
-              label: '健康植被',
-            },
-            {
-              value: '7,6,5',
-              label: '穿透大气层',
-            },
-            {
-              value: '7,5,4',
-              label: '短波红外',
-            },
-            {
-              value: '6,5,4',
-              label: '植被分析',
-            },
-          ]}
-        />
-      </p>
+     <p>
+      <Select
+        value={'3,2,1'}
+        style={{ width: 120, zIndex: 10 }}
+        options={[
+          {
+            value: '3,2,1',
+            label: '真彩色图像',
+          },
+          {
+            value: '4,3,2',
+            label: '自然真彩色',
+          },
+          {
+            value: '7,6,4',
+            label: '城市',
+          },
+          {
+            value: '5,4,3',
+            label: '标准假彩色图像',
+          },
+          {
+            value: '6,5,2',
+            label: '农业',
+          },
+          {
+            value: '5,6,2',
+            label: '健康植被',
+          },
+          {
+            value: '7,6,5',
+            label: '穿透大气层',
+          },
+          {
+            value: '7,5,4',
+            label: '短波红外',
+          },
+          {
+            value: '6,5,4',
+            label: '植被分析',
+          },
+        ]}
+      />
+    </p>
       <div
         id="map"
         style={{
           height: '500px',
           position: 'relative',
         }}
-      />
+      >  
+      </div>
     </>
   );
 };

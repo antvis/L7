@@ -50,8 +50,6 @@ export default () => {
               return { rasterData: values[0], width, height };
             },
             operation: ['+', ['+', ['band', 0], 90], ['*', ['band', 1], 50]],
-            min: 0,
-            max: 80,
             extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
           },
         })
