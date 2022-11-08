@@ -1,4 +1,5 @@
 export type DataType = string | object[] | object;
+export type TypedArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array;
 export interface IDictionary<TValue> {
   [key: string]: TValue;
 }
@@ -27,7 +28,7 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
-  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
+  rasterData: HTMLImageElement | Uint8Array |  ImageBitmap | null | undefined;
   width: number;
   height: number;
 }

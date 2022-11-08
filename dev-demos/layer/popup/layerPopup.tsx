@@ -1,5 +1,5 @@
 import {
-  GaodeMap,
+  GaodeMapV2,
   LayerPopup,
   PointLayer,
   Scene,
@@ -20,7 +20,7 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         style: 'dark',
         center: [120.104697, 30.260704],
         pitch: 0,

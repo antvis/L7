@@ -1,4 +1,4 @@
-import { GaodeMap, Scene, MapTheme } from '@antv/l7';
+import { GaodeMapV2, Scene, MapTheme } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -14,7 +14,7 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         style: 'dark',
         center: [120, 30],
         pitch: 0,

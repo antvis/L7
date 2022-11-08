@@ -44,10 +44,10 @@ export default class RasterModel extends BaseModel {
     } else {
       // 多波段形式、需要进行处理
       // 支持彩色栅格（多通道）
-      const { rasterData, width, height, channelR, channelG, channelB } = await parserDataItem.data;
-      this.channelRMax = channelR;
-      this.channelGMax = channelG;
-      this.channelBMax = channelB;
+      const { rasterData, width, height, channelRMax, channelGMax, channelBMax } = await parserDataItem.data;
+      this.channelRMax = channelRMax;
+      this.channelGMax = channelGMax;
+      this.channelBMax = channelBMax;
       return {
         data: Array.from(rasterData),
         width,
