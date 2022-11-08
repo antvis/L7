@@ -7,6 +7,16 @@ order: 7
 
 L7 加载栅格瓦片地图的时候需要在 `source` 中对瓦片服务进行解析，同时配置瓦片服务的请求参数。
 
+## data
+
+瓦片 URL,仅支持 EPSG 3857 的坐标系
+
+### TMS
+
+### WMS
+
+### WMTS
+
 ## parser
 
 - type string 固定值为 `rasterTile`

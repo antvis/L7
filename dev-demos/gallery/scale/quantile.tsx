@@ -37,6 +37,9 @@ export default () => {
           opacity: 1,
         });
 
+      layer.on('mousemove', (e) => {
+        console.log(e);
+      });
       scene.addLayer(layer);
       addLayers(geoData, scene, layer);
     }

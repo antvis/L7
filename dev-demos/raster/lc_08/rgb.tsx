@@ -1,5 +1,5 @@
 // @ts-ignore
-import { RasterLayer, Scene } from '@antv/l7';
+import { RasterLayer, Scene, metersToLngLat } from '@antv/l7';
 import { Select } from 'antd';
 import 'antd/es/select/style/index';
 // @ts-ignore
@@ -13,15 +13,13 @@ async function getTiffData(url: string) {
   return arrayBuffer;
 }
 
-// console.log(metersToLngLat([14504979.7235,5917159.8828993]));
-// console.log(metersToLngLat([14571644.4264000,5981299.2233999]))
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
       map: new Map({
         center: [130.5, 47],
-        zoom: 10.5,
+        zoom: 5,
       }),
     });
 
@@ -44,16 +42,24 @@ export default () => {
       });
       scene.addLayer(layer2);
       const url1 =
-        'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
+        'https://gw.alipayobjects.com/zos/raptor/1667920165972/china.tif';
       const tiffdata = await getTiffData(url1);
-
-      const layer = new RasterLayer({ zIndex: 10 });
+      const maskData = await (
+        await fetch(
+          'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
+        )
+      ).json();
+      const layer = new RasterLayer({
+        zIndex: 10,
+        mask: true,
+        maskfence: maskData,
+      });
       layer
         .source(
           [
             {
               data: tiffdata,
-              bands: [6, 5, 2].map((v) => v - 1),
+              bands: [0, 1, 2],
             },
           ],
           {
@@ -74,10 +80,14 @@ export default () => {
               },
               operation: 'rgb',
               extent: [
-                130.39565357746957,
-                46.905730725742366,
-                130.73364094187343,
-                47.10217234153133,
+                ...metersToLngLat([
+                  8182125.2558000003919005,
+                  427435.8622000003233552,
+                ]),
+                ...metersToLngLat([
+                  15038832.4410999994724989,
+                  7087852.7587999999523163,
+                ]),
               ],
             },
           },

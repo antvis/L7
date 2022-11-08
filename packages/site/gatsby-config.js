@@ -237,13 +237,22 @@ module.exports = {
         order: 8,
       },
       {
-        slug: 'api/tile',
+        slug: 'api/vectortile',
         title: {
-          zh: '瓦片图层 TileLayer',
-          en: 'tile',
+          zh: '矢量瓦片 TileLayer',
+          en: 'VectorTile',
         },
-        order: 9,
+        order: 8,
       },
+      {
+        slug: 'api/rastertile',
+        title: {
+          zh: '栅格瓦片 TileLayer',
+          en: 'rasterTile',
+        },
+        order: 8,
+      },
+      
       {
         slug: 'api/other',
         title: {

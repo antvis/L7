@@ -80,17 +80,10 @@ export default () => {
           },
         )
         .style({
-          domain: [-0.3, 0.5],
+          domain: [0, 1],
           rampColors: {
-            colors: [
-              '#ce4a2e',
-              '#f0a875',
-              '#fff8ba',
-              '#bddd8a',
-              '#5da73e',
-              '#235117',
-            ],
-            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+            colors: ['#0000FF', '#FF0000'],
+            positions: [0, 1.0],
           },
         });
 
