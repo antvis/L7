@@ -1,7 +1,7 @@
 // @ts-ignore
 import { RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
 
@@ -15,21 +15,20 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [121.268, 30.3628],
         zoom: 3,
       }),
     });
 
     scene.on('loaded', async () => {
-      const url1 = 'http://localhost:3333/luochuan2.tif';
+      const url1 = 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-JRUT5u3IDcAAAAAAAAAAAAADmJ7AQ/original';
       const tiffdata = await getTiffData(url1);
 
       const layer = new RasterLayer({})
       layer.source([
         {
           data: tiffdata,
-          bands: [0, 1, 2, 3],
         },
       ], {
           parser: {
@@ -37,27 +36,12 @@ export default () => {
             format: async (data, bands) => {
               const tiff = await GeoTIFF.fromArrayBuffer(data);
               const imageCount = await tiff.getImageCount();
-              console.log('imageCount', imageCount, bands)
-
-              
-              // const image = await tiff.getImage();
-              // const width = image.getWidth();
-              // const height = image.getHeight();
-              // const value0 = await image.readRasters();
-
-              const image1 = await tiff.getImage(2);
+              const image1 = await tiff.getImage();
               const value1 = await image1.readRasters();
-              // console.log(value1)
-
-              // const image2 = await tiff.getImage(2);
-              // const value2 = await image2.readRasters();
-              // console.log(value2)
 
               const value = value1;
               return [
-                // { rasterData: value0[0], width, height },
-                // { rasterData: value1[0], width, height },
-                // { rasterData: value2[0], width, height }
+  
                 { rasterData: value[0], width: value.width, height: value.height },
                 { rasterData: value[1], width: value.width, height: value.height },
                 { rasterData: value[2], width: value.width, height: value.height },
@@ -109,23 +93,6 @@ export default () => {
           },
         })
         .style({
-          // opacity: 0.8,
-          // channelRMax: 96,
-          // channelGMax: 112,
-          // channelBMax: 141
-
-          // channelRMax: 150,
-          // channelGMax: 131,
-          // channelBMax: 141
-
-          // channelRMax: 234,
-          // channelGMax: 296,
-          // channelBMax: 296
-
-          channelRMax: 234 - 133,
-          channelGMax: 296 - 155,
-          channelBMax: 296 - 184
-
           // channelRMax: 255,
           // channelGMax: 255,
           // channelBMax: 255

@@ -1,7 +1,7 @@
 // @ts-ignore
 import { RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
 
@@ -15,14 +15,14 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new GaodeMapV2({
         center: [121.268, 30.3628],
         zoom: 3,
       }),
     });
 
     scene.on('loaded', async () => {
-      const url1 = 'http://localhost:3333/luochuan2.tif';
+      const url1 = 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-JRUT5u3IDcAAAAAAAAAAAAADmJ7AQ/original';
       const tiffdata = await getTiffData(url1);
 
       const layer = new RasterLayer({})
@@ -36,6 +36,7 @@ export default () => {
             type: 'raster',
             format: async (data, bands) => {
               const tiff = await GeoTIFF.fromArrayBuffer(data);
+              console.log(tiff)
               const imageCount = await tiff.getImageCount();
               console.log('imageCount', imageCount, bands)
 
