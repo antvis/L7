@@ -4,10 +4,11 @@ order: 3
 ---
 `markdown:docs/common/style.md`
 
-高德地图为我们提供和许多好用的插件，借助这些插件的能力我们可以覆盖更多的业务场景。
+我们在使用高德地图作为地图底图的时候，可以借助高德地图提供的插件实现也中需求。
 
 ### AMap.LineSearch
-道路查询
+
+- 道路查询
 
 ```javascript
 const scene = new Scene({
@@ -25,7 +26,8 @@ const scene = new Scene({
 [在线案例](/zh/examples/amapPlugin/bus#busStop)
 
 ### AMap.ToolBar
-地图工具栏
+
+- 地图工具栏
 
 ```javascript
 scene.on('loaded', () => {
@@ -38,28 +40,29 @@ scene.on('loaded', () => {
       city: '北京', // 限定查询城市，可以是城市名（中文/中文全拼）、城市编码，默认值为『全国』
       extensions: 'all' // 是否返回公交线路详细信息，默认值为『base』
     });
-...
 ```
 
 [在线案例](/zh/examples/amapPlugin/bus#busStop)
 
 ### AMap.TileLayer
-加载使用 xyz 地图瓦片
+
+- 加载使用 `xyz` 地图瓦片
 
 ```javascript
 scene.on('loaded', () => {
-    var xyzTileLayer = new window.AMap.TileLayer({
-      getTileUrl:
-        'https://wprd0{1,2,3,4}.is.autonavi.com/appmaptile?x=[x]&y=[y]&z=[z]&size=1&scl=1&style=8&ltype=11',
-      zIndex: 100,
-    });
-    scene.getMapService().map.add(xyzTileLayer);
+  var xyzTileLayer = new window.AMap.TileLayer({
+    getTileUrl:
+      'https://wprd0{1,2,3,4}.is.autonavi.com/appmaptile?x=[x]&y=[y]&z=[z]&size=1&scl=1&style=8&ltype=11',
+    zIndex: 100,
+  });
+  scene.getMapService().map.add(xyzTileLayer);
 });
 ```
 [在线案例](/zh/examples/amapPlugin/bus#xyzTile)
 
 ### AMap.TileLayer.Satellite
-加载使用默认的卫星瓦片
+
+- 加载使用默认的卫星瓦片
 
 ```javascript
  scene.on('loaded', () => {

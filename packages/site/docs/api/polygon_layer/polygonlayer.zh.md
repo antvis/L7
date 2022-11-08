@@ -13,135 +13,30 @@ order: 0
 
 ```javascript
 import { PolygonLayer } from '@antv/l7';
-```
-
-### shape
-
-`PolygonLayer` 填充图支持 3 种 shape，均不支持数据映射
-
-**填充面**
-
-- fill 绘制填充面
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*v5dZT4Q1dgsAAAAAAAAAAAAAARQnAQ">
-
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('red')
-        .shape('fill')
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
-```
-
-**填充图描边**
-
-- line 绘制填充图描边
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KSlPQ6MCu4sAAAAAAAAAAAAAARQnAQ">
-
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('#000')
-        .shape('line')
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
-```
-
-**3D 填充图**
-
-- extrude 对填充图 3D 拉伸
-
-<img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*vcN8TptUA1cAAAAAAAAAAAAAARQnAQ">
-
-```javascript
-import { Scene, PolygonLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-
-const scene = new Scene({
-  id: 'map',
-  map: new Mapbox({
-    pitch: 0,
-    style: 'blank',
-    center: [116.368652, 39.93866],
-    zoom: 10.07,
-  }),
-});
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/d6da7ac1-8b4f-4a55-93ea-e81aa08f0cf3.json',
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      const chinaPolygonLayer = new PolygonLayer({
-        autoFit: true,
-      })
-        .source(data)
-        .color('name', [
-          'rgb(239,243,255)',
-          'rgb(189,215,231)',
-          'rgb(107,174,214)',
-          'rgb(49,130,189)',
-          'rgb(8,81,156)',
-        ])
-        .shape('extrude')
-        .size('childrenNum', (num) => num * 10000)
-        .style({
-          opacity: 1,
-        });
-
-      scene.addLayer(chinaPolygonLayer);
-    });
-});
+const layer = new PolygonLayer()
+  .source({
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [104.4140625, 35.460669951495305],
+              [98.7890625, 24.206889622398023],
+              [111.796875, 27.371767300523047],
+              [104.4140625, 35.460669951495305],
+            ],
+          ],
+        },
+      },
+    ],
+  })
+  .shape('fill')
+  .color('#f00')
+  .style({
+    opacity: 0.6,
+  });
 ```

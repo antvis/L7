@@ -5,11 +5,8 @@ import Features from '@antv/gatsby-theme-antv/site/components/Features';
 import SEO from '@antv/gatsby-theme-antv/site/components/Seo';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dipper } from '../components/Dipper';
-import { DipperMap } from '../components/DipperMap';
 import { L7Draw } from '../components/L7Draw';
 import { L7Plot } from '../components/L7Plot';
-import { L7React } from '../components/L7React';
 import '../css/home.css';
 
 const IndexPage = () => {
@@ -30,15 +27,6 @@ const IndexPage = () => {
       link: 'https://antv.vision/Dipper/~demos/docs-analysis',
       image:
         'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*OnGVRb_qWxcAAAAAAAAAAAAAARQnAQ',
-    },
-    {
-      logo:
-        'https://gw.alipayobjects.com/zos/bmw-prod/222865fc-15e9-44b9-b726-444e1512d937.ico',
-      title: t('DipperMap 地理分析工具'),
-      description: t('地图可视化配置分析类场景'),
-      link: `/${i18n.language}/examples/gallery/basic`,
-      image:
-        'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*MPWKQqh54vwAAAAAAAAAAAAAARQnAQ',
     },
   ];
   const companies = [
@@ -125,72 +113,22 @@ const IndexPage = () => {
       link: 'https://www.yuque.com/xiaofengcanyue/scpehq/fgcwge',
     },
     {
-      type: t('L7 2.9 酷炫的可视化'),
-      title: t('瓦片地图 矢量&栅格瓦片'),
-      date: '2022.06.31',
-      link: 'https://www.yuque.com/antv/blog/sq4ogr',
+      type: t('版本记录'),
+      title: t('L7 各个版本的记录'),
+      date: getDate(),
+      link: 'https://www.yuque.com/antv/l7/xivetl',
     },
   ];
 
-  const dipper = [
-    {
-      title: t('配置化'),
-      image:
-        'https://gw.alipayobjects.com/zos/bmw-prod/a8d32053-ef9d-485e-ae13-2b49535e6f4f.svg',
-      link: `/${i18n.language}/view`,
-    },
-    {
-      title: t('组件化'),
-      image:
-        'https://gw.alipayobjects.com/zos/bmw-prod/4235cc53-ef5f-4a47-a33c-1623df19e4b7.svg',
-      link: `/${i18n.language}/task`,
-    },
-    {
-      title: t('自由定制'),
-      image:
-        'https://gw.alipayobjects.com/zos/bmw-prod/29cbd68c-86ac-440c-a38d-792dbd8aea61.svg',
-      link: 'https://dippermap.alipay.com',
-    },
-  ];
-
-  const dippermap = [
-    {
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*6S8hQJAUB2oAAAAAAAAAAAAAARQnAQ',
-      alt: 'heat',
-      desc: '3D热力图',
-    },
-    {
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*R8juSLJc86wAAAAAAAAAAAAAARQnAQ',
-      alt: '3DARC',
-      desc: '3D曲线',
-    },
-    {
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*MDmtT6lRS6EAAAAAAAAAAAAAARQnAQ',
-      alt: 'trip',
-      desc: '路径图',
-    },
-    {
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*lRdLQotjkKsAAAAAAAAAAAAAARQnAQ',
-      alt: 'point',
-      desc: '3D柱图',
-    },
-    {
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*W_DMQ5DVmIsAAAAAAAAAAAAAARQnAQ',
-      alt: 'polygon',
-      desc: '中国3D地图',
-    },
-    {
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_e7e1c6/afts/img/A*InJXT6G-l6UAAAAAAAAAAAAAARQnAQ',
-      alt: 'hex',
-      desc: '六边形图',
-    },
-  ];
+  function getDate() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const monthStr = month < 10 ? '0' + month : month + '';
+    const day = date.getDate();
+    const dateStr = day < 10 ? '0' + day : day + '';
+    return year + '.' + monthStr + '.' + dateStr;
+  }
 
   const draw = [
     {
@@ -213,6 +151,18 @@ const IndexPage = () => {
     },
   ];
 
+  // fetch('http://registry.npmjs.org/-/package/@antv/g2/dist-tags', {
+  //   method: 'GET',//post请求
+  //   headers: {
+  //   'Accept': 'application/json',
+  //   'Content-Type': 'application/json'
+  //   }
+  // })
+  // .then(e =>e.json())
+  // .then(e =>{
+  //   console.log('###', e)
+  // })
+
   return (
     <>
       <SEO title={t('蚂蚁地理空间数据可视化')} lang={i18n.language} />
@@ -234,15 +184,10 @@ const IndexPage = () => {
         // @ts-ignore
         githubStarLink="https://github.com/antvis/L7/stargazers"
       />
+          {/* <img src='https://img.shields.io/npm/v/@antv/l7-draw.svg'/> */}
       <Features features={L7Features} style={{ width: '100%' }} />
 
-      <Dipper dipper={dipper} />
-
-      <DipperMap dippermap={dippermap} />
-
       <Cases cases={L7Case} />
-
-      <L7React />
 
       <L7Plot />
 

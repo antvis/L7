@@ -1,7 +1,5 @@
 ---
 title: QuickStart
-order: 0
-redirect_from:
-  - /en/docs/tutorial
+order: 1
 ---
 `markdown:docs/tutorial/quickstart.zh.md`
