@@ -20,19 +20,20 @@ module.exports = {
     showAPIDoc: true, // 是否在demo页展示API文档
     navs: [
       {
-        slug: 'docs/api',
+        slug: 'docs/tutorial/l7',
         title: {
-          zh: '文档',
-          en: 'Document',
-        },
-        redirect: 'api/l7',
-      },
-      {
-        slug: 'docs/tutorial',
-        title: {
-          zh: '教程',
+          zh: '使用教程',
           en: 'Tutorial',
         },
+        redirect: 'api/quickstart',
+      },
+      {
+        slug: 'docs/api',
+        title: {
+          zh: 'API 文档',
+          en: 'Document',
+        },
+        redirect: 'api/scene',
       },
       {
         slug: 'examples',
@@ -82,21 +83,37 @@ module.exports = {
     docs: [
       // ****** tutorial
       // quickStart 0
+      {
+        slug: 'tutorial/l7',
+        title: {
+          zh: '简介',
+          en: 'introduce',
+        },
+        order: 1,
+      },
+      {
+        slug: 'tutorial/quickstart',
+        title: {
+          zh: '快速上手',
+          en: 'quickStart',
+        },
+        order: 2,
+      },
       // demo 1
       // data 2
       {
         slug: 'tutorial/map',
         title: {
-          zh: '地图',
-          en: 'Map',
+          zh: '地图使用',
+          en: 'Map Usage',
         },
         order: 3,
       },
       {
         slug: 'tutorial/interactive',
         title: {
-          zh: '交互',
-          en: 'interactive',
+          zh: '图层交互',
+          en: 'Layer Interactive',
         },
         order: 4,
       },
@@ -109,28 +126,56 @@ module.exports = {
         },
         order: 5,
       },
-
+      {
+        slug: 'tutorial/point',
+        icon: 'map',
+        title: {
+          zh: '点图层 PointLayer',
+          en: 'PointLayer',
+        },
+        order: 6,
+      },
+      {
+        slug: 'tutorial/line',
+        icon: 'map',
+        title: {
+          zh: '线图层 LineLayer',
+          en: 'LineLayer',
+        },
+        order: 7,
+      },
+      {
+        slug: 'tutorial/polygon',
+        icon: 'map',
+        title: {
+          zh: '面图层 PolygonLayer',
+          en: 'PolygonLayer',
+        },
+        order: 8,
+      },
+      {
+        slug: 'tutorial/heatmap',
+        icon: 'map',
+        title: {
+          zh: '热力图层 HeatmapLayer',
+          en: 'HeatmapLayer',
+        },
+        order: 9,
+      },
+      {
+        slug: 'tutorial/tile',
+        icon: 'map',
+        title: {
+          zh: '瓦片图层 TileLayer',
+          en: 'TileLayer',
+        },
+        order: 10,
+      },
       // ****** api
-      {
-        slug: 'api/map',
-        title: {
-          zh: '地图 Map',
-          en: 'Map',
-        },
-        order: 1,
-      },
-      {
-        slug: 'api/map/earth',
-        title: {
-          zh: '地球模式',
-          en: 'Earth Mode',
-        },
-        order: 3,
-      },
       {
         slug: 'api/base',
         title: {
-          zh: '图层 base',
+          zh: '图层 BaseLayer',
           en: 'Layer',
         },
         order: 2,
@@ -141,12 +186,12 @@ module.exports = {
           zh: '数据 Source',
           en: 'Source',
         },
-        order: 2,
+        order: 3,
       },
       {
         slug: 'api/point_layer',
         title: {
-          zh: '点图层',
+          zh: '点图层 PointLayer',
           en: 'PointLayer',
         },
         order: 3,
@@ -154,7 +199,7 @@ module.exports = {
       {
         slug: 'api/line_layer',
         title: {
-          zh: '线图层',
+          zh: '线图层 LineLayer',
           en: 'LineLayer',
         },
         order: 4,
@@ -162,7 +207,7 @@ module.exports = {
       {
         slug: 'api/polygon_layer',
         title: {
-          zh: '面图层',
+          zh: '面图层 PolygonLayer',
           en: 'PolygonLayer',
         },
         order: 5,
@@ -170,23 +215,15 @@ module.exports = {
       {
         slug: 'api/heatmap_layer',
         title: {
-          zh: '热力图层',
+          zh: '热力图层 HeatMapLayer',
           en: 'HeatMapLayer',
-        },
-        order: 6,
-      },
-      {
-        slug: 'api/geometry_layer',
-        title: {
-          zh: '几何体图层',
-          en: 'GeometryLayer',
         },
         order: 6,
       },
       {
         slug: 'api/imageLayer',
         title: {
-          zh: '图片图层',
+          zh: '图片图层 ImageLayer',
           en: 'ImageLayer',
         },
         order: 7,
@@ -194,23 +231,39 @@ module.exports = {
       {
         slug: 'api/raster',
         title: {
-          zh: '栅格图层',
+          zh: '栅格图层 RasterLayer',
           en: 'RasterLayer',
         },
         order: 8,
       },
       {
+        slug: 'api/tile',
+        title: {
+          zh: '瓦片图层 TileLayer',
+          en: 'tile',
+        },
+        order: 9,
+      },
+      {
+        slug: 'api/other',
+        title: {
+          zh: '其他图层 Other',
+          en: 'Other Layers',
+        },
+        order: 10,
+      },
+      {
         slug: 'api/component',
         title: {
-          zh: '组件',
+          zh: '组件 Component',
           en: 'Component',
         },
-        order: 8,
+        order: 11,
       },
       {
         slug: 'api/component/control',
         title: {
-          zh: '控件类型',
+          zh: '控件类型 Control',
           en: 'Control',
         },
         order: 1,
@@ -218,7 +271,7 @@ module.exports = {
       {
         slug: 'api/component/popup',
         title: {
-          zh: '气泡类型',
+          zh: '气泡类型 Popup',
           en: 'Popup',
         },
         order: 2,
@@ -232,84 +285,36 @@ module.exports = {
         order: 3,
       },
       {
-        slug: 'api/renderer',
+        slug: 'api/experiment/earth',
         title: {
-          zh: '第三方引擎接入',
-          en: 'import other gl',
+          zh: '地球模式',
+          en: 'Earth Mode',
         },
-        order: 8,
+        order: 0,
       },
-      {
-        slug: 'api/tile',
-        title: {
-          zh: '瓦片',
-          en: 'tile',
-        },
-        order: 8,
-      },
-      {
-        slug: 'api/cityBuilding',
-        title: {
-          zh: '城市图层',
-          en: 'CityBuildLayer',
-        },
-        order: 9,
-      },
-      {
-        slug: 'api/wind',
-        title: {
-          zh: '风场图层',
-          en: 'WindLayer',
-        },
-        order: 9,
-      },
-      {
-        slug: 'api/mini',
-        title: {
-          zh: '小程序',
-          en: 'mini',
-        },
-        order: 9,
-      },
-      {
-        slug: 'api/pass',
-        title: {
-          zh: '后处理模块',
-          en: 'MultiPass',
-        },
-        order: 10,
-      },
-      {
-        slug: 'api/district',
-        title: {
-          zh: '行政区划',
-          en: 'District',
-        },
-        order: 11,
-      },
-      {
-        slug: 'api/draw',
-        title: {
-          zh: '绘制组件',
-          en: 'Draw Component',
-        },
-        order: 12,
-      },
-      {
-        slug: 'api/mini/demos',
-        title: {
-          zh: '案例集合',
-          en: 'demos',
-        },
-        order: 14,
-      },
+      // {
+      //   slug: 'api/mini',
+      //   title: {
+      //     zh: '小程序',
+      //     en: 'mini',
+      //   },
+      //   order: 9,
+      // },
+      // {
+      //   slug: 'api/mini/demos',
+      //   title: {
+      //     zh: '案例集合',
+      //     en: 'demos',
+      //   },
+      //   order: 14,
+      // },
       {
         slug: 'api/experiment',
         title: {
           zh: '实验特性',
           en: 'experiment',
         },
-        order: 15,
+        order: 12,
       },
     ],
     examples: [

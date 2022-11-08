@@ -1,16 +1,4 @@
 
-## options 配置项
-
-通过 options，我们可以在初始化的时候指定图层状态
-
-```javascript
-const options = {
-  name: 'xxx',
-  zIndex: 1,
-};
-const layer = new Layer(options);
-```
-
 ### name
 
 <description> _string_ **optional** _default:_ 自动数字编号</description>
@@ -83,15 +71,21 @@ layer 初始化完成之后，地图是否自动缩放到图层范围
 - false 不参与裁减
 - true 参与裁减
 
-[在线案例](../../examples/raster/basic#dem)
+[在线案例](/zh/examples/tile/raster#amap-satelliteMask)
+
+### maskfence
+
+<description> _geojson_ **optional** _default:_ []</description>
+
+描述当前图层的掩模边界，边界用 `GeoJSON` 数据进行描述。
 
 ### maskInside
 
 <description> _boolean_ **optional** _default:_ true</description>
 
-是否在 maskLayer 显示
+用来描述当前图层的内容与掩模边界显示。
 
-- true 在内部显示
-- 
+- `true` 在掩模内部显示
+- `false` 在掩模外部显示
 
 

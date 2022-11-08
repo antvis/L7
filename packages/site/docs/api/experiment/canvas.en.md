@@ -1,5 +1,5 @@
 ---
-title: Custom Layer
+title: Canvas Layer
 order: 7
 ---
 
