@@ -38,6 +38,7 @@ export default class MarkerLayer extends EventEmitter {
   private scene: Container;
   private zoom: number;
   private bbox: IBounds;
+  private inited: boolean;
   private containerSize: IMarkerContainerAndBounds;
 
   constructor(option?: Partial<IMarkerLayerOption>) {
@@ -76,6 +77,7 @@ export default class MarkerLayer extends EventEmitter {
     this.mapsService.on('camerachange', this.setContainerSize.bind(this)); // amap1.x 更新事件
     this.mapsService.on('viewchange', this.setContainerSize.bind(this)); // amap2.0 更新事件
     this.addMarkers();
+    this.inited = true;
     return this;
   }
 
@@ -112,6 +114,10 @@ export default class MarkerLayer extends EventEmitter {
       }
     }
     this.markers.push(marker);
+    // if(this.inited) {
+    //   marker.addTo(this.scene);
+    // }
+     
   }
 
   public removeMarker(marker: IMarker) {
