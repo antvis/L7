@@ -1,7 +1,5 @@
 // @ts-ignore
 import { RasterLayer, Scene, metersToLngLat } from '@antv/l7';
-import { Select } from 'antd';
-import 'antd/es/select/style/index';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -19,28 +17,11 @@ export default () => {
       id: 'map',
       map: new Map({
         center: [130.5, 47],
-        zoom: 5,
+        zoom: 2,
       }),
     });
 
     scene.on('loaded', async () => {
-      const url2 =
-        'https://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&';
-
-      const layer2 = new RasterLayer({
-        zIndex: 1,
-      }).source(url2, {
-        parser: {
-          type: 'rasterTile',
-          tileSize: 256,
-          wmtsOptions: {
-            layer: 'img',
-            tileMatrixset: 'w',
-            format: 'tiles',
-          },
-        },
-      });
-      scene.addLayer(layer2);
       const url1 =
         'https://gw.alipayobjects.com/zos/raptor/1667920165972/china.tif';
       const tiffdata = await getTiffData(url1);
@@ -101,50 +82,6 @@ export default () => {
 
   return (
     <>
-      <p>
-        <Select
-          value={'3,2,1'}
-          style={{ width: 120, zIndex: 10 }}
-          options={[
-            {
-              value: '3,2,1',
-              label: '真彩色图像',
-            },
-            {
-              value: '4,3,2',
-              label: '自然真彩色',
-            },
-            {
-              value: '7,6,4',
-              label: '城市',
-            },
-            {
-              value: '5,4,3',
-              label: '标准假彩色图像',
-            },
-            {
-              value: '6,5,2',
-              label: '农业',
-            },
-            {
-              value: '5,6,2',
-              label: '健康植被',
-            },
-            {
-              value: '7,6,5',
-              label: '穿透大气层',
-            },
-            {
-              value: '7,5,4',
-              label: '短波红外',
-            },
-            {
-              value: '6,5,4',
-              label: '植被分析',
-            },
-          ]}
-        />
-      </p>
       <div
         id="map"
         style={{

@@ -8,7 +8,8 @@ export const operationsSchema = {
     ['-', ['band', 1], ['band', 0]], // R > NIR
     ['+', ['band', 1], ['band', 0]]
   ],
-  rgb: strethRgb2minMax
+  rgb: strethRgb2minMax,
+  
 
 }
 
