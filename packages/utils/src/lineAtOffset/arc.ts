@@ -1,6 +1,6 @@
-import { Point } from './interface';
 import { amap2Project, amap2UnProject } from '../geo';
 import { Version } from '../interface/map';
+import { Point } from './interface';
 // arc
 export function arcLineAtOffset(
   source: Point,
@@ -36,7 +36,7 @@ function calDistance(p1: Point, p2: Point) {
 }
 
 function midPoint(source: Point, target: Point, thetaOffset: number) {
-  const center = [target[0] - source[0], target[1] - source[1]]; //target - source;
+  const center = [target[0] - source[0], target[1] - source[1]]; // target - source;
   const r = calDistance(center, [0, 0]);
   const theta = Math.atan2(center[1], center[0]);
   const r2 = r / 2.0 / Math.cos(thetaOffset);

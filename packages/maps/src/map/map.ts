@@ -7,9 +7,9 @@ import { Map } from '@antv/l7-map';
 import { $window } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { Version } from '../version';
-import Viewport from '../utils/Viewport';
 import BaseMapService from '../utils/BaseMapService';
+import Viewport from '../utils/Viewport';
+import { Version } from '../version';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
@@ -19,8 +19,8 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 export default class L7MapService extends BaseMapService<Map> {
   public version: string = Version.L7MAP;
   public lngLatToMercator(
-    _lnglat: [number, number],
-    _altitude: number,
+    lnglat: [number, number],
+    altitude: number,
   ): IMercator {
     throw new Error('Method not implemented.');
   }

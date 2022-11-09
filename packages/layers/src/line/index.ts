@@ -1,7 +1,7 @@
 import BaseLayer from '../core/BaseLayer';
 import { ILineLayerStyleOptions } from '../core/interface';
-import LineModels, { LineModelType } from './models';
 import { isVectorTile } from '../tile/utils';
+import LineModels, { LineModelType } from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';

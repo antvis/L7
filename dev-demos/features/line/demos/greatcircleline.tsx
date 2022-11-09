@@ -89,8 +89,8 @@ export default () => {
         .source(midPoints, {
           parser: {
             type: 'json',
-            x: '_lng',
-            y: '_lat',
+            x: 'lng',
+            y: 'lat',
           },
         })
         .shape('circle')
@@ -114,8 +114,8 @@ export default () => {
         .source(midPoints, {
           parser: {
             type: 'json',
-            x: '_lng',
-            y: '_lat',
+            x: 'lng',
+            y: 'lat',
           },
         })
         .shape('circle')

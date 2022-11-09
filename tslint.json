@@ -1,4 +1,5 @@
 {
+  "enable":true,
   "extends": [
     "tslint:latest",
     "tslint-plugin-prettier",

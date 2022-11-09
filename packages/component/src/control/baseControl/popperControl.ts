@@ -52,7 +52,8 @@ export default class PopperControl<
     const position = option?.position ?? defaultOption.position!;
     return {
       ...super.getDefault(option),
-      popperPlacement: PopperPlacementMap[position],
+      popperPlacement:
+        position instanceof Element ? 'bottom' : PopperPlacementMap[position],
       popperTrigger: 'click',
     };
   }
