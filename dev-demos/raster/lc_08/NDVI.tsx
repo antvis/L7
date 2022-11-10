@@ -70,7 +70,7 @@ export default () => {
                 ];
               },
               operation: {
-                type:'nd'
+                type: 'nd',
               },
               extent: [
                 130.39565357746957,

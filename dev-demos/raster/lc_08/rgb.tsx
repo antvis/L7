@@ -60,12 +60,9 @@ export default () => {
                   };
                 });
               },
-              operation:{
-                type:'rgb',
-                options:{
-                  
-                }
-
+              operation: {
+                type: 'rgb',
+                options: {},
               },
               extent: [
                 ...metersToLngLat([
