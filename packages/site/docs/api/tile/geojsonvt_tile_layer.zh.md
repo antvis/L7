@@ -7,12 +7,13 @@ order: 0
 
 `L7` 矢量瓦片除了可以时候后端提供的瓦片服务之外，同时提供了 `geojson-vt` 瓦片切分方案，使得前端在没有后端支持的情况下也能使用矢量瓦片。
 
-
 ### 矢量瓦片 - GeoJsonVT
 
 ```javascript
 import { PolygonLayer } from '@antv/l7';
-fetch('https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json')
+fetch(
+  'https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d2808.json',
+)
   .then((d) => d.json())
   .then((data) => {
     const source = new Source(data, {
@@ -38,13 +39,14 @@ fetch('https://gw.alipayobjects.com/os/bmw-prod/2b7aae6e-5f40-437f-8047-100e9a0d
 
 ```js
 const source = new Source(data, {
-  parser: { 
+  parser: {
     type: 'geojsonvt',
     maxZoom: 9,
-    geojsonvtOptions: {}
+    geojsonvtOptions: {},
   },
 });
 ```
+
 `geojsonOptions` 支持如下参数:
 
 | 参数           | 类型          | 默认值   | 描述                                                           |
@@ -59,4 +61,3 @@ const source = new Source(data, {
 | promoteId      | `string|null` | `null`   | name of a feature property to be promoted to feature.id        |
 | generateId     | `boolean`     | `true`   | whether to generate feature ids. Cannot be used with promoteId |
 | debug          | `0, 1 or 2`   | `0`      | logging level (0, 1 or 2)                                      |
-

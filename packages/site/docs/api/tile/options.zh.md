@@ -9,15 +9,16 @@ order: 1
 
 <description> _string_ **required** </description>
 
-只有矢量图层生效，用于设置矢量图层的数据源。        
+只有矢量图层生效，用于设置矢量图层的数据源。
 
 🌟 一般矢量服务返回的数据中存在多个图层的数据，我们需要从中进行选取。
 
 ```javascript
 const layer = new PointLayer({
-    sourceLayer: 'city'
-})
+  sourceLayer: 'city',
+});
 ```
+
 ### featureId
 
 <description> _string_ **optional** _default:_ 自动数字编号</description>
@@ -28,8 +29,8 @@ const layer = new PointLayer({
 
 ```javascript
 const layer = new PointLayer({
-    featureId: 'id'
-})
+  featureId: 'id',
+});
 ```
 
 `markdown:docs/common/layer/options.md`

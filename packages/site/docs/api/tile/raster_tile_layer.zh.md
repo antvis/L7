@@ -7,7 +7,6 @@ order: 0
 
 `L7` 的栅格图层支持加载 `TMS`、`WMS`、`WMTS` 等多种格式的图片瓦片，同时也支持 `Tiff`、`Lerc` 等多种格式的数据栅格瓦片。
 
-
 | 分类     | Layer         | parserType   | dataType      | 描述             |
 | -------- | ------------- | ------------ | ------------- | ---------------- |
 | 栅格瓦片 | `RasterLayer` | `rasterTile` | `image`、`/`  | 图片栅格         |
@@ -71,12 +70,12 @@ const source = new Source(url, {
 ```
 
 | 参数           | 类型                               | 默认值                                     | 描述                 |
-| -------------- | ---------------------------------- | ------------------------------------------ | ----------------- |
+| -------------- | ---------------------------------- | ------------------------------------------ | -------------------- |
 | type           | `string`                           | /                                          | 描述不同类型的瓦片   |
-| tileSize       | `number`                           | `256`                                      | 请求的瓦片尺寸      |
+| tileSize       | `number`                           | `256`                                      | 请求的瓦片尺寸       |
 | minZoom        | `number`                           | `0`                                        | 请求瓦片的最小层级   |
 | maxZoom        | `number`                           | `Infinity`                                 | 请求瓦片的最大层级   |
-| zoomOffset     | `number`                           | `0`                                        | 请求瓦片层级的偏移量  |
+| zoomOffset     | `number`                           | `0`                                        | 请求瓦片层级的偏移量 |
 | extent         | `[number, number, number, number]` | `[-Infinity,-Infinity,Infinity,Infinity,]` | 请求瓦片的边界       |
 | updateStrategy | `UpdateTileStrategy`               | `replace`                                  | 瓦片的替换策略       |
 
@@ -86,20 +85,18 @@ type UpdateTileStrategy = 'realtime' | 'overlap' | 'replace';
 
 关于不同的栅格瓦片使用不同的 `parser` 参数。
 
-| 瓦片类型       | type               |  dataType     |   描述           | 
-| ------------- | ------------------ |  ------------ | --------------- | 
-| TMS           | `rasterTile`       | `image`       |   图片栅格       | 
-| WMS           | `rasterTile`       | `image`       |   图片栅格       | 
-| WMTS          | `rasterTile`       | `image`       |   图片栅格       | 
-| arraybuffer   | `rasterTile`       | `arraybuffer` |   数据栅格，单通道 | 
-| rgb           | `rasterRgb`        | `arraybuffer` |   数据栅格，多通道 | 
-
+| 瓦片类型    | type         | dataType      | 描述             |
+| ----------- | ------------ | ------------- | ---------------- |
+| TMS         | `rasterTile` | `image`       | 图片栅格         |
+| WMS         | `rasterTile` | `image`       | 图片栅格         |
+| WMTS        | `rasterTile` | `image`       | 图片栅格         |
+| arraybuffer | `rasterTile` | `arraybuffer` | 数据栅格，单通道 |
+| rgb         | `rasterRgb`  | `arraybuffer` | 数据栅格，多通道 |
 
 🌟 `WMTS` 格式的瓦片有额外的参数。
 
-
-| 参数           | 类型           | 值                 | 描述          |
-| ------------- | -------------- | ------------------ | ------------ |
+| 参数          | 类型           | 值  | 描述         |
+| ------------- | -------------- | --- | ------------ |
 | `wmtsOptions` | `IWmtsOptions` | `/` | 设置请求参数 |
 
 `IWmtsOptions` 的参数用于拼接 `url`。
@@ -114,6 +111,7 @@ interface IWmtsOptions {
   tileMatrixset: string;
 }
 ```
+
 #### parser 参数
 
 ##### type: string

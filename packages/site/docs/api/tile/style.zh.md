@@ -44,6 +44,7 @@ ps：⚠️ color, position 的长度要相同，rgb 多通道栅格不支持
 ### vector tile
 
 矢量图层的 `style` 样式和普通图层保持一致。
+
 ### event
 
 🌟 数据栅格支持图层事件，目前图片栅格暂时不支持图层事件。

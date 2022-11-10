@@ -7,7 +7,6 @@ order: 0
 
 `L7` 的矢量瓦片图层复用了普通图层的数据可视化能力，支持对图层的样式进行数据映射。目前矢量瓦片支持了点、线、面、掩模等图层
 
-
 | 分类     | Layer            | parserType                          | 描述                                      |
 | -------- | ---------------- | ----------------------------------- | ----------------------------------------- |
 | 矢量瓦片 | `PointLayer`     | parser of PointLayer、`geojsonvt`   | 矢量点图层                                |
@@ -50,12 +49,12 @@ const source = new Source(url, {
 ```
 
 | 参数           | 类型                               | 默认值                                     | 描述                 |
-| -------------- | ---------------------------------- | ------------------------------------------ | ----------------- |
-| type           | `string`                           | /                                          | 固定值为 `mvt`     |
-| tileSize       | `number`                           | `256`                                      | 请求的瓦片尺寸      |
+| -------------- | ---------------------------------- | ------------------------------------------ | -------------------- |
+| type           | `string`                           | /                                          | 固定值为 `mvt`       |
+| tileSize       | `number`                           | `256`                                      | 请求的瓦片尺寸       |
 | minZoom        | `number`                           | `0`                                        | 请求瓦片的最小层级   |
 | maxZoom        | `number`                           | `Infinity`                                 | 请求瓦片的最大层级   |
-| zoomOffset     | `number`                           | `0`                                        | 请求瓦片层级的偏移量  |
+| zoomOffset     | `number`                           | `0`                                        | 请求瓦片层级的偏移量 |
 | extent         | `[number, number, number, number]` | `[-Infinity,-Infinity,Infinity,Infinity,]` | 请求瓦片的边界       |
 | updateStrategy | `UpdateTileStrategy`               | `replace`                                  | 瓦片的替换策略       |
 
