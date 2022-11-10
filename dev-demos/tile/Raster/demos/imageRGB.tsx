@@ -60,11 +60,13 @@ export default () => {
                   { rasterData: channelB, width: 256, height: 256 },
                 ];
               },
-              // operation: 'rgb'
               operation: {
-                r: ['band', 0],
-                g: ['band', 1],
-                b: ['band', 2],
+                type:'rgb',
+                options:{
+                  RMinMax:[0,255],
+                  GMinMax:[0,255],
+                  BMinMax:[0,255],
+                }
               },
             },
           },

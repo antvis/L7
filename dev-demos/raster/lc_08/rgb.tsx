@@ -60,7 +60,13 @@ export default () => {
                   };
                 });
               },
-              operation: 'rgb',
+              operation:{
+                type:'rgb',
+                options:{
+                  
+                }
+
+              },
               extent: [
                 ...metersToLngLat([
                   8182125.2558000003919005,

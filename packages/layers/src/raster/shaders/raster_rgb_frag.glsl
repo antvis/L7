@@ -10,7 +10,7 @@ varying vec2 v_texCoord;
 void main() {
   vec3 rgb = texture2D(u_texture,vec2(v_texCoord.x,v_texCoord.y)).rgb;
   if(rgb == vec3(u_noDataValue)) {
-    gl_FragColor = vec4(1.0, 0, 0, 1.0);
+    gl_FragColor = vec4(0.0, 0, 0, 0.0);
   } else {
     gl_FragColor = vec4(rgb.r / (u_rminmax.y -u_rminmax.x), rgb.g /(u_gminmax.y -u_gminmax.x), rgb.b/ (u_bminmax.y - u_bminmax.x), u_opacity);
   }

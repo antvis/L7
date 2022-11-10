@@ -22,14 +22,15 @@ function strethRgb2minMax(bandsData: IRasterData[],options?:SchemaRGBOption) {
   const channelG = bandsData[1].rasterData as Uint8Array;
   const channelB = bandsData[2].rasterData as Uint8Array;
   const data = [];
-  const minMaxR = percentile(channelR, 2, 98);
-  const minMaxG = percentile(channelG, 2, 98);
-  const minMaxB = percentile(channelB, 2, 98);
+  const [low,high]= options?.countCut || [2, 98]
+  const minMaxR = options?.RMinMax || percentile(channelR, low, high);
+  const minMaxG = options?.GMinMax || percentile(channelG, low, high);
+  const minMaxB = options?.BMinMax || percentile(channelB, low, high);
 
   for (let i = 0; i < channelR.length; i++) {
-    data.push(channelR[i] - minMaxR[0]);
-    data.push(channelG[i] - minMaxG[0]);
-    data.push(channelB[i] - minMaxB[0]);
+    data.push(Math.max(0,channelR[i] - minMaxR[0]));
+    data.push(Math.max(0,channelG[i] - minMaxG[0]));
+    data.push(Math.max(0,channelB[i] - minMaxB[0]));
   }
   return {
     rasterData: data,

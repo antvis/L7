@@ -27,7 +27,6 @@ export const getRasterFile = async (
       callback(errList as Error[], null);
       return;
     }
-
     processRasterData(rasterFiles, rasterFormat, operation, callback);
   } else { 
     const xhr = getArrayBuffer(requestParameters, (err, imgData) => {

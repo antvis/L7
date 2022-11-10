@@ -13,7 +13,7 @@ import rasterFrag from '../shaders/raster_rgb_frag.glsl';
 import rasterVert from '../shaders/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
-  protected dataOption: any;
+  protected dataOption: any = {};
 
   public getUninforms() {
     const {
@@ -33,20 +33,28 @@ export default class RasterModel extends BaseModel {
   }
 
   private async getRasterData(parserDataItem: any) {
+     
     if(Array.isArray(parserDataItem.data)) {
+      const {data,...rescfg} = parserDataItem;
+      this.dataOption = rescfg;
+      return {
+        data,
+        ...rescfg
+      }
+    }
+     
+    const { rasterData,...rest  } = await parserDataItem.data;
+    this.dataOption = rest;
+    if(Array.isArray(rasterData)) {
       // 直接传入波段数据
       return {
-        data: parserDataItem.data,
-        width: parserDataItem.width,
-        height: parserDataItem.height,
+        data: rasterData,
+        ...rest
       }
     } else {
       // 多波段形式、需要进行处理
       // 支持彩色栅格（多通道）
-      const { rasterData,...rest  } = await parserDataItem.data;
-      this.dataOption = rest;
       return {
-
         data: Array.from(rasterData),
         ...rest
       }
@@ -61,7 +69,6 @@ export default class RasterModel extends BaseModel {
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
-    
     const {data, width, height} = await this.getRasterData(parserDataItem);
     this.texture = createTexture2D({
       // @ts-ignore

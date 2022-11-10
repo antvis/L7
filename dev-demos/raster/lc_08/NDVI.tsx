@@ -69,7 +69,9 @@ export default () => {
                   { rasterData: values[bands[1]], width, height }, // NIR
                 ];
               },
-              operation: 'ndvi',
+              operation: {
+                type:'nd'
+              },
               extent: [
                 130.39565357746957,
                 46.905730725742366,

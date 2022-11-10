@@ -25,6 +25,7 @@ export default () => {
             mask: false,
             maskfence: maskData,
           });
+          //https://ganos.oss-cn-hangzhou.aliyuncs.com/tmp/landsat08/LC08/B02/8/220/90.tiff
           const urls = [
             {
               url: 'http://localhost:8080/LC08/B04/{z}/{x}/{y}.tiff',
@@ -48,7 +49,15 @@ export default () => {
                 type: 'rasterTile',
                 dataType: 'rgb',
                 tileSize: 256,
-                operation: 'rgb',
+                operation: {
+                  type:'rgb',
+                  // options:{
+                  //   RMinMax:[7799,29131],
+                  //   GMinMax:[8127,28226],
+                  //   BMinMax:[7549,27298],
+                  // }
+                  
+                },
                 format: async (data,bands) => {
                   const tiff = await GeoTIFF.fromArrayBuffer(data);
                   const image = await tiff.getImage();

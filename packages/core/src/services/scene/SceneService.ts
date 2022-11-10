@@ -130,7 +130,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.iconService.on('imageUpdate', () => this.render());
     // 字体资源
     this.fontService.init();
-
     /**
      * 初始化底图
      */

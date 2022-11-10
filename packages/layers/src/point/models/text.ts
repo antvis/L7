@@ -108,8 +108,9 @@ export default class TextModel extends BaseModel {
       gamma = 2.0,
       raisingHeight = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+
     const { canvas, mapping } = this.fontService;
-    if (Object.keys(mapping).length !== this.textCount) {
+    if (mapping && Object.keys(mapping).length !== this.textCount && canvas) {
       this.updateTexture();
       this.textCount = Object.keys(mapping).length;
     }
@@ -172,7 +173,7 @@ export default class TextModel extends BaseModel {
       u_sdf_map: this.texture,
       u_halo_blur: halo,
       u_gamma_scale: gamma,
-      u_sdf_map_size: [canvas.width, canvas.height],
+      u_sdf_map_size: [canvas?.width || 1, canvas?.height ||1],
     };
   }
 
@@ -201,6 +202,7 @@ export default class TextModel extends BaseModel {
       maskInside = true,
       textAllowOverlap = false
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+   
   
   //  this.mapping(); 重复调用
    this.initGlyph(); //

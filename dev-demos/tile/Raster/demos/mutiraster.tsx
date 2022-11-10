@@ -44,8 +44,10 @@ export default () => {
                 type: 'rasterTile',
                 dataType: 'arraybuffer',
                 tileSize: 256,
-                maxZoom: 13.1,
-                operation: 'ndvi',
+                
+                operation: {
+                  type:'nd'
+                },
                 format: async (data,bands) => {
                   const tiff = await GeoTIFF.fromArrayBuffer(data);
                   const image = await tiff.getImage();

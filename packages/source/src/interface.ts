@@ -61,12 +61,7 @@ export type SchemaRGBOperation = {
 }
 export type SchemaBandOperation = {
   type: 'nd'
-  options?:Partial<{
-    countCut:[number,number];// 百分比
-    RMinMax:[number,number];
-    GMinMax:[number,number];
-    BMinMax:[number,number];
-  }> 
+
 }
 
 export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation | SchemaOperationType;

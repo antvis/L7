@@ -36,10 +36,6 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
   const { width, height } = bandsData[0];
   type IOperationResult = HTMLImageElement | Uint8Array | ImageBitmap | null | undefined
   let rasterData: IOperationResult | IOperationResult[] | any ;
-  // let operationFunc = operation;
-  // if(typeof  operationFunc === 'string') {
-  //   operationFunc = operationsSchema[operationFunc] as IBandsOperation | undefined;
-  // }
 
   switch (typeof operation) {
     case 'function':
@@ -75,18 +71,21 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
 
 function processSchemaOperation(operation: SchemaOperationType,bandsData: IRasterData[]) {
   const schema = operationsSchema[operation.type];
+  
   if(schema.type === 'function') {
     // @ts-ignore
     return schema.method(bandsData,operation?.options as any)
   } else if(schema.type === 'operation') {
-       // @ts-ignore
-    return getRgbBands(schema.expression,bandsData)
+    if(operation.type === 'rgb') { // TODO 临时处理
+      // @ts-ignore
+      return getRgbBands(schema.expression,bandsData)
+    } else {
+      // @ts-ignore
+      return { rasterData: calculate(schema.expression as any[], bandsData)};
+    }
   }
   
 }
-
-
-
   function getRgbBands(operation: IRgbOperation, bandsData: IRasterData[]) {
     if (operation.r === undefined) console.warn('Channel R lost in Operation! Use band[0] to fill!');
     if (operation.g === undefined) console.warn('Channel G lost in Operation! Use band[0] to fill!');
@@ -94,6 +93,7 @@ function processSchemaOperation(operation: SchemaOperationType,bandsData: IRaste
     const r = calculate(operation.r || ['band', 0], bandsData);
     const g = calculate(operation.g || ['band', 0], bandsData);
     const b = calculate(operation.b || ['band', 0], bandsData);
+    console.log(r, g, b)
     return [r, g, b];
   }
 
@@ -131,16 +131,8 @@ function processSchemaOperation(operation: SchemaOperationType,bandsData: IRaste
     operation: IBandsOperation | undefined,
     callback: ResponseCallback<any>
   ) {
-    const { rasterData, width, height } = await bandsOperation(rasterFiles, rasterFormat, operation)
+    const rasterData =  await bandsOperation(rasterFiles, rasterFormat, operation);
     // 目前 max｜min 没有生效
-    const defaultMIN = 0;
-    const defaultMAX = 8000;
-    console.log(rasterData)
-    callback(null, {
-      data: rasterData,
-      width,
-      height,
-      min: defaultMIN,
-      max: defaultMAX,
-    });
+
+    callback(null, {data:rasterData});
   }
