@@ -121,7 +121,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
 
         layer?.on('click', onClick);
       }
-      const source = layer.getSource();
+      const source = layer?.getSource?.();
       const onSourceUpdate = this.onSourceUpdate.bind(this, layer);
       source?.on('update', onSourceUpdate);
       layerInfo.onSourceUpdate = onSourceUpdate;
@@ -237,7 +237,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
           (formatValue instanceof Function
             ? formatValue(value)
             : formatValue) ?? value;
-        row.innerHTML = `${fieldText}: ${valueText}`;
+        row.innerHTML = `<span class="l7-layer-popup__key">${fieldText}</span>: <span class="l7-layer-popup__value">${valueText}</span>`;
         frag.appendChild(row);
       });
     }
