@@ -6,4 +6,4 @@ order: 0
 
 ### Point Text
 
-<code src="./district/text.tsx"></code>
+<code src="./demos/text.tsx"></code>

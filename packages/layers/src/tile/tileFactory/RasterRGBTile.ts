@@ -30,7 +30,7 @@ export default class RasterTile extends Tile {
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
     return {
-      data: this.sourceTile.data.data,
+      data: this.sourceTile.data.data, // 栅格数
       options: {
         parser: {
           type: 'rasterRgb',

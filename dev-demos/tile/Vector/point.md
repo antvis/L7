@@ -6,4 +6,4 @@ order: 0
 
 ### Point
 
-<code src="./district/point.tsx"></code>
+<code src="./demos/point.tsx"></code>

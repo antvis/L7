@@ -6,4 +6,4 @@ order: 0
 
 ### Simple Line
 
-<code src="./district/simpleLine.tsx"></code>
+<code src="./demos/simpleLine.tsx"></code>

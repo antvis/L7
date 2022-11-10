@@ -1,19 +1,23 @@
-import { TypedArray, IRasterData } from '../../interface';
-export const operationsSchema = {
-  ndvi: ['/',
+import { TypedArray, IRasterData,SchemaRGBOption } from '../../interface';
+
+export type operationsType = 'rgb' | 'nd';
+
+export const operationsSchema= {
+  nd:{
+    type:'operation',
+    expression:['/',
     ['-', ['band', 1], ['band', 0]], // R > NIR
     ['+', ['band', 1], ['band', 0]]
   ],
-  normalizedDifference: ['/',
-    ['-', ['band', 1], ['band', 0]], // R > NIR
-    ['+', ['band', 1], ['band', 0]]
-  ],
-  rgb: strethRgb2minMax,
-  
+  },
+  rgb: {
+    type: 'function',
+    method:strethRgb2minMax
+    },
 
 }
 
-function strethRgb2minMax(bandsData: IRasterData[]) {
+function strethRgb2minMax(bandsData: IRasterData[],options?:SchemaRGBOption) {
   const channelR = bandsData[0].rasterData as Uint8Array;
   const channelG = bandsData[1].rasterData as Uint8Array;
   const channelB = bandsData[2].rasterData as Uint8Array;
@@ -29,9 +33,9 @@ function strethRgb2minMax(bandsData: IRasterData[]) {
   }
   return {
     rasterData: data,
-    channelRMax: (minMaxR[1] - minMaxR[0]),
-    channelGMax: (minMaxG[1] - minMaxG[0]),
-    channelBMax: (minMaxB[1] - minMaxB[0]),
+    rMinMax:minMaxR,
+    gMinMax:minMaxG,
+    bMinMax:minMaxB,
   };
 }
 

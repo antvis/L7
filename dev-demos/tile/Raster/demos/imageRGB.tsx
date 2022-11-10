@@ -29,7 +29,6 @@ export default () => {
           {
             parser: {
               type: 'rasterTile',
-              // dataType: 'arraybuffer',
               dataType: 'rgb',
               tileSize: 256,
               zoomOffset: 0,
@@ -61,11 +60,7 @@ export default () => {
                   { rasterData: channelB, width: 256, height: 256 },
                 ];
               },
-              // operation: ['band', 0]
-              // operation: (allBands) => {
-              //   // console.log(allBands)
-              //   return allBands[0].rasterData
-              // }
+              // operation: 'rgb'
               operation: {
                 r: ['band', 0],
                 g: ['band', 1],
@@ -78,13 +73,13 @@ export default () => {
 
       scene.addLayer(layer);
 
-      setTimeout(() => {
-        layer.style({
-          opacity: 0.5,
-        });
-        scene.render();
-        console.log('***');
-      }, 1500);
+      // setTimeout(() => {
+      //   layer.style({
+      //     opacity: 0.5,
+      //   });
+      //   scene.render();
+      //   console.log('***');
+      // }, 1500);
     });
   }, []);
   return (

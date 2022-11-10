@@ -6,4 +6,4 @@ order: 0
 
 ### Polygon
 
-<code src="./district/polygon.tsx"></code>
+<code src="./demos/polygon.tsx"></code>

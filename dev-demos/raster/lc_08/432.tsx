@@ -72,7 +72,9 @@ export default () => {
                   };
                 });
               },
-              operation: 'rgb',
+              operation: {
+                type: 'rgb',
+              },
               extent: [
                 130.39565357746957,
                 46.905730725742366,

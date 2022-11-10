@@ -1,4 +1,4 @@
-import { IRasterFileData, IRasterFormat, IBandsOperation, IRgbOperation, IRasterData } from '../../interface';
+import { IRasterFileData, IRasterFormat, IBandsOperation, IRgbOperation, IRasterData, SchemaOperationType} from '../../interface';
 import { calculate } from './math';
 import { operationsSchema } from './operationSchema'
 
@@ -21,6 +21,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
       heigh: 1
     }
   }
+
   const formatData = (await Promise.all(
     imageDataList.map(({ data, bands = [0] }) => rasterFormat(data, bands)),
   )) as IRasterData[];
@@ -33,16 +34,16 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
   })
   // 多个栅格数据必须是相同大小才能进行相互之间的运算
   const { width, height } = bandsData[0];
-
   type IOperationResult = HTMLImageElement | Uint8Array | ImageBitmap | null | undefined
   let rasterData: IOperationResult | IOperationResult[] | any ;
-  let operationFunc = operation;
-  if(typeof  operationFunc === 'string') {
-    operationFunc = operationsSchema[operationFunc] as IBandsOperation | undefined;
-  }
-  switch (typeof operationFunc) {
+  // let operationFunc = operation;
+  // if(typeof  operationFunc === 'string') {
+  //   operationFunc = operationsSchema[operationFunc] as IBandsOperation | undefined;
+  // }
+
+  switch (typeof operation) {
     case 'function':
-      rasterData = operationFunc(bandsData) as Uint8Array;
+      rasterData = operation(bandsData) as Uint8Array;
       break;
     case 'object':
       // 波段计算表达式 - operation
@@ -54,12 +55,11 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
        *  b: ['+', ['band', 0], 1],
        * }
        */
-      if (!Array.isArray(operationFunc)) { // RGB 三通道
-        const rgbBands = getRgbBands(operationFunc as IRgbOperation, bandsData);
-        rasterData = combineRGBChannels(rgbBands);
+      if (!Array.isArray(operation)) { // RGB 三通道
+        rasterData = processSchemaOperation(operation as SchemaOperationType, bandsData);
       
       } else { // 数值计算
-        rasterData ={ rasterData: calculate(operationFunc as any[], bandsData)};
+        rasterData ={ rasterData: calculate(operation as any[], bandsData)};
       }
       break;
   
@@ -71,6 +71,18 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
     width,
     height,
   }
+}
+
+function processSchemaOperation(operation: SchemaOperationType,bandsData: IRasterData[]) {
+  const schema = operationsSchema[operation.type];
+  if(schema.type === 'function') {
+    // @ts-ignore
+    return schema.method(bandsData,operation?.options as any)
+  } else if(schema.type === 'operation') {
+       // @ts-ignore
+    return getRgbBands(schema.expression,bandsData)
+  }
+  
 }
 
 
@@ -103,7 +115,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
       data.push((channelB)[i]); channelBMax = Math.max(channelBMax, channelR[i]);
     }
     return {
-      data,
+      rasterData:data,
       channelRMax,
       channelGMax,
       channelBMax
@@ -113,7 +125,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
   /**
    * 处理每个请求得到的栅格文件数据
    */
-  export async function handleRasterFiles(
+  export async function processRasterData(
     rasterFiles: IRasterFileData[],
     rasterFormat: IRasterFormat,
     operation: IBandsOperation | undefined,
@@ -123,6 +135,7 @@ export async function bandsOperation(imageDataList: IRasterFileData[], rasterFor
     // 目前 max｜min 没有生效
     const defaultMIN = 0;
     const defaultMAX = 8000;
+    console.log(rasterData)
     callback(null, {
       data: rasterData,
       width,

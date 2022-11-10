@@ -13,23 +13,22 @@ import rasterFrag from '../shaders/raster_rgb_frag.glsl';
 import rasterVert from '../shaders/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
-  protected channelRMax: number = 256;
-  protected channelGMax: number = 256;
-  protected channelBMax: number = 256;
+  protected dataOption: any;
 
   public getUninforms() {
     const {
       opacity = 1,
-      channelRMax,
-      channelGMax,
-      channelBMax
+      noDataValue = 0,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
+    const {rMinMax,gMinMax,bMinMax} = this.dataOption;
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
-      u_channelRMax: channelRMax !== undefined ? channelRMax : this.channelRMax,
-      u_channelGMax: channelGMax !== undefined ? channelGMax : this.channelGMax,
-      u_channelBMax: channelBMax !== undefined ? channelBMax : this.channelBMax,
+      u_noDataValue: noDataValue,
+      u_rminmax: rMinMax,
+      u_gminmax: gMinMax,
+      u_bminmax: bMinMax,
+  
     };
   }
 
@@ -44,14 +43,12 @@ export default class RasterModel extends BaseModel {
     } else {
       // 多波段形式、需要进行处理
       // 支持彩色栅格（多通道）
-      const { rasterData, width, height, channelRMax, channelGMax, channelBMax } = await parserDataItem.data;
-      this.channelRMax = channelRMax;
-      this.channelGMax = channelGMax;
-      this.channelBMax = channelBMax;
+      const { rasterData,...rest  } = await parserDataItem.data;
+      this.dataOption = rest;
       return {
+
         data: Array.from(rasterData),
-        width,
-        height
+        ...rest
       }
     }
   }
@@ -64,7 +61,7 @@ export default class RasterModel extends BaseModel {
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
-
+    
     const {data, width, height} = await this.getRasterData(parserDataItem);
     this.texture = createTexture2D({
       // @ts-ignore
