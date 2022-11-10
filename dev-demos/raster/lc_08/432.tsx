@@ -63,7 +63,6 @@ export default () => {
                 const tiff = await GeoTIFF.fromArrayBuffer(data);
                 const image1 = await tiff.getImage();
                 const value = await image1.readRasters();
-
                 return bands.map((band) => {
                   return {
                     rasterData: value[band],

@@ -93,7 +93,6 @@ function processSchemaOperation(operation: SchemaOperationType,bandsData: IRaste
     const r = calculate(operation.r || ['band', 0], bandsData);
     const g = calculate(operation.g || ['band', 0], bandsData);
     const b = calculate(operation.b || ['band', 0], bandsData);
-    console.log(r, g, b)
     return [r, g, b];
   }
 
