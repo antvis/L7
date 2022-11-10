@@ -47,7 +47,7 @@ scene.on('loaded', () => {
   );
   scene.addLayer(pointLayer);
   const layerPopup = new LayerPopup({
-    config: [
+    items: [
       {
         layer: pointLayer,
         fields: [
@@ -68,7 +68,7 @@ scene.on('loaded', () => {
 
 | 名称    | 说明                                                                                          | 类型                          | 默认值    |
 | ------- | --------------------------------------------------------------------------------------------- | ----------------------------- | --------- |
-| config  | 需要展示 Popup 的图层配置数组，每个选项类型可见 [LayerPopupConfigItem](#layerpopupconfigitem) | `Array<LayerPopupConfigItem>` | `[]`      |
+| items   | 需要展示 Popup 的图层配置数组，每个选项类型可见 [LayerPopupConfigItem](#layerpopupconfigitem) | `Array<LayerPopupConfigItem>` | `[]`      |
 | trigger | 鼠标触发 Popup 展示的方式                                                                     | `'hover' | 'click'`           | `'hover'` |
 
 ### LayerPopupConfigItem
@@ -80,11 +80,11 @@ scene.on('loaded', () => {
 
 ### LayerField
 
-| 名称        | 说明                        | 类型                          |
-| ----------- | --------------------------- |-----------------------------|
+| 名称        | 说明                        | 类型                        |
+| ----------- | --------------------------- | --------------------------- |
 | field       | 字段的 key 值字符串         | `string`                    |
-| formatField | 对展示的 key 字段进行格式化 | `(field: string) => string` |
-| formatValue | 对展示的 value 值进行格式化 | `(value: any) => any`       |
+| formatField | 对展示的 key 字段进行格式化 | `(field: string) => string | string` |
+| formatValue | 对展示的 value 值进行格式化 | `(value: any) => any | string`       |
 | getValue    | 自定义获取值的方式          | `(feature: any) => any`     |
 
 ## 方法

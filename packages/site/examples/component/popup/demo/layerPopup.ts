@@ -77,7 +77,7 @@ scene.on('loaded', () => {
     .shape('circle');
   scene.addLayer(pointLayer);
   const layerPopup = new LayerPopup({
-    config: [
+    items: [
       {
         layer: pointLayer,
         fields: [
