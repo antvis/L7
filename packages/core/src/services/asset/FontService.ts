@@ -73,7 +73,7 @@ export default class FontService extends EventEmitter implements IFontService {
 
   public get mapping(): IFontMapping {
     const data = this.cache.get(this.key);
-    return data && data.mapping;
+    return data && data.mapping || {};
   }
   public fontAtlas: IFontAtlas;
 

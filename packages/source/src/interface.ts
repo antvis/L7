@@ -43,8 +43,29 @@ export type IRgbOperation = {
   g?: any[]
   b?: any[]
 };
+export type SchemaOperationType = SchemaRGBOperation | SchemaBandOperation;
+export type SchemaRGBOption ={
+  countCut?:[number,number];// 百分比
+  RMinMax?:[number,number];
+  GMinMax?:[number,number];
+  BMinMax?:[number,number];
+}
 
-export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation;
+export type SchemaRGBOperation = {
+  type: 'rgb'
+  options:SchemaRGBOption | {
+    r?: any[];
+    g?: any[]
+    b?: any[]
+  }
+}
+export type SchemaBandOperation = {
+  type: 'nd'
+
+}
+
+export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation | SchemaOperationType;
+
 
 export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
 

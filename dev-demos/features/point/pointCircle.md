@@ -53,9 +53,11 @@ export default () => {
                             strokeWidth: 0,
                             stroke: '#fff',
                         });
-
+                    pointLayer.on('mousemove',(e)=>{
+                        console.log(e);
+                    })
                     scene.addLayer(pointLayer);
-            
+
                 },
                 )
         })

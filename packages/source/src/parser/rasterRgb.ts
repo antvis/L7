@@ -7,15 +7,11 @@ export default function rasterRgb(
   data: IRasterLayerData,
   cfg: IRasterCfg,
 ): IParserData {
-  const { extent, width, height, min, max, format, operation } = cfg;
+  const { extent, min, max, width, height, format, operation, ...rest } = cfg;
   let bandData;
-  let rasterWidth;
-  let rasterHeight;
   if (format === undefined || isNumberArray(data)) {
     // 兼容写法 - 用户直接传入解析完的波段数据
     bandData = Array.from(data as number[]);
-    rasterWidth = width;
-    rasterHeight = height;
   } else {
     // 用户传入为解析的栅格数据 - arraybuffer
     // 将数据统一为 IRasterFileData[]
@@ -24,15 +20,15 @@ export default function rasterRgb(
       : [data]) as IRasterFileData[];
     bandData = bandsOperation(imageDataList, format, operation);
   }
-
   const resultData = {
     _id: 1,
     dataArray: [
       {
         _id: 1,
         data: bandData,
-        width: rasterWidth,
-        height: rasterHeight,
+        width,
+        height,
+        ...rest,
         min,
         max,
         coordinates: [

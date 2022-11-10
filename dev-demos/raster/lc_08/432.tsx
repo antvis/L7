@@ -4,7 +4,7 @@ import { Select } from 'antd';
 import 'antd/es/select/style/index';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
 
 async function getTiffData(url: string) {
@@ -13,18 +13,15 @@ async function getTiffData(url: string) {
   return arrayBuffer;
 }
 
+// console.log(metersToLngLat([14504979.7235,5917159.8828993]));
+// console.log(metersToLngLat([14571644.4264000,5981299.2233999]))
 export default () => {
-  const [type, setType] = useState('4,3,2');
-  const handleChange = (value: string) => {
-    setType(value);
-    console.log(`selected ${value}`);
-  };
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
       map: new Map({
         center: [130.5, 47],
-        zoom: 10,
+        zoom: 10.5,
       }),
     });
 
@@ -56,7 +53,7 @@ export default () => {
           [
             {
               data: tiffdata,
-              bands: [7, 6, 5].map((v) => v - 1),
+              bands: [6, 5, 2].map((v) => v - 1),
             },
           ],
           {
@@ -74,7 +71,9 @@ export default () => {
                   };
                 });
               },
-              operation: 'rgb',
+              operation: {
+                type: 'rgb',
+              },
               extent: [
                 130.39565357746957,
                 46.905730725742366,
@@ -95,9 +94,8 @@ export default () => {
     <>
       <p>
         <Select
-          value={type}
+          value={'3,2,1'}
           style={{ width: 120, zIndex: 10 }}
-          onChange={handleChange}
           options={[
             {
               value: '3,2,1',
@@ -144,7 +142,7 @@ export default () => {
           height: '500px',
           position: 'relative',
         }}
-      />
+      ></div>
     </>
   );
 };

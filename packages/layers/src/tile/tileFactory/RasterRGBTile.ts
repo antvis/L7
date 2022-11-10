@@ -7,7 +7,6 @@ export default class RasterTile extends Tile {
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig()
     const sourceOptions = this.getSourceOption();
-
     const layer = new RasterLayer({
       ...layerOptions,
     })
@@ -29,14 +28,14 @@ export default class RasterTile extends Tile {
 
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
+    const {rasterData,...res} = this.sourceTile.data.data;
     return {
-      data: this.sourceTile.data.data,
+      data: rasterData, // 栅格数
       options: {
         parser: {
           type: 'rasterRgb',
           extent: this.sourceTile.bounds,
-          width: this.sourceTile.data.width,
-          height: this.sourceTile.data.height,
+          ...res
         },
         transforms: rawSource.transforms,
       },

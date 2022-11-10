@@ -45,14 +45,14 @@ export default class RasterTile extends Tile {
 
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
+    const {rasterData,...res} = this.sourceTile.data.data;
     return {
-      data: this.sourceTile.data.data,
+      data: rasterData,
       options: {
         parser: {
           type: 'raster',
           extent: this.sourceTile.bounds,
-          width: this.sourceTile.data.width,
-          height: this.sourceTile.data.height,
+          ...res
         },
         transforms: rawSource.transforms,
       },
