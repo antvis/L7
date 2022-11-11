@@ -3,7 +3,7 @@ title: GeoJSON
 order: 1
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 简介
 

@@ -3,7 +3,7 @@ title: Style
 order: 4
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 `style` 方法用于配制图层的样式，栅格图层在绘制单通道的栅格和多通道的栅格时拥有不同的 `style` 参数。
 

@@ -3,4 +3,4 @@ title: Render Component
 order: 3
 ---
 
-`markdown:docs/api/renderer/three.zh.md`
+<embed src="@/docs/api/experiment/three.zh.md"></embed>

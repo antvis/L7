@@ -3,7 +3,7 @@ title: Options
 order: 1
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ### sourceLayer
 
@@ -33,4 +33,4 @@ const layer = new PointLayer({
 });
 ```
 
-`markdown:docs/common/layer/options.md`
+<embed src="@/docs/common/layer/options.md"></embed>

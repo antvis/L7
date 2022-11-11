@@ -3,4 +3,4 @@ title: Canvas Layer
 order: 7
 ---
 
-`markdown:docs/api/canvas.zh.md`
+<embed src="@/docs/api/experiment/canvas.zh.md"></embed>

@@ -3,6 +3,6 @@ title: Texture
 order: 6
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
-`markdown:docs/api/line_layer/features/texture.zh.md`
+<embed src="@/docs/api/line_layer/features/texture.zh.md"></embed>

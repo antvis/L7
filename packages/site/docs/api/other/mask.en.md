@@ -3,4 +3,4 @@ title: mask
 order: 2
 ---
 
-`markdown:docs/api/other/mask.zh.md`
+<embed src="@/docs/api/other/mask.zh.md"></embed>

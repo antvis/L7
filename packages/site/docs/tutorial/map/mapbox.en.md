@@ -2,4 +2,4 @@
 title: MapBox BaseMap
 order: 0
 ---
-`markdown:docs/tutorial/map/mapbox.zh.md`
+<embed src="@/docs/tutorial/map/mapbox.zh.md"></embed>

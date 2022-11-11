@@ -3,4 +3,4 @@ title: Earth Point
 order: 3
 ---
 
-`markdown:docs/api/earth/point.zh.md`
+<embed src="@/docs/api/experiment/earth/point.zh.md"></embed>

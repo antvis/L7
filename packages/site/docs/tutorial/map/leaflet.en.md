@@ -2,4 +2,4 @@
 title: Leaflet BaseMap
 order: 2
 ---
-`markdown:docs/tutorial/map/leaflet.zh.md`
+<embed src="@/docs/tutorial/map/leaflet.zh.md"></embed>

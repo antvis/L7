@@ -3,7 +3,7 @@ title: Style
 order: 4
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 `imagelayer` 的 `style` 参数只支持 `opacity`。
 

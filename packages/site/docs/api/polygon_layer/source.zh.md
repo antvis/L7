@@ -3,7 +3,7 @@ title: Source
 order: 2
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 几何体图层数据推荐使用 GeoJSON 格式的数据。
 

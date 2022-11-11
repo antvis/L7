@@ -3,4 +3,4 @@ title: Animate
 order: 7
 ---
 
-`markdown:docs/api/line_layer/animate.zh.md`
+<embed src="@/docs/api/line_layer/animate.zh.md"></embed>

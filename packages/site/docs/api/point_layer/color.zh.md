@@ -3,6 +3,6 @@ title: Color
 order: 6
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
-`markdown:docs/common/layer/color.md`
+<embed src="@/docs/common/layer/color.md"></embed>

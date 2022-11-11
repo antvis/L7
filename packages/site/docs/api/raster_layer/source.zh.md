@@ -3,7 +3,7 @@ title: Source
 order: 2
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 栅格图层接受的并不是矢量的地理数据（GeoJSON），而是栅格数据。同时支持传入多种数据格式，入 `tiff`、`lerc` 等。
 

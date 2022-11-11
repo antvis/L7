@@ -1,1 +1,1 @@
-`markdown:docs/api/wind.en.md`
+<embed src="@/docs/api/wind.en.md"></embed>

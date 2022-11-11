@@ -3,7 +3,7 @@ title: Size
 order: 5
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 `size` 方法用于设置点图层图形的大小。
 

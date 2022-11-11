@@ -3,4 +3,4 @@ title: Source
 order: 2
 ---
 
-`markdown:docs/api/line_layer/source.zh.md`
+<embed src="@/docs/api/line_layer/source.zh.md"></embed>

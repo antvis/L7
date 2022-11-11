@@ -3,7 +3,7 @@ title: L7Mini 小程序模块教程
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 简介
 

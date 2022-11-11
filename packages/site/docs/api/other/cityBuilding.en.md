@@ -3,4 +3,4 @@ title: CityBuild
 order: 6
 ---
 
-`markdown:docs/api/other/cityBuilding.zh.md`
+<embed src="@/docs/api/other/cityBuilding.zh.md"></embed>

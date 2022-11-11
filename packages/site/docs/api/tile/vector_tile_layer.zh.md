@@ -3,7 +3,7 @@ title: Vector TileLayer
 order: 0
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 `L7` 的矢量瓦片图层复用了普通图层的数据可视化能力，支持对图层的样式进行数据映射。目前矢量瓦片支持了点、线、面、掩模等图层
 

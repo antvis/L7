@@ -3,7 +3,7 @@ title: PlaneGeometry
 order: 0
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 简介
 

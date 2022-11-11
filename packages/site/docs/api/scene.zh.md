@@ -5,7 +5,7 @@ redirect_from:
   - /zh/docs/api
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 简介
 

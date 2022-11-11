@@ -1,13 +1,11 @@
-module.exports = {
-  plugins: [
-    {
-      resolve: '@antv/gatsby-theme-antv',
-      options: {
-        GATrackingId: 'UA-148148901-7',
-      },
-    },
-  ],
-  siteMetadata: {
+import { defineConfig } from 'dumi';
+const path = require('path');
+import { repository, version } from './package.json';
+
+export default defineConfig({
+  locales: [{ id: 'zh', name: '中文' }, { id: 'en', name: 'English' }],
+  
+  themeConfig: {
     title: 'L7',
     isAntVSite: false,
     description:
@@ -18,6 +16,116 @@ module.exports = {
       'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
     showAPIDoc: true, // 是否在demo页展示API文档
+    detail: {
+      title: {
+        zh: '蚂蚁地理空间数据可视化',
+        en: 'L7 Geospatial Visualization',
+      },
+      description: {
+        zh: '蚂蚁集团 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析引擎。',
+        en: 'Geospatial Data Visualization Analysis Engine',
+      },
+      image: 'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*cCI7RaJs46AAAAAAAAAAAABkARQnAQ',
+      buttons: [
+        {
+          text: {
+            zh: '开始使用',
+            en: 'Getting Started',
+          },
+          link: `docs/api/l7`,
+        },
+        {
+          text: {
+            zh: '图表示例',
+            en: 'gallery',
+          },
+          link: `/examples/gallery`,
+          type: 'primary',
+        },
+      ],
+    },
+    features: [
+      {
+        icon:
+          'https://gw.alipayobjects.com/zos/basement_prod/ca2168d1-ae50-4929-8738-c6df62231de3.svg',
+        title: {
+          zh: '架构灵活且自由',
+          en: 'Easy to use',
+        },
+        description: {
+          zh: '支持地图底图，渲染引擎，图层自由定制、扩展，组合',
+          en: 'Support many basemap, many rendering engine, and layer free customization, extension, combination',
+        },
+      },
+      {
+        icon:
+          'https://gw.alipayobjects.com/zos/basement_prod/0ccf4dcb-1bac-4f4e-8d8d-f1031c77c9c8.svg',
+        title: {
+          zh: '业务专业且通用',
+          en: 'Simple and Universal',
+        },
+        description: {
+          zh: '以图形符号学地理设计体系理论基础，易用、易理解、专业、专注',
+          en: 'Generating high quality statistical charts through a few lines of code.',
+        },
+      },
+      {
+        icon:
+          'https://gw.alipayobjects.com/zos/basement_prod/fd232581-14b3-45ec-a85c-fb349c51b376.svg',
+        title: {
+          zh: '视觉酷炫且动感',
+          en: 'Cool and Dynamic',
+        },
+        description: {
+          zh: '支持海量数据，2D、3D，动态，可交互，高性能渲染',
+          en: 'Support many basemap, many rendering engine, and layer free customization, extension, combination',
+        },
+      },
+    ],
+    case: [
+      {
+        logo: 'https://antv-2018.alipay.com/assets/image/icon/l7.svg',
+        title: {
+          zh: '指挥分配场景',
+          en: 'Advanced Features',
+        },
+        description: {
+          zh: '区域化网格化数据管理指挥分配场景',
+          en: 'We are now working on some advanced and powerful chart features.',
+        },
+        link: 'https://antv.vision/Dipper/~demos/docs-task',
+        image:
+          'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*scJBTq8PW7kAAAAAAAAAAAAAARQnAQ',
+      },
+      {
+        logo: 'https://antv-2018.alipay.com/assets/image/icon/l7.svg',
+        title: {
+          zh: '地图数据分析',
+          en: 'Advanced Features',
+        },
+        description: {
+          zh: '区域化网格化数据分析场景',
+          en: 'We are now working on some advanced and powerful chart features.',
+        },
+        link: 'https://antv.vision/Dipper/~demos/docs-analysis',
+        image:
+          'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*OnGVRb_qWxcAAAAAAAAAAAAAARQnAQ',
+      },
+    ],
+    news: [
+      {
+        type: {
+          zh: '论坛',
+          en: 'Forum',
+        },
+        title: {
+          zh: 'AntV 芒种日 图新物：GraphInsight 发布',
+          en: 'AntV Seeds Day Graph New: GraphInsight Released',
+        },
+        date: '2022.07.20',
+        link: 'https://www.yuque.com/xiaofengcanyue/scpehq/fgcwge',
+      },
+    ],
     navs: [
       {
         slug: 'docs/tutorial/l7',
@@ -497,4 +605,9 @@ module.exports = {
       indexName: 'antv_l7',
     },
   },
-};
+  mfsu: false,
+  links: [
+  ],
+  scripts: [
+  ],
+});

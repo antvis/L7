@@ -3,4 +3,4 @@ title: Map
 order: 1
 ---
 
-`markdown:docs/api/map/map.zh.md`
+<embed src="@/docs/api/map.zh.md"></embed>

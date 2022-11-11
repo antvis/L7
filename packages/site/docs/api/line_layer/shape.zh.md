@@ -3,7 +3,7 @@ title: Shape
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 `shape` 方法用于指定线图层绘制什么样的线。
 

@@ -3,7 +3,7 @@ title: Source
 order: 0
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 概述
 

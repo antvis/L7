@@ -2,4 +2,4 @@
 title: Point Custom Marker
 order: 8
 ---
-`markdown:docs/tutorial/point/mark.zh.md`
+<embed src="@/docs/tutorial/point/mark.zh.md"></embed>

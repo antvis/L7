@@ -3,7 +3,7 @@ title: Source
 order: 2
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 `imagelayer` 通过提供在线图片的 `url` 指定数据，通过 `extent` 指定图片在地图上的位置。
 

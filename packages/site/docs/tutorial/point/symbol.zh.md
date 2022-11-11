@@ -2,7 +2,7 @@
 title: 符号图
 order: 5
 ---
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 点图层支持绘制图标，在地理区域上放置不同图片作为符号，通常表示不同地理要素分布情况
 

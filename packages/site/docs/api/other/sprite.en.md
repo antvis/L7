@@ -3,4 +3,4 @@ title: SpriteGeometry
 order: 1
 ---
 
-`markdown:docs/api/other/sprite.zh.md`
+<embed src="@/docs/api/other/sprite.zh.md"></embed>

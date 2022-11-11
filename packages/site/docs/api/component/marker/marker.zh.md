@@ -3,7 +3,7 @@ title: Marker 标注
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 Marker 地图标注 目前只支持 2D Dom 标注
 

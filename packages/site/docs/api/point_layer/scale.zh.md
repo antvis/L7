@@ -3,6 +3,6 @@ title: Scale
 order: 6
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
-`markdown:docs/common/layer/scale.md`
+<embed src="@/docs/common/layer/scale.md"></embed>

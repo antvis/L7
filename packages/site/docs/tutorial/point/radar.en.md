@@ -2,4 +2,4 @@
 title: Point Radar
 order: 4
 ---
-`markdown:docs/tutorial/point/radar.zh.md`
+<embed src="@/docs/tutorial/point/radar.zh.md"></embed>
