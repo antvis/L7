@@ -1,5 +1,5 @@
 import { Scene } from '@antv/l7';
-import { DrawCircle, DrawEvent } from '@antv/l7-draw';
+import { DrawEvent, DrawLine } from '@antv/l7-draw';
 import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -11,10 +11,12 @@ const scene = new Scene({
   }),
 });
 scene.on('loaded', () => {
-  const drawCircle = new DrawCircle(scene, {});
-  drawCircle.enable();
+  const drawLine = new DrawLine(scene, {
+    distanceOptions: {},
+  });
+  drawLine.enable();
 
-  drawCircle.on(DrawEvent.Change, (allFeatures) => {
+  drawLine.on(DrawEvent.Change, (allFeatures) => {
     console.log(allFeatures);
   });
 });
