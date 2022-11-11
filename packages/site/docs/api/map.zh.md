@@ -198,7 +198,7 @@ scene.on('loaded', () => {
     });
 
     //执行公交路线关键字查询
-    linesearch.search('536', function(status, result) {
+    linesearch.search('536', function (status, result) {
       //打印状态信息status和结果信息result
       // ... do something
     });

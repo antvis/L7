@@ -16,7 +16,8 @@ export default class ThreeJSLayer
   extends BaseLayer<{
     onAddMeshes: (threeScene: Scene, layer: ThreeJSLayer) => void;
   }>
-  implements ILayer {
+  implements ILayer
+{
   public type: string = 'custom';
   public threeRenderService: IThreeRenderService;
   public isUpdate: boolean = false;

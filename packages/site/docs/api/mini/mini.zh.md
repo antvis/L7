@@ -160,7 +160,7 @@ function handleCanvas(my, callback) {
         rect: true,
         computedStyle: ['height', 'width'],
       },
-      function(res) {
+      function (res) {
         // 内部计算使用 （必须设置）
         res.node.left = res.left;
         res.node.top = res.top;

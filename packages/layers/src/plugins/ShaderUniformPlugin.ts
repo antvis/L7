@@ -58,20 +58,29 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       layer.models.forEach((model) => {
         model.addUniforms({
           // 相机参数，包含 VP 矩阵、缩放等级
-          [CameraUniform.ProjectionMatrix]: this.cameraService.getProjectionMatrix(),
+          [CameraUniform.ProjectionMatrix]:
+            this.cameraService.getProjectionMatrix(),
           [CameraUniform.ViewMatrix]: this.cameraService.getViewMatrix(),
-          [CameraUniform.ViewProjectionMatrix]: this.cameraService.getViewProjectionMatrix(),
+          [CameraUniform.ViewProjectionMatrix]:
+            this.cameraService.getViewProjectionMatrix(),
           [CameraUniform.Zoom]: this.cameraService.getZoom(),
           [CameraUniform.ZoomScale]: this.cameraService.getZoomScale(),
           [CameraUniform.FocalDistance]: this.cameraService.getFocalDistance(),
-          [CameraUniform.CameraPosition]: this.cameraService.getCameraPosition(),
+          [CameraUniform.CameraPosition]:
+            this.cameraService.getCameraPosition(),
           // 坐标系参数
-          [CoordinateUniform.CoordinateSystem]: this.coordinateSystemService.getCoordinateSystem(),
-          [CoordinateUniform.ViewportCenter]: this.coordinateSystemService.getViewportCenter(),
-          [CoordinateUniform.ViewportCenterProjection]: this.coordinateSystemService.getViewportCenterProjection(),
-          [CoordinateUniform.PixelsPerDegree]: this.coordinateSystemService.getPixelsPerDegree(),
-          [CoordinateUniform.PixelsPerDegree2]: this.coordinateSystemService.getPixelsPerDegree2(),
-          [CoordinateUniform.PixelsPerMeter]: this.coordinateSystemService.getPixelsPerMeter(),
+          [CoordinateUniform.CoordinateSystem]:
+            this.coordinateSystemService.getCoordinateSystem(),
+          [CoordinateUniform.ViewportCenter]:
+            this.coordinateSystemService.getViewportCenter(),
+          [CoordinateUniform.ViewportCenterProjection]:
+            this.coordinateSystemService.getViewportCenterProjection(),
+          [CoordinateUniform.PixelsPerDegree]:
+            this.coordinateSystemService.getPixelsPerDegree(),
+          [CoordinateUniform.PixelsPerDegree2]:
+            this.coordinateSystemService.getPixelsPerDegree2(),
+          [CoordinateUniform.PixelsPerMeter]:
+            this.coordinateSystemService.getPixelsPerMeter(),
           // 坐标系是高德2.0的时候单独计算
           [CoordinateUniform.Mvp]: mvp,
           u_SceneCenterMKT: sceneCenterMKT,

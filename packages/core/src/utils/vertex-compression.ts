@@ -54,9 +54,7 @@ export function packUint8ToFloat(a: number, b: number): number {
 /**
  * 为 SDF circle 压缩顶点数据
  */
-export function packCircleVertex(
-  props: ICircleVertex,
-): {
+export function packCircleVertex(props: ICircleVertex): {
   packedBuffer: number[][];
   packedBuffer2: number[][];
   packedBuffer3: number[][];

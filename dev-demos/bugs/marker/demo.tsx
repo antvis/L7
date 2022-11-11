@@ -21,8 +21,7 @@ export default () => {
       });
       scene.addMarkerLayer(markerLayer);
       const marker = new Marker().setLnglat([
-        120.1047383116185,
-        30.261127905299425,
+        120.1047383116185, 30.261127905299425,
       ]);
       markerLayer.addMarker(marker);
     });

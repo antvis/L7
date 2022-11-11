@@ -58,7 +58,8 @@ export interface ICellProperty {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class BaseModel<ChildLayerStyleOptions = {}>
-  implements ILayerModel {
+  implements ILayerModel
+{
   public triangulation: Triangulation;
 
   // style texture data mapping

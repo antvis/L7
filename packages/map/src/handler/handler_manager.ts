@@ -536,13 +536,8 @@ class HandlerManager {
     if (!hasChange(combinedResult)) {
       return this.fireEvents(combinedEventsInProgress, deactivatedHandlers);
     }
-    const {
-      panDelta,
-      zoomDelta,
-      bearingDelta,
-      pitchDelta,
-      pinchAround,
-    } = combinedResult;
+    const { panDelta, zoomDelta, bearingDelta, pitchDelta, pinchAround } =
+      combinedResult;
     let { around } = combinedResult;
 
     if (pinchAround !== undefined) {

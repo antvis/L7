@@ -57,8 +57,12 @@ export default () => {
 
                 ctx.clearRect(0, 0, canvasSize, canvasSize);
                 ctx.drawImage(img, 0, 0, canvasSize, canvasSize);
-                const imgData = ctx.getImageData(0, 0, canvasSize, canvasSize)
-                  .data;
+                const imgData = ctx.getImageData(
+                  0,
+                  0,
+                  canvasSize,
+                  canvasSize,
+                ).data;
                 const channelR: number[] = [];
                 const channelG: number[] = [];
                 const channelB: number[] = [];
@@ -106,10 +110,7 @@ export default () => {
                 // b: grayExp,
               },
               extent: [
-                73.482190241,
-                3.82501784112,
-                135.106618732,
-                57.6300459963,
+                73.482190241, 3.82501784112, 135.106618732, 57.6300459963,
               ],
             },
           },

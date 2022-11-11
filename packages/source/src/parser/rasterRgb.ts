@@ -15,9 +15,9 @@ export default function rasterRgb(
   } else {
     // 用户传入为解析的栅格数据 - arraybuffer
     // 将数据统一为 IRasterFileData[]
-    const imageDataList = (Array.isArray(data)
-      ? data
-      : [data]) as IRasterFileData[];
+    const imageDataList = (
+      Array.isArray(data) ? data : [data]
+    ) as IRasterFileData[];
     bandData = bandsOperation(imageDataList, format, operation);
   }
   const resultData = {

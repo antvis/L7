@@ -37,8 +37,10 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
  * AMapService
  */
 @injectable()
-export default class AMapService extends AMapBaseService
-  implements IMapService<AMap.Map & IAMapInstance> {
+export default class AMapService
+  extends AMapBaseService
+  implements IMapService<AMap.Map & IAMapInstance>
+{
   public version: string = Version['GAODE1.x'];
   protected viewport: IViewport;
 
@@ -67,7 +69,7 @@ export default class AMapService extends AMapBaseService
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
     mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
 
-    return (modelMatrix as unknown) as number[];
+    return modelMatrix as unknown as number[];
   }
 
   public async init(): Promise<void> {
@@ -196,16 +198,8 @@ export default class AMapService extends AMapBaseService
   }
 
   protected handleCameraChanged = (e: IAMapEvent): void => {
-    const {
-      fov,
-      near,
-      far,
-      height,
-      pitch,
-      rotation,
-      aspect,
-      position,
-    } = e.camera;
+    const { fov, near, far, height, pitch, rotation, aspect, position } =
+      e.camera;
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');

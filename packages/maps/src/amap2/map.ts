@@ -231,7 +231,7 @@ export default class AMapService extends AMapBaseService {
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
     mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
 
-    return (modelMatrix as unknown) as number[];
+    return modelMatrix as unknown as number[];
   }
   public async init(): Promise<void> {
     const {
