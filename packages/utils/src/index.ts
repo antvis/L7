@@ -19,4 +19,4 @@ export * from './cull';
 export * from './env';
 export * from './tileset-manager';
 export * from './workers/triangulation';
-export * from './lineAtOffset'
+export * from './lineAtOffset';
