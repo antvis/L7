@@ -49,7 +49,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.18.9",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "cross-env": "^7.0.3",
-    "dumi": "^2.0.0-rc.4",
+    "dumi": "2.0.0-rc.4",
     "gcoord": "^0.3.2",
     "geotiff": "^2.0.7",
     "lerc": "^4.0.1",

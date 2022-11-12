@@ -168,6 +168,7 @@
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
     "site:deploy": "lerna --scope @antv/l7-site exec yarn run site:deploy",
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
+    "async-site": "sh ./scripts/site.sh",
     "storybook": "start-storybook -p 6006",
     "prebuild": "yarn clean && run-p tsc lint",
     "build": " yarn worker && lerna run build",
