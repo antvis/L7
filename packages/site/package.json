@@ -26,7 +26,7 @@
   "scripts": {
     "site:clean": "rm -rf ./dumi/tmp && rm -rf ./dumi/tmp-production && rm -rf .umi/ && rm rf ./dist",
     "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md *.md",
-    "build":"yarn site:build",
+    "build-site":"yarn site:build",
     "site:deploy": "npm run site:build && gh-pages -d public",
     "site:develop": "dumi dev",
     "site:build": "dumi build",
@@ -43,18 +43,17 @@
     "@antv/l7-maps": "^2.10.4",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
-    "@types/react": "^16.9.35",
-    "@types/react-dom": "^16.9.8",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
-    "@babel/plugin-proposal-optional-chaining": "^7.18.9",
-    "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "cross-env": "^7.0.3",
-    "dumi": "2.0.0-rc.4",
+    "dumi": "^2.0.0-rc.6",
     "gcoord": "^0.3.2",
     "geotiff": "^2.0.7",
     "lerc": "^4.0.1",
     "popmotion": "^11.0.5",
     "three": "^0.146.0",
-    "gh-pages": "^2.1.1"
+    "rollup": "^2.0.0",
+    "stylelint":"^14.4.0",
+    "webpack":"^5.20.0",
+    "gh-pages": "^2.1.1",
+    "antd":"^4.20.0"
   }
 }

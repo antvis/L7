@@ -8,8 +8,6 @@
   "devDependencies": {
     "@antv/g2": "^3.5.9",
     "@antv/g2plot": "^2.3.40",
-    "@antv/gatsby-theme-antv": "^1.1.15",
-    "@antv/l7-district": "^2.3.9",
     "@antv/l7-draw": "^3.0.8",
     "@antv/l7-react": "^2.3.3",
     "@antv/l7plot": "^0.1.0",
@@ -48,13 +46,12 @@
     "@types/node": "13.11.1",
     "@types/offscreencanvas": "^2019.7.0",
     "@types/react-router-dom": "^5.3.2",
-    "@types/storybook__react": "^5.2.1",
     "@types/supercluster": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "@umijs/fabric": "^2.8.1",
     "@umijs/test": "^3.0.5",
-    "antd": "4.12.3",
+    "antd": "^4.12.3",
     "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
@@ -89,10 +86,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "father": "^4.0.0-rc.2",
-    "gatsby": "2.32.13",
-    "gatsby-plugin-google-analytics": "^2.1.27",
-    "gatsby-remark-prettier": "^1.0.0",
+    "father": "^4.1.0",
     "gcoord": "^0.3.2",
     "geotiff": "1.0.0-beta.10",
     "gh-pages": "^2.1.1",
@@ -169,7 +163,6 @@
     "site:deploy": "lerna --scope @antv/l7-site exec yarn run site:deploy",
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
     "async-site": "sh ./scripts/site.sh",
-    "storybook": "start-storybook -p 6006",
     "prebuild": "yarn clean && run-p tsc lint",
     "build": " yarn worker && lerna run build",
     "postbuild": "yarn build:declarations",
@@ -223,17 +216,7 @@
     }
   },
   "resolutions": {
-    "d3-array": "1",
-    "monaco-editor-webpack-plugin": "2.0.0",
-    "@babel/types": "7.19.4",
-    "@babel/runtime": "7.19.4",
-    "@babel/parser": "7.19.4",
-    "@babel/standalone": "7.19.4",
-    "@babel/generator": "7.19.4",
-    "@babel/traverse": "7.19.4",
-    "@babel/plugin-proposal-decorators": "7.19.6",
-    "@babel/helper-skip-transparent-expression-wrappers": "7.18.9",
-    "monaco-editor": "0.21.0"
+    "d3-array": "1"
   },
   "tnpm": {
     "mode": "yarn"
