@@ -77,12 +77,8 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     });
 
     const { vs, fs, uniforms } = this.shaderModuleService.getModule('raster');
-    const {
-      createAttribute,
-      createElements,
-      createBuffer,
-      createModel,
-    } = this.rendererService;
+    const { createAttribute, createElements, createBuffer, createModel } =
+      this.rendererService;
     return createModel({
       vs,
       fs,

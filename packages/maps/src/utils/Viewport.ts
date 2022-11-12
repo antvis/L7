@@ -5,14 +5,8 @@ export default class Viewport implements IViewport {
   public viewport: WebMercatorViewport;
 
   public syncWithMapCamera(mapCamera: Partial<IMapCamera>) {
-    const {
-      center,
-      zoom,
-      pitch,
-      bearing,
-      viewportHeight,
-      viewportWidth,
-    } = mapCamera;
+    const { center, zoom, pitch, bearing, viewportHeight, viewportWidth } =
+      mapCamera;
 
     const preView = this.viewport
       ? {

@@ -3,9 +3,9 @@ title: Source
 order: 2
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
-`markdown:docs/common/layer/source.md`
+<embed src="@/docs/common/layer/source.md"></embed>
 
 🌟 热力图的数据使用和点图层保持一致。
 

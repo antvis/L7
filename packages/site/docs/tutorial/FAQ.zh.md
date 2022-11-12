@@ -3,7 +3,7 @@ title: FAQ
 order: 16
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ### 项目中 L7 各个依赖包版本不一致导致报错
 

@@ -3,7 +3,7 @@ title: GeoJsonVT TileLayer
 order: 0
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 `L7` 矢量瓦片除了可以时候后端提供的瓦片服务之外，同时提供了 `geojson-vt` 瓦片切分方案，使得前端在没有后端支持的情况下也能使用矢量瓦片。
 
@@ -49,15 +49,15 @@ const source = new Source(data, {
 
 `geojsonOptions` 支持如下参数:
 
-| 参数           | 类型          | 默认值   | 描述                                                           |
-| -------------- | ------------- | -------- | -------------------------------------------------------------- |
-| maxZoom        | `number`      | `14`     | max zoom to preserve detail on                                 |
-| indexMaxZoom   | `number`      | `5`      | max zoom in the tile index                                     |
-| indexMaxPoints | `number`      | `100000` | max number of points per tile in the tile index                |
-| tolerance      | `number`      | `3`      | simplification tolerance (higher means simpler)                |
-| extent         | `number`      | `4096`   | tile extent                                                    |
-| buffer         | `number`      | `64`     | tile buffer on each side                                       |
-| lineMetrics    | `boolean`     | `false`  | whether to calculate line metrics                              |
-| promoteId      | `string|null` | `null`   | name of a feature property to be promoted to feature.id        |
-| generateId     | `boolean`     | `true`   | whether to generate feature ids. Cannot be used with promoteId |
-| debug          | `0, 1 or 2`   | `0`      | logging level (0, 1 or 2)                                      |
+| 参数           | 类型        | 默认值   | 描述                                                           |
+| -------------- | ----------- | -------- | -------------------------------------------------------------- | ------------------------------------------------------- |
+| maxZoom        | `number`    | `14`     | max zoom to preserve detail on                                 |
+| indexMaxZoom   | `number`    | `5`      | max zoom in the tile index                                     |
+| indexMaxPoints | `number`    | `100000` | max number of points per tile in the tile index                |
+| tolerance      | `number`    | `3`      | simplification tolerance (higher means simpler)                |
+| extent         | `number`    | `4096`   | tile extent                                                    |
+| buffer         | `number`    | `64`     | tile buffer on each side                                       |
+| lineMetrics    | `boolean`   | `false`  | whether to calculate line metrics                              |
+| promoteId      | `string     | null`    | `null`                                                         | name of a feature property to be promoted to feature.id |
+| generateId     | `boolean`   | `true`   | whether to generate feature ids. Cannot be used with promoteId |
+| debug          | `0, 1 or 2` | `0`      | logging level (0, 1 or 2)                                      |

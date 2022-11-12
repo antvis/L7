@@ -10,9 +10,7 @@ export interface IExportImageControlOption extends IButtonControlOption {
 
 export { ExportImage };
 
-export default class ExportImage extends ButtonControl<
-  IExportImageControlOption
-> {
+export default class ExportImage extends ButtonControl<IExportImageControlOption> {
   public onAdd(): HTMLElement {
     const button = super.onAdd();
     button.addEventListener('click', this.onClick);

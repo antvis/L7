@@ -2,8 +2,8 @@
   "enable":true,
   "extends": [
     "tslint:latest",
-    "tslint-plugin-prettier",
-    "tslint-config-prettier"
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
   ],
   "rules": {
     "prettier": true,

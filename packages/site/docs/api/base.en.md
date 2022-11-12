@@ -3,4 +3,4 @@ title: Base Layer
 order: 1
 ---
 
-`markdown:docs/api/base.zh.md`
+<embed src="@/docs/api/base.zh.md"></embed>

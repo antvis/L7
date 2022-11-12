@@ -53,9 +53,8 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       return this.layerType as LineModelType;
     }
 
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
-      'shape',
-    );
+    const shapeAttribute =
+      this.styleAttributeService.getLayerStyleAttribute('shape');
     const shape = shapeAttribute?.scale?.field as LineModelType;
     return shape || 'line';
   }

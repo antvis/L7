@@ -2,7 +2,7 @@
 title: 本地运行
 order: 1
 ---
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ### 一、打开L7demo页面
 

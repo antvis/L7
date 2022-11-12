@@ -47,9 +47,8 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   }
 
   public getModelType(): HeatMapModelType {
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
-      'shape',
-    );
+    const shapeAttribute =
+      this.styleAttributeService.getLayerStyleAttribute('shape');
     const { shape3d } = this.getLayerConfig();
     const source = this.getSource();
     const sourceType = source.data.type;

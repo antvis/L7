@@ -2,4 +2,4 @@
 title: introduction
 ---
 
-`markdown:examples/draw/basic/design.zh.md`
+<embed src="@/examples/draw/basic/design.zh.md"></embed>

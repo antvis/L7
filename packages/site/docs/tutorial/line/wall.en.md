@@ -2,4 +2,4 @@
 title: Line Wall
 order: 5
 ---
-`markdown:docs/tutorial/line/wall.zh.md`
+<embed src="@/docs/tutorial/line/wall.zh.md"></embed>

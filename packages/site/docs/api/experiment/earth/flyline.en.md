@@ -3,4 +3,4 @@ title: Earth Flyline
 order: 2
 ---
 
-`markdown:docs/api/earth/flyline.zh.md`
+<embed src="@/docs/api/experiment/earth/flyline.zh.md"></embed>

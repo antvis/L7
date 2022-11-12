@@ -73,7 +73,8 @@ let layerIdCounter = 0;
 
 export default class BaseLayer<ChildLayerStyleOptions = {}>
   extends EventEmitter<LayerEventType>
-  implements ILayer {
+  implements ILayer
+{
   public id: string = `${layerIdCounter++}`;
   public name: string = `${layerIdCounter}`;
   public parent: ILayer;
@@ -541,9 +542,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    const lastShape = this.styleAttributeService?.getLayerStyleAttribute(
-      'shape',
-    )?.scale?.field;
+    const lastShape =
+      this.styleAttributeService?.getLayerStyleAttribute('shape')?.scale?.field;
     const currentShape = field;
     this.shapeOption = {
       field,
@@ -1225,15 +1225,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           })
           .catch((err) => reject(err));
       } else {
-        const {
-          attributes,
-          elements,
-          count,
-        } = this.styleAttributeService.createAttributesAndIndices(
-          this.encodedData,
-          triangulation,
-          segmentNumber,
-        );
+        const { attributes, elements, count } =
+          this.styleAttributeService.createAttributesAndIndices(
+            this.encodedData,
+            triangulation,
+            segmentNumber,
+          );
         const modelOptions = {
           attributes,
           uniforms,
@@ -1287,10 +1284,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public needPick(type: string): boolean {
-    const {
-      enableHighlight = true,
-      enableSelect = true,
-    } = this.getLayerConfig();
+    const { enableHighlight = true, enableSelect = true } =
+      this.getLayerConfig();
     // 判断layer是否监听事件;
     let isPick =
       this.eventNames().indexOf(type) !== -1 ||

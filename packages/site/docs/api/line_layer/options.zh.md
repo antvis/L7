@@ -3,6 +3,6 @@ title: Options
 order: 1
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
-`markdown:docs/common/layer/options.md`
+<embed src="@/docs/common/layer/options.md"></embed>

@@ -3,4 +3,4 @@ title: Earth Mode
 order: 1
 ---
 
-`markdown:docs/api/earth/earth.zh.md`
+<embed src="@/docs/api/experiment/earth/earth.zh.md"></embed>

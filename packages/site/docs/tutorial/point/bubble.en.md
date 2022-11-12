@@ -2,4 +2,4 @@
 title: Point Bubble
 order: 0
 ---
-`markdown:docs/tutorial/point/bubble.zh.md`
+<embed src="@/docs/tutorial/point/bubble.zh.md"></embed>

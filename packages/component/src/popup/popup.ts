@@ -22,7 +22,8 @@ export { Popup };
 
 export default class Popup<O extends IPopupOption = IPopupOption>
   extends EventEmitter
-  implements IPopup {
+  implements IPopup
+{
   /**
    * 配置
    * @protected
@@ -475,13 +476,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
   protected update = () => {
     const hasPosition = !!this.lngLat;
-    const {
-      className,
-      style,
-      maxWidth,
-      anchor,
-      stopPropagation,
-    } = this.popupOption;
+    const { className, style, maxWidth, anchor, stopPropagation } =
+      this.popupOption;
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }

@@ -3,4 +3,4 @@ title: Source
 order: 2
 ---
 
-`markdown:docs/tutorial/data.zh.md`
+<embed src="@/docs/tutorial/data.zh.md"></embed>

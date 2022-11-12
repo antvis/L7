@@ -20,9 +20,8 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
   }
 
   public getModelType(): ImageModelType {
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
-      'shape',
-    );
+    const shapeAttribute =
+      this.styleAttributeService.getLayerStyleAttribute('shape');
     const shape = shapeAttribute?.scale?.field as ImageModelType;
     if (shape === 'dataImage') {
       return 'dataImage';

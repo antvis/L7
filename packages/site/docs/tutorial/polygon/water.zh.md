@@ -2,7 +2,7 @@
 title: 水面图层
 order: 2
 ---
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 
 几何体图层支持特殊的表现形式，水面图层。

@@ -3,7 +3,7 @@ title: Popup
 order: 0
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 地图标注信息窗口，用于展示地图要素的属性信息
 

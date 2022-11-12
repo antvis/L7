@@ -27,7 +27,7 @@ const getVectorTile = async (tile: SourceTile): Promise<MapboxVectorTile> => {
     const vectorTile: MapboxVectorTile = {
       layers: {
         // Tip: fixed SourceLayer Name
-        testTile: ({
+        testTile: {
           features: [
             {
               type: 'Feature',
@@ -47,7 +47,7 @@ const getVectorTile = async (tile: SourceTile): Promise<MapboxVectorTile> => {
               },
             },
           ],
-        } as unknown) as VectorTileLayer & {
+        } as unknown as VectorTileLayer & {
           features: Feature[];
         },
       },

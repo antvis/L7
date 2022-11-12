@@ -65,10 +65,8 @@ export default class MapboxService extends BaseMapService<
     scale: [number, number, number] = [1, 1, 1],
     origin: IMercator = { x: 0, y: 0, z: 0 },
   ): number[] {
-    const modelAsMercatorCoordinate = window.mapboxgl.MercatorCoordinate.fromLngLat(
-      lnglat,
-      altitude,
-    );
+    const modelAsMercatorCoordinate =
+      window.mapboxgl.MercatorCoordinate.fromLngLat(lnglat, altitude);
     // @ts-ignore
     const meters = modelAsMercatorCoordinate.meterInMercatorCoordinateUnits();
     const modelMatrix = mat4.create();
@@ -93,7 +91,7 @@ export default class MapboxService extends BaseMapService<
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
     mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
 
-    return (modelMatrix as unknown) as number[];
+    return modelMatrix as unknown as number[];
   }
 
   public async init(): Promise<void> {

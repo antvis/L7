@@ -24,8 +24,7 @@ const Demo: FunctionComponent = () => {
 
       setTimeout(() => {
         logo1.setOptions({
-          img:
-            'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+          img: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
           href: '',
           style: 'height: 40px; width: 40px;',
         });
@@ -40,8 +39,7 @@ const Demo: FunctionComponent = () => {
       const logo3 = new Logo({
         position: 'topright',
         style: 'height: 40px; width: 40px;',
-        img:
-          'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+        img: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
         href: '',
       });
       scene.addControl(logo3);
@@ -49,8 +47,7 @@ const Demo: FunctionComponent = () => {
       const logo4 = new Logo({
         position: 'topleft',
         style: 'height: 40px; width: 40px;',
-        img:
-          'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+        img: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
         href: 'https://ant.design/index-cn',
       });
       scene.addControl(logo4);

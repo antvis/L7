@@ -3,7 +3,7 @@ title: 城市建筑
 order: 6
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 简介
 

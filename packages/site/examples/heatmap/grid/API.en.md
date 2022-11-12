@@ -1,1 +1,1 @@
-`markdown:docs/api/layer/heatmap_layer/grid.en.md`
+<embed src="@/docs/api/layer/heatmap_layer/grid.en.md"></embed>

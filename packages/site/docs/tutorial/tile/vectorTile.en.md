@@ -3,4 +3,4 @@ title: Tile Vector
 order: 2
 ---
 
-`markdown:docs/tutorial/tile/vectorTile.zh.md`
+<embed src="@/docs/tutorial/tile/vectorTile.zh.md"></embed>

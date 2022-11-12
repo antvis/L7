@@ -2,7 +2,7 @@
 title: 地理围墙
 order: 5
 ---
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 地理围墙在原有线图层的基础上赋予了高度的概念，其他的使用和普通的线图保持一致。
 
@@ -61,15 +61,15 @@ scene.on('loaded', () => {
 
 为了绘制地理围墙，我们需要将 `shape` 的参数设置成 `wall`。
 
-`markdown:docs/api/line_layer/features/animate.zh.md`
+<embed src="@/docs/api/line_layer/features/animate.zh.md"></embed>
 
 ### style
 
-`markdown:docs/api/line_layer/features/linear.zh.md`
+<embed src="@/docs/api/line_layer/features/linear.zh.md"></embed>
 
 🌟 目前渐变色的方向为垂直向上
 
-`markdown:docs/api/line_layer/features/texture.zh.md`
+<embed src="@/docs/api/line_layer/features/texture.zh.md"></embed>
 
 🌟 地理围栏支持了新的样式参数 iconStepCount
 

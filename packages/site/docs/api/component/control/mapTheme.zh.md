@@ -47,20 +47,20 @@ export type IControlOptionItem = {
 };
 ```
 
-`markdown:docs/common/control/popper-api.md`
+<embed src="@/docs/common/control/popper-api.md"></embed>
 
-`markdown:docs/common/control/btn-api.md`
+<embed src="@/docs/common/control/btn-api.md"></embed>
 
-`markdown:docs/common/control/api.md`
+<embed src="@/docs/common/control/api.md"></embed>
 
 ## 方法
 
-`markdown:docs/common/control/method.md`
+<embed src="@/docs/common/control/method.md"></embed>
 
 ## 事件
 
-`markdown:docs/common/control/event.md`
+<embed src="@/docs/common/control/event.md"></embed>
 
-`markdown:docs/common/control/popper-event.md`
+<embed src="@/docs/common/control/popper-event.md"></embed>
 
-`markdown:docs/common/control/select-event.md`
+<embed src="@/docs/common/control/select-event.md"></embed>

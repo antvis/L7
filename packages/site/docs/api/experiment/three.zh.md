@@ -3,7 +3,7 @@ title: threejs 引擎兼容
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 简介
 

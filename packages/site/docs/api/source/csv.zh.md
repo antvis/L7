@@ -3,7 +3,7 @@ title: CSV
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 L7 支持 CSV 以逗号分隔的 CSV 数据加载。
 

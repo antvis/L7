@@ -1,1 +1,1 @@
-`markdown:docs/api/line_layer/wall.zh.md`
+<embed src="@/docs/api/line_layer/wall.zh.md"></embed>

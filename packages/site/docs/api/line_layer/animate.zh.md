@@ -3,7 +3,7 @@ title: Animate
 order: 7
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 线图层图层在开启 `animate` 方法后会得到沿线方向的线动画。
 
@@ -35,4 +35,4 @@ interface IAnimateOption {
 }
 ```
 
-`markdown:docs/api/line_layer/features/animate.zh.md`
+<embed src="@/docs/api/line_layer/features/animate.zh.md"></embed>
