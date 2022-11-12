@@ -20,12 +20,19 @@ export default class MaskTile extends Tile {
     await this.addLayer(layer);
     this.isLoaded = true;
   }
+
+  public getFeatures(sourceLayer: string | undefined){
+    if(!sourceLayer) return [];
+    const source = this.sourceTile.data;
+    return source.getTileData(sourceLayer);
+  }
+
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
     const { sourceLayer, featureId } = this.parent.getLayerConfig<{
       featureId: string;
     }>();
-    const features = this.getFeatures(sourceLayer)
+    const features = this.getFeatures(sourceLayer);
     return {
       data: {
         type: 'FeatureCollection',
