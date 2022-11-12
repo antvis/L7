@@ -10,7 +10,7 @@
     "@antv/g2plot": "^2.3.40",
     "@antv/gatsby-theme-antv": "^1.1.15",
     "@antv/l7-district": "^2.3.9",
-    "@antv/l7-draw": "2.4.18",
+    "@antv/l7-draw": "^3.0.9",
     "@antv/l7-react": "^2.3.3",
     "@antv/l7plot": "^0.1.0",
     "@babel/cli": "^7.6.4",
