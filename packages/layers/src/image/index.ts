@@ -18,8 +18,6 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
   }
 
   public getModelType(): ImageModelType {
-
-      return 'image';
-    
+    return 'image';
   }
 }

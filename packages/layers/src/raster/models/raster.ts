@@ -26,7 +26,6 @@ export default class RasterModel extends BaseModel {
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     this.colorTexture =  this.layer.textureService.getColorTexture(rampColors);
 
-
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,

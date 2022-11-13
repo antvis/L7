@@ -1,6 +1,5 @@
 import { ILayerAttributesOption, ITexture2D } from '@antv/l7-core';
-
-import RasterLayer from './layers/RasterDataLayer';
+import RasterLayer from '../../raster'
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import Tile from './Tile';
 
