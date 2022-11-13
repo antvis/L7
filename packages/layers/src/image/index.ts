@@ -13,24 +13,13 @@ export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
     const type = this.getModelType();
     const defaultConfig = {
       image: {},
-      dataImage: {},
-      tileDataImage: {},
     };
     return defaultConfig[type];
   }
 
   public getModelType(): ImageModelType {
-    const shapeAttribute =
-      this.styleAttributeService.getLayerStyleAttribute('shape');
-    const shape = shapeAttribute?.scale?.field as ImageModelType;
-    if (shape === 'dataImage') {
-      return 'dataImage';
-    } else if (shape === 'image') {
+
       return 'image';
-    } else if (shape === 'tileDataImage') {
-      return 'tileDataImage';
-    } else {
-      return 'image';
-    }
+    
   }
 }
