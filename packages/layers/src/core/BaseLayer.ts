@@ -44,6 +44,7 @@ import {
   ISourceCFG,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
+  ITextureService,
   LayerEventType,
   lazyInject,
   LegendItems,
@@ -66,6 +67,7 @@ import {
 } from '../utils/multiPassRender';
 import { updateShape } from '../utils/updateShape';
 import LayerPickService from './LayerPickService';
+import TextureService from './TextureService';
 /**
  * 分配 layer id
  */
@@ -95,6 +97,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public layerType?: string | undefined;
   public triangulation?: Triangulation | undefined;
   public layerPickService: ILayerPickService;
+  public textureService: ITextureService;
 
   public defaultSourceConfig: {
     data: any[];
@@ -409,6 +412,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // 初始化其他服务
     this.layerPickService = new LayerPickService(this);
+
+    // 颜色纹理服务
+    this.textureService = new TextureService(this);
 
     // 触发 init 生命周期插件
     await this.hooks.init.promise();
@@ -983,6 +989,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.layerSource.off('update', this.sourceEvent);
 
     this.multiPassRenderer?.destroy();
+
+    this.textureService.destroy();
 
     // 清除所有属性以及关联的 vao == 销毁所有 => model this.models.forEach((model) => model.destroy());
     this.styleAttributeService.clearAllAttributes();

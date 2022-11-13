@@ -23,28 +23,15 @@ export default class ImageDataModel extends BaseModel {
       clampHigh = true,
       noDataValue = -9999999,
       domain = [0, 1],
-
       colorTexture = createTexture2D({
         height: 0,
         width: 0,
       }),
-      pixelConstant = 0.0,
-      pixelConstantR = 256 * 256,
-      pixelConstantG = 256,
-      pixelConstantB = 1,
-      pixelConstantRGB = 0.1,
     } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
 
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
-
-      u_pixelConstant: pixelConstant,
-      u_pixelConstantR: pixelConstantR,
-      u_pixelConstantG: pixelConstantG,
-      u_pixelConstantB: pixelConstantB,
-      u_pixelConstantRGB: pixelConstantRGB,
-
       u_domain: domain,
       u_clampLow: clampLow,
       u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
@@ -60,24 +47,14 @@ export default class ImageDataModel extends BaseModel {
 
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
+    const imageData = await source.data.images;
     this.texture = createTexture2D({
-      height: 0,
-      width: 0,
+      data: imageData[0],
+      width: imageData[0].width,
+      height: imageData[0].height,
     });
 
-    source.data.images.then(
-      (imageData: Array<HTMLImageElement | ImageBitmap>) => {
-        this.texture = createTexture2D({
-          data: imageData[0],
-          width: imageData[0].width,
-          height: imageData[0].height,
-        });
-        this.layerService.reRender();
-      },
-    );
-   
-
-   const model = await this.layer
+    const model = await this.layer
       .buildLayerModel({
         moduleName: 'RasterTileDataImage',
         vertexShader: ImageVert,
@@ -88,14 +65,14 @@ export default class ImageDataModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-     return [model]
+    return [model]
   }
 
   public clearModels(): void {
     this.texture?.destroy();
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     return await this.initModels();
   }
 

@@ -56,6 +56,7 @@ export default class ImageDataModel extends BaseModel {
     };
   }
   public async initModels(): Promise<IModel[]> {
+    console.log('111')
     const {
       mask = false,
       maskInside = true,
@@ -65,21 +66,13 @@ export default class ImageDataModel extends BaseModel {
 
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
+    const imageData = await source.data.images;
     this.texture = createTexture2D({
-      height: 0,
-      width: 0,
+      data: imageData[0],
+      width: imageData[0].width,
+      height: imageData[0].height,
     });
 
-    source.data.images.then(
-      (imageData: Array<HTMLImageElement | ImageBitmap>) => {
-        this.texture = createTexture2D({
-          data: imageData[0],
-          width: imageData[0].width,
-          height: imageData[0].height,
-        });
-        this.layerService.reRender();
-      },
-    );
 
     const rampImageData = rampColorsData
       ? rampColorsData
@@ -91,7 +84,7 @@ export default class ImageDataModel extends BaseModel {
       flipY: false,
     });
 
-   const model = await this.layer
+    const model = await this.layer
       .buildLayerModel({
         moduleName: 'RasterImage',
         vertexShader: ImageVert,
@@ -102,7 +95,7 @@ export default class ImageDataModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-     return [model]
+    return [model]
   }
 
   public clearModels(): void {
@@ -110,7 +103,7 @@ export default class ImageDataModel extends BaseModel {
     this.colorTexture?.destroy();
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     return await this.initModels();
   }
 

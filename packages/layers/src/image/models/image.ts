@@ -52,21 +52,19 @@ export default class ImageModel extends BaseModel {
         this.layerService.reRender();
       };
     } else {
-      source.data.images.then(
-        (imageData: Array<HTMLImageElement | ImageBitmap>) => {
-          this.texture = createTexture2D({
-            data: imageData[0],
-            width: imageData[0].width,
-            height: imageData[0].height,
-            mag: gl.LINEAR,
-            min: gl.LINEAR,
-          });
-          this.layerService.reRender();
-        },
-      );
+      const imageData = await source.data.images;
+
+      this.texture = createTexture2D({
+        data: imageData[0],
+        width: imageData[0].width,
+        height: imageData[0].height,
+        mag: gl.LINEAR,
+        min: gl.LINEAR,
+      });
+
     }
 
-   const model = await this.layer
+    const model = await this.layer
       .buildLayerModel({
         moduleName: 'rasterImage',
         vertexShader: ImageVert,
@@ -80,14 +78,14 @@ export default class ImageModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-     return [model]
+    return [model]
   }
 
   public clearModels(): void {
     this.texture?.destroy();
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     return await this.initModels();
   }
 

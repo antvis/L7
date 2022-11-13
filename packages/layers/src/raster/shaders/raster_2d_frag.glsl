@@ -15,9 +15,6 @@ bool isnan_emu(float x) { return (x > 0.0 || x < 0.0) ? x != x : x != 0.0; }
 void main() {
 
   float value = texture2D(u_texture,vec2(v_texCoord.x,v_texCoord.y)).r;
-
-
-
   if (value == u_noDataValue || isnan_emu(value))
     gl_FragColor = vec4(0.0, 0, 0, 0.0);
   else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1]))

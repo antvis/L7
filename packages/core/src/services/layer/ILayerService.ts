@@ -3,6 +3,7 @@ import { SyncBailHook, SyncHook, AsyncSeriesBailHook, AsyncWaterfallHook} from '
 import { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
+import { ITextureService } from '../asset/ITextureService';
 import { ISceneConfig } from '../config/IConfigService';
 import { IInteractionTarget } from '../interaction/IInteractionService';
 import { ILayerPickService, IPickingService } from '../interaction/IPickingService';
@@ -305,6 +306,7 @@ export type LayerEventType =
 export interface ILayer {
   styleAttributeService: IStyleAttributeService,
   layerPickService: ILayerPickService;
+  textureService: ITextureService;
   sourceLayer?: string;
   parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
