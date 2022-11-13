@@ -33,18 +33,14 @@ export default () => {
 
       const layer = new RasterLayer();
       layer
-        .source(values[0],
-          {
-            parser: {
-              type: 'raster',
-              width,
-              height,
-              extent: [
-                73.482190241, 3.82501784112, 135.106618732, 57.6300459963,
-              ],
-            },
+        .source(values[0], {
+          parser: {
+            type: 'raster',
+            width,
+            height,
+            extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
           },
-        )
+        })
         .style({
           opacity: 0.8,
           clampLow: false,
