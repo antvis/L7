@@ -1,4 +1,7 @@
 ---
+group:
+  path: 'basemap'
+  title: 地图底图
 title: 星球地图-矢量图
 order: 2
 ---

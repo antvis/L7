@@ -55,13 +55,6 @@ export default defineConfig({
       path: 'https://github.com/antvis/L7',
     },
   ],
-  // menus: {
-  //   '/raster': [
-  //     {
-  //       title: '栅格',
-  //     },
-  //   ]
-  // },
   esbuild: false,
   chainWebpack: (memo, { env, webpack, createCSSRule }) => {
     // 设置 alias
