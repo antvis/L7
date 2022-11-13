@@ -1055,7 +1055,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        if (this.mapService.setCoordCenter) {
+        if (this.mapService?.setCoordCenter) {
           this.mapService.setCoordCenter(layerCenter);
         }
       }
