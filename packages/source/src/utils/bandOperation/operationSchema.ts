@@ -13,7 +13,7 @@ export const operationsSchema= {
   rgb: {
     type: 'function',
     method:strethRgb2minMax
-    },
+  },
 
 }
 

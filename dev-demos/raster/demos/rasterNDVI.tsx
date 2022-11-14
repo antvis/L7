@@ -26,13 +26,6 @@ export default () => {
       const url1 =
         'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*XKLhRY67iPgAAAAAAAAAAAAADmJ7AQ/original';
       const tiffdata = await getTiffData(url1);
-
-      // const tiffdata1 = await GeoTIFF.fromUrl('https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-JRUT5u3IDcAAAAAAAAAAAAADmJ7AQ/original');
-
-      // const tiffdata1 =  await parse_georaster(tiffdata);
-      // console.log(tiffdata1)
-      // console.log(await tiffdata1.getImageCount())
-      // console.log(await tiffdata2.getImageCount())
       const url2 =
         'https://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&';
 

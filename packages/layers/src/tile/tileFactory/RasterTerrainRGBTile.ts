@@ -1,14 +1,13 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
-import ImageLayer from '../../image'
+import RasterLayer from '../../raster'
 import Tile from './Tile';
-export default class ImageTile extends Tile {
+export default class RasterTerrainRGBTile extends Tile {
   public async initTileLayer(): Promise<void> {
-    
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.parent.getLayerConfig()
 
     const sourceOptions = this.getSourceOption();
-    const layer = new ImageLayer({...layerOptions}).source(
+    const layer = new RasterLayer({...layerOptions}).source(
       sourceOptions.data,
       sourceOptions.options,
     );

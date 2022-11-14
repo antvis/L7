@@ -4,6 +4,7 @@ import DebugTile from './DebugTile';
 import ImageTile from  './ImageTile';
 import RasterTile from './RasterTile';
 import RasterRGBTile from './RasterRGBTile';
+import RasterTerrainRGBTile  from './RasterTerrainRGBTile';
 import MaskLayer from './MaskTile';
 
 
@@ -38,6 +39,8 @@ export function getTileFactory(layer: ILayer) {
           return RasterRGBTile;
         case 'arraybuffer':
           return RasterTile
+        case "terrainRGB" :
+            return RasterTerrainRGBTile
         default:
           return ImageTile;
       }
