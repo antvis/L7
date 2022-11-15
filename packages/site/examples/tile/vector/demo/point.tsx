@@ -18,7 +18,6 @@ export default () => {
     const layer = new PointLayer({
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
-      blend: 'normal',
     });
     layer
       .source(
@@ -33,11 +32,10 @@ export default () => {
           },
         },
       )
-      .shape('COLOR', 'text')
-      .color('COLOR')
-      // .color('#000')
-      .size(10)
-      .select(true);
+      .shape('circle')
+      .color('red')
+      .size(10);
+    // .select(true);
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
@@ -47,7 +45,7 @@ export default () => {
     <div
       id="map"
       style={{
-        height: '60vh',
+        height: '500px',
         position: 'relative',
       }}
     />

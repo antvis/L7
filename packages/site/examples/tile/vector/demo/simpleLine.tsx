@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, PointLayer } from '@antv/l7';
+import { Scene, LineLayer } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -11,14 +11,13 @@ export default () => {
       stencil: true,
       map: new Map({
         center: [112, 30],
-        zoom: 3,
+        zoom: 6,
       }),
     });
 
-    const layer = new PointLayer({
+    const layer = new LineLayer({
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
-      blend: 'normal',
     });
     layer
       .source(
@@ -33,21 +32,33 @@ export default () => {
           },
         },
       )
-      .shape('COLOR', 'text')
+      // .shape('simple')
       .color('COLOR')
-      // .color('#000')
-      .size(10)
+      .size(2)
       .select(true);
+    scene.on('click', () => {
+      console.log(scene.getZoom());
+      layer.tileLayer.tileLayerService.tiles.map((t) => {
+        console.log(t.layers[0].isVisible());
+      });
+    });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      setTimeout(() => {
+        layer
+          .color('#f00')
+          .size(1)
+          .animate(true);
+        scene.render();
+      }, 3000);
     });
   }, []);
   return (
     <div
       id="map"
       style={{
-        height: '60vh',
+        height: '500px',
         position: 'relative',
       }}
     />

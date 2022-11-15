@@ -112,13 +112,16 @@ export default () => {
       scene.addLayer(layer1);
       scene.addLayer(layer2);
       scene.addLayer(layer3);
+
+      const debugerLayer = new TileDebugLayer();
+      scene.addLayer(debugerLayer);
     });
   }, []);
   return (
     <div
       id="map"
       style={{
-        height: '60vh',
+        height: '500px',
         position: 'relative',
       }}
     />

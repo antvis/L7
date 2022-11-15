@@ -50,7 +50,7 @@ export default () => {
     <div
       id="geojsonvt"
       style={{
-        height: '60vh',
+        height: '500px',
         position: 'relative',
       }}
     />

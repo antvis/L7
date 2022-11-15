@@ -24,7 +24,7 @@ export default () => {
       id="map"
       style={{
         backgroundColor: 'rgba(175,200,253)',
-        height: '60vh',
+        height: '500px',
         position: 'relative',
       }}
     />
