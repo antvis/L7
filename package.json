@@ -151,6 +151,7 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.7",
     "webpack-merge": "^4.1.4",
+    "wellknown": "^0.5.0",
     "worker-loader": "^2.0.0",
     "yorkie": "^2.0.0"
   },

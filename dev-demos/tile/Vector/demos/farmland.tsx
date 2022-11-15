@@ -44,16 +44,7 @@ export default () => {
         },
       },
     );
-    // const source2 = new Source(
-    //   'https://cdn.unfolded.ai/indigo/hexify_v5/{z}/{x}/{y}.pbf',
-    //   {
-    //     parser: {
-    //       type: 'mvt',
-    //       tileSize: 256,
-    //       maxZoom: 9,
-    //     },
-    //   },
-    // );
+
     const layer = new LineLayer({
       featureId: 'id',
       zIndex: 3,

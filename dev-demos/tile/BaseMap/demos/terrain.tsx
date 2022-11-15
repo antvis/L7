@@ -24,7 +24,7 @@ export default () => {
               type: 'rasterTile',
               dataType:'terrainRGB',
               tileSize: 256,
-              zoomOffset: 1,
+              zoomOffset: 0,
             },
           },
         )

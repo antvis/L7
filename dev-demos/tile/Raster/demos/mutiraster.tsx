@@ -10,28 +10,45 @@ export default () => {
       stencil: true,
       map: new Map({
         center: [129.54663, 46.42832],
-        zoom: 8,
+        zoom: 10,
         style: 'dark',
       }),
     });
 
     scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json',
-      )
-        .then((res) => res.json())
-        .then((maskData) => {
+      const url1 =
+      'https://tiles{1-3}.geovisearth.com/base/v1/img/{z}/{x}/{y}?format=webp&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788';
+    const url2 =
+      'https://tiles{1-3}.geovisearth.com/base/v1/cia/{z}/{x}/{y}?format=png&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788';
+    const layer1 = new RasterLayer({
+      zIndex: 1,
+    }).source(url1, {
+      parser: {
+        type: 'rasterTile',
+        tileSize: 256,
+      },
+    });
+
+    const layer2 = new RasterLayer({
+      zIndex: 12,
+    }).source(url2, {
+      parser: {
+        type: 'rasterTile',
+        tileSize: 256,
+        zoomOffset:0,
+      },
+    });
           const layer = new RasterLayer({
             mask: false,
-            maskfence: maskData,
+            zIndex:10,
           });
           const urls = [
             {
-              url: 'http://localhost:8080/LC08/B04/{z}/{x}/{y}.tiff',
+              url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/tmp/landsat08/B04/{z}/{x}/{y}.tiff',
               bands: [0]
             },
             {
-              url: 'http://localhost:8080/LC08/B05/{z}/{x}/{y}.tiff',
+              url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/tmp/landsat08/B05/{z}/{x}/{y}.tiff',
               bands: [0]
             }
           ]
@@ -44,7 +61,6 @@ export default () => {
                 type: 'rasterTile',
                 dataType: 'arraybuffer',
                 tileSize: 256,
-                
                 operation: {
                   type:'nd'
                 },
@@ -69,6 +85,7 @@ export default () => {
             domain: [-0.3, 0.5],
             clampLow: true,
             noDataValue:0,
+            opacity:1,
             rampColors: {
               colors: [
                 '#ce4a2e',
@@ -81,10 +98,11 @@ export default () => {
               positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
             },
           });
-
+          scene.addLayer(layer1);
+          scene.addLayer(layer2);
           scene.addLayer(layer);
 
-        });
+        
     });
 
     return () => {

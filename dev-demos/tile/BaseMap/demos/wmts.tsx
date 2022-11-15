@@ -43,7 +43,7 @@ export default () => {
       parser: {
         type: 'rasterTile',
         tileSize: 256,
-        zoomOffset: 1,
+        zoomOffset: 0,
       },
     });
 
@@ -53,7 +53,7 @@ export default () => {
       parser: {
         type: 'rasterTile',
         tileSize: 256,
-        zoomOffset: 1,
+        zoomOffset: 0,
       },
     });
 
@@ -63,7 +63,7 @@ export default () => {
       parser: {
         type: 'rasterTile',
         tileSize: 256,
-        zoomOffset: 1,
+        zoomOffset: 0,
       },
     });
 
