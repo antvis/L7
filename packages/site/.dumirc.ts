@@ -605,7 +605,7 @@ export default defineConfig({
       indexName: 'antv_l7',
     },
   },
-  mfsu: false,
+  mfsu:true,
   links: [
   ],
   scripts: [

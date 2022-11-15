@@ -117,6 +117,7 @@
     "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.1.0",
     "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
     "react-router": "6.0.0",
     "react-router-dom": "6.0.0",
     "rimraf": "^3.0.2",
