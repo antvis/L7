@@ -10,10 +10,11 @@ order: 0
 将图片添加到地图上，同时需要指定图片的经纬度范围和数据解析类型。
 
 <div>
-  <div style="width:40%;float:right; margin-left: 16px;">
+  <div style="width:40%; margin: 16px;">
     <img  width="80%" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*8MtWSIGTN8UAAAAAAAAAAAAAARQnAQ'>
   </div>
 </div>
+
 
 ```javascript
 const layer = new ImageLayer({});

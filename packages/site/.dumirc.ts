@@ -189,26 +189,6 @@ export default defineConfig({
       },
     ],
     docs: [
-      // ****** tutorial
-      // quickStart 0
-      {
-        slug: 'tutorial/l7',
-        title: {
-          zh: '简介',
-          en: 'introduce',
-        },
-        order: 1,
-      },
-      {
-        slug: 'tutorial/quickstart',
-        title: {
-          zh: '快速上手',
-          en: 'quickStart',
-        },
-        order: 2,
-      },
-      // demo 1
-      // data 2
       {
         slug: 'tutorial/map',
         title: {
@@ -279,20 +259,27 @@ export default defineConfig({
         },
         order: 10,
       },
-      // ****** api
       {
-        slug: 'api/base',
+        slug: 'api/map',
         title: {
-          zh: '图层 BaseLayer',
-          en: 'Layer',
+          zh: '地图 Map',
+          en: 'Map',
         },
-        order: 2,
+        order: 3,
       },
       {
         slug: 'api/source',
         title: {
           zh: '数据 Source',
           en: 'Source',
+        },
+        order: 3,
+      },
+      {
+        slug: 'api/base_layer',
+        title: {
+          zh: '图层基类 BaseLayer',
+          en: 'BaseLayer',
         },
         order: 3,
       },
@@ -329,7 +316,7 @@ export default defineConfig({
         order: 6,
       },
       {
-        slug: 'api/imageLayer',
+        slug: 'api/image_layer',
         title: {
           zh: '图片图层 ImageLayer',
           en: 'ImageLayer',
@@ -351,16 +338,7 @@ export default defineConfig({
           en: 'VectorTile',
         },
         order: 8,
-      },
-      {
-        slug: 'api/rastertile',
-        title: {
-          zh: '栅格瓦片 TileLayer',
-          en: 'rasterTile',
-        },
-        order: 8,
-      },
-      
+      },   
       {
         slug: 'api/other',
         title: {
@@ -409,22 +387,6 @@ export default defineConfig({
         },
         order: 0,
       },
-      // {
-      //   slug: 'api/mini',
-      //   title: {
-      //     zh: '小程序',
-      //     en: 'mini',
-      //   },
-      //   order: 9,
-      // },
-      // {
-      //   slug: 'api/mini/demos',
-      //   title: {
-      //     zh: '案例集合',
-      //     en: 'demos',
-      //   },
-      //   order: 14,
-      // },
       {
         slug: 'api/experiment',
         title: {

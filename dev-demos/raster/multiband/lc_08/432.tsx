@@ -137,7 +137,7 @@ export default () => {
       <div
         id="map"
         style={{
-          height: '500px',
+          height: '60vh',
           position: 'relative',
         }}
       ></div>
