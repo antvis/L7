@@ -15,7 +15,6 @@ order: 0
   </div>
 </div>
 
-
 ```javascript
 const layer = new ImageLayer({});
 layer.source(
