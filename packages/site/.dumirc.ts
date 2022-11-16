@@ -552,10 +552,6 @@ export default defineConfig({
       indexName: 'antv_l7',
     },
   },
-  targets: {
-    chrome: 58,
-    ie: 11,
-  },
   mfsu:false,
   // chainWebpack: (memo, { env, webpack, createCSSRule }) => {
   //   // 设置 alias
