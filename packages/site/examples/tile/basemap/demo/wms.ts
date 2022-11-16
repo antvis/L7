@@ -32,7 +32,7 @@ const layer2 = new RasterLayer({
     tileSize: 256,
   },
 });
-
+// WMS 底图 BBOX获取数据
 const url =
   'https://pnr.sz.gov.cn/d-suplicmap/dynamap_1/rest/services/LAND_CERTAIN/MapServer/export?F=image&FORMAT=PNG32&TRANSPARENT=true&layers=show:1&SIZE=256,256&BBOX={bbox}&BBOXSR=4326&IMAGESR=3857&DPI=90';
 
@@ -47,6 +47,8 @@ const layer = new RasterLayer({
 });
 
 scene.on('loaded', () => {
+  scene.addLayer(layer1);
+  scene.addLayer(layer2);
   scene.addLayer(layer);
 
 });
