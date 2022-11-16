@@ -20,18 +20,16 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
 
       return this;
     }
-    if (this.layerModelNeedUpdate) {
-      // TODO 渲染流程修改
-      this.layerModel.buildModels().then((models) => {
-        this.models = models;
-        this.layerModelNeedUpdate = false;
-      });
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return this;
     }
+    this.hooks.beforeRender.call();
     this.models.forEach((model) =>
       model.draw({
         uniforms: this.layerModel.getUninforms(),
       }),
     );
+    this.hooks.afterRender.call();
     return this;
   }
 
