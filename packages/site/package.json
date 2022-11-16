@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@antv/l7-site",
-  "version": "2.10.5",
+  "version": "2.10.6",
   "description": "L7 sites deployed on gh-pages",
   "keywords": [
     "antv",
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@antv/gatsby-theme-antv": "1.1.15",
-    "@antv/l7": "2.10.5",
+    "@antv/l7": "2.10.6",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
     "@types/react": "^16.9.35",
