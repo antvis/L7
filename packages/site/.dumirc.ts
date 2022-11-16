@@ -39,7 +39,7 @@ export default defineConfig({
             zh: '图表示例',
             en: 'gallery',
           },
-          link: `/examples/gallery`,
+          link: `/examples`,
           type: 'primary',
         },
       ],
@@ -189,7 +189,6 @@ export default defineConfig({
       },
     ],
     docs: [
-      // ****** tutorial
       {
         slug: 'tutorial/map',
         title: {
@@ -254,20 +253,27 @@ export default defineConfig({
         },
         order: 10,
       },
-      // ****** api
       {
-        slug: 'api/base',
+        slug: 'api/map',
         title: {
-          zh: '图层 BaseLayer',
-          en: 'Layer',
+          zh: '地图 Map',
+          en: 'Map',
         },
-        order: 2,
+        order: 3,
       },
       {
         slug: 'api/source',
         title: {
           zh: '数据 Source',
           en: 'Source',
+        },
+        order: 3,
+      },
+      {
+        slug: 'api/base_layer',
+        title: {
+          zh: '图层基类 BaseLayer',
+          en: 'BaseLayer',
         },
         order: 3,
       },
@@ -304,7 +310,7 @@ export default defineConfig({
         order: 6,
       },
       {
-        slug: 'api/imageLayer',
+        slug: 'api/image_layer',
         title: {
           zh: '图片图层 ImageLayer',
           en: 'ImageLayer',
@@ -326,16 +332,7 @@ export default defineConfig({
           en: 'VectorTile',
         },
         order: 8,
-      },
-      {
-        slug: 'api/rastertile',
-        title: {
-          zh: '栅格瓦片 TileLayer',
-          en: 'rasterTile',
-        },
-        order: 8,
-      },
-      
+      },   
       {
         slug: 'api/other',
         title: {
@@ -384,22 +381,6 @@ export default defineConfig({
         },
         order: 0,
       },
-      // {
-      //   slug: 'api/mini',
-      //   title: {
-      //     zh: '小程序',
-      //     en: 'mini',
-      //   },
-      //   order: 9,
-      // },
-      // {
-      //   slug: 'api/mini/demos',
-      //   title: {
-      //     zh: '案例集合',
-      //     en: 'demos',
-      //   },
-      //   order: 14,
-      // },
       {
         slug: 'api/experiment',
         title: {
@@ -447,15 +428,6 @@ export default defineConfig({
         order: 3,
       },
       {
-        slug: 'earth',
-        icon: 'map',
-        title: {
-          zh: '地球模式',
-          en: 'Earth Mode',
-        },
-        order: 4,
-      },
-      {
         slug: 'heatmap',
         icon: 'heatmap',
         title: {
@@ -463,15 +435,6 @@ export default defineConfig({
           en: 'HeatMap Layer',
         },
         order: 6,
-      },
-      {
-        slug: 'tile',
-        icon: 'raster',
-        title: {
-          zh: '瓦片图层',
-          en: 'Tile Layer',
-        },
-        order: 7,
       },
       {
         slug: 'raster',
@@ -483,6 +446,24 @@ export default defineConfig({
         order: 7,
       },
       {
+        slug: 'tile',
+        icon: 'raster',
+        title: {
+          zh: '瓦片图层',
+          en: 'Tile Layer',
+        },
+        order: 7,
+      },
+      {
+        slug: 'component',
+        icon: 'map',
+        title: {
+          zh: '组件',
+          en: 'Component',
+        },
+        order: 9,
+      },
+      {
         slug: 'wind',
         icon: 'raster',
         title: {
@@ -490,6 +471,15 @@ export default defineConfig({
           en: 'Wind Layer',
         },
         order: 7,
+      },
+      {
+        slug: 'earth',
+        icon: 'map',
+        title: {
+          zh: '地球模式',
+          en: 'Earth Mode',
+        },
+        order: 4,
       },
       {
         slug: 'geometry',
@@ -508,24 +498,6 @@ export default defineConfig({
           en: 'other engine',
         },
         order: 8,
-      },
-      {
-        slug: 'component',
-        icon: 'map',
-        title: {
-          zh: '组件',
-          en: 'Component',
-        },
-        order: 9,
-      },
-      {
-        slug: 'react',
-        icon: 'map',
-        title: {
-          zh: 'React 组件',
-          en: 'React Demo',
-        },
-        order: 9,
       },
       {
         slug: 'amapPlugin',
@@ -580,9 +552,39 @@ export default defineConfig({
       indexName: 'antv_l7',
     },
   },
-  mfsu: false,
+  mfsu:false,
+  // chainWebpack: (memo, { env, webpack, createCSSRule }) => {
+  //   // 设置 alias
+  //   memo.module
+  //     .rule('lint')
+  //     .test(/\.glsl$/)
+  //     .use('babel')
+  //     .loader('ts-shader-loader');
+  //   // 还可以创建具名use (loaders)
+  // },
+  extraBabelPlugins: [
+    // 开发模式下以原始文本引入，便于调试
+    [
+      // import glsl as raw text
+      'babel-plugin-inline-import',
+      { extensions: ['.glsl','.worker.js'] },
+    ],
+    ['transform-import-css-l7'],
+  ],
   links: [
   ],
-  scripts: [
-  ],
+  alias:{
+    '@antv/l7': path.resolve(__dirname, '../l7/src'),
+    '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
+    '@antv/l7-maps/lib/map': path.resolve(__dirname, '../maps/src/map'),
+    '@antv/l7-core': path.resolve(__dirname, '../core/src'),
+    '@antv/l7-component': path.resolve(__dirname, '../component/src'),
+    '@antv/l7-layers': path.resolve(__dirname, '../layers/src'),
+    '@antv/l7-map': path.resolve(__dirname, '../map/src'),
+    '@antv/l7-maps': path.resolve(__dirname, '../maps/src'),
+    '@antv/l7-renderer': path.resolve(__dirname, '../renderer/src'),
+    '@antv/l7-scene': path.resolve(__dirname, '../scene/src'),
+    '@antv/l7-source': path.resolve(__dirname, '../source/src'),
+    '@antv/l7-utils': path.resolve(__dirname, '../utils/src')
+  }
 });

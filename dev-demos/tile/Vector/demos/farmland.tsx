@@ -44,16 +44,7 @@ export default () => {
         },
       },
     );
-    // const source2 = new Source(
-    //   'https://cdn.unfolded.ai/indigo/hexify_v5/{z}/{x}/{y}.pbf',
-    //   {
-    //     parser: {
-    //       type: 'mvt',
-    //       tileSize: 256,
-    //       maxZoom: 9,
-    //     },
-    //   },
-    // );
+
     const layer = new LineLayer({
       featureId: 'id',
       zIndex: 3,
@@ -121,16 +112,13 @@ export default () => {
       scene.addLayer(layer1);
       scene.addLayer(layer2);
       scene.addLayer(layer3);
-
-      const debugerLayer = new TileDebugLayer();
-      scene.addLayer(debugerLayer);
     });
   }, []);
   return (
     <div
       id="map"
       style={{
-        height: '500px',
+        height: '60vh',
         position: 'relative',
       }}
     />

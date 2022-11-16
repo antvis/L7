@@ -117,6 +117,7 @@
     "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.1.0",
     "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
     "react-router": "6.0.0",
     "react-router-dom": "6.0.0",
     "rimraf": "^3.0.2",
@@ -151,6 +152,7 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.7",
     "webpack-merge": "^4.1.4",
+    "wellknown": "^0.5.0",
     "worker-loader": "^2.0.0",
     "yorkie": "^2.0.0"
   },

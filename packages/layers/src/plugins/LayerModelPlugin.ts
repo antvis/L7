@@ -12,6 +12,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
     layer.prepareBuildModel();
     // 初始化 Model
     await layer.buildModels();
+
     layer.styleNeedUpdate = false;
   }
 

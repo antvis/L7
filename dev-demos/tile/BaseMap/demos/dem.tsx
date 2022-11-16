@@ -25,7 +25,7 @@ export default () => {
       parser: {
         type: 'rasterTile',
         tileSize: 256,
-        zoomOffset: 1,
+        zoomOffset: 0,
       },
     });
 
@@ -35,7 +35,7 @@ export default () => {
       parser: {
         type: 'rasterTile',
         tileSize: 256,
-        zoomOffset: 1,
+        zoomOffset: 0,
       },
     });
 
@@ -45,7 +45,7 @@ export default () => {
     //   parser: {
     //     type: 'rasterTile',
     //     tileSize: 256,
-    //     zoomOffset: 1,
+    //     zoomOffset: 0,
     //   },
     // });
 
@@ -55,7 +55,7 @@ export default () => {
     //   parser: {
     //     type: 'rasterTile',
     //     tileSize: 256,
-    //     zoomOffset: 1,
+    //     zoomOffset: 0,
     //   },
     // });
 
@@ -70,7 +70,7 @@ export default () => {
     <div
       id="map"
       style={{
-        height: '500px',
+        height: '60vh',
         position: 'relative',
       }}
     />

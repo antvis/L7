@@ -4,3 +4,5 @@
 node_modules
 yarn.lock
 dist
+.DS_Store
+yarn-error.log

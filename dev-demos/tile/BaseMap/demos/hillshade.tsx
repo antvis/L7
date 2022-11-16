@@ -29,7 +29,7 @@ export default () => {
       parser: {
         type: 'rasterTile',
         tileSize: 256,
-        zoomOffset: 1,
+        zoomOffset: 0,
       },
     });
 
@@ -45,7 +45,7 @@ export default () => {
               type: 'rasterTile',
               dataType: 'arraybuffer',
               tileSize: 256,
-              zoomOffset:1,
+              zoomOffset: 0,
               format: async (data: any) => {
                 const blob: Blob = new Blob([new Uint8Array(data)], {
                   type: 'image/png',
@@ -196,7 +196,7 @@ export default () => {
     <div
       id="map"
       style={{
-        height: '500px',
+        height: '60vh',
         position: 'relative',
       }}
     />

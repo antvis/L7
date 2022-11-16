@@ -50,6 +50,7 @@ export default class Grid3DModel extends BaseModel {
         stencil: getMask(mask, maskInside),
       })
      return [model]
+
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

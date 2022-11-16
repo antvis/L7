@@ -1,0 +1,49 @@
+{
+  "title": {
+    "zh": "地图底图",
+    "en": "BaseMap"
+  },
+  "demos": [
+    {
+      "filename": "dem.ts",
+      "title": "地形图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "hillshade.ts",
+      "title": "山体阴影",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "mask.ts",
+      "title": "底图掩膜",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "raster.ts",
+      "title": "卫星图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Gg87TbHRYNcAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "normal.ts",
+      "title": "普通底图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*ZM2lR56TIwoAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "terrain.ts",
+      "title": "地形图底图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "wms.ts",
+      "title": "WMS 底图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "wmts.ts",
+      "title": "WMTS 底图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original"
+    }
+    
+  ]
+}
