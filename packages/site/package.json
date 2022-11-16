@@ -42,6 +42,8 @@
     "@antv/l7": "^2.10.4",
     "@antv/l7-maps": "^2.10.4",
     "@antv/util": "^2.0.9",
+    "babel-plugin-inline-import": "^3.0.0",
+    "babel-plugin-transform-import-css-l7": "^0.0.6",
     "@turf/turf": "^6.5.0",
     "cross-env": "^7.0.3",
     "dumi": "^2.0.0-rc.8",
