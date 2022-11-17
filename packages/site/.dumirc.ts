@@ -465,6 +465,15 @@ export default defineConfig({
         order: 9,
       },
       {
+        slug: 'draw',
+        icon: 'map',
+        title: {
+          zh: '绘制组件',
+          en: 'L7Draw',
+        },
+        order: 9,
+      },
+      {
         slug: 'wind',
         icon: 'raster',
         title: {
@@ -519,15 +528,6 @@ export default defineConfig({
         order: 11,
       },
       {
-        slug: 'draw',
-        icon: 'map',
-        title: {
-          zh: '绘制组件',
-          en: 'L7Draw',
-        },
-        order: 12,
-      },
-      {
         slug: 'tutorial',
         icon: 'map',
         title: {
@@ -538,7 +538,7 @@ export default defineConfig({
     ],
     playground: {
       container:
-        '<div style="height: 100vh;justify-content: center; position: relative" id="map"/>',
+        '<div style="height: 80vh;justify-content: center; position: relative" id="map"/>',
       dependencies: {
         '@antv/l7': 'latest',
         '@antv/l7-maps': 'latest',
