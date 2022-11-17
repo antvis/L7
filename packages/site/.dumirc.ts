@@ -2,6 +2,7 @@ import { defineConfig } from 'dumi';
 const path = require('path');
 import { repository, version } from './package.json';
 const env = process.env.NODE_ENV;
+console.log(env)
 export default defineConfig({
   locales: [{ id: 'zh', name: '中文' }, { id: 'en', name: 'English' }],
   
@@ -390,7 +391,6 @@ export default defineConfig({
         order: 12,
       },
     ],
-
     examples: [
       {
         slug: 'gallery',
@@ -465,6 +465,15 @@ export default defineConfig({
         order: 9,
       },
       {
+        slug: 'draw',
+        icon: 'map',
+        title: {
+          zh: '绘制组件',
+          en: 'L7Draw',
+        },
+        order: 9,
+      },
+      {
         slug: 'wind',
         icon: 'raster',
         title: {
@@ -519,15 +528,6 @@ export default defineConfig({
         order: 11,
       },
       {
-        slug: 'draw',
-        icon: 'map',
-        title: {
-          zh: '绘制组件',
-          en: 'L7Draw',
-        },
-        order: 12,
-      },
-      {
         slug: 'tutorial',
         icon: 'map',
         title: {
@@ -538,7 +538,7 @@ export default defineConfig({
     ],
     playground: {
       container:
-        '<div style="height: 100vh;justify-content: center; position: relative" id="map"/>',
+        '<div style="height: 80vh;justify-content: center; position: relative" id="map"/>',
       dependencies: {
         '@antv/l7': 'latest',
         '@antv/l7-maps': 'latest',
@@ -553,17 +553,7 @@ export default defineConfig({
       indexName: 'antv_l7',
     },
   },
-  mfsu:false,
-  // chainWebpack: (memo, { env, webpack, createCSSRule }) => {
-  //   // 设置 alias
-  //   memo.module
-  //     .rule('lint')
-  //     .test(/\.glsl$/)
-  //     .use('babel')
-  //     .loader('ts-shader-loader');
-  //   // 还可以创建具名use (loaders)
-  // },
-  extraBabelPlugins: [
+  extraBabelPlugins: env === 'development'? [
     // 开发模式下以原始文本引入，便于调试
     [
       // import glsl as raw text
@@ -571,8 +561,11 @@ export default defineConfig({
       { extensions: ['.glsl','.worker.js'] },
     ],
     ['transform-import-css-l7'],
-  ],
+  ]:[],
   links: [
+  ],
+  scripts: [
+    'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f&callback=onLoad'
   ],
   alias: env === 'development'? {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),

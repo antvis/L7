@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Scene, Source, LineLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMapV2 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
     const scene = new Scene({
       id: 'geojsonvt',
       stencil: true,
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [111.268, 30.3628],
         pitch: 0,
         zoom: 2,

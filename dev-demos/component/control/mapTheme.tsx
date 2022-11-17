@@ -13,7 +13,7 @@ const Demo: FunctionComponent = () => {
         zoom: 6.45,
         style: 'normal',
       }),
-      // map: new GaodeMapV2({
+      // map: new GaodeMap({
       //   style: 'dark',
       //   center: [120, 30],
       //   pitch: 0,

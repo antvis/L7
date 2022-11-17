@@ -2,7 +2,6 @@
 /**
  * AMapService
  */
-import AMapLoader from '@amap/amap-jsapi-loader';
 import {
   CoordinateSystem,
   IMapCamera,
@@ -13,6 +12,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import AMapLoader from '../utils/amaploader';
 import { Version } from '../version';
 
 import AMapBaseService from '../utils/amap/AMapBaseService';

@@ -34,12 +34,12 @@
     "site:publish": "gh-pages -d public"
   },
   "devDependencies": {
-    "@antv/dumi-theme-antv": "^0.3.0-beta.12",
+    "@antv/dumi-theme-antv": "^0.3.0-2.10.7.12",
     "@antv/g2": "^4.2.8",
-    "@antv/l7": "beta",
-    "@antv/l7-draw": "2",
-    "@antv/l7-maps": "beta",
-    "@antv/l7-three":"beta",
+    "@antv/l7": "2.10.7",
+    "@antv/l7-draw": "^3.0.9",
+    "@antv/l7-maps": "2.10.7",
+    "@antv/l7-three":"2.10.7",
     "@antv/l7plot": "^0.3.3",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
@@ -47,15 +47,15 @@
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-transform-import-css-l7": "^0.0.6",
     "cross-env": "^7.0.3",
-    "dumi": "^2.0.0-rc.8",
+    "dumi": "^2.0.0-rc.13",
     "gcoord": "^0.3.2",
     "geotiff": "^2.0.7",
     "gh-pages": "^2.1.1",
-    "lerc": "^4.0.1",
+    "lerc": "^3.0.0",
     "popmotion": "^11.0.5",
     "rollup": "^2.0.0",
     "stylelint": "^14.4.0",
-    "three": "^0.146.0",
+    "three": "0.115.0",
     "webpack": "^5.20.0"
   }
 }

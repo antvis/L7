@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Scene, HeatmapLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMapV2,Map} from '@antv/l7-maps';
+import { GaodeMap,Map} from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
 
 const scene = new Scene({
     id: 'map',
-    map: new GaodeMapV2({
+    map: new GaodeMap({
       style: 'light',
       pitch: 56.499,
       center: [ 114.07737552216226, 22.542656745583486 ],
@@ -34,7 +34,7 @@ const scene = new Scene({
               }
             ]
           })
-          .size('sum', [ 0, 600 ])
+          .size('sum', [ 0, 60 ])
           .shape('hexagonColumn')
           .style({
             opacity:1

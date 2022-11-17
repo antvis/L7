@@ -1,8 +1,39 @@
 {
   "title": {
-    "zh": "矢量瓦片",
+    "zh": "矢量瓦片图层",
     "en": "Vector Tile"
   },
   "demos": [
+  
+    {
+      "filename": "chinadistrictmap.ts",
+      "title": "中国区县地图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "chinamap.ts",
+      "title": "中国区县地图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "point.ts",
+      "title": "中国区县地图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "polygon.ts",
+      "title": "中国区县地图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "simpleline.ts",
+      "title": "线图层",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "worldmap.ts",
+      "title": "线图层",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+    }
   ]
 }

@@ -19,7 +19,8 @@ void main() {
   float topV = styleMappingMat[2][3];
 
   float sidey = styleMappingMat[3][0];
-  if(isSide < 1.0) {
+  // Tip: 部分机型 GPU 计算精度兼容
+  if(isSide < 0.999) {
     // side face
     if(u_sidesurface < 1.0) {
       discard;

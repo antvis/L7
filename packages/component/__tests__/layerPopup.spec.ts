@@ -17,7 +17,7 @@ describe('popup', () => {
     });
     const layerPopup = new LayerPopup({
       className: testClassName,
-      config: [
+      items: [
         {
           layer: pointLayer,
           fields: [

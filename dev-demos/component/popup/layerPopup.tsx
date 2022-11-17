@@ -1,12 +1,13 @@
 import {
-  GaodeMapV2,
+  GaodeMap,
   LayerPopup,
-  PointLayer,
-  Scene,
   LineLayer,
+  PointLayer,
+  PolygonLayer,
+  Scene,
   // anchorType,
 } from '@antv/l7';
-import { featureCollection, point } from '@turf/turf';
+import { circle, featureCollection, point } from '@turf/turf';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -20,7 +21,7 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         style: 'dark',
         center: [120.104697, 30.260704],
         pitch: 0,
@@ -28,7 +29,6 @@ const Demo: FunctionComponent = () => {
       }),
       // logoVisible: false,
     });
-
     newScene.on('loaded', () => {
       const pointLayer = new PointLayer({
         name: 'pointLayer',
@@ -36,20 +36,49 @@ const Demo: FunctionComponent = () => {
       pointLayer
         .source(
           featureCollection([
-            point([120.104697, 30.260704], {
+            point([120.105697, 30.260704], {
               name: '测试点1',
               lng: 120.104697,
               lat: 30.260704,
             }),
-            point([120.104697, 30.261715], {
-              name: '测试点2',
+            point([120.103697, 30.260704], {
+              name: '测试点1',
               lng: 120.104697,
-              lat: 30.261715,
+              lat: 30.260704,
+            }),
+          ]),
+        )
+        .color('#ffffff')
+        .size(10);
+
+      const polygonLayer = new PolygonLayer({
+        name: 'polygonLayer',
+      });
+      polygonLayer
+        .source(
+          featureCollection([
+            circle([120.104697, 30.260704], 30, {
+              units: 'meters',
+              properties: {
+                name: '测试点1',
+                lng: 120.104697,
+                lat: 30.260704,
+              },
+            }),
+            circle([120.104697, 30.261715], 30, {
+              units: 'meters',
+              properties: {
+                name: '测试点1',
+                lng: 120.104697,
+                lat: 30.260704,
+              },
             }),
           ]),
         )
         .color('#ff0000')
-        .size(10);
+        .size(10)
+        .shape('circle');
+
       const lineString = new LineLayer({
         name: 'lineLayer',
       });
@@ -75,9 +104,10 @@ const Demo: FunctionComponent = () => {
         .size(6)
         .color('#00ff00');
       newScene.addLayer(pointLayer);
+      newScene.addLayer(polygonLayer);
       newScene.addLayer(lineString);
       const newPopup = new LayerPopup({
-        config: [
+        items: [
           {
             layer: 'pointLayer',
             fields: [
@@ -93,6 +123,10 @@ const Demo: FunctionComponent = () => {
           },
           {
             layer: 'lineLayer',
+            fields: ['name'],
+          },
+          {
+            layer: 'polygonLayer',
             fields: ['name'],
           },
         ],

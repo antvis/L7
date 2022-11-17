@@ -1,4 +1,4 @@
-import { Scene, GaodeMapV2 } from "@antv/l7";
+import { Scene, GaodeMap } from "@antv/l7";
 import React, { useEffect } from "react";
 import { LineLayer, PointLayer } from "@antv/l7";
 const lineList: Feature<LineString>[] = [
@@ -45,7 +45,7 @@ const Demo: React.FC = () => {
   useEffect(() => {
     const scene = new Scene({
       id,
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [120.151634, 30.244831],
         pitch: 0,
         style: "dark",

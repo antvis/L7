@@ -1,7 +1,7 @@
 ### point - image
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {

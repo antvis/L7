@@ -1,4 +1,4 @@
-import { GaodeMapV2, IControlOption, Logo, Scale, Scene, Zoom } from '@antv/l7';
+import { GaodeMap, IControlOption, Logo, Scale, Scene, Zoom } from '@antv/l7';
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 
 const Demo: FunctionComponent = () => {
@@ -7,7 +7,7 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         style: 'dark',
         center: [120, 30],
         pitch: 0,
