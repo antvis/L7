@@ -26,7 +26,7 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@amap/amap-jsapi-loader": "^0.0.3",
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@antv/l7-core": "2.10.7",
     "@antv/l7-map": "2.10.7",
     "@antv/l7-utils": "2.10.7",

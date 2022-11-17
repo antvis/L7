@@ -34,7 +34,7 @@ const scene = new Scene({
               }
             ]
           })
-          .size('sum', [ 0, 600 ])
+          .size('sum', [ 0, 60 ])
           .shape('hexagonColumn')
           .style({
             opacity:1

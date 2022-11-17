@@ -77,7 +77,7 @@ export default () => {
               ],
             })
             .size('sum', (sum) => {
-              return sum * 20000;
+              return sum * 200;
             })
             .shape('hexagonColumn')
             .style({
