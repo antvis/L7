@@ -111,16 +111,15 @@ const load = async (options: ILoadOption) => {
         reject('不允许多个版本 JSAPI 混用');
         return;
       }
-      const newPlugins:string[] = [];
+      const newPlugins: string[] = [];
       if (options.plugins) {
         // @ts-ignore
-        options.plugins.forEach((p:string)=>{
-            if (config.AMap.plugins.indexOf(p) === -1) {
-                newPlugins.push(p);
-              }
-        })
-     }
-       
+        options.plugins.forEach((p: string) => {
+          if (config.AMap.plugins.indexOf(p) === -1) {
+            newPlugins.push(p);
+          }
+        });
+      }
 
       if (newPlugins.length) {
         window.AMap.plugin(newPlugins, () => {
@@ -140,11 +139,11 @@ const load = async (options: ILoadOption) => {
       const newPlugins: string[] = [];
       if (options.plugins) {
         // @ts-ignore
-        options.plugins.forEach((p:string)=>{
-            if (config.AMap.plugins.indexOf(p) === -1) {
-                newPlugins.push(p);
-              }
-        })
+        options.plugins.forEach((p: string) => {
+          if (config.AMap.plugins.indexOf(p) === -1) {
+            newPlugins.push(p);
+          }
+        });
       }
       onload(() => {
         if (newPlugins.length) {
