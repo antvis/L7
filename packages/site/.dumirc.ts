@@ -2,6 +2,7 @@ import { defineConfig } from 'dumi';
 const path = require('path');
 import { repository, version } from './package.json';
 const env = process.env.NODE_ENV;
+console.log(env)
 export default defineConfig({
   locales: [{ id: 'zh', name: '中文' }, { id: 'en', name: 'English' }],
   

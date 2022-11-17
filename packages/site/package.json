@@ -29,7 +29,7 @@
     "build": "yarn site:build",
     "site:deploy": "npm run site:build && gh-pages -d public",
     "site:develop": "dumi dev",
-    "site:build": "dumi build",
+    "site:build": "cross-env NODE_ENV=production1 dumi build",
     "start": "npm run site:develop",
     "site:publish": "gh-pages -d public"
   },
