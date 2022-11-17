@@ -389,25 +389,35 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @protected
    */
   protected updateCloseOnClick(onlyClear?: boolean) {
-    this.mapsService.off('click', this.onCloseButtonClick);
-    if (this.popupOption.closeOnClick && !onlyClear) {
-      this.mapsService.on('click', this.onCloseButtonClick);
+    const mapsService = this.mapsService;
+    if (mapsService) {
+      this.mapsService.off('click', this.onCloseButtonClick);
+      if (this.popupOption.closeOnClick && !onlyClear) {
+        requestAnimationFrame(() => {
+          this.mapsService.on('click', this.onCloseButtonClick);
+        });
+      }
     }
   }
 
   protected updateCloseOnEsc(onlyClear?: boolean) {
     window.removeEventListener('keydown', this.onKeyDown);
     if (this.popupOption.closeOnEsc && !onlyClear) {
-      window.addEventListener('keydown', this.onKeyDown);
+      requestAnimationFrame(() => {
+        window.addEventListener('keydown', this.onKeyDown);
+      });
     }
   }
 
   protected updateFollowCursor(onlyClear?: boolean) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const container = this.mapsService.getContainer()!;
-    container.removeEventListener('mousemove', this.onMouseMove);
-    if (this.popupOption.followCursor && !onlyClear) {
-      container.addEventListener('mousemove', this.onMouseMove);
+    const container = this.mapsService?.getContainer();
+    if (container) {
+      container.removeEventListener('mousemove', this.onMouseMove);
+      if (this.popupOption.followCursor && !onlyClear) {
+        requestAnimationFrame(() => {
+          container.addEventListener('mousemove', this.onMouseMove);
+        });
+      }
     }
   }
 

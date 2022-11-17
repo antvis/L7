@@ -7,8 +7,8 @@ import Popup from './popup';
 
 export type LayerField = {
   field: string;
-  formatField?: (field: string) => string;
-  formatValue?: (value: any) => any;
+  formatField?: ((field: string) => string) | string;
+  formatValue?: ((value: any) => any) | string;
   getValue?: (feature: any) => any;
 };
 
@@ -18,7 +18,8 @@ export type LayerPopupConfigItem = {
 };
 
 export interface ILayerPopupOption extends IPopupOption {
-  config: LayerPopupConfigItem[];
+  config?: LayerPopupConfigItem[];
+  items?: LayerPopupConfigItem[];
   trigger: 'hover' | 'click';
 }
 
@@ -46,6 +47,11 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     layer: ILayer;
     featureId: number;
   };
+
+  protected get layerConfigItems() {
+    const { config, items } = this.popupOption;
+    return config ?? items ?? [];
+  }
 
   public addTo(scene: Container) {
     super.addTo(scene);
@@ -91,8 +97,8 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * @protected
    */
   protected bindLayerEvent() {
-    const { config, trigger } = this.popupOption;
-    config.forEach((configItem) => {
+    const { trigger } = this.popupOption;
+    this.layerConfigItems.forEach((configItem) => {
       const layer = this.getLayerByConfig(configItem);
       if (!layer) {
         return;
@@ -115,7 +121,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
 
         layer?.on('click', onClick);
       }
-      const source = layer.getSource();
+      const source = layer?.getSource?.();
       const onSourceUpdate = this.onSourceUpdate.bind(this, layer);
       source?.on('update', onSourceUpdate);
       layerInfo.onSourceUpdate = onSourceUpdate;
@@ -129,8 +135,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * @protected
    */
   protected unbindLayerEvent() {
-    const { config } = this.popupOption;
-    config.forEach((configItem) => {
+    this.layerConfigItems.forEach((configItem) => {
       const layer = this.getLayerByConfig(configItem);
       const layerInfo = layer && this.layerConfigMap.get(layer);
       if (!layerInfo) {
@@ -219,13 +224,21 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       fields?.forEach((fieldConfig) => {
         const { field, formatField, formatValue, getValue } =
           typeof fieldConfig === 'string'
-            ? ({ field: fieldConfig } as any)
+            ? // tslint:disable-next-line:no-object-literal-type-assertion
+              ({ field: fieldConfig } as LayerField)
             : fieldConfig;
         const row = DOM.create('div', 'l7-layer-popup__row');
         const value = getValue ? getValue(e.feature) : get(feature, field);
-        row.innerHTML = `${formatField ? formatField(field) : field}: ${
-          formatValue ? formatValue(value) : value
-        }`;
+
+        const fieldText =
+          (formatField instanceof Function
+            ? formatField(field)
+            : formatField) ?? field;
+        const valueText =
+          (formatValue instanceof Function
+            ? formatValue(value)
+            : formatValue) ?? value;
+        row.innerHTML = `<span class="l7-layer-popup__key">${fieldText}</span>: <span class="l7-layer-popup__value">${valueText}</span>`;
         frag.appendChild(row);
       });
     }
@@ -234,11 +247,13 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
 
   /**
    * 通过 Layer 配置访问到真实的 Layer 实例
-   * @param config
+   * @param configItem
    * @protected
    */
-  protected getLayerByConfig(config: LayerPopupConfigItem): ILayer | undefined {
-    const layer = config.layer;
+  protected getLayerByConfig(
+    configItem: LayerPopupConfigItem,
+  ): ILayer | undefined {
+    const layer = configItem.layer;
     if (layer instanceof Object) {
       return layer;
     }
@@ -258,6 +273,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    */
   protected isSameFeature(layer: ILayer, featureId: number) {
     const displayFeatureInfo = this.displayFeatureInfo;
+
     return (
       displayFeatureInfo &&
       layer === displayFeatureInfo.layer &&

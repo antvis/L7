@@ -37,7 +37,7 @@
     "@antv/dumi-theme-antv": "^0.3.0-beta.12",
     "@antv/g2": "^4.2.8",
     "@antv/l7": "beta",
-    "@antv/l7-draw": "2",
+    "@antv/l7-draw": "^3.0.9",
     "@antv/l7-maps": "beta",
     "@antv/l7-three":"beta",
     "@antv/l7plot": "^0.3.3",
