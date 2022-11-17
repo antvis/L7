@@ -390,6 +390,7 @@ export default defineConfig({
         order: 12,
       },
     ],
+
     examples: [
       {
         slug: 'gallery',
@@ -440,8 +441,8 @@ export default defineConfig({
         slug: 'raster',
         icon: 'raster',
         title: {
-          zh: '栅格图层',
-          en: 'Raster Layer',
+          zh: '栅格图层🌟',
+          en: 'Raster Layer🌟',
         },
         order: 7,
       },
@@ -449,8 +450,8 @@ export default defineConfig({
         slug: 'tile',
         icon: 'raster',
         title: {
-          zh: '瓦片图层',
-          en: 'Tile Layer',
+          zh: '瓦片图层 🌟',
+          en: 'Tile Layer🌟 ',
         },
         order: 7,
       },
@@ -512,7 +513,7 @@ export default defineConfig({
         slug: 'choropleth',
         icon: 'map',
         title: {
-          zh: '行政区划 🌟',
+          zh: '行政区划',
           en: 'Choropleth',
         },
         order: 11,

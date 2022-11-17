@@ -52,7 +52,7 @@ order: 0
 - 首先我们需要获取数据，获取数据方法，这里我们获取在线的地理数据。
 - 然后我们就可以初始一个 `Layer`，并添加到 `Scene` 就完成了图层的添加。
 
-```javascript
+``` javascript
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   .then(res => res.json())
   .then(data => {
@@ -146,4 +146,5 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
 </script>
 </body>
 </html>
+
 ```

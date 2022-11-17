@@ -1,4 +1,4 @@
 ---
-title: 矢量瓦片
+title: 栅格瓦片
 order: 0
 ---
