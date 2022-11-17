@@ -1,6 +1,6 @@
 import { Scene, PointLayer, LineLayer, Source } from "@antv/l7";
 // import { DrawEvent, DrawLine } from "@antv/l7-draw";
-import { GaodeMapV2, GaodeMap, Map, Mapbox } from "@antv/l7-maps";
+import { GaodeMap, Map, Mapbox } from "@antv/l7-maps";
 import { coordAll, Feature, featureCollection, LineString, point } from "@turf/turf";
 import React, { useEffect } from 'react';
 
@@ -97,7 +97,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [120.151634, 30.244831],
         style: "dark",
         zoom: 10

@@ -1,14 +1,14 @@
 // @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
   
 export default () => {
     useEffect( () => {
       const scene = new Scene({
         id: 'map',
-        map: new GaodeMapV2({
+        map: new GaodeMap({
           center: [121.107846, 30.267069],
           pitch: 35.210526315789465,
           style: 'dark',

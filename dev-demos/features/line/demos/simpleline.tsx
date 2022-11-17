@@ -4,7 +4,7 @@ import {
   // @ts-ignore
 } from '@antv/l7';
 // @ts-ignore
-import { GaodeMapV2 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { polygonToLineString, MultiPolygon } from '@turf/turf';
 
@@ -80,7 +80,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         // center: [121.268, 30.3628],
         // center: [115.565185546875,41.31082388091818],
         center: [112.796630859375, 21.80030805097259],

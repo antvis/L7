@@ -1,5 +1,5 @@
 import {
-  GaodeMapV2,
+  GaodeMap,
   Scene,
   LayerSwitch,
   ILayer,
@@ -21,7 +21,7 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         style: 'normal',
         center: [120, 30],
         pitch: 0,

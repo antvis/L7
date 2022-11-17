@@ -1,4 +1,4 @@
-import { GaodeMapV2, GeoLocate, Scene } from '@antv/l7';
+import { GaodeMap, GeoLocate, Scene } from '@antv/l7';
 import gcoord from 'gcoord';
 import React from 'react';
 // tslint:disable-next-line:no-duplicate-imports
@@ -8,7 +8,7 @@ const Demo: FunctionComponent = () => {
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         style: 'normal',
         center: [120, 30],
         pitch: 0,

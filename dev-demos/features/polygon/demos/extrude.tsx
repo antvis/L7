@@ -7,14 +7,14 @@ import {
   // @ts-ignore
 } from '@antv/l7';
 // @ts-ignore
-import { GaodeMapV2 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         style: 'dark',
         center: [120, 29.732983],
         zoom: 6.2,

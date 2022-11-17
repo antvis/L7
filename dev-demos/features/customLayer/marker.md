@@ -9,7 +9,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map-marker',
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [120.184824, 30.248341],
         pitch: 0,
         zoom: 18,

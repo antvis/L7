@@ -1,7 +1,7 @@
 // @ts-ignore
 import { PointLayer,LineLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import {GaodeMapV2 } from '@antv/l7-maps';
+import {GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
   
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
         let startPoint =[110.23,32];
         const scene = new Scene({
             id: 'map',
-            map: new GaodeMapV2({
+            map: new GaodeMap({
               center: [ 110, 36 ],
               style: 'light',
               zoom: 3

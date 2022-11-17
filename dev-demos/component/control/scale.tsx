@@ -1,4 +1,4 @@
-import { GaodeMapV2, Scene, Scale } from '@antv/l7';
+import { GaodeMap, Scene, Scale } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -14,7 +14,7 @@ const Demo: FunctionComponent = () => {
       //   pitch: 0,
       //   zoom: 6.45,
       // }),
-      map: new GaodeMapV2({
+      map: new GaodeMap({
         center: [120, 30],
         pitch: 0,
         zoom: 6.45,
