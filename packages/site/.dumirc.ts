@@ -1,7 +1,7 @@
 import { defineConfig } from 'dumi';
 const path = require('path');
 import { repository, version } from './package.json';
-
+const env = process.env.NODE_ENV;
 export default defineConfig({
   locales: [{ id: 'zh', name: '中文' }, { id: 'en', name: 'English' }],
   
@@ -574,7 +574,7 @@ export default defineConfig({
   ],
   links: [
   ],
-  alias:{
+  alias: env === 'development'? {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
     '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
     '@antv/l7-maps/lib/map': path.resolve(__dirname, '../maps/src/map'),
@@ -587,5 +587,5 @@ export default defineConfig({
     '@antv/l7-scene': path.resolve(__dirname, '../scene/src'),
     '@antv/l7-source': path.resolve(__dirname, '../source/src'),
     '@antv/l7-utils': path.resolve(__dirname, '../utils/src')
-  }
+  }:{}
 });
