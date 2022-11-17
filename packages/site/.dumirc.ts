@@ -391,7 +391,6 @@ export default defineConfig({
         order: 12,
       },
     ],
-
     examples: [
       {
         slug: 'gallery',
@@ -554,17 +553,7 @@ export default defineConfig({
       indexName: 'antv_l7',
     },
   },
-  mfsu:false,
-  // chainWebpack: (memo, { env, webpack, createCSSRule }) => {
-  //   // 设置 alias
-  //   memo.module
-  //     .rule('lint')
-  //     .test(/\.glsl$/)
-  //     .use('babel')
-  //     .loader('ts-shader-loader');
-  //   // 还可以创建具名use (loaders)
-  // },
-  extraBabelPlugins: [
+  extraBabelPlugins: env === 'development'? [
     // 开发模式下以原始文本引入，便于调试
     [
       // import glsl as raw text
@@ -572,7 +561,7 @@ export default defineConfig({
       { extensions: ['.glsl','.worker.js'] },
     ],
     ['transform-import-css-l7'],
-  ],
+  ]:[],
   links: [
   ],
   scripts: [
