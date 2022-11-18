@@ -36,29 +36,30 @@ export default class IconService extends EventEmitter implements IIconService {
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
   }
 
-  public addImage(id: string, image: IImage) {
+  public async addImage(id: string, image: IImage) {
     let imagedata = new Image();
     this.loadingImageCount++;
     if (this.hasImage(id)) {
-      throw new Error('Image Id already exists');
+      console.warn('Image Id already exists');
     }
     this.iconData.push({
       id,
       size: imageSize,
     });
     this.updateIconMap();
-    this.loadImage(image).then((img) => {
-      imagedata = img as HTMLImageElement;
-      const iconImage = this.iconData.find((icon: IIcon) => {
-        return icon.id === id;
-      });
-      if (iconImage) {
-        iconImage.image = imagedata;
-        iconImage.width = imagedata.width;
-        iconImage.height = imagedata.height;
-      }
-      this.update();
+    imagedata = await this.loadImage(image) as HTMLImageElement;
+    // imagedata = this.loadImage(image) 
+    // imagedata = img as HTMLImageElement;
+    const iconImage = this.iconData.find((icon: IIcon) => {
+      return icon.id === id;
     });
+    if (iconImage) {
+      iconImage.image = imagedata;
+      iconImage.width = imagedata.width;
+      iconImage.height = imagedata.height;
+    }
+    this.update();
+
   }
 
   /**

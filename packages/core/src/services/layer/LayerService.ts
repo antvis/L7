@@ -40,6 +40,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   private readonly mapService: IMapService;
 
   public reRender = throttle(() => {
+    this.clear();
     this.updateLayerRenderList();
     this.renderLayers();
   }, 32);
@@ -48,6 +49,9 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.renderLayers();
   }, 16);
 
+  public needPick(type:string): boolean {
+   return this.layerList.some((layer=>layer.needPick(type)))
+  }
   public add(layer: ILayer) {
     this.layers.push(layer);
     if (this.sceneInited) {
@@ -160,7 +164,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
         await layer.renderMultiPass();
       } else {
         await layer.render();
-
+   
       }
     }
     this.alreadyInRendering = false;

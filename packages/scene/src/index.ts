@@ -281,9 +281,9 @@ class Scene
     this.fontService.addFontFace(fontFamily, fontPath);
   }
 
-  public addImage(id: string, img: IImage) {
+  public async addImage(id: string, img: IImage) {
     if (!isMini) {
-      this.iconService.addImage(id, img);
+      await this.iconService.addImage(id, img);
     } else {
       this.iconService.addImageMini(id, img, this.sceneService);
     }

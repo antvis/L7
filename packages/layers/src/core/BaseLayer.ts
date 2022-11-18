@@ -619,7 +619,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         } else {
           this.layerSource.setData(data, options);
         }
-        // this.layerSource.setData(data, options);
       });
     }
     return this;
@@ -628,7 +627,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
   ): ILayer {
     const { passes, ...rest } = options;
-
     // passes 特殊处理
     if (passes) {
       normalizePasses(passes).forEach(
@@ -693,6 +691,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
     }
+
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     this.renderModels();
     return this;

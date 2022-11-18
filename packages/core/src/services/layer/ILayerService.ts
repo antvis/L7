@@ -685,7 +685,7 @@ export interface ILayerService {
   beforeRenderData(layer: ILayer): Promise<void>;
   renderMask(masks:ILayer[]): void;
   renderLayer(layer: ILayer): Promise<void>
-
+  needPick(type:string):boolean;
   throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;

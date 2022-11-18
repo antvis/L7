@@ -1,6 +1,5 @@
 import { defineConfig } from 'dumi';
 const path = require('path');
-import { repository, version } from './package.json';
 const env = process.env.NODE_ENV;
 console.log(env)
 export default defineConfig({
@@ -120,10 +119,10 @@ export default defineConfig({
           en: 'Forum',
         },
         title: {
-          zh: 'AntV 芒种日 图新物：GraphInsight 发布',
-          en: 'AntV Seeds Day Graph New: GraphInsight Released',
+          zh: 'L7 从矢量到遥感，从引擎到平台，探索地理分析的远方',
+          en: 'From vector to remote sensing, from engine to platform, explore the distance of geographical analysis',
         },
-        date: '2022.07.20',
+        date: '2022.11.22',
         link: 'https://www.yuque.com/xiaofengcanyue/scpehq/fgcwge',
       },
     ],
@@ -152,17 +151,47 @@ export default defineConfig({
         },
       },
     ],
+    cases: [
+      {
+        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*ZdZcS5MKuAMAAAAAAAAAAAAADmJ7AQ/original',
+        title: {
+          zh: 'LarkMap 空间数据可视分析组件库',
+          en: 'LarkMap ',
+        },
+        description: {
+          zh: '新一代 React 地图可视分析组件库，提供丰富/高效/专业/易用的可视化组件，一站式满足地理可视化需求。',
+          en: 'The new generation of React map visual analysis component library provides rich/efficient/professional/easy-to-use visual components to meet the needs of geographic visualization in a one-stop manner.',
+        },
+        link: `https://larkmap.antv.antgroup.com/`,
+        image: 'https://mdn.alipayobjects.com/mdn/huamei_qa8qxu/afts/img/A*5iCQSqov5p4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
+        isAppLogo: true,
+      },
+      {
+        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*yaEWT706NFoAAAAAAAAAAAAADmJ7AQ/original',
+        title: {
+          zh: 'LocationInsight 空间数据可视分析组件库',
+          en: 'LocationInsight',
+        },
+        description: {
+          zh: '下一代地理空间数据可视分析平台，可配置出丰富的地理可视化效果提供洞察分析、地图应用搭建、开放扩展能力',
+          en: 'The next generation geospatial data visual analysis platform can be configured with rich geographic visualization effects to provide insight analysis, map application construction, and open expansion capabilities',
+        },
+        link: `https://larkmap.antv.antgroup.com/`,
+        image: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*0fW-SqO2y18AAAAAAAAAAAAADmJ7AQ/original',
+        isAppLogo: true,
+      },
+    ],
     ecosystems: [
       {
         name: {
-          zh: 'L7 React 组件',
+          zh: 'LarkMap 地图空间可视化组件库',
           en: 'L7 For React',
         },
-        url: 'http://antv.vision/L7-react/',
+        url: 'https://larkmap.antv.antgroup.com/',
       },
       {
         name: {
-          zh: 'L7 Plot 图表',
+          zh: 'L7 Plot 图表库',
           en: 'L7Plot',
         },
         url: 'https://l7plot.antv.vision/',
@@ -176,17 +205,10 @@ export default defineConfig({
       },
       {
         name: {
-          zh: 'L7 行政区划可视化库',
-          en: 'L7Boundary',
+          zh: 'LocationInsight 地理空间数据可视分析平台',
+          en: 'LocationInsight',
         },
-        url: 'http://antv.vision/L7-boundary/',
-      },
-      {
-        name: {
-          zh: 'Dipper 地理可视分开发框架',
-          en: 'Dipper',
-        },
-        url: 'http://antv.vision/Dipper',
+        url: 'https://li.antv.antgroup.com/#/home',
       },
     ],
     docs: [
@@ -560,12 +582,12 @@ export default defineConfig({
       'babel-plugin-inline-import',
       { extensions: ['.glsl','.worker.js'] },
     ],
-    ['transform-import-css-l7'],
+    // ['transform-import-css-l7'],
   ]:[],
   links: [
   ],
   scripts: [
-    'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f&callback=onLoad'
+    'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f'
   ],
   alias: env === 'development'? {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
@@ -573,6 +595,7 @@ export default defineConfig({
     '@antv/l7-maps/lib/map': path.resolve(__dirname, '../maps/src/map'),
     '@antv/l7-core': path.resolve(__dirname, '../core/src'),
     '@antv/l7-component': path.resolve(__dirname, '../component/src'),
+    '@antv/l7-three': path.resolve(__dirname, '../three/src'),
     '@antv/l7-layers': path.resolve(__dirname, '../layers/src'),
     '@antv/l7-map': path.resolve(__dirname, '../map/src'),
     '@antv/l7-maps': path.resolve(__dirname, '../maps/src'),

@@ -9,6 +9,7 @@ const scene = new Scene({
   map: new GaodeMapV2({
     center: [112, 30],
     zoom: 3,
+    style:'normal'
   }),
 });
 
@@ -30,7 +31,7 @@ layer
     },
   )
   .shape('circle')
-  .color('red')
+  .color('COLOR')
   .size(10);
 // .select(true);
 
