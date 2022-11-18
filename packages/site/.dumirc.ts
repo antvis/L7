@@ -1,6 +1,5 @@
 import { defineConfig } from 'dumi';
 const path = require('path');
-import { repository, version } from './package.json';
 const env = process.env.NODE_ENV;
 console.log(env)
 export default defineConfig({
@@ -560,12 +559,12 @@ export default defineConfig({
       'babel-plugin-inline-import',
       { extensions: ['.glsl','.worker.js'] },
     ],
-    ['transform-import-css-l7'],
+    // ['transform-import-css-l7'],
   ]:[],
   links: [
   ],
   scripts: [
-    'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f&callback=onLoad'
+    'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f'
   ],
   alias: env === 'development'? {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),

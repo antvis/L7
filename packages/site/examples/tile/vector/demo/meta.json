@@ -8,17 +8,17 @@
     {
       "filename": "chinadistrictmap.ts",
       "title": "中国区县地图",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*QlNPTpxjWEAAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
       "filename": "chinamap.ts",
-      "title": "中国区县地图",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+      "title": "中国城市地图",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*kY2sRLu2sTYAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
       "filename": "point.ts",
-      "title": "中国区县地图",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+      "title": "瓦片点图层",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*LF3vSbPk2ZEAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
       "filename": "polygon.ts",

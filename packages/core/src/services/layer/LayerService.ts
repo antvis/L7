@@ -40,6 +40,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   private readonly mapService: IMapService;
 
   public reRender = throttle(() => {
+
     this.updateLayerRenderList();
     this.renderLayers();
   }, 32);
@@ -176,6 +177,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   public async beforeRenderData(layer: ILayer) {
     const flag = await layer.hooks.beforeRenderData.promise();
     if(flag) {
+      console.log(flag)
       this.renderLayers();
     }
     
