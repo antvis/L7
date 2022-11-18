@@ -43,6 +43,7 @@ export default () => {
               },
             });
           scene.addLayer(layer);
+          console.log(layer);
         });
     });
   }, []);

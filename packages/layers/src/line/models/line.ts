@@ -31,7 +31,22 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class LineModel extends BaseModel {
-  protected texture: ITexture2D;
+  protected texture: ITexture2D = this.createTexture2D({
+    data: [0,0,0,0],
+    mag: gl.NEAREST,
+    min: gl.NEAREST,
+    premultiplyAlpha: false,
+    width: 1,
+    height: 1,
+  });
+  protected dataTexture: ITexture2D =this.createTexture2D({
+    flipY: true,
+    data: [1],
+    format: gl.LUMINANCE,
+    type: gl.FLOAT,
+    width: 1,
+    height: 1,
+  }); 
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -61,7 +76,8 @@ export default class LineModel extends BaseModel {
     }
 
     if (this.rendererService.getDirty()) {
-      this.texture.bind();
+      
+      this.texture && this.texture.bind();
     }
 
     // 转化渐变色
@@ -74,7 +90,7 @@ export default class LineModel extends BaseModel {
       useLinearColor = 1;
     }
 
-    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
+    if (!this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
@@ -82,8 +98,9 @@ export default class LineModel extends BaseModel {
         encodeData,
         this.cellProperties,
       );
-      this.rowCount = height; // 当前数据纹理有多少行
 
+      this.rowCount = height; // 当前数据纹理有多少行
+   
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({
@@ -102,6 +119,7 @@ export default class LineModel extends BaseModel {
               width: 1,
               height: 1,
             });
+            console.timeEnd('encodeData')
     }
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
@@ -114,7 +132,7 @@ export default class LineModel extends BaseModel {
       u_blur: blur,
 
       // 纹理支持参数
-      u_texture: this.texture, // 贴图
+       u_texture: this.texture, // 贴图
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
       u_icon_step: iconStep,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
@@ -152,8 +170,8 @@ export default class LineModel extends BaseModel {
   }
 
   public async initModels():Promise<IModel[]>{
-    this.updateTexture();
-    this.iconService.on('imageUpdate', this.updateTexture);
+    // this.updateTexture();
+    // this.iconService.on('imageUpdate', this.updateTexture);
     return await this.buildModels();
   }
 
@@ -365,14 +383,19 @@ export default class LineModel extends BaseModel {
   }
 
   private updateTexture = () => {
-    const { createTexture2D } = this.rendererService;
-    if (this.texture) {
-      this.texture.update({
-        data: this.iconService.getCanvas(),
-      });
-      this.layer.render();
+    if(this.texture) {
       return;
     }
+    console.log(this.texture)
+    const { createTexture2D } = this.rendererService;
+    // if (this.texture) {
+    //   this.texture.update({
+    //     data: this.iconService.getCanvas(),
+    //   });
+    //   this.layer.render();
+    //   return;
+    // }
+    console.log('update texture')
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.NEAREST,
