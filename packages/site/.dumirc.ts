@@ -549,11 +549,11 @@ export default defineConfig({
         order: 8,
       },
       {
-        slug: 'amapPlugin',
+        slug: 'amap-plugin',
         icon: 'map',
         title: {
           zh: '高德地图插件',
-          en: 'amapPlugin',
+          en: 'Amap Plugin',
         },
         order: 10,
       },
