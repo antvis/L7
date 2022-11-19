@@ -25,7 +25,7 @@ export default () => {
     ];
     const scene = new Scene({
       id: 'map',
-      stencil: true,
+     
       map: new GaodeMap({
         center: [100, 30],
         // zoom: 12,

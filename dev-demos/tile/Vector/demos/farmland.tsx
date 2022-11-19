@@ -16,7 +16,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      stencil: true,
+     
       map: new Map({
         center: [-95.7548387434569, 44.82687715672517],
         zoom: 9,
