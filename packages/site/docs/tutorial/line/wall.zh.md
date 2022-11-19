@@ -16,7 +16,7 @@ order: 5
 
 下面我们来介绍如何绘制简单的地理围墙。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/line/wall/#hangzhou_wall)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/line/wall/#hangzhou_wall)
 
 ## 使用
 

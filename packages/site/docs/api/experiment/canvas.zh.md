@@ -22,7 +22,7 @@ const layer = new CanvasLayer({}).style({
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hUmNQJ1sAb8AAAAAAAAAAAAAARQnAQ'/>
 
-[在线案例](/zh/examples/point/chart#custom)
+[在线案例](/examples/point/chart#custom)
 
 ### source
 
@@ -40,7 +40,7 @@ const layer = new CanvasLayer({}).style({
 layer.animate(true);
 ```
 
-[在线案例](/zh/examples/point/chart#custom)
+[在线案例](/examples/point/chart#custom)
 
 ### style
 

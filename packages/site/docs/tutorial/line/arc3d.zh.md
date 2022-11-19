@@ -17,7 +17,7 @@ order: 2
 
 下面我们来介绍如何绘制一个简单的 `3D` 弧线图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/line/arc#trip_arc)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/line/arc#trip_arc)
 
 ```javascript
 import { LineLayer } from '@antv/l7';

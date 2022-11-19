@@ -92,7 +92,7 @@ layer.source(data, {
 
 #### 通用解析
 
-[ 点 coodinates 数据格式](./geojson##point)
+[ 点 coodinates 数据格式](/api/source/geojson##point)
 
 ```javascript
 const data = [
@@ -185,7 +185,7 @@ layer.source(data, {
 
 coordinate 格式 geojson 的 coordinate 字段 支持 LineString, MultiLineString
 
-[ 线 coodinates 数据格式](./geojson#linesring)
+[ 线 coodinates 数据格式](/api/source/geojson#linesring)
 
 ```javascript
 const data = {
@@ -219,7 +219,7 @@ layer.source(data, {
 
 需要指定 coordinates 字段, 格式同 GeoJSON 的 coordinates 字段
 
-[面 coodinates 数据格式](./geojson/#polygon)
+[面 coodinates 数据格式](/api/source/geojson/#polygon)
 
 **注意面数据 coord  是三层数据结构**
 

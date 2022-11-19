@@ -16,7 +16,7 @@ order: 6
 
 下面我们来介绍如何绘制一个常见的文本标注地图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/text/#point_text)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/point/text/#point_text)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

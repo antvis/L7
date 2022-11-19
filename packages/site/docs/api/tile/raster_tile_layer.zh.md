@@ -177,7 +177,7 @@ ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要�
 `format` 方法用于从传入的栅格文件二进制数据中提取波段数据。
 
 - 第一个参数是栅格文件二进制数据。
-- 第二个参数是第一个参数指定的栅格文件中应该提取的波段，方法参数是我们通过 [source](/zh/docs/api/raster/source#data-ibandsdata--ibandsdata) 参数传递的 `data` 数值。
+- 第二个参数是第一个参数指定的栅格文件中应该提取的波段，方法参数是我们通过 `source` 参数传递的 `data` 数值。
 - `format` 是一个 `async` 方法。
 
 ```js

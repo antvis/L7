@@ -18,7 +18,7 @@ Popup 的锚点位置是由经纬度来表达的，当地图缩放/平移时，P
 
 ## 使用
 
-[示例](/zh/examples/component/popup#popup)
+[示例](/examples/component/popup#popup)
 
 ```ts
 import { Scene, Popup } from '@antv/l7';

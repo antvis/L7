@@ -18,7 +18,7 @@ order: 2
 
 下面我们来介绍如何绘制一个常见的聚合图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/cluster/#cluster)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/point/cluster/#cluster)
 
 ```js
 import { Scene, PointLayer } from '@antv/l7';
@@ -83,7 +83,7 @@ interface IClusterOption {
 }
 ```
 
-[在线案例](/zh/examples/point/cluster#cluster)
+[在线案例](/examples/point/cluster#cluster)
 
 ### shape
 
@@ -93,4 +93,4 @@ interface IClusterOption {
 
 `PointLayer` 的聚合图采用 `WebGL` 绘制，不支持自定义具体聚合样式，如果有自定义的需求可以使用 `MarkerLayer` 的聚合功能，你可以通过 `Dom` 完全自定义样式。
 
-[MarkerLayer 聚合](/zh/docs/api/component/markerLayer)
+[MarkerLayer 聚合](/api/component/markerlayer)

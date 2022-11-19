@@ -16,7 +16,7 @@ order: 0
 
 下面我们来介绍如何绘制一个常见的路径图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/gallery/animate#animate_path_texture)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/gallery/animate#animate_path_texture)
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';

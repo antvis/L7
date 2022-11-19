@@ -47,7 +47,7 @@ layer.animatte({
 
 其他 style 配置项同
 
-[baselayer#style](../base#style)
+[baselayer#style](/api/base_layer/base#style)
 
 ## 自定义动画频率
 
@@ -119,4 +119,4 @@ scene.on('loaded', () => {
 });
 ```
 
-[在线案例](../../../examples/gallery/animate#build_sweep)
+[在线案例](/examples/gallery/animate#build_sweep)

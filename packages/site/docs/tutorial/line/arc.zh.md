@@ -17,7 +17,7 @@ order: 1
 
 下面我们来介绍如何使用弧线绘制一个模拟的风场。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/line/animate/#wind)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/line/animate/#wind)
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';

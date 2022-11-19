@@ -88,4 +88,4 @@ new L7.Marker({
   .setPopup(popup);
 ```
 
-[demo1](../../../examples/tutorial/marker#amap)
+[demo1](/examples/tutorial/marker#amap)

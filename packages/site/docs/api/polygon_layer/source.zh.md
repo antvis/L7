@@ -7,7 +7,7 @@ order: 2
 
 几何体图层数据推荐使用 GeoJSON 格式的数据。
 
-- [GeoJSON](/zh/docs/api/source/geojson/#point)
+- [GeoJSON](/api/source/geojson/#point)
 
 ### GeoJSON
 

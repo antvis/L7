@@ -25,7 +25,7 @@ layer.style({
 
 `shape` 为平面填充几何体。
 
-- [fill](/zh/docs/api/polygon_layer/shape#shapefill)
+- [fill](/api/polygon_layer/shape#shapefill)
 
 | style         | 类型             | 描述     | 默认值 |
 | ------------- | ---------------- | -------- | ------ |
@@ -47,7 +47,7 @@ interface IOpacityLinear {
 
 `shape` 为挤出几何体。
 
-- [extrude](/zh/docs/api/polygon_layer/shape#shapeextrude)
+- [extrude](/api/polygon_layer/shape#shapeextrude)
 
 | style         | 类型      | 描述                       | 默认值  |
 | ------------- | --------- | -------------------------- | ------- |
@@ -66,7 +66,7 @@ interface IOpacityLinear {
 
 `shape` 为水体表面几何体。
 
-- [water](/zh/docs/api/polygon_layer/shape#shapewater)
+- [water](/api/polygon_layer/shape#shapewater)
 
 | style        | 类型     | 描述     | 默认值 |
 | ------------ | -------- | -------- | ------ |
@@ -79,7 +79,7 @@ interface IOpacityLinear {
 
 `shape` 为海洋表面几何体。
 
-- [ocean](/zh/docs/api/polygon_layer/shape#shapeocean)
+- [ocean](/api/polygon_layer/shape#shapeocean)
 
 | style       | 类型     | 描述     | 默认值    |
 | ----------- | -------- | -------- | --------- |
