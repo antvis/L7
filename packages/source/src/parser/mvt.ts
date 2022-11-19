@@ -9,7 +9,7 @@ import {
 } from '@antv/l7-utils';
 import { VectorTileLayer } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
-import { IParserData } from '../interface';
+import { IParserData, ITileSource } from '../interface';
 import VectorSource from '../source/vector';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
@@ -29,7 +29,7 @@ const getVectorTile = async (
   tileParams: TileLoadParams,
   tile: SourceTile,
   requestParameters?: Partial<RequestParameters>,
-): Promise<VectorSource | undefined> => {
+): Promise<ITileSource | undefined> => {
   const tileUrl = getURLFromTemplate(url, tileParams);
   return new Promise((resolve) => {
     const xhr = getArrayBuffer(
