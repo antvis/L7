@@ -44,7 +44,7 @@ export default () => {
       addLayers(geoData, scene, layer);
     }
     return () => {
-      console.log(111)
+      console.log(111);
       scene.destroy();
     };
   }, [geoData]);
