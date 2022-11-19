@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@antv/l7-site",
-  "version": "2.10.11",
+  "version": "2.10.13",
   "description": "L7 sites deployed on gh-pages",
   "keywords": [
     "antv",
@@ -36,10 +36,10 @@
   "devDependencies": {
     "@antv/dumi-theme-antv": "^0.3.0-2.10.7.12",
     "@antv/g2": "^4.2.8",
-    "@antv/l7": "2.10.11",
+    "@antv/l7": "2.10.13",
     "@antv/l7-draw": "^3.0.9",
-    "@antv/l7-maps": "2.10.11",
-    "@antv/l7-three": "2.10.11",
+    "@antv/l7-maps": "2.10.13",
+    "@antv/l7-three": "2.10.13",
     "@antv/l7plot": "^0.3.3",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
