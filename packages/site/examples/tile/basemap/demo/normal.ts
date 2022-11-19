@@ -5,7 +5,7 @@ import { Map } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  stencil: true,
+ 
   map: new Map({
     center: [113.270854, 23.141717],
     zoom: 5,

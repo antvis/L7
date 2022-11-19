@@ -14,7 +14,7 @@ async function getTiffData(url: string) {
 
 const scene = new Scene({
   id: 'map',
-  stencil: true,
+ 
   map: new Map({
     center: [130.5, 47],
     zoom: 2,

@@ -12,9 +12,9 @@ export default class RasterTile extends Tile {
   private colorTexture: ITexture2D;
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.parent.getLayerConfig();
+    const layerOptions = this.getLayerOptions();
     const sourceOptions = this.getSourceOption();
-    this.colorTexture = this.parent.textureService.getColorTexture((layerOptions as IRasterLayerStyleOptions).rampColors)
+    this.colorTexture = this.parent.textureService.getColorTexture((layerOptions as unknown as IRasterLayerStyleOptions).rampColors)
     const layer = new RasterLayer({
       ...layerOptions,
       colorTexture: this.colorTexture,

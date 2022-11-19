@@ -32,6 +32,11 @@ import { toPaddingOptions } from '../utils';
 import Viewport from '../Viewport';
 import './logo.css';
 import { MapTheme } from './theme';
+const AMapEventMap: {
+  [key: string]: any;
+} = {
+  contextmenu:'rightclick',
+};
 
 let mapdivCount = 0;
 // @ts-ignore
@@ -110,14 +115,14 @@ export default abstract class AMapBaseService
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handler);
     } else {
-      this.map.on(type, handler);
+      this.map.on(AMapEventMap[type] || type, handler);
     }
   }
   public off(type: string, handler: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handler);
     } else {
-      this.map.off(type, handler);
+      this.map.on(AMapEventMap[type] || type, handler);
     }
   }
 

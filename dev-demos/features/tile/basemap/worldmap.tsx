@@ -11,7 +11,7 @@ export default () => {
     const color = ['#41ae76', '#99d8c9', '#ccece6', '#e5f5f9', '#f7fcfd'];
     const scene = new Scene({
       id: 'map',
-      stencil: true,
+     
       map: new Map({
         center: [112, 30],
         // zoom: 12,

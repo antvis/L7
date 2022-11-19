@@ -10,7 +10,6 @@ export default class DataSourcePlugin implements ILayerPlugin {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
       let source = layer.getSource();
-
       if (!source) {
         // Tip: 用户没有传入 source 的时候使用图层的默认数据
         const { data, options } =

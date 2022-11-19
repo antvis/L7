@@ -22,18 +22,23 @@
     },
     {
       "filename": "polygon.ts",
-      "title": "中国区县地图",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+      "title": "面图层",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*OLv5T4PTzH4AAAAAAAAAAAAADmJ7AQ/fmt.webp"
     },
     {
       "filename": "simpleline.ts",
       "title": "线图层",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*cF8gRqAdXTMAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
       "filename": "worldmap.ts",
-      "title": "线图层",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pNs4R6YVI54AAAAAAAAAAAAADmJ7AQ/original"
+      "title": "世界地图-瓦片",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*v9uTSJpdeksAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "geojson-vt.ts",
+      "title": "GeoJSON-Vt",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*amqiQaYHIKYAAAAAAAAAAAAADmJ7AQ/original"
     }
   ]
 }
