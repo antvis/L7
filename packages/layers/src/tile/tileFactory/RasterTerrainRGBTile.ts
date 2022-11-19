@@ -4,7 +4,7 @@ import Tile from './Tile';
 export default class RasterTerrainRGBTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.parent.getLayerConfig()
+    const layerOptions = this.getLayerOptions();
 
     const sourceOptions = this.getSourceOption();
     const layer = new RasterLayer({...layerOptions}).source(

@@ -1,14 +1,13 @@
 import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
 import Tile from './Tile';
-import { getTileLayer, isNeedMask } from './util';
+import { getTileLayer } from './util';
 import MaskLayer from '../../mask';
 import { VectorSource } from '@antv/l7-source'
  
 export default class VectorTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.parent.getLayerConfig()
-    layerOptions.mask = isNeedMask(this.parent.type) ||layerOptions.mask;
+    const layerOptions = this.getLayerOptions();
     const vectorLayer = getTileLayer(this.parent.type);
 
     const sourceOptions = this.getSourceOption();

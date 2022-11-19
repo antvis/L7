@@ -1,6 +1,7 @@
 import { ILayer, createLayerContainer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import { isNeedMask } from './util';
 
 export default abstract class Tile implements ITile{
   public x: number;
@@ -33,6 +34,15 @@ export default abstract class Tile implements ITile{
     const [minLng, minLat, maxLng, maxLat] = this.sourceTile.bounds;
     const { lng, lat } = lnglat;
     return lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat;
+  }
+
+  protected getLayerOptions() {
+    const options = this.parent.getLayerConfig();
+    return {
+      ...options,
+      autoFit:false,
+      mask:isNeedMask(this.parent.type) || options.mask
+    }
   }
 
 

@@ -5,7 +5,7 @@ export default class ImageTile extends Tile {
   public async initTileLayer(): Promise<void> {
     
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.parent.getLayerConfig()
+    const layerOptions = this.getLayerOptions();
 
     const sourceOptions = this.getSourceOption();
     const layer = new ImageLayer({...layerOptions}).source(
