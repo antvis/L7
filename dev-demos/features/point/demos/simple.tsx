@@ -18,6 +18,21 @@ export default () => {
             fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
               .then(res => res.json())
               .then(data => {
+                const highlightLayer = new PointLayer({ blend: 'normal' })
+                .source([], {
+                  parser: {
+                    type: 'json',
+                    coordinates:'coordinates',
+                  }
+                })
+                .shape('circle')
+                .active(false)
+                .select(false)
+                .size(20)
+                .color('#f0027f')
+                .style({
+                  opacity: 1,
+                });
                 const pointLayer = new PointLayer({ blend: 'normal' })
                   .source(data.list, {
                     parser: {
@@ -27,15 +42,25 @@ export default () => {
                     }
                   })
                   .shape('circle')
-                  .active(true)
-                  .select(true)
+                  .active(false)
+                  .select(false)
                   .size(10)
                   .color('t',['#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666'])
                   .style({
                     opacity: 1
                   });
+                  pointLayer.on('mousemove',(e)=>{
           
+                    highlightLayer.setData([e.feature
+                    ],{
+                      parser: {
+                        type: 'json',
+                        coordinates:'coordinates',
+                      }
+                    })
+                  })
                 scene.addLayer(pointLayer);
+                scene.addLayer(highlightLayer);
               });
           
           });

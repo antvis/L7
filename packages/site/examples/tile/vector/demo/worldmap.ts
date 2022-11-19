@@ -109,15 +109,12 @@ scene.on('loaded', () => {
     .size(12)
     .color('#000');
 
-  water_surface.on('click', (e) => {
-    console.log(e);
-  });
+  // water_surface.on('click', (e) => {
+  //   console.log(e);
+  // });
 
-  scene.on('zoomend', () => {
-    console.log(water_surface);
-  });
 
   scene.addLayer(water_surface);
-  scene.addLayer(text);
-  scene.addLayer(line);
+  // scene.addLayer(text);
+  // scene.addLayer(line);
 });

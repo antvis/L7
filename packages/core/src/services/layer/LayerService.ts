@@ -40,7 +40,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   private readonly mapService: IMapService;
 
   public reRender = throttle(() => {
-    this.clear();
     this.updateLayerRenderList();
     this.renderLayers();
   }, 32);
