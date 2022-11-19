@@ -9,7 +9,7 @@ order: 1
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*HenKR5VsXX0AAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/zh/examples/point/text#simpleCoordinate)
+[在线案例](/examples/point/text#simplecoordinate)
 
 ### Map
 

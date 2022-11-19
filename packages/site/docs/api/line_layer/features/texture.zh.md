@@ -27,7 +27,7 @@ const layer = new LineLayer()
 - lineTexture   指定是否开启纹理贴图能力
 - iconStep      指定贴图在线图层上面排布的间隔
 
-[在线案例](/zh/examples/gallery/animate/#animate_path_texture)
+[在线案例](/examples/gallery/animate/#animate_path_texture)
 
 #### texture advance
 

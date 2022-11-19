@@ -15,7 +15,7 @@ LayerPopup 会自行对目标图层的鼠标事件进行监听，当用户点击
 
 ## 使用
 
-[示例](/zh/examples/component/popup#layerPopup)
+[示例](/examples/component/popup#layerpopup)
 
 ```ts
 import { Scene, LayerPopup, PointLayer } from '@antv/l7';

@@ -9,7 +9,7 @@ order: 4
 
 ## 使用
 
-[示例](/zh/examples/component/control#scale)
+[示例](/examples/component/control#scale)
 
 ```ts
 import { Scene, Scale } from '@antv/l7';

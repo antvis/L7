@@ -54,9 +54,9 @@ const layer = new PointLayer()
 scene.addLayer(layer);
 ```
 
-[在线案例](../../examples/point/text#styleMap)
+[在线案例](/examples/point/text#stylemap)
 
-从 L7 2.5 开始，各图层样式将逐步支持样式数据映射，目前支持样式数据映射的 style 参数如下：
+从 `L7 2.5` 开始，各图层样式将逐步支持样式数据映射，目前支持样式数据映射的 `style` 参数如下：
 
 | layer 类型/shape       | 支持的样式字段                                       | 备注                              |
 | ---------------------- | ---------------------------------------------------- | --------------------------------- |
@@ -74,4 +74,4 @@ scene.addLayer(layer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*iz3ERZdg2SkAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](../../examples/point/scatter#scatterStyleMap)
+[在线案例](/examples/point/scatter#scatterstylemap)

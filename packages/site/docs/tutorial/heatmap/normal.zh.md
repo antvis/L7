@@ -17,7 +17,7 @@ order: 0
 
 下面我们来介绍如何绘制一个经典热力图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/heatmap/heatmap/#heatmap)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/heatmap/heatmap/#heatmap)
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';

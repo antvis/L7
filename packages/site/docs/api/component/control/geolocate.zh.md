@@ -9,7 +9,7 @@ order: 6
 
 ## 说明
 
-[示例](/zh/examples/component/control#geolocate)
+[示例](/examples/component/control#geolocate)
 
 **注意：**
 

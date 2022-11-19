@@ -24,7 +24,7 @@ Error: Cannot apply @injectable decorator multiple times.
 - mapbox https://docs.mapbox.com/mapbox-gl-js/api/#map
 
 2. 加载完成后设置
-   调用 `scene` 的 [setMapStatus](/zh/docs/api/scene/scene/#setmapstatus) 方法
+   调用 `scene` 的 [setMapStatus](/api/scene/scene/#setmapstatus) 方法
 
 ### webcontext lost
 1. 浏览器存在 `webgl` 实例上限，一般浏览器为 16 个，因此浏览器中可以存在的地图实例是有限的。

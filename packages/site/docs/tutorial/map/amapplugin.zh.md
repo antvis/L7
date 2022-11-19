@@ -23,7 +23,7 @@ const scene = new Scene({
 });
 ```
 
-[在线案例](/zh/examples/amapPlugin/bus#busStop)
+[在线案例](/examples/amapplugin/bus#busstop)
 
 ### AMap.ToolBar
 
@@ -42,7 +42,7 @@ scene.on('loaded', () => {
     });
 ```
 
-[在线案例](/zh/examples/amapPlugin/bus#busStop)
+[在线案例](/examples/amapplugin/bus#busstop)
 
 ### AMap.TileLayer
 
@@ -58,7 +58,7 @@ scene.on('loaded', () => {
   scene.getMapService().map.add(xyzTileLayer);
 });
 ```
-[在线案例](/zh/examples/amapPlugin/bus#xyzTile)
+[在线案例](/examples/amapplugin/bus#xyztile)
 
 ### AMap.TileLayer.Satellite
 
@@ -70,5 +70,5 @@ scene.on('loaded', () => {
 });
 ```
 
-[在线案例](/zh/examples/amapPlugin/bus#satellite)
+[在线案例](/examples/amapplugin/bus#satellite)
 

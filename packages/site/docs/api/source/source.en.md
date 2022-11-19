@@ -60,7 +60,7 @@ layer.source(data);
 如果数据发生改变，可以需要更新数据
 可以通过调用 layer 的 setData 方法实现数据的更新
 
-具体见 [Layer](../layer/layer/#setdata)
+具体见 [Layer](/api/base_layer/base/#setdata)
 
 ```javascript
 layer.setData(data);
@@ -68,17 +68,17 @@ layer.setData(data);
 
 #### JSON
 
-[JSON 数据格式解析](./json)
+[JSON 数据格式解析](/api/source/json)
 
 #### csv
 
-[CSV 数据格式解析](./csv)
+[CSV 数据格式解析](/api/source/csv)
 
 栅格数据类型
 
 #### image
 
-[Image 数据格式解析](./image)
+[Image 数据格式解析](/api/source/image)
 
 ### transforms
 

@@ -16,7 +16,7 @@ order: 4
 
 下面我们来介绍如何绘制简单线。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/gallery/animate#grid)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/gallery/animate#grid)
 
 ```javascript
 import { LineLayer } from '@antv/l7';

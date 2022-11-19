@@ -24,7 +24,7 @@ const scene = new Scene({
 
 ## 使用
 
-[示例](/zh/examples/component/control#logo)
+[示例](/examples/component/control#logo)
 
 ```ts
 import { Scene, Logo } from '@antv/l7';

@@ -153,5 +153,5 @@ popup.on('close', () => {});
 
 ## demo 地址
 
-[demo1](../../../examples/point/column#column_linear)
-[demo2](../../../examples/line/path#bus_light)
+[demo1](/examples/point/column#column_linear)
+[demo2](/examples/line/path#bus_light)

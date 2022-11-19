@@ -16,7 +16,7 @@ order: 8
 
 下面我们来介绍如何绘制一个简单的地图复合图表。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/chart#bar)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/point/chart#bar)
 
 
 ```javascript

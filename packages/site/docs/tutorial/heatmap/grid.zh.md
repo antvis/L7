@@ -16,7 +16,7 @@ order: 1
 
 下面我们来介绍如何绘制一个简单的网格热力图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/heatmap/grid#china)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/heatmap/grid#china)
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';

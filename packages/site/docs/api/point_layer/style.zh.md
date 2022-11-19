@@ -25,7 +25,7 @@ layer.style({
 
 `shape` 为平面图形、如三角形、正方等。
 
-- [IFillShape](/zh/docs/api/point_layer/shape#shapefillshape-ifillshape)
+- [IFillShape](/api/point_layer/shape#shapefillshape-ifillshape)
 
 | style         | 类型               | 描述                       | 默认值   |
 | ------------- | ------------------ | -------------------------- | -------- |
@@ -68,7 +68,7 @@ const layer = PointLayer()
 
 `shape` 为 3D 柱图。
 
-- [IColumn](/zh/docs/api/point_layer/shape#shapecolumn-icolumn)
+- [IColumn](/api/point_layer/shape#shapecolumn-icolumn)
 
 | style       | 类型      | 描述                 | 默认值  |
 | ----------- | --------- | -------------------- | ------- |
@@ -108,23 +108,23 @@ interface IOpcityLinear = {
 
 `shape` 为文字。
 
-- [text](http://localhost:8000/zh/docs/api/point_layer/shape#shapefield-string-text)
+- [text](/api/point_layer/shape#shapefield-string-text)
 
-| style            | 类型                                                    | 描述                       | 默认值       |
-| ---------------- | ------------------------------------------------------- | -------------------------- | ------------ |
-| stroke           | `string`                                                | 图形边框颜色               | `#fff`       |
-| strokeWidth      | `number`                                                | 图形边框颜色               | `0`          |
-| textOffset       | `[number, number]`                                      | 文字的偏移                 | `[0, 0]`     |
-| textAnchor       | [anchorType](/zh/docs/api/point_layer/style#anchortype) | 文字对齐锚点 `text`        | `center`     |
-| spacing          | `number`                                                | 文字间隔                   | `2`          |
-| padding          | `number`                                                | 文字内边框宽度             | `2`          |
-| halo             | `number`                                                | 文字边缘光晕宽度           | `0.5`        |
-| gamma            | `number`                                                | 文字的颜色参数             | `2`          |
-| fontWeight       | `string`                                                | 文字的大小                 | `400`        |
-| fontFamily       | [font](/zh/docs/api/point_layer/style#font)             | 字体                       | `sans-serif` |
-| textAllowOverlap | `boolean`                                               | 文字是否允许覆盖           | `false`      |
-| raisingHeight    | `number`                                                | 抬升高度                   | `0`          |
-| heightfixed      | `boolean`                                               | 抬升高度是否随 `zoom` 变化 | `false`      |
+| style            | 类型                                            | 描述                       | 默认值       |
+| ---------------- | ----------------------------------------------- | -------------------------- | ------------ |
+| stroke           | `string`                                        | 图形边框颜色               | `#fff`       |
+| strokeWidth      | `number`                                        | 图形边框颜色               | `0`          |
+| textOffset       | `[number, number]`                              | 文字的偏移                 | `[0, 0]`     |
+| textAnchor       | [anchorType](/api/point_layer/style#anchortype) | 文字对齐锚点 `text`        | `center`     |
+| spacing          | `number`                                        | 文字间隔                   | `2`          |
+| padding          | `number`                                        | 文字内边框宽度             | `2`          |
+| halo             | `number`                                        | 文字边缘光晕宽度           | `0.5`        |
+| gamma            | `number`                                        | 文字的颜色参数             | `2`          |
+| fontWeight       | `string`                                        | 文字的大小                 | `400`        |
+| fontFamily       | [font](/api/point_layer/style#font)             | 字体                       | `sans-serif` |
+| textAllowOverlap | `boolean`                                       | 文字是否允许覆盖           | `false`      |
+| raisingHeight    | `number`                                        | 抬升高度                   | `0`          |
+| heightfixed      | `boolean`                                       | 抬升高度是否随 `zoom` 变化 | `false`      |
 
 #### anchorType
 
@@ -156,7 +156,7 @@ const font2 = 'Times New Roman';
 
 `shape` 为简单点图形（精灵)。
 
-- [simple](http://localhost:8000/zh/docs/api/point_layer/shape#shapesimple)
+- [simple](/api/point_layer/shape#shapesimple)
 
 | style         | 类型               | 描述         | 默认值   |
 | ------------- | ------------------ | ------------ | -------- |
@@ -169,7 +169,7 @@ const font2 = 'Times New Roman';
 
 `shape` 为图标类型。
 
-- [icon](http://localhost:8000/zh/docs/api/point_layer/shape#shapeiconname-string)
+- [icon](/api/point_layer/shape#shapeiconname-string)
 
 | style         | 类型               | 描述                       | 默认值   |
 | ------------- | ------------------ | -------------------------- | -------- |
@@ -202,7 +202,7 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
 
 `shape` 为雷达图。
 
-- [radar](http://localhost:8000/zh/docs/api/point_layer/shape#shaperadar)
+- [radar](/api/point_layer/shape#shaperadar)
 
 | style | 类型     | 描述             | 默认值 |
 | ----- | -------- | ---------------- | ------ |
