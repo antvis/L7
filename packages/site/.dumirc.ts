@@ -269,12 +269,20 @@ export default defineConfig({
         order: 9,
       },
       {
+        slug: 'tutorial/mask',
+        title: {
+          zh: '掩模图层 MaskLayer',
+          en: 'MaskLayer',
+        },
+        order: 10,
+      },
+      {
         slug: 'tutorial/tile',
         title: {
           zh: '瓦片图层 TileLayer',
           en: 'TileLayer',
         },
-        order: 10,
+        order: 11,
       },
       {
         slug: 'api/map',
@@ -341,20 +349,28 @@ export default defineConfig({
         order: 7,
       },
       {
-        slug: 'api/raster',
+        slug: 'api/mask_layer',
         title: {
-          zh: '栅格图层 RasterLayer',
-          en: 'RasterLayer',
+          zh: '掩模图层 MaskLayer',
+          en: 'MaskLayer',
         },
         order: 8,
       },
       {
-        slug: 'api/vectortile',
+        slug: 'api/raster_layer',
         title: {
-          zh: '矢量瓦片 TileLayer',
-          en: 'VectorTile',
+          zh: '栅格图层 RasterLayer',
+          en: 'RasterLayer',
         },
-        order: 8,
+        order: 9,
+      },
+      {
+        slug: 'api/tile',
+        title: {
+          zh: '瓦片图层 TileLayer',
+          en: 'TileLayer',
+        },
+        order: 10,
       },   
       {
         slug: 'api/other',
@@ -362,7 +378,7 @@ export default defineConfig({
           zh: '其他图层 Other',
           en: 'Other Layers',
         },
-        order: 10,
+        order: 11,
       },
       {
         slug: 'api/component',
@@ -370,7 +386,7 @@ export default defineConfig({
           zh: '组件 Component',
           en: 'Component',
         },
-        order: 11,
+        order: 12,
       },
       {
         slug: 'api/component/control',
@@ -410,7 +426,7 @@ export default defineConfig({
           zh: '实验特性',
           en: 'experiment',
         },
-        order: 12,
+        order: 13,
       },
     ],
     examples: [
