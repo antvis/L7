@@ -49,6 +49,10 @@ export default () => {
               });
           
           });
+
+          return ()=>{
+            scene.destroy();
+          }
           
     }, []);
     return (

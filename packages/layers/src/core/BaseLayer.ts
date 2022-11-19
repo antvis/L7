@@ -1004,8 +1004,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.models = [];
 
-    this.layerService.cleanRemove(this, refresh);
-
     this.emit('remove', {
       target: this,
       type: 'remove',

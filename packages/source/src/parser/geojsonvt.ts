@@ -3,7 +3,6 @@ import {
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
-import { VectorTileLayer } from '@mapbox/vector-tile';
 import {
   Feature,
   FeatureCollection,
@@ -11,7 +10,8 @@ import {
   Properties,
 } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
-import { IParserData } from '../interface';
+import { IParserData, ITileSource } from '../interface';
+import VtSource from '../source/geojsonvt';
 
 import { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
 
@@ -155,7 +155,7 @@ function GetGeoJSON(
 }
 
 export type MapboxVectorTile = {
-  layers: { [key: string]: VectorTileLayer & { features: Feature[] } };
+  layers: { [key: string]: { features: Feature[] } };
 };
 
 const getVectorTile = async (
@@ -163,7 +163,7 @@ const getVectorTile = async (
   tileIndex: any,
   tileParams: TileLoadParams,
   extent: number,
-): Promise<MapboxVectorTile> => {
+): Promise<ITileSource> => {
   return new Promise((resolve) => {
     const tileData = tileIndex.getTile(tile.z, tile.x, tile.y);
     // tileData
@@ -184,13 +184,11 @@ const getVectorTile = async (
         defaultLayer: {
           // @ts-ignore
           features,
-        } as VectorTileLayer & {
-          features: Feature[];
         },
       },
     };
-
-    resolve(vectorTile);
+    const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+    resolve(vectorSource);
   });
 };
 

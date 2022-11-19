@@ -26,7 +26,6 @@ layer
         tileSize: 256,
         zoomOffset: 0,
         maxZoom: 9,
-        extent: [-180, -85.051129, 179, 85.051129],
       },
     },
   )

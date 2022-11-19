@@ -379,11 +379,31 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.destroyed = true;
       return;
     }
-    this.emit('destroy');
+    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
+    if ($window.matchMedia) {
+      $window
+        .matchMedia('screen and (min-resolution: 2dppx)')
+        ?.removeListener(this.handleWindowResized);
+    }
+
 
     this.pickingService.destroy();
     this.layerService.destroy();
+
     // this.rendererService.destroy();
+
+    this.interactionService.destroy();
+    this.controlService.destroy();
+    this.markerService.destroy();
+    this.fontService.destroy();
+    this.iconService.destroy();
+
+
+
+    this.removeAllListeners();
+    this.inited = false;
+
+    this.map.destroy();
     setTimeout(() => {
       this.$container?.removeChild(this.canvas);
       // this.canvas = null 清除对 webgl 实例的引用
@@ -392,26 +412,9 @@ export default class Scene extends EventEmitter implements ISceneService {
       // Tip: 把这一部分销毁放到写下一个事件循环中执行，兼容 L7React 中 scene 和 layer 同时销毁的情况
       this.rendererService.destroy();
     });
-
-    this.map.destroy();
-
-    this.interactionService.destroy();
-    this.controlService.destroy();
-    this.markerService.destroy();
-    this.fontService.destroy();
-    this.iconService.destroy();
-
-    // 销毁 container 容器
+        // 销毁 container 容器
     this.$container?.parentNode?.removeChild(this.$container);
-
-    this.removeAllListeners();
-    this.inited = false;
-    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    if ($window.matchMedia) {
-      $window
-        .matchMedia('screen and (min-resolution: 2dppx)')
-        ?.removeListener(this.handleWindowResized);
-    }
+    this.emit('destroy');
   }
 
   private handleWindowResized = () => {

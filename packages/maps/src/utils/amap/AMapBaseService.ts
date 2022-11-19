@@ -481,7 +481,6 @@ export default abstract class AMapBaseService
   }
 
   public destroy() {
-    this.map.destroy();
 
     // TODO: 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
@@ -492,6 +491,8 @@ export default abstract class AMapBaseService
     if ($jsapi) {
       document.head.removeChild($jsapi);
     }
+    this.map.destroy();
+
   }
 
   public getMapContainer() {
@@ -520,7 +521,7 @@ export default abstract class AMapBaseService
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');
-
+  
     if (this.cameraChangedCallback) {
       // resync viewport
       // console.log('cameraHeight', height)

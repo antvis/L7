@@ -1,7 +1,7 @@
 import { VectorTile } from '@mapbox/vector-tile';
 import { Feature, Properties } from '@turf/helpers';
 import Protobuf from 'pbf';
-import { ITileSource, MapboxVectorTile } from './interface';
+import { ITileSource } from '../interface';
 export default class VectorSource implements ITileSource {
   private vectorTile: VectorTile;
   private vectorLayerCache: {
@@ -15,7 +15,7 @@ export default class VectorSource implements ITileSource {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.vectorTile = new VectorTile(new Protobuf(data)) as MapboxVectorTile;
+    this.vectorTile = new VectorTile(new Protobuf(data)) as VectorTile;
   }
 
   public getTileData(sourceLayer: string) {

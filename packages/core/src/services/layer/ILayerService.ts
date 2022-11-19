@@ -677,7 +677,6 @@ export interface ILayerService {
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
-  cleanRemove(layer: ILayer, refresh?: boolean): void;
   remove(layer: ILayer, parentLayer?: ILayer): void;
   removeAllLayers(): void;
   updateLayerRenderList(): void;

@@ -78,3 +78,12 @@ export interface IRasterCfg {
   max: number;
   min: number;
 }
+
+import { Feature } from '@turf/helpers';
+export interface ITileSource {
+  getTileData(layer: string): any;
+}
+
+export type MapboxVectorTile = {
+  layers: { [_: string]: { features: Feature[] } };
+};
