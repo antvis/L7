@@ -77,7 +77,7 @@ export default () => {
                   });
                  
                 scene.addLayer(fill);
-                fill.on('mousemove',()=>{
+                scene.on('contextmenu',()=>{
                   fill.setData(data)
                 })
               })

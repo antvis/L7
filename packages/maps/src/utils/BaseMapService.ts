@@ -88,6 +88,7 @@ export default abstract class BaseMapService<T>
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
+
       // 统一事件名称
       this.map.on(EventMap[type] || type, handle);
     }
