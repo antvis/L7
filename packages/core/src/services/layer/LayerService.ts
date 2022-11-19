@@ -134,6 +134,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
 
   public removeAllLayers() {
     this.destroy();
+    this.renderLayers();
   }
 
   public setEnableRender(flag: boolean) {
@@ -229,7 +230,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     });
     this.layers = [];
     this.layerList = [];
-    this.renderLayers();
     this.emit('layerChange', this.layers);
   }
 
