@@ -31,7 +31,7 @@ export default () => {
   useEffect( async () => {
     const scene = new Scene({
       id: 'map',
-      stencil: true,
+     
       map: new GaodeMap({
         center: [120.165, 30.26],
         pitch: 0,

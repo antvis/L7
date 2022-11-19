@@ -15,7 +15,7 @@ const counts = [10000, 5000, 1000, 500, 100];
 const color = ['#fcfbfd','#efedf5','#dadaeb','#bcbddc','#9e9ac8','#807dba','#6a51a3','#4a1486'].reverse();
 const scene = new Scene({
   id: 'map',
-  stencil: true,
+ 
   map: new GaodeMap({
     center: [100, 30],
     minZoom: 0,

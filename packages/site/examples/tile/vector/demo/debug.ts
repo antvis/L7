@@ -5,7 +5,7 @@ import { GaodeMapV2 } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
-  stencil: true,
+ 
   map: new GaodeMapV2({
     center: [120, 30],
     // zoom: 12,

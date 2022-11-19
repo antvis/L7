@@ -65,7 +65,7 @@ export default () => {
 
     const scene = new Scene({
       id: 'map',
-      stencil: true,
+     
       map: new Map({
         center: [112, 30],
 
