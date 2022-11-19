@@ -110,21 +110,21 @@ interface IOpcityLinear = {
 
 - [text](/api/point_layer/shape#shapefield-string-text)
 
-| style            | 类型                                                    | 描述                       | 默认值       |
-| ---------------- | ------------------------------------------------------- | -------------------------- | ------------ |
-| stroke           | `string`                                                | 图形边框颜色               | `#fff`       |
-| strokeWidth      | `number`                                                | 图形边框颜色               | `0`          |
-| textOffset       | `[number, number]`                                      | 文字的偏移                 | `[0, 0]`     |
+| style            | 类型                                            | 描述                       | 默认值       |
+| ---------------- | ----------------------------------------------- | -------------------------- | ------------ |
+| stroke           | `string`                                        | 图形边框颜色               | `#fff`       |
+| strokeWidth      | `number`                                        | 图形边框颜色               | `0`          |
+| textOffset       | `[number, number]`                              | 文字的偏移                 | `[0, 0]`     |
 | textAnchor       | [anchorType](/api/point_layer/style#anchortype) | 文字对齐锚点 `text`        | `center`     |
-| spacing          | `number`                                                | 文字间隔                   | `2`          |
-| padding          | `number`                                                | 文字内边框宽度             | `2`          |
-| halo             | `number`                                                | 文字边缘光晕宽度           | `0.5`        |
-| gamma            | `number`                                                | 文字的颜色参数             | `2`          |
-| fontWeight       | `string`                                                | 文字的大小                 | `400`        |
+| spacing          | `number`                                        | 文字间隔                   | `2`          |
+| padding          | `number`                                        | 文字内边框宽度             | `2`          |
+| halo             | `number`                                        | 文字边缘光晕宽度           | `0.5`        |
+| gamma            | `number`                                        | 文字的颜色参数             | `2`          |
+| fontWeight       | `string`                                        | 文字的大小                 | `400`        |
 | fontFamily       | [font](/api/point_layer/style#font)             | 字体                       | `sans-serif` |
-| textAllowOverlap | `boolean`                                               | 文字是否允许覆盖           | `false`      |
-| raisingHeight    | `number`                                                | 抬升高度                   | `0`          |
-| heightfixed      | `boolean`                                               | 抬升高度是否随 `zoom` 变化 | `false`      |
+| textAllowOverlap | `boolean`                                       | 文字是否允许覆盖           | `false`      |
+| raisingHeight    | `number`                                        | 抬升高度                   | `0`          |
+| heightfixed      | `boolean`                                       | 抬升高度是否随 `zoom` 变化 | `false`      |
 
 #### anchorType
 
