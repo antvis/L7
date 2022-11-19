@@ -178,7 +178,7 @@ export default defineConfig({
           en: 'The next generation geospatial data visual analysis platform can be configured with rich geographic visualization effects to provide insight analysis, map application construction, and open expansion capabilities',
         },
         link: `https://larkmap.antv.antgroup.com/`,
-        image: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*S5dGS7C6SH0AAAAAAAAAAAAADmJ7AQ/original',
+        image: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*tR2BTIG6Bz8AAAAAAAAAAAAADmJ7AQ/original',
         isAppLogo: true,
       },
     ],
