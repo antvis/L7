@@ -90,7 +90,7 @@ _如果你有新的字体需求可提PR，帮你自动生成在线可用的字�
 
 字体服务下载：[gh-pages分支](https://github.com/lzxue/font-glyphs/tree/gh-pages) 你可以 `clone` 下来直接使用。
 
-**你也可以使用在线服务**<br />**<br />github服务<br />[https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf](https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf)<br />蚂蚁CDN：<br />[https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf](https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf)
+**你也可以使用在线服务**<br />github服务<br />[https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf](https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf)<br />蚂蚁CDN：<br />[https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf](https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf)
 
 #### 地图服务本地化
 

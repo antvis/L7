@@ -165,8 +165,8 @@ const scene = new Scene({
   map: new GaodeMap({
     center: [ 113, 29 ],
     pitch: 70,
-    zoom: 8.5,
-    rotation: 160,
+    zoom: 7.5,
+    rotation: 170,
     style: 'blank'
   })
 });
@@ -180,7 +180,7 @@ const threeJSLayer = new ThreeLayer({
   onAddMeshes: (threeScene, layer) => {
     threeScene.add(new THREE.AmbientLight(0xffffff));
     const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
-    sunlight.position.set(0, 80000000, 100000000);
+    sunlight.position.set(0, 800000, 1000000);
     sunlight.matrixWorldNeedsUpdate = true;
     threeScene.add(sunlight);
 
@@ -192,7 +192,7 @@ const threeJSLayer = new ThreeLayer({
         const antModel = gltf.scene;
         setMaterial(antModel);
         layer.adjustMeshToMap(antModel);
-        layer.setMeshScale(antModel, 8000, 8000, 8000);
+        layer.setMeshScale(antModel, 2000, 2000, 2000);
         layer.setObjectLngLat(
           antModel,
           [ 113, 29 ],
@@ -214,7 +214,8 @@ const threeJSLayer = new ThreeLayer({
         return '';
       }
     );
-  }
+  },
+  zIndex: 1
 });
 
 scene.addImage(
@@ -284,7 +285,7 @@ fetch(
   .then(data => {
     const layer = new LineLayer({})
       .source(data)
-      .size(30000)
+      .size(10000)
       .shape('wall')
       .style({
         opacity: 0.4,

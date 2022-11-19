@@ -188,12 +188,12 @@ export default class DataMappingPlugin implements ILayerPlugin {
       }
       return encodeRecord;
     }) as IEncodeFeature[];
-
     // 调整数据兼容 Amap2.0
     this.adjustData2Amap2Coordinates(mappedData, layer);
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
+
     return mappedData;
   }
 
