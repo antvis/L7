@@ -72,7 +72,9 @@ export default class AMapService extends AMapBaseService {
       layerCenterFlat,
     );
     // Z 参数
-    coord.push(lnglat[2] || 0);
+    if(lnglat[2]) {
+      coord.push(lnglat[2])
+    }
     return coord;
   }
 
