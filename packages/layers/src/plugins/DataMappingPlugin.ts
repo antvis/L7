@@ -193,8 +193,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
-    
-    
+
     return mappedData;
   }
 

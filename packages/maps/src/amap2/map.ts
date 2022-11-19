@@ -64,15 +64,15 @@ export default class AMapService extends AMapBaseService {
     return this.sceneCenterMKT;
   }
 
-  public lngLatToCoordByLayer(
-    lnglat: number[],
-    layerCenter: [number, number],
-  ) {
+  public lngLatToCoordByLayer(lnglat: number[], layerCenter: [number, number]) {
     const center = layerCenter || this.sceneCenter;
     const layerCenterFlat = amap2Project(...center);
-    const coord = this._sub(amap2Project(lnglat[0], lnglat[1]), layerCenterFlat);
+    const coord = this._sub(
+      amap2Project(lnglat[0], lnglat[1]),
+      layerCenterFlat,
+    );
     // Z 参数
-    coord.push(lnglat[2] || 0)
+    coord.push(lnglat[2] || 0);
     return coord;
   }
 
@@ -83,17 +83,11 @@ export default class AMapService extends AMapBaseService {
     // @ts-ignore
     return lnglatArray.map((lnglats) => {
       if (typeof lnglats[0] === 'number') {
-        return this.lngLatToCoordByLayer(
-          lnglats as number[],
-          layerCenter,
-        );
+        return this.lngLatToCoordByLayer(lnglats as number[], layerCenter);
       } else {
         // @ts-ignore
         return lnglats.map((lnglat) => {
-          return this.lngLatToCoordByLayer(
-            lnglat as number[],
-            layerCenter,
-          );
+          return this.lngLatToCoordByLayer(lnglat as number[], layerCenter);
         });
       }
     });

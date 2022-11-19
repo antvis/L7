@@ -39,7 +39,7 @@ order: 2
 
 ```js
 const mask = new MaskLayer({
-  sourceLayer: 'ecoregions2', 
+  sourceLayer: 'ecoregions2',
 }).source(
   'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
   {
@@ -51,4 +51,3 @@ const mask = new MaskLayer({
   },
 );
 ```
-
