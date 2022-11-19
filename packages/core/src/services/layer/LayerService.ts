@@ -40,7 +40,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   private readonly mapService: IMapService;
 
   public reRender = throttle(() => {
-    this.clear();
     this.updateLayerRenderList();
     this.renderLayers();
   }, 32);
@@ -103,16 +102,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public cleanRemove(layer: ILayer, refresh = true) {
-    const layerIndex = this.layers.indexOf(layer);
-    if (layerIndex > -1) {
-      this.layers.splice(layerIndex, 1);
-    }
-    if (refresh) {
-      this.throttleRenderLayers();
-    }
-  }
-
   public remove(layer: ILayer, parentLayer?: ILayer): void {
     // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {
@@ -134,6 +123,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
 
   public removeAllLayers() {
     this.destroy();
+    this.renderLayers();
   }
 
   public setEnableRender(flag: boolean) {
@@ -229,7 +219,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     });
     this.layers = [];
     this.layerList = [];
-    this.renderLayers();
     this.emit('layerChange', this.layers);
   }
 

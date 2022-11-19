@@ -1,7 +1,7 @@
 ### CanvasLayer - demo1
 ```tsx
 import { CanvasLayer, Scene } from '@antv/l7';
-import { GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
  let x = 0;
 function draw(option) {
@@ -19,13 +19,13 @@ const points = [
     lng: 108.544921875,
     lat: 30.977609093348686,
     level: 85,
-    color: 'rgba(	220,20,60, 0.6)'
+    color: 'rgba(220,20,60, 0.6)'
     },
     {
     lng: 110.654296875,
     lat: 31.090574094954192,
     level: 75,
-    color: 'rgba(	255,140,0, 0.6)'
+    color: 'rgba(255,140,0, 0.6)'
     },
     {
     lng: 112.5,
@@ -114,7 +114,7 @@ export default () => {
     useEffect(() => {
         const scene = new Scene({
         id: 'map',
-        map: new GaodeMapV1({
+        map: new GaodeMap({
             style: 'light',
             center: [ 115, 31 ],
             zoom: 5.0
