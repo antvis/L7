@@ -37,8 +37,6 @@ scene.addLayer(layer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PIXmQ6m1C10AAAAAAAAAAAAAARQnAQ' />
 
-[在线案例](/zh/examples/line/isoline#ele_dark)
-
 ### 开启后处理
 
 为了开启图层的后处理能力，我们需要在初始化图层的时候配置 enableMultiPassRenderer 为 true，同时传入该图层作用的处理效果配置。

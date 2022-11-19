@@ -55,52 +55,51 @@ export default () => {
 
     scene.on('loaded', () => {
       // 绿地
-      // const water_surface = new PolygonLayer({
-      //   sourceLayer: 'WLD',
-      //   zIndex: 1,
-      // })
-      //   .source(source)
-      //   .select(true)
-      //   .active(false)
-      //   .shape('fill')
-      //   .color('NAME_CHN', (NAME_CHN) => {
-      //     const namestr = unicode2Char(NAME_CHN);
-      //     const country = data.find((c) => {
-      //       return c.name == namestr;
-      //     });
-      //     if (!country) {
-      //       return '#ffff33';
-      //     }
-      //     const qz = ((country.qz as unknown) as number) * 1;
-      //     if (qz > counts[0]) {
-      //       return color[0];
-      //     } else if (qz > counts[1]) {
-      //       return color[1];
-      //     } else if (qz > counts[2]) {
-      //       return color[2];
-      //     } else if (qz > counts[3]) {
-      //       return color[3];
-      //     } else {
-      //       return color[4];
-      //     }
-      //   });
-
-      const line = new LineLayer({
-        sourceLayer: 'WLD_L',
-        zIndex: 2,
+      const water_surface = new PolygonLayer({
+        sourceLayer: 'WLD',
+        zIndex: 1,
       })
         .source(source)
-        .shape('line')
-        .size(0.6)
-        .color('type', (t) => {
-          if (t === '0') {
-            return 'red';
+        .select(true)
+        .active(false)
+        .shape('fill')
+        .color('NAME_CHN', (NAME_CHN) => {
+          const namestr = unicode2Char(NAME_CHN);
+          const country = data.find((c) => {
+            return c.name == namestr;
+          });
+          if (!country) {
+            return '#ffff33';
           }
-          if (t === '2') {
-            return '#09f';
+          const qz = ((country.qz as unknown) as number) * 1;
+          if (qz > counts[0]) {
+            return color[0];
+          } else if (qz > counts[1]) {
+            return color[1];
+          } else if (qz > counts[2]) {
+            return color[2];
+          } else if (qz > counts[3]) {
+            return color[3];
+          } else {
+            return color[4];
           }
-          return '#fc9272';
         });
+      // const line = new LineLayer({
+      //   sourceLayer: 'WLD_L',
+      //   zIndex: 2,
+      // })
+      //   .source(source)
+      //   .shape('line')
+      //   .size(0.6)
+      //   .color('type', (t) => {
+      //     if (t === '0') {
+      //       return 'red';
+      //     }
+      //     if (t === '2') {
+      //       return '#09f';
+      //     }
+      //     return '#fc9272';
+      //   });
 
       // const text = new PointLayer({
       //   sourceLayer: 'WLD',
@@ -118,9 +117,9 @@ export default () => {
       //   console.log(e);
       // });
 
-      // scene.addLayer(water_surface);
+      scene.addLayer(water_surface);
       // scene.addLayer(text);
-      scene.addLayer(line);
+      // scene.addLayer(line);
       // scene.addLayer(debugerLayer);
     });
   }, []);

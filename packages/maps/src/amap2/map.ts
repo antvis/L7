@@ -64,13 +64,18 @@ export default class AMapService extends AMapBaseService {
     return this.sceneCenterMKT;
   }
 
-  public lngLatToCoordByLayer(
-    lnglat: [number, number],
-    layerCenter: [number, number],
-  ) {
+  public lngLatToCoordByLayer(lnglat: number[], layerCenter: [number, number]) {
     const center = layerCenter || this.sceneCenter;
     const layerCenterFlat = amap2Project(...center);
-    return this._sub(amap2Project(lnglat[0], lnglat[1]), layerCenterFlat);
+    const coord = this._sub(
+      amap2Project(lnglat[0], lnglat[1]),
+      layerCenterFlat,
+    );
+    // Z 参数
+    if (lnglat[2]) {
+      coord.push(lnglat[2]);
+    }
+    return coord;
   }
 
   public lngLatToCoordsByLayer(
@@ -80,17 +85,11 @@ export default class AMapService extends AMapBaseService {
     // @ts-ignore
     return lnglatArray.map((lnglats) => {
       if (typeof lnglats[0] === 'number') {
-        return this.lngLatToCoordByLayer(
-          lnglats as [number, number],
-          layerCenter,
-        );
+        return this.lngLatToCoordByLayer(lnglats as number[], layerCenter);
       } else {
         // @ts-ignore
         return lnglats.map((lnglat) => {
-          return this.lngLatToCoordByLayer(
-            lnglat as [number, number],
-            layerCenter,
-          );
+          return this.lngLatToCoordByLayer(lnglat as number[], layerCenter);
         });
       }
     });
@@ -395,7 +394,6 @@ export default class AMapService extends AMapBaseService {
     } = this.map.customCoords.getCameraParams();
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
-
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     if (this.cameraChangedCallback) {

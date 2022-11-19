@@ -18,12 +18,16 @@ order: 0
 
 ```js
 const layer = new LineLayer()
-        .source([{lng: 120, lat: 30, lng1: 125,lat1: 30 }], {
-        parser:  {
-            type: 'json', x: 'lng', y: 'lat', x1: 'lng1', y1: 'lat1'
-        }})
-    .shape('line')
-    .size(2)
-    .color('#f00);
-
+  .source([{ lng: 120, lat: 30, lng1: 125, lat1: 30 }], {
+    parser: {
+      type: 'json',
+      x: 'lng',
+      y: 'lat',
+      x1: 'lng1',
+      y1: 'lat1',
+    },
+  })
+  .shape('line')
+  .size(2)
+  .color('#f00');
 ```

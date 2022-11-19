@@ -68,7 +68,6 @@
     "babel-plugin-transform-node-env-inline": "^0.4.3",
     "babel-plugin-transform-postcss": "^0.3.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-gatsby": "^1.12.0",
     "babel-template": "^6.26.0",
     "babel-types": "^6.26.0",
     "clean-webpack-plugin": "^3.0.0",

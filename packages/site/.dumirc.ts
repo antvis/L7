@@ -154,7 +154,7 @@ export default defineConfig({
     ],
     cases: [
       {
-        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*ZdZcS5MKuAMAAAAAAAAAAAAADmJ7AQ/original',
+        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-kafQrA1ky4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
         title: {
           zh: 'LarkMap 空间数据可视分析组件库',
           en: 'LarkMap ',
@@ -270,12 +270,20 @@ export default defineConfig({
         order: 9,
       },
       {
+        slug: 'tutorial/mask',
+        title: {
+          zh: '掩模图层 MaskLayer',
+          en: 'MaskLayer',
+        },
+        order: 10,
+      },
+      {
         slug: 'tutorial/tile',
         title: {
           zh: '瓦片图层 TileLayer',
           en: 'TileLayer',
         },
-        order: 10,
+        order: 11,
       },
       {
         slug: 'api/map',
@@ -342,20 +350,28 @@ export default defineConfig({
         order: 7,
       },
       {
+        slug: 'api/mask_layer',
+        title: {
+          zh: '掩模图层 MaskLayer',
+          en: 'MaskLayer',
+        },
+        order: 8,
+      },
+      {
         slug: 'api/raster_layer',
         title: {
           zh: '栅格图层 RasterLayer',
           en: 'RasterLayer',
         },
-        order: 8,
+        order: 9,
       },
       {
         slug: 'api/tile',
         title: {
           zh: '瓦片图层 TileLayer',
-          en: 'Tile',
+          en: 'TileLayer',
         },
-        order: 8,
+        order: 10,
       },   
       {
         slug: 'api/other',
@@ -363,7 +379,7 @@ export default defineConfig({
           zh: '其他图层 Other',
           en: 'Other Layers',
         },
-        order: 10,
+        order: 11,
       },
       {
         slug: 'api/component',
@@ -371,7 +387,7 @@ export default defineConfig({
           zh: '组件 Component',
           en: 'Component',
         },
-        order: 11,
+        order: 12,
       },
       {
         slug: 'api/component/control',
@@ -411,7 +427,7 @@ export default defineConfig({
           zh: '实验特性',
           en: 'experiment',
         },
-        order: 12,
+        order: 13,
       },
     ],
     examples: [

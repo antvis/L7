@@ -108,6 +108,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
+
     let filterData = dataArray;
     // 数据过滤完 再执行数据映射
     if (filter?.scale) {
@@ -119,7 +120,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
     // 在各个 layer 中继承
     filterData = layer.processData(filterData);
-
     const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
     // 对外暴露事件
@@ -188,12 +188,12 @@ export default class DataMappingPlugin implements ILayerPlugin {
       }
       return encodeRecord;
     }) as IEncodeFeature[];
-
     // 调整数据兼容 Amap2.0
     this.adjustData2Amap2Coordinates(mappedData, layer);
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
+
     return mappedData;
   }
 

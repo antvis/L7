@@ -64,14 +64,12 @@ layer 初始化完成之后，地图是否自动缩放到图层范围
 
 <description> _boolean_ **optional** _default:_ false</description>
 
-是否参与裁减
+是否参与裁减。
+
+- `false` 不参与裁减
+- `true` 参与裁减
 
 🌟 从 v2.7.2 版本开始支持
-
-- false 不参与裁减
-- true 参与裁减
-
-[在线案例](/zh/examples/tile/raster#amap-satelliteMask)
 
 ### maskfence
 

@@ -379,9 +379,17 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.destroyed = true;
       return;
     }
+    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
+    if ($window.matchMedia) {
+      $window
+        .matchMedia('screen and (min-resolution: 2dppx)')
+        ?.removeListener(this.handleWindowResized);
+    }
+
 
     this.pickingService.destroy();
     this.layerService.destroy();
+
     // this.rendererService.destroy();
 
     this.interactionService.destroy();
@@ -394,12 +402,6 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     this.removeAllListeners();
     this.inited = false;
-    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    if ($window.matchMedia) {
-      $window
-        .matchMedia('screen and (min-resolution: 2dppx)')
-        ?.removeListener(this.handleWindowResized);
-    }
 
     this.map.destroy();
     setTimeout(() => {

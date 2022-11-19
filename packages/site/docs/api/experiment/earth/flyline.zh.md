@@ -20,9 +20,3 @@ import { EarthLayer, LineLayer } from '@antv/l7';
 ### shape
 
 地球飞线图层 shape 只支持 **arc3d**
-
-### 其他配置
-
-剩下的配置和[线图层](../../line_layer/linelayer)一致
-
-[在线案例](../../../../examples/earth/arc3d#flyline)
