@@ -1,15 +1,13 @@
 // @ts-ignore
 import { Scene, Source, PolygonLayer } from '@antv/l7';
 // @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
-  id: 'geojsonvt',
-  stencil: true,
-  map: new Map({
+  id: 'map',
+  map: new GaodeMap({
     center: [121.268, 30.3628],
     pitch: 0,
-    style: 'blank',
     zoom: 4,
   }),
 });
@@ -31,10 +29,9 @@ fetch(
 
     const polygon = new PolygonLayer({
       featureId: 'COLOR',
-      // sourceLayer: 'testName', // woods hillshade contour ecoregions ecoregions2 city
     })
       .source(source)
-      .color('red')
+      .color('COLOR')
       .shape('fill')
       // .active(true)
       // .select(true)

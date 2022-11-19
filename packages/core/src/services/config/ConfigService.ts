@@ -15,6 +15,7 @@ const defaultSceneConfig: Partial<ISceneConfig & IRenderConfig> = {
   logoPosition: 'bottomleft',
   logoVisible: true,
   antialias: true,
+  stencil: true,
   preserveDrawingBuffer: false,
   pickBufferScale: 1.0,
   fitBoundsOptions: {
