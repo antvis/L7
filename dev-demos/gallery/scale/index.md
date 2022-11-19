@@ -9,10 +9,6 @@ Range 和 domain 是 Scale 中非常重要的两个参数
 
 不同Scale 的差异在于 domain->range 的转换方法的不同
 
-| style   | 类型     | 描述         | 默认值 |
-| ------- | -------- | ------------ | ------ |
-| opacity | `number` | 图形的透明度 | `1`    |
-
 |  数据类型   | 度量类型  |
 |  ----  | ----  |
 | 连续 | linear、log、pow、time、quantize、quantile |
