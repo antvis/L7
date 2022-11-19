@@ -108,7 +108,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
-    
+
     let filterData = dataArray;
     // 数据过滤完 再执行数据映射
     if (filter?.scale) {

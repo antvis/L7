@@ -80,34 +80,34 @@ scene.on('loaded', () => {
       }
     });
 
-  const line = new LineLayer({
-    sourceLayer: 'WLD_L',
-    zIndex: 2,
-  })
-    .source(source)
-    .shape('line')
-    .size(0.6)
-    .color('type', (t) => {
-      if (t === '0') {
-        return 'red';
-      }
-      if (t === '2') {
-        return '#09f';
-      }
-      return '#fc9272';
-    });
+  // const line = new LineLayer({
+  //   sourceLayer: 'WLD_L',
+  //   zIndex: 2,
+  // })
+  //   .source(source)
+  //   .shape('line')
+  //   .size(0.6)
+  //   .color('type', (t) => {
+  //     if (t === '0') {
+  //       return 'red';
+  //     }
+  //     if (t === '2') {
+  //       return '#09f';
+  //     }
+  //     return '#fc9272';
+  //   });
 
-  const text = new PointLayer({
-    sourceLayer: 'WLD',
-    blend: 'normal',
-    zIndex: 10,
-  })
-    .source(source)
-    .shape('NAME_CHN', (NAME_CHN) => {
-      return unicode2Char(NAME_CHN);
-    })
-    .size(12)
-    .color('#000');
+  // const text = new PointLayer({
+  //   sourceLayer: 'WLD',
+  //   blend: 'normal',
+  //   zIndex: 10,
+  // })
+  //   .source(source)
+  //   .shape('NAME_CHN', (NAME_CHN) => {
+  //     return unicode2Char(NAME_CHN);
+  //   })
+  //   .size(12)
+  //   .color('#000');
 
   // water_surface.on('click', (e) => {
   //   console.log(e);

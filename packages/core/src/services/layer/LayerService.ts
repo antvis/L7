@@ -102,16 +102,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public cleanRemove(layer: ILayer, refresh = true) {
-    const layerIndex = this.layers.indexOf(layer);
-    if (layerIndex > -1) {
-      this.layers.splice(layerIndex, 1);
-    }
-    if (refresh) {
-      this.throttleRenderLayers();
-    }
-  }
-
   public remove(layer: ILayer, parentLayer?: ILayer): void {
     // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {

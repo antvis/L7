@@ -1,14 +1,14 @@
 // @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
   
 export default () => {
     useEffect( () => {
         const scene = new Scene({
             id: 'map',
-            map: new GaodeMap({
+            map: new GaodeMapV2({
               center: [ 110, 36 ],
               style: 'light',
               zoom: 3
@@ -60,7 +60,11 @@ export default () => {
                     })
                   })
                 scene.addLayer(pointLayer);
-                scene.addLayer(highlightLayer);
+                scene.addLayer(highlightLayer)
+                setTimeout(()=>{
+                  console.log('destroy')
+                  scene.destroy();
+                },2000)
               });
           
           });
