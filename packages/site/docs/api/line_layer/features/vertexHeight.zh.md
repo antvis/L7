@@ -45,4 +45,4 @@ scene.addLayer(layer);
 
 <img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*8TXwR7XbeLIAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](../../../examples/line/isoline#height)
+[在线案例](/examples/line/isoline#height)

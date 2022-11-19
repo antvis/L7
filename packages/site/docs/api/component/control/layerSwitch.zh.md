@@ -13,7 +13,7 @@ order: 8
 
 ## 使用
 
-[示例](/zh/examples/component/control#layerSwitch)
+[示例](/examples/component/control#layerswitch)
 
 ```ts
 import { Scene, LayerSwitch } from '@antv/l7';

@@ -25,11 +25,11 @@ layer.style({
 
 `shape` 为 `line` 的普通线图层。
 
-- [line](/zh/docs/api/line_layer/shape#shapeline)
-- [支持渐变](/zh/docs/api/line_layer/style#linear)
-- [支持纹理](/zh/docs/api/line_layer/style#texture)
-- [支持虚线](/zh/docs/api/line_layer/style#dash)
-- [支持箭头](/zh/docs/api/line_layer/style#arrow)
+- [line](/api/line_layer/shape#shapeline)
+- [支持渐变](/api/line_layer/style#linear)
+- [支持纹理](/api/line_layer/style#texture)
+- [支持虚线](/api/line_layer/style#dash)
+- [支持箭头](/api/line_layer/style#arrow)
 
 | style         | 类型                       | 描述                       | 默认值      |
 | ------------- | -------------------------- | -------------------------- | ----------- |
@@ -43,10 +43,10 @@ layer.style({
 
 `shape` 为 `arc` 平面的弧线。
 
-- [arc](/zh/docs/api/line_layer/shape#shapearc)
-- [支持渐变](/zh/docs/api/line_layer/style#linear)
-- [支持纹理](/zh/docs/api/line_layer/style#texture)
-- [支持虚线](/zh/docs/api/line_layer/style#dash)
+- [arc](/api/line_layer/shape#shapearc)
+- [支持渐变](/api/line_layer/style#linear)
+- [支持纹理](/api/line_layer/style#texture)
+- [支持虚线](/api/line_layer/style#dash)
 
 | style         | 类型     | 描述                               | 默认值  |
 | ------------- | -------- | ---------------------------------- | ------- |
@@ -57,10 +57,10 @@ layer.style({
 
 `shape` 为 `arc3d` 的弧线图层。
 
-- [arc3d](/zh/docs/api/line_layer/shape#shapearc3d)
-- [支持渐变](/zh/docs/api/line_layer/style#linear)
-- [支持纹理](/zh/docs/api/line_layer/style#texture)
-- [支持虚线](/zh/docs/api/line_layer/style#dash)
+- [arc3d](/api/line_layer/shape#shapearc3d)
+- [支持渐变](/api/line_layer/style#linear)
+- [支持纹理](/api/line_layer/style#texture)
+- [支持虚线](/api/line_layer/style#dash)
 
 | style         | 类型     | 描述                               | 默认值 |
 | ------------- | -------- | ---------------------------------- | ------ |
@@ -70,10 +70,10 @@ layer.style({
 
 `shape` 为大圆弧线图层。
 
-- [greatcircle](/zh/docs/api/line_layer/shape#shapegreatcircle)
-- [支持渐变](/zh/docs/api/line_layer/style#linear)
-- [支持纹理](/zh/docs/api/line_layer/style#texture)
-- [支持虚线](/zh/docs/api/line_layer/style#dash)
+- [greatcircle](/api/line_layer/shape#shapegreatcircle)
+- [支持渐变](/api/line_layer/style#linear)
+- [支持纹理](/api/line_layer/style#texture)
+- [支持虚线](/api/line_layer/style#dash)
 
 | style         | 类型     | 描述                               | 默认值 |
 | ------------- | -------- | ---------------------------------- | ------ |
@@ -83,20 +83,20 @@ layer.style({
 
 `shape` 为 `wall` 地理围栏弧线图层。
 
-- [wall](/zh/docs/api/line_layer/shape#shapewall)
-- [支持渐变](/zh/docs/api/line_layer/style#linear)
-- [支持纹理](/zh/docs/api/line_layer/style#texture)
+- [wall](/api/line_layer/shape#shapewall)
+- [支持渐变](/api/line_layer/style#linear)
+- [支持纹理](/api/line_layer/style#texture)
 
 ### simple
 
 `shape` 为 `simple` 简单线图层。
 
-- [simple](/zh/docs/api/line_layer/shape#shapesimple)
-- [支持渐变](/zh/docs/api/line_layer/style#linear)
+- [simple](/api/line_layer/shape#shapesimple)
+- [支持渐变](/api/line_layer/style#linear)
 
 ### arrow
 
-- [line](/zh/docs/api/line_layer/shape#shapeline)
+- [line](/api/line_layer/shape#shapeline)
 
 线图层支持配置箭头，箭头有额外的样式。
 

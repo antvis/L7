@@ -37,7 +37,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*fqJlQ5vJVicAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "geoLocate.ts",
+      "filename": "geolocate.ts",
       "title": {
         "zh": "GeoLocate 定位",
         "en": "GeoLocate"
@@ -45,7 +45,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*aElZR7bPFGAAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "exportImage.ts",
+      "filename": "exportimage.ts",
       "title": {
         "zh": "ExportImage 导出图片",
         "en": "ExportImage"
@@ -53,7 +53,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*at1HRbHfipUAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "mouseLocation.ts",
+      "filename": "mouselocation.ts",
       "title": {
         "zh": "MouseLocation 鼠标经纬度",
         "en": "MouseLocation"
@@ -61,7 +61,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*sJF1S4JaPx8AAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "layerSwitch.ts",
+      "filename": "layerswitch.ts",
       "title": {
         "zh": "LayerSwitch 图层显隐控制",
         "en": "LayerSwitch"
@@ -69,7 +69,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*gWO_T6xpVtwAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "mapTheme.ts",
+      "filename": "maptheme.ts",
       "title": {
         "zh": "MapTheme 地图样式切换",
         "en": "MapTheme"

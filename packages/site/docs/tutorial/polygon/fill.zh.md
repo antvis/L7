@@ -16,7 +16,7 @@ order: 0
 
 下面我们来介绍如何绘制一个简单的填充图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/polygon/fill#usa)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/polygon/fill#usa)
 
 ```javascript
 import { Scene, PolygonLayer, LineLayer, Popup } from '@antv/l7';
@@ -94,11 +94,11 @@ style({
 });
 ```
 
-[径向渐变 in](/zh/examples/polygon/fill#china_linear_in)
+[径向渐变 in](/examples/polygon/fill#china_linear_in)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*XjT5T4cT_CYAAAAAAAAAAAAAARQnAQ">
 
-[径向渐变 out](/zh/examples/polygon/fill#china_linear_out)
+[径向渐变 out](/examples/polygon/fill#china_linear_out)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Ob62Q7JDpZ4AAAAAAAAAAAAAARQnAQ">
 

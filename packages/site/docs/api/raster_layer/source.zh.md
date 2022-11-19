@@ -203,7 +203,7 @@ interface IParser {
 `format` 方法用于从传入的栅格文件二进制数据中提取波段数据。
 
 - 第一个参数是栅格文件二进制数据。
-- 第二个参数是第一个参数指定的栅格文件中应该提取的波段，方法参数是我们通过 [source](/zh/docs/api/raster/source#data-ibandsdata--ibandsdata) 参数传递的 `data` 数值。
+- 第二个参数是第一个参数指定的栅格文件中应该提取的波段，方法参数是我们通过 `source` 参数传递的 `data` 数值。
 - `format` 是一个 `async` 方法。
 
 ```js
@@ -307,11 +307,11 @@ const parser = {
 
 #### data: IBandsData[] | IBandsData
 
-绘制多通道影像的时候，需要加载[多波段数据](/zh/docs/api/raster/source#data-ibandsdata--ibandsdata)
+绘制多通道影像的时候，需要加载多波段数据
 
 #### parser
 
-使用栅格数据的使用提供必要的参数和方法， 具体使用和多波段栅格的 [parser](/zh/docs/api/raster/source#parser-1) 保持一致。
+使用栅格数据的使用提供必要的参数和方法， 具体使用和多波段栅格的 `parser` 保持一致。
 
 ##### type
 
@@ -323,7 +323,7 @@ const parser = {
 
 <description> _IFormat_ **必选** </description>
 
-绘制多通道影像的时候，使用通用的[format](/zh/docs/api/raster/source#format-irasterformat)函数。
+绘制多通道影像的时候，使用通用的 `format`函数。
 
 ##### operation: IOperation
 

@@ -16,7 +16,7 @@ order: 8
 
 下面我们来介绍如何绘制一个简单的 `Marker` 图层。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/component/marker#marker)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/component/marker#marker)
 
 ```javascript
 import { Scene, Marker } from '@antv/l7';
@@ -73,6 +73,6 @@ function getColor(v) {
 
 ### 使用文档
 
-[Marker 文档](/zh/docs/api/component/marker/marker)
+[Marker 文档](/api/component/marker/marker)
 
-[MarkerLayer 文档](/zh/docs/api/component/marker/markerLayer)
+[MarkerLayer 文档](/api/component/marker/markerlayer)

@@ -31,7 +31,7 @@ scene.addLayer(layer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*7DpqRrE0LM4AAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/zh/examples/geometry/geometry#plane)
+[在线案例](/examples/geometry/geometry#plane)
 
 设置 3D 地形模式
 
@@ -63,7 +63,7 @@ scene.addLayer(layer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*mkPtQJVN8eQAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/zh/examples/geometry/geometry#terrain)
+[在线案例](/examples/geometry/geometry#terrain)
 
 ### source
 

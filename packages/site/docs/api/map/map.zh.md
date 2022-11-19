@@ -95,10 +95,10 @@ const scene = new Scene({
 });
 ```
 
-[示例地址](/zh/examples/tutorial/map#amapInstance)
+[示例地址](/examples/tutorial/map#amapInstance)
 [代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
-[示例地址（ 2D ）](/zh/examples/tutorial/map#amapInstance2d)
+[示例地址（ 2D ）](/examples/tutorial/map#amapInstance2d)
 [代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
 #### 传入 Mapbox 地图实例
@@ -208,4 +208,4 @@ scene.on('loaded', () => {
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ag-nSrIPPEUAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](../../../examples/amapPlugin/bus#busStop)
+[在线案例](/examples/amapplugin/bus#busstop)

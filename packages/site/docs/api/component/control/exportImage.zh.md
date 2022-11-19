@@ -9,7 +9,7 @@ order: 7
 
 ## 说明
 
-[示例](/zh/examples/component/control#exportimage)
+[示例](/examples/component/control#exportimage)
 
 截图时被截取的目标仅包含：
 

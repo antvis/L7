@@ -13,7 +13,7 @@ MapTheme 会根据当前地图底图类型（如 Mapbox、GaodeMapV2），默认
 
 ## 使用
 
-[示例](/zh/examples/component/control#maptheme)
+[示例](/examples/component/control#maptheme)
 
 ```ts
 import { Scene, MapTheme } from '@antv/l7';

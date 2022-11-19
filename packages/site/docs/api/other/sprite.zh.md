@@ -32,7 +32,7 @@ let layer = new GeometryLayer()
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PEd7RasIpiEAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/zh/examples/geometry/geometry#snow)
+[在线案例](/examples/geometry/geometry#snow)
 
 ### source
 

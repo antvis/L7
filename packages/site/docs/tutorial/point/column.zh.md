@@ -16,7 +16,7 @@ order: 1
 
 下面我们来介绍如何绘制一个常见的 `3D` 柱图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/column/#clumn_shape)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/point/column/#clumn_shape)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';
@@ -81,7 +81,7 @@ layer.size('unit_price', h => {
 
 ### animate
 
-`3D` 柱图支持生长动画，通过 `animate` 方法进行设置，具体使用可以查看[详细文档](/zh/docs/api/point_layer/animate#生长动画)
+`3D` 柱图支持生长动画，通过 `animate` 方法进行设置，具体使用可以查看[详细文档](/api/point_layer/animate#生长动画)
 
 <div>
   <div style="width:60%;float:left; margin: 10px;">
@@ -91,4 +91,4 @@ layer.size('unit_price', h => {
 
 ### style
 
-`3D` 柱图有特殊的 `style` 属性，具体使用可以查找[详细文档](/zh/docs/api/point_layer/style#3d-column)
+`3D` 柱图有特殊的 `style` 属性，具体使用可以查找[详细文档](/api/point_layer/style#3d-column)

@@ -16,7 +16,7 @@ order: 9
 
 下面我们来介绍如何绘制一个简单点图层。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/simple#simple)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/point/simple#simple)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

@@ -213,8 +213,6 @@ const markerLayer = new MarkerLayer();
 scene.addMarkerLayer(markerLayer);
 ```
 
-[示例地址](/zh/examples/point/marker#markerlayer)
-
 ### removeMarkerLayer(layer: IMarkerLayer): void 移除标签图层
 
 移除标签图层。
@@ -347,7 +345,7 @@ export interface ICameraOptions {
 }
 ```
 
-[在线案例](/zh/examples/point/bubble#point)
+[在线案例](/examples/point/bubble#point)
 
 ### setZoomAndCenter(zoom: number, center: ICenter): void 设置地图缩放等级和中心点
 
@@ -587,7 +585,7 @@ type IImage = HTMLImageElement | string | File；
 scene.addImage( '02','https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg');
 ```
 
-[示例地址](/zh/examples/gallery/animate#animate_path_texture)
+[示例地址](/examples/gallery/animate#animate_path_texture)
 
 ### hasImage(id: string): boolean 判断全局图片资源
 

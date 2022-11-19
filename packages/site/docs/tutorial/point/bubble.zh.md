@@ -16,7 +16,7 @@ order: 0
 
 下面我们来介绍如何绘制一个常见的气泡图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/bubble/#point)
+- 你可以在 `L7` 官网上找到[在线案例](/examples/point/bubble/#point)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

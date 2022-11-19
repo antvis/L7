@@ -8,7 +8,7 @@ import { Choropleth } from '@antv/l7plot';
 const choropleth = new Choropleth('container', options);
 ```
 
-2. 按场景方式，[在线示例](/zh/examples/choropleth/administrative#china-map)
+2. 按场景方式，[在线示例](/examples/choropleth/administrative#china-map)
 
 ```js
 import { Scene, Mapbox } from '@antv/l7';
