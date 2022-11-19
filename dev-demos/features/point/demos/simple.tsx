@@ -18,7 +18,7 @@ export default () => {
             fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
               .then(res => res.json())
               .then(data => {
-                const pointLayer = new PointLayer({ blend: 'additive' })
+                const pointLayer = new PointLayer({ blend: 'normal' })
                   .source(data.list, {
                     parser: {
                       type: 'json',
@@ -26,11 +26,13 @@ export default () => {
                       y: 'w'
                     }
                   })
-                  .shape('simple')
-                  .size(6)
-                  .color('#ff0')
+                  .shape('circle')
+                  .active(true)
+                  .select(true)
+                  .size(10)
+                  .color('t',['#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666'])
                   .style({
-                    opacity: 0.3
+                    opacity: 1
                   });
           
                 scene.addLayer(pointLayer);

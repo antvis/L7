@@ -55,35 +55,35 @@ export default () => {
 
     scene.on('loaded', () => {
       // 绿地
-      const water_surface = new PolygonLayer({
-        sourceLayer: 'WLD',
-        zIndex: 1,
-      })
-        .source(source)
-        .select(true)
-        .active(false)
-        .shape('fill')
-        .color('NAME_CHN', (NAME_CHN) => {
-          const namestr = unicode2Char(NAME_CHN);
-          const country = data.find((c) => {
-            return c.name == namestr;
-          });
-          if (!country) {
-            return '#ffff33';
-          }
-          const qz = ((country.qz as unknown) as number) * 1;
-          if (qz > counts[0]) {
-            return color[0];
-          } else if (qz > counts[1]) {
-            return color[1];
-          } else if (qz > counts[2]) {
-            return color[2];
-          } else if (qz > counts[3]) {
-            return color[3];
-          } else {
-            return color[4];
-          }
-        });
+      // const water_surface = new PolygonLayer({
+      //   sourceLayer: 'WLD',
+      //   zIndex: 1,
+      // })
+      //   .source(source)
+      //   .select(true)
+      //   .active(false)
+      //   .shape('fill')
+      //   .color('NAME_CHN', (NAME_CHN) => {
+      //     const namestr = unicode2Char(NAME_CHN);
+      //     const country = data.find((c) => {
+      //       return c.name == namestr;
+      //     });
+      //     if (!country) {
+      //       return '#ffff33';
+      //     }
+      //     const qz = ((country.qz as unknown) as number) * 1;
+      //     if (qz > counts[0]) {
+      //       return color[0];
+      //     } else if (qz > counts[1]) {
+      //       return color[1];
+      //     } else if (qz > counts[2]) {
+      //       return color[2];
+      //     } else if (qz > counts[3]) {
+      //       return color[3];
+      //     } else {
+      //       return color[4];
+      //     }
+      //   });
 
       const line = new LineLayer({
         sourceLayer: 'WLD_L',
@@ -102,31 +102,26 @@ export default () => {
           return '#fc9272';
         });
 
-      const text = new PointLayer({
-        sourceLayer: 'WLD',
-        blend: 'normal',
-        zIndex: 10,
-      })
-        .source(source)
-        .shape('NAME_CHN', (NAME_CHN) => {
-          return unicode2Char(NAME_CHN);
-        })
-        .size(12)
-        .color('#000');
+      // const text = new PointLayer({
+      //   sourceLayer: 'WLD',
+      //   blend: 'normal',
+      //   zIndex: 10,
+      // })
+      //   .source(source)
+      //   .shape('NAME_CHN', (NAME_CHN) => {
+      //     return unicode2Char(NAME_CHN);
+      //   })
+      //   .size(12)
+      //   .color('#000');
 
-      water_surface.on('click', (e) => {
-        console.log(e);
-      });
+      // water_surface.on('click', (e) => {
+      //   console.log(e);
+      // });
 
-      scene.on('zoomend', () => {
-        console.log(water_surface);
-      });
-
-      scene.addLayer(water_surface);
-      scene.addLayer(text);
+      // scene.addLayer(water_surface);
+      // scene.addLayer(text);
       scene.addLayer(line);
-      const debugerLayer = new TileDebugLayer();
-      scene.addLayer(debugerLayer);
+      // scene.addLayer(debugerLayer);
     });
   }, []);
   return (

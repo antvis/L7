@@ -90,7 +90,7 @@ export default class LineModel extends BaseModel {
       useLinearColor = 1;
     }
 
-    if (!this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
+    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
       const { data, width, height } = this.calDataFrame(
@@ -383,19 +383,15 @@ export default class LineModel extends BaseModel {
   }
 
   private updateTexture = () => {
-    if(this.texture) {
+
+    const { createTexture2D } = this.rendererService;
+    if (this.texture) {
+      this.texture.update({
+        data: this.iconService.getCanvas(),
+      });
+      this.layer.render();
       return;
     }
-    console.log(this.texture)
-    const { createTexture2D } = this.rendererService;
-    // if (this.texture) {
-    //   this.texture.update({
-    //     data: this.iconService.getCanvas(),
-    //   });
-    //   this.layer.render();
-    //   return;
-    // }
-    console.log('update texture')
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
       mag: gl.NEAREST,
