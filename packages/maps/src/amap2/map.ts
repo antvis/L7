@@ -395,7 +395,6 @@ export default class AMapService extends AMapBaseService {
     } = this.map.customCoords.getCameraParams();
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
-
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     if (this.cameraChangedCallback) {
