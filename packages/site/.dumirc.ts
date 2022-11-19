@@ -44,6 +44,7 @@ export default defineConfig({
         },
       ],
     },
+    msfu:true,
     features: [
       {
         icon:
@@ -115,8 +116,8 @@ export default defineConfig({
     news: [
       {
         type: {
-          zh: '论坛',
-          en: 'Forum',
+          zh: '发布',
+          en: 'publish',
         },
         title: {
           zh: 'L7 从矢量到遥感，从引擎到平台，探索地理分析的远方',
@@ -153,7 +154,7 @@ export default defineConfig({
     ],
     cases: [
       {
-        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*ZdZcS5MKuAMAAAAAAAAAAAAADmJ7AQ/original',
+        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-kafQrA1ky4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
         title: {
           zh: 'LarkMap 空间数据可视分析组件库',
           en: 'LarkMap ',
@@ -177,7 +178,7 @@ export default defineConfig({
           en: 'The next generation geospatial data visual analysis platform can be configured with rich geographic visualization effects to provide insight analysis, map application construction, and open expansion capabilities',
         },
         link: `https://larkmap.antv.antgroup.com/`,
-        image: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*0fW-SqO2y18AAAAAAAAAAAAADmJ7AQ/original',
+        image: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Yss3QZJcCsMAAAAAAAAAAAAADmJ7AQ/fmt.webp',
         isAppLogo: true,
       },
     ],
@@ -341,7 +342,7 @@ export default defineConfig({
         order: 7,
       },
       {
-        slug: 'api/raster',
+        slug: 'api/raster_layer',
         title: {
           zh: '栅格图层 RasterLayer',
           en: 'RasterLayer',
@@ -349,10 +350,10 @@ export default defineConfig({
         order: 8,
       },
       {
-        slug: 'api/vectortile',
+        slug: 'api/tile',
         title: {
-          zh: '矢量瓦片 TileLayer',
-          en: 'VectorTile',
+          zh: '瓦片图层 TileLayer',
+          en: 'Tile',
         },
         order: 8,
       },   
