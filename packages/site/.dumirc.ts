@@ -154,7 +154,7 @@ export default defineConfig({
     ],
     cases: [
       {
-        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-kafQrA1ky4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
+        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*ZdZcS5MKuAMAAAAAAAAAAAAADmJ7AQ/original',
         title: {
           zh: 'LarkMap 空间数据可视分析组件库',
           en: 'LarkMap ',
