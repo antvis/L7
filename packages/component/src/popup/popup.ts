@@ -391,10 +391,10 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected updateCloseOnClick(onlyClear?: boolean) {
     const mapsService = this.mapsService;
     if (mapsService) {
-      mapsService.off('click', this.onCloseButtonClick);
+      mapsService?.off('click', this.onCloseButtonClick);
       if (this.popupOption.closeOnClick && !onlyClear) {
         requestAnimationFrame(() => {
-          mapsService.on('click', this.onCloseButtonClick);
+          mapsService?.on('click', this.onCloseButtonClick);
         });
       }
     }
@@ -403,20 +403,16 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected updateCloseOnEsc(onlyClear?: boolean) {
     window.removeEventListener('keydown', this.onKeyDown);
     if (this.popupOption.closeOnEsc && !onlyClear) {
-      requestAnimationFrame(() => {
-        window.addEventListener('keydown', this.onKeyDown);
-      });
+      window.addEventListener('keydown', this.onKeyDown);
     }
   }
 
   protected updateFollowCursor(onlyClear?: boolean) {
     const container = this.mapsService?.getContainer();
     if (container) {
-      container.removeEventListener('mousemove', this.onMouseMove);
+      container?.removeEventListener('mousemove', this.onMouseMove);
       if (this.popupOption.followCursor && !onlyClear) {
-        requestAnimationFrame(() => {
-          container.addEventListener('mousemove', this.onMouseMove);
-        });
+        container?.addEventListener('mousemove', this.onMouseMove);
       }
     }
   }
