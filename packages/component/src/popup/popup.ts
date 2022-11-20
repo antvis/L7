@@ -460,7 +460,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
       // this.closeButton.type = 'button';
       closeButton.setAttribute('aria-label', 'Close popup');
-      closeButton.addEventListener('click', ()=>{
+      closeButton.addEventListener('click', () => {
         this.hide();
       });
 
@@ -480,7 +480,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     if (e.stopPropagation) {
       e.stopPropagation();
     }
-    this.hide()
+    this.hide();
   };
 
   protected update = () => {
