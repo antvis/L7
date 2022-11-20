@@ -82,9 +82,10 @@ export default class ImageModel extends BaseModel {
   }
 
   public async initModels():Promise<IModel[]>  {
-    this.registerBuiltinAttributes();
-    this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
+    // this.registerBuiltinAttributes();
+    this.updateTexture();
+
     return await this.buildModels();
   }
 

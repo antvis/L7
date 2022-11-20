@@ -37,7 +37,6 @@ export default () => {
         return item;
       });
       const imageLayer = new PointLayer({
-        blend: 'normal',
       })
         .source(newData, {
           parser: {

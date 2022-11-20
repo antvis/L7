@@ -132,9 +132,8 @@ export default class FillImageModel extends BaseModel {
   }
 
   public async initModels():Promise<IModel[]>  {
-    this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
-
+    this.updateTexture();
     const {
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
