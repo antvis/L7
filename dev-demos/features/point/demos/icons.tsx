@@ -55,23 +55,21 @@ export default () => {
         console.log('mousedown', e);
       });
       const popup = new Popup({
-        title: '自定义标题',
-        html: '<p>Popup 示例的自定义内容</p>',
-        lngLat: {
-          lng: 120.154672,
-          lat: 30.241095,
-        },
       });
     
       scene.addPopup(popup);
       imageLayer.on('click', (e) => {
+        console.log(e)
         const {lng,lat} = e.lngLat
 
-        popup.setLngLat({
-          lng: lng,
-          lat: lat,
+        popup.setOptions({
+          title: e.feature.name,
+          html:e.feature.name,
+          lngLat: {
+            lng,
+            lat,
+          },
         });
-        scene.addPopup(popup);
       });
           
     }, []);
