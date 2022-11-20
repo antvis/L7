@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PointLayer, Scene } from '@antv/l7';
+import { PointLayer, Scene,Popup } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -54,8 +54,24 @@ export default () => {
       imageLayer.on('mousedown', (e) => {
         console.log('mousedown', e);
       });
+      const popup = new Popup({
+        title: '自定义标题',
+        html: '<p>Popup 示例的自定义内容</p>',
+        lngLat: {
+          lng: 120.154672,
+          lat: 30.241095,
+        },
+      });
+    
+      scene.addPopup(popup);
       imageLayer.on('click', (e) => {
-        console.log('click', e);
+        const {lng,lat} = e.lngLat
+
+        popup.setLngLat({
+          lng: lng,
+          lat: lat,
+        });
+        scene.addPopup(popup);
       });
           
     }, []);

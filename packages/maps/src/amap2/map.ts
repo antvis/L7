@@ -150,7 +150,7 @@ export default class AMapService extends AMapBaseService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // tslint:disable-next-line:variable-name no-empty
-  public updateView(_viewOption: Partial<IMapCamera>): void {}
+  public updateView(_viewOption: Partial<IMapCamera>): void { }
 
   public getOverlayContainer(): HTMLElement | undefined {
     return undefined;
@@ -289,7 +289,11 @@ export default class AMapService extends AMapBaseService {
       // 在使用 map.customCoords 的时候必须使用
       const mapInitCenter = map.getCenter();
       // @ts-ignore
-      map.customCoords.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
+
+      // @ts-ignore
+      this.map.customCoords?.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
+
+
       // @ts-ignore
       this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
       // 监听地图相机事件

@@ -20,6 +20,13 @@ const source = new Source(data, option);
   - parser 数据解析配置
   - transforms 数据处理配置
 
+## data
+
+不同 parser 类型对应不同 data 类型
+
+- 瓦片图层 data 为 url 模板，支持 TMS、WMS、WMTS 数据服务
+- 非瓦片图层 data 为数据对象
+
 ## option
 
 `source` 通过 `option` 来描述如果处理数据， 其中主要包括 `parser` 和 `transforms`。

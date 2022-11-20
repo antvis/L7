@@ -130,7 +130,7 @@ const Demo: FunctionComponent = () => {
             fields: ['name'],
           },
         ],
-        trigger: 'hover',
+        trigger: 'mousemove',
       });
       newScene.addPopup(newPopup);
       setPopup(newPopup);

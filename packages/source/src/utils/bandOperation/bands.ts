@@ -96,30 +96,6 @@ function processSchemaOperation(operation: SchemaOperationType,bandsData: IRaste
     return [r, g, b];
   }
 
-  /**
-   * 将波段数据进行合并操作（彩色多通道）
-   * @param bandsData 
-   */
-  function combineRGBChannels(bandsData: Uint8Array[]) {
-    const channelR = bandsData[0];
-    const channelG = bandsData[1];
-    const channelB = bandsData[2];
-    const data = [];
-    let channelRMax = -Infinity;
-    let channelGMax = -Infinity;
-    let channelBMax = -Infinity;
-    for (let i = 0; i < channelR.length; i++) {
-      data.push(channelR[i]); channelRMax = Math.max(channelRMax, channelR[i]);
-      data.push((channelG)[i]); channelGMax = Math.max(channelGMax, channelR[i]);
-      data.push((channelB)[i]); channelBMax = Math.max(channelBMax, channelR[i]);
-    }
-    return {
-      rasterData:data,
-      channelRMax,
-      channelGMax,
-      channelBMax
-    };
-  }
 
   /**
    * 处理每个请求得到的栅格文件数据
