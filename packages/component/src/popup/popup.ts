@@ -361,7 +361,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
       closeButton: true,
-      closeOnClick: true,
+      closeOnClick: false,
       maxWidth: '240px',
       offsets: [0, 0],
       anchor: anchorType.BOTTOM,

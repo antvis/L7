@@ -57,13 +57,13 @@ scene.on('loaded', () => {
 
 ## 配置
 
-| 名称               | 说明                                                                     | 类型                                   | 默认值     |
-| ------------------ | ------------------------------------------------------------------------ | -------------------------------------- | ---------- |
+| 名称               | 说明                                                                     | 类型                                   | 默认值        |
+| ------------------ | ------------------------------------------------------------------------ | -------------------------------------- |------------|
 | lngLat             | Popup 所在的经纬度                                                       | `{ lng: number; lat: number }`         | -          |
 | text               | Popup 内容展示的文本内容                                                 | `string`                               | -          |
 | html               | Popup 内容展示的自定义 HTML，可以传 HTML 字符串，也可以传 DOM 对象或数组 | `string | HTMLElement | HTMLElement[]` | -          |
 | title              | Popup 标题展示的自定义 HTML，可以传 HTML 字符串，也可以传 DOM 对象或数组 | `string | HTMLElement | HTMLElement[]` | -          |
-| closeOnClick       | 点击地图区域时，是否关闭当前 Popup                                       | `boolean`                              | `true`     |
+| closeOnClick       | 点击地图区域时，是否关闭当前 Popup                                       | `boolean`                              | `false`    |
 | closeOnEsc         | 点击 Esc 键时，是否关闭当前 Popup                                        | `boolean`                              | `false`    |
 | maxWidth           | Popup 的最大宽度                                                         | `string`                               | `240px`    |
 | anchor             | Popup 箭头位置，可以控制 Popup 相对于经纬度点的展示位置                  | [AnchorType](#anchortype)              | `'bottom'` |
