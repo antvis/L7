@@ -289,7 +289,10 @@ export default class AMapService extends AMapBaseService {
       // 在使用 map.customCoords 的时候必须使用
       const mapInitCenter = map.getCenter();
       // @ts-ignore
-      map.customCoords.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
+
+      // @ts-ignore
+      this.map.customCoords?.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
+
       // @ts-ignore
       this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
       // 监听地图相机事件

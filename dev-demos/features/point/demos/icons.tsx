@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PointLayer, Scene } from '@antv/l7';
+import { PointLayer, Scene,Popup } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -37,7 +37,6 @@ export default () => {
         return item;
       });
       const imageLayer = new PointLayer({
-        blend: 'normal',
       })
         .source(newData, {
           parser: {
@@ -55,8 +54,22 @@ export default () => {
       imageLayer.on('mousedown', (e) => {
         console.log('mousedown', e);
       });
+      const popup = new Popup({
+      });
+    
+      scene.addPopup(popup);
       imageLayer.on('click', (e) => {
-        console.log('click', e);
+        console.log(e)
+        const {lng,lat} = e.lngLat
+
+        popup.setOptions({
+          title: e.feature.name,
+          html:e.feature.name,
+          lngLat: {
+            lng,
+            lat,
+          },
+        });
       });
           
     }, []);

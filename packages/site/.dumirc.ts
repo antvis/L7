@@ -302,6 +302,14 @@ export default defineConfig({
         order: 3,
       },
       {
+        slug: 'api/component',
+        title: {
+          zh: '组件 Component',
+          en: 'Component',
+        },
+        order: 3,
+      },
+      {
         slug: 'api/base_layer',
         title: {
           zh: '图层基类 BaseLayer',
@@ -380,14 +388,6 @@ export default defineConfig({
           en: 'Other Layers',
         },
         order: 11,
-      },
-      {
-        slug: 'api/component',
-        title: {
-          zh: '组件 Component',
-          en: 'Component',
-        },
-        order: 12,
       },
       {
         slug: 'api/component/control',

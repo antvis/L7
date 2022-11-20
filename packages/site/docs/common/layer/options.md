@@ -23,8 +23,6 @@ scene.getLayerByName(name);
 
 L7 采用队列渲染的机制，所有的图层在内部保存在一个数组中，每一帧的渲染会将图层数组按照 zIndex 的值进行排序，然后遍历数组，将符合条件的图层渲染到场景中
 
-<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*a5xKRZmhoogAAAAAAAAAAAAAARQnAQ'>
-
 ### minZoom
 
 <description> _number_ **optional** _default:_ Mapbox （0-24） 高德 （2-19)</description>

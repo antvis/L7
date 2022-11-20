@@ -122,7 +122,7 @@ export default abstract class AMapBaseService
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handler);
     } else {
-      this.map.on(AMapEventMap[type] || type, handler);
+      this.map.off(AMapEventMap[type] || type, handler);
     }
   }
 

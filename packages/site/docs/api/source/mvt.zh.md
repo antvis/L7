@@ -1,5 +1,5 @@
 ---
-title: MVT
+title: MVTTile 矢量瓦片
 order: 6
 ---
 
@@ -9,12 +9,34 @@ L7 加载矢量瓦片地图的时候需要在 `source` 中对瓦片服务进行�
 
 ## parser
 
-- type string 固定值为 `mvt`
-- tileSize number 请求瓦片的大小
-- zoomOffset number 瓦片请求瓦片层级的偏移
-- maxZoom number 瓦片加载最大 `zoom`
-- minZoom number 瓦片加载最小 `zoom`
-- extent [number, number, number, number] 地图显示范围
+### type
+
+<description> _string_ **必选** _default:_ mvt</description>
+
+### tileSize `number`
+
+<description> _number_ **可选** _default:_ 256</description>
+请求瓦片的大小
+
+### zoomOffset
+
+<description> number **可选** _default:_ 0</description>
+瓦片请求瓦片层级的偏移
+
+### maxZoom
+
+<description> _number_ **可选** _default:_ 0</description>
+瓦片最大缩放等级 `20`
+
+### minZoom
+
+<description> _number_ **可选** _default:_ 2-</description>
+瓦片最小缩放等
+
+### extent `[number, number, number, number]`
+
+<description> _number[]_ **可选** 不限制:\_ </description>
+地图显示范围
 
 ```javascript
 const tileSource = new Source(

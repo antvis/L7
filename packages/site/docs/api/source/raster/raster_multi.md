@@ -1,64 +1,73 @@
----
-title: Source
-order: 2
----
+### data
 
-<embed src="@/docs/common/style.md"></embed>
+多波段支持两种数据方式，栅格数据坐标系只支持 3857 投影的栅格
 
-栅格图层接受的并不是矢量的地理数据（GeoJSON），而是栅格数据。同时支持传入多种数据格式，入 `tiff`、`lerc` 等。
+- 单文件多波段
+- 多个单波段文件组成多波段
 
-```js
-const source = new Source(data, {
-    parser: {...},
-});
-```
+#### 单文件多波段
 
-### 加载未解析的栅格数据
+data 为未解析过 tiff arraybuffer 数据，在 parser 中 通过 format 进行数据标准化
 
-我们可以直接将请求到的栅格文件的二进制数据直接传递给栅格图层使用，此时我们不仅仅可以选择加载多波段的数据，同时还可以对栅格数据进行简单的数学计算。
-
-- 对多（单）波段的数据进行数学运算。
-- 绘制彩色遥感影像（真、假彩色）。
-- 需要提供解析栅格数据的标准方法。
-
-```js
-// 对单波段数据进行运算
-async function getTiffData() {
-  const response = await fetch(
-    'https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat',
-  );
+```ts
+  const url1 = 'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
+  async function getTiffData(url: string) {
+  const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
   return arrayBuffer;
+  }
 }
-const tiffdata = await getTiffData();
-const layer = new RasterLayer({});
 layer.source(
-  [
+    [
     {
-      data: tiffdata,
-      bands: [0],
+        data: tiffdata,
+        bands: [6, 5, 2].map((v) => v - 1),
     },
-  ],
-  {
+    ],
+    {
     parser: {
-      type: 'raster',
-      format: async (data, bands) => {
+        type: 'rasterRgb',
+        format: async (data, bands) => {
         const tiff = await GeoTIFF.fromArrayBuffer(data);
-        const imageCount = await tiff.getImageCount();
-        const image = await tiff.getImage(bands[0]);
-        const width = image.getWidth();
-        const height = image.getHeight();
-        const values = await image.readRasters();
-        return { rasterData: values[0], width, height };
-      },
-      operation: ['*', ['band', 0], 0.5],
-      extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+        const image1 = await tiff.getImage();
+        const value = await image1.readRasters();
+        return bands.map((band) => {
+            return {
+            rasterData: value[band],
+            width: value.width,
+            height: value.height,
+            };
+        });
+        },
+        operation: {
+        type: 'rgb',
+        },
+        extent: [
+        130.39565357746957, 46.905730725742366, 130.73364094187343,
+        47.10217234153133,
+        ],
     },
-  },
-);
+    },
+)
+
 ```
 
-#### data: IBandsData[] | IBandsData
+### parser
+
+- type: raster
+- extent: 栅格的经纬度范围 [minlng, minlat,maxLng, maxLat]
+
+
+根据栅格数据的经纬度范围，将其添加到地图上。
+
+```javascript
+layer.source(rasterData, {
+  parser: {
+    type: 'raster',
+    extent: [121.168, 30.2828, 121.384, 30.4219],
+  },
+});
+```
 
 用户可以直接传入栅格文件的二进制数据。
 

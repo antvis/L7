@@ -32,7 +32,6 @@ const layer = new RasterLayer({})
     },
   })
   .style({
-    heightRatio: 100,
     opacity: 0.8,
     domain: [0, 2000],
     rampColors: {

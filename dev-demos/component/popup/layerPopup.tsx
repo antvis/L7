@@ -49,6 +49,7 @@ const Demo: FunctionComponent = () => {
           ]),
         )
         .color('#ffffff')
+        .shape('circle')
         .size(10);
 
       const polygonLayer = new PolygonLayer({
@@ -76,8 +77,7 @@ const Demo: FunctionComponent = () => {
           ]),
         )
         .color('#ff0000')
-        .size(10)
-        .shape('circle');
+        .shape('fill');
 
       const lineString = new LineLayer({
         name: 'lineLayer',
@@ -130,8 +130,18 @@ const Demo: FunctionComponent = () => {
             fields: ['name'],
           },
         ],
-        trigger: 'hover',
+        trigger: 'mousemove',
       });
+      pointLayer.on('mousemove', (e) => {
+        console.log('point mousemove', e);
+      });
+      polygonLayer.on('mousemove', (e) => {
+        console.log('polygon mousemove', e);
+      });
+      lineString.on('mousemove', (e) => {
+        console.log('line mousemove', e);
+      });
+
       newScene.addPopup(newPopup);
       setPopup(newPopup);
       setScene(newScene);

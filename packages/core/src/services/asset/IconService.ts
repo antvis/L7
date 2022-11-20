@@ -41,15 +41,14 @@ export default class IconService extends EventEmitter implements IIconService {
     this.loadingImageCount++;
     if (this.hasImage(id)) {
       console.warn('Image Id already exists');
+    } else {
+      this.iconData.push({
+        id,
+        size: imageSize,
+      });
     }
-    this.iconData.push({
-      id,
-      size: imageSize,
-    });
-    this.updateIconMap();
+     this.updateIconMap();// 先存储 ID，
     imagedata = await this.loadImage(image) as HTMLImageElement;
-    // imagedata = this.loadImage(image) 
-    // imagedata = img as HTMLImageElement;
     const iconImage = this.iconData.find((icon: IIcon) => {
       return icon.id === id;
     });
@@ -61,7 +60,7 @@ export default class IconService extends EventEmitter implements IIconService {
     this.update();
 
   }
-
+  
   /**
    * 适配小程序
    * @param id

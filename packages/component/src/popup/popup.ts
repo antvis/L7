@@ -119,7 +119,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
     this.update();
-
+    // 临时关闭
     this.updateCloseOnClick();
     this.updateCloseOnEsc();
     this.updateFollowCursor();
@@ -216,6 +216,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     if (this.checkUpdateOption(option, ['lngLat']) && option.lngLat) {
       this.setLnglat(option.lngLat);
+      this.show();
     }
     return this;
   }
@@ -459,7 +460,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
       // this.closeButton.type = 'button';
       closeButton.setAttribute('aria-label', 'Close popup');
-      closeButton.addEventListener('click', this.onCloseButtonClick);
+      closeButton.addEventListener('click', () => {
+        this.hide();
+      });
 
       this.closeButton = closeButton;
     } else {
@@ -477,7 +480,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     if (e.stopPropagation) {
       e.stopPropagation();
     }
-    this.remove();
+    this.hide();
   };
 
   protected update = () => {
