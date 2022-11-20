@@ -391,10 +391,10 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected updateCloseOnClick(onlyClear?: boolean) {
     const mapsService = this.mapsService;
     if (mapsService) {
-      this.mapsService.off('click', this.onCloseButtonClick);
+      mapsService.off('click', this.onCloseButtonClick);
       if (this.popupOption.closeOnClick && !onlyClear) {
         requestAnimationFrame(() => {
-          this.mapsService.on('click', this.onCloseButtonClick);
+          mapsService.on('click', this.onCloseButtonClick);
         });
       }
     }
