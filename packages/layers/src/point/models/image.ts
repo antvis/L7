@@ -82,6 +82,7 @@ export default class ImageModel extends BaseModel {
   }
 
   public async initModels():Promise<IModel[]>  {
+    this.iconService.off('imageUpdate', this.updateTexture);
     this.iconService.on('imageUpdate', this.updateTexture);
     // this.registerBuiltinAttributes();
     this.updateTexture();
@@ -174,7 +175,11 @@ export default class ImageModel extends BaseModel {
         mipmap: true,
       });
       // 更新完纹理后在更新的图层的时候需要更新所有的图层
-      this.layerService.throttleRenderLayers();
+      // this.layer.layerModelNeedUpdate = true;
+      setTimeout(()=>{ // 延迟渲染
+        this.layerService.throttleRenderLayers();
+      })
+      
       return;
     }
     this.texture = createTexture2D({
