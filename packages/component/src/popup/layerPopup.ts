@@ -86,7 +86,6 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       },
       offsets: [0, 10],
       closeButton: false,
-      closeOnClick: false,
       autoClose: false,
       closeOnEsc: false,
     };
