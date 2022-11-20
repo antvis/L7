@@ -1,7 +1,7 @@
 // @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
   
 export default () => {
@@ -40,9 +40,9 @@ export default () => {
             })
             .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
             .style({
-              opacity: 1.0,
+              opacity:0.5
             });
-  
+          console.log(pointLayer);
           scene.addLayer(pointLayer);
         });
           

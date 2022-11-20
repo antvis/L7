@@ -48,31 +48,38 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.renderLayers();
   }, 16);
 
-
+  public needPick(type:string): boolean {
+   return this.layerList.some((layer=>layer.needPick(type)))
+  }
   public add(layer: ILayer) {
-    if (this.sceneInited) {
-      layer.init();
-    }
-
     this.layers.push(layer);
-    this.updateLayerRenderList();
-    this.emit('layerChange', this.layers);
+    if (this.sceneInited) {
+      layer.init().then(() => {
+        this.updateLayerRenderList();
+        this.renderLayers();
+      });
+    } 
+   
+  
   }
 
   public addMask(mask: ILayer) {
     if (this.sceneInited) {
-      mask.init();
+      mask.init().then(() => {
+        this.renderLayers();
+      });
     }
   }
 
-  public initLayers() {
+  public async initLayers() {
     this.sceneInited = true;
-    this.layers.forEach((layer) => {
-      if (!layer.inited) {
-        layer.init();
+
+    this.layers.forEach(async (layer) => {
+      if (!layer.startInit) {
+        await layer.init();
+        this.updateLayerRenderList();
       }
     });
-    this.updateLayerRenderList();
   }
 
   public getSceneInited() {
@@ -93,16 +100,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
 
   public getLayerByName(name: string): ILayer | undefined {
     return this.layers.find((layer) => layer.name === name);
-  }
-
-  public cleanRemove(layer: ILayer, refresh = true) {
-    const layerIndex = this.layers.indexOf(layer);
-    if (layerIndex > -1) {
-      this.layers.splice(layerIndex, 1);
-    }
-    if (refresh) {
-      this.throttleRenderLayers();
-    }
   }
 
   public remove(layer: ILayer, parentLayer?: ILayer): void {
@@ -126,6 +123,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
 
   public removeAllLayers() {
     this.destroy();
+    this.renderLayers();
   }
 
   public setEnableRender(flag: boolean) {
@@ -138,35 +136,65 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     }
     this.alreadyInRendering = true;
     this.clear();
-
     for (const layer of this.layerList) {
-      layer.hooks.beforeRenderData.call();
-      layer.hooks.beforeRender.call();
-
-      if (layer.masks.length > 0) {
+      if (layer.masks.filter((m)=>m.inited).length > 0) {
         // 清除上一次的模版缓存
         this.renderService.clear({
           stencil: 0,
           depth: 1,
           framebuffer: null,
         });
-        layer.masks.map((m: ILayer) => {
-          m.hooks.beforeRenderData.call();
-          m.hooks.beforeRender.call();
+        layer.masks.map(async (m: ILayer) => {
           m.render();
-          m.hooks.afterRender.call();
-        });
+        })
       }
 
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
       } else {
-        layer.render();
+        await layer.render();
+   
       }
-      layer.hooks.afterRender.call();
     }
     this.alreadyInRendering = false;
+  }
+  
+  public renderMask(masks:ILayer[]) {
+    masks.filter(m => m.inited)
+    .map(m =>{
+      m.render();
+    })
+  }
+
+  public async beforeRenderData(layer: ILayer) {
+    const flag = await layer.hooks.beforeRenderData.promise();
+    if(flag) {
+      this.renderLayers();
+    }
+    
+  }
+
+  async renderLayer(layer: ILayer){
+
+    if (layer.masks.filter((m)=>m.inited).length > 0) {
+      layer.masks.map(mask =>{
+          this.renderService.clear({
+            stencil: 0,
+            depth: 1,
+            framebuffer: null,
+          });
+          mask.render();  
+      })
+
+    }
+    if (layer.getLayerConfig().enableMultiPassRenderer) {
+      // multiPassRender 不是同步渲染完成的
+      await layer.renderMultiPass();
+    } else {
+      await layer.render();
+    }
+
   }
 
   public updateLayerRenderList() {
@@ -182,6 +210,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
       .forEach((layer) => {
         this.layerList.push(layer);
       });
+
   }
 
   public destroy() {
@@ -190,7 +219,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     });
     this.layers = [];
     this.layerList = [];
-    this.renderLayers();
     this.emit('layerChange', this.layers);
   }
 
@@ -224,6 +252,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   public getShaderPickStat() {
     return this.shaderPicking;
   }
+  
 
   public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
@@ -250,4 +279,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   private stopRender() {
     $window.cancelAnimationFrame(this.layerRenderID);
   }
+
+
 }

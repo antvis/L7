@@ -13,7 +13,7 @@ order: 8
 
 ## 使用
 
-[示例](/zh/examples/component/control#layerSwitch)
+[示例](/examples/component/control#layerswitch)
 
 ```ts
 import { Scene, LayerSwitch } from '@antv/l7';
@@ -41,20 +41,20 @@ scene.on('loaded', () => {
 | ------ | ------------------------------------------------------------------------------------------ | ---------------------- |
 | layers | 需要被控制的 `layer` 数组，支持传入图层示例或者图层 id，不传则默认读取当前 L7 中所有的图层 | `Array<ILayer|string>` |
 
-`markdown:docs/common/control/popper-api.md`
+<embed src="@/docs/common/control/popper-api.md"></embed>
 
-`markdown:docs/common/control/btn-api.md`
+<embed src="@/docs/common/control/btn-api.md"></embed>
 
-`markdown:docs/common/control/api.md`
+<embed src="@/docs/common/control/api.md"></embed>
 
 ## 方法
 
-`markdown:docs/common/control/method.md`
+<embed src="@/docs/common/control/method.md"></embed>
 
 ## 事件
 
-`markdown:docs/common/control/event.md`
+<embed src="@/docs/common/control/event.md"></embed>
 
-`markdown:docs/common/control/popper-event.md`
+<embed src="@/docs/common/control/popper-event.md"></embed>
 
-`markdown:docs/common/control/select-event.md`
+<embed src="@/docs/common/control/select-event.md"></embed>

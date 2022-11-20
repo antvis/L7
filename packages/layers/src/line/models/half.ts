@@ -84,15 +84,15 @@ export default class LineModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
   public clearModels() {
     this.dataTexture?.destroy();
   }
 
-  public async buildModels(callbackModel: (models: IModel[]) => void) {
+  public async buildModels(): Promise<IModel[]>  {
     const {
       mask = false,
       maskInside = true,
@@ -101,7 +101,7 @@ export default class LineModel extends BaseModel {
     const { frag, vert } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'lineHalf',
         vertexShader: vert,
@@ -111,13 +111,7 @@ export default class LineModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   /**

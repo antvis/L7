@@ -16,7 +16,7 @@ window.mapboxgl = mapboxgl;
 
 let mapdivCount = 0;
 const MAPBOX_API_KEY =
-  'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2s5OXVzdHlzMDVneDNscDVjdzVmeXl0dyJ9.81SQ5qaJS0xExYLbDZAGpQ';
+  '101MlGsZ2AmmA&access_token=pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2p0MG01MXRqMW45cjQzb2R6b2ptc3J4MSJ9.zA2W0IkI0c6KaAhJfk9bWg';
 /**
  * AMapService
  */
@@ -65,10 +65,8 @@ export default class MapboxService extends BaseMapService<
     scale: [number, number, number] = [1, 1, 1],
     origin: IMercator = { x: 0, y: 0, z: 0 },
   ): number[] {
-    const modelAsMercatorCoordinate = window.mapboxgl.MercatorCoordinate.fromLngLat(
-      lnglat,
-      altitude,
-    );
+    const modelAsMercatorCoordinate =
+      window.mapboxgl.MercatorCoordinate.fromLngLat(lnglat, altitude);
     // @ts-ignore
     const meters = modelAsMercatorCoordinate.meterInMercatorCoordinateUnits();
     const modelMatrix = mat4.create();
@@ -93,7 +91,7 @@ export default class MapboxService extends BaseMapService<
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
     mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
 
-    return (modelMatrix as unknown) as number[];
+    return modelMatrix as unknown as number[];
   }
 
   public async init(): Promise<void> {
@@ -150,7 +148,9 @@ export default class MapboxService extends BaseMapService<
         ...rest,
       });
     }
-    this.map.on('load', this.handleCameraChanged);
+    this.map.on('load', () => {
+      this.handleCameraChanged();
+    });
     this.map.on('move', this.handleCameraChanged);
 
     // 不同于高德地图，需要手动触发首次渲染

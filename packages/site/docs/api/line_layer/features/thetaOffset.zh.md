@@ -22,4 +22,4 @@ const layer = new LineLayer({})
 ```
 <img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*qRFaR7Ko274AAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](../../../examples/gallery/animate#route_line)
+[在线案例](/examples/gallery/animate#route_line)

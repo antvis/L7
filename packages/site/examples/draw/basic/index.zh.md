@@ -1,4 +1,4 @@
 ---
-title: 绘制组件
+title: 地图绘制
 order: 3
 ---

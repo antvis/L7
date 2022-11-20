@@ -73,7 +73,7 @@ export default class FontService extends EventEmitter implements IFontService {
 
   public get mapping(): IFontMapping {
     const data = this.cache.get(this.key);
-    return data && data.mapping;
+    return data && data.mapping || {};
   }
   public fontAtlas: IFontAtlas;
 
@@ -220,7 +220,7 @@ export default class FontService extends EventEmitter implements IFontService {
       canvas = $window.document.createElement('canvas');
       canvas.width = MAX_CANVAS_WIDTH;
     }
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
     setTextStyle(ctx, fontFamily, fontSize, fontWeight);
 
     // 1. build mapping

@@ -3,4 +3,4 @@ title: WindLayer
 order: 7
 ---
 
-`markdown:docs/api/wind.zh.md`
+<embed src="@/docs/api/experiment/wind.zh.md"></embed>

@@ -36,16 +36,13 @@ function getFeatureID(feature: Feature<Geometries, Properties>, key?: string) {
   if (key === undefined) {
     return null;
   }
-  if (key === 'id' && feature.id) {
-    // 标准 mapbox vector feature
-    return feature.id;
-  }
   // @ts-ignore
-  if (feature[key]) {
+  if (feature.properties[key]) {
     // 单独指定要素
     // @ts-ignore
-    return feature[key];
+    return feature.properties[key];
   }
+
   if (feature.properties && feature.properties[key]) {
     // 根据 properties 要素的属性进行编码
     return djb2hash(feature.properties[key] + '') % 1000019;
@@ -59,7 +56,6 @@ export default function geoJSON(
 ): IParserData {
   const resultData: IParseDataItem[] = [];
   const featureKeys: IFeatureKey = {};
-
   if (!data.features) {
     data.features = [];
     return {
@@ -95,6 +91,7 @@ export default function geoJSON(
       if (featureId === null) {
         featureId = featureIndex;
       }
+
       const sortedID = featureId;
 
       const coord = getCoords(currentFeature);

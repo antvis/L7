@@ -1,1 +1,1 @@
-`markdown:docs/api/point_layer/dot.en.md`
+<embed src="@/docs/api/point_layer/dot.en.md"></embed>

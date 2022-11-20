@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.10.6",
+  "version": "2.10.15",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -24,8 +24,8 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/async-hook": "^2.2.2",
-    "@antv/l7-utils": "2.10.6",
+    "@antv/async-hook": "^2.2.9",
+    "@antv/l7-utils": "2.10.15",
     "@babel/runtime": "^7.7.7",
     "@turf/helpers": "^6.1.4",
     "ajv": "^6.10.2",
@@ -34,7 +34,7 @@
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
-    "l7-tiny-sdf": "^0.0.3",
+    "l7-tiny-sdf": "^0.0.4",
     "l7hammerjs": "^0.0.7",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",

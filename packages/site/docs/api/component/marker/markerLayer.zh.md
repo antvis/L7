@@ -3,7 +3,7 @@ title: Marker 图层
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 MarkerLayer 是 Marker 的升级版，Marker 是独立的地图标注，MarkerLayer 则是统一管理大量的 Marker 数据。
 
@@ -72,7 +72,7 @@ markerLayer.addMarker(marker);
 
 如果聚合参数设置统计配置项 `field| method`需要为 Marker 添加属性信息
 
-通过 Marker 的 extData[配置项](./marker#option)设置 Marker 属性信息
+通过 Marker 的 extData[配置项](/api/compnent/marker#option)设置 Marker 属性信息
 
 ```javascript
 const marker = new Marker({
@@ -117,6 +117,6 @@ scene.removeMarkerLayer(layer);
 
 ### demo 地址
 
-[markerLayer ](../../../examples/point/marker#markerlayer)
+[markerLayer ](/examples/point/marker#markerlayer)
 
-[markerLayer 聚合](../../../examples/point/marker#clustermarker)
+[markerLayer 聚合](/examples/point/marker#clustermarker)

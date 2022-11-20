@@ -1,43 +1,53 @@
-import { IParserCfg } from '@antv/l7-core';
-import { rasterDataTypes } from '@antv/l7-source';
-import VectorLineTile from './line';
-import VectorPointLayer from './point';
-import VectorPolygonTile from './polygon';
-import VectorMask from './mask'
-import RasterTileFactory from './raster';
-import RasterDataFactory from './rasterData';
-import TestTile from './test';
+import { ILayer } from '@antv/l7-core';
+import VectorTile from './VectorTile';
+import DebugTile from './DebugTile';
+import ImageTile from  './ImageTile';
+import RasterTile from './RasterTile';
+import RasterRGBTile from './RasterRGBTile';
+import RasterTerrainRGBTile  from './RasterTerrainRGBTile';
+import MaskLayer from './MaskTile';
+
 
 export type TileType =
+  | 'VectorTile'
+  | 'DebugTile'
   | 'PolygonLayer'
   | 'PointLayer'
   | 'LineLayer'
   | 'RasterLayer'
+  | 'image'
   | 'MaskLayer'
   | 'TileDebugLayer';
 
-export function getTileFactory(tileType: TileType, parser: IParserCfg) {
+export function getTileFactory(layer: ILayer) {
+  const tileType = layer.type;
   switch (tileType) {
     case 'PolygonLayer':
-      return VectorPolygonTile;
+      return VectorTile;
     case 'LineLayer':
-      return VectorLineTile;
+      return VectorTile;
     case 'PointLayer':
-      return VectorPointLayer;
-    case 'MaskLayer':
-      return VectorMask;
+      return VectorTile;
     case 'TileDebugLayer': 
-      return TestTile;
+      return DebugTile;
+    case 'MaskLayer':
+      return MaskLayer;
     case 'RasterLayer':
-      if(rasterDataTypes.includes(parser.dataType)) {
-        return RasterDataFactory;
-      } else {
-        return RasterTileFactory;
+      const { dataType } = layer.getSource().parser;
+      switch(dataType) {
+        case 'rgb':
+          return RasterRGBTile;
+        case 'arraybuffer':
+          return RasterTile
+        case "terrainRGB" :
+            return RasterTerrainRGBTile
+        default:
+          return ImageTile;
       }
     default:
-      console.warn('Current Tile Not Exist!');
-      return RasterTileFactory;
+      return VectorTile;
   }
 }
 
 export * from '../interface';
+export * from './Tile'

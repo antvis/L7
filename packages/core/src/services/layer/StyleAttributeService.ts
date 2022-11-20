@@ -66,6 +66,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       attributeToUpdate = new StyleAttribute(options);
       this.attributes.push(attributeToUpdate);
     }
+    
     return attributeToUpdate;
   }
 
@@ -74,6 +75,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     options: Partial<IStyleAttributeInitializationOptions>,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
+
     let attributeToUpdate = this.getLayerStyleAttribute(attributeName);
     if (!attributeToUpdate) {
       attributeToUpdate = this.registerStyleAttribute({
@@ -373,6 +375,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     const attributes: {
       [attributeName: string]: IAttribute;
     } = {};
+
     descriptors.forEach((descriptor, attributeIdx) => {
       if (descriptor) {
         // IAttribute 参数透传

@@ -10,13 +10,12 @@ import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
+import TileDebugLayer from './tile/tileFactory/layers/TileDebugLayer';
 
 import EarthLayer from './earth';
 
 import MaskLayer from './mask';
 import WindLayer from './wind';
-
-import TileDebugLayer from './tile/tileFactory/layers/tileTest';
 
 // import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './plugins/DataMappingPlugin';
@@ -153,7 +152,7 @@ export {
   EarthLayer,
   WindLayer,
   MaskLayer,
-  TileDebugLayer
+  TileDebugLayer,
 };
 
 export * from './core/interface';

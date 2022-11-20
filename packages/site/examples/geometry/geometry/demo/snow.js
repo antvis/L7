@@ -16,14 +16,12 @@ scene.on('loaded', () => {
     .shape('sprite')
     .size(10)
     .style({
-      opacity: 0.3,
       mapTexture:
           'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*zLQwQKBSagYAAAAAAAAAAAAAARQnAQ', // snow
       center: [ 120, 30 ],
       spriteCount: 60,
       spriteRadius: 10,
       spriteTop: 2500000,
-      spriteScale: 0.6
     });
   scene.addLayer(layer);
 });

@@ -41,7 +41,6 @@ export default class FillModel extends BaseModel {
       unit = 'l7size',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.updateUnit(unit);
-
     if (
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
@@ -68,7 +67,6 @@ export default class FillModel extends BaseModel {
         this.cellProperties,
       );
       this.rowCount = height; // 当前数据纹理有多少行
-
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({
@@ -132,9 +130,9 @@ export default class FillModel extends BaseModel {
     );
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     this.updateUnit('l7size');
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
   /**
@@ -187,7 +185,7 @@ export default class FillModel extends BaseModel {
     }
   }
 
-  public async buildModels(callbackModel: (models: IModel[]) => void) {
+  public async buildModels():Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -201,8 +199,7 @@ export default class FillModel extends BaseModel {
     const { frag, vert, type } = this.getShaders(animateOption);
 
     this.layer.triangulation = PointFillTriangulation;
-
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
@@ -217,14 +214,8 @@ export default class FillModel extends BaseModel {
           enablePicking,
           shape2d,
         },
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
       });
+      return [model];
   }
 
   /**
@@ -355,7 +346,7 @@ export default class FillModel extends BaseModel {
       if (
         this.unit !== 'meter' &&
         unit === 'meter' &&
-        version !== Version.L7MAP &&
+        version !== Version.DEFUALT &&
         version !== Version.GLOBEL
       ) {
         this.isMeter = true;

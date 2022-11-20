@@ -1,5 +1,5 @@
 // @ts-ignore
-import { AsyncSeriesHook  } from '@antv/async-hook';
+import { AsyncSeriesHook } from '@antv/async-hook';
 import { $window, DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
@@ -35,7 +35,6 @@ export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
   public loaded: boolean = false;
-
 
   @inject(TYPES.SceneID)
   private readonly id: string;
@@ -131,8 +130,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.iconService.on('imageUpdate', () => this.render());
     // 字体资源
     this.fontService.init();
-  
-
     /**
      * 初始化底图
      */
@@ -142,12 +139,13 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.map.onCameraChanged((viewport: IViewport) => {
           this.cameraService.init();
           this.cameraService.update(viewport);
+         
           resolve();
+         
         });
         this.map.init();
       });
-    
-      
+
       // 重新绑定非首次相机更新事件
       this.map.onCameraChanged(this.handleMapCameraChanged);
       this.map.addMarkerContainer();
@@ -169,29 +167,29 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.hooks.init.tapPromise('initRenderer', async () => {
       const renderContainer = this.map.getOverlayContainer();
 
-      if(renderContainer) {
+      if (renderContainer) {
         this.$container = renderContainer as HTMLDivElement;
       } else {
         this.$container = createRendererContainer(
           this.configService.getSceneConfig(this.id).id || '',
         );
-        
       }
 
-  
       // 创建底图之上的 container
-     
-
       if (this.$container) {
-        this.canvas = DOM.create('canvas', '', this.$container) as HTMLCanvasElement;
+        this.canvas = DOM.create(
+          'canvas',
+          '',
+          this.$container,
+        ) as HTMLCanvasElement;
         this.setCanvas();
         await this.rendererService.init(
           // @ts-ignore
           this.canvas,
           this.configService.getSceneConfig(this.id) as IRenderConfig,
-          sceneConfig.gl
+          sceneConfig.gl,
         );
-        this.initContainer()
+        this.initContainer();
 
         elementResizeEvent(
           this.$container as HTMLDivElement,
@@ -207,11 +205,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       }
       this.pickingService.init(this.id);
     });
-    // TODO：init worker, fontAtlas...
-
-    // 执行异步并行初始化任务
-    // @ts-ignore
-    this.initPromise = this.hooks.init.promise();
+   
     this.render();
   }
 
@@ -310,22 +304,23 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (!this.inited) {
       // 还未初始化完成需要等待
 
-      await this.initPromise; // 初始化地图和渲染
+      await this.hooks.init.promise(); // 初始化地图和渲染
       if (this.destroyed) {
         this.destroy();
       }
-
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
-      this.layerService.initLayers();
+      await this.layerService.initLayers();
+
+      this.layerService.renderLayers();
       this.controlService.addControls();
       this.loaded = true;
       this.emit('loaded');
       this.inited = true;
+    } else {
+      // 尝试初始化未初始化的图层
+      this.layerService.initLayers();
+      this.layerService.renderLayers();
     }
-
-    // 尝试初始化未初始化的图层
-    this.layerService.updateLayerRenderList();
-    this.layerService.renderLayers();
 
     // 组件需要等待layer 初始化完成之后添加
     this.rendering = false;
@@ -337,7 +332,7 @@ export default class Scene extends EventEmitter implements ISceneService {
    * @param fontPath
    */
   public addFontFace(fontFamily: string, fontPath: string): void {
-    this.fontService.addFontFace(fontFamily,fontPath)
+    this.fontService.addFontFace(fontFamily, fontPath);
   }
 
   public getSceneContainer(): HTMLDivElement {
@@ -384,11 +379,31 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.destroyed = true;
       return;
     }
-    this.emit('destroy');
+    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
+    if ($window.matchMedia) {
+      $window
+        .matchMedia('screen and (min-resolution: 2dppx)')
+        ?.removeListener(this.handleWindowResized);
+    }
+
 
     this.pickingService.destroy();
     this.layerService.destroy();
+
     // this.rendererService.destroy();
+
+    this.interactionService.destroy();
+    this.controlService.destroy();
+    this.markerService.destroy();
+    this.fontService.destroy();
+    this.iconService.destroy();
+
+
+
+    this.removeAllListeners();
+    this.inited = false;
+
+    this.map.destroy();
     setTimeout(() => {
       this.$container?.removeChild(this.canvas);
       // this.canvas = null 清除对 webgl 实例的引用
@@ -397,26 +412,9 @@ export default class Scene extends EventEmitter implements ISceneService {
       // Tip: 把这一部分销毁放到写下一个事件循环中执行，兼容 L7React 中 scene 和 layer 同时销毁的情况
       this.rendererService.destroy();
     });
-
-    this.map.destroy();
-
-    this.interactionService.destroy();
-    this.controlService.destroy();
-    this.markerService.destroy();
-    this.fontService.destroy();
-    this.iconService.destroy();
-
-    // 销毁 container 容器
+        // 销毁 container 容器
     this.$container?.parentNode?.removeChild(this.$container);
-
-    this.removeAllListeners();
-    this.inited = false;
-    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    if ($window.matchMedia) {
-      $window
-        .matchMedia('screen and (min-resolution: 2dppx)')
-        ?.removeListener(this.handleWindowResized);
-    }
+    this.emit('destroy');
   }
 
   private handleWindowResized = () => {

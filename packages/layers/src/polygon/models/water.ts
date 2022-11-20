@@ -34,17 +34,17 @@ export default class WaterModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     this.loadTexture();
-    this.buildModels(callbackModel);
+      return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'polygonWater',
         vertexShader: water_vert,
@@ -54,13 +54,7 @@ export default class WaterModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   public clearModels() {

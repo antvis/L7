@@ -24,4 +24,4 @@ scene.addLayer(layer);
 len1 实线长度
 len2 间隔长度
 
-[在线案例](../../../examples/line/arc#trip_arc_dark_linear)
+[在线案例](/examples/line/arc#trip_arc_dark_linear)

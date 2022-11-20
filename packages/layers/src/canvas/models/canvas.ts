@@ -60,7 +60,7 @@ export default class CanvaModel extends BaseModel {
     this.unBindListener();
   }
 
-  public initModels() {
+  public async initModels() {
     const {
       update = CanvasUpdateType.ALWAYS,
     } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
@@ -138,7 +138,7 @@ export default class CanvaModel extends BaseModel {
     }
   };
 
-  public buildModels() {
+  public async buildModels() {
     return this.initModels();
   }
 

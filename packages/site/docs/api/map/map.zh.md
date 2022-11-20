@@ -3,16 +3,21 @@ title: 地图 Map
 order: 1
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
-# 简介
+## 简介
 
-L7 专注数据可视化层数据表达，目前 L7 还不支持独立的地图引擎，需要引入第三方引擎，目前支持高德地图和 MapBox 两种。
+L7 地理可视化侧重于地理数据的可视化表达，地图层需要依赖第三方地图，第三方地图通过 Scene 统一创建，创建管理
+只需要通过 Scene 传入地图配置项即可。
+
 L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管理地图的操作方法。
 
-## Map
+目前 L7 支持两种地图底图
 
-### 引入 Map
+- 高德地图 国内业务场景 合规中国地图
+- MapBox 国际业务，或者内网离线部署场景
+
+### import
 
 ```javascript
 import { GaodeMap } from '@antv/l7-maps'; // 默认引入高德1.x
@@ -90,10 +95,10 @@ const scene = new Scene({
 });
 ```
 
-[示例地址](/zh/examples/tutorial/map#amapInstance)
+[示例地址](/examples/tutorial/map#amapInstance)
 [代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
-[示例地址（ 2D ）](/zh/examples/tutorial/map#amapInstance2d)
+[示例地址（ 2D ）](/examples/tutorial/map#amapInstance2d)
 [代码地址](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
 #### 传入 Mapbox 地图实例
@@ -114,3 +119,93 @@ const scene = new Scene({
   }),
 });
 ```
+
+## options
+
+### zoom 初始化缩放等级
+
+<description> _number_ </description>
+
+地图初始显示级别 {number} Mapbox （0-24） 高德 （2-19）
+
+### center 地图中心
+
+地图初始中心经纬度 {Lnglat}
+
+### pitch 地图倾角
+
+地图初始俯仰角度 {number}  default 0
+
+### style 地图图样式
+
+简化地图样式设置，L7 内置了三种主题默认样式 高德，mapbox 都可以使用
+
+- dark
+- light
+- normal
+- blank 无底图
+
+除了内置的样式，你也可以传入自定义的其他属性。
+
+比如高德地图
+
+⚠️ 高德地图样式 增加 `isPublic=true` 参数
+
+```javascript
+{
+  style: 'amap://styles/2a09079c3daac9420ee53b67307a8006?isPublic=true'; // 设置方法和高德地图一致
+}
+```
+
+### minZoom 最小缩放等级
+
+地图最小缩放等级 {number}  default 0 Mapbox 0-24） 高德 （2-19）
+
+### maxZoom 最大缩放等级
+
+地图最大缩放等级 {number}  default 22 Mapbox（0-24） 高德 （2-19）
+
+### rotateEnable 是否允许旋转
+
+地图是否可旋转 {Boolean} default true
+
+## 注册使用高德插件
+
+```javascript
+const scene = new Scene({
+  id: 'map',
+  map: new GaodeMap({
+    center: [116.475, 39.99],
+    pitch: 0,
+    zoom: 13,
+    plugin: ['AMap.ToolBar', 'AMap.LineSearch'],
+  }),
+});
+// plugin: ['AMap.ToolBar', 'AMap.LineSearch'],
+// 为了使用对应插件的能力，应该首先在 plugin 中注册对应的插件
+
+// 加载的 AMap 会挂载在全局的 window 对象上
+scene.on('loaded', () => {
+  window.AMap.plugin(['AMap.ToolBar', 'AMap.LineSearch'], () => {
+    // add control
+    scene.map.addControl(new AMap.ToolBar());
+
+    var linesearch = new AMap.LineSearch({
+      pageIndex: 1, //页码，默认值为1
+      pageSize: 1, //单页显示结果条数，默认值为20，最大值为50
+      city: '北京', //限定查询城市，可以是城市名（中文/中文全拼）、城市编码，默认值为『全国』
+      extensions: 'all', //是否返回公交线路详细信息，默认值为『base』
+    });
+
+    //执行公交路线关键字查询
+    linesearch.search('536', function (status, result) {
+      //打印状态信息status和结果信息result
+      // ... do something
+    });
+  });
+});
+```
+
+<img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ag-nSrIPPEUAAAAAAAAAAAAAARQnAQ'>
+
+[在线案例](/examples/amapplugin/bus#busstop)

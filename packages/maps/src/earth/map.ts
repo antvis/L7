@@ -29,8 +29,10 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  * EarthService
  */
 @injectable()
-export default class L7EarthService extends BaseMapService<Map>
-  implements IEarthService {
+export default class L7EarthService
+  extends BaseMapService<Map>
+  implements IEarthService
+{
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,

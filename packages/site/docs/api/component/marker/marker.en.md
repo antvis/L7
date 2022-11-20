@@ -3,7 +3,7 @@ title: Marker
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 Marker 地图标注 目前只支持 2D dom 标注
 
@@ -88,4 +88,4 @@ new L7.Marker({
   .setPopup(popup);
 ```
 
-[demo1](../../../examples/tutorial/marker#amap)
+[demo1](/examples/tutorial/marker#amap)

@@ -1,2 +1,2 @@
-`markdown:docs/api/wind.zh.md`
+<embed src="@/docs/api/wind.zh.md"></embed>
 

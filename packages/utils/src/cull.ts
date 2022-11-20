@@ -6,7 +6,7 @@ export function getCullFace(mapVersion: string | undefined): number {
   // 'GAODE1.x' = 'GAODE1.x',
   // 'GAODE2.x' = 'GAODE2.x',
   // 'MAPBOX' = 'MAPBOX',
-  // 'L7MAP' = 'L7MAP',
+  // 'DEFAULT' = 'DEFAULTMAP',
   // 'SIMPLE' = 'SIMPLE',
   // 'GLOBEL' = 'GLOBEL',
   switch (mapVersion) {
@@ -25,7 +25,7 @@ export function getCullFace(mapVersion: string | undefined): number {
     case 'GLOBEL':
       return gl.BACK;
       break;
-    case 'L7MAP':
+    case 'DEBAULT':
       return gl.FRONT;
       break;
     default:

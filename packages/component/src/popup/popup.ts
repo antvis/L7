@@ -22,7 +22,8 @@ export { Popup };
 
 export default class Popup<O extends IPopupOption = IPopupOption>
   extends EventEmitter
-  implements IPopup {
+  implements IPopup
+{
   /**
    * 配置
    * @protected
@@ -355,6 +356,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.setPopupPosition(x, y);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
@@ -484,13 +486,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
   protected update = () => {
     const hasPosition = !!this.lngLat;
-    const {
-      className,
-      style,
-      maxWidth,
-      anchor,
-      stopPropagation,
-    } = this.popupOption;
+    const { className, style, maxWidth, anchor, stopPropagation } =
+      this.popupOption;
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }

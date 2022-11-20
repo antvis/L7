@@ -129,18 +129,18 @@ export default class ExtrudeModel extends BaseModel {
       u_lightEnable: Number(lightEnable),
     };
   }
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels():Promise<IModel[]> {
+    return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+  public async buildModels():Promise<IModel[]> {
     // GAODE1.x GAODE2.x MAPBOX
     const {
       animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiseRepeat = repeat;
 
-    this.layer
+ const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointEarthExtrude',
         vertexShader: pointExtrudeVert,
@@ -152,14 +152,8 @@ export default class ExtrudeModel extends BaseModel {
           face: getCullFace(this.mapService.version),
         },
         blend: this.getBlend(),
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
       });
+      return [model]
   }
   public clearModels() {
     this.dataTexture?.destroy();

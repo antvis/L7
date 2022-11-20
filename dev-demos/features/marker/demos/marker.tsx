@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Popup,PointLayer, Marker,Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
   
 export default () => {

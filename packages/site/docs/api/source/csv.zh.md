@@ -3,7 +3,7 @@ title: CSV
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 L7 支持 CSV 以逗号分隔的 CSV 数据加载。
 
@@ -32,7 +32,7 @@ layer.source(data, {
 });
 ```
 
-[CSV 数据 demo 示例](../../../examples/point/bubble#scatter)
+[CSV 数据 demo 示例](/examples/point/bubble#scatter)
 
 ### 线段弧线数据通过 CSV 加载
 
@@ -48,4 +48,4 @@ layer.source(data, {
 });
 ```
 
-[CSV 线段数据 demo 示例](../../../examples/gallery/basic#arcCircle)
+[CSV 线段数据 demo 示例](/examples/gallery/basic#arccircle)
