@@ -17,7 +17,7 @@ git checkout -b $feat_name
 
 cd ../../
 echo `pwd`
-rsync -av   --exclude .dumi/tmp-production --exclude .dumi/tmp  --exclude node_modules --exclude public  --exclude dist ./packages/site/ ./site_temp/l7-site/
+rsync -av   --exclude .cache  --exclude .dumi/tmp-production --exclude .dumi/tmp  --exclude node_modules --exclude public  --exclude dist ./packages/site/ ./site_temp/l7-site/
 
 cd ./site_temp/l7-site
 

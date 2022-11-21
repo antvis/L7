@@ -13,7 +13,7 @@ order: 0
 | 栅格瓦片 | `RasterLayer` | `rasterTile` | `arraybuffer` | 数据栅格         |
 | 栅格瓦片 | `RasterLayer` | `rasterTile` | `rgb`         | 彩色遥感影像栅格 |
 
-🌟 目前只支持 3857坐标系
+🌟 目前只支持 3857 坐标系
 
 ### source(url: string, option: IOption)
 
@@ -203,64 +203,6 @@ const source = new Source(data, {
     }
   }
 })
-```
-
-1. `format` 方法的返回值为栅格数据（`rasterData`）以及表示大小的 `width`、`height` 参数。
-2. `format` 方法可以返回多份数据，表示从当前栅格文件中提取多份波段的数据。
-
-##### operation: IOperation
-
-<description> _IOperation_ **可选** </description>
-
-在加载多波段数据的时候我们可以通过 `operation` 配置波段数据的运算。
-
-🌟 我们可以不配置 `operation`，此时默认使用第一个栅格文件提取的第一个波段数据
-
-1. `operation` 可以是一个函数，`allbands` 是我们从所有栅格文件中提取的所有波段数据的集合。
-
-```js
-const parser = {
-  operation: (allBands) => {
-    // operation 可以是一个函数，allbands 是我们从所有栅格文件中提取的所有波段数据的集合，
-    // 在设立 allbands 就是 [band0]
-    // 函数的返回值是单纯的波段数据，在这里我们直接返回第一个波段的数据
-    return allBands[0].rasterData;
-  },
-};
-```
-
-2. `operation` 可以是以数组形式存在的计算表达式.
-
-```js
-// 下面表达式可以转述为 band1 * 0.5，表示将波段1 的值都乘上 0.5 并返回
-const parser = {
-  operation: ['*', ['band', 1], 0.5],
-};
-```
-
-3. `operation` 可以嵌套使用：`['+', ['*', ['band', 0], 0.2], ['band', 1]]]`，返回结果为：`band0 * 0.2 + band1`。
-
-4. `operation` 可以直接指定结果：`['band', 0]`。
-
-5. `operation` 支持以下的数学运算。
-
-```js
-/** 数学运算 根据计算表达式进行数学运算
- * * * Math operators:
- * `['*', value1, value2]` 返回  `value1 * value2`
- * `['/', value1, value2]` 返回 `value1 / value2`
- * `['+', value1, value2]` 返回 `value1 + value2`
- * `['-', value1, value2]` 返回 `value2 - value1`
- * `['%', value1, value2]` 返回 `value1 % value2`
- * `['^', value1, value2]` 返回  `value1 ^ value2`
- * `['abs', value1]`       返回  `Math.abs(value1)`
- * `['floor', value1]`     返回  `Math.floor(value1)`
- * `['round', value1]`     返回  `Math.round(value1)`
- * `['ceil', value1]`      返回  `Math.ceil(value1)`
- * `['sin', value1]`       返回  `Math.sin(value1)`
- * `['cos', value1]`       返回  `Math.cos(value1)`
- * `['atan', value1, value2]` 返回  `n1===-1?Math.atan(n1): Math.atan2(n1, n2)`
- */
 ```
 
 ## style
