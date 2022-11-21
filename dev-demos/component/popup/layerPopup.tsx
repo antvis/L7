@@ -130,7 +130,7 @@ const Demo: FunctionComponent = () => {
             fields: ['name'],
           },
         ],
-        trigger: 'mousemove',
+        trigger: 'click',
       });
       pointLayer.on('mousemove', (e) => {
         console.log('point mousemove', e);
