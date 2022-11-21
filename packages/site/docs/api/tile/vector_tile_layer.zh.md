@@ -1,5 +1,5 @@
 ---
-title: Vector TileLayer
+title: Vector 矢量瓦片
 order: 0
 ---
 
@@ -15,7 +15,8 @@ order: 0
 | 矢量瓦片 | `MaskLayer`      | parser of MaskLayer、`geojsonvt`    | 矢量掩模图层                              |
 | 矢量瓦片 | `TileDebugLayer` | `/`                                 | `TileDebugLayer` 不需要执行 `source` 方法 |
 
-🌟 目前只支持 `GCJ-02` 火星坐标系。
+### option
+<embed src="@/docs/api/tile/common/options.zh.md"></embed>
 
 ### source(url: string, option: IOption)
 

@@ -1,5 +1,5 @@
 ---
-title: Raster TileLayer
+title: Raster 栅格瓦片
 order: 0
 ---
 
@@ -13,7 +13,7 @@ order: 0
 | 栅格瓦片 | `RasterLayer` | `rasterTile` | `arraybuffer` | 数据栅格         |
 | 栅格瓦片 | `RasterLayer` | `rasterTile` | `rgb`         | 彩色遥感影像栅格 |
 
-🌟 目前只支持 `GCJ-02` 火星坐标系。
+🌟 目前只支持 3857坐标系
 
 ### source(url: string, option: IOption)
 
@@ -262,3 +262,7 @@ const parser = {
  * `['atan', value1, value2]` 返回  `n1===-1?Math.atan(n1): Math.atan2(n1, n2)`
  */
 ```
+
+## style
+
+<embed src="@/docs/api/raster_layer/common/style_single.md"></embed>
