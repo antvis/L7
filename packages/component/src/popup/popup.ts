@@ -171,6 +171,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   }
 
   public setOptions(option: Partial<O>) {
+    this.show();
     this.popupOption = {
       ...this.popupOption,
       ...option,
@@ -216,7 +217,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     if (this.checkUpdateOption(option, ['lngLat']) && option.lngLat) {
       this.setLnglat(option.lngLat);
-      this.show();
     }
     return this;
   }
@@ -293,6 +293,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param lngLat
    */
   public setLnglat(lngLat: ILngLat | [number, number]): this {
+    this.show();
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {
@@ -379,6 +380,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param htmlNode
    */
   protected setDOMContent(htmlNode: ChildNode | DocumentFragment) {
+    this.show();
     this.createContent();
     this.contentPanel.appendChild(htmlNode);
     this.update();
