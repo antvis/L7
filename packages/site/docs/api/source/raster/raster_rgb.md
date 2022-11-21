@@ -61,6 +61,22 @@ layer.source(
 )
 
 ```
+#### 多文件多波段
+
+```ts
+
+const urls = [
+  {
+    url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
+    bands: [0]
+  },
+  {
+    url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff'
+  },
+  ...
+]
+const tileSource = new Source(urls, {...});
+```
 
 ### parser
 
@@ -70,7 +86,7 @@ layer.source(
 
 ####  operation 合成方式
  rgb 会自动根据最大值最小值进行拉伸处理
- 
+
   - type `rgb`
 
 #### format 数据处理方法，栅格数据解析方式

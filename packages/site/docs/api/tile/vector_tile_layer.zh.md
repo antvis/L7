@@ -1,9 +1,11 @@
 ---
-title: Vector TileLayer
+title: Vector 矢量瓦片
 order: 0
 ---
 
 <embed src="@/docs/common/style.md"></embed>
+
+### 简介
 
 `L7` 的矢量瓦片图层复用了普通图层的数据可视化能力，支持对图层的样式进行数据映射。目前矢量瓦片支持了点、线、面、掩模等图层
 
@@ -14,6 +16,12 @@ order: 0
 | 矢量瓦片 | `PolygonLayer`   | parser of PolygonLayer、`geojsonvt` | 矢量几何体图层                            |
 | 矢量瓦片 | `MaskLayer`      | parser of MaskLayer、`geojsonvt`    | 矢量掩模图层                              |
 | 矢量瓦片 | `TileDebugLayer` | `/`                                 | `TileDebugLayer` 不需要执行 `source` 方法 |
+
+瓦片图层其他配置项和基础图层PointLayer、Linelayer、PolygonLayer 保持一致
+
+### options
+
+<embed src="@/docs/api/tile/common/options.zh.md"></embed>
 
 ### source(url: string, option: IOption)
 
@@ -60,7 +68,7 @@ const source = new Source(url, {
 type UpdateTileStrategy = 'realtime' | 'overlap' | 'replace';
 ```
 
-🌟 矢量瓦片推荐复用瓦片服务。
+🌟 矢量瓦片推荐复用 Source
 
 ```js
 const vectorSource = new Source(
