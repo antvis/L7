@@ -606,6 +606,13 @@ export default defineConfig({
   scripts: [
     'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f'
   ],
+  internalSite: {
+    url: 'https://s2.antv.antgroup.com',
+    name: {
+      zh: '国内镜像',
+      en: 'China Mirror',
+    },
+  },
   alias: env === 'development'? {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
     '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
