@@ -422,7 +422,6 @@
   z-index: 5;
   display: -webkit-flex;
   display: flex;
-  pointer-events: none;
   will-change: transform;
 }
 .l7-popup.l7-popup-hide {
@@ -435,11 +434,14 @@
   background: #fff;
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  pointer-events: auto;
 }
 .l7-popup .l7-popup-content .l7-popup-content__title {
   margin-bottom: 8px;
   font-weight: bold;
+}
+.l7-popup .l7-popup-content .l7-popup-content__title,
+.l7-popup .l7-popup-content .l7-popup-content__panel {
+  white-space: break-spaces;
 }
 .l7-popup .l7-popup-content .l7-popup-close-button {
   position: absolute;
@@ -457,11 +459,11 @@
   cursor: pointer;
 }
 .l7-popup .l7-popup-tip {
+  position: relative;
   z-index: 1;
   width: 0;
   height: 0;
   border: 10px solid transparent;
-  position: relative;
 }
 .l7-popup.l7-popup-anchor-bottom,
 .l7-popup.l7-popup-anchor-bottom-left,
@@ -541,11 +543,11 @@
   border-left: none;
 }
 .l7-popup-anchor-right .l7-popup-tip {
+  right: 1px;
   -webkit-align-self: center;
   align-self: center;
   border-right: none;
   border-left-color: #fff;
-  right: 1px;
 }
 .l7-popup-anchor-top-left .l7-popup-content {
   border-top-left-radius: 0;
