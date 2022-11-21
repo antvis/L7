@@ -124,7 +124,7 @@ export default defineConfig({
           en: 'From vector to remote sensing, from engine to platform, explore the distance of geographical analysis',
         },
         date: '2022.11.22',
-        link: 'https://www.yuque.com/xiaofengcanyue/scpehq/fgcwge',
+        link: 'https://www.yuque.com/antv/blog/zrz77eat2m4wb7yk',
       },
     ],
     navs: [
@@ -192,7 +192,7 @@ export default defineConfig({
       },
       {
         name: {
-          zh: 'L7 Plot 图表库',
+          zh: 'L7 Plot 地图图表库',
           en: 'L7Plot',
         },
         url: 'https://l7plot.antv.vision/',
