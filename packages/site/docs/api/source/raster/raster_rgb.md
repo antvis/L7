@@ -64,13 +64,17 @@ layer.source(
 
 ### parser
 
-- type: `rasterRgb`
+#### type: `rasterRgb`
   多波段数据影像合成
-- extent: 栅格的经纬度范围 [minlng, minlat,maxLng, maxLat]
+####  extent: 栅格的经纬度范围 [minlng, minlat,maxLng, maxLat]
 
-- operation 合成方式
+####  operation 合成方式
+ rgb 会自动根据最大值最小值进行拉伸处理
+ 
   - type `rgb`
-- format 数据处理方法，栅格数据解析方式
+
+#### format 数据处理方法，栅格数据解析方式
+  
   - 入参数：
   - data: source 传入参数
   - bands 波段序号

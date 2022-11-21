@@ -19,5 +19,10 @@ order: 1
 
 ## style
 
-- opacity
-  透明度
+### opacity 透明度
+
+```js
+layer.style({
+  opacity: 0.5,
+});
+```
