@@ -27,19 +27,16 @@
     "site:clean": "rm -rf ./dumi/tmp && rm -rf ./dumi/tmp-production && rm -rf .umi/ && rm rf ./dist",
     "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md *.md",
     "build": "yarn site:build",
-    "site:deploy": "npm run site:build && gh-pages -d public",
+    "site:deploy": "npm run site:build && gh-pages -d dist",
     "site:develop": "dumi dev",
     "site:build": "dumi build",
     "start": "npm run site:develop",
-    "site:publish": "gh-pages -d public"
+    "site:publish": "gh-pages -d dist"
   },
   "devDependencies": {
     "@antv/dumi-theme-antv": "^0.3.0",
     "@antv/g2": "^4.2.8",
-    "@antv/l7": "2.11.1",
     "@antv/l7-draw": "^3.0.9",
-    "@antv/l7-maps": "2.11.1",
-    "@antv/l7-three": "2.11.1",
     "@antv/l7plot": "^0.3.3",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",

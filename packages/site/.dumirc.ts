@@ -4,10 +4,17 @@ const env = process.env.NODE_ENV;
 console.log(env)
 export default defineConfig({
   locales: [{ id: 'zh', name: '中文' }, { id: 'en', name: 'English' }],
-  
+  copy: env ==='production' ? ['docs/CNAME'] : [],
   themeConfig: {
     title: 'L7',
     isAntVSite: false,
+    internalSite: {
+      url: 'https://l7.antv.antgroup.com',
+      name: {
+        zh: '国内镜像',
+        en: 'China Mirror',
+      },
+    },
     description:
       'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.vision',
@@ -44,7 +51,7 @@ export default defineConfig({
         },
       ],
     },
-    msfu:true,
+    msfu:false,
     features: [
       {
         icon:
@@ -592,7 +599,7 @@ export default defineConfig({
       indexName: 'antv_l7',
     },
   },
-  extraBabelPlugins: env === 'development'? [
+  extraBabelPlugins:[
     // 开发模式下以原始文本引入，便于调试
     [
       // import glsl as raw text
@@ -600,20 +607,13 @@ export default defineConfig({
       { extensions: ['.glsl','.worker.js'] },
     ],
     // ['transform-import-css-l7'],
-  ]:[],
+  ],
   links: [
   ],
   scripts: [
     'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f'
   ],
-  internalSite: {
-    url: 'https://s2.antv.antgroup.com',
-    name: {
-      zh: '国内镜像',
-      en: 'China Mirror',
-    },
-  },
-  alias: env === 'development'? {
+  alias: {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
     '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
     '@antv/l7-maps/lib/map': path.resolve(__dirname, '../maps/src/map'),
@@ -627,5 +627,5 @@ export default defineConfig({
     '@antv/l7-scene': path.resolve(__dirname, '../scene/src'),
     '@antv/l7-source': path.resolve(__dirname, '../source/src'),
     '@antv/l7-utils': path.resolve(__dirname, '../utils/src')
-  }:{}
+  }
 });
