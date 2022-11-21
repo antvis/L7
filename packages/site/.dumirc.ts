@@ -199,7 +199,7 @@ export default defineConfig({
       },
       {
         name: {
-          zh: 'L7 地理围栏绘制组件库',
+          zh: 'L7Draw 地理围栏绘制组件库',
           en: 'L7Draw',
         },
         url: 'http://antv.vision/L7Draw/',
