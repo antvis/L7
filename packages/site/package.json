@@ -34,7 +34,7 @@
     "site:publish": "gh-pages -d public"
   },
   "devDependencies": {
-    "@antv/dumi-theme-antv": "^0.3.0-2.10.7.12",
+    "@antv/dumi-theme-antv": "^0.3.0",
     "@antv/g2": "^4.2.8",
     "@antv/l7": "2.11.1",
     "@antv/l7-draw": "^3.0.9",
