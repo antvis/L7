@@ -13,7 +13,7 @@ order: 0
 | 栅格瓦片 | `RasterLayer` | `rasterTile` | `arraybuffer` | 数据栅格         |
 | 栅格瓦片 | `RasterLayer` | `rasterTile` | `rgb`         | 彩色遥感影像栅格 |
 
-🌟 目前只支持 3857坐标系
+🌟 目前只支持 3857 坐标系
 
 ### source(url: string, option: IOption)
 
@@ -204,6 +204,7 @@ const source = new Source(data, {
   }
 })
 ```
+
 ## style
 
 <embed src="@/docs/api/raster_layer/common/style_single.md"></embed>

@@ -17,7 +17,7 @@ order: 0
 | 矢量瓦片 | `MaskLayer`      | parser of MaskLayer、`geojsonvt`    | 矢量掩模图层                              |
 | 矢量瓦片 | `TileDebugLayer` | `/`                                 | `TileDebugLayer` 不需要执行 `source` 方法 |
 
-瓦片图层其他配置项和基础图层PointLayer、Linelayer、PolygonLayer 保持一致
+瓦片图层其他配置项和基础图层 PointLayer、Linelayer、PolygonLayer 保持一致
 
 ### options
 
