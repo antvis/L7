@@ -2,6 +2,7 @@
 title: RasterLayer 多波段计算
 order: 2
 ---
+
 <embed src="@/docs/common/style.md"></embed>
 
 ## 简介
@@ -15,8 +16,6 @@ order: 2
 ## source
 
 <embed src="@/docs/api/source/raster/raster_band_calc.md"></embed>
-
-
 
 ## style
 

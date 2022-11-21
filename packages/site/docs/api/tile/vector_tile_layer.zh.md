@@ -15,8 +15,6 @@ order: 0
 | 矢量瓦片 | `MaskLayer`      | parser of MaskLayer、`geojsonvt`    | 矢量掩模图层                              |
 | 矢量瓦片 | `TileDebugLayer` | `/`                                 | `TileDebugLayer` 不需要执行 `source` 方法 |
 
-🌟 目前只支持 `GCJ-02` 火星坐标系。
-
 ### source(url: string, option: IOption)
 
 矢量瓦片的数据源需要传入矢量数据的瓦片服务以及对应的配置参数。
