@@ -40,7 +40,7 @@ scene.on('loaded', () => {
     img:
       'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GRb1TKp4HcMAAAAAAAAAAAAAARQnAQ',
     // 跳转地址
-    href: 'https://l7.antv.vision/',
+    href: 'https://l7.antv.antgroup.com',
   });
   scene.addControl(logo);
 });
