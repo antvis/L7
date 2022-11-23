@@ -2,6 +2,12 @@
 
 👍🎉 欢迎向 L7 贡献代码! 🎉👍
 
+## 下载源码
+
+```bash
+git clone https://github.com/antvis/L7  --depth=1
+```
+
 ## 前置依赖安装
 
 ### 安装 Yarn
@@ -20,6 +26,7 @@
 ## 安装依赖
 
 安装依赖并完成 Yarn workspace 初始化：
+
 ```bash
 yarn install
 ```
@@ -32,20 +39,22 @@ copy node_modules/gl/deps/windows/dll/x64/*.dll c:\windows\system32
 
 ## 运行 DEMO
 
-
-
 ```bash
 yarn dev
 ```
-打开  `http://localhost:6006/`：
+
+打开 `http://localhost:6006/`：
+
 ## 运行测试
 
 运行单元测试：
+
 ```bash
 yarn test
 ```
 
 运行单元测试并查看代码覆盖率：
+
 ```bash
 yarn coveralls
 ```
@@ -53,21 +62,25 @@ yarn coveralls
 ## 添加 Lerna package
 
 添加一个新的 lerna package：
+
 ```bash
 lerna create my-pack -y
 ```
 
 将 ui-lib 作为 my-pack 的依赖：
+
 ```bash
 yarn workspace my-pack add ui-lib/1.0.0
 ```
 
-将 lodash 添加为所有 package 的依赖(不包含root）
+将 lodash 添加为所有 package 的依赖(不包含 root）
+
 ```bash
 yarn workspaces run add lodash
 ```
 
 将 typescript 设置为 root 的开发依赖
+
 ```bash
 yarn add -W -D typescript jest
 ```
@@ -75,6 +88,7 @@ yarn add -W -D typescript jest
 ## 提交代码
 
 代替 `git commit` 提交：
+
 ```bash
 yarn commit
 ```
@@ -86,10 +100,9 @@ yarn commit
 ```bash
 yarn run version:prerelease
 ```
-设置完成后需要commit一下代码
+
+设置完成后需要 commit 一下代码
 
 ### 发布
- 
+
 yarn run release
-
-
