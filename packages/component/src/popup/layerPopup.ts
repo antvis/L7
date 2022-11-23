@@ -5,16 +5,19 @@ import { get } from 'lodash';
 // import { Container } from 'inversify';
 import Popup from './popup';
 
+type ElementType = DOM.ElementType;
+
 export type LayerField = {
   field: string;
-  formatField?: ((field: string) => string) | string;
-  formatValue?: ((value: any) => any) | string;
+  formatField?: ((field: string, feature: any) => ElementType) | ElementType;
+  formatValue?: ((value: any, feature: any) => ElementType) | ElementType;
   getValue?: (feature: any) => any;
 };
 
 export type LayerPopupConfigItem = {
   layer: ILayer | string;
   fields: Array<LayerField | string>;
+  customContent?: ElementType | ((feature: any) => ElementType);
 };
 
 export interface ILayerPopupOption extends IPopupOption {
@@ -219,27 +222,42 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       ) {
         feature = feature.properties;
       }
-      const { fields } = layerInfo;
-      fields?.forEach((fieldConfig) => {
-        const { field, formatField, formatValue, getValue } =
-          typeof fieldConfig === 'string'
-            ? // tslint:disable-next-line:no-object-literal-type-assertion
-              ({ field: fieldConfig } as LayerField)
-            : fieldConfig;
-        const row = DOM.create('div', 'l7-layer-popup__row');
-        const value = getValue ? getValue(e.feature) : get(feature, field);
+      const { fields, customContent } = layerInfo;
+      if (customContent) {
+        const content =
+          customContent instanceof Function
+            ? customContent(feature)
+            : customContent;
+        DOM.appendElement(frag, content);
+      } else {
+        fields?.forEach((fieldConfig) => {
+          const { field, formatField, formatValue, getValue } =
+            typeof fieldConfig === 'string'
+              ? // tslint:disable-next-line:no-object-literal-type-assertion
+                ({ field: fieldConfig } as LayerField)
+              : fieldConfig;
+          const row = DOM.create('div', 'l7-layer-popup__row');
+          const value = getValue ? getValue(e.feature) : get(feature, field);
 
-        const fieldText =
-          (formatField instanceof Function
-            ? formatField(field)
-            : formatField) ?? field;
-        const valueText =
-          (formatValue instanceof Function
-            ? formatValue(value)
-            : formatValue) ?? value;
-        row.innerHTML = `<span class="l7-layer-popup__key">${fieldText}</span>: <span class="l7-layer-popup__value">${valueText}</span>`;
-        frag.appendChild(row);
-      });
+          const fieldElement =
+            (formatField instanceof Function
+              ? formatField(field, feature)
+              : formatField) ?? field;
+
+          const valueElement =
+            (formatValue instanceof Function
+              ? formatValue(value, feature)
+              : formatValue) ?? value;
+
+          const fieldSpan = DOM.create('span', 'l7-layer-popup__key', row);
+          DOM.appendElement(fieldSpan, fieldElement);
+          DOM.appendElement(fieldSpan, document.createTextNode('：'));
+
+          const valueSpan = DOM.create('span', 'l7-layer-popup__value', row);
+          DOM.appendElement(valueSpan, valueElement);
+          frag.appendChild(row);
+        });
+      }
     }
     return frag;
   }
