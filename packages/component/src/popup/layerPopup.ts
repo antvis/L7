@@ -16,7 +16,7 @@ export type LayerField = {
 
 export type LayerPopupConfigItem = {
   layer: ILayer | string;
-  fields: Array<LayerField | string>;
+  fields?: Array<LayerField | string>;
   customContent?: ElementType | ((feature: any) => ElementType);
 };
 
@@ -230,7 +230,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
             ? customContent(feature)
             : customContent;
         DOM.appendElement(frag, content);
-      } else {
+      } else if (fields?.length) {
         fields?.forEach((fieldConfig) => {
           const { field, formatField, formatValue, getValue } =
             typeof fieldConfig === 'string'
