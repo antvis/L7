@@ -55,12 +55,12 @@ const onPositionChange = () => {
 
 ## 配置
 
-`markdown:docs/common/control/api.md`
+<embed src="@/docs/common/control/api.md"></embed>
 
 ## 方法
 
-`markdown:docs/common/control/method.md`
+<embed src="@/docs/common/control/method.md"></embed>
 
 ## 事件
 
-`markdown:docs/common/control/event.md`
+<embed src="@/docs/common/control/event.md"></embed>

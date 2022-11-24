@@ -32,6 +32,15 @@ export default () => {
               dashArray: [5, 5],
             });
           scene.addLayer(layer);
+
+          // setTimeout(()=>{
+          //   console.log('setdata')
+          //   layer.setData({
+          //     type: 'featureCollection',
+          //     features:[],
+          //   })
+       
+          // },3000)
         });
     });
   }, []);

@@ -25,10 +25,9 @@ export function getUniformLengthByType(type: string): number {
   return arrayLength;
 }
 
-const uniformRegExp = /uniform\s+(bool|float|int|vec2|vec3|vec4|ivec2|ivec3|ivec4|mat2|mat3|mat4|sampler2D|samplerCube)\s+([\s\S]*?);/g;
-export function extractUniforms(
-  content: string,
-): {
+const uniformRegExp =
+  /uniform\s+(bool|float|int|vec2|vec3|vec4|ivec2|ivec3|ivec4|mat2|mat3|mat4|sampler2D|samplerCube)\s+([\s\S]*?);/g;
+export function extractUniforms(content: string): {
   content: string;
   uniforms: {
     [key: string]: any;

@@ -1,2 +1,2 @@
-`markdown:docs/api/point_layer/column.zh.md`
+<embed src="@/docs/api/point_layer/column.zh.md"></embed>
 

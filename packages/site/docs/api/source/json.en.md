@@ -3,7 +3,7 @@ title: JSON
 order: 2
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 GeoJSON 虽然是通用的的地理数据格式，在具体使用场景中，数据服务人员可能并不熟悉 GeoJON,或者没有生成 GeoJON 的工具， 因此 L7 对数据定义了 Parser 的概念，你的数据可以是任何格式，使用指定数据对应的地理信息字段即可。
 
@@ -92,7 +92,7 @@ layer.source(data, {
 
 #### 通用解析
 
-[ 点 coodinates 数据格式](./geojson##point)
+[ 点 coodinates 数据格式](/api/source/geojson##point)
 
 ```javascript
 const data = [
@@ -185,7 +185,7 @@ layer.source(data, {
 
 coordinate 格式 geojson 的 coordinate 字段 支持 LineString, MultiLineString
 
-[ 线 coodinates 数据格式](./geojson#linesring)
+[ 线 coodinates 数据格式](/api/source/geojson#linesring)
 
 ```javascript
 const data = {
@@ -219,7 +219,7 @@ layer.source(data, {
 
 需要指定 coordinates 字段, 格式同 GeoJSON 的 coordinates 字段
 
-[面 coodinates 数据格式](./geojson/#polygon)
+[面 coodinates 数据格式](/api/source/geojson/#polygon)
 
 **注意面数据 coord  是三层数据结构**
 

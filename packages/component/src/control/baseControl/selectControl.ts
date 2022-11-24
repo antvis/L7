@@ -70,6 +70,7 @@ export default class SelectControl<
   public setSelectValue(value: string | string[], emitEvent = true) {
     const finalValue = this.transSelectValue(value);
     this.optionDOMList.forEach((optionDOM) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const optionValue = optionDOM.getAttribute(
         SelectControlConstant.OptionValueAttrKey,
       )!;

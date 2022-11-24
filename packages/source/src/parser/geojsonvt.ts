@@ -1,5 +1,8 @@
-import { Tile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
-import { VectorTileLayer } from '@mapbox/vector-tile';
+import {
+  SourceTile,
+  TileLoadParams,
+  TilesetManagerOptions,
+} from '@antv/l7-utils';
 import {
   Feature,
   FeatureCollection,
@@ -7,7 +10,10 @@ import {
   Properties,
 } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
-import { IGeojsonvtOptions, IParserData, ITileParserCFG } from '../interface';
+import { IParserData, ITileSource } from '../interface';
+import VtSource from '../source/geojsonvt';
+
+import { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -149,45 +155,40 @@ function GetGeoJSON(
 }
 
 export type MapboxVectorTile = {
-  layers: { [_: string]: VectorTileLayer & { features: Feature[] } };
+  layers: { [key: string]: { features: Feature[] } };
 };
 
 const getVectorTile = async (
-  tile: Tile,
+  tile: SourceTile,
   tileIndex: any,
   tileParams: TileLoadParams,
   extent: number,
-): Promise<MapboxVectorTile> => {
+): Promise<ITileSource> => {
   return new Promise((resolve) => {
     const tileData = tileIndex.getTile(tile.z, tile.x, tile.y);
     // tileData
-    const features: any = [];
-    tileData.features.map((vectorTileFeature: any) => {
-      const feature = GetGeoJSON(
-        extent,
-        tileParams.x,
-        tileParams.y,
-        tileParams.z,
-        vectorTileFeature,
-      );
-      features.push(feature);
-    });
-    type IGeojsonVT = VectorTileLayer & {
-      features: Feature[];
-    };
-    // @ts-ignore
-    const featureCollection: IGeojsonVT = {
-      features,
-    };
+    const features = tileData
+      ? tileData.features.map((vectorTileFeature: any) => {
+          return GetGeoJSON(
+            extent,
+            tileParams.x,
+            tileParams.y,
+            tileParams.z,
+            vectorTileFeature,
+          );
+        })
+      : [];
 
     const vectorTile: MapboxVectorTile = {
       layers: {
-        // Tip: fixed SourceLayer Name
-        geojsonvt: featureCollection,
+        defaultLayer: {
+          // @ts-ignore
+          features,
+        },
       },
     };
-
-    resolve(vectorTile);
+    const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+    resolve(vectorSource);
   });
 };
 
@@ -223,7 +224,7 @@ export default function geojsonVTTile(
   const extent = geojsonOptions.extent || 4096;
   const tileIndex = geojsonvt(data, geojsonOptions);
 
-  const getTileData = (tileParams: TileLoadParams, tile: Tile) => {
+  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) => {
     return getVectorTile(tile, tileIndex, tileParams, extent);
   };
 

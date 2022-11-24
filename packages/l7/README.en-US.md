@@ -1,23 +1,27 @@
-# L7
+<img src="https://gw.alipayobjects.com/zos/antfincdn/R8sN%24GNdh6/language.svg" width="18"> English | [简体中文](./README.md)
 
-.
+<h1 align="center">L7</h1>
+
+<div align="center">
+
+🌍 Large-scale WebGL-powered Geospatial data visualization analysis framework.
+
 [![travis ci](https://travis-ci.com/antvis/L7.svg?branch=master)](https://travis-ci.com/antvis/L7) [![](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![最近提交](https://badgen.net/github/last-commit/antvis/L7)
 
-Large-scale WebGL-powered Geospatial data visualization analysis framework.
+<p align="center">
+  <a href="https://l7.antv.antgroup.com/tutorial/quickstart">Tutorials</a> •
+  <a href="https://l7.antv.antgroup.com/api/scene">API documentation</a> •
+  <a href="https://l7.antv.antgroup.com/examples">Examples</a> •
+  <a href="./.github/CONTRIBUTING.md">Contributor</a>
+</p>
 
-[中文 README](./README.md)
+![L7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
 
-[GitHub](https://github.com/antvis/L7)
+</div>
 
 Powered by WebGL, the rendering technology of L7 supports fast and efficient rendering of big data, 2D/3D rendering, possible through calculation and analysis of spatial data by GPU Parallel Compu-ting.
 
 L7 focuses on geographic data expressiveness，interaction and design of geographic visualization layers. The basemaps on the platform are powered by third-party services
-
-[website](https://l7.antv.vision/zh)
-
-## 🌄 L7 visualization demos
-
-![L7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
 
 ## 🌟 Highlight features of L7 2.0
 
@@ -81,20 +85,12 @@ const pointLayer = new PointLayer()
 scene.addLayer(pointLayer);
 ```
 
-## :memo: Documentation
-
-- [Getting started with L7](https://l7.antv.vision/en/docs/api/l7)
-- [Tutorials](https://l7.antv.vision/en/docs/tutorial/quickstart)
-- [API documentation](https://l7.antv.vision/en/docs/api/l7)
-- [Examples](https://l7.antv.vision/en/examples/gallery/basic)
-- [Contributor documentation](./.github/CONTRIBUTING.md)
-
 ## 🔗 Links
 
-- [L7Plot](https://github.com/antvis/L7Plot)
-- [L7 React](https://github.com/antvis/L7-React)
-- [L7 Boundary](https://github.com/antvis/L7-boundary)
 - [L7Draw](https://github.com/antvis/L7Draw)
+- [L7Plot](https://github.com/antvis/L7Plot)
+- [LarkMap](https://github.com/antvis/LarkMap)
+- [LocationInsight](https://locationinsight.antv.antgroup.com)
 
 ## ✅ License
 

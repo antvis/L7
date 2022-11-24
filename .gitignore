@@ -88,3 +88,5 @@ packages/district/src/data
 .umi/
 docs-dist
 /packages/leaflet
+site_temp
+.dumi

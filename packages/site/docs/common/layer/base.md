@@ -1,19 +1,22 @@
-`markdown:docs/common/style.md`
 
-`markdown:docs/common/layer/options.md`
+## options
 
-`markdown:docs/common/layer/layer_encode.md`
+<embed src="@/docs/common/layer/options.md"></embed>
 
-`markdown:docs/common/layer/layer_style.md`
+## 数据方法
 
-`markdown:docs/common/layer/layer_texture.md`
+<embed src="@/docs/common/layer/layer_encode.md"></embed>
 
-`markdown:docs/common/layer/layer_update.md`
+<embed src="@/docs/common/layer/layer_style.md"></embed>
 
-`markdown:docs/common/layer/layer_ctr.md`
+<embed src="@/docs/common/layer/layer_texture.md"></embed>
 
-`markdown:docs/common/layer/layer_interaction.md`
+<embed src="@/docs/common/layer/layer_update.md"></embed>
 
-`markdown:docs/common/layer/mouse_event.md`
+<embed src="@/docs/common/layer/layer_ctr.md"></embed>
 
-`markdown:docs/common/layer/layer_event.md`
+<embed src="@/docs/common/layer/layer_interaction.md"></embed>
+
+<embed src="@/docs/common/layer/mouse_event.md"></embed>
+
+<embed src="@/docs/common/layer/layer_event.md"></embed>

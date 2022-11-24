@@ -1,4 +1,5 @@
 export type DataType = string | object[] | object;
+export type TypedArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array;
 export interface IDictionary<TValue> {
   [key: string]: TValue;
 }
@@ -21,54 +22,13 @@ export interface IParserData {
   featureKeys?: IFeatureKey;
 }
 
-// 栅格瓦片解析配置项
-
-export enum RasterTileType {
-  IMAGE = 'image',
-  ARRAYBUFFER = 'arraybuffer',
-  RGB = 'rgb',
-}
-
-export interface IGeojsonvtOptions {
-  maxZoom: number; // max zoom to preserve detail on
-  indexMaxZoom: number; // max zoom in the tile index
-  indexMaxPoints: number; // max number of points per tile in the tile index
-  tolerance: number; // simplification tolerance (higher means simpler)
-  extent: number; // tile extent
-  buffer: number; // tile buffer on each side
-  lineMetrics: boolean; // whether to calculate line metrics
-  promoteId: null; // name of a feature property to be promoted to feature.id
-  generateId: boolean; // whether to generate feature ids. Cannot be used with promoteId
-  debug: number; // logging level (0, 1 or 2)
-}
-export interface ITileParserCFG {
-  tileSize?: number;
-  minZoom?: number;
-  maxZoom?: number;
-  zoomOffset?: number;
-  extent?: [number, number, number, number];
-  updateStrategy?: 'overlap' | 'replace';
-  // 指定 feature 编码 id
-  featureId?: string;
-  // 指定矢量瓦片的数据分类
-  sourceLayer?: string;
-  coord?: string;
-  // 指定栅格瓦片的类型
-  dataType?: RasterTileType;
-  geojsonvtOptions?: IGeojsonvtOptions;
-  format?: any;
-  // 请求返回的数据类型
-  responseType?: 'string' | 'json' | 'arrayBuffer';
-  operation?: any;
-}
-
 export interface IJsonItem {
   [key: string]: any;
 }
 export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
-  rasterData: HTMLImageElement | Uint8Array| ImageBitmap | null | undefined;
+  rasterData: HTMLImageElement | Uint8Array |  ImageBitmap | null | undefined;
   width: number;
   height: number;
 }
@@ -83,8 +43,29 @@ export type IRgbOperation = {
   g?: any[]
   b?: any[]
 };
+export type SchemaOperationType = SchemaRGBOperation | SchemaBandOperation;
+export type SchemaRGBOption ={
+  countCut?:[number,number];// 百分比
+  RMinMax?:[number,number];
+  GMinMax?:[number,number];
+  BMinMax?:[number,number];
+}
 
-export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation;
+export type SchemaRGBOperation = {
+  type: 'rgb'
+  options:SchemaRGBOption | {
+    r?: any[];
+    g?: any[]
+    b?: any[]
+  }
+}
+export type SchemaBandOperation = {
+  type: 'nd'
+
+}
+
+export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation | SchemaOperationType;
+
 
 export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
 
@@ -97,3 +78,12 @@ export interface IRasterCfg {
   max: number;
   min: number;
 }
+
+import { Feature } from '@turf/helpers';
+export interface ITileSource {
+  getTileData(layer: string): any;
+}
+
+export type MapboxVectorTile = {
+  layers: { [_: string]: { features: Feature[] } };
+};

@@ -3,17 +3,10 @@ import { IRasterLayerStyleOptions } from '../core/interface';
 import RasterModels, { RasterModelType } from './models/index';
 export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
-  public buildModels() {
+  public async buildModels() {
     const modelType = this.getModelType();
     this.layerModel = new RasterModels[modelType](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
   protected getDefaultConfig() {
@@ -22,12 +15,12 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       raster: {},
       rasterRgb: {},
       raster3d: {},
-      rasterTile: {},
+      rasterTerrainRgb: {},
     };
     return defaultConfig[type];
   }
 
-  protected getModelType(): RasterModelType {
+  public getModelType(): RasterModelType {
     // 根据 source 的类型判断 model type
     const parserType = this.layerSource.getParserType();
     switch (parserType) {
@@ -35,8 +28,8 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
         return 'raster';
       case 'rasterRgb':
         return 'rasterRgb';
-      case 'rasterTile':
-        return 'rasterTile';
+      case 'image':
+        return 'rasterTerrainRgb';
       default:
         return 'raster';
     }

@@ -3,7 +3,7 @@ title: L7Mini 小程序模块教程
 order: 3
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 简介
 
@@ -160,7 +160,7 @@ function handleCanvas(my, callback) {
         rect: true,
         computedStyle: ['height', 'width'],
       },
-      function(res) {
+      function (res) {
         // 内部计算使用 （必须设置）
         res.node.left = res.left;
         res.node.top = res.top;

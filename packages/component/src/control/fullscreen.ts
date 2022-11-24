@@ -13,9 +13,7 @@ export interface IFullscreenControlOption extends IButtonControlOption {
 
 export { Fullscreen };
 
-export default class Fullscreen extends ButtonControl<
-  IFullscreenControlOption
-> {
+export default class Fullscreen extends ButtonControl<IFullscreenControlOption> {
   protected isFullscreen = false;
 
   protected mapContainer: HTMLElement;
@@ -47,6 +45,7 @@ export default class Fullscreen extends ButtonControl<
   public onAdd(): HTMLElement {
     const button = super.onAdd();
     button.addEventListener('click', this.onClick);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.mapContainer = DOM.getContainer(this.scene.getSceneConfig().id!);
     this.mapContainer.addEventListener(
       'fullscreenchange',
@@ -88,14 +87,8 @@ export default class Fullscreen extends ButtonControl<
   protected onFullscreenChange = () => {
     this.isFullscreen = !!document.fullscreenElement;
 
-    const {
-      btnText,
-      btnIcon,
-      title,
-      exitBtnText,
-      exitBtnIcon,
-      exitTitle,
-    } = this.controlOption;
+    const { btnText, btnIcon, title, exitBtnText, exitBtnIcon, exitTitle } =
+      this.controlOption;
     if (this.isFullscreen) {
       this.setBtnTitle(exitTitle);
       this.setBtnText(exitBtnText);

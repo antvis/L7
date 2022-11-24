@@ -36,9 +36,9 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
       .inSingletonScope();
   }
 
-  protected getServiceConstructor(): new (...args: any[]) => IMapService<
-    RawMap
-  > {
+  protected getServiceConstructor(): new (
+    ...args: any[]
+  ) => IMapService<RawMap> {
     throw new Error('Method not implemented.');
   }
 }

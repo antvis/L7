@@ -1,22 +1,27 @@
-## L7 地理空间数据可视分析引擎
+<img src="https://gw.alipayobjects.com/zos/antfincdn/R8sN%24GNdh6/language.svg" width="18"> [English](./README.en-US.md) | 简体中文
+
+<h1 align="center">L7</h1>
+
+<div align="center">
+
+🌍 地理空间数据可视分析引擎
 
 [![travis ci](https://travis-ci.com/antvis/L7.svg?branch=master)](https://travis-ci.com/antvis/L7) [![](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![最近提交](https://badgen.net/github/last-commit/antvis/L7)
 
-[README](./README.en-US.md)
+<p align="center">
+  <a href="https://l7.antv.antgroup.com/tutorial/quickstart">教程</a> •
+  <a href="https://l7.antv.antgroup.com/api/scene">文档</a> •
+  <a href="https://l7.antv.antgroup.com/examples">示例</a> •
+  <a href="./.github/CONTRIBUTING.md">贡献</a>
+</p>
 
-[GitHub](https://github.com/antvis/L7)
+![L7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
 
-```bash
-  git clone https://github.com/antvis/L7  --depth=1
-```
+</div>
 
 L7 是由蚂蚁金服 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析开发框架。L7 中的 L 代表 Location，7 代表世界七大洲，寓意能为全球位置数据提供可视分析的能力。L7 专注数据可视化化表达，通过颜色、大小、纹理，方向，体积等视觉变量设置实现从数据到信息清晰，有效的表达。
 
-[官网地址](https://l7.antv.vision/zh)
-
 L7 能够满足常见的地图图表，BI 系统的可视化分析、以及 GIS，交通，电力，国土，农业，城市等领域的空间信息管理，分析等应用系统开发需求。
-
-![L7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)
 
 ## 🌟 核心特性
 
@@ -113,20 +118,12 @@ const pointLayer = new PointLayer()
 scene.addLayer(pointLayer);
 ```
 
-## :memo: 文档
-
-- [开始使用](https://l7.antv.vision/en/docs/api/l7)
-- [教程](https://l7.antv.vision/en/docs/tutorial/quickstart)
-- [文档](https://l7.antv.vision/en/docs/api/l7)
-- [示例](https://l7.antv.vision/en/examples/gallery/basic)
-- [贡献](./.github/CONTRIBUTING.md)
-
 ## 🔗 Links
 
-- [L7Plot](https://github.com/antvis/L7Plot)
-- [L7 React](https://github.com/antvis/L7-React)
-- [L7 Boundary](https://github.com/antvis/L7-boundary)
 - [L7Draw](https://github.com/antvis/L7Draw)
+- [L7Plot](https://github.com/antvis/L7Plot)
+- [LarkMap](https://github.com/antvis/LarkMap)
+- [LocationInsight](https://locationinsight.antv.antgroup.com)
 
 ## ✅ License
 

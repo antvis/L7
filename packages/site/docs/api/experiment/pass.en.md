@@ -3,4 +3,4 @@ title: MultiPass
 order: 10
 ---
 
-`markdown:docs/api/pass.zh.md`
+<embed src="@/docs/api/experiment/pass.zh.md"></embed>

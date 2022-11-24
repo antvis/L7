@@ -21,7 +21,7 @@ l7globalThis = getGlobalThis();
 let globalWindow: Window & typeof l7globalThis;
 
 if (typeof window === 'undefined') {
-  globalWindow = ({
+  globalWindow = {
     devicePixelRatio: 1,
     navigator: {
       userAgent:
@@ -73,7 +73,7 @@ if (typeof window === 'undefined') {
     requestAnimationFrame: () => true,
     cancelAnimationFrame: () => true,
     clearTimeout: () => true,
-  } as unknown) as Window & typeof globalThis;
+  } as unknown as Window & typeof globalThis;
 } else {
   globalWindow = window;
 }

@@ -20,6 +20,41 @@ export default defineConfig({
     ie: 11,
   },
   mode: 'site',
+  navs: [
+    {
+      title: 'bugs',
+      path: '/bugs',
+    },
+    {
+      title: '特性',
+      path: '/features',
+    },
+  
+    {
+      title: '图库',
+      path: '/gallery',
+    },
+    {
+      title: '瓦片',
+      path: '/tile',
+    },
+    {
+      title: '栅格',
+      path: '/raster',
+    },
+    {
+      title: '组件',
+      path: '/component',
+    },
+    {
+      title: '绘制组件',
+      path: '/draw',
+    },
+    {
+      title: 'GitHub',
+      path: 'https://github.com/antvis/L7',
+    },
+  ],
   esbuild: false,
   chainWebpack: (memo, { env, webpack, createCSSRule }) => {
     // 设置 alias
@@ -42,13 +77,6 @@ export default defineConfig({
     ['transform-import-css-l7'],
     ['babel-plugin-inline-import', { extensions: ['.worker.js'] }],
   ],
-  navs: [
-    null,
-    {
-      title: 'GitHub',
-      path: 'https://github.com/antvis/L7',
-    },
-  ],
   externals: {
     react: 'window.React',
     'react-dom': 'window.ReactDOM',
@@ -67,7 +95,7 @@ export default defineConfig({
     'https://gw.alipayobjects.com/os/lib/antd/4.19.4/dist/antd.js',
     /** lodash */
     'https://gw.alipayobjects.com/os/lib/lodash/4.17.20/lodash.min.js',
-  ],
+  ]
 
   // more config: https://d.umijs.org/config
 });

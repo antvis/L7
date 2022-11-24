@@ -1,8 +1,8 @@
-import { Scene, GaodeMapV2, Logo } from '@antv/l7';
+import { Scene, GaodeMap, Logo } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
-  map: new GaodeMapV2({
+  map: new GaodeMap({
     pitch: 0,
     style: 'normal',
     center: [120.154672, 30.241095],

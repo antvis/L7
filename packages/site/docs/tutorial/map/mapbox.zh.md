@@ -1,8 +1,8 @@
 ---
-title: MapBox地图
+title: MapBox 地图
 order: 0
 ---
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 ## 使用Mapbox 地图
 
 1、注册MapBox token

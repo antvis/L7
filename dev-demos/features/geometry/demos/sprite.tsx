@@ -9,7 +9,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        // map: new GaodeMapV2({
+        // map: new GaodeMap({
         // map: new Mapbox({
         pitch: 40,
         style: 'dark',

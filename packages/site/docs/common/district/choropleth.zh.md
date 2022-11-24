@@ -1,6 +1,6 @@
 ## Usage
 
-1. 按图表方式，[在线示例](https://l7plot.antv.vision/zh/examples/choropleth/administrative#china-map)
+1. 按图表方式，[在线示例](https://l7plot.antv.antgroup.com/zh/examples/choropleth/administrative#china-map)
 
 ```js
 import { Choropleth } from '@antv/l7plot';
@@ -8,7 +8,7 @@ import { Choropleth } from '@antv/l7plot';
 const choropleth = new Choropleth('container', options);
 ```
 
-2. 按场景方式，[在线示例](/zh/examples/choropleth/administrative#china-map)
+2. 按场景方式，[在线示例](/examples/choropleth/administrative#china-map)
 
 ```js
 import { Scene, Mapbox } from '@antv/l7';
@@ -32,4 +32,4 @@ scene.on('loaded', () => {
 
 ## API
 
-Choropleth 具体 API 文档移步 [L7Plot 官网](https://l7plot.antv.vision/zh/docs/api/plots/choropleth)。
+Choropleth 具体 API 文档移步 [L7Plot 官网](https://l7plot.antv.antgroup.com/zh/docs/api/plots/choropleth)。

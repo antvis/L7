@@ -13,5 +13,8 @@ export default class UpdateModelPlugin implements ILayerPlugin {
         layer.layerModel.needUpdate();
       }
     });
+    layer.hooks.afterRender.tap('UpdateModelPlugin', () => {
+      layer.layerModelNeedUpdate = false;
+    });
   }
 }

@@ -35,7 +35,7 @@ export default class Marker extends EventEmitter {
       ...this.getDefault(),
       ...option,
     };
-    bindAll(['update', 'onMove', 'onUp', 'addDragHandler', 'onMapClick'], this);
+    bindAll(['update', 'onMove', 'onMapClick'], this);
     this.init();
   }
 
@@ -71,10 +71,10 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('click', this.onMapClick);
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
-      this.mapsService.off('mousedown', this.addDragHandler);
-      this.mapsService.off('touchstart', this.addDragHandler);
-      this.mapsService.off('mouseup', this.onUp);
-      this.mapsService.off('touchend', this.onUp);
+      // this.mapsService.off('mousedown', this.addDragHandler);
+      // this.mapsService.off('touchstart', this.addDragHandler);
+      // this.mapsService.off('mouseup', this.onUp);
+      // this.mapsService.off('touchend', this.onUp);
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
@@ -349,7 +349,7 @@ export default class Marker extends EventEmitter {
   
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
-    throw new Error('Method not implemented.');
+   return null
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

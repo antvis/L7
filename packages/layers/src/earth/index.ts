@@ -33,12 +33,10 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
     },
   };
 
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
     this.layerModel = new EarthModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
 
   /**
@@ -53,10 +51,9 @@ export default class EarthLayer extends BaseLayer<IEarthLayerStyleOptions> {
     }
   }
 
-  protected getModelType(): EarthModelType {
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
-      'shape',
-    );
+  public getModelType(): EarthModelType {
+    const shapeAttribute =
+      this.styleAttributeService.getLayerStyleAttribute('shape');
     let shape = (shapeAttribute?.scale?.field || 'base') as string;
     if (earthLayerTypes.indexOf(shape) < 0) {
       shape = 'base';

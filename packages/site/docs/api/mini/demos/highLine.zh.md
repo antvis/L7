@@ -3,7 +3,7 @@ title: L7Mini 等高线
 order: 4
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 ## 案例
 

@@ -23,7 +23,7 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -52,21 +52,19 @@ export default class ImageModel extends BaseModel {
         this.layerService.reRender();
       };
     } else {
-      source.data.images.then(
-        (imageData: Array<HTMLImageElement | ImageBitmap>) => {
-          this.texture = createTexture2D({
-            data: imageData[0],
-            width: imageData[0].width,
-            height: imageData[0].height,
-            mag: gl.LINEAR,
-            min: gl.LINEAR,
-          });
-          this.layerService.reRender();
-        },
-      );
+      const imageData = await source.data.images;
+
+      this.texture = createTexture2D({
+        data: imageData[0],
+        width: imageData[0].width,
+        height: imageData[0].height,
+        mag: gl.LINEAR,
+        min: gl.LINEAR,
+      });
+
     }
 
-    this.layer
+    const model = await this.layer
       .buildLayerModel({
         moduleName: 'rasterImage',
         vertexShader: ImageVert,
@@ -80,21 +78,15 @@ export default class ImageModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+    return [model]
   }
 
   public clearModels(): void {
     this.texture?.destroy();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+  public async buildModels(): Promise<IModel[]> {
+    return await this.initModels();
   }
 
   protected registerBuiltinAttributes() {

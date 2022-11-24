@@ -29,16 +29,16 @@ export default class GridModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'heatmapGrid',
         vertexShader: heatmapGridVert,
@@ -48,13 +48,7 @@ export default class GridModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({

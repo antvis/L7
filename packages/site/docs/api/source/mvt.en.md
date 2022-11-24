@@ -3,4 +3,4 @@ title: MVT
 order: 6
 ---
 
-`markdown: docs/api/source/mvt.zh.md`
+<embed src="@/docs/api/source/mvt.zh.md"></embed>

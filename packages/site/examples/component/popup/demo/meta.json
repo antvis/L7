@@ -13,7 +13,15 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*cNMlSLwgjboAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "layerPopup.ts",
+      "filename": "popup2.ts",
+      "title": {
+        "zh": "图层点击 气泡",
+        "en": "Popup"
+      },
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*cNMlSLwgjboAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "layerpopup.ts",
       "title": {
         "zh": "LayerPopup 图层气泡",
         "en": "LayerPopup"

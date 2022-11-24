@@ -2,7 +2,7 @@
 title: 高德地图
 order: 0
 ---
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 ## 使用高德地图
 
 ### 注册账号并申请Key
@@ -15,19 +15,19 @@ order: 0
 
 ### 引入 L7 
 
-2.0版本在L7内部动态引入了高德地图JS API，因此不再需要单独引入高德JS API，只需设置 type 为 ```amap``` 并且传入token
+高德 2.0 版本在L7内部动态引入了高德地图 `JS API` ，因此不再需要单独引入高德 `JS API`，只需设置 `type` 为 `amap` 并且传入 `token`。 
 
 ```html
 <script src="https://unpkg.com/@antv/l7"></script>
 ```
 
-### 添加div 标签指定地图容器
+### 添加 div 标签指定地图容器
 
-同时需要为Div设置 高度和宽度
+同时需要为 `div`设置 高度和宽度。
 
 ``` html
 <div id="map"></div>
-````
+```
 
 ### 初始化 L7 Scene
 
@@ -43,19 +43,16 @@ order: 0
       token: '高德地图token',
     }),
   });
-
 ```
 
-这样我们就完成了通过L7 实例化高德地图
-
+这样我们就完成了通过 `L7` 实例化高德地图。
 
 ### 添加可视化图层
 
-- 首先我们需要获取数据，获取数据方法，这里我们获取在线的json数据
-- 然后我们就可以初始一个Layer，并添加到Scene就完成了图层的添加。
+- 首先我们需要获取数据，获取数据方法，这里我们获取在线的地理数据。
+- 然后我们就可以初始一个 `Layer`，并添加到 `Scene` 就完成了图层的添加。
 
-```javascript
-
+``` javascript
 fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
   .then(res => res.json())
   .then(data => {
@@ -82,16 +79,12 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
         '#7BE39E',
         '#A1EDB8',
         '#CEF8D6'
-      ])
-      .style({
-        opacity: 1.0
-      });
+      ]);
     scene.addLayer(pointLayer);
   });
-
   ```
 
-  ### 完整demo代码
+### 完整 demo 代码
 
 ```html
 <!DOCTYPE html>
@@ -146,14 +139,12 @@ fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
         '#7BE39E',
         '#A1EDB8',
         '#CEF8D6'
-      ])
-      .style({
-        opacity: 1.0
-      });
+      ]);
     scene.addLayer(pointLayer);
   });
 
 </script>
 </body>
 </html>
+
 ```

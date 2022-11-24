@@ -6,7 +6,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
-import { isEqual } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -25,10 +24,7 @@ export default class RasterModel extends BaseModel {
       domain = [0, 1],
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    if (!isEqual(this.rampColors, rampColors)) {
-      this.updateColorTexture();
-      this.rampColors = rampColors;
-    }
+    this.colorTexture =  this.layer.textureService.getColorTexture(rampColors);
 
     return {
       u_opacity: opacity || 1,
@@ -60,12 +56,10 @@ export default class RasterModel extends BaseModel {
     }
   }
 
-  public async initModels(callbackModel: (models: IModel[]) => void) {
+   public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
-      rampColorsData,
-      rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
@@ -81,17 +75,8 @@ export default class RasterModel extends BaseModel {
       type: gl.FLOAT,
       // aniso: 4,
     });
-    const imageData = rampColorsData
-      ? rampColorsData
-      : generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: false,
-    });
-
-    this.layer
+  
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'rasterImageData',
         vertexShader: rasterVert,
@@ -101,17 +86,11 @@ export default class RasterModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   public clearModels(): void {

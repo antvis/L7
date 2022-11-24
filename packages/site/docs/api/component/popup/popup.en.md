@@ -3,7 +3,7 @@ title: Popup
 order: 0
 ---
 
-`markdown:docs/common/style.md`
+<embed src="@/docs/common/style.md"></embed>
 
 地图标注信息窗口，用于展示地图要素的属性信息
 
@@ -153,5 +153,5 @@ popup.on('close', () => {});
 
 ## demo 地址
 
-[demo1](../../../examples/point/column#column_linear)
-[demo2](../../../examples/line/path#bus_light)
+[demo1](/examples/point/column#column_linear)
+[demo2](/examples/line/path#bus_light)

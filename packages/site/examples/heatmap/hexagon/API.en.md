@@ -1,1 +1,1 @@
-`markdown:docs/api/layer/heatmap_layer/hexagon.en.md`
+<embed src="@/docs/api/layer/heatmap_layer/hexagon.en.md"></embed>

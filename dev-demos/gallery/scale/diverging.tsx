@@ -1,22 +1,27 @@
 import { PolygonLayer, Scene } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
-import React, { useEffect } from 'react';
+import { Map } from '@antv/l7-maps';
+import React, { useEffect, useState } from 'react';
 import { useEuropeData, addEuropeLayers } from './useLine';
 
 export default () => {
   const { geoData } = useEuropeData();
+  const [scene, setScene] = useState<Scene>();
 
   useEffect(() => {
-    const scene = new Scene({
-      id: 'map',
-      map: new Mapbox({
-        pitch: 0,
-        style: 'light',
-        center: [-96, 37.8],
-        zoom: 3,
-      }),
-    });
-    if (geoData) {
+    if (!scene) {
+      const mapScene = new Scene({
+        id: 'map',
+        map: new Map({
+          pitch: 0,
+          style: 'light',
+          center: [-96, 37.8],
+          zoom: 3,
+        }),
+      });
+      setScene(mapScene);
+    }
+
+    if (geoData && scene) {
       const layer = new PolygonLayer({
         autoFit: true,
       })
@@ -46,11 +51,11 @@ export default () => {
           opacity: 1,
         });
 
-      scene.addLayer(layer);
+      scene?.addLayer(layer);
       addEuropeLayers(geoData, scene, layer);
     }
     return () => {
-      scene.destroy();
+      scene?.destroy();
     };
   }, [geoData]);
 

@@ -15,7 +15,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      stencil: true,
+     
       map: new Map({
         center: [121.268, 29],
         // zoom: 12,
@@ -35,7 +35,6 @@ export default () => {
         type: 'mvt',
         tileSize: 256,
         // extent: [-180, -85.051129, 179, 85.051129],
-        cancelExtent: true,
       },
     });
     /**

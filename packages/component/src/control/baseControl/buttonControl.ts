@@ -1,11 +1,10 @@
 import { DOM } from '@antv/l7-utils';
-import { ELType } from '@antv/l7-utils/src/dom';
 import Control, { IControlOption } from './control';
 
 export { ButtonControl };
 
 export interface IButtonControlOption extends IControlOption {
-  btnIcon?: ELType | DocumentFragment;
+  btnIcon?: DOM.ELType | DocumentFragment;
   btnText?: string;
   title?: string;
   vertical?: boolean;
@@ -36,7 +35,7 @@ export default class ButtonControl<
    * 按钮中图标对应的 DOM
    * @protected
    */
-  protected buttonIcon?: ELType | DocumentFragment;
+  protected buttonIcon?: DOM.ELType | DocumentFragment;
 
   /**
    * 设置当前按钮

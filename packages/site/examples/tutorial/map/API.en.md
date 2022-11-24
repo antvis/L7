@@ -1,4 +1,4 @@
 ---
 title: API
 ---
-`markdown:docs/api/base.en.md`
+<embed src="@/docs/api/base.en.md"></embed>

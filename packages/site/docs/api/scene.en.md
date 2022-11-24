@@ -1,6 +1,8 @@
 ---
 title: Scene
-order: 1
+order: 0
+redirect_from:
+  - /en/docs/api
 ---
 
-`markdown:docs/api/scene.zh.md`
+<embed src="@/docs/api/scene.zh.md"></embed>

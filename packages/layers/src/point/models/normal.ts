@@ -37,18 +37,18 @@ export default class NormalModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels():Promise<IModel[]>  {
+    return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]>  {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
 
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointNormal',
         vertexShader: normalVert,
@@ -60,13 +60,7 @@ export default class NormalModel extends BaseModel {
         stencil: getMask(mask, maskInside),
         pick: false,
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+      return [model]
   }
 
   public clearModels() {
