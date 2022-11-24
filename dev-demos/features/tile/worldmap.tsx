@@ -1,11 +1,9 @@
 // @ts-ignore
 import {
+  PolygonLayer,
   Scene,
   // LineLayer,
   Source,
-  PolygonLayer,
-  // PointLayer,
-  // TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
