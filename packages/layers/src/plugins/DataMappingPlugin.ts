@@ -11,7 +11,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { isColor, normalize, rgb2arr } from '@antv/l7-utils';
+import { normalize, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import { cloneDeep } from 'lodash';
 import 'reflect-metadata';
@@ -31,56 +31,46 @@ export default class DataMappingPlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    layer.hooks.init.tap('DataMappingPlugin', () => {
+    layer.hooks.init.tapPromise('DataMappingPlugin', async () => {
       // 初始化重新生成 map
-      const source = layer.getSource();
-      if (source.inited) {
-        this.generateMaping(layer, { styleAttributeService });
-      } else {
-        source.once('update', () => {
-          this.generateMaping(layer, { styleAttributeService });
-        });
-      }
+      this.generateMaping(layer, { styleAttributeService });
     });
 
-    layer.hooks.beforeRenderData.tap('DataMappingPlugin', () => {
-      layer.dataState.dataMappingNeedUpdate = false;
-      const source = layer.getSource();
-      if (source.inited) {
+    layer.hooks.beforeRenderData.tapPromise(
+      'DataMappingPlugin',
+      async (flag: boolean) => {
+        if (!flag) {
+          return flag;
+        }
+        layer.dataState.dataMappingNeedUpdate = false;
         this.generateMaping(layer, { styleAttributeService });
-      } else {
-        source.once('update', () => {
-          this.generateMaping(layer, { styleAttributeService });
-        });
-      }
 
-      return true;
-    });
+        return true;
+      },
+    );
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
-      const { usage } = layer.getLayerConfig();
-      if (usage === 'basemap') {
-        return;
-      }
       const source = layer.getSource();
       if (layer.layerModelNeedUpdate || !source || !source.inited) {
         return;
       }
-      const bottomColor = layer.getBottomColor();
       const attributes = styleAttributeService.getLayerStyleAttributes() || [];
       const filter = styleAttributeService.getLayerStyleAttribute('filter');
       const { dataArray } = source.data;
+      // TODO 数据为空的情况
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
+        return;
+      }
 
       const attributesToRemapping = attributes.filter(
         (attribute) => attribute.needRemapping, // 如果filter变化
       );
       let filterData = dataArray;
-
       // 数据过滤完 再执行数据映射
       if (filter?.needRemapping && filter?.scale) {
         filterData = dataArray.filter((record: IParseDataItem) => {
-          return this.applyAttributeMapping(filter, record, bottomColor)[0];
+          return this.applyAttributeMapping(filter, record)[0];
         });
       }
 
@@ -92,7 +82,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
             attributes,
             filterData,
             undefined,
-            bottomColor,
           );
           layer.setEncodedData(encodeData);
           filter.needRemapping = false;
@@ -102,12 +91,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
             attributesToRemapping,
             filterData,
             layer.getEncodedData(),
-            bottomColor,
           );
           layer.setEncodedData(encodeData);
         }
-        // 处理文本更新
-        layer.emit('remapping', null);
+        // 处理文本更新，更新文字形状
+        // layer.emit('remapping', null);
       }
     });
   }
@@ -117,24 +105,22 @@ export default class DataMappingPlugin implements ILayerPlugin {
       styleAttributeService,
     }: { styleAttributeService: IStyleAttributeService },
   ) {
-    const bottomColor = layer.getBottomColor();
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
+
     let filterData = dataArray;
     // 数据过滤完 再执行数据映射
     if (filter?.scale) {
       filterData = dataArray.filter((record: IParseDataItem) => {
-        return this.applyAttributeMapping(filter, record, bottomColor)[0];
+        return this.applyAttributeMapping(filter, record)[0];
       });
     }
-    const encodeData = this.mapping(
-      layer,
-      attributes,
-      filterData,
-      undefined,
-      bottomColor,
-    );
+    // Tip: layer 对数据做处理
+    // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
+    // 在各个 layer 中继承
+    filterData = layer.processData(filterData);
+    const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
     // 对外暴露事件
     layer.emit('dataUpdate', null);
@@ -145,17 +131,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
     attributes: IStyleAttribute[],
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
-    minimumColor?: string,
   ): IEncodeFeature[] {
     const {
+      // TODO 单独的数据处理不应在此处
       arrow = {
         enable: false,
       },
-      usage,
     } = layer.getLayerConfig() as ILineLayerStyleOptions;
-    if (usage === 'basemap') {
-      return this.mapLayerMapping(layer, attributes, data, predata);
-    }
+
     const usedAttributes = attributes.filter(
       (attribute) => attribute.scale !== undefined,
     );
@@ -167,11 +150,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         ...preRecord,
       };
       usedAttributes.forEach((attribute: IStyleAttribute) => {
-        let values = this.applyAttributeMapping(
-          attribute,
-          record,
-          minimumColor,
-        );
+        let values = this.applyAttributeMapping(attribute, record);
         attribute.needRemapping = false;
 
         // TODO: 支持每个属性配置 postprocess
@@ -209,67 +188,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
       }
       return encodeRecord;
     }) as IEncodeFeature[];
-
     // 调整数据兼容 Amap2.0
     this.adjustData2Amap2Coordinates(mappedData, layer);
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
-
-    return mappedData;
-  }
-
-  private mapLayerMapping(
-    layer: ILayer,
-    attributes: IStyleAttribute[],
-    data: IParseDataItem[],
-    predata?: IEncodeFeature[],
-  ): IEncodeFeature[] {
-    const usedAttributes = attributes.filter(
-      (attribute) => attribute.scale !== undefined,
-    );
-    const mappedData = data.map((record: IParseDataItem, i) => {
-      const preRecord = predata ? predata[i] : {};
-      const encodeRecord: IEncodeFeature = {
-        id: record._id,
-        coordinates: record.coordinates,
-        ...preRecord,
-      };
-      usedAttributes.forEach((attribute: IStyleAttribute) => {
-        if (
-          attribute.name === 'shape' &&
-          // @ts-ignore
-          layer.shapeOption?.field === 'simple'
-        ) {
-          encodeRecord[attribute.name] = 'simple';
-          attribute.needRemapping = false;
-        } else {
-          const values = this.applyMapLayerAttributeMapping(attribute, record);
-
-          attribute.needRemapping = false;
-
-          // @ts-ignore
-          encodeRecord[attribute.name] =
-            Array.isArray(values) && values.length === 1 ? values[0] : values;
-
-          // 增加对 layer/text/iconfont unicode 映射的解析
-          if (attribute.name === 'shape') {
-            encodeRecord.shape = this.fontService.getIconFontKey(
-              encodeRecord[attribute.name] as string,
-            );
-          }
-        }
-      });
-
-      if (encodeRecord.size === undefined) {
-        // in case not set size
-        encodeRecord.size = 1;
-      }
-      return encodeRecord;
-    }) as IEncodeFeature[];
-
-    // 调整数据兼容 Amap2.0
-    this.adjustData2Amap2Coordinates(mappedData, layer);
 
     return mappedData;
   }
@@ -372,7 +295,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
   private applyAttributeMapping(
     attribute: IStyleAttribute,
     record: { [key: string]: unknown },
-    minimumColor?: string,
   ) {
     if (!attribute.scale) {
       return [];
@@ -391,34 +313,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
     });
 
     const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
-    if (attribute.name === 'color' && !isColor(mappingResult[0])) {
-      return [minimumColor];
-    }
+
     return mappingResult;
     // return attribute.mapping ? attribute.mapping(params) : [];
-  }
-
-  private applyMapLayerAttributeMapping(
-    attribute: IStyleAttribute,
-    record: { [key: string]: unknown },
-  ) {
-    if (!attribute.scale) {
-      return [];
-    }
-    const scalers = attribute?.scale?.scalers || [];
-    const params: unknown[] = [];
-
-    scalers.forEach(({ field }) => {
-      if (
-        record.hasOwnProperty(field) ||
-        attribute.scale?.type === 'variable'
-      ) {
-        params.push(record[field]);
-      }
-    });
-
-    const mappingResult = attribute.mapping ? attribute.mapping(params) : [];
-    return mappingResult;
   }
 
   private getArrowPoints(p1: Position, p2: Position) {

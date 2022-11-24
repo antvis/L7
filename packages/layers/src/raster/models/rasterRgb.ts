@@ -13,50 +13,55 @@ import rasterFrag from '../shaders/raster_rgb_frag.glsl';
 import rasterVert from '../shaders/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
-  protected channelRMax: number = 256;
-  protected channelGMax: number = 256;
-  protected channelBMax: number = 256;
+  protected dataOption: any = {};
 
   public getUninforms() {
     const {
       opacity = 1,
-      channelRMax,
-      channelGMax,
-      channelBMax
+      noDataValue = 0,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
+    const {rMinMax,gMinMax,bMinMax} = this.dataOption;
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
-      u_channelRMax: channelRMax !== undefined ? channelRMax : this.channelRMax,
-      u_channelGMax: channelGMax !== undefined ? channelGMax : this.channelGMax,
-      u_channelBMax: channelBMax !== undefined ? channelBMax : this.channelBMax,
+      u_noDataValue: noDataValue,
+      u_rminmax: rMinMax,
+      u_gminmax: gMinMax,
+      u_bminmax: bMinMax,
+  
     };
   }
 
   private async getRasterData(parserDataItem: any) {
+     
     if(Array.isArray(parserDataItem.data)) {
+      const {data,...rescfg} = parserDataItem;
+      this.dataOption = rescfg;
+      return {
+        data,
+        ...rescfg
+      }
+    }
+     
+    const { rasterData,...rest  } = await parserDataItem.data;
+    this.dataOption = rest;
+    if(Array.isArray(rasterData)) {
       // 直接传入波段数据
       return {
-        data: parserDataItem.data,
-        width: parserDataItem.width,
-        height: parserDataItem.height,
+        data: rasterData,
+        ...rest
       }
     } else {
       // 多波段形式、需要进行处理
       // 支持彩色栅格（多通道）
-      const { rasterData, width, height, channelR, channelG, channelB } = await parserDataItem.data;
-      this.channelRMax = channelR;
-      this.channelGMax = channelG;
-      this.channelBMax = channelB;
       return {
         data: Array.from(rasterData),
-        width,
-        height
+        ...rest
       }
     }
   }
 
-  public async initModels(callbackModel: (models: IModel[]) => void) {
+   public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -64,7 +69,6 @@ export default class RasterModel extends BaseModel {
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
-
     const {data, width, height} = await this.getRasterData(parserDataItem);
     this.texture = createTexture2D({
       // @ts-ignore
@@ -75,7 +79,7 @@ export default class RasterModel extends BaseModel {
       type: gl.FLOAT,
     });
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'rasterImageDataRGBA',
         vertexShader: rasterVert,
@@ -85,17 +89,11 @@ export default class RasterModel extends BaseModel {
         depth: { enable: false },
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
-    this.initModels(callbackModel);
+ public async buildModels():Promise<IModel[]> {
+    return await this.initModels();
   }
 
   public clearModels(): void {

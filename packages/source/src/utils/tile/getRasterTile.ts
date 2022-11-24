@@ -2,10 +2,12 @@ import {
   getImage,
   ITileBand,
   getURLFromTemplate,
-  Tile,
+  getWMTSURLFromTemplate,
+  SourceTile,
   TileLoadParams,
 } from '@antv/l7-utils';
 import { getTileUrl } from './request';
+import { ITileParserCFG } from '@antv/l7-core'
 import { IRasterFormat, IBandsOperation } from '../../interface';
 import { getRasterFile } from './getRasterData';
 
@@ -21,7 +23,7 @@ import { getRasterFile } from './getRasterData';
 export const getTileBuffer = async (
   url: string | string[] | ITileBand[],
   tileParams: TileLoadParams,
-  tile: Tile,
+  tile: SourceTile,
   rasterFormat: IRasterFormat,
   operation?: IBandsOperation,
 ): Promise<HTMLImageElement | ImageBitmap> => {
@@ -55,16 +57,26 @@ export const getTileBuffer = async (
 export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
-  tile: Tile,
+  tile: SourceTile,
+  cfg: Partial<ITileParserCFG>
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
-  const imgUrl = getURLFromTemplate(
-    Array.isArray(url) ? url[0] : url,
-    tileParams,
-  );
+  let imageUrl:string;
+  const templateUrl = Array.isArray(url) ? url[0] : url;
+  if(cfg.wmtsOptions) {
+    imageUrl = getWMTSURLFromTemplate(templateUrl, {
+       ...tileParams,
+      ...cfg.wmtsOptions
+    })
+  } else {
+    imageUrl = getURLFromTemplate(
+      Array.isArray(url) ? url[0] : url,
+      tileParams,
+    );
+  }
 
   return new Promise((resolve, reject) => {
-    const xhr = getImage({ url: imgUrl }, (err, img) => {
+    const xhr = getImage({ url: imageUrl }, (err, img) => {
       if (err) {
         reject(err);
       } else if (img) {

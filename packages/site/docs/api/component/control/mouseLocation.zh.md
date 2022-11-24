@@ -9,7 +9,7 @@ order: 9
 
 ## 使用
 
-[示例](/zh/examples/component/control#mouselocation)
+[示例](/examples/component/control#mouselocation)
 
 ```ts
 import { Scene, MouseLocation } from '@antv/l7';
@@ -34,11 +34,11 @@ scene.on('loaded', () => {
 | --------- | ---------------------------- | -------------------------------------------------- |
 | transform | 转换光标所在经纬度的回调函数 | `(position: [number, number]) => [number, number]` |
 
-`markdown:docs/common/control/api.md`
+<embed src="@/docs/common/control/api.md"></embed>
 
 ## 方法
 
-`markdown:docs/common/control/method.md`
+<embed src="@/docs/common/control/method.md"></embed>
 
 ## 事件
 
@@ -46,4 +46,4 @@ scene.on('loaded', () => {
 | -------------- | ---------------------------- | -------------------------------------- |
 | locationChange | 光标所在经纬度发生变化时触发 | `(position: [number, number]) => void` |
 
-`markdown:docs/common/control/event.md`
+<embed src="@/docs/common/control/event.md"></embed>

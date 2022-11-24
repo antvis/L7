@@ -22,7 +22,8 @@ export { Popup };
 
 export default class Popup<O extends IPopupOption = IPopupOption>
   extends EventEmitter
-  implements IPopup {
+  implements IPopup
+{
   /**
    * 配置
    * @protected
@@ -118,7 +119,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
     this.update();
-
+    // 临时关闭
     this.updateCloseOnClick();
     this.updateCloseOnEsc();
     this.updateFollowCursor();
@@ -170,6 +171,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   }
 
   public setOptions(option: Partial<O>) {
+    this.show();
     this.popupOption = {
       ...this.popupOption,
       ...option,
@@ -291,6 +293,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param lngLat
    */
   public setLnglat(lngLat: ILngLat | [number, number]): this {
+    this.show();
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {
@@ -355,11 +358,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.setPopupPosition(x, y);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
       closeButton: true,
-      closeOnClick: true,
+      closeOnClick: false,
       maxWidth: '240px',
       offsets: [0, 0],
       anchor: anchorType.BOTTOM,
@@ -376,6 +380,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param htmlNode
    */
   protected setDOMContent(htmlNode: ChildNode | DocumentFragment) {
+    this.show();
     this.createContent();
     this.contentPanel.appendChild(htmlNode);
     this.update();
@@ -387,9 +392,14 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @protected
    */
   protected updateCloseOnClick(onlyClear?: boolean) {
-    this.mapsService.off('click', this.onCloseButtonClick);
-    if (this.popupOption.closeOnClick && !onlyClear) {
-      this.mapsService.on('click', this.onCloseButtonClick);
+    const mapsService = this.mapsService;
+    if (mapsService) {
+      mapsService?.off('click', this.onCloseButtonClick);
+      if (this.popupOption.closeOnClick && !onlyClear) {
+        requestAnimationFrame(() => {
+          mapsService?.on('click', this.onCloseButtonClick);
+        });
+      }
     }
   }
 
@@ -401,10 +411,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   }
 
   protected updateFollowCursor(onlyClear?: boolean) {
-    const container = this.mapsService.getContainer()!;
-    container.removeEventListener('mousemove', this.onMouseMove);
-    if (this.popupOption.followCursor && !onlyClear) {
-      container.addEventListener('mousemove', this.onMouseMove);
+    const container = this.mapsService?.getContainer();
+    if (container) {
+      container?.removeEventListener('mousemove', this.onMouseMove);
+      if (this.popupOption.followCursor && !onlyClear) {
+        container?.addEventListener('mousemove', this.onMouseMove);
+      }
     }
   }
 
@@ -450,7 +462,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
       // this.closeButton.type = 'button';
       closeButton.setAttribute('aria-label', 'Close popup');
-      closeButton.addEventListener('click', this.onCloseButtonClick);
+      closeButton.addEventListener('click', () => {
+        this.hide();
+      });
 
       this.closeButton = closeButton;
     } else {
@@ -468,18 +482,13 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     if (e.stopPropagation) {
       e.stopPropagation();
     }
-    this.remove();
+    this.hide();
   };
 
   protected update = () => {
     const hasPosition = !!this.lngLat;
-    const {
-      className,
-      style,
-      maxWidth,
-      anchor,
-      stopPropagation,
-    } = this.popupOption;
+    const { className, style, maxWidth, anchor, stopPropagation } =
+      this.popupOption;
     if (!this.mapsService || !hasPosition || !this.content) {
       return;
     }

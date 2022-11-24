@@ -24,8 +24,7 @@ export default () => {
         parser: {
           type: 'rasterTile',
           tileSize: 256,
-          //   zoomOffset: 0
-          // zoomOffset: 1,
+  
         },
       },
     );

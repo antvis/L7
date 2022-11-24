@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { animate, easeInOut } from 'popmotion';
-
 function changeValue(
   startValue,
   endValue,
@@ -247,7 +246,7 @@ scene.on('loaded', () => {
           return '';
         }
       );
-
+    console.log(THREE.FontLoader)
       const textLoader = new THREE.FontLoader();
       textLoader.load(
         'https://gw.alipayobjects.com/os/bmw-prod/0a3f46eb-294e-4d95-87f2-052c26ad4bf1.json',

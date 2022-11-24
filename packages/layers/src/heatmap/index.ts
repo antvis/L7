@@ -5,18 +5,12 @@ import HeatMapModels, { HeatMapModelType } from './models';
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
 
-  public buildModels() {
+  public async buildModels() {
     const shape = this.getModelType();
     this.layerModel = new HeatMapModels[shape](this);
-    this.layerModel.initModels((models) => {
-      this.dispatchModelLoad(models);
-    });
+    await this.initLayerModels();
   }
-  public rebuildModels() {
-    this.layerModel.buildModels((models) => {
-      this.dispatchModelLoad(models);
-    });
-  }
+
   public renderModels() {
     const shape = this.getModelType();
     if (shape === 'heatmap') {
@@ -26,15 +20,16 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
 
       return this;
     }
-    if (this.layerModelNeedUpdate) {
-      this.layerModel.buildModels((models) => (this.models = models));
-      this.layerModelNeedUpdate = false;
+    if (this.encodeDataLength <= 0 && !this.forceRender) {
+      return this;
     }
+    this.hooks.beforeRender.call();
     this.models.forEach((model) =>
       model.draw({
         uniforms: this.layerModel.getUninforms(),
       }),
     );
+    this.hooks.afterRender.call();
     return this;
   }
 
@@ -49,10 +44,9 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     }
   }
 
-  protected getModelType(): HeatMapModelType {
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute(
-      'shape',
-    );
+  public getModelType(): HeatMapModelType {
+    const shapeAttribute =
+      this.styleAttributeService.getLayerStyleAttribute('shape');
     const { shape3d } = this.getLayerConfig();
     const source = this.getSource();
     const sourceType = source.data.type;

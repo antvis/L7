@@ -76,9 +76,9 @@ export default class LinearLineModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels(): Promise<IModel[]> {
     this.updateTexture();
-    this.buildModels(callbackModel);
+      return await this.buildModels();
   }
 
   public clearModels() {
@@ -86,7 +86,7 @@ export default class LinearLineModel extends BaseModel {
     this.dataTexture?.destroy();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -95,7 +95,7 @@ export default class LinearLineModel extends BaseModel {
 
     this.layer.triangulation = LineTriangulation;
 
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: 'lineRampColors',
         vertexShader: linear_line_vert,
@@ -105,13 +105,7 @@ export default class LinearLineModel extends BaseModel {
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   protected registerBuiltinAttributes() {

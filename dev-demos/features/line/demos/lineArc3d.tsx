@@ -120,6 +120,7 @@ export default () => {
         scene.addLayer(dotPoint);
         scene.addLayer(flyLine2);
         scene.addLayer(flyLine);
+  
       });
     });
   }, []);

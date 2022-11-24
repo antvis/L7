@@ -1,2 +1,2 @@
-`markdown:docs/api/polygon_layer/extrude.zh.md`
+<embed src="@/docs/api/polygon_layer/extrude.zh.md"></embed>
 

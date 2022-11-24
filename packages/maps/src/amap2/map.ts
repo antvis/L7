@@ -2,7 +2,8 @@
 /**
  * AMapService
  */
-import AMapLoader from '@amap/amap-jsapi-loader';
+import AMapLoader from '../utils/amaploader';
+
 import {
   Bounds,
   CoordinateSystem,
@@ -19,23 +20,22 @@ import AMapBaseService from '../utils/amap/AMapBaseService';
 import { Version } from '../version';
 import './logo.css';
 import Viewport from './Viewport';
+const DEFAULTMAPCENTER = [108.92361, 34.54083];
 
 // @ts-ignore
 window.forceWebGL = true;
 
-// const AMAP_API_KEY: string = '15cd8a57710d40c9b7c0e3cc120f1200';
 const AMAP_API_KEY: string = 'ff533602d57df6f8ab3b0fea226ae52f';
-// const AMAP_VERSION: string = '1.4.15';
-const AMAP_VERSION: string = '2.0.5';
+const AMAP_VERSION: string = '2.0';
 
 /**
  * 高德地图脚本是否加载完毕
  */
-let amapLoaded = false;
+const amapLoaded = false;
 /**
  * 高德地图脚本加载成功等待队列，成功之后依次触发
  */
-let pendingResolveQueue: Array<() => void> = [];
+const pendingResolveQueue: Array<() => void> = [];
 
 /**
  * AMapService
@@ -64,13 +64,18 @@ export default class AMapService extends AMapBaseService {
     return this.sceneCenterMKT;
   }
 
-  public lngLatToCoordByLayer(
-    lnglat: [number, number],
-    layerCenter: [number, number],
-  ) {
+  public lngLatToCoordByLayer(lnglat: number[], layerCenter: [number, number]) {
     const center = layerCenter || this.sceneCenter;
     const layerCenterFlat = amap2Project(...center);
-    return this._sub(amap2Project(lnglat[0], lnglat[1]), layerCenterFlat);
+    const coord = this._sub(
+      amap2Project(lnglat[0], lnglat[1]),
+      layerCenterFlat,
+    );
+    // Z 参数
+    if (lnglat[2]) {
+      coord.push(lnglat[2]);
+    }
+    return coord;
   }
 
   public lngLatToCoordsByLayer(
@@ -80,17 +85,11 @@ export default class AMapService extends AMapBaseService {
     // @ts-ignore
     return lnglatArray.map((lnglats) => {
       if (typeof lnglats[0] === 'number') {
-        return this.lngLatToCoordByLayer(
-          lnglats as [number, number],
-          layerCenter,
-        );
+        return this.lngLatToCoordByLayer(lnglats as number[], layerCenter);
       } else {
         // @ts-ignore
         return lnglats.map((lnglat) => {
-          return this.lngLatToCoordByLayer(
-            lnglat as [number, number],
-            layerCenter,
-          );
+          return this.lngLatToCoordByLayer(lnglat as number[], layerCenter);
         });
       }
     });
@@ -98,8 +97,8 @@ export default class AMapService extends AMapBaseService {
 
   public setCoordCenter(center: [number, number]) {
     // @ts-ignore
-    this.map.customCoords.setCenter(center);
-    this.setCustomCoordCenter(center);
+    this.map.customCoords.setCenter(center || DEFAULTMAPCENTER);
+    this.setCustomCoordCenter(center || DEFAULTMAPCENTER);
   }
 
   /**
@@ -230,7 +229,7 @@ export default class AMapService extends AMapBaseService {
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
     mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
 
-    return (modelMatrix as unknown) as number[];
+    return modelMatrix as unknown as number[];
   }
   public async init(): Promise<void> {
     const {
@@ -244,93 +243,62 @@ export default class AMapService extends AMapBaseService {
       version = AMAP_VERSION,
       ...rest
     } = this.config;
-    // 高德地图创建独立的container；
-    // tslint:disable-next-line:typedef
-    await new Promise<void>((resolve) => {
-      const resolveMap = () => {
-        if (mapInstance) {
-          this.map = mapInstance as AMap.Map & IAMapInstance;
-          this.$mapContainer = this.map.getContainer();
+    this.viewport = new Viewport();
+    if (!(window.AMap || mapInstance)) {
+      plugin.push('Map3D');
+      await AMapLoader.load({
+        key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
+        version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+        plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+      });
+    }
+    if (mapInstance) {
+      this.map = mapInstance as AMap.Map & IAMapInstance;
+      this.$mapContainer = this.map.getContainer();
 
-          // 在使用 map.customCoords 的时候必须使用
-          const mapInitCenter = this.map.getCenter();
-          // @ts-ignore
-          this.map.customCoords?.setCenter([
-            // @ts-ignore
-            mapInitCenter.lng,
-            // @ts-ignore
-            mapInitCenter.lat,
-          ]);
-          // @ts-ignore
-          this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
-
-          setTimeout(() => {
-            this.map.on('viewchange', this.handleViewChanged);
-            resolve();
-          }, 30);
-        } else {
-          this.$mapContainer = this.creatMapContainer(
-            id as string | HTMLDivElement,
-          );
-          const mapConstructorOptions = {
-            mapStyle: this.getMapStyleValue(style as string),
-            zooms: [minZoom, maxZoom],
-            viewMode: '3D',
-            ...rest,
-          };
-          if (mapConstructorOptions.zoom) {
-            // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
-            mapConstructorOptions.zoom += 1;
-          }
-          // @ts-ignore
-          const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
-          // @ts-ignore
-          this.map = map;
-          // 在使用 map.customCoords 的时候必须使用
-          const mapInitCenter = map.getCenter();
-          // @ts-ignore
-          map.customCoords.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
-          // @ts-ignore
-          this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
-          // 监听地图相机事件
-          map.on('viewchange', this.handleViewChanged);
-
-          setTimeout(() => {
-            resolve();
-          }, 10);
-        }
+      // 在使用 map.customCoords 的时候必须使用
+      const mapInitCenter = this.map.getCenter();
+      // @ts-ignore
+      this.map.customCoords?.setCenter([
+        // @ts-ignore
+        mapInitCenter.lng,
+        // @ts-ignore
+        mapInitCenter.lat,
+      ]);
+      // @ts-ignore
+      this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
+      this.map.on('viewchange', this.handleViewChanged);
+    } else {
+      this.$mapContainer = this.creatMapContainer(
+        id as string | HTMLDivElement,
+      );
+      const mapConstructorOptions = {
+        mapStyle: this.getMapStyleValue(style as string),
+        zooms: [minZoom, maxZoom],
+        viewMode: '3D',
+        ...rest,
       };
-      this.viewport = new Viewport();
-      if (!amapLoaded && !mapInstance) {
-        if (token === AMAP_API_KEY) {
-          console.warn(this.configService.getSceneWarninfo('MapToken'));
-        }
-        amapLoaded = true;
-        plugin.push('Map3D');
-        AMapLoader.load({
-          key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
-          version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-          plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
-        })
-          .then((AMap) => {
-            resolveMap();
-
-            if (pendingResolveQueue.length) {
-              pendingResolveQueue.forEach((r) => r());
-              pendingResolveQueue = [];
-            }
-          })
-          .catch((e) => {
-            throw new Error(e);
-          });
-      } else {
-        if ((amapLoaded && window.AMap) || mapInstance) {
-          resolveMap();
-        } else {
-          pendingResolveQueue.push(resolveMap);
-        }
+      if (mapConstructorOptions.zoom) {
+        // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
+        mapConstructorOptions.zoom += 1;
       }
-    });
+      // @ts-ignore
+      const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
+      // @ts-ignore
+      this.map = map;
+      // 在使用 map.customCoords 的时候必须使用
+      const mapInitCenter = map.getCenter();
+      // @ts-ignore
+
+      // @ts-ignore
+      this.map.customCoords?.setCenter([mapInitCenter.lng, mapInitCenter.lat]);
+
+      // @ts-ignore
+      this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
+      // 监听地图相机事件
+      map.on('viewchange', this.handleViewChanged);
+    }
+
     this.initViewPort();
   }
 
@@ -429,7 +397,6 @@ export default class AMapService extends AMapBaseService {
     } = this.map.customCoords.getCameraParams();
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
-
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     if (this.cameraChangedCallback) {

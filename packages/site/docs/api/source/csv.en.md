@@ -3,4 +3,4 @@ title: CSV
 order: 3
 ---
 
-`markdown: docs/api/source/csv.zh.md`
+<embed src="@/docs/api/source/csv.zh.md"></embed>

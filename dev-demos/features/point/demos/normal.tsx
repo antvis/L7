@@ -1,7 +1,7 @@
 // @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
   
 export default () => {
@@ -19,7 +19,7 @@ export default () => {
         fetch('https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt')
           .then(res => res.text())
           .then(data => {
-            const pointLayer = new PointLayer({})
+            const pointLayer = new PointLayer({blend:'additive'})
               .source(data, {
                 parser: {
                   type: 'csv',

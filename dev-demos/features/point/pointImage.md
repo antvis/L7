@@ -1,14 +1,14 @@
 ### point - image
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
-import { GaodeMap, GaodeMapV2, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
     useEffect(() => {
         const scene = new Scene({
             id: 'point_fillImage',
-            map: new Mapbox({
+            map: new GaodeMap({
                 style: 'light',
                 center: [120, 30],
                 pitch: 60,
@@ -19,7 +19,9 @@ export default () => {
         scene.addImage(
             'marker',
             'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ'
-          );
+          ).then(()=>{
+            console.log(1111)
+          })
 
         const pointLayer = new PointLayer({ })
         .source([{

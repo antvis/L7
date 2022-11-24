@@ -135,7 +135,7 @@ export default class TextModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
+  public async initModels():Promise<IModel[]>  {
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
@@ -145,13 +145,13 @@ export default class TextModel extends BaseModel {
       textAnchor,
       textAllowOverlap,
     };
-    this.buildModels(callbackModel);
+    return await this.buildModels();
   }
 
-  public buildModels = async (callbackModel: (models: IModel[]) => void) => {
+  public async buildModels ():Promise<IModel[]> {
     this.mapping();
     const { usage } = this.layer.getLayerConfig();
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointTileText_' + usage,
         vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
@@ -161,14 +161,9 @@ export default class TextModel extends BaseModel {
         blend: this.getBlend(),
         pick: usage !== 'basemap'
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
-  };
+      return [model]
+
+  }
 
   public clearModels() {
     this.texture?.destroy();
@@ -398,11 +393,11 @@ export default class TextModel extends BaseModel {
     });
   }
 
-  private reBuildModel() {
+  private async reBuildModel() {
     const { usage } = this.layer.getLayerConfig();
     
     this.filterGlyphs();
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointTileText_' + usage,
         vertexShader: usage === 'basemap' ? text_map_vert : text_vert,
@@ -412,13 +407,6 @@ export default class TextModel extends BaseModel {
         blend: this.getBlend(),
         pick: usage !== 'basemap'
       })
-      .then((model) => {
-        this.layer.models = [model];
-        this.layerService.throttleRenderLayers();
-      })
-      .catch((err) => {
-        console.warn(err);
-        this.layer.models = [];
-      });
+      return [model]
   }
 }

@@ -1,1 +1,1 @@
-`markdown:docs/api/component/control/control.zh.md`
+<embed src="@/docs/api/component/control/control.zh.md"></embed>

@@ -8,9 +8,7 @@ export interface IMouseLocationControlOption extends IControlOption {
 
 export { MouseLocation };
 
-export default class MouseLocation extends Control<
-  IMouseLocationControlOption
-> {
+export default class MouseLocation extends Control<IMouseLocationControlOption> {
   protected location: Position = [0, 0];
 
   public getLocation() {

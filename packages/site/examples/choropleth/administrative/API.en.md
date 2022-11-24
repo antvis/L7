@@ -1,1 +1,1 @@
-`markdown:docs/common/district/choropleth.zh.md`
+<embed src="@/docs/common/district/choropleth.zh.md"></embed>

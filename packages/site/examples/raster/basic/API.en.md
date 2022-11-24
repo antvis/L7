@@ -1,1 +1,0 @@
-`markdown:docs/api/raster/raster_layer.en.md`

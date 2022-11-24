@@ -8,7 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      stencil: true,
+     
       map: new GaodeMap({
         center: [120.165, 30.26],
         pitch: 0,
@@ -77,7 +77,7 @@ export default () => {
               ],
             })
             .size('sum', (sum) => {
-              return sum * 20000;
+              return sum * 200;
             })
             .shape('hexagonColumn')
             .style({

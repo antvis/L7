@@ -175,6 +175,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onLayerMouseOut(layer: ILayer, e: any) {
     this.displayFeatureInfo = undefined;
     if (this.isShow) {

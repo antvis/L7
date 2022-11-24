@@ -32,6 +32,11 @@ import { toPaddingOptions } from '../utils';
 import Viewport from '../Viewport';
 import './logo.css';
 import { MapTheme } from './theme';
+const AMapEventMap: {
+  [key: string]: any;
+} = {
+  contextmenu:'rightclick',
+};
 
 let mapdivCount = 0;
 // @ts-ignore
@@ -110,14 +115,14 @@ export default abstract class AMapBaseService
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handler);
     } else {
-      this.map.on(type, handler);
+      this.map.on(AMapEventMap[type] || type, handler);
     }
   }
   public off(type: string, handler: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handler);
     } else {
-      this.map.off(type, handler);
+      this.map.off(AMapEventMap[type] || type, handler);
     }
   }
 
@@ -481,7 +486,6 @@ export default abstract class AMapBaseService
   }
 
   public destroy() {
-    this.map.destroy();
 
     // TODO: 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
@@ -492,6 +496,8 @@ export default abstract class AMapBaseService
     if ($jsapi) {
       document.head.removeChild($jsapi);
     }
+    this.map.destroy();
+
   }
 
   public getMapContainer() {
@@ -520,7 +526,7 @@ export default abstract class AMapBaseService
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');
-
+  
     if (this.cameraChangedCallback) {
       // resync viewport
       // console.log('cameraHeight', height)

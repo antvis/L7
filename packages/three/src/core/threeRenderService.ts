@@ -137,14 +137,8 @@ export class ThreeRenderService implements IThreeRenderService {
     customCoords.getCenter();
 
     const camera = this.camera;
-    const {
-      near,
-      far,
-      fov,
-      up,
-      lookAt,
-      position,
-    } = customCoords.getCameraParams();
+    const { near, far, fov, up, lookAt, position } =
+      customCoords.getCameraParams();
     // @ts-ignore
     camera.near = near;
     // @ts-ignore

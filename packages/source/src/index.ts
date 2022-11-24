@@ -16,6 +16,7 @@ import { aggregatorToGrid } from './transform/grid';
 import { pointToHexbin } from './transform/hexagon';
 import { join } from './transform/join';
 import { map } from './transform/map';
+export * from './source/index';
 
 registerParser('rasterTile', rasterTile);
 registerParser('mvt', mapboxVectorTile);

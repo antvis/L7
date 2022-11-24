@@ -26,8 +26,8 @@ function registerCanvas(c, id: string) {
   Mixin.clientRegion(canvas);
   Mixin.offsetRegion(canvas);
 
-  canvas.focus = function() {};
-  canvas.blur = function() {};
+  canvas.focus = function () {};
+  canvas.blur = function () {};
   // Tip: 小程序中无法动态注册事件
   // canvas.addEventListener = function(type, listener, options = {}) {
   //   document.addEventListener(type, listener, options);
@@ -65,13 +65,13 @@ function registerCanvas2D(ctx, id: string) {
   Mixin.clientRegion(canvas2D);
   Mixin.offsetRegion(canvas2D);
 
-  canvas2D.getContext = function(type) {
+  canvas2D.getContext = function (type) {
     if (type === '2d') {
       return ctx;
     }
   };
-  canvas2D.focus = function() {};
-  canvas2D.blur = function() {};
+  canvas2D.focus = function () {};
+  canvas2D.blur = function () {};
   // Tip: 小程序中无法动态注册事件
   // canvas2D.addEventListener = function(type, listener, options = {}) {
   //   document.addEventListener(type, listener, options);

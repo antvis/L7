@@ -36,6 +36,7 @@ export default () => {
     });
     const lineLayer = new LineLayer({
       blend: 'normal',
+      autoFit: true,
     });
     lineLayer
       .source(data)
@@ -44,7 +45,6 @@ export default () => {
       .color('saldo', (v) => {
         return v < 0 ? 'rgb(60,255,255)' : 'rgb(255,255,60)';
       })
-      // .color('red')
       .animate({
         enable: true,
         interval: 0.1,
@@ -54,9 +54,8 @@ export default () => {
       .style({
         opacity: 1,
       })
-      .render();
-    lineLayer.fitBounds();
     scene.addLayer(lineLayer);
+    // scene.render()
   }, []);
   return (
     <div

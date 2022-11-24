@@ -99,29 +99,22 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+    return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+  public async buildModels(): Promise<IModel[]> {
     this.layer.triangulation = GlobelPointFillTriangulation;
-    this.layer
-      .buildLayerModel({
-        moduleName: 'pointEarthFill',
-        vertexShader: pointFillVert,
-        fragmentShader: pointFillFrag,
-        triangulation: GlobelPointFillTriangulation,
-        depth: { enable: true },
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'pointEarthFill',
+      vertexShader: pointFillVert,
+      fragmentShader: pointFillFrag,
+      triangulation: GlobelPointFillTriangulation,
+      depth: { enable: true },
 
-        blend: this.getBlend(),
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+      blend: this.getBlend(),
+    });
+    return [model];
   }
 
   public clearModels() {
@@ -204,9 +197,7 @@ export default class FillModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
@@ -226,9 +217,7 @@ export default class FillModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { shape = 2 } = feature;
           const shape2d = this.layer.getLayerConfig().shape2d as string[];
           const shapeIndex = shape2d.indexOf(shape as string);

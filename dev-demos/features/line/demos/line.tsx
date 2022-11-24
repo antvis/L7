@@ -68,9 +68,6 @@ export default () => {
       ],
     };
     const source = new Source(geoData);
-
-    // scene.on('zoom', e => console.log(e))
-
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(1)
@@ -124,6 +121,8 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      
+  
     });
   }, []);
   return (

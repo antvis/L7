@@ -81,11 +81,13 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.registerBuiltinAttributes();
-    this.updateTexture();
+  public async initModels():Promise<IModel[]>  {
+    this.iconService.off('imageUpdate', this.updateTexture);
     this.iconService.on('imageUpdate', this.updateTexture);
-    this.buildModels(callbackModel);
+    // this.registerBuiltinAttributes();
+    this.updateTexture();
+
+    return await this.buildModels();
   }
 
   public clearModels() {
@@ -94,13 +96,13 @@ export default class ImageModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]>  {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    this.layer
+       const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointImage',
         vertexShader: pointImageVert,
@@ -110,14 +112,10 @@ export default class ImageModel extends BaseModel {
         primitive: gl.POINTS,
         blend: this.getBlend(),
         stencil: getMask(mask, maskInside),
-      })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
       });
+
+      return [model]
+       
   }
   protected registerBuiltinAttributes() {
     // point layer size;
@@ -177,7 +175,11 @@ export default class ImageModel extends BaseModel {
         mipmap: true,
       });
       // 更新完纹理后在更新的图层的时候需要更新所有的图层
-      this.layerService.throttleRenderLayers();
+      // this.layer.layerModelNeedUpdate = true;
+      setTimeout(()=>{ // 延迟渲染
+        this.layerService.throttleRenderLayers();
+      })
+      
       return;
     }
     this.texture = createTexture2D({

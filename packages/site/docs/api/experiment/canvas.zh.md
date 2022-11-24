@@ -1,9 +1,9 @@
 ---
-title: 自定义图层
+title: CanvasLayer
 order: 7
 ---
 
-L7 的自定义图层允许用户通过 canvas 绘制的方法自定义图层的内容和样式。相比于 Marker 通过创建实际 DOM 的方式，CanvasLayer 无疑有更佳的性能。
+CanvasLayer 允许用户通过 canvas 绘制的方法自定义图层的内容和样式。相比于 Marker 通过创建实际 DOM 的方式，CanvasLayer 无疑有更佳的性能。
 
 ## 使用
 
@@ -22,7 +22,7 @@ const layer = new CanvasLayer({}).style({
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hUmNQJ1sAb8AAAAAAAAAAAAAARQnAQ'/>
 
-[在线案例](/zh/examples/point/chart#custom)
+[在线案例](/examples/point/chart#custom)
 
 ### source
 
@@ -40,7 +40,7 @@ const layer = new CanvasLayer({}).style({
 layer.animate(true);
 ```
 
-[在线案例](/zh/examples/point/chart#custom)
+[在线案例](/examples/point/chart#custom)
 
 ### style
 

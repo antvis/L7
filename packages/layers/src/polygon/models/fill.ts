@@ -25,6 +25,7 @@ export default class FillModel extends BaseModel {
         dir: 'in',
       },
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+
     if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
       this.judgeStyleAttributes({ opacity });
       const encodeData = this.layer.getEncodedData();
@@ -34,7 +35,6 @@ export default class FillModel extends BaseModel {
         this.cellProperties,
       );
       this.rowCount = height; // 当前数据纹理有多少行
-
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({
@@ -53,7 +53,9 @@ export default class FillModel extends BaseModel {
               width: 1,
               height: 1,
             });
+
     }
+
     return {
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
@@ -67,11 +69,11 @@ export default class FillModel extends BaseModel {
     };
   }
 
-  public initModels(callbackModel: (models: IModel[]) => void) {
-    this.buildModels(callbackModel);
+  public async initModels(): Promise<IModel[]> {
+      return await this.buildModels();
   }
 
-  public buildModels(callbackModel: (models: IModel[]) => void) {
+ public async buildModels():Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
     const {
       mask = false,
@@ -82,7 +84,7 @@ export default class FillModel extends BaseModel {
       ILayerConfig & IPolygonLayerStyleOptions
     >;
     this.layer.triangulation = triangulation;
-    this.layer
+   const model = await this.layer
       .buildLayerModel({
         moduleName: type,
         vertexShader: vert,
@@ -98,13 +100,7 @@ export default class FillModel extends BaseModel {
           enablePicking,
         },
       })
-      .then((model) => {
-        callbackModel([model]);
-      })
-      .catch((err) => {
-        console.warn(err);
-        callbackModel([]);
-      });
+     return [model]
   }
 
   public clearModels() {

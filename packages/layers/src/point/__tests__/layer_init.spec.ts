@@ -3,6 +3,13 @@ import { TestScene } from '@antv/l7-test-utils';
 import PointLayer from '../';
 
 describe('template', () => {
+
+  it('1', async () => {
+    
+   expect('1').toEqual('1')
+    
+  });
+
   const el = document.createElement('div');
   el.id = 'test-div-id';
   const body = document.querySelector('body') as HTMLBodyElement;
@@ -36,7 +43,9 @@ describe('template', () => {
     ).shape('circle')
     .color('red')
     .size(10)
-    scene.addLayer(layer)
+    scene.on('loaded',  () =>{
+      scene.addLayer(layer)
+   })
     
   });
   it('scene layer text', async () => {
@@ -52,8 +61,14 @@ describe('template', () => {
     ).shape('name','text')
     .color('name',['red','blue'])
     .size('v',[10,20])
-    scene.addLayer(layer)
-   expect(layer.name).toEqual('text')
+
+    scene.on('loaded',  () =>{
+      scene.addLayer(layer)
+      expect(layer.name).toEqual('text')
+   })
+
+    // scene.addLayer(layer)
+  
     
   });
 

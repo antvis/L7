@@ -41,6 +41,7 @@ export * from './services/scene/ISceneService';
 export * from './services/shader/IShaderModuleService';
 export * from './services/asset/IIconService';
 export * from './services/asset/IFontService';
+export * from './services/asset/ITextureService';
 export * from './services/component/IControlService';
 export * from './services/component/IMarkerService';
 export * from './services/component/IPopupService';

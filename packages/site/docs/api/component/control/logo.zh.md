@@ -24,7 +24,7 @@ const scene = new Scene({
 
 ## 使用
 
-[示例](/zh/examples/component/control#logo)
+[示例](/examples/component/control#logo)
 
 ```ts
 import { Scene, Logo } from '@antv/l7';
@@ -40,7 +40,7 @@ scene.on('loaded', () => {
     img:
       'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GRb1TKp4HcMAAAAAAAAAAAAAARQnAQ',
     // 跳转地址
-    href: 'https://l7.antv.vision/',
+    href: 'https://l7.antv.antgroup.com',
   });
   scene.addControl(logo);
 });
@@ -53,12 +53,12 @@ scene.on('loaded', () => {
 | img  | Logo 展示的图片 url                                  | `string` |
 | href | 点击 Logo 跳转的超链接，不传则纯展示图片，点击不跳转 | `string` |
 
-`markdown:docs/common/control/api.md`
+<embed src="@/docs/common/control/api.md"></embed>
 
 ## 方法
 
-`markdown:docs/common/control/method.md`
+<embed src="@/docs/common/control/method.md"></embed>
 
 ## 事件
 
-`markdown:docs/common/control/event.md`
+<embed src="@/docs/common/control/event.md"></embed>

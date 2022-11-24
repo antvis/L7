@@ -197,7 +197,7 @@ class Scene
       maskColor = '#000',
       maskOpacity = 0,
     }  = layer.getLayerConfig();
-    if(!mask) return undefined;
+    if(!mask || !maskfence) return undefined;
 
     const maskInstance = new MaskLayer()
     .source(maskfence)
@@ -216,7 +216,7 @@ class Scene
       const layerContainer = createLayerContainer(this.container);
       mask.setContainer(layerContainer, this.container);
       parent.addMaskLayer(mask);
-      this.sceneService.addLayer(mask);
+      this.sceneService.addMask(mask);
     } else {
       console.warn('parent layer not find!');
     }
@@ -281,9 +281,9 @@ class Scene
     this.fontService.addFontFace(fontFamily, fontPath);
   }
 
-  public addImage(id: string, img: IImage) {
+  public async addImage(id: string, img: IImage) {
     if (!isMini) {
-      this.iconService.addImage(id, img);
+      await this.iconService.addImage(id, img);
     } else {
       this.iconService.addImageMini(id, img, this.sceneService);
     }

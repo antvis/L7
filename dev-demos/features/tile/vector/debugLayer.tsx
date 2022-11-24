@@ -6,7 +6,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'test',
-      // stencil: true,
+      //
       map: new Mapbox({
         center: [121.268, 30.3628],
         pitch: 0,

@@ -1,15 +1,14 @@
-# 方法
 
 ### source
 
-设置图层数据以及解析配置 source(data, config)
+设置图层数据以及解析配置 `source(data, config)`。
 
 - data { geojson | json | csv }
 - config   可选   数据源配置项
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换可设置多个
 
-parser 和  transforms [见 source 文档](/zh/docs/api/source/source)
+`parser` 和  `transforms` [见 source 文档](/api/source/source)。
 
 ```javascript
 layer.source(data, {
@@ -40,88 +39,144 @@ layer.source(data, {
 });
 ```
 
-### scale
-
-设置数据字段映射方法，用于设置数据字段的定义域。  
-
-用户在 source 方法中传入数据后可以通过 scale 方法设置映射到值域的映射关系以及相关的定义域
-
-```javascript
-const pointLayer = new PointLayer({})
-    .source(data)
-    .shape('circle')
-    .color('id', ['#f00', '#ff0'])
-    .size('mag', [1, 80])
-    .scale('mag', {
-      type: "linear",
-      domain: [ 1, 50]
-    })
-    .active(true)
-    .style({
-      opacity: 0.3,
-      strokeWidth: 1
-    });
-```
-🌟  在上面的代码中 size 设置点的大小，且点大小的值域为 [1, 80]。我们通过 scale 指定 mag 字段的定义域是 [1, 50]  
-✨  为了验证是否生效我们可以讲 domain 设置为 [1, 20]，我们可以看到点的 size 明显变大了（size 在值域中的取值变大了）
-
-[在线案例](https://codesandbox.io/s/gracious-dhawan-4d71l?file=/index.js)   
-
-✨ L7 在内部使用了 d3 的 scale 方法，为了方便理解可以看 d3 比例尺的概念
-
-```javascript
-var data = [1.2, 2.3, 0.9, 1.5, 3.3];
-var min = d3.min(data);
-var max = d3.max(data);
-
-var linear = d3.scale.linear()
-            .domain([min, max])
-            .range([0, 300])
-linear(0.9) // 0
-linear(2.3) // 1.5
-linear(3.3) // 300
-```
+### scale(field: string, scaleConfig: IScaleConfig)
 
 - `field` 指定 source 中传入的数据中用于映射的字段名
-
-- `scaleConfig` 列定义配置，对象类型，可配置的属性如下：
-
-#### scale 类型
-
-**连续型**
-
-- linear 线性
-- log
-- pow 指数型
-
-**连续分类型**
-
-- quantile 等分位
-- quantize 等间距
-
-**枚举型**
-
-- cat 枚举
+- `scaleConfig` 列定义配置，对象类型
 
 ```javascript
-layer.scale('name', {
-  type: 'cat',
-});
+interface IScaleConfig {
+  type: ScaleTypeName;
+  domain?: any[];
+  ...
+}
 
-// 设置多个scale
-
-// 字段名为 key, value 为scale配置项
-
-layer.scale({
-  name: {
-    type: 'cat',
-  },
-  value: {
-    type: 'linear',
-  },
-});
+layer.color('id', ['#f00', '#ff0'])
+.size('mag', [1, 80])
+.scale('mag', {
+  type: 'linear',
+  domain: [ 1, 50]
+})；
 ```
 
+### ScaleTypeName
+
+`scale` 的类型可以分为 `3` 类 `11` 种，不同 `Scale` 的差异在于 `domain->range` 的转换方法的不同。    
+`range` 和 `domain` 是 `Scale` 中非常重要的两个参数。
+
+- domain: 地图数据值的定义区间
+- range：视觉值的区间定义
+
+|  数据类型   | 度量类型  |
+|  --------  | ------- |
+| 连续        | linear、log、pow、time、sequential、quantize、quantile、threshold |
+| 分类        | cat、time |
+| 常量        | identity  |
+
+
+#### Cat
+
+Cat 指枚举类型，用于展示分类数据，比如农作物种植区分布图，水稻、玉米、大豆等不同类别需要映射为不同的颜色。
+
+```js
+// 三种作物会分别转成对应的颜色
+// domain = ['corn','rice', 'soybean'];
+// range = ['red','white','blue'];
+const data = [
+  { lng: 120, lat: 30, t: 'corn' },
+  { lng: 121, lat: 30, t: 'rice' },
+  { lng: 122, lat: 30, t: 'soybean' },
+];
+layer.source(data, {
+  parser: {
+    type: 'type',
+    x: 'lng',
+    y: 'lat'
+  }
+});
+layer.scale('t', { type: 'cat' });
+layer.color('t', ['red', 'white', 'blue']);
+
+```
+
+
+#### identify
+
+常量度量 某个字段是不变的常量。
+
+#### linear
+
+线性是连续数据的映射方法，数据和视觉值是通过线性方法换算的。如数据值 1-100 线性映射到红到蓝的线下渐变色每个数字对应一个颜色
+
+#### quantize 
+
+相等间隔会将属性值的范围划分为若干个大小相等的子范围。相等间隔最适用于常见的数据范围，如百分比和温度。这种方法强调的是某个属性值相对于其他值的量
+
+#### quantile
+
+每个类都含有相等数量的要素。分位数分类非常适用于呈线性分布的数据。分位数为每个类分配数量相等的数据值。不存在空类，也不存在值过多或过少的类。
+由于使用“分位数”分类将要素以同等数量分组到每个类中，因此得到的地图往往具有误导性。可能会将相似的要素置于相邻的类中，或将值差异较大的要素置于相同类中。可通过增加类的数量将这种失真降至最低。
+
+#### threshold 
+
+他允许将域的任意子集（非统一段）映射到范围内的离散值。输入域仍然是连续的，并根据提供给域属性的一组阈值划分为多个切片。 range 属性必须有 N+1 个元素，其中 N 是域中提供的阈值边界数
+
+手动设置间隔 Manual interval 手动设置分级分类区间，某些数据会有相应的业界标准，或者需要进行某种特殊的显示。如空气质量数据有严格数据分段标准
+
+```
+-1   => "red"
+0    => "white"
+0.5  => "white"
+1.0  => "blue"
+1000 => "blue
+
+```
+#### diverging || Sequential
+用于返回给定的颜色数组的统一非有理 B-spline 插值器函数，该数组将转换为RGB颜色。
+
+```js
+const scaleColors = d3interpolate.interpolateRgbBasis(colors);
+```
+
+#### IScaleConfig
+
+```js
+interface IScaleConfig {
+  type: ScaleTypeName;
+  domain?: any[];
+  range?: any[];
+  neutral?: number;
+  field?: string;
+  unknown?: string;
+  ticks?: any[];
+  nice?: boolean;
+  clamp?: boolean;
+  format?: () => any;
+}
+```
+
+### cluster
+
+我们在使用 `cluster` 配置聚合图之后就可以使用一些聚合方法来获取对应参数。
+#### getClusters(zoom: number): IFeatureCollection
+
+获取指定缩放等级的聚合数据
+
+- `zoom` 缩放等级
+
+#### getClustersLeaves(id: string): IFeatureCollection
+
+根据 `id` 获取聚合节点的数据，每个聚合节点会有一个唯一 `ID`。
+
+- `id` 聚合节点的 `id`
+
+```javascript
+const source = layer.getSource();
+source.getClustersLeaves(id);
+layer.on('click', (e) => {
+  console.log(source.getClustersLeaves(e.feature.cluster_id));
+});
+```
 ## 视觉编码方法
 
 可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。
@@ -296,7 +351,7 @@ scene.addLayer(imageLayer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oVyHT5S3sv0AAAAAAAAAAABkARQnAQ'>
 
-[在线案例](../../examples/point/image#image)
+[在线案例](/examples/point/image#image)
 
 **shape(field, callback)**
 

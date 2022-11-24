@@ -1,1 +1,1 @@
-`markdown:docs/api/point_layer/cluster.zh.md`
+<embed src="@/docs/api/point_layer/cluster.zh.md"></embed>
