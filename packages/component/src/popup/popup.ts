@@ -188,6 +188,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
         'lngLat',
         'offsets',
         'title',
+        'html',
+        'text',
       ])
     ) {
       if (this.container) {
@@ -209,11 +211,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     if (this.checkUpdateOption(option, ['followCursor'])) {
       this.updateFollowCursor();
-    }
-    if (this.checkUpdateOption(option, ['html']) && option.html) {
-      this.setHTML(option.html);
-    } else if (this.checkUpdateOption(option, ['text']) && option.text) {
-      this.setText(option.text);
     }
     if (this.checkUpdateOption(option, ['lngLat']) && option.lngLat) {
       this.setLnglat(option.lngLat);
