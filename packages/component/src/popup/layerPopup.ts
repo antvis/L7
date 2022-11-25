@@ -9,15 +9,15 @@ type ElementType = DOM.ElementType;
 
 export type LayerField = {
   field: string;
-  formatField?: ((field: string, feature: any) => ElementType) | ElementType;
-  formatValue?: ((value: any, feature: any) => ElementType) | ElementType;
+  formatField?: ElementType | ((field: string, feature: any) => ElementType);
+  formatValue?: ElementType | ((value: any, feature: any) => ElementType);
   getValue?: (feature: any) => any;
 };
 
 export type LayerPopupConfigItem = {
   layer: ILayer | string;
   fields?: Array<LayerField | string>;
-  title?: ((feature: any) => ElementType) | ElementType;
+  title?: ElementType | ((feature: any) => ElementType);
   customContent?: ElementType | ((feature: any) => ElementType);
 };
 

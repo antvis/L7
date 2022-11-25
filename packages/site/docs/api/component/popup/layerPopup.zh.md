@@ -16,6 +16,7 @@ LayerPopup 会自行对目标图层的鼠标事件进行监听，当用户点击
 ## 使用
 
 [示例](/examples/component/popup#layerpopup)
+[自定义内容示例](/zh/examples/component/popup/#customContent)
 
 ```ts
 import { Scene, LayerPopup, PointLayer } from '@antv/l7';
@@ -82,12 +83,12 @@ scene.on('loaded', () => {
 
 ### LayerField
 
-| 名称        | 说明                        | 类型                             |
-| ----------- | --------------------------- | -------------------------------- |
-| field       | 字段的 key 值字符串         | `string`                         |
-| formatField | 对展示的 key 字段进行格式化 | `(field: string) => ElementType` |
-| formatValue | 对展示的 value 值进行格式化 | `(value: any) => ElementType`    |
-| getValue    | 自定义获取值的方式          | `(feature: any) => any`          |
+| 名称        | 说明                        | 类型                                                            |
+| ----------- | --------------------------- | --------------------------------------------------------------- |
+| field       | 字段的 key 值字符串         | `string`                                                        |
+| formatField | 对展示的 key 字段进行格式化 | `ElementType \| ((field: string, feature: any) => ElementType)` |
+| formatValue | 对展示的 value 值进行格式化 | `ElementType \| ((value: any, feature: any) => ElementType)`    |
+| getValue    | 自定义获取值的方式          | `(feature: any) => any`                                         |
 
 ### ElementType
 
