@@ -109,6 +109,11 @@ const Demo: FunctionComponent = () => {
       const newPopup = new LayerPopup({
         items: [
           {
+            title: (e) => {
+              const h1 = document.createElement('h1');
+              h1.innerText = e.name;
+              return h1;
+            },
             layer: 'pointLayer',
             fields: [
               {
@@ -122,25 +127,27 @@ const Demo: FunctionComponent = () => {
             ],
           },
           {
+            title: '线图层',
             layer: 'lineLayer',
             fields: ['name'],
           },
           {
+            title: '面图层',
             layer: 'polygonLayer',
             fields: ['name'],
           },
         ],
-        trigger: 'click',
+        trigger: 'hover',
       });
-      pointLayer.on('mousemove', (e) => {
-        console.log('point mousemove', e);
-      });
-      polygonLayer.on('mousemove', (e) => {
-        console.log('polygon mousemove', e);
-      });
-      lineString.on('mousemove', (e) => {
-        console.log('line mousemove', e);
-      });
+      // pointLayer.on('mousemove', (e) => {
+      //   console.log('point mousemove', e);
+      // });
+      // polygonLayer.on('mousemove', (e) => {
+      //   console.log('polygon mousemove', e);
+      // });
+      // lineString.on('mousemove', (e) => {
+      //   console.log('line mousemove', e);
+      // });
 
       newScene.addPopup(newPopup);
       setPopup(newPopup);

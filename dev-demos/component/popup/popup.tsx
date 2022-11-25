@@ -220,7 +220,7 @@ const Demo: FunctionComponent = () => {
         <button
           onClick={() => {
             popup?.setOptions({
-              title: undefined,
+              title: popup.getOptions().title ? undefined : 'Popup Title',
             });
           }}
         >

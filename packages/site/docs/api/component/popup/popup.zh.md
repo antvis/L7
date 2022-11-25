@@ -57,28 +57,39 @@ scene.on('loaded', () => {
 
 ## 配置
 
-| 名称               | 说明                                                                     | 类型                                   | 默认值        |
-| ------------------ | ------------------------------------------------------------------------ | -------------------------------------- |------------|
-| lngLat             | Popup 所在的经纬度                                                       | `{ lng: number; lat: number }`         | -          |
-| text               | Popup 内容展示的文本内容                                                 | `string`                               | -          |
-| html               | Popup 内容展示的自定义 HTML，可以传 HTML 字符串，也可以传 DOM 对象或数组 | `string | HTMLElement | HTMLElement[]` | -          |
-| title              | Popup 标题展示的自定义 HTML，可以传 HTML 字符串，也可以传 DOM 对象或数组 | `string | HTMLElement | HTMLElement[]` | -          |
-| closeOnClick       | 点击地图区域时，是否关闭当前 Popup                                       | `boolean`                              | `false`    |
-| closeOnEsc         | 点击 Esc 键时，是否关闭当前 Popup                                        | `boolean`                              | `false`    |
-| maxWidth           | Popup 的最大宽度                                                         | `string`                               | `240px`    |
-| anchor             | Popup 箭头位置，可以控制 Popup 相对于经纬度点的展示位置                  | [AnchorType](#anchortype)              | `'bottom'` |
-| offsets            | Popup 相对于锚点的偏移                                                   | `[number, number]`                     | `[0, 0]`   |
-| autoPan            | 当 Popup 展示或者位置发生变化时，地图是否要自动平移至 Popup 所在位置     | `boolean`                              | `false`    |
-| autoClose          | 当有其他 Popup 展示时，是否自动关闭当前气泡                              | `boolean`                              | `true`     |
-| followCursor       | Popup 是否跟随光标移动，若设为 `true`，则 `lngLat` 配置无效              | `boolean`                              | `false`    |
-| closeButton        | 是否展示关闭 Popup 图标                                                  | `boolean`                              | `true`     |
-| closeButtonOffsets | 关闭 Popup 图标的相对偏移                                                | `[number, number]`                     | -          |
-| stopPropagation    | Popup 上的鼠标事件是否要阻止其冒泡                                       | `boolean`                              | `true`     |
+| 名称               | 说明                                                                     | 类型                           | 默认值     |
+| ------------------ | ------------------------------------------------------------------------ | ------------------------------ | ---------- |
+| lngLat             | Popup 所在的经纬度                                                       | `{ lng: number; lat: number }` | -          |
+| text               | Popup 内容展示的文本内容                                                 | `string`                       | -          |
+| html               | Popup 内容展示的自定义 HTML，可以传 HTML 字符串，也可以传 DOM 对象或数组 | [ElementType](#elementtype)    | -          |
+| title              | Popup 标题展示的自定义 HTML，可以传 HTML 字符串，也可以传 DOM 对象或数组 | [ElementType](#elementtype)    | -          |
+| closeOnClick       | 点击地图区域时，是否关闭当前 Popup                                       | `boolean`                      | `false`    |
+| closeOnEsc         | 点击 Esc 键时，是否关闭当前 Popup                                        | `boolean`                      | `false`    |
+| maxWidth           | Popup 的最大宽度                                                         | `string`                       | `240px`    |
+| anchor             | Popup 箭头位置，可以控制 Popup 相对于经纬度点的展示位置                  | [AnchorType](#anchortype)      | `'bottom'` |
+| offsets            | Popup 相对于锚点的偏移                                                   | `[number, number]`             | `[0, 0]`   |
+| autoPan            | 当 Popup 展示或者位置发生变化时，地图是否要自动平移至 Popup 所在位置     | `boolean`                      | `false`    |
+| autoClose          | 当有其他 Popup 展示时，是否自动关闭当前气泡                              | `boolean`                      | `true`     |
+| followCursor       | Popup 是否跟随光标移动，若设为 `true`，则 `lngLat` 配置无效              | `boolean`                      | `false`    |
+| closeButton        | 是否展示关闭 Popup 图标                                                  | `boolean`                      | `true`     |
+| closeButtonOffsets | 关闭 Popup 图标的相对偏移                                                | `[number, number]`             | -          |
+| stopPropagation    | Popup 上的鼠标事件是否要阻止其冒泡                                       | `boolean`                      | `true`     |
+
+### ElementType
+
+```ts
+type ElementType =
+  | HTMLElement
+  | HTMLElement[]
+  | DocumentFragment
+  | Text
+  | string;
+```
 
 ### AnchorType
 
 ```ts
-export type AnchorType =
+type AnchorType =
   | 'center'
   | 'top'
   | 'top-left'
@@ -92,17 +103,18 @@ export type AnchorType =
 
 ## 方法
 
-| 名称       | 说明                        | 类型                                                                |
-| ---------- | --------------------------- | ------------------------------------------------------------------- |
-| getOptions | 获取当前 Popup 配置         | `() => IPopupOption`                                                |
-| setOptions | 更新当前 Popup 配置         | `(newOption: Partial<IPopupOption>) => this`                        |
-| show       | 显示 Popup                  | `() => this`                                                        |
-| hide       | 隐藏 Popup                  | `() => this`                                                        |
-| getIsShow  | 判断当前气泡是否展示        | `() => boolean`                                                     |
-| setHTML    | 设置 Popup 内容展示的 HTML  | `(html: string | HTMLElement | HTMLElement[]) => this`              |
-| setText    | 设置 Popup 内容展示的文本   | `(text: string) => this`                                            |
-| setLngLat  | 设置 Popup 锚点所在经纬度   | `(lngLat: { lng: number; lat: number } | [number, number]) => this` |
-| panToPopup | 将地图平移至当前 Popup 位置 | `() => this`                                                        |
+| 名称       | 说明                        | 类型                                                                 |
+| ---------- | --------------------------- | -------------------------------------------------------------------- |
+| getOptions | 获取当前 Popup 配置         | `() => IPopupOption`                                                 |
+| setOptions | 更新当前 Popup 配置         | `(newOption: Partial<IPopupOption>) => this`                         |
+| show       | 显示 Popup                  | `() => this`                                                         |
+| hide       | 隐藏 Popup                  | `() => this`                                                         |
+| getIsShow  | 判断当前气泡是否展示        | `() => boolean`                                                      |
+| setTitle   | 设置 Popup 标题展示的 HTML  | `(title: ElementType) => this`                                       |
+| setHTML    | 设置 Popup 内容展示的 HTML  | `(html: ElementType) => this`                                        |
+| setText    | 设置 Popup 内容展示的文本   | `(text: string) => this`                                             |
+| setLngLat  | 设置 Popup 锚点所在经纬度   | `(lngLat: { lng: number; lat: number } \| [number, number]) => this` |
+| panToPopup | 将地图平移至当前 Popup 位置 | `() => this`                                                         |
 
 ## 事件
 
