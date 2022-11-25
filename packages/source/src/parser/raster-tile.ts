@@ -52,12 +52,6 @@ export default function rasterTile(
   const getTileData = (tileParams: TileLoadParams, tile: SourceTile) => {
     switch (tileDataType) {
       case RasterTileType.IMAGE:
-        // return getTileImage(
-        //   data as string | string[],
-        //   tileParams,
-        //   tile,
-        //   cfg?.responseType,
-        // );
         return getTileImage(data as string | string[], tileParams, tile, cfg);
       case RasterTileType.ARRAYBUFFER:
         return getTileBuffer(
@@ -68,12 +62,6 @@ export default function rasterTile(
           cfg?.operation,
         );
       default:
-        // return getTileImage(
-        //   data as string | string[],
-        //   tileParams,
-        //   tile,
-        //   cfg?.responseType,
-        // );
         return getTileImage(data as string | string[], tileParams, tile, cfg);
     }
   };

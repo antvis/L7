@@ -14,6 +14,7 @@ export type RequestParameters = {
   credentials?: 'same-origin' | 'include';
   collectResourceTiming?: boolean;
   signal?: AbortSignal;
+  [key: string]: any;
 };
 
 export type ResponseCallback<T> = (
@@ -59,8 +60,11 @@ function makeXMLHttpRequest(
   callback: ResponseCallback<any>,
 ) {
   const xhr = new $XMLHttpRequest();
-  transformXhr?.transformRequest?.(requestParameters); // 修改request参数
-  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
+  requestParameters?.transformRequest?.(requestParameters); // 修改request参数
+
+  const url = Array.isArray(requestParameters.url)
+    ? requestParameters.url[0]
+    : requestParameters.url;
   xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
     xhr.responseType = 'arraybuffer';
@@ -88,8 +92,8 @@ function makeXMLHttpRequest(
       if (requestParameters.type === 'json') {
         // We're manually parsing JSON here to get better error messages.
         try {
-          if (transformXhr?.transformResponse) {
-            data = transformXhr?.transformResponse?.(xhr.response);
+          if (requestParameters?.transformResponse) {
+            data = requestParameters?.transformResponse?.(xhr.response);
           } else {
             data = JSON.parse(xhr.response);
           }
@@ -266,12 +270,4 @@ export const getImage = (
   } else {
     return getArrayBuffer(requestParameters, optionFunc);
   }
-};
-
-export const transformXhr: {
-  transformRequest?: (request: RequestParameters) => RequestParameters;
-  transformResponse?: (response: Object) => any;
-} = {
-  transformRequest: (request) => request, // 修改默认request中url、header等参数，返回修改后的请求参数
-  transformResponse: (response) => response, // 修改默认处理请求返回数据的函数
 };

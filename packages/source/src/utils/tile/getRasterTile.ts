@@ -1,15 +1,15 @@
+import { ITileParserCFG } from '@antv/l7-core';
 import {
   getImage,
-  ITileBand,
   getURLFromTemplate,
   getWMTSURLFromTemplate,
+  ITileBand,
   SourceTile,
   TileLoadParams,
 } from '@antv/l7-utils';
-import { getTileUrl } from './request';
-import { ITileParserCFG } from '@antv/l7-core'
-import { IRasterFormat, IBandsOperation } from '../../interface';
+import { IBandsOperation, IRasterFormat } from '../../interface';
 import { getRasterFile } from './getRasterData';
+import { getTileUrl } from './request';
 
 /**
  * 用于获取 raster data 的瓦片，如 tiff、lerc、dem 等
@@ -58,17 +58,17 @@ export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: SourceTile,
-  cfg: Partial<ITileParserCFG>
+  cfg: Partial<ITileParserCFG>,
   //   responseType?: 'string' | 'json' | 'arrayBuffer',
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
-  let imageUrl:string;
+  let imageUrl: string;
   const templateUrl = Array.isArray(url) ? url[0] : url;
-  if(cfg.wmtsOptions) {
+  if (cfg.wmtsOptions) {
     imageUrl = getWMTSURLFromTemplate(templateUrl, {
-       ...tileParams,
-      ...cfg.wmtsOptions
-    })
+      ...tileParams,
+      ...cfg.wmtsOptions,
+    });
   } else {
     imageUrl = getURLFromTemplate(
       Array.isArray(url) ? url[0] : url,
@@ -77,14 +77,20 @@ export const getTileImage = async (
   }
 
   return new Promise((resolve, reject) => {
-    // const xhr = getImage({ url: imgUrl, type: responseType }, (err, img) => {
-    const xhr = getImage({ url: imageUrl }, (err, img) => {
-      if (err) {
-        reject(err);
-      } else if (img) {
-        resolve(img);
-      }
-    });
+    const xhr = getImage(
+      {
+        url: imageUrl,
+        ...cfg,
+        type: cfg.dataType as 'string' | 'json' | 'arrayBuffer' | undefined,
+      },
+      (err, img) => {
+        if (err) {
+          reject(err);
+        } else if (img) {
+          resolve(img);
+        }
+      },
+    );
     tile.xhrCancel = () => xhr.abort();
   });
 };

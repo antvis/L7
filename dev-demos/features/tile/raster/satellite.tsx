@@ -14,30 +14,6 @@ export default () => {
         style: 'blank',
         zoom: 10,
       }),
-      transformRequest: (requestParams) => {
-        const { x, y, z, index, crow_type } = getUrlQueryParams(
-          requestParams.url,
-        );
-        const biz_content = { x, y, z, index, crow_type };
-        const newUrl = sign('anttech.ai.cv.rs.xytile.get', biz_content, {
-          charset: 'utf-8',
-          version: '1.0',
-        });
-
-        const signStr = Object.keys(encodeParams(newUrl))
-          .sort()
-          .map((key) => {
-            let data = encodeParams(newUrl)[key];
-            if (Array.prototype.toString.call(data) !== '[object String]') {
-              data = JSON.stringify(data);
-            }
-            return `${key}=${data}`;
-          })
-          .join('&');
-        requestParams.url = `https://openapi.alipay.com/gateway.do?${signStr}`; // 线上环境    
-        return requestParams;
-      },
-      transformResponse: (response) => Base64toArrayBuffer(response?.anttech_ai_cv_rs_xytile_get_response?.image || '')
     });
 
     const Base64toArrayBuffer = (base64Data) => {
@@ -68,7 +44,7 @@ export default () => {
       zIndex: 1,
     });
     layerTile.source(
-      '//t{0-4}.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=f1f2021a42d110057042177cd22d856f',
+      '//t{0-4}.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=f1f2021a42d110057042177cd22d856f',
       {
         parser: {
           type: 'rasterTile',
@@ -81,7 +57,7 @@ export default () => {
     );
 
     const layerTile2 = new RasterLayer({
-      zIndex: 0,
+      zIndex: 2,
     });
     layerTile2.source(
       // 'http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
@@ -90,13 +66,37 @@ export default () => {
         parser: {
           type: 'rasterTile',
           tileSize: 256,
-          responseType: 'json'
+          dataType: 'json',
+          transformRequest: (requestParams) => {
+            const { x, y, z, index, crow_type } = getUrlQueryParams(
+              requestParams.url,
+            );
+            const biz_content = { x, y, z, index, crow_type };
+            const newUrl = sign('anttech.ai.cv.rs.xytile.get', biz_content, {
+              charset: 'utf-8',
+              version: '1.0',
+            });
+    
+            const signStr = Object.keys(encodeParams(newUrl))
+              .sort()
+              .map((key) => {
+                let data = encodeParams(newUrl)[key];
+                if (Array.prototype.toString.call(data) !== '[object String]') {
+                  data = JSON.stringify(data);
+                }
+                return `${key}=${data}`;
+              })
+              .join('&');
+            requestParams.url = `https://openapi.alipay.com/gateway.do?${signStr}`; // 线上环境    
+            return requestParams;
+          },
+          transformResponse: (response) => Base64toArrayBuffer(response?.anttech_ai_cv_rs_xytile_get_response?.image || '')
         },
       },
     );
 
     scene.on('loaded', () => {
-      // scene.addLayer(layerTile);
+      scene.addLayer(layerTile);
       scene.addLayer(layerTile2);
     });
   }, []);
