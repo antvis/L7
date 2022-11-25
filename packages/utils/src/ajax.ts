@@ -110,7 +110,9 @@ function makeXMLHttpRequest(
       const body = new Blob([xhr.response], {
         type: xhr.getResponseHeader('Content-Type'),
       });
-      callback(new AJAXError(xhr.status, xhr.statusText, url.toString(), body));
+      callback(
+        new AJAXError(xhr.status, xhr.statusText, url.toString(), body)
+      );
     }
   };
   xhr.send(requestParameters.body);
@@ -130,16 +132,16 @@ export function makeXMLHttpRequestPromise(
 ): Promise<IXhrRequestResult> {
   return new Promise((resolve, reject) => {
     makeXMLHttpRequest(requestParameters, (error, data, cacheControl, expires, xhr) => {
-      if (error) {
+      if(error) {
         reject({
           err: error,
           data: null,
-          xhr,
+          xhr
         });
       } else {
         resolve({
           err: null,
-          data,
+          data ,
           cacheControl,
           expires,
           xhr,
