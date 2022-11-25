@@ -1,15 +1,16 @@
-import { ITileParserCFG } from '@antv/l7-core';
 import {
   getImage,
+  ITileBand,
   getURLFromTemplate,
   getWMTSURLFromTemplate,
-  ITileBand,
   SourceTile,
   TileLoadParams,
 } from '@antv/l7-utils';
-import { IBandsOperation, IRasterFormat } from '../../interface';
-import { getRasterFile } from './getRasterData';
 import { getTileUrl } from './request';
+import { ITileParserCFG } from '@antv/l7-core'
+import { IRasterFormat, IBandsOperation } from '../../interface';
+import { getRasterFile } from './getRasterData';
+
 
 /**
  * 用于获取 raster data 的瓦片，如 tiff、lerc、dem 等
@@ -58,7 +59,7 @@ export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: SourceTile,
-  cfg: Partial<ITileParserCFG>,
+  cfg: Partial<ITileParserCFG>
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
   let imageUrl:string;
@@ -76,8 +77,7 @@ export const getTileImage = async (
   }
 
   return new Promise((resolve, reject) => {
-    const xhr = getImage(
-      {
+    const xhr = getImage({
         url: imageUrl,
         ...cfg,
         type: cfg.dataType as 'string' | 'json' | 'arrayBuffer' | undefined,
