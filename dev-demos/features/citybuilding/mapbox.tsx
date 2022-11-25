@@ -1,5 +1,5 @@
 // @ts-ignore
-import { CityBuildingLayer, LineLayer, PolygonLayer, Scene } from '@antv/l7';
+import { Scene, CityBuildingLayer, LineLayer, PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { Mapbox } from '@antv/l7-maps';
 import React, { useEffect } from 'react';

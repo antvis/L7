@@ -1,10 +1,11 @@
 import {
-  anchorType,
-  Fullscreen,
   GaodeMap,
   PointLayer,
   Popup,
   Scene,
+  Fullscreen,	
+  anchorType,	
+  // anchorType,
 } from '@antv/l7';
 import { featureCollection, point } from '@turf/turf';
 import React, { useState } from 'react';

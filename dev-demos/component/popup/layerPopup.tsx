@@ -5,6 +5,7 @@ import {
   PointLayer,
   PolygonLayer,
   Scene,
+  // anchorType,
 } from '@antv/l7';
 import { circle, featureCollection, point } from '@turf/turf';
 import React, { useState } from 'react';

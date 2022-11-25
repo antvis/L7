@@ -1,4 +1,4 @@
-import { RasterLayer, Scene } from '@antv/l7';
+import { Scene, RasterLayer } from '@antv/l7';
 import { DrawControl } from '@antv/l7-draw';
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';

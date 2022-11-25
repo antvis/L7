@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Earth, EarthLayer, Scene } from '@antv/l7';
+import { Scene, Earth, EarthLayer } from '@antv/l7';
 
 import React, { useEffect } from 'react';
 
