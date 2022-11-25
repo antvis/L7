@@ -1,8 +1,7 @@
-import { TilesetManager } from '@antv/l7-utils';
+import { RequestParameters, TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
-export type SourceEventType = 'inited' | 'sourceUpdate' | 'update'
-import { RequestParameters } from "@antv/l7-utils";
+export type SourceEventType = 'inited' | 'sourceUpdate' | 'update';
 // 栅格瓦片解析配置项
 
 export enum RasterTileType {
@@ -12,25 +11,25 @@ export enum RasterTileType {
 }
 
 export interface IGeojsonvtOptions {
-  maxZoom: number;          // max zoom to preserve detail on
-  indexMaxZoom: number;     // max zoom in the tile index
-  indexMaxPoints: number;   // max number of points per tile in the tile index
-  tolerance: number;        // simplification tolerance (higher means simpler)
-  extent: number;           // tile extent
-  buffer: number;           // tile buffer on each side
-  lineMetrics: boolean;     // whether to calculate line metrics
-  promoteId: null;          // name of a feature property to be promoted to feature.id
-  generateId: boolean;      // whether to generate feature ids. Cannot be used with promoteId
-  debug: number;            // logging level (0, 1 or 2)
+  maxZoom: number; // max zoom to preserve detail on
+  indexMaxZoom: number; // max zoom in the tile index
+  indexMaxPoints: number; // max number of points per tile in the tile index
+  tolerance: number; // simplification tolerance (higher means simpler)
+  extent: number; // tile extent
+  buffer: number; // tile buffer on each side
+  lineMetrics: boolean; // whether to calculate line metrics
+  promoteId: null; // name of a feature property to be promoted to feature.id
+  generateId: boolean; // whether to generate feature ids. Cannot be used with promoteId
+  debug: number; // logging level (0, 1 or 2)
 }
 export interface ITileParserCFG {
-  type:string,
+  type: string;
   tileSize?: number;
   minZoom?: number;
   maxZoom?: number;
   zoomOffset?: number;
   extent?: [number, number, number, number];
-  requestParameters: Partial<RequestParameters>
+  requestParameters: Partial<RequestParameters>;
   updateStrategy?: 'overlap' | 'replace';
   // 指定 feature 编码 id
   featureId?: string;
@@ -42,10 +41,15 @@ export interface ITileParserCFG {
 
   geojsonvtOptions?: IGeojsonvtOptions;
 
-  wmtsOptions: IWMTSServiceOption
-  
+  wmtsOptions: IWMTSServiceOption;
+
   format?: any;
   operation?: any;
+
+  // 用户自定义请求url
+  getURLFromTemplate?: (template: string, properties: { x: number; y: number; z: number }) => string;
+  // 用户自定义处理返回数据回调
+  transformResponse?: (response: Object) => any;
 }
 
 export interface IWMTSServiceOption {
@@ -76,7 +80,7 @@ export interface ITransform {
 export interface ISourceCFG {
   cluster?: boolean;
   clusterOptions?: Partial<IClusterOptions>;
-  autoRender?:boolean,
+  autoRender?: boolean;
   parser?: IParserCfg | ITileParserCFG;
   transforms?: ITransform[];
 }
@@ -118,7 +122,7 @@ export type IJsonData = IJsonItem[];
 
 export interface ISource {
   inited: boolean;
-  isTile: boolean
+  isTile: boolean;
   data: IParserData;
   center: [number, number];
   parser: IParserCfg;

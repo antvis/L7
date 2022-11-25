@@ -59,6 +59,7 @@ function makeXMLHttpRequest(
   callback: ResponseCallback<any>,
 ) {
   const xhr = new $XMLHttpRequest();
+
   const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
   xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
@@ -104,7 +105,7 @@ function makeXMLHttpRequest(
         type: xhr.getResponseHeader('Content-Type'),
       });
       callback(
-        new AJAXError(xhr.status, xhr.statusText, url.toString(), body),
+        new AJAXError(xhr.status, xhr.statusText, url.toString(), body)
       );
     }
   };
@@ -114,10 +115,10 @@ function makeXMLHttpRequest(
 }
 
 export interface IXhrRequestResult {
-  err?: Error | Error[] | null,
-  data?: any | null,
-  cacheControl?: string | null,
-  expires?: string | null,
+  err?: Error | Error[] | null;
+  data?: any | null;
+  cacheControl?: string | null;
+  expires?: string | null;
   xhr?: any;
 }
 export function makeXMLHttpRequestPromise(
@@ -236,19 +237,30 @@ function arrayBufferToImageBitmap(
 export const getImage = (
   requestParameters: RequestParameters,
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
+  transformResponse?: (response: Object) => any
 ) => {
   // request the image with XHR to work around caching issues
   // see https://github.com/mapbox/mapbox-gl-js/issues/1470
-  return getArrayBuffer(requestParameters, (err, imgData) => {
+  const optionFunc = (
+    err?: Error | Error[] | null,
+    imgData?: ArrayBuffer | null,
+  ) => {
     if (err) {
       callback(err);
     } else if (imgData) {
       const imageBitmapSupported = typeof createImageBitmap === 'function';
+      const _imgData = transformResponse? transformResponse(imgData) : imgData;
       if (imageBitmapSupported) {
-        arrayBufferToImageBitmap(imgData, callback);
+        arrayBufferToImageBitmap(_imgData, callback);
       } else {
-        arrayBufferToImage(imgData, callback);
+        arrayBufferToImage(_imgData, callback);
       }
     }
-  });
+  };
+
+  if (requestParameters.type === 'json') {
+    return getJSON(requestParameters, optionFunc);
+  } else {
+    return getArrayBuffer(requestParameters, optionFunc);
+  }
 };
