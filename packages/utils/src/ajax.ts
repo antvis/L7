@@ -14,7 +14,6 @@ export type RequestParameters = {
   credentials?: 'same-origin' | 'include';
   collectResourceTiming?: boolean;
   signal?: AbortSignal;
-  [key: string]: any;
 };
 
 export type ResponseCallback<T> = (
@@ -60,7 +59,6 @@ function makeXMLHttpRequest(
   callback: ResponseCallback<any>,
 ) {
   const xhr = new $XMLHttpRequest();
-  requestParameters?.transformRequest?.(requestParameters); // 修改request参数
 
   const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
   xhr.open(requestParameters.method || 'GET', url, true);
@@ -73,7 +71,7 @@ function makeXMLHttpRequest(
     }
   }
   if (requestParameters.type === 'json') {
-    xhr.responseType = 'json';
+    xhr.responseType = 'text';
     xhr.setRequestHeader('Accept', 'application/json');
   }
   xhr.withCredentials = requestParameters.credentials === 'include';
@@ -90,11 +88,7 @@ function makeXMLHttpRequest(
       if (requestParameters.type === 'json') {
         // We're manually parsing JSON here to get better error messages.
         try {
-          if (requestParameters?.transformResponse) {
-            data = requestParameters?.transformResponse?.(xhr.response);
-          } else {
-            data = JSON.parse(xhr.response);
-          }
+          data = JSON.parse(xhr.response);
         } catch (err) {
           return callback(err as Error);
         }
@@ -243,6 +237,7 @@ function arrayBufferToImageBitmap(
 export const getImage = (
   requestParameters: RequestParameters,
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
+  transformResponse?: (response: Object) => any
 ) => {
   // request the image with XHR to work around caching issues
   // see https://github.com/mapbox/mapbox-gl-js/issues/1470
@@ -254,10 +249,11 @@ export const getImage = (
       callback(err);
     } else if (imgData) {
       const imageBitmapSupported = typeof createImageBitmap === 'function';
+      const _imgData = transformResponse? transformResponse(imgData) : imgData;
       if (imageBitmapSupported) {
-        arrayBufferToImageBitmap(imgData, callback);
+        arrayBufferToImageBitmap(_imgData, callback);
       } else {
-        arrayBufferToImage(imgData, callback);
+        arrayBufferToImage(_imgData, callback);
       }
     }
   };

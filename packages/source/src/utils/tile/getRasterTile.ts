@@ -65,22 +65,20 @@ export const getTileImage = async (
   let imageUrl:string;
   const templateUrl = Array.isArray(url) ? url[0] : url;
   if(cfg.wmtsOptions) {
-    imageUrl = getWMTSURLFromTemplate(templateUrl, {
+    const _getWMTSURLFromTemplate = cfg?.getURLFromTemplate || getWMTSURLFromTemplate
+    imageUrl = _getWMTSURLFromTemplate(templateUrl, {
        ...tileParams,
       ...cfg.wmtsOptions
     })
   } else {
-    imageUrl = getURLFromTemplate(
-      Array.isArray(url) ? url[0] : url,
-      tileParams,
-    );
+    const _getURLFromTemplate = cfg?.getURLFromTemplate || getURLFromTemplate
+    imageUrl = _getURLFromTemplate(templateUrl, tileParams);
   }
 
   return new Promise((resolve, reject) => {
     const xhr = getImage({
-        url: imageUrl,
-        ...cfg,
-        type: cfg.dataType as 'string' | 'json' | 'arrayBuffer' | undefined,
+      url: imageUrl,
+        type: cfg?.requestParameters?.type || 'arrayBuffer'
       },
       (err, img) => {
         if (err) {
@@ -89,6 +87,7 @@ export const getTileImage = async (
           resolve(img);
         }
       },
+      cfg.transformResponse
     );
     tile.xhrCancel = () => xhr.abort();
   });
