@@ -1,6 +1,6 @@
 import {
   GaodeMap,
-  Scene,	
+  Scene,
   LayerSwitch,
   ILayer,
   PointLayer,

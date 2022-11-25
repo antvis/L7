@@ -19,7 +19,7 @@ export default class RasterTiffLayer extends BaseLayer<
   }
   public  getModelType():string {
     return this.layerSource.parser.type === 'rasterRgb' ? 'rasterRgb' : 'raster'
-
+    
   }
 
   protected getDefaultConfig() {

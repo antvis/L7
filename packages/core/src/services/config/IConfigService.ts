@@ -3,7 +3,6 @@ import { PositionName } from '../component/IControlService';
 import { ILayerConfig,ILayerAttributesOption } from '../layer/ILayerService';
 import { IMapWrapper } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
-import { RequestParameters } from '@antv/l7-utils';
 
 export interface ISceneConfig extends IRenderConfig {
   id: string | HTMLDivElement;
@@ -18,8 +17,6 @@ export interface ISceneConfig extends IRenderConfig {
   pickBufferScale?: number;
   // TODO: 场景是否支持 stencil mask
   stencil?: boolean;
-  transformRequest?: (request: RequestParameters) => RequestParameters; // 修改默认请求的回调函数
-  transformResponse?: (response: Object) => any; // 修改默认的返回处理逻辑
 }
 
 export interface IGlobalConfigService {

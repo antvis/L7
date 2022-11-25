@@ -3,8 +3,8 @@ import {
   Scene,
   // LineLayer,
   Source,
-  PolygonLayer,	
-  // PointLayer,	
+  PolygonLayer,
+  // PointLayer,
   // TileDebugLayer,
 } from '@antv/l7';
 // @ts-ignore

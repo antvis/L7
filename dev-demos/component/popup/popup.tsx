@@ -3,8 +3,8 @@ import {
   PointLayer,
   Popup,
   Scene,
-  Fullscreen,	
-  anchorType,	
+  Fullscreen,
+  anchorType,
   // anchorType,
 } from '@antv/l7';
 import { featureCollection, point } from '@turf/turf';

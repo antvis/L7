@@ -62,9 +62,7 @@ function makeXMLHttpRequest(
   const xhr = new $XMLHttpRequest();
   requestParameters?.transformRequest?.(requestParameters); // 修改request参数
 
-  const url = Array.isArray(requestParameters.url)
-    ? requestParameters.url[0]
-    : requestParameters.url;
+  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
   xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
     xhr.responseType = 'arraybuffer';
@@ -131,27 +129,24 @@ export function makeXMLHttpRequestPromise(
   requestParameters: RequestParameters,
 ): Promise<IXhrRequestResult> {
   return new Promise((resolve, reject) => {
-    makeXMLHttpRequest(
-      requestParameters,
-      (error, data, cacheControl, expires, xhr) => {
-        if (error) {
-          reject({
-            err: error,
-            data: null,
-            xhr,
-          });
-        } else {
-          resolve({
-            err: null,
-            data,
-            cacheControl,
-            expires,
-            xhr,
-          });
-        }
-      },
-    );
-  });
+    makeXMLHttpRequest(requestParameters, (error, data, cacheControl, expires, xhr) => {
+      if (error) {
+        reject({
+          err: error,
+          data: null,
+          xhr,
+        });
+      } else {
+        resolve({
+          err: null,
+          data,
+          cacheControl,
+          expires,
+          xhr,
+        });
+      }
+    })
+  })
 }
 
 function makeRequest(

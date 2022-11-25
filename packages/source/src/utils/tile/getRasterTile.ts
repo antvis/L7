@@ -49,26 +49,25 @@ export const getTileBuffer = async (
 };
 /**
  * 获取图片格式的文件 jpg、png 等
- * @param url
- * @param tileParams
- * @param tile
- * @returns
+ * @param url 
+ * @param tileParams 
+ * @param tile 
+ * @returns 
  */
 export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: SourceTile,
   cfg: Partial<ITileParserCFG>,
-  //   responseType?: 'string' | 'json' | 'arrayBuffer',
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
-  let imageUrl: string;
+  let imageUrl:string;
   const templateUrl = Array.isArray(url) ? url[0] : url;
-  if (cfg.wmtsOptions) {
+  if(cfg.wmtsOptions) {
     imageUrl = getWMTSURLFromTemplate(templateUrl, {
-      ...tileParams,
-      ...cfg.wmtsOptions,
-    });
+       ...tileParams,
+      ...cfg.wmtsOptions
+    })
   } else {
     imageUrl = getURLFromTemplate(
       Array.isArray(url) ? url[0] : url,
