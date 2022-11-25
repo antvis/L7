@@ -41,7 +41,7 @@ export default defineConfig({
             zh: '开始使用',
             en: 'Getting Started',
           },
-          link: `docs/api/l7`,
+          link: `/tutorial/quickstart`,
         },
         {
           text: {
