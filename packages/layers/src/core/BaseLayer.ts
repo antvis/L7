@@ -399,6 +399,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // 获取插件集
     this.plugins = this.container.getAll<ILayerPlugin>(TYPES.ILayerPlugin);
+    
     // 完成插件注册，传入场景和图层容器内的服务
     for (const plugin of this.plugins) {
       plugin.apply(this, {

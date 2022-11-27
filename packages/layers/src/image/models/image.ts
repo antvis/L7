@@ -24,6 +24,8 @@ export default class ImageModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
+    console.log('initModels');
+    
     const {
       mask = false,
       maskInside = true,

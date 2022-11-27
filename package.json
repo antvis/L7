@@ -155,7 +155,9 @@
     "webpack-merge": "^4.1.4",
     "wellknown": "^0.5.0",
     "worker-loader": "^2.0.0",
-    "yorkie": "^2.0.0"
+    "yorkie": "^2.0.0",
+    "crypto-js": "^4.1.1",
+    "jsencrypt": "^3.2.1"
   },
   "scripts": {
     "dev": "npm run worker && dumi dev",
