@@ -21,8 +21,6 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   }
 
   public getModelType(): RasterModelType {
-    
-    
     // 根据 source 的类型判断 model type
     const parserType = this.layerSource.getParserType();
     switch (parserType) {

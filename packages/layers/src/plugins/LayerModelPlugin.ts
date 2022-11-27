@@ -30,7 +30,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
       if (layer.getSource().isTile) {
         layer.prepareBuildModel();
         // TODO 为什么执行两次
-        
+
         layer.tileLayer = new TileLayer(layer);
         return;
       }
