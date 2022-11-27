@@ -16,8 +16,7 @@ export default class Logo extends Control<ILogoControlOption> {
       position: PositionType.BOTTOMLEFT,
       name: 'logo',
       href: 'https://l7.antv.antgroup.com/',
-      img:
-        'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GRb1TKp4HcMAAAAAAAAAAAAAARQnAQ',
+      img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*GRb1TKp4HcMAAAAAAAAAAAAAARQnAQ',
     };
   }
 
