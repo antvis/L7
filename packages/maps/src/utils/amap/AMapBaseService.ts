@@ -529,10 +529,6 @@ export default abstract class AMapBaseService
   
     if (this.cameraChangedCallback) {
       // resync viewport
-      // console.log('cameraHeight', height)
-      // console.log('pitch', pitch)
-      // console.log('rotation', rotation)
-      // console.log('zoom', this.map.getZoom())
       this.viewport.syncWithMapCamera({
         aspect,
         // AMap 定义 rotation 为顺时针方向，而 Mapbox 为逆时针
