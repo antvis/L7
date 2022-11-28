@@ -32,5 +32,3 @@ const layer = new PointLayer({
   featureId: 'id',
 });
 ```
-
-<embed src="@/docs/common/layer/options.md"></embed>

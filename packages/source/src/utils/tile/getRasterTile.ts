@@ -11,6 +11,7 @@ import { ITileParserCFG } from '@antv/l7-core'
 import { IRasterFormat, IBandsOperation } from '../../interface';
 import { getRasterFile } from './getRasterData';
 
+
 /**
  * 用于获取 raster data 的瓦片，如 tiff、lerc、dem 等
  * 支持多文件模式
@@ -35,7 +36,7 @@ export const getTileBuffer = async (
     getRasterFile(
       tile,
       requestParameters,
-      (err, img) => {
+      (err:any, img:any) => {
         if (err) {
           reject(err);
         } else if (img) {
@@ -64,25 +65,30 @@ export const getTileImage = async (
   let imageUrl:string;
   const templateUrl = Array.isArray(url) ? url[0] : url;
   if(cfg.wmtsOptions) {
-    imageUrl = getWMTSURLFromTemplate(templateUrl, {
+    const _getWMTSURLFromTemplate = cfg?.getURLFromTemplate || getWMTSURLFromTemplate
+    imageUrl = _getWMTSURLFromTemplate(templateUrl, {
        ...tileParams,
       ...cfg.wmtsOptions
     })
   } else {
-    imageUrl = getURLFromTemplate(
-      Array.isArray(url) ? url[0] : url,
-      tileParams,
-    );
+    const _getURLFromTemplate = cfg?.getURLFromTemplate || getURLFromTemplate
+    imageUrl = _getURLFromTemplate(templateUrl, tileParams);
   }
 
   return new Promise((resolve, reject) => {
-    const xhr = getImage({ url: imageUrl }, (err, img) => {
-      if (err) {
-        reject(err);
-      } else if (img) {
-        resolve(img);
-      }
-    });
+    const xhr = getImage({
+      url: imageUrl,
+        type: cfg?.requestParameters?.type || 'arrayBuffer'
+      },
+      (err, img) => {
+        if (err) {
+          reject(err);
+        } else if (img) {
+          resolve(img);
+        }
+      },
+      cfg.transformResponse
+    );
     tile.xhrCancel = () => xhr.abort();
   });
 };

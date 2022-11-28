@@ -63,6 +63,10 @@ export default () => {
                   })
                   .shape('circle')
                   .size(12)
+                  .active({
+                    color:'red',
+                  })
+                  .select(true)
                   .color('red')
                   .style({
                     stroke: ['name', (name)=>{

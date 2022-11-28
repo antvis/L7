@@ -1,4 +1,4 @@
-## data
+### data
 
 data 解析后的数据，为数组
 
@@ -39,7 +39,7 @@ layer.source(tiffdata.data, {
 });
 ```
 
-## parser
+### parser
 
 - type: raster
 - extent: 栅格的经纬度范围 [minlng, minlat,maxLng, maxLat]

@@ -5,7 +5,6 @@ import {
   IPopup,
   IPopupOption,
   ISceneService,
-  PopupHTML,
   TYPES,
 } from '@antv/l7-core';
 import {
@@ -17,6 +16,8 @@ import {
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { createL7Icon } from '../utils/icon';
+
+type ElementType = DOM.ElementType;
 
 export { Popup };
 
@@ -63,12 +64,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @protected
    */
   protected contentPanel: HTMLElement;
-
-  /**
-   * popup 内容标题
-   * @protected
-   */
-  protected title: HTMLElement;
 
   /**
    * 气泡箭头对应的 DOM
@@ -124,11 +119,14 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.updateCloseOnEsc();
     this.updateFollowCursor();
 
-    const { html, text } = this.popupOption;
+    const { html, text, title } = this.popupOption;
     if (html) {
       this.setHTML(html);
     } else if (text) {
       this.setText(text);
+    }
+    if (title) {
+      this.setTitle(title);
     }
     this.emit('open');
     return this;
@@ -171,6 +169,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   }
 
   public setOptions(option: Partial<O>) {
+    this.show();
     this.popupOption = {
       ...this.popupOption,
       ...option,
@@ -186,13 +185,15 @@ export default class Popup<O extends IPopupOption = IPopupOption>
         'style',
         'lngLat',
         'offsets',
-        'title',
       ])
     ) {
       if (this.container) {
         DOM.remove(this.container);
         // @ts-ignore
         this.container = undefined;
+      }
+      if (this.popupOption.title) {
+        this.setTitle(this.popupOption.title);
       }
       if (this.popupOption.html) {
         this.setHTML(this.popupOption.html);
@@ -214,9 +215,11 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     } else if (this.checkUpdateOption(option, ['text']) && option.text) {
       this.setText(option.text);
     }
+    if (this.checkUpdateOption(option, ['title'])) {
+      this.setTitle(option.title);
+    }
     if (this.checkUpdateOption(option, ['lngLat']) && option.lngLat) {
       this.setLnglat(option.lngLat);
-      this.show();
     }
     return this;
   }
@@ -259,9 +262,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * 设置 HTML 内容
    * @param html
    */
-  public setHTML(html: PopupHTML) {
+  public setHTML(html: ElementType) {
     this.popupOption.html = html;
-    return this.setDOMContent(this.getPopupHTMLFragment(html));
+    return this.setDOMContent(html);
   }
 
   /**
@@ -271,6 +274,28 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   public setText(text: string) {
     this.popupOption.text = text;
     return this.setDOMContent(window.document.createTextNode(text));
+  }
+
+  public setTitle(title?: ElementType) {
+    this.show();
+    if (title) {
+      if (!this.contentTitle) {
+        this.contentTitle = DOM.create('div', 'l7-popup-content__title');
+        if (this.content.firstChild) {
+          this.content.insertBefore(
+            this.contentTitle!,
+            this.content.firstChild,
+          );
+        } else {
+          this.content.append(this.contentTitle!);
+        }
+      }
+      DOM.clearChildren(this.contentTitle!);
+      DOM.appendElementType(this.contentTitle!, title);
+    } else if (this.contentTitle) {
+      DOM.remove(this.contentTitle);
+      this.contentTitle = undefined;
+    }
   }
 
   /**
@@ -293,6 +318,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param lngLat
    */
   public setLnglat(lngLat: ILngLat | [number, number]): this {
+    this.show();
     this.lngLat = lngLat as ILngLat;
     if (Array.isArray(lngLat)) {
       this.lngLat = {
@@ -376,11 +402,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
   /**
    * 设置 Popup 内容 HTML
-   * @param htmlNode
+   * @param element
    */
-  protected setDOMContent(htmlNode: ChildNode | DocumentFragment) {
+  protected setDOMContent(element: ElementType) {
+    this.show();
     this.createContent();
-    this.contentPanel.appendChild(htmlNode);
+    DOM.appendElementType(this.contentPanel, element);
     this.update();
     return this;
   }
@@ -432,20 +459,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     if (this.content) {
       DOM.remove(this.content);
     }
+    this.contentTitle = undefined;
     this.content = DOM.create('div', 'l7-popup-content', this.container);
-
-    if (this.popupOption.title) {
-      this.contentTitle = DOM.create(
-        'div',
-        'l7-popup-content__title',
-        this.content,
-      );
-      this.contentTitle?.append(
-        this.getPopupHTMLFragment(this.popupOption.title),
-      );
-    } else {
-      this.contentTitle = undefined;
-    }
 
     if (this.popupOption.closeButton) {
       const closeButton = createL7Icon('l7-icon-guanbi');
@@ -552,31 +567,5 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    */
   protected checkUpdateOption(option: Partial<O>, keys: Array<keyof O>) {
     return keys.some((key) => key in option);
-  }
-
-  /**
-   * 根据参数 HTML 片段返回对应的 Fragment
-   * @param html
-   * @protected
-   */
-  protected getPopupHTMLFragment(html: PopupHTML) {
-    const frag = window.document.createDocumentFragment();
-    const temp = window.document.createElement('body');
-    let child: ChildNode | null;
-    if (typeof html === 'string') {
-      temp.innerHTML = html;
-    } else if (Array.isArray(html)) {
-      temp.append(...html);
-    } else if (html instanceof HTMLElement) {
-      temp.append(html);
-    }
-    while (true) {
-      child = temp.firstChild;
-      if (!child) {
-        break;
-      }
-      frag.appendChild(child);
-    }
-    return frag;
   }
 }

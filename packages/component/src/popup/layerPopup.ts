@@ -5,16 +5,20 @@ import { get } from 'lodash';
 // import { Container } from 'inversify';
 import Popup from './popup';
 
+type ElementType = DOM.ElementType;
+
 export type LayerField = {
   field: string;
-  formatField?: ((field: string) => string) | string;
-  formatValue?: ((value: any) => any) | string;
+  formatField?: ElementType | ((field: string, feature: any) => ElementType);
+  formatValue?: ElementType | ((value: any, feature: any) => ElementType);
   getValue?: (feature: any) => any;
 };
 
 export type LayerPopupConfigItem = {
   layer: ILayer | string;
-  fields: Array<LayerField | string>;
+  fields?: Array<LayerField | string>;
+  title?: ElementType | ((feature: any) => ElementType);
+  customContent?: ElementType | ((feature: any) => ElementType);
 };
 
 export interface ILayerPopupOption extends IPopupOption {
@@ -86,6 +90,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       },
       offsets: [0, 10],
       closeButton: false,
+      closeOnClick: false,
       autoClose: false,
       closeOnEsc: false,
     };
@@ -158,15 +163,13 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
 
   protected onLayerMouseMove(layer: ILayer, e: any) {
     if (!this.isSameFeature(layer, e.featureId)) {
-      const frag = this.getLayerInfoFrag(layer, e);
-      this.setDOMContent(frag);
+      const { title, content } = this.getLayerInfoFrag(layer, e);
+      this.setDOMContent(content);
+      this.setTitle(title);
       this.displayFeatureInfo = {
         layer,
         featureId: e.featureId,
       };
-    }
-
-    if (!this.isShow) {
       this.show();
     }
   }
@@ -183,14 +186,15 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     if (this.isShow && this.isSameFeature(layer, e.featureId)) {
       this.hide();
     } else {
-      const frag = this.getLayerInfoFrag(layer, e);
-      this.setDOMContent(frag);
+      const { title, content } = this.getLayerInfoFrag(layer, e);
+      this.setDOMContent(content);
       this.setLnglat(e.lngLat);
-      this.show();
+      this.setTitle(title);
       this.displayFeatureInfo = {
         layer,
         featureId: e.featureId,
       };
+      this.show();
     }
   }
 
@@ -207,9 +211,10 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * @param e
    * @protected
    */
-  protected getLayerInfoFrag(layer: ILayer, e: any): DocumentFragment {
+  protected getLayerInfoFrag(layer: ILayer, e: any) {
     const layerInfo = this.layerConfigMap.get(layer);
-    const frag = document.createDocumentFragment();
+    let titleFrag: DocumentFragment | undefined;
+    const contentFrag = document.createDocumentFragment();
     if (layerInfo) {
       let feature = e.feature;
       if (
@@ -219,29 +224,54 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       ) {
         feature = feature.properties;
       }
-      const { fields } = layerInfo;
-      fields?.forEach((fieldConfig) => {
-        const { field, formatField, formatValue, getValue } =
-          typeof fieldConfig === 'string'
-            ? // tslint:disable-next-line:no-object-literal-type-assertion
-              ({ field: fieldConfig } as LayerField)
-            : fieldConfig;
-        const row = DOM.create('div', 'l7-layer-popup__row');
-        const value = getValue ? getValue(e.feature) : get(feature, field);
+      const { title, fields, customContent } = layerInfo;
 
-        const fieldText =
-          (formatField instanceof Function
-            ? formatField(field)
-            : formatField) ?? field;
-        const valueText =
-          (formatValue instanceof Function
-            ? formatValue(value)
-            : formatValue) ?? value;
-        row.innerHTML = `<span class="l7-layer-popup__key">${fieldText}</span>: <span class="l7-layer-popup__value">${valueText}</span>`;
-        frag.appendChild(row);
-      });
+      if (title) {
+        titleFrag = document.createDocumentFragment();
+        const titleElement = title instanceof Function ? title(feature) : title;
+        DOM.appendElementType(titleFrag, titleElement);
+      }
+
+      if (customContent) {
+        const content =
+          customContent instanceof Function
+            ? customContent(feature)
+            : customContent;
+        DOM.appendElementType(contentFrag, content);
+      } else if (fields?.length) {
+        fields?.forEach((fieldConfig) => {
+          const { field, formatField, formatValue, getValue } =
+            typeof fieldConfig === 'string'
+              ? // tslint:disable-next-line:no-object-literal-type-assertion
+                ({ field: fieldConfig } as LayerField)
+              : fieldConfig;
+          const row = DOM.create('div', 'l7-layer-popup__row');
+          const value = getValue ? getValue(e.feature) : get(feature, field);
+
+          const fieldElement =
+            (formatField instanceof Function
+              ? formatField(field, feature)
+              : formatField) ?? field;
+
+          const valueElement =
+            (formatValue instanceof Function
+              ? formatValue(value, feature)
+              : formatValue) ?? value;
+
+          const fieldSpan = DOM.create('span', 'l7-layer-popup__key', row);
+          DOM.appendElementType(fieldSpan, fieldElement);
+          DOM.appendElementType(fieldSpan, document.createTextNode('：'));
+
+          const valueSpan = DOM.create('span', 'l7-layer-popup__value', row);
+          DOM.appendElementType(valueSpan, valueElement);
+          contentFrag.appendChild(row);
+        });
+      }
     }
-    return frag;
+    return {
+      title: titleFrag,
+      content: contentFrag,
+    };
   }
 
   /**

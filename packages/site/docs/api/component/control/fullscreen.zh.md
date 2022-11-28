@@ -33,7 +33,7 @@ scene.on('loaded', () => {
 
 | 名称        | 说明                              | 类型                              |
 | ----------- | --------------------------------- | --------------------------------- |
-| exitBtnIcon | 退出全屏按钮的图标                | `HTMLElement` &#124; `SVGElement` |
+| exitBtnIcon | 退出全屏按钮的图标                | `HTMLElement` \| `SVGElement` |
 | exitBtnText | 退出全屏按钮的文本                | `string`                          |
 | exitTitle   | 退出全屏按钮的文本的 `title` 属性 | `string`                          |
 

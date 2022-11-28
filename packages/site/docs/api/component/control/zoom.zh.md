@@ -31,9 +31,9 @@ scene.on('loaded', () => {
 
 | 名称         | 说明                    | 类型                      |
 | ------------ | ----------------------- | ------------------------- |
-| zoomInText   | 放大按钮的展示内容      | `Element` &#124; `string` |
+| zoomInText   | 放大按钮的展示内容      | `Element` \| `string` |
 | zoomInTitle  | 放大按钮的 `title` 属性 | `string`                  |
-| zoomOutText  | 缩小按钮的展示内容      | `Element` &#124; `string` |
+| zoomOutText  | 缩小按钮的展示内容      | `Element` \| `string` |
 | zoomOutTitle | 缩小按钮的 `title` 属性 | `string`                  |
 
 <embed src="@/docs/common/control/api.md"></embed>
