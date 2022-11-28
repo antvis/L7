@@ -6,6 +6,7 @@ import {
   TilesetManagerOptions,
 } from '@antv/l7-utils';
 import { IParserData } from '../interface';
+import { getCustomData } from '../utils/tile/getCustomData';
 import {
   defaultFormat,
   getTileBuffer,
@@ -58,6 +59,15 @@ export default function rasterTile(
           data,
           tileParams,
           tile,
+          cfg?.format || defaultFormat,
+          cfg?.operation,
+        );
+      case RasterTileType.CUSTOMARRAYBUFFER:
+      case RasterTileType.CUSTOMRGB:
+        return getCustomData(
+          tile,
+          // @ts-ignore
+          cfg?.getCustomData,
           cfg?.format || defaultFormat,
           cfg?.operation,
         );
