@@ -6,8 +6,7 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
-    "@antv/g2": "^3.5.9",
-    "@antv/g2plot": "^2.3.40",
+    "@antv/g2": "^4.2.8",
     "@antv/l7-district": "^2.3.9",
     "@antv/l7-draw": "^3.0.9",
     "@antv/l7-react": "^2.3.3",

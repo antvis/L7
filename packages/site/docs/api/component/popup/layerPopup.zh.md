@@ -16,6 +16,7 @@ LayerPopup 会自行对目标图层的鼠标事件进行监听，当用户点击
 ## 使用
 
 [示例](/examples/component/popup#layerpopup)
+[自定义内容示例](/zh/examples/component/popup/#customContent)
 
 ```ts
 import { Scene, LayerPopup, PointLayer } from '@antv/l7';
@@ -69,37 +70,47 @@ scene.on('loaded', () => {
 | 名称    | 说明                                                                                          | 类型                          | 默认值    |
 | ------- | --------------------------------------------------------------------------------------------- | ----------------------------- | --------- |
 | items   | 需要展示 Popup 的图层配置数组，每个选项类型可见 [LayerPopupConfigItem](#layerpopupconfigitem) | `Array<LayerPopupConfigItem>` | `[]`      |
-| trigger | 鼠标触发 Popup 展示的方式                                                                     | `'hover' | 'click'`           | `'hover'` |
+| trigger | 鼠标触发 Popup 展示的方式                                                                     | `'hover' \| 'click'`          | `'hover'` |
 
 ### LayerPopupConfigItem
 
-| 名称   | 说明                                                                                              | 类型                  |
-| ------ | ------------------------------------------------------------------------------------------------- | --------------------- |
-| layer  | 需要展示 Popup 的目标图层实例，或其的 `id` 或 `name`                                              | `BaseLayer | string`  |
-| fields | 需要展示的字段数组，支持传入字段 key 值字符串，或者针对该字段的详细配置 [LayerField](#layerfield) | `string | LayerField` |
+| 名称          | 说明                                                                                                                 | 类型                                             |
+| ------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| layer         | 需要展示 Popup 的目标图层实例，或其的 `id` 或 `name`                                                                 | `BaseLayer` \| `string`                          |
+| fields        | 需要展示的字段数组，支持传入字段 key 值字符串，或者针对该字段的详细配置 [LayerField](#layerfield)                    | `string` \| `LayerField`                         |
+| customContent | 自定义气泡内容，支持直接传入自定义内容或者通过回调函数返回自定义内容两种方式，与 `fields` 共存下优先读取该配置并渲染 | `ElementType \| ((feature: any) => ElementType)` |
+| title         | 自定义气泡标题，支持直接传入自定义内容或者通过回调函数返回自定义内容两种方式                                         | `ElementType \| ((feature: any) => ElementType)` |
 
 ### LayerField
 
-| 名称        | 说明                        | 类型                        |
-| ----------- | --------------------------- | --------------------------- |
-| field       | 字段的 key 值字符串         | `string`                    |
-| formatField | 对展示的 key 字段进行格式化 | `(field: string) => string | string` |
-| formatValue | 对展示的 value 值进行格式化 | `(value: any) => any | string`       |
-| getValue    | 自定义获取值的方式          | `(feature: any) => any`     |
+| 名称        | 说明                        | 类型                                                            |
+| ----------- | --------------------------- | --------------------------------------------------------------- |
+| field       | 字段的 key 值字符串         | `string`                                                        |
+| formatField | 对展示的 key 字段进行格式化 | `ElementType \| ((field: string, feature: any) => ElementType)` |
+| formatValue | 对展示的 value 值进行格式化 | `ElementType \| ((value: any, feature: any) => ElementType)`    |
+| getValue    | 自定义获取值的方式          | `(feature: any) => any`                                         |
+
+### ElementType
+
+```ts
+type ElementType =
+  | HTMLElement
+  | HTMLElement[]
+  | DocumentFragment
+  | Text
+  | string;
+```
 
 ## 方法
 
-| 名称       | 说明                        | 类型                                                                |
-| ---------- | --------------------------- | ------------------------------------------------------------------- |
-| getOptions | 获取当前 Popup 配置         | `() => IPopupOption`                                                |
-| setOptions | 更新当前 Popup 配置         | `(newOption: Partial<IPopupOption>) => this`                        |
-| show       | 显示 Popup                  | `() => this`                                                        |
-| hide       | 隐藏 Popup                  | `() => this`                                                        |
-| getIsShow  | 判断当前气泡是否展示        | `() => boolean`                                                     |
-| setHTML    | 设置 Popup 内容展示的 HTML  | `(html: string | HTMLElement | HTMLElement[]) => this`              |
-| setText    | 设置 Popup 内容展示的文本   | `(text: string) => this`                                            |
-| setLngLat  | 设置 Popup 锚点所在经纬度   | `(lngLat: { lng: number; lat: number } | [number, number]) => this` |
-| panToPopup | 将地图平移至当前 Popup 位置 | `() => this`                                                        |
+| 名称       | 说明                        | 类型                                                                 |
+| ---------- | --------------------------- | -------------------------------------------------------------------- |
+| getOptions | 获取当前 Popup 配置         | `() => IPopupOption`                                                 |
+| setOptions | 更新当前 Popup 配置         | `(newOption: Partial<IPopupOption>) => this`                         |
+| show       | 显示 Popup                  | `() => this`                                                         |
+| hide       | 隐藏 Popup                  | `() => this`                                                         |
+| setLngLat  | 设置 Popup 锚点所在经纬度   | `(lngLat: { lng: number; lat: number } \| [number, number]) => this` |
+| panToPopup | 将地图平移至当前 Popup 位置 | `() => this`                                                         |
 
 ## 事件
 

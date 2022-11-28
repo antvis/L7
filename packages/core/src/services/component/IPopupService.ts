@@ -1,9 +1,7 @@
-import { anchorType } from '@antv/l7-utils';
+import { anchorType, DOM } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
 import { Container } from 'inversify';
 import { ILngLat } from '../map/IMapService';
-
-export type PopupHTML = string | HTMLElement | HTMLElement[];
 
 export interface IPopupOption {
   /**
@@ -79,12 +77,12 @@ export interface IPopupOption {
   /**
    * Popup 气泡的内置HTML
    */
-  html?: PopupHTML;
+  html?: DOM.ElementType;
 
   /**
    * Popup 气泡的标题
    */
-  title?: PopupHTML;
+  title?: DOM.ElementType;
 
   /**
    * 初始的经纬度位置
@@ -97,7 +95,7 @@ export interface IPopup extends EventEmitter {
   remove(): void;
   setLnglat(lngLat: ILngLat): this;
   getLnglat(): ILngLat;
-  setHTML(html: PopupHTML): this;
+  setHTML(html: DOM.ElementType): this;
   setText(text: string): this;
   setMaxWidth(maxWidth: string): this;
   isOpen(): boolean;

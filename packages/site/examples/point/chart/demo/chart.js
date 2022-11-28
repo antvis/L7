@@ -6,7 +6,7 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     style: 'light',
-    center: [ 2.6125016864608597, 49.359131 ],
+    center: [2.6125016864608597, 49.359131],
     zoom: 4.19
   })
 });
@@ -20,7 +20,7 @@ function addChart() {
   )
     .then(res => res.json())
     .then(data => {
-      data.nodes.forEach(function(item) {
+      data.nodes.forEach(function (item) {
         const el = document.createElement('div');
         const total =
           item.gdp.Agriculture + item.gdp.Industry + item.gdp.Service;
@@ -47,28 +47,6 @@ function addChart() {
           }
         ];
 
-        const sliceNumber = 0.02;
-
-        // 自定义 other 的图形，增加两条线
-        G2.Shape.registerShape('interval', 'sliceShape', {
-          draw: function draw(cfg, container) {
-            const points = cfg.points;
-            let path = [];
-            path.push([ 'M', points[0].x, points[0].y ]);
-            path.push([ 'L', points[1].x, points[1].y - sliceNumber ]);
-            path.push([ 'L', points[2].x, points[2].y - sliceNumber ]);
-            path.push([ 'L', points[3].x, points[3].y ]);
-            path.push('Z');
-            path = this.parsePath(path);
-            return container.addShape('path', {
-              attrs: {
-                fill: cfg.color,
-                path
-              }
-            });
-          }
-        });
-
         const chart = new G2.Chart({
           container: el,
           width: size,
@@ -76,17 +54,18 @@ function addChart() {
           render: 'svg',
           padding: 0
         });
+        console.log(chart)
         chart.legend(false);
-        chart.source(itemData);
+        chart.data(itemData);
         chart.coord('theta', {
           innerRadius: 0.6
         });
         chart.tooltip(false);
         chart
-          .intervalStack()
-          .position('percent')
-          .color('item', [ '#5CCEA1', '#5D7092', '#5B8FF9' ])
-          .shape('sliceShape');
+          .interval()
+          .adjust('stack')
+          .position('percent').color('item', ['#5CCEA1', '#5D7092', '#5B8FF9'])
+          .shape('sliceShape')
         chart.render();
         const marker = new Marker({
           element: el

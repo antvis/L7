@@ -61,7 +61,7 @@ scene.on('loaded', () => {
 
 | 名称      | 说明                                               | 类型                       |
 | --------- | -------------------------------------------------- | -------------------------- |
-| imageType | 截图图片的格式                                     | `'png'` &#124; `'jpeg'`    |
+| imageType | 截图图片的格式                                     | `'png'` \| `'jpeg'`    |
 | onExport  | 截图成功后，用于接收图片 `Base64` 字符串的回调函数 | `(base64: string) => void` |
 
 <embed src="@/docs/common/control/btn-api.md"></embed>
