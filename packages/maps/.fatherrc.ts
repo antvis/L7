@@ -7,6 +7,12 @@ export default {
     
     output:'lib'
   },
+  umd: {
+    output: 'dist',
+    externals: {
+      "mapbox-gl": "mapboxgl",
+    },
+  },
   platform:'browser',
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
