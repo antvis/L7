@@ -36,7 +36,7 @@ export const getTileBuffer = async (
     getRasterFile(
       tile,
       requestParameters,
-      (err, img) => {
+      (err:any, img:any) => {
         if (err) {
           reject(err);
         } else if (img) {

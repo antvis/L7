@@ -36,8 +36,10 @@ export function getTileFactory(layer: ILayer) {
       const { dataType } = layer.getSource().parser;
       switch(dataType) {
         case 'rgb':
+        case 'customRGB':
           return RasterRGBTile;
         case 'arraybuffer':
+        case 'customArrayBuffer':
           return RasterTile
         case "terrainRGB" :
             return RasterTerrainRGBTile
