@@ -17,8 +17,10 @@ export const getCustomData = async (
             y: tile.y,
             z: tile.z
         }, (err, data) => {
-            if(err){
+           
+            if(err || data.length ===0){
               reject(err)  
+              return;
             }
             if (data) {
                 processRasterData([{data,bands:[0]}], rasterFormat, operation, (err: any, img: any) => {
