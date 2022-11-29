@@ -82,6 +82,8 @@ export class ThreeRenderService implements IThreeRenderService {
         return this.AMap2Camera();
       case 'MAPBOX':
         return this.mapboxCamera();
+      case 'DEFAULTMAP':
+        return this.mapboxCamera();
       default:
         return this.AMapCamera();
     }
