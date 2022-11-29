@@ -3,15 +3,14 @@
  * MapboxService
  */
 import { CoordinateSystem, IMercator } from '@antv/l7-core';
-import { Map, MercatorCoordinate} from '@antv/l7-map';
-import { mat4, vec3 } from 'gl-matrix';
+import { Map, MercatorCoordinate } from '@antv/l7-map';
 import { $window } from '@antv/l7-utils';
+import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from '../utils/Viewport';
 import { Version } from '../version';
-
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
@@ -20,20 +19,20 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 @injectable()
 export default class DefaultMapService extends BaseMapService<Map> {
   public version: string = Version.DEFUALT;
-   /**
+  /**
    * 将经纬度转成墨卡托坐标
    * @param lnglat
    * @returns
    */
-    public lngLatToCoord(
-      lnglat: [number, number],
-      origin: IMercator = { x: 0, y: 0, z: 0 },
-    ) {
-      // @ts-ignore
-      const { x, y } = this.lngLatToMercator(lnglat, 0);
-      return [x - origin.x, y - origin.y] as [number, number];
-    }
-  
+  public lngLatToCoord(
+    lnglat: [number, number],
+    origin: IMercator = { x: 0, y: 0, z: 0 },
+  ) {
+    // @ts-ignore
+    const { x, y } = this.lngLatToMercator(lnglat, 0);
+    return [x - origin.x, y - origin.y] as [number, number];
+  }
+
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
@@ -52,8 +51,10 @@ export default class DefaultMapService extends BaseMapService<Map> {
     scale: [number, number, number] = [1, 1, 1],
     origin: IMercator = { x: 0, y: 0, z: 0 },
   ): number[] {
-    const modelAsMercatorCoordinate =
-      MercatorCoordinate.fromLngLat(lnglat, altitude);
+    const modelAsMercatorCoordinate = MercatorCoordinate.fromLngLat(
+      lnglat,
+      altitude,
+    );
     // @ts-ignore
     const meters = modelAsMercatorCoordinate.meterInMercatorCoordinateUnits();
     const modelMatrix = mat4.create();

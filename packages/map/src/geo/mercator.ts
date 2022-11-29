@@ -90,6 +90,4 @@ export default class MercatorCoordinate {
   }
 }
 
-export {
-  MercatorCoordinate
-}
+export { MercatorCoordinate };
