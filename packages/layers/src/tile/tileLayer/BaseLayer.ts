@@ -82,10 +82,10 @@ export default class BaseTileLayer {
 
     if (this.mapService.version === 'GAODE1.x') {
       const { visible } = this.parent.getLayerConfig();
-      if (zoom < 3 && visible) {
+      if (zoom < 2 && visible) {
         this.parent.updateLayerConfig({ visible: false });
         this.layerService.reRender();
-      } else if (zoom >= 3 && !visible) {
+      } else if (zoom >= 2 && !visible) {
         this.parent.updateLayerConfig({ visible: true });
         this.layerService.reRender();
       }
