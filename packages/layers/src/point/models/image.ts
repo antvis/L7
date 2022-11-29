@@ -15,7 +15,6 @@ import pointImageFrag from '../shaders/image_frag.glsl';
 import pointImageVert from '../shaders/image_vert.glsl';
 export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
-
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -49,21 +48,21 @@ export default class ImageModel extends BaseModel {
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
+            flipY: true,
+            data,
+            format: gl.LUMINANCE,
+            type: gl.FLOAT,
+            width,
+            height,
+          })
           : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
+            flipY: true,
+            data: [1],
+            format: gl.LUMINANCE,
+            type: gl.FLOAT,
+            width: 1,
+            height: 1,
+          });
     }
     return {
       u_raisingHeight: Number(raisingHeight),
@@ -81,10 +80,8 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  public async initModels():Promise<IModel[]>  {
-    this.iconService.off('imageUpdate', this.updateTexture);
+  public async initModels(): Promise<IModel[]> {
     this.iconService.on('imageUpdate', this.updateTexture);
-    // this.registerBuiltinAttributes();
     this.updateTexture();
 
     return await this.buildModels();
@@ -96,13 +93,13 @@ export default class ImageModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
- public async buildModels():Promise<IModel[]>  {
+  public async buildModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-       const model = await this.layer
+    const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointImage',
         vertexShader: pointImageVert,
@@ -114,8 +111,8 @@ export default class ImageModel extends BaseModel {
         stencil: getMask(mask, maskInside),
       });
 
-      return [model]
-       
+    return [model]
+
   }
   protected registerBuiltinAttributes() {
     // point layer size;
@@ -176,10 +173,10 @@ export default class ImageModel extends BaseModel {
       });
       // 更新完纹理后在更新的图层的时候需要更新所有的图层
       // this.layer.layerModelNeedUpdate = true;
-      setTimeout(()=>{ // 延迟渲染
+      setTimeout(() => { // 延迟渲染
         this.layerService.throttleRenderLayers();
       })
-      
+
       return;
     }
     this.texture = createTexture2D({

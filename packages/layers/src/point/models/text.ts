@@ -180,10 +180,7 @@ export default class TextModel extends BaseModel {
   public async initModels():Promise<IModel[]>  {
 
     // 绑定事件
-    if(!this.layer.inited) {
-      this.bindEvent();
-    }
-    
+    this.bindEvent();
     this.extent = this.textExtent();
     const {
       textAnchor = 'center',
