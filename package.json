@@ -179,6 +179,7 @@
     "lint:css": "stylelint 'packages/**/src/**/*.js{,x}'",
     "lint": "run-p -c lint:*",
     "commit": "git-cz",
+    "vercel-build": "yarn global add node-gyp",
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
     "prerelease": "yarn build && yarn bundle",
