@@ -3,6 +3,13 @@ import { $window } from './mini-adapter';
 
 export type ELType = HTMLElement | SVGElement;
 
+export type ElementType =
+  | HTMLElement
+  | HTMLElement[]
+  | DocumentFragment
+  | Text
+  | string;
+
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
   if (typeof domId === 'string') {
@@ -224,4 +231,21 @@ export function clearChildren(el: ELType) {
 
 export function setUnDraggable(el: ELType) {
   el.setAttribute('draggable', 'false');
+}
+
+export function appendElementType(
+  container: HTMLElement | DocumentFragment,
+  children: ElementType,
+) {
+  if (typeof children === 'string') {
+    const div = document.createElement('div');
+    div.innerHTML = children;
+    while (div.firstChild) {
+      container.append(div.firstChild);
+    }
+  } else if (Array.isArray(children)) {
+    container.append(...children);
+  } else {
+    container.append(children);
+  }
 }

@@ -139,7 +139,6 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.map.onCameraChanged((viewport: IViewport) => {
           this.cameraService.init();
           this.cameraService.update(viewport);
-         
           resolve();
          
         });
@@ -318,8 +317,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.inited = true;
     } else {
       // 尝试初始化未初始化的图层
-      this.layerService.initLayers();
-      this.layerService.renderLayers();
+      await this.layerService.initLayers();
+      await this.layerService.renderLayers();
     }
 
     // 组件需要等待layer 初始化完成之后添加

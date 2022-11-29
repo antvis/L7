@@ -6,8 +6,7 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
-    "@antv/g2": "^3.5.9",
-    "@antv/g2plot": "^2.3.40",
+    "@antv/g2": "^4.2.8",
     "@antv/l7-district": "^2.3.9",
     "@antv/l7-draw": "^3.0.9",
     "@antv/l7-react": "^2.3.3",
@@ -155,7 +154,9 @@
     "webpack-merge": "^4.1.4",
     "wellknown": "^0.5.0",
     "worker-loader": "^2.0.0",
-    "yorkie": "^2.0.0"
+    "yorkie": "^2.0.0",
+    "crypto-js": "^4.1.1",
+    "jsencrypt": "^3.2.1"
   },
   "scripts": {
     "dev": "npm run worker && dumi dev",
@@ -167,7 +168,7 @@
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
     "async-site": "sh ./scripts/site.sh",
     "prebuild": "yarn clean && run-p tsc lint",
-    "build": " yarn worker && lerna run build --ignore @antv/l7-site ",
+    "build": " yarn worker && lerna run build ",
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna run tsc --stream --no-bail",
     "tslint": "tslint  packages/**/src/**/*.ts  -c tslint.prod.json",

@@ -8,6 +8,8 @@ export enum RasterTileType {
   IMAGE = 'image',
   ARRAYBUFFER = 'arraybuffer',
   RGB = 'rgb',
+  CUSTOMRGB = 'customRGB',
+  CUSTOMARRAYBUFFER = 'customArrayBuffer',
 }
 
 export interface IGeojsonvtOptions {
@@ -28,6 +30,7 @@ export interface ITileParserCFG {
   minZoom?: number;
   maxZoom?: number;
   zoomOffset?: number;
+  getCustomData: (tile: { x: number, y: number, z: number },cb:(err:any,data:any)=>void)=>void,
   extent?: [number, number, number, number];
   requestParameters: Partial<RequestParameters>;
   updateStrategy?: 'overlap' | 'replace';
