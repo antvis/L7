@@ -2,7 +2,7 @@
 /**
  * AMapService
  */
-import AMapLoader from '../utils/amaploader';
+import AMapLoader from '@amap/amap-jsapi-loader';
 
 import {
   Bounds,
@@ -246,6 +246,7 @@ export default class AMapService extends AMapBaseService {
     this.viewport = new Viewport();
     if (!(window.AMap || mapInstance)) {
       plugin.push('Map3D');
+      // if (AMapLoader.status.AMap === 'notload') {
       await AMapLoader.load({
         key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
         version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15

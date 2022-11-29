@@ -16,7 +16,7 @@ export default () => {
         center: [127.471855, 46.509622], // 绥化市-北林区
         pitch: 0,
         style: 'blank',
-        zoom: 10,
+        zoom: 7,
       }),
     });
 
