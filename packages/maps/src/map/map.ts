@@ -3,13 +3,15 @@
  * MapboxService
  */
 import { CoordinateSystem, IMercator } from '@antv/l7-core';
-import { Map } from '@antv/l7-map';
+import { Map, MercatorCoordinate} from '@antv/l7-map';
+import { mat4, vec3 } from 'gl-matrix';
 import { $window } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from '../utils/Viewport';
 import { Version } from '../version';
+
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
@@ -18,15 +20,67 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 @injectable()
 export default class DefaultMapService extends BaseMapService<Map> {
   public version: string = Version.DEFUALT;
+   /**
+   * 将经纬度转成墨卡托坐标
+   * @param lnglat
+   * @returns
+   */
+    public lngLatToCoord(
+      lnglat: [number, number],
+      origin: IMercator = { x: 0, y: 0, z: 0 },
+    ) {
+      // @ts-ignore
+      const { x, y } = this.lngLatToMercator(lnglat, 0);
+      return [x - origin.x, y - origin.y] as [number, number];
+    }
+  
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
   ): IMercator {
-    throw new Error('Method not implemented.');
+    const {
+      x = 0,
+      y = 0,
+      z = 0,
+    } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    return { x, y, z };
   }
-  public getModelMatrix(): number[] {
-    throw new Error('Method not implemented.');
+  public getModelMatrix(
+    lnglat: [number, number],
+    altitude: number,
+    rotate: [number, number, number],
+    scale: [number, number, number] = [1, 1, 1],
+    origin: IMercator = { x: 0, y: 0, z: 0 },
+  ): number[] {
+    const modelAsMercatorCoordinate =
+      MercatorCoordinate.fromLngLat(lnglat, altitude);
+    // @ts-ignore
+    const meters = modelAsMercatorCoordinate.meterInMercatorCoordinateUnits();
+    const modelMatrix = mat4.create();
+
+    mat4.translate(
+      modelMatrix,
+      modelMatrix,
+      vec3.fromValues(
+        modelAsMercatorCoordinate.x - origin.x,
+        modelAsMercatorCoordinate.y - origin.y,
+        modelAsMercatorCoordinate.z || 0 - origin.z,
+      ),
+    );
+
+    mat4.scale(
+      modelMatrix,
+      modelMatrix,
+      vec3.fromValues(meters * scale[0], -meters * scale[1], meters * scale[2]),
+    );
+
+    mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
+    mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
+    mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
+
+    return modelMatrix as unknown as number[];
   }
+
   public viewport: Viewport;
 
   public async init(): Promise<void> {

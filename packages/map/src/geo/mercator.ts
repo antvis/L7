@@ -89,3 +89,7 @@ export default class MercatorCoordinate {
     return (1 / earthCircumfrence) * mercatorScale(latFromMercatorY(this.y));
   }
 }
+
+export {
+  MercatorCoordinate
+}

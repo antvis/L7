@@ -14,7 +14,6 @@ import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import AMapLoader from '../utils/amaploader';
 import { Version } from '../version';
-
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import Viewport from './Viewport';
 // @ts-ignore
