@@ -176,6 +176,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     };
     if (
       this.checkUpdateOption(option, [
+        'html',
+        'text',
+        'title',
         'closeButton',
         'closeButtonOffsets',
         'maxWidth',
@@ -214,9 +217,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.setHTML(option.html);
     } else if (this.checkUpdateOption(option, ['text']) && option.text) {
       this.setText(option.text);
-    }
-    if (this.checkUpdateOption(option, ['title'])) {
-      this.setTitle(option.title);
     }
     if (this.checkUpdateOption(option, ['lngLat']) && option.lngLat) {
       this.setLnglat(option.lngLat);
@@ -278,6 +278,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
   public setTitle(title?: ElementType) {
     this.show();
+    this.popupOption.title = title;
     if (title) {
       if (!this.contentTitle) {
         this.contentTitle = DOM.create('div', 'l7-popup-content__title');
@@ -461,6 +462,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     this.contentTitle = undefined;
     this.content = DOM.create('div', 'l7-popup-content', this.container);
+    this.setTitle(this.popupOption.title);
 
     if (this.popupOption.closeButton) {
       const closeButton = createL7Icon('l7-icon-guanbi');
@@ -535,14 +537,18 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.container.style.whiteSpace = 'nowrap';
     }
 
-    // 设置 Popup 的最大宽度
-    if (maxWidth && this.container.style.maxWidth !== maxWidth) {
-      this.container.style.maxWidth = maxWidth;
-    }
-
     this.updateLngLatPosition();
     DOM.setTransform(this.container, `${anchorTranslate[anchor]}`);
     applyAnchorClass(this.container, anchor, 'popup');
+
+    if (maxWidth) {
+      const { width } = this.container.getBoundingClientRect();
+      if (width > parseFloat(maxWidth)) {
+        this.container.style.width = maxWidth;
+      }
+    } else {
+      this.container.style.removeProperty('width');
+    }
   };
 
   /**
