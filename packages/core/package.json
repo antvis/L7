@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.11.3",
+  "version": "2.11.4",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,7 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-utils": "2.11.3",
+    "@antv/l7-utils": "2.11.4",
     "@babel/runtime": "^7.7.7",
     "@turf/helpers": "^6.1.4",
     "ajv": "^6.10.2",
