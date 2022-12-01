@@ -117,7 +117,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           model.addUniforms({
             u_PickingStage: PickingStage.HIGHLIGHT,
             u_PickingColor: pickedColor,
-            // u_HighlightColor: highlightColorInArray.map((c) => c * 255),
+            u_HighlightColor: highlightColorInArray.map((c) => c * 255),
             u_activeMix: selectMix,
             u_CurrentSelectedId: pickedColor,
             u_SelectColor: highlightColorInArray.map((c) => c * 255),
