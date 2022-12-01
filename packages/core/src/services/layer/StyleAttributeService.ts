@@ -283,6 +283,9 @@ export default class StyleAttributeService implements IStyleAttributeService {
       sizePerElement: 0,
       elements: [],
     };
+
+    
+
     if (triangulation) {
       this.triangulation = triangulation;
     }
@@ -423,6 +426,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     if (triangulation) {
       this.triangulation = triangulation;
     }
+    
     const descriptors = this.attributes.map((attr) => {
       attr.resetDescriptor();
       return attr.descriptor;
