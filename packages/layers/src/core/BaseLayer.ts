@@ -1289,7 +1289,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public needPick(type: string): boolean {
-
     const { enableHighlight = true, enableSelect = true } =
       this.getLayerConfig();
     // 判断layer是否监听事件;
