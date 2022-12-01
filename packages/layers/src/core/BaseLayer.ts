@@ -1192,8 +1192,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       fragmentShader,
       triangulation,
       segmentNumber,
-      workerEnabled = false,
-      workerOptions,
+
       ...rest
     } = options;
 
@@ -1205,52 +1204,33 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { createModel } = this.rendererService;
     return new Promise((resolve, reject) => {
       // filter supported worker & worker enabled layer
-      if (
-        workerOptions &&
-        workerOptions.modelType in WorkerSourceMap &&
-        workerEnabled
-      ) {
-        this.styleAttributeService
-          .createAttributesAndIndicesAscy(
-            this.encodedData,
-            segmentNumber,
-            workerOptions,
-          )
-          .then(({ attributes, elements }) => {
-            const m = createModel({
-              attributes,
-              uniforms,
-              fs,
-              vs,
-              elements,
-              blend: BlendTypes[BlendType.normal],
-              ...rest,
-            });
-            resolve(m as IModel);
-          })
-          .catch((err) => reject(err));
-      } else {
-        const { attributes, elements, count } =
-          this.styleAttributeService.createAttributesAndIndices(
-            this.encodedData,
-            triangulation,
-            segmentNumber,
-          );
-        const modelOptions = {
-          attributes,
-          uniforms,
-          fs,
-          vs,
-          elements,
-          blend: BlendTypes[BlendType.normal],
-          ...rest,
-        };
-        if (count) {
-          modelOptions.count = count;
-        }
-        const m = createModel(modelOptions);
-        resolve(m);
-      }
+
+      const { attributes, elements } =
+        this.styleAttributeService.createAttributesAndIndices(
+          [
+            {
+              color: [1, 0, 0, 1],
+              coordinates: [120, 30],
+              id: 0,
+              shape: 'circle',
+              size: 16,
+            },
+          ],
+          triangulation,
+          segmentNumber,
+        );
+      const modelOptions = {
+        attributes,
+        uniforms,
+        fs,
+        vs,
+        elements,
+        blend: BlendTypes[BlendType.normal],
+        ...rest,
+      };
+
+      const m = createModel(modelOptions);
+      resolve(m);
     });
   }
 
@@ -1289,7 +1269,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public needPick(type: string): boolean {
-
     const { enableHighlight = true, enableSelect = true } =
       this.getLayerConfig();
     // 判断layer是否监听事件;
@@ -1331,7 +1310,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.models.forEach((model) => {
       model.draw(
         {
-          uniforms: this.layerModel.getUninforms(),
+          uniforms: {},
         },
         isPicking,
       );

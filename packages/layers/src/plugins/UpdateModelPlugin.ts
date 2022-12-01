@@ -7,12 +7,7 @@ import 'reflect-metadata';
 @injectable()
 export default class UpdateModelPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
-    layer.hooks.beforeRender.tap('UpdateModelPlugin', () => {
-      // 处理文本更新
-      if (layer.layerModel) {
-        layer.layerModel.needUpdate();
-      }
-    });
+    layer.hooks.beforeRender.tap('UpdateModelPlugin', () => {});
     layer.hooks.afterRender.tap('UpdateModelPlugin', () => {
       layer.layerModelNeedUpdate = false;
     });

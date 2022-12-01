@@ -94,8 +94,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           );
           layer.setEncodedData(encodeData);
         }
-        // 处理文本更新，更新文字形状
-        // layer.emit('remapping', null);
       }
     });
   }
