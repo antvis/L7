@@ -201,7 +201,7 @@ const Demo: FunctionComponent = () => {
         <button
           onClick={() => {
             popup?.setOptions({
-              html: 'htmlByOptions',
+              html: 'html byOptions',
             });
           }}
         >
