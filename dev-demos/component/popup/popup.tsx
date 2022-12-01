@@ -30,15 +30,17 @@ const Demo: FunctionComponent = () => {
 
     newScene.on('loaded', () => {
       const newPopup = new Popup({
-        closeOnClick: true,
+        // closeOnClick: true,
         closeOnEsc: true,
         lngLat: {
           lng: 120.104697,
           lat: 30.260704,
         },
         anchor: 'bottom-right',
-        title: 'Popup Title',
-        html: 'Popup Content',
+        // followCursor: true,
+        title:
+          '算啦就是老地方上的分萨迪克浪费撒东方巨龙凯撒付款流水阿帆十多分数据福克斯阿道夫阿斯蒂芬',
+        html: '算啦就是老地方上的分萨迪克浪费撒东方巨龙凯撒付款流水阿帆十多分数据福克斯阿道夫阿斯蒂芬',
       });
       newScene.addPopup(newPopup);
 
@@ -199,8 +201,15 @@ const Demo: FunctionComponent = () => {
         <button
           onClick={() => {
             popup?.setOptions({
-              html: 'html',
+              html: 'html byOptions',
             });
+          }}
+        >
+          htmlByOptions
+        </button>
+        <button
+          onClick={() => {
+            popup?.setHTML('html');
           }}
         >
           html
@@ -224,7 +233,7 @@ const Demo: FunctionComponent = () => {
             });
           }}
         >
-          title
+          toggleTitle
         </button>
         <button
           onClick={() => {
