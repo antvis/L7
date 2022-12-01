@@ -423,6 +423,7 @@
   display: -webkit-flex;
   display: flex;
   will-change: transform;
+  pointer-events: none;
 }
 .l7-popup.l7-popup-hide {
   display: none;
@@ -439,9 +440,12 @@
   margin-bottom: 8px;
   font-weight: bold;
 }
+.l7-popup .l7-popup-content .l7-popup-close-button,
 .l7-popup .l7-popup-content .l7-popup-content__title,
 .l7-popup .l7-popup-content .l7-popup-content__panel {
-  white-space: break-spaces;
+  white-space: normal;
+  user-select: text;
+  pointer-events: initial;
 }
 .l7-popup .l7-popup-content .l7-popup-close-button {
   position: absolute;
