@@ -51,10 +51,12 @@ import {
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
+  CameraUniform,
+  CoordinateUniform,
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
+import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isFunction, isObject, isUndefined } from 'lodash';
@@ -172,6 +174,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   protected cameraService: ICameraService;
 
   protected coordinateService: ICoordinateSystemService;
+
+  protected coordinateSystemService: ICoordinateSystemService;
 
   protected iconService: IIconService;
 
@@ -340,13 +344,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       TYPES.IPickingService,
     );
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
-    const { enableMultiPassRenderer, passes } = this.getLayerConfig();
-    if (enableMultiPassRenderer && passes?.length && passes.length > 0) {
-      // Tip: 兼容 multiPassRender 在 amap1 时存在的图层不同步问题 zoom
-      this.mapService.on('mapAfterFrameChange', () => {
-        this.renderLayers();
-      });
-    }
+    const { enableMultiPassRenderer } = this.getLayerConfig();
+   
 
     this.cameraService = this.container.get<ICameraService>(
       TYPES.ICameraService,
@@ -354,6 +353,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.coordinateService = this.container.get<ICoordinateSystemService>(
       TYPES.ICoordinateSystemService,
     );
+
+    this.coordinateSystemService = this.container.get<ICoordinateSystemService>(
+      TYPES.ICoordinateSystemService,
+    );
+
     this.shaderModuleService = this.container.get<IShaderModuleService>(
       TYPES.IShaderModuleService,
     );
@@ -675,26 +679,51 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 渲染所有的图层
    */
   public renderLayers(): void {
-    this.rendering = true;
-    this.layerService.renderLayers();
-
-    this.rendering = false;
+   
   }
 
   public render(): ILayer {
-    if (this.tileLayer) {
-      // 瓦片图层执行单独的 render 渲染队列
-      this.tileLayer.render();
-      return this;
-    }
-    this.layerService.beforeRenderData(this);
-    if (this.encodeDataLength <= 0 && !this.forceRender) {
-      return this;
-    }
+   
+    this.updateUniform();
 
-    // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    this.renderModels();
+    this.models.forEach((model) => {
+      model.draw({ uniforms: {}  });
+    });
     return this;
+  }
+
+  public updateUniform() {
+    // 重新计算坐标系参数
+    this.coordinateSystemService.refresh();
+    
+    const { width, height } = this.rendererService.getViewportSize();
+    this.models.forEach((model) => {
+      model.addUniforms({
+        // 相机参数，包含 VP 矩阵、缩放等级
+        [CameraUniform.ProjectionMatrix]:
+          this.cameraService.getProjectionMatrix(),
+        [CameraUniform.ViewMatrix]: this.cameraService.getViewMatrix(),
+        [CameraUniform.ViewProjectionMatrix]:
+          this.cameraService.getViewProjectionMatrix(),
+        [CameraUniform.Zoom]: this.cameraService.getZoom(),
+        [CameraUniform.ZoomScale]: this.cameraService.getZoomScale(),
+        [CoordinateUniform.CoordinateSystem]:
+          this.coordinateSystemService.getCoordinateSystem(),
+        [CoordinateUniform.ViewportCenter]:
+          this.coordinateSystemService.getViewportCenter(),
+        [CoordinateUniform.ViewportCenterProjection]:
+          this.coordinateSystemService.getViewportCenterProjection(),
+        [CoordinateUniform.PixelsPerDegree]:
+          this.coordinateSystemService.getPixelsPerDegree(),
+        [CoordinateUniform.PixelsPerDegree2]:
+          this.coordinateSystemService.getPixelsPerDegree2(),
+        [CoordinateUniform.PixelsPerMeter]:
+          this.coordinateSystemService.getPixelsPerMeter(),
+        u_SceneCenterMKT: [0, 0],
+        u_ViewportSize: [width, height],
+        u_ModelMatrix: this.cameraService.getModelMatrix(),
+      });
+    });
   }
 
   /**
@@ -704,15 +733,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return;
     }
-    if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
-      // multi render 开始执行 multiPassRender 的渲染流程
-      await this.multiPassRenderer.render();
-    } else if (this.multiPassRenderer) {
-      // renderPass 触发的渲染
-      this.renderModels();
-    } else {
-      this.renderModels();
-    }
+   
   }
 
   public active(options: IActiveOption | boolean) {
@@ -848,8 +869,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   public setIndex(index: number): ILayer {
     this.zIndex = index;
-    this.layerService.updateLayerRenderList();
-    this.layerService.renderLayers();
+   
     return this;
   }
 
@@ -1301,18 +1321,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await multiPassRenderer.render();
   }
 
-  public renderModels(isPicking?: boolean) {
-   
-    this.hooks.beforeRender.call();
-    this.models.forEach((model) => {
-      model.draw(
-        {
-          uniforms: {},
-        }
-      );
-    });
-    this.hooks.afterRender.call();
-    return this;
+  public renderModels() {
+    
   }
 
   public updateStyleAttribute(

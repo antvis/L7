@@ -40,6 +40,7 @@ export default () => {
                     
         scene.on('loaded', () => {
            scene.addLayer(pointLayer);
+        //    scene.render();
         })
     }, [])
     return (

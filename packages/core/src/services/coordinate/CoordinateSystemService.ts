@@ -66,9 +66,7 @@ export default class CoordinateSystemService
    * TODO: 使用 memoize 缓存参数以及计算结果
    */
   public refresh(offsetCenter?: [number, number]): void {
-    // if (!this.needRefresh) {
-    //   return;
-    // }
+
     const zoom = this.cameraService.getZoom();
     const zoomScale = this.cameraService.getZoomScale();
     const center = offsetCenter ? offsetCenter : this.cameraService.getCenter();

@@ -303,12 +303,7 @@ export default class PickingService implements IPickingService {
     }
   }
   private async pickingAllLayer(target: IInteractionTarget) {
-    // 判断是否进行拾取操作
-    if (!this.layerService.needPick(target.type) ||!this.isPickingAllLayer()) return;
-    this.alreadyInPicking = true;
-    await this.pickingLayers(target);
-    this.layerService.renderLayers();
-    this.alreadyInPicking = false;
+
   }
 
   private isPickingAllLayer() {

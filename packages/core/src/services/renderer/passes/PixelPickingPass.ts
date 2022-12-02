@@ -245,14 +245,14 @@ export default class PixelPickingPass<
     // @ts-ignore
     const [r, g, b] = pickedColors;
     this.layer.hooks.beforeHighlight.call([r, g, b]);
-    this.layerService.renderLayers();
+    
   }
 
   private selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
     this.layer.hooks.beforeSelect.call([r, g, b]);
-    this.layerService.renderLayers();
+    
   }
 
   private selectFeatureHandle({ featureId }: Partial<IInteractionTarget>) {

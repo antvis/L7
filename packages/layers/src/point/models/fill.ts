@@ -4,50 +4,39 @@ import {
   IEncodeFeature,
   ILayer,
   TYPES,
-  IShaderModuleService,
   IRendererService,
-  IStyleAttributeService,
 } from '@antv/l7-core';
 
-import pointFillFrag from '../shaders/fill_frag.glsl';
-import pointFillVert from '../shaders/fill_vert.glsl';
-
 import StyleAttribute from '../../../../core/src/services/layer/StyleAttribute'
-
+import { vert, frag } from './fillShader';
 export default class FillModel {
   protected layer: ILayer;
   private attributes: any[] = [];
 
-  protected shaderModuleService: IShaderModuleService;
-
   protected rendererService: IRendererService;
-
-  protected styleAttributeService: IStyleAttributeService;
-
 
   constructor(layer: ILayer) {
     this.layer = layer;
     this.rendererService = layer
       .getContainer()
       .get<IRendererService>(TYPES.IRendererService);
-  
 
-    this.shaderModuleService = layer
-      .getContainer()
-      .get<IShaderModuleService>(TYPES.IShaderModuleService);
-
-    this.styleAttributeService = layer
-      .getContainer()
-      .get<IStyleAttributeService>(TYPES.IStyleAttributeService);
-  
     this.registerBuiltinAttributes();
   }
 
   public createAttributesAndIndices(
     features: IEncodeFeature[],
-    triangulation: Triangulation,
-    segmentNumber: number,
+   
   ) {
+
+    function triangulation() {
+      const coordinates = [120, 30]
+      return {
+        vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
+        indices: [0, 1, 2, 2, 3, 0],
+        size: 2,
+      };
+    }
   
     const descriptors = this.attributes.map((attr) => {
       attr.resetDescriptor();
@@ -70,7 +59,7 @@ export default class FillModel {
         size: vertexSize,
         indexes,
         count,
-      } = triangulation(feature, segmentNumber);
+      } = triangulation(feature);
 
       if (typeof count === 'number') {
         vecticesCount += count;
@@ -104,7 +93,7 @@ export default class FillModel {
           vertexIndex = indexes[vertexIdx];
         }
 
-        descriptors.forEach((descriptor, attributeIdx) => {
+        descriptors.forEach((descriptor) => {
           if (descriptor && descriptor.update) {
             (descriptor.buffer.data as number[]).push(
               ...descriptor.update(
@@ -129,10 +118,8 @@ export default class FillModel {
 
     const attributes = {};
 
-    descriptors.forEach((descriptor, attributeIdx) => {
+    descriptors.forEach((descriptor) => {
       if (descriptor) {
-        // IAttribute 参数透传
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { buffer, update, name, ...rest } = descriptor;
 
         const vertexAttribute = createAttribute({
@@ -141,8 +128,6 @@ export default class FillModel {
           ...rest,
         });
         attributes[descriptor.name || ''] = vertexAttribute;
-
-     
       }
     });
 
@@ -159,44 +144,41 @@ export default class FillModel {
     return attributesAndIndices;
   }
 
-
-
-
-  public buildLayerModel( options: any ) {
-    const {
-      moduleName,
-      vertexShader,
-      fragmentShader,
-      triangulation,
-      segmentNumber,
-      ...rest
-    } = options;
-
-    this.shaderModuleService.registerModule(moduleName, {
-      vs: vertexShader,
-      fs: fragmentShader,
-    });
-    const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
+  public buildLayerModel() {
+    const uniforms = {
+      u_CameraPosition: [0, 0, 0],
+      u_CoordinateSystem: 0,
+      u_DevicePixelRatio: 0,
+      u_FocalDistance: 0,
+      u_ModelMatrix:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      u_Mvp:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      u_PixelsPerDegree: [0, 0, 0],
+      u_PixelsPerDegree2: [0, 0, 0],
+      u_PixelsPerMeter: [0, 0, 0],
+      u_ProjectionMatrix: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      u_ViewMatrix: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      u_ViewProjectionMatrix: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      u_ViewportCenter: [0, 0],
+      u_ViewportCenterProjection:  [0, 0, 0, 0],
+      u_ViewportSize: [0, 0],
+      u_Zoom: 1,
+      u_ZoomScale: 1
+    }
+    
     const { createModel } = this.rendererService;
     const { attributes, elements } =this.createAttributesAndIndices(
       [{
-        color: [1, 0, 0, 1],
         coordinates: [120, 30],
         id: 0,
-        shape: 'circle',
-        size: 16
       }],
-      triangulation,
-      segmentNumber,
     );
     
     const modelOptions = {
       attributes,
       uniforms,
-      fs,
-      vs,
+      fs: frag,
+      vs: vert,
       elements,
-      ...rest,
     };
   
     return createModel(modelOptions);
@@ -204,23 +186,7 @@ export default class FillModel {
 
 
   public buildModels() {
-  
-    function PointFillTriangulation() {
-      const coordinates = [120, 30]
-      return {
-        vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
-        indices: [0, 1, 2, 2, 3, 0],
-        size: 2,
-      };
-    }
-
-   const model =  this
-      .buildLayerModel({
-        moduleName: 'pointFill',
-        vertexShader: pointFillVert,
-        fragmentShader: pointFillFrag,
-        triangulation: PointFillTriangulation,
-      });
+   const model =  this.buildLayerModel();
       return [model];
   }
 

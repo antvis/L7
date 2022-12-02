@@ -295,10 +295,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
-    if (this.rendering || this.destroyed) {
-      return;
-    }
-    this.rendering = true;
+   
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
@@ -309,20 +306,18 @@ export default class Scene extends EventEmitter implements ISceneService {
       }
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       await this.layerService.initLayers();
-
+       
+        
       this.layerService.renderLayers();
       this.controlService.addControls();
       this.loaded = true;
       this.emit('loaded');
       this.inited = true;
     } else {
-      // 尝试初始化未初始化的图层
-      await this.layerService.initLayers();
-      await this.layerService.renderLayers();
+   
+      this.layerService.renderLayers();
     }
 
-    // 组件需要等待layer 初始化完成之后添加
-    this.rendering = false;
   }
 
   /**
@@ -460,6 +455,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     canvas.style.height = '100%';
   }
 
+  // map move -> render
   private handleMapCameraChanged = (viewport: IViewport) => {
     this.cameraService.update(viewport);
     this.render();

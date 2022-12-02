@@ -35,7 +35,7 @@ export class Base {
   }
 
   public render() {
-    this.parent.renderLayers();
+    
   }
 
   public hasTile(tile: SourceTile) {

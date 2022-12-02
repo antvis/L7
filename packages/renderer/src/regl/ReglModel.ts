@@ -76,9 +76,6 @@ export default class ReglModel implements IModel {
   }
 
   public draw(options: IModelDrawOptions) {
-
-    
-    
     this.drawCommand(this.uniforms);
   }
 
