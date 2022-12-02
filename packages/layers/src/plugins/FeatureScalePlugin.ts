@@ -78,27 +78,6 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         return true;
       },
     );
-
-    layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
-      if (layer.layerModelNeedUpdate) {
-        return;
-      }
-      this.scaleOptions = layer.getScaleOptions();
-      const attributes = styleAttributeService.getLayerStyleAttributes();
-      const dataArray = layer.getSource().data.dataArray;
-
-      if (Array.isArray(dataArray) && dataArray.length === 0) {
-        return;
-      }
-      if (attributes) {
-        const attributesToRescale = attributes.filter(
-          (attribute) => attribute.needRescale,
-        );
-        if (attributesToRescale.length) {
-          this.caculateScalesForAttributes(attributesToRescale, dataArray);
-        }
-      }
-    });
   }
   private isNumber(n: any) {
     return !isNaN(parseFloat(n)) && isFinite(n);

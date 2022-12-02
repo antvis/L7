@@ -106,16 +106,6 @@ export function generateLightingUniforms(
 @injectable()
 export default class LightingPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
-    layer.hooks.beforeRender.tap('LightingPlugin', () => {
-      const { enableLighting } = layer.getLayerConfig();
-      if (enableLighting) {
-        layer.models.forEach((model) =>
-          // @ts-ignore
-          model.addUniforms({
-            ...generateLightingUniforms(),
-          }),
-        );
-      }
-    });
+   
   }
 }

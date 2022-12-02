@@ -48,54 +48,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
         return true;
       },
     );
-
-    // remapping before render
-    layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
-      const source = layer.getSource();
-      if (layer.layerModelNeedUpdate || !source || !source.inited) {
-        return;
-      }
-      const attributes = styleAttributeService.getLayerStyleAttributes() || [];
-      const filter = styleAttributeService.getLayerStyleAttribute('filter');
-      const { dataArray } = source.data;
-      // TODO 数据为空的情况
-      if (Array.isArray(dataArray) && dataArray.length === 0) {
-        return;
-      }
-
-      const attributesToRemapping = attributes.filter(
-        (attribute) => attribute.needRemapping, // 如果filter变化
-      );
-      let filterData = dataArray;
-      // 数据过滤完 再执行数据映射
-      if (filter?.needRemapping && filter?.scale) {
-        filterData = dataArray.filter((record: IParseDataItem) => {
-          return this.applyAttributeMapping(filter, record)[0];
-        });
-      }
-
-      if (attributesToRemapping.length) {
-        // 过滤数据
-        if (filter?.needRemapping) {
-          const encodeData = this.mapping(
-            layer,
-            attributes,
-            filterData,
-            undefined,
-          );
-          layer.setEncodedData(encodeData);
-          filter.needRemapping = false;
-        } else {
-          const encodeData = this.mapping(
-            layer,
-            attributesToRemapping,
-            filterData,
-            layer.getEncodedData(),
-          );
-          layer.setEncodedData(encodeData);
-        }
-      }
-    });
   }
   private generateMaping(
     layer: ILayer,

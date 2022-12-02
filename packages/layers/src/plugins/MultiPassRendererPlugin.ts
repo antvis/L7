@@ -57,13 +57,5 @@ export default class MultiPassRendererPlugin implements ILayerPlugin {
         layer.multiPassRenderer.setRenderFlag(true);
       }
     });
-
-    layer.hooks.beforeRender.tap('MultiPassRendererPlugin', () => {
-      if (this.enabled) {
-        // 渲染前根据 viewport 调整 FBO size
-        const { width, height } = rendererService.getViewportSize();
-        layer.multiPassRenderer.resize(width, height);
-      }
-    });
   }
 }
