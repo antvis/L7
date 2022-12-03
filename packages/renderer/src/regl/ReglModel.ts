@@ -1,7 +1,4 @@
 import {
-  gl,
-  IAttribute,
-  IElements,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
@@ -9,9 +6,6 @@ import {
 } from '@antv/l7-core';
 import regl from 'l7regl';
 import { isPlainObject, isTypedArray } from 'lodash';
-import {
-  primitiveMap,
-} from './constants';
 import ReglAttribute from './ReglAttribute';
 import ReglElements from './ReglElements';
 
@@ -20,9 +14,7 @@ import ReglElements from './ReglElements';
  */
 export default class ReglModel implements IModel {
   private reGl: regl.Regl;
-  private drawCommand: regl.DrawCommand;
-  private drawParams: regl.DrawConfig;
-  private options: IModelInitializationOptions;
+  private drawCommand: regl.DrawCommand;  
   private uniforms: {
     [key: string]: IUniform;
   } = {};
@@ -34,11 +26,10 @@ export default class ReglModel implements IModel {
       fs,
       attributes,
       uniforms,
-      primitive,
       elements,
     } = options;
     const reglUniforms: { [key: string]: IUniform } = {};
-    this.options = options;
+    
     
     if (uniforms) {
       this.uniforms = this.extractUniforms(uniforms);
@@ -59,9 +50,7 @@ export default class ReglModel implements IModel {
       frag: fs,
       uniforms: reglUniforms,
       vert: vs,
-      blend: {},
-      primitive:
-        primitiveMap[primitive === undefined ? gl.TRIANGLES : primitive],
+      primitive: 'triangles'
     };
 
     drawParams.elements = (elements as ReglElements).get();
