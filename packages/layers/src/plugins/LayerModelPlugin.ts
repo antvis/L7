@@ -17,12 +17,12 @@ export default class LayerModelPlugin implements ILayerPlugin {
   }
 
   public async prepareLayerModel(layer: ILayer) {
-    // 更新Model 配置项
-    layer.prepareBuildModel();
-    // clear layerModel resource
-    // 初始化 Model
-    await layer.buildModels();
-    // layer.layerModelNeedUpdate = false;
+    // // 更新Model 配置项
+    // layer.prepareBuildModel();
+    // // clear layerModel resource
+    // // 初始化 Model
+    // await layer.buildModels();
+    // // layer.layerModelNeedUpdate = false;
   }
 
   public apply(layer: ILayer) {
