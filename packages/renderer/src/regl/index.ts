@@ -93,8 +93,42 @@ import { injectable } from 'inversify';
 import regl from 'l7regl';
 import 'reflect-metadata';
 
+// import {polyfillContext} from '@luma.gl/gltools';
+
+
 /**
- * regl renderer
+ * 
+ *  使用 luma 的低级模式进行替换实验
+ https://luma.gl/docs/getting-started/hello-instancing-low
+
+import { Model} from '@luma.gl/engine';
+import {Buffer, clear} from '@luma.gl/webgl';
+ const positionBuffer = new Buffer(gl, new Float32Array([
+      -0.5, -0.5,
+      0.5, -0.5,
+      0.0, 0.5
+    ]));
+
+    const model = new Model(gl, {
+      vs,
+      fs,
+      attributes: {
+        position: positionBuffer,
+        color: colorBuffer
+      },
+      vertexCount: 3,
+
+       uniforms: {
+        uTexture: texture
+      }
+
+    });
+    clear(gl, {color: [0, 0, 0, 1]});
+
+     model.setUniforms({uMVP: mvpMatrix})
+      
+
+    model.draw();
  */
 @injectable()
 export default class ReglRendererService {
@@ -114,17 +148,18 @@ export default class ReglRendererService {
     new ReglModel(this.gl);
 
 
-  public clear = (options: any) => {
-    const { color, depth, stencil } = options;
+  public clear = () => {
     const reglClearOptions: any = {
-      color,
-      depth,
-      stencil,
+      color: [0, 0, 0, 0],
+      depth: 1,
+      stencil: 0,
     };
+    
     this.gl?.clear(reglClearOptions);
   };
 }
 
+// 程序对象
 class ReglModel {
   private drawCommand: any;  
   private uniforms: any = {};
@@ -161,6 +196,7 @@ class ReglModel {
     //   coordinates: [120, 30],
     //   id: 0,
     // }],
+    console.log(reglUniforms);
     
     const drawParams: any = {
       attributes: {
@@ -170,7 +206,7 @@ class ReglModel {
       frag,
       uniforms: reglUniforms,
       vert,
-      primitive: 'triangles'
+      // primitive: 'triangles'
     };
 
     drawParams.elements = [0, 1, 2, 2, 3, 0];

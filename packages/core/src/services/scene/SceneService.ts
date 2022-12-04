@@ -435,7 +435,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     }
   
     // set view port
-    this.gl._gl.viewport(0, 0, pixelRatio * w, pixelRatio * h);
+    // this.gl._gl.viewport(0, 0, pixelRatio * w, pixelRatio * h);
   }
 
   private setCanvas() {
