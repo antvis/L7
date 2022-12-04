@@ -100,17 +100,13 @@ class Scene
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
     this.boxSelect = new BoxSelect(this, {});
 
-    if (isMini) {
-      this.sceneService.initMiniScene(config);
-    } else {
-      this.initComponent(id);
+    this.initComponent(id);
 
-      // 初始化 scene
-      this.sceneService.init(config);
-      // TODO: 初始化组件
+    // 初始化 scene
+    this.sceneService.init(config);
+    // TODO: 初始化组件
 
-      this.initControl();
-    }
+    this.initControl();
   }
 
   public get map() {

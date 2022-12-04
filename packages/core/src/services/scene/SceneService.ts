@@ -101,6 +101,8 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   private markerContainer: HTMLElement;
 
+  private gl: any
+
   private hooks: {
     init: AsyncSeriesHook;
   };
@@ -182,12 +184,11 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.$container,
         ) as HTMLCanvasElement;
         this.setCanvas();
-        await this.rendererService.init(
-          // @ts-ignore
+
+        this.gl = this.rendererService.init(
           this.canvas,
-          this.configService.getSceneConfig(this.id) as IRenderConfig,
-          sceneConfig.gl,
         );
+
         this.initContainer();
 
         elementResizeEvent(
@@ -431,15 +432,10 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (canvas) {
       canvas.width = w * pixelRatio;
       canvas.height = h * pixelRatio;
-      // canvas.style.width = `${w}px`;
-      // canvas.style.height = `${h}px`;
     }
-    this.rendererService.viewport({
-      x: 0,
-      y: 0,
-      width: pixelRatio * w,
-      height: pixelRatio * h,
-    });
+  
+    // set view port
+    this.gl._gl.viewport(0, 0, pixelRatio * w, pixelRatio * h);
   }
 
   private setCanvas() {

@@ -44,34 +44,7 @@ export default class PickingService implements IPickingService {
   private pickBufferScale: number = 1.0;
 
   public init(id: string) {
-    const {
-      createTexture2D,
-      createFramebuffer,
-      getContainer,
-    } = this.rendererService;
-
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );      
-    width *= DOM.DPR;
-    height *= DOM.DPR;
-    this.pickBufferScale =
-      this.configService.getSceneConfig(id).pickBufferScale || 1;
-    // 创建 picking framebuffer，后续实时 resize
-    this.pickingFBO = createFramebuffer({
-      color: createTexture2D({
-        width: Math.round(width / this.pickBufferScale),
-        height: Math.round(height / this.pickBufferScale),
-        wrapS: gl.CLAMP_TO_EDGE,
-        wrapT: gl.CLAMP_TO_EDGE,
-      }),
-    });
-
-    // 监听 hover 事件
-    this.interactionService.on(
-      InteractionEvent.Hover,
-      this.pickingAllLayer.bind(this),
-    );
+   
   }
 
   public async boxPickLayer(

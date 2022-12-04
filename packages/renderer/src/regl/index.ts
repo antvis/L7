@@ -3,109 +3,57 @@
  * @see https://github.com/regl-project/regl/blob/gh-pages/API.md
  */
 import {
-  IAttribute,
   IAttributeInitializationOptions,
-  IBuffer,
   IBufferInitializationOptions,
   IClearOptions,
-  IElements,
   IElementsInitializationOptions,
   IExtensions,
-  IFramebuffer,
-  IFramebufferInitializationOptions,
   IModel,
   IModelInitializationOptions,
-  IReadPixelsOptions,
-  IRenderConfig,
-  IRendererService,
-  ITexture2D,
-  ITexture2DInitializationOptions,
 } from '@antv/l7-core';
-import { isMini } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import regl from 'l7regl';
 import 'reflect-metadata';
-import ReglAttribute from './ReglAttribute';
-import ReglBuffer from './ReglBuffer';
-import ReglElements from './ReglElements';
-import ReglFramebuffer from './ReglFramebuffer';
-import ReglModel from './ReglModel';
-import ReglTexture2D from './ReglTexture2D';
 
 /**
  * regl renderer
  */
 @injectable()
-export default class ReglRendererService implements IRendererService {
+export default class ReglRendererService {
   public extensionObject: IExtensions;
   private gl: regl.Regl;
-  private $container: HTMLDivElement | null;
-  private canvas: HTMLCanvasElement;
-  private width: number;
-  private height: number;
-  private isDirty: boolean;
 
-  public async init(
+  public init(
     canvas: HTMLCanvasElement,
-    cfg: IRenderConfig,
-    gl?: regl.Regl,
-  ): Promise<void> {
-    // this.$container = $container;
-    this.canvas = canvas;
-    if (gl) {
-      this.gl = gl;
-    } else {
-      // tslint:disable-next-line:typedef
-      this.gl = await new Promise((resolve, reject) => {
-        regl({
-          canvas: this.canvas,
-          attributes: {
-            alpha: true,
-            // use TAA instead of MSAA
-            // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
-            antialias: cfg.antialias,
-            premultipliedAlpha: true,
-            preserveDrawingBuffer: cfg.preserveDrawingBuffer,
-
-            stencil: cfg.stencil,
-          },
-          // TODO: use extensions
-          extensions: [
-            'OES_element_index_uint',
-            'OES_standard_derivatives', // wireframe
-            'ANGLE_instanced_arrays', // VSM shadow map
-          ],
-          optionalExtensions: [
-            'oes_texture_float_linear',
-            'OES_texture_float',
-            'EXT_texture_filter_anisotropic',
-            'EXT_blend_minmax',
-            'WEBGL_depth_texture',
-          ],
-          profile: true,
-          onDone: (err: Error | null, r?: regl.Regl | undefined): void => {
-            if (err || !r) {
-              reject(err);
-            }
-            // @ts-ignore
-            resolve(r);
-          },
-        });
-      });
-    }
-
-    this.extensionObject = {
-      OES_texture_float: this.testExtension('OES_texture_float'),
-    };
-  }
-
-  public getPointSizeRange() {
-    return this.gl._gl.getParameter(this.gl._gl.ALIASED_POINT_SIZE_RANGE);
-  }
-
-  public testExtension(name: string) {
-    // OES_texture_float
-    return !!this.getGLContext().getExtension(name);
+  ) {
+    
+    this.gl = regl({
+      // creates a full screen canvas element and WebGLRenderingContext
+      // var regl = require('regl')()
+      canvas: canvas,
+      attributes: {
+        alpha: true,
+        antialias: true,
+        premultipliedAlpha: true,
+        preserveDrawingBuffer: false,
+        stencil: false,
+      },
+      // TODO: use extensions
+      extensions: [
+        'OES_element_index_uint',
+        'OES_standard_derivatives', // wireframe
+        'ANGLE_instanced_arrays', // VSM shadow map
+      ],
+      optionalExtensions: [
+        'oes_texture_float_linear',
+        'OES_texture_float',
+        'EXT_texture_filter_anisotropic',
+        'EXT_blend_minmax',
+        'WEBGL_depth_texture',
+      ],
+      profile: true,
+    });
+    return this.gl;
   }
 
   public createModel = (options: IModelInitializationOptions): IModel =>
@@ -113,172 +61,108 @@ export default class ReglRendererService implements IRendererService {
 
   public createAttribute = (
     options: IAttributeInitializationOptions,
-  ): IAttribute => new ReglAttribute(this.gl, options);
+  ) => {
+    const { buffer, offset, stride, normalized, size, divisor } = options;
+   
+    const attribute = {
+      buffer,
+      offset: offset || 0,
+      stride: stride || 0,
+      normalized: normalized || false,
+      divisor: divisor || 0,
+    };
 
-  public createBuffer = (options: IBufferInitializationOptions): IBuffer =>
-    new ReglBuffer(this.gl, options);
+    if (size) {
+      attribute.size = size;
+    }
+    return attribute;
+  }
+  public createBuffer = (options: IBufferInitializationOptions) => {
+    const { data } = options;
+    return this.gl.buffer({
+      data,
+      usage: 'static',
+    });
+  }
+    
 
   public createElements = (
     options: IElementsInitializationOptions,
-  ): IElements => new ReglElements(this.gl, options);
-
-  public createTexture2D = (
-    options: ITexture2DInitializationOptions,
-  ): ITexture2D => new ReglTexture2D(this.gl, options);
-
-  public createFramebuffer = (options: IFramebufferInitializationOptions) =>
-    new ReglFramebuffer(this.gl, options);
-
-  public useFramebuffer = (
-    framebuffer: IFramebuffer | null,
-    drawCommands: () => void,
   ) => {
-    this.gl({
-      framebuffer: framebuffer ? (framebuffer as ReglFramebuffer).get() : null,
-    })(drawCommands);
+    
+    const { data, count } = options;
+    return this.gl.elements({
+      data,
+      usage: "static",
+      count,
+    });
   };
 
   public clear = (options: IClearOptions) => {
-    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
-    const { color, depth, stencil, framebuffer = null } = options;
+    const { color, depth, stencil } = options;
     const reglClearOptions: regl.ClearOptions = {
       color,
       depth,
       stencil,
     };
-
-    reglClearOptions.framebuffer =
-      framebuffer === null
-        ? framebuffer
-        : (framebuffer as ReglFramebuffer).get();
-
     this.gl?.clear(reglClearOptions);
   };
+}
 
-  public viewport = ({
-    x,
-    y,
-    width,
-    height,
-  }: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  }) => {
-    // use WebGL context directly
-    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#unsafe-escape-hatch
-    this.gl._gl.viewport(x, y, width, height);
-    this.width = width;
-    this.height = height;
-    this.gl._refresh();
-  };
+class ReglModel {
+  private drawCommand: any;  
+  private uniforms: any = {};
 
-  public readPixels = (options: IReadPixelsOptions) => {
-    const { framebuffer, x, y, width, height } = options;
-    const readPixelsOptions: regl.ReadOptions = {
-      x,
-      y,
-      width,
-      height,
-    };
-    if (framebuffer) {
-      readPixelsOptions.framebuffer = (framebuffer as ReglFramebuffer).get();
-    }
-    return this.gl.read(readPixelsOptions);
-  };
-
-  public getViewportSize = () => {
-    return {
-      width: this.gl._gl.drawingBufferWidth,
-      height: this.gl._gl.drawingBufferHeight,
-    };
-  };
-
-  public getContainer = () => {
-    if (isMini) {
-      return this.canvas;
-    } else {
-      return this.canvas?.parentElement;
-    }
-  };
-
-  public getCanvas = () => {
-    // return this.$container?.getElementsByTagName('canvas')[0] || null;
-    return this.canvas;
-  };
-
-  public getGLContext = () => {
-    return this.gl._gl;
-  };
-
-  // TODO: 临时方法
-  public setState() {
-    this.gl({
-      cull: {
-        enable: false,
-        face: 'back',
-      },
-      viewport: {
-        x: 0,
-        y: 0,
-        height: this.width,
-        width: this.height,
-      },
-      blend: {
-        enable: true,
-        equation: 'add',
-      },
-      framebuffer: null,
+  constructor(reGl: any, options: any) {
+    const {
+      vs,
+      fs,
+      attributes,
+      uniforms,
+      elements,
+    } = options;
+    const reglUniforms: any = {};
+    
+    this.uniforms = this.extractUniforms(uniforms);
+    Object.keys(uniforms).forEach((uniformName) => {
+      // pass data into regl
+      reglUniforms[uniformName] = reGl.prop(uniformName);
     });
-    this.gl._refresh();
-  }
+    
 
-  public setBaseState() {
-    this.gl({
-      cull: {
-        enable: false,
-        face: 'back',
-      },
-      viewport: {
-        x: 0,
-        y: 0,
-        height: this.width,
-        width: this.height,
-      },
-      blend: {
-        enable: false,
-        equation: 'add',
-      },
-      framebuffer: null,
+    const reglAttributes: any = {};
+    Object.keys(attributes).forEach((name: string) => {
+      reglAttributes[name] = attributes[name];
     });
-    this.gl._refresh();
-  }
-  public setCustomLayerDefaults() {
-    const gl = this.getGLContext();
-    gl.disable(gl.CULL_FACE);
-  }
+    const drawParams: any = {
+      attributes: reglAttributes,
+      frag: fs,
+      uniforms: reglUniforms,
+      vert: vs,
+      primitive: 'triangles'
+    };
 
-  public setDirty(flag: boolean): void {
-    this.isDirty = flag;
-  }
-
-  public getDirty(): boolean {
-    return this.isDirty;
+    drawParams.elements = elements;
+    this.drawCommand = reGl(drawParams);
   }
 
-  public destroy = () => {
-    // this.canvas = null 清除对 webgl 实例的引用
-    // @ts-ignore
-    this.canvas = null;
+  public addUniforms(uniforms: any ) {
+    this.uniforms = {
+      ...this.uniforms,
+      ...this.extractUniforms(uniforms),
+    };
+  }
 
-    // make sure release webgl context
-    this.gl?._gl?.getExtension('WEBGL_lose_context')?.loseContext();
+  public draw(options: any) {
+    this.drawCommand(this.uniforms);
+  }
 
-    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clean-up
-    this.gl.destroy();
-
-    // @ts-ignore
-    this.gl = null;
-  };
+  private extractUniforms(uniforms:any): any {
+    const extractedUniforms = {};
+    Object.keys(uniforms).forEach((uniformName) => {
+      extractedUniforms[uniformName] = uniforms[uniformName];
+    });
+    
+    return extractedUniforms;
+  }
 }

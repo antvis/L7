@@ -50,20 +50,10 @@ export default class StyleAttribute implements IStyleAttribute {
     Object.assign(this, options);
   }
 
-  public mapping(params: unknown[]): unknown[] {
-    /**
-     * 当用户设置的 callback 返回 null 时, 应该返回默认 callback 中的值
-     */
-    if (this.scale?.callback) {
-      // 使用用户返回的值处理
-      const ret = this.scale?.callback(...params);
-      if (!isNil(ret)) {
-        return [ret];
-      }
-    }
-
-    // 没有 callback 或者用户 callback 返回值为空，则使用默认的逻辑处理
-    return this.defaultCallback(params);
+  public mapping(){
+    // console.log(this.scale?.defaultValues);
+    
+    return this.scale?.defaultValues;
   }
 
   public resetDescriptor() {
@@ -71,18 +61,4 @@ export default class StyleAttribute implements IStyleAttribute {
       this.descriptor.buffer.data = [];
     }
   }
-
-  private defaultCallback = (params: unknown[]): unknown[] => {
-    // 没有 params 的情况，是指没有指定 fields，直接返回配置的 values 常量
-    if (params.length === 0) {
-      return this.scale?.defaultValues || [];
-    }
-    return params.map((param, idx) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const scaleFunc = this.scale?.scalers![idx].func;
-      // @ts-ignore // TODO 支持双变量映射
-      const value = scaleFunc(param);
-      return value;
-    });
-  };
 }

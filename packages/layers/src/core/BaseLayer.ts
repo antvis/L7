@@ -695,8 +695,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public updateUniform() {
     // 重新计算坐标系参数
     this.coordinateSystemService.refresh();
-    
-    const { width, height } = this.rendererService.getViewportSize();
+    const { width: w, height: h } = this.mapService.getMapCanvasContainer().getBoundingClientRect();
+    const width = w * window.devicePixelRatio;
+    const height = h * window.devicePixelRatio
+  
     this.models.forEach((model) => {
       model.addUniforms({
         // 相机参数，包含 VP 矩阵、缩放等级

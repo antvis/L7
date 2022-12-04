@@ -23,17 +23,4 @@ export default class ReglBuffer implements IBuffer {
     return this.buffer;
   }
 
-  public destroy() {
-    this.buffer.destroy();
-  }
-
-  public subData({
-    data,
-    offset,
-  }: {
-    data: number[] | number[][] | Uint8Array | Uint16Array | Uint32Array;
-    offset: number;
-  }) {
-    this.buffer.subdata(data, offset);
-  }
 }

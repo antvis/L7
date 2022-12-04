@@ -136,6 +136,21 @@ export default class FillModel {
       type: gl.UNSIGNED_INT,
       count: indices.length,
     });
+
+    // console.log(attributes);
+
+    const a_posotion_data = {
+      data: [120, 30, 0, 120, 30, 0, 120, 30, 0, 120, 30, 0],
+      type: 5126
+    }
+    const a_extrude_data = {
+      data: [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0],
+      type: 5126,
+      usage: 35048
+    }
+    
+    
+
     const attributesAndIndices = {
       attributes,
       elements,
@@ -194,6 +209,10 @@ export default class FillModel {
     options: any
   ) {
     const attributeToUpdate = new StyleAttribute(options);
+    // console.log(options);
+    // console.log(attributeToUpdate);
+    
+    
     this.attributes.push(attributeToUpdate);
   }
 
