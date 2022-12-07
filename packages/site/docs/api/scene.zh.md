@@ -187,6 +187,24 @@ const zoomControl = new Zoom({
 scene.getControlByName('z1');
 ```
 
+## 气泡方法
+
+### addPopup(popup: Popup): void 添加气泡
+
+往场景中添加气泡对象，气泡用于展示用户自定义信息。
+
+```javascript
+scene.addPopup(popup);
+```
+
+### removePopup(popup: Popup): void 移除气泡
+
+往场景中移除气泡对象
+
+```javascript
+scene.removePopup(popup);
+```
+
 ## 标记方法
 
 ### addMarker(maker: IMarker): void 添加标记
