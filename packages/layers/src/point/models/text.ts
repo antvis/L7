@@ -103,6 +103,7 @@ export default class TextModel extends BaseModel {
       stroke = '#fff',
       strokeWidth = 0,
       textAnchor = 'center',
+      textOffset = [0,0],
       textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
@@ -117,6 +118,7 @@ export default class TextModel extends BaseModel {
     this.preTextStyle = {
       textAnchor,
       textAllowOverlap,
+      textOffset,
     };
 
     if (
@@ -185,10 +187,12 @@ export default class TextModel extends BaseModel {
     const {
       textAnchor = 'center',
       textAllowOverlap = true,
+      textOffset,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.preTextStyle = {
       textAnchor,
       textAllowOverlap,
+      textOffset
     };
     return await this.buildModels();
   }
@@ -221,11 +225,17 @@ export default class TextModel extends BaseModel {
        
   }
   
-  public needUpdate() {
+  public async needUpdate():Promise<boolean> {
     const {
       textAllowOverlap = false,
+      textAnchor,
+      textOffset
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.layer.getEncodedData();
+    if(JSON.stringify(textOffset) !==JSON.stringify(this.preTextStyle.textOffset) ||textAnchor!==this.preTextStyle.textAnchor ) {
+      await this.mapping();
+      return true;
+    }
     if(data.length < 5 || textAllowOverlap) { // 小于不做避让
       return false;
     }
@@ -240,7 +250,7 @@ export default class TextModel extends BaseModel {
       textAllowOverlap !== this.preTextStyle.textAllowOverlap
     ) {
       // TODO this.mapping 数据未变化，避让
-      this.reBuildModel();
+      await this.reBuildModel();
       return true;
     }
     
@@ -419,12 +429,12 @@ export default class TextModel extends BaseModel {
     const {
       spacing = 2,
       textAnchor = 'center',
-      // textOffset,
+      textOffset,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.layer.getEncodedData();
 
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
-      const { shape = '', id, size = 1, textOffset = [0, 0] } = feature;
+      const { shape = '', id, size = 1, } = feature;
 
       const shaping = shapeText(
         shape.toString(),
@@ -434,7 +444,7 @@ export default class TextModel extends BaseModel {
         textAnchor,
         'left',
         spacing,
-        textOffset,
+        textOffset || feature.textOffset || [0,0],
         iconfont,
       );
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);
