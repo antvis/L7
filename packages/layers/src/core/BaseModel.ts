@@ -512,7 +512,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     return {};
   }
 
-  public needUpdate(): boolean {
+  public async needUpdate(): Promise<boolean> {
     return false;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
