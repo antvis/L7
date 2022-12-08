@@ -234,7 +234,6 @@ export default class TextModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.layer.getEncodedData();
     if(JSON.stringify(textOffset) !==JSON.stringify(this.preTextStyle.textOffset) ||textAnchor!==this.preTextStyle.textAnchor ) {
-      console.log('needupdate')
       await this.mapping();
       return true;
     }
