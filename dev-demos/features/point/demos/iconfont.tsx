@@ -55,7 +55,7 @@ export default () => {
             iconfont: true,
             textAllowOverlap: true,
           });
-      
+          console.log(imageLayer);
             scene.addLayer(imageLayer);
           // }
           

@@ -103,7 +103,7 @@ export default class TextModel extends BaseModel {
       stroke = '#fff',
       strokeWidth = 0,
       textAnchor = 'center',
-      textOffset = [0,0],
+      textOffset,
       textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
@@ -115,6 +115,7 @@ export default class TextModel extends BaseModel {
       this.updateTexture();
       this.textCount = Object.keys(mapping).length;
     }
+
     this.preTextStyle = {
       textAnchor,
       textAllowOverlap,
@@ -228,11 +229,12 @@ export default class TextModel extends BaseModel {
   public async needUpdate():Promise<boolean> {
     const {
       textAllowOverlap = false,
-      textAnchor,
+      textAnchor = 'center',
       textOffset
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.layer.getEncodedData();
     if(JSON.stringify(textOffset) !==JSON.stringify(this.preTextStyle.textOffset) ||textAnchor!==this.preTextStyle.textAnchor ) {
+      console.log('needupdate')
       await this.mapping();
       return true;
     }
@@ -566,6 +568,5 @@ export default class TextModel extends BaseModel {
       });
       // TODO 渲染流程待修改
       this.layer.models = [model];
-      // this.layerService.throttleRenderLayers();
   }
 }
