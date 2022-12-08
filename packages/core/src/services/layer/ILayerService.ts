@@ -80,7 +80,7 @@ export interface ILayerModel {
   getAnimateUniforms(): IModelUniform;
   buildModels(): Promise<IModel[]>;
   initModels(): Promise<IModel[]>;
-  needUpdate(): boolean;
+  needUpdate():Promise<boolean>
   clearModels(refresh?: boolean): void;
 
   // canvasLayer
