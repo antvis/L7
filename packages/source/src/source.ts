@@ -62,18 +62,18 @@ export default class Source extends EventEmitter implements ISource {
   // 瓦片数据管理器
   public tileset: TilesetManager | undefined;
   // 是否有效范围
-  private invalidExtent: boolean = false;
+  protected invalidExtent: boolean = false;
 
-  private dataArrayChanged: boolean = false;
+  protected dataArrayChanged: boolean = false;
 
   // 原始数据
-  private originData: any;
-  private rawData: any;
-  private cfg: Partial<ISourceCFG> = {
+  protected originData: any;
+  protected rawData: any;
+  protected cfg: Partial<ISourceCFG> = {
     autoRender: true
   };
 
-  private clusterIndex: Supercluster;
+  protected clusterIndex: Supercluster;
 
   constructor(data: any | ISource, cfg?: ISourceCFG) {
     super();
@@ -220,7 +220,7 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset?.destroy();
   }
 
-  private async processData() {
+  protected async processData() {
     return await new Promise((resolve, reject) => {
       try {
         this.excuteParser();
@@ -233,7 +233,7 @@ export default class Source extends EventEmitter implements ISource {
     });
   }
 
-  private initCfg(option?: ISourceCFG) {
+  protected initCfg(option?: ISourceCFG) {
     this.cfg = mergeWith(this.cfg, option, mergeCustomizer);
     const cfg = this.cfg;
     if (cfg) {
@@ -254,7 +254,7 @@ export default class Source extends EventEmitter implements ISource {
     }
   }
 
-  private async init() {
+  protected async init() {
     this.inited = false;
     await this.processData();
     this.inited = true;
@@ -263,7 +263,7 @@ export default class Source extends EventEmitter implements ISource {
   /**
    * 数据解析
    */
-  private excuteParser(): void {
+  protected excuteParser(): void {
     // 耗时计算测试
     // let t = new Date().getTime();
     // let c = 0
@@ -289,7 +289,7 @@ export default class Source extends EventEmitter implements ISource {
       this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
   }
 
-  private setCenter(bbox: BBox) {
+  protected setCenter(bbox: BBox) {
     this.center = [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2];
     if (isNaN(this.center[0]) || isNaN(this.center[1])) {
       // this.center = [NaN, NaN] // Infinity - Infinity = NaN
@@ -301,7 +301,7 @@ export default class Source extends EventEmitter implements ISource {
   /**
    * 瓦片数据管理器
    */
-  private initTileset() {
+  protected initTileset() {
     const { tilesetOptions } = this.data;
     if (!tilesetOptions) {
       return;
@@ -321,7 +321,7 @@ export default class Source extends EventEmitter implements ISource {
   /**
    * 数据统计
    */
-  private executeTrans() {
+  protected executeTrans() {
     const trans = this.transforms;
     trans.forEach((tran: ITransform) => {
       const { type } = tran;
@@ -334,7 +334,7 @@ export default class Source extends EventEmitter implements ISource {
   /**
    * 数据聚合
    */
-  private initCluster() {
+  protected initCluster() {
     if (!this.cluster) {
       return;
     }
@@ -343,7 +343,7 @@ export default class Source extends EventEmitter implements ISource {
     this.clusterIndex = cluster(this.data, clusterOptions);
   }
 
-  private caculClusterExtent(bufferRatio: number): any {
+  protected caculClusterExtent(bufferRatio: number): any {
     let newBounds = [
       [-Infinity, -Infinity],
       [Infinity, Infinity],
