@@ -355,6 +355,12 @@ export interface ICameraOptions {
 type ICenter = [number, number];
 scene.setZoomAndCenter(zoom, center);
 ```
+### setZoom(zoom: number): void 设置地图旋转
+设置地图缩放等级
+
+```javascript
+scene.setZoom(10);
+```
 
 ### setRotation(rotation: number): void 设置地图旋转
 
