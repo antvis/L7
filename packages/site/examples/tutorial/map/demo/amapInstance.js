@@ -1,7 +1,8 @@
 import { Scene, PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 
-window.onLoad = function() {
+function initMap() {
+  // 全局加载高德地图API
   const map = new AMap.Map('map', {
     viewMode: '3D',
     mapStyle: 'amap://styles/darkblue',
@@ -49,11 +50,5 @@ window.onLoad = function() {
         scene.addLayer(pointLayer);
       });
   });
-};
-
-const url = 'https://webapi.amap.com/maps?v=1.4.15&key=15cd8a57710d40c9b7c0e3cc120f1200&callback=onLoad';
-// const url = 'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f&callback=onLoad';
-const jsapi = document.createElement('script');
-jsapi.charset = 'utf-8';
-jsapi.src = url;
-document.head.appendChild(jsapi);
+}
+  initMap();
