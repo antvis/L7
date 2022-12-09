@@ -64,10 +64,11 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
 
 export function polygonFillTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
-  // @ts-ignore
-  const flatCoord = coordinates.map((coord: number[][]) => coord.map((lnglat: [number, number]) => [lnglat[0], project_y(lnglat[1])]))
-  const flattengeo = earcut.flatten(flatCoord as number[][][]);
+  const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
+  for (let i = 0; i < vertices.length; i += dimensions) {
+    vertices[i + 1] = project_y(vertices[i + 1]);
+  }
   // https://github.com/mapbox/earcut/issues/159
   const triangles = earcut(vertices, holes, dimensions);
   for (let i = 0; i < vertices.length; i += 2) {
@@ -81,12 +82,10 @@ export function polygonFillTriangulation(feature: IEncodeFeature) {
   };
 }
 
-function project_y( y: number) {
-  return Math.log(Math.tan(Math.PI * y / 360))
+function project_y(y: number) {
+  return Math.log(Math.tan((Math.PI * y) / 360));
 }
 
-function un_project_y( y: number) {
-
-  return Math.atan(Math.exp(y)) * 360 / Math.PI
-  
+function un_project_y(y: number) {
+  return (Math.atan(Math.exp(y)) * 360) / Math.PI;
 }
