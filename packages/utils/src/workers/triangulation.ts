@@ -71,7 +71,7 @@ export function polygonFillTriangulation(feature: IEncodeFeature) {
   }
   // https://github.com/mapbox/earcut/issues/159
   const triangles = earcut(vertices, holes, dimensions);
-  for (let i = 0; i < vertices.length; i += 2) {
+  for (let i = 0; i < vertices.length; i += dimensions) {
     vertices[i + 1] = un_project_y(vertices[i + 1]);
   }
 
