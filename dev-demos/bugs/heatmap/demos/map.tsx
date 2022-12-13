@@ -9,7 +9,7 @@ export default () => {
 
 const scene = new Scene({
     id: 'map',
-    map: new GaodeMap({
+    map: new Map({
       style: 'light',
       pitch: 0,
       center: [ 114.07737552216226, 22.542656745583486 ],

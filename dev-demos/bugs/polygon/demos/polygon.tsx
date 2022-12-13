@@ -1,5 +1,5 @@
 import { Scene, PolygonLayer, LineLayer, PointLayer } from "@antv/l7";
-import { Mapbox } from "@antv/l7-maps";
+import { GaodeMap } from "@antv/l7-maps";
 import React, { useEffect } from 'react';
 const list = {
   portrKey: "PROVINCE_CITY_DITU",
@@ -2494,7 +2494,7 @@ export default () => {
     useEffect( () => {
       const scene = new Scene({
         id: "map",
-        map: new Mapbox({
+        map: new GaodeMap({
           pitch: 0,
           style: "blank",
           center: [116.368652, 39.93866],
