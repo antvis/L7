@@ -134,7 +134,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
   // 移除popup
   public remove() {
-    if (!this.isOpen()) {
+    if (!this?.isOpen()) {
       return;
     }
 

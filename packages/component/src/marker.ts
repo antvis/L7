@@ -346,7 +346,7 @@ export default class Marker extends EventEmitter {
       lngLat: this.lngLat,
     });
   };
-  
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
    return null

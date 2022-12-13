@@ -16,7 +16,7 @@ export default class PopupService implements IPopupService {
   }
 
   public removePopup(popup: IPopup): void {
-    if (popup.isOpen()) {
+    if (popup?.isOpen()) {
       popup.remove();
     }
 
