@@ -283,6 +283,9 @@ export default class AMapService extends AMapBaseService {
         // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
         mapConstructorOptions.zoom += 1;
       }
+      if (token === AMAP_API_KEY) {
+        console.warn(`%c${this.configService.getSceneWarninfo('MapToken')}!`,'color: #873bf4;font-weigh:900;font-size: 16px;');
+      }
       // @ts-ignore
       const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
       // @ts-ignore

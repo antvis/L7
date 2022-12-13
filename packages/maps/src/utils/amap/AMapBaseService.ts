@@ -411,7 +411,7 @@ export default abstract class AMapBaseService
       };
       if (!amapLoaded && !mapInstance) {
         if (token === AMAP_API_KEY) {
-          console.warn(this.configService.getSceneWarninfo('MapToken'));
+          console.warn(`%c${this.configService.getSceneWarninfo('MapToken')}!`,'color: #873bf4;font-weigh:900;font-size: 16px;');
         }
         amapLoaded = true;
         plugin.push('Map3D');
