@@ -284,7 +284,10 @@ export default class AMapService extends AMapBaseService {
         mapConstructorOptions.zoom += 1;
       }
       if (token === AMAP_API_KEY) {
-        console.warn(`%c${this.configService.getSceneWarninfo('MapToken')}!`,'color: #873bf4;font-weigh:900;font-size: 16px;');
+        console.warn(
+          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
+          'color: #873bf4;font-weigh:900;font-size: 16px;',
+        );
       }
       // @ts-ignore
       const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
