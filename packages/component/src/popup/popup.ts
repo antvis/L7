@@ -134,7 +134,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
   // 移除popup
   public remove() {
-    if (!this.isOpen()) {
+    if (!this?.isOpen()) {
       return;
     }
 
@@ -195,13 +195,13 @@ export default class Popup<O extends IPopupOption = IPopupOption>
         // @ts-ignore
         this.container = undefined;
       }
-      if (this.popupOption.title) {
-        this.setTitle(this.popupOption.title);
-      }
       if (this.popupOption.html) {
         this.setHTML(this.popupOption.html);
       } else if (this.popupOption.text) {
         this.setText(this.popupOption.text);
+      }
+      if (this.popupOption.title) {
+        this.setTitle(this.popupOption.title);
       }
     }
     if (this.checkUpdateOption(option, ['closeOnEsc'])) {

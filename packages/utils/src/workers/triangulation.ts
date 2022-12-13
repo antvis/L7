@@ -83,15 +83,17 @@ export function polygonFillTriangulation(feature: IEncodeFeature) {
 }
 
 function project_y(y: number) {
-  if (y > 85 || y < -85) {
-    return y;
+
+  if(y > 85 || y<-85) {
+    return y
   }
   return Math.log(Math.tan((Math.PI * y) / 360));
 }
 
 function un_project_y(y: number) {
-  if (y > 85 || y < -85) {
-    return y;
+
+  if(y > 85 || y<-85) {
+    return y
   }
   return (Math.atan(Math.exp(y)) * 360) / Math.PI;
 }
