@@ -18,6 +18,17 @@ export default () => {
             fetch('https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json')
               .then(res => res.json())
               .then(data => {
+                const pointLayer1 = new PointLayer({})
+                  .source(data.list, {
+                    parser: {
+                      type: 'json',
+                      x: 'j',
+                      y: 'w'
+                    }
+                  })
+                  .shape('circle')
+                  .size(5)
+                  .color('red')
                 const pointLayer = new PointLayer({})
                   .source(data.list, {
                     parser: {
@@ -39,13 +50,15 @@ export default () => {
                     strokeWidth: 0.3, // 描边宽度
                     strokeOpacity: 1.0
                   });
-                  pointLayer.style({
-                    stroke: '#f00', // 描边颜色
-                    strokeWidth: 0.3, // 描边宽度
-                    strokeOpacity: 1.0
-                  })
+                scene.addLayer(pointLayer1);
                 scene.addLayer(pointLayer);
-                console.log(pointLayer)
+                setTimeout(()=>{
+                  pointLayer.style({
+                    textAnchor:'left'
+                    // textOffset: [ 40, 40 ], // 文本相对锚点的偏移量 [水平, 垂直]
+                  })
+                  scene.render()
+                },2000)
               });
           
           });
