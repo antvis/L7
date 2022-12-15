@@ -26,7 +26,7 @@ export default function identity(d: any) {
     return unknown;
   };
 
-  scale.copy =  () => {
+  scale.copy = () => {
     return identity(d).unknown(unknown);
   };
 
