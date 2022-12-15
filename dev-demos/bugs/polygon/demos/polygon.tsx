@@ -2582,14 +2582,13 @@ export default () => {
                   coordinates: "center"
                 }
               })
-              .color("#fff")
+              .color("#f00")
               .shape("name", "text")
               .size(12)
               .style({
                 opacity: 1,
                 stroke: "#fff",
-                strokeWidth: 0,
-                padding: [5, 5],
+                strokeWidth: 1,
                 textAllowOverlap: false
               });
       

@@ -463,7 +463,7 @@ export default class TextModel extends BaseModel {
    */
   private filterGlyphs() {
     const {
-      padding = [4, 4],
+      padding = [0, 0],
       textAllowOverlap = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (textAllowOverlap) {
