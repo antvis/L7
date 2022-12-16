@@ -23,7 +23,9 @@ export default () => {
                       {
                         "type": "Feature",
                         "properties": {
-                          "name": "A"
+                          "name": "A",
+                          "color":"red",
+                          size:10,
                         },
                         "geometry": {
                           "type": "Point",
@@ -36,7 +38,8 @@ export default () => {
                       {
                         "type": "Feature",
                         "properties": {
-                          "name": "B"
+                          "name": "B",
+                          "color":"yellow",
                         },
                         "geometry": {
                           "type": "Point",
@@ -49,7 +52,39 @@ export default () => {
                       {
                         "type": "Feature",
                         "properties": {
-                          "name": "C"
+                          "name": "E",
+                          "color":"blue",
+                          size:13,
+                        },
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            121.9375,
+                            27.059125784374068
+                          ]
+                        }
+                      },
+                      {
+                        "type": "Feature",
+                        "properties": {
+                          "name": "C",
+                          "color":"red",
+                          size:10,
+                        },
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            107.22656249999999,
+                            37.020098201368114
+                          ]
+                        }
+                      },
+                      {
+                        "type": "Feature",
+                        "properties": {
+                          "name": "F",
+                          "color":"red",
+                          size:15,
                         },
                         "geometry": {
                           "type": "Point",
@@ -61,34 +96,44 @@ export default () => {
                       }
                     ]
                   })
+                  // .scale('color',{
+                  //   type:'identity'
+                  // })
+                  .scale('size',{
+                    type:'identity'
+                  })
                   .shape('circle')
-                  .size(12)
+                  .size('size')
                   .active({
                     color:'red',
                   })
                   .select(true)
-                  .color('red')
+                  .color('color')
                   .style({
-                    stroke: ['name', (name)=>{
-                        switch (name) {
-                            case 'A' :
-                             return '#fc8d59';
+                    // stroke: ['name', (name)=>{
+                    //     switch (name) {
+                    //         case 'A' :
+                    //          return '#fc8d59';
                             
-                            case 'B' :
-                                return '#91cf60';
-                            default:
-                                return '#ffffbf';
+                    //         case 'B' :
+                    //             return '#91cf60';
+                    //         default:
+                    //             return '#ffffbf';
 
-                        }
-                    }
+                    //     }
+                    // }
                         
-                    ], // 描边颜色
+                    // ], // 描边颜色
                     strokeWidth: 5, // 描边宽度
                  
                   });
                   
+
                 scene.addLayer(pointLayer);
             
+                pointLayer.on('inited',()=>{
+                  console.log(pointLayer.getLegend('size'))
+                })
           
           });
           

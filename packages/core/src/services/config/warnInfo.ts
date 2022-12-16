@@ -5,7 +5,7 @@ export interface IWarnInfo {
 }
 const WarnInfo: IWarnInfo = {
   MapToken:
-    '您正在使用 Demo测试地图token，如果生产环境中使用去对应地图请注册Token',
+    '您正在使用 Demo 测试 Token, 生产环境务必自行注册 Token 确保服务稳定',
   SDK: '请确认引入了mapbox-gl api且在L7之前引入',
 };
 
