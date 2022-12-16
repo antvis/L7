@@ -17,6 +17,7 @@ import * as d3 from 'd3-scale';
 import { injectable } from 'inversify';
 import { isNil, isString, uniq } from 'lodash';
 import 'reflect-metadata';
+import identity from '../utils/identityScale';
 
 const dateRegex =
   /^(?:(?!0000)[0-9]{4}([-/.]+)(?:(?:0?[1-9]|1[0-2])\1(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])\1(?:29|30)|(?:0?[13578]|1[02])\1(?:31))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2\2(?:29))(\s+([01]|([01][0-9]|2[0-3])):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]))?$/;
@@ -25,7 +26,7 @@ const scaleMap = {
   [ScaleTypes.LINEAR]: d3.scaleLinear,
   [ScaleTypes.POWER]: d3.scalePow,
   [ScaleTypes.LOG]: d3.scaleLog,
-  [ScaleTypes.IDENTITY]: d3.scaleIdentity,
+  [ScaleTypes.IDENTITY]: identity,
   [ScaleTypes.SEQUENTIAL]: d3.scaleSequential,
   [ScaleTypes.TIME]: d3.scaleTime,
   [ScaleTypes.QUANTILE]: d3.scaleQuantile,
@@ -34,7 +35,6 @@ const scaleMap = {
   [ScaleTypes.CAT]: d3.scaleOrdinal,
   [ScaleTypes.DIVERGING]: d3.scaleDiverging,
 };
-
 /**
  * 根据 Source 原始数据为指定字段创建 Scale，保存在 StyleAttribute 上，供下游插件使用
  */
@@ -154,6 +154,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                 case ScaleTypes.QUANTIZE:
                 case ScaleTypes.THRESHOLD:
                   scale.scale.range(attributeScale.values); //
+                  break;
+                case ScaleTypes.IDENTITY: // 不做处理xe
                   break;
                 case ScaleTypes.CAT:
                   attributeScale.values
@@ -279,14 +281,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     const values = data?.map((item) => item[field]) || [];
     if (scaleOption?.domain) {
       cfg.domain = scaleOption?.domain;
-    } else if (
-      type !== ScaleTypes.CAT &&
-      type !== ScaleTypes.QUANTILE &&
-      type !== ScaleTypes.DIVERGING
-    ) {
-      // linear/
-      cfg.domain = extent(values);
-    } else if (type === ScaleTypes.CAT) {
+    } else if (type === ScaleTypes.CAT || type === ScaleTypes.IDENTITY) {
       cfg.domain = uniq(values);
     } else if (type === ScaleTypes.QUANTILE) {
       cfg.domain = values;
@@ -297,6 +292,9 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           ? scaleOption?.neutral
           : (minMax[0] + minMax[1]) / 2;
       cfg.domain = [minMax[0], neutral, minMax[1]];
+    } else {
+      // linear/Power/log
+      cfg.domain = extent(values);
     }
     return { ...cfg, ...scaleOption };
   }
