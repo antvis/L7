@@ -67,8 +67,8 @@ export default class Source extends EventEmitter implements ISource {
   private dataArrayChanged: boolean = false;
 
   // 原始数据
-  private originData: any;
-  private rawData: any;
+  protected originData: any;
+  protected rawData: any;
   private cfg: Partial<ISourceCFG> = {
     autoRender: true
   };
