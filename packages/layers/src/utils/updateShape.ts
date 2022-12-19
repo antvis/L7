@@ -13,11 +13,11 @@ const shapeUpdateList = [
   ['rhombus', 'cylinder'],
   ['vesica', 'cylinder'],
 ];
-export function updateShape(
+export async function updateShape(
   layer: ILayer,
   lastShape: StyleAttributeField | undefined,
   currentShape: StyleAttributeField | undefined,
-): void {
+) {
   if (
     typeof lastShape === 'string' &&
     typeof currentShape === 'string' &&
@@ -25,13 +25,17 @@ export function updateShape(
   ) {
     if (layer.type === 'PointLayer') {
       layer.dataState.dataSourceNeedUpdate = true;
+      await layer.hooks.beforeRenderData.promise();
+      layer.renderLayers();
       return;
     }
 
-    shapeUpdateList.map((shapes) => {
+    shapeUpdateList.map(async (shapes) => {
       if (shapes.includes(lastShape) && shapes.includes(currentShape)) {
         // dataSourceNeedUpdate 借用数据更新时更新 layer model 的工作流
         layer.dataState.dataSourceNeedUpdate = true;
+        await layer.hooks.beforeRenderData.promise();
+        layer.renderLayers();
         return;
       }
     });
