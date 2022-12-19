@@ -168,7 +168,7 @@
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
     "async-site": "sh ./scripts/site.sh",
     "prebuild": "yarn clean && run-p tsc lint",
-    "build": " yarn worker && lerna run build --ignore @antv/l7-site ",
+    "build": " yarn worker && lerna run build",
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna run tsc --stream --no-bail",
     "tslint": "tslint  packages/**/src/**/*.ts  -c tslint.prod.json",
