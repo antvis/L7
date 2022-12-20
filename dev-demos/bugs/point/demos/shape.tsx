@@ -55,13 +55,11 @@ export default () => {
         .size(20);
       scene.addLayer(imageLayer);
       setTimeout(()=>{
-      shapeType = '02';
-    //   imageLayer.shape('type', (v: any) => {
-    //     console.log(1111,shapeType)
-    //     return shapeType;
-    //   })
-    imageLayer.shape('02');
-    //   scene.render()
+        shapeType = '02';
+        imageLayer.shape('type', (v: any) => {
+          return shapeType;
+        })
+       scene.render()
 
       },2000)
           

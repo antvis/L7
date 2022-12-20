@@ -76,6 +76,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
 
+
     let attributeToUpdate = this.getLayerStyleAttribute(attributeName);
     if (!attributeToUpdate) {
       attributeToUpdate = this.registerStyleAttribute({

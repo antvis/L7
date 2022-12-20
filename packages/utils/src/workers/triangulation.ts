@@ -63,16 +63,24 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
 }
 
 export function polygonFillTriangulation(feature: IEncodeFeature) {
-  const { coordinates } = feature;
+  const { coordinates, version } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
-  for (let i = 0; i < vertices.length; i += dimensions) {
-    vertices[i + 1] = project_y(vertices[i + 1]);
+  if (version !== 'GAODE2.x') {
+    for (let i = 0; i < vertices.length; i += dimensions) {
+      const mer = project_mercator(vertices[i + 0], vertices[i + 1]);
+      vertices[i] = mer[0];
+      vertices[i + 1] = mer[1];
+    }
   }
   // https://github.com/mapbox/earcut/issues/159
   const triangles = earcut(vertices, holes, dimensions);
-  for (let i = 0; i < vertices.length; i += dimensions) {
-    vertices[i + 1] = un_project_y(vertices[i + 1]);
+  if (version !== 'GAODE2.x') {
+    for (let i = 0; i < vertices.length; i += dimensions) {
+      const ll = mercator_lnglat(vertices[i + 0], vertices[i + 1]);
+      vertices[i] = ll[0];
+      vertices[i + 1] = ll[1];
+    }
   }
 
   return {
@@ -82,16 +90,16 @@ export function polygonFillTriangulation(feature: IEncodeFeature) {
   };
 }
 
-function project_y(y: number) {
-  if (y > 85 || y < -85) {
-    return y;
-  }
-  return Math.log(Math.tan((Math.PI * y) / 360));
+function project_mercator(x: number, y: number) {
+  return [
+    (Math.PI * x) / 180 + Math.PI,
+    Math.PI - Math.log(Math.tan(Math.PI * 0.25 + ((Math.PI * y) / 180) * 0.5)),
+  ];
 }
 
-function un_project_y(y: number) {
-  if (y > 85 || y < -85) {
-    return y;
-  }
-  return (Math.atan(Math.exp(y)) * 360) / Math.PI;
+function mercator_lnglat(x: number, y: number) {
+  return [
+    ((x - Math.PI) * 180) / Math.PI,
+    ((Math.atan(Math.exp(Math.PI - y)) - Math.PI * 0.25) * 2 * 180) / Math.PI,
+  ];
 }

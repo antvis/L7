@@ -16,6 +16,7 @@ export default () => {
           style: 'light',
           center: [-96, 37.8],
           zoom: 3,
+          interactive: true,
         }),
       });
       setScene(mapScene);

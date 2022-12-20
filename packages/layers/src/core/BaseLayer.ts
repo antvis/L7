@@ -65,7 +65,6 @@ import {
   createMultiPassRenderer,
   normalizePasses,
 } from '../utils/multiPassRender';
-import { updateShape } from '../utils/updateShape';
 import LayerPickService from './LayerPickService';
 import TextureService from './TextureService';
 /**
@@ -540,6 +539,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
     this.updateStyleAttribute('filter', field, values, updateOptions);
+    this.dataState.dataSourceNeedUpdate = true;
     return this;
   }
 
@@ -548,18 +548,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    const lastShape =
-      this.styleAttributeService?.getLayerStyleAttribute('shape')?.scale?.field;
-    const currentShape = field;
     this.shapeOption = {
       field,
       values,
     };
     this.updateStyleAttribute('shape', field, values, updateOptions);
-    // Tip: 根据 shape 判断是否需要更新 model
-    if (!this.tileLayer) {
-      updateShape(this, lastShape, currentShape);
-    }
+    this.dataState.dataSourceNeedUpdate = true; // 通过数据更新驱动shape 更新
     return this;
   }
   public label(

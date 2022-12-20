@@ -92,6 +92,7 @@ const scene = new L7.Scene({
 是否保留缓冲区数据 `boolean` `false`。
 
 ### isMini
+
 <description> _boolean_ **可选** _default: false_ </description>
 
 是否小程序模式 `boolean` `false`,目前仅支持支付宝
