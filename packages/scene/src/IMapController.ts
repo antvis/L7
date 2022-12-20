@@ -82,5 +82,5 @@ export default interface IMapController {
   lngLatToPixel(lnglat: Point): IPoint;
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
-  exportMap(type: 'jpg' | 'png'): string;
+  exportMap(type: 'jpg' | 'png'): Promise<string> ;
 }

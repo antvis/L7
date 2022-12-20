@@ -147,12 +147,12 @@ class Scene
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
-  public exportPng(type?: 'png' | 'jpg'): string {
-    return this.sceneService.exportPng(type);
+  public async exportPng(type?: 'png' | 'jpg'): Promise<string> {
+    return await this.sceneService.exportPng(type);
   }
 
-  public exportMap(type?: 'png' | 'jpg'): string {
-    return this.sceneService.exportPng(type);
+  public async exportMap(type?: 'png' | 'jpg'): Promise<string>  {
+    return  await this.sceneService.exportPng(type);
   }
 
   public registerRenderService(render: any) {

@@ -28,10 +28,10 @@ export default class ExportImage extends ButtonControl<IExportImageControlOption
     };
   }
 
-  public getImage() {
-    const mapImage = this.mapsService.exportMap('png');
-    const layerImage = this.scene.exportPng('png');
-    return this.mergeImage(mapImage, layerImage);
+  public async getImage() {
+    const mapImage = await this.mapsService.exportMap('png');
+    const layerImage = await this.scene.exportPng('png');
+    return await this.mergeImage(mapImage, layerImage);
   }
 
   protected onClick = async () => {
