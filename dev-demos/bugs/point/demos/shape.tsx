@@ -10,13 +10,15 @@ export default () => {
       const response = await fetch(
         'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
       );
+      let shapeType = '01'
       const scene = new Scene({
         id: 'map',
         map: new GaodeMap({
           center: [121.4, 31.258134],
-          zoom: 12,
+          zoom: 14,
           pitch: 0,
           style: 'normal',
+          doubleClickZoom:false,
         }),
       });
       scene.addImage(
@@ -37,6 +39,7 @@ export default () => {
         return item;
       });
       const imageLayer = new PointLayer({
+        autoFit:false
       })
         .source(newData, {
           parser: {
@@ -46,36 +49,19 @@ export default () => {
           },
         })
         .shape('type', (v: any) => {
-          return v;
+          return shapeType;
         })
         .active(false)
         .size(20);
       scene.addLayer(imageLayer);
+      setTimeout(()=>{
+        shapeType = '02';
+        imageLayer.shape('type', (v: any) => {
+          return shapeType;
+        })
+       scene.render()
 
-      setTimeout(() => {
-        imageLayer.shape('02');
-        scene.render();
-      }, 4000)
-      // imageLayer.on('mousedown', (e) => {
-      //   console.log('mousedown', e);
-      // });
-      // const popup = new Popup({
-      // });
-    
-      // scene.addPopup(popup);
-      // imageLayer.on('click', (e) => {
-      //   console.log(e)
-      //   const {lng,lat} = e.lngLat
-
-      //   popup.setOptions({
-      //     title: e.feature.name,
-      //     html:e.feature.name,
-      //     lngLat: {
-      //       lng,
-      //       lat,
-      //     },
-      //   });
-      // });
+      },2000)
           
     }, []);
     return (

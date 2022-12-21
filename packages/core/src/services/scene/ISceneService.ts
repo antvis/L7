@@ -18,7 +18,7 @@ export interface ISceneService extends EventEmitter {
   render(): void;
   getSceneContainer(): HTMLDivElement;
   getMarkerContainer(): HTMLElement;
-  exportPng(type?: 'png' | 'jpg'): string;
+  exportPng(type?: 'png' | 'jpg'):  Promise<string> ;
   addFontFace(fontname: string, fontpath: string): void;
   destroy(): void;
 }

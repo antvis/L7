@@ -42,7 +42,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     }
     // Tip: normal render layer
     this.registerPositionAttribute(styleAttributeService);
-    this.registerFilterAttribute(styleAttributeService);
+    // this.registerFilterAttribute(styleAttributeService);//数据层数据过滤
     this.registerColorAttribute(styleAttributeService);
     this.registerVertexIdAttribute(styleAttributeService);
   }

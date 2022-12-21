@@ -197,7 +197,6 @@ export default class FillImageModel extends BaseModel {
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
        const model = await this.layer
       .buildLayerModel({
         moduleName: 'pointFillImage',

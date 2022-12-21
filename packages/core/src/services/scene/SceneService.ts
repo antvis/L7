@@ -338,9 +338,10 @@ export default class Scene extends EventEmitter implements ISceneService {
     return this.$container as HTMLDivElement;
   }
 
-  public exportPng(type?: 'png' | 'jpg'): string {
+  public async exportPng(type?: 'png' | 'jpg'): Promise<string> {
     const renderCanvas = this.$container?.getElementsByTagName('canvas')[0];
-    this.render();
+    await this.render();
+
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)

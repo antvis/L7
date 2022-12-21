@@ -32,7 +32,7 @@ import {
 } from '@antv/l7-core';
 import { MaskLayer } from '@antv/l7-layers';
 import { ReglRendererService } from '@antv/l7-renderer';
-import { DOM, isMini } from '@antv/l7-utils';
+import { DOM, isMini, setMiniScene } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import BoxSelect, { BoxSelectEventList } from './boxSelect';
 import ILayerManager from './ILayerManager';
@@ -99,6 +99,7 @@ class Scene
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
     this.boxSelect = new BoxSelect(this, {});
+    setMiniScene(config?.isMini|| false);
 
     if (isMini) {
       this.sceneService.initMiniScene(config);
@@ -146,12 +147,12 @@ class Scene
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
-  public exportPng(type?: 'png' | 'jpg'): string {
-    return this.sceneService.exportPng(type);
+  public async exportPng(type?: 'png' | 'jpg'): Promise<string> {
+    return await this.sceneService.exportPng(type);
   }
 
-  public exportMap(type?: 'png' | 'jpg'): string {
-    return this.sceneService.exportPng(type);
+  public async exportMap(type?: 'png' | 'jpg'): Promise<string>  {
+    return  await this.sceneService.exportPng(type);
   }
 
   public registerRenderService(render: any) {

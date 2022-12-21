@@ -29,6 +29,11 @@ import { $XMLHttpRequest as $XMLHttpRequest2 } from './XMLHttpRequest';
 
 import { globalWindow, l7globalThis } from './global';
 
+export let isMiniScene = false;
+export function setMiniScene(flag: boolean) {
+  isMiniScene = flag;
+}
+
 // 判断时候是支付宝小程序环境 （ my.isFRM == true smallfish H5+ ）
 export const isMiniAli =
   // @ts-ignore
@@ -42,7 +47,7 @@ export const isWeChatMiniProgram =
   wx !== null &&
   (typeof wx.request !== 'undefined' || typeof wx.miniProgram !== 'undefined');
 
-export const isMini = isMiniAli || isWeChatMiniProgram;
+export const isMini = (isMiniAli || isWeChatMiniProgram) && isMiniScene;
 
 export const miniWindow = {
   atob,

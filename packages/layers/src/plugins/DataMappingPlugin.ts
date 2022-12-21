@@ -62,7 +62,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
       if (Array.isArray(dataArray) && dataArray.length === 0) {
         return;
       }
-
       const attributesToRemapping = attributes.filter(
         (attribute) => attribute.needRemapping, // 如果filter变化
       );
@@ -76,27 +75,16 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
       if (attributesToRemapping.length) {
         // 过滤数据
-        if (filter?.needRemapping) {
-          const encodeData = this.mapping(
-            layer,
-            attributes,
-            filterData,
-            undefined,
-          );
-          layer.setEncodedData(encodeData);
-          filter.needRemapping = false;
-        } else {
-          const encodeData = this.mapping(
-            layer,
-            attributesToRemapping,
-            filterData,
-            layer.getEncodedData(),
-          );
-          layer.setEncodedData(encodeData);
-        }
-        // 处理文本更新，更新文字形状
-        // layer.emit('remapping', null);
+        const encodeData = this.mapping(
+          layer,
+          attributesToRemapping,
+          filterData,
+          layer.getEncodedData(),
+        );
+        layer.setEncodedData(encodeData);
       }
+      // 处理文本更新，更新文字形状
+      // layer.emit('remapping', null);
     });
   }
   private generateMaping(
@@ -119,6 +107,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // Tip: layer 对数据做处理
     // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
     // 在各个 layer 中继承
+
     filterData = layer.processData(filterData);
     const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
@@ -139,9 +128,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
       },
     } = layer.getLayerConfig() as ILineLayerStyleOptions;
 
-    const usedAttributes = attributes.filter(
-      (attribute) => attribute.scale !== undefined,
-    );
+    const usedAttributes = attributes
+      .filter((attribute) => attribute.scale !== undefined)
+      .filter((attribute) => attribute.name !== 'filter');
     const mappedData = data.map((record: IParseDataItem, i) => {
       const preRecord = predata ? predata[i] : {};
       const encodeRecord: IEncodeFeature = {
@@ -149,10 +138,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
         coordinates: record.coordinates,
         ...preRecord,
       };
+
       usedAttributes.forEach((attribute: IStyleAttribute) => {
         let values = this.applyAttributeMapping(attribute, record);
-        attribute.needRemapping = false;
-
         // TODO: 支持每个属性配置 postprocess
         if (attribute.name === 'color') {
           values = values.map((c: unknown) => {
@@ -188,12 +176,15 @@ export default class DataMappingPlugin implements ILayerPlugin {
       }
       return encodeRecord;
     }) as IEncodeFeature[];
+
+    attributes.forEach((attribute) => {
+      attribute.needRemapping = false;
+    });
     // 调整数据兼容 Amap2.0
     this.adjustData2Amap2Coordinates(mappedData, layer);
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
-
     return mappedData;
   }
 
