@@ -32,6 +32,9 @@ export default () => {
                 y: 'lat',
             },
         })
+        .style({
+            unit:'meter'
+        })
         .shape('marker')
         .size(36)
 

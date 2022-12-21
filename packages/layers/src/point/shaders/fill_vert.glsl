@@ -8,9 +8,7 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform float u_meter2coord;
-uniform float u_meteryScale;
-uniform float u_isMeter;
+uniform int u_Size_Unit;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -42,7 +40,7 @@ void main() {
   *  setPickingSize 设置拾取大小
   *  u_meter2coord 在等面积大小的时候设置单位
   */
-  float newSize = setPickingSize(a_Size) * u_meter2coord;
+  float newSize = setPickingSize(a_Size);
   // float newSize = setPickingSize(a_Size) * 0.00001038445708445579;
 
   // cal style mapping - 数据纹理映射部分的计算
@@ -126,9 +124,11 @@ void main() {
 
   // unpack color(vec2)
   v_color = a_Color;
+if(u_Size_Unit == 1) {
+    newSize = newSize  * u_PixelsPerMeter.z;
+  }
 
-  // radius(16-bit)
-  v_radius = newSize;
+   v_radius = newSize;
 
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
@@ -136,26 +136,9 @@ void main() {
 
   vec2 offset = (extrude.xy * (newSize + u_stroke_width) + textrueOffsets);
   vec3 aPosition = a_Position;
-  if(u_isMeter < 1.0) {
-    // 不以米为实际单位
-    offset = project_pixel(offset);
-  } else {
-    // 以米为实际单位
-    if(newSize * pow(2.0, u_Zoom) < 48.0) {
-      antialiasblur = max(antialiasblur, -0.05);
-    } else if(newSize * pow(2.0, u_Zoom) < 128.0) {
-      antialiasblur = max(antialiasblur, -0.6/pow(u_Zoom, 2.0));
-    } else {
-      antialiasblur = max(antialiasblur, -0.8/pow(u_Zoom, 2.0));
-    }
-    
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-      aPosition.x += offset.x / u_meteryScale;
-      aPosition.y += offset.y;
-      offset = vec2(0.0);
-    }
-  }
 
+  offset = project_pixel(offset);
+  
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
@@ -177,7 +160,7 @@ void main() {
  
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raisingHeight, 1.0);
+    gl_Position =  u_Mvp * vec4(project_pos.xy + offset, raisingHeight, 1.0);
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
   }

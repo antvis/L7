@@ -32,9 +32,12 @@ export default () => {
             },
           },
         )
-        .size(25)
+        .size(100)
         .color('#f00')
         .shape('radar')
+        .style({
+          unit:'pixel'
+        })
         .animate(true)
         .active(true);
   

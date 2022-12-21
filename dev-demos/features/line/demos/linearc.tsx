@@ -9,7 +9,7 @@ import {
   // @ts-ignore
 } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap,Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -54,8 +54,8 @@ export default () => {
             type: 'MultiLineString',
             coordinates: [
               [
-                [120, 30],
-                [120, 40],
+                [116.43,39.97],
+                [108.39,22.91],
               ],
             ],
           },
@@ -64,11 +64,12 @@ export default () => {
     };
     const source = new Source(geoData);
 
+
     // scene.on('zoom', e => console.log(e))
 
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
-      .size(1)
+      .size(2)
       .shape('arc')
       .color('#f00')
       .style({
@@ -77,15 +78,15 @@ export default () => {
         thetaOffset: 0.5,
       });
 
-    source.on('update', () => {
-      const midPoints = lineAtOffset(source, {
-        offset: 0.1,
-        shape: 'arc',
-        thetaOffset: 0.5,
-        mapVersion: scene.getMapService().version,
-      });
+ 
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source(midPoints, {
+        .source([{
+          lng:116.43,
+          lat:39.97
+        },{
+          lng:108.39,
+          lat:22.91
+        }], {
           parser: {
             type: 'json',
             x: 'lng',
@@ -94,21 +95,15 @@ export default () => {
         })
         .shape('circle')
         .size(10)
-        .color('#ff0');
-      scene.addLayer(point);
-    });
-
-    (async () => {
-      // const midPoints = await lineAtOffsetAsyc(source, 0.1, 'arc', 'offset');
-      const midPoints = await lineAtOffsetAsyc(source, {
-        offset: 0.3,
-        shape: 'arc',
-        thetaOffset: 0.5,
-        mapVersion: scene.getMapService().version,
-        featureId: 1,
-      });
-      const point = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source(midPoints, {
+        .color('blue');
+        const point2 = new PointLayer({ blend: 'normal', zIndex: 1 })
+        .source([{
+          lng:116.43,
+          lat:39.97
+        },{
+          lng:108.39,
+          lat:22.91
+        }], {
           parser: {
             type: 'json',
             x: 'lng',
@@ -116,13 +111,15 @@ export default () => {
           },
         })
         .shape('circle')
-        .size(5)
-        .color('#0f0')
+        .size(100000)
+        .color('blue')
         .style({
-          opacity: 0.8,
-        });
+          opacity:0.5,
+          unit:'meter'
+        })
       scene.addLayer(point);
-    })();
+      scene.addLayer(point2);
+
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
