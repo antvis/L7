@@ -118,7 +118,7 @@ void main() {
 
   vec4 projected_position;
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-   projected_position  = u_Mvp * (vec4(a_Position.xyz + vec3(0.0, 0.0, raiseHeight), 1.0));
+   projected_position  = u_Mvp *(vec4(a_Position.xyz + vec3(0.0, 0.0, raiseHeight), 1.0));
   } else { // else
    projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz + vec3(0.0, 0.0, raiseHeight), 1.0));
   }

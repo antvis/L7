@@ -8,7 +8,6 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { Version } from '@antv/l7-maps';
 import { getCullFace, getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
@@ -17,6 +16,7 @@ import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
 import pointFillVert from '../shaders/image/fillImage_vert.glsl';
+import { SizeUnitType } from '../../core/interface'
 
 export default class FillImageModel extends BaseModel {
   private meter2coord: number = 1;
@@ -30,6 +30,7 @@ export default class FillImageModel extends BaseModel {
       rotation,
       raisingHeight = 0.0,
       heightfixed = false,
+      unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (this.rendererService.getDirty()) {
@@ -98,7 +99,7 @@ export default class FillImageModel extends BaseModel {
     return {
       u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
-      u_isMeter: Number(this.isMeter),
+      u_Size_Unit: SizeUnitType[unit] as SizeUnitType,
       u_RotateMatrix: new Float32Array([
         Math.cos(this.radian),
         Math.sin(this.radian),
@@ -134,63 +135,10 @@ export default class FillImageModel extends BaseModel {
   public async initModels():Promise<IModel[]>  {
     this.iconService.on('imageUpdate', this.updateTexture);
     this.updateTexture();
-    const {
-      unit = 'l7size',
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const { version } = this.mapService;
-    if (
-      unit === 'meter' &&
-      version !== Version.DEFUALT &&
-      version !== Version.GLOBEL
-    ) {
-      this.isMeter = true;
-      this.calMeter2Coord();
-    }
-
     return await this.buildModels();
   }
 
-  /**
-   * 计算等面积点图层（unit meter）笛卡尔坐标标度与世界坐标标度的比例
-   * @returns
-   */
-  public calMeter2Coord() {
-    const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
-    const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
 
-    const { version } = this.mapService;
-    if (version === Version.MAPBOX && window.mapboxgl.MercatorCoordinate) {
-      const coord = window.mapboxgl.MercatorCoordinate.fromLngLat(
-        { lng: center[0], lat: center[1] },
-        0,
-      );
-      const offsetInMeters = 1;
-      const offsetInMercatorCoordinateUnits =
-        offsetInMeters * coord.meterInMercatorCoordinateUnits();
-      const westCoord = new window.mapboxgl.MercatorCoordinate(
-        coord.x - offsetInMercatorCoordinateUnits,
-        coord.y,
-        coord.z,
-      );
-      const westLnglat = westCoord.toLngLat();
-
-      this.meter2coord = center[0] - westLnglat.lng;
-      return;
-    }
-
-    // @ts-ignore
-    const m1 = this.mapService.meterToCoord(center, [minLng, minLat]);
-    // @ts-ignore
-    const m2 = this.mapService.meterToCoord(center, [
-      maxLng === minLng ? maxLng + 0.1 : maxLng,
-      maxLat === minLat ? minLat + 0.1 : maxLat,
-    ]);
-    this.meter2coord = (m1 + m2) / 2;
-    if (!this.meter2coord) {
-      // Tip: 兼容单个数据导致的 m1、m2 为 NaN
-      this.meter2coord = 7.70681090738883;
-    }
-  }
 
  public async buildModels():Promise<IModel[]>  {
     const {
@@ -313,8 +261,8 @@ export default class FillImageModel extends BaseModel {
         ) => {
           const { size = 5 } = feature;
           return Array.isArray(size)
-            ? [size[0] * this.meter2coord]
-            : [(size as number) * this.meter2coord];
+            ? [size[0]]
+            : [(size as number)];
         },
       },
     });

@@ -147,38 +147,38 @@ float project_pixel_allmap(float pixel) {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT) {
     return pixel * pow(2.0, u_Zoom);
   }
-  return pixel;
+  return pixel * u_FocalDistance ;
 }
 
 // 适配纹理贴图的等像素大小
 float project_pixel_texture(float pixel) {
   // mapbox zoom > 12
   if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-    return pixel * pow(0.5, u_Zoom);
+    return pixel * pow(0.5, u_Zoom) * u_FocalDistance ;
   }
 
   // amap2 zoom > 12
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom))* u_FocalDistance ;
   }
 
   // amap zoom > 12
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
-    return pixel * pow(0.5, u_Zoom);
+    return pixel * pow(0.5, u_Zoom)* u_FocalDistance ;
   }
   
   // amap zoom < 12
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
-    return pixel * pow(2.0, (20.0 - u_Zoom));
+    return pixel * pow(2.0, (20.0 - u_Zoom))* u_FocalDistance ;
   }
-  return pixel * 2.0;
+  return pixel * 2.0 *  u_FocalDistance;;
 }
 
 // 在不论什么底图下需要统一处理的时候使用
 float project_float_pixel(float pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
     // mapbox P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, (19.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - u_Zoom))  * u_FocalDistance ;
   }
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // amap P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
@@ -186,43 +186,43 @@ float project_float_pixel(float pixel) {
   }
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
     // amap2 P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom))* u_FocalDistance ;
   }
-  return pixel;
+  return pixel * u_FocalDistance;
 }
 
 float project_pixel(float pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // amap P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, (19.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - u_Zoom)) * u_FocalDistance ;
   }
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
     // amap2 P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom)) * u_FocalDistance ;
   }
-  return pixel;
+  return pixel * u_FocalDistance;
 }
 vec2 project_pixel(vec2 pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, (19.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - u_Zoom)) * u_FocalDistance ;
   }
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
     // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom)) * u_FocalDistance ;
   }
-  return pixel * -1.;
+  return pixel * -1. * u_FocalDistance;
 }
 vec3 project_pixel(vec3 pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, (19.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - u_Zoom)) *  u_FocalDistance ;
   }
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
     // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom));
+    return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom))  * u_FocalDistance ;
   }
-  return pixel * -1.;
+  return pixel * -1. * u_FocalDistance;
 }
 
 vec4 project_common_position_to_clipspace(vec4 position, mat4 viewProjectionMatrix, vec4 center) {

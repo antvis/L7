@@ -83,7 +83,10 @@ export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
   enablePicking?: boolean;
   workerEnabled?: boolean;
 }
-
+export enum SizeUnitType {
+  pixel = 0,
+  meter = 1,
+}
 export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   tileOrigin?: number[];
   coord?: string;
@@ -118,7 +121,7 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
 
   offsets?: styleOffset;
 
-  unit?: string;
+  unit?: SizeUnitType;
 
   rotation?: number; // angle
   speed?: number;
@@ -191,11 +194,6 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   rampColors?: IColorRamp;
   rampColorsData?: ImageData | IImagedata;
   colorTexture?: ITexture2D;
-  pixelConstant?: number;
-  pixelConstantR?: number;
-  pixelConstantG?: number;
-  pixelConstantB?: number;
-  pixelConstantRGB?: number;
 }
 
 export interface ICityBuildLayerStyleOptions {

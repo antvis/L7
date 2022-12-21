@@ -9,7 +9,7 @@ import {
   // @ts-ignore
 } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { Map,GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -70,7 +70,7 @@ export default () => {
     const source = new Source(geoData);
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
-      .size(1)
+      .size(10)
       .shape('line')
       .color('#f00')
       .style({});

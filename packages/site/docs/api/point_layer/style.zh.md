@@ -36,15 +36,15 @@ layer.style({
 | offsets       | `[number, number]` | 点偏移                     | `[0, 0]` |
 | raisingHeight | `number`           | 抬升高度                   | `0`      |
 | heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `false`  |
-| unit          | `string`           | 点大小单位                 | `l7size` |
+| unit          | `string`           | 点大小单位                 | `pixel`  |
 
 #### unit
 
-- l7size 默认值
+- pixel 默认值
 - meter 单位为米
 
 ```js
-type IUnit = 'l7size' | 'meter';
+type IUnit = 'pixel' | 'meter';
 ```
 
 点图层支持等面积点，点大小的单位是米，同样通过 size 方法设置大小
