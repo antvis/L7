@@ -57,7 +57,7 @@ import Source from '@antv/l7-source';
 import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isFunction, isObject, isUndefined,isEqual } from 'lodash';
+import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { styleDataMapping } from '../utils/dataMappingStyle';
 import { calculateData } from '../utils/layerData';
