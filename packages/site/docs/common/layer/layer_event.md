@@ -67,13 +67,13 @@ layer.on('legend:color', (ev) => console.log(ev));
 
 ### legend:size
 
-数据映射更新，图例发生变化,color 大小改变
+数据映射更新，图例发生变化,size 大小改变
 参数 option
 - type 映射通道、图例类型
 - attr 映射实例
 
 ```js
-layer.on('legend:color', (ev) => console.log(ev));
+layer.on('legend:size', (ev) => console.log(ev));
 
 ```
 

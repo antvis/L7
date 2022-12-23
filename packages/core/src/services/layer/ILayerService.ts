@@ -406,7 +406,7 @@ export interface ILayer {
     field: StyleAttributeField,
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
-  ): void;
+  ): boolean;
   setLayerPickService(layerPickService:ILayerPickService):void;
   init(): Promise<void>;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
