@@ -1,6 +1,7 @@
 import {
   AttributeType,
   gl,
+  ICON_FONT,
   IEncodeFeature,
   IModel,
   IModelUniform,
@@ -421,6 +422,8 @@ export default class TextModel extends BaseModel {
     });
   }
 
+
+
   /**
    * 生成文字布局（对照文字纹理字典提取对应文字的位置很好信息）
    */
@@ -468,6 +471,10 @@ export default class TextModel extends BaseModel {
       };
       return feature;
     });
+  }
+
+  private isIconFont() {
+    return this.layer.getEncodedData().some(d => d[ICON_FONT] === true)
   }
   /**
    * 文字避让 depend on originCentorid
@@ -522,7 +529,7 @@ export default class TextModel extends BaseModel {
    * 初始化文字布局
    */
   private initGlyph() {
-    const { iconfont = false } = this.layer.getLayerConfig();
+    const iconfont = this.isIconFont();
     // 1.生成文字纹理（或是生成 iconfont）
     iconfont ? this.initIconFontTex() : this.initTextFont();
     // this.initTextFont();

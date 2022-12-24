@@ -636,10 +636,6 @@ export interface ILayerConfig {
    * 地球模式参数
    */
    globalOptions: any;
-  /**
-   * layer point text 是否是 iconfont 模式
-   */
-  iconfont: boolean;
 
   workerEnabled?: boolean;
   onHover(pickedFeature: IPickedFeature): void;

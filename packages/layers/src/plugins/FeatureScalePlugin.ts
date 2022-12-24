@@ -3,6 +3,7 @@ import {
   ILayerPlugin,
   IScale,
   IScaleOptions,
+  isFont,
   IStyleAttribute,
   IStyleAttributeService,
   IStyleScale,
@@ -132,7 +133,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           attributeScale.type = StyleScaleType.VARIABLE;
           scales.forEach((scale) => {
             // 如果设置了回调, 这不需要设置range
-            if (!attributeScale.callback && attributeScale.values !== 'text') {
+            if (!attributeScale.callback && !isFont(attributeScale.values)) {
               switch (scale.option?.type) {
                 case ScaleTypes.LOG:
                 case ScaleTypes.LINEAR:
@@ -171,7 +172,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                   break;
               }
             }
-            if (attributeScale.values === 'text') {
+            if (isFont(attributeScale.values)) {
               scale.scale.range(scale.option?.domain);
             }
           });
@@ -249,7 +250,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       // 根据数据类型判断 默认等分位，时间，和枚举类型
       let type =
         (scaleOption && scaleOption.type) || this.getDefaultType(firstValue);
-      if (values === 'text') {
+      if (isFont(values)) {
         // text 为内置变 如果是文本则为cat
         type = ScaleTypes.CAT;
       }

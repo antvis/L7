@@ -39,17 +39,9 @@ scene.on('loaded', () => {
             y: 'w',
           },
         })
-        .shape('icon', 'text') // 指定需要映射字段为 icon、shape 类型和普通的文字标注一样为 text
+        .shape('icon', 'iconfont') // 指定需要映射字段为 icon、shape 类型和普通的文字标注一样为 text
         .size(20)
-        .color('w', ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99'])
-        .style({
-          textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          textOffset: [40, 0], // 文本相对锚点的偏移量 [水平, 垂直]
-          padding: [0, 0], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-          stroke: '#ffffff', // 描边颜色
-          fontFamily,
-          iconfont: true, // 开启 iconfont 映射
-        });
+        .color('w', ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99']);
       scene.addLayer(pointLayer);
     });
 });
@@ -58,19 +50,17 @@ scene.on('loaded', () => {
 1. `iconfont` 绘制的是 `unicode` 图标，在使用的时候需要提前指定对应的 `unicode` 映射文件。
 2. 关于 `iconfont` 资源使用可以前往 `iconfont` 官网 [官网传送门](https://iconfont.cn/)。
 
-### shape(field: string, shapeType: 'text'): ILayer
+### shape(field: string, shapeType: 'iconfont'): ILayer
 
 `iconfont` 其实就是特殊的文本标注，因此 `shape` 的用法和普通文本标注的用法保持一致。
 
 - `field` 标注的字段名称。
-- `shapeType` 默认为 `text`。
+- `shapeType` 默认为 `iconfont`。
 
 ```javascript
-layer.shape('iconfontField', 'text');
+layer.shape('iconfontField', 'iconfont');
 ```
 
 ### style
-
-我们在使用 `iconfont` 绘制简单图标的时候需要在 `style` 方法中将 `iconfont` 参数设置为 `true`。
 
 ✨ iconfont 其他 style 参数的使用和普通的文本标注的参数保持一致。

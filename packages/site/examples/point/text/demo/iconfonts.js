@@ -47,14 +47,12 @@ scene.on('loaded', () => {
           }
         }
         )
-        .shape('iconType', 'text')
+        .shape('iconType', 'iconfont')
         .size(30)
         .color('iconColor')
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
           textOffset: [ -10, 10 ], // 文本相对锚点的偏移量 [水平, 垂直]
-          fontFamily,
-          iconfont: true,
           textAllowOverlap: true
         });
       scene.addLayer(pointIconFontLayer);

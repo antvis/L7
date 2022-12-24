@@ -28,15 +28,11 @@ scene.on('loaded', () => {
             y: 'w'
           }
         })
-        .shape('icon', 'text')
+        .shape('icon', 'iconfont')
         .size(20)
         .color('w', [ '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99' ])
         .style({
-          textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          padding: [ 0, 0 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
           stroke: '#ffffff', // 描边颜色
-          fontFamily,
-          iconfont: true,
           textAllowOverlap: true
         });
       scene.addLayer(pointLayer);

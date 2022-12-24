@@ -70,7 +70,7 @@ scene.on('loaded', () => {
         zIndex: 10
       })
         .source(data)
-        .shape('icon', 'text')
+        .shape('icon', 'iconfont')
         .size(25)
         .color('count', t => {
           const c = Number(t.replace('℃', ''));
@@ -80,8 +80,6 @@ scene.on('loaded', () => {
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
           textOffset: [ -25, 15 ],
           padding: [ 2, 2 ],
-          fontFamily,
-          iconfont: true,
           textAllowOverlap: true
         });
       scene.addLayer(pointLayer);

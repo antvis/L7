@@ -1,10 +1,12 @@
 import {
+  ICON_FONT,
   IEncodeFeature,
   IFontService,
   ILayer,
   ILayerPlugin,
   IMapService,
   IParseDataItem,
+  isFont,
   IStyleAttribute,
   IStyleAttributeService,
   Position,
@@ -152,11 +154,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
           Array.isArray(values) && values.length === 1 ? values[0] : values;
 
         // 增加对 layer/text/iconfont unicode 映射的解析
-        if (attribute.name === 'shape') {
-          encodeRecord.shape = this.fontService.getIconFontKey(
-            encodeRecord[attribute.name] as string,
-          );
-        }
+        this.deassignShape(attribute, encodeRecord);
       });
 
       if (
@@ -186,6 +184,27 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
     return mappedData;
+  }
+
+  private deassignShape(
+    attribute: IStyleAttribute,
+    encodeRecord: IEncodeFeature,
+  ) {
+    if (
+      isFont(attribute.scale?.values) &&
+      attribute.scale?.values === ICON_FONT
+    ) {
+      if (typeof encodeRecord.shape !== 'string') {
+        return;
+      }
+      const last = encodeRecord.shape;
+      const current = this.fontService.getIconFontKey(encodeRecord.shape);
+      if (last === current) {
+        return;
+      } // 还是作为文字渲染
+      encodeRecord.shape = current; // 作为 iconfont 渲染
+      encodeRecord[ICON_FONT] = true;
+    }
   }
 
   private adjustData2Amap2Coordinates(

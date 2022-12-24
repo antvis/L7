@@ -7,8 +7,11 @@ import container, {
 import BasePostProcessingPass from './services/renderer/passes/BasePostProcessingPass';
 import { TYPES } from './types';
 import { packCircleVertex } from './utils/vertex-compression';
-
+import { isFont, ICON_FONT, FONT_TYPE } from './utils/font_util';
 export {
+  isFont,
+  ICON_FONT,
+  FONT_TYPE,
   /**
    * IoC 容器
    */

@@ -123,7 +123,8 @@ export default class FontService extends EventEmitter implements IFontService {
    * @returns
    */
   public getIconFontKey(name: string): string {
-    return this.iconFontMap.get(name) || name;
+    const unicode = this.iconFontMap.get(name);
+    return  unicode === undefined ? name : unicode;
   }
 
   public getGlyph(name: string): string {

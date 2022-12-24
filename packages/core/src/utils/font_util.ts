@@ -3,6 +3,18 @@ import { IIcon, IICONMap } from '../services/asset/IIconService';
 /**
  * tiny-sdf 中每个 glyph 的宽度（加上 buffer 24 + 3 + 3 = 30）
  */
+export const ICON_FONT = 'iconfont';
+export const FONT_TYPE = ['text', 'iconfont'];
+export function isFont(value: string | unknown[] | undefined) {
+  if (value === undefined) {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return false;
+  }
+  return FONT_TYPE.indexOf(value) >= 0;
+}
+
 const glyphSizeInSDF = 30;
 export function buildMapping({
   characterSet,

@@ -581,12 +581,10 @@ const pointIconFontLayer = new PointLayer({})
       },
     },
   )
-  .shape('m', 'text')
+  .shape('m', 'iconfont')
   .size(12)
   .color('w', ['#f00', '#f00', '#0f0'])
   .style({
-    fontFamily,
-    iconfont: true,
     textAllowOverlap: true,
   });
 ```
