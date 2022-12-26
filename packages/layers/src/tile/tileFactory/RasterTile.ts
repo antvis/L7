@@ -2,6 +2,7 @@ import { ILayerAttributesOption, ITexture2D } from '@antv/l7-core';
 import RasterLayer from '../../raster'
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import Tile from './Tile';
+import { getDefaultDomain } from '@antv/l7-utils';
 
 const DEFAULT_COLOR_TEXTURE_OPTION = {
   positions: [0, 1],
@@ -12,9 +13,10 @@ export default class RasterTile extends Tile {
   private colorTexture: ITexture2D;
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
-    const layerOptions = this.getLayerOptions();
+    const layerOptions = this.getLayerOptions() ;
     const sourceOptions = this.getSourceOption();
-    this.colorTexture = this.parent.textureService.getColorTexture((layerOptions as unknown as IRasterLayerStyleOptions).rampColors)
+    const {rampColors,domain} = this.getLayerOptions() as unknown as IRasterLayerStyleOptions;
+    this.colorTexture = this.parent.textureService.getColorTexture(rampColors,domain);
     const layer = new RasterLayer({
       ...layerOptions,
       colorTexture: this.colorTexture,
@@ -57,8 +59,8 @@ export default class RasterTile extends Tile {
    */
   public styleUpdate(...arg: any): void {
 
-    const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION} = arg;
-    this.colorTexture = this.parent.textureService.getColorTexture(rampColors)
+    const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION, domain} = arg as IRasterLayerStyleOptions;
+    this.colorTexture = this.parent.textureService.getColorTexture(rampColors,domain || getDefaultDomain(rampColors))
     this.layers.forEach(layer => layer.style({ colorTexture: this.colorTexture }));
   }
 

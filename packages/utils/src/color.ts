@@ -232,3 +232,13 @@ function toIEIMageData(ctx: Context, data: Uint8ClampedArray) {
   }
   return imageData
 }
+
+export function getDefaultDomain(rampColors:IColorRamp) {
+  switch (rampColors.type) {
+     case 'cat' :
+       return [0,255]
+     default: 
+       [0,1]
+  }
+
+}

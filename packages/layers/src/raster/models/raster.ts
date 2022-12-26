@@ -5,7 +5,7 @@ import {
   IModel,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask,IColorRamp } from '@antv/l7-utils';
+import { getMask,getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -23,7 +23,7 @@ export default class RasterModel extends BaseModel {
       domain,
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-     const newdomain = domain || this.getDefaultDomain(rampColors)
+     const newdomain = domain ||getDefaultDomain(rampColors)
     this.colorTexture =  this.layer.textureService.getColorTexture(rampColors,newdomain);
     return {
       u_opacity: opacity || 1,
@@ -121,14 +121,5 @@ export default class RasterModel extends BaseModel {
       },
     });
   }
-  protected getDefaultDomain(rampColors:IColorRamp) {
-     switch (rampColors.type) {
-        case 'cat' :
-          return [0,255]
-        default: 
-          [0,1]
-     }
-
-  }
-
+  
 }
