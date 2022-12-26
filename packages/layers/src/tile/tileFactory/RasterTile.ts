@@ -57,7 +57,7 @@ export default class RasterTile extends Tile {
    */
   public styleUpdate(...arg: any): void {
 
-    const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION } = arg;
+    const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION} = arg;
     this.colorTexture = this.parent.textureService.getColorTexture(rampColors)
     this.layers.forEach(layer => layer.style({ colorTexture: this.colorTexture }));
   }

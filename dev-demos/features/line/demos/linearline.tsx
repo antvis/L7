@@ -54,13 +54,9 @@ export default () => {
         rampColors: {
           colors: [
             '#FF4818',
-            '#F7B74A',
-            '#FFF598',
-            '#91EABC',
-            '#2EA9A1',
             '#206C7C',
           ],
-          weights: [0.1, 0.1, 0.1, 0.1, 0.1, 0.5],
+          positions: [0., 1.0],
         },
       });
 

@@ -5,7 +5,7 @@ import {
   IModel,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
+import { getMask,IColorRamp } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -14,22 +14,21 @@ import rasterVert from '../shaders/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
-  private rampColors: any;
   public getUninforms() {
     const {
       opacity = 1,
       clampLow = true,
       clampHigh = true,
       noDataValue = -9999999,
-      domain = [0, 1],
+      domain,
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    this.colorTexture =  this.layer.textureService.getColorTexture(rampColors);
-
+     const newdomain = domain || this.getDefaultDomain(rampColors)
+    this.colorTexture =  this.layer.textureService.getColorTexture(rampColors,newdomain);
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
-      u_domain: domain,
+      u_domain: newdomain,
       u_clampLow: clampLow,
       u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
       u_noDataValue: noDataValue,
@@ -56,7 +55,7 @@ export default class RasterModel extends BaseModel {
     }
   }
 
-   public async initModels(): Promise<IModel[]> {
+  public async initModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -122,18 +121,14 @@ export default class RasterModel extends BaseModel {
       },
     });
   }
+  protected getDefaultDomain(rampColors:IColorRamp) {
+     switch (rampColors.type) {
+        case 'cat' :
+          return [0,255]
+        default: 
+          [0,1]
+     }
 
-  private updateColorTexture() {
-    const { createTexture2D } = this.rendererService;
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    const imageData = generateColorRamp(rampColors as IColorRamp);
-    this.colorTexture = createTexture2D({
-      data: imageData.data,
-      width: imageData.width,
-      height: imageData.height,
-      flipY: false,
-    });
   }
+
 }

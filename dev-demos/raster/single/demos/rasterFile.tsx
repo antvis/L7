@@ -42,20 +42,14 @@ export default () => {
           },
         })
         .style({
-          opacity: 0.8,
+          opacity: 1,
           clampLow: false,
           clampHigh: false,
-          domain: [100, 8000],
+          domain: [0, 10000],
           rampColors: {
-            colors: [
-              '#FF4818',
-              '#F7B74A',
-              '#FFF598',
-              '#91EABC',
-              '#2EA9A1',
-              '#206C7C',
-            ].reverse(),
-            positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+            type:'quantize',
+            colors: ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'],
+            positions: [0, 50, 200, 500, 2000, 3000, 4000, 5000, 8000],
           },
         });
 

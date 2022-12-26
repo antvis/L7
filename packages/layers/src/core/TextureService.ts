@@ -6,7 +6,14 @@ import {
   TYPES,
 } from '@antv/l7-core';
 
-import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import {
+  generateCatRamp,
+  generateColorRamp,
+  generateCustomRamp,
+  generateLinearRamp,
+  generateQuantizeRamp,
+  IColorRamp,
+} from '@antv/l7-utils';
 
 export default class TextureService implements ITextureService {
   private layer: ILayer;
@@ -20,21 +27,21 @@ export default class TextureService implements ITextureService {
       TYPES.IRendererService,
     );
   }
-  public getColorTexture(colorRamp: IColorRamp) {
+  public getColorTexture(colorRamp: IColorRamp, domain?: [number, number]) {
     // TODO 支持传入图片
-    const currentkey = this.getTextureKey(colorRamp);
+    const currentkey = this.getTextureKey(colorRamp, domain);
     if (this.key === currentkey) {
       return this.colorTexture;
     } else {
-      this.createColorTexture(colorRamp);
+      this.createColorTexture(colorRamp, domain);
     }
     this.key = currentkey;
     return this.colorTexture;
   }
 
-  public createColorTexture(colorRamp: IColorRamp) {
+  public createColorTexture(colorRamp: IColorRamp, domain?: [number, number]) {
     const { createTexture2D } = this.rendererService;
-    const imageData = generateColorRamp(colorRamp) as ImageData;
+    const imageData = this.getColorRampBar(colorRamp, domain) as ImageData;
     const texture = createTexture2D({
       data: imageData.data,
       width: imageData.width,
@@ -45,8 +52,12 @@ export default class TextureService implements ITextureService {
     return texture;
   }
 
-  public setColorTexture(texture: ITexture2D, colorRamp: IColorRamp) {
-    this.key = this.getTextureKey(colorRamp);
+  public setColorTexture(
+    texture: ITexture2D,
+    colorRamp: IColorRamp,
+    domain?: [number, number],
+  ) {
+    this.key = this.getTextureKey(colorRamp, domain);
     this.colorTexture = texture;
   }
 
@@ -54,7 +65,27 @@ export default class TextureService implements ITextureService {
     this.colorTexture?.destroy();
   }
 
-  private getTextureKey(colorRamp: IColorRamp): string {
-    return `${colorRamp.colors.join('_')}_${colorRamp.positions.join('_')}`;
+  private getColorRampBar(colorRamp: IColorRamp, domain?: [number, number]) {
+    switch (colorRamp.type) {
+      case 'cat':
+        return generateCatRamp(colorRamp);
+      case 'quantize':
+        return generateQuantizeRamp(colorRamp);
+      case 'custom':
+        return generateCustomRamp(colorRamp, domain as [number, number]);
+      case 'linear':
+        return generateLinearRamp(colorRamp, domain as [number, number]);
+      default:
+        return generateColorRamp(colorRamp) as ImageData;
+    }
+  }
+
+  private getTextureKey(
+    colorRamp: IColorRamp,
+    domain?: [number, number],
+  ): string {
+    return `${colorRamp.colors.join('_')}_${colorRamp.positions.join(
+      '_',
+    )}_${domain?.join('_')}`;
   }
 }

@@ -1,6 +1,8 @@
 import * as d3 from 'd3-color';
+import { Context } from 'vm';
 import { $window, isMini } from './mini-adapter';
 export interface IColorRamp {
+  type?: 'cat' | 'linear' | 'quantize' | 'custom'
   positions: number[];
   colors: string[];
   weights?: number[];
@@ -51,6 +53,7 @@ export interface IImagedata {
   height: number;
 }
 
+// 连续型 老版本兼容
 export function generateColorRamp(
   colorRamp: IColorRamp,
 ): ImageData | IImagedata {
@@ -60,29 +63,18 @@ export function generateColorRamp(
   canvas.height = 1;
   let data = null;
 
-  if (colorRamp.weights) {
-    // draw enum color
-    let count = 0;
-    colorRamp.weights.map((w, index) => {
-      const color = colorRamp.colors[index] || 'rgba(0, 0, 0, 0)';
-      const stop = count + w;
-      ctx.fillStyle = color;
-      ctx.fillRect(count * 256, 0, stop * 256, 1);
-      count = stop;
-    });
-  } else {
-    // draw linear color
-    const gradient = ctx.createLinearGradient(0, 0, 256, 1);
+  // draw linear color
+  const gradient = ctx.createLinearGradient(0, 0, 256, 1);
 
-    const min = colorRamp.positions[0];
-    const max = colorRamp.positions[colorRamp.positions.length - 1];
-    for (let i = 0; i < colorRamp.colors.length; ++i) {
-      const value = (colorRamp.positions[i] - min) / (max - min);
-      gradient.addColorStop(value, colorRamp.colors[i]);
-    }
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 256, 1);
+  const min = colorRamp.positions[0];
+  const max = colorRamp.positions[colorRamp.positions.length - 1];
+  for (let i = 0; i < colorRamp.colors.length; ++i) {
+    const value = (colorRamp.positions[i] - min) / (max - min);
+    gradient.addColorStop(value, colorRamp.colors[i]);
   }
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 256, 1);
+
 
   if (!isMini) {
     data = ctx.getImageData(0, 0, 256, 1).data;
@@ -107,4 +99,136 @@ export function generateColorRamp(
     ctx = null;
     return { data, width: 256, height: 1 };
   }
+}
+
+// 连续型 Position 支持设置原始数据
+export function generateLinearRamp(
+  colorRamp: IColorRamp,
+  domain: [number, number],
+): ImageData | IImagedata {
+  let canvas = $window.document.createElement('canvas');
+  let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  canvas.width = 256;
+  canvas.height = 1;
+  // draw linear color
+  const gradient = ctx.createLinearGradient(0, 0, 256, 1);
+  const step = domain[1] - domain[0];
+
+  for (let i = 0; i < colorRamp.colors.length; ++i) {
+    const value = (colorRamp.positions[i] - domain[0]) / step;
+    gradient.addColorStop(value, colorRamp.colors[i]);
+  }
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 256, 1);
+  const data = ctx.getImageData(0, 0, 256, 1).data;
+  const imageData = toIEIMageData(ctx, data);
+
+  // @ts-ignore
+  canvas = null;
+  // @ts-ignore
+  ctx = null;
+  return imageData
+
+}
+
+
+// 枚举类型
+export function generateCatRamp(
+  colorRamp: IColorRamp,
+): ImageData | IImagedata {
+
+  let canvas = $window.document.createElement('canvas');
+  let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  canvas.width = 256;
+  canvas.height = 1;
+  const imageData = ctx.createImageData(256, 1);
+  imageData.data.fill(0);
+  colorRamp.positions.forEach((p: number, index: number) => {
+    const colorArray = rgb2arr(colorRamp.colors[index])
+    imageData.data[p * 4 + 0] = colorArray[0] * 255;
+    imageData.data[p * 4 + 1] = colorArray[1] * 255;
+    imageData.data[p * 4 + 2] = colorArray[2] * 255;
+    imageData.data[p * 4 + 3] = colorArray[3] * 255;
+  })
+  // @ts-ignore
+  canvas = null;
+  // @ts-ignore
+  ctx = null;
+  return imageData;
+}
+
+// 等间距
+export function generateQuantizeRamp(
+  colorRamp: IColorRamp,
+): ImageData | IImagedata {
+  let canvas = $window.document.createElement('canvas');
+  let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  canvas.width = 256;
+  canvas.height = 1;
+  let data = null;
+  const step = 256 / colorRamp.colors.length;
+  // draw linear color
+  for (let i = 0; i < colorRamp.colors.length; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = colorRamp.colors[i];
+    ctx.moveTo(i * step, 0); // positioned at 50,25
+    ctx.lineTo((i + 1) * step, 0);
+    ctx.stroke();
+
+  }
+  data = ctx.getImageData(0, 0, 256, 1).data;
+  // 使用 createImageData 替代 new ImageData、兼容 IE11
+  const imageData = toIEIMageData(ctx, data);
+
+
+  // @ts-ignore
+  canvas = null;
+  // @ts-ignore
+  ctx = null;
+  return imageData;
+}
+
+// 自定义间距
+
+export function generateCustomRamp(
+  colorRamp: IColorRamp,
+  domain: [number, number],
+): ImageData | IImagedata {
+
+  let canvas = $window.document.createElement('canvas');
+  let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  canvas.width = 256;
+  canvas.height = 1;
+  const step = domain[1] - domain[0];
+  if(colorRamp.positions.length -  colorRamp.colors.length !==1) {
+    console.warn('positions 的数字个数应当比 colors 的样式多一个,poisitions 的首尾值一般为数据的最大最新值')
+  }
+
+  for (let i = 0; i < colorRamp.colors.length; i++) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = colorRamp.colors[i];
+    ctx.moveTo((colorRamp.positions[i] - domain[0]) / step * 255, 0); // positioned at 50,25
+    ctx.lineTo((colorRamp.positions[i + 1]- domain[0]) / step * 255, 0);
+    ctx.stroke();
+
+  }
+  const data = ctx.getImageData(0, 0, 256, 1).data;
+  const imageData = toIEIMageData(ctx, data);
+  // @ts-ignore
+  canvas = null;
+  // @ts-ignore
+  ctx = null;
+  return imageData;
+}
+function toIEIMageData(ctx: Context, data: Uint8ClampedArray) {
+  const imageData = ctx.createImageData(256, 1);
+  for (let i = 0; i < imageData.data.length; i += 4) {
+    imageData.data[i + 0] = data[i + 0];
+    imageData.data[i + 1] = data[i + 1];
+    imageData.data[i + 2] = data[i + 2];
+    imageData.data[i + 3] = data[i + 3];
+  }
+  return imageData
 }
