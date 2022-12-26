@@ -1,9 +1,10 @@
 import * as d3 from 'd3-color';
 import { $window, isMini } from './mini-adapter';
 export interface IColorRamp {
-  positions: number[];
-  colors: string[];
+  positions?: number[];
+  colors?: string[];
   weights?: number[];
+  [key: string]: any;
 }
 
 export function isColor(str: any) {
@@ -51,39 +52,129 @@ export interface IImagedata {
   height: number;
 }
 
-export function generateColorRamp(
-  colorRamp: IColorRamp,
-): ImageData | IImagedata {
-  let canvas = $window.document.createElement('canvas');
-  let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  canvas.width = 256;
-  canvas.height = 1;
-  let data = null;
+enum ColorRampType {
+  LINEAR =  'linear',
+  CAT = 'cat'
+}
 
-  if (colorRamp.weights) {
-    // draw enum color
-    let count = 0;
-    colorRamp.weights.map((w, index) => {
-      const color = colorRamp.colors[index] || 'rgba(0, 0, 0, 0)';
-      const stop = count + w;
-      ctx.fillStyle = color;
-      ctx.fillRect(count * 256, 0, stop * 256, 1);
-      count = stop;
-    });
+type ColorCategory = [number, number, string];
+
+function getColorRampType(colorRamp: IColorRamp) {
+  if(colorRamp.colors && colorRamp.positions) {
+    return ColorRampType.LINEAR;
   } else {
-    // draw linear color
-    const gradient = ctx.createLinearGradient(0, 0, 256, 1);
+    return ColorRampType.CAT;
+  }
+}
 
-    const min = colorRamp.positions[0];
-    const max = colorRamp.positions[colorRamp.positions.length - 1];
-    for (let i = 0; i < colorRamp.colors.length; ++i) {
-      const value = (colorRamp.positions[i] - min) / (max - min);
-      gradient.addColorStop(value, colorRamp.colors[i]);
+function isValid(category: any) {
+  // valid category - [number, number, string?] || string
+ if(typeof category === 'string') return true;
+ if(Array.isArray(category) && category.length === 3) {
+   return typeof category[0] === 'number' &&
+   typeof category[1] === 'number' &&
+   typeof category[2] === 'string'
+ }
+ return false;
+}
+
+export function formatCategory(colorRamp: IColorRamp) {
+  /**
+   * {
+   *  a: '#f00',
+   *  b: [0.2, 0.3, #ff0],
+   *  c: [0.3, 0.4, #0f0],
+   *  d: '#fff',
+   *  e: #0ff
+   * }
+   */
+  
+  const keywords = ['colors', 'position', 'default'];
+
+  /** categories
+   * [
+   *  [0, 0.2 #f00],
+   *  [0.2, 0.3, #ff0],
+   *  [0.3, 0.4, #ff0],
+   *  [0.4, 1.0, #fff, #0ff]
+   * ]
+   */
+  const categories: any[]= [];
+  let range = 0;
+  Object.keys(colorRamp)
+  .filter(key => keywords.indexOf(key) < 0)
+  .filter(key => isValid(colorRamp[key]))
+  .forEach((key) => {
+    const category = colorRamp[key];
+    const last = categories[categories.length - 1];
+    if(Array.isArray(category)) {
+      // category === [number, number, color]
+      if(last) {
+        if(last[1] === -1) {
+            last[1] = category[0];
+        } else if(last[1] < category[0]){
+            categories.push([last[1], category[0], null])
+        }
     }
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 256, 1);
+      range = category[1];
+      categories.push(category);
+    } else {
+      // category === color
+      if(last && last[1] === -1) {
+        last.push(category)
+      } else {
+        categories.push([range, -1, category])
+      }
+    }
+    return category
+  })
+
+  // incase all raw color
+  if(categories.length > 0) {
+    categories[categories.length - 1][1] = 1;
   }
 
+  const validCategories: ColorCategory[] = [];
+  categories.forEach(category => {
+    const [start, end, ...colors] = category;
+    const step = (end - start)/colors.length;
+    colors.forEach((color: string, index: number) => {
+      validCategories.push([start + index * step, start + (index + 1) * step, color])
+    })
+  })
+  return validCategories;
+}
+
+// draw cat color
+function drawCat(colorRamp: IColorRamp, ctx: CanvasRenderingContext2D) {
+  // 色带未指定部分的默认颜色
+  const defaultColor = colorRamp.default || '#fff';
+  const canvasWidth = 256;
+  const categories =  formatCategory(colorRamp);
+  categories.forEach(([start, end, color]) => {
+    const drawColor = isColor(color) ? color : defaultColor;
+    ctx.fillStyle = drawColor;
+    ctx.fillRect(start * canvasWidth, 0, end * canvasWidth, 1);
+  })
+}
+
+// draw linear color
+function drawLinear(colorRamp: IColorRamp, ctx: CanvasRenderingContext2D) {
+  const gradient = ctx.createLinearGradient(0, 0, 256, 1);
+  const positions = colorRamp.positions as number[];
+  const colors = colorRamp.colors as string[];
+  const min = positions[0];
+  const max = positions[positions.length - 1];
+  for (let i = 0; i < colors.length; ++i) {
+    const value = (positions[i] - min) / (max - min);
+    gradient.addColorStop(value, colors[i]);
+  }
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 256, 1);
+}
+
+function getColorData(ctx: CanvasRenderingContext2D) {
+  let data = null;
   if (!isMini) {
     data = ctx.getImageData(0, 0, 256, 1).data;
     // 使用 createImageData 替代 new ImageData、兼容 IE11
@@ -94,17 +185,69 @@ export function generateColorRamp(
       imageData.data[i + 2] = data[i + 2];
       imageData.data[i + 3] = data[i + 3];
     }
-    // @ts-ignore
-    canvas = null;
-    // @ts-ignore
-    ctx = null;
     return imageData;
   } else {
     data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
-    // @ts-ignore
-    canvas = null;
-    // @ts-ignore
-    ctx = null;
     return { data, width: 256, height: 1 };
   }
+}
+
+export function generateColorRampKey(colorRamp: IColorRamp) {
+  const type = getColorRampType(colorRamp);
+  switch(type) {
+    case ColorRampType.CAT:
+      const defaultColor = colorRamp.default || '#fff';
+      const categories =  formatCategory(colorRamp);
+      const fields: string[] = [];
+      const values: string[] = [];
+      categories.forEach(category => {
+        const start = category[0];
+        const end = category[1];
+        const color = category[2];
+        fields.push(String(start));
+        fields.push(String(end));
+        const drawColor = isColor(color) ? color : defaultColor;
+        values.push(drawColor)
+      })
+      if(categories.length > 0) {
+        fields.push(String(categories[categories.length - 1][0]));
+        fields.push(String(categories[categories.length - 1][1]));
+        values.push(categories[categories.length - 1][2]);
+      }
+      return [...values, ...fields].join('_');
+    case ColorRampType.LINEAR:
+      return `${colorRamp?.colors?.join('_')}_${colorRamp?.positions?.join('_')}`;
+  }
+
+}
+
+/**
+ * init color texture for data range
+ * @param colorRamp 
+ * @returns 
+ */
+export function generateColorRamp(
+  colorRamp: IColorRamp,
+): ImageData | IImagedata {
+  let canvas = $window.document.createElement('canvas');
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  canvas.width = 256;
+  canvas.height = 1;
+
+  const type = getColorRampType(colorRamp);
+  switch(type) {
+    case ColorRampType.CAT:
+      drawCat(colorRamp, ctx);
+      break;
+    case ColorRampType.LINEAR:
+      drawLinear(colorRamp, ctx);
+      break;
+  }
+
+  const colorData = getColorData(ctx);
+
+  canvas.width = 0;
+  canvas.height = 0;
+  canvas = null;
+  return colorData;
 }

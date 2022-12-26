@@ -51,36 +51,13 @@ layer.animate(true);
 
 ```js
 const rampColors = {
-  colors: [
-    '#3288bd',
-    '#66c2a5',
-    '#abdda4',
-    '#e6f598',
-    '#fee08b',
-    '#fdae61',
-    '#f46d43',
-    '#d53e4f',
-  ],
-  positions: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 1.0],
+  0.0: '#c6dbef',
+  0.1: '#9ecae1',
+  0.2: '#6baed6',
+  0.3: '#4292c6',
+  0.4: '#2171b5',
+  0.5: '#084594',
 };
-```
-
-#### rampColors
-
-- colors  颜色数组
-- positions 数据区间
-
-配置值域映射颜色的色带，值域的范围为 `[0 - 1]`, 对应的我们需要为每一个 `position` 位置设置一个颜色值。
-
-⚠️ colors, positions 的长度要相同
-
-```javascript
-layer.style({
-  rampColors: {
-    colors: ['#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C'],
-    positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-  },
-});
 ```
 
 [在线案例](/examples/wind/basic#wind)

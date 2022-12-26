@@ -52,15 +52,12 @@ export default () => {
       .shape('linearline')
       .style({
         rampColors: {
-          colors: [
-            '#FF4818',
-            '#F7B74A',
-            '#FFF598',
-            '#91EABC',
-            '#2EA9A1',
-            '#206C7C',
-          ],
-          weights: [0.1, 0.1, 0.1, 0.1, 0.1, 0.5],
+          c1: '#FF4818',
+          c2: '#F7B74A',
+          c3: '#FFF598',
+          c4: '#91EABC',
+          c5: '#2EA9A1',
+          c6: [0.5, 1, '#206C7C']
         },
       });
 

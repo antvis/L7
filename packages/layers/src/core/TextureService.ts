@@ -6,7 +6,11 @@ import {
   TYPES,
 } from '@antv/l7-core';
 
-import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import {
+  generateColorRamp,
+  generateColorRampKey,
+  IColorRamp,
+} from '@antv/l7-utils';
 
 export default class TextureService implements ITextureService {
   private layer: ILayer;
@@ -22,13 +26,14 @@ export default class TextureService implements ITextureService {
   }
   public getColorTexture(colorRamp: IColorRamp) {
     // TODO 支持传入图片
-    const currentkey = this.getTextureKey(colorRamp);
-    if (this.key === currentkey) {
+    const currentKey = generateColorRampKey(colorRamp);
+
+    if (this.key === currentKey) {
       return this.colorTexture;
     } else {
       this.createColorTexture(colorRamp);
     }
-    this.key = currentkey;
+    this.key = currentKey;
     return this.colorTexture;
   }
 
@@ -46,15 +51,11 @@ export default class TextureService implements ITextureService {
   }
 
   public setColorTexture(texture: ITexture2D, colorRamp: IColorRamp) {
-    this.key = this.getTextureKey(colorRamp);
+    this.key = generateColorRampKey(colorRamp);
     this.colorTexture = texture;
   }
 
   public destroy() {
     this.colorTexture?.destroy();
-  }
-
-  private getTextureKey(colorRamp: IColorRamp): string {
-    return `${colorRamp.colors.join('_')}_${colorRamp.positions.join('_')}`;
   }
 }

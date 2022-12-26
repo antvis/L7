@@ -3,59 +3,7 @@ import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
 
-const colorList = [
-  '#419bdf', // Water
-  '#419bdf',
 
-  '#397d49', // Tree
-  '#397d49',
-
-  '#88b053', // Grass
-  '#88b053',
-
-  '#7a87c6', // vegetation
-  '#7a87c6',
-
-  '#e49635', // Crops
-  '#e49635',
-
-  '#dfc35a', // shrub
-  '#dfc35a',
-
-  '#c4281b', // Built Area
-  '#c4281b',
-
-  '#a59b8f', // Bare ground
-  '#a59b8f',
-
-  '#a8ebff', // Snow
-  '#a8ebff',
-
-  '#616161', // Clouds
-  '#616161'
-];
-const positions = [
-  0.0,
-  0.1,
-  0.1,
-  0.2,
-  0.2,
-  0.3,
-  0.3,
-  0.4,
-  0.4,
-  0.5,
-  0.5,
-  0.6,
-  0.6,
-  0.7,
-  0.7,
-  0.8,
-  0.8,
-  0.9,
-  0.9,
-  1.0
-];
 export default () => {
 
   useEffect(() => {
@@ -103,10 +51,18 @@ export default () => {
               domain: [ 0.001, 11.001 ],
               clampLow: false,
               rampColors: {
-                colors: colorList,
-                positions
-                // colors: ['#f00', '#f00'],
-                // positions: [0, 1]
+                // colors: colorList,
+                // positions
+                // 'Water': '#419bdf',
+                // 'Tree': '#397d49',
+                // 'Grass': '#88b053',
+                // 'vegetation': '#7a87c6',
+                // 'Crops': '#e49635',
+                // 'shrub': '#dfc35a',
+                // 'Built Area': '#c4281b',
+                // 'Bare ground': '#a59b8f',
+                // 'Snow': '#a8ebff',
+                // 'Clouds': '#616161',
               }
             });
     

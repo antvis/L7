@@ -33,28 +33,6 @@ const colorList = [
   '#616161', // Clouds
   '#616161'
 ];
-const positions = [
-  0.0,
-  0.1,
-  0.1,
-  0.2,
-  0.2,
-  0.3,
-  0.3,
-  0.4,
-  0.4,
-  0.5,
-  0.5,
-  0.6,
-  0.6,
-  0.7,
-  0.7,
-  0.8,
-  0.8,
-  0.9,
-  0.9,
-  1.0
-];
 
 const scene = new Scene({
   id: 'map',
@@ -100,8 +78,16 @@ scene.on('loaded', () => {
           domain: [ 0.001, 11.001 ],
           clampLow: false,
           rampColors: {
-            colors: colorList,
-            positions
+            'Water': '#419bdf',
+            'Tree': '#397d49',
+            'Grass': '#88b053',
+            'vegetation': '#7a87c6',
+            'Crops': '#e49635',
+            'shrub': '#dfc35a',
+            'Built Area': '#c4281b',
+            'Bare ground': '#a59b8f',
+            'Snow': '#a8ebff',
+            'Clouds': '#616161',
           }
         });
 
