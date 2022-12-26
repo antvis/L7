@@ -53,16 +53,16 @@ export default () => {
               rampColors: {
                 // colors: colorList,
                 // positions
-                // 'Water': '#419bdf',
-                // 'Tree': '#397d49',
-                // 'Grass': '#88b053',
-                // 'vegetation': '#7a87c6',
-                // 'Crops': '#e49635',
-                // 'shrub': '#dfc35a',
-                // 'Built Area': '#c4281b',
-                // 'Bare ground': '#a59b8f',
-                // 'Snow': '#a8ebff',
-                // 'Clouds': '#616161',
+                'Water': '#419bdf',
+                'Tree': '#397d49',
+                'Grass': '#88b053',
+                'vegetation': '#7a87c6',
+                'Crops': '#e49635',
+                'shrub': '#dfc35a',
+                'Built Area': '#c4281b',
+                'Bare ground': '#a59b8f',
+                'Snow': '#a8ebff',
+                'Clouds': '#616161',
               }
             });
     
