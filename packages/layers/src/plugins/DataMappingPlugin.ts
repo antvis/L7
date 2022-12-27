@@ -191,8 +191,8 @@ export default class DataMappingPlugin implements ILayerPlugin {
     encodeRecord: IEncodeFeature,
   ) {
     if (
-      isFont(attribute.scale?.values) &&
-      attribute.scale?.values === ICON_FONT
+      isFont(attribute.scale?.values)
+      // && attribute.scale?.values === ICON_FONT
     ) {
       if (typeof encodeRecord.shape !== 'string') {
         return;
@@ -203,7 +203,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
         return;
       } // 还是作为文字渲染
       encodeRecord.shape = current; // 作为 iconfont 渲染
-      encodeRecord[ICON_FONT] = true;
+      if (attribute.scale?.values === ICON_FONT) {
+        encodeRecord[ICON_FONT] = true;
+      }
     }
   }
 

@@ -474,6 +474,8 @@ export default class TextModel extends BaseModel {
   }
 
   private isIconFont() {
+    const { iconfont } = this.layer.getLayerConfig() as {iconfont:boolean};
+    if(iconfont) return true;
     return this.layer.getEncodedData().some(d => d[ICON_FONT] === true)
   }
   /**

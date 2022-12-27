@@ -23,16 +23,13 @@ export default () => {
       
       scene.on('loaded', () => {
         scene.once('fontloaded',(e)=>{
-          const imageLayer = new PointLayer()
+          const icon1 = new PointLayer()
           .source(
             [
               {
                 j: 118.234433,
                 w: 35.007936,
                 icon: 'icon1',
-                value: 10,
-                name: 'AA',
-                type: 'dibiaoshui',
               },
             ],
             {
@@ -45,32 +42,43 @@ export default () => {
           )
           .color('#f00')
           .shape('icon', 'iconfont')
-          // .shape('icon', 'text')
           .size(30)
           .style({
-            // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-            // textOffset: [ 40, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
-            padding: [0, 0], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
             stroke: '#ffffff', // 描边颜色
             fontFamily,
-            textAllowOverlap: true,
           });
-          console.log(imageLayer);
-            scene.addLayer(imageLayer);
-          // }
+          const icon2 = new PointLayer()
+          .source(
+            [
+              {
+                j: 115,
+                w: 35.007936,
+                icon: 'icon1',
+              },
+            ],
+            {
+              parser: {
+                type: 'json',
+                x: 'j',
+                y: 'w',
+              },
+            },
+          )
+          .color('#f00')
+          .shape('icon', 'text')
+          .size(30)
+          .style({
+            fontFamily,
+            iconfont: true,
+          });
           
+          scene.addLayer(icon1);
+          scene.addLayer(icon2);
         })
 
  
         scene.addFontFace(fontFamily, fontPath);     
         scene.addIconFont('icon1', '&#xe6d4;');
-   
-          // 全局添加资源
-
-      // 全局添加 iconfont 字段的映射;
-
-        
-       
       });
 
     }, []);
