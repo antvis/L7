@@ -55,9 +55,9 @@ export default class TextureService implements ITextureService {
   public setColorTexture(
     texture: ITexture2D,
     colorRamp: IColorRamp,
-    domain:[number,number]
+    domain: [number, number],
   ) {
-    this.key = this.getTextureKey(colorRamp,domain);
+    this.key = this.getTextureKey(colorRamp, domain);
     this.colorTexture = texture;
   }
 
@@ -82,10 +82,10 @@ export default class TextureService implements ITextureService {
 
   private getTextureKey(
     colorRamp: IColorRamp,
-    domain?:[number,number]
+    domain?: [number, number],
   ): string {
-    return `${colorRamp.colors.join('_')}_${colorRamp.positions.join(
-      '_',
-    )}_${colorRamp.type}_${domain?.join('_')}`;
+    return `${colorRamp.colors.join('_')}_${colorRamp?.positions.join('_')}_${
+      colorRamp.type
+    }_${domain?.join('_')}`;
   }
 }

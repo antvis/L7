@@ -5,7 +5,6 @@ export interface IColorRamp {
   type?: 'cat' | 'linear' | 'quantize' | 'custom'
   positions: number[];
   colors: string[];
-  weights?: number[];
 }
 
 export function isColor(str: any) {
@@ -166,11 +165,12 @@ export function generateQuantizeRamp(
   canvas.width = 256;
   canvas.height = 1;
   let data = null;
-  const step = 256 / colorRamp.colors.length;
+  const step = 256 / colorRamp.colors.length;// TODO 精度问题
   // draw linear color
   for (let i = 0; i < colorRamp.colors.length; i++) {
     ctx.beginPath();
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
+
     ctx.strokeStyle = colorRamp.colors[i];
     ctx.moveTo(i * step, 0); // positioned at 50,25
     ctx.lineTo((i + 1) * step, 0);
@@ -207,7 +207,7 @@ export function generateCustomRamp(
 
   for (let i = 0; i < colorRamp.colors.length; i++) {
     ctx.beginPath();
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.strokeStyle = colorRamp.colors[i];
     ctx.moveTo((colorRamp.positions[i] - domain[0]) / step * 255, 0); // positioned at 50,25
     ctx.lineTo((colorRamp.positions[i + 1]- domain[0]) / step * 255, 0);
