@@ -114,7 +114,8 @@ export function generateLinearRamp(
   const step = domain[1] - domain[0];
 
   for (let i = 0; i < colorRamp.colors.length; ++i) {
-    const value = (colorRamp.positions[i] - domain[0]) / step;
+    const value = Math.max((colorRamp.positions[i] - domain[0]) / step,0);
+    console.log(value)
     gradient.addColorStop(value, colorRamp.colors[i]);
   }
   ctx.fillStyle = gradient;

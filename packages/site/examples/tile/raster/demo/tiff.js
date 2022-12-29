@@ -4,56 +4,33 @@ import * as GeoTIFF from 'geotiff';
 
 const colorList = [
   '#419bdf', // Water
-  '#419bdf',
 
-  '#397d49', // Tree
-  '#397d49',
+  '#358221', // Tree
 
   '#88b053', // Grass
-  '#88b053',
+
 
   '#7a87c6', // vegetation
-  '#7a87c6',
+
 
   '#e49635', // Crops
-  '#e49635',
+
 
   '#dfc35a', // shrub
-  '#dfc35a',
 
-  '#c4281b', // Built Area
-  '#c4281b',
 
-  '#a59b8f', // Bare ground
-  '#a59b8f',
+  '#ED022A', // Built Area
 
-  '#a8ebff', // Snow
-  '#a8ebff',
 
-  '#616161', // Clouds
-  '#616161'
+  '#EDE9E4', // Bare ground
+ 
+
+  '#F2FAFF', // Snow
+
+  '#C8C8C8', // Clouds
 ];
 const positions = [
-  0.0,
-  0.1,
-  0.1,
-  0.2,
-  0.2,
-  0.3,
-  0.3,
-  0.4,
-  0.4,
-  0.5,
-  0.5,
-  0.6,
-  0.6,
-  0.7,
-  0.7,
-  0.8,
-  0.8,
-  0.9,
-  0.9,
-  1.0
+  1,2,3,4,5,6,7,8,9,10,11,
 ];
 
 const scene = new Scene({
@@ -97,9 +74,10 @@ scene.on('loaded', () => {
 
       layer.source(tileSource)
         .style({
-          domain: [ 0.001, 11.001 ],
+          domain: [ 0, 255],// 枚举类型domain 必须为0-255
           clampLow: false,
           rampColors: {
+            type:'cat',
             colors: colorList,
             positions
           }
@@ -115,7 +93,7 @@ const wrap = document.getElementById('map');
 const legend = document.createElement('div');
 
 const data = [];
-for (let i = 0; i < colorList.length; i += 2) {
+for (let i = 0; i < colorList.length; i += 1) {
   data.push({
     color: colorList[i],
     text: [
@@ -129,7 +107,7 @@ for (let i = 0; i < colorList.length; i += 2) {
       'Bare ground',
       'Snow',
       'Clouds'
-    ][i / 2]
+    ][i]
   });
 }
 const strArr = [];
