@@ -94,6 +94,7 @@ export interface ITexture2DInitializationOptions {
 
 export interface ITexture2D {
   get(): unknown;
+  getSize():[number,number];
   update(options: any): void;
   bind(): void;
   resize(options: { width: number; height: number }): void;

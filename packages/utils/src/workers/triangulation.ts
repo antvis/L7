@@ -2,7 +2,7 @@ import earcut from 'earcut';
 import { calculateCentroid } from '../geo';
 import ExtrudePolyline from './extrude_polyline';
 import { IEncodeFeature } from './interface';
-
+const LATMAX = 85.0511287798;
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates, originCoordinates, version } = feature;
   // let path = coordinates as number[][][] | number[][];
@@ -91,9 +91,17 @@ export function polygonFillTriangulation(feature: IEncodeFeature) {
 }
 
 function project_mercator(x: number, y: number) {
+  let y1 = y;
+  if (y > LATMAX) {
+    y1 = LATMAX;
+  }
+  if (y < -LATMAX) {
+    y1 = -LATMAX;
+  }
+
   return [
     (Math.PI * x) / 180 + Math.PI,
-    Math.PI - Math.log(Math.tan(Math.PI * 0.25 + ((Math.PI * y) / 180) * 0.5)),
+    Math.PI - Math.log(Math.tan(Math.PI * 0.25 + ((Math.PI * y1) / 180) * 0.5)),
   ];
 }
 

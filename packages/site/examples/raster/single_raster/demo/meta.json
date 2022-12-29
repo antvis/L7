@@ -1,0 +1,29 @@
+{
+  "title": {
+    "zh": "单波段数据栅格",
+    "en": "Gallery"
+  },
+  "demos": [
+
+    {
+      "filename": "light_default.js",
+      "title": "夜光图-默认线性",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*xznhSJFEAXYAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "light.js",
+      "title": "夜光图-线性色带",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*xznhSJFEAXYAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "dem.js",
+      "title": "高程图-自定义色带",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*_RtOTrYOOrUAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "dem_quantize.js",
+      "title": "高程图-等间距色带",
+      "screenshot": "https://mdn.alipayobjects.com//huamei_qa8qxu/afts/img/A*DT1HQbl4JKMAAAAAAAAAAAAADmJ7AQ/original"
+    }
+  ]
+}

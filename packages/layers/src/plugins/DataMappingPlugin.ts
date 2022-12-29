@@ -43,9 +43,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
           return flag;
         }
         layer.dataState.dataMappingNeedUpdate = false;
-        this.generateMaping(layer, { styleAttributeService });
-
-        return true;
+        return this.generateMaping(layer, { styleAttributeService });
       },
     );
 
@@ -72,7 +70,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           return this.applyAttributeMapping(filter, record)[0];
         });
       }
-
       if (attributesToRemapping.length) {
         // 过滤数据
         const encodeData = this.mapping(
@@ -83,6 +80,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         );
         layer.setEncodedData(encodeData);
       }
+
       // 处理文本更新，更新文字形状
       // layer.emit('remapping', null);
     });
@@ -96,7 +94,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
-
     let filterData = dataArray;
     // 数据过滤完 再执行数据映射
     if (filter?.scale) {
@@ -111,8 +108,13 @@ export default class DataMappingPlugin implements ILayerPlugin {
     filterData = layer.processData(filterData);
     const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
+
+    if (dataArray.length === 0 && layer.encodeDataLength === 0) {
+      return false;
+    }
     // 对外暴露事件
     layer.emit('dataUpdate', null);
+    return true;
   }
 
   private mapping(

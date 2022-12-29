@@ -59,10 +59,12 @@ export default () => {
           .style({
             clampLow: false,
             clampHigh: false,
-            domain: [ 0, 90 ],
+            domain: [ 1, 90 ],
             nodataValue: 0,
             rampColors: {
-              colors: [ 'rgba(92,58,16,0)', 'rgba(92,58,16,0)', '#fabd08', '#f1e93f', '#f1ff8f', '#fcfff7' ],
+              type:'quantize',
+              colors:['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02'],
+              // colors: [ 'rgba(92,58,16,0)', 'rgba(92,58,16,0)', '#fabd08', '#f1e93f', '#f1ff8f', '#fcfff7' ],
               positions: [ 0, 0.05, 0.1, 0.25, 0.5, 1.0 ]
             }
           });
