@@ -40,9 +40,9 @@ const scene = new Scene({
         clampHigh: false,
         domain: [0, 10000],
         rampColors: {
-          type:'custom',
+          type:'quantize', // 等间距 不需要设置 position
           colors: ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'],
-          positions: [0, 50, 200, 500, 2000, 3000, 4000, 5000, 8000,10000],
+         
         },
       });
 

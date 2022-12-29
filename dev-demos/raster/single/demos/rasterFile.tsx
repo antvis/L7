@@ -1,7 +1,7 @@
 // @ts-ignore
 import { RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap,Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
 
@@ -17,7 +17,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new Map({
         center: [121.268, 30.3628],
         zoom: 3,
       }),
@@ -47,9 +47,9 @@ export default () => {
           clampHigh: false,
           domain: [0, 10000],
           rampColors: {
-            type:'quantize',
+            type:'custom',
             colors: ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'],
-            positions: [0, 50, 200, 500, 2000, 3000, 4000, 5000, 8000],
+            positions: [0, 50, 200, 500, 2000, 3000, 4000, 5000, 8000,10000],
           },
         });
 

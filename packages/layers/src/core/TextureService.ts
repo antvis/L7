@@ -84,7 +84,7 @@ export default class TextureService implements ITextureService {
     colorRamp: IColorRamp,
     domain?: [number, number],
   ): string {
-    return `${colorRamp.colors.join('_')}_${colorRamp?.positions.join('_')}_${
+    return `${colorRamp.colors.join('_')}_${colorRamp?.positions?.join('_')}_${
       colorRamp.type
     }_${domain?.join('_')}`;
   }

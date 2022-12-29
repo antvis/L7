@@ -162,9 +162,9 @@ export function generateQuantizeRamp(
 ): ImageData | IImagedata {
   let canvas = $window.document.createElement('canvas');
   let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  ctx.globalAlpha = 1.0
   canvas.width = 256;
   canvas.height = 1;
-  let data = null;
   const step = 256 / colorRamp.colors.length;// TODO 精度问题
   // draw linear color
   for (let i = 0; i < colorRamp.colors.length; i++) {
@@ -177,7 +177,8 @@ export function generateQuantizeRamp(
     ctx.stroke();
 
   }
-  data = ctx.getImageData(0, 0, 256, 1).data;
+
+  const data = ctx.getImageData(0, 0, 256, 1).data;
   // 使用 createImageData 替代 new ImageData、兼容 IE11
   const imageData = toIEIMageData(ctx, data);
 
@@ -198,6 +199,7 @@ export function generateCustomRamp(
 
   let canvas = $window.document.createElement('canvas');
   let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  ctx.globalAlpha = 1.0
   canvas.width = 256;
   canvas.height = 1;
   const step = domain[1] - domain[0];

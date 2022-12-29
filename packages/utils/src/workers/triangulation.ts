@@ -106,7 +106,6 @@ function project_mercator(x: number, y: number) {
 }
 
 function mercator_lnglat(x: number, y: number) {
-
   return [
     ((x - Math.PI) * 180) / Math.PI,
     ((Math.atan(Math.exp(Math.PI - y)) - Math.PI * 0.25) * 2 * 180) / Math.PI,
