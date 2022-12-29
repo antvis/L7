@@ -121,7 +121,7 @@ export default class Viewport implements IViewport {
   }
 
   public getFocalDistance() {
-    return 1;
+    return 1.2;
   }
 
   /**

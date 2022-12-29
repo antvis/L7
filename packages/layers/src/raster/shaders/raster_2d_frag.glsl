@@ -20,6 +20,7 @@ void main() {
   else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1]))
     gl_FragColor = vec4(0, 0, 0, 0);
   else {
+   
     float normalisedValue =(value - u_domain[0]) / (u_domain[1] -u_domain[0]);
     vec4 color = texture2D(u_colorTexture,vec2(normalisedValue, 0));
     gl_FragColor = color;

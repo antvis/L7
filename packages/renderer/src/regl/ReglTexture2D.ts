@@ -98,6 +98,10 @@ export default class ReglTexture2D implements ITexture2D {
     this.height = height;
   }
 
+  public getSize(): [number, number] {
+    return [this.width, this.height];
+  }
+
   public destroy() {
     if (!this.isDestroy) {
       this.texture?.destroy();

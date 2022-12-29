@@ -33,8 +33,6 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       return 'ocean';
     } else if (shape === 'line') {
       return 'line';
-    } else if (shape === 'tile') {
-      return 'tile';
     } else {
       return this.getPointModelType();
     }

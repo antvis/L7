@@ -2,7 +2,7 @@ import earcut from 'earcut';
 import { calculateCentroid } from '../geo';
 import ExtrudePolyline from './extrude_polyline';
 import { IEncodeFeature } from './interface';
-
+const LATMAX = 85.0511287798;
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates, originCoordinates, version } = feature;
   // let path = coordinates as number[][][] | number[][];
@@ -63,25 +63,25 @@ export function PointFillTriangulation(feature: IEncodeFeature) {
 }
 
 export function polygonFillTriangulation(feature: IEncodeFeature) {
-  const { coordinates, version } = feature;
+  const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
-  if (version !== 'GAODE2.x') {
-    for (let i = 0; i < vertices.length; i += dimensions) {
-      const mer = project_mercator(vertices[i + 0], vertices[i + 1]);
-      vertices[i] = mer[0];
-      vertices[i + 1] = mer[1];
-    }
-  }
+  // if (version !== 'GAODE2.x') {
+  //   for (let i = 0; i < vertices.length; i += dimensions) {
+  //     const mer = project_mercator(vertices[i + 0], vertices[i + 1]);
+  //     vertices[i] = mer[0];
+  //     vertices[i + 1] = mer[1];
+  //   }
+  // }
   // https://github.com/mapbox/earcut/issues/159
   const triangles = earcut(vertices, holes, dimensions);
-  if (version !== 'GAODE2.x') {
-    for (let i = 0; i < vertices.length; i += dimensions) {
-      const ll = mercator_lnglat(vertices[i + 0], vertices[i + 1]);
-      vertices[i] = ll[0];
-      vertices[i + 1] = ll[1];
-    }
-  }
+  // if (version !== 'GAODE2.x') {
+  //   for (let i = 0; i < vertices.length; i += dimensions) {
+  //     const ll = mercator_lnglat(vertices[i + 0], vertices[i + 1]);
+  //     vertices[i] = ll[0];
+  //     vertices[i + 1] = ll[1];
+  //   }
+  // }
 
   return {
     indices: triangles,
@@ -91,9 +91,17 @@ export function polygonFillTriangulation(feature: IEncodeFeature) {
 }
 
 function project_mercator(x: number, y: number) {
+  let y1 = y;
+  if (y > LATMAX) {
+    y1 = LATMAX;
+  }
+  if (y < -LATMAX) {
+    y1 = -LATMAX;
+  }
+
   return [
     (Math.PI * x) / 180 + Math.PI,
-    Math.PI - Math.log(Math.tan(Math.PI * 0.25 + ((Math.PI * y) / 180) * 0.5)),
+    Math.PI - Math.log(Math.tan(Math.PI * 0.25 + ((Math.PI * y1) / 180) * 0.5)),
   ];
 }
 

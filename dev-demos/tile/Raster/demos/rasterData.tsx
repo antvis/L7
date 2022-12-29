@@ -2,59 +2,36 @@ import { RasterLayer, Scene, Source } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
-
+// https://gee-community-catalog.org/projects/esrilc2020/
 const colorList = [
   '#419bdf', // Water
-  '#419bdf',
 
-  '#397d49', // Tree
-  '#397d49',
+  '#358221', // Tree
 
   '#88b053', // Grass
-  '#88b053',
+
 
   '#7a87c6', // vegetation
-  '#7a87c6',
+
 
   '#e49635', // Crops
-  '#e49635',
+
 
   '#dfc35a', // shrub
-  '#dfc35a',
 
-  '#c4281b', // Built Area
-  '#c4281b',
 
-  '#a59b8f', // Bare ground
-  '#a59b8f',
+  '#ED022A', // Built Area
 
-  '#a8ebff', // Snow
-  '#a8ebff',
 
-  '#616161', // Clouds
-  '#616161',
+  '#EDE9E4', // Bare ground
+ 
+
+  '#F2FAFF', // Snow
+
+  '#C8C8C8', // Clouds
 ];
 const positions = [
-  0.0,
-  0.1,
-  0.1,
-  0.2,
-  0.2,
-  0.3,
-  0.3,
-  0.4,
-  0.4,
-  0.5,
-  0.5,
-  0.6,
-  0.6,
-  0.7,
-  0.7,
-  0.8,
-  0.8,
-  0.9,
-  0.9,
-  1.0,
+  1,2,3,4,5,6,7,8,9,10,11,
 ];
 export default () => {
   useEffect(() => {
@@ -93,6 +70,7 @@ export default () => {
                   const width = image.getWidth();
                   const height = image.getHeight();
                   const values = await image.readRasters();
+                  console.log(values)
                   return { rasterData: values[0], width, height };
                 },
               },
@@ -100,13 +78,13 @@ export default () => {
           );
 
           layer.source(tileSource).style({
-            domain: [0.001, 11.001],
+            // domain: [0, 255],
             clampLow: false,
             rampColors: {
+              type:"cat",
               colors: colorList,
               positions,
-              // colors: ['#f00', '#f00'],
-              // positions: [0, 1]
+              
             },
           });
 

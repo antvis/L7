@@ -1,4 +1,4 @@
 ---
-title: 多波段
+title: 单波段
 order: 0
 ---

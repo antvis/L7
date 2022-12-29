@@ -1,61 +1,61 @@
 export const GaodeMapStyleConfig = {
   normal: {
     text: '标准',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*-nqiT6Vu948AAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*qdFDSbvIalgAAAAAAAAAAAAADmJ7AQ/original',
   },
   light: {
     text: '月光银',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*J_wYQL_PaUEAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*d-vcRLzu8WIAAAAAAAAAAAAADmJ7AQ/original',
   },
   dark: {
     text: '幻影黑',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*U7M9QI1yat4AAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*HMbRTI3XnpIAAAAAAAAAAAAADmJ7AQ/original',
   },
   fresh: {
     text: '草色青',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*T-oBT4hB5ucAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*kqaGQ5kjSiAAAAAAAAAAAAAADmJ7AQ/original',
   },
   grey: {
     text: '雅士灰',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*OREXQ4vgQRIAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*XegrTpZIbqAAAAAAAAAAAAAADmJ7AQ/original',
   },
   graffiti: {
     text: '涂鸦',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*4UApTKmeiy4AAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*G5g9SZ_Jg4cAAAAAAAAAAAAADmJ7AQ/original',
   },
   macaron: {
     text: '马卡龙',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*0GrCQLtDjNcAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*irVvQbDpQMwAAAAAAAAAAAAADmJ7AQ/original',
   },
   darkblue: {
     text: '极夜蓝',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*uWxqSZQlPkkAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*lKRzQYB4iR0AAAAAAAAAAAAADmJ7AQ/original',
   },
   wine: {
     text: '酱籽',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*OFPrTbg3an0AAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*orY0T7QL-lwAAAAAAAAAAAAADmJ7AQ/original',
   },
 };
 
 export const MapboxMapStyleConfig = {
   normal: {
     text: '标准',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*AnfJTbIBJOkAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*kIyZTok4Uk0AAAAAAAAAAAAADmJ7AQ/original',
   },
   light: {
     text: '亮',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*gnuiQIok9qIAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Z3JRQKDI-cIAAAAAAAAAAAAADmJ7AQ/original',
   },
   dark: {
     text: '暗',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*NwG-TbOlBH0AAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*d7HCQbfmyaoAAAAAAAAAAAAADmJ7AQ/original',
   },
   satellite: {
     text: '卫星',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*2X5EQLKul3IAAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*TytUT6pS9okAAAAAAAAAAAAADmJ7AQ/original',
   },
   outdoors: {
     text: '户外',
-    img: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*gXFLRIaBUI0AAAAAAAAAAAAAARQnAQ',
+    img: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*hWwFSYJEFWsAAAAAAAAAAAAADmJ7AQ/original',
   },
 };

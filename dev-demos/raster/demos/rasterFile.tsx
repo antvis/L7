@@ -42,7 +42,7 @@ export default () => {
           },
         })
         .style({
-          opacity: 0.8,
+          opacity: 1.0,
           clampLow: false,
           clampHigh: false,
           domain: [100, 8000],

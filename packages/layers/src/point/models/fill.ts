@@ -9,7 +9,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { $window, getMask, PointFillTriangulation } from '@antv/l7-utils';
+import { getMask, PointFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -18,15 +18,11 @@ import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
+import { SizeUnitType } from '../../core/interface'
 
-import { Version } from '@antv/l7-maps';
 
 export default class FillModel extends BaseModel {
-  private meter2coord: number = 1;
-  private meterYScale: number = 1; // 兼容 mapbox
-  private isMeter: boolean = false;
 
-  private unit: string = 'l7size';
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -38,9 +34,8 @@ export default class FillModel extends BaseModel {
       blur = 0,
       raisingHeight = 0,
       heightfixed = false,
-      unit = 'l7size',
+      unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    this.updateUnit(unit);
     if (
       this.dataTextureTest &&
       this.dataTextureNeedUpdate({
@@ -89,12 +84,7 @@ export default class FillModel extends BaseModel {
     return {
       u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
-
-      u_meter2coord: this.meter2coord,
-      u_meteryScale: this.meterYScale,
-      u_isMeter: Number(this.isMeter),
       u_blur: blur,
-
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
       u_cellTypeLayout: this.getCellTypeLayout(),
@@ -103,6 +93,7 @@ export default class FillModel extends BaseModel {
       u_stroke_opacity: isNumber(strokeOpacity) ? strokeOpacity : 1.0,
       u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
       u_stroke_color: this.getStrokeColor(stroke),
+      u_Size_Unit: SizeUnitType[unit] as SizeUnitType,
       u_offsets: this.isOffsetStatic(offsets)
         ? (offsets as [number, number])
         : [0, 0],
@@ -131,58 +122,7 @@ export default class FillModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    this.updateUnit('l7size');
     return await this.buildModels();
-  }
-
-  /**
-   * 计算等面积点图层（unit meter）笛卡尔坐标标度与世界坐标标度的比例
-   * @returns
-   */
-  public calMeter2Coord() {
-    const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
-    const center = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
-
-    const { version } = this.mapService;
-    const mapboxContext = $window?.mapboxgl;
-    if (version === Version.MAPBOX && mapboxContext?.MercatorCoordinate) {
-      // 参考：
-      // https://docs.mapbox.com/mapbox-gl-js/api/geography/#mercatorcoordinate#meterinmercatorcoordinateunits
-      const coord = mapboxContext.MercatorCoordinate.fromLngLat(
-        { lng: center[0], lat: center[1] },
-        0,
-      );
-      const offsetInMercatorCoordinateUnits = coord.meterInMercatorCoordinateUnits();
-      const westCoord = new mapboxContext.MercatorCoordinate(
-        coord.x - offsetInMercatorCoordinateUnits,
-        coord.y,
-        coord.z,
-      );
-      const westLnglat = westCoord.toLngLat();
-
-      const southCoord = new mapboxContext.MercatorCoordinate(
-        coord.x,
-        coord.y - offsetInMercatorCoordinateUnits,
-        coord.z,
-      );
-      const southLnglat = southCoord.toLngLat();
-
-      this.meter2coord = center[0] - westLnglat.lng;
-
-      this.meterYScale = (southLnglat.lat - center[1]) / this.meter2coord;
-      return;
-    }
-
-    const m1 = this.mapService.meterToCoord(center, [minLng, minLat]);
-    const m2 = this.mapService.meterToCoord(center, [
-      maxLng === minLng ? maxLng + 0.1 : maxLng,
-      maxLat === minLat ? minLat + 0.1 : maxLat,
-    ]);
-    this.meter2coord = (m1 + m2) / 2;
-    if (!this.meter2coord) {
-      // Tip: 兼容单个数据导致的 m1、m2 为 NaN
-      this.meter2coord = 7.70681090738883;
-    }
   }
 
   public async buildModels():Promise<IModel[]> {
@@ -335,28 +275,5 @@ export default class FillModel extends BaseModel {
     });
   }
 
-  /**
-   * 判断是否更新点图层的计量单位
-   * @param unit
-   */
-  private updateUnit(unit: string) {
-    const { version } = this.mapService;
-    if (this.unit !== unit) {
-      // l7size => meter
-      if (
-        this.unit !== 'meter' &&
-        unit === 'meter' &&
-        version !== Version.DEFUALT &&
-        version !== Version.GLOBEL
-      ) {
-        this.isMeter = true;
-        this.calMeter2Coord();
-        // meter => l7size
-      } else if (this.unit === 'meter' && unit !== 'meter') {
-        this.isMeter = false;
-        this.meter2coord = 1;
-      }
-      this.unit = unit;
-    }
-  }
+
 }

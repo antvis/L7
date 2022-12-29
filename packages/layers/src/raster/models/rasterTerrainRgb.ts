@@ -6,7 +6,7 @@ import {
     IModelUniform,
     ITexture2D,
   } from '@antv/l7-core';
-  import { getMask } from '@antv/l7-utils';
+  import { getMask,getDefaultDomain } from '@antv/l7-utils';
   import BaseModel from '../../core/BaseModel';
   import { IRasterLayerStyleOptions } from '../../core/interface';
   import { RasterImageTriangulation } from '../../core/triangulation';
@@ -21,20 +21,21 @@ import {
         clampLow = true,
         clampHigh = true,
         noDataValue = -9999999,
-        domain = [0, 1],
+        domain,
         rampColors,
         colorTexture
       } = this.layer.getLayerConfig() as  IRasterLayerStyleOptions;
+      const newdomain = domain ||getDefaultDomain(rampColors)
       let texture:ITexture2D | undefined = colorTexture;
       if(!colorTexture) {
-        texture = this.layer.textureService.getColorTexture(rampColors) as ITexture2D;
+        texture = this.layer.textureService.getColorTexture(rampColors,newdomain) as ITexture2D;
       } else {
-        this.layer.textureService.setColorTexture(colorTexture,rampColors)
+        this.layer.textureService.setColorTexture(colorTexture,rampColors,newdomain)
       }
       return {
         u_opacity: opacity || 1,
         u_texture: this.texture,
-        u_domain: domain,
+        u_domain: newdomain,
         u_clampLow: clampLow,
         u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
         u_noDataValue: noDataValue,

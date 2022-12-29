@@ -57,7 +57,7 @@ import Source from '@antv/l7-source';
 import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isFunction, isObject, isUndefined } from 'lodash';
+import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { styleDataMapping } from '../utils/dataMappingStyle';
 import { calculateData } from '../utils/layerData';
@@ -140,7 +140,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   // 每个 Layer 都有一个
   public multiPassRenderer: IMultiPassRenderer;
 
-  // 注入插件集
+  // 注入插件
   public plugins: ILayerPlugin[];
 
   public startInit: boolean = false;
@@ -538,8 +538,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.updateStyleAttribute('filter', field, values, updateOptions);
-    this.dataState.dataSourceNeedUpdate = true;
+    const flag = this.updateStyleAttribute(
+      'filter',
+      field,
+      values,
+      updateOptions,
+    );
+    this.dataState.dataSourceNeedUpdate = flag;
     return this;
   }
 
@@ -552,8 +557,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       field,
       values,
     };
-    this.updateStyleAttribute('shape', field, values, updateOptions);
-    this.dataState.dataSourceNeedUpdate = true; // 通过数据更新驱动shape 更新
+    const flag = this.updateStyleAttribute(
+      'shape',
+      field,
+      values,
+      updateOptions,
+    );
+    this.dataState.dataSourceNeedUpdate = flag;
     return this;
   }
   public label(
@@ -1338,7 +1348,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     field: StyleAttributeField,
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
-  ) {
+  ): boolean {
+    // encode diff
+    const preAttribute = this.configService.getAttributeConfig(this.id) || {};
+    // @ts-ignore
+    if (isEqual(preAttribute[type], { field, values })) {
+      return false;
+    }
+
     // 存储 Attribute
     if (
       [
@@ -1358,6 +1375,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         },
       });
     }
+
     if (!this.startInit) {
       // 开始初始化执行
       this.pendingStyleAttributes.push({
@@ -1385,6 +1403,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         updateOptions,
       );
     }
+    return true;
   }
 
   public getLayerAttributeConfig(): Partial<ILayerAttributesOption> {

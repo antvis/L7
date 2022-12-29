@@ -10,7 +10,7 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform mat2 u_RotateMatrix;
-uniform float u_isMeter;
+uniform int u_Size_Unit;
 
 varying vec2 v_uv; // 本身的 uv 坐标
 varying vec2 v_Iconuv; // icon 贴图的 uv 坐标
@@ -76,22 +76,16 @@ void main() {
   highp float angle_sin = sin(a_Rotate);
   highp float angle_cos = cos(a_Rotate);
   mat2 rotation_matrix = mat2(angle_cos, -1.0 * angle_sin, angle_sin, angle_cos);
+  float newSize = a_Size;
+  if(u_Size_Unit == 1) {
+    newSize = newSize  * u_PixelsPerMeter.z;
+  }
 
   // vec2 offset = (u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
-  vec2 offset = (rotation_matrix * u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
+  vec2 offset = (rotation_matrix * u_RotateMatrix * extrude.xy * (newSize) + textrueOffsets);
   vec3 aPosition = a_Position;
-  if(u_isMeter < 1.0) {
-    // 不以米为实际单位
-    offset = project_pixel(offset);
-  } else {
-    // 以米为实际单位
 
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-      aPosition.xy += offset;
-      offset.x = 0.0;
-      offset.y = 0.0;
-    }
-  }
+  offset = project_pixel(offset);
 
   vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
   float raisingHeight = u_raisingHeight;
@@ -105,7 +99,7 @@ void main() {
   }
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raisingHeight, 1.0);
+    gl_Position = u_Mvp *vec4(project_pos.xy + offset, raisingHeight, 1.0);
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
   }
