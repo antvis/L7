@@ -1,27 +1,21 @@
-
 import {
+  CameraUniform,
+  CoordinateUniform,
   ICameraService,
   ICoordinateSystemService,
   IDataState,
   IGlobalConfigService,
   IInteractionService,
   ILayer,
-  
   ILayerConfig,
   ILayerModel,
   ILayerService,
-
   IMapService,
   IModel,
-
   IRendererService,
-
   LayerEventType,
   lazyInject,
-  
   Triangulation,
-  CameraUniform,
-  CoordinateUniform,
   TYPES,
 } from '@antv/l7-core';
 
@@ -70,9 +64,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   // 注入插件集
 
-
   public startInit: boolean = false;
-
 
   public layerModel: ILayerModel;
 
@@ -82,7 +74,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   };
 
   public sceneContainer: Container | undefined;
-
 
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
@@ -101,9 +92,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected mapService: IMapService;
 
-
   protected container: Container;
-
 
   protected rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
@@ -119,7 +108,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.id,
     );
   }
-
 
   public setContainer(container: Container, sceneContainer: Container) {
     this.container = container;
@@ -147,7 +135,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     );
 
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
-   
 
     this.cameraService = this.container.get<ICameraService>(
       TYPES.ICameraService,
@@ -165,11 +152,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public render(): ILayer {
-   
     this.updateUniform();
 
     this.models.forEach((model) => {
-      model.draw({ uniforms: {}  });
+      model.draw({ uniforms: {} });
     });
     return this;
   }
@@ -177,10 +163,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public updateUniform() {
     // 重新计算坐标系参数
     this.coordinateSystemService.refresh();
-    const { width: w, height: h } = this.mapService.getMapCanvasContainer().getBoundingClientRect();
+    const { width: w, height: h } = this.mapService
+      .getMapCanvasContainer()
+      .getBoundingClientRect();
     const width = w * window.devicePixelRatio;
-    const height = h * window.devicePixelRatio
-  
+    const height = h * window.devicePixelRatio;
+
     this.models.forEach((model) => {
       model.addUniforms({
         // 相机参数，包含 VP 矩阵、缩放等级
@@ -210,21 +198,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
   }
 
-
   public destroy(refresh = true) {
-   
-
     // Tip: 清除各个图层自定义的 models 资源
     this.layerModel?.clearModels(refresh);
 
     this.models = [];
 
-   
     this.removeAllListeners();
     // 解绑图层容器中的服务
   }
   public clear() {
-    
     // 销毁所有 model
   }
   public clearModels() {
@@ -232,7 +215,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.layerModel?.clearModels();
     this.models = [];
   }
-
 
   public getTime() {
     return this.layerService.clock.getDelta();
@@ -246,11 +228,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return {};
   }
 
-
   protected async initLayerModels() {
     this.models.forEach((model) => model.destroy());
     this.models = [];
     this.models = await this.layerModel.initModels();
   }
-
 }

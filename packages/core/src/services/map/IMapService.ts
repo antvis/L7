@@ -57,7 +57,6 @@ export interface IMapService<RawMap = {}> {
   setCoordCenter?(center: number[]): void;
   setBgColor(color: string): void;
   init(): void;
-  initMiniMap?(): void;
   destroy(): void;
   onCameraChanged(callback: (viewport: IViewport) => void): void;
   // init map

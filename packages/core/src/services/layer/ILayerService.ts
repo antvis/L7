@@ -4,7 +4,6 @@ import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ISceneConfig } from '../config/IConfigService';
 import { IInteractionTarget } from '../interaction/IInteractionService';
-import { IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 
 import {
@@ -15,7 +14,7 @@ import {
 import { IRendererService } from '../renderer/IRendererService';
 import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
-import { ISourceCFG, ITransform, IParseDataItem } from '../source/ISourceService';
+import { ITransform } from '../source/ISourceService';
 import {
   IAnimateOption,
 
@@ -258,7 +257,6 @@ export interface ITileLayerOPtions {
   rendererService: IRendererService;
   mapService: IMapService;
   layerService: ILayerService;
-  pickingService: IPickingService;
   transforms: ITransform[];
 }
 
@@ -464,7 +462,7 @@ export interface ILayerService {
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
   remove(layer: ILayer, parentLayer?: ILayer): void;
-  removeAllLayers(): void;
+  
   updateLayerRenderList(): void;
   reRender(): void;
   beforeRenderData(layer: ILayer): Promise<void>;
@@ -472,7 +470,7 @@ export interface ILayerService {
   renderLayer(layer: ILayer): Promise<void>
   needPick(type:string):boolean;
   renderLayers(): void;
-  setEnableRender(flag: boolean): void;
+  
   getOESTextureFloat(): boolean;
 
   destroy(): void;

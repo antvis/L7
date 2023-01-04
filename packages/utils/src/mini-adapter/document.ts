@@ -4,7 +4,6 @@ import { Event } from './Event';
 import { HTMLElement } from './HTMLElement';
 import { HTMLVideoElement } from './HTMLVideoElement';
 import { Image } from './Image';
-import { $location } from './location';
 
 class Body extends HTMLElement {
   constructor() {
@@ -55,7 +54,7 @@ export const $document = {
   scripts: [],
   style: {},
 
-  location: $location,
+  location: window.location,
 
   ontouchstart: null,
   ontouchmove: null,

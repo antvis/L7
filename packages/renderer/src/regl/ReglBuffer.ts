@@ -22,5 +22,4 @@ export default class ReglBuffer implements IBuffer {
   public get() {
     return this.buffer;
   }
-
 }

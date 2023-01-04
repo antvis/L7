@@ -1,4 +1,3 @@
-import { $window, isMini } from '@antv/l7-utils';
 // @ts-ignore
 import Point from '../geo/point';
 
@@ -8,7 +7,7 @@ const DOM: {
 export default DOM;
 
 DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
-  const el = $window.document.createElement(tagName) as HTMLElement;
+  const el = window.document.createElement(tagName) as HTMLElement;
   if (className !== undefined) {
     el.className = className;
   }
@@ -19,14 +18,14 @@ DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
 };
 
 DOM.createNS = (namespaceURI: string, tagName: string) => {
-  const el = $window.document.createElementNS(
+  const el = window.document.createElementNS(
     namespaceURI,
     tagName,
   ) as HTMLElement;
   return el;
 };
 
-const docStyle = $window.document && $window.document.documentElement.style;
+const docStyle = window.document && window.document.documentElement.style;
 
 function testProp(props: any) {
   if (!docStyle) {
@@ -82,9 +81,9 @@ try {
     },
   });
   // @ts-ignore
-  $window.addEventListener('test', options, options);
+  window.addEventListener('test', options, options);
   // @ts-ignore
-  $window.removeEventListener('test', options, options);
+  window.removeEventListener('test', options, options);
 } catch (err) {
   passiveSupported = false;
 }
@@ -119,83 +118,41 @@ DOM.removeEventListener = (
 const suppressClick = (e: MouseEvent) => {
   e.preventDefault();
   e.stopPropagation();
-  $window.removeEventListener('click', suppressClick, true);
+  window.removeEventListener('click', suppressClick, true);
 };
 
 DOM.suppressClick = () => {
-  if (isMini) {
-    return;
-  }
-  $window.addEventListener('click', suppressClick, true);
+  window.addEventListener('click', suppressClick, true);
   setTimeout(() => {
-    $window.removeEventListener('click', suppressClick, true);
+    window.removeEventListener('click', suppressClick, true);
   }, 0);
 };
 
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
   // 暂时从 el 上获取 top/left， 后面需要动态获取
-  if (!isMini) {
-    const rect = el.getBoundingClientRect();
-    return new Point(
-      e.clientX - rect.left - el.clientLeft,
-      e.clientY - rect.top - el.clientTop,
-    );
-  } else {
-    return new Point(
-      // @ts-ignore
-      e.clientX - el.left - 0,
-      // @ts-ignore
-      e.clientY - el.top - 0,
-    );
-  }
+  const rect = el.getBoundingClientRect();
+  return new Point(
+    e.clientX - rect.left - el.clientLeft,
+    e.clientY - rect.top - el.clientTop,
+  );
 };
 
 DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {
   // 暂时从 el 上获取 top/left， 后面需要动态获取
-  if (!isMini) {
-    const rect = el.getBoundingClientRect();
-    const points = [];
-    for (const touche of touches) {
-      points.push(
-        new Point(
-          touche.clientX - rect.left - el.clientLeft,
-          touche.clientY - rect.top - el.clientTop,
-        ),
-      );
-    }
-    return points;
-  } else {
-    const points = [];
-    for (const touche of touches) {
-      points.push(
-        new Point(
-          // @ts-ignore
-          touche.clientX - el.left,
-          // @ts-ignore
-          touche.clientY - el.top,
-        ),
-      );
-    }
-    return points;
+  const rect = el.getBoundingClientRect();
+  const points = [];
+  for (const touche of touches) {
+    points.push(
+      new Point(
+        touche.clientX - rect.left - el.clientLeft,
+        touche.clientY - rect.top - el.clientTop,
+      ),
+    );
   }
+  return points;
 };
 
 DOM.mouseButton = (e: MouseEvent) => {
-  if (!isMini) {
-    return e.button;
-  }
-  if (
-    // @ts-ignore
-    typeof $window.InstallTrigger !== 'undefined' &&
-    e.button === 2 &&
-    e.ctrlKey &&
-    $window.navigator.platform.toUpperCase().indexOf('MAC') >= 0
-  ) {
-    // Fix for https://github.com/mapbox/mapbox-gl-js/issues/3131:
-    // Firefox (detected by InstallTrigger) on Mac determines e.button = 2 when
-    // using Control + left click
-    return 0;
-  }
   return e.button;
 };
 

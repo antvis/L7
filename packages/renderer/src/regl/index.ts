@@ -95,7 +95,6 @@ import 'reflect-metadata';
 
 // import {polyfillContext} from '@luma.gl/gltools';
 
-
 /**
  * 
  *  使用 luma 的低级模式进行替换实验
@@ -134,19 +133,14 @@ import {Buffer, clear} from '@luma.gl/webgl';
 export default class ReglRendererService {
   private gl: regl.Regl;
 
-  public init(
-    canvas: HTMLCanvasElement,
-  ) {
-    
-    this.gl = regl({      
+  public init(canvas: HTMLCanvasElement) {
+    this.gl = regl({
       canvas,
     });
     return this.gl;
   }
 
-  public createModel = () =>
-    new ReglModel(this.gl);
-
+  public createModel = () => new ReglModel(this.gl);
 
   public clear = () => {
     const reglClearOptions: any = {
@@ -154,14 +148,14 @@ export default class ReglRendererService {
       depth: 1,
       stencil: 0,
     };
-    
+
     this.gl?.clear(reglClearOptions);
   };
 }
 
 // 程序对象
 class ReglModel {
-  private drawCommand: any;  
+  private drawCommand: any;
   private uniforms: any = {};
 
   constructor(reGl: any) {
@@ -171,7 +165,7 @@ class ReglModel {
       u_CameraPosition: [0, 0, 0],
       u_CoordinateSystem: 0,
       u_DevicePixelRatio: 0,
-      u_ModelMatrix:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      u_ModelMatrix: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       u_PixelsPerDegree: [0, 0, 0],
       u_PixelsPerDegree2: [0, 0, 0],
       u_PixelsPerMeter: [0, 0, 0],
@@ -179,25 +173,24 @@ class ReglModel {
       u_ViewMatrix: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       u_ViewProjectionMatrix: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       u_ViewportCenter: [0, 0],
-      u_ViewportCenterProjection:  [0, 0, 0, 0],
+      u_ViewportCenterProjection: [0, 0, 0, 0],
       u_ViewportSize: [0, 0],
       u_Zoom: 1,
-      u_ZoomScale: 1
-    }
-    
+      u_ZoomScale: 1,
+    };
+
     this.uniforms = this.extractUniforms(uniforms);
     Object.keys(uniforms).forEach((uniformName) => {
       // pass data into regl
       reglUniforms[uniformName] = reGl.prop(uniformName);
     });
-  
 
     // [{
     //   coordinates: [120, 30],
     //   id: 0,
     // }],
     console.log(reglUniforms);
-    
+
     const drawParams: any = {
       attributes: {
         a_Extrude: [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0],
@@ -213,7 +206,7 @@ class ReglModel {
     this.drawCommand = reGl(drawParams);
   }
 
-  public addUniforms(uniforms: any ) {
+  public addUniforms(uniforms: any) {
     this.uniforms = {
       ...this.uniforms,
       ...this.extractUniforms(uniforms),
@@ -224,12 +217,12 @@ class ReglModel {
     this.drawCommand(this.uniforms);
   }
 
-  private extractUniforms(uniforms:any): any {
+  private extractUniforms(uniforms: any): any {
     const extractedUniforms = {};
     Object.keys(uniforms).forEach((uniformName) => {
       extractedUniforms[uniformName] = uniforms[uniformName];
     });
-    
+
     return extractedUniforms;
   }
 }

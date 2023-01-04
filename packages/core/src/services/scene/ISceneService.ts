@@ -10,7 +10,6 @@ export interface ISceneService extends EventEmitter {
   // off(type: string, handle: (...args: any[]) => void): void;
   removeAllListeners(event?: string): this;
   init(config: ISceneConfig): void;
-  initMiniScene(config: ISceneConfig): void;
   addLayer(layer: ILayer): void;
   getSceneConfig(): Partial<ISceneConfig>;
   getPointSizeRange(): Float32Array;
@@ -18,7 +17,7 @@ export interface ISceneService extends EventEmitter {
   getSceneContainer(): HTMLDivElement;
   getMarkerContainer(): HTMLElement;
   exportPng(type?: 'png' | 'jpg'): string;
-  addFontFace(fontname: string, fontpath: string): void;
+  
   destroy(): void;
 }
 // scene 事件

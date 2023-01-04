@@ -10,22 +10,17 @@ import getDecorators from 'inversify-inject-decorators';
 import { TYPES } from './types';
 
 /** Service interfaces */
-import { IFontService } from './services/asset/IFontService';
-import { IIconService } from './services/asset/IIconService';
 import { ICameraService } from './services/camera/ICameraService';
 import { IControlService } from './services/component/IControlService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
 import { IInteractionService } from './services/interaction/IInteractionService';
-import { IPickingService } from './services/interaction/IPickingService';
 import { ILayerService } from './services/layer/ILayerService';
 
 import { ISceneService } from './services/scene/ISceneService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
 
 /** Service implements */
-import FontService from './services/asset/FontService';
-import IconService from './services/asset/IconService';
 import CameraService from './services/camera/CameraService';
 import ControlService from './services/component/ControlService';
 import MarkerService from './services/component/MarkerService';
@@ -33,7 +28,6 @@ import PopupService from './services/component/PopupService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
 import InteractionService from './services/interaction/InteractionService';
-import PickingService from './services/interaction/PickingService';
 import LayerService from './services/layer/LayerService';
 
 import SceneService from './services/scene/SceneService';
@@ -157,24 +151,12 @@ export function createSceneContainer() {
     .to(InteractionService)
     .inSingletonScope();
   sceneContainer
-    .bind<IPickingService>(TYPES.IPickingService)
-    .to(PickingService)
-    .inSingletonScope();
-  sceneContainer
     .bind<IControlService>(TYPES.IControlService)
     .to(ControlService)
     .inSingletonScope();
   sceneContainer
     .bind<IMarkerService>(TYPES.IMarkerService)
     .to(MarkerService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IIconService>(TYPES.IIconService)
-    .to(IconService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IFontService>(TYPES.IFontService)
-    .to(FontService)
     .inSingletonScope();
 
   sceneContainer
