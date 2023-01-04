@@ -19,7 +19,7 @@ import { ICoordinateSystemService } from './services/coordinate/ICoordinateSyste
 import { IInteractionService } from './services/interaction/IInteractionService';
 import { IPickingService } from './services/interaction/IPickingService';
 import { ILayerService } from './services/layer/ILayerService';
-import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
+
 import { ISceneService } from './services/scene/ISceneService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
 
@@ -35,34 +35,21 @@ import CoordinateSystemService from './services/coordinate/CoordinateSystemServi
 import InteractionService from './services/interaction/InteractionService';
 import PickingService from './services/interaction/PickingService';
 import LayerService from './services/layer/LayerService';
-import StyleAttributeService from './services/layer/StyleAttributeService';
+
 import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
 
 /** PostProcessing passes */
 import { IMarkerService } from './services/component/IMarkerService';
 import { IPopupService } from './services/component/IPopupService';
-import {
-  IMultiPassRenderer,
-  IPass,
-  IPostProcessingPass,
-  IPostProcessor,
-} from './services/renderer/IMultiPassRenderer';
+
 import ClearPass from './services/renderer/passes/ClearPass';
-import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
-import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
-import BloomPass from './services/renderer/passes/post-processing/BloomPass';
-import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
-import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
-import ColorHalfTonePass from './services/renderer/passes/post-processing/ColorHalfTonePass';
+
+
 import CopyPass from './services/renderer/passes/post-processing/CopyPass';
-import HexagonalPixelatePass from './services/renderer/passes/post-processing/HexagonalPixelatePass';
-import InkPass from './services/renderer/passes/post-processing/InkPass';
-import NoisePass from './services/renderer/passes/post-processing/NoisePass';
-import SepiaPass from './services/renderer/passes/post-processing/SepiaPass';
-import PostProcessor from './services/renderer/passes/PostProcessor';
+
 import RenderPass from './services/renderer/passes/RenderPass';
-import TAAPass from './services/renderer/passes/TAAPass';
+
 
 // @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#defaultscope
 const container = new Container();
@@ -200,18 +187,12 @@ export function createSceneContainer() {
     .bind<IPass<unknown>>(TYPES.INormalPass)
     .to(ClearPass)
     .whenTargetNamed('clear');
-  sceneContainer
-    .bind<IPass<unknown>>(TYPES.INormalPass)
-    .to(PixelPickingPass)
-    .whenTargetNamed('pixelPicking');
+
   sceneContainer
     .bind<IPass<unknown>>(TYPES.INormalPass)
     .to(RenderPass)
     .whenTargetNamed('render');
-  sceneContainer
-    .bind<IPass<unknown>>(TYPES.INormalPass)
-    .to(TAAPass)
-    .whenTargetNamed('taa');
+
   sceneContainer
     .bind<interfaces.Factory<IPass<unknown>>>(TYPES.IFactoryNormalPass)
     .toFactory<IPass<unknown>>((context) => (named: string) =>
@@ -222,39 +203,7 @@ export function createSceneContainer() {
   sceneContainer
     .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
     .to(CopyPass)
-    .whenTargetNamed('copy');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(BloomPass)
-    .whenTargetNamed('bloom');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(BlurHPass)
-    .whenTargetNamed('blurH');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(BlurVPass)
-    .whenTargetNamed('blurV');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(NoisePass)
-    .whenTargetNamed('noise');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(SepiaPass)
-    .whenTargetNamed('sepia');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(ColorHalfTonePass)
-    .whenTargetNamed('colorHalftone');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(HexagonalPixelatePass)
-    .whenTargetNamed('hexagonalPixelate');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(InkPass)
-    .whenTargetNamed('ink');
+
 
   // 绑定工厂方法
   sceneContainer
@@ -277,17 +226,6 @@ export function createLayerContainer(sceneContainer: Container) {
   const layerContainer = new Container();
   layerContainer.parent = sceneContainer;
   
-  layerContainer
-    .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
-    .to(StyleAttributeService)
-    .inSingletonScope();
-  layerContainer
-    .bind<IMultiPassRenderer>(TYPES.IMultiPassRenderer)
-    .to(MultiPassRenderer)
-    .inSingletonScope();
-  layerContainer
-    .bind<IPostProcessor>(TYPES.IPostProcessor)
-    .to(PostProcessor)
-    .inSingletonScope();
+
   return layerContainer;
 }

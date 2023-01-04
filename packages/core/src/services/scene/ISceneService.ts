@@ -12,7 +12,6 @@ export interface ISceneService extends EventEmitter {
   init(config: ISceneConfig): void;
   initMiniScene(config: ISceneConfig): void;
   addLayer(layer: ILayer): void;
-  addMask(mask: ILayer): void;
   getSceneConfig(): Partial<ISceneConfig>;
   getPointSizeRange(): Float32Array;
   render(): void;

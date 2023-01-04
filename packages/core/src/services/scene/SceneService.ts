@@ -290,11 +290,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.layerService.add(layer);
   }
 
-  public addMask(mask: ILayer) {
-    this.layerService.sceneService = this;
-    this.layerService.addMask(mask);
-  }
-
   public async render() {
    
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化

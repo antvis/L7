@@ -7,13 +7,6 @@ import {
 import earcut from 'earcut';
 // @ts-ignore
 import { vec3 } from 'gl-matrix';
-import {
-  EARTH_RADIUS,
-  EARTH_RADIUS_OUTER,
-  EARTH_SEGMENTS,
-  lglt2xyz,
-  primitiveSphere,
-} from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import extrudePolygon, {
   extrude_PolygonNormal,

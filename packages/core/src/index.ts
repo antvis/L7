@@ -54,7 +54,7 @@ export * from './services/renderer/IBuffer';
 export * from './services/renderer/IElements';
 export * from './services/renderer/IFramebuffer';
 export * from './services/renderer/IModel';
-export * from './services/renderer/IMultiPassRenderer';
+
 export * from './services/renderer/IRenderbuffer';
 export * from './services/renderer/ITexture2D';
 export * from './services/renderer/IUniform';

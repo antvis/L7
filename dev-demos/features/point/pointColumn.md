@@ -16,27 +16,7 @@ export default () => {
             }),
         });
           const pointLayer = new PointLayer({})
-            .source([{
-                x: 120, y: 30
-            }], {
-                parser: {
-                    type: 'json',
-                    x: 'x',
-                    y: 'y',
-                },
-            })
-            .shape('circle')
-            .size(16)
-            .active(true)
-            .select({
-                color: 'red',
-            })
-            .color('#f00')
-            .style({
-                opacity: 1,
-                strokeWidth: 0,
-                stroke: '#fff',
-            });
+          
                     
         scene.on('loaded', () => {
            scene.addLayer(pointLayer);

@@ -61,9 +61,9 @@ export default class PickingService implements IPickingService {
         stencil: 0,
         depth: 1,
       });
-      layer.hooks.beforePickingEncode.call();
-      layer.renderModels();
-      layer.hooks.afterPickingEncode.call();
+     
+      
+     
       const features = this.pickBox(layer, box);
       cb(features);
     });
@@ -275,23 +275,7 @@ export default class PickingService implements IPickingService {
       return container.getBoundingClientRect();
     }
   }
-  private async pickingAllLayer(target: IInteractionTarget) {
 
-  }
-
-  private isPickingAllLayer() {
-    // this.alreadyInPicking 避免多次重复拾取
-    if (this.alreadyInPicking) return false;
-    // this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
-    if (this.layerService.alreadyInRendering) return false;
-    // this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
-    if (this.interactionService.indragging) return false;
-    // 判断当前进行 shader pick 拾取判断
-    if (!this.layerService.getShaderPickStat()) return false;
-
-    // 进行拾取
-    return true;
-  }
 
   private resizePickingFBO() {
     const { getContainer } = this.rendererService;
@@ -310,33 +294,7 @@ export default class PickingService implements IPickingService {
       this.height = height;
     }
   }
-  private async pickingLayers(target: IInteractionTarget) {
-    const { useFramebuffer, clear } = this.rendererService;
-    this.resizePickingFBO();
 
-    useFramebuffer(this.pickingFBO, () => {
-      const layers = this.layerService.getRenderList();
-      
-      layers
-        .filter((layer) => {
-          return layer.needPick(target.type)})
-        .reverse()
-        .some((layer) => {
-        
-          clear({
-            framebuffer: this.pickingFBO,
-            color: [0, 0, 0, 0],
-            stencil: 0,
-            depth: 1,
-          });
-
-          layer.layerPickService.pickRender(target);
-          const isPicked = this.pickFromPickingFBO(layer, target);
-          this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
-          return isPicked && !layer.getLayerConfig().enablePropagation;
-        });
-    });
-  }
   public triggerHoverOnLayer(
     layer: ILayer,
     target: {

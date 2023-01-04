@@ -1,37 +1,26 @@
-// @ts-ignore
-import { SyncBailHook, SyncHook, AsyncSeriesBailHook, AsyncWaterfallHook} from '@antv/async-hook';
+
 import { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
-import { ITextureService } from '../asset/ITextureService';
 import { ISceneConfig } from '../config/IConfigService';
 import { IInteractionTarget } from '../interaction/IInteractionService';
-import { ILayerPickService, IPickingService } from '../interaction/IPickingService';
+import { IPickingService } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
-import { IAttribute } from '../renderer/IAttribute';
+
 import {
   IBlendOptions,
   IModel,
-  IModelInitializationOptions,
+  
 } from '../renderer/IModel';
-import {
-  IMultiPassRenderer,
-  IPass,
-  IPostProcessingPass,
-} from '../renderer/IMultiPassRenderer';
 import { IRendererService } from '../renderer/IRendererService';
 import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
-import { ISource, ISourceCFG, ITransform, IParseDataItem } from '../source/ISourceService';
+import { ISourceCFG, ITransform, IParseDataItem } from '../source/ISourceService';
 import {
   IAnimateOption,
-  IEncodeFeature,
+
   IScale,
-  IScaleOptions,
   IScaleValue,
-  IStyleAttribute,
-  IStyleAttributeService,
-  IStyleAttributeUpdateOptions,
   ScaleTypeName,
   StyleAttrField,
   StyleAttributeField,
@@ -86,19 +75,16 @@ export interface ILayerModel {
   // canvasLayer
   clearCanvas?(): void;
 
-  // earth mode
-  setEarthTime?(time: number): void;
   createModelData?(options?: any): any;
 }
 
 export interface ILayerAttributesOption {
   shape: IAttrbuteOptions,
   color: IAttrbuteOptions,
-  texture:IAttrbuteOptions,
+  
   rotate:IAttrbuteOptions,
   size:IAttrbuteOptions,
   filter:IAttrbuteOptions,
-  label:IAttrbuteOptions,
 }
 
 export interface IModelUniform {
@@ -304,9 +290,6 @@ export type LayerEventType =
   | any;
 
 export interface ILayer {
-  styleAttributeService: IStyleAttributeService,
-  layerPickService: ILayerPickService;
-  textureService: ITextureService;
   sourceLayer?: string;
   parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
@@ -317,161 +300,42 @@ export interface ILayer {
   startInit: boolean // 是否开始初始化;
   zIndex: number;
   clusterZoom: number;
-  plugins: ILayerPlugin[];
+  
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
-  tileLayer: IBaseTileLayer;
-  layerChildren: ILayer[]; // 在图层中添加子图层
-  masks: ILayer[]; // 图层的 mask 列表
+  
+  
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
-  defaultSourceConfig: {
-    data: any[],
-    options: ISourceCFG | undefined,
-  },
-  encodeDataLength: number;
+
+  
   pickedFeatureID: number | null;
-  hooks: {
-    init:AsyncSeriesBailHook;
-    afterInit: SyncBailHook;
-    beforeRenderData: AsyncWaterfallHook ;
-    beforeRender: SyncBailHook;
-    afterRender: SyncHook;
-    beforePickingEncode: SyncHook;
-    afterPickingEncode: SyncHook;
-    beforeHighlight: SyncHook;
-    beforeSelect: SyncHook;
-    afterSelect: SyncHook;
-    afterHighlight: SyncHook;
-    beforeDestroy: SyncHook;
-    afterDestroy: SyncHook;
-  };
+
   models: IModel[];
-  sourceOption: {
-    data: any;
-    options?: ISourceCFG;
-  };
-  multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
-  isTileLayer?: boolean;
+  
   triangulation?: Triangulation | undefined;
-  processData(data: IParseDataItem[]): IParseDataItem[];
-  /**
-   * threejs 适配兼容相关的方法
-   * @param lnglat
-   * @param altitude
-   * @param rotation
-   * @param scale
-   */
 
-  threeRenderService?: any;
-  postProcessingPassFactory: (
-    name: string,
-  ) => IPostProcessingPass<unknown>;
-  normalPassFactory: (name: string) => IPass<unknown>;
-  getShaderPickStat: () => boolean;
-  updateModelData(data: IAttributeAndElements): void;
 
-  addMaskLayer(maskLayer: ILayer): void;
-  removeMaskLayer(maskLayer: ILayer): void;
-  needPick(type: string): boolean;
-  getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
-  getLayerAttributeConfig():Partial<ILayerAttributesOption>
+  
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
-  setCurrentPickId(id: number | null): void;
-  getCurrentPickId(): number | null;
-  setCurrentSelectedId(id: number | null): void;
-  getCurrentSelectedId(): number | null;
-  prepareBuildModel(): void;
-  renderModels(isPicking?: boolean): void;
+  
+
   buildModels(): void;
-  rebuildModels(): void;
-  getModelType():string;
-  buildLayerModel(
-    options: ILayerModelInitializationOptions &
-      Partial<IModelInitializationOptions>,
-  ): Promise<IModel>;
-  createAttributes(
-    options: ILayerModelInitializationOptions &
-      Partial<IModelInitializationOptions>,
-  ): {
-    [attributeName: string]: IAttribute;
-  };
-  updateStyleAttribute(
-    type: string,
-    field: StyleAttributeField,
-    values?: StyleAttributeOption,
-    updateOptions?: Partial<IStyleAttributeUpdateOptions>,
-  ): void;
-  setLayerPickService(layerPickService:ILayerPickService):void;
+
+  
   init(): Promise<void>;
-  scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
-  getScale(name: string): any;
-  size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  rotate(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  texture(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  shape(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  label(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
-  animate(option: Partial<IAnimateOption> | boolean): ILayer;
-  // pattern(field: string, value: StyleAttributeOption): ILayer;
-  filter(field: string, value: StyleAttributeOption): ILayer;
-  active(option: IActiveOption | boolean): ILayer;
-  setActive(
-    id: number | { x: number; y: number },
-    option?: IActiveOption,
-  ): void;
-  select(option: IActiveOption | boolean): ILayer;
-  setSelect(
-    id: number | { x: number; y: number },
-    option?: IActiveOption,
-  ): void;
-  setAutoFit(autoFit: boolean): void;
-  style(options: unknown): ILayer;
-  hide(): ILayer;
-  show(): ILayer;
-  getLegendItems(name: string,index?: number): LegendItems;
-  getLegend(name: string):ILegend;
-  setIndex(index: number): ILayer;
-  isVisible(): boolean;
-  setMaxZoom(min: number): ILayer;
-  setMinZoom(max: number): ILayer;
-  getMinZoom(): number;
-  getMaxZoom(): number;
-  get(name: string): number;
-  setBlend(type: keyof typeof BlendType): ILayer;
-  // animate(field: string, option: any): ILayer;
 
-  setMultiPass(
-    multipass: boolean,
-    passes?: Array<string | [string, { [key: string]: unknown }]>,
-  ): ILayer;
-  renderLayers(): void;
+
   render(): ILayer;
-
-  renderMultiPass(): any;
 
   clear(): void;
   clearModels(): void;
   destroy(refresh?: boolean): void;
-  source(data: any, option?: ISourceCFG): ILayer;
-  setData(data: any, option?: ISourceCFG): ILayer;
-  fitBounds(fitBoundsOptions?: unknown): ILayer;
-  /**
-   * 向当前图层注册插件
-   * @param plugin 插件实例
-   */
-  addPlugin(plugin: ILayerPlugin): ILayer;
-  getSource(): ISource;
-  setSource(source: ISource): void;
-  initSource(source: ISource): void;
-  setEncodedData(encodedData: IEncodeFeature[]): void;
-  getEncodedData(): IEncodeFeature[];
-  getScaleOptions(): IScaleOptions;
 
   /**
    * 事件
@@ -480,89 +344,12 @@ export interface ILayer {
   off(type: LayerEventType, handler: (...args: any[]) => void): void;
   emit(type: LayerEventType, handler: unknown): void;
   once(type: LayerEventType, handler: (...args: any[]) => void): void;
-
-  isDirty(): boolean;
-  /**
-   * 直接调用拾取方法，在非鼠标交互场景中使用
-   */
-  pick(query: { x: number; y: number }): void;
-  boxSelect(
-    box: [number, number, number, number],
-    cb: (...args: any[]) => void,
-  ): void;
-
-  updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
-  setAnimateStartTime(): void;
-  getLayerAnimateTime(): number;
-
-  // 获取对应地图的经纬度模型矩阵
-  getModelMatrix?(
-    lnglat: ILngLat,
-    altitude: number,
-    rotation: [number, number, number],
-    scale: [number, number, number],
-  ): any;
-
-  // 获取对应地图的经纬度平移矩阵
-  getTranslateMatrix?(lnglat: ILngLat, altitude?: number): any;
-
-  // 设置模型对应地图在经纬度和高度方向的平移
-  applyObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
-
-  // 根据经纬度设置模型对应地图的平移
-  setObjectLngLat?(object: any, lnglat: ILngLat, altitude?: number): void;
-
-  // 返回物体在场景中的经纬度
-  getObjectLngLat?(object: any): ILngLat;
-
-  // 将经纬度转为 three 世界坐标
-  lnglatToCoord?(lnglat: ILngLat): ILngLat;
-
-  // 设置网格适配到地图坐标系
-  adjustMeshToMap?(object: any): void;
-
-  // 设置网格的缩放 （主要是抹平 mapbox 底图时的差异，若是高德底图则可以直接设置网格的 scale 属性/方法）
-  setMeshScale?(object: any, x: number, y: number, z: number): void;
-
-  // 增加加载模型的动画混合器
-  addAnimateMixer?(mixer: any): void;
-
-  // 返回当前的 threejs camera
-  getRenderCamera?(): any;
-
-  /**
-   * 地球模式相关的方法
-   */
-
-  // 设置当前地球时间 控制太阳角度
-  setEarthTime(time: number): void;
-}
-
-/**
- * Layer 插件
- */
-export interface ILayerPlugin {
-  apply(
-    layer: ILayer,
-    services: {
-      rendererService: IRendererService;
-      mapService: IMapService;
-      styleAttributeService: IStyleAttributeService;
-      postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>;
-      normalPassFactory: (name: string) => IPass<unknown>;
-    },
-  ): void;
 }
 
 /**
  * Layer 初始化参数
  */
 export interface ILayerConfig {
-  mask: boolean;
-  maskInside: boolean;
-  maskfence: any;
-  maskColor: string;
-  maskOpacity: number;
   sourceLayer:string;
 
   colors: string[];
@@ -585,7 +372,7 @@ export interface ILayerConfig {
   blend: keyof typeof BlendType;
   depth: boolean;
   pickedFeatureID: number;
-  enableMultiPassRenderer: boolean;
+  
   passes: Array<string | [string, { [key: string]: unknown }]>;
 
   // layerType 指定 shape 的类型
@@ -660,7 +447,7 @@ export interface ILayerService {
   // 控制着色器颜色拾取计算
   enableShaderPick: () => void;
   disableShaderPick: () => void;
-  getShaderPickStat: () => boolean;
+  
 
   on(type: string, handler: (...args: any[]) => void): void;
   off(type: string, handler: (...args: any[]) => void): void;
@@ -668,7 +455,6 @@ export interface ILayerService {
   // 清除画布
   clear(): void;
   add(layer: ILayer): void;
-  addMask(mask: ILayer): void;
   initLayers(): Promise<void>;
   startAnimate(): void;
   stopAnimate(): void;
@@ -685,7 +471,6 @@ export interface ILayerService {
   renderMask(masks:ILayer[]): void;
   renderLayer(layer: ILayer): Promise<void>
   needPick(type:string):boolean;
-  throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;

@@ -6,12 +6,6 @@
     "url": "https://github.com/antvis/L7"
   },
   "devDependencies": {
-    "@antv/g2": "^4.2.8",
-    "@antv/l7-district": "^2.3.9",
-    "@antv/l7-draw": "^3.0.9",
-    "@antv/l7-react": "^2.3.3",
-    "@antv/l7plot": "^0.1.0",
-    "@antv/larkmap": "^0.10.0",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.18.10",
     "@babel/eslint-parser": "^7.18.9",
@@ -87,8 +81,6 @@
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "father": "^4.1.0",
-    "gcoord": "^0.3.2",
-    "geotiff": "1.0.0-beta.10",
     "gh-pages": "^2.1.1",
     "gl": "^5.0.3",
     "glsl-minifier": "^0.0.13",
@@ -153,10 +145,7 @@
     "webpack-dev-server": "^3.1.7",
     "webpack-merge": "^4.1.4",
     "wellknown": "^0.5.0",
-    "worker-loader": "^2.0.0",
-    "yorkie": "^2.0.0",
-    "crypto-js": "^4.1.1",
-    "jsencrypt": "^3.2.1"
+    "worker-loader": "^2.0.0"
   },
   "scripts": {
     "dev": "npm run worker && dumi dev",
