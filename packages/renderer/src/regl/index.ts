@@ -17,13 +17,13 @@ layout(std140) uniform ub_SceneParams {
 
 layout(std140) uniform ub_MaterialParams {
   mat4 u_ViewProjectionMatrix;
-  float u_Zoom;
-  float u_ZoomScale;
-  float u_CoordinateSystem;
-  vec2 u_ViewportCenter;
   vec4 u_ViewportCenterProjection;
   vec3 u_PixelsPerDegree;
+  float u_Zoom;
   vec3 u_PixelsPerDegree2;
+  float u_ZoomScale;
+  vec2 u_ViewportCenter;
+  float u_CoordinateSystem;
 };
 
 layout(location = ${VertexAttributeLocation.MODEL_MATRIX0}) in vec4 a_ModelMatrix0;
@@ -97,13 +97,13 @@ layout(std140) uniform ub_SceneParams {
 
 layout(std140) uniform ub_MaterialParams {
   mat4 u_ViewProjectionMatrix;
-  float u_Zoom;
-  float u_ZoomScale;
-  float u_CoordinateSystem;
-  vec2 u_ViewportCenter;
   vec4 u_ViewportCenterProjection;
   vec3 u_PixelsPerDegree;
+  float u_Zoom;
   vec3 u_PixelsPerDegree2;
+  float u_ZoomScale;
+  vec2 u_ViewportCenter;
+  float u_CoordinateSystem;
 };
 
 out vec4 outputColor;
@@ -127,43 +127,6 @@ import {
 import { Renderer } from '@antv/g-webgl';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-
-// import {polyfillContext} from '@luma.gl/gltools';
-
-/**
- * 
- *  使用 luma 的低级模式进行替换实验
- https://luma.gl/docs/getting-started/hello-instancing-low
-
-import { Model} from '@luma.gl/engine';
-import {Buffer, clear} from '@luma.gl/webgl';
- const positionBuffer = new Buffer(gl, new Float32Array([
-      -0.5, -0.5,
-      0.5, -0.5,
-      0.0, 0.5
-    ]));
-
-    const model = new Model(gl, {
-      vs,
-      fs,
-      attributes: {
-        position: positionBuffer,
-        color: colorBuffer
-      },
-      vertexCount: 3,
-
-       uniforms: {
-        uTexture: texture
-      }
-
-    });
-    clear(gl, {color: [0, 0, 0, 1]});
-
-     model.setUniforms({uMVP: mvpMatrix})
-      
-
-    model.draw();
- */
 @injectable()
 export default class ReglRendererService {
   private canvas: Canvas;
@@ -286,29 +249,6 @@ class ReglModel {
       },
     });
     canvas.appendChild(mesh);
-    // const reglUniforms: any = {};
-
-    // Object.keys(uniforms).forEach((uniformName) => {
-    //   // pass data into regl
-    //   reglUniforms[uniformName] = reGl.prop(uniformName);
-    // });
-    // // [{
-    // //   coordinates: [120, 30],
-    // //   id: 0,
-    // // }],
-    // console.log(reglUniforms);
-    // const drawParams: any = {
-    //   attributes: {
-    //     a_Extrude: [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0],
-    //     a_Position: [120, 30, 0, 120, 30, 0, 120, 30, 0, 120, 30, 0],
-    //   },
-    //   frag,
-    //   uniforms: reglUniforms,
-    //   vert,
-    //   // primitive: 'triangles'
-    // };
-    // drawParams.elements = [0, 1, 2, 2, 3, 0];
-    // this.drawCommand = reGl(drawParams);
   }
 
   public addUniforms(uniforms: any) {
@@ -320,7 +260,28 @@ class ReglModel {
 
   public draw(options: any) {
     console.log(this.uniforms);
-    this.shaderMaterial.setUniforms(this.uniforms);
+
+    const {
+      u_CoordinateSystem,
+      u_ViewProjectionMatrix,
+      u_PixelsPerDegree,
+      u_PixelsPerDegree2,
+      u_Zoom,
+      u_ZoomScale,
+      u_ViewportCenter,
+      u_ViewportCenterProjection,
+    } = this.uniforms;
+
+    this.shaderMaterial.setUniforms({
+      u_CoordinateSystem,
+      u_ViewProjectionMatrix,
+      u_PixelsPerDegree,
+      u_PixelsPerDegree2,
+      u_Zoom,
+      u_ZoomScale,
+      u_ViewportCenter,
+      u_ViewportCenterProjection,
+    });
   }
 
   private extractUniforms(uniforms: any): any {
