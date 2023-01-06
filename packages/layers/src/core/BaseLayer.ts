@@ -7,6 +7,8 @@ import {
 } from '@antv/async-hook';
 import {
   BlendType,
+  CameraUniform,
+  CoordinateUniform,
   IActiveOption,
   IAnimateOption,
   IAttributeAndElements,
@@ -51,8 +53,6 @@ import {
   StyleAttributeField,
   StyleAttributeOption,
   Triangulation,
-  CameraUniform,
-  CoordinateUniform,
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
@@ -345,7 +345,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     );
     this.mapService = this.container.get<IMapService>(TYPES.IMapService);
     const { enableMultiPassRenderer } = this.getLayerConfig();
-   
 
     this.cameraService = this.container.get<ICameraService>(
       TYPES.ICameraService,
@@ -678,16 +677,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   /**
    * 渲染所有的图层
    */
-  public renderLayers(): void {
-   
-  }
+  public renderLayers(): void {}
 
   public render(): ILayer {
-   
     this.updateUniform();
 
     this.models.forEach((model) => {
-      model.draw({ uniforms: {}  });
+      model.draw({ uniforms: {} });
     });
     return this;
   }
@@ -695,10 +691,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public updateUniform() {
     // 重新计算坐标系参数
     this.coordinateSystemService.refresh();
-    const { width: w, height: h } = this.mapService.getMapCanvasContainer().getBoundingClientRect();
+    const { width: w, height: h } = this.mapService
+      .getMapCanvasContainer()
+      .getBoundingClientRect();
     const width = w * window.devicePixelRatio;
-    const height = h * window.devicePixelRatio
-  
+    const height = h * window.devicePixelRatio;
+
     this.models.forEach((model) => {
       model.addUniforms({
         // 相机参数，包含 VP 矩阵、缩放等级
@@ -735,7 +733,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return;
     }
-   
   }
 
   public active(options: IActiveOption | boolean) {
@@ -871,7 +868,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   public setIndex(index: number): ILayer {
     this.zIndex = index;
-   
+
     return this;
   }
 
@@ -1323,9 +1320,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await multiPassRenderer.render();
   }
 
-  public renderModels() {
-    
-  }
+  public renderModels() {}
 
   public updateStyleAttribute(
     type: string,

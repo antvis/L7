@@ -31,5 +31,4 @@ export default class ReglAttribute implements IAttribute {
   public get() {
     return this.attribute;
   }
-
 }

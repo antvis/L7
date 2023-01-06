@@ -31,9 +31,6 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
   private readonly rendererService: IRendererService;
 
   public apply(layer: ILayer) {
-
-    layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
-    
-    });
+    layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {});
   }
 }

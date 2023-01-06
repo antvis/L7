@@ -6,6 +6,5 @@ import 'reflect-metadata';
  */
 @injectable()
 export default class UpdateModelPlugin implements ILayerPlugin {
-  public apply(layer: ILayer) {
-  }
+  public apply(layer: ILayer) {}
 }

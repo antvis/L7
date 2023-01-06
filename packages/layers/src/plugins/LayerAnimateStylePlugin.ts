@@ -4,6 +4,5 @@ import 'reflect-metadata';
 
 @injectable()
 export default class LayerAnimateStylePlugin implements ILayerPlugin {
-  public apply(layer: ILayer) {
-  }
+  public apply(layer: ILayer) {}
 }

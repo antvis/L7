@@ -105,7 +105,5 @@ export function generateLightingUniforms(
  */
 @injectable()
 export default class LightingPlugin implements ILayerPlugin {
-  public apply(layer: ILayer) {
-   
-  }
+  public apply(layer: ILayer) {}
 }
