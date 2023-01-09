@@ -41,7 +41,7 @@ export const isMiniAli =
   !!my &&
   typeof my.showToast === 'function' &&
   my.isFRM !== true;
-
+// wx.miniProgram.getEnv 微信jssdk推荐使用，以上方法进行处理，但是如果采用wx.miniProgram会把引入了weixinSdk的webview判断为小程序，
 export const isWeChatMiniProgram =
   typeof wx !== 'undefined' &&
   wx !== null &&
