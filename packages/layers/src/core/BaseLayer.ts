@@ -672,6 +672,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     } else {
       this.scaleOptions[field] = cfg;
     }
+    if(this.inited) {
+      // 在 layer 创建完成之后，更新 scale 需要重新进行数据映射
+      this.dataState.dataSourceNeedUpdate = true;
+    }
     return this;
   }
 
