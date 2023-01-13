@@ -11,7 +11,7 @@ order: 2
 
 ```js
 // 传入 GeoJSON 类型数据 *** L7 默认支持，不需要 parser 解析
-var data = {
+const data = {
   type: 'FeatureCollection',
   features: [
     {
@@ -28,7 +28,7 @@ var data = {
   ],
 };
 
-var layer = new PointLayer().source(data);
+const layer = new LineLayer().source(data);
 ```
 
 ### CSV
