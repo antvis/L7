@@ -9,6 +9,7 @@ import { IRendererService } from '../renderer/IRendererService';
 import { ILayer, IWorkerOption } from './ILayerService';
 import {
   IAttributeScale,
+  IScaleOptions,
   IEncodeFeature,
   IStyleAttribute,
   IStyleAttributeInitializationOptions,
@@ -70,13 +71,24 @@ export default class StyleAttributeService implements IStyleAttributeService {
     return attributeToUpdate;
   }
 
+  public updateScaleAttribute(scaleOption: IScaleOptions) {
+    this.attributes.forEach((attr:IStyleAttribute)=>{
+      const name = attr.name;
+      const field =  attr.scale?.field as string;
+      if(scaleOption[name] || (field && scaleOption[field])) { // 字段类型和映射类型
+        attr.needRescale = true;
+        attr.needRemapping = true;
+        attr.needRegenerateVertices = true;
+      }
+    })
+
+  }
+
   public updateStyleAttribute(
     attributeName: string,
     options: Partial<IStyleAttributeInitializationOptions>,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-
-
     let attributeToUpdate = this.getLayerStyleAttribute(attributeName);
     if (!attributeToUpdate) {
       attributeToUpdate = this.registerStyleAttribute({

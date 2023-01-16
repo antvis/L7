@@ -2530,6 +2530,9 @@ export default () => {
               //     'rgb(8,81,156)'
               //   ]
               // )
+              .scale('num',{
+                type:'quantile'
+              })
               .color("num", ["#E8F1FF", "#A8BDEC", "#688DE4", "#3461CA", "#23396E"])
               .shape("fill")
               .select({
@@ -2539,7 +2542,7 @@ export default () => {
               .style({
                 opacity: 1
               });
-      
+
             // 默认高亮选中北京
             chinaPolygonLayer.on("add", () => {
               setTimeout(() => {
@@ -2567,6 +2570,14 @@ export default () => {
       
             scene.addLayer(chinaPolygonLayer);
             scene.addLayer(layer2);
+            setTimeout(()=>{
+              chinaPolygonLayer.scale('num',{
+                type:'quantize'
+              })
+              // chinaPolygonLayer.color('num',['#ffffb2','#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026'])
+              scene.render()
+              console.log('render')
+            },3000)
           });
         fetch(
           "https://gw.alipayobjects.com/os/bmw-prod/c4a6aa9d-8923-4193-a695-455fd8f6638c.json" //  标注数据

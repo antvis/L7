@@ -243,7 +243,6 @@ const data = {
     }
   ]
 }
-console.log(data);
 export default () => {
   useEffect(() => {
     const scene = new Scene({

@@ -672,6 +672,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     } else {
       this.scaleOptions[field] = cfg;
     }
+    if (this.styleAttributeService) {
+      const scaleOptions = isObject(field) ? field : { [field]: cfg };
+      this.styleAttributeService.updateScaleAttribute(scaleOptions);
+    }
+
     return this;
   }
 
@@ -1103,7 +1108,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public getScaleOptions() {
     return this.scaleOptions;
   }
-
   public encodeDataLength: number = 0;
   public setEncodedData(encodedData: IEncodeFeature[]) {
     this.encodedData = encodedData;
