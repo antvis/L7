@@ -14,6 +14,7 @@ L7 Layer 接口设计遵循图形语法，所有图层都继承于基类（baseL
 ```javascript
 const layer = new BaseLayer(option) // option - 传入构造函数的参数对象，提供 layer 的初始状态
   .source(...)    // 传入图层需要的数据以及相关的解析器
+  .filter()       // 数据过滤方法
   .shape(...)     // 为图层指定具体的形状，如：circle/triangle 等
   .color(...)     // 指定图层的颜色配置
   .texture(...)   // 指定图层引用的纹理

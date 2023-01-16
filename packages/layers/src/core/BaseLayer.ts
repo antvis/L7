@@ -664,6 +664,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
+    const preOption = { ...this.scaleOptions };
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,
@@ -672,6 +673,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     } else {
       this.scaleOptions[field] = cfg;
     }
+    if (this.styleAttributeService && !isEqual(preOption, this.scaleOptions)) {
+      const scaleOptions = isObject(field) ? field : { [field]: cfg };
+      this.styleAttributeService.updateScaleAttribute(scaleOptions);
+    }
+
     return this;
   }
 
@@ -1103,7 +1109,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public getScaleOptions() {
     return this.scaleOptions;
   }
-
   public encodeDataLength: number = 0;
   public setEncodedData(encodedData: IEncodeFeature[]) {
     this.encodedData = encodedData;

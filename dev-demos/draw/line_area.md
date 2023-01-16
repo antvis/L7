@@ -3,7 +3,7 @@ title: 展示距离和面积
 order: 3
 group:
   path: /polygon
-  title: 绘制面
+  title: 图形绘制
   order: 3
 ---
 
