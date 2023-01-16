@@ -1,5 +1,5 @@
 
-### source
+### source 数据
 
 设置图层数据以及解析配置 `source(data, config)`。
 
@@ -38,14 +38,63 @@ layer.source(data, {
   ],
 });
 ```
+### cluster
 
-### scale(field: string, scaleConfig: IScaleConfig)
+我们在使用 `cluster` 配置聚合图之后就可以使用一些聚合方法来获取对应参数。
+#### getClusters(zoom: number): IFeatureCollection
 
+获取指定缩放等级的聚合数据
+
+- `zoom` 缩放等级
+
+#### getClustersLeaves(id: string): IFeatureCollection
+
+根据 `id` 获取聚合节点的数据，每个聚合节点会有一个唯一 `ID`。
+
+- `id` 聚合节点的 `id`
+
+
+```ts
+const source = layer.getSource();
+source.getClustersLeaves(id);
+layer.on('click', (e) => {
+  console.log(source.getClustersLeaves(e.feature.cluster_id));
+});
+
+```
+
+
+## scale 数据度量
+
+Scale 度量是将地图数据值（数字、日期、类别等数据）转成视觉值（颜色、大小、形状）。尺度 Scale 是数据可视化的基本组成部分，因为它们决定了视觉编码的性质。 L7 目前支持连续、离散、枚举类型数据的Scale，并支持位置、形状、大小和颜色编码的映射。
+
+在使用 L7 过程中，默认情况下不需要进行 Scale 的配置，因为 L7 会根据数据类型对 scale 推断，推断过程如下：
+
+查看用户是否设置了 Scale，如果没有:
+
+判断字段的第一条数据的字段类型，如果数据中不存在对应的字段：
+
+认为是常量为固定值
+
+如果是数字则为 'linear';
+
+如果是字符串类型 'cat';
+
+
+### scale
+
+![Scale 详细介绍](https://mp.weixin.qq.com/s/QyD1_ypu0PDwMxEz45v6Jg)
+
+参数： (field: string, scaleOptions: IscaleOptions)
 - `field` 指定 source 中传入的数据中用于映射的字段名
-- `scaleConfig` 列定义配置，对象类型
+- `scaleOptions` 列定义配置，对象类型
+  - type scale 类型
+  - unknown 未匹配颜色 可选  默认透明
+  - domain 值域 可选
+
 
 ```javascript
-interface IScaleConfig {
+interface IscaleOptions {
   type: ScaleTypeName;
   domain?: any[];
   ...
@@ -59,19 +108,23 @@ layer.color('id', ['#f00', '#ff0'])
 })；
 ```
 
-### ScaleTypeName
+#### 类型
 
-`scale` 的类型可以分为 `3` 类 `11` 种，不同 `Scale` 的差异在于 `domain->range` 的转换方法的不同。    
-`range` 和 `domain` 是 `Scale` 中非常重要的两个参数。
+
+Range 和 domain 是 Scale 中非常重要的两个参数
+
+domain: 地图数据值的定义区间
+range：视觉值的区间
+不同Scale 的差异在于 domain->range 的转换方法的不同
 
 - domain: 地图数据值的定义区间
 - range：视觉值的区间定义
 
-|  数据类型   | 度量类型  |
-|  --------  | ------- |
-| 连续        | linear、log、pow、time、sequential、quantize、quantile、threshold |
-| 分类        | cat、time |
-| 常量        | identity  |
+|数据类|度量类型|
+|-----|------|
+| 连续 | linear、log、pow |
+| 连续分类 | quantize quantile,threshold,diverging |
+| 分类 枚举 | cat |
 
 
 #### Cat
@@ -102,7 +155,18 @@ layer.color('t', ['red', 'white', 'blue']);
 
 #### identify
 
-常量度量 某个字段是不变的常量。
+数据值和映射值相同
+比如数据中value 字段记录了每个要素的颜色，数值既为要映射的结果值s
+
+```
+// 设置为 identify
+layer.scale('value', { type: 'identify' });
+
+// 或者 
+
+layer.scale('value'); // L7  能够自动推断为  identify
+
+```
 
 #### linear
 
@@ -131,57 +195,32 @@ layer.color('t', ['red', 'white', 'blue']);
 1000 => "blue
 
 ```
-#### diverging || Sequential
-用于返回给定的颜色数组的统一非有理 B-spline 插值器函数，该数组将转换为RGB颜色。
+#### diverging
 
-```js
-const scaleColors = d3interpolate.interpolateRgbBasis(colors);
-```
+离散分类通常与两种相反的色调一起使用，以显示从负值到中心到正值的变化。这些类型的地图显示了彼此相关的值的大小。
 
-#### IScaleConfig
 
-```js
-interface IScaleConfig {
-  type: ScaleTypeName;
-  domain?: any[];
-  range?: any[];
-  neutral?: number;
-  field?: string;
-  unknown?: string;
-  ticks?: any[];
-  nice?: boolean;
-  clamp?: boolean;
-  format?: () => any;
-}
-```
-
-### cluster
-
-我们在使用 `cluster` 配置聚合图之后就可以使用一些聚合方法来获取对应参数。
-#### getClusters(zoom: number): IFeatureCollection
-
-获取指定缩放等级的聚合数据
-
-- `zoom` 缩放等级
-
-#### getClustersLeaves(id: string): IFeatureCollection
-
-根据 `id` 获取聚合节点的数据，每个聚合节点会有一个唯一 `ID`。
-
-- `id` 聚合节点的 `id`
-
-```javascript
-const source = layer.getSource();
-source.getClustersLeaves(id);
-layer.on('click', (e) => {
-  console.log(source.getClustersLeaves(e.feature.cluster_id));
-});
-```
 ## 视觉编码方法
 
 可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。
 
 <img width="100%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PzoTRJnY-fIAAAAAAAAAAAAAARQnAQ'>
+
+### filter
+
+数据过滤方法,支持回调函数，将数据映射为true | false, 结果为true 时可见
+
+```ts 
+
+pointLayer.size('type', (type) => {
+  // 回调函数
+  if (type === 'a') {
+    return false;
+  }
+  return true ;
+});
+```
+
 
 ### size
 
@@ -250,11 +289,15 @@ layer.color('type*value', (type, value) => {
 #### color(value)
 
 参数：`value` ：string
+
 只支持接收一个参数，value 可以是：
 
 - 映射至颜色属性的数据源字段名，如果数据源中不存在这个字段名的话，则按照常量进行解析，这个时候会使用 L7 默认提供的颜色。
 
 - 也可以直接指定某一个具体的颜色值 color，如 '#fff', 'white','rgba(255,0,0,0.5)' ,rgb(255,0,1) 等。
+
+如果数据为映射到颜色，默认为透明色不显示，如果需要设置该颜色，需要在scale 中设置
+
 
 示例
 
@@ -274,7 +317,11 @@ layer.color('white'); // 指定颜色
 colors 的参数有以下情况：  如果为空，即未指定颜色的数组，那么使用内置的全局的颜色；如果需要指定颜色，则需要以数组格式传入，那么分类的颜色按照数组中的颜色确定。
 
 ```javascript
-layer.color('name'); // 使用默认的颜色
+layer.scale('name',{
+  type:'quantile'
+  unknown:'#ccc' // 设置无效颜色
+})
+layer.color('name'); // 使用identity 
 layer.color('name', ['red', 'blue']); // 使用传入的指定颜色
 ```
 
