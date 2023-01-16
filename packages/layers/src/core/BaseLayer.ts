@@ -664,7 +664,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
-    const preOption ={...this.scaleOptions}
+    const preOption ={ ...this.scaleOptions };
     if (isObject(field)) {
       this.scaleOptions = {
         ...this.scaleOptions,

@@ -39,14 +39,6 @@ export default class LineModel extends BaseModel {
     width: 1,
     height: 1,
   });
-  protected dataTexture: ITexture2D =this.createTexture2D({
-    flipY: true,
-    data: [1],
-    format: gl.LUMINANCE,
-    type: gl.FLOAT,
-    width: 1,
-    height: 1,
-  }); 
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
