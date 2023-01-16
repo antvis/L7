@@ -1,4 +1,3 @@
-import { $window, $XMLHttpRequest } from './mini-adapter';
 
 export interface ITileBand {
   url: string;
@@ -58,7 +57,7 @@ function makeXMLHttpRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
 ) {
-  const xhr = new $XMLHttpRequest();
+  const xhr = new window.XMLHttpRequest();
 
   const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
   xhr.open(requestParameters.method || 'GET', url, true);
@@ -177,11 +176,11 @@ export const postData = (
 };
 
 export function sameOrigin(url: string) {
-  const a = $window.document.createElement('a');
+  const a = window.document.createElement('a');
   a.href = url;
   return (
-    a.protocol === $window.document.location.protocol &&
-    a.host === $window.document.location.host
+    a.protocol === window.document.location.protocol &&
+    a.host === window.document.location.host
   );
 }
 
@@ -192,8 +191,8 @@ function arrayBufferToImage(
   data: ArrayBuffer,
   callback: (err?: Error | null, image?: HTMLImageElement | null) => void,
 ) {
-  const img: HTMLImageElement = new $window.Image();
-  const URL = $window.URL || $window.webkitURL;
+  const img: HTMLImageElement = new window.Image();
+  const URL = window.URL || window.webkitURL;
   img.crossOrigin = 'anonymous';
   img.onload = () => {
     callback(null, img);

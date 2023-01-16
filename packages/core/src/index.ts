@@ -39,14 +39,11 @@ export * from './services/camera/ICameraService';
 export * from './services/config/IConfigService';
 export * from './services/scene/ISceneService';
 export * from './services/shader/IShaderModuleService';
-export * from './services/asset/IIconService';
-export * from './services/asset/IFontService';
-export * from './services/asset/ITextureService';
+
 export * from './services/component/IControlService';
 export * from './services/component/IMarkerService';
 export * from './services/component/IPopupService';
 export * from './services/interaction/IInteractionService';
-export * from './services/interaction/IPickingService';
 
 /** 全部渲染服务接口 */
 export * from './services/renderer/IAttribute';
@@ -54,7 +51,7 @@ export * from './services/renderer/IBuffer';
 export * from './services/renderer/IElements';
 export * from './services/renderer/IFramebuffer';
 export * from './services/renderer/IModel';
-export * from './services/renderer/IMultiPassRenderer';
+
 export * from './services/renderer/IRenderbuffer';
 export * from './services/renderer/ITexture2D';
 export * from './services/renderer/IUniform';

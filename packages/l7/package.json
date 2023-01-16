@@ -31,7 +31,6 @@
     "@antv/l7-layers": "2.11.4",
     "@antv/l7-maps": "2.11.4",
     "@antv/l7-scene": "2.11.4",
-    "@antv/l7-source": "2.11.4",
     "@antv/l7-utils": "2.11.4",
     "@babel/runtime": "^7.7.7"
   },

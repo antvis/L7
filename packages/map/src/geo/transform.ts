@@ -1,5 +1,3 @@
-// @ts-ignore
-import { isMini } from '@antv/l7-utils';
 import { mat2, mat4, vec4 } from 'gl-matrix';
 import Point from '../geo/point';
 import { clamp, interpolate, wrap } from '../util';
@@ -854,12 +852,7 @@ export default class Transform {
           sy ? (maxY + minY) / 2 : point.y,
         ),
       );
-      if (isMini) {
-        this.zoom = Math.max(this.zoom, Math.max(-1, this.minZoom));
-      } else {
-        this.zoom += this.scaleZoom(s);
-      }
-
+      this.zoom += this.scaleZoom(s);
       this.unmodified = unmodified;
       this.constraining = false;
       return;

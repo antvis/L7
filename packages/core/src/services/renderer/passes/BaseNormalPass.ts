@@ -6,7 +6,7 @@ import { IInteractionService } from '../../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../../layer/ILayerService';
 import { IMapService } from '../../map/IMapService';
 import { IShaderModuleService } from '../../shader/IShaderModuleService';
-import { IPass, PassType } from '../IMultiPassRenderer';
+
 import { IRendererService } from '../IRendererService';
 
 /**

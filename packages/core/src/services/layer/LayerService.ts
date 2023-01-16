@@ -1,4 +1,4 @@
-import { $window, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
 import { throttle } from 'lodash';
@@ -43,10 +43,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
    
   }, 32);
 
-  public throttleRenderLayers = throttle(() => {
-   
-  }, 16);
-
   public needPick(type:string): boolean {
    return this.layerList.some((layer=>layer.needPick(type)))
   }
@@ -60,10 +56,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     } 
    
   
-  }
-
-  public addMask(mask: ILayer) {
-   
   }
 
   public async initLayers() {
@@ -101,13 +93,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
    
   }
 
-  public removeAllLayers() {
 
-  }
-
-  public setEnableRender(flag: boolean) {
-    this.enableRender = flag;
-  }
 
   public renderLayers() {
     console.log('renderLayers');
@@ -139,7 +125,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.layerList = [];
     this.layers
       .filter((layer) => layer.inited)
-      .filter((layer) => layer.isVisible())
       .sort((pre: ILayer, next: ILayer) => {
         // 根据 zIndex 对渲染顺序进行排序
         return pre.zIndex - next.zIndex;
@@ -186,9 +171,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.shaderPicking = false;
   }
 
-  public getShaderPickStat() {
-    return this.shaderPicking;
-  }
   
 
   public clear() {
@@ -210,7 +192,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   }
 
   private stopRender() {
-    $window.cancelAnimationFrame(this.layerRenderID);
+    window.cancelAnimationFrame(this.layerRenderID);
   }
 
 

@@ -5,15 +5,14 @@ import {
   IFramebuffer,
   IFramebufferInitializationOptions,
 } from './IFramebuffer';
-import { IModel, IModelInitializationOptions } from './IModel';
-import { IPass } from './IMultiPassRenderer';
+import { IModel } from './IModel';
 import { ITexture2D, ITexture2DInitializationOptions } from './ITexture2D';
 
 export interface IRenderConfig {
   /**
    * 是否开启 multi pass
    */
-  enableMultiPassRenderer?: boolean;
+  
   passes?: Array<IPass<unknown>>;
   antialias?: boolean;
   preserveDrawingBuffer?: boolean;
@@ -51,7 +50,7 @@ export interface IRendererService {
   init(canvas: HTMLCanvasElement, cfg: IRenderConfig,gl: any): Promise<void>;
   testExtension(name: string): boolean;
   clear(options: IClearOptions): void;
-  createModel(options: IModelInitializationOptions): IModel;
+  createModel(): IModel;
   createAttribute(options: IAttributeInitializationOptions): IAttribute;
   createBuffer(options: IBufferInitializationOptions): IBuffer;
   createElements(options: IElementsInitializationOptions): IElements;

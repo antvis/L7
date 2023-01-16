@@ -18,20 +18,14 @@
     "baseUrl": "./",
     "paths": {
       "@antv/l7-core": ["packages/core/src"],
-      "@antv/l7-component": ["packages/component/src"],
       "@antv/l7-layers": ["packages/layers/src"],
       "@antv/l7-map": ["packages/map/src"],
       "@antv/l7-maps/lib/map": ["packages/maps/src/map"],
       "@antv/l7-maps": ["packages/maps/src"],
       "@antv/l7-scene": ["packages/scene/src"],
       "@antv/l7-renderer": ["packages/renderer/src"],
-      "@antv/l7-three": ["packages/three/src"],
-      "@antv/l7-source": ["packages/source/src"],
-      "@antv/l7-mini": ["packages/mini/src"],
       "@antv/l7-utils": ["packages/utils/src"],
-      "@antv/l7-test-utils":["packages/test-utils/src"],
       "@antv/l7": ["packages/l7/src"],
-      "@antv/l7-leaflet": ["packages/leaflet/src"],
       "*": ["packages", "typings/*"]
     }
   },

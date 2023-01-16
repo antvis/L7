@@ -13,10 +13,9 @@ const TYPES = {
   IFactoryMapService: Symbol.for('Factory<IMapService>'),
   IRendererService: Symbol.for('IRendererService'),
   IShaderModuleService: Symbol.for('IShaderModuleService'),
-  IIconService: Symbol.for('IIconService'),
-  IFontService: Symbol.for('IFontService'),
+  
+  
   IInteractionService: Symbol.for('IInteractionService'),
-  IPickingService: Symbol.for('IPickingService'),
   IControlService: Symbol.for('IControlService'),
   IStyleAttributeService: Symbol.for('IStyleAttributeService'),
   ILayer: Symbol.for('ILayer'),
@@ -26,7 +25,6 @@ const TYPES = {
   IPostProcessingPass: Symbol.for('IPostProcessingPass'),
   IFactoryPostProcessingPass: Symbol.for('Factory<IPostProcessingPass>'),
   IFactoryNormalPass: Symbol.for('Factory<IFactoryNormalPass>'),
-  IMultiPassRenderer: Symbol.for('IMultiPassRenderer'),
   SceneID: Symbol.for('SceneID'),
   MapConfig: Symbol.for('MapConfig'),
 };

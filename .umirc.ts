@@ -22,37 +22,8 @@ export default defineConfig({
   mode: 'site',
   navs: [
     {
-      title: 'bugs',
-      path: '/bugs',
-    },
-    {
       title: '特性',
       path: '/features',
-    },
-  
-    {
-      title: '图库',
-      path: '/gallery',
-    },
-    {
-      title: '瓦片',
-      path: '/tile',
-    },
-    {
-      title: '栅格',
-      path: '/raster',
-    },
-    {
-      title: '组件',
-      path: '/component',
-    },
-    {
-      title: '绘制组件',
-      path: '/draw',
-    },
-    {
-      title: 'GitHub',
-      path: 'https://github.com/antvis/L7',
     },
   ],
   esbuild: false,

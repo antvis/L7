@@ -23,7 +23,6 @@
   "author": "xiaoiver",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-component": "2.11.4",
     "@antv/l7-core": "2.11.4",
     "@antv/l7-layers": "2.11.4",
     "@antv/l7-maps": "2.11.4",

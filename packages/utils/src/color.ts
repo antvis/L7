@@ -1,5 +1,4 @@
 import * as d3 from 'd3-color';
-import { $window, isMini } from './mini-adapter';
 export interface IColorRamp {
   positions: number[];
   colors: string[];
@@ -54,7 +53,7 @@ export interface IImagedata {
 export function generateColorRamp(
   colorRamp: IColorRamp,
 ): ImageData | IImagedata {
-  let canvas = $window.document.createElement('canvas');
+  let canvas = window.document.createElement('canvas');
   let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
   canvas.height = 1;
@@ -83,28 +82,18 @@ export function generateColorRamp(
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 256, 1);
   }
-
-  if (!isMini) {
-    data = ctx.getImageData(0, 0, 256, 1).data;
-    // 使用 createImageData 替代 new ImageData、兼容 IE11
-    const imageData = ctx.createImageData(256, 1);
-    for (let i = 0; i < imageData.data.length; i += 4) {
-      imageData.data[i + 0] = data[i + 0];
-      imageData.data[i + 1] = data[i + 1];
-      imageData.data[i + 2] = data[i + 2];
-      imageData.data[i + 3] = data[i + 3];
-    }
-    // @ts-ignore
-    canvas = null;
-    // @ts-ignore
-    ctx = null;
-    return imageData;
-  } else {
-    data = new Uint8ClampedArray(ctx.getImageData(0, 0, 256, 1).data);
-    // @ts-ignore
-    canvas = null;
-    // @ts-ignore
-    ctx = null;
-    return { data, width: 256, height: 1 };
+  data = ctx.getImageData(0, 0, 256, 1).data;
+  // 使用 createImageData 替代 new ImageData、兼容 IE11
+  const imageData = ctx.createImageData(256, 1);
+  for (let i = 0; i < imageData.data.length; i += 4) {
+    imageData.data[i + 0] = data[i + 0];
+    imageData.data[i + 1] = data[i + 1];
+    imageData.data[i + 2] = data[i + 2];
+    imageData.data[i + 3] = data[i + 3];
   }
+  // @ts-ignore
+  canvas = null;
+  // @ts-ignore
+  ctx = null;
+  return imageData;
 }

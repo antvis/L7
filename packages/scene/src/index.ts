@@ -1,4 +1,3 @@
-import { Logo } from '@antv/l7-component';
 import {
   Bounds,
   createLayerContainer,
@@ -6,10 +5,7 @@ import {
   ICameraOptions,
   IControl,
   IControlService,
-  IFontService,
-  IIconFontGlyph,
-  IIconService,
-  IImage,
+
   IInteractionService,
   ILayer,
   ILayerService,
@@ -21,7 +17,6 @@ import {
   IPoint,
   IPopup,
   IPopupService,
-  IPostProcessingPass,
   IRendererService,
   ISceneConfig,
   ISceneService,
@@ -30,9 +25,8 @@ import {
   SceneEventList,
   TYPES,
 } from '@antv/l7-core';
-import { MaskLayer } from '@antv/l7-layers';
 import { ReglRendererService } from '@antv/l7-renderer';
-import { DOM, isMini } from '@antv/l7-utils';
+import { DOM } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import BoxSelect, { BoxSelectEventList } from './boxSelect';
 import ILayerManager from './ILayerManager';
@@ -57,10 +51,9 @@ class Scene
   private mapService: IMapService<unknown>;
   private controlService: IControlService;
   private layerService: ILayerService;
-  private iconService: IIconService;
   private markerService: IMarkerService;
   private popupService: IPopupService;
-  private fontService: IFontService;
+  
   private interactionService: IInteractionService;
   private boxSelect: BoxSelect;
   private container: Container;
@@ -84,8 +77,8 @@ class Scene
     this.mapService = sceneContainer.get<IMapService<unknown>>(
       TYPES.IMapService,
     );
-    this.iconService = sceneContainer.get<IIconService>(TYPES.IIconService);
-    this.fontService = sceneContainer.get<IFontService>(TYPES.IFontService);
+    
+    
     this.controlService = sceneContainer.get<IControlService>(
       TYPES.IControlService,
     );
@@ -105,8 +98,6 @@ class Scene
     // 初始化 scene
     this.sceneService.init(config);
     // TODO: 初始化组件
-
-    this.initControl();
   }
 
   public get map() {
@@ -173,49 +164,6 @@ class Scene
     const layerContainer = createLayerContainer(this.container);
     layer.setContainer(layerContainer, this.container);
     this.sceneService.addLayer(layer);
-
-    // mask 在 scene loaded 之后执行
-    if (layer.inited) {
-      const maskInstance = this.initMask(layer);
-      this.addMask(maskInstance as ILayer, layer.id);
-    } else {
-      layer.on('inited', () => {
-        const maskInstance = this.initMask(layer);
-        this.addMask(maskInstance as ILayer, layer.id);
-      })
-    }
-  }
-
-  public initMask(layer: ILayer) {
-    const {
-      mask,
-      maskfence,
-      maskColor = '#000',
-      maskOpacity = 0,
-    }  = layer.getLayerConfig();
-    if(!mask || !maskfence) return undefined;
-
-    const maskInstance = new MaskLayer()
-    .source(maskfence)
-    .shape('fill')
-    .style({
-      color: maskColor,
-      opacity: maskOpacity,
-    });
-    return maskInstance;
-  }
-
-  public addMask(mask: ILayer, layerId: string) {
-    if(!mask) return;
-    const parent = this.getLayer(layerId);
-    if (parent) {
-      const layerContainer = createLayerContainer(this.container);
-      mask.setContainer(layerContainer, this.container);
-      parent.addMaskLayer(mask);
-      this.sceneService.addMask(mask);
-    } else {
-      console.warn('parent layer not find!');
-    }
   }
 
   public getPickedLayer() {
@@ -238,64 +186,13 @@ class Scene
     this.layerService.remove(layer, parentLayer);
   }
 
-  public removeAllLayer(): void {
-    this.layerService.removeAllLayers();
-  }
+
 
   public render(): void {
     this.sceneService.render();
   }
 
-  public setEnableRender(flag: boolean) {
-    this.layerService.setEnableRender(flag);
-  }
 
-  // asset method
-  /**
-   * 为 layer/point/text 支持 iconfont 模式支持
-   * @param fontUnicode
-   * @param name
-   */
-  public addIconFont(name: string, fontUnicode: string): void {
-    this.fontService.addIconFont(name, fontUnicode);
-  }
-
-  public addIconFonts(options: string[][]): void {
-    options.forEach(([name, fontUnicode]) => {
-      this.fontService.addIconFont(name, fontUnicode);
-    });
-  }
-  /**
-   * 用户自定义添加第三方字体
-   * @param fontFamily
-   * @param fontPath
-   */
-  public addFontFace(fontFamily: string, fontPath: string): void {
-    this.fontService.once('fontloaded', (e) => {
-      this.emit('fontloaded', e);
-    });
-    this.fontService.addFontFace(fontFamily, fontPath);
-  }
-
-  public async addImage(id: string, img: IImage) {
-    if (!isMini) {
-      await this.iconService.addImage(id, img);
-    } else {
-      this.iconService.addImageMini(id, img, this.sceneService);
-    }
-  }
-
-  public hasImage(id: string) {
-    return this.iconService.hasImage(id);
-  }
-
-  public removeImage(id: string) {
-    this.iconService.removeImage(id);
-  }
-
-  public addIconFontGlyphs(fontFamily: string, glyphs: IIconFontGlyph[]) {
-    this.fontService.addIconGlyphs(glyphs);
-  }
 
   // map control method
   public addControl(ctr: IControl) {
@@ -468,7 +365,7 @@ class Scene
 
   public destroy() {
     this.sceneService.destroy();
-    // TODO: 清理其他 Service 例如 IconService
+    
   }
 
   public registerPostProcessingPass(
@@ -517,13 +414,6 @@ class Scene
     );
     this.markerService.init(this.container);
     this.popupService.init(this.container);
-  }
-
-  private initControl() {
-    const { logoVisible, logoPosition } = this.sceneService.getSceneConfig();
-    if (logoVisible) {
-      this.addControl(new Logo({ position: logoPosition }));
-    }
   }
 }
 
