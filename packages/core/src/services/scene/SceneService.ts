@@ -37,7 +37,6 @@ export default class Scene extends EventEmitter implements ISceneService {
   @inject(TYPES.SceneID)
   private readonly id: string;
 
-
   @inject(TYPES.IControlService)
   private readonly controlService: IControlService;
 
@@ -62,7 +61,6 @@ export default class Scene extends EventEmitter implements ISceneService {
   @inject(TYPES.IInteractionService)
   private readonly interactionService: IInteractionService;
 
-
   @inject(TYPES.IShaderModuleService)
   private readonly shaderModuleService: IShaderModuleService;
 
@@ -86,7 +84,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   private markerContainer: HTMLElement;
 
-  private gl: any
+  private gl: any;
 
   private hooks: {
     init: AsyncSeriesHook;
@@ -112,7 +110,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     // 初始化 ShaderModule
     this.shaderModuleService.registerBuiltinModules();
 
-
     /**
      * 初始化底图
      */
@@ -123,7 +120,6 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.cameraService.init();
           this.cameraService.update(viewport);
           resolve();
-         
         });
         this.map.init();
       });
@@ -166,9 +162,7 @@ export default class Scene extends EventEmitter implements ISceneService {
         ) as HTMLCanvasElement;
         this.setCanvas();
 
-        this.gl = this.rendererService.init(
-          this.canvas,
-        );
+        this.gl = await this.rendererService.init(this.canvas);
 
         this.initContainer();
 
@@ -184,12 +178,10 @@ export default class Scene extends EventEmitter implements ISceneService {
       } else {
         console.error('容器 id 不存在');
       }
-      
     });
-   
+
     this.render();
   }
-
 
   public addLayer(layer: ILayer) {
     this.layerService.sceneService = this;
@@ -197,7 +189,6 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public async render() {
-   
     // 首次初始化，或者地图的容器被强制销毁的需要重新初始化
     if (!this.inited) {
       // 还未初始化完成需要等待
@@ -208,21 +199,16 @@ export default class Scene extends EventEmitter implements ISceneService {
       }
       // FIXME: 初始化 marker 容器，可以放到 map 初始化方法中？
       await this.layerService.initLayers();
-       
-        
+
       this.layerService.renderLayers();
       this.controlService.addControls();
       this.loaded = true;
       this.emit('loaded');
       this.inited = true;
     } else {
-   
       this.layerService.renderLayers();
     }
-
   }
-
-
 
   public getSceneContainer(): HTMLDivElement {
     return this.$container as HTMLDivElement;
@@ -275,8 +261,6 @@ export default class Scene extends EventEmitter implements ISceneService {
         ?.removeListener(this.handleWindowResized);
     }
 
-
-
     this.layerService.destroy();
 
     // this.rendererService.destroy();
@@ -284,9 +268,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.interactionService.destroy();
     this.controlService.destroy();
     this.markerService.destroy();
-    
-
-
 
     this.removeAllListeners();
     this.inited = false;
@@ -300,7 +281,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       // Tip: 把这一部分销毁放到写下一个事件循环中执行，兼容 L7React 中 scene 和 layer 同时销毁的情况
       this.rendererService.destroy();
     });
-        // 销毁 container 容器
+    // 销毁 container 容器
     this.$container?.parentNode?.removeChild(this.$container);
     this.emit('destroy');
   }
@@ -326,7 +307,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       canvas.width = w * pixelRatio;
       canvas.height = h * pixelRatio;
     }
-  
+
     // set view port
     // this.gl._gl.viewport(0, 0, pixelRatio * w, pixelRatio * h);
   }
