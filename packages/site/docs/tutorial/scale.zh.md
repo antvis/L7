@@ -106,7 +106,7 @@ layer.scale('type', {
 });
 layer.color('type', ['red', 'white', 'blue', 'yellow']);
 ```
-![](https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*kyP2RpUXdGUAAAAAAAAAAAAADmJ7AQ/original)
+![L7 Cat ](https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*kyP2RpUXdGUAAAAAAAAAAAAADmJ7AQ/original)
 
 ## Linear 连续线性
 
@@ -196,7 +196,7 @@ layer.scale('rate', {
 
 离散分类通常与两种相反的色调一起使用，以显示从负值到中心到正值的变化。这些类型的地图显示了彼此相关的值的大小。
 
-![](https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*8anRRLJNu6YAAAAAAAAAAAAADmJ7AQ/original)
+![L7 diverging](https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*8anRRLJNu6YAAAAAAAAAAAAADmJ7AQ/original)
 
 
 diverging 如果没有设置 domain 会自动根据数据计算min、middle、max 三个值作为domain。range 至少需要设置三个颜色，形成双极色带。
