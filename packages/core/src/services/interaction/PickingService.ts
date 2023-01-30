@@ -217,6 +217,7 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
+  
       // 瓦片数据获取性能问题需要优化
       const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (

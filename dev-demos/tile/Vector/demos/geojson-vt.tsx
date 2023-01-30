@@ -34,18 +34,19 @@ export default () => {
 
         const polygon = new PolygonLayer({
           featureId: 'COLOR',
-          // sourceLayer: 'testName', // woods hillshade contour ecoregions ecoregions2 city
         })
           .source(source)
-          .color('red')
+          .color('COLOR')
           .shape('fill')
           // .active(true)
-          // .select(true)
+          .select(true)
           .style({
-            opacity: 0.6,
+            opacity: 1,
           });
         scene.addLayer(polygon);
-        console.log(polygon);
+        polygon.on('mousemove',(e)=>{
+          console.log(e)
+        })
       });
   }, []);
   return (

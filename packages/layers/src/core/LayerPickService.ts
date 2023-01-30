@@ -44,7 +44,7 @@ export default class BaseLayerPickService implements ILayerPickService {
     }
 
     this.pickRender(target);
-
+     
     return pickingService.pickFromPickingFBO(layer, target);
   }
 
