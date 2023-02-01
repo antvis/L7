@@ -102,7 +102,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public remove(layer: ILayer, parentLayer?: ILayer): void {
+  public async remove(layer: ILayer, parentLayer?: ILayer):Promise<void> {
     // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {
       const layerIndex = parentLayer.layerChildren.indexOf(layer);
@@ -117,13 +117,13 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     }
     this.updateLayerRenderList();
     layer.destroy();
-    this.renderLayers();
+    await this.renderLayers();
     this.emit('layerChange', this.layers);
   }
 
-  public removeAllLayers() {
+  public async removeAllLayers():Promise<void> {
     this.destroy();
-    this.renderLayers();
+    await this.renderLayers();
   }
 
   public setEnableRender(flag: boolean) {
