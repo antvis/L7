@@ -112,19 +112,16 @@ export class TilePickService implements ITilePickService{
     const tiles = this.tileLayerService.getTiles().filter(tile => tile.visible);
     // 提取当前可见瓦片中匹配 ID 的 feature 列表
     const features: any[] = [];
-    tiles.map(tile => {
+    tiles.forEach(tile => {
       features.push(...tile.getFeatureById(pickedFeatureIdx));
     })
 
-    if (features.length <= 0) {
-      return null;
-    }
     // 将 feature 列表合并后返回
     // 统一返回成 polygon 的格式 点、线、面可以通用
 
     // const data = this.tileSourceService.getCombineFeature(features);
 
-    return []
+    return features
   }
 
   // Tip: for interface define

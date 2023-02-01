@@ -85,6 +85,8 @@ export default class VectorTile extends Tile {
     }
 
   }
+  // 获取瓦片数据
+
   public getFeatures(sourceLayer: string){
    const source = this.sourceTile.data as VectorSource;
    return source.getTileData(sourceLayer);
@@ -96,11 +98,13 @@ export default class VectorTile extends Tile {
    * @returns 
    */
   public getFeatureById(id: number) {
+   
     const layer = this.getMainLayer();
     if (!layer) {
       return [];
     }
-    return layer.getSource().data.dataArray.filter(d => d._id === id);
+    const res =  layer.getSource().data.dataArray.filter(d => d._id === id);
+    return res
   }
 
 }
