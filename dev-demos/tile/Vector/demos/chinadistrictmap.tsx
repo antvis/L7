@@ -41,6 +41,9 @@ export default () => {
       })
         .source(source)
         .shape('fill')
+        .select({
+          color:'red'
+        })
         .color('adcode', getColorByAdcode);
 
       const line = new LineLayer({
@@ -70,6 +73,10 @@ export default () => {
       scene.addLayer(line);
       scene.addLayer(line2);
       scene.addLayer(line3);
+
+      fill.on('click',(e)=>{
+        console.log(e)
+      })
       //   scene.addLayer(line2);
       // const debugerLayer = new TileDebugLayer({ usage: 'basemap' });
       // scene.addLayer(debugerLayer);

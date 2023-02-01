@@ -239,12 +239,12 @@ class Scene
     return this.layerService.getLayerByName(name);
   }
 
-  public removeLayer(layer: ILayer, parentLayer?: ILayer): void {
-    this.layerService.remove(layer, parentLayer);
+  public async removeLayer(layer: ILayer, parentLayer?: ILayer): Promise<void> {
+   await this.layerService.remove(layer, parentLayer);
   }
 
-  public removeAllLayer(): void {
-    this.layerService.removeAllLayers();
+  public async  removeAllLayer(): Promise<void> {
+    await this.layerService.removeAllLayers();
   }
 
   public render(): void {
