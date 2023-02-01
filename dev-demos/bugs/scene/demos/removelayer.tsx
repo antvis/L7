@@ -45,8 +45,8 @@ export default function App() {
                     scene.addLayer(pointLayer);
                     scene.addLayer(point2Layer);
                     setTimeout(async() => {
-                        await scene.removeLayer(pointLayer)
-                        await scene.removeLayer(point2Layer)
+                         scene.removeLayer(pointLayer)
+                         scene.removeLayer(point2Layer)
                       
                     }, 1000);
                     // setTimeout(() => {

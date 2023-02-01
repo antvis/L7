@@ -117,13 +117,13 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     }
     this.updateLayerRenderList();
     layer.destroy();
-    await this.renderLayers();
+    this.reRender()
     this.emit('layerChange', this.layers);
   }
 
   public async removeAllLayers():Promise<void> {
     this.destroy();
-    await this.renderLayers();
+    this.reRender()
   }
 
   public setEnableRender(flag: boolean) {
