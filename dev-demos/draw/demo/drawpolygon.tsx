@@ -1,6 +1,6 @@
 import { Scene } from '@antv/l7';
 import { DrawPolygon } from '@antv/l7-draw';
-import { Map } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-maps';
 import React, { useEffect, useState } from 'react';
 
 const id = String(Math.random());
@@ -11,7 +11,7 @@ const Demo: React.FC = () => {
   useEffect(() => {
     const scene = new Scene({
       id,
-      map: new Map({
+      map: new Mapbox({
         center: [120.151634, 30.244831],
         pitch: 0,
         style: 'dark',
