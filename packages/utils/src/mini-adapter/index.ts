@@ -42,12 +42,7 @@ export const isMiniAli =
   typeof my.showToast === 'function' &&
   my.isFRM !== true;
 
-export const isWeChatMiniProgram =
-  typeof wx !== 'undefined' &&
-  wx !== null &&
-  (typeof wx.request !== 'undefined' || typeof wx.miniProgram !== 'undefined');
-
-export const isMini = (isMiniAli || isWeChatMiniProgram) && isMiniScene;
+export const isMini = isMiniAli && isMiniScene;
 
 export const miniWindow = {
   atob,
