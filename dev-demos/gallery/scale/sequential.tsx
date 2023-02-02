@@ -1,7 +1,7 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
-import { useData, addLayers } from './useLine';
+import { addLayers, useData } from './useLine';
 
 export default () => {
   const { geoData } = useData();

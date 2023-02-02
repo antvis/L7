@@ -31,7 +31,7 @@ export default () => {
       const data = await response.arrayBuffer();
 
       const geojson = geobuf.decode(new Pbf(data));
-      var options = {tolerance: 0.001, highQuality: false};
+      var options = {tolerance: 0.005, highQuality: false};
       var simplified = turf.simplify(geojson, options);
 
       

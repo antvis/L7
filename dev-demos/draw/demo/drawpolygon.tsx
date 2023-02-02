@@ -16,6 +16,8 @@ const Demo: React.FC = () => {
         pitch: 0,
         style: 'dark',
         zoom: 10,
+        token:
+        "pk.eyJ1IjoibW9ob25nIiwiYSI6ImNrNGFsdjY5ZzA1NW4zbG14b2JoMnA5c3IifQ.1qVWFsyHW2wKThTgQg08SA"
       }),
     });
     scene.on('mousedown', () => {
