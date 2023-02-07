@@ -83,7 +83,7 @@ Scale 度量是将地图数据值（数字、日期、类别等数据）转成�
 
 ### scale
 
-![Scale 详细介绍](https://mp.weixin.qq.com/s/QyD1_ypu0PDwMxEz45v6Jg)
+[Scale 详细介绍](https://mp.weixin.qq.com/s/QyD1_ypu0PDwMxEz45v6Jg)
 
 参数： (field: string, scaleOptions: IscaleOptions)
 - `field` 指定 source 中传入的数据中用于映射的字段名
