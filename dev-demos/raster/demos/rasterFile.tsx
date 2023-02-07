@@ -2,8 +2,8 @@
 import { RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
-import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
+import React, { useEffect } from 'react';
 
 async function getTiffData() {
   const response = await fetch(

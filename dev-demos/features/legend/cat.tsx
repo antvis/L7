@@ -3,7 +3,7 @@ import { Button } from 'antd';
 
 import { Map } from '@antv/l7-maps';
 import React, { useEffect, useState } from 'react';
-import { useData, addLayers } from './useLine';
+import { addLayers, useData } from './useLine';
 
 export default () => {
   const { geoData } = useData();

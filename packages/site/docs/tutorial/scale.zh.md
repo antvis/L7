@@ -99,20 +99,13 @@ layer.scale('type', {
 layer.color('type', ['red', 'white', 'blue', 'yellow']);
 
 ```
-
-layer.scale('type', {
-  type: 'cat',
-  domain: ['B', 'A', 'C', 'D'],
-});
-layer.color('type', ['red', 'white', 'blue', 'yellow']);
-```
 ![L7 Cat ](https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*kyP2RpUXdGUAAAAAAAAAAAAADmJ7AQ/original)
 
 ## Linear 连续线性
 
 线性是连续数据的映射方法，数据和视觉值是通过线性方法计算的。如数据范围domain [0,1000] 线性映射到 range [red,blue] 渐变色，就是依据线性函完成一一转换。
 
-![L7 Scale 线性]('https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Z_rGRr-jgI0AAAAAAAAAAAAADmJ7AQ/original')
+![L7 Scale 线性](https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Z_rGRr-jgI0AAAAAAAAAAAAADmJ7AQ/original')
 
 ```tsx
 layer.color('rate', ['#ffffcc', '#b6e2b6', '#64c1c0', '#338cbb', '#253494'])
@@ -121,7 +114,7 @@ layer.color('rate', ['#ffffcc', '#b6e2b6', '#64c1c0', '#338cbb', '#253494'])
 数据 L7 默认会设置为 linear, domain为数据的min、max值。颜色会根据 range 颜色生成渐变色。linear
 默认可不设置 domain 区间
 
-```
+```ts
 layer.scale('value', {
   type: 'linear',
   domain: [5, 100], // 可定义domain,也可以不设置，自定根据数据计算

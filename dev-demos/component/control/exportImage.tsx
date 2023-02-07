@@ -1,4 +1,4 @@
-import { GaodeMap, Scene, ExportImage, PointLayer } from '@antv/l7';
+import { ExportImage, GaodeMap, PointLayer, Scene } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';

@@ -1,4 +1,4 @@
-import { GaodeMap, Scene, Logo } from '@antv/l7';
+import { GaodeMap, Logo, Scene } from '@antv/l7';
 import React from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
