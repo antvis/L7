@@ -24,12 +24,12 @@ export interface IControlOption {
   position: PositionName | Element;
   className?: string;
   style?: string;
-  [key: string]: any;
 }
 
 export default class Control<O extends IControlOption = IControlOption>
   extends EventEmitter<ControlEvent>
-  implements IControl<O> {
+  implements IControl<O>
+{
   /**
    * 当前类型控件实例个数
    * @protected
