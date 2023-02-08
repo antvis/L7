@@ -33,11 +33,17 @@ export default class DataSourcePlugin implements ILayerPlugin {
 
     // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tapPromise('DataSourcePlugin', async () => {
+      const timeStamp = Date.now();
       const neeUpdateCluster = this.updateClusterData(layer);
 
       const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
       layer.dataState.dataSourceNeedUpdate = false;
-      return neeUpdateCluster || dataSourceNeedUpdate;
+
+      const needScale = neeUpdateCluster || dataSourceNeedUpdate;
+      if (needScale) {
+        layer.log({ mappingStart: timeStamp });
+      }
+      return needScale;
     });
   }
 

@@ -75,6 +75,9 @@ export default class Source extends EventEmitter implements ISource {
 
   private clusterIndex: Supercluster;
 
+  private sourceInitStart: number;
+  private sourceInitEnd: number;
+
   constructor(data: any | ISource, cfg?: ISourceCFG) {
     super();
     // this.rawData = cloneDeep(data);
@@ -198,6 +201,17 @@ export default class Source extends EventEmitter implements ISource {
     return feature?._id;
   }
 
+  /**
+   * 获取 source 日志信息
+   * @returns 
+   */
+  public getLog() {
+    return {
+      sourceInitStart: this.sourceInitStart,
+      sourceInitEnd: this.sourceInitEnd,
+    }
+  }
+
   public setData(data: any, options?: ISourceCFG) {
     this.originData = data;
     this.dataArrayChanged = false;
@@ -255,9 +269,11 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private async init() {
+    this.sourceInitStart = Date.now();
     this.inited = false;
     await this.processData();
     this.inited = true;
+    this.sourceInitEnd = Date.now();
   }
 
   /**

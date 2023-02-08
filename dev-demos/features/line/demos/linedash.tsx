@@ -33,14 +33,22 @@ export default () => {
               // dashArray: [5, 5],
             });
           scene.addLayer(layer);
+          // scene.render
 
+          const debugService = scene.getDebugService();
+          layer.on('inited', () => {
+            const layerLog = debugService.getLayerLog();
+            console.log('layerLog', layerLog);
+          })
+          const mapLog = debugService.getMapLog();
+          console.log('mapLog', mapLog)
+          
           // setTimeout(()=>{
-          //   console.log('setdata')
-          //   layer.setData({
-          //     type: 'featureCollection',
-          //     features:[],
+          //   console.log('lostContext test')
+          //   debugService.on('webglcontextlost', () => {
+          //     console.log('webglcontextlost');
           //   })
-       
+          //   debugService.lostContext();
           // },3000)
         });
     });

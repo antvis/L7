@@ -42,8 +42,12 @@ export default class DataMappingPlugin implements ILayerPlugin {
         if (!flag) {
           return flag;
         }
+        const timeStamp = Date.now();
+
         layer.dataState.dataMappingNeedUpdate = false;
-        return this.generateMaping(layer, { styleAttributeService });
+        const result = this.generateMaping(layer, { styleAttributeService });
+        layer.log({ mappingEnd: timeStamp });
+        return result;
       },
     );
 

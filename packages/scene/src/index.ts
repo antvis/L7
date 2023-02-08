@@ -13,6 +13,7 @@ import {
   IInteractionService,
   ILayer,
   ILayerService,
+  IDebugService,
   ILngLat,
   IMapService,
   IMarker,
@@ -57,6 +58,7 @@ class Scene
   private mapService: IMapService<unknown>;
   private controlService: IControlService;
   private layerService: ILayerService;
+  private debugService: IDebugService;
   private iconService: IIconService;
   private markerService: IMarkerService;
   private popupService: IPopupService;
@@ -90,6 +92,7 @@ class Scene
       TYPES.IControlService,
     );
     this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
+    this.debugService = sceneContainer.get<IDebugService>(TYPES.IDebugService);
 
     this.markerService = sceneContainer.get<IMarkerService>(
       TYPES.IMarkerService,
@@ -147,6 +150,15 @@ class Scene
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
+
+  /**
+   * 对外暴露 debugService
+   * @returns 
+   */
+  public getDebugService(): IDebugService{
+    return this.debugService;
+  }
+
   public async exportPng(type?: 'png' | 'jpg'): Promise<string> {
     return await this.sceneService.exportPng(type);
   }

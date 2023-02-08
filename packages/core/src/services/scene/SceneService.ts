@@ -26,6 +26,7 @@ import { IMapService } from '../map/IMapService';
 import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
+import { IDebugService } from '../debug/IDebugService';
 
 /**
  * will emit `loaded` `resize` `destroy` event panstart panmove panend
@@ -64,6 +65,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.ILayerService)
   private readonly layerService: ILayerService;
+
+  @inject(TYPES.IDebugService)
+  private readonly debugService: IDebugService;
 
   @inject(TYPES.ICameraService)
   private readonly cameraService: ICameraService;
@@ -134,6 +138,10 @@ export default class Scene extends EventEmitter implements ISceneService {
      * 初始化底图
      */
     this.hooks.init.tapPromise('initMap', async () => {
+      this.debugService.mapLog({
+        type: this.map.version,
+        mapInitStart: Date.now(),
+      })
       // 等待首次相机同步
       await new Promise<void>((resolve) => {
         this.map.onCameraChanged((viewport: IViewport) => {
@@ -270,6 +278,8 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.configService.getSceneConfig(this.id) as IRenderConfig,
           undefined,
         );
+        // 绑定 webglContextLost 的监听
+        this.debugService.registerContextLost();
       } else {
         console.error('容器 id 不存在');
       }

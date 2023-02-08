@@ -81,6 +81,7 @@ export default class ReglRendererService implements IRendererService {
             'EXT_texture_filter_anisotropic',
             'EXT_blend_minmax',
             'WEBGL_depth_texture',
+            'WEBGL_lose_context',
           ],
           profile: true,
           onDone: (err: Error | null, r?: regl.Regl | undefined): void => {

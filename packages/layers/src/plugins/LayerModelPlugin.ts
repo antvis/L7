@@ -7,21 +7,25 @@ import TileLayer from '../tile/tileLayer/BaseLayer';
  */
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
-  public async initLayerModel(layer: ILayer) {
+  private async build(layer: ILayer) {
+    const buildModelStart = Date.now();
     // 更新Model 配置项
     layer.prepareBuildModel();
     // 初始化 Model
     await layer.buildModels();
+
+    const buildModenEnd = Date.now();
+    layer.log({ buildModelStart, buildModenEnd });
+  }
+
+  public async initLayerModel(layer: ILayer) {
+    await this.build(layer);
 
     layer.styleNeedUpdate = false;
   }
 
   public async prepareLayerModel(layer: ILayer) {
-    // 更新Model 配置项
-    layer.prepareBuildModel();
-    // clear layerModel resource
-    // 初始化 Model
-    await layer.buildModels();
+    await this.build(layer);
     // layer.layerModelNeedUpdate = false;
   }
 
