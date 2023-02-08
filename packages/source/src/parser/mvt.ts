@@ -29,27 +29,43 @@ const getVectorTile = async (
   tileParams: TileLoadParams,
   tile: SourceTile,
   requestParameters?: Partial<RequestParameters>,
+  getCustomData?: ITileParserCFG['getCustomData'],
 ): Promise<ITileSource | undefined> => {
   const tileUrl = getURLFromTemplate(url, tileParams);
   return new Promise((resolve) => {
-    const xhr = getArrayBuffer(
-      {
-        ...requestParameters,
-        url: tileUrl,
-      },
-      (err, data) => {
-        if (err || !data) {
-          resolve(undefined);
-        } else {
-          const vectorSource = new VectorSource(data, tile.x, tile.y, tile.z);
-          // const vectorTile = new VectorTile(
-          //   new Protobuf(data),
-          // ) as MapboxVectorTile;
-          resolve(vectorSource);
-        }
-      },
-    );
-    tile.xhrCancel = () => xhr.abort();
+    if (getCustomData) {
+      getCustomData(
+        {
+          x: tile.x,
+          y: tile.y,
+          z: tile.z,
+        },
+        (err, data) => {
+          if (err || !data) {
+            resolve(undefined);
+          } else {
+            const vectorSource = new VectorSource(data, tile.x, tile.y, tile.z);
+            resolve(vectorSource);
+          }
+        },
+      );
+    } else {
+      const xhr = getArrayBuffer(
+        {
+          ...requestParameters,
+          url: tileUrl,
+        },
+        (err, data) => {
+          if (err || !data) {
+            resolve(undefined);
+          } else {
+            const vectorSource = new VectorSource(data, tile.x, tile.y, tile.z);
+            resolve(vectorSource);
+          }
+        },
+      );
+      tile.xhrCancel = () => xhr.abort();
+    }
   });
 };
 
@@ -59,9 +75,14 @@ export default function mapboxVectorTile(
 ): IParserData {
   // TODO: 后续考虑支持多服务
   const url = Array.isArray(data) ? data[0] : data;
-
   const getTileData = (tileParams: TileLoadParams, tile: SourceTile) =>
-    getVectorTile(url, tileParams, tile, cfg?.requestParameters);
+    getVectorTile(
+      url,
+      tileParams,
+      tile,
+      cfg?.requestParameters,
+      cfg?.getCustomData,
+    );
 
   const tilesetOptions = {
     ...DEFAULT_CONFIG,
