@@ -3,7 +3,6 @@ import { TestScene } from '@antv/l7-test-utils';
 import PointLayer from '../';
 
 describe('template', () => {
-  
   const el = document.createElement('div');
   el.id = 'test-div-id';
   const body = document.querySelector('body') as HTMLBodyElement;
@@ -40,8 +39,8 @@ describe('template', () => {
     scene.on('loaded',  () =>{
       scene.addLayer(layer)
    })
-    
   });
+
   it('scene layer text', async () => {
     const layer = new PointLayer({name:'text'}).source(
         testData,
@@ -60,10 +59,6 @@ describe('template', () => {
       scene.addLayer(layer)
       expect(layer.name).toEqual('text')
    })
-
-    scene.addLayer(layer)
-  
-    
   });
 
   it('scene layer extrude', async () => {
@@ -79,10 +74,9 @@ describe('template', () => {
     ).shape('cloumn')
     .color('red')
     .size([5,5,10])
-    scene.addLayer(layer)
-    
-
-    
+    scene.on('loaded',  () =>{
+      scene.addLayer(layer)
+    })
   });
 
   it('scene layer simplePoint', async () => {
@@ -101,9 +95,5 @@ describe('template', () => {
     scene.on('loaded',  () =>{
       scene.addLayer(layer)
    })
-    
   });
-
-
- 
 });
