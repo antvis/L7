@@ -1,7 +1,7 @@
+import { IParseDataItem, IParserData, ITransform } from '@antv/l7-core';
 import { aProjectFlat, Satistics } from '@antv/l7-utils';
 import { hexbin } from 'd3-hexbin';
 const R_EARTH = 6378000;
-import { IParseDataItem, IParserData, ITransform } from '@antv/l7-core';
 interface IHexBinItem<T> extends Array<T> {
   x: number;
   y: number;
