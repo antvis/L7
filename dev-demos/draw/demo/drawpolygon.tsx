@@ -66,7 +66,6 @@ const Demo: React.FC = () => {
       <div id={id} style={{ height: 400, position: 'relative' }} />
     </div>
   );
-  
 };
 
 export default Demo;

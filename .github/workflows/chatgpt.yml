@@ -16,4 +16,4 @@ jobs:
           openai_engine: "text-davinci-002" #optional
           openai_temperature: 0.5 #optional
           openai_max_tokens: 2048 #optional
-          mode: file # file or patch 
+          mode: patch # file or patch git
