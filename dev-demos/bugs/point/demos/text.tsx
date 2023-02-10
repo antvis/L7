@@ -3303,23 +3303,38 @@ export default () => {
   
     const labelLayer = new PointLayer({
       zIndex: 1,
-      autoFit: false
+      autoFit: true
     })
       .source(polygonLayerData)
       .color("black")
       .shape("name", "text")
-      .size(20)
+      .size(15)
       .style({
         opacity: 1,
+        fontFamily:'fangsong',
         stroke: "#fff",
         strokeWidth: 1,
         padding: [0, 0],
         textAllowOverlap: false
       });
+
+ 
   
     scene.addLayer(polygonLayer);
     scene.addLayer(lineLayer);
     scene.addLayer(labelLayer);
+    setTimeout(() => {
+
+      labelLayer.style({
+        // fontFamily:'cursive',
+        // textAnchor: 'top',
+        textOffset:[20,10]
+
+
+      })
+      scene.render();
+         
+    },2000)
   })
   
     return (
