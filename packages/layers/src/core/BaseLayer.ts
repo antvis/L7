@@ -429,7 +429,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.log('sourceInitStart', sourceInitStart);
     this.log('sourceInitEnd', sourceInitEnd);
     this.log('layerInitEnd');
-   
+
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
@@ -448,11 +448,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return;
     }
     const key = `${this.id}.${logType}`;
-    const values: {[key: string]: any} = {
+    const values: { [key: string]: any } = {
       id: this.id,
       type: this.type,
     };
-    if(time) {
+    if (time) {
       values.time = time;
     }
     this.debugService.log(key, values);
@@ -1041,7 +1041,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.models = [];
     // 清除图层日志（如果有的话：非瓦片相关）
-    // this.debugService.removeLayerLog(this.id);
+    this.debugService.removeLog(this.id);
 
     this.emit('remove', {
       target: this,

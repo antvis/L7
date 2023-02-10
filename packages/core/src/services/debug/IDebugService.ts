@@ -5,9 +5,8 @@ export interface ILog {
 export interface IDebugService {
 
   log(key: string, values: ILog): void;
-  // getLog(key: string | RegExp, key2?: string): ILog[];
   getLog(key: string | string[] | undefined): void;
-
+  removeLog(key: string): void;
   registerContextLost(): void;
   lostContext(): void;
 }
