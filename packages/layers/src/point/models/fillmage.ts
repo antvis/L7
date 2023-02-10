@@ -196,7 +196,7 @@ export default class FillImageModel extends BaseModel {
         update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { shape } = feature;
-          const { x, y } = iconMap[shape as string] || { x: 0, y: 0 };
+          const { x, y } = iconMap[shape as string] || { x: -64, y: -64 };
           return [x, y];
         },
       },
