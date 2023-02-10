@@ -235,3 +235,4 @@ export function getDefaultDomain(rampColors: IColorRamp) {
       [0, 1];
   }
 }
+
