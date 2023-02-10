@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import { TYPES } from '../../types';
 import { inject, injectable } from 'inversify';
-import { IDebugService, ILayerId, ILayerLog, IMapLog } from './IDebugService';
+import { IDebugService, ILog } from './IDebugService';
 import { IRendererService } from '../renderer/IRendererService';
 
 @injectable()
@@ -10,70 +10,51 @@ export default class DebugService extends EventEmitter implements IDebugService 
   @inject(TYPES.IRendererService)
   private readonly rendererService: IRendererService;
 
-  /** */
-  private mapLogCache: IMapLog = {};
+  private logMap = new Map<string, ILog>();
 
-  /** 存储 layer 的日志信息 */
-  private layerLogMap = new Map<ILayerId, ILayerLog>();
 
-  /**
-   * 设置地图日志信息
-   * @param logs 
-   */
-  public mapLog(logs: IMapLog) {
-    this.mapLogCache = {
-      ...this.mapLogCache,
-      ...logs,
+  log(key: string, values: ILog) {
+    const [k1, k2] = key.split('.');
+    const logType = k2;
+    /**
+     * map: {
+     *  mapInitStart: { time, ... }
+     * },
+     * 12: {
+     *  layerInitStart: { time, id, ... },
+     *  layerInitEnd: { time, id, ... },
+     * }
+     */
+    const cacheLog = this.logMap.get(k1) || {}; // 一级存储对象
+    const cacheLogValues = cacheLog[logType] || {}; // 二级存储对象
+    const logValues = {
+      time: Date.now(),
+      ...cacheLogValues,
+      ...values,
+    }
+    this.logMap.set(k1, {
+      ...cacheLog,
+      [logType]: logValues,
+    })
+  }
+
+  getLog(key: string | string[] | undefined) {
+    switch(typeof key) {
+      case 'string':
+        return this.logMap.get(key);
+      case 'object':
+        return (key as Array<string>).map(k => this.logMap.get(k)).filter(o => o !== undefined) as ILog[];
+      case 'undefined':
+        return Array.from(this.logMap.keys()).map(k => this.logMap.get(k))
     }
   }
 
   /**
-   * 获取地图日志信息
-   * @returns 
+   * 删除日志
+   * @param key 
    */
-  public getMapLog() {
-    return this.mapLogCache;
-  }
-
-  /**
-   * 设置、更新 layer 的日志
-   * @param id 
-   * @param layerLogs 
-   */
-  public layerLog(id: ILayerId, logs: ILayerLog) {
-    const lastLog = this.layerLogMap.get(id) || {};
-    this.layerLogMap.set(id, {
-      ...lastLog,
-      ...logs,
-    });
-  }
-
-  /**
-   * 删除对应 layer 的日志
-   * @param id 
-   */
-  public removeLayerLog(id: ILayerId) {
-    this.layerLogMap.delete(id);
-  }
-
-  /**
-   * 获取对应的图层日志
-   * @param flag 
-   * @returns 
-   */
-  public getLayerLog(flag: undefined | ILayerId | ILayerId[]) {
-    switch(typeof flag) {
-      case 'undefined': // 获取所有图层的日志
-        return [...this.layerLogMap.values()];
-      case 'string':    // 获取对应图层的日志
-        return this.layerLogMap.has(flag) ? this.layerLogMap.get(flag) as ILayerLog : undefined;
-      case 'object':    // 获取一组对应日志
-        return (flag as ILayerId[])
-        .map((id: ILayerId) => this.layerLogMap.get(id))
-        .filter(log => log !== undefined) as ILayerLog[];
-      default:
-        return undefined;
-    }
+  public removeLog(key: string) {
+    this.logMap.delete(key);
   }
 
   public registerContextLost() {
@@ -94,6 +75,6 @@ export default class DebugService extends EventEmitter implements IDebugService 
   }
 
   public destroy() {
-    this.layerLogMap.clear();
+    this.logMap.clear();
   }
 }

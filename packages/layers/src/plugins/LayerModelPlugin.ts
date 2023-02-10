@@ -8,14 +8,13 @@ import TileLayer from '../tile/tileLayer/BaseLayer';
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
   private async build(layer: ILayer) {
-    const buildModelStart = Date.now();
+    layer.log('buildModelStart');
     // 更新Model 配置项
     layer.prepareBuildModel();
     // 初始化 Model
     await layer.buildModels();
 
-    const buildModenEnd = Date.now();
-    layer.log({ buildModelStart, buildModenEnd });
+    layer.log('buildModenEnd');
   }
 
   public async initLayerModel(layer: ILayer) {

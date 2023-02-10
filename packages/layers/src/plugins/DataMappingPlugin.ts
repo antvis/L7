@@ -42,11 +42,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
         if (!flag) {
           return flag;
         }
-        const timeStamp = Date.now();
 
         layer.dataState.dataMappingNeedUpdate = false;
         const result = this.generateMaping(layer, { styleAttributeService });
-        layer.log({ mappingEnd: timeStamp });
+        layer.log('mappingEnd');
         return result;
       },
     );

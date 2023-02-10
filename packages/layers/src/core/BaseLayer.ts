@@ -22,7 +22,6 @@ import {
   ILayer,
   ILayerAttributesOption,
   ILayerConfig,
-  ILayerLog,
   ILayerModel,
   ILayerModelInitializationOptions,
   ILayerPickService,
@@ -314,7 +313,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public async init(): Promise<void> {
-    const layerInitStart = Date.now();
     // 设置配置项
     const sceneId = this.container.get<string>(TYPES.SceneID);
     this.startInit = true;
@@ -337,6 +335,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     );
     this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
     this.debugService = this.container.get<IDebugService>(TYPES.IDebugService);
+    this.log('layerInitStart');
     this.interactionService = this.container.get<IInteractionService>(
       TYPES.IInteractionService,
     );
@@ -425,18 +424,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await this.hooks.init.promise();
     this.inited = true;
 
-    const layerInitEnd = Date.now();
     const currentSource = this.getSource();
     const { sourceInitStart, sourceInitEnd } = currentSource.getLog();
-    this.log({
-      id: this.id,
-      type: this.type,
-      sourceInitStart,
-      sourceInitEnd,
-      layerInitStart,
-      layerInitEnd,
-      encodeDataCount: this.getEncodedData().length,
-    });
+    this.log('sourceInitStart', sourceInitStart);
+    this.log('sourceInitEnd', sourceInitEnd);
+    this.log('layerInitEnd');
+   
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
@@ -449,12 +442,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.hooks.afterInit.call();
   }
 
-  public log(logs: ILayerLog) {
+  public log(logType: string, time?: number) {
     // @ts-ignore 瓦片、瓦片图层目前不参与日志
     if (this.tileLayer || this.isTileLayer) {
       return;
     }
-    this.debugService.layerLog(this.id, logs);
+    const key = `${this.id}.${logType}`;
+    const values: {[key: string]: any} = {
+      id: this.id,
+      type: this.type,
+    };
+    if(time) {
+      values.time = time;
+    }
+    this.debugService.log(key, values);
   }
 
   public updateModelData(data: IAttributeAndElements) {
@@ -1040,7 +1041,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.models = [];
     // 清除图层日志（如果有的话：非瓦片相关）
-    this.debugService.removeLayerLog(this.id);
+    // this.debugService.removeLayerLog(this.id);
 
     this.emit('remove', {
       target: this,

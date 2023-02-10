@@ -41,7 +41,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
 
       const needScale = neeUpdateCluster || dataSourceNeedUpdate;
       if (needScale) {
-        layer.log({ mappingStart: timeStamp });
+        layer.log('mappingStart', timeStamp);
       }
       return needScale;
     });

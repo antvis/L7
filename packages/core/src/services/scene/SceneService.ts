@@ -138,9 +138,8 @@ export default class Scene extends EventEmitter implements ISceneService {
      * 初始化底图
      */
     this.hooks.init.tapPromise('initMap', async () => {
-      this.debugService.mapLog({
-        type: this.map.version,
-        mapInitStart: Date.now(),
+      this.debugService.log('map.mapInitStart', {
+        type: this.map.version
       })
       // 等待首次相机同步
       await new Promise<void>((resolve) => {

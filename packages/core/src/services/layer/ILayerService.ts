@@ -38,7 +38,6 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
-import { ILayerLog } from '../debug/IDebugService';
 
 export enum BlendType {
   normal = 'normal',
@@ -444,7 +443,7 @@ export interface ILayer {
   getMinZoom(): number;
   getMaxZoom(): number;
   get(name: string): number;
-  log(logs: ILayerLog): void
+  log(type: string, time?: number): void
   setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
 

@@ -1,5 +1,5 @@
 // @ts-ignore
-import { LineLayer, Scene } from '@antv/l7';
+import { LineLayer, PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { GaodeMapV1 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -33,16 +33,40 @@ export default () => {
               // dashArray: [5, 5],
             });
           scene.addLayer(layer);
-          // scene.render
+
+          const point = new PointLayer({})
+          .source([{ lng: 116.2, lat: 40 }], {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            }
+          })
+          .size(10)
+          .shape('circle')
+          .color('#5CCEA1');
+          scene.addLayer(point);
 
           const debugService = scene.getDebugService();
-          layer.on('inited', () => {
-            const layerLog = debugService.getLayerLog();
-            console.log('layerLog', layerLog);
+         
+          layerAllLoad([point, layer], () => {
+            // console.log('debugService id type', debugService.getLog())
+            // console.log('debugService id type', debugService.getLog(layer.id))
+            // console.log('debugService id type', debugService.getLog('map'))
+            console.log('debugService id type', debugService.getLog([layer.id, point.id]))
           })
-          const mapLog = debugService.getMapLog();
-          console.log('mapLog', mapLog)
-          
+         
+          function layerAllLoad(layers: any[], callback: () => void) {
+            let count = 0;
+            layers.forEach(l => {
+              l.on('inited', () => {
+                count++;
+                if(count === layers.length) {
+                  callback();
+                }
+              })
+            })
+          }
           // setTimeout(()=>{
           //   console.log('lostContext test')
           //   debugService.on('webglcontextlost', () => {
