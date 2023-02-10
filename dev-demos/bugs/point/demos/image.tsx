@@ -33,14 +33,14 @@ export default () => {
         'https://gw.alipayobjects.com/zos/bmw-prod/904d047a-16a5-461b-a921-98fa537fc04a.svg',
       );
       const data = await response.json();
-      const newData = data.map((item: any) => {
-        item.type = ['00', '01', '02'][Math.floor(Math.random() * 3)];
+      const newData = data.map((item: any,index: number) => {
+        item.type = ['00', '01', '02',''][index % 4];
         return item;
       });
       const imageLayer = new PointLayer({
         autoFit:false
       })
-        .source(newData, {
+        .source(newData.slice(0,4), {
           parser: {
             type: 'json',
             x: 'longitude',
@@ -52,25 +52,9 @@ export default () => {
         })
         .active(false)
         .size(20);
+
       scene.addLayer(imageLayer);
-      setInterval(()=>{
-        scene.addImage(
-            '00',
-            'https://gw.alipayobjects.com/mdn/rms_fcd5b3/afts/img/A*g8cUQ7pPT9YAAAAAAAAAAAAAARQnAQ',
-          );
-          scene.addImage(
-            '01',
-            'https://gw.alipayobjects.com/mdn/rms_fcd5b3/afts/img/A*LTcXTLBM7kYAAAAAAAAAAAAAARQnAQ',
-          );
-          scene.addImage(
-            '02',
-            'https://gw.alipayobjects.com/zos/bmw-prod/904d047a-16a5-461b-a921-98fa537fc04a.svg',
-          );
-        const data = newData.slice(0,5+ Math.round(Math.random()*10));
-        imageLayer.setData(data)
-        console.log(imageLayer)
-        console.log('更新')
-      },3000)
+  
      
           
     }, []);

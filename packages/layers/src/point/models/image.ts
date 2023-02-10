@@ -48,21 +48,21 @@ export default class ImageModel extends BaseModel {
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({
-            flipY: true,
-            data,
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width,
-            height,
-          })
+              flipY: true,
+              data,
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width,
+              height,
+            })
           : this.createTexture2D({
-            flipY: true,
-            data: [1],
-            format: gl.LUMINANCE,
-            type: gl.FLOAT,
-            width: 1,
-            height: 1,
-          });
+              flipY: true,
+              data: [1],
+              format: gl.LUMINANCE,
+              type: gl.FLOAT,
+              width: 1,
+              height: 1,
+            });
     }
     return {
       u_raisingHeight: Number(raisingHeight),
@@ -83,7 +83,7 @@ export default class ImageModel extends BaseModel {
   public async initModels(): Promise<IModel[]> {
     this.iconService.on('imageUpdate', this.updateTexture);
     this.updateTexture();
-    return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -93,25 +93,21 @@ export default class ImageModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'pointImage',
-        vertexShader: pointImageVert,
-        fragmentShader: pointImageFrag,
-        triangulation: PointImageTriangulation,
-        depth: { enable: false },
-        primitive: gl.POINTS,
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      });
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'pointImage',
+      vertexShader: pointImageVert,
+      fragmentShader: pointImageFrag,
+      triangulation: PointImageTriangulation,
+      depth: { enable: false },
+      primitive: gl.POINTS,
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
 
-    return [model]
-
+    return [model];
   }
   protected registerBuiltinAttributes() {
     // point layer size;
@@ -127,9 +123,7 @@ export default class ImageModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
@@ -149,12 +143,10 @@ export default class ImageModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { shape } = feature;
-          const { x, y } = iconMap[shape as string] || { x: 0, y: 0 };
+          const { x, y } = iconMap[shape as string] || { x: -64, y: -64 }; // 非画布区域，默认的图标改为透明
           return [x, y];
         },
       },
@@ -172,9 +164,10 @@ export default class ImageModel extends BaseModel {
       });
       // 更新完纹理后在更新的图层的时候需要更新所有的图层
       // this.layer.layerModelNeedUpdate = true;
-      setTimeout(() => { // 延迟渲染
+      setTimeout(() => {
+        // 延迟渲染
         this.layerService.throttleRenderLayers();
-      })
+      });
 
       return;
     }
