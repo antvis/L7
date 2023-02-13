@@ -32,7 +32,7 @@ const lineStyleObj: { [key: string]: number } = {
 };
 export default class LineModel extends BaseModel {
   protected texture: ITexture2D = this.createTexture2D({
-    data: [0,0,0,0],
+    data: [0, 0, 0, 0],
     mag: gl.NEAREST,
     min: gl.NEAREST,
     premultiplyAlpha: false,
