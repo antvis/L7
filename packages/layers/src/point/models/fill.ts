@@ -12,17 +12,14 @@ import {
 import { getMask, PointFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { IPointLayerStyleOptions } from '../../core/interface';
+import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 // animate pointLayer shader - support animate
 import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
-import { SizeUnitType } from '../../core/interface'
-
 
 export default class FillModel extends BaseModel {
-
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
@@ -100,9 +97,8 @@ export default class FillModel extends BaseModel {
     };
   }
   public getAnimateUniforms(): IModelUniform {
-    const {
-      animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as ILayerConfig;
+    const { animateOption = { enable: false } } =
+      this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_animate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -122,10 +118,10 @@ export default class FillModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    return await this.buildModels();
+    return this.buildModels();
   }
 
-  public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -139,32 +135,33 @@ export default class FillModel extends BaseModel {
     const { frag, vert, type } = this.getShaders(animateOption);
 
     this.layer.triangulation = PointFillTriangulation;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: PointFillTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        workerEnabled,
-        workerOptions: {
-          modelType: type,
-          enablePicking,
-          shape2d,
-        },
-      });
-      return [model];
+    const model = await this.layer.buildLayerModel({
+      moduleName: type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: PointFillTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      workerEnabled,
+      workerOptions: {
+        modelType: type,
+        enablePicking,
+        shape2d,
+      },
+    });
+    return [model];
   }
 
   /**
    * 根据 animateOption 的值返回对应的 shader 代码
    * @returns
    */
-  public getShaders(
-    animateOption: Partial<IAnimateOption>,
-  ): { frag: string; vert: string; type: string } {
+  public getShaders(animateOption: Partial<IAnimateOption>): {
+    frag: string;
+    vert: string;
+    type: string;
+  } {
     if (animateOption.enable) {
       switch (animateOption.type) {
         case 'wave':
@@ -242,9 +239,7 @@ export default class FillModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 5 } = feature;
           return Array.isArray(size) ? [size[0]] : [size];
         },
@@ -264,9 +259,7 @@ export default class FillModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { shape = 2 } = feature;
           const shapeIndex = shape2d.indexOf(shape as string);
           return [shapeIndex];
@@ -274,6 +267,4 @@ export default class FillModel extends BaseModel {
       },
     });
   }
-
-
 }

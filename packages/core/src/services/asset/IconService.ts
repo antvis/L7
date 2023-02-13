@@ -5,12 +5,7 @@ import 'reflect-metadata';
 import { buildIconMaping } from '../../utils/font_util';
 import { ITexture2D } from '../renderer/ITexture2D';
 import { ISceneService } from '../scene/ISceneService';
-import {
-  IIcon,
-  IICONMap,
-  IIconService,
-  IImage,
-} from './IIconService';
+import { IIcon, IICONMap, IIconService, IImage } from './IIconService';
 const BUFFER = 3;
 const MAX_CANVAS_WIDTH = 1024;
 const imageSize = 64;
@@ -47,8 +42,8 @@ export default class IconService extends EventEmitter implements IIconService {
         size: imageSize,
       });
     }
-     this.updateIconMap();// 先存储 ID，
-    imagedata = await this.loadImage(image) as HTMLImageElement;
+    this.updateIconMap(); // 先存储 ID，
+    imagedata = (await this.loadImage(image)) as HTMLImageElement;
     const iconImage = this.iconData.find((icon: IIcon) => {
       return icon.id === id;
     });
@@ -58,9 +53,8 @@ export default class IconService extends EventEmitter implements IIconService {
       iconImage.height = imagedata.height;
     }
     this.update();
-
   }
-  
+
   /**
    * 适配小程序
    * @param id

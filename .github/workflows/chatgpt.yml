@@ -1,0 +1,19 @@
+on: [pull_request]
+
+name: ChatGPT CodeReview
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: ChatGPT explain code
+    steps:
+      - name: ChatGTP explain code
+        uses: cirolini/chatgpt-github-actions@v1.3
+        with:
+          openai_api_key: ${{ secrets.CHATGPT_SESSION_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_pr_id: ${{ github.event.number }}
+          openai_engine: "text-davinci-002" #optional
+          openai_temperature: 0.5 #optional
+          openai_max_tokens: 2048 #optional
+          mode: patch # file or patch git

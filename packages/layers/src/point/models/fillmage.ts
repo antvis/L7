@@ -11,12 +11,11 @@ import {
 import { getCullFace, getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { IPointLayerStyleOptions } from '../../core/interface';
+import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
 import pointFillVert from '../shaders/image/fillImage_vert.glsl';
-import { SizeUnitType } from '../../core/interface'
 
 export default class FillImageModel extends BaseModel {
   private meter2coord: number = 1;
@@ -132,35 +131,29 @@ export default class FillImageModel extends BaseModel {
     );
   }
 
-  public async initModels():Promise<IModel[]>  {
+  public async initModels(): Promise<IModel[]> {
     this.iconService.on('imageUpdate', this.updateTexture);
     this.updateTexture();
-    return await this.buildModels();
+    return this.buildModels();
   }
 
-
-
- public async buildModels():Promise<IModel[]>  {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-       const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'pointFillImage',
-        vertexShader: pointFillVert,
-        fragmentShader: pointFillFrag,
-        triangulation: PointFillTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        cull: {
-          enable: true,
-          face: getCullFace(this.mapService.version),
-        },
-      });
-      return [model]
-       
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'pointFillImage',
+      vertexShader: pointFillVert,
+      fragmentShader: pointFillFrag,
+      triangulation: PointFillTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      cull: {
+        enable: true,
+        face: getCullFace(this.mapService.version),
+      },
+    });
+    return [model];
   }
 
   public clearModels() {
@@ -182,9 +175,7 @@ export default class FillImageModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { rotate = 0 } = feature;
           return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
         },
@@ -202,12 +193,10 @@ export default class FillImageModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { shape } = feature;
-          const { x, y } = iconMap[shape as string] || { x: 0, y: 0 };
+          const { x, y } = iconMap[shape as string] || { x: -64, y: -64 };
           return [x, y];
         },
       },
@@ -256,13 +245,9 @@ export default class FillImageModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 5 } = feature;
-          return Array.isArray(size)
-            ? [size[0]]
-            : [(size as number)];
+          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });
