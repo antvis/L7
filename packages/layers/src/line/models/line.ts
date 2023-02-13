@@ -31,6 +31,7 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class LineModel extends BaseModel {
+  private textureListenService: undefined | any;
   protected texture: ITexture2D = this.createTexture2D({
     data: [0,0,0,0],
     mag: gl.NEAREST,
@@ -163,8 +164,10 @@ export default class LineModel extends BaseModel {
   public async initModels():Promise<IModel[]>{
     this.updateTexture();
     // Tip: keep updateTexture listen only once
-    this.iconService.off('imageUpdate', this.updateTexture);
-    this.iconService.on('imageUpdate', this.updateTexture);
+    if(!this.textureListenService) {
+      this.textureListenService = this.iconService.on('imageUpdate', this.updateTexture);
+    }
+    
     return await this.buildModels();
   }
 
