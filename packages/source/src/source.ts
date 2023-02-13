@@ -26,6 +26,7 @@ import { getParser, getTransform } from './factory';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
+import { Log } from './log';
 
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
@@ -75,8 +76,7 @@ export default class Source extends EventEmitter implements ISource {
 
   private clusterIndex: Supercluster;
 
-  private sourceInitStart: number;
-  private sourceInitEnd: number;
+  private logger: Log = new Log();
 
   constructor(data: any | ISource, cfg?: ISourceCFG) {
     super();
@@ -206,10 +206,7 @@ export default class Source extends EventEmitter implements ISource {
    * @returns 
    */
   public getLog() {
-    return {
-      sourceInitStart: this.sourceInitStart,
-      sourceInitEnd: this.sourceInitEnd,
-    }
+    return this.logger;
   }
 
   public setData(data: any, options?: ISourceCFG) {
@@ -269,11 +266,11 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private async init() {
-    this.sourceInitStart = Date.now();
+    this.logger.log('sourceInitStart');
     this.inited = false;
     await this.processData();
     this.inited = true;
-    this.sourceInitEnd = Date.now();
+    this.logger.log('sourceInitEnd');
   }
 
   /**
