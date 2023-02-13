@@ -16,4 +16,3 @@ export * from './stencli';
 export * from './tileset-manager';
 export * from './worker-helper';
 export * from './workers/triangulation';
-
