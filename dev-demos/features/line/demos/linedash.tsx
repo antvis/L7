@@ -14,6 +14,7 @@ export default () => {
         style:'light'
         // style: 'amap://styles/wine',
       }),
+      debug: true,
     });
 
     scene.on('loaded', () => {

@@ -93,6 +93,7 @@ class Scene
     );
     this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
     this.debugService = sceneContainer.get<IDebugService>(TYPES.IDebugService);
+    this.debugService.setEnable(config.debug);
 
     this.markerService = sceneContainer.get<IMarkerService>(
       TYPES.IMarkerService,

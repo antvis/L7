@@ -14,10 +14,15 @@ export default class DebugService extends EventEmitter implements IDebugService 
   private logMap = new Map<string, ILog>();
   private renderMap = new Map<string, IRenderInfo>();
 
+  private enable: boolean = false;
   public renderEnable: boolean = false;
-
+  
+  setEnable(flag: boolean) {
+    this.enable = !!flag;
+  }
 
   log(key: string, values: ILog) {
+    if(!this.enable) return;
     const [k1, k2] = key.split('.');
     const logType = k2;
     /**
@@ -62,6 +67,7 @@ export default class DebugService extends EventEmitter implements IDebugService 
   }
 
   public registerContextLost() {
+    if(!this.enable) return;
     const canvas = this.rendererService.getCanvas();
     if(canvas) {
       canvas.addEventListener('webglcontextlost', () => this.emit('webglcontextlost'));
@@ -69,6 +75,7 @@ export default class DebugService extends EventEmitter implements IDebugService 
   }
 
   public lostContext() {
+    if(!this.enable) return;
     let gl = this.rendererService.getGLContext();
     const loseContext = gl.getExtension('WEBGL_lose_context');
     if(loseContext) {
@@ -91,7 +98,7 @@ export default class DebugService extends EventEmitter implements IDebugService 
   }
 
   public renderStart(guid: string) {
-    if(!this.renderEnable) {
+    if(!this.renderEnable || !this.enable) {
       return;
     }
     const cacheRenderInfo = this.renderMap.get(guid) || {};
@@ -103,7 +110,7 @@ export default class DebugService extends EventEmitter implements IDebugService 
   }
 
   public renderEnd(guid: string) {
-    if(!this.renderEnable) {
+    if(!this.renderEnable || !this.enable) {
       return;
     }
     const cacheRenderInfo = this.renderMap.get(guid);
