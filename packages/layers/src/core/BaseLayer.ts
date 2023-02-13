@@ -425,7 +425,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.inited = true;
 
     const currentSource = this.getSource();
-    const { sourceInitStart, sourceInitEnd } = currentSource.getLog().getLogs();
+    const { sourceInitStart, sourceInitEnd } = currentSource.getLog();
     this.log('sourceInitStart', sourceInitStart);
     this.log('sourceInitEnd', sourceInitEnd);
     this.log('layerInitEnd');

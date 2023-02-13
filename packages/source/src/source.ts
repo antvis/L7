@@ -206,7 +206,7 @@ export default class Source extends EventEmitter implements ISource {
    * @returns 
    */
   public getLog() {
-    return this.logger;
+    return this.logger.getLogs();
   }
 
   public setData(data: any, options?: ISourceCFG) {
