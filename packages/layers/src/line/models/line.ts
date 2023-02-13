@@ -162,6 +162,8 @@ export default class LineModel extends BaseModel {
 
   public async initModels():Promise<IModel[]>{
     this.updateTexture();
+    // Tip: keep updateTexture listen only once
+    this.iconService.off('imageUpdate', this.updateTexture);
     this.iconService.on('imageUpdate', this.updateTexture);
     return await this.buildModels();
   }
