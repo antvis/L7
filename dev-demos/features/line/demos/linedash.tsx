@@ -74,6 +74,19 @@ export default () => {
           //   })
           //   debugService.lostContext();
           // },3000)
+
+          // setTimeout(()=>{
+          // },3000)
+          debugService.renderDebug(true);
+
+            debugService.on('renderEnd', (renderInfo) => {
+              console.log('renderEnd', renderInfo);
+            })
+
+
+            setTimeout(() => {
+              debugService.renderDebug(false);
+            }, 200)
         });
     });
   }, []);

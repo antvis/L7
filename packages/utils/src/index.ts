@@ -1,5 +1,5 @@
 // @ts-ignore
-export { djb2hash, BKDRHash } from './hash';
+export { djb2hash, BKDRHash, guid } from './hash';
 
 import * as DOM from './dom';
 import * as Satistics from './statistics';

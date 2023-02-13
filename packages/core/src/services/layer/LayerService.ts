@@ -8,6 +8,7 @@ import Clock from '../../utils/clock';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
+import { IDebugService } from '../debug/IDebugService';
 
 @injectable()
 export default class LayerService extends EventEmitter<LayerServiceEvent>
@@ -38,6 +39,9 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
 
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
+
+  @inject(TYPES.IDebugService)
+  private readonly debugService: IDebugService;
 
   public reRender = throttle(() => {
     this.updateLayerRenderList();
@@ -134,6 +138,8 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     if (this.alreadyInRendering || !this.enableRender) {
       return;
     }
+    const renderUid = this.debugService.generateRenderUid();
+    this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
@@ -157,6 +163,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
    
       }
     }
+    this.debugService.renderEnd(renderUid);
     this.alreadyInRendering = false;
   }
   

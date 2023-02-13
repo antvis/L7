@@ -1,8 +1,9 @@
 import { EventEmitter } from 'eventemitter3';
 import { TYPES } from '../../types';
 import { inject, injectable } from 'inversify';
-import { IDebugService, ILog } from './IDebugService';
+import { IDebugService, ILog, IRenderInfo } from './IDebugService';
 import { IRendererService } from '../renderer/IRendererService';
+import { guid } from '@antv/l7-utils';
 
 @injectable()
 export default class DebugService extends EventEmitter implements IDebugService {
@@ -11,6 +12,9 @@ export default class DebugService extends EventEmitter implements IDebugService 
   private readonly rendererService: IRendererService;
 
   private logMap = new Map<string, ILog>();
+  private renderMap = new Map<string, IRenderInfo>();
+
+  public renderEnable: boolean = false;
 
 
   log(key: string, values: ILog) {
@@ -74,7 +78,49 @@ export default class DebugService extends EventEmitter implements IDebugService 
     }
   }
 
+  public generateRenderUid() {
+    if(this.renderEnable) {
+      return guid();
+    } else {
+      return '';
+    }
+  }
+
+  public renderDebug(enable: boolean) {
+    this.renderEnable = enable;
+  }
+
+  public renderStart(guid: string) {
+    if(!this.renderEnable) {
+      return;
+    }
+    const cacheRenderInfo = this.renderMap.get(guid) || {};
+    this.renderMap.set(guid, {
+      ...cacheRenderInfo,
+      renderUid: guid,
+      renderStart: Date.now(),
+    })
+  }
+
+  public renderEnd(guid: string) {
+    if(!this.renderEnable) {
+      return;
+    }
+    const cacheRenderInfo = this.renderMap.get(guid);
+    if(cacheRenderInfo) {
+      const renderStart = cacheRenderInfo.renderStart as number;
+      const renderEnd = Date.now();
+      this.emit('renderEnd', {
+        ...cacheRenderInfo,
+        renderEnd,
+        renderDuration: renderEnd - renderStart,
+      });
+      this.renderMap.delete(guid);
+    }
+  }
+
   public destroy() {
     this.logMap.clear();
+    this.renderMap.clear();
   }
 }
