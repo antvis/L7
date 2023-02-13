@@ -4,6 +4,7 @@ import {
   IAnimateOption,
   IEncodeFeature,
   ILayerConfig,
+  IIconService,
   IModel,
   IModelUniform,
   ITexture2D,
@@ -31,7 +32,7 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class LineModel extends BaseModel {
-  private textureListenService: undefined | any;
+  private textureListenService: undefined | IIconService;
   protected texture: ITexture2D = this.createTexture2D({
     data: [0,0,0,0],
     mag: gl.NEAREST,
