@@ -9,6 +9,7 @@ import {
   IStyleAttributeService,
   Position,
   TYPES,
+  IDebugLog,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 import { normalize, rgb2arr } from '@antv/l7-utils';
@@ -34,6 +35,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     layer.hooks.init.tapPromise('DataMappingPlugin', async () => {
       // 初始化重新生成 map
       this.generateMaping(layer, { styleAttributeService });
+      layer.log(IDebugLog.MappingEnd);
     });
 
     layer.hooks.beforeRenderData.tapPromise(
@@ -44,9 +46,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         }
 
         layer.dataState.dataMappingNeedUpdate = false;
-        const result = this.generateMaping(layer, { styleAttributeService });
-        layer.log('mappingEnd');
-        return result;
+        return this.generateMaping(layer, { styleAttributeService });
       },
     );
 

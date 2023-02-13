@@ -1,4 +1,4 @@
-import { ILayer, ILayerPlugin } from '@antv/l7-core';
+import { ILayer, ILayerPlugin, IDebugLog } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import TileLayer from '../tile/tileLayer/BaseLayer';
@@ -8,13 +8,13 @@ import TileLayer from '../tile/tileLayer/BaseLayer';
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
   private async build(layer: ILayer) {
-    layer.log('buildModelStart');
+    layer.log(IDebugLog.BuildModelStart);
     // 更新Model 配置项
     layer.prepareBuildModel();
     // 初始化 Model
     await layer.buildModels();
 
-    layer.log('buildModenEnd');
+    layer.log(IDebugLog.BuildModelEnd);
   }
 
   public async initLayerModel(layer: ILayer) {

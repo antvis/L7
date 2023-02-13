@@ -3,6 +3,18 @@ export interface ILog {
   [key: string]: any
 }
 
+export const enum IDebugLog {
+  MapInitStart = 'mapInitStart',
+  LayerInitStart = 'layerInitStart',
+  LayerInitEnd = 'layerInitEnd',
+  SourceInitStart = 'sourceInitStart',
+  SourceInitEnd= 'sourceInitEnd',
+  MappingStart = 'mappingStart',
+  MappingEnd = 'mappingEnd',
+  BuildModelStart = 'buildModelStart',
+  BuildModelEnd = 'buildModelEnd',
+}
+
 export interface IRenderInfo {
   renderUid: string;
   renderStart?: number;

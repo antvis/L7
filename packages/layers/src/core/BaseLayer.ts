@@ -14,6 +14,7 @@ import {
   ICoordinateSystemService,
   IDataState,
   IDebugService,
+  IDebugLog,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -335,7 +336,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     );
     this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
     this.debugService = this.container.get<IDebugService>(TYPES.IDebugService);
-    this.log('layerInitStart');
+    this.log(IDebugLog.LayerInitStart);
     this.interactionService = this.container.get<IInteractionService>(
       TYPES.IInteractionService,
     );
@@ -426,9 +427,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     const currentSource = this.getSource();
     const { sourceInitStart, sourceInitEnd } = currentSource.getLog();
-    this.log('sourceInitStart', sourceInitStart);
-    this.log('sourceInitEnd', sourceInitEnd);
-    this.log('layerInitEnd');
+    this.log(IDebugLog.SourceInitStart, sourceInitStart);
+    this.log(IDebugLog.SourceInitEnd, sourceInitEnd);
+    this.log(IDebugLog.LayerInitEnd);
 
     // 触发初始化完成事件;
     this.emit('inited', {

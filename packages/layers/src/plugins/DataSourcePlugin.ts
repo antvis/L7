@@ -1,4 +1,4 @@
-import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
+import { ILayer, ILayerPlugin, IMapService, TYPES, IDebugLog } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
@@ -17,13 +17,16 @@ export default class DataSourcePlugin implements ILayerPlugin {
         source = new Source(data, options);
         layer.setSource(source);
       }
+      const timeStamp = Date.now();
       if (source.inited) {
         this.updateClusterData(layer);
+        layer.log(IDebugLog.MappingStart, timeStamp);
       } else {
         await new Promise((resolve) => {
           source.on('update', (e) => {
             if (e.type === 'inited') {
               this.updateClusterData(layer);
+              layer.log(IDebugLog.MappingStart, timeStamp);
             }
             resolve(null);
           });
@@ -33,16 +36,12 @@ export default class DataSourcePlugin implements ILayerPlugin {
 
     // 检测数据是否需要更新
     layer.hooks.beforeRenderData.tapPromise('DataSourcePlugin', async () => {
-      const timeStamp = Date.now();
       const neeUpdateCluster = this.updateClusterData(layer);
 
       const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
       layer.dataState.dataSourceNeedUpdate = false;
 
       const needScale = neeUpdateCluster || dataSourceNeedUpdate;
-      if (needScale) {
-        layer.log('mappingStart', timeStamp);
-      }
       return needScale;
     });
   }
