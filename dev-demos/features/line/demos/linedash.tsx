@@ -68,26 +68,26 @@ export default () => {
               })
             })
           }
-          // setTimeout(()=>{
-          //   console.log('lostContext test')
-          //   debugService.on('webglcontextlost', () => {
-          //     console.log('webglcontextlost');
-          //   })
-          //   debugService.lostContext();
-          // },3000)
-
-          // setTimeout(()=>{
-          // },3000)
-          debugService.renderDebug(true);
-
-            debugService.on('renderEnd', (renderInfo) => {
-              console.log('renderEnd', renderInfo);
+          setTimeout(()=>{
+            console.log('lostContext test')
+            scene.on('webglcontextlost', () => {
+              console.log('webglcontextlost');
             })
+            // scene.lostContext();
+          },3000)
+
+          // setTimeout(()=>{
+          // },3000)
+        //   debugService.renderDebug(true);
+
+        //     debugService.on('renderEnd', (renderInfo) => {
+        //       console.log('renderEnd', renderInfo);
+        //     })
 
 
-            setTimeout(() => {
-              debugService.renderDebug(false);
-            }, 200)
+        //     setTimeout(() => {
+        //       debugService.renderDebug(false);
+        //     }, 200)
         });
     });
   }, []);

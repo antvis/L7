@@ -195,6 +195,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.configService.getSceneConfig(this.id) as IRenderConfig,
           sceneConfig.gl,
         );
+        this.registerContextLost();
         this.initContainer();
 
         elementResizeEvent(
@@ -213,6 +214,13 @@ export default class Scene extends EventEmitter implements ISceneService {
     });
    
     this.render();
+  }
+
+  private registerContextLost() {
+    const canvas = this.rendererService.getCanvas();
+    if(canvas) {
+      canvas.addEventListener('webglcontextlost', () => this.emit('webglcontextlost'));
+    }
   }
 
   /**
@@ -277,8 +285,6 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.configService.getSceneConfig(this.id) as IRenderConfig,
           undefined,
         );
-        // 绑定 webglContextLost 的监听
-        this.debugService.registerContextLost();
       } else {
         console.error('容器 id 不存在');
       }

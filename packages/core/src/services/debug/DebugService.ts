@@ -1,15 +1,10 @@
 import { EventEmitter } from 'eventemitter3';
-import { TYPES } from '../../types';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { IDebugService, ILog, IRenderInfo } from './IDebugService';
-import { IRendererService } from '../renderer/IRendererService';
 import { guid } from '@antv/l7-utils';
 
 @injectable()
 export default class DebugService extends EventEmitter implements IDebugService {
-
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
 
   private logMap = new Map<string, ILog>();
   private renderMap = new Map<string, IRenderInfo>();
@@ -64,25 +59,6 @@ export default class DebugService extends EventEmitter implements IDebugService 
    */
   public removeLog(key: string) {
     this.logMap.delete(key);
-  }
-
-  public registerContextLost() {
-    if(!this.enable) return;
-    const canvas = this.rendererService.getCanvas();
-    if(canvas) {
-      canvas.addEventListener('webglcontextlost', () => this.emit('webglcontextlost'));
-    }
-  }
-
-  public lostContext() {
-    if(!this.enable) return;
-    let gl = this.rendererService.getGLContext();
-    const loseContext = gl.getExtension('WEBGL_lose_context');
-    if(loseContext) {
-      loseContext.loseContext();
-      // @ts-ignore
-      gl = null;
-    }
   }
 
   public generateRenderUid() {
