@@ -212,7 +212,7 @@ layer.scale('value'); // L7  能够自动推断为  identify
 
 ```ts 
 
-pointLayer.size('type', (type) => {
+pointLayer.filter('type', (type) => {
   // 回调函数
   if (type === 'a') {
     return false;
