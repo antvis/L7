@@ -16,13 +16,20 @@ export default () => {
     });
 
     const source = new Source(
-      'https://pre-gridwise.alibaba-inc.com/tile/test?z={z}&x={x}&y={y}',
+      'https://gridwise.alibaba-inc.com/tile/test?z={z}&x={x}&y={y}',
       {
         parser: {
           type: 'mvt',
           tileSize: 256,
-          // minZoom: 9,
+          getCustomData:(tile, cb)=>{
+            const url = `https://gridwise.alibaba-inc.com/tile/test?z=${tile.z}&x=${tile.x}&y=${tile.y}`;
+            fetch(url).then(res=>res.arrayBuffer()).then((data)=>{
+              cb(null,data)
+            }
+            )
+            }
         },
+  
       },
     );
 

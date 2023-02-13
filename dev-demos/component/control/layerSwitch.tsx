@@ -1,11 +1,11 @@
 import {
   GaodeMap,
-  Scene,
-  LayerSwitch,
   ILayer,
-  PointLayer,
+  LayerSwitch,
   LineLayer,
+  PointLayer,
   PolygonLayer,
+  Scene,
 } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
