@@ -17,9 +17,8 @@ export default class BillBoardModel extends BaseModel {
   private radian: number = 0; // 旋转的弧度
 
   public planeGeometryTriangulation = () => {
-    const {
-      center = [120, 30],
-    } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { center = [120, 30] } =
+      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     return {
       size: 4,
       indices: [0, 1, 2, 2, 3, 0],
@@ -98,31 +97,28 @@ export default class BillBoardModel extends BaseModel {
       this.updateTexture(drawCanvas);
     }
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'geometryBillboard',
-        vertexShader: planeVert,
-        fragmentShader: planeFrag,
-        triangulation: this.planeGeometryTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: true },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'geometryBillboard',
+      vertexShader: planeVert,
+      fragmentShader: planeFrag,
+      triangulation: this.planeGeometryTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: true },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
- public async buildModels():Promise<IModel[]> {
-    return await this.initModels();
+  public async buildModels(): Promise<IModel[]> {
+    return this.initModels();
   }
 
   public updateTexture(drawCanvas: (canvas: HTMLCanvasElement) => void): void {
     const { createTexture2D } = this.rendererService;
 
-    const {
-      canvasWidth = 1,
-      canvasHeight = 1,
-    } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { canvasWidth = 1, canvasHeight = 1 } =
+      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     const canvas = document.createElement('canvas');
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;

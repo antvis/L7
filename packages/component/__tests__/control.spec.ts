@@ -7,7 +7,9 @@ class TestControl extends Control {
   public onAdd(): HTMLElement {
     return DOM.create('div');
   }
-  public onRemove(): void {}
+  public onRemove(): void {
+    return;
+  }
 }
 
 describe('control', () => {

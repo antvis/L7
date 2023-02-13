@@ -10,8 +10,10 @@ import { IRendererService } from '../renderer/IRendererService';
 import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 
 @injectable()
-export default class LayerService extends EventEmitter<LayerServiceEvent>
-  implements ILayerService {
+export default class LayerService
+  extends EventEmitter<LayerServiceEvent>
+  implements ILayerService
+{
   // pickedLayerId 参数用于指定当前存在被选中的 layer
   public pickedLayerId: number = -1;
   public clock = new Clock();
@@ -48,8 +50,8 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.renderLayers();
   }, 16);
 
-  public needPick(type:string): boolean {
-   return this.layerList.some((layer=>layer.needPick(type)))
+  public needPick(type: string): boolean {
+    return this.layerList.some((layer) => layer.needPick(type));
   }
   public add(layer: ILayer) {
     this.layers.push(layer);
@@ -58,9 +60,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
         this.updateLayerRenderList();
         this.renderLayers();
       });
-    } 
-   
-  
+    }
   }
 
   public addMask(mask: ILayer) {
@@ -102,7 +102,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     return this.layers.find((layer) => layer.name === name);
   }
 
-  public async remove(layer: ILayer, parentLayer?: ILayer):Promise<void> {
+  public async remove(layer: ILayer, parentLayer?: ILayer): Promise<void> {
     // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {
       const layerIndex = parentLayer.layerChildren.indexOf(layer);
@@ -117,13 +117,13 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     }
     this.updateLayerRenderList();
     layer.destroy();
-    this.reRender()
+    this.reRender();
     this.emit('layerChange', this.layers);
   }
 
-  public async removeAllLayers():Promise<void> {
+  public async removeAllLayers(): Promise<void> {
     this.destroy();
-    this.reRender()
+    this.reRender();
   }
 
   public setEnableRender(flag: boolean) {
@@ -137,7 +137,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      if (layer.masks.filter((m)=>m.inited).length > 0) {
+      if (layer.masks.filter((m) => m.inited).length > 0) {
         // 清除上一次的模版缓存
         this.renderService.clear({
           stencil: 0,
@@ -146,7 +146,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
         });
         layer.masks.map(async (m: ILayer) => {
           m.render();
-        })
+        });
       }
 
       if (layer.getLayerConfig().enableMultiPassRenderer) {
@@ -154,39 +154,36 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
         await layer.renderMultiPass();
       } else {
         await layer.render();
-   
       }
     }
     this.alreadyInRendering = false;
   }
-  
-  public renderMask(masks:ILayer[]) {
-    masks.filter(m => m.inited)
-    .map(m =>{
-      m.render();
-    })
+
+  public renderMask(masks: ILayer[]) {
+    masks
+      .filter((m) => m.inited)
+      .map((m) => {
+        m.render();
+      });
   }
 
   public async beforeRenderData(layer: ILayer) {
     const flag = await layer.hooks.beforeRenderData.promise();
-    if(flag) {
+    if (flag) {
       this.renderLayers();
     }
-    
   }
 
-  async renderLayer(layer: ILayer){
-
-    if (layer.masks.filter((m)=>m.inited).length > 0) {
-      layer.masks.map(mask =>{
-          this.renderService.clear({
-            stencil: 0,
-            depth: 1,
-            framebuffer: null,
-          });
-          mask.render();  
-      })
-
+  public async renderLayer(layer: ILayer) {
+    if (layer.masks.filter((m) => m.inited).length > 0) {
+      layer.masks.map((mask) => {
+        this.renderService.clear({
+          stencil: 0,
+          depth: 1,
+          framebuffer: null,
+        });
+        mask.render();
+      });
     }
     if (layer.getLayerConfig().enableMultiPassRenderer) {
       // multiPassRender 不是同步渲染完成的
@@ -194,7 +191,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
     } else {
       await layer.render();
     }
-
   }
 
   public updateLayerRenderList() {
@@ -210,7 +206,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
       .forEach((layer) => {
         this.layerList.push(layer);
       });
-
   }
 
   public destroy() {
@@ -252,7 +247,6 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   public getShaderPickStat() {
     return this.shaderPicking;
   }
-  
 
   public clear() {
     const color = rgb2arr(this.mapService.bgColor) as [
@@ -279,6 +273,4 @@ export default class LayerService extends EventEmitter<LayerServiceEvent>
   private stopRender() {
     $window.cancelAnimationFrame(this.layerRenderID);
   }
-
-
 }

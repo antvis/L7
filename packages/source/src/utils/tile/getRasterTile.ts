@@ -1,16 +1,15 @@
+import { ITileParserCFG } from '@antv/l7-core';
 import {
   getImage,
-  ITileBand,
   getURLFromTemplate,
   getWMTSURLFromTemplate,
+  ITileBand,
   SourceTile,
   TileLoadParams,
 } from '@antv/l7-utils';
-import { getTileUrl } from './request';
-import { ITileParserCFG } from '@antv/l7-core'
-import { IRasterFormat, IBandsOperation } from '../../interface';
+import { IBandsOperation, IRasterFormat } from '../../interface';
 import { getRasterFile } from './getRasterData';
-
+import { getTileUrl } from './request';
 
 /**
  * 用于获取 raster data 的瓦片，如 tiff、lerc、dem 等
@@ -36,7 +35,7 @@ export const getTileBuffer = async (
     getRasterFile(
       tile,
       requestParameters,
-      (err:any, img:any) => {
+      (err: any, img: any) => {
         if (err) {
           reject(err);
         } else if (img) {
@@ -50,35 +49,37 @@ export const getTileBuffer = async (
 };
 /**
  * 获取图片格式的文件 jpg、png 等
- * @param url 
- * @param tileParams 
- * @param tile 
- * @returns 
+ * @param url
+ * @param tileParams
+ * @param tile
+ * @returns
  */
 export const getTileImage = async (
   url: string | string[],
   tileParams: TileLoadParams,
   tile: SourceTile,
-  cfg: Partial<ITileParserCFG>
+  cfg: Partial<ITileParserCFG>,
 ): Promise<HTMLImageElement | ImageBitmap> => {
   // TODO: 后续考虑支持加载多服务
-  let imageUrl:string;
+  let imageUrl: string;
   const templateUrl = Array.isArray(url) ? url[0] : url;
-  if(cfg.wmtsOptions) {
-    const _getWMTSURLFromTemplate = cfg?.getURLFromTemplate || getWMTSURLFromTemplate
-    imageUrl = _getWMTSURLFromTemplate(templateUrl, {
-       ...tileParams,
-      ...cfg.wmtsOptions
-    })
+  if (cfg.wmtsOptions) {
+    const getWMTSURLFromTemplateNew =
+      cfg?.getURLFromTemplate || getWMTSURLFromTemplate;
+    imageUrl = getWMTSURLFromTemplateNew(templateUrl, {
+      ...tileParams,
+      ...cfg.wmtsOptions,
+    });
   } else {
-    const _getURLFromTemplate = cfg?.getURLFromTemplate || getURLFromTemplate
-    imageUrl = _getURLFromTemplate(templateUrl, tileParams);
+    const getURLFromTemplateNew = cfg?.getURLFromTemplate || getURLFromTemplate;
+    imageUrl = getURLFromTemplateNew(templateUrl, tileParams);
   }
 
   return new Promise((resolve, reject) => {
-    const xhr = getImage({
-      url: imageUrl,
-        type: cfg?.requestParameters?.type || 'arrayBuffer'
+    const xhr = getImage(
+      {
+        url: imageUrl,
+        type: cfg?.requestParameters?.type || 'arrayBuffer',
       },
       (err, img) => {
         if (err) {
@@ -87,7 +88,7 @@ export const getTileImage = async (
           resolve(img);
         }
       },
-      cfg.transformResponse
+      cfg.transformResponse,
     );
     tile.xhrCancel = () => xhr.abort();
   });

@@ -11,18 +11,15 @@ export interface IBlurHPassConfig {
 }
 
 @injectable()
-export default class BlurHPass extends BasePostProcessingPass<
-  IBlurHPassConfig
-> {
+export default class BlurHPass extends BasePostProcessingPass<IBlurHPassConfig> {
   protected setupShaders() {
     this.shaderModuleService.registerModule('blur-pass', {
       vs: quad,
       fs: blur,
     });
 
-    const { vs, fs, uniforms } = this.shaderModuleService.getModule(
-      'blur-pass',
-    );
+    const { vs, fs, uniforms } =
+      this.shaderModuleService.getModule('blur-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {
@@ -35,9 +32,7 @@ export default class BlurHPass extends BasePostProcessingPass<
     };
   }
 
-  protected convertOptionsToUniforms(
-    options: Partial<IBlurHPassConfig>,
-  ): {
+  protected convertOptionsToUniforms(options: Partial<IBlurHPassConfig>): {
     [uniformName: string]: IUniform;
   } | void {
     const uniforms: {

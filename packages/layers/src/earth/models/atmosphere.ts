@@ -17,35 +17,33 @@ interface IAtmoSphereLayerStyleOptions {
 
 export default class EarthAtomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const {
-      opacity = 1,
-    } = this.layer.getLayerConfig() as IAtmoSphereLayerStyleOptions;
+    const { opacity = 1 } =
+      this.layer.getLayerConfig() as IAtmoSphereLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
 
   public async initModels(): Promise<IModel[]> {
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
     return '';
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -997;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'earthAtmoSphere',
-        vertexShader: atmoSphereVert,
-        fragmentShader: atmoSphereFrag,
-        triangulation: earthTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'earthAtmoSphere',
+      vertexShader: atmoSphereVert,
+      fragmentShader: atmoSphereFrag,
+      triangulation: earthTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+    });
+    return [model];
   }
 
   protected registerBuiltinAttributes() {
@@ -61,9 +59,7 @@ export default class EarthAtomSphereModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },

@@ -27,6 +27,7 @@ export default class Marker extends EventEmitter {
   private lngLat: ILngLat;
   private scene: Container;
   private added: boolean = false;
+  // tslint:disable-next-line: no-empty
   public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
 
   constructor(option?: Partial<IMarkerOption>) {
@@ -244,7 +245,9 @@ export default class Marker extends EventEmitter {
       const { containerHeight, containerWidth, bounds } =
         this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
 
-      if (!bounds) return;
+      if (!bounds) {
+        return;
+      }
       // 当前可视区域包含跨日界线
       if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
         if (pos.x > containerWidth) {
@@ -349,7 +352,7 @@ export default class Marker extends EventEmitter {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
-   return null
+    return null;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

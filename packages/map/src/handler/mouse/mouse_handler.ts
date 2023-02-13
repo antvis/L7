@@ -18,9 +18,9 @@ export default class MouseHandler {
   public reset() {
     this.active = false;
     this.moved = false;
-    //@ts-ignore
+    // @ts-ignore
     delete this.lastPoint;
-    //@ts-ignore
+    // @ts-ignore
     delete this.eventButton;
   }
 

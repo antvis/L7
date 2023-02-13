@@ -18,7 +18,7 @@ import BaseNormalPass from './BaseNormalPass';
  */
 @injectable()
 export default class PixelPickingPass<
-  InitializationOptions = {}
+  InitializationOptions = {},
 > extends BaseNormalPass<InitializationOptions> {
   /**
    * picking framebuffer，供 attributes 颜色编码后输出
@@ -50,11 +50,8 @@ export default class PixelPickingPass<
   public init(layer: ILayer, config?: Partial<InitializationOptions>) {
     super.init(layer, config);
     this.layer = layer;
-    const {
-      createTexture2D,
-      createFramebuffer,
-      getViewportSize,
-    } = this.rendererService;
+    const { createTexture2D, createFramebuffer, getViewportSize } =
+      this.rendererService;
     const { width, height } = getViewportSize();
     // 创建 picking framebuffer，后续实时 resize
     this.pickingFBO = createFramebuffer({
@@ -129,11 +126,8 @@ export default class PixelPickingPass<
     if (!this.layer.isVisible() || !this.layer.needPick(type)) {
       return;
     }
-    const {
-      getViewportSize,
-      readPixels,
-      useFramebuffer,
-    } = this.rendererService;
+    const { getViewportSize, readPixels, useFramebuffer } =
+      this.rendererService;
     const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = this.layer.getLayerConfig();
 

@@ -125,17 +125,17 @@ export default class CameraService implements ICameraService {
   public jitterProjectionMatrix(x: number, y: number) {
     const translation = mat4.fromTranslation(mat4.create(), [x, y, 0]);
 
-    this.jitteredProjectionMatrix = (mat4.multiply(
+    this.jitteredProjectionMatrix = mat4.multiply(
       mat4.create(),
       translation,
-      (this.viewport.getProjectionMatrix() as unknown) as mat4,
-    ) as unknown) as number[];
+      this.viewport.getProjectionMatrix() as unknown as mat4,
+    ) as unknown as number[];
 
-    this.jitteredViewProjectionMatrix = (mat4.multiply(
+    this.jitteredViewProjectionMatrix = mat4.multiply(
       mat4.create(),
-      (this.jitteredProjectionMatrix as unknown) as mat4,
-      (this.viewport.getViewMatrix() as unknown) as mat4,
-    ) as unknown) as number[];
+      this.jitteredProjectionMatrix as unknown as mat4,
+      this.viewport.getViewMatrix() as unknown as mat4,
+    ) as unknown as number[];
   }
 
   public clearJitterProjectionMatrix() {

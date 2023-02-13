@@ -127,11 +127,11 @@ export default class ExtrudeModel extends BaseModel {
       u_lightEnable: Number(lightEnable),
     };
   }
-  public async initModels():Promise<IModel[]>  {
-    return await this.buildModels();
+  public async initModels(): Promise<IModel[]> {
+    return this.buildModels();
   }
 
-  public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     // GAODE1.x GAODE2.x MAPBOX
     const {
       depth = true,
@@ -139,23 +139,21 @@ export default class ExtrudeModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiseRepeat = repeat;
 
-      const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'pointExtrude',
-        vertexShader: pointExtrudeVert,
-        fragmentShader: pointExtrudeFrag,
-        triangulation: PointExtrudeTriangulation,
-        blend: this.getBlend(),
-        cull: {
-          enable: true,
-          face: getCullFace(this.mapService.version),
-        },
-        depth: {
-          enable: depth,
-        },
-      })
-      return [model]
-       
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'pointExtrude',
+      vertexShader: pointExtrudeVert,
+      fragmentShader: pointExtrudeFrag,
+      triangulation: PointExtrudeTriangulation,
+      blend: this.getBlend(),
+      cull: {
+        enable: true,
+        face: getCullFace(this.mapService.version),
+      },
+      depth: {
+        enable: depth,
+      },
+    });
+    return [model];
   }
   public clearModels() {
     this.dataTexture?.destroy();
@@ -173,9 +171,7 @@ export default class ExtrudeModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size } = feature;
           if (size) {
             let buffersize: number[] = [];

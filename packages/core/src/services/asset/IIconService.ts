@@ -20,7 +20,7 @@ export interface IIcon {
 export interface IICONMap {
   [key: string]: IIconValue;
 }
-export interface IIconService extends EventEmitter { 
+export interface IIconService extends EventEmitter {
   canvasHeight: number;
   // on(event: string, fn: EventEmitter.ListenerFn, context?: any): this;
   // off(event: string, fn: EventEmitter.ListenerFn, context?: any): this;

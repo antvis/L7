@@ -137,6 +137,7 @@ container
   .to(LayerModelPlugin)
   .inRequestScope();
 
+export * from './core/interface';
 export {
   BaseLayer,
   BaseModel,
@@ -154,5 +155,3 @@ export {
   MaskLayer,
   TileDebugLayer,
 };
-
-export * from './core/interface';

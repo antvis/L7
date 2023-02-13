@@ -9,9 +9,7 @@ export interface INoisePassConfig {
 }
 
 @injectable()
-export default class NoisePass extends BasePostProcessingPass<
-  INoisePassConfig
-> {
+export default class NoisePass extends BasePostProcessingPass<INoisePassConfig> {
   public setupShaders() {
     this.shaderModuleService.registerModule('noise-pass', {
       vs: quad,

@@ -92,29 +92,26 @@ export default class SimplePointModel extends BaseModel {
     };
   }
 
-  public async initModels():Promise<IModel[]>  {
-    return await this.buildModels();
+  public async initModels(): Promise<IModel[]> {
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]>  {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
 
-       const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'pointSimple',
-        vertexShader: simplePointVert,
-        fragmentShader: simplePointFrag,
-        triangulation: PointTriangulation,
-        depth: { enable: false },
-        primitive: gl.POINTS,
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-      return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'pointSimple',
+      vertexShader: simplePointVert,
+      fragmentShader: simplePointFrag,
+      triangulation: PointTriangulation,
+      depth: { enable: false },
+      primitive: gl.POINTS,
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   public clearModels() {
@@ -133,9 +130,7 @@ export default class SimplePointModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },

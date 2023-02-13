@@ -93,7 +93,7 @@ export const lazyInject = (
   const original = DECORATORS.lazyInject(serviceIdentifier);
   // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
   // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
-  return function(
+  return function (
     this: any,
     proto: any,
     key: string,
@@ -115,7 +115,7 @@ export const lazyMultiInject = (
   const original = DECORATORS.lazyMultiInject(serviceIdentifier);
   // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
   // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
-  return function(
+  return function (
     this: any,
     proto: any,
     key: string,
@@ -214,8 +214,9 @@ export function createSceneContainer() {
     .whenTargetNamed('taa');
   sceneContainer
     .bind<interfaces.Factory<IPass<unknown>>>(TYPES.IFactoryNormalPass)
-    .toFactory<IPass<unknown>>((context) => (named: string) =>
-      context.container.getNamed<IPass<unknown>>(TYPES.INormalPass, named),
+    .toFactory<IPass<unknown>>(
+      (context) => (named: string) =>
+        context.container.getNamed<IPass<unknown>>(TYPES.INormalPass, named),
     );
 
   // 绑定 post processing passes
@@ -276,7 +277,7 @@ export function createSceneContainer() {
 export function createLayerContainer(sceneContainer: Container) {
   const layerContainer = new Container();
   layerContainer.parent = sceneContainer;
-  
+
   layerContainer
     .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
     .to(StyleAttributeService)

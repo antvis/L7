@@ -14,7 +14,8 @@ import { IRendererService } from '../IRendererService';
  */
 @injectable()
 export default class BaseNormalPass<InitializationOptions = {}>
-  implements IPass<InitializationOptions> {
+  implements IPass<InitializationOptions>
+{
   // @inject(TYPES.IShaderModuleService)
   protected shaderModuleService: IShaderModuleService;
 

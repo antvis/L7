@@ -5,7 +5,7 @@ import gl from 'gl';
 const CONTEXT = gl(1, 1, { preserveDrawingBuffer: true });
 const RESIZE = CONTEXT.getExtension('STACKGL_resize_drawingbuffer');
 
-export default function(width: number, height: number) {
+export default function (width: number, height: number) {
   resize(width, height);
   return CONTEXT;
 }

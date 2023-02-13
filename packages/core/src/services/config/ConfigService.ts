@@ -2,9 +2,9 @@
 import { injectable } from 'inversify';
 import { merge } from 'lodash';
 import 'reflect-metadata';
-import { ILayerConfig,ILayerAttributesOption} from '../layer/ILayerService';
+import { ILayerAttributesOption, ILayerConfig } from '../layer/ILayerService';
 import { IRenderConfig } from '../renderer/IRendererService';
-import { IGlobalConfigService, ISceneConfig, } from './IConfigService';
+import { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import WarnInfo from './warnInfo';
 
 /**
@@ -119,13 +119,12 @@ export default class GlobalConfigService implements IGlobalConfigService {
     [layerId: string]: Partial<ILayerConfig & ISceneConfig>;
   } = {};
 
-
   /**
    * 数据映射缓存
    */
 
   private layerAttributeConfigCache: {
-    [layerId: string]: Partial<ILayerAttributesOption>
+    [layerId: string]: Partial<ILayerAttributesOption>;
   } = {};
 
   /**
@@ -175,19 +174,21 @@ export default class GlobalConfigService implements IGlobalConfigService {
       ...merge({}, this.sceneConfigCache[sceneId], defaultLayerConfig, config),
     };
   }
-  
-   public getAttributeConfig(layerId: string,): Partial<ILayerAttributesOption> {
-    return this.layerAttributeConfigCache[layerId]
 
-   }
+  public getAttributeConfig(layerId: string): Partial<ILayerAttributesOption> {
+    return this.layerAttributeConfigCache[layerId];
+  }
 
-   public setAttributeConfig(layerId: string, attr: Partial<ILayerAttributesOption>) {
+  public setAttributeConfig(
+    layerId: string,
+    attr: Partial<ILayerAttributesOption>,
+  ) {
     // TODO
-      this.layerAttributeConfigCache[layerId] = {
-        ...this.layerAttributeConfigCache[layerId],
-        ...attr
-      }
-   }
+    this.layerAttributeConfigCache[layerId] = {
+      ...this.layerAttributeConfigCache[layerId],
+      ...attr,
+    };
+  }
 
   public clean() {
     this.sceneConfigCache = {};

@@ -14,7 +14,8 @@ const VECTOR_TO_POINT_MATRIX = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
 
 @injectable()
 export default class CoordinateSystemService
-  implements ICoordinateSystemService {
+  implements ICoordinateSystemService
+{
   public needRefresh: boolean = true;
   @inject(TYPES.ICameraService)
   private readonly cameraService: ICameraService;
@@ -152,9 +153,9 @@ export default class CoordinateSystemService
     let viewMatrix = this.cameraService.getViewMatrix();
     const projectionMatrix = this.cameraService.getProjectionMatrix();
     let viewProjectionMatrix = mat4.multiply(
-      ([] as unknown) as mat4,
-      (projectionMatrix as unknown) as mat4,
-      (viewMatrix as unknown) as mat4,
+      [] as unknown as mat4,
+      projectionMatrix as unknown as mat4,
+      viewMatrix as unknown as mat4,
     );
 
     // 经纬度投影到 Web 墨卡托坐标系
@@ -164,30 +165,30 @@ export default class CoordinateSystemService
     );
 
     // Web 墨卡托坐标系通过 VP 矩阵变换到世界坐标系
-    this.viewportCenterProjection = (vec4.transformMat4(
-      ([] as unknown) as vec4,
+    this.viewportCenterProjection = vec4.transformMat4(
+      [] as unknown as vec4,
       [positionPixels[0], positionPixels[1], 0.0, 1.0],
-      (viewProjectionMatrix as unknown) as mat4,
-    ) as unknown) as [number, number, number, number];
+      viewProjectionMatrix as unknown as mat4,
+    ) as unknown as [number, number, number, number];
 
     // Always apply uncentered projection matrix if available (shader adds center)
     viewMatrix = this.cameraService.getViewMatrixUncentered() || viewMatrix;
 
     // Zero out 4th coordinate ("after" model matrix) - avoids further translations
     viewProjectionMatrix = mat4.multiply(
-      ([] as unknown) as mat4,
-      (projectionMatrix as unknown) as mat4,
-      (viewMatrix as unknown) as mat4,
+      [] as unknown as mat4,
+      projectionMatrix as unknown as mat4,
+      viewMatrix as unknown as mat4,
     );
     viewProjectionMatrix = mat4.multiply(
-      ([] as unknown) as mat4,
+      [] as unknown as mat4,
       viewProjectionMatrix,
-      (VECTOR_TO_POINT_MATRIX as unknown) as mat4,
+      VECTOR_TO_POINT_MATRIX as unknown as mat4,
     );
 
     // 重新计算相机 VP 矩阵
     this.cameraService.setViewProjectionMatrix(
-      (viewProjectionMatrix as unknown) as number[],
+      viewProjectionMatrix as unknown as number[],
     );
 
     this.pixelsPerMeter = ppm;

@@ -19,7 +19,7 @@ export type PolygonModelType =
   | 'point_extrude'
   | 'text'
   | 'water'
-  | 'ocean'
+  | 'ocean';
 const PolygonModels: { [key in PolygonModelType]: any } = {
   fill: FillModel,
   line: LineModel,

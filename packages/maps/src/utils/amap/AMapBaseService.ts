@@ -35,7 +35,7 @@ import { MapTheme } from './theme';
 const AMapEventMap: {
   [key: string]: any;
 } = {
-  contextmenu:'rightclick',
+  contextmenu: 'rightclick',
 };
 
 let mapdivCount = 0;
@@ -63,7 +63,8 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
  */
 @injectable()
 export default abstract class AMapBaseService
-  implements IMapService<AMap.Map & IAMapInstance> {
+  implements IMapService<AMap.Map & IAMapInstance>
+{
   public version: string = Version['GAODE1.x'];
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   /**
@@ -353,7 +354,7 @@ export default abstract class AMapBaseService
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
     mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
 
-    return (modelMatrix as unknown) as number[];
+    return modelMatrix as unknown as number[];
   }
 
   public async init(): Promise<void> {
@@ -411,7 +412,10 @@ export default abstract class AMapBaseService
       };
       if (!amapLoaded && !mapInstance) {
         if (token === AMAP_API_KEY) {
-          console.warn(`%c${this.configService.getSceneWarninfo('MapToken')}!`,'color: #873bf4;font-weigh:900;font-size: 16px;');
+          console.warn(
+            `%c${this.configService.getSceneWarninfo('MapToken')}!`,
+            'color: #873bf4;font-weigh:900;font-size: 16px;',
+          );
         }
         amapLoaded = true;
         plugin.push('Map3D');
@@ -460,7 +464,9 @@ export default abstract class AMapBaseService
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public updateView(viewOption: Partial<IMapCamera>): void {}
+  public updateView(viewOption: Partial<IMapCamera>): void {
+    return;
+  }
 
   public getOverlayContainer(): HTMLElement | undefined {
     return undefined;
@@ -486,7 +492,6 @@ export default abstract class AMapBaseService
   }
 
   public destroy() {
-
     // TODO: 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
 
@@ -497,7 +502,6 @@ export default abstract class AMapBaseService
       document.head.removeChild($jsapi);
     }
     this.map.destroy();
-
   }
 
   public getMapContainer() {
@@ -513,20 +517,12 @@ export default abstract class AMapBaseService
   }
 
   protected handleCameraChanged = (e: IAMapEvent): void => {
-    const {
-      fov,
-      near,
-      far,
-      height,
-      pitch,
-      rotation,
-      aspect,
-      position,
-    } = e.camera;
+    const { fov, near, far, height, pitch, rotation, aspect, position } =
+      e.camera;
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');
-  
+
     if (this.cameraChangedCallback) {
       // resync viewport
       this.viewport.syncWithMapCamera({

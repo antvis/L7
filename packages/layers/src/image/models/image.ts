@@ -24,10 +24,8 @@ export default class ImageModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IImageLayerStyleOptions;
 
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
@@ -61,24 +59,22 @@ export default class ImageModel extends BaseModel {
         mag: gl.LINEAR,
         min: gl.LINEAR,
       });
-
     }
 
-    const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'rasterImage',
-        vertexShader: ImageVert,
-        fragmentShader: ImageFrag,
-        triangulation: RasterImageTriangulation,
-        primitive: gl.TRIANGLES,
-        blend: {
-          // Tip: 优化显示效果
-          enable: true,
-        },
-        depth: { enable: false },
-        stencil: getMask(mask, maskInside),
-      })
-    return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'rasterImage',
+      vertexShader: ImageVert,
+      fragmentShader: ImageFrag,
+      triangulation: RasterImageTriangulation,
+      primitive: gl.TRIANGLES,
+      blend: {
+        // Tip: 优化显示效果
+        enable: true,
+      },
+      depth: { enable: false },
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   public clearModels(): void {
@@ -86,7 +82,7 @@ export default class ImageModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    return await this.initModels();
+    return this.initModels();
   }
 
   protected registerBuiltinAttributes() {

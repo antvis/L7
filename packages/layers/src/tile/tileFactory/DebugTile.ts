@@ -1,6 +1,6 @@
-import Tile from './Tile';
-import PointLayer from '../../point';
 import LineLayer from '../../line';
+import PointLayer from '../../point';
+import Tile from './Tile';
 
 export default class DebugTile extends Tile {
   public async initTileLayer(): Promise<void> {
@@ -11,36 +11,34 @@ export default class DebugTile extends Tile {
       .size(1)
       .shape('line')
       .color('red');
-      const pointLayer = new PointLayer({
-        minZoom:this.z-1,
-        maxZoom: this.z+1
-      })
-      .source([pointData],{
+    const pointLayer = new PointLayer({
+      minZoom: this.z - 1,
+      maxZoom: this.z + 1,
+    })
+      .source([pointData], {
         parser: {
           type: 'json',
           x: 'textLng',
           y: 'textLat',
-        }
-  
+        },
       })
       .size(20)
       .color('red')
       .shape(this.key)
       .style({
         stroke: '#fff',
-        strokeWidth: 2
+        strokeWidth: 2,
       });
-    
+
     await this.addLayer(lineLayer);
     await this.addLayer(pointLayer);
-    
+
     this.isLoaded = true;
   }
 
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
-    const features = this.sourceTile.data.layers['testTile']
-      .features;
+    const features = this.sourceTile.data.layers.testTile.features;
     return {
       data: {
         type: 'FeatureCollection',

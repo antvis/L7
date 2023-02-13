@@ -11,8 +11,8 @@ import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/extrude/polygon_extrude_frag.glsl';
-// extrude
 import polygonExtrudeVert from '../shaders/extrude/polygon_extrude_vert.glsl';
+// extrude
 import polygonExtrudeTexFrag from '../shaders/extrude/polygon_extrudetex_frag.glsl';
 // texture
 import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.glsl';
@@ -95,32 +95,27 @@ export default class ExtrudeModel extends BaseModel {
 
   public async initModels(): Promise<IModel[]> {
     this.loadTexture();
-      return await this.buildModels();
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     const { frag, vert, type } = this.getShaders();
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: PolygonExtrudeTriangulation,
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: PolygonExtrudeTriangulation,
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   public getShaders() {
-    const {
-      pickLight,
-      mapTexture,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { pickLight, mapTexture } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     if (mapTexture) {
       return {
         frag: polygonExtrudeTexFrag,
@@ -212,9 +207,7 @@ export default class ExtrudeModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 10 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
@@ -223,9 +216,8 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   private loadTexture() {
-    const {
-      mapTexture,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { mapTexture } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({

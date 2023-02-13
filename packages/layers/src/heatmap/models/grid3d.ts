@@ -13,11 +13,8 @@ import heatmapGrid3dVert from '../shaders/hexagon_3d_vert.glsl';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
 export default class Grid3DModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const {
-      opacity,
-      coverage,
-      angle,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    const { opacity, coverage, angle } =
+      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 1.0,
@@ -30,27 +27,23 @@ export default class Grid3DModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-      return await this.buildModels();
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'heatmapGrid3d',
-        vertexShader: heatmapGrid3dVert,
-        fragmentShader: heatmapGridFrag,
-        triangulation: PointExtrudeTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: true },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
-
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'heatmapGrid3d',
+      vertexShader: heatmapGrid3dVert,
+      fragmentShader: heatmapGridFrag,
+      triangulation: PointExtrudeTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: true },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -64,9 +57,7 @@ export default class Grid3DModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
@@ -107,9 +98,11 @@ export default class Grid3DModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature) => {
-          const coordinates = (feature.version === 'GAODE2.x'
-            ? feature.originCoordinates
-            : feature.coordinates) as number[];
+          const coordinates = (
+            feature.version === 'GAODE2.x'
+              ? feature.originCoordinates
+              : feature.coordinates
+          ) as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

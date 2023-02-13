@@ -1,4 +1,5 @@
 import { gl } from '@antv/l7-core';
+import { createContext } from '@antv/l7-test-utils';
 import regl from 'l7regl';
 import 'reflect-metadata';
 import quad from '../../../../core/src/shaders/post-processing/quad.glsl';
@@ -7,7 +8,6 @@ import ReglBuffer from '../ReglBuffer';
 import ReglElements from '../ReglElements';
 import ReglModel from '../ReglModel';
 import checkPixels from './utils/check-pixels';
-import { createContext } from '@antv/l7-test-utils';
 
 describe('ReglElements', () => {
   let context;

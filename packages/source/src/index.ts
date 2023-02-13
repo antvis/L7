@@ -1,13 +1,13 @@
 import { registerParser, registerTransform } from './factory';
 import csv from './parser/csv';
 import geojson from './parser/geojson';
+import geojsonVTTile from './parser/geojsonvt';
 import image from './parser/image';
 import json from './parser/json';
 import mapboxVectorTile from './parser/mvt';
-import geojsonVTTile from './parser/geojsonvt';
 import raster from './parser/raster';
-import rasterRgb from './parser/rasterRgb';
 import rasterTile, { rasterDataTypes } from './parser/raster-tile';
+import rasterRgb from './parser/rasterRgb';
 import testTile from './parser/testTile';
 import Source from './source';
 import { cluster } from './transform/cluster';
@@ -16,7 +16,15 @@ import { aggregatorToGrid } from './transform/grid';
 import { pointToHexbin } from './transform/hexagon';
 import { join } from './transform/join';
 import { map } from './transform/map';
+export {
+  getParser,
+  getTransform,
+  registerParser,
+  registerTransform,
+} from './factory';
+export * from './interface';
 export * from './source/index';
+export { rasterDataTypes };
 
 registerParser('rasterTile', rasterTile);
 registerParser('mvt', mapboxVectorTile);
@@ -34,17 +42,5 @@ registerTransform('join', join);
 registerTransform('map', map);
 registerTransform('grid', aggregatorToGrid);
 registerTransform('hexagon', pointToHexbin);
-
-export {
-  rasterDataTypes,
-}
-export {
-  getTransform,
-  registerTransform,
-  getParser,
-  registerParser,
-} from './factory';
-
-export * from './interface';
 
 export default Source;

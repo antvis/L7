@@ -17,35 +17,33 @@ interface IBloomLayerStyleOptions {
 
 export default class EarthBloomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const {
-      opacity = 1,
-    } = this.layer.getLayerConfig() as IBloomLayerStyleOptions;
+    const { opacity = 1 } =
+      this.layer.getLayerConfig() as IBloomLayerStyleOptions;
     return {
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
 
   public async initModels(): Promise<IModel[]> {
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
     return '';
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     // Tip: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
     this.layer.zIndex = -999;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'earthBloom',
-        vertexShader: bloomSphereVert,
-        fragmentShader: bloomSphereFrag,
-        triangulation: earthOuterTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'earthBloom',
+      vertexShader: bloomSphereVert,
+      fragmentShader: bloomSphereFrag,
+      triangulation: earthOuterTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+    });
+    return [model];
   }
 
   protected registerBuiltinAttributes() {
@@ -60,9 +58,7 @@ export default class EarthBloomSphereModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },

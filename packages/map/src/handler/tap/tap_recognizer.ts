@@ -20,7 +20,7 @@ export default class TapRecognizer {
 
   public reset() {
     this.lastTime = Infinity;
-    //@ts-ignore
+    // @ts-ignore
     delete this.lastTap;
     this.count = 0;
     this.singleTap.reset();

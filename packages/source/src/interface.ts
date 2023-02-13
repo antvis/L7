@@ -1,5 +1,14 @@
 export type DataType = string | object[] | object;
-export type TypedArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array;
+export type TypedArray =
+  | Int8Array
+  | Uint8Array
+  | Int16Array
+  | Uint16Array
+  | Int32Array
+  | Uint32Array
+  | Uint8ClampedArray
+  | Float32Array
+  | Float64Array;
 export interface IDictionary<TValue> {
   [key: string]: TValue;
 }
@@ -28,11 +37,15 @@ export interface IJsonItem {
 export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
-  rasterData: HTMLImageElement | Uint8Array |  ImageBitmap | null | undefined;
+  rasterData: HTMLImageElement | Uint8Array | ImageBitmap | null | undefined;
   width: number;
   height: number;
 }
-export type IRasterFormat = (imageData: ArrayBuffer, bands: number[], channels?: string[]) => Promise<IRasterData|IRasterData[]>;
+export type IRasterFormat = (
+  imageData: ArrayBuffer,
+  bands: number[],
+  channels?: string[],
+) => Promise<IRasterData | IRasterData[]>;
 export interface IRasterFileData {
   data: ArrayBuffer;
   bands: number[];
@@ -40,32 +53,36 @@ export interface IRasterFileData {
 
 export type IRgbOperation = {
   r?: any[];
-  g?: any[]
-  b?: any[]
+  g?: any[];
+  b?: any[];
 };
 export type SchemaOperationType = SchemaRGBOperation | SchemaBandOperation;
-export type SchemaRGBOption ={
-  countCut?:[number,number];// 百分比
-  RMinMax?:[number,number];
-  GMinMax?:[number,number];
-  BMinMax?:[number,number];
-}
+export type SchemaRGBOption = {
+  countCut?: [number, number]; // 百分比
+  RMinMax?: [number, number];
+  GMinMax?: [number, number];
+  BMinMax?: [number, number];
+};
 
 export type SchemaRGBOperation = {
-  type: 'rgb'
-  options:SchemaRGBOption | {
-    r?: any[];
-    g?: any[]
-    b?: any[]
-  }
-}
+  type: 'rgb';
+  options:
+    | SchemaRGBOption
+    | {
+        r?: any[];
+        g?: any[];
+        b?: any[];
+      };
+};
 export type SchemaBandOperation = {
-  type: 'nd'
+  type: 'nd';
+};
 
-}
-
-export type IBandsOperation = ((bands: IRasterData[]) => Uint8Array | Array<number>) | any[] | IRgbOperation | SchemaOperationType;
-
+export type IBandsOperation =
+  | ((bands: IRasterData[]) => Uint8Array | number[])
+  | any[]
+  | IRgbOperation
+  | SchemaOperationType;
 
 export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
 

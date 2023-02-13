@@ -151,26 +151,25 @@ export default class PlaneModel extends BaseModel {
 
     this.updateTexture(mapTexture);
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'geometryPlane',
-        vertexShader: planeVert,
-        fragmentShader: planeFrag,
-        triangulation: this.planeGeometryTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: true },
-        stencil: getMask(mask, maskInside),
-        blend: this.getBlend(),
-        cull: {
-          enable: true,
-          face: gl.BACK, // gl.FRONT | gl.BACK;
-        },
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'geometryPlane',
+      vertexShader: planeVert,
+      fragmentShader: planeFrag,
+      triangulation: this.planeGeometryTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: true },
+      stencil: getMask(mask, maskInside),
+      blend: this.getBlend(),
+      cull: {
+        enable: true,
+        face: gl.BACK, // gl.FRONT | gl.BACK;
+      },
+    });
+    return [model];
   }
 
- public async buildModels():Promise<IModel[]> {
-    return await this.initModels();
+  public async buildModels(): Promise<IModel[]> {
+    return this.initModels();
   }
 
   public createModelData(options?: any) {
@@ -181,12 +180,8 @@ export default class PlaneModel extends BaseModel {
         width: oldwidth,
         height: oldheight,
       } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
-      const {
-        widthSegments,
-        heightSegments,
-        width,
-        height,
-      } = options as IGeometryLayerStyleOptions;
+      const { widthSegments, heightSegments, width, height } =
+        options as IGeometryLayerStyleOptions;
       this.layer.style({
         widthSegments:
           widthSegments !== undefined ? widthSegments : oldwidthSegments,

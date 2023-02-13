@@ -1,6 +1,6 @@
 // import Ajv from 'ajv';
 import { PositionName } from '../component/IControlService';
-import { ILayerConfig,ILayerAttributesOption } from '../layer/ILayerService';
+import { ILayerAttributesOption, ILayerConfig } from '../layer/ILayerService';
 import { IMapWrapper } from '../map/IMapService';
 import { IRenderConfig } from '../renderer/IRendererService';
 export interface ISceneConfig extends IRenderConfig {
@@ -63,18 +63,21 @@ export interface IGlobalConfigService {
     layerId: string,
     config: Partial<ILayerConfig>,
   ): void;
-    /**
+  /**
    * 获取数据映射
    */
-    getAttributeConfig(layerId: string,): Partial<ILayerAttributesOption>
-   
-   /**
-    * 设置数据映射
-    * @param layerId sh
-    * @param attr 
-    */
-    setAttributeConfig(layerId: string, attr: Partial<ILayerAttributesOption>):void
-   
+  getAttributeConfig(layerId: string): Partial<ILayerAttributesOption>;
+
+  /**
+   * 设置数据映射
+   * @param layerId sh
+   * @param attr
+   */
+  setAttributeConfig(
+    layerId: string,
+    attr: Partial<ILayerAttributesOption>,
+  ): void;
+
   /**
    * 清除场景和图层配置项 Cache，但是需要保留校验器
    */

@@ -9,7 +9,7 @@ import BaseNormalPass from './BaseNormalPass';
  */
 @injectable()
 export default class RenderPass<
-  InitializationOptions = {}
+  InitializationOptions = {},
 > extends BaseNormalPass<InitializationOptions> {
   public getType() {
     return PassType.Normal;

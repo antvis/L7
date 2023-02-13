@@ -1,12 +1,11 @@
 import { ILayer } from '@antv/l7-core';
-import VectorTile from './VectorTile';
 import DebugTile from './DebugTile';
-import ImageTile from  './ImageTile';
-import RasterTile from './RasterTile';
-import RasterRGBTile from './RasterRGBTile';
-import RasterTerrainRGBTile  from './RasterTerrainRGBTile';
+import ImageTile from './ImageTile';
 import MaskLayer from './MaskTile';
-
+import RasterRGBTile from './RasterRGBTile';
+import RasterTerrainRGBTile from './RasterTerrainRGBTile';
+import RasterTile from './RasterTile';
+import VectorTile from './VectorTile';
 
 export type TileType =
   | 'VectorTile'
@@ -28,21 +27,21 @@ export function getTileFactory(layer: ILayer) {
       return VectorTile;
     case 'PointLayer':
       return VectorTile;
-    case 'TileDebugLayer': 
+    case 'TileDebugLayer':
       return DebugTile;
     case 'MaskLayer':
       return MaskLayer;
     case 'RasterLayer':
       const { dataType } = layer.getSource().parser;
-      switch(dataType) {
+      switch (dataType) {
         case 'rgb':
         case 'customRGB':
           return RasterRGBTile;
         case 'arraybuffer':
         case 'customArrayBuffer':
-          return RasterTile
-        case "terrainRGB" :
-            return RasterTerrainRGBTile
+          return RasterTile;
+        case 'terrainRGB':
+          return RasterTerrainRGBTile;
         default:
           return ImageTile;
       }
@@ -52,4 +51,4 @@ export function getTileFactory(layer: ILayer) {
 }
 
 export * from '../interface';
-export * from './Tile'
+export * from './Tile';

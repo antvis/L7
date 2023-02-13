@@ -45,7 +45,7 @@ export default class LineWallModel extends BaseModel {
 
     return {
       u_heightfixed: Number(heightfixed),
-  
+
       u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
 
@@ -74,7 +74,7 @@ export default class LineWallModel extends BaseModel {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -82,17 +82,16 @@ export default class LineWallModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
- public async buildModels():Promise<IModel[]> {
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'lineWall',
-        vertexShader: line_vert,
-        fragmentShader: line_frag,
-        triangulation: LineTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-      })
-     return [model]
+  public async buildModels(): Promise<IModel[]> {
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'lineWall',
+      vertexShader: line_vert,
+      fragmentShader: line_frag,
+      triangulation: LineTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+    });
+    return [model];
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -150,9 +149,7 @@ export default class LineWallModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
         },
@@ -219,9 +216,7 @@ export default class LineWallModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;
           const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };

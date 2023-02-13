@@ -17,10 +17,8 @@ import water_vert from '../shaders/water/polygon_water_vert.glsl';
 export default class WaterModel extends BaseModel {
   private texture: ITexture2D;
   public getUninforms() {
-    const {
-      opacity = 1,
-      speed = 0.5,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { opacity = 1, speed = 0.5 } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     return {
       u_texture: this.texture,
       u_speed: speed,
@@ -36,25 +34,22 @@ export default class WaterModel extends BaseModel {
 
   public async initModels(): Promise<IModel[]> {
     this.loadTexture();
-      return await this.buildModels();
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'polygonWater',
-        vertexShader: water_vert,
-        fragmentShader: water_frag,
-        triangulation: polygonTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'polygonWater',
+      vertexShader: water_vert,
+      fragmentShader: water_frag,
+      triangulation: polygonTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   public clearModels() {
@@ -83,9 +78,12 @@ export default class WaterModel extends BaseModel {
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
-          attributeIdx: number
+          attributeIdx: number,
         ) => {
-          const v = (feature.version === Version['GAODE2.x'] ? feature.originCoordinates[0][attributeIdx] : vertex)
+          const v =
+            feature.version === Version['GAODE2.x']
+              ? feature.originCoordinates[0][attributeIdx]
+              : vertex;
           const [lng, lat] = v;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },
@@ -94,9 +92,8 @@ export default class WaterModel extends BaseModel {
   }
 
   private loadTexture() {
-    const {
-      waterTexture,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { waterTexture } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({

@@ -8,7 +8,7 @@ describe('popup', () => {
   it('life cycle', () => {
     const popup = new Popup({
       html: '123456',
-      className: className,
+      className,
       lngLat: {
         lng: 120,
         lat: 30,

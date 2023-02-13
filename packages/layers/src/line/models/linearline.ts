@@ -78,7 +78,7 @@ export default class LinearLineModel extends BaseModel {
 
   public async initModels(): Promise<IModel[]> {
     this.updateTexture();
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -86,7 +86,7 @@ export default class LinearLineModel extends BaseModel {
     this.dataTexture?.destroy();
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -95,17 +95,16 @@ export default class LinearLineModel extends BaseModel {
 
     this.layer.triangulation = LineTriangulation;
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'lineRampColors',
-        vertexShader: linear_line_vert,
-        fragmentShader: linear_line_frag,
-        triangulation: LineTriangulation,
-        depth: { enable: depth },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'lineRampColors',
+      vertexShader: linear_line_vert,
+      fragmentShader: linear_line_frag,
+      triangulation: LineTriangulation,
+      depth: { enable: depth },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   protected registerBuiltinAttributes() {
@@ -169,9 +168,7 @@ export default class LinearLineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
         },
@@ -231,9 +228,8 @@ export default class LinearLineModel extends BaseModel {
     if (this.colorTexture) {
       this.colorTexture.destroy();
     }
-    const {
-      rampColors,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { rampColors } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const imageData = generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
       data: new Uint8Array(imageData.data),

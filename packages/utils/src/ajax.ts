@@ -60,7 +60,9 @@ function makeXMLHttpRequest(
 ) {
   const xhr = new $XMLHttpRequest();
 
-  const url = Array.isArray(requestParameters.url) ? requestParameters.url[0] : requestParameters.url;
+  const url = Array.isArray(requestParameters.url)
+    ? requestParameters.url[0]
+    : requestParameters.url;
   xhr.open(requestParameters.method || 'GET', url, true);
   if (requestParameters.type === 'arrayBuffer') {
     xhr.responseType = 'arraybuffer';
@@ -104,9 +106,7 @@ function makeXMLHttpRequest(
       const body = new Blob([xhr.response], {
         type: xhr.getResponseHeader('Content-Type'),
       });
-      callback(
-        new AJAXError(xhr.status, xhr.statusText, url.toString(), body)
-      );
+      callback(new AJAXError(xhr.status, xhr.statusText, url.toString(), body));
     }
   };
   xhr.send(requestParameters.body);
@@ -125,24 +125,27 @@ export function makeXMLHttpRequestPromise(
   requestParameters: RequestParameters,
 ): Promise<IXhrRequestResult> {
   return new Promise((resolve, reject) => {
-    makeXMLHttpRequest(requestParameters, (error, data, cacheControl, expires, xhr) => {
-      if(error) {
-        reject({
-          err: error,
-          data: null,
-          xhr
-        });
-      } else {
-        resolve({
-          err: null,
-          data ,
-          cacheControl,
-          expires,
-          xhr,
-        });
-      }
-    })
-  })
+    makeXMLHttpRequest(
+      requestParameters,
+      (error, data, cacheControl, expires, xhr) => {
+        if (error) {
+          reject({
+            err: error,
+            data: null,
+            xhr,
+          });
+        } else {
+          resolve({
+            err: null,
+            data,
+            cacheControl,
+            expires,
+            xhr,
+          });
+        }
+      },
+    );
+  });
 }
 
 function makeRequest(
@@ -237,7 +240,7 @@ function arrayBufferToImageBitmap(
 export const getImage = (
   requestParameters: RequestParameters,
   callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
-  transformResponse?: (response: Object) => any
+  transformResponse?: (response: object) => any,
 ) => {
   // request the image with XHR to work around caching issues
   // see https://github.com/mapbox/mapbox-gl-js/issues/1470
@@ -249,11 +252,13 @@ export const getImage = (
       callback(err);
     } else if (imgData) {
       const imageBitmapSupported = typeof createImageBitmap === 'function';
-      const _imgData = transformResponse? transformResponse(imgData) : imgData;
+      const transformImgData = transformResponse
+        ? transformResponse(imgData)
+        : imgData;
       if (imageBitmapSupported) {
-        arrayBufferToImageBitmap(_imgData, callback);
+        arrayBufferToImageBitmap(transformImgData, callback);
       } else {
-        arrayBufferToImage(_imgData, callback);
+        arrayBufferToImage(transformImgData, callback);
       }
     }
   };
