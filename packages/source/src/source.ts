@@ -4,10 +4,10 @@ import {
   IClusterOptions,
   IParseDataItem,
   IParserCfg,
-  ITileParserCFG,
   IParserData,
   ISource,
   ISourceCFG,
+  ITileParserCFG,
   ITransform,
 } from '@antv/l7-core';
 import {
@@ -26,7 +26,6 @@ import { getParser, getTransform } from './factory';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
-import { Log } from './log';
 
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
@@ -49,7 +48,7 @@ export default class Source extends EventEmitter implements ISource {
   public getSourceCfg() {
     return this.cfg;
   }
-  public parser: IParserCfg | ITileParserCFG = { type: 'geojson' } ;
+  public parser: IParserCfg | ITileParserCFG = { type: 'geojson' };
   public transforms: ITransform[] = [];
   public cluster: boolean = false;
   public clusterOptions: Partial<IClusterOptions> = {
@@ -71,12 +70,10 @@ export default class Source extends EventEmitter implements ISource {
   protected originData: any;
   protected rawData: any;
   private cfg: Partial<ISourceCFG> = {
-    autoRender: true
+    autoRender: true,
   };
 
   private clusterIndex: Supercluster;
-
-  private logger: Log = new Log();
 
   constructor(data: any | ISource, cfg?: ISourceCFG) {
     super();
@@ -84,11 +81,11 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     this.initCfg(cfg);
 
-    this.init().then(()=>{
+    this.init().then(() => {
       this.inited = true;
-      this.emit('update',{
-        type: 'inited'
-      })
+      this.emit('update', {
+        type: 'inited',
+      });
     });
   }
 
@@ -145,7 +142,6 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getFeatureById(id: number): unknown {
-    
     const { type = 'geojson', geometry } = this.parser as IParserCfg;
     if (type === 'geojson' && !this.cluster) {
       const feature =
@@ -154,7 +150,6 @@ export default class Source extends EventEmitter implements ISource {
           : 'null';
       const newFeature = cloneDeep(feature);
 
-      
       if (
         newFeature?.properties &&
         (this.transforms.length !== 0 || this.dataArrayChanged)
@@ -189,8 +184,8 @@ export default class Source extends EventEmitter implements ISource {
       },
     );
     this.dataArrayChanged = true;
-    this.emit('update',{
-      type: 'update'
+    this.emit('update', {
+      type: 'update',
     });
   }
 
@@ -201,25 +196,15 @@ export default class Source extends EventEmitter implements ISource {
     return feature?._id;
   }
 
-  /**
-   * 获取 source 日志信息
-   * @returns 
-   */
-  public getLog() {
-    return this.logger.getLogs();
-  }
-
   public setData(data: any, options?: ISourceCFG) {
     this.originData = data;
     this.dataArrayChanged = false;
     this.initCfg(options);
-   
-    this.init().then(()=>{
-      this.emit('update',{
-        type: 'update'
-      })
+    this.init().then(() => {
+      this.emit('update', {
+        type: 'update',
+      });
     });
-
   }
 
   public destroy() {
@@ -232,7 +217,7 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private async processData() {
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       try {
         this.excuteParser();
         this.initCluster();
@@ -266,11 +251,9 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private async init() {
-    this.logger.log('sourceInitStart');
     this.inited = false;
     await this.processData();
     this.inited = true;
-    this.logger.log('sourceInitEnd');
   }
 
   /**
@@ -293,7 +276,7 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset = this.initTileset();
 
     // 判断当前 source 是否需要计算范围
-    if (parser.cancelExtent) return;
+    if (parser.cancelExtent) { return; }
 
     // 计算范围
     this.extent = extent(this.data.dataArray);

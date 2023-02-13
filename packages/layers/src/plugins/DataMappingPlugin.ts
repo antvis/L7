@@ -33,6 +33,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tapPromise('DataMappingPlugin', async () => {
+      layer.log(IDebugLog.MappingStart);
       // 初始化重新生成 map
       this.generateMaping(layer, { styleAttributeService });
       layer.log(IDebugLog.MappingEnd);

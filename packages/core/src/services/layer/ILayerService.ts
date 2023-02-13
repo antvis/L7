@@ -443,7 +443,7 @@ export interface ILayer {
   getMinZoom(): number;
   getMaxZoom(): number;
   get(name: string): number;
-  log(type: string, time?: number): void
+  log(type: string, time?: number): void;
   setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
 

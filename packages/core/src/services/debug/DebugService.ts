@@ -1,23 +1,27 @@
+import { guid } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { injectable } from 'inversify';
 import { IDebugService, ILog, IRenderInfo } from './IDebugService';
-import { guid } from '@antv/l7-utils';
 
 @injectable()
-export default class DebugService extends EventEmitter implements IDebugService {
-
+export default class DebugService
+  extends EventEmitter
+  implements IDebugService
+{
   private logMap = new Map<string, ILog>();
   private renderMap = new Map<string, IRenderInfo>();
 
   private enable: boolean = false;
   public renderEnable: boolean = false;
-  
-  setEnable(flag: boolean) {
+
+  public setEnable(flag: boolean) {
     this.enable = !!flag;
   }
 
-  log(key: string, values: ILog) {
-    if(!this.enable) return;
+  public log(key: string, values: ILog) {
+    if (!this.enable) {
+      return;
+    }
     const [k1, k2] = key.split('.');
     const logType = k2;
     /**
@@ -35,34 +39,36 @@ export default class DebugService extends EventEmitter implements IDebugService 
       time: Date.now(),
       ...cacheLogValues,
       ...values,
-    }
+    };
     this.logMap.set(k1, {
       ...cacheLog,
       [logType]: logValues,
-    })
+    });
   }
 
-  getLog(key: string | string[] | undefined) {
-    switch(typeof key) {
+  public getLog(key: string | string[] | undefined) {
+    switch (typeof key) {
       case 'string':
         return this.logMap.get(key);
       case 'object':
-        return (key as Array<string>).map(k => this.logMap.get(k)).filter(o => o !== undefined) as ILog[];
+        return (key as string[])
+          .map((k) => this.logMap.get(k))
+          .filter((o) => o !== undefined) as ILog[];
       case 'undefined':
-        return Array.from(this.logMap.keys()).map(k => this.logMap.get(k))
+        return Array.from(this.logMap.keys()).map((k) => this.logMap.get(k));
     }
   }
 
   /**
    * 删除日志
-   * @param key 
+   * @param key
    */
   public removeLog(key: string) {
     this.logMap.delete(key);
   }
 
   public generateRenderUid() {
-    if(this.renderEnable) {
+    if (this.renderEnable) {
       return guid();
     } else {
       return '';
@@ -74,7 +80,7 @@ export default class DebugService extends EventEmitter implements IDebugService 
   }
 
   public renderStart(guid: string) {
-    if(!this.renderEnable || !this.enable) {
+    if (!this.renderEnable || !this.enable) {
       return;
     }
     const cacheRenderInfo = this.renderMap.get(guid) || {};
@@ -82,15 +88,15 @@ export default class DebugService extends EventEmitter implements IDebugService 
       ...cacheRenderInfo,
       renderUid: guid,
       renderStart: Date.now(),
-    })
+    });
   }
 
   public renderEnd(guid: string) {
-    if(!this.renderEnable || !this.enable) {
+    if (!this.renderEnable || !this.enable) {
       return;
     }
     const cacheRenderInfo = this.renderMap.get(guid);
-    if(cacheRenderInfo) {
+    if (cacheRenderInfo) {
       const renderStart = cacheRenderInfo.renderStart as number;
       const renderEnd = Date.now();
       this.emit('renderEnd', {

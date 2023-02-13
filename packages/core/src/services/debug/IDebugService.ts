@@ -1,6 +1,6 @@
 export type ILayerId = string;
 export interface ILog {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export const enum IDebugLog {
@@ -8,11 +8,15 @@ export const enum IDebugLog {
   LayerInitStart = 'layerInitStart',
   LayerInitEnd = 'layerInitEnd',
   SourceInitStart = 'sourceInitStart',
-  SourceInitEnd= 'sourceInitEnd',
+  SourceInitEnd = 'sourceInitEnd',
+  ScaleInitStart = 'scaleInitStart',
+  ScaleInitEnd = 'scaleInitEnd',
   MappingStart = 'mappingStart',
   MappingEnd = 'mappingEnd',
   BuildModelStart = 'buildModelStart',
   BuildModelEnd = 'buildModelEnd',
+  renderModelStart = 'renderModelStart',
+  renderModelEnd = 'renderModelEnd',
 }
 
 export interface IRenderInfo {
@@ -33,5 +37,4 @@ export interface IDebugService {
   generateRenderUid(): string;
   renderStart(guid: string): void;
   renderEnd(guid: string): void;
-
 }
