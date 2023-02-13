@@ -12,7 +12,7 @@ import {
   getMask,
   padBounds,
 } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
+import { isEqual, isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
@@ -102,9 +102,6 @@ export default class TextModel extends BaseModel {
       opacity = 1.0,
       stroke = '#fff',
       strokeWidth = 0,
-      textAnchor = 'center',
-      textOffset,
-      textAllowOverlap = false,
       halo = 0.5,
       gamma = 2.0,
       raisingHeight = 0,
@@ -116,11 +113,7 @@ export default class TextModel extends BaseModel {
       this.textCount = Object.keys(mapping).length;
     }
 
-    this.preTextStyle = {
-      textAnchor,
-      textAllowOverlap,
-      textOffset,
-    };
+    this.preTextStyle = this.getTextStyle();
 
     if (
       this.dataTextureTest &&
@@ -184,16 +177,7 @@ export default class TextModel extends BaseModel {
     // 绑定事件
     this.bindEvent();
     this.extent = this.textExtent();
-    const {
-      textAnchor = 'center',
-      textAllowOverlap = true,
-      textOffset,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    this.preTextStyle = {
-      textAnchor,
-      textAllowOverlap,
-      textOffset,
-    };
+    this.preTextStyle = this.getTextStyle();
     return this.buildModels();
   }
 
@@ -221,23 +205,41 @@ export default class TextModel extends BaseModel {
     });
     return [model];
   }
-
+  // 需要更新的场景
+  // 1. 文本偏移量发生改变
+  // 2. 文本锚点发生改变
+  // 3. 文本允许重叠发生改变
+  // 4. 文本字体发生改变
+  // 5. 文本字体粗细发生改变
   public async needUpdate(): Promise<boolean> {
     const {
       textAllowOverlap = false,
       textAnchor = 'center',
       textOffset,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const data = this.layer.getEncodedData();
+      padding,
+      fontFamily,
+      fontWeight,
+    } = this.getTextStyle() as IPointLayerStyleOptions;
     if (
-      JSON.stringify(textOffset) !==
-        JSON.stringify(this.preTextStyle.textOffset) ||
-      textAnchor !== this.preTextStyle.textAnchor
+      !isEqual(padding, this.preTextStyle.padding) ||
+      !isEqual(textOffset, this.preTextStyle.textOffset) ||
+      !isEqual(textAnchor, this.preTextStyle.textAnchor) ||
+      !isEqual(fontFamily, this.preTextStyle.fontFamily) ||
+      !isEqual(fontWeight, this.preTextStyle.fontWeight)
     ) {
       await this.mapping();
       return true;
     }
-    if (data.length < 5 || textAllowOverlap) {
+
+    // if (
+    //   JSON.stringify(textOffset) !==
+    //     JSON.stringify(this.preTextStyle.textOffset) ||
+    //   textAnchor !== this.preTextStyle.textAnchor
+    // ) {
+    //   await this.mapping();
+    //   return true;
+    // }
+    if (textAllowOverlap) {
       // 小于不做避让
       return false;
     }
@@ -248,7 +250,7 @@ export default class TextModel extends BaseModel {
     const flag = boundsContains(this.extent, extent);
     // 文本不能压盖则进行过滤
     if (
-      Math.abs(this.currentZoom - zoom) > 1 ||
+      Math.abs(this.currentZoom - zoom) > 0.5 ||
       !flag ||
       textAllowOverlap !== this.preTextStyle.textAllowOverlap
     ) {
@@ -370,8 +372,7 @@ export default class TextModel extends BaseModel {
    * 生成文字纹理（生成文字纹理字典）
    */
   private initTextFont() {
-    const { fontWeight = '400', fontFamily = 'sans-serif' } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { fontWeight, fontFamily } = this.getTextStyle();
     const data = this.layer.getEncodedData();
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
@@ -396,8 +397,7 @@ export default class TextModel extends BaseModel {
    * 生成 iconfont 纹理字典
    */
   private initIconFontTex() {
-    const { fontWeight = '400', fontFamily = 'sans-serif' } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { fontWeight, fontFamily } = this.getTextStyle();
     const data = this.layer.getEncodedData();
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
@@ -413,6 +413,33 @@ export default class TextModel extends BaseModel {
       fontFamily,
       iconfont: true,
     });
+  }
+
+  private getTextStyle() {
+    const {
+      fontWeight = '400',
+      fontFamily = 'sans-serif',
+      textAllowOverlap = false,
+      padding = [0, 0],
+      textAnchor = 'center',
+      textOffset = [0, 0],
+      opacity = 1,
+      strokeOpacity = 1,
+      strokeWidth = 0,
+      stroke = '#000',
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    return {
+      fontWeight,
+      fontFamily,
+      textAllowOverlap,
+      padding,
+      textAnchor,
+      textOffset,
+      opacity,
+      strokeOpacity,
+      strokeWidth,
+      stroke,
+    };
   }
 
   /**
@@ -471,7 +498,6 @@ export default class TextModel extends BaseModel {
       this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (textAllowOverlap) {
       // 如果允许文本覆盖
-      // this.layer.setEncodedData(this.glyphInfo);
       return;
     }
     this.glyphInfoMap = {};
@@ -519,8 +545,6 @@ export default class TextModel extends BaseModel {
     const { iconfont = false } = this.layer.getLayerConfig();
     // 1.生成文字纹理（或是生成 iconfont）
     iconfont ? this.initIconFontTex() : this.initTextFont();
-    // this.initTextFont();
-
     // 2.生成文字布局
     this.generateGlyphLayout(iconfont);
   }

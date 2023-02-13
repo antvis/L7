@@ -46,7 +46,14 @@ export function mathematical(symbol: string, n1: number, n2: number) {
       return Math.cos(n1);
     case 'atan':
       return n2 === -1 ? Math.atan(n1) : Math.atan2(n1, n2);
-
+    case 'min':
+      return Math.min(n1, n2);
+    case 'max':
+      return Math.max(n1, n2);
+    case 'log10':
+      return Math.log(n1);
+    case 'log2':
+      return Math.log2(n1);
     default:
       console.warn('Calculate symbol err! Return default 0');
       return 0;

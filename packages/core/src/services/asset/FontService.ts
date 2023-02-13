@@ -296,13 +296,8 @@ export default class FontService extends EventEmitter implements IFontService {
   }
 
   private getKey() {
-    return 'key';
-    const { fontFamily, fontWeight, fontSize, buffer, sdf, radius, cutoff } =
-      this.fontOptions;
-    if (sdf) {
-      return `${fontFamily} ${fontWeight} ${fontSize} ${buffer} ${radius} ${cutoff} `;
-    }
-    return `${fontFamily} ${fontWeight} ${fontSize} ${buffer}`;
+    const { fontFamily, fontWeight } = this.fontOptions;
+    return `${fontFamily}_${fontWeight}`;
   }
 
   /**
