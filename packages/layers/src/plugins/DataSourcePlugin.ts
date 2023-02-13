@@ -1,4 +1,10 @@
-import { ILayer, ILayerPlugin, IMapService, TYPES, IDebugLog } from '@antv/l7-core';
+import {
+  IDebugLog,
+  ILayer,
+  ILayerPlugin,
+  IMapService,
+  TYPES,
+} from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
 import 'reflect-metadata';

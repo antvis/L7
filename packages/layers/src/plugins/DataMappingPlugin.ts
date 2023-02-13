@@ -1,4 +1,5 @@
 import {
+  IDebugLog,
   IEncodeFeature,
   IFontService,
   ILayer,
@@ -9,7 +10,6 @@ import {
   IStyleAttributeService,
   Position,
   TYPES,
-  IDebugLog,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 import { normalize, rgb2arr } from '@antv/l7-utils';
