@@ -17,6 +17,7 @@ export * from './services/component/IMarkerService';
 export * from './services/component/IPopupService';
 export * from './services/config/IConfigService';
 export * from './services/coordinate/ICoordinateSystemService';
+export * from './services/debug/IDebugService';
 export * from './services/interaction/IInteractionService';
 export * from './services/interaction/IPickingService';
 /** 暴露服务接口供其他 packages 实现 */

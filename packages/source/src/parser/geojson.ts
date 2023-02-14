@@ -36,11 +36,11 @@ function getFeatureID(feature: Feature<Geometries, Properties>, key?: string) {
   if (key === undefined) {
     return null;
   }
+
   // @ts-ignore
-  if (feature.properties[key]) {
-    // 单独指定要素
+  if (typeof feature.properties[key] * 1 === 'number') {
     // @ts-ignore
-    return feature.properties[key];
+    return feature.properties[key] * 1;
   }
 
   if (feature.properties && feature.properties[key]) {

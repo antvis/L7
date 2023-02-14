@@ -16,6 +16,7 @@ import { ICameraService } from './services/camera/ICameraService';
 import { IControlService } from './services/component/IControlService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
+import { IDebugService } from './services/debug/IDebugService';
 import { IInteractionService } from './services/interaction/IInteractionService';
 import { IPickingService } from './services/interaction/IPickingService';
 import { ILayerService } from './services/layer/ILayerService';
@@ -32,6 +33,7 @@ import MarkerService from './services/component/MarkerService';
 import PopupService from './services/component/PopupService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
+import DebugService from './services/debug/DebugService';
 import InteractionService from './services/interaction/InteractionService';
 import PickingService from './services/interaction/PickingService';
 import LayerService from './services/layer/LayerService';
@@ -152,6 +154,10 @@ export function createSceneContainer() {
   sceneContainer
     .bind<ILayerService>(TYPES.ILayerService)
     .to(LayerService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IDebugService>(TYPES.IDebugService)
+    .to(DebugService)
     .inSingletonScope();
   sceneContainer
     .bind<ISceneService>(TYPES.ISceneService)

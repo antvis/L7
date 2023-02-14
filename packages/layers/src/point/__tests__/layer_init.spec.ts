@@ -39,6 +39,7 @@ describe('template', () => {
       scene.addLayer(layer);
     });
   });
+
   it('scene layer text', async () => {
     const layer = new PointLayer({ name: 'text' })
       .source(testData, {
@@ -56,8 +57,6 @@ describe('template', () => {
       scene.addLayer(layer);
       expect(layer.name).toEqual('text');
     });
-
-    scene.addLayer(layer);
   });
 
   it('scene layer extrude', async () => {
@@ -72,7 +71,9 @@ describe('template', () => {
       .shape('cloumn')
       .color('red')
       .size([5, 5, 10]);
-    scene.addLayer(layer);
+    scene.on('loaded', () => {
+      scene.addLayer(layer);
+    });
   });
 
   it('scene layer simplePoint', async () => {

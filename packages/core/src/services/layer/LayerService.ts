@@ -5,6 +5,7 @@ import { throttle } from 'lodash';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
+import { IDebugService } from '../debug/IDebugService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
 import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
@@ -40,6 +41,9 @@ export default class LayerService
 
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
+
+  @inject(TYPES.IDebugService)
+  private readonly debugService: IDebugService;
 
   public reRender = throttle(() => {
     this.updateLayerRenderList();
@@ -134,6 +138,8 @@ export default class LayerService
     if (this.alreadyInRendering || !this.enableRender) {
       return;
     }
+    const renderUid = this.debugService.generateRenderUid();
+    this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
@@ -156,6 +162,7 @@ export default class LayerService
         await layer.render();
       }
     }
+    this.debugService.renderEnd(renderUid);
     this.alreadyInRendering = false;
   }
 

@@ -1,4 +1,5 @@
 import {
+  IDebugLog,
   IEncodeFeature,
   IFontService,
   ILayer,
@@ -32,8 +33,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tapPromise('DataMappingPlugin', async () => {
+      layer.log(IDebugLog.MappingStart);
       // 初始化重新生成 map
       this.generateMaping(layer, { styleAttributeService });
+      layer.log(IDebugLog.MappingEnd);
     });
 
     layer.hooks.beforeRenderData.tapPromise(
@@ -42,6 +45,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         if (!flag) {
           return flag;
         }
+
         layer.dataState.dataMappingNeedUpdate = false;
         return this.generateMaping(layer, { styleAttributeService });
       },
