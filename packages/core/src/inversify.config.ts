@@ -19,6 +19,7 @@ import { ICoordinateSystemService } from './services/coordinate/ICoordinateSyste
 import { IInteractionService } from './services/interaction/IInteractionService';
 import { IPickingService } from './services/interaction/IPickingService';
 import { ILayerService } from './services/layer/ILayerService';
+import { IDebugService } from './services/debug/IDebugService';
 import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
 import { ISceneService } from './services/scene/ISceneService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
@@ -35,6 +36,7 @@ import CoordinateSystemService from './services/coordinate/CoordinateSystemServi
 import InteractionService from './services/interaction/InteractionService';
 import PickingService from './services/interaction/PickingService';
 import LayerService from './services/layer/LayerService';
+import DebugService from './services/debug/DebugService';
 import StyleAttributeService from './services/layer/StyleAttributeService';
 import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
@@ -152,6 +154,10 @@ export function createSceneContainer() {
   sceneContainer
     .bind<ILayerService>(TYPES.ILayerService)
     .to(LayerService)
+    .inSingletonScope();
+  sceneContainer
+    .bind<IDebugService>(TYPES.IDebugService)
+    .to(DebugService)
     .inSingletonScope();
   sceneContainer
     .bind<ISceneService>(TYPES.ISceneService)

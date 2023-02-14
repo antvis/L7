@@ -26,6 +26,7 @@ import { IMapService } from '../map/IMapService';
 import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
 import { IShaderModuleService } from '../shader/IShaderModuleService';
 import { ISceneService } from './ISceneService';
+import { IDebugService } from '../debug/IDebugService';
 
 /**
  * will emit `loaded` `resize` `destroy` event panstart panmove panend
@@ -64,6 +65,9 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   @inject(TYPES.ILayerService)
   private readonly layerService: ILayerService;
+
+  @inject(TYPES.IDebugService)
+  private readonly debugService: IDebugService;
 
   @inject(TYPES.ICameraService)
   private readonly cameraService: ICameraService;
@@ -134,6 +138,9 @@ export default class Scene extends EventEmitter implements ISceneService {
      * 初始化底图
      */
     this.hooks.init.tapPromise('initMap', async () => {
+      this.debugService.log('map.mapInitStart', {
+        type: this.map.version
+      })
       // 等待首次相机同步
       await new Promise<void>((resolve) => {
         this.map.onCameraChanged((viewport: IViewport) => {
@@ -188,6 +195,7 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.configService.getSceneConfig(this.id) as IRenderConfig,
           sceneConfig.gl,
         );
+        this.registerContextLost();
         this.initContainer();
 
         elementResizeEvent(
@@ -206,6 +214,13 @@ export default class Scene extends EventEmitter implements ISceneService {
     });
    
     this.render();
+  }
+
+  private registerContextLost() {
+    const canvas = this.rendererService.getCanvas();
+    if(canvas) {
+      canvas.addEventListener('webglcontextlost', () => this.emit('webglcontextlost'));
+    }
   }
 
   /**
