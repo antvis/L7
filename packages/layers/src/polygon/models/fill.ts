@@ -6,7 +6,7 @@ import {
   IModel,
   Triangulation,
 } from '@antv/l7-core';
-import { getMask, polygonFillTriangulation } from '@antv/l7-utils';
+import { polygonFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
@@ -90,8 +90,7 @@ export default class FillModel extends BaseModel {
       triangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
+
       workerEnabled,
       workerOptions: {
         modelType: type,

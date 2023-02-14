@@ -6,7 +6,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, getMask, IColorRamp } from '@antv/l7-utils';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, LinearDir } from '../../core/interface';
@@ -101,8 +101,6 @@ export default class LinearLineModel extends BaseModel {
       fragmentShader: linear_line_frag,
       triangulation: LineTriangulation,
       depth: { enable: depth },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

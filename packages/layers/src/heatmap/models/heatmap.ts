@@ -7,12 +7,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import {
-  generateColorRamp,
-  getCullFace,
-  getMask,
-  IColorRamp,
-} from '@antv/l7-utils';
+import { generateColorRamp, getCullFace, IColorRamp } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
@@ -167,8 +162,6 @@ export default class HeatMapModel extends BaseModel {
   }
 
   private buildHeatmapColor(): IModel {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.shaderModuleService.registerModule('heatmapColor', {
       vs: heatmapColorVert,
       fs: heatmapColorFrag,
@@ -203,13 +196,11 @@ export default class HeatMapModel extends BaseModel {
       depth: {
         enable: false,
       },
-      blend: this.getBlend(),
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],
         type: gl.UNSIGNED_INT,
         count: 6,
       }),
-      stencil: getMask(mask, maskInside),
     });
   }
 
@@ -275,8 +266,6 @@ export default class HeatMapModel extends BaseModel {
     });
   }
   private build3dHeatMap() {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
     const triangulation = heatMap3DTriangulation(width / 4.0, height / 4.0);
@@ -329,7 +318,6 @@ export default class HeatMapModel extends BaseModel {
         type: gl.UNSIGNED_INT,
         count: triangulation.indices.length,
       }),
-      stencil: getMask(mask, maskInside),
     });
   }
   private updateStyle() {

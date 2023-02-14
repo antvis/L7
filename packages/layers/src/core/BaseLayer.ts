@@ -857,7 +857,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.updateLayerConfig({
       blend: type,
     });
-    this.layerModelNeedUpdate = true;
+    // this.layerModelNeedUpdate = true;
     this.reRender();
     return this;
   }
@@ -1364,6 +1364,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       model.draw(
         {
           uniforms: this.layerModel.getUninforms(),
+          blend: this.layerModel.getBlend(),
+          stencil: this.layerModel.getStencil(),
         },
         isPicking,
       );

@@ -8,7 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, LineTriangulation, rgb2arr } from '@antv/l7-utils';
+import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import {
@@ -194,8 +194,7 @@ export default class LineModel extends BaseModel {
       fragmentShader: frag,
       triangulation: LineTriangulation,
       depth: { enable: depth },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
+
       workerEnabled,
       workerOptions: {
         modelType: 'line' + type,

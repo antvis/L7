@@ -20,6 +20,7 @@ import {
   IPickingService,
   IRendererService,
   IShaderModuleService,
+  IStencilOptions,
   IStyleAttributeService,
   ITexture2D,
   ITexture2DInitializationOptions,
@@ -27,7 +28,7 @@ import {
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { getMask, rgb2arr } from '@antv/l7-utils';
 import { color } from 'd3-color';
 import { isEqual, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
@@ -500,6 +501,27 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public getBlend(): IBlendOptions {
     const { blend = 'normal' } = this.layer.getLayerConfig();
     return BlendTypes[BlendType[blend]] as IBlendOptions;
+  }
+  public getStencil(): Partial<IStencilOptions> {
+    const { mask = false, maskInside = true } = this.layer.getLayerConfig();
+    // TODO 临时处理，后期移除MaskLayer
+    if (this.layer.type === 'MaskLayer') {
+      return {
+        enable: true,
+        mask: 0xff,
+        func: {
+          cmp: gl.ALWAYS,
+          ref: 1,
+          mask: 0xff,
+        },
+        opFront: {
+          fail: gl.REPLACE,
+          zfail: gl.REPLACE,
+          zpass: gl.REPLACE,
+        },
+      };
+    }
+    return getMask(mask, maskInside);
   }
   public getDefaultStyle(): unknown {
     return {};

@@ -28,7 +28,6 @@ export default class MaskModel extends BaseModel {
       fragmentShader: mask_frag,
       triangulation: polygonTriangulation,
       depth: { enable: false },
-      blend: this.getBlend(),
       stencil: {
         enable: true,
         mask: 0xff,

@@ -9,7 +9,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask, PointFillTriangulation } from '@antv/l7-utils';
+import { PointFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
@@ -141,8 +141,7 @@ export default class FillModel extends BaseModel {
       fragmentShader: frag,
       triangulation: PointFillTriangulation,
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
+
       workerEnabled,
       workerOptions: {
         modelType: type,

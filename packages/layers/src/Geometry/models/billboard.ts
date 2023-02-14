@@ -6,7 +6,6 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/billboard_frag.glsl';
@@ -104,8 +103,6 @@ export default class BillBoardModel extends BaseModel {
       triangulation: this.planeGeometryTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: true },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

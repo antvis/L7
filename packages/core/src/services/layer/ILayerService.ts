@@ -21,6 +21,7 @@ import {
   IBlendOptions,
   IModel,
   IModelInitializationOptions,
+  IStencilOptions,
 } from '../renderer/IModel';
 import {
   IMultiPassRenderer,
@@ -88,6 +89,8 @@ export interface ILayerModelInitializationOptions {
 export interface ILayerModel {
   render(): void;
   renderUpdate?(): void;
+  getBlend(): Partial<IBlendOptions>;
+  getStencil(): Partial<IStencilOptions>;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;

@@ -5,7 +5,7 @@ import {
   IModel,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
@@ -99,16 +99,12 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-
     const { frag, vert, type } = this.getShaders();
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
       fragmentShader: frag,
       triangulation: PolygonExtrudeTriangulation,
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

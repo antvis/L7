@@ -8,7 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
@@ -183,9 +183,7 @@ export default class ArcModel extends BaseModel {
       fragmentShader: frag,
       triangulation: LineArcTriangulation,
       depth: { enable: false },
-      blend: this.getBlend(),
       segmentNumber,
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }
