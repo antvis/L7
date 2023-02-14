@@ -10,13 +10,14 @@ order: 0
 L7 在通过 debugService 的形式对外提供调试服务，通过 debugService 用户可以获得一些有助于性能监控的信息。
 
 ### serEnable(enable: boolean)
+
 用户可以通过 scene 初始化的时候和 debugService 提供的方法来开启监控。
 
 ```js
 // 可以在 scene 初始化的时候打开监控
 const scene = new Scene({
   debug: true, // 默认为 false
-})
+});
 
 // 可以通过 debugService 单独控制监控
 const debugService = scene.getDebugService();
@@ -24,6 +25,7 @@ debugService.serEnable(true); // 开启监控
 ```
 
 ### getLog(field: undefined | string | string[]): ILog[] | ILog | undefined
+
 用户通过 getLog 方法获取日志，通过传入不通的参数，用户可以准确获得自己需要的日志内容。
 
 ```js
@@ -32,20 +34,21 @@ debugService.getLog('map'); // map 为固定值
 
 // 在获取图层的创建日志时，为了获取到全部的数据，需要在 layer 创建完成之后获取
 layer.on('inited', () => {
-	debugService.getLog(layer.id); // 获取单个图层创建日志  
-})
+  debugService.getLog(layer.id); // 获取单个图层创建日志
+});
 
-layerAllLoad([pointLayer1, pointLayer2], () => { // layerAllLoad 自己实现监听
-  debugService.getLog([pointLayer1.id, pointLayer2.id]); // 获取多个图层创建日志  
-})
+layerAllLoad([pointLayer1, pointLayer2], () => {
+  // layerAllLoad 自己实现监听
+  debugService.getLog([pointLayer1.id, pointLayer2.id]); // 获取多个图层创建日志
+});
 
 // 获取所有日志
-debugService.getLog(); 
+debugService.getLog();
 ```
 
 ### renderDebug(enable: boolean)
 
-debugService 提供了监听图层渲染时间的便捷方法, 通过  renderDebug 开启。
+debugService 提供了监听图层渲染时间的便捷方法, 通过 renderDebug 开启。
 
 ### on(name: string, options: any)
 
@@ -66,4 +69,3 @@ debugService.on('renderEnd', renderInfo => {
 ### off(name: string, func: Function)
 
 debugService 事件取消监听。
-
