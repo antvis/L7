@@ -309,6 +309,14 @@ export default defineConfig({
         order: 11,
       },
       {
+        slug: 'tutorial/debug',
+        title: {
+          zh: '调试 debug',
+          en: 'debug',
+        },
+        order: 12,
+      },
+      {
         slug: 'api/map',
         title: {
           zh: '地图 Map',
@@ -411,6 +419,14 @@ export default defineConfig({
           en: 'Other Layers',
         },
         order: 11,
+      },
+      {
+        slug: 'api/debug',
+        title: {
+          zh: '调试 debug',
+          en: 'debug',
+        },
+        order: 12,
       },
       {
         slug: 'api/component/control',

@@ -29,7 +29,7 @@ export interface IDebugService {
   setEnable(flag: boolean | undefined): void;
 
   log(key: string, values: ILog): void;
-  getLog(key: string | string[] | undefined): void;
+  getLog(key: string | string[] | undefined): ILog[] | ILog | undefined;
   removeLog(key: string): void;
 
   generateRenderUid(): string;
