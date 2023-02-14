@@ -116,7 +116,7 @@ export default class GreatCircleModel extends BaseModel {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -125,22 +125,19 @@ export default class GreatCircleModel extends BaseModel {
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
- public async buildModels():Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'lineGreatCircle',
-        vertexShader: line_arc2d_vert,
-        fragmentShader: line_arc_frag,
-        triangulation: LineArcTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'lineGreatCircle',
+      vertexShader: line_arc2d_vert,
+      fragmentShader: line_arc_frag,
+      triangulation: LineArcTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -155,9 +152,7 @@ export default class GreatCircleModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
@@ -197,9 +192,7 @@ export default class GreatCircleModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;
           // console.log('icon feature', feature)

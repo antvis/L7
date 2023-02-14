@@ -13,11 +13,11 @@ export default class TouchRotateHandler extends TwoTouchHandler {
 
   public reset() {
     super.reset();
-    //@ts-ignore
+    // @ts-ignore
     delete this.minDiameter;
-    //@ts-ignore
+    // @ts-ignore
     delete this.startVector;
-    //@ts-ignore
+    // @ts-ignore
     delete this.vector;
   }
 

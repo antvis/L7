@@ -16,7 +16,7 @@ export default class TwoTouchHandler {
 
   public reset() {
     this.active = false;
-        //@ts-ignore
+    // @ts-ignore
     delete this.firstTwoTouches;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

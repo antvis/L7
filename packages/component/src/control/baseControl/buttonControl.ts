@@ -11,7 +11,7 @@ export interface IButtonControlOption extends IControlOption {
 }
 
 export default class ButtonControl<
-  O extends IButtonControlOption = IButtonControlOption
+  O extends IButtonControlOption = IButtonControlOption,
 > extends Control<O> {
   /**
    * 当前按钮是否禁用

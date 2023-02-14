@@ -90,9 +90,8 @@ export default class FillModel extends BaseModel {
     };
   }
   public getAnimateUniforms(): IModelUniform {
-    const {
-      animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as ILayerConfig;
+    const { animateOption = { enable: false } } =
+      this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_animate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -100,7 +99,7 @@ export default class FillModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    return await this.buildModels();
+    return this.buildModels();
   }
 
   public async buildModels(): Promise<IModel[]> {

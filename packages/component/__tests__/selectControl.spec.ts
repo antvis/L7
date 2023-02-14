@@ -27,6 +27,7 @@ class SingleControl extends SelectControl {
   }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 class MultiControl extends SelectControl {
   public getDefault(option: any): any {
     return {

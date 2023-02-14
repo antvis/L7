@@ -28,11 +28,11 @@ export default class SingleTapRecognizer {
   }
 
   public reset() {
-    //@ts-ignore
+    // @ts-ignore
     delete this.centroid;
-    //@ts-ignore
+    // @ts-ignore
     delete this.startTime;
-    //@ts-ignore
+    // @ts-ignore
     delete this.touches;
     this.aborted = false;
   }

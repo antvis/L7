@@ -12,12 +12,11 @@ import {
 import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
-import { IPointLayerStyleOptions } from '../../core/interface';
+import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
 
 import pointFillFrag from '../shaders/radar/radar_frag.glsl';
 import pointFillVert from '../shaders/radar/radar_vert.glsl';
-import { SizeUnitType } from '../../core/interface'
 
 export default class RadarModel extends BaseModel {
   public getUninforms(): IModelUniform {
@@ -25,7 +24,7 @@ export default class RadarModel extends BaseModel {
       opacity = 1,
       blend,
       speed = 1,
-      unit = 'pixel'
+      unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     return {
@@ -36,9 +35,8 @@ export default class RadarModel extends BaseModel {
     };
   }
   public getAnimateUniforms(): IModelUniform {
-    const {
-      animateOption = { enable: false },
-    } = this.layer.getLayerConfig() as ILayerConfig;
+    const { animateOption = { enable: false } } =
+      this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_animate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
@@ -57,30 +55,24 @@ export default class RadarModel extends BaseModel {
     );
   }
 
-  public async initModels():Promise<IModel[]>  {
-    return await this.buildModels();
+  public async initModels(): Promise<IModel[]> {
+    return this.buildModels();
   }
 
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-
- public async buildModels():Promise<IModel[]>  {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
-       const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'pointRadar',
-        vertexShader: pointFillVert,
-        fragmentShader: pointFillFrag,
-        triangulation: PointFillTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-      return [model]
-       
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'pointRadar',
+      vertexShader: pointFillVert,
+      fragmentShader: pointFillFrag,
+      triangulation: PointFillTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   public clearModels() {
@@ -134,13 +126,9 @@ export default class RadarModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 5 } = feature;
-          return Array.isArray(size)
-            ? [size[0]]
-            : [(size as number)];
+          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });

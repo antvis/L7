@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox';
 import {
   BBox,
   degreesToRadians,
@@ -7,7 +8,6 @@ import {
   Units,
 } from '@turf/helpers';
 import { isNumber } from './math';
-import bbox from '@turf/bbox';
 
 export type IBounds = [[number, number], [number, number]];
 
@@ -19,9 +19,14 @@ interface ILngLat {
 const originShift = (2 * Math.PI * 6378137) / 2.0;
 type Point = number[];
 
-export function lngLatInExtent(lngLat: ILngLat, extent: number[]) {
-  const [minLng, minLat, maxLng, maxLat] = extent;
-  return lngLat.lng > minLng && lngLat.lng <= maxLng && lngLat.lat > minLat && lngLat.lat <= maxLat
+export function lngLatInExtent(lngLat: ILngLat, bounds: number[]) {
+  const [minLng, minLat, maxLng, maxLat] = bounds;
+  return (
+    lngLat.lng > minLng &&
+    lngLat.lng <= maxLng &&
+    lngLat.lat > minLat &&
+    lngLat.lat <= maxLat
+  );
 }
 /**
  * 计算地理数据范围

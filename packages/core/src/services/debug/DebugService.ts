@@ -79,23 +79,23 @@ export default class DebugService
     this.renderEnable = enable;
   }
 
-  public renderStart(guid: string) {
+  public renderStart(id: string) {
     if (!this.renderEnable || !this.enable) {
       return;
     }
-    const cacheRenderInfo = this.renderMap.get(guid) || {};
-    this.renderMap.set(guid, {
+    const cacheRenderInfo = this.renderMap.get(id) || {};
+    this.renderMap.set(id, {
       ...cacheRenderInfo,
-      renderUid: guid,
+      renderUid: id,
       renderStart: Date.now(),
     });
   }
 
-  public renderEnd(guid: string) {
+  public renderEnd(id: string) {
     if (!this.renderEnable || !this.enable) {
       return;
     }
-    const cacheRenderInfo = this.renderMap.get(guid);
+    const cacheRenderInfo = this.renderMap.get(id);
     if (cacheRenderInfo) {
       const renderStart = cacheRenderInfo.renderStart as number;
       const renderEnd = Date.now();
@@ -104,7 +104,7 @@ export default class DebugService
         renderEnd,
         renderDuration: renderEnd - renderStart,
       });
-      this.renderMap.delete(guid);
+      this.renderMap.delete(id);
     }
   }
 

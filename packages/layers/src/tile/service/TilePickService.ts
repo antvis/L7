@@ -124,10 +124,10 @@ export class TilePickService implements ITilePickService {
     // 提取当前可见瓦片
     const tiles = this.tileLayerService
       .getTiles()
-      .filter((tile) => tile.visible);
+      .filter((tile: ITile) => tile.visible);
     // 提取当前可见瓦片中匹配 ID 的 feature 列表
     const features: any[] = [];
-    tiles.forEach((tile) => {
+    tiles.forEach((tile: ITile) => {
       features.push(...tile.getFeatureById(pickedFeatureIdx));
     });
 

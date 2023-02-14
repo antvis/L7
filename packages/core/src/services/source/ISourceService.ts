@@ -30,7 +30,10 @@ export interface ITileParserCFG {
   minZoom?: number;
   maxZoom?: number;
   zoomOffset?: number;
-  getCustomData: (tile: { x: number, y: number, z: number },cb:(err:any,data:any)=>void)=>void,
+  getCustomData: (
+    tile: { x: number; y: number; z: number },
+    cb: (err: any, data: any) => void,
+  ) => void;
   extent?: [number, number, number, number];
   requestParameters: Partial<RequestParameters>;
   updateStrategy?: 'overlap' | 'replace';
@@ -50,9 +53,12 @@ export interface ITileParserCFG {
   operation?: any;
 
   // 用户自定义请求url
-  getURLFromTemplate?: (template: string, properties: { x: number; y: number; z: number }) => string;
+  getURLFromTemplate?: (
+    template: string,
+    properties: { x: number; y: number; z: number },
+  ) => string;
   // 用户自定义处理返回数据回调
-  transformResponse?: (response: Object) => any;
+  transformResponse?: (response: object) => any;
 }
 
 export interface IWMTSServiceOption {

@@ -61,9 +61,8 @@ export default class CanvaModel extends BaseModel {
   }
 
   public async initModels() {
-    const {
-      update = CanvasUpdateType.ALWAYS,
-    } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
+    const { update = CanvasUpdateType.ALWAYS } =
+      this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
     this.updateMode = update as CanvasUpdateType;
     this.initCanvas();
 
@@ -79,10 +78,8 @@ export default class CanvaModel extends BaseModel {
     const { zIndex } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
     const size = this.mapService.getSize();
     const [width, height] = size;
-    const {
-      width: viewWidth,
-      height: viewHeight,
-    } = this.rendererService.getViewportSize();
+    const { width: viewWidth, height: viewHeight } =
+      this.rendererService.getViewportSize();
     this.prevSize = [viewWidth, viewHeight];
 
     const canvas = document.createElement('canvas');
@@ -110,10 +107,8 @@ export default class CanvaModel extends BaseModel {
   };
 
   public renderCanvas = () => {
-    const {
-      width: viewWidth,
-      height: viewHeight,
-    } = this.rendererService.getViewportSize();
+    const { width: viewWidth, height: viewHeight } =
+      this.rendererService.getViewportSize();
     if (this.prevSize[0] !== viewWidth || this.prevSize[1] !== viewHeight) {
       this.prevSize = [viewWidth, viewHeight];
       const size = this.mapService.getSize();
@@ -124,9 +119,8 @@ export default class CanvaModel extends BaseModel {
       this.canvas.style.height = height + 'px';
     }
 
-    const {
-      drawingOnCanvas,
-    } = this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
+    const { drawingOnCanvas } =
+      this.layer.getLayerConfig() as ICanvasLayerStyleOptions;
 
     if (this.ctx) {
       drawingOnCanvas({

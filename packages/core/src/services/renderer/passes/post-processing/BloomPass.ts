@@ -13,18 +13,15 @@ export interface IBloomPassConfig {
 }
 
 @injectable()
-export default class BloomPass extends BasePostProcessingPass<
-  IBloomPassConfig
-> {
+export default class BloomPass extends BasePostProcessingPass<IBloomPassConfig> {
   protected setupShaders() {
     this.shaderModuleService.registerModule('blur-pass', {
       vs: quad,
       fs: blur,
     });
 
-    const { vs, fs, uniforms } = this.shaderModuleService.getModule(
-      'blur-pass',
-    );
+    const { vs, fs, uniforms } =
+      this.shaderModuleService.getModule('blur-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {
@@ -37,9 +34,7 @@ export default class BloomPass extends BasePostProcessingPass<
     };
   }
 
-  protected convertOptionsToUniforms(
-    options: Partial<IBloomPassConfig>,
-  ): {
+  protected convertOptionsToUniforms(options: Partial<IBloomPassConfig>): {
     [uniformName: string]: IUniform;
   } | void {
     const uniforms: {

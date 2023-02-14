@@ -16,10 +16,10 @@ import { ICameraService } from './services/camera/ICameraService';
 import { IControlService } from './services/component/IControlService';
 import { IGlobalConfigService } from './services/config/IConfigService';
 import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
+import { IDebugService } from './services/debug/IDebugService';
 import { IInteractionService } from './services/interaction/IInteractionService';
 import { IPickingService } from './services/interaction/IPickingService';
 import { ILayerService } from './services/layer/ILayerService';
-import { IDebugService } from './services/debug/IDebugService';
 import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
 import { ISceneService } from './services/scene/ISceneService';
 import { IShaderModuleService } from './services/shader/IShaderModuleService';
@@ -33,10 +33,10 @@ import MarkerService from './services/component/MarkerService';
 import PopupService from './services/component/PopupService';
 import GlobalConfigService from './services/config/ConfigService';
 import CoordinateSystemService from './services/coordinate/CoordinateSystemService';
+import DebugService from './services/debug/DebugService';
 import InteractionService from './services/interaction/InteractionService';
 import PickingService from './services/interaction/PickingService';
 import LayerService from './services/layer/LayerService';
-import DebugService from './services/debug/DebugService';
 import StyleAttributeService from './services/layer/StyleAttributeService';
 import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
@@ -95,7 +95,7 @@ export const lazyInject = (
   const original = DECORATORS.lazyInject(serviceIdentifier);
   // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
   // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
-  return function(
+  return function (
     this: any,
     proto: any,
     key: string,
@@ -117,7 +117,7 @@ export const lazyMultiInject = (
   const original = DECORATORS.lazyMultiInject(serviceIdentifier);
   // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
   // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
-  return function(
+  return function (
     this: any,
     proto: any,
     key: string,
@@ -220,8 +220,9 @@ export function createSceneContainer() {
     .whenTargetNamed('taa');
   sceneContainer
     .bind<interfaces.Factory<IPass<unknown>>>(TYPES.IFactoryNormalPass)
-    .toFactory<IPass<unknown>>((context) => (named: string) =>
-      context.container.getNamed<IPass<unknown>>(TYPES.INormalPass, named),
+    .toFactory<IPass<unknown>>(
+      (context) => (named: string) =>
+        context.container.getNamed<IPass<unknown>>(TYPES.INormalPass, named),
     );
 
   // 绑定 post processing passes
@@ -282,7 +283,7 @@ export function createSceneContainer() {
 export function createLayerContainer(sceneContainer: Container) {
   const layerContainer = new Container();
   layerContainer.parent = sceneContainer;
-  
+
   layerContainer
     .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
     .to(StyleAttributeService)

@@ -277,7 +277,9 @@ export default class Source extends EventEmitter implements ISource {
     this.tileset = this.initTileset();
 
     // 判断当前 source 是否需要计算范围
-    if (parser.cancelExtent) { return; }
+    if (parser.cancelExtent) {
+      return;
+    }
 
     // 计算范围
     this.extent = extent(this.data.dataArray);

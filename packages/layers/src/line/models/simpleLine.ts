@@ -79,7 +79,7 @@ export default class SimpleLineModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -87,10 +87,8 @@ export default class SimpleLineModel extends BaseModel {
   }
 
   public getShaders(): { frag: string; vert: string; type: string } {
-    const {
-      sourceColor,
-      targetColor,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { sourceColor, targetColor } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (sourceColor && targetColor) {
       // 分离 linear 功能
       return {
@@ -107,27 +105,24 @@ export default class SimpleLineModel extends BaseModel {
     }
   }
 
- public async buildModels():Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     const { frag, vert, type } = this.getShaders();
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: SimpleLineTriangulation,
-        primitive: gl.LINES,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        pick: false,
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: SimpleLineTriangulation,
+      primitive: gl.LINES,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      pick: false,
+    });
+    return [model];
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -185,9 +180,7 @@ export default class SimpleLineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
         },

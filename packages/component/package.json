@@ -36,7 +36,8 @@
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.13.6",
+    "@antv/l7-layers": "^2.13.6",
+    "@antv/l7-test-utils": "^2.13.6",
     "gcoord": "^0.3.2",
     "less": "^4.1.3"
   },

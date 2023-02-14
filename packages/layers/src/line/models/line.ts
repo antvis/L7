@@ -68,8 +68,8 @@ export default class LineModel extends BaseModel {
       dashArray.push(0, 0);
     }
 
-    if (this.rendererService.getDirty()) {
-      this.texture && this.texture.bind();
+    if (this.rendererService.getDirty() && this.texture) {
+      this.texture.bind();
     }
 
     // 转化渐变色

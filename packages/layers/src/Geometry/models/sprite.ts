@@ -1,9 +1,4 @@
-import {
-  gl,
-  IModel,
-  IModelUniform,
-  ITexture2D,
-} from '@antv/l7-core';
+import { gl, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
 
 import BaseModel from '../../core/BaseModel';
@@ -63,9 +58,8 @@ export default class SpriteModel extends BaseModel {
   }
 
   public planeGeometryUpdateTriangulation = () => {
-    const {
-      spriteBottom = -100000,
-    } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { spriteBottom = -100000 } =
+      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     const updateZ = this.spriteUpdate;
     const bottomZ = spriteBottom;
     const topZ = this.spriteTop;
@@ -175,21 +169,20 @@ export default class SpriteModel extends BaseModel {
       this.updateModel();
     }, 100);
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'geometrySprite',
-        vertexShader: spriteVert,
-        fragmentShader: spriteFrag,
-        triangulation: this.planeGeometryTriangulation,
-        primitive: gl.POINTS,
-        depth: { enable: false },
-        blend: this.getBlend(),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'geometrySprite',
+      vertexShader: spriteVert,
+      fragmentShader: spriteFrag,
+      triangulation: this.planeGeometryTriangulation,
+      primitive: gl.POINTS,
+      depth: { enable: false },
+      blend: this.getBlend(),
+    });
+    return [model];
   }
 
- public async buildModels():Promise<IModel[]> {
-    return await this.initModels();
+  public async buildModels(): Promise<IModel[]> {
+    return this.initModels();
   }
 
   public updateTexture(mapTexture: string | undefined): void {

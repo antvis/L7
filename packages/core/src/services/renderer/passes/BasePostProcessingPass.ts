@@ -20,7 +20,8 @@ import { IUniform } from '../IUniform';
  */
 @injectable()
 export default class BasePostProcessingPass<InitializationOptions = {}>
-  implements IPostProcessingPass<InitializationOptions> {
+  implements IPostProcessingPass<InitializationOptions>
+{
   @inject(TYPES.IShaderModuleService)
   protected shaderModuleService: IShaderModuleService;
 
@@ -166,9 +167,7 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
     throw new Error('Method not implemented.');
   }
 
-  protected convertOptionsToUniforms(
-    options: Partial<InitializationOptions>,
-  ): {
+  protected convertOptionsToUniforms(options: Partial<InitializationOptions>): {
     [uniformName: string]: IUniform;
   } | void {
     const uniforms: {

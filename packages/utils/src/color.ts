@@ -232,7 +232,6 @@ export function getDefaultDomain(rampColors: IColorRamp) {
     case 'cat':
       return [0, 255];
     default:
-      [0, 1];
+      return [0, 1];
   }
 }
-

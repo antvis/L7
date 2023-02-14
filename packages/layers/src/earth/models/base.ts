@@ -80,27 +80,26 @@ export default class BaseEarthModel extends BaseModel {
       this.layerService.reRender();
     });
 
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
     return '';
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     // Tip: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -998;
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'earthBase',
-        vertexShader: baseVert,
-        fragmentShader: baseFrag,
-        triangulation: earthTriangulation,
-        depth: { enable: true },
-        blend: this.getBlend(),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'earthBase',
+      vertexShader: baseVert,
+      fragmentShader: baseFrag,
+      triangulation: earthTriangulation,
+      depth: { enable: true },
+      blend: this.getBlend(),
+    });
+    return [model];
   }
 
   protected registerBuiltinAttributes() {
@@ -115,9 +114,7 @@ export default class BaseEarthModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },

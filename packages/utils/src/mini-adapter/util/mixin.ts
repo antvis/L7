@@ -82,7 +82,7 @@ export function clientRegion(obj: any) {
   }
 
   if (!('getBoundingClientRect' in obj)) {
-    obj.getBoundingClientRect = function() {
+    obj.getBoundingClientRect = function () {
       const ret = {
         x: 0,
         y: 0,

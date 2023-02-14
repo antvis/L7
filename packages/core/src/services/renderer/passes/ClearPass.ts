@@ -8,7 +8,7 @@ import BaseNormalPass from './BaseNormalPass';
  */
 @injectable()
 export default class ClearPass<
-  InitializationOptions = {}
+  InitializationOptions = {},
 > extends BaseNormalPass<InitializationOptions> {
   public getName() {
     return 'clear';

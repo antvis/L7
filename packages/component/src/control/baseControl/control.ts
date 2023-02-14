@@ -16,7 +16,6 @@ import { Container } from 'inversify';
 import { ControlEvent } from '../../interface';
 
 export { PositionType } from '@antv/l7-core';
-
 export { Control };
 
 export interface IControlOption {

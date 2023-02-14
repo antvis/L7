@@ -37,9 +37,9 @@ let accumulatingId = 1;
  * @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/ri52hv
  */
 @injectable()
-export default class TAAPass<InitializationOptions = {}> extends BaseNormalPass<
-  InitializationOptions
-> {
+export default class TAAPass<
+  InitializationOptions = {},
+> extends BaseNormalPass<InitializationOptions> {
   @inject(TYPES.IShaderModuleService)
   protected readonly shaderModuleService: IShaderModuleService;
 
@@ -305,9 +305,8 @@ export default class TAAPass<InitializationOptions = {}> extends BaseNormalPass<
       fs: fragmentShader,
     });
 
-    const { vs, fs, uniforms } = this.shaderModuleService.getModule(
-      shaderModuleName,
-    );
+    const { vs, fs, uniforms } =
+      this.shaderModuleService.getModule(shaderModuleName);
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     return createModel({
       vs,

@@ -1,4 +1,5 @@
 import { gl } from '@antv/l7-core';
+import { createContext } from '@antv/l7-test-utils';
 import regl from 'l7regl';
 import 'reflect-metadata';
 import copy from '../../../../core/src/shaders/post-processing/copy.glsl';
@@ -7,7 +8,6 @@ import { ReglRendererService } from '../../index';
 import ReglAttribute from '../ReglAttribute';
 import ReglBuffer from '../ReglBuffer';
 import checkPixels from './utils/check-pixels';
-import { createContext } from '@antv/l7-test-utils';
 import globalDefaultprecision from './utils/default-precision';
 
 describe('ReglRendererService', () => {
@@ -40,12 +40,8 @@ describe('ReglRendererService', () => {
   });
 
   it('should create model with createModel API', () => {
-    const {
-      clear,
-      createModel,
-      createAttribute,
-      createBuffer,
-    } = rendererService;
+    const { clear, createModel, createAttribute, createBuffer } =
+      rendererService;
     const model = createModel({
       vs: quad,
       fs: 'void main() {gl_FragColor = vec4(1., 0., 0., 1.);}',

@@ -14,11 +14,8 @@ import heatmapGridVert from '../shaders/hexagon_vert.glsl';
 
 export default class HexagonModel extends BaseModel {
   public getUninforms(): IModelUniform {
-    const {
-      opacity,
-      coverage,
-      angle,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    const { opacity, coverage, angle } =
+      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     return {
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 0.9,
@@ -31,26 +28,23 @@ export default class HexagonModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-      return await this.buildModels();
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'heatmapHexagon',
-        vertexShader: heatmapGridVert,
-        fragmentShader: heatmapGridFrag,
-        triangulation: HeatmapGridTriangulation,
-        depth: { enable: false },
-        primitive: gl.TRIANGLES,
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'heatmapHexagon',
+      vertexShader: heatmapGridVert,
+      fragmentShader: heatmapGridFrag,
+      triangulation: HeatmapGridTriangulation,
+      depth: { enable: false },
+      primitive: gl.TRIANGLES,
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -65,9 +59,11 @@ export default class HexagonModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature) => {
-          const coordinates = (feature.version === 'GAODE2.x'
-            ? feature.originCoordinates
-            : feature.coordinates) as number[];
+          const coordinates = (
+            feature.version === 'GAODE2.x'
+              ? feature.originCoordinates
+              : feature.coordinates
+          ) as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

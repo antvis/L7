@@ -9,8 +9,8 @@ import { IRendererService } from '../renderer/IRendererService';
 import { ILayer, IWorkerOption } from './ILayerService';
 import {
   IAttributeScale,
-  IScaleOptions,
   IEncodeFeature,
+  IScaleOptions,
   IStyleAttribute,
   IStyleAttributeInitializationOptions,
   IStyleAttributeService,
@@ -67,21 +67,21 @@ export default class StyleAttributeService implements IStyleAttributeService {
       attributeToUpdate = new StyleAttribute(options);
       this.attributes.push(attributeToUpdate);
     }
-    
+
     return attributeToUpdate;
   }
 
   public updateScaleAttribute(scaleOption: IScaleOptions) {
-    this.attributes.forEach((attr:IStyleAttribute)=>{
+    this.attributes.forEach((attr: IStyleAttribute) => {
       const name = attr.name;
-      const field =  attr.scale?.field as string;
-      if(scaleOption[name] || (field && scaleOption[field])) { // 字段类型和映射类型
+      const field = attr.scale?.field as string;
+      if (scaleOption[name] || (field && scaleOption[field])) {
+        // 字段类型和映射类型
         attr.needRescale = true;
         attr.needRemapping = true;
         attr.needRegenerateVertices = true;
       }
-    })
-
+    });
   }
 
   public updateStyleAttribute(
@@ -136,7 +136,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     features: IEncodeFeature[],
     startFeatureIdx: number = 0,
     endFeatureIdx?: number,
-    layer?:ILayer
+    layer?: ILayer,
   ) {
     const attributeToUpdate = this.attributes.find(
       (attribute) => attribute.name === attributeName,
@@ -167,8 +167,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
               vertexIdx++
             ) {
               const normal = normals
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                ? normals!.slice(vertexIdx * 3, vertexIdx * 3 + 3)
+                ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  normals!.slice(vertexIdx * 3, vertexIdx * 3 + 3)
                 : [];
               featureData.push(
                 ...update(
@@ -196,10 +196,10 @@ export default class StyleAttributeService implements IStyleAttributeService {
           offset: bufferOffsetInBytes,
         });
         // size color 触发更新事件
-        layer?.emit(`legend:${attributeName}`,{
-          type:attributeName,
-          attr:attributeToUpdate
-        })
+        layer?.emit(`legend:${attributeName}`, {
+          type: attributeName,
+          attr: attributeToUpdate,
+        });
       }
     }
   }
@@ -223,11 +223,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
       .filter((d) => d);
     const { modelType, ...restOptions } = workerOptions;
 
-    const {
-      createAttribute,
-      createBuffer,
-      createElements,
-    } = this.rendererService;
+    const { createAttribute, createBuffer, createElements } =
+      this.rendererService;
     const attributes: {
       [attributeName: string]: IAttribute;
     } = {};
@@ -361,7 +358,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         if (indexes && indexes[vertexIdx] !== undefined) {
           vertexIndex = indexes[vertexIdx];
         }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
             (descriptor.buffer.data as number[]).push(
@@ -379,11 +376,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
         }); // end for each
       } // end for
     }); // end features for Each
-    const {
-      createAttribute,
-      createBuffer,
-      createElements,
-    } = this.rendererService;
+    const { createAttribute, createBuffer, createElements } =
+      this.rendererService;
 
     const attributes: {
       [attributeName: string]: IAttribute;
@@ -487,7 +481,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         if (indexes && indexes[vertexIdx] !== undefined) {
           vertexIndex = indexes[vertexIdx];
         }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         descriptors.forEach((descriptor, attributeIdx) => {
           if (descriptor && descriptor.update) {
             (descriptor.buffer.data as number[]).push(

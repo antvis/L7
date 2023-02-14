@@ -1,9 +1,9 @@
 import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
-import { VectorSource } from '@antv/l7-source'
+import { VectorSource } from '@antv/l7-source';
 import MaskLayer from '../../mask';
 import Tile from './Tile';
 import { getTileLayer } from './util';
- 
+
 export default class VectorTile extends Tile {
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();
@@ -100,7 +100,6 @@ export default class VectorTile extends Tile {
     if (!layer) {
       return [];
     }
-    console.log(layer.getSource().data.dataArray,id)
     const res = layer.getSource().data.dataArray.filter((d) => d._id === id);
     return res;
   }

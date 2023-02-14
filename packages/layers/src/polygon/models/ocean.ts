@@ -24,7 +24,7 @@ export default class OceanModel extends BaseModel {
       watercolor = '#6D99A8',
       watercolor2 = '#0F121C',
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-   
+
     return {
       u_texture1: this.texture1,
       u_texture2: this.texture2,
@@ -43,25 +43,22 @@ export default class OceanModel extends BaseModel {
 
   public async initModels(): Promise<IModel[]> {
     this.loadTexture();
-      return await this.buildModels();
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'polygonOcean',
-        vertexShader: ocean_vert,
-        fragmentShader: ocean_frag,
-        triangulation: polygonTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'polygonOcean',
+      vertexShader: ocean_vert,
+      fragmentShader: ocean_frag,
+      triangulation: polygonTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   public clearModels() {
@@ -94,7 +91,10 @@ export default class OceanModel extends BaseModel {
           vertex: number[],
           attributeIdx: number,
         ) => {
-          const v = (feature.version === Version['GAODE2.x'] ? feature.originCoordinates[0][attributeIdx] : vertex)
+          const v =
+            feature.version === Version['GAODE2.x']
+              ? feature.originCoordinates[0][attributeIdx]
+              : vertex;
           const [lng, lat] = v;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },

@@ -26,7 +26,7 @@ const PopperPlacementMap: Record<PositionName, PopperPlacement> = {
 };
 
 export default class PopperControl<
-  O extends IPopperControlOption = IPopperControlOption
+  O extends IPopperControlOption = IPopperControlOption,
 > extends ButtonControl<O> {
   /**
    * 气泡实例
@@ -70,11 +70,8 @@ export default class PopperControl<
   }
 
   public initPopper() {
-    const {
-      popperClassName,
-      popperPlacement,
-      popperTrigger,
-    } = this.controlOption;
+    const { popperClassName, popperPlacement, popperTrigger } =
+      this.controlOption;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const popperContainer = this.mapsService.getMapContainer()!;
 

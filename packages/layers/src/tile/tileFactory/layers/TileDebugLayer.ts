@@ -3,7 +3,7 @@ import { IBaseLayerStyleOptions } from '../../../core/interface';
 
 export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
   public type: string = 'TileDebugLayer';
-  public zIndex:number = 10000;
+  public zIndex: number = 10000;
   public defaultSourceConfig = {
     data: [],
     options: {
@@ -13,5 +13,6 @@ export default class TileDebugLayer extends BaseLayer<IBaseLayerStyleOptions> {
     },
   };
   public async buildModels() {
+    return;
   }
 }

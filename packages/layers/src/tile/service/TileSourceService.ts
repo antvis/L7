@@ -11,6 +11,7 @@ export class TileSourceService {
     const properties = features[0];
     features.map((feature) => {
       const polygon = turf.polygon(feature.coordinates);
+      // tslint:disable-next-line: prefer-conditional-expression
       if (p === null) {
         p = polygon;
       } else {

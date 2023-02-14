@@ -28,42 +28,39 @@ export default class NormalModel extends BaseModel {
     };
   }
   public getUninforms(): IModelUniform {
-    const {
-      opacity = 1,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { opacity = 1 } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     return {
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
   }
 
-  public async initModels():Promise<IModel[]>  {
-    return await this.buildModels();
+  public async initModels(): Promise<IModel[]> {
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]>  {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+  public async buildModels(): Promise<IModel[]> {
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
 
-       const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'pointNormal',
-        vertexShader: normalVert,
-        fragmentShader: normalFrag,
-        triangulation: PointTriangulation,
-        depth: { enable: false },
-        primitive: gl.POINTS,
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        pick: false,
-      })
-      return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'pointNormal',
+      vertexShader: normalVert,
+      fragmentShader: normalFrag,
+      triangulation: PointTriangulation,
+      depth: { enable: false },
+      primitive: gl.POINTS,
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      pick: false,
+    });
+    return [model];
   }
 
   public clearModels() {
+    return;
   }
 
   protected registerBuiltinAttributes() {
@@ -78,9 +75,7 @@ export default class NormalModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },

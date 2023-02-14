@@ -1,14 +1,18 @@
-import { IRasterFormat, IBandsOperation, IRasterFileData } from '../../interface';
-import { getTileBandParams, bindCancel } from './request';
 import {
-    makeXMLHttpRequestPromise,
-    ResponseCallback,
-    ITileBand,
-    RequestParameters,
-    getArrayBuffer,
-    SourceTile,
+  getArrayBuffer,
+  ITileBand,
+  makeXMLHttpRequestPromise,
+  RequestParameters,
+  ResponseCallback,
+  SourceTile,
 } from '@antv/l7-utils';
+import {
+  IBandsOperation,
+  IRasterFileData,
+  IRasterFormat,
+} from '../../interface';
 import { processRasterData } from '../bandOperation/bands';
+import { bindCancel, getTileBandParams } from './request';
 
 export const getRasterFile = async (
   tile: SourceTile,
@@ -19,8 +23,12 @@ export const getRasterFile = async (
 ) => {
   // Tip: 至少存在一个请求文件的 url，处理得到标准的 ITileBand[] url 路径和 bands 参数
   const tileBandParams: ITileBand[] = getTileBandParams(requestParameters.url);
-  if(tileBandParams.length > 1) {// 同时请求多文件
-    const { rasterFiles, xhrList, errList } = await getMultiArrayBuffer(tileBandParams, requestParameters);
+  if (tileBandParams.length > 1) {
+    // 同时请求多文件
+    const { rasterFiles, xhrList, errList } = await getMultiArrayBuffer(
+      tileBandParams,
+      requestParameters,
+    );
     // 多波段计算
     bindCancel(tile, xhrList);
     if (errList.length > 0) {
@@ -28,15 +36,17 @@ export const getRasterFile = async (
       return;
     }
     processRasterData(rasterFiles, rasterFormat, operation, callback);
-  } else { 
+  } else {
     const xhr = getArrayBuffer(requestParameters, (err, imgData) => {
       if (err) {
         callback(err);
       } else if (imgData) {
-        const rasterFiles = [{
-          data: imgData,
-          bands: tileBandParams[0].bands
-        }];
+        const rasterFiles = [
+          {
+            data: imgData,
+            bands: tileBandParams[0].bands,
+          },
+        ];
         processRasterData(rasterFiles, rasterFormat, operation, callback);
       }
     });
@@ -46,36 +56,40 @@ export const getRasterFile = async (
 
 /**
  * get multi raster files async
- * @param tileBandParams 
- * @param requestParameters 
- * @returns 
+ * @param tileBandParams
+ * @param requestParameters
+ * @returns
  */
-async function getMultiArrayBuffer(tileBandParams: ITileBand[], requestParameters: RequestParameters) {
+async function getMultiArrayBuffer(
+  tileBandParams: ITileBand[],
+  requestParameters: RequestParameters,
+) {
   const rasterFiles: IRasterFileData[] = [];
   const xhrList: any[] = [];
   const errList = [];
 
+  // tslint:disable-next-line: prefer-for-of
   for (let i = 0; i < tileBandParams.length; i++) {
-    const tileBandParam = tileBandParams[i]
+    const tileBandParam = tileBandParams[i];
     const params = {
-        ...requestParameters,
-        url: tileBandParam.url,
+      ...requestParameters,
+      url: tileBandParam.url,
     };
-    
+
     const bands = tileBandParam.bands;
     const { err, data, xhr } = await makeXMLHttpRequestPromise({
-        ...params,
-        type: 'arrayBuffer',
+      ...params,
+      type: 'arrayBuffer',
     });
     if (err) {
-        errList.push(err);
+      errList.push(err);
     }
     xhrList.push(xhr);
     rasterFiles.push({
-        data,
-        bands,
+      data,
+      bands,
     });
   }
 
-  return { rasterFiles, xhrList, errList }
+  return { rasterFiles, xhrList, errList };
 }
