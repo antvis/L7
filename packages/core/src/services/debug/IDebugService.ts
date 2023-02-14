@@ -15,8 +15,6 @@ export const enum IDebugLog {
   MappingEnd = 'mappingEnd',
   BuildModelStart = 'buildModelStart',
   BuildModelEnd = 'buildModelEnd',
-  renderModelStart = 'renderModelStart',
-  renderModelEnd = 'renderModelEnd',
 }
 
 export interface IRenderInfo {
