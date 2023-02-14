@@ -31,6 +31,7 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class LineModel extends BaseModel {
+  private textureEventFlag: boolean = false;
   protected texture: ITexture2D = this.createTexture2D({
     data: [0, 0, 0, 0],
     mag: gl.NEAREST,
@@ -162,6 +163,11 @@ export default class LineModel extends BaseModel {
   public async initModels(): Promise<IModel[]> {
     // this.updateTexture();
     // this.iconService.on('imageUpdate', this.updateTexture);
+    if (!this.textureEventFlag) {
+      this.textureEventFlag = true;
+      this.updateTexture();
+      this.iconService.on('imageUpdate', this.updateTexture);
+    }
     return this.buildModels();
   }
 
