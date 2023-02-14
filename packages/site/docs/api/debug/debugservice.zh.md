@@ -45,6 +45,32 @@ layerAllLoad([pointLayer1, pointLayer2], () => {
 // 获取所有日志
 debugService.getLog();
 ```
+- 通过 getLog 方法可以获得如下的日志信息
+```js
+const enum IDebugLog {
+  MapInitStart = 'mapInitStart', 			// 地图初始化时间
+    
+  LayerInitStart = 'layerInitStart',	// 图层初始化开始时间
+  LayerInitEnd = 'layerInitEnd',			// 图层初始化结束时间
+    
+  SourceInitStart = 'sourceInitStart',// souce 初始化开始时间
+  SourceInitEnd = 'sourceInitEnd',		// souce 初始化结束时间
+
+  // scale：将数据进行 scale 映射处理 => 将数据从定义域转化到值域
+  // 如： layer.size('v', [1, 10]);
+  //  		根据字段 v 表示的定义域将 size 的结果映射到 1 ～ 10 之间
+  ScaleInitStart = 'scaleInitStart',	// scale 初始化开始时间
+  ScaleInitEnd = 'scaleInitEnd',			// scale 初始化结束时间
+
+  // mapping：构建渲染数据
+  MappingStart = 'mappingStart',			// mapping 初始化开始时间
+  MappingEnd = 'mappingEnd',					// mapping 初始化结束时间
+
+  // build model：构建渲染使用的程序对象、构建网格、纹理等
+  BuildModelStart = 'buildModelStart',// souce 初始化开始时间
+  BuildModelEnd = 'buildModelEnd',		// souce 初始化结束时间
+}
+```
 
 ### renderDebug(enable: boolean)
 
