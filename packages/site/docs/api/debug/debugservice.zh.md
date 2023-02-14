@@ -45,14 +45,16 @@ layerAllLoad([pointLayer1, pointLayer2], () => {
 // 获取所有日志
 debugService.getLog();
 ```
+
 - 通过 getLog 方法可以获得如下的日志信息
+
 ```js
 const enum IDebugLog {
   MapInitStart = 'mapInitStart', 			// 地图初始化时间
-    
+
   LayerInitStart = 'layerInitStart',	// 图层初始化开始时间
   LayerInitEnd = 'layerInitEnd',			// 图层初始化结束时间
-    
+
   SourceInitStart = 'sourceInitStart',// souce 初始化开始时间
   SourceInitEnd = 'sourceInitEnd',		// souce 初始化结束时间
 
