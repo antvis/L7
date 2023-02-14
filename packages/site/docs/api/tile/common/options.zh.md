@@ -5,7 +5,7 @@ order: 1
 
 <embed src="@/docs/common/style.md"></embed>
 
-### sourceLayer
+#### sourceLayer
 
 <description> _string_ **required** </description>
 
@@ -19,7 +19,7 @@ const layer = new PointLayer({
 });
 ```
 
-### featureId
+#### featureId
 
 <description> _string_ **optional** _default:_ 自动数字编号</description>
 
