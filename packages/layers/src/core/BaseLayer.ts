@@ -336,7 +336,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     );
     this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
     this.debugService = this.container.get<IDebugService>(TYPES.IDebugService);
-    this.log(IDebugLog.LayerInitStart);
     this.interactionService = this.container.get<IInteractionService>(
       TYPES.IInteractionService,
     );
@@ -420,16 +419,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // 颜色纹理服务
     this.textureService = new TextureService(this);
-
+    this.log(IDebugLog.LayerInitStart);
     // 触发 init 生命周期插件
     await this.hooks.init.promise();
-    this.inited = true;
-
-    const currentSource = this.getSource();
-    const { sourceInitStart, sourceInitEnd } = currentSource.getLog();
-    this.log(IDebugLog.SourceInitStart, sourceInitStart);
-    this.log(IDebugLog.SourceInitEnd, sourceInitEnd);
     this.log(IDebugLog.LayerInitEnd);
+    this.inited = true;
 
     // 触发初始化完成事件;
     this.emit('inited', {
@@ -1361,6 +1355,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public renderModels(isPicking?: boolean) {
+    this.log(IDebugLog.renderModelStart);
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
@@ -1374,6 +1369,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         isPicking,
       );
     });
+    this.log(IDebugLog.renderModelEnd);
     this.hooks.afterRender.call();
     return this;
   }

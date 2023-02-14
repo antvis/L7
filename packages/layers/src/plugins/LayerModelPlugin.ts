@@ -8,13 +8,10 @@ import TileLayer from '../tile/tileLayer/BaseLayer';
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
   private async build(layer: ILayer) {
-    layer.log(IDebugLog.BuildModelStart);
     // 更新Model 配置项
     layer.prepareBuildModel();
     // 初始化 Model
     await layer.buildModels();
-
-    layer.log(IDebugLog.BuildModelEnd);
   }
 
   public async initLayerModel(layer: ILayer) {
@@ -35,7 +32,9 @@ export default class LayerModelPlugin implements ILayerPlugin {
         layer.tileLayer = new TileLayer(layer);
         return;
       }
+      layer.log(IDebugLog.BuildModelStart);
       await this.initLayerModel(layer);
+      layer.log(IDebugLog.BuildModelEnd);
     });
 
     layer.hooks.beforeRenderData.tapPromise(
