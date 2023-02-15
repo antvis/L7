@@ -109,7 +109,7 @@ layout(std140) uniform ub_MaterialParams {
 out vec4 outputColor;
 
 void main() {
-  outputColor = vec4(1.0, 0.0, 0.0, 1.0);
+  outputColor = vec4(1.0, 0.0, 0.0, 0.5);
 }
 `;
 
@@ -237,6 +237,61 @@ class ReglModel {
     // draw 6 vertices
     bufferGeometry.vertexCount = 6;
 
+    const offset = 0.5;
+    const bufferGeometry2 = new BufferGeometry(device);
+    bufferGeometry2.setVertexBuffer({
+      bufferIndex: VertexAttributeBufferIndex.POSITION,
+      byteStride: 4 * 3,
+      frequency: VertexBufferFrequency.PerVertex,
+      attributes: [
+        {
+          format: Format.F32_RGB,
+          bufferByteOffset: 4 * 0,
+          location: VertexAttributeLocation.POSITION,
+        },
+      ],
+      // use 6 vertices
+      data: Float32Array.from([
+        120 + offset,
+        30,
+        0,
+        120 + offset,
+        30,
+        0,
+        120 + offset,
+        30,
+        0,
+        120 + offset,
+        30,
+        0,
+        120 + offset,
+        30,
+        0,
+        120 + offset,
+        30,
+        0,
+      ]),
+    });
+    bufferGeometry2.setVertexBuffer({
+      bufferIndex: VertexAttributeBufferIndex.MAX,
+      byteStride: 4 * 3,
+      frequency: VertexBufferFrequency.PerVertex,
+      attributes: [
+        {
+          format: Format.F32_RGB,
+          bufferByteOffset: 4 * 0,
+          location: VertexAttributeLocation.MAX,
+        },
+      ],
+      // use 6 vertices
+      data: Float32Array.from([
+        1, 1, 0, -1, 1, 0, -1, -1, 0, -1, -1, 0, 1, -1, 0, 1, 1, 0,
+      ]),
+    });
+    // draw 6 vertices
+    bufferGeometry.vertexCount = 6;
+    bufferGeometry2.vertexCount = 6;
+
     /**
      * @see https://g.antv.antgroup.com/api/3d/mesh
      */
@@ -248,7 +303,16 @@ class ReglModel {
         material: shaderMaterial,
       },
     });
+    const mesh2 = new Mesh({
+      style: {
+        fill: '#1890FF',
+        opacity: 1,
+        geometry: bufferGeometry2,
+        material: shaderMaterial,
+      },
+    });
     canvas.appendChild(mesh);
+    canvas.appendChild(mesh2);
   }
 
   public addUniforms(uniforms: any) {
@@ -271,6 +335,7 @@ class ReglModel {
       u_ViewportCenter,
       u_ViewportCenterProjection,
     } = this.uniforms;
+    console.log('u_ZoomScale', u_ZoomScale);
 
     this.shaderMaterial.setUniforms({
       u_CoordinateSystem,

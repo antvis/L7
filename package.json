@@ -46,7 +46,6 @@
     "@typescript-eslint/parser": "^5.6.0",
     "@umijs/fabric": "^2.8.1",
     "@umijs/test": "^3.0.5",
-    "antd": "^4.12.3",
     "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
