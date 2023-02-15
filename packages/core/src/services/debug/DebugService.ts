@@ -46,7 +46,7 @@ export default class DebugService
     });
   }
 
-  public getLog(key: string | string[] | undefined) {
+  public getLog(key?: string | string[]) {
     switch (typeof key) {
       case 'string':
         return this.logMap.get(key);
