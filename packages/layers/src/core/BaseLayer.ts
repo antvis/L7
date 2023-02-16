@@ -28,6 +28,7 @@ import {
   ILayerPickService,
   ILayerPlugin,
   ILayerService,
+  ILayerStage,
   ILegend,
   ILegendClassificaItem,
   ILegendSegmentItem,
@@ -437,19 +438,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.hooks.afterInit.call();
   }
 
-  public log(logType: string, time?: number) {
+  public log(logType: string, step: string = 'init') {
     // @ts-ignore 瓦片、瓦片图层目前不参与日志
     if (this.tileLayer || this.isTileLayer) {
       return;
     }
-    const key = `${this.id}.${logType}`;
+    const key = `${this.id}.${step}.${logType}`;
     const values: { [key: string]: any } = {
       id: this.id,
       type: this.type,
     };
-    if (time) {
-      values.time = time;
-    }
     this.debugService.log(key, values);
   }
 
@@ -634,10 +632,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setData(data: any, options?: ISourceCFG) {
+    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
     if (this.inited) {
       this.layerSource.setData(data, options);
+      this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     } else {
       this.on('inited', () => {
+        this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
         const currentSource = this.getSource();
         if (!currentSource) {
           // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
@@ -645,6 +646,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         } else {
           this.layerSource.setData(data, options);
         }
+        this.layerSource.once('update', () => {
+          this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
+        });
       });
     }
     return this;

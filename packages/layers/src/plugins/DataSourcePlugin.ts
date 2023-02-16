@@ -2,6 +2,7 @@ import {
   IDebugLog,
   ILayer,
   ILayerPlugin,
+  ILayerStage,
   IMapService,
   TYPES,
 } from '@antv/l7-core';
@@ -15,7 +16,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
-      layer.log(IDebugLog.SourceInitStart);
+      layer.log(IDebugLog.SourceInitStart, ILayerStage.INIT);
       let source = layer.getSource();
       if (!source) {
         // Tip: 用户没有传入 source 的时候使用图层的默认数据
@@ -26,13 +27,13 @@ export default class DataSourcePlugin implements ILayerPlugin {
       }
       if (source.inited) {
         this.updateClusterData(layer);
-        layer.log(IDebugLog.SourceInitEnd);
+        layer.log(IDebugLog.SourceInitEnd, ILayerStage.INIT);
       } else {
         await new Promise((resolve) => {
           source.on('update', (e) => {
             if (e.type === 'inited') {
               this.updateClusterData(layer);
-              layer.log(IDebugLog.SourceInitEnd);
+              layer.log(IDebugLog.SourceInitEnd, ILayerStage.INIT);
             }
             resolve(null);
           });

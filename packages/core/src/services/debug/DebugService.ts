@@ -8,7 +8,6 @@ export default class DebugService
   extends EventEmitter
   implements IDebugService
 {
-  private logMap = new Map<string, ILog>();
   private renderMap = new Map<string, IRenderInfo>();
 
   private enable: boolean = false;
@@ -18,44 +17,50 @@ export default class DebugService
     this.enable = !!flag;
   }
 
+  private cacheLogs: any = {};
+
   public log(key: string, values: ILog) {
     if (!this.enable) {
       return;
     }
-    const [k1, k2] = key.split('.');
-    const logType = k2;
-    /**
-     * map: {
-     *  mapInitStart: { time, ... }
-     * },
-     * 12: {
-     *  layerInitStart: { time, id, ... },
-     *  layerInitEnd: { time, id, ... },
-     * }
-     */
-    const cacheLog = this.logMap.get(k1) || {}; // 一级存储对象
-    const cacheLogValues = cacheLog[logType] || {}; // 二级存储对象
-    const logValues = {
-      time: Date.now(),
-      ...cacheLogValues,
-      ...values,
-    };
-    this.logMap.set(k1, {
-      ...cacheLog,
-      [logType]: logValues,
+    const keys = key.split('.'); // [12, init, layerInitStart]
+    let parent: any = null;
+    keys.forEach((k, i) => {
+      if (parent !== null) {
+        if (!parent[k]) {
+          parent[k] = {};
+        }
+        if (i !== keys.length - 1) {
+          parent = parent[k];
+        }
+      } else {
+        if (!this.cacheLogs[k]) {
+          this.cacheLogs[k] = {};
+        }
+        if (i !== keys.length - 1) {
+          parent = this.cacheLogs[k];
+        }
+      }
+
+      if (i === keys.length - 1) {
+        parent[k] = {
+          time: Date.now(),
+          ...parent[k],
+          ...values,
+        };
+      }
     });
   }
-
-  public getLog(key: string | string[] | undefined) {
+  public getLog(key?: string | string[]) {
     switch (typeof key) {
       case 'string':
-        return this.logMap.get(key);
+        return this.cacheLogs[key];
       case 'object':
         return (key as string[])
-          .map((k) => this.logMap.get(k))
+          .map((k) => this.cacheLogs[k])
           .filter((o) => o !== undefined) as ILog[];
       case 'undefined':
-        return Array.from(this.logMap.keys()).map((k) => this.logMap.get(k));
+        return this.cacheLogs;
     }
   }
 
@@ -64,7 +69,7 @@ export default class DebugService
    * @param key
    */
   public removeLog(key: string) {
-    this.logMap.delete(key);
+    delete this.cacheLogs[key];
   }
 
   public generateRenderUid() {
@@ -109,7 +114,7 @@ export default class DebugService
   }
 
   public destroy() {
-    this.logMap.clear();
+    this.cacheLogs = null;
     this.renderMap.clear();
   }
 }
