@@ -51,6 +51,7 @@ export default class DebugService
       }
     });
   }
+
   public getLog(key?: string | string[]) {
     switch (typeof key) {
       case 'string':
