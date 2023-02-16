@@ -21,6 +21,7 @@ export default class RasterTile extends Tile {
       });
 
     await this.addLayer(layer);
+    this.addMaskLayer();
     this.isLoaded = true;
   }
 

@@ -142,6 +142,7 @@ export default class LayerService
     this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
+
     for (const layer of this.layerList) {
       if (layer.masks.filter((m) => m.inited).length > 0) {
         // 清除上一次的模版缓存

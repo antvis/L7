@@ -54,6 +54,11 @@ export default abstract class Tile implements ITile {
   protected addMaskLayer() {
     const { maskLayers } = this.parent.getLayerConfig();
     maskLayers?.forEach((layer: ILayer) => {
+      if (!layer.tileLayer) {
+        this.parent.addMaskLayer(layer);
+        // 非瓦片单独处理
+        return;
+      }
       const tileLayer = layer.tileLayer as BaseTileLayer;
       const tile = tileLayer.getTile(this.sourceTile.key);
 

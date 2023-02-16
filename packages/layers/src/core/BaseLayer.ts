@@ -425,6 +425,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await this.hooks.init.promise();
     this.log(IDebugLog.LayerInitEnd);
     this.inited = true;
+    // add mask layer
+    const { maskLayers } = this.getLayerConfig();
+    if (maskLayers && maskLayers.length > 0) {
+      this.masks.push(...maskLayers);
+      this.updateLayerConfig({
+        mask: true,
+      });
+    }
 
     // 触发初始化完成事件;
     this.emit('inited', {
