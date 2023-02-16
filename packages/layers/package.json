@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.13.6",
+  "version": "2.13.7",
   "description": "L7's collection of built-in layers",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -27,10 +27,10 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-core": "2.13.6",
-    "@antv/l7-maps": "2.13.6",
-    "@antv/l7-source": "2.13.6",
-    "@antv/l7-utils": "2.13.6",
+    "@antv/l7-core": "2.13.7",
+    "@antv/l7-maps": "2.13.7",
+    "@antv/l7-source": "2.13.7",
+    "@antv/l7-utils": "2.13.7",
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.2.0",
     "@turf/clone": "^6.5.0",
@@ -53,14 +53,14 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@antv/l7-test-utils": "2.13.7",
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
     "@types/d3-interpolate": "1.1.6",
     "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
     "@types/gl-matrix": "^2.4.5",
-    "@types/lodash": "^4.14.138",
-    "@antv/l7-test-utils":"^2.13.4"
+    "@types/lodash": "^4.14.138"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {
