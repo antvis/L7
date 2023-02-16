@@ -313,6 +313,10 @@ export type LayerEventType =
   | 'hide'
   | any;
 
+export enum ILayerStage {
+  INIT = 'init',
+  UPDATE = 'update',
+}
 export interface ILayer {
   styleAttributeService: IStyleAttributeService;
   layerPickService: ILayerPickService;
@@ -451,7 +455,7 @@ export interface ILayer {
   getMinZoom(): number;
   getMaxZoom(): number;
   get(name: string): number;
-  log(type: string, time?: number): void;
+  log(type: string, step: string): void;
   setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
 

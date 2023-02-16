@@ -1,4 +1,4 @@
-import { IDebugLog, ILayer, ILayerPlugin } from '@antv/l7-core';
+import { IDebugLog, ILayer, ILayerPlugin, ILayerStage } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import TileLayer from '../tile/tileLayer/BaseLayer';
@@ -32,9 +32,9 @@ export default class LayerModelPlugin implements ILayerPlugin {
         layer.tileLayer = new TileLayer(layer);
         return;
       }
-      layer.log(IDebugLog.BuildModelStart);
+      layer.log(IDebugLog.BuildModelStart, ILayerStage.INIT);
       await this.initLayerModel(layer);
-      layer.log(IDebugLog.BuildModelEnd);
+      layer.log(IDebugLog.BuildModelEnd, ILayerStage.INIT);
     });
 
     layer.hooks.beforeRenderData.tapPromise(
@@ -48,7 +48,9 @@ export default class LayerModelPlugin implements ILayerPlugin {
           layer.tileLayer = new TileLayer(layer);
           return false;
         }
+        layer.log(IDebugLog.BuildModelStart, ILayerStage.UPDATE);
         await this.prepareLayerModel(layer);
+        layer.log(IDebugLog.BuildModelEnd, ILayerStage.UPDATE);
         return true;
       },
     );

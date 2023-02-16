@@ -35,27 +35,27 @@ export default () => {
             });
           scene.addLayer(layer);
 
-          // const point = new PointLayer({})
-          // .source([{ lng: 116.2, lat: 40 }], {
-          //   parser: {
-          //     type: 'json',
-          //     x: 'lng',
-          //     y: 'lat',
-          //   }
-          // })
-          // .size(10)
-          // .shape('circle')
-          // .color('#5CCEA1');
-          // scene.addLayer(point);
+          const point = new PointLayer({})
+          .source([{ lng: 116.2, lat: 40 }], {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            }
+          })
+          .size(10)
+          .shape('circle')
+          .color('#5CCEA1');
+          scene.addLayer(point);
 
           const debugService = scene.getDebugService();
          
-          layerAllLoad([layer], () => {
+          layerAllLoad([layer, point], () => {
             // console.log('debugService id type', debugService.getLog())
             // console.log('debugService id type', debugService.getLog(layer.id))
             // console.log('debugService id type', debugService.getLog('map'))
-            // console.log('debugService id type', debugService.getLog([layer.id, point.id]))
-            console.log('debugService id type', debugService.getLog([layer.id]))
+            console.log('debugService id type', debugService.getLog([layer.id, point.id]))
+            // console.log('debugService id type', debugService.getLog([layer.id]))
           })
          
           function layerAllLoad(layers: any[], callback: () => void) {

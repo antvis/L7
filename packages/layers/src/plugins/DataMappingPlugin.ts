@@ -4,6 +4,7 @@ import {
   IFontService,
   ILayer,
   ILayerPlugin,
+  ILayerStage,
   IMapService,
   IParseDataItem,
   IStyleAttribute,
@@ -33,10 +34,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tapPromise('DataMappingPlugin', async () => {
-      layer.log(IDebugLog.MappingStart);
+      layer.log(IDebugLog.MappingStart, ILayerStage.INIT);
       // 初始化重新生成 map
       this.generateMaping(layer, { styleAttributeService });
-      layer.log(IDebugLog.MappingEnd);
+      layer.log(IDebugLog.MappingEnd, ILayerStage.INIT);
     });
 
     layer.hooks.beforeRenderData.tapPromise(
@@ -47,7 +48,12 @@ export default class DataMappingPlugin implements ILayerPlugin {
         }
 
         layer.dataState.dataMappingNeedUpdate = false;
-        return this.generateMaping(layer, { styleAttributeService });
+        layer.log(IDebugLog.MappingStart, ILayerStage.UPDATE);
+        const mappingResult = this.generateMaping(layer, {
+          styleAttributeService,
+        });
+        layer.log(IDebugLog.MappingEnd, ILayerStage.UPDATE);
+        return mappingResult;
       },
     );
 

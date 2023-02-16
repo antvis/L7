@@ -2,6 +2,7 @@ import {
   IDebugLog,
   ILayer,
   ILayerPlugin,
+  ILayerStage,
   IScale,
   IScaleOptions,
   IStyleAttribute,
@@ -50,7 +51,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     }: { styleAttributeService: IStyleAttributeService },
   ) {
     layer.hooks.init.tapPromise('FeatureScalePlugin', async () => {
-      layer.log(IDebugLog.ScaleInitStart);
+      layer.log(IDebugLog.ScaleInitStart, ILayerStage.INIT);
       this.scaleOptions = layer.getScaleOptions();
       const attributes = styleAttributeService.getLayerStyleAttributes();
       const dataArray = layer.getSource()?.data.dataArray;
@@ -59,7 +60,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       } else {
         this.caculateScalesForAttributes(attributes || [], dataArray);
       }
-      layer.log(IDebugLog.ScaleInitEnd);
+      layer.log(IDebugLog.ScaleInitEnd, ILayerStage.INIT);
     });
 
     // 检测数据是否需要更新
@@ -69,6 +70,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         if (!flag) {
           return flag;
         }
+        layer.log(IDebugLog.ScaleInitStart, ILayerStage.UPDATE);
         this.scaleOptions = layer.getScaleOptions();
         const attributes = styleAttributeService.getLayerStyleAttributes();
         const dataArray = layer.getSource().data.dataArray;
@@ -77,6 +79,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
           return true;
         }
         this.caculateScalesForAttributes(attributes || [], dataArray);
+        layer.log(IDebugLog.ScaleInitEnd, ILayerStage.UPDATE);
         layer.layerModelNeedUpdate = true;
         return true;
       },
