@@ -179,8 +179,6 @@ export default class LineModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const {
-      mask = false,
-      maskInside = true,
       depth = false,
       workerEnabled = false,
       enablePicking,

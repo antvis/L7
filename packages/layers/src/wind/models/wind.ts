@@ -63,8 +63,6 @@ export default class WindModel extends BaseModel {
       rampColors = defaultRampColors,
       sizeScale = 0.5,
       // mask
-      mask = false,
-      maskInside = true,
     } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
     const { createTexture2D } = this.rendererService;
     const source = this.layer.getSource();

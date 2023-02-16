@@ -177,11 +177,8 @@ export default class TextModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-      textAllowOverlap = false,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { textAllowOverlap = false } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     //  this.mapping(); 重复调用
     this.initGlyph(); //

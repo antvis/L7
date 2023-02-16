@@ -74,14 +74,10 @@ export default class FillModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
-    const {
-      mask = false,
-      maskInside = true,
-      workerEnabled = false,
-      enablePicking,
-    } = this.layer.getLayerConfig() as Partial<
-      ILayerConfig & IPolygonLayerStyleOptions
-    >;
+    const { workerEnabled = false, enablePicking } =
+      this.layer.getLayerConfig() as Partial<
+        ILayerConfig & IPolygonLayerStyleOptions
+      >;
     this.layer.triangulation = triangulation;
     const model = await this.layer.buildLayerModel({
       moduleName: type,

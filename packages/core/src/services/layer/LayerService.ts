@@ -151,7 +151,7 @@ export default class LayerService
           framebuffer: null,
         });
         layer.masks.map(async (m: ILayer) => {
-          m.render();
+          m.render({ isStencil: true });
         });
       }
 
@@ -170,7 +170,7 @@ export default class LayerService
     masks
       .filter((m) => m.inited)
       .map((m) => {
-        m.render();
+        m.render({ isStencil: true });
       });
   }
 
@@ -183,14 +183,16 @@ export default class LayerService
 
   public async renderLayer(layer: ILayer) {
     if (layer.masks.filter((m) => m.inited).length > 0) {
-      layer.masks.map((mask) => {
+      const maskRender = layer.masks.map(async (mask) => {
         this.renderService.clear({
           stencil: 0,
           depth: 1,
           framebuffer: null,
         });
-        mask.render();
+        mask.render({ isStencil: true });
       });
+      // TODO: maskRender 不是同步渲染完成的
+      Promise.all(maskRender);
     }
     if (layer.getLayerConfig().enableMultiPassRenderer) {
       // multiPassRender 不是同步渲染完成的

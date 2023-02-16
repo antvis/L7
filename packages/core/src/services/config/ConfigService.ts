@@ -64,6 +64,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   enablePropagation: false,
   zIndex: 0,
   blend: 'normal',
+  maskLayers: [],
   pickedFeatureID: -1,
   enableMultiPassRenderer: false,
   enablePicking: true,

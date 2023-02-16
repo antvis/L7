@@ -40,6 +40,7 @@ import {
   IPickingService,
   IPostProcessingPass,
   IRendererService,
+  IRenderOptions,
   IScale,
   IScaleOptions,
   IShaderModuleService,
@@ -713,7 +714,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.rendering = false;
   }
 
-  public render(): ILayer {
+  public render(options: Partial<IRenderOptions> = {}): ILayer {
     if (this.tileLayer) {
       // 瓦片图层执行单独的 render 渲染队列
       this.tileLayer.render();
@@ -725,7 +726,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    this.renderModels();
+    this.renderModels(options);
     return this;
   }
 
@@ -1354,7 +1355,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await multiPassRenderer.render();
   }
 
-  public renderModels(isPicking?: boolean) {
+  public renderModels(options: Partial<IRenderOptions> = {}) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
@@ -1365,9 +1366,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         {
           uniforms: this.layerModel.getUninforms(),
           blend: this.layerModel.getBlend(),
-          stencil: this.layerModel.getStencil(),
+          stencil: this.layerModel.getStencil(options),
         },
-        isPicking,
+        options?.ispick || false,
       );
     });
     this.hooks.afterRender.call();

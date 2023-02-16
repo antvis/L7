@@ -19,6 +19,7 @@ import {
   IModelUniform,
   IPickingService,
   IRendererService,
+  IRenderOptions,
   IShaderModuleService,
   IStencilOptions,
   IStyleAttributeService,
@@ -502,10 +503,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     const { blend = 'normal' } = this.layer.getLayerConfig();
     return BlendTypes[BlendType[blend]] as IBlendOptions;
   }
-  public getStencil(): Partial<IStencilOptions> {
+  public getStencil(option: Partial<IRenderOptions>): Partial<IStencilOptions> {
     const { mask = false, maskInside = true } = this.layer.getLayerConfig();
     // TODO 临时处理，后期移除MaskLayer
-    if (this.layer.type === 'MaskLayer') {
+    if (this.layer.type === 'MaskLayer' || option.isStencil) {
       return {
         enable: true,
         mask: 0xff,

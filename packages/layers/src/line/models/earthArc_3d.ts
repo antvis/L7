@@ -157,11 +157,8 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      segmentNumber = 30,
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { segmentNumber = 30 } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     const model = await this.layer.buildLayerModel({
       moduleName: 'lineEarthArc3d' + type,

@@ -135,11 +135,8 @@ export default class PlaneModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-      mapTexture,
-    } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { mapTexture } =
+      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     this.mapTexture = mapTexture;
 
     const { createTexture2D } = this.rendererService;

@@ -123,8 +123,6 @@ export default class FillModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const {
-      mask = false,
-      maskInside = true,
       animateOption = { enable: false },
       workerEnabled = false,
       enablePicking,

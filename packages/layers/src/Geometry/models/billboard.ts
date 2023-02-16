@@ -80,11 +80,8 @@ export default class BillBoardModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-      drawCanvas,
-    } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { drawCanvas } =
+      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({

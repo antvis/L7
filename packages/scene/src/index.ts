@@ -215,7 +215,6 @@ class Scene
     if (!mask || !maskfence) {
       return undefined;
     }
-
     const maskInstance = new MaskLayer().source(maskfence).shape('fill').style({
       color: maskColor,
       opacity: maskOpacity,

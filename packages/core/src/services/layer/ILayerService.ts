@@ -90,7 +90,7 @@ export interface ILayerModel {
   render(): void;
   renderUpdate?(): void;
   getBlend(): Partial<IBlendOptions>;
-  getStencil(): Partial<IStencilOptions>;
+  getStencil(option?: Partial<IRenderOptions>): Partial<IStencilOptions>;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
@@ -167,6 +167,11 @@ export interface ISubLayerStyles {
 export interface IAttrbuteOptions {
   field: StyleAttrField;
   values: StyleAttributeOption;
+}
+
+export interface IRenderOptions {
+  ispick: boolean;
+  isStencil: boolean;
 }
 
 /**
@@ -398,7 +403,7 @@ export interface ILayer {
   setCurrentSelectedId(id: number | null): void;
   getCurrentSelectedId(): number | null;
   prepareBuildModel(): void;
-  renderModels(isPicking?: boolean): void;
+  renderModels(options?: Partial<IRenderOptions>): void;
   buildModels(): void;
   rebuildModels(): void;
   getModelType(): string;
@@ -463,7 +468,7 @@ export interface ILayer {
     passes?: Array<string | [string, { [key: string]: unknown }]>,
   ): ILayer;
   renderLayers(): void;
-  render(): ILayer;
+  render(options?: Partial<IRenderOptions>): ILayer;
 
   renderMultiPass(): any;
 
@@ -575,6 +580,7 @@ export interface ILayerConfig {
   maskfence: any;
   maskColor: string;
   maskOpacity: number;
+  maskLayers: ILayer[];
   sourceLayer: string;
 
   colors: string[];

@@ -22,6 +22,7 @@ export default class ImageTile extends Tile {
       });
 
     await this.addLayer(layer);
+    this.addMaskLayer();
     this.isLoaded = true;
   }
   protected getSourceOption() {

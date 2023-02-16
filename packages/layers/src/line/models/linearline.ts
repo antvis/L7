@@ -87,11 +87,8 @@ export default class LinearLineModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-      depth = false,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { depth = false } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     this.layer.triangulation = LineTriangulation;
 

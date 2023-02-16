@@ -1,6 +1,7 @@
 import { createLayerContainer, ILayer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import BaseTileLayer from '../tileLayer/BaseLayer';
 import { isNeedMask } from './util';
 
 export default abstract class Tile implements ITile {
@@ -43,8 +44,26 @@ export default abstract class Tile implements ITile {
     return {
       ...options,
       autoFit: false,
-      mask: isNeedMask(this.parent.type) || options.mask,
+      mask:
+        isNeedMask(this.parent.type) ||
+        options.mask ||
+        options.maskLayers?.length !== 0,
     };
+  }
+
+  protected addMaskLayer() {
+    const { maskLayers } = this.parent.getLayerConfig();
+    maskLayers?.forEach((layer: ILayer) => {
+      const tileLayer = layer.tileLayer as BaseTileLayer;
+      const tile = tileLayer.getTile(this.sourceTile.key);
+
+      this.layers.forEach((main: ILayer) => {
+        const l = tile?.getLayers()[0] as ILayer;
+        if (l) {
+          main.addMaskLayer(l);
+        }
+      });
+    });
   }
 
   protected async addMask(layer: ILayer, mask: ILayer) {

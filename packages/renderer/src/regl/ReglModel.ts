@@ -9,7 +9,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import regl from 'l7regl';
-import { cloneDeep, isPlainObject, isTypedArray } from 'lodash';
+import { isPlainObject, isTypedArray } from 'lodash';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -31,7 +31,6 @@ export default class ReglModel implements IModel {
   private reGl: regl.Regl;
   private destroyed: boolean = false;
   private drawCommand: regl.DrawCommand;
-  private drawPickCommand: regl.DrawCommand;
   private drawParams: regl.DrawConfig;
   private options: IModelInitializationOptions;
   private uniforms: {
@@ -41,7 +40,6 @@ export default class ReglModel implements IModel {
   constructor(reGl: regl.Regl, options: IModelInitializationOptions) {
     this.reGl = reGl;
     const {
-      pick = true,
       vs,
       fs,
       attributes,
@@ -73,6 +71,8 @@ export default class ReglModel implements IModel {
       frag: fs,
       uniforms: reglUniforms,
       vert: vs,
+      // @ts-ignore
+      colorMask: reGl.prop('colorMask'),
       blend: {
         // @ts-ignore
         enable: reGl.prop('blend.enable'),
@@ -140,17 +140,6 @@ export default class ReglModel implements IModel {
     });
     this.drawParams.attributes = reglAttributes;
     this.drawCommand = this.reGl(this.drawParams);
-
-    if (this.options.pick) {
-      const pickDrawParams = cloneDeep(this.drawParams);
-
-      pickDrawParams.blend = {
-        ...pickDrawParams.blend,
-        enable: false,
-      };
-
-      this.drawPickCommand = this.reGl(pickDrawParams);
-    }
   }
 
   public addUniforms(uniforms: { [key: string]: IUniform }) {
@@ -204,7 +193,7 @@ export default class ReglModel implements IModel {
     });
     // 更新 blend
     // @ts-ignore
-    reglDrawProps.blend = pick
+    reglDrawProps.blend = pick // picking 操作不应该使用 blend
       ? this.getBlendDrawParams({
           blend: { enable: false },
         })
@@ -213,6 +202,8 @@ export default class ReglModel implements IModel {
     // 更新stentil 配置
     // @ts-ignore
     reglDrawProps.stencil = this.getStencilDrawParams(options);
+    // @ts-ignore
+    reglDrawProps.colorMask = this.getColorMaskDrawParams(options, pick);
 
     // 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
     this.drawCommand(reglDrawProps);
@@ -311,6 +302,18 @@ export default class ReglModel implements IModel {
         zpass: stencilOpMap[opBack.zpass],
       },
     };
+  }
+
+  private getColorMaskDrawParams(
+    { stencil }: Pick<IModelInitializationOptions, 'stencil'>,
+    pick: boolean,
+  ) {
+    // TODO: 重构相关参数
+    const colorMask =
+      stencil?.enable && stencil.opFront && !pick
+        ? [false, false, false, false]
+        : [true, true, true, true];
+    return colorMask;
   }
 
   /**
