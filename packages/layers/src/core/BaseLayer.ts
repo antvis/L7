@@ -448,7 +448,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       id: this.id,
       type: this.type,
     };
-    this.debugService.log(key, values);
+    this.debugService?.log(key, values);
   }
 
   public updateModelData(data: IAttributeAndElements) {
@@ -632,8 +632,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setData(data: any, options?: ISourceCFG) {
-    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
     if (this.inited) {
+      this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
       this.layerSource.setData(data, options);
       this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     } else {
@@ -1040,7 +1040,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.models = [];
     // 清除图层日志（如果有的话：非瓦片相关）
-    this.debugService.removeLog(this.id);
+    this.debugService?.removeLog(this.id);
 
     this.emit('remove', {
       target: this,

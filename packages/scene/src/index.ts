@@ -92,9 +92,9 @@ class Scene
     this.controlService = sceneContainer.get<IControlService>(
       TYPES.IControlService,
     );
-    this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
     this.debugService = sceneContainer.get<IDebugService>(TYPES.IDebugService);
     this.debugService.setEnable(config.debug);
+    this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
 
     this.markerService = sceneContainer.get<IMarkerService>(
       TYPES.IMarkerService,
