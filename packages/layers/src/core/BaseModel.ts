@@ -558,7 +558,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   } {
     throw new Error('Method not implemented.');
   }
-  public render() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public render(renderOptions?: Partial<IRenderOptions>): void {
     throw new Error('Method not implemented.');
   }
   protected registerBuiltinAttributes() {

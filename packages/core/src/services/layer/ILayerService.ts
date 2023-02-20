@@ -87,7 +87,6 @@ export interface ILayerModelInitializationOptions {
 }
 
 export interface ILayerModel {
-  render(): void;
   renderUpdate?(): void;
   getBlend(): Partial<IBlendOptions>;
   getStencil(option?: Partial<IRenderOptions>): Partial<IStencilOptions>;
@@ -98,6 +97,7 @@ export interface ILayerModel {
   initModels(): Promise<IModel[]>;
   needUpdate(): Promise<boolean>;
   clearModels(refresh?: boolean): void;
+  render(renderOptions?: Partial<IRenderOptions>): void;
 
   // canvasLayer
   clearCanvas?(): void;
