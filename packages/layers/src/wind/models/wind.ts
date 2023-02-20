@@ -4,6 +4,7 @@ import {
   IEncodeFeature,
   IModel,
   IModelUniform,
+  IRenderOptions,
   ITexture2D,
   Point,
 } from '@antv/l7-core';
@@ -38,12 +39,12 @@ export default class WindModel extends BaseModel {
   private frequency = new FrequencyController(7.2);
   private cacheZoom: number;
 
-  public render() {
+  public render(options: Partial<IRenderOptions>) {
     // Tip: 控制风场的平均更新频率
     this.frequency.run(() => {
       this.drawWind();
     });
-    this.drawColorMode();
+    this.drawColorMode(options);
   }
 
   public getUninforms(): IModelUniform {
@@ -118,7 +119,6 @@ export default class WindModel extends BaseModel {
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-      blend: this.getBlend(),
     });
     this.colorModel = model;
     return [model];
@@ -228,19 +228,19 @@ export default class WindModel extends BaseModel {
     }
   }
 
-  private drawColorMode() {
+  private drawColorMode(options: Partial<IRenderOptions> = {}) {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
 
     this.layerService.beforeRenderData(this.layer);
-    this.layer.hooks.beforeRender.call();
-
     this.layerService.renderMask(this.layer.masks);
-
+    this.layer.hooks.beforeRender.call();
     this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_texture: this.texture,
       },
+      blend: this.getBlend(),
+      stencil: this.getStencil(options),
     });
 
     this.layer.hooks.afterRender.call();

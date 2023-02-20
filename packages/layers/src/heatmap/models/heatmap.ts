@@ -223,7 +223,15 @@ export default class HeatMapModel extends BaseModel {
           dstAlpha: 1,
         },
       },
-      stencil: this.getStencil({}),
+      stencil: {
+        enable: false,
+        mask: 0xff,
+        func: {
+          cmp: 514, // gl.EQUAL,
+          ref: 1,
+          mask: 0xff,
+        },
+      },
     });
 
     this.layer.hooks.afterRender.call();

@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, WindLayer } from '@antv/l7';
+import { Scene, WindLayer,PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -12,7 +12,7 @@ export default () => {
       map: new GaodeMap({
         center: [105.732421875, 32.24997445586331],
         pitch: 0,
-        style: 'dark',
+        style: 'light',
         zoom: 2,
       }),
     });
@@ -47,10 +47,12 @@ export default () => {
     };
 
     scene.on('loaded', () => {
+      const polygonLayer = new PolygonLayer({
+        visible: true,
+      }).source(maskData).shape('fill').color('#f00').style({opacity:0.3});
       const layer = new WindLayer({
-        mask: true,
-        maskInside: false,
-        maskfence: maskData,
+        maskLayers: [polygonLayer],
+        zIndex: 2,
       });
       layer
         .source(
@@ -81,6 +83,7 @@ export default () => {
           },
         });
       scene.addLayer(layer);
+      scene.addLayer(polygonLayer);
     });
   }, []);
   return (

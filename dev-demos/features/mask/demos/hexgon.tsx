@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, HeatmapLayer } from '@antv/l7';
+import { Scene, HeatmapLayer,PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -54,12 +54,10 @@ export default () => {
       )
         .then((res) => res.text())
         .then((data) => {
+          const polygonLayer = new PolygonLayer().source(maskData).shape('fill').color('#f00').style({opacity:0.5});
           const layer = new HeatmapLayer({
-            mask: true,
-            maskInside: false,
-            maskfence: maskData,
-            maskOpacity: 0.5,
-            maskColor: '#00f',
+            maskLayers: [polygonLayer]
+  
           })
             .source(data, {
               parser: {
@@ -100,6 +98,7 @@ export default () => {
               '#ECFFB1',
             ]);
           scene.addLayer(layer);
+          scene.addLayer(polygonLayer);
         });
     });
   }, []);

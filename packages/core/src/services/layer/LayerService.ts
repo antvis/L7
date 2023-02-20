@@ -142,20 +142,11 @@ export default class LayerService
     this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
-
     for (const layer of this.layerList) {
       if (layer.masks.filter((m) => m.inited).length > 0) {
         // 清除上一次的模版缓存
-        this.renderService.clear({
-          stencil: 0,
-          depth: 1,
-          framebuffer: null,
-        });
-        layer.masks.map(async (m: ILayer) => {
-          m.render({ isStencil: true });
-        });
+        this.renderMask(layer.masks);
       }
-
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
@@ -168,11 +159,15 @@ export default class LayerService
   }
 
   public renderMask(masks: ILayer[]) {
-    masks
-      .filter((m) => m.inited)
-      .map((m) => {
-        m.render({ isStencil: true });
-      });
+    this.renderService.clear({
+      stencil: 0,
+      depth: 1,
+      framebuffer: null,
+    });
+    for (const layer of masks) {
+      // 清除上一次的模版缓存
+      layer.render({ isStencil: true });
+    }
   }
 
   public async beforeRenderData(layer: ILayer) {

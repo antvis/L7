@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, HeatmapLayer, PointLayer } from '@antv/l7';
+import { Scene, HeatmapLayer, PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -52,13 +52,15 @@ export default () => {
    
     scene.on('loaded', () => {
       
+      
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
       )
         .then((res) => res.json())
         .then((data) => {
-
+          const polygonLayer = new PolygonLayer({visible:false}).source(maskData).shape('fill').color('#f00').style({opacity:0.4});
           const heatmapLayer = new HeatmapLayer({
+            maskLayers: [polygonLayer],
 
           })
             .source(data)
@@ -80,6 +82,7 @@ export default () => {
                 positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
               },
             });
+            scene.addLayer(polygonLayer);
             scene.addLayer(heatmapLayer);
           
         });
