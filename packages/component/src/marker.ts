@@ -14,6 +14,8 @@ import {
   applyAnchorClass,
   bindAll,
   DOM,
+  isiOS,
+  isPC,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
@@ -329,6 +331,8 @@ export default class Marker extends EventEmitter {
     element.addEventListener('contextmenu', this.eventHandle);
     element.addEventListener('mouseover', this.eventHandle);
     element.addEventListener('mouseout', this.eventHandle);
+    element.addEventListener('touchstart', this.eventHandle);
+    element.addEventListener('touchend', this.eventHandle);
   }
   private unRegisterMarkerEvent() {
     const element = this.getElement();
@@ -340,15 +344,41 @@ export default class Marker extends EventEmitter {
     element.removeEventListener('contextmenu', this.eventHandle);
     element.removeEventListener('mouseover', this.eventHandle);
     element.removeEventListener('mouseout', this.eventHandle);
+    element.removeEventListener('touchstart', this.eventHandle);
+    element.removeEventListener('touchend', this.eventHandle);
   }
 
-  private eventHandle = (e: MouseEvent) => {
+  private eventHandle = (e: MouseEvent | TouchEvent) => {
+    this.polyfillEvent(e);
     this.emit(e.type, {
       target: e,
       data: this.markerOption.extData,
       lngLat: this.lngLat,
     });
   };
+
+  /**
+   * 高德 2.x 使用了 fastClick.js 避免延迟，导致 IOS 移动端的 click 事件不会正常触发，需要手动触发
+   * @param e
+   */
+  private touchStartTime: number;
+  private polyfillEvent(e: MouseEvent | TouchEvent) {
+    if (!this.mapsService || this.mapsService.version !== 'GAODE2.x') {
+      return;
+    }
+    if (!isPC() && isiOS) {
+      if (e.type === 'touchstart') {
+        this.touchStartTime = Date.now();
+      }
+      if (e.type === 'touchend' && Date.now() - this.touchStartTime < 300) {
+        this.emit('click', {
+          target: e,
+          data: this.markerOption.extData,
+          lngLat: this.lngLat,
+        });
+      }
+    }
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
