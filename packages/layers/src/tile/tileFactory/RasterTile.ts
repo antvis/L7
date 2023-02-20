@@ -35,7 +35,6 @@ export default class RasterTile extends Tile {
         layer[attr](attributes[attr]?.field, attributes[attr]?.values);
       });
     await this.addLayer(layer);
-    this.addMaskLayer();
     this.isLoaded = true;
   }
 

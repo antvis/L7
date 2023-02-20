@@ -44,6 +44,7 @@ export default abstract class Tile implements ITile {
     return {
       ...options,
       autoFit: false,
+      maskLayers: this.getMaskLayer(),
       mask:
         isNeedMask(this.parent.type) ||
         options.mask ||
@@ -51,24 +52,23 @@ export default abstract class Tile implements ITile {
     };
   }
 
-  protected addMaskLayer() {
+  protected getMaskLayer(): ILayer[] {
     const { maskLayers } = this.parent.getLayerConfig();
+    const layers: ILayer[] = [];
     maskLayers?.forEach((layer: ILayer) => {
       if (!layer.tileLayer) {
-        this.parent.addMaskLayer(layer);
-        // 非瓦片单独处理
-        return;
+        // 非瓦片图层返回图层本身，瓦片图层返回对应的行列号图层
+        layers.push(layer);
+        return layer;
       }
       const tileLayer = layer.tileLayer as BaseTileLayer;
       const tile = tileLayer.getTile(this.sourceTile.key);
-
-      this.layers.forEach((main: ILayer) => {
-        const l = tile?.getLayers()[0] as ILayer;
-        if (l) {
-          main.addMaskLayer(l);
-        }
-      });
+      const l = tile?.getLayers()[0] as ILayer;
+      if (l) {
+        layers.push(l);
+      }
     });
+    return layers;
   }
 
   protected async addMask(layer: ILayer, mask: ILayer) {

@@ -22,7 +22,6 @@ export default class RasterTerrainRGBTile extends Tile {
       });
 
     await this.addLayer(layer);
-    this.addMaskLayer();
     this.isLoaded = true;
   }
   protected getSourceOption() {

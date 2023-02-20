@@ -243,11 +243,33 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.rawConfig = config;
     // this.parent = this;
   }
+  public addMask(layer: ILayer): void {
+    this.masks.push(layer);
+  }
 
+  public removeMask(layer: ILayer): void {
+    const layerIndex = this.masks.indexOf(layer);
+    if (layerIndex > -1) {
+      this.masks.splice(layerIndex, 1);
+    }
+  }
+
+  public disableMask(): void {
+    this.updateLayerConfig({
+      mask: false,
+    });
+  }
+
+  public enableMask(): void {
+    this.updateLayerConfig({
+      mask: true,
+    });
+  }
+  // 将废弃
   public addMaskLayer(maskLayer: ILayer) {
     this.masks.push(maskLayer);
   }
-
+  // 将废弃
   public removeMaskLayer(maskLayer: ILayer) {
     const layerIndex = this.masks.indexOf(maskLayer);
     if (layerIndex > -1) {
@@ -427,7 +449,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.inited = true;
     // add mask layer
     const { maskLayers } = this.getLayerConfig();
-    if (maskLayers && maskLayers.length > 0) {
+    // TDOD: 非瓦片图层无需处理
+    if (!this.tileLayer && maskLayers && maskLayers.length > 0) {
       this.masks.push(...maskLayers);
       this.updateLayerConfig({
         mask: true,

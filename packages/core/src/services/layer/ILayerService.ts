@@ -461,6 +461,13 @@ export interface ILayer {
   get(name: string): number;
   log(type: string, time?: number): void;
   setBlend(type: keyof typeof BlendType): ILayer;
+
+  // mask
+  addMask(mask: ILayer): void;
+  removeMask(layer: ILayer): void;
+  disableMask(): void;
+  enableMask(): void;
+
   // animate(field: string, option: any): ILayer;
 
   setMultiPass(
@@ -686,7 +693,6 @@ export interface ILayerService {
   // 清除画布
   clear(): void;
   add(layer: ILayer): void;
-  addMask(mask: ILayer): void;
   initLayers(): Promise<void>;
   startAnimate(): void;
   stopAnimate(): void;
@@ -707,6 +713,7 @@ export interface ILayerService {
   renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
+  addMask(mask: ILayer): void;
 
   destroy(): void;
 }

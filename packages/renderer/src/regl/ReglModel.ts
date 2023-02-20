@@ -309,10 +309,11 @@ export default class ReglModel implements IModel {
     pick: boolean,
   ) {
     // TODO: 重构相关参数
+    // 掩膜模式下，颜色通道全部关闭
     const colorMask =
       stencil?.enable && stencil.opFront && !pick
         ? [false, false, false, false]
-        : [true, true, true, true];
+        : [true, true, true, true]; // 非掩码模式下，颜色通道全部开启
     return colorMask;
   }
 
