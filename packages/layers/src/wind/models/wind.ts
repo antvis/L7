@@ -40,11 +40,11 @@ export default class WindModel extends BaseModel {
   private cacheZoom: number;
 
   public render(options: Partial<IRenderOptions>) {
+    this.drawColorMode(options);
     // Tip: 控制风场的平均更新频率
     this.frequency.run(() => {
       this.drawWind();
     });
-    this.drawColorMode(options);
   }
 
   public getUninforms(): IModelUniform {
@@ -232,8 +232,8 @@ export default class WindModel extends BaseModel {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
 
     this.layerService.beforeRenderData(this.layer);
-    this.layerService.renderMask(this.layer.masks);
     this.layer.hooks.beforeRender.call();
+    this.layerService.renderMask(this.layer.masks);
     this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,

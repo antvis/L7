@@ -48,7 +48,7 @@ export default () => {
 
     scene.on('loaded', () => {
       const polygonLayer = new PolygonLayer({
-        visible: true,
+        visible: false,
       }).source(maskData).shape('fill').color('#f00').style({opacity:0.3});
       const layer = new WindLayer({
         maskLayers: [polygonLayer],
