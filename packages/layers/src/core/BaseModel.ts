@@ -29,10 +29,11 @@ import {
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
-import { getMask, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import { color } from 'd3-color';
 import { isEqual, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
+import { getStencil, getStencilMask } from '../utils/stencil';
 
 export type styleSingle =
   | number
@@ -504,25 +505,23 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     return BlendTypes[BlendType[blend]] as IBlendOptions;
   }
   public getStencil(option: Partial<IRenderOptions>): Partial<IStencilOptions> {
-    const { mask = false, maskInside = true } = this.layer.getLayerConfig();
+    const {
+      mask = false,
+      maskInside = true,
+      enableMask,
+    } = this.layer.getLayerConfig();
     // TODO 临时处理，后期移除MaskLayer
     if (this.layer.type === 'MaskLayer' || option.isStencil) {
-      return {
-        enable: true,
-        mask: 0xff,
-        func: {
-          cmp: gl.ALWAYS,
-          ref: 1,
-          mask: 0xff,
-        },
-        opFront: {
-          fail: gl.REPLACE,
-          zfail: gl.REPLACE,
-          zpass: gl.REPLACE,
-        },
-      };
+      return getStencilMask(option); // 用于遮罩的stencil 参数
     }
-    return getMask(mask, maskInside);
+
+    const maskflag =
+      mask || //  mask 兼容历史写法
+      (enableMask && this.layer.masks.length !== 0) || // 外部图层的mask
+      this.layer.tileMask !== undefined; // 瓦片图层
+
+    // !!(mask || enableMask || this.layer.tileMask);
+    return getStencil(maskflag, maskInside);
   }
   public getDefaultStyle(): unknown {
     return {};

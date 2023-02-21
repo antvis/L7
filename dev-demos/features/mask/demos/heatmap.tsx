@@ -58,9 +58,10 @@ export default () => {
       )
         .then((res) => res.json())
         .then((data) => {
-          const polygonLayer = new PolygonLayer({visible:false}).source(maskData).shape('fill').color('#f00').style({opacity:0.4});
+          const polygonLayer = new PolygonLayer({visible:true}).source(maskData).shape('fill').color('#f00').style({opacity:0.4});
           const heatmapLayer = new HeatmapLayer({
             maskLayers: [polygonLayer],
+            mask:false,
 
           })
             .source(data)
@@ -84,6 +85,20 @@ export default () => {
             });
             scene.addLayer(polygonLayer);
             scene.addLayer(heatmapLayer);
+
+            setTimeout(()=>{
+              console.log('add mask');
+              // heatmapLayer.addMask(polygonLayer);
+              // scene.render();
+
+              console.log('disable mask');
+              // heatmapLayer.disableMask();
+              // scene.render();
+              heatmapLayer.enableMask();
+              scene.render();
+
+
+            },2000)
           
         });
     });

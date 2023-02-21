@@ -1,6 +1,7 @@
 import { createLayerContainer, ILayer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
+import PolygonLayer from '../../polygon';
 import BaseTileLayer from '../tileLayer/BaseLayer';
 import { isNeedMask } from './util';
 
@@ -14,6 +15,8 @@ export default abstract class Tile implements ITile {
   public visible: boolean = true;
   protected layers: ILayer[] = [];
   public isLoaded: boolean = false;
+  protected tileMaskLayers: ILayer[] = [];
+  protected tileMask: ILayer | undefined;
   constructor(sourceTile: SourceTile, parent: ILayer) {
     this.parent = parent;
     this.sourceTile = sourceTile;
@@ -45,13 +48,13 @@ export default abstract class Tile implements ITile {
       ...options,
       autoFit: false,
       maskLayers: this.getMaskLayer(),
+      tileMask: isNeedMask(this.parent.type),
       mask:
-        isNeedMask(this.parent.type) ||
         options.mask ||
-        options.maskLayers?.length !== 0,
+        (options.maskLayers?.length !== 0 && options.enableMask),
     };
   }
-
+  // 获取Mask 图层
   protected getMaskLayer(): ILayer[] {
     const { maskLayers } = this.parent.getLayerConfig();
     const layers: ILayer[] = [];
@@ -71,13 +74,42 @@ export default abstract class Tile implements ITile {
     return layers;
   }
 
+  protected async addTileMask() {
+    const mask = new PolygonLayer({ visible: false, enablePicking: false })
+      .source(
+        {
+          type: 'FeatureCollection',
+          features: [this.sourceTile.bboxPolygon],
+        },
+        {
+          parser: {
+            type: 'geojson',
+            featureId: 'id',
+          },
+        },
+      )
+      .shape('fill');
+    const container = createLayerContainer(
+      this.parent.sceneContainer as Container,
+    );
+    mask.setContainer(container, this.parent.sceneContainer as Container);
+    await mask.init();
+    this.tileMask = mask;
+    const mainLayer = this.getMainLayer();
+    if (mainLayer !== undefined) {
+      mainLayer.tileMask = mask;
+    }
+    return mask;
+  }
+
   protected async addMask(layer: ILayer, mask: ILayer) {
     const container = createLayerContainer(
       this.parent.sceneContainer as Container,
     );
     mask.setContainer(container, this.parent.sceneContainer as Container);
     await mask.init();
-    layer.addMaskLayer(mask);
+    layer.addMask(mask);
+    this.tileMaskLayers.push(mask);
   }
 
   protected async addLayer(layer: ILayer) {
@@ -125,6 +157,7 @@ export default abstract class Tile implements ITile {
   }
 
   public destroy() {
+    this.tileMask?.destroy();
     this.layers.forEach((layer) => layer.destroy());
   }
 }

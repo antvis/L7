@@ -143,7 +143,8 @@ export default class LayerService
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      if (layer.masks.filter((m) => m.inited).length > 0) {
+      const { enableMask } = layer.getLayerConfig();
+      if (layer.masks.filter((m) => m.inited).length > 0 && enableMask) {
         // 清除上一次的模版缓存
         this.renderMask(layer.masks);
       }
@@ -176,20 +177,27 @@ export default class LayerService
       this.renderLayers();
     }
   }
-
-  public async renderLayer(layer: ILayer) {
-    if (layer.masks.filter((m) => m.inited).length > 0) {
+  // 瓦片图层渲染
+  public async renderTileLayer(layer: ILayer) {
+    const { enableMask } = layer.getLayerConfig();
+    this.renderService.clear({
+      stencil: 0,
+      depth: 1,
+      framebuffer: null,
+    });
+    if (layer.masks.filter((m) => m.inited).length > 0 && enableMask) {
       const maskRender = layer.masks.map(async (mask) => {
-        this.renderService.clear({
-          stencil: 0,
-          depth: 1,
-          framebuffer: null,
-        });
         mask.render({ isStencil: true });
       });
       // TODO: maskRender 不是同步渲染完成的
       Promise.all(maskRender);
     }
+    // 瓦片裁剪
+    if (layer.tileMask) {
+      // TODO 示例瓦片掩膜多层支持
+      layer.tileMask.render({ isStencil: true, stencilType: '2' });
+    }
+
     if (layer.getLayerConfig().enableMultiPassRenderer) {
       // multiPassRender 不是同步渲染完成的
       await layer.renderMultiPass();

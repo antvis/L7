@@ -245,6 +245,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   public addMask(layer: ILayer): void {
     this.masks.push(layer);
+    this.enableMask();
   }
 
   public removeMask(layer: ILayer): void {
@@ -256,13 +257,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public disableMask(): void {
     this.updateLayerConfig({
-      mask: false,
+      enableMask: false,
     });
   }
 
   public enableMask(): void {
     this.updateLayerConfig({
-      mask: true,
+      enableMask: true,
     });
   }
   // 将废弃
@@ -448,12 +449,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.log(IDebugLog.LayerInitEnd);
     this.inited = true;
     // add mask layer
-    const { maskLayers } = this.getLayerConfig();
+    const { maskLayers, enableMask } = this.getLayerConfig();
     // TDOD: 非瓦片图层无需处理
     if (!this.tileLayer && maskLayers && maskLayers.length > 0) {
       this.masks.push(...maskLayers);
       this.updateLayerConfig({
-        mask: true,
+        mask: true && enableMask,
       });
     }
 

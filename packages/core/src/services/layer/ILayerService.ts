@@ -172,6 +172,7 @@ export interface IAttrbuteOptions {
 export interface IRenderOptions {
   ispick: boolean;
   isStencil: boolean;
+  stencilType: string;
 }
 
 /**
@@ -342,6 +343,7 @@ export interface ILayer {
   tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
+  tileMask?: ILayer | undefined; // 图层的 tileMask;
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   defaultSourceConfig: {
@@ -619,7 +621,7 @@ export interface ILayerConfig {
   cursor?: string;
   forward: boolean; // 正方向
   usage?: string; // 指定图层的使用类型 - 用户地图底图绘制的优化
-
+  enableMask: boolean;
   /**
    * 开启拾取
    */
@@ -707,7 +709,7 @@ export interface ILayerService {
   reRender(): void;
   beforeRenderData(layer: ILayer): Promise<void>;
   renderMask(masks: ILayer[]): void;
-  renderLayer(layer: ILayer): Promise<void>;
+  renderTileLayer(layer: ILayer): Promise<void>;
   needPick(type: string): boolean;
   throttleRenderLayers(): void;
   renderLayers(): void;
