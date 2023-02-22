@@ -8,7 +8,12 @@ import Clock from '../../utils/clock';
 import { IDebugService } from '../debug/IDebugService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
+import {
+  ILayer,
+  ILayerService,
+  LayerServiceEvent,
+  StencilType,
+} from './ILayerService';
 
 @injectable()
 export default class LayerService
@@ -160,14 +165,17 @@ export default class LayerService
   }
 
   public renderMask(masks: ILayer[]) {
+    let maskIndex = 0;
     this.renderService.clear({
       stencil: 0,
       depth: 1,
       framebuffer: null,
     });
+    const stencilType =
+      masks.length > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
     for (const layer of masks) {
       // 清除上一次的模版缓存
-      layer.render({ isStencil: true });
+      layer.render({ isStencil: true, stencilType, stencilIndex: maskIndex++ });
     }
   }
 
@@ -179,15 +187,25 @@ export default class LayerService
   }
   // 瓦片图层渲染
   public async renderTileLayer(layer: ILayer) {
-    const { enableMask } = layer.getLayerConfig();
+    let maskindex = 0;
+    const { enableMask = true } = layer.getLayerConfig();
     this.renderService.clear({
       stencil: 0,
       depth: 1,
       framebuffer: null,
     });
-    if (layer.masks.filter((m) => m.inited).length > 0 && enableMask) {
+    let maskCount = layer.tileMask ? 1 : 0;
+    const masklayers = layer.masks.filter((m) => m.inited);
+    maskCount = maskCount + (enableMask ? masklayers.length : 1);
+    const stencilType =
+      maskCount > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
+    if (masklayers.length && enableMask) {
       const maskRender = layer.masks.map(async (mask) => {
-        mask.render({ isStencil: true });
+        mask.render({
+          isStencil: true,
+          stencilType,
+          stencilIndex: maskindex++,
+        });
       });
       // TODO: maskRender 不是同步渲染完成的
       Promise.all(maskRender);
@@ -195,7 +213,11 @@ export default class LayerService
     // 瓦片裁剪
     if (layer.tileMask) {
       // TODO 示例瓦片掩膜多层支持
-      layer.tileMask.render({ isStencil: true, stencilType: '2' });
+      layer.tileMask.render({
+        isStencil: true,
+        stencilType,
+        stencilIndex: maskindex++,
+      });
     }
 
     if (layer.getLayerConfig().enableMultiPassRenderer) {

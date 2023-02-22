@@ -1,4 +1,9 @@
-import { gl, IRenderOptions, IStencilOptions } from '@antv/l7-core';
+import {
+  gl,
+  IRenderOptions,
+  IStencilOptions,
+  StencilType,
+} from '@antv/l7-core';
 // 掩膜配置
 export function getStencil(
   mask: boolean,
@@ -22,8 +27,18 @@ export function getStencilMask(
     enable: true,
     mask: 0xff,
     func: {
-      cmp: option.stencilType ? gl.LESS : gl.ALWAYS,
-      ref: option.stencilType ? 1 : 2,
+      cmp:
+        option.stencilType === StencilType.SINGLE // 单层
+          ? gl.ALWAYS
+          : option.stencilIndex === 0 // 多层
+          ? gl.ALWAYS
+          : gl.LESS,
+      ref:
+        option.stencilType === StencilType.SINGLE
+          ? 1
+          : option.stencilIndex === 0
+          ? 2
+          : 1,
       mask: 0xff,
     },
     opFront: {

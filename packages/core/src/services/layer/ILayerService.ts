@@ -172,7 +172,12 @@ export interface IAttrbuteOptions {
 export interface IRenderOptions {
   ispick: boolean;
   isStencil: boolean;
-  stencilType: string;
+  stencilType: StencilType;
+  stencilIndex: number;
+}
+export enum StencilType {
+  MULTIPLE = 'MULTIPLE',
+  SINGLE = 'SINGLE',
 }
 
 /**
