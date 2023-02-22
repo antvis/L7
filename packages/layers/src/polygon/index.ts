@@ -23,7 +23,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     const shapeAttribute =
       this.styleAttributeService.getLayerStyleAttribute('shape');
     const shape = shapeAttribute?.scale?.field as PolygonModelType;
-    if (shape === 'fill') {
+    if (shape === 'fill' || !shape) {
       return 'fill';
     } else if (shape === 'extrude') {
       return 'extrude';

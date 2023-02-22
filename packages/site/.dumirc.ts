@@ -534,6 +534,15 @@ export default defineConfig({
         order: 7,
       },
       {
+        slug: 'Mask',
+        icon: 'raster',
+        title: {
+          zh: '图层掩膜 🌟',
+          en: 'Layer Mask🌟 ',
+        },
+        order: 7,
+      },
+      {
         slug: 'component',
         icon: 'map',
         title: {
