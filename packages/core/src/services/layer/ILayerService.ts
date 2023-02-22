@@ -174,10 +174,16 @@ export interface IRenderOptions {
   isStencil: boolean;
   stencilType: StencilType;
   stencilIndex: number;
+  stencilOperation: MaskOperation;
 }
 export enum StencilType {
   MULTIPLE = 'MULTIPLE',
   SINGLE = 'SINGLE',
+}
+
+export enum MaskOperation {
+  AND = 'and',
+  OR = 'or',
 }
 
 /**
@@ -595,6 +601,7 @@ export interface ILayerConfig {
   maskColor: string;
   maskOpacity: number;
   maskLayers: ILayer[];
+  maskOperation?: MaskOperation;
   sourceLayer: string;
 
   colors: string[];

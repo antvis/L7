@@ -2,7 +2,11 @@
 import { injectable } from 'inversify';
 import { merge } from 'lodash';
 import 'reflect-metadata';
-import { ILayerAttributesOption, ILayerConfig } from '../layer/ILayerService';
+import {
+  ILayerAttributesOption,
+  ILayerConfig,
+  MaskOperation,
+} from '../layer/ILayerService';
 import { IRenderConfig } from '../renderer/IRendererService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import WarnInfo from './warnInfo';
@@ -66,6 +70,7 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   blend: 'normal',
   maskLayers: [],
   enableMask: true,
+  maskOperation: MaskOperation.AND,
   pickedFeatureID: -1,
   enableMultiPassRenderer: false,
   enablePicking: true,

@@ -12,6 +12,7 @@ import {
   ILayer,
   ILayerService,
   LayerServiceEvent,
+  MaskOperation,
   StencilType,
 } from './ILayerService';
 
@@ -189,9 +190,9 @@ export default class LayerService
   public async renderTileLayer(layer: ILayer) {
     let maskindex = 0;
     const { enableMask = true } = layer.getLayerConfig();
-
     let maskCount = layer.tileMask ? 1 : 0;
     const masklayers = layer.masks.filter((m) => m.inited);
+
     maskCount = maskCount + (enableMask ? masklayers.length : 1);
     const stencilType =
       maskCount > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
@@ -205,15 +206,13 @@ export default class LayerService
     }
 
     if (masklayers.length && enableMask) {
-      const maskRender = layer.masks.map(async (mask) => {
-        mask.render({
+      for (const mask of masklayers) {
+        await mask.render({
           isStencil: true,
           stencilType,
           stencilIndex: maskindex++,
         });
-      });
-      // TODO: maskRender 不是同步渲染完成的
-      Promise.all(maskRender);
+      }
     }
     // // 瓦片裁剪
     if (layer.tileMask) {
@@ -222,6 +221,7 @@ export default class LayerService
         isStencil: true,
         stencilType,
         stencilIndex: maskindex++,
+        stencilOperation: MaskOperation.OR,
       });
     }
 

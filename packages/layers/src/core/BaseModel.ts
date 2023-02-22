@@ -26,6 +26,7 @@ import {
   ITexture2D,
   ITexture2DInitializationOptions,
   lazyInject,
+  MaskOperation,
   StencilType,
   Triangulation,
   TYPES,
@@ -510,6 +511,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       mask = false,
       maskInside = true,
       enableMask,
+      maskOperation = MaskOperation.AND,
     } = this.layer.getLayerConfig();
     // TODO 临时处理，后期移除MaskLayer
     if (this.layer.type === 'MaskLayer') {
@@ -520,7 +522,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     }
 
     if (option.isStencil) {
-      return getStencilMask(option); // 用于遮罩的stencil 参数
+      return getStencilMask({ ...option, maskOperation }); // 用于遮罩的stencil 参数
     }
 
     const maskflag =

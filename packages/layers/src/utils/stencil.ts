@@ -2,6 +2,7 @@ import {
   gl,
   IRenderOptions,
   IStencilOptions,
+  MaskOperation,
   StencilType,
 } from '@antv/l7-core';
 // 掩膜配置
@@ -19,10 +20,29 @@ export function getStencil(
     },
   };
 }
+interface IStencilMaskOptions extends IRenderOptions {
+  maskOperation?: MaskOperation;
+}
 // 模版配置
 export function getStencilMask(
-  option: Partial<IRenderOptions>,
+  option: Partial<IStencilMaskOptions>,
 ): Partial<IStencilOptions> {
+  if (option.maskOperation === MaskOperation.OR) {
+    return {
+      enable: true,
+      mask: 0xff,
+      func: {
+        cmp: gl.ALWAYS,
+        ref: 1,
+        mask: 0xff,
+      },
+      opFront: {
+        fail: gl.KEEP,
+        zfail: gl.REPLACE,
+        zpass: gl.REPLACE,
+      },
+    };
+  }
   return {
     enable: true,
     mask: 0xff,

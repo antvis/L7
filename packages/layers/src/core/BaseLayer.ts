@@ -1034,9 +1034,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
 
-    // remove mask list
-    this.masks.map((mask: ILayer) => mask.destroy(false));
-    this.masks = [];
+    // remove mask list maskfence 掩膜需要销毁
+    const { maskfence } = this.getLayerConfig();
+    if (maskfence) {
+      this.masks.map((mask: ILayer) => mask.destroy(false));
+      this.masks = [];
+    }
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件
@@ -1382,6 +1385,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
     }
+
     this.hooks.beforeRender.call();
     this.models.forEach((model) => {
       model.draw(
