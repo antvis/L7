@@ -26,6 +26,7 @@ import {
   ITexture2D,
   ITexture2DInitializationOptions,
   lazyInject,
+  StencilType,
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
@@ -511,7 +512,14 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       enableMask,
     } = this.layer.getLayerConfig();
     // TODO 临时处理，后期移除MaskLayer
-    if (this.layer.type === 'MaskLayer' || option.isStencil) {
+    if (this.layer.type === 'MaskLayer') {
+      return getStencilMask({
+        isStencil: true,
+        stencilType: StencilType.SINGLE,
+      }); // 用于遮罩的stencil 参数
+    }
+
+    if (option.isStencil) {
       return getStencilMask(option); // 用于遮罩的stencil 参数
     }
 
@@ -519,7 +527,6 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       mask || //  mask 兼容历史写法
       (enableMask && this.layer.masks.length !== 0) || // 外部图层的mask
       this.layer.tileMask !== undefined; // 瓦片图层
-
     // !!(mask || enableMask || this.layer.tileMask);
     return getStencil(maskflag, maskInside);
   }

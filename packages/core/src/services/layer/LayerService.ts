@@ -189,16 +189,21 @@ export default class LayerService
   public async renderTileLayer(layer: ILayer) {
     let maskindex = 0;
     const { enableMask = true } = layer.getLayerConfig();
-    this.renderService.clear({
-      stencil: 0,
-      depth: 1,
-      framebuffer: null,
-    });
+
     let maskCount = layer.tileMask ? 1 : 0;
     const masklayers = layer.masks.filter((m) => m.inited);
     maskCount = maskCount + (enableMask ? masklayers.length : 1);
     const stencilType =
       maskCount > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
+    //  兼容MaskLayer MaskLayer的掩膜不能clear
+    if (layer.tileMask || (masklayers.length && enableMask)) {
+      this.renderService.clear({
+        stencil: 0,
+        depth: 1,
+        framebuffer: null,
+      });
+    }
+
     if (masklayers.length && enableMask) {
       const maskRender = layer.masks.map(async (mask) => {
         mask.render({
@@ -210,7 +215,7 @@ export default class LayerService
       // TODO: maskRender 不是同步渲染完成的
       Promise.all(maskRender);
     }
-    // 瓦片裁剪
+    // // 瓦片裁剪
     if (layer.tileMask) {
       // TODO 示例瓦片掩膜多层支持
       layer.tileMask.render({

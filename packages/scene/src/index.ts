@@ -199,7 +199,7 @@ class Scene
       this.addMask(maskInstance as ILayer, layer.id);
     } else {
       layer.on('inited', () => {
-        const maskInstance = this.initMask(layer);
+        const maskInstance = this.initMask(layer); // 初始化 mask
         this.addMask(maskInstance as ILayer, layer.id);
       });
     }

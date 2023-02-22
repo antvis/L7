@@ -449,15 +449,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.log(IDebugLog.LayerInitEnd);
     this.inited = true;
     // add mask layer
-    const { maskLayers, enableMask } = this.getLayerConfig();
-    // TDOD: 非瓦片图层无需处理
-    if (!this.tileLayer && maskLayers && maskLayers.length > 0) {
-      this.masks.push(...maskLayers);
-      this.updateLayerConfig({
-        mask: true && enableMask,
-      });
-    }
-
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
