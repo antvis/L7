@@ -207,7 +207,7 @@ export default class LayerService
 
     if (masklayers.length && enableMask) {
       for (const mask of masklayers) {
-        await mask.render({
+        mask.render({
           isStencil: true,
           stencilType,
           stencilIndex: maskindex++,

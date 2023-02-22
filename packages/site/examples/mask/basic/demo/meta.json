@@ -29,7 +29,23 @@
         "filename": "raster_polygon.js",
         "title": "栅格瓦片-多边形掩膜",
         "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*n0y_TZ2gr5AAAAAAAAAAAAAADmJ7AQ/original"
+      },
+      {
+        "filename": "multi_mask_or.ts",
+        "title": "栅格瓦片-多个Plolygon掩膜-并集",
+        "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*09_KQZqe8L8AAAAAAAAAAAAADmJ7AQ/original"
+      },
+      {
+        "filename": "multi_mask_and.ts",
+        "title": "栅格瓦片-多个Polygon掩膜-交集",
+        "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*n4nwQ7ZgbDYAAAAAAAAAAAAADmJ7AQ/original"
+      },
+      {
+        "filename": "multi_mask_or_not.ts",
+        "title": "栅格瓦片-多个Plolygon掩膜-并集取反",
+        "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*bytjT7JNtekAAAAAAAAAAAAADmJ7AQ/original"
       }
+
     ]
   }
   
