@@ -3,7 +3,7 @@
 
 ⚠️ mask、maskfence 不推荐使用，一下配置 2.14.x 之后版本生效
 
-模板图层：用做模板的图层
+模板图层：用做模板的图层，PointLayer、LineLayer、PolygonLayer 都可以作为模板
 掩膜图层：被模板切割的图层
 
 ### maskLayers

@@ -14,5 +14,7 @@ void main() {
   } else {
     gl_FragColor = vec4(rgb.r / (u_rminmax.y -u_rminmax.x), rgb.g /(u_gminmax.y -u_gminmax.x), rgb.b/ (u_bminmax.y - u_bminmax.x), u_opacity);
   }
+  if(gl_FragColor.a < 0.01)
+    discard;
  
 }

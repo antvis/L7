@@ -174,7 +174,7 @@ export interface IRenderOptions {
   isStencil: boolean;
   stencilType: StencilType;
   stencilIndex: number;
-  stencilOperation: MaskOperation;
+  stencilOperation: MaskOperationType;
 }
 export enum StencilType {
   MULTIPLE = 'MULTIPLE',
@@ -185,6 +185,8 @@ export enum MaskOperation {
   AND = 'and',
   OR = 'or',
 }
+
+export type MaskOperationType = 'and' | 'or';
 
 /**
  * For tile subLayer
@@ -601,7 +603,7 @@ export interface ILayerConfig {
   maskColor: string;
   maskOpacity: number;
   maskLayers: ILayer[];
-  maskOperation?: MaskOperation;
+  maskOperation?: MaskOperationType;
   sourceLayer: string;
 
   colors: string[];

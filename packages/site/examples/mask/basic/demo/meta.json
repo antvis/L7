@@ -44,7 +44,19 @@
         "filename": "multi_mask_or_not.ts",
         "title": "栅格瓦片-多个Plolygon掩膜-并集取反",
         "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*bytjT7JNtekAAAAAAAAAAAAADmJ7AQ/original"
+      },
+      {
+        "filename": "rastertile_raster.ts",
+        "title": "栅格瓦片-栅格掩膜",
+        "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*bytjT7JNtekAAAAAAAAAAAAADmJ7AQ/original"
+      },
+      {
+        "filename": "rastertile_raster.ts",
+        "title": "栅格-点图层",
+        "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*bytjT7JNtekAAAAAAAAAAAAADmJ7AQ/original"
       }
+
+
 
     ]
   }
