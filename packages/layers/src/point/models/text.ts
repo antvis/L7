@@ -6,12 +6,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import {
-  boundsContains,
-  calculateCentroid,
-  getMask,
-  padBounds,
-} from '@antv/l7-utils';
+import { boundsContains, calculateCentroid, padBounds } from '@antv/l7-utils';
 import { isEqual, isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -182,11 +177,8 @@ export default class TextModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-      textAllowOverlap = false,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { textAllowOverlap = false } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     //  this.mapping(); 重复调用
     this.initGlyph(); //
@@ -200,8 +192,6 @@ export default class TextModel extends BaseModel {
       fragmentShader: textFrag,
       triangulation: TextTriangulation.bind(this),
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }
@@ -568,8 +558,6 @@ export default class TextModel extends BaseModel {
   }
 
   private async reBuildModel() {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.filterGlyphs();
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointText',
@@ -577,8 +565,6 @@ export default class TextModel extends BaseModel {
       fragmentShader: textFrag,
       triangulation: TextTriangulation.bind(this),
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
     // TODO 渲染流程待修改
     this.layer.models = [model];

@@ -22,6 +22,7 @@ import DataMappingPlugin from './plugins/DataMappingPlugin';
 import DataSourcePlugin from './plugins/DataSourcePlugin';
 import FeatureScalePlugin from './plugins/FeatureScalePlugin';
 import LayerAnimateStylePlugin from './plugins/LayerAnimateStylePlugin';
+import LayerMaskPlugin from './plugins/LayerMaskPlugin';
 import LayerModelPlugin from './plugins/LayerModelPlugin';
 import LayerStylePlugin from './plugins/LayerStylePlugin';
 import LightingPlugin from './plugins/LightingPlugin';
@@ -75,6 +76,14 @@ container
 container
   .bind<ILayerPlugin>(TYPES.ILayerPlugin)
   .to(LayerStylePlugin)
+  .inRequestScope();
+
+/**
+ * 初始化地图 Mask
+ */
+container
+  .bind<ILayerPlugin>(TYPES.ILayerPlugin)
+  .to(LayerMaskPlugin)
   .inRequestScope();
 
 /**

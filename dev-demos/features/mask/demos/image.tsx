@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, ImageLayer } from '@antv/l7';
+import { Scene, ImageLayer,PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -51,12 +51,9 @@ export default () => {
     };
 
     scene.on('loaded', () => {
+      const polygonLayer = new PolygonLayer().source(maskData).shape('fill').color('#f00').style({opacity:0.5});
       const layer = new ImageLayer({
-        mask: true,
-        maskInside: false,
-        maskfence: maskData,
-        maskOpacity: 0.5,
-        maskColor: '#f00',
+        maskLayers:[polygonLayer],
       });
       layer.source(
         'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*4UApTKmeiy4AAAAAAAAAAAAAARQnAQ',
@@ -73,6 +70,7 @@ export default () => {
         },
       );
       scene.addLayer(layer);
+      scene.addLayer(polygonLayer);
     });
   }, []);
   return (

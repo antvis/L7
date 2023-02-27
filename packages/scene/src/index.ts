@@ -199,7 +199,7 @@ class Scene
       this.addMask(maskInstance as ILayer, layer.id);
     } else {
       layer.on('inited', () => {
-        const maskInstance = this.initMask(layer);
+        const maskInstance = this.initMask(layer); // 初始化 mask
         this.addMask(maskInstance as ILayer, layer.id);
       });
     }
@@ -215,7 +215,6 @@ class Scene
     if (!mask || !maskfence) {
       return undefined;
     }
-
     const maskInstance = new MaskLayer().source(maskfence).shape('fill').style({
       color: maskColor,
       opacity: maskOpacity,

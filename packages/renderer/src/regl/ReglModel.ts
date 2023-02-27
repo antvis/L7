@@ -1,6 +1,7 @@
 import {
   gl,
   IAttribute,
+  IBlendOptions,
   IElements,
   IModel,
   IModelDrawOptions,
@@ -8,7 +9,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import regl from 'l7regl';
-import { cloneDeep, isPlainObject, isTypedArray } from 'lodash';
+import { isPlainObject, isTypedArray } from 'lodash';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -30,7 +31,6 @@ export default class ReglModel implements IModel {
   private reGl: regl.Regl;
   private destroyed: boolean = false;
   private drawCommand: regl.DrawCommand;
-  private drawPickCommand: regl.DrawCommand;
   private drawParams: regl.DrawConfig;
   private options: IModelInitializationOptions;
   private uniforms: {
@@ -40,7 +40,6 @@ export default class ReglModel implements IModel {
   constructor(reGl: regl.Regl, options: IModelInitializationOptions) {
     this.reGl = reGl;
     const {
-      pick = true,
       vs,
       fs,
       attributes,
@@ -49,8 +48,6 @@ export default class ReglModel implements IModel {
       count,
       elements,
       depth,
-      blend,
-      stencil,
       cull,
       instances,
     } = options;
@@ -74,7 +71,30 @@ export default class ReglModel implements IModel {
       frag: fs,
       uniforms: reglUniforms,
       vert: vs,
-      blend: {},
+      // @ts-ignore
+      colorMask: reGl.prop('colorMask'),
+      blend: {
+        // @ts-ignore
+        enable: reGl.prop('blend.enable'),
+        // @ts-ignore
+        func: reGl.prop('blend.func'),
+        // @ts-ignore
+        equation: reGl.prop('blend.equation'),
+        // @ts-ignore
+        color: reGl.prop('blend.color'),
+      },
+      stencil: {
+        // @ts-ignore
+        enable: reGl.prop('stencil.enable'),
+        // @ts-ignore
+        mask: reGl.prop('stencil.mask'),
+        // @ts-ignore
+        func: reGl.prop('stencil.func'),
+        // @ts-ignore
+        opFront: reGl.prop('stencil.opFront'),
+        // @ts-ignore
+        opBack: reGl.prop('stencil.opBack'),
+      },
       primitive:
         primitiveMap[primitive === undefined ? gl.TRIANGLES : primitive],
     };
@@ -92,22 +112,10 @@ export default class ReglModel implements IModel {
     }
 
     this.initDepthDrawParams({ depth }, drawParams);
-    this.initBlendDrawParams({ blend }, drawParams);
-    this.initStencilDrawParams({ stencil }, drawParams);
+    // this.initBlendDrawParams({ blend }, drawParams);
+    // this.initStencilDrawParams({ stencil }, drawParams);
     this.initCullDrawParams({ cull }, drawParams);
-
     this.drawCommand = reGl(drawParams);
-
-    if (pick) {
-      const pickDrawParams = cloneDeep(drawParams);
-
-      pickDrawParams.blend = {
-        ...pickDrawParams.blend,
-        enable: false,
-      };
-
-      this.drawPickCommand = reGl(pickDrawParams);
-    }
     this.drawParams = drawParams;
   }
 
@@ -123,15 +131,6 @@ export default class ReglModel implements IModel {
     this.drawParams.elements = (elements as ReglElements).get();
 
     this.drawCommand = this.reGl(this.drawParams);
-    if (this.options.pick) {
-      const pickDrawParams = cloneDeep(this.drawParams);
-      pickDrawParams.blend = {
-        ...pickDrawParams.blend,
-        enable: false,
-      };
-
-      this.drawPickCommand = this.reGl(pickDrawParams);
-    }
   }
 
   public updateAttributes(attributes: { [key: string]: IAttribute }) {
@@ -141,17 +140,6 @@ export default class ReglModel implements IModel {
     });
     this.drawParams.attributes = reglAttributes;
     this.drawCommand = this.reGl(this.drawParams);
-
-    if (this.options.pick) {
-      const pickDrawParams = cloneDeep(this.drawParams);
-
-      pickDrawParams.blend = {
-        ...pickDrawParams.blend,
-        enable: false,
-      };
-
-      this.drawPickCommand = this.reGl(pickDrawParams);
-    }
   }
 
   public addUniforms(uniforms: { [key: string]: IUniform }) {
@@ -181,6 +169,7 @@ export default class ReglModel implements IModel {
         | regl.Texture2D
         | number
         | number[]
+        | Partial<IBlendOptions>
         | boolean;
     } = {};
     Object.keys(uniforms).forEach((uniformName: string) => {
@@ -202,16 +191,22 @@ export default class ReglModel implements IModel {
         ).get();
       }
     });
+    // 更新 blend
+    // @ts-ignore
+    reglDrawProps.blend = pick // picking 操作不应该使用 blend
+      ? this.getBlendDrawParams({
+          blend: { enable: false },
+        })
+      : this.getBlendDrawParams(options);
+
+    // 更新stentil 配置
+    // @ts-ignore
+    reglDrawProps.stencil = this.getStencilDrawParams(options);
+    // @ts-ignore
+    reglDrawProps.colorMask = this.getColorMaskDrawParams(options, pick);
+
     // 在进行拾取操作的绘制中，不应该使用叠加模式 - picking 根据拾取的颜色作为判断的输入，而叠加模式会产生新的，在 id 序列中不存在的颜色
-    if (!pick) {
-      this.drawCommand(reglDrawProps);
-    } else {
-      if (this.drawPickCommand) {
-        this.drawPickCommand(reglDrawProps);
-      }
-    }
-    // this.drawCommand(reglDrawProps);
-    // this.drawPickCommand(reglDrawProps);
+    this.drawCommand(reglDrawProps);
   }
 
   public destroy() {
@@ -243,80 +238,83 @@ export default class ReglModel implements IModel {
     }
   }
 
-  /**
-   * @see https://github.com/regl-project/regl/blob/gh-pages/API.md#blending
-   */
-  private initBlendDrawParams(
-    { blend }: Pick<IModelInitializationOptions, 'blend'>,
-    drawParams: regl.DrawConfig,
-  ) {
-    if (blend) {
-      const { enable, func, equation, color = [0, 0, 0, 0] } = blend;
-      // @ts-ignore
-      drawParams.blend = {
-        enable: !!enable,
-        func: {
-          srcRGB: blendFuncMap[(func && func.srcRGB) || gl.SRC_ALPHA],
-          srcAlpha: blendFuncMap[(func && func.srcAlpha) || gl.SRC_ALPHA],
-          dstRGB: blendFuncMap[(func && func.dstRGB) || gl.ONE_MINUS_SRC_ALPHA],
-          dstAlpha:
-            blendFuncMap[(func && func.dstAlpha) || gl.ONE_MINUS_SRC_ALPHA],
-        },
-        equation: {
-          rgb: blendEquationMap[(equation && equation.rgb) || gl.FUNC_ADD],
-          alpha: blendEquationMap[(equation && equation.alpha) || gl.FUNC_ADD],
-        },
-        color,
-      };
-    }
+  private getBlendDrawParams({
+    blend,
+  }: Pick<IModelInitializationOptions, 'blend'>) {
+    const { enable, func, equation, color = [0, 0, 0, 0] } = blend || {};
+    // @ts-ignore
+    return {
+      enable: !!enable,
+      func: {
+        srcRGB: blendFuncMap[(func && func.srcRGB) || gl.SRC_ALPHA],
+        srcAlpha: blendFuncMap[(func && func.srcAlpha) || gl.SRC_ALPHA],
+        dstRGB: blendFuncMap[(func && func.dstRGB) || gl.ONE_MINUS_SRC_ALPHA],
+        dstAlpha:
+          blendFuncMap[(func && func.dstAlpha) || gl.ONE_MINUS_SRC_ALPHA],
+      },
+      equation: {
+        rgb: blendEquationMap[(equation && equation.rgb) || gl.FUNC_ADD],
+        alpha: blendEquationMap[(equation && equation.alpha) || gl.FUNC_ADD],
+      },
+      color,
+    };
   }
-
   /**
    * @see https://github.com/regl-project/regl/blob/gh-pages/API.md#stencil
    */
-  private initStencilDrawParams(
+  private getStencilDrawParams({
+    stencil,
+  }: Pick<IModelInitializationOptions, 'stencil'>) {
+    const {
+      enable,
+      mask = -1,
+      func = {
+        cmp: gl.ALWAYS,
+        ref: 0,
+        mask: -1,
+      },
+      opFront = {
+        fail: gl.KEEP,
+        zfail: gl.KEEP,
+        zpass: gl.KEEP,
+      },
+      opBack = {
+        fail: gl.KEEP,
+        zfail: gl.KEEP,
+        zpass: gl.KEEP,
+      },
+    } = stencil || {};
+    return {
+      enable: !!enable,
+      mask,
+      func: {
+        ...func,
+        cmp: stencilFuncMap[func.cmp],
+      },
+      opFront: {
+        fail: stencilOpMap[opFront.fail],
+        zfail: stencilOpMap[opFront.zfail],
+        zpass: stencilOpMap[opFront.zpass],
+      },
+      opBack: {
+        fail: stencilOpMap[opBack.fail],
+        zfail: stencilOpMap[opBack.zfail],
+        zpass: stencilOpMap[opBack.zpass],
+      },
+    };
+  }
+
+  private getColorMaskDrawParams(
     { stencil }: Pick<IModelInitializationOptions, 'stencil'>,
-    drawParams: regl.DrawConfig,
+    pick: boolean,
   ) {
-    if (stencil) {
-      const {
-        enable,
-        mask = -1,
-        func = {
-          cmp: gl.ALWAYS,
-          ref: 0,
-          mask: -1,
-        },
-        opFront = {
-          fail: gl.KEEP,
-          zfail: gl.KEEP,
-          zpass: gl.KEEP,
-        },
-        opBack = {
-          fail: gl.KEEP,
-          zfail: gl.KEEP,
-          zpass: gl.KEEP,
-        },
-      } = stencil;
-      drawParams.stencil = {
-        enable: !!enable,
-        mask,
-        func: {
-          ...func,
-          cmp: stencilFuncMap[func.cmp],
-        },
-        opFront: {
-          fail: stencilOpMap[opFront.fail],
-          zfail: stencilOpMap[opFront.zfail],
-          zpass: stencilOpMap[opFront.zpass],
-        },
-        opBack: {
-          fail: stencilOpMap[opBack.fail],
-          zfail: stencilOpMap[opBack.zfail],
-          zpass: stencilOpMap[opBack.zpass],
-        },
-      };
-    }
+    // TODO: 重构相关参数
+    // 掩膜模式下，颜色通道全部关闭
+    const colorMask =
+      stencil?.enable && stencil.opFront && !pick
+        ? [false, false, false, false]
+        : [true, true, true, true]; // 非掩码模式下，颜色通道全部开启
+    return colorMask;
   }
 
   /**

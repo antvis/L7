@@ -16,4 +16,6 @@ export const ProxyFuncs = [
   'setBlend',
   'setSelect',
   'setActive',
+  'disableMask',
+  'enableMask',
 ];

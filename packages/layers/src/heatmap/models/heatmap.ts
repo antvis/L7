@@ -5,14 +5,10 @@ import {
   IFramebuffer,
   IModel,
   IModelUniform,
+  IRenderOptions,
   ITexture2D,
 } from '@antv/l7-core';
-import {
-  generateColorRamp,
-  getCullFace,
-  getMask,
-  IColorRamp,
-} from '@antv/l7-utils';
+import { generateColorRamp, getCullFace, IColorRamp } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
@@ -39,7 +35,7 @@ export default class HeatMapModel extends BaseModel {
   private colorModel: IModel;
   private shapeType: string;
 
-  public render() {
+  public render(options: Partial<IRenderOptions>) {
     const { clear, useFramebuffer } = this.rendererService;
     useFramebuffer(this.heatmapFramerBuffer, () => {
       clear({
@@ -53,7 +49,9 @@ export default class HeatMapModel extends BaseModel {
     if (this.layer.styleNeedUpdate) {
       this.updateColorTexture();
     }
-    this.shapeType === 'heatmap' ? this.drawColorMode() : this.draw3DHeatMap();
+    this.shapeType === 'heatmap'
+      ? this.drawColorMode(options)
+      : this.draw3DHeatMap(options);
   }
 
   public getUninforms(): IModelUniform {
@@ -153,22 +151,11 @@ export default class HeatMapModel extends BaseModel {
         enable: true,
         face: getCullFace(this.mapService.version),
       },
-      blend: {
-        enable: true,
-        func: {
-          srcRGB: gl.ONE,
-          srcAlpha: 1,
-          dstRGB: gl.ONE,
-          dstAlpha: 1,
-        },
-      },
     });
     return model;
   }
 
   private buildHeatmapColor(): IModel {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.shaderModuleService.registerModule('heatmapColor', {
       vs: heatmapColorVert,
       fs: heatmapColorFrag,
@@ -203,13 +190,11 @@ export default class HeatMapModel extends BaseModel {
       depth: {
         enable: false,
       },
-      blend: this.getBlend(),
       elements: createElements({
         data: [0, 2, 1, 2, 3, 1],
         type: gl.UNSIGNED_INT,
         count: 6,
       }),
-      stencil: getMask(mask, maskInside),
     });
   }
 
@@ -222,19 +207,37 @@ export default class HeatMapModel extends BaseModel {
 
     this.layerService.beforeRenderData(this.layer);
     this.layer.hooks.beforeRender.call();
-
+    // 绘制密度图
     this.intensityModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_radius: radius,
         u_intensity: intensity,
       },
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: gl.ONE,
+          srcAlpha: 1,
+          dstRGB: gl.ONE,
+          dstAlpha: 1,
+        },
+      },
+      stencil: {
+        enable: false,
+        mask: 0xff,
+        func: {
+          cmp: 514, // gl.EQUAL,
+          ref: 1,
+          mask: 0xff,
+        },
+      },
     });
 
     this.layer.hooks.afterRender.call();
   }
 
-  private drawColorMode() {
+  private drawColorMode(options: Partial<IRenderOptions>) {
     const { opacity } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     this.colorModel?.draw({
@@ -243,10 +246,12 @@ export default class HeatMapModel extends BaseModel {
         u_colorTexture: this.colorTexture,
         u_texture: this.heatmapFramerBuffer,
       },
+      blend: this.getBlend(),
+      stencil: this.getStencil(options),
     });
   }
 
-  private draw3DHeatMap() {
+  private draw3DHeatMap(options: Partial<IRenderOptions>) {
     const { opacity } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
 
@@ -272,11 +277,19 @@ export default class HeatMapModel extends BaseModel {
           this.cameraService.getViewProjectionMatrixUncentered(),
         u_InverseViewProjectionMatrix: [...invert],
       },
+      blend: {
+        enable: true,
+        func: {
+          srcRGB: gl.SRC_ALPHA,
+          srcAlpha: 1,
+          dstRGB: gl.ONE_MINUS_SRC_ALPHA,
+          dstAlpha: 1,
+        },
+      },
+      stencil: this.getStencil(options),
     });
   }
   private build3dHeatMap() {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
     const triangulation = heatMap3DTriangulation(width / 4.0, height / 4.0);
@@ -329,7 +342,6 @@ export default class HeatMapModel extends BaseModel {
         type: gl.UNSIGNED_INT,
         count: triangulation.indices.length,
       }),
-      stencil: getMask(mask, maskInside),
     });
   }
   private updateStyle() {

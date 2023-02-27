@@ -35,5 +35,9 @@ void main(){
       }
 
       gl_FragColor.a = gl_FragColor.a * opacity;
+      
+      if (gl_FragColor.a < 0.01) {
+         discard;
+      }
       gl_FragColor = filterColor(gl_FragColor);
 }

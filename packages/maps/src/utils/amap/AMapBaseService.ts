@@ -288,6 +288,7 @@ export default abstract class AMapBaseService
   }
   public lngLatToPixel(lnglat: [number, number]): IPoint {
     const p = this.map.lnglatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
+    // lngLatToPixel
     return {
       x: p.getX(),
       y: p.getY(),
