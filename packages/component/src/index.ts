@@ -6,18 +6,16 @@ import './assets/iconfont/iconfont.js';
 import './css/index.css';
 
 export * from './control/baseControl';
-export * from './control/logo';
-export * from './control/fullscreen';
 export * from './control/exportImage';
+export * from './control/fullscreen';
 export * from './control/geoLocate';
-export * from './control/mapTheme';
 export * from './control/layerSwitch';
+export * from './control/logo';
+export * from './control/mapTheme';
 export * from './control/mouseLocation';
-export * from './control/zoom';
 export * from './control/scale';
-export * from './popup/popup';
-export * from './popup/layerPopup';
-
-export { Marker, MarkerLayer };
-
+export * from './control/zoom';
 export * from './interface';
+export * from './popup/layerPopup';
+export * from './popup/popup';
+export { Marker, MarkerLayer };

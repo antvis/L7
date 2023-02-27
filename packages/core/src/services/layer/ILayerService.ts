@@ -1,12 +1,20 @@
 // @ts-ignore
-import { SyncBailHook, SyncHook, AsyncSeriesBailHook, AsyncWaterfallHook} from '@antv/async-hook';
+import {
+  AsyncSeriesBailHook,
+  AsyncWaterfallHook,
+  SyncBailHook,
+  SyncHook,
+} from '@antv/async-hook';
 import { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import Clock from '../../utils/clock';
 import { ITextureService } from '../asset/ITextureService';
 import { ISceneConfig } from '../config/IConfigService';
 import { IInteractionTarget } from '../interaction/IInteractionService';
-import { ILayerPickService, IPickingService } from '../interaction/IPickingService';
+import {
+  ILayerPickService,
+  IPickingService,
+} from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 import { IAttribute } from '../renderer/IAttribute';
 import {
@@ -22,7 +30,12 @@ import {
 import { IRendererService } from '../renderer/IRendererService';
 import { ITexture2D } from '../renderer/ITexture2D';
 import { IUniform } from '../renderer/IUniform';
-import { ISource, ISourceCFG, ITransform, IParseDataItem } from '../source/ISourceService';
+import {
+  IParseDataItem,
+  ISource,
+  ISourceCFG,
+  ITransform,
+} from '../source/ISourceService';
 import {
   IAnimateOption,
   IEncodeFeature,
@@ -80,7 +93,7 @@ export interface ILayerModel {
   getAnimateUniforms(): IModelUniform;
   buildModels(): Promise<IModel[]>;
   initModels(): Promise<IModel[]>;
-  needUpdate():Promise<boolean>
+  needUpdate(): Promise<boolean>;
   clearModels(refresh?: boolean): void;
 
   // canvasLayer
@@ -92,13 +105,13 @@ export interface ILayerModel {
 }
 
 export interface ILayerAttributesOption {
-  shape: IAttrbuteOptions,
-  color: IAttrbuteOptions,
-  texture:IAttrbuteOptions,
-  rotate:IAttrbuteOptions,
-  size:IAttrbuteOptions,
-  filter:IAttrbuteOptions,
-  label:IAttrbuteOptions,
+  shape: IAttrbuteOptions;
+  color: IAttrbuteOptions;
+  texture: IAttrbuteOptions;
+  rotate: IAttrbuteOptions;
+  size: IAttrbuteOptions;
+  filter: IAttrbuteOptions;
+  label: IAttrbuteOptions;
 }
 
 export interface IModelUniform {
@@ -119,15 +132,15 @@ export interface IActiveOption {
 
 type ILngLat = [number, number];
 
-export interface ILegend  {
-  type: ScaleTypeName | undefined
+export interface ILegend {
+  type: ScaleTypeName | undefined;
   field: StyleAttributeField | undefined;
-  items:LegendItems
+  items: LegendItems;
 }
 
 // 分段图例
 export interface ILegendSegmentItem {
-  field:string;// 图例字段
+  field: string; // 图例字段
   value: [number, number];
   [key: string]: any;
 }
@@ -149,18 +162,18 @@ export interface ISubLayerStyles {
 }
 
 export interface IAttrbuteOptions {
-  field: StyleAttrField,
-  values:StyleAttributeOption
+  field: StyleAttrField;
+  values: StyleAttributeOption;
 }
 
 /**
  * For tile subLayer
  */
 export interface ISubLayerInitOptions {
-  usage?: string|undefined;
+  usage?: string | undefined;
   layerType: string;
   transforms?: ITransform[];
-  visible: boolean,
+  visible: boolean;
   shape?: string | string[] | IScaleValue;
   // options
   zIndex: number;
@@ -203,7 +216,7 @@ export interface IBaseTileLayerManager {
   parent: ILayer;
   children: ILayer[];
 
-  addTile(tile: SourceTile):Promise<{ layers: ILayer[]; }>;
+  addTile(tile: SourceTile): Promise<{ layers: ILayer[] }>;
 
   addChild(layer: ILayer): void;
   addChildren(layers: ILayer[]): void;
@@ -232,10 +245,7 @@ export interface ITile {
   getFeatureById(id: number): any;
   styleUpdate(...args: any): void;
   initTileLayer(): Promise<void>;
-  lnglatInBounds(lnglat: {
-    lng: number;
-    lat: number;
-  }): boolean;
+  lnglatInBounds(lnglat: { lng: number; lat: number }): boolean;
   updateVisible(value: boolean): void;
   updateOptions(key: string, value: any): void;
   destroy(): void;
@@ -253,14 +263,14 @@ export interface IBaseTileLayer {
   tileLayerService: ITileLayerService;
   getLayers(): ILayer[];
   getTiles(): ITile[];
-  pickRender(target: IInteractionTarget):void;
-  selectFeature(pickedColors: Uint8Array | undefined):void;
-  highlightPickedFeature(pickedColors: Uint8Array | undefined):void;
+  pickRender(target: IInteractionTarget): void;
+  selectFeature(pickedColors: Uint8Array | undefined): void;
+  highlightPickedFeature(pickedColors: Uint8Array | undefined): void;
   render(isPicking?: boolean): void;
   destroy(): void;
 }
-export interface ITileLayer extends IBaseTileLayer{
-  pickRender(target: IInteractionTarget):void;
+export interface ITileLayer extends IBaseTileLayer {
+  pickRender(target: IInteractionTarget): void;
   pickLayers(target: IInteractionTarget): boolean;
   clearPick(type: string): void;
   clearPickState(): void;
@@ -303,8 +313,12 @@ export type LayerEventType =
   | 'hide'
   | any;
 
+export enum ILayerStage {
+  INIT = 'init',
+  UPDATE = 'update',
+}
 export interface ILayer {
-  styleAttributeService: IStyleAttributeService,
+  styleAttributeService: IStyleAttributeService;
   layerPickService: ILayerPickService;
   textureService: ITextureService;
   sourceLayer?: string;
@@ -314,7 +328,7 @@ export interface ILayer {
   coordCenter: number[];
   name: string; //
   inited: boolean; // 是否初始化完成
-  startInit: boolean // 是否开始初始化;
+  startInit: boolean; // 是否开始初始化;
   zIndex: number;
   clusterZoom: number;
   plugins: ILayerPlugin[];
@@ -327,15 +341,15 @@ export interface ILayer {
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   defaultSourceConfig: {
-    data: any[],
-    options: ISourceCFG | undefined,
-  },
+    data: any[];
+    options: ISourceCFG | undefined;
+  };
   encodeDataLength: number;
   pickedFeatureID: number | null;
   hooks: {
-    init:AsyncSeriesBailHook;
+    init: AsyncSeriesBailHook;
     afterInit: SyncBailHook;
-    beforeRenderData: AsyncWaterfallHook ;
+    beforeRenderData: AsyncWaterfallHook;
     beforeRender: SyncBailHook;
     afterRender: SyncHook;
     beforePickingEncode: SyncHook;
@@ -367,9 +381,7 @@ export interface ILayer {
    */
 
   threeRenderService?: any;
-  postProcessingPassFactory: (
-    name: string,
-  ) => IPostProcessingPass<unknown>;
+  postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>;
   normalPassFactory: (name: string) => IPass<unknown>;
   getShaderPickStat: () => boolean;
   updateModelData(data: IAttributeAndElements): void;
@@ -379,7 +391,7 @@ export interface ILayer {
   needPick(type: string): boolean;
   getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
-  getLayerAttributeConfig():Partial<ILayerAttributesOption>
+  getLayerAttributeConfig(): Partial<ILayerAttributesOption>;
   getContainer(): Container;
   setContainer(container: Container, sceneContainer: Container): void;
   setCurrentPickId(id: number | null): void;
@@ -390,7 +402,7 @@ export interface ILayer {
   renderModels(isPicking?: boolean): void;
   buildModels(): void;
   rebuildModels(): void;
-  getModelType():string;
+  getModelType(): string;
   buildLayerModel(
     options: ILayerModelInitializationOptions &
       Partial<IModelInitializationOptions>,
@@ -407,7 +419,7 @@ export interface ILayer {
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ): boolean;
-  setLayerPickService(layerPickService:ILayerPickService):void;
+  setLayerPickService(layerPickService: ILayerPickService): void;
   init(): Promise<void>;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
   getScale(name: string): any;
@@ -434,8 +446,8 @@ export interface ILayer {
   style(options: unknown): ILayer;
   hide(): ILayer;
   show(): ILayer;
-  getLegendItems(name: string,index?: number): LegendItems;
-  getLegend(name: string):ILegend;
+  getLegendItems(name: string, index?: number): LegendItems;
+  getLegend(name: string): ILegend;
   setIndex(index: number): ILayer;
   isVisible(): boolean;
   setMaxZoom(min: number): ILayer;
@@ -443,6 +455,7 @@ export interface ILayer {
   getMinZoom(): number;
   getMaxZoom(): number;
   get(name: string): number;
+  log(type: string, step: string): void;
   setBlend(type: keyof typeof BlendType): ILayer;
   // animate(field: string, option: any): ILayer;
 
@@ -563,7 +576,7 @@ export interface ILayerConfig {
   maskfence: any;
   maskColor: string;
   maskOpacity: number;
-  sourceLayer:string;
+  sourceLayer: string;
 
   colors: string[];
   size: number;
@@ -635,7 +648,7 @@ export interface ILayerConfig {
   /**
    * 地球模式参数
    */
-   globalOptions: any;
+  globalOptions: any;
   /**
    * layer point text 是否是 iconfont 模式
    */
@@ -677,14 +690,14 @@ export interface ILayerService {
   getRenderList(): ILayer[];
   getLayer(id: string): ILayer | undefined;
   getLayerByName(name: string): ILayer | undefined;
-  remove(layer: ILayer, parentLayer?: ILayer):Promise<void>;
-  removeAllLayers():Promise<void>;
+  remove(layer: ILayer, parentLayer?: ILayer): Promise<void>;
+  removeAllLayers(): Promise<void>;
   updateLayerRenderList(): void;
   reRender(): void;
   beforeRenderData(layer: ILayer): Promise<void>;
-  renderMask(masks:ILayer[]): void;
-  renderLayer(layer: ILayer): Promise<void>
-  needPick(type:string):boolean;
+  renderMask(masks: ILayer[]): void;
+  renderLayer(layer: ILayer): Promise<void>;
+  needPick(type: string): boolean;
   throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;

@@ -83,7 +83,9 @@ export default class MarkerLayer extends EventEmitter {
 
   // 设置容器大小
   private setContainerSize() {
-    if (!this.mapsService) return;
+    if (!this.mapsService) {
+      return;
+    }
     const container = this.mapsService.getContainer();
     this.containerSize = {
       containerWidth: container?.scrollWidth || 0,
@@ -117,7 +119,6 @@ export default class MarkerLayer extends EventEmitter {
     // if(this.inited) {
     //   marker.addTo(this.scene);
     // }
-     
   }
 
   public removeMarker(marker: IMarker) {
@@ -274,9 +275,8 @@ export default class MarkerLayer extends EventEmitter {
   private clusterMarker(feature: any) {
     const clusterOption = this.markerLayerOption.clusterOption;
 
-    const {
-      element = this.generateElement.bind(this),
-    } = clusterOption as IMarkerStyleOption;
+    const { element = this.generateElement.bind(this) } =
+      clusterOption as IMarkerStyleOption;
     const marker = new Marker({
       element: element(feature),
     }).setLnglat({
@@ -292,9 +292,13 @@ export default class MarkerLayer extends EventEmitter {
   }
 
   private update() {
-    if (!this.mapsService) return;
+    if (!this.mapsService) {
+      return;
+    }
     // 当图层中无marker时，无需更新
-    if (this.markers.length === 0) return;
+    if (this.markers.length === 0) {
+      return;
+    }
 
     const zoom = this.mapsService.getZoom();
     const bbox = this.mapsService.getBounds();

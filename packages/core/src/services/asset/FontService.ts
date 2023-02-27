@@ -1,6 +1,6 @@
 import { $window, LRUCache } from '@antv/l7-utils';
-import { injectable } from 'inversify';
 import { EventEmitter } from 'eventemitter3';
+import { injectable } from 'inversify';
 import TinySDF from 'l7-tiny-sdf';
 import 'reflect-metadata';
 import { buildMapping } from '../../utils/font_util';
@@ -73,7 +73,7 @@ export default class FontService extends EventEmitter implements IFontService {
 
   public get mapping(): IFontMapping {
     const data = this.cache.get(this.key);
-    return data && data.mapping || {};
+    return (data && data.mapping) || {};
   }
   public fontAtlas: IFontAtlas;
 
@@ -162,7 +162,7 @@ export default class FontService extends EventEmitter implements IFontService {
    * @param fontFamily
    * @param fontPath
    */
-   public addFontFace(fontFamily: string, fontPath: string): void {
+  public addFontFace(fontFamily: string, fontPath: string): void {
     const style = document.createElement('style');
     style.type = 'text/css';
     style.innerText = `
@@ -172,28 +172,24 @@ export default class FontService extends EventEmitter implements IFontService {
             url('${fontPath}') format('woff'),
             url('${fontPath}') format('truetype');
         }`;
-        style.onload=()=>{
-          if ( document.fonts) {
-            try {
-              // @ts-ignore
-            document.fonts.load(`24px ${fontFamily}`, 'L7text');
-            document.fonts.ready.then(()=>{
-              this.emit('fontloaded',{
-                fontFamily
-              })
-            })
-          
-            } catch (e) {
-              console.warn('当前环境不支持 document.fonts !');
-              console.warn('当前环境不支持 iconfont !');
-              console.warn(e);
-            }
-          }
-    
+    style.onload = () => {
+      if (document.fonts) {
+        try {
+          // @ts-ignore
+          document.fonts.load(`24px ${fontFamily}`, 'L7text');
+          document.fonts.ready.then(() => {
+            this.emit('fontloaded', {
+              fontFamily,
+            });
+          });
+        } catch (e) {
+          console.warn('当前环境不支持 document.fonts !');
+          console.warn('当前环境不支持 iconfont !');
+          console.warn(e);
         }
+      }
+    };
     document.getElementsByTagName('head')[0].appendChild(style);
-
-    
   }
   public destroy(): void {
     this.cache.clear();
@@ -220,7 +216,9 @@ export default class FontService extends EventEmitter implements IFontService {
       canvas = $window.document.createElement('canvas');
       canvas.width = MAX_CANVAS_WIDTH;
     }
-    const ctx = canvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+    const ctx = canvas.getContext('2d', {
+      willReadFrequently: true,
+    }) as CanvasRenderingContext2D;
     setTextStyle(ctx, fontFamily, fontSize, fontWeight);
 
     // 1. build mapping

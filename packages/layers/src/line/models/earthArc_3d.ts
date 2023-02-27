@@ -127,7 +127,7 @@ export default class Arc3DModel extends BaseModel {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -137,10 +137,8 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public getShaders(): { frag: string; vert: string; type: string } {
-    const {
-      sourceColor,
-      targetColor,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { sourceColor, targetColor } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     if (sourceColor && targetColor) {
       // 分离 linear 功能
@@ -158,25 +156,24 @@ export default class Arc3DModel extends BaseModel {
     }
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     const {
       segmentNumber = 30,
       mask = false,
       maskInside = true,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'lineEarthArc3d' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: LineArcTriangulation,
-        depth: { enable: true },
-        blend: this.getBlend(),
-        segmentNumber,
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'lineEarthArc3d' + type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: LineArcTriangulation,
+      depth: { enable: true },
+      blend: this.getBlend(),
+      segmentNumber,
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
@@ -191,9 +188,7 @@ export default class Arc3DModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
@@ -232,9 +227,7 @@ export default class Arc3DModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;
           const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };

@@ -44,15 +44,12 @@ export default class PickingService implements IPickingService {
   private pickBufferScale: number = 1.0;
 
   public init(id: string) {
-    const {
-      createTexture2D,
-      createFramebuffer,
-      getContainer,
-    } = this.rendererService;
+    const { createTexture2D, createFramebuffer, getContainer } =
+      this.rendererService;
 
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
-    );      
+    );
     width *= DOM.DPR;
     height *= DOM.DPR;
     this.pickBufferScale =
@@ -134,7 +131,8 @@ export default class PickingService implements IPickingService {
       const color = pickedColors.slice(i * 4, i * 4 + 4);
       const pickedFeatureIdx = decodePickingColor(color);
       if (pickedFeatureIdx !== -1 && !featuresIdMap[pickedFeatureIdx]) {
-        const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
+        const rawFeature =
+          layer.layerPickService.getFeatureById(pickedFeatureIdx);
         features.push({
           // @ts-ignore
           ...rawFeature,
@@ -217,9 +215,10 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-  
+
       // 瓦片数据获取性能问题需要优化
-      const rawFeature = layer.layerPickService.getFeatureById(pickedFeatureIdx);
+      const rawFeature =
+        layer.layerPickService.getFeatureById(pickedFeatureIdx);
       if (
         pickedFeatureIdx !== layer.getCurrentPickId() &&
         type === 'mousemove'
@@ -276,7 +275,6 @@ export default class PickingService implements IPickingService {
       type === 'click' &&
       pickedColors?.toString() !== [0, 0, 0, 0].toString()
     ) {
-
       const selectedId = decodePickingColor(pickedColors);
       if (
         layer.getCurrentSelectedId() === null ||
@@ -305,7 +303,9 @@ export default class PickingService implements IPickingService {
   }
   private async pickingAllLayer(target: IInteractionTarget) {
     // 判断是否进行拾取操作
-    if (!this.layerService.needPick(target.type) ||!this.isPickingAllLayer()) return;
+    if (!this.layerService.needPick(target.type) || !this.isPickingAllLayer()) {
+      return;
+    }
     this.alreadyInPicking = true;
     await this.pickingLayers(target);
     this.layerService.renderLayers();
@@ -314,13 +314,21 @@ export default class PickingService implements IPickingService {
 
   private isPickingAllLayer() {
     // this.alreadyInPicking 避免多次重复拾取
-    if (this.alreadyInPicking) return false;
+    if (this.alreadyInPicking) {
+      return false;
+    }
     // this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
-    if (this.layerService.alreadyInRendering) return false;
+    if (this.layerService.alreadyInRendering) {
+      return false;
+    }
     // this.interactionService.dragging amap2 在点击操作的时候同时会触发 dragging 的情况（避免舍去）
-    if (this.interactionService.indragging) return false;
+    if (this.interactionService.indragging) {
+      return false;
+    }
     // 判断当前进行 shader pick 拾取判断
-    if (!this.layerService.getShaderPickStat()) return false;
+    if (!this.layerService.getShaderPickStat()) {
+      return false;
+    }
 
     // 进行拾取
     return true;
@@ -349,13 +357,13 @@ export default class PickingService implements IPickingService {
 
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getRenderList();
-      
+
       layers
         .filter((layer) => {
-          return layer.needPick(target.type)})
+          return layer.needPick(target.type);
+        })
         .reverse()
         .some((layer) => {
-        
           clear({
             framebuffer: this.pickingFBO,
             color: [0, 0, 0, 0],
@@ -389,5 +397,4 @@ export default class PickingService implements IPickingService {
       layer.emit(target.type, target);
     }
   }
-
 }

@@ -53,7 +53,6 @@ export default class FillModel extends BaseModel {
               width: 1,
               height: 1,
             });
-
     }
 
     return {
@@ -70,10 +69,10 @@ export default class FillModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-      return await this.buildModels();
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
     const {
       mask = false,
@@ -84,23 +83,22 @@ export default class FillModel extends BaseModel {
       ILayerConfig & IPolygonLayerStyleOptions
     >;
     this.layer.triangulation = triangulation;
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-        workerEnabled,
-        workerOptions: {
-          modelType: type,
-          enablePicking,
-        },
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+      workerEnabled,
+      workerOptions: {
+        modelType: type,
+        enablePicking,
+      },
+    });
+    return [model];
   }
 
   public clearModels() {

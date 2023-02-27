@@ -1,6 +1,6 @@
+import EventEmitter from 'eventemitter3';
 import { ISceneConfig } from '../config/IConfigService';
 import { ILayer } from '../layer/ILayerService';
-import EventEmitter from 'eventemitter3';
 
 export interface ISceneService extends EventEmitter {
   destroyed: boolean;
@@ -18,7 +18,7 @@ export interface ISceneService extends EventEmitter {
   render(): void;
   getSceneContainer(): HTMLDivElement;
   getMarkerContainer(): HTMLElement;
-  exportPng(type?: 'png' | 'jpg'):  Promise<string> ;
+  exportPng(type?: 'png' | 'jpg'): Promise<string>;
   addFontFace(fontname: string, fontpath: string): void;
   destroy(): void;
 }

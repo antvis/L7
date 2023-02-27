@@ -31,7 +31,7 @@ enum SelectControlConstant {
 }
 
 export default class SelectControl<
-  O extends ISelectControlOption = ISelectControlOption
+  O extends ISelectControlOption = ISelectControlOption,
 > extends PopperControl<O> {
   /**
    * 当前选中的值

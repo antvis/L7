@@ -13,6 +13,8 @@ import {
   ICameraService,
   ICoordinateSystemService,
   IDataState,
+  IDebugLog,
+  IDebugService,
   IEncodeFeature,
   IFontService,
   IGlobalConfigService,
@@ -26,6 +28,7 @@ import {
   ILayerPickService,
   ILayerPlugin,
   ILayerService,
+  ILayerStage,
   ILegend,
   ILegendClassificaItem,
   ILegendSegmentItem,
@@ -182,6 +185,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected layerService: ILayerService;
 
+  protected debugService: IDebugService;
+
   protected interactionService: IInteractionService;
 
   protected mapService: IMapService;
@@ -331,6 +336,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       TYPES.IRendererService,
     );
     this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
+    this.debugService = this.container.get<IDebugService>(TYPES.IDebugService);
     this.interactionService = this.container.get<IInteractionService>(
       TYPES.IInteractionService,
     );
@@ -414,9 +420,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     // 颜色纹理服务
     this.textureService = new TextureService(this);
-
+    this.log(IDebugLog.LayerInitStart);
     // 触发 init 生命周期插件
     await this.hooks.init.promise();
+    this.log(IDebugLog.LayerInitEnd);
     this.inited = true;
 
     // 触发初始化完成事件;
@@ -429,6 +436,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       type: 'add',
     });
     this.hooks.afterInit.call();
+  }
+
+  public log(logType: string, step: string = 'init') {
+    // @ts-ignore 瓦片、瓦片图层目前不参与日志
+    if (this.tileLayer || this.isTileLayer) {
+      return;
+    }
+    const key = `${this.id}.${step}.${logType}`;
+    const values: { [key: string]: any } = {
+      id: this.id,
+      type: this.type,
+    };
+    this.debugService?.log(key, values);
   }
 
   public updateModelData(data: IAttributeAndElements) {
@@ -613,9 +633,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public setData(data: any, options?: ISourceCFG) {
     if (this.inited) {
+      this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
       this.layerSource.setData(data, options);
+      this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     } else {
       this.on('inited', () => {
+        this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
         const currentSource = this.getSource();
         if (!currentSource) {
           // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
@@ -623,6 +646,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         } else {
           this.layerSource.setData(data, options);
         }
+        this.layerSource.once('update', () => {
+          this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
+        });
       });
     }
     return this;
@@ -1013,6 +1039,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.tileLayer?.destroy();
 
     this.models = [];
+    // 清除图层日志（如果有的话：非瓦片相关）
+    this.debugService?.removeLog(this.id);
 
     this.emit('remove', {
       target: this,

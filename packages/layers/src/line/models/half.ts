@@ -85,14 +85,14 @@ export default class LineModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
     this.dataTexture?.destroy();
   }
 
-  public async buildModels(): Promise<IModel[]>  {
+  public async buildModels(): Promise<IModel[]> {
     const {
       mask = false,
       maskInside = true,
@@ -101,17 +101,16 @@ export default class LineModel extends BaseModel {
     const { frag, vert } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'lineHalf',
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: LineTriangulation,
-        depth: { enable: depth },
-        blend: this.getBlend(),
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'lineHalf',
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: LineTriangulation,
+      depth: { enable: depth },
+      blend: this.getBlend(),
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   /**
@@ -165,9 +164,7 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 4,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const startPoint = (feature.coordinates[0] || [0, 0]) as number[];
           const endPoint = (feature.coordinates[3] || [0, 0]) as number[];
 
@@ -188,9 +185,7 @@ export default class LineModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
         },

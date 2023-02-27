@@ -31,8 +31,9 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class LineModel extends BaseModel {
+  private textureEventFlag: boolean = false;
   protected texture: ITexture2D = this.createTexture2D({
-    data: [0,0,0,0],
+    data: [0, 0, 0, 0],
     mag: gl.NEAREST,
     min: gl.NEAREST,
     premultiplyAlpha: false,
@@ -67,9 +68,8 @@ export default class LineModel extends BaseModel {
       dashArray.push(0, 0);
     }
 
-    if (this.rendererService.getDirty()) {
-      
-      this.texture && this.texture.bind();
+    if (this.rendererService.getDirty() && this.texture) {
+      this.texture.bind();
     }
 
     // 转化渐变色
@@ -92,7 +92,7 @@ export default class LineModel extends BaseModel {
       );
 
       this.rowCount = height; // 当前数据纹理有多少行
-   
+
       this.dataTexture =
         this.cellLength > 0 && data.length > 0
           ? this.createTexture2D({
@@ -123,7 +123,7 @@ export default class LineModel extends BaseModel {
       u_blur: blur,
 
       // 纹理支持参数
-       u_texture: this.texture, // 贴图
+      u_texture: this.texture, // 贴图
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
       u_icon_step: iconStep,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
@@ -160,10 +160,15 @@ export default class LineModel extends BaseModel {
     };
   }
 
-  public async initModels():Promise<IModel[]>{
+  public async initModels(): Promise<IModel[]> {
     // this.updateTexture();
     // this.iconService.on('imageUpdate', this.updateTexture);
-    return await this.buildModels();
+    if (!this.textureEventFlag) {
+      this.textureEventFlag = true;
+      this.updateTexture();
+      this.iconService.on('imageUpdate', this.updateTexture);
+    }
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -206,11 +211,8 @@ export default class LineModel extends BaseModel {
    * @returns
    */
   public getShaders(): { frag: string; vert: string; type: string } {
-    const {
-      sourceColor,
-      targetColor,
-      lineType,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { sourceColor, targetColor, lineType } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     if (lineType === 'dash') {
       return {
@@ -374,7 +376,6 @@ export default class LineModel extends BaseModel {
   }
 
   private updateTexture = () => {
-
     const { createTexture2D } = this.rendererService;
     if (this.texture) {
       this.texture.update({

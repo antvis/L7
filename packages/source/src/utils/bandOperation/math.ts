@@ -1,5 +1,6 @@
 import { IRasterData } from '../../interface';
 
+// tslint:disable-next-line: jsdoc-format
 /** 数学运算 根据计算表达式进行数学运算
  * * * Math operators:
  * `['*', value1, value2]`

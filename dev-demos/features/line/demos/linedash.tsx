@@ -1,5 +1,5 @@
 // @ts-ignore
-import { LineLayer, Scene } from '@antv/l7';
+import { LineLayer, PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { GaodeMapV1 } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -14,6 +14,7 @@ export default () => {
         style:'light'
         // style: 'amap://styles/wine',
       }),
+      debug: true,
     });
 
     scene.on('loaded', () => {
@@ -34,14 +35,65 @@ export default () => {
             });
           scene.addLayer(layer);
 
+          const point = new PointLayer({})
+          .source([{ lng: 116.2, lat: 40 }], {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            }
+          })
+          .size(10)
+          .shape('circle')
+          .color('#5CCEA1');
+          scene.addLayer(point);
+
+          const debugService = scene.getDebugService();
+         
+          layerAllLoad([layer, point], () => {
+            // console.log('debugService id type', debugService.getLog())
+            // console.log('debugService id type', debugService.getLog(layer.id))
+            // console.log('debugService id type', debugService.getLog('map'))
+            console.log('debugService id type', debugService.getLog([layer.id, point.id]))
+            // console.log('debugService id type', debugService.getLog([layer.id]))
+          })
+         
+          function layerAllLoad(layers: any[], callback: () => void) {
+            let count = 0;
+            layers.forEach(l => {
+              l.on('inited', () => {
+                console.log('***');
+                
+                count++;
+                if(count === layers.length) {
+                  setTimeout(() => {
+                    callback();
+                  }, 100)
+                  // callback();
+                }
+              })
+            })
+          }
           // setTimeout(()=>{
-          //   console.log('setdata')
-          //   layer.setData({
-          //     type: 'featureCollection',
-          //     features:[],
+          //   console.log('lostContext test')
+          //   scene.on('webglcontextlost', () => {
+          //     console.log('webglcontextlost');
           //   })
-       
+          //   // scene.lostContext();
           // },3000)
+
+          // setTimeout(()=>{
+          // },3000)
+        //   debugService.renderDebug(true);
+
+        //     debugService.on('renderEnd', (renderInfo) => {
+        //       console.log('renderEnd', renderInfo);
+        //     })
+
+
+        //     setTimeout(() => {
+        //       debugService.renderDebug(false);
+        //     }, 200)
         });
     });
   }, []);

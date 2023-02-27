@@ -11,18 +11,15 @@ export interface IColorHalftonePassConfig {
 }
 
 @injectable()
-export default class ColorHalftonePass extends BasePostProcessingPass<
-  IColorHalftonePassConfig
-> {
+export default class ColorHalftonePass extends BasePostProcessingPass<IColorHalftonePassConfig> {
   protected setupShaders() {
     this.shaderModuleService.registerModule('colorhalftone-pass', {
       vs: quad,
       fs: colorHalftone,
     });
 
-    const { vs, fs, uniforms } = this.shaderModuleService.getModule(
-      'colorhalftone-pass',
-    );
+    const { vs, fs, uniforms } =
+      this.shaderModuleService.getModule('colorhalftone-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {

@@ -10,9 +10,7 @@ export interface IHexagonalPixelatePassConfig {
 }
 
 @injectable()
-export default class HexagonalPixelatePass extends BasePostProcessingPass<
-  IHexagonalPixelatePassConfig
-> {
+export default class HexagonalPixelatePass extends BasePostProcessingPass<IHexagonalPixelatePassConfig> {
   protected setupShaders() {
     this.shaderModuleService.registerModule('hexagonalpixelate-pass', {
       vs: quad,

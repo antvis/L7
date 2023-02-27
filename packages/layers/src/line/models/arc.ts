@@ -133,7 +133,7 @@ export default class ArcModel extends BaseModel {
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
-      return await this.buildModels();
+    return this.buildModels();
   }
 
   public clearModels() {
@@ -143,11 +143,8 @@ export default class ArcModel extends BaseModel {
   }
 
   public getShaders(): { frag: string; vert: string; type: string } {
-    const {
-      sourceColor,
-      targetColor,
-      lineType,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { sourceColor, targetColor, lineType } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (lineType === 'dash') {
       return {
         frag: arc_dash_frag,
@@ -172,7 +169,7 @@ export default class ArcModel extends BaseModel {
     }
   }
 
- public async buildModels():Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
     const {
       segmentNumber = 30,
       mask = false,
@@ -180,18 +177,17 @@ export default class ArcModel extends BaseModel {
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     //
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'lineArc2d' + type,
-        vertexShader: vert,
-        fragmentShader: frag,
-        triangulation: LineArcTriangulation,
-        depth: { enable: false },
-        blend: this.getBlend(),
-        segmentNumber,
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'lineArc2d' + type,
+      vertexShader: vert,
+      fragmentShader: frag,
+      triangulation: LineArcTriangulation,
+      depth: { enable: false },
+      blend: this.getBlend(),
+      segmentNumber,
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
   protected registerBuiltinAttributes() {
@@ -207,9 +203,7 @@ export default class ArcModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },
@@ -249,9 +243,7 @@ export default class ArcModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;
           const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };

@@ -6,6 +6,7 @@ import {
   ICameraOptions,
   IControl,
   IControlService,
+  IDebugService,
   IFontService,
   IIconFontGlyph,
   IIconService,
@@ -52,11 +53,13 @@ import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
  *
  */
 class Scene
-  implements IPostProcessingPassPluggable, IMapController, ILayerManager {
+  implements IPostProcessingPassPluggable, IMapController, ILayerManager
+{
   private sceneService: ISceneService;
   private mapService: IMapService<unknown>;
   private controlService: IControlService;
   private layerService: ILayerService;
+  private debugService: IDebugService;
   private iconService: IIconService;
   private markerService: IMarkerService;
   private popupService: IPopupService;
@@ -90,6 +93,8 @@ class Scene
       TYPES.IControlService,
     );
     this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
+    this.debugService = sceneContainer.get<IDebugService>(TYPES.IDebugService);
+    this.debugService.setEnable(config.debug);
 
     this.markerService = sceneContainer.get<IMarkerService>(
       TYPES.IMarkerService,
@@ -99,7 +104,7 @@ class Scene
     );
     this.popupService = sceneContainer.get<IPopupService>(TYPES.IPopupService);
     this.boxSelect = new BoxSelect(this, {});
-    setMiniScene(config?.isMini|| false);
+    setMiniScene(config?.isMini || false);
 
     if (isMini) {
       this.sceneService.initMiniScene(config);
@@ -147,12 +152,21 @@ class Scene
   public getMapService(): IMapService<unknown> {
     return this.mapService;
   }
-  public async exportPng(type?: 'png' | 'jpg'): Promise<string> {
-    return await this.sceneService.exportPng(type);
+
+  /**
+   * 对外暴露 debugService
+   * @returns
+   */
+  public getDebugService(): IDebugService {
+    return this.debugService;
   }
 
-  public async exportMap(type?: 'png' | 'jpg'): Promise<string>  {
-    return  await this.sceneService.exportPng(type);
+  public async exportPng(type?: 'png' | 'jpg'): Promise<string> {
+    return this.sceneService.exportPng(type);
+  }
+
+  public async exportMap(type?: 'png' | 'jpg'): Promise<string> {
+    return this.sceneService.exportPng(type);
   }
 
   public registerRenderService(render: any) {
@@ -187,7 +201,7 @@ class Scene
       layer.on('inited', () => {
         const maskInstance = this.initMask(layer);
         this.addMask(maskInstance as ILayer, layer.id);
-      })
+      });
     }
   }
 
@@ -197,13 +211,12 @@ class Scene
       maskfence,
       maskColor = '#000',
       maskOpacity = 0,
-    }  = layer.getLayerConfig();
-    if(!mask || !maskfence) return undefined;
+    } = layer.getLayerConfig();
+    if (!mask || !maskfence) {
+      return undefined;
+    }
 
-    const maskInstance = new MaskLayer()
-    .source(maskfence)
-    .shape('fill')
-    .style({
+    const maskInstance = new MaskLayer().source(maskfence).shape('fill').style({
       color: maskColor,
       opacity: maskOpacity,
     });
@@ -211,7 +224,9 @@ class Scene
   }
 
   public addMask(mask: ILayer, layerId: string) {
-    if(!mask) return;
+    if (!mask) {
+      return;
+    }
     const parent = this.getLayer(layerId);
     if (parent) {
       const layerContainer = createLayerContainer(this.container);
@@ -240,10 +255,10 @@ class Scene
   }
 
   public async removeLayer(layer: ILayer, parentLayer?: ILayer): Promise<void> {
-   await this.layerService.remove(layer, parentLayer);
+    await this.layerService.remove(layer, parentLayer);
   }
 
-  public async  removeAllLayer(): Promise<void> {
+  public async removeAllLayer(): Promise<void> {
     await this.layerService.removeAllLayers();
   }
 

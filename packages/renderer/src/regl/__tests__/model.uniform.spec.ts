@@ -1,9 +1,9 @@
+import { createContext } from '@antv/l7-test-utils';
 import regl from 'l7regl';
 import 'reflect-metadata';
 import ReglFramebuffer from '../ReglFramebuffer';
 import ReglModel from '../ReglModel';
 import ReglTexture2D from '../ReglTexture2D';
-import { createContext } from '@antv/l7-test-utils';
 
 describe('uniforms in ReglModel', () => {
   let gl;

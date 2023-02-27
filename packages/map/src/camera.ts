@@ -8,7 +8,6 @@ import Point, { PointLike } from './geo/point';
 import Transform from './geo/transform';
 import { Event } from './handler/events/event';
 import { IMapOptions } from './interface';
-type CallBack = (_: number) => void;
 import {
   clamp,
   ease as defaultEasing,
@@ -18,6 +17,7 @@ import {
   prefersReducedMotion,
   wrap,
 } from './util';
+type CallBack = (_: number) => void;
 
 export interface ICameraOptions {
   center?: LngLatLike;
@@ -863,10 +863,7 @@ export default class Camera extends EventEmitter {
     );
 
     const center = tr.unproject(
-      p0world
-        .add(p1world)
-        .div(2)
-        .sub(offsetAtFinalZoom),
+      p0world.add(p1world).div(2).sub(offsetAtFinalZoom),
     );
 
     return {

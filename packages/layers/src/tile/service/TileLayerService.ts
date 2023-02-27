@@ -1,11 +1,17 @@
-import { ILayer, ILayerService, ILngLat, IRendererService, ITile } from '@antv/l7-core';
+import {
+  ILayer,
+  ILayerService,
+  ILngLat,
+  IRendererService,
+  ITile,
+} from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import 'reflect-metadata';
 
-interface TileLayerServiceOptions {
+interface ITileLayerServiceOptions {
   rendererService: IRendererService;
-  layerService: ILayerService
-  parent:ILayer;
+  layerService: ILayerService;
+  parent: ILayer;
 }
 export class TileLayerService {
   /**
@@ -16,42 +22,47 @@ export class TileLayerService {
   private layerService: ILayerService;
   private parent: ILayer;
 
-
-  private _tiles: ITile[] = [];
-  constructor({ rendererService,layerService, parent }: TileLayerServiceOptions) {
+  private layerTiles: ITile[] = [];
+  constructor({
+    rendererService,
+    layerService,
+    parent,
+  }: ITileLayerServiceOptions) {
     this.rendererService = rendererService;
-    this.layerService =layerService;
+    this.layerService = layerService;
     this.parent = parent;
   }
   get tiles(): ITile[] {
-    return this._tiles;
+    return this.layerTiles;
   }
 
-  hasTile(tileKey: string): boolean {
-    return this._tiles.some((tile) => tile.key === tileKey);
+  public hasTile(tileKey: string): boolean {
+    return this.layerTiles.some((tile) => tile.key === tileKey);
   }
 
-  addTile(tile: ITile) {
-    this._tiles.push(tile);
+  public addTile(tile: ITile) {
+    this.layerTiles.push(tile);
   }
 
-  getTile(tileKey: string): ITile | undefined {
-    return this._tiles.find((tile) => tile.key === tileKey);
+  public getTile(tileKey: string): ITile | undefined {
+    return this.layerTiles.find((tile) => tile.key === tileKey);
   }
-  
-  getVisibleTileBylngLat(lngLat: ILngLat): ITile | undefined {
+
+  public getVisibleTileBylngLat(lngLat: ILngLat): ITile | undefined {
     // 加载完成 & 可见 & 鼠标选中
-    return this._tiles.find(
+    return this.layerTiles.find(
       (tile) => tile.isLoaded && tile.visible && tile.lnglatInBounds(lngLat),
     );
   }
 
-  removeTile(tileKey: string) {
-    const index = this._tiles.findIndex((tile) => tile.key === tileKey);
-    const tile = this._tiles.splice(index, 1);
-    tile[0] && tile[0].destroy();
+  public removeTile(tileKey: string) {
+    const index = this.layerTiles.findIndex((t) => t.key === tileKey);
+    const tile = this.layerTiles.splice(index, 1);
+    if (tile[0]) {
+      tile[0].destroy();
+    }
   }
-  updateTileVisible(sourceTile: SourceTile) {
+  public updateTileVisible(sourceTile: SourceTile) {
     const tile = this.getTile(sourceTile.key);
     // if(sourceTile.isVisible) {
     //   // 不可见 => 可见 兄弟节点加载完成
@@ -61,7 +72,7 @@ export class TileLayerService {
     //   } else {
     //     tile?.updateVisible(true);
     //   }
-        
+
     // } else {
     //    // 可见 => 不可见 兄弟节点加载完成
     //    if(sourceTile.parent) {
@@ -71,62 +82,62 @@ export class TileLayerService {
     //     tile?.updateVisible(false);
     //   }
     // }
- 
-    tile?.updateVisible(sourceTile.isVisible);
 
+    tile?.updateVisible(sourceTile.isVisible);
   }
   public isParentLoaded(sourceTile: SourceTile): boolean {
     const parentTile = sourceTile.parent;
-    if(!parentTile) {
-      return true
+    if (!parentTile) {
+      return true;
     }
-    const tile = this.getTile(parentTile?.key)
-    if(tile?.isLoaded) { // 递归父级
-      return true
+    const tile = this.getTile(parentTile?.key);
+    if (tile?.isLoaded) {
+      // 递归父级
+      return true;
     }
- 
-    return false
 
+    return false;
   }
 
-  public isChildrenLoaded(sourceTile: SourceTile):boolean {
+  public isChildrenLoaded(sourceTile: SourceTile): boolean {
     const childrenTile = sourceTile?.children;
-    if(childrenTile.length === 0) {
-      return true
+    if (childrenTile.length === 0) {
+      return true;
     }
-   return childrenTile.some((tile:SourceTile)=>{
-      const tileLayer = this.getTile(tile?.key)
-      return tileLayer?.isLoaded === false
-    })
+    return childrenTile.some((tile: SourceTile) => {
+      const tileLayer = this.getTile(tile?.key);
+      return tileLayer?.isLoaded === false;
+    });
   }
-  async render() {
+  public async render() {
     const layers = this.getRenderLayers();
-    layers.map(async layer => {
+    layers.map(async (layer) => {
       await this.layerService.renderLayer(layer);
-    })    
+    });
   }
 
-  getRenderLayers() {
-    const tileList = this._tiles.filter((t)=>t.visible && t.isLoaded);
+  public getRenderLayers() {
+    const tileList = this.layerTiles.filter(
+      (t: ITile) => t.visible && t.isLoaded,
+    );
     const layers: ILayer[] = [];
-    tileList.map(tile => layers.push(...tile.getLayers()))
+    tileList.map((tile: ITile) => layers.push(...tile.getLayers()));
     return layers;
   }
 
-  getLayers(){
-    const tileList = this._tiles.filter((t)=>t.isLoaded);
+  public getLayers() {
+    const tileList = this.layerTiles.filter((t: ITile) => t.isLoaded);
     const layers: ILayer[] = [];
-    tileList.map(tile => layers.push(...tile.getLayers()))
+    tileList.map((tile) => layers.push(...tile.getLayers()));
     return layers;
   }
 
-  getTiles() {
-    return this._tiles;
+  public getTiles() {
+    return this.layerTiles;
   }
 
-
-  destroy() {
-    this._tiles.forEach((t) => t.destroy());
+  public destroy() {
+    this.layerTiles.forEach((t: ITile) => t.destroy());
     this.tileResource.clear();
   }
 }

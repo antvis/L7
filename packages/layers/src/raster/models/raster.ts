@@ -5,7 +5,7 @@ import {
   IModel,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask,getDefaultDomain } from '@antv/l7-utils';
+import { getDefaultDomain, getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -23,8 +23,11 @@ export default class RasterModel extends BaseModel {
       domain,
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-     const newdomain = domain ||getDefaultDomain(rampColors)
-    this.colorTexture =  this.layer.textureService.getColorTexture(rampColors,newdomain);
+    const newdomain = domain || getDefaultDomain(rampColors);
+    this.colorTexture = this.layer.textureService.getColorTexture(
+      rampColors,
+      newdomain,
+    );
     return {
       u_opacity: opacity || 1,
       u_texture: this.texture,
@@ -37,35 +40,33 @@ export default class RasterModel extends BaseModel {
   }
 
   private async getRasterData(parserDataItem: any) {
-    if(Array.isArray(parserDataItem.data)) {
+    if (Array.isArray(parserDataItem.data)) {
       // 直接传入波段数据
       return {
         data: parserDataItem.data,
         width: parserDataItem.width,
         height: parserDataItem.height,
-      }
+      };
     } else {
       // 多波段形式、需要进行处理
       const { rasterData, width, height } = await parserDataItem.data;
       return {
         data: Array.from(rasterData),
         width,
-        height
-      }
+        height,
+      };
     }
   }
 
   public async initModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
+    const { mask = false, maskInside = true } =
+      this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
 
-    const {data, width, height} = await this.getRasterData(parserDataItem);
-    
+    const { data, width, height } = await this.getRasterData(parserDataItem);
+
     this.texture = createTexture2D({
       data,
       width,
@@ -74,22 +75,21 @@ export default class RasterModel extends BaseModel {
       type: gl.FLOAT,
       // aniso: 4,
     });
-  
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'rasterImageData',
-        vertexShader: rasterVert,
-        fragmentShader: rasterFrag,
-        triangulation: RasterImageTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
-        stencil: getMask(mask, maskInside),
-      })
-     return [model]
+
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'rasterImageData',
+      vertexShader: rasterVert,
+      fragmentShader: rasterFrag,
+      triangulation: RasterImageTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      stencil: getMask(mask, maskInside),
+    });
+    return [model];
   }
 
- public async buildModels():Promise<IModel[]> {
-    return await this.initModels();
+  public async buildModels(): Promise<IModel[]> {
+    return this.initModels();
   }
 
   public clearModels(): void {
@@ -121,5 +121,4 @@ export default class RasterModel extends BaseModel {
       },
     });
   }
-  
 }

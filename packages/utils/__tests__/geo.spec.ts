@@ -1,11 +1,4 @@
-import {
-  aProjectFlat,
-  boundsContains,
-  IBounds,
-  lngLatToMeters,
-  padBounds,
-  project,
-} from '../src/geo';
+import { boundsContains, IBounds, padBounds } from '../src/geo';
 
 describe('geo', () => {
   it('padBounds', () => {

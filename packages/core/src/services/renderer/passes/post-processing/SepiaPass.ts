@@ -9,9 +9,7 @@ export interface ISepiaPassConfig {
 }
 
 @injectable()
-export default class SepiaPass extends BasePostProcessingPass<
-  ISepiaPassConfig
-> {
+export default class SepiaPass extends BasePostProcessingPass<ISepiaPassConfig> {
   public setupShaders() {
     this.shaderModuleService.registerModule('sepia-pass', {
       vs: quad,

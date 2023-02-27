@@ -7,7 +7,8 @@ export interface IPickingService {
   init(id: string): void;
   pickFromPickingFBO(layer: ILayer, target: IInteractionTarget): boolean;
   pickBox(layer: ILayer, box: [number, number, number, number]): any[];
-  triggerHoverOnLayer(layer: ILayer,
+  triggerHoverOnLayer(
+    layer: ILayer,
     target: {
       x: number;
       y: number;
@@ -15,7 +16,8 @@ export interface IPickingService {
       lngLat: ILngLat;
       feature?: unknown;
       featureId?: number | null;
-    }): void;
+    },
+  ): void;
 
   boxPickLayer(
     layer: ILayer,
@@ -26,7 +28,11 @@ export interface IPickingService {
 }
 
 export interface ILayerPickService {
-  pickRasterLayer(layer: ILayer, target: IInteractionTarget, parent?: ILayer): boolean;
+  pickRasterLayer(
+    layer: ILayer,
+    target: IInteractionTarget,
+    parent?: ILayer,
+  ): boolean;
   pick(layer: ILayer, target: IInteractionTarget): boolean;
   /**
    * 绘制拾取图层
@@ -35,21 +41,19 @@ export interface ILayerPickService {
   pickRender(target: IInteractionTarget): void;
   /**
    * 为图层设置选中对象
-   * @param pickedColors 
+   * @param pickedColors
    */
-  selectFeature(pickedColors: Uint8Array | undefined):void
+  selectFeature(pickedColors: Uint8Array | undefined): void;
   /**
    * 为图层设置active对象
-   * @param pickedColors 
+   * @param pickedColors
    */
 
-  highlightPickedFeature(pickedColors: Uint8Array | undefined):void
-  
+  highlightPickedFeature(pickedColors: Uint8Array | undefined): void;
+
   /**
    * 获取选中的要素
    * @param id q
    */
-  getFeatureById(id: number, lngLat?: ILngLat):any
-
-
+  getFeatureById(id: number, lngLat?: ILngLat): any;
 }

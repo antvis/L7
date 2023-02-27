@@ -113,19 +113,18 @@ export default class WindModel extends BaseModel {
       this.layerService.reRender();
     });
 
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'wind',
-        vertexShader: WindVert,
-        fragmentShader: WindFrag,
-        triangulation: RasterImageTriangulation,
-        primitive: gl.TRIANGLES,
-        depth: { enable: false },
-        stencil: getMask(mask, maskInside),
-        blend: this.getBlend(),
-      })
-      this.colorModel = model;
-      return [model];
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'wind',
+      vertexShader: WindVert,
+      fragmentShader: WindFrag,
+      triangulation: RasterImageTriangulation,
+      primitive: gl.TRIANGLES,
+      depth: { enable: false },
+      stencil: getMask(mask, maskInside),
+      blend: this.getBlend(),
+    });
+    this.colorModel = model;
+    return [model];
   }
 
   public getWindSize() {
@@ -143,8 +142,8 @@ export default class WindModel extends BaseModel {
     return { imageWidth, imageHeight };
   }
 
- public async buildModels():Promise<IModel[]> {
-    return await this.initModels();
+  public async buildModels(): Promise<IModel[]> {
+    return this.initModels();
   }
 
   public clearModels(): void {
@@ -238,7 +237,7 @@ export default class WindModel extends BaseModel {
     this.layerService.beforeRenderData(this.layer);
     this.layer.hooks.beforeRender.call();
 
-    this.layerService.renderMask(this.layer.masks)
+    this.layerService.renderMask(this.layer.masks);
 
     this.colorModel?.draw({
       uniforms: {

@@ -1,4 +1,4 @@
-import { PointLayer, Scale, Scene, Layers, Zoom } from '@antv/l7';
+import { PointLayer, Scale, Scene, LayerSwitch, Zoom } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 const scene = new Scene({
   id: 'map',
@@ -31,24 +31,20 @@ scene.on('loaded', () => {
         });
 
       scene.addLayer(pointLayer);
-      const overlayers = {
-        气泡图: pointLayer
-      };
-      const layersControl = new Layers({
-        overlayers,
-        position: 'rightcenter'
-      });
-
-      scene.addControl(layersControl);
     });
 
-  const zoomControl = new Zoom({
-    position: 'rightcenter'
-  });
+    const layerSwitch = new LayerSwitch({
+      position: 'rightcenter'
+    })
+    scene.addControl(layerSwitch);
 
-  const scaleControl = new Scale({
-    position: 'bottomright'
-  });
-  scene.addControl(zoomControl);
-  scene.addControl(scaleControl);
+    const zoomControl = new Zoom({
+      position: 'rightcenter'
+    });
+
+    const scaleControl = new Scale({
+      position: 'bottomright'
+    });
+    scene.addControl(zoomControl);
+    scene.addControl(scaleControl);
 });

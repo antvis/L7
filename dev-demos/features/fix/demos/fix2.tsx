@@ -1,4 +1,4 @@
-import { Scene, PointLayer, LineLayer, Source } from "@antv/l7";
+import { Scene, PointLayer, Marker, LineLayer, Source } from "@antv/l7";
 // import { DrawEvent, DrawLine } from "@antv/l7-draw";
 import { GaodeMap, Map, Mapbox } from "@antv/l7-maps";
 import { coordAll, Feature, featureCollection, LineString, point } from "@turf/turf";
@@ -118,9 +118,16 @@ export default () => {
         .source(source)
         .size(4)
         .color("#f00");
-    
-        
       scene.addLayer(lineLayer);
+
+      const marker = new Marker()
+      marker.setLnglat([
+        120.1047383116185, 30.261127905299425,
+      ]);
+      marker.on('click', (e) => {
+        console.log( 'click')
+      })
+      scene.addMarker(marker);
     });
   }, []);
   return (

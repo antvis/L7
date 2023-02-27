@@ -1,4 +1,11 @@
-import { ILayer, ILayerPlugin, IMapService, TYPES } from '@antv/l7-core';
+import {
+  IDebugLog,
+  ILayer,
+  ILayerPlugin,
+  ILayerStage,
+  IMapService,
+  TYPES,
+} from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
@@ -9,6 +16,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
     layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
+      layer.log(IDebugLog.SourceInitStart, ILayerStage.INIT);
       let source = layer.getSource();
       if (!source) {
         // Tip: 用户没有传入 source 的时候使用图层的默认数据
@@ -19,11 +27,13 @@ export default class DataSourcePlugin implements ILayerPlugin {
       }
       if (source.inited) {
         this.updateClusterData(layer);
+        layer.log(IDebugLog.SourceInitEnd, ILayerStage.INIT);
       } else {
         await new Promise((resolve) => {
           source.on('update', (e) => {
             if (e.type === 'inited') {
               this.updateClusterData(layer);
+              layer.log(IDebugLog.SourceInitEnd, ILayerStage.INIT);
             }
             resolve(null);
           });
@@ -37,7 +47,9 @@ export default class DataSourcePlugin implements ILayerPlugin {
 
       const dataSourceNeedUpdate = layer.dataState.dataSourceNeedUpdate;
       layer.dataState.dataSourceNeedUpdate = false;
-      return neeUpdateCluster || dataSourceNeedUpdate;
+
+      const needScale = neeUpdateCluster || dataSourceNeedUpdate;
+      return needScale;
     });
   }
 

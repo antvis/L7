@@ -1,9 +1,9 @@
-import { ILayer, createLayerContainer, ILngLat, ITile } from '@antv/l7-core';
+import { createLayerContainer, ILayer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import { isNeedMask } from './util';
 
-export default abstract class Tile implements ITile{
+export default abstract class Tile implements ITile {
   public x: number;
   public y: number;
   public z: number;
@@ -26,7 +26,9 @@ export default abstract class Tile implements ITile{
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public styleUpdate(...arg: any) {}
+  public styleUpdate(...arg: any) {
+    return;
+  }
 
   public abstract initTileLayer(): Promise<void>;
 
@@ -40,11 +42,10 @@ export default abstract class Tile implements ITile{
     const options = this.parent.getLayerConfig();
     return {
       ...options,
-      autoFit:false,
-      mask:isNeedMask(this.parent.type) || options.mask
-    }
+      autoFit: false,
+      mask: isNeedMask(this.parent.type) || options.mask,
+    };
   }
-
 
   protected async addMask(layer: ILayer, mask: ILayer) {
     const container = createLayerContainer(
@@ -86,17 +87,17 @@ export default abstract class Tile implements ITile{
     return this.layers[0];
   }
 
-  public  getFeatures(sourceLayer: string | undefined):any[] {
-    return []
+  public getFeatures(sourceLayer: string | undefined): any[] {
+    return [];
   }
-    
+
   /**
    * 在一个 Tile 中可能存在一个相同 ID 的 feature
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
-  public  getFeatureById(id: number):any[] {
-    return []
+  public getFeatureById(id: number): any[] {
+    return [];
   }
 
   public destroy() {

@@ -199,10 +199,8 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
   }
 
   protected onSourceUpdate(layer: ILayer) {
-    if (this.displayFeatureInfo?.layer === layer) {
-      this.hide();
-      this.displayFeatureInfo = undefined;
-    }
+    this.hide();
+    this.displayFeatureInfo = undefined;
   }
 
   /**

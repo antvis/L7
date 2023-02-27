@@ -1,5 +1,5 @@
 import { ILayerAttributesOption } from '@antv/l7-core';
-import RasterLayer from '../../raster'
+import RasterLayer from '../../raster';
 import Tile from './Tile';
 export default class RasterTerrainRGBTile extends Tile {
   public async initTileLayer(): Promise<void> {
@@ -7,17 +7,19 @@ export default class RasterTerrainRGBTile extends Tile {
     const layerOptions = this.getLayerOptions();
 
     const sourceOptions = this.getSourceOption();
-    const layer = new RasterLayer({...layerOptions}).source(
+    const layer = new RasterLayer({ ...layerOptions }).source(
       sourceOptions.data,
       sourceOptions.options,
     );
 
     // 初始化数据映射
-    attributes && Object.keys(attributes).forEach((type) => {
-      const attr = type as keyof ILayerAttributesOption;
-      // @ts-ignore
-      layer[attr](attributes[attr]?.field, attributes[attr]?.values);
-    });
+    // tslint:disable-next-line: no-unused-expression
+    attributes &&
+      Object.keys(attributes).forEach((type) => {
+        const attr = type as keyof ILayerAttributesOption;
+        // @ts-ignore
+        layer[attr](attributes[attr]?.field, attributes[attr]?.values);
+      });
 
     await this.addLayer(layer);
     this.isLoaded = true;

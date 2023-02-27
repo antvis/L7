@@ -1,10 +1,10 @@
 import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ICityBuildLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import buildFrag from '../shaders/build_frag.glsl';
 import buildVert from '../shaders/build_vert.glsl';
-import { ICityBuildLayerStyleOptions } from '../../core/interface';
 export default class CityBuildModel extends BaseModel {
   private cityCenter: [number, number];
   private cityMinSize: number;
@@ -67,23 +67,22 @@ export default class CityBuildModel extends BaseModel {
 
     this.startModelAnimate();
 
-      return await this.buildModels();
+    return this.buildModels();
   }
 
- public async buildModels():Promise<IModel[]> {
-   const model = await this.layer
-      .buildLayerModel({
-        moduleName: 'cityBuilding',
-        vertexShader: buildVert,
-        fragmentShader: buildFrag,
-        triangulation: PolygonExtrudeTriangulation,
-        depth: { enable: true },
-        cull: {
-          enable: true,
-          face: gl.BACK,
-        },
-      })
-     return [model]
+  public async buildModels(): Promise<IModel[]> {
+    const model = await this.layer.buildLayerModel({
+      moduleName: 'cityBuilding',
+      vertexShader: buildVert,
+      fragmentShader: buildFrag,
+      triangulation: PolygonExtrudeTriangulation,
+      depth: { enable: true },
+      cull: {
+        enable: true,
+        face: gl.BACK,
+      },
+    });
+    return [model];
   }
 
   protected registerBuiltinAttributes() {
@@ -124,9 +123,7 @@ export default class CityBuildModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-        ) => {
+        update: (feature: IEncodeFeature) => {
           const { size = 10 } = feature;
           return Array.isArray(size) ? [size[0]] : [size as number];
         },

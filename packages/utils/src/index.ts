@@ -7,7 +7,7 @@ export * as DOM from './dom';
 export * from './env';
 export * from './event';
 export * from './geo';
-export { BKDRHash, djb2hash } from './hash';
+export { BKDRHash, djb2hash, guid } from './hash';
 export * from './lineAtOffset';
 export * from './lru_cache';
 export * from './mini-adapter/index';
@@ -16,4 +16,3 @@ export * from './stencli';
 export * from './tileset-manager';
 export * from './worker-helper';
 export * from './workers/triangulation';
-

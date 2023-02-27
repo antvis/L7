@@ -194,7 +194,7 @@ export interface IStyleAttributeService {
   registerStyleAttribute(
     options: Partial<IStyleAttributeInitializationOptions>,
   ): IStyleAttribute;
-  updateScaleAttribute(scale: IScaleOptions):void;
+  updateScaleAttribute(scale: IScaleOptions): void;
   updateStyleAttribute(
     attributeName: string,
     attributeOptions: Partial<IStyleAttributeInitializationOptions>,
@@ -227,7 +227,7 @@ export interface IStyleAttributeService {
     features: IEncodeFeature[],
     startFeatureIdx?: number,
     endFeatureIdx?: number,
-    layer?: ILayer
+    layer?: ILayer,
   ): void;
   /**
    * 清除当前管理的所有属性
