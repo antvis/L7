@@ -111,9 +111,10 @@ export class TileLayerService {
   }
   public async render() {
     const layers = this.getRenderLayers();
-    layers.map(async (layer) => {
-      await this.layerService.renderLayer(layer);
+    const renders = layers.map(async (layer) => {
+      await this.layerService.renderTileLayer(layer);
     });
+    Promise.all(renders);
   }
 
   public getRenderLayers() {

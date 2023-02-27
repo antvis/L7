@@ -1,4 +1,4 @@
-import { IAttributeAndElements } from '@antv/l7-core';
+import { IAttributeAndElements, IRenderOptions } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IHeatMapLayerStyleOptions } from '../core/interface';
 import HeatMapModels, { HeatMapModelType } from './models';
@@ -11,11 +11,11 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     await this.initLayerModels();
   }
 
-  public renderModels() {
+  public renderModels(options: Partial<IRenderOptions> = {}) {
     const shape = this.getModelType();
     if (shape === 'heatmap') {
       if (this.layerModel) {
-        this.layerModel.render(); // 独立的渲染流程
+        this.layerModel.render(options); // 独立的渲染流程
       }
 
       return this;
@@ -27,6 +27,8 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     this.models.forEach((model) =>
       model.draw({
         uniforms: this.layerModel.getUninforms(),
+        blend: this.layerModel.getBlend(),
+        stencil: this.layerModel.getStencil(options),
       }),
     );
     this.hooks.afterRender.call();

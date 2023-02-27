@@ -81,4 +81,8 @@ void main() {
     gl_FragColor.a *= opacity_t;
     gl_FragColor = filterColor(gl_FragColor);
   }
+   // 作为 mask 模板时需要丢弃透明的像素
+  if(gl_FragColor.a < 0.01) {
+    discard;
+  } 
 }

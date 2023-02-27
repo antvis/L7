@@ -18,6 +18,8 @@ export default () => {
     });
 
     const layer = new MaskLayer({
+      color: '#f00',
+      
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
     }).source(
         'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',

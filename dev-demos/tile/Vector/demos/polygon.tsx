@@ -11,11 +11,42 @@ export default () => {
      
       map: new Map({
         center: [112, 30],
-        zoom: 3,
+        zoom: 0,
       }),
     });
+    const maskData = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'MultiPolygon',
+            coordinates: [
+              [
+                [
+                  [125.15625000000001, 8.407168163601076],
+                  [116.54296874999999, -21.289374355860424],
+                  [156.26953125, -20.632784250388013],
+                  [150.29296875, 2.1088986592431382],
+                ],
+              ],
+              [
+                [
+                  [78.57421875, 46.92025531537451],
+                  [51.67968749999999, 37.020098201368114],
+                  [87.890625, 28.76765910569123],
+                ],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
+    const polygonLayer = new PolygonLayer({visible:true}).source(maskData).shape('fill').color('#f00').style({opacity:0.3});
 
     const layer = new PolygonLayer({
+      maskLayers: [polygonLayer],
       featureId: 'COLOR',
       sourceLayer: 'ecoregions2', // woods hillshade contour ecoregions ecoregions2 city
     });
@@ -38,7 +69,7 @@ export default () => {
       .select(true)
 
       .style({
-        // opacity: 0.3
+        opacity: 0.5
       });
 
     const point = new PointLayer({ zIndex: 1 })
@@ -64,6 +95,7 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.addLayer(polygonLayer);
 
       setTimeout(() => {
         point.setData([

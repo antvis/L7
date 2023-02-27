@@ -7,7 +7,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
@@ -38,8 +37,6 @@ export default class WaterModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     const model = await this.layer.buildLayerModel({
       moduleName: 'polygonWater',
       vertexShader: water_vert,
@@ -47,7 +44,6 @@ export default class WaterModel extends BaseModel {
       triangulation: polygonTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

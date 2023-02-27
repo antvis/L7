@@ -6,7 +6,7 @@ import {
   IModel,
   Triangulation,
 } from '@antv/l7-core';
-import { getMask, polygonFillTriangulation } from '@antv/l7-utils';
+import { polygonFillTriangulation } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
@@ -74,14 +74,10 @@ export default class FillModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
-    const {
-      mask = false,
-      maskInside = true,
-      workerEnabled = false,
-      enablePicking,
-    } = this.layer.getLayerConfig() as Partial<
-      ILayerConfig & IPolygonLayerStyleOptions
-    >;
+    const { workerEnabled = false, enablePicking } =
+      this.layer.getLayerConfig() as Partial<
+        ILayerConfig & IPolygonLayerStyleOptions
+      >;
     this.layer.triangulation = triangulation;
     const model = await this.layer.buildLayerModel({
       moduleName: type,
@@ -90,8 +86,7 @@ export default class FillModel extends BaseModel {
       triangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
+
       workerEnabled,
       workerOptions: {
         modelType: type,

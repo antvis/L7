@@ -144,7 +144,6 @@ export default class ExtrudeModel extends BaseModel {
       vertexShader: pointExtrudeVert,
       fragmentShader: pointExtrudeFrag,
       triangulation: PointExtrudeTriangulation,
-      blend: this.getBlend(),
       cull: {
         enable: true,
         face: getCullFace(this.mapService.version),

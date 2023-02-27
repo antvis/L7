@@ -58,30 +58,11 @@ layer 初始化完成之后，地图是否自动缩放到图层范围
 - subtractive 相减模式 发生遮挡的时候，显示前后图层颜色的相减
 - max 最大值 发生遮挡的时候，显示图层颜色 rgb 的最大值
 
-### mask
+<embed src="@/docs/common/layer/mask_options.md"></embed>
 
-<description> _boolean_ **optional** _default:_ false</description>
 
-是否参与裁减。
 
-- `false` 不参与裁减
-- `true` 参与裁减
 
-🌟 从 v2.7.2 版本开始支持
 
-### maskfence
-
-<description> _geojson_ **optional** _default:_ []</description>
-
-描述当前图层的掩模边界，边界用 `GeoJSON` 数据进行描述。
-
-### maskInside
-
-<description> _boolean_ **optional** _default:_ true</description>
-
-用来描述当前图层的内容与掩模边界显示。
-
-- `true` 在掩模内部显示
-- `false` 在掩模外部显示
 
 

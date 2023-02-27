@@ -5,7 +5,6 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -41,8 +40,6 @@ export default class NormalModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
     this.layer.triangulation = PointTriangulation;
 
     const model = await this.layer.buildLayerModel({
@@ -52,8 +49,7 @@ export default class NormalModel extends BaseModel {
       triangulation: PointTriangulation,
       depth: { enable: false },
       primitive: gl.POINTS,
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
+
       pick: false,
     });
     return [model];

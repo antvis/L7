@@ -51,6 +51,7 @@ export default () => {
         .active(false)
         .size(20);
       scene.addLayer(imageLayer);
+     
 
       setTimeout(() => {
         imageLayer.shape('02');

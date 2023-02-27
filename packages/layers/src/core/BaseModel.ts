@@ -19,11 +19,15 @@ import {
   IModelUniform,
   IPickingService,
   IRendererService,
+  IRenderOptions,
   IShaderModuleService,
+  IStencilOptions,
   IStyleAttributeService,
   ITexture2D,
   ITexture2DInitializationOptions,
   lazyInject,
+  MaskOperation,
+  StencilType,
   Triangulation,
   TYPES,
 } from '@antv/l7-core';
@@ -31,6 +35,7 @@ import { rgb2arr } from '@antv/l7-utils';
 import { color } from 'd3-color';
 import { isEqual, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
+import { getStencil, getStencilMask } from '../utils/stencil';
 
 export type styleSingle =
   | number
@@ -501,6 +506,32 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     const { blend = 'normal' } = this.layer.getLayerConfig();
     return BlendTypes[BlendType[blend]] as IBlendOptions;
   }
+  public getStencil(option: Partial<IRenderOptions>): Partial<IStencilOptions> {
+    const {
+      mask = false,
+      maskInside = true,
+      enableMask,
+      maskOperation = MaskOperation.AND,
+    } = this.layer.getLayerConfig();
+    // TODO 临时处理，后期移除MaskLayer
+    if (this.layer.type === 'MaskLayer') {
+      return getStencilMask({
+        isStencil: true,
+        stencilType: StencilType.SINGLE,
+      }); // 用于遮罩的stencil 参数
+    }
+
+    if (option.isStencil) {
+      return getStencilMask({ ...option, maskOperation }); // 用于遮罩的stencil 参数
+    }
+
+    const maskflag =
+      mask || //  mask 兼容历史写法
+      (enableMask && this.layer.masks.length !== 0) || // 外部图层的mask
+      this.layer.tileMask !== undefined; // 瓦片图层
+    // !!(mask || enableMask || this.layer.tileMask);
+    return getStencil(maskflag, maskInside);
+  }
   public getDefaultStyle(): unknown {
     return {};
   }
@@ -535,7 +566,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   } {
     throw new Error('Method not implemented.');
   }
-  public render() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public render(renderOptions?: Partial<IRenderOptions>): void {
     throw new Error('Method not implemented.');
   }
   protected registerBuiltinAttributes() {
