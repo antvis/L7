@@ -86,12 +86,12 @@ export default () => {
 
     scene.on('loaded', () => {
       // 绿地
-      const fill = new PolygonLayer({
-        sourceLayer: 'CHN_Cities',
-      })
-        .source(source)
-        .shape('fill')
-        .color('adcode_pro', getColorByDGP);
+      // const fill = new PolygonLayer({
+      //   sourceLayer: 'CHN_Cities',
+      // })
+      //   .source(source)
+      //   .shape('fill')
+      //   .color('adcode_pro', getColorByDGP);
 
       const line = new LineLayer({
         sourceLayer: 'CHN_Cities_L',
@@ -100,30 +100,31 @@ export default () => {
         .shape('line')
         .color('#FFA500');
 
-      const line2 = new LineLayer({
-        sourceLayer: 'CHN_L',
-      })
-        .source(source)
-        .shape('line')
-        .size(0.6)
-        .color('#053061');
+      // const line2 = new LineLayer({
+      //   sourceLayer: 'CHN_L',
+      // })
+      //   .source(source)
+      //   .shape('line')
+      //   .size(0.6)
+      //   .color('#053061');
 
-      const text = new PointLayer({
-        sourceLayer: 'CHN_Cities',
-        blend: 'normal',
-      })
-        .source(source)
-        .shape('id', 'text')
-        .size(12)
-        .color('#000');
+      // const text = new PointLayer({
+      //   sourceLayer: 'CHN_Cities',
+      //   blend: 'normal',
+      // })
+      //   .source(source)
+      //   .shape('id', 'text')
+      //   .size(12)
+      //   .color('#000');
 
-      const debugerLayer = new TileDebugLayer();
+      // const debugerLayer = new TileDebugLayer();
 
-      scene.addLayer(fill);
+      // scene.addLayer(fill);
       scene.addLayer(line);
-      scene.addLayer(line2);
-      scene.addLayer(text);
-      scene.addLayer(debugerLayer);
+    
+      // scene.addLayer(line2);
+      // scene.addLayer(text);
+      // scene.addLayer(debugerLayer);
     });
   }, []);
   return (

@@ -9,7 +9,6 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
@@ -60,17 +59,12 @@ export default class RadarModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointRadar',
       vertexShader: pointFillVert,
       fragmentShader: pointFillFrag,
       triangulation: PointFillTriangulation,
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

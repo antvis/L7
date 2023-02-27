@@ -26,6 +26,35 @@ export interface IBlendOptions {
   // gl.blendColor
   color: [number, number, number, number];
 }
+export interface IStencilOptions {
+  // gl.enable(gl.STENCIL_TEST)
+  enable: boolean;
+  // gl.stencilMask
+  mask: number;
+  func: {
+    cmp:
+      | gl.NEVER
+      | gl.ALWAYS
+      | gl.LESS
+      | gl.LEQUAL
+      | gl.GREATER
+      | gl.GEQUAL
+      | gl.EQUAL
+      | gl.NOTEQUAL;
+    ref: number;
+    mask: number;
+  };
+  opFront: {
+    fail: stencilOp;
+    zfail: stencilOp;
+    zpass: stencilOp;
+  };
+  opBack: {
+    fail: stencilOp;
+    zfail: stencilOp;
+    zpass: stencilOp;
+  };
+}
 type stencilOp =
   | gl.ZERO
   | gl.KEEP
@@ -185,35 +214,7 @@ export interface IModelInitializationOptions {
   /**
    * stencil
    */
-  stencil?: Partial<{
-    // gl.enable(gl.STENCIL_TEST)
-    enable: boolean;
-    // gl.stencilMask
-    mask: number;
-    func: {
-      cmp:
-        | gl.NEVER
-        | gl.ALWAYS
-        | gl.LESS
-        | gl.LEQUAL
-        | gl.GREATER
-        | gl.GEQUAL
-        | gl.EQUAL
-        | gl.NOTEQUAL;
-      ref: number;
-      mask: number;
-    };
-    opFront: {
-      fail: stencilOp;
-      zfail: stencilOp;
-      zpass: stencilOp;
-    };
-    opBack: {
-      fail: stencilOp;
-      zfail: stencilOp;
-      zpass: stencilOp;
-    };
-  }>;
+  stencil?: Partial<IStencilOptions>;
 
   /**
    * cull
@@ -236,7 +237,9 @@ export interface IModelDrawOptions {
   };
   elements?: IElements;
 
-  blend?: IBlendOptions;
+  blend?: Partial<IBlendOptions>;
+
+  stencil?: Partial<IStencilOptions>;
 }
 
 /**

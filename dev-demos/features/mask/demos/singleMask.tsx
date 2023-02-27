@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, PointLayer } from '@antv/l7';
+import { Scene, PointLayer, PolygonLayer} from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -43,11 +43,11 @@ export default () => {
     };
 
     scene.on('loaded', () => {
+      const polygonLayer = new PolygonLayer().source(maskData).shape('fill').color('#f00').style({opacity:0.5});
+      
       let point1 = new PointLayer({
         zIndex: 1,
-        mask: true,
-        maskInside: false,
-        maskfence: maskData,
+        maskLayers: [polygonLayer],
       })
         .source(
           [
@@ -73,12 +73,7 @@ export default () => {
         .active(true);
 
       let point2 = new PointLayer({
-        zIndex: 3,
-        mask: true,
-        maskInside: true,
-        maskfence: maskData,
-        maskColor: '#f00',
-        maskOpacity: 0.5,
+        maskLayers: [polygonLayer],
       })
         .source(
           [
@@ -102,20 +97,8 @@ export default () => {
         .active(true);
 
       scene.addLayer(point1);
+      scene.addLayer(polygonLayer);
       scene.addLayer(point2);
-
-      // scene.addLayer(mask1);
-
-      setTimeout(() => {
-        // scene.removeLayer(mask1);
-
-        point1.style({ mask: false });
-        point2.style({ mask: false });
-
-        // scene.removeLayer(mask1);
-
-        scene.render();
-      }, 2000);
     });
   }, []);
   return (

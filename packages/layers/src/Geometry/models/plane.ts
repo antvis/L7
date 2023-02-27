@@ -8,7 +8,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { getMask } from '@antv/l7-utils';
 // import { mat4, vec3 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
@@ -136,11 +135,8 @@ export default class PlaneModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-      mapTexture,
-    } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { mapTexture } =
+      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     this.mapTexture = mapTexture;
 
     const { createTexture2D } = this.rendererService;
@@ -158,8 +154,7 @@ export default class PlaneModel extends BaseModel {
       triangulation: this.planeGeometryTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: true },
-      stencil: getMask(mask, maskInside),
-      blend: this.getBlend(),
+
       cull: {
         enable: true,
         face: gl.BACK, // gl.FRONT | gl.BACK;

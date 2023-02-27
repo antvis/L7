@@ -9,6 +9,7 @@ export default class LayerStylePlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.afterInit.tap('LayerStylePlugin', () => {
       const { autoFit, fitBoundsOptions } = layer.getLayerConfig();
+      // mask 初始化
       if (autoFit) {
         layer.fitBounds(fitBoundsOptions);
       }

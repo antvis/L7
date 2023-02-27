@@ -8,7 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getCullFace, getMask } from '@antv/l7-utils';
+import { getCullFace } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
@@ -138,16 +138,13 @@ export default class FillImageModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointFillImage',
       vertexShader: pointFillVert,
       fragmentShader: pointFillFrag,
       triangulation: PointFillTriangulation,
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
+
       cull: {
         enable: true,
         face: getCullFace(this.mapService.version),

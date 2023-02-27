@@ -200,6 +200,15 @@ export default class AMapService extends AMapBaseService {
       y: pixel.getY(),
     };
   }
+  public lngLatToPixel(lnglat: [number, number]): IPoint {
+    // @ts-ignore
+    const p = this.map.lngLatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
+    // lngLatToPixel
+    return {
+      x: p.getX(),
+      y: p.getY(),
+    };
+  }
 
   public getModelMatrix(
     lnglat: [number, number],

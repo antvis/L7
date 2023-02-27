@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, PointLayer } from '@antv/l7';
+import { Scene, PointLayer,PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -53,11 +53,9 @@ export default () => {
       )
         .then((res) => res.json())
         .then((data) => {
+          const polygonLayer = new PolygonLayer().source(maskData).shape('fill').color('#f00').style({opacity:0.5});
           const pointLayer = new PointLayer({
-            mask: true,
-            maskInside: false,
-            maskfence: maskData,
-            maskOpacity: 0.2,
+            maskLayers: [polygonLayer]
           })
             .source(data.list, {
               parser: {
@@ -80,6 +78,7 @@ export default () => {
               // textAllowOverlap: true
             });
           scene.addLayer(pointLayer);
+          scene.addLayer(polygonLayer);
         });
     });
   }, []);

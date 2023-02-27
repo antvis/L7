@@ -6,7 +6,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, isMini } from '@antv/l7-utils';
+import { isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -24,9 +24,6 @@ export default class ImageModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IImageLayerStyleOptions;
-
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
@@ -72,7 +69,6 @@ export default class ImageModel extends BaseModel {
         enable: true,
       },
       depth: { enable: false },
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }
