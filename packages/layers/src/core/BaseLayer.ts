@@ -588,7 +588,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       values,
       updateOptions,
     );
-    this.dataState.dataSourceNeedUpdate = flag;
+    this.dataState.dataSourceNeedUpdate = flag && this.inited;
     return this;
   }
 
@@ -607,7 +607,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       values,
       updateOptions,
     );
-    this.dataState.dataSourceNeedUpdate = flag;
+    this.dataState.dataSourceNeedUpdate = flag && this.inited;
     return this;
   }
   public label(
