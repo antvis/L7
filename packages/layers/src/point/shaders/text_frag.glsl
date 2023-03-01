@@ -44,5 +44,9 @@ void main() {
   // gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), vec4(u_stroke_color.rgb, u_stroke_color.a * u_opacity), smoothstep(0., 0.5, 1. - dist));
   gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), vec4(textrueStroke.rgb, textrueStroke.a * opacity), smoothstep(0., 0.5, 1. - dist));
   gl_FragColor.a= gl_FragColor.a * alpha;
+   // 作为 mask 模板时需要丢弃透明的像素
+  if (gl_FragColor.a < 0.01) {
+    discard;
+  }
   gl_FragColor = filterColor(gl_FragColor);
 }

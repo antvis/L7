@@ -1,3 +1,4 @@
+import { IRenderOptions } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import { IWindLayerStyleOptions } from '../core/interface';
 import WindModels, { WindModelType } from './models';
@@ -9,9 +10,9 @@ export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
     await this.initLayerModels();
   }
 
-  public renderModels() {
+  public renderModels(options: Partial<IRenderOptions> = {}) {
     if (this.layerModel) {
-      this.layerModel.render(); // 独立的渲染流程
+      this.layerModel.render(options); // 独立的渲染流程
     }
 
     return this;

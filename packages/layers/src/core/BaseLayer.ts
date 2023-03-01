@@ -41,6 +41,7 @@ import {
   IPickingService,
   IPostProcessingPass,
   IRendererService,
+  IRenderOptions,
   IScale,
   IScaleOptions,
   IShaderModuleService,
@@ -243,11 +244,34 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.rawConfig = config;
     // this.parent = this;
   }
+  public addMask(layer: ILayer): void {
+    this.masks.push(layer);
+    this.enableMask();
+  }
 
+  public removeMask(layer: ILayer): void {
+    const layerIndex = this.masks.indexOf(layer);
+    if (layerIndex > -1) {
+      this.masks.splice(layerIndex, 1);
+    }
+  }
+
+  public disableMask(): void {
+    this.updateLayerConfig({
+      enableMask: false,
+    });
+  }
+
+  public enableMask(): void {
+    this.updateLayerConfig({
+      enableMask: true,
+    });
+  }
+  // 将废弃
   public addMaskLayer(maskLayer: ILayer) {
     this.masks.push(maskLayer);
   }
-
+  // 将废弃
   public removeMaskLayer(maskLayer: ILayer) {
     const layerIndex = this.masks.indexOf(maskLayer);
     if (layerIndex > -1) {
@@ -425,7 +449,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await this.hooks.init.promise();
     this.log(IDebugLog.LayerInitEnd);
     this.inited = true;
-
+    // add mask layer
     // 触发初始化完成事件;
     this.emit('inited', {
       target: this,
@@ -717,7 +741,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.rendering = false;
   }
 
-  public render(): ILayer {
+  public render(options: Partial<IRenderOptions> = {}): ILayer {
     if (this.tileLayer) {
       // 瓦片图层执行单独的 render 渲染队列
       this.tileLayer.render();
@@ -727,9 +751,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
     }
-
     // Tip: this.getEncodedData().length !== 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
-    this.renderModels();
+    this.renderModels(options);
     return this;
   }
 
@@ -861,7 +884,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.updateLayerConfig({
       blend: type,
     });
-    this.layerModelNeedUpdate = true;
+    // this.layerModelNeedUpdate = true;
     this.reRender();
     return this;
   }
@@ -1015,9 +1038,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
 
-    // remove mask list
-    this.masks.map((mask: ILayer) => mask.destroy(false));
-    this.masks = [];
+    // remove mask list maskfence 掩膜需要销毁
+    const { maskfence } = this.getLayerConfig();
+    if (maskfence) {
+      this.masks.map((mask: ILayer) => mask.destroy(false));
+      this.masks = [];
+    }
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件
@@ -1368,18 +1394,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await multiPassRenderer.render();
   }
 
-  public renderModels(isPicking?: boolean) {
+  public renderModels(options: Partial<IRenderOptions> = {}) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) {
       return this;
     }
+
     this.hooks.beforeRender.call();
     this.models.forEach((model) => {
       model.draw(
         {
           uniforms: this.layerModel.getUninforms(),
+          blend: this.layerModel.getBlend(),
+          stencil: this.layerModel.getStencil(options),
         },
-        isPicking,
+        options?.ispick || false,
       );
     });
     this.hooks.afterRender.call();

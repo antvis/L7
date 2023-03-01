@@ -84,22 +84,22 @@ export default () => {
             return color[4];
           }
         });
-      // const line = new LineLayer({
-      //   sourceLayer: 'WLD_L',
-      //   zIndex: 2,
-      // })
-      //   .source(source)
-      //   .shape('line')
-      //   .size(0.6)
-      //   .color('type', (t) => {
-      //     if (t === '0') {
-      //       return 'red';
-      //     }
-      //     if (t === '2') {
-      //       return '#09f';
-      //     }
-      //     return '#fc9272';
-      //   });
+      const line = new LineLayer({
+        sourceLayer: 'WLD_L',
+        zIndex: 2,
+      })
+        .source(source)
+        .shape('line')
+        .size(0.6)
+        .color('type', (t) => {
+          if (t === '0') {
+            return 'red';
+          }
+          if (t === '2') {
+            return '#09f';
+          }
+          return '#fc9272';
+        });
 
       // const text = new PointLayer({
       //   sourceLayer: 'WLD',
@@ -119,7 +119,7 @@ export default () => {
 
       scene.addLayer(water_surface);
       // scene.addLayer(text);
-      // scene.addLayer(line);
+      scene.addLayer(line);
       // scene.addLayer(debugerLayer);
     });
   }, []);

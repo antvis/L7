@@ -5,5 +5,7 @@ uniform float u_opacity: 1.0;
 void main() {
    gl_FragColor = v_color;
    gl_FragColor.a *= u_opacity;
+   if(gl_FragColor.a < 0.01)
+   discard;
 
 }

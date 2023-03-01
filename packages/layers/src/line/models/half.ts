@@ -5,7 +5,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { getMask, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
@@ -93,11 +93,8 @@ export default class LineModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      mask = false,
-      maskInside = true,
-      depth = false,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { depth = false } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
 
@@ -107,8 +104,6 @@ export default class LineModel extends BaseModel {
       fragmentShader: frag,
       triangulation: LineTriangulation,
       depth: { enable: depth },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

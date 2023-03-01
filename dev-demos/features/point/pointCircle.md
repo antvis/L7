@@ -22,8 +22,10 @@ export default () => {
             )
                 .then((res) => res.text())
                 .then((data) => {
-                    const pointLayer = new PointLayer({})
-                        .source(data.slice(0, 1000), {
+                    const pointLayer = new PointLayer({
+                        blend:'additive'
+                    })
+                        .source(data, {
                             parser: {
                                 type: 'csv',
                                 x: 'Longitude',
@@ -53,10 +55,13 @@ export default () => {
                             strokeWidth: 0,
                             stroke: '#fff',
                         });
-                    pointLayer.on('mousemove',(e)=>{
-                        console.log(e);
-                    })
                     scene.addLayer(pointLayer);
+                    //  let i =0;
+                    // setInterval(() => {
+                    //     i++ % 2 === 0 ? pointLayer.setBlend('additive') : pointLayer.setBlend('normal');
+
+                    // },20)
+            
 
                 },
                 )

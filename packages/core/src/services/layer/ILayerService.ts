@@ -21,6 +21,7 @@ import {
   IBlendOptions,
   IModel,
   IModelInitializationOptions,
+  IStencilOptions,
 } from '../renderer/IModel';
 import {
   IMultiPassRenderer,
@@ -86,8 +87,9 @@ export interface ILayerModelInitializationOptions {
 }
 
 export interface ILayerModel {
-  render(): void;
   renderUpdate?(): void;
+  getBlend(): Partial<IBlendOptions>;
+  getStencil(option?: Partial<IRenderOptions>): Partial<IStencilOptions>;
   getUninforms(): IModelUniform;
   getDefaultStyle(): unknown;
   getAnimateUniforms(): IModelUniform;
@@ -95,6 +97,7 @@ export interface ILayerModel {
   initModels(): Promise<IModel[]>;
   needUpdate(): Promise<boolean>;
   clearModels(refresh?: boolean): void;
+  render(renderOptions?: Partial<IRenderOptions>): void;
 
   // canvasLayer
   clearCanvas?(): void;
@@ -165,6 +168,25 @@ export interface IAttrbuteOptions {
   field: StyleAttrField;
   values: StyleAttributeOption;
 }
+
+export interface IRenderOptions {
+  ispick: boolean;
+  isStencil: boolean;
+  stencilType: StencilType;
+  stencilIndex: number;
+  stencilOperation: MaskOperationType;
+}
+export enum StencilType {
+  MULTIPLE = 'MULTIPLE',
+  SINGLE = 'SINGLE',
+}
+
+export enum MaskOperation {
+  AND = 'and',
+  OR = 'or',
+}
+
+export type MaskOperationType = 'and' | 'or';
 
 /**
  * For tile subLayer
@@ -342,6 +364,7 @@ export interface ILayer {
   tileLayer: IBaseTileLayer;
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
+  tileMask?: ILayer | undefined; // 图层的 tileMask;
   sceneContainer: Container | undefined;
   dataState: IDataState; // 数据流状态
   defaultSourceConfig: {
@@ -405,7 +428,7 @@ export interface ILayer {
   setCurrentSelectedId(id: number | null): void;
   getCurrentSelectedId(): number | null;
   prepareBuildModel(): void;
-  renderModels(isPicking?: boolean): void;
+  renderModels(options?: Partial<IRenderOptions>): void;
   buildModels(): void;
   rebuildModels(): void;
   getModelType(): string;
@@ -463,6 +486,13 @@ export interface ILayer {
   get(name: string): number;
   log(type: string, step: string): void;
   setBlend(type: keyof typeof BlendType): ILayer;
+
+  // mask
+  addMask(mask: ILayer): void;
+  removeMask(layer: ILayer): void;
+  disableMask(): void;
+  enableMask(): void;
+
   // animate(field: string, option: any): ILayer;
 
   setMultiPass(
@@ -470,7 +500,7 @@ export interface ILayer {
     passes?: Array<string | [string, { [key: string]: unknown }]>,
   ): ILayer;
   renderLayers(): void;
-  render(): ILayer;
+  render(options?: Partial<IRenderOptions>): ILayer;
 
   renderMultiPass(): any;
 
@@ -582,6 +612,8 @@ export interface ILayerConfig {
   maskfence: any;
   maskColor: string;
   maskOpacity: number;
+  maskLayers: ILayer[];
+  maskOperation?: MaskOperationType;
   sourceLayer: string;
 
   colors: string[];
@@ -613,7 +645,7 @@ export interface ILayerConfig {
   cursor?: string;
   forward: boolean; // 正方向
   usage?: string; // 指定图层的使用类型 - 用户地图底图绘制的优化
-
+  enableMask: boolean;
   /**
    * 开启拾取
    */
@@ -687,7 +719,6 @@ export interface ILayerService {
   // 清除画布
   clear(): void;
   add(layer: ILayer): void;
-  addMask(mask: ILayer): void;
   initLayers(): Promise<void>;
   startAnimate(): void;
   stopAnimate(): void;
@@ -702,12 +733,13 @@ export interface ILayerService {
   reRender(): void;
   beforeRenderData(layer: ILayer): Promise<void>;
   renderMask(masks: ILayer[]): void;
-  renderLayer(layer: ILayer): Promise<void>;
+  renderTileLayer(layer: ILayer): Promise<void>;
   needPick(type: string): boolean;
   throttleRenderLayers(): void;
   renderLayers(): void;
   setEnableRender(flag: boolean): void;
   getOESTextureFloat(): boolean;
+  addMask(mask: ILayer): void;
 
   destroy(): void;
 }

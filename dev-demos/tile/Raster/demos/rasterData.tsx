@@ -1,4 +1,6 @@
+
 import { RasterLayer, Scene, Source, TileDebugLayer, LineLayer, PolygonLayer } from '@antv/l7';
+
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
@@ -54,10 +56,18 @@ export default () => {
       )
         .then((res) => res.json())
         .then((maskData) => {
-          const layer = new RasterLayer({
-            mask: true,
-            maskfence: maskData,
-          });
+          const p = new PolygonLayer({
+            visible:false
+          })
+          .source(maskData)
+          .shape('fill')
+          .color('blue')
+          scene.addLayer(p)
+          const layer = new RasterLayer(
+            {
+              maskLayers: [p],
+            }
+          );
 
           const tileSource = new Source(
             'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
