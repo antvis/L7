@@ -29,7 +29,7 @@ export interface IPickingService {
 
   boxPickLayer(
     layer: ILayer,
-    box: number[],
+    box: [number, number, number, number],
     cb: (...args: any[]) => void,
   ): Promise<any>;
   destroy(): void;

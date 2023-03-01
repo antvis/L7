@@ -393,8 +393,8 @@ export interface ILayer {
   addMaskLayer(maskLayer: ILayer): void;
   removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
-  getData(filter: number[]): any; // 获取数据
-  pickData(filter: number[]): any; // 圈选数据
+  getData(filter: number[]): Promise<any>; // 获取数据
+  pickData(filter: number[]): Promise<any>; // 圈选数据
   getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
   getLayerAttributeConfig(): Partial<ILayerAttributesOption>;

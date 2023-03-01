@@ -36,7 +36,7 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
       case 'rasterRgb':
         return this.getRasterRGBData(bounds);
       default:
-        return this.layerSource.data;
+        return Promise.resolve(this.layerSource.data);
     }
   }
 
@@ -57,7 +57,7 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
 
   // TODO: 临时写法，后续需要重构
   private getRasterRGBData(bounds: number[]) {
-    return this.layerSource.data;
+    return Promise.resolve(this.layerSource.data);
   }
 
   /**
@@ -76,9 +76,7 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
         });
         return;
       }
-
       this.pickRaster(points, (e) => {
-        // console.log('pickRaster', e)
         resolve(e);
       });
     });

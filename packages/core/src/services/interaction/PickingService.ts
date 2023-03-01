@@ -169,8 +169,6 @@ export default class PickingService implements IPickingService {
     const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
     const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
 
-    // console.log('xMin yMax w h', xMin, yMax, xMax, yMax, w, h)
-
     const pickedColors: Uint8Array | undefined = readPixels({
       x: xMin,
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴

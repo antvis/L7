@@ -1221,11 +1221,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   // 每个图层获取数据的方法
   public getData(filter: number[]) {
-    return this.layerSource.data as any;
+    const data = this.layerSource?.data?.dataArray;
+    return Promise.resolve(data) as Promise<any>;
   }
 
   // 根据 filter 圈选数据的方法 外部调用
   public pickData(filter: number[]) {
+    // 返回的是 promise
     return this.layerPickService.pickData(filter);
   }
 

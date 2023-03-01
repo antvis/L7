@@ -93,17 +93,12 @@ export default class BaseLayerPickService implements ILayerPickService {
   }
 
   /**
-   * 正常图层的圈选数据
+   * 正常图层的圈选数据 暂时只支持栅格图层
    * @param points
-   * @returns
+   * @returns 返回的是 promise
    */
   public pickData(points: number[]) {
-    switch (this.layer.type) {
-      case 'RasterLayer':
-        return this.layer.getData(points);
-      default:
-        return this.layer.getSource().data;
-    }
+    return this.layer.getData(points);
   }
 
   public readRasterValue(
