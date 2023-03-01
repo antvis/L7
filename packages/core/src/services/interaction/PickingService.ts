@@ -240,6 +240,7 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
+
     const pickedColors: Uint8Array | undefined = readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
@@ -258,7 +259,6 @@ export default class PickingService implements IPickingService {
       pickedColors[2] !== 0
     ) {
       const pickedFeatureIdx = decodePickingColor(pickedColors);
-
       // 瓦片数据获取性能问题需要优化
       const rawFeature =
         layer.layerPickService.getFeatureById(pickedFeatureIdx);
@@ -397,10 +397,8 @@ export default class PickingService implements IPickingService {
   private async pickingLayers(target: IInteractionTarget) {
     const { useFramebuffer, clear } = this.rendererService;
     this.resizePickingFBO();
-
     useFramebuffer(this.pickingFBO, () => {
       const layers = this.layerService.getRenderList();
-
       layers
         .filter((layer) => {
           return layer.needPick(target.type);

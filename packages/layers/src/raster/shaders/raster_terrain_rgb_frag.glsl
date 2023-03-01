@@ -27,5 +27,7 @@ void main() {
     vec4 color = texture2D(u_colorTexture, vec2(normalisedValue, 0));
     gl_FragColor = color;
     gl_FragColor.a =  gl_FragColor.a * u_opacity ;
+      if(gl_FragColor.a < 0.01)
+      discard;
   }
 }

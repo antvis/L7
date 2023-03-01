@@ -4,10 +4,11 @@ import {
   IEncodeFeature,
   IModel,
   IModelUniform,
+  IRenderOptions,
   ITexture2D,
   Point,
 } from '@antv/l7-core';
-import { FrequencyController, getMask } from '@antv/l7-utils';
+import { FrequencyController } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -38,12 +39,12 @@ export default class WindModel extends BaseModel {
   private frequency = new FrequencyController(7.2);
   private cacheZoom: number;
 
-  public render() {
+  public render(options: Partial<IRenderOptions>) {
+    this.drawColorMode(options);
     // Tip: 控制风场的平均更新频率
     this.frequency.run(() => {
       this.drawWind();
     });
-    this.drawColorMode();
   }
 
   public getUninforms(): IModelUniform {
@@ -63,8 +64,6 @@ export default class WindModel extends BaseModel {
       rampColors = defaultRampColors,
       sizeScale = 0.5,
       // mask
-      mask = false,
-      maskInside = true,
     } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
     const { createTexture2D } = this.rendererService;
     const source = this.layer.getSource();
@@ -120,8 +119,6 @@ export default class WindModel extends BaseModel {
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-      stencil: getMask(mask, maskInside),
-      blend: this.getBlend(),
     });
     this.colorModel = model;
     return [model];
@@ -231,19 +228,19 @@ export default class WindModel extends BaseModel {
     }
   }
 
-  private drawColorMode() {
+  private drawColorMode(options: Partial<IRenderOptions> = {}) {
     const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
 
     this.layerService.beforeRenderData(this.layer);
     this.layer.hooks.beforeRender.call();
-
     this.layerService.renderMask(this.layer.masks);
-
     this.colorModel?.draw({
       uniforms: {
         u_opacity: opacity || 1.0,
         u_texture: this.texture,
       },
+      blend: this.getBlend(),
+      stencil: this.getStencil(options),
     });
 
     this.layer.hooks.afterRender.call();

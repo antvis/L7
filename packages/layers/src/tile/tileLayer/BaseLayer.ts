@@ -258,6 +258,10 @@ export default class BaseTileLayer {
     return this.tileLayerService.getTiles();
   }
 
+  public getTile(key: string) {
+    return this.tileLayerService.getTile(key);
+  }
+
   //  防抖操作
   public viewchange = debounce(this.mapchange, 24);
 

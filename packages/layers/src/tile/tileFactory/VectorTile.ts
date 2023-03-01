@@ -1,6 +1,5 @@
 import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
 import { VectorSource } from '@antv/l7-source';
-import MaskLayer from '../../mask';
 import Tile from './Tile';
 import { getTileLayer } from './util';
 
@@ -26,30 +25,16 @@ export default class VectorTile extends Tile {
       // @ts-ignore
       layer[attr](attributes[attr]?.field, attributes[attr]?.values);
     });
-    if (layerOptions.mask) {
-      await this.addTileMask(layer);
-    }
 
     await this.addLayer(layer);
+    if (layerOptions.tileMask) {
+      // 瓦片数据裁剪
+      await this.addTileMask();
+    }
     this.setLayerMinMaxZoom(layer);
     this.isLoaded = true;
   }
-  // Todo 校验数据有效性
-  protected async addTileMask(layer: ILayer) {
-    const mask = new MaskLayer({ layerType: 'MaskLayer' }).source(
-      {
-        type: 'FeatureCollection',
-        features: [this.sourceTile.bboxPolygon],
-      },
-      {
-        parser: {
-          type: 'geojson',
-          featureId: 'id',
-        },
-      },
-    );
-    await this.addMask(layer, mask);
-  }
+
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
 

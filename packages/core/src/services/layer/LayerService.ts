@@ -8,7 +8,13 @@ import Clock from '../../utils/clock';
 import { IDebugService } from '../debug/IDebugService';
 import { IMapService } from '../map/IMapService';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
+import {
+  ILayer,
+  ILayerService,
+  LayerServiceEvent,
+  MaskOperation,
+  StencilType,
+} from './ILayerService';
 
 @injectable()
 export default class LayerService
@@ -143,18 +149,11 @@ export default class LayerService
     this.alreadyInRendering = true;
     this.clear();
     for (const layer of this.layerList) {
-      if (layer.masks.filter((m) => m.inited).length > 0) {
+      const { enableMask } = layer.getLayerConfig();
+      if (layer.masks.filter((m) => m.inited).length > 0 && enableMask) {
         // 清除上一次的模版缓存
-        this.renderService.clear({
-          stencil: 0,
-          depth: 1,
-          framebuffer: null,
-        });
-        layer.masks.map(async (m: ILayer) => {
-          m.render();
-        });
+        this.renderMask(layer.masks);
       }
-
       if (layer.getLayerConfig().enableMultiPassRenderer) {
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
@@ -167,11 +166,18 @@ export default class LayerService
   }
 
   public renderMask(masks: ILayer[]) {
-    masks
-      .filter((m) => m.inited)
-      .map((m) => {
-        m.render();
-      });
+    let maskIndex = 0;
+    this.renderService.clear({
+      stencil: 0,
+      depth: 1,
+      framebuffer: null,
+    });
+    const stencilType =
+      masks.length > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
+    for (const layer of masks) {
+      // 清除上一次的模版缓存
+      layer.render({ isStencil: true, stencilType, stencilIndex: maskIndex++ });
+    }
   }
 
   public async beforeRenderData(layer: ILayer) {
@@ -180,18 +186,45 @@ export default class LayerService
       this.renderLayers();
     }
   }
+  // 瓦片图层渲染
+  public async renderTileLayer(layer: ILayer) {
+    let maskindex = 0;
+    const { enableMask = true } = layer.getLayerConfig();
+    let maskCount = layer.tileMask ? 1 : 0;
+    const masklayers = layer.masks.filter((m) => m.inited);
 
-  public async renderLayer(layer: ILayer) {
-    if (layer.masks.filter((m) => m.inited).length > 0) {
-      layer.masks.map((mask) => {
-        this.renderService.clear({
-          stencil: 0,
-          depth: 1,
-          framebuffer: null,
-        });
-        mask.render();
+    maskCount = maskCount + (enableMask ? masklayers.length : 1);
+    const stencilType =
+      maskCount > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
+    //  兼容MaskLayer MaskLayer的掩膜不能clear
+    if (layer.tileMask || (masklayers.length && enableMask)) {
+      this.renderService.clear({
+        stencil: 0,
+        depth: 1,
+        framebuffer: null,
       });
     }
+
+    if (masklayers.length && enableMask) {
+      for (const mask of masklayers) {
+        mask.render({
+          isStencil: true,
+          stencilType,
+          stencilIndex: maskindex++,
+        });
+      }
+    }
+    // // 瓦片裁剪
+    if (layer.tileMask) {
+      // TODO 示例瓦片掩膜多层支持
+      layer.tileMask.render({
+        isStencil: true,
+        stencilType,
+        stencilIndex: maskindex++,
+        stencilOperation: MaskOperation.OR,
+      });
+    }
+
     if (layer.getLayerConfig().enableMultiPassRenderer) {
       // multiPassRender 不是同步渲染完成的
       await layer.renderMultiPass();

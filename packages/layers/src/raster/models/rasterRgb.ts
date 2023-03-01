@@ -5,7 +5,6 @@ import {
   IModel,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -58,8 +57,6 @@ export default class RasterModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
@@ -80,7 +77,6 @@ export default class RasterModel extends BaseModel {
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

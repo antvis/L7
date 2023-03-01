@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, RasterLayer } from '@antv/l7';
+import { Scene, RasterLayer,PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -51,7 +51,12 @@ export default () => {
     )
       .then((res) => res.json())
       .then((maskData) => {
-        const layer = new RasterLayer({ mask: true, maskfence: maskData });
+        const polygonLayer = new PolygonLayer({
+          visible:false
+        }).source(maskData).shape('fill').color('#f00').style({opacity:0.5});
+        const layer = new RasterLayer({
+           maskLayers: [polygonLayer]
+           });
         const mindata = -0;
         const maxdata = 8000;
         layer
@@ -84,6 +89,7 @@ export default () => {
             },
           });
         scene.addLayer(layer);
+        scene.addLayer(polygonLayer);
       });
   }, []);
   return (

@@ -74,6 +74,7 @@ export class TilePickService implements ITilePickService {
       }
       return false;
     }
+
     this.pickRender(target);
 
     return pickingService.pickFromPickingFBO(layer, target);

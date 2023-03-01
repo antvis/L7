@@ -1,11 +1,22 @@
 ---
-title: MaskLayer
+title: 图层掩膜
 order: 0
 ---
 
 <embed src="@/docs/common/style.md"></embed>
 
 ## 简介
+
+⚠️  原有 MaskLayer 功能受限，后续将废弃掉，现采用更灵活的Mask方案。
+
+现有掩膜方案采用图层进行掩膜。
+
+
+
+
+
+
+
 
 `MaskLayer` 是一类特殊的图层，和其他图层配合使用，用于对其他图层进行裁剪操作。`MaskLayer` 有两种用法，一种是在创建普通 `layer` 的时候配置 `mask` 参数，另外一种是直接创建 `MaskLayer` 图层添加到 `Scene` 中。在直接创建 `MaskLayer` 图层的时候，我们还可以创建瓦片类型的掩模图层。
 

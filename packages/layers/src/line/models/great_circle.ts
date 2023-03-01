@@ -8,7 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
@@ -126,16 +126,12 @@ export default class GreatCircleModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const model = await this.layer.buildLayerModel({
       moduleName: 'lineGreatCircle',
       vertexShader: line_arc2d_vert,
       fragmentShader: line_arc_frag,
       triangulation: LineArcTriangulation,
       depth: { enable: false },
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
     return [model];
   }

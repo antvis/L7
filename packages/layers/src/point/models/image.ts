@@ -6,7 +6,6 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { getMask } from '@antv/l7-utils';
 import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
@@ -93,9 +92,6 @@ export default class ImageModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { mask = false, maskInside = true } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointImage',
       vertexShader: pointImageVert,
@@ -103,8 +99,6 @@ export default class ImageModel extends BaseModel {
       triangulation: PointImageTriangulation,
       depth: { enable: false },
       primitive: gl.POINTS,
-      blend: this.getBlend(),
-      stencil: getMask(mask, maskInside),
     });
 
     return [model];
