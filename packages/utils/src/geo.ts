@@ -2,11 +2,15 @@ import bbox from '@turf/bbox';
 import {
   BBox,
   degreesToRadians,
+  Feature,
   featureCollection,
   lineString,
+  polygon,
+  Polygon,
   radiansToLength,
   Units,
 } from '@turf/helpers';
+import intersect from '@turf/intersect';
 import { isNumber } from './math';
 
 export type IBounds = [[number, number], [number, number]];
@@ -28,6 +32,33 @@ export function lngLatInExtent(lngLat: ILngLat, bounds: number[]) {
     lngLat.lat <= maxLat
   );
 }
+
+/**
+ *
+ * @param points [lng, lat, lng, lat, ...]
+ */
+export function extentPoints(points: number[]) {
+  // const [minLng, minLat, maxLng, maxLat] = bounds;
+  const dataExtent: BBox = [Infinity, Infinity, -Infinity, -Infinity];
+  for (let i = 0; i < points.length; i += 2) {
+    const lng = points[i];
+    const lat = points[i + 1];
+    if (dataExtent[0] > lng) {
+      dataExtent[0] = lng;
+    }
+    if (dataExtent[1] > lat) {
+      dataExtent[1] = lat;
+    }
+    if (dataExtent[2] < lng) {
+      dataExtent[2] = lng;
+    }
+    if (dataExtent[3] < lat) {
+      dataExtent[3] = lat;
+    }
+  }
+  return dataExtent;
+}
+
 /**
  * 计算地理数据范围
  * @param {dataArray} data 地理坐标数据
@@ -272,6 +303,90 @@ export function boundsContains(b1: IBounds, b2: IBounds): boolean {
     b1[1][1] >= b2[1][1]
   );
 }
+
+/**
+ * 构建一个矩形的 Polygon
+ * @param minLng
+ * @param minLat
+ * @param maxLng
+ * @param maxLat
+ * @returns
+ */
+export function initRectPolygon(
+  minLng: number,
+  minLat: number,
+  maxLng: number,
+  maxLat: number,
+) {
+  return polygon([
+    [
+      [minLng, maxLat],
+      [maxLng, maxLat],
+      [maxLng, minLat],
+      [minLng, minLat],
+      [minLng, maxLat],
+    ],
+  ]);
+}
+
+/**
+ * 将经纬度点位的数组转换为 geojson 格式的 Polygon 数据
+ * @param points 存储经纬度点位的数组
+ */
+export function pointsToPolygon(
+  points: number[],
+  properties: { [key: string]: any } = {},
+) {
+  const coord = [];
+  for (let i = 0; i < points.length; i += 2) {
+    const lng = points[i];
+    const lat = points[i + 1];
+    if (lng !== undefined && lat !== undefined) {
+      coord.push([lng, lat]);
+    }
+  }
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties,
+        geometry: {
+          type: 'Polygon',
+          coordinates: [coord],
+        },
+      },
+    ],
+  };
+}
+
+/**
+ * 计算两个 Polygon 的交集
+ * @param polygon1
+ * @param polygon2
+ * @returns
+ */
+export function intersectPolygon(
+  polygon1: Feature<Polygon>,
+  polygon2: Feature<Polygon>,
+) {
+  return intersect(polygon1, polygon2);
+}
+
+/**
+ * 计算两个 bounds 的并集
+ * @param b1 [minLng, minLat, maxLng, maxLat]
+ * @param b2 [minLng, minLat, maxLng, maxLat]
+ * @returns 返回重叠的矩形 bounds [minLng, minLat, maxLng, maxLat]
+ */
+export function overlapBounds(
+  b1: [number, number, number, number],
+  b2: [number, number, number, number],
+) {
+  const rect1 = initRectPolygon(...b1);
+  const rect2 = initRectPolygon(...b2);
+  return bbox(intersectPolygon(rect1, rect2));
+}
 /**
  * bbox转换为Bounds
  * @param b1 bbox
@@ -447,4 +562,8 @@ export function calculatePointsCenterAndRadius(points: number[]) {
  */
 export function getBBoxFromPoints(pointList: Position[]) {
   return bbox(featureCollection([lineString(pointList)]));
+}
+
+export function getBBox(feature: Feature<any>) {
+  return bbox(feature);
 }

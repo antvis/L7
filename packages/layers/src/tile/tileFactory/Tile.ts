@@ -1,5 +1,5 @@
 import { createLayerContainer, ILayer, ILngLat, ITile } from '@antv/l7-core';
-import { SourceTile } from '@antv/l7-utils';
+import { SourceTile, TileBounds } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import { isNeedMask } from './util';
 
@@ -21,6 +21,12 @@ export default abstract class Tile implements ITile {
     this.z = sourceTile.z;
     this.key = `${this.x}_${this.y}_${this.z}`;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getData(bounds: TileBounds) {
+    return this.sourceTile.data;
+  }
+
   public getLayers() {
     return this.layers;
   }

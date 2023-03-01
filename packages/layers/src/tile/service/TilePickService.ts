@@ -44,6 +44,19 @@ export class TilePickService implements ITilePickService {
     }
   }
 
+  /**
+   * 圈选数据
+   * @param points
+   * @returns
+   */
+  public pickData(points: number[]) {
+    return new Promise((resolve) => {
+      this.parent.tileLayer.pickData(points, (data) => {
+        resolve(data);
+      });
+    });
+  }
+
   public pick(layer: ILayer, target: IInteractionTarget) {
     const container = this.parent.getContainer();
     const pickingService = container.get<IPickingService>(

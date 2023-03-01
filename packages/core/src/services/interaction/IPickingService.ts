@@ -7,6 +7,14 @@ export interface IPickingService {
   init(id: string): void;
   pickFromPickingFBO(layer: ILayer, target: IInteractionTarget): boolean;
   pickBox(layer: ILayer, box: [number, number, number, number]): any[];
+  render(layer: ILayer, cb: (...args: any[]) => void): void;
+  extractPixels(box: number[]): {
+    pickedColors: Uint8Array;
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
   triggerHoverOnLayer(
     layer: ILayer,
     target: {
@@ -21,13 +29,14 @@ export interface IPickingService {
 
   boxPickLayer(
     layer: ILayer,
-    box: [number, number, number, number],
+    box: number[],
     cb: (...args: any[]) => void,
   ): Promise<any>;
   destroy(): void;
 }
 
 export interface ILayerPickService {
+  pickData(box: number[]): any;
   pickRasterLayer(
     layer: ILayer,
     target: IInteractionTarget,

@@ -240,6 +240,7 @@ export interface ITile {
   sourceTile: SourceTile;
   visible: boolean;
   isLoaded: boolean;
+  getData(bounds: any): any;
   getMainLayer(): ILayer | undefined;
   getLayers(): ILayer[];
   getFeatureById(id: number): any;
@@ -261,6 +262,7 @@ export interface ITileLayerService {
 export interface IBaseTileLayer {
   tilesetManager: TilesetManager | undefined;
   tileLayerService: ITileLayerService;
+  pickData(bounds: number[], callback: (data: any) => void): any;
   getLayers(): ILayer[];
   getTiles(): ITile[];
   pickRender(target: IInteractionTarget): void;
@@ -320,6 +322,8 @@ export enum ILayerStage {
 export interface ILayer {
   styleAttributeService: IStyleAttributeService;
   layerPickService: ILayerPickService;
+  mapService: IMapService;
+  pickingService: IPickingService;
   textureService: ITextureService;
   sourceLayer?: string;
   parent: ILayer;
@@ -389,6 +393,8 @@ export interface ILayer {
   addMaskLayer(maskLayer: ILayer): void;
   removeMaskLayer(maskLayer: ILayer): void;
   needPick(type: string): boolean;
+  getData(filter: number[]): any; // 获取数据
+  pickData(filter: number[]): any; // 圈选数据
   getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
   getLayerAttributeConfig(): Partial<ILayerAttributesOption>;

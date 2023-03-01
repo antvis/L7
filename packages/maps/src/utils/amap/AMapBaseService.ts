@@ -21,7 +21,7 @@ import {
   MapStyleName,
   TYPES,
 } from '@antv/l7-core';
-import { DOM } from '@antv/l7-utils';
+import { DOM, floorArray } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -314,6 +314,18 @@ export default abstract class AMapBaseService
     // @ts-ignore
     const { x, y } = this.map.lngLatToGeodeticCoord(lnglat);
     return [x, -y];
+  }
+
+  /**
+   * 将经纬度范围转换为容器范围 lnglat => pixel
+   * @param bounds [minLng, minLat, maxLng, maxLat]
+   * @returns
+   */
+  public boundsToContainer(bounds: number[]) {
+    const [minLng, minLat, maxLng, maxLat] = bounds;
+    const { x: minX, y: minY } = this.lngLatToContainer([minLng, maxLat]);
+    const { x: maxX, y: maxY } = this.lngLatToContainer([maxLng, minLat]);
+    return floorArray([minX, minY, maxX, maxY]);
   }
 
   public lngLatToMercator(

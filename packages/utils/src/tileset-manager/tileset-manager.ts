@@ -238,7 +238,7 @@ export class TilesetManager extends EventEmitter {
   }
 
   // 获取当前视野层级瓦片的所有索引
-  protected getTileIndices(
+  public getTileIndices(
     zoom: number,
     latLonBounds: [number, number, number, number],
   ) {
@@ -283,7 +283,7 @@ export class TilesetManager extends EventEmitter {
   }
 
   // 获取瓦片
-  private getTile(x: number, y: number, z: number) {
+  public getTile(x: number, y: number, z: number) {
     const tileId = this.getTileId(x, y, z);
     const tile = this.cacheTiles.get(tileId);
     return tile;

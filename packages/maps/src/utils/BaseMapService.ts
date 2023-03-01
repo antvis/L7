@@ -20,7 +20,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Map } from '@antv/l7-map';
-import { DOM } from '@antv/l7-utils';
+import { DOM, floorArray } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { Version } from '../version';
@@ -253,6 +253,19 @@ export default abstract class BaseMapService<T>
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     return this.map.project(lnglat);
   }
+
+  /**
+   * 将经纬度范围转换为容器范围 lnglat => pixel
+   * @param bounds [minLng, minLat, maxLng, maxLat]
+   * @returns
+   */
+  public boundsToContainer(bounds: number[]) {
+    const [minLng, minLat, maxLng, maxLat] = bounds;
+    const { x: minX, y: minY } = this.lngLatToContainer([minLng, maxLat]);
+    const { x: maxX, y: maxY } = this.lngLatToContainer([maxLng, minLat]);
+    return floorArray([minX, minY, maxX, maxY]) as number[];
+  }
+
   public abstract lngLatToMercator(
     lnglat: [number, number],
     altitude: number,

@@ -76,6 +76,18 @@ export default class PickingService implements IPickingService {
     box: [number, number, number, number],
     cb: (...args: any[]) => void,
   ): Promise<any> {
+    this.render(layer, () => {
+      const features = this.pickBox(layer, box);
+      cb(features);
+    });
+  }
+
+  /**
+   * 将指定的 layer 渲染到 pickingFBO 中
+   * @param layer
+   * @param cb
+   */
+  public render = (layer: ILayer, cb: (...args: any[]) => void) => {
     const { useFramebuffer, clear } = this.rendererService;
     this.resizePickingFBO();
     useFramebuffer(this.pickingFBO, () => {
@@ -88,42 +100,13 @@ export default class PickingService implements IPickingService {
       layer.hooks.beforePickingEncode.call();
       layer.renderModels();
       layer.hooks.afterPickingEncode.call();
-      const features = this.pickBox(layer, box);
-      cb(features);
+      cb();
     });
-  }
+  };
 
   public pickBox(layer: ILayer, box: [number, number, number, number]): any[] {
-    const [xMin, yMin, xMax, yMax] = box.map((v) => {
-      const tmpV = v < 0 ? 0 : v;
-      return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
-    });
-    const { readPixels, getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
-    if (
-      xMin > ((width - 1) * DOM.DPR) / this.pickBufferScale ||
-      xMax < 0 ||
-      yMin > ((height - 1) * DOM.DPR) / this.pickBufferScale ||
-      yMax < 0
-    ) {
-      return [];
-    }
-
-    const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
-    const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
-    const pickedColors: Uint8Array | undefined = readPixels({
-      x: xMin,
-      // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.floor(height / this.pickBufferScale - (yMax + 1)),
-      width: w,
-      height: h,
-      data: new Uint8Array(w * h * 4),
-      framebuffer: this.pickingFBO,
-    });
+    // 从 pickingFBO 中提取的像素颜色
+    const { pickedColors } = this.extractPixels(box);
 
     const features = [];
     const featuresIdMap: { [key: string]: boolean } = {};
@@ -143,6 +126,68 @@ export default class PickingService implements IPickingService {
     }
     return features;
   }
+
+  /**
+   * 根据指定的 box 范围从 pickingFBO 中提取像素颜色
+   * @param box
+   */
+  public extractPixels = (box: number[]) => {
+    const { readPixels, getContainer } = this.rendererService;
+    const [minX, minY, maxX, maxY] = box;
+
+    let { width, height } = this.getContainerSize(
+      getContainer() as HTMLCanvasElement | HTMLElement,
+    );
+    // keep the box within the screen
+    const formatBox = [
+      Math.max(minX, 0),
+      Math.max(minY, 0),
+      Math.min(maxX, width - 1),
+      Math.min(maxY, height - 1),
+    ];
+    const [xMin, yMin, xMax, yMax] = formatBox.map((v) => {
+      return Math.floor((v * DOM.DPR) / this.pickBufferScale);
+    });
+
+    width *= DOM.DPR;
+    height *= DOM.DPR;
+    if (
+      xMin > ((width - 1) * DOM.DPR) / this.pickBufferScale ||
+      xMax < 0 ||
+      yMin > ((height - 1) * DOM.DPR) / this.pickBufferScale ||
+      yMax < 0
+    ) {
+      return {
+        pickedColors: new Uint8Array(0),
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+      };
+    }
+
+    const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
+    const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
+
+    // console.log('xMin yMax w h', xMin, yMax, xMax, yMax, w, h)
+
+    const pickedColors: Uint8Array | undefined = readPixels({
+      x: xMin,
+      // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+      y: Math.floor(height / this.pickBufferScale - (yMax + 1)),
+      width: w,
+      height: h,
+      data: new Uint8Array(w * h * 4),
+      framebuffer: this.pickingFBO,
+    });
+    return {
+      pickedColors,
+      width: w,
+      height: h,
+      x: xMin,
+      y: yMin,
+    };
+  };
 
   // 动态设置鼠标光标
   public handleCursor(layer: ILayer, type: string) {

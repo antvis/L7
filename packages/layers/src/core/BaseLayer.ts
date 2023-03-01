@@ -179,8 +179,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected fontService: IFontService;
 
-  protected pickingService: IPickingService;
-
   protected rendererService: IRendererService;
 
   protected layerService: ILayerService;
@@ -189,7 +187,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected interactionService: IInteractionService;
 
-  protected mapService: IMapService;
+  public pickingService: IPickingService;
+
+  public mapService: IMapService;
 
   public styleAttributeService: IStyleAttributeService;
 
@@ -1217,6 +1217,16 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     cb: (...args: any[]) => void,
   ) {
     this.pickingService.boxPickLayer(this, box, cb);
+  }
+
+  // 每个图层获取数据的方法
+  public getData(filter: number[]) {
+    return this.layerSource.data as any;
+  }
+
+  // 根据 filter 圈选数据的方法 外部调用
+  public pickData(filter: number[]) {
+    return this.layerPickService.pickData(filter);
   }
 
   public async buildLayerModel(

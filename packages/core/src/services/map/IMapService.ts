@@ -107,6 +107,7 @@ export interface IMapService<RawMap = {}> {
   meterToCoord(center: number[], lnglat: number[]): number;
   pixelToLngLat(pixel: Point): ILngLat;
   lngLatToPixel(lnglat: Point): IPoint;
+  boundsToContainer(bounds: number[]): number[];
   containerToLngLat(pixel: Point): ILngLat;
   lngLatToContainer(lnglat: Point): IPoint;
   lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;

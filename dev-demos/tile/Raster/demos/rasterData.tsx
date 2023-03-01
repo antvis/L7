@@ -1,4 +1,4 @@
-import { RasterLayer, Scene, Source } from '@antv/l7';
+import { RasterLayer, Scene, Source, TileDebugLayer, LineLayer, PolygonLayer } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
@@ -39,13 +39,16 @@ export default () => {
       id: 'map',
      
       map: new Map({
-        center: [116, 27],
-        zoom: 6,
-        style: 'dark',
+        center: [115, 27],
+        zoom: 9,
       }),
     });
 
     scene.on('loaded', () => {
+      const offset = 0.25;
+
+      const tileDebug = new TileDebugLayer();
+      scene.addLayer(tileDebug);
       fetch(
         'https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json',
       )
@@ -70,7 +73,7 @@ export default () => {
                   const width = image.getWidth();
                   const height = image.getHeight();
                   const values = await image.readRasters();
-                  console.log(values)
+                  // console.log(values)
                   return { rasterData: values[0], width, height };
                 },
               },
@@ -79,6 +82,7 @@ export default () => {
 
           layer.source(tileSource).style({
             // domain: [0, 255],
+            opacity: 0.5,
             clampLow: false,
             rampColors: {
               type:"cat",
@@ -89,6 +93,90 @@ export default () => {
           });
 
           scene.addLayer(layer);
+
+          const offset = 0.25;
+          const points = [
+            ...[115 - offset, 27 + offset],
+            ...[115 + offset, 27 + offset],
+            ...[115 + offset, 27 - offset],
+          ]
+
+          setTimeout(() => {
+            // console.log('rasterLayer boxSelect');
+            // layer.boxSelect([115 - offset, 27 - offset, 115 + offset, 27 + offset], (e) => {
+            //   console.log('boxSelect', e);
+            // })
+            layer.pickData(points)
+            // layer.pickData([115 - offset, 27 - offset, 115 + offset, 27 + offset])
+            .then(res => {
+              console.log(JSON.stringify(res[1].filterData))
+              // console.log(JSON.stringify(res[0].data))
+              // console.log(res)
+            })
+            
+          }, 2200)
+
+          
+          const line = new LineLayer()
+          .source({
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {
+                  "name": "tom"
+                },
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [
+                    [
+                      [115 - offset, 27 + offset],
+                      [115 + offset, 27 + offset],
+                      [115 + offset, 27 - offset],
+                      [115 - offset, 27 - offset],
+                      [115 - offset, 27 + offset],
+                    ]
+                  ]
+                }
+              }
+            ]
+          })
+          .size(2)
+          .shape('line')
+          .color('#f00')
+            scene.addLayer(line);
+
+            // 114.75, 27.059126, 115.25, 27.25
+            const polygon = new PolygonLayer()
+            .source({
+              "type": "FeatureCollection",
+              "features": [
+                {
+                  "type": "Feature",
+                  "properties": {
+                    "name": "tom"
+                  },
+                  "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                      [
+                        [114.75, 27.25],
+                        [115.25, 27.25],
+                        [115.25, 27.059126],
+                        [114.75, 27.059126],
+                        [114.75, 27.059126],
+                      ]
+                    ]
+                  }
+                }
+              ]
+            })
+            .shape('fill')
+            .color('#00f')
+            .style({
+              opacity: 0.2,
+            })
+            scene.addLayer(polygon);
 
           // setTimeout(() => {
           //   layer.style({

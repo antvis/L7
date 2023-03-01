@@ -1,5 +1,5 @@
 // @ts-ignore
-import { RasterLayer, Scene } from '@antv/l7';
+import { LineLayer, PolygonLayer, RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import * as GeoTIFF from 'geotiff';
@@ -60,6 +60,84 @@ export default () => {
         });
 
       scene.addLayer(layer);
+
+      const minLng = 110;
+      const minLat = 25;
+      const maxLng = 120;
+      const maxLat = 35;
+      const points = [minLng, minLat, maxLng, maxLat];
+
+      const polygon = new PolygonLayer()
+        .source({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Polygon',
+                coordinates: [
+                  [
+                    [minLng, maxLat],
+                    [maxLng, minLat],
+                    [minLng, minLat],
+                    [minLng, maxLat],
+                  ],
+                ],
+              },
+            },
+          ],
+        })
+        .shape('fill')
+        .color('#ff0')
+        .style({
+          opacity: 0.5,
+        });
+      // scene.addLayer(polygon);
+
+      const line = new LineLayer()
+        .source({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Polygon',
+                coordinates: [
+                  [
+                    [minLng, maxLat],
+                    [maxLng, maxLat],
+                    [maxLng, minLat],
+                    [minLng, minLat],
+                    [minLng, maxLat],
+                  ],
+                ],
+              },
+            },
+          ],
+        })
+        .size(2)
+        .shape('line')
+        .color('#f00');
+      scene.addLayer(line);
+
+      setTimeout(() => {
+        const rect = [110, 25, 120, 35];
+        const triangle = [110, 35, 120, 25, 110, 25, 110, 35];
+
+        // layer.pickData(points)
+        layer
+          .pickData(triangle)
+          // layer.pickData([115 - offset, 27 - offset, 115 + offset, 27 + offset])
+          .then((res) => {
+            console.log('pickData', JSON.stringify(res[0].filterData));
+            // console.log('pickData', JSON.stringify(res[0].data))
+          });
+        // layer.boxSelect([73.482190241, 3.82501784112, 135.106618732, 57.6300459963], (e) => {
+        //   console.log('boxSelect', e)
+        // })
+      }, 2000);
     });
   }, []);
   return (
