@@ -15,7 +15,7 @@ export default () => {
         zoom: 3,
       }),
     });
-    const worldSource = new Source('http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+    const worldSource = new Source('https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
     {
       parser: {
         type: 'mvt',

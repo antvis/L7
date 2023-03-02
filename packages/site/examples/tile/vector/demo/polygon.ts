@@ -18,7 +18,7 @@ const layer = new PolygonLayer({
 });
 layer
   .source(
-    'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+    'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
     {
       parser: {
         type: 'mvt',
