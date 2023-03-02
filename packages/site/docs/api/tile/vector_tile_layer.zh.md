@@ -72,7 +72,7 @@ type UpdateTileStrategy = 'realtime' | 'overlap' | 'replace';
 
 ```js
 const vectorSource = new Source(
-  'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
+  'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
   {
     parser: {
       type: 'mvt',

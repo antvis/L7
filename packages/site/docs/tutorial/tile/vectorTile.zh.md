@@ -53,7 +53,7 @@ const polygon = new PolygonLayer({
 ```js
 import { MaskLayer } from '@antv/l7';
 const mask = new MaskLayer({sourceLayer: 'ecoregions2' })
-.source( 'http://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf' {
+.source( 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf' {
   parser: {
       type: 'mvt',
       maxZoom: 9,
