@@ -12,6 +12,8 @@ export default () => {
       map: new Map({
         center: [113.270854, 23.141717],
         zoom: 5,
+        style: 'blank',
+        pitch: 60,
       }),
     });
 
@@ -43,6 +45,7 @@ export default () => {
     scene.on('loaded', () => {
       scene.addLayer(layer1);
       scene.addLayer(layer2);
+      scene.setPitch(0)
 
     });
   }, []);

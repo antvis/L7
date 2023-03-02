@@ -246,7 +246,7 @@ export default class Camera extends EventEmitter {
     let bearingChanged = false;
     let pitchChanged = false;
 
-    if (options.zoom && tr.zoom !== +options.zoom) {
+    if (options.zoom !== undefined && tr.zoom !== +options.zoom) {
       zoomChanged = true;
       tr.zoom = +options.zoom;
     }
@@ -255,17 +255,16 @@ export default class Camera extends EventEmitter {
       tr.center = LngLat.convert(options.center);
     }
 
-    if (options.bearing && tr.bearing !== +options.bearing) {
+    if (options.bearing !== undefined && tr.bearing !== +options.bearing) {
       bearingChanged = true;
       tr.bearing = +options.bearing;
     }
-
-    if (options.pitch && tr.pitch !== +options.pitch) {
+    if (options.pitch !== undefined && tr.pitch !== +options.pitch) {
       pitchChanged = true;
       tr.pitch = +options.pitch;
     }
 
-    if (options.padding != null && !tr.isPaddingEqual(options.padding)) {
+    if (options.padding !== undefined && !tr.isPaddingEqual(options.padding)) {
       tr.padding = options.padding;
     }
 
