@@ -567,3 +567,25 @@ export function getBBoxFromPoints(pointList: Position[]) {
 export function getBBox(feature: Feature<any>) {
   return bbox(feature);
 }
+
+export enum IPointsType {
+  POINT = 'POINT', // 单个点
+  BOUNDS = 'BOUNDS', // 矩形范围
+  POLYGON = 'POLYGON', // 多边形范围
+}
+
+/**
+ * 判断点集列表的类型
+ * @param points
+ * @returns
+ */
+export function pointsType(points: number[]) {
+  const len = points.length;
+  if (len === 2) {
+    return IPointsType.POINT;
+  }
+  if (len === 4) {
+    return IPointsType.BOUNDS;
+  }
+  return IPointsType.POLYGON;
+}

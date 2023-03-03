@@ -8,22 +8,8 @@ import {
   ISource,
   TYPES,
 } from '@antv/l7-core';
-import {
-  extentPoints,
-  getBBox,
-  initRectPolygon,
-  intersectPolygon,
-  SourceTile,
-  TileBounds,
-  TilesetManager,
-} from '@antv/l7-utils';
+import { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { debounce } from 'lodash';
-import {
-  filterByPolygon,
-  ICoverRect,
-  ListType,
-  listType,
-} from '../../core/helper';
 import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
 import { ProxyFuncs } from '../style/constants';
@@ -61,109 +47,20 @@ export default class BaseTileLayer {
       layerService: this.layerService,
       parent,
     });
+
+    this.initTileSetManager();
+
     // 初始化拾取服务
     this.tilePickService = new TilePickService({
       tileLayerService: this.tileLayerService,
       layerService: this.layerService,
       parent,
+      tilesetManager: this.tilesetManager,
     });
 
     // 重置
     this.parent.setLayerPickService(this.tilePickService);
     this.proxy(parent);
-
-    this.initTileSetManager();
-  }
-
-  /**
-   * 根据范围拾取数据
-   * @param points [lng, lat, lng, lat, ...]
-   * @param callback
-   * @returns
-   */
-  public pickData(points: number[], callback: (data: any) => void) {
-    const type = listType(points);
-    switch (type) {
-      case ListType.POINT: // 拾取一个点
-        callback([]);
-        break;
-      case ListType.POLYGON: // 多边形
-        const extent = extentPoints(points); // 获取多边形的范围、包围盒 [minLng, minLat, maxLng, maxLat]
-        const coverData: ICoverRect[] = this.getCoverRects(extent); // 获取多边形包围盒与瓦片的重叠矩形
-        const pixelBounds = this.mapService.boundsToContainer(extent); // 获取多边形的像素包围盒
-        const filterOption = {
-          container: this.parent.getContainer(),
-          mapService: this.mapService,
-          pickingService: this.pickingService,
-          polygonPoints: points,
-        };
-        filterByPolygon(filterOption, coverData, pixelBounds, callback);
-        break;
-      case ListType.BOUNDS: // 拾取矩形
-        const tileCoverData: ICoverRect[] = this.getCoverRects(points);
-        callback(tileCoverData);
-        break;
-      case ListType.ALL:
-      case ListType.INVALID:
-      default:
-        callback([]);
-    }
-  }
-
-  /**
-   * 计算多边形包围盒与瓦片的重叠矩形
-   * @param latLonBounds [minLng, minLat, maxLng, maxLat]
-   * @returns
-   */
-  public getCoverRects(latLonBounds: number[]) {
-    const coverRects = this.boundsCover(latLonBounds);
-    const tileCoverData: ICoverRect[] = [];
-    coverRects.forEach(({ rect, tileKey }) => {
-      const tileLayer = this.tileLayerService.getTile(tileKey);
-      if (tileLayer) {
-        tileCoverData.push({
-          tileKey,
-          width: tileLayer.sourceTile.tileSize,
-          height: tileLayer.sourceTile.tileSize,
-          ...tileLayer.getData(rect),
-        });
-      }
-    });
-
-    return tileCoverData;
-  }
-
-  // 计算覆盖区域的瓦片
-  public boundsCover(latLonBounds: number[]) {
-    if (!this.initedTileset) {
-      console.warn('TileSet Not Inited!');
-      return [];
-    }
-    const [minLat, minLng, maxLat, maxLng] = latLonBounds;
-    const boundsRect = initRectPolygon(minLat, minLng, maxLat, maxLng);
-    const zoom = this.mapService.getZoom();
-    const tileIndices = this.tilesetManager.getTileIndices(zoom, [
-      minLat,
-      minLng,
-      maxLat,
-      maxLng,
-    ]);
-    const combineRects: Array<{ rect: any; tileKey: string }> = [];
-    tileIndices.forEach(({ x, y, z }) => {
-      const tile = this.tilesetManager.getTile(x, y, z);
-      if (tile?.bounds) {
-        const tileRect = initRectPolygon(...tile.bounds);
-        const combineRect = intersectPolygon(boundsRect, tileRect);
-        // 存在重叠部分
-        if (combineRect) {
-          combineRects.push({
-            rect: getBBox(combineRect) as TileBounds,
-            tileKey: tile.key,
-          });
-        }
-      }
-    });
-    return combineRects;
   }
 
   protected initTileSetManager() {

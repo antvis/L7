@@ -24,6 +24,74 @@ export default () => {
     });
 
     scene.on('loaded', async () => {
+
+      const minLng = 110;
+      const minLat = 25;
+      const maxLng = 120;
+      const maxLat = 35;
+      const points = [minLng, minLat, maxLng, maxLat];
+
+      
+    
+
+      const polygon = new PolygonLayer({ visible: true })
+        .source({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Polygon',
+                coordinates: [
+                  [
+                    
+                    [maxLng, maxLat],
+                    [maxLng, minLat],
+                    [minLng, minLat],
+                    [maxLng, maxLat],
+                  ],
+                ],
+              },
+            },
+          ],
+        })
+        .shape('fill')
+        .color('#ff0')
+        .style({
+          opacity: 0.5,
+        });
+      scene.addLayer(polygon);
+
+     
+      const polygon2 = new PolygonLayer({ visible: true })
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
+                [
+                  [minLng, maxLat],
+                  [maxLng, minLat],
+                  [minLng, minLat],
+                  [minLng, maxLat],
+                ],
+              ],
+            },
+          },
+        ],
+      })
+      .shape('fill')
+      .color('#f00')
+      .style({
+        opacity: 0.5,
+      });
+      scene.addLayer(polygon2);
+
       const tiffdata = await getTiffData();
       const tiff = await GeoTIFF.fromArrayBuffer(tiffdata);
       const image = await tiff.getImage();
@@ -31,7 +99,9 @@ export default () => {
       const height = image.getHeight();
       const values = await image.readRasters();
 
-      const layer = new RasterLayer();
+      const layer = new RasterLayer({
+        maskLayers: [polygon]
+      });
       layer
         .source(values[0], {
           parser: {
@@ -58,42 +128,10 @@ export default () => {
             positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
           },
         });
+        scene.addLayer(layer);
+      
 
-      scene.addLayer(layer);
 
-      const minLng = 110;
-      const minLat = 25;
-      const maxLng = 120;
-      const maxLat = 35;
-      const points = [minLng, minLat, maxLng, maxLat];
-
-      const polygon = new PolygonLayer()
-        .source({
-          type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'Polygon',
-                coordinates: [
-                  [
-                    [minLng, maxLat],
-                    [maxLng, minLat],
-                    [minLng, minLat],
-                    [minLng, maxLat],
-                  ],
-                ],
-              },
-            },
-          ],
-        })
-        .shape('fill')
-        .color('#ff0')
-        .style({
-          opacity: 0.5,
-        });
-      // scene.addLayer(polygon);
 
       const line = new LineLayer()
         .source({
@@ -126,17 +164,16 @@ export default () => {
         const rect = [110, 25, 120, 35];
         const triangle = [110, 35, 120, 25, 110, 25, 110, 35];
 
-        // layer.pickData(points)
+        
         layer
+          // .pickData(rect)
           .pickData(triangle)
-          // layer.pickData([115 - offset, 27 - offset, 115 + offset, 27 + offset])
           .then((res) => {
-            console.log('pickData', JSON.stringify(res[0].filterData));
+            console.log('pickData', res[0])
+            // console.log('pickData', JSON.stringify(res[0].filterData));
             // console.log('pickData', JSON.stringify(res[0].data))
           });
-        // layer.boxSelect([73.482190241, 3.82501784112, 135.106618732, 57.6300459963], (e) => {
-        //   console.log('boxSelect', e)
-        // })
+      
       }, 2000);
     });
   }, []);

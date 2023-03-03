@@ -13,6 +13,7 @@ import {
 import {
   bBoxToBounds,
   extent,
+  overlapBounds,
   padBounds,
   TilesetManager,
 } from '@antv/l7-utils';
@@ -23,7 +24,9 @@ import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './factory';
+
 import { cluster } from './transform/cluster';
+import { getRectData, pixelFilter, projectRect } from './utils/filter';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
 
@@ -352,5 +355,61 @@ export default class Source extends EventEmitter implements ISource {
       newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
     }
     return newBounds[0].concat(newBounds[1]);
+  }
+
+  public getData(rect: number[]) {
+    const { data, width } = this.data.dataArray[0];
+    const filterData = getRectData(data, width, rect);
+    return filterData;
+  }
+
+  public filterData(
+    coverRect: number[],
+    coverPixelsBounds: number[],
+    pixelBounds: number[],
+    pixels: number[],
+  ) {
+    const coverData = this.getData(coverRect);
+    return pixelFilter(
+      coverData,
+      coverRect,
+      coverPixelsBounds,
+      pixelBounds,
+      pixels,
+    );
+  }
+
+  public coverRect(selectBounds: [number, number, number, number]) {
+    // 栅格图层本身的数据范围 [minLng, minLat, maxLng, maxLat]
+    const {
+      width: dataWidth,
+      height: dataHeight,
+      coordinates,
+    } = this.data.dataArray[0];
+    const dataBounds = [...coordinates[0], ...coordinates[1]] as [
+      number,
+      number,
+      number,
+      number,
+    ];
+    const coverBounds: number[] = overlapBounds(selectBounds, dataBounds);
+    const [minLng, minLat, maxLng, maxLat] = coverBounds;
+    // 计算重叠部分的数据坐标
+    const [minX, minY] = projectRect(
+      [minLng, maxLat],
+      dataWidth,
+      dataHeight,
+      dataBounds,
+    );
+    const [maxX, maxY] = projectRect(
+      [maxLng, minLat],
+      dataWidth,
+      dataHeight,
+      dataBounds,
+    );
+    return {
+      bounds: coverBounds,
+      rect: [minX, minY, maxX, maxY], // data rect width, height
+    };
   }
 }

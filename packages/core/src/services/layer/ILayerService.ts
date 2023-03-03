@@ -262,7 +262,6 @@ export interface ITile {
   sourceTile: SourceTile;
   visible: boolean;
   isLoaded: boolean;
-  getData(bounds: any): any;
   getMainLayer(): ILayer | undefined;
   getLayers(): ILayer[];
   getFeatureById(id: number): any;
@@ -284,7 +283,6 @@ export interface ITileLayerService {
 export interface IBaseTileLayer {
   tilesetManager: TilesetManager | undefined;
   tileLayerService: ITileLayerService;
-  pickData(bounds: number[], callback: (data: any) => void): any;
   getLayers(): ILayer[];
   getTiles(): ITile[];
   pickRender(target: IInteractionTarget): void;
@@ -732,7 +730,7 @@ export interface ILayerService {
   updateLayerRenderList(): void;
   reRender(): void;
   beforeRenderData(layer: ILayer): Promise<void>;
-  renderMask(masks: ILayer[]): void;
+  renderMask(masks: ILayer[], target?: any): void;
   renderTileLayer(layer: ILayer): Promise<void>;
   needPick(type: string): boolean;
   throttleRenderLayers(): void;

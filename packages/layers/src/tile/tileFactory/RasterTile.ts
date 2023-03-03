@@ -1,9 +1,8 @@
 import { ILayerAttributesOption, ITexture2D } from '@antv/l7-core';
-import { getDefaultDomain, TileBounds } from '@antv/l7-utils';
+import { getDefaultDomain } from '@antv/l7-utils';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import RasterLayer from '../../raster';
 import Tile from './Tile';
-import { getRectData, projectRect } from './util';
 
 const DEFAULT_COLOR_TEXTURE_OPTION = {
   positions: [0, 1],
@@ -11,34 +10,6 @@ const DEFAULT_COLOR_TEXTURE_OPTION = {
 };
 
 export default class RasterTile extends Tile {
-  /**
-   * 根据框选矩形（与瓦片重叠部分 lngLat）获取数据
-   * @param bounds
-   * @returns
-   */
-  public getData(bounds: TileBounds) {
-    const [minLng, minLat, maxLng, maxLat] = bounds;
-    const { bounds: tileBounds, data } = this.sourceTile;
-    const { width, height } = data.data;
-    const [minX, minY] = projectRect(
-      [minLng, maxLat],
-      width,
-      height,
-      tileBounds,
-    );
-    const [maxX, maxY] = projectRect(
-      [maxLng, minLat],
-      width,
-      height,
-      tileBounds,
-    );
-    return {
-      data: getRectData(data.data.rasterData, width, [minX, minY, maxX, maxY]),
-      bounds,
-      rect: [minX, minY, maxX, maxY],
-    };
-  }
-
   private colorTexture: ITexture2D;
   public async initTileLayer(): Promise<void> {
     const attributes = this.parent.getLayerAttributeConfig();

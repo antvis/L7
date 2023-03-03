@@ -15,6 +15,11 @@ export interface IPickingService {
     x: number;
     y: number;
   };
+  layer2Pixels(
+    layer: ILayer,
+    pixelBounds: number[],
+    callback: (...args: any[]) => void,
+  ): void;
   triggerHoverOnLayer(
     layer: ILayer,
     target: {

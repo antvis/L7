@@ -97,6 +97,13 @@ export default class PickingService implements IPickingService {
         stencil: 0,
         depth: 1,
       });
+
+      const { enableMask } = layer.getLayerConfig();
+      if (layer.masks.filter((m) => m.inited).length > 0 && enableMask) {
+        // 清除上一次的模版缓存
+        this.layerService.renderMask(layer.masks, this.pickingFBO);
+      }
+
       layer.hooks.beforePickingEncode.call();
       layer.renderModels();
       layer.hooks.afterPickingEncode.call();
@@ -185,6 +192,30 @@ export default class PickingService implements IPickingService {
       x: xMin,
       y: yMin,
     };
+  };
+
+  public layer2Pixels = (
+    layer: ILayer,
+    pixelBounds: number[],
+    callback: (...args: any[]) => void,
+  ) => {
+    this.render(layer, () => {
+      // 根据绘制的几何形状像素纹理过滤有效值
+      const {
+        pickedColors,
+        x: pixelMinX,
+        y: pixelMinY,
+        width: pixelWidth,
+        height: pixelHeight,
+      } = this.extractPixels(pixelBounds);
+      callback({
+        pickedColors,
+        pixelMinX,
+        pixelMinY,
+        pixelWidth,
+        pixelHeight,
+      });
+    });
   };
 
   // 动态设置鼠标光标

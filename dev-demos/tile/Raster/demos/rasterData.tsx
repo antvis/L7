@@ -112,16 +112,13 @@ export default () => {
           ]
 
           setTimeout(() => {
-            // console.log('rasterLayer boxSelect');
-            // layer.boxSelect([115 - offset, 27 - offset, 115 + offset, 27 + offset], (e) => {
-            //   console.log('boxSelect', e);
-            // })
             layer.pickData(points)
             // layer.pickData([115 - offset, 27 - offset, 115 + offset, 27 + offset])
             .then(res => {
+              console.log(res)
               console.log(JSON.stringify(res[1].filterData))
-              // console.log(JSON.stringify(res[0].data))
-              // console.log(res)
+              // console.log(JSON.stringify(res[1].data))
+              
             })
             
           }, 2200)

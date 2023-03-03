@@ -140,6 +140,7 @@ export interface ISource {
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
   tileset: TilesetManager | undefined;
+  coverRect(bounds: number[]): any;
   getSourceCfg(): any;
   setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;

@@ -3,16 +3,30 @@ import {
   ILayer,
   ILayerService,
   IPickingService,
+  ISource,
   ITile,
   ITilePickService,
   TYPES,
 } from '@antv/l7-core';
-import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
+import {
+  decodePickingColor,
+  encodePickingColor,
+  extentPoints,
+  getBBox,
+  initRectPolygon,
+  intersectPolygon,
+  IPointsType,
+  pointsType,
+  TileBounds,
+  TilesetManager,
+} from '@antv/l7-utils';
+import { filterByPolygon, ICoverRect } from '../../core/helper';
 import { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
   tileLayerService: TileLayerService;
+  tilesetManager: TilesetManager;
   parent: ILayer;
 }
 
@@ -22,16 +36,19 @@ export class TilePickService implements ITilePickService {
   private layerService: ILayerService;
   private tileLayerService: TileLayerService;
   private tileSourceService: TileSourceService;
+  private tilesetManager: TilesetManager;
   private parent: ILayer;
   private tilePickID = new Map();
   constructor({
     layerService,
     tileLayerService,
     parent,
+    tilesetManager,
   }: ITilePickServiceOptions) {
     this.layerService = layerService;
     this.tileLayerService = tileLayerService;
     this.parent = parent;
+    this.tilesetManager = tilesetManager;
     this.tileSourceService = new TileSourceService();
   }
   public pickRender(target: IInteractionTarget) {
@@ -51,11 +68,115 @@ export class TilePickService implements ITilePickService {
    */
   public pickData(points: number[]) {
     return new Promise((resolve) => {
-      this.parent.tileLayer.pickData(points, (data) => {
+      this.pickTileData(points, (data) => {
         resolve(data);
       });
     });
   }
+
+  private pickTileData(points: number[], callback: (data: any) => void) {
+    const type = pointsType(points);
+    switch (type) {
+      case IPointsType.POINT: // 拾取一个点
+        callback([]);
+        break;
+      case IPointsType.POLYGON: // 多边形
+        const extent = extentPoints(points); // 获取多边形的范围、包围盒 [minLng, minLat, maxLng, maxLat]
+        const covers = this.getCoverOptions(extent);
+        const pixelBounds = this.parent.mapService.boundsToContainer(extent); // 获取多边形的像素包围盒
+        const filterOption = {
+          container: this.parent.getContainer(),
+          pickingService: this.parent.pickingService,
+          polygonPoints: points,
+          maskLayers: [], // TODO: 后续添加 Mask
+        };
+        filterByPolygon(filterOption, covers, pixelBounds, callback);
+        break;
+      case IPointsType.BOUNDS: // 拾取矩形
+        const boundsCovers = this.getCoverOptions(points);
+        const boundsSelect = boundsCovers.map((cover) => {
+          return {
+            ...cover,
+            data: cover.source?.getData(cover.rect),
+          };
+        });
+        callback(boundsSelect);
+        break;
+      default:
+        callback([]);
+    }
+  }
+
+  private getCoverOptions(lngLatBounds: number[]) {
+    const covers = this.getCoverRects(lngLatBounds);
+    covers.forEach((cover) => {
+      const { coverBounds, tileKey } = cover;
+      const tileLayer = this.tileLayerService.getTile(
+        tileKey as string,
+      ) as ITile;
+      const source = tileLayer?.getMainLayer()?.getSource() as ISource;
+      const { rect } = source.coverRect(coverBounds as number[]);
+      const PixelsBounds = this.parent.mapService.boundsToContainer(
+        coverBounds as number[],
+      );
+      cover.coverPixelsBounds = PixelsBounds;
+      cover.bounds = coverBounds as number[];
+      cover.rect = rect;
+      cover.source = source;
+    });
+    return covers;
+  }
+
+  /**
+   * 计算多边形包围盒与瓦片的重叠矩形
+   * @param latLonBounds [minLng, minLat, maxLng, maxLat]
+   * @returns
+   */
+  public getCoverRects(latLonBounds: number[]) {
+    const coverRects = this.boundsCover(latLonBounds);
+    const tileCoverData: ICoverRect[] = [];
+    coverRects.forEach(({ coverBounds, tileKey }) => {
+      const tileLayer = this.tileLayerService.getTile(tileKey);
+      if (tileLayer) {
+        tileCoverData.push({
+          tileKey,
+          coverBounds,
+        });
+      }
+    });
+
+    return tileCoverData;
+  }
+
+  // 计算覆盖区域的瓦片
+  public boundsCover = (latLonBounds: number[]) => {
+    const [minLat, minLng, maxLat, maxLng] = latLonBounds;
+    const boundsRect = initRectPolygon(minLat, minLng, maxLat, maxLng);
+    const zoom = this.parent.mapService.getZoom();
+    const tileIndices = this.tilesetManager.getTileIndices(zoom, [
+      minLat,
+      minLng,
+      maxLat,
+      maxLng,
+    ]);
+    const combineRects: Array<{ coverBounds: TileBounds; tileKey: string }> =
+      [];
+    tileIndices.forEach(({ x, y, z }) => {
+      const tile = this.tilesetManager.getTile(x, y, z);
+      if (tile?.bounds) {
+        const tileRect = initRectPolygon(...tile.bounds);
+        const combineRect = intersectPolygon(boundsRect, tileRect);
+        // 存在重叠部分
+        if (combineRect) {
+          combineRects.push({
+            coverBounds: getBBox(combineRect) as TileBounds,
+            tileKey: tile.key,
+          });
+        }
+      }
+    });
+    return combineRects;
+  };
 
   public pick(layer: ILayer, target: IInteractionTarget) {
     const container = this.parent.getContainer();

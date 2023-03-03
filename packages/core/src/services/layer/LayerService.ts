@@ -165,12 +165,12 @@ export default class LayerService
     this.alreadyInRendering = false;
   }
 
-  public renderMask(masks: ILayer[]) {
+  public renderMask(masks: ILayer[], target = null) {
     let maskIndex = 0;
     this.renderService.clear({
       stencil: 0,
       depth: 1,
-      framebuffer: null,
+      framebuffer: target,
     });
     const stencilType =
       masks.length > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
