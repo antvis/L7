@@ -77,13 +77,12 @@ export default () => {
       });
 
     source.on('update', () => {
-      // console.log(scene.getMapService().version)
       // const midPoints = lineAtOffset(source, 0.3, 'arc', 'offset');
       const midPoints = lineAtOffset(source, {
         offset: 2 / 30,
         shape: 'greatcircle',
         // thetaOffset: 0.5,
-        mapVersion: scene.getMapService().version,
+        mapVersion: scene.map.version,
       });
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })
         .source(midPoints, {
@@ -108,7 +107,7 @@ export default () => {
         offset: 0.3,
         shape: 'greatcircle',
         // thetaOffset: 0.5,
-        mapVersion: scene.getMapService().version,
+        mapVersion: scene.map.version,
       });
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })
         .source(midPoints, {

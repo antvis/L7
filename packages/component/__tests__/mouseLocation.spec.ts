@@ -19,7 +19,7 @@ describe('buttonControl', () => {
     const control = new MouseLocation();
     scene.addControl(control);
 
-    (scene.getMapService().map as any).emit('mousemove', {
+    (scene.map as any).emit('mousemove', {
       lngLat: {
         lng: 120,
         lat: 30,
