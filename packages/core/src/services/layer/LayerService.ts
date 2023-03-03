@@ -186,8 +186,7 @@ export default class LayerService
       this.renderLayers();
     }
   }
-  // 瓦片图层渲染
-  public async renderTileLayer(layer: ILayer) {
+  public renderTileLayerMask(layer: ILayer) {
     let maskindex = 0;
     const { enableMask = true } = layer.getLayerConfig();
     let maskCount = layer.tileMask ? 1 : 0;
@@ -224,7 +223,10 @@ export default class LayerService
         stencilOperation: MaskOperation.OR,
       });
     }
-
+  }
+  // 瓦片图层渲染
+  public async renderTileLayer(layer: ILayer) {
+    this.renderTileLayerMask(layer);
     if (layer.getLayerConfig().enableMultiPassRenderer) {
       // multiPassRender 不是同步渲染完成的
       await layer.renderMultiPass();

@@ -2,6 +2,7 @@ import {
   IInteractionTarget,
   ILayer,
   ILayerPickService,
+  ILayerService,
   IMapService,
   IPickingService,
   TYPES,
@@ -13,22 +14,14 @@ export default class BaseLayerPickService implements ILayerPickService {
     this.layer = layer;
   }
   public pickRender(target: IInteractionTarget): void {
+    const container = this.layer.getContainer();
+    const layerService = container.get<ILayerService>(TYPES.ILayerService);
     const layer = this.layer;
     // 瓦片图层的拾取绘制
     if (layer.tileLayer) {
       return layer.tileLayer.pickRender(target);
     }
-
-    layer.hooks.beforePickingEncode.call();
-
-    if (layer.masks.length > 0) {
-      // 若存在 mask，则在 pick 阶段的绘制也启用
-      layer.masks
-        .filter((mask) => mask.inited)
-        .forEach(async (m: ILayer) => {
-          m.render({ isStencil: true });
-        });
-    }
+    layerService.renderTileLayerMask(layer);
     layer.renderModels({
       ispick: true,
     });

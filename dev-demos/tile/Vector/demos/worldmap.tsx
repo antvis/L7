@@ -113,9 +113,9 @@ export default () => {
       //   .size(12)
       //   .color('#000');
 
-      // water_surface.on('click', (e) => {
-      //   console.log(e);
-      // });
+      water_surface.on('click', (e) => {
+        console.log(e);
+      });
 
       scene.addLayer(water_surface);
       // scene.addLayer(text);
