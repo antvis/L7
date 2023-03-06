@@ -263,7 +263,12 @@ export default abstract class BaseMapService<T>
     const [minLng, minLat, maxLng, maxLat] = bounds;
     const { x: minX, y: minY } = this.lngLatToContainer([minLng, maxLat]);
     const { x: maxX, y: maxY } = this.lngLatToContainer([maxLng, minLat]);
-    return floorArray([minX, minY, maxX, maxY]) as number[];
+    return floorArray([
+      minX * DOM.DPR,
+      minY * DOM.DPR,
+      maxX * DOM.DPR,
+      maxY * DOM.DPR,
+    ]);
   }
 
   public abstract lngLatToMercator(

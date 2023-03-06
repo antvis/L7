@@ -84,11 +84,13 @@ export class TilePickService implements ITilePickService {
         const extent = extentPoints(points); // 获取多边形的范围、包围盒 [minLng, minLat, maxLng, maxLat]
         const covers = this.getCoverOptions(extent);
         const pixelBounds = this.parent.mapService.boundsToContainer(extent); // 获取多边形的像素包围盒
+        const { maskLayers, enableMask } = this.parent.getLayerConfig();
+        const masks = enableMask ? maskLayers : [];
         const filterOption = {
           container: this.parent.getContainer(),
           pickingService: this.parent.pickingService,
           polygonPoints: points,
-          maskLayers: [], // TODO: 后续添加 Mask
+          maskLayers: masks as ILayer[],
         };
         filterByPolygon(filterOption, covers, pixelBounds, callback);
         break;

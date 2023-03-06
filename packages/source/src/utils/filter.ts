@@ -89,25 +89,41 @@ export function pixelFilter(
   // 覆盖矩形的像素坐标范围
   const [coverPixelMinX, coverPixelMinY, coverPixelMaxX, coverPixelMaxY] =
     coverPixelsBounds;
-  const [pixelMinX, pixelMinY] = pixelBounds;
+  const [pixelMinX, pixelMinY, pixelWidth, pixelHeight] = pixelBounds;
   // 覆盖矩形的像素宽高
   const coverPixelHeight = coverPixelMaxY - coverPixelMinY;
   const coverPixelWidth = coverPixelMaxX - coverPixelMinX;
+  // console.log('coverPixelWidth', coverPixelWidth)
+  // console.log('coverPixelHeight', coverPixelHeight)
   // 覆盖矩形的像素坐标与过滤的几何形状的像素坐标的偏移量
   const offsetX = coverPixelMinX - pixelMinX;
   const offsetY = coverPixelMinY - pixelMinY;
+  // console.log('offsetX', offsetX)
+  // console.log('offsetY', offsetY)
   // 判断覆盖的矩形区域数据是否在过滤的几何形状内部（根据 pickFrameBuffer 的渲染纹理进行判断）
   const filterData = [];
   for (let y = 0; y < coverHeightCount; y++) {
     for (let x = 0; x < coverWidthCount; x++) {
       // 将坐标转换为像素坐标，并根据像素坐标从 pickFrameBuffer 中提取对应的像素值
       // 计算数据坐标对应的像素点位的坐标
-      const pixelX = Math.floor(
-        offsetX + (x * coverPixelWidth) / coverWidthCount,
-      );
-      const pixelY = Math.floor(
-        offsetY + (y * coverPixelHeight) / coverHeightCount,
-      );
+      const pixelX = Math.floor(offsetX + (x * pixelWidth) / coverPixelWidth);
+      const pixelY = Math.floor(offsetY + (y * pixelHeight) / coverPixelHeight);
+      // let pixelX = Math.floor(
+      //   offsetX + x * (coverPixelWidth / coverWidthCount),
+      // ) ;
+      // if(x < coverWidthCount/2 ) {
+      //   pixelX = pixelX - 1
+      // } else {
+      //   pixelX = pixelX + 1
+      // }
+      // let pixelY = Math.floor(
+      //   offsetY + y * (coverPixelHeight / coverHeightCount),
+      // );
+      // if(y < coverHeightCount/2 ) {
+      //   pixelY = pixelY - 1
+      // } else {
+      //   pixelY = pixelY + 1
+      // }
       const pixelIndex = pixelY * coverPixelWidth + pixelX;
       // 根据像素值判断
       if (pixels[pixelIndex] > 0) {

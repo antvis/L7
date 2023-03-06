@@ -56,18 +56,42 @@ export default () => {
       )
         .then((res) => res.json())
         .then((maskData) => {
-          const p = new PolygonLayer({
-            visible:false
-          })
-          .source(maskData)
+          const geojson = {
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {
+                  "name": "tom"
+                },
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [
+                    [
+                      [114.75, 26.75],
+                      [115.25, 27.25],
+                      [115.25, 26.75],
+                    ]
+                  ]
+                }
+              }
+            ]
+          }
+          const p = new PolygonLayer()
+          .source(geojson)
           .shape('fill')
           .color('blue')
+          .style({
+            opacity: 0.3
+          })
           scene.addLayer(p)
+          
           const layer = new RasterLayer(
             {
               maskLayers: [p],
             }
           );
+          console.log('RasterLayer', layer)
 
           const tileSource = new Source(
             'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
@@ -112,12 +136,12 @@ export default () => {
           ]
 
           setTimeout(() => {
-            layer.pickData(points)
-            // layer.pickData([115 - offset, 27 - offset, 115 + offset, 27 + offset])
+            // layer.pickData(points)
+            layer.pickData([115 - offset, 27 - offset, 115 + offset, 27 + offset])
             .then(res => {
               console.log(res)
-              console.log(JSON.stringify(res[1].filterData))
-              // console.log(JSON.stringify(res[1].data))
+              // console.log(JSON.stringify(res[1].filterData))
+              console.log(JSON.stringify(res[1].data))
               
             })
             
@@ -153,56 +177,68 @@ export default () => {
           .color('#f00')
             scene.addLayer(line);
 
-            // 114.75, 27.059126, 115.25, 27.25
-            const polygon = new PolygonLayer()
-            .source({
-              "type": "FeatureCollection",
-              "features": [
-                {
-                  "type": "Feature",
-                  "properties": {
-                    "name": "tom"
-                  },
-                  "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [
-                      [
-                        [114.75, 27.25],
-                        [115.25, 27.25],
-                        [115.25, 27.059126],
-                        [114.75, 27.059126],
-                        [114.75, 27.059126],
-                      ]
+          // 114.75, 27.059126, 115.25, 27.25
+          const polygon = new PolygonLayer()
+          .source({
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {
+                  "name": "tom"
+                },
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [
+                    [
+                      [114.75, 27.25],
+                      [115.25, 27.25],
+                      [115.25, 27.059126],
+                      [114.75, 27.059126],
+                      [114.75, 27.059126],
                     ]
-                  }
+                  ]
                 }
-              ]
-            })
-            .shape('fill')
-            .color('#00f')
-            .style({
-              opacity: 0.2,
-            })
-            scene.addLayer(polygon);
+              }
+            ]
+          })
+          .shape('fill')
+          .color('#00f')
+          .style({
+            opacity: 0.2,
+          })
+          scene.addLayer(polygon);
 
-          // setTimeout(() => {
-          //   layer.style({
-          //     opacity: 0.5,
-          //     // rampColors: {
-          //     //   // colors: colorList,
-          //     //   // positions,
-          //     //   colors: ['#f00', '#f00'],
-          //     //   positions: [0, 1]
-          //     // },
-          //   })
-          //   scene.render();
-          //   console.log('***')
-          // }, 2000)
+          const polygon2 = new PolygonLayer()
+          .source({
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {
+                  "name": "tom"
+                },
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [
+                    [
+                      [114.75, 27.25],
+                      [115.25, 27.25],
+                      [115.25, 26.75],
+                    ]
+                  ]
+                }
+              }
+            ]
+          })
+          .shape('fill')
+          .color('#00f')
+          .style({
+            opacity: 0.2,
+          })
+          scene.addLayer(polygon2);
 
-          // layer.on('click', (e) => {
-          //   console.log('layer click');
-          //   console.log(e);
-          // })
+
         });
     });
 

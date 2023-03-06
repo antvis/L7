@@ -88,6 +88,7 @@ export async function filterByPolygon(
   pixelBounds: number[],
   callback: (data: any) => void,
 ) {
+  // console.log('pixelBounds', pixelBounds)
   const { container, pickingService, polygonPoints, maskLayers } = filterOption;
   const polygon = await createPolygon(polygonPoints, container, maskLayers);
   const { layer2Pixels } = pickingService;
@@ -96,6 +97,8 @@ export async function filterByPolygon(
     pixelBounds,
     ({ pickedColors, pixelMinX, pixelMinY, pixelWidth, pixelHeight }) => {
       const pixels = getPixelsR(pickedColors, pixelWidth, pixelHeight);
+      // console.log(pixelWidth, pixelHeight)
+      // console.log(JSON.stringify(pixels), pixels.length,  pixelWidth, pixelHeight)
       coverRects.forEach((coverRectData) => {
         const { coverPixelsBounds, rect: coverRect, source } = coverRectData;
         coverRectData.filterData = source.filterData(
@@ -125,10 +128,8 @@ export function getPixelsR(
 ) {
   // 将像素值上下翻转，使得数据与渲染贴图一致（ pixels 的数据值与实际的渲染结果上下颠倒 ）
   const data = [];
-  // renderService 在提取像素时，会将像素值放大 DPR 倍，而使用 boundsToContainer 获取的 pixel 坐标按 DPR 1 计算，因此这里需要将像素值缩小 DPR 倍
-  const DPR = window.devicePixelRatio;
-  for (let i = pixelHeight - 1; i >= 0; i -= DPR) {
-    for (let j = 0; j < pixelWidth; j += DPR) {
+  for (let i = pixelHeight - 1; i >= 0; i--) {
+    for (let j = 0; j < pixelWidth; j++) {
       data.push(pixels[(i * pixelWidth + j) * 4]);
     }
   }
