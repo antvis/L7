@@ -86,7 +86,9 @@ export default class PickingService implements IPickingService {
         depth: 1,
       });
       layer.hooks.beforePickingEncode.call();
-      layer.renderModels();
+      layer.renderModels({
+        ispick: true,
+      });
       layer.hooks.afterPickingEncode.call();
       const features = this.pickBox(layer, box);
       cb(features);
