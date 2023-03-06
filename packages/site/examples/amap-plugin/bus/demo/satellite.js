@@ -11,5 +11,5 @@ const scene = new Scene({
 
 
 scene.on('loaded', () => {
-  scene.getMapService().map.add(new window.AMap.TileLayer.Satellite());
+  scene.map.add(new window.AMap.TileLayer.Satellite());
 });

@@ -113,10 +113,8 @@ const scene = new Scene({
   map: new Earth({}),
 });
 
-const mapService = scene.getMapService();
-
 function step() {
-  mapService.rotateY({
+  scene.map.rotateY({
     option: {
       force: true,
       reg: 0.1,

@@ -4,7 +4,7 @@ import {
   // @ts-ignore
 } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap , GaodeMapV1} from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import { polygonToLineString, MultiPolygon } from '@turf/turf';
 

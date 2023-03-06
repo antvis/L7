@@ -207,7 +207,6 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
-
     this.pickedColors = pickedColors;
 
     if (
@@ -368,7 +367,6 @@ export default class PickingService implements IPickingService {
             stencil: 0,
             depth: 1,
           });
-
           layer.layerPickService.pickRender(target);
           const isPicked = this.pickFromPickingFBO(layer, target);
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;

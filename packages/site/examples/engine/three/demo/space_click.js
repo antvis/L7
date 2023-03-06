@@ -338,7 +338,7 @@ scene.on('loaded', () => {
     return '';
   });
 
-  scene.getMapService().on('mapchange', () => {
+  scene.map.on('mapchange', () => {
     // @ts-ignore
     currentCamera = threeJSLayer.getRenderCamera();
     currentView.pitch = scene.getPitch();

@@ -728,6 +728,7 @@ export interface ILayerService {
   beforeRenderData(layer: ILayer): Promise<void>;
   renderMask(masks: ILayer[]): void;
   renderTileLayer(layer: ILayer): Promise<void>;
+  renderTileLayerMask(layer: ILayer): void;
   needPick(type: string): boolean;
   throttleRenderLayers(): void;
   renderLayers(): void;
