@@ -78,7 +78,6 @@ export default () => {
                   const width = image.getWidth();
                   const height = image.getHeight();
                   const values = await image.readRasters();
-                  console.log(values)
                   return { rasterData: values[0], width, height };
                 },
               },
@@ -98,19 +97,21 @@ export default () => {
 
           scene.addLayer(layer);
 
-          // setTimeout(() => {
-          //   layer.style({
-          //     opacity: 0.5,
-          //     // rampColors: {
-          //     //   // colors: colorList,
-          //     //   // positions,
-          //     //   colors: ['#f00', '#f00'],
-          //     //   positions: [0, 1]
-          //     // },
-          //   })
-          //   scene.render();
-          //   console.log('***')
-          // }, 2000)
+          setTimeout(() => {
+            //   layer.style({
+            //     opacity: 0.5,
+            //     // rampColors: {
+            //     //   // colors: colorList,
+            //     //   // positions,
+            //     //   colors: ['#f00', '#f00'],
+            //     //   positions: [0, 1]
+            //     // },
+            //   })
+            //   scene.render();
+            //   console.log('***')
+            scene.removeLayer(layer);
+            // tileSource.destroy();
+          }, 2000)
 
           // layer.on('click', (e) => {
           //   console.log('layer click');

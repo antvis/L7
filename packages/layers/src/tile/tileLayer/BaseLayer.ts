@@ -74,7 +74,7 @@ export default class BaseTileLayer {
     const { latLonBounds, zoom } = this.getCurrentView();
     this.tilesetManager?.update(zoom, latLonBounds);
   }
-  protected mapchange() {
+  protected mapchange = () => {
     const { latLonBounds, zoom } = this.getCurrentView();
 
     if (this.mapService.version === 'GAODE1.x') {
@@ -98,7 +98,7 @@ export default class BaseTileLayer {
     this.lastViewStates = { zoom, latLonBounds };
 
     this.tilesetManager?.throttleUpdate(zoom, latLonBounds);
-  }
+  };
   protected getCurrentView() {
     const bounds = this.mapService.getBounds();
     const latLonBounds: [number, number, number, number] = [
@@ -138,8 +138,8 @@ export default class BaseTileLayer {
     });
 
     // 地图视野发生改变
-    this.mapService.on('zoomend', () => this.mapchange());
-    this.mapService.on('moveend', () => this.viewchange());
+    this.mapService.on('zoomend', this.mapchange);
+    this.mapService.on('moveend', this.viewchange);
   }
 
   public render() {
@@ -171,6 +171,8 @@ export default class BaseTileLayer {
   }
 
   public destroy() {
+    this.mapService.off('zoomend', this.mapchange);
+    this.mapService.off('moveend', this.viewchange);
     this.tilesetManager?.destroy();
     this.tileLayerService.destroy();
   }
