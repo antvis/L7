@@ -21,6 +21,7 @@ export default class BaseLayerPickService implements ILayerPickService {
     if (layer.tileLayer) {
       return layer.tileLayer.pickRender(target);
     }
+    layer.hooks.beforePickingEncode.call();
     layerService.renderTileLayerMask(layer);
     layer.renderModels({
       ispick: true,
