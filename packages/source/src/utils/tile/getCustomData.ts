@@ -1,5 +1,5 @@
 // import { bindCancel } from './request';
-import { SourceTile } from '@antv/l7-utils';
+import { formatImage, SourceTile } from '@antv/l7-utils';
 import { IBandsOperation, IRasterFormat } from '../../interface';
 import { processRasterData } from '../bandOperation/bands';
 
@@ -37,6 +37,38 @@ export const getCustomData = async (
               }
             },
           );
+        }
+      },
+    );
+  });
+};
+
+export const getCustomImageData = async (
+  tile: SourceTile,
+  getCustomDataFunc: (
+    tile: { x: number; y: number; z: number },
+    cb: (err: any, data: any) => void,
+  ) => void,
+) => {
+  return new Promise((resolve, reject) => {
+    getCustomDataFunc(
+      {
+        x: tile.x,
+        y: tile.y,
+        z: tile.z,
+      },
+      (err, data) => {
+        if (err || data.length === 0) {
+          reject(err);
+          return;
+        }
+        if (data) {
+          formatImage(data, (error, image) => {
+            if (error) {
+              reject(error);
+            }
+            resolve(image);
+          });
         }
       },
     );

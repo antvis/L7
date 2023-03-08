@@ -269,3 +269,15 @@ export const getImage = (
     return getArrayBuffer(requestParameters, optionFunc);
   }
 };
+
+export const formatImage = (
+  imgData: ArrayBuffer,
+  callback: ResponseCallback<HTMLImageElement | ImageBitmap | null>,
+) => {
+  const imageBitmapSupported = typeof createImageBitmap === 'function';
+  if (imageBitmapSupported) {
+    arrayBufferToImageBitmap(imgData, callback);
+  } else {
+    arrayBufferToImage(imgData, callback);
+  }
+};
