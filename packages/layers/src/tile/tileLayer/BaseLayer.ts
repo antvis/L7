@@ -71,9 +71,26 @@ export default class BaseTileLayer {
       this.initedTileset = true;
     }
 
-    const { latLonBounds, zoom } = this.getCurrentView();
-    this.tilesetManager?.update(zoom, latLonBounds);
+    this.tileSetUpdate();
   }
+
+  public tileSetUpdate(forceUpdate: boolean = false) {
+    const { latLonBounds, zoom } = this.getCurrentView();
+    this.tilesetManager?.update(zoom, latLonBounds, forceUpdate);
+  }
+
+  public sourceUpdate() {
+    // clear tileLayerService cache
+    this.tileLayerService.clearTiles();
+    this.tileLayerService.destroy();
+
+    // clear tilesetManager cache
+    this.tilesetManager.clear();
+
+    // build new tiles
+    this.tileSetUpdate(true);
+  }
+
   protected mapchange = () => {
     const { latLonBounds, zoom } = this.getCurrentView();
 
@@ -96,9 +113,9 @@ export default class BaseTileLayer {
       return;
     }
     this.lastViewStates = { zoom, latLonBounds };
-
     this.tilesetManager?.throttleUpdate(zoom, latLonBounds);
   };
+
   protected getCurrentView() {
     const bounds = this.mapService.getBounds();
     const latLonBounds: [number, number, number, number] = [
@@ -206,7 +223,6 @@ export default class BaseTileLayer {
             }
           } else {
             // 已加载瓦片
-
             this.tileLayerService.updateTileVisible(tile);
             this.tilePickService.setPickState();
             this.layerService.reRender();

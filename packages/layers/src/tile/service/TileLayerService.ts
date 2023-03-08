@@ -55,6 +55,13 @@ export class TileLayerService {
     );
   }
 
+  public clearTiles() {
+    this.layerTiles.forEach((tile) => {
+      tile.destroy();
+    });
+    this.layerTiles = [];
+  }
+
   public removeTile(tileKey: string) {
     const index = this.layerTiles.findIndex((t) => t.key === tileKey);
     const tile = this.layerTiles.splice(index, 1);

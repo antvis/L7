@@ -78,10 +78,15 @@ export class TilesetManager extends EventEmitter {
 
   // 更新
   // 1.瓦片序号发生改变 2.瓦片新增 3.瓦片显隐控制
-  public update(zoom: number, latLonBounds: [number, number, number, number]) {
+  public update(
+    zoom: number,
+    latLonBounds: [number, number, number, number],
+    force = false,
+  ) {
     // 校验层级，向上取整
     const verifyZoom = Math.max(0, Math.ceil(zoom));
     if (
+      !force &&
       this.lastViewStates &&
       this.lastViewStates.zoom === verifyZoom &&
       isLatLonBoundsContains(
@@ -184,8 +189,7 @@ export class TilesetManager extends EventEmitter {
     return tiles[0];
   }
 
-  // 摧毁
-  public destroy() {
+  public clear() {
     for (const tile of this.cacheTiles.values()) {
       if (tile.isLoading) {
         tile.abortLoad();
@@ -193,6 +197,11 @@ export class TilesetManager extends EventEmitter {
     }
     this.cacheTiles.clear();
     this.currentTiles = [];
+  }
+
+  // 摧毁
+  public destroy() {
+    this.clear();
     this.removeAllListeners();
   }
 

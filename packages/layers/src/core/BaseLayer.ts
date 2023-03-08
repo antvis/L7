@@ -659,7 +659,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.inited) {
       this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
       this.layerSource.setData(data, options);
-      this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
+      this.layerSource.once('update', () => {
+        this.tileLayer?.sourceUpdate();
+        this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
+      });
     } else {
       this.on('inited', () => {
         this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
