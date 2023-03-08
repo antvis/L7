@@ -6,7 +6,7 @@ import {
   TilesetManagerOptions,
 } from '@antv/l7-utils';
 import { IParserData } from '../interface';
-import { getCustomData } from '../utils/tile/getCustomData';
+import { getCustomData, getCustomImageData } from '../utils/tile/getCustomData';
 import {
   defaultFormat,
   getTileBuffer,
@@ -54,6 +54,13 @@ export default function rasterTile(
     switch (tileDataType) {
       case RasterTileType.IMAGE:
         return getTileImage(data as string | string[], tileParams, tile, cfg);
+      case RasterTileType.CUSTOMTERRAINRGB:
+        return getCustomImageData(
+          // 自定义地形请求方式数据
+          tile,
+          // @ts-ignore
+          cfg?.getCustomData,
+        );
       case RasterTileType.ARRAYBUFFER:
         return getTileBuffer(
           data,
@@ -75,7 +82,6 @@ export default function rasterTile(
         return getTileImage(data as string | string[], tileParams, tile, cfg);
     }
   };
-
   const tilesetOptions = { ...DEFAULT_CONFIG, ...cfg, getTileData };
 
   return {
