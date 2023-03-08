@@ -1,4 +1,4 @@
-import { ILayer } from '@antv/l7-core';
+import { ILayer, RasterTileType } from '@antv/l7-core';
 import DebugTile from './DebugTile';
 import ImageTile from './ImageTile';
 import MaskLayer from './MaskTile';
@@ -34,13 +34,14 @@ export function getTileFactory(layer: ILayer) {
     case 'RasterLayer':
       const { dataType } = layer.getSource().parser;
       switch (dataType) {
-        case 'rgb':
-        case 'customRGB':
+        case RasterTileType.RGB:
+        case RasterTileType.CUSTOMRGB:
           return RasterRGBTile;
-        case 'arraybuffer':
-        case 'customArrayBuffer':
+        case RasterTileType.ARRAYBUFFER:
+        case RasterTileType.CUSTOMARRAYBUFFER:
           return RasterTile;
-        case 'terrainRGB':
+        case RasterTileType.TERRAINRGB:
+        case RasterTileType.CUSTOMTERRAINRGB:
           return RasterTerrainRGBTile;
         default:
           return ImageTile;

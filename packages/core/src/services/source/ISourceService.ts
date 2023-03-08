@@ -8,8 +8,10 @@ export enum RasterTileType {
   IMAGE = 'image',
   ARRAYBUFFER = 'arraybuffer',
   RGB = 'rgb',
+  TERRAINRGB = 'terrainRGB',
   CUSTOMRGB = 'customRGB',
   CUSTOMARRAYBUFFER = 'customArrayBuffer',
+  CUSTOMTERRAINRGB = 'customTerrainRGB',
 }
 
 export interface IGeojsonvtOptions {
