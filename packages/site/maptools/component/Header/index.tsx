@@ -7,7 +7,7 @@ import 'dumi/theme-default/slots/Header/index.less';
 
 
 const nav = [
-  {title: '首页', order: 0, link: '../tools', activePath: '/tools'},
+  // {title: '首页', order: 0, link: '../tools', activePath: '/tools'},
   {title: '地图下载', order: 1, link: '../tools/map', activePath: '/tools/map'},
   {title: '数据 SDK', order: 2, link: '../tools/sdk', activePath: '/tools/sdk'},
   {title: '数据服务', order: 3, link: '../tools/service', activePath: '/tools/service'}
