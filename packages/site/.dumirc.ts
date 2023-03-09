@@ -166,6 +166,13 @@ export default defineConfig({
           en: 'Examples',
         },
       },
+      {
+        slug: 'tools',
+        title: {
+          zh: '地图工具',
+          en: 'tools',
+        },
+      },
     ],
     cases: [
       {
@@ -467,6 +474,17 @@ export default defineConfig({
           en: 'experiment',
         },
         order: 13,
+      },
+    ],
+    sdk: [
+      {
+        slug: 'demo',
+        icon: 'point',
+        title: {
+          zh: 'SDK',
+          en: 'SDK',
+        },
+        order: 1,
       },
     ],
     examples: [
