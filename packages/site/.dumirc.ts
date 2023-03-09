@@ -671,6 +671,9 @@ export default defineConfig({
   scripts: [
     'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f',
   ],
+  analytics: {
+    baidu:'cde34c32ff1edfd4f933bfb44ae0e9f3',
+  },
   alias: {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
     '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
