@@ -11,6 +11,10 @@ const Hero: FC = () => {
         {
           text:'地图下载',
           link: '../tools/map'
+        },
+        {
+          text:'GITHUB',
+          link: 'https://github.com/antvis/l7'
         }
       ],
     },

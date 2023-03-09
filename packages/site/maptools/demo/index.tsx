@@ -8,16 +8,18 @@ import {
   InfoCircleOutlined,
   PictureOutlined,
 } from '@ant-design/icons';
-import type { LayerPopupProps } from '@antv/larkmap';
 import {
   ChoroplethLayer,
+  CustomControl,
   LarkMap,
   LayerPopup,
+  LayerPopupProps,
   MapThemeControl,
 } from '@antv/larkmap';
 import { FeatureCollection } from '@turf/helpers';
 import {
   Button,
+  Card,
   Col,
   Descriptions,
   Divider,
@@ -137,6 +139,7 @@ export default () => {
         ...prevState,
         data,
       }));
+      message.info(`${dataInfo.sourceVersion}版加载完成`);
     });
   }, [dataInfo.sourceType, dataInfo.sourceVersion]);
 
@@ -225,6 +228,12 @@ export default () => {
             items={items}
           />
           <MapThemeControl position="bottomright" />
+          <CustomControl position="bottomleft">
+            <Card style={{ width: 180, padding:12,height: 100 }}>
+              <p> 双击行政区域下钻</p>
+              <p>双击非行政区域上卷</p>
+            </Card>
+          </CustomControl>
         </LarkMap>
         <div className="panel">
           <Row className="row">
