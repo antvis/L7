@@ -166,6 +166,13 @@ export default defineConfig({
           en: 'Examples',
         },
       },
+      {
+        slug: 'tools',
+        title: {
+          zh: '地图工具',
+          en: 'tools',
+        },
+      },
     ],
     cases: [
       {
@@ -469,6 +476,17 @@ export default defineConfig({
         order: 13,
       },
     ],
+    sdk: [
+      {
+        slug: 'demo',
+        icon: 'point',
+        title: {
+          zh: 'SDK',
+          en: 'SDK',
+        },
+        order: 1,
+      },
+    ],
     examples: [
       {
         slug: 'gallery',
@@ -653,6 +671,9 @@ export default defineConfig({
   scripts: [
     'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f',
   ],
+  analytics: {
+    baidu:'cde34c32ff1edfd4f933bfb44ae0e9f3',
+  },
   alias: {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
     '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
