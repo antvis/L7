@@ -4,6 +4,7 @@
  */
 import {
   CopyOutlined,
+  DoubleLeftOutlined,
   DownloadOutlined,
   InfoCircleOutlined,
   PictureOutlined,
@@ -19,7 +20,6 @@ import {
 import { FeatureCollection } from '@turf/helpers';
 import {
   Button,
-  Card,
   Col,
   Descriptions,
   Divider,
@@ -47,12 +47,22 @@ import {
   item,
   layerOptions,
 } from './util';
-
+const closePanel = {
+  width: 20,
+  display: 'none',
+  rotate: 0,
+};
+const openPanel = {
+  width: 370,
+  rotate: 180,
+  display: 'block',
+};
 export default () => {
   const [layerSource, setLayerSource] = useState({
     data: { type: 'FeatureCollection', features: [] },
     parser: { type: 'geojson' },
   });
+  const [panelInfo, setPanelInfo] = useState(openPanel);
   const size = 'middle';
   const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
   const [drillList, setDrillList] = useState<any[]>([
@@ -71,6 +81,12 @@ export default () => {
       [type]: value,
     });
   };
+  useEffect(() => {
+    const width = document.body.clientWidth;
+    if (width < 768) {
+      setPanelInfo(closePanel);
+    }
+  }, []);
   const [dataSource, setDataSource] = useState<BaseSource>();
 
   const getDownloadData = async () => {
@@ -88,7 +104,7 @@ export default () => {
       data = (await dataSource?.getChildrenData({
         parentLevel: currentLevel,
         parentAdcode: currentCode,
-        childrenLevel: childrenLevel,
+        childrenLevel,
       })) as FeatureCollection;
     }
     return data;
@@ -150,7 +166,7 @@ export default () => {
       return;
     }
     const currentInfo = {
-      currentLevel: currentLevel,
+      currentLevel,
       currentName: e.feature.properties.name,
       currentCode: e.feature.properties.adcode,
     };
@@ -210,7 +226,7 @@ export default () => {
           {...config}
           style={{
             height: 'calc(100vh - 240px)',
-            width: 'calc(100% - 300px)',
+            width: `calc(100% - ${panelInfo.width}px)`,
           }}
         >
           <ChoroplethLayer
@@ -228,167 +244,188 @@ export default () => {
             items={items}
           />
           <MapThemeControl position="bottomright" />
-          <CustomControl position="bottomleft">
-            <Card style={{ width: 180, padding:12,height: 100 }}>
-              <p> 双击行政区域下钻</p>
-              <p>双击非行政区域上卷</p>
-            </Card>
+          <CustomControl
+            position="bottomleft"
+            className="custom-control-class"
+            style={{
+              background: '#fff',
+              borderRadius: 4,
+              overflow: 'hidden',
+              padding: 16,
+            }}
+          >
+            <div>下钻: 双击要下钻的区域</div>
+            <div>上卷: 双击非行政区划区域</div>
           </CustomControl>
         </LarkMap>
-        <div className="panel">
-          <Row className="row">
-            <Col span={8} className="label">
-              版本：
-            </Col>
-            <Col span={16} style={{ textAlign: 'right' }}>
-              <Select
-                value={dataInfo.sourceVersion}
-                size={'small'}
-                onChange={onDataConfigChange.bind(null, 'sourceVersion')}
-                options={editionOptions[dataInfo.sourceType]}
-              />
-            </Col>
-          </Row>
-          <Divider style={{ margin: '8px 0' }}></Divider>
-
-          <Descriptions title="当前地区">
-            <Descriptions.Item style={{ width: '180px' }} label="名称">
-              {dataInfo.currentName}
-            </Descriptions.Item>
-            <Descriptions.Item label="adcode">
-              {dataInfo.currentCode}
-            </Descriptions.Item>
-          </Descriptions>
-
-          <Row className="row">
-            <Col span={12} className="label">
-              包含子区域:
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              <Switch
-                style={{ width: '32px' }}
-                checked={dataInfo.hasSubChildren}
-                onChange={onDataConfigChange.bind(null, 'hasSubChildren')}
-              />
-            </Col>
-          </Row>
-
-          {dataInfo.hasSubChildren && (
+        <div className="panel" style={{ width: panelInfo.width }}>
+          <div className="toggle">
+            <DoubleLeftOutlined
+              title="展开收起"
+              rotate={panelInfo.rotate}
+              className="icon"
+              onClick={() => {
+                setPanelInfo(panelInfo.width === 20 ? openPanel : closePanel);
+              }}
+            />
+          </div>
+          <div style={{ paddingLeft: '10px', display: panelInfo.display }}>
             <Row className="row">
-              <Col span={10} className="label">
-                子区域级别:
+              <Col span={8} className="label">
+                版本：
               </Col>
-              <Col span={14} style={{ textAlign: 'right' }}>
-                <Radio.Group
-                  defaultValue={childrenLevelList[0] || 'province'}
-                  size={size}
-                  value={dataInfo.childrenLevel}
-                  onChange={(e) => {
-                    onDataConfigChange('childrenLevel', e.target.value);
-                  }}
-                >
-                  {childrenLevelList.indexOf('province') !== -1 && (
-                    <Radio.Button value="province">省</Radio.Button>
-                  )}
-                  {childrenLevelList.indexOf('city') !== -1 && (
-                    <Radio.Button value="city">市</Radio.Button>
-                  )}
-                  <Radio.Button value="county">县</Radio.Button>
-                </Radio.Group>
+              <Col span={16} style={{ textAlign: 'right' }}>
+                <Select
+                  value={dataInfo.sourceVersion}
+                  size={'small'}
+                  onChange={onDataConfigChange.bind(null, 'sourceVersion')}
+                  options={editionOptions[dataInfo.sourceType]}
+                />
               </Col>
             </Row>
-          )}
+            <Divider style={{ margin: '8px 0' }}></Divider>
 
-          <Row className="row">
-            <Col span={6} className="label">
-              数据下载:
-            </Col>
-            <Col span={18} style={{ textAlign: 'right' }}>
-              <Select
-                value={dataInfo.datatype}
-                style={{ width: 120 }}
-                size={size}
-                options={downloadDataType}
-                onChange={onDataConfigChange.bind(null, 'datatype')}
-              />
+            <Descriptions title="当前地区">
+              <Descriptions.Item style={{ width: '180px' }} label="名称">
+                {dataInfo.currentName}
+              </Descriptions.Item>
+              <Descriptions.Item label="adcode">
+                {dataInfo.currentCode}
+              </Descriptions.Item>
+            </Descriptions>
 
-              <Button
-                type="primary"
-                style={{ marginLeft: '8px' }}
-                icon={<DownloadOutlined />}
-                size={size}
-                onClick={onDownload}
-              />
+            <Row className="row">
+              <Col span={12} className="label">
+                包含子区域:
+              </Col>
+              <Col span={12} style={{ textAlign: 'right' }}>
+                <Switch
+                  style={{ width: '32px' }}
+                  checked={dataInfo.hasSubChildren}
+                  onChange={onDataConfigChange.bind(null, 'hasSubChildren')}
+                />
+              </Col>
+            </Row>
 
-              <Button
-                type="primary"
-                style={{ marginLeft: '8px' }}
-                icon={<CopyOutlined />}
-                onClick={onCopyData}
-                size={size}
-              />
-            </Col>
-          </Row>
-          <Row className="row">
-            <Col span={6} className="label">
-              SVG下载:
-            </Col>
-            <Col span={18} style={{ textAlign: 'right' }}>
-              <Button style={{ pointerEvents: 'none', width: 120 }}>
-                {' '}
-                <PictureOutlined /> SVG{' '}
-              </Button>
-              <Button
-                type="primary"
-                style={{ marginLeft: '8px' }}
-                icon={<DownloadOutlined />}
-                size={size}
-                onClick={onDownloadSvg}
-              />
+            {dataInfo.hasSubChildren && (
+              <Row className="row">
+                <Col span={10} className="label">
+                  子区域级别:
+                </Col>
+                <Col span={14} style={{ textAlign: 'right' }}>
+                  <Radio.Group
+                    defaultValue={childrenLevelList[0] || 'province'}
+                    size={size}
+                    value={dataInfo.childrenLevel}
+                    onChange={(e) => {
+                      onDataConfigChange('childrenLevel', e.target.value);
+                    }}
+                  >
+                    {childrenLevelList.indexOf('province') !== -1 && (
+                      <Radio.Button value="province">省</Radio.Button>
+                    )}
+                    {childrenLevelList.indexOf('city') !== -1 && (
+                      <Radio.Button value="city">市</Radio.Button>
+                    )}
+                    <Radio.Button value="county">县</Radio.Button>
+                  </Radio.Group>
+                </Col>
+              </Row>
+            )}
 
-              <Button
-                type="primary"
-                style={{ marginLeft: '8px' }}
-                icon={<CopyOutlined />}
-                onClick={onCopySvg}
-                size={size}
-              />
-            </Col>
-          </Row>
-          <Row className="row">
-            <Col span={12} className="label">
-              中国边界下载{' '}
-              <Tooltip
-                placement="top"
-                overlayInnerStyle={{
-                  color: '#111',
-                }}
-                color={'#fff'}
-                title={
-                  '全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素.'
-                }
-              >
-                {' '}
-                <InfoCircleOutlined />
-              </Tooltip>
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              <Button
-                type="primary"
-                style={{ marginLeft: '8px' }}
-                icon={<DownloadOutlined />}
-                onClick={onDownloadGUOJIE}
-                size={size}
-              />
-            </Col>
-          </Row>
+            <Row className="row">
+              <Col span={6} className="label">
+                数据下载:
+              </Col>
+              <Col span={18} style={{ textAlign: 'right' }}>
+                <Select
+                  value={dataInfo.datatype}
+                  style={{ width: 120 }}
+                  size={size}
+                  options={downloadDataType}
+                  onChange={onDataConfigChange.bind(null, 'datatype')}
+                />
 
-          {/* 全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素 */}
-          <div className="originData" style={{}}>
-            <div>数据来源：</div>
-            <a
-              href={`${dataSource?.info?.desc?.href}`}
-            >{`${dataSource?.info?.desc?.text}`}</a>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<DownloadOutlined />}
+                  size={size}
+                  onClick={onDownload}
+                />
+
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<CopyOutlined />}
+                  onClick={onCopyData}
+                  size={size}
+                />
+              </Col>
+            </Row>
+            <Row className="row">
+              <Col span={6} className="label">
+                SVG下载:
+              </Col>
+              <Col span={18} style={{ textAlign: 'right' }}>
+                <Button style={{ pointerEvents: 'none', width: 120 }}>
+                  {' '}
+                  <PictureOutlined /> SVG{' '}
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<DownloadOutlined />}
+                  size={size}
+                  onClick={onDownloadSvg}
+                />
+
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<CopyOutlined />}
+                  onClick={onCopySvg}
+                  size={size}
+                />
+              </Col>
+            </Row>
+            <Row className="row">
+              <Col span={12} className="label">
+                中国边界下载{' '}
+                <Tooltip
+                  placement="top"
+                  overlayInnerStyle={{
+                    color: '#111',
+                  }}
+                  color={'#fff'}
+                  title={
+                    '全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素.'
+                  }
+                >
+                  {' '}
+                  <InfoCircleOutlined />
+                </Tooltip>
+              </Col>
+              <Col span={12} style={{ textAlign: 'right' }}>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<DownloadOutlined />}
+                  onClick={onDownloadGUOJIE}
+                  size={size}
+                />
+              </Col>
+            </Row>
+
+            {/* 全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素 */}
+            <div className="originData" style={{}}>
+              <div>
+                <div>数据来源：</div>
+                <a
+                  href={`${dataSource?.info?.desc?.href}`}
+                >{`${dataSource?.info?.desc?.text}`}</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
