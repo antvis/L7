@@ -1,9 +1,24 @@
 .panel {
-  width: 350px;
+  width: 370px;
   height: 100%;
-  padding: 10px 15px;
+  padding: 10px 15px 15px 0px;
   overflow: auto;
   background: #fff;
+  height: calc(100vh - 240px);
+  display: flex;
+  .toggle {
+    width: 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    .icon {
+      font-size: 20px;
+      :hover {
+        cursor: pointer;
+        color: #873bf4;
+      }
+    }
+  }
  .row {
   align-items: center;
   height: 40px;

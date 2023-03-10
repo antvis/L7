@@ -5,21 +5,21 @@
 import {
   CopyOutlined,
   DownloadOutlined,
+  DoubleLeftOutlined,
   InfoCircleOutlined,
   PictureOutlined,
 } from '@ant-design/icons';
 import {
   ChoroplethLayer,
-  CustomControl,
   LarkMap,
   LayerPopup,
   LayerPopupProps,
   MapThemeControl,
+  CustomControl,
 } from '@antv/larkmap';
 import { FeatureCollection } from '@turf/helpers';
 import {
   Button,
-  Card,
   Col,
   Descriptions,
   Divider,
@@ -47,12 +47,23 @@ import {
   item,
   layerOptions,
 } from './util';
-
+const closePanel =
+  {
+    width: 20,
+    display: 'none',
+    rotate:0,
+  }
+const openPanel = {
+    width: 370,
+    rotate:180,
+    display:'block',
+}
 export default () => {
   const [layerSource, setLayerSource] = useState({
     data: { type: 'FeatureCollection', features: [] },
     parser: { type: 'geojson' },
   });
+  const [panelInfo, setPanelInfo] = useState(openPanel);
   const size = 'middle';
   const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
   const [drillList, setDrillList] = useState<any[]>([
@@ -71,6 +82,13 @@ export default () => {
       [type]: value,
     });
   };
+  useEffect(() => {
+    const width = document.body.clientWidth;
+    if(width<768){
+      setPanelInfo(closePanel)
+    }
+
+  }, []);
   const [dataSource, setDataSource] = useState<BaseSource>();
 
   const getDownloadData = async () => {
@@ -210,7 +228,7 @@ export default () => {
           {...config}
           style={{
             height: 'calc(100vh - 240px)',
-            width: 'calc(100% - 300px)',
+            width: `calc(100% - ${panelInfo.width}px)`,
           }}
         >
           <ChoroplethLayer
@@ -228,14 +246,22 @@ export default () => {
             items={items}
           />
           <MapThemeControl position="bottomright" />
-          <CustomControl position="bottomleft">
-            <Card style={{ width: 200, padding:12 }}>
-              <p> 双击行政区域下钻</p>
-              <p>双击非行政区域上卷</p>
-            </Card>
+          <CustomControl
+            position="bottomleft"
+            className="custom-control-class"
+            style={{ background: '#fff', borderRadius: 4, overflow: 'hidden', padding: 16 }}
+          >
+            <div>下钻: 双击要下钻的区域</div>
+            <div>下卷: 双击要上卷的区域</div>
           </CustomControl>
         </LarkMap>
-        <div className="panel">
+        <div className="panel" style={{width:panelInfo.width}}>
+          <div className='toggle'>
+          <DoubleLeftOutlined title='展开收起' rotate={panelInfo.rotate} className='icon'  onClick={()=>{
+            setPanelInfo(panelInfo.width=== 20 ? openPanel : closePanel)
+          }}/>
+          </div>
+          <div style={{paddingLeft:'10px',display: panelInfo.display}}>
           <Row className="row">
             <Col span={8} className="label">
               版本：
@@ -385,11 +411,14 @@ export default () => {
 
           {/* 全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素 */}
           <div className="originData" style={{}}>
-            <div>数据来源：</div>
-            <a
-              href={`${dataSource?.info?.desc?.href}`}
-            >{`${dataSource?.info?.desc?.text}`}</a>
+            <div>
+              <div>数据来源：</div>
+              <a
+                href={`${dataSource?.info?.desc?.href}`}
+              >{`${dataSource?.info?.desc?.text}`}</a>
+            </div>
           </div>
+        </div>
         </div>
       </div>
     </Spin>
