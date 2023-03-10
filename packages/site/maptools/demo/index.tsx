@@ -229,7 +229,7 @@ export default () => {
           />
           <MapThemeControl position="bottomright" />
           <CustomControl position="bottomleft">
-            <Card style={{ width: 180, padding:12,height: 100 }}>
+            <Card style={{ width: 200, padding:12 }}>
               <p> 双击行政区域下钻</p>
               <p>双击非行政区域上卷</p>
             </Card>
