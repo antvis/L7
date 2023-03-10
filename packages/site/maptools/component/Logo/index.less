@@ -1,0 +1,32 @@
+@import (reference) '../../styles/variables.less';
+
+.@{prefix}-logo {
+  display: inline-flex;
+  align-items: center;
+  color: @c-text;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 500;
+  text-decoration: none;
+
+  @{dark-selector} & {
+    color: @c-text-dark;
+  }
+
+  @media @mobile {
+    font-size: 18px;
+
+    img {
+      height: 32px;
+    }
+  }
+
+  img {
+    margin-inline-end: 10px;
+    height: 40px;
+
+    @media @mobile {
+      height: 32px;
+    }
+  }
+}
