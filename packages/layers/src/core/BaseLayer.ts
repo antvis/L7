@@ -1132,32 +1132,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       }
 
       if (type === 'update') {
+        if (this.tileLayer) {
+          // 瓦片图层独立更新
+          this.tileLayer.reload();
+          return;
+        }
         // source 初始化不需要处理
         this.sourceEvent();
       }
     });
   }
-  // layer 初始化source
-  public initSource(source: Source) {
-    this.layerSource = source;
-    this.clusterZoom = 0;
-    this.addSourceEvent();
-  }
   public getSource() {
     return this.layerSource;
-  }
-  // 注册source 更新事件
-  private addSourceEvent() {
-    this.layerSource.on('update', () => {
-      if (this.coordCenter === undefined) {
-        const layerCenter = this.layerSource.center;
-        this.coordCenter = layerCenter;
-        if (this.mapService?.setCoordCenter) {
-          this.mapService.setCoordCenter(layerCenter);
-        }
-      }
-      this.sourceEvent();
-    });
   }
 
   public getScaleOptions() {

@@ -148,6 +148,7 @@ export class TilesetManager extends EventEmitter {
       if (!this.currentTiles.includes(tile)) {
         this.cacheTiles.delete(tileId);
         this.onTileUnload(tile);
+        return;
       }
       this.onTileUnload(tile);
       tile.loadData({
@@ -185,14 +186,22 @@ export class TilesetManager extends EventEmitter {
   }
 
   // 摧毁
-  public destroy() {
+  public clear() {
     for (const tile of this.cacheTiles.values()) {
       if (tile.isLoading) {
         tile.abortLoad();
+      } else {
+        this.onTileUnload(tile);
       }
     }
+    this.lastViewStates = undefined;
     this.cacheTiles.clear();
     this.currentTiles = [];
+  }
+
+  // 摧毁
+  public destroy() {
+    this.clear();
     this.removeAllListeners();
   }
 
