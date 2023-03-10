@@ -252,7 +252,7 @@ export default () => {
             style={{ background: '#fff', borderRadius: 4, overflow: 'hidden', padding: 16 }}
           >
             <div>下钻: 双击要下钻的区域</div>
-            <div>下卷: 双击要上卷的区域</div>
+            <div>上卷: 双击非行政区划的区域</div>
           </CustomControl>
         </LarkMap>
         <div className="panel" style={{width:panelInfo.width}}>
