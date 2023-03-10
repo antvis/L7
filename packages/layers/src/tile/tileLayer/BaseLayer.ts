@@ -176,6 +176,13 @@ export default class BaseTileLayer {
     this.tilesetManager?.destroy();
     this.tileLayerService.destroy();
   }
+  // 重新加载
+  public reload() {
+    // 瓦片重新加载
+    this.tilesetManager.clear();
+    const { latLonBounds, zoom } = this.getCurrentView();
+    this.tilesetManager?.update(zoom, latLonBounds);
+  }
 
   public tileUnLoad(tile: SourceTile) {
     this.tileLayerService.removeTile(tile.key);
