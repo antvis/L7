@@ -33,16 +33,18 @@ import {
 } from 'antd';
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { downloadData, exportSVG } from '../utils/util';
 import './index.less';
 import {
   config,
   defaultDataInfo,
+  downloadDataLevel,
   downloadDataType,
   editionOptions,
   getChildrenLevel,
   getChildrenList,
+  getRawData,
   IDataInfo,
   item,
   layerOptions,
@@ -63,6 +65,7 @@ export default () => {
     parser: { type: 'geojson' },
   });
   const [panelInfo, setPanelInfo] = useState(openPanel);
+  const [loading, setLoading] = useState(false);
   const size = 'middle';
   const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
   const [drillList, setDrillList] = useState<any[]>([
@@ -120,6 +123,14 @@ export default () => {
     const data = (await getDownloadData()) as FeatureCollection;
     return downloadData(currentName, data, 'SVG');
   };
+  const onDownloadRawData = async () => {
+    const { dataLevel, datatype } = dataInfo;
+    setLoading(true);
+    const data = await getRawData(dataLevel);
+    setLoading(false);
+    downloadData(`全量数据${dataLevel}`, data, datatype);
+  };
+
   const onDownloadGUOJIE = async () => {
     const { datatype } = dataInfo;
     const data = await (
@@ -148,6 +159,7 @@ export default () => {
     const currentSource = new DataSourceMap[sourceType]({
       version: sourceVersion,
     });
+    setLoading(true);
     setDataSource(currentSource);
     // 初始化数据
     currentSource.getData({ level: 'province', code: 100000 }).then((data) => {
@@ -155,7 +167,15 @@ export default () => {
         ...prevState,
         data,
       }));
-      message.info(`${dataInfo.sourceVersion}版加载完成`);
+      // 数据预加载
+      setTimeout(() => {
+        currentSource.getData({ level: 'city' });
+      }, 2000);
+      setTimeout(() => {
+        currentSource.getData({ level: 'county' });
+      }, 2000);
+      // message.info(`${dataInfo.sourceVersion}版加载完成`);
+      setLoading(false);
     });
   }, [dataInfo.sourceType, dataInfo.sourceVersion]);
 
@@ -165,6 +185,7 @@ export default () => {
     if (currentLevel === 'county') {
       return;
     }
+    setLoading(true);
     const currentInfo = {
       currentLevel,
       currentName: e.feature.properties.name,
@@ -184,6 +205,7 @@ export default () => {
       ...prevState,
       data,
     }));
+    setLoading(false);
   };
 
   const onUndblclick = async () => {
@@ -193,7 +215,7 @@ export default () => {
     if (currentLevel === 'country') {
       return;
     }
-
+    setLoading(true);
     setDataInfo({
       ...dataInfo,
       ...currentInfo,
@@ -210,13 +232,14 @@ export default () => {
       ...prevState,
       data,
     }));
+    setLoading(false);
   };
 
   const items: LayerPopupProps['items'] = useMemo(() => {
     return item();
   }, [dataInfo.sourceType, dataInfo.currentLevel]);
   return (
-    <Spin spinning={false}>
+    <Spin spinning={loading} tip={'数据加载中……'}>
       <div
         style={{
           display: 'flex',
@@ -389,6 +412,7 @@ export default () => {
                 />
               </Col>
             </Row>
+            <h3>其他下载</h3>
             <Row className="row">
               <Col span={12} className="label">
                 中国边界下载{' '}
@@ -412,6 +436,40 @@ export default () => {
                   style={{ marginLeft: '8px' }}
                   icon={<DownloadOutlined />}
                   onClick={onDownloadGUOJIE}
+                  size={size}
+                />
+              </Col>
+            </Row>
+            <Row className="row">
+              <Col span={12} className="label">
+                高精度数据下载{' '}
+                <Tooltip
+                  placement="top"
+                  overlayInnerStyle={{
+                    color: '#111',
+                  }}
+                  color={'#fff'}
+                  title={
+                    '省市县原始精度下载，数据量比较大，适合线下数据分析场景'
+                  }
+                >
+                  {' '}
+                  <InfoCircleOutlined />
+                </Tooltip>
+              </Col>
+              <Col span={12} style={{ textAlign: 'right' }}>
+                <Select
+                  value={dataInfo.dataLevel}
+                  style={{ width: 100 }}
+                  size={size}
+                  options={downloadDataLevel}
+                  onChange={onDataConfigChange.bind(null, 'dataLevel')}
+                />
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<DownloadOutlined />}
+                  onClick={onDownloadRawData}
                   size={size}
                 />
               </Col>

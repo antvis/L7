@@ -1,6 +1,7 @@
 import type { ChoroplethLayerProps, LarkMapProps } from '@antv/larkmap';
+import { FeatureCollection } from '@turf/turf';
 import { message } from 'antd';
-import { DataLevel, SourceType } from 'district-data';
+import { DataLevel, RDBSource, SourceType } from 'district-data';
 
 export const layerOptions: Omit<ChoroplethLayerProps, 'source'> = {
   autoFit: true,
@@ -87,6 +88,14 @@ export const downloadDataType = [
   { key: 'CSV', value: 'CSV', label: 'CSV' },
   { key: 'KML', value: 'KML', label: 'KML' },
 ];
+
+export const downloadDataLevel = [
+  { value: 'country', label: '国家' },
+  { value: 'province', label: '省' },
+  { value: 'city', label: '市' },
+  { value: 'county', label: '县' },
+];
+
 export const editionOptions = {
   DataVSource: [
     { value: 'areas_v3', label: 'areas_v3' },
@@ -120,6 +129,7 @@ export interface IDataInfo {
   hasSubChildren: boolean;
   childrenLevel: DataLevel;
   datatype: DataType;
+  dataLevel: DataLevel;
 }
 export const defaultDataInfo: IDataInfo = {
   sourceType: 'RDBSource',
@@ -130,6 +140,7 @@ export const defaultDataInfo: IDataInfo = {
   hasSubChildren: true,
   childrenLevel: 'province',
   datatype: 'GeoJSON',
+  dataLevel: 'country',
 };
 
 export const getParentLevel = (level: DataLevel): DataLevel | undefined => {
@@ -173,4 +184,11 @@ export const getChildrenList = (level: DataLevel): DataLevel[] => {
     default:
       return [];
   }
+};
+
+export const getRawData = async (level: DataLevel): FeatureCollection => {
+  const source = new RDBSource({
+    version: '1',
+  });
+ return source.getData({ level });
 };
