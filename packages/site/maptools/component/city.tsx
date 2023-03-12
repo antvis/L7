@@ -66,7 +66,7 @@ const App: React.FC<IProps> = (props: IProps) => {
 
   const fetchData = () => {
     setLoading(true);
-    fetch(`https://unpkg.com/xingzhengqu@2023/data/city.pbf`)
+    fetch('https://npm.elemecdn.com/xingzhengqu@2023/data/city.pbf')
       .then((response) => response.arrayBuffer())
       .then((data) => {
         // 数据解码为geojson
