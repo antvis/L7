@@ -33,6 +33,7 @@ import {
 } from 'antd';
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
+import { debounce } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { downloadData, exportSVG } from '../utils/util';
 import './index.less';
@@ -162,27 +163,35 @@ export default () => {
     setLoading(true);
     setDataSource(currentSource);
     // 初始化数据
-    currentSource.getData({ level: 'province', code: 100000 }).then((data) => {
-      setLayerSource((prevState: any) => ({
-        ...prevState,
-        data,
-      }));
-      // 数据预加载
-      setTimeout(() => {
-        currentSource.getData({ level: 'city' });
-      }, 2000);
-      setTimeout(() => {
-        currentSource.getData({ level: 'county' });
-      }, 2000);
-      // message.info(`${dataInfo.sourceVersion}版加载完成`);
-      setLoading(false);
-    });
+    currentSource
+      .getChildrenData({
+        childrenLevel: 'province',
+        parentAdcode: 100000,
+        parentLevel: 'country',
+        precision: 'low',
+      })
+      .then((data) => {
+        setLayerSource((prevState: any) => ({
+          ...prevState,
+          data,
+        }));
+        // 数据预加载
+        setTimeout(() => {
+          currentSource.getData({ level: 'city' });
+        }, 4000);
+        setTimeout(() => {
+          currentSource.getData({ level: 'county' });
+        }, 6000);
+        // message.info(`${dataInfo.sourceVersion}版加载完成`);
+        setLoading(false);
+      });
   }, [dataInfo.sourceType, dataInfo.sourceVersion]);
 
   // 下钻
-  const onDblClick = async (e: any) => {
+  const onDblClick = debounce(async (e: any) => {
     const currentLevel = getChildrenLevel(dataInfo.currentLevel) as DataLevel;
     if (currentLevel === 'county') {
+      message.info('已下钻到最底层');
       return;
     }
     setLoading(true);
@@ -200,19 +209,21 @@ export default () => {
       parentLevel: currentInfo.currentLevel,
       parentAdcode: currentInfo.currentCode,
       childrenLevel: getChildrenLevel(currentLevel),
+      precision: 'low',
     });
     setLayerSource((prevState: any) => ({
       ...prevState,
       data,
     }));
     setLoading(false);
-  };
+  }, 600);
 
-  const onUndblclick = async () => {
+  const onUndblclick = debounce(async () => {
     const currentList = drillList.slice(0, drillList.length - 1);
     const currentInfo = currentList[currentList.length - 1];
     const currentLevel = dataInfo.currentLevel;
     if (currentLevel === 'country') {
+      message.info('已上卷到最上层');
       return;
     }
     setLoading(true);
@@ -221,19 +232,18 @@ export default () => {
       ...currentInfo,
     });
     setDrillList(currentList);
-
     const data = await dataSource?.getChildrenData({
       parentLevel: currentInfo.currentLevel,
       parentAdcode: currentInfo.currentCode,
       childrenLevel: currentLevel,
+      precision: 'low',
     });
-
     setLayerSource((prevState: any) => ({
       ...prevState,
       data,
     }));
     setLoading(false);
-  };
+  }, 600);
 
   const items: LayerPopupProps['items'] = useMemo(() => {
     return item();
