@@ -40,11 +40,11 @@ const App: React.FC = () => {
 
   const dropDownItems: MenuProps['items'] = [
     {
-      key: 'csv',
+      key: 'CSV',
       label: 'CSV 格式',
     },
     {
-      key: 'json',
+      key: 'JSON',
       label: 'JSON 格式',
     },
   ];
@@ -59,11 +59,10 @@ const App: React.FC = () => {
               menu={{
                 items: dropDownItems,
                 onClick: ({ key }) => {
-                  console.log(selectTab, districtData);
                   downloadData(
                     selectTab,
                     districtData[selectTab],
-                    key as 'csv' | 'json',
+                    key as 'CSV' | 'JSON',
                   );
                 },
               }}

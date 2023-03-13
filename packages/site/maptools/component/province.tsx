@@ -61,7 +61,6 @@ const App: React.FC<IProps> = (props: IProps) => {
         const results = geojson.features.map((feature: any) => {
           return feature.properties;
         });
-
         setData(results);
         setLoading(false);
       });
