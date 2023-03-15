@@ -204,6 +204,7 @@ export default () => {
     setDataInfo({
       ...dataInfo,
       ...currentInfo,
+      childrenLevel: getChildrenLevel(currentLevel),
     });
     const data = await dataSource?.getChildrenData({
       parentLevel: currentInfo.currentLevel,
@@ -230,6 +231,7 @@ export default () => {
     setDataInfo({
       ...dataInfo,
       ...currentInfo,
+      childrenLevel: currentLevel,
     });
     setDrillList(currentList);
     const data = await dataSource?.getChildrenData({

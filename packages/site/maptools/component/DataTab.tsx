@@ -10,6 +10,7 @@ import { downloadData } from '../utils/util';
 import City from './city';
 import County from './county';
 import Province from './province';
+import World from './world';
 
 const App: React.FC = () => {
   const [selectTab, setSelectTab] = useState('province');
@@ -35,6 +36,11 @@ const App: React.FC = () => {
       key: 'county',
       label: `县级`,
       children: <County onDataLoad={onDataLoad} />,
+    },
+    {
+      key: 'world',
+      label: `世界地图`,
+      children: <World onDataLoad={onDataLoad} />,
     },
   ];
 

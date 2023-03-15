@@ -6,10 +6,16 @@ import 'dumi/theme-default/slots/Header/index.less';
 const nav = [
   // {title: '首页', order: 0, link: '../tools', activePath: '/tools'},
   {
-    title: '地图下载',
+    title: '中国地图',
     order: 1,
     link: '../tools/map',
     activePath: '/tools/map',
+  },
+  {
+    title: '世界地图',
+    order: 1,
+    link: '../tools/worldmap',
+    activePath: '/tools/worldmap',
   },
   {
     title: '数据 SDK',

@@ -1,4 +1,8 @@
-import type { ChoroplethLayerProps, LarkMapProps } from '@antv/larkmap';
+import type {
+  ChoroplethLayerProps,
+  LarkMapProps,
+  LineLayerProps,
+} from '@antv/larkmap';
 import { FeatureCollection } from '@turf/turf';
 import { message } from 'antd';
 import { DataLevel, RDBSource, SourceType } from 'district-data';
@@ -9,9 +13,56 @@ export const layerOptions: Omit<ChoroplethLayerProps, 'source'> = {
   opacity: 0.3,
   strokeColor: 'blue',
   lineWidth: 0.5,
+  lineOpacity: 0,
   state: {
     active: { strokeColor: 'green', lineWidth: 1.5, lineOpacity: 0.8 },
     select: { strokeColor: 'red', lineWidth: 1.5, lineOpacity: 0.8 },
+  },
+};
+
+export const lineLayerOptions: Omit<LineLayerProps, 'source'> = {
+  shape: 'line' as const,
+  size: 0.8,
+  color: {
+    scale: {
+      type: 'cat',
+      domain: ['0', '2', '7', '9'],
+      // [0, 1, 2, 7, 8, 9, 10, 11],
+    },
+    // 9 中国陆上边界
+    // 7 中国海上边界
+    // 0 海洋界线
+    // 2 国界
+    field: 'type',
+    value: ['#084081', '#09f', '#377eb8', '#e41a1c'],
+  },
+
+  style: {
+    opacity: 0.8,
+    lineType: 'solid' as const,
+  },
+};
+
+export const lineLayerOptions2: Omit<LineLayerProps, 'source'> = {
+  shape: 'line' as const,
+  size: 0.8,
+  color: {
+    scale: {
+      type: 'cat',
+      domain: ['1', '8', '10', '11'],
+    },
+    // 9 中国陆上边界
+    // 7 中国海上边界
+    // 0 海洋界线
+    // 2 国界
+    field: 'type',
+    value: ['#084081', '#e41a1c', '#377eb8', '#09f'],
+  },
+
+  style: {
+    opacity: 1,
+    lineType: 'dash' as const,
+    dashArray: [1, 1],
   },
 };
 
@@ -22,6 +73,17 @@ export const config: LarkMapProps = {
     center: [120.210792, 30.246026],
     zoom: 3,
     maxZoom: 10,
+    doubleClickZoom: false,
+  },
+};
+
+export const worldConfig: LarkMapProps = {
+  mapType: 'Gaode',
+  mapOptions: {
+    style: 'light',
+    center: [120.210792, 30.246026],
+    zoom: 3,
+    maxZoom: 5,
     doubleClickZoom: false,
   },
 };
@@ -133,7 +195,7 @@ export interface IDataInfo {
 }
 export const defaultDataInfo: IDataInfo = {
   sourceType: 'RDBSource',
-  sourceVersion: '2023',
+  sourceVersion: '2023.0.8',
   currentLevel: 'country',
   currentName: '中国',
   currentCode: 100000,
@@ -190,5 +252,5 @@ export const getRawData = async (level: DataLevel): FeatureCollection => {
   const source = new RDBSource({
     version: '1',
   });
- return source.getData({ level });
+  return source.getData({ level });
 };
