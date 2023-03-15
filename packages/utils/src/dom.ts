@@ -244,12 +244,7 @@ export function appendElementType(
       container.append(div.firstChild);
     }
   } else if (Array.isArray(children)) {
-    // 当 children 中每项元素均为基础数据类型时，用逗号隔开
-    if (children.every((item) => !(item instanceof Object))) {
-      container.append(children.map((item) => String(item)).join(','));
-    } else {
-      container.append(...children);
-    }
+    container.append(...children);
   } else {
     container.append(children);
   }
