@@ -1,10 +1,24 @@
 import { defineConfig } from 'dumi';
 const path = require('path');
 const env = process.env.NODE_ENV;
-console.log(env);
 export default defineConfig({
-  locales: [{ id: 'zh', name: '中文' }, { id: 'en', name: 'English' }],
-  copy: env ==='production' ? ['docs/CNAME'] : [],
+  locales: [
+    { id: 'zh', name: '中文' },
+    { id: 'en', name: 'English' },
+  ],
+  copy: env === 'production' ? ['docs/CNAME'] : [],
+  metas: [
+    {
+      name: 'keywords',
+      content:
+        'AntV L7 GIS 地理可视化 行政区划 地图 Map WebGIS WebGL Leaflet Openlayer 超图 ArcGIS GoogleMap 高德地图 百度地图 腾讯地图 数据可视化 deckgl, GISData, DataV',
+    },
+    {
+      name: 'description',
+      content:
+        'AntV 蚂蚁集团 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析引擎。',
+    },
+  ],
   themeConfig: {
     title: 'L7',
     isAntVSite: false,
@@ -29,8 +43,7 @@ export default defineConfig({
         en: 'L7 Geospatial Visualization',
       },
       description: {
-        zh:
-          '蚂蚁集团 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析引擎。',
+        zh: '蚂蚁集团 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析引擎。',
         en: 'Geospatial Data Visualization Analysis Engine',
       },
       image:
@@ -41,57 +54,51 @@ export default defineConfig({
             zh: '开始使用',
             en: 'Getting Started',
           },
-          link: `/tutorial/quickstart`,
+          link: '/tutorial/quickstart',
         },
         {
           text: {
             zh: '图表示例',
             en: 'gallery',
           },
-          link: `/examples`,
+          link: '/examples',
           type: 'primary',
         },
       ],
     },
-    msfu:false,
+    msfu: false,
     features: [
       {
-        icon:
-          'https://gw.alipayobjects.com/zos/basement_prod/ca2168d1-ae50-4929-8738-c6df62231de3.svg',
+        icon: 'https://gw.alipayobjects.com/zos/basement_prod/ca2168d1-ae50-4929-8738-c6df62231de3.svg',
         title: {
           zh: '架构灵活且自由',
           en: 'Easy to use',
         },
         description: {
           zh: '支持地图底图，渲染引擎，图层自由定制、扩展，组合',
-          en:
-            'Support many basemap, many rendering engine, and layer free customization, extension, combination',
+          en: 'Support many basemap, many rendering engine, and layer free customization, extension, combination',
         },
       },
       {
-        icon:
-          'https://gw.alipayobjects.com/zos/basement_prod/0ccf4dcb-1bac-4f4e-8d8d-f1031c77c9c8.svg',
+        icon: 'https://gw.alipayobjects.com/zos/basement_prod/0ccf4dcb-1bac-4f4e-8d8d-f1031c77c9c8.svg',
         title: {
           zh: '业务专业且通用',
           en: 'Simple and Universal',
         },
         description: {
           zh: '以图形符号学地理设计体系理论基础，易用、易理解、专业、专注',
-          en:
-            'Generating high quality statistical charts through a few lines of code.',
+          en: 'Generating high quality statistical charts through a few lines of code.',
         },
       },
       {
-        icon:
-          'https://gw.alipayobjects.com/zos/basement_prod/fd232581-14b3-45ec-a85c-fb349c51b376.svg',
+        icon: 'https://gw.alipayobjects.com/zos/basement_prod/fd232581-14b3-45ec-a85c-fb349c51b376.svg',
         title: {
           zh: '视觉酷炫且动感',
           en: 'Cool and Dynamic',
         },
         description: {
           zh: '支持海量数据，2D、3D，动态，可交互，高性能渲染',
-          en:
-            'Support many basemap, many rendering engine, and layer free customization, extension, combination',
+          en: 'Support many basemap, many rendering engine, and layer free customization, extension, combination',
         },
       },
     ],
@@ -104,8 +111,7 @@ export default defineConfig({
         },
         description: {
           zh: '区域化网格化数据管理指挥分配场景',
-          en:
-            'We are now working on some advanced and powerful chart features.',
+          en: 'We are now working on some advanced and powerful chart features.',
         },
         link: 'https://antv.vision/Dipper/~demos/docs-task',
         image:
@@ -119,8 +125,7 @@ export default defineConfig({
         },
         description: {
           zh: '区域化网格化数据分析场景',
-          en:
-            'We are now working on some advanced and powerful chart features.',
+          en: 'We are now working on some advanced and powerful chart features.',
         },
         link: 'https://antv.vision/Dipper/~demos/docs-analysis',
         image:
@@ -135,8 +140,7 @@ export default defineConfig({
         },
         title: {
           zh: 'L7 从矢量到遥感，从引擎到平台，探索地理分析的远方',
-          en:
-            'From vector to remote sensing, from engine to platform, explore the distance of geographical analysis',
+          en: 'From vector to remote sensing, from engine to platform, explore the distance of geographical analysis',
         },
         date: '2022.11.22',
         link: 'https://www.yuque.com/antv/blog/zrz77eat2m4wb7yk',
@@ -176,37 +180,31 @@ export default defineConfig({
     ],
     cases: [
       {
-        logo:
-          'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-kafQrA1ky4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
+        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-kafQrA1ky4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
         title: {
           zh: 'LarkMap 空间数据可视分析组件库',
           en: 'LarkMap ',
         },
         description: {
-          zh:
-            '新一代 React 地图可视分析组件库，提供丰富/高效/专业/易用的可视化组件，一站式满足地理可视化需求。',
-          en:
-            'The new generation of React map visual analysis component library provides rich/efficient/professional/easy-to-use visual components to meet the needs of geographic visualization in a one-stop manner.',
+          zh: '新一代 React 地图可视分析组件库，提供丰富/高效/专业/易用的可视化组件，一站式满足地理可视化需求。',
+          en: 'The new generation of React map visual analysis component library provides rich/efficient/professional/easy-to-use visual components to meet the needs of geographic visualization in a one-stop manner.',
         },
-        link: `https://larkmap.antv.antgroup.com/`,
+        link: 'https://larkmap.antv.antgroup.com/',
         image:
           'https://mdn.alipayobjects.com/mdn/huamei_qa8qxu/afts/img/A*5iCQSqov5p4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
         isAppLogo: true,
       },
       {
-        logo:
-          'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*yaEWT706NFoAAAAAAAAAAAAADmJ7AQ/original',
+        logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*yaEWT706NFoAAAAAAAAAAAAADmJ7AQ/original',
         title: {
           zh: 'LocationInsight 空间数据可视分析组件库',
           en: 'LocationInsight',
         },
         description: {
-          zh:
-            '下一代地理空间数据可视分析平台，可配置出丰富的地理可视化效果提供洞察分析、地图应用搭建、开放扩展能力',
-          en:
-            'The next generation geospatial data visual analysis platform can be configured with rich geographic visualization effects to provide insight analysis, map application construction, and open expansion capabilities',
+          zh: '下一代地理空间数据可视分析平台，可配置出丰富的地理可视化效果提供洞察分析、地图应用搭建、开放扩展能力',
+          en: 'The next generation geospatial data visual analysis platform can be configured with rich geographic visualization effects to provide insight analysis, map application construction, and open expansion capabilities',
         },
-        link: `https://larkmap.antv.antgroup.com/`,
+        link: 'https://larkmap.antv.antgroup.com/',
         image:
           'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*tR2BTIG6Bz8AAAAAAAAAAAAADmJ7AQ/original',
         isAppLogo: true,
@@ -658,12 +656,12 @@ export default defineConfig({
       indexName: 'antv_l7',
     },
   },
-  extraBabelPlugins:[
+  extraBabelPlugins: [
     // 开发模式下以原始文本引入，便于调试
     [
       // import glsl as raw text
       'babel-plugin-inline-import',
-      { extensions: ['.glsl','.worker.js'] },
+      { extensions: ['.glsl', '.worker.js'] },
     ],
     // ['transform-import-css-l7'],
   ],
@@ -672,7 +670,7 @@ export default defineConfig({
     'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f',
   ],
   analytics: {
-    baidu:'cde34c32ff1edfd4f933bfb44ae0e9f3',
+    baidu: 'cde34c32ff1edfd4f933bfb44ae0e9f3',
   },
   alias: {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
@@ -687,6 +685,6 @@ export default defineConfig({
     '@antv/l7-renderer': path.resolve(__dirname, '../renderer/src'),
     '@antv/l7-scene': path.resolve(__dirname, '../scene/src'),
     '@antv/l7-source': path.resolve(__dirname, '../source/src'),
-    '@antv/l7-utils': path.resolve(__dirname, '../utils/src')
-  }
+    '@antv/l7-utils': path.resolve(__dirname, '../utils/src'),
+  },
 });
