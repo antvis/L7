@@ -41,6 +41,8 @@
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
     "antd": "^4.20.0",
+    "cheerio": "^1.0.0-rc.12",
+    "read-markdown": "^1.0.2",
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-transform-import-css-l7": "^0.0.6",
     "cross-env": "^7.0.3",

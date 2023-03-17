@@ -13,7 +13,7 @@ export const layerOptions: Omit<ChoroplethLayerProps, 'source'> = {
   opacity: 0.3,
   strokeColor: 'blue',
   lineWidth: 0.5,
-  lineOpacity: 0,
+  lineOpacity: 1,
   state: {
     active: { strokeColor: 'green', lineWidth: 1.5, lineOpacity: 0.8 },
     select: { strokeColor: 'red', lineWidth: 1.5, lineOpacity: 0.8 },

@@ -7,6 +7,7 @@ export default defineConfig({
     { id: 'en', name: 'English' },
   ],
   copy: env === 'production' ? ['docs/CNAME'] : [],
+  // ...(process.env.NODE_ENV === 'development' ? {} : { ssr: {} }),
   metas: [
     {
       name: 'keywords',
@@ -19,6 +20,7 @@ export default defineConfig({
         'AntV 蚂蚁集团 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析引擎。',
     },
   ],
+  title: 'AntV L7 地理空间数据可视化引擎',
   themeConfig: {
     title: 'L7',
     isAntVSite: false,
@@ -171,7 +173,7 @@ export default defineConfig({
         },
       },
       {
-        slug: 'tools',
+        slug: 'custom/tools',
         title: {
           zh: '地图工具',
           en: 'tools',
@@ -472,17 +474,6 @@ export default defineConfig({
           en: 'experiment',
         },
         order: 13,
-      },
-    ],
-    sdk: [
-      {
-        slug: 'demo',
-        icon: 'point',
-        title: {
-          zh: 'SDK',
-          en: 'SDK',
-        },
-        order: 1,
       },
     ],
     examples: [

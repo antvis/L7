@@ -8,26 +8,26 @@ const nav = [
   {
     title: '中国地图',
     order: 1,
-    link: '../tools/map',
-    activePath: '/tools/map',
+    link: '../custom/tools/map',
+    activePath: '/custom/tools/map',
   },
   {
     title: '世界地图',
     order: 1,
-    link: '../tools/worldmap',
-    activePath: '/tools/worldmap',
+    link: '../custom/tools/worldmap',
+    activePath: '/custom/tools/worldmap',
   },
   {
     title: '数据 SDK',
     order: 2,
-    link: '../tools/sdk',
-    activePath: '/tools/sdk',
+    link: '../custom/tools/sdk',
+    activePath: '/custom/tools/sdk',
   },
   {
     title: '数据服务',
     order: 3,
-    link: '../tools/service',
-    activePath: '/tools/service',
+    link: '../custom/tools/service',
+    activePath: '/custom/tools/service',
   },
   // { title: '应用', order: 3, link: '../tools/app', activePath: '/tools/app' },
 ];
@@ -35,7 +35,7 @@ const nav = [
 const data = {
   nav,
   url: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*uQbXRLw_Q2UAAAAAAAAAAAAADmJ7AQ/original',
-  to: '/tools',
+  to: '/custom/tools',
   title: 'GISDATA',
 };
 
