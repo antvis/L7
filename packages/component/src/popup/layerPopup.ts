@@ -251,7 +251,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
               ? formatField(field, feature)
               : formatField) ?? field;
 
-          const valueElement =
+          let valueElement =
             (formatValue instanceof Function
               ? formatValue(value, feature)
               : formatValue) ?? value;
@@ -261,6 +261,14 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
           DOM.appendElementType(fieldSpan, document.createTextNode('：'));
 
           const valueSpan = DOM.create('span', 'l7-layer-popup__value', row);
+
+          // 当 value 中每项元素均为基础数据类型时，用逗号隔开
+          if (
+            Array.isArray(valueElement) &&
+            valueElement.every((item) => !(item instanceof Object))
+          ) {
+            valueElement = valueElement.map((item) => String(item)).join(',');
+          }
           DOM.appendElementType(valueSpan, valueElement);
           contentFrag.appendChild(row);
         });

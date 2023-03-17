@@ -63,6 +63,7 @@ const Demo: FunctionComponent = () => {
                 name: '测试点1',
                 lng: 120.104697,
                 lat: 30.260704,
+                lines: [1, 2, 3, 4, 5, false, '2'],
               },
             }),
             circle([120.104697, 30.261715], 30, {
@@ -133,7 +134,7 @@ const Demo: FunctionComponent = () => {
           {
             title: '面图层',
             layer: 'polygonLayer',
-            fields: ['name'],
+            fields: ['name', 'lines'],
           },
         ],
         trigger: 'hover',
