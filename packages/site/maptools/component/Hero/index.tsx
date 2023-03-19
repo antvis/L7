@@ -1,36 +1,32 @@
 import { Link } from 'dumi';
+import 'dumi/theme-default/slots/Hero/index.less';
 import HeroTitle from 'dumi/theme/slots/HeroTitle';
 import React, { type FC } from 'react';
-import 'dumi/theme-default/slots/Hero/index.less';
 const Hero: FC = () => {
   const frontmatter = {
     hero: {
       title: '行政区划',
-      description:'一站式行政区划数据下载、应用平台',
+      description: '一站式行政区划数据下载、应用平台',
       actions: [
         {
-          text:'地图下载',
-          link: '../tools/map'
+          text: '地图下载',
+          link: '../custom/tools/map',
         },
         {
-          text:'GITHUB',
-          link: 'https://github.com/antvis/l7'
-        }
+          text: 'GITHUB',
+          link: 'https://github.com/antvis/l7',
+        },
       ],
     },
-   
-  }
+  };
 
-  if (!('hero' in frontmatter)) return null;
+  if (!('hero' in frontmatter)) { return null; }
 
   return (
     <div className="dumi-default-hero">
-
-        <HeroTitle>{frontmatter.hero.title}</HeroTitle>
+      <HeroTitle>{frontmatter.hero.title}</HeroTitle>
       {frontmatter.hero.description && (
-        <p
-          dangerouslySetInnerHTML={{ __html: frontmatter.hero.description }}
-        />
+        <p dangerouslySetInnerHTML={{ __html: frontmatter.hero.description }} />
       )}
       {Boolean(frontmatter.hero.actions.length) && (
         <div className="dumi-default-hero-actions">

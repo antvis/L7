@@ -1,7 +1,3 @@
-/**
- * compact: true
- * inline: true
- */
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import geobuf from 'geobuf';
@@ -10,35 +6,33 @@ import React, { useEffect, useState } from 'react';
 
 interface DataType {
   name: string;
+  adcode: number;
   name_en: string;
   name_var: string;
-  adcode: number;
+  city_type: string;
+  city_adcode: string;
+  province: string;
   province_adcode: string;
+  province_type: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
-    title: 'name',
-    dataIndex: 'name',
+    title: 'NAME_CHN',
+    dataIndex: 'NAME_CHN',
     sorter: true,
-    width: '20%',
   },
   {
-    title: 'name_en',
-    dataIndex: 'name_en',
-    width: '20%',
+    title: 'NAME_ENG',
+    dataIndex: 'NAME_ENG',
   },
   {
-    title: 'name_var',
-    dataIndex: 'name_var',
+    title: 'SOC',
+    dataIndex: 'SOC',
   },
   {
-    title: 'adcode',
-    dataIndex: 'adcode',
-  },
-  {
-    title: 'province_adcode',
-    dataIndex: 'province_adcode',
+    title: 'NR_C',
+    dataIndex: 'NR_C',
   },
 ];
 
@@ -49,16 +43,17 @@ interface IProps {
 const App: React.FC<IProps> = (props: IProps) => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
+
   const fetchData = () => {
     setLoading(true);
-    fetch('https://npm.elemecdn.com/xingzhengqu@2023/data/province.pbf')
+    fetch('https://npm.elemecdn.com/xingzhengqu@2.0.8/data/world_polygon.pbf')
       .then((response) => response.arrayBuffer())
       .then((data) => {
         // 数据解码为geojson
-        const geojson = geobuf.decode(new Pbf(data));
-        props?.onDataLoad({ province: geojson });
+        const gejson = geobuf.decode(new Pbf(data));
+        props?.onDataLoad({ city: gejson });
         // @ts-ignore
-        const results = geojson.features.map((feature: any) => {
+        const results = gejson.features.map((feature: any) => {
           return feature.properties;
         });
         setData(results);
@@ -77,10 +72,11 @@ const App: React.FC<IProps> = (props: IProps) => {
       dataSource={data}
       loading={loading}
       size="small"
+      scroll={{ x: 1000, y: 500 }}
       pagination={{
         pageSize: 20,
+        simple: true,
       }}
-      scroll={{ x: 1000, y: 500 }}
     />
   );
 };

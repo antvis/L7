@@ -89,4 +89,4 @@ packages/district/src/data
 docs-dist
 /packages/leaflet
 site_temp
-.dumi
+/packages/site/server

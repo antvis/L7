@@ -87,9 +87,9 @@ layer.source(data, {
 
 ### style
 
-<embed src="@/docs/api/line_layer/features/segmentNumber.zh.md"></embed>
+<embed src="@/docs/api/line_layer/features/segment_number.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/thetaOffset.zh.md"></embed>
+<embed src="@/docs/api/line_layer/features/theta_offset.zh.md"></embed>
 
 <embed src="@/docs/api/line_layer/features/linear.zh.md"></embed>
 

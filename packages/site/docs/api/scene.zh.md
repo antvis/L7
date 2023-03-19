@@ -1,5 +1,7 @@
 ---
 title: 场景 Scene
+description:  地图场景初始 
+keywords: 地图 Scene 
 order: 0
 redirect_from:
   - /zh/docs/api
