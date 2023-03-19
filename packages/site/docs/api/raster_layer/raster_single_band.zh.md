@@ -17,7 +17,7 @@ order: 0
 
 ## source
 
-<embed src="@/docs/api/source/raster/raster_single.md"></embed>
+<embed src="@/docs/api/source/raster/raster_single.zh.md"></embed>
 
 ## style
 

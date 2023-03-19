@@ -1,7 +1,5 @@
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import geobuf from 'geobuf';
-import Pbf from 'pbf';
 import React, { useEffect, useState } from 'react';
 
 interface DataType {
@@ -18,41 +16,13 @@ interface DataType {
 
 const columns: ColumnsType<DataType> = [
   {
-    title: 'name',
-    dataIndex: 'name',
+    title: 'NAME',
+    dataIndex: 'NAME',
     sorter: true,
   },
   {
-    title: 'adcode',
-    dataIndex: 'adcode',
-  },
-  {
-    title: 'city_type',
-    dataIndex: 'city_type',
-  },
-  {
-    title: 'city_adcode',
-    dataIndex: 'city_adcode',
-  },
-  {
-    title: 'name_en',
-    dataIndex: 'name_en',
-  },
-  {
-    title: 'name_var',
-    dataIndex: 'name_var',
-  },
-  {
-    title: 'province_adcode',
-    dataIndex: 'province_adcode',
-  },
-  {
-    title: 'province',
-    dataIndex: 'province',
-  },
-  {
-    title: 'province_type',
-    dataIndex: 'province_type',
+    title: 'type',
+    dataIndex: 'type',
   },
 ];
 
@@ -60,24 +30,21 @@ interface IProps {
   onDataLoad: (data: any) => void;
 }
 
-const App: React.FC<IProps> = (props: IProps) => {
+const App: React.FC<IProps> = () => {
   const [data, setData] = useState<DataType[]>();
-  const [loading, setLoading] = useState(false);
 
   const fetchData = () => {
-    setLoading(true);
-    fetch('https://npm.elemecdn.com/xingzhengqu@2023/data/city.pbf')
-      .then((response) => response.arrayBuffer())
+    fetch(
+      `https://mdn.alipayobjects.com/afts/file/A*zMVuS7mKBI4AAAAAAAAAAAAADrd2AQ/%E5%85%A8%E5%9B%BD%E8%BE%B9%E7%95%8C.json`,
+    )
+      .then((response) => response.json())
       .then((data) => {
         // 数据解码为geojson
-        const gejson = geobuf.decode(new Pbf(data));
-        props?.onDataLoad({ city: gejson });
         // @ts-ignore
-        const results = gejson.features.map((feature: any) => {
+        const results = data.features.map((feature: any) => {
           return feature.properties;
         });
         setData(results);
-        setLoading(false);
       });
   };
 
@@ -90,7 +57,6 @@ const App: React.FC<IProps> = (props: IProps) => {
       columns={columns}
       rowKey={(record) => record.adcode}
       dataSource={data}
-      loading={loading}
       size="small"
       scroll={{ x: 1000, y: 500 }}
       pagination={{
