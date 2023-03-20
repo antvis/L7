@@ -43,7 +43,7 @@ export default class TextureService implements ITextureService {
     const { createTexture2D } = this.rendererService;
     const imageData = this.getColorRampBar(colorRamp, domain) as ImageData;
     const texture = createTexture2D({
-      data: imageData.data,
+      data: new Uint8Array(imageData.data),
       width: imageData.width,
       height: imageData.height,
       flipY: false,

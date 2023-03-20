@@ -18,6 +18,13 @@ float getElevation(vec2 coord, float bias) {
     data.a = -1.0;
     return dot(data, u_unpack);
 }
+
+vec4 getColor(float value) {
+   float normalisedValue =(value- u_domain[0]) / (u_domain[1] - u_domain[0]);
+    vec2 coord = vec2(normalisedValue, 0);
+    return texture2D(u_colorTexture, coord);
+}
+
 void main() {
   float value = getElevation(v_texCoord,0.0);
   if (value == u_noDataValue) {
@@ -25,9 +32,8 @@ void main() {
   } else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1])) {
      gl_FragColor = vec4(0.0, 0, 0, 0.0);
   } else {
-    float normalisedValue =(value - u_domain[0]) / (u_domain[1] - u_domain[0]);
-    vec4 color = texture2D(u_colorTexture, vec2(normalisedValue, 0));
-    gl_FragColor = color;
+   
+    gl_FragColor = getColor(value);
     gl_FragColor.a =  gl_FragColor.a * u_opacity ;
       if(gl_FragColor.a < 0.01)
       discard;
