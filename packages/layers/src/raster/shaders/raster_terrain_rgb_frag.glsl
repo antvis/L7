@@ -10,14 +10,16 @@ uniform vec2 u_domain;
 uniform float u_noDataValue;
 uniform bool u_clampLow: true;
 uniform bool u_clampHigh: true;
+uniform vec4 u_unpack;
 
+float getElevation(vec2 coord, float bias) {
+    // Convert encoded elevation value to meters
+    vec4 data = texture2D(u_texture, coord,bias) * 255.0;
+    data.a = -1.0;
+    return dot(data, u_unpack);
+}
 void main() {
-  vec4 baseColor = texture2D(u_texture, vec2(v_texCoord.x, v_texCoord.y)) * 256.0;
-  float r = baseColor.r * 256.0 * 256.0;
-  float g = baseColor.g * 256.0;
-  float b = baseColor.b;
-  float value =  (r + g + b) * 0.1 - 10000.0;
-  
+  float value = getElevation(v_texCoord,0.0);
   if (value == u_noDataValue) {
     gl_FragColor = vec4(0.0, 0, 0, 0.0);
   } else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1])) {
