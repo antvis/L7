@@ -8,7 +8,7 @@ import {
 } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IRasterLayerStyleOptions } from '../../core/interface';
+import { IRasterTerrainLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import Raster_terrainFrag from '../shaders/raster_terrain_rgb_frag.glsl';
 import Raster_terrainVert from '../shaders/rater_terrain_rgb_vert.glsl';
@@ -24,7 +24,11 @@ export default class RasterTerrainRGB extends BaseModel {
       domain,
       rampColors,
       colorTexture,
-    } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
+      rScaler = 6553.6,
+      gScaler = 25.6,
+      bScaler = 0.1,
+      offset = 10000,
+    } = this.layer.getLayerConfig() as IRasterTerrainLayerStyleOptions;
     const newdomain = domain || getDefaultDomain(rampColors);
     let texture: ITexture2D | undefined = colorTexture;
     if (!colorTexture) {
@@ -46,6 +50,7 @@ export default class RasterTerrainRGB extends BaseModel {
       u_clampLow: clampLow,
       u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
       u_noDataValue: noDataValue,
+      u_unpack: [rScaler, gScaler, bScaler, offset],
       u_colorTexture: texture!,
     };
   }
@@ -57,6 +62,8 @@ export default class RasterTerrainRGB extends BaseModel {
       data: imageData[0],
       width: imageData[0].width,
       height: imageData[0].height,
+      min: gl.LINEAR,
+      mag: gl.LINEAR,
     });
 
     const model = await this.layer.buildLayerModel({

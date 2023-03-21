@@ -33,11 +33,11 @@ export default () => {
           clampHigh: false,
           domain: [0, 7000],
           rampColors: {
+            type:'linear',
             colors: ['#d73027','#fc8d59','#fee08b','#d9ef8b','#91cf60','#1a9850'],
-            positions: [0,0.2,0.4,0.6,0.8,1.0],
+            positions: [0,200,500,1000,2000,7000], // '#1a9850'
           }
         });
-
       scene.addLayer(layer);
     });
   }, []);

@@ -1,5 +1,5 @@
 import { IAnimateOption, IMapService, ITexture2D } from '@antv/l7-core';
-import { IColorRamp, IImagedata } from '@antv/l7-utils';
+import { IColorRamp } from '@antv/l7-utils';
 import { styleOffset } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
@@ -192,7 +192,6 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   clampLow?: boolean;
   clampHigh?: boolean;
   rampColors?: IColorRamp;
-  rampColorsData?: ImageData | IImagedata;
   colorTexture?: ITexture2D;
 }
 
@@ -269,17 +268,24 @@ export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {
 
   coverage?: number;
 }
-
-export interface IRasterLayerStyleOptions extends IBaseLayerStyleOptions {
+export interface IBaseRasterLayerStyleOptions extends IBaseLayerStyleOptions {
   colorTexture?: ITexture2D;
   domain: [number, number];
   noDataValue: number;
   clampLow: boolean;
   clampHigh: boolean;
   rampColors: IColorRamp;
-  rampColorsData?: ImageData | IImagedata;
-
+}
+export interface IRasterLayerStyleOptions extends IBaseRasterLayerStyleOptions {
   channelRMax?: number;
   channelGMax?: number;
   channelBMax?: number;
+}
+
+export interface IRasterTerrainLayerStyleOptions
+  extends IBaseRasterLayerStyleOptions {
+  rScaler?: number;
+  gScaler?: number;
+  bScaler?: number;
+  offset?: number;
 }
