@@ -22,12 +22,12 @@ scene.on('loaded', () => {
       {
         parser: {
           type: 'rasterTile',
-          // dataType: 'customTerrainRGB',
-          dataType:'terrainRGB',
+          dataType: 'customTerrainRGB',
+          // dataType:'terrainRGB',
           tileSize: 256,
           zoomOffset: 0,
           getCustomData: async(tile,cb) => {
-            const URL= `https://tiles1.geovisearth.com/base/v1/terrain_rgb/${tile.z}/${tile.x}/${tile.y}?format=png&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788`;
+            const URL= `https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Zij0QLRrV-oAAAAAAAAAAAAADmJ7AQ/original`;
           fetch(URL).then((res) => res.arrayBuffer().then((data) => {
             cb(null,data)
           }));
@@ -40,10 +40,12 @@ scene.on('loaded', () => {
     .style({
       clampLow: false,
       clampHigh: false,
-      domain: [0, 7000],
-      rampColors: {
-        colors: ['#d73027', '#fc8d59', '#fee08b', '#d9ef8b', '#91cf60', '#1a9850'],
-        positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+      domain: [0, 255],
+      noDataValue: 0,
+      rampColors: { 
+        type:'custom',
+        colors: [ 'yellow','#f00', '#b3e2cd','#fdcdac'],
+        positions: [0, 10,102, 116, 148],
       }
     });
 
