@@ -74,10 +74,8 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('click', this.onMapClick);
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
-      // this.mapsService.off('mousedown', this.addDragHandler);
-      // this.mapsService.off('touchstart', this.addDragHandler);
-      // this.mapsService.off('mouseup', this.onUp);
-      // this.mapsService.off('touchend', this.onUp);
+      this.mapsService.off('camerachange', this.update);
+      this.mapsService.off('viewchange', this.update);
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
