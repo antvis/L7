@@ -52,7 +52,6 @@ export default class LayerService
   private readonly debugService: IDebugService;
 
   public reRender = throttle(() => {
-    this.updateLayerRenderList();
     this.renderLayers();
   }, 32);
 
@@ -67,7 +66,6 @@ export default class LayerService
     this.layers.push(layer);
     if (this.sceneInited) {
       layer.init().then(() => {
-        this.updateLayerRenderList();
         this.renderLayers();
       });
     }
@@ -125,7 +123,6 @@ export default class LayerService
         this.layers.splice(layerIndex, 1);
       }
     }
-    this.updateLayerRenderList();
     layer.destroy();
     this.reRender();
     this.emit('layerChange', this.layers);
@@ -144,6 +141,7 @@ export default class LayerService
     if (this.alreadyInRendering || !this.enableRender) {
       return;
     }
+    this.updateLayerRenderList();
     const renderUid = this.debugService.generateRenderUid();
     this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
