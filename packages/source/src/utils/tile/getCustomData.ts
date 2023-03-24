@@ -47,7 +47,7 @@ export const getCustomImageData = async (
   tile: SourceTile,
   getCustomDataFunc: (
     tile: { x: number; y: number; z: number },
-    cb: (err: any, data: any) => void,
+    cb: (err: any, data: ArrayBuffer | HTMLImageElement) => void,
   ) => void,
 ) => {
   return new Promise((resolve, reject) => {
@@ -58,17 +58,21 @@ export const getCustomImageData = async (
         z: tile.z,
       },
       (err, data) => {
-        if (err || data.length === 0) {
+        if (err || !data) {
           reject(err);
           return;
         }
-        if (data) {
+        if (data instanceof ArrayBuffer) {
           formatImage(data, (error, image) => {
             if (error) {
               reject(error);
             }
             resolve(image);
           });
+        } else if (data instanceof HTMLImageElement) {
+          resolve(data);
+        } else {
+          reject(err);
         }
       },
     );

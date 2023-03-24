@@ -54,6 +54,7 @@ export default function rasterTile(
     switch (tileDataType) {
       case RasterTileType.IMAGE:
         return getTileImage(data as string | string[], tileParams, tile, cfg);
+      case RasterTileType.CUSTOMIMAGE:
       case RasterTileType.CUSTOMTERRAINRGB:
         return getCustomImageData(
           // 自定义地形请求方式数据
