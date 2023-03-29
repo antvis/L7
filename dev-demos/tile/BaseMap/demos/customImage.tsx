@@ -29,6 +29,7 @@ export default () => {
         tileSize: 256,
         zoomOffset: 0,
         getCustomData:(tile,cb)=>{
+            // 通过 Image 对象获取图像数据
             const imageUrl = `https://tiles1.geovisearth.com/base/v1/vec/${tile.z}/${tile.x}/${tile.y}?format=png&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788`;
             const img = new Image();
             img.crossOrigin = "anonymous"; // enable CORS for the image
@@ -54,7 +55,7 @@ export default () => {
                 const g = data[index + 1];
                 const b = data[index + 2];
                 const a = data[index + 3];
-                data[index] = r
+                data[index] = 255;
                 data[index + 1] = r;
                 data[index + 2] = r;
             }
@@ -66,10 +67,14 @@ export default () => {
               // 获取canvas图像
               const res = new Image();
               res.src = canvas.toDataURL();
+              res.onload = () => {
+                cb(null,res)
+              }
                               
-              cb(null,res)
             };
             img.src = imageUrl;
+
+           
         }
       },
     });
