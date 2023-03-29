@@ -6,6 +6,7 @@ export type SourceEventType = 'inited' | 'sourceUpdate' | 'update';
 
 export enum RasterTileType {
   IMAGE = 'image',
+  CUSTOMIMAGE = 'customImage',
   ARRAYBUFFER = 'arraybuffer',
   RGB = 'rgb',
   TERRAINRGB = 'terrainRGB',
