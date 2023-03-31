@@ -62,7 +62,6 @@ export default class Marker extends EventEmitter {
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
     this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
-    this.mapsService.on('viewchange', this.update); // 注册高德2.0 的地图事件监听
     this.update();
     this.added = true;
     this.emit('added');
@@ -75,7 +74,6 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
       this.mapsService.off('camerachange', this.update);
-      this.mapsService.off('viewchange', this.update);
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
@@ -314,13 +312,10 @@ export default class Marker extends EventEmitter {
       },
     );
 
-    element.addEventListener('click', (e: MouseEvent) => {
-      this.onMapClick(e);
-    });
-    element.addEventListener('click', this.eventHandle);
     applyAnchorClass(element, anchor, 'marker');
   }
   private registerMarkerEvent(element: HTMLElement) {
+    element.addEventListener('click', this.onMapClick);
     element.addEventListener('mousemove', this.eventHandle);
     element.addEventListener('click', this.eventHandle);
     element.addEventListener('mousedown', this.eventHandle);
@@ -334,6 +329,7 @@ export default class Marker extends EventEmitter {
   }
   private unRegisterMarkerEvent() {
     const element = this.getElement();
+    element.removeEventListener('click', this.onMapClick);
     element.removeEventListener('mousemove', this.eventHandle);
     element.removeEventListener('click', this.eventHandle);
     element.removeEventListener('mousedown', this.eventHandle);
