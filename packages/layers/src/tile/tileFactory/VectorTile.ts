@@ -43,7 +43,7 @@ export default class VectorTile extends Tile {
         featureId: string;
       }>();
     const features = this.getFeatures(sourceLayer);
-
+    console.log(rawSource,rawSource.transforms);
     return {
       data: {
         type: 'FeatureCollection',
