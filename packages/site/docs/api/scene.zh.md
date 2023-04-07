@@ -382,7 +382,7 @@ type ICenter = [number, number];
 scene.setZoomAndCenter(zoom, center);
 ```
 
-### setZoom(zoom: number): void 设置地图旋转
+### setZoom(zoom: number): void 设置地图缩放等级
 
 设置地图缩放等级
 
