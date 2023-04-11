@@ -32,10 +32,24 @@ import { toPaddingOptions } from '../utils';
 import Viewport from '../Viewport';
 import './logo.css';
 import { MapTheme } from './theme';
-const AMapEventMap: {
+const AMapEventMapV1: {
   [key: string]: any;
 } = {
   contextmenu: 'rightclick',
+};
+
+const AMapEventMapV2: {
+  [key: string]: any;
+} = {
+  contextmenu: 'rightclick',
+  camerachange: 'viewchange',
+};
+
+const MapEventProxyMap: {
+  [key: string]: any;
+} = {
+  'GAODE1.x': AMapEventMapV1,
+  'GAODE2.x': AMapEventMapV2,
 };
 
 let mapdivCount = 0;
@@ -116,14 +130,14 @@ export default abstract class AMapBaseService
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handler);
     } else {
-      this.map.on(AMapEventMap[type] || type, handler);
+      this.map.on(MapEventProxyMap[this.version][type] || type, handler);
     }
   }
   public off(type: string, handler: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handler);
     } else {
-      this.map.off(AMapEventMap[type] || type, handler);
+      this.map.off(MapEventProxyMap[this.version][type] || type, handler);
     }
   }
 
