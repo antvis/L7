@@ -31,7 +31,10 @@ export default class ExportImage extends ButtonControl<IExportImageControlOption
   public async getImage() {
     const mapImage = await this.mapsService.exportMap('png');
     const layerImage = await this.scene.exportPng('png');
-    return this.mergeImage(mapImage, layerImage);
+    return this.mergeImage(
+      // 在 Map 底图模式下 mapImage 为 undefined
+      ...[mapImage, layerImage].filter((base64) => base64),
+    );
   }
 
   protected onClick = async () => {

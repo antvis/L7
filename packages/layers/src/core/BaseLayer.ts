@@ -816,7 +816,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           ? options.mix
           : this.getLayerConfig().activeMix,
       });
-      this.hooks.beforeSelect
+      this.hooks.beforeHighlight
         .call(encodePickingColor(id as number) as number[])
         // @ts-ignore
         .then(() => {
