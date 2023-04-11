@@ -61,6 +61,8 @@ export interface IFontService extends EventEmitter {
   addIconFont(name: string, fontUnicode: string): void;
   addFontFace(fontname: string, fontpath: string): void;
   getIconFontKey(name: string): string;
+  getCanvasByKey(key: string): HTMLCanvasElement;
+  getMappingByKey(key: string): IFontMapping;
   getGlyph(name: string): string;
   setFontOptions(option: Partial<IFontOptions>): void;
   destroy(): void;

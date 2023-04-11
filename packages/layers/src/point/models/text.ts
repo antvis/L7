@@ -2,6 +2,7 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
+  IFontMapping,
   IModel,
   IModelUniform,
   ITexture2D,
@@ -101,8 +102,8 @@ export default class TextModel extends BaseModel {
       gamma = 2.0,
       raisingHeight = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
-    const { canvas, mapping } = this.fontService;
+    const mapping = this.getFontServiceMapping();
+    const canvas = this.getFontServiceCanvas();
     if (mapping && Object.keys(mapping).length !== this.textCount && canvas) {
       this.updateTexture();
       this.textCount = Object.keys(mapping).length;
@@ -436,8 +437,7 @@ export default class TextModel extends BaseModel {
    * 生成文字布局（对照文字纹理字典提取对应文字的位置很好信息）
    */
   private generateGlyphLayout(iconfont: boolean) {
-    // 更新文字布局
-    const { mapping } = this.fontService;
+    const mapping = this.getFontServiceMapping();
     const {
       spacing = 2,
       textAnchor = 'center',
@@ -480,6 +480,20 @@ export default class TextModel extends BaseModel {
       return feature;
     });
   }
+
+  private getFontServiceMapping(): IFontMapping {
+    const { fontWeight = '400', fontFamily = 'sans-serif' } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    return this.fontService.getMappingByKey(`${fontFamily}_${fontWeight}`);
+  }
+
+  private getFontServiceCanvas(): HTMLCanvasElement {
+    const { fontWeight = '400', fontFamily = 'sans-serif' } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    // 更新文字布局
+    return this.fontService.getCanvasByKey(`${fontFamily}_${fontWeight}`);
+  }
+
   /**
    * 文字避让 depend on originCentorid
    */
@@ -543,7 +557,7 @@ export default class TextModel extends BaseModel {
    */
   private updateTexture() {
     const { createTexture2D } = this.rendererService;
-    const { canvas } = this.fontService;
+    const canvas = this.getFontServiceCanvas();
     this.textureHeight = canvas.height;
     if (this.texture) {
       this.texture.destroy();
