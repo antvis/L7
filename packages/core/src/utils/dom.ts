@@ -36,14 +36,26 @@ export function createRendererContainer(
  */
 export function isEventCrash(obj: any) {
   let notCrash = true;
-  obj?.target?.path?.map((p: HTMLElement) => {
-    if (p?.classList) {
-      p?.classList?.forEach((n: any) => {
-        if (n === 'l7-marker' || n === 'l7-popup') {
-          notCrash = false;
-        }
-      });
+  if (obj?.target?.path) {
+    obj?.target?.path?.map((p: HTMLElement) => {
+      if (p?.classList) {
+        p?.classList?.forEach((n: any) => {
+          if (n === 'l7-marker' || n === 'l7-popup') {
+            notCrash = false;
+          }
+        });
+      }
+    });
+  } else if (obj?.target?.target instanceof HTMLElement) {
+    let currentElement: HTMLElement | null = obj?.target?.target;
+    while (currentElement) {
+      const classList = Array.from(currentElement.classList);
+      if (classList.includes('l7-marker') || classList.includes('l7-popup')) {
+        notCrash = false;
+        break;
+      }
+      currentElement = currentElement?.parentElement;
     }
-  });
+  }
   return notCrash;
 }
