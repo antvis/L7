@@ -31,19 +31,22 @@ export function createRendererContainer(
 
 /**
  * 检测触发事件是否是在 marker/popup 上发生，若是则会发生冲突（发生冲突时 marker/popup 事件优先）
- * @param obj
+ * @param layerEvent
  * @returns
  */
-export function isEventCrash(obj: any) {
+export function isEventCrash(layerEvent: any) {
   let notCrash = true;
-  obj?.target?.path?.map((p: HTMLElement) => {
-    if (p?.classList) {
-      p?.classList?.forEach((n: any) => {
-        if (n === 'l7-marker' || n === 'l7-popup') {
-          notCrash = false;
-        }
-      });
+  // 获取图层鼠标事件中对应点击的 DOM 元素
+  if (layerEvent?.target?.target instanceof HTMLElement) {
+    let currentElement: HTMLElement | null = layerEvent?.target?.target;
+    while (currentElement) {
+      const classList = Array.from(currentElement.classList);
+      if (classList.includes('l7-marker') || classList.includes('l7-popup')) {
+        notCrash = false;
+        break;
+      }
+      currentElement = currentElement?.parentElement;
     }
-  });
+  }
   return notCrash;
 }

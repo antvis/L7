@@ -75,6 +75,16 @@ export default class FontService extends EventEmitter implements IFontService {
     const data = this.cache.get(this.key);
     return (data && data.mapping) || {};
   }
+
+  public getCanvasByKey(key: string): HTMLCanvasElement {
+    const data = this.cache.get(key);
+    return data && data.data;
+  }
+  public getMappingByKey(key: string): IFontMapping {
+    const data = this.cache.get(key);
+    return (data && data.mapping) || {};
+  }
+
   public fontAtlas: IFontAtlas;
 
   // iconFontMap 记录用户设置的 iconfont unicode 和名称的键值关系
@@ -285,6 +295,7 @@ export default class FontService extends EventEmitter implements IFontService {
         );
       }
     }
+
     return {
       xOffset,
       yOffset,
