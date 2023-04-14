@@ -2517,7 +2517,8 @@ export default () => {
               i.properties.num = item?.num || 0;
             });
             const chinaPolygonLayer = new PolygonLayer({
-              autoFit: true
+              autoFit: true,
+              zIndex: 10
             })
               .source(data)
               // .color(
