@@ -241,6 +241,13 @@ export default defineConfig({
         },
         url: 'https://li.antv.antgroup.com/#/home',
       },
+      {
+        name: {
+          zh: 'L7Editor',
+          en: 'L7Editor',
+        },
+        url: 'https://l7editor.antv.antgroup.com/',
+      },
     ],
     docs: [
       {
