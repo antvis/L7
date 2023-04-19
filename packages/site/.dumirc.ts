@@ -6,6 +6,7 @@ export default defineConfig({
     { id: 'zh', name: '中文' },
     { id: 'en', name: 'English' },
   ],
+  mfsu: false,
   copy: env === 'production' ? ['docs/CNAME'] : [],
   // ...(process.env.NODE_ENV === 'development' ? {} : { ssr: {} }),
   metas: [
