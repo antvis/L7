@@ -220,7 +220,7 @@ export default () => {
             />
           </div>
           <div style={{ paddingLeft: '10px', display: panelInfo.display }}>
-            <Row className="row">
+            {/* <Row className="row">
               <Col span={8} className="label">
                 版本：
               </Col>
@@ -232,7 +232,7 @@ export default () => {
                   options={editionOptions[dataInfo.sourceType]}
                 />
               </Col>
-            </Row>
+            </Row> */}
             <Divider style={{ margin: '8px 0' }}></Divider>
 
             <Descriptions title="当前地区">
