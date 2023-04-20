@@ -150,6 +150,11 @@ export interface ISource {
   getFeatureId(field: string, value: any): number | undefined;
   getParserType(): string;
   getClusters(zoom: number): any;
+  // 瓦片图层
+  reloadAllTile(): void;
+  reloadTilebyId(z: number, x: number, y: number): void;
+  reloadTileByLnglat(lng: number, lat: number, z: number): void;
+  reloadTileByExtent(bounds: [number, number, number, number], z: number): void;
   getClustersLeaves(id: number): any;
   updateFeaturePropertiesById(
     id: number,

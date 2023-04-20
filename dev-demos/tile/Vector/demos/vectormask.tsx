@@ -27,7 +27,6 @@ import {
         'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.webp?sku=101ifSAcKcVFs&access_token=pk.eyJ1IjoidW5mb2xkZWRpbmMiLCJhIjoiY2s5ZG90MjMzMDV6eDNkbnh2cDJvbHl4NyJ9.BT2LAvHi31vNNEplsgxucQ';
       const layer1 = new RasterLayer({
         zIndex: 1,
-        mask: true,
       }).source(url1, {
         parser: {
           type: 'rasterTile',
@@ -44,11 +43,7 @@ import {
           },
         },
       );
-
-      const mask2 = new MaskLayer({
-        sourceLayer: 'state_s10_27', // woods hillshade contour ecoregions ecoregions2 city
-      }).source(source);
-
+    
       const layer = new LineLayer({
         featureId: 'id',
         zIndex: 3,
@@ -91,7 +86,6 @@ import {
      
   
       scene.on('loaded', () => {
-        scene.addLayer(mask2);
         scene.addLayer(layer1);
         scene.addLayer(layer);
 
