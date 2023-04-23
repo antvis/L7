@@ -1,8 +1,12 @@
 import { wrap } from '../util';
 export const earthRadius = 6371008.8;
+export interface ILngLat {
+  lng: number;
+  lat: number;
+}
 export type LngLatLike =
   | LngLat
-  | { lng: number; lat: number }
+  | ILngLat
   | { lon: number; lat: number }
   | [number, number];
 

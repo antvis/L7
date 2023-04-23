@@ -2,6 +2,7 @@ import { $window, DOM, isMini } from '@antv/l7-utils';
 import { merge } from 'lodash';
 import Camera from './camera';
 import './css/l7.css';
+import { EPSG3857 } from './geo/crs';
 import LngLat, { LngLatLike } from './geo/lng_lat';
 import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
 // @ts-ignore
@@ -55,6 +56,7 @@ const DefaultOptions: IMapOptions = {
   renderWorldCopies: true,
   pitchEnabled: true,
   rotateEnabled: true,
+  crs: new EPSG3857(),
 };
 export class Map extends Camera {
   public doubleClickZoom: DoubleClickZoomHandler;

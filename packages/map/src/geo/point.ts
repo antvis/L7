@@ -1,4 +1,8 @@
 export type PointLike = [number, number] | Point;
+export interface IPoint {
+  x: number;
+  y: number;
+}
 
 export default class Point {
   public static convert(a: any) {

@@ -34,7 +34,6 @@ import './index.less';
 import {
   defaultDataInfo,
   downloadDataType,
-  editionOptions,
   IDataInfo,
   layerOptions,
   lineLayerOptions,
