@@ -145,5 +145,3 @@ const rasterSource = new Source(
   },
 );
 ```
-
-<embed src="@/docs/api/source/tile/method.md"></embed>
