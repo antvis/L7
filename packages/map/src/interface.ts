@@ -1,4 +1,4 @@
-import { ICRS } from './geo/crs';
+import { TypeCRS } from './geo/crs';
 import { LngLatBoundsLike } from './geo/lng_lat_bounds';
 
 export interface IMapOptions {
@@ -33,5 +33,5 @@ export interface IMapOptions {
   pitchWithRotate: boolean;
   pitchEnabled: boolean;
   rotateEnabled: boolean;
-  crs: ICRS;
+  crs: TypeCRS;
 }

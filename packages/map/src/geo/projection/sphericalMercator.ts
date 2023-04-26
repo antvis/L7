@@ -1,5 +1,5 @@
 import Bounds from '../bounds';
-import LngLat, { ILngLat } from '../lng_lat';
+import LngLat, { LngLatLike } from '../lng_lat';
 import Point, { IPoint } from '../point';
 import { IProjection } from './interface';
 const earthRadius = 6378137;
@@ -11,7 +11,8 @@ export default class SphericalMercator implements IProjection {
   public static R: number = earthRadius;
   private maxLatitude: number = 85.0511287798;
 
-  public project(lngLat: ILngLat): Point {
+  public project(ll: LngLatLike): Point {
+    const lngLat = LngLat.convert(ll);
     const d = Math.PI / 180;
     const max = this.maxLatitude;
     const lat = Math.max(Math.min(max, lngLat.lat), -max);

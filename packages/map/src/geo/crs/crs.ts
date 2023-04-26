@@ -1,17 +1,19 @@
+import { TypeCRS } from '.';
 import { wrap } from '../../util';
 import Bounds from '../bounds';
-import LngLat, { ILngLat } from '../lng_lat';
+import LngLat, { ILngLat, LngLatLike } from '../lng_lat';
 import LngLatBounds from '../lng_lat_bounds';
 import Point, { IPoint } from '../point';
 import { IProjection } from '../projection/interface';
 import Transformation from '../transformation';
 export interface ICRS {
+  code: TypeCRS;
   transformation: Transformation;
   projection: IProjection;
   wrapLng: [number, number];
   wrapLat: [number, number];
   infinite: boolean;
-  lngLatToPoint(lngLat: ILngLat, zoom: number): Point;
+  lngLatToPoint(lngLat: LngLatLike, zoom: number): Point;
   pointToLngLat(point: IPoint, zoom: number): LngLat;
   project(lngLat: ILngLat): Point;
   unproject(point: IPoint): LngLat;
@@ -22,16 +24,16 @@ export interface ICRS {
   wrapLnglatBounds(lngLatBounds: LngLatBounds): LngLatBounds;
 }
 export default class BaseCRS implements ICRS {
-  private tileSize: number = 256;
+  private tileSize: number = 512;
   public transformation: Transformation;
   public projection: IProjection;
   public wrapLng: [number, number];
   public wrapLat: [number, number];
-  public code: string = '';
+  public code: TypeCRS;
   // 空间是否限制
   public infinite: boolean = false;
-
-  public lngLatToPoint(lngLat: ILngLat, zoom: number): Point {
+  // 经纬度转地图像素坐标
+  public lngLatToPoint(lngLat: LngLatLike, zoom: number): Point {
     const projectedPoint = this.projection.project(lngLat);
     const scale = this.scale(zoom);
     return this.transformation.transform(projectedPoint, scale);
@@ -41,7 +43,7 @@ export default class BaseCRS implements ICRS {
     const untransformedPoint = this.transformation.untransform(point, scale);
     return this.projection.unproject(untransformedPoint);
   }
-
+  // 经纬度转平面坐标
   public project(lngLat: ILngLat): Point {
     return this.projection.project(lngLat);
   }

@@ -65,7 +65,8 @@ export default class Camera extends EventEmitter {
   constructor(options: IMapOptions) {
     super();
     this.options = options;
-    const { minZoom, maxZoom, minPitch, maxPitch, renderWorldCopies } = options;
+    const { minZoom, maxZoom, minPitch, maxPitch, renderWorldCopies, crs } =
+      options;
     this.moving = false;
     this.zooming = false;
     this.bearingSnap = options.bearingSnap;
@@ -77,6 +78,7 @@ export default class Camera extends EventEmitter {
       minPitch,
       maxPitch,
       renderWorldCopies,
+      crs,
     );
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

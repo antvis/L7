@@ -3,16 +3,17 @@ import { isMini } from '@antv/l7-utils';
 import { mat2, mat4, vec4 } from 'gl-matrix';
 import Point from '../geo/point';
 import { clamp, interpolate, wrap } from '../util';
+import { getCRS, ICRS, TypeCRS } from './crs';
 import EdgeInsets, { IPaddingOptions } from './edge_insets';
 import LngLat from './lng_lat';
 import LngLatBounds from './lng_lat_bounds';
-import MercatorCoordinate, {
-  mercatorXfromLng,
-  mercatorYfromLat,
-  mercatorZfromAltitude,
-} from './mercator';
+import MercatorCoordinate, { mercatorZfromAltitude } from './mercator';
 export const EXTENT = 8192;
 export default class Transform {
+  get crs(): ICRS {
+    return this._crs;
+  }
+
   get minZoom(): number {
     return this._minZoom;
   }
@@ -217,6 +218,7 @@ export default class Transform {
   private _minPitch: number;
   private _maxPitch: number;
   private _center: LngLat;
+  private _crs: ICRS;
   // tslint:enable
   private zoomFraction: number;
   private unmodified: boolean;
@@ -230,6 +232,7 @@ export default class Transform {
     minPitch: number,
     maxPitch: number,
     renderWorldCopies: boolean | void,
+    crs: TypeCRS,
   ) {
     this.tileSize = 512; // constant
     this.maxValidLatitude = 85.051129; // constant
@@ -257,6 +260,7 @@ export default class Transform {
     this.edgeInsets = new EdgeInsets();
     this.posMatrixCache = {};
     this.alignedPosMatrixCache = {};
+    this._crs = getCRS(crs);
   }
 
   public clone(): Transform {
@@ -266,6 +270,7 @@ export default class Transform {
       this._minPitch,
       this._maxPitch,
       this._renderWorldCopies,
+      this._crs.code,
     );
     clone.tileSize = this.tileSize;
     clone.latRange = this.latRange;
@@ -357,157 +362,6 @@ export default class Transform {
   //   return result;
   // }
 
-  /**
-   * Return all coordinates that could cover this transform for a covering
-   * zoom level.
-   * @param {Object} options
-   * @param {number} options.tileSize
-   * @param {number} options.minzoom
-   * @param {number} options.maxzoom
-   * @param {boolean} options.roundZoom
-   * @param {boolean} options.reparseOverscaled
-   * @param {boolean} options.renderWorldCopies
-   * @returns {Array<OverscaledTileID>} OverscaledTileIDs
-   * @private
-   */
-  // public coveringTiles(options: {
-  //   tileSize: number;
-  //   minzoom?: number;
-  //   maxzoom?: number;
-  //   roundZoom?: boolean;
-  //   reparseOverscaled?: boolean;
-  //   renderWorldCopies?: boolean;
-  // }): OverscaledTileID[] {
-  //   let z = this.coveringZoomLevel(options);
-  //   const actualZ = z;
-
-  //   if (options.minzoom !== undefined && z < options.minzoom) {
-  //     return [];
-  //   }
-  //   if (options.maxzoom !== undefined && z > options.maxzoom) {
-  //     z = options.maxzoom;
-  //   }
-
-  //   const centerCoord = MercatorCoordinate.fromLngLat(this.center);
-  //   const numTiles = Math.pow(2, z);
-  //   const centerPoint = [numTiles * centerCoord.x, numTiles * centerCoord.y, 0];
-  //   const cameraFrustum = Frustum.fromInvProjectionMatrix(
-  //     this.invProjMatrix,
-  //     this.worldSize,
-  //     z,
-  //   );
-
-  //   // No change of LOD behavior for pitch lower than 60 and when there is no top padding: return only tile ids from the requested zoom level
-  //   let minZoom = options.minzoom || 0;
-  //   // Use 0.1 as an epsilon to avoid for explicit == 0.0 floating point checks
-  //   if (this._pitch <= 60.0 && this.edgeInsets.top < 0.1) {
-  //     minZoom = z;
-  //   }
-
-  //   // There should always be a certain number of maximum zoom level tiles surrounding the center location
-  //   const radiusOfMaxLvlLodInTiles = 3;
-
-  //   const newRootTile = (wrap: number): any => {
-  //     return {
-  //       // All tiles are on zero elevation plane => z difference is zero
-  //       aabb: new Aabb(
-  //         [wrap * numTiles, 0, 0],
-  //         [(wrap + 1) * numTiles, numTiles, 0],
-  //       ),
-  //       zoom: 0,
-  //       x: 0,
-  //       y: 0,
-  //       wrap,
-  //       fullyVisible: false,
-  //     };
-  //   };
-
-  //   // Do a depth-first traversal to find visible tiles and proper levels of detail
-  //   const stack = [];
-  //   const result = [];
-  //   const maxZoom = z;
-  //   const overscaledZ = options.reparseOverscaled ? actualZ : z;
-
-  //   if (this._renderWorldCopies) {
-  //     // Render copy of the globe thrice on both sides
-  //     for (let i = 1; i <= 3; i++) {
-  //       stack.push(newRootTile(-i));
-  //       stack.push(newRootTile(i));
-  //     }
-  //   }
-
-  //   stack.push(newRootTile(0));
-
-  //   while (stack.length > 0) {
-  //     const it = stack.pop();
-  //     const x = it.x;
-  //     const y = it.y;
-  //     let fullyVisible = it.fullyVisible;
-
-  //     // Visibility of a tile is not required if any of its ancestor if fully inside the frustum
-  //     if (!fullyVisible) {
-  //       const intersectResult = it.aabb.intersects(cameraFrustum);
-
-  //       if (intersectResult === 0) {
-  //         continue;
-  //       }
-
-  //       fullyVisible = intersectResult === 2;
-  //     }
-
-  //     const distanceX = it.aabb.distanceX(centerPoint);
-  //     const distanceY = it.aabb.distanceY(centerPoint);
-  //     const longestDim = Math.max(Math.abs(distanceX), Math.abs(distanceY));
-
-  //     // We're using distance based heuristics to determine if a tile should be split into quadrants or not.
-  //     // radiusOfMaxLvlLodInTiles defines that there's always a certain number of maxLevel tiles next to the map center.
-  //     // Using the fact that a parent node in quadtree is twice the size of its children (per dimension)
-  //     // we can define distance thresholds for each relative level:
-  //     // f(k) = offset + 2 + 4 + 8 + 16 + ... + 2^k. This is the same as "offset+2^(k+1)-2"
-  //     const distToSplit =
-  //       radiusOfMaxLvlLodInTiles + (1 << (maxZoom - it.zoom)) - 2;
-
-  //     // Have we reached the target depth or is the tile too far away to be any split further?
-  //     if (
-  //       it.zoom === maxZoom ||
-  //       (longestDim > distToSplit && it.zoom >= minZoom)
-  //     ) {
-  //       result.push({
-  //         tileID: new OverscaledTileID(
-  //           it.zoom === maxZoom ? overscaledZ : it.zoom,
-  //           it.wrap,
-  //           it.zoom,
-  //           x,
-  //           y,
-  //         ),
-  //         distanceSq: vec2.sqrLen([
-  //           centerPoint[0] - 0.5 - x,
-  //           centerPoint[1] - 0.5 - y,
-  //         ]),
-  //       });
-  //       continue;
-  //     }
-
-  //     for (let i = 0; i < 4; i++) {
-  //       const childX = (x << 1) + (i % 2);
-  //       const childY = (y << 1) + (i >> 1);
-
-  //       stack.push({
-  //         aabb: it.aabb.quadrant(i),
-  //         zoom: it.zoom + 1,
-  //         x: childX,
-  //         y: childY,
-  //         wrap: it.wrap,
-  //         fullyVisible,
-  //       });
-  //     }
-  //   }
-
-  //   return result
-  //     .sort((a, b) => a.distanceSq - b.distanceSq)
-  //     .map((a) => a.tileID);
-  // }
-
   public resize(width: number, height: number) {
     this.width = width;
     this.height = height;
@@ -530,17 +384,12 @@ export default class Transform {
       -this.maxValidLatitude,
       this.maxValidLatitude,
     );
-    return new Point(
-      mercatorXfromLng(lnglat.lng) * this.worldSize,
-      mercatorYfromLat(lat) * this.worldSize,
-    );
+
+    return this.crs.lngLatToPoint({ lng: lnglat.lng, lat }, this.zoom);
   }
 
   public unproject(point: Point): LngLat {
-    return new MercatorCoordinate(
-      point.x / this.worldSize,
-      point.y / this.worldSize,
-    ).toLngLat();
+    return this.crs.pointToLngLat(point, this.zoom);
   }
 
   public setLocationAtPoint(lnglat: LngLat, point: Point) {
@@ -581,7 +430,6 @@ export default class Transform {
     const z1 = coord1[2] / w1;
 
     const t = z0 === z1 ? 0 : (targetZ - z0) / (z1 - z0);
-
     return new MercatorCoordinate(
       interpolate(x0, x1, t) / this.worldSize,
       interpolate(y0, y1, t) / this.worldSize,
@@ -743,10 +591,6 @@ export default class Transform {
    * @private
    */
   public pointLocation(p: Point) {
-    // if(p.x !== 0 && p.x !== 1001) {
-    //   console.log(p.x)
-    // }
-
     return this.coordinateLocation(this.pointCoordinate(p));
   }
 
@@ -830,15 +674,15 @@ export default class Transform {
     const unmodified = this.unmodified;
     if (this.latRange) {
       const latRange = this.latRange;
-      minY = mercatorYfromLat(latRange[1]) * this.worldSize;
-      maxY = mercatorYfromLat(latRange[0]) * this.worldSize;
+      minY = this.crs.lngLatToPoint([0, latRange[1]], this.zoom).y;
+      maxY = this.crs.lngLatToPoint([0, latRange[0]], this.zoom).y;
       sy = maxY - minY < size.y ? size.y / (maxY - minY) : 0;
     }
 
     if (this.lngRange) {
       const lngRange = this.lngRange;
-      minX = mercatorXfromLng(lngRange[0]) * this.worldSize;
-      maxX = mercatorXfromLng(lngRange[1]) * this.worldSize;
+      minX = this.crs.lngLatToPoint([lngRange[0], 0], this.zoom).x;
+      maxX = this.crs.lngLatToPoint([lngRange[1], 0], this.zoom).x;
       sx = maxX - minX < size.x ? size.x / (maxX - minX) : 0;
     }
 

@@ -1,8 +1,10 @@
 // https://github.com/Leaflet/Leaflet/blob/f0ca5bc9cf/src/geo/crs/CRS.Earth.js
+import { TypeCRS } from '.';
 import LngLat from '../lng_lat';
 import BaseCRS, { ICRS } from './crs';
 
 export default class Earth extends BaseCRS implements ICRS {
+  public code: TypeCRS = 'Earth';
   public wrapLng: [-180, 180];
   private R: number = 6378137;
   public distance(lnglat1: LngLat, lnglat2: LngLat) {
