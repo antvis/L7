@@ -14,7 +14,6 @@ import {
   applyAnchorClass,
   bindAll,
   DOM,
-  isiOS,
   isPC,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
@@ -360,7 +359,7 @@ export default class Marker extends EventEmitter {
     if (!this.mapsService || this.mapsService.version !== 'GAODE2.x') {
       return;
     }
-    if (!isPC() && isiOS) {
+    if (!isPC()) {
       if (e.type === 'touchstart') {
         this.touchStartTime = Date.now();
       }
