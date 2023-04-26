@@ -83,7 +83,10 @@ export function addClass(el: ELType, name: string) {
 // Removes `name` from the element's class attribute.
 export function removeClass(el: ELType, name: string) {
   if (el.classList !== undefined) {
-    el.classList.remove(name);
+    const classes = splitWords(name);
+    classes.forEach((className) => {
+      el.classList.remove(className);
+    });
   } else {
     setClass(
       el,
