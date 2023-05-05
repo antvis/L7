@@ -1,5 +1,4 @@
-import { TypeCRS } from './geo/crs';
-import { LngLatBoundsLike } from './geo/lng_lat_bounds';
+import { LngLatBoundsLike, TypeCRS } from '@antv/l7-core';
 
 export interface IMapOptions {
   hash: boolean;

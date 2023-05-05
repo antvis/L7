@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../../geo/point';
+import { Point } from '@antv/l7-core';
 import { indexTouches } from '../handler_util';
 
 export default class TouchPanHandler {

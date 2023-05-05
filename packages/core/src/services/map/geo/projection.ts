@@ -1,5 +1,5 @@
-import LngLat, { LngLatLike } from '../lng_lat';
-import Point, { IPoint } from '../point';
+import { LngLat, LngLatLike } from './lng_lat';
+import { IPoint, Point } from './point';
 export interface IProjection {
   bounds: any;
   project(lngLat: LngLatLike): Point;

@@ -5,8 +5,8 @@
 import AMapLoader from '@amap/amap-jsapi-loader';
 
 import {
-  Bounds,
   CoordinateSystem,
+  IBoundsArray,
   IMapCamera,
   IPoint,
   IViewport,
@@ -160,7 +160,7 @@ export default class AMapService extends AMapBaseService {
     return 'amap2';
   }
 
-  public getBounds(): Bounds {
+  public getBounds(): IBoundsArray {
     const bounds = this.map.getBounds();
 
     // @ts-ignore

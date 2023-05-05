@@ -4,9 +4,9 @@ import {
   IEncodeFeature,
   IModel,
   IModelUniform,
+  IPointArray,
   IRenderOptions,
   ITexture2D,
-  Point,
 } from '@antv/l7-core';
 import { FrequencyController } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -31,7 +31,7 @@ export default class WindModel extends BaseModel {
   protected texture: ITexture2D;
   private colorModel: IModel;
   private wind: IWind;
-  private imageCoords: [Point, Point];
+  private imageCoords: [IPointArray, IPointArray];
   private sizeScale: number = 0.5;
   // https://mapbox.github.io/webgl-wind/demo/
   // source: 'http://nomads.ncep.noaa.gov',
@@ -74,7 +74,10 @@ export default class WindModel extends BaseModel {
     this.cacheZoom = Math.floor(this.mapService.getZoom());
 
     const glContext = this.rendererService.getGLContext();
-    this.imageCoords = source.data?.dataArray[0].coordinates as [Point, Point];
+    this.imageCoords = source.data?.dataArray[0].coordinates as [
+      IPointArray,
+      IPointArray,
+    ];
 
     source.data?.images?.then((imageData: HTMLImageElement[]) => {
       this.sizeScale = sizeScale * this.getZoomScale();

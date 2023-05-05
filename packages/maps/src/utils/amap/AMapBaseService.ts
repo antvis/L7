@@ -3,8 +3,8 @@
  */
 import AMapLoader from '@amap/amap-jsapi-loader';
 import {
-  Bounds,
   CoordinateSystem,
+  IBoundsArray,
   ICameraOptions,
   ICoordinateSystemService,
   IGlobalConfigService,
@@ -217,7 +217,7 @@ export default abstract class AMapBaseService
     return 360 - this.map.getRotation();
   }
 
-  public getBounds(): Bounds {
+  public getBounds(): IBoundsArray {
     // @ts-ignore
     const amapBound = this.map.getBounds().toBounds();
     const NE = amapBound.getNorthEast();
@@ -266,7 +266,7 @@ export default abstract class AMapBaseService
     this.map.panBy(x, y);
   }
 
-  public fitBounds(extent: Bounds): void {
+  public fitBounds(extent: IBoundsArray): void {
     this.map.setBounds(
       new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
     );

@@ -1,4 +1,4 @@
-import { Point } from '@antv/l7-core';
+import { IPointArray } from '@antv/l7-core';
 import { isNaN } from 'lodash';
 import { createL7Icon } from '../utils/icon';
 import ButtonControl, {
@@ -6,7 +6,7 @@ import ButtonControl, {
 } from './baseControl/buttonControl';
 
 export interface IGeoLocateOption extends IButtonControlOption {
-  transform: (position: Point) => Point | Promise<Point>;
+  transform: (position: IPointArray) => IPointArray | Promise<IPointArray>;
 }
 
 export { GeoLocate };
@@ -38,7 +38,7 @@ export default class GeoLocate extends ButtonControl<IGeoLocateOption> {
    * 通过浏览器 API 获取当前所在经纬度
    */
   public getGeoLocation = () => {
-    return new Promise<Point>((resolve, reject) => {
+    return new Promise<IPointArray>((resolve, reject) => {
       window.navigator.geolocation.getCurrentPosition(
         ({ coords }) => {
           const { longitude, latitude } = coords ?? {};

@@ -1,7 +1,6 @@
 // https://github.com/Leaflet/Leaflet/blob/f0ca5bc9cf/src/geo/crs/CRS.Earth.js
-import { TypeCRS } from '.';
-import LngLat from '../lng_lat';
-import BaseCRS, { ICRS } from './crs';
+import { ICRS, LngLat, TypeCRS } from '@antv/l7-core';
+import BaseCRS from './crs';
 
 export default class Earth extends BaseCRS implements ICRS {
   public code: TypeCRS = 'Earth';

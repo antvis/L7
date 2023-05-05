@@ -41,6 +41,7 @@
   "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
     "@antv/l7-utils": "2.15.2",
+    "@antv/l7-core": "2.15.2",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",

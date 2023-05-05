@@ -1,5 +1,5 @@
-import Point, { IPoint } from './point';
-export default class Transformation {
+import { IPoint, Point } from './point';
+export class Transformation {
   private a: number = 0;
   private b: number = 0;
   private c: number = 0;

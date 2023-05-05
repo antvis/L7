@@ -1,7 +1,6 @@
-import { TypeCRS } from '.';
+import { ICRS, Transformation, TypeCRS } from '@antv/l7-core';
 import SphericalMercator from '../projection/sphericalMercator';
-import Transformation from '../transformation';
-import { ICRS } from './crs';
+
 import Earth from './crs.earth';
 export default class EPSG3857 extends Earth implements ICRS {
   public code: TypeCRS = 'EPSG:3857';

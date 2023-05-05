@@ -2,8 +2,8 @@
  * MapboxService
  */
 import {
-  Bounds,
   CoordinateSystem,
+  IBoundsArray,
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
@@ -143,8 +143,8 @@ export default abstract class BaseMapService<T>
     return this.map.getBearing();
   }
 
-  public getBounds(): Bounds {
-    return this.map.getBounds().toArray() as Bounds;
+  public getBounds(): IBoundsArray {
+    return this.map.getBounds().toArray() as IBoundsArray;
   }
 
   public getMinZoom(): number {
@@ -177,7 +177,7 @@ export default abstract class BaseMapService<T>
     this.panTo([x, y]);
   }
 
-  public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
+  public fitBounds(bound: IBoundsArray, fitBoundsOptions?: any): void {
     this.map.fitBounds(bound, fitBoundsOptions);
   }
 

@@ -1,6 +1,5 @@
-import { TypeCRS } from '.';
+import { Transformation, TypeCRS } from '@antv/l7-core';
 import LngLatProjection from '../projection/lng_lat';
-import Transformation from '../transformation';
 import Earth from './crs.earth';
 export default class EPSG4326 extends Earth {
   public code: TypeCRS = 'EPSG:4326';

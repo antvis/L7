@@ -1,7 +1,6 @@
 // @ts-ignore
+import { LngLat, Point } from '@antv/l7-core';
 import { EarthMap } from '../earthmap';
-import LngLat from '../geo/lng_lat';
-import Point from '../geo/point';
 import { Map } from '../map';
 import { bezier, ease, interpolate, now } from '../util';
 import DOM from '../utils/dom';

@@ -23,6 +23,8 @@ export * from './services/interaction/IPickingService';
 /** 暴露服务接口供其他 packages 实现 */
 export * from './services/layer/ILayerService';
 export * from './services/layer/IStyleAttributeService';
+export * from './services/map/geo';
+export * from './services/map/ICRS';
 export * from './services/map/IMapService';
 export * from './services/renderer/gl';
 /** 全部渲染服务接口 */

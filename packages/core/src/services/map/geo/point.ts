@@ -1,10 +1,13 @@
-export type PointLike = [number, number] | Point;
 export interface IPoint {
   x: number;
   y: number;
 }
 
-export default class Point {
+export type IPointArray = [number, number];
+
+export type PointLike = IPointArray | Point | IPoint;
+
+export class Point {
   public static convert(a: any) {
     if (a instanceof Point) {
       return a;

@@ -1,13 +1,19 @@
 // @ts-ignore
-import { isMini } from '@antv/l7-utils';
+import {
+  ICRS,
+  LngLat,
+  LngLatBounds,
+  MercatorCoordinate,
+  mercatorZfromAltitude,
+  Point,
+  TypeCRS,
+} from '@antv/l7-core';
+import { isMini, wrap } from '@antv/l7-utils';
 import { mat2, mat4, vec4 } from 'gl-matrix';
-import Point from '../geo/point';
-import { clamp, interpolate, wrap } from '../util';
-import { getCRS, ICRS, TypeCRS } from './crs';
+import { clamp, interpolate } from '../util';
+import { getCRS } from './crs';
 import EdgeInsets, { IPaddingOptions } from './edge_insets';
-import LngLat from './lng_lat';
-import LngLatBounds from './lng_lat_bounds';
-import MercatorCoordinate, { mercatorZfromAltitude } from './mercator';
+
 export const EXTENT = 8192;
 export default class Transform {
   get crs(): ICRS {

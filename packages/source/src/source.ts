@@ -2,6 +2,7 @@
 import { SyncHook } from '@antv/async-hook';
 import {
   IClusterOptions,
+  ICRS,
   IParseDataItem,
   IParserCfg,
   IParserData,
@@ -9,6 +10,7 @@ import {
   ISourceCFG,
   ITileParserCFG,
   ITransform,
+  TypeCRS,
 } from '@antv/l7-core';
 import {
   bBoxToBounds,
@@ -61,6 +63,8 @@ export default class Source extends EventEmitter implements ISource {
 
   // 瓦片数据管理器
   public tileset: TilesetManager | undefined;
+
+  private crs: ICRS | undefined;
   // 是否有效范围
   private invalidExtent: boolean = false;
 
@@ -87,6 +91,9 @@ export default class Source extends EventEmitter implements ISource {
         type: 'inited',
       });
     });
+  }
+  public setCRS(crs: TypeCRS): void {
+    throw new Error('Method not implemented.');
   }
 
   public getClusters(zoom: number): any {
@@ -322,7 +329,7 @@ export default class Source extends EventEmitter implements ISource {
       this.tileset.updateOptions(tilesetOptions);
       return this.tileset;
     }
-
+    // 初始化 瓦片数据管理器
     const tileset = new TilesetManager({
       ...tilesetOptions,
     });

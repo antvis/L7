@@ -1,5 +1,7 @@
 import { RequestParameters, TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
+import { TypeCRS } from '../map/ICRS';
+
 export type DataType = string | object[] | object;
 export type SourceEventType = 'inited' | 'sourceUpdate' | 'update';
 // 栅格瓦片解析配置项
@@ -143,6 +145,7 @@ export interface ISource {
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
   tileset: TilesetManager | undefined;
+  setCRS(crs: TypeCRS): void;
   getSourceCfg(): any;
   setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;

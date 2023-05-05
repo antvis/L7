@@ -1,7 +1,12 @@
-import Bounds from '../bounds';
-import LngLat, { LngLatLike } from '../lng_lat';
-import Point, { IPoint } from '../point';
-import { IProjection } from './interface';
+import {
+  Bounds,
+  IPoint,
+  IProjection,
+  LngLat,
+  LngLatLike,
+  Point,
+} from '@antv/l7-core';
+
 const earthRadius = 6378137;
 export default class SphericalMercator implements IProjection {
   public bounds: Bounds = (() => {

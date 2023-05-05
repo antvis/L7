@@ -1,28 +1,18 @@
-import { TypeCRS } from '.';
-import { wrap } from '../../util';
-import Bounds from '../bounds';
-import LngLat, { ILngLat, LngLatLike } from '../lng_lat';
-import LngLatBounds from '../lng_lat_bounds';
-import Point, { IPoint } from '../point';
-import { IProjection } from '../projection/interface';
-import Transformation from '../transformation';
-export interface ICRS {
-  code: TypeCRS;
-  transformation: Transformation;
-  projection: IProjection;
-  wrapLng: [number, number];
-  wrapLat: [number, number];
-  infinite: boolean;
-  lngLatToPoint(lngLat: LngLatLike, zoom: number): Point;
-  pointToLngLat(point: IPoint, zoom: number): LngLat;
-  project(lngLat: ILngLat): Point;
-  unproject(point: IPoint): LngLat;
-  scale(zoom: number): number;
-  zoom(scale: number): number;
-  getProjectedBounds(zoom: number): Bounds | null;
-  wrapLnglat(lngLat: LngLat): LngLat;
-  wrapLnglatBounds(lngLatBounds: LngLatBounds): LngLatBounds;
-}
+import {
+  Bounds,
+  ICRS,
+  ILngLat,
+  IPoint,
+  IProjection,
+  LngLat,
+  LngLatBounds,
+  LngLatLike,
+  Point,
+  Transformation,
+  TypeCRS,
+} from '@antv/l7-core';
+import { wrap } from '@antv/l7-utils';
+
 export default class BaseCRS implements ICRS {
   private tileSize: number = 512;
   public transformation: Transformation;

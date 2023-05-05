@@ -1,16 +1,15 @@
-import { wrap } from '../util';
+import { wrap } from '@antv/l7-utils';
+
 export const earthRadius = 6371008.8;
 export interface ILngLat {
   lng: number;
   lat: number;
 }
-export type LngLatLike =
-  | LngLat
-  | ILngLat
-  | { lon: number; lat: number }
-  | [number, number];
+export type LngLatArray = [number, number];
 
-export default class LngLat {
+export type LngLatLike = ILngLat | { lon: number; lat: number } | LngLatArray;
+
+export class LngLat {
   public static convert(input: LngLatLike): LngLat {
     if (input instanceof LngLat) {
       return input;

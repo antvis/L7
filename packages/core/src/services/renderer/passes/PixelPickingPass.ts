@@ -6,7 +6,7 @@ import {
   InteractionEvent,
 } from '../../interaction/IInteractionService';
 import { ILayer } from '../../layer/ILayerService';
-import { ILngLat } from '../../map/IMapService';
+import { ILngLat } from '../../map/geo';
 import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
 import { PassType } from '../IMultiPassRenderer';

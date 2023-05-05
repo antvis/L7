@@ -1,8 +1,8 @@
 import { Logo } from '@antv/l7-component';
 import {
-  Bounds,
   createLayerContainer,
   createSceneContainer,
+  IBoundsArray,
   ICameraOptions,
   IControl,
   IControlService,
@@ -20,6 +20,7 @@ import {
   IMarkerLayer,
   IMarkerService,
   IPoint,
+  IPointArray,
   IPopup,
   IPopupService,
   IPostProcessingPass,
@@ -27,7 +28,7 @@ import {
   ISceneConfig,
   ISceneService,
   IStatusOptions,
-  Point,
+  LngLatArray,
   SceneEventList,
   TYPES,
 } from '@antv/l7-core';
@@ -415,7 +416,7 @@ class Scene
     return this.mapService.getRotation();
   }
 
-  public getBounds(): Bounds {
+  public getBounds(): IBoundsArray {
     return this.mapService.getBounds();
   }
 
@@ -430,7 +431,7 @@ class Scene
     this.mapService.zoomOut();
   }
 
-  public panTo(p: Point): void {
+  public panTo(p: IPointArray): void {
     this.mapService.panTo(p);
   }
 
@@ -444,7 +445,7 @@ class Scene
   public setZoom(zoom: number): void {
     this.mapService.setZoom(zoom);
   }
-  public fitBounds(bound: Bounds, options?: unknown): void {
+  public fitBounds(bound: IBoundsArray, options?: unknown): void {
     const { fitBoundsOptions, animate } = this.sceneService.getSceneConfig();
     this.mapService.fitBounds(
       bound,
@@ -456,7 +457,7 @@ class Scene
     );
   }
 
-  public setZoomAndCenter(zoom: number, center: Point): void {
+  public setZoomAndCenter(zoom: number, center: IPointArray): void {
     this.mapService.setZoomAndCenter(zoom, center);
   }
 
@@ -469,19 +470,19 @@ class Scene
   }
 
   // conversion Method
-  public pixelToLngLat(pixel: Point): ILngLat {
+  public pixelToLngLat(pixel: IPointArray): ILngLat {
     return this.mapService.pixelToLngLat(pixel);
   }
 
-  public lngLatToPixel(lnglat: Point): IPoint {
+  public lngLatToPixel(lnglat: LngLatArray): IPoint {
     return this.mapService.lngLatToPixel(lnglat);
   }
 
-  public containerToLngLat(pixel: Point): ILngLat {
+  public containerToLngLat(pixel: IPointArray): ILngLat {
     return this.mapService.containerToLngLat(pixel);
   }
 
-  public lngLatToContainer(lnglat: Point): IPoint {
+  public lngLatToContainer(lnglat: LngLatArray): IPoint {
     return this.mapService.lngLatToContainer(lnglat);
   }
 

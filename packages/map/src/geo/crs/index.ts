@@ -1,8 +1,8 @@
-import BaseCRS, { ICRS } from './crs';
+import { ICRS, TypeCRS } from '@antv/l7-core';
+import BaseCRS from './crs';
 import EPSG3857 from './crs.3857';
 import Earth from './crs.earth';
 import EPSG4326 from './crs.epsg4326';
-export type TypeCRS = 'EPSG:3857' | 'EPSG:4326' | 'Earth' | undefined;
 
 export function getCRS(name: TypeCRS): ICRS {
   switch (name) {
@@ -15,4 +15,4 @@ export function getCRS(name: TypeCRS): ICRS {
   }
 }
 
-export { EPSG3857, EPSG4326, Earth, BaseCRS, ICRS };
+export { EPSG3857, EPSG4326, Earth, BaseCRS };

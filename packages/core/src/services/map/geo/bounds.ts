@@ -1,9 +1,11 @@
-import Point, { PointLike } from './point';
+import { Point, PointLike } from './point';
+
+export type IBoundsArray = [[number, number], [number, number]];
 export type IBoundsLike =
   | Bounds
   | [PointLike, PointLike]
   | [number, number, number, number];
-export default class Bounds {
+export class Bounds {
   public min: Point;
   public max: Point;
 

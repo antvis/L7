@@ -1,7 +1,12 @@
-import LngLat, { LngLatLike } from '../lng_lat';
-import LngLatBounds, { LngLatBoundsLike } from '../lng_lat_bounds';
-import Point, { IPoint } from '../point';
-import { IProjection } from './interface';
+import {
+  IPoint,
+  IProjection,
+  LngLat,
+  LngLatBounds,
+  LngLatBoundsLike,
+  LngLatLike,
+  Point,
+} from '@antv/l7-core';
 
 export default class LngLatProjection implements IProjection {
   public bounds: LngLatBoundsLike = new LngLatBounds([-180, -90], [180, 90]);
