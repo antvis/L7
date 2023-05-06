@@ -10,7 +10,6 @@ import {
   ISourceCFG,
   ITileParserCFG,
   ITransform,
-  TypeCRS,
 } from '@antv/l7-core';
 import {
   bBoxToBounds,
@@ -92,8 +91,8 @@ export default class Source extends EventEmitter implements ISource {
       });
     });
   }
-  public setCRS(crs: TypeCRS): void {
-    throw new Error('Method not implemented.');
+  public setCRS(crs: ICRS): void {
+    this.crs = crs;
   }
 
   public getClusters(zoom: number): any {
@@ -266,6 +265,9 @@ export default class Source extends EventEmitter implements ISource {
       if (cfg.transforms) {
         this.transforms = cfg.transforms;
       }
+      if (cfg.crs) {
+        this.crs = cfg.crs;
+      }
       this.cluster = cfg.cluster || false;
       if (cfg.clusterOptions) {
         this.cluster = true;
@@ -329,6 +331,7 @@ export default class Source extends EventEmitter implements ISource {
       this.tileset.updateOptions(tilesetOptions);
       return this.tileset;
     }
+
     // 初始化 瓦片数据管理器
     const tileset = new TilesetManager({
       ...tilesetOptions,

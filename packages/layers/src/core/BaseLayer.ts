@@ -1110,6 +1110,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.layerSource) {
       this.layerSource.off('update', this.sourceEvent);
     }
+    // TODO: mapservice 未初始化如何设置 CRS;
+    // if (this.mapService.getCrs) {
+    //    source.setCRS(this.mapService.getCrs());
+    // }
     this.layerSource = source;
     this.clusterZoom = 0;
 

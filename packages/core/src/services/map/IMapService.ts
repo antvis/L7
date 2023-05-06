@@ -8,6 +8,7 @@ import {
   IPointArray,
   LngLatArray,
 } from './geo';
+import { ICRS } from './ICRS';
 
 export interface IStatusOptions {
   showIndoorMap: boolean;
@@ -65,6 +66,8 @@ export interface IMapService<RawMap = {}> {
   once(type: string, handler: (...args: any[]) => void): void;
   // get dom
   getContainer(): HTMLElement | null;
+  // 获取地图投影；
+  getCrs?(): ICRS;
   getSize(): [number, number];
   // get map status method
   getMinZoom(): number;

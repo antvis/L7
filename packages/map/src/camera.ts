@@ -1,5 +1,6 @@
 // @ts-ignore
 import {
+  ICRS,
   LngLat,
   LngLatBounds,
   LngLatBoundsLike,
@@ -93,6 +94,10 @@ export default class Camera extends EventEmitter {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public cancelRenderFrame(_: number): void {
     return;
+  }
+
+  public getCrs(): ICRS {
+    return this.transform.crs;
   }
 
   public getCenter() {

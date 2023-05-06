@@ -5,6 +5,7 @@ import {
   CoordinateSystem,
   IBoundsArray,
   ICoordinateSystemService,
+  ICRS,
   IGlobalConfigService,
   ILngLat,
   IMapCamera,
@@ -99,6 +100,10 @@ export default abstract class BaseMapService<T>
 
   public getContainer(): HTMLElement | null {
     return this.map.getContainer();
+  }
+
+  public getCrs(): ICRS {
+    return this.map.getCrs();
   }
 
   public getMapCanvasContainer(): HTMLElement {

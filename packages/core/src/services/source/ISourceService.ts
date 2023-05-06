@@ -1,6 +1,6 @@
 import { RequestParameters, TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
-import { TypeCRS } from '../map/ICRS';
+import { ICRS } from '../map/ICRS';
 
 export type DataType = string | object[] | object;
 export type SourceEventType = 'inited' | 'sourceUpdate' | 'update';
@@ -97,6 +97,7 @@ export interface ISourceCFG {
   autoRender?: boolean;
   parser?: IParserCfg | ITileParserCFG;
   transforms?: ITransform[];
+  crs?: ICRS | undefined;
 }
 export interface IClusterOptions {
   enable: false;
@@ -145,7 +146,7 @@ export interface ISource {
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
   tileset: TilesetManager | undefined;
-  setCRS(crs: TypeCRS): void;
+  setCRS(crs: ICRS): void;
   getSourceCfg(): any;
   setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;

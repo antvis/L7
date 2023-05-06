@@ -19,17 +19,18 @@ export default () => {
     const url =
       'http://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles';
 
-    const layer = new RasterLayer({
-      zIndex: 1,
-    }).source(url, {
-      parser: {
-        type: 'rasterTile',
-        tileSize: 256,
-      },
-    });
+
 
     scene.on('loaded', () => {
       const source = new RDBSource({});
+      const layer = new RasterLayer({
+        zIndex: 1,
+      }).source(url, {
+        parser: {
+          type: 'rasterTile',
+          tileSize: 256,
+        },
+      });
     source.getData({ level: 'province' }).then((data) => {
       const fill = new PolygonLayer({
         autoFit: true,
