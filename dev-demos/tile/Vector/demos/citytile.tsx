@@ -7,8 +7,8 @@ import React, { useEffect,useState } from 'react';
 export default () => {
  const [tileSource, setTileSource] = useState<Source>();
  const onReload = ()=>{
-  // tileSource.tileReload();
-  tileSource.reloadTilebyId(9,421,193)
+  tileSource.reloadAllTile();
+  // tileSource.reloadTilebyId(9,421,193)
 }
   useEffect(() => {
     const scene = new Scene({
