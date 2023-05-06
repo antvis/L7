@@ -8,7 +8,7 @@ import {
   UPDATE_TILE_STRATEGIES,
 } from './const';
 import { SourceTile } from './tile';
-import { TilesetManagerOptions, UpdateTileStrategy } from './types';
+import { TileBounds, TilesetManagerOptions, UpdateTileStrategy } from './types';
 import {
   getLatLonBoundsBuffer,
   isLatLonBoundsContains,
@@ -157,6 +157,32 @@ export class TilesetManager extends EventEmitter {
         onError: this.onTileError,
       });
     }
+  }
+
+  public reloadTileById(z: number, x: number, y: number) {
+    const tile = this.cacheTiles.get(`${x},${y},${z}`);
+    if (tile) {
+      this.onTileUnload(tile);
+      tile.loadData({
+        getData: this.options.getTileData,
+        onLoad: this.onTileLoad,
+        onError: this.onTileError,
+      });
+    }
+  }
+
+  public reloadTileByLnglat(lng: number, lat: number, z: number) {
+    const tile = this.getTileByLngLat(lng, lat, z);
+    if (tile) {
+      this.reloadTileById(tile.z, tile.x, tile.y);
+    }
+  }
+
+  public reloadTileByExtent(extent: TileBounds, z: number) {
+    const tiles = this.getTileIndices(z, extent);
+    tiles.forEach((tile) => {
+      this.reloadTileById(tile.z, tile.x, tile.y);
+    });
   }
 
   // 取消滞留请求中的瓦片

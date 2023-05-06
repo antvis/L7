@@ -271,6 +271,7 @@ source.getFeatureId('name', '张三');
 ```javascript
 layer.setData(data);
 ```
+<embed src="@/docs/api/source/tile/method.md"></embed>
 
 ### 数据类型
 
