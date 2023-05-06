@@ -10,7 +10,8 @@ import {
   InteractionEvent,
 } from '../interaction/IInteractionService';
 import { ILayer, ILayerService } from '../layer/ILayerService';
-import { ILngLat, IMapService } from '../map/IMapService';
+import { ILngLat } from '../map/geo';
+import { IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';

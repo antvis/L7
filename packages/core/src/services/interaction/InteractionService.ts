@@ -5,7 +5,8 @@ import Hammer from 'l7hammerjs';
 import 'reflect-metadata';
 // @ts-ignore
 import { TYPES } from '../../types';
-import { ILngLat, IMapService } from '../map/IMapService';
+import { ILngLat } from '../map/geo';
+import { IMapService } from '../map/IMapService';
 import { IInteractionService, InteractionEvent } from './IInteractionService';
 const DragEventMap: { [key: string]: string } = {
   panstart: 'dragstart',

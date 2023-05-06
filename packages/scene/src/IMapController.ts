@@ -1,10 +1,11 @@
 import {
-  Bounds,
+  IBoundsArray,
   ICameraOptions,
   ILngLat,
   IPoint,
+  IPointArray,
   IStatusOptions,
-  Point,
+  LngLatArray,
 } from '@antv/l7-core';
 
 export default interface IMapController {
@@ -31,7 +32,7 @@ export default interface IMapController {
   /**
    * 获取当前地图可视区域 `[西南角、东北角]`
    */
-  getBounds(): Bounds;
+  getBounds(): IBoundsArray;
 
   /**
    * 放大地图
@@ -46,7 +47,7 @@ export default interface IMapController {
   /**
    * 地图平移到指定点 `[x, y]`
    */
-  panTo(p: Point): void;
+  panTo(p: IPointArray): void;
 
   /**
    * 地图平移到指定点 `[x, y]`
@@ -56,7 +57,7 @@ export default interface IMapController {
   /**
    * 调整地图适合指定区域
    */
-  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
+  fitBounds(bound: IBoundsArray, fitBoundsOptions?: unknown): void;
 
   getContainer(): HTMLElement | null;
   getSize(): [number, number];
@@ -70,7 +71,7 @@ export default interface IMapController {
 
   // control with raw map
   setRotation(rotation: number): void;
-  setZoomAndCenter(zoom: number, center: Point): void;
+  setZoomAndCenter(zoom: number, center: IPointArray): void;
   setCenter(center: [number, number], options?: ICameraOptions): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
@@ -78,9 +79,9 @@ export default interface IMapController {
   setMapStatus(option: Partial<IStatusOptions>): void;
 
   // coordinates methods
-  pixelToLngLat(pixel: Point): ILngLat;
-  lngLatToPixel(lnglat: Point): IPoint;
-  containerToLngLat(pixel: Point): ILngLat;
-  lngLatToContainer(lnglat: Point): IPoint;
+  pixelToLngLat(pixel: IPointArray): ILngLat;
+  lngLatToPixel(lnglat: LngLatArray): IPoint;
+  containerToLngLat(pixel: IPointArray): ILngLat;
+  lngLatToContainer(lnglat: LngLatArray): IPoint;
   exportMap(type: 'jpg' | 'png'): Promise<string>;
 }

@@ -1,11 +1,15 @@
+import {
+  LngLat,
+  LngLatBounds,
+  LngLatBoundsLike,
+  LngLatLike,
+  Point,
+  PointLike,
+} from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { merge } from 'lodash';
 import Camera from './camera';
 import './css/l7.css';
-import LngLat, { LngLatLike } from './geo/lng_lat';
-import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
-// @ts-ignore
-import Point, { PointLike } from './geo/point';
 import BoxZoomHandler from './handler/box_zoom';
 import HandlerManager from './handler/handler_manager';
 import KeyboardHandler from './handler/keyboard';
@@ -54,6 +58,7 @@ const DefaultOptions: IMapOptions = {
   renderWorldCopies: true,
   pitchEnabled: true,
   rotateEnabled: true,
+  crs: 'EPSG:3857',
 };
 export class EarthMap extends Camera {
   public doubleClickZoom: DoubleClickZoomHandler;

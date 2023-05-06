@@ -1,5 +1,9 @@
-import LngLat, { earthRadius, LngLatLike } from '../geo/lng_lat';
-
+import { earthRadius, LngLat, LngLatLike } from './lng_lat';
+export interface IMercator {
+  x: number;
+  y: number;
+  z: number;
+}
 /*
  * The average circumference of the world in meters.
  */

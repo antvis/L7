@@ -2,9 +2,15 @@
 import { Scene, Source, PolygonLayer, LineLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 
 export default () => {
+ const [tileSource, setTileSource] = useState<Source>();
+ const onReload = ()=>{
+  tileSource.reloadAllTile();
+  // tileSource.reloadTilebyId(9,421,193)
+  // tileSource
+}
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
@@ -32,6 +38,7 @@ export default () => {
   
       },
     );
+    setTileSource(source)
 
     const layer = new PolygonLayer({
       featureId: 'space_id',
@@ -79,6 +86,8 @@ export default () => {
     });
   }, []);
   return (
+    <>
+    <button onClick={onReload}>reload</button>
     <div
       id="map"
       style={{
@@ -86,6 +95,7 @@ export default () => {
         position: 'relative',
       }}
     />
+    </>
   );
 };
 

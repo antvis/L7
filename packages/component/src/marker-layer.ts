@@ -1,4 +1,5 @@
 import {
+  IBoundsArray,
   IMapService,
   IMarker,
   IMarkerContainerAndBounds,
@@ -8,7 +9,6 @@ import {
   bindAll,
   boundsContains,
   DOM,
-  IBounds,
   padBounds,
   Satistics,
 } from '@antv/l7-utils';
@@ -37,7 +37,7 @@ export default class MarkerLayer extends EventEmitter {
   private mapsService: IMapService<unknown>;
   private scene: Container;
   private zoom: number;
-  private bbox: IBounds;
+  private bbox: IBoundsArray;
   private inited: boolean;
   private containerSize: IMarkerContainerAndBounds;
 
@@ -229,7 +229,7 @@ export default class MarkerLayer extends EventEmitter {
     this.clusterIndex.load(this.points);
   }
 
-  private getClusterMarker(viewBounds: IBounds, zoom: number) {
+  private getClusterMarker(viewBounds: IBoundsArray, zoom: number) {
     const viewBBox = viewBounds[0].concat(viewBounds[1]);
     const clusterPoint = this.clusterIndex.getClusters(viewBBox, zoom);
     this.clusterMarkers.forEach((marker: IMarker) => {

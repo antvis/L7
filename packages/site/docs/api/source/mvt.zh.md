@@ -89,3 +89,5 @@ const source = new Source(
   },
 );
 ```
+
+<embed src="@/docs/api/source/tile/method.md"></embed>

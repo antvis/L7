@@ -1,6 +1,6 @@
 // @ts-ignore
+import { Point } from '@antv/l7-core';
 import { EarthMap } from '../earthmap';
-import Point from '../geo/point';
 import { Map } from '../map';
 import { MapMouseEvent, MapTouchEvent, MapWheelEvent } from './events';
 

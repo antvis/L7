@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../geo/point';
+import { Point } from '@antv/l7-core';
 
 export function indexTouches(touches: Touch[], points: Point[]) {
   const obj: { [key: string]: any } = {};

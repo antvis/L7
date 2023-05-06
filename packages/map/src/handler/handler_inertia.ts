@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../geo/point';
+import { Point } from '@antv/l7-core';
 
 // tslint:disable-next-line:no-submodule-imports
 import merge from 'lodash/merge';

@@ -1,6 +1,7 @@
-import { anchorType, IBounds } from '@antv/l7-utils';
+import { anchorType } from '@antv/l7-utils';
 import { Container } from 'inversify';
-import { ILngLat, IMapService, IPoint } from '../map/IMapService';
+import { IBoundsArray, ILngLat, IPoint } from '../map/geo';
+import { IMapService } from '../map/IMapService';
 import { IPopup } from './IPopupService';
 export interface IMarkerScene {
   getMapService(): IMapService<unknown>;
@@ -23,7 +24,7 @@ export interface IMarkerOption {
 export interface IMarkerContainerAndBounds {
   containerWidth: number;
   containerHeight: number;
-  bounds: IBounds;
+  bounds: IBoundsArray;
 }
 
 export interface IMarker {

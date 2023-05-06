@@ -1,9 +1,9 @@
 // @ts-ignore
 // tslint:disable-next-line: no-submodule-imports
+import { Point } from '@antv/l7-core';
 import { $window, isMini } from '@antv/l7-utils';
 import { merge } from 'lodash';
 import { EarthMap } from '../earthmap';
-import Point from '../geo/point';
 import { Map } from '../map';
 import DOM from '../utils/dom';
 import BlockableMapEventHandler from './blockable_map_event';

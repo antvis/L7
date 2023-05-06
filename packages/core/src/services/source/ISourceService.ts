@@ -1,5 +1,7 @@
 import { RequestParameters, TilesetManager } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
+import { ICRS } from '../map/ICRS';
+
 export type DataType = string | object[] | object;
 export type SourceEventType = 'inited' | 'sourceUpdate' | 'update';
 // 栅格瓦片解析配置项
@@ -95,6 +97,7 @@ export interface ISourceCFG {
   autoRender?: boolean;
   parser?: IParserCfg | ITileParserCFG;
   transforms?: ITransform[];
+  crs?: ICRS | undefined;
 }
 export interface IClusterOptions {
   enable: false;
@@ -143,6 +146,7 @@ export interface ISource {
   clusterOptions: Partial<IClusterOptions>;
   extent: BBox;
   tileset: TilesetManager | undefined;
+  setCRS(crs: ICRS): void;
   getSourceCfg(): any;
   setData(data: any, options?: ISourceCFG): void;
   updateClusterData(zoom: number): void;
@@ -150,6 +154,11 @@ export interface ISource {
   getFeatureId(field: string, value: any): number | undefined;
   getParserType(): string;
   getClusters(zoom: number): any;
+  // 瓦片图层
+  reloadAllTile(): void;
+  reloadTilebyId(z: number, x: number, y: number): void;
+  reloadTileByLnglat(lng: number, lat: number, z: number): void;
+  reloadTileByExtent(bounds: [number, number, number, number], z: number): void;
   getClustersLeaves(id: number): any;
   updateFeaturePropertiesById(
     id: number,

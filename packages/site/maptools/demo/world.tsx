@@ -34,7 +34,6 @@ import './index.less';
 import {
   defaultDataInfo,
   downloadDataType,
-  editionOptions,
   IDataInfo,
   layerOptions,
   lineLayerOptions,
@@ -56,6 +55,7 @@ export default () => {
     data: { type: 'FeatureCollection', features: [] },
     parser: { type: 'geojson' },
   });
+  const [linedata,setLineData] = useState<any>();
   const [lineLayerSource, setLineLayerSource] = useState({
     data: { type: 'FeatureCollection', features: [] },
     parser: { type: 'geojson' },
@@ -83,13 +83,14 @@ export default () => {
   }, []);
 
 
-  const getDownloadData = async () => {
-    return layerSource.data as FeatureCollection;
+  const getDownloadData = async (type?:string = 'fill') => {
+    return type === 'line' ? linedata : layerSource.data;
+
   };
 
-  const onDownload = async () => {
+  const onDownload = async (type:string) => {
     const { datatype, currentName } = dataInfo;
-    const data = await getDownloadData();
+    const data = await getDownloadData(type);
     downloadData(currentName, data, datatype);
   };
   const onDownloadSvg = async () => {
@@ -98,8 +99,8 @@ export default () => {
     return downloadData(currentName, data, 'SVG');
   };
 
-  const onCopyData = async () => {
-    const data = (await getDownloadData()) as FeatureCollection;
+  const onCopyData = async (type) => {
+    const data = (await getDownloadData(type)) as FeatureCollection;
     navigator.clipboard.writeText(JSON.stringify(data));
     message.success('复制成功');
   };
@@ -124,6 +125,7 @@ export default () => {
       .then((res) => res.arrayBuffer())
       .then((data) => {
         const jsonData = geobuf.decode(new Pbf(data)) as FeatureCollection;
+        setLineData(jsonData);
         const linedata1 = {
           // 确定边界
           type: 'FeatureCollection',
@@ -217,7 +219,7 @@ export default () => {
             />
           </div>
           <div style={{ paddingLeft: '10px', display: panelInfo.display }}>
-            <Row className="row">
+            {/* <Row className="row">
               <Col span={8} className="label">
                 版本：
               </Col>
@@ -229,7 +231,7 @@ export default () => {
                   options={editionOptions[dataInfo.sourceType]}
                 />
               </Col>
-            </Row>
+            </Row> */}
             <Divider style={{ margin: '8px 0' }}></Divider>
 
             <Descriptions title="当前地区">
@@ -243,7 +245,7 @@ export default () => {
 
             <Row className="row">
               <Col span={6} className="label">
-                数据下载:
+                面数据:
               </Col>
               <Col span={18} style={{ textAlign: 'right' }}>
                 <Select
@@ -259,14 +261,44 @@ export default () => {
                   style={{ marginLeft: '8px' }}
                   icon={<DownloadOutlined />}
                   size={size}
-                  onClick={onDownload}
+                  onClick={onDownload.bind(null,'fill')}
                 />
 
                 <Button
                   type="primary"
                   style={{ marginLeft: '8px' }}
                   icon={<CopyOutlined />}
-                  onClick={onCopyData}
+                  onClick={onCopyData.bind(null,'fill')}
+                  size={size}
+                />
+              </Col>
+            </Row>
+            <Row className="row">
+              <Col span={6} className="label">
+                国界数据:
+              </Col>
+              <Col span={18} style={{ textAlign: 'right' }}>
+                <Select
+                  value={dataInfo.datatype}
+                  style={{ width: 120 }}
+                  size={size}
+                  options={downloadDataType}
+                  onChange={onDataConfigChange.bind(null, 'datatype','line')}
+                />
+
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<DownloadOutlined />}
+                  size={size}
+                  onClick={onDownload.bind(null,'line')}
+                />
+
+                <Button
+                  type="primary"
+                  style={{ marginLeft: '8px' }}
+                  icon={<CopyOutlined />}
+                  onClick={onCopyData.bind(null,'fill')}
                   size={size}
                 />
               </Col>

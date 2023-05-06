@@ -1,20 +1,15 @@
 import { Container } from 'inversify';
 import { IViewport } from '../camera/ICameraService';
-export type Point = [number, number];
-export type Bounds = [[number, number], [number, number]];
-export interface ILngLat {
-  lng: number;
-  lat: number;
-}
-export interface IPoint {
-  x: number;
-  y: number;
-}
-export interface IMercator {
-  x: number;
-  y: number;
-  z: number;
-}
+import {
+  IBoundsArray,
+  ILngLat,
+  IMercator,
+  IPoint,
+  IPointArray,
+  LngLatArray,
+} from './geo';
+import { ICRS } from './ICRS';
+
 export interface IStatusOptions {
   showIndoorMap: boolean;
   resizeEnable: boolean;
@@ -71,6 +66,8 @@ export interface IMapService<RawMap = {}> {
   once(type: string, handler: (...args: any[]) => void): void;
   // get dom
   getContainer(): HTMLElement | null;
+  // 获取地图投影；
+  getCrs?(): ICRS;
   getSize(): [number, number];
   // get map status method
   getMinZoom(): number;
@@ -81,7 +78,7 @@ export interface IMapService<RawMap = {}> {
   getCenter(option?: ICameraOptions): ILngLat;
   getPitch(): number;
   getRotation(): number;
-  getBounds(): Bounds;
+  getBounds(): IBoundsArray;
   getMapContainer(): HTMLElement | null;
   getMapCanvasContainer(): HTMLElement;
   getMapStyleConfig(): MapStyleConfig; // 获取当前地图类型默认的样式配置
@@ -93,10 +90,10 @@ export interface IMapService<RawMap = {}> {
   setRotation(rotation: number): void;
   zoomIn(option?: any, eventData?: any): void;
   zoomOut(option?: any, eventData?: any): void;
-  panTo(p: Point): void;
+  panTo(p: IPointArray): void;
   panBy(x: number, y: number): void;
-  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
-  setZoomAndCenter(zoom: number, center: Point): void;
+  fitBounds(bound: IBoundsArray, fitBoundsOptions?: unknown): void;
+  setZoomAndCenter(zoom: number, center: IPointArray): void;
   setCenter(center: [number, number], option?: ICameraOptions): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
@@ -105,11 +102,11 @@ export interface IMapService<RawMap = {}> {
 
   // coordinates methods
   meterToCoord(center: number[], lnglat: number[]): number;
-  pixelToLngLat(pixel: Point): ILngLat;
-  lngLatToPixel(lnglat: Point): IPoint;
-  containerToLngLat(pixel: Point): ILngLat;
-  lngLatToContainer(lnglat: Point): IPoint;
-  lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;
+  pixelToLngLat(pixel: LngLatArray): ILngLat;
+  lngLatToPixel(lnglat: LngLatArray): IPoint;
+  containerToLngLat(pixel: IPointArray): ILngLat;
+  lngLatToContainer(lnglat: LngLatArray): IPoint;
+  lngLatToMercator(lnglat: LngLatArray, altitude: number): IMercator;
   getModelMatrix(
     lnglat: [number, number],
     altitude: number,
@@ -164,7 +161,7 @@ export interface IEarthService<RawMap = {}> {
   getCenter(option?: ICameraOptions): ILngLat;
   getPitch(): number;
   getRotation(): number;
-  getBounds(): Bounds;
+  getBounds(): IBoundsArray;
   getMapContainer(): HTMLElement | null;
   getMapCanvasContainer(): HTMLElement;
   getMapStyleConfig(): MapStyleConfig;
@@ -173,10 +170,10 @@ export interface IEarthService<RawMap = {}> {
   setRotation(rotation: number): void;
   zoomIn(option?: any, eventData?: any): void;
   zoomOut(option?: any, eventData?: any): void;
-  panTo(p: Point): void;
+  panTo(p: IPointArray): void;
   panBy(x: number, y: number): void;
-  fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void;
-  setZoomAndCenter(zoom: number, center: Point): void;
+  fitBounds(bound: IBoundsArray, fitBoundsOptions?: unknown): void;
+  setZoomAndCenter(zoom: number, center: IPointArray): void;
   setCenter(center: [number, number], option?: ICameraOptions): void;
   setPitch(pitch: number): void;
   setZoom(zoom: number): void;
@@ -185,10 +182,10 @@ export interface IEarthService<RawMap = {}> {
 
   // coordinates methods
   meterToCoord(center: number[], lnglat: number[]): number;
-  pixelToLngLat(pixel: Point): ILngLat;
-  lngLatToPixel(lnglat: Point): IPoint;
-  containerToLngLat(pixel: Point): ILngLat;
-  lngLatToContainer(lnglat: Point): IPoint;
+  pixelToLngLat(pixel: IPointArray): ILngLat;
+  lngLatToPixel(lnglat: IPointArray): IPoint;
+  containerToLngLat(pixel: IPointArray): ILngLat;
+  lngLatToContainer(lnglat: LngLatArray): IPoint;
   lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;
   getModelMatrix(
     lnglat: [number, number],

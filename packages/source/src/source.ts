@@ -2,6 +2,7 @@
 import { SyncHook } from '@antv/async-hook';
 import {
   IClusterOptions,
+  ICRS,
   IParseDataItem,
   IParserCfg,
   IParserData,
@@ -61,6 +62,8 @@ export default class Source extends EventEmitter implements ISource {
 
   // 瓦片数据管理器
   public tileset: TilesetManager | undefined;
+
+  private crs: ICRS | undefined;
   // 是否有效范围
   private invalidExtent: boolean = false;
 
@@ -87,6 +90,9 @@ export default class Source extends EventEmitter implements ISource {
         type: 'inited',
       });
     });
+  }
+  public setCRS(crs: ICRS): void {
+    this.crs = crs;
   }
 
   public getClusters(zoom: number): any {
@@ -208,6 +214,25 @@ export default class Source extends EventEmitter implements ISource {
     });
   }
 
+  public reloadAllTile() {
+    this.tileset?.reloadAll();
+  }
+
+  public reloadTilebyId(z: number, x: number, y: number): void {
+    this.tileset?.reloadTileById(z, x, y);
+  }
+
+  public reloadTileByLnglat(lng: number, lat: number, z: number): void {
+    this.tileset?.reloadTileByLnglat(lng, lat, z);
+  }
+
+  public reloadTileByExtent(
+    bounds: [number, number, number, number],
+    z: number,
+  ): void {
+    this.tileset?.reloadTileByExtent(bounds, z);
+  }
+
   public destroy() {
     this.removeAllListeners();
     this.originData = null;
@@ -240,6 +265,9 @@ export default class Source extends EventEmitter implements ISource {
       if (cfg.transforms) {
         this.transforms = cfg.transforms;
       }
+      if (cfg.crs) {
+        this.crs = cfg.crs;
+      }
       this.cluster = cfg.cluster || false;
       if (cfg.clusterOptions) {
         this.cluster = true;
@@ -262,17 +290,10 @@ export default class Source extends EventEmitter implements ISource {
    */
   private excuteParser(): void {
     // 耗时计算测试
-    // let t = new Date().getTime();
-    // let c = 0
-    // while(c < 100000000) {
-    //   c++
-    // }
-    // console.log('t', new Date().getTime() - t)
     const parser = this.parser as IParserCfg;
     const type: string = parser.type || 'geojson';
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
-
     // 为瓦片图层的父图层创建数据瓦片金字塔管理器
     this.tileset = this.initTileset();
 
@@ -311,6 +332,7 @@ export default class Source extends EventEmitter implements ISource {
       return this.tileset;
     }
 
+    // 初始化 瓦片数据管理器
     const tileset = new TilesetManager({
       ...tilesetOptions,
     });

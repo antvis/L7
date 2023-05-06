@@ -1,9 +1,10 @@
-import LngLat, { LngLatLike } from './lng_lat';
+import { LngLat, LngLatLike } from './lng_lat';
 export type LngLatBoundsLike =
   | LngLatBounds
   | [LngLatLike, LngLatLike]
   | [number, number, number, number];
-export default class LngLatBounds {
+
+export class LngLatBounds {
   public static convert(input: LngLatBoundsLike): LngLatBounds {
     if (input instanceof LngLatBounds) {
       return input;

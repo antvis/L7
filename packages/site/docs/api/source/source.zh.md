@@ -272,6 +272,8 @@ source.getFeatureId('name', '张三');
 layer.setData(data);
 ```
 
+<embed src="@/docs/api/source/tile/method.md"></embed>
+
 ### 数据类型
 
 #### JSON

@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../../geo/point';
+import { Point } from '@antv/l7-core';
 import SingleTapRecognizer, {
   MAX_DIST,
   MAX_TAP_INTERVAL,

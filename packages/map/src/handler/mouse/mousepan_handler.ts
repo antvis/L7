@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../../geo/point';
+import { Point } from '@antv/l7-core';
 import MouseHandler from './mouse_handler';
 import { LEFT_BUTTON } from './util';
 export default class MousePanHandler extends MouseHandler {

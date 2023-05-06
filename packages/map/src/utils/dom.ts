@@ -1,6 +1,6 @@
-import { $window, isMini } from '@antv/l7-utils';
 // @ts-ignore
-import Point from '../geo/point';
+import { Point } from '@antv/l7-core';
+import { $window, isMini } from '@antv/l7-utils';
 
 const DOM: {
   [key: string]: (...arg: any[]) => any;
