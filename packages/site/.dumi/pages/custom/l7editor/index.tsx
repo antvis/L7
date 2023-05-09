@@ -1,6 +1,6 @@
 import { Footer } from '@antv/dumi-theme-antv/dist/slots/Footer';
 import { Header } from '@antv/dumi-theme-antv/dist/slots/Header';
-import React, { useRef } from 'react';
+import React from 'react';
 const L7Editor: React.FC = () => {
   return (
     <div style={{ height: '100vh' }}>
