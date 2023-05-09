@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@antv/l7-site",
-  "version": "2.15.3",
+  "version": "2.15.4",
   "description": "L7 sites deployed on gh-pages",
   "keywords": [
     "antv",
@@ -34,7 +34,7 @@
     "site:publish": "gh-pages -d dist"
   },
   "devDependencies": {
-    "@antv/dumi-theme-antv": "^0.3.7",
+    "@antv/dumi-theme-antv": "^0.3.13",
     "@antv/g2": "^4.2.8",
     "@antv/l7-draw": "^3.0.9",
     "@antv/l7plot": "^0.3.3",

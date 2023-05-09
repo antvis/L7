@@ -174,11 +174,20 @@ export default defineConfig({
         },
       },
       {
-        slug: 'custom/tools',
         title: {
           zh: '地图工具',
           en: 'tools',
         },
+        dropdownItems: [
+          {
+            name: { zh: '行政区划数据', en: 'Administrative Division Data' },
+            url: '/custom/tools',
+          },
+          {
+            name: { zh: 'GeoJSON 编辑工具', en: 'Administrative Division Data' },
+            url: '/custom/l7editor',
+          },
+        ],
       },
     ],
     cases: [
