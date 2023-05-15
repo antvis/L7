@@ -14,6 +14,7 @@ import {
   bBoxToBounds,
   extent,
   padBounds,
+  SourceTile,
   TilesetManager,
 } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
@@ -218,6 +219,17 @@ export default class Source extends EventEmitter implements ISource {
 
   public reloadTileByLnglat(lng: number, lat: number, z: number): void {
     this.tileset?.reloadTileByLnglat(lng, lat, z);
+  }
+
+  public getTileExtent(
+    e: [number, number, number, number],
+    zoom: number,
+  ): Array<{ x: number; y: number; z: number }> | undefined {
+    return this.tileset?.getTileExtent(e, zoom);
+  }
+
+  public getTileByZXY(z: number, x: number, y: number): SourceTile | undefined {
+    return this.tileset?.getTileByZXY(z, x, y);
   }
 
   public reloadTileByExtent(

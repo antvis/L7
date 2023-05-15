@@ -61,7 +61,10 @@ layer 初始化完成之后，地图是否自动缩放到图层范围
 <embed src="@/docs/common/layer/mask_options.md"></embed>
 
 
+### enablePropagation
 
+<description> _boolean_ **optional** _default:_ 'false'</description>
+图层事件，默认只响应最上层图层，设置为true 将允许事件透传
 
 
 

@@ -19,6 +19,7 @@ import { getTileIndices, osmLonLat2TileXY } from './utils/lonlat-tile';
  * 管理瓦片数据
  */
 export class TilesetManager extends EventEmitter {
+  public currentZoom?: number;
   public get isLoaded() {
     return this.currentTiles.every((tile) => tile.isDone);
   }
@@ -81,6 +82,7 @@ export class TilesetManager extends EventEmitter {
   public update(zoom: number, latLonBounds: [number, number, number, number]) {
     // 校验层级，向上取整
     const verifyZoom = Math.max(0, Math.ceil(zoom));
+
     if (
       this.lastViewStates &&
       this.lastViewStates.zoom === verifyZoom &&
@@ -104,6 +106,7 @@ export class TilesetManager extends EventEmitter {
       latLonBoundsBuffer,
     };
 
+    this.currentZoom = verifyZoom;
     let isAddTile = false;
     const tileIndices = this.getTileIndices(
       verifyZoom,
@@ -209,6 +212,15 @@ export class TilesetManager extends EventEmitter {
     const xy = osmLonLat2TileXY(lng, lat, z);
     const tiles = this.tiles.filter((t) => t.key === `${xy[0]}_${xy[1]}_${z}`);
     return tiles[0];
+  }
+
+  public getTileExtent(extent: TileBounds, zoom: number) {
+    return this.getTileIndices(zoom, extent);
+  }
+
+  public getTileByZXY(z: number, x: number, y: number) {
+    const tile = this.tiles.filter((t) => t.key === `${x}_${y}_${z}`);
+    return tile[0];
   }
 
   // 摧毁
