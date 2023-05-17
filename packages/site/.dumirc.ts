@@ -333,10 +333,10 @@ export default defineConfig({
         order: 11,
       },
       {
-        slug: 'tutorial/debug',
+        slug: 'tutorial/monitor',
         title: {
-          zh: '调试 debug',
-          en: 'debug',
+          zh: '监控打点',
+          en: 'Monitor',
         },
         order: 12,
       },
