@@ -3,7 +3,6 @@ import { TileDebugLayer, RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import { useEffect } from 'react';
-import * as wktParser from 'wellknown';
 
 export default () => {
   useEffect(() => {
@@ -20,10 +19,10 @@ export default () => {
       
       const url1 =
         'https://raw.githubusercontent.com/Slluxx/TOTK-Interactive-Map/tiles/assets/tiles/groundtiles/{z}/{x}/{y}.png';
-      
+      const url2 = 'https://switch-cdn.vgjump.com/gamewiki/maps/ground/{z}_{x}_{y}.jpg'
         const layer1 = new RasterLayer({
         zIndex: 1,
-      }).source(url1, {
+      }).source(url2, {
         parser: {
           type: 'rasterTile',
           tileSize: 256,
@@ -32,20 +31,9 @@ export default () => {
           warp:false
         },
       });
-      layer1.on('inited',()=>{
-        const source = layer1.getSource();
-        const tileSet = source.tileset;
-        tileSet.on('tiles-load-start',()=>{
-            console.log('tile start');
-        })
-        tileSet.on('tiles-load-finished',()=>{
-            console.log('tile finished');
-        })
-        console.log(tileSet);
-      })
-      
       const debugLayer = new TileDebugLayer();
       scene.addLayer(layer1);
+      scene.addLayer(debugLayer);
   }, []);
   return (
     <div
