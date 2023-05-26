@@ -138,6 +138,18 @@ export default defineConfig({
     news: [
       {
         type: {
+          zh: '活动',
+          en: 'publish',
+        },
+        title: {
+          zh: 'AntV L7 地理可视化有奖征文',
+          en: 'AntV L7 Geographic Visualization Prize Call for article',
+        },
+        date: '2023.05.25 - 2023.06.25',
+        link: 'https://mp.weixin.qq.com/s/SG6xE98pvqgG8zsrMevUXw',
+      },
+      {
+        type: {
           zh: '发布',
           en: 'publish',
         },
@@ -246,8 +258,8 @@ export default defineConfig({
       },
       {
         name: {
-          zh: 'LocationInsight',
-          en: 'LocationInsight',
+          zh: 'L7VP',
+          en: 'L7VP',
         },
         url: 'https://li.antv.antgroup.com/#/home',
       },
