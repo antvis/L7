@@ -135,32 +135,6 @@ export default defineConfig({
           'https://gw.alipayobjects.com/mdn/rms_08cc33/afts/img/A*OnGVRb_qWxcAAAAAAAAAAAAAARQnAQ',
       },
     ],
-    news: [
-      {
-        type: {
-          zh: '活动',
-          en: 'publish',
-        },
-        title: {
-          zh: 'AntV L7 地理可视化有奖征文',
-          en: 'AntV L7 Geographic Visualization Prize Call for article',
-        },
-        date: '2023.05.25 - 2023.06.25',
-        link: 'https://mp.weixin.qq.com/s/SG6xE98pvqgG8zsrMevUXw',
-      },
-      {
-        type: {
-          zh: '发布',
-          en: 'publish',
-        },
-        title: {
-          zh: 'L7 从矢量到遥感，从引擎到平台，探索地理分析的远方',
-          en: 'From vector to remote sensing, from engine to platform, explore the distance of geographical analysis',
-        },
-        date: '2022.11.22',
-        link: 'https://www.yuque.com/antv/blog/zrz77eat2m4wb7yk',
-      },
-    ],
     navs: [
       {
         slug: 'docs/tutorial/l7',
