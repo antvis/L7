@@ -42,6 +42,12 @@ const Demo: React.FC = () => {
       // 实例化 DrawControl
       const drawControl = new DrawControl(scene, {
         defaultActiveType: 'point',
+        commonDrawOptions: {
+          distanceOptions: {
+
+          }
+        }
+        
       });
       scene.addLayer(layer1);
       scene.addLayer(layer2);

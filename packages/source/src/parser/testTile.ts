@@ -33,8 +33,8 @@ const getVectorTile = async (tile: SourceTile): Promise<MapboxVectorTile> => {
               type: 'Feature',
               properties: {
                 key: tile.x + '/' + tile.y + '/' + tile.z,
-                textLng: (minLng + maxLng) / 2,
-                textLat: (minLat + maxLat) / 2,
+                x: (minLng + maxLng) / 2,
+                y: (minLat + maxLat) / 2,
               },
               geometry: {
                 type: 'LineString',

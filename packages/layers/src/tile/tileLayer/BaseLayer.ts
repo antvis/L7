@@ -201,6 +201,7 @@ export default class BaseTileLayer {
         .filter((tile: SourceTile) => tile.data)
         .filter((tile: SourceTile) => tile.z >= minZoom && tile.z < maxZoom)
         .map(async (tile: SourceTile) => {
+          // 未加载瓦片
           if (!this.tileLayerService.hasTile(tile.key)) {
             const tileInstance = getTileFactory(this.parent);
             const tileLayer = new tileInstance(tile, this.parent);

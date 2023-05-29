@@ -1,3 +1,49 @@
+### 瓦片source 属性
+
+#### tileSet 
+ 瓦片数据集，可以获取当前视野内的瓦片信息, 瓦片状态
+
+ ```ts
+ const source = layer1.getSource();
+ const tileSet = source.tileset;
+ ```
+ ##### 属性
+ 
+###### isLoaded 
+    瓦片是否加载完成
+
+###### currentTiles
+   
+
+###### currentZoom
+ 当前瓦片层级；这里的曾经和map 的缩放层级不相等
+
+ ##### 事件
+
+ ###### tiles-load-start
+
+    地图拖动，需要加载新的瓦片时触发
+
+    ```ts
+     
+        tileSet.on('tiles-load-start',()=>{
+            console.log('tile start');
+        })
+      
+    ```
+  
+
+###### tiles-load-finished
+    所有需要加载的瓦片资源加载完成后触发
+  
+
+    ```ts
+      tileSet.on('tiles-load-finished',()=>{
+            console.log('tile finished');
+        })
+
+    ```
+
 ### 瓦片source 方法
 
 #### reloadAllTile

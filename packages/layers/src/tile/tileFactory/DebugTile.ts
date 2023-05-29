@@ -14,12 +14,13 @@ export default class DebugTile extends Tile {
     const pointLayer = new PointLayer({
       minZoom: this.z - 1,
       maxZoom: this.z + 1,
+      textAllowOverlap: true,
     })
       .source([pointData], {
         parser: {
           type: 'json',
-          x: 'textLng',
-          y: 'textLat',
+          x: 'x',
+          y: 'y',
         },
       })
       .size(20)

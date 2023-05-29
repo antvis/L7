@@ -46,6 +46,7 @@ export default abstract class Tile implements ITile {
     const options = this.parent.getLayerConfig();
     return {
       ...options,
+      textAllowOverlap: true, // 文本允许重叠
       autoFit: false,
       maskLayers: this.getMaskLayer(),
       tileMask: isNeedMask(this.parent.type),
