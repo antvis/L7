@@ -82,8 +82,12 @@ export class TileLayerService {
     //     tile?.updateVisible(false);
     //   }
     // }
-
     tile?.updateVisible(sourceTile.isVisible);
+    // if (sourceTile.isVisible) {
+    //   tile?.updateVisible(sourceTile.isVisible);
+    // } else {
+    //   this.removeTile(sourceTile.key);
+    // }
   }
   public isParentLoaded(sourceTile: SourceTile): boolean {
     const parentTile = sourceTile.parent;
@@ -114,7 +118,7 @@ export class TileLayerService {
     const renders = layers.map(async (layer) => {
       await this.layerService.renderTileLayer(layer);
     });
-    Promise.all(renders);
+    await Promise.all(renders);
   }
 
   public getRenderLayers() {
