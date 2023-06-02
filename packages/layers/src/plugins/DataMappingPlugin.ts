@@ -115,7 +115,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
     // 在各个 layer 中继承
 
-    filterData = layer.processData(filterData);
+    filterData = layer.processData(filterData); // 目前只有简单线需要处理
     const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
 
