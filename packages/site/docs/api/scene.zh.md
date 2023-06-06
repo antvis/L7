@@ -254,7 +254,7 @@ scene.removeMarkerLayer(markerLayer);
 移除场景中所有的标签对象。
 
 ```javascript
-scene.removeAllMakers();
+scene.removeAllMarkers();
 ```
 
 ## 地图方法
