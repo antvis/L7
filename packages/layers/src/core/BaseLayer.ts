@@ -736,7 +736,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    */
   public renderLayers(): void {
     this.rendering = true;
-    this.layerService.renderLayers();
+    this.layerService.reRender();
 
     this.rendering = false;
   }
@@ -1279,6 +1279,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           })
           .catch((err) => reject(err));
       } else {
+        // console.log(this.encodedData)
         const { attributes, elements, count } =
           this.styleAttributeService.createAttributesAndIndices(
             this.encodedData,

@@ -342,7 +342,7 @@ class Scene
     this.markerService.removeMarkerLayer(layer);
   }
 
-  public removeAllMakers() {
+  public removeAllMarkers() {
     this.markerService.removeAllMarkers();
   }
 
