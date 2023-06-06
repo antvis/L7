@@ -20,7 +20,7 @@ import {
 import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
 
-export function TextTriangulation(feature: IEncodeFeature) {
+export function TextTrianglation(feature: IEncodeFeature) {
   // @ts-ignore
   const that = this as TextModel;
   const id = feature.id as number;
@@ -87,6 +87,7 @@ export default class TextModel extends BaseModel {
       centroid: number[];
     };
   } = {};
+  private rawEncodeData: IEncodeFeature[];
   private texture: ITexture2D;
   private currentZoom: number = -1;
   private extent: [[number, number], [number, number]];
@@ -172,6 +173,7 @@ export default class TextModel extends BaseModel {
     // 绑定事件
     this.bindEvent();
     this.extent = this.textExtent();
+    this.rawEncodeData = this.layer.getEncodedData();
     this.preTextStyle = this.getTextStyle();
     return this.buildModels();
   }
@@ -190,7 +192,7 @@ export default class TextModel extends BaseModel {
       moduleName: 'pointText',
       vertexShader: textVert,
       fragmentShader: textFrag,
-      triangulation: TextTriangulation.bind(this),
+      triangulation: TextTrianglation.bind(this),
       depth: { enable: false },
     });
     return [model];
@@ -220,15 +222,6 @@ export default class TextModel extends BaseModel {
       await this.mapping();
       return true;
     }
-
-    // if (
-    //   JSON.stringify(textOffset) !==
-    //     JSON.stringify(this.preTextStyle.textOffset) ||
-    //   textAnchor !== this.preTextStyle.textAnchor
-    // ) {
-    //   await this.mapping();
-    //   return true;
-    // }
     if (textAllowOverlap) {
       // 小于不做避让
       return false;
@@ -363,7 +356,7 @@ export default class TextModel extends BaseModel {
    */
   private initTextFont() {
     const { fontWeight, fontFamily } = this.getTextStyle();
-    const data = this.layer.getEncodedData();
+    const data = this.rawEncodeData;
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
       let { shape = '' } = item;
@@ -388,7 +381,7 @@ export default class TextModel extends BaseModel {
    */
   private initIconFontTex() {
     const { fontWeight, fontFamily } = this.getTextStyle();
-    const data = this.layer.getEncodedData();
+    const data = this.rawEncodeData;
     const characterSet: string[] = [];
     data.forEach((item: IEncodeFeature) => {
       let { shape = '' } = item;
@@ -442,7 +435,7 @@ export default class TextModel extends BaseModel {
       textAnchor = 'center',
       textOffset,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    const data = this.layer.getEncodedData();
+    const data = this.rawEncodeData;
 
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
       const { shape = '', id, size = 1 } = feature;
@@ -576,7 +569,7 @@ export default class TextModel extends BaseModel {
       moduleName: 'pointText',
       vertexShader: textVert,
       fragmentShader: textFrag,
-      triangulation: TextTriangulation.bind(this),
+      triangulation: TextTrianglation.bind(this),
       depth: { enable: false },
     });
     // TODO 渲染流程待修改
