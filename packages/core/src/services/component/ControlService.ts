@@ -107,6 +107,8 @@ export default class ControlService implements IControlService {
     Object.values(PositionType).forEach((position) => {
       createCorner(getCornerClassList(position));
     });
+
+    this.checkCornerOverlap();
   }
 
   private clearControlPos() {
@@ -117,6 +119,31 @@ export default class ControlService implements IControlService {
     }
     if (this.controlContainer) {
       DOM.remove(this.controlContainer);
+    }
+  }
+
+  private checkCornerOverlap() {
+    const Observer = window.MutationObserver;
+    // 在 jest 或者低版本的浏览器下，如果不支持 MutationObserver 则直接不处理
+    if (!Observer) {
+      return;
+    }
+    for (const cornerType of Object.keys(this.controlCorners)) {
+      const matchResult = cornerType.match(/^(top|bottom)(left|right)$/);
+      if (matchResult) {
+        const [, pos1, pos2] = matchResult;
+        const dom = this.controlCorners[`${pos1}${pos2}`];
+        const observer = new Observer(([{ target }]) => {
+          if (dom) {
+            // @ts-ignore
+            dom.style[pos1] = (target as HTMLDivElement).clientHeight + 'px';
+          }
+        });
+        observer.observe(this.controlCorners[`${pos2}${pos1}`], {
+          childList: true,
+          attributes: true,
+        });
+      }
     }
   }
 }
