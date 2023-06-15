@@ -18,13 +18,13 @@ export const getReferrer = isWorker()
       (window.location.protocol === 'blob:' ? window.parent : window).location
         .href;
 
-const userAgent = navigator.userAgent;
+const userAgent = navigator?.userAgent;
 
 export const isiOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 export const isAndroid =
   userAgent.indexOf('Android') > -1 || userAgent.indexOf('Adr') > -1;
 export function isPC() {
-  const userAgentInfo = navigator.userAgent;
+  const userAgentInfo = userAgent;
   const Agents = [
     'Android',
     'iPhone',
