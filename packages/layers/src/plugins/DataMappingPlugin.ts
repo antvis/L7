@@ -210,7 +210,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
       this.mapService.version === Version['GAODE2.x']
     ) {
       const layerCenter = layer.coordCenter || layer.getSource().center;
-
       // 单个的点数据
       // @ts-ignore
       mappedData

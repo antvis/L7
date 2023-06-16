@@ -140,9 +140,27 @@ export default class ExtrudeModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     const bbox = this.layer.getSource().extent;
-    const [minLng, minLat, maxLng, maxLat] = bbox;
-    const lngLen = maxLng - minLng;
-    const latLen = maxLat - minLat;
+    let bounds = bbox;
+    const layerCenter = this.layer.coordCenter || this.layer.getSource().center;
+    let lngLen = bounds[2] - bounds[0];
+    let latLen = bounds[3] - bounds[1];
+
+    if (this.mapService.version === 'GAODE2.x') {
+      // @ts-ignore
+      const [minX, minY] = this.mapService.coordToAMap2RelativeCoordinates(
+        [bbox[0], bbox[1]],
+        layerCenter,
+      );
+      // @ts-ignore
+      const [maxX, maxY] = this.mapService.coordToAMap2RelativeCoordinates(
+        [bbox[2], bbox[3]],
+        layerCenter,
+      );
+      lngLen = maxX - minX;
+      latLen = maxY - minY;
+      bounds = [minX, minY, maxX, maxY];
+    }
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'uvs',
       type: AttributeType.Attribute,
@@ -162,8 +180,13 @@ export default class ExtrudeModel extends BaseModel {
         ) => {
           const lng = vertex[0];
           const lat = vertex[1];
+          // console.log((lng - bounds[0]) / lngLen, (lat - bounds[1]) / latLen, vertex[4])
           // 临时 兼容高德V2
-          return [(lng - minLng) / lngLen, (lat - minLat) / latLen, vertex[4]];
+          return [
+            (lng - bounds[0]) / lngLen,
+            (lat - bounds[1]) / latLen,
+            vertex[4],
+          ];
         },
       },
     });

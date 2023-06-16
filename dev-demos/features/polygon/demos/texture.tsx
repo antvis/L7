@@ -43,8 +43,8 @@ import {
               .style({
                 heightfixed: true,
                 // pickLight: true,
-                // mapTexture:'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*bm0eRKOCcNoAAAAAAAAAAAAADmJ7AQ/original',
-                mapTexture:'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original',
+                mapTexture:'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*bm0eRKOCcNoAAAAAAAAAAAAADmJ7AQ/original',
+                // mapTexture:'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*3UcORbAv_zEAAAAAAAAAAAAADmJ7AQ/original',
                 // raisingHeight: 10000,
                 opacity: 0.8,
                 // sidesurface: false,
