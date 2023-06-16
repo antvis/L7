@@ -51,35 +51,9 @@ function styleDataMapping(configToUpdate: IConfigToUpdate, layer: any) {
     floatStyleMapping('opacity', layer, configToUpdate.opacity);
   }
 
-  if (configToUpdate.strokeWidth) {
-    // 处理 style 中 strokeWidth 属性的数据映射
-
-    floatStyleMapping('strokeWidth', layer, configToUpdate.strokeWidth);
-  }
-
-  if (configToUpdate.strokeOpacity) {
-    // 处理 style 中 strokeOpacity 属性的数据映射
-    floatStyleMapping('strokeOpacity', layer, configToUpdate.strokeOpacity);
-  }
-
   if (configToUpdate.stroke) {
     // 处理 style 中 stroke (strokeColor) 属性的数据映射
     colorStyleMapping('stroke', layer, configToUpdate.stroke);
-  }
-
-  if (configToUpdate.offsets) {
-    // 处理 style 中 offsets 属性的数据映射
-    offsetStyleMapping('offsets', layer, configToUpdate.offsets);
-  }
-
-  if (configToUpdate.textOffset) {
-    // 处理 style 中 textOffset 属性的数据映射
-    offsetStyleMapping('textOffset', layer, configToUpdate.textOffset);
-  }
-
-  if (configToUpdate.thetaOffset) {
-    // 处理 style 中 thetaOffset 属性的数据映射
-    floatStyleMapping('thetaOffset', layer, configToUpdate.thetaOffset);
   }
 }
 

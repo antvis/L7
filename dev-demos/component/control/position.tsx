@@ -1,9 +1,16 @@
-import { GaodeMap, IControlOption, Logo, Scale, Scene, Zoom } from '@antv/l7';
+import {
+  GaodeMap,
+  IControlOption,
+  Logo,
+  MouseLocation,
+  Scale,
+  Scene,
+} from '@antv/l7';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);
-  const [zoomList, setZoomList] = useState<Zoom[]>([]);
+  const [controlList, setControlList] = useState<MouseLocation[]>([]);
 
   useEffect(() => {
     const newScene = new Scene({
@@ -14,28 +21,27 @@ const Demo: FunctionComponent = () => {
         pitch: 0,
         zoom: 6.45,
       }),
-      // logoVisible: false,
+      logoVisible: false,
     });
     setScene(newScene);
 
     newScene.on('loaded', () => {
       function createTestControl(position: IControlOption['position']) {
-        const zoom = new Zoom({
-          position,
-        });
-        newScene.addControl(zoom);
-        setZoomList((list) => [...list, zoom]);
-        newScene.addControl(
-          new Scale({
-            position,
-          }),
-        );
-
         newScene.addControl(
           new Logo({
             position,
           }),
         );
+        newScene.addControl(
+          new Scale({
+            position,
+          }),
+        );
+        const mouseLocation = new MouseLocation({
+          position,
+        });
+        newScene.addControl(mouseLocation);
+        setControlList((list) => [...list, mouseLocation]);
       }
 
       createTestControl('topleft');
@@ -66,9 +72,11 @@ const Demo: FunctionComponent = () => {
     <>
       <div>
         <button
-          onClick={() => zoomList.forEach((zoom) => scene?.removeControl(zoom))}
+          onClick={() =>
+            controlList.forEach((zoom) => scene?.removeControl(zoom))
+          }
         >
-          Zoom 消失术
+          MouseLocation 消失术
         </button>
       </div>
       <div

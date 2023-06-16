@@ -84,7 +84,7 @@ export default () => {
         .scale('size', {
           type: 'identity',
         })
-        .shape('name', 'text')
+        .shape('circle')
         .size('size')
         .active({
           color: 'red',
@@ -92,7 +92,7 @@ export default () => {
         .select(true)
         .color('color')
         .style({
-          strokeWidth: 1,
+          strokeWidth: 3,
           stroke: [
             'name',
             (name) => {
@@ -120,17 +120,13 @@ export default () => {
           stroke: '#fff',
           strokeWidth: 1,
           padding: [0, 0],
-          textOffset: [0, 20],
+    
           textAllowOverlap: false,
         });
 
-      // scene.addLayer(pointLayer);
-      scene.addLayer(pointlable);
-      const drawer = new DrawLine(scene, {
-        distanceOptions: {},
-        // liveUpdate: true,
-      });
-      drawer.enable();
+      scene.addLayer(pointLayer);
+      // scene.addLayer(pointlable);
+      
     });
   }, []);
   return (
