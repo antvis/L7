@@ -210,40 +210,23 @@ export default class DataMappingPlugin implements ILayerPlugin {
       this.mapService.version === Version['GAODE2.x']
     ) {
       const layerCenter = layer.coordCenter || layer.getSource().center;
-      if (typeof mappedData[0].coordinates[0] === 'number') {
-        // 单个的点数据
-        // @ts-ignore
-        mappedData
-          // TODO: 避免经纬度被重复计算导致坐标位置偏移
-          .filter((d) => !d.originCoordinates)
-          .map((d) => {
-            d.version = Version['GAODE2.x'];
-            // @ts-ignore
-            d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
-            // @ts-ignore
-            // d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
-            d.coordinates = this.mapService.lngLatToCoordByLayer(
-              d.coordinates,
-              layerCenter,
-            );
-          });
-      } else {
-        // 连续的线、面数据
-        mappedData
-          // TODO: 避免经纬度被重复计算导致坐标位置偏移
-          .filter((d) => !d.originCoordinates)
-          .map((d) => {
-            d.version = Version['GAODE2.x'];
-            // @ts-ignore
-            d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
-            // @ts-ignore
-            // d.coordinates = this.mapService.lngLatToCoords(d.coordinates);
-            d.coordinates = this.mapService.lngLatToCoordsByLayer(
-              d.coordinates,
-              layerCenter,
-            );
-          });
-      }
+
+      // 单个的点数据
+      // @ts-ignore
+      mappedData
+        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        .filter((d) => !d.originCoordinates)
+        .map((d) => {
+          d.version = Version['GAODE2.x'];
+          // @ts-ignore
+          d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
+          // @ts-ignore
+          // d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
+          d.coordinates = this.mapService.coordToAMap2RelativeCoordinates(
+            d.coordinates,
+            layerCenter,
+          );
+        });
     }
   }
 

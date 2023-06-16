@@ -78,17 +78,6 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      console.log(layer)
-
-      setTimeout(() =>{
-        layer.setData(data2)
-      }, 200)
-      layer.on('mousemove', () =>{
-        console.log('mousemove')
-      })
-      layer.on('unmousemove', () =>{
-        console.log('unmousemove')
-      })
     });
   }, []);
   return (

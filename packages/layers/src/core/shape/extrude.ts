@@ -100,15 +100,14 @@ export function extrude_PolygonNormal(
   const positions = [];
   const indexArray = [];
   const normals = [];
-  const uv = [];
   // 设置顶部z值 position uv
   for (let j = 0; j < vertices.length / dimensions; j++) {
     positions.push(
-      vertices[j * dimensions],
-      vertices[j * dimensions + 1],
-      1,
-      -1,
-      -1,
+      vertices[j * dimensions], // x
+      vertices[j * dimensions + 1], // y
+      1, // z
+      -1, // 顶部uv
+      -1, // 顶部uv
     );
     normals.push(0, 0, 1);
   }
@@ -142,8 +141,8 @@ export function extrude_PolygonNormal(
       nextPoint[0],
       nextPoint[1],
       1,
-      0.1,
-      0,
+      0.1, // 侧面 低uv
+      0, // 侧面低 uv
       prePoint[0],
       prePoint[1],
       0,

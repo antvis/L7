@@ -29,7 +29,7 @@ import {
           .then((res) => res.json())
           .then((data) => {
      
-
+            console.log(data);
   
             const provincelayerTop = new PolygonLayer({})
               .source(data)
