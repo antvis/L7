@@ -1,11 +1,12 @@
 import { GaodeMap, IControlOption, Logo, Scale, Scene, Zoom } from '@antv/l7';
-import React, { FunctionComponent, useEffect, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 
 const Demo: FunctionComponent = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scene, setScene] = useState<Scene | null>(null);
+  const [zoomList, setZoomList] = useState<Zoom[]>([]);
 
   useEffect(() => {
-    const scene = new Scene({
+    const newScene = new Scene({
       id: 'map',
       map: new GaodeMap({
         style: 'dark',
@@ -15,21 +16,22 @@ const Demo: FunctionComponent = () => {
       }),
       // logoVisible: false,
     });
+    setScene(newScene);
 
-    scene.on('loaded', () => {
+    newScene.on('loaded', () => {
       function createTestControl(position: IControlOption['position']) {
-        scene.addControl(
-          new Zoom({
-            position,
-          }),
-        );
-        scene.addControl(
+        const zoom = new Zoom({
+          position,
+        });
+        newScene.addControl(zoom);
+        setZoomList((list) => [...list, zoom]);
+        newScene.addControl(
           new Scale({
             position,
           }),
         );
 
-        scene.addControl(
+        newScene.addControl(
           new Logo({
             position,
           }),
@@ -51,18 +53,24 @@ const Demo: FunctionComponent = () => {
       createTestControl('rightcenter');
       createTestControl('bottomcenter');
 
-      if (containerRef.current) {
-        scene.addControl(
-          new Logo({
-            position: containerRef.current,
-          }),
-        );
-      }
+      // if (containerRef.current) {
+      //   scene.addControl(
+      //     new Logo({
+      //       position: containerRef.current,
+      //     }),
+      //   );
+      // }
     });
   }, []);
   return (
     <>
-      <div ref={containerRef} />
+      <div>
+        <button
+          onClick={() => zoomList.forEach((zoom) => scene?.removeControl(zoom))}
+        >
+          Zoom 消失术
+        </button>
+      </div>
       <div
         id="map"
         style={{
