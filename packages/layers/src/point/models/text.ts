@@ -7,8 +7,13 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { boundsContains, calculateCentroid, padBounds } from '@antv/l7-utils';
-import { isEqual, isNumber } from 'lodash';
+import {
+  boundsContains,
+  calculateCentroid,
+  padBounds,
+  rgb2arr,
+} from '@antv/l7-utils';
+import { isEqual } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
@@ -111,57 +116,11 @@ export default class TextModel extends BaseModel {
     }
 
     this.preTextStyle = this.getTextStyle();
-
-    if (
-      this.dataTextureTest &&
-      this.dataTextureNeedUpdate({
-        opacity,
-        strokeWidth,
-        stroke,
-      })
-    ) {
-      this.judgeStyleAttributes({
-        opacity,
-        strokeWidth,
-        stroke,
-      });
-
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
-
     return {
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
       u_raisingHeight: Number(raisingHeight),
-
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
-      u_stroke_width: isNumber(strokeWidth) ? strokeWidth : 1.0,
-      u_stroke_color: this.getStrokeColor(stroke),
-
+      u_opacity: opacity,
+      u_stroke_width: strokeWidth,
+      u_stroke_color: rgb2arr(stroke),
       u_sdf_map: this.texture,
       u_halo_blur: halo,
       u_gamma_scale: gamma,
@@ -274,7 +233,7 @@ export default class TextModel extends BaseModel {
       name: 'textOffsets',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_textOffsets',
+        name: 'a_textOffsets', // 文字偏移量
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -436,10 +395,8 @@ export default class TextModel extends BaseModel {
       textOffset,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.rawEncodeData;
-
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
       const { shape = '', id, size = 1 } = feature;
-
       const shaping = shapeText(
         shape.toString(),
         mapping,
@@ -448,7 +405,8 @@ export default class TextModel extends BaseModel {
         textAnchor,
         'left',
         spacing,
-        textOffset || feature.textOffset || [0, 0],
+        [0, 0],
+        // textOffset || feature.textOffset || [0, 0],
         iconfont,
       );
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);

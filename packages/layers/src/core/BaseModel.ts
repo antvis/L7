@@ -276,32 +276,16 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     textOffset?: styleOffset;
   }): boolean {
     let isUpdate = false;
-    if (!isEqual(options.thetaOffset, this.cacheStyleProperties.thetaOffset)) {
-      isUpdate = true;
-      this.cacheStyleProperties.thetaOffset = options.thetaOffset;
-    }
     if (!isEqual(options.opacity, this.cacheStyleProperties.opacity)) {
       isUpdate = true;
       this.cacheStyleProperties.opacity = options.opacity;
     }
-    if (
-      !isEqual(options.strokeOpacity, this.cacheStyleProperties.strokeOpacity)
-    ) {
-      isUpdate = true;
-      this.cacheStyleProperties.strokeOpacity = options.strokeOpacity;
-    }
-    if (!isEqual(options.strokeWidth, this.cacheStyleProperties.strokeWidth)) {
-      isUpdate = true;
-      this.cacheStyleProperties.strokeWidth = options.strokeWidth;
-    }
+
     if (!isEqual(options.stroke, this.cacheStyleProperties.stroke)) {
       isUpdate = true;
       this.cacheStyleProperties.stroke = options.stroke;
     }
-    if (!isEqual(options.offsets, this.cacheStyleProperties.offsets)) {
-      isUpdate = true;
-      this.cacheStyleProperties.offsets = options.offsets;
-    }
+
     if (this.dataTexture === undefined) {
       isUpdate = true;
     }
@@ -329,45 +313,11 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       this.cellLength += 1;
     }
 
-    if (
-      options.strokeOpacity !== undefined &&
-      !isNumber(options.strokeOpacity)
-    ) {
-      // 数据映射
-      this.cellProperties.push({ attr: 'strokeOpacity', count: 1 });
-      this.stylePropertiesExist.hasStrokeOpacity = 1;
-      this.cellLength += 1;
-    }
-
-    if (options.strokeWidth !== undefined && !isNumber(options.strokeWidth)) {
-      // 数据映射
-      this.cellProperties.push({ attr: 'strokeWidth', count: 1 });
-      this.stylePropertiesExist.hasStrokeWidth = 1;
-      this.cellLength += 1;
-    }
-
     if (options.stroke !== undefined && !this.isStaticColor(options.stroke)) {
       // 数据映射
       this.cellProperties.push({ attr: 'stroke', count: 4 });
       this.stylePropertiesExist.hasStroke = 1;
       this.cellLength += 4;
-    }
-
-    if (
-      options.offsets !== undefined &&
-      !this.isOffsetStatic(options.offsets)
-    ) {
-      // 数据映射
-      this.cellProperties.push({ attr: 'offsets', count: 2 });
-      this.stylePropertiesExist.hasOffsets = 1;
-      this.cellLength += 2;
-    }
-
-    if (options.thetaOffset !== undefined && !isNumber(options.thetaOffset)) {
-      // 数据映射
-      this.cellProperties.push({ attr: 'thetaOffset', count: 1 });
-      this.stylePropertiesExist.hasThetaOffset = 1;
-      this.cellLength += 1;
     }
   }
 
