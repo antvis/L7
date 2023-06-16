@@ -279,7 +279,11 @@ export default class Control<O extends IControlOption = IControlOption>
       position.appendChild(container);
     } else {
       const corner = this.controlService.controlCorners[position];
-      if (position.indexOf('bottom') !== -1) {
+      if (
+        ['bottomleft', 'bottomright', 'righttop', 'rightbottom'].includes(
+          position,
+        )
+      ) {
         corner.insertBefore(container, corner.firstChild);
       } else {
         corner.appendChild(container);
