@@ -1,3 +1,4 @@
+#extension GL_OES_standard_derivatives : enable
 #define Animate 0.0
 #define LineTexture 1.0
 uniform float u_opacity : 1.0;
@@ -68,11 +69,13 @@ void main() {
   float borderWidth = min(0.5, u_borderWidth);
   // 绘制 border
   if(borderWidth > 0.01) {
-    float borderOuterWidth = borderWidth/2.0;
+    float borderOuterWidth = borderWidth / 2.0;
+
 
     if(v >= 1.0 - borderWidth || v <= borderWidth) {
-      if(v > borderWidth) {
+      if(v > borderWidth) { // 外侧
         float linear = smoothstep(0.0, 1.0, (v - (1.0 - borderWidth))/borderWidth);
+        //  float linear = step(0.0, (v - (1.0 - borderWidth))/borderWidth);
         gl_FragColor.rgb = mix(gl_FragColor.rgb, u_borderColor.rgb, linear);
       } else if(v <= borderWidth) {
         float linear = smoothstep(0.0, 1.0, v/borderWidth);

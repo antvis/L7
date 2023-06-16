@@ -73,7 +73,6 @@ export default class ExtrudeModel extends BaseModel {
       targetColorArr = rgb2arr(targetColor);
       useLinearColor = 1;
     }
-
     return {
       // 控制侧面和顶面的显示隐藏
       u_topsurface: Number(topsurface),
@@ -94,7 +93,7 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    this.loadTexture();
+    await this.loadTexture();
     return this.buildModels();
   }
 
@@ -141,9 +140,26 @@ export default class ExtrudeModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     const bbox = this.layer.getSource().extent;
-    const [minLng, minLat, maxLng, maxLat] = bbox;
-    const lngLen = maxLng - minLng;
-    const latLen = maxLat - minLat;
+    let bounds = bbox;
+    const layerCenter = this.layer.coordCenter || this.layer.getSource().center;
+    let lngLen = bounds[2] - bounds[0];
+    let latLen = bounds[3] - bounds[1];
+
+    if (this.mapService.version === 'GAODE2.x') {
+      // @ts-ignore
+      const [minX, minY] = this.mapService.coordToAMap2RelativeCoordinates(
+        [bbox[0], bbox[1]],
+        layerCenter,
+      );
+      // @ts-ignore
+      const [maxX, maxY] = this.mapService.coordToAMap2RelativeCoordinates(
+        [bbox[2], bbox[3]],
+        layerCenter,
+      );
+      lngLen = maxX - minX;
+      latLen = maxY - minY;
+      bounds = [minX, minY, maxX, maxY];
+    }
 
     this.styleAttributeService.registerStyleAttribute({
       name: 'uvs',
@@ -164,7 +180,13 @@ export default class ExtrudeModel extends BaseModel {
         ) => {
           const lng = vertex[0];
           const lat = vertex[1];
-          return [(lng - minLng) / lngLen, (lat - minLat) / latLen, vertex[4]];
+          // console.log((lng - bounds[0]) / lngLen, (lat - bounds[1]) / latLen, vertex[4])
+          // 临时 兼容高德V2
+          return [
+            (lng - bounds[0]) / lngLen,
+            (lat - bounds[1]) / latLen,
+            vertex[4],
+          ];
         },
       },
     });
@@ -211,7 +233,7 @@ export default class ExtrudeModel extends BaseModel {
     });
   }
 
-  private loadTexture() {
+  private async loadTexture() {
     const { mapTexture } =
       this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
@@ -221,22 +243,29 @@ export default class ExtrudeModel extends BaseModel {
       width: 0,
     });
     if (mapTexture) {
-      const image = new Image();
-      image.crossOrigin = '';
-      image.src = mapTexture;
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.crossOrigin = 'anonymous';
+        image.src = mapTexture;
 
-      image.onload = () => {
-        this.texture = createTexture2D({
-          data: image,
-          width: image.width,
-          height: image.height,
-          wrapS: gl.CLAMP_TO_EDGE,
-          wrapT: gl.CLAMP_TO_EDGE,
-          min: gl.LINEAR,
-          mag: gl.LINEAR,
-        });
-        this.layerService.reRender();
-      };
+        image.onload = () => {
+          this.texture = createTexture2D({
+            data: image,
+            width: image.width,
+            height: image.height,
+            wrapS: gl.CLAMP_TO_EDGE,
+            wrapT: gl.CLAMP_TO_EDGE,
+            min: gl.LINEAR,
+            mag: gl.LINEAR,
+          });
+          return resolve(null);
+          // this.layerService.reRender();
+        };
+
+        image.onerror = () => {
+          reject(new Error('image load error'));
+        };
+      });
     }
   }
 }

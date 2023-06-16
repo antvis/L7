@@ -346,6 +346,11 @@ class Scene
     this.markerService.removeAllMarkers();
   }
 
+  public removeAllMakers() {
+    console.warn('removeAllMakers 已废弃，请使用 removeAllMarkers');
+    this.markerService.removeAllMarkers();
+  }
+
   public addPopup(popup: IPopup) {
     this.popupService.addPopup(popup);
   }
