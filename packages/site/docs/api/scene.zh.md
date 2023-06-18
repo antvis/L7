@@ -249,7 +249,7 @@ scene.addMarkerLayer(markerLayer);
 scene.removeMarkerLayer(markerLayer);
 ```
 
-### removeAllMakers(): void 移除场景中所有的标签对象
+### removeAllMarkers(): void 移除场景中所有的标签对象
 
 移除场景中所有的标签对象。
 

@@ -115,7 +115,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
     // 在各个 layer 中继承
 
-    filterData = layer.processData(filterData);
+    filterData = layer.processData(filterData); // 目前只有简单线需要处理
     const encodeData = this.mapping(layer, attributes, filterData, undefined);
     layer.setEncodedData(encodeData);
 
@@ -210,40 +210,22 @@ export default class DataMappingPlugin implements ILayerPlugin {
       this.mapService.version === Version['GAODE2.x']
     ) {
       const layerCenter = layer.coordCenter || layer.getSource().center;
-      if (typeof mappedData[0].coordinates[0] === 'number') {
-        // 单个的点数据
-        // @ts-ignore
-        mappedData
-          // TODO: 避免经纬度被重复计算导致坐标位置偏移
-          .filter((d) => !d.originCoordinates)
-          .map((d) => {
-            d.version = Version['GAODE2.x'];
-            // @ts-ignore
-            d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
-            // @ts-ignore
-            // d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
-            d.coordinates = this.mapService.lngLatToCoordByLayer(
-              d.coordinates,
-              layerCenter,
-            );
-          });
-      } else {
-        // 连续的线、面数据
-        mappedData
-          // TODO: 避免经纬度被重复计算导致坐标位置偏移
-          .filter((d) => !d.originCoordinates)
-          .map((d) => {
-            d.version = Version['GAODE2.x'];
-            // @ts-ignore
-            d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
-            // @ts-ignore
-            // d.coordinates = this.mapService.lngLatToCoords(d.coordinates);
-            d.coordinates = this.mapService.lngLatToCoordsByLayer(
-              d.coordinates,
-              layerCenter,
-            );
-          });
-      }
+      // 单个的点数据
+      // @ts-ignore
+      mappedData
+        // TODO: 避免经纬度被重复计算导致坐标位置偏移
+        .filter((d) => !d.originCoordinates)
+        .map((d) => {
+          d.version = Version['GAODE2.x'];
+          // @ts-ignore
+          d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
+          // @ts-ignore
+          // d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
+          d.coordinates = this.mapService.coordToAMap2RelativeCoordinates(
+            d.coordinates,
+            layerCenter,
+          );
+        });
     }
   }
 

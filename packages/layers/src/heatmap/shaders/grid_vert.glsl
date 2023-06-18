@@ -12,7 +12,7 @@ uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 varying vec4 v_color;
 
-uniform vec2 u_SceneCenterMKT;
+uniform vec2 u_sceneCenterMercator;
 
 #pragma include "projection"
 #pragma include "project"
@@ -29,7 +29,7 @@ void main() {
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     vec2 lnglat = unProjectFlat(a_Pos.xy + offset);
-    vec2 customLnglat = customProject(lnglat) - u_SceneCenterMKT; // 将经纬度转换为高德2.0需要的平面坐标
+    vec2 customLnglat = customProject(lnglat) - u_sceneCenterMercator; // 将经纬度转换为高德2.0需要的平面坐标
     vec4 project_pos = project_position(vec4(customLnglat, 0, 1.0));
     gl_Position = u_Mvp * (project_pos);
   } else {

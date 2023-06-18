@@ -45,7 +45,7 @@ function adjustData2Amap2Coordinates(
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
           // @ts-ignore
           // d.coordinates = mapService.lngLatToCoord(d.coordinates);
-          d.coordinates = mapService.lngLatToCoordByLayer(
+          d.coordinates = mapService.coordToAMap2RelativeCoordinates(
             d.coordinates,
             layerCenter,
           );
@@ -62,7 +62,7 @@ function adjustData2Amap2Coordinates(
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
           // @ts-ignore
           // d.coordinates = mapService.lngLatToCoords(d.coordinates);
-          d.coordinates = mapService.lngLatToCoordsByLayer(
+          d.coordinates = mapService.coordToAMap2RelativeCoordinates(
             d.coordinates,
             layerCenter,
           );
