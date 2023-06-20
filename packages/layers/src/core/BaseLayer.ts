@@ -58,7 +58,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
+import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
@@ -242,7 +242,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
-    // this.parent = this;
   }
   public addMask(layer: ILayer): void {
     this.masks.push(layer);
@@ -314,6 +313,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         ...this.needUpdateConfig,
         ...configToUpdate,
       });
+      this.styleNeedUpdate = true;
       this.needUpdateConfig = {};
     }
   }
@@ -695,22 +695,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       );
     }
 
-    this.rawConfig = {
-      ...this.rawConfig,
-      ...rest,
-    };
-    if (this.container) {
-      this.updateLayerConfig(this.rawConfig);
-      this.styleNeedUpdate = true;
-    }
-    // TODO style model 更新
-    // @ts-ignore
-    // if (lastConfig && lastConfig.mask === true && options.mask === false) {
-    //   this.clearModels();
-    //   this.layerModel.buildModels((models) => {
-    //     this.models = models;
-    //   });
-    // }
+    this.updateLayerConfig(rest);
+
     return this;
   }
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
@@ -1241,8 +1227,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       fragmentShader,
       triangulation,
       segmentNumber,
-      workerEnabled = false,
-      workerOptions,
       ...rest
     } = options;
 
@@ -1252,55 +1236,28 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    return new Promise((resolve, reject) => {
-      // filter supported worker & worker enabled layer
-      if (
-        workerOptions &&
-        workerOptions.modelType in WorkerSourceMap &&
-        workerEnabled
-      ) {
-        this.styleAttributeService
-          .createAttributesAndIndicesAscy(
-            this.encodedData,
-            segmentNumber,
-            workerOptions,
-          )
-          .then(({ attributes, elements }) => {
-            const m = createModel({
-              attributes,
-              uniforms,
-              fs,
-              vs,
-              elements,
-              blend: BlendTypes[BlendType.normal],
-              ...rest,
-            });
-            resolve(m as IModel);
-          })
-          .catch((err) => reject(err));
-      } else {
-        // console.log(this.encodedData)
-        const { attributes, elements, count } =
-          this.styleAttributeService.createAttributesAndIndices(
-            this.encodedData,
-            triangulation,
-            segmentNumber,
-          );
-        const modelOptions = {
-          attributes,
-          uniforms,
-          fs,
-          vs,
-          elements,
-          blend: BlendTypes[BlendType.normal],
-          ...rest,
-        };
-        if (count) {
-          modelOptions.count = count;
-        }
-        const m = createModel(modelOptions);
-        resolve(m);
+    return new Promise((resolve) => {
+      // console.log(this.encodedData)
+      const { attributes, elements, count } =
+        this.styleAttributeService.createAttributesAndIndices(
+          this.encodedData,
+          triangulation,
+          segmentNumber,
+        );
+      const modelOptions = {
+        attributes,
+        uniforms,
+        fs,
+        vs,
+        elements,
+        blend: BlendTypes[BlendType.normal],
+        ...rest,
+      };
+      if (count) {
+        modelOptions.count = count;
       }
+      const m = createModel(modelOptions);
+      resolve(m);
     });
   }
 
@@ -1407,7 +1364,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return false;
     }
 
-    // 存储 Attribute
+    // 存储 Attribute 瓦片图层使用
     if (
       [
         'color',

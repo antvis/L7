@@ -73,6 +73,7 @@ export default class ReglModel implements IModel {
       vert: vs,
       // @ts-ignore
       colorMask: reGl.prop('colorMask'),
+      lineWidth: 1,
       blend: {
         // @ts-ignore
         enable: reGl.prop('blend.enable'),

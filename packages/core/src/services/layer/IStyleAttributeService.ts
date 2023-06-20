@@ -214,11 +214,6 @@ export interface IStyleAttributeService {
     elements: IElements;
     count: number | null;
   };
-  createAttributesAndIndicesAscy(
-    encodedFeatures: IEncodeFeature[],
-    segmentNumber?: number,
-    workerOptions?: any,
-  ): Promise<any>;
   /**
    * 根据 feature range 更新指定属性
    */
