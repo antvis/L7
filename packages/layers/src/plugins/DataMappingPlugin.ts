@@ -86,7 +86,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
           layer,
           attributesToRemapping,
           filterData,
-          layer.getEncodedData(),
+          layer.getEncodedData(), // TODO 优化
         );
         layer.setEncodedData(encodeData);
       }
@@ -117,6 +117,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     filterData = layer.processData(filterData); // 目前只有简单线需要处理
     const encodeData = this.mapping(layer, attributes, filterData, undefined);
+
     layer.setEncodedData(encodeData);
 
     if (dataArray.length === 0 && layer.encodeDataLength === 0) {
@@ -153,8 +154,8 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
       usedAttributes.forEach((attribute: IStyleAttribute) => {
         let values = this.applyAttributeMapping(attribute, record);
-        // TODO: 支持每个属性配置 postprocess
-        if (attribute.name === 'color') {
+        // TODO: 支持每个属性配置 postprocess}
+        if (attribute.name === 'color' || attribute.name === 'stroke') {
           values = values.map((c: unknown) => {
             return rgb2arr(c as string);
           });

@@ -69,6 +69,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
     return attributeToUpdate;
   }
 
+  public unRegisterStyleAttribute(name: string) {
+    const attributeIndex = this.attributes.findIndex(
+      (attribute) => attribute.name === name,
+    );
+    if (attributeIndex > -1) {
+      this.attributes.splice(attributeIndex, 1);
+    }
+  }
+
   public updateScaleAttribute(scaleOption: IScaleOptions) {
     this.attributes.forEach((attr: IStyleAttribute) => {
       const name = attr.name;

@@ -368,6 +368,7 @@ export interface ILayer {
     options: ISourceCFG | undefined;
   };
   encodeDataLength: number;
+  encodeStyleAttribute: Record<string, any>;
   pickedFeatureID: number | null;
   hooks: {
     init: AsyncSeriesBailHook;

@@ -5,13 +5,13 @@ attribute vec4 a_Color;
 attribute vec2 a_Size;
 attribute vec4 a_Instance;
 attribute vec3 a_Normal;
-attribute float a_Miter;
 attribute vec3 a_Position;
+
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
 
-
+#pragma include "commom_attr_vert"
 #pragma include "projection"
 #pragma include "picking"
 
@@ -21,14 +21,20 @@ uniform float u_gap_width: 1.0;
 uniform float u_stroke_width: 1.0;
 uniform float u_stroke_opacity: 1.0;
 uniform vec4 u_stroke;
-uniform vec2 u_end_point_offsets;
-
-
-
-
+uniform vec2 u_offsets;
 
 
 void main() {
+
+// 透明度计算
+  #pragma include "opacity_attr_vert"
+  
+  vec2 end_point_offsets = u_offsets;
+
+
+  #ifdef USE_ATTRIBUTE_OFFSETS
+   end_point_offsets = a_Offsets;
+  #endif
 
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
@@ -45,8 +51,8 @@ void main() {
     -lengthCommon*.8, lengthCommon*.8
   );
 
-  float startOffsetCommon = project_pixel(u_end_point_offsets[0]);
-  float endOffsetCommon = project_pixel(u_end_point_offsets[1]);
+  float startOffsetCommon = project_pixel(end_point_offsets[0]);
+  float endOffsetCommon = project_pixel(end_point_offsets[1]);
   float endpointOffset = mix(
     clamp(startOffsetCommon, 0.0, lengthCommon*.2),
     -clamp(endOffsetCommon, 0.0, lengthCommon*.2),
@@ -65,7 +71,7 @@ void main() {
 
   vec4 project_pos = project_position(vec4(position.xy, 0, 1.0));
 
-  vec4 fillColor = vec4(a_Color.rgb, a_Color.a * u_opacity);
+  vec4 fillColor = vec4(a_Color.rgb, a_Color.a * opacity);
   v_color = mix(fillColor, vec4(u_stroke.xyz, u_stroke.w * fillColor.w * u_stroke_opacity), a_Normal.z);
 
 

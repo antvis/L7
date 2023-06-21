@@ -194,6 +194,7 @@ export interface IStyleAttributeService {
   registerStyleAttribute(
     options: Partial<IStyleAttributeInitializationOptions>,
   ): IStyleAttribute;
+  unRegisterStyleAttribute(name: string): void;
   updateScaleAttribute(scale: IScaleOptions): void;
   updateStyleAttribute(
     attributeName: string,

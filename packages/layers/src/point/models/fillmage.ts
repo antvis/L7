@@ -98,7 +98,7 @@ export default class FillImageModel extends BaseModel {
     return {
       u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
-      u_Size_Unit: SizeUnitType[unit] as SizeUnitType,
+      u_size_unit: SizeUnitType[unit] as SizeUnitType,
       u_RotateMatrix: new Float32Array([
         Math.cos(this.radian),
         Math.sin(this.radian),

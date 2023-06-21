@@ -5,9 +5,11 @@ import { extractUniforms } from '../../utils/shader-module';
 import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 
 import common from '../../shaders/common.glsl';
+import commom_attr_vert from '../../shaders/common_attr.vert.glsl';
 import decode from '../../shaders/decode.glsl';
 import light from '../../shaders/light2.glsl';
 import lighting from '../../shaders/lighting.glsl';
+import opacity_attr_vert from '../../shaders/opacity_attr.vert.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
 import pickingVert from '../../shaders/picking.vert.glsl';
 import project from '../../shaders/project.glsl';
@@ -39,6 +41,8 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('lighting', { vs: lighting, fs: '' });
     this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
+    this.registerModule('commom_attr_vert', { vs: commom_attr_vert, fs: '' });
+    this.registerModule('opacity_attr_vert', { vs: opacity_attr_vert, fs: '' });
     this.registerModule('styleMapping', { vs: styleMapping, fs: '' });
     this.registerModule('styleMappingCalThetaOffset', {
       vs: styleMappingCalThetaOffset,
@@ -60,16 +64,16 @@ export default class ShaderModuleService implements IShaderModuleService {
 
   public registerModule(moduleName: string, moduleParams: IModuleParams) {
     // prevent registering the same module multiple times
-    if (this.rawContentCache[moduleName]) {
-      return;
-    }
+    // if (this.rawContentCache[moduleName]) {
+    //   return;
+    // }
 
-    const { vs, fs, uniforms: declaredUniforms } = moduleParams;
+    const { vs, fs, uniforms: declaredUniforms, defines } = moduleParams;
     const { content: extractedVS, uniforms: vsUniforms } = extractUniforms(vs);
     const { content: extractedFS, uniforms: fsUniforms } = extractUniforms(fs);
-
     this.rawContentCache[moduleName] = {
       fs: extractedFS,
+      defines,
       uniforms: {
         ...vsUniforms,
         ...fsUniforms,
@@ -83,15 +87,18 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.rawContentCache = {};
   }
   public getModule(moduleName: string): IModuleParams {
-    if (this.moduleCache[moduleName]) {
-      return this.moduleCache[moduleName];
-    }
+    // TODO: cache module
+    // if (this.moduleCache[moduleName]) {
+    //   return this.moduleCache[moduleName];
+    // }
 
     const rawVS = this.rawContentCache[moduleName].vs;
     const rawFS = this.rawContentCache[moduleName].fs;
+    const defines = this.rawContentCache[moduleName].defines;
 
+    const definesContent = defines ? this.injectDefines(defines) : '';
     const { content: vs, includeList: vsIncludeList } = this.processModule(
-      rawVS,
+      definesContent + rawVS,
       [],
       'vs',
     );
@@ -100,7 +107,7 @@ export default class ShaderModuleService implements IShaderModuleService {
       [],
       'fs',
     );
-    let compiledFs = fs;
+    let compiledFs = '';
     // TODO: extract uniforms and their default values from GLSL
     const uniforms: {
       [key: string]: any;
@@ -119,8 +126,10 @@ export default class ShaderModuleService implements IShaderModuleService {
      * https://stackoverflow.com/questions/28540290/why-it-is-necessary-to-set-precision-for-the-fragment-shader
      */
     if (!precisionRegExp.test(fs)) {
-      compiledFs = globalDefaultprecision + fs;
+      compiledFs = compiledFs + globalDefaultprecision;
     }
+
+    compiledFs = compiledFs + fs;
 
     this.moduleCache[moduleName] = {
       fs: compiledFs.trim(),
@@ -140,6 +149,7 @@ export default class ShaderModuleService implements IShaderModuleService {
   } {
     const compiled = rawContent.replace(includeRegExp, (_, strMatch) => {
       const includeOpt = strMatch.split(' ');
+
       const includeName = includeOpt[0].replace(/"/g, '');
 
       if (includeList.indexOf(includeName) > -1) {
@@ -157,5 +167,12 @@ export default class ShaderModuleService implements IShaderModuleService {
       content: compiled,
       includeList,
     };
+  }
+
+  private injectDefines(defines: Record<string, string | number | boolean>) {
+    const defineStr = Object.keys(defines).reduce((prev, cur) => {
+      return prev + `#define ${cur.toUpperCase()} ${defines[cur]};\n`;
+    }, '\n');
+    return defineStr;
   }
 }

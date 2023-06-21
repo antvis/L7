@@ -10,6 +10,7 @@ import BaseModel from '../../core/BaseModel';
 import { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineFillTriangulation } from '../../core/triangulation';
 import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
+
 // linear simple line shader
 
 import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
@@ -17,8 +18,8 @@ export default class FlowLineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
       opacity = 1,
+      offsets = [0, 0],
       gapWidth = 2,
-      endPointOffsets = [0, 0],
       strokeWidth = 1,
       stroke = '#000',
       strokeOpacity = 1,
@@ -26,11 +27,12 @@ export default class FlowLineModel extends BaseModel {
 
     return {
       u_opacity: opacity,
+      u_offsets: offsets,
       u_gap_width: gapWidth,
-      u_end_point_offsets: endPointOffsets,
       u_stroke_width: strokeWidth,
       u_stroke: rgb2arr(stroke),
       u_stroke_opacity: strokeOpacity,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -43,6 +45,7 @@ export default class FlowLineModel extends BaseModel {
       moduleName: 'flow_line',
       vertexShader: flow_line_vert,
       fragmentShader: flow_line_frag,
+      defines: this.getAttributeDefines(),
       triangulation: FlowLineFillTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
@@ -52,6 +55,7 @@ export default class FlowLineModel extends BaseModel {
     return [modelFill];
   }
   protected registerBuiltinAttributes() {
+    // 注册 Style 参与数据映射的内置属性
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,

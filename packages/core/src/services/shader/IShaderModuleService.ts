@@ -10,6 +10,7 @@ export interface IModuleParams {
   uniforms?: {
     [key: string]: IUniform;
   };
+  defines?: Record<string, string | number | boolean>;
 }
 
 export interface IShaderModuleService {

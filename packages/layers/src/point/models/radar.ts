@@ -27,7 +27,7 @@ export default class RadarModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     return {
-      u_Size_Unit: SizeUnitType[unit] as SizeUnitType,
+      u_size_unit: SizeUnitType[unit] as SizeUnitType,
       u_speed: speed,
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_opacity: isNumber(opacity) ? opacity : 1.0,

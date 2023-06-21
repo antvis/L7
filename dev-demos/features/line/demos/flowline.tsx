@@ -45,7 +45,9 @@ import {
           return item.properties;
         });
 
-        const circleLayer = new PointLayer({}).source(pointdata, {
+        const circleLayer = new PointLayer({
+          zIndex: 1,
+        }).source(pointdata, {
           parser: {
             type: 'json',
             coordinates: 'centroid',
@@ -81,7 +83,7 @@ import {
 
         
           const layer = new LineLayer({
-            zIndex: 2
+            zIndex: 0,
           })
             .source(oddata, {
               parser: {
@@ -104,14 +106,24 @@ import {
               '#e15383',
             ])
             .style({
-              opacity: .8,
-              gapWidth: 1,
-              endPointOffsets:[10,10],// 支持数据映射
+              // opacity: {
+              //   field: 'count',
+              //   values: [0.2,0.4,0.6,0.8],
+              // },
+              opacity:1.0,
+              gapWidth: 2,
+              offsets:{
+                field: 'count',
+                values:()=>{
+                  return [10 + Math.random()*20, 10 + Math.random()*20]
+                }
+              },// 支持数据映射
               strokeWidth: 1,
               strokeOpacity:1,
               stroke: '#000',
             });
             scene.addLayer(layer);
+              
         })
 
       })

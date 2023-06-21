@@ -10,7 +10,7 @@ varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样�
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform mat2 u_RotateMatrix;
-uniform int u_Size_Unit;
+uniform int u_size_unit;
 
 varying vec2 v_uv; // 本身的 uv 坐标
 varying vec2 v_Iconuv; // icon 贴图的 uv 坐标
@@ -77,7 +77,7 @@ void main() {
   highp float angle_cos = cos(a_Rotate);
   mat2 rotation_matrix = mat2(angle_cos, -1.0 * angle_sin, angle_sin, angle_cos);
   float newSize = a_Size;
-  if(u_Size_Unit == 1) {
+  if(u_size_unit == 1) {
     newSize = newSize  * u_PixelsPerMeter.z;
   }
 

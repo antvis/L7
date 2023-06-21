@@ -7,7 +7,7 @@ uniform float u_time;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform int u_Size_Unit;
+uniform int u_size_unit;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -37,7 +37,7 @@ void main() {
   float blur = 0.0;
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, blur);
 
-  if(u_Size_Unit == 1) {
+  if(u_size_unit == 1) {
     newSize = newSize  * u_PixelsPerMeter.z;
   }
   // radius(16-bit)

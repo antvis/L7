@@ -36,6 +36,7 @@ import { color } from 'd3-color';
 import { isEqual, isNumber, isString } from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
+import { getCommonStyleAttributeOptions } from './CommonStyleAttribute';
 
 export type styleSingle =
   | number
@@ -71,7 +72,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public createTexture2D: (
     options: ITexture2DInitializationOptions,
   ) => ITexture2D;
-
+  public preStyleAttribute: Record<string, any> = {};
+  protected encodeStyleAttribute: Record<string, boolean> = {};
   protected layer: ILayer;
   protected dataTexture: ITexture2D; // 用于数据传递的数据纹理
   protected DATA_TEXTURE_WIDTH: number; // 默认有多少列（宽度）
@@ -151,7 +153,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.layerService = layer
       .getContainer()
       .get<ILayerService>(TYPES.ILayerService);
+    // 初始化支持数据映射的 Style 属性
 
+    this.registerStyleAttribute();
     // 注册 Attribute
     this.registerBuiltinAttributes();
     // 开启动画
@@ -536,5 +540,45 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     if (animateOption.enable) {
       this.layer.setAnimateStartTime();
     }
+  }
+
+  protected getAttributeDefines(): Record<string, string | number | boolean> {
+    const defines: Record<string, string | number | boolean> = {};
+    const encodeStyleAttribute = this.layer.encodeStyleAttribute;
+    Object.keys(encodeStyleAttribute).forEach((key) => {
+      if (encodeStyleAttribute[key]) {
+        defines[`USE_ATTRIBUTE_${key.toUpperCase()}`] = 0.0;
+      }
+    });
+    return defines;
+  }
+
+  // 获取数据映射样式
+  protected getStyleAttribute() {
+    const options: { [key: string]: any } = {};
+    // TODO: 优化
+
+    const defualtValue: { [key: string]: any } = {
+      opacity: 1,
+      stroke: [1, 0, 0, 1],
+      offsets: [0, 0],
+    };
+
+    Object.keys(this.layer.encodeStyleAttribute).forEach((key) => {
+      options['u_' + key] = defualtValue[key];
+    });
+    return options;
+  }
+  // 注册数据映射样式
+  protected registerStyleAttribute() {
+    Object.keys(this.layer.encodeStyleAttribute).forEach((key) => {
+      const options = getCommonStyleAttributeOptions(key);
+      if (options) {
+        this.styleAttributeService.registerStyleAttribute(options);
+      }
+    });
+  }
+  public updateEncodeAttribute(type: string, flag: boolean) {
+    this.encodeStyleAttribute[type] = flag;
   }
 }

@@ -148,6 +148,8 @@ export interface IModelInitializationOptions {
   vs: string;
   fs: string;
 
+  defines?: Record<string, string | number | boolean>;
+
   uniforms?: {
     [key: string]: IUniform;
   };
