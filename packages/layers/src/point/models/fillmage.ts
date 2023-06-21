@@ -9,7 +9,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { getCullFace } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
@@ -54,47 +53,6 @@ export default class FillImageModel extends BaseModel {
       rotation !== undefined
         ? (rotateFlag * Math.PI * rotation) / 180
         : (rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180;
-
-    if (
-      this.dataTextureTest &&
-      this.dataTextureNeedUpdate({
-        opacity,
-        offsets,
-      })
-    ) {
-      // 判断当前的样式中哪些是需要进行数据映射的，哪些是常量，同时计算用于构建数据纹理的一些中间变量
-      this.judgeStyleAttributes({
-        opacity,
-        offsets,
-      });
-
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
     return {
       u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
@@ -106,16 +64,11 @@ export default class FillImageModel extends BaseModel {
         Math.cos(this.radian),
       ]),
 
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
-
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
 
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
-      u_offsets: this.isOffsetStatic(offsets)
-        ? (offsets as [number, number])
-        : [0, 0],
+      u_opacity: opacity,
+      u_offsets: offsets,
     };
   }
 
