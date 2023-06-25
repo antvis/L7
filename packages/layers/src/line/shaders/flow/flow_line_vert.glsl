@@ -1,6 +1,3 @@
-
-#define Animate 0.0
-
 attribute vec4 a_Color;
 attribute vec2 a_Size;
 attribute vec4 a_Instance;
@@ -10,32 +7,31 @@ attribute vec3 a_Position;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 
-
-#pragma include "commom_attr_vert"
 #pragma include "projection"
 #pragma include "picking"
-
 varying vec4 v_color;
-uniform float u_opacity: 1.0;
 uniform float u_gap_width: 1.0;
 uniform float u_stroke_width: 1.0;
 uniform float u_stroke_opacity: 1.0;
-uniform vec4 u_stroke;
-uniform vec2 u_offsets;
 
 
 void main() {
 
+// #ifdef USE_ATTRIBUTE_OPACITY
+//   float opacity  = a_Opacity;
+// #else
+//   float opacity = u_opacity;
+// #endif
+
+
+// #ifdef USE_ATTRIBUTE_OFFSETS
+//   vec2 offsets  = a_Offsets;
+// #else
+//   vec2 offsets = u_offsets;
+// #endif
+
+  // float opacity = u_opacity;
 // 透明度计算
-  #pragma include "opacity_attr_vert"
-  
-  vec2 end_point_offsets = u_offsets;
-
-
-  #ifdef USE_ATTRIBUTE_OFFSETS
-   end_point_offsets = a_Offsets;
-  #endif
-
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
   vec2 flowlineDir = normalize(target - source);
@@ -51,8 +47,8 @@ void main() {
     -lengthCommon*.8, lengthCommon*.8
   );
 
-  float startOffsetCommon = project_pixel(end_point_offsets[0]);
-  float endOffsetCommon = project_pixel(end_point_offsets[1]);
+  float startOffsetCommon = project_pixel(offsets[0]);
+  float endOffsetCommon = project_pixel(offsets[1]);
   float endpointOffset = mix(
     clamp(startOffsetCommon, 0.0, lengthCommon*.2),
     -clamp(endOffsetCommon, 0.0, lengthCommon*.2),

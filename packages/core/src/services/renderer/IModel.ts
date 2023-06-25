@@ -136,7 +136,14 @@ type BlendingFunctionSeparate = Partial<{
     | gl.SRC_ALPHA_SATURATE;
   dstAlpha: number;
 }>;
-
+export type injectType =
+  | 'vs:#decl'
+  | 'vs:#main-start'
+  | 'vs:#main-end'
+  | 'fs:#decl'
+  | 'fs:#main-start'
+  | 'fs:#main-end';
+export type IInject = Partial<Record<injectType, string>>;
 export interface IModelInitializationOptions {
   /**
    * 该 model 是否支持拾取
@@ -148,7 +155,7 @@ export interface IModelInitializationOptions {
   vs: string;
   fs: string;
 
-  defines?: Record<string, string | number | boolean>;
+  inject?: IInject;
 
   uniforms?: {
     [key: string]: IUniform;

@@ -1,3 +1,4 @@
+import { IInject } from '../renderer/IModel';
 import { IUniform } from '../renderer/IUniform';
 
 /**
@@ -10,7 +11,7 @@ export interface IModuleParams {
   uniforms?: {
     [key: string]: IUniform;
   };
-  defines?: Record<string, string | number | boolean>;
+  inject?: IInject;
 }
 
 export interface IShaderModuleService {

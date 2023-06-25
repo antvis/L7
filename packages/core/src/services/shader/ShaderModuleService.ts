@@ -25,7 +25,8 @@ const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
   '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
 const includeRegExp = /#pragma include (["^+"]?["[a-zA-Z_0-9](.*)"]*?)/g;
-
+const REGEX_START_OF_MAIN = /void\s+main\s*\([^)]*\)\s*\{\n?/; // Beginning of main
+const REGEX_END_OF_MAIN = /}\n?[^{}]*$/; // End of main, assumes main is last function
 @injectable()
 export default class ShaderModuleService implements IShaderModuleService {
   private moduleCache: { [key: string]: IModuleParams } = {};
@@ -68,12 +69,12 @@ export default class ShaderModuleService implements IShaderModuleService {
     //   return;
     // }
 
-    const { vs, fs, uniforms: declaredUniforms, defines } = moduleParams;
+    const { vs, fs, uniforms: declaredUniforms, inject } = moduleParams;
     const { content: extractedVS, uniforms: vsUniforms } = extractUniforms(vs);
     const { content: extractedFS, uniforms: fsUniforms } = extractUniforms(fs);
     this.rawContentCache[moduleName] = {
       fs: extractedFS,
-      defines,
+      inject,
       uniforms: {
         ...vsUniforms,
         ...fsUniforms,
@@ -92,13 +93,24 @@ export default class ShaderModuleService implements IShaderModuleService {
     //   return this.moduleCache[moduleName];
     // }
 
-    const rawVS = this.rawContentCache[moduleName].vs;
+    let rawVS = this.rawContentCache[moduleName].vs;
     const rawFS = this.rawContentCache[moduleName].fs;
-    const defines = this.rawContentCache[moduleName].defines;
+    const inject = this.rawContentCache[moduleName].inject;
+    let declaredUniforms = {};
+    if (inject?.['vs:#decl']) {
+      // 头部注入
+      rawVS = inject?.['vs:#decl'] + rawVS;
+      declaredUniforms = extractUniforms(inject?.['vs:#decl']).uniforms;
+    }
+    if (inject?.['vs:#main-start']) {
+      // main
+      rawVS = rawVS.replace(REGEX_START_OF_MAIN, (match: string) => {
+        return match + inject?.['vs:#main-start'];
+      });
+    }
 
-    const definesContent = defines ? this.injectDefines(defines) : '';
     const { content: vs, includeList: vsIncludeList } = this.processModule(
-      definesContent + rawVS,
+      rawVS,
       [],
       'vs',
     );
@@ -118,7 +130,9 @@ export default class ShaderModuleService implements IShaderModuleService {
           ...this.rawContentCache[cur].uniforms,
         };
       },
-      {},
+      {
+        ...declaredUniforms, // 头部注入 uniforms
+      },
     );
 
     /**

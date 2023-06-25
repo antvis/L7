@@ -39,7 +39,7 @@ import {
         .source(fill)
         .shape('fill')
         .color('#aaa')
-        scene.addLayer(filllayer);
+        // scene.addLayer(filllayer);
 
         const pointdata = fill.features.map((item:any) => {
           return item.properties;
@@ -62,7 +62,7 @@ import {
         }
       )
 
-        scene.addLayer(circleLayer);
+        // scene.addLayer(circleLayer);
 
         fetch('https://mdn.alipayobjects.com/afts/file/A*Q_x7TLOMcrAAAAAAAAAAAAAADrd2AQ/flows-2016.json')
         .then(res => res.json())
@@ -112,12 +112,12 @@ import {
               // },
               opacity:1.0,
               gapWidth: 2,
-              offsets:{
-                field: 'count',
-                values:()=>{
-                  return [10 + Math.random()*20, 10 + Math.random()*20]
-                }
-              },// 支持数据映射
+              // offsets:{
+              //   field: 'count',
+              //   values:()=>{
+              //     return [10 + Math.random()*20, 10 + Math.random()*20]
+              //   }
+              // },// 支持数据映射
               strokeWidth: 1,
               strokeOpacity:1,
               stroke: '#000',

@@ -10,6 +10,7 @@ import {
   IFontService,
   IGlobalConfigService,
   IIconService,
+  IInject,
   ILayer,
   ILayerConfig,
   ILayerModel,
@@ -542,15 +543,42 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     }
   }
 
-  protected getAttributeDefines(): Record<string, string | number | boolean> {
-    const defines: Record<string, string | number | boolean> = {};
+  protected getInject(): IInject {
     const encodeStyleAttribute = this.layer.encodeStyleAttribute;
-    Object.keys(encodeStyleAttribute).forEach((key) => {
+    let str = '';
+    const attrType: { [key: string]: any } = {
+      opacity: 'float',
+      stroke: 'vec4',
+      offsets: 'vec2',
+    };
+    const items = ['offsets', 'opacity', 'stroke'];
+    // ['opacity','stroke','offsets'].forEach((key) => {
+    items.forEach((key: string) => {
       if (encodeStyleAttribute[key]) {
-        defines[`USE_ATTRIBUTE_${key.toUpperCase()}`] = 0.0;
+        str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
       }
+      str += `
+      #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+  attribute ${attrType[key]} a_${key.charAt(0).toUpperCase() + key.slice(1)};
+#else
+  uniform ${attrType[key]} u_${key};
+#endif\n
+`;
     });
-    return defines;
+    let innerStr = '';
+    items.forEach((key) => {
+      innerStr += `\n
+#ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+  ${attrType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
+#else
+  ${attrType[key]} ${key} = u_${key};
+#endif\n
+`;
+    });
+    return {
+      'vs:#decl': str,
+      'vs:#main-start': innerStr,
+    };
   }
 
   // 获取数据映射样式
@@ -563,9 +591,17 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       stroke: [1, 0, 0, 1],
       offsets: [0, 0],
     };
+    const items = ['opacity', 'stroke', 'offsets'];
+    items.forEach((key) => {
+      if (!this.layer.encodeStyleAttribute[key]) {
+        // @ts-ignore
+        let value = this.layer.getLayerConfig()[key] || defualtValue[key];
+        if (key === 'stroke') {
+          value = rgb2arr(value);
+        }
 
-    Object.keys(this.layer.encodeStyleAttribute).forEach((key) => {
-      options['u_' + key] = defualtValue[key];
+        options['u_' + key] = value;
+      }
     });
     return options;
   }

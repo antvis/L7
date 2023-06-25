@@ -13,29 +13,17 @@ varying vec4 v_color;
 varying float v_radius;
 varying vec4 v_stroke;
 
-uniform float u_opacity : 1;
-uniform vec4 u_stroke: [1.0,0.,0.,1.0];
-uniform float u_stroke_width : 2;
-uniform vec2 u_offsets;
+// uniform float u_opacity : 1;
+uniform float u_stroke_width: 2;
+uniform vec3 u_blur_height_fixed: [0, 0, 0];
 
-uniform float u_blur : 0.0;
-uniform float u_raisingHeight: 0.0;
-uniform float u_heightfixed: 0.0;
-
-#pragma include "commom_attr_vert"
 #pragma include "projection"
 #pragma include "picking"
 
 
 void main() {
   // 透明度计算
-  #pragma include "opacity_attr_vert"
-
-  vec4 stroke = u_stroke;
-  #ifdef USE_ATTRIBUTE_STROKE
-    stroke = a_Stroke;
-  #endif
-  v_stroke = stroke;
+  v_stroke = stroke;  
   vec3 extrude = a_Extrude;
   float shape_type = a_Shape;
   /*
@@ -58,7 +46,7 @@ void main() {
 
   // anti-alias
   //  float antialiased_blur = -max(u_blur, antialiasblur);
-  float antialiasblur = -max(2.0 / u_DevicePixelRatio / newSize, u_blur);
+  float antialiasblur = -max(2.0 / u_DevicePixelRatio / newSize, u_blur_height_fixed.x);
 
   vec2 offset = (extrude.xy * (newSize + u_stroke_width) + u_offsets);
   vec3 aPosition = a_Position;
@@ -73,14 +61,14 @@ void main() {
   vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
-  float raisingHeight = u_raisingHeight;
+  float raisingHeight = u_blur_height_fixed.y;
 
-  if(u_heightfixed < 1.0) { // false
-    raisingHeight = project_pixel(u_raisingHeight);
+  if(u_blur_height_fixed.z < 1.0) { // false
+    raisingHeight = project_pixel(u_blur_height_fixed.y);
   } else {
      if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
       float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
-      raisingHeight = u_raisingHeight * mapboxZoomScale;
+      raisingHeight = u_blur_height_fixed.y * mapboxZoomScale;
     }
   }
  

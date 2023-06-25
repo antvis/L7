@@ -9,7 +9,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { PointFillTriangulation, rgb2arr } from '@antv/l7-utils';
+import { PointFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 // animate pointLayer shader - support animate
@@ -23,10 +23,7 @@ export default class FillModel extends BaseModel {
     const {
       strokeOpacity = 1,
       strokeWidth = 0,
-      offsets = [0, 0],
       blend,
-      opacity = 1,
-      stroke = '#fff',
       blur = 0,
       raisingHeight = 0,
       heightfixed = false,
@@ -34,16 +31,11 @@ export default class FillModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     return {
-      u_opacity: opacity,
-      u_stroke: rgb2arr(stroke),
-      u_raisingHeight: Number(raisingHeight),
-      u_heightfixed: Number(heightfixed),
-      u_blur: blur,
+      u_blur_height_fixed: [blur, Number(raisingHeight), Number(heightfixed)],
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
       u_stroke_width: strokeWidth,
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      u_offsets: offsets,
       ...this.getStyleAttribute(),
     };
   }
@@ -83,7 +75,7 @@ export default class FillModel extends BaseModel {
       moduleName: type,
       vertexShader: vert,
       fragmentShader: frag,
-      defines: this.getAttributeDefines(),
+      inject: this.getInject(),
       triangulation: PointFillTriangulation,
       depth: { enable: false },
     });

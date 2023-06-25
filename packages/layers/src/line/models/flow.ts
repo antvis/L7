@@ -26,8 +26,8 @@ export default class FlowLineModel extends BaseModel {
     } = this.layer.getLayerConfig() as IFlowLineStyleOptions;
 
     return {
-      u_opacity: opacity,
-      u_offsets: offsets,
+      // u_opacity: opacity,
+      // u_offsets: offsets,
       u_gap_width: gapWidth,
       u_stroke_width: strokeWidth,
       u_stroke: rgb2arr(stroke),
@@ -45,7 +45,7 @@ export default class FlowLineModel extends BaseModel {
       moduleName: 'flow_line',
       vertexShader: flow_line_vert,
       fragmentShader: flow_line_frag,
-      defines: this.getAttributeDefines(),
+      inject: this.getInject(),
       triangulation: FlowLineFillTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },

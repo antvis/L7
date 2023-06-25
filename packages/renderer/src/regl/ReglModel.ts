@@ -151,7 +151,6 @@ export default class ReglModel implements IModel {
   }
 
   public draw(options: IModelDrawOptions, pick?: boolean) {
-    // console.log('options', this.drawParams)
     if (
       this.drawParams.attributes &&
       Object.keys(this.drawParams.attributes).length === 0
