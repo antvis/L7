@@ -17,6 +17,7 @@ varying vec4 v_stroke;
 uniform float u_stroke_width: 2;
 uniform vec3 u_blur_height_fixed: [0, 0, 0];
 
+
 #pragma include "projection"
 #pragma include "picking"
 

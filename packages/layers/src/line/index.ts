@@ -5,7 +5,7 @@ import LineModels, { LineModelType } from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
-  public enableEncodeStyles = ['opacity', 'stroke', 'offsets'];
+  public enableEncodeStyles = ['opacity', 'offsets', 'stroke'];
   public arrowInsertCount: number = 0;
   public defaultSourceConfig = {
     data: [
