@@ -75,54 +75,9 @@ export default () => {
       .color('#f00')
       .style({});
 
-    source.on('update', () => {
-      console.log(source);
-      const midPoints = lineAtOffset(source, {
-        offset: 0.1,
-        shape: 'line',
-      });
-      const point = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source(midPoints, {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        })
-        .shape('circle')
-        .size(10)
-        .color('#ff0');
-      scene.addLayer(point);
-    });
-
-    (async () => {
-      // const midPoints = await lineAtOffsetAsyc(source, 0.1, 'arc', 'offset');
-      const midPoints = await lineAtOffsetAsyc(source, {
-        offset: 0.5,
-        shape: 'line',
-        featureId: 1,
-      });
-      const point = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source(midPoints, {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        })
-        .shape('circle')
-        .size(5)
-        .color('#0f0')
-        .style({
-          opacity: 0.8,
-        });
-      scene.addLayer(point);
-    })();
-
     scene.on('loaded', () => {
       scene.addLayer(layer);
-      
-  
+    
     });
   }, []);
   return (

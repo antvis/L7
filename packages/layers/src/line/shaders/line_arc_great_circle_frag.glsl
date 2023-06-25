@@ -25,17 +25,16 @@ varying vec2 v_iconMapUV;
 uniform float u_linearColor: 0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
-
-varying mat4 styleMappingMat;
+varying vec4 v_line_data;
 
 #pragma include "picking"
 #pragma include "project"
 #pragma include "projection"
 
 void main() {
-  float opacity = styleMappingMat[0][0];
+  float opacity = u_opacity;
   float animateSpeed = 0.0;
-  float d_segmentIndex = styleMappingMat[3].g;
+  float d_segmentIndex = v_line_data.g;
   
   // 设置弧线的底色
   if(u_linearColor == 1.0) { // 使用渐变颜色
@@ -70,14 +69,14 @@ void main() {
   if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { 
     float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / (segmentNumber - 1.0)));
     // float arcRadio = d_segmentIndex / (segmentNumber - 1.0);
-    float count = styleMappingMat[3].b; // 贴图在弧线上重复的数量
+    float count = v_line_data.b; // 贴图在弧线上重复的数量
     float u = fract(arcRadio * count - animateSpeed * count);
     // float u = fract(arcRadio * count - animateSpeed);
     if(u_animate.x == Animate) {
       u = gl_FragColor.a/opacity;
     }
 
-    float v = styleMappingMat[3].a; // 线图层贴图部分的 v 坐标值
+    float v = v_line_data.a; // 线图层贴图部分的 v 坐标值
 
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     vec4 pattern = texture2D(u_texture, uv);

@@ -63,10 +63,6 @@ export default class FillModel extends BaseModel {
     return [model];
   }
 
-  public clearModels() {
-    this.dataTexture?.destroy();
-  }
-
   protected registerBuiltinAttributes() {
     const {
       opacityLinear = {

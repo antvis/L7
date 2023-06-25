@@ -95,11 +95,11 @@ export default () => {
            },
           // opacity:1,
           strokeWidth: 3,
-          stroke: '#f00',
-          // stroke: {
-          //   field:'name',
-          //   values: ['red','yellow','blue','green']
-          // }
+          // stroke: '#f00',
+          stroke: {
+            field:'name',
+            values: ['red','yellow','blue','green']
+          }
         });
 
       // const pointlable = new PointLayer({})

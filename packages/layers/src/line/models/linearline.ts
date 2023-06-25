@@ -7,7 +7,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, LinearDir } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
@@ -29,41 +28,9 @@ export default class LinearLineModel extends BaseModel {
       this.colorTexture.bind();
     }
 
-    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
-      this.judgeStyleAttributes({ opacity });
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
     return {
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
-
       u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: opacity,
       // 纹理支持参数
       u_texture: this.colorTexture, // 贴图
 
@@ -83,7 +50,6 @@ export default class LinearLineModel extends BaseModel {
 
   public clearModels() {
     this.colorTexture?.destroy();
-    this.dataTexture?.destroy();
   }
 
   public async buildModels(): Promise<IModel[]> {

@@ -61,9 +61,14 @@ import Source from '@antv/l7-source';
 import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
+import {
+  isEqual,
+  isFunction,
+  isObject,
+  isPlainObject,
+  isUndefined,
+} from 'lodash';
 import { BlendTypes } from '../utils/blend';
-// import { styleDataMapping } from '../utils/dataMappingStyle';
 import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
@@ -705,9 +710,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     Object.keys(options).forEach((key: string) => {
       if (
         // 需要数据映射
-        (isObject(options[key]) && options[key].field) ||
-        (options[key].values &&
-          !isEqual(this.encodeStyleAttribute[key], options[key])) // 防止计算属性重复计算
+        isPlainObject(
+          options[key] &&
+            (options[key].field || options[key].values) &&
+            !isEqual(this.encodeStyleAttribute[key], options[key]),
+        ) // 防止计算属性重复计算
       ) {
         this.encodeStyleAttribute[key] = options[key];
         this.updateStyleAttribute(key, options[key].field, options[key].values);

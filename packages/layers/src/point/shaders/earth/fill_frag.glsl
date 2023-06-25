@@ -14,11 +14,6 @@ varying float v_radius;
 void main() {
   int shape = int(floor(v_data.w + 0.5));
 
-
-
-  float opacity = styleMappingMat[0][0];
-  float stroke_opacity = styleMappingMat[0][1];
-  float strokeWidth = styleMappingMat[0][2];
   vec4 strokeColor = textrueStroke == vec4(0) ? v_color : textrueStroke;
 
   lowp float antialiasblur = v_data.z;

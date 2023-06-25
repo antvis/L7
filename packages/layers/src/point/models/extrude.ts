@@ -114,9 +114,6 @@ export default class ExtrudeModel extends BaseModel {
     });
     return [model];
   }
-  public clearModels() {
-    this.dataTexture?.destroy();
-  }
   protected registerBuiltinAttributes() {
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({

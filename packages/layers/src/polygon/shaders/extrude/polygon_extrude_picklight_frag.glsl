@@ -7,14 +7,16 @@ uniform float u_topsurface: 1.0;
 uniform float u_sidesurface: 1.0;
 
 varying vec4 v_Color;
-varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
+varying vec3 v_uvs;
+varying vec2 v_texture_data;
+
 #pragma include "picking"
 
 void main() {
-  float opacity = styleMappingMat[0][0];
-  float isSide = styleMappingMat[0][3];
-  float sidey = styleMappingMat[3][0];
-  float lightWeight = styleMappingMat[3][1];
+  float opacity = u_opacity;
+  float isSide =  v_texture_data.x;
+  float sidey = v_uvs[2];
+  float lightWeight = v_texture_data.y;
 
   // Tip: 部分机型 GPU 计算精度兼容
   if(isSide < 0.999) {

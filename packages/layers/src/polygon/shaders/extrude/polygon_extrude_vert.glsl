@@ -16,28 +16,21 @@ varying vec4 v_Color;
 uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_raisingHeight: 0.0;
 uniform float u_opacity: 1.0;
-varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
-
-#pragma include "styleMapping"
-#pragma include "styleMappingCalOpacity"
 
 #pragma include "projection"
 #pragma include "light"
 #pragma include "picking"
 
 void main() {
-  // cal style mapping - 数据纹理映射部分的计算
-  
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
-  // 按顺序从 cell 中取值、若没有则自动往下取值
-  float textureOffset = 0.0; // 在 cell 中取值的偏移量
-
-  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][0] = opacityAndOffset.r;
-  textureOffset = opacityAndOffset.g;
-  // cal style mapping - 数据纹理映射部分的计算
+ 
+  float isSide = a_Position.z;
+ float topU = a_uvs[0];
+ float topV = 1.0 - a_uvs[1];
+ float sidey = a_uvs[2];
 
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
+  float lightWeight = calc_lighting(pos);
+
   vec4 project_pos = project_position(pos);
 
   if(u_heightfixed > 0.0) { // 判断几何体是否固定高度
@@ -51,10 +44,7 @@ void main() {
     }
   }
 
-  // project_pos.z += 500000.0; // amap1
 
-  // project_pos.z += (500000.0 * 4.0)/pow(2.0, 21.0 - u_Zoom); // mapbox
-  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     // gl_Position = u_Mvp * (vec4(project_pos.xyz * vec3(1.0, 1.0, -1.0), 1.0));
@@ -63,11 +53,28 @@ void main() {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   }
 
-  float lightWeight = calc_lighting(pos);
+  // Tip: 部分机型 GPU 计算精度兼容
+  if(isSide < 0.999) {
+    // side face
+    if(u_sidesurface < 1.0) {
+      discard;
+    }
+
+    if(u_linearColor == 1.0) {
+      vec4 linearColor = mix(u_targetColor, u_sourceColor, sidey);
+      linearColor.rgb *= lightWeight;
+      v_Color = linearColor;
+    } else {
+      v_Color = a_Color;
+    }
+
+  } else {
+    v_Color = a_Color;
+  }
+
   // v_Color = a_Color;
   v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w);
 
-  styleMappingMat[3][1] = lightWeight;
 
   setPickingColor(a_PickingColor);
 }

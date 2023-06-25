@@ -109,7 +109,6 @@ export default class FillImageModel extends BaseModel {
   public clearModels() {
     this.iconService.off('imageUpdate', this.updateTexture);
     this.texture?.destroy();
-    this.dataTexture?.destroy();
   }
 
   // overwrite baseModel func

@@ -206,7 +206,6 @@ export default class TextModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
-    this.dataTexture?.destroy();
     // TODO this.mapping
     this.layer.off('remapping', this.mapping);
   }
