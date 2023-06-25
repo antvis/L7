@@ -3,7 +3,6 @@
 #define Animate 0.0
 #define LineTexture 1.0
 
-uniform float u_opacity;
 uniform float u_textureBlend;
 uniform float u_blur : 0.9;
 uniform float u_line_type: 0.0;
@@ -17,6 +16,7 @@ uniform sampler2D u_texture;
 uniform vec2 u_textSize;
 varying float v_segmentIndex;
 uniform float segmentNumber;
+uniform float u_opacity;
 
 varying vec2 v_iconMapUV;
 

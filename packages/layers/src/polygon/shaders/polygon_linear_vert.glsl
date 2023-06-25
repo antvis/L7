@@ -3,7 +3,6 @@ attribute vec3 a_Position;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform float u_opacity: 1.0;
 uniform float u_raisingHeight: 0.0;
 
 varying vec4 v_Color;
@@ -23,8 +22,6 @@ void main() {
     v_linear = a_linear;
     v_pos = a_Position.xy;
   }
-  
-  v_Color = a_Color;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   project_pos.z += u_raisingHeight;

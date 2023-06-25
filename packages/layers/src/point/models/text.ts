@@ -528,6 +528,7 @@ export default class TextModel extends BaseModel {
       vertexShader: textVert,
       fragmentShader: textFrag,
       triangulation: TextTrianglation.bind(this),
+      inject: this.getInject(),
       depth: { enable: false },
     });
     // TODO 渲染流程待修改

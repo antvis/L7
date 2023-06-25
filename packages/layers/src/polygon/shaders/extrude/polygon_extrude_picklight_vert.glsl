@@ -14,7 +14,6 @@ uniform mat4 u_Mvp;
 
 uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_raisingHeight: 0.0;
-uniform float u_opacity: 1.0;
 
 varying vec2 v_texture_data;
 varying vec3 v_uvs;

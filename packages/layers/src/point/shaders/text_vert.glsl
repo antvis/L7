@@ -7,7 +7,6 @@ attribute vec2 a_textOffsets;
 attribute vec4 a_Color;
 attribute float a_Size;
 attribute float a_Rotate;
-uniform sampler2D u_sdf_map;
 
 uniform vec2 u_sdf_map_size;
 uniform mat4 u_ModelMatrix;
@@ -17,6 +16,7 @@ uniform float u_raisingHeight: 0.0;
 varying vec2 v_uv;
 varying float v_gamma_scale;
 varying vec4 v_color;
+varying vec4 v_stroke_color;
 varying float v_fontScale;
 // uniform float u_opacity : 1;
 uniform float u_stroke_width : 2;
@@ -29,10 +29,12 @@ uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
   
-  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
   v_uv = a_tex / u_sdf_map_size;
-  float dist = texture2D(u_sdf_map, v_uv).a;
-  v_color = mix(vec4(a_Color.xyz, a_Color.w * opacity), vec4(u_stroke_color.rgb, u_stroke_color.a * opacity), smoothstep(0., 0.5, 1. - dist));
+
+
+
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
+  v_stroke_color = vec4(u_stroke_color.xyz, u_stroke_color.w * opacity);
 
   // 文本缩放比例
   float fontScale = a_Size / FONT_SIZE;

@@ -25,16 +25,14 @@ scene.on('loaded', () => {
         .color('color')
         .size('value', v => 5 + 15 * v)
         .style({
-          stroke: 'strokeColor',
-          strokeWidth: 'strokeWidth',
-          strokeOpacity: [
-            'strokeOpacity',
-            d => {
-              return d * 2;
-            }
-          ],
-
-          opacity: 'opacity'
+          stroke: {
+            field: 'stroke',
+          },
+          strokeWidth: 2,
+          strokeOpacity:1,
+          opacity: {
+            field: 'opacity',
+          }
         })
         .active(true);
       scene.addLayer(layer);

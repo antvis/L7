@@ -37,7 +37,6 @@ uniform float u_arrowHeight: 3.0;
 uniform float u_arrowWidth: 2.0;
 uniform float u_tailWidth: 1.0;
 
-uniform float u_opacity: 1.0;
 varying vec4 v_texture_data;
 
 vec2 calculateArrow(vec2 offset) {
