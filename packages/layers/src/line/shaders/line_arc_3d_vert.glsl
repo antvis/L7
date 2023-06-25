@@ -28,8 +28,6 @@ attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
 varying vec4 v_line_data;
 
-uniform float u_opacity: 1.0;
-
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"

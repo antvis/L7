@@ -344,6 +344,7 @@ export interface ILayer {
   layerPickService: ILayerPickService;
   textureService: ITextureService;
   sourceLayer?: string;
+  enableEncodeStyles: string[];
   parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型

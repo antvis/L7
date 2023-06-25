@@ -28,7 +28,8 @@ void main() {
   highp float gamma_scaled = gamma * v_gamma_scale;
 
   highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
-  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), vec4(u_stroke_color.rgb, u_stroke_color.a * u_opacity), smoothstep(0., 0.5, 1. - dist));
+  // gl_FragColor = mix(v_color, vec4(u_stroke_color.rgb, u_stroke_color.a * u_opacity), smoothstep(0., 0.5, 1. - dist));
+  gl_FragColor = v_color;
   gl_FragColor.a= gl_FragColor.a * alpha;
    // 作为 mask 模板时需要丢弃透明的像素
   if (gl_FragColor.a < 0.01) {

@@ -11,11 +11,16 @@ attribute float a_Size;
 attribute vec3 a_uvs;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
+uniform float u_linearColor: 0;
+
+uniform float u_topsurface: 1.0;
+uniform float u_sidesurface: 1.0;
 
 varying vec4 v_Color;
 uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_raisingHeight: 0.0;
-uniform float u_opacity: 1.0;
 
 #pragma include "projection"
 #pragma include "light"
@@ -56,9 +61,9 @@ void main() {
   // Tip: 部分机型 GPU 计算精度兼容
   if(isSide < 0.999) {
     // side face
-    if(u_sidesurface < 1.0) {
-      discard;
-    }
+    // if(u_sidesurface < 1.0) {
+    //   discard;
+    // }
 
     if(u_linearColor == 1.0) {
       vec4 linearColor = mix(u_targetColor, u_sourceColor, sidey);
@@ -73,7 +78,7 @@ void main() {
   }
 
   // v_Color = a_Color;
-  v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w);
+  v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w * opacity);
 
 
   setPickingColor(a_PickingColor);

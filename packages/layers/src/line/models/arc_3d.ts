@@ -26,9 +26,9 @@ const lineStyleObj: { [key: string]: number } = {
 };
 export default class Arc3DModel extends BaseModel {
   protected texture: ITexture2D;
+  public enableEncodeStyles = ['opacity'];
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -61,7 +61,6 @@ export default class Arc3DModel extends BaseModel {
       u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
       u_globel_radius: EARTH_RADIUS, // 地球半径
       u_global_height: globalArcHeight,
-      u_opacity: opacity,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
       u_line_type: lineStyleObj[lineType as string] || 0.0,
@@ -77,6 +76,7 @@ export default class Arc3DModel extends BaseModel {
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -129,6 +129,7 @@ export default class Arc3DModel extends BaseModel {
       moduleName: 'lineArc3d' + type,
       vertexShader: vert,
       fragmentShader: frag,
+      inject: this.getInject(),
       triangulation: LineArcTriangulation,
       segmentNumber,
     });

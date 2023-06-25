@@ -1,4 +1,3 @@
-uniform float u_opacity: 1.0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
 uniform float u_linearColor: 0;

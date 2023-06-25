@@ -223,6 +223,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public encodeStyleAttribute: Record<string, any> = {};
 
+  public enableEncodeStyles: string[] = [];
+
   /**
    * 待更新样式属性，在初始化阶段完成注册
    */
@@ -710,11 +712,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     Object.keys(options).forEach((key: string) => {
       if (
         // 需要数据映射
-        isPlainObject(
-          options[key] &&
-            (options[key].field || options[key].values) &&
-            !isEqual(this.encodeStyleAttribute[key], options[key]),
-        ) // 防止计算属性重复计算
+        this.enableEncodeStyles.includes(key) &&
+        isPlainObject(options[key]) &&
+        (options[key].field || options[key].values) &&
+        !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
       ) {
         this.encodeStyleAttribute[key] = options[key];
         this.updateStyleAttribute(key, options[key].field, options[key].values);
@@ -726,7 +727,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         }
       }
     });
-    // console.log(this.encodeStyleAttribute);
   }
 
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {

@@ -12,8 +12,9 @@ varying float v_segmentIndex;
 uniform float u_lineDir: 1.0;
 
 uniform float u_thetaOffset: 0.314;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
 
-uniform float u_opacity: 1.0;
 
 
 

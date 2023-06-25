@@ -118,13 +118,14 @@ export default class TextModel extends BaseModel {
     this.preTextStyle = this.getTextStyle();
     return {
       u_raisingHeight: Number(raisingHeight),
-      u_opacity: opacity,
+      // u_opacity: opacity,
       u_stroke_width: strokeWidth,
       u_stroke_color: rgb2arr(stroke),
       u_sdf_map: this.texture,
       u_halo_blur: halo,
       u_gamma_scale: gamma,
       u_sdf_map_size: [canvas?.width || 1, canvas?.height || 1],
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -151,6 +152,7 @@ export default class TextModel extends BaseModel {
       moduleName: 'pointText',
       vertexShader: textVert,
       fragmentShader: textFrag,
+      inject: this.getInject(),
       triangulation: TextTrianglation.bind(this),
       depth: { enable: false },
     });
@@ -404,8 +406,7 @@ export default class TextModel extends BaseModel {
         textAnchor,
         'left',
         spacing,
-        [0, 0],
-        // textOffset || feature.textOffset || [0, 0],
+        textOffset, // || feature['textOffset'] || [0, 0],// TODO: 文字偏移量 CPU 计算
         iconfont,
       );
       const glyphQuads = getGlyphQuads(shaping, textOffset, false);

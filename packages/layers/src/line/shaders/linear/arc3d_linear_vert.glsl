@@ -15,18 +15,19 @@ uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
 uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
 
 uniform float u_line_type: 0.0;
 uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
-uniform float u_opacity: 1.0;
-varying float v_distance_ratio
+varying float v_distance_ratio;
 
 varying vec4 v_dash_array;
 varying vec4 v_color;
 varying vec2 v_iconMapUV;
-
+varying vec4 v_Color;
 
 #pragma include "projection"
 #pragma include "project"

@@ -24,7 +24,6 @@ export default class ExtrudeModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms() {
     const {
-      opacity = 1,
       heightfixed = false,
       raisingHeight = 0,
       topsurface = true,
@@ -48,13 +47,13 @@ export default class ExtrudeModel extends BaseModel {
       u_sidesurface: Number(sidesurface),
       u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
-      u_opacity: opacity,
 
       // 渐变色支持参数
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
       u_texture: this.texture,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -69,6 +68,7 @@ export default class ExtrudeModel extends BaseModel {
       moduleName: type,
       vertexShader: vert,
       fragmentShader: frag,
+      inject: this.getInject(),
       triangulation: PolygonExtrudeTriangulation,
     });
     return [model];
