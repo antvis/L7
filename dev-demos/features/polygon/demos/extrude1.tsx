@@ -31,30 +31,29 @@ import { GaodeMap } from '@antv/l7-maps';
             '#FF0000'
           ];
           scene.on('loaded', () => {
-            fetch(
-              'https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json'
-            )
-              .then(res => res.json())
-              .then(data => {
-                const filllayer = new PolygonLayer({
-                  name: 'fill',
-                  zIndex: 3
-                })
-                  .source(data)
-                  .shape('fill')
-                  .color('unit_price', colors)
-                //   .size('unit_price', unit_price => unit_price * 50)
-                  .style({
-                    opacity: {
-                        field: 'unit_price',
-                        value: [ 0, 1.0 ]
-                  }})
-          
-                scene.addLayer(filllayer);
-              });
-          });
-          
+            fetch('https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json')
+            .then(res => res.json())
+            .then(data => {
+
+              const filllayer = new PolygonLayer({
+                name: 'fill',
+                zIndex: 3
+              })
+                .source(data)
+                .shape('fill')
+                .color('count', [ '#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f' ])
+                .style({
+                  opacity: 0.6,
+                  opacityLinear: {
+                    enable: true,
+                    dir: 'out' // in - out
+                  }
+                });
+              scene.addLayer(filllayer);
+            });
       
+        });
+          
     }, []);
     return (
       <div

@@ -64,6 +64,7 @@ import { Container } from 'inversify';
 import {
   isEqual,
   isFunction,
+  isNumber,
   isObject,
   isPlainObject,
   isUndefined,
@@ -700,9 +701,27 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         },
       );
     }
-    this.encodeStyle(rest);
 
-    this.updateLayerConfig(rest);
+    // 兼容老版本的写法 ['field, 'value']
+    const newOption: { [key: string]: any } = rest;
+    Object.keys(rest).forEach((key: string) => {
+      // @ts-ignore
+      const values = rest[key];
+      if (
+        Array.isArray(values) &&
+        values.length === 2 &&
+        !isNumber(values[0]) &&
+        !isNumber(values[1])
+      ) {
+        newOption[key] = {
+          field: values[0],
+          value: values[1],
+        };
+      }
+    });
+    this.encodeStyle(newOption);
+
+    this.updateLayerConfig(newOption);
 
     return this;
   }

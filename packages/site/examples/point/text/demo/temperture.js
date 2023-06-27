@@ -1,4 +1,4 @@
-import { Scene, PolygonLayer } from '@antv/l7';
+import { Scene, PolygonLayer,LineLayer,PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({
@@ -53,55 +53,55 @@ scene.on('loaded', () => {
         });
       scene.addLayer(filllayer);
 
-      // const linelayer = new LineLayer({
-      //   zIndex: 5,
-      //   name: 'line2'
-      // })
-      //   .source(data)
-      //   .shape('line')
-      //   .size(1)
-      //   .color('#fff')
-      //   .style({
-      //     opacity: 0.3
-      //   });
-      // scene.addLayer(linelayer);
+      const linelayer = new LineLayer({
+        zIndex: 5,
+        name: 'line2'
+      })
+        .source(data)
+        .shape('line')
+        .size(1)
+        .color('#fff')
+        .style({
+          opacity: 0.3
+        });
+      scene.addLayer(linelayer);
 
-      // const pointLayer = new PointLayer({
-      //   zIndex: 10
-      // })
-      //   .source(data)
-      //   .shape('icon', 'text')
-      //   .size(25)
-      //   .color('count', t => {
-      //     const c = Number(t.replace('℃', ''));
-      //     return colors[Math.floor(((c - 18) / 16) * 10)];
-      //   })
-      //   .style({
-      //     textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-      //     textOffset: [ -25, 15 ],
-      //     padding: [ 2, 2 ],
-      //     fontFamily,
-      //     iconfont: true,
-      //     textAllowOverlap: true
-      //   });
-      // scene.addLayer(pointLayer);
+      const pointLayer = new PointLayer({
+        zIndex: 10
+      })
+        .source(data)
+        .shape('icon', 'text')
+        .size(25)
+        .color('count', t => {
+          const c = Number(t.replace('℃', ''));
+          return colors[Math.floor(((c - 18) / 16) * 10)];
+        })
+        .style({
+          textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [ -25, 15 ],
+          padding: [ 2, 2 ],
+          fontFamily,
+          iconfont: true,
+          textAllowOverlap: true
+        });
+      scene.addLayer(pointLayer);
 
-      // const tempertureLayer = new PointLayer({
-      //   zIndex: 10
-      // })
-      //   .source(data)
-      //   .shape('count', 'text')
-      //   .size(12)
-      //   .color('count', t => {
-      //     const c = Number(t.replace('℃', ''));
-      //     return colors[Math.floor(((c - 18) / 16) * 10)];
-      //   })
-      //   .style({
-      //     textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-      //     textOffset: [ 35, 30 ],
-      //     padding: [ 1, 1 ]
-      //   });
-      // scene.addLayer(tempertureLayer);
+      const tempertureLayer = new PointLayer({
+        zIndex: 10
+      })
+        .source(data)
+        .shape('count', 'text')
+        .size(12)
+        .color('count', t => {
+          const c = Number(t.replace('℃', ''));
+          return colors[Math.floor(((c - 18) / 16) * 10)];
+        })
+        .style({
+          textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [ 35, 30 ],
+          padding: [ 1, 1 ]
+        });
+      scene.addLayer(tempertureLayer);
 
     });
 });

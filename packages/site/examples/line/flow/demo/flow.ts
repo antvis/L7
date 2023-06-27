@@ -104,7 +104,7 @@ fetch('https://mdn.alipayobjects.com/afts/file/A*O7PBQoWAMP4AAAAAAAAAAAAADrd2AQ/
                         gapWidth: 2,
                         offsets:{
                           field: 'count',
-                          values:()=>{
+                          value:()=>{
                             return [10 + Math.random()*20, 10 + Math.random()*20]
                           }
                         },// 支持数据映射

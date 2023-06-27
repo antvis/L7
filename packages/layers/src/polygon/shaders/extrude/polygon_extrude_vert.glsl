@@ -77,8 +77,7 @@ void main() {
     v_Color = a_Color;
   }
 
-  // v_Color = a_Color;
-  v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w * opacity);
+  v_Color = vec4(v_Color.rgb * lightWeight, v_Color.w * opacity);
 
 
   setPickingColor(a_PickingColor);
