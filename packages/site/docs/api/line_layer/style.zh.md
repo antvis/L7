@@ -97,10 +97,10 @@ flowline opacity 和 offsets 支持数据映射，数据驱动设置数据大小
 layer.style({
   opacity: {
     field: 'count', // 映射字段
-    values: [0.2,0.4,0.6,0.8], // 映射值,支持回调函数，支持设置scale
+    value: [0.2,0.4,0.6,0.8], // 映射值,支持回调函数，支持设置scale
   }
 
-// field 和 values  等同于 layer.color('count',[0.2,0.4,0.6,0.8])
+// field 和 value  等同于 layer.color('count',[0.2,0.4,0.6,0.8])
 ```
 #### offsets
 

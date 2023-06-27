@@ -99,7 +99,7 @@ fetch('https://mdn.alipayobjects.com/afts/file/A*O7PBQoWAMP4AAAAAAAAAAAAADrd2AQ/
                     .style({
                         opacity: {
                           field: 'count',
-                          values: [0.2,0.4,0.6,0.8],
+                          value: [0.2,0.4,0.6,0.8],
                         },
                         gapWidth: 2,
                         offsets:{

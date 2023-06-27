@@ -47,7 +47,7 @@ import { GaodeMap } from '@antv/l7-maps';
                   .style({
                     opacity: {
                         field: 'unit_price',
-                        values: [ 0, 1.0 ]
+                        value: [ 0, 1.0 ]
                   }})
           
                 scene.addLayer(filllayer);

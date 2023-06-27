@@ -714,11 +714,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         // 需要数据映射
         this.enableEncodeStyles.includes(key) &&
         isPlainObject(options[key]) &&
-        (options[key].field || options[key].values) &&
+        (options[key].field || options[key].value) &&
         !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
       ) {
         this.encodeStyleAttribute[key] = options[key];
-        this.updateStyleAttribute(key, options[key].field, options[key].values);
+        this.updateStyleAttribute(key, options[key].field, options[key].value);
         this.styleNeedUpdate = true;
       } else {
         // 不需要数据映射

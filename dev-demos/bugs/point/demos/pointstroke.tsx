@@ -91,14 +91,14 @@ export default () => {
         .style({
           opacity: {
             field: 'name',
-            values: [0.5,0.5,0.8,1]
+            value: [0.5,0.5,0.8,1]
            },
           // opacity:1,
           strokeWidth: 3,
           // stroke: '#f00',
           stroke: {
             field:'name',
-            values: ['red','yellow','blue','green']
+            value: ['red','yellow','blue','green']
           }
         });
 
