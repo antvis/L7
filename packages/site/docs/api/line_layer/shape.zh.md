@@ -56,3 +56,7 @@ layer.shape('wall');
 ```js
 layer.shape('simple');
 ```
+
+### shape('flowline')
+
+`flowline` 流向图, 2.17 版本新增

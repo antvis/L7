@@ -144,11 +144,8 @@ export default class LineModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      depth = false,
-      workerEnabled = false,
-      enablePicking,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { depth = false } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     // console.log(frag)
     this.layer.triangulation = LineTriangulation;
@@ -158,13 +155,6 @@ export default class LineModel extends BaseModel {
       fragmentShader: frag,
       triangulation: LineTriangulation,
       depth: { enable: depth },
-
-      workerEnabled,
-      workerOptions: {
-        modelType: 'line' + type,
-        enablePicking,
-        iconMap: this.iconService.getIconMap(),
-      },
     });
     return [model];
   }

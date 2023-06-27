@@ -17,8 +17,6 @@ import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
 export default class FlowLineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
-      offsets = [0, 0],
       gapWidth = 2,
       strokeWidth = 1,
       stroke = '#000',
