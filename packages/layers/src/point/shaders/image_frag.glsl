@@ -5,13 +5,9 @@ varying vec2 v_uv;
 uniform vec2 u_textSize;
 uniform float u_opacity : 1;
 
-varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
-
 #pragma include "picking"
 
 void main(){
-      float opacity = styleMappingMat[0][0];
-      float size = styleMappingMat[1][0];
       vec2 pos = v_uv / u_textSize + gl_PointCoord / u_textSize * 64.;
       vec4 textureColor;
 
@@ -34,7 +30,7 @@ void main(){
             gl_FragColor= step(0.01, textureColor.z) * v_color;
       }
 
-      gl_FragColor.a = gl_FragColor.a * opacity;
+      gl_FragColor.a = gl_FragColor.a * u_opacity;
       
       if (gl_FragColor.a < 0.01) {
          discard;

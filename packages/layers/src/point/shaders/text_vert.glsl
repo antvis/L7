@@ -16,8 +16,9 @@ uniform float u_raisingHeight: 0.0;
 varying vec2 v_uv;
 varying float v_gamma_scale;
 varying vec4 v_color;
+varying vec4 v_stroke_color;
 varying float v_fontScale;
-uniform float u_opacity : 1;
+// uniform float u_opacity : 1;
 uniform float u_stroke_width : 2;
 uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 
@@ -28,8 +29,12 @@ uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
   
-  v_color = a_Color;
   v_uv = a_tex / u_sdf_map_size;
+
+
+
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
+  v_stroke_color = vec4(u_stroke_color.xyz, u_stroke_color.w * opacity);
 
   // 文本缩放比例
   float fontScale = a_Size / FONT_SIZE;

@@ -13,7 +13,9 @@ scene.on('loaded', () => {
   fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
     .then(res => res.text())
     .then(data => {
-      const layer = new LineLayer({})
+      const layer = new LineLayer({
+        blend: 'additive'
+      })
         .source(data, {
           parser: {
             type: 'csv',

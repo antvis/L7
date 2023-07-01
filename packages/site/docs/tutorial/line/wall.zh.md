@@ -61,15 +61,15 @@ scene.on('loaded', () => {
 
 为了绘制地理围墙，我们需要将 `shape` 的参数设置成 `wall`。
 
-<embed src="@/docs/api/line_layer/features/animate.zh.md"></embed>
+<embed src="@/docs/common/features/animate.zh.md"></embed>
 
 ### style
 
-<embed src="@/docs/api/line_layer/features/linear.zh.md"></embed>
+<embed src="@/docs/common/features/linear.zh.md"></embed>
 
 🌟 目前渐变色的方向为垂直向上
 
-<embed src="@/docs/api/line_layer/features/texture.zh.md"></embed>
+<embed src="@/docs/common/features/texture.zh.md"></embed>
 
 🌟 地理围栏支持了新的样式参数 iconStepCount
 

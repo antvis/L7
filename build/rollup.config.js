@@ -78,6 +78,7 @@ module.exports = [
             'cloneDeep',
             'isString',
             'isNumber',
+            'isPlainObject',
             'merge',
           ],
         },

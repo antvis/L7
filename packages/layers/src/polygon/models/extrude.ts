@@ -6,7 +6,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
@@ -25,7 +24,6 @@ export default class ExtrudeModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms() {
     const {
-      opacity = 1,
       heightfixed = false,
       raisingHeight = 0,
       topsurface = true,
@@ -33,36 +31,6 @@ export default class ExtrudeModel extends BaseModel {
       sourceColor,
       targetColor,
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-
-    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
-      this.judgeStyleAttributes({ opacity });
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
 
     // 转化渐变色
     let useLinearColor = 0; // 默认不生效
@@ -77,18 +45,15 @@ export default class ExtrudeModel extends BaseModel {
       // 控制侧面和顶面的显示隐藏
       u_topsurface: Number(topsurface),
       u_sidesurface: Number(sidesurface),
-
       u_heightfixed: Number(heightfixed),
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
       u_raisingHeight: Number(raisingHeight),
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
 
       // 渐变色支持参数
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
       u_texture: this.texture,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -103,6 +68,7 @@ export default class ExtrudeModel extends BaseModel {
       moduleName: type,
       vertexShader: vert,
       fragmentShader: frag,
+      inject: this.getInject(),
       triangulation: PolygonExtrudeTriangulation,
     });
     return [model];
@@ -134,7 +100,6 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public clearModels() {
-    this.dataTexture?.destroy();
     this.texture?.destroy();
   }
 

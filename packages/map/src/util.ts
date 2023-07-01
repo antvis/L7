@@ -88,3 +88,16 @@ export function renderframe(
   const frame = raf(fn);
   return { cancel: () => cancel(frame) };
 }
+export function extend(
+  dest: { [key: string]: any },
+  ...sources: Array<Partial<{ [key: string]: any }>>
+): { [key: string]: any } {
+  for (const src of sources) {
+    for (const k in src) {
+      if (src[k] !== undefined) {
+        dest[k] = src[k];
+      }
+    }
+  }
+  return dest;
+}

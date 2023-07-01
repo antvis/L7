@@ -1,7 +1,6 @@
 
 uniform float u_additive;
 
-varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -13,15 +12,6 @@ uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 #pragma include "picking"
 
 void main() {
-
-  vec4 textrueStroke = vec4(
-    styleMappingMat[1][0],
-    styleMappingMat[1][1],
-    styleMappingMat[1][2],
-    styleMappingMat[1][3]
-  );
-
-  float opacity = styleMappingMat[0][0];
 
   lowp float antialiasblur = v_data.z;
   float r = v_radius / (v_radius);
@@ -45,7 +35,7 @@ void main() {
   float N_RINGS = 3.0;
   float FREQ = 1.0;
 
- gl_FragColor = vec4(v_color.rgb, v_color.a * opacity);
+  gl_FragColor = v_color;
 
   float d = length(v_data.xy);
   if(d > 0.5) {

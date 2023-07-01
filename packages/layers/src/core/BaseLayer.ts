@@ -58,12 +58,18 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { encodePickingColor, WorkerSourceMap } from '@antv/l7-utils';
+import { encodePickingColor } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { isEqual, isFunction, isObject, isUndefined } from 'lodash';
+import {
+  isEqual,
+  isFunction,
+  isNumber,
+  isObject,
+  isPlainObject,
+  isUndefined,
+} from 'lodash';
 import { BlendTypes } from '../utils/blend';
-import { styleDataMapping } from '../utils/dataMappingStyle';
 import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
@@ -216,6 +222,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
+  public encodeStyleAttribute: Record<string, any> = {};
+
+  public enableEncodeStyles: string[] = [];
+
   /**
    * 待更新样式属性，在初始化阶段完成注册
    */
@@ -242,7 +252,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
-    // this.parent = this;
   }
   public addMask(layer: ILayer): void {
     this.masks.push(layer);
@@ -308,7 +317,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     } else {
       const sceneId = this.container.get<string>(TYPES.SceneID);
       // @ts-ignore
-      styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
+      // styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,
@@ -528,11 +537,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * Model初始化前需要更新Model样式
    */
   public prepareBuildModel() {
-    this.updateLayerConfig({
-      ...(this.getDefaultConfig() as object),
-      ...this.rawConfig,
-      ...this.needUpdateConfig,
-    });
+    if (Object.keys(this.needUpdateConfig || {}).length !== 0) {
+      this.updateLayerConfig({});
+    }
 
     // 启动动画
     const { animateOption } = this.getLayerConfig();
@@ -695,24 +702,52 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       );
     }
 
-    this.rawConfig = {
-      ...this.rawConfig,
-      ...rest,
-    };
-    if (this.container) {
-      this.updateLayerConfig(this.rawConfig);
-      this.styleNeedUpdate = true;
-    }
-    // TODO style model 更新
-    // @ts-ignore
-    // if (lastConfig && lastConfig.mask === true && options.mask === false) {
-    //   this.clearModels();
-    //   this.layerModel.buildModels((models) => {
-    //     this.models = models;
-    //   });
-    // }
+    // 兼容老版本的写法 ['field, 'value']
+    const newOption: { [key: string]: any } = rest;
+    Object.keys(rest).forEach((key: string) => {
+      // @ts-ignore
+      const values = rest[key];
+      if (
+        Array.isArray(values) &&
+        values.length === 2 &&
+        !isNumber(values[0]) &&
+        !isNumber(values[1])
+      ) {
+        newOption[key] = {
+          field: values[0],
+          value: values[1],
+        };
+      }
+    });
+    this.encodeStyle(newOption);
+
+    this.updateLayerConfig(newOption);
+
     return this;
   }
+
+  // 参与数据映射的字段 encodeing
+  private encodeStyle(options: { [key: string]: any }) {
+    Object.keys(options).forEach((key: string) => {
+      if (
+        // 需要数据映射
+        this.enableEncodeStyles.includes(key) &&
+        isPlainObject(options[key]) &&
+        (options[key].field || options[key].value) &&
+        !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
+      ) {
+        this.encodeStyleAttribute[key] = options[key];
+        this.updateStyleAttribute(key, options[key].field, options[key].value);
+        this.styleNeedUpdate = true;
+      } else {
+        // 不需要数据映射
+        if (this.encodeStyleAttribute[key]) {
+          delete this.encodeStyleAttribute[key]; // 删除已经存在的属性
+        }
+      }
+    });
+  }
+
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
     const preOption = { ...this.scaleOptions };
     if (isObject(field)) {
@@ -1239,68 +1274,40 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       moduleName,
       vertexShader,
       fragmentShader,
+      inject,
       triangulation,
       segmentNumber,
-      workerEnabled = false,
-      workerOptions,
       ...rest
     } = options;
-
     this.shaderModuleService.registerModule(moduleName, {
       vs: vertexShader,
       fs: fragmentShader,
+      inject,
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
-    return new Promise((resolve, reject) => {
-      // filter supported worker & worker enabled layer
-      if (
-        workerOptions &&
-        workerOptions.modelType in WorkerSourceMap &&
-        workerEnabled
-      ) {
-        this.styleAttributeService
-          .createAttributesAndIndicesAscy(
-            this.encodedData,
-            segmentNumber,
-            workerOptions,
-          )
-          .then(({ attributes, elements }) => {
-            const m = createModel({
-              attributes,
-              uniforms,
-              fs,
-              vs,
-              elements,
-              blend: BlendTypes[BlendType.normal],
-              ...rest,
-            });
-            resolve(m as IModel);
-          })
-          .catch((err) => reject(err));
-      } else {
-        // console.log(this.encodedData)
-        const { attributes, elements, count } =
-          this.styleAttributeService.createAttributesAndIndices(
-            this.encodedData,
-            triangulation,
-            segmentNumber,
-          );
-        const modelOptions = {
-          attributes,
-          uniforms,
-          fs,
-          vs,
-          elements,
-          blend: BlendTypes[BlendType.normal],
-          ...rest,
-        };
-        if (count) {
-          modelOptions.count = count;
-        }
-        const m = createModel(modelOptions);
-        resolve(m);
+    return new Promise((resolve) => {
+      // console.log(this.encodedData)
+      const { attributes, elements, count } =
+        this.styleAttributeService.createAttributesAndIndices(
+          this.encodedData,
+          triangulation,
+          segmentNumber,
+        );
+      const modelOptions = {
+        attributes,
+        uniforms,
+        fs,
+        vs,
+        elements,
+        blend: BlendTypes[BlendType.normal],
+        ...rest,
+      };
+      if (count) {
+        modelOptions.count = count;
       }
+      const m = createModel(modelOptions);
+      resolve(m);
     });
   }
 
@@ -1404,10 +1411,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const preAttribute = this.configService.getAttributeConfig(this.id) || {};
     // @ts-ignore
     if (isEqual(preAttribute[type], { field, values })) {
+      // 检测是否发生更新
       return false;
     }
 
-    // 存储 Attribute
+    // 存储 Attribute 瓦片图层使用
     if (
       [
         'color',

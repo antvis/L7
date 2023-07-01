@@ -18,20 +18,16 @@ export default class FillModel extends BaseModel {
   public getUninforms() {
     const {
       raisingHeight = 0,
-      opacity = 1,
       opacityLinear = {
         enable: false,
         dir: 'in',
       },
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-
     return {
       u_raisingHeight: Number(raisingHeight),
-
-      u_opacity: opacity,
-
       u_opacitylinear: Number(opacityLinear.enable),
       u_dir: opacityLinear.dir === 'in' ? 1.0 : 0.0,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -50,6 +46,7 @@ export default class FillModel extends BaseModel {
       moduleName: type,
       vertexShader: vert,
       fragmentShader: frag,
+      inject: this.getInject(),
       triangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
@@ -61,10 +58,6 @@ export default class FillModel extends BaseModel {
       },
     });
     return [model];
-  }
-
-  public clearModels() {
-    this.dataTexture?.destroy();
   }
 
   protected registerBuiltinAttributes() {

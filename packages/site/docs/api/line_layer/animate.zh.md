@@ -35,4 +35,4 @@ interface IAnimateOption {
 }
 ```
 
-<embed src="@/docs/api/line_layer/features/animate.zh.md"></embed>
+<embed src="@/docs/common/features/animate.zh.md"></embed>

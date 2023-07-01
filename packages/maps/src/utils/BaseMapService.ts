@@ -174,7 +174,8 @@ export default abstract class BaseMapService<T>
   }
 
   public panBy(x: number = 0, y: number = 0): void {
-    this.panTo([x, y]);
+    // @ts-ignore
+    this.map.panBy([x, y]);
   }
 
   public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {

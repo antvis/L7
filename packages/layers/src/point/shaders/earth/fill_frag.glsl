@@ -1,6 +1,7 @@
 uniform float u_additive;
-
-varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
+uniform float u_opacity : 1;
+uniform float u_stroke_opacity : 1;
+uniform float u_stroke_width : 2;
 
 varying vec4 v_data;
 varying vec4 v_color;
@@ -13,16 +14,6 @@ varying float v_radius;
 void main() {
   int shape = int(floor(v_data.w + 0.5));
 
-  vec4 textrueStroke = vec4(
-    styleMappingMat[1][0],
-    styleMappingMat[1][1],
-    styleMappingMat[1][2],
-    styleMappingMat[1][3]
-  );
-
-  float opacity = styleMappingMat[0][0];
-  float stroke_opacity = styleMappingMat[0][1];
-  float strokeWidth = styleMappingMat[0][2];
   vec4 strokeColor = textrueStroke == vec4(0) ? v_color : textrueStroke;
 
   lowp float antialiasblur = v_data.z;
@@ -71,9 +62,9 @@ void main() {
   );
 
   if(strokeWidth < 0.01) {
-    gl_FragColor = vec4(v_color.rgb, v_color.a * opacity);
+    gl_FragColor = vec4(v_color.rgb, v_color.a * u_opacity);
   } else {
-    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * opacity), strokeColor * stroke_opacity, color_t);
+    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), u_stroke_color * u_stroke_opacity, color_t);
   }
 
   if(u_additive > 0.0) {

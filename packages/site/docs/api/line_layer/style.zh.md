@@ -1,6 +1,6 @@
 ---
 title: Style
-order: 4
+order: 8
 ---
 
 <embed src="@/docs/common/style.md"></embed>
@@ -78,6 +78,42 @@ layer.style({
 | style         | 类型     | 描述                               | 默认值 |
 | ------------- | -------- | ---------------------------------- | ------ |
 | segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
+
+### flowline
+
+| style         | 类型     | 描述                               | 默认值 |
+| ------------- | -------- | ---------------------------------- | ------ |
+| opacity | `number` | 透明度，支持数据映射 | `1`   |
+| strokeOpacity | `number` |描边透明度 | `30`   |
+| stroke | `number` | 弧线分段，分段越多越平滑，消耗越大 | `#000`   |
+| strokeWidth | `number` | 描边宽度 | `1`   |
+| gapWidth | `number` | 不同方向两条线间距 | `2`   |
+| offsets | `[number,number]` | 两端偏移量，支持数据映射 | `[0,0]`   |
+
+flowline opacity 和 offsets 支持数据映射，数据驱动设置数据大小
+
+#### opacity
+```ts
+layer.style({
+  opacity: {
+    field: 'count', // 映射字段
+    value: [0.2,0.4,0.6,0.8], // 映射值,支持回调函数，支持设置scale
+  }
+
+// field 和 value  等同于 layer.color('count',[0.2,0.4,0.6,0.8])
+```
+#### offsets
+
+```ts
+layer.style({
+  offsets:{
+     field: 'count',
+     values:() => {
+      return [10 + Math.random()*20, 10 + Math.random()*20]
+     }
+})
+
+```
 
 ### wall
 

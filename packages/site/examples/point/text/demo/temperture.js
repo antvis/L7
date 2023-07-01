@@ -1,4 +1,4 @@
-import { Scene, PointLayer, PolygonLayer, LineLayer } from '@antv/l7';
+import { Scene, PolygonLayer,LineLayer,PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 
 const scene = new Scene({

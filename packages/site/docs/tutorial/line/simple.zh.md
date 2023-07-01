@@ -32,6 +32,6 @@ const layer = new LineLayer()
 
 为了绘制简单线，我们需要将 `shape` 的参数设置成 `simple`。
 
-<embed src="@/docs/api/line_layer/features/linear.zh.md"></embed>
+<embed src="@/docs/common/features/linear.zh.md"></embed>
 
 🌟 简单线图层不支持动画和纹理

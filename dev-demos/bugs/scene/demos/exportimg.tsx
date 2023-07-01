@@ -1,4 +1,4 @@
-import { Map, Scene, ExportImage, PointLayer } from "@antv/l7";
+import { Map, Mapbox,Scene, ExportImage, PointLayer } from "@antv/l7";
 import React, { useState } from "react";
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from "react";
@@ -30,7 +30,7 @@ const Demo: FunctionComponent = () => {
         .then((res) => res.json())
         .then((data) => {
           const pointLayer = new PointLayer({
-            autoFit: true
+            autoFit: false
           })
             .source(data)
             .shape("circle")
@@ -46,6 +46,8 @@ const Demo: FunctionComponent = () => {
           newScene.addLayer(pointLayer);
           setScene(newScene);
           newScene.setPitch(30)
+          // newScene.panBy(100, 100)
+          // console.log(newScene.panBy(100, 100));
 
 
         });

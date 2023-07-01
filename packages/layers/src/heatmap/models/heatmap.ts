@@ -25,6 +25,7 @@ import heatmapColorVert from '../shaders/heatmap_vert.glsl';
 import heatmapFramebufferFrag from '../shaders/heatmap_framebuffer_frag.glsl';
 import heatmapFramebufferVert from '../shaders/heatmap_framebuffer_vert.glsl';
 
+import { isEqual } from 'lodash';
 import { heatMap3DTriangulation } from '../triangulation';
 @injectable()
 export default class HeatMapModel extends BaseModel {
@@ -34,9 +35,13 @@ export default class HeatMapModel extends BaseModel {
   private intensityModel: IModel;
   private colorModel: IModel;
   private shapeType: string;
+  private preRampColors: IColorRamp;
 
   public render(options: Partial<IRenderOptions>) {
     const { clear, useFramebuffer } = this.rendererService;
+    const { rampColors } =
+      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+
     useFramebuffer(this.heatmapFramerBuffer, () => {
       clear({
         color: [0, 0, 0, 0],
@@ -46,7 +51,7 @@ export default class HeatMapModel extends BaseModel {
       });
       this.drawIntensityMode();
     });
-    if (this.layer.styleNeedUpdate) {
+    if (!isEqual(this.preRampColors, rampColors)) {
       this.updateColorTexture();
     }
     this.shapeType === 'heatmap'
@@ -367,5 +372,7 @@ export default class HeatMapModel extends BaseModel {
       mag: gl.NEAREST,
       flipY: false,
     });
+
+    this.preRampColors = rampColors;
   }
 }

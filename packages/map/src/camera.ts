@@ -11,6 +11,7 @@ import { IMapOptions } from './interface';
 import {
   clamp,
   ease as defaultEasing,
+  extend,
   interpolate,
   now,
   pick,
@@ -130,6 +131,18 @@ export default class Camera extends EventEmitter {
     );
   }
 
+  public panBy(
+    offset: PointLike,
+    options?: IAnimationOptions,
+    eventData?: any,
+  ) {
+    offset = Point.convert(offset).mult(-1);
+    return this.panTo(
+      this.transform.center,
+      extend({ offset }, options || {}),
+      eventData,
+    );
+  }
   public zoomOut(options?: IAnimationOptions, eventData?: any) {
     this.zoomTo(this.getZoom() - 1, options, eventData);
     return this;
