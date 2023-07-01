@@ -26,7 +26,9 @@ scene.on('loaded', () => {
         .size('value', v => 15 + 15 * v)
         .style({
           blur: 2.5,
-          opacity: 'opacity'
+          opacity: {
+            field: 'opacity',
+          }
         })
         .active(true);
       scene.addLayer(layer);

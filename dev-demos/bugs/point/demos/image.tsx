@@ -38,7 +38,8 @@ export default () => {
         return item;
       });
       const imageLayer = new PointLayer({
-        autoFit:false
+        autoFit:false,
+        // layerType: 'fillImage',
       })
         .source(newData.slice(0,4), {
           parser: {

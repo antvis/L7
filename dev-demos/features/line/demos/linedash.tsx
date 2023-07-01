@@ -1,14 +1,14 @@
 // @ts-ignore
 import { LineLayer, PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV1({
+      map: new GaodeMap({
         center: [116.3956, 39.9392],
         zoom: 10,
         style:'light'
@@ -30,8 +30,8 @@ export default () => {
             .color('标准名称', ['#5B8FF9', '#5CCEA1', '#F6BD16'])
             .active(true)
             .style({
-              // lineType: 'dash',
-              // dashArray: [5, 5],
+              lineType: 'dash',
+              dashArray: [5, 5],
             });
           scene.addLayer(layer);
 

@@ -11,7 +11,7 @@ import SimplePoint from './simplePoint';
 import TextModel from './text';
 
 export type PointType =
-  | 'fillImage'
+  | 'fillImage' // 平铺
   | 'fill'
   | 'radar'
   | 'image'

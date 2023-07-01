@@ -37,10 +37,10 @@ scene.on('loaded', () => {
         })
         .shape('iconType', 'text')
         .size(30)
-        .color('iconColor')
+        .color('red')
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          textOffset: 'textOffset', // 文本相对锚点的偏移量 [水平, 垂直]
+          // textOffset: 'textOffset', // 文本相对锚点的偏移量 [水平, 垂直]
           fontFamily,
           iconfont: true,
           textAllowOverlap: true

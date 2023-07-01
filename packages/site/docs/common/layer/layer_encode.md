@@ -200,6 +200,19 @@ layer.scale('value'); // L7  能够自动推断为  identify
 离散分类通常与两种相反的色调一起使用，以显示从负值到中心到正值的变化。这些类型的地图显示了彼此相关的值的大小。
 
 
+
+### getScale(scaleName:string)
+
+根据视觉通道名称获取 scale 实例,调用之前确保 layer 已经初始化完成
+
+
+```ts
+const scale = layer.getScale('color')
+const color = scale(1)// 将数值转换成颜色
+```
+更多是方法 
+<a  target="_blank" href='https://github.com/antvis/L7/blob/master/packages/layers/src/core/BaseLayer.ts#L1176'>scale 示例使用</a>
+
 ## 视觉编码方法
 
 可视化编码是将数据转换为可视形式的过程，L7 目前支持形状，大小，颜色 3 种视觉通道，你可以指定数据字段，为不同要素设置不同的图形属性。

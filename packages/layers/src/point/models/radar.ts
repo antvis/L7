@@ -9,7 +9,6 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
@@ -27,10 +26,10 @@ export default class RadarModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     return {
-      u_Size_Unit: SizeUnitType[unit] as SizeUnitType,
+      u_size_unit: SizeUnitType[unit] as SizeUnitType,
       u_speed: speed,
       u_additive: blend === 'additive' ? 1.0 : 0.0,
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: opacity,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -67,10 +66,6 @@ export default class RadarModel extends BaseModel {
       depth: { enable: false },
     });
     return [model];
-  }
-
-  public clearModels() {
-    this.dataTexture?.destroy();
   }
 
   // overwrite baseModel func

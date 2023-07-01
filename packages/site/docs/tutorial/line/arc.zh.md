@@ -83,16 +83,16 @@ layer.source(data, {
 为了绘制弧线图，我们需要将 `shape` 的参数设置成 `arc`。
 
 
-<embed src="@/docs/api/line_layer/features/animate.zh.md"></embed>
+<embed src="@/docs/common/features/animate.zh.md"></embed>
 
 ### style
 
-<embed src="@/docs/api/line_layer/features/segment_number.zh.md"></embed>
+<embed src="@/docs/common/features/segment_number.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/theta_offset.zh.md"></embed>
+<embed src="@/docs/common/features/theta_offset.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/linear.zh.md"></embed>
+<embed src="@/docs/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/dash.zh.md"></embed>
+<embed src="@/docs/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/texture.zh.md"></embed>
+<embed src="@/docs/common/features/texture.zh.md"></embed>

@@ -3,13 +3,12 @@
 #define FONT_SIZE 48.0
 uniform sampler2D u_sdf_map;
 uniform float u_gamma_scale : 0.5;
-uniform float u_opacity : 1.0;
-uniform vec4 u_stroke_color : [0, 0, 0, 1];
 uniform float u_stroke_width : 2.0;
 uniform float u_halo_blur : 0.5;
 uniform float u_DevicePixelRatio;
 
 varying vec4 v_color;
+varying vec4 v_stroke_color;
 varying vec2 v_uv;
 varying float v_gamma_scale;
 varying float v_fontScale;
@@ -28,8 +27,10 @@ void main() {
   highp float gamma_scaled = gamma * v_gamma_scale;
 
   highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
-  gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), vec4(u_stroke_color.rgb, u_stroke_color.a * u_opacity), smoothstep(0., 0.5, 1. - dist));
-  gl_FragColor.a= gl_FragColor.a * alpha;
+
+  gl_FragColor = mix(v_color, v_stroke_color, smoothstep(0., 0.5, 1.- dist));
+
+  gl_FragColor.a *= alpha;
    // 作为 mask 模板时需要丢弃透明的像素
   if (gl_FragColor.a < 0.01) {
     discard;
