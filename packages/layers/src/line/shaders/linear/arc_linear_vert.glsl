@@ -10,6 +10,7 @@ varying vec4 v_color;
 varying float v_segmentIndex;
 
 uniform float u_lineDir: 1.0;
+uniform float u_opacity: 1.0;
 
 uniform float u_thetaOffset: 0.314;
 uniform vec4 u_sourceColor;
@@ -80,7 +81,7 @@ void main() {
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   float d_distance_ratio;
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, u_thetaOffset, 0.0, 1.0));
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, u_thetaOffset), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, u_thetaOffset), 0.0, 1.0));
   // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   //unProjCustomCoord
@@ -90,8 +91,8 @@ void main() {
 
   float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
 
-  v_Color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
-  v_Color.a *= u_opacity;
+  v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
+  v_color.a *= u_opacity;
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * (vec4(curr.xy + offset, 0, 1.0));
