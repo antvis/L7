@@ -29,7 +29,6 @@ export default class FillModel extends BaseModel {
       heightfixed = false,
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
     return {
       u_blur_height_fixed: [blur, Number(raisingHeight), Number(heightfixed)],
       u_additive: blend === 'additive' ? 1.0 : 0.0,

@@ -281,6 +281,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
 #endif\n
 `;
     });
+
     return {
       'vs:#decl': str,
       'vs:#main-start': innerStr,
@@ -300,7 +301,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.layer.enableEncodeStyles.forEach((key) => {
       if (!this.layer.encodeStyleAttribute[key]) {
         // @ts-ignore
-        let value = this.layer.getLayerConfig()[key] || defualtValue[key];
+        const keyValue = this.layer.getLayerConfig()[key];
+
+        let value =
+          typeof keyValue === 'undefined' ? defualtValue[key] : keyValue;
         if (key === 'stroke') {
           value = rgb2arr(value);
         }
