@@ -43,7 +43,11 @@ export default () => {
               })
               .color('red')
               .shape('circle')
-              .size('unit_price',[2,30]);
+              .size('unit_price',[2,30])
+              .style({
+                opacity: 0.1,
+              })
+              ;
             scene.addLayer(imageLayer);
           });
       });
