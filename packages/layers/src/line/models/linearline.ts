@@ -7,6 +7,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, LinearDir } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
@@ -30,7 +31,7 @@ export default class LinearLineModel extends BaseModel {
 
     return {
       u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
-      u_opacity: opacity,
+      u_opacity: isNumber(opacity) ? opacity : 1,
       // 纹理支持参数
       u_texture: this.colorTexture, // 贴图
 

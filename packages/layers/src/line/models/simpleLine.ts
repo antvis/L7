@@ -6,6 +6,7 @@ import {
   IModelUniform,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
@@ -33,7 +34,7 @@ export default class SimpleLineModel extends BaseModel {
     }
 
     return {
-      u_opacity: opacity,
+      u_opacity: isNumber(opacity) ? opacity : 1,
 
       // 渐变色支持参数
       u_linearColor: useLinearColor,

@@ -9,6 +9,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
@@ -63,7 +64,7 @@ export default class ArcModel extends BaseModel {
     return {
       u_thetaOffset: thetaOffset,
       // u_thetaOffset:  0.0,
-      u_opacity: opacity,
+      u_opacity: isNumber(opacity) ? opacity : 1,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
       u_line_type: lineStyleObj[lineType || 'solid'],

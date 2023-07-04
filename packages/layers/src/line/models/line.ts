@@ -9,6 +9,7 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
+import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import {
   ILineLayerStyleOptions,
@@ -82,7 +83,7 @@ export default class LineModel extends BaseModel {
     }
 
     return {
-      u_opacity: opacity,
+      u_opacity: isNumber(opacity) ? opacity : 1,
       u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
