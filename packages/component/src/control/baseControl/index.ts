@@ -1,4 +1,8 @@
-export * from './buttonControl';
-export * from './control';
-export * from './popperControl';
-export * from './selectControl';
+export { ButtonControl, IButtonControlOption } from './buttonControl';
+export { Control, IControlOption, PositionType } from './control';
+export { IPopperControlOption, PopperControl } from './popperControl';
+export {
+  ControlOptionItem,
+  ISelectControlOption,
+  SelectControl,
+} from './selectControl';
