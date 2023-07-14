@@ -6,16 +6,30 @@ import './assets/iconfont/iconfont.js';
 import './css/index.css';
 
 export * from './control/baseControl';
-export * from './control/exportImage';
-export * from './control/fullscreen';
-export * from './control/geoLocate';
-export * from './control/layerSwitch';
-export * from './control/logo';
-export * from './control/mapTheme';
-export * from './control/mouseLocation';
-export * from './control/scale';
-export * from './control/zoom';
+export {
+  ExportImage,
+  type IExportImageControlOption,
+} from './control/exportImage';
+export {
+  Fullscreen,
+  type IFullscreenControlOption,
+} from './control/fullscreen';
+export { GeoLocate, type IGeoLocateOption } from './control/geoLocate';
+export { LayerSwitch, type ILayerSwitchOption } from './control/layerSwitch';
+export { Logo, type ILogoControlOption } from './control/logo';
+export { MapTheme } from './control/mapTheme';
+export {
+  MouseLocation,
+  type IMouseLocationControlOption,
+} from './control/mouseLocation';
+export { Scale, type IScaleControlOption } from './control/scale';
+export { Zoom, type IZoomControlOption } from './control/zoom';
 export * from './interface';
-export * from './popup/layerPopup';
-export * from './popup/popup';
+export {
+  LayerPopup,
+  type ILayerPopupOption,
+  type LayerField,
+  type LayerPopupConfigItem,
+} from './popup/layerPopup';
+export { Popup } from './popup/popup';
 export { Marker, MarkerLayer };
