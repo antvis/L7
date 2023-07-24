@@ -13,6 +13,7 @@ export default class LayerStylePlugin implements ILayerPlugin {
       if (autoFit) {
         layer.fitBounds(fitBoundsOptions);
       }
+      layer.styleNeedUpdate = false;
     });
   }
 }

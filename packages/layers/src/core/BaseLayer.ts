@@ -731,18 +731,21 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     Object.keys(options).forEach((key: string) => {
       if (
         // 需要数据映射
-        this.enableEncodeStyles.includes(key) &&
-        isPlainObject(options[key]) &&
-        (options[key].field || options[key].value) &&
+        this.enableEncodeStyles.includes(key) && // 支持的数据映射类型
+        isPlainObject(options[key]) && //
+        (options[key].field || options[key].value) && // 有数据映射的配置
         !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
       ) {
         this.encodeStyleAttribute[key] = options[key];
         this.updateStyleAttribute(key, options[key].field, options[key].value);
-        this.styleNeedUpdate = true;
+        if (this.inited) {
+          this.dataState.dataMappingNeedUpdate = true;
+        }
       } else {
         // 不需要数据映射
         if (this.encodeStyleAttribute[key]) {
           delete this.encodeStyleAttribute[key]; // 删除已经存在的属性
+          this.dataState.dataSourceNeedUpdate = true;
         }
       }
     });
