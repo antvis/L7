@@ -30,7 +30,7 @@ export default () => {
             .color('标准名称', ['#5B8FF9', '#5CCEA1', '#F6BD16'])
             .active(true)
             .style({
-              lineType: 'dash',
+              // lineType: 'dash',
               opacity:['标准名称',[0,0.5,0.6,1]],
               dashArray: [5, 5],
             });
@@ -39,7 +39,9 @@ export default () => {
           setTimeout(() => {
             console.log('update1111');
             layer.style({
-              opacity:1
+              opacity:1,
+              lineType: 'dash',
+              dashArray: [5, 5]
             });
             scene.render();
           },2000)
