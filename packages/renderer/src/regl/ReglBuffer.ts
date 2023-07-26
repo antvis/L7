@@ -27,7 +27,7 @@ export default class ReglBuffer implements IBuffer {
 
   public destroy() {
     if (!this.isDestroyed) {
-     this.buffer.destroy();
+      this.buffer.destroy();
     }
     this.isDestroyed = true;
   }
