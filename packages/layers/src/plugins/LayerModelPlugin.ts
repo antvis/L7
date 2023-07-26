@@ -54,17 +54,5 @@ export default class LayerModelPlugin implements ILayerPlugin {
         return true;
       },
     );
-
-    layer.hooks.beforeRender.tap('LayerModelPlugin', () => {
-      // 判断数据映射是否需要更新
-      if (layer.styleNeedUpdate) {
-        this.prepareLayerModel(layer).then(() => {
-          layer.styleNeedUpdate = false;
-          layer.renderLayers();
-        });
-      }
-
-      layer.styleNeedUpdate = false;
-    });
   }
 }

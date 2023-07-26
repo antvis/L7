@@ -1,7 +1,6 @@
 #extension GL_OES_standard_derivatives : enable
 #define Animate 0.0
 #define LineTexture 1.0
-uniform float u_opacity : 1.0;
 uniform float u_textureBlend;
 
 uniform float u_borderWidth: 0.0;
@@ -29,7 +28,6 @@ void main() {
   gl_FragColor = v_color;
   // anti-alias
   // float blur = 1.0 - smoothstep(u_blur, 1., length(v_normal.xy));
-  gl_FragColor.a *= u_opacity; // 全局透明度
   if(u_animate.x == Animate) {
       animateSpeed = u_time / u_animate.y;
        float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_animate.z)* (1.0/ u_animate.z) + animateSpeed);
@@ -52,7 +50,7 @@ void main() {
       pattern.a = 0.0;
       gl_FragColor += pattern;
     } else { // replace
-        pattern.a *= u_opacity;
+        pattern.a *= v_color.a;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
         }

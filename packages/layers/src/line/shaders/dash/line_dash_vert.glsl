@@ -27,12 +27,11 @@ varying vec4 v_color;
 varying vec4 v_dash_array;
 varying float v_d_distance_ratio;
 
-uniform float u_opacity: 1.0;
 
 void main() {
 
   v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
-  v_color = vec4(a_Color.xyz, a_Color.w * u_opacity);
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
   vec2 offset = project_pixel(size.xy);

@@ -83,6 +83,7 @@ vec2 calculateArrow(vec2 offset) {
 
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
+
   
   float d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
 
@@ -93,6 +94,7 @@ void main() {
   }
 
   v_color = a_Color;
+  v_color.a *= opacity;
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
   
