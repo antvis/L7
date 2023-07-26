@@ -1071,7 +1071,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.isDestroyed) {
       return;
     }
-
     // remove child layer
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
@@ -1117,10 +1116,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
 
     this.removeAllListeners();
+    this.isDestroyed = true;
     // 解绑图层容器中的服务
     // this.container.unbind(TYPES.IStyleAttributeService);
-
-    this.isDestroyed = true;
   }
   public clear() {
     this.styleAttributeService.clearAllAttributes();
