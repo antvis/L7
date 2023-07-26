@@ -1068,6 +1068,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.isDestroyed) {
       return;
     }
+    console.log('destroy',this.layerType,this.id)
 
     // remove child layer
     this.layerChildren.map((child: ILayer) => child.destroy(false));
