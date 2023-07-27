@@ -224,7 +224,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public encodeStyleAttribute: Record<string, any> = {};
 
-  public enableEncodeStyles: string[] = [];
+  // Shader 的数据映射
+  public enableShaderEncodeStyles: string[] = [];
+
+  // 数据层数据映射
+
+  public enableDataEncodeStyles: string[] = [];
+
+  public enablg: string[] = [];
 
   /**
    * 待更新样式属性，在初始化阶段完成注册
@@ -731,9 +738,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     Object.keys(options).forEach((key: string) => {
       if (
         // 需要数据映射
-        this.enableEncodeStyles.includes(key) &&
+        [
+          this.enableShaderEncodeStyles,
+          ...this.enableDataEncodeStyles,
+        ].includes(key) &&
         isPlainObject(options[key]) &&
-        (options[key].field || options[key].value) &&
+        (options[key].field || options[key].values) &&
         !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
       ) {
         this.encodeStyleAttribute[key] = options[key];

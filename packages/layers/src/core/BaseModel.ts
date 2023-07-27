@@ -259,20 +259,22 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       offsets: 'vec2',
       textOffset: 'vec2',
     };
-    this.layer.enableEncodeStyles.forEach((key: string) => {
+    this.layer.enableShaderEncodeStyles.forEach((key: string) => {
       if (encodeStyleAttribute[key]) {
         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
       }
       str += `
-      #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-  attribute ${attrType[key]} a_${key.charAt(0).toUpperCase() + key.slice(1)};
-#else
-  uniform ${attrType[key]} u_${key};
-#endif\n
-`;
+          #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+      attribute ${attrType[key]} a_${
+        key.charAt(0).toUpperCase() + key.slice(1)
+      };
+    #else
+      uniform ${attrType[key]} u_${key};
+    #endif\n
+    `;
     });
     let innerStr = '';
-    this.layer.enableEncodeStyles.forEach((key) => {
+    this.layer.enableShaderEncodeStyles.forEach((key) => {
       innerStr += `\n
 #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
   ${attrType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
@@ -298,7 +300,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       stroke: [1, 0, 0, 1],
       offsets: [0, 0],
     };
-    this.layer.enableEncodeStyles.forEach((key) => {
+    this.layer.enableShaderEncodeStyles.forEach((key) => {
       if (!this.layer.encodeStyleAttribute[key]) {
         // @ts-ignore
         const keyValue = this.layer.getLayerConfig()[key];
