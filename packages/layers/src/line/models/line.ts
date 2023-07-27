@@ -9,7 +9,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import {
   ILineLayerStyleOptions,
@@ -42,7 +41,7 @@ export default class LineModel extends BaseModel {
   });
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
+      // opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -83,7 +82,7 @@ export default class LineModel extends BaseModel {
     }
 
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1,
+      // u_opacity: isNumber(opacity) ? opacity : 1,
       u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
@@ -118,6 +117,7 @@ export default class LineModel extends BaseModel {
       u_arrowHeight: arrow.arrowHeight || 3,
       u_arrowWidth: arrow.arrowWidth || 2,
       u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
+      ...this.getStyleAttribute(),
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -155,6 +155,7 @@ export default class LineModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       triangulation: LineTriangulation,
+      inject: this.getInject(),
       depth: { enable: depth },
     });
     return [model];

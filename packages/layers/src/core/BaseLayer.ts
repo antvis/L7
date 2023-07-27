@@ -748,11 +748,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       ) {
         this.encodeStyleAttribute[key] = options[key];
         this.updateStyleAttribute(key, options[key].field, options[key].value);
-        this.styleNeedUpdate = true;
+        if (this.inited) {
+          this.dataState.dataMappingNeedUpdate = true;
+        }
       } else {
         // 不需要数据映射
         if (this.encodeStyleAttribute[key]) {
           delete this.encodeStyleAttribute[key]; // 删除已经存在的属性
+          this.dataState.dataSourceNeedUpdate = true;
         }
       }
     });
@@ -1078,7 +1081,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.isDestroyed) {
       return;
     }
-
     // remove child layer
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
@@ -1124,10 +1126,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
 
     this.removeAllListeners();
+    this.isDestroyed = true;
     // 解绑图层容器中的服务
     // this.container.unbind(TYPES.IStyleAttributeService);
-
-    this.isDestroyed = true;
   }
   public clear() {
     this.styleAttributeService.clearAllAttributes();

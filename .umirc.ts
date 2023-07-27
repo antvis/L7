@@ -84,7 +84,7 @@ export default defineConfig({
     lodash: '_',
     fetch: 'window.fetch',
   },
-  links: ['https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd.css'],
+  styles: ['https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd.css'],
   scripts: [
     'https://gw.alipayobjects.com/os/lib/whatwg-fetch/3.6.2/dist/fetch.umd.js',
     'https://gw.alipayobjects.com/os/lib/react/17.0.2/umd/react.profiling.min.js',

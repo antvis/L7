@@ -17,10 +17,10 @@ void main() {
 
   if(u_linearColor == 1.0) { // 使用渐变颜色
     gl_FragColor = mix(u_sourceColor, u_targetColor, linearRadio);
+    gl_FragColor.a *= v_color.a;
   } else { // 使用 color 方法传入的颜色
      gl_FragColor = v_color;
   }
 
-  gl_FragColor.a *= u_opacity; // 全局透明度
   gl_FragColor = filterColor(gl_FragColor);
 }
