@@ -743,7 +743,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           ...this.enableDataEncodeStyles,
         ].includes(key) &&
         isPlainObject(options[key]) &&
-        (options[key].field || options[key].values) &&
+        (options[key].field || options[key].value) &&
         !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
       ) {
         this.encodeStyleAttribute[key] = options[key];
