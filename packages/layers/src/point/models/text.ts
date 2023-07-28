@@ -101,7 +101,6 @@ export default class TextModel extends BaseModel {
   private preTextStyle: Partial<IPointLayerStyleOptions> = {};
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1.0,
       stroke = '#fff',
       strokeWidth = 0,
       halo = 0.5,
@@ -118,7 +117,6 @@ export default class TextModel extends BaseModel {
     this.preTextStyle = this.getTextStyle();
     return {
       u_raisingHeight: Number(raisingHeight),
-      // u_opacity: opacity,
       u_stroke_width: strokeWidth,
       u_stroke_color: rgb2arr(stroke),
       u_sdf_map: this.texture,
@@ -398,18 +396,26 @@ export default class TextModel extends BaseModel {
     const data = this.rawEncodeData;
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
       const { shape = '', id, size = 1 } = feature;
+      const offset = feature.textOffset
+        ? feature.textOffset
+        : textOffset || [0, 0];
+      const anchor = feature.textAnchor
+        ? feature.textAnchor
+        : textAnchor || 'center';
+
       const shaping = shapeText(
         shape.toString(),
         mapping,
         // @ts-ignore
         size,
-        textAnchor,
+        anchor,
         'left',
         spacing,
-        textOffset, // || feature['textOffset'] || [0, 0],// TODO: 文字偏移量 CPU 计算
+        offset, //
         iconfont,
       );
-      const glyphQuads = getGlyphQuads(shaping, textOffset, false);
+
+      const glyphQuads = getGlyphQuads(shaping, offset, false);
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
       // feature.centroid = calculteCentroid(coordinates);

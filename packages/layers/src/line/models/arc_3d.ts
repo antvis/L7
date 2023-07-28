@@ -26,7 +26,7 @@ const lineStyleObj: { [key: string]: number } = {
 };
 export default class Arc3DModel extends BaseModel {
   protected texture: ITexture2D;
-  // public enableEncodeStyles = ['opacity'];
+  // public enableShaderEncodeStyles = ['opacity'];
   public getUninforms(): IModelUniform {
     const {
       sourceColor,
