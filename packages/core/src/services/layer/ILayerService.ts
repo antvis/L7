@@ -344,6 +344,8 @@ export interface ILayer {
   layerPickService: ILayerPickService;
   textureService: ITextureService;
   sourceLayer?: string;
+  enableShaderEncodeStyles: string[];
+  enableDataEncodeStyles: string[];
   parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个
   type: string; // 代表 Layer 的类型
@@ -368,6 +370,7 @@ export interface ILayer {
     options: ISourceCFG | undefined;
   };
   encodeDataLength: number;
+  encodeStyleAttribute: Record<string, any>;
   pickedFeatureID: number | null;
   hooks: {
     init: AsyncSeriesBailHook;

@@ -40,7 +40,7 @@ export default () => {
             })
             .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
             .style({
-              opacity:0.5
+              opacity:1,
             });
           console.log(pointLayer);
           scene.addLayer(pointLayer);

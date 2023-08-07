@@ -5,6 +5,7 @@ import PolygonModels, { PolygonModelType } from './models/';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
+  public enableShaderEncodeStyles = ['opacity'];
   public defaultSourceConfig: {
     data: [];
     options: {

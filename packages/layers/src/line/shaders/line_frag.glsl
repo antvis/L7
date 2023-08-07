@@ -1,6 +1,6 @@
+#extension GL_OES_standard_derivatives : enable
 #define Animate 0.0
 #define LineTexture 1.0
-uniform float u_opacity : 1.0;
 uniform float u_textureBlend;
 
 uniform float u_borderWidth: 0.0;
@@ -13,24 +13,21 @@ varying vec4 v_color;
 uniform float u_line_texture;
 uniform sampler2D u_texture;
 uniform vec2 u_textSize;
-
 varying vec2 v_iconMapUV;
+varying vec4 v_texture_data;
+
 
 #pragma include "picking"
 
 uniform float u_time;
 uniform vec4 u_animate: [ 1, 2., 1.0, 0.2 ]; // 控制运动
-
-varying mat4 styleMappingMat;
 // [animate, duration, interval, trailLength],
 void main() {
-  float opacity = styleMappingMat[0][0];
   float animateSpeed = 0.0; // 运动速度
-  float d_distance_ratio = styleMappingMat[3].r; // 当前点位距离占线总长的比例
+  float d_distance_ratio = v_texture_data.r; // 当前点位距离占线总长的比例
   gl_FragColor = v_color;
   // anti-alias
   // float blur = 1.0 - smoothstep(u_blur, 1., length(v_normal.xy));
-  gl_FragColor.a *= opacity; // 全局透明度
   if(u_animate.x == Animate) {
       animateSpeed = u_time / u_animate.y;
        float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_animate.z)* (1.0/ u_animate.z) + animateSpeed);
@@ -40,23 +37,20 @@ void main() {
   }
 
   if(u_line_texture == LineTexture) { // while load texture
-    float aDistance = styleMappingMat[3].g;      // 当前顶点的距离
-    float d_texPixelLen = styleMappingMat[3].b;  // 贴图的像素长度，根据地图层级缩放
+    float aDistance = v_texture_data.g;      // 当前顶点的距离
+    float d_texPixelLen = v_texture_data.b;  // 贴图的像素长度，根据地图层级缩放
     float u = fract(mod(aDistance, d_texPixelLen)/d_texPixelLen - animateSpeed);
-    float v = styleMappingMat[3].a;  // 线图层贴图部分的 v 坐标值
+    float v = v_texture_data.a;  // 线图层贴图部分的 v 坐标值
 
     // v = max(smoothstep(0.95, 1.0, v), v);
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
-    
-    // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, vec2(u, v)));
-    // gl_FragColor = filterColor(gl_FragColor + texture2D(u_texture, uv));
      vec4 pattern = texture2D(u_texture, uv);
 
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
       gl_FragColor += pattern;
     } else { // replace
-        pattern.a *= opacity;
+        pattern.a *= v_color.a;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
         }
@@ -64,15 +58,17 @@ void main() {
     }
   } 
 
-  float v = styleMappingMat[3].a;
+  float v = v_texture_data.a;
   float borderWidth = min(0.5, u_borderWidth);
   // 绘制 border
   if(borderWidth > 0.01) {
-    float borderOuterWidth = borderWidth/2.0;
+    float borderOuterWidth = borderWidth / 2.0;
+
 
     if(v >= 1.0 - borderWidth || v <= borderWidth) {
-      if(v > borderWidth) {
+      if(v > borderWidth) { // 外侧
         float linear = smoothstep(0.0, 1.0, (v - (1.0 - borderWidth))/borderWidth);
+        //  float linear = step(0.0, (v - (1.0 - borderWidth))/borderWidth);
         gl_FragColor.rgb = mix(gl_FragColor.rgb, u_borderColor.rgb, linear);
       } else if(v <= borderWidth) {
         float linear = smoothstep(0.0, 1.0, v/borderWidth);
@@ -88,7 +84,7 @@ void main() {
   }
 
   // blur
-  float blurV = styleMappingMat[3][3];
+  float blurV = v_texture_data.a;
   if(blurV < 0.5) {
     gl_FragColor.a *= mix(u_blur.r, u_blur.g, blurV/0.5);
   } else {

@@ -177,7 +177,7 @@ export default class ThreeJSLayer
     );
     const config = this.getLayerConfig();
     if (config && config.onAddMeshes) {
-      config.onAddMeshes(this.scene, this);
+      await config.onAddMeshes(this.scene, this);
     }
   }
   public renderModels() {

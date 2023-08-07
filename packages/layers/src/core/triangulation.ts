@@ -144,6 +144,140 @@ export function LineTriangulation(feature: IEncodeFeature) {
   };
 }
 
+export function FlowLineFillTriangulation(feature: IEncodeFeature) {
+  // @ts-ignore
+  const coord = (feature.coordinates as Array<[number, number]>).flat();
+  const tin = 1;
+  const tout = 1.0;
+  return {
+    vertices: [
+      1,
+      0,
+      0,
+      ...coord, // 0
+      1,
+      2,
+      -3,
+      ...coord, // 1
+      1,
+      1,
+      -3,
+      ...coord, // 2
+      0,
+      1,
+      0,
+      ...coord, // 3
+      0,
+      0,
+      0,
+      ...coord, // 4
+      1,
+      0,
+      0,
+      ...coord, // 0
+      1,
+      2,
+      -3,
+      ...coord, // 1
+      1,
+      1,
+      -3,
+      ...coord, // 2
+      0,
+      1,
+      0,
+      ...coord, // 3
+      0,
+      0,
+      0,
+      ...coord, // 4
+    ],
+    normals: [
+      -tin,
+      2 * tout,
+      1, // 0
+      2 * tout,
+      -tout,
+      1, // 1
+      tout,
+      -tout,
+      1, // 2
+      tout,
+      -tout,
+      1, // 3
+      -tin,
+      -tout,
+      1, // 4
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    indices: [0, 1, 2, 0, 2, 3, 0, 3, 4, 5, 6, 7, 5, 7, 8, 5, 8, 9],
+    size: 7,
+  };
+}
+export function FlowLineStrokeTriangulation(feature: IEncodeFeature) {
+  // @ts-ignore
+  const coord = (feature.coordinates as Array<[number, number]>).flat();
+  const tin = 1;
+  const tout = 1;
+  return {
+    vertices: [
+      1,
+      0,
+      0,
+      ...coord, // 0
+      1,
+      2,
+      -3,
+      ...coord, // 1
+      1,
+      1,
+      -3,
+      ...coord, // 2
+      0,
+      1,
+      0,
+      ...coord, // 3
+      0,
+      0,
+      0,
+      ...coord, // 4
+    ],
+    normals: [
+      -tin,
+      2 * tout,
+      1, // 0
+      2 * tout,
+      -tout,
+      1, // 1
+      tout,
+      -tout,
+      1, // 2
+      tout,
+      -tout,
+      1, // 3
+      -tin,
+      -tout,
+      1, // 4
+    ],
+    indices: [0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
+    size: 7,
+  };
+}
+
 export function SimpleLineTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const pos: any[] = [];

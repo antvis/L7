@@ -1,11 +1,19 @@
-import { GaodeMap, IControlOption, Logo, Scale, Scene, Zoom } from '@antv/l7';
-import React, { FunctionComponent, useEffect, useRef } from 'react';
+import {
+  GaodeMap,
+  IControlOption,
+  Logo,
+  MouseLocation,
+  Scale,
+  Scene,
+} from '@antv/l7';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 
 const Demo: FunctionComponent = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scene, setScene] = useState<Scene | null>(null);
+  const [controlList, setControlList] = useState<MouseLocation[]>([]);
 
   useEffect(() => {
-    const scene = new Scene({
+    const newScene = new Scene({
       id: 'map',
       map: new GaodeMap({
         style: 'dark',
@@ -13,27 +21,27 @@ const Demo: FunctionComponent = () => {
         pitch: 0,
         zoom: 6.45,
       }),
-      // logoVisible: false,
+      logoVisible: false,
     });
+    setScene(newScene);
 
-    scene.on('loaded', () => {
+    newScene.on('loaded', () => {
       function createTestControl(position: IControlOption['position']) {
-        scene.addControl(
-          new Zoom({
-            position,
-          }),
-        );
-        scene.addControl(
-          new Scale({
-            position,
-          }),
-        );
-
-        scene.addControl(
+        newScene.addControl(
           new Logo({
             position,
           }),
         );
+        newScene.addControl(
+          new Scale({
+            position,
+          }),
+        );
+        const mouseLocation = new MouseLocation({
+          position,
+        });
+        newScene.addControl(mouseLocation);
+        setControlList((list) => [...list, mouseLocation]);
       }
 
       createTestControl('topleft');
@@ -51,18 +59,26 @@ const Demo: FunctionComponent = () => {
       createTestControl('rightcenter');
       createTestControl('bottomcenter');
 
-      if (containerRef.current) {
-        scene.addControl(
-          new Logo({
-            position: containerRef.current,
-          }),
-        );
-      }
+      // if (containerRef.current) {
+      //   scene.addControl(
+      //     new Logo({
+      //       position: containerRef.current,
+      //     }),
+      //   );
+      // }
     });
   }, []);
   return (
     <>
-      <div ref={containerRef} />
+      <div>
+        <button
+          onClick={() =>
+            controlList.forEach((zoom) => scene?.removeControl(zoom))
+          }
+        >
+          MouseLocation 消失术
+        </button>
+      </div>
       <div
         id="map"
         style={{

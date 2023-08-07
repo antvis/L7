@@ -8,7 +8,7 @@ import TileLayer from '../tile/tileLayer/BaseLayer';
 @injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
   private async build(layer: ILayer) {
-    // 更新Model 配置项
+    // 更新Model 配置项 style options
     layer.prepareBuildModel();
     // 初始化 Model
     await layer.buildModels();
@@ -22,7 +22,7 @@ export default class LayerModelPlugin implements ILayerPlugin {
 
   public async prepareLayerModel(layer: ILayer) {
     await this.build(layer);
-    // layer.layerModelNeedUpdate = false;
+    layer.styleNeedUpdate = false;
   }
 
   public apply(layer: ILayer) {

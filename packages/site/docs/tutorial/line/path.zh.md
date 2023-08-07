@@ -69,12 +69,12 @@ layer.size(2); // 绘制宽度为 2 的路径
 ```
 ### style
 
-<embed src="@/docs/api/line_layer/features/linear.zh.md"></embed>
+<embed src="@/docs/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/dash.zh.md"></embed>
+<embed src="@/docs/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/border.zh.md"></embed>
+<embed src="@/docs/common/features/border.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/texture.zh.md"></embed>
+<embed src="@/docs/common/features/texture.zh.md"></embed>
 
-<embed src="@/docs/api/line_layer/features/animate.zh.md"></embed>
+<embed src="@/docs/common/features/animate.zh.md"></embed>

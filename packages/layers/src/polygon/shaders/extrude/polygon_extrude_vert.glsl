@@ -11,50 +11,31 @@ attribute float a_Size;
 attribute vec3 a_uvs;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
+uniform float u_linearColor: 0;
+
+uniform float u_topsurface: 1.0;
+uniform float u_sidesurface: 1.0;
 
 varying vec4 v_Color;
 uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_raisingHeight: 0.0;
-uniform float u_opacity: 1.0;
-varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
-
-#pragma include "styleMapping"
-#pragma include "styleMappingCalOpacity"
 
 #pragma include "projection"
 #pragma include "light"
 #pragma include "picking"
 
 void main() {
-  // cal style mapping - 数据纹理映射部分的计算
-  styleMappingMat = mat4(
-    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - isSide
-    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0  // sidey
-  );
-  styleMappingMat[0][3] = a_Position.z;
-  styleMappingMat[3][0] = a_uvs[2];
-
-  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
-  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
-  float columnWidth = 1.0/columnCount;  // 列宽
-  float rowHeight = 1.0/rowCount;       // 行高
-  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
-  float id = a_vertexId; // 第n个顶点
-  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
-  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
-  
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
-  // 按顺序从 cell 中取值、若没有则自动往下取值
-  float textureOffset = 0.0; // 在 cell 中取值的偏移量
-
-  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][0] = opacityAndOffset.r;
-  textureOffset = opacityAndOffset.g;
-  // cal style mapping - 数据纹理映射部分的计算
+ 
+  float isSide = a_Position.z;
+ float topU = a_uvs[0];
+ float topV = 1.0 - a_uvs[1];
+ float sidey = a_uvs[2];
 
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
+  float lightWeight = calc_lighting(pos);
+
   vec4 project_pos = project_position(pos);
 
   if(u_heightfixed > 0.0) { // 判断几何体是否固定高度
@@ -68,10 +49,7 @@ void main() {
     }
   }
 
-  // project_pos.z += 500000.0; // amap1
 
-  // project_pos.z += (500000.0 * 4.0)/pow(2.0, 21.0 - u_Zoom); // mapbox
-  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     // gl_Position = u_Mvp * (vec4(project_pos.xyz * vec3(1.0, 1.0, -1.0), 1.0));
@@ -80,11 +58,27 @@ void main() {
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   }
 
-  float lightWeight = calc_lighting(pos);
-  // v_Color = a_Color;
-  v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w);
+  // Tip: 部分机型 GPU 计算精度兼容
+  if(isSide < 0.999) {
+    // side face
+    // if(u_sidesurface < 1.0) {
+    //   discard;
+    // }
 
-  styleMappingMat[3][1] = lightWeight;
+    if(u_linearColor == 1.0) {
+      vec4 linearColor = mix(u_targetColor, u_sourceColor, sidey);
+      linearColor.rgb *= lightWeight;
+      v_Color = linearColor;
+    } else {
+      v_Color = a_Color;
+    }
+
+  } else {
+    v_Color = a_Color;
+  }
+
+  v_Color = vec4(v_Color.rgb * lightWeight, v_Color.w * opacity);
+
 
   setPickingColor(a_PickingColor);
 }

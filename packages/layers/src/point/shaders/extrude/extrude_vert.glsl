@@ -16,14 +16,17 @@ uniform float u_r;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 varying vec4 v_color;
+varying float v_lightWeight;
+varying float v_barLinearZ;
 
 uniform float u_opacity : 1;
 uniform float u_lightEnable: 1;
+uniform float u_opacitylinear: 0.0;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
+uniform float u_opacitylinear_dir: 1.0;
+uniform float  u_linearColor: 0.0;
 
-varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
-
-#pragma include "styleMapping"
-#pragma include "styleMappingCalOpacity"
 
 #pragma include "projection"
 #pragma include "light"
@@ -47,37 +50,11 @@ float getXRadian(float y, float r) {
 
 void main() {
 
-  // cal style mapping - 数据纹理映射部分的计算
-  styleMappingMat = mat4(
-    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
-    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA - lightWeight
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1] - linearZ(垂直方向 0 - 1 的值)
-    0.0, 0.0, 0.0, 0.0
-  );
 
-  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
-  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
-  float columnWidth = 1.0/columnCount;  // 列宽
-  float rowHeight = 1.0/rowCount;       // 行高
-  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
-  float id = a_vertexId; // 第n个顶点
-  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
-  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
-  
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
-  // 按顺序从 cell 中取值、若没有则自动往下取值
-  float textureOffset = 0.0; // 在 cell 中取值的偏移量
-
-  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][0] = opacityAndOffset.r;
-  textureOffset = opacityAndOffset.g;
-  // cal style mapping - 数据纹理映射部分的计算
   vec3 size = a_Size * a_Position;
 
-  // a_Position.z 是在构建网格的时候传入的标准值 0 - 1，在插值器插值可以获取 0～1 线性渐变的值
-  styleMappingMat[2][3] =  a_Position.z;
-
   vec3 offset = size; // 控制圆柱体的大小 - 从标准单位圆柱体进行偏移
+
   if(u_heightfixed < 1.0) { // 圆柱体不固定高度
     
     if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
@@ -100,14 +77,29 @@ void main() {
   // u_r 控制圆柱的生长
   vec4 pos = vec4(project_pos.xy + offset.xy, offset.z * u_r, 1.0);
 
-  // 圆柱光照效果
+  // // 圆柱光照效果
   float lightWeight = 1.0;
+
   if(u_lightEnable > 0.0) { // 取消三元表达式，增强健壮性
     lightWeight = calc_lighting(pos);
   }
-  styleMappingMat[1][3] = lightWeight;
 
-  v_color =vec4(a_Color.rgb * lightWeight, a_Color.w);
+  v_lightWeight = lightWeight;
+
+  v_color = a_Color;
+
+    // 设置圆柱的底色
+  if(u_linearColor == 1.0) { // 使用渐变颜色
+    v_color = mix(u_sourceColor, u_targetColor, a_Position.z);
+    v_color.a =  v_color.a * u_opacity;
+  } else {
+    v_color = vec4(a_Color.rgb * lightWeight, a_Color.w * u_opacity);
+  }
+
+    if(u_opacitylinear > 0.0) {
+    v_color.a *= u_opacitylinear_dir > 0.0 ? (1.0 - a_Position.z): a_Position.z;
+  }
+
 
   // gl_Position = project_common_position_to_clipspace(pos);
 

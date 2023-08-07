@@ -39,7 +39,7 @@ const pointData = {
       },
       geometry: {
         type: 'Point',
-        coordinates: [121.9375, 27.059125784374068],
+        coordinates: [125.9375, 24.059125784374068],
       },
     },
     {
@@ -63,7 +63,7 @@ const pointData = {
       },
       geometry: {
         type: 'Point',
-        coordinates: [107.22656249999999, 37.020098201368114],
+        coordinates: [110.22656249999999, 39.020098201368114],
       },
     },
   ],
@@ -81,56 +81,45 @@ export default () => {
     scene.on('loaded', () => {
       const pointLayer = new PointLayer({})
         .source(pointData)
-        .scale('size', {
-          type: 'identity',
-        })
-        .shape('name', 'text')
-        .size('size')
+      
+        .shape('circle')
+        .size(20)
         .active({
           color: 'red',
         })
-        .select(true)
-        .color('color')
+        .color('#111')
         .style({
-          strokeWidth: 1,
-          stroke: [
-            'name',
-            (name) => {
-              switch (name) {
-                case 'A':
-                  return '#fc8d59';
-
-                case 'B':
-                  return '#91cf60';
-                default:
-                  return '#ffffbf';
-              }
-            },
-          ], // 描边颜色
+          opacity: {
+            field: 'name',
+            value: [0.5,0.5,0.8,1]
+           },
+          // opacity:1,
+          strokeWidth: 3,
+          // stroke: '#f00',
+          stroke: {
+            field:'name',
+            value: ['red','yellow','blue','green']
+          }
         });
 
-      const pointlable = new PointLayer({})
-        .shape('name', 'text')
-        .source(pointData)
-        .size(24)
-        .color('#f00')
-        .style({
-          opacity: 1,
-          fontFamily: 'fangsong',
-          stroke: '#fff',
-          strokeWidth: 1,
-          padding: [0, 0],
-          textOffset: [0, 20],
-          textAllowOverlap: false,
-        });
+      // const pointlable = new PointLayer({})
+      //   .shape('name', 'text')
+      //   .source(pointData)
+      //   .size(24)
+      //   .color('#f00')
+      //   .style({
+      //     opacity: 1,
+      //     fontFamily: 'fangsong',
+      //     stroke: '#fff',
+      //     strokeWidth: 1,
+      //     padding: [0, 0],
+    
+      //     textAllowOverlap: false,
+      //   });
 
-      // scene.addLayer(pointLayer);
-      scene.addLayer(pointlable);
-      const drawer = new DrawLine(scene, {
-        distanceOptions: {},
-        // liveUpdate: true,
-      });
-      drawer.enable();
+      scene.addLayer(pointLayer);
+      // scene.addLayer(pointlable);
+      
     });
   }, []);
   return (

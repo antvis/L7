@@ -43,39 +43,6 @@ export default class ArcModel extends BaseModel {
       thetaOffset = 0.314,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
-    if (
-      this.dataTextureTest &&
-      this.dataTextureNeedUpdate({ opacity, thetaOffset })
-    ) {
-      this.judgeStyleAttributes({ opacity, thetaOffset });
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
-
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
@@ -95,12 +62,9 @@ export default class ArcModel extends BaseModel {
     }
 
     return {
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
-
-      u_thetaOffset: isNumber(thetaOffset) ? thetaOffset : 0.0,
+      u_thetaOffset: thetaOffset,
       // u_thetaOffset:  0.0,
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity: isNumber(opacity) ? opacity : 1,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
       u_line_type: lineStyleObj[lineType || 'solid'],
@@ -138,7 +102,6 @@ export default class ArcModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
-    this.dataTexture?.destroy();
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 

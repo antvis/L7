@@ -7,17 +7,17 @@ uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform float segmentNumber;
 varying vec4 v_color;
+varying float v_segmentIndex;
 
 uniform float u_lineDir: 1.0;
+uniform float u_opacity: 1.0;
 
 uniform float u_thetaOffset: 0.314;
+uniform vec4 u_sourceColor;
+uniform vec4 u_targetColor;
 
-uniform float u_opacity: 1.0;
-varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
 
-#pragma include "styleMapping"
-#pragma include "styleMappingCalOpacity"
-#pragma include "styleMappingCalThetaOffset"
+
 
 #pragma include "projection"
 #pragma include "project"
@@ -73,37 +73,6 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 void main() {
   v_color = a_Color;
 
-  // cal style mapping - 数据纹理映射部分的计算
-  styleMappingMat = mat4(
-    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
-    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1]
-    0.0, 0.0, 0.0, 0.0  // dataset 数据集
-  );
-
-  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
-  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
-  float columnWidth = 1.0/columnCount;  // 列宽
-  float rowHeight = 1.0/rowCount;       // 行高
-  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
-  float id = a_vertexId; // 第n个顶点
-  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
-  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
-  
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke -> thetaOffset... 
-  // 按顺序从 cell 中取值、若没有则自动往下取值
-  float textureOffset = 0.0; // 在 cell 中取值的偏移量
-
-  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][0] = opacityAndOffset.r;
-  textureOffset = opacityAndOffset.g;
-
-  vec2 thetaOffsetAndOffset = calThetaOffsetAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][1] = thetaOffsetAndOffset.r;
-  textureOffset = thetaOffsetAndOffset.g;
-  // cal style mapping - 数据纹理映射部分的计算
-
-  
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
   float segmentIndex = a_Position.x;
@@ -112,12 +81,8 @@ void main() {
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   float d_distance_ratio;
-
-   styleMappingMat[3].b = d_distance_ratio;
-
-  // styleMappingMat[0][1] - arcThetaOffset
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
-  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, styleMappingMat[0][1]), 0.0, 1.0));
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, u_thetaOffset), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, u_thetaOffset), 0.0, 1.0));
   // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   //unProjCustomCoord
   
@@ -125,11 +90,11 @@ void main() {
 
 
   float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
-  styleMappingMat[3].r = d_segmentIndex;
 
-  // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
+  v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
+  v_color.a *= u_opacity;
+
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    // gl_Position = u_Mvp * (vec4(curr.xy + offset, 0, 1.0));
     gl_Position = u_Mvp * (vec4(curr.xy + offset, 0, 1.0));
   } else {
     gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));

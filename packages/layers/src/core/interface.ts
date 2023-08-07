@@ -1,6 +1,11 @@
-import { IAnimateOption, IMapService, ITexture2D } from '@antv/l7-core';
+import {
+  IAnimateOption,
+  IMapService,
+  ITexture2D,
+  StyleAttributeField,
+  StyleAttributeOption,
+} from '@antv/l7-core';
 import { IColorRamp } from '@antv/l7-utils';
-import { styleOffset } from '../core/BaseModel';
 import { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
@@ -119,7 +124,7 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   };
   lightEnable: boolean;
 
-  offsets?: styleOffset;
+  offsets?: [number, number];
 
   unit?: SizeUnitType;
 
@@ -288,4 +293,17 @@ export interface IRasterTerrainLayerStyleOptions
   gScaler?: number;
   bScaler?: number;
   offset?: number;
+}
+
+export interface IFlowLineStyleOptions extends IBaseLayerStyleOptions {
+  gapWidth?: number;
+  offsets?: [number, number];
+  stroke?: string;
+  strokeOpacity?: number;
+  strokeWidth?: number;
+}
+
+export interface IStyleEncodeAttributeOptions {
+  field: StyleAttributeField;
+  values?: StyleAttributeOption;
 }

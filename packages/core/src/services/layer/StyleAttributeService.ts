@@ -1,4 +1,3 @@
-import { executeWorkerTask } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
@@ -6,7 +5,7 @@ import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
-import { ILayer, IWorkerOption } from './ILayerService';
+import { ILayer } from './ILayerService';
 import {
   IAttributeScale,
   IEncodeFeature,
@@ -15,7 +14,6 @@ import {
   IStyleAttributeInitializationOptions,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
-  IVertexAttributeDescriptor,
   Triangulation,
 } from './IStyleAttributeService';
 import StyleAttribute from './StyleAttribute';
@@ -69,6 +67,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
     }
 
     return attributeToUpdate;
+  }
+
+  public unRegisterStyleAttribute(name: string) {
+    const attributeIndex = this.attributes.findIndex(
+      (attribute) => attribute.name === name,
+    );
+    if (attributeIndex > -1) {
+      this.attributes.splice(attributeIndex, 1);
+    }
   }
 
   public updateScaleAttribute(scaleOption: IScaleOptions) {
@@ -204,79 +211,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
     }
   }
 
-  public createAttributesAndIndicesAscy(
-    features: IEncodeFeature[],
-    segmentNumber: number,
-    workerOptions: IWorkerOption,
-  ) {
-    // 每次创建的初始化化 LayerOut
-    this.featureLayout = {
-      sizePerElement: 0,
-      elements: [],
-    };
-
-    const descriptors = this.attributes
-      .map((attr) => {
-        attr.resetDescriptor();
-        return attr.descriptor;
-      })
-      .filter((d) => d);
-    const { modelType, ...restOptions } = workerOptions;
-
-    const { createAttribute, createBuffer, createElements } =
-      this.rendererService;
-    const attributes: {
-      [attributeName: string]: IAttribute;
-    } = {};
-    return new Promise((resolve, reject) => {
-      executeWorkerTask(modelType, {
-        // Tip: worker 不支持传递 function 函数
-        descriptors: this.getDescriptorsWithOutFunc(descriptors),
-        features,
-        segmentNumber,
-        ...restOptions,
-      })
-        .then((e) => {
-          e.descriptors.forEach(
-            (descriptor: IVertexAttributeDescriptor, attributeIdx: number) => {
-              if (descriptor) {
-                // IAttribute 参数透传
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { buffer, update, name, ...rest } = descriptor;
-
-                const vertexAttribute = createAttribute({
-                  // IBuffer 参数透传
-                  buffer: createBuffer(buffer),
-                  ...rest,
-                });
-                attributes[descriptor.name || ''] = vertexAttribute;
-
-                // 在 StyleAttribute 上保存对 VertexAttribute 的引用
-                this.attributes[attributeIdx].vertexAttribute = vertexAttribute;
-              }
-            },
-          );
-          this.featureLayout = e.featureLayout;
-          const elements = createElements({
-            data: e.indices,
-            type: gl.UNSIGNED_INT,
-            count: e.indices.length,
-          });
-          this.attributesAndIndices = {
-            attributes,
-            elements,
-            count: null,
-          };
-
-          resolve(this.attributesAndIndices);
-        })
-        .catch((err: Error) => {
-          console.warn(err);
-          reject(err);
-        });
-    });
-  }
-
   public createAttributesAndIndices(
     features: IEncodeFeature[],
     triangulation: Triangulation,
@@ -303,10 +237,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
     let verticesNum = 0;
     let vecticesCount = 0; // 在不使用 element 的时候记录顶点、图层所有顶点的总数
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const vertices: number[] = [];
     const indices: number[] = [];
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const normals: number[] = [];
     let size = 3;
     features.forEach((feature, featureIdx) => {
       // 逐 feature 进行三角化
@@ -318,8 +250,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
         indexes,
         count,
       } = this.triangulation(feature, segmentNumber);
-
       if (typeof count === 'number') {
+        // 顶点数
         vecticesCount += count;
       }
 
@@ -340,7 +272,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
       });
 
       verticesNum += verticesNumForCurrentFeature;
-      // 根据 position 顶点生成其他顶点数据
+      // 根据 position 顶点生成其他顶点数据 // color/size/ui
       for (
         let vertexIdx = 0;
         vertexIdx < verticesNumForCurrentFeature;
@@ -536,15 +468,5 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
     this.attributesAndIndices?.elements.destroy();
     this.attributes = [];
-  }
-
-  private getDescriptorsWithOutFunc(descriptors: IVertexAttributeDescriptor[]) {
-    return descriptors.map((d) => {
-      return {
-        buffer: d.buffer,
-        name: d.name,
-        size: d.size,
-      };
-    });
   }
 }

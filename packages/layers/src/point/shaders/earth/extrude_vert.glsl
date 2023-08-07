@@ -20,11 +20,10 @@ varying vec4 v_color;
 
 uniform float u_opacity : 1;
 uniform float u_lightEnable: 1;
+varying float v_lightWeight;
+varying float v_barLinearZ;
+// 用于将在顶点着色器中计算好的样式值传递给片元
 
-varying mat4 styleMappingMat; // 用于将在顶点着色器中计算好的样式值传递给片元
-
-#pragma include "styleMapping"
-#pragma include "styleMappingCalOpacity"
 
 #pragma include "projection"
 #pragma include "light"
@@ -48,35 +47,15 @@ float getXRadian(float y, float r) {
 
 void main() {
 
-  // cal style mapping - 数据纹理映射部分的计算
-  styleMappingMat = mat4(
-    0.0, 0.0, 0.0, 0.0, // opacity - strokeOpacity - strokeWidth - empty
-    0.0, 0.0, 0.0, 0.0, // strokeR - strokeG - strokeB - strokeA - lightWeight
-    0.0, 0.0, 0.0, 0.0, // offsets[0] - offsets[1] - linearZ(垂直方向 0 - 1 的值)
-    0.0, 0.0, 0.0, 0.0
-  );
-
-  float rowCount = u_cellTypeLayout[0][0];    // 当前的数据纹理有几行
-  float columnCount = u_cellTypeLayout[0][1]; // 当看到数据纹理有几列
-  float columnWidth = 1.0/columnCount;  // 列宽
-  float rowHeight = 1.0/rowCount;       // 行高
-  float cellCount = calCellCount(); // opacity - strokeOpacity - strokeWidth - stroke - offsets
-  float id = a_vertexId; // 第n个顶点
-  float cellCurrentRow = floor(id * cellCount / columnCount) + 1.0; // 起始点在第几行
-  float cellCurrentColumn = mod(id * cellCount, columnCount) + 1.0; // 起始点在第几列
   
-  // cell 固定顺序 opacity -> strokeOpacity -> strokeWidth -> stroke ... 
-  // 按顺序从 cell 中取值、若没有则自动往下取值
   float textureOffset = 0.0; // 在 cell 中取值的偏移量
 
-  vec2 opacityAndOffset = calOpacityAndOffset(cellCurrentRow, cellCurrentColumn, columnCount, textureOffset, columnWidth, rowHeight);
-  styleMappingMat[0][0] = opacityAndOffset.r;
   textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
   vec3 size = a_Size * a_Position;
 
   // a_Position.z 是在构建网格的时候传入的标准值 0 - 1，在插值器插值可以获取 0～1 线性渐变的值
-  styleMappingMat[2][3] =  a_Position.z;
+  v_barLinearZ =  a_Position.z;
 
   vec3 offset = size; // 控制圆柱体的大小 - 从标准单位圆柱体进行偏移
   if(u_heightfixed < 1.0) { // 圆柱体不固定高度
@@ -106,11 +85,17 @@ void main() {
   if(u_lightEnable > 0.0) { // 取消三元表达式，增强健壮性
     lightWeight = calc_lighting(pos);
   }
-  styleMappingMat[1][3] = lightWeight;
+  v_lightWeight = lightWeight;
+  // 设置圆柱的底色
+  if(u_linearColor == 1.0) { // 使用渐变颜色
+    v_color = mix(u_sourceColor, u_targetColor, barLinearZ);
+    v_color.rgb *= lightWeight;
+  } else { // 使用 color 方法传入的颜色
+     v_color = a_Color;
+  }
+  v_color.a *= u_opacity;
 
-  v_color =vec4(a_Color.rgb * lightWeight, a_Color.w);
-
-  
+    
   // 在地球模式下，将原本垂直于 xy 平面的圆柱调整姿态到适应圆的角度
   //旋转矩阵mx，创建绕x轴旋转矩阵
   float r = sqrt(a_Pos.z*a_Pos.z + a_Pos.x*a_Pos.x);

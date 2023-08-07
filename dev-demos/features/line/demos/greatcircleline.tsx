@@ -67,7 +67,7 @@ export default () => {
 
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
-      .size(1)
+      .size(5)
       .shape('greatcircle')
       .color('#f00')
       .style({
@@ -75,56 +75,6 @@ export default () => {
         // segmentNumber: 10,
         // thetaOffset: 0.5,
       });
-
-    source.on('update', () => {
-      // const midPoints = lineAtOffset(source, 0.3, 'arc', 'offset');
-      const midPoints = lineAtOffset(source, {
-        offset: 2 / 30,
-        shape: 'greatcircle',
-        // thetaOffset: 0.5,
-        mapVersion: scene.map.version,
-      });
-      const point = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source(midPoints, {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        })
-        .shape('circle')
-        .size(10)
-        .color('#ff0');
-      scene.addLayer(point);
-    });
-
-    (async () => {
-      // const midPoints = await lineAtOffsetAsyc(source, 0.1, 'arc', 'offset');
-      const midPoints = await lineAtOffsetAsyc(source, {
-        // offset: 12.681/30,
-        // offset: 12/31,
-        // offset: 48/186,
-        offset: 0.3,
-        shape: 'greatcircle',
-        // thetaOffset: 0.5,
-        mapVersion: scene.map.version,
-      });
-      const point = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source(midPoints, {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
-        })
-        .shape('circle')
-        .size(5)
-        .color('#0f0')
-        .style({
-          opacity: 0.8,
-        });
-      scene.addLayer(point);
-    })();
 
     scene.on('loaded', () => {
       scene.addLayer(layer);

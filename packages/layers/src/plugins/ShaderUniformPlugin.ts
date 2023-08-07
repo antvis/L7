@@ -38,7 +38,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     const version = this.mapService.version;
 
     let mvp = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; // default matrix (for gaode2.x)
-    let sceneCenterMKT = [0, 0];
+    let sceneCenterMercator = [0, 0];
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
       // @ts-ignore
       const offset = layer.getLayerConfig().tileOrigin;
@@ -51,7 +51,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         mvp = this.mapService.map.customCoords.getMVPMatrix();
         // mvp = amapCustomCoords.getMVPMatrix()
         // @ts-ignore
-        sceneCenterMKT = this.mapService.getCustomCoordCenter();
+        sceneCenterMercator = this.mapService.getCustomCoordCenter();
       }
 
       const { width, height } = this.rendererService.getViewportSize();
@@ -83,7 +83,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
             this.coordinateSystemService.getPixelsPerMeter(),
           // 坐标系是高德2.0的时候单独计算
           [CoordinateUniform.Mvp]: mvp,
-          u_SceneCenterMKT: sceneCenterMKT,
+          u_sceneCenterMercator: sceneCenterMercator,
           // 其他参数，例如视口大小、DPR 等
           u_ViewportSize: [width, height],
           u_ModelMatrix: this.cameraService.getModelMatrix(),

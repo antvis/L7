@@ -48,7 +48,7 @@ export default class AMapService extends AMapBaseService {
    * 用于 customCooords 数据的计算
    */
   public sceneCenter!: [number, number]; // 一般使用用户数据的第一个
-  public sceneCenterMKT!: [number, number]; // 莫卡托
+  public sceneCenterMercator!: [number, number]; // 莫卡托
 
   protected viewport: Viewport;
 
@@ -57,16 +57,18 @@ export default class AMapService extends AMapBaseService {
    */
   public setCustomCoordCenter(center: [number, number]) {
     this.sceneCenter = center;
-    this.sceneCenterMKT = amap2Project(...center);
+    this.sceneCenterMercator = amap2Project(...center);
   }
 
   public getCustomCoordCenter(): [number, number] {
-    return this.sceneCenterMKT;
+    return this.sceneCenterMercator;
   }
 
-  public lngLatToCoordByLayer(lnglat: number[], layerCenter: [number, number]) {
-    const center = layerCenter || this.sceneCenter;
-    const layerCenterFlat = amap2Project(...center);
+  public lngLatToCoordByLayer(
+    lnglat: number[],
+    layerCenterMercator: [number, number],
+  ) {
+    const layerCenterFlat = layerCenterMercator || this.sceneCenterMercator;
     const coord = this._sub(
       amap2Project(lnglat[0], lnglat[1]),
       layerCenterFlat,
@@ -78,21 +80,35 @@ export default class AMapService extends AMapBaseService {
     return coord;
   }
 
-  public lngLatToCoordsByLayer(
-    lnglatArray: number[][][] | number[][],
+  public coordToAMap2RelativeCoordinates(
+    lnglatArray: number[][][] | number[][] | number[],
     layerCenter: [number, number],
-  ): number[][][] | number[][] {
-    // @ts-ignore
-    return lnglatArray.map((lnglats) => {
-      if (typeof lnglats[0] === 'number') {
-        return this.lngLatToCoordByLayer(lnglats as number[], layerCenter);
-      } else {
-        // @ts-ignore
-        return lnglats.map((lnglat) => {
-          return this.lngLatToCoordByLayer(lnglat as number[], layerCenter);
-        });
-      }
-    });
+  ): number[][][] | number[][] | number[] {
+    const layerCenterMercator = amap2Project(layerCenter[0], layerCenter[1]);
+    if (typeof lnglatArray[0] === 'number') {
+      return this.lngLatToCoordByLayer(
+        lnglatArray as number[],
+        layerCenterMercator,
+      );
+    } else {
+      // @ts-ignore
+      return lnglatArray.map((lnglats) => {
+        if (Array.isArray(lnglats) && typeof lnglats[0] === 'number') {
+          return this.lngLatToCoordByLayer(
+            lnglats as number[],
+            layerCenterMercator,
+          );
+        } else {
+          // @ts-ignore
+          return lnglats.map((lnglat) => {
+            return this.lngLatToCoordByLayer(
+              lnglat as number[],
+              layerCenterMercator,
+            );
+          });
+        }
+      });
+    }
   }
 
   public setCoordCenter(center: [number, number]) {
@@ -111,7 +127,10 @@ export default class AMapService extends AMapBaseService {
       this.map.customCoords.setCenter(lnglat);
       this.setCustomCoordCenter(lnglat);
     }
-    return this._sub(amap2Project(lnglat[0], lnglat[1]), this.sceneCenterMKT);
+    return this._sub(
+      amap2Project(lnglat[0], lnglat[1]),
+      this.sceneCenterMercator,
+    );
   }
 
   /**

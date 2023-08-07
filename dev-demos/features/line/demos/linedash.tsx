@@ -1,14 +1,14 @@
 // @ts-ignore
 import { LineLayer, PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMapV1 } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMapV1({
+      map: new GaodeMap({
         center: [116.3956, 39.9392],
         zoom: 10,
         style:'light'
@@ -31,69 +31,21 @@ export default () => {
             .active(true)
             .style({
               // lineType: 'dash',
-              // dashArray: [5, 5],
+              opacity:['标准名称',[0,0.5,0.6,1]],
+              dashArray: [5, 5],
             });
           scene.addLayer(layer);
-
-          const point = new PointLayer({})
-          .source([{ lng: 116.2, lat: 40 }], {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            }
-          })
-          .size(10)
-          .shape('circle')
-          .color('#5CCEA1');
-          scene.addLayer(point);
-
-          const debugService = scene.getDebugService();
          
-          layerAllLoad([layer, point], () => {
-            // console.log('debugService id type', debugService.getLog())
-            // console.log('debugService id type', debugService.getLog(layer.id))
-            // console.log('debugService id type', debugService.getLog('map'))
-            console.log('debugService id type', debugService.getLog([layer.id, point.id]))
-            // console.log('debugService id type', debugService.getLog([layer.id]))
-          })
-         
-          function layerAllLoad(layers: any[], callback: () => void) {
-            let count = 0;
-            layers.forEach(l => {
-              l.on('inited', () => {
-                console.log('***');
-                
-                count++;
-                if(count === layers.length) {
-                  setTimeout(() => {
-                    callback();
-                  }, 100)
-                  // callback();
-                }
-              })
-            })
-          }
-          // setTimeout(()=>{
-          //   console.log('lostContext test')
-          //   scene.on('webglcontextlost', () => {
-          //     console.log('webglcontextlost');
-          //   })
-          //   // scene.lostContext();
-          // },3000)
+          setTimeout(() => {
+            console.log('update1111');
+            layer.style({
+              opacity:1,
+              lineType: 'dash',
+              dashArray: [5, 5]
+            });
+            scene.render();
+          },2000)
 
-          // setTimeout(()=>{
-          // },3000)
-        //   debugService.renderDebug(true);
-
-        //     debugService.on('renderEnd', (renderInfo) => {
-        //       console.log('renderEnd', renderInfo);
-        //     })
-
-
-        //     setTimeout(() => {
-        //       debugService.renderDebug(false);
-        //     }, 200)
         });
     });
   }, []);

@@ -102,11 +102,13 @@ export function extrude_PolygonNormal(
   const normals = [];
   // 设置顶部z值 position uv
   for (let j = 0; j < vertices.length / dimensions; j++) {
-    if (dimensions === 2) {
-      positions.push(vertices[j * 2], vertices[j * 2 + 1], 1, -1, -1);
-    } else {
-      positions.push(vertices[j * 3], vertices[j * 3 + 1], 1, -1, -1);
-    }
+    positions.push(
+      vertices[j * dimensions], // x
+      vertices[j * dimensions + 1], // y
+      1, // z
+      -1, // 顶部uv
+      -1, // 顶部uv
+    );
     normals.push(0, 0, 1);
   }
   const triangles = earcut(
@@ -115,6 +117,7 @@ export function extrude_PolygonNormal(
     flattengeo.dimensions,
   );
   indexArray.push(...triangles);
+  // 设置侧面
   for (let i = 0; i < n; i++) {
     const prePoint = flattengeo.vertices.slice(
       i * dimensions,
@@ -128,6 +131,7 @@ export function extrude_PolygonNormal(
       nextPoint = flattengeo.vertices.slice(0, dimensions);
     }
     const indexOffset = positions.length / 5;
+    // 侧面四顶点
     positions.push(
       prePoint[0],
       prePoint[1],
@@ -137,8 +141,8 @@ export function extrude_PolygonNormal(
       nextPoint[0],
       nextPoint[1],
       1,
-      0.1,
-      0,
+      0.1, // 侧面 低uv
+      0, // 侧面低 uv
       prePoint[0],
       prePoint[1],
       0,

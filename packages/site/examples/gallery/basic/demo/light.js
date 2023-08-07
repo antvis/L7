@@ -33,7 +33,7 @@ scene.on('loaded', () => {
           ]
         })
         .size('sum', sum => {
-          return sum * 1000000;
+          return sum * 10;
         })
         .shape('hexagonColumn')
         .style({

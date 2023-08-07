@@ -9,6 +9,8 @@ import { dataTypeMap, usageMap } from './constants';
 export default class ReglBuffer implements IBuffer {
   private buffer: regl.Buffer;
 
+  private isDestroyed: boolean = false;
+
   constructor(reGl: regl.Regl, options: IBufferInitializationOptions) {
     const { data, usage, type } = options;
     this.buffer = reGl.buffer({
@@ -24,7 +26,10 @@ export default class ReglBuffer implements IBuffer {
   }
 
   public destroy() {
-    this.buffer.destroy();
+    if (!this.isDestroyed) {
+      this.buffer.destroy();
+    }
+    this.isDestroyed = true;
   }
 
   public subData({

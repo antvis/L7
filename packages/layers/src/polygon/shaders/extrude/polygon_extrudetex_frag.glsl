@@ -8,19 +8,21 @@ uniform float u_topsurface: 1.0;
 uniform float u_sidesurface: 1.0;
 
 varying vec4 v_Color;
-varying mat4 styleMappingMat; // 传递从片元中传递的映射数据
+varying vec3 v_uvs;
+varying vec2 v_texture_data;
+
+
 #pragma include "picking"
 
 void main() {
-  float opacity = styleMappingMat[0][0];
-  float isSide = styleMappingMat[0][3];
-  float lightWeight = styleMappingMat[3][1];
-  float topU = styleMappingMat[2][2];
-  float topV = styleMappingMat[2][3];
-
-  float sidey = styleMappingMat[3][0];
+  float opacity = u_opacity;
+  float isSide = v_texture_data.x;
+  float lightWeight = v_texture_data.y;
+  float topU = v_uvs[0];
+  float topV = 1.0 - v_uvs[1];
+  float sidey = v_uvs[2];
   // Tip: 部分机型 GPU 计算精度兼容
-  if(isSide < 0.999) {
+  if(isSide < 0.999) {// 是否是边缘
     // side face
     if(u_sidesurface < 1.0) {
       discard;
@@ -41,6 +43,7 @@ void main() {
     }
 
     gl_FragColor = texture2D(u_texture, vec2(topU, topV));
+    // gl_FragColor = vec4(1.0, 0., 0., 1.0);
   }
   
 

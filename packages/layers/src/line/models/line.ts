@@ -9,7 +9,6 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import {
   ILineLayerStyleOptions,
@@ -42,7 +41,7 @@ export default class LineModel extends BaseModel {
   });
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
+      // opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -82,40 +81,8 @@ export default class LineModel extends BaseModel {
       useLinearColor = 1;
     }
 
-    if (this.dataTextureTest && this.dataTextureNeedUpdate({ opacity })) {
-      this.judgeStyleAttributes({ opacity });
-      const encodeData = this.layer.getEncodedData();
-      const { data, width, height } = this.calDataFrame(
-        this.cellLength,
-        encodeData,
-        this.cellProperties,
-      );
-
-      this.rowCount = height; // 当前数据纹理有多少行
-
-      this.dataTexture =
-        this.cellLength > 0 && data.length > 0
-          ? this.createTexture2D({
-              flipY: true,
-              data,
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width,
-              height,
-            })
-          : this.createTexture2D({
-              flipY: true,
-              data: [1],
-              format: gl.LUMINANCE,
-              type: gl.FLOAT,
-              width: 1,
-              height: 1,
-            });
-    }
     return {
-      u_dataTexture: this.dataTexture, // 数据纹理 - 有数据映射的时候纹理中带数据，若没有任何数据映射时纹理是 [1]
-      u_cellTypeLayout: this.getCellTypeLayout(),
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      // u_opacity: isNumber(opacity) ? opacity : 1,
       u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
       u_line_type: lineStyleObj[lineType],
       u_dash_array: dashArray,
@@ -150,6 +117,7 @@ export default class LineModel extends BaseModel {
       u_arrowHeight: arrow.arrowHeight || 3,
       u_arrowWidth: arrow.arrowWidth || 2,
       u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
+      ...this.getStyleAttribute(),
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -173,16 +141,12 @@ export default class LineModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
-    this.dataTexture?.destroy();
     this.iconService.off('imageUpdate', this.updateTexture);
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const {
-      depth = false,
-      workerEnabled = false,
-      enablePicking,
-    } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { depth = false } =
+      this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     // console.log(frag)
     this.layer.triangulation = LineTriangulation;
@@ -191,14 +155,8 @@ export default class LineModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       triangulation: LineTriangulation,
+      inject: this.getInject(),
       depth: { enable: depth },
-
-      workerEnabled,
-      workerOptions: {
-        modelType: 'line' + type,
-        enablePicking,
-        iconMap: this.iconService.getIconMap(),
-      },
     });
     return [model];
   }
