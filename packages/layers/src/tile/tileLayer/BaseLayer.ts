@@ -73,7 +73,7 @@ export default class BaseTileLayer {
 
     // 图层不可见时，不触发加载瓦片
     if (this.parent.isVisible() === false) {
-      return
+      return;
     }
 
     const { latLonBounds, zoom } = this.getCurrentView();
@@ -83,7 +83,7 @@ export default class BaseTileLayer {
   protected mapchange = () => {
     // 图层不可见时，不触发加载瓦片
     if (this.parent.isVisible() === false) {
-      return
+      return;
     }
 
     const { latLonBounds, zoom } = this.getCurrentView();
