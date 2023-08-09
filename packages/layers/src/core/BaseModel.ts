@@ -302,6 +302,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     };
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       if (!this.layer.encodeStyleAttribute[key]) {
+        // 没有设置样式映射
         // @ts-ignore
         const keyValue = this.layer.getLayerConfig()[key];
 

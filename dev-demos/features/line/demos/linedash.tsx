@@ -36,15 +36,15 @@ export default () => {
             });
           scene.addLayer(layer);
          
-          setTimeout(() => {
-            console.log('update1111');
-            layer.style({
-              opacity:1,
-              lineType: 'dash',
-              dashArray: [5, 5]
-            });
-            scene.render();
-          },2000)
+          // setTimeout(() => {
+          //   console.log('update1111');
+          //   layer.style({
+          //     opacity:1,
+          //     // lineType: 'dash',
+          //     dashArray: [5, 5]
+          //   });
+          //   scene.render();
+          // },2000)
 
         });
     });
