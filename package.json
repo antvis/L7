@@ -216,10 +216,6 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "browserslist": [
-    "last 2 version",
-    "Firefox ESR"
-  ],
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
