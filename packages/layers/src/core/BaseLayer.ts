@@ -739,7 +739,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (
         // 需要数据映射
         [
-          this.enableShaderEncodeStyles,
+          ...this.enableShaderEncodeStyles,
           ...this.enableDataEncodeStyles,
         ].includes(key) &&
         isPlainObject(options[key]) &&
