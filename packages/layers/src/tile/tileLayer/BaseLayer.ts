@@ -71,10 +71,21 @@ export default class BaseTileLayer {
       this.initedTileset = true;
     }
 
+    // 图层不可见时，不触发加载瓦片
+    if (this.parent.isVisible() === false) {
+      return;
+    }
+
     const { latLonBounds, zoom } = this.getCurrentView();
     this.tilesetManager?.update(zoom, latLonBounds);
   }
+
   protected mapchange = () => {
+    // 图层不可见时，不触发加载瓦片
+    if (this.parent.isVisible() === false) {
+      return;
+    }
+
     const { latLonBounds, zoom } = this.getCurrentView();
 
     if (this.mapService.version === 'GAODE1.x') {
@@ -99,6 +110,7 @@ export default class BaseTileLayer {
 
     this.tilesetManager?.throttleUpdate(zoom, latLonBounds);
   };
+
   protected getCurrentView() {
     const bounds = this.mapService.getBounds();
     const latLonBounds: [number, number, number, number] = [

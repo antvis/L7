@@ -16,9 +16,9 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 
 - Map 独立地图引擎，不需要底图、或者加载地图瓦片服务，不需要 Token
 
-- 高德地图 国内业务场景 合规中国地图 从 2.11.0 版本起 GaodeMap 默认指向 高德 2.0 版本需要注册 Token
+- 高德地图  GaodeMap 默认指向  [Token](https://lbs.amap.com/api/javascript-api/guide/abc/prepare)
 
-- MapBox 国际业务， 需要注册 oken
+- MapBox 国际业务， 需要注册 [Token]()
 
 ### import
 
