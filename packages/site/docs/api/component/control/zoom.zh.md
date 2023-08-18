@@ -29,12 +29,13 @@ scene.on('loaded', () => {
 
 ## 配置
 
-| 名称         | 说明                    | 类型                      |
-| ------------ | ----------------------- | ------------------------- |
-| zoomInText   | 放大按钮的展示内容      | `Element` \| `string` |
-| zoomInTitle  | 放大按钮的 `title` 属性 | `string`                  |
-| zoomOutText  | 缩小按钮的展示内容      | `Element` \| `string` |
-| zoomOutTitle | 缩小按钮的 `title` 属性 | `string`                  |
+| 名称         | 说明                                         | 类型                  |
+| ------------ | -------------------------------------------- | --------------------- |
+| zoomInText   | 放大按钮的展示内容                           | `Element` \| `string` |
+| zoomInTitle  | 放大按钮的 `title` 属性                      | `string`              |
+| zoomOutText  | 缩小按钮的展示内容                           | `Element` \| `string` |
+| zoomOutTitle | 缩小按钮的 `title` 属性                      | `string`              |
+| showZoom     | 是否展示地图当前实时 zoom 数值，默认向下取整 | `boolean`             |
 
 <embed src="@/docs/common/control/api.md"></embed>
 
