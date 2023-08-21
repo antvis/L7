@@ -370,21 +370,29 @@
   min-width: 130px;
 }
 .l7-control-zoom {
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
-  border-radius: 2px;
   overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
 }
 .l7-control-zoom .l7-button-control {
-  box-shadow: 0 0 0;
-  border-radius: 0;
   font-size: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 0;
+  box-shadow: 0 0 0;
 }
 .l7-control-zoom .l7-button-control .l7-iconfont {
   width: 14px;
   height: 14px;
 }
-.l7-control-zoom .l7-button-control:first-child {
-  border-bottom: 1px solid #f0f0f0;
+.l7-control-zoom .l7-button-control:last-child {
+  border-bottom: 0;
+}
+.l7-control-zoom .l7-control-zoom__number {
+  color: #595959;
+  padding: 0;
+}
+.l7-control-zoom .l7-control-zoom__number:hover {
+  background-color: #fff;
 }
 .l7-control-scale {
   display: flex;

@@ -8,6 +8,7 @@ export interface IZoomControlOption extends IControlOption {
   zoomInTitle: string;
   zoomOutText: DOM.ELType | string;
   zoomOutTitle: string;
+  showZoom: boolean;
 }
 
 export { Zoom };
@@ -16,6 +17,7 @@ export default class Zoom extends Control<IZoomControlOption> {
   private disabled: boolean;
   private zoomInButton: HTMLElement;
   private zoomOutButton: HTMLElement;
+  private zoomNumDiv: HTMLElement;
 
   public getDefault(option: Partial<IZoomControlOption>) {
     return {
@@ -26,6 +28,7 @@ export default class Zoom extends Control<IZoomControlOption> {
       zoomInTitle: 'Zoom in',
       zoomOutText: createL7Icon('l7-icon-narrow'),
       zoomOutTitle: 'Zoom out',
+      showZoom: false,
     };
   }
   public setOptions(newOptions: Partial<IZoomControlOption>) {
@@ -36,6 +39,7 @@ export default class Zoom extends Control<IZoomControlOption> {
         'zoomInTitle',
         'zoomOutText',
         'zoomOutTitle',
+        'showZoom',
       ])
     ) {
       this.resetButtonGroup(this.container);
@@ -94,6 +98,14 @@ export default class Zoom extends Control<IZoomControlOption> {
       container,
       this.zoomIn,
     );
+    if (this.controlOption.showZoom) {
+      this.zoomNumDiv = this.createButton(
+        '0',
+        '',
+        'l7-button-control l7-control-zoom__number',
+        container,
+      );
+    }
     this.zoomOutButton = this.createButton(
       this.controlOption.zoomOutText,
       this.controlOption.zoomOutTitle,
@@ -109,7 +121,7 @@ export default class Zoom extends Control<IZoomControlOption> {
     tile: string,
     className: string,
     container: HTMLElement,
-    fn: (...arg: any[]) => any,
+    fn?: (...arg: any[]) => any,
   ) {
     const link = DOM.create('button', className, container) as HTMLLinkElement;
     if (typeof html === 'string') {
@@ -118,7 +130,9 @@ export default class Zoom extends Control<IZoomControlOption> {
       link.append(html);
     }
     link.title = tile;
-    link.addEventListener('click', fn);
+    if (fn) {
+      link.addEventListener('click', fn);
+    }
     return link;
   }
 
@@ -128,6 +142,9 @@ export default class Zoom extends Control<IZoomControlOption> {
     this.zoomOutButton.removeAttribute('disabled');
     if (this.disabled || mapsService.getZoom() <= mapsService.getMinZoom()) {
       this.zoomOutButton.setAttribute('disabled', 'true');
+    }
+    if (this.controlOption.showZoom && this.zoomNumDiv) {
+      this.zoomNumDiv.innerText = String(Math.floor(mapsService.getZoom()));
     }
     if (this.disabled || mapsService.getZoom() >= mapsService.getMaxZoom()) {
       this.zoomInButton.setAttribute('disabled', 'true');

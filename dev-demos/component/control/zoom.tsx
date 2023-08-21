@@ -17,7 +17,9 @@ const Demo: FunctionComponent = () => {
     });
 
     newScene.on('loaded', () => {
-      const newControl = new Zoom();
+      const newControl = new Zoom({
+        showZoom: true,
+      });
       newScene.addControl(newControl);
       setControl(newControl);
     });
@@ -32,6 +34,7 @@ const Demo: FunctionComponent = () => {
             zoomInTitle: 'in',
             zoomOutText: '减',
             zoomOutTitle: 'out',
+            showZoom: undefined,
           });
         }}
       >
@@ -44,6 +47,7 @@ const Demo: FunctionComponent = () => {
             zoomInTitle: undefined,
             zoomOutText: undefined,
             zoomOutTitle: undefined,
+            showZoom: true,
           });
         }}
       >
