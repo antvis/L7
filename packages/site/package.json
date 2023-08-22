@@ -40,6 +40,7 @@
     "@antv/l7plot": "^0.3.3",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
+    "pmtiles": "^2.7.2",
     "antd": "^4.20.0",
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-transform-import-css-l7": "^0.0.6",
