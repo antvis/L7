@@ -4,8 +4,9 @@ import { Scene, PolygonLayer, PointLayer, Source } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 import * as pmtiles from "pmtiles";
-let protocol = new pmtiles.Protocol();
+const protocol = new pmtiles.Protocol();
 
+Scene.addProtocol('pmtiles',protocol.tile);
 export default () => {
   useEffect(() => {
     const scene = new Scene({
@@ -16,7 +17,6 @@ export default () => {
       }),
     });
 
-    scene.addProtocol('pmtiles',protocol.tile);
     const source = new Source('pmtiles://https://mdn.alipayobjects.com/afts/file/A*HYvHSZ-wQmIAAAAAAAAAAAAADrd2AQ/protomaps(vector)ODbL_firenze.bin', {
         parser: {
           type: 'mvt',

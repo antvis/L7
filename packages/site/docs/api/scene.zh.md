@@ -257,6 +257,7 @@ scene.removeMarkerLayer(markerLayer);
 scene.removeAllMarkers();
 ```
 ## 静态方法
+静态方法通过 Scene 类去调用，不是 scene 实例
 ### addProtocol
 添加自定义数据协议，设置一个自定义加载瓦片函数，当使用以自定义 URL 模式开头的数据时，该函数将被调用。
 -  protocol 协议名称
@@ -272,7 +273,7 @@ scene.removeAllMarkers();
 #### 自定义函数
 
 ```ts
-    scene.addProtocol('custom', (params, callback) => {
+    Scene.addProtocol('custom', (params, callback) => {
           fetch(`https://${params.url.split("://")[1]}`)
               .then(t => {
                   if (t.status == 200) {
@@ -289,7 +290,7 @@ scene.removeAllMarkers();
           return { cancel: () => { } };
       });
 // the following is an example of a way to return an error when trying to load a tile
-    scene.addProtocol('custom2', (params, callback) => {
+    Scene.addProtocol('custom2', (params, callback) => {
         callback(new Error('someErrorMessage'));
         return { cancel: () => { } };
     });
