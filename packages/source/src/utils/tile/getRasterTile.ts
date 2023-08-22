@@ -90,7 +90,7 @@ export const getTileImage = async (
       },
       cfg.transformResponse,
     );
-    tile.xhrCancel = () => xhr.abort();
+    tile.xhrCancel = () => xhr.cancel();
   });
 };
 

@@ -1,9 +1,16 @@
+import { SceneConifg } from './config';
 import { $window, $XMLHttpRequest } from './mini-adapter';
+
+export const getProtocolAction = (url: string) =>
+  SceneConifg.REGISTERED_PROTOCOLS[url.substring(0, url.indexOf('://'))];
 
 export interface ITileBand {
   url: string;
   bands: number[];
 }
+export type Cancelable = {
+  cancel: () => void;
+};
 
 export type RequestParameters = {
   url: string | string[] | ITileBand[];
@@ -109,6 +116,7 @@ function makeXMLHttpRequest(
       callback(new AJAXError(xhr.status, xhr.statusText, url.toString(), body));
     }
   };
+  xhr.cancel = xhr.abort;
   xhr.send(requestParameters.body);
 
   return xhr;
@@ -162,14 +170,18 @@ export const getJSON = (
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
 ) => {
-  return makeRequest({ ...requestParameters, type: 'json' }, callback);
+  const action =
+    getProtocolAction(requestParameters.url as string) || makeRequest;
+  return action({ ...requestParameters, type: 'json' }, callback);
 };
 
 export const getArrayBuffer = (
   requestParameters: RequestParameters,
   callback: ResponseCallback<ArrayBuffer>,
 ) => {
-  return makeRequest({ ...requestParameters, type: 'arrayBuffer' }, callback);
+  const action =
+    getProtocolAction(requestParameters.url as string) || makeRequest;
+  return action({ ...requestParameters, type: 'arrayBuffer' }, callback);
 };
 
 export const postData = (

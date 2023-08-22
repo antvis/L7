@@ -33,7 +33,13 @@ import {
 } from '@antv/l7-core';
 import { MaskLayer } from '@antv/l7-layers';
 import { ReglRendererService } from '@antv/l7-renderer';
-import { DOM, isMini, setMiniScene } from '@antv/l7-utils';
+import {
+  DOM,
+  IProtocolHandler,
+  isMini,
+  SceneConifg,
+  setMiniScene,
+} from '@antv/l7-utils';
 import { Container } from 'inversify';
 import BoxSelect, { BoxSelectEventList } from './boxSelect';
 import ILayerManager from './ILayerManager';
@@ -525,6 +531,19 @@ class Scene
 
   public disableBoxSelect() {
     this.boxSelect.disable();
+  }
+
+  // 数据协议
+  public static addProtocol(protocol: string, handler: IProtocolHandler) {
+    SceneConifg.REGISTERED_PROTOCOLS[protocol] = handler;
+  }
+
+  public static removeProtocol(protocol: string) {
+    delete SceneConifg.REGISTERED_PROTOCOLS[protocol];
+  }
+
+  public getProtocol(protocol: string): IProtocolHandler {
+    return SceneConifg.REGISTERED_PROTOCOLS[protocol];
   }
 
   // get current point size info

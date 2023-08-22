@@ -1,9 +1,10 @@
+import { getProtocolAction } from '../../ajax';
 import { tileToBounds } from './lonlat-tile';
 /*
  * 判断是否是一个合法的瓦片请求模版
  */
 export function isURLTemplate(s: string) {
-  return /(?=.*{z})(?=.*{x})(?=.*({y}|{-y}))/.test(s);
+  return /(?=.*{box})(?=.*{z})(?=.*{x})(?=.*({y}|{-y}))/.test(s);
 }
 
 /**
@@ -52,7 +53,10 @@ export function getURLFromTemplate(
 
   const urls = expandUrl(template);
   const index = Math.abs(x + y) % urls.length;
-  const url = urls[index];
+  // 兼容其他协议的 URL 模版
+  const url = getProtocolAction(urls[index])
+    ? `${urls[index]}/{z}/{x}/{y}`
+    : urls[index];
 
   return url
     .replace(/\{x\}/g, x.toString())
