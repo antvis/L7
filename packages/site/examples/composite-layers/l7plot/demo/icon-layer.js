@@ -1,6 +1,8 @@
 import { Scene, GaodeMap } from '@antv/l7';
 import { IconFontLayer } from '@antv/l7-composite-layers';
 
+// 详情可见：https://l7plot.antv.antgroup.com/api/composite-layers/icon-font-layer
+
 fetch('https://gw.alipayobjects.com/os/bmw-prod/9eb3f1b5-0c3b-49b2-8221-191d4ba8aa5e.json')
   .then((response) => response.json())
   .then((data) => {

@@ -1,6 +1,8 @@
 import { GaodeMapV2, LayerPopup, Scene } from '@antv/l7';
 import { FlowLayer } from '@antv/l7-composite-layers';
 
+// 详情可见：https://l7plot.antv.antgroup.com/api/composite-layers/flow-layer
+
 const scene = new Scene({
   id: 'map',
   map: new GaodeMapV2({
