@@ -10,6 +10,8 @@ import glsl from './rollup-plugin-glsl';
 import inlineWorker from './rollup-plugin-inline-worker';
 import postcss from 'rollup-plugin-postcss';
 import url from 'postcss-url';
+import replace from '@rollup/plugin-replace';
+const version = require('../packages/l7/package.json').version;
 
 const { BUILD, MINIFY } = process.env;
 const minified = MINIFY === 'true';
@@ -59,6 +61,10 @@ module.exports = [
       glsl(['**/*.glsl'], true),
       inlineWorker(['**/*.worker.js']),
       json(),
+      replace({
+        // 在这里定义全局变量及其值
+        'process.env.VERSION': JSON.stringify(version),
+      }),
       postcss({
         extract: false,
         plugins: [url({ url: 'inline' })],
