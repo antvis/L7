@@ -2,6 +2,7 @@
 export * from './ajax';
 export * from './anchor';
 export * from './color';
+export * from './config';
 export * from './cull';
 export * as DOM from './dom';
 export * from './env';

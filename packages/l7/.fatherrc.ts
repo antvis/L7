@@ -1,3 +1,4 @@
+const version = require('./package.json').version;
 export default {
   // more father 4 config: https://github.com/umijs/father-next/blob/master/docs/config.md
   esm: {
@@ -8,6 +9,9 @@ export default {
   },
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
+  },
+  define:{
+    'process.env.VERSION': JSON.stringify(version),
   },
   extraBabelPresets: [
     '@babel/preset-typescript'

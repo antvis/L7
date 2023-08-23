@@ -256,6 +256,80 @@ scene.removeMarkerLayer(markerLayer);
 ```javascript
 scene.removeAllMarkers();
 ```
+## 静态方法
+静态方法通过 Scene 类去调用，不是 scene 实例
+### addProtocol
+添加自定义数据协议，设置一个自定义加载瓦片函数，当使用以自定义 URL 模式开头的数据时，该函数将被调用。
+-  protocol 协议名称
+-  handler 数据处理回调函数
+    -  requestParameters: RequestParameters,
+        - url 瓦片 URL，携带瓦片行列号 x,y,z 
+    -  callback: ResponseCallback<any>) => Cancelable
+        - Cancelable： {
+            cancel: () => void;
+          };
+
+
+#### 自定义函数
+
+```ts
+    Scene.addProtocol('custom', (params, callback) => {
+          fetch(`https://${params.url.split("://")[1]}`)
+              .then(t => {
+                  if (t.status == 200) {
+                      t.arrayBuffer().then(arr => {
+                          callback(null, arr, null, null);
+                      });
+                  } else {
+                      callback(new Error(`Tile fetch error: ${t.statusText}`));
+                  }
+              })
+              .catch(e => {
+                  callback(new Error(e));
+              });
+          return { cancel: () => { } };
+      });
+// the following is an example of a way to return an error when trying to load a tile
+    Scene.addProtocol('custom2', (params, callback) => {
+        callback(new Error('someErrorMessage'));
+        return { cancel: () => { } };
+    });
+```
+
+#### 加载 PMTiles
+
+```ts
+import * as pmtiles from "pmtiles";
+const protocol = new pmtiles.Protocol();
+const scene = new Scene({
+      id: 'map',
+      map: new Map({
+        center: [11.2438, 43.7799],
+        zoom: 12,
+      }),
+    });
+
+    scene.addProtocol('pmtiles',protocol.tile);
+    const source = new Source('pmtiles://https://mdn.alipayobjects.com/afts/file/A*HYvHSZ-wQmIAAAAAAAAAAAAADrd2AQ/protomaps(vector)ODbL_firenze.bin', {
+        parser: {
+          type: 'mvt',
+          tileSize: 256,
+          maxZoom: 14,
+          extent: [-180, -85.051129, 179, 85.051129],
+        },
+      })
+
+
+```
+
+### removeProtocol
+  删除之前添加的协议
+  - name: 协议名称
+
+```ts
+ scene.removeProtocol('pmtiles',protocol.tile);
+```
+
 
 ## 地图方法
 
@@ -695,6 +769,7 @@ scene.on('loaded', () => {
 scene.on('resize', () => {}); // 地图容器大小改变事件
 ```
 
+
 ### 地图事件
 
 ```javascript
@@ -730,6 +805,8 @@ scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖
 
 scene.on('webglcontextlost', () => {}); // webgl 上下文丢失
 ```
+
+
 
 ## 实验参数
 

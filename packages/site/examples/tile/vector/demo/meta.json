@@ -39,6 +39,11 @@
       "filename": "geojson-vt.ts",
       "title": "GeoJSON-Vt",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*amqiQaYHIKYAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "pmtiles.ts",
+      "title": "pmtiles",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*ZEC8Q52nhn4AAAAAAAAAAAAADmJ7AQ/fmt.webp"
     }
   ]
 }

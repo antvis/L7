@@ -18,4 +18,5 @@ if (window) {
     window.reactDom = require('react-dom');
     window.antd = require('antd');
     window.gcoord = require('gcoord');
+    window.pmtiles = require('pmtiles');
 }

@@ -11,7 +11,6 @@ import { VectorTileLayer } from '@mapbox/vector-tile';
 import { Feature } from '@turf/helpers';
 import { IParserData, ITileSource } from '../interface';
 import VectorSource from '../source/vector';
-
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
   minZoom: 0,
@@ -64,7 +63,7 @@ const getVectorTile = async (
           }
         },
       );
-      tile.xhrCancel = () => xhr.abort();
+      tile.xhrCancel = () => xhr.cancel();
     }
   });
 };
