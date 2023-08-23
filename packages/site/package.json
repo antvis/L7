@@ -1,6 +1,7 @@
 {
+  "private": true,
   "name": "@antv/l7-site",
-  "version": "2.17.8",
+  "version": "2.17.10",
   "description": "L7 sites deployed on gh-pages",
   "keywords": [
     "antv",
@@ -39,7 +40,6 @@
     "@antv/l7plot": "^0.x",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
-    "pmtiles": "^2.7.2",
     "antd": "^4.20.0",
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-transform-import-css-l7": "^0.0.6",
@@ -50,6 +50,7 @@
     "geotiff": "^2.0.7",
     "gh-pages": "^2.1.1",
     "lerc": "^3.0.0",
+    "pmtiles": "^2.7.2",
     "popmotion": "^11.0.5",
     "read-markdown": "^1.0.2",
     "rollup": "^2.0.0",
