@@ -7,6 +7,7 @@ if (window) {
     window.l7 = require('@antv/l7');
     window.l7Maps = require('@antv/l7-maps');
     window.l7plot = require('@antv/l7plot');
+    window.l7CompositeLayers = require('@antv/l7-composite-layers');
     window.l7Draw = require('@antv/l7-draw');
     window.l7Three = require('@antv/l7-three');
     window.three = require('three');

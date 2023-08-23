@@ -37,6 +37,7 @@
     "@antv/dumi-theme-antv": "^0.3.16",
     "@antv/g2": "^4.2.8",
     "@antv/l7-draw": "^3.0.9",
+    "@antv/l7-composite-layers": "^0.15.0",
     "@antv/l7plot": "^0.x",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",

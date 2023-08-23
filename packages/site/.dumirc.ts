@@ -553,6 +553,15 @@ export default defineConfig({
         order: 7,
       },
       {
+        slug: 'composite-layers',
+        icon: 'map',
+        title: {
+          zh: '复合图层',
+          en: 'CompositeLayers',
+        },
+        order: 8,
+      },
+      {
         slug: 'component',
         icon: 'map',
         title: {
