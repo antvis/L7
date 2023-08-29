@@ -1,0 +1,2 @@
+- name: issue-metrics
+  uses: github/issue-metrics@v2.7.0
