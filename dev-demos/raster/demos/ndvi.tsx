@@ -1,10 +1,11 @@
-import { Scene, PolygonLayer, RasterLayer, LineLayer, Popup, GaodeMap } from '@antv/l7';
+import { Scene, PolygonLayer, RasterLayer, LineLayer, Popup, GaodeMap, project } from '@antv/l7';
 
 import * as GeoTIFF from 'geotiff';
 import React, { useEffect, useState } from 'react';
 import eachSeries from 'async/eachSeries';
 import asyncMap from 'async/mapLimit';
-import { Card } from 'antd';
+import { Card,Spin } from 'antd';
+import { Chart } from '@antv/g2';
 
 const ndviList = [
     {
@@ -74,6 +75,22 @@ const ndviList = [
     }
 ]
 
+async function  readTiffbyLngLat(tiffdata, lnglat) {
+    const [x ,y] = project([lnglat.lng,lnglat.lat])
+    const offset = [x-tiffdata.info.originX,y-tiffdata.info.originY];
+    const offsetPixel = [offset[0]/tiffdata.info.uWidth, offset[1]/tiffdata.info.uHeight];
+    const pixelX = Math.floor( tiffdata.info.width * offsetPixel[0] );
+    const pixelY = Math.floor( tiffdata.info.height * offsetPixel[1] );
+
+    const [ value ] = await tiffdata.image.readRasters( {
+        interleave: true,
+        window: [ pixelX, pixelY, pixelX + 1, pixelY + 1],
+        samples: [ 0 ]
+    } );
+
+    return value
+}
+
 async function getTiffData(url) {
     const response = await fetch(
         url);
@@ -82,19 +99,34 @@ async function getTiffData(url) {
     const image = await tiff.getImage();
     const width = image.getWidth();
     const height = image.getHeight();
+    const [ originX, originY ] = image.getOrigin();
+    const [ xSize, ySize ] = image.getResolution();
+    const uWidth = xSize * width;
+    const uHeight = ySize * height;
     const values = await image.readRasters();
     return {
         data: values[0],
-        width,
-        height,
-        image
+        info:{
+            width,
+            height,
+            originX,
+            originY,
+            xSize,
+            ySize,
+            uWidth,
+            uHeight,
+        },
+        image,
+        
     };
 }
 
 const googleUrl = 'https://www.google.com/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'
+const colors = ['#d73027', '#f46d43', '#fdae61', '#fee08b', '#d9ef8b', '#a6d96a', '#66bd63', '#1a9850'];
 
 export default () => {
     const [timestr,setTimeStr]= useState('20220301')
+    const [loading,setLoding] =useState(true)
     useEffect(() => {
       
         const scene = new Scene({
@@ -107,6 +139,11 @@ export default () => {
         });
 
         scene.on('loaded', async () => {
+            const chart = new Chart({
+                container: 'container',
+                autoFit: true,
+                height: 200,
+              })
             const google = new RasterLayer({
                 zIndex: 0,
             }).source(
@@ -159,8 +196,8 @@ export default () => {
                 .source(tiffdata.data, {
                     parser: {
                         type: 'raster',
-                        width: tiffdata.width,
-                        height: tiffdata.height,
+                        width: tiffdata.info.width,
+                        height: tiffdata.info.height,
                         extent: [-112.117293306503, 32.78212288135407, -111.77216057434428, 33.10568277278276]
                     }
                 })
@@ -172,7 +209,7 @@ export default () => {
                     rampColors: {
                         type: 'linear',
                         positions: [-0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1.0],// 数据需要换成 0-1
-                        colors: ['#d73027', '#f46d43', '#fdae61', '#fee08b', '#d9ef8b', '#a6d96a', '#66bd63', '#1a9850']
+                        colors: colors
 
                     }
                 });
@@ -182,10 +219,12 @@ export default () => {
                 const tiffdata = await getTiffData(item.value);
                 callback(null, {
                     name: item.name,
-                    data: tiffdata.data
+                    ...tiffdata 
                 })
 
             });
+
+            setLoding(false)
       
             const renderNDVI = (results) => {
                 eachSeries(results, async (item, callback) => {
@@ -205,11 +244,33 @@ export default () => {
 
             setTimeout(() => {
                 console.log('开始更新')
-                renderNDVI(results)
+                // renderNDVI(results)
 
             }, 5000);
 
-
+            scene.on('click',async (e)=>{
+                console.time('readTiffbyLngLat')
+               const list = await asyncMap(results, 3,async (item, callback) => {
+                    const value = await readTiffbyLngLat(item, e.lnglat);
+                    callback(null, {
+                        time: item.name,
+                        value
+                    })
+                })
+                console.timeEnd('readTiffbyLngLat')
+                chart.data(list);
+                chart.scale('value', {
+                    min: -0.5,
+                    max: 1,
+                  });
+                chart.line().position('time*value').shape('smooth');;
+                chart
+                 .point()
+                 .position('time*value')
+                 .color('value',colors)
+                 .shape('circle');
+                chart.render();
+            })
 
 
             //    scene.on('click',async ()=>{
@@ -232,6 +293,8 @@ export default () => {
 
     }, []);
     return (
+          <>
+          <Spin spinning={loading}  />
             <div
                 id="map"
                 style={{
@@ -241,8 +304,11 @@ export default () => {
             >
             <Card style={{ zIndex:10, width: 180, position:'absolute', top: '20px', right:'20px'}}>
             <strong>日期: {`${timestr.slice(0,4)}-${timestr.slice(4,6)}-${timestr.slice(6,8)}`}</strong>
-
-        </Card>
+            </Card>
+            <Card title="作物生长曲线"  style={{ zIndex:10, width: '100%', height:300, position:'absolute', bottom: '0',}}>
+            <div id="container"></div>
+            </Card>
         </div>
+        </>
     );
 };
