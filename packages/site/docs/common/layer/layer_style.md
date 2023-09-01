@@ -44,12 +44,6 @@ const layer = new PointLayer()
   .size({
     // 第一种写法 根据字段从 data 中直接取值
     opacity: 'v'// opacity = 0.5
-
-    // 第二种写法 根据字段从 data 中取值，同时通过回调函数赋值（通常会在回调函数中写业务逻辑）
-    opacity: ['v', (v: number) => v] // opacity = 0.5
-
-    // 第三种写法 根据字段取值，然后映射到设置的值区间
-    opaicty: ['v', [0.1, 0.5]] // opacity 的值字啊 0.1 ～ 0.5 之间
   }); 
 scene.addLayer(layer);
 ```

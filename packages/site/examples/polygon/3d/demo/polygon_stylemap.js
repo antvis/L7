@@ -40,8 +40,10 @@ scene.on('loaded', () => {
         .color('unit_price', colors)
         .size('unit_price', unit_price => unit_price * 50)
         .style({
-          opacity: [ 'unit_price', [ 0, 1 ]],
-          pickLight: true
+          opacity: {
+            field: 'unit_price',
+            value:[ 0, 1 ]
+          }
         })
         .active(true);
       scene.addLayer(filllayer);
