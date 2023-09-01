@@ -180,8 +180,8 @@ export default defineConfig({
       {
         logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-kafQrA1ky4AAAAAAAAAAAAADmJ7AQ/fmt.webp',
         title: {
-          zh: 'LarkMap 空间数据可视分析组件库',
-          en: 'LarkMap ',
+          zh: 'L7React 空间数据可视分析组件库',
+          en: 'L7React ',
         },
         description: {
           zh: '新一代 React 地图可视分析组件库，提供丰富/高效/专业/易用的可视化组件，一站式满足地理可视化需求。',
@@ -211,7 +211,7 @@ export default defineConfig({
     ecosystems: [
       {
         name: {
-          zh: 'LarkMap',
+          zh: 'L7React',
           en: 'L7 For React',
         },
         url: 'https://larkmap.antv.antgroup.com/',
