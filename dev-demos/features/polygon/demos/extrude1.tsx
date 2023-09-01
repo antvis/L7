@@ -40,14 +40,19 @@ import { GaodeMap } from '@antv/l7-maps';
                 zIndex: 3
               })
                 .source(data)
-                .shape('fill')
+                .shape('extrude')
+                .size('unit_price', unit_price => unit_price * 50)
                 .color('count', [ '#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f' ])
                 .style({
-                  opacity: 0.6,
-                  opacityLinear: {
-                    enable: true,
-                    dir: 'out' // in - out
+                  // opacity: 1,
+                  opacity: {
+                    field:'unit_price',
+                    value: [0,1]
                   }
+                  // opacityLinear: {
+                  //   enable: true,
+                  //   dir: 'out' // in - out
+                  // }
                 });
               scene.addLayer(filllayer);
             });
