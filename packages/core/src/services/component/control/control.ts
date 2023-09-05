@@ -1,21 +1,21 @@
-import {
-  IControl,
-  IControlService,
-  IGlobalConfigService,
-  ILayerService,
-  IMapService,
-  IRendererService,
-  ISceneService,
-  PositionName,
-  PositionType,
-  TYPES,
-} from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
 import { Container } from 'inversify';
-import { ControlEvent } from '../../interface';
+import { TYPES } from '../../../types';
+import { IGlobalConfigService } from '../../config/IConfigService';
+import { ILayerService } from '../../layer/ILayerService';
+import { IMapService } from '../../map/IMapService';
+import { IRendererService } from '../../renderer/IRendererService';
+import { ISceneService } from '../../scene/ISceneService';
+import {
+  IControl,
+  IControlService,
+  PositionName,
+  PositionType,
+} from '../IControlService';
 
-export { PositionType } from '@antv/l7-core';
+export type ControlEvent = 'show' | 'hide' | 'add' | 'remove' | string;
+
 export { Control };
 
 export interface IControlOption {

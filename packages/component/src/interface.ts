@@ -1,5 +1,3 @@
-export type ControlEvent = 'show' | 'hide' | 'add' | 'remove' | string;
-
 export interface IMarkerStyleOption {
   element?: (...args: any[]) => any;
   style: { [key: string]: any } | ((...args: any[]) => any);

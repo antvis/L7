@@ -1,6 +1,11 @@
-import { ILngLat, Position, PositionType } from '@antv/l7-core';
+import {
+  Control,
+  IControlOption,
+  ILngLat,
+  Position,
+  PositionType,
+} from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
-import Control, { IControlOption } from './baseControl/control';
 
 export interface IMouseLocationControlOption extends IControlOption {
   transform: (position: Position) => Position;

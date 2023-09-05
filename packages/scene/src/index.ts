@@ -1,4 +1,3 @@
-// import { Logo } from '@antv/l7-component';
 import {
   Bounds,
   createLayerContainer,
@@ -27,6 +26,7 @@ import {
   ISceneConfig,
   ISceneService,
   IStatusOptions,
+  Logo,
   Point,
   SceneEventList,
   TYPES,
@@ -564,9 +564,9 @@ class Scene
 
   private initControl() {
     const { logoVisible, logoPosition } = this.sceneService.getSceneConfig();
-    // if (logoVisible) {
-    //   this.addControl(new Logo({ position: logoPosition }));
-    // }
+    if (logoVisible) {
+      this.addControl(new Logo({ position: logoPosition }));
+    }
   }
 }
 

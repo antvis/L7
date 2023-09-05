@@ -16,7 +16,6 @@ export {
 } from './control/fullscreen';
 export { GeoLocate, type IGeoLocateOption } from './control/geoLocate';
 export { LayerSwitch, type ILayerSwitchOption } from './control/layerSwitch';
-export { Logo, type ILogoControlOption } from './control/logo';
 export { MapTheme } from './control/mapTheme';
 export {
   MouseLocation,

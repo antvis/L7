@@ -12,6 +12,8 @@ export * from './services/asset/IFontService';
 export * from './services/asset/IIconService';
 export * from './services/asset/ITextureService';
 export * from './services/camera/ICameraService';
+export * from './services/component/control/control';
+export * from './services/component/control/logo';
 export * from './services/component/IControlService';
 export * from './services/component/IMarkerService';
 export * from './services/component/IPopupService';
