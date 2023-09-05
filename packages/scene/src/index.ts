@@ -1,4 +1,4 @@
-import { Logo } from '@antv/l7-component';
+// import { Logo } from '@antv/l7-component';
 import {
   Bounds,
   createLayerContainer,
@@ -31,7 +31,7 @@ import {
   SceneEventList,
   TYPES,
 } from '@antv/l7-core';
-import { MaskLayer } from '@antv/l7-layers';
+// import { MaskLayer } from '@antv/l7-layers';
 import { ReglRendererService } from '@antv/l7-renderer';
 import {
   DOM,
@@ -200,32 +200,32 @@ class Scene
     this.sceneService.addLayer(layer);
 
     // mask 在 scene loaded 之后执行
-    if (layer.inited) {
-      const maskInstance = this.initMask(layer);
-      this.addMask(maskInstance as ILayer, layer.id);
-    } else {
-      layer.on('inited', () => {
-        const maskInstance = this.initMask(layer); // 初始化 mask
-        this.addMask(maskInstance as ILayer, layer.id);
-      });
-    }
+    // if (layer.inited) {
+    //   const maskInstance = this.initMask(layer);
+    //   this.addMask(maskInstance as ILayer, layer.id);
+    // } else {
+    //   layer.on('inited', () => {
+    //     const maskInstance = this.initMask(layer); // 初始化 mask
+    //     this.addMask(maskInstance as ILayer, layer.id);
+    //   });
+    // }
   }
 
   public initMask(layer: ILayer) {
-    const {
-      mask,
-      maskfence,
-      maskColor = '#000',
-      maskOpacity = 0,
-    } = layer.getLayerConfig();
-    if (!mask || !maskfence) {
-      return undefined;
-    }
-    const maskInstance = new MaskLayer().source(maskfence).shape('fill').style({
-      color: maskColor,
-      opacity: maskOpacity,
-    });
-    return maskInstance;
+    // const {
+    //   mask,
+    //   maskfence,
+    //   maskColor = '#000',
+    //   maskOpacity = 0,
+    // } = layer.getLayerConfig();
+    // if (!mask || !maskfence) {
+    //   return undefined;
+    // }
+    // const maskInstance = new MaskLayer().source(maskfence).shape('fill').style({
+    //   color: maskColor,
+    //   opacity: maskOpacity,
+    // });
+    // return maskInstance;
   }
 
   public addMask(mask: ILayer, layerId: string) {
@@ -564,9 +564,9 @@ class Scene
 
   private initControl() {
     const { logoVisible, logoPosition } = this.sceneService.getSceneConfig();
-    if (logoVisible) {
-      this.addControl(new Logo({ position: logoPosition }));
-    }
+    // if (logoVisible) {
+    //   this.addControl(new Logo({ position: logoPosition }));
+    // }
   }
 }
 

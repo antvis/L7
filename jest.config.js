@@ -1,28 +1,4 @@
 module.exports = {
-  // "preset": "jest-puppeteer",
-  // "globalSetup": "jest-environment-puppeteer/setup",
-  // "globalTeardown": "jest-environment-puppeteer/teardown",
-  // "testEnvironment": "jest-environment-puppeteer",
-  // runner: 'jest-electron/runner',
-  // testEnvironment: 'jest-electron/environment',
-  // preset: 'ts-jest',
-  // clearMocks: true,
-  // collectCoverageFrom: [
-  //   'packages/**/*.{ts,tsx}',
-  //   '!**/node_modules/**',
-  //   '!**/__tests__/**',
-  //   '!**/*.d.ts'
-  // ],
-  // coverageDirectory: 'coverage',
-  // coverageReporters: [ 'text', 'clover' ],
-  // coverageThreshold: {
-  //   global: {
-  //     branches: 80,
-  //     functions: 80,
-  //     lines: 80,
-  //     statements: 80
-  //   }
-  // },
   globals: {
     'ts-jest': {
       // @see https://github.com/kulshekhar/ts-jest/issues/933#issuecomment-479821844

@@ -23,8 +23,7 @@ async function worker({ workerType, data }: { workerType: string; data: any }) {
     new Error(`Worker with type "${workerType}" non-existent.`),
   );
 }
-
-createWorker(worker);
-
+// 注释 Worker
+// createWorker(worker);
 // export default createWorker(worker);
 export { createWorker, worker };
