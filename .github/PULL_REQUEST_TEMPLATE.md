@@ -5,7 +5,7 @@ Contributors guide: https://github.com/antvis/L7/blob/master/.github/CONTRIBUTIN
 
 -->
 
-[[English Template / 英文模板](https://github.com/antvis/L7/blob/master/.github/PULL_REQUEST_TEMPLATE.md?plain=1)]
+[[English Template / 英文模板](https://github.com/antvis/L7/blob/master/.github/PULL_REQUEST_TEMPLATE_EN.md?plain=1)]
 
 ### 🤔 这个变动的性质是？
 
