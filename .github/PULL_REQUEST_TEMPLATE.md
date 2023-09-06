@@ -1,13 +1,11 @@
 <!--
-首先，感谢你的贡献！😄
+Thank you for your pull request. Please review below requirements.
+Bug fixes and new features should include tests and possibly benchmarks.
+Contributors guide: https://github.com/antvis/L7/blob/master/.github/CONTRIBUTING.md
 
-代码可以提到 master 分支，
-贡献指南: https://github.com/antvis/L7/blob/master/.github/CONTRIBUTING.md
-在维护者审核通过后会合并。
-请确保填写以下 pull request 的信息，谢谢！~
 -->
 
-[[English Template / 英文模板](https://github.com/ant-design/ant-design/blob/master/.github/PULL_REQUEST_TEMPLATE.md?plain=1)]
+[[English Template / 英文模板](https://github.com/antvis/L7/blob/master/.github/PULL_REQUEST_TEMPLATE.md?plain=1)]
 
 ### 🤔 这个变动的性质是？
 
