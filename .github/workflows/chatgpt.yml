@@ -1,19 +1,24 @@
-on: [pull_request]
+name: 🤖 ChatGPT Code Review
 
-name: ChatGPT CodeReview
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
-  hello_world_job:
+  test:
     runs-on: ubuntu-latest
-    name: ChatGPT explain code
+    if: github.event.pull_request.head.ref != 'feature' && github.event.pull_request.head.ref != 'master' && github.event.pull_request.head.ref != 'next' && github.event.pull_request.head.ref != 'master-merge-feature' && github.event.pull_request.head.ref != 'feature-merge-master' && github.event.pull_request.head.ref != 'next-merge-master' && github.event.pull_request.head.ref != 'next-merge-feature'
     steps:
-      - name: ChatGTP explain code
-        uses: cirolini/chatgpt-github-actions@v1.3
-        with:
-          openai_api_key: ${{ secrets.CHATGPT_SESSION_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_pr_id: ${{ github.event.number }}
-          openai_engine: "text-davinci-002" #optional
-          openai_temperature: 0.5 #optional
-          openai_max_tokens: 2048 #optional
-          mode: file # file or patch git
+      - uses: anc95/ChatGPT-CodeReview@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Optional
+          LANGUAGE: Chinese
+          MODEL:
+          top_p: 1
+          temperature: 1
