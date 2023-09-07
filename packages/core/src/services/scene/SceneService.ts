@@ -170,8 +170,8 @@ export default class Scene extends EventEmitter implements ISceneService {
      * 初始化渲染引擎
      */
     this.hooks.init.tapPromise('initRenderer', async () => {
-      const renderContainer = this.map.getOverlayContainer();
-
+      // https://github.com/antvis/L7/issues/1459#issuecomment-1709481920 不确定我什么会报错先兼容一下
+      const renderContainer = this.map?.getOverlayContainer() || undefined;
       if (renderContainer) {
         this.$container = renderContainer as HTMLDivElement;
       } else {
