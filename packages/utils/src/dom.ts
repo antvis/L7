@@ -1,5 +1,6 @@
-import { pull } from 'lodash';
+import { lodashUtil } from './lodash-adapter';
 import { $window } from './mini-adapter';
+const { pull } = lodashUtil;
 
 export type ELType = HTMLElement | SVGElement;
 

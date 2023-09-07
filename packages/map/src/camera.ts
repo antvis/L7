@@ -1,6 +1,6 @@
 // @ts-ignore
+import { lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { merge } from 'lodash';
 import { IPaddingOptions } from './geo/edge_insets';
 import LngLat, { LngLatLike } from './geo/lng_lat';
 import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
@@ -18,6 +18,7 @@ import {
   prefersReducedMotion,
   wrap,
 } from './util';
+const { merge } = lodashUtil;
 type CallBack = (_: number) => void;
 
 export interface ICameraOptions {

@@ -5,15 +5,19 @@ import {
   ILayerConfig,
   IModel,
 } from '@antv/l7-core';
-import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
+import {
+  calculateCentroid,
+  getCullFace,
+  lodashUtil,
+  rgb2arr,
+} from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
 import pointExtrudeFrag from '../shaders/earth/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/earth/extrude_vert.glsl';
-
+const { isNumber } = lodashUtil;
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
   private raiseRepeat: number = 0;

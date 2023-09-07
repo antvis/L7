@@ -8,8 +8,7 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
-import { isNumber } from 'lodash';
+import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
@@ -26,6 +25,7 @@ const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
 };
+const { isNumber } = lodashUtil;
 export default class ArcModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {

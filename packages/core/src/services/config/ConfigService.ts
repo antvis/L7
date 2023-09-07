@@ -1,6 +1,7 @@
 // import Ajv from 'ajv';
 import { injectable } from 'inversify';
-import { merge } from 'lodash';
+
+import { lodashUtil } from '@antv/l7-utils';
 import 'reflect-metadata';
 import {
   ILayerAttributesOption,
@@ -10,7 +11,7 @@ import {
 import { IRenderConfig } from '../renderer/IRendererService';
 import { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import WarnInfo from './warnInfo';
-
+const { merge } = lodashUtil;
 /**
  * 场景默认配置项
  */

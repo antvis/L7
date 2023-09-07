@@ -7,6 +7,17 @@ export default {
   cjs: {
     output:'lib'
   },
+  umd:{
+    name:'L7',
+    output:{
+      path:'./dist',
+      filename:'l7.js'
+    },
+    platform:'browser',
+    externals:{
+      "mapbox-gl":'mapboxgl',
+    }
+  },
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
   },

@@ -1,11 +1,11 @@
+import { lodashUtil } from '@antv/l7-utils';
 import { injectable } from 'inversify';
-import { isNil } from 'lodash';
 import 'reflect-metadata';
 import blur from '../../../../shaders/post-processing/blur.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import { IUniform } from '../../IUniform';
 import BasePostProcessingPass from '../BasePostProcessingPass';
-
+const { isNil } = lodashUtil;
 export interface IBlurHPassConfig {
   blurRadius: number;
 }

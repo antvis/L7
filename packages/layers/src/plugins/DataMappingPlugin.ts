@@ -13,11 +13,11 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { Version } from '@antv/l7-maps';
-import { normalize, rgb2arr } from '@antv/l7-utils';
+import { lodashUtil, normalize, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
-import { cloneDeep } from 'lodash';
 import 'reflect-metadata';
 import { ILineLayerStyleOptions } from '../core/interface';
+const { cloneDeep } = lodashUtil;
 
 @injectable()
 export default class DataMappingPlugin implements ILayerPlugin {

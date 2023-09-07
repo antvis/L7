@@ -1,12 +1,11 @@
 import { ILayer, IPopupOption } from '@antv/l7-core';
-import { DOM } from '@antv/l7-utils';
+import { DOM, lodashUtil } from '@antv/l7-utils';
 import { Container } from 'inversify';
-import { get } from 'lodash';
 // import { Container } from 'inversify';
 import Popup from './popup';
 
 type ElementType = DOM.ElementType;
-
+const { get } = lodashUtil;
 export type LayerField = {
   field: string;
   formatField?: ElementType | ((field: string, feature: any) => ElementType);

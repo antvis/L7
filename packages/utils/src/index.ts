@@ -10,6 +10,7 @@ export * from './event';
 export * from './geo';
 export { BKDRHash, djb2hash, guid } from './hash';
 export * from './lineAtOffset';
+export * from './lodash-adapter';
 export * from './lru_cache';
 export * from './mini-adapter/index';
 export * as Satistics from './statistics';

@@ -1,7 +1,6 @@
 // @ts-ignore
 // tslint:disable-next-line: no-submodule-imports
-import { $window, isMini } from '@antv/l7-utils';
-import { merge } from 'lodash';
+import { $window, isMini, lodashUtil } from '@antv/l7-utils';
 import { EarthMap } from '../earthmap';
 import Point from '../geo/point';
 import { Map } from '../map';
@@ -35,7 +34,7 @@ import {
 } from './touch';
 
 export type InputEvent = MouseEvent | TouchEvent | KeyboardEvent | WheelEvent;
-
+const { merge } = lodashUtil;
 const isMoving = (p: any) => p.zoom || p.drag || p.pitch || p.rotate;
 
 function hasChange(result: IHandlerResult) {

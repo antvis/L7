@@ -10,10 +10,10 @@ import {
 import {
   boundsContains,
   calculateCentroid,
+  lodashUtil,
   padBounds,
   rgb2arr,
 } from '@antv/l7-utils';
-import { isEqual } from 'lodash';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
@@ -24,6 +24,7 @@ import {
 } from '../../utils/symbol-layout';
 import textFrag from '../shaders/text_frag.glsl';
 import textVert from '../shaders/text_vert.glsl';
+const { isEqual } = lodashUtil;
 
 export function TextTrianglation(feature: IEncodeFeature) {
   // @ts-ignore

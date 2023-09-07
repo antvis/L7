@@ -1,9 +1,8 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import { $window } from '@antv/l7-utils';
-import { throttle } from 'lodash';
+import { $window, lodashUtil } from '@antv/l7-utils';
 import { Map } from './map';
-
+const { throttle } = lodashUtil;
 /*
  * Adds the map's position to its page's location hash.
  * Passed as an option to the map object.

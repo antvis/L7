@@ -25,8 +25,11 @@
   <body>
     <div id="map"></div>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4.2.8/dist/es6-promise.auto.min.js"></script>
+
+
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js"></script>
-    <script src="../dist/l7-dev.js"></script>
+    <script src="../dist/l7.js"></script>
     <script>
     const data =
 {"type":"FeatureCollection","features":[
@@ -86,13 +89,13 @@
 
       const scene = new L7.Scene({
         id: "map",
-        // map: new L7.Mapbox({
+        // map: new L7.Map({
         //   style: "blank", // 样式URL
         //   center: [ -96, 37.8 ],
         //   zoom: 3,
         //   pitch: 0,
         // })
-        map: new L7.Mapbox({
+        map: new L7.Map({
           style: "blank", // 样式URL
           center: [ -96, 37.8 ],
           zoom: 3,

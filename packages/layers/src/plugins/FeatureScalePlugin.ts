@@ -13,14 +13,14 @@ import {
   StyleScaleType,
 } from '@antv/l7-core';
 import { IParseDataItem } from '@antv/l7-source';
+import { lodashUtil } from '@antv/l7-utils';
 import { extent } from 'd3-array';
 import * as d3interpolate from 'd3-interpolate';
 import * as d3 from 'd3-scale';
 import { injectable } from 'inversify';
-import { isNil, isString, uniq } from 'lodash';
 import 'reflect-metadata';
 import identity from '../utils/identityScale';
-
+const { isNil, isString, uniq } = lodashUtil;
 const dateRegex =
   /^(?:(?!0000)[0-9]{4}([-/.]+)(?:(?:0?[1-9]|1[0-2])\1(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])\1(?:29|30)|(?:0?[13578]|1[02])\1(?:31))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2\2(?:29))(\s+([01]|([01][0-9]|2[0-3])):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]))?$/;
 

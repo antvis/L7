@@ -38,7 +38,6 @@
     "eventemitter3": "^4.0.0",
     "geojson-vt": "^3.2.1",
     "inversify": "^5.0.1",
-    "lodash": "^4.17.15",
     "pbf": "^3.2.1",
     "reflect-metadata": "^0.1.13",
     "supercluster": "^7.0.0"
