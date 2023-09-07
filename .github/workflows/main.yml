@@ -2,7 +2,7 @@ name: Monthly issue metrics
 on:
   workflow_dispatch:
   schedule:
-    - cron: '3 2 1 * *'
+    - cron: '9 0 * * 1'
 
 permissions:
   issues: write
