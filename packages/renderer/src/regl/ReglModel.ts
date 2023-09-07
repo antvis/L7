@@ -9,7 +9,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import regl from 'l7regl';
+import regl from 'regl';
 import {
   blendEquationMap,
   blendFuncMap,

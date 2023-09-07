@@ -23,8 +23,8 @@ import {
 } from '@antv/l7-core';
 import { isMini } from '@antv/l7-utils';
 import { injectable } from 'inversify';
-import regl from 'l7regl';
 import 'reflect-metadata';
+import regl from 'regl';
 import ReglAttribute from './ReglAttribute';
 import ReglBuffer from './ReglBuffer';
 import ReglElements from './ReglElements';

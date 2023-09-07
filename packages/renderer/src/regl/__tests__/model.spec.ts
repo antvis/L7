@@ -1,6 +1,6 @@
 import { createContext } from '@antv/l7-test-utils';
-import regl from 'l7regl';
 import 'reflect-metadata';
+import regl from 'regl';
 import ReglModel from '../ReglModel';
 
 describe('ReglModel', () => {
