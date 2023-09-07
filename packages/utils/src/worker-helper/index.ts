@@ -1,6 +1,7 @@
 import { WorkerFarm } from 'web-worker-helper';
 // @ts-ignore
-import WorkerInlineSource from '../../dist/l7-utils.worker.js';
+// TODO 暂时注释掉，后续需要修改
+// import WorkerInlineSource from '../../dist/l7-utils.worker.js';
 import { WorkerSourceMap } from '../workers';
 import { getWorkerSource, registerWorkerSource } from './worker-map';
 
@@ -41,4 +42,4 @@ export async function executeWorkerTask(workerType: string, data: any) {
   return result.result;
 }
 
-setL7WorkerSource(WorkerInlineSource);
+// setL7WorkerSource(WorkerInlineSource);

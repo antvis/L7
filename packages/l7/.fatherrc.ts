@@ -16,7 +16,11 @@ export default {
     platform:'browser',
     externals:{
       "mapbox-gl":'mapboxgl',
-    }
+    },
+    // chainWebpack: (config) => {
+    //   config.plugin('webpack-bundle-analyzer')
+    //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+    // },
   },
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
@@ -24,6 +28,7 @@ export default {
   define:{
     'process.env.VERSION': JSON.stringify(version),
   },
+
   extraBabelPresets: [
     '@babel/preset-typescript'
   ],
