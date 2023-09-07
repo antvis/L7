@@ -17,20 +17,6 @@ uniform float u_stroke_opacity: 1.0;
 
 void main() {
 
-// #ifdef USE_ATTRIBUTE_OPACITY
-//   float opacity  = a_Opacity;
-// #else
-//   float opacity = u_opacity;
-// #endif
-
-
-// #ifdef USE_ATTRIBUTE_OFFSETS
-//   vec2 offsets  = a_Offsets;
-// #else
-//   vec2 offsets = u_offsets;
-// #endif
-
-  // float opacity = u_opacity;
 // 透明度计算
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
@@ -39,13 +25,14 @@ void main() {
 
 
   vec2 position = mix(source, target, a_Position.x);
-
-  float lengthCommon = length(target - source);    
+  
+  float lengthCommon = length(project_position(vec4(target,0,1)) - project_position(vec4(source,0,1)));  //    
   vec2 offsetDistances = a_Size.x * project_pixel(a_Position.yz);
   vec2 limitedOffsetDistances = clamp(   
    offsetDistances,
-    -lengthCommon*.8, lengthCommon*.8
+   project_pixel(-lengthCommon*.8), project_pixel(lengthCommon*.8)
   );
+
 
   float startOffsetCommon = project_pixel(offsets[0]);
   float endOffsetCommon = project_pixel(offsets[1]);
