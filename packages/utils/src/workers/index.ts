@@ -24,7 +24,7 @@ async function worker({ workerType, data }: { workerType: string; data: any }) {
   );
 }
 
-createWorker(worker);
+// createWorker(worker);// Worker 暂未开启  TODO
 
 // export default createWorker(worker);
 export { createWorker, worker };

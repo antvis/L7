@@ -5,10 +5,11 @@ import {
     Source,
     PointLayer,
     PolygonLayer,
+
     // @ts-ignore
   } from '@antv/l7';
   // @ts-ignore
-  import { GaodeMap,Map } from '@antv/l7-maps';
+  import { GaodeMap,Map,Mapbox } from '@antv/l7-maps';
 
   import React, { useEffect } from 'react';
   
@@ -16,7 +17,7 @@ import {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
-        map: new GaodeMap({
+        map: new Map({
           center: [8.654789284720719, 47.412606122294044],
           zoom: 5,
           style: 'dark',
@@ -95,7 +96,7 @@ import {
               type: 'quantile',
             })
             .size('count', [0.5, 1, 2,2,2,6,8, 10])
-            .shape('flowline')
+            .shape('flowline') 
             .color('count',[
               '#fef6b5',
               '#ffdd9a',
