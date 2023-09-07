@@ -31,7 +31,7 @@ jobs:
             issue-number: ${{ github.event.issue.number }}
             body: |
                 Hi @${{ github.event.issue.user.login }}, Please star this repo if you find it useful! Thanks :star:!
-                你好 @${{ github.event.issue.user.login }}。如果该仓库对你有用，可以 star 一下，感谢你的 :star:。
+                你好 @${{ github.event.issue.user.login }}。如果该仓库对你有用，可以 star 一下，感谢你的 :star:!
             
             
 
