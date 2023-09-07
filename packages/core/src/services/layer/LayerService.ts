@@ -1,4 +1,4 @@
-import { $window, lodashUtil, rgb2arr } from '@antv/l7-utils';
+import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -304,12 +304,12 @@ export default class LayerService
 
   private runRender() {
     this.renderLayers();
-    this.layerRenderID = $window.requestAnimationFrame(
+    this.layerRenderID = window.requestAnimationFrame(
       this.runRender.bind(this),
     );
   }
 
   private stopRender() {
-    $window.cancelAnimationFrame(this.layerRenderID);
+    window.cancelAnimationFrame(this.layerRenderID);
   }
 }

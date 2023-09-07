@@ -1,4 +1,4 @@
-import { $window, LRUCache } from '@antv/l7-utils';
+import { LRUCache } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { injectable } from 'inversify';
 import TinySDF from 'l7-tiny-sdf';
@@ -223,7 +223,7 @@ export default class FontService extends EventEmitter implements IFontService {
     } = this.fontOptions;
     let canvas = cachedFontAtlas && cachedFontAtlas.data;
     if (!canvas) {
-      canvas = $window.document.createElement('canvas');
+      canvas = window.document.createElement('canvas');
       canvas.width = MAX_CANVAS_WIDTH;
     }
     const ctx = canvas.getContext('2d', {

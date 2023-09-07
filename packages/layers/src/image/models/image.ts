@@ -6,7 +6,6 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { isMini } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
@@ -31,32 +30,15 @@ export default class ImageModel extends BaseModel {
       width: 0,
     });
 
-    if (isMini) {
-      // @ts-ignore
-      const canvas = this.layerService.sceneService.getSceneConfig().canvas;
-      const img = canvas.createImage();
-      img.crossOrigin = 'anonymous';
-      img.src = source.data.originData;
+    const imageData = await source.data.images;
 
-      img.onload = () => {
-        this.texture = createTexture2D({
-          data: img,
-          width: img.width,
-          height: img.height,
-        });
-        this.layerService.reRender();
-      };
-    } else {
-      const imageData = await source.data.images;
-
-      this.texture = createTexture2D({
-        data: imageData[0],
-        width: imageData[0].width,
-        height: imageData[0].height,
-        mag: gl.LINEAR,
-        min: gl.LINEAR,
-      });
-    }
+    this.texture = createTexture2D({
+      data: imageData[0],
+      width: imageData[0].width,
+      height: imageData[0].height,
+      mag: gl.LINEAR,
+      min: gl.LINEAR,
+    });
 
     const model = await this.layer.buildLayerModel({
       moduleName: 'rasterImage',

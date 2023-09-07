@@ -1,6 +1,4 @@
 import { SceneConifg } from './config';
-import { $window, $XMLHttpRequest } from './mini-adapter';
-
 export const getProtocolAction = (url: string) =>
   SceneConifg.REGISTERED_PROTOCOLS[url.substring(0, url.indexOf('://'))];
 
@@ -65,12 +63,12 @@ function makeXMLHttpRequest(
   requestParameters: RequestParameters,
   callback: ResponseCallback<any>,
 ) {
-  const xhr = new $XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
 
   const url = Array.isArray(requestParameters.url)
     ? requestParameters.url[0]
     : requestParameters.url;
-  xhr.open(requestParameters.method || 'GET', url, true);
+  xhr.open(requestParameters.method || 'GET', url as string, true);
   if (requestParameters.type === 'arrayBuffer') {
     xhr.responseType = 'arraybuffer';
   }
@@ -111,11 +109,12 @@ function makeXMLHttpRequest(
       );
     } else {
       const body = new Blob([xhr.response], {
-        type: xhr.getResponseHeader('Content-Type'),
+        type: xhr.getResponseHeader('Content-Type') as string,
       });
       callback(new AJAXError(xhr.status, xhr.statusText, url.toString(), body));
     }
   };
+  // @ts-ignore
   xhr.cancel = xhr.abort;
   xhr.send(requestParameters.body);
 
@@ -192,11 +191,11 @@ export const postData = (
 };
 
 export function sameOrigin(url: string) {
-  const a = $window.document.createElement('a');
+  const a = window.document.createElement('a');
   a.href = url;
   return (
-    a.protocol === $window.document.location.protocol &&
-    a.host === $window.document.location.host
+    a.protocol === window.document.location.protocol &&
+    a.host === window.document.location.host
   );
 }
 
@@ -207,8 +206,8 @@ function arrayBufferToImage(
   data: ArrayBuffer,
   callback: (err?: Error | null, image?: HTMLImageElement | null) => void,
 ) {
-  const img: HTMLImageElement = new $window.Image();
-  const URL = $window.URL || $window.webkitURL;
+  const img: HTMLImageElement = new window.Image();
+  const URL = window.URL || window.webkitURL;
   img.crossOrigin = 'anonymous';
   img.onload = () => {
     callback(null, img);

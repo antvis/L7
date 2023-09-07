@@ -1,4 +1,3 @@
-import { $window } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
@@ -25,7 +24,7 @@ export default class IconService extends EventEmitter implements IIconService {
   public init() {
     this.iconData = [];
     this.iconMap = {};
-    this.canvas = $window.document.createElement('canvas');
+    this.canvas = window.document.createElement('canvas');
     this.canvas.width = 128;
     this.canvas.height = 128;
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;

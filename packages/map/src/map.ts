@@ -1,4 +1,4 @@
-import { $window, DOM, isMini, lodashUtil } from '@antv/l7-utils';
+import { DOM, lodashUtil } from '@antv/l7-utils';
 import Camera from './camera';
 import './css/l7.css';
 import LngLat, { LngLatLike } from './geo/lng_lat';
@@ -75,11 +75,8 @@ export class Map extends Camera {
   private hash: Hash | undefined;
   constructor(options: Partial<IMapOptions>) {
     super(merge({}, DefaultOptions, options));
-    if (isMini) {
-      this.initMiniContainer();
-    } else {
-      this.initContainer();
-    }
+
+    this.initContainer();
 
     this.resize();
     this.handlers = new HandlerManager(this, this.options);
@@ -90,12 +87,10 @@ export class Map extends Camera {
       window.addEventListener('orientationchange', this.onWindowResize, false);
     }
 
-    if (!isMini) {
-      const hashName =
-        (typeof options.hash === 'string' && options.hash) || undefined;
-      if (options.hash) {
-        this.hash = new Hash(hashName).addTo(this) as Hash;
-      }
+    const hashName =
+      (typeof options.hash === 'string' && options.hash) || undefined;
+    if (options.hash) {
+      this.hash = new Hash(hashName).addTo(this) as Hash;
     }
 
     // don't set position from options if set through hash
@@ -121,20 +116,17 @@ export class Map extends Camera {
     const [width, height] = this.containerDimensions();
     this.transform.resize(width, height);
     // 小程序环境不需要执行后续动作
-    if (isMini) {
-      return this;
-    }
     const fireMoving = !this.moving;
     if (fireMoving) {
       this.stop();
-      this.emit('movestart', new $window.Event('movestart', eventData));
-      this.emit('move', new $window.Event('move', eventData));
+      this.emit('movestart', new window.Event('movestart', eventData));
+      this.emit('move', new window.Event('move', eventData));
     }
 
-    this.emit('resize', new $window.Event('resize', eventData));
+    this.emit('resize', new window.Event('resize', eventData));
 
     if (fireMoving) {
-      this.emit('moveend', new $window.Event('moveend', eventData));
+      this.emit('moveend', new window.Event('moveend', eventData));
     }
 
     return this;
@@ -359,19 +351,10 @@ export class Map extends Camera {
     let width = 0;
     let height = 0;
     if (this.container) {
-      if (isMini) {
-        width =
-          (this.container as HTMLCanvasElement).width /
-          $window.devicePixelRatio;
-        height =
-          (this.container as HTMLCanvasElement).height /
-          $window.devicePixelRatio;
-      } else {
-        width = this.container.clientWidth;
-        height = this.container.clientHeight;
-        width = width === 0 ? 400 : width;
-        height = height === 0 ? 300 : height;
-      }
+      width = this.container.clientWidth;
+      height = this.container.clientHeight;
+      width = width === 0 ? 400 : width;
+      height = height === 0 ? 300 : height;
     }
     return [width, height];
   }

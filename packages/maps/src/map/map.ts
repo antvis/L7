@@ -4,7 +4,6 @@
  */
 import { CoordinateSystem, IMercator } from '@antv/l7-core';
 import { Map, MercatorCoordinate } from '@antv/l7-map';
-import { $window } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
@@ -178,7 +177,7 @@ export default class DefaultMapService extends BaseMapService<Map> {
         this.map.getBearing(),
         this.map.getPitch(),
       );
-      $window.document.addEventListener('mapCameaParams', (event: any) => {
+      window.document.addEventListener('mapCameaParams', (event: any) => {
         const {
           e: { longitude, latitude, scale, bearing, pitch },
         } = event;

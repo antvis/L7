@@ -1,7 +1,8 @@
 {
   "packages": [
     "packages/*",
-    "!packages/site"
+    "!packages/site",
+    "!packages/mini"
   ],
   "command": {
     "publish": {

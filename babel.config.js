@@ -129,7 +129,7 @@ module.exports = (api) => {
         },
       ],
       // 按需引用 @see https://github.com/lodash/babel-plugin-lodash
-      'lodash',
+      // 'lodash',
       // 内联 WebGL 常量 @see https://www.npmjs.com/package/babel-plugin-inline-webgl-constants
       // isCDNBundle ? 'inline-webgl-constants' : {},
     ],

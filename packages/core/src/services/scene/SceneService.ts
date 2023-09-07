@@ -1,6 +1,6 @@
 // @ts-ignore
 import { AsyncSeriesHook } from '@antv/async-hook';
-import { $window, DOM } from '@antv/l7-utils';
+import { DOM } from '@antv/l7-utils';
 import elementResizeEvent, { unbind } from 'element-resize-event';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
@@ -201,8 +201,8 @@ export default class Scene extends EventEmitter implements ISceneService {
           this.$container as HTMLDivElement,
           this.handleWindowResized,
         );
-        if ($window.matchMedia) {
-          $window
+        if (window.matchMedia) {
+          window
             .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
             ?.addListener(this.handleWindowResized);
         }
@@ -396,8 +396,8 @@ export default class Scene extends EventEmitter implements ISceneService {
       return;
     }
     unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    if ($window.matchMedia) {
-      $window
+    if (window.matchMedia) {
+      window
         .matchMedia('screen and (min-resolution: 2dppx)')
         ?.removeListener(this.handleWindowResized);
     }
