@@ -8,5 +8,5 @@ declare module '@antv/l7-test-utils';
 declare module '@antv/l7-test-utils';
 declare module '@antv/l7-component';
 declare module 'regl';
-declare module 'l7hammerjs';
-declare module 'l7-tiny-sdf';
+declare module 'hammerjs';
+declare module '@mapbox/tiny-sdf';

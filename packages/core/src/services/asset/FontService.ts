@@ -1,7 +1,7 @@
 import { LRUCache } from '@antv/l7-utils';
+import TinySDF from '@mapbox/tiny-sdf';
 import { EventEmitter } from 'eventemitter3';
 import { injectable } from 'inversify';
-import TinySDF from 'l7-tiny-sdf';
 import 'reflect-metadata';
 import { buildMapping } from '../../utils/font_util';
 import {

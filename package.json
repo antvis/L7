@@ -20,7 +20,7 @@
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
     "async-site": "sh ./scripts/site.sh",
     "prebuild": "yarn clean && run-p tsc lint",
-    "build": " lerna run build",
+    "build": "lerna run build --ignore @antv/l7-site --ignore @antv/l7-mini ",
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna run tsc --stream --no-bail",
     "lint:tslint": "tslint -p tsconfig.json -c tslint.prod.json",
