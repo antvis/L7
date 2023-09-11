@@ -5,7 +5,7 @@
 
   .l7-control {
     position: relative;
-    z-index: 800;
+    z-index: @l7-control-z-index;
     float: left;
     clear: both;
     color: @l7-control-font-color;
@@ -23,7 +23,7 @@
         @{value}: 0;
       display: flex;
       position: absolute;
-      z-index: 1000;
+      z-index: @l7-control-z-index;
       pointer-events: none;
       .l7-control:not(.l7-control--hide) {
         margin-@{value}: @l7-control-space;
