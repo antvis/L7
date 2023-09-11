@@ -49,7 +49,7 @@
   border: 3px dashed gray;
   border-radius: 2px;
   position: absolute;
-  z-index: 1000;
+  z-index: 999;
   box-sizing: border-box;
 }
 .l7-control-container {
@@ -57,7 +57,7 @@
 }
 .l7-control-container .l7-control {
   position: relative;
-  z-index: 800;
+  z-index: 999;
   float: left;
   clear: both;
   color: #595959;
@@ -73,7 +73,7 @@
   top: 0;
   display: flex;
   position: absolute;
-  z-index: 1000;
+  z-index: 999;
   pointer-events: none;
 }
 .l7-control-container .l7-top .l7-control:not(.l7-control--hide) {
@@ -83,7 +83,7 @@
   right: 0;
   display: flex;
   position: absolute;
-  z-index: 1000;
+  z-index: 999;
   pointer-events: none;
 }
 .l7-control-container .l7-right .l7-control:not(.l7-control--hide) {
@@ -93,7 +93,7 @@
   bottom: 0;
   display: flex;
   position: absolute;
-  z-index: 1000;
+  z-index: 999;
   pointer-events: none;
 }
 .l7-control-container .l7-bottom .l7-control:not(.l7-control--hide) {
@@ -103,7 +103,7 @@
   left: 0;
   display: flex;
   position: absolute;
-  z-index: 1000;
+  z-index: 999;
   pointer-events: none;
 }
 .l7-control-container .l7-left .l7-control:not(.l7-control--hide) {
