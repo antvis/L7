@@ -5,7 +5,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { isNumber } from 'lodash';
+import { lodashUtil } from '@antv/l7-utils';
 
 import BaseModel from '../../core/BaseModel';
 import { earthOuterTriangulation } from '../../core/triangulation';
@@ -14,7 +14,7 @@ import bloomSphereVert from '../shaders/bloomsphere_vert.glsl';
 interface IBloomLayerStyleOptions {
   opacity: number;
 }
-
+const { isNumber } = lodashUtil;
 export default class EarthBloomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const { opacity = 1 } =

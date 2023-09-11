@@ -11,7 +11,6 @@ export interface ISceneConfig extends IRenderConfig {
   map: IMapWrapper;
   logoPosition?: PositionName;
   logoVisible?: boolean;
-  isMini?: boolean; // 是否是小程序场景
   animate?: boolean;
   fitBoundsOptions?: unknown;
   pickBufferScale?: number;

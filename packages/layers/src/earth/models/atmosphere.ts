@@ -5,8 +5,7 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { isNumber } from 'lodash';
-
+import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 import atmoSphereFrag from '../shaders/atmosphere_frag.glsl';
@@ -14,6 +13,7 @@ import atmoSphereVert from '../shaders/atmosphere_vert.glsl';
 interface IAtmoSphereLayerStyleOptions {
   opacity: number;
 }
+const { isNumber } = lodashUtil;
 
 export default class EarthAtomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {

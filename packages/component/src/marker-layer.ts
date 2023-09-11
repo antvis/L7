@@ -9,17 +9,18 @@ import {
   boundsContains,
   DOM,
   IBounds,
+  lodashUtil,
   padBounds,
   Satistics,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import { merge } from 'lodash';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
 import { IMarkerLayerOption, IMarkerStyleOption } from './interface';
 import Marker from './marker';
+const { merge } = lodashUtil;
 
 interface IPointFeature {
   geometry: {

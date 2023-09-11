@@ -33,7 +33,7 @@ import {
 } from 'antd';
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { downloadData, exportSVG } from '../utils/util';
 import './index.less';

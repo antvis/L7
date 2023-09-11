@@ -17,16 +17,18 @@
          height:400px;
       }
     </style>
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <div id="map"></div>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js"></script>
-    <script src="../dist/l7-dev.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+
+
+
+
+    <!-- <script src="../dist/l7.js"></script> -->
+    <script src = 'https://unpkg.com/@antv/l7@2.15.0'></script>
     <script>
     const data =
 {"type":"FeatureCollection","features":[
@@ -86,13 +88,13 @@
 
       const scene = new L7.Scene({
         id: "map",
-        // map: new L7.Mapbox({
+        // map: new L7.Map({
         //   style: "blank", // 样式URL
         //   center: [ -96, 37.8 ],
         //   zoom: 3,
         //   pitch: 0,
         // })
-        map: new L7.Mapbox({
+        map: new L7.Map({
           style: "blank", // 样式URL
           center: [ -96, 37.8 ],
           zoom: 3,

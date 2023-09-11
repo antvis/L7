@@ -1,7 +1,6 @@
-import { $window, rgb2arr } from '@antv/l7-utils';
+import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
-import { throttle } from 'lodash';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
@@ -15,7 +14,7 @@ import {
   MaskOperation,
   StencilType,
 } from './ILayerService';
-
+const { throttle } = lodashUtil;
 @injectable()
 export default class LayerService
   extends EventEmitter<LayerServiceEvent>
@@ -305,12 +304,12 @@ export default class LayerService
 
   private runRender() {
     this.renderLayers();
-    this.layerRenderID = $window.requestAnimationFrame(
+    this.layerRenderID = window.requestAnimationFrame(
       this.runRender.bind(this),
     );
   }
 
   private stopRender() {
-    $window.cancelAnimationFrame(this.layerRenderID);
+    window.cancelAnimationFrame(this.layerRenderID);
   }
 }

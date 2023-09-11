@@ -13,13 +13,14 @@ import {
 import {
   bBoxToBounds,
   extent,
+  lodashUtil,
   padBounds,
   SourceTile,
   TilesetManager,
 } from '@antv/l7-utils';
 import { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-import { cloneDeep, isFunction, isString, mergeWith } from 'lodash';
+const { cloneDeep, isFunction, isString, mergeWith } = lodashUtil;
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';

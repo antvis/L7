@@ -32,7 +32,7 @@
     "earcut": "^2.1.0",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
-    "lodash": "^4.17.15",
+    "lodash":"^4.17.15",
     "web-worker-helper": "^0.0.3"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
-import { pull } from 'lodash';
-import { $window } from './mini-adapter';
+import { lodashUtil } from './lodash-adapter';
+const { pull } = lodashUtil;
 
 export type ELType = HTMLElement | SVGElement;
 
@@ -13,7 +13,7 @@ export type ElementType =
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
   if (typeof domId === 'string') {
-    $dom = $window.document.getElementById(domId) as HTMLDivElement;
+    $dom = window.document.getElementById(domId) as HTMLDivElement;
   }
   return $dom;
 }
@@ -29,7 +29,7 @@ export function splitWords(str: string) {
 }
 
 function testProp(props: string[]): string {
-  const docStyle = $window?.document?.documentElement?.style;
+  const docStyle = window?.document?.documentElement?.style;
   if (!docStyle) {
     return props[0];
   }
@@ -46,7 +46,7 @@ export function create(
   className?: string,
   container?: HTMLElement,
 ) {
-  const el = $window.document.createElement(tagName);
+  const el = window.document.createElement(tagName);
   if (className) {
     el.className = className || '';
   }
@@ -149,14 +149,14 @@ export function setTransform(el: ELType, value: string) {
 export function triggerResize() {
   if (typeof Event === 'function') {
     // modern browsers
-    $window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event('resize'));
   } else {
     // for IE and other old browsers
     // causes deprecation warning on modern browsers
-    const evt = $window.document.createEvent('UIEvents');
+    const evt = window.document.createEvent('UIEvents');
     // @ts-ignore
-    evt.initUIEvent('resize', true, false, $window, 0);
-    $window.dispatchEvent(evt);
+    evt.initUIEvent('resize', true, false, window, 0);
+    window.dispatchEvent(evt);
   }
 }
 
@@ -171,7 +171,7 @@ export function printCanvas(canvas: HTMLCanvasElement) {
 }
 
 export function getViewPortScale() {
-  const meta = $window.document.querySelector('meta[name="viewport"]');
+  const meta = window.document.querySelector('meta[name="viewport"]');
   if (!meta) {
     return 1;
   }
@@ -183,7 +183,7 @@ export function getViewPortScale() {
   return scale ? scale.split('=')[1] * 1 : 1;
 }
 
-export const DPR = getViewPortScale() < 1 ? 1 : $window.devicePixelRatio;
+export const DPR = getViewPortScale() < 1 ? 1 : window.devicePixelRatio;
 
 export function addStyle(el: ELType, style: string) {
   el.setAttribute('style', `${el.style.cssText}${style}`);

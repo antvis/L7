@@ -58,17 +58,9 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { encodePickingColor } from '@antv/l7-utils';
+import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
-import {
-  isEqual,
-  isFunction,
-  isNumber,
-  isObject,
-  isPlainObject,
-  isUndefined,
-} from 'lodash';
 import { BlendTypes } from '../utils/blend';
 import { calculateData } from '../utils/layerData';
 import {
@@ -77,6 +69,8 @@ import {
 } from '../utils/multiPassRender';
 import LayerPickService from './LayerPickService';
 import TextureService from './TextureService';
+const { isEqual, isFunction, isNumber, isObject, isPlainObject, isUndefined } =
+  lodashUtil;
 /**
  * 分配 layer id
  */

@@ -1,4 +1,3 @@
-import { $window } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import blendFS from '../../../shaders/post-processing/blend.glsl';
@@ -177,7 +176,7 @@ export default class TAAPass<
       if (!this.isFinished()) {
         this.doRender(layer);
 
-        $window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
           accumulate(id);
         });
       }
@@ -185,7 +184,7 @@ export default class TAAPass<
 
     this.accumulatingId = accumulatingId++;
     // @ts-ignore
-    this.timer = $window.setTimeout(() => {
+    this.timer = window.setTimeout(() => {
       accumulate(this.accumulatingId);
     }, 50);
   }
@@ -292,7 +291,7 @@ export default class TAAPass<
 
   private stopAccumulating() {
     this.accumulatingId = 0;
-    $window.clearTimeout(this.timer);
+    window.clearTimeout(this.timer);
   }
 
   private createTriangleModel(

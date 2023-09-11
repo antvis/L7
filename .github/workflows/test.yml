@@ -15,7 +15,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn
-    - run: yarn run worker
     - run: yarn test-cover
     - name: Coveralls
       uses: coverallsapp/github-action@master

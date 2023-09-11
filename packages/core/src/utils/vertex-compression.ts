@@ -4,8 +4,9 @@
  * @see https://zhuanlan.zhihu.com/p/67484498
  */
 
-import { clamp } from 'lodash';
+import { lodashUtil } from '@antv/l7-utils';
 import { getShapeIndex } from './sdf-2d';
+const { clamp } = lodashUtil;
 
 export interface ICircleVertex {
   tileX: number;

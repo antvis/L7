@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { throttle } from 'lodash';
+import { lodashUtil } from '../lodash-adapter';
 import {
   BOUNDS_BUFFER_SCALE,
   DEFAULT_CACHE_SCALE,
@@ -15,6 +15,7 @@ import {
 } from './utils/bound-buffer';
 import { getTileIndices, osmLonLat2TileXY } from './utils/lonlat-tile';
 
+const { throttle } = lodashUtil;
 export enum TileEventType {
   TilesLoadStart = 'tiles-load-start',
   TileLoaded = 'tile-loaded',

@@ -1,7 +1,7 @@
 import { IMapOptions } from '@antv/l7-map';
 import { Map } from '@antv/l7-maps';
 import { Scene } from '@antv/l7-scene';
-import regl from 'l7regl';
+import regl from 'regl';
 import createContext from './create-context';
 
 export function TestScene(options?: Partial<IMapOptions>) {

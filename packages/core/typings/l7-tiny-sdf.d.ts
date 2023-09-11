@@ -1,2 +1,2 @@
-declare module 'l7hammerjs';
-declare module 'l7-tiny-sdf';
+declare module '@mapbox/tiny-sdf';
+declare module 'hammerjs';

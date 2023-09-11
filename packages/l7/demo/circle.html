@@ -17,29 +17,24 @@
         cursor:pointer;
       }
     </style>
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <div id="map"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js"></script>
-
-     <script src="../dist/l7-dev.js"></script>
+     <script src="../dist/l7.js"></script>
     <script>
       console.log('L7', L7);
       var scene = new L7.Scene({
         id: "map",
-        // map: new L7.Mapbox({
+        // map: new L7.Map({
         //   style: "dark", // 样式URL
         //   center: [108.6167, 19.1000],
         //   pitch: 0,
         //   zoom: 6
         // })
-        map: new L7.Mapbox({
+        map: new L7.Map({
           style: "dark", // 样式URL
           center: [108.6167, 19.1000],
           pitch: 0,

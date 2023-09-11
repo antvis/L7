@@ -24,15 +24,15 @@
   <body>
     <div id="map"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.3/polyfill.min.js"></script>
-     <!-- <script src="https://cdn.jsdelivr.net/npm/symbol-es6@0.1.2/symbol-es6.min.js"></script> -->
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/symbol-es6@0.1.2/symbol-es6.min.js"></script>
 
-    <script src="../dist/l7-dev.js"></script>
+
+    <script src="../dist/l7.js"></script>
     <script>
       console.log(L7);
       const scene = new L7.Scene({
         id: "map",
-        map: new L7.Mapbox({
+        map: new L7.Map({
           style: "dark", // 样式URL
           center: [110, 19.1000],
           pitch: 0,

@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { lodashUtil } from '@antv/l7-utils';
 import {
   IAttributeScale,
   IStyleAttribute,
@@ -12,7 +12,7 @@ import {
   IStyleAttributeInitializationOptions,
   IVertexAttributeDescriptor,
 } from './IStyleAttributeService';
-
+const { isNil } = lodashUtil;
 export default class StyleAttribute implements IStyleAttribute {
   public name: string;
   public type: AttributeType;

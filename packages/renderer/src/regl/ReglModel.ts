@@ -8,8 +8,8 @@ import {
   IModelInitializationOptions,
   IUniform,
 } from '@antv/l7-core';
-import regl from 'l7regl';
-import { isPlainObject, isTypedArray } from 'lodash';
+import { lodashUtil } from '@antv/l7-utils';
+import regl from 'regl';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -23,6 +23,7 @@ import ReglAttribute from './ReglAttribute';
 import ReglElements from './ReglElements';
 import ReglFramebuffer from './ReglFramebuffer';
 import ReglTexture2D from './ReglTexture2D';
+const { isPlainObject, isTypedArray } = lodashUtil;
 
 /**
  * adaptor for regl.DrawCommand

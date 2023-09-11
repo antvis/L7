@@ -1,12 +1,13 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import merge from 'lodash/merge';
+import { lodashUtil } from '@antv/l7-utils';
 import { EarthMap } from '../../earthmap';
 import LngLat from '../../geo/lng_lat';
 import Point from '../../geo/point';
 import { Map } from '../../map';
 import DOM from '../../utils/dom';
 import { Event } from './event';
+const { merge } = lodashUtil;
 export default class MapMouseEvent extends Event {
   /**
    * `true` if `preventDefault` has been called.

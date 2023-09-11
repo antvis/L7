@@ -8,12 +8,12 @@ import {
   ISource,
   TYPES,
 } from '@antv/l7-core';
-import { SourceTile, TilesetManager } from '@antv/l7-utils';
-import { debounce } from 'lodash';
+import { lodashUtil, SourceTile, TilesetManager } from '@antv/l7-utils';
 import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
 import { ProxyFuncs } from '../style/constants';
 import { getTileFactory } from '../tileFactory';
+const { debounce } = lodashUtil;
 
 export default class BaseTileLayer {
   private parent: ILayer;

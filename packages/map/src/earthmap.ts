@@ -1,5 +1,4 @@
-import { DOM } from '@antv/l7-utils';
-import { merge } from 'lodash';
+import { DOM, lodashUtil } from '@antv/l7-utils';
 import Camera from './camera';
 import './css/l7.css';
 import LngLat, { LngLatLike } from './geo/lng_lat';
@@ -23,7 +22,7 @@ import TaskQueue, { TaskID } from './utils/task_queue';
 type CallBack = (_: number) => void;
 const defaultMinZoom = -2;
 const defaultMaxZoom = 22;
-
+const { merge } = lodashUtil;
 // the default values, but also the valid range
 const defaultMinPitch = 0;
 const defaultMaxPitch = 60;

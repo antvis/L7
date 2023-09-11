@@ -33,7 +33,8 @@
     "@antv/l7-scene": "2.17.12",
     "@antv/l7-source": "2.17.12",
     "@antv/l7-utils": "2.17.12",
-    "@babel/runtime": "^7.7.7"
+    "@babel/runtime": "^7.7.7",
+    "webpack-bundle-analyzer":"^4.9.1"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {

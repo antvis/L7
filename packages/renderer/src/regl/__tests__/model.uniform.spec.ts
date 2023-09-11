@@ -1,6 +1,6 @@
 import { createContext } from '@antv/l7-test-utils';
-import regl from 'l7regl';
 import 'reflect-metadata';
+import regl from 'regl';
 import ReglFramebuffer from '../ReglFramebuffer';
 import ReglModel from '../ReglModel';
 import ReglTexture2D from '../ReglTexture2D';
