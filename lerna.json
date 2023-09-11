@@ -1,8 +1,6 @@
 {
   "packages": [
-    "packages/*",
-    "!packages/site",
-    "!packages/mini"
+    "packages/*"
   ],
   "command": {
     "publish": {
@@ -17,7 +15,7 @@
       "registry": "https://registry.npmjs.org"
     }
   },
-  "version": "2.17.12",
+  "version": "2.18.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {
