@@ -8,6 +8,8 @@
   },
   "workspaces": [
     "packages/*",
+    "!packages/site",
+    "!packages/mini",
     "dev-demos/*"
   ],
   "scripts": {
