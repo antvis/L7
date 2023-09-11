@@ -1,14 +1,11 @@
 {
   "packages": [
-    "packages/*",
-    "!packages/site"
+    "packages/*"
   ],
   "command": {
     "publish": {
       "ignoreChanges": [
-        "*.md",
-        "packages/site",
-        "packages/mini"
+        "*.md"
       ],
       "allowBranch": [
         "publish",
