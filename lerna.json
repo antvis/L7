@@ -7,7 +7,9 @@
   "command": {
     "publish": {
       "ignoreChanges": [
-        "*.md"
+        "*.md",
+        "packages/site",
+        "packages/mini"
       ],
       "allowBranch": [
         "publish",
