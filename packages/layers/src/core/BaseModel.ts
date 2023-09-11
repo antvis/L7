@@ -74,28 +74,6 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected layer: ILayer;
   protected dataTexture: ITexture2D; // 用于数据传递的数据纹理
   protected DATA_TEXTURE_WIDTH: number; // 默认有多少列（宽度）
-  protected rowCount: number; // 计算得到的当前数据纹理有多少行（高度）
-  protected cacheStyleProperties: {
-    // 记录存储上一次样式字段的值
-    thetaOffset: styleSingle | undefined;
-    opacity: styleSingle | undefined;
-    strokeOpacity: styleSingle | undefined;
-    strokeWidth: styleSingle | undefined;
-    stroke: styleColor | undefined;
-    offsets: styleOffset | undefined;
-  };
-  protected cellLength: number; // 单个 cell 的长度
-  protected cellProperties: ICellProperty[]; // 需要进行数据映射的属性集合
-  protected cellTypeLayout: number[];
-  protected stylePropertiesExist: {
-    // 记录 style 属性是否存在的中间变量
-    hasThetaOffset: number;
-    hasOpacity: number;
-    hasStrokeOpacity: number;
-    hasStrokeWidth: number;
-    hasStroke: number;
-    hasOffsets: number;
-  };
   protected dataTextureTest: boolean;
 
   @lazyInject(TYPES.IGlobalConfigService)

@@ -3,6 +3,7 @@ attribute vec3 a_Position;
 attribute vec4 a_Color;
 attribute vec2 a_Uv;
 attribute float a_Size;
+attribute float a_Rotate;
 varying vec4 v_color;
 varying vec2 v_uv;
 uniform mat4 u_ModelMatrix;

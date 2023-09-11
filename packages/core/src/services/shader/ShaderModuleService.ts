@@ -6,11 +6,9 @@ import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 const { uniq } = lodashUtil;
 
 import common from '../../shaders/common.glsl';
-import commom_attr_vert from '../../shaders/common_attr.vert.glsl';
 import decode from '../../shaders/decode.glsl';
 import light from '../../shaders/light2.glsl';
 import lighting from '../../shaders/lighting.glsl';
-import opacity_attr_vert from '../../shaders/opacity_attr.vert.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
 import pickingVert from '../../shaders/picking.vert.glsl';
 import project from '../../shaders/project.glsl';
@@ -38,8 +36,6 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('lighting', { vs: lighting, fs: '' });
     this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
-    this.registerModule('commom_attr_vert', { vs: commom_attr_vert, fs: '' });
-    this.registerModule('opacity_attr_vert', { vs: opacity_attr_vert, fs: '' });
   }
 
   public registerModule(moduleName: string, moduleParams: IModuleParams) {
