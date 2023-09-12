@@ -52,8 +52,7 @@ export default () => {
         .size(36)
         .active(true)
         .style({
-            raisingHeight: 50,
-            heightfixed: true
+            rotate: 90
         })
 
                    

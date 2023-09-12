@@ -119,7 +119,10 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         // 创建Scale
         const attributeScale = attribute.scale;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        attributeScale.names = this.parseFields(attribute!.scale!.field || []);
+        const fieldValue = attribute!.scale!.field;
+        attributeScale.names = this.parseFields(
+          isNil(fieldValue) ? [] : fieldValue,
+        );
         const scales: IStyleScale[] = [];
         // 为每个字段创建 Scale
         attributeScale.names.forEach((field: string | number) => {

@@ -48,9 +48,8 @@ export default () => {
             y: 'latitude',
           },
         })
-        .shape('type', (v: any) => {
-          return v;
-        })
+        .shape('01')
+        .rotate(1.4)
         .active(false)
         .size(20);
 

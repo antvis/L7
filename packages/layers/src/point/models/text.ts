@@ -213,23 +213,6 @@ export default class TextModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'rotate',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Rotate',
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { rotate = 0 } = feature;
-          return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
-        },
-      },
-    });
-    this.styleAttributeService.registerStyleAttribute({
       name: 'textOffsets',
       type: AttributeType.Attribute,
       descriptor: {

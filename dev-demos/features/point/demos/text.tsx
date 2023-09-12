@@ -48,7 +48,11 @@ export default () => {
                     padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
                     stroke: '#ffffff', // 描边颜色
                     strokeWidth: 2, // 描边宽度
-                    strokeOpacity: 1.0
+                    strokeOpacity: 1.0,
+                    rotate:{
+                      field:'m',
+                      value: [0,350]
+                    }
                   });
                 scene.addLayer(pointLayer1);
                 scene.addLayer(pointLayer);

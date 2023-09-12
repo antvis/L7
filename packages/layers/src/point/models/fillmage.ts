@@ -67,8 +67,9 @@ export default class FillImageModel extends BaseModel {
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
 
-      u_opacity: opacity,
-      u_offsets: offsets,
+      // u_opacity: opacity,
+      // u_offsets: offsets,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -97,7 +98,7 @@ export default class FillImageModel extends BaseModel {
       fragmentShader: pointFillFrag,
       triangulation: PointFillTriangulation,
       depth: { enable: false },
-
+      inject: this.getInject(),
       cull: {
         enable: true,
         face: getCullFace(this.mapService.version),
@@ -113,23 +114,6 @@ export default class FillImageModel extends BaseModel {
 
   // overwrite baseModel func
   protected registerBuiltinAttributes() {
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'rotate',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Rotate',
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { rotate = 0 } = feature;
-          return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
-        },
-      },
-    });
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
