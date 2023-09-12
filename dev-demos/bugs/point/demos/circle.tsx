@@ -42,13 +42,31 @@ export default () => {
                 }
               })
               .color('red')
-              .shape('circle')
+              .shape('square')
               .size('unit_price',[2,30])
               .style({
-                opacity: 0.1,
+                rotate: {
+                  field:'unit_price',
+                  value: [0,360]
+                },
+                opacity: 1,
+              });
+              const imageLayer2 = new PointLayer()
+              .source(data, {
+                parser: {
+                  type: 'json',
+                  x: 'longitude',
+                  y: 'latitude'
+                }
               })
-              ;
+              .color('#00f')
+              .shape('circle')
+              .size(6)
+              .style({
+                opacity: 1,
+              });
             scene.addLayer(imageLayer);
+            scene.addLayer(imageLayer2);
           });
       });
       

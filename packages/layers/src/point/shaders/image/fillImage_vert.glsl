@@ -3,7 +3,6 @@ attribute vec3 a_Position;
 attribute vec3 a_Extrude;
 attribute float a_Size;
 attribute vec2 a_Uv;
-attribute float a_Rotate;
 
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
@@ -15,31 +14,30 @@ varying vec2 v_Iconuv; // icon 贴图的 uv 坐标
 
 uniform float u_raisingHeight: 0.0;
 uniform float u_heightfixed: 0.0;
-uniform float u_opacity : 1;
-uniform vec2 u_offsets;
-
+varying float v_opacity;
+// uniform vec2 u_offsets; // shader 注入
 
 
 #pragma include "projection"
 #pragma include "picking"
+#pragma include "rotation_2d"
 
 void main() {
   vec3 extrude = a_Extrude;
   v_uv = (a_Extrude.xy + 1.0)/2.0;
   v_uv.y = 1.0 - v_uv.y;
   v_Iconuv = a_Uv;
-
-
-  highp float angle_sin = sin(a_Rotate);
-  highp float angle_cos = cos(a_Rotate);
-  mat2 rotation_matrix = mat2(angle_cos, -1.0 * angle_sin, angle_sin, angle_cos);
+  v_opacity = opacity;
   float newSize = a_Size;
   if(u_size_unit == 1) {
     newSize = newSize  * u_PixelsPerMeter.z;
   }
-
+  
   // vec2 offset = (u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
-  vec2 offset = (rotation_matrix * u_RotateMatrix * extrude.xy * (newSize) + u_offsets);
+  vec2 offset = u_RotateMatrix * (extrude.xy * (newSize) + offsets);
+
+  offset = rotate_matrix(offset,rotate);
+
   vec3 aPosition = a_Position;
 
   offset = project_pixel(offset);

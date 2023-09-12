@@ -3,7 +3,6 @@ attribute vec3 a_Position;
 attribute vec3 a_Extrude;
 attribute float a_Size;
 attribute float a_Shape;
-
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
 uniform int u_size_unit;
@@ -20,11 +19,12 @@ uniform vec3 u_blur_height_fixed: [0, 0, 0];
 
 #pragma include "projection"
 #pragma include "picking"
+#pragma include "rotation_2d"
 
 
 void main() {
   // 透明度计算
-  v_stroke = stroke;  
+   v_stroke = stroke;  
   vec3 extrude = a_Extrude;
   float shape_type = a_Shape;
   /*
@@ -53,6 +53,7 @@ void main() {
   vec3 aPosition = a_Position;
 
   offset = project_pixel(offset);
+  offset = rotate_matrix(offset,rotate);
   
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);

@@ -45,6 +45,7 @@ export default () => {
           )
           .color('#f00')
           .shape('icon', 'text')
+          .rotate(720+90)
           .size(30)
           .style({
             // textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
