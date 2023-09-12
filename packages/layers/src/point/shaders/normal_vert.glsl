@@ -1,7 +1,6 @@
 
 attribute vec3 a_Position;
 uniform mat4 u_ModelMatrix;
-uniform float u_opacity : 1;
 uniform mat4 u_Mvp;
 attribute float a_Size;
 attribute vec4 a_Color;
@@ -12,7 +11,7 @@ varying vec4 v_color;
 #pragma include "project"
 
 void main() {
-  v_color = vec4(a_Color.xyz, a_Color.w * u_opacity);
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * vec4(a_Position.xy, a_Position.z, 1.0);

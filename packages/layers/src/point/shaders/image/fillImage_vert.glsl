@@ -34,9 +34,9 @@ void main() {
   }
   
   // vec2 offset = (u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
-  vec2 offset = u_RotateMatrix * (extrude.xy * (newSize) + offsets);
+  vec2 offset = (extrude.xy * (newSize) + offsets);
 
-  offset = rotate_matrix(offset,rotate);
+  offset = rotate_matrix(offset,rotation);
 
   vec3 aPosition = a_Position;
 

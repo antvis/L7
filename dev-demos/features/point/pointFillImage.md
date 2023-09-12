@@ -52,7 +52,7 @@ export default () => {
         .size(36)
         .active(true)
         .style({
-            rotate: 90
+            rotation: 90
         })
 
                    

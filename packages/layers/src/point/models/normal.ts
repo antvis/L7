@@ -32,7 +32,7 @@ export default class NormalModel extends BaseModel {
       this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -48,6 +48,7 @@ export default class NormalModel extends BaseModel {
       vertexShader: normalVert,
       fragmentShader: normalFrag,
       triangulation: PointTriangulation,
+      inject: this.getInject(),
       depth: { enable: false },
       primitive: gl.POINTS,
 

@@ -1,3 +1,4 @@
+import SimplePoint from './billboard_point';
 import EarthExtrudeModel from './earthExtrude';
 // earth
 import EarthFillModel from './earthFill';
@@ -7,7 +8,6 @@ import FillImageModel from './fillmage';
 import IMageModel from './image';
 import NormalModel from './normal';
 import Radar from './radar';
-import SimplePoint from './simplePoint';
 import TextModel from './text';
 
 export type PointType =

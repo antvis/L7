@@ -9,12 +9,12 @@ export function getCommonStyleAttributeOptions(
 ): Partial<IStyleAttribute> | undefined {
   switch (name) {
     // // roate
-    case 'rotate':
+    case 'rotation':
       return {
-        name: 'rotate',
+        name: 'Rotation',
         type: AttributeType.Attribute,
         descriptor: {
-          name: 'a_Rotate',
+          name: 'a_Rotation',
           buffer: {
             usage: gl.DYNAMIC_DRAW,
             data: [],
@@ -22,8 +22,10 @@ export function getCommonStyleAttributeOptions(
           },
           size: 1,
           update: (feature: IEncodeFeature) => {
-            const { rotate = 0 } = feature;
-            return Array.isArray(rotate) ? [rotate[0]] : [rotate as number];
+            const { rotation = 0 } = feature;
+            return Array.isArray(rotation)
+              ? [rotation[0]]
+              : [rotation as number];
           },
         },
       };

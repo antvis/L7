@@ -5,7 +5,12 @@ import PointModels, { PointType } from './models/index';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
-  public enableShaderEncodeStyles = ['opacity', 'offsets', 'stroke', 'rotate'];
+  public enableShaderEncodeStyles = [
+    'opacity',
+    'offsets',
+    'stroke',
+    'rotation',
+  ];
   public enableDataEncodeStyles = ['textOffset', 'textAnchor'];
   public defaultSourceConfig = {
     data: [],
@@ -85,7 +90,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public getModelType(): PointType {
     //  2D、 3d、 shape、image、text、normal、
     const layerData = this.getEncodedData();
-    const { shape2d, shape3d } = this.getLayerConfig();
+    const { shape2d, shape3d, billboard = true } = this.getLayerConfig();
     const iconMap = this.iconService.getIconMap();
     const item = layerData.find((fe: IEncodeFeature) => {
       return fe.hasOwnProperty('shape');
@@ -103,7 +108,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
       if (shape === 'radar') {
         return 'radar';
       }
-      if (this.layerType === 'fillImage') {
+      if (this.layerType === 'fillImage' || billboard === false) {
         return 'fillImage';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {
