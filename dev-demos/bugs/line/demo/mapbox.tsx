@@ -1,5 +1,5 @@
 // @ts-ignore
-import { LineLayer, GaodeMap, Mapbox,Scene,Map } from '@antv/l7';
+import { LineLayer, GaodeMap,Scene,Map } from '@antv/l7';
 import React, { useEffect } from 'react';
   
 export default () => {
