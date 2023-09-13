@@ -1,0 +1,17 @@
+name: PR Closed
+
+on:
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  pr-closed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove lint and test failed labels
+        uses: actions-cool/issues-helper@main
+        with:
+          actions: 'remove-labels'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          labels: '🚨 lint failed,🚨 test failed'
