@@ -49,7 +49,7 @@ export default () => {
                     stroke: '#ffffff', // 描边颜色
                     strokeWidth: 2, // 描边宽度
                     strokeOpacity: 1.0,
-                    rotate:{
+                    rotation:{
                       field:'m',
                       value: [0,350]
                     }

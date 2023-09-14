@@ -36,7 +36,30 @@ scene.on('loaded', () => {
           }
         })
         .shape('name', [ '00', '01', '02' ])
-        .size(25);
+        .size(10)
+        .style({
+          offsets:{
+            field:'name',
+            value: [-100,30,100,200]
+          }
+        })
+        ;
+      const imageLayerText = new PointLayer()
+        .source(data, {
+          parser: {
+            type: 'json',
+            x: 'longitude',
+            y: 'latitude'
+          }
+        })
+        .shape('name', 'text')
+        .color('#f00')
+        .size(25)
+        .style({
+          textOffset:[ 0, 20]
+        })
+        ;
       scene.addLayer(imageLayer);
+      scene.addLayer(imageLayerText);
     });
 });

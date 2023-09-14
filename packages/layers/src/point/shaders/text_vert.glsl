@@ -43,7 +43,7 @@ void main() {
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
   // vec4 projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
-  vec2 offset = rotate_matrix(a_textOffsets,rotate);
+  vec2 offset = rotate_matrix(a_textOffsets,rotation);
   
   // gl_Position = vec4(projected_position.xy / projected_position.w + rotation_matrix * a_textOffsets * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);
 

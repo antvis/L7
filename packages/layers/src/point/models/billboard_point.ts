@@ -9,8 +9,8 @@ import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 
 import { rgb2arr } from '@antv/l7-utils';
-import simplePointFrag from '../shaders/simplePoint_frag.glsl';
-import simplePointVert from '../shaders/simplePoint_vert.glsl';
+import simplePointFrag from '../shaders/billboard_point_frag.glsl';
+import simplePointVert from '../shaders/billboard_point_vert.glsl';
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];

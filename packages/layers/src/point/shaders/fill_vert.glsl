@@ -11,8 +11,6 @@ varying vec4 v_data;
 varying vec4 v_color;
 varying float v_radius;
 varying vec4 v_stroke;
-
-// uniform float u_opacity : 1;
 uniform float u_stroke_width: 2;
 uniform vec3 u_blur_height_fixed: [0, 0, 0];
 
@@ -53,7 +51,7 @@ void main() {
   vec3 aPosition = a_Position;
 
   offset = project_pixel(offset);
-  offset = rotate_matrix(offset,rotate);
+  offset = rotate_matrix(offset,rotation);
   
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);

@@ -98,14 +98,15 @@ const scatter = new PointLayer()
 ⚠️ 为了得到更好的现实效果（图片清晰，无明显锯齿），我们在选择图片以及设置图标大小的时候应保持相当，或者在 L7 图层中设置的图标大小略小于实际图片的像素大小。
 
 [在线案例](/examples/point/image#image)
-
-### fillImage
+### style
+#### billboard
 
 1. 默认通过 `PointLayer` 实例化的 `image` 本质上是精灵贴图，因此有始终面向相机的特性，同时贴图的大小也收到设备的限制。  
 2. 由于精灵始终面向相机，因此我们也无法自定义配置 `image` 的旋转角度。
 
-为了解决上述的两个问题（1. 大小受限，2. 无法自定义旋转角度），我们单独提供了 `fillimage` 的模式。  
-只需要在初始化图层的时候提前指定 `layerType` 为 `fillImage`，其他使用与普通的 `image` 模式完全相同。
+为了解决上述的两个问题（1. 大小受限，2. 无法自定义旋转角度），我们单独提供了非精灵模式`billboard` 的模式。  
+
+只需要在 style 中配置  billboard 为 ```false```
 
 ```javascript
 const imageLayer = new PointLayer({ layerType: 'fillImage',})
@@ -119,39 +120,54 @@ const imageLayer = new PointLayer({ layerType: 'fillImage',})
   .shape('name', ['00', '01', '02'])
   .style({
     rotation: 0,
+    billboard: false,
   })
   .size(45);
 
-let r = 0;
-rotate();
-function rotate() {
-  r += 0.2;
-  imageLayer.style({
-    rotation: r,
-  });
-  scene.render();
-  requestAnimationFrame(rotate);
-}
 ```
 
 ##### rotation
 
 我们支持使用 `rotation` 自定义配置图标的旋转角度（顺时针方向、角度制）。
 
-- `rotation`: number|undefined  
+- `rotation`: number|undefined // 角度单位 0-360
+
+```ts
+layer.style({
+  rotation: 90
+})
+```
+
+rotation 支持常量，也支持数据映射
+
+```ts
+layer.style({
+  rotation: {
+    field: 'rotate',
+    value: [0,360]
+  }
+})
+```
+
+```tsx
+layer.style({
+  rotation: {
+    field: 'rotate',
+    value: (rotate)=>{
+      return rotate
+    }
+  }
+})
+```
   
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1kBZTaains4AAAAAAAAAAAAAARQnAQ'>
 
 [在线案例](/examples/point/image#fillimage)
 
-##### rotate(r: number): ILayer
 
-符号图的 `fillimage` 模式支持 `rotate` 方法根据数据映射旋转角度。
+符号图的 非 billboard 模式支持 `rotation` 方法根据数据映射旋转角度。
 
-🌟 记得要在 `style` 配置中将 `rotation` 设为 `0`。
-
-- `rotate` 方法
  
 ```javascript
 const imageLayer = new PointLayer()
@@ -162,11 +178,10 @@ const imageLayer = new PointLayer()
     }
     return 'arrRed';
   })
-  .rotate('r', (r) => Math.PI * r)
   .size(15)
   .style({
-    rotation: 0,
-    layerType: 'fillImage',
+    rotation: 0, // 
+    billboard: false,
   });
 scene.addLayer(imageLayer);
 ```

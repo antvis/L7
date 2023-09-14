@@ -39,7 +39,6 @@ export default () => {
       });
       const imageLayer = new PointLayer({
         autoFit:false,
-        // layerType: 'fillImage',
       })
         .source(newData.slice(0,4), {
           parser: {
@@ -49,7 +48,6 @@ export default () => {
           },
         })
         .shape('01')
-        .rotate(1.4)
         .active(false)
         .size(20);
 

@@ -5,14 +5,12 @@ attribute vec2 a_Uv;
 attribute float a_Size;
 varying vec4 v_color;
 varying vec2 v_uv;
+varying float v_opacity;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_Mvp;
-uniform vec2 u_offsets;
 
-uniform float u_opacity : 1;
 uniform float u_raisingHeight: 0.0;
 uniform float u_heightfixed: 0.0;
-
 
 #pragma include "projection"
 #pragma include "picking"
@@ -21,10 +19,11 @@ void main() {
 
   // cal style mapping - 数据纹理映射部分的计算
   v_color = a_Color;
+  v_opacity = opacity;
   v_uv = a_Uv;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
    
-  vec2 offset = project_pixel(u_offsets);
+  vec2 offset = project_pixel(offsets);
 
   float raisingHeight = u_raisingHeight;
   if(u_heightfixed < 1.0) { // false

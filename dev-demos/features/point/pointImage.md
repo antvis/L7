@@ -11,7 +11,7 @@ export default () => {
             map: new GaodeMap({
                 style: 'light',
                 center: [120, 30],
-                pitch: 60,
+                pitch: 0,
                 zoom: 14
             }),
         });
@@ -33,8 +33,9 @@ export default () => {
                 y: 'lat',
             },
         })
-        .shape('marker')
-        .size(36)
+        .shape('circle')
+        .color('red')
+        .size(20)
 
         const pointLayer2 = new PointLayer({  })
         .source([{
@@ -47,10 +48,16 @@ export default () => {
             },
         })
         .shape('marker')
-        .size(36)
+        .size(24)
         .active(true)
         .style({
-            raisingHeight: 100,
+            offsets:{
+                field:'name',
+                value: ()=>{
+                    return [0,20]
+                }
+            }
+            // raisingHeight: 100,
             // heightfixed: true
         })
 

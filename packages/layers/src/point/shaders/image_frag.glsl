@@ -2,8 +2,8 @@
 uniform sampler2D u_texture;
 varying vec4 v_color;
 varying vec2 v_uv;
+varying float v_opacity;
 uniform vec2 u_textSize;
-uniform float u_opacity : 1;
 
 #pragma include "picking"
 
@@ -29,9 +29,7 @@ void main(){
       }else {
             gl_FragColor= step(0.01, textureColor.z) * v_color;
       }
-
-      gl_FragColor.a = gl_FragColor.a * u_opacity;
-      
+      gl_FragColor.a *= v_opacity;
       if (gl_FragColor.a < 0.01) {
          discard;
       }

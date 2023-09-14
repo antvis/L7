@@ -41,6 +41,7 @@ layer.style({
 | heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `false`  |
 | unit          | `string`           | 点大小单位                 | `pixel`  |
 
+
 #### unit
 
 - pixel 默认值
@@ -121,6 +122,7 @@ interface IOpcityLinear = {
 | textOffset       | `[number, number]`                              | 文字的偏移                 | 是 |`[0, 0]`     |
 | textAnchor       | [anchorType](/api/point_layer/style#anchortype) | 文字对齐锚点 `text`        | 是 |`center`     |
 | spacing          | `number`                                        | 文字间隔                   | 否|`2`          |
+|rotation|`number`   | 旋转角度 | 是| `0`|
 | padding          | `number`                                        | 文字内边框宽度             | 否|`2`          |
 | halo             | `number`                                        | 文字边缘光晕宽度           | 否|`0.5`        |
 | gamma            | `number`                                        | 文字的颜色参数             | 否|`2`          |
@@ -177,12 +179,12 @@ const font2 = 'Times New Roman';
 
 - [icon](/api/point_layer/shape#shapeiconname-string)
 
-| style         | 类型               | 描述                       | 默认值   |
-| ------------- | ------------------ | -------------------------- | -------- |
-| offsets       | `[number, number]` | 点偏移                     | `[0, 0]` |
-| raisingHeight | `number`           | 抬升高度                   | `0`      |
-| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `false`  |
-| rotation      | `number`           | 图标的偏移                 | `0`      |
+| style         | 类型               | 描述                       |数据映射| 默认值   |
+| ------------- | ------------------ | -------------------------- |---- | -------- |
+| offsets       | `[number, number]` | 点偏移                     |否| `[0, 0]` |
+| raisingHeight | `number`           | 抬升高度                   | 否|`0`      |
+| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | 否|`false`  |
+|rotation|`number`   | 旋转角度 | 是| `0`|
 
 #### rotation
 
@@ -197,7 +199,6 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
     }
     return 'arrRed';
   })
-  .rotate('r', (r) => Math.PI * r)
   .size(15)
   .style({
     rotation: 0,

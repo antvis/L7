@@ -23,9 +23,6 @@ export default class FillImageModel extends BaseModel {
   private radian: number = 0; // 旋转的弧度
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
-      offsets = [0, 0],
-      rotation,
       raisingHeight = 0.0,
       heightfixed = false,
       unit = 'pixel',
@@ -41,28 +38,11 @@ export default class FillImageModel extends BaseModel {
      * GAODE2.x         -1
      * GAODE1.x         -1
      */
-    let rotateFlag = 1;
-    if (
-      this.mapService.version === 'GAODE2.x' ||
-      this.mapService.version === 'GAODE1.x'
-    ) {
-      rotateFlag = -1;
-    }
-    // 控制图标的旋转角度（绕 Z 轴旋转）
-    this.radian =
-      rotation !== undefined
-        ? (rotateFlag * Math.PI * rotation) / 180
-        : (rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180;
+
     return {
       u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      u_RotateMatrix: new Float32Array([
-        Math.cos(this.radian),
-        Math.sin(this.radian),
-        -Math.sin(this.radian),
-        Math.cos(this.radian),
-      ]),
 
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],

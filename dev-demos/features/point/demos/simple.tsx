@@ -61,10 +61,6 @@ export default () => {
                   })
                 scene.addLayer(pointLayer);
                 scene.addLayer(highlightLayer)
-                setTimeout(()=>{
-                  console.log('destroy')
-                  scene.destroy();
-                },2000)
               });
           
           });

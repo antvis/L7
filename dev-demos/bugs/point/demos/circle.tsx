@@ -45,7 +45,7 @@ export default () => {
               .shape('square')
               .size('unit_price',[2,30])
               .style({
-                rotate: {
+                rotation: {
                   field:'unit_price',
                   value: [0,360]
                 },

@@ -26,7 +26,9 @@ scene.on('loaded', () => {
     .then(res => res.json())
     .then(monsoon => {
       const { data, borderData } = monsoon;
-      const imageLayer = new PointLayer()
+      const imageLayer = new PointLayer(
+        
+      )
         .source(data)
         .shape('wind', wind => {
           if (wind === 'up') {
@@ -35,11 +37,13 @@ scene.on('loaded', () => {
           return 'arrRed';
 
         })
-        .rotate('r', r => Math.PI * r)
         .size(15)
         .style({
-          rotation: 0,
-          layerType: 'fillImage'
+          rotation: {
+            field:'r',
+            value: [ 0, 90, 180, 270 ]
+          },
+          billboard:false, // 图片图层只有非精灵模式支持旋转
         });
       scene.addLayer(imageLayer);
 

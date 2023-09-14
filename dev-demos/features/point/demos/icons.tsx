@@ -49,34 +49,24 @@ export default () => {
           return v;
         })
         .active(false)
-        .size(20);
+        .size('unit_price', [10, 30])
+        .style({
+          opacity: {
+            field: 'unit_price',
+            value: [0.3, 1.0],
+          },
+          offsets:{
+            field: 'unit_price',
+            value: (v: any) => {
+              return [0, v * 0.0005];
+            }
+          }
+        })
+        ;
       scene.addLayer(imageLayer);
      
 
-      setTimeout(() => {
-        imageLayer.shape('02');
-        scene.render();
-      }, 4000)
-      // imageLayer.on('mousedown', (e) => {
-      //   console.log('mousedown', e);
-      // });
-      // const popup = new Popup({
-      // });
-    
-      // scene.addPopup(popup);
-      // imageLayer.on('click', (e) => {
-      //   console.log(e)
-      //   const {lng,lat} = e.lngLat
-
-      //   popup.setOptions({
-      //     title: e.feature.name,
-      //     html:e.feature.name,
-      //     lngLat: {
-      //       lng,
-      //       lat,
-      //     },
-      //   });
-      // });
+      
           
     }, []);
     return (
