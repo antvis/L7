@@ -73,11 +73,36 @@ export default defineConfig({
             en: 'QuickIssue',
           },
           link: '/tutorial/quick_issue',
-          type: 'primary',
         },
       ],
     },
     msfu: false,
+    news: [
+      {
+        type: {
+          zh: '推荐',
+          en: 'News',
+        },
+        title: {
+          zh: '地理数据编辑工具',
+          en: 'L7 Editor',
+        },
+        date: '2023.09.15',
+        link: 'https://l7editor.antv.antgroup.com/',
+      },
+      {
+        type: {
+          zh: '推荐',
+          en: 'News',
+        },
+        title: {
+          zh: '地理数据分析工具',
+          en: 'L7VP',
+        },
+        date: '2023.09.15',
+        link: 'https://li.antv.antgroup.com/',
+      },
+    ],
     features: [
       {
         icon: 'https://gw.alipayobjects.com/zos/basement_prod/ca2168d1-ae50-4929-8738-c6df62231de3.svg',
