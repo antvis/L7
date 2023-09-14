@@ -42,7 +42,7 @@ copy node_modules/gl/deps/windows/dll/x64/*.dll c:\windows\system32
 Start each package code change monitoring:
 
 ```bash
-yarn watch
+yarn  run dev
 ```
 
 Start Storybook, it will automatically open `http://localhost:6006/`:

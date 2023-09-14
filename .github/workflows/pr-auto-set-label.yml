@@ -1,0 +1,15 @@
+name: 🏷 PR Auto Set Label
+
+on:
+  pull_request_target:
+    types: [opened, edited]
+
+jobs:
+  auto-set-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: pr-auto-label
+        uses: actions-cool/pr-auto-label@v1
+        with:
+          enum: 'fix, chore, feat, refactor, test, docs'
+          extra: 'feat/feature, docs/documentation'

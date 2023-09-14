@@ -24,6 +24,7 @@ Thank you!
 - [ ] Code style optimization
 - [ ] Test Case
 - [ ] Branch merge
+- [ ] update version
 - [ ] Workflow
 - [ ] Other (about what?)
 
@@ -63,16 +64,3 @@ Describe changes from the user side, and list all potential break changes or oth
 - [ ] Changelog is provided or not needed
 
 ---
-
-<!--
-Below are template for copilot to generate CR message.
-Please DO NOT modify it.
--->
-
-### 🚀 Summary
-
-copilot:summary
-
-### 🔍 Walkthrough
-
-copilot:walkthrough

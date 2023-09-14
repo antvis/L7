@@ -1,0 +1,45 @@
+name: PR Labeled
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+jobs:
+  pr-labeled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Need test case or docs
+        if: github.event.label.name == '🙏 need test cases or docs'
+        uses: actions-cool/issues-helper@main
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            你好 @${{ github.event.pull_request.user.login }}，感谢你的贡献, 为了让代码更健壮, 请补充相应单元测试, 如果有 API 改动, 请修改 [相应的文档](https://github.com/antvis/L7/tree/master/packages/site)
+
+            Hello, @${{ github.event.pull_request.user.login }}, Thanks for your contribution. In order to make the code more robust, please add the corresponding unit tests, and update the [docs](https://github.com/antvis/L7/tree/master/packages/site) if there are API changes.
+
+      - name: Need more info
+        if: github.event.label.name == '👀 need more info'
+        uses: actions-cool/issues-helper@main
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            你好 @${{ github.event.pull_request.user.login }}，感谢你的贡献, 请根据模板完善 PR 描述, 并站在用户的角度说明其改动目的和解决了什么问题 (而非你的解决方式), 以便于我们可以更好的进行 Code Review, 同时请确保已关联相应 issue (如有), 检查你的 commit 是否有描述清楚你这个 PR 所做的事情。
+
+            Hello, @${{ github.event.pull_request.user.login }}, Thanks for your contribution. Please improve the PR description based on the template, and explain the purpose of the change and the problems solved from the perspective of users (not your solution), so that we can conduct a better Code Review. At the same time, please make sure corresponding issue is associated (if any) Meanwhile, please check whether your commit clearly describes what you do as a PR.
+
+      - name: Need modify commit msg
+        if: github.event.label.name == '🙏 need modify commit msg'
+        uses: actions-cool/issues-helper@main
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            你好 @${{ github.event.pull_request.user.login }}，感谢你的贡献, 更新日志会根据每个 PR 的提交信息自动生成, 所以请修改 (rebase) 你的 git 提交信息 (比如: `git rebase -i HEAD~1`), 确保其应该言简意赅的说明当前的**改动点** (例: `feat: 表格增加滚动交互`, `fix: 修复点击单元格后表格无法滚动`) 而不是 (`fix: bug`, `feat: 新功能`), 请面向用户, 让更新日志具有良好的可读性, 谢谢!
+
+            Hello, @${{ github.event.pull_request.user.login }}, Thanks for your contribution. The changelog log is automatically generated for each PR commit, so please rebase your git commit (eg. `git rebase -i HEAD~1`) and make sure that it should be brief and to the point about the current ** change ** (eg: `feat: Table added scrolling interaction`, `fix: fixed table can't scroll after clicking on the cell`) instead of (`fix: bug`, `feat: new feature`), please face to users, make update log with good readability, thank you!

@@ -24,6 +24,7 @@ Contributors guide: https://github.com/antvis/L7/blob/master/.github/CONTRIBUTIN
 - [ ] 测试用例
 - [ ] 分支合并
 - [ ] 工作流程
+- [ ] 版本更新
 - [ ] 其他改动（是关于什么的改动？）
 
 ### 🔗 相关 Issue
@@ -62,15 +63,3 @@ Contributors guide: https://github.com/antvis/L7/blob/master/.github/CONTRIBUTIN
 - [ ] Changelog 已提供或无须提供
 
 ---
-
-<!--
-以下为 copilot 自动生成的 CR 结果，请勿修改
--->
-
-### 🚀 概述
-
-copilot:summary
-
-### 🔍 实现细节
-
-copilot:walkthrough
