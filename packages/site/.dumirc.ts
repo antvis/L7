@@ -67,6 +67,14 @@ export default defineConfig({
           link: '/examples',
           type: 'primary',
         },
+        {
+          text: {
+            zh: 'QuickIssue',
+            en: 'QuickIssue',
+          },
+          link: '/tutorial/quick_issue',
+          type: 'primary',
+        },
       ],
     },
     msfu: false,
