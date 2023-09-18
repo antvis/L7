@@ -10,7 +10,7 @@ const scene = new Scene({
   }),
 });
 scene.on('loaded', () => {
-  fetch('https://geo.datav.aliyun.com/areas_v3/bound/330100_full.json')
+  fetch('https://mdn.alipayobjects.com/afts/file/A*nNheQL3Z-FUAAAAAAAAAAAAADrd2AQ/330100_full.json')
     .then((res) => res.json())
     .then((data) => {
       const fillLayer = new PolygonLayer({
