@@ -14,7 +14,7 @@ attribute float a_Total_Distance;
 attribute vec2 a_DistanceAndIndex;
 
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 uniform float u_icon_step: 100;
 

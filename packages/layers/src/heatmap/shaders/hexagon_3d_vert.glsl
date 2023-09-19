@@ -11,7 +11,7 @@ uniform vec2 u_radius;
 uniform float u_coverage: 0.9;
 uniform float u_angle: 0;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 varying vec4 v_color;
 
 uniform vec2 u_sceneCenterMercator;

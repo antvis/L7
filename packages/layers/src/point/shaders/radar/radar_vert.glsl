@@ -6,7 +6,7 @@ uniform float u_speed: 1.0;
 uniform float u_time;
 
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform int u_size_unit;
 
 varying vec4 v_data;
@@ -31,8 +31,6 @@ void main() {
   // unpack color(vec2)
   v_color = a_Color;
 
-
-
   // anti-alias
   float blur = 0.0;
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, blur);
@@ -52,12 +50,7 @@ void main() {
   v_data = vec4(extrude.x, extrude.y, antialiasblur, -1.0);
 
   vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
-
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp *vec4(project_pos.xy + offset, 0.0, 1.0);
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
-  }
+  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
   setPickingColor(a_PickingColor);
 }

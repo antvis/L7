@@ -29,8 +29,7 @@ uniform vec2 u_ViewportSize;
 uniform float u_DevicePixelRatio;
 uniform float u_FocalDistance;
 uniform vec3 u_CameraPosition;
-
-// uniform mat4 u_Mvp;
+uniform mat4 u_Mvp;
 
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
@@ -258,4 +257,13 @@ vec4 unproject_clipspace_to_position(vec4 clipspacePos, mat4 u_InverseViewProjec
 
 bool isEqual( float a,  float b) {
     return  a< b + 0.001 && a > b - 0.001;
+}
+
+// 支持 GaodeV2、Mapbox
+vec4 project_common_position_to_clipspace_v2(vec4 position) {
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    return u_Mvp * position;
+  } else {
+    return project_common_position_to_clipspace(position);
+  }
 }

@@ -6,7 +6,7 @@ attribute float a_Total_Distance;
 attribute float a_Distance;
 
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 
 uniform float u_opacity: 1.0;
 uniform float u_vertexScale: 1.0;

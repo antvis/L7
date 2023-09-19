@@ -7,7 +7,7 @@ varying vec4 v_color;
 varying vec2 v_uv;
 varying float v_opacity;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 
 uniform float u_raisingHeight: 0.0;
 uniform float u_heightfixed: 0.0;
@@ -35,11 +35,8 @@ void main() {
     }
   }
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offset, raisingHeight, 1.0);
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
-  }
+
+  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, raisingHeight, 1.0));
 
   gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
   setPickingColor(a_PickingColor);
