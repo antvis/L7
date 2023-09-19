@@ -4,7 +4,7 @@ attribute vec3 a_Extrude;
 attribute float a_Size;
 attribute float a_Shape;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform int u_size_unit;
 
 varying vec4 v_data;
@@ -71,15 +71,8 @@ void main() {
       raisingHeight = u_blur_height_fixed.y * mapboxZoomScale;
     }
   }
- 
-
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position =  u_Mvp * vec4(project_pos.xy + offset, raisingHeight, 1.0);
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
-  }
- 
-  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+  
+  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, raisingHeight, 1.0));
 
   setPickingColor(a_PickingColor);
 }

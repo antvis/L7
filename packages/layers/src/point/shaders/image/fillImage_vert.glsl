@@ -5,7 +5,7 @@ attribute float a_Size;
 attribute vec2 a_Uv;
 
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform mat2 u_RotateMatrix;
 uniform int u_size_unit;
 
@@ -53,13 +53,7 @@ void main() {
     }
   }
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp *vec4(project_pos.xy + offset, raisingHeight, 1.0);
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
-  }
- 
-  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
+  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, 0.0, 1.0));
 
   setPickingColor(a_PickingColor);
 }

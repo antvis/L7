@@ -4,7 +4,7 @@ attribute vec3 a_Position;
 attribute vec4 a_Instance;
 attribute float a_Size;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform float segmentNumber;
 varying vec4 v_color;
 varying float v_segmentIndex;
@@ -94,10 +94,7 @@ void main() {
   v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
   v_color.a *= u_opacity;
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * (vec4(curr.xy + offset, 0, 1.0));
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
-  }
+  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + offset, 0, 1.0));
+
   setPickingColor(a_PickingColor);
 }

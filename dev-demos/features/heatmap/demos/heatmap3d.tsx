@@ -28,7 +28,7 @@ export default () => {
         zoomOffset: 0,
       },
     });
-    scene.addLayer(layer1)
+    // scene.addLayer(layer1)
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
       )

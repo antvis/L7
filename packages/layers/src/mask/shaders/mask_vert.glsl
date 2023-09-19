@@ -1,6 +1,6 @@
 attribute vec3 a_Position;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 
 #pragma include "projection"
 

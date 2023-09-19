@@ -80,6 +80,6 @@ void main() {
   v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
 
-  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
+  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + offset, 0, 1.0));
   setPickingColor(a_PickingColor);
 }

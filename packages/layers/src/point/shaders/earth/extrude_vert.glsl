@@ -15,7 +15,7 @@ uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_globel;
 uniform float u_r;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 varying vec4 v_color;
 
 uniform float u_opacity : 1;

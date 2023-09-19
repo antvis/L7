@@ -13,9 +13,10 @@ attribute vec2 a_iconMapUV;
 // dash line
 attribute float a_Total_Distance;
 attribute vec2 a_DistanceAndIndex;
+uniform float u_raisingHeight: 0.0;
 
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 
 uniform float u_vertexScale: 1.0;

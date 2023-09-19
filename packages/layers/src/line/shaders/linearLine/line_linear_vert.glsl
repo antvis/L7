@@ -9,7 +9,7 @@ attribute float a_Total_Distance;
 attribute vec2 a_DistanceAndIndex;
 
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 
 uniform float u_heightfixed: 0.0;
 uniform float u_vertexScale: 1.0;

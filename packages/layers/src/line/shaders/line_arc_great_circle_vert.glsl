@@ -8,7 +8,7 @@ attribute vec3 a_Position;
 attribute vec4 a_Instance;
 attribute float a_Size;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform float segmentNumber;
 uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 varying vec4 v_color;
@@ -176,11 +176,9 @@ v_line_data.a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v �
     v_iconMapUV = a_iconMapUV;
   }
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * (vec4(curr.xy + offset, curr.z, 1.0));
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
-  }
+
+
+  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + offset, 0, 1.0));
   setPickingColor(a_PickingColor);
 }
 
