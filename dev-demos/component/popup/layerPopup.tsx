@@ -137,7 +137,8 @@ const Demo: FunctionComponent = () => {
             fields: ['name', 'lines'],
           },
         ],
-        trigger: 'hover',
+        trigger: 'click',
+        closeOnClick: true,
       });
       // pointLayer.on('mousemove', (e) => {
       //   console.log('point mousemove', e);

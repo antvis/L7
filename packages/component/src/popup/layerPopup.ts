@@ -1,7 +1,6 @@
 import { ILayer, IPopupOption } from '@antv/l7-core';
 import { DOM, lodashUtil } from '@antv/l7-utils';
 import { Container } from 'inversify';
-// import { Container } from 'inversify';
 import Popup from './popup';
 
 type ElementType = DOM.ElementType;
@@ -36,6 +35,10 @@ type LayerMapInfo = {
 export { LayerPopup };
 
 export default class LayerPopup extends Popup<ILayerPopupOption> {
+  /**
+   * 用于统计当前帧当中，layer 被点击的次数
+   */
+  protected layerClickCountByFrame = 0;
   /**
    * 用于保存图层对应的事件回调以及配置信息
    * @protected
@@ -89,7 +92,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       },
       offsets: [0, 10],
       closeButton: false,
-      closeOnClick: false,
+      closeOnClick: true,
       autoClose: false,
       closeOnEsc: false,
     };
@@ -100,7 +103,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * @protected
    */
   protected bindLayerEvent() {
-    const { trigger } = this.popupOption;
+    const { trigger, closeOnClick } = this.popupOption;
     this.layerConfigItems.forEach((configItem) => {
       const layer = this.getLayerByConfig(configItem);
       if (!layer) {
@@ -119,10 +122,14 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
         layer?.on('mousemove', onMouseMove);
         layer?.on('mouseout', onMouseOut);
       } else {
-        const onClick = this.onLayerClick.bind(this, layer);
-        layerInfo.onClick = onClick;
+        const onLayerClick = this.onLayerClick.bind(this, layer);
+        layerInfo.onClick = onLayerClick;
+        layer?.on('click', onLayerClick);
 
-        layer?.on('click', onClick);
+        const mapContainer = this.mapsService?.getMapContainer();
+        if (mapContainer && closeOnClick) {
+          mapContainer.addEventListener('click', this.onSceneClick);
+        }
       }
       const source = layer?.getSource?.();
       const onSourceUpdate = this.onSourceUpdate.bind(this, layer);
@@ -157,6 +164,10 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       if (onSourceUpdate) {
         layer?.getSource()?.off('update', onSourceUpdate);
       }
+      const mapContainer = this.mapsService?.getMapContainer();
+      if (mapContainer) {
+        mapContainer.removeEventListener('click', this.onSceneClick);
+      }
     });
   }
 
@@ -181,21 +192,35 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     }
   }
 
-  protected onLayerClick(layer: ILayer, e: any) {
-    if (this.isShow && this.isSameFeature(layer, e.featureId)) {
-      this.hide();
-    } else {
-      const { title, content } = this.getLayerInfoFrag(layer, e);
-      this.setDOMContent(content);
-      this.setLnglat(e.lngLat);
-      this.setTitle(title);
-      this.displayFeatureInfo = {
-        layer,
-        featureId: e.featureId,
-      };
-      this.show();
-    }
-  }
+  protected onLayerClick = (layer: ILayer, e: any) => {
+    requestAnimationFrame(() => {
+      if (this.popupOption.closeOnClick) {
+        this.layerClickCountByFrame++;
+      }
+      if (this.isShow && this.isSameFeature(layer, e.featureId)) {
+        this.hide();
+      } else {
+        const { title, content } = this.getLayerInfoFrag(layer, e);
+        this.setDOMContent(content);
+        this.setLnglat(e.lngLat);
+        this.setTitle(title);
+        this.displayFeatureInfo = {
+          layer,
+          featureId: e.featureId,
+        };
+        this.show();
+      }
+    });
+  };
+
+  protected onSceneClick = () => {
+    this.layerClickCountByFrame = 0;
+    requestAnimationFrame(() => {
+      if (!this.layerClickCountByFrame) {
+        this.hide();
+      }
+    });
+  };
 
   protected onSourceUpdate(layer: ILayer) {
     this.hide();
@@ -314,4 +339,10 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       featureId === displayFeatureInfo.featureId
     );
   }
+
+  /**
+   * 覆盖 Popup 中的默认的 closeOnClick 行为
+   */
+  // tslint:disable-next-line:no-empty
+  protected updateCloseOnClick = () => {};
 }
