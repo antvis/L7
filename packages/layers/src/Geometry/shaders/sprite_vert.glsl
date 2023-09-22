@@ -4,7 +4,6 @@ attribute vec3 a_Position;
 attribute vec3 a_Color;
 
 uniform mat4 u_ModelMatrix;
-
 uniform float u_opacity;
 uniform float u_Scale;
 varying vec3 v_Color;

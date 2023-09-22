@@ -1,7 +1,6 @@
 precision highp float;
 uniform mat4 u_ModelMatrix;
 uniform float u_raisingHeight: 0.0;
-
 uniform float u_opacity;
 uniform vec2 u_size: [1.0, 1.0];
 uniform mat2 u_RotateMatrix;

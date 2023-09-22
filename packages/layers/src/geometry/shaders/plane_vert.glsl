@@ -1,7 +1,6 @@
 precision highp float;
 uniform mat4 u_ModelMatrix;
 
-
 uniform float u_opacity;
 uniform float u_terrainClipHeight;
 
