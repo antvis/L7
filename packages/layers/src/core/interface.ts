@@ -113,7 +113,6 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   fontWeight?: string;
   fontFamily?: string;
   textAllowOverlap?: boolean;
-
   // cylinder
   pickLight?: boolean;
 
@@ -162,6 +161,11 @@ export interface IPolygonLayerStyleOptions extends IBaseLayerStyleOptions {
 
   featureId?: string;
   sourceLayer?: string;
+}
+
+export interface IPolygonExtrusionStyleOptions {
+  opacity: number;
+  extrusionBase: number;
 }
 
 // 栅格瓦片图层
