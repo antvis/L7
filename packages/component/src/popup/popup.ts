@@ -477,8 +477,16 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
       // this.closeButton.type = 'button';
       closeButton.setAttribute('aria-label', 'Close popup');
-      closeButton.addEventListener('click', () => {
+      closeButton.addEventListener('click', (e) => {
         this.hide();
+      });
+
+      // 防止点击 Popup 关闭按钮时，触发 Layer click 事件
+      closeButton.addEventListener('pointerup', (e) => {
+        e.stopPropagation();
+      });
+      closeButton.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
       });
 
       this.closeButton = closeButton;
