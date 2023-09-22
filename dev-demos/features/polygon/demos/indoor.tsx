@@ -7,7 +7,11 @@ import {
     // @ts-ignore
   } from '@antv/l7';
   // @ts-ignore
+<<<<<<< HEAD
   import { GaodeMap,Mapbox } from '@antv/l7-maps';
+=======
+  import { GaodeMap } from '@antv/l7-maps';
+>>>>>>> c44ebbba05 (Polygon extrude (#1885))
   import React, { useEffect } from 'react';
   
   export default () => {
