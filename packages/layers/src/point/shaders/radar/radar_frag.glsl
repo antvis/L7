@@ -35,12 +35,6 @@ void main() {
   vec2 dir = normalize(extrude);
   vec2 baseDir = vec2(1.0, 0.0);
   float pi = 3.14159265359;
-  // full circle
-  // float rades = dot(dir, baseDir);
-  // float flag = sign(dir.y);
-  // float radar_v = (flag - 1.0) * -0.5 + flag * acos(rades)/pi/2.0;
-  
-  // half circle
   float flag = sign(dir.y);
   float rades = dot(dir, baseDir);
   float radar_v = (flag - 1.0) * -0.5 * acos(rades)/pi;

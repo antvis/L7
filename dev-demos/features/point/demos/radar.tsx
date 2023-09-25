@@ -9,34 +9,74 @@ export default () => {
       const scene = new Scene({
         id: 'map',
         map: new GaodeMap({
-          center: [110.19382669582967, 30.258134],
+          center: [120.188193, 30.292542],
           pitch: 0,
-          zoom: 2,
+          zoom: 13,
         }),
       });
   
       const layer = new PointLayer()
         .source(
-          [
-            {
-              lng: 120,
-              lat: 30,
-              t: 'text1',
-            },
-          ],
           {
-            parser: {
-              type: 'json',
-              x: 'lng',
-              y: 'lat',
-            },
-          },
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [120.188193, 30.292542]
+                }
+              },
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [120.201665, 30.26873]
+                }
+              },
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [120.225209, 30.290802]
+                }
+              },
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [120.189641, 30.293248]
+                }
+              },
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [120.189389, 30.292542]
+                }
+              },
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [120.190837, 30.293303]
+                }
+              }
+            ]
+          }
+          
         )
         .size(100)
         .color('#f00')
         .shape('radar')
         .style({
-          unit:'pixel'
+          unit:'meter',
         })
         .animate(true)
         .active(true);

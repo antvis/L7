@@ -7,7 +7,7 @@ uniform float u_radius;
 varying vec2 v_extrude;
 varying float v_weight;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 
 #define GAUSS_COEF  0.3989422804014327
 

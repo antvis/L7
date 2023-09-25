@@ -14,7 +14,7 @@ attribute vec3 a_Normal;
 uniform float u_heightfixed: 0.0; // 默认不固定
 uniform float u_r;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 varying vec4 v_color;
 varying float v_lightWeight;
 varying float v_barLinearZ;
@@ -103,11 +103,7 @@ void main() {
 
   // gl_Position = project_common_position_to_clipspace(pos);
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * pos;
-  } else {
-    gl_Position = project_common_position_to_clipspace(pos);
-  }
+  gl_Position = project_common_position_to_clipspace_v2(pos);
 
   setPickingColor(a_PickingColor);
 }

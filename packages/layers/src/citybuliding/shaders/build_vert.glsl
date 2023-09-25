@@ -14,7 +14,6 @@ attribute vec2 a_Uv;
 varying vec2 v_texCoord;
 
 varying vec4 v_Color;
-uniform mat4 u_Mvp;
 
 uniform float u_circleSweep;
 uniform vec2 u_cityCenter;

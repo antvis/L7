@@ -10,7 +10,7 @@ attribute vec3 a_Normal;
 attribute float a_Size;
 attribute vec3 a_uvs;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 uniform sampler2D u_texture;
 
 
@@ -51,13 +51,7 @@ void main() {
   }
 
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    // gl_Position = u_Mvp * (vec4(project_pos.xyz * vec3(1.0, 1.0, -1.0), 1.0));
-    gl_Position = u_Mvp * (vec4(project_pos.xyz, 1.0));
-  } else {
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
-  }
-
+    gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xyz, 1.0));
 
 
 

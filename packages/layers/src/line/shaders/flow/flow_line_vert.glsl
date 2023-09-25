@@ -5,7 +5,7 @@ attribute vec3 a_Normal;
 attribute vec3 a_Position;
 
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_Mvp;
+
 
 #pragma include "projection"
 #pragma include "picking"
@@ -57,12 +57,7 @@ void main() {
   vec4 fillColor = vec4(a_Color.rgb, a_Color.a * opacity);
   v_color = mix(fillColor, vec4(u_stroke.xyz, u_stroke.w * fillColor.w * u_stroke_opacity), a_Normal.z);
 
-
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy + offsetCommon.xy, 0., 1.0);
-  } else {
-     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offsetCommon.xy, 0., 1.0));
-  }
+  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offsetCommon.xy, 0., 1.0));
 
 
 
