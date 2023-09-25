@@ -6,7 +6,7 @@ import {
   PolygonLayer,
   Scene,
 } from '@antv/l7';
-import { circle, featureCollection, point } from '@turf/turf';
+import { featureCollection, point } from '@turf/turf';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from 'react';
@@ -50,33 +50,12 @@ const Demo: FunctionComponent = () => {
         .color('#ffffff')
         .shape('circle')
         .size(10);
-
       const polygonLayer = new PolygonLayer({
         name: 'polygonLayer',
       });
       polygonLayer
-        .source(
-          featureCollection([
-            circle([120.104697, 30.260704], 30, {
-              units: 'meters',
-              properties: {
-                name: '测试点1',
-                lng: 120.104697,
-                lat: 30.260704,
-                lines: [1, 2, 3, 4, 5, false, '2'],
-              },
-            }),
-            circle([120.104697, 30.261715], 30, {
-              units: 'meters',
-              properties: {
-                name: '测试点1',
-                lng: 120.104697,
-                lat: 30.260704,
-              },
-            }),
-          ]),
-        )
-        .color('#ff0000')
+        .source(featureCollection([]))
+        .color('rgba(255,255,255,0.2)')
         .shape('fill');
 
       const lineString = new LineLayer({
@@ -103,10 +82,17 @@ const Demo: FunctionComponent = () => {
         )
         .size(6)
         .color('#00ff00');
+
+      fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+        .then((res) => res.json())
+        .then((data) => {
+          polygonLayer.setData(data);
+        });
       newScene.addLayer(pointLayer);
       newScene.addLayer(polygonLayer);
       newScene.addLayer(lineString);
       const newPopup = new LayerPopup({
+        closeButton: true,
         items: [
           {
             title: (e) => {
