@@ -237,6 +237,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       offsets: 'vec2',
       textOffset: 'vec2',
       rotation: 'float',
+      extrusionBase: 'float',
     };
     this.layer.enableShaderEncodeStyles.forEach((key: string) => {
       if (encodeStyleAttribute[key]) {
@@ -279,6 +280,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       stroke: [1, 0, 0, 1],
       offsets: [0, 0],
       rotation: 0,
+      extrusionBase: 0,
     };
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       if (!this.layer.encodeStyleAttribute[key]) {

@@ -6,21 +6,14 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { IPolygonExtrusionStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
-import {
-  default as polygonExtrudeFrag,
-  default as polygonExtrudeVert,
-} from '../shaders/extrusion/polygon_extrusion_frag.glsl';
+import polygonExtrudeFrag from '../shaders/extrusion/polygon_extrusion_frag.glsl';
+import polygonExtrudeVert from '../shaders/extrusion/polygon_extrusion_vert.glsl';
 
-export default class ExtrudeModel extends BaseModel {
+export default class ExtrusionModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms() {
-    const { extrusionBase = 0 } =
-      this.layer.getLayerConfig() as IPolygonExtrusionStyleOptions;
-
     return {
-      extrusionBase,
       ...this.getStyleAttribute(),
     };
   }

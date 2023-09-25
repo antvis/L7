@@ -7,11 +7,7 @@ import {
     // @ts-ignore
   } from '@antv/l7';
   // @ts-ignore
-<<<<<<< HEAD
   import { GaodeMap,Mapbox } from '@antv/l7-maps';
-=======
-  import { GaodeMap } from '@antv/l7-maps';
->>>>>>> c44ebbba05 (Polygon extrude (#1885))
   import React, { useEffect } from 'react';
   
   export default () => {
@@ -38,14 +34,20 @@ import {
                 autoFit: true,
             })
               .source(data)
-              .size(100)
-              .shape('extrude')
-              .color('red')
+              .size('height',(val)=>{
+                return val * 1.2;
+              })
+              .shape('extrusion')
+              .color('color')
               .style({
-                // heightfixed: true,
-                // pickLight: true,
-                // raisingHeight: 200000,
-                opacity: 1,
+                extrusionBase:{
+                  field:'base_height',
+                  // value:(val)=>{
+                  //   return val;
+                  // }
+
+                },
+                opacity: 1.0,
                 // topsurface: false,
               });
             scene.addLayer(provincelayerSide);
