@@ -1,10 +1,5 @@
-import {
-  IFramebuffer,
-  IFramebufferInitializationOptions,
-  IRenderbuffer,
-  ITexture2D,
-} from '@antv/l7-core';
-import DeviceTexture2D, { isTexture2D } from './DeviceTexture2D';
+import { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
+import { isTexture2D } from './DeviceTexture2D';
 import {
   Device,
   Format,

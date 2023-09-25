@@ -69,7 +69,7 @@ class Scene
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, canvas, hasBaseMap } = config;
+    const { id, map, canvas, hasBaseMap, renderer } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
@@ -79,8 +79,7 @@ class Scene
     // 绑定渲染引擎服务
     sceneContainer
       .bind<IRendererService>(TYPES.IRendererService)
-      // .to(ReglRendererService)
-      .to(DeviceRendererService)
+      .to(renderer === 'device' ? DeviceRendererService : ReglRendererService)
       .inSingletonScope();
 
     // 依赖注入

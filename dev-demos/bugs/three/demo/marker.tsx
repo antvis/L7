@@ -10,7 +10,7 @@ const gltfPromiseMap: Record<string, Promise<Group>> = {};
 
 export const getGLTFScene = (() => {
   return (url: string) => {
-    const promise = new Promise<Group>((resolve, reject) => {
+    const promise = new Promise<Group>((resolve) => {
       // 防止 promise 还未完成赋值
       setTimeout(() => {
         const cacheGLTF = gltfSceneMap[url];
@@ -43,32 +43,31 @@ const data1 = [
   {
     lng: 120.1143242,
     lat: 20.27562376,
-    size:  Math.pow(2, 17),
+    size: Math.pow(2, 17),
     url: 'https://mdn.alipayobjects.com/huamei_zihk4o/uri/file/as/2/zihk4o/6/mp/RxNN8ocL3KtNSN9F/homePoi/homePoi.gltf',
     label: '潜客: 750',
-  }
+  },
 ];
 
 const data2 = [
   {
     lng: 120.1669987,
     lat: 40.27756082,
-    size:  Math.pow(2, 17),
+    size: Math.pow(2, 17),
     url: 'https://mdn.alipayobjects.com/huamei_zihk4o/uri/file/as/2/zihk4o/6/mp/RxNN8ocL3KtNSN9F/homePoi/homePoi.gltf',
     label: '潜客: 780',
   },
 ];
 
 const data3 = [
-
-    {
-      lng: 60.164324,
-      lat: 30.272368,
-      size:  Math.pow(2, 17),
-      url: 'https://mdn.alipayobjects.com/huamei_iy7sau/uri/file/as/2/iy7sau/6/mp/fP3BH5TMbu1I9Crv/site/site.gltf',
-      label: '武林广场',
-    },
-  ];
+  {
+    lng: 60.164324,
+    lat: 30.272368,
+    size: Math.pow(2, 17),
+    url: 'https://mdn.alipayobjects.com/huamei_iy7sau/uri/file/as/2/iy7sau/6/mp/fP3BH5TMbu1I9Crv/site/site.gltf',
+    label: '武林广场',
+  },
+];
 
 export default () => {
   const [scene, setScene] = useState<Scene | undefined>();
@@ -95,63 +94,61 @@ export default () => {
       return;
     }
     const threeJSLayer2 = new ThreeLayer({
-        enableMultiPassRenderer: false,
-        // @ts-ignore
-        onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
-          threeScene.add(new AmbientLight(0xffffff));
-          const sunlight = new DirectionalLight(0xffffff, 0.25);
-          sunlight.position.set(0, 80000000, 100000000);
-          sunlight.matrixWorldNeedsUpdate = true;
-          threeScene.add(sunlight);
-  
-          Promise.all(
-            data3.map(({ url, lng, lat, size }) => {
-              return new Promise<void>((resolve) => {
-                const loader = new GLTFLoader();
-                loader.load(url, (gltf) => {
-                  const gltfScene = gltf.scene;
-                  layer.adjustMeshToMap(gltfScene);
-                  layer.setMeshScale(gltfScene, size, size, size);
-                  layer.setObjectLngLat(gltfScene, [lng, lat], 0);
-                  // 向场景中添加模型
-                  threeScene.add(gltfScene);
-                  resolve();
-                });
+      enableMultiPassRenderer: false,
+      // @ts-ignore
+      onAddMeshes: (threeScene: THREE.Scene, layer: ThreeLayer) => {
+        threeScene.add(new AmbientLight(0xffffff));
+        const sunlight = new DirectionalLight(0xffffff, 0.25);
+        sunlight.position.set(0, 80000000, 100000000);
+        sunlight.matrixWorldNeedsUpdate = true;
+        threeScene.add(sunlight);
+
+        Promise.all(
+          data3.map(({ url, lng, lat, size }) => {
+            return new Promise<void>((resolve) => {
+              const loader = new GLTFLoader();
+              loader.load(url, (gltf) => {
+                const gltfScene = gltf.scene;
+                layer.adjustMeshToMap(gltfScene);
+                layer.setMeshScale(gltfScene, size, size, size);
+                layer.setObjectLngLat(gltfScene, [lng, lat], 0);
+                // 向场景中添加模型
+                threeScene.add(gltfScene);
+                resolve();
               });
-            }),
-          ).then(() => {
-            // layer.render();
+            });
+          }),
+        ).then(() => {
+          // layer.render();
+        });
+      },
+    });
+    scene?.addLayer(threeJSLayer2);
+    fetch('https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt')
+      .then((res) => res.text())
+      .then((data) => {
+        const layer = new LineLayer({
+          zIndex: -2,
+        })
+          .source(data, {
+            parser: {
+              type: 'csv',
+              x: 'lng1',
+              y: 'lat1',
+              x1: 'lng2',
+              y1: 'lat2',
+            },
+          })
+          .size(1)
+          .shape('arc')
+          .color('#FF7C6A')
+          .style({
+            opacity: 0.8,
+            sourceColor: '#f00',
+            targetColor: '#6F19FF',
           });
-        },
+        scene.addLayer(layer);
       });
-          scene?.addLayer(threeJSLayer2);
-    fetch("https://gw.alipayobjects.com/os/rmsportal/UEXQMifxtkQlYfChpPwT.txt")
-              .then((res) => res.text(
-                
-              ))
-              .then((data) => {
-                const layer = new LineLayer({
-                    zIndex: -2
-                })
-                  .source(data, {
-                    parser: {
-                      type: "csv",
-                      x: "lng1",
-                      y: "lat1",
-                      x1: "lng2",
-                      y1: "lat2"
-                    }
-                  })
-                  .size(1)
-                  .shape("arc")
-                  .color("#FF7C6A")
-                  .style({
-                    opacity: 0.8,
-                    sourceColor: "#f00",
-                    targetColor: "#6F19FF"
-                  });
-                scene.addLayer(layer);
-              });
     const threeJSLayer = new ThreeLayer({
       enableMultiPassRenderer: false,
       // @ts-ignore
@@ -178,18 +175,16 @@ export default () => {
             });
           }),
         ).then(() => {
-        //   scene.render();
+          //   scene.render();
         });
       },
     });
 
     scene?.addLayer(threeJSLayer);
 
-
-
     return () => {
-        console.log('remove layer');
-       scene?.removeLayer(threeJSLayer2);
+      console.log('remove layer');
+      scene?.removeLayer(threeJSLayer2);
       scene?.removeLayer(threeJSLayer);
     };
   }, [data, scene]);

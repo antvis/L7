@@ -11,6 +11,16 @@ export function TestScene(options?: Partial<IMapOptions>) {
   body.appendChild(el);
 
   const context = createContext(400, 300);
+  const canvas = {
+    width: 400,
+    height: 300,
+    // @ts-ignore
+    getContext: () => {
+      // @ts-ignore
+      context.canvas = canvas;
+      return context;
+    },
+  };
   const reGL = regl({
     gl: context,
     attributes: {
@@ -40,6 +50,8 @@ export function TestScene(options?: Partial<IMapOptions>) {
   const scene = new Scene({
     id: el,
     gl: reGL,
+    // @ts-ignore
+    canvas,
     map: new Map({
       style: 'dark',
       center: [110.19382669582967, 30.258134],

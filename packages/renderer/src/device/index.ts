@@ -7,7 +7,6 @@ import {
   IElements,
   IElementsInitializationOptions,
   IExtensions,
-  IFramebuffer,
   IFramebufferInitializationOptions,
   IModel,
   IModelInitializationOptions,
@@ -106,14 +105,14 @@ export default class DeviceRendererService implements IRendererService {
   createFramebuffer = (options: IFramebufferInitializationOptions) =>
     new DeviceFramebuffer(this.device, options);
 
-  useFramebuffer = (
-    framebuffer: IFramebuffer | null,
-    drawCommands: () => void,
-  ) => {
-    // this.gl({
-    //   framebuffer: framebuffer ? (framebuffer as DeviceFramebuffer).get() : null,
-    // })(drawCommands);
-  };
+  useFramebuffer = () =>
+    // framebuffer: IFramebuffer | null,
+    // drawCommands: () => void,
+    {
+      // this.gl({
+      //   framebuffer: framebuffer ? (framebuffer as DeviceFramebuffer).get() : null,
+      // })(drawCommands);
+    };
 
   clear = (options: IClearOptions) => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
@@ -157,9 +156,9 @@ export default class DeviceRendererService implements IRendererService {
   };
 
   readPixels = (options: IReadPixelsOptions) => {
-    const { framebuffer, x, y, width, height } = options;
+    // const { framebuffer, x, y, width, height } = options;
 
-    const readback = this.device.createReadback();
+    // const readback = this.device.createReadback();
 
     // if (framebuffer) {
     //   readPixelsOptions.framebuffer = (framebuffer as DeviceFramebuffer).get();

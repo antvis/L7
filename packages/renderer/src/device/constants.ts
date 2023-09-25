@@ -6,9 +6,7 @@ import {
   BufferFrequencyHint,
   CompareFunction,
   CullMode,
-  FilterMode,
   Format,
-  MipmapFilterMode,
   PrimitiveTopology,
 } from '@strawberry-vis/g-device-api';
 import { TypedArray } from './utils/typedarray';

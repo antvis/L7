@@ -7,7 +7,7 @@ describe('Map', () => {
   el.style.background = '#aaa';
   document.querySelector('body')?.appendChild(el);
   it('init Map', () => {
-    const map = new Map({
+    new Map({
       container: el,
     });
   });

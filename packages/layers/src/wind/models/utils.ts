@@ -190,7 +190,7 @@ export function bindUnifrom(
   program: WebGLProgram,
   vec: string,
 ) {
-  const uniform = gl.getUniformLocation(program, unifromName);
+  const uniform = gl.getUniformLocation(program, unifromName) as number;
   if (uniform === null || uniform < 0) {
     console.warn('无法获取 uniform 变量的存储位置');
   } else {

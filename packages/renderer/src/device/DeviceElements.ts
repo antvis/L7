@@ -12,7 +12,7 @@ export default class DeviceElements implements IElements {
   private type;
 
   constructor(device: Device, options: IElementsInitializationOptions) {
-    const { data, usage, type, count } = options;
+    const { data, type } = options;
 
     let typed: TypedArray;
     if (isTypedArray(data)) {

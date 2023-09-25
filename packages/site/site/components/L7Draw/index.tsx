@@ -14,9 +14,9 @@ interface DipperMapProps {
 export function L7Draw(props: DipperMapProps) {
   const { draw } = props;
 
-  const jumoDemo = (url: string) => {
-    window.open(url, '_blank');
-  };
+  // const jumoDemo = (url: string) => {
+  //   window.open(url, '_blank');
+  // };
 
   return (
     <div className="dippermapcontainer">

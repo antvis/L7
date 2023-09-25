@@ -22,7 +22,9 @@ export default () => {
 
     const Base64toArrayBuffer = (base64Data) => {
       const padding = '='.repeat((4 - (base64Data.length % 4)) % 4);
-      const base64 = (base64Data + padding).replace(/-/g, '+').replace(/_/g, '/');
+      const base64 = (base64Data + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
 
       const rawData = window.atob(base64);
       const outputArray = new Uint8Array(rawData.length);
@@ -31,19 +33,18 @@ export default () => {
         outputArray[i] = rawData.charCodeAt(i);
       }
       return outputArray;
-    }
-
-    const getUrlQueryParams = (url = location.search): any => {
-      const params = {};
-      const keys = url.match(/([^?&]+)(?==)/g);
-      const values = url.match(/(?<==)([^&]*)/g);
-      for (const index in keys) {
-        // @ts-ignore
-        params[keys[index]] = values?.[index];
-      }
-      return params;
     };
 
+    // const getUrlQueryParams = (url = location.search): any => {
+    //   const params = {};
+    //   const keys = url.match(/([^?&]+)(?==)/g);
+    //   const values = url.match(/(?<==)([^&]*)/g);
+    //   for (const index in keys) {
+    //     // @ts-ignore
+    //     params[keys[index]] = values?.[index];
+    //   }
+    //   return params;
+    // };
 
     // const layerTile = new RasterLayer({
     //   zIndex: 1,
@@ -54,7 +55,7 @@ export default () => {
     //     parser: {
     //       type: 'rasterTile',
     //       tileSize: 256,
-  
+
     //     },
     //   },
     // );
@@ -67,11 +68,11 @@ export default () => {
       {
         parser: {
           type: 'rasterTile',
-          dataType:'customArrayBuffer',
+          dataType: 'customArrayBuffer',
           tileSize: 256,
-  
-          getCustomData: ({x,y,z},callback)=>{
-            const biz_content = { x, y, z, index:1001, crow_type:101 };
+
+          getCustomData: ({ x, y, z }, callback) => {
+            const biz_content = { x, y, z, index: 1001, crow_type: 101 };
             const newUrl = sign('anttech.ai.cv.rs.xytile.get', biz_content, {
               charset: 'utf-8',
               version: '1.0',
@@ -88,12 +89,15 @@ export default () => {
               })
               .join('&');
 
-            const url = `https://openapi.alipay.com/gateway.do?${signStr}`; 
-            fetch(url).then(res=>res.json()).then(response=>{
-              const bufferData = Base64toArrayBuffer(response?.anttech_ai_cv_rs_xytile_get_response?.image || '');
-            callback(null, bufferData);
-
-            })
+            const url = `https://openapi.alipay.com/gateway.do?${signStr}`;
+            fetch(url)
+              .then((res) => res.json())
+              .then((response) => {
+                const bufferData = Base64toArrayBuffer(
+                  response?.anttech_ai_cv_rs_xytile_get_response?.image || '',
+                );
+                callback(null, bufferData);
+              });
           },
           format: async (data: any) => {
             // console.log(bands)
@@ -129,8 +133,7 @@ export default () => {
           //     BMinMax:[0,255],
           //   }
           // },
-        }
-          
+        },
       },
     );
     layerTile2.style({
@@ -139,8 +142,8 @@ export default () => {
       clampHigh: false,
       domain: [0, 150],
       rampColors: {
-        colors: ['rgba(0, 0, 0, 0)','rgba(0, 0, 0, 0)','#EAC300','#EAC300' ],
-        positions: [0,0.2,0.6,1],
+        colors: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)', '#EAC300', '#EAC300'],
+        positions: [0, 0.2, 0.6, 1],
       },
     });
 

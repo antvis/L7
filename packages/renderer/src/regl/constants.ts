@@ -47,7 +47,7 @@ export const dataTypeMap: {
   [gl.INT]: 'int32',
   [gl.UNSIGNED_BYTE]: 'uint8',
   [gl.UNSIGNED_SHORT]: 'uint16',
-  [gl.UNSIGNED_INT]: 'uint32',
+  // [gl.UNSIGNED_INT]: 'uint32',
   [gl.FLOAT]: 'float',
 };
 
