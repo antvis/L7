@@ -15,7 +15,7 @@ order: 2
 
 ## source
 
-<embed src="@/docs/api/source/raster/raster_band_calc.zh.md"></embed>
+<embed src="@/docs/common/source/raster/raster_band_calc.md"></embed>
 
 ## style
 

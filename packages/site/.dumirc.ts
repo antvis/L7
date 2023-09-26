@@ -336,14 +336,6 @@ export default defineConfig({
         order: 9,
       },
       {
-        slug: 'tutorial/mask',
-        title: {
-          zh: '掩模图层 MaskLayer',
-          en: 'MaskLayer',
-        },
-        order: 10,
-      },
-      {
         slug: 'tutorial/tile',
         title: {
           zh: '瓦片图层 TileLayer',
