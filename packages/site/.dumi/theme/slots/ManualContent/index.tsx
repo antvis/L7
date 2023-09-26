@@ -13,12 +13,14 @@ import { useMedia } from 'react-use';
 import readingTime from 'reading-time';
 import URI from 'uri-parse';
 
-import { ContentTable } from '../ContentTable';
-import { SEO } from '../SEO';
-import { useScrollToTop } from '../hooks';
-import { NavigatorBanner } from './NavigatorBanner';
-import ReadingTime from './ReadingTime';
-import { usePreview } from './usePreview';
+import GithubButtonBar from './GithubButtonBar'
+import { ContentTable } from '@antv/dumi-theme-antv/dist/slots/ContentTable';
+import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
+
+import { useScrollToTop } from '@antv/dumi-theme-antv/dist/slots/hooks';
+import { NavigatorBanner } from '@antv/dumi-theme-antv/dist/slots/ManualContent/NavigatorBanner';
+import ReadingTime from '@antv/dumi-theme-antv/dist/slots/ManualContent/ReadingTime';
+import { usePreview } from '@antv/dumi-theme-antv/dist/slots/ManualContent/usePreview';
 import {
   getBaseRoute,
   getIndexRoute,
@@ -261,7 +263,7 @@ export const ManualContent: React.FC<ManualContent> = ({ children }) => {
   }): string => {
     const path = uri.path.replace(`/en`, '');
     const lang = !baseRoute.startsWith('/en') ? 'zh' : 'en';
-    return `${githubUrl}/edit/master${relativePath}${path}.${lang}.md`;
+    return `${githubUrl}/edit/master/${relativePath}${path}.${lang}.md`;
   };
   const menu = (
     <Menu
@@ -329,6 +331,7 @@ export const ManualContent: React.FC<ManualContent> = ({ children }) => {
                   <EditOutlined />
                 </a>
               </Tooltip>
+              <GithubButtonBar/>
             </h1>
             <div className={styles.readtimeContainer}>
               <ReadingTime

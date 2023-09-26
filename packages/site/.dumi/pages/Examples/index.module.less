@@ -1,5 +1,4 @@
-@import '~antd/es/style/themes/default.less';
-@import '@antv/dumi-theme-antv/dist/slots/_.less';
+@import 'antd/es/style/themes/default.less';
 
 // 参考 yuque 右侧 tabOfContent 宽度
 @toc-width: 260px;
@@ -7,7 +6,6 @@
 .markdown {
   font-size: 14px;
   line-height: 2;
-  min-height: 600px; // 大概一屏幕占位，防止切换文档的时候，有黑影！
 
   h1 {
     margin-bottom: 20px;
@@ -84,14 +82,6 @@
     background-color: rgba(0, 0, 0, 0.03);
   }
 
-  code {
-    padding: 0.2em 0.4em;
-    margin: 0;
-    font-size: 85%;
-    background-color: rgba(175, 184, 193, 0.2);
-    border-radius: 6px;
-  }
-
   code[class*='language-'] {
     background: none;
   }
@@ -115,7 +105,7 @@
     border-left: 2px solid #873bf4;
   }
 
-  description {
+  .description {
     opacity: 0.68;
   }
 
@@ -205,20 +195,23 @@
   > p > br {
     clear: both;
   }
-
-  img {
-    max-width: 100%;
-  }
 }
 
 .layout {
   margin: 24px 0 32px;
+  :global {
+    .ant-layout-content {
+      background-color: #ffffff;
+    }
+  }
 }
 
 .main {
-  width: 100%;
+  background-color: #ffffff;
+  width: calc(100% - @toc-width);
   padding-left: 48px;
   padding-right: 24px;
+  padding-bottom: 24px;
   overflow: hidden;
 
   .meta {
@@ -240,11 +233,13 @@
     }
   }
 
+  .content {
+    .contentReset;
 
-}
-
-.tocSider {
-  width: @toc-width ! important;
+    > div {
+      .contentReset;
+    }
+  }
 }
 
 // reference yuque UI
@@ -254,15 +249,16 @@
   font-size: 12px;
   background: #fff;
   max-height: 100vh;
-  overflow: auto;
+  overflow: hidden;
 
   position: sticky;
   top: 0;
+  padding: 8px 0;
 
-  ul>li {
+  ul > li {
     list-style: none !important;
     padding: 0 !important;
-    margin-left: -1px !important;
+    margin-left: 1em !important;
 
     // 超出部分省略号显示
     text-overflow: ellipsis;
@@ -274,17 +270,11 @@
     }
   }
 }
-.contentTitle {
-  margin-top: 8px;
-  margin-bottom: 20px;
-  font-weight: 500;
-  font-size: 30px;
-  font-family: Avenir, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-  line-height: 38px;
-}
+
 .sider {
   width: 280px !important;
   height: inherit;
+  background-color: #fff;
 
   // menu 滚动
   :global {
@@ -299,6 +289,7 @@
 }
 
 .affix {
+  background-color: #fff;
   & > div {
     height: 100%;
   }
@@ -383,6 +374,12 @@
       cursor: pointer;
       transition: all 0.3s;
       margin: 12px;
+
+      .screenshot {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
 
       > div {
         border: 1px solid @border-color-split;
@@ -491,11 +488,16 @@
       padding-left: 32px;
       padding-right: 32px;
     }
-  }
-  .tocSiderbar {
+
+    .toc {
       display: none;
+    }
   }
- 
+
+  .sider {
+    width: 240px !important;
+  }
+
   .gallery {
     .galleryCard {
       width: 50%;
@@ -513,9 +515,11 @@
   }
 
   .sider {
+    width: 100% !important;
     margin-bottom: 32px;
     padding-bottom: 32px;
     border-bottom: 1px solid #e8e8e8;
+    display: none;
   }
 
   .markdown {
@@ -523,6 +527,7 @@
       margin-top: 30px;
       padding-left: 24px;
       padding-right: 24px;
+      margin-bottom: 30px;
     }
   }
 }
@@ -612,64 +617,4 @@
   font-size: 22px;
   border-radius: 50%;
   text-align: center;
-}
-
-.title {
-  width: 100%;
-  margin-top: 8px;
-  margin-bottom: 20px;
-  font-weight: 500;
-  font-size: 30px;
-  line-height: 38px;
-}
-
-.content {
-  width: 100% !important;
-  min-width: 400px;
-  justify-content: center;
-}
-
-.menuSwitch {
-  position: absolute;
-  top: 72px;
-  right: -40px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  z-index: 0;
-  text-align: center;
-  line-height: 40px;
-  font-size: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-  border-radius: 0 4px 4px 0;
-}
-
-.readtimeContainer {
-  margin-bottom: 1.2em;
-}
-
-.readtime {
-  color: #0d1a26;
-  line-height: 1.5715;
-  list-style: none;
-  -webkit-font-feature-settings: "tnum";
-  font-feature-settings: "tnum";
-  display: inline-block;
-  height: auto;
-  margin: 0 8px 0 0;
-  padding: 0 7px;
-  font-size: 12px;
-  line-height: 20px;
-  white-space: nowrap;
-  background: #fafafa;
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
-  opacity: 1;
-  transition: all .3s;
-  background-color: #fff;
-  font-family: Avenir, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
