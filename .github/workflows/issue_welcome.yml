@@ -28,7 +28,7 @@ jobs:
             actions: 'add-labels'
             token: ${{ secrets.GITHUB_TOKEN }}
             issue-number: ${{ github.event.issue.number }}
-            labels: 'need star'
+            labels: '🌟 need star'
         - name: Create comment
           if: steps.check-star.outputs.is-stargazer != 'true'
           uses: actions-cool/issues-helper@v3
