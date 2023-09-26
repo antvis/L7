@@ -21,4 +21,4 @@ order: 0
 
 ## style
 
-<embed src="@/docs/api/raster_layer/common/style.md"></embed>
+<embed src="@/docs/common/layer/raster/style.md"></embed>

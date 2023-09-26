@@ -20,4 +20,4 @@ layer.style({
 | rampColors  | `IRampColors`      | 值域映射颜色的色带                          | `/`           |
 
 
-<embed src="@/docs/api/raster_layer/common/rampcolors.md"></embed>
+<embed src="@/docs/common/layer/raster/rampcolors.md"></embed>

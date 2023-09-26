@@ -424,14 +424,6 @@ export default defineConfig({
         order: 7,
       },
       {
-        slug: 'api/mask_layer',
-        title: {
-          zh: '掩模图层 MaskLayer',
-          en: 'MaskLayer',
-        },
-        order: 8,
-      },
-      {
         slug: 'api/raster_layer',
         title: {
           zh: '栅格图层 RasterLayer',
