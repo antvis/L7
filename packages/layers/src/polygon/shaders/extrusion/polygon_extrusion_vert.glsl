@@ -21,10 +21,9 @@ varying vec4 v_Color;
 
 void main() {
  
-  vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size + (1.0 - a_Position.z) * extrusionBase * 1.5, 1.0);
+  vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size + (1.0 - a_Position.z) * extrusionBase, 1.0);
   float lightWeight = calc_lighting(pos);
   vec4 project_pos = project_position(pos);
-  // project_pos.z += extrusionBase * 2.0;
   v_Color = a_Color;
   v_Color = vec4(v_Color.rgb * lightWeight, v_Color.w * opacity);
 

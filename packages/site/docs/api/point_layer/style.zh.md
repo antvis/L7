@@ -30,16 +30,16 @@ layer.style({
 
 - [IFillShape](/api/point_layer/shape#shapefillshape-ifillshape)
 
-| style         | 类型               | 描述                       | 默认值   |
-| ------------- | ------------------ | -------------------------- | -------- |
-| stroke        | `string`           | 图形边框颜色               | `#fff`   |
-| strokeWidth   | `number`           | 图形边框宽度               | `0`      |
-| strokeOpacity | `number`           | 图形边框透明度             | `1`      |
-| blur          | `number`           | 图形模糊半径               | `0`      |
-| offsets       | `[number, number]` | 点偏移                     | `[0, 0]` |
-| raisingHeight | `number`           | 抬升高度                   | `0`      |
-| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | `false`  |
-| unit          | `string`           | 点大小单位                 | `pixel`  |
+| style         | 类型              |是否支持数据映射 | 描述                       | 默认值   |
+| ------------- | ------------------|--------------- | -------------------------- | -------- |
+| stroke        | `string`           |是 | 图形边框颜色               | `#fff`   |
+| strokeWidth   | `number`           |否 | 图形边框宽度               | `0`      |
+| strokeOpacity | `number`           |否 | 图形边框透明度             | `1`      |
+| blur          | `number`           |否 | 图形模糊半径               | `0`      |
+| offsets       | `[number, number]` |是 | 点偏移                     | `[0, 0]` |
+|rotation|`number`   | 旋转角度 | 是| `0` |
+| raisingHeight | `number`           |否 | 抬升高度                   | `0`      |
+| heightfixed   | `boolean`          |否 | 点大小单位                 | `pixel`  |
 
 
 #### unit

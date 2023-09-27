@@ -262,8 +262,10 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         // text 为内置变 如果是文本则为cat
         type = ScaleTypes.CAT;
       }
+      if (values === undefined) {
+        type = ScaleTypes.IDENTITY;
+      }
       const cfg = this.createScaleConfig(type, field, scaleOption, data);
-
       styleScale.scale = this.createDefaultScale(cfg);
       styleScale.option = cfg;
     }

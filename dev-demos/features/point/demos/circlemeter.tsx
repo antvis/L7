@@ -40,13 +40,14 @@ const player = new PolygonLayer().source(turf.featureCollection([circle]))
         }
       ]
     })
-    .shape("circle")
+    .shape("triangle")
     .size(size)
     .color("#ff0000")
     .active(true)
     .style({
-      opacity: 0.3,
+      opacity: 1,
       strokeWidth: 1,
+      rotation: 30,
       unit:'meter'
     });
   scene.addLayer(player);
