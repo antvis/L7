@@ -26,7 +26,7 @@ export default defineConfig({
     title: 'L7',
     isAntVSite: false,
     internalSite: {
-      url: 'https://l7.antv.antgroup.com',
+      url: 'https://gitee.com/antv/L7',
       name: {
         zh: '国内镜像',
         en: 'China Mirror',
