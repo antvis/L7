@@ -3,7 +3,6 @@ import { useLocale } from 'dumi';
 import { ExampleWithTopic, GalleryPageContentProps } from '../../types';
 import { DemoCard } from './DemoCard';
 import { getCategoryId } from '@antv/dumi-theme-antv/dist/pages/Examples/utils';
-import SelectBar from '../SelectExampleBar';
 import styles from '../../index.module.less';
 
 /**

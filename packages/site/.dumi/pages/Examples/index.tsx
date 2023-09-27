@@ -1,9 +1,8 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cloneDeep, throttle } from 'lodash-es';
-import { SearchOutlined } from '@ant-design/icons';
-import { BackTop, Layout as AntLayout, Input, Select, Button } from 'antd';
+import { BackTop, Layout as AntLayout } from 'antd';
 import { useLocale } from 'dumi';
 import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
 import { Header } from '@antv/dumi-theme-antv/dist/slots/Header';
