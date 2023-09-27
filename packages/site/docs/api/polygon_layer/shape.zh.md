@@ -23,6 +23,20 @@ layer.shape('fill');
 layer.shape('extrude');
 ```
 
+### extrusion
+
+extrude 图层的升级版, 支持 extrusionBase（基础高度）数据映射
+
+```js
+layer.shape('extrusion');
+
+```
+
+
+
+
+
+
 ### shape('water')
 
 `shape` 为 `water` 几何图层用于绘制平面水体。

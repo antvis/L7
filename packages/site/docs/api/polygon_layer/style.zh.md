@@ -58,6 +58,16 @@ interface IOpacityLinear {
 | sourceColor   | `IColor`  | 侧面底部颜色               | `/`     |
 | targetColor   | `IColor`  | 侧面顶部颜色               | `/`     |
 
+### extrusion
+`shape` 为挤出几何体。
+
+- [extrusion](/api/polygon_layer/shape#extrusion)
+
+| style         | 类型      | 描述       |  是否支持数据映射               | 默认值  |
+| ------------- | --------- | -----------| --------------- | ------- |
+| extrusionBase | `number`  | 基础高度，单位米     | 支持           | `0`     |
+
+
 #### linear
 
 几何体图层支持配置渐变效果（sourceColor、targetColor），在配置渐变效果后会覆盖 `layer.color` 方法设置的颜色。
