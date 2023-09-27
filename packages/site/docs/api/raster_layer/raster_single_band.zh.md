@@ -17,8 +17,8 @@ order: 0
 
 ## source
 
-<embed src="@/docs/api/source/raster/raster_single.zh.md"></embed>
+<embed src="@/docs/common/source/raster/raster_single.md"></embed>
 
 ## style
 
-<embed src="@/docs/api/raster_layer/common/style.md"></embed>
+<embed src="@/docs/common/layer/raster/style.md"></embed>

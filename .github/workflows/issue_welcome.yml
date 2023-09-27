@@ -22,6 +22,13 @@ jobs:
         - name: check-star
           uses: gacts/is-stargazer@v1
           id: check-star
+        - name: Add need star labels
+          uses: actions-cool/issues-helper@v3
+          with:
+            actions: 'add-labels'
+            token: ${{ secrets.GITHUB_TOKEN }}
+            issue-number: ${{ github.event.issue.number }}
+            labels: '🌟 need star'
         - name: Create comment
           if: steps.check-star.outputs.is-stargazer != 'true'
           uses: actions-cool/issues-helper@v3

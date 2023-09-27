@@ -15,7 +15,7 @@ order: 1
 
 ## source
 
-<embed src="@/docs/api/source/raster/raster_rgb.zh.md"></embed>
+<embed src="@/docs/common/source/raster/raster_rgb.md"></embed>
 
 ## style
 

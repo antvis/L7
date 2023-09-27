@@ -36,6 +36,7 @@ export default defineConfig({
       'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.antgroup.com/',
     githubUrl: 'https://github.com/antvis/L7',
+    relativePath:'packages/site',
     keywords:
       'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
@@ -336,14 +337,6 @@ export default defineConfig({
         order: 9,
       },
       {
-        slug: 'tutorial/mask',
-        title: {
-          zh: '掩模图层 MaskLayer',
-          en: 'MaskLayer',
-        },
-        order: 10,
-      },
-      {
         slug: 'tutorial/tile',
         title: {
           zh: '瓦片图层 TileLayer',
@@ -430,14 +423,6 @@ export default defineConfig({
           en: 'ImageLayer',
         },
         order: 7,
-      },
-      {
-        slug: 'api/mask_layer',
-        title: {
-          zh: '掩模图层 MaskLayer',
-          en: 'MaskLayer',
-        },
-        order: 8,
       },
       {
         slug: 'api/raster_layer',

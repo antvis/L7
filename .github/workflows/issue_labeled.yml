@@ -30,7 +30,7 @@ jobs:
             ![giphy](https://user-images.githubusercontent.com/507615/62342668-4735dc00-b51a-11e9-92a7-d46fbb1cc0c7.gif)
 
       - name: 🤔 Need Reproduce,
-        if: github.event.label.name == '🤔 Need Reproduce' ||  github.event.label.name == '👀 need more info'
+        if: github.event.label.name == '🤔 Need Reproduce'
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'create-comment'

@@ -1,0 +1,82 @@
+@import 'antd/es/style/themes/default.less';
+@import '@antv/dumi-theme-antv/dist/slots/_.less';
+
+:global(#root) {
+  width: 100%;
+  height: 100%;
+}
+
+.example {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .container {
+    flex: 1;
+    background-color: #fff;
+
+    .content {
+      position: relative;
+      height: 100%;
+
+      .left {
+        height: 100%;
+      }
+
+      .right {
+        height: 100%;
+      }
+    }
+  }
+}
+
+.menuSider {
+  background-color: #f8f9fc;
+  border-right: 1px solid #ececec;
+
+  :global {
+    .ant-layout-sider-children {
+      overflow-y: hidden;
+      overflow-x: hidden;
+
+      &:hover {
+        overflow-y: auto;
+      }
+    }
+  }
+}
+
+.trigger {
+  font-size: 12px;
+  position: relative;
+  margin: auto;
+  color: #6c7f90;
+  left: -1px;
+  z-index: 4;
+  width: 22px;
+  cursor: pointer;
+  transition: color 0.3s;
+  border: 1px solid #ececec;
+  border-left: none;
+  background-color: #fff;
+  height: 66px;
+  box-sizing: border-box;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  text-align: center;
+
+  &[type='menu-unfold'] {
+    background-color: #f8f9fc;
+  }
+
+  svg {
+    position: absolute;
+    left: 3px;
+    top: 25px;
+  }
+}
+
+.trigger:hover {
+  color: @primary-color;
+}

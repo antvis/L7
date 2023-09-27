@@ -49,7 +49,7 @@ callback 参数
 
 自定义瓦片数据获取方法,试用业务场景需要数据鉴权，或者特殊处理的场景
 
-<embed src="@/docs/api/source/tile/method.md"></embed>
+<embed src="@/docs/common/source/tile/method.md"></embed>
 
 ## 示例
 

@@ -10,39 +10,40 @@
  ##### 属性
  
 ###### isLoaded 
-    瓦片是否加载完成
+
+瓦片是否加载完成
 
 ###### currentTiles
-   
+当前瓦片对象
 
 ###### currentZoom
- 当前瓦片层级；这里的曾经和map 的缩放层级不相等
+
+当前瓦片层级；这里的曾经和map 的缩放层级不相等
 
  ##### 事件
 
  ###### tiles-load-start
 
-    地图拖动，需要加载新的瓦片时触发
+地图拖动，需要加载新的瓦片时触发
 
-    ```ts
+```ts
      
         tileSet.on('tiles-load-start',()=>{
             console.log('tile start');
         })
       
-    ```
+ ```
   
 
 ###### tiles-load-finished
-    所有需要加载的瓦片资源加载完成后触发
-  
 
-    ```ts
+所有需要加载的瓦片资源加载完成后触发
+
+```ts
       tileSet.on('tiles-load-finished',()=>{
             console.log('tile finished');
         })
-
-    ```
+```
 
 ### 瓦片source 方法
 
@@ -50,7 +51,7 @@
 
 重新加载瓦片，会重新请求数据，适用与动态瓦片场景，如瓦片数据发生了更新，或者瓦片Join 的数据发生了更新
 
-```ts pure
+``` ts pure
 source.reloadAllTile();
 ```
 
