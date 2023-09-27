@@ -23,9 +23,7 @@ scene.on('loaded', () => {
           autoFit: true,
       })
         .source(data)
-        .size('height',(val)=>{
-          return val * 1.2;
-        })
+        .size('height')
         .shape('extrusion')
         .color('color')
         .style({
