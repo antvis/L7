@@ -13,7 +13,7 @@ import { useMedia } from 'react-use';
 import readingTime from 'reading-time';
 import URI from 'uri-parse';
 
-import GithubButtonBar from './GithubButtonBar'
+import GithubButtonBar from '../GithubButtonBar'
 import { ContentTable } from '@antv/dumi-theme-antv/dist/slots/ContentTable';
 import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
 
@@ -263,7 +263,7 @@ export const ManualContent: React.FC<ManualContent> = ({ children }) => {
   }): string => {
     const path = uri.path.replace(`/en`, '');
     const lang = !baseRoute.startsWith('/en') ? 'zh' : 'en';
-    return `${githubUrl}/edit/master/${relativePath}${path}.${lang}.md`;
+    return `${githubUrl}/edit/master/${relativePath}/docs${path}.${lang}.md`;
   };
   const menu = (
     <Menu

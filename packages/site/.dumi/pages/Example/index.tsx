@@ -7,8 +7,6 @@ import { ThemeAntVContext } from '@antv/dumi-theme-antv/dist/context';
 import { CodeRunner } from '@antv/dumi-theme-antv/dist/slots/CodeRunner';
 import { getDemoInfo } from '@antv/dumi-theme-antv/dist/slots/CodeRunner/utils';
 import { ExampleSider } from '@antv/dumi-theme-antv/dist/slots/ExampleSider';
-import { Header } from '@antv/dumi-theme-antv/dist/slots/Header';
-import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
 import { Demo, ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
 import styles from './index.module.less';
 import { getCurrentTitle } from './utils';
