@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { cloneDeep, throttle } from 'lodash-es';
 import { BackTop, Layout as AntLayout } from 'antd';
 import { useLocale } from 'dumi';
 import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
@@ -14,7 +15,9 @@ import { GalleryPageContent } from './components/GalleryPageContent';
 import { usePrevAndNext } from '@antv/dumi-theme-antv/dist/slots/hooks';
 import { ThemeAntVContext } from '@antv/dumi-theme-antv/dist/context';
 import { ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
+import SelectBar from './components/SelectExampleBar';
 import styles from './index.module.less';
+
 
 
 /**
@@ -29,7 +32,45 @@ const Example = () => {
   const metaData: any = useContext(ThemeAntVContext);
 
   const exampleTopics: ExampleTopic[] = metaData.meta.exampleTopics;
+  const [exampleTopicsState, setExampleTopicsState] = useState<ExampleTopic[]>(exampleTopics);
   const [prev, next] = usePrevAndNext();
+
+  const filterExampleTopics =(filterInfo) => {
+    let result = cloneDeep(exampleTopics);
+    if (filterInfo.types.length !== 0) {
+      result = result.filter((item) => {
+        return filterInfo.types.includes(item.title.en)
+      })
+    }
+    if (filterInfo.search !== '') {
+      result = result.map((item) => {
+        return {
+          ...item,
+          examples: item.examples.map((example) => {
+            return {
+              ...example,
+              demos: example.demos.filter((demo) => {
+                const title = demo.title[locale.id] || demo.title ;
+                return title.toLowerCase().includes(filterInfo.search.toLowerCase())
+              })
+            }
+          }).filter((example) => {
+            return example.demos.length !== 0
+          })
+        }
+      })
+    }
+    return result;
+    
+
+  }
+
+  const onFilterChange = (search: string, types: string[]) => {
+   setExampleTopicsState(filterExampleTopics({
+      search,
+      types
+    }))
+  }
 
   const title = {
     zh: '所有图表',
@@ -40,9 +81,9 @@ const Example = () => {
   useEffect(() => {
     const p = window.location.pathname
     if (p.includes('/zh/')) {
-      nav(p.replace('/zh/','/'))
-  }
-  },[])
+      nav(p.replace('/zh/', '/'))
+    }
+  }, [])
   return (
     <>
       <SEO title={title[locale.id]} />
@@ -52,8 +93,10 @@ const Example = () => {
         className={styles.layout}>
         <ExampleTopicMenu exampleTopics={exampleTopics} />
         <Article className={styles.markdown}>
+
           <div className={styles.main} style={{ width: '100%' }}>
-            <GalleryPageContent exampleTopics={exampleTopics} />
+            <SelectBar exampleTopics={exampleTopics} onFilterChange={ throttle(onFilterChange,200)} />
+            <GalleryPageContent exampleTopics={exampleTopicsState} />
             <div>
               <NavigatorBanner type='prev' post={prev} />
               <NavigatorBanner type='next' post={next} />

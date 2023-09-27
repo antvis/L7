@@ -15,37 +15,6 @@ import styles from '../../index.module.less';
 export const GalleryPageContent: React.FC<GalleryPageContentProps> = (props) => {
   const { exampleTopics } = props;
   const locale = useLocale();
-
-  // TODO: 公告功能待后续补充
-  // /** 获取上新的 demo. 直接用英文 title 作为 id */
-  // const demosOnTheNew = useMemo((): Array<NewDemo> => {
-  //   const result: NewDemo[] = [];
-  //   each(allDemosInCategory, (categoryDemos, category) => {
-  //     const newDemos = filter(categoryDemos, (d) => d.new);
-  //     // 大于4个新增 demo 或全部新增，则直接使用 category 作为代替
-  //     if (
-  //       size(newDemos) > 6 ||
-  //       (size(newDemos) && size(newDemos) === size(categoryDemos))
-  //     ) {
-  //       result.push({
-  //         title: category,
-  //         id: getDemoCategory(newDemos[0], 'en'),
-  //         category,
-  //       });
-  //     } else {
-  //       each(newDemos, (demo) =>
-  //         result.push({
-  //           title: demo.title[locale.id],
-  //           id: demo.title.en,
-  //           category: getDemoCategory(demo),
-  //         }),
-  //       );
-  //     }
-  //   });
-  //   return result;
-  // }, [allDemosInCategory, allDemos, locale.id]);
-
-
   const flattenExamples = exampleTopics.reduce((prev, current) => {
     const exampleWithTopic = current.examples.map(item => {
       return {
@@ -56,7 +25,6 @@ export const GalleryPageContent: React.FC<GalleryPageContentProps> = (props) => 
 
     return prev.concat(exampleWithTopic);
   }, [] as ExampleWithTopic[]);
-
   return (
     <div className={styles.gallery}>
       <div className={styles.galleryContent}>
