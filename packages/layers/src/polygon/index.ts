@@ -5,7 +5,7 @@ import PolygonModels, { PolygonModelType } from './models/';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
-  public enableShaderEncodeStyles = ['opacity'];
+  public enableShaderEncodeStyles = ['opacity', 'extrusionBase'];
   public defaultSourceConfig: {
     data: [];
     options: {
@@ -28,6 +28,8 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
       return 'fill';
     } else if (shape === 'extrude') {
       return 'extrude';
+    } else if (shape === 'extrusion') {
+      return 'extrusion';
     } else if (shape === 'water') {
       return 'water';
     } else if (shape === 'ocean') {

@@ -67,6 +67,25 @@ export function getCommonStyleAttributeOptions(
           },
         },
       };
+    case 'extrusionBase':
+      return {
+        name: 'extrusionBase',
+        type: AttributeType.Attribute,
+        descriptor: {
+          name: 'a_ExtrusionBase',
+          buffer: {
+            // give the WebGL driver a hint that this buffer may change
+            usage: gl.STATIC_DRAW,
+            data: [],
+            type: gl.FLOAT,
+          },
+          size: 1,
+          update: (feature: IEncodeFeature) => {
+            const { extrusionBase: op = 0 } = feature;
+            return [op];
+          },
+        },
+      };
     case 'offsets':
       return {
         name: 'offsets',
