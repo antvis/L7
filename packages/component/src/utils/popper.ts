@@ -127,6 +127,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
       });
     }
     this.emit('show');
+    window.addEventListener('pointerdown', this.onPopperUnClick);
     return this;
   };
 
@@ -137,6 +138,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     DOM.addClass(this.popperDOM, 'l7-popper-hide');
     this.isShow = false;
     this.emit('hide');
+    window.removeEventListener('pointerdown', this.onPopperUnClick);
     return this;
   };
 
@@ -269,6 +271,17 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
       this.hide();
     } else {
       this.show();
+    }
+  };
+
+  protected onPopperUnClick = (e: MouseEvent) => {
+    if (
+      !DOM.findParentElement(e.target as HTMLElement, [
+        '.l7-button-control',
+        '.l7-popper-content',
+      ])
+    ) {
+      this.hide();
     }
   };
 

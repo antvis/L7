@@ -252,3 +252,18 @@ export function appendElementType(
     container.append(children);
   }
 }
+
+export function findParentElement(
+  target: HTMLElement,
+  selector: string | string[],
+) {
+  const selectors = Array.isArray(selector) ? selector : [selector];
+  let current: Element | null = target;
+  while (current instanceof Element && current !== window.document.body) {
+    if (selectors.find((item) => current?.matches(item))) {
+      return current;
+    }
+    current = current?.parentElement ?? null;
+  }
+  return undefined;
+}
