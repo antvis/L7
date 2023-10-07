@@ -63,6 +63,7 @@ export function isNumberArray(data: IRasterLayerData) {
 export function geojsonRewind<
   T extends FeatureCollection | Feature | Geometries,
 >(geojson: T) {
+  // rewind 方法会修改原始数据，frozen 的数据，需要深度克隆后才能修改
   const data = Object.isFrozen(geojson)
     ? lodashUtil.cloneDeep(geojson)
     : geojson;
