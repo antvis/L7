@@ -1,3 +1,7 @@
+import { lodashUtil } from '@antv/l7-utils';
+// @ts-ignore
+import rewind from '@mapbox/geojson-rewind';
+import { Feature, FeatureCollection, Geometries } from '@turf/helpers';
 import { IRasterFileData, IRasterLayerData } from '../interface';
 
 interface IDataItem {
@@ -48,4 +52,23 @@ export function isNumberArray(data: IRasterLayerData) {
     }
   }
   return false;
+}
+
+/**
+ * enforce polygon ring winding order for geojson
+ * https://github.com/mapbox/geojson-rewind
+ * @param geojson
+ * @returns geojson
+ */
+export function geojsonRewind<
+  T extends FeatureCollection | Feature | Geometries,
+>(geojson: T) {
+  const data = Object.isFrozen(geojson)
+    ? lodashUtil.cloneDeep(geojson)
+    : geojson;
+
+  // 设置地理多边形方向 If clockwise is true, the outer ring is clockwise, otherwise it is counterclockwise.
+  rewind(data, true);
+
+  return data;
 }
