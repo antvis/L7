@@ -1,5 +1,3 @@
-// @ts-ignore
-import rewind from '@mapbox/geojson-rewind';
 import {
   Feature,
   FeatureCollection,
@@ -10,6 +8,7 @@ import {
 import { getCoords } from '@turf/invariant';
 import { flattenEach } from '@turf/meta';
 import { IFeatureKey, IParseDataItem, IParserData } from '../interface';
+import { geojsonRewind } from '../utils/util';
 
 interface IParserCFG {
   idField?: string;
@@ -74,7 +73,7 @@ export default function geoJSON(
     );
   });
 
-  rewind(data, true); // 设置地理多边形方向 If clockwise is true, the outer ring is clockwise, otherwise it is counterclockwise.
+  data = geojsonRewind(data);
 
   if (data.features.length === 0) {
     return {
