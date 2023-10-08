@@ -5,7 +5,14 @@ import PolygonModels, { PolygonModelType } from './models/';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   public type: string = 'PolygonLayer';
-  public enableShaderEncodeStyles = ['opacity', 'extrusionBase'];
+  public enableShaderEncodeStyles = [
+    'opacity',
+    'extrusionBase',
+    // shape 为文本时
+    'rotation',
+    'offsets',
+    'stroke',
+  ];
   public defaultSourceConfig: {
     data: [];
     options: {

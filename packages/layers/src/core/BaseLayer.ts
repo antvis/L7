@@ -425,7 +425,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
                 // @ts-ignore
                 attributeValues,
                 // @ts-ignore
-                this.getLayerConfig()[attributeName],
+                attributeField
+                  ? undefined
+                  : this.getLayerConfig()[attributeName], // 设置了字段不需要设置默认值
               ),
             },
           },
@@ -1528,9 +1530,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     defaultValues?: unknown[],
   ) {
     return {
-      values: isFunction(valuesOrCallback)
-        ? undefined
-        : valuesOrCallback || defaultValues,
+      values: isFunction(valuesOrCallback) ? undefined : valuesOrCallback,
       callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
     };
   }
