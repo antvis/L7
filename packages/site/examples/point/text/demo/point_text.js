@@ -5,7 +5,7 @@ const scene = new Scene({
   id: 'map',
   map: new GaodeMap({
     center: [ 110, 36 ],
-    style: 'light',
+    style: 'dark',
     zoom: 3
   })
 });
@@ -23,15 +23,21 @@ scene.on('loaded', () => {
         })
         .shape('m', 'text')
         .size(12)
-        .color('w', [ '#0e0030', '#0e0030', '#0e0030' ])
+        .color('#084081')
         .style({
           textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
           textOffset: [ 0, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]
           spacing: 2, // 字符间距
           padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
           stroke: '#ffffff', // 描边颜色
-          strokeWidth: 0.3, // 描边宽度
-          strokeOpacity: 1.0
+          strokeWidth: 2, // 描边宽度
+          strokeOpacity: 1.0,
+          // rotation: 60, // 常量旋转
+          rotation:{ // 字段映射旋转
+            field: 't',
+            value:[30,270]
+          }
+
         });
 
       scene.addLayer(pointLayer);
