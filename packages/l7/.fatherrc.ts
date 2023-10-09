@@ -11,17 +11,19 @@ export default {
     name:'L7',
     output:{
       path:'./dist',
-      filename:'l7.js'
+      filename:'l7.js',
     },
     platform:'browser',
     externals:{
-      "mapbox-gl":'mapboxgl',
+      "mapbox-gl":{
+        root:'mapboxgl',
+        commonjs:'mapbox-gl',
+        commonjs2:'mapbox-gl',
+        amd:'mapboxgl',
+      },
     },
-    // chainWebpack: (config) => {
-    //   config.plugin('webpack-bundle-analyzer')
-    //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-    // },
   },
+
   autoprefixer: {
     browsers: ['IE 11', 'last 2 versions'],
   },
