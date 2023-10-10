@@ -205,7 +205,7 @@ export default defineConfig({
           },
           {
             name: { zh: 'GeoJSON 编辑工具', en: 'Administrative Division Data' },
-            url: '/custom/l7editor',
+            url: 'https://l7editor.antv.antgroup.com/',
           },
         ],
       },
