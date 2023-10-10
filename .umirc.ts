@@ -93,6 +93,7 @@ export default defineConfig({
     'https://gw.alipayobjects.com/os/lib/react-dom/17.0.2/umd/react-dom.production.min.js',
     // 'https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd-with-locales.js',
     'https://gw.alipayobjects.com/os/lib/antd/4.19.4/dist/antd.js',
+    "https://api.map.baidu.com/api?v=1.0&amp;&amp;type=webgl&amp;ak=zLhopYPPERGtpGOgimcdKcCimGRyyIsh",
     /** lodash */
     'https://gw.alipayobjects.com/os/lib/lodash/4.17.20/lodash.min.js',
   ]

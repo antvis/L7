@@ -1,4 +1,5 @@
 /// <reference types="amap-js-api" />
+/// <reference types="bmapgl" />
 import { IControl } from 'mapbox-gl';
 
 interface Window {
