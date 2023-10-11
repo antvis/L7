@@ -97,10 +97,10 @@ export default defineConfig({
           en: 'News',
         },
         title: {
-          zh: '地理数据分析工具',
+          zh: 'L7VP 地理数据分析工具',
           en: 'L7VP',
         },
-        date: '2023.09.15',
+        date: '2023.07.07',
         link: 'https://li.antv.antgroup.com/',
       },
     ],
@@ -229,8 +229,8 @@ export default defineConfig({
       {
         logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*yaEWT706NFoAAAAAAAAAAAAADmJ7AQ/original',
         title: {
-          zh: 'LocationInsight 空间数据可视分析组件库',
-          en: 'LocationInsight',
+          zh: 'L7VP 空间数据可视分析组件库',
+          en: 'L7VP',
         },
         description: {
           zh: '下一代地理空间数据可视分析平台，可配置出丰富的地理可视化效果提供洞察分析、地图应用搭建、开放扩展能力',
@@ -239,6 +239,21 @@ export default defineConfig({
         link: 'https://larkmap.antv.antgroup.com/',
         image:
           'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*tR2BTIG6Bz8AAAAAAAAAAAAADmJ7AQ/original',
+        isAppLogo: true,
+      },
+      {
+        logo: 'https://mdn.alipayobjects.com/huamei_k6sfo0/afts/img/A*RSdESJd70P8AAAAAAAAAAAAADjWqAQ/original',
+        title: {
+          zh: 'L7Editor 空间数据可视编辑工具',
+          en: 'L7Editor',
+        },
+        description: {
+          zh: '支持 GeoJSON、WKT 等 GIS 格式的地理数据可视编辑工具，支持从 数据 & 地图 双视角编辑数据。 ',
+          en: 'Support GeoJSON, WKT and other GIS format geographic data visual editing tools, support data editing from the data and map dual perspectives.',
+        },
+        link: 'https://l7editor.antv.antgroup.com/',
+        image:
+          'https://mdn.alipayobjects.com/huamei_k6sfo0/afts/img/A*NAC-RpA0KNUAAAAAAAAAAAAADjWqAQ/original',
         isAppLogo: true,
       },
     ],
