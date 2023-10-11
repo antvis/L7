@@ -3,4 +3,6 @@ title: Options
 order: 1
 ---
 
-<embed src="@/docs/api/heatmap_layer/options.zh.md"></embed>
+<embed src="@/docs/common/style.md"></embed>
+
+<embed src="@/docs/common/layer/options.en.md"></embed>
