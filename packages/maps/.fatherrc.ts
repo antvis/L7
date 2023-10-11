@@ -9,8 +9,13 @@ export default {
   },
   umd: {
     output: 'dist',
-    externals: {
-      "mapbox-gl": "mapboxgl",
+    externals:{
+      "mapbox-gl":{
+        root:'mapboxgl',
+        commonjs:'mapbox-gl',
+        commonjs2:'mapbox-gl',
+        amd:'mapbox-gl',
+      },
     },
   },
   platform:'browser',

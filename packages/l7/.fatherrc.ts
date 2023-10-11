@@ -19,7 +19,7 @@ export default {
         root:'mapboxgl',
         commonjs:'mapbox-gl',
         commonjs2:'mapbox-gl',
-        amd:'mapboxgl',
+        amd:'mapbox-gl',
       },
     },
   },
