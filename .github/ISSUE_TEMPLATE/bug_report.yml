@@ -23,7 +23,7 @@ body:
       placeholder: |
         示例: CodeSandBox 或者 StackBlitz URL
     validations:
-      required: true
+      required: false
   - type: textarea
     id: steps
     attributes:
@@ -34,7 +34,7 @@ body:
         2.点击....
         3.查看错误....
     validations:
-      required: true
+      required: false
   - type: textarea
     id: expected
     attributes:
@@ -43,7 +43,7 @@ body:
       placeholder: |
         我期望看到...，但我看到了...
     validations:
-      required: true
+      required: false
   - type: textarea
     id: platform
     attributes:
@@ -52,7 +52,7 @@ body:
         - 操作系统: [macOS, Windows, Linux, React Native ...]
         - 网页浏览器: [Google Chrome, Safari, Firefox]
     validations:
-      required: true
+      required: false
   - type: textarea
     id: screenshots_or_videos
     attributes:
