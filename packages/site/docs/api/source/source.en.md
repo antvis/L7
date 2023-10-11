@@ -5,93 +5,82 @@ order: 0
 
 <embed src="@/docs/common/style.md"></embed>
 
-## 概述
+## Introduction
 
-source 地理数据处理模块，主要包含数据解析（parser)，和数据处理(transform);
+The source geographical data processing module mainly includes data analysis (parser) and data processing (transform).
 
-- data
-- option
-  - cluster **boolean** 是否聚合
-  - clusterOption 聚合配置项
-  - parser 数据解析配置
-  - transforms 数据处理配置
+```js
+const source = new Source(data, option);
+```
 
-### parser
+* data
+* option
+  * cluster **boolean**Whether to aggregate
+  * clusterOptions aggregation configuration items
+  * parser data parsing configuration
+  * transforms data processing configuration
 
-不同数据类型处理成统一数据格式。矢量数据包括 GeoJON, CSV，Json 等不同数据格式，栅格数据，包括 Raster，Image 数据。将来还会支持瓦片格式数据。
+## data
 
-空间数据分矢量数据和栅格数据两大类
+Different parser types correspond to different data types
 
-- 矢量数据 支持 csv，geojson，json 三种数据类型
+* The tile layer data is a url template and supports TMS, WMS, and WMTS data services.
+* Non-tile layer data is a data object
 
-- 栅格数据 支持 image，Raster
+## option
 
-### transform
-
-数据转换，数据统计，网格布局，数据聚合等数据操作。
-
-## API
-
-### cluster `boolean` 可选 可以只设置
-
-### clusterOption 可选
-
-- radius 聚合半径 **number** default 40
-- minZoom: 最小聚合缩放等级 **number** default 0
-- maxZoom: 最大聚合缩放等级 **number** default 16
+`source`pass`option`to describe how the data is processed, which mainly include`parser`and`transforms`。
 
 ### parser
 
-**配置项**
+Different data types are processed into a unified data format. Vector data includes different data formats such as GeoJON, CSV, and Json, and raster data includes Raster and Image data. Tile format data will also be supported in the future.
 
-- type: `csv|json|geojson|image|raster`
-- 其他可选配置项，具体和数据格式相关
+Spatial data is divided into three categories: vector data, raster data and tiles
+
+* Vector data supports three data types: csv, geojson, and json.
+* Raster data supports image, Raster
+* Tile service supports mvt, rasterTile, geojsonvt
+
+```js
+type IParserType =
+  | 'csv'
+  | 'json'
+  | 'geojson'
+  | 'image'
+  | 'raster'
+  | 'rasterTile'
+  | 'mvt'
+  | 'geojsonvt';
+interface IParser {
+  type: IParserType;
+  x?: string;
+  y?: string;
+  x1?: string;
+  y1?: string;
+  coordinates?: string;
+  geometry?: string;
+  [key: string]: any;
+}
+```
 
 #### geojson
 
-[geojson](https://www.yuque.com/antv/l7/dm2zll) 数据为默认数据格式，可以 不设置 parser 参数
+[geojson](https://www.yuque.com/antv/l7/dm2zll)The data is in the default data format, and the parser parameter does not need to be set.
 
 ```javascript
 layer.source(data);
 ```
 
-### Source 更新
-
-如果数据发生改变，可以需要更新数据
-可以通过调用 layer 的 setData 方法实现数据的更新
-
-具体见 [Layer](/api/base_layer/base/#setdata)
-
-```javascript
-layer.setData(data);
-```
-
-#### JSON
-
-[JSON 数据格式解析](/api/source/json)
-
-#### csv
-
-[CSV 数据格式解析](/api/source/csv)
-
-栅格数据类型
-
-#### image
-
-[Image 数据格式解析](/api/source/image)
-
 ### transforms
 
-tranforms 处理的是的标准化之后的数据
-标准化之后的数据结构包括 coordinates 地理坐标字段，以及其他属性字段。
-
-处理完之后返回的也是标准数据
+Transforms processes standardized data and performs data operations such as data conversion, data statistics, grid layout, and data aggregation. After processing, standard data is returned.\
+The standardized data structure includes coordinates geographical coordinate fields, and other attribute fields.
 
 ```json
 [
   {
-    "coordinates": [[]], // 地理坐标字段
-    "_id": "122", // 标准化之后新增字段
+    "coordinates": [[]], // Geographical coordinates field
+    "_id": "122", // New fields after standardization
     "name": "test",
     "value": 1
     // ....
@@ -99,19 +88,19 @@ tranforms 处理的是的标准化之后的数据
 ]
 ```
 
-目前支持两种热力图使用的数据处理方法 grid，hexagon transform 配置项
+Currently, two data processing methods used in heat maps are supported: grid and hexagon transform configuration items
 
-- type 数据处理类型
-- tansform cfg  数据处理配置项
+* type data processing type
+* tansform cfg data processing configuration items
 
 #### grid
 
-生成方格网布局，根据数据字段统计，主要在网格热力图中使用
+Generate a square grid layout, based on data field statistics, mainly used in grid heat maps
 
-- type: 'grid',
-- size: 网格半径
-- field: 数据统计字段
-- method:聚合方法   count,max,min,sum,mean5 个统计维度
+* type: 'grid',
+* size: grid radius
+* field: data statistics field
+* method: aggregation method count,max,min,sum,mean 5 statistical dimensions
 
 ```javascript
 layer.source(data, {
@@ -128,23 +117,23 @@ layer.source(data, {
 
 #### hexagon
 
-生成六边形网格布局，根据数据字段统计
+Generate hexagonal grid layout, statistics based on data fields
 
-- type: hexagon,
-- size: 网格半径
-- field: 数据统计字段
-- method: 聚合方法   count,max,min,sum,mean 5 个统计维度
+* type: 'hexagon',
+* size: grid radius
+* field: data statistics field
+* method: aggregation method count, max, min, sum, mean 5 statistical dimensions
 
 #### join
 
-数据连接，业务中跟多情况是地理数据和业务数据分开的两套数据，我们可与通过 join 方法将地理数据和业务数据进行关联。
+Data connection, in many cases in business, geographical data and business data are two separate sets of data. We can associate geographical data and business data through the join method.
 
-**配置项**
+**Configuration items**
 
-- type: join
-- sourceField 需要连接的业务数据字段名称
-- data 需要连接的数据源 仅支持 json 格式
-- targetField 关联的地理数据字段名称
+* type: join
+* sourceField The name of the business data field that needs to be connected
+* data The data source to be connected only supports json format
+* targetField associated geographic data field name
 
 ```javascript
 const data = {
@@ -153,7 +142,7 @@ const data = {
     {
       type: 'Feature',
       properties: {
-        city: '北京',
+        city: 'Beijing',
       },
       geometry: {},
     },
@@ -162,27 +151,141 @@ const data = {
 
 const data2 = [
   {
-    name: '北京',
+    name: 'Beijing',
     value: 13,
   },
   {
-    name: '天津',
+    name: 'Tianjin',
     value: 20,
   },
 ];
-// data 是地理数据
-// data2 属性数据或者业务数据
+// data is geographical data
+// data2 attribute data or business data
 
-// 通过join方法我们就可以将两个数据连接到一起
+// We can join two data together through the join method
 
 layer
   .source(data, {
     transforms: [
-      (type: 'join'),
-      (sourceField: 'name'), //data1 对应字段名
-      (targetField: 'city'), // data 对应字段名
-      (data: data2),
+      {
+        type: 'join',
+        sourceField: 'name', //data1 corresponding field name
+        targetField: 'city', // data corresponds to the field name and is bound to the geographical data
+        data: data2,
+      },
     ],
   })
-  .color('value'); // 可以采用data1的value字段进行数据到颜色的映射
+  .color('value'); // You can use the value field of data1 to map data to color.
 ```
+
+### cluster
+
+* cluster:`boolean`
+
+`cluster`Indicates whether to aggregate data. Currently, only point layers support it.
+
+### clusterOption optional
+
+* radius aggregate radius**number**default 40
+* minZoom: Minimum aggregate zoom level**number**default 0
+* maxZoom: Maximum aggregate zoom level**number** default 16
+
+[Aggregation graph use cases](/examples/point/cluster#cluster)
+
+## method
+
+### getClustersLeaves(cluster\_id)
+
+Use the aggregation graph to obtain the original data of the aggregation node
+
+parameter:
+id cluster\_id of the aggregation node
+
+```javascript
+layer.on('click', (e) => {
+  console.log(source.getClustersLeaves(e.feature.cluster_id));
+});
+```
+
+### setData
+
+Update source data
+
+#### parameter
+
+* data data is the same as source initialization parameter
+* option configuration item is the same as source initialization parameter
+
+### getFeatureById
+
+Get feature elements based on featureID
+
+#### parameter
+
+* id featureId, unique feature ID encoded internally by L7
+
+```tsx
+const source = layer.getSource();
+source.getFeatureById(1);
+```
+
+### updateFeaturePropertiesById
+
+Updating source's attribute data based on ID will trigger re-rendering
+
+#### parameter
+
+* id featureId, unique feature ID encoded internally by L7
+* Properties needs to update attribute data, merge operation
+
+```tsx
+const source = layer.getSource();
+layer.on('click', (e) => {
+  source.updateFeaturePropertiesById(e.featureId, {
+    name: Math.random() * 10,
+  });
+});
+```
+
+### getFeatureId
+
+Obtain the feature L7 encoding featureId based on the key and value of the attribute, and ensure that the value of the attribute is a unique value. If there are multiple, return the first one.
+
+#### parameter
+
+* key: attribute field
+* value: corresponding value
+
+```tsx
+const source = layer.getSource();
+source.getFeatureId('name', '张三');
+```
+
+## Source update
+
+If the data changes, the data may need to be updated.
+This can be done by calling`layer`of`setData`Method to update data.
+
+For details, see[Layer](/api/base_layer/base/#setdata)
+
+```javascript
+layer.setData(data);
+```
+
+<embed src="@/docs/common/source/tile/method.zh.md"></embed>
+
+### type of data
+
+#### JSON
+
+[JSON data format parsing](/api/source/json)
+
+#### csv
+
+[CSV data format analysis](/api/source/csv)
+
+Raster data type
+
+#### image
+
+[Image data format analysis](/api/source/image)

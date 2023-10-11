@@ -17,4 +17,4 @@ layer.style({
 | noDataValue | `number`           | 不会显示的值                                | `-9999999`    |
 | rampColors  | `IRampColors`      | 值域映射颜色的色带                          | `/`           |
 
-<embed src="@/docs/common/layer/raster/rampcolors.md"></embed>
+<embed src="@/docs/common/layer/raster/rampcolors.zh.md"></embed>

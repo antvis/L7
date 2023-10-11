@@ -5,7 +5,7 @@ order: 2
 
 <embed src="@/docs/common/style.md"></embed>
 
-<embed src="@/docs/common/layer/source.md"></embed>
+<embed src="@/docs/common/layer/source.zh.md"></embed>
 
 ### GeoJSON
 

@@ -5,14 +5,15 @@ order: 1
 
 <embed src="@/docs/common/style.md"></embed>
 
-## 简介
+## Introduction
 
-GeoJSON 是一种对各种地理数据结构进行编码的格式。GeoJSON 对象可以表示几何、特征或者特征集合。GeoJSON 支持下面几何类型：点、线、面、多点、多线、多面和几何集合。GeoJSON 里的特征包含一个几何对象和其他属性，特征集合表示一系列特征。
-[The GeoJSON Format](https://tools.ietf.org/html/draft-butler-geojson-06)
+GeoJSON is a format for encoding various geographic data structures. GeoJSON objects can represent geometries, features, or collections of features. GeoJSON supports the following geometry types: point, line, polygon, multipoint, multiline, polygon, and geometry collection. A feature in GeoJSON contains a geometric object and other attributes, and a feature collection represents a series of features.[The GeoJSON Format](https://tools.ietf.org/html/draft-butler-geojson-06)
 
-L7 数据 source 支持   传入 Geometry 集合 FeatureCollection
+L7 data source supports passing in the Geometry collection FeatureCollection
 
 ### Feature Collection Object
+
+A feature Collection consists of pairs of features
 
 ```json
 {
@@ -42,6 +43,8 @@ L7 数据 source 支持   传入 Geometry 集合 FeatureCollection
 
 ### Feature Object
 
+A feature has geometry spatial information and properties attribute information, where geometry is a required field.
+
 ```json
 {
   "type": "Feature",
@@ -52,9 +55,9 @@ L7 数据 source 支持   传入 Geometry 集合 FeatureCollection
 
 ### Gemetry Object
 
-支持 Gemetry Object 类型
+Supports Gemetry Object type
 
-### Point
+#### Point
 
 ```json
 {
@@ -63,7 +66,7 @@ L7 数据 source 支持   传入 Geometry 集合 FeatureCollection
 }
 ```
 
-### MultiPoint
+#### MultiPoint
 
 ```json
 {
@@ -77,7 +80,7 @@ L7 数据 source 支持   传入 Geometry 集合 FeatureCollection
 
 Line
 
-### LineSring
+#### LineSring
 
 ```json
 {
@@ -89,7 +92,7 @@ Line
 }
 ```
 
-### MultiLineString
+#### MultiLineString
 
 ```json
 {
@@ -109,7 +112,7 @@ Line
 
 Polygon
 
-### Polygon
+#### Polygon
 
 ```json
 {
@@ -150,7 +153,7 @@ With holes:
 }
 ```
 
-### MultiPolygon
+#### MultiPolygon
 
 ```json
 {
@@ -185,16 +188,16 @@ With holes:
 }
 ```
 
-[geojson 详细文档]()
+[geojson detailed documentation]()
 
-## Geojson 相关的 JS 库
+## Geojson related JS libraries
 
-### 地理统计分析工具
+### Geostatistical analysis tools
 
-[turfjs](http://turfjs.org/):   地理数据计算，处理，统计，分析的 Javascript 库
+[turfjs](http://turfjs.org/): Javascript library for geographic data calculation, processing, statistics, and analysis
 
-### 在线工具：
+### Online tools:
 
-[http://geojson.io/](http://geojson.io/)     可以在线查看，绘制，修改 GeoJSON 数据
+<http://geojson.io/>You can view, draw and modify GeoJSON data online
 
-[https://mapshaper.org/](https://mapshaper.org/) 可以查看较大的 geojson，还能够简化 GeoJSON 数据
+<https://mapshaper.org/>Ability to view larger geojson and also simplify GeoJSON data

@@ -11,11 +11,11 @@ order: 1
 
 ## Option
 
-<embed src="@/docs/common/layer/options.md"></embed>
+<embed src="@/docs/common/layer/options.zh.md"></embed>
 
 ## source
 
-<embed src="@/docs/common/source/raster/raster_rgb.md"></embed>
+<!-- <embed src="@/docs/common/source/raster/raster_rgb.zh.md"></embed> -->
 
 ## style
 
