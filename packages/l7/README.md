@@ -123,7 +123,7 @@ scene.addLayer(pointLayer);
 - [L7Draw](https://github.com/antvis/L7Draw)
 - [L7Plot](https://github.com/antvis/L7Plot)
 - [LarkMap](https://github.com/antvis/LarkMap)
-- [LocationInsight](https://locationinsight.antv.antgroup.com)
+- [L7VP](https://locationinsight.antv.antgroup.com)
 - [L7Editor](https://l7editor.antv.antgroup.com/)
 
 ## ✅ License
