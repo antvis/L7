@@ -229,14 +229,14 @@ export default defineConfig({
       {
         logo: 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*yaEWT706NFoAAAAAAAAAAAAADmJ7AQ/original',
         title: {
-          zh: 'L7VP 空间数据可视分析组件库',
+          zh: 'L7VP 地理空间数据可视分析工具',
           en: 'L7VP',
         },
         description: {
-          zh: '下一代地理空间数据可视分析平台，可配置出丰富的地理可视化效果提供洞察分析、地图应用搭建、开放扩展能力',
+          zh: '下一代地理空间数据可视分析工具&研发平台，可配置出丰富的地理可视化效果提供洞察分析、地图应用搭建、开放扩展能力',
           en: 'The next generation geospatial data visual analysis platform can be configured with rich geographic visualization effects to provide insight analysis, map application construction, and open expansion capabilities',
         },
-        link: 'https://larkmap.antv.antgroup.com/',
+        link: 'https://li.antv.antgroup.com',
         image:
           'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*tR2BTIG6Bz8AAAAAAAAAAAAADmJ7AQ/original',
         isAppLogo: true,
