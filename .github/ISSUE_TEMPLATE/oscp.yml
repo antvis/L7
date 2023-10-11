@@ -40,7 +40,7 @@ body:
     validations:
       required: false
   - type: textarea
-    id: oscp_task_info_description
+    id: oscp_task_info_description_2
     attributes:
       label: 参考说明
       description: | 
