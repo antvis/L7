@@ -1,5 +1,5 @@
 ---
-title: MapTheme 地图主题
+title: MapTheme
 order: 11
 ---
 
