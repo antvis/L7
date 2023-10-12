@@ -1,10 +1,10 @@
 name: 'AntV OSCP 计划'
-description: 创建一个新的 issue，如果你的 issue 不符合规范，它将会被自动关闭。
+description:  AntV 开源共建计划（AntV Open Source Contribution Plan，简称 AntV OSCP）
 body:
   - type: checkboxes
     id: AntV_OSCP_program
     attributes:
-      label: Issue Hunt 计划（可选）
+      label: AntV Open Source Contribution Plan（可选）
       description: |
         AntV 开源共建计划（AntV Open Source Contribution Plan，简称 AntV OSCP） 期望可以基于 AntV 的开源 Roadmap 开放具体开发任务到社区，以社区共建任务的形式推动“AntV” 的开源发展，也期望有更多社区伙伴各各种形式参与到 AntV 的开源共建中，共同参与数据可视化开源生态的持续建设。
         若有感兴趣想要认领的任务，可直接回复认领，如果你是首次认领可先完成[新手任务](https://www.yuque.com/antv/cyggvg/cwc9kacfvd9aivsp)
