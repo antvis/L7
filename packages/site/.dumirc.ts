@@ -472,38 +472,6 @@ export default defineConfig({
         order: 12,
       },
       {
-        slug: 'api/component/control',
-        title: {
-          zh: '控件类型 Control',
-          en: 'Control',
-        },
-        order: 1,
-      },
-      {
-        slug: 'api/component/popup',
-        title: {
-          zh: '气泡类型 Popup',
-          en: 'Popup',
-        },
-        order: 2,
-      },
-      {
-        slug: 'api/component/marker',
-        title: {
-          zh: 'Marker 类型',
-          en: 'Marker',
-        },
-        order: 3,
-      },
-      {
-        slug: 'api/experiment/earth',
-        title: {
-          zh: '地球模式',
-          en: 'Earth Mode',
-        },
-        order: 0,
-      },
-      {
         slug: 'api/experiment',
         title: {
           zh: '实验特性',

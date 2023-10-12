@@ -21,7 +21,7 @@ layer.style({
 | ------- | -------- | ------------ | ------ |
 | opacity | `number` | 图形的透明度 | `1`    |
 
-<embed src="@/docs/common/layer/style_encode.md"></embed>
+<embed src="@/docs/common/layer/style_encode.zh.md"></embed>
 
 
 ### 2D shape

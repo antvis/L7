@@ -11,14 +11,14 @@ order: 0
 
 ## Option
 
-<embed src="@/docs/common/layer/options.md"></embed>
+<embed src="@/docs/common/layer/options.zh.md"></embed>
 
 `RasterLayer` 图层主要实现栅格数据的可视化，栅格数据主要来源是卫星遥感数据，如数字高程图，植被分布图，夜光图。
 
 ## source
 
-<embed src="@/docs/common/source/raster/raster_single.md"></embed>
+<embed src="@/docs/common/source/raster/raster_single.zh.md"></embed>
 
 ## style
 
-<embed src="@/docs/common/layer/raster/style.md"></embed>
+<embed src="@/docs/common/layer/raster/style.zh.md"></embed>

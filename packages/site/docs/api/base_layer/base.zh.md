@@ -27,4 +27,4 @@ const layer = new BaseLayer(option) // option - 传入构造函数的参数对�
 scene.addLayer(layer);
 ```
 
-<embed src="@/docs/common/layer/base.md"></embed>
+<embed src="@/docs/common/layer/base.zh.md"></embed>

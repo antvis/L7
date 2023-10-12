@@ -207,4 +207,4 @@ const source = new Source(data, {
 
 ## style
 
-<embed src="@/docs/common/layer/raster/style_single.md"></embed>
+<embed src="@/docs/common/layer/raster/style_single.zh.md"></embed>

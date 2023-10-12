@@ -5,31 +5,31 @@ order: 2
 
 <embed src="@/docs/common/style.md"></embed>
 
-GeoJSON 虽然是通用的的地理数据格式，在具体使用场景中，数据服务人员可能并不熟悉 GeoJON,或者没有生成 GeoJON 的工具， 因此 L7 对数据定义了 Parser 的概念，你的数据可以是任何格式，使用指定数据对应的地理信息字段即可。
+Although GeoJSON is a universal geographical data format, in specific usage scenarios, data service personnel may not be familiar with GeoJON, or do not have the tools to generate GeoJON. Therefore, L7 defines the concept of Parser for data, and your data can be in any format. , just use the geographic information field corresponding to the specified data.
 
 ## JSON
 
-⚠️ json 不是标准的地理数据结构，因此在使用时务必要设置 Parser
+⚠️ json is not a standard geographical data structure, so be sure to set Parser when using it
 
-json 数据解析使用对应 JSON parser
+json data parsing uses the corresponding JSON parser
 
 ## parser
 
-支持两种解析方式
+Supports two parsing methods
 
-### 简易解析方式
+### Simple analysis method
 
-该方式只支持解析的点数据，或者只有两个点的线段，或者弧线数据
+This method only supports analytical point data, or line segments with only two points, or arc data.
 
-- type `string` 必选 `json`
-- x `string` 点数据表示 经度
-- y `string` 点数据表示 纬度
-- x1 `string` 经度
-- x2 `string` 纬度
+* type `string`required`json`
+* x `string`Point data represents longitude
+* y `string`Point data represents latitude
+* x1 `string`longitude
+* x2 `string`latitude
 
-如果数据是点数据，只需要设置 x,y 字段即可
+If the data is point data, you only need to set the x,y fields.
 
-如果是线段，弧线数据，需要知道起止点坐标既，x,y,x1,y1
+If it is line segment or arc data, you need to know the coordinates of the starting and ending points, x, y, x1, y1
 
 ```javascript
 layer.source(data, {
@@ -41,12 +41,14 @@ layer.source(data, {
 });
 ```
 
-### 通用解析方式
+[JSON data demo example](/examples/gallery/animate#animate_path_texture)
 
-可也解析任意复杂的点，线面
+### Universal parsing method
 
-- type `string` 必选 `json`
-- coordinates `array` 必选，主要用于表达比较复杂的格式，等同于 geojson coordinates 属性
+It can also analyze arbitrarily complex points, lines and surfaces.
+
+* type `string`required`json`
+* coordinates `array`Required, mainly used to express more complex formats, equivalent to the geojson coordinates attribute
 
 ```javascript
 layer.source(data, {
@@ -57,15 +59,15 @@ layer.source(data, {
 });
 ```
 
-## 使用示例
+## Usage example
 
-### 点数据
+### point data
 
-#### 简易解析
+#### Simple analysis
 
-- type json
-- x: 经度字段
-- y: 纬度字段
+* type json
+* x: longitude field
+* y: latitude field
 
 ```javascript
 const data = [
@@ -90,9 +92,9 @@ layer.source(data, {
 });
 ```
 
-#### 通用解析
+#### general analysis
 
-[ 点 coodinates 数据格式](/api/source/geojson##point)
+[Point coodinates data format](/api/source/geojson##point)
 
 ```javascript
 const data = [
@@ -114,17 +116,17 @@ layer.source(data, {
 });
 ```
 
-### 线数据
+### line data
 
-#### 简易解析
+#### Simple analysis
 
-- type: json
-- x `string` 经度
-- y `string` 纬度
-- x1 `string` 经度
-- x2 `string` 纬度
+* type: json
+* x `string`longitude
+* y `string`latitude
+* x1 `string`longitude
+* x2 `string`latitude
 
-简易解析只支持两个点组成的线段，主要再绘制弧线的时候比较常用，只需指定线段的起止点坐标
+Simple analysis only supports line segments composed of two points. It is mainly used when drawing arcs. You only need to specify the starting and ending point coordinates of the line segment.
 
 ```javascript
 const data = [
@@ -155,13 +157,13 @@ layer.source(data, {
 });
 ```
 
-#### 通用解析
+#### general analysis
 
-绘制线段、弧线也支持使用 coordinates 组织数据
+Drawing line segments and arcs also supports using coordinates to organize data.
 
-coordinates 包含两个坐标，
-第一个坐标 对应 x, y
-第二个坐标 对应 x1, y1
+coordinates contains two coordinates,
+The first coordinate corresponds to x, y
+The second coordinate corresponds to x1, y1
 
 ```javascript
 const data = [
@@ -181,11 +183,11 @@ layer.source(data, {
 });
 ```
 
-如果需要使用绘制轨迹数据，需要通过 coodinates 指定线的点序列。
+If you need to use drawing trajectory data, you need to specify the point sequence of the line through codinates.
 
-coordinate 格式 geojson 的 coordinate 字段 支持 LineString, MultiLineString
+coordinate format The coordinate field of geojson supports LineString, MultiLineString
 
-[ 线 coodinates 数据格式](/api/source/geojson#linesring)
+[Line coodinates data format](/api/source/geojson#linesring)
 
 ```javascript
 const data = {
@@ -200,7 +202,7 @@ const data = {
 };
 ```
 
-使用时通过 coordinates 指定
+Specify by coordinates when using
 
 ```javascript
 layer.source(data, {
@@ -211,17 +213,17 @@ layer.source(data, {
 });
 ```
 
-### 面数据
+### area data
 
-面数据 coordinates 字段比较复杂不支持简易的解析方式
+The coordinates field of surface data is relatively complex and does not support simple parsing methods.
 
-#### 通用解析
+#### general analysis
 
-需要指定 coordinates 字段, 格式同 GeoJSON 的 coordinates 字段
+The coordinates field needs to be specified. The format is the same as the coordinates field of GeoJSON.
 
-[面 coodinates 数据格式](/api/source/geojson/#polygon)
+[Face codinates data format](/api/source/geojson/#polygon)
 
-**注意面数据 coord  是三层数据结构**
+**Note that surface data coord is a three-layer data structure**
 
 ```javascript
 [

@@ -1,6 +1,24 @@
 ---
-title: RasterLayer single band
+title: RasterLayer data encode
 order: 0
 ---
 
-<embed src="@/docs/api/raster_layer/raster_single_band.zh.md"></embed>
+<embed src="@/docs/common/style.md"></embed>
+
+## Introduction
+
+Single-band raster data rendering, visual coloring based on raster data
+
+## Option
+
+<embed src="@/docs/common/layer/options.en.md"></embed>
+
+`RasterLayer`The layer mainly realizes the visualization of raster data. The main source of raster data is satellite remote sensing data, such as digital elevation map, vegetation distribution map, and night light map.
+
+## source
+
+<embed src="@/docs/common/source/raster/raster_single.en.md"></embed>
+
+## style
+
+<embed src="@/docs/common/layer/raster/style.en.md"></embed>

@@ -4,14 +4,15 @@ order: 4
 ---
 
 <embed src="@/docs/common/style.md"></embed>
-Image 数据主要用于在地图根据经纬度范围添加图图片，不如一幅纸制地图扫描版你要放在地图显示。
+
+Image data is mainly used to add images to maps based on longitude and latitude ranges. For example, you want to display a scanned version of a paper map on the map.
 
 ## parser
 
-- type: image
-- extent: 图像的经纬度范围 [minlng, minlat,maxLng, maxLat]
+* type: image
+* extent: the latitude and longitude range of the image \[minlng, minlat,maxLng, maxLat]
 
-根据图片的经纬度范围，将图片添加到地图上。
+Add the image to the map based on its latitude and longitude range.
 
 ```javascript
 layer.source(
