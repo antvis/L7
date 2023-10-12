@@ -2,7 +2,7 @@ name: 'AntV OSCP 计划'
 description: 创建一个新的 issue，如果你的 issue 不符合规范，它将会被自动关闭。
 body:
   - type: checkboxes
-    id: AntV OSCP_program
+    id: AntV_OSCP_program
     attributes:
       label: Issue Hunt 计划（可选）
       description: |
