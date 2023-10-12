@@ -2,11 +2,12 @@
 title: Use Offline
 order: 0
 ---
+
 <embed src="@/docs/common/style.md"></embed>
 
-目前 `L7` 支持高德和 `Mapbox` 两种底图，高德地图由于使用在线 `API` 不能做离线部署，如果你有离线部署的需求可以采用 `MapBox`做底图。`L7` 在接口层统一了不同底图直接的差异，一套可视化代码可以运行在 `L7` 支持的任意底图上。本文主要介绍如何离线使用，国内加速使用 `MapBox`，同时也提供了在线的字体服务，你也可也下载到本地使用。
+at present`L7`Support Gao Dehe`Mapbox`Two base maps, the Amap map is used online`API`Offline deployment is not possible. If you have offline deployment requirements, you can use it.`MapBox`Make a base map.`L7`The interface layer unifies the direct differences between different basemaps, and a set of visualization codes can be run on`L7`On any supported basemap. This article mainly introduces how to use it offline and accelerate its use in China.`MapBox`, and also provides online font services, which you can also download for local use.
 
-### L7 如何引入 Mapbox
+### How to introduce Mapbox in L7
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
@@ -23,36 +24,37 @@ const scene = new Scene({
   })
 });
 ```
-### 为什么离线化
 
-- 离线部署
-- 国内加速
-- 不使用 `mapbox token`
+### Why go offline
 
-### 如何离线化使用 MapBox
+* Offline deployment
+* Domestic acceleration
+* Do not use`mapbox token`
 
-你只要不使用 `MapBox` 的数据底图服务就可以离线使用，`mapbox` 所有数据服务资源都是在 `style` 里面配置的。除了数据服务以外还有一些静态资源，这些主要是图片标注，文字标注的时候使用。    
+### How to use MapBox offline
 
-`mapbox` 本身数据资源在国外如果在国内单独部署使用，加载速度体验还是很好的。   
+As long as you don't use`MapBox`The data base map service can be used offline.`mapbox`All data service resources are in`style`configured inside. In addition to data services, there are also some static resources, which are mainly used for image annotation and text annotation.
 
-我们先了解一下 `MapBox` 样式包含哪些配置项。    
+`mapbox`If the data resources themselves are deployed and used separately in foreign countries, the loading speed experience is still very good.
 
-#### Mapbox 样式参数
+Let's find out first`MapBox`What configuration items the style contains.
 
-- `version`：`JS SDK` 对应版本必须为 8。
-- `name`：样式的命名。
-- `sprite`：雪碧图，将一个地图涉及到的所有零星图标图片都包含到一张大图中。
-- `glyphs`：`.pbf` 格式的字体样式，例如微软雅黑等字体库。
-- `sources`：图层的资源文件，可以支持矢量切片、栅格、`dem` 栅格、图片、`geojson`、视频等格式。
-- `layers`：是对每个图层样式的描述，这里就是对地图样式渲染的关键，可以做定制化地图样式。
+#### Mapbox style parameters
 
-具体参数及其 `api` 可以参考 `mapbox` 官网。   
+* `version`：`JS SDK`The corresponding version must be 8.
+* `name`: The naming of the style.
+* `sprite`: Sprite map, which contains all the sporadic icon images involved in a map into one large image.
+* `glyphs`：`.pbf`Format font style, such as Microsoft Yahei and other font libraries.
+* `sources`: The resource file of the layer, which can support vector slices, raster,`dem`raster, picture,`geojson`, video and other formats.
+* `layers`: It is a description of each layer style. This is the key to rendering the map style. You can customize the map style.
 
-如果做到本地化只需要 `sprite`，`glyphs` 本地化就可以了，地图服务可以加载其他服务。    
+Specific parameters and their`api`Can refer to`mapbox`official website.
 
-如果你不需要使用 `MapBox` 数据服务，可视化层完成用 `L7` 渲染那就更简单了。
+If you want to achieve localization, you only need`sprite`，`glyphs`Localization is fine, and the map service can load other services.
 
-你只需要将 `MapBox` 的地图样式设置 `blank`。  
+If you don't need to use`MapBox`Data service, used to complete the visualization layer`L7`Rendering is even simpler.
+
+You just need to`MapBox`Map style settings`blank`。
 
 ```javascript
 const scene = new Scene({
@@ -67,42 +69,40 @@ const scene = new Scene({
 });
 ```
 
-`blank` 样式以为无底图样式，这种样式下就不需要使用 `mapbox` 服务，也不需要使用 `mapbox` 的 `token`。   
+`blank`The style is considered to be a baseless style, so there is no need to use it in this style.`mapbox`service, there is no need to use`mapbox`of`token`。
 
-#### 本地化雪碧图
+#### Localized sprite map
 
-如果你需要使用 `mapbox` 字段的图片标注，你需要本地化雪碧图资源<br />只需要下载两个文件即可<br />sprite.json 主要记录每个图表在大图上位置<br />sprite.png  每个小图标组成的大图
+If you need to use`mapbox`For field image annotation, you need to localize sprite image resources<br />Just download two files<br />sprite.json mainly records the position of each chart on the big picture<br />sprite.png A big picture composed of each small icon
 
-在线雪碧图服务地址:<br />[https://lzxue.github.io/font-glyphs/sprite/sprite](https://lzxue.github.io/font-glyphs/sprite/sprite)
+Online sprite service address:<br /><https://lzxue.github.io/font-glyphs/sprite/sprite>
 
-#### 本地化字体
+#### localized fonts
 
-如果需要使用 `mapbox` 文章标注功能需要本地化，如果你的渲染能力都是用 `L7` 实现的，这个过程也是不需要的。    
+If needed use`mapbox`The article annotation function needs to be localized. If your rendering capabilities are all using`L7`To achieve this, this process is also unnecessary.
 
-`L7` 提供了在线字体服务<br /> 目前支持4种字体。
+`L7`Online font service provided<br />Currently supports 4 fonts.
 
-- 阿里巴巴普惠体
-- noto
-- opensan
-- roboto
+* Alibaba inclusive body
+* noto
+* opensan
+* roboto
 
-_如果你有新的字体需求可提PR，帮你自动生成在线可用的字体服务，你可以在线使用，也可以下载到本地使用。_
+*If you have new font requirements, you can submit a PR and we will automatically generate an online font service for you. You can use it online or download it for local use.*
 
-字体服务下载：[gh-pages分支](https://github.com/lzxue/font-glyphs/tree/gh-pages) 你可以 `clone` 下来直接使用。
+Font service download:[gh-pages branch](https://github.com/lzxue/font-glyphs/tree/gh-pages) you can`clone`Come down and use it directly.
 
-**你也可以使用在线服务**<br />github服务<br />[https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf](https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf)<br />蚂蚁CDN：<br />[https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf](https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf)
+**You can also use online services**<br />github service<br /><https://lzxue.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf><br />Ant CDN:<br /><https://gw.alipayobjects.com/os/antvdemo/assets/mapbox/glyphs/{fontstack}/{range}.pbf>
 
-#### 地图服务本地化
+#### Map service localization
 
-1.加载[第三方底图](https://github.com/htoooth/Leaflet.ChineseTmsProviders)，栅格瓦片图层做底图，如天地图，高德，`google` 的栅格瓦片都可以<br />
-2.下载[opensteetmap ](https://openmaptiles.com/downloads/planet/)矢量瓦片地图做底图<br />
-3.自己业务数据发布底图服务，或者矢量瓦片服务。
+1.Load[Third-party basemap](https://github.com/htoooth/Leaflet.ChineseTmsProviders), the raster tile layer is used as the base map, such as Sky Map, Amap,`google`Grid tiles are available<br />2.Download[opensteetmap ](https://openmaptiles.com/downloads/planet/)Vector tile map as base map<br />3. Publish base map service or vector tile service for your own business data.
 
-**这里还有个更完备的解决方案**<br /> [https://jingsam.github.io/foxgis-server-lite/#/](https://jingsam.github.io/foxgis-server-lite/#/)
+**Here is a more complete solution**<br /> <https://jingsam.github.io/foxgis-server-lite/#/>
 
-#### 
+####
 
-所有的服务资源已经准备好了，这样我们就可以独立使用 `mapbox` 服务，不需要再申请 `mapbox` 的 `token`。
+All service resources have been prepared so that we can use them independently`mapbox`Service, no need to apply again`mapbox`of`token`。
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
@@ -135,4 +135,4 @@ const scene = new Scene({
 });
 ```
 
-[离线，无token使用mapbox demo](https://codesandbox.io/embed/frosty-architecture-tv6uv?fontsize=14&hidenavigation=1&theme=dark)<br />
+[Offline, use mapbox demo without token](https://codesandbox.io/embed/frosty-architecture-tv6uv?fontsize=14\&hidenavigation=1\&theme=dark)<br />
