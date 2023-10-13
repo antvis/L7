@@ -1,3 +1,3 @@
 ### point - circle - WebGPU
 
-<code src="./demos/webgpu.tsx"></code>
+<code src="./demos/circle-webgpu.tsx"></code>

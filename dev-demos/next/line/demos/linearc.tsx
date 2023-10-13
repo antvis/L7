@@ -1,15 +1,7 @@
 // @ts-ignore
-import {
-  LineLayer,
-  Scene,
-  Source,
-  lineAtOffset,
-  lineAtOffsetAsyc,
-  PointLayer,
-  // @ts-ignore
-} from '@antv/l7';
+import { LineLayer, PointLayer, Scene, Source } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap,Map } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -54,8 +46,8 @@ export default () => {
             type: 'MultiLineString',
             coordinates: [
               [
-                [116.43,39.97],
-                [108.39,22.91],
+                [116.43, 39.97],
+                [108.39, 22.91],
               ],
             ],
           },
@@ -63,7 +55,6 @@ export default () => {
       ],
     };
     const source = new Source(geoData);
-
 
     // scene.on('zoom', e => console.log(e))
 
@@ -78,52 +69,63 @@ export default () => {
         thetaOffset: 0.5,
       });
 
- 
-      const point = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source([{
-          lng:116.43,
-          lat:39.97
-        },{
-          lng:108.39,
-          lat:22.91
-        }], {
+    const point = new PointLayer({ blend: 'normal', zIndex: 1 })
+      .source(
+        [
+          {
+            lng: 116.43,
+            lat: 39.97,
+          },
+          {
+            lng: 108.39,
+            lat: 22.91,
+          },
+        ],
+        {
           parser: {
             type: 'json',
             x: 'lng',
             y: 'lat',
           },
-        })
-        .shape('circle')
-        .size(10)
-        .color('blue');
-        const point2 = new PointLayer({ blend: 'normal', zIndex: 1 })
-        .source([{
-          lng:116.43,
-          lat:39.97
-        },{
-          lng:108.39,
-          lat:22.91
-        }], {
+        },
+      )
+      .shape('circle')
+      .size(10)
+      .color('blue');
+    const point2 = new PointLayer({ blend: 'normal', zIndex: 1 })
+      .source(
+        [
+          {
+            lng: 116.43,
+            lat: 39.97,
+          },
+          {
+            lng: 108.39,
+            lat: 22.91,
+          },
+        ],
+        {
           parser: {
             type: 'json',
             x: 'lng',
             y: 'lat',
           },
-        })
-        .shape('circle')
-        .size(100000)
-        .color('blue')
-        .style({
-          opacity:0.5,
-          unit:'meter'
-        })
-      scene.addLayer(point);
-      scene.addLayer(point2);
+        },
+      )
+      .shape('circle')
+      .size(100000)
+      .color('blue')
+      .style({
+        opacity: 0.5,
+        unit: 'meter',
+      });
+    scene.addLayer(layer);
+    scene.addLayer(point);
+    scene.addLayer(point2);
 
+    // scene.on('loaded', () => {
 
-    scene.on('loaded', () => {
-      scene.addLayer(layer);
-    });
+    // });
   }, []);
   return (
     <div

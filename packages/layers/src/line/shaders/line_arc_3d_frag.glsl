@@ -27,14 +27,10 @@ in vec4 v_line_data;
 in float v_segmentIndex;
 in vec2 v_iconMapUV;
 
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
-
 out vec4 outputColor;
 
 #pragma include "picking"
+#pragma include "animation"
 
 void main() {
   float opacity = u_opacity;

@@ -32,11 +32,7 @@ out vec4 v_color;
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 float bezier3(vec3 arr, float t) {
   float ut = 1. - t;

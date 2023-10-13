@@ -31,11 +31,7 @@ in vec2 v_iconMapUV;
 in vec4 v_texture_data;
 
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 out vec4 outputColor;
 

@@ -27,12 +27,8 @@ in vec4 v_color;
 
 out vec4 outputColor;
 
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
-
 #pragma include "picking"
+#pragma include "animation"
 
 void main() {
   float animateSpeed = 0.0; // 运动速度

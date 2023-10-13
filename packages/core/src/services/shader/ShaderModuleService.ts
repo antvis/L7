@@ -5,6 +5,7 @@ import { extractUniforms } from '../../utils/shader-module';
 import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 const { uniq } = lodashUtil;
 
+import animation from '../../shaders/animation.glsl';
 import common from '../../shaders/common.glsl';
 import decode from '../../shaders/decode.glsl';
 import light from '../../shaders/light2.glsl';
@@ -38,6 +39,7 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.registerModule('lighting', { vs: lighting, fs: '' });
     this.registerModule('light', { vs: light, fs: '' });
     this.registerModule('picking', { vs: pickingVert, fs: pickingFrag });
+    this.registerModule('animation', { vs: animation, fs: animation });
     this.registerModule('rotation_2d', { vs: rotation_2d, fs: '' });
   }
 

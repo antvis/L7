@@ -19,11 +19,10 @@ layout(std140) uniform ModelUniforms {
 out vec4 outputColor;
 
 void main() {
-
   outputColor = v_color;
   // 开启透明度渐变
   // picking
-  if(u_pickLight > 0.0) {
+  if (u_pickLight > 0.0) {
     outputColor = filterColorAlpha(outputColor, v_lightWeight);
   } else {
     outputColor = filterColor(outputColor);

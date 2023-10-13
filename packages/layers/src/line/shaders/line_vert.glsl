@@ -34,11 +34,7 @@ layout(std140) uniform ModelUniforms {
 
 #pragma include "projection"
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 out vec4 v_color;
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）

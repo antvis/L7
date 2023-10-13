@@ -22,22 +22,13 @@ layout(std140) uniform ModelUniforms {
   float u_pickLight;
 };
 
-// uniform float u_heightfixed: 0.0; // 默认不固定
-// uniform float u_r;
-// uniform float u_opacity : 1;
-// uniform float u_lightEnable: 1;
-// uniform float u_opacitylinear: 0.0;
-// uniform float u_opacitylinear_dir: 1.0;
-// uniform float  u_linearColor: 0.0;
-// uniform float u_pickLight: 0.0;
-
 out vec4 v_color;
 out float v_lightWeight;
-out float v_barLinearZ;
 
 #pragma include "projection"
 #pragma include "light"
 #pragma include "picking"
+#pragma include "animation"
 
 float getYRadian(float x, float z) {
   if(x > 0.0 && z > 0.0) {
@@ -56,7 +47,7 @@ float getXRadian(float y, float r) {
 }
 
 void main() {
-
+  float t = u_time;
 
   vec3 size = a_Size * a_Position;
 

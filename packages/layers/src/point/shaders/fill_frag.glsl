@@ -17,7 +17,7 @@ out vec4 outputColor;
 #pragma include "projection"
 #pragma include "sdf_2d"
 #pragma include "picking"
-
+#pragma include "animation"
 
 void main() {
   int shape = int(floor(v_data.w + 0.5));

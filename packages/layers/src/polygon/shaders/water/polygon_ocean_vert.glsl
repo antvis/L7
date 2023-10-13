@@ -11,11 +11,7 @@ out vec2 v_uv;
 
 #pragma include "projection"
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 void main() {
   v_uv = a_uv;

@@ -63,6 +63,7 @@ export default class FillModel extends BaseModel {
           u_additive,
           u_stroke_opacity,
           u_size_unit,
+          0, // padding
         ]).buffer,
       ),
     });
@@ -118,7 +119,7 @@ export default class FillModel extends BaseModel {
 
     this.uniformBuffers.push(
       this.rendererService.createBuffer({
-        data: new Float32Array(3 + 1 + 1 + 1 + 1),
+        data: new Float32Array(3 + 1 + 1 + 1 + 1 + 1),
         isUBO: true,
       }),
     );

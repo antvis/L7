@@ -23,11 +23,7 @@ in float v_distance_ratio;
 out vec4 outputColor;
 
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 void main() {
 

@@ -25,11 +25,7 @@ in vec4 v_dataset;
 out vec4 outputColor;
 
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 void main() {
   float opacity = u_opacity;

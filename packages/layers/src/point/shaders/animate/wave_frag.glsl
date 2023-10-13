@@ -14,11 +14,7 @@ out vec4 outputColor;
 
 #pragma include "sdf_2d"
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 void main() {
 

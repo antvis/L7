@@ -20,13 +20,11 @@ out vec4 v_data;
 #pragma include "projection"
 #pragma include "picking"
 #pragma include "rotation_2d"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 void main() {
+  float t = u_time;
+
   // 透明度计算
   v_stroke = stroke;
   vec3 extrude = a_Extrude;
@@ -37,8 +35,6 @@ void main() {
   */
   float newSize = setPickingSize(a_Size);
   // float newSize = setPickingSize(a_Size) * 0.00001038445708445579;
-
-
 
   // unpack color(vec2)
   v_color = vec4(a_Color.xyz, a_Color.w * opacity);

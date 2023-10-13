@@ -1,10 +1,12 @@
 import {
   CameraUniform,
   CoordinateUniform,
+  IBuffer,
   ICameraService,
   ICoordinateSystemService,
   ILayer,
   ILayerPlugin,
+  ILayerService,
   IMapService,
   IRendererService,
   TYPES,
@@ -33,18 +35,24 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
   @inject(TYPES.IMapService)
   private readonly mapService: IMapService;
 
+  @inject(TYPES.ILayerService)
+  private readonly layerService: ILayerService;
+
   public apply(layer: ILayer) {
     const version = this.mapService.version;
 
     let mvp = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; // default matrix (for gaode2.x)
     let sceneCenterMercator: [number, number] = [0, 0];
 
-    // Create a Uniform Buffer Object(UBO).
-    const uniformBuffer = this.rendererService.createBuffer({
-      data: new Float32Array(16 * 5 + 4 * 6 + 1 + 2),
-      isUBO: true,
-    });
-    this.rendererService.uniformBuffers[0] = uniformBuffer;
+    let uniformBuffer: IBuffer;
+    if (!this.rendererService.uniformBuffers[0]) {
+      // Create a Uniform Buffer Object(UBO).
+      uniformBuffer = this.rendererService.createBuffer({
+        data: new Float32Array(16 * 5 + 4 * 6 + 4),
+        isUBO: true,
+      });
+      this.rendererService.uniformBuffers[0] = uniformBuffer;
+    }
 
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
       // @ts-ignore
@@ -69,11 +77,14 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         width,
         height,
       );
-      // Update only once since all models can share one UBO.
-      uniformBuffer.subData({
-        offset: 0,
-        data,
-      });
+
+      if (this.layerService.alreadyInRendering && uniformBuffer) {
+        // Update only once since all models can share one UBO.
+        uniformBuffer.subData({
+          offset: 0,
+          data,
+        });
+      }
       // For WebGL1.
       layer.models.forEach((model) => {
         model.addUniforms(uniforms);
@@ -136,9 +147,10 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       ...u_CameraPosition, // 4
       u_DevicePixelRatio,
       ...u_ViewportCenter, // 4
-      ...u_ViewportSize,
-      ...sceneCenterMercator,
+      ...u_ViewportSize, // 2
+      ...sceneCenterMercator, // 2
       u_FocalDistance, // 1
+      0,
     ];
 
     return {

@@ -6,11 +6,7 @@ layout(std140) uniform ModelUniforms {
 };
 
 #pragma include "picking"
-
-layout(std140) uniform AnimationUniforms {
-  vec4 u_animate;
-  float u_time;
-};
+#pragma include "animation"
 
 in vec4 v_Color;
 in vec2 v_uv;
