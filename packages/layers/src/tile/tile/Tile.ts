@@ -2,7 +2,7 @@ import { createLayerContainer, ILayer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import PolygonLayer from '../../polygon';
-import BaseTileLayer from '../tileLayer/BaseLayer';
+import BaseTileLayer from '../core/BaseLayer';
 import { isNeedMask } from './util';
 
 export default abstract class Tile implements ITile {

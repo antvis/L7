@@ -1,7 +1,7 @@
 import { IDebugLog, ILayer, ILayerPlugin, ILayerStage } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import TileLayer from '../tile/tileLayer/BaseLayer';
+import TileLayer from '../tile/core/BaseLayer';
 /**
  * Layer Model 初始化，更新，销毁
  */

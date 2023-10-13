@@ -11,8 +11,8 @@ import {
 import { lodashUtil, SourceTile, TilesetManager } from '@antv/l7-utils';
 import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
-import { ProxyFuncs } from '../style/constants';
-import { getTileFactory } from '../tileFactory';
+import { getTileFactory } from '../tile';
+import { ProxyFuncs } from '../utils/constants';
 const { debounce } = lodashUtil;
 
 export default class BaseTileLayer {
@@ -226,7 +226,6 @@ export default class BaseTileLayer {
             }
           } else {
             // 已加载瓦片
-
             this.tileLayerService.updateTileVisible(tile);
             this.tilePickService.setPickState();
             this.layerService.reRender();
