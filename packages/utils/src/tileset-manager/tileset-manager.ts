@@ -65,7 +65,7 @@ export class TilesetManager extends EventEmitter {
       getTileData: NOOP,
       warp: true,
       // TODO 更新策略
-      updateStrategy: UpdateTileStrategy.Overlap,
+      updateStrategy: UpdateTileStrategy.Replace,
     };
     this.updateOptions(options);
   }
@@ -272,7 +272,6 @@ export class TilesetManager extends EventEmitter {
     }
 
     const tiles = Array.from(this.cacheTiles.values());
-
     if (typeof updateStrategy === 'function') {
       updateStrategy(tiles);
     } else {
