@@ -15,6 +15,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import BaseMapService from '../utils/BaseMapService';
 import { toPaddingOptions } from '../utils/utils';
 import Viewport from '../utils/Viewport';
+import BMapGLLoader from './bmapglloader';
 
 const EventMap: {
   [key: string]: any;
@@ -22,6 +23,9 @@ const EventMap: {
   mapmove: 'moving',
   contextmenu: 'rightclick',
 };
+
+const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
+const BMAP_VERSION: string = '1.0';
 
 export default class AMapService extends BaseMapService<BMapGL.Map> {
   protected viewport: IViewport;
@@ -70,11 +74,67 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
 
   public async init(): Promise<void> {
     this.viewport = new Viewport();
-    this.map = this.config.mapInstance as any;
-    // this.mapType = this.config.mapType;
-    this.$mapContainer = this.map.getContainer();
-    this.map.enableScrollWheelZoom();
-    this.map.on('update', this.handleCameraChanged);
+    const {
+      id,
+      minZoom = 0,
+      maxZoom = 18,
+      center = [121.30654632240122, 31.25744185633306],
+      zoom = 12,
+      token = BMAP_API_KEY,
+      mapInstance,
+      version = BMAP_VERSION,
+      mapSize = 10000,
+      ...rest
+    } = this.config;
+    this.viewport = new Viewport();
+    this.version = version;
+    this.simpleMapCoord.setSize(mapSize);
+
+    if (!(window.BMapGL || mapInstance)) {
+      await BMapGLLoader.load({
+        key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
+        version: BMAP_VERSION, // 指定要加载的 JSAPI 的gl版本，缺省时默认为 1.0
+      });
+    }
+
+    if (mapInstance) {
+      this.map = mapInstance as any;
+      this.$mapContainer = this.map.getContainer();
+      this.map.on('update', this.handleCameraChanged);
+    } else {
+      this.$mapContainer = this.creatMapContainer(
+        id as string | HTMLDivElement,
+      );
+
+      const mapConstructorOptions = {
+        zooms: [minZoom, maxZoom],
+        ...rest,
+      } as any;
+
+      if (mapConstructorOptions.zoom) {
+        // 百度地图在相同大小下需要比 MapBox 多一个 zoom 层级
+        mapConstructorOptions.zoom += 1;
+      }
+      if (token === BMAP_API_KEY) {
+        console.warn(
+          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
+          'color: #873bf4;font-weigh:900;font-size: 16px;',
+        );
+      }
+      // @ts-ignore
+      const map = new BMapGL.Map(
+        this.$mapContainer,
+        mapConstructorOptions,
+      ) as any;
+
+      this.map = map;
+      const point = new BMapGL.Point(center[0], center[1]);
+      this.map.centerAndZoom(point, zoom);
+      this.map.enableScrollWheelZoom();
+
+      // 监听地图相机事件
+      map.on('update', this.handleCameraChanged);
+    }
   }
 
   public destroy(): void {
@@ -200,7 +260,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   public zoomIn(): void {
     this.getMap().zoomIn();
   }
-  public zoomOut(option?: any, eventData?: any): void {
+  public zoomOut(): void {
     this.getMap().zoomOut();
   }
   public panTo(p: Point): void {
@@ -391,10 +451,5 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
         ? (renderCanvas?.toDataURL('image/jpeg') as string)
         : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
-  }
-
-  // 地球模式下的地图方法/属性
-  public rotateY?(option: { force?: boolean; reg?: number }): void {
-    throw new Error('Method not implemented.');
   }
 }
