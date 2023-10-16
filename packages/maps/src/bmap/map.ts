@@ -13,6 +13,7 @@ import {
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMapService from '../utils/BaseMapService';
+import { toPaddingOptions } from '../utils/utils';
 import Viewport from '../utils/Viewport';
 
 const EventMap: {
@@ -26,32 +27,39 @@ const EventMap: {
 
 export default class AMapService extends BaseMapService<BMapGL.Map> {
   protected viewport: IViewport;
+  protected styleConfig: Record<string, any> = {
+    normal: [],
+  };
+  protected currentStyle: any = 'normal';
 
   public getMap() {
-    return this.map as BMapGL.Map;
+    return this.map as any as BMapGL.Map & {
+      destroy: () => void;
+      getTilt: () => number;
+      enableRotate: () => void;
+      enableRotateGestures: () => void;
+      disableRotate: () => void;
+      disableRotateGestures: () => void;
+      lnglatToMercator: (lng: number, lat: number) => [number, number];
+      _webglPainter: {
+        _canvas: HTMLCanvasElement;
+      };
+      getHeading: () => number;
+      setDisplayOptions: (options: { indoor?: boolean }) => void;
+    };
   }
 
   public handleCameraChanged = (e?: any) => {
-    // Tip: 统一触发地图变化事件
     this.emit('mapchange');
-    // resync
     const map = this.getMap();
-    // @ts-ignore
     const { lng, lat } = map.getCenter();
     const option = {
       center: [lng, lat],
-      // @ts-ignore
       viewportHeight: map.getContainer().clientHeight,
-      // @ts-ignore
       viewportWidth: map.getContainer().clientWidth,
-      // @ts-ignore
       bearing: 360 - map.getHeading(),
-      // @ts-ignore
       pitch: map.getTilt(),
-      // @ts-ignore
       zoom: map.getZoom() - 1.75,
-      cameraHeight: 0,
-      // cameraPosition
     };
     this.viewport.syncWithMapCamera(option as any);
     this.updateCoordinateSystemService();
@@ -59,7 +67,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   };
 
   public setBgColor(color: string): void {
-    throw new Error('Method not implemented.');
+    this.bgColor = color;
   }
 
   public async init(): Promise<void> {
@@ -67,14 +75,12 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     this.map = this.config.mapInstance as any;
     // this.mapType = this.config.mapType;
     this.$mapContainer = this.map.getContainer();
-    // @ts-ignore
     this.map.enableScrollWheelZoom();
     this.map.on('update', this.handleCameraChanged);
   }
 
   public destroy(): void {
-    // @ts-ignore
-    this.getMap().getContainer().remove();
+    this.getMap().destroy();
   }
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
@@ -95,20 +101,21 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   public on(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
-    } else {
-      // 统一事件名称
-      this.map.on(EventMap[type] || type, handle);
+      return;
     }
+    this.map.on(EventMap[type] || type, handle);
   }
   public off(type: string, handle: (...args: any[]) => void): void {
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.off(type, handle);
+      return;
+    }
     this.map.off(EventMap[type] || type, handle);
-    this.eventEmitter.off(type, handle);
   }
   public once(type: string, handler: (...args: any[]) => void): void {
-    throw new Error('Method not implemented.');
+    this.eventEmitter.once(type, handler);
   }
 
-  // get dom
   public getContainer(): HTMLElement | null {
     return this.getMap().getContainer();
   }
@@ -117,14 +124,11 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     return [size.width, size.height];
   }
 
-  // get map status method
   public getMinZoom(): number {
-    return 5;
-    // return this.mapType.getMinZoom();
+    return this.map.getMinZoom();
   }
   public getMaxZoom(): number {
-    return 20;
-    // return this.mapType.getMaxZoom();
+    return this.map.getMaxZoom();
   }
 
   // get map params
@@ -142,10 +146,10 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     };
   }
   public getPitch(): number {
-    throw new Error('Method not implemented.');
+    return this.getMap().getTilt();
   }
   public getRotation(): number {
-    throw new Error('Method not implemented.');
+    return this.getMap().getHeading();
   }
   public getBounds(): Bounds {
     const { getNorthEast, getSouthWest } = this.getMap().getBounds();
@@ -163,13 +167,37 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     return this.getMap().getContainer()?.getElementsByTagName('canvas')[0];
   }
   public getMapStyleConfig(): MapStyleConfig {
-    // return this.getMap()
-    throw new Error('Method not implemented.');
+    return this.styleConfig;
   }
+  public getMapStyleValue(name: string) {
+    return this.styleConfig[name];
+  }
+  public setMapStyle(style: any): void {
+    if (this.currentStyle === style) {
+      return;
+    }
+    const styleVal = Array.isArray(style)
+      ? style
+      : this.styleConfig[style] || style;
 
-  // control with raw map
+    if (Array.isArray(styleVal)) {
+      this.map.setMapStyleV2({
+        styleJson: styleVal,
+      });
+      this.currentStyle = style;
+      return;
+    }
+
+    if (typeof styleVal === 'string') {
+      this.map.setMapStyleV2({
+        styleId: styleVal,
+      });
+      this.currentStyle = style;
+      return;
+    }
+  }
   public setRotation(rotation: number): void {
-    throw new Error('Method not implemented.');
+    this.getMap().setHeading(rotation);
   }
   public zoomIn(): void {
     this.getMap().zoomIn();
@@ -184,25 +212,85 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     this.getMap().panBy(x, y);
   }
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
-    throw new Error('Method not implemented.');
+    // todo 需要适配第二个参数
+    this.map.setViewport(
+      bound.map((item) => new BMapGL.Point(item[0], item[1])),
+      fitBoundsOptions as any,
+    );
   }
   public setZoomAndCenter(zoom: number, [lng, lat]: Point): void {
     this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom);
   }
   public setCenter(
     [lng, lat]: [number, number],
-    option?: ICameraOptions,
+    options?: ICameraOptions,
   ): void {
-    this.getMap().setCenter(new BMapGL.Point(lng, lat));
+    let newCenter = { lng, lat };
+    if (options?.padding) {
+      const padding = toPaddingOptions(options.padding);
+      const px = this.lngLatToPixel([lng, lat]);
+      const offsetPx = [
+        (padding.right - padding.left) / 2,
+        (padding.bottom - padding.top) / 2,
+      ];
+      newCenter = this.pixelToLngLat([px.x + offsetPx[0], px.y + offsetPx[1]]);
+    }
+    this.getMap().setCenter(new BMapGL.Point(newCenter.lng, newCenter.lat));
   }
   public setPitch(pitch: number): any {
     this.getMap().setTilt(pitch);
   }
   public setZoom(zoom: number): any {
-    this.getMap().setZoom(zoom);
+    this.getMap().setZoom(Math.max(zoom, this.getMinZoom()));
   }
   public setMapStatus(option: Partial<IStatusOptions>): void {
-    throw new Error('Method not implemented.');
+    const map = this.getMap();
+    (Object.keys(option) as Array<keyof IStatusOptions>).map((status) => {
+      switch (status) {
+        case 'doubleClickZoom':
+          option.doubleClickZoom
+            ? map.enableDoubleClickZoom()
+            : map.disableDoubleClickZoom();
+          break;
+        case 'dragEnable':
+          option.dragEnable ? map.enableDragging() : map.disableDragging();
+          break;
+        case 'keyboardEnable':
+          option.keyboardEnable ? map.enableKeyboard() : map.disableKeyboard();
+          break;
+        case 'resizeEnable':
+          option.resizeEnable
+            ? map.enableAutoResize()
+            : map.disableAutoResize();
+          break;
+        case 'rotateEnable':
+          if (option.rotateEnable) {
+            map.enableRotate();
+            map.enableRotateGestures();
+          } else {
+            map.disableRotate();
+            map.disableRotateGestures();
+          }
+          break;
+        case 'zoomEnable':
+          if (option.zoomEnable) {
+            this.map.enableDoubleClickZoom();
+            this.map.enableScrollWheelZoom();
+            this.map.enablePinchToZoom();
+          } else {
+            this.map.disableDoubleClickZoom();
+            this.map.disableScrollWheelZoom();
+            this.map.disablePinchToZoom();
+          }
+          break;
+        case 'showIndoorMap':
+          map.setDisplayOptions({
+            indoor: !!option.showIndoorMap,
+          });
+          break;
+        default:
+      }
+    });
   }
 
   // coordinates methods
@@ -262,7 +350,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     [lng, lat]: [number, number],
     altitude: number,
   ): IMercator {
-    const [McLng, McLat] = (this.getMap() as any).lnglatToMercator(lng, lat);
+    const [McLng, McLat] = this.getMap().lnglatToMercator(lng, lat);
     return {
       x: McLat,
       y: McLng,
@@ -276,7 +364,6 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     scale: [number, number, number] = [1, 1, 1],
   ): number[] {
     const flat = this.viewport.projectFlat(lnglat);
-    // @ts-ignore
     const modelMatrix = mat4.create();
 
     mat4.translate(
@@ -300,7 +387,12 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     throw new Error('Method not implemented.');
   }
   public exportMap(type: 'jpg' | 'png'): string {
-    throw new Error('Method not implemented.');
+    const renderCanvas = this.getMap()._webglPainter._canvas;
+    const layersPng =
+      type === 'jpg'
+        ? (renderCanvas?.toDataURL('image/jpeg') as string)
+        : (renderCanvas?.toDataURL('image/png') as string);
+    return layersPng;
   }
 
   // 地球模式下的地图方法/属性
