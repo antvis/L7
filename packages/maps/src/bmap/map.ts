@@ -20,9 +20,7 @@ const EventMap: {
   [key: string]: any;
 } = {
   mapmove: 'moving',
-  camerachange: 'resize',
-  zoomchange: 'zoomend',
-  dragging: 'dragging',
+  contextmenu: 'rightclick',
 };
 
 export default class AMapService extends BaseMapService<BMapGL.Map> {
