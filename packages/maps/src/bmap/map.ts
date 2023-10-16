@@ -270,7 +270,6 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     this.getMap().panBy(x, y);
   }
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
-    // todo 需要适配第二个参数
     this.map.setViewport(
       bound.map((item) => new BMapGL.Point(item[0], item[1])),
       fitBoundsOptions as any,
