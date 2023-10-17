@@ -10,7 +10,6 @@ import {
   MapStyleConfig,
   Point,
 } from '@antv/l7-core';
-import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMapService from '../utils/BaseMapService';
 import { toPaddingOptions } from '../utils/utils';
@@ -22,6 +21,8 @@ const EventMap: {
 } = {
   mapmove: 'moving',
   contextmenu: 'rightclick',
+  camerachange: 'update',
+  zoomchange: 'zoomend',
 };
 
 const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
@@ -72,18 +73,19 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     this.bgColor = color;
   }
 
-  public async init(): Promise<void> {
+  public async init() {
     this.viewport = new Viewport();
     const {
       id,
-      minZoom = 0,
-      maxZoom = 18,
       center = [121.30654632240122, 31.25744185633306],
       zoom = 12,
       token = BMAP_API_KEY,
       mapInstance,
       version = BMAP_VERSION,
       mapSize = 10000,
+      style,
+      pitch = 0,
+      rotation = 0,
       ...rest
     } = this.config;
     this.viewport = new Viewport();
@@ -98,41 +100,62 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     }
 
     if (mapInstance) {
-      this.map = mapInstance as any;
+      // @ts-ignore
+      this.map = mapInstance;
       this.$mapContainer = this.map.getContainer();
+      const point = new BMapGL.Point(center[0], center[1]);
+      // false，表示用户未执行centerAndZoom进行地图初始渲染
+      // @ts-ignore
+      if (!this.map.isLoaded()) {
+        this.map.centerAndZoom(point, zoom);
+      }
       this.map.on('update', this.handleCameraChanged);
     } else {
-      this.$mapContainer = this.creatMapContainer(
-        id as string | HTMLDivElement,
-      );
-
       const mapConstructorOptions = {
-        zooms: [minZoom, maxZoom],
+        enableWheelZoom: true,
         ...rest,
-      } as any;
+      };
 
-      if (mapConstructorOptions.zoom) {
-        // 百度地图在相同大小下需要比 MapBox 多一个 zoom 层级
-        mapConstructorOptions.zoom += 1;
-      }
       if (token === BMAP_API_KEY) {
         console.warn(
           `%c${this.configService.getSceneWarninfo('MapToken')}!`,
           'color: #873bf4;font-weigh:900;font-size: 16px;',
         );
       }
-      // @ts-ignore
-      const map = new BMapGL.Map(
-        this.$mapContainer,
-        mapConstructorOptions,
-      ) as any;
 
+      let mapContainer = id as HTMLElement;
+      if (typeof id === 'string') {
+        mapContainer = document.getElementById(id)!;
+      }
+
+      // 存储控件等容器，百度地图实例会被卸载掉，所以实例化后需要重新挂载
+      // @ts-ignore
+      let mapChildNodes = [...mapContainer.childNodes];
+      // @ts-ignore
+      const map = new BMapGL.Map(mapContainer, mapConstructorOptions);
+      this.$mapContainer = map.getContainer();
+
+      mapChildNodes.forEach((child) => {
+        this.$mapContainer!.appendChild(child);
+      });
+      // @ts-ignore
+      mapChildNodes = null;
+
+      // @ts-ignore
       this.map = map;
       const point = new BMapGL.Point(center[0], center[1]);
       this.map.centerAndZoom(point, zoom);
-      this.map.enableScrollWheelZoom();
-
+      if (pitch) {
+        this.setPitch(pitch);
+      }
+      if (rotation) {
+        this.setRotation(rotation);
+      }
+      if (style) {
+        this.setMapStyle(style);
+      }
       // 监听地图相机事件
+      // @ts-ignore
       map.on('update', this.handleCameraChanged);
     }
   }
@@ -145,14 +168,11 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     this.cameraChangedCallback = callback;
   }
 
-  // init map
-  public addMarkerContainer(): void {
-    const container = this.getMarkerContainer();
-    this.markerContainer = DOM.create('div', 'l7-marker-container', container);
-    this.markerContainer.setAttribute('tabindex', '-1');
-  }
+  // tslint:disable-next-line:no-empty
+  public addMarkerContainer(): void {}
+
   public getMarkerContainer(): HTMLElement {
-    return this.markerContainer;
+    return this.map.getPanes().markerPane!;
   }
 
   // MapEvent // 定义事件类型
@@ -163,6 +183,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     }
     this.map.on(EventMap[type] || type, handle);
   }
+
   public off(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handle);
@@ -170,6 +191,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     }
     this.map.off(EventMap[type] || type, handle);
   }
+
   public once(type: string, handler: (...args: any[]) => void): void {
     this.eventEmitter.once(type, handler);
   }
@@ -177,6 +199,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   public getContainer(): HTMLElement | null {
     return this.getMap().getContainer();
   }
+
   public getSize(): [number, number] {
     const size = this.getMap().getSize();
     return [size.width, size.height];
@@ -191,11 +214,13 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
 
   // get map params
   public getType() {
-    return 'bd09';
+    return 'bmap';
   }
+
   public getZoom(): number {
     return this.getMap().getZoom();
   }
+
   public getCenter(): ILngLat {
     const { lng, lat } = this.getMap().getCenter();
     return {
@@ -203,12 +228,15 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       lat,
     };
   }
+
   public getPitch(): number {
     return this.getMap().getTilt();
   }
+
   public getRotation(): number {
     return this.getMap().getHeading();
   }
+
   public getBounds(): Bounds {
     const { getNorthEast, getSouthWest } = this.getMap().getBounds();
     const ne = getNorthEast();
@@ -218,22 +246,28 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       [sw.lng, sw.lat],
     ];
   }
+
   public getMapContainer(): HTMLElement {
     return this.getMap().getContainer();
   }
+
   public getMapCanvasContainer(): HTMLElement {
-    return this.getMap().getContainer()?.getElementsByTagName('canvas')[0];
+    return this.getMap().getContainer();
   }
+
   public getMapStyleConfig(): MapStyleConfig {
     return this.styleConfig;
   }
+
   public getMapStyleValue(name: string) {
     return this.styleConfig[name];
   }
+
   public setMapStyle(style: any): void {
     if (this.currentStyle === style) {
       return;
     }
+
     const styleVal = Array.isArray(style)
       ? style
       : this.styleConfig[style] || style;
@@ -254,30 +288,38 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       return;
     }
   }
+
   public setRotation(rotation: number): void {
     this.getMap().setHeading(rotation);
   }
+
   public zoomIn(): void {
     this.getMap().zoomIn();
   }
+
   public zoomOut(): void {
     this.getMap().zoomOut();
   }
+
   public panTo(p: Point): void {
     this.getMap().panTo(new BMapGL.Point(p[0], p[1]));
   }
+
   public panBy(x: number, y: number): void {
     this.getMap().panBy(x, y);
   }
+
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
     this.map.setViewport(
       bound.map((item) => new BMapGL.Point(item[0], item[1])),
       fitBoundsOptions as any,
     );
   }
+
   public setZoomAndCenter(zoom: number, [lng, lat]: Point): void {
     this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom);
   }
+
   public setCenter(
     [lng, lat]: [number, number],
     options?: ICameraOptions,
@@ -294,12 +336,15 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     }
     this.getMap().setCenter(new BMapGL.Point(newCenter.lng, newCenter.lat));
   }
+
   public setPitch(pitch: number): any {
     this.getMap().setTilt(pitch);
   }
+
   public setZoom(zoom: number): any {
     this.getMap().setZoom(Math.max(zoom, this.getMinZoom()));
   }
+
   public setMapStatus(option: Partial<IStatusOptions>): void {
     const map = this.getMap();
     (Object.keys(option) as Array<keyof IStatusOptions>).map((status) => {
@@ -365,10 +410,12 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
 
     return coordDistance / metreDistance;
   }
+
   public pixelToLngLat([x, y]: Point): ILngLat {
     const lngLat = this.getMap().pixelToPoint(new BMapGL.Pixel(x, y));
     return { lng: lngLat.lng, lat: lngLat.lat };
   }
+
   public lngLatToPixel([lng, lat]: Point): IPoint {
     const pixel = this.getMap().pointToPixel(new BMapGL.Point(lng, lat));
     return {
@@ -376,6 +423,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       y: pixel.y,
     };
   }
+
   public containerToLngLat([x, y]: [number, number]): ILngLat {
     const point = this.getMap().overlayPixelToPoint(new BMapGL.Pixel(x, y));
     return {
@@ -383,6 +431,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       lat: point.lat,
     };
   }
+
   public lngLatToContainer([lng, lat]: [number, number]): IPoint {
     const overlayPixel = this.getMap().pointToOverlayPixel(
       new BMapGL.Point(lng, lat),
@@ -392,10 +441,12 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       y: overlayPixel.y,
     };
   }
+
   public lngLatToCoord([lng, lat]: [number, number]): [number, number] {
     const { x, y } = this.getMap().pointToPixel(new BMapGL.Point(lng, lat));
     return [x, -y];
   }
+
   public lngLatToCoords(list: number[][] | number[][][]): any {
     return list.map((item) =>
       Array.isArray(item[0])
@@ -403,17 +454,19 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
         : this.lngLatToCoord(item as [number, number]),
     );
   }
+
   public lngLatToMercator(
     [lng, lat]: [number, number],
     altitude: number,
   ): IMercator {
     const [McLng, McLat] = this.getMap().lnglatToMercator(lng, lat);
     return {
-      x: McLat,
-      y: McLng,
+      x: McLng,
+      y: McLat,
       z: altitude,
     };
   }
+
   public getModelMatrix(
     lnglat: [number, number],
     altitude: number,
@@ -440,9 +493,11 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
 
     return modelMatrix as unknown as number[];
   }
+
   public getCustomCoordCenter?(): [number, number] {
     throw new Error('Method not implemented.');
   }
+
   public exportMap(type: 'jpg' | 'png'): string {
     const renderCanvas = this.getMap()._webglPainter._canvas;
     const layersPng =
