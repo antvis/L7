@@ -115,8 +115,8 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
     } else {
       const mapConstructorOptions = {
         enableWheelZoom: true,
-        minZoom: minZoom + 1.75,
-        maxZoom: maxZoom + 1.75,
+        minZoom,
+        maxZoom,
         ...rest,
       };
 
