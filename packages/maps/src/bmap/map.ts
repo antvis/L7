@@ -86,6 +86,8 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       style,
       pitch = 0,
       rotation = 0,
+      minZoom = 0,
+      maxZoom = 21,
       ...rest
     } = this.config;
     this.viewport = new Viewport();
@@ -107,12 +109,14 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       // false，表示用户未执行centerAndZoom进行地图初始渲染
       // @ts-ignore
       if (!this.map.isLoaded()) {
-        this.map.centerAndZoom(point, zoom);
+        this.map.centerAndZoom(point, zoom + 1.75);
       }
       this.map.on('update', this.handleCameraChanged);
     } else {
       const mapConstructorOptions = {
         enableWheelZoom: true,
+        minZoom: minZoom + 1.75,
+        maxZoom: maxZoom + 1.75,
         ...rest,
       };
 
@@ -144,7 +148,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
       // @ts-ignore
       this.map = map;
       const point = new BMapGL.Point(center[0], center[1]);
-      this.map.centerAndZoom(point, zoom);
+      this.map.centerAndZoom(point, zoom + 1.75);
       if (pitch) {
         this.setPitch(pitch);
       }
@@ -206,10 +210,10 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public getMinZoom(): number {
-    return this.map.getMinZoom();
+    return this.map.getMinZoom() - 1.75;
   }
   public getMaxZoom(): number {
-    return this.map.getMaxZoom();
+    return this.map.getMaxZoom() - 1.75;
   }
 
   // get map params
@@ -218,7 +222,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public getZoom(): number {
-    return this.getMap().getZoom();
+    return this.getMap().getZoom() - 1.75;
   }
 
   public getCenter(): ILngLat {
@@ -234,7 +238,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public getRotation(): number {
-    return this.getMap().getHeading();
+    return 360 - this.getMap().getHeading();
   }
 
   public getBounds(): Bounds {
@@ -317,7 +321,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public setZoomAndCenter(zoom: number, [lng, lat]: Point): void {
-    this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom);
+    this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom + 1.75);
   }
 
   public setCenter(
@@ -342,7 +346,7 @@ export default class AMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public setZoom(zoom: number): any {
-    this.getMap().setZoom(Math.max(zoom, this.getMinZoom()));
+    this.getMap().setZoom(zoom + 1.75);
   }
 
   public setMapStatus(option: Partial<IStatusOptions>): void {
