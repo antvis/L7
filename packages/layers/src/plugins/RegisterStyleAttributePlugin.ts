@@ -55,6 +55,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Position',
+        shaderLocation: 0,
         buffer: {
           data: [],
           type: gl.FLOAT,
@@ -73,28 +74,28 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     });
   }
 
-  private registerFilterAttribute(
-    styleAttributeService: IStyleAttributeService,
-  ) {
-    styleAttributeService.registerStyleAttribute({
-      name: 'filter',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'filter',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { filter } = feature;
-          return filter ? [1] : [0];
-        },
-      },
-    });
-  }
+  // private registerFilterAttribute(
+  //   styleAttributeService: IStyleAttributeService,
+  // ) {
+  //   styleAttributeService.registerStyleAttribute({
+  //     name: 'filter',
+  //     type: AttributeType.Attribute,
+  //     descriptor: {
+  //       name: 'filter',
+  //       buffer: {
+  //         // give the WebGL driver a hint that this buffer may change
+  //         usage: gl.DYNAMIC_DRAW,
+  //         data: [],
+  //         type: gl.FLOAT,
+  //       },
+  //       size: 1,
+  //       update: (feature: IEncodeFeature) => {
+  //         const { filter } = feature;
+  //         return filter ? [1] : [0];
+  //       },
+  //     },
+  //   });
+  // }
 
   private registerColorAttribute(
     styleAttributeService: IStyleAttributeService,
@@ -104,6 +105,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Color',
+        shaderLocation: 1,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -122,23 +124,23 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
   private registerVertexIdAttribute(
     styleAttributeService: IStyleAttributeService,
   ) {
-    styleAttributeService.registerStyleAttribute({
-      // 统一注册每个顶点的唯一编号（目前用于样式的数据映射计算使用）
-      name: 'vertexId',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_vertexId',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
-          return [featureIdx];
-        },
-      },
-    });
+    // styleAttributeService.registerStyleAttribute({
+    //   // 统一注册每个顶点的唯一编号（目前用于样式的数据映射计算使用）
+    //   name: 'vertexId',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_vertexId',
+    //     buffer: {
+    //       // give the WebGL driver a hint that this buffer may change
+    //       usage: gl.DYNAMIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 1,
+    //     update: (feature: IEncodeFeature, featureIdx: number) => {
+    //       return [featureIdx];
+    //     },
+    //   },
+    // });
   }
 }

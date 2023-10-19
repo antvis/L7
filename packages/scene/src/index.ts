@@ -32,7 +32,7 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import { MaskLayer } from '@antv/l7-layers';
-import { ReglRendererService } from '@antv/l7-renderer';
+import { DeviceRendererService, ReglRendererService } from '@antv/l7-renderer';
 import { DOM, IProtocolHandler, SceneConifg } from '@antv/l7-utils';
 import { Container } from 'inversify';
 import BoxSelect, { BoxSelectEventList } from './boxSelect';
@@ -79,7 +79,8 @@ class Scene
     // 绑定渲染引擎服务
     sceneContainer
       .bind<IRendererService>(TYPES.IRendererService)
-      .to(ReglRendererService)
+      // .to(ReglRendererService)
+      .to(DeviceRendererService)
       .inSingletonScope();
 
     // 依赖注入

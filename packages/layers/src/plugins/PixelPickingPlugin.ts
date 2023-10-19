@@ -26,12 +26,23 @@ export default class PixelPickingPlugin implements ILayerPlugin {
   public apply(
     layer: ILayer,
     {
+      rendererService,
       styleAttributeService,
     }: {
       rendererService: IRendererService;
       styleAttributeService: IStyleAttributeService;
     },
   ) {
+    // Create a Uniform Buffer Object(UBO).
+    const uniformBuffer = rendererService.createBuffer({
+      data: new Float32Array(),
+      isUBO: true,
+    });
+    rendererService.uniformBuffers[1] = uniformBuffer;
+    // u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
+    // // Tip: 当前地图是否在拖动
+    // u_shaderPick: Number(layer.getShaderPickStat()),
+
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
     layer.hooks.init.tapPromise('PixelPickingPlugin', () => {
       const { enablePicking } = layer.getLayerConfig();
@@ -40,6 +51,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_PickingColor',
+          shaderLocation: 4,
           buffer: {
             data: [],
             type: gl.FLOAT,

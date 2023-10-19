@@ -1,15 +1,18 @@
-attribute vec3 a_PickingColor;
-varying vec4 v_PickingResult;
+layout(location = 4) in vec3 a_PickingColor;
 
-uniform vec3 u_PickingColor : [0, 0, 0];
-uniform vec3 u_CurrentSelectedId : [0, 0, 0];
-uniform vec4 u_HighlightColor : [0, 0, 0, 0];
-uniform vec4 u_SelectColor : [0, 0, 0, 0];
-uniform float u_PickingStage : 0.0;
-uniform float u_PickingThreshold : 1.0;
-uniform float u_PickingBuffer: 0.0;
-uniform float u_shaderPick;
-uniform float u_EnableSelect: 0.0;
+out vec4 v_PickingResult;
+
+layout(std140) uniform PickingUniforms {
+  vec4 u_HighlightColor;
+  vec4 u_SelectColor;
+  vec3 u_PickingColor;
+  float u_PickingStage;
+  vec3 u_CurrentSelectedId;
+  float u_PickingThreshold;
+  float u_PickingBuffer;
+  float u_shaderPick;
+  float u_EnableSelect;
+}
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0

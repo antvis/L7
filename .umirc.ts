@@ -29,7 +29,7 @@ export default defineConfig({
       title: '特性',
       path: '/features',
     },
-  
+
     {
       title: '图库',
       path: '/gallery',
@@ -49,6 +49,10 @@ export default defineConfig({
     {
       title: '绘制组件',
       path: '/draw',
+    },
+    {
+      title: 'Device API',
+      path: '/next',
     },
     {
       title: 'GitHub',
@@ -96,7 +100,7 @@ export default defineConfig({
     "https://api.map.baidu.com/api?v=1.0&amp;&amp;type=webgl&amp;ak=zLhopYPPERGtpGOgimcdKcCimGRyyIsh",
     /** lodash */
     'https://gw.alipayobjects.com/os/lib/lodash/4.17.20/lodash.min.js',
-  ]
+  ],
 
   // more config: https://d.umijs.org/config
 });

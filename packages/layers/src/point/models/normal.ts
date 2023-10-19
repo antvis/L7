@@ -67,6 +67,7 @@ export default class NormalModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 2,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

@@ -229,45 +229,45 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   }
 
   protected getInject(): IInject {
-    const encodeStyleAttribute = this.layer.encodeStyleAttribute;
-    let str = '';
-    const attrType: { [key: string]: any } = {
-      opacity: 'float',
-      stroke: 'vec4',
-      offsets: 'vec2',
-      textOffset: 'vec2',
-      rotation: 'float',
-      extrusionBase: 'float',
-    };
-    this.layer.enableShaderEncodeStyles.forEach((key: string) => {
-      if (encodeStyleAttribute[key]) {
-        str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
-      }
-      str += `
-          #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-      attribute ${attrType[key]} a_${
-        key.charAt(0).toUpperCase() + key.slice(1)
-      };
-    #else
-      uniform ${attrType[key]} u_${key};
-    #endif\n
-    `;
-    });
-    let innerStr = '';
-    this.layer.enableShaderEncodeStyles.forEach((key) => {
-      innerStr += `\n
-#ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-  ${attrType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
-#else
-  ${attrType[key]} ${key} = u_${key};
-#endif\n
-`;
-    });
+    //     const encodeStyleAttribute = this.layer.encodeStyleAttribute;
+    //     let str = '';
+    //     const attrType: { [key: string]: any } = {
+    //       opacity: 'float',
+    //       stroke: 'vec4',
+    //       offsets: 'vec2',
+    //       textOffset: 'vec2',
+    //       rotation: 'float',
+    //     };
+    //     this.layer.enableShaderEncodeStyles.forEach((key: string) => {
+    //       if (encodeStyleAttribute[key]) {
+    //         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
+    //       }
+    //       str += `
+    //           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+    //       attribute ${attrType[key]} a_${
+    //         key.charAt(0).toUpperCase() + key.slice(1)
+    //       };
+    //     #else
+    //       uniform ${attrType[key]} u_${key};
+    //     #endif\n
+    //     `;
+    //     });
+    //     let innerStr = '';
+    //     this.layer.enableShaderEncodeStyles.forEach((key) => {
+    //       innerStr += `\n
+    // #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+    //   ${attrType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
+    // #else
+    //   ${attrType[key]} ${key} = u_${key};
+    // #endif\n
+    // `;
+    //     });
 
-    return {
-      'vs:#decl': str,
-      'vs:#main-start': innerStr,
-    };
+    //     return {
+    //       'vs:#decl': str,
+    //       'vs:#main-start': innerStr,
+    //     };
+    return {};
   }
 
   // 获取数据映射样式

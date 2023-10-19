@@ -1308,11 +1308,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         vs,
         elements,
         blend: BlendTypes[BlendType.normal],
+        uniformBuffers: this.rendererService.uniformBuffers,
         ...rest,
       };
       if (count) {
         modelOptions.count = count;
       }
+
       const m = createModel(modelOptions);
       resolve(m);
     });

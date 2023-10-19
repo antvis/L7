@@ -36,6 +36,7 @@ import ReglTexture2D from './ReglTexture2D';
  */
 @injectable()
 export default class ReglRendererService implements IRendererService {
+  uniformBuffers: IBuffer[] = [];
   public extensionObject: IExtensions;
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
@@ -103,7 +104,7 @@ export default class ReglRendererService implements IRendererService {
     return this.gl._gl.getParameter(this.gl._gl.ALIASED_POINT_SIZE_RANGE);
   }
 
-  public testExtension(name: string) {
+  private testExtension(name: string) {
     // OES_texture_float
     return !!this.getGLContext().getExtension(name);
   }

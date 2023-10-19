@@ -1,5 +1,6 @@
 import { gl } from './gl';
 import { IAttribute } from './IAttribute';
+import { IBuffer } from './IBuffer';
 import { IElements } from './IElements';
 import { IUniform } from './IUniform';
 
@@ -160,6 +161,8 @@ export interface IModelInitializationOptions {
   uniforms?: {
     [key: string]: IUniform;
   };
+  // UBOs
+  uniformBuffers?: IBuffer[];
 
   attributes: {
     [key: string]: IAttribute;
