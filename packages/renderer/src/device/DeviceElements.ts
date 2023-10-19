@@ -1,8 +1,7 @@
 import { Buffer, BufferUsage, Device } from '@antv/g-device-api';
 import { IElements, IElementsInitializationOptions, gl } from '@antv/l7-core';
-import { TypedArray } from '@antv/l7-source';
 import { typedArrayCtorMap } from './constants';
-import { isTypedArray } from './utils/typedarray';
+import { isTypedArray,TypedArray } from './utils/typedarray';
 
 export default class DeviceElements implements IElements {
   private indexBuffer: Buffer;
