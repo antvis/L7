@@ -24,18 +24,47 @@ export default class CityBuildModel extends BaseModel {
         sweepCenter: this.cityCenter,
       },
     } = this.layer.getLayerConfig() as ICityBuildLayerStyleOptions;
-    return {
-      u_cityCenter: sweep.sweepCenter || this.cityCenter,
-      u_cityMinSize: this.cityMinSize * sweep.sweepRadius,
-      u_circleSweep: sweep.enable ? 1.0 : 0.0,
-      u_circleSweepColor: rgb2arr(sweep.sweepColor).slice(0, 3),
-      u_circleSweepSpeed: sweep.sweepSpeed,
 
-      u_opacity: opacity,
-      u_baseColor: rgb2arr(baseColor),
-      u_brightColor: rgb2arr(brightColor),
-      u_windowColor: rgb2arr(windowColor),
-      u_time: this.layer.getLayerAnimateTime() || time,
+    const u_cityCenter = sweep.sweepCenter || this.cityCenter;
+    const u_cityMinSize = this.cityMinSize * sweep.sweepRadius;
+    const u_circleSweep = sweep.enable ? 1.0 : 0.0;
+    const u_circleSweepColor = rgb2arr(sweep.sweepColor).slice(0, 3);
+    const u_circleSweepSpeed = sweep.sweepSpeed;
+    const u_opacity = opacity;
+    const u_baseColor = rgb2arr(baseColor);
+    const u_brightColor = rgb2arr(brightColor);
+    const u_windowColor = rgb2arr(windowColor);
+    const u_time = this.layer.getLayerAnimateTime() || time;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...u_baseColor,
+          ...u_brightColor,
+          ...u_windowColor,
+          ...u_circleSweepColor,
+          u_cityMinSize,
+          ...u_cityCenter,
+          u_circleSweep,
+          u_circleSweepSpeed,
+          u_opacity,
+          u_time,
+        ]).buffer,
+      ),
+    });
+
+    return {
+      u_baseColor,
+      u_brightColor,
+      u_windowColor,
+      u_circleSweepColor,
+      u_cityCenter,
+      u_cityMinSize,
+      u_circleSweep,
+      u_circleSweepSpeed,
+      u_opacity,
+      u_time,
     };
   }
 
@@ -71,6 +100,13 @@ export default class CityBuildModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 * 3 + 3 + 2 + 1 * 5),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'cityBuilding',
       vertexShader: buildVert,
@@ -92,6 +128,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -116,6 +153,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -134,6 +172,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

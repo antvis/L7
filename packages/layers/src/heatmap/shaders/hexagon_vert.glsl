@@ -1,18 +1,15 @@
-precision highp float;
-// 多边形顶点坐标
-attribute vec3 a_Position;
-// 多边形经纬度坐标
-attribute vec3 a_Pos;
-attribute float a_Size;
-attribute vec4 a_Color;
-uniform vec2 u_radius;
-uniform float u_coverage: 0.9;
-uniform float u_angle: 0;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in vec3 a_Pos;
 
-varying vec4 v_color;
+layout(std140) uniform ModelUniforms {
+  vec2 u_radius;
+  float u_opacity;
+  float u_coverage;
+  float u_angle;
+};
 
-uniform vec2 u_sceneCenterMercator;
+out vec4 v_color;
 
 #pragma include "projection"
 #pragma include "project"

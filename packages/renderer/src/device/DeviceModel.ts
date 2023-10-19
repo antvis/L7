@@ -82,6 +82,8 @@ export default class DeviceModel implements IModel {
     });
     this.program = program;
 
+    // console.log(vs, fs);
+
     if (uniforms) {
       this.uniforms = this.extractUniforms(uniforms);
     }

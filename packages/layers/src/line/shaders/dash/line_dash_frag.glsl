@@ -24,8 +24,6 @@ layout(std140) uniform ModelUniforms {
 };
 
 in vec4 v_color;
-
-// dash
 in vec4 v_dash_array;
 in float v_d_distance_ratio;
 

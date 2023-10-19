@@ -15,14 +15,26 @@ export default class HexagonModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const { opacity, coverage, angle } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+
+    const u_opacity = opacity || 1.0;
+    const u_coverage = coverage || 0.9;
+    const u_angle = angle || 0;
+    const u_radius = [
+      this.layer.getSource().data.xOffset,
+      this.layer.getSource().data.yOffset,
+    ];
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([...u_radius, u_opacity, u_coverage, u_angle]).buffer,
+      ),
+    });
     return {
-      u_opacity: opacity || 1.0,
-      u_coverage: coverage || 0.9,
-      u_angle: angle || 0,
-      u_radius: [
-        this.layer.getSource().data.xOffset,
-        this.layer.getSource().data.yOffset,
-      ],
+      u_radius,
+      u_opacity,
+      u_coverage,
+      u_angle,
     };
   }
 
@@ -31,6 +43,13 @@ export default class HexagonModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(2 + 1 * 3),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapHexagon',
       vertexShader: heatmapGridVert,
@@ -47,6 +66,7 @@ export default class HexagonModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
+        shaderLocation: 7,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

@@ -1,13 +1,13 @@
 import {
   Device,
+  Format,
+  RenderPass,
+  RenderTarget,
   SwapChain,
+  TextureUsage,
+  TransparentBlack,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
-  RenderPass,
-  TransparentBlack,
-  RenderTarget,
-  Format,
-  TextureUsage,
 } from '@antv/g-device-api';
 import {
   IAttribute,
@@ -105,16 +105,17 @@ export default class DeviceRendererService implements IRendererService {
 
     const renderTargetTexture = this.device.createTexture({
       format: Format.U8_RGBA_RT,
-      width: canvas.width, 
+      width: canvas.width,
       height: canvas.height,
       usage: TextureUsage.RENDER_TARGET,
     });
-    this.renderTarget = this.device.createRenderTargetFromTexture(renderTargetTexture);
+    this.renderTarget =
+      this.device.createRenderTargetFromTexture(renderTargetTexture);
 
     this.mainDepthRT = this.device.createRenderTargetFromTexture(
       this.device.createTexture({
         format: Format.D24_S8,
-        width: canvas.width, 
+        width: canvas.width,
         height: canvas.height,
         usage: TextureUsage.RENDER_TARGET,
       }),

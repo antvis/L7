@@ -23,19 +23,37 @@ export default class RasterModel extends BaseModel {
       domain,
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
+
     const newdomain = domain || getDefaultDomain(rampColors);
-    this.colorTexture = this.layer.textureService.getColorTexture(
-      rampColors,
-      newdomain,
-    );
+    const u_opacity = opacity || 1;
+    const u_domain = newdomain;
+    const u_clampLow = clampLow ? 1.0 : 0.0;
+    const u_clampHigh = (
+      typeof clampHigh !== 'undefined' ? clampHigh : clampLow
+    )
+      ? 1.0
+      : 0.0;
+    const u_noDataValue = noDataValue;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...u_domain,
+          u_opacity,
+          u_clampLow,
+          u_clampHigh,
+          u_noDataValue,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_opacity: opacity || 1,
-      u_texture: this.texture,
-      u_domain: newdomain,
-      u_clampLow: clampLow,
-      u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
-      u_noDataValue: noDataValue,
-      u_colorTexture: this.colorTexture,
+      u_opacity,
+      u_domain,
+      u_clampLow,
+      u_clampHigh,
+      u_noDataValue,
     };
   }
 
@@ -66,13 +84,30 @@ export default class RasterModel extends BaseModel {
     const { data, width, height } = await this.getRasterData(parserDataItem);
 
     this.texture = createTexture2D({
-      data,
+      data: new Uint8Array(data),
       width,
       height,
       format: gl.LUMINANCE,
-      type: gl.FLOAT,
-      // aniso: 4,
+      type: gl.UNSIGNED_BYTE,
     });
+
+    const { domain, rampColors } =
+      this.layer.getLayerConfig() as IRasterLayerStyleOptions;
+    const newdomain = domain || getDefaultDomain(rampColors);
+    this.colorTexture = this.layer.textureService.getColorTexture(
+      rampColors,
+      newdomain,
+    );
+
+    this.textures[0] = this.texture;
+    this.textures[1] = this.colorTexture;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(2 + 1 * 4),
+        isUBO: true,
+      }),
+    );
 
     const model = await this.layer.buildLayerModel({
       moduleName: 'rasterImageData',
@@ -101,6 +136,7 @@ export default class RasterModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

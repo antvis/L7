@@ -19,8 +19,14 @@ export default class EarthBloomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const { opacity = 1 } =
       this.layer.getLayerConfig() as IBloomLayerStyleOptions;
+
+    const u_opacity = isNumber(opacity) ? opacity : 1.0;
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(new Float32Array([u_opacity]).buffer),
+    });
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity,
     };
   }
 
@@ -35,6 +41,14 @@ export default class EarthBloomSphereModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     // Tip: 调整图层的绘制顺序，让它保持在地球后面（减少锯齿现象）
     this.layer.zIndex = -999;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'earthBloom',
       vertexShader: bloomSphereVert,
@@ -48,28 +62,11 @@ export default class EarthBloomSphereModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
-    this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 7,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -93,6 +90,7 @@ export default class EarthBloomSphereModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: 8,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

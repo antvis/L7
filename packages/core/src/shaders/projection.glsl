@@ -29,6 +29,7 @@ layout(std140) uniform SceneUniforms {
   float u_DevicePixelRatio;
   vec2 u_ViewportCenter;
   vec2 u_ViewportSize;
+  vec2 u_sceneCenterMercator;
   float u_FocalDistance;
 };
 

@@ -48,6 +48,10 @@ export default class DeviceTexture2D implements ITexture2D {
     let pixelFormat: Format = Format.U8_RGBA_RT;
     if (type === gl.UNSIGNED_BYTE && format === gl.RGBA) {
       pixelFormat = Format.U8_RGBA_RT;
+    } else if (format === gl.LUMINANCE && type === gl.FLOAT) {
+      pixelFormat = Format.F32_LUMINANCE;
+    } else if (format === gl.LUMINANCE && type === gl.UNSIGNED_BYTE) {
+      pixelFormat = Format.U8_LUMINANCE;
     } else {
       throw new Error(`create texture error, type: ${type}, format: ${format}`);
     }

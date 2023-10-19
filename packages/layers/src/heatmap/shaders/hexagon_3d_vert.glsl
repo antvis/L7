@@ -1,31 +1,26 @@
-precision highp float;
-// 多边形顶点坐标
-attribute vec3 a_Position;
-// 多边形经纬度坐标
-attribute vec3 a_Pos;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in vec3 a_Pos;
+layout(location = 8) in vec3 a_Normal;
+layout(location = 9) in float a_Size;
 
-attribute vec3 a_Normal;
-attribute float a_Size;
-attribute vec4 a_Color;
-uniform vec2 u_radius;
-uniform float u_coverage: 0.9;
-uniform float u_angle: 0;
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform ModelUniforms {
+  vec2 u_radius;
+  float u_opacity;
+  float u_coverage;
+  float u_angle;
+};
 
-varying vec4 v_color;
-
-uniform vec2 u_sceneCenterMercator;
+out vec4 v_color;
 
 #pragma include "projection"
 #pragma include "project"
 #pragma include "light"
 #pragma include "picking"
 
-
 void main() {
   mat2 rotationMatrix = mat2(cos(u_angle), sin(u_angle), -sin(u_angle), cos(u_angle));
   vec2 offset =(vec2(a_Position.xy * u_radius * rotationMatrix * u_coverage));
-
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
  

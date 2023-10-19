@@ -1,4 +1,3 @@
-
 #define Animate 0.0
 
 layout(location = 0) in vec3 a_Position;

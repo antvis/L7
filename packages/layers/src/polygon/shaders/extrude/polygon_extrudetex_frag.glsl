@@ -1,16 +1,20 @@
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_linearColor;
+  float u_topsurface;
+  float u_sidesurface;
+  float u_heightfixed;
+  float u_raisingHeight;
+};
+
 uniform sampler2D u_texture;
-uniform float u_opacity: 1.0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-uniform float u_linearColor: 0;
 
-uniform float u_topsurface: 1.0;
-uniform float u_sidesurface: 1.0;
+in vec4 v_Color;
+in vec3 v_uvs;
+in vec2 v_texture_data;
 
-varying vec4 v_Color;
-varying vec3 v_uvs;
-varying vec2 v_texture_data;
-
+out vec4 outputColor;
 
 #pragma include "picking"
 
@@ -31,9 +35,9 @@ void main() {
     if(u_linearColor == 1.0) {
       vec4 linearColor = mix(u_targetColor, u_sourceColor, sidey);
       linearColor.rgb *= lightWeight;
-      gl_FragColor = linearColor;
+      outputColor = linearColor;
     } else {
-      gl_FragColor = v_Color;
+      outputColor = v_Color;
     }
   } else {
 
@@ -42,11 +46,10 @@ void main() {
       discard;
     }
 
-    gl_FragColor = texture2D(u_texture, vec2(topU, topV));
-    // gl_FragColor = vec4(1.0, 0., 0., 1.0);
+    outputColor = texture(SAMPLER_2D(u_texture), vec2(topU, topV));
+    // outputColor = vec4(1.0, 0., 0., 1.0);
   }
-  
 
-  gl_FragColor.a *= opacity;
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor.a *= opacity;
+  outputColor = filterColor(outputColor);
 }

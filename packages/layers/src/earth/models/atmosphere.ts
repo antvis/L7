@@ -19,8 +19,14 @@ export default class EarthAtomSphereModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const { opacity = 1 } =
       this.layer.getLayerConfig() as IAtmoSphereLayerStyleOptions;
+
+    const u_opacity = isNumber(opacity) ? opacity : 1.0;
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(new Float32Array([u_opacity]).buffer),
+    });
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_opacity,
     };
   }
 
@@ -35,6 +41,14 @@ export default class EarthAtomSphereModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     // TODO: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -997;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'earthAtmoSphere',
       vertexShader: atmoSphereVert,
@@ -47,30 +61,12 @@ export default class EarthAtomSphereModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 7,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -94,6 +90,7 @@ export default class EarthAtomSphereModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: 8,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

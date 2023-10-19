@@ -39,13 +39,28 @@ export default class BaseEarthModel extends BaseModel {
       this.sunZ = Math.sin(this.earthTime) * (this.sunRadius - this.sunY);
     }
 
-    return {
-      u_ambientRatio: globalOptions?.ambientRatio || 0.6, // 环境光
-      u_diffuseRatio: globalOptions?.diffuseRatio || 0.4, // 漫反射
-      u_specularRatio: globalOptions?.specularRatio || 0.1, // 高光反射
-      u_sunLight: [this.sunX, this.sunY, this.sunZ],
+    const u_ambientRatio = globalOptions?.ambientRatio || 0.6; // 环境光
+    const u_diffuseRatio = globalOptions?.diffuseRatio || 0.4; // 漫反射
+    const u_specularRatio = globalOptions?.specularRatio || 0.1; // 高光反射
+    const u_sunLight = [this.sunX, this.sunY, this.sunZ];
 
-      u_texture: this.texture,
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...u_sunLight,
+          u_ambientRatio,
+          u_diffuseRatio,
+          u_specularRatio,
+        ]).buffer,
+      ),
+    });
+
+    return {
+      u_ambientRatio,
+      u_diffuseRatio,
+      u_specularRatio,
+      u_sunLight,
     };
   }
 
@@ -71,12 +86,14 @@ export default class BaseEarthModel extends BaseModel {
       height: 0,
       width: 0,
     });
+    this.textures[0] = this.texture;
     source.data.images.then((imageData: HTMLImageElement[]) => {
       this.texture = createTexture2D({
         data: imageData[0],
         width: imageData[0].width,
         height: imageData[0].height,
       });
+      this.textures[0] = this.texture;
       this.layerService.reRender();
     });
 
@@ -91,6 +108,13 @@ export default class BaseEarthModel extends BaseModel {
     // Tip: 调整图层的绘制顺序 地球大气层
     this.layer.zIndex = -998;
 
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(3 + 1 * 3),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'earthBase',
       vertexShader: baseVert,
@@ -104,28 +128,11 @@ export default class BaseEarthModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
-
-    this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 7,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -149,6 +156,7 @@ export default class BaseEarthModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

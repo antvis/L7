@@ -25,11 +25,10 @@ out vec4 v_Color;
 #pragma include "picking"
 
 void main() {
- 
   float isSide = a_Position.z;
- float topU = a_uvs[0];
- float topV = 1.0 - a_uvs[1];
- float sidey = a_uvs[2];
+  float topU = a_uvs[0];
+  float topV = 1.0 - a_uvs[1];
+  float sidey = a_uvs[2];
 
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
   float lightWeight = calc_lighting(pos);

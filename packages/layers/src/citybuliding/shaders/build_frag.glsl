@@ -1,20 +1,24 @@
-uniform float u_opacity: 1.0;
-uniform vec4 u_baseColor : [ 1.0, 0, 0, 1.0 ];
-uniform vec4 u_brightColor : [ 1.0, 0, 0, 1.0 ];
-uniform vec4 u_windowColor : [ 1.0, 0, 0, 1.0 ];
-uniform float u_near : 0;
-uniform float u_far : 1;
-varying vec4 v_Color;
-varying vec2 v_texCoord;
-uniform float u_Zoom : 1;
-uniform float u_time;
+layout(std140) uniform ModelUniforms {
+  vec4 u_baseColor;
+  vec4 u_brightColor;
+  vec4 u_windowColor;
+  vec3 u_circleSweepColor;
+  float u_cityMinSize;
+  vec2 u_cityCenter;
+  float u_circleSweep;
+  float u_circleSweepSpeed;
+  float u_opacity;
+  float u_time;
+};
 
-uniform float u_circleSweep;
-uniform float u_cityMinSize;
-uniform vec3 u_circleSweepColor;
-uniform float u_circleSweepSpeed;
+float u_near = 0.0;
+float u_far = 1.0;
+float u_Zoom = 1.0;
 
-varying float v_worldDis;
+in vec4 v_Color;
+in vec2 v_texCoord;
+in float v_worldDis;
+out vec4 outputColor;
 
 #pragma include "picking"
 
@@ -48,7 +52,7 @@ float sdRect(vec2 p, vec2 sz) {
 }
 
 void main() {
-  gl_FragColor = v_Color;
+  outputColor = v_Color;
   vec3 baseColor = u_baseColor.xyz;
   vec3 brightColor = u_brightColor.xyz;
   vec3 windowColor = u_windowColor.xyz;
@@ -57,7 +61,7 @@ void main() {
   vec3 fogColor = vec3(23.0/255.0,31.0/255.0,51.0/255.0);
   if(v_texCoord.x < 0.) { //顶部颜色
        vec3 foggedColor = fog(baseColor.xyz + vec3(0.12*0.9,0.2*0.9,0.3*0.9),fogColor,depth);
-       gl_FragColor = vec4( foggedColor, v_Color.w);
+       outputColor = vec4( foggedColor, v_Color.w);
   }else { // 侧面颜色
         vec2 st = v_texCoord;
         vec2  UvScale = v_texCoord;
@@ -103,15 +107,15 @@ void main() {
 
         vec3 foggedColor = fog(color,fogColor,depth);
 
-        gl_FragColor = vec4(foggedColor,1.0);
+        outputColor = vec4(foggedColor,1.0);
   }
 
 
   if(u_circleSweep > 0.0 && v_worldDis < u_cityMinSize) {
     float r = fract(((v_worldDis/u_cityMinSize) - u_time * u_circleSweepSpeed) * 2.0);
-    gl_FragColor.rgb += r * r * u_circleSweepColor;
+    outputColor.rgb += r * r * u_circleSweepColor;
   }
    
-  gl_FragColor.a *= u_opacity;
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor.a *= u_opacity;
+  outputColor = filterColor(outputColor);
 }

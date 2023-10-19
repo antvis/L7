@@ -1,29 +1,33 @@
-precision highp float;
-
 #define ambientRatio 0.5
 #define diffuseRatio 0.3
 #define specularRatio 0.2
 
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec3 a_Normal;
-attribute float a_Size;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in vec3 a_Normal;
+layout(location = 8) in float a_Size;
+layout(location = 9) in vec2 a_Uv;
 
-attribute vec2 a_Uv;
-varying vec2 v_texCoord;
+layout(std140) uniform ModelUniforms {
+  vec4 u_baseColor;
+  vec4 u_brightColor;
+  vec4 u_windowColor;
+  vec3 u_circleSweepColor;
+  float u_cityMinSize;
+  vec2 u_cityCenter;
+  float u_circleSweep;
+  float u_circleSweepSpeed;
+  float u_opacity;
+  float u_time;
+};
 
-varying vec4 v_Color;
-
-uniform float u_circleSweep;
-uniform vec2 u_cityCenter;
-
-varying float v_worldDis;
+out vec2 v_texCoord;
+out vec4 v_Color;
+out float v_worldDis;
 
 #pragma include "projection"
 #pragma include "light"
 #pragma include "picking"
-
 
 void main() {
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);

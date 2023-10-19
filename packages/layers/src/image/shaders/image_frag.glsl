@@ -1,11 +1,16 @@
-precision mediump float;
-uniform float u_opacity: 1.0;
+layout(std140) uniform ModelUniforms {
+  float u_opacity;
+};
+
 uniform sampler2D u_texture;
-varying vec2 v_texCoord;
+
+in vec2 v_texCoord;
+out vec4 outputColor;
+
 void main() {
-  vec4 color = texture2D(u_texture,vec2(v_texCoord.x,v_texCoord.y));
-  gl_FragColor = color;
-  gl_FragColor.a *= u_opacity;
-  if(gl_FragColor.a < 0.01)
+  vec4 color = texture(SAMPLER_2D(u_texture), vec2(v_texCoord.x,v_texCoord.y));
+  outputColor = color;
+  outputColor.a *= u_opacity;
+  if(outputColor.a < 0.01)
     discard;
 }

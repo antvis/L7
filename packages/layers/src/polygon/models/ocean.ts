@@ -1,7 +1,9 @@
 import {
   AttributeType,
   gl,
+  IAnimateOption,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,
@@ -25,18 +27,29 @@ export default class OceanModel extends BaseModel {
       watercolor2 = '#0F121C',
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
+    const u_watercolor = rgb2arr(watercolor);
+    const u_watercolor2 = rgb2arr(watercolor2);
+    const u_opacity = isNumber(opacity) ? opacity : 1.0;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([...u_watercolor, ...u_watercolor2, u_opacity]).buffer,
+      ),
+    });
+
     return {
-      u_texture1: this.texture1,
-      u_texture2: this.texture2,
-      u_texture3: this.texture3,
-      u_watercolor: rgb2arr(watercolor),
-      u_watercolor2: rgb2arr(watercolor2),
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_watercolor,
+      u_watercolor2,
+      u_opacity,
     };
   }
 
   public getAnimateUniforms(): IModelUniform {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+
     return {
+      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
@@ -47,6 +60,13 @@ export default class OceanModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'polygonOcean',
       vertexShader: ocean_vert,
@@ -75,6 +95,7 @@ export default class OceanModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -106,12 +127,18 @@ export default class OceanModel extends BaseModel {
     this.texture1 = createTexture2D(defaultTextureOptions);
     this.texture2 = createTexture2D(defaultTextureOptions);
     this.texture3 = createTexture2D(defaultTextureOptions);
+    this.textures[0] = this.texture1;
+    this.textures[1] = this.texture2;
+    this.textures[2] = this.texture3;
 
     // 加载完 image 后单独给 texture f赋值
     initImage((images: HTMLImageElement[]) => {
       this.texture1 = initTex(images[0]);
       this.texture2 = initTex(images[1]);
       this.texture3 = initTex(images[2]);
+      this.textures[0] = this.texture1;
+      this.textures[1] = this.texture2;
+      this.textures[2] = this.texture3;
       this.layerService.reRender();
     });
 

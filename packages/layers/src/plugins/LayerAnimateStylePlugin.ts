@@ -28,20 +28,20 @@ export default class LayerAnimateStylePlugin implements ILayerPlugin {
       if (animateStatus) {
         layer.models.forEach((model: IModel) => {
           const uniforms = layer.layerModel.getAnimateUniforms();
-
-          uniformBuffer.subData({
-            offset: 0,
-            data: new Uint8Array(
-              new Float32Array([
-                // @ts-ignore
-                ...uniforms.u_animate,
-                uniforms.u_time,
-              ]).buffer,
-            ),
-          });
-          model.addUniforms({
-            ...uniforms,
-          });
+          if (uniforms) {
+            uniformBuffer.subData({
+              offset: 0,
+              data: new Uint8Array(
+                new Float32Array([
+                  ...((uniforms.u_animate as number[]) || [0, 0, 0, 0]),
+                  uniforms.u_time as number,
+                ]).buffer,
+              ),
+            });
+            model.addUniforms({
+              ...uniforms,
+            });
+          }
         });
       }
     });

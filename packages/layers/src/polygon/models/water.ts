@@ -1,7 +1,9 @@
 import {
   AttributeType,
   gl,
+  IAnimateOption,
   IEncodeFeature,
+  ILayerConfig,
   IModel,
   IModelUniform,
   ITexture2D,
@@ -19,15 +21,25 @@ export default class WaterModel extends BaseModel {
   public getUninforms() {
     const { opacity = 1, speed = 0.5 } =
       this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+
+    const u_speed = speed;
+    const u_opacity = isNumber(opacity) ? opacity : 1.0;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(new Float32Array([u_speed, u_opacity]).buffer),
+    });
     return {
-      u_texture: this.texture,
-      u_speed: speed,
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
+      u_speed,
+      u_opacity,
     };
   }
 
   public getAnimateUniforms(): IModelUniform {
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+
     return {
+      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
       u_time: this.layer.getLayerAnimateTime(),
     };
   }
@@ -38,6 +50,13 @@ export default class WaterModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(1 + 1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'polygonWater',
       vertexShader: water_vert,
@@ -64,6 +83,7 @@ export default class WaterModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -97,6 +117,7 @@ export default class WaterModel extends BaseModel {
       height: 0,
       width: 0,
     });
+    this.textures[0] = this.texture;
     const image = new Image();
     image.crossOrigin = '';
     if (waterTexture) {
@@ -121,6 +142,7 @@ export default class WaterModel extends BaseModel {
         min: gl.LINEAR,
         mag: gl.LINEAR,
       });
+      this.textures[0] = this.texture;
       this.layerService.reRender();
     };
   }

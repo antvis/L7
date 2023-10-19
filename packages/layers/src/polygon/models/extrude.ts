@@ -42,6 +42,9 @@ export default class ExtrudeModel extends BaseModel {
       useLinearColor = 1;
     }
 
+    const uniforms = this.getStyleAttribute();
+    const useAttributeUniforms = !!Object.keys(uniforms).length;
+
     const u_topsurface = Number(topsurface);
     const u_sidesurface = Number(sidesurface);
     const u_heightfixed = Number(heightfixed);
@@ -52,7 +55,16 @@ export default class ExtrudeModel extends BaseModel {
     const u_sourceColor = sourceColorArr;
     const u_targetColor = targetColorArr;
 
-    this.uniformBuffers[0].subData({
+    let index = 0;
+    if (useAttributeUniforms) {
+      this.uniformBuffers[0].subData({
+        offset: 0,
+        data: new Uint8Array(new Float32Array([uniforms.u_opacity]).buffer),
+      });
+      index++;
+    }
+
+    this.uniformBuffers[index].subData({
       offset: 0,
       data: new Uint8Array(
         new Float32Array([
@@ -76,6 +88,7 @@ export default class ExtrudeModel extends BaseModel {
       u_sidesurface,
       u_heightfixed,
       u_raisingHeight,
+      ...uniforms,
     };
   }
 
@@ -87,6 +100,17 @@ export default class ExtrudeModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, type } = this.getShaders();
 
+    const uniforms = this.getStyleAttribute();
+    const useAttributeUniforms = !!Object.keys(uniforms).length;
+
+    if (useAttributeUniforms) {
+      this.uniformBuffers.push(
+        this.rendererService.createBuffer({
+          data: new Float32Array(1),
+          isUBO: true,
+        }),
+      );
+    }
     this.uniformBuffers.push(
       this.rendererService.createBuffer({
         data: new Float32Array(4 + 4 + 1 * 5),

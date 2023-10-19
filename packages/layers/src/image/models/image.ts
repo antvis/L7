@@ -15,10 +15,16 @@ import ImageVert from '../shaders/image_vert.glsl';
 export default class ImageModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
-    const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+    const { opacity = 1 } =
+      this.layer.getLayerConfig() as IImageLayerStyleOptions;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(new Float32Array([opacity]).buffer),
+    });
+
     return {
-      u_opacity: opacity || 1,
-      u_texture: this.texture,
+      u_opacity: opacity,
     };
   }
 
@@ -39,6 +45,14 @@ export default class ImageModel extends BaseModel {
       mag: gl.LINEAR,
       min: gl.LINEAR,
     });
+    this.textures[0] = this.texture;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(1),
+        isUBO: true,
+      }),
+    );
 
     const model = await this.layer.buildLayerModel({
       moduleName: 'rasterImage',
@@ -69,6 +83,7 @@ export default class ImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: 7,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
