@@ -28,7 +28,7 @@ const EventMap: {
 const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
 const BMAP_VERSION: string = '1.0';
 
-export default class AMapService extends BaseMapService<BMapGL.Map> {
+export default class BMapService extends BaseMapService<BMapGL.Map> {
   protected viewport: IViewport;
   protected styleConfig: Record<string, any> = {
     normal: [],
