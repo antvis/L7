@@ -246,8 +246,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     const ne = getNorthEast();
     const sw = getSouthWest();
     return [
-      [ne.lng, ne.lat],
       [sw.lng, sw.lat],
+      [ne.lng, ne.lat],
     ];
   }
 
