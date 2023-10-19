@@ -242,9 +242,9 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public getBounds(): Bounds {
-    const { getNorthEast, getSouthWest } = this.getMap().getBounds();
-    const ne = getNorthEast();
-    const sw = getSouthWest();
+    const bounds = this.getMap().getBounds();
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
     return [
       [sw.lng, sw.lat],
       [ne.lng, ne.lat],
