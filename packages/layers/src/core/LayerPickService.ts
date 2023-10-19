@@ -126,7 +126,7 @@ export default class BaseLayerPickService implements ILayerPickService {
   }
   public highlightPickedFeature(pickedColors: Uint8Array | undefined): void {
     // @ts-ignore
-    const [r, g, b] = pickedColors;
+    const [r = 0, g = 0, b = 0] = pickedColors;
     this.layer.hooks.beforeHighlight.call([r, g, b]);
   }
   public getFeatureById(pickedFeatureIdx: number): any {

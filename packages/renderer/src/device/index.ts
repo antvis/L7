@@ -1,4 +1,10 @@
 import {
+  Device,
+  SwapChain,
+  WebGLDeviceContribution,
+  WebGPUDeviceContribution,
+} from '@antv/g-device-api';
+import {
   IAttribute,
   IAttributeInitializationOptions,
   IBuffer,
@@ -7,6 +13,7 @@ import {
   IElements,
   IElementsInitializationOptions,
   IExtensions,
+  IFramebuffer,
   IFramebufferInitializationOptions,
   IModel,
   IModelInitializationOptions,
@@ -18,13 +25,12 @@ import {
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { Device, SwapChain, WebGLDeviceContribution } from '@antv/g-device-api';
 import DeviceAttribute from './DeviceAttribute';
 import DeviceBuffer from './DeviceBuffer';
 import DeviceElements from './DeviceElements';
+import DeviceFramebuffer from './DeviceFramebuffer';
 import DeviceModel from './DeviceModel';
 import DeviceTexture2D from './DeviceTexture2D';
-import DeviceFramebuffer from './DeviceFramebuffer';
 import { isWebGL2 } from './utils/webgl';
 
 /**
@@ -43,29 +49,45 @@ export default class DeviceRendererService implements IRendererService {
   private isDirty: boolean;
 
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
+    const { enableWebGPU, shaderCompilerPath } = cfg;
     // this.$container = $container;
     this.canvas = canvas;
 
     // TODO: use antialias from cfg
-    const deviceContribution = new WebGLDeviceContribution({
-      // Use WebGL2 first and downgrade to WebGL1 if WebGL2 is not supported.
-      targets: ['webgl2', 'webgl1'],
-      onContextLost(e) {
-        console.warn('context lost', e);
-      },
-      onContextCreationError(e) {
-        console.warn('context creation error', e);
-      },
-      onContextRestored(e) {
-        console.warn('context restored', e);
-      },
-    });
+    const deviceContribution = enableWebGPU
+      ? new WebGPUDeviceContribution({
+          shaderCompilerPath,
+        })
+      : new WebGLDeviceContribution({
+          // Use WebGL2 first and downgrade to WebGL1 if WebGL2 is not supported.
+          targets: ['webgl2', 'webgl1'],
+          onContextLost(e) {
+            console.warn('context lost', e);
+          },
+          onContextCreationError(e) {
+            console.warn('context creation error', e);
+          },
+          onContextRestored(e) {
+            console.warn('context restored', e);
+          },
+        });
 
     const swapChain = await deviceContribution.createSwapChain(canvas);
     swapChain.configureSwapChain(canvas.width, canvas.height);
     this.device = swapChain.getDevice();
     // @ts-ignore
     this.device.swapChain = swapChain;
+
+    // Create default RT
+    // @ts-ignore
+    this.device.onscreenFramebuffer = this.createFramebuffer({
+      width: canvas.width,
+      height: canvas.height,
+    });
+    // @ts-ignore
+    this.device.onscreenFramebuffer.onscreen = true;
+    // @ts-ignore
+    this.device.currentFramebuffer = this.device.onscreenFramebuffer;
 
     // @ts-ignore
     const gl = this.device['gl'];
@@ -101,14 +123,19 @@ export default class DeviceRendererService implements IRendererService {
   createFramebuffer = (options: IFramebufferInitializationOptions) =>
     new DeviceFramebuffer(this.device, options);
 
-  useFramebuffer = () =>
-    // framebuffer: IFramebuffer | null,
-    // drawCommands: () => void,
-    {
-      // this.gl({
-      //   framebuffer: framebuffer ? (framebuffer as DeviceFramebuffer).get() : null,
-      // })(drawCommands);
-    };
+  useFramebuffer = (
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => void,
+  ) => {
+    if (framebuffer == null) {
+      // @ts-ignore
+      this.device.currentFramebuffer = this.device.onscreenFramebuffer;
+    } else {
+      // @ts-ignore
+      this.device.currentFramebuffer = framebuffer;
+    }
+    drawCommands();
+  };
 
   clear = (options: IClearOptions) => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
@@ -167,9 +194,9 @@ export default class DeviceRendererService implements IRendererService {
     // FIXME: add viewport size in Device API.
     return {
       // @ts-ignore
-      width: this.device['gl'].drawingBufferWidth,
+      width: this.device.width,
       // @ts-ignore
-      height: this.device['gl'].drawingBufferHeight,
+      height: this.device.height,
     };
   };
 

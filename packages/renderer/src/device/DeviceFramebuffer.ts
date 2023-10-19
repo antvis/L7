@@ -1,11 +1,16 @@
-import { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
-import { isTexture2D } from './DeviceTexture2D';
 import { Device, Format, RenderTarget, Texture } from '@antv/g-device-api';
+import { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
+import DeviceTexture2D, { isTexture2D } from './DeviceTexture2D';
 
 export default class DeviceFramebuffer implements IFramebuffer {
   private renderTarget: RenderTarget;
+  private width: number;
+  private height: number;
 
-  constructor(device: Device, options: IFramebufferInitializationOptions) {
+  constructor(
+    private device: Device,
+    options: IFramebufferInitializationOptions,
+  ) {
     // TODO: depth
     const { width, height, depth, color, colors } = options;
 
@@ -13,12 +18,16 @@ export default class DeviceFramebuffer implements IFramebuffer {
       this.renderTarget = device.createRenderTargetFromTexture(
         color.get() as Texture,
       );
+      this.width = (color as DeviceTexture2D)['width'];
+      this.height = (color as DeviceTexture2D)['height'];
     } else if (width && height) {
       this.renderTarget = device.createRenderTarget({
         format: Format.U8_RGBA_RT,
         width,
         height,
       });
+      this.width = width;
+      this.height = height;
     }
   }
 
@@ -31,6 +40,17 @@ export default class DeviceFramebuffer implements IFramebuffer {
   }
 
   public resize({ width, height }: { width: number; height: number }) {
-    // this.framebuffer.resize(width, height);
+    if (this.width !== width || this.height !== height) {
+      if (this.renderTarget) {
+        this.renderTarget.destroy();
+      }
+      this.renderTarget = this.device.createRenderTarget({
+        format: Format.U8_RGBA_RT,
+        width,
+        height,
+      });
+      this.width = width;
+      this.height = height;
+    }
   }
 }

@@ -1,14 +1,4 @@
 import {
-  gl,
-  IAttribute,
-  IElements,
-  IModel,
-  IModelDrawOptions,
-  IModelInitializationOptions,
-  IUniform,
-} from '@antv/l7-core';
-import { lodashUtil } from '@antv/l7-utils';
-import {
   Bindings,
   BlendFactor,
   BlendMode,
@@ -22,13 +12,23 @@ import {
   InputLayoutBufferDescriptor,
   Program,
   RenderPipeline,
-  RenderTarget,
-  TextureUsage,
   TransparentBlack,
   TransparentWhite,
   VertexStepMode,
 } from '@antv/g-device-api';
+import {
+  IAttribute,
+  IElements,
+  IModel,
+  IModelDrawOptions,
+  IModelInitializationOptions,
+  IUniform,
+  gl,
+} from '@antv/l7-core';
+import { lodashUtil } from '@antv/l7-utils';
 import DeviceAttribute from './DeviceAttribute';
+import DeviceBuffer from './DeviceBuffer';
+import DeviceElements from './DeviceElements';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -37,8 +37,6 @@ import {
   primitiveMap,
   sizeFormatMap,
 } from './constants';
-import DeviceBuffer from './DeviceBuffer';
-import DeviceElements from './DeviceElements';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 export default class DeviceModel implements IModel {
@@ -50,7 +48,6 @@ export default class DeviceModel implements IModel {
   private program: Program;
   private inputLayout: InputLayout;
   private pipeline: RenderPipeline;
-  private renderTarget: RenderTarget;
   private indexBuffer: Buffer;
   private vertexBuffers: Buffer[] = [];
   private bindings: Bindings;
@@ -65,6 +62,7 @@ export default class DeviceModel implements IModel {
       attributes,
       uniforms,
       uniformBuffers,
+      textures,
       primitive = gl.TRIANGLES,
       count,
       elements,
@@ -201,21 +199,12 @@ export default class DeviceModel implements IModel {
             size: buffer['size'] * 4,
           };
         }),
-        // TODO: Texture
+        samplerBindings: textures?.map((t: any) => ({
+          texture: t['texture'],
+          sampler: t['sampler'],
+        })),
       });
     }
-
-    // @ts-ignore
-    const { width, height } = this.device;
-    // TODO: useFramebuffer
-    this.renderTarget = device.createRenderTargetFromTexture(
-      device.createTexture({
-        format: Format.U8_RGBA_RT,
-        width,
-        height,
-        usage: TextureUsage.RENDER_TARGET,
-      }),
-    );
   }
 
   updateAttributesAndElements(
@@ -268,9 +257,13 @@ export default class DeviceModel implements IModel {
     // Compatible to WebGL1.
     this.program.setUniformsLegacy(this.uniforms);
 
+    // @ts-ignore
+    const renderTarget = this.device.currentFramebuffer;
+    const { onscreen } = renderTarget;
+
     const renderPass = this.device.createRenderPass({
-      colorAttachment: [this.renderTarget],
-      colorResolveTo: [onscreenTexture],
+      colorAttachment: [renderTarget.get()],
+      colorResolveTo: [onscreen ? onscreenTexture : onscreenTexture],
       colorClearColor: [TransparentWhite],
     });
     renderPass.setPipeline(this.pipeline);
@@ -292,7 +285,7 @@ export default class DeviceModel implements IModel {
     }
 
     if (elements) {
-      renderPass.drawIndexed(count, instances);
+      renderPass.drawIndexed((elements as DeviceElements)['count'], instances);
     } else {
       renderPass.draw(count, instances);
     }
@@ -307,7 +300,6 @@ export default class DeviceModel implements IModel {
     this.bindings?.destroy();
     this.inputLayout.destroy();
     this.pipeline.destroy();
-    this.renderTarget.destroy();
     this.destroyed = true;
   }
 

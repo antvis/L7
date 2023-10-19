@@ -2,6 +2,7 @@ import { gl } from './gl';
 import { IAttribute } from './IAttribute';
 import { IBuffer } from './IBuffer';
 import { IElements } from './IElements';
+import { ITexture2D } from './ITexture2D';
 import { IUniform } from './IUniform';
 
 export interface IBlendOptions {
@@ -163,6 +164,7 @@ export interface IModelInitializationOptions {
   };
   // UBOs
   uniformBuffers?: IBuffer[];
+  textures?: ITexture2D[];
 
   attributes: {
     [key: string]: IAttribute;

@@ -38,18 +38,48 @@ export default class FillImageModel extends BaseModel {
      * GAODE2.x         -1
      * GAODE1.x         -1
      */
+    const attributes = this.getStyleAttribute();
+
+    // FIXME: No need to update each frame
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...attributes.u_stroke,
+          ...attributes.u_offsets,
+          attributes.u_opacity,
+          attributes.u_rotation,
+        ]).buffer,
+      ),
+    });
+
+    const u_raisingHeight = Number(raisingHeight);
+    const u_heightfixed = Number(heightfixed);
+    const u_size_unit = SizeUnitType[unit] as SizeUnitType;
+    const u_textSize = [1024, this.iconService.canvasHeight || 128];
+
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          // vec2 u_textSize;
+          // float u_raisingHeight;
+          // float u_heightfixed;
+          // float u_size_unit;
+          ...u_textSize,
+          u_raisingHeight,
+          u_heightfixed,
+          u_size_unit,
+        ]).buffer,
+      ),
+    });
 
     return {
-      u_raisingHeight: Number(raisingHeight),
-      u_heightfixed: Number(heightfixed),
-      u_size_unit: SizeUnitType[unit] as SizeUnitType,
-
-      u_texture: this.texture,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // u_opacity: opacity,
-      // u_offsets: offsets,
-      ...this.getStyleAttribute(),
+      u_raisingHeight,
+      u_heightfixed,
+      u_size_unit,
+      u_textSize,
+      ...attributes,
     };
   }
 
@@ -72,6 +102,19 @@ export default class FillImageModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 2 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(2 + 1 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointFillImage',
       vertexShader: pointFillVert,
@@ -99,6 +142,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -120,6 +164,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -151,6 +196,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -188,5 +234,6 @@ export default class FillImageModel extends BaseModel {
       height: this.iconService.canvasHeight || 128,
       mipmap: true,
     });
+    this.textures[0] = this.texture;
   };
 }

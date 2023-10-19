@@ -1,18 +1,25 @@
 uniform sampler2D u_texture;
-uniform vec2 u_textSize;
-uniform float u_opacity : 1;
 
-#pragma include "sdf_2d"
+layout(std140) uniform ModelUniforms {
+  vec2 u_textSize;
+  float u_raisingHeight;
+  float u_heightfixed;
+  float u_size_unit;
+};
+
 #pragma include "picking"
-varying vec2 v_uv; // 本身的 uv 坐标
-varying vec2 v_Iconuv;
-varying float v_opacity;
+
+in vec2 v_uv; // 本身的 uv 坐标
+in vec2 v_Iconuv;
+in float v_opacity;
+
+out vec4 outputColor;
 
 void main() {
 
   vec2 pos = v_Iconuv / u_textSize + v_uv / u_textSize * 64.;
-  gl_FragColor = texture2D(u_texture, pos);
-  gl_FragColor.a *= v_opacity;
+  outputColor = texture(SAMPLER_2D(u_texture), pos);
+  outputColor.a *= v_opacity;
 
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor = filterColor(outputColor);
 }

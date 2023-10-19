@@ -1,15 +1,16 @@
-import { gl, IElements, IElementsInitializationOptions } from '@antv/l7-core';
-import { TypedArray } from '@antv/l7-source';
 import { Buffer, BufferUsage, Device } from '@antv/g-device-api';
-import { isTypedArray } from './utils/typedarray';
+import { IElements, IElementsInitializationOptions, gl } from '@antv/l7-core';
+import { TypedArray } from '@antv/l7-source';
 import { typedArrayCtorMap } from './constants';
+import { isTypedArray } from './utils/typedarray';
 
 export default class DeviceElements implements IElements {
   private indexBuffer: Buffer;
   private type;
+  private count: number;
 
   constructor(device: Device, options: IElementsInitializationOptions) {
-    const { data, type } = options;
+    const { data, type, count = 0 } = options;
 
     let typed: TypedArray;
     if (isTypedArray(data)) {
@@ -21,6 +22,7 @@ export default class DeviceElements implements IElements {
     }
 
     this.type = type;
+    this.count = count;
 
     this.indexBuffer = device.createBuffer({
       viewOrSize: typed,

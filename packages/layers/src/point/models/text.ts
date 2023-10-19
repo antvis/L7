@@ -116,15 +116,55 @@ export default class TextModel extends BaseModel {
     }
 
     this.preTextStyle = this.getTextStyle();
+
+    const attributes = this.getStyleAttribute();
+    // FIXME: No need to update each frame
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...attributes.u_stroke,
+          ...attributes.u_offsets,
+          attributes.u_opacity,
+          attributes.u_rotation,
+        ]).buffer,
+      ),
+    });
+
+    const u_raisingHeight = Number(raisingHeight);
+    const u_stroke_width = strokeWidth;
+    const u_stroke_color = rgb2arr(stroke);
+    const u_halo_blur = halo;
+    const u_gamma_scale = gamma;
+    const u_sdf_map_size = [canvas?.width || 1, canvas?.height || 1];
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          // vec4 u_stroke_color;
+          // vec2 u_sdf_map_size;
+          // float u_stroke_width;
+          // float u_raisingHeight;
+          // float u_gamma_scale;
+          // float u_halo_blur;
+          ...u_stroke_color,
+          ...u_sdf_map_size,
+          u_stroke_width,
+          u_raisingHeight,
+          u_gamma_scale,
+          u_halo_blur,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_raisingHeight: Number(raisingHeight),
-      u_stroke_width: strokeWidth,
-      u_stroke_color: rgb2arr(stroke),
-      u_sdf_map: this.texture,
-      u_halo_blur: halo,
-      u_gamma_scale: gamma,
-      u_sdf_map_size: [canvas?.width || 1, canvas?.height || 1],
-      ...this.getStyleAttribute(),
+      u_raisingHeight,
+      u_stroke_width,
+      u_stroke_color,
+      u_halo_blur,
+      u_gamma_scale,
+      u_sdf_map_size,
+      ...attributes,
     };
   }
 
@@ -147,6 +187,21 @@ export default class TextModel extends BaseModel {
     if (!textAllowOverlap) {
       this.filterGlyphs();
     }
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 2 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 2 + 1 + 1 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointText',
       vertexShader: textVert,
@@ -217,6 +272,7 @@ export default class TextModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_textOffsets', // 文字偏移量
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -240,6 +296,7 @@ export default class TextModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -259,6 +316,7 @@ export default class TextModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_tex',
+        shaderLocation: 7,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -509,6 +567,7 @@ export default class TextModel extends BaseModel {
       width: canvas.width,
       height: canvas.height,
     });
+    this.textures[0] = this.texture;
   }
 
   private async reBuildModel() {

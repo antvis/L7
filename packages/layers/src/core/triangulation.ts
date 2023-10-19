@@ -15,17 +15,17 @@ import {
   primitiveSphere,
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
-import extrudePolygon, {
-  extrude_PolygonNormal,
-  fillPolygon,
-  IExtrudeGeomety,
-} from './shape/extrude';
 import {
-  geometryShape,
   IPosition,
   ShapeType2D,
   ShapeType3D,
+  geometryShape,
 } from './shape/Path';
+import extrudePolygon, {
+  IExtrudeGeomety,
+  extrude_PolygonNormal,
+  fillPolygon,
+} from './shape/extrude';
 type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;

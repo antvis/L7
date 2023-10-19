@@ -17,6 +17,7 @@ import {
 } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 import { IAttribute } from '../renderer/IAttribute';
+import { IBuffer } from '../renderer/IBuffer';
 import {
   IBlendOptions,
   IModel,
@@ -52,7 +53,6 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
-import { IBuffer } from '../renderer/IBuffer';
 
 export enum BlendType {
   normal = 'normal',
@@ -89,6 +89,7 @@ export interface ILayerModelInitializationOptions {
 
 export interface ILayerModel {
   uniformBuffers: IBuffer[];
+  textures: ITexture2D[];
 
   renderUpdate?(): void;
   getBlend(): Partial<IBlendOptions>;

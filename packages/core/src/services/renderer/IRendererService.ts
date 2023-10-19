@@ -19,6 +19,14 @@ export interface IRenderConfig {
   preserveDrawingBuffer?: boolean;
   // Tip: 场景是否支持 stencil mask
   stencil?: boolean;
+  /**
+   * Whether to use WebGPU Device.
+   */
+  enableWebGPU?: boolean;
+  /**
+   * Path of WASM shader compiler.
+   */
+  shaderCompilerPath?: string;
 }
 
 export interface IClearOptions {

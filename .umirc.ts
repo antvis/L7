@@ -2,8 +2,8 @@ import { defineConfig } from 'dumi';
 
 export default defineConfig({
   title: 'L7 开发 Demo',
-  favicon: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
-  logo: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
+  favicon: '/antv.png',
+  logo: '/antv.png',
   outputPath: 'docs-dist',
   base: '/',
   devServer: {
@@ -101,6 +101,7 @@ export default defineConfig({
     /** lodash */
     'https://gw.alipayobjects.com/os/lib/lodash/4.17.20/lodash.min.js',
   ],
+  // publicPath: '/public/',
 
   // more config: https://d.umijs.org/config
 });

@@ -12,10 +12,10 @@ layout(std140) uniform ModelUniforms {
   float u_size_unit;
 };
 
-out vec4 v_data;
 out vec4 v_color;
 out float v_radius;
 out vec4 v_stroke;
+out vec4 v_data;
 
 #pragma include "projection"
 #pragma include "picking"

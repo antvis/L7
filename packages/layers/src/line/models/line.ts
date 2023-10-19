@@ -81,43 +81,106 @@ export default class LineModel extends BaseModel {
       useLinearColor = 1;
     }
 
+    const u_textureBlend = textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0;
+    const u_line_type = lineStyleObj[lineType];
+    const u_dash_array = dashArray;
+    const u_blur = blur;
+    // 纹理支持参数
+    // const   u_texture: this.texture, // 贴图
+    const u_line_texture = lineTexture ? 1.0 : 0.0; // 传入线的标识
+    const u_icon_step = iconStep;
+    const u_textSize = [1024, this.iconService.canvasHeight || 128];
+
+    // line border 参数
+    const u_borderWidth = borderWidth;
+    const u_borderColor = rgb2arr(borderColor);
+
+    // 渐变色支持参数
+    const u_linearDir = linearDir === LinearDir.VERTICAL ? 1.0 : 0.0;
+    const u_linearColor = useLinearColor;
+    const u_sourceColor = sourceColorArr;
+    const u_targetColor = targetColorArr;
+
+    // 是否固定高度
+    const u_heightfixed = Number(heightfixed);
+
+    // 顶点高度 scale
+    const u_vertexScale = vertexHeightScale;
+    const u_raisingHeight = Number(raisingHeight);
+
+    // arrow
+    const u_arrow = Number(arrow.enable);
+    const u_arrowHeight = arrow.arrowHeight || 3;
+    const u_arrowWidth = arrow.arrowWidth || 2;
+    const u_tailWidth = arrow.tailWidth === undefined ? 1 : arrow.tailWidth;
+
+    const attributes = this.getStyleAttribute();
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...attributes.u_stroke,
+          ...attributes.u_offsets,
+          attributes.u_opacity,
+        ]).buffer,
+      ),
+    });
+
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...u_sourceColor,
+          ...u_targetColor,
+          ...u_dash_array,
+          ...u_borderColor,
+          ...u_blur,
+          u_icon_step,
+          ...u_textSize,
+          u_heightfixed,
+          u_vertexScale,
+          u_raisingHeight,
+          u_linearColor,
+          u_arrow,
+          u_arrowHeight,
+          u_arrowWidth,
+          u_tailWidth,
+          u_textureBlend,
+          u_borderWidth,
+          u_line_texture,
+          u_linearDir,
+          u_line_type,
+        ]).buffer,
+      ),
+    });
+
     return {
-      // u_opacity: isNumber(opacity) ? opacity : 1,
-      u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
-      u_line_type: lineStyleObj[lineType],
-      u_dash_array: dashArray,
-
-      u_blur: blur,
-
+      u_sourceColor,
+      u_targetColor,
+      u_dash_array,
+      u_borderColor,
+      u_blur,
+      u_icon_step,
+      u_textSize,
+      u_heightfixed,
+      u_vertexScale,
+      u_raisingHeight,
+      u_linearColor,
+      u_arrow,
+      u_arrowHeight,
+      u_arrowWidth,
+      u_tailWidth,
+      u_textureBlend,
+      u_borderWidth,
+      u_line_texture,
+      u_linearDir,
+      u_line_type,
       // 纹理支持参数
-      u_texture: this.texture, // 贴图
-      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-      u_icon_step: iconStep,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // line border 参数
-      u_borderWidth: borderWidth,
-      u_borderColor: rgb2arr(borderColor),
-
+      // u_texture: this.texture, // 贴图
       // 渐变色支持参数
-      u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
 
-      // 是否固定高度
-      u_heightfixed: Number(heightfixed),
-
-      // 顶点高度 scale
-      u_vertexScale: vertexHeightScale,
-      u_raisingHeight: Number(raisingHeight),
-
-      // arrow
-      u_arrow: Number(arrow.enable),
-      u_arrowHeight: arrow.arrowHeight || 3,
-      u_arrowWidth: arrow.arrowWidth || 2,
-      u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
-      ...this.getStyleAttribute(),
+      ...attributes,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -150,6 +213,20 @@ export default class LineModel extends BaseModel {
     const { frag, vert, type } = this.getShaders();
     // console.log(frag)
     this.layer.triangulation = LineTriangulation;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 2 + 1),
+        isUBO: true,
+      }),
+    );
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 4 + 4 + 3 + 1 + 2 + 1 * 13),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'line' + type,
       vertexShader: vert,
@@ -199,6 +276,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_DistanceAndIndex',
+        shaderLocation: 12,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -225,6 +303,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Total_Distance',
+        shaderLocation: 11,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -247,6 +326,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -267,6 +347,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -291,6 +372,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Miter',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -313,6 +395,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
+        shaderLocation: 10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -347,5 +430,6 @@ export default class LineModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
+    this.textures[0] = this.texture;
   };
 }

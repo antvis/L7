@@ -66,6 +66,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
 {
   public triangulation: Triangulation;
   public uniformBuffers: IBuffer[] = [];
+  public textures: ITexture2D[] = [];
 
   // style texture data mapping
   public createTexture2D: (
