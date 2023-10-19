@@ -671,7 +671,7 @@ export default defineConfig({
   ],
   links: [],
   scripts: [
-    'https://webapi.amap.com/maps?v=2.0&key=ff533602d57df6f8ab3b0fea226ae52f',
+    'https://webapi.amap.com/maps?v=2.0&key=f59bcf249433f8b05caaee19f349b3d7',
   ],
   analytics: {
     baidu: 'cde34c32ff1edfd4f933bfb44ae0e9f3',
