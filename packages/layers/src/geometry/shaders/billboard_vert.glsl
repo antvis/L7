@@ -1,6 +1,7 @@
 precision highp float;
 uniform mat4 u_ModelMatrix;
 uniform float u_raisingHeight: 0.0;
+uniform mat4 u_Mvp;
 uniform float u_opacity;
 uniform vec2 u_size: [1.0, 1.0];
 uniform mat2 u_RotateMatrix;
@@ -37,7 +38,13 @@ void main() {
    // z 轴不参与旋转
    float z = project_pixel(extrude.y * u_size.y + raiseHeight);
 
-   gl_Position = project_common_position_to_clipspace_v2(vec4(x , y, z , 1.0));
+
+   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+      // gl_Position = u_Mvp * (vec4(project_pos.xy, a_Position.z, 1.0));
+      gl_Position = u_Mvp * (vec4(x, y, z, 1.0));
+   } else {
+      gl_Position = project_common_position_to_clipspace(vec4(x , y, z , 1.0));
+   }
 
    setPickingColor(a_PickingColor);
 }
