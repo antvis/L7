@@ -13,7 +13,6 @@ import {
   Program,
   RenderPipeline,
   TransparentBlack,
-  TransparentWhite,
   VertexStepMode,
 } from '@antv/g-device-api';
 import {
@@ -152,8 +151,7 @@ export default class DeviceModel implements IModel {
       program,
       topology: primitiveMap[primitive],
       colorAttachmentFormats: [Format.U8_RGBA_RT],
-      depthStencilAttachmentFormat:
-        (depthEnabled && Format.D24_S8) || undefined,
+      depthStencilAttachmentFormat: Format.D24_S8,
       megaStateDescriptor: {
         attachmentsState: [
           {
@@ -187,24 +185,6 @@ export default class DeviceModel implements IModel {
         stencilWrite: false,
       },
     });
-
-    if (uniformBuffers) {
-      this.bindings = device.createBindings({
-        pipeline: this.pipeline,
-        uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
-          const buffer = uniformBuffer as DeviceBuffer;
-          return {
-            binding: i,
-            buffer: buffer.get(),
-            size: buffer['size'] * 4,
-          };
-        }),
-        samplerBindings: textures?.map((t: any) => ({
-          texture: t['texture'],
-          sampler: t['sampler'],
-        })),
-      });
-    }
   }
 
   updateAttributesAndElements(
@@ -235,6 +215,8 @@ export default class DeviceModel implements IModel {
       instances,
       elements,
       uniforms = {},
+      uniformBuffers,
+      textures,
     } = {
       ...this.options,
       ...options,
@@ -247,25 +229,13 @@ export default class DeviceModel implements IModel {
 
     // @ts-ignore
     const { width, height } = this.device;
-    // @ts-ignore
-    const onscreenTexture = this.device.swapChain.getOnscreenTexture();
-
-    Object.keys(this.uniforms).forEach((name) => {
-      // TODO: Handle texture2d and other non-number uniform.
-      const uniform = this.uniforms[name];
-    });
-    // Compatible to WebGL1.
-    this.program.setUniformsLegacy(this.uniforms);
 
     // @ts-ignore
-    const renderTarget = this.device.currentFramebuffer;
-    const { onscreen } = renderTarget;
+    // const renderTarget = this.device.currentFramebuffer;
+    // const { onscreen } = renderTarget
 
-    const renderPass = this.device.createRenderPass({
-      colorAttachment: [renderTarget.get()],
-      colorResolveTo: [onscreen ? onscreenTexture : onscreenTexture],
-      colorClearColor: [TransparentWhite],
-    });
+    // @ts-ignore
+    const renderPass = this.device.renderPass;
     renderPass.setPipeline(this.pipeline);
     renderPass.setVertexInput(
       this.inputLayout,
@@ -280,17 +250,41 @@ export default class DeviceModel implements IModel {
         : null,
     );
     renderPass.setViewport(0, 0, width, height);
+
+    if (uniformBuffers) {
+      this.bindings = this.device.createBindings({
+        pipeline: this.pipeline,
+        uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
+          const buffer = uniformBuffer as DeviceBuffer;
+          return {
+            binding: i,
+            buffer: buffer.get(),
+            size: buffer['size'] * 4,
+          };
+        }),
+        samplerBindings: textures?.map((t: any) => ({
+          texture: t['texture'],
+          sampler: t['sampler'],
+        })),
+      });
+    }
+
     if (this.bindings) {
       renderPass.setBindings(this.bindings);
+      // Compatible to WebGL1.
+      this.program.setUniformsLegacy(this.uniforms);
     }
 
     if (elements) {
-      renderPass.drawIndexed((elements as DeviceElements)['count'], instances);
+      const indexCount = (elements as DeviceElements)['count'];
+      if (indexCount === 0) {
+        renderPass.draw(count, instances);
+      } else {
+        renderPass.drawIndexed(indexCount, instances);
+      }
     } else {
       renderPass.draw(count, instances);
     }
-
-    this.device.submitPass(renderPass);
   }
 
   destroy() {

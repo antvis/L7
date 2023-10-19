@@ -2,32 +2,44 @@
 #define LineTypeDash 1.0
 #define Animate 0.0
 
-attribute float a_Miter;
-attribute vec4 a_Color;
-attribute vec2 a_Size;
-attribute vec3 a_Normal;
-attribute vec3 a_Position;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in vec2 a_Size;
+layout(location = 8) in float a_Miter;
+layout(location = 9) in vec3 a_Normal;
+layout(location = 10) in vec2 a_iconMapUV;
+layout(location = 11) in float a_Total_Distance;
+layout(location = 12) in vec2 a_DistanceAndIndex;
 
-attribute vec2 a_iconMapUV;
-
-// dash line
-attribute float a_Total_Distance;
-attribute vec2 a_DistanceAndIndex;
-uniform float u_raisingHeight: 0.0;
-
-uniform mat4 u_ModelMatrix;
-
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-
-uniform float u_vertexScale: 1.0;
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec4 u_dash_array;
+  vec4 u_borderColor;
+  vec3 u_blur;
+  float u_icon_step;
+  vec2 u_textSize;
+  float u_heightfixed;
+  float u_vertexScale;
+  float u_raisingHeight;
+  float u_linearColor;
+  float u_arrow;
+  float u_arrowHeight;
+  float u_arrowWidth;
+  float u_tailWidth;
+  float u_textureBlend;
+  float u_borderWidth;
+  float u_line_texture;
+  float u_linearDir;
+  float u_line_type;
+};
 
 #pragma include "projection"
 #pragma include "picking"
 
-varying vec4 v_color;
-varying vec4 v_dash_array;
-varying float v_d_distance_ratio;
-
+out vec4 v_color;
+out vec4 v_dash_array;
+out float v_d_distance_ratio;
 
 void main() {
 

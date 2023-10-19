@@ -22,11 +22,30 @@ export default class FillModel extends BaseModel {
         dir: 'in',
       },
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+
+    const uniforms = this.getStyleAttribute();
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(new Float32Array([uniforms.u_opacity]).buffer),
+    });
+
+    const u_raisingHeight = Number(raisingHeight);
+    const u_opacitylinear = Number(opacityLinear.enable);
+    const u_dir = opacityLinear.dir === 'in' ? 1.0 : 0.0;
+
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([u_raisingHeight, u_opacitylinear, u_dir]).buffer,
+      ),
+    });
+
     return {
-      u_raisingHeight: Number(raisingHeight),
-      u_opacitylinear: Number(opacityLinear.enable),
-      u_dir: opacityLinear.dir === 'in' ? 1.0 : 0.0,
-      ...this.getStyleAttribute(),
+      u_raisingHeight,
+      u_opacitylinear,
+      u_dir,
+      ...uniforms,
     };
   }
 
@@ -37,6 +56,19 @@ export default class FillModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
     this.layer.triangulation = triangulation;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(1),
+        isUBO: true,
+      }),
+    );
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(1 + 1 + 1),
+        isUBO: true,
+      }),
+    );
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -62,6 +94,7 @@ export default class FillModel extends BaseModel {
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_linear',
+          shaderLocation: 7,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,

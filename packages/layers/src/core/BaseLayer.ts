@@ -1403,7 +1403,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.clearModels();
       return this;
     }
-
     this.hooks.beforeRender.call();
     this.models.forEach((model) => {
       model.draw(

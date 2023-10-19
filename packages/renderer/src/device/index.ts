@@ -3,6 +3,11 @@ import {
   SwapChain,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
+  RenderPass,
+  TransparentBlack,
+  RenderTarget,
+  Format,
+  TextureUsage,
 } from '@antv/g-device-api';
 import {
   IAttribute,
@@ -47,6 +52,9 @@ export default class DeviceRendererService implements IRendererService {
   private width: number;
   private height: number;
   private isDirty: boolean;
+  private renderPass: RenderPass;
+  private renderTarget: RenderTarget;
+  private mainDepthRT: RenderTarget;
 
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
@@ -75,19 +83,18 @@ export default class DeviceRendererService implements IRendererService {
     const swapChain = await deviceContribution.createSwapChain(canvas);
     swapChain.configureSwapChain(canvas.width, canvas.height);
     this.device = swapChain.getDevice();
-    // @ts-ignore
-    this.device.swapChain = swapChain;
+    this.swapChain = swapChain;
 
     // Create default RT
     // @ts-ignore
-    this.device.onscreenFramebuffer = this.createFramebuffer({
-      width: canvas.width,
-      height: canvas.height,
-    });
-    // @ts-ignore
-    this.device.onscreenFramebuffer.onscreen = true;
-    // @ts-ignore
-    this.device.currentFramebuffer = this.device.onscreenFramebuffer;
+    // this.device.onscreenFramebuffer = this.createFramebuffer({
+    //   width: canvas.width,
+    //   height: canvas.height,
+    // });
+    // // @ts-ignore
+    // this.device.onscreenFramebuffer.onscreen = true;
+    // // @ts-ignore
+    // this.device.currentFramebuffer = this.device.onscreenFramebuffer;
 
     // @ts-ignore
     const gl = this.device['gl'];
@@ -95,6 +102,41 @@ export default class DeviceRendererService implements IRendererService {
       // @ts-ignore
       OES_texture_float: !isWebGL2(gl) && this.device['OES_texture_float'],
     };
+
+    const renderTargetTexture = this.device.createTexture({
+      format: Format.U8_RGBA_RT,
+      width: canvas.width, 
+      height: canvas.height,
+      usage: TextureUsage.RENDER_TARGET,
+    });
+    this.renderTarget = this.device.createRenderTargetFromTexture(renderTargetTexture);
+
+    this.mainDepthRT = this.device.createRenderTargetFromTexture(
+      this.device.createTexture({
+        format: Format.D24_S8,
+        width: canvas.width, 
+        height: canvas.height,
+        usage: TextureUsage.RENDER_TARGET,
+      }),
+    );
+  }
+
+  beginFrame(): void {
+    const onscreenTexture = this.swapChain.getOnscreenTexture();
+    this.renderPass = this.device.createRenderPass({
+      colorAttachment: [this.renderTarget],
+      // colorResolveTo: [onscreen ? onscreenTexture : onscreenTexture],
+      colorResolveTo: [onscreenTexture],
+      colorClearColor: [TransparentBlack],
+      depthStencilAttachment: this.mainDepthRT,
+      depthClearValue: 1,
+    });
+    // @ts-ignore
+    this.device.renderPass = this.renderPass;
+  }
+
+  endFrame(): void {
+    this.device.submitPass(this.renderPass);
   }
 
   getPointSizeRange() {
@@ -127,14 +169,14 @@ export default class DeviceRendererService implements IRendererService {
     framebuffer: IFramebuffer | null,
     drawCommands: () => void,
   ) => {
-    if (framebuffer == null) {
-      // @ts-ignore
-      this.device.currentFramebuffer = this.device.onscreenFramebuffer;
-    } else {
-      // @ts-ignore
-      this.device.currentFramebuffer = framebuffer;
-    }
-    drawCommands();
+    // if (framebuffer == null) {
+    //   // @ts-ignore
+    //   this.device.currentFramebuffer = this.device.onscreenFramebuffer;
+    // } else {
+    //   // @ts-ignore
+    //   this.device.currentFramebuffer = framebuffer;
+    // }
+    // drawCommands();
   };
 
   clear = (options: IClearOptions) => {

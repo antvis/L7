@@ -42,23 +42,57 @@ export default class LineWallModel extends BaseModel {
       useLinearColor = 1;
     }
 
+    const u_heightfixed = Number(heightfixed);
+    const u_opacity = isNumber(opacity) ? opacity : 1.0;
+    const u_textureBlend = textureBlend === 'normal' ? 0.0 : 1.0;
+    const u_line_texture = lineTexture ? 1.0 : 0.0; // 传入线的标;
+    const u_iconStepCount = iconStepCount;
+    const u_icon_step = iconStep;
+    const u_textSize = [1024, this.iconService.canvasHeight || 128];
+    // 渐变色支持参数
+    const u_linearColor = useLinearColor;
+    const u_sourceColor = sourceColorArr;
+    const u_targetColor = targetColorArr;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          // vec4 u_sourceColor;
+          // vec4 u_targetColor;
+          // vec2 u_textSize;
+          // float u_icon_step;
+          // float u_heightfixed;
+          // float u_linearColor;
+          // float u_line_texture;
+          // float u_opacity;
+          // float u_textureBlend;
+          // float u_iconStepCount;
+          ...u_sourceColor,
+          ...u_targetColor,
+          ...u_textSize,
+          u_icon_step,
+          u_heightfixed,
+          u_linearColor,
+          u_line_texture,
+          u_opacity,
+          u_textureBlend,
+          u_iconStepCount,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_heightfixed: Number(heightfixed),
-
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
-      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
-
-      // 纹理支持参数
-      u_texture: this.texture, // 贴图
-      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-      u_iconStepCount: iconStepCount,
-      u_icon_step: iconStep,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
+      u_heightfixed,
+      u_opacity,
+      u_textureBlend,
+      u_line_texture,
+      u_iconStepCount,
+      u_icon_step,
+      u_textSize,
+      u_linearColor,
+      u_sourceColor,
+      u_targetColor,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -82,6 +116,13 @@ export default class LineWallModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 2 + 1 * 7),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'lineWall',
       vertexShader: line_vert,
@@ -98,6 +139,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Distance',
+        shaderLocation: 12,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -119,6 +161,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Total_Distance',
+        shaderLocation: 11,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -141,6 +184,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -161,6 +205,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -186,6 +231,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Miter',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -208,6 +254,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
+        shaderLocation: 10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -241,5 +288,6 @@ export default class LineWallModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
+    this.textures[0] = this.texture;
   };
 }

@@ -1,34 +1,44 @@
-
 #define Animate 0.0
 #define LineTexture 1.0
 
-uniform float u_opacity;
-uniform float u_textureBlend;
-uniform float u_blur : 0.9;
-uniform float u_line_type: 0.0;
-// varying vec2 v_normal;
-varying vec4 v_dash_array;
-varying vec4 v_color;
-
-uniform float u_time;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-
-uniform float u_line_texture;
 uniform sampler2D u_texture;
-uniform vec2 u_textSize;
 
-uniform float segmentNumber;
-varying vec2 v_iconMapUV;
-varying vec4 v_lineData;
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec4 u_dash_array;
+  vec2 u_textSize;
+  float u_thetaOffset;
+  float u_opacity;
+  float u_textureBlend;
+  float segmentNumber;
+  float u_line_type;
+  float u_blur;
+  float u_lineDir;
+  float u_line_texture;
+  float u_icon_step;
+  float u_linearColor;
+};
 
+in vec2 v_iconMapUV;
+in vec4 v_lineData;
+in vec4 v_dash_array;
+in vec4 v_color;
+
+out vec4 outputColor;
+
+layout(std140) uniform AnimationUniforms {
+  vec4 u_animate;
+  float u_time;
+};
 
 #pragma include "picking"
 
 void main() {
   float animateSpeed = 0.0; // 运动速度
-  gl_FragColor = v_color;
+  outputColor = v_color;
   
-  gl_FragColor.a *= u_opacity;
+  outputColor.a *= u_opacity;
 
   if(u_animate.x == Animate && u_line_texture != LineTexture) {
       animateSpeed = u_time / u_animate.y;
@@ -36,7 +46,7 @@ void main() {
       alpha = (alpha + u_animate.w -1.0) / u_animate.w;
       // alpha = smoothstep(0., 1., alpha);
       alpha = clamp(alpha, 0.0, 1.0);
-      gl_FragColor.a *= alpha;
+      outputColor.a *= alpha;
   }
 
   // 当存在贴图时在底色上贴上贴图
@@ -56,7 +66,7 @@ void main() {
     float v = v_lineData.a; // 横向 v
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
 
-    vec4 pattern = texture2D(u_texture, uv);
+    vec4 pattern = texture(SAMPLER_2D(u_texture), uv);
 
     if(u_animate.x == Animate) {
       float currentPlane = floor(redioCount - time);
@@ -69,16 +79,18 @@ void main() {
 
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
-      gl_FragColor = filterColor(gl_FragColor + pattern);
+      outputColor = filterColor(outputColor + pattern);
     } else { // replace
         pattern.a *= u_opacity;
-        if(gl_FragColor.a <= 0.0) {
+        if(outputColor.a <= 0.0) {
           pattern.a = 0.0;
         }
-        gl_FragColor = filterColor(pattern);
+        outputColor = filterColor(pattern);
     }
     
   } else {
-     gl_FragColor = filterColor(gl_FragColor);
+     outputColor = filterColor(outputColor);
   }
+
+  outputColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

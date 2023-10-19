@@ -36,6 +36,12 @@ import ReglTexture2D from './ReglTexture2D';
  */
 @injectable()
 export default class ReglRendererService implements IRendererService {
+  beginFrame(): void {
+    throw new Error('Method not implemented.');
+  }
+  endFrame(): void {
+    throw new Error('Method not implemented.');
+  }
   uniformBuffers: IBuffer[] = [];
   public extensionObject: IExtensions;
   private gl: regl.Regl;

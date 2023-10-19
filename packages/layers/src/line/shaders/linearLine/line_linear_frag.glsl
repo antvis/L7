@@ -1,8 +1,19 @@
+in float v_linearRadio;
+out vec4 outputColor;
 
-varying vec4 v_Color;
+uniform sampler2D u_texture;
+
+layout(std140) uniform ModelUniforms {
+  float u_linearDir;
+  float u_opacity;
+  float u_vertexScale;
+  float u_heightfixed;
+  float u_raisingHeight;
+};
+
 #pragma include "picking"
-void main() {
-
-  gl_FragColor = v_Color; // 全局透明度
-  gl_FragColor = filterColor(gl_FragColor);
+void main() { 
+  outputColor = texture(SAMPLER_2D(u_texture), vec2(v_linearRadio, 0.5));
+  outputColor.a *= u_opacity;
+  outputColor = filterColor(outputColor);
 }

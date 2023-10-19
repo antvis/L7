@@ -1,21 +1,19 @@
-attribute vec4 a_Color;
-attribute vec3 a_Position;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in vec3 a_linear;
 
-uniform mat4 u_ModelMatrix;
-
-uniform float u_raisingHeight: 0.0;
-
-varying vec4 v_Color;
-
+layout(std140) uniform ModelUniforms {
+  float u_raisingHeight;
+  float u_opacitylinear;
+  float u_dir;
+};
 
 #pragma include "projection"
 #pragma include "picking"
 
-uniform float u_opacitylinear: 0.0;
-
-attribute vec3 a_linear;
-varying vec3 v_linear;
-varying vec2 v_pos;
+out vec4 v_Color;
+out vec3 v_linear;
+out vec2 v_pos;
 
 void main() {
   if(u_opacitylinear > 0.0) {

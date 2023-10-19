@@ -28,18 +28,43 @@ export default class LinearLineModel extends BaseModel {
       this.colorTexture.bind();
     }
 
+    const u_linearDir = linearDir === LinearDir.VERTICAL ? 1.0 : 0.0;
+    const u_opacity = isNumber(opacity) ? opacity : 1;
+    // 纹理支持参数
+    // const   u_texture: this.colorTexture, // 贴图
+
+    // 是否固定高度
+    const u_heightfixed = Number(heightfixed);
+
+    // 顶点高度 scale
+    const u_vertexScale = vertexHeightScale;
+    const u_raisingHeight = Number(raisingHeight);
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          u_linearDir,
+          u_opacity,
+          u_vertexScale,
+          u_heightfixed,
+          u_raisingHeight,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
-      u_opacity: isNumber(opacity) ? opacity : 1,
+      u_linearDir,
+      u_opacity,
       // 纹理支持参数
-      u_texture: this.colorTexture, // 贴图
+      // u_texture: this.colorTexture, // 贴图
 
       // 是否固定高度
-      u_heightfixed: Number(heightfixed),
+      u_heightfixed,
 
       // 顶点高度 scale
-      u_vertexScale: vertexHeightScale,
-      u_raisingHeight: Number(raisingHeight),
+      u_vertexScale,
+      u_raisingHeight,
     };
   }
 
@@ -58,6 +83,13 @@ export default class LinearLineModel extends BaseModel {
 
     this.layer.triangulation = LineTriangulation;
 
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(1 + 1 + 1 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'lineRampColors',
       vertexShader: linear_line_vert,
@@ -74,6 +106,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_DistanceAndIndex',
+        shaderLocation: 11,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -100,6 +133,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Total_Distance',
+        shaderLocation: 10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -122,6 +156,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -142,6 +177,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -166,6 +202,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Miter',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -202,5 +239,6 @@ export default class LinearLineModel extends BaseModel {
       mag: gl.NEAREST,
       flipY: false,
     });
+    this.textures[0] = this.colorTexture;
   };
 }

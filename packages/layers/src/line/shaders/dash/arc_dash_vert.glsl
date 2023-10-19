@@ -1,22 +1,28 @@
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in float a_Size;
+layout(location = 8) in vec4 a_Instance;
 
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec4 a_Instance;
-attribute float a_Size;
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec4 u_dash_array;
+  vec2 u_textSize;
+  float u_thetaOffset;
+  float u_opacity;
+  float u_textureBlend;
+  float segmentNumber;
+  float u_line_type;
+  float u_blur;
+  float u_lineDir;
+  float u_line_texture;
+  float u_icon_step;
+  float u_linearColor;
+};
 
-uniform float segmentNumber;
-varying vec4 v_color;
-
-
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-uniform float u_lineDir: 1.0;
-varying vec4 v_dash_array;
-varying float v_distance_ratio;
-
-uniform float u_thetaOffset: 0.314;
-
-uniform float u_opacity: 1.0;
+out vec4 v_color;
+out vec4 v_dash_array;
+out float v_distance_ratio;
 
 #pragma include "projection"
 #pragma include "project"

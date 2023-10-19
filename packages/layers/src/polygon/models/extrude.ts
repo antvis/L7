@@ -41,19 +41,41 @@ export default class ExtrudeModel extends BaseModel {
       targetColorArr = rgb2arr(targetColor);
       useLinearColor = 1;
     }
+
+    const u_topsurface = Number(topsurface);
+    const u_sidesurface = Number(sidesurface);
+    const u_heightfixed = Number(heightfixed);
+    const u_raisingHeight = Number(raisingHeight);
+
+    // 渐变色支持参数
+    const u_linearColor = useLinearColor;
+    const u_sourceColor = sourceColorArr;
+    const u_targetColor = targetColorArr;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...u_sourceColor,
+          ...u_targetColor,
+          u_linearColor,
+          u_topsurface,
+          u_sidesurface,
+          u_heightfixed,
+          u_raisingHeight,
+        ]).buffer,
+      ),
+    });
+
     return {
       // 控制侧面和顶面的显示隐藏
-      u_topsurface: Number(topsurface),
-      u_sidesurface: Number(sidesurface),
-      u_heightfixed: Number(heightfixed),
-      u_raisingHeight: Number(raisingHeight),
-
-      // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
-      u_texture: this.texture,
-      ...this.getStyleAttribute(),
+      u_sourceColor,
+      u_targetColor,
+      u_linearColor,
+      u_topsurface,
+      u_sidesurface,
+      u_heightfixed,
+      u_raisingHeight,
     };
   }
 
@@ -64,6 +86,14 @@ export default class ExtrudeModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, type } = this.getShaders();
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 1 * 5),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -131,6 +161,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uvs',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -160,6 +191,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -184,6 +216,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 8,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -207,6 +240,7 @@ export default class ExtrudeModel extends BaseModel {
       height: 0,
       width: 0,
     });
+    this.textures[0] = this.texture;
     if (mapTexture) {
       return new Promise((resolve, reject) => {
         const image = new Image();
@@ -223,6 +257,7 @@ export default class ExtrudeModel extends BaseModel {
             min: gl.LINEAR,
             mag: gl.LINEAR,
           });
+          this.textures[0] = this.texture;
           return resolve(null);
           // this.layerService.reRender();
         };

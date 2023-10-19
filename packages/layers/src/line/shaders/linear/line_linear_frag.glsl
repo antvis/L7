@@ -1,13 +1,32 @@
-varying vec4 v_color;
-varying vec4 v_texture_data;
-uniform float u_linearDir: 1.0;
-uniform float u_linearColor: 0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-uniform float u_opacity: 1.0;
+in vec4 v_color;
+in vec4 v_texture_data;
+
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec4 u_dash_array;
+  vec4 u_borderColor;
+  vec3 u_blur;
+  float u_icon_step;
+  vec2 u_textSize;
+  float u_heightfixed;
+  float u_vertexScale;
+  float u_raisingHeight;
+  float u_linearColor;
+  float u_arrow;
+  float u_arrowHeight;
+  float u_arrowWidth;
+  float u_tailWidth;
+  float u_textureBlend;
+  float u_borderWidth;
+  float u_line_texture;
+  float u_linearDir;
+  float u_line_type;
+};
 
 #pragma include "picking"
 
+out vec4 outputColor;
 
 void main() {
   float linearRadio = v_texture_data.r; // 当前点位距离占线总长的比例
@@ -16,11 +35,11 @@ void main() {
   }
 
   if(u_linearColor == 1.0) { // 使用渐变颜色
-    gl_FragColor = mix(u_sourceColor, u_targetColor, linearRadio);
-    gl_FragColor.a *= v_color.a;
+    outputColor = mix(u_sourceColor, u_targetColor, linearRadio);
+    outputColor.a *= v_color.a;
   } else { // 使用 color 方法传入的颜色
-     gl_FragColor = v_color;
+     outputColor = v_color;
   }
 
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor = filterColor(outputColor);
 }

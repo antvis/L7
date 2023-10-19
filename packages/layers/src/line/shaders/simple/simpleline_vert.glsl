@@ -1,27 +1,23 @@
-attribute vec4 a_Color;
-attribute vec2 a_Size;
-attribute vec3 a_Position;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in vec2 a_Size;
+layout(location = 8) in float a_Total_Distance;
+layout(location = 9) in float a_Distance;
 
-attribute float a_Total_Distance;
-attribute float a_Distance;
-
-uniform mat4 u_ModelMatrix;
-
-
-uniform float u_opacity: 1.0;
-uniform float u_vertexScale: 1.0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
-
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_opacity;
+  float u_vertexScale;
+  float u_linearColor;
+};
 
 #pragma include "projection"
 
-varying vec4 v_color;
-varying float v_distanceScale;
+out vec4 v_color;
+out float v_distanceScale;
 
 void main() {
-
   v_color = a_Color; 
   v_distanceScale = a_Distance / a_Total_Distance;
   v_color = vec4(a_Color.xyz, a_Color.w * u_opacity); 

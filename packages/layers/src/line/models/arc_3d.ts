@@ -26,7 +26,6 @@ const lineStyleObj: { [key: string]: number } = {
 };
 export default class Arc3DModel extends BaseModel {
   protected texture: ITexture2D;
-  // public enableShaderEncodeStyles = ['opacity'];
   public getUninforms(): IModelUniform {
     const {
       sourceColor,
@@ -57,26 +56,73 @@ export default class Arc3DModel extends BaseModel {
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
+
+    const u_globel = this.mapService.version === 'GLOBEL' ? 1 : 0;
+    const u_globel_radius = EARTH_RADIUS; // 地球半径
+    const u_global_height = globalArcHeight;
+    const u_textureBlend = textureBlend === 'normal' ? 0.0 : 1.0;
+    const u_line_type = lineStyleObj[lineType as string] || 0.0;
+    const u_dash_array = dashArray;
+
+    // 纹理支持参数
+    const u_line_texture = lineTexture ? 1.0 : 0.0; // 传入线的标识
+    const u_icon_step = iconStep;
+    const u_textSize = [1024, this.iconService.canvasHeight || 128];
+
+    // 渐变色支持参数
+    const u_linearColor = useLinearColor;
+    const u_sourceColor = sourceColorArr;
+    const u_targetColor = targetColorArr;
+
+    const uniforms = this.getStyleAttribute();
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...uniforms.u_stroke,
+          ...uniforms.u_offsets,
+          uniforms.u_opacity,
+        ]),
+      ),
+    });
+
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...u_sourceColor,
+          ...u_targetColor,
+          ...u_dash_array,
+          ...u_textSize,
+          u_linearColor,
+          u_line_texture,
+          u_icon_step,
+          u_globel,
+          u_globel_radius,
+          u_global_height,
+          u_textureBlend,
+          u_line_type,
+          segmentNumber,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
-      u_globel_radius: EARTH_RADIUS, // 地球半径
-      u_global_height: globalArcHeight,
-      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
+      u_sourceColor,
+      u_targetColor,
+      u_dash_array,
+      u_textSize,
+      u_linearColor,
+      u_line_texture,
+      u_icon_step,
+      u_globel,
+      u_globel_radius,
+      u_global_height,
+      u_textureBlend,
+      u_line_type,
       segmentNumber,
-      u_line_type: lineStyleObj[lineType as string] || 0.0,
-      u_dash_array: dashArray,
-
-      // 纹理支持参数
-      u_texture: this.texture, // 贴图
-      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-      u_icon_step: iconStep,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
-      ...this.getStyleAttribute(),
+      ...uniforms,
     };
   }
 
@@ -125,6 +171,19 @@ export default class Arc3DModel extends BaseModel {
       this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
 
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 2 + 1),
+        isUBO: true,
+      }),
+    );
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 4 + 2 + 1 * 9),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'lineArc3d' + type,
       vertexShader: vert,
@@ -141,6 +200,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -160,6 +220,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
+        shaderLocation: 8,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -181,6 +242,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
+        shaderLocation: 9,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -214,5 +276,6 @@ export default class Arc3DModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
+    this.textures[0] = this.texture;
   };
 }

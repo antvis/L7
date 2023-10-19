@@ -31,14 +31,7 @@ const lineStyleObj: { [key: string]: number } = {
 };
 export default class LineModel extends BaseModel {
   private textureEventFlag: boolean = false;
-  protected texture: ITexture2D = this.createTexture2D({
-    data: [0, 0, 0, 0],
-    mag: gl.NEAREST,
-    min: gl.NEAREST,
-    premultiplyAlpha: false,
-    width: 1,
-    height: 1,
-  });
+  protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
       // opacity = 1,
@@ -211,7 +204,6 @@ export default class LineModel extends BaseModel {
     const { depth = false } =
       this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-    // console.log(frag)
     this.layer.triangulation = LineTriangulation;
 
     this.uniformBuffers.push(

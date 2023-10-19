@@ -61,27 +61,75 @@ export default class ArcModel extends BaseModel {
       this.texture.bind();
     }
 
+    const u_thetaOffset = thetaOffset;
+    const u_opacity = isNumber(opacity) ? opacity : 1;
+    const  u_textureBlend = textureBlend === 'normal' ? 0.0 : 1.0;
+    const u_line_type = lineStyleObj[lineType || 'solid'];
+    const u_dash_array = dashArray;
+    const u_blur = 0.9;
+    const u_lineDir = forward ? 1 : -1;
+
+    // 纹理支持参数
+    const u_line_texture = lineTexture ? 1.0 : 0.0; // 传入线的标识
+    const u_icon_step = iconStep;
+    const u_textSize = [1024, this.iconService.canvasHeight || 128];
+
+    // 渐变色支持参数
+    const u_linearColor = useLinearColor;
+    const u_sourceColor = sourceColorArr;
+    const u_targetColor = targetColorArr;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          // vec4 u_sourceColor;
+          // vec4 u_targetColor;
+          // vec4 u_dash_array;
+          // vec2 u_textSize;
+          // float u_thetaOffset;
+          // float u_opacity;
+          // float u_textureBlend;
+          // float segmentNumber;
+          // float u_line_type;
+          // float u_blur;
+          // float u_lineDir;
+          // float u_line_texture;
+          // float u_icon_step;
+          // float u_linearColor;
+          ...u_sourceColor,
+          ...u_targetColor,
+          ...u_dash_array,
+          ...u_textSize,
+          u_thetaOffset,
+          u_opacity,
+          u_textureBlend,
+          segmentNumber,
+          u_line_type,
+          u_blur,
+          u_lineDir,
+          u_line_texture,
+          u_icon_step,
+          u_linearColor,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_thetaOffset: thetaOffset,
-      // u_thetaOffset:  0.0,
-      u_opacity: isNumber(opacity) ? opacity : 1,
-      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
+      u_sourceColor,
+      u_targetColor,
+      u_dash_array,
+      u_textSize,
+      u_thetaOffset,
+      u_opacity,
+      u_textureBlend,
       segmentNumber,
-      u_line_type: lineStyleObj[lineType || 'solid'],
-      u_dash_array: dashArray,
-      u_blur: 0.9,
-      u_lineDir: forward ? 1 : -1,
-
-      // 纹理支持参数
-      u_texture: this.texture, // 贴图
-      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-      u_icon_step: iconStep,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
+      u_line_type,
+      u_blur,
+      u_lineDir,
+      u_line_texture,
+      u_icon_step,
+      u_linearColor,
     };
   }
 
@@ -136,7 +184,14 @@ export default class ArcModel extends BaseModel {
     const { segmentNumber = 30 } =
       this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-    //
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 4 + 2 + 1 * 10),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'lineArc2d' + type,
       vertexShader: vert,
@@ -154,6 +209,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -173,6 +229,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
+        shaderLocation: 8,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -194,6 +251,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -228,5 +286,6 @@ export default class ArcModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
+    this.textures[0] = this.texture;
   };
 }

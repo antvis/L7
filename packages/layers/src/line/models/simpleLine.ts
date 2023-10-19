@@ -33,16 +33,39 @@ export default class SimpleLineModel extends BaseModel {
       useLinearColor = 1;
     }
 
+    const u_sourceColor = sourceColorArr;
+    const u_targetColor = targetColorArr;
+    const u_linearColor = useLinearColor;
+    const u_opacity = isNumber(opacity) ? opacity : 1;
+    // 顶点高度 scale
+    const u_vertexScale = vertexHeightScale;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          // vec4 u_sourceColor;
+          // vec4 u_targetColor;
+          // float u_opacity;
+          // float u_vertexScale;
+          // float u_linearColor;
+          ...u_sourceColor,
+          ...u_targetColor,
+          u_opacity,
+          u_vertexScale,
+          u_linearColor,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1,
-
       // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
-
+      u_sourceColor,
+      u_targetColor,
+      u_linearColor,
+      u_opacity,
       // 顶点高度 scale
-      u_vertexScale: vertexHeightScale,
+      u_vertexScale,
     };
   }
 
@@ -72,6 +95,13 @@ export default class SimpleLineModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, type } = this.getShaders();
 
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 1 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -79,9 +109,9 @@ export default class SimpleLineModel extends BaseModel {
       triangulation: SimpleLineTriangulation,
       primitive: gl.LINES,
       depth: { enable: false },
-
       pick: false,
     });
+
     return [model];
   }
   protected registerBuiltinAttributes() {
@@ -90,6 +120,7 @@ export default class SimpleLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Distance',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -111,6 +142,7 @@ export default class SimpleLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Total_Distance',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -133,6 +165,7 @@ export default class SimpleLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

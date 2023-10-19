@@ -4,8 +4,8 @@ layout(location = 7) in vec3 a_Extrude;
 layout(location = 8) in float a_Size;
 layout(location = 9) in vec2 a_Uv;
 
-out vec2 v_uv; // 本身的 uv 坐标
-out vec2 v_Iconuv; // icon 贴图的 uv 坐标
+out vec2 v_uv;
+out vec2 v_Iconuv;
 out float v_opacity;
 
 layout(std140) uniform ModelUniforms {

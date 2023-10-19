@@ -60,6 +60,13 @@ export interface ICellProperty {
   count: number;
 }
 
+const shaderLocationMap: Record<string, number> = {
+  opacity: 4,
+  stroke: 3,
+  offsets: 5,
+  rotation: 6,
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class BaseModel<ChildLayerStyleOptions = {}>
   implements ILayerModel
@@ -254,7 +261,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       }
       str += `
               #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-          layout(location = ${i + 3}) in ${attrType[key]} a_${
+          layout(location = ${shaderLocationMap[key]}) in ${attrType[key]} a_${
         key.charAt(0).toUpperCase() + key.slice(1)
       };
         #endif\n
@@ -323,6 +330,10 @@ ${uniforms.join('\n')}
       const options = getCommonStyleAttributeOptions(key);
       if (options) {
         this.styleAttributeService.registerStyleAttribute(options);
+
+        if (options.descriptor) {
+          options.descriptor.shaderLocation = shaderLocationMap[key];
+        }
       }
     });
   }

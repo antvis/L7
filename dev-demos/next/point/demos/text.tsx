@@ -8,7 +8,6 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer: 'device',
       map: new GaodeMap({
         center: [110, 36],
         style: 'light',
@@ -57,8 +56,8 @@ export default () => {
                 value: [0, 350],
               },
             });
-          scene.addLayer(pointLayer);
           scene.addLayer(pointLayer1);
+          scene.addLayer(pointLayer);
           // setTimeout(() => {
           //   pointLayer.style({
           //     textAnchor: 'left',

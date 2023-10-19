@@ -2,36 +2,42 @@
 #define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
-attribute vec3 a_Position;
-attribute vec4 a_Instance;
-attribute vec4 a_Color;
-attribute float a_Size;
-attribute vec2 a_iconMapUV;
 
-uniform float u_globel;
-uniform float u_globel_radius;
-uniform float u_global_height: 10;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in float a_Size;
+layout(location = 8) in vec4 a_Instance;
+layout(location = 9) in vec2 a_iconMapUV;
 
-uniform float segmentNumber;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec4 u_dash_array;
+  vec2 u_textSize;
+  float u_linearColor;
+  float u_line_texture;
+  float u_icon_step;
+  float u_globel;
+  float u_globel_radius;
+  float u_global_height;
+  float u_textureBlend;
+  float u_line_type;
+  float segmentNumber;
+};
 
-uniform float u_line_type: 0.0;
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-uniform float u_icon_step: 100;
-uniform float u_line_texture: 0.0;
-varying float v_distance_ratio;
-
-varying vec4 v_dash_array;
-varying vec4 v_color;
-varying vec2 v_iconMapUV;
-varying vec4 v_Color;
+out vec4 v_dash_array;
+out vec4 v_color;
+out vec2 v_iconMapUV;
+out vec4 v_Color;
 
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
+
+layout(std140) uniform AnimationUniforms {
+  vec4 u_animate;
+  float u_time;
+};
 
 float maps (float value, float start1, float stop1, float start2, float stop2) {
   return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));

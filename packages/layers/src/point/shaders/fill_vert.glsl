@@ -21,6 +21,10 @@ out vec4 v_data;
 #pragma include "picking"
 #pragma include "rotation_2d"
 
+layout(std140) uniform AnimationUniforms {
+  vec4 u_animate;
+  float u_time;
+};
 
 void main() {
   // 透明度计算
