@@ -1,4 +1,14 @@
-layout(location = 4) in vec3 a_PickingColor;
+
+#define PICKING_NONE 0.0
+#define PICKING_ENCODE 1.0
+#define PICKING_HIGHLIGHT 2.0
+#define COLOR_SCALE 1. / 255.
+
+#define NORMAL 0.0
+#define HIGHLIGHT 1.0
+#define SELECT 2.0
+
+layout(location = 2) in vec3 a_PickingColor;
 
 out vec4 v_PickingResult;
 
@@ -12,16 +22,8 @@ layout(std140) uniform PickingUniforms {
   float u_PickingBuffer;
   float u_shaderPick;
   float u_EnableSelect;
-}
-
-#define PICKING_NONE 0.0
-#define PICKING_ENCODE 1.0
-#define PICKING_HIGHLIGHT 2.0
-#define COLOR_SCALE 1. / 255.
-
-#define NORMAL 0.0
-#define HIGHLIGHT 1.0
-#define SELECT 2.0
+  float u_activeMix;
+};
 
 bool isVertexPicked(vec3 vertexColor) {
   return

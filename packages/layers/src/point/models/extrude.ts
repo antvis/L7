@@ -64,27 +64,65 @@ export default class ExtrudeModel extends BaseModel {
         }
       }
     }
+
+    const u_pickLight = Number(pickLight);
+    const u_heightfixed = Number(heightfixed);
+    const u_r =
+      animateOption.enable && this.raiseRepeat > 0 ? this.raiseCount : 1.0;
+    const u_opacity = opacity;
+    const u_linearColor = useLinearColor;
+    const u_sourceColor = sourceColorArr;
+    const u_targetColor = targetColorArr;
+    const u_opacitylinear = Number(opacityLinear.enable);
+    const u_opacitylinear_dir = opacityLinear.dir === 'up' ? 1.0 : 0.0;
+    const u_lightEnable = Number(lightEnable);
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          // vec4 u_sourceColor;
+          // vec4 u_targetColor;
+          // float u_heightfixed;
+          // float u_r;
+          // float u_opacity;
+          // float u_lightEnable;
+          // float u_opacitylinear;
+          // float u_opacitylinear_dir;
+          // float u_linearColor;
+          // float u_pickLight;
+          ...u_sourceColor,
+          ...u_targetColor,
+          u_heightfixed,
+          u_r,
+          u_opacity,
+          u_lightEnable,
+          u_opacitylinear,
+          u_opacitylinear_dir,
+          u_linearColor,
+          u_pickLight,
+        ]).buffer,
+      ),
+    });
+
     return {
       // 圆柱体的拾取高亮是否要计算光照
-      u_pickLight: Number(pickLight),
+      u_pickLight,
       // 圆柱体是否固定高度
-      u_heightfixed: Number(heightfixed),
-
-      u_r: animateOption.enable && this.raiseRepeat > 0 ? this.raiseCount : 1.0,
-
-      u_opacity: opacity,
-
+      u_heightfixed,
+      u_r,
+      u_opacity,
       // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
+      u_linearColor,
+      u_sourceColor,
+      u_targetColor,
 
       // 透明度渐变
-      u_opacitylinear: Number(opacityLinear.enable),
-      u_opacitylinear_dir: opacityLinear.dir === 'up' ? 1.0 : 0.0,
+      u_opacitylinear,
+      u_opacitylinear_dir,
 
       // 光照计算开关
-      u_lightEnable: Number(lightEnable),
+      u_lightEnable,
     };
   }
   public async initModels(): Promise<IModel[]> {
@@ -98,6 +136,13 @@ export default class ExtrudeModel extends BaseModel {
       animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as ILayerConfig;
     this.raiseRepeat = repeat;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 4 + 1 * 8),
+        isUBO: true,
+      }),
+    );
 
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointExtrude',
@@ -121,6 +166,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 8,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -152,6 +198,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -175,6 +222,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

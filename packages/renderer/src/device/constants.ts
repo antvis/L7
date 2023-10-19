@@ -8,7 +8,7 @@ import {
   CullMode,
   Format,
   PrimitiveTopology,
-} from '@strawberry-vis/g-device-api';
+} from '@antv/g-device-api';
 import { TypedArray } from './utils/typedarray';
 
 export const typedArrayCtorMap: {

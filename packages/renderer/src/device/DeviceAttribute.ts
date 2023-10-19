@@ -4,7 +4,7 @@ import {
   IBuffer,
 } from '@antv/l7-core';
 import DeviceBuffer from './DeviceBuffer';
-import { Buffer, Device } from '@strawberry-vis/g-device-api';
+import { Buffer, Device } from '@antv/g-device-api';
 
 interface AttributeConfig {
   shaderLocation?: number;

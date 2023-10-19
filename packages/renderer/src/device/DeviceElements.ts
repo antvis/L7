@@ -1,12 +1,9 @@
 import { gl, IElements, IElementsInitializationOptions } from '@antv/l7-core';
 import { TypedArray } from '@antv/l7-source';
-import { Buffer, BufferUsage, Device } from '@strawberry-vis/g-device-api';
+import { Buffer, BufferUsage, Device } from '@antv/g-device-api';
 import { isTypedArray } from './utils/typedarray';
 import { typedArrayCtorMap } from './constants';
 
-/**
- * @see https://github.com/regl-project/regl/blob/gh-pages/API.md#elements
- */
 export default class DeviceElements implements IElements {
   private indexBuffer: Buffer;
   private type;

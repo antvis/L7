@@ -35,7 +35,28 @@ export default class PixelPickingPlugin implements ILayerPlugin {
   ) {
     // Create a Uniform Buffer Object(UBO).
     const uniformBuffer = rendererService.createBuffer({
-      data: new Float32Array(),
+      // vec4 u_HighlightColor;
+      // vec4 u_SelectColor;
+      // vec3 u_PickingColor;
+      // float u_PickingStage;
+      // vec3 u_CurrentSelectedId;
+      // float u_PickingThreshold;
+      // float u_PickingBuffer;
+      // float u_shaderPick;
+      // float u_EnableSelect;
+      // float u_activeMix;
+      data: new Float32Array([
+        ...[1, 0, 0, 1],
+        ...[1, 0, 0, 1],
+        ...[0, 0, 0],
+        0,
+        ...[0, 0, 0],
+        0,
+        0,
+        0,
+        0,
+        0,
+      ]),
       isUBO: true,
     });
     rendererService.uniformBuffers[1] = uniformBuffer;
@@ -51,7 +72,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_PickingColor',
-          shaderLocation: 4,
+          shaderLocation: 2,
           buffer: {
             data: [],
             type: gl.FLOAT,

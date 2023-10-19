@@ -1077,6 +1077,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.isDestroyed) {
       return;
     }
+
+    this.layerModel.uniformBuffers.forEach((buffer) => {
+      buffer.destroy();
+    });
+
     // remove child layer
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
@@ -1308,7 +1313,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         vs,
         elements,
         blend: BlendTypes[BlendType.normal],
-        uniformBuffers: this.rendererService.uniformBuffers,
+        uniformBuffers: [
+          ...this.layerModel.uniformBuffers,
+          ...this.rendererService.uniformBuffers,
+        ],
         ...rest,
       };
       if (count) {

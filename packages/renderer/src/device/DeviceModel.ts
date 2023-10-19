@@ -27,7 +27,7 @@ import {
   TransparentBlack,
   TransparentWhite,
   VertexStepMode,
-} from '@strawberry-vis/g-device-api';
+} from '@antv/g-device-api';
 import DeviceAttribute from './DeviceAttribute';
 import {
   blendEquationMap,
@@ -245,9 +245,15 @@ export default class DeviceModel implements IModel {
       count = 0,
       instances,
       elements,
+      uniforms = {},
     } = {
       ...this.options,
       ...options,
+    };
+
+    this.uniforms = {
+      ...this.uniforms,
+      ...this.extractUniforms(uniforms),
     };
 
     // @ts-ignore

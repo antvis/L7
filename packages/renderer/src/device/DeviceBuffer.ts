@@ -1,11 +1,10 @@
 import { gl, IBuffer, IBufferInitializationOptions } from '@antv/l7-core';
-import { Buffer, BufferUsage, Device } from '@strawberry-vis/g-device-api';
+import { Buffer, BufferUsage, Device } from '@antv/g-device-api';
 import { hintMap, typedArrayCtorMap } from './constants';
-import { isTypedArray } from './utils/typedarray';
-import { TypedArray } from '@antv/l7-source';
+import { isTypedArray, TypedArray } from './utils/typedarray';
 
 /**
- * Use Buffer from @strawberry-vis/g-device-api
+ * Use Buffer from @antv/g-device-api
  */
 export default class DeviceBuffer implements IBuffer {
   private buffer: Buffer;
@@ -27,7 +26,7 @@ export default class DeviceBuffer implements IBuffer {
     this.type = type;
     this.size = typed.length;
 
-    // @see https://www.npmjs.com/package/@strawberry-vis/g-device-api#createBuffer
+    // @see https://www.npmjs.com/package/@antv/g-device-api#createBuffer
     this.buffer = device.createBuffer({
       viewOrSize: typed,
       usage: isUBO ? BufferUsage.UNIFORM : BufferUsage.VERTEX,

@@ -3,6 +3,7 @@ import {
   IAnimateOption,
   IAttribute,
   IBlendOptions,
+  IBuffer,
   ICameraService,
   IElements,
   IFontService,
@@ -64,6 +65,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   implements ILayerModel
 {
   public triangulation: Triangulation;
+  public uniformBuffers: IBuffer[] = [];
 
   // style texture data mapping
   public createTexture2D: (
@@ -229,45 +231,61 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   }
 
   protected getInject(): IInject {
-    //     const encodeStyleAttribute = this.layer.encodeStyleAttribute;
-    //     let str = '';
-    //     const attrType: { [key: string]: any } = {
-    //       opacity: 'float',
-    //       stroke: 'vec4',
-    //       offsets: 'vec2',
-    //       textOffset: 'vec2',
-    //       rotation: 'float',
-    //     };
-    //     this.layer.enableShaderEncodeStyles.forEach((key: string) => {
-    //       if (encodeStyleAttribute[key]) {
-    //         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
-    //       }
-    //       str += `
-    //           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-    //       attribute ${attrType[key]} a_${
-    //         key.charAt(0).toUpperCase() + key.slice(1)
-    //       };
-    //     #else
-    //       uniform ${attrType[key]} u_${key};
-    //     #endif\n
-    //     `;
-    //     });
-    //     let innerStr = '';
-    //     this.layer.enableShaderEncodeStyles.forEach((key) => {
-    //       innerStr += `\n
-    // #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-    //   ${attrType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
-    // #else
-    //   ${attrType[key]} ${key} = u_${key};
-    // #endif\n
-    // `;
-    //     });
+    const encodeStyleAttribute = this.layer.encodeStyleAttribute;
+    let str = '';
+    const attrType: { [key: string]: any } = {
+      opacity: 'float',
+      stroke: 'vec4',
+      offsets: 'vec2',
+      textOffset: 'vec2',
+      rotation: 'float',
+    };
+    // a_Position = 0
+    // a_Color = 1
+    // a_PickingColor = 2
 
-    //     return {
-    //       'vs:#decl': str,
-    //       'vs:#main-start': innerStr,
-    //     };
-    return {};
+    const uniforms: string[] = [];
+    this.layer.enableShaderEncodeStyles.forEach((key: string, i) => {
+      if (encodeStyleAttribute[key]) {
+        str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
+      } else {
+        uniforms.push(`  ${attrType[key]} u_${key};`);
+      }
+      str += `
+              #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+          layout(location = ${i + 3}) in ${attrType[key]} a_${
+        key.charAt(0).toUpperCase() + key.slice(1)
+      };
+        #endif\n
+        `;
+    });
+    const attributeUniforms = uniforms.length
+      ? `
+layout(std140) uniform AttributeUniforms {
+${uniforms.join('\n')}
+};
+    `
+      : '';
+    str += attributeUniforms;
+
+    let innerStr = '';
+    this.layer.enableShaderEncodeStyles.forEach((key) => {
+      innerStr += `\n
+    #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+      ${attrType[key]} ${key}  = a_${
+        key.charAt(0).toUpperCase() + key.slice(1)
+      };
+    #else
+      ${attrType[key]} ${key} = u_${key};
+    #endif\n
+    `;
+    });
+
+    return {
+      'vs:#decl': str,
+      'fs:#decl': attributeUniforms,
+      'vs:#main-start': innerStr,
+    };
   }
 
   // 获取数据映射样式

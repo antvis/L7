@@ -7,7 +7,7 @@ import {
   Sampler,
   Texture,
   TextureUsage,
-} from '@strawberry-vis/g-device-api';
+} from '@antv/g-device-api';
 import { wrapModeMap } from './constants';
 
 export function isTexture2D(t: any): t is ITexture2D {

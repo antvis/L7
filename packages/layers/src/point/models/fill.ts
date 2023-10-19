@@ -29,13 +29,51 @@ export default class FillModel extends BaseModel {
       heightfixed = false,
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+
+    const attributes = this.getStyleAttribute();
+
+    // FIXME: No need to update each frame
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...attributes.u_stroke,
+          ...attributes.u_offsets,
+          attributes.u_opacity,
+          attributes.u_rotation,
+        ]).buffer,
+      ),
+    });
+
+    const u_blur_height_fixed = [
+      blur,
+      Number(raisingHeight),
+      Number(heightfixed),
+    ];
+    const u_additive = blend === 'additive' ? 1.0 : 0.0;
+    const u_stroke_opacity = strokeOpacity;
+    const u_stroke_width = strokeWidth;
+    const u_size_unit = SizeUnitType[unit] as SizeUnitType;
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...u_blur_height_fixed,
+          u_stroke_width,
+          u_additive,
+          u_stroke_opacity,
+          u_size_unit,
+        ]).buffer,
+      ),
+    });
+
     return {
-      u_blur_height_fixed: [blur, Number(raisingHeight), Number(heightfixed)],
-      u_additive: blend === 'additive' ? 1.0 : 0.0,
-      u_stroke_opacity: strokeOpacity,
-      u_stroke_width: strokeWidth,
-      u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      ...this.getStyleAttribute(),
+      u_blur_height_fixed,
+      u_additive,
+      u_stroke_opacity,
+      u_stroke_width,
+      u_size_unit,
+      ...attributes,
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -70,6 +108,21 @@ export default class FillModel extends BaseModel {
       >;
     const { frag, vert, type } = this.getShaders(animateOption);
     this.layer.triangulation = PointFillTriangulation;
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(4 + 2 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+
+    this.uniformBuffers.push(
+      this.rendererService.createBuffer({
+        data: new Float32Array(3 + 1 + 1 + 1 + 1),
+        isUBO: true,
+      }),
+    );
+
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -127,6 +180,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
+        shaderLocation: 8,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -157,6 +211,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 7,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -177,6 +232,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Shape',
+        shaderLocation: 9,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

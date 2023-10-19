@@ -52,6 +52,7 @@ import {
   StyleAttributeOption,
   Triangulation,
 } from './IStyleAttributeService';
+import { IBuffer } from '../renderer/IBuffer';
 
 export enum BlendType {
   normal = 'normal',
@@ -87,6 +88,8 @@ export interface ILayerModelInitializationOptions {
 }
 
 export interface ILayerModel {
+  uniformBuffers: IBuffer[];
+
   renderUpdate?(): void;
   getBlend(): Partial<IBlendOptions>;
   getStencil(option?: Partial<IRenderOptions>): Partial<IStencilOptions>;

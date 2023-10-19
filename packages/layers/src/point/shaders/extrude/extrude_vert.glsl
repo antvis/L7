@@ -1,32 +1,39 @@
-precision highp float;
-
 #define pi 3.1415926535
 #define ambientRatio 0.5
 #define diffuseRatio 0.3
 #define specularRatio 0.2
 
-attribute vec3 a_Position;
-attribute vec3 a_Pos;
-attribute vec4 a_Color;
-attribute vec3 a_Size;
-attribute vec3 a_Normal;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 7) in vec3 a_Pos;
+layout(location = 8) in vec3 a_Size;
+layout(location = 9) in vec3 a_Normal;
 
-uniform float u_heightfixed: 0.0; // 默认不固定
-uniform float u_r;
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform ModelUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_heightfixed;
+  float u_r;
+  float u_opacity;
+  float u_lightEnable;
+  float u_opacitylinear;
+  float u_opacitylinear_dir;
+  float u_linearColor;
+  float u_pickLight;
+};
 
-varying vec4 v_color;
-varying float v_lightWeight;
-varying float v_barLinearZ;
+// uniform float u_heightfixed: 0.0; // 默认不固定
+// uniform float u_r;
+// uniform float u_opacity : 1;
+// uniform float u_lightEnable: 1;
+// uniform float u_opacitylinear: 0.0;
+// uniform float u_opacitylinear_dir: 1.0;
+// uniform float  u_linearColor: 0.0;
+// uniform float u_pickLight: 0.0;
 
-uniform float u_opacity : 1;
-uniform float u_lightEnable: 1;
-uniform float u_opacitylinear: 0.0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-uniform float u_opacitylinear_dir: 1.0;
-uniform float  u_linearColor: 0.0;
-
+out vec4 v_color;
+out float v_lightWeight;
+out float v_barLinearZ;
 
 #pragma include "projection"
 #pragma include "light"

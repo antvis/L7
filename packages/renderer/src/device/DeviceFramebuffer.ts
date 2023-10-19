@@ -1,11 +1,6 @@
 import { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
 import { isTexture2D } from './DeviceTexture2D';
-import {
-  Device,
-  Format,
-  RenderTarget,
-  Texture,
-} from '@strawberry-vis/g-device-api';
+import { Device, Format, RenderTarget, Texture } from '@antv/g-device-api';
 
 export default class DeviceFramebuffer implements IFramebuffer {
   private renderTarget: RenderTarget;

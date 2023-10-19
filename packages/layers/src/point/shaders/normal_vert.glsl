@@ -1,6 +1,6 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
-layout(location = 2) in float a_Size;
+layout(location = 6) in float a_Size;
 
 out vec4 v_color;
 
@@ -8,8 +8,7 @@ out vec4 v_color;
 #pragma include "project"
 
 void main() {
-  // v_color = vec4(a_Color.xyz, a_Color.w * opacity);
-  v_color = a_Color;
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * vec4(a_Position, 1.0);

@@ -18,11 +18,7 @@ import {
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import {
-  Device,
-  SwapChain,
-  WebGLDeviceContribution,
-} from '@strawberry-vis/g-device-api';
+import { Device, SwapChain, WebGLDeviceContribution } from '@antv/g-device-api';
 import DeviceAttribute from './DeviceAttribute';
 import DeviceBuffer from './DeviceBuffer';
 import DeviceElements from './DeviceElements';
