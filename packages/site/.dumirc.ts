@@ -671,6 +671,9 @@ export default defineConfig({
   ],
   links: [],
   scripts: [
+    ` window._AMapSecurityConfig = {
+      securityJsCode: '2653011adeb04230b3a26cc9a780a800',
+    }`,
     'https://webapi.amap.com/maps?v=2.0&key=f59bcf249433f8b05caaee19f349b3d7',
   ],
   analytics: {

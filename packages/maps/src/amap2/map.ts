@@ -24,6 +24,10 @@ const DEFAULTMAPCENTER = [108.92361, 34.54083];
 
 // @ts-ignore
 window.forceWebGL = true;
+// @ts-ignore
+window._AMapSecurityConfig = {
+  securityJsCode: '2653011adeb04230b3a26cc9a780a800',
+};
 
 const AMAP_API_KEY: string = 'f59bcf249433f8b05caaee19f349b3d7';
 // 'ff533602d57df6f8ab3b0fea226ae52f';
