@@ -34,6 +34,11 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     normal: [],
   };
   protected currentStyle: any = 'normal';
+  // 事件回调代理
+  protected evtCbProxyMap: Map<
+    string,
+    Map<(...args: any) => any, (...args: any) => any>
+  > = new Map();
 
   public getMap() {
     return this.map as any as BMapGL.Map & {
@@ -185,7 +190,26 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       this.eventEmitter.on(type, handle);
       return;
     }
-    this.map.on(EventMap[type] || type, handle);
+
+    let cbProxyMap = this.evtCbProxyMap.get(type);
+    if (!cbProxyMap) {
+      this.evtCbProxyMap.set(type, (cbProxyMap = new Map()));
+    }
+    // 对事件对象的经纬度进行统一处理l7需要的
+    const handleProxy = (...args: any[]) => {
+      if (
+        args[0] &&
+        typeof args[0] === 'object' &&
+        !args[0].lngLat &&
+        !args[0].lnglat
+      ) {
+        args[0].lngLat = args[0].latlng || args[0].latLng;
+      }
+      handle(...args);
+    };
+
+    cbProxyMap.set(handle, handleProxy);
+    this.map.on(EventMap[type] || type, handleProxy);
   }
 
   public off(type: string, handle: (...args: any[]) => void): void {
@@ -193,7 +217,9 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       this.eventEmitter.off(type, handle);
       return;
     }
-    this.map.off(EventMap[type] || type, handle);
+
+    const handleProxy = this.evtCbProxyMap.get(type)?.get(handle) || handle;
+    this.map.off(EventMap[type] || type, handleProxy);
   }
 
   public once(type: string, handler: (...args: any[]) => void): void {
