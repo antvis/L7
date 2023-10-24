@@ -1,0 +1,3 @@
+.bmap-contianer--hide-logo .anchorBL > img[src*='api.map.baidu.com/images/logo_hd.png'] {
+  display: none;
+}

@@ -2,6 +2,7 @@ import {
   Bounds,
   ICameraOptions,
   ILngLat,
+  IMapConfig,
   IMercator,
   IPoint,
   IStatusOptions,
@@ -10,11 +11,13 @@ import {
   MapStyleConfig,
   Point,
 } from '@antv/l7-core';
+import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMapService from '../utils/BaseMapService';
 import { toPaddingOptions } from '../utils/utils';
 import Viewport from '../utils/Viewport';
 import BMapGLLoader from './bmapglloader';
+import './logo.css';
 
 const EventMap: {
   [key: string]: any;
@@ -88,9 +91,6 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       mapInstance,
       version = BMAP_VERSION,
       mapSize = 10000,
-      style,
-      pitch = 0,
-      rotation = 0,
       minZoom = 0,
       maxZoom = 21,
       ...rest
@@ -116,6 +116,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       if (!this.map.isLoaded()) {
         this.map.centerAndZoom(point, zoom + 1.75);
       }
+      this.initMapByConfig(this.config);
       this.map.on('update', this.handleCameraChanged);
     } else {
       const mapConstructorOptions = {
@@ -132,10 +133,11 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
         );
       }
 
-      let mapContainer = id as HTMLElement;
-      if (typeof id === 'string') {
-        mapContainer = document.getElementById(id)!;
+      if (!id) {
+        throw Error('No container id specified');
       }
+
+      const mapContainer = DOM.getContainer(id);
 
       // 存储控件等容器，百度地图实例会被卸载掉，所以实例化后需要重新挂载
       // @ts-ignore
@@ -154,15 +156,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       this.map = map;
       const point = new BMapGL.Point(center[0], center[1]);
       this.map.centerAndZoom(point, zoom + 1.75);
-      if (pitch) {
-        this.setPitch(pitch);
-      }
-      if (rotation) {
-        this.setRotation(rotation);
-      }
-      if (style) {
-        this.setMapStyle(style);
-      }
+      this.initMapByConfig(this.config);
       // 监听地图相机事件
       // @ts-ignore
       map.on('update', this.handleCameraChanged);
@@ -545,5 +539,29 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
         ? (renderCanvas?.toDataURL('image/jpeg') as string)
         : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
+  }
+
+  private hideLogo() {
+    const container = this.map.getContainer();
+    if (!container) {
+      return;
+    }
+    DOM.addClass(container, 'bmap-contianer--hide-logo');
+  }
+
+  private initMapByConfig(config: Partial<IMapConfig<{}>>) {
+    const { style, pitch = 0, rotation = 0, logoVisible = true } = config;
+    if (style) {
+      this.setMapStyle(style);
+    }
+    if (pitch) {
+      this.setPitch(pitch);
+    }
+    if (rotation) {
+      this.setRotation(rotation);
+    }
+    if (logoVisible === false) {
+      this.hideLogo();
+    }
   }
 }
