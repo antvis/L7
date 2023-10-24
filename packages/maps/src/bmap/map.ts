@@ -195,6 +195,12 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     if (!cbProxyMap) {
       this.evtCbProxyMap.set(type, (cbProxyMap = new Map()));
     }
+
+    // 忽略重复监听回调
+    if (cbProxyMap.get(handle)) {
+      return;
+    }
+
     // 对事件对象的经纬度进行统一处理l7需要的
     const handleProxy = (...args: any[]) => {
       if (
@@ -218,7 +224,11 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       return;
     }
 
-    const handleProxy = this.evtCbProxyMap.get(type)?.get(handle) || handle;
+    const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
+    if (!handleProxy) {
+      return;
+    }
+    this.evtCbProxyMap.get(type)?.delete(handle);
     this.map.off(EventMap[type] || type, handleProxy);
   }
 
