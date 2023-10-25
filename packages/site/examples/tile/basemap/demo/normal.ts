@@ -25,17 +25,6 @@ const layer1 = new RasterLayer({
   },
 });
 
-const layer2 = new RasterLayer({
-  zIndex: 1,
-}).source(url1, {
-  parser: {
-    type: 'rasterTile',
-    tileSize: 256,
-    zoomOffset: 0,
-  },
-});
-
 scene.on('loaded', () => {
   scene.addLayer(layer1);
-  scene.addLayer(layer2);
 });
