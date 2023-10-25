@@ -36,7 +36,7 @@ export default defineConfig({
       'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.antgroup.com/',
     githubUrl: 'https://github.com/antvis/L7',
-    relativePath:'packages/site',
+    relativePath: 'packages/site',
     keywords:
       'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
@@ -204,7 +204,10 @@ export default defineConfig({
             url: '/custom/tools',
           },
           {
-            name: { zh: 'GeoJSON 编辑工具', en: 'Administrative Division Data' },
+            name: {
+              zh: 'GeoJSON 编辑工具',
+              en: 'Administrative Division Data',
+            },
             url: 'https://l7editor.antv.antgroup.com/',
           },
         ],
@@ -671,6 +674,7 @@ export default defineConfig({
   ],
   links: [],
   scripts: [
+    'https://api.map.baidu.com/api?type=webgl&v=1.0&ak=zLhopYPPERGtpGOgimcdKcCimGRyyIsh',
     ` window._AMapSecurityConfig = {
       securityJsCode: '2653011adeb04230b3a26cc9a780a800',
     }`,
