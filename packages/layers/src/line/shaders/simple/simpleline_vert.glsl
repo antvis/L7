@@ -39,8 +39,6 @@ void main() {
       h *= 2.0/pow(2.0, 20.0 - u_Zoom);
     }
 
-    // #define COORDINATE_SYSTEM_P20 5.0
-    // #define COORDINATE_SYSTEM_P20_OFFSET 6.0
     // amap1.x
     if(u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
       // 保持高度相对不变

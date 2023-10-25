@@ -64,30 +64,23 @@ export class TileLayerService {
   }
   public updateTileVisible(sourceTile: SourceTile) {
     const tile = this.getTile(sourceTile.key);
-    // if(sourceTile.isVisible) {
-    //   // 不可见 => 可见 兄弟节点加载完成
-    //   if(sourceTile.parent) {
-    //     const flag = this.isChildrenLoaded(sourceTile.parent)
-    //     tile?.updateVisible(flag);
-    //   } else {
-    //     tile?.updateVisible(true);
-    //   }
-
-    // } else {
-    //    // 可见 => 不可见 兄弟节点加载完成
-    //    if(sourceTile.parent) {
-    //     const flag = this.isChildrenLoaded(sourceTile.parent)
-    //     tile?.updateVisible(!flag);
-    //   } else {
-    //     tile?.updateVisible(false);
-    //   }
-    // }
-    tile?.updateVisible(sourceTile.isVisible);
-    // if (sourceTile.isVisible) {
-    //   tile?.updateVisible(sourceTile.isVisible);
-    // } else {
-    //   this.removeTile(sourceTile.key);
-    // }
+    if (sourceTile.isVisible) {
+      // 不可见 => 可见 兄弟节点加载完成
+      if (sourceTile.parent) {
+        const flag = this.isChildrenLoaded(sourceTile.parent);
+        tile?.updateVisible(flag);
+      } else {
+        tile?.updateVisible(true);
+      }
+    } else {
+      // 可见 => 不可见 兄弟节点加载完成
+      if (sourceTile.parent) {
+        const flag = this.isChildrenLoaded(sourceTile.parent);
+        tile?.updateVisible(!flag);
+      } else {
+        tile?.updateVisible(false);
+      }
+    }
   }
   public isParentLoaded(sourceTile: SourceTile): boolean {
     const parentTile = sourceTile.parent;
@@ -108,9 +101,12 @@ export class TileLayerService {
     if (childrenTile.length === 0) {
       return true;
     }
-    return childrenTile.some((tile: SourceTile) => {
+    return childrenTile.every((tile: SourceTile) => {
       const tileLayer = this.getTile(tile?.key);
-      return tileLayer?.isLoaded === false;
+      if (!tileLayer) {
+        return true;
+      }
+      return tileLayer?.isLoaded === true;
     });
   }
   public async render() {

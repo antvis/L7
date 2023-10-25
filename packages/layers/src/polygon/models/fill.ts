@@ -2,7 +2,6 @@ import {
   AttributeType,
   gl,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   Triangulation,
 } from '@antv/l7-core';
@@ -37,10 +36,6 @@ export default class FillModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
-    const { workerEnabled = false, enablePicking } =
-      this.layer.getLayerConfig() as Partial<
-        ILayerConfig & IPolygonLayerStyleOptions
-      >;
     this.layer.triangulation = triangulation;
     const model = await this.layer.buildLayerModel({
       moduleName: type,
@@ -50,12 +45,6 @@ export default class FillModel extends BaseModel {
       triangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-
-      workerEnabled,
-      workerOptions: {
-        modelType: type,
-        enablePicking,
-      },
     });
     return [model];
   }

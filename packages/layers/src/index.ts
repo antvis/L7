@@ -10,7 +10,7 @@ import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
-import TileDebugLayer from './tile/tileFactory/layers/TileDebugLayer';
+import TileDebugLayer from './tile/core/TileDebugLayer';
 
 import EarthLayer from './earth';
 

@@ -92,17 +92,6 @@ scene.on('loaded', () => {
       return '#fc9272';
     });
 
-  const text = new PointLayer({
-    sourceLayer: 'WLD',
-    blend: 'normal',
-    zIndex: 10,
-  })
-    .source(source)
-    .shape('NAME_CHN', (NAME_CHN) => {
-      return unicode2Char(NAME_CHN);
-    })
-    .size(12)
-    .color('#000');
 
   // water_surface.on('click', (e) => {
   //   console.log(e);
@@ -110,6 +99,5 @@ scene.on('loaded', () => {
 
 
   scene.addLayer(water_surface);
-  scene.addLayer(text);
   scene.addLayer(line);
 });

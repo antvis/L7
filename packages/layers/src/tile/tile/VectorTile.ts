@@ -12,6 +12,7 @@ export default class VectorTile extends Tile {
     const sourceOptions = this.getSourceOption();
     if (!sourceOptions) {
       this.isLoaded = true;
+      this.emit('loaded');
       return;
     }
     const layer = new vectorLayer({ ...layerOptions }).source(
@@ -33,6 +34,7 @@ export default class VectorTile extends Tile {
     }
     this.setLayerMinMaxZoom(layer);
     this.isLoaded = true;
+    this.emit('loaded');
   }
 
   protected getSourceOption() {

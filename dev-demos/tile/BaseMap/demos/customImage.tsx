@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, RasterLayer } from '@antv/l7';
+import { Scene, RasterLayer, TileDebugLayer } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -82,6 +82,8 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer1);
+      const debugerLayer = new TileDebugLayer();
+      scene.addLayer(debugerLayer);
 
     });
   }, []);

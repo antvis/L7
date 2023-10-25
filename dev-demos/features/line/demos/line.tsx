@@ -71,9 +71,13 @@ export default () => {
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(10)
-      .shape('line')
+      .shape('simple')
       .color('#f00')
-      .style({});
+      .style({
+        opacity:1,
+        sourceColor: '#f00',
+        targetColor: '#0f0',
+      });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
