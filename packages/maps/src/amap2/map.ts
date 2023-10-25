@@ -24,11 +24,6 @@ const DEFAULTMAPCENTER = [108.92361, 34.54083];
 
 // @ts-ignore
 window.forceWebGL = true;
-// @ts-ignore
-window._AMapSecurityConfig = {
-  securityJsCode: '2653011adeb04230b3a26cc9a780a800',
-};
-
 const AMAP_API_KEY: string = 'f59bcf249433f8b05caaee19f349b3d7';
 // 'ff533602d57df6f8ab3b0fea226ae52f';
 const AMAP_VERSION: string = '2.0';
@@ -317,6 +312,11 @@ export default class AMapService extends AMapBaseService {
         mapConstructorOptions.zoom += 1;
       }
       if (token === AMAP_API_KEY) {
+        // @ts-ignore
+        window._AMapSecurityConfig = {
+          securityJsCode: '2653011adeb04230b3a26cc9a780a800',
+        };
+
         console.warn(
           `%c${this.configService.getSceneWarninfo('MapToken')}!`,
           'color: #873bf4;font-weigh:900;font-size: 16px;',
