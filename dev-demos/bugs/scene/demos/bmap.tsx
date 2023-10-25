@@ -1,4 +1,4 @@
-import { Map, BMap,Scene, ExportImage, PointLayer } from "@antv/l7";
+import { Map, BaiduMap,Scene, ExportImage, PointLayer } from "@antv/l7";
 import React, { useState } from "react";
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from "react";
@@ -15,11 +15,10 @@ const Demo: FunctionComponent = () => {
     console.log('getRotation',bmap)
     const newScene = new Scene({
       id: "map",
-      map:new BMap({mapInstance:bmap})
+      map:new BaiduMap({mapInstance:bmap})
     });
 
     newScene.on("loaded", () => {
-      
       fetch(
         "https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json"
       )
@@ -49,14 +48,12 @@ const Demo: FunctionComponent = () => {
             });
           newScene.addLayer(pointLayer);
 
-
-
         });
     });
   }, []);
 
   return (
-   
+
       <div
         id="map"
         style={{
