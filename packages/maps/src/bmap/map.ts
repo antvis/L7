@@ -255,11 +255,26 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     return this.getMap().getZoom() - 1.75;
   }
 
-  public getCenter(): ILngLat {
-    const { lng, lat } = this.getMap().getCenter();
+  public getCenter(options?: ICameraOptions): ILngLat {
+    if (options?.padding) {
+      const originCenter = this.getCenter();
+      const padding = toPaddingOptions(options.padding);
+      const px = this.lngLatToPixel([originCenter.lng, originCenter.lat]);
+      const offsetPx = [
+        (padding.right - padding.left) / 2,
+        (padding.bottom - padding.top) / 2,
+      ];
+
+      const newCenter = this.pixelToLngLat([
+        px.x - offsetPx[0],
+        px.y - offsetPx[1],
+      ]);
+      return newCenter;
+    }
+    const center = this.map.getCenter();
     return {
-      lng,
-      lat,
+      lng: center.lng,
+      lat: center.lat,
     };
   }
 
