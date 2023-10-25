@@ -1,11 +1,14 @@
 import { createLayerContainer, ILayer, ILngLat, ITile } from '@antv/l7-core';
 import { SourceTile } from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import PolygonLayer from '../../polygon';
-import BaseTileLayer from '../tileLayer/BaseLayer';
+import BaseTileLayer from '../core/BaseLayer';
 import { isNeedMask } from './util';
 
-export default abstract class Tile implements ITile {
+export type TileEventType = 'loaded';
+
+export default abstract class Tile extends EventEmitter implements ITile {
   public x: number;
   public y: number;
   public z: number;
@@ -18,6 +21,7 @@ export default abstract class Tile implements ITile {
   protected tileMaskLayers: ILayer[] = [];
   protected tileMask: ILayer | undefined;
   constructor(sourceTile: SourceTile, parent: ILayer) {
+    super();
     this.parent = parent;
     this.sourceTile = sourceTile;
     this.x = sourceTile.x;
@@ -89,7 +93,10 @@ export default abstract class Tile implements ITile {
           },
         },
       )
-      .shape('fill');
+      .shape('fill')
+      .style({
+        opacity: 0.5,
+      });
     const container = createLayerContainer(
       this.parent.sceneContainer as Container,
     );

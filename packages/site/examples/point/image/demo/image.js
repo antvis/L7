@@ -36,14 +36,7 @@ scene.on('loaded', () => {
           }
         })
         .shape('name', [ '00', '01', '02' ])
-        .size(10)
-        .style({
-          offsets:{
-            field:'name',
-            value: [-100,30,100,200]
-          }
-        })
-        ;
+        .size(10);
       const imageLayerText = new PointLayer()
         .source(data, {
           parser: {

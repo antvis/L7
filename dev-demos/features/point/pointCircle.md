@@ -23,7 +23,7 @@ export default () => {
                 .then((res) => res.text())
                 .then((data) => {
                     const pointLayer = new PointLayer({
-                        blend:'additive'
+                        blend:'normal'
                     })
                         .source(data, {
                             parser: {
@@ -51,7 +51,7 @@ export default () => {
                             '#D7F9F0',
                         ])
                         .style({
-                            opacity: 1,
+                            opacity: 0.3,
                             strokeWidth: 0,
                             stroke: '#fff',
                         });

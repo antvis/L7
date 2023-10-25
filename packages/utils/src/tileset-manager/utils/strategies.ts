@@ -21,7 +21,7 @@ export function updateTileStateRealtime(tiles: SourceTile[]) {
 }
 
 /*
- * 瓦片更新状态策略 - 渐近更新策略
+ * 瓦片更新状态策略 - 渐近更新策略 有透明度情况会导致颜色叠加
  * 对于当前视野 currentTile 且数据请求中的瓦片
  * 用最近上级的瓦片作为占位符
  * 如果没有最近上级瓦片可用，用最近的子级瓦片作为占位符

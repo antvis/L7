@@ -5,6 +5,7 @@ const scene = new Scene({
   id: 'map',
   map: new Map({
     center: [ 90.268, 40.3628 ],
+    minZoom:2,
     zoom: 3
   })
 });

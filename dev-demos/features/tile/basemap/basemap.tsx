@@ -171,7 +171,7 @@ export default () => {
         .color('#87CEFA');
       scene.addLayer(water);
 
-      const debugerLayer = new TileDebugLayer({ usage: 'basemap' });
+      const debugerLayer = new TileDebugLayer();
       scene.addLayer(debugerLayer);
 
       // scene.on('zoom', () => {
