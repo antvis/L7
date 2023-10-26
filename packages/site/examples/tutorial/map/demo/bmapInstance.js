@@ -30,7 +30,9 @@ function initMap() {
     )
       .then(res => res.json())
       .then(data => {
-        const pointLayer = new PointLayer()
+        const pointLayer = new PointLayer({
+          autoFit: true
+        })
           .source(data, {
             parser: {
               type: 'json',
