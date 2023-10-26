@@ -194,28 +194,13 @@ export default () => {
       // .source(polygonToLine(testdata2))
       // .source(testdata)
       .source(polygonToLineString((multipolygon as unknown) as MultiPolygon))
-      // .source([
-      //   {
-      //     lng1: 120,
-      //     lat1: 30,
-      //     lng2: 130,
-      //     lat2: 30
-      //   }
-      // ], {
-      //   parser: {
-      //     type: 'json',
-      //     x: 'lng1',
-      //     y: 'lat1',
-      //     x1: 'lng2',
-      //     y1: 'lat2'
-      //   }
-      // })
+
       .shape('simple')
       .color('#f00')
       .style({
         // vertexHeightScale: 2000,
-        // sourceColor: '#f00',
-        // targetColor: '#0f0',
+        sourceColor: '#f00',
+        targetColor: '#0f0',
       });
 
     scene.on('loaded', () => {

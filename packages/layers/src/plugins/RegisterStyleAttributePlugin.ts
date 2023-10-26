@@ -8,7 +8,7 @@ import {
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { isTileGroup } from '../tile/utils';
+import { isTileGroup } from '../tile/utils/utils';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建

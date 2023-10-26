@@ -16,11 +16,12 @@ body:
   - type: dropdown
     id: issue_oscp_difficulty
     attributes:
-      label: Issue 难度
+      label: Issue 类型
       options:
-        - 低难度
-        - 中等难度
-        - 高难度
+        - 入门任务
+        - 初级任务
+        - 中级任务
+        - 高级任务
     validations:
       required: false
   - type: textarea
@@ -29,14 +30,6 @@ body:
       label: 任务介绍
       description: | 
         简单描述任务背景信息，为了解决哪些问题
-    validations:
-      required: false
-  - type: textarea
-    id: oscp_task_info_description
-    attributes:
-      label: 详细介绍
-      description: | 
-        简单描述任务背景信息
     validations:
       required: false
   - type: textarea
