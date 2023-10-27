@@ -1,13 +1,11 @@
 import {
+  getData,
+  getURLFromTemplate,
   RequestParameters,
   SourceTile,
   TileLoadParams,
-  getData,
-  getURLFromTemplate,
 } from '@antv/l7-utils';
-import {
-  Feature,
-} from '@turf/helpers';
+import { Feature } from '@turf/helpers';
 import { IParserData, ITileSource } from '../interface';
 import VtSource from '../source/geojsonvt';
 
@@ -23,39 +21,25 @@ const getVectorTile = async (
   requestParameters?: Partial<RequestParameters>,
   getCustomData?: ITileParserCFG['getCustomData'],
 ): Promise<ITileSource> => {
-  const tileUrl = getURLFromTemplate(url, { x: tile.x, y: tile.y, z: tile.z });
+  const params = { x: tile.x, y: tile.y, z: tile.z };
+  const tileUrl = getURLFromTemplate(url, params);
   return new Promise((resolve) => {
     if (getCustomData) {
-      getCustomData(
-        {
-          x: tile.x,
-          y: tile.y,
-          z: tile.z,
-        },
-        (err, data) => {
-          if (err || !data) {
-            const vectorTile: MapboxVectorTile = {
-              layers: {
-                defaultLayer: {
-                  features: [],
-                },
-              },
-            };
-            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
-            resolve(vectorSource);
-          } else {
-            const vectorTile: MapboxVectorTile = {
-              layers: {
-                defaultLayer: {
-                  features: data.features,
-                },
-              },
-            };
-            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
-            resolve(vectorSource);
-          }
-        },
-      );
+      getCustomData(params, (err, data) => {
+        if (err || !data) {
+          const vectorTile: MapboxVectorTile = {
+            layers: { defaultLayer: { features: [] } },
+          };
+          const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+          resolve(vectorSource);
+        } else {
+          const vectorTile: MapboxVectorTile = {
+            layers: { defaultLayer: { features: data.features } },
+          };
+          const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+          resolve(vectorSource);
+        }
+      });
     } else {
       getData(
         {
@@ -71,18 +55,28 @@ const getVectorTile = async (
                 },
               },
             };
-            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+            const vectorSource = new VtSource(
+              vectorTile,
+              tile.x,
+              tile.y,
+              tile.z,
+            );
             resolve(vectorSource);
           } else {
-            const json = JSON.parse(data)
+            const json = JSON.parse(data);
             const vectorTile: MapboxVectorTile = {
               layers: {
                 defaultLayer: {
-                  features: json
+                  features: json,
                 },
               },
             };
-            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+            const vectorSource = new VtSource(
+              vectorTile,
+              tile.x,
+              tile.y,
+              tile.z,
+            );
             resolve(vectorSource);
           }
         },
@@ -91,8 +85,11 @@ const getVectorTile = async (
   });
 };
 
-export default function jsonTile(url: string, cfg: ITileParserCFG): IParserData {
-  const getTileData = (_tileParams: TileLoadParams, tile: SourceTile) => {
+export default function jsonTile(
+  url: string,
+  cfg: ITileParserCFG,
+): IParserData {
+  const getTileData = (_: TileLoadParams, tile: SourceTile) => {
     return getVectorTile(url, tile, cfg?.requestParameters, cfg.getCustomData);
   };
 
