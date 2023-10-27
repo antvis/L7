@@ -190,6 +190,13 @@ export const postData = (
   return makeRequest({ ...requestParameters, method: 'POST' }, callback);
 };
 
+export const getData = (
+  requestParameters: RequestParameters,
+  callback: ResponseCallback<string>,
+) => {
+  return makeRequest({ ...requestParameters, method: 'GET' }, callback);
+};
+
 export function sameOrigin(url: string) {
   const a = window.document.createElement('a');
   a.href = url;

@@ -1,5 +1,5 @@
-import { Map, BMap,Scene, ExportImage, PointLayer } from "@antv/l7";
-import React, { useState } from "react";
+import { BaiduMap, Scene, PointLayer } from "@antv/l7";
+import React from "react";
 // tslint:disable-next-line:no-duplicate-imports
 import { FunctionComponent, useEffect } from "react";
 
@@ -12,14 +12,14 @@ const Demo: FunctionComponent = () => {
     var marker1 = new BMapGL.Marker(new BMapGL.Point(116.404, 39.925));
     bmap.addOverlay(marker1);
 
-    console.log('getRotation',bmap)
+    console.log('getRotation', bmap)
     const newScene = new Scene({
       id: "map",
-      map:new BMap({mapInstance:bmap})
+      map: new BaiduMap({ mapInstance: bmap })
     });
 
     newScene.on("loaded", () => {
-      
+
       fetch(
         "https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json"
       )
@@ -29,15 +29,15 @@ const Demo: FunctionComponent = () => {
             autoFit: false
           })
             .source([{
-                x:116.404,
-                y:39.925
+              x: 116.404,
+              y: 39.925
 
-            }],{
-                parser:{
-                    type:'json',
-                    x:'x',
-                    y:'y'
-                }
+            }], {
+              parser: {
+                type: 'json',
+                x: 'x',
+                y: 'y'
+              }
             })
             .shape("circle")
             .size(10)
@@ -56,14 +56,14 @@ const Demo: FunctionComponent = () => {
   }, []);
 
   return (
-   
-      <div
-        id="map"
-        style={{
-          height: "500px",
-          position: "relative"
-        }}
-      />
+
+    <div
+      id="map"
+      style={{
+        height: "500px",
+        position: "relative"
+      }}
+    />
   );
 };
 
