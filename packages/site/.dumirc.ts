@@ -494,6 +494,15 @@ export default defineConfig({
         order: 0,
       },
       {
+        slug: 'map',
+        icon: 'map',
+        title: {
+          zh: '地图底图',
+          en: 'BaseMap',
+        },
+        order: 1,
+      },
+      {
         slug: 'point',
         icon: 'point',
         title: {
