@@ -1,4 +1,4 @@
-import { Scene, PolygonLayer, PointLayer, LineLayer, LayerPopup, Control, DOM } from '@antv/l7';
+import { Scene, PolygonLayer, LineLayer, LayerPopup, Control, DOM } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 const styleElement = document.createElement('style');
 
@@ -41,6 +41,7 @@ const scene = new Scene({
         style: 'light',
         center: [116.368652, 39.93866],
         zoom: 0,
+        maxZoom: 5,
         token: "6f025e700cbacbb0bb866712d20bb35c"
     })
 });
@@ -53,171 +54,144 @@ function getColor(d, color) {
                         'rgba(0,0,0,0)'
 }
 scene.on('loaded', async () => {
-    fetch(
-        'https://mdn.alipayobjects.com/afts/file/A*6dU9SL6RD8IAAAAAAAAAAAAADrd2AQ/world_gdp.json'
-    )
-        .then(res => res.json())
-        .then(data => {
-            const features_1 = data.features.filter(fe => fe.properties.flag === true)
-            const features_2 = data.features.filter(fe => fe.properties.flag === false)
-            const layer1 = new PolygonLayer({})
-                .source({
-                    "type": "FeatureCollection",
-                    "features": features_1
-                })
-                .color(
-                    'gdp',
-                    ['#fdd49e', '#fdbb84', '#fc8d59', '#e34a33', '#b30000']
-                )
-                .shape('fill')
-                .scale('gdp', {
-                    type: 'threshold',
-                    domain: [0, 1000, 5000, 10000, 100000, 300000],
-                })
-                .active(false)
-                .style({
-                    opacity: 0.8
-                })
+    const data = await (await fetch('https://mdn.alipayobjects.com/afts/file/A*6dU9SL6RD8IAAAAAAAAAAAAADrd2AQ/world_gdp.json')).json();
+    const data_line = await (await fetch('https://mdn.alipayobjects.com/afts/file/A*5NgLQrPivBgAAAAAAAAAAAAADrd2AQ/line_2.json')).json();
 
-            const layer2 = new PolygonLayer({})
-                .source({
-                    "type": "FeatureCollection",
-                    "features": features_2
-                })
-                .color(
-                    'gdp',
-                    ['#c7e9b4', '#7fcdbb', '#41b6c4', '#2c7fb8', '#253494']
-                )
-                .shape('fill')
-                // .filter('flag',flag=>!falg)
-                .scale('gdp', {
-                    type: 'threshold',
-                    domain: [0, 1000, 5000, 10000, 100000, 300000],
-                })
-                .style({
-                    opacity: 0.8
-                })
+    const features_1 = data.features.filter(fe => fe.properties.flag === true)
+    const features_2 = data.features.filter(fe => fe.properties.flag === false)
+    const layer1 = new PolygonLayer({})
+        .source({
+            "type": "FeatureCollection",
+            "features": features_1
+        })
+        .color(
+            'gdp',
+            ['#fdd49e', '#fdbb84', '#fc8d59', '#e34a33', '#b30000']
+        )
+        .shape('fill')
+        .scale('gdp', {
+            type: 'threshold',
+            domain: [0, 1000, 5000, 10000, 100000, 300000],
+        })
+        .active(false)
+        .style({
+            opacity: 0.6
+        })
 
-                .active(false);
-            const layer3 = new LineLayer({
-                zIndex: 2
-            })
-                .source(data)
-                .color('#ddd')
-                .size(0.8);
+    const layer2 = new PolygonLayer({})
+        .source({
+            "type": "FeatureCollection",
+            "features": features_2
+        })
+        .color(
+            'gdp',
+            ['#c7e9b4', '#7fcdbb', '#41b6c4', '#2c7fb8', '#253494']
+        )
+        .shape('fill')
+        // .filter('flag',flag=>!falg)
+        .scale('gdp', {
+            type: 'threshold',
+            domain: [0, 1000, 5000, 10000, 100000, 300000],
+        })
+        .style({
+            opacity: 0.6
+        })
 
-            const layerPopup1 = new LayerPopup({
-                items: [
-                    {
-                        layer: layer1,
-                        fields: [
-                            {
-                                field: 'NAME_CHN',
-                                formatField: () => '国家',
-                            },
-                            {
-                                field: 'gdp',
-                                formatField: () => 'GDP',
-                                formatValue: (val) => {
-                                    return val < 0.00001 ? `${val * 10000 * 10000}美元` : `${val.toFixed(2)}亿美元`;
-
-                                }
-                            },
-                            {
-                                field: 'industries',
-                                formatField: () => '行业',
-                                formatValue: (val) => {
-                                    return val || '';
-
-                                }
-                            },
-                            {
-                                field: 'relations',
-                                formatField: () => '关系',
-                                formatValue: (val) => {
-                                    return val || '';
-
-                                }
-                            },
-                        ],
-                    },
-                ],
-            });
-            const layerPopup2 = new LayerPopup({
-                items: [
-                    {
-                        layer: layer2,
-                        fields: [
-                            {
-                                field: 'NAME_CHN',
-                                formatField: () => '国家',
-                            },
-                            {
-                                field: 'gdp',
-                                formatField: () => 'GDP',
-                                formatValue: (val) => {
-                                    return val < 0.00001 ? `${val * 10000 * 10000}美元` : `${val.toFixed(2)}亿美元`;
-
-                                }
-
-                            },
-                        ],
-                    },
-                ],
-            });
-
-
-            scene.addPopup(layerPopup1);
-            scene.addPopup(layerPopup2);
-
-            scene.addLayer(layer1);
-            scene.addLayer(layer2);
-            scene.addLayer(layer3);
-        });
-
-
-    const belt = await (await fetch('https://gw.alipayobjects.com/os/rmsportal/UpapMomPYUeiBjbHNAma.json')).json();
-    const line = await (await fetch('https://gw.alipayobjects.com/os/rmsportal/kwUdcXnxQtexeGRvTGtA.json')).json();
-    const line2 = await (await fetch('https://gw.alipayobjects.com/os/rmsportal/dzpMOiLYBKxpdmsgBLoE.json')).json();
-    const point = await (await fetch('https://gw.alipayobjects.com/os/rmsportal/opYqFyDGyGUAUXkLUhBV.json')).json();
-    const fillLayer = new PolygonLayer({
-        autoFit: false
-    }).source(belt).color('cname', function (value) {
-        return value == '中国' ? 'rgba(46,149,169,0.45)' : 'rgba(227,244,244,1)';
-    }).shape('fill');
-
-    const linelayer = new LineLayer({ zIndex: 2 }).source(line).color('rgb(79,147,234)').size(1.5).shape('line');
-    const linelayer_2 = new LineLayer({ zIndex: 1 }).source(line2).color('#fff').size(2).shape('line');
-
-    const linelayer2 = new LineLayer({ zIndex: 2 }).source(line2).color('rgb(173,113,55)').size(1).shape('line').style({
-        stroke: '#f00',
-        strokeWidth: 2,
-    })
-
-    const pointlayer = new PointLayer({ zIndex: 1 }).source(point).size(5.0).shape('circle').color('Id', (id) => {
-        return id < 30 ? '#027aff' : 'rgb(173,113,55)'
-
-    }).style({
-        stroke: '#000',
-        strokeWidth: 1
+        .active(false);
+    const lineLayer = new LineLayer().source(data_line).filter('type',(t)=>{
+        return t === '11' || t === '1'
+    }).color('#09f').size(0.6).shape('line').style({
+        lineType: 'dash',
+        dashArray: [3, 3]
     });
 
-    const textlayer = new PointLayer({ zIndex: 3 }).source(point).size(10.0).shape('name', 'text').color('Id', (id) => {
-        return id < 29 ? '#027aff' : 'rgb(173,113,55)'
+    const lineLayer2 = new LineLayer().source(data_line).filter('type',(t)=>{
+        return t === '10'
+    }).color('#09f').size(0.6).shape('line').style({
+        lineType: 'dash',
+        dashArray: [2, 2]
+    });
 
-    }).style({
-        textOffset: [0, -20],
-        stroke: '#fff',
-        strokeWidth: 2,
-        textAnchor: 'bottom',
+    const lineLayer3 = new LineLayer().source(data_line).filter('type',(t)=>{
+        return t === '0' || t === '9' || t ==='7' || t ==='2'
+    }).color('type',(t)=>{
+        return t === '0' 
+        ? 'red' : t === '9' || t === '2' ? '#09f ' : '#fff';
+    }).size(0.8).shape('line');
 
-    })
-    scene.addLayer(fillLayer)
-    scene.addLayer(linelayer)
-    scene.addLayer(linelayer_2)
-    scene.addLayer(linelayer2)
-    scene.addLayer(pointlayer)
-    scene.addLayer(textlayer)
+    // const lineLayer4 = new LineLayer().source(data_line).filter('type',(t)=>{
+    //     return t === '0'
+    // }).color('red').size(1).shape('line').style();
+    const layerPopup1 = new LayerPopup({
+        items: [
+            {
+                layer: layer1,
+                fields: [
+                    {
+                        field: 'NAME_CHN',
+                        formatField: () => '国家',
+                    },
+                    {
+                        field: 'gdp',
+                        formatField: () => 'GDP',
+                        formatValue: (val) => {
+                            return val < 0.00001 ? `${val * 10000 * 10000}美元` : `${val.toFixed(2)}亿美元`;
+
+                        }
+                    },
+                    {
+                        field: 'industries',
+                        formatField: () => '行业',
+                        formatValue: (val) => {
+                            return val || '';
+
+                        }
+                    },
+                    {
+                        field: 'relations',
+                        formatField: () => '关系',
+                        formatValue: (val) => {
+                            return val || '';
+
+                        }
+                    },
+                ],
+            },
+        ],
+    });
+    const layerPopup2 = new LayerPopup({
+        items: [
+            {
+                layer: layer2,
+                fields: [
+                    {
+                        field: 'NAME_CHN',
+                        formatField: () => '国家',
+                    },
+                    {
+                        field: 'gdp',
+                        formatField: () => 'GDP',
+                        formatValue: (val) => {
+                            return val < 0.00001 ? `${val * 10000 * 10000}美元` : `${val.toFixed(2)}亿美元`;
+
+                        }
+
+                    },
+                ],
+            },
+        ],
+    });
+
+
+    scene.addPopup(layerPopup1);
+    scene.addPopup(layerPopup2);
+
+    scene.addLayer(layer1);
+    scene.addLayer(layer2);
+    scene.addLayer(lineLayer);
+    scene.addLayer(lineLayer2);
+    scene.addLayer(lineLayer3);
+
 
     const legend = new Control(
         { position: 'bottomright' }
@@ -226,7 +200,6 @@ scene.on('loaded', async () => {
     legend.onAdd = () => {
         var div = DOM.create('div', 'info legend'),
             grades = [0, 1000, 5000, 10000, 100000, -999],
-            labels = [],
             grades2 = [0, '1千', '5千', '1万', '10万', '30万/亿美元'];
 
         // loop through our density intervals and generate a label with a colored square for each interval
