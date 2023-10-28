@@ -23,6 +23,7 @@ jobs:
           uses: gacts/is-stargazer@v1
           id: check-star
         - name: Add need star labels
+          if: steps.check-star.outputs.is-stargazer != 'true'
           uses: actions-cool/issues-helper@v3
           with:
             actions: 'add-labels'
