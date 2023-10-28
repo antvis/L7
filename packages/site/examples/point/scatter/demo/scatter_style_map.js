@@ -29,7 +29,7 @@ scene.on('loaded', () => {
             field: 'strokeColor',
           },
           strokeWidth: 1,
-          strokeOpacity: '#fff',
+          strokeOpacity: 1,
           opacity: {
             field: 'opacity',
           }
