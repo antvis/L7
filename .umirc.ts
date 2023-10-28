@@ -86,6 +86,10 @@ export default defineConfig({
   },
   styles: ['https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd.css'],
   scripts: [
+    ` window._AMapSecurityConfig = {
+      securityJsCode: "290ddc4b0d33be7bc9b354bc6a4ca614"
+    }`,
+    'https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c',
     'https://gw.alipayobjects.com/os/lib/whatwg-fetch/3.6.2/dist/fetch.umd.js',
     'https://gw.alipayobjects.com/os/lib/react/17.0.2/umd/react.profiling.min.js',
     'https://gw.alipayobjects.com/os/lib/react-dom/17.0.2/umd/react-dom.profiling.min.js',
@@ -93,7 +97,8 @@ export default defineConfig({
     'https://gw.alipayobjects.com/os/lib/react-dom/17.0.2/umd/react-dom.production.min.js',
     // 'https://gw.alipayobjects.com/os/lib/antd/4.16.13/dist/antd-with-locales.js',
     'https://gw.alipayobjects.com/os/lib/antd/4.19.4/dist/antd.js',
-    "https://api.map.baidu.com/api?v=1.0&amp;&amp;type=webgl&amp;ak=zLhopYPPERGtpGOgimcdKcCimGRyyIsh",
+    'https://api.map.baidu.com/api?type=webgl&v=1.0&ak=zLhopYPPERGtpGOgimcdKcCimGRyyIsh',
+    // "https://api.map.baidu.com/api?v=1.0&amp;&amp;type=webgl&amp;ak=zLhopYPPERGtpGOgimcdKcCimGRyyIsh",
     /** lodash */
     'https://gw.alipayobjects.com/os/lib/lodash/4.17.20/lodash.min.js',
   ]
