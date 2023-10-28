@@ -215,6 +215,7 @@
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.3.2",
     "svg-inline-loader": "^0.8.0",
+    "tmap-types-temporary": "0.1.4",
     "tokml": "^0.4.0",
     "topojson": "^3.0.2",
     "ts-jest": "^24.0.2",

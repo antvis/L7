@@ -1,0 +1,3 @@
+.tmap-contianer--hide-logo  img[src*='mapapi.qq.com/web/jsapi/logo/logo_def.png'] {
+  display: none;
+}
