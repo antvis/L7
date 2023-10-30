@@ -5,12 +5,21 @@ import SelectControl, {
   ISelectControlOption,
 } from './baseControl/selectControl';
 
+export type LayerSwitchItem = {
+  layer: ILayer;
+  name?: string;
+  img?: string;
+};
+
 export interface ILayerSwitchOption extends ISelectControlOption {
-  layers: Array<ILayer | string>;
+  layers: Array<ILayer | string | LayerSwitchItem>;
 }
 
 export { LayerSwitch };
 
+function isLayerSwitchItem(obj: any): obj is LayerSwitchItem {
+  return obj && obj.layer;
+}
 export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   protected get layers(): ILayer[] {
     const layerService = this.layerService;
@@ -19,7 +28,11 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
       const layerInstances: ILayer[] = [];
       layers.forEach((layer) => {
         if (layer instanceof Object) {
-          layerInstances.push(layer as ILayer);
+          if (isLayerSwitchItem(layer)) {
+            layerInstances.push(layer.layer as ILayer);
+          } else {
+            layerInstances.push(layer as ILayer);
+          }
         }
         if (typeof layer === 'string') {
           const targetLayer =
@@ -54,6 +67,31 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public getLayerOptions(): ControlOptionItem[] {
+    const { layers } = this.controlOption;
+    const isImg = layers?.every((item: any) => item.img && item.img !== '');
+    if (layers) {
+      return layers?.map((layer: any) => {
+        if (isLayerSwitchItem(layer)) {
+          return {
+            text: layer.name || layer.layer.name,
+            value: layer.layer.name,
+            img: isImg ? layer.img : undefined,
+          };
+        } else if (typeof layer === 'string') {
+          const targetLayer =
+            this.layerService.getLayer(layer) ||
+            this.layerService.getLayerByName(layer);
+          return {
+            text: targetLayer?.name,
+            value: targetLayer?.name,
+          };
+        }
+        return {
+          text: layer.name,
+          value: layer.name,
+        };
+      }) as ControlOptionItem[];
+    }
     return this.layers.map((layer: ILayer) => {
       return {
         text: layer.name,
