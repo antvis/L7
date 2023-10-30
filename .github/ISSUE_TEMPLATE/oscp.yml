@@ -22,6 +22,7 @@ body:
         - 初级任务
         - 中级任务
         - 高级任务
+        - 专家任务
     validations:
       required: false
   - type: textarea
