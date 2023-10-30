@@ -68,15 +68,29 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
 
   public getLayerOptions(): ControlOptionItem[] {
     const { layers } = this.controlOption;
-    const isImg = layers?.find((item: any) => !item.img);
-    if (isLayerSwitchItem(layers?.[0])) {
-      return layers.map((layer: any) => {
+    const isImg = layers?.every((item: any) => item.img && item.img !== '');
+    if (layers) {
+      return layers?.map((layer: any) => {
+        if (isLayerSwitchItem(layer)) {
+          return {
+            text: layer.name || layer.layer.name,
+            value: layer.layer.name,
+            img: isImg ? layer.img : undefined,
+          };
+        } else if (typeof layer === 'string') {
+          const targetLayer =
+            this.layerService.getLayer(layer) ||
+            this.layerService.getLayerByName(layer);
+          return {
+            text: targetLayer?.name,
+            value: targetLayer?.name,
+          };
+        }
         return {
-          text: layer.name || layer.layer.name,
-          value: layer.layer.name,
-          img: !isImg ? layer.img : undefined,
+          text: layer.name,
+          value: layer.name,
         };
-      });
+      }) as ControlOptionItem[];
     }
     return this.layers.map((layer: ILayer) => {
       return {
