@@ -137,7 +137,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
         }
       }
       const source = layer?.getSource?.();
-      const onSourceUpdate = this.onSourceUpdate.bind(this, layer);
+      const onSourceUpdate = this.onSourceUpdate.bind(this);
       source?.on('update', onSourceUpdate);
       layerInfo.onSourceUpdate = onSourceUpdate;
 
@@ -227,7 +227,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     });
   };
 
-  protected onSourceUpdate(layer: ILayer) {
+  protected onSourceUpdate() {
     this.hide();
     this.displayFeatureInfo = undefined;
   }

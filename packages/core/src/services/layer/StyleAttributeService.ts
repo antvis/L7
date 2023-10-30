@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
-import { gl } from '../renderer/gl';
 import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
+import { gl } from '../renderer/gl';
 import { ILayer } from './ILayerService';
 import {
   IAttributeScale,

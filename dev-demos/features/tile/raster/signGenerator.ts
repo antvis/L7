@@ -87,7 +87,6 @@ export function sign(method: string, bizContent: any = {}, config: any): any {
 }
 
 function RSAEncrypt(signStr: string) {
-  const start = Date.now();
   const encrypted = encrypt.sign(signStr, CryptoJS.SHA256, 'sha256');
   // console.log('encrypted :>> ', encrypted, Date.now() - start);
   return encrypted;

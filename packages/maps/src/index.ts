@@ -4,17 +4,19 @@ import BaiduMap from './bmap/';
 import Earth from './earth/';
 import Map from './map/';
 import Mapbox from './mapbox/';
+import MapLibre from './maplibre';
 import TencentMap from './tmap';
 import { Version } from './version';
 export * from './utils';
 export {
-  Version,
+  BaiduMap,
+  Earth,
   GaodeMap,
   GaodeMapV1,
   GaodeMapV2,
-  Mapbox,
   Map,
-  Earth,
-  BaiduMap,
+  MapLibre,
+  Mapbox,
   TencentMap,
+  Version,
 };

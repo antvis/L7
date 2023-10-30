@@ -6,10 +6,10 @@ import quadVS from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
 import { IShaderModuleService } from '../../shader/IShaderModuleService';
-import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
 import { IModel, IModelInitializationOptions } from '../IModel';
 import { PassType } from '../IMultiPassRenderer';
+import { gl } from '../gl';
 import BaseNormalPass from './BaseNormalPass';
 
 // Generate halton sequence

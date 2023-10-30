@@ -54,7 +54,10 @@ function setTextStyle(
   // ctx.textAlign = 'left';
 }
 
-function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
+function populateAlphaChannel(
+  alphaChannel: Uint8ClampedArray,
+  imageData: ImageData,
+) {
   // populate distance value from tinySDF to image alpha channel
   for (let i = 0; i < alphaChannel.length; i++) {
     imageData.data[4 * i + 3] = alphaChannel[i];
@@ -256,33 +259,30 @@ export default class FontService extends EventEmitter implements IFontService {
 
     // 3. layout characters
     if (sdf) {
-      const tinySDF = new TinySDF(
+      const tinySDF = new TinySDF({
         fontSize,
         buffer,
         radius,
         cutoff,
         fontFamily,
         fontWeight,
-      );
+      });
       // used to store distance values from tinySDF
       // tinySDF.size equals `fontSize + buffer * 2`
-      const imageData = ctx.getImageData(0, 0, tinySDF.size, tinySDF.size);
-      for (const char of characterSet) {
-        if (iconfont) {
-          // @ts-ignore
-          // const icon = eval(
-          //   '("' + char.replace('&#x', '\\u').replace(';', '') + '")',
-          // );
 
+      for (const char of characterSet) {
+        let iconData;
+        if (iconfont) {
           const icon = String.fromCharCode(
             parseInt(char.replace('&#x', '').replace(';', ''), 16),
           );
-          const iconData = tinySDF.draw(icon);
-          populateAlphaChannel(iconData, imageData);
+          iconData = tinySDF.draw(icon);
         } else {
-          populateAlphaChannel(tinySDF.draw(char), imageData);
+          iconData = tinySDF.draw(char);
         }
-        // populateAlphaChannel(tinySDF.draw(char), imageData);
+        const { data, width, height } = iconData;
+        const imageData = ctx.getImageData(0, 0, width, height);
+        populateAlphaChannel(data, imageData);
 
         // 考虑到描边，需要保留 sdf 的 buffer，不能像 deck.gl 一样直接减去
         ctx.putImageData(imageData, mapping[char].x, mapping[char].y);

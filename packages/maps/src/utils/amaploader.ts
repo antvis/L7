@@ -25,9 +25,7 @@ let config: IConfig = {
 let Status = {
   AMap: LoadStatus.notload,
 };
-let Callback = {
-  AMap: [],
-};
+
 
 const onloadCBKs: any[] = [];
 // @ts-ignore
@@ -167,9 +165,6 @@ function reset() {
   };
   Status = {
     AMap: LoadStatus.notload,
-  };
-  Callback = {
-    AMap: [],
   };
 }
 export default { load, reset };

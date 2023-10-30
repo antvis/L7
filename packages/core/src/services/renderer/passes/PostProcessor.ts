@@ -2,11 +2,11 @@ import { inject, injectable, postConstruct } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../../types';
 import { ILayer } from '../../layer/ILayerService';
-import { gl } from '../gl';
 import { IFramebuffer } from '../IFramebuffer';
 import { IPostProcessingPass, IPostProcessor } from '../IMultiPassRenderer';
 import { IRendererService } from '../IRendererService';
 import { ITexture2D } from '../ITexture2D';
+import { gl } from '../gl';
 
 /**
  * ported from Three.js EffectComposer

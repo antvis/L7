@@ -10,7 +10,7 @@ const gltfPromiseMap: Record<string, Promise<Group>> = {};
 
 export const getGLTFScene = (() => {
   return (url: string) => {
-    const promise = new Promise<Group>((resolve, reject) => {
+    const promise = new Promise<Group>((resolve) => {
       // 防止 promise 还未完成赋值
       setTimeout(() => {
         const cacheGLTF = gltfSceneMap[url];

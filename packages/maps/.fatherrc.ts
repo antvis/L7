@@ -16,6 +16,12 @@ export default {
         commonjs2:'mapbox-gl',
         amd:'mapbox-gl',
       },
+      "maplibre-gl":{
+        root:'maplibregl',
+        commonjs:'maplibre-gl',
+        commonjs2:'maplibre-gl',
+        amd:'maplibre-gl',
+      },
     },
   },
   platform:'browser',

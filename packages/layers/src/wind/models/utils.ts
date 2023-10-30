@@ -191,6 +191,7 @@ export function bindUnifrom(
   vec: string,
 ) {
   const uniform = gl.getUniformLocation(program, unifromName);
+  // @ts-ignore
   if (uniform === null || uniform < 0) {
     console.warn('无法获取 uniform 变量的存储位置');
   } else {

@@ -27,9 +27,9 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../../typings/index';
 import { Version } from '../../version';
+import Viewport from '../Viewport';
 import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
-import Viewport from '../Viewport';
 import './logo.css';
 import { MapTheme } from './theme';
 const AMapEventMapV1: {

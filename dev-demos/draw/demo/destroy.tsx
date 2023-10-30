@@ -1,4 +1,4 @@
-import { RasterLayer, Scene } from '@antv/l7';
+import { Scene } from '@antv/l7';
 import { DrawPolygon } from '@antv/l7-draw';
 import { Map } from '@antv/l7-maps';
 import { Button, Modal } from 'antd';
@@ -20,27 +20,7 @@ const Demo: React.FC = () => {
     });
     let drawPolygon: DrawPolygon | undefined;
     scene.on('loaded', () => {
-      const url1 =
-        'https://tiles{1-3}.geovisearth.com/base/v1/img/{z}/{x}/{y}?format=webp&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788';
-      const url2 =
-        'https://tiles{1-3}.geovisearth.com/base/v1/cia/{z}/{x}/{y}?format=png&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788';
-      const layer1 = new RasterLayer({
-        zIndex: -10,
-      }).source(url1, {
-        parser: {
-          type: 'rasterTile',
-          tileSize: 256,
-        },
-      });
-
-      const layer2 = new RasterLayer({
-        zIndex: -9,
-      }).source(url2, {
-        parser: {
-          type: 'rasterTile',
-          tileSize: 256,
-        },
-      });
+     
       // 实例化 DrawControl
       drawPolygon = new DrawPolygon(scene, {
         distanceOptions: {},

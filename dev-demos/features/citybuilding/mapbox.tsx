@@ -1,15 +1,15 @@
 // @ts-ignore
 import { CityBuildingLayer, LineLayer, PolygonLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { Mapbox } from '@antv/l7-maps';
+import { MapLibre } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new Mapbox({
-        style: 'dark',
+      map: new MapLibre({
+        style: 'https://api.maptiler.com/maps/satellite/style.json?key=731EwZL6mr4DFzqQkmtW',
         center: [120.145, 30.238915],
         pitch: 60,
         zoom: 13.2,

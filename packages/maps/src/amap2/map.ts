@@ -11,15 +11,15 @@ import {
   IPoint,
   IViewport,
 } from '@antv/l7-core';
-import { amap2Project, DOM } from '@antv/l7-utils';
+import { DOM, amap2Project } from '@antv/l7-utils';
 import { mat4, vec2, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import { Version } from '../version';
-import './logo.css';
 import Viewport from './Viewport';
+import './logo.css';
 const DEFAULTMAPCENTER = [108.92361, 34.54083];
 
 // @ts-ignore

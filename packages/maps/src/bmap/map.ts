@@ -14,8 +14,8 @@ import {
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMapService from '../utils/BaseMapService';
-import { toPaddingOptions } from '../utils/utils';
 import Viewport from '../utils/Viewport';
+import { toPaddingOptions } from '../utils/utils';
 import BMapGLLoader from './bmapglloader';
 import './logo.css';
 
@@ -60,7 +60,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     };
   }
 
-  public handleCameraChanged = (e?: any) => {
+  public handleCameraChanged = () => {
     this.emit('mapchange');
     const map = this.getMap();
     const { lng, lat } = map.getCenter();

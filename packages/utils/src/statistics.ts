@@ -84,7 +84,7 @@ function mode(x: any[]) {
   return value * 1;
 }
 
-export { sum, max, min, mean, mode };
+export { max, mean, min, mode, sum };
 export const statMap: { [key: string]: any } = {
   min,
   max,

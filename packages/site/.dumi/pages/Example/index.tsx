@@ -54,9 +54,9 @@ const Example: React.FC = () => {
 
   const [currentDemo, setCurrentDemo] = useState<Demo>();
 
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [isCollapsed] = useState<boolean>(false);
 
-  const [title, setTitle] = useState<title>({});
+  const [, setTitle] = useState<title>({});
 
   useEffect(() => {
     if (topic && example && demo) {

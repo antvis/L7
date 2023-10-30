@@ -9,11 +9,11 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import {
+  DOM,
   anchorTranslate,
   anchorType,
   applyAnchorClass,
   bindAll,
-  DOM,
   isPC,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';

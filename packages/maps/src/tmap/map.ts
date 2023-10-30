@@ -1,6 +1,5 @@
 import {
   Bounds,
-  ICameraOptions,
   ILngLat,
   IMercator,
   IPoint,
@@ -34,7 +33,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   // @ts-ignore
   protected viewport: IViewport = null;
 
-  public handleCameraChanged = (e?: any) => {
+  public handleCameraChanged = () => {
     // Trigger map change event
     this.emit('mapchange');
     // resync
@@ -175,7 +174,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     this.eventEmitter.off(type, handle);
   }
 
-  public once(type: string, handler: (...args: any[]) => void): void {
+  public once(): void {
     throw new Error('Method not implemented.');
   }
 
@@ -262,7 +261,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     this.map.setZoom(this.getZoom() + 1);
   }
 
-  public zoomOut(option?: any, eventData?: any): void {
+  public zoomOut(): void {
     this.map.setZoom(this.getZoom() - 1);
   }
 
@@ -290,7 +289,6 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
   public setCenter(
     [lng, lat]: [number, number],
-    option?: ICameraOptions,
   ): void {
     this.map.setCenter(new TMap.LatLng(lat, lng));
   }
@@ -454,7 +452,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   }
 
   // Method on earth mode
-  public rotateY?(option: { force?: boolean; reg?: number }): void {
+  public rotateY?(): void {
     throw new Error('Method not implemented.');
   }
 

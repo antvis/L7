@@ -3,9 +3,9 @@ import { lodashUtil } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { IShaderModuleService } from '../../shader/IShaderModuleService';
-import { gl } from '../gl';
 import { IModel } from '../IModel';
 import { IRendererService } from '../IRendererService';
+import { gl } from '../gl';
 const { camelCase, isNil, upperFirst } = lodashUtil;
 
 import quad from '../../../shaders/post-processing/quad.glsl';

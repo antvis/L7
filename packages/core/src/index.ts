@@ -40,18 +40,18 @@ export * from './services/scene/ISceneService';
 export * from './services/shader/IShaderModuleService';
 export * from './services/source/ISourceService';
 export {
+  BasePostProcessingPass,
+  /**
+   * 各个 Service 接口标识符
+   */
+  TYPES,
   container,
-  createSceneContainer,
   createLayerContainer,
+  createSceneContainer,
   /**
    * lazy inject，供各个 Layer 使用
    */
   lazyInject,
   lazyMultiInject,
-  /**
-   * 各个 Service 接口标识符
-   */
-  TYPES,
   packCircleVertex,
-  BasePostProcessingPass,
 };
