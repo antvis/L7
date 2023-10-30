@@ -5,12 +5,21 @@ import SelectControl, {
   ISelectControlOption,
 } from './baseControl/selectControl';
 
+export type LayerSwitchItem = {
+  layer: ILayer;
+  name?: string;
+  img?: string;
+};
+
 export interface ILayerSwitchOption extends ISelectControlOption {
-  layers: Array<ILayer | string>;
+  layers: Array<ILayer | string | LayerSwitchItem>;
 }
 
 export { LayerSwitch };
 
+function isLayerSwitchItem(obj: any): obj is LayerSwitchItem {
+  return obj && obj.layer;
+}
 export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   protected get layers(): ILayer[] {
     const layerService = this.layerService;
@@ -19,7 +28,11 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
       const layerInstances: ILayer[] = [];
       layers.forEach((layer) => {
         if (layer instanceof Object) {
-          layerInstances.push(layer as ILayer);
+          if (isLayerSwitchItem(layer)) {
+            layerInstances.push(layer.layer as ILayer);
+          } else {
+            layerInstances.push(layer as ILayer);
+          }
         }
         if (typeof layer === 'string') {
           const targetLayer =
@@ -54,6 +67,17 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public getLayerOptions(): ControlOptionItem[] {
+    const { layers } = this.controlOption;
+    const isImg = layers?.find((item: any) => !item.img);
+    if (isLayerSwitchItem(layers?.[0])) {
+      return layers.map((layer: any) => {
+        return {
+          text: layer.name || layer.layer.name,
+          value: layer.layer.name,
+          img: !isImg ? layer.img : undefined,
+        };
+      });
+    }
     return this.layers.map((layer: ILayer) => {
       return {
         text: layer.name,
