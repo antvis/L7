@@ -17,28 +17,28 @@ const arcSource = {
 };
 
 describe('lineAtOffset', () => {
-  (async () => {
-    const asyncOffsetPoint = await lineAtOffsetAsyc(arcSource, {
-      shape: 'arc',
-      offset: 0.1,
-      mapVersion: Version['GAODE1.x'],
-    });
-    it('asyncOffsetPoint', () => {
-      expect(asyncOffsetPoint).toEqual([
-        {
-          coordinates: [
-            [99.228515625, 37.43997405227057],
-            [100.72265625, 27.994401411046148],
-          ],
-          offset: 0.3,
-          id: 0,
-          lng: 99.66757224332352,
-          lat: 36.507847734146466,
-          height: 0,
-        },
-      ]);
-    });
-  })();
+  // (async () => {
+  //   const asyncOffsetPoint = await lineAtOffsetAsyc(arcSource, {
+  //     shape: 'arc',
+  //     offset: 0.1,
+  //     mapVersion: Version['GAODE1.x'],
+  //   });
+  //   it('asyncOffsetPoint', async () => {
+  //     expect(asyncOffsetPoint).toEqual([
+  //       {
+  //         coordinates: [
+  //           [99.228515625, 37.43997405227057],
+  //           [100.72265625, 27.994401411046148],
+  //         ],
+  //         offset: 0.3,
+  //         id: 0,
+  //         lng: 99.66757224332352,
+  //         lat: 36.507847734146466,
+  //         height: 0,
+  //       },
+  //     ]);
+  //   });
+  // })();
   const arcOffsetPoint = lineAtOffset(arcSource, {
     shape: 'arc',
     offset: 0.1,

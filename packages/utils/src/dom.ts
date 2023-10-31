@@ -29,7 +29,7 @@ export function splitWords(str: string) {
 }
 
 function testProp(props: string[]): string {
-  const docStyle = window?.document?.documentElement?.style;
+  const docStyle = document?.documentElement?.style;
   if (!docStyle) {
     return props[0];
   }

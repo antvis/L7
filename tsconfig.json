@@ -35,6 +35,16 @@
       "*": ["packages", "typings/*"]
     }
   },
+  "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "esm": true,
+    "compilerOptions": {
+      "target": "es2019",
+      "types": [
+        "node"
+      ]
+    }
+  },
   "include": ["packages"],
   "exclude": ["node_modules", "packages/**/dist","packages/site","packages/leaflet/**",]
 

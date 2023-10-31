@@ -15,7 +15,6 @@ import project from '../../shaders/project.glsl';
 import projection from '../../shaders/projection.glsl';
 import rotation_2d from '../../shaders/rotation_2d.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
-
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
   '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
