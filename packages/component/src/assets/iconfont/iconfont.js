@@ -19,7 +19,7 @@
           t.__iconfont__svg__cssinject__ = !0;
           try {
             document.write(
-              '<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>',
+              '<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>'
             );
           } catch (a) {
             console && console.log(a);
@@ -42,7 +42,7 @@
         }),
           document.addEventListener
             ? ~['complete', 'loaded', 'interactive'].indexOf(
-                document.readyState,
+                document.readyState
               )
               ? setTimeout(o, 0)
               : ((e = function() {

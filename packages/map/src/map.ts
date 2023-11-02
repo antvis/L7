@@ -20,6 +20,21 @@ import { IMapOptions } from './interface';
 import { renderframe } from './util';
 import { PerformanceUtils } from './utils/performance';
 import TaskQueue, { TaskID } from './utils/task_queue';
+
+(function () {
+  if ( typeof window.CustomEvent === "function" ) return false; //If not IE
+
+  function CustomEvent ( event: any, params:any ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    const evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+  // @ts-ignore
+  window.CustomEvent = CustomEvent;
+})();
 type CallBack = (_: number) => void;
 const defaultMinZoom = -2;
 const defaultMaxZoom = 22;
@@ -119,14 +134,14 @@ export class Map extends Camera {
     const fireMoving = !this.moving;
     if (fireMoving) {
       this.stop();
-      this.emit('movestart', new window.Event('movestart', eventData));
-      this.emit('move', new window.Event('move', eventData));
+      this.emit('movestart', new window.CustomEvent('movestart', eventData));
+      this.emit('move', new window.CustomEvent('move', eventData));
     }
 
-    this.emit('resize', new window.Event('resize', eventData));
+    this.emit('resize', new window.CustomEvent('resize', eventData));
 
     if (fireMoving) {
-      this.emit('moveend', new window.Event('moveend', eventData));
+      this.emit('moveend', new window.CustomEvent('moveend', eventData));
     }
 
     return this;
