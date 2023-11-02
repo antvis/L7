@@ -1,6 +1,7 @@
 const version = require('./package.json').version;
 export default {
-  // more father 4 config: https://github.com/umijs/father-next/blob/master/docs/config.md
+  // more father 4 config: 
+
   esm: {
     output:'es'
   },
@@ -12,6 +13,11 @@ export default {
     output:{
       path:'./dist',
       filename:'l7.js',
+      minFile:false
+    },
+    targets:{
+      ie:11
+
     },
     platform:'browser',
     externals:{

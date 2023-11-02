@@ -1,2 +1,2 @@
-const version = '2.17.11';
+const version = process.env.VERSION;
 export { version };
