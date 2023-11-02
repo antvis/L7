@@ -1,8 +1,8 @@
 ### rampColors color ramps
 
-* type type supports \`linear','quantize','custom','cat'
-* colors color array
-* positions data segmentation interval, optional, quantize does not need to set position, position is the original data value
+- type type supports \`linear','quantize','custom','cat'
+- colors color array
+- positions data segmentation interval, optional, quantize does not need to set position, position is the original data value
 
 ⚠️ 2.13 new features
 
@@ -55,17 +55,4 @@ rampColors: {
   colors: ['#f0f9e8','#bae4bc','#7bccc4','#43a2ca','#0868ac'],
   positions [0,200,1000,4000,8000,10000]
 }
-```
-
-Configure the color band of the value range mapping color. The range of the value range is`[0 - 1]`, correspondingly we need to provide each`position`Position sets a color value.
-
-⚠️ colors, positions must be the same length
-
-```javascript
-layer.style({
-  rampColors: {
-    colors: ['#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C'],
-    positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-  },
-});
 ```
