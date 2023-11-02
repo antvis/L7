@@ -57,16 +57,3 @@ rampColors: {
 }
 ```
 
-
-
-配置值域映射颜色的色带，值域的范围为 `[0 - 1]`, 对应的我们需要为每一个 `position` 位置设置一个颜色值。
-
-⚠️ colors, positions 的长度要相同
-
-```javascript
-layer.style({
-  rampColors: {
-    colors: ['#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C'],
-    positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-  },
-});
