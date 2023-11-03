@@ -1,5 +1,4 @@
 import { gl, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
-import { Version } from '@antv/l7-maps';
 
 import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
@@ -42,7 +41,7 @@ export default class SpriteModel extends BaseModel {
       const randomY = radius * Math.random();
       const x = -radius / 2 + randomX;
       const y = -radius / 2 + randomY;
-      if (mapService.version === Version['GAODE2.x']) {
+      if (mapService.version === 'GAODE2.x') {
         // @ts-ignore
         const [a, b] = mapService.lngLatToCoord([x + lng, -y + lat]) as [
           number,

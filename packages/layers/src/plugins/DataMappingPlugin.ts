@@ -12,7 +12,6 @@ import {
   Position,
   TYPES,
 } from '@antv/l7-core';
-import { Version } from '@antv/l7-maps';
 import { lodashUtil, normalize, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -205,7 +204,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
     if (
       mappedData.length > 0 &&
-      this.mapService.version === Version['GAODE2.x']
+      this.mapService.version === 'GAODE2.x'
     ) {
       const layerCenter = layer.coordCenter || layer.getSource().center;
       // 单个的点数据
@@ -214,7 +213,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         // TODO: 避免经纬度被重复计算导致坐标位置偏移
         .filter((d) => !d.originCoordinates)
         .map((d) => {
-          d.version = Version['GAODE2.x'];
+          d.version = 'GAODE2.x';
           // @ts-ignore
           d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
           // @ts-ignore
@@ -228,7 +227,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
   }
 
   private adjustData2SimpleCoordinates(mappedData: IEncodeFeature[]) {
-    if (mappedData.length > 0 && this.mapService.version === Version.SIMPLE) {
+    if (mappedData.length > 0 && this.mapService.version === 'SIMPLE') {
       mappedData.map((d) => {
         if (!d.simpleCoordinate) {
           d.coordinates = this.unProjectCoordinates(d.coordinates);

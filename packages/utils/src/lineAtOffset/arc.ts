@@ -1,5 +1,5 @@
 import { amap2Project, amap2UnProject } from '../geo';
-import { Version } from '../interface/map';
+import { MapType } from '../interface/map';
 import { Point } from './interface';
 // arc
 export function arcLineAtOffset(
@@ -7,7 +7,7 @@ export function arcLineAtOffset(
   target: Point,
   offset: number,
   thetaOffset: number | undefined,
-  mapVersion: Version | undefined,
+  mapVersion: MapType | undefined,
   segmentNumber: number = 30,
   autoFit: boolean,
 ) {
@@ -53,9 +53,9 @@ function interpolate(
   target: Point,
   offset: number,
   thetaOffset: number,
-  mapVersion?: Version,
+  mapVersion?: MapType,
 ) {
-  if (mapVersion === Version['GAODE2.x']) {
+  if (mapVersion === MapType['GAODE2.x']) {
     // amap2
     const sourceFlat = amap2Project(source[0], source[1]);
     const targetFlat = amap2Project(target[0], target[1]);

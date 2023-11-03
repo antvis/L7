@@ -7,7 +7,6 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { Version } from '@antv/l7-maps';
 // import { mat4, vec3 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
@@ -49,7 +48,7 @@ export default class PlaneModel extends BaseModel {
 
       for (let ix = 0; ix < gridX1; ix++) {
         const x = ix * segmentWidth - widthHalf;
-        if (this.mapService.version === Version['GAODE2.x']) {
+        if (this.mapService.version === 'GAODE2.x') {
           // @ts-ignore
           const [a, b] = this.mapService.lngLatToCoord([x + lng, -y + lat]) as [
             number,

@@ -6,7 +6,6 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { Version } from '@antv/l7-maps';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
@@ -89,7 +88,7 @@ export default class OceanModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const v =
-            feature.version === Version['GAODE2.x']
+            feature.version === 'GAODE2.x'
               ? feature.originCoordinates[0][attributeIdx]
               : vertex;
           const [lng, lat] = v;
