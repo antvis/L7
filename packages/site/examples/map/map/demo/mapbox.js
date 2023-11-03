@@ -1,23 +1,21 @@
 import { Scene, PointLayer } from '@antv/l7';
-import { MapLibre } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-maps';
 
 function initMap() {
   const scene = new Scene({
     id: 'map',
-    map: new MapLibre({
+    map: new Mapbox({
       zoom: 10,
-      style: "https://api.maptiler.com/maps/streets/style.json?key=YbCPLULzWdf1NplssEIc", // style URL
       minZoom: 0,
-      maxZoom: 18
+      maxZoom: 18,
+      token:"pk.eyJ1Ijoic2tvcm5vdXMiLCJhIjoiY2s4dDBkNjY1MG13ZTNzcWEyZDYycGkzMyJ9.tjfwvJ8G_VDmXoClOyxufg",
     })
   });
   scene.on('loaded', () => {
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json'
     )
-      .then(res => res.json({
-        autoFit: true
-      }))
+      .then(res => res.json())
       .then(data => {
         const pointLayer = new PointLayer({
           autoFit: true
