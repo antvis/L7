@@ -40,7 +40,7 @@ export default {
     browsers: ['IE 11', 'last 2 versions'],
   },
   define:{
-    'process.env.VERSION': version,
+    'process.env.VERSION': JSON.stringify(version),
   },
 
   extraBabelPresets: [
