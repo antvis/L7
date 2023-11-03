@@ -17,9 +17,9 @@ layer.style({
 
 通用 `style` 参数，所有图形都支持的参数。
 
-| style   | 类型     | 描述         | 默认值 |
-| ------- | -------- | ------------ | ------ |
-| opacity | `number` | 图形的透明度 | `1`    |
+| style   | 类型     | 描述      | 数据映射  | 默认值 |
+| ------- | -------- | ---------|--- | ------ |
+| opacity | `number` | 图形的透明度| 支持 | `1`    |
 
 ### line
 
@@ -29,15 +29,14 @@ layer.style({
 - [支持渐变](/api/line_layer/style#linear)
 - [支持纹理](/api/line_layer/style#texture)
 - [支持虚线](/api/line_layer/style#dash)
-- [支持箭头](/api/line_layer/style#arrow)
 
-| style         | 类型                       | 描述                       | 默认值      |
-| ------------- | -------------------------- | -------------------------- | ----------- |
-| borderColor   | `string`                   | 图形边框颜色               | `#fff`      |
-| borderWidth   | `number`                   | 图形边框半径               | `0`         |
-| blur          | `[number, number, number]` | 图形模糊分布               | `[1, 1, 1]` |
-| raisingHeight | `number`                   | 抬升高度                   | `0`         |
-| heightfixed   | `boolean`                  | 抬升高度是否随 `zoom` 变化 | `false`     |
+| style         | 类型                       | 描述          |支持数据映射             | 默认值      |
+| ------------- | -------------------------- | ---------------|----------- | ----------- |
+| stroke   | `string`                   | 图形边框颜色          |   是  | `#fff`      |
+| strokeWidth   | `number`                   | 图形边框半径      |   否      | `0`         |
+| blur          | `[number, number, number]` | 图形模糊分布        |   否       | `[1, 1, 1]` |
+| raisingHeight | `number`                   | 抬升高度            |    否      | `0`         |
+| heightfixed   | `boolean`                  | 抬升高度是否随 `zoom` 变化 | 否  | `false`     |
 
 ### arc
 
@@ -48,10 +47,11 @@ layer.style({
 - [支持纹理](/api/line_layer/style#texture)
 - [支持虚线](/api/line_layer/style#dash)
 
-| style         | 类型     | 描述                               | 默认值  |
-| ------------- | -------- | ---------------------------------- | ------- |
-| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 | `30`    |
-| thetaOffset   | `number` | 弧线的弧度参数                     | `0.314` |
+| style         | 类型     | 描述             |支持数据映射| 默认值  |
+| ------------- | -------- | -----------------|----------------- | ------- |
+| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 |否| `30`    |
+| opacity | `number` | 透明度，支持数据映射 |是| `1`   |
+| thetaOffset   | `number` | 弧线的弧度参数            |   是   | `0.314` |
 
 ### arc3d
 
@@ -62,9 +62,11 @@ layer.style({
 - [支持纹理](/api/line_layer/style#texture)
 - [支持虚线](/api/line_layer/style#dash)
 
-| style         | 类型     | 描述                               | 默认值 |
-| ------------- | -------- | ---------------------------------- | ------ |
-| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
+| style         | 类型     | 描述                  |支持数据映射             | 默认值 |
+| ------------- | -------- | ---------------------|------------- | ------ |
+| opacity | `number` | 透明度，支持数据映射 |是| `1`   |
+| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大|否 | `30`   |
+| thetaOffset   | `number` | 弧线的弧度参数            |   是   | `1` |
 
 ### greatcircle
 
@@ -75,20 +77,21 @@ layer.style({
 - [支持纹理](/api/line_layer/style#texture)
 - [支持虚线](/api/line_layer/style#dash)
 
-| style         | 类型     | 描述                               | 默认值 |
-| ------------- | -------- | ---------------------------------- | ------ |
-| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大 | `30`   |
+| style         | 类型     | 描述           |      支持数据映射              | 默认值 |
+| ------------- | -------- | ---------------|------------------- | ------ |
+| opacity | `number` | 透明度，支持数据映射 |是| `1`   |
+| segmentNumber | `number` | 弧线分段，分段越多越平滑，消耗越大|否 | `30`   |
 
 ### flowline
 
-| style         | 类型     | 描述                               | 默认值 |
-| ------------- | -------- | ---------------------------------- | ------ |
-| opacity | `number` | 透明度，支持数据映射 | `1`   |
-| strokeOpacity | `number` |描边透明度 | `30`   |
-| stroke | `number` | 弧线分段，分段越多越平滑，消耗越大 | `#000`   |
-| strokeWidth | `number` | 描边宽度 | `1`   |
-| gapWidth | `number` | 不同方向两条线间距 | `2`   |
-| offsets | `[number,number]` | 两端偏移量，支持数据映射 | `[0,0]`   |
+| style         | 类型     | 描述           |支持数据映射                      | 默认值 |
+| ------------- | -------- | -------------|--------------------- | ------ |
+| opacity | `number` | 透明度，支持数据映射 |是| `1`   |
+| strokeOpacity | `number` |描边透明度 |否| `30`   |
+| stroke | `number` | 弧线分段，分段越多越平滑，消耗越大 |是| `#000`   |
+| strokeWidth | `number` | 描边宽度 | `1` |否  |
+| gapWidth | `number` | 不同方向两条线间距 | `2` |否  |
+| offsets | `[number,number]` | 两端偏移量，支持数据映射 |是| `[0,0]`   |
 
 flowline opacity 和 offsets 支持数据映射，数据驱动设置数据大小
 
@@ -130,29 +133,6 @@ layer.style({
 - [simple](/api/line_layer/shape#shapesimple)
 - [支持渐变](/api/line_layer/style#linear)
 
-### arrow
-
-- [line](/api/line_layer/shape#shapeline)
-
-线图层支持配置箭头，箭头有额外的样式。
-
-```js
-layer.style({
-  arrow: {
-    enable: true,
-    arrowWidth: 2,
-    arrowHeight: 3,
-    tailWidth: 1,
-  },
-});
-```
-
-| style       | 类型           | 描述         | 默认值 |
-| ----------- | -------------- | ------------ | ------ |
-| arrow       | `IArrowOption` | 箭头的样式   | `/`    |
-| arrowWidth  | `number`       | 箭头的宽度   | `2`    |
-| arrowHeight | `number`       | 箭头的长度   | `3`    |
-| tailWidth   | `number`       | 箭头尾部宽度 | `1`    |
 
 ### linear
 

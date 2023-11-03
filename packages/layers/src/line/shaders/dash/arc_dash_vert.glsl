@@ -16,8 +16,6 @@ varying float v_distance_ratio;
 
 uniform float u_thetaOffset: 0.314;
 
-uniform float u_opacity: 1.0;
-
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
@@ -72,7 +70,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 }
 
 void main() {
-  v_color = vec4(a_Color.xyz, a_Color.w * u_opacity);
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
   
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点

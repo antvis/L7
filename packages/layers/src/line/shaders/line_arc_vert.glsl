@@ -13,15 +13,12 @@ varying vec4 v_color;
 
 uniform float u_lineDir: 1.0;
 
-uniform float u_thetaOffset: 0.314;
 uniform float u_icon_step: 100;
 uniform float u_line_texture: 0.0;
 attribute vec2 a_iconMapUV;
 varying vec2 v_iconMapUV;
 varying vec4 v_lineData;
 varying vec2 v_distance_ratio;
-
-uniform float u_opacity: 1.0;
 
 
 #pragma include "projection"
@@ -80,6 +77,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 
 void main() {
   v_color = a_Color;
+  v_color.a = v_color.a * opacity;
 
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
@@ -99,8 +97,8 @@ void main() {
 
  v_lineData.b = d_distance_ratio;
 
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, u_thetaOffset), 0.0, 1.0));
-  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, u_thetaOffset), 0.0, 1.0));
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, thetaOffset), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, thetaOffset), 0.0, 1.0));
 
   
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));

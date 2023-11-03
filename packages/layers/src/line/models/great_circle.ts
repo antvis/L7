@@ -23,7 +23,6 @@ export default class GreatCircleModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -52,7 +51,6 @@ export default class GreatCircleModel extends BaseModel {
     }
 
     return {
-      u_opacity: opacity,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
       u_line_type: lineStyleObj[lineType as string] || 0.0,
@@ -68,7 +66,8 @@ export default class GreatCircleModel extends BaseModel {
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
-    };
+      ...this.getStyleAttribute()
+    };  
   }
   public getAnimateUniforms(): IModelUniform {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
@@ -96,6 +95,7 @@ export default class GreatCircleModel extends BaseModel {
       vertexShader: line_arc2d_vert,
       fragmentShader: line_arc_frag,
       triangulation: LineArcTriangulation,
+      inject:this.getInject(),
       depth: { enable: false },
     });
     return [model];

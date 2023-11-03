@@ -34,6 +34,7 @@ import { rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
 import { getCommonStyleAttributeOptions } from './CommonStyleAttribute';
+import { DefaultUniformStyleType, DefaultUniformStyleValue} from './constant'
 
 export type styleSingle =
   | number
@@ -231,25 +232,17 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected getInject(): IInject {
     const encodeStyleAttribute = this.layer.encodeStyleAttribute;
     let str = '';
-    const attrType: { [key: string]: any } = {
-      opacity: 'float',
-      stroke: 'vec4',
-      offsets: 'vec2',
-      textOffset: 'vec2',
-      rotation: 'float',
-      extrusionBase: 'float',
-    };
     this.layer.enableShaderEncodeStyles.forEach((key: string) => {
       if (encodeStyleAttribute[key]) {
         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
       }
       str += `
           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-      attribute ${attrType[key]} a_${
+      attribute ${DefaultUniformStyleType[key]} a_${
         key.charAt(0).toUpperCase() + key.slice(1)
       };
     #else
-      uniform ${attrType[key]} u_${key};
+      uniform ${DefaultUniformStyleType[key]} u_${key};
     #endif\n
     `;
     });
@@ -257,9 +250,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       innerStr += `\n
 #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-  ${attrType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
+  ${DefaultUniformStyleType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
 #else
-  ${attrType[key]} ${key} = u_${key};
+  ${DefaultUniformStyleType[key]} ${key} = u_${key};
 #endif\n
 `;
     });
@@ -274,14 +267,6 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected getStyleAttribute() {
     const options: { [key: string]: any } = {};
     // TODO: 优化
-
-    const defualtValue: { [key: string]: any } = {
-      opacity: 1,
-      stroke: [1, 0, 0, 1],
-      offsets: [0, 0],
-      rotation: 0,
-      extrusionBase: 0,
-    };
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       if (!this.layer.encodeStyleAttribute[key]) {
         // 没有设置样式映射
@@ -289,7 +274,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         const keyValue = this.layer.getLayerConfig()[key];
 
         let value =
-          typeof keyValue === 'undefined' ? defualtValue[key] : keyValue;
+          typeof keyValue === 'undefined' ? DefaultUniformStyleValue[key] : keyValue;
         if (key === 'stroke') {
           value = rgb2arr(value);
         }

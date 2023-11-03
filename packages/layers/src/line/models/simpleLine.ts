@@ -34,8 +34,7 @@ export default class SimpleLineModel extends BaseModel {
     }
 
     return {
-      u_opacity: isNumber(opacity) ? opacity : 1,
-
+    
       // 渐变色支持参数
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
@@ -43,6 +42,7 @@ export default class SimpleLineModel extends BaseModel {
 
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -77,6 +77,7 @@ export default class SimpleLineModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       triangulation: SimpleLineTriangulation,
+      inject:this.getInject(),
       primitive: gl.LINES,
       depth: { enable: false },
 

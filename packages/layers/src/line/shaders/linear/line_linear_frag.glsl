@@ -4,7 +4,6 @@ uniform float u_linearDir: 1.0;
 uniform float u_linearColor: 0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
-uniform float u_opacity: 1.0;
 
 #pragma include "picking"
 

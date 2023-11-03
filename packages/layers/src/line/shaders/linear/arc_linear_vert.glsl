@@ -10,7 +10,6 @@ varying vec4 v_color;
 varying float v_segmentIndex;
 
 uniform float u_lineDir: 1.0;
-uniform float u_opacity: 1.0;
 
 uniform float u_thetaOffset: 0.314;
 uniform vec4 u_sourceColor;
@@ -92,7 +91,7 @@ void main() {
   float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
 
   v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
-  v_color.a *= u_opacity;
+  v_color.a *= opacity;
 
   gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + offset, 0, 1.0));
 
