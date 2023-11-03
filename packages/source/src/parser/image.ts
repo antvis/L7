@@ -39,7 +39,7 @@ function loadData(data: string | string[], done: any) {
   const url = data;
   const imageDatas: Array<HTMLImageElement | ImageBitmap> = [];
   if (typeof url === 'string') {
-    getImage({ url, credentials: 'include' }, (err, img) => {
+    getImage({ url }, (err, img) => {
       if (img) {
         imageDatas.push(img);
         done(imageDatas);
@@ -49,7 +49,7 @@ function loadData(data: string | string[], done: any) {
     const imageCount = url.length;
     let imageindex = 0;
     url.forEach((item) => {
-      getImage({ url: item, credentials: 'include' }, (err, img) => {
+      getImage({ url: item }, (err, img) => {
         imageindex++;
         if (img) {
           imageDatas.push(img);
