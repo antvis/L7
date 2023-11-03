@@ -26,6 +26,7 @@ uniform float u_raisingHeight: 0.0;
 #pragma include "picking"
 
 varying vec4 v_color;
+varying vec4 v_stroke;
 
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 varying vec2 v_iconMapUV;
@@ -95,6 +96,7 @@ void main() {
 
   v_color = a_Color;
   v_color.a *= opacity;
+  v_stroke = stroke;
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
   

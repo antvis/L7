@@ -30,7 +30,6 @@ export default class LinearLineModel extends BaseModel {
 
     return {
       u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
-      u_opacity: isNumber(opacity) ? opacity : 1,
       // 纹理支持参数
       u_texture: this.colorTexture, // 贴图
 
@@ -40,6 +39,7 @@ export default class LinearLineModel extends BaseModel {
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -63,6 +63,7 @@ export default class LinearLineModel extends BaseModel {
       vertexShader: linear_line_vert,
       fragmentShader: linear_line_frag,
       triangulation: LineTriangulation,
+      inject:this.getInject(),
       depth: { enable: depth },
     });
     return [model];

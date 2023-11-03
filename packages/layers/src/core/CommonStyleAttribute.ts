@@ -105,6 +105,25 @@ export function getCommonStyleAttributeOptions(
           },
         },
       };
+      case 'thetaOffset':
+        return {
+          name: 'thetaOffset',
+          type: AttributeType.Attribute,
+          descriptor: {
+            name: 'a_ThetaOffset',
+            buffer: {
+              // give the WebGL driver a hint that this buffer may change
+              usage: gl.STATIC_DRAW,
+              data: [],
+              type: gl.FLOAT,
+            },
+            size: 1,
+            update: (feature: IEncodeFeature) => {
+              const { thetaOffset: op = 1 } = feature;
+              return [op];
+            },
+          },
+        };
     default:
       return undefined;
   }

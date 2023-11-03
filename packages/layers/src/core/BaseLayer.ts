@@ -704,6 +704,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         },
       );
     }
+        // 兼容 borderColor borderWidth
+        // @ts-ignore
+        if(rest.borderColor) {
+           // @ts-ignore
+          rest.stroke = rest.borderColor;
+        }
+        // @ts-ignore
+        if(rest.borderWidth) {
+          // @ts-ignore
+         rest.strokeWidth = rest.borderWidth;
+       }
 
     // 兼容老版本的写法 ['field, 'value']
     const newOption: { [key: string]: any } = rest;
@@ -722,6 +733,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         };
       }
     });
+
+
+  
     this.encodeStyle(newOption);
 
     this.updateLayerConfig(newOption);

@@ -1,8 +1,6 @@
 
 #define Animate 0.0
 #define LineTexture 1.0
-
-uniform float u_opacity;
 uniform float u_textureBlend;
 uniform float u_blur : 0.9;
 uniform float u_line_type: 0.0;
@@ -28,7 +26,6 @@ void main() {
   float animateSpeed = 0.0; // 运动速度
   gl_FragColor = v_color;
   
-  gl_FragColor.a *= u_opacity;
 
   if(u_animate.x == Animate && u_line_texture != LineTexture) {
       animateSpeed = u_time / u_animate.y;
@@ -71,7 +68,7 @@ void main() {
       pattern.a = 0.0;
       gl_FragColor = filterColor(gl_FragColor + pattern);
     } else { // replace
-        pattern.a *= u_opacity;
+        pattern.a *= v_color.a;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
         }

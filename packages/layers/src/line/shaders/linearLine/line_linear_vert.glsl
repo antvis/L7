@@ -14,7 +14,6 @@ uniform mat4 u_ModelMatrix;
 uniform float u_heightfixed: 0.0;
 uniform float u_vertexScale: 1.0;
 uniform float u_raisingHeight: 0.0;
-uniform float u_opacity : 1.0;
 uniform sampler2D u_texture;
 uniform float u_linearDir: 1.0;
 varying vec4 v_Color;
@@ -46,7 +45,7 @@ void main() {
 
   v_Color = texture2D(u_texture, vec2(linearRadio, 0.5));
 
-  v_Color.a *= u_opacity; // 全局透明度
+  v_Color.a *= opacity; // 全局透明度
 
 
 

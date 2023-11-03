@@ -78,6 +78,9 @@ export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
   borderWidth?: number; // 可选参数 线边框宽度
   borderColor?: string; // 可选参数 线边框颜色
 
+  strokeWidth?: number; // 可选参数 线边框宽度
+  storke?: string; // 可选参数 线边框颜色
+
   blur?: [number, number, number]; // 配置线图层的 blur 分布
 
   arrow?: ILineArrow;

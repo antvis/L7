@@ -19,7 +19,6 @@ export default class LineWallModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -44,8 +43,6 @@ export default class LineWallModel extends BaseModel {
 
     return {
       u_heightfixed: Number(heightfixed),
-
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
 
       // 纹理支持参数
@@ -59,6 +56,7 @@ export default class LineWallModel extends BaseModel {
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
+      ...this.getStyleAttribute()
     };
   }
   public getAnimateUniforms(): IModelUniform {
@@ -87,6 +85,7 @@ export default class LineWallModel extends BaseModel {
       vertexShader: line_vert,
       fragmentShader: line_frag,
       triangulation: LineTriangulation,
+      inject: this.getInject(),
       depth: { enable: false },
       blend: this.getBlend(),
     });

@@ -3,7 +3,6 @@
 #define Animate 0.0
 #define LineTexture 1.0
 
-uniform float u_opacity;
 uniform float u_textureBlend;
 uniform float u_blur : 0.9;
 uniform float u_line_type: 0.0;
@@ -32,20 +31,20 @@ varying vec4 v_line_data;
 #pragma include "projection"
 
 void main() {
-  float opacity = u_opacity;
+
   float animateSpeed = 0.0;
   float d_segmentIndex = v_line_data.g;
   
   // 设置弧线的底色
   if(u_linearColor == 1.0) { // 使用渐变颜色
     gl_FragColor = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
+     gl_FragColor.a *= v_color.a;
   } else { // 使用 color 方法传入的颜色
      gl_FragColor = v_color;
   }
 
   // float blur = 1.- smoothstep(u_blur, 1., length(v_normal.xy));
   // float blur = smoothstep(1.0, u_blur, length(v_normal.xy));
-  gl_FragColor.a *= opacity;
   if(u_line_type == LineTypeDash) {
     float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
     if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
@@ -73,7 +72,7 @@ void main() {
     float u = fract(arcRadio * count - animateSpeed * count);
     // float u = fract(arcRadio * count - animateSpeed);
     if(u_animate.x == Animate) {
-      u = gl_FragColor.a/opacity;
+      u = gl_FragColor.a/v_color.a;
     }
 
     float v = v_line_data.a; // 线图层贴图部分的 v 坐标值
@@ -86,7 +85,7 @@ void main() {
       pattern.a = 0.0;
       gl_FragColor = filterColor(gl_FragColor + pattern);
     } else { // replace
-        pattern.a *= opacity;
+        pattern.a *= v_color.a;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
         }

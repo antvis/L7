@@ -40,7 +40,7 @@ export default class ArcModel extends BaseModel {
       lineTexture = false,
       iconStep = 100,
       segmentNumber = 30,
-      thetaOffset = 0.314,
+      // thetaOffset = 0.314,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
     if (dashArray.length === 2) {
@@ -62,16 +62,12 @@ export default class ArcModel extends BaseModel {
     }
 
     return {
-      u_thetaOffset: thetaOffset,
-      // u_thetaOffset:  0.0,
-      u_opacity: isNumber(opacity) ? opacity : 1,
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       segmentNumber,
       u_line_type: lineStyleObj[lineType || 'solid'],
       u_dash_array: dashArray,
       u_blur: 0.9,
       u_lineDir: forward ? 1 : -1,
-
       // 纹理支持参数
       u_texture: this.texture, // 贴图
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
@@ -82,6 +78,7 @@ export default class ArcModel extends BaseModel {
       u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
+      ...this.getStyleAttribute(),
     };
   }
 
@@ -141,6 +138,7 @@ export default class ArcModel extends BaseModel {
       moduleName: 'lineArc2d' + type,
       vertexShader: vert,
       fragmentShader: frag,
+      inject:this.getInject(),
       triangulation: LineArcTriangulation,
       depth: { enable: false },
       segmentNumber,

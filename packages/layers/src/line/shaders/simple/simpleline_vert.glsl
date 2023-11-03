@@ -8,7 +8,6 @@ attribute float a_Distance;
 uniform mat4 u_ModelMatrix;
 
 
-uniform float u_opacity: 1.0;
 uniform float u_vertexScale: 1.0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
@@ -24,7 +23,7 @@ void main() {
 
   v_color = a_Color; 
   v_distanceScale = a_Distance / a_Total_Distance;
-  v_color = vec4(a_Color.xyz, a_Color.w * u_opacity); 
+  v_color.a = v_color.a * opacity;
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 
   float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况
