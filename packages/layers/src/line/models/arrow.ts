@@ -9,11 +9,11 @@ import {
   import BaseModel from '../../core/BaseModel';
   import { IFlowLineStyleOptions } from '../../core/interface';
   import { FlowLineTriangulation } from '../../core/line_trangluation';
-  import flow_line_frag from '../shaders/arrow/flow_line_frag.glsl';
+  import flow_line_frag from '../shaders/arrow/arrow_line_frag.glsl';
   
   // linear simple line shader
   
-  import flow_line_vert from '../shaders/arrow/flow_line_vert.glsl';
+  import flow_line_vert from '../shaders/arrow/arrow_line_vert.glsl';
   export default class FlowLineModel extends BaseModel {
     public getUninforms(): IModelUniform {
       const {
@@ -43,7 +43,7 @@ import {
         fragmentShader: flow_line_frag,
         inject: this.getInject(),
         triangulation: FlowLineTriangulation,
-        styleOption:(this.layer.getLayerConfig()as IFlowLineStyleOptions).arrow || {},
+        styleOption:(this.layer.getLayerConfig()as IFlowLineStyleOptions).symbol,
         primitive: gl.TRIANGLES,
         depth: { enable: false },
   

@@ -157,11 +157,11 @@ export function FlowLineFillTriangulation(feature: IEncodeFeature) {
       ...coord, // 0
       1,
       2,
-      -3,
+      -3,// mapbox 为正
       ...coord, // 1
       1,
       1,
-      -3,
+      -3, // mapbox 为正
       ...coord, // 2
       0,
       1,
@@ -177,11 +177,12 @@ export function FlowLineFillTriangulation(feature: IEncodeFeature) {
       ...coord, // 0
       1,
       2,
-      -3,
+      -3,// mapbox 为正
       ...coord, // 1
       1,
       1,
       -3,
+      // // mapbox 为正
       ...coord, // 2
       0,
       1,

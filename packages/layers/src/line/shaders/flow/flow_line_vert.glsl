@@ -8,6 +8,7 @@ uniform mat4 u_ModelMatrix;
 
 
 #pragma include "projection"
+#pragma include "project"
 #pragma include "picking"
 varying vec4 v_color;
 uniform float u_gap_width: 1.0;
@@ -20,14 +21,14 @@ void main() {
 // 透明度计算
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
-  vec2 flowlineDir = normalize(target - source);
+  vec2 flowlineDir = normalize(ProjectFlat(target) - ProjectFlat(source));
   vec2 perpendicularDir = vec2(-flowlineDir.y, flowlineDir.x);
 
 
   vec2 position = mix(source, target, a_Position.x);
   
   float lengthCommon = length(project_position(vec4(target,0,1)) - project_position(vec4(source,0,1)));  //    
-  vec2 offsetDistances = a_Size.x * project_pixel(a_Position.yz);
+  vec2 offsetDistances = a_Size.x * project_pixel(vec2(a_Position.y,-a_Position.z));
   vec2 limitedOffsetDistances = clamp(   
    offsetDistances,
    project_pixel(-lengthCommon*.8), project_pixel(lengthCommon*.8)
@@ -42,7 +43,7 @@ void main() {
     a_Position.x
   );
 
-  vec2 normalsCommon =  u_stroke_width * project_pixel(a_Normal.xy);
+  vec2 normalsCommon =  u_stroke_width * project_pixel(vec2(a_Normal.x,-a_Normal.y));
 
   float gapCommon =  project_pixel(u_gap_width);
   vec3 offsetCommon = vec3(

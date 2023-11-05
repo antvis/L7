@@ -54,12 +54,6 @@ export default class LineModel extends BaseModel {
       heightfixed = false,
       linearDir = LinearDir.VERTICAL, // 默认纵向
       blur = [1, 1, 1],
-      arrow = {
-        enable: false,
-        arrowWidth: 2,
-        arrowHeight: 3,
-        tailWidth: 1,
-      },
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);

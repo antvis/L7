@@ -76,7 +76,7 @@ export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
 
   blur?: [number, number, number]; // 配置线图层的 blur 分布
 
-  arrow?: ILineArrow;
+  symbol?: ILineSymbol;
 
   rampColors?: IColorRamp;
   featureId?: string;
@@ -295,9 +295,16 @@ export interface IRasterTerrainLayerStyleOptions
   bScaler?: number;
   offset?: number;
 }
-export interface ILineArrow {
-  type:'half' | 'arrow' | 'none';
-  position: 'start' | 'end' | 'both';
+export type ArrowType = 'circle' | 'triangle' | 'rect'  | 'diamond' | 'classic' | 'halfTriangle' | undefined;
+export interface IArrowOptions {
+  type: ArrowType;
+  width?: number;
+  height?: number;
+  radius?: number;
+}
+export interface ILineSymbol {
+  source: ArrowType | IArrowOptions;
+  target: ArrowType | IArrowOptions;
 }
 export interface IFlowLineStyleOptions extends IBaseLayerStyleOptions {
   gapWidth?: number;
@@ -305,7 +312,7 @@ export interface IFlowLineStyleOptions extends IBaseLayerStyleOptions {
   stroke?: string;
   strokeOpacity?: number;
   strokeWidth?: number;
-  arrow?: ILineArrow;
+  symbol?: ILineSymbol;
 }
 
 export interface IStyleEncodeAttributeOptions {

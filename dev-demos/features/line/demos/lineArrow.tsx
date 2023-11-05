@@ -1,14 +1,14 @@
 // @ts-ignore
 import { LineLayer, Scene, PointLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap,Mapbox,Map,BaiduMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      map: new GaodeMap({
+      map: new BaiduMap({
         center: [ 120.15, 30.3 ],
         zoom: 9,
         style: 'dark'
@@ -28,29 +28,32 @@ export default () => {
               coordinates: [
                 
                 [
-                  8.628549054737778, 46.7719996986948
+                  120.1863098144,
+                  30.321915039121
                 ],
                 [
-                  9.36701599748908, 47.365427898323425
-                ],
+                  120.3401184082,
+                  30.321915039121
+                ]
               ]
             }
           }
         ]
       }
       )
-      .size(5)
+      .size(3)
       .shape('arrow')
       .color('#00f')
       .style({
         strokeWidth: 1,
-        stroke: '#fff',  
-        opacity: 1,
-        // arrow: {
-        //   type:'arrow',
-        //   position:'end',
-        // }
-      })
+        stroke: '#f00', 
+        opacity: 0.5,
+        symbol:{
+          source:'circle',
+          target:'rect'
+        }}
+
+      )
       ;
     scene.on('loaded', () => {
       scene.addLayer(lineLayer);

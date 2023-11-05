@@ -33,6 +33,9 @@ uniform mat4 u_Mvp;
 
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
+   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.0
+    return lnglat;
+  }
   float x = lnglat.x;
   return vec2(
     radians(x) + PI,
