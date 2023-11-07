@@ -67,7 +67,7 @@ const L7AMap = new GaodeMap({
   style: 'dark',
   center: [104.288144, 31.239692],
   zoom: 4.4,
-  token: 'xxxx - token',
+  token: 'xxxx - token', // token 是对应高德地图的key
   plugin: [], // 可以不设置
 });
 ```
