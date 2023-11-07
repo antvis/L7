@@ -5,7 +5,7 @@ order: 0
 <embed src="@/docs/common/style.md"></embed>
 ## 使用高德地图
 
-### 注册账号并申请Key
+### 注册账号并申请 Key
 
 1. 首先，[注册开发者账号](https://lbs.amap.com/dev/id/choose)，成为高德开放平台开发者
 
