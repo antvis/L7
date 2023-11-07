@@ -32,6 +32,10 @@ const EventMap: {
 export default class TMapService extends BaseMapService<TMap.Map> {
   // @ts-ignore
   protected viewport: IViewport = null;
+  protected evtCbProxyMap: Map<
+    string,
+    Map<(...args: any) => any, (...args: any) => any>
+  > = new Map();
 
   public handleCameraChanged = () => {
     // Trigger map change event
@@ -123,6 +127,15 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     // Set tencent map canvas element position as absolute
     // @ts-ignore
     this.map.canvasContainer.style.position = 'absolute';
+
+    // Set tencent map control layer dom index
+    // @ts-ignore
+    const controlParentContainer = this.map.controlManager.controlContainer?.parentNode;
+    if (controlParentContainer) {
+      controlParentContainer.style.zIndex = 2;
+    }
+
+
     this.simpleMapCoord.setSize(mapSize);
 
     // May be find an integrated event replacing following events
@@ -131,6 +144,8 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     this.map.on('rotate', this.handleCameraChanged);
     this.map.on('pitch', this.handleCameraChanged);
     this.map.on('zoom', this.handleCameraChanged);
+
+    this.map.on('mousemove', () => console.log('asdasd'));
 
     // Trigger camera change after init
     this.handleCameraChanged();
@@ -148,6 +163,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     const container = this.map.getContainer();
     this.markerContainer = DOM.create('div', 'l7-marker-container', container);
     this.markerContainer.setAttribute('tabindex', '-1');
+    this.markerContainer.style.zIndex = '2';
   }
 
   public getMarkerContainer(): HTMLElement {
@@ -159,19 +175,65 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
+      const onProxy = (eventName: string) => {
+        let cbProxyMap = this.evtCbProxyMap.get(eventName);
+
+        if (!cbProxyMap) {
+          this.evtCbProxyMap.set(eventName, (cbProxyMap = new Map()));
+        }
+
+        if (cbProxyMap.get(handle)) {
+          return;
+        }
+
+        const handleProxy = (...args: any[]) => {
+          if (
+            args[0] &&
+            typeof args[0] === 'object' &&
+            !args[0].lngLat &&
+            !args[0].lnglat
+          ) {
+            args[0].lngLat = args[0].latlng || args[0].latLng;
+          }
+          handle(...args);
+        };
+
+        cbProxyMap.set(handle, handleProxy);
+        this.map.on(eventName, handleProxy);
+      }
+
       if (Array.isArray(EventMap[type])) {
         EventMap[type].forEach((eventName: string) => {
-          this.map.on(eventName || type, handle);
+          onProxy(eventName || type);
         });
       } else {
-        this.map.on(EventMap[type] || type, handle);
+        onProxy(EventMap[type] || type);
       }
     }
   }
 
   public off(type: string, handle: (...args: any[]) => void): void {
-    this.map.off(EventMap[type] || type, handle);
-    this.eventEmitter.off(type, handle);
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.off(type, handle);
+      return;
+    }
+
+    const offProxy = (eventName: string) => {
+      const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
+      if (!handleProxy) {
+        return;
+      }
+      this.evtCbProxyMap.get(eventName)?.delete(handle);
+      this.map.off(eventName, handleProxy);
+    }
+
+    if (Array.isArray(EventMap[type])) {
+      EventMap[type].forEach((eventName: string) => {
+        offProxy(eventName || type);
+      });
+    } else {
+      offProxy(EventMap[type] || type);
+    }
   }
 
   public once(): void {
