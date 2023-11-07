@@ -58,6 +58,7 @@ export default class MapboxService extends BaseMapService<
     } = window.mapboxgl.MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
   }
+
   public getModelMatrix(
     lnglat: [number, number],
     altitude: number,
