@@ -9,7 +9,7 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from '../utils/Viewport';
-import { Version } from '../version';
+import { MapType } from '@antv/l7-utils';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
@@ -17,7 +17,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  */
 @injectable()
 export default class DefaultMapService extends BaseMapService<Map> {
-  public version: string = Version.DEFUALT;
+  public version: string = MapType.DEFAULT;
   /**
    * 将经纬度转成墨卡托坐标
    * @param lnglat
@@ -99,7 +99,7 @@ export default class DefaultMapService extends BaseMapService<Map> {
 
     this.version = version;
     this.simpleMapCoord.setSize(mapSize);
-    if (version === Version.SIMPLE && rest.center) {
+    if (version === 'SIMPLE' && rest.center) {
       rest.center = this.simpleMapCoord.unproject(
         rest.center as [number, number],
       );

@@ -13,7 +13,6 @@ import { EarthMap, Map } from '@antv/l7-map';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseMapService from '../utils/BaseMapService';
-import { Version } from '../version';
 import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;
@@ -48,7 +47,7 @@ export default class L7EarthService
   ): number[] {
     throw new Error('Method not implemented.');
   }
-  public version: string = Version.GLOBEL;
+  public version: string = 'GLOBEL';
   // TODO: 判断地图是否正在拖拽
   public dragging: boolean = false;
   public viewport: Viewport;

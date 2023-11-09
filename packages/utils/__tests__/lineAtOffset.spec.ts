@@ -1,5 +1,5 @@
-import { Version } from '../src/interface/map';
-import { lineAtOffset, lineAtOffsetAsyc } from '../src/lineAtOffset/index';
+import { MapType } from '../src/interface/map';
+import { lineAtOffset } from '../src/lineAtOffset/index';
 const arcSource = {
   inited: true,
   data: {
@@ -42,20 +42,20 @@ describe('lineAtOffset', () => {
   const arcOffsetPoint = lineAtOffset(arcSource, {
     shape: 'arc',
     offset: 0.1,
-    mapVersion: Version['GAODE1.x'],
+    mapVersion: MapType['GAODE1.x'],
   });
 
   const arcOffsetPoint2 = lineAtOffset(arcSource, {
     shape: 'arc',
     offset: 0.1,
-    mapVersion: Version['GAODE2.x'],
+    mapVersion: MapType['GAODE2.x'],
     thetaOffset: 0.314,
   });
 
   const arcOffsetPoint3 = lineAtOffset(arcSource, {
     shape: 'arc',
     offset: 0.1,
-    mapVersion: Version['GAODE2.x'],
+    mapVersion: MapType['GAODE2.x'],
     thetaOffset: 0.314,
     featureId: 0,
   });
@@ -63,19 +63,19 @@ describe('lineAtOffset', () => {
   const greatCircleOffsetPoint = lineAtOffset(arcSource, {
     shape: 'greatcircle',
     offset: 0.1,
-    mapVersion: Version['GAODE1.x'],
+    mapVersion: MapType['GAODE1.x'],
   });
 
   const greatCircleOffsetPoint2 = lineAtOffset(arcSource, {
     shape: 'greatcircle',
     offset: 0.1,
-    mapVersion: Version['GAODE2.x'],
+    mapVersion: MapType['GAODE2.x'],
   });
 
   const lineOffsetPoint = lineAtOffset(arcSource, {
     shape: 'line',
     offset: 0.1,
-    mapVersion: Version['GAODE1.x'],
+    mapVersion: MapType['GAODE1.x'],
   });
 
   it('arcOffsetPoint', () => {

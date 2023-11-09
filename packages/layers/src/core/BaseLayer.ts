@@ -62,7 +62,6 @@ import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
 import { BlendTypes } from '../utils/blend';
-import { calculateData } from '../utils/layerData';
 import {
   createMultiPassRenderer,
   normalizePasses,
@@ -497,44 +496,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
   }
 
-  public createModelData(data: any, option?: ISourceCFG) {
-    if (this.layerModel?.createModelData) {
-      // 在某些特殊图层中单独构建 attribute & elements
-      return this.layerModel.createModelData(option);
-    }
-    const calEncodeData = this.calculateEncodeData(data, option);
-    const triangulation = this.triangulation;
 
-    if (calEncodeData && triangulation) {
-      return this.styleAttributeService.createAttributesAndIndices(
-        calEncodeData,
-        triangulation,
-      );
-    } else {
-      return {
-        attributes: undefined,
-        elements: undefined,
-      };
-    }
-  }
   public setLayerPickService(layerPickService: ILayerPickService): void {
     this.layerPickService = layerPickService;
-  }
-
-  public calculateEncodeData(data: any, option?: ISourceCFG) {
-    if (this.inited) {
-      return calculateData(
-        this,
-        this.fontService,
-        this.mapService,
-        this.styleAttributeService,
-        data,
-        option,
-      );
-    } else {
-      console.warn('layer not inited!');
-      return null;
-    }
   }
   /**
    * Model初始化前需要更新Model样式

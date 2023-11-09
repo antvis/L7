@@ -104,7 +104,6 @@ export interface ILayerModel {
 
   // earth mode
   setEarthTime?(time: number): void;
-  createModelData?(options?: any): any;
 }
 
 export interface ILayerAttributesOption {
