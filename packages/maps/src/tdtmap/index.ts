@@ -1,10 +1,10 @@
 /* eslint-disable */
 import BaseMapWrapper from '../utils/BaseMapWrapper';
-import TMapService from './map';
+import TdtMapService from './map';
 
-export default class TMapWrapper extends BaseMapWrapper<any> {
+export default class TdtMapWrapper extends BaseMapWrapper<any> {
   // @ts-ignore
   protected getServiceConstructor() {
-    return TMapService;
+    return TdtMapService;
   }
 }

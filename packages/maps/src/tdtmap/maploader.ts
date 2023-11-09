@@ -1,21 +1,29 @@
+export const load = (options: any) => {
+  const { tk } = options;
 
-
-
-
-const load = (options: any) => {
-  const { tk = 'b15e548080c79819617367d3f6095c69' } = options;
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.async = false;
     script.src = `https://api.tianditu.gov.cn/api?v=4.0&tk=${tk}`;
-    const parentNode = document.body || document.head;
-    parentNode.appendChild(script);
+
+    // 定义加载脚本完成后的回调函数
+    script.onload = function () {
+      console.log('TianDiTu API script loaded.');
+      // 在这里可以开始使用TianDiTu API
+      resolve(true);
+    };
+
+    script.onerror = function () {
+      console.error('Failed to load TianDiTu API script.');
+      // 处理加载失败的情况
+      resolve(false);
+    };
+
+    // 将脚本元素添加到文档的<head>中
+    document.head.appendChild(script);
   });
 };
 
-const reset = () => {
+export const reset = () => {
   // @ts-ignore
 };
-
-export default { load, reset };

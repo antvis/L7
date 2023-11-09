@@ -26,6 +26,7 @@ import 'reflect-metadata';
 import { Version } from '../version';
 import { ISimpleMapCoord, SimpleMapCoord } from './simpleMapCoord';
 import { MapTheme } from './theme';
+
 const EventMap: {
   [key: string]: any;
 } = {
@@ -65,6 +66,7 @@ export default abstract class BaseMapService<T>
   protected markerContainer: HTMLElement;
   protected cameraChangedCallback: (viewport: IViewport) => void;
   protected $mapContainer: HTMLElement | null;
+
   public setBgColor(color: string) {
     this.bgColor = color;
   }
@@ -79,6 +81,7 @@ export default abstract class BaseMapService<T>
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;
   }
+
   public getOverlayContainer(): HTMLElement | undefined {
     return undefined;
   }
@@ -92,6 +95,7 @@ export default abstract class BaseMapService<T>
       this.map.on(EventMap[type] || type, handle);
     }
   }
+
   public off(type: string, handle: (...args: any[]) => void): void {
     this.map.off(EventMap[type] || type, handle);
     this.eventEmitter.off(type, handle);
@@ -113,6 +117,7 @@ export default abstract class BaseMapService<T>
 
     return [size.width, size.height];
   }
+
   // get mapStatus method
 
   public getType() {
@@ -162,9 +167,11 @@ export default abstract class BaseMapService<T>
   public zoomIn(option?: any, eventData?: any): void {
     this.map.zoomIn(option, eventData);
   }
+
   public zoomOut(option?: any, eventData?: any): void {
     this.map.zoomOut(option, eventData);
   }
+
   public setPitch(pitch: number) {
     return this.map.setPitch(pitch);
   }
@@ -189,6 +196,7 @@ export default abstract class BaseMapService<T>
   public setMinZoom(min: number): void {
     this.map.setMinZoom(min);
   }
+
   public setMapStatus(option: Partial<IStatusOptions>): void {
     if (option.doubleClickZoom === true) {
       this.map.doubleClickZoom.enable();
@@ -254,6 +262,7 @@ export default abstract class BaseMapService<T>
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     return this.map.project(lnglat);
   }
+
   public abstract lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
@@ -298,9 +307,11 @@ export default abstract class BaseMapService<T>
       this.$mapContainer = null;
     }
   }
+
   public emit(name: string, ...args: any[]) {
     this.eventEmitter.emit(name, ...args);
   }
+
   public once(name: string, ...args: any[]) {
     this.eventEmitter.once(name, ...args);
   }
@@ -317,12 +328,14 @@ export default abstract class BaseMapService<T>
         : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
   }
+
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected handleCameraChanged = (e?: any) => {
+    debugger;
     const { lat, lng } = this.map.getCenter();
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
@@ -349,6 +362,7 @@ export default abstract class BaseMapService<T>
     }
     return $wrapper;
   }
+
   public updateView(viewOption: Partial<IMapCamera>) {
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');

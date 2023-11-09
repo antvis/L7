@@ -4,12 +4,15 @@ import {
   Bounds,
   ILngLat,
   IMercator,
+  IPoint,
   IStatusOptions,
   IViewport,
   MapServiceEvent,
+  Point,
 } from '@antv/l7-core';
-import { DOM } from '@antv/l7-utils';
+import { MercatorCoordinate } from '@antv/l7-map';
 import Viewport from '../utils/Viewport';
+import { load } from './maploader';
 
 let mapdivCount: number = 0;
 
@@ -23,7 +26,7 @@ const EventMap: {
 };
 
 export default class TdtMapService extends BaseMapService<any> {
-  protected viewport: IViewport = null;
+  protected viewport: IViewport | null = null;
 
   // init
   public addMarkerContainer(): void {}
@@ -35,6 +38,31 @@ export default class TdtMapService extends BaseMapService<any> {
     return undefined;
   }
 
+  protected handleCameraChanged = (e?: any) => {
+    console.log('mapchange');
+    this.emit('mapchange');
+    const map = this.map;
+    const { lng, lat } = this.map.getCenter();
+    const option = {
+      center: [lng, lat],
+      // @ts-ignore
+      viewportHeight: map.getContainer().clientHeight,
+      // @ts-ignore
+      viewportWidth: map.getContainer().clientWidth,
+      // @ts-ignore
+      bearing: 360,
+      // @ts-ignore
+      pitch: 0,
+      // @ts-ignore
+      zoom: map.getZoom() - 1,
+    };
+    if (this.viewport) {
+      this.viewport.syncWithMapCamera(option as any);
+      this.updateCoordinateSystemService();
+      this.cameraChangedCallback(this.viewport);
+    }
+  };
+
   public async init(): Promise<void> {
     this.viewport = new Viewport();
 
@@ -42,38 +70,57 @@ export default class TdtMapService extends BaseMapService<any> {
       id,
       mapInstance,
       center = [121.30654632240122, 31.25744185633306],
-      token = '',
+      token = 'b15e548080c79819617367d3f6095c69',
       version = '4.0',
-      minZoom = 3,
+      minZoom = 0,
       maxZoom = 18,
-      rotation = 0,
-      pitch = 0,
-      mapSize = 10000,
       logoVisible = true,
+      zoom = 3,
       ...rest
     } = this.config;
 
+    // @ts-ignore
+    if (!window.T) {
+      await load({ tk: token });
+    }
+
     if (mapInstance) {
+      this.map = mapInstance;
       // @ts-ignore
-      if (!(window.T.Map || mapInstance)) {
-      }
+      this.map.centerAndZoom(new window.T.LngLat(center[0], center[1]), zoom);
+      this.$mapContainer = this.map.getContainer();
+      // @ts-ignore
+      const point = new window.T.LngLat(center[0], center[1]);
+      this.map.centerAndZoom(point, zoom);
+      this.setMinZoom(minZoom);
+      this.setMaxZoom(maxZoom);
     } else {
       if (!id) {
         throw Error('No container id specified');
       }
-      const mapContainer = DOM.getContainer(id)!;
+
+      this.$mapContainer = this.creatMapContainer(
+        id as string | HTMLDivElement,
+      );
       // @ts-ignore
-      const map = new window.T.Map(mapContainer, {
-        maxZoom,
+      const map = new T.Map(this.$mapContainer, {
+        // @ts-ignore
+        center: window.T.LngLat(center[0], center[1]),
         minZoom,
-        rotation,
-        pitch,
-        showControl: false,
-        // Tencent use (Lat, Lng) while center is (Lng, Lat)
-        center: new window.T.LatLng(center[0], center[1]),
-        ...rest,
+        maxZoom,
+        zoom,
+        projection: 'EPSG:900913',
       });
+      this.map = map;
     }
+
+    const container = this.map.getContainer();
+    // tdt-pane的zindex是400，去掉
+    const tdtPanes = container.querySelector('.tdt-pane');
+    tdtPanes.style.zIndex = 1;
+    this.handleCameraChanged();
+    this.map.on('move', this.handleCameraChanged, this);
+    this.map.on('moveend', this.handleCameraChanged, this);
   }
 
   public destroy(): void {}
@@ -163,7 +210,7 @@ export default class TdtMapService extends BaseMapService<any> {
   public getMaxZoom(): number {}
 
   public setRotation(rotation: number): void {
-    this.map.setBearing(0);
+    this.map.setBearing(360);
   }
 
   //
@@ -240,11 +287,74 @@ export default class TdtMapService extends BaseMapService<any> {
     return [];
   }
 
+  public meterToCoord(center: [number, number], outer: [number, number]) {
+    const metreDistance = this.getMap().getDistance(
+      new BMapGL.Point(...center),
+      new BMapGL.Point(...outer),
+    );
+
+    const [x1, y1] = this.lngLatToCoord(center);
+    const [x2, y2] = this.lngLatToCoord(outer);
+    const coordDistance = Math.sqrt(
+      Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2),
+    );
+
+    return coordDistance / metreDistance;
+  }
+
+  public pixelToLngLat([x, y]: Point): ILngLat {
+    const lngLat = this.map.layerPointToLngLat({ x, y });
+    return { lng: lngLat.lng, lat: lngLat.lat };
+  }
+
+  public lngLatToPixel([lng, lat]: Point): IPoint {
+    const pixel = this.map.lngLatToLayerPoint({ lng, lat });
+    return {
+      x: pixel.x,
+      y: pixel.y,
+    };
+  }
+
+  public containerToLngLat([x, y]: [number, number]): ILngLat {
+    const point = this.map.containerPointToLngLat({ x, y });
+    return {
+      lng: point.lng,
+      lat: point.lat,
+    };
+  }
+
+  public lngLatToContainer([lng, lat]: [number, number]): IPoint {
+    const overlayPixel = this.map.lngLatToContainerPoint({ lat, lng });
+    return {
+      x: overlayPixel.x,
+      y: overlayPixel.y,
+    };
+  }
+
+  public lngLatToCoord([lng, lat]: [number, number]): [number, number] {
+    const { x, y } = this.getMap().pointToPixel(new BMapGL.Point(lng, lat));
+    return [x, -y];
+  }
+
+  public lngLatToCoords(list: number[][] | number[][][]): any {
+    return list.map((item) =>
+      Array.isArray(item[0])
+        ? this.lngLatToCoords(item as Array<[number, number]>)
+        : this.lngLatToCoord(item as [number, number]),
+    );
+  }
+
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
   ): IMercator {
-    return undefined;
+    // Use built in mercator tools due to Tencent not provided related methods
+    const {
+      x = 0,
+      y = 0,
+      z = 0,
+    } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    return { x, y, z };
   }
 
   public getCustomCoordCenter?(): [number, number] {
@@ -268,31 +378,7 @@ export default class TdtMapService extends BaseMapService<any> {
     return $tdtmapdiv;
   }
 
-  public exportMap() {
-
-  }
+  public exportMap() {}
 
   private hideLogo() {}
-
-  public handleCameraChanged() {
-    this.emit('mapchange');
-    const map = this.map;
-    const { lng, lat } = this.map.getCenter();
-    const option = {
-      center: [lng, lat],
-      // @ts-ignore
-      viewportHeight: map.getContainer().clientHeight,
-      // @ts-ignore
-      viewportWidth: map.getContainer().clientWidth,
-      // @ts-ignore
-      bearing: 0,
-      // @ts-ignore
-      pitch: 0,
-      // @ts-ignore
-      zoom: map.getZoom() - 1,
-    };
-    this.viewport.syncWithMapCamera(option as any);
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback(this.viewport);
-  }
 }
