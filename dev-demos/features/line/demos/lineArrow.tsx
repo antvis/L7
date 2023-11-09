@@ -37,20 +37,40 @@ export default () => {
                 ]
               ]
             }
-          }
+          },
+          // {
+          //   type: 'Feature',
+          //   properties: {},
+          //   geometry: {
+          //     type: 'LineString',
+          //     coordinates: [
+                
+              
+          //       [
+          //         120.3401184082,
+          //         30.321915039121
+          //       ],
+          //       [
+          //         120.1863098144,
+          //         30.321915039121
+          //       ],
+          //     ]
+          //   }
+          // }
         ]
       }
       )
-      .size(3)
+      .size(4)
       .shape('arrow')
       .color('#00f')
       .style({
         strokeWidth: 1,
         stroke: '#f00', 
-        opacity: 0.5,
+        gapWidth: 10,
+        opacity: 1,
         symbol:{
-          source:'circle',
-          target:'rect'
+          source:'classic',
+          target:'classic',
         }}
 
       )

@@ -5,8 +5,10 @@ import earcut from 'earcut';
 export interface IArrowData {
     vertices: number[];
     indices: number[];
+    outLineIndices: number[];
     dimensions: number;
     offset?: number[];
+    normals: number[];
 }
 const maxArrowWidthMap = {
     circle: 2,
@@ -15,20 +17,33 @@ const maxArrowWidthMap = {
     rect: 4,
     classic: 3,
     halfTriangle: 2,
+    'none': 0
 
 }
 export type arrowPosition = -1 | 1;
+const PathHeight = 1 / 2
 export function halfTriangleArrow(dir: arrowPosition, options: IArrowOptions): IArrowData {
-    const { width = 2, height = 2 } = options;
+    const { width = 2, height = 1 } = options;
     return {
         vertices: [
-            0, - (height - 1) * dir,
-            1 * dir * (width), (height + 1) * dir,
-            1 * dir * (width), - (height - 1) * dir,
+            0, PathHeight * dir,
+            1 * dir * (width), -(height + PathHeight) * dir,
+            1 * dir * (width), (height - PathHeight) * dir,
+            0, PathHeight * dir,
+            1 * dir * (width), -(height + PathHeight) * dir,
+            1 * dir * (width), (height - PathHeight) * dir,
         ],
-        indices: [0, 1, 2],
+        indices: [3, 4, 5],
+        outLineIndices: [0, 1, 2],
+        normals: [
+            1 * dir, -1.5 * dir, 1,// y,x
+            -2 * dir, 0 * dir, 1,
+            1 * dir, -0 * dir, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+        ],
         dimensions: 2,
-        offset: [0, 0, 0, 0, 0, 0, 0, 0, 0]
     };
 
 }
@@ -39,10 +54,22 @@ export function triangleArrow(dir: arrowPosition, options: IArrowOptions): IArro
             0, 0,
             1 * dir * width, 1 * height,
             1 * dir * width, -1 * height,
+            0, 0,
+            1 * dir * width, 1 * height,
+            1 * dir * width, -1 * height,
         ],
-        indices: [0, 1, 2],
+        outLineIndices: [0, 1, 2],
+        indices: [3, 4, 5],
+        normals: [
+            0, -1.5 * dir, 1,
+            2, 1 * dir, 1,
+            -2, 1 * dir, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+
+        ],
         dimensions: 2,
-        offset: [0, 0, 0, 0, 0, 0, 0, 0, 0]
     };
 }
 export function rectArrow(dir: arrowPosition, options: IArrowOptions): IArrowData {
@@ -50,15 +77,44 @@ export function rectArrow(dir: arrowPosition, options: IArrowOptions): IArrowDat
     return {
         vertices: [0, height, dir * width * 2, height, dir * width * 2, - height, 0, -height],
         dimensions: 2,
-        indices: [0, 1, 2, 0, 2, 3]
+        indices: [4, 5, 6, 4, 6, 7],
+        outLineIndices: [0, 1, 2, 0, 2, 3],
+        normals: [
+            0, -dir, 1,
+            1, 0, 1,
+            0, -dir, 1,
+            -1, -0, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+        ],
     }
 }
 export function diamondArrow(dir: arrowPosition, options: IArrowOptions): IArrowData {
     const { width = 2, height = 3 } = options;
     return {
-        vertices: [0, 0, 1 * width * dir, 0.5 * height, 2 * width * dir, 0, 1 * width * dir, -0.5 * height],
+        vertices: [
+            0, 0, 1 * width * dir,
+            0.5 * height, 2 * width * dir,
+            0, 1 * width * dir, -0.5 * height,
+            0, 0, 1 * width * dir,
+            0.5 * height, 2 * width * dir,
+            0, 1 * width * dir, -0.5 * height
+        ],
         dimensions: 2,
-        indices: [0, 1, 2, 0, 2, 3]
+        indices: [4, 5, 6, 4, 6, 7],
+        outLineIndices: [0, 1, 2, 0, 2, 3],
+        normals: [
+            0, -dir, 1,
+            1, 0, 1,
+            0, -dir, 1,
+            -1, -0, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+        ],
     }
 }
 export function classicArrow(dir: arrowPosition, options: IArrowOptions): IArrowData {
@@ -69,9 +125,24 @@ export function classicArrow(dir: arrowPosition, options: IArrowOptions): IArrow
             2 * dir * width, 1 * height,
             1.5 * dir * width, 0,
             2 * dir * width, -1 * height,
+            0, 0,
+            2 * dir * width, 1 * height,
+            1.5 * dir * width, 0,
+            2 * dir * width, -1 * height,
         ],
         dimensions: 2,
-        indices: [0, 1, 2, 0, 2, 3]
+        indices: [4, 5, 6, 4, 6, 7],
+        outLineIndices: [0, 1, 2, 0, 2, 3],
+        normals: [
+            0, -dir, 1,
+            1, 0, 1,
+            0, -dir, 1,
+            -1, -0, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
+        ]
     }
 
 }
@@ -81,27 +152,50 @@ export function circleArraw(dir: arrowPosition, options: IArrowOptions): IArrowD
     const path = circle();
     const flattengeo = earcut.flatten([path]);
     const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
+    // @ts-ignore
+    const vertice = path.map((t) => [t[0] * width * dir, t[1] * height]).flat();
     return {
-        // @ts-ignore
-        vertices: path.map((t) => [t[0]*width*dir, t[1]* height]).flat(),
+
+        vertices: [...vertice, ...vertice],
         dimensions: 2,
-        indices: triangles
+        indices: triangles.map(v => v + path.length),
+        outLineIndices: triangles,
+        normals: [
+            ...new Array(path.length * 2).fill(0)
+        ]
     }
 
 }
 
 export function lineArrowPath(coord: number[], indexOffset: number = 0, symbol: ILineSymbol): IArrowData {
-    const sourceType =  typeof symbol['source'] === 'object' ? symbol['source'].type : symbol['source'];
-    const targetType =  typeof symbol['target'] === 'object' ? symbol['target'].type : symbol['target'];
-    const { width: sourceWidth = sourceType ? maxArrowWidthMap[sourceType]:0, height: sourceHeight = 2 } = typeof symbol['source'] === 'object' ? symbol['source'] : {};
-    const { width: targetWidth = targetType ? maxArrowWidthMap[targetType]:0, height: targetHeight = 2 } = typeof symbol['target'] === 'object' ? symbol['target'] : {};
+    const sourceType = typeof symbol['source'] === 'object' ? symbol['source'].type : symbol['source'];
+    const targetType = typeof symbol['target'] === 'object' ? symbol['target'].type : symbol['target'];
+    const { width: sourceWidth = sourceType ? maxArrowWidthMap[sourceType] : 0, height: sourceHeight = 2 } = typeof symbol['source'] === 'object' ? symbol['source'] : {};
+    const { width: targetWidth = targetType ? maxArrowWidthMap[targetType] : 0, height: targetHeight = 2 } = typeof symbol['target'] === 'object' ? symbol['target'] : {};
     return {
         vertices: [
-            0, 1 / 2, 1 * sourceWidth, ...coord,
-            1, 1 / 2, -1 * targetWidth, ...coord,
-            1, -1 / 2, -1 * targetWidth, ...coord,
-            0, -1 / 2, 1 * sourceWidth, ...coord],
-        indices: [0, 1, 2, 0, 2, 3].map((t) => t + indexOffset),
+            0, PathHeight, 1 * sourceWidth, ...coord,
+            1, PathHeight, -1 * targetWidth, ...coord,
+            1, - PathHeight, -1 * targetWidth, ...coord,
+            0, - PathHeight, 1 * sourceWidth, ...coord,
+            0, PathHeight, 1 * sourceWidth, ...coord,
+            1, PathHeight, -1 * targetWidth, ...coord,
+            1, - PathHeight, -1 * targetWidth, ...coord,
+            0, - PathHeight, 1 * sourceWidth, ...coord
+        ],
+        outLineIndices: [0, 1, 2, 0, 2, 3].map((t) => t + indexOffset),
+        indices: [4, 5, 6, 4, 6, 7].map((t) => t + indexOffset),
+        normals: [
+
+            1, -1, 1,
+            1, 1, 1,
+            -1, 0, 1,
+            -1, 0, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+        ],
         dimensions: 2,
 
     }
@@ -129,7 +223,10 @@ export function getSymbol(type: ArrowType | IArrowOptions, position: 'source' | 
             return {
                 vertices: [],
                 indices: [],
+                normals: [],
                 dimensions: 2,
+                outLineIndices: [],
+                outLineNormals: []
             };
 
 

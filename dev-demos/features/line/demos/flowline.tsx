@@ -80,11 +80,12 @@ import {
             }
           }).sort((a:any,b:any) => {
             return a.count - b.count;
-          })
+          }).filter((item:any) => {return item.count>1000});
 
         
           const layer = new LineLayer({
             zIndex: 0,
+            autoFit:true
           })
             .source(oddata, {
               parser: {
@@ -96,7 +97,7 @@ import {
               type: 'quantile',
             })
             .size('count', [0.5, 1, 2,2,2,6,8, 10])
-            .shape('arrow')
+            .shape('flowline')
             .color('count',[
               '#fef6b5',
               '#ffdd9a',
@@ -107,19 +108,20 @@ import {
               '#e15383',
             ])
             .style({
-              arrow:{
-                type:'arrow',
-                position:'end',
+              symbol:{
+                target:'halfTriangle',
+                source:'none',
               },
               opacity: {
                 field: 'count',
                 value: [0.2,0.4,0.6,0.8],
               },
-              gapWidth: 8,
+              // opacity:1,
+              gapWidth: 3,
               offsets:{
                 field: 'count',
                 value:()=>{
-                  return [10, 10]
+                  return [20, 20]
                 }
               },// 支持数据映射
               strokeWidth: 1,

@@ -103,20 +103,29 @@ export function ArrowLineTriangulation(feature: IEncodeFeature, symbolOption?: u
     // @ts-ignore
     const coord = (feature.coordinates as Array<[number, number]>).flat();
     const { target = 'classic', source = 'circle' } = symbolOption as ILineSymbol;
-    const startSymbol = shape2Vertices(getSymbol(source,'source'), coord, 0, 0);
-    const linePath = lineArrowPath(coord, startSymbol.vertices.length / 7,symbolOption as ILineSymbol);
-    const endSymbol = shape2Vertices(getSymbol(target,'target'), coord, 1, startSymbol.vertices.length / 7 + linePath.vertices.length / 7);
+    const startSymbol = shape2Vertices(getSymbol(source, 'source'), coord, 0, 0);
+    const linePath = lineArrowPath(coord, startSymbol.vertices.length / 7, symbolOption as ILineSymbol);
+    const endSymbol = shape2Vertices(getSymbol(target, 'target'), coord, 1, startSymbol.vertices.length / 7 + linePath.vertices.length / 7);
     const data = {
         vertices: [
             ...startSymbol.vertices,
             ...linePath.vertices,
             ...endSymbol.vertices
         ],
-        indices: [...startSymbol.indices, ...linePath.indices, ...endSymbol.indices],
-        normals: new Array((startSymbol.vertices.length + linePath.vertices.length + endSymbol.vertices.length) / 7 * 3).fill(0),
+        indices: [
+            ...startSymbol.outLineIndices,
+            ...linePath.outLineIndices,
+            ...endSymbol.outLineIndices,
+            ...startSymbol.indices, ...linePath.indices, ...endSymbol.indices
+        ],
+        normals: [
+            ...startSymbol.normals,
+            ...linePath.normals,
+            ...endSymbol.normals,
+        ],
         size: 7
     }
-
+    console.log('endSymbol', endSymbol);
     return data
 
 
@@ -124,12 +133,14 @@ export function ArrowLineTriangulation(feature: IEncodeFeature, symbolOption?: u
 // start 0,end 1;
 function shape2Vertices(shape: IArrowData, coord: number[], type: 0 | 1 = 1, indexOffset: number = 0) {
     const shapeVertices: number[] = [];
-    const { vertices, indices, dimensions } = shape;
+    const { vertices, indices, dimensions, outLineIndices } = shape;
     for (let i = 0; i < vertices.length; i += dimensions) {
         shapeVertices.push(type, vertices[i + 1], vertices[i], ...coord);
     }
     return {
+        ...shape,
         vertices: shapeVertices,
         indices: indices.map((i) => i + indexOffset),
+        outLineIndices: outLineIndices.map((i) => i + indexOffset),
     }
 }
