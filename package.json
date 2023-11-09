@@ -49,6 +49,7 @@
     "worker:watch": "cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.worker.js --environment BUILD:development --watch",
     "clean": "lerna run clean --parallel",
     "clear-node-modules": "rimraf node_modules && lerna clean -y",
+    "changelog": "auto-changelog --output CHANGELOG.md",
     "sync": "lerna run sync --parallel"
   },
   "husky": {
@@ -101,6 +102,7 @@
     "@umijs/fabric": "^2.8.1",
     "antd": "^4.12.3",
     "async": "^3.2.4",
+    "auto-changelog": "^2.4.0",
     "babel-jest": "^29.7.0",
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-transform-import-css-l7": "^0.0.6",
