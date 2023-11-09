@@ -161,7 +161,9 @@ export function circleArraw(dir: arrowPosition, options: IArrowOptions): IArrowD
         indices: triangles.map(v => v + path.length),
         outLineIndices: triangles,
         normals: [
-            ...new Array(path.length * 2).fill(0)
+            // @ts-ignore
+            ...path.map((t) => [t[1] * height,t[0] * width * dir,1]).flat(),
+            ...new Array(path.length*3).fill(0)
         ]
     }
 

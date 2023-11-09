@@ -69,8 +69,8 @@ export default () => {
         gapWidth: 10,
         opacity: 1,
         symbol:{
-          source:'classic',
-          target:'classic',
+          source:'circle',
+          target:'circle',
         }}
 
       )
