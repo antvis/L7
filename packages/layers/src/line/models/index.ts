@@ -7,7 +7,6 @@ import LineModel from './line';
 import LinearLine from './linearline';
 import SimpleLineModel from './simpleLine';
 import LineWallModel from './wall';
-import ArrowLine from './arrow'
 
 export type LineModelType = 
   | 'arc'
