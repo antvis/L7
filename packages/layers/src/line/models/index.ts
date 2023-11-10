@@ -14,7 +14,6 @@ export type LineModelType =
   | 'arc3d'
   | 'greatcircle'
   | 'flowline'
-  | 'arrow'
   | 'wall'
   | 'simple'
   | 'line'
@@ -31,7 +30,6 @@ const LineModels: { [key in LineModelType]: any } = {
   linearline: LinearLine,
   earthArc3d: EarthArc3DModel,
   flowline: FlowLineModel,
-  arrow: ArrowLine
 };
 
 export default LineModels;

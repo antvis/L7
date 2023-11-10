@@ -9,7 +9,7 @@ import {
     // @ts-ignore
   } from '@antv/l7';
   // @ts-ignore
-  import { GaodeMap,Map,Mapbox } from '@antv/l7-maps';
+  import { GaodeMap,Map,BaiduMap } from '@antv/l7-maps';
 
   import React, { useEffect } from 'react';
   
@@ -17,7 +17,7 @@ import {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
-        map: new Map({
+        map: new BaiduMap({
           center: [8.654789284720719, 47.412606122294044],
           zoom: 5,
           style: 'dark',
@@ -80,7 +80,7 @@ import {
             }
           }).sort((a:any,b:any) => {
             return a.count - b.count;
-          }).filter((item:any) => {return item.count>1000});
+          });
 
         
           const layer = new LineLayer({
@@ -108,16 +108,16 @@ import {
               '#e15383',
             ])
             .style({
-              symbol:{
-                target:'halfTriangle',
-                source:'none',
-              },
+              // symbol:{
+              //   target:'halfTriangle',
+              //   source:'none',
+              // },
               opacity: {
                 field: 'count',
                 value: [0.2,0.4,0.6,0.8],
               },
               // opacity:1,
-              gapWidth: 3,
+              gapWidth: 1,
               offsets:{
                 field: 'count',
                 value:()=>{

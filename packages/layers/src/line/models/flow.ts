@@ -9,11 +9,11 @@ import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineTriangulation } from '../../core/line_trangluation';
-import flow_line_frag from '../shaders/arrow/arrow_line_frag.glsl';
+import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
 
 // linear simple line shader
 
-import flow_line_vert from '../shaders/arrow/arrow_line_vert.glsl';
+import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
 export default class FlowLineModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const {

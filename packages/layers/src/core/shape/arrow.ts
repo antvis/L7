@@ -14,7 +14,7 @@ const maxArrowWidthMap = {
     circle: 2,
     triangle: 2,
     diamond: 4,
-    rect: 4,
+    rect: 2,
     classic: 3,
     halfTriangle: 2,
     'none': 0
@@ -36,9 +36,9 @@ export function halfTriangleArrow(dir: arrowPosition, options: IArrowOptions): I
         indices: [3, 4, 5],
         outLineIndices: [0, 1, 2],
         normals: [
-            1 * dir, -1.5 * dir, 1,// y,x
-            -2 * dir, 0 * dir, 1,
-            1 * dir, -0 * dir, 1,
+            1 * dir, -2 * dir, 1,// y,x
+            -2 * dir, 1.5 * dir, 1,
+            1 * dir, 1.5 * dir, 1,
             0, 0, 0,
             0, 0, 0,
             0, 0, 0,
@@ -75,7 +75,16 @@ export function triangleArrow(dir: arrowPosition, options: IArrowOptions): IArro
 export function rectArrow(dir: arrowPosition, options: IArrowOptions): IArrowData {
     const { width = 2, height = 2 } = options;
     return {
-        vertices: [0, height, dir * width * 2, height, dir * width * 2, - height, 0, -height],
+        vertices: [
+            0, height / 2,
+            dir * width * 1,height / 2,
+            dir * width * 1, - height / 2,
+            0, -height / 2 ,
+            0, height / 2,
+            dir * width * 1,height / 2, 
+            dir * width * 1, - height / 2,
+            0, -height / 2
+            ],
         dimensions: 2,
         indices: [4, 5, 6, 4, 6, 7],
         outLineIndices: [0, 1, 2, 0, 2, 3],
@@ -162,7 +171,7 @@ export function circleArraw(dir: arrowPosition, options: IArrowOptions): IArrowD
         outLineIndices: triangles,
         normals: [
             // @ts-ignore
-            ...path.map((t) => [t[1] * height,t[0] * width * dir,1]).flat(),
+            ...path.map((t) => [ t[1] * height,t[0] * width * dir,1]).flat(),
             ...new Array(path.length*3).fill(0)
         ]
     }

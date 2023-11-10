@@ -1,5 +1,6 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import { ILineSymbol } from './interface';
+import { FlowLineFillTriangulation } from './triangulation';
 import { getSymbol, lineArrowPath, IArrowData } from './shape/arrow';
 
 // list all arrow shape
@@ -9,7 +10,6 @@ import { getSymbol, lineArrowPath, IArrowData } from './shape/arrow';
 export function FlowHalfArrowFillTriangulation(feature: IEncodeFeature) {
     // @ts-ignore
     const coord = (feature.coordinates as Array<[number, number]>).flat();
-    console.log(coord);
     const tin = 1;
     const tout = 1.0;
     return {
@@ -125,7 +125,6 @@ export function ArrowLineTriangulation(feature: IEncodeFeature, symbolOption?: u
         ],
         size: 7
     }
-    console.log('endSymbol', endSymbol);
     return data
 
 
