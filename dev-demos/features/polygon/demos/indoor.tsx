@@ -14,7 +14,7 @@ import {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
-        map: new Mapbox({
+        map: new GaodeMap({
           style: 'dark',
           center: [120, 29.732983],
           zoom: 6.2,
