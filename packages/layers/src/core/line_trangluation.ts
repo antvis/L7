@@ -1,6 +1,5 @@
 import { IEncodeFeature } from '@antv/l7-core';
 import { ILineSymbol } from './interface';
-import { FlowLineFillTriangulation } from './triangulation';
 import { getSymbol, lineArrowPath, IArrowData } from './shape/arrow';
 
 // list all arrow shape
