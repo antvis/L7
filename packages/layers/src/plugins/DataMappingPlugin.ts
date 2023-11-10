@@ -15,7 +15,6 @@ import {
 import { lodashUtil, normalize, rgb2arr } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { ILineLayerStyleOptions } from '../core/interface';
 const { cloneDeep } = lodashUtil;
 
 @injectable()
@@ -133,12 +132,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
   ): IEncodeFeature[] {
-    const {
-      // TODO 单独的数据处理不应在此处
-      arrow = {
-        enable: false,
-      },
-    } = layer.getLayerConfig() as ILineLayerStyleOptions;
 
     const usedAttributes = attributes
       .filter((attribute) => attribute.scale !== undefined)
@@ -170,19 +163,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
           );
         }
       });
-
-      if (arrow.enable && encodeRecord.shape === 'line') {
-        // 只有在线图层且支持配置箭头的时候进行插入顶点的处理
-        const coords = encodeRecord.coordinates as Position[];
-        // @ts-ignore
-        if (layer.arrowInsertCount < layer.encodeDataLength) {
-          // Tip: arrowInsert 的判断用于确保每一条线数据 arrow 的属性点只会被植入一次
-          const arrowPoint = this.getArrowPoints(coords[0], coords[1]);
-          encodeRecord.coordinates.splice(1, 0, arrowPoint, arrowPoint);
-          // @ts-ignore
-          layer.arrowInsertCount++;
-        }
-      }
       return encodeRecord;
     }) as IEncodeFeature[];
 

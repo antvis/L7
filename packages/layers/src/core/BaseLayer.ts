@@ -1261,7 +1261,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       fragmentShader,
       inject,
       triangulation,
-      segmentNumber,
+      styleOption,
       ...rest
     } = options;
     this.shaderModuleService.registerModule(moduleName, {
@@ -1277,7 +1277,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         this.styleAttributeService.createAttributesAndIndices(
           this.encodedData,
           triangulation,
-          segmentNumber,
+          styleOption,
         );
       const modelOptions = {
         attributes,

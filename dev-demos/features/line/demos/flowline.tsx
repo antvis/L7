@@ -81,12 +81,12 @@ import {
           }).sort((a:any,b:any) => {
             return a.count - b.count;
           })
-
+        console.log(oddata.slice(0,1));
         
           const layer = new LineLayer({
             zIndex: 0,
           })
-            .source(oddata, {
+            .source(oddata.slice(0,1), {
               parser: {
                 type: 'json',
                 coordinates: 'coordinates',
@@ -95,8 +95,9 @@ import {
             .scale('count', {
               type: 'quantile',
             })
-            .size('count', [0.5, 1, 2,2,2,6,8, 10])
-            .shape('flowline') 
+            // .size('count', [0.5, 1, 2,2,2,6,8, 10])
+            .size(2)
+            .shape('arrow') 
             .color('count',[
               '#fef6b5',
               '#ffdd9a',
@@ -112,11 +113,11 @@ import {
               //   values: [0.2,0.4,0.6,0.8],
               // },
               opacity:1.0,
-              gapWidth: 2,
+              // gapWidth: 2,
               // offsets:{
               //   field: 'count',
-              //   values:()=>{
-              //     return [10 + Math.random()*20, 10 + Math.random()*20]
+              //   value:()=>{
+              //     return [10, 10]
               //   }
               // },// 支持数据映射
               strokeWidth: 1,

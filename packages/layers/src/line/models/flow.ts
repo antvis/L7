@@ -24,8 +24,6 @@ export default class FlowLineModel extends BaseModel {
     } = this.layer.getLayerConfig() as IFlowLineStyleOptions;
 
     return {
-      // u_opacity: opacity,
-      // u_offsets: offsets,
       u_gap_width: gapWidth,
       u_stroke_width: strokeWidth,
       u_stroke: rgb2arr(stroke),

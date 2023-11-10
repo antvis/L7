@@ -7,12 +7,14 @@ import LineModel from './line';
 import LinearLine from './linearline';
 import SimpleLineModel from './simpleLine';
 import LineWallModel from './wall';
+import ArrowLine from './arrow'
 
-export type LineModelType =
+export type LineModelType = 
   | 'arc'
   | 'arc3d'
   | 'greatcircle'
   | 'flowline'
+  | 'arrow'
   | 'wall'
   | 'simple'
   | 'line'
@@ -29,6 +31,7 @@ const LineModels: { [key in LineModelType]: any } = {
   linearline: LinearLine,
   earthArc3d: EarthArc3DModel,
   flowline: FlowLineModel,
+  arrow: ArrowLine
 };
 
 export default LineModels;

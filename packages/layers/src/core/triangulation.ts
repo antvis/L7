@@ -521,13 +521,14 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
  */
 export function LineArcTriangulation(
   feature: IEncodeFeature,
-  segmentNumber?: number,
+  styleOption?: unknown,
 ) {
-  const segNum = segmentNumber ? segmentNumber : 30;
+  // @ts-ignore
+  const { segmentNumber = 30 } = styleOption;
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
   const indexArray = [];
-  for (let i = 0; i < segNum; i++) {
+  for (let i = 0; i < segmentNumber; i++) {
     // 上线两个顶点
     // [ x, y, z, sx,sy, tx,ty]
     positions.push(
@@ -547,7 +548,7 @@ export function LineArcTriangulation(
       coordinates[1][1],
     );
 
-    if (i !== segNum - 1) {
+    if (i !== segmentNumber - 1) {
       indexArray.push(
         ...[0, 1, 2, 1, 3, 2].map((v) => {
           return i * 2 + v;
