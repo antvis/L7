@@ -27,6 +27,9 @@ const EventMap: {
 
 export default class TdtMapService extends BaseMapService<any> {
   protected viewport: IViewport | null = null;
+  // @ts-ignore
+  private sceneContainer: HTMLElement;
+  private origin: { x: number; y: number };
 
   // init
   public addMarkerContainer(): void {}
@@ -35,11 +38,30 @@ export default class TdtMapService extends BaseMapService<any> {
   public getMarkerContainer(): HTMLElement {}
 
   public getOverlayContainer(): HTMLElement | undefined {
-    return undefined;
+    const overlayPane = this.map.getPanes()?.overlayPane;
+    const container = document.createElement('div');
+    overlayPane.appendChild(container);
+    const size = this.map.getSize();
+    container.style.width = `${size.x}px`;
+    container.style.height = `${size.y}px`;
+    // @ts-ignore
+    this.sceneContainer = container;
+    return container;
+  }
+
+  private update() {
+    const bounds = this.map.getBounds();
+    const { x, y } = this.map.lngLatToLayerPoint({
+      lng: bounds.getSouthWest().lng,
+      lat: bounds.getNorthEast().lat,
+    });
+
+    this.sceneContainer.style.transform = `translate3d(${x}px, ${y}px, 0px)`;
+
+    this.handleCameraChanged();
   }
 
   protected handleCameraChanged = (e?: any) => {
-    console.log('mapchange');
     this.emit('mapchange');
     const map = this.map;
     const { lng, lat } = this.map.getCenter();
@@ -72,7 +94,7 @@ export default class TdtMapService extends BaseMapService<any> {
       center = [121.30654632240122, 31.25744185633306],
       token = 'b15e548080c79819617367d3f6095c69',
       version = '4.0',
-      minZoom = 0,
+      minZoom = 1,
       maxZoom = 18,
       logoVisible = true,
       zoom = 3,
@@ -119,8 +141,15 @@ export default class TdtMapService extends BaseMapService<any> {
     const tdtPanes = container.querySelector('.tdt-pane');
     tdtPanes.style.zIndex = 1;
     this.handleCameraChanged();
-    this.map.on('move', this.handleCameraChanged, this);
-    this.map.on('moveend', this.handleCameraChanged, this);
+    const bounds = this.map.getBounds();
+    this.origin = this.map.lngLatToLayerPoint({
+      lng: bounds.getSouthWest().lng,
+      lat: bounds.getNorthEast().lat,
+    });
+
+
+
+    this.map.on('move', this.update, this);
   }
 
   public destroy(): void {}
@@ -205,10 +234,6 @@ export default class TdtMapService extends BaseMapService<any> {
     ];
   }
 
-  public getMinZoom(): number {}
-
-  public getMaxZoom(): number {}
-
   public setRotation(rotation: number): void {
     this.map.setBearing(360);
   }
@@ -262,7 +287,7 @@ export default class TdtMapService extends BaseMapService<any> {
     }
 
     if (option.keyboardEnable === false) {
-      this.map.disableKeyboard;
+      this.map.disableKeyboard();
     }
     if (option.keyboardEnable === true) {
       this.map.enableKeyboard();
@@ -378,7 +403,7 @@ export default class TdtMapService extends BaseMapService<any> {
     return $tdtmapdiv;
   }
 
-  public exportMap() {}
-
-  private hideLogo() {}
+  // public exportMap() {}
+  //
+  // private hideLogo() {}
 }

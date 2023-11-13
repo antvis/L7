@@ -48,11 +48,11 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       // @ts-ignore
       viewportWidth: map.getContainer().clientWidth,
       // @ts-ignore
-      bearing: map.getHeading(),
-      // @ts-ignore
-      pitch: map.getPitch(),
-      // @ts-ignore
       zoom: map.getZoom() - 1,
+      bearing: 0,
+      pitch: 0,
+      // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
+      cameraHeight: 0,
     };
 
     this.viewport.syncWithMapCamera(option as any);
