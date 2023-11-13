@@ -208,7 +208,7 @@ export default class DeviceModel implements IModel {
       ...this.options,
       ...options,
     };
-    let {
+    const {
       count = 0,
       instances,
       elements,
