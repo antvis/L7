@@ -32,10 +32,14 @@ export default class TdtMapService extends BaseMapService<any> {
   private origin: { x: number; y: number };
 
   // init
-  public addMarkerContainer(): void {}
+  public addMarkerContainer(): void {
+    return;
+  }
 
   // @ts-ignore
-  public getMarkerContainer(): HTMLElement {}
+  public getMarkerContainer(): HTMLElement {
+    return;
+  }
 
   public getOverlayContainer(): HTMLElement | undefined {
     const overlayPane = this.map.getPanes()?.overlayPane;
@@ -147,12 +151,12 @@ export default class TdtMapService extends BaseMapService<any> {
       lat: bounds.getNorthEast().lat,
     });
 
-
-
     this.map.on('move', this.update, this);
   }
 
-  public destroy(): void {}
+  public destroy(): void {
+    return;
+  }
 
   // MapEvent
   public on(type: string, handle: (...args: any[]) => void): void {
@@ -312,21 +316,6 @@ export default class TdtMapService extends BaseMapService<any> {
     return [];
   }
 
-  public meterToCoord(center: [number, number], outer: [number, number]) {
-    const metreDistance = this.getMap().getDistance(
-      new BMapGL.Point(...center),
-      new BMapGL.Point(...outer),
-    );
-
-    const [x1, y1] = this.lngLatToCoord(center);
-    const [x2, y2] = this.lngLatToCoord(outer);
-    const coordDistance = Math.sqrt(
-      Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2),
-    );
-
-    return coordDistance / metreDistance;
-  }
-
   public pixelToLngLat([x, y]: Point): ILngLat {
     const lngLat = this.map.layerPointToLngLat({ x, y });
     return { lng: lngLat.lng, lat: lngLat.lat };
@@ -357,8 +346,8 @@ export default class TdtMapService extends BaseMapService<any> {
   }
 
   public lngLatToCoord([lng, lat]: [number, number]): [number, number] {
-    const { x, y } = this.getMap().pointToPixel(new BMapGL.Point(lng, lat));
-    return [x, -y];
+    // const { x, y } = this.getMap().pointToPixel(new BMapGL.Point(lng, lat));
+    // return [x, -y];
   }
 
   public lngLatToCoords(list: number[][] | number[][][]): any {
