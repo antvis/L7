@@ -31,7 +31,7 @@ export default class DeviceTexture2D implements ITexture2D {
       format = gl.RGBA,
       wrapS = gl.CLAMP_TO_EDGE,
       wrapT = gl.CLAMP_TO_EDGE,
-      aniso = 0,
+      // aniso = 0,
       alignment = 1,
       // mipmap = false,
       // premultiplyAlpha = false,

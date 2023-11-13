@@ -12,7 +12,7 @@ export default class DeviceFramebuffer implements IFramebuffer {
     options: IFramebufferInitializationOptions,
   ) {
     // TODO: depth
-    const { width, height, depth, color, colors } = options;
+    const { width, height, color } = options;
 
     if (isTexture2D(color)) {
       this.renderTarget = device.createRenderTargetFromTexture(

@@ -16,8 +16,6 @@ import {
   VertexStepMode,
 } from '@antv/g-device-api';
 import {
-  IAttribute,
-  IElements,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
@@ -89,7 +87,6 @@ export default class DeviceModel implements IModel {
         offset = 0,
         stride = 0,
         // TODO: normalized
-        normalized,
         size = 1,
         divisor = 0,
         shaderLocation = 0,
@@ -131,7 +128,7 @@ export default class DeviceModel implements IModel {
   }
 
   private createPipeline(options: IModelInitializationOptions) {
-    const { primitive = gl.TRIANGLES, depth, cull, blend, stencil } = options;
+    const { primitive = gl.TRIANGLES, depth, cull, blend } = options;
 
     const depthParams = this.initDepthDrawParams({ depth });
     const depthEnabled = !!(depthParams && depthParams.enable);
@@ -182,13 +179,15 @@ export default class DeviceModel implements IModel {
   }
 
   updateAttributesAndElements(
-    attributes: { [key: string]: IAttribute },
-    elements: IElements,
+    // attributes: { [key: string]: IAttribute },
+    // elements: IElements,
   ) {
     // TODO: implement
   }
 
-  updateAttributes(attributes: { [key: string]: IAttribute }) {
+  updateAttributes(
+    // attributes: { [key: string]: IAttribute }
+  ) {
     // TODO: implement
     // Object.keys(attributes).forEach((name: string) => {
     //   const attribute = attributes[name] as DeviceAttribute;
@@ -203,7 +202,9 @@ export default class DeviceModel implements IModel {
     };
   }
 
-  draw(options: IModelDrawOptions, pick?: boolean) {
+  draw(options: IModelDrawOptions
+    //  pick?: boolean
+  ) {
     const mergedOptions = {
       ...this.options,
       ...options,
@@ -241,9 +242,9 @@ export default class DeviceModel implements IModel {
       })),
       elements
         ? {
-            buffer: this.indexBuffer,
-            offset: 0, // TODO: use defaule value
-          }
+          buffer: this.indexBuffer,
+          offset: 0, // TODO: use defaule value
+        }
         : null,
     );
     renderPass.setViewport(0, 0, width, height);

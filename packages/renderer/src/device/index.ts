@@ -14,15 +14,12 @@ import {
   IAttributeInitializationOptions,
   IBuffer,
   IBufferInitializationOptions,
-  IClearOptions,
   IElements,
   IElementsInitializationOptions,
   IExtensions,
-  IFramebuffer,
   IFramebufferInitializationOptions,
   IModel,
   IModelInitializationOptions,
-  IReadPixelsOptions,
   IRenderConfig,
   IRendererService,
   ITexture2D,
@@ -64,21 +61,21 @@ export default class DeviceRendererService implements IRendererService {
     // TODO: use antialias from cfg
     const deviceContribution = enableWebGPU
       ? new WebGPUDeviceContribution({
-          shaderCompilerPath,
-        })
+        shaderCompilerPath,
+      })
       : new WebGLDeviceContribution({
-          // Use WebGL2 first and downgrade to WebGL1 if WebGL2 is not supported.
-          targets: ['webgl2', 'webgl1'],
-          onContextLost(e) {
-            console.warn('context lost', e);
-          },
-          onContextCreationError(e) {
-            console.warn('context creation error', e);
-          },
-          onContextRestored(e) {
-            console.warn('context restored', e);
-          },
-        });
+        // Use WebGL2 first and downgrade to WebGL1 if WebGL2 is not supported.
+        targets: ['webgl2', 'webgl1'],
+        onContextLost(e) {
+          console.warn('context lost', e);
+        },
+        onContextCreationError(e) {
+          console.warn('context creation error', e);
+        },
+        onContextRestored(e) {
+          console.warn('context restored', e);
+        },
+      });
 
     const swapChain = await deviceContribution.createSwapChain(canvas);
     swapChain.configureSwapChain(canvas.width, canvas.height);
@@ -172,8 +169,8 @@ export default class DeviceRendererService implements IRendererService {
     new DeviceFramebuffer(this.device, options);
 
   useFramebuffer = (
-    framebuffer: IFramebuffer | null,
-    drawCommands: () => void,
+    // framebuffer: IFramebuffer | null,
+    // drawCommands: () => void,
   ) => {
     // if (framebuffer == null) {
     //   // @ts-ignore
@@ -185,7 +182,9 @@ export default class DeviceRendererService implements IRendererService {
     // drawCommands();
   };
 
-  clear = (options: IClearOptions) => {
+  clear = (
+    // options: IClearOptions
+  ) => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
     // const { color, depth, stencil, framebuffer = null } = options;
     // const reglClearOptions: regl.ClearOptions = {
@@ -202,8 +201,8 @@ export default class DeviceRendererService implements IRendererService {
   };
 
   viewport = ({
-    x,
-    y,
+    // x,
+    // y,
     width,
     height,
   }: {
@@ -226,7 +225,9 @@ export default class DeviceRendererService implements IRendererService {
     // this.gl._refresh();
   };
 
-  readPixels = (options: IReadPixelsOptions) => {
+  readPixels = (
+    // options: IReadPixelsOptions
+  ) => {
     // const { framebuffer, x, y, width, height } = options;
 
     // const readback = this.device.createReadback();
