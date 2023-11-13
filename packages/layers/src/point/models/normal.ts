@@ -31,8 +31,23 @@ export default class NormalModel extends BaseModel {
     const { opacity = 1 } =
       this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
+    const attributes = this.getStyleAttribute();
+
+    // FIXME: No need to update each frame
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...attributes.u_stroke,
+          ...attributes.u_offsets,
+          attributes.u_opacity,
+          attributes.u_rotation,
+        ]).buffer,
+      ),
+    });
+
     return {
-      ...this.getStyleAttribute(),
+      ...attributes,
     };
   }
 
@@ -42,6 +57,12 @@ export default class NormalModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     this.layer.triangulation = PointTriangulation;
+
+    const uniformBuffer = this.rendererService.createBuffer({
+      data: new Float32Array(4 + 2 + 1 + 1),
+      isUBO: true,
+    });
+    this.uniformBuffers.push(uniformBuffer);
 
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointNormal',
@@ -67,6 +88,7 @@ export default class NormalModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: 6,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

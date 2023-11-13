@@ -39,11 +39,11 @@
     "url": "https://github.com/antvis/L7/issues"
   },
   "devDependencies": {
-    "@antv/l7-map": "2.19.10",
-    "@antv/l7-maps": "2.19.10",
-    "@antv/l7-scene": "2.19.10",
-    "gl": "^5.0.3",
-    "regl": "1.6.1"
+    "@antv/l7-map": "2.19.7",
+    "@antv/l7-maps": "2.19.7",
+    "@antv/l7-scene": "2.19.7",
+    "gl": "^6.0.2",
+    "regl": "^1.7.0"
   },
   "homepage": "https://github.com/antvis/L7#readme"
 }

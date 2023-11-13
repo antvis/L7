@@ -40,8 +40,8 @@ import {
   IPass,
   IPickingService,
   IPostProcessingPass,
-  IRendererService,
   IRenderOptions,
+  IRendererService,
   IScale,
   IScaleOptions,
   IShaderModuleService,
@@ -50,12 +50,12 @@ import {
   IStyleAttributeUpdateOptions,
   ITextureService,
   LayerEventType,
-  lazyInject,
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
-  Triangulation,
   TYPES,
+  Triangulation,
+  lazyInject,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
@@ -1055,6 +1055,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.isDestroyed) {
       return;
     }
+
+    // destroy all UBOs
+    this.layerModel.uniformBuffers.forEach((buffer) => {
+      buffer.destroy();
+    });
+
     // remove child layer
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
@@ -1286,6 +1292,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         vs,
         elements,
         blend: BlendTypes[BlendType.normal],
+        uniformBuffers: [
+          ...this.layerModel.uniformBuffers,
+          ...this.rendererService.uniformBuffers,
+        ],
+        textures: this.layerModel.textures,
         ...rest,
       };
       if (count) {
