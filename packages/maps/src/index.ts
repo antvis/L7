@@ -4,6 +4,7 @@ import BaiduMap from './bmap/';
 import Earth from './earth/';
 import Map from './map/';
 import Mapbox from './mapbox/';
+import TdtMap from './tdtmap';
 import TencentMap from './tmap';
 import { Version } from './version';
 export * from './utils';
@@ -17,4 +18,5 @@ export {
   Earth,
   BaiduMap,
   TencentMap,
+  TdtMap,
 };
