@@ -34,8 +34,11 @@ import {
 import { rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
-import { getCommonStyleAttributeOptions } from './CommonStyleAttribute';
 import { DefaultUniformStyleType, DefaultUniformStyleValue } from './constant'
+import {
+  getCommonStyleAttributeOptions,
+  ShaderLocation,
+} from './CommonStyleAttribute';
 
 export type styleSingle =
   | number
@@ -61,11 +64,12 @@ export interface ICellProperty {
   count: number;
 }
 
-const shaderLocationMap: Record<string, number> = {
-  opacity: 4,
-  stroke: 3,
-  offsets: 5,
-  rotation: 6,
+const shaderLocationMap: Record<string, ShaderLocation> = {
+  opacity: ShaderLocation.OPACITY,
+  stroke: ShaderLocation.STROKE,
+  offsets: ShaderLocation.OFFSETS,
+  rotation: ShaderLocation.ROTATION,
+  extrusionBase: ShaderLocation.EXTRUSION_BASE,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -83,4 +83,6 @@ export interface IRendererService {
   setDirty(flag: boolean): void;
   getDirty(): boolean;
   destroy(): void;
+  beginFrame(): void;
+  endFrame(): void;
 }

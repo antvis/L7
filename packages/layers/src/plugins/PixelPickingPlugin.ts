@@ -14,6 +14,7 @@ import {
 } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
+import { ShaderLocation } from '../core/CommonStyleAttribute';
 
 const PickingStage = {
   NONE: 0.0,
@@ -26,12 +27,44 @@ export default class PixelPickingPlugin implements ILayerPlugin {
   public apply(
     layer: ILayer,
     {
+      rendererService,
       styleAttributeService,
     }: {
       rendererService: IRendererService;
       styleAttributeService: IStyleAttributeService;
     },
   ) {
+    // Create a Uniform Buffer Object(UBO).
+    const uniformBuffer = rendererService.createBuffer({
+      // vec4 u_HighlightColor;
+      // vec4 u_SelectColor;
+      // vec3 u_PickingColor;
+      // float u_PickingStage;
+      // vec3 u_CurrentSelectedId;
+      // float u_PickingThreshold;
+      // float u_PickingBuffer;
+      // float u_shaderPick;
+      // float u_EnableSelect;
+      // float u_activeMix;
+      data: new Float32Array([
+        ...[1, 0, 0, 1],
+        ...[1, 0, 0, 1],
+        ...[0, 0, 0],
+        0,
+        ...[0, 0, 0],
+        0,
+        0,
+        0,
+        0,
+        0,
+      ]),
+      isUBO: true,
+    });
+    rendererService.uniformBuffers[1] = uniformBuffer;
+    // u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
+    // // Tip: 当前地图是否在拖动
+    // u_shaderPick: Number(layer.getShaderPickStat()),
+
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
     layer.hooks.init.tapPromise('PixelPickingPlugin', () => {
       const { enablePicking } = layer.getLayerConfig();
@@ -40,6 +73,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_PickingColor',
+          shaderLocation: ShaderLocation.PICKING_COLOR,
           buffer: {
             data: [],
             type: gl.FLOAT,

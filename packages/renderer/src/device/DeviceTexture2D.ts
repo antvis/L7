@@ -1,4 +1,3 @@
-import { gl, ITexture2D, ITexture2DInitializationOptions } from '@antv/l7-core';
 import {
   Device,
   FilterMode,
@@ -8,6 +7,7 @@ import {
   Texture,
   TextureUsage,
 } from '@antv/g-device-api';
+import { ITexture2D, ITexture2DInitializationOptions, gl } from '@antv/l7-core';
 import { wrapModeMap } from './constants';
 
 export function isTexture2D(t: any): t is ITexture2D {
@@ -48,6 +48,10 @@ export default class DeviceTexture2D implements ITexture2D {
     let pixelFormat: Format = Format.U8_RGBA_RT;
     if (type === gl.UNSIGNED_BYTE && format === gl.RGBA) {
       pixelFormat = Format.U8_RGBA_RT;
+    } else if (format === gl.LUMINANCE && type === gl.FLOAT) {
+      pixelFormat = Format.F32_LUMINANCE;
+    } else if (format === gl.LUMINANCE && type === gl.UNSIGNED_BYTE) {
+      pixelFormat = Format.U8_LUMINANCE;
     } else {
       throw new Error(`create texture error, type: ${type}, format: ${format}`);
     }
@@ -81,7 +85,7 @@ export default class DeviceTexture2D implements ITexture2D {
       mipmapFilter: MipmapFilterMode.NO_MIP,
       lodMinClamp: 0,
       lodMaxClamp: 0,
-      maxAnisotropy: aniso,
+      // maxAnisotropy: aniso,
     });
   }
 
@@ -90,7 +94,8 @@ export default class DeviceTexture2D implements ITexture2D {
   }
 
   update(props: any) {
-    // this.texture(props);
+    const { data } = props;
+    this.texture.setImageData([data]);
   }
 
   bind() {

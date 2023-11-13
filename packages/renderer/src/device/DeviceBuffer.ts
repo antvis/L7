@@ -1,7 +1,7 @@
 import { Buffer, BufferUsage, Device } from '@antv/g-device-api';
-import { gl, IBuffer, IBufferInitializationOptions } from '@antv/l7-core';
+import { IBuffer, IBufferInitializationOptions, gl } from '@antv/l7-core';
 import { hintMap, typedArrayCtorMap } from './constants';
-import { isTypedArray, TypedArray } from './utils/typedarray';
+import { TypedArray, isTypedArray } from './utils/typedarray';
 
 /**
  * Use Buffer from @antv/g-device-api
@@ -24,7 +24,7 @@ export default class DeviceBuffer implements IBuffer {
     }
 
     this.type = type;
-    this.size = typed.length;
+    this.size = typed.byteLength;
 
     // @see https://www.npmjs.com/package/@antv/g-device-api#createBuffer
     this.buffer = device.createBuffer({

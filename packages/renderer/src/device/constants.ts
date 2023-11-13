@@ -1,4 +1,3 @@
-import { gl } from '@antv/l7-core';
 import {
   AddressMode,
   BlendFactor,
@@ -9,6 +8,7 @@ import {
   Format,
   PrimitiveTopology,
 } from '@antv/g-device-api';
+import { gl } from '@antv/l7-core';
 import { TypedArray } from './utils/typedarray';
 
 export const typedArrayCtorMap: {

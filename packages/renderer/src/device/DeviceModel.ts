@@ -12,22 +12,22 @@ import {
   InputLayoutBufferDescriptor,
   Program,
   RenderPipeline,
-  RenderTarget,
-  TextureUsage,
   TransparentBlack,
-  TransparentWhite,
   VertexStepMode,
 } from '@antv/g-device-api';
 import {
-  gl,
   IAttribute,
   IElements,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
   IUniform,
+  gl,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
+import DeviceAttribute from './DeviceAttribute';
+import DeviceBuffer from './DeviceBuffer';
+import DeviceElements from './DeviceElements';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -36,9 +36,6 @@ import {
   primitiveMap,
   sizeFormatMap,
 } from './constants';
-import DeviceAttribute from './DeviceAttribute';
-import DeviceBuffer from './DeviceBuffer';
-import DeviceElements from './DeviceElements';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 export default class DeviceModel implements IModel {
@@ -50,7 +47,6 @@ export default class DeviceModel implements IModel {
   private program: Program;
   private inputLayout: InputLayout;
   private pipeline: RenderPipeline;
-  private renderTarget: RenderTarget;
   private indexBuffer: Buffer;
   private vertexBuffers: Buffer[] = [];
   private bindings: Bindings;
@@ -59,20 +55,7 @@ export default class DeviceModel implements IModel {
     private device: Device,
     private options: IModelInitializationOptions,
   ) {
-    const {
-      vs,
-      fs,
-      attributes,
-      uniforms,
-      uniformBuffers,
-      primitive = gl.TRIANGLES,
-      count,
-      elements,
-      depth,
-      cull,
-      blend,
-      stencil,
-    } = options;
+    const { vs, fs, attributes, uniforms, count, elements } = options;
     this.options = options;
 
     const program = device.createProgram({
@@ -84,6 +67,8 @@ export default class DeviceModel implements IModel {
       },
     });
     this.program = program;
+
+    // console.log(vs, fs);
 
     if (uniforms) {
       this.uniforms = this.extractUniforms(uniforms);
@@ -142,6 +127,12 @@ export default class DeviceModel implements IModel {
     });
     this.inputLayout = inputLayout;
 
+    this.pipeline = this.createPipeline(options);
+  }
+
+  private createPipeline(options: IModelInitializationOptions) {
+    const { primitive = gl.TRIANGLES, depth, cull, blend, stencil } = options;
+
     const depthParams = this.initDepthDrawParams({ depth });
     const depthEnabled = !!(depthParams && depthParams.enable);
     const cullParams = this.initCullDrawParams({ cull });
@@ -149,13 +140,12 @@ export default class DeviceModel implements IModel {
     const blendParams = this.getBlendDrawParams({ blend });
     const blendEnabled = !!(blendParams && blendParams.enable);
 
-    this.pipeline = device.createRenderPipeline({
-      inputLayout,
-      program,
+    return this.device.createRenderPipeline({
+      inputLayout: this.inputLayout,
+      program: this.program,
       topology: primitiveMap[primitive],
       colorAttachmentFormats: [Format.U8_RGBA_RT],
-      depthStencilAttachmentFormat:
-        (depthEnabled && Format.D24_S8) || undefined,
+      depthStencilAttachmentFormat: Format.D24_S8,
       megaStateDescriptor: {
         attachmentsState: [
           {
@@ -189,33 +179,6 @@ export default class DeviceModel implements IModel {
         stencilWrite: false,
       },
     });
-
-    if (uniformBuffers) {
-      this.bindings = device.createBindings({
-        pipeline: this.pipeline,
-        uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
-          const buffer = uniformBuffer as DeviceBuffer;
-          return {
-            binding: i,
-            buffer: buffer.get(),
-            size: buffer['size'] * 4,
-          };
-        }),
-        // TODO: Texture
-      });
-    }
-
-    // @ts-ignore
-    const { width, height } = this.device;
-    // TODO: useFramebuffer
-    this.renderTarget = device.createRenderTargetFromTexture(
-      device.createTexture({
-        format: Format.U8_RGBA_RT,
-        width,
-        height,
-        usage: TextureUsage.RENDER_TARGET,
-      }),
-    );
   }
 
   updateAttributesAndElements(
@@ -241,15 +204,18 @@ export default class DeviceModel implements IModel {
   }
 
   draw(options: IModelDrawOptions, pick?: boolean) {
-    const {
+    const mergedOptions = {
+      ...this.options,
+      ...options,
+    };
+    let {
       count = 0,
       instances,
       elements,
       uniforms = {},
-    } = {
-      ...this.options,
-      ...options,
-    };
+      uniformBuffers,
+      textures,
+    } = mergedOptions;
 
     this.uniforms = {
       ...this.uniforms,
@@ -258,21 +224,15 @@ export default class DeviceModel implements IModel {
 
     // @ts-ignore
     const { width, height } = this.device;
+
     // @ts-ignore
-    const onscreenTexture = this.device.swapChain.getOnscreenTexture();
+    // const renderTarget = this.device.currentFramebuffer;
+    // const { onscreen } = renderTarget
 
-    Object.keys(this.uniforms).forEach((name) => {
-      // TODO: Handle texture2d and other non-number uniform.
-      const uniform = this.uniforms[name];
-    });
-    // Compatible to WebGL1.
-    this.program.setUniformsLegacy(this.uniforms);
-
-    const renderPass = this.device.createRenderPass({
-      colorAttachment: [this.renderTarget],
-      colorResolveTo: [onscreenTexture],
-      colorClearColor: [TransparentWhite],
-    });
+    // @ts-ignore
+    const renderPass = this.device.renderPass;
+    // TODO: Recreate pipeline only when blend / cull changed.
+    this.pipeline = this.createPipeline(mergedOptions);
     renderPass.setPipeline(this.pipeline);
     renderPass.setVertexInput(
       this.inputLayout,
@@ -287,17 +247,41 @@ export default class DeviceModel implements IModel {
         : null,
     );
     renderPass.setViewport(0, 0, width, height);
+
+    if (uniformBuffers) {
+      this.bindings = this.device.createBindings({
+        pipeline: this.pipeline,
+        uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
+          const buffer = uniformBuffer as DeviceBuffer;
+          return {
+            binding: i,
+            buffer: buffer.get(),
+            size: buffer['size'],
+          };
+        }),
+        samplerBindings: textures?.map((t: any) => ({
+          texture: t['texture'],
+          sampler: t['sampler'],
+        })),
+      });
+    }
+
     if (this.bindings) {
       renderPass.setBindings(this.bindings);
+      // Compatible to WebGL1.
+      this.program.setUniformsLegacy(this.uniforms);
     }
 
     if (elements) {
-      renderPass.drawIndexed(count, instances);
+      const indexCount = (elements as DeviceElements)['count'];
+      if (indexCount === 0) {
+        renderPass.draw(count, instances);
+      } else {
+        renderPass.drawIndexed(indexCount, instances);
+      }
     } else {
       renderPass.draw(count, instances);
     }
-
-    this.device.submitPass(renderPass);
   }
 
   destroy() {
@@ -307,7 +291,6 @@ export default class DeviceModel implements IModel {
     this.bindings?.destroy();
     this.inputLayout.destroy();
     this.pipeline.destroy();
-    this.renderTarget.destroy();
     this.destroyed = true;
   }
 

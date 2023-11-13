@@ -278,4 +278,7 @@ export default class ReglRendererService implements IRendererService {
     // @ts-ignore
     this.gl = null;
   };
+
+  beginFrame(): void {}
+  endFrame(): void {}
 }

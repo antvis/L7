@@ -5,12 +5,11 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
-const { isNumber } = lodashUtil;
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -88,7 +87,7 @@ export default class NormalModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: 6,
+        shaderLocation: ShaderLocation.MAX,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
