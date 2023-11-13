@@ -39,7 +39,6 @@ import {
   getCommonStyleAttributeOptions,
   ShaderLocation,
 } from './CommonStyleAttribute';
-
 export type styleSingle =
   | number
   | string
@@ -74,7 +73,8 @@ const shaderLocationMap: Record<string, ShaderLocation> = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class BaseModel<ChildLayerStyleOptions = {}>
-  implements ILayerModel {
+  implements ILayerModel
+{
   public triangulation: Triangulation;
   public uniformBuffers: IBuffer[] = [];
   public textures: ITexture2D[] = [];
@@ -258,8 +258,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       }
       str += `
               #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-          layout(location = ${shaderLocationMap[key]}) in ${DefaultUniformStyleType[key]} a_${key.charAt(0).toUpperCase() + key.slice(1)
-        };
+          layout(location = ${shaderLocationMap[key]}) in ${
+        DefaultUniformStyleType[key]
+      } a_${key.charAt(0).toUpperCase() + key.slice(1)};
         #endif\n
         `;
     });
@@ -276,8 +277,9 @@ ${uniforms.join('\n')}
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       innerStr += `\n
     #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-      ${DefaultUniformStyleType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)
-        };
+      ${DefaultUniformStyleType[key]} ${key}  = a_${
+        key.charAt(0).toUpperCase() + key.slice(1)
+      };
     #else
       ${DefaultUniformStyleType[key]} ${key} = u_${key};
     #endif\n
