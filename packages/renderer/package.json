@@ -32,7 +32,7 @@
     "regl": "1.7.0"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.19.7",
+    "@antv/l7-test-utils": "2.19.10",
     "gl": "^6.0.2"
   },
   "publishConfig": {
