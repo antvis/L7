@@ -12,12 +12,6 @@ export enum lineStyleType {
   'dash' = 1.0,
 }
 
-interface ILineArrow {
-  enable: boolean;
-  arrowWidth: number;
-  arrowHeight: number;
-  tailWidth: number;
-}
 
 export enum LinearDir {
   VERTICAL = 'vertical',
@@ -47,7 +41,6 @@ export interface IBaseLayerStyleOptions {
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
 
-  usage?: string;
   color?: string;
   size?: number;
 }
@@ -83,7 +76,7 @@ export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
 
   blur?: [number, number, number]; // 配置线图层的 blur 分布
 
-  arrow?: ILineArrow;
+  symbol?: ILineSymbol;
 
   rampColors?: IColorRamp;
   featureId?: string;
@@ -302,13 +295,24 @@ export interface IRasterTerrainLayerStyleOptions
   bScaler?: number;
   offset?: number;
 }
-
+export type ArrowType = 'circle' | 'triangle' | 'rect'  | 'diamond' | 'classic' | 'halfTriangle' | 'none' ;
+export interface IArrowOptions {
+  type: ArrowType;
+  width?: number;
+  height?: number;
+  radius?: number;
+}
+export interface ILineSymbol {
+  source: ArrowType | IArrowOptions;
+  target: ArrowType | IArrowOptions;
+}
 export interface IFlowLineStyleOptions extends IBaseLayerStyleOptions {
   gapWidth?: number;
   offsets?: [number, number];
   stroke?: string;
   strokeOpacity?: number;
   strokeWidth?: number;
+  symbol?: ILineSymbol;
 }
 
 export interface IStyleEncodeAttributeOptions {

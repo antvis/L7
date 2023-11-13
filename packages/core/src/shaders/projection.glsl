@@ -33,6 +33,9 @@ uniform mat4 u_Mvp;
 
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
+   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.0
+    return lnglat;
+  }
   float x = lnglat.x;
   return vec2(
     radians(x) + PI,
@@ -132,6 +135,8 @@ vec2 project_pixel_size_to_clipspace(vec2 pixels) {
   vec2 offset = pixels / u_ViewportSize * u_DevicePixelRatio * 2.0;
   return offset * u_FocalDistance;
 }
+
+
 
 float project_pixel_allmap(float pixel) {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT) {

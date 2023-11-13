@@ -46,6 +46,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       tileLine: {},
       earthArc3d: {},
       flowline: {},
+      arrow:{}
     };
     return defaultConfig[type];
   }

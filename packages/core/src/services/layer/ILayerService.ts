@@ -81,7 +81,7 @@ export interface ILayerModelInitializationOptions {
   vertexShader: string;
   fragmentShader: string;
   triangulation: Triangulation;
-  segmentNumber?: number;
+  styleOption?: unknown,
   workerEnabled?: boolean;
   workerOptions?: IWorkerOption;
 }
@@ -639,7 +639,6 @@ export interface ILayerConfig {
   cursorEnabled?: boolean;
   cursor?: string;
   forward: boolean; // 正方向
-  usage?: string; // 指定图层的使用类型 - 用户地图底图绘制的优化
   enableMask: boolean;
   /**
    * 开启拾取

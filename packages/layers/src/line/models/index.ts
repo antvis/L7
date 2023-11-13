@@ -8,7 +8,7 @@ import LinearLine from './linearline';
 import SimpleLineModel from './simpleLine';
 import LineWallModel from './wall';
 
-export type LineModelType =
+export type LineModelType = 
   | 'arc'
   | 'arc3d'
   | 'greatcircle'
