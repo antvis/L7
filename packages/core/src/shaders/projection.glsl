@@ -113,7 +113,6 @@ vec4 project_position(vec4 position) {
       position.w
     );
   }
-
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
     return vec4(
       (project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale - vec2(215440491., 106744817.)) * vec2(1., -1.),
@@ -123,15 +122,7 @@ vec4 project_position(vec4 position) {
   }
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // return vec4(
-    //   (position.xy * WORLD_SCALE * u_ZoomScale) * vec2(1., -1.), 
-    //   project_scale(position.z), 
-    //   position.w);
-
-     return vec4(
-      position.xy, 
-      project_scale(position.z), 
-      position.w);
+   return position;
   }
   return position;
 
