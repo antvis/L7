@@ -56,8 +56,6 @@ export default class DeviceRendererService implements IRendererService {
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
 
-    console.log(cfg);
-
     // this.$container = $container;
     this.canvas = canvas;
 
@@ -143,7 +141,6 @@ export default class DeviceRendererService implements IRendererService {
   getPointSizeRange() {
     // @ts-ignore
     const gl = this.device['gl'];
-    console.log(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE));
     // FIXME: implement this method in Device API.
     return gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
   }

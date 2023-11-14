@@ -39,6 +39,13 @@ scene.on("loaded", () => {
       opacity: 1,
       strokeWidth: 1,
     });
+  setTimeout(() => {
+    pointLayer.style({
+      opacity: 0.5,
+    })
+    scene.render();
+
+  }, 1000);
   scene.addLayer(pointLayer);
 });
 }, []);
