@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IInteractionTarget,
   ILayer,
@@ -141,7 +142,6 @@ export class TilePickService implements ITilePickService {
   }
 
   // Tip: for interface define
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public pickRasterLayer(
     layer: ILayer,
     target: IInteractionTarget,

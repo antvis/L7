@@ -15,7 +15,9 @@ export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       opacity = 1,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       offsets = [0, 0],
       raisingHeight = 0,
       heightfixed = false,

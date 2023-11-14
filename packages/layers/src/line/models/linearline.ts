@@ -6,17 +6,17 @@ import {
   IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp, lodashUtil } from '@antv/l7-utils';
+import { generateColorRamp, IColorRamp } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ILineLayerStyleOptions, LinearDir } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import linear_line_frag from '../shaders/linearLine/line_linear_frag.glsl';
 import linear_line_vert from '../shaders/linearLine/line_linear_vert.glsl';
-const { isNumber } = lodashUtil;
 export default class LinearLineModel extends BaseModel {
   protected colorTexture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       opacity = 1,
       vertexHeightScale = 20.0,
       raisingHeight = 0,

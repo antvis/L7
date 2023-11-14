@@ -181,7 +181,9 @@ export function circleArraw(dir: arrowPosition, options: IArrowOptions): IArrowD
 export function lineArrowPath(coord: number[], indexOffset: number = 0, symbol: ILineSymbol): IArrowData {
     const sourceType = typeof symbol['source'] === 'object' ? symbol['source'].type : symbol['source'];
     const targetType = typeof symbol['target'] === 'object' ? symbol['target'].type : symbol['target'];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { width: sourceWidth = sourceType ? maxArrowWidthMap[sourceType] : 0, height: sourceHeight = 2 } = typeof symbol['source'] === 'object' ? symbol['source'] : {};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { width: targetWidth = targetType ? maxArrowWidthMap[targetType] : 0, height: targetHeight = 2 } = typeof symbol['target'] === 'object' ? symbol['target'] : {};
     return {
         vertices: [

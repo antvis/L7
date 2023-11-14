@@ -5,12 +5,11 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
-const { isNumber } = lodashUtil;
+
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -28,6 +27,7 @@ export default class NormalModel extends BaseModel {
     };
   }
   public getUninforms(): IModelUniform {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { opacity = 1 } =
       this.layer.getLayerConfig() as IPointLayerStyleOptions;
 

@@ -20,6 +20,7 @@ const globalDefaultprecision =
   '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
 const includeRegExp = /#pragma include (["^+"]?["[a-zA-Z_0-9](.*)"]*?)/g;
 const REGEX_START_OF_MAIN = /void\s+main\s*\([^)]*\)\s*\{\n?/; // Beginning of main
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const REGEX_END_OF_MAIN = /}\n?[^{}]*$/; // End of main, assumes main is last function
 @injectable()
 export default class ShaderModuleService implements IShaderModuleService {

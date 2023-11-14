@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 /**
  * WebGL 枚举值
  * @see http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14
