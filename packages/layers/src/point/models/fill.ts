@@ -41,7 +41,6 @@ export default class FillModel extends BaseModel {
     };
 
     const attributes = this.getStyleAttribute();
-    console.log('attributes',attributes,commonIniform)
     this.uniformBuffers[0].subData({
       offset:0,
       data: new Uint8Array(
@@ -54,18 +53,18 @@ export default class FillModel extends BaseModel {
       ),
     });
    
-    this.uniformBuffers[1].subData({
-      offset:0,
-      data: new Uint8Array(
-        new Float32Array([
-          ...commonIniform.u_blur_height_fixed,
-          commonIniform.u_stroke_width,
-          commonIniform.u_stroke_opacity,
-          commonIniform.u_additive,
-          commonIniform.u_size_unit,
-        ]).buffer,
-      ),
-    })
+    // this.uniformBuffers[1].subData({
+    //   offset:0,
+    //   data: new Uint8Array(
+    //     new Float32Array([
+    //       ...commonIniform.u_blur_height_fixed,
+    //       commonIniform.u_stroke_width,
+    //       commonIniform.u_stroke_opacity,
+    //       commonIniform.u_additive,
+    //       commonIniform.u_size_unit,
+    //     ]).buffer,
+    //   ),
+    // })
     return commonIniform;
    
   }
@@ -106,13 +105,13 @@ export default class FillModel extends BaseModel {
       isUBO: true,
     });
 
-    const commonUniforms = this.rendererService.createBuffer({
-      data: new Float32Array(3 + 4),
-      isUBO: true,
-    });
+    // const commonUniforms = this.rendererService.createBuffer({
+    //   data: new Float32Array(3 + 4),
+    //   isUBO: true,
+    // });
 
 
-    this.uniformBuffers.push(attributeUniformBuffer,commonUniforms);
+    this.uniformBuffers.push(attributeUniformBuffer);
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -201,7 +200,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.MAX,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

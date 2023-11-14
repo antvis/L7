@@ -250,6 +250,7 @@ export default class DeviceModel implements IModel {
     renderPass.setViewport(0, 0, width, height);
 
     if (uniformBuffers) {
+      console.log('uniformBuffers', uniformBuffers);
       this.bindings = this.device.createBindings({
         pipeline: this.pipeline,
         uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {

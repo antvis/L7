@@ -10,7 +10,7 @@ export default () => {
       id: 'map',
       renderer: 'device',
       map: new GaodeMap({
-        style: 'blank',
+        // style: 'blank',
         center: [120.099658370018, 30.263445807542666],
         pitch: 0,
         zoom: 11,
@@ -40,7 +40,11 @@ export default () => {
             .shape('dot')
             .color('#f00')
             .style({
-              opacity: 1,
+              sizeScale:0.5,
+              opacity: 0.6,
+              stroke:'#00f',
+      
+              
             });
 
           scene.addLayer(pointLayer);

@@ -251,6 +251,8 @@ export interface IModelDrawOptions {
   };
   elements?: IElements;
 
+  uniformBuffers: IBuffer[];
+
   blend?: Partial<IBlendOptions>;
 
   stencil?: Partial<IStencilOptions>;

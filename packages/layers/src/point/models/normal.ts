@@ -28,7 +28,6 @@ export default class NormalModel extends BaseModel {
   }
   public getUninforms(): IModelUniform {
     const attributes = this.getStyleAttribute();
-
     // FIXME: No need to update each frame
     this.uniformBuffers[0].subData({
       offset: 0,
@@ -42,7 +41,17 @@ export default class NormalModel extends BaseModel {
       ),
     });
 
+    // this.uniformBuffers[1].subData({
+    //   offset: 0,
+    //   data: new Uint8Array(
+    //     new Float32Array([0.5
+    //     ]).buffer,
+    //   )
+    // });
+
+
     return {
+      u_size_scale: 0.5,
       ...attributes,
     };
   }
@@ -58,7 +67,13 @@ export default class NormalModel extends BaseModel {
       data: new Float32Array(4 + 2 + 1 + 1),
       isUBO: true,
     });
-    this.uniformBuffers.push(uniformBuffer);
+
+    const commonBuffer = this.rendererService.createBuffer({
+      data: new Float32Array([0.5]),
+      isUBO: true,
+    });
+
+    this.uniformBuffers.push(uniformBuffer,commonBuffer);
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointNormal',
       vertexShader: normalVert,
@@ -83,7 +98,7 @@ export default class NormalModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.MAX,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
