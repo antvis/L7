@@ -7,6 +7,7 @@ export default () => {
     useEffect( () => {
 const scene = new Scene({
   id: "map",
+  renderer: 'device',
   map: new GaodeMap({
     style: "light",
     center: [120.099658370018, 30.263445807542666],
@@ -18,12 +19,12 @@ scene.on("loaded", () => {
   const circle = turf.circle([120.099658370018, 30.263445807542666],size/1000,{
      steps: 60, units: 'kilometers'
   });
-const player = new PolygonLayer().source(turf.featureCollection([circle]))
-.shape('fill')
-.color('blue')
-.style({
-  opacity:0.5
-})
+// const player = new PolygonLayer().source(turf.featureCollection([circle]))
+// .shape('fill')
+// .color('blue')
+// .style({
+//   opacity:0.5
+// })
   const pointLayer = new PointLayer({
     autoFit: false
   })
@@ -39,18 +40,19 @@ const player = new PolygonLayer().source(turf.featureCollection([circle]))
           }
         }
       ]
-    })
-    .shape("triangle")
-    .size(size)
+    })  
+    .shape("circle")
+    .size(100)
     .color("#ff0000")
-    .active(true)
+    // .animate(true)
+    // .active(true)
     .style({
       opacity: 1,
       strokeWidth: 1,
-      rotation: 30,
-      unit:'meter'
+      // rotation: 30,
+      // unit:'meter'
     });
-  scene.addLayer(player);
+  // scene.addLayer(player);
   scene.addLayer(pointLayer);
 });
 }, []);

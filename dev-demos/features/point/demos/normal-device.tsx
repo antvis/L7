@@ -10,34 +10,41 @@ export default () => {
       id: 'map',
       renderer: 'device',
       map: new GaodeMap({
-        style: 'dark',
-        center: [121.417463, 31.215175],
+        style: 'blank',
+        center: [120.099658370018, 30.263445807542666],
         pitch: 0,
         zoom: 11,
       }),
     });
     scene.on('loaded', () => {
-      fetch(
-        'https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt',
-      )
-        .then((res) => res.text())
-        .then((data) => {
+      // fetch(
+      //   'https://gw.alipayobjects.com/os/rmsportal/BElVQFEFvpAKzddxFZxJ.txt',
+      // )
+      //   .then((res) => res.text())
+      //   .then((data) => {
           const pointLayer = new PointLayer({ blend: 'additive' })
-            .source(data, {
-              parser: {
-                type: 'csv',
-                y: 'lat',
-                x: 'lng',
-              },
+            .source({
+              type: "FeatureCollection",
+              features: [
+                {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    type: "Point",
+                    coordinates: [120.099658370018, 30.263445807542666]
+                  }
+                }
+              ]
             })
-            .size(0.5)
-            .color('#080298')
+            .size(40)
+            .shape('dot')
+            .color('#f00')
             .style({
               opacity: 1,
             });
 
           scene.addLayer(pointLayer);
-        });
+        // });
     });
   }, []);
   return (

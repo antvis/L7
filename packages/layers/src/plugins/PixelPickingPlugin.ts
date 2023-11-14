@@ -60,7 +60,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       ]),
       isUBO: true,
     });
-    rendererService.uniformBuffers[1] = uniformBuffer;
+    // rendererService.uniformBuffers[1] = uniformBuffer;
     // u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
     // // Tip: 当前地图是否在拖动
     // u_shaderPick: Number(layer.getShaderPickStat()),
@@ -92,6 +92,12 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     layer.hooks.beforePickingEncode.tap('PixelPickingPlugin', () => {
       const { enablePicking } = layer.getLayerConfig();
       if (enablePicking && layer.isVisible()) {
+        // rendererService.uniformBuffers[1].subData({
+        //   offset: 11,
+        //   data: new Uint8Array(new Float32Array([
+        //     PickingStage.ENCODE
+        //   ])),
+        // })
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.ENCODE,
@@ -104,6 +110,12 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       const { enablePicking } = layer.getLayerConfig();
       // 区分选中高亮 和滑过高亮
       if (enablePicking && layer.isVisible()) {
+        // rendererService.uniformBuffers[1].subData({
+        //   offset: 11,
+        //   data: new Uint8Array(new Float32Array([
+        //     PickingStage.HIGHLIGHT
+        //   ])),
+        // })
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.HIGHLIGHT,
@@ -125,6 +137,12 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         layer.updateLayerConfig({
           pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
         });
+        // rendererService.uniformBuffers[1].subData({
+        //   offset: 11,
+        //   data: new Uint8Array(new Float32Array([
+        //     PickingStage.HIGHLIGHT
+        //   ])),
+        // })
         layer.models.forEach((model) =>
           model.addUniforms({
             u_PickingStage: PickingStage.HIGHLIGHT,

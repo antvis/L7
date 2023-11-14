@@ -1,22 +1,23 @@
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec3 a_Extrude;
-attribute float a_Size;
-attribute float a_Shape;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 10) in float a_Shape;
+layout(location = 11) in vec3 a_Extrude;
 
-uniform int u_size_unit;
+layout(std140) uniform commonUniforms {
+  vec3  u_blur_height_fixed;
+  float u_stroke_width;
+  float u_stroke_opacity;
+  float u_additive;
+  float u_size_unit;
+};
 
-varying vec4 v_data;
-varying vec4 v_color;
-varying float v_radius;
-varying vec4 v_stroke;
-uniform float u_stroke_width: 2;
-uniform vec3 u_blur_height_fixed: [0, 0, 0];
-
+out vec4 v_color;
+out float v_radius;
+out vec4 v_stroke;
+out vec4 v_data;
 
 #pragma include "projection"
-#pragma include "picking"
 #pragma include "rotation_2d"
 
 
@@ -29,7 +30,9 @@ void main() {
   *  setPickingSize 设置拾取大小
   *  u_meter2coord 在等面积大小的时候设置单位
   */
-  float newSize = setPickingSize(a_Size);
+  // float newSize = setPickingSize(a_Size);
+  float newSize = a_Size;
+
   // float newSize = setPickingSize(a_Size) * 0.00001038445708445579;
 
 
@@ -37,7 +40,7 @@ void main() {
   // unpack color(vec2)
   v_color = vec4(a_Color.xyz, a_Color.w * opacity);
 
-  if(u_size_unit == 1) {
+  if(u_size_unit == 1.0) {
     newSize = newSize  * u_PixelsPerMeter.z;
   }
 
@@ -74,5 +77,5 @@ void main() {
   
   gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, raisingHeight, 1.0));
 
-  setPickingColor(a_PickingColor);
+  // setPickingColor(a_PickingColor);
 }

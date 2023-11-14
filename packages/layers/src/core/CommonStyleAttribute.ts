@@ -15,6 +15,9 @@ export enum ShaderLocation {
   OFFSETS,
   ROTATION,
   EXTRUSION_BASE,
+  SIZE,
+  SHAPE,
+  EXTRUDE,
   MAX,
 }
 

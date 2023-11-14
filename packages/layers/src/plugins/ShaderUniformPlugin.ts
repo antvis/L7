@@ -85,7 +85,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           data,
         });
       }
-      // For WebGL1.
+      // For WebGL1. regl
       layer.models.forEach((model) => {
         model.addUniforms({
           ...uniforms,

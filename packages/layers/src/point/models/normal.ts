@@ -27,9 +27,6 @@ export default class NormalModel extends BaseModel {
     };
   }
   public getUninforms(): IModelUniform {
-    const { opacity = 1 } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
     const attributes = this.getStyleAttribute();
 
     // FIXME: No need to update each frame
@@ -62,7 +59,6 @@ export default class NormalModel extends BaseModel {
       isUBO: true,
     });
     this.uniformBuffers.push(uniformBuffer);
-
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointNormal',
       vertexShader: normalVert,

@@ -11,6 +11,7 @@ import {
 } from '@antv/l7-core';
 import { PointFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 // animate pointLayer shader - support animate
 import waveFillFrag from '../shaders/animate/wave_frag.glsl';
@@ -29,7 +30,8 @@ export default class FillModel extends BaseModel {
       heightfixed = false,
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    return {
+
+   const commonIniform = {
       u_blur_height_fixed: [blur, Number(raisingHeight), Number(heightfixed)],
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
@@ -37,6 +39,35 @@ export default class FillModel extends BaseModel {
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
       ...this.getStyleAttribute(),
     };
+
+    const attributes = this.getStyleAttribute();
+    console.log('attributes',attributes,commonIniform)
+    this.uniformBuffers[0].subData({
+      offset:0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...attributes.u_stroke,
+          ...attributes.u_offsets,
+          attributes.u_opacity,
+          attributes.u_rotation,
+        ]).buffer,
+      ),
+    });
+   
+    this.uniformBuffers[1].subData({
+      offset:0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...commonIniform.u_blur_height_fixed,
+          commonIniform.u_stroke_width,
+          commonIniform.u_stroke_opacity,
+          commonIniform.u_additive,
+          commonIniform.u_size_unit,
+        ]).buffer,
+      ),
+    })
+    return commonIniform;
+   
   }
   public getAnimateUniforms(): IModelUniform {
     const { animateOption = { enable: false } } =
@@ -70,6 +101,18 @@ export default class FillModel extends BaseModel {
       >;
     const { frag, vert, type } = this.getShaders(animateOption);
     this.layer.triangulation = PointFillTriangulation;
+    const attributeUniformBuffer = this.rendererService.createBuffer({
+      data: new Float32Array(4 + 2 + 1 + 1),
+      isUBO: true,
+    });
+
+    const commonUniforms = this.rendererService.createBuffer({
+      data: new Float32Array(3 + 4),
+      isUBO: true,
+    });
+
+
+    this.uniformBuffers.push(attributeUniformBuffer,commonUniforms);
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -127,6 +170,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
+        shaderLocation: ShaderLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -157,6 +201,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: ShaderLocation.MAX,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -177,6 +222,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Shape',
+        shaderLocation: ShaderLocation.SHAPE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

@@ -250,14 +250,15 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     // a_PickingColor = 2
 
     const uniforms: string[] = [];
+    // 支持数据映射的类型
     this.layer.enableShaderEncodeStyles.forEach((key: string) => {
-      if (encodeStyleAttribute[key]) {
+      if (encodeStyleAttribute[key]) { // 配置了数据映射的类型
         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
       } else {
         uniforms.push(`  ${DefaultUniformStyleType[key]} u_${key};`);
       }
       str += `
-              #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+          #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
           layout(location = ${shaderLocationMap[key]}) in ${
         DefaultUniformStyleType[key]
       } a_${key.charAt(0).toUpperCase() + key.slice(1)};
