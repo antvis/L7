@@ -31,7 +31,7 @@ export default class FillModel extends BaseModel {
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-   const commonIniform = {
+    const commonIniform = {
       u_blur_height_fixed: [blur, Number(raisingHeight), Number(heightfixed)],
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
@@ -42,7 +42,7 @@ export default class FillModel extends BaseModel {
 
     const attributes = this.getStyleAttribute();
     this.uniformBuffers[0].subData({
-      offset:0,
+      offset: 0,
       data: new Uint8Array(
         new Float32Array([
           ...attributes.u_stroke,
@@ -52,9 +52,9 @@ export default class FillModel extends BaseModel {
         ]).buffer,
       ),
     });
-   
+
     this.uniformBuffers[1].subData({
-      offset:0,
+      offset: 0,
       data: new Uint8Array(
         new Float32Array([
           ...commonIniform.u_blur_height_fixed,
@@ -64,9 +64,8 @@ export default class FillModel extends BaseModel {
           commonIniform.u_size_unit,
         ]).buffer,
       ),
-    })
+    });
     return commonIniform;
-   
   }
   public getAnimateUniforms(): IModelUniform {
     const { animateOption = { enable: false } } =
@@ -110,8 +109,7 @@ export default class FillModel extends BaseModel {
       isUBO: true,
     });
 
-
-    this.uniformBuffers.push(attributeUniformBuffer,commonUniforms);
+    this.uniformBuffers.push(attributeUniformBuffer, commonUniforms);
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,

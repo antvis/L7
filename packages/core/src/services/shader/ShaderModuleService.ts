@@ -16,8 +16,9 @@ import projection from '../../shaders/projection.glsl';
 import rotation_2d from '../../shaders/rotation_2d.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
-const globalDefaultprecision =
-  '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
+const globalDefaultprecision = '';
+// const globalDefaultprecision =
+//   '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
 const includeRegExp = /#pragma include (["^+"]?["[a-zA-Z_0-9](.*)"]*?)/g;
 const REGEX_START_OF_MAIN = /void\s+main\s*\([^)]*\)\s*\{\n?/; // Beginning of main
 const REGEX_END_OF_MAIN = /}\n?[^{}]*$/; // End of main, assumes main is last function
@@ -30,7 +31,7 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.destroy();
     this.registerModule('common', { vs: common, fs: common });
     this.registerModule('decode', { vs: decode, fs: '' });
-    this.registerModule('projection', { vs: projection, fs: '' });
+    this.registerModule('projection', { vs: projection, fs: projection });
     this.registerModule('project', { vs: project, fs: '' });
     this.registerModule('sdf_2d', { vs: '', fs: sdf2d });
     this.registerModule('lighting', { vs: lighting, fs: '' });
@@ -70,7 +71,7 @@ export default class ShaderModuleService implements IShaderModuleService {
     // }
 
     let rawVS = this.rawContentCache[moduleName].vs;
-    const rawFS = this.rawContentCache[moduleName].fs;
+    let rawFS = this.rawContentCache[moduleName].fs;
     const inject = this.rawContentCache[moduleName].inject;
     let declaredUniforms = {};
     if (inject?.['vs:#decl']) {
@@ -83,6 +84,10 @@ export default class ShaderModuleService implements IShaderModuleService {
       rawVS = rawVS.replace(REGEX_START_OF_MAIN, (match: string) => {
         return match + inject?.['vs:#main-start'];
       });
+    }
+    if (inject?.['fs:#decl']) {
+      // 头部注入
+      rawFS = inject?.['fs:#decl'] + rawFS;
     }
 
     const { content: vs, includeList: vsIncludeList } = this.processModule(

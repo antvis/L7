@@ -178,16 +178,12 @@ export default class DeviceModel implements IModel {
     });
   }
 
-  updateAttributesAndElements(
-    // attributes: { [key: string]: IAttribute },
-    // elements: IElements,
-  ) {
+  updateAttributesAndElements() // elements: IElements, // attributes: { [key: string]: IAttribute },
+  {
     // TODO: implement
   }
 
-  updateAttributes(
-    // attributes: { [key: string]: IAttribute }
-  ) {
+  updateAttributes() { // attributes: { [key: string]: IAttribute }
     // TODO: implement
     // Object.keys(attributes).forEach((name: string) => {
     //   const attribute = attributes[name] as DeviceAttribute;
@@ -202,7 +198,8 @@ export default class DeviceModel implements IModel {
     };
   }
 
-  draw(options: IModelDrawOptions
+  draw(
+    options: IModelDrawOptions,
     //  pick?: boolean
   ) {
     const mergedOptions = {
@@ -242,9 +239,9 @@ export default class DeviceModel implements IModel {
       })),
       elements
         ? {
-          buffer: this.indexBuffer,
-          offset: 0, // TODO: use defaule value
-        }
+            buffer: this.indexBuffer,
+            offset: 0, // TODO: use defaule value
+          }
         : null,
     );
     renderPass.setViewport(0, 0, width, height);

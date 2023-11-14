@@ -4,14 +4,12 @@ in vec4 v_stroke;
 in vec4 v_data;
 
 layout(std140) uniform commonUniforms {
-  vec3  u_blur_height_fixed;
+  vec3 u_blur_height_fixed;
   float u_stroke_width;
   float u_additive;
   float u_stroke_opacity;
   float u_size_unit;
 };
-
-
 
 #pragma include "projection"
 #pragma include "sdf_2d"

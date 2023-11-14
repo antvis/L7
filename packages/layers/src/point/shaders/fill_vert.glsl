@@ -17,12 +17,9 @@ out float v_radius;
 out vec4 v_stroke;
 out vec4 v_data;
 
-
 #pragma include "projection"
 #pragma include "picking"
 #pragma include "rotation_2d"
-
-
 
 void main() {
   // 透明度计算

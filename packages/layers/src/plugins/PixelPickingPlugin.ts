@@ -34,33 +34,35 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       styleAttributeService: IStyleAttributeService;
     },
   ) {
-    // Create a Uniform Buffer Object(UBO).
-    const uniformBuffer = rendererService.createBuffer({
-      // vec4 u_HighlightColor;
-      // vec4 u_SelectColor;
-      // vec3 u_PickingColor;
-      // float u_PickingStage;
-      // vec3 u_CurrentSelectedId;
-      // float u_PickingThreshold;
-      // float u_PickingBuffer;
-      // float u_shaderPick;
-      // float u_EnableSelect;
-      // float u_activeMix;
-      data: new Float32Array([
-        ...[1, 0, 0, 1],
-        ...[1, 0, 0, 1],
-        ...[0, 0, 0],
-        0,
-        ...[0, 0, 0],
-        0,
-        0,
-        0,
-        0,
-        0,
-      ]),
-      isUBO: true,
-    });
-    // rendererService.uniformBuffers[1] = uniformBuffer;
+    if (!rendererService.uniformBuffers[1]) {
+      // Create a Uniform Buffer Object(UBO).
+      const uniformBuffer = rendererService.createBuffer({
+        // vec4 u_HighlightColor;
+        // vec4 u_SelectColor;
+        // vec3 u_PickingColor;
+        // float u_PickingStage;
+        // vec3 u_CurrentSelectedId;
+        // float u_PickingThreshold;
+        // float u_PickingBuffer;
+        // float u_shaderPick;
+        // float u_EnableSelect;
+        // float u_activeMix;
+        data: new Float32Array([
+          ...[1, 0, 0, 1],
+          ...[1, 0, 0, 1],
+          ...[0, 0, 0],
+          0,
+          ...[0, 0, 0],
+          0,
+          0,
+          0,
+          0,
+          0,
+        ]),
+        isUBO: true,
+      });
+      rendererService.uniformBuffers[1] = uniformBuffer;
+    }
     // u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
     // // Tip: 当前地图是否在拖动
     // u_shaderPick: Number(layer.getShaderPickStat()),
