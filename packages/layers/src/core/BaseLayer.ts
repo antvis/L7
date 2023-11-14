@@ -40,8 +40,8 @@ import {
   IPass,
   IPickingService,
   IPostProcessingPass,
-  IRendererService,
   IRenderOptions,
+  IRendererService,
   IScale,
   IScaleOptions,
   IShaderModuleService,
@@ -50,12 +50,12 @@ import {
   IStyleAttributeUpdateOptions,
   ITextureService,
   LayerEventType,
-  lazyInject,
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
-  Triangulation,
   TYPES,
+  Triangulation,
+  lazyInject,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
@@ -496,7 +496,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
   }
 
-
   public setLayerPickService(layerPickService: ILayerPickService): void {
     this.layerPickService = layerPickService;
   }
@@ -668,17 +667,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         },
       );
     }
-        // 兼容 borderColor borderWidth
-        // @ts-ignore
-        if(rest.borderColor) {
-           // @ts-ignore
-          rest.stroke = rest.borderColor;
-        }
-        // @ts-ignore
-        if(rest.borderWidth) {
-          // @ts-ignore
-         rest.strokeWidth = rest.borderWidth;
-       }
+    // 兼容 borderColor borderWidth
+    // @ts-ignore
+    if (rest.borderColor) {
+      // @ts-ignore
+      rest.stroke = rest.borderColor;
+    }
+    // @ts-ignore
+    if (rest.borderWidth) {
+      // @ts-ignore
+      rest.strokeWidth = rest.borderWidth;
+    }
 
     // 兼容老版本的写法 ['field, 'value']
     const newOption: { [key: string]: any } = rest;
@@ -698,8 +697,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       }
     });
 
-
-  
     this.encodeStyle(newOption);
 
     this.updateLayerConfig(newOption);
@@ -1055,6 +1052,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.isDestroyed) {
       return;
     }
+
+    // destroy all UBOs
+    this.layerModel.uniformBuffers.forEach((buffer) => {
+      buffer.destroy();
+    });
+
     // remove child layer
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
@@ -1270,6 +1273,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       inject,
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
+    console.log(vs, fs);
     const { createModel } = this.rendererService;
     return new Promise((resolve) => {
       // console.log(this.encodedData)
@@ -1286,6 +1290,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         vs,
         elements,
         blend: BlendTypes[BlendType.normal],
+        uniformBuffers: [
+          ...this.layerModel.uniformBuffers,
+          ...this.rendererService.uniformBuffers,
+        ],
+        textures: this.layerModel.textures,
         ...rest,
       };
       if (count) {
@@ -1375,6 +1384,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.models.forEach((model) => {
       model.draw(
         {
+          uniformBuffers: [
+            ...this.layerModel.uniformBuffers,
+            ...this.rendererService.uniformBuffers,
+          ],
           uniforms: this.layerModel.getUninforms(),
           blend: this.layerModel.getBlend(),
           stencil: this.layerModel.getStencil(options),

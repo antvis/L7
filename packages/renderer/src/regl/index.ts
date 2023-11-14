@@ -36,6 +36,7 @@ import ReglTexture2D from './ReglTexture2D';
  */
 @injectable()
 export default class ReglRendererService implements IRendererService {
+  uniformBuffers: IBuffer[] = [];
   public extensionObject: IExtensions;
   private gl: regl.Regl;
   private $container: HTMLDivElement | null;
@@ -277,4 +278,7 @@ export default class ReglRendererService implements IRendererService {
     // @ts-ignore
     this.gl = null;
   };
+
+  beginFrame(): void {}
+  endFrame(): void {}
 }

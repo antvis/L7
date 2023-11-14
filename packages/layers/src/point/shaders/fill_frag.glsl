@@ -1,16 +1,22 @@
-uniform float u_additive;
-uniform float u_stroke_opacity : 1;
-uniform float u_stroke_width : 2;
 
-varying vec4 v_data;
-varying vec4 v_color;
-varying float v_radius;
-varying vec4 v_stroke;
+layout(std140) uniform commonUniforms {
+  vec3 u_blur_height_fixed;
+  float u_stroke_width;
+  float u_additive;
+  float u_stroke_opacity;
+  float u_size_unit;
+};
 
+in vec4 v_color;
+in vec4 v_stroke;
+in vec4 v_data;
+in float v_radius;
 
+#pragma include "projection"
 #pragma include "sdf_2d"
 #pragma include "picking"
 
+out vec4 outputColor;
 
 void main() {
   int shape = int(floor(v_data.w + 0.5));
@@ -58,20 +64,20 @@ void main() {
   );
 
   if(u_stroke_width < 0.01) {
-    gl_FragColor = v_color;
+    outputColor = v_color;
   } else {
-    gl_FragColor = mix(v_color, v_stroke * u_stroke_opacity, color_t);
+    outputColor = mix(v_color, v_stroke * u_stroke_opacity, color_t);
   }
 
   if(u_additive > 0.0) {
-    gl_FragColor *= opacity_t;
-    gl_FragColor = filterColorAlpha(gl_FragColor, gl_FragColor.a);
+    outputColor *= opacity_t;
+    outputColor = filterColorAlpha(outputColor, outputColor.a);
   } else {
-    gl_FragColor.a *= opacity_t;
-    gl_FragColor = filterColor(gl_FragColor);
+    outputColor.a *= opacity_t;
+    outputColor = filterColor(outputColor);
   }
    // 作为 mask 模板时需要丢弃透明的像素
-  if(gl_FragColor.a < 0.01) {
+  if(outputColor.a < 0.01) {
     discard;
   } 
 }

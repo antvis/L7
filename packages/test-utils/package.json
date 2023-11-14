@@ -42,8 +42,8 @@
     "@antv/l7-map": "2.19.10",
     "@antv/l7-maps": "2.19.10",
     "@antv/l7-scene": "2.19.10",
-    "gl": "^5.0.3",
-    "regl": "1.6.1"
+    "gl": "^6.0.2",
+    "regl": "^1.7.0"
   },
   "homepage": "https://github.com/antvis/L7#readme"
 }
