@@ -41,13 +41,13 @@ export default class NormalModel extends BaseModel {
       ),
     });
 
-    // this.uniformBuffers[1].subData({
-    //   offset: 0,
-    //   data: new Uint8Array(
-    //     new Float32Array([0.5
-    //     ]).buffer,
-    //   )
-    // });
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([0.5
+        ]).buffer,
+      )
+    });
 
 
     return {
@@ -69,7 +69,7 @@ export default class NormalModel extends BaseModel {
     });
 
     const commonBuffer = this.rendererService.createBuffer({
-      data: new Float32Array([0.5]),
+      data: new Float32Array(4),
       isUBO: true,
     });
 

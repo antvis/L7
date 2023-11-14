@@ -7,8 +7,8 @@ export default () => {
     useEffect( () => {
 const scene = new Scene({
   id: "map",
-  // renderer: 'device',
-  map: new Map({
+  renderer: 'device',
+  map: new GaodeMap({
     style: "light",
     center: [120.099658370018, 30.263445807542666],
     zoom: 10

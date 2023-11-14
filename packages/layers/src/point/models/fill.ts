@@ -53,18 +53,18 @@ export default class FillModel extends BaseModel {
       ),
     });
    
-    // this.uniformBuffers[1].subData({
-    //   offset:0,
-    //   data: new Uint8Array(
-    //     new Float32Array([
-    //       ...commonIniform.u_blur_height_fixed,
-    //       commonIniform.u_stroke_width,
-    //       commonIniform.u_stroke_opacity,
-    //       commonIniform.u_additive,
-    //       commonIniform.u_size_unit,
-    //     ]).buffer,
-    //   ),
-    // })
+    this.uniformBuffers[1].subData({
+      offset:0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...commonIniform.u_blur_height_fixed,
+          commonIniform.u_stroke_width,
+          commonIniform.u_stroke_opacity,
+          commonIniform.u_additive,
+          commonIniform.u_size_unit,
+        ]).buffer,
+      ),
+    })
     return commonIniform;
    
   }
@@ -105,13 +105,13 @@ export default class FillModel extends BaseModel {
       isUBO: true,
     });
 
-    // const commonUniforms = this.rendererService.createBuffer({
-    //   data: new Float32Array(3 + 4),
-    //   isUBO: true,
-    // });
+    const commonUniforms = this.rendererService.createBuffer({
+      data: new Float32Array(8),
+      isUBO: true,
+    });
 
 
-    this.uniformBuffers.push(attributeUniformBuffer);
+    this.uniformBuffers.push(attributeUniformBuffer,commonUniforms);
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
