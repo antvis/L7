@@ -1,7 +1,3 @@
-in vec4 v_color;
-in float v_radius;
-in vec4 v_stroke;
-in vec4 v_data;
 
 layout(std140) uniform commonUniforms {
   vec3 u_blur_height_fixed;
@@ -10,6 +6,11 @@ layout(std140) uniform commonUniforms {
   float u_stroke_opacity;
   float u_size_unit;
 };
+
+in vec4 v_color;
+in vec4 v_stroke;
+in vec4 v_data;
+in float v_radius;
 
 #pragma include "projection"
 #pragma include "sdf_2d"

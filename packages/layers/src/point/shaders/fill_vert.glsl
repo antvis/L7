@@ -13,9 +13,9 @@ layout(std140) uniform commonUniforms {
 };
 
 out vec4 v_color;
-out float v_radius;
 out vec4 v_stroke;
 out vec4 v_data;
+out float v_radius;
 
 #pragma include "projection"
 #pragma include "picking"

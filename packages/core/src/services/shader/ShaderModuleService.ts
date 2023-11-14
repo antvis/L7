@@ -16,9 +16,8 @@ import projection from '../../shaders/projection.glsl';
 import rotation_2d from '../../shaders/rotation_2d.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
-const globalDefaultprecision = '';
-// const globalDefaultprecision =
-//   '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
+const globalDefaultprecision =
+  '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
 const includeRegExp = /#pragma include (["^+"]?["[a-zA-Z_0-9](.*)"]*?)/g;
 const REGEX_START_OF_MAIN = /void\s+main\s*\([^)]*\)\s*\{\n?/; // Beginning of main
 const REGEX_END_OF_MAIN = /}\n?[^{}]*$/; // End of main, assumes main is last function
@@ -123,13 +122,18 @@ export default class ShaderModuleService implements IShaderModuleService {
     if (!precisionRegExp.test(fs)) {
       compiledFs = compiledFs + globalDefaultprecision;
     }
-
     compiledFs = compiledFs + fs;
+
+    let compiledVs = '';
+    if (!precisionRegExp.test(vs)) {
+      compiledVs = compiledVs + globalDefaultprecision;
+    }
+    compiledVs = compiledVs + vs;
 
     this.moduleCache[moduleName] = {
       fs: compiledFs.trim(),
       uniforms,
-      vs: vs.trim(),
+      vs: compiledVs.trim(),
     };
     return this.moduleCache[moduleName];
   }
