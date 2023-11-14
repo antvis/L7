@@ -7,6 +7,8 @@ const { uniq } = lodashUtil;
 
 import common from '../../shaders/common.glsl';
 import decode from '../../shaders/decode.glsl';
+import scene_uniforms from '../../shaders/scene_uniforms.glsl';
+import picking_uniforms from '../../shaders/picking_uniforms.glsl';
 import light from '../../shaders/light2.glsl';
 import lighting from '../../shaders/lighting.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
@@ -30,6 +32,15 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.destroy();
     this.registerModule('common', { vs: common, fs: common });
     this.registerModule('decode', { vs: decode, fs: '' });
+    this.registerModule('scene_uniforms', {
+      vs: scene_uniforms,
+      fs: scene_uniforms,
+    });
+    this.registerModule('picking_uniforms', {
+      vs: picking_uniforms,
+      fs: picking_uniforms,
+    });
+
     this.registerModule('projection', { vs: projection, fs: projection });
     this.registerModule('project', { vs: project, fs: '' });
     this.registerModule('sdf_2d', { vs: '', fs: sdf2d });

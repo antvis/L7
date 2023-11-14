@@ -33,11 +33,14 @@ scene.on("loaded", () => {
       ]
     })  
     .shape("circle")
-    .size(100)
+    .size(1000)
     .color("#ff0000")
+    .active(true)
+    // .animate({ enable: true })
     .style({
       opacity: 1,
       strokeWidth: 1,
+      unit: 'meter',
     });
   setTimeout(() => {
     pointLayer.style({
