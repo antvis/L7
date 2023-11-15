@@ -141,7 +141,7 @@ export default class ArcModel extends BaseModel {
       inject:this.getInject(),
       triangulation: LineArcTriangulation,
       depth: { enable: false },
-      segmentNumber,
+      styleOption:{segmentNumber},
     });
     return [model];
   }

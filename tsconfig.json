@@ -6,7 +6,7 @@
     "downlevelIteration": true,
     "jsx": "react",
     "target": "es5",
-    "lib": ["es6", "dom"],
+    "lib": ["es6", "dom","es2019"],
     "types": ["reflect-metadata", "jest", "node","offscreencanvas"],
     "module": "esnext",
     "moduleResolution": "node",

@@ -14,7 +14,6 @@ import 'reflect-metadata';
 import { IAMapEvent, IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import AMapLoader from '../utils/amaploader';
-import { Version } from '../version';
 import Viewport from './Viewport';
 // @ts-ignore
 window.forceWebGL = true;
@@ -40,7 +39,7 @@ export default class AMapService
   extends AMapBaseService
   implements IMapService<AMap.Map & IAMapInstance>
 {
-  public version: string = Version['GAODE1.x'];
+  public version: string = 'GAODE1.x';
   protected viewport: IViewport;
 
   public getModelMatrix(

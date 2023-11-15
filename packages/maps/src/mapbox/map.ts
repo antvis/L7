@@ -10,7 +10,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import 'reflect-metadata';
 import { IMapboxInstance } from '../../typings/index';
 import BaseMapService from '../utils/BaseMapService';
-import { Version } from '../version';
 import Viewport from './Viewport';
 window.mapboxgl = mapboxgl;
 
@@ -24,7 +23,7 @@ const MAPBOX_API_KEY =
 export default class MapboxService extends BaseMapService<
   Map & IMapboxInstance
 > {
-  public version: string = Version.MAPBOX;
+  public version: string = 'MAPBOX';
   // get mapStatus method
 
   public viewport: Viewport;

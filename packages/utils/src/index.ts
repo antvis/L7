@@ -17,3 +17,4 @@ export * as Satistics from './statistics';
 export * from './tileset-manager';
 export * from './worker-helper';
 export * from './workers/triangulation';
+export * from './interface/map'

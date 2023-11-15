@@ -19,6 +19,14 @@ export interface IRenderConfig {
   preserveDrawingBuffer?: boolean;
   // Tip: 场景是否支持 stencil mask
   stencil?: boolean;
+  /**
+   * Whether to use WebGPU Device.
+   */
+  enableWebGPU?: boolean;
+  /**
+   * Path of WASM shader compiler.
+   */
+  shaderCompilerPath?: string;
 }
 
 export interface IClearOptions {
@@ -47,6 +55,7 @@ export interface IExtensions {
 }
 
 export interface IRendererService {
+  uniformBuffers: IBuffer[];
   extensionObject: IExtensions;
   init(canvas: HTMLCanvasElement, cfg: IRenderConfig, gl: any): Promise<void>;
   testExtension(name: string): boolean;
@@ -74,4 +83,6 @@ export interface IRendererService {
   setDirty(flag: boolean): void;
   getDirty(): boolean;
   destroy(): void;
+  beginFrame(): void;
+  endFrame(): void;
 }

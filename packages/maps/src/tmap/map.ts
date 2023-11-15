@@ -370,7 +370,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
           this.map.setDoubleClickZoom(!!option.doubleClickZoom);
           break;
         case 'dragEnable':
-          this.map.setDraggable(!!option.doubleClickZoom);
+          this.map.setDraggable(!!option.dragEnable);
           break;
         case 'rotateEnable':
           // @ts-ignore

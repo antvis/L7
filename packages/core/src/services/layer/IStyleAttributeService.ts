@@ -4,7 +4,7 @@ import {
 } from '../renderer/IAttribute';
 import { IBufferInitializationOptions } from '../renderer/IBuffer';
 import { IElements } from '../renderer/IElements';
-import { ILayer } from './ILayerService';
+import { ILayer, ILayerConfig } from './ILayerService';
 
 /**
  * 1. 提供各个 Layer 样式属性初始值的注册服务
@@ -170,7 +170,7 @@ export interface IStyleAttribute extends IStyleAttributeInitializationOptions {
 
 export type Triangulation = (
   feature: IEncodeFeature,
-  segmentNumber?: number,
+  styleOption?: unknown,
 ) => {
   vertices: number[];
   indices: number[];
@@ -207,7 +207,7 @@ export interface IStyleAttributeService {
   createAttributesAndIndices(
     encodedFeatures: IEncodeFeature[],
     triangulation?: Triangulation,
-    segmentNumber?: number,
+    styleOption?: unknown,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;

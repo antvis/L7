@@ -52,44 +52,46 @@ import {
       })
         .source(source)
         .shape('simple')
-        .color('#DFB02F')
+        .color('#fff')
         .size(0.3)
         .style({
           opacity: 1,
         });
+
+        
   
-    
   
-    //   const layer2 = new PolygonLayer({
-    //     featureId: 'id',
-    //     zIndex: 2,
-    //     minZoom: 9,
-    //     sourceLayer: 'state_s10_27', // woods hillshade contour ecoregions ecoregions2 city
-    //   })
-    //     .source(source)
-    //     .shape('fill')
-    //     .scale('croptype', {
-    //       type: 'quantize',
-    //       domain: [0, 4],
-    //     })
-    //     .color('croptype', [
-    //       '#C1C9CC',
-    //       '#DFB02F',
-    //       '#7F8120',
-    //       '#DCD0A4',
-    //       '#AD5633',
-    //     ])
-    //     .style({
-    //       opacity: 1,
-    //     });
+      const layer2 = new PolygonLayer({
+        featureId: 'id',
+        zIndex: 2,
+        minZoom: 9,
+        sourceLayer: 'state_s10_27', // woods hillshade contour ecoregions ecoregions2 city
+      })
+        .source(source)
+        .shape('fill')
+        .scale('croptype', {
+          type: 'quantize',
+          domain: [0, 4],
+        })
+        .color('croptype', [
+          '#C1C9CC',
+          '#DFB02F',
+          '#7F8120',
+          '#DCD0A4',
+          '#AD5633',
+        ])
+        .style({
+          opacity: 0.9,
+        });
   
      
   
       scene.on('loaded', () => {
+        scene.addLayer(layer2);
         scene.addLayer(layer1);
         scene.addLayer(layer);
 
-        // scene.addLayer(layer2);
+   
       });
     }, []);
     return (

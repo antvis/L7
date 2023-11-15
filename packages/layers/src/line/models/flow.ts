@@ -8,7 +8,7 @@ import {
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IFlowLineStyleOptions } from '../../core/interface';
-import { FlowLineFillTriangulation } from '../../core/triangulation';
+import { FlowLineTriangulation } from '../../core/line_trangluation';
 import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
 
 // linear simple line shader
@@ -24,8 +24,6 @@ export default class FlowLineModel extends BaseModel {
     } = this.layer.getLayerConfig() as IFlowLineStyleOptions;
 
     return {
-      // u_opacity: opacity,
-      // u_offsets: offsets,
       u_gap_width: gapWidth,
       u_stroke_width: strokeWidth,
       u_stroke: rgb2arr(stroke),
@@ -44,7 +42,8 @@ export default class FlowLineModel extends BaseModel {
       vertexShader: flow_line_vert,
       fragmentShader: flow_line_frag,
       inject: this.getInject(),
-      triangulation: FlowLineFillTriangulation,
+      triangulation: FlowLineTriangulation,
+      styleOption:(this.layer.getLayerConfig()as IFlowLineStyleOptions).symbol,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
 

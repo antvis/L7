@@ -132,7 +132,7 @@ export default class Arc3DModel extends BaseModel {
       fragmentShader: frag,
       triangulation: LineArcTriangulation,
       depth: { enable: true },
-      segmentNumber,
+      styleOption: {segmentNumber},
     });
     return [model];
   }

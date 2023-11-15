@@ -5,12 +5,11 @@ import {
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
-import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal_frag.glsl';
 import normalVert from '../shaders/normal_vert.glsl';
-const { isNumber } = lodashUtil;
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -28,11 +27,32 @@ export default class NormalModel extends BaseModel {
     };
   }
   public getUninforms(): IModelUniform {
-    const { opacity = 1 } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const attributes = this.getStyleAttribute();
+    // FIXME: No need to update each frame
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([
+          ...attributes.u_stroke,
+          ...attributes.u_offsets,
+          attributes.u_opacity,
+          attributes.u_rotation,
+        ]).buffer,
+      ),
+    });
+
+    this.uniformBuffers[1].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([0.5
+        ]).buffer,
+      )
+    });
+
 
     return {
-      ...this.getStyleAttribute(),
+      u_size_scale: 0.5,
+      ...attributes,
     };
   }
 
@@ -43,6 +63,17 @@ export default class NormalModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     this.layer.triangulation = PointTriangulation;
 
+    const uniformBuffer = this.rendererService.createBuffer({
+      data: new Float32Array(4 + 2 + 1 + 1),
+      isUBO: true,
+    });
+
+    const commonBuffer = this.rendererService.createBuffer({
+      data: new Float32Array(4),
+      isUBO: true,
+    });
+
+    this.uniformBuffers.push(uniformBuffer,commonBuffer);
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointNormal',
       vertexShader: normalVert,
@@ -67,6 +98,7 @@ export default class NormalModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
