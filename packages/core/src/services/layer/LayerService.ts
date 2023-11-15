@@ -145,6 +145,8 @@ export default class LayerService
     this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
+
+    this.renderService.beginFrame();
     for (const layer of this.layerList) {
       const { enableMask } = layer.getLayerConfig();
       if (layer.masks.filter((m) => m.inited).length > 0 && enableMask) {
@@ -158,6 +160,7 @@ export default class LayerService
         await layer.render();
       }
     }
+    this.renderService.endFrame();
     this.debugService.renderEnd(renderUid);
     this.alreadyInRendering = false;
   }

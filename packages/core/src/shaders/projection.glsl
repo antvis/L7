@@ -11,25 +11,8 @@
 #define COORDINATE_SYSTEM_METER_OFFSET 7.0
 
 #define COORDINATE_SYSTEM_P20_2 8.0         // amap2.0
+#pragma include "scene_uniforms"
 
-uniform mat4 u_ViewMatrix;
-uniform mat4 u_ProjectionMatrix;
-uniform mat4 u_ViewProjectionMatrix;
-uniform float u_Zoom : 1;
-uniform float u_ZoomScale : 1;
-
-uniform float u_CoordinateSystem;
-uniform vec2 u_ViewportCenter;
-uniform vec4 u_ViewportCenterProjection;
-uniform vec3 u_PixelsPerDegree;
-uniform vec3 u_PixelsPerDegree2;
-uniform vec3 u_PixelsPerMeter;
-
-uniform vec2 u_ViewportSize;
-uniform float u_DevicePixelRatio;
-uniform float u_FocalDistance;
-uniform vec3 u_CameraPosition;
-uniform mat4 u_Mvp;
 
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {

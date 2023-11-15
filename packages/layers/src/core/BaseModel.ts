@@ -3,6 +3,7 @@ import {
   IAnimateOption,
   IAttribute,
   IBlendOptions,
+  IBuffer,
   ICameraService,
   IElements,
   IFontService,
@@ -33,9 +34,11 @@ import {
 import { rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
-import { getCommonStyleAttributeOptions } from './CommonStyleAttribute';
-import { DefaultUniformStyleType, DefaultUniformStyleValue} from './constant'
-
+import { DefaultUniformStyleType, DefaultUniformStyleValue } from './constant'
+import {
+  getCommonStyleAttributeOptions,
+  ShaderLocation,
+} from './CommonStyleAttribute';
 export type styleSingle =
   | number
   | string
@@ -60,11 +63,21 @@ export interface ICellProperty {
   count: number;
 }
 
+const shaderLocationMap: Record<string, ShaderLocation> = {
+  opacity: ShaderLocation.OPACITY,
+  stroke: ShaderLocation.STROKE,
+  offsets: ShaderLocation.OFFSETS,
+  rotation: ShaderLocation.ROTATION,
+  extrusionBase: ShaderLocation.EXTRUSION_BASE,
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class BaseModel<ChildLayerStyleOptions = {}>
   implements ILayerModel
 {
   public triangulation: Triangulation;
+  public uniformBuffers: IBuffer[] = [];
+  public textures: ITexture2D[] = [];
 
   // style texture data mapping
   public createTexture2D: (
@@ -232,33 +245,51 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected getInject(): IInject {
     const encodeStyleAttribute = this.layer.encodeStyleAttribute;
     let str = '';
+    // a_Position = 0
+    // a_Color = 1
+    // a_PickingColor = 2
+
+    const uniforms: string[] = [];
+    // 支持数据映射的类型
     this.layer.enableShaderEncodeStyles.forEach((key: string) => {
-      if (encodeStyleAttribute[key]) {
+      if (encodeStyleAttribute[key]) { // 配置了数据映射的类型
         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
+      } else {
+        uniforms.push(`  ${DefaultUniformStyleType[key]} u_${key};`);
       }
       str += `
           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-      attribute ${DefaultUniformStyleType[key]} a_${
-        key.charAt(0).toUpperCase() + key.slice(1)
-      };
-    #else
-      uniform ${DefaultUniformStyleType[key]} u_${key};
-    #endif\n
-    `;
+          layout(location = ${shaderLocationMap[key]}) in ${
+        DefaultUniformStyleType[key]
+      } a_${key.charAt(0).toUpperCase() + key.slice(1)};
+        #endif\n
+        `;
     });
+    const attributeUniforms = uniforms.length
+      ? `
+layout(std140) uniform AttributeUniforms {
+${uniforms.join('\n')}
+};
+    `
+      : '';
+    str += attributeUniforms;
+
     let innerStr = '';
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       innerStr += `\n
-#ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-  ${DefaultUniformStyleType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
-#else
-  ${DefaultUniformStyleType[key]} ${key} = u_${key};
-#endif\n
-`;
+    #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
+      ${DefaultUniformStyleType[key]} ${key}  = a_${
+        key.charAt(0).toUpperCase() + key.slice(1)
+      };
+    #else
+      ${DefaultUniformStyleType[key]} ${key} = u_${key};
+    #endif\n
+    `;
     });
 
     return {
       'vs:#decl': str,
+      'fs:#decl': attributeUniforms,
       'vs:#main-start': innerStr,
     };
   }
@@ -289,6 +320,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       const options = getCommonStyleAttributeOptions(key);
       if (options) {
         this.styleAttributeService.registerStyleAttribute(options);
+
+        if (options.descriptor) {
+          options.descriptor.shaderLocation = shaderLocationMap[key];
+        }
       }
     });
   }

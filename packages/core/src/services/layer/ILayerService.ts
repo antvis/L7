@@ -17,6 +17,7 @@ import {
 } from '../interaction/IPickingService';
 import { IMapService } from '../map/IMapService';
 import { IAttribute } from '../renderer/IAttribute';
+import { IBuffer } from '../renderer/IBuffer';
 import {
   IBlendOptions,
   IModel,
@@ -87,6 +88,8 @@ export interface ILayerModelInitializationOptions {
 }
 
 export interface ILayerModel {
+  uniformBuffers: IBuffer[];
+  textures: ITexture2D[];
   renderUpdate?(): void;
   getBlend(): Partial<IBlendOptions>;
   getStencil(option?: Partial<IRenderOptions>): Partial<IStencilOptions>;
