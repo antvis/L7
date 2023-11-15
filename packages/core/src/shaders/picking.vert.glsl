@@ -29,16 +29,6 @@ void setPickingColor(vec3 pickingColor) {
 
   v_PickingResult.a = float((u_PickingStage == PICKING_HIGHLIGHT) && isVertexPicked(pickingColor));
 
-  // if (u_EnableSelect == 1.0 && u_PickingStage == PICKING_HIGHLIGHT && isVertexSelected(pickingColor)) {
-  //   // 选中态
-  //   v_PickingResult.a = SELECT;
-  // } else if (u_PickingStage == PICKING_HIGHLIGHT && isVertexPicked(pickingColor)) {
-  //   // 高亮态
-  //   v_PickingResult.a = HIGHLIGHT;
-  // } else {
-  //   v_PickingResult.a = NORMAL;
-  // }
-
   // Stores the picking color so that the fragment shader can render it during picking
   v_PickingResult.rgb = pickingColor * COLOR_SCALE;
 }
