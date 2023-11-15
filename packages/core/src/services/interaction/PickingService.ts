@@ -326,11 +326,7 @@ export default class PickingService implements IPickingService {
     if (this.interactionService.indragging) {
       return false;
     }
-    // 判断当前进行 shader pick 拾取判断
-    if (!this.layerService.getShaderPickStat()) {
-      return false;
-    }
-
+  
     // 进行拾取
     return true;
   }

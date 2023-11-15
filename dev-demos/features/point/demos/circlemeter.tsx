@@ -7,24 +7,27 @@ export default () => {
     useEffect( () => {
 const scene = new Scene({
   id: "map",
-  renderer: 'device',
+  // renderer: 'device',
   map: new GaodeMap({
     style: "light",
     center: [120.099658370018, 30.263445807542666],
-    zoom: 10
+    zoom: 12
   })
 });
 scene.on("loaded", () => {
 
   const pointLayer = new PointLayer({
-    autoFit: true
+    autoFit: false
   })
     .source({
       type: "FeatureCollection",
       features: [
         {
           type: "Feature",
-          properties: {},
+          properties: {
+            name: "point1"
+          
+          },
           geometry: {
             type: "Point",
             coordinates: [120.099658370018, 30.263445807542666]
@@ -34,21 +37,18 @@ scene.on("loaded", () => {
     })  
     .shape("circle")
     .size(1000)
-    .color("#ff0000")
-    .active(true)
+    .color("red")
+    // .active(true)
+    .select(true)
     // .animate({ enable: true })
     .style({
       opacity: 1,
       strokeWidth: 1,
       unit: 'meter',
     });
-  setTimeout(() => {
-    pointLayer.style({
-      opacity: 0.5,
-    })
-    scene.render();
-
-  }, 1000);
+    pointLayer.on('click', (e) => {
+      console.log(e)
+    });
   scene.addLayer(pointLayer);
 });
 }, []);

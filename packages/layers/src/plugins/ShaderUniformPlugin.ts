@@ -91,8 +91,6 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           ...uniforms,
           // TODO: move these 2 uniforms to PixelPickingPlugin
           u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
-          // Tip: 当前地图是否在拖动
-          u_shaderPick: Number(layer.getShaderPickStat()),
         });
       });
     });

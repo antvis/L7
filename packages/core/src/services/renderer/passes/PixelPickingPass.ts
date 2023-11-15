@@ -245,6 +245,7 @@ export default class PixelPickingPass<
   private selectFeature(pickedColors: Uint8Array | undefined) {
     // @ts-ignore
     const [r, g, b] = pickedColors;
+    console.log('selectFeature', r, g, b);
     this.layer.hooks.beforeSelect.call([r, g, b]);
     this.layerService.renderLayers();
   }

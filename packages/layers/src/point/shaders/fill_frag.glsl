@@ -68,12 +68,10 @@ void main() {
   } else {
     outputColor = mix(v_color, v_stroke * u_stroke_opacity, color_t);
   }
-
-  if(u_additive > 0.0) {
     outputColor *= opacity_t;
+  if(u_additive > 0.0) {
     outputColor = filterColorAlpha(outputColor, outputColor.a);
   } else {
-    outputColor.a *= opacity_t;
     outputColor = filterColor(outputColor);
   }
    // 作为 mask 模板时需要丢弃透明的像素

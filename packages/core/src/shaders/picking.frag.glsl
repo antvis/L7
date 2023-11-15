@@ -21,8 +21,8 @@ vec4 filterHighlightColor(vec4 color, float weight) {
   // if (selected == SELECT) {
   if (selected) {
   //   // 点击选中状态
-  //   vec4 selectColor = u_SelectColor * COLOR_SCALE;
-  //   return selectColor;
+    // vec4 selectColor = u_SelectColor * COLOR_SCALE;
+    // return selectColor;
   // } else if (selected == HIGHLIGHT) {
   //   // hover 高亮状态
     vec4 highLightColor = u_HighlightColor * COLOR_SCALE;
@@ -55,21 +55,17 @@ vec4 filterPickingColor(vec4 color) {
 vec4 filterColor(vec4 color) {
   // 过滤多余的 shader 计算
   // return color;
-  if(u_shaderPick < 0.5) {
-    return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
-  } else {
+
     return filterPickingColor(filterHighlightColor(color, 1.0));
-  }
+  
   
 }
 
 vec4 filterColorAlpha(vec4 color, float alpha) {
   // 过滤多余的 shader 计算
   // return color;
-  if(u_shaderPick < 0.5) {
-    return color; // 暂时去除 直接取消计算在选中时拖拽地图会有问题
-  } else {
+
     return filterPickingColor(filterHighlightColor(color, alpha));
-  }
+  
 }
 

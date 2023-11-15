@@ -38,6 +38,7 @@ export default () => {
             .size('unit_price', (h) => {
               return [6, 6, 100];
             })
+            .active(true)
             .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
             .style({
               opacity:1,

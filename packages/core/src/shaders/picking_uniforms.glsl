@@ -6,7 +6,6 @@ layout(std140) uniform PickingUniforms {
   vec3 u_CurrentSelectedId;
   float u_PickingThreshold;
   float u_PickingBuffer;
-  float u_shaderPick;
   float u_EnableSelect;
   float u_activeMix;
 };
