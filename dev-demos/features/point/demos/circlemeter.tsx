@@ -1,13 +1,12 @@
 import { Scene, PointLayer,PolygonLayer } from "@antv/l7";
 import { GaodeMap,Map } from "@antv/l7-maps";
 import React, { useEffect } from 'react';
-import * as turf from '@turf/turf'
   
 export default () => {
     useEffect( () => {
 const scene = new Scene({
   id: "map",
-  renderer: 'device',
+  // renderer: 'device',
   map: new GaodeMap({
     style: "light",
     center: [120.099658370018, 30.263445807542666],
