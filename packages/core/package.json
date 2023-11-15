@@ -27,7 +27,7 @@
     "@antv/async-hook": "^2.2.9",
     "@antv/l7-utils": "2.19.10",
     "@babel/runtime": "^7.7.7",
-    "@mapbox/tiny-sdf": "^2.0.6",
+    "@mapbox/tiny-sdf": "^1.2.5",
     "@turf/helpers": "^6.1.4",
     "ajv": "^6.10.2",
     "element-resize-event": "^3.0.3",

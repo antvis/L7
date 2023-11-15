@@ -12,7 +12,7 @@ in vec4 v_stroke;
 in vec4 v_data;
 in float v_radius;
 
-#pragma include "projection"
+#pragma include "scene_uniforms"
 #pragma include "sdf_2d"
 #pragma include "picking"
 

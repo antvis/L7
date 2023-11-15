@@ -1273,10 +1273,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       inject,
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
-    console.log(vs, fs);
     const { createModel } = this.rendererService;
     return new Promise((resolve) => {
-      // console.log(this.encodedData)
       const { attributes, elements, count } =
         this.styleAttributeService.createAttributesAndIndices(
           this.encodedData,
@@ -1384,10 +1382,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.models.forEach((model) => {
       model.draw(
         {
-          uniformBuffers: [
-            ...this.layerModel.uniformBuffers,
-            ...this.rendererService.uniformBuffers,
-          ],
           uniforms: this.layerModel.getUninforms(),
           blend: this.layerModel.getBlend(),
           stencil: this.layerModel.getStencil(options),
