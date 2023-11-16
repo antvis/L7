@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.19.11",
+  "version": "2.20.0",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -27,9 +27,9 @@
   "license": "ISC",
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@antv/l7-core": "2.19.11",
-    "@antv/l7-map": "2.19.11",
-    "@antv/l7-utils": "2.19.11",
+    "@antv/l7-core": "2.20.0",
+    "@antv/l7-map": "2.20.0",
+    "@antv/l7-utils": "2.20.0",
     "@babel/runtime": "^7.7.7",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
@@ -39,12 +39,12 @@
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
-    "@types/gl-matrix": "^2.4.5",
     "@types/amap-js-api": "^1.4.6",
-    "@types/mapbox-gl": "^1.11.2",
-    "tmap-types-temporary": "0.1.4",
     "@types/bmapgl": "^0.0.7",
-    "@types/viewport-mercator-project": "^6.1.0"
+    "@types/gl-matrix": "^2.4.5",
+    "@types/mapbox-gl": "^1.11.2",
+    "@types/viewport-mercator-project": "^6.1.0",
+    "tmap-types-temporary": "0.1.4"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {
