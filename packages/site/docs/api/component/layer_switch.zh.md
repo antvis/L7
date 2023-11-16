@@ -43,11 +43,11 @@ scene.on('loaded', () => {
 
 ### LayerSwitchItem
 
-| 名称  | 说明                          | 类型                  |
-| ----- | ----------------------------- | --------------------- |
-| layer | 需要被控制的 `layer` 数组实例 | `ILayer`              |
-| name  | 展示的图层名称                | `string \| undefined` |
-| img   | 展示的图层图片 `URL`          | `string \| undefined` |
+| 名称  | 说明                      | 类型                  |
+| ----- | ------------------------- | --------------------- |
+| layer | 需要被控制的 `layer` 实例 | `ILayer`              |
+| name  | 展示的图层名称            | `string \| undefined` |
+| img   | 展示的图层图片 `URL`      | `string \| undefined` |
 
 <embed src="@/docs/common/control/popper-api.zh.md"></embed>
 
