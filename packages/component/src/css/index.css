@@ -271,60 +271,60 @@
   padding: 4px 0;
 }
 .l7-select-control--normal .l7-select-control-item {
-  height: 24px;
-  line-height: 24px;
   display: flex;
   align-items: center;
+  height: 24px;
   padding: 0 16px;
   font-size: 12px;
+  line-height: 24px;
 }
 .l7-select-control--normal .l7-select-control-item > * + * {
   margin-left: 6px;
 }
 .l7-select-control--normal .l7-select-control-item input[type='checkbox'] {
-  height: 14px;
   width: 14px;
+  height: 14px;
 }
 .l7-select-control--normal .l7-select-control-item:hover {
   background-color: #f3f3f3;
 }
 .l7-select-control--image {
-  padding: 12px 12px 0 12px;
-  width: 474px;
-  height: 320px;
-  overflow: auto;
   display: flex;
   flex-wrap: wrap;
-  box-sizing: border-box;
   align-items: flex-start;
+  box-sizing: content-box;
+  max-width: 420px;
+  max-height: 400px;
+  margin: 12px 0 0 12px;
+  overflow: auto;
 }
 .l7-select-control--image .l7-select-control-item {
-  margin-right: 12px;
-  border-radius: 2px;
-  overflow: hidden;
-  border: 1px solid #fff;
-  box-sizing: content-box;
-  width: calc((100% - 36px) / 3);
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-sizing: content-box;
+  width: 408px / 3 - 12px;
+  margin-right: 12px;
   margin-bottom: 12px;
-  position: relative;
+  overflow: hidden;
   font-size: 12px;
+  border: 1px solid #fff;
+  border-radius: 2px;
 }
 .l7-select-control--image .l7-select-control-item img {
-  width: 142px;
+  width: 100%;
   height: 80px;
 }
 .l7-select-control--image .l7-select-control-item input[type='checkbox'] {
   position: absolute;
-  right: 0;
   top: 0;
+  right: 0;
 }
 .l7-select-control--image .l7-select-control-item .l7-select-control-item-row {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   line-height: 26px;
 }
 .l7-select-control--image .l7-select-control-item .l7-select-control-item-row > * + * {
@@ -332,9 +332,6 @@
 }
 .l7-select-control--image .l7-select-control-item.l7-select-control-item-active {
   border-color: #0370fe;
-}
-.l7-select-control--image .l7-select-control-item:nth-child(3n) {
-  margin-right: 0;
 }
 .l7-select-control-item {
   cursor: pointer;

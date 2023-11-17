@@ -5,13 +5,13 @@ import {
   TYPES,
 } from '@antv/l7-core';
 import {
-  bindAll,
-  boundsContains,
   DOM,
   IBounds,
+  Satistics,
+  bindAll,
+  boundsContains,
   lodashUtil,
   padBounds,
-  Satistics,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { Container } from 'inversify';
@@ -117,9 +117,6 @@ export default class MarkerLayer extends EventEmitter {
       }
     }
     this.markers.push(marker);
-    // if(this.inited) {
-    //   marker.addTo(this.scene);
-    // }
   }
 
   public removeMarker(marker: IMarker) {
@@ -127,6 +124,12 @@ export default class MarkerLayer extends EventEmitter {
     const markerIndex = this.markers.indexOf(marker);
     if (markerIndex > -1) {
       this.markers.splice(markerIndex, 1);
+      if (this.markerLayerOption.cluster) {
+        this.removePoint(markerIndex);
+        if (this.mapsService) {
+          this.getClusterMarker(this.bbox, this.zoom);
+        }
+      }
     }
   }
 
@@ -160,6 +163,10 @@ export default class MarkerLayer extends EventEmitter {
   public getMarkers() {
     const cluster = this.markerLayerOption.cluster;
     return cluster ? this.clusterMarkers : this.markers;
+  }
+
+  public getOriginMarkers() {
+    return this.markers;
   }
 
   // 批量添加marker到scene
@@ -209,6 +216,19 @@ export default class MarkerLayer extends EventEmitter {
     if (this.clusterIndex) {
       // 在新增点的时候需要更新 cluster 的数据
       this.clusterIndex.load(this.points);
+    }
+  }
+
+  private removePoint(id: number) {
+    const targetIndex = this.points.findIndex(
+      (point) => point.properties.marker_id === id,
+    );
+    if (targetIndex > -1) {
+      this.points.splice(targetIndex, 1);
+    }
+    if (this.clusterIndex) {
+      // 在删除点的时候需要更新 cluster 的数据
+      this.clusterIndex.load(this.points as any[]);
     }
   }
 
@@ -303,7 +323,6 @@ export default class MarkerLayer extends EventEmitter {
 
     const zoom = this.mapsService.getZoom();
     const bbox = this.mapsService.getBounds();
-
     if (
       !this.bbox ||
       Math.abs(zoom - this.zoom) >= 1 ||

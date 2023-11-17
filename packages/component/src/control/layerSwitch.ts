@@ -18,8 +18,11 @@ export interface ILayerSwitchOption extends ISelectControlOption {
 export { LayerSwitch };
 
 function isLayerSwitchItem(obj: any): obj is LayerSwitchItem {
-  return obj && obj.layer;
+  return Object.keys(obj ?? {}).every((key) =>
+    ['layer', 'name', 'img'].includes(key),
+  );
 }
+
 export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   protected get layers(): ILayer[] {
     const layerService = this.layerService;

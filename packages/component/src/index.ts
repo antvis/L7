@@ -4,6 +4,7 @@ import MarkerLayer from './marker-layer';
 import './assets/iconfont/iconfont.js';
 // 引入样式
 import './css/index.css';
+// import './css/index.less';
 
 export * from './control/baseControl';
 export {

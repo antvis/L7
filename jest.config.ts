@@ -14,7 +14,7 @@ const sharedConfig = {
     },
     // any tests that operate on dist files shouldn't compile them again.
 
-    transformIgnorePatterns: ['<rootDir>/dist','^.+\\.js$', "<rootDir>/node_modules/(?!(@mapbox/tiny-sdf)/)"],
+    transformIgnorePatterns: ['<rootDir>/dist','^.+\\.js$'],
     modulePathIgnorePatterns: ['<rootDir>/dist'],
     moduleNameMapper: {
         '@antv/l7-(.+)$': '<rootDir>packages/$1/src',
