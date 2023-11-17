@@ -1,5 +1,5 @@
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap} from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 //加载外部脚本
 function addExternalScript(src) {
@@ -86,14 +86,14 @@ function csvToGeojson(csvString) {
 }
 export default () => {
   useEffect(() => {
-
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
         pitch: 40,
         style: 'dark',
         center: [43.686824, -4.665872],
-        zoom: 1.2
+        zoom: 1.2,
+        token:"pk.eyJ1Ijoic2tvcm5vdXMiLCJhIjoiY2s4dDBkNjY1MG13ZTNzcWEyZDYycGkzMyJ9.tjfwvJ8G_VDmXoClOyxufg"
       })
     });
     const guiConfig = {
@@ -103,7 +103,7 @@ export default () => {
       // opacity:1.0,
       blend: 'additive'
     }
-    let layer, originData;
+    let layer, originData,gui;
 
     scene.on('loaded', () => {
       fetch('https://static.observableusercontent.com/files/c517bc4710d3a5daf34549dde51fd3a0e457a62ce3113847cf804dd21b78a95dd0ecc0b975455c4c162f87e74e665e6994bb9bbd457a420e46d6b6179200b47d')
@@ -125,7 +125,7 @@ export default () => {
           scene.addLayer(layer);
         });
       addExternalScript('https://cdn.uino.cn/thing-earth-space/libs/dat.gui.min.js').then(() => {
-        const gui = new dat.GUI();
+        gui = new dat.GUI();
         gui.domElement.style.position = 'absolute';
         gui.domElement.style.top = '202px';
         gui.domElement.style.right = '220px';
@@ -149,6 +149,9 @@ export default () => {
         });
       })
     });
+    return () => {
+      gui.destroy();
+    };
   }, []);
   return (
     <div
