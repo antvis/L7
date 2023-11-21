@@ -34,7 +34,7 @@
     "start": "npm run site:develop"
   },
   "devDependencies": {
-    "@antv/dumi-theme-antv": "^0.3.16",
+    "@antv/dumi-theme-antv": "^0.4.1",
     "@antv/g2": "^4.2.8",
     "@antv/l7-composite-layers": "^0.15.0",
     "@antv/l7-draw": "^3.0.9",
