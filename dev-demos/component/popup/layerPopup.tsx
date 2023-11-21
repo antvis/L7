@@ -156,6 +156,16 @@ const Demo: FunctionComponent = () => {
         >
           切换
         </button>
+
+        <button
+          onClick={() => {
+            popup?.setOptions({
+              items: [],
+            });
+          }}
+        >
+          清空 items
+        </button>
       </div>
       <div
         id="map"

@@ -77,10 +77,14 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     const newOption = { ...option };
     const trigger = newOption.trigger || this.popupOption.trigger;
     const items = newOption.items || this.popupOption.items;
-    newOption.followCursor = trigger === 'hover' && items?.length === 0;
+    const isEmptyItems = items?.length === 0;
+    newOption.followCursor = trigger === 'hover' && !isEmptyItems;
 
     super.setOptions(newOption);
     this.bindLayerEvent();
+    if (isEmptyItems) {
+      this.hide();
+    }
     return this;
   }
 
