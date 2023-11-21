@@ -144,6 +144,19 @@ const Demo: FunctionComponent = () => {
 
   return (
     <>
+      <div>
+        <button
+          onClick={() => {
+            popup?.setOptions({
+              trigger:
+                popup?.getOptions().trigger === 'click' ? 'hover' : 'click',
+            });
+            console.log(popup?.getOptions().trigger);
+          }}
+        >
+          切换
+        </button>
+      </div>
       <div
         id="map"
         style={{
