@@ -56,6 +56,8 @@ export default class ShaderModuleService implements IShaderModuleService {
     //   return;
     // }
 
+    moduleParams.vs = moduleParams.vs.replace(/\r\n/g, '\n'); // 将所有的\r\n替换为\n
+    moduleParams.fs = moduleParams.fs.replace(/\r\n/g, '\n'); // 将所有的\r\n替换为\n
     const { vs, fs, uniforms: declaredUniforms, inject } = moduleParams;
     const { content: extractedVS, uniforms: vsUniforms } = extractUniforms(vs);
     const { content: extractedFS, uniforms: fsUniforms } = extractUniforms(fs);
