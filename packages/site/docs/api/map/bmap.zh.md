@@ -1,6 +1,6 @@
 ---
 title: 百度地图
-order: 1
+order: 2
 ---
 
 <embed src="@/docs/common/style.md"></embed>
@@ -73,58 +73,4 @@ const scene = new Scene({
 
 BaiduMap [示例地址](/examples/map/map/#baidumap)、外部传入[示例地址](/examples/map/map/#bmapInstance)
 
-## options
-
-### zoom 初始化缩放等级
-
-地图初始显示级别 {number} 百度地图（3-21）
-
-### center 地图中心
-
-地图初始中心经纬度 {Lnglat}
-
-### pitch 地图倾角
-
-地图初始俯仰角度 {number}  default 0
-
-### style 地图样式
-
-地图初始样式 {'normal' | string | Array}
-
-- 值 'normal' 默认主题样式。
-
-- 值 string 类型时，为个性化配置的[样式ID](https://lbsyun.baidu.com/index.php?title=jspopularGL/guide/custom)。
-
-```javascript
-{
-  // 测试账号，已发布的样式ID 
-  style: '90dbaeacad6d1d1663046eed2555ab9e'
-}
-```
-
-- 值 Array 时，为自定义的[样式JSON](https://lbsyun.baidu.com/index.php?title=jspopularGL/guide/custom)
-
-```javascript
-{
-  style: [{
-    featureType: 'background',
-    elementType: 'geometry',
-    stylers: {
-        color: '#070c17ff'
-    }
-  }]
-}
-```
-
-### minZoom 最小缩放等级
-
-地图最小缩放等级 {number} 百度地图（3-21）
-
-### maxZoom 最大缩放等级
-
-地图最大缩放等级 {number} 百度地图（3-21）
-
-### rotateEnable 是否允许旋转
-
-地图是否可旋转 {Boolean} default true
-
+<embed src="@/docs/common/map.zh.md"></embed>
