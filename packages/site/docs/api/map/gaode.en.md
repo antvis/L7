@@ -33,7 +33,7 @@ const L7AMap = new GaodeMap({
 });
 ```
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/common/map.en.md"></embed>
 
 ## Pass in external instance
 
@@ -66,7 +66,7 @@ const scene = new Scene({
 
 [Example address (2D)](/examples/tutorial/map#amapInstance2d)[code address](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/common/map.en.md"></embed>
 
 ## Register to use Gaode plug-in
 

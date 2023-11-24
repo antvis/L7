@@ -54,4 +54,4 @@ const scene = new Scene({
 });
 ```
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/common/map.en.md"></embed>

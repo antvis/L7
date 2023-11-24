@@ -54,4 +54,4 @@ scene.on('loaded', () => {
 });
 ```
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/common/map.en.md"></embed>
