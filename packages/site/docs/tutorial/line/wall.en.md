@@ -47,7 +47,7 @@ scene.on('loaded', () => {
         .size(40)
         .shape('wall')
         .style({
-          opacity: 'testOpacity',
+          opacity: 1,
           sourceColor: '#0DCCFF',
           targetColor: 'rbga(255,255,255, 0)'
         });
