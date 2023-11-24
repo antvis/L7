@@ -66,7 +66,7 @@ void main() {
   float lightWeight = calc_lighting(vec4(project_pos.xy, wallHeight, 1.0));
 
   v_blur = min(project_float_pixel(2.0) / originSize, 0.05);
-  v_color = vec4(a_Color.rgb * lightWeight, a_Color.w);
+  v_color = vec4(a_Color.rgb * lightWeight, a_Color.w * opacity);
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * (vec4(project_pos.xy, wallHeight, 1.0));

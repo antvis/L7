@@ -8,7 +8,6 @@ uniform vec2 u_textSize;
 uniform float u_linearColor: 0;
 uniform vec4 u_sourceColor;
 uniform vec4 u_targetColor;
-uniform float u_opacity : 1.0;
 uniform float u_textureBlend;
 uniform float u_iconStepCount;
 uniform float u_time;
@@ -23,7 +22,6 @@ varying vec4 v_dataset;
 #pragma include "picking"
 
 void main() {
-  float opacity = u_opacity;
   float animateSpeed = 0.0; // 运动速度
   float d_distance_ratio = v_dataset.r; // 当前点位距离占线总长的比例
   float v = v_dataset.a;
@@ -34,7 +32,7 @@ void main() {
      gl_FragColor = v_color;
   }
 
-  gl_FragColor.a *= opacity; // 全局透明度
+  gl_FragColor.a *= v_color.a; // 全局透明度
   if(u_animate.x == Animate) {
       animateSpeed = u_time / u_animate.y;
        float alpha =1.0 - fract( mod(1.0- d_distance_ratio, u_animate.z)* (1.0/ u_animate.z) + animateSpeed);
@@ -69,7 +67,7 @@ void main() {
       pattern.a = 0.0;
       gl_FragColor = filterColor(gl_FragColor + pattern);
     } else { // replace
-        pattern.a *= opacity;
+        pattern.a *= v_color.a;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
         }

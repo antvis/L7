@@ -14,7 +14,6 @@ import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/wall/wall_frag.glsl';
 import line_vert from '../shaders/wall/wall_vert.glsl';
-const { isNumber } = lodashUtil;
 export default class LineWallModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms(): IModelUniform {
@@ -40,7 +39,7 @@ export default class LineWallModel extends BaseModel {
       targetColorArr = rgb2arr(targetColor);
       useLinearColor = 1;
     }
-
+    console.log('sourceColorArr', this.layer.getEncodedData());
     return {
       u_heightfixed: Number(heightfixed),
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
