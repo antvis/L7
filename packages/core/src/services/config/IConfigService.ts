@@ -17,6 +17,10 @@ export interface ISceneConfig extends IRenderConfig {
   // TODO: 场景是否支持 stencil mask
   stencil?: boolean;
   debug?: boolean;
+  /**
+   * Support regl & @antv/g-device-api now
+   */
+  renderer?: 'regl' | 'device';
 }
 
 export interface IGlobalConfigService {

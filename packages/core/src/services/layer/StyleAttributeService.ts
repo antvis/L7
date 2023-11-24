@@ -5,7 +5,7 @@ import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
 import { gl } from '../renderer/gl';
-import { ILayer } from './ILayerService';
+import { ILayer, ILayerConfig } from './ILayerService';
 import {
   IAttributeScale,
   IEncodeFeature,
@@ -214,7 +214,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   public createAttributesAndIndices(
     features: IEncodeFeature[],
     triangulation: Triangulation,
-    segmentNumber: number,
+    styleOption: unknown,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -249,7 +249,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         size: vertexSize,
         indexes,
         count,
-      } = this.triangulation(feature, segmentNumber);
+      } = this.triangulation(feature, styleOption);
       if (typeof count === 'number') {
         // 顶点数
         vecticesCount += count;

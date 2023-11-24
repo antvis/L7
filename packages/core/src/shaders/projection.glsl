@@ -12,28 +12,14 @@
 #define COORDINATE_SYSTEM_METER_OFFSET 7.0
 
 #define COORDINATE_SYSTEM_P20_2 8.0         // amap2.0
+#pragma include "scene_uniforms"
 
-uniform mat4 u_ViewMatrix;
-uniform mat4 u_ProjectionMatrix;
-uniform mat4 u_ViewProjectionMatrix;
-uniform float u_Zoom : 1;
-uniform float u_ZoomScale : 1;
-
-uniform float u_CoordinateSystem;
-uniform vec2 u_ViewportCenter;
-uniform vec4 u_ViewportCenterProjection;
-uniform vec3 u_PixelsPerDegree;
-uniform vec3 u_PixelsPerDegree2;
-uniform vec3 u_PixelsPerMeter;
-
-uniform vec2 u_ViewportSize;
-uniform float u_DevicePixelRatio;
-uniform float u_FocalDistance;
-uniform vec3 u_CameraPosition;
-uniform mat4 u_Mvp;
 
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
+   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.0
+    return lnglat;
+  }
   float x = lnglat.x;
   return vec2(
     radians(x) + PI,
@@ -114,7 +100,6 @@ vec4 project_position(vec4 position) {
       position.w
     );
   }
-
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
     return vec4(
       (project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale - vec2(215440491., 106744817.)) * vec2(1., -1.),
@@ -142,6 +127,8 @@ vec2 project_pixel_size_to_clipspace(vec2 pixels) {
   vec2 offset = pixels / u_ViewportSize * u_DevicePixelRatio * 2.0;
   return offset * u_FocalDistance;
 }
+
+
 
 float project_pixel_allmap(float pixel) {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT) {

@@ -1,7 +1,7 @@
 module.exports = {
     globals: {
-        "AMap": true,
-        "L7": true,
+        'AMap': true,
+        'L7': true,
     },
     env: {
         browser: true,
@@ -15,9 +15,9 @@ module.exports = {
         ecmaVersion: 12,
         sourceType: 'module'
     },
-    plugins: ['@typescript-eslint',"unused-imports"],
+    plugins: ['@typescript-eslint','unused-imports'],
     rules: {
-        "unused-imports/no-unused-imports": "error",
+        'unused-imports/no-unused-imports': 'error',
         '@typescript-eslint/no-loss-of-precision':0,
         '@typescript-eslint/no-inferrable-types': 0,
         'no-constant-condition': 0,
@@ -29,6 +29,8 @@ module.exports = {
         'no-useless-catch': 0,
         '@typescript-eslint/explicit-module-boundary-types': 0,
         '@typescript-eslint/no-explicit-any':0,
+        '@typescript-eslint/no-unused-vars': 0,
+        '@typescript-eslint/no-duplicate-enum-values':0,
         'prefer-rest-params':0,
     },
     settings: {

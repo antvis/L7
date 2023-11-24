@@ -7,6 +7,8 @@ const { uniq } = lodashUtil;
 
 import common from '../../shaders/common.glsl';
 import decode from '../../shaders/decode.glsl';
+import scene_uniforms from '../../shaders/scene_uniforms.glsl';
+import picking_uniforms from '../../shaders/picking_uniforms.glsl';
 import light from '../../shaders/light2.glsl';
 import lighting from '../../shaders/lighting.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
@@ -30,7 +32,16 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.destroy();
     this.registerModule('common', { vs: common, fs: common });
     this.registerModule('decode', { vs: decode, fs: '' });
-    this.registerModule('projection', { vs: projection, fs: '' });
+    this.registerModule('scene_uniforms', {
+      vs: scene_uniforms,
+      fs: scene_uniforms,
+    });
+    this.registerModule('picking_uniforms', {
+      vs: picking_uniforms,
+      fs: picking_uniforms,
+    });
+
+    this.registerModule('projection', { vs: projection, fs: projection });
     this.registerModule('project', { vs: project, fs: '' });
     this.registerModule('sdf_2d', { vs: '', fs: sdf2d });
     this.registerModule('lighting', { vs: lighting, fs: '' });
@@ -45,6 +56,8 @@ export default class ShaderModuleService implements IShaderModuleService {
     //   return;
     // }
 
+    moduleParams.vs = moduleParams.vs.replace(/\r\n/g, '\n'); // 将所有的\r\n替换为\n
+    moduleParams.fs = moduleParams.fs.replace(/\r\n/g, '\n'); // 将所有的\r\n替换为\n
     const { vs, fs, uniforms: declaredUniforms, inject } = moduleParams;
     const { content: extractedVS, uniforms: vsUniforms } = extractUniforms(vs);
     const { content: extractedFS, uniforms: fsUniforms } = extractUniforms(fs);
@@ -70,7 +83,7 @@ export default class ShaderModuleService implements IShaderModuleService {
     // }
 
     let rawVS = this.rawContentCache[moduleName].vs;
-    const rawFS = this.rawContentCache[moduleName].fs;
+    let rawFS = this.rawContentCache[moduleName].fs;
     const inject = this.rawContentCache[moduleName].inject;
     let declaredUniforms = {};
     if (inject?.['vs:#decl']) {
@@ -83,6 +96,10 @@ export default class ShaderModuleService implements IShaderModuleService {
       rawVS = rawVS.replace(REGEX_START_OF_MAIN, (match: string) => {
         return match + inject?.['vs:#main-start'];
       });
+    }
+    if (inject?.['fs:#decl']) {
+      // 头部注入
+      rawFS = inject?.['fs:#decl'] + rawFS;
     }
 
     const { content: vs, includeList: vsIncludeList } = this.processModule(
@@ -118,13 +135,18 @@ export default class ShaderModuleService implements IShaderModuleService {
     if (!precisionRegExp.test(fs)) {
       compiledFs = compiledFs + globalDefaultprecision;
     }
-
     compiledFs = compiledFs + fs;
+
+    let compiledVs = '';
+    if (!precisionRegExp.test(vs)) {
+      compiledVs = compiledVs + globalDefaultprecision;
+    }
+    compiledVs = compiledVs + vs;
 
     this.moduleCache[moduleName] = {
       fs: compiledFs.trim(),
       uniforms,
-      vs: vs.trim(),
+      vs: compiledVs.trim(),
     };
     return this.moduleCache[moduleName];
   }

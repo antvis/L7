@@ -27,7 +27,10 @@ export function getUniformLengthByType(type: string): number {
 
 const uniformRegExp =
   /uniform\s+(bool|float|int|vec2|vec3|vec4|ivec2|ivec3|ivec4|mat2|mat3|mat4|sampler2D|samplerCube)\s+([\s\S]*?);/g;
-export function extractUniforms(content: string): {
+function fillUniforms(
+  content: string,
+  uniformPrefix = false,
+): {
   content: string;
   uniforms: {
     [key: string]: any;
@@ -79,10 +82,52 @@ export function extractUniforms(content: string): {
 
     // @ts-ignore
     uniforms[uniformName] = defaultValue;
-    return `uniform ${type} ${uniformName};\n`;
+    return `${uniformPrefix ? 'uniform ' : ''}${type} ${uniformName};\n`;
   });
+
   return {
     content,
     uniforms,
   };
+}
+export function extractUniforms(content: string): {
+  content: string;
+  uniforms: {
+    [key: string]: any;
+  };
+} {
+  // eslint-disable-next-line prefer-const
+  let { content: c, uniforms: u } = fillUniforms(content, true);
+
+  c = c.replace(
+    /(\s*uniform\s*.*\s*){((?:\s*.*\s*)*?)};/g,
+    (substr, header, uniforms) => {
+      uniforms = uniforms.trim().replace(/^.*$/gm, (uniform: string) => {
+        return `uniform ${uniform}`;
+      });
+
+      const { content: cc, uniforms: uu } = fillUniforms(uniforms);
+      Object.assign(u, uu);
+
+      return `${header}{\n${cc}\n};`;
+    },
+  );
+
+  return {
+    content: c,
+    uniforms: u,
+  };
+}
+
+export function removeDuplicateUniforms(content: string) {
+  const uniforms: Record<string, boolean> = {};
+  return content.replace(uniformRegExp, (_, type, uniformName) => {
+    const name = uniformName.trim();
+    if (!uniforms[name]) {
+      uniforms[name] = true;
+      return `uniform ${type} ${name};\n`;
+    } else {
+      return '';
+    }
+  });
 }

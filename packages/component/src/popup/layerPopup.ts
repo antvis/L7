@@ -75,22 +75,26 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
   public setOptions(option: Partial<ILayerPopupOption>) {
     this.unbindLayerEvent();
     const newOption = { ...option };
-    const trigger = option.trigger || this.popupOption.trigger;
-    if (newOption.items?.length === 0 && trigger === 'hover') {
-      newOption.followCursor = false;
-    }
+    const trigger = newOption.trigger || this.popupOption.trigger;
+    const items = newOption.items || this.popupOption.items;
+    const isEmptyItems = items?.length === 0;
+    newOption.followCursor = trigger === 'hover' && !isEmptyItems;
+
     super.setOptions(newOption);
     this.bindLayerEvent();
+    if (isEmptyItems) {
+      this.hide();
+    }
     return this;
   }
 
   protected getDefault(option: Partial<ILayerPopupOption>): ILayerPopupOption {
-    const isClickTrigger = option.trigger === 'click';
+    const isHoverTrigger = option.trigger === 'hover';
 
     return {
       ...super.getDefault(option),
       trigger: 'hover',
-      followCursor: !isClickTrigger,
+      followCursor: isHoverTrigger,
       lngLat: {
         lng: 0,
         lat: 0,

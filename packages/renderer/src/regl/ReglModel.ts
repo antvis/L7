@@ -1,4 +1,9 @@
 import {
+  ClipSpaceNearZ,
+  preprocessShader_GLSL,
+  ViewportOrigin,
+} from '@antv/g-device-api';
+import {
   gl,
   IAttribute,
   IBlendOptions,
@@ -7,6 +12,7 @@ import {
   IModelDrawOptions,
   IModelInitializationOptions,
   IUniform,
+  removeDuplicateUniforms,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import regl from 'regl';
@@ -52,6 +58,20 @@ export default class ReglModel implements IModel {
       cull,
       instances,
     } = options;
+
+    /**
+     * try to compile GLSL 300 to 100
+     */
+    const vendorInfo = {
+      platformString: 'WebGL1',
+      glslVersion: '#version 100',
+      explicitBindingLocations: false,
+      separateSamplerTextures: false,
+      viewportOrigin: ViewportOrigin.LOWER_LEFT,
+      clipSpaceNearZ: ClipSpaceNearZ.NEGATIVE_ONE,
+      supportMRT: false,
+    };
+
     const reglUniforms: { [key: string]: IUniform } = {};
     this.options = options;
     if (uniforms) {
@@ -69,9 +89,13 @@ export default class ReglModel implements IModel {
     });
     const drawParams: regl.DrawConfig = {
       attributes: reglAttributes,
-      frag: fs,
+      frag: removeDuplicateUniforms(
+        preprocessShader_GLSL(vendorInfo, 'frag', fs, null, false),
+      ),
       uniforms: reglUniforms,
-      vert: vs,
+      vert: removeDuplicateUniforms(
+        preprocessShader_GLSL(vendorInfo, 'vert', vs, null, false),
+      ),
       // @ts-ignore
       colorMask: reGl.prop('colorMask'),
       lineWidth: 1,

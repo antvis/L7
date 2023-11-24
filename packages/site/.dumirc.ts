@@ -36,6 +36,7 @@ export default defineConfig({
   themeConfig: {
     title: 'L7',
     isAntVSite: false,
+    footerTheme: 'light', // 白色 底部主题
     internalSite: {
       url: 'https://gitee.com/antv/L7',
       name: {
@@ -53,16 +54,25 @@ export default defineConfig({
     showChartResize: true, // 是否在demo页展示图表视图切换
     showAPIDoc: true, // 是否在demo页展示API文档
     detail: {
+      engine: {
+        zh: 'L7',
+        en: 'L7',
+      },
       title: {
-        zh: '蚂蚁地理空间数据可视化',
-        en: 'L7 Geospatial Visualization',
+        zh: 'L7·蚂蚁地理空间数据可视化',
+        en: 'L7·Geospatial Visualization',
       },
       description: {
         zh: '蚂蚁集团 AntV 数据可视化团队推出的基于 WebGL 的开源大规模地理空间数据可视分析引擎。',
         en: 'Geospatial Data Visualization Analysis Engine',
       },
       image:
-        'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*cCI7RaJs46AAAAAAAAAAAABkARQnAQ',
+        'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*5bIcTaxarjoAAAAAAAAAAAAADmJ7AQ/original',
+      imageStyle: {
+        transform: 'scale(0.6)',
+        marginLeft: '145px',
+        marginTop: '-25px',
+      },
       buttons: [
         {
           text: {
@@ -76,14 +86,16 @@ export default defineConfig({
             zh: '图表示例',
             en: 'gallery',
           },
-          link: '/examples',
           type: 'primary',
+          link: '/examples',
         },
         {
           text: {
             zh: 'QuickIssue',
             en: 'QuickIssue',
           },
+          type: 'primary',
+          icon: null,
           link: '/tutorial/quick_issue',
         },
       ],

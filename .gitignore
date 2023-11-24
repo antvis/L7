@@ -71,7 +71,6 @@ dist/
 es/
 
 .DS_Store
-public
 .cache
 .idea
 

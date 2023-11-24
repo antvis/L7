@@ -9,7 +9,7 @@ import {
     // @ts-ignore
   } from '@antv/l7';
   // @ts-ignore
-  import { GaodeMap,Map,Mapbox } from '@antv/l7-maps';
+  import { GaodeMap,Map,BaiduMap } from '@antv/l7-maps';
 
   import React, { useEffect } from 'react';
   
@@ -17,7 +17,7 @@ import {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
-        map: new Map({
+        map: new BaiduMap({
           center: [8.654789284720719, 47.412606122294044],
           zoom: 5,
           style: 'dark',
@@ -80,11 +80,12 @@ import {
             }
           }).sort((a:any,b:any) => {
             return a.count - b.count;
-          })
+          });
 
         
           const layer = new LineLayer({
             zIndex: 0,
+            autoFit:true
           })
             .source(oddata, {
               parser: {
@@ -96,7 +97,7 @@ import {
               type: 'quantile',
             })
             .size('count', [0.5, 1, 2,2,2,6,8, 10])
-            .shape('flowline') 
+            .shape('flowline')
             .color('count',[
               '#fef6b5',
               '#ffdd9a',
@@ -107,18 +108,22 @@ import {
               '#e15383',
             ])
             .style({
-              // opacity: {
-              //   field: 'count',
-              //   values: [0.2,0.4,0.6,0.8],
+              // symbol:{
+              //   target:'halfTriangle',
+              //   source:'none',
               // },
-              opacity:1.0,
-              gapWidth: 2,
-              // offsets:{
-              //   field: 'count',
-              //   values:()=>{
-              //     return [10 + Math.random()*20, 10 + Math.random()*20]
-              //   }
-              // },// 支持数据映射
+              opacity: {
+                field: 'count',
+                value: [0.2,0.4,0.6,0.8],
+              },
+              // opacity:1,
+              gapWidth: 1,
+              offsets:{
+                field: 'count',
+                value:()=>{
+                  return [20, 20]
+                }
+              },// 支持数据映射
               strokeWidth: 1,
               strokeOpacity:1,
               stroke: '#000',
