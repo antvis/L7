@@ -1,6 +1,7 @@
 #define TILE_SIZE 512.0
 #define PI 3.1415926536
 #define WORLD_SCALE TILE_SIZE / (PI * 2.0)
+#define EARTH_CIRCUMFERENCE 40.03e6
 
 #define COORDINATE_SYSTEM_LNGLAT 1.0        // mapbox
 #define COORDINATE_SYSTEM_LNGLAT_OFFSET 2.0 // mapbox offset
@@ -107,13 +108,17 @@ vec4 project_position(vec4 position) {
     );
   }
 
-  // if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+    // return vec4(
+    //   (position.xy * WORLD_SCALE * u_ZoomScale) * vec2(1., -1.),
+    //   project_scale(position.z),
+    //   position.w);
 
-  //    return vec4(
-  //     position.xy, 
-  //     project_scale(position.z), 
-  //     position.w);
-  // }
+     return vec4(
+      position.xy,
+      project_scale(position.z),
+      position.w);
+  }
   return position;
 
   // TODO: 瓦片坐标系 & 常规世界坐标系
@@ -148,7 +153,7 @@ float project_pixel_texture(float pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     return pixel * pow(0.5, u_Zoom)* u_FocalDistance ;
   }
-  
+
   // amap zoom < 12
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
     return pixel * pow(2.0, (20.0 - u_Zoom))* u_FocalDistance ;
@@ -171,6 +176,18 @@ float project_float_pixel(float pixel) {
     return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom))* u_FocalDistance ;
   }
   return pixel * u_FocalDistance;
+}
+
+// Project meter into the unit of pixel which used in the camera world space
+float project_float_meter(float meter) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+    // Since the zoom level uniform is updated by mapservice and it's alread been subtracted by 1
+    // Not sure if we are supposed to do that again
+    return u_FocalDistance * TILE_SIZE * pow(2.0, u_Zoom) * meter / EARTH_CIRCUMFERENCE;
+  }
+
+  // TODO: change the following code to make adaptations for amap
+  return u_FocalDistance * TILE_SIZE * pow(2.0, u_Zoom) * meter / EARTH_CIRCUMFERENCE;
 }
 
 float project_pixel(float pixel) {
