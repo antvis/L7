@@ -73,4 +73,4 @@ const scene = new Scene({
 
 BaiduMap [Example address](/examples/map/map/#baidumap), external incoming[Example address](/examples/map/map/#bmapInstance)
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/common/map.en.md"></embed>

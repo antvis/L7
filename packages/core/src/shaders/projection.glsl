@@ -107,9 +107,13 @@ vec4 project_position(vec4 position) {
     );
   }
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-   return position;
-  }
+  // if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+
+  //    return vec4(
+  //     position.xy, 
+  //     project_scale(position.z), 
+  //     position.w);
+  // }
   return position;
 
   // TODO: 瓦片坐标系 & 常规世界坐标系

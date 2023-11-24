@@ -32,4 +32,4 @@ import { TencentMap } from '@antv/l7-maps';
   });
 ```
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/common/map.en.md"></embed>
