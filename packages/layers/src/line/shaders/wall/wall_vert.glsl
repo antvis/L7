@@ -57,9 +57,10 @@ void main() {
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 
   float originSize = a_Size.x;  // 固定高度
-  if(u_heightfixed < 1.0) {     // 高度随 zoom 调整
-    originSize = project_float_meter(a_Size.x);
+  if(u_heightfixed < 1.0) {    
+     originSize = project_float_meter(a_Size.x); // 高度随 zoom 调整
   }
+
 
   float wallHeight = originSize * miter;
   float lightWeight = calc_lighting(vec4(project_pos.xy, wallHeight, 1.0));

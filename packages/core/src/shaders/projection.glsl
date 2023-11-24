@@ -108,17 +108,14 @@ vec4 project_position(vec4 position) {
     );
   }
 
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // return vec4(
-    //   (position.xy * WORLD_SCALE * u_ZoomScale) * vec2(1., -1.),
-    //   project_scale(position.z),
-    //   position.w);
+  // if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
+ 
 
-     return vec4(
-      position.xy,
-      project_scale(position.z),
-      position.w);
-  }
+  //    return vec4(
+  //     position.xy,
+  //     project_scale(position.z),
+  //     position.w);
+  // }
   return position;
 
   // TODO: 瓦片坐标系 & 常规世界坐标系
@@ -183,7 +180,9 @@ float project_float_meter(float meter) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
     // Since the zoom level uniform is updated by mapservice and it's alread been subtracted by 1
     // Not sure if we are supposed to do that again
-    return u_FocalDistance * TILE_SIZE * pow(2.0, u_Zoom) * meter / EARTH_CIRCUMFERENCE;
+   return meter;
+  } else  {
+    return project_float_pixel(meter);
   }
 
   // TODO: change the following code to make adaptations for amap
