@@ -39,7 +39,6 @@ export default class LineWallModel extends BaseModel {
       targetColorArr = rgb2arr(targetColor);
       useLinearColor = 1;
     }
-    console.log('sourceColorArr', this.layer.getEncodedData());
     return {
       u_heightfixed: Number(heightfixed),
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
