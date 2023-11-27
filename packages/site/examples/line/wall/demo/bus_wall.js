@@ -39,7 +39,7 @@ scene.on('loaded', () => {
         .shape('wall')
         .texture('02')
         .style({
-          opacity: 'testOpacity',
+          opacity: 1,
           lineTexture: true, // 开启线的贴图功能
           iconStep: 40, // 设置贴图纹理的间距
           iconStepCount: 4,
