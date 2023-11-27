@@ -1054,7 +1054,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     // destroy all UBOs
-    this.layerModel.uniformBuffers.forEach((buffer) => {
+    this.layerModel?.uniformBuffers.forEach((buffer) => {
       buffer.destroy();
     });
 
