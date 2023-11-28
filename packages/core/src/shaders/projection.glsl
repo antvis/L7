@@ -1,6 +1,7 @@
 #define TILE_SIZE 512.0
 #define PI 3.1415926536
 #define WORLD_SCALE TILE_SIZE / (PI * 2.0)
+#define EARTH_CIRCUMFERENCE 40.03e6
 
 #define COORDINATE_SYSTEM_LNGLAT 1.0        // mapbox
 #define COORDINATE_SYSTEM_LNGLAT_OFFSET 2.0 // mapbox offset
@@ -11,28 +12,14 @@
 #define COORDINATE_SYSTEM_METER_OFFSET 7.0
 
 #define COORDINATE_SYSTEM_P20_2 8.0         // amap2.0
+#pragma include "scene_uniforms"
 
-uniform mat4 u_ViewMatrix;
-uniform mat4 u_ProjectionMatrix;
-uniform mat4 u_ViewProjectionMatrix;
-uniform float u_Zoom : 1;
-uniform float u_ZoomScale : 1;
-
-uniform float u_CoordinateSystem;
-uniform vec2 u_ViewportCenter;
-uniform vec4 u_ViewportCenterProjection;
-uniform vec3 u_PixelsPerDegree;
-uniform vec3 u_PixelsPerDegree2;
-uniform vec3 u_PixelsPerMeter;
-
-uniform vec2 u_ViewportSize;
-uniform float u_DevicePixelRatio;
-uniform float u_FocalDistance;
-uniform vec3 u_CameraPosition;
-uniform mat4 u_Mvp;
 
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
+   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.0
+    return lnglat;
+  }
   float x = lnglat.x;
   return vec2(
     radians(x) + PI,
@@ -113,7 +100,6 @@ vec4 project_position(vec4 position) {
       position.w
     );
   }
-
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
     return vec4(
       (project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale - vec2(215440491., 106744817.)) * vec2(1., -1.),
@@ -124,13 +110,13 @@ vec4 project_position(vec4 position) {
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
     // return vec4(
-    //   (position.xy * WORLD_SCALE * u_ZoomScale) * vec2(1., -1.), 
-    //   project_scale(position.z), 
+    //   (position.xy * WORLD_SCALE * u_ZoomScale) * vec2(1., -1.),
+    //   project_scale(position.z),
     //   position.w);
 
      return vec4(
-      position.xy, 
-      project_scale(position.z), 
+      position.xy,
+      project_scale(position.z),
       position.w);
   }
   return position;
@@ -141,6 +127,8 @@ vec2 project_pixel_size_to_clipspace(vec2 pixels) {
   vec2 offset = pixels / u_ViewportSize * u_DevicePixelRatio * 2.0;
   return offset * u_FocalDistance;
 }
+
+
 
 float project_pixel_allmap(float pixel) {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT) {
@@ -165,7 +153,7 @@ float project_pixel_texture(float pixel) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
     return pixel * pow(0.5, u_Zoom)* u_FocalDistance ;
   }
-  
+
   // amap zoom < 12
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
     return pixel * pow(2.0, (20.0 - u_Zoom))* u_FocalDistance ;
@@ -188,6 +176,18 @@ float project_float_pixel(float pixel) {
     return pixel * pow(2.0, (19.0 - 3.0 - u_Zoom))* u_FocalDistance ;
   }
   return pixel * u_FocalDistance;
+}
+
+// Project meter into the unit of pixel which used in the camera world space
+float project_float_meter(float meter) {
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+    // Since the zoom level uniform is updated by mapservice and it's alread been subtracted by 1
+    // Not sure if we are supposed to do that again
+    return u_FocalDistance * TILE_SIZE * pow(2.0, u_Zoom) * meter / EARTH_CIRCUMFERENCE;
+  }
+
+  // TODO: change the following code to make adaptations for amap
+  return u_FocalDistance * TILE_SIZE * pow(2.0, u_Zoom) * meter / EARTH_CIRCUMFERENCE;
 }
 
 float project_pixel(float pixel) {

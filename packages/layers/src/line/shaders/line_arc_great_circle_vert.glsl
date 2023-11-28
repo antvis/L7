@@ -119,9 +119,8 @@ vec2 interpolate (vec2 source, vec2 target, float angularDist, float t) {
 }
 
 void main() {
-  
-
   v_color = a_Color;
+  v_color.a = v_color.a * opacity;
   vec2 source = radians(a_Instance.rg);
   vec2 target = radians(a_Instance.ba);
   float angularDist = getAngularDist(source, target);

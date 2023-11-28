@@ -157,11 +157,11 @@ export function FlowLineFillTriangulation(feature: IEncodeFeature) {
       ...coord, // 0
       1,
       2,
-      -3,
+      -3,// mapbox 为正
       ...coord, // 1
       1,
       1,
-      -3,
+      -3, // mapbox 为正
       ...coord, // 2
       0,
       1,
@@ -177,11 +177,12 @@ export function FlowLineFillTriangulation(feature: IEncodeFeature) {
       ...coord, // 0
       1,
       2,
-      -3,
+      -3,// mapbox 为正
       ...coord, // 1
       1,
       1,
       -3,
+      // // mapbox 为正
       ...coord, // 2
       0,
       1,
@@ -225,55 +226,6 @@ export function FlowLineFillTriangulation(feature: IEncodeFeature) {
       0,
     ],
     indices: [0, 1, 2, 0, 2, 3, 0, 3, 4, 5, 6, 7, 5, 7, 8, 5, 8, 9],
-    size: 7,
-  };
-}
-export function FlowLineStrokeTriangulation(feature: IEncodeFeature) {
-  // @ts-ignore
-  const coord = (feature.coordinates as Array<[number, number]>).flat();
-  const tin = 1;
-  const tout = 1;
-  return {
-    vertices: [
-      1,
-      0,
-      0,
-      ...coord, // 0
-      1,
-      2,
-      -3,
-      ...coord, // 1
-      1,
-      1,
-      -3,
-      ...coord, // 2
-      0,
-      1,
-      0,
-      ...coord, // 3
-      0,
-      0,
-      0,
-      ...coord, // 4
-    ],
-    normals: [
-      -tin,
-      2 * tout,
-      1, // 0
-      2 * tout,
-      -tout,
-      1, // 1
-      tout,
-      -tout,
-      1, // 2
-      tout,
-      -tout,
-      1, // 3
-      -tin,
-      -tout,
-      1, // 4
-    ],
-    indices: [0, 1, 1, 2, 2, 3, 3, 4, 4, 0],
     size: 7,
   };
 }
@@ -521,13 +473,14 @@ export function RasterImageTriangulation(feature: IEncodeFeature) {
  */
 export function LineArcTriangulation(
   feature: IEncodeFeature,
-  segmentNumber?: number,
+  styleOption?: unknown,
 ) {
-  const segNum = segmentNumber ? segmentNumber : 30;
+  // @ts-ignore
+  const { segmentNumber = 30 } = styleOption;
   const coordinates = feature.coordinates as IPosition[];
   const positions = [];
   const indexArray = [];
-  for (let i = 0; i < segNum; i++) {
+  for (let i = 0; i < segmentNumber; i++) {
     // 上线两个顶点
     // [ x, y, z, sx,sy, tx,ty]
     positions.push(
@@ -547,7 +500,7 @@ export function LineArcTriangulation(
       coordinates[1][1],
     );
 
-    if (i !== segNum - 1) {
+    if (i !== segmentNumber - 1) {
       indexArray.push(
         ...[0, 1, 2, 1, 3, 2].map((v) => {
           return i * 2 + v;

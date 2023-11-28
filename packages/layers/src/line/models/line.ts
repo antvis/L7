@@ -41,7 +41,6 @@ export default class LineModel extends BaseModel {
   });
   public getUninforms(): IModelUniform {
     const {
-      // opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -50,18 +49,11 @@ export default class LineModel extends BaseModel {
       lineTexture = false,
       iconStep = 100,
       vertexHeightScale = 20.0,
-      borderWidth = 0.0,
-      borderColor = '#ccc',
+      strokeWidth = 0.0,
       raisingHeight = 0,
       heightfixed = false,
       linearDir = LinearDir.VERTICAL, // 默认纵向
       blur = [1, 1, 1],
-      arrow = {
-        enable: false,
-        arrowWidth: 2,
-        arrowHeight: 3,
-        tailWidth: 1,
-      },
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -88,7 +80,6 @@ export default class LineModel extends BaseModel {
       u_dash_array: dashArray,
 
       u_blur: blur,
-
       // 纹理支持参数
       u_texture: this.texture, // 贴图
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
@@ -96,9 +87,7 @@ export default class LineModel extends BaseModel {
       u_textSize: [1024, this.iconService.canvasHeight || 128],
 
       // line border 参数
-      u_borderWidth: borderWidth,
-      u_borderColor: rgb2arr(borderColor),
-
+      u_strokeWidth: strokeWidth,
       // 渐变色支持参数
       u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
       u_linearColor: useLinearColor,
@@ -111,12 +100,6 @@ export default class LineModel extends BaseModel {
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
-
-      // arrow
-      u_arrow: Number(arrow.enable),
-      u_arrowHeight: arrow.arrowHeight || 3,
-      u_arrowWidth: arrow.arrowWidth || 2,
-      u_tailWidth: arrow.tailWidth === undefined ? 1 : arrow.tailWidth,
       ...this.getStyleAttribute(),
     };
   }

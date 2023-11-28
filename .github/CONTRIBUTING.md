@@ -16,12 +16,27 @@ git clone https://github.com/antvis/L7  --depth=1
 
 ### Windows 环境配置
 
-[L7 测试方案](https://github.com/antvis/L7/blob/master/dev-docs/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.md)依赖 headless-gl，其中需要 node-gyp [编译本地依赖](https://github.com/nodejs/node-gyp#on-windows)。
+由于新Node for Windows中已包含用来构建的工具，所以无需像以前安装windows-build-tools依赖。
 
-1. 首先以管理员身份启动 PowerShell
-2. 运行 `npm install --global --production windows-build-tools`，安装 Microsoft's windows-build-tools
+所需环境：`python>=3.6.0 && node >= 16.16.0` (官网node版本推荐 v16.20.2)
 
-安装过程中其他问题[详见](https://github.com/antvis/L7/issues/101)。
+1.首先安装>=3.6.0的python版本，可以在[官网](https://www.python.org/downloads/)直接安装，也可以先下载conda等包管理工具后再安装python
+
+2.打开命令行，运行
+```
+where python
+```
+找到自己本机的python安装路径,如
+```
+C:\Users\42297\anaconda3\python.exe
+```
+
+3.再切换到项目路径下，输入
+```bash
+npm config set python "${path}\python.exe"
+```
+
+到此，所需的依赖就安装完毕。安装过程中其他问题[详见](https://github.com/antvis/L7/issues/101)。
 
 ## 安装依赖
 
@@ -31,12 +46,6 @@ git clone https://github.com/antvis/L7  --depth=1
 yarn install
 ```
 
-### Windows
-
-```bash
-copy node_modules/gl/deps/windows/dll/x64/*.dll c:\windows\system32
-```
-
 ## 运行 DEMO
 
 ```bash
@@ -44,6 +53,13 @@ yarn dev
 ```
 
 打开 `http://localhost:6006/`：
+
+## 启动项目
+
+```bash
+yarn start
+```
+
 
 ## 运行测试
 

@@ -96,6 +96,7 @@ vec3 lglt2xyz(vec2 lnglat) {
 void main() {
 
   v_color = a_Color;
+  v_color.a = v_color.a * opacity;
   vec2 source = project_position(vec4(a_Instance.rg, 0, 0)).xy;
   vec2 target = project_position(vec4(a_Instance.ba, 0, 0)).xy;
   float segmentIndex = a_Position.x;
@@ -143,7 +144,7 @@ void main() {
   }
 
 
-  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + project_pixel(offset), curr.z, 1.0));
+  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + project_pixel(offset), curr.z * thetaOffset, 1.0));
 
   // 地球模式
   if(u_globel > 0.0) {

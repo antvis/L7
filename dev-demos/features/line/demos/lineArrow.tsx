@@ -1,36 +1,34 @@
 // @ts-ignore
 import { LineLayer, Scene, PointLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap,Mapbox,Map,BaiduMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
+    const symbol = {
+      source:'none',
+      target:'halfTriangle',
+    };
     const scene = new Scene({
       id: 'map',
       map: new GaodeMap({
         center: [ 120.15, 30.3 ],
-        zoom: 10,
-        style: 'light'
+        zoom: 5,
+        style: 'dark'
+      })
+    });
+    const scene2 = new Scene({
+      id: 'map2',
+      map: new BaiduMap({
+        center: [ 120.15, 30.3 ],
+        zoom: 9,
+        style: 'dark'
       })
     });
     
-    const pointLayer = new PointLayer()
-      .source([{ lng: 120.155, lat: 30.31 }], {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat'
-        }
-      })
-      .shape('circle')
-      .size(6000)
-      .color('#f00')
-      .animate(true)
-      .style({
-        unit: 'meter'
-      });
-    const lineLayer = new LineLayer({})
+  
+    const lineLayer = new LineLayer({autoFit: true})
       .source({
         type: 'FeatureCollection',
         features: [
@@ -40,111 +38,137 @@ export default () => {
             geometry: {
               type: 'LineString',
               coordinates: [
+                
                 [
                   120.1863098144,
                   30.321915039121
                 ],
                 [
                   120.3401184082,
-                  30.43446594614
+                  30.321915039121
                 ]
               ]
             }
           },
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [
-                  120.19660949707033,
-                  30.298796461361665
-                ],
-                [
-                  120.31883239746092,
-                  30.28041626667403
-                ]
-              ]
-            }
-          },
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [
-                  120.12245178222656,
-                  30.29523927312319
-                ],
-                [
-                  120.01808166503906,
-                  30.261439550638762
-                ]
-              ]
-            }
-          },
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [
-                  120.15609741210938,
-                  30.285159872426014
-                ],
-                [
-                  120.14923095703124,
-                  30.20626765511821
-                ]
-              ]
-            }
-          },
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [
-                  120.10940551757812,
-                  30.320136880604423
-                ],
-                [
-                  120.01327514648438,
-                  30.362803774813028
-                ]
-              ]
-            }
-          }
+          // {
+          //   type: 'Feature',
+          //   properties: {},
+          //   geometry: {
+          //     type: 'LineString',
+          //     coordinates: [
+                
+              
+          //       [
+          //         120.3401184082,
+          //         30.321915039121
+          //       ],
+          //       [
+          //         120.1863098144,
+          //         30.321915039121
+          //       ],
+          //     ]
+          //   }
+          // }
         ]
       }
       )
-      .size(2)
-      .shape('line')
+      .size(10)
+      .shape('flowline')
+      .color('#00f')
       .style({
-        arrow: {
-          enable: true,
-          arrowWidth: 4,
-          arrowHeight: 4,
-          tailWidth: 0.4
-        }
-      })
-      .color('#f00');
+        strokeWidth: 1,
+        stroke: '#f00', 
+        gapWidth: 10,
+        opacity: 1,
+        symbol
+      }
+
+      );
+
+      const lineLayer2 = new LineLayer({autoFit: true})
+      .source({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                
+                [
+                  120.1863098144,
+                  30.321915039121
+                ],
+                [
+                  120.3401184082,
+                  30.321915039121
+                ]
+              ]
+            }
+          },
+          // {
+          //   type: 'Feature',
+          //   properties: {},
+          //   geometry: {
+          //     type: 'LineString',
+          //     coordinates: [
+                
+              
+          //       [
+          //         120.3401184082,
+          //         30.321915039121
+          //       ],
+          //       [
+          //         120.1863098144,
+          //         30.321915039121
+          //       ],
+          //     ]
+          //   }
+          // }
+        ]
+      }
+      )
+      .size(10)
+      .shape('flowline')
+      .color('#00f')
+      .style({
+        strokeWidth: 1,
+        stroke: '#f00', 
+        gapWidth: 10,
+        opacity: 1,
+        symbol,}
+
+      );
     scene.on('loaded', () => {
-      scene.addLayer(pointLayer);
       scene.addLayer(lineLayer);
+    });
+    scene2.on('loaded', () => {
+      scene2.addLayer(lineLayer2);
     });
   }, []);
   return (
+    <div style={{
+      display:'flex',
+      height: '500px',
+      position: 'relative',
+    }}>
     <div
       id="map"
       style={{
         height: '500px',
-        position: 'relative',
+        width:'450px',
+        position: 'relative'
       }}
     />
+     <div
+      id="map2"
+      style={{
+        height: '500px',
+        width:'450px',
+        position: 'relative'
+      }}
+    />
+    </div>
   );
 };

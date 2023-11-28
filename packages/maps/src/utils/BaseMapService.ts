@@ -23,7 +23,6 @@ import { Map } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { Version } from '../version';
 import { ISimpleMapCoord, SimpleMapCoord } from './simpleMapCoord';
 import { MapTheme } from './theme';
 const EventMap: {
@@ -43,7 +42,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 export default abstract class BaseMapService<T>
   implements IMapService<Map & T>
 {
-  public version: string = Version.DEFUALT;
+  public version: string = 'DEFAUlTMAP';
   public map: Map & T;
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   // 背景色
@@ -106,7 +105,7 @@ export default abstract class BaseMapService<T>
   }
 
   public getSize(): [number, number] {
-    if (this.version === Version.SIMPLE) {
+    if (this.version === 'SIMPLE') {
       return this.simpleMapCoord.getSize();
     }
     const size = this.map.transform;

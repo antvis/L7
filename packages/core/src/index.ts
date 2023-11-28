@@ -6,6 +6,7 @@ import container, {
 } from './inversify.config';
 import BasePostProcessingPass from './services/renderer/passes/BasePostProcessingPass';
 import { TYPES } from './types';
+import { removeDuplicateUniforms } from './utils/shader-module';
 import { packCircleVertex } from './utils/vertex-compression';
 
 export * from './services/asset/IFontService';
@@ -54,4 +55,5 @@ export {
   lazyInject,
   lazyMultiInject,
   packCircleVertex,
+  removeDuplicateUniforms,
 };

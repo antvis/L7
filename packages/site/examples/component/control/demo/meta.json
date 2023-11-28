@@ -69,6 +69,14 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*gWO_T6xpVtwAAAAAAAAAAAAAARQnAQ"
     },
     {
+      "filename": "layerswitch1.ts",
+      "title": {
+        "zh": "LayerSwitch 图层显隐控制（展示图层图片）",
+        "en": "LayerSwitch"
+      },
+      "screenshot": "https://mdn.alipayobjects.com/huamei_k6sfo0/afts/img/A*sJVXRbmd6_UAAAAAAAAAAAAADjWqAQ/original"
+    },
+    {
       "filename": "maptheme.ts",
       "title": {
         "zh": "MapTheme 地图样式切换",

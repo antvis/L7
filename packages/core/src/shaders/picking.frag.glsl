@@ -1,10 +1,7 @@
-varying vec4 v_PickingResult;
-uniform vec4 u_HighlightColor : [0, 0, 0, 0];
-uniform vec4 u_SelectColor : [0, 0, 0, 0];
-uniform float u_PickingStage : 0.0;
-uniform float u_shaderPick;
 
-uniform float u_activeMix: 0;
+in vec4 v_PickingResult;
+
+#pragma include "picking_uniforms"
 
 #define PICKING_NONE 0.0
 #define PICKING_ENCODE 1.0

@@ -8,6 +8,7 @@ import {
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
+import { ShaderLocation } from '../core/CommonStyleAttribute';
 import { isTileGroup } from '../tile/utils/utils';
 
 /**
@@ -55,6 +56,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Position',
+        shaderLocation: ShaderLocation.POSITION,
         buffer: {
           data: [],
           type: gl.FLOAT,
@@ -73,29 +75,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     });
   }
 
-  private registerFilterAttribute(
-    styleAttributeService: IStyleAttributeService,
-  ) {
-    styleAttributeService.registerStyleAttribute({
-      name: 'filter',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'filter',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { filter } = feature;
-          return filter ? [1] : [0];
-        },
-      },
-    });
-  }
-
   private registerColorAttribute(
     styleAttributeService: IStyleAttributeService,
   ) {
@@ -104,6 +83,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Color',
+        shaderLocation: ShaderLocation.COLOR,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -128,6 +108,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_vertexId',
+        shaderLocation: ShaderLocation.VERTEX_ID,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

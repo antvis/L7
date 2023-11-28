@@ -5,7 +5,7 @@ import LineModels, { LineModelType } from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
-  public enableShaderEncodeStyles = ['opacity', 'offsets', 'stroke'];
+  public enableShaderEncodeStyles = ['opacity', 'offsets', 'stroke','thetaOffset'];
   public arrowInsertCount: number = 0;
   public defaultSourceConfig = {
     data: [
@@ -46,6 +46,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       tileLine: {},
       earthArc3d: {},
       flowline: {},
+      arrow:{}
     };
     return defaultConfig[type];
   }

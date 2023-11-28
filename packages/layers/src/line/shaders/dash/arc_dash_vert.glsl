@@ -13,11 +13,6 @@ uniform vec4 u_dash_array: [10.0, 5., 0, 0];
 uniform float u_lineDir: 1.0;
 varying vec4 v_dash_array;
 varying float v_distance_ratio;
-
-uniform float u_thetaOffset: 0.314;
-
-uniform float u_opacity: 1.0;
-
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
@@ -72,7 +67,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 }
 
 void main() {
-  v_color = vec4(a_Color.xyz, a_Color.w * u_opacity);
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
   
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
@@ -94,8 +89,8 @@ void main() {
 
   v_distance_ratio = segmentIndex / segmentNumber;
 
-  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, u_thetaOffset), 0.0, 1.0));
-  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, u_thetaOffset), 0.0, 1.0));
+  vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, thetaOffset), 0.0, 1.0));
+  vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, thetaOffset), 0.0, 1.0));
  
   
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));

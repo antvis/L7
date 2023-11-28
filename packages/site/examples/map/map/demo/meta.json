@@ -37,6 +37,18 @@
       "title": "腾讯地图实例化",
       "new": true,
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*2v8KSpMdVK0AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "mapbox.js",
+      "title": "Mapbox 地图",
+      "new": true,
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*twTiRJv0c5EAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "maplibre.js",
+      "title": "MapLibre 地图",
+      "new": true,
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*tTFVRbgUdfMAAAAAAAAAAAAADmJ7AQ/original"
     }
   ]
 }

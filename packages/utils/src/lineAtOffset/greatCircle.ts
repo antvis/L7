@@ -1,6 +1,6 @@
 import { degreesToRadians, radiansToDegrees } from '@turf/helpers';
 import { calDistance } from '../geo';
-import { Version } from '../interface/map';
+import { MapType } from '../interface/map';
 import { Point } from './interface';
 // arc
 export function greatCircleLineAtOffset(
@@ -8,7 +8,7 @@ export function greatCircleLineAtOffset(
   target: Point,
   offset: number,
   thetaOffset: number | undefined,
-  mapVersion: Version | undefined,
+  mapVersion: MapType | undefined,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   segmentNumber: number = 30,
   autoFit: boolean,

@@ -58,7 +58,7 @@ void main() {
 
   float originSize = a_Size.x;  // 固定高度
   if(u_heightfixed < 1.0) {     // 高度随 zoom 调整
-    originSize = project_float_pixel(a_Size.x);
+    originSize = project_float_meter(a_Size.x);
   }
 
   float wallHeight = originSize * miter;

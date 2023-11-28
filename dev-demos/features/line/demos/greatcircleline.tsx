@@ -68,12 +68,12 @@ export default () => {
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(5)
-      .shape('greatcircle')
+      .shape('arc3d')
       .color('#f00')
       .style({
-        // thetaOffset: 'offset'
-        // segmentNumber: 10,
-        // thetaOffset: 0.5,
+        //  sourceColor: '#00f',
+        //  targetColor: '#0f0',
+         opacity:1,
       });
 
     scene.on('loaded', () => {

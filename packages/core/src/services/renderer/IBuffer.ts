@@ -19,6 +19,11 @@ export interface IBufferInitializationOptions {
    */
   type?: gl.FLOAT | gl.UNSIGNED_BYTE;
   length?: number;
+
+  /**
+   * UniformBuffer
+   */
+  isUBO?: boolean;
 }
 
 export interface IBuffer {

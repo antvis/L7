@@ -17,7 +17,6 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
-import { Version } from '../version';
 import Viewport from './Viewport';
 import './logo.css';
 const DEFAULTMAPCENTER = [108.92361, 34.54083];
@@ -42,7 +41,7 @@ const pendingResolveQueue: Array<() => void> = [];
  */
 @injectable()
 export default class AMapService extends AMapBaseService {
-  public version: string = Version['GAODE2.x'];
+  public version: string = 'GAODE2.x';
 
   /**
    * 用于 customCooords 数据的计算

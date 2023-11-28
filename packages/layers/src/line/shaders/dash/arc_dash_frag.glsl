@@ -1,6 +1,3 @@
-
-uniform float u_opacity;
-
 varying vec4 v_dash_array;
 varying vec4 v_color;
 varying float v_distance_ratio;
@@ -12,7 +9,6 @@ uniform float segmentNumber;
 
 void main() {
   gl_FragColor = v_color;
-
 
   float flag = 0.;
   float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);

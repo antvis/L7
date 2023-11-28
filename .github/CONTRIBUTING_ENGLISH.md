@@ -16,10 +16,31 @@ Since Yarn workspace is used, Yarn needs to be installed first: https://yarnpkg.
 
 ### Windows environment configuration
 
-[The L7 test solution](https://github.com/antvis/L7/blob/master/dev-docs/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.md) relies on headless-gl, which requires node-gyp [to compile local dependencies](https://github.com/nodejs/node-gyp#on-windows).
+Since the new Node for Windows already includes tools for building, there is no need to rely on installing Windows-build-Tools as before.
 
-1. Start PowerShell as an administrator
-2. Run `npm install --global --production windows-build-tools` to install Microsoft's windows-build-tools
+Required environment: 'python>= 3.6.0&&node >= 16.16.0' (node version v16.20.2 recommended)
+
+1. The first installation > = 3.6.0 python version, can be in the website (https://www.python.org/downloads/) installed directly, also can download package management tools such as conda first before you install python
+
+2. Open the CLI and run it
+
+```
+where python
+```
+
+Find your native python installation path，Such as...
+
+```
+C:\Users\42297\anaconda3\python.exe
+```
+
+3.Then switch to the project path
+
+```bash
+npm config set python "${path}\python.exe"
+```
+
+At this point, the required dependencies are installed.
 
 See [other issues](https://github.com/antvis/L7/issues/101) during installation.
 
@@ -29,12 +50,7 @@ Install dependencies and complete Yarn workspace initialization:
 
 ```bash
 yarn install
-```
 
-### Windows
-
-```bash
-copy node_modules/gl/deps/windows/dll/x64/*.dll c:\windows\system32
 ```
 
 ## Run DEMO
@@ -47,8 +63,10 @@ yarn  run dev
 
 Start Storybook, it will automatically open `http://localhost:6006/`:
 
+## Start-up project
+
 ```bash
-yarn storybook
+yarn start
 ```
 
 ## Run test

@@ -6,9 +6,9 @@ import PointModels, { PointType } from './models/index';
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
   public enableShaderEncodeStyles = [
-    'opacity',
-    'offsets',
     'stroke',
+    'offsets',
+    'opacity',
     'rotation',
   ];
   public enableDataEncodeStyles = ['textOffset', 'textAnchor'];

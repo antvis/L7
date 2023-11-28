@@ -16,7 +16,7 @@ uniform sampler2D u_texture;
 uniform vec2 u_textSize;
 varying float v_segmentIndex;
 uniform float segmentNumber;
-uniform float u_opacity;
+
 
 varying vec2 v_iconMapUV;
 
@@ -27,12 +27,10 @@ uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
 #pragma include "picking"
 
 void main() {
-  float opacity = u_opacity;
   float animateSpeed = 0.0; // 运动速度
   float d_distance_ratio = v_line_data.g; // 当前点位距离占线总长的比例
   gl_FragColor = v_color;
 
-  gl_FragColor.a *= opacity;
   if(u_line_type == LineTypeDash) {
     float flag = 0.;
     float dashLength = mod(d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
@@ -88,7 +86,7 @@ void main() {
       pattern.a = 0.0;
       gl_FragColor = filterColor(gl_FragColor + pattern);
     } else { // replace
-        pattern.a *= opacity;
+        pattern.a *= v_color.a;
         if(gl_FragColor.a <= 0.0) {
           pattern.a = 0.0;
           discard;

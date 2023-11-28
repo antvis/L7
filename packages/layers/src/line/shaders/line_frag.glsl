@@ -3,11 +3,11 @@
 #define LineTexture 1.0
 uniform float u_textureBlend;
 
-uniform float u_borderWidth: 0.0;
+uniform float u_strokeWidth: 0.0;
 
 uniform vec3 u_blur;
-uniform vec4 u_borderColor;
 varying vec4 v_color;
+varying vec4 v_stroke;
 
 // line texture
 uniform float u_line_texture;
@@ -59,20 +59,20 @@ void main() {
   } 
 
   float v = v_texture_data.a;
-  float borderWidth = min(0.5, u_borderWidth);
+  float strokeWidth = min(0.5, u_strokeWidth);
   // 绘制 border
-  if(borderWidth > 0.01) {
-    float borderOuterWidth = borderWidth / 2.0;
+  if(strokeWidth > 0.01) {
+    float borderOuterWidth = strokeWidth / 2.0;
 
 
-    if(v >= 1.0 - borderWidth || v <= borderWidth) {
-      if(v > borderWidth) { // 外侧
-        float linear = smoothstep(0.0, 1.0, (v - (1.0 - borderWidth))/borderWidth);
+    if(v >= 1.0 - strokeWidth || v <= strokeWidth) {
+      if(v > strokeWidth) { // 外侧
+        float linear = smoothstep(0.0, 1.0, (v - (1.0 - strokeWidth))/strokeWidth);
         //  float linear = step(0.0, (v - (1.0 - borderWidth))/borderWidth);
-        gl_FragColor.rgb = mix(gl_FragColor.rgb, u_borderColor.rgb, linear);
-      } else if(v <= borderWidth) {
-        float linear = smoothstep(0.0, 1.0, v/borderWidth);
-        gl_FragColor.rgb = mix(u_borderColor.rgb, gl_FragColor.rgb, linear);
+        gl_FragColor.rgb = mix(gl_FragColor.rgb, v_stroke.rgb, linear);
+      } else if(v <= strokeWidth) {
+        float linear = smoothstep(0.0, 1.0, v/strokeWidth);
+        gl_FragColor.rgb = mix(v_stroke.rgb, gl_FragColor.rgb, linear);
       }
     }
 

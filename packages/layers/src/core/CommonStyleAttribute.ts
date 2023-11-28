@@ -4,6 +4,23 @@ import {
   IEncodeFeature,
   IStyleAttribute,
 } from '@antv/l7-core';
+
+export enum ShaderLocation {
+  POSITION = 0,
+  COLOR,
+  VERTEX_ID,
+  PICKING_COLOR,
+  STROKE,
+  OPACITY,
+  OFFSETS,
+  ROTATION,
+  EXTRUSION_BASE,
+  SIZE,
+  SHAPE,
+  EXTRUDE,
+  MAX,
+}
+
 export function getCommonStyleAttributeOptions(
   name: string,
 ): Partial<IStyleAttribute> | undefined {
@@ -15,6 +32,7 @@ export function getCommonStyleAttributeOptions(
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Rotation',
+          shaderLocation: ShaderLocation.ROTATION,
           buffer: {
             usage: gl.DYNAMIC_DRAW,
             data: [],
@@ -35,6 +53,7 @@ export function getCommonStyleAttributeOptions(
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Stroke',
+          shaderLocation: ShaderLocation.STROKE,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.DYNAMIC_DRAW,
@@ -54,6 +73,7 @@ export function getCommonStyleAttributeOptions(
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Opacity',
+          shaderLocation: ShaderLocation.OPACITY,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,
@@ -73,6 +93,7 @@ export function getCommonStyleAttributeOptions(
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_ExtrusionBase',
+          shaderLocation: ShaderLocation.EXTRUSION_BASE,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,
@@ -92,6 +113,7 @@ export function getCommonStyleAttributeOptions(
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Offsets',
+          shaderLocation: ShaderLocation.OFFSETS,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,
@@ -105,6 +127,25 @@ export function getCommonStyleAttributeOptions(
           },
         },
       };
+      case 'thetaOffset':
+        return {
+          name: 'thetaOffset',
+          type: AttributeType.Attribute,
+          descriptor: {
+            name: 'a_ThetaOffset',
+            buffer: {
+              // give the WebGL driver a hint that this buffer may change
+              usage: gl.STATIC_DRAW,
+              data: [],
+              type: gl.FLOAT,
+            },
+            size: 1,
+            update: (feature: IEncodeFeature) => {
+              const { thetaOffset: op = 1 } = feature;
+              return [op];
+            },
+          },
+        };
     default:
       return undefined;
   }

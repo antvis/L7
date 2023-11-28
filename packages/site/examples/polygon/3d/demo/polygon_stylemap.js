@@ -1,5 +1,5 @@
 import { Scene, PolygonLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap,Mapbox } from '@antv/l7-maps';
 
 const scene = new Scene({
   id: 'map',
@@ -38,7 +38,7 @@ scene.on('loaded', () => {
         .source(data)
         .shape('extrude')
         .color('unit_price', colors)
-        .size('unit_price', unit_price => unit_price * 50)
+        .size('unit_price')
         .style({
           opacity: {
             field: 'unit_price',

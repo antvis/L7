@@ -101,8 +101,6 @@ void main() {
   }
 
 
-  // gl_Position = project_common_position_to_clipspace(pos);
-
   gl_Position = project_common_position_to_clipspace_v2(pos);
 
   setPickingColor(a_PickingColor);
