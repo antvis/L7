@@ -8,6 +8,7 @@ export default () => {
     useEffect( () => {
       const scene = new Scene({
         id: 'map',
+        renderer: 'device',
         map: new GaodeMap({
           pitch: 66.02383,
           style: 'dark',
@@ -35,14 +36,15 @@ export default () => {
               'hexagonColumn',
               'squareColumn',
             ])
+            .active(true)
             .size('unit_price', (h) => {
               return [6, 6, 100];
             })
             .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
             .style({
               opacity:1,
-            });
-          console.log(pointLayer);
+            })
+            ;
           scene.addLayer(pointLayer);
         });
           

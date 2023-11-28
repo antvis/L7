@@ -9,6 +9,7 @@ export const DefaultUniformStyleValue: { [key: string]: any } = {
 
 }
 
+
 export const DefaultUniformStyleType: { [key: string]: any } = {
       opacity: 'float',
       stroke: 'vec4',

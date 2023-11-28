@@ -1,32 +1,28 @@
-precision highp float;
-
 #define pi 3.1415926535
 #define ambientRatio 0.5
 #define diffuseRatio 0.3
 #define specularRatio 0.2
 
-attribute vec3 a_Position;
-attribute vec3 a_Pos;
-attribute vec4 a_Color;
-attribute vec3 a_Size;
-attribute vec3 a_Normal;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in vec3 a_Size;
+layout(location = 11) in vec3 a_Extrude;
+layout(location = 13) in vec3 a_Normal;
 
-uniform float u_heightfixed: 0.0; // 默认不固定
-uniform float u_r;
-uniform mat4 u_ModelMatrix;
-
-varying vec4 v_color;
-varying float v_lightWeight;
-varying float v_barLinearZ;
-
-uniform float u_opacity : 1;
-uniform float u_lightEnable: 1;
-uniform float u_opacitylinear: 0.0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-uniform float u_opacitylinear_dir: 1.0;
-uniform float  u_linearColor: 0.0;
-
+layout(std140) uniform commonUniforms {
+  float u_pickLight;
+  float u_heightfixed;
+  float u_r;
+  float u_linearColor;
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_opacitylinear;
+  float u_opacitylinear_dir;
+  float u_lightEnable;
+};
+out vec4 v_color;
+out float v_lightWeight;
+out float v_barLinearZ;
 
 #pragma include "projection"
 #pragma include "light"
@@ -72,7 +68,7 @@ void main() {
   }
 
 
-  vec4 project_pos = project_position(vec4(a_Pos.xy, 0., 1.0));
+  vec4 project_pos = project_position(vec4(a_Extrude.xy, 0., 1.0));
 
   // u_r 控制圆柱的生长
   vec4 pos = vec4(project_pos.xy + offset.xy, offset.z * u_r, 1.0);
@@ -91,9 +87,9 @@ void main() {
     // 设置圆柱的底色
   if(u_linearColor == 1.0) { // 使用渐变颜色
     v_color = mix(u_sourceColor, u_targetColor, a_Position.z);
-    v_color.a =  v_color.a * u_opacity;
+    v_color.a =  v_color.a * opacity;
   } else {
-    v_color = vec4(a_Color.rgb * lightWeight, a_Color.w * u_opacity);
+    v_color = vec4(a_Color.rgb * lightWeight, a_Color.w * opacity);
   }
 
     if(u_opacitylinear > 0.0) {
