@@ -23,23 +23,25 @@
 }
 
 .l7-select-control--image {
+  @select-control-split: 12px;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   box-sizing: content-box;
-  max-width: @l7-select-control-image-width;
+  max-width: 460px;
   max-height: 400px;
-  margin: 12px 0 0 12px;
-  overflow: auto;
+  margin: @select-control-split 0 0 @select-control-split;
+  overflow-x: hidden;
+  overflow-y: auto;
   .l7-select-control-item {
     position: relative;
     display: flex;
+    flex: 0 0 calc((100% - (@select-control-split + 9px) * 2) / 3);
     flex-direction: column;
     justify-content: center;
     box-sizing: content-box;
-    width: (@l7-select-control-image-width - 12px) / 3 - 12px;
-    margin-right: 12px;
-    margin-bottom: 12px;
+    margin-right: @select-control-split;
+    margin-bottom: @select-control-split;
     overflow: hidden;
     font-size: 12px;
     border: 1px solid @l7-popper-control-bg-color;
