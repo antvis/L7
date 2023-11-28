@@ -26,7 +26,7 @@ Before using Tencent Map, you need to register a Tencent Map account and apply f
 
 ⚠️  L7 has a default token set internally, which is for testing only.
 
-### Import
+### import
 
 ```javascript
 import { TencentMap } from '@antv/l7-maps';
