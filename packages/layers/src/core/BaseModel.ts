@@ -35,6 +35,7 @@ import { rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
 import { DefaultUniformStyleType, DefaultUniformStyleValue } from './constant'
+import { MultipleOfFourNumber } from './utils'
 import {
   getCommonStyleAttributeOptions,
   ShaderLocation,
@@ -73,8 +74,7 @@ const shaderLocationMap: Record<string, ShaderLocation> = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class BaseModel<ChildLayerStyleOptions = {}>
-  implements ILayerModel
-{
+  implements ILayerModel {
   public triangulation: Triangulation;
   public uniformBuffers: IBuffer[] = [];
   public textures: ITexture2D[] = [];
@@ -110,6 +110,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected cameraService: ICameraService;
   protected layerService: ILayerService;
   protected pickingService: IPickingService;
+
+  protected attributeUnifoms: IBuffer; // 支持数据映射的buffer
+  protected commonUnifoms: IBuffer; // 不支持数据映射的buffer
 
   // style texture data mapping
 
@@ -242,6 +245,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     }
   }
 
+  // 动态注入参与数据映射的uniform
   protected getInject(): IInject {
     const encodeStyleAttribute = this.layer.encodeStyleAttribute;
     let str = '';
@@ -259,9 +263,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       }
       str += `
           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-          layout(location = ${shaderLocationMap[key]}) in ${
-        DefaultUniformStyleType[key]
-      } a_${key.charAt(0).toUpperCase() + key.slice(1)};
+          layout(location = ${shaderLocationMap[key]}) in ${DefaultUniformStyleType[key]
+        } a_${key.charAt(0).toUpperCase() + key.slice(1)};
         #endif\n
         `;
     });
@@ -278,9 +281,8 @@ ${uniforms.join('\n')}
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       innerStr += `\n
     #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-      ${DefaultUniformStyleType[key]} ${key}  = a_${
-        key.charAt(0).toUpperCase() + key.slice(1)
-      };
+      ${DefaultUniformStyleType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)
+        };
     #else
       ${DefaultUniformStyleType[key]} ${key} = u_${key};
     #endif\n
@@ -330,4 +332,68 @@ ${uniforms.join('\n')}
   public updateEncodeAttribute(type: string, flag: boolean) {
     this.encodeStyleAttribute[type] = flag;
   }
+
+  public initUniformsBuffer() {
+    const attrUniforms = this.getUniformsBufferInfo(this.getStyleAttribute());
+    const commonUniforms = this.getCommonUniformsInfo();
+    this.attributeUnifoms = this.rendererService.createBuffer({
+      data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)), // 长度需要大于等于 4
+      isUBO: true,
+    });
+
+    this.commonUnifoms = this.rendererService.createBuffer({
+      data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)),
+      isUBO: true,
+    });
+    this.uniformBuffers = [this.attributeUnifoms, this.commonUnifoms];
+  }
+  // 获取数据映射 uniform 信息
+  protected getUniformsBufferInfo(uniformsOption: { [key: string]: any }) {
+    let uniformsLength = 0;
+    const uniformsArray: number[] = [];
+    Object.values(uniformsOption).forEach((value: any) => {
+      if (Array.isArray(value)) {
+        uniformsArray.push(...value);
+        uniformsLength += value.length;
+      } else {
+        uniformsArray.push(value);
+        uniformsLength += 1;
+      }
+    })
+
+    return {
+      uniformsOption,
+      uniformsLength,
+      uniformsArray
+    }
+
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
+    return {
+      uniformsLength: 0,
+      uniformsArray: [],
+      uniformsOption: {}
+    }
+  }
+
+  // 更新支持数据映射的uniform
+  public updateStyleUnifoms() {
+    const { uniformsArray } = this.getUniformsBufferInfo(this.getStyleAttribute());
+    const { uniformsArray: commonUniformsArray } = this.getCommonUniformsInfo();
+    this.attributeUnifoms.subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array(uniformsArray).buffer,
+      ),
+    });
+    this.commonUnifoms.subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array(commonUniformsArray).buffer,
+      ),
+    }
+    );
+
+  }
+
 }

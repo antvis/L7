@@ -19,6 +19,7 @@ export enum ShaderLocation {
   SHAPE,
   EXTRUDE,
   MAX,
+  NORMAL,
 }
 
 export function getCommonStyleAttributeOptions(

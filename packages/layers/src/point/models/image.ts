@@ -15,8 +15,6 @@ export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
   public getUninforms(): IModelUniform {
     const {
-      opacity = 1,
-      offsets = [0, 0],
       raisingHeight = 0,
       heightfixed = false,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
@@ -31,8 +29,6 @@ export default class ImageModel extends BaseModel {
       u_heightfixed: Number(heightfixed),
       u_texture: this.texture,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
-      // u_opacity: opacity,
-      // u_offsets: offsets,
       ...this.getStyleAttribute(),
     };
   }
