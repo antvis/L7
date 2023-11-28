@@ -42,4 +42,4 @@ import { TencentMap } from '@antv/l7-maps';
 
 Tencentmap [Example address](/examples/map/map/#tencentmap)、Tencentmap instantiate[Example address](/examples/map/map/#tmapInstance)
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/common/map.en.md"></embed>
