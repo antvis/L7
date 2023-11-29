@@ -1495,7 +1495,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
     const autoRender = this.layerSource.getSourceCfg().autoRender;
     if (autoRender) {
-      this.reRender();
+      setTimeout(() => {
+        this.reRender();
+      },10);
+     
     }
   };
 
