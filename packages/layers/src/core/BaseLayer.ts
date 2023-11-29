@@ -1385,6 +1385,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           uniforms: this.layerModel.getUninforms(),
           blend: this.layerModel.getBlend(),
           stencil: this.layerModel.getStencil(options),
+          textures:this.layerModel.textures
         },
         options?.ispick || false,
       );

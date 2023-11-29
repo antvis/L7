@@ -20,6 +20,7 @@ export enum ShaderLocation {
   EXTRUDE,
   MAX,
   NORMAL,
+  UV
 }
 
 export function getCommonStyleAttributeOptions(

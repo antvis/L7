@@ -15,6 +15,7 @@ import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
 import pointFillVert from '../shaders/image/fillImage_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class FillImageModel extends BaseModel {
   private meter2coord: number = 1;
@@ -22,6 +23,15 @@ export default class FillImageModel extends BaseModel {
   private isMeter: boolean = false;
   private radian: number = 0; // 旋转的弧度
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       raisingHeight = 0.0,
       heightfixed = false,
@@ -39,20 +49,16 @@ export default class FillImageModel extends BaseModel {
      * GAODE1.x         -1
      */
 
-    return {
+    const commonOptions = {
       u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-
-      u_texture: this.texture,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // u_opacity: opacity,
-      // u_offsets: offsets,
-      ...this.getStyleAttribute(),
+      u_textSize: [1024, this.iconService.canvasHeight || 128]
     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    
+    return commonBufferInfo;
   }
-
   public getAttribute(): {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -72,6 +78,7 @@ export default class FillImageModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointFillImage',
       vertexShader: pointFillVert,
@@ -99,6 +106,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation:ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -120,6 +128,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
+        shaderLocation: ShaderLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -151,6 +160,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -188,5 +198,6 @@ export default class FillImageModel extends BaseModel {
       height: this.iconService.canvasHeight || 128,
       mipmap: true,
     });
+    this.textures = [this.texture];
   };
 }

@@ -195,7 +195,6 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public getUninforms(): IModelUniform {
     throw new Error('Method not implemented.');
   }
-
   public getAnimateUniforms(): IModelUniform {
     return {};
   }

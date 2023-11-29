@@ -1,21 +1,19 @@
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec3 a_Extrude;
-attribute float a_Size;
-attribute vec2 a_Uv;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 11) in vec3 a_Extrude;
+layout(location = 14) in vec2 a_Uv;
 
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform uBlock {
+  float u_size_unit;
+  float u_raisingHeight: 0.0;
+  float u_heightfixed: 0.0;
+  vec2 u_textSize;
+};
 
-uniform mat2 u_RotateMatrix;
-uniform int u_size_unit;
-
-varying vec2 v_uv; // 本身的 uv 坐标
-varying vec2 v_Iconuv; // icon 贴图的 uv 坐标
-
-uniform float u_raisingHeight: 0.0;
-uniform float u_heightfixed: 0.0;
-varying float v_opacity;
-// uniform vec2 u_offsets; // shader 注入
+out vec2 v_uv;
+out vec2 v_Iconuv;
+out float v_opacity;
 
 
 #pragma include "projection"
@@ -29,7 +27,7 @@ void main() {
   v_Iconuv = a_Uv;
   v_opacity = opacity;
   float newSize = a_Size;
-  if(u_size_unit == 1) {
+  if(u_size_unit == 1.0) {
     newSize = newSize  * u_PixelsPerMeter.z;
   }
   
