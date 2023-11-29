@@ -90,11 +90,14 @@ export default class GreatCircleModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    const { segmentNumber = 30 } =
+    this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const model = await this.layer.buildLayerModel({
       moduleName: 'lineGreatCircle',
       vertexShader: line_arc2d_vert,
       fragmentShader: line_arc_frag,
       triangulation: LineArcTriangulation,
+      styleOption:{segmentNumber},
       inject:this.getInject(),
       depth: { enable: false },
     });
