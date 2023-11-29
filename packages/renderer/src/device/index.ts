@@ -17,9 +17,11 @@ import {
   IElements,
   IElementsInitializationOptions,
   IExtensions,
+  IFramebuffer,
   IFramebufferInitializationOptions,
   IModel,
   IModelInitializationOptions,
+  IReadPixelsOptions,
   IRenderConfig,
   IRendererService,
   ITexture2D,
@@ -53,6 +55,11 @@ export default class DeviceRendererService implements IRendererService {
   private renderTarget: RenderTarget;
   private mainDepthRT: RenderTarget;
 
+  /**
+   * Current FBO.
+   */
+  private currentFramebuffer: DeviceFramebuffer | null;
+
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
 
@@ -84,15 +91,7 @@ export default class DeviceRendererService implements IRendererService {
     this.swapChain = swapChain;
 
     // Create default RT
-    // @ts-ignore
-    // this.device.onscreenFramebuffer = this.createFramebuffer({
-    //   width: canvas.width,
-    //   height: canvas.height,
-    // });
-    // // @ts-ignore
-    // this.device.onscreenFramebuffer.onscreen = true;
-    // // @ts-ignore
-    // this.device.currentFramebuffer = this.device.onscreenFramebuffer;
+    this.currentFramebuffer = null;
 
     // @ts-ignore
     const gl = this.device['gl'];
@@ -122,10 +121,15 @@ export default class DeviceRendererService implements IRendererService {
 
   beginFrame(): void {
     const onscreenTexture = this.swapChain.getOnscreenTexture();
+
     this.renderPass = this.device.createRenderPass({
       colorAttachment: [this.renderTarget],
-      // colorResolveTo: [onscreen ? onscreenTexture : onscreenTexture],
-      colorResolveTo: [onscreenTexture],
+      colorResolveTo: [
+        this.currentFramebuffer
+          ? // @ts-ignore
+            this.currentFramebuffer.get()['texture']
+          : onscreenTexture,
+      ],
       colorClearColor: [TransparentBlack],
       depthStencilAttachment: this.mainDepthRT,
       depthClearValue: 1,
@@ -168,19 +172,13 @@ export default class DeviceRendererService implements IRendererService {
   createFramebuffer = (options: IFramebufferInitializationOptions) =>
     new DeviceFramebuffer(this.device, options);
 
-  useFramebuffer = () =>
-    // framebuffer: IFramebuffer | null,
-    // drawCommands: () => void,
-    {
-      // if (framebuffer == null) {
-      //   // @ts-ignore
-      //   this.device.currentFramebuffer = this.device.onscreenFramebuffer;
-      // } else {
-      //   // @ts-ignore
-      //   this.device.currentFramebuffer = framebuffer;
-      // }
-      // drawCommands();
-    };
+  useFramebuffer = (
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => void,
+  ) => {
+    // this.currentFramebuffer = framebuffer as DeviceFramebuffer;
+    drawCommands();
+  };
 
   clear = () =>
     // options: IClearOptions
@@ -225,19 +223,26 @@ export default class DeviceRendererService implements IRendererService {
     // this.gl._refresh();
   };
 
-  readPixels = () =>
-    // options: IReadPixelsOptions
-    {
-      // const { framebuffer, x, y, width, height } = options;
+  readPixels = (options: IReadPixelsOptions) => {
+    const { framebuffer, x, y, width, height } = options;
 
-      // const readback = this.device.createReadback();
+    return new Uint8Array([0, 0, 0, 0]);
 
-      // if (framebuffer) {
-      //   readPixelsOptions.framebuffer = (framebuffer as DeviceFramebuffer).get();
-      // }
-      // return readback.readTextureSync(null, x, y, width, height, new Uint8Array()) as Uint8Array;
-      return new Uint8Array();
-    };
+    const readback = this.device.createReadback();
+
+    // @ts-ignore
+    const texture = (
+      (framebuffer || this.currentFramebuffer) as DeviceFramebuffer
+    ).get()['texture'];
+    return readback.readTextureSync(
+      texture,
+      x,
+      y,
+      width,
+      height,
+      new Uint8Array(),
+    ) as Uint8Array;
+  };
 
   getViewportSize = () => {
     // FIXME: add viewport size in Device API.
