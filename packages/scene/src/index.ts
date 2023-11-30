@@ -531,6 +531,14 @@ class Scene
     return SceneConifg.REGISTERED_PROTOCOLS[protocol];
   }
 
+  public startAnimate() {
+    this.layerService.startAnimate();
+  }
+
+  public stopAnimate() {
+    this.layerService.stopAnimate();
+  }
+
   // get current point size info
   public getPointSizeRange() {
     return this.sceneService.getPointSizeRange();

@@ -1,8 +1,10 @@
 ---
-title: Scene
+title: 场景 Scene
+description:  地图场景初始 
+keywords: 地图 Scene 
 order: 0
 redirect_from:
-  - /en/docs/api
+  - /zh/docs/api
 ---
 
 <embed src="@/docs/common/style.md"></embed>
@@ -742,7 +744,7 @@ remove in`scene`The event listener bound on.
 * `eventName`Event name.
 * `handler`Event callback function.
 
-### scene event
+### scene events
 
 `scene`Some common scene events will be triggered, and users can monitor them when needed.
 
@@ -763,6 +765,14 @@ Map container change event
 ```javascript
 scene.on('resize', () => {}); // Map container size change event
 ```
+
+#### startAnimate
+
+By default, L7 redraws on demand and enables real-time rendering by starting the animation, which facilitates the SpectorJS plug-in to capture frame rendering.
+
+#### stopAnimate
+
+Used during debugging to stop real-time rendering
 
 ### map events
 

@@ -763,6 +763,13 @@ scene.on('loaded', () => {
 scene.on('resize', () => {}); // 地图容器大小改变事件
 ```
 
+#### startAnimate
+
+默认 L7 按需重绘，通过启动动画开启实时渲染，便于 SpectorJS 插件捕捉帧渲染。
+
+
+####  stopAnimate
+调试时使用，停止实时渲染
 
 ### 地图事件
 

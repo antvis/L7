@@ -52,6 +52,7 @@ scene.on("loaded", () => {
 
   }, 1000);
   scene.addLayer(pointLayer);
+  // scene.startAnimate();
 });
 }, []);
 return (
