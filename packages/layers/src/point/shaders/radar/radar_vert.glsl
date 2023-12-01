@@ -3,9 +3,8 @@ layout(location = 1) in vec4 a_Color;
 layout(location = 9) in float a_Size;
 layout(location = 11) in vec3 a_Extrude;
 
-layout(std140) uniform uBlock1{
+layout(std140) uniform commonUniorm {
   float u_additive;
-  float u_opacity:1.0;
   float u_size_unit;
   float u_speed: 1.0;
   float u_time;
@@ -31,6 +30,7 @@ void main() {
   v_extrude = rotateMatrix * a_Extrude.xy;
 
   v_color = a_Color;
+  v_color.a *= opacity;
 
   float blur = 0.0;
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, blur);

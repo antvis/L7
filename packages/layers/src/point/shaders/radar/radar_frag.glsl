@@ -1,7 +1,6 @@
 
-layout(std140) uniform uBlock1{
+layout(std140) uniform commonUniorm{
   float u_additive;
-  float u_opacity:1.0;
   float u_size_unit;
   float u_speed: 1.0;
   float u_time;
@@ -25,7 +24,7 @@ void main() {
 
   float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
-  outputColor = vec4(v_color.rgb, v_color.a * u_opacity);
+  outputColor = vec4(v_color.rgb, v_color.a);
 
   if(u_additive > 0.0) {
     outputColor *= opacity_t;

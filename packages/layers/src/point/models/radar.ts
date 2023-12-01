@@ -37,10 +37,8 @@ export default class RadarModel extends BaseModel {
     // this.layer.getLayerConfig() as ILayerConfig;
     const commonOptions = {
       u_additive: blend === 'additive' ? 1.0 : 0.0,
-      u_opacity: opacity,
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
       u_speed: speed,
-      // u_animate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
      };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
@@ -74,6 +72,7 @@ export default class RadarModel extends BaseModel {
       vertexShader: pointFillVert,
       fragmentShader: pointFillFrag,
       triangulation: PointFillTriangulation,
+      inject:this.getInject(),
       depth: { enable: false },
     });
     return [model];
