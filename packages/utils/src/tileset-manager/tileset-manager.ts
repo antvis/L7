@@ -64,7 +64,7 @@ export class TilesetManager extends EventEmitter {
       extent: DEFAULT_EXTENT,
       getTileData: NOOP,
       warp: true,
-      // TODO 更新策略
+      // TODO 更新策略 ovelap 图层设置了透明度，会产生叠加效果
       updateStrategy: UpdateTileStrategy.Replace,
     };
     this.updateOptions(options);
