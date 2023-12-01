@@ -5,9 +5,9 @@ layout(location = 11) in vec3 a_Extrude;
 layout(location = 14) in vec2 a_Uv;
 
 layout(std140) uniform uBlock {
-  float u_size_unit;
-  float u_raisingHeight: 0.0;
   float u_heightfixed: 0.0;
+  float u_raisingHeight: 0.0;
+  float u_size_unit;
   vec2 u_textSize;
 };
 

@@ -29,6 +29,7 @@ export default class FillImageModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
+      ...{u_texture:this.texture}
     }
   }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
@@ -50,8 +51,8 @@ export default class FillImageModel extends BaseModel {
      */
 
     const commonOptions = {
-      u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
+      u_raisingHeight: Number(raisingHeight),
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
       u_textSize: [1024, this.iconService.canvasHeight || 128]
     };

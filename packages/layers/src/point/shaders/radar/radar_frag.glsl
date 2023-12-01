@@ -1,13 +1,20 @@
 
-uniform float u_additive;
-uniform float u_opacity: 1.0;
+layout(std140) uniform uBlock1 {
+  float u_size_unit;
+  float u_speed: 1.0;
+  float u_additive;
+  float u_opacity:1.0;
+  float u_time;
+};
 
-varying vec4 v_data;
-varying vec4 v_color;
-varying float v_radius;
-varying vec2 v_exteude;
+in vec4 v_data;
+in vec4 v_color;
+in float v_radius;
+in vec2 v_exteude;
 #pragma include "sdf_2d"
 #pragma include "picking"
+
+out vec4 outputColor;
 
 void main() {
 
@@ -19,16 +26,16 @@ void main() {
 
   float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
-  gl_FragColor = vec4(v_color.rgb, v_color.a * u_opacity);
+  outputColor = vec4(v_color.rgb, v_color.a * u_opacity);
 
   if(u_additive > 0.0) {
-    gl_FragColor *= opacity_t;
+    outputColor *= opacity_t;
   } else {
-    gl_FragColor.a *= opacity_t;
+    outputColor.a *= opacity_t;
   }
 
-  if(gl_FragColor.a > 0.0) {
-    gl_FragColor = filterColor(gl_FragColor);
+  if(outputColor.a > 0.0) {
+    outputColor = filterColor(outputColor);
   }
 
   vec2 extrude =  v_exteude;
@@ -43,5 +50,5 @@ void main() {
     radar_v = 1.0 - (radar_v - 0.99)/0.01;
   }
 
-  gl_FragColor.a *= radar_v;
+  outputColor.a *= radar_v;
 }

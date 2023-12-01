@@ -5,7 +5,6 @@ import {
   IAttribute,
   IElements,
   IEncodeFeature,
-  ILayerConfig,
   IModel,
   IModelUniform,
 } from '@antv/l7-core';
@@ -15,30 +14,41 @@ import { PointFillTriangulation } from '../../core/triangulation';
 
 import pointFillFrag from '../shaders/radar/radar_frag.glsl';
 import pointFillVert from '../shaders/radar/radar_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class RadarModel extends BaseModel {
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       opacity = 1,
       blend,
       speed = 1,
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
-    return {
+    // const { animateOption = { enable: false } } =
+    // this.layer.getLayerConfig() as ILayerConfig;
+    const commonOptions = {
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
       u_speed: speed,
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_opacity: opacity,
-    };
+      // u_animate: this.animateOption2Array(animateOption),
+      u_time: this.layer.getLayerAnimateTime(),
+     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    
+    return commonBufferInfo;
   }
   public getAnimateUniforms(): IModelUniform {
-    const { animateOption = { enable: false } } =
-      this.layer.getLayerConfig() as ILayerConfig;
-    return {
-      u_animate: this.animateOption2Array(animateOption),
-      u_time: this.layer.getLayerAnimateTime(),
-    };
+    return {};
   }
 
   public getAttribute(): {
@@ -58,6 +68,7 @@ export default class RadarModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointRadar',
       vertexShader: pointFillVert,
@@ -78,6 +89,7 @@ export default class RadarModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
+        shaderLocation: ShaderLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -108,6 +120,7 @@ export default class RadarModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

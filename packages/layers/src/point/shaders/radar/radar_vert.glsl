@@ -1,18 +1,20 @@
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec3 a_Extrude;
-attribute float a_Size;
-uniform float u_speed: 1.0;
-uniform float u_time;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 11) in vec3 a_Extrude;
 
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform uBlock1{
+  float u_size_unit;
+  float u_speed: 1.0;
+  float u_additive;
+  float u_opacity:1.0;
+  float u_time;
+};
 
-uniform int u_size_unit;
-
-varying vec4 v_data;
-varying vec4 v_color;
-varying float v_radius;
-varying vec2 v_exteude;
+out vec4 v_data;
+out vec4 v_color;
+out float v_radius;
+out vec2 v_exteude;
 
 #pragma include "projection"
 #pragma include "picking"
@@ -28,23 +30,19 @@ void main() {
   );
   v_exteude = rotateMatrix * a_Extrude.xy;
 
-  // unpack color(vec2)
   v_color = a_Color;
 
-  // anti-alias
   float blur = 0.0;
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, blur);
 
-  if(u_size_unit == 1) {
+  if(u_size_unit == 1.) {
     newSize = newSize  * u_PixelsPerMeter.z;
   }
-  // radius(16-bit)
   v_radius = newSize;
 
   vec2 offset = (extrude.xy * (newSize));
   vec3 aPosition = a_Position;
   
-    // 不以米为实际单位
   offset = project_pixel(offset);
   
   v_data = vec4(extrude.x, extrude.y, antialiasblur, -1.0);
