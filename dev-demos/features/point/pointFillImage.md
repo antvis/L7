@@ -1,3 +1,8 @@
+---
+group:
+  title: 点
+  order: 1
+---
 ### point - fillImage
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';
@@ -9,6 +14,7 @@ export default () => {
         
         const scene = new Scene({
             id: 'point_fillImage',
+            // renderer: 'device',
             map: new GaodeMap({
                 style: 'light',
                 center: [120, 30],

@@ -28,13 +28,10 @@ export default class RadarModel extends BaseModel {
   }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
-      opacity = 1,
       blend,
       speed = 1,
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    // const { animateOption = { enable: false } } =
-    // this.layer.getLayerConfig() as ILayerConfig;
     const commonOptions = {
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
