@@ -1,12 +1,11 @@
 
-layout(std140) uniform uBlock1 {
-  float u_size_unit;
-  float u_speed: 1.0;
+layout(std140) uniform uBlock1{
   float u_additive;
   float u_opacity:1.0;
+  float u_size_unit;
+  float u_speed: 1.0;
   float u_time;
 };
-
 in vec4 v_data;
 in vec4 v_color;
 in float v_radius;

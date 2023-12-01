@@ -36,10 +36,10 @@ export default class RadarModel extends BaseModel {
     // const { animateOption = { enable: false } } =
     // this.layer.getLayerConfig() as ILayerConfig;
     const commonOptions = {
-      u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      u_speed: speed,
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_opacity: opacity,
+      u_size_unit: SizeUnitType[unit] as SizeUnitType,
+      u_speed: speed,
       // u_animate: this.animateOption2Array(animateOption),
       u_time: this.layer.getLayerAnimateTime(),
      };

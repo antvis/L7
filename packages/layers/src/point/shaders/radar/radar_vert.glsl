@@ -4,10 +4,10 @@ layout(location = 9) in float a_Size;
 layout(location = 11) in vec3 a_Extrude;
 
 layout(std140) uniform uBlock1{
-  float u_size_unit;
-  float u_speed: 1.0;
   float u_additive;
   float u_opacity:1.0;
+  float u_size_unit;
+  float u_speed: 1.0;
   float u_time;
 };
 
