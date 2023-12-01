@@ -50,6 +50,7 @@
     "clean": "lerna run clean --parallel",
     "clear-node-modules": "rimraf node_modules && lerna clean -y",
     "changelog": "auto-changelog --output CHANGELOG.md",
+    "translate":"translate  -d",
     "sync": "lerna run sync --parallel"
   },
   "husky": {

@@ -289,7 +289,19 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     const cfg: IScale = {
       type,
     };
-    const values = data?.map((item) => item[field]) || [];
+    // quantile domain 需要根据ID 进行去重
+    let values = []
+    if (type === ScaleTypes.QUANTILE) {
+      // 根据 obejct 属性 _id 进行去重 
+      const idMap = new Map();
+      data?.forEach(obj => {
+        idMap.set(obj._id, obj[field]);
+      });
+      values = Array.from(idMap.values());
+    } else {
+      values = data?.map((item) => item[field]) || [];
+    }
+
     if (scaleOption?.domain) {
       cfg.domain = scaleOption?.domain;
     } else if (type === ScaleTypes.CAT || type === ScaleTypes.IDENTITY) {

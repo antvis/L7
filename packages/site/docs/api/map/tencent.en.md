@@ -1,5 +1,5 @@
 ---
-title: 腾讯地图
+title: Tencent Map
 order: 3
 ---
 
@@ -11,11 +11,19 @@ L7 geographical visualization focuses on the visual expression of geographical d
 
 L7 internally resolves the differences between different map basemaps, and at the same time, L7 manages the operation methods of the map in a unified manner.
 
-* [Tencent Map API](https://lbs.qq.com/webApi/javascriptGL/glGuide/glOverview)
+The Tencent map currently supported by L7 is[JavaScript API GL](https://lbs.qq.com/webApi/javascriptGL/glGuide/glOverview), which is also the officially recommended version of Tencent Maps.
 
 ### Apply for token
 
-[Tencent map token application](https://lbs.qq.com/webApi/javascriptGL/glGuide/glBasic)
+Before using Tencent Map, you need to register a Tencent Map account and apply for a Key. How to apply for a Tencent Map key?[Click me to view](https://lbs.qq.com/webApi/javascriptGL/glGuide/glBasic).
+
+⚠️  L7 has a default token set internally, which is for testing only.
+
+### import
+
+```javascript
+import { TencentMap } from '@antv/l7-maps';
+```
 
 ## Initialize map
 
@@ -31,5 +39,7 @@ import { TencentMap } from '@antv/l7-maps';
     })
   });
 ```
+
+Tencentmap [Example address](/examples/map/map/#tencentmap)、Tencentmap instantiate[Example address](/examples/map/map/#tmapInstance)
 
 <embed src="@/docs/common/map.en.md"></embed>

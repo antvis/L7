@@ -11,16 +11,23 @@ L7 地理可视化侧重于地理数据的可视化表达，地图层需要依�
 
 L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管理地图的操作方法。
 
-- [腾讯地图 API ](https://lbs.qq.com/webApi/javascriptGL/glGuide/glOverview)
+L7 目前支持的腾讯地图是[JavaScript API GL](https://lbs.qq.com/webApi/javascriptGL/glGuide/glOverview)，也是腾讯地图官方推荐使用版本。
 
 ### 申请token
 
-[腾讯地图 token 申请](https://lbs.qq.com/webApi/javascriptGL/glGuide/glBasic)
+使用腾讯地图之前，需要申请腾讯地图密钥，如何申请腾讯地图密钥[点我查看](https://lbs.qq.com/webApi/javascriptGL/glGuide/glBasic)。
+
+⚠️  L7 内部设置了默认 token，仅供测试使用。
+
+### import
+
+```javascript
+import { TencentMap } from '@antv/l7-maps';
+```
 
 ## 初始化地图
 
 ```ts
-
 import { Scene, PointLayer } from '@antv/l7';
 import { TencentMap } from '@antv/l7-maps';
   const scene = new Scene({
@@ -31,8 +38,8 @@ import { TencentMap } from '@antv/l7-maps';
       maxZoom: 18
     })
   });
-
 ```
 
+腾讯底图 [示例地址](/examples/map/map/#tencentmap)、腾讯地图实例化[示例地址](/examples/map/map/#tmapInstance)
 
 <embed src="@/docs/common/map.zh.md"></embed>
