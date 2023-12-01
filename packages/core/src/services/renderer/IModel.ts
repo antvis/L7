@@ -254,6 +254,8 @@ export interface IModelDrawOptions {
   blend?: Partial<IBlendOptions>;
 
   stencil?: Partial<IStencilOptions>;
+
+  textures?:ITexture2D[]
 }
 
 /**

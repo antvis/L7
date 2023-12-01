@@ -5,7 +5,7 @@ import { IAttribute } from '../renderer/IAttribute';
 import { IElements } from '../renderer/IElements';
 import { IRendererService } from '../renderer/IRendererService';
 import { gl } from '../renderer/gl';
-import { ILayer, ILayerConfig } from './ILayerService';
+import { ILayer } from './ILayerService';
 import {
   IAttributeScale,
   IEncodeFeature,
