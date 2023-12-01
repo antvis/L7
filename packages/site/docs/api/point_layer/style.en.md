@@ -36,7 +36,7 @@ Universal`style`Parameters, parameters supported by all graphics.
 | strokeOpacity | `number`           | no                              | Graphic border transparency | `1`           |
 | blur          | `number`           | no                              | Graphic blur radius         | `0`           |
 | offsets       | `[number, number]` | yes                             | point offset                | `[0, 0]`      |
-| rotation      | `number`           | Rotation angle                  | yes                         | `0`           |
+| rotation      | `number`           | yes                  | Rotation angle                         | `0`           |
 | raisingHeight | `number`           | no                              | Lifting height              | `0`           |
 | heightfixed   | `boolean`          | no                              | Point size unit             | `pixel`       |
 
