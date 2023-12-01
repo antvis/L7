@@ -108,11 +108,11 @@ export default defineConfig({
           en: 'News',
         },
         title: {
-          zh: '地理数据编辑工具',
-          en: 'L7 Editor',
+          zh: '地图站点导航工具',
+          en: 'DipperMap',
         },
-        date: '2023.09.15',
-        link: 'https://l7editor.antv.antgroup.com/',
+        date: '2023.12.01',
+        link: 'https://nav.dippermap.com/',
       },
       {
         type: {
