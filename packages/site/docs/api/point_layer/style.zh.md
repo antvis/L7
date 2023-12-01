@@ -37,7 +37,7 @@ layer.style({
 | strokeOpacity | `number`           |否 | 图形边框透明度             | `1`      |
 | blur          | `number`           |否 | 图形模糊半径               | `0`      |
 | offsets       | `[number, number]` |是 | 点偏移                     | `[0, 0]` |
-|rotation|`number`   | 旋转角度 | 是| `0` |
+|rotation|`number`   | 是 |旋转角度 | `0` |
 | raisingHeight | `number`           |否 | 抬升高度                   | `0`      |
 | heightfixed   | `boolean`          |否 | 点大小单位                 | `pixel`  |
 
