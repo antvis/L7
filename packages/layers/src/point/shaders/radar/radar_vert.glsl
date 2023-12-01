@@ -14,7 +14,7 @@ layout(std140) uniform uBlock1{
 out vec4 v_data;
 out vec4 v_color;
 out float v_radius;
-out vec2 v_exteude;
+out vec2 v_extrude;
 
 #pragma include "projection"
 #pragma include "picking"
@@ -28,7 +28,7 @@ void main() {
     cos(time), sin(time), 
     -sin(time), cos(time)
   );
-  v_exteude = rotateMatrix * a_Extrude.xy;
+  v_extrude = rotateMatrix * a_Extrude.xy;
 
   v_color = a_Color;
 

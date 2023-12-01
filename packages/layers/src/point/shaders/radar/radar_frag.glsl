@@ -9,7 +9,7 @@ layout(std140) uniform uBlock1{
 in vec4 v_data;
 in vec4 v_color;
 in float v_radius;
-in vec2 v_exteude;
+in vec2 v_extrude;
 #pragma include "sdf_2d"
 #pragma include "picking"
 
@@ -37,7 +37,7 @@ void main() {
     outputColor = filterColor(outputColor);
   }
 
-  vec2 extrude =  v_exteude;
+  vec2 extrude =  v_extrude;
   vec2 dir = normalize(extrude);
   vec2 baseDir = vec2(1.0, 0.0);
   float pi = 3.14159265359;
