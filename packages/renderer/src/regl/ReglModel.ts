@@ -87,11 +87,14 @@ export default class ReglModel implements IModel {
     Object.keys(attributes).forEach((name: string) => {
       reglAttributes[name] = (attributes[name] as ReglAttribute).get();
     });
+    let frag = removeDuplicateUniforms(
+      preprocessShader_GLSL(vendorInfo, 'frag', fs, null, false),
+    );
+    frag = frag.replace('texture(','texture2D(');//没用正则 暂时这样吧
+    frag = frag.replace('texture (','texture2D(');
     const drawParams: regl.DrawConfig = {
       attributes: reglAttributes,
-      frag: removeDuplicateUniforms(
-        preprocessShader_GLSL(vendorInfo, 'frag', fs, null, false),
-      ),
+      frag,
       uniforms: reglUniforms,
       vert: removeDuplicateUniforms(
         preprocessShader_GLSL(vendorInfo, 'vert', vs, null, false),
