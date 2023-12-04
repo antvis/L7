@@ -168,7 +168,7 @@ export default class DeviceModel implements IModel {
           },
         ],
         blendConstant: TransparentBlack,
-        depthWrite: depthEnabled,
+        depthWrite: true,
         depthCompare:
           (depthEnabled && depthParams.func) || CompareFunction.LESS,
         cullMode: (cullEnabled && cullParams.face) || CullMode.NONE,

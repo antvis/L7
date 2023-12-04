@@ -13,8 +13,20 @@ import polygon_frag from '../shaders/polygon_frag.glsl';
 import polygon_linear_frag from '../shaders/polygon_linear_frag.glsl';
 import polygon_linear_vert from '../shaders/polygon_linear_vert.glsl';
 import polygon_vert from '../shaders/polygon_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class FillModel extends BaseModel {
   public getUninforms() {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+    
+  }
+
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const {
       raisingHeight = 0,
       opacityLinear = {
@@ -22,12 +34,15 @@ export default class FillModel extends BaseModel {
         dir: 'in',
       },
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-    return {
-      u_raisingHeight: Number(raisingHeight),
-      u_opacitylinear: Number(opacityLinear.enable),
-      u_dir: opacityLinear.dir === 'in' ? 1.0 : 0.0,
-      ...this.getStyleAttribute(),
-    };
+
+   const commonOptions = {
+    u_raisingHeight: Number(raisingHeight),
+    u_opacitylinear: Number(opacityLinear.enable),
+    u_dir: opacityLinear.dir === 'in' ? 1.0 : 0.0,
+   }
+   const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+   return commonBufferInfo;
+      
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -36,6 +51,7 @@ export default class FillModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, triangulation, type } = this.getModelParams();
+    this.initUniformsBuffer();
     this.layer.triangulation = triangulation;
     const model = await this.layer.buildLayerModel({
       moduleName: type,
@@ -60,8 +76,10 @@ export default class FillModel extends BaseModel {
       this.styleAttributeService.registerStyleAttribute({
         name: 'linear',
         type: AttributeType.Attribute,
+
         descriptor: {
           name: 'a_linear',
+          shaderLocation: ShaderLocation.LINEAR,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,

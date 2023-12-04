@@ -20,7 +20,8 @@ export enum ShaderLocation {
   EXTRUDE,
   MAX,
   NORMAL,
-  UV
+  UV,
+  LINEAR // Polygon Linear
 }
 
 export function getCommonStyleAttributeOptions(
