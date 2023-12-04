@@ -71,6 +71,7 @@ const shaderLocationMap: Record<string, ShaderLocation> = {
   offsets: ShaderLocation.OFFSETS,
   rotation: ShaderLocation.ROTATION,
   extrusionBase: ShaderLocation.EXTRUSION_BASE,
+  thetaOffset: ShaderLocation.THETA_OFFSET,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -196,6 +197,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public getUninforms(): IModelUniform {
     throw new Error('Method not implemented.');
   }
+  
   public getAnimateUniforms(): IModelUniform {
     return {};
   }

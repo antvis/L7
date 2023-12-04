@@ -5,7 +5,7 @@ import LineModels, { LineModelType } from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
-  public enableShaderEncodeStyles = ['opacity', 'offsets', 'stroke','thetaOffset'];
+  public enableShaderEncodeStyles = ['offsets','opacity', 'stroke','thetaOffset'];//需严格按照unicode顺序 因为动态生成uniformBuffer时是按照uniform名称的unicode排序
   public arrowInsertCount: number = 0;
   public defaultSourceConfig = {
     data: [
