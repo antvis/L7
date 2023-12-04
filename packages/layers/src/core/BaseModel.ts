@@ -336,16 +336,21 @@ ${uniforms.join('\n')}
   public initUniformsBuffer() {
     const attrUniforms = this.getUniformsBufferInfo(this.getStyleAttribute());
     const commonUniforms = this.getCommonUniformsInfo();
-    this.attributeUnifoms = this.rendererService.createBuffer({
-      data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)), // 长度需要大于等于 4
-      isUBO: true,
-    });
+    if (attrUniforms.uniformsLength !== 0) {
+      this.attributeUnifoms = this.rendererService.createBuffer({
+        data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)).fill(0), // 长度需要大于等于 4
+        isUBO: true,
+      });
+      this.uniformBuffers.push(this.attributeUnifoms);
+    }
+    if (commonUniforms.uniformsLength !== 0) {
+      this.commonUnifoms = this.rendererService.createBuffer({
+        data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)).fill(0),
+        isUBO: true,
+      });
+      this.uniformBuffers.push(this.commonUnifoms);
+    }
 
-    this.commonUnifoms = this.rendererService.createBuffer({
-      data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)),
-      isUBO: true,
-    });
-    this.uniformBuffers = [this.attributeUnifoms, this.commonUnifoms];
   }
   // 获取数据映射 uniform 信息
   protected getUniformsBufferInfo(uniformsOption: { [key: string]: any }) {
@@ -380,13 +385,13 @@ ${uniforms.join('\n')}
   public updateStyleUnifoms() {
     const { uniformsArray } = this.getUniformsBufferInfo(this.getStyleAttribute());
     const { uniformsArray: commonUniformsArray } = this.getCommonUniformsInfo();
-    this.attributeUnifoms.subData({
+    this.attributeUnifoms?.subData({
       offset: 0,
       data: new Uint8Array(
         new Float32Array(uniformsArray).buffer,
       ),
     });
-    this.commonUnifoms.subData({
+    this.commonUnifoms?.subData({
       offset: 0,
       data: new Uint8Array(
         new Float32Array(commonUniformsArray).buffer,
