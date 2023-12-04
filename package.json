@@ -13,8 +13,8 @@
     "dev-demos/*"
   ],
   "scripts": {
-    "dev": "dumi dev --openssl-legacy-provider",
-    "dev-build": "dumi build --openssl-legacy-provider",
+    "dev": "export NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
+    "dev-build": "export NODE_OPTIONS=--openssl-legacy-provider && dumi build",
     "start": "lerna --scope @antv/l7-site exec yarn run site:develop",
     "site:build": "lerna --scope @antv/l7-site exec yarn run site:build",
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
@@ -178,7 +178,7 @@
     "ts-shader-loader": "^1.0.6",
     "typescript": "^5.2.2",
     "typings-for-css-modules-loader": "^1.7.0",
-    "webpack": "^4.17.1",
+    "x": "^4.17.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.7",
     "webpack-merge": "^4.1.4",
