@@ -65,6 +65,9 @@ export default class ExtrudeModel extends BaseModel {
       // 渐变色支持参数
       u_texture: this.texture,// 纹理
     };
+    if(this.texture){
+      this.textures =[this.texture]
+    }
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
 
@@ -115,6 +118,7 @@ export default class ExtrudeModel extends BaseModel {
 
   public clearModels() {
     this.texture?.destroy();
+    this.textures = [];
   }
 
   protected registerBuiltinAttributes() {
