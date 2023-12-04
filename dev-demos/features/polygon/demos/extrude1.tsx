@@ -8,7 +8,7 @@ import { GaodeMap,Mapbox } from '@antv/l7-maps';
     useEffect(() => {
         const scene = new Scene({
             id: 'map',
-            renderer: 'device',
+            // renderer: 'device',
             map: new GaodeMap({
               style: 'dark',
               pitch: 50,
@@ -45,10 +45,12 @@ import { GaodeMap,Mapbox } from '@antv/l7-maps';
               })
                 .source(data)
                 .shape('extrude')
+                .active(true)
                 .size('unit_price', unit_price => unit_price)
                 // .size(10000)
                 .color('count', [ '#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f' ])
                 .style({
+                  pickLight:true,
     
                   opacity: 1,
                   // opacity: {

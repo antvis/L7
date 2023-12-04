@@ -4,7 +4,6 @@ layout(location = 9) in float a_Size;
 layout(location = 13) in vec3 a_Normal;
 layout(location = 14) in vec3 a_uvs;
 
-uniform sampler2D u_texture;
 
 layout(std140) uniform commonUniforms {
   vec4 u_sourceColor;
