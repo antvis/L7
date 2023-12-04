@@ -19,10 +19,20 @@ import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.gl
 
 import polygonExtrudePickLightFrag from '../shaders/extrude/polygon_extrude_picklight_frag.glsl';
 import polygonExtrudePickLightVert from '../shaders/extrude/polygon_extrude_picklight_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class ExtrudeModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms() {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const {
       heightfixed = false,
       raisingHeight = 0,
@@ -41,7 +51,11 @@ export default class ExtrudeModel extends BaseModel {
       targetColorArr = rgb2arr(targetColor);
       useLinearColor = 1;
     }
-    return {
+    const commonOptions = {
+
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr,
+      u_linearColor: useLinearColor,
       // 控制侧面和顶面的显示隐藏
       u_topsurface: Number(topsurface),
       u_sidesurface: Number(sidesurface),
@@ -49,12 +63,11 @@ export default class ExtrudeModel extends BaseModel {
       u_raisingHeight: Number(raisingHeight),
 
       // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
-      u_texture: this.texture,
-      ...this.getStyleAttribute(),
+      u_texture: this.texture,// 纹理
     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
+
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -64,6 +77,7 @@ export default class ExtrudeModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, type } = this.getShaders();
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -131,6 +145,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uvs',
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -160,6 +175,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -184,6 +200,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
