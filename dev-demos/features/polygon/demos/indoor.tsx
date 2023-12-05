@@ -14,6 +14,7 @@ import {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
+        renderer: 'device',
         map: new GaodeMap({
           style: 'dark',
           center: [120, 29.732983],
@@ -43,9 +44,9 @@ import {
                   field:'base_height',
                 },
                 opacity: 1.0,
-                // topsurface: false,
               });
             scene.addLayer(provincelayerSide);
+            scene.startAnimate()
   
           });
       });

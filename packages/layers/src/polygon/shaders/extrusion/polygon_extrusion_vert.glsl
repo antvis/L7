@@ -1,19 +1,9 @@
-precision highp float;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 13) in vec3 a_Normal;
 
-#define ambientRatio 0.5
-#define diffuseRatio 0.3
-#define specularRatio 0.2
-
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec3 a_Normal;
-attribute float a_Size;
-uniform mat4 u_ModelMatrix;
-
-
-
-
-varying vec4 v_Color;
+out vec4 v_Color;
 
 #pragma include "projection"
 #pragma include "light"
@@ -22,8 +12,9 @@ varying vec4 v_Color;
 void main() {
  
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size + (1.0 - a_Position.z) * extrusionBase, 1.0);
-  float lightWeight = calc_lighting(pos);
+
   vec4 project_pos = project_position(pos);
+   float lightWeight = calc_lighting(project_pos);
   v_Color = a_Color;
   v_Color = vec4(v_Color.rgb * lightWeight, v_Color.w * opacity);
 

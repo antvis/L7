@@ -9,13 +9,24 @@ import BaseModel from '../../core/BaseModel';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/extrusion/polygon_extrusion_frag.glsl';
 import polygonExtrudeVert from '../shaders/extrusion/polygon_extrusion_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class ExtrusionModel extends BaseModel {
   protected texture: ITexture2D;
   public getUninforms() {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
     return {
-      ...this.getStyleAttribute(),
-    };
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+  }
+
+  protected  getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+    const commonOptions = {};
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -24,6 +35,7 @@ export default class ExtrusionModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     const { frag, vert, type } = this.getShaders();
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,
@@ -52,6 +64,7 @@ export default class ExtrusionModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation: ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -76,6 +89,7 @@ export default class ExtrusionModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

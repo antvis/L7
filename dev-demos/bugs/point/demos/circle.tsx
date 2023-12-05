@@ -66,6 +66,9 @@ export default () => {
                 opacity: 1,
               });
             scene.addLayer(imageLayer);
+            imageLayer.on('click',(e)=>{
+              console.log(e)
+            })
             scene.addLayer(imageLayer2);
           });
       });

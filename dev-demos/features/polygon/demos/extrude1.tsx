@@ -8,13 +8,14 @@ import { GaodeMap,Mapbox } from '@antv/l7-maps';
     useEffect(() => {
         const scene = new Scene({
             id: 'map',
-            map: new Mapbox({
+            renderer: 'device',
+            map: new GaodeMap({
               style: 'dark',
               pitch: 50,
               center: [ 118.8, 32.056 ],
               zoom: 10,
               // style: 'mapbox://styles/mapbox/cjaudgl840gn32rnrepcb9b9g',
-              token: 'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w4bXNyeHgzMGl0cjNvbXlmeHFjeDBwZCJ9.05W7JfyT6BVkpu12dYL58w'
+              // token: 'pk.eyJ1IjoiMTg5Njk5NDg2MTkiLCJhIjoiY2w4bXNyeHgzMGl0cjNvbXlmeHFjeDBwZCJ9.05W7JfyT6BVkpu12dYL58w'
             })
           });
           const colors = [
@@ -44,10 +45,12 @@ import { GaodeMap,Mapbox } from '@antv/l7-maps';
               })
                 .source(data)
                 .shape('extrude')
+                .active(true)
                 .size('unit_price', unit_price => unit_price)
                 // .size(10000)
                 .color('count', [ '#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f' ])
                 .style({
+                  pickLight:true,
     
                   opacity: 1,
                   // opacity: {

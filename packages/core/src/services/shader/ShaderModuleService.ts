@@ -9,7 +9,7 @@ import common from '../../shaders/common.glsl';
 import decode from '../../shaders/decode.glsl';
 import scene_uniforms from '../../shaders/scene_uniforms.glsl';
 import picking_uniforms from '../../shaders/picking_uniforms.glsl';
-import light from '../../shaders/light2.glsl';
+import light from '../../shaders/common_light.glsl';
 import lighting from '../../shaders/lighting.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
 import pickingVert from '../../shaders/picking.vert.glsl';

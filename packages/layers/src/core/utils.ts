@@ -12,6 +12,6 @@ export function formatUniformsOption2Std140 (uniformsOption:{[key:string]:any}) 
 }
 
 export function MultipleOfFourNumber(num: number) {
-  return Math.ceil(num / 4) * 4;
+  return Math.max(Math.ceil(num / 4) * 4, 4);
 }
 
