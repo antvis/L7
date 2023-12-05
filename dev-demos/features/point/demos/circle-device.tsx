@@ -6,7 +6,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      // pickBufferScale: 1.0,
+      pickBufferScale: 1.0,
       renderer: 'device',
       map: new GaodeMap({
         style: 'light',
@@ -34,9 +34,9 @@ export default () => {
             .shape('circle')
             .size(16)
             .active(true)
-            // .select({
-            //   color: 'red',
-            // })
+            .select({
+              color: 'red',
+            })
             .color('Magnitude', [
               '#0A3663',
               '#1558AC',
@@ -48,12 +48,12 @@ export default () => {
               '#A6E1E0',
               '#B8EFE2',
               '#D7F9F0',
-            ])
-            .style({
-              opacity: 0.3,
-              strokeWidth: 0,
-              stroke: '#fff',
-            });
+            ]);
+          // .style({
+          //   opacity: 0.3,
+          //   strokeWidth: 0,
+          //   stroke: '#fff',
+          // });
           scene.addLayer(pointLayer);
           //  let i =0;
           // setInterval(() => {

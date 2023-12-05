@@ -134,7 +134,7 @@ export default class DeviceModel implements IModel {
     const cullEnabled = !!(cullParams && cullParams.enable);
     // Disable blend when picking.
     const blendParams = this.getBlendDrawParams({ blend });
-    const blendEnabled = pick ? false : !!(blendParams && blendParams.enable);
+    const blendEnabled = !!(blendParams && blendParams.enable);
 
     return this.device.createRenderPipeline({
       inputLayout: this.inputLayout,
@@ -144,31 +144,47 @@ export default class DeviceModel implements IModel {
       depthStencilAttachmentFormat: Format.D24_S8,
       megaStateDescriptor: {
         attachmentsState: [
-          {
-            channelWriteMask: ChannelWriteMask.ALL,
-            rgbBlendState: {
-              blendMode:
-                (blendEnabled && blendParams.equation.rgb) || BlendMode.ADD,
-              blendSrcFactor:
-                (blendEnabled && blendParams.func.srcRGB) ||
-                BlendFactor.SRC_ALPHA,
-              blendDstFactor:
-                (blendEnabled && blendParams.func.dstRGB) ||
-                BlendFactor.ONE_MINUS_SRC_ALPHA,
-            },
-            alphaBlendState: {
-              blendMode:
-                (blendEnabled && blendParams.equation.alpha) || BlendMode.ADD,
-              blendSrcFactor:
-                (blendEnabled && blendParams.func.srcAlpha) || BlendFactor.ONE,
-              blendDstFactor:
-                (blendEnabled && blendParams.func.dstAlpha) ||
-                BlendFactor.ONE_MINUS_SRC_ALPHA,
-            },
-          },
+          pick
+            ? {
+                channelWriteMask: ChannelWriteMask.ALL,
+                rgbBlendState: {
+                  blendMode: BlendMode.ADD,
+                  blendSrcFactor: BlendFactor.ONE,
+                  blendDstFactor: BlendFactor.ZERO,
+                },
+                alphaBlendState: {
+                  blendMode: BlendMode.ADD,
+                  blendSrcFactor: BlendFactor.ONE,
+                  blendDstFactor: BlendFactor.ZERO,
+                },
+              }
+            : {
+                channelWriteMask: ChannelWriteMask.ALL,
+                rgbBlendState: {
+                  blendMode:
+                    (blendEnabled && blendParams.equation.rgb) || BlendMode.ADD,
+                  blendSrcFactor:
+                    (blendEnabled && blendParams.func.srcRGB) ||
+                    BlendFactor.SRC_ALPHA,
+                  blendDstFactor:
+                    (blendEnabled && blendParams.func.dstRGB) ||
+                    BlendFactor.ONE_MINUS_SRC_ALPHA,
+                },
+                alphaBlendState: {
+                  blendMode:
+                    (blendEnabled && blendParams.equation.alpha) ||
+                    BlendMode.ADD,
+                  blendSrcFactor:
+                    (blendEnabled && blendParams.func.srcAlpha) ||
+                    BlendFactor.ONE,
+                  blendDstFactor:
+                    (blendEnabled && blendParams.func.dstAlpha) ||
+                    BlendFactor.ONE_MINUS_SRC_ALPHA,
+                },
+              },
         ],
-        blendConstant: TransparentBlack,
-        depthWrite: depthEnabled,
+        blendConstant: blendEnabled ? TransparentBlack : undefined,
+        depthWrite: true,
         depthCompare:
           (depthEnabled && depthParams.func) || CompareFunction.LESS,
         cullMode: (cullEnabled && cullParams.face) || CullMode.NONE,
@@ -218,10 +234,10 @@ export default class DeviceModel implements IModel {
     };
 
     // @ts-ignore
-    const { width, height } = this.device;
+    const { width, height, renderPass } = this.device;
 
-    // @ts-ignore
-    const renderPass = this.device.renderPass;
+    console.log('pick...', pick);
+
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
     renderPass.setPipeline(this.pipeline);
@@ -233,7 +249,7 @@ export default class DeviceModel implements IModel {
       elements
         ? {
             buffer: this.indexBuffer,
-            offset: 0, // TODO: use defaule value
+            offset: 0,
           }
         : null,
     );

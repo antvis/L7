@@ -44,7 +44,14 @@ export default class PixelPickingPlugin implements ILayerPlugin {
   private updatePickOption(
     option: { [key: string]: number[] | number },
     rendererService: IRendererService,
+    layer: ILayer,
   ) {
+    const u_PickingBuffer = layer.getLayerConfig().pickingBuffer || 0;
+    // Tip: 当前地图是否在拖动
+    const u_shaderPick = Number(layer.getShaderPickStat());
+    this.PickOption.u_PickingBuffer = u_PickingBuffer;
+    this.PickOption.u_shaderPick = u_shaderPick;
+
     Object.keys(option).forEach((key: string) => {
       this.PickOption[key] = option[key];
     });
@@ -80,11 +87,8 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         isUBO: true,
       });
       rendererService.uniformBuffers[1] = uniformBuffer;
-      this.updatePickOption({}, rendererService);
+      this.updatePickOption({}, rendererService, layer);
     }
-    // u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
-    // // Tip: 当前地图是否在拖动
-    // u_shaderPick: Number(layer.getShaderPickStat()),
 
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
     layer.hooks.init.tapPromise('PixelPickingPlugin', () => {
@@ -118,6 +122,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingStage: PickingStage.ENCODE,
           },
           rendererService,
+          layer,
         );
         layer.models.forEach((model) =>
           model.addUniforms({
@@ -136,6 +141,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
             u_PickingStage: PickingStage.HIGHLIGHT,
           },
           rendererService,
+          layer,
         );
         layer.models.forEach((model) =>
           model.addUniforms({
@@ -165,7 +171,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           u_HighlightColor: highlightColorInArray.map((c) => c * 255),
           u_activeMix: activeMix,
         };
-        this.updatePickOption(option, rendererService);
+        this.updatePickOption(option, rendererService, layer);
         layer.models.forEach((model) => model.addUniforms(option));
       },
     );
@@ -191,8 +197,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           u_SelectColor: highlightColorInArray.map((c) => c * 255),
           u_EnableSelect: 1,
         };
-        console.log(option);
-        this.updatePickOption(option, rendererService);
+        this.updatePickOption(option, rendererService, layer);
         layer.models.forEach((model) => model.addUniforms(option));
       },
     );

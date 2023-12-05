@@ -52,7 +52,7 @@ export default class DeviceRendererService implements IRendererService {
   private height: number;
   private isDirty: boolean;
   private renderPass: RenderPass;
-  private renderTarget: RenderTarget;
+  private mainColorRT: RenderTarget;
   private mainDepthRT: RenderTarget;
 
   /**
@@ -100,14 +100,14 @@ export default class DeviceRendererService implements IRendererService {
       OES_texture_float: !isWebGL2(gl) && this.device['OES_texture_float'],
     };
 
-    const renderTargetTexture = this.device.createTexture({
-      format: Format.U8_RGBA_RT,
-      width: canvas.width,
-      height: canvas.height,
-      usage: TextureUsage.RENDER_TARGET,
-    });
-    this.renderTarget =
-      this.device.createRenderTargetFromTexture(renderTargetTexture);
+    this.mainColorRT = this.device.createRenderTargetFromTexture(
+      this.device.createTexture({
+        format: Format.U8_RGBA_RT,
+        width: canvas.width,
+        height: canvas.height,
+        usage: TextureUsage.RENDER_TARGET,
+      }),
+    );
 
     this.mainDepthRT = this.device.createRenderTargetFromTexture(
       this.device.createTexture({
@@ -121,17 +121,21 @@ export default class DeviceRendererService implements IRendererService {
 
   beginFrame(): void {
     const onscreenTexture = this.swapChain.getOnscreenTexture();
+    const colorAttachment = this.currentFramebuffer
+      ? this.currentFramebuffer['colorRenderTarget']
+      : this.mainColorRT;
+    const depthStencilAttachment = this.currentFramebuffer
+      ? this.currentFramebuffer['depthRenderTarget']
+      : this.mainDepthRT;
+
+    // @ts-ignore
+    this.device.renderPass = this.renderPass;
 
     this.renderPass = this.device.createRenderPass({
-      colorAttachment: [this.renderTarget],
-      colorResolveTo: [
-        this.currentFramebuffer
-          ? // @ts-ignore
-            this.currentFramebuffer.get()['texture']
-          : onscreenTexture,
-      ],
+      colorAttachment: [colorAttachment],
+      colorResolveTo: [this.currentFramebuffer ? null : onscreenTexture],
       colorClearColor: [TransparentBlack],
-      depthStencilAttachment: this.mainDepthRT,
+      depthStencilAttachment,
       depthClearValue: 1,
     });
     // @ts-ignore
@@ -176,8 +180,9 @@ export default class DeviceRendererService implements IRendererService {
     framebuffer: IFramebuffer | null,
     drawCommands: () => void,
   ) => {
-    // this.currentFramebuffer = framebuffer as DeviceFramebuffer;
+    this.currentFramebuffer = framebuffer as DeviceFramebuffer;
     drawCommands();
+    this.currentFramebuffer = null;
   };
 
   clear = () =>
@@ -226,21 +231,17 @@ export default class DeviceRendererService implements IRendererService {
   readPixels = (options: IReadPixelsOptions) => {
     const { framebuffer, x, y, width, height } = options;
 
-    return new Uint8Array([0, 0, 0, 0]);
-
     const readback = this.device.createReadback();
 
-    // @ts-ignore
-    const texture = (
-      (framebuffer || this.currentFramebuffer) as DeviceFramebuffer
-    ).get()['texture'];
+    const texture = (framebuffer as DeviceFramebuffer)['colorTexture'];
+
     return readback.readTextureSync(
       texture,
       x,
       y,
       width,
       height,
-      new Uint8Array(),
+      new Uint8Array(width * height * 4),
     ) as Uint8Array;
   };
 
