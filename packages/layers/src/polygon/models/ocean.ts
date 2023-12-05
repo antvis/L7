@@ -40,7 +40,6 @@ export default class OceanModel extends BaseModel {
       u_texture2: this.texture2,
       u_texture3: this.texture3,
 
-
     };
 
       // u_opacity: isNumber(opacity) ? opacity : 1.0,

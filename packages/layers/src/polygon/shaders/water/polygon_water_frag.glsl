@@ -1,21 +1,25 @@
 uniform sampler2D u_texture;
-uniform float u_time: 0.0;
-uniform float u_speed: 1.0;
-uniform float u_opacity: 1.0;
+layout(std140) uniform commonUniforms {
+  float u_speed;
+  float u_time;
+};
 
-varying vec4 v_Color;
-varying vec2 v_uv;
+out vec4 outputColor;
+
+
+in vec4 v_Color;
+in vec2 v_uv;
 
 float rand(vec2 n) { return 0.5 + 0.5 * fract(sin(dot(n.xy, vec2(12.9898, 78.233)))* 43758.5453); }
 
 float water(vec3 p) {
   float t = u_time * u_speed;
   p.z += t * 2.; p.x += t * 2.;
-  vec3 c1 = texture2D(u_texture, p.xz / 30.).xyz;
+  vec3 c1 = texture(SAMPLER_2D(u_texture), p.xz / 30.).xyz;
   p.z += t * 3.; p.x += t * 0.52;
-  vec3 c2 = texture2D(u_texture, p.xz / 30.).xyz;
+  vec3 c2 = texture(SAMPLER_2D(u_texture), p.xz / 30.).xyz;
   p.z += t * 4.; p.x += t * 0.8;
-  vec3 c3 = texture2D(u_texture, p.xz / 30.).xyz;
+  vec3 c3 = texture(SAMPLER_2D(u_texture), p.xz / 30.).xyz;
   c1 += c2 - c3;
   float z = (c1.x + c1.y + c1.z) / 3.;
   return p.y + z / 4.;
@@ -62,10 +66,8 @@ float calSpc() {
 }
 
 void main() {
-  float opacity = u_opacity;
-  gl_FragColor = v_Color;
-  gl_FragColor.a *= opacity;
 
+  outputColor = v_Color;
   float spc = calSpc();
-  gl_FragColor += spc * 0.4;
+  outputColor += spc * 0.4;
 }

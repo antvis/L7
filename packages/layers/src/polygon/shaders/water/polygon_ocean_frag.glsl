@@ -41,11 +41,11 @@ float noise1( in vec2 x ) {
 }
 
 float noise(vec2 p) {
-    return texture(u_texture2,p*vec2(1./256.)).x;
+    return texture(SAMPLER_2D(u_texture2),p*vec2(1./256.)).x;
 }
 
 vec4 highness(vec2 p) {
-    vec4 t = texture(u_texture1,fract(p));
+    vec4 t = texture(SAMPLER_2D(u_texture1),fract(p));
     float clipped = -2.0-smoothstep(3.,10.,t.a)*6.9-smoothstep(10.,100.,t.a)*89.9-smoothstep(0.,10000.,t.a)*10000.0;
     return clamp(t, 0.0,3.0)+clamp(t/3.0-1.0, 0.0,1.0)+clamp(t/16.0-1.0, 0.0,1.0);
 }
@@ -111,7 +111,7 @@ vec4 color(vec2 p){
 
 vec3 terrain_map( vec2 p )
 {
-  return color(p).rgb*0.75+0.25*vec3(0.7, .55, .4)+texture(u_texture3, fract(p*5.)).rgb*.5; // test-terrain is simply 'sandstone'
+  return color(p).rgb*0.75+0.25*vec3(0.7, .55, .4)+texture(SAMPLER_2D(u_texture3), fract(p*5.)).rgb*.5; // test-terrain is simply 'sandstone'
 }
 
 const mat2 m = mat2( 0.72, -1.60,  1.60,  0.72 );

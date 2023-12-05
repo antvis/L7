@@ -90,8 +90,6 @@ export default class ReglModel implements IModel {
     const frag = removeDuplicateUniforms(
       preprocessShader_GLSL(vendorInfo, 'frag', fs, null, false),
     );
-
-    // frag = frag.replace(/texture\(/g,'texture2D(');
     const drawParams: regl.DrawConfig = {
       attributes: reglAttributes,
       frag,
