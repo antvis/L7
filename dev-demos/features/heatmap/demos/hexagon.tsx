@@ -9,12 +9,13 @@ export default () => {
 
 const scene = new Scene({
     id: 'map',
-    map: new GaodeMap({
+    renderer:'device',
+    map: new Map({
       style: 'light',
-      pitch: 56.499,
+      pitch: 0,
       center: [ 114.07737552216226, 22.542656745583486 ],
-      rotation: 39.19,
-      zoom: 10
+      rotation: 0,
+      zoom: 14
     })
   });
   scene.on('loaded', () => {
@@ -35,7 +36,7 @@ const scene = new Scene({
             ]
           })
           .size('sum', [ 0, 60 ])
-          .shape('hexagonColumn')
+          .shape('squareColumn')
           .style({
             opacity:1
           })
@@ -54,7 +55,7 @@ const scene = new Scene({
               '#CEF8D6'
             ].reverse()
           );
-        console.log(layer)
+        // scene.startAnimate()
         scene.addLayer(layer);
         scene.render()
       });

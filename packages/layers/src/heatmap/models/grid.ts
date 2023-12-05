@@ -12,17 +12,31 @@ import heatmapGridVert from '../shaders/grid_vert.glsl';
 import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
 export default class GridModel extends BaseModel {
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+  }
+
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const { opacity, coverage, angle } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    return {
-      u_opacity: opacity || 1.0,
-      u_coverage: coverage || 0.9,
-      u_angle: angle || 0,
+    const commonOptions = {
       u_radius: [
         this.layer.getSource().data.xOffset,
         this.layer.getSource().data.yOffset,
       ],
+      u_opacity: opacity || 1.0,
+      u_coverage: coverage || 0.9,
+      u_angle: angle || 0,
     };
+  
+   const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+   return commonBufferInfo;
+      
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -30,6 +44,7 @@ export default class GridModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapGrid',
       vertexShader: heatmapGridVert,
@@ -45,6 +60,7 @@ export default class GridModel extends BaseModel {
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,
       descriptor: {
+        shaderLocation:10,
         name: 'a_Pos',
         buffer: {
           usage: gl.DYNAMIC_DRAW,

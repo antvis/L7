@@ -8,6 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer:'device',
       map: new Map({
         style: 'dark',
         pitch: 0,
@@ -44,7 +45,7 @@ export default () => {
             });
           scene.addLayer(layer);
 
-
+          scene.startAnimate();
           setTimeout(() => {
             layer.style({
               rampColors: {
