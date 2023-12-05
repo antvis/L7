@@ -239,7 +239,7 @@ export default class HeatMapModel extends BaseModel {
       u_intensity: intensity,
      }
 
-     this.colorModelUniformBuffer[0].subData({
+     this.uniformBuffers[0].subData({
       offset: 0,
       data: new Uint8Array(
         new Float32Array([intensity,radius]).buffer,

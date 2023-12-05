@@ -2,6 +2,8 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 9) in vec2 a_Uv;
 
 uniform sampler2D u_texture;
+uniform mat4 u_InverseViewProjectionMatrix;
+uniform mat4 u_ViewProjectionMatrixUncentered;
 
 out vec2 v_texCoord;
 out float v_intensity;
@@ -16,7 +18,10 @@ vec2 toBezier(float t, vec2 P0, vec2 P1, vec2 P2, vec2 P3) {
 vec2 toBezier(float t, vec4 p){
     return toBezier(t, vec2(0.0, 0.0), vec2(p.x, p.y), vec2(p.z, p.w), vec2(1.0, 1.0));
 }
+
 #pragma include "projection"
+#pragma include "project"
+
 void main() {
   v_texCoord = a_Uv;
 
