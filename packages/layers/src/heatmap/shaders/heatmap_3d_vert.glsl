@@ -1,12 +1,10 @@
-precision highp float;
-attribute vec3 a_Position;
-attribute vec2 a_Uv;
+layout(location = 0) in vec3 a_Position;
+layout(location = 9) in vec2 a_Uv;
+
 uniform sampler2D u_texture;
-varying vec2 v_texCoord;
-uniform mat4 u_ModelMatrix;
-uniform mat4 u_InverseViewProjectionMatrix;
-uniform mat4 u_ViewProjectionMatrixUncentered;
-varying float v_intensity;
+
+out vec2 v_texCoord;
+out float v_intensity;
 
 
 vec2 toBezier(float t, vec2 P0, vec2 P1, vec2 P2, vec2 P3) {
@@ -39,7 +37,7 @@ void main() {
   vec4 b= vec4(0.5000, 0.0, 1.0, 0.5000);
   float fh;
 
-  v_intensity = texture2D(u_texture, v_texCoord).r;
+  v_intensity = texture(SAMPLER_2D(u_texture), v_texCoord).r;
   fh = toBezier(v_intensity, b).y;
   gl_Position = u_ViewProjectionMatrixUncentered * vec4(position.xy, fh * project_pixel(50.), 1.0);
  

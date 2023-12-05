@@ -283,7 +283,6 @@ export default class HeatMapModel extends BaseModel {
       u_colorTexture: this.colorTexture,
       u_texture: this.heatmapFramerBuffer,
     }
-    console.log(this.heatmapFramerBuffer)
     const textures = [this.heatmapFramerBuffer as ITexture2D,this.colorTexture,]
     this.colorModelUniformBuffer[0].subData({
       offset: 0,
