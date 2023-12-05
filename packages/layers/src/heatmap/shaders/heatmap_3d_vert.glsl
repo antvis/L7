@@ -1,12 +1,21 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 9) in vec2 a_Uv;
 
+layout(std140) uniform commonUniforms {
+  mat4 u_ViewProjectionMatrixUncentered;
+  mat4 u_InverseViewProjectionMatrix;
+  float u_opacity;
+};
+
+
 uniform sampler2D u_texture;
 uniform mat4 u_InverseViewProjectionMatrix;
 uniform mat4 u_ViewProjectionMatrixUncentered;
 
 out vec2 v_texCoord;
 out float v_intensity;
+
+
 
 
 vec2 toBezier(float t, vec2 P0, vec2 P1, vec2 P2, vec2 P3) {

@@ -1,7 +1,13 @@
 uniform sampler2D u_texture;
 uniform sampler2D u_colorTexture;
 
-uniform float u_opacity;
+
+layout(std140) uniform commonUniforms {
+  mat4 u_ViewProjectionMatrixUncentered;
+  mat4 u_InverseViewProjectionMatrix;
+  float u_opacity;
+};
+
 in vec2 v_texCoord;
 in float v_intensity;
 out vec4 outputColor;

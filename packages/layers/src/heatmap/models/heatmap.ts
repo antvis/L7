@@ -43,7 +43,7 @@ export default class HeatMapModel extends BaseModel {
   private shapeType: string;
   private preRampColors: IColorRamp;
   private colorModelUniformBuffer: IBuffer[] =[]
-  private intensityModelUniformBuffer: IBuffer[] =[]
+  private heat3DModelUniformBuffer: IBuffer[] =[]
 
   public render(options: Partial<IRenderOptions>) {
     const { clear, useFramebuffer } = this.rendererService;
@@ -154,13 +154,12 @@ export default class HeatMapModel extends BaseModel {
   }
   private async buildHeatMapIntensity() {
 
-    this.intensityModelUniformBuffer = [this.rendererService.createBuffer({
+    this.uniformBuffers = [this.rendererService.createBuffer({
       // opacity
       data: new Float32Array(4).fill(0), // 长度需要大于等于 4
       isUBO: true,
     })];
     this.layer.triangulation = HeatmapTriangulation;
-    this.uniformBuffers = this.intensityModelUniformBuffer;
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapIntensity',
       vertexShader: heatmapFramebufferVert,
@@ -299,31 +298,35 @@ export default class HeatMapModel extends BaseModel {
   }
 
   private draw3DHeatMap(options: Partial<IRenderOptions>) {
-    const { opacity } =
+    const { opacity = 1.0 } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-
-    // const invert = mat4.invert(
-    //   mat4.create(),
-    //   mat4.fromValues(
-    //     // @ts-ignore
-    //     ...this.cameraService.getViewProjectionMatrixUncentered(),
-    //   ),
-    // ) as mat4;
+     
+   
     const invert = mat4.create();
     mat4.invert(
       invert,
       this.cameraService.getViewProjectionMatrixUncentered() as mat4,
     );
 
+   
+
+    const commonOptions = {
+      u_opacity: opacity,
+      u_colorTexture: this.colorTexture,
+      u_texture: this.heatmapFramerBuffer,
+      u_ViewProjectionMatrixUncentered:
+        this.cameraService.getViewProjectionMatrixUncentered(),
+      u_InverseViewProjectionMatrix: [...invert],
+    }
+    this.heat3DModelUniformBuffer[0].subData({
+      offset: 0,
+      data: new Uint8Array(
+        new Float32Array([...commonOptions.u_ViewProjectionMatrixUncentered,...commonOptions.u_InverseViewProjectionMatrix,opacity]).buffer,
+      ),
+    })
+
     this.colorModel?.draw({
-      uniforms: {
-        u_opacity: opacity || 1.0,
-        u_colorTexture: this.colorTexture,
-        u_texture: this.heatmapFramerBuffer,
-        u_ViewProjectionMatrixUncentered:
-          this.cameraService.getViewProjectionMatrixUncentered(),
-        u_InverseViewProjectionMatrix: [...invert],
-      },
+      uniforms: commonOptions,
       blend: {
         enable: true,
         func: {
@@ -344,7 +347,12 @@ export default class HeatMapModel extends BaseModel {
       vs: heatmap3DVert,
       fs: heatmap3DFrag,
     });
-
+    
+    this.heat3DModelUniformBuffer = [this.rendererService.createBuffer({
+      // opacity
+      data: new Float32Array(36).fill(0), // 长度需要大于等于 4
+      isUBO: true,
+    })];
     const { vs, fs, uniforms } =
       this.shaderModuleService.getModule('heatmap3dColor');
     const { createAttribute, createElements, createBuffer, createModel } =
@@ -354,6 +362,7 @@ export default class HeatMapModel extends BaseModel {
       fs,
       attributes: {
         a_Position: createAttribute({
+          shaderLocation:ShaderLocation.POSITION,
           buffer: createBuffer({
             data: triangulation.vertices,
             type: gl.FLOAT,
@@ -361,6 +370,7 @@ export default class HeatMapModel extends BaseModel {
           size: 3,
         }),
         a_Uv: createAttribute({
+          shaderLocation:ShaderLocation.UV,
           buffer: createBuffer({
             data: triangulation.uvs,
             type: gl.FLOAT,
