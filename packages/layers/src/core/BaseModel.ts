@@ -194,10 +194,18 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public getDefaultStyle(): unknown {
     return {};
   }
+  // public getUninforms(): IModelUniform {
+  //   throw new Error('Method not implemented.');
+  // }
   public getUninforms(): IModelUniform {
-    throw new Error('Method not implemented.');
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...attributeInfo.uniformsOption,
+      ...commoninfo.uniformsOption
+    }
   }
-  
   public getAnimateUniforms(): IModelUniform {
     return {};
   }

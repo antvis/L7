@@ -72,7 +72,7 @@ export default () => {
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(10)
-      .shape('simple')
+      .shape('line')
       .color('#f00')
       .style({
         opacity:1,
