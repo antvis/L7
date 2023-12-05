@@ -37,7 +37,7 @@ export default class RadarModel extends BaseModel {
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
       u_speed: speed,
       u_time: this.layer.getLayerAnimateTime(),
-     };
+     };//1+1+1+1
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     
     return commonBufferInfo;
