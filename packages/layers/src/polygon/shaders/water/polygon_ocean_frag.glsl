@@ -1,8 +1,13 @@
 
-uniform float u_time: 0.0;
-uniform float u_opacity: 1.0;
+layout(std140) uniform commonUniforms {
+  vec4 u_watercolor;
+  vec4 u_watercolor2;
+  float u_time;
+};
 
-varying vec2 v_uv;
+in vec2 v_uv;
+in float v_opacity;
+out vec4 outputColor;
 
 float coast2water_fadedepth = 0.10;
 float large_waveheight      = .750; // change to adjust the "heavy" waves
@@ -12,10 +17,7 @@ float small_wavesize        = 0.5;   // factor to ajust the small wave size
 float water_softlight_fact  = 15.;  // range [1..200] (should be << smaller than glossy-fact)
 float water_glossylight_fact= 120.; // range [1..200]
 float particle_amount       = 70.;
-// vec3 watercolor             = vec3(0.43, 0.60, 0.66); // 'transparent' low-water color (RGB)
-// vec3 watercolor2            = vec3(0.06, 0.07, 0.11); // deep-water color (RGB, should be darker than the low-water color)
-uniform vec4 u_watercolor;
-uniform vec4 u_watercolor2;
+
 vec3 water_specularcolor    = vec3(1.3, 1.3, 0.9);    // specular Color (RGB) of the water-highlights
 #define light                 vec3(-0., sin(u_time*0.5)*.5 + .35, 2.8) // position of the sun
 
@@ -39,11 +41,11 @@ float noise1( in vec2 x ) {
 }
 
 float noise(vec2 p) {
-    return texture2D(u_texture2,p*vec2(1./256.)).x;
+    return texture(u_texture2,p*vec2(1./256.)).x;
 }
 
 vec4 highness(vec2 p) {
-    vec4 t = texture2D(u_texture1,fract(p));
+    vec4 t = texture(u_texture1,fract(p));
     float clipped = -2.0-smoothstep(3.,10.,t.a)*6.9-smoothstep(10.,100.,t.a)*89.9-smoothstep(0.,10000.,t.a)*10000.0;
     return clamp(t, 0.0,3.0)+clamp(t/3.0-1.0, 0.0,1.0)+clamp(t/16.0-1.0, 0.0,1.0);
 }
@@ -109,7 +111,7 @@ vec4 color(vec2 p){
 
 vec3 terrain_map( vec2 p )
 {
-  return color(p).rgb*0.75+0.25*vec3(0.7, .55, .4)+texture2D(u_texture3, fract(p*5.)).rgb*.5; // test-terrain is simply 'sandstone'
+  return color(p).rgb*0.75+0.25*vec3(0.7, .55, .4)+texture(u_texture3, fract(p*5.)).rgb*.5; // test-terrain is simply 'sandstone'
 }
 
 const mat2 m = mat2( 0.72, -1.60,  1.60,  0.72 );
@@ -241,7 +243,5 @@ void main() {
         col = mix(col, watercolor, coastfade);
     }
     
-
-  float opacity = u_opacity;
-  gl_FragColor = vec4(col, opacity);  
+  outputColor = vec4(col, v_opacity);  
 }
