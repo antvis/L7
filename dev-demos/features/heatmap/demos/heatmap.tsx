@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, HeatmapLayer } from '@antv/l7';
+import { HeatmapLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -8,7 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer:'device',
+      // renderer: 'device',
       map: new Map({
         style: 'dark',
         pitch: 0,
@@ -34,18 +34,18 @@ export default () => {
               rampColors: {
                 colors: [
                   '#FF4818',
-                  '#FF4818',
-                  '#FF4818',
-                  '#FF4818',
-                  '#FF4818',
-                  '#FF4818',
+                  '#F7B74A',
+                  '#FFF598',
+                  '#91EABC',
+                  '#2EA9A1',
+                  '#206C7C',
                 ].reverse(),
                 positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
               },
             });
           scene.addLayer(layer);
 
-          // scene.startAnimate();
+          scene.startAnimate();
           // setTimeout(() => {
           //   layer.style({
           //     rampColors: {
@@ -61,7 +61,6 @@ export default () => {
           //     },
           //   })
           // },2000);
-          console.log(layer);
         });
     });
   }, []);

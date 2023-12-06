@@ -1,4 +1,5 @@
 import {
+  colorNewFromRGBA,
   Device,
   Format,
   RenderPass,
@@ -14,6 +15,7 @@ import {
   IAttributeInitializationOptions,
   IBuffer,
   IBufferInitializationOptions,
+  IClearOptions,
   IElements,
   IElementsInitializationOptions,
   IExtensions,
@@ -128,14 +130,28 @@ export default class DeviceRendererService implements IRendererService {
     const depthStencilAttachment = this.currentFramebuffer
       ? this.currentFramebuffer['depthRenderTarget'] || null
       : this.mainDepthRT;
-    const depthClearValue = depthStencilAttachment ? 1 : undefined;
+
+    const { color = [0, 0, 0, 0], depth = 1, stencil = 0 } =
+      // @ts-ignore
+      this.currentFramebuffer?.clearOptions || {};
+    const colorClearColor = colorAttachment
+      ? colorNewFromRGBA(
+          color[0] * 255,
+          color[1] * 255,
+          color[2] * 255,
+          color[3],
+        )
+      : TransparentBlack;
+    const depthClearValue = depthStencilAttachment ? depth : undefined;
+    const stencilClearValue = depthStencilAttachment ? stencil : undefined;
 
     this.renderPass = this.device.createRenderPass({
       colorAttachment: [colorAttachment],
       colorResolveTo: [colorResolveTo],
-      colorClearColor: [TransparentBlack],
+      colorClearColor: [colorClearColor],
       depthStencilAttachment,
       depthClearValue,
+      stencilClearValue,
     });
     // @ts-ignore
     this.device.renderPass = this.renderPass;
@@ -184,26 +200,16 @@ export default class DeviceRendererService implements IRendererService {
     drawCommands();
     this.endFrame();
     this.currentFramebuffer = null;
-
   };
 
-  clear = () =>
-    // options: IClearOptions
-    {
-      // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
-      // const { color, depth, stencil, framebuffer = null } = options;
-      // const reglClearOptions: regl.ClearOptions = {
-      //   color,
-      //   depth,
-      //   stencil,
-      // };
-      // reglClearOptions.framebuffer =
-      //   framebuffer === null
-      //     ? framebuffer
-      //     : (framebuffer as DeviceFramebuffer).get();
-      // this.gl?.clear(reglClearOptions);
-      // TODO: clear
-    };
+  clear = (options: IClearOptions) => {
+    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
+    const { color, depth, stencil, framebuffer = null } = options;
+    if (framebuffer) {
+      // @ts-ignore
+      framebuffer.clearOptions = { color, depth, stencil };
+    }
+  };
 
   viewport = ({
     // x,

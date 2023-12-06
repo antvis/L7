@@ -18,7 +18,7 @@ layout(std140) uniform uBlock {
 
 void main() {
   vec2 pos = v_Iconuv / u_textSize + v_uv / u_textSize * 64.;
-  outputColor = texture(u_texture, pos);
+  outputColor = texture(SAMPLER_2D(u_texture), pos);
   outputColor.a *= v_opacity;
   outputColor = filterColor(outputColor);
 }

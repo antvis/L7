@@ -14,17 +14,17 @@
     "README.md"
   ],
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
     "build": "father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
     "sync": "tnpm sync",
     "test": "umi-test --passWithNoTests",
-    "test-live": "umi-test --watch"
+    "test-live": "umi-test --watch",
+    "tsc": "tsc --project tsconfig.build.json"
   },
   "dependencies": {
-    "@antv/g-device-api": "^1.4.2",
+    "@antv/g-device-api": "^1.4.3",
     "@antv/l7-core": "2.20.5",
     "@antv/l7-utils": "2.20.5",
     "@babel/runtime": "^7.7.7",

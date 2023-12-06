@@ -356,7 +356,6 @@ export default class PickingService implements IPickingService {
     const { clear } = this.rendererService;
     this.resizePickingFBO();
     this.rendererService.useFramebuffer(this.pickingFBO, () => {
-      this.rendererService.beginFrame();
       const layers = this.layerService.getRenderList();
       layers
         .filter((layer) => {
@@ -375,7 +374,6 @@ export default class PickingService implements IPickingService {
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
-      this.rendererService.endFrame();
     });
   }
   public triggerHoverOnLayer(
