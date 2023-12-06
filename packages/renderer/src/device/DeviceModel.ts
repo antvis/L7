@@ -179,12 +179,12 @@ export default class DeviceModel implements IModel {
                     BlendFactor.ONE,
                   blendDstFactor:
                     (blendEnabled && blendParams.func.dstAlpha) ||
-                    BlendFactor.ONE_MINUS_SRC_ALPHA,
+                    BlendFactor.ONE,
                 },
               },
         ],
         blendConstant: blendEnabled ? TransparentBlack : undefined,
-        depthWrite: true,
+        depthWrite: depthEnabled,
         depthCompare:
           (depthEnabled && depthParams.func) || CompareFunction.LESS,
         cullMode: (cullEnabled && cullParams.face) || CullMode.NONE,
@@ -235,8 +235,6 @@ export default class DeviceModel implements IModel {
 
     // @ts-ignore
     const { width, height, renderPass } = this.device;
-
-    console.log('pick...', pick);
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);

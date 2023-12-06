@@ -83,7 +83,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         // float u_shaderPick;
         // float u_EnableSelect;
         // float u_activeMix;
-        data: new Float32Array(this.pickOption2Array().length),
+        data: new Float32Array(20),
         isUBO: true,
       });
       rendererService.uniformBuffers[1] = uniformBuffer;
