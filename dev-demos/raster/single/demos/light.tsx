@@ -17,6 +17,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
         id: 'map',
+        renderer:'device',
         map: new Map({
           center: [ 105, 37.5 ],
           zoom: 2.5
@@ -47,7 +48,7 @@ export default () => {
       
         const layer = new RasterLayer({
           zIndex: 2,
-          visible:false,
+          visible:true,
         });
         layer
           .source(tiffdata.data, {
@@ -70,24 +71,25 @@ export default () => {
               positions: [ 0, 0.05, 0.1, 0.25, 0.5, 1.0 ]
             }
           });
-          const raster = new RasterLayer({
-            zIndex: 2,
-            maskLayers: [layer],
-            visible: true,
-            enableMask: true,
-        }).source(
-            'https://tiles{1-3}.geovisearth.com/base/v1/img/{z}/{x}/{y}?format=webp&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788',
-            {
-                parser: {
-                    type: 'rasterTile',
-                    tileSize: 256,
-                },
-            },
-        ).style({
-            opacity: 1
-        });
-        scene.addLayer(raster);
+        //   const raster = new RasterLayer({
+        //     zIndex: 2,
+        //     maskLayers: [layer],
+        //     visible: true,
+        //     enableMask: true,
+        // }).source(
+        //     'https://tiles{1-3}.geovisearth.com/base/v1/img/{z}/{x}/{y}?format=webp&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788',
+        //     {
+        //         parser: {
+        //             type: 'rasterTile',
+        //             tileSize: 256,
+        //         },
+        //     },
+        // ).style({
+        //     opacity: 1
+        // });
+        // scene.addLayer(raster);
         scene.addLayer(layer);
+        scene.startAnimate();
       }
   }, []);
   return (

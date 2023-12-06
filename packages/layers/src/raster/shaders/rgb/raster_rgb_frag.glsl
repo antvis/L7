@@ -1,4 +1,3 @@
-precision mediump float;
 uniform vec2 u_rminmax: vec2(0,255); 
 uniform vec2 u_gminmax: vec2(0,255);
 uniform vec2 u_bminmax: vec2(0,255);

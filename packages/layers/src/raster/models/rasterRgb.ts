@@ -8,8 +8,8 @@ import {
 import BaseModel from '../../core/BaseModel';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import rasterVert from '../shaders/raster_2d_vert.glsl';
-import rasterFrag from '../shaders/raster_rgb_frag.glsl';
+import rasterVert from '../shaders/raster/raster_2d_vert.glsl';
+import rasterFrag from '../shaders/rgb/raster_rgb_frag.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected dataOption: any = {};

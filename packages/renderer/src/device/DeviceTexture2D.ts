@@ -72,6 +72,7 @@ export default class DeviceTexture2D implements ITexture2D {
         packAlignment: alignment,
       },
     });
+    console.log(data)
     if (data) {
       // @ts-ignore
       this.texture.setImageData([data]);

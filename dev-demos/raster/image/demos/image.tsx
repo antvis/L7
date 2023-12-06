@@ -28,7 +28,7 @@ export default () => {
           tileSize: 256,
         },
       });
-      scene.addLayer(layer1);
+      // scene.addLayer(layer1);
         const layer = new ImageLayer({});
 
         layer.source(
@@ -41,6 +41,7 @@ export default () => {
           }
         );
         scene.addLayer(layer);
+        scene.startAnimate();
 
 
       })
