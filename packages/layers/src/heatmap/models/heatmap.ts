@@ -8,6 +8,7 @@ import {
   IModelUniform,
   IRenderOptions,
   ITexture2D,
+  TextureUsage,
 } from '@antv/l7-core';
 import {
   generateColorRamp,
@@ -96,6 +97,7 @@ export default class HeatMapModel extends BaseModel {
       wrapT: gl.CLAMP_TO_EDGE,
       min: gl.LINEAR,
       mag: gl.LINEAR,
+      usage: TextureUsage.RENDER_TARGET,
     });
     this.heatmapFramerBuffer = createFramebuffer({
       color: this.heatmapTexture,

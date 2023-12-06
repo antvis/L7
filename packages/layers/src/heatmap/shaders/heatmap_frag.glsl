@@ -2,9 +2,11 @@ uniform sampler2D u_texture;        // 热力强度图
 uniform sampler2D u_colorTexture;   // 根据强度分布的色带
 
 layout(std140) uniform commonUniforms {
-    float u_opacity;
+  float u_opacity;
+  float u_common_uniforms_padding1;
+  float u_common_uniforms_padding2;
+  float u_common_uniforms_padding3;
 };
-
 in vec2 v_texCoord;
 out vec4 outputColor;
 

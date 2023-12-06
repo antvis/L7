@@ -1,6 +1,8 @@
 layout(std140) uniform commonUniforms {
   float u_radius;
   float u_intensity;
+  float u_common_uniforms_padding1;
+  float u_common_uniforms_padding2;
 };
 
 in float v_weight;

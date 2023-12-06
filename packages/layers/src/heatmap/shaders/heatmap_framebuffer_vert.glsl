@@ -6,6 +6,8 @@ layout(location = 10) in vec2 a_Dir;
 layout(std140) uniform commonUniforms {
   float u_radius;
   float u_intensity;
+  float u_common_uniforms_padding1;
+  float u_common_uniforms_padding2;
 };
 
 out vec2 v_extrude;
