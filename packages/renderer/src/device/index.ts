@@ -124,6 +124,7 @@ export default class DeviceRendererService implements IRendererService {
     const colorAttachment = this.currentFramebuffer
       ? this.currentFramebuffer['colorRenderTarget'] || null
       : this.mainColorRT;
+    const colorResolveTo = this.currentFramebuffer ? null : onscreenTexture;
     const depthStencilAttachment = this.currentFramebuffer
       ? this.currentFramebuffer['depthRenderTarget'] || null
       : this.mainDepthRT;
@@ -131,7 +132,7 @@ export default class DeviceRendererService implements IRendererService {
 
     this.renderPass = this.device.createRenderPass({
       colorAttachment: [colorAttachment],
-      colorResolveTo: [this.currentFramebuffer ? null : onscreenTexture],
+      colorResolveTo: [colorResolveTo],
       colorClearColor: [TransparentBlack],
       depthStencilAttachment,
       depthClearValue,
