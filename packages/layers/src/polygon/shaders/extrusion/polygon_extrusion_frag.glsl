@@ -1,13 +1,9 @@
 
-uniform float u_opacity: 1.0;
-varying vec4 v_Color;
-varying vec2 v_texture_data;
-
-
+in vec4 v_Color;
 #pragma include "picking"
-
+out vec4 outputColor;
 void main() {
 
-  gl_FragColor = v_Color;
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor = v_Color;
+  outputColor = filterColor(outputColor);
 }

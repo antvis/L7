@@ -9,7 +9,7 @@ layout(location = 13) in vec3 a_Normal;
 layout(location = 14) in vec2 a_iconMapUV;
 // dash line
 layout(location = 11) in float a_Total_Distance;
-layout(location = 15) in vec2 a_DistanceAndIndex;
+layout(location = 10) in vec2 a_DistanceAndIndex;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];

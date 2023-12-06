@@ -16,6 +16,7 @@ import {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
+        renderer:'device',
         map: new GaodeMap({
           center: [105, 32],
           zoom: 4,

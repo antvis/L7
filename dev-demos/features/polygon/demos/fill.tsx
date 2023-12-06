@@ -12,6 +12,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer: 'device',
       map: new GaodeMap({
         pitch: 40,
         center: [113.8623046875, 30.031055426540206],
@@ -73,7 +74,11 @@ export default () => {
       .color('red')
       .active(true)
       .style({
-        opacity:0.5
+        opacity:0.5,
+        opacityLinear:{
+          enable:true,
+          dir:'in'
+        }
       });
 
     scene.on('loaded', () => {

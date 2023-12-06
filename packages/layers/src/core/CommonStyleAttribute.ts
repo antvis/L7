@@ -21,7 +21,7 @@ export enum ShaderLocation {
   MAX,
   NORMAL,
   UV,
-  THETA_OFFSET
+  LINEAR // Polygon Linear
 }
 
 export function getCommonStyleAttributeOptions(
@@ -136,7 +136,7 @@ export function getCommonStyleAttributeOptions(
           type: AttributeType.Attribute,
           descriptor: {
             name: 'a_ThetaOffset',
-            shaderLocation: ShaderLocation.THETA_OFFSET,
+            shaderLocation: 15,
             buffer: {
               // give the WebGL driver a hint that this buffer may change
               usage: gl.STATIC_DRAW,

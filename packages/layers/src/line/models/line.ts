@@ -114,8 +114,6 @@ export default class LineModel extends BaseModel {
         u_linearColor: useLinearColor,
       }
     }
-    const attributionUniforms = this.getStyleAttribute();
-    commonOptions = Object.assign( commonOptions, attributionUniforms);
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
     return commonBufferInfo;
   }
@@ -209,7 +207,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_DistanceAndIndex',
-        shaderLocation:15,
+        shaderLocation:10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

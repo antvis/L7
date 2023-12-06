@@ -8,6 +8,7 @@ export default () => {
 
 const scene = new Scene({
   id: 'map',
+  renderer:'device',
   map: new GaodeMap({
     center: [ 120.5, 30.2 ],
     style: 'dark',

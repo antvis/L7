@@ -2,31 +2,32 @@
 #define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
-attribute vec3 a_Position;
-attribute vec4 a_Instance;
-attribute vec4 a_Color;
-attribute float a_Size;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 12) in vec4 a_Instance;
+layout(location = 14) in vec2 a_iconMapUV;
 
-uniform float u_globel;
-uniform float u_globel_radius;
-uniform float u_global_height: 10;
-uniform mat4 u_ModelMatrix;
 
-uniform float segmentNumber;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-varying vec4 v_color;
-
-uniform float u_line_type: 0.0;
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-varying vec4 v_dash_array;
-
-uniform float u_icon_step: 100;
-uniform float u_line_texture: 0.0;
-varying float v_segmentIndex;
-
-attribute vec2 a_iconMapUV;
-varying vec2 v_iconMapUV;
-varying vec4 v_line_data;
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array: [10.0, 5., 0, 0];
+  vec2 u_textSize;
+  float u_globel;
+  float u_globel_radius;
+  float u_global_height: 10;
+  float segmentNumber;
+  float u_line_type: 0.0;
+  float u_icon_step: 100;
+  float u_line_texture: 0.0;
+  float u_textureBlend;
+  float u_time;
+};
+out vec4 v_color;
+out vec4 v_dash_array;
+out float v_segmentIndex;
+out vec2 v_iconMapUV;
+out vec4 v_line_data;
 
 #pragma include "projection"
 #pragma include "project"

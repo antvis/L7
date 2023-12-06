@@ -13,8 +13,9 @@
     "dev-demos/*"
   ],
   "scripts": {
-    "dev": "dumi dev",
-    "dev-build": "dumi build",
+    "dev": "export NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
+    "dev_windows": "dumi dev",
+    "dev-build": "export NODE_OPTIONS=--openssl-legacy-provider && dumi build",
     "start": "lerna --scope @antv/l7-site exec yarn run site:develop",
     "site:build": "lerna --scope @antv/l7-site exec yarn run site:build",
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
@@ -50,7 +51,7 @@
     "clean": "lerna run clean --parallel",
     "clear-node-modules": "rimraf node_modules && lerna clean -y",
     "changelog": "auto-changelog --output CHANGELOG.md",
-    "translate":"translate  -d",
+    "translate": "translate  -d",
     "sync": "lerna run sync --parallel"
   },
   "husky": {
@@ -79,7 +80,7 @@
     "@antv/larkmap": "^1.3.2",
     "@antv/translator": "^1.0.1",
     "@babel/standalone": "^7.13.15",
-    "@commitlint/cli": "^8.1.0",
+    "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^8.1.0",
     "@loadable/component": "^5.15.0",
     "@material-ui/core": "^4.10.2",
@@ -188,5 +189,8 @@
   },
   "tnpm": {
     "mode": "yarn"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
   }
 }

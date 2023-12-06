@@ -1,24 +1,24 @@
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-uniform float u_linearColor: 0;
+layout(std140) uniform commonUniforms {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_linearColor;
+  float u_topsurface;
+  float u_sidesurface;
+  float u_heightfixed; // 默认不固定
+  float u_raisingHeight;
+};
 
-uniform float u_topsurface: 1.0;
-uniform float u_sidesurface: 1.0;
-
-varying vec4 v_Color;
-
+in vec4 v_Color;
 #pragma include "picking"
-
+out vec4 outputColor;
 void main() {
-
 
      // top face
     if(u_topsurface < 1.0) {
       discard;
     }
 
-    gl_FragColor = v_Color;
+    outputColor = v_Color;
   
-
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor = filterColor(outputColor);
 }

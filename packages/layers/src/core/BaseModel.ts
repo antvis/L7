@@ -71,7 +71,7 @@ const shaderLocationMap: Record<string, ShaderLocation> = {
   offsets: ShaderLocation.OFFSETS,
   rotation: ShaderLocation.ROTATION,
   extrusionBase: ShaderLocation.EXTRUSION_BASE,
-  thetaOffset: ShaderLocation.THETA_OFFSET,
+  thetaOffset: 15,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -201,10 +201,14 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     const commoninfo = this.getCommonUniformsInfo();
     const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
     this.updateStyleUnifoms();
-    return {
+    const result =  {
       ...attributeInfo.uniformsOption,
       ...commoninfo.uniformsOption
     }
+    if(this.textures&&this.textures.length===1){
+      result['u_texture'] = this.textures[0];
+    }
+    return result;
   }
   public getAnimateUniforms(): IModelUniform {
     return {};
@@ -270,6 +274,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
       } else {
         uniforms.push(`  ${DefaultUniformStyleType[key]} u_${key};`);
+      }
+      let location = shaderLocationMap[key];
+      if(!location&&key==='THETA_OFFSET'){
+        location = 15;
       }
       str += `
           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
@@ -346,16 +354,21 @@ ${uniforms.join('\n')}
   public initUniformsBuffer() {
     const attrUniforms = this.getUniformsBufferInfo(this.getStyleAttribute());
     const commonUniforms = this.getCommonUniformsInfo();
-    this.attributeUnifoms = this.rendererService.createBuffer({
-      data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)), // 长度需要大于等于 4
-      isUBO: true,
-    });
+    if (attrUniforms.uniformsLength !== 0) {
+      this.attributeUnifoms = this.rendererService.createBuffer({
+        data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)).fill(0), // 长度需要大于等于 4
+        isUBO: true,
+      });
+      this.uniformBuffers.push(this.attributeUnifoms);
+    }
+    if (commonUniforms.uniformsLength !== 0) {
+      this.commonUnifoms = this.rendererService.createBuffer({
+        data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)).fill(0),
+        isUBO: true,
+      });
+      this.uniformBuffers.push(this.commonUnifoms);
+    }
 
-    this.commonUnifoms = this.rendererService.createBuffer({
-      data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)),
-      isUBO: true,
-    });
-    this.uniformBuffers = [this.attributeUnifoms, this.commonUnifoms];
   }
   // 获取数据映射 uniform 信息
   protected getUniformsBufferInfo(uniformsOption: { [key: string]: any }) {
@@ -365,7 +378,7 @@ ${uniforms.join('\n')}
       if (Array.isArray(value)) {
         uniformsArray.push(...value);
         uniformsLength += value.length;
-      } else {
+      } else if (typeof value === 'number') { // 排除纹理
         uniformsArray.push(value);
         uniformsLength += 1;
       }
@@ -390,13 +403,13 @@ ${uniforms.join('\n')}
   public updateStyleUnifoms() {
     const { uniformsArray } = this.getUniformsBufferInfo(this.getStyleAttribute());
     const { uniformsArray: commonUniformsArray } = this.getCommonUniformsInfo();
-    this.attributeUnifoms.subData({
+    this.attributeUnifoms?.subData({
       offset: 0,
       data: new Uint8Array(
         new Float32Array(uniformsArray).buffer,
       ),
     });
-    this.commonUnifoms.subData({
+    this.commonUnifoms?.subData({
       offset: 0,
       data: new Uint8Array(
         new Float32Array(commonUniformsArray).buffer,

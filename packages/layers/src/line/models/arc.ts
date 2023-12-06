@@ -5,7 +5,6 @@ import {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
@@ -18,6 +17,7 @@ import arc_dash_vert from '../shaders/dash/arc_dash_vert.glsl';
 // arc normal line
 import arc_line_frag from '../shaders/line_arc_frag.glsl';
 import arc_line_vert from '../shaders/line_arc_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 // arc linear line
 import arc_linear_frag from '../shaders/linear/arc_linear_frag.glsl';
 import arc_linear_vert from '../shaders/linear/arc_linear_vert.glsl';
@@ -28,9 +28,8 @@ const lineStyleObj: { [key: string]: number } = {
 const { isNumber } = lodashUtil;
 export default class ArcModel extends BaseModel {
   protected texture: ITexture2D;
-  public getUninforms(): IModelUniform {
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
-      opacity = 1,
       sourceColor,
       targetColor,
       textureBlend = 'normal',
@@ -43,52 +42,74 @@ export default class ArcModel extends BaseModel {
       // thetaOffset = 0.314,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
 
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
 
     // 转化渐变色
-    let useLinearColor = 0; // 默认不生效
+    // let useLinearColor = 0; // 默认不生效
     let sourceColorArr = [0, 0, 0, 0];
     let targetColorArr = [0, 0, 0, 0];
     if (sourceColor && targetColor) {
       sourceColorArr = rgb2arr(sourceColor);
       targetColorArr = rgb2arr(targetColor);
-      useLinearColor = 1;
+      // useLinearColor = 1;
     }
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
-
-    return {
-      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
-      segmentNumber,
-      u_line_type: lineStyleObj[lineType || 'solid'],
-      u_dash_array: dashArray,
-      u_blur: 0.9,
-      u_lineDir: forward ? 1 : -1,
-      // 纹理支持参数
-      u_texture: this.texture, // 贴图
-      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-      u_icon_step: iconStep,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
-      ...this.getStyleAttribute(),
-    };
+    let commonOptions;
+    if(lineType==='dash'){
+      commonOptions = {
+        u_dash_array: dashArray,
+        u_lineDir: forward ? 1 : -1,
+        segmentNumber,
+      }
+    }
+    else{
+      if (sourceColor && targetColor) {
+        commonOptions = {
+          u_sourceColor: sourceColorArr,
+          u_targetColor: targetColorArr,
+          segmentNumber,
+          u_lineDir: forward ? 1 : -1
+        }
+      }
+      else{
+        commonOptions = {
+          u_animate: this.animateOption2Array(animateOption as IAnimateOption),
+          u_textSize: [1024, this.iconService.canvasHeight || 128],
+          segmentNumber,
+          u_lineDir: forward ? 1 : -1,
+          u_icon_step: iconStep,
+          u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+          u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
+          u_blur: 0.9,
+          u_line_type: lineStyleObj[lineType || 'solid'],
+          u_time: this.layer.getLayerAnimateTime(),
+          // // 纹理支持参数
+          // u_texture: this.texture, // 贴图
+  
+          // // 渐变色支持参数
+          // u_linearColor: useLinearColor,
+          // u_sourceColor: sourceColorArr,
+          // u_targetColor: targetColorArr,
+        };
+      }
+    }
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
+    return commonBufferInfo; 
   }
 
-  public getAnimateUniforms(): IModelUniform {
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-    return {
-      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
-      u_time: this.layer.getLayerAnimateTime(),
-    };
-  }
+  // public getAnimateUniforms(): IModelUniform {
+  //   const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+  //   return {
+  //     u_animate: this.animateOption2Array(animateOption as IAnimateOption),
+  //     u_time: this.layer.getLayerAnimateTime(),
+  //   };
+  // }
 
   public async initModels(): Promise<IModel[]> {
     this.updateTexture();
@@ -130,6 +151,7 @@ export default class ArcModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const { segmentNumber = 30 } =
       this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
@@ -152,6 +174,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -171,6 +194,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
+        shaderLocation:12,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -192,6 +216,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
+        shaderLocation:14,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -226,5 +251,6 @@ export default class ArcModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
+    this.textures = [this.texture];
   };
 }

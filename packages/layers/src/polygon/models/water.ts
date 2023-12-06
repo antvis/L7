@@ -12,18 +12,37 @@ import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import water_frag from '../shaders/water/polygon_water_frag.glsl';
 import water_vert from '../shaders/water/polygon_water_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 export default class WaterModel extends BaseModel {
   private texture: ITexture2D;
   public getUninforms() {
-    const { opacity = 1, speed = 0.5 } =
-      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
     return {
-      u_texture: this.texture,
-      u_speed: speed,
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
-    };
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
   }
+  
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+    const { speed = 0.5 } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const commonOptions = {
+      u_speed: speed,
+      u_time: this.layer.getLayerAnimateTime(),
+      u_texture: this.texture,
+    };
+
+      // u_opacity: isNumber(opacity) ? opacity : 1.0,
+     this.textures=[this.texture]
+     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+     return commonBufferInfo;
+     
+  }
+ 
+
 
   public getAnimateUniforms(): IModelUniform {
     return {
@@ -37,11 +56,13 @@ export default class WaterModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'polygonWater',
       vertexShader: water_vert,
       fragmentShader: water_frag,
       triangulation: polygonTriangulation,
+      inject:this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: false },
     });
@@ -63,6 +84,7 @@ export default class WaterModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

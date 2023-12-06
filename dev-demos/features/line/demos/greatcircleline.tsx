@@ -15,6 +15,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer:'device',
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,
@@ -68,7 +69,7 @@ export default () => {
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(5)
-      .shape('arc3d')
+      .shape('greatcircle')
       .color('#f00')
       .style({
         //  sourceColor: '#00f',
@@ -78,6 +79,7 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.startAnimate();
     });
   }, []);
   return (

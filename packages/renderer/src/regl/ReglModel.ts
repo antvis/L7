@@ -90,15 +90,19 @@ export default class ReglModel implements IModel {
     let frag = removeDuplicateUniforms(
       preprocessShader_GLSL(vendorInfo, 'frag', fs, null, false),
     );
-    frag = frag.replace('texture(','texture2D(');//没用正则 暂时这样吧
-    frag = frag.replace('texture (','texture2D(');
+    frag = frag.replace(' texture(',' texture2D(');//没用正则 暂时这样吧
+    frag = frag.replace(' texture (',' texture2D(');
+    let vert = removeDuplicateUniforms(
+      preprocessShader_GLSL(vendorInfo, 'vert', vs, null, false),
+    )
+    vert = vert.replace(' texture(',' texture2D(');//没用正则 暂时这样吧
+    vert = vert.replace(' texture (',' texture2D(');
+    
     const drawParams: regl.DrawConfig = {
       attributes: reglAttributes,
       frag,
       uniforms: reglUniforms,
-      vert: removeDuplicateUniforms(
-        preprocessShader_GLSL(vendorInfo, 'vert', vs, null, false),
-      ),
+      vert,
       // @ts-ignore
       colorMask: reGl.prop('colorMask'),
       lineWidth: 1,

@@ -6,7 +6,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      // renderer:'device',
+      renderer:'device',
       map: new GaodeMap({
         center: [105, 30.258134],
         zoom: 5,
@@ -63,6 +63,7 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.startAnimate();
     });
   }, []);
   return (
