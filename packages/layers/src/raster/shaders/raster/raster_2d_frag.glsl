@@ -11,10 +11,11 @@ uniform sampler2D u_colorTexture;
 
 in vec2 v_texCoord;
 
-out vec4 outputColor;
+
 
 bool isnan_emu(float x) { return (x > 0.0 || x < 0.0) ? x != x : x != 0.0; }
 
+out vec4 outputColor;
 
 void main() {
 

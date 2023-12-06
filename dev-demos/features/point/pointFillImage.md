@@ -14,7 +14,7 @@ export default () => {
         
         const scene = new Scene({
             id: 'point_fillImage',
-            // renderer: 'device',
+            renderer: 'device',
             map: new GaodeMap({
                 style: 'light',
                 center: [120, 30],
@@ -56,7 +56,7 @@ export default () => {
         })
         .shape('marker')
         .size(36)
-        .active(true)
+        // .active(true)
         .style({
             rotation: 90
         })

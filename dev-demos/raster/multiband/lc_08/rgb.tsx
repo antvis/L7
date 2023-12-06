@@ -15,7 +15,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-     
+      renderer:'device',
       map: new Map({
         center: [130.5, 47],
         zoom: 2,
@@ -33,8 +33,8 @@ export default () => {
       ).json();
       const layer = new RasterLayer({
         zIndex: 10,
-        mask: true,
-        maskfence: maskData,
+        // mask: true,
+        // maskfence: maskData,
       });
       layer
         .source(
@@ -78,6 +78,8 @@ export default () => {
         .style({
           opacity: 1,
         });
+
+      scene.startAnimate();
       scene.addLayer(layer);
     });
   }, []);

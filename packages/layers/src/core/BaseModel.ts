@@ -334,7 +334,6 @@ ${uniforms.join('\n')}
   }
 
   public initUniformsBuffer() {
-    console.log('init')
     const attrUniforms = this.getUniformsBufferInfo(this.getStyleAttribute());
     const commonUniforms = this.getCommonUniformsInfo();
     if (attrUniforms.uniformsLength !== 0) {

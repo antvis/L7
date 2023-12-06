@@ -75,6 +75,11 @@ export default class RasterModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
+    return this.buildModels();
+  }
+
+  public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
@@ -89,7 +94,7 @@ export default class RasterModel extends BaseModel {
       type: gl.FLOAT,
       // aniso: 4,
     });
-    this.initUniformsBuffer();
+
     const model = await this.layer.buildLayerModel({
       moduleName: 'rasterImageData',
       vertexShader: rasterVert,
@@ -99,11 +104,6 @@ export default class RasterModel extends BaseModel {
       depth: { enable: false },
     });
     return [model];
-  }
-
-  public async buildModels(): Promise<IModel[]> {
-
-    return this.initModels();
   }
 
   public clearModels(): void {

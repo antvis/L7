@@ -52,7 +52,10 @@ export default class DeviceTexture2D implements ITexture2D {
       pixelFormat = Format.F32_LUMINANCE;
     } else if (format === gl.LUMINANCE && type === gl.UNSIGNED_BYTE) {
       pixelFormat = Format.U8_LUMINANCE;
-    } else {
+    } else if(type === gl.FLOAT && format === gl.RGB) {
+      pixelFormat = Format.F32_RGB;
+    }
+     else {
       throw new Error(`create texture error, type: ${type}, format: ${format}`);
     }
 
@@ -72,7 +75,6 @@ export default class DeviceTexture2D implements ITexture2D {
         packAlignment: alignment,
       },
     });
-    console.log(data)
     if (data) {
       // @ts-ignore
       this.texture.setImageData([data]);
