@@ -10,8 +10,8 @@ import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
-import ocean_frag from '../shaders/water/polygon_ocean_frag.glsl';
-import ocean_vert from '../shaders/water/polygon_ocean_vert.glsl';
+import ocean_frag from '../shaders/ocean/ocean_frag.glsl';
+import ocean_vert from '../shaders/ocean/ocean_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 export default class OceanModel extends BaseModel {

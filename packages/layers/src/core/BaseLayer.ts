@@ -40,8 +40,8 @@ import {
   IPass,
   IPickingService,
   IPostProcessingPass,
-  IRenderOptions,
   IRendererService,
+  IRenderOptions,
   IScale,
   IScaleOptions,
   IShaderModuleService,
@@ -50,12 +50,12 @@ import {
   IStyleAttributeUpdateOptions,
   ITextureService,
   LayerEventType,
+  lazyInject,
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
-  TYPES,
   Triangulation,
-  lazyInject,
+  TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
@@ -1385,7 +1385,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           uniforms: this.layerModel.getUninforms(),
           blend: this.layerModel.getBlend(),
           stencil: this.layerModel.getStencil(options),
-          textures:this.layerModel.textures
+          textures: this.layerModel.textures,
         },
         options?.ispick || false,
       );
@@ -1498,8 +1498,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (autoRender) {
       setTimeout(() => {
         this.reRender();
-      },10);
-     
+      }, 10);
     }
   };
 

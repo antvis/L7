@@ -48,12 +48,12 @@ export default () => {
               '#A6E1E0',
               '#B8EFE2',
               '#D7F9F0',
-            ]);
-          // .style({
-          //   opacity: 0.3,
-          //   strokeWidth: 0,
-          //   stroke: '#fff',
-          // });
+            ])
+            .style({
+              opacity: 0.3,
+              strokeWidth: 0,
+              stroke: '#fff',
+            });
           scene.addLayer(pointLayer);
           //  let i =0;
           // setInterval(() => {
