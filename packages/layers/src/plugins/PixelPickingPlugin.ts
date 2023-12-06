@@ -1,6 +1,7 @@
 import {
   AttributeType,
   gl,
+  IBuffer,
   IEncodeFeature,
   ILayer,
   ILayerPlugin,
@@ -10,11 +11,13 @@ import {
 import {
   decodePickingColor,
   encodePickingColor,
+  lodashUtil,
   rgb2arr,
 } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { ShaderLocation } from '../core/CommonStyleAttribute';
+const { isNumber } = lodashUtil;
 
 const PickingStage = {
   NONE: 0.0,
@@ -24,40 +27,41 @@ const PickingStage = {
 
 @injectable()
 export default class PixelPickingPlugin implements ILayerPlugin {
-  private PickOption: { [key: string]: number[] | number } = {
-    u_HighlightColor: [1, 0, 0, 1],
-    u_SelectColor: [1, 0, 0, 1],
-    u_PickingColor: [0, 0, 0],
-    u_PickingStage: 0,
-    u_CurrentSelectedId: [0, 0, 0],
-    u_PickingThreshold: 10,
-    u_PickingBuffer: 0, // TODO: 更新机制
-    u_shaderPick: 0,
-    u_EnableSelect: 0,
-    u_activeMix: 0,
-  };
+  /**
+   * Use map to keep order of insertion.
+   * @see https://stackoverflow.com/questions/5525795/does-javascript-guarantee-object-property-order
+   */
+  private pickingUniformMap: Map<string, number[] | number>;
 
   private pickOption2Array() {
-    return Object.values(this.PickOption).flat();
+    const array: number[] = [];
+    this.pickingUniformMap.forEach((value, key) => {
+      if (isNumber(value)) {
+        array.push(value);
+      } else {
+        array.push(...value);
+      }
+    });
+    return array;
   }
 
   private updatePickOption(
-    option: { [key: string]: number[] | number },
-    rendererService: IRendererService,
+    options: { [key: string]: number[] | number },
+    uniformBuffer: IBuffer,
     layer: ILayer,
   ) {
+    Object.keys(options).forEach((key) => {
+      this.pickingUniformMap.set(key, options[key]);
+    });
+
     const u_PickingBuffer = layer.getLayerConfig().pickingBuffer || 0;
     // Tip: 当前地图是否在拖动
     const u_shaderPick = Number(layer.getShaderPickStat());
-    this.PickOption.u_PickingBuffer = u_PickingBuffer;
-    this.PickOption.u_shaderPick = u_shaderPick;
-
-    Object.keys(option).forEach((key: string) => {
-      this.PickOption[key] = option[key];
-    });
-    rendererService.uniformBuffers[1].subData({
+    this.pickingUniformMap.set('u_PickingBuffer', u_PickingBuffer);
+    this.pickingUniformMap.set('u_shaderPick', u_shaderPick);
+    uniformBuffer.subData({
       offset: 0,
-      data: new Uint8Array(new Float32Array(this.pickOption2Array())),
+      data: this.pickOption2Array(),
     });
   }
   public apply(
@@ -70,9 +74,23 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       styleAttributeService: IStyleAttributeService;
     },
   ) {
+    let uniformBuffer: IBuffer;
+    this.pickingUniformMap = new Map<string, number[] | number>([
+      ['u_HighlightColor', [1, 0, 0, 1]],
+      ['u_SelectColor', [1, 0, 0, 1]],
+      ['u_PickingColor', [0, 0, 0]],
+      ['u_PickingStage', 0],
+      ['u_CurrentSelectedId', [0, 0, 0]],
+      ['u_PickingThreshold', 10],
+      ['u_PickingBuffer', 0],
+      ['u_shaderPick', 0],
+      ['u_EnableSelect', 0],
+      ['u_activeMix', 0],
+    ]);
+
     if (!rendererService.uniformBuffers[1]) {
       // Create a Uniform Buffer Object(UBO).
-      const uniformBuffer = rendererService.createBuffer({
+      uniformBuffer = rendererService.createBuffer({
         // vec4 u_HighlightColor;
         // vec4 u_SelectColor;
         // vec3 u_PickingColor;
@@ -87,7 +105,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         isUBO: true,
       });
       rendererService.uniformBuffers[1] = uniformBuffer;
-      this.updatePickOption({}, rendererService, layer);
+      this.updatePickOption({}, uniformBuffer, layer);
     }
 
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
@@ -121,7 +139,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           {
             u_PickingStage: PickingStage.ENCODE,
           },
-          rendererService,
+          uniformBuffer,
           layer,
         );
         layer.models.forEach((model) =>
@@ -140,7 +158,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           {
             u_PickingStage: PickingStage.HIGHLIGHT,
           },
-          rendererService,
+          uniformBuffer,
           layer,
         );
         layer.models.forEach((model) =>
@@ -171,7 +189,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           u_HighlightColor: highlightColorInArray.map((c) => c * 255),
           u_activeMix: activeMix,
         };
-        this.updatePickOption(option, rendererService, layer);
+        this.updatePickOption(option, uniformBuffer, layer);
         layer.models.forEach((model) => model.addUniforms(option));
       },
     );
@@ -197,7 +215,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           u_SelectColor: highlightColorInArray.map((c) => c * 255),
           u_EnableSelect: 1,
         };
-        this.updatePickOption(option, rendererService, layer);
+        this.updatePickOption(option, uniformBuffer, layer);
         layer.models.forEach((model) => model.addUniforms(option));
       },
     );

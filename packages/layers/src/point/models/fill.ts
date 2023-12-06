@@ -59,9 +59,10 @@ export default class FillModel extends BaseModel {
         new Float32Array([
           ...commonIniform.u_blur_height_fixed,
           commonIniform.u_stroke_width,
-          commonIniform.u_stroke_opacity,
           commonIniform.u_additive,
+          commonIniform.u_stroke_opacity,
           commonIniform.u_size_unit,
+          0,
         ]).buffer,
       ),
     });
