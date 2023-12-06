@@ -55,6 +55,8 @@ export default class DeviceFramebuffer implements IFramebuffer {
 
   private createDepthRenderTarget() {
     const { width, height, depth } = this.options;
+    // TODO: avoid creating depth texture if not needed
+    // if (depth) {
     if (isTexture2D(depth)) {
       this.depthTexture = depth.get() as Texture;
       this.depthRenderTarget = this.device.createRenderTargetFromTexture(

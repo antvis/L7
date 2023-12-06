@@ -251,7 +251,6 @@ export default class DeviceModel implements IModel {
           }
         : null,
     );
-    renderPass.setViewport(0, 0, width, height);
 
     if (uniformBuffers) {
       this.bindings = this.device.createBindings({

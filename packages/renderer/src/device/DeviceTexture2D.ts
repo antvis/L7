@@ -86,10 +86,15 @@ export default class DeviceTexture2D implements ITexture2D {
       this.texture.setImageData([data]);
     }
 
+    // wrapS: gl.CLAMP_TO_EDGE,
+    // wrapT: gl.CLAMP_TO_EDGE,
+    // min: gl.LINEAR,
+    // mag: gl.LINEAR,
+
     this.sampler = device.createSampler({
       addressModeU: wrapModeMap[wrapS],
       addressModeV: wrapModeMap[wrapT],
-      minFilter: FilterMode.POINT, // TODO: use mag & min
+      minFilter: FilterMode.BILINEAR, // TODO: use mag & min
       magFilter: FilterMode.BILINEAR,
       mipmapFilter: MipmapFilterMode.NO_MIP,
       lodMinClamp: 0,

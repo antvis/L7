@@ -155,6 +155,17 @@ export default class DeviceRendererService implements IRendererService {
     });
     // @ts-ignore
     this.device.renderPass = this.renderPass;
+
+    if (this.currentFramebuffer) {
+      this.renderPass.setViewport(
+        0,
+        0,
+        this.currentFramebuffer['width'],
+        this.currentFramebuffer['height'],
+      );
+    } else {
+      this.renderPass.setViewport(0, 0, this.width, this.height);
+    }
   }
 
   endFrame(): void {
