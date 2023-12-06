@@ -10,6 +10,7 @@ layout(std140) uniform commonUniforms {
   float u_additive;
   float u_stroke_opacity;
   float u_size_unit;
+  float u_common_uniforms_padding;
 };
 
 out vec4 v_color;

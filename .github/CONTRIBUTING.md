@@ -121,4 +121,6 @@ yarn run version:prerelease
 
 ### 发布
 
+```bash
 yarn run release
+```

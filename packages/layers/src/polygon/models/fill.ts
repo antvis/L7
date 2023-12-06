@@ -9,10 +9,10 @@ import { polygonFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulationWithCenter } from '../../core/triangulation';
-import polygon_frag from '../shaders/polygon_frag.glsl';
-import polygon_linear_frag from '../shaders/polygon_linear_frag.glsl';
-import polygon_linear_vert from '../shaders/polygon_linear_vert.glsl';
-import polygon_vert from '../shaders/polygon_vert.glsl';
+import polygon_frag from '../shaders/fill/fill_frag.glsl';
+import polygon_linear_frag from '../shaders/fill/fill_linear_frag.glsl';
+import polygon_linear_vert from '../shaders/fill/fill_linear_vert.glsl';
+import polygon_vert from '../shaders/fill/fill_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class FillModel extends BaseModel {
   public getUninforms() {
