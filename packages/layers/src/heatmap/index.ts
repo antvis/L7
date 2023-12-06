@@ -4,6 +4,9 @@ import { IHeatMapLayerStyleOptions } from '../core/interface';
 import HeatMapModels, { HeatMapModelType } from './models';
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
+  public enableShaderEncodeStyles = [
+    'opacity',
+  ];
 
   public async buildModels() {
     const shape = this.getModelType();
