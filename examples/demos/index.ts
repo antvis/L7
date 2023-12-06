@@ -51,7 +51,7 @@ export default [{
 }
 ]
 
-export const MapType = ['Map','GaodeMap','BaiduMap','MapLibre','TencentMap','Mapbox']
+export const MapType = ['Map','GaodeMap','BaiduMap','MapLibre','TencentMap','Mapbox','TMap']
 export const InitMapOptions = {
     map: 'Map',
     renderer:'device',
