@@ -13,7 +13,7 @@ import DeviceTexture2D, { isTexture2D } from './DeviceTexture2D';
  */
 export default class DeviceFramebuffer implements IFramebuffer {
   private colorRenderTarget: RenderTarget;
-  private colorTexture: Texture;
+  public colorTexture: Texture;
   private depthRenderTarget: RenderTarget;
   private depthTexture: Texture;
   private width: number;

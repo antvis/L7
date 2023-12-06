@@ -55,7 +55,7 @@ const scene = new Scene({
               '#CEF8D6'
             ].reverse()
           );
-        // scene.startAnimate()
+        scene.startAnimate();
         scene.addLayer(layer);
         scene.render()
       });

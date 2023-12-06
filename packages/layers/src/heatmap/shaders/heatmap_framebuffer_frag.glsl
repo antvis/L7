@@ -5,10 +5,10 @@ layout(std140) uniform commonUniforms {
 
 in float v_weight;
 in vec2 v_extrude;
-out vec4 v_color;
+out vec4 outputColor;
 #define GAUSS_COEF  0.3989422804014327
 void main(){
     float d = -0.5 * 3.0 * 3.0 * dot(v_extrude, v_extrude);
     float val = v_weight * u_intensity * GAUSS_COEF * exp(d);
-    v_color = vec4(val, 1., 1., 1.);
+    outputColor = vec4(val, 1., 1., 1.);
 }

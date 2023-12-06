@@ -1,6 +1,8 @@
 uniform sampler2D u_texture;        // 热力强度图
 uniform sampler2D u_colorTexture;   // 根据强度分布的色带
-uniform float u_opacity;
+layout(std140) uniform commonUniforms {
+    float u_opacity;
+};
 
 in vec2 v_texCoord;
 out vec4 outputColor;
@@ -44,5 +46,5 @@ void main(){
     vec4 color = texture(SAMPLER_2D(u_colorTexture), vec2(intensity, 0.0));
     outputColor = color;
     outputColor.a = color.a * smoothstep(0.,0.1,intensity) * u_opacity;
-
+    outputColor=vec4(1.0,0.0,0.0,1.0);
 }

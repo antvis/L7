@@ -72,6 +72,7 @@ export default class HeatMapModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
+    console.log('initModels')
     const { createFramebuffer, getViewportSize, createTexture2D } =
       this.rendererService;
     const shapeAttr =
@@ -100,7 +101,7 @@ export default class HeatMapModel extends BaseModel {
       }),
       depth: false,
     });
-
+    console.log('initModels', this.heatmapFramerBuffer)
     this.updateColorTexture();
     return [this.intensityModel, this.colorModel];
   }
@@ -115,7 +116,7 @@ export default class HeatMapModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Dir',
-        shaderLocation:10,
+        shaderLocation: 10,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -195,7 +196,10 @@ export default class HeatMapModel extends BaseModel {
     return createModel({
       vs,
       fs,
-      uniformBuffers:this.colorModelUniformBuffer,
+      uniformBuffers: [
+        ...this.colorModelUniformBuffer,
+        ...this.rendererService.uniformBuffers,
+      ],
       attributes: {
         a_Position: createAttribute({
           shaderLocation: 0,
@@ -241,7 +245,7 @@ export default class HeatMapModel extends BaseModel {
      this.uniformBuffers[0].subData({
       offset: 0,
       data: new Uint8Array(
-        new Float32Array([intensity,radius]).buffer,
+        new Float32Array([radius,intensity]).buffer,
       ),
     })
     this.layerService.beforeRenderData(this.layer);
@@ -249,6 +253,7 @@ export default class HeatMapModel extends BaseModel {
 
     // 绘制密度图
     this.intensityModel?.draw({
+      
       uniforms: commonOptions,
       blend: {
         enable: true,
@@ -276,13 +281,14 @@ export default class HeatMapModel extends BaseModel {
   private drawColorMode(options: Partial<IRenderOptions>) {
     const { opacity = 1.0 } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    
     const commonOptions = {
       u_opacity: opacity,
       u_colorTexture: this.colorTexture,
       u_texture: this.heatmapFramerBuffer,
+    
     }
-    const textures = [this.heatmapFramerBuffer as ITexture2D,this.colorTexture,]
+    // @ts-ignore
+    const textures = [this.heatmapFramerBuffer.options?.color as ITexture2D,this.colorTexture,]
     this.colorModelUniformBuffer[0].subData({
       offset: 0,
       data: new Uint8Array(

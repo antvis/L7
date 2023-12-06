@@ -180,8 +180,11 @@ export default class DeviceRendererService implements IRendererService {
     drawCommands: () => void,
   ) => {
     this.currentFramebuffer = framebuffer as DeviceFramebuffer;
+    this.beginFrame();
     drawCommands();
+    this.endFrame();
     this.currentFramebuffer = null;
+
   };
 
   clear = () =>
