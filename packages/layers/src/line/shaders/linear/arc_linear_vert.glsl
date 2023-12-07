@@ -8,7 +8,7 @@ layout(std140) uniform commonUniorm {
   vec4 u_targetColor;
   float segmentNumber;
   float u_lineDir: 1.0;
-}
+};
 
 out vec4 v_color;
 out float v_segmentIndex;

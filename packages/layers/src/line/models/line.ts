@@ -109,10 +109,11 @@ export default class LineModel extends BaseModel {
         u_strokeWidth: strokeWidth,
         u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
         u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-        u_time: this.layer.getLayerAnimateTime(),
         u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
         u_linearColor: useLinearColor,
+        u_time: this.layer.getLayerAnimateTime(),
       }
+      // console.log(commonOptions.u_time);
     }
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
     return commonBufferInfo;

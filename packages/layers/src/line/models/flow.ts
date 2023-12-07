@@ -29,14 +29,12 @@ export default class FlowLineModel extends BaseModel {
     const {
       gapWidth = 2,
       strokeWidth = 1,
-      // stroke = '#000',
       strokeOpacity = 1,
     } = this.layer.getLayerConfig() as IFlowLineStyleOptions;
 
     const commonOptions = {
       u_gap_width: gapWidth,
       u_stroke_width: strokeWidth,
-      // u_stroke: rgb2arr(stroke),
       u_stroke_opacity: strokeOpacity
     };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
@@ -58,7 +56,6 @@ export default class FlowLineModel extends BaseModel {
       styleOption:(this.layer.getLayerConfig()as IFlowLineStyleOptions).symbol,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-
       pick: false,
     });
     return [modelFill];

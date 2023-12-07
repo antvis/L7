@@ -1,18 +1,20 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec4 a_Size;
+layout(location = 9) in vec2 a_Size;
 layout(location = 12) in vec4 a_Instance;
 layout(location = 13) in vec3 a_Normal;
 
-#pragma include "projection"
-#pragma include "project"
-#pragma include "picking"
-out vec4 v_color;
 layout(std140) uniform commonUniorm{
   float u_gap_width: 1.0;
   float u_stroke_width: 1.0;
   float u_stroke_opacity: 1.0;
 };
+
+#pragma include "projection"
+#pragma include "project"
+#pragma include "picking"
+
+out vec4 v_color;
 
 vec2 project_pixel_offset(vec2 offsets) {
 
