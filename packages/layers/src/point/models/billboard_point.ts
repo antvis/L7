@@ -9,6 +9,7 @@ import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 
 import { rgb2arr } from '@antv/l7-utils';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import simplePointFrag from '../shaders/billboard_point_frag.glsl';
 import simplePointVert from '../shaders/billboard_point_vert.glsl';
 
@@ -28,6 +29,17 @@ export default class SimplePointModel extends BaseModel {
     };
   }
   public getUninforms(): IModelUniform {
+    const commonInfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+
+    return {
+      ...commonInfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    };
+  }
+
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const {
       opacity = 1,
       offsets = [0, 0],
@@ -37,14 +49,17 @@ export default class SimplePointModel extends BaseModel {
       stroke = '#fff',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    return {
-      u_additive: blend === 'additive' ? 1.0 : 0.0,
-      u_opacity: opacity,
+    const commonOptions = {
+      u_stroke_color: rgb2arr(stroke),
       u_offsets: offsets,
+      u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
       u_stroke_width: strokeWidth,
-      u_stroke_color: rgb2arr(stroke),
-    };
+      u_opacity: opacity
+    }
+
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -54,6 +69,7 @@ export default class SimplePointModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     this.layer.triangulation = PointTriangulation;
 
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointSimple',
       vertexShader: simplePointVert,
@@ -71,6 +87,7 @@ export default class SimplePointModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
