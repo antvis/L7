@@ -10,30 +10,45 @@ import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
-import ocean_frag from '../shaders/water/polygon_ocean_frag.glsl';
-import ocean_vert from '../shaders/water/polygon_ocean_vert.glsl';
+import ocean_frag from '../shaders/ocean/ocean_frag.glsl';
+import ocean_vert from '../shaders/ocean/ocean_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 export default class OceanModel extends BaseModel {
   private texture1: ITexture2D;
   private texture2: ITexture2D;
   private texture3: ITexture2D;
   public getUninforms() {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const {
-      opacity = 1,
       watercolor = '#6D99A8',
       watercolor2 = '#0F121C',
     } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
-
-    return {
+    const commonOptions = {
+      u_watercolor: rgb2arr(watercolor),
+      u_watercolor2: rgb2arr(watercolor2),
+      u_time: this.layer.getLayerAnimateTime(),
       u_texture1: this.texture1,
       u_texture2: this.texture2,
       u_texture3: this.texture3,
-      u_watercolor: rgb2arr(watercolor),
-      u_watercolor2: rgb2arr(watercolor2),
-      u_opacity: isNumber(opacity) ? opacity : 1.0,
-    };
-  }
 
+    };
+
+      // u_opacity: isNumber(opacity) ? opacity : 1.0,
+     this.textures=[this.texture1,this.texture2,this.texture3]
+     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+     return commonBufferInfo;
+     
+  }
+ 
   public getAnimateUniforms(): IModelUniform {
     return {
       u_time: this.layer.getLayerAnimateTime(),
@@ -46,10 +61,12 @@ export default class OceanModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'polygonOcean',
       vertexShader: ocean_vert,
       fragmentShader: ocean_frag,
+      inject:this.getInject(),
       triangulation: polygonTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
@@ -74,6 +91,7 @@ export default class OceanModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

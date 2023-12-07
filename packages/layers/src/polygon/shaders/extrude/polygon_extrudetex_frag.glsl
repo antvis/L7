@@ -47,7 +47,7 @@ void main() {
       discard;
     }
 
-    outputColor = texture(u_texture, vec2(topU, topV));
+    outputColor = texture(SAMPLER_2D(u_texture), vec2(topU, topV));
   }
   
 

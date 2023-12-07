@@ -16,16 +16,13 @@ import {
   VertexStepMode,
 } from '@antv/g-device-api';
 import {
+  gl,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
   IUniform,
-  gl,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import DeviceAttribute from './DeviceAttribute';
-import DeviceBuffer from './DeviceBuffer';
-import DeviceElements from './DeviceElements';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -34,6 +31,9 @@ import {
   primitiveMap,
   sizeFormatMap,
 } from './constants';
+import DeviceAttribute from './DeviceAttribute';
+import DeviceBuffer from './DeviceBuffer';
+import DeviceElements from './DeviceElements';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 export default class DeviceModel implements IModel {
@@ -65,7 +65,6 @@ export default class DeviceModel implements IModel {
       },
     });
     this.program = program;
-
 
     if (uniforms) {
       this.uniforms = this.extractUniforms(uniforms);
@@ -126,13 +125,14 @@ export default class DeviceModel implements IModel {
     this.pipeline = this.createPipeline(options);
   }
 
-  private createPipeline(options: IModelInitializationOptions) {
+  private createPipeline(options: IModelInitializationOptions, pick?: boolean) {
     const { primitive = gl.TRIANGLES, depth, cull, blend } = options;
 
     const depthParams = this.initDepthDrawParams({ depth });
     const depthEnabled = !!(depthParams && depthParams.enable);
     const cullParams = this.initCullDrawParams({ cull });
     const cullEnabled = !!(cullParams && cullParams.enable);
+    // Disable blend when picking.
     const blendParams = this.getBlendDrawParams({ blend });
     const blendEnabled = !!(blendParams && blendParams.enable);
 
@@ -144,31 +144,47 @@ export default class DeviceModel implements IModel {
       depthStencilAttachmentFormat: Format.D24_S8,
       megaStateDescriptor: {
         attachmentsState: [
-          {
-            channelWriteMask: ChannelWriteMask.ALL,
-            rgbBlendState: {
-              blendMode:
-                (blendEnabled && blendParams.equation.rgb) || BlendMode.ADD,
-              blendSrcFactor:
-                (blendEnabled && blendParams.func.srcRGB) ||
-                BlendFactor.SRC_ALPHA,
-              blendDstFactor:
-                (blendEnabled && blendParams.func.dstRGB) ||
-                BlendFactor.ONE_MINUS_SRC_ALPHA,
-            },
-            alphaBlendState: {
-              blendMode:
-                (blendEnabled && blendParams.equation.alpha) || BlendMode.ADD,
-              blendSrcFactor:
-                (blendEnabled && blendParams.func.srcAlpha) || BlendFactor.ONE,
-              blendDstFactor:
-                (blendEnabled && blendParams.func.dstAlpha) ||
-                BlendFactor.ONE_MINUS_SRC_ALPHA,
-            },
-          },
+          pick
+            ? {
+                channelWriteMask: ChannelWriteMask.ALL,
+                rgbBlendState: {
+                  blendMode: BlendMode.ADD,
+                  blendSrcFactor: BlendFactor.ONE,
+                  blendDstFactor: BlendFactor.ZERO,
+                },
+                alphaBlendState: {
+                  blendMode: BlendMode.ADD,
+                  blendSrcFactor: BlendFactor.ONE,
+                  blendDstFactor: BlendFactor.ZERO,
+                },
+              }
+            : {
+                channelWriteMask: ChannelWriteMask.ALL,
+                rgbBlendState: {
+                  blendMode:
+                    (blendEnabled && blendParams.equation.rgb) || BlendMode.ADD,
+                  blendSrcFactor:
+                    (blendEnabled && blendParams.func.srcRGB) ||
+                    BlendFactor.SRC_ALPHA,
+                  blendDstFactor:
+                    (blendEnabled && blendParams.func.dstRGB) ||
+                    BlendFactor.ONE_MINUS_SRC_ALPHA,
+                },
+                alphaBlendState: {
+                  blendMode:
+                    (blendEnabled && blendParams.equation.alpha) ||
+                    BlendMode.ADD,
+                  blendSrcFactor:
+                    (blendEnabled && blendParams.func.srcAlpha) ||
+                    BlendFactor.ONE,
+                  blendDstFactor:
+                    (blendEnabled && blendParams.func.dstAlpha) ||
+                    BlendFactor.ONE,
+                },
+              },
         ],
-        blendConstant: TransparentBlack,
-        depthWrite: true,
+        blendConstant: blendEnabled ? TransparentBlack : undefined,
+        depthWrite: depthEnabled,
         depthCompare:
           (depthEnabled && depthParams.func) || CompareFunction.LESS,
         cullMode: (cullEnabled && cullParams.face) || CullMode.NONE,
@@ -177,12 +193,13 @@ export default class DeviceModel implements IModel {
     });
   }
 
-  updateAttributesAndElements() // elements: IElements, // attributes: { [key: string]: IAttribute },
-  {
+  updateAttributesAndElements() {
+    // elements: IElements, // attributes: { [key: string]: IAttribute },
     // TODO: implement
   }
 
-  updateAttributes() { // attributes: { [key: string]: IAttribute }
+  updateAttributes() {
+    // attributes: { [key: string]: IAttribute }
     // TODO: implement
     // Object.keys(attributes).forEach((name: string) => {
     //   const attribute = attributes[name] as DeviceAttribute;
@@ -197,10 +214,7 @@ export default class DeviceModel implements IModel {
     };
   }
 
-  draw(
-    options: IModelDrawOptions,
-    //  pick?: boolean
-  ) {
+  draw(options: IModelDrawOptions, pick?: boolean) {
     const mergedOptions = {
       ...this.options,
       ...options,
@@ -220,16 +234,10 @@ export default class DeviceModel implements IModel {
     };
 
     // @ts-ignore
-    const { width, height } = this.device;
+    const { width, height, renderPass } = this.device;
 
-    // @ts-ignore
-    // const renderTarget = this.device.currentFramebuffer;
-    // const { onscreen } = renderTarget
-
-    // @ts-ignore
-    const renderPass = this.device.renderPass;
     // TODO: Recreate pipeline only when blend / cull changed.
-    this.pipeline = this.createPipeline(mergedOptions);
+    this.pipeline = this.createPipeline(mergedOptions, pick);
     renderPass.setPipeline(this.pipeline);
     renderPass.setVertexInput(
       this.inputLayout,
@@ -239,7 +247,7 @@ export default class DeviceModel implements IModel {
       elements
         ? {
             buffer: this.indexBuffer,
-            offset: 0, // TODO: use defaule value
+            offset: 0,
           }
         : null,
     );

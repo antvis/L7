@@ -129,4 +129,6 @@ After setting, you need to commit the code
 
 ### release
 
+```bash
 yarn run release
+```

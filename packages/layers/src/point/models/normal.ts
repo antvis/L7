@@ -43,12 +43,8 @@ export default class NormalModel extends BaseModel {
 
     this.uniformBuffers[1].subData({
       offset: 0,
-      data: new Uint8Array(
-        new Float32Array([0.5
-        ]).buffer,
-      )
+      data: new Uint8Array(new Float32Array([0.5]).buffer),
     });
-
 
     return {
       u_size_scale: 0.5,
@@ -73,7 +69,7 @@ export default class NormalModel extends BaseModel {
       isUBO: true,
     });
 
-    this.uniformBuffers.push(uniformBuffer,commonBuffer);
+    this.uniformBuffers.push(uniformBuffer, commonBuffer);
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointNormal',
       vertexShader: normalVert,

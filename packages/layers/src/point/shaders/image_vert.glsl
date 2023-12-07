@@ -1,16 +1,17 @@
-precision highp float;
-attribute vec3 a_Position;
-attribute vec4 a_Color;
-attribute vec2 a_Uv;
-attribute float a_Size;
-varying vec4 v_color;
-varying vec2 v_uv;
-varying float v_opacity;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 14) in vec2 a_Uv;
 
+layout(std140) uniform commonUniforms {
+  vec2 u_textSize;
+  float u_raisingHeight;
+  float u_heightfixed;
+};
 
-uniform float u_raisingHeight: 0.0;
-uniform float u_heightfixed: 0.0;
+out vec4 v_color;
+out vec2 v_uv;
+out float v_opacity;
 
 #pragma include "projection"
 #pragma include "picking"
