@@ -18,4 +18,6 @@ export const ProxyFuncs = [
   'setActive',
   'disableMask',
   'enableMask',
+  'addMask',
+  'removeMask',
 ];
