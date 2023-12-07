@@ -16,19 +16,19 @@ import { Control, IControlOption } from './baseControl';
 
 export interface ISwipeControlOption extends IControlOption {
   /**
-   * layers to swipe
+   * 左侧的图层层
    */
   layers: ILayer[];
   /**
-   * layers to swipe on right side
+   * 右侧的图层层
    */
   rightLayers: ILayer[];
   /**
-   * ratio property of the swipe [0,1], default 0.5
+   * 设置卷帘的位置，值域为 0 到 1, 默认正中间为 0.5
    */
   ratio?: number;
   /**
-   * orientation property (vertical|horizontal), default vertical
+   * 卷帘方向设置（'vertical' | 'horizontal'），默认 'vertical'
    */
   orientation?: 'vertical' | 'horizontal';
 }
@@ -103,17 +103,15 @@ export default class Swipe extends Control<ISwipeControlOption> {
     this.updateMask();
     this.registerEvent();
 
-    // TODO:设置掩膜
+    // TODO:给图层挂载掩膜
     layers.forEach((layer) => layer.addMask(this.maskLayer));
+    // rightLayers.forEach((layer) => layer.addMask(this.maskLayer));
 
     // 添加掩膜图层到 scene
     const layerContainer = createLayerContainer(sceneContainer);
     this.maskLayer.setContainer(layerContainer, sceneContainer);
     this.scene.addLayer(this.maskLayer);
-    this.scene.render();
-
-    // 设置掩膜
-    // layers.forEach((layer) => layer.addMask(this.maskLayer));
+    // this.scene.render();
 
     this.emit('add', this);
     return this;
@@ -130,6 +128,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
   public show() {
     const container = this.container;
     DOM.removeClass(container, 'l7-control-swipe_hide');
+    // TODO 掩膜设置
     this.isShow = true;
     this.emit('show', this);
   }
@@ -137,6 +136,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
   public hide() {
     const container = this.container;
     DOM.addClass(container, 'l7-control-swipe_hide');
+    // TODO 掩膜设置
     this.isShow = false;
     this.emit('hide', this);
   }
@@ -404,9 +404,9 @@ export default class Swipe extends Control<ISwipeControlOption> {
   }
 
   /**
-   * Add a layer to clip
-   * @param layer to clip
-   * @param add layer in the right part of the map, default left.
+   * 添加要剪裁的图层
+   * @param layer 剪裁的图层
+   * @param add 添加图层到右侧, 默认添加到左侧.
    */
   public addLayer(layer: ILayer | ILayer[], add: boolean = false) {
     const layers = Array.isArray(layer) ? layer : [layer];
@@ -419,7 +419,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
   }
 
   /**
-   * Remove a layer to clip
+   * 移除剪裁的图层
    */
   public removeLayer(layer: ILayer | ILayer[]) {
     const layers = Array.isArray(layer) ? layer : [layer];
@@ -427,7 +427,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
   }
 
   /**
-   * Remove all layers
+   * 清除所有图层
    */
   public removeLayers() {
     this.setOptions({ rightLayers: [], layers: [] });

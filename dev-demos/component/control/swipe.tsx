@@ -83,16 +83,16 @@ const Demo: FunctionComponent = () => {
               },
             });
 
-          // scene.addLayer(leftLayer1);
-          // scene.addLayer(rightLayer1);
-          scene.addLayer(leftLayer2);
-          scene.addLayer(rightLayer2);
+          scene.addLayer(leftLayer1);
+          scene.addLayer(rightLayer1);
+          // scene.addLayer(leftLayer2);
+          // scene.addLayer(rightLayer2);
 
           const swipe = new Swipe({
             orientation: 'vertical',
             ratio: 0.5,
-            layers: [leftLayer2],
-            rightLayers: [rightLayer2],
+            layers: [leftLayer1],
+            rightLayers: [rightLayer1],
           });
           scene.addControl(swipe);
           setSwipe(swipe);
