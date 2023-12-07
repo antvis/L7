@@ -36,7 +36,13 @@ export interface ISwipeControlOption extends IControlOption {
 export { Swipe };
 
 export default class Swipe extends Control<ISwipeControlOption> {
+  /**
+   * 是否正在拖动卷帘
+   */
   private isMoving: boolean = false;
+  /**
+   * 掩膜图层实例
+   */
   private maskLayer: ILayer;
 
   public getDefault(): ISwipeControlOption {
@@ -103,15 +109,14 @@ export default class Swipe extends Control<ISwipeControlOption> {
     this.updateMask();
     this.registerEvent();
 
-    // TODO:给图层挂载掩膜
-    layers.forEach((layer) => layer.addMask(this.maskLayer));
-    // rightLayers.forEach((layer) => layer.addMask(this.maskLayer));
+    // 给图层挂载掩膜
+    this.addMaskToLayers(layers, false);
+    this.addMaskToLayers(rightLayers, true);
 
     // 添加掩膜图层到 scene
     const layerContainer = createLayerContainer(sceneContainer);
     this.maskLayer.setContainer(layerContainer, sceneContainer);
     this.scene.addLayer(this.maskLayer);
-    // this.scene.render();
 
     this.emit('add', this);
     return this;
@@ -119,6 +124,9 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
   public onRemove() {
     if (this.maskLayer) {
+      const { layers, rightLayers } = this.controlOption;
+      this.removeMaskFromLayers(layers);
+      this.removeMaskFromLayers(rightLayers);
       this.layerService?.remove(this.maskLayer);
     }
     this.unRegisterEvent();
@@ -128,7 +136,11 @@ export default class Swipe extends Control<ISwipeControlOption> {
   public show() {
     const container = this.container;
     DOM.removeClass(container, 'l7-control-swipe_hide');
-    // TODO 掩膜设置
+    // 启用掩膜
+    const { layers, rightLayers } = this.controlOption;
+    layers.forEach((layer) => layer.enableMask());
+    rightLayers.forEach((layer) => layer.enableMask());
+    this.scene?.render();
     this.isShow = true;
     this.emit('show', this);
   }
@@ -136,7 +148,11 @@ export default class Swipe extends Control<ISwipeControlOption> {
   public hide() {
     const container = this.container;
     DOM.addClass(container, 'l7-control-swipe_hide');
-    // TODO 掩膜设置
+    // 禁用掩膜
+    const { layers, rightLayers } = this.controlOption;
+    layers.forEach((layer) => layer.disableMask());
+    rightLayers.forEach((layer) => layer.disableMask());
+    this.scene?.render();
     this.isShow = false;
     this.emit('hide', this);
   }
@@ -160,6 +176,18 @@ export default class Swipe extends Control<ISwipeControlOption> {
         controlOption.orientation,
         controlOption.ratio,
       );
+    }
+
+    if (newOptions.layers) {
+      const newLayers = newOptions.layers;
+      const oldLayers = this.controlOption.layers;
+      this.setLayers(newLayers, oldLayers, false);
+    }
+
+    if (newOptions.rightLayers) {
+      const newLayers = newOptions.rightLayers;
+      const oldLayers = this.controlOption.rightLayers;
+      this.setLayers(newLayers, oldLayers, true);
     }
 
     this.controlOption = controlOption;
@@ -196,6 +224,41 @@ export default class Swipe extends Control<ISwipeControlOption> {
     }
   }
 
+  private setLayers(
+    newLayers: ILayer[],
+    oldLayers: ILayer[],
+    isRightLayer = false,
+  ) {
+    const addLayers = newLayers.filter(
+      (layer) => oldLayers.includes(layer) === false,
+    );
+    const removeLayers = oldLayers.filter(
+      (layer) => newLayers.includes(layer) === false,
+    );
+
+    this.addMaskToLayers(addLayers, isRightLayer);
+    this.removeMaskFromLayers(removeLayers);
+  }
+
+  private addMaskToLayers(layers: ILayer[], isRightLayer: boolean) {
+    layers.forEach((layer) => {
+      layer.updateLayerConfig({
+        maskInside: isRightLayer ? false : true,
+      });
+      layer.addMask(this.maskLayer);
+    });
+  }
+
+  private removeMaskFromLayers(layers: ILayer[]) {
+    layers.forEach((layer) => {
+      // reset default is true
+      layer.updateLayerConfig({
+        maskInside: true,
+      });
+      layer.removeMask(this.maskLayer);
+    });
+  }
+
   private move = (e: MouseEvent | TouchEvent) => {
     // 阻止事件冒泡到地图上
     e.stopPropagation();
@@ -216,11 +279,6 @@ export default class Swipe extends Control<ISwipeControlOption> {
         ).forEach((eventName) => {
           document.removeEventListener(eventName, this.move);
         });
-        // Force VectorImage to refresh
-        // this.layers.forEach(function (l) {
-        //   if (l.layer.getImageRatio)
-        //     l.layer.changed();
-        // });
         break;
       }
       case 'mousedown':
@@ -274,8 +332,8 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
             this.setOptions({ ratio });
             this.emit('moving', {
-              // size: [width, containerSize[1]],
-              // ratio: [ratio, 0]
+              size: [width, containerSize[1]],
+              ratio: [ratio, 0],
             });
           } else {
             let pageY: number | undefined;
@@ -307,8 +365,8 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
             this.setOptions({ ratio });
             this.emit('moving', {
-              // size: [containerSize[0], height],
-              // ratio: [0, ratio]
+              size: [containerSize[0], height],
+              ratio: [0, ratio],
             });
           }
         }
@@ -385,8 +443,6 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
     const geoJSON = this.getMaskGeoData();
     this.maskLayer?.setData(geoJSON);
-
-    // this.scene.render();
   };
 
   private getContainerDOMRect() {
@@ -400,7 +456,9 @@ export default class Swipe extends Control<ISwipeControlOption> {
   }
 
   private getBounds() {
-    return this.mapsService.getBounds();
+    const bounds = this.mapsService.getBounds();
+
+    return bounds;
   }
 
   /**
@@ -411,11 +469,12 @@ export default class Swipe extends Control<ISwipeControlOption> {
   public addLayer(layer: ILayer | ILayer[], add: boolean = false) {
     const layers = Array.isArray(layer) ? layer : [layer];
     if (add) {
-      this.setOptions({ rightLayers: layers });
+      const rightLayers = this.controlOption.rightLayers.concat(...layers);
+      this.setOptions({ rightLayers });
     } else {
-      this.setOptions({ layers });
+      const leftLayers = this.controlOption.layers.concat(...layers);
+      this.setOptions({ layers: leftLayers });
     }
-    // TODO:
   }
 
   /**
@@ -423,14 +482,20 @@ export default class Swipe extends Control<ISwipeControlOption> {
    */
   public removeLayer(layer: ILayer | ILayer[]) {
     const layers = Array.isArray(layer) ? layer : [layer];
-    // TODO:
+    const leftLayers = this.controlOption.layers.filter((layer) =>
+      layers.includes(layer),
+    );
+    const rightLayers = this.controlOption.rightLayers.filter((layer) =>
+      layers.includes(layer),
+    );
+
+    this.setOptions({ layers: leftLayers, rightLayers });
   }
 
   /**
    * 清除所有图层
    */
   public removeLayers() {
-    this.setOptions({ rightLayers: [], layers: [] });
-    // TODO:
+    this.setOptions({ layers: [], rightLayers: [] });
   }
 }

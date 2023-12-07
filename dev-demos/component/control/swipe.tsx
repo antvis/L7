@@ -61,7 +61,10 @@ const Demo: FunctionComponent = () => {
             .source(data)
             .shape('circle')
             .size('mag', [1, 25])
-            .color('mag', '#5B8FF9');
+            .color('#5B8FF9')
+            .style({
+              strokeWidth: 3,
+            });
           const rightLayer2 = new HeatmapLayer({})
             .source(data)
             .shape('heatmap')
@@ -83,16 +86,16 @@ const Demo: FunctionComponent = () => {
               },
             });
 
-          scene.addLayer(leftLayer1);
-          scene.addLayer(rightLayer1);
-          // scene.addLayer(leftLayer2);
-          // scene.addLayer(rightLayer2);
+          // scene.addLayer(rightLayer1);
+          // scene.addLayer(leftLayer1);
+          scene.addLayer(leftLayer2);
+          scene.addLayer(rightLayer2);
 
           const swipe = new Swipe({
             orientation: 'vertical',
             ratio: 0.5,
-            layers: [leftLayer1],
-            rightLayers: [rightLayer1],
+            layers: [leftLayer2],
+            rightLayers: [rightLayer2],
           });
           scene.addControl(swipe);
           setSwipe(swipe);
