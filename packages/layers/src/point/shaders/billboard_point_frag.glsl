@@ -1,11 +1,9 @@
 
 layout(std140) uniform commonUniorm {
   vec4 u_stroke_color;
-  vec2 u_offsets;
   float u_additive;
   float u_stroke_opacity;
   float u_stroke_width;
-  float u_opacity;
 };
 
 in vec4 v_color;

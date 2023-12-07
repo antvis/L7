@@ -5,11 +5,9 @@ layout(location = 9) in float a_Size;
 
 layout(std140) uniform commonUniorm {
   vec4 u_stroke_color;
-  vec2 u_offsets;
   float u_additive;
   float u_stroke_opacity;
   float u_stroke_width;
-  float u_opacity;
 };
 
 out vec4 v_color;
@@ -20,7 +18,7 @@ out float v_innerRadius;
 #pragma include "picking"
 #pragma include "project"
 void main() {
-  v_color = vec4(a_Color.xyz, a_Color.w * u_opacity);
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
   v_blur = 1.0 - max(2.0/a_Size, 0.05);
   v_innerRadius = max((a_Size - u_stroke_width) / a_Size, 0.0);
   

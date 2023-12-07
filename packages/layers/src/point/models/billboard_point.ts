@@ -41,8 +41,6 @@ export default class SimplePointModel extends BaseModel {
 
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const {
-      opacity = 1,
-      offsets = [0, 0],
       blend,
       strokeOpacity = 1,
       strokeWidth = 0,
@@ -51,11 +49,9 @@ export default class SimplePointModel extends BaseModel {
 
     const commonOptions = {
       u_stroke_color: rgb2arr(stroke),
-      u_offsets: offsets,
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
       u_stroke_width: strokeWidth,
-      u_opacity: opacity
     }
 
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
@@ -74,6 +70,7 @@ export default class SimplePointModel extends BaseModel {
       moduleName: 'pointSimple',
       vertexShader: simplePointVert,
       fragmentShader: simplePointFrag,
+      inject: this.getInject(),
       triangulation: PointTriangulation,
       depth: { enable: false },
       primitive: gl.POINTS,
