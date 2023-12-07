@@ -276,11 +276,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       enableMask: true,
     });
   }
-  // 将废弃
+
+  /**
+   * 将废弃
+   * @deprecated
+   */
   public addMaskLayer(maskLayer: ILayer) {
     this.masks.push(maskLayer);
   }
-  // 将废弃
+
+  /**
+   * 将废弃
+   * @deprecated
+   */
   public removeMaskLayer(maskLayer: ILayer) {
     const layerIndex = this.masks.indexOf(maskLayer);
     if (layerIndex > -1) {
@@ -1385,7 +1393,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           uniforms: this.layerModel.getUninforms(),
           blend: this.layerModel.getBlend(),
           stencil: this.layerModel.getStencil(options),
-          textures:this.layerModel.textures
+          textures: this.layerModel.textures,
         },
         options?.ispick || false,
       );
@@ -1498,8 +1506,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (autoRender) {
       setTimeout(() => {
         this.reRender();
-      },10);
-     
+      }, 10);
     }
   };
 

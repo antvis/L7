@@ -24,6 +24,7 @@ export {
   type IMouseLocationControlOption,
 } from './control/mouseLocation';
 export { Scale, type IScaleControlOption } from './control/scale';
+export { Swipe, type ISwipeControlOption } from './control/swipe';
 export { Zoom, type IZoomControlOption } from './control/zoom';
 export * from './interface';
 export {

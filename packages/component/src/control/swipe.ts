@@ -18,11 +18,11 @@ export interface ISwipeControlOption extends IControlOption {
   /**
    * layers to swipe
    */
-  layers: ILayer | ILayer[];
+  layers: ILayer[];
   /**
    * layers to swipe on right side
    */
-  rightLayers: ILayer | ILayer[];
+  rightLayers: ILayer[];
   /**
    * ratio property of the swipe [0,1], default 0.5
    */
@@ -87,7 +87,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
     // 初始化 container
     this.container = this.onAdd();
 
-    const { className, style } = this.controlOption;
+    const { className, style, layers, rightLayers } = this.controlOption;
     if (className) {
       this.setClassName(className);
     }
@@ -96,17 +96,24 @@ export default class Swipe extends Control<ISwipeControlOption> {
     }
 
     // 将 container 插入容器中
-    // this.sceneSerive.getSceneContainer().appendChild(this.container);
+    // this.scene.getSceneContainer().appendChild(this.container);
     this.mapsService.getMarkerContainer().appendChild(this.container);
 
     this.maskLayer = this.getMaskLayer();
     this.updateMask();
     this.registerEvent();
 
-    // 添加淹没图层到 scene
+    // TODO:设置掩膜
+    layers.forEach((layer) => layer.addMask(this.maskLayer));
+
+    // 添加掩膜图层到 scene
     const layerContainer = createLayerContainer(sceneContainer);
     this.maskLayer.setContainer(layerContainer, sceneContainer);
     this.scene.addLayer(this.maskLayer);
+    this.scene.render();
+
+    // 设置掩膜
+    // layers.forEach((layer) => layer.addMask(this.maskLayer));
 
     this.emit('add', this);
     return this;
@@ -378,6 +385,8 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
     const geoJSON = this.getMaskGeoData();
     this.maskLayer?.setData(geoJSON);
+
+    // this.scene.render();
   };
 
   private getContainerDOMRect() {
@@ -399,15 +408,29 @@ export default class Swipe extends Control<ISwipeControlOption> {
    * @param layer to clip
    * @param add layer in the right part of the map, default left.
    */
-  public addLayer(layer: ILayer | ILayer[], add: boolean = false) {}
+  public addLayer(layer: ILayer | ILayer[], add: boolean = false) {
+    const layers = Array.isArray(layer) ? layer : [layer];
+    if (add) {
+      this.setOptions({ rightLayers: layers });
+    } else {
+      this.setOptions({ layers });
+    }
+    // TODO:
+  }
 
   /**
    * Remove a layer to clip
    */
-  public removeLayer(layer: ILayer | ILayer[]) {}
+  public removeLayer(layer: ILayer | ILayer[]) {
+    const layers = Array.isArray(layer) ? layer : [layer];
+    // TODO:
+  }
 
   /**
    * Remove all layers
    */
-  public removeLayers() {}
+  public removeLayers() {
+    this.setOptions({ rightLayers: [], layers: [] });
+    // TODO:
+  }
 }
