@@ -36,6 +36,8 @@ import {
 import DeviceAttribute from './DeviceAttribute';
 import DeviceBuffer from './DeviceBuffer';
 import DeviceElements from './DeviceElements';
+import DeviceFramebuffer from './DeviceFramebuffer';
+import DeviceTexture2D from './DeviceTexture2D';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 export default class DeviceModel implements IModel {
@@ -325,6 +327,16 @@ export default class DeviceModel implements IModel {
     if (this.bindings) {
       renderPass.setBindings(this.bindings);
       // Compatible to WebGL1.
+      Object.keys(this.uniforms).forEach((uniformName) => {
+        const uniform = this.uniforms[uniformName];
+        if (uniform instanceof DeviceTexture2D) {
+          // @ts-ignore
+          this.uniforms[uniformName] = uniform.get();
+        } else if (uniform instanceof DeviceFramebuffer) {
+          // @ts-ignore
+          this.uniforms[uniformName] = uniform.get()['texture'];
+        }
+      });
       this.program.setUniformsLegacy(this.uniforms);
     }
 
