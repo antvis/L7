@@ -3,7 +3,6 @@ import {
   gl,
   IEncodeFeature,
   IModel,
-  IModelUniform,
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { IFlowLineStyleOptions } from '../../core/interface';
@@ -15,16 +14,7 @@ import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
 import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class FlowLineModel extends BaseModel {
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    const result =  {
-      ...attributeInfo.uniformsOption,
-      ...commoninfo.uniformsOption
-    }
-    return result;
-  }
+
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       gapWidth = 2,

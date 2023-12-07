@@ -17,15 +17,7 @@ import pointFillVert from '../shaders/radar/radar_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class RadarModel extends BaseModel {
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-    }
-  }
+
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       blend,

@@ -5,7 +5,6 @@ import {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
@@ -125,16 +124,6 @@ export default class LineModel extends BaseModel {
   //     u_time: this.layer.getLayerAnimateTime(),
   //   };
   // }
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-      ...{u_texture:this.texture}
-    }
-  }
   public async initModels(): Promise<IModel[]> {    
     this.initUniformsBuffer();
     // this.updateTexture();

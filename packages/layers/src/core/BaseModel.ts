@@ -205,7 +205,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       ...attributeInfo.uniformsOption,
       ...commoninfo.uniformsOption
     }
-    if(this.textures&&this.textures.length===1){
+    //如果是regl渲染 需要在uniform中带上u_texture 暂时用this.rendererService.device判断
+    if(!this.rendererService.hasOwnProperty('device')&&this.textures&&this.textures.length===1){
       result['u_texture'] = this.textures[0];
     }
     return result;
