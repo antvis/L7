@@ -86,16 +86,16 @@ const Demo: FunctionComponent = () => {
               },
             });
 
-          // scene.addLayer(rightLayer1);
-          // scene.addLayer(leftLayer1);
+          scene.addLayer(leftLayer1);
+          scene.addLayer(rightLayer1);
           scene.addLayer(leftLayer2);
           scene.addLayer(rightLayer2);
 
           const swipe = new Swipe({
             orientation: 'vertical',
             ratio: 0.5,
-            layers: [leftLayer2],
-            rightLayers: [rightLayer2],
+            layers: [leftLayer1, leftLayer2],
+            rightLayers: [rightLayer1, rightLayer2],
           });
           scene.addControl(swipe);
           setSwipe(swipe);
@@ -111,18 +111,19 @@ const Demo: FunctionComponent = () => {
         onClick={() => {
           if (!scene) return;
           if (isAddSwipe) {
-            scene.removeControl(swipe);
-            // swipe.hide();
+            // scene.removeControl(swipe);
+            swipe.hide();
             setIsAddSwipe(false);
           } else {
-            scene.addControl(swipe);
-            // swipe.show();
+            // scene.addControl(swipe);
+            swipe.show();
             setIsAddSwipe(true);
           }
         }}
         disabled={!scene}
       >
-        {isAddSwipe ? 'removeControl' : 'addControl'}
+        {/* {isAddSwipe ? 'Remove' : 'Add'} */}
+        {isAddSwipe ? 'Hide' : 'Show'}
       </button>
       <button
         onClick={() => {

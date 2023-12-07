@@ -279,6 +279,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
         ).forEach((eventName) => {
           document.removeEventListener(eventName, this.move);
         });
+        this.scene?.render();
         break;
       }
       case 'mousedown':
@@ -424,8 +425,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
   private getMaskLayer = () => {
     return new PolygonLayer({
-      zIndex: 1,
-      visible: true,
+      visible: false,
     })
       .source({
         type: 'FeatureCollection',
