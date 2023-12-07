@@ -1,8 +1,3 @@
----
-group:
-  title: 线
-  order: 2
----
 ### Line_regl
 ```tsx
 // @ts-ignore
