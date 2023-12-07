@@ -14,6 +14,7 @@ import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
+import { TextureUsage } from '../renderer/ITexture2D';
 import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
@@ -61,6 +62,7 @@ export default class PickingService implements IPickingService {
         height: Math.round(height / this.pickBufferScale),
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
+        usage: TextureUsage.RENDER_TARGET,
       }),
     });
 

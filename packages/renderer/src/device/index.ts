@@ -1,12 +1,10 @@
 import {
-  colorNewFromRGBA,
   Device,
   Format,
   RenderPass,
   RenderTarget,
   SwapChain,
   TextureUsage,
-  TransparentBlack,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
 } from '@antv/g-device-api';
@@ -47,20 +45,23 @@ export default class DeviceRendererService implements IRendererService {
   uniformBuffers: IBuffer[] = [];
   extensionObject: IExtensions;
   private device: Device;
-  private swapChain: SwapChain;
+  swapChain: SwapChain;
   private $container: HTMLDivElement | null;
   private canvas: HTMLCanvasElement;
-  private width: number;
-  private height: number;
+  width: number;
+  height: number;
   private isDirty: boolean;
-  private renderPass: RenderPass;
-  private mainColorRT: RenderTarget;
-  private mainDepthRT: RenderTarget;
+  /**
+   * Current render pass.
+   */
+  renderPasses: RenderPass[] = [];
+  mainColorRT: RenderTarget;
+  mainDepthRT: RenderTarget;
 
   /**
    * Current FBO.
    */
-  private currentFramebuffer: DeviceFramebuffer | null;
+  currentFramebuffer: DeviceFramebuffer | null;
 
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
@@ -121,55 +122,18 @@ export default class DeviceRendererService implements IRendererService {
     );
   }
 
-  beginFrame(): void {
-    const onscreenTexture = this.swapChain.getOnscreenTexture();
-    const colorAttachment = this.currentFramebuffer
-      ? this.currentFramebuffer['colorRenderTarget'] || null
-      : this.mainColorRT;
-    const colorResolveTo = this.currentFramebuffer ? null : onscreenTexture;
-    const depthStencilAttachment = this.currentFramebuffer
-      ? this.currentFramebuffer['depthRenderTarget'] || null
-      : this.mainDepthRT;
-
-    const { color = [0, 0, 0, 0], depth = 1, stencil = 0 } =
-      // @ts-ignore
-      this.currentFramebuffer?.clearOptions || {};
-    const colorClearColor = colorAttachment
-      ? colorNewFromRGBA(
-          color[0] * 255,
-          color[1] * 255,
-          color[2] * 255,
-          color[3],
-        )
-      : TransparentBlack;
-    const depthClearValue = depthStencilAttachment ? depth : undefined;
-    const stencilClearValue = depthStencilAttachment ? stencil : undefined;
-
-    this.renderPass = this.device.createRenderPass({
-      colorAttachment: [colorAttachment],
-      colorResolveTo: [colorResolveTo],
-      colorClearColor: [colorClearColor],
-      depthStencilAttachment,
-      depthClearValue,
-      stencilClearValue,
-    });
-    // @ts-ignore
-    this.device.renderPass = this.renderPass;
-
-    if (this.currentFramebuffer) {
-      this.renderPass.setViewport(
-        0,
-        0,
-        this.currentFramebuffer['width'],
-        this.currentFramebuffer['height'],
-      );
-    } else {
-      this.renderPass.setViewport(0, 0, this.width, this.height);
-    }
-  }
+  beginFrame(): void {}
 
   endFrame(): void {
-    this.device.submitPass(this.renderPass);
+    if (this.renderPasses.length) {
+      this.renderPasses.forEach((renderPass, i) => {
+        // FIXME: WebGL2 should support submit multiple render passes.
+        // if (i === 0) {
+        this.device.submitPass(renderPass);
+        // }
+      });
+      this.renderPasses = [];
+    }
   }
 
   getPointSizeRange() {
@@ -185,7 +149,7 @@ export default class DeviceRendererService implements IRendererService {
   }
 
   createModel = (options: IModelInitializationOptions): IModel =>
-    new DeviceModel(this.device, options);
+    new DeviceModel(this.device, options, this);
 
   createAttribute = (options: IAttributeInitializationOptions): IAttribute =>
     new DeviceAttribute(this.device, options);
@@ -239,11 +203,6 @@ export default class DeviceRendererService implements IRendererService {
     this.width = width;
     this.height = height;
     // Will be used in `setViewport` from RenderPass later.
-    // @ts-ignore
-    this.device.width = width;
-    // @ts-ignore
-    this.device.height = height;
-
     // this.gl._refresh();
   };
 
@@ -267,10 +226,8 @@ export default class DeviceRendererService implements IRendererService {
   getViewportSize = () => {
     // FIXME: add viewport size in Device API.
     return {
-      // @ts-ignore
-      width: this.device.width,
-      // @ts-ignore
-      height: this.device.height,
+      width: this.width,
+      height: this.height,
     };
   };
 

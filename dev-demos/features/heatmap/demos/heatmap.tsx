@@ -45,22 +45,22 @@ export default () => {
             });
           scene.addLayer(layer);
 
-          scene.startAnimate();
-          // setTimeout(() => {
-          //   layer.style({
-          //     rampColors: {
-          //       colors: [
-          //         '#FF4818',
-          //         '#F7B74A',
-          //         '#FFF598',
-          //         '#91EABC',
-          //         '#2EA9A1',
-          //         '#206C7C',
-          //       ],
-          //       positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-          //     },
-          //   })
-          // },2000);
+          // scene.startAnimate();
+          setTimeout(() => {
+            layer.style({
+              rampColors: {
+                colors: [
+                  '#FF4818',
+                  '#F7B74A',
+                  '#FFF598',
+                  '#91EABC',
+                  '#2EA9A1',
+                  '#206C7C',
+                ],
+                positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+              },
+            });
+          }, 2000);
         });
     });
   }, []);

@@ -56,26 +56,27 @@ export default class DeviceFramebuffer implements IFramebuffer {
   private createDepthRenderTarget() {
     const { width, height, depth } = this.options;
     // TODO: avoid creating depth texture if not needed
-    // if (depth) {
-    if (isTexture2D(depth)) {
-      this.depthTexture = depth.get() as Texture;
-      this.depthRenderTarget = this.device.createRenderTargetFromTexture(
-        this.depthTexture,
-      );
-      this.width = (depth as DeviceTexture2D)['width'];
-      this.height = (depth as DeviceTexture2D)['height'];
-    } else if (width && height) {
-      this.depthTexture = this.device.createTexture({
-        format: Format.D24_S8,
-        usage: TextureUsage.RENDER_TARGET,
-        width,
-        height,
-      });
-      this.depthRenderTarget = this.device.createRenderTargetFromTexture(
-        this.depthTexture,
-      );
-      this.width = width;
-      this.height = height;
+    if (depth) {
+      if (isTexture2D(depth)) {
+        this.depthTexture = depth.get() as Texture;
+        this.depthRenderTarget = this.device.createRenderTargetFromTexture(
+          this.depthTexture,
+        );
+        this.width = (depth as DeviceTexture2D)['width'];
+        this.height = (depth as DeviceTexture2D)['height'];
+      } else if (width && height) {
+        this.depthTexture = this.device.createTexture({
+          format: Format.D24_S8,
+          usage: TextureUsage.RENDER_TARGET,
+          width,
+          height,
+        });
+        this.depthRenderTarget = this.device.createRenderTargetFromTexture(
+          this.depthTexture,
+        );
+        this.width = width;
+        this.height = height;
+      }
     }
   }
 
