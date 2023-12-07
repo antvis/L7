@@ -139,7 +139,7 @@ export default () => {
         scene.addLayer(layer1);
         setTimeout(() => {
           layer1.addMask(polygonLayer);
-          layer1.enableMask();
+          // layer1.enableMask();
           scene.render();
         }, 2000)
       
