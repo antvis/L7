@@ -149,7 +149,7 @@ export default class Arc3DModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       inject: this.getInject(),
-       triangulation: LineArcTriangulation,
+      triangulation: LineArcTriangulation,
       styleOption:{segmentNumber},
     });
     return [model];
