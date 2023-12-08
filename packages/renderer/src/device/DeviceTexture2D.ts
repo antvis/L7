@@ -5,13 +5,18 @@ import {
   MipmapFilterMode,
   Sampler,
   Texture,
-  TextureUsage,
+  TextureUsage as DeviceTextureUsage,
 } from '@antv/g-device-api';
-import { ITexture2D, ITexture2DInitializationOptions, gl } from '@antv/l7-core';
+import {
+  gl,
+  ITexture2D,
+  ITexture2DInitializationOptions,
+  TextureUsage,
+} from '@antv/l7-core';
 import { wrapModeMap } from './constants';
 
 export function isTexture2D(t: any): t is ITexture2D {
-  return false;
+  return !!(t && t['texture']);
 }
 
 export default class DeviceTexture2D implements ITexture2D {
@@ -33,6 +38,7 @@ export default class DeviceTexture2D implements ITexture2D {
       wrapT = gl.CLAMP_TO_EDGE,
       // aniso = 0,
       alignment = 1,
+      usage = TextureUsage.SAMPLED,
       // mipmap = false,
       // premultiplyAlpha = false,
       // mag = gl.NEAREST,
@@ -66,7 +72,10 @@ export default class DeviceTexture2D implements ITexture2D {
       format: pixelFormat!,
       width,
       height,
-      usage: TextureUsage.SAMPLED,
+      usage:
+        usage === TextureUsage.SAMPLED
+          ? DeviceTextureUsage.SAMPLED
+          : DeviceTextureUsage.RENDER_TARGET,
       pixelStore: {
         unpackFlipY: flipY,
         packAlignment: alignment,
@@ -77,10 +86,15 @@ export default class DeviceTexture2D implements ITexture2D {
       this.texture.setImageData([data]);
     }
 
+    // wrapS: gl.CLAMP_TO_EDGE,
+    // wrapT: gl.CLAMP_TO_EDGE,
+    // min: gl.LINEAR,
+    // mag: gl.LINEAR,
+
     this.sampler = device.createSampler({
       addressModeU: wrapModeMap[wrapS],
       addressModeV: wrapModeMap[wrapT],
-      minFilter: FilterMode.POINT, // TODO: use mag & min
+      minFilter: FilterMode.BILINEAR, // TODO: use mag & min
       magFilter: FilterMode.BILINEAR,
       mipmapFilter: MipmapFilterMode.NO_MIP,
       lodMinClamp: 0,

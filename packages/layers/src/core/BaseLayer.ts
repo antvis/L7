@@ -255,6 +255,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   public addMask(layer: ILayer): void {
     this.masks.push(layer);
+    this.updateLayerConfig({
+      maskLayers: this.masks,
+    });
     this.enableMask();
   }
 
@@ -263,6 +266,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (layerIndex > -1) {
       this.masks.splice(layerIndex, 1);
     }
+    this.updateLayerConfig({
+      maskLayers: this.masks,
+    });
   }
 
   public disableMask(): void {

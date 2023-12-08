@@ -367,6 +367,7 @@ ${uniforms.join('\n')}
         data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)).fill(0),
         isUBO: true,
       });
+      console.log(commonUniforms.uniformsLength)
       this.uniformBuffers.push(this.commonUnifoms);
     }
 
