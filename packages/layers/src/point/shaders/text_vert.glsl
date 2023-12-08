@@ -1,24 +1,27 @@
 #define SDF_PX 8.0
 #define EDGE_GAMMA 0.105
 #define FONT_SIZE 24.0
-attribute vec3 a_Position;
-attribute vec2 a_tex;
-attribute vec2 a_textOffsets;
-attribute vec4 a_Color;
-attribute float a_Size;
 
-uniform vec2 u_sdf_map_size;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 14) in vec2 a_tex;
+layout(location = 15) in vec2 a_textOffsets;
 
-uniform float u_raisingHeight: 0.0;
+layout(std140) uniform commonUniforms {
+  vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
+  vec2 u_sdf_map_size;
+  float u_raisingHeight: 0.0;
+  float u_stroke_width : 2;
+  float u_gamma_scale : 0.5;
+  float u_halo_blur : 0.5;
+};
 
-varying vec2 v_uv;
-varying float v_gamma_scale;
-varying vec4 v_color;
-varying vec4 v_stroke_color;
-varying float v_fontScale;
-uniform float u_stroke_width : 2;
-uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
+out vec2 v_uv;
+out float v_gamma_scale;
+out vec4 v_color;
+out vec4 v_stroke_color;
+out float v_fontScale;
 
 
 

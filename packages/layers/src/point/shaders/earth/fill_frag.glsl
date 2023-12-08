@@ -1,15 +1,18 @@
-uniform float u_additive;
-uniform float u_opacity : 1;
-uniform float u_stroke_opacity : 1;
-uniform float u_stroke_width : 2;
+in vec4 v_data;
+in vec4 v_color;
+in float v_radius;
 
-varying vec4 v_data;
-varying vec4 v_color;
-varying float v_radius;
-
+layout(std140) uniform commonUniform {
+  vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
+  float u_additive;
+  float u_stroke_opacity : 1;
+  float u_stroke_width : 2;
+  float u_blur : 0.0;
+};
 #pragma include "sdf_2d"
 #pragma include "picking"
 
+out vec4 outputColor;
 
 void main() {
   int shape = int(floor(v_data.w + 0.5));
@@ -62,16 +65,16 @@ void main() {
   );
 
   if(strokeWidth < 0.01) {
-    gl_FragColor = vec4(v_color.rgb, v_color.a * u_opacity);
+    outputColor = vec4(v_color.rgb, v_color.a * u_opacity);
   } else {
-    gl_FragColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), u_stroke_color * u_stroke_opacity, color_t);
+    outputColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), u_stroke_color * u_stroke_opacity, color_t);
   }
 
   if(u_additive > 0.0) {
-    gl_FragColor *= opacity_t;
-    gl_FragColor = filterColorAlpha(gl_FragColor, gl_FragColor.a);
+    outputColor *= opacity_t;
+    outputColor = filterColorAlpha(outputColor, outputColor.a);
   } else {
-    gl_FragColor.a *= opacity_t;
-    gl_FragColor = filterColor(gl_FragColor);
+    outputColor.a *= opacity_t;
+    outputColor = filterColor(outputColor);
   }
 }

@@ -8,6 +8,7 @@ export default () => {
     useEffect( () => {
         const scene = new Scene({
             id: 'map',
+            renderer:'device',
             map: new GaodeMap({
               center: [ 110, 36 ],
               style: 'light',
@@ -41,6 +42,7 @@ export default () => {
                   .size(12)
                   .color('red')
                   .style({
+                     opacity: 0.8,
                     // textAllowOverlap: true,
                     textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
                     textOffset: [ 0, 0 ], // 文本相对锚点的偏移量 [水平, 垂直]

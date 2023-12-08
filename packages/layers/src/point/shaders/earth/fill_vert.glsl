@@ -1,22 +1,19 @@
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec3 a_Extrude;
-attribute float a_Size;
-attribute float a_Shape;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 10) in float a_Shape;
+layout(location = 11) in vec3 a_Extrude;
 
-
-varying vec4 v_data;
-varying vec4 v_color;
-varying float v_radius;
-
-uniform float u_opacity : 1;
-uniform float u_stroke_opacity : 1;
-uniform float u_stroke_width : 2;
-uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
-uniform vec2 u_offsets;
-
-uniform float u_blur : 0.0;
+layout(std140) uniform commonUniform {
+  vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
+  float u_additive;
+  float u_stroke_opacity : 1;
+  float u_stroke_width : 2;
+  float u_blur : 0.0;
+};
+out vec4 v_data;
+out vec4 v_color;
+out float v_radius;
 
 #pragma include "projection"
 #pragma include "picking"

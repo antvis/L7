@@ -16,8 +16,18 @@ import pointFillVert from '../shaders/earth/fill_vert.glsl';
 
 import { rgb2arr } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class FillModel extends BaseModel {
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption
+    }
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       opacity = 1,
       strokeOpacity = 1,
@@ -27,27 +37,26 @@ export default class FillModel extends BaseModel {
       blend,
       blur = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
-    return {
-      u_blur: blur,
+    // const { animateOption = { enable: false } } =
+    this.layer.getLayerConfig() as ILayerConfig;
+    const commonOptions = {
+      u_stroke_color: rgb2arr(stroke),
       u_additive: blend === 'additive' ? 1.0 : 0.0,
-      u_opacity: opacity,
       u_stroke_opacity: strokeOpacity,
       u_stroke_width: strokeWidth,
-      u_stroke_color: rgb2arr(stroke),
+      u_blur: blur,
+      // u_opacity: opacity,
+      // u_animate: this.animateOption2Array(animateOption),
+      // u_time: this.layer.getLayerAnimateTime(),
       // u_offsets: offsets,
     };
-  }
-  public getAnimateUniforms(): IModelUniform {
-    const { animateOption = { enable: false } } =
-      this.layer.getLayerConfig() as ILayerConfig;
-    return {
-      u_animate: this.animateOption2Array(animateOption),
-      u_time: this.layer.getLayerAnimateTime(),
-    };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
+    return commonBufferInfo;
   }
 
+
   public async initModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     return this.buildModels();
   }
 
@@ -58,6 +67,7 @@ export default class FillModel extends BaseModel {
       vertexShader: pointFillVert,
       fragmentShader: pointFillFrag,
       triangulation: GlobelPointFillTriangulation,
+      inject:this.getInject(),
       depth: { enable: true },
 
       blend: this.getBlend(),
@@ -75,6 +85,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
+        shaderLocation:ShaderLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -134,6 +145,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -154,6 +166,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Shape',
+        shaderLocation:ShaderLocation.SHAPE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
