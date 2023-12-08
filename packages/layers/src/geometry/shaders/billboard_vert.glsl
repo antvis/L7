@@ -1,25 +1,21 @@
-precision highp float;
-uniform mat4 u_ModelMatrix;
-uniform float u_raisingHeight: 0.0;
-uniform float u_opacity;
-uniform vec2 u_size: [1.0, 1.0];
-uniform mat2 u_RotateMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 11) in vec3 a_Extrude;
+layout(location = 14) in vec2 a_Uv;
 
-attribute vec3 a_Extrude;
-attribute vec3 a_Position;
-attribute vec2 a_Uv;
-attribute vec3 a_Color;
+layout(std140) uniform commonUniforms {
+ mat2 u_RotateMatrix;
+ vec2 u_size;
+ float u_raisingHeight;
+ float u_opacity;
+};
 
-varying vec3 v_Color;
-varying vec2 v_uv;
+out vec2 v_uv;
 
 #pragma include "projection"
 #pragma include "picking"
 void main() {
    vec3 extrude = a_Extrude;
-   v_Color = a_Color;
    v_uv = a_Uv;
-
    float raiseHeight = u_raisingHeight;
    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
       float mapboxZoomScale = 4.0/pow(2.0, 21.0 - u_Zoom);
