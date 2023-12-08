@@ -396,7 +396,12 @@ export default class Swipe extends Control<ISwipeControlOption> {
         [swLng, neLat],
       ];
     } else {
-      const centerLat = neLat - (neLat - swLat) * ratio;
+      const size = this.getContainerSize();
+      const lngLat = this.mapsService.containerToLngLat([
+        size[0],
+        size[1] * ratio,
+      ]);
+      const centerLat = lngLat.lat;
       coordinate = [
         [swLng, neLat],
         ne,
