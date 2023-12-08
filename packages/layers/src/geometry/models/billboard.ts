@@ -10,6 +10,7 @@ import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/billboard_frag.glsl';
 import planeVert from '../shaders/billboard_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class BillBoardModel extends BaseModel {
   protected texture: ITexture2D;
@@ -35,6 +36,17 @@ export default class BillBoardModel extends BaseModel {
   };
 
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
+
     const {
       opacity,
       width = 1,
@@ -60,19 +72,16 @@ export default class BillBoardModel extends BaseModel {
     this.radian =
       (rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180;
 
-    return {
+    const commonOptions = {
+      u_size: [width, height],
       u_raisingHeight: Number(raisingHeight),
-      u_RotateMatrix: new Float32Array([
-        // z
-        Math.cos(this.radian),
-        Math.sin(this.radian),
-        -Math.sin(this.radian),
-        Math.cos(this.radian),
-      ]),
+      u_rotation: this.radian,
       u_opacity: opacity || 1,
       u_texture: this.texture,
-      u_size: [width, height],
     };
+    this.textures = [this.texture];
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public clearModels(): void {
@@ -91,13 +100,14 @@ export default class BillBoardModel extends BaseModel {
 
     if (drawCanvas) {
       this.updateTexture(drawCanvas);
-    }
-
-    const model = await this.layer.buildLayerModel({
+      }
+      this.initUniformsBuffer();
+      const model = await this.layer.buildLayerModel({
       moduleName: 'geometryBillboard',
       vertexShader: planeVert,
       fragmentShader: planeFrag,
       triangulation: this.planeGeometryTriangulation,
+      inject: this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: true },
     });
@@ -136,6 +146,7 @@ export default class BillBoardModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
+        shaderLocation: ShaderLocation.EXTRUDE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -163,6 +174,7 @@ export default class BillBoardModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
