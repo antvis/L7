@@ -8,6 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer:'device',
       map: new GaodeMap({
         // map: new GaodeMap({
         // map: new Mapbox({
@@ -46,6 +47,7 @@ export default () => {
         .color('#f00');
 
       scene.addLayer(layer);
+      scene.startAnimate()
     });
   }, []);
   return (

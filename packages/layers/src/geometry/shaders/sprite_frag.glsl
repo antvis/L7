@@ -1,10 +1,14 @@
 
+layout(std140) uniform commonUniforms {
+  float u_opacity;
+  float u_mapFlag;
+  float u_Scale;
+};
 uniform sampler2D u_texture;
-uniform float u_mapFlag;
-uniform float u_opacity;
 
-varying vec3 v_Color;
-varying float v_d;
+in vec3 v_Color;
+in float v_d;
+out vec4 outputColor;
 
 void main() {
 
@@ -13,9 +17,9 @@ void main() {
   }
 
   if(u_mapFlag > 0.0) {
-    gl_FragColor = texture2D(u_texture, gl_PointCoord);
-    gl_FragColor.a *= u_opacity;
+    outputColor = texture(SAMPLER_2D(u_texture), gl_PointCoord);
+    outputColor.a *= u_opacity;
   } else {
-    gl_FragColor = vec4(v_Color, u_opacity);
+    outputColor = vec4(v_Color, u_opacity);
   }
 }
