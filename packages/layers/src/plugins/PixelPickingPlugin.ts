@@ -50,19 +50,21 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     uniformBuffer: IBuffer,
     layer: ILayer,
   ) {
-    Object.keys(options).forEach((key) => {
-      this.pickingUniformMap.set(key, options[key]);
-    });
+    if (uniformBuffer) {
+      Object.keys(options).forEach((key) => {
+        this.pickingUniformMap.set(key, options[key]);
+      });
 
-    const u_PickingBuffer = layer.getLayerConfig().pickingBuffer || 0;
-    // Tip: 当前地图是否在拖动
-    const u_shaderPick = Number(layer.getShaderPickStat());
-    this.pickingUniformMap.set('u_PickingBuffer', u_PickingBuffer);
-    this.pickingUniformMap.set('u_shaderPick', u_shaderPick);
-    uniformBuffer.subData({
-      offset: 0,
-      data: this.pickOption2Array(),
-    });
+      const u_PickingBuffer = layer.getLayerConfig().pickingBuffer || 0;
+      // Tip: 当前地图是否在拖动
+      const u_shaderPick = Number(layer.getShaderPickStat());
+      this.pickingUniformMap.set('u_PickingBuffer', u_PickingBuffer);
+      this.pickingUniformMap.set('u_shaderPick', u_shaderPick);
+      uniformBuffer.subData({
+        offset: 0,
+        data: this.pickOption2Array(),
+      });
+    }
   }
   public apply(
     layer: ILayer,

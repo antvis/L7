@@ -1,12 +1,17 @@
-precision highp float;
-attribute vec3 a_Position;
-attribute float a_Size;
-attribute vec2 a_Dir;
-uniform float u_intensity;
-uniform float u_radius;
-varying vec2 v_extrude;
-varying float v_weight;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 9) in float a_Size;
+layout(location = 10) in vec2 a_Dir;
+
+
+layout(std140) uniform commonUniforms {
+  float u_radius;
+  float u_intensity;
+  float u_common_uniforms_padding1;
+  float u_common_uniforms_padding2;
+};
+
+out vec2 v_extrude;
+out float v_weight;
 
 
 #define GAUSS_COEF  0.3989422804014327

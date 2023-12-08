@@ -5,7 +5,6 @@ import {
   RenderTarget,
   SwapChain,
   TextureUsage,
-  TransparentBlack,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
 } from '@antv/g-device-api';
@@ -14,6 +13,7 @@ import {
   IAttributeInitializationOptions,
   IBuffer,
   IBufferInitializationOptions,
+  IClearOptions,
   IElements,
   IElementsInitializationOptions,
   IExtensions,
@@ -45,20 +45,23 @@ export default class DeviceRendererService implements IRendererService {
   uniformBuffers: IBuffer[] = [];
   extensionObject: IExtensions;
   private device: Device;
-  private swapChain: SwapChain;
+  swapChain: SwapChain;
   private $container: HTMLDivElement | null;
   private canvas: HTMLCanvasElement;
-  private width: number;
-  private height: number;
+  width: number;
+  height: number;
   private isDirty: boolean;
-  private renderPass: RenderPass;
-  private mainColorRT: RenderTarget;
-  private mainDepthRT: RenderTarget;
+  /**
+   * Current render pass.
+   */
+  renderPasses: RenderPass[] = [];
+  mainColorRT: RenderTarget;
+  mainDepthRT: RenderTarget;
 
   /**
    * Current FBO.
    */
-  private currentFramebuffer: DeviceFramebuffer | null;
+  currentFramebuffer: DeviceFramebuffer | null;
 
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
@@ -119,30 +122,18 @@ export default class DeviceRendererService implements IRendererService {
     );
   }
 
-  beginFrame(): void {
-    const onscreenTexture = this.swapChain.getOnscreenTexture();
-    const colorAttachment = this.currentFramebuffer
-      ? this.currentFramebuffer['colorRenderTarget'] || null
-      : this.mainColorRT;
-    const colorResolveTo = this.currentFramebuffer ? null : onscreenTexture;
-    const depthStencilAttachment = this.currentFramebuffer
-      ? this.currentFramebuffer['depthRenderTarget'] || null
-      : this.mainDepthRT;
-    const depthClearValue = depthStencilAttachment ? 1 : undefined;
-
-    this.renderPass = this.device.createRenderPass({
-      colorAttachment: [colorAttachment],
-      colorResolveTo: [colorResolveTo],
-      colorClearColor: [TransparentBlack],
-      depthStencilAttachment,
-      depthClearValue,
-    });
-    // @ts-ignore
-    this.device.renderPass = this.renderPass;
-  }
+  beginFrame(): void {}
 
   endFrame(): void {
-    this.device.submitPass(this.renderPass);
+    if (this.renderPasses.length) {
+      this.renderPasses.forEach((renderPass, i) => {
+        // FIXME: WebGL2 should support submit multiple render passes.
+        // if (i === 0) {
+        this.device.submitPass(renderPass);
+        // }
+      });
+      this.renderPasses = [];
+    }
   }
 
   getPointSizeRange() {
@@ -158,7 +149,7 @@ export default class DeviceRendererService implements IRendererService {
   }
 
   createModel = (options: IModelInitializationOptions): IModel =>
-    new DeviceModel(this.device, options);
+    new DeviceModel(this.device, options, this);
 
   createAttribute = (options: IAttributeInitializationOptions): IAttribute =>
     new DeviceAttribute(this.device, options);
@@ -180,27 +171,20 @@ export default class DeviceRendererService implements IRendererService {
     drawCommands: () => void,
   ) => {
     this.currentFramebuffer = framebuffer as DeviceFramebuffer;
+    this.beginFrame();
     drawCommands();
+    this.endFrame();
     this.currentFramebuffer = null;
   };
 
-  clear = () =>
-    // options: IClearOptions
-    {
-      // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
-      // const { color, depth, stencil, framebuffer = null } = options;
-      // const reglClearOptions: regl.ClearOptions = {
-      //   color,
-      //   depth,
-      //   stencil,
-      // };
-      // reglClearOptions.framebuffer =
-      //   framebuffer === null
-      //     ? framebuffer
-      //     : (framebuffer as DeviceFramebuffer).get();
-      // this.gl?.clear(reglClearOptions);
-      // TODO: clear
-    };
+  clear = (options: IClearOptions) => {
+    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
+    const { color, depth, stencil, framebuffer = null } = options;
+    if (framebuffer) {
+      // @ts-ignore
+      framebuffer.clearOptions = { color, depth, stencil };
+    }
+  };
 
   viewport = ({
     // x,
@@ -219,11 +203,6 @@ export default class DeviceRendererService implements IRendererService {
     this.width = width;
     this.height = height;
     // Will be used in `setViewport` from RenderPass later.
-    // @ts-ignore
-    this.device.width = width;
-    // @ts-ignore
-    this.device.height = height;
-
     // this.gl._refresh();
   };
 
@@ -247,10 +226,8 @@ export default class DeviceRendererService implements IRendererService {
   getViewportSize = () => {
     // FIXME: add viewport size in Device API.
     return {
-      // @ts-ignore
-      width: this.device.width,
-      // @ts-ignore
-      height: this.device.height,
+      width: this.width,
+      height: this.height,
     };
   };
 
