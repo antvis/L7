@@ -7,7 +7,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       pickBufferScale: 1.0,
-      renderer: 'device',
+      renderer: process.env.renderer,
       map: new GaodeMap({
         style: 'light',
         center: [-121.24357, 37.58264],

@@ -76,7 +76,7 @@ scene.on('loaded', () => {
           fontFamily: 'Times New Roman',
           textAllowOverlap: true
         });
-      scene.addLayer(textLayer);
+      // scene.addLayer(textLayer);
     });
 
 });

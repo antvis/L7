@@ -119,8 +119,8 @@ export default () => {
           opacity:0.5,
           unit:'meter'
         })
-      scene.addLayer(point);
-      scene.addLayer(point2);
+      // scene.addLayer(point);
+      // scene.addLayer(point2);
 
 
     scene.on('loaded', () => {
