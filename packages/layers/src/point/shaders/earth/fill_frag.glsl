@@ -3,7 +3,6 @@ in vec4 v_color;
 in float v_radius;
 
 layout(std140) uniform commonUniform {
-  vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
   float u_additive;
   float u_stroke_opacity : 1;
   float u_stroke_width : 2;
@@ -17,7 +16,7 @@ out vec4 outputColor;
 void main() {
   int shape = int(floor(v_data.w + 0.5));
 
-  vec4 strokeColor = u_stroke_color == vec4(0) ? v_color : u_stroke_color;
+  vec4 strokeColor = u_stroke == vec4(0.0) ? v_color : u_stroke;
 
   lowp float antialiasblur = v_data.z;
   float r = v_radius / (v_radius + u_stroke_width);
@@ -67,7 +66,7 @@ void main() {
   if(u_stroke_width < 0.01) {
     outputColor = vec4(v_color.rgb, v_color.a * u_opacity);
   } else {
-    outputColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), u_stroke_color * u_stroke_opacity, color_t);
+    outputColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), strokeColor * u_stroke_opacity, color_t);
   }
 
   if(u_additive > 0.0) {

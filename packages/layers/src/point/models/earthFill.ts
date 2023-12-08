@@ -14,7 +14,6 @@ import { GlobelPointFillTriangulation } from '../../core/triangulation';
 import pointFillFrag from '../shaders/earth/fill_frag.glsl';
 import pointFillVert from '../shaders/earth/fill_vert.glsl';
 
-import { rgb2arr } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class FillModel extends BaseModel {
@@ -29,26 +28,18 @@ export default class FillModel extends BaseModel {
   }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
-      opacity = 1,
       strokeOpacity = 1,
       strokeWidth = 0,
-      stroke = 'rgba(0,0,0,0)',
       // offsets = [0, 0],
       blend,
       blur = 0,
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-    // const { animateOption = { enable: false } } =
     this.layer.getLayerConfig() as ILayerConfig;
     const commonOptions = {
-      u_stroke_color: rgb2arr(stroke),
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
       u_stroke_width: strokeWidth,
       u_blur: blur,
-      // u_opacity: opacity,
-      // u_animate: this.animateOption2Array(animateOption),
-      // u_time: this.layer.getLayerAnimateTime(),
-      // u_offsets: offsets,
     };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
     return commonBufferInfo;
