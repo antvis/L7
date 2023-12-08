@@ -16,11 +16,11 @@ import { Control, IControlOption } from './baseControl';
 
 export interface ISwipeControlOption extends IControlOption {
   /**
-   * 左侧的图层层
+   * 左侧的图层
    */
   layers: ILayer[];
   /**
-   * 右侧的图层层
+   * 右侧的图层
    */
   rightLayers: ILayer[];
   /**
@@ -469,11 +469,11 @@ export default class Swipe extends Control<ISwipeControlOption> {
   /**
    * 添加要剪裁的图层
    * @param layer 剪裁的图层
-   * @param add 添加图层到右侧, 默认添加到左侧.
+   * @param addRight 是否添加图层到右侧, 默认添加到左侧.
    */
-  public addLayer(layer: ILayer | ILayer[], add: boolean = false) {
+  public addLayer(layer: ILayer | ILayer[], addRight: boolean = false) {
     const layers = Array.isArray(layer) ? layer : [layer];
-    if (add) {
+    if (addRight) {
       const rightLayers = this.controlOption.rightLayers.concat(...layers);
       this.setOptions({ rightLayers });
     } else {
