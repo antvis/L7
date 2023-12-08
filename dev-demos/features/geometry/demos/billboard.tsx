@@ -55,6 +55,7 @@ export default () => {
           color: '#0ff',
           mix: 0.5,
         });
+        scene.startAnimate();
         scene.addLayer(billboard);
                };
       img.src =

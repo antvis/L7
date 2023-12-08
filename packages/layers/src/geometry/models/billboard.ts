@@ -73,21 +73,14 @@ export default class BillBoardModel extends BaseModel {
       (rotateFlag * Math.PI * (this.mapService.getRotation() % 360)) / 180;
 
     const commonOptions = {
-      u_RotateMatrix: new Float32Array([
-        // z
-        Math.cos(this.radian),
-        Math.sin(this.radian),
-        -Math.sin(this.radian),
-        Math.cos(this.radian),
-      ]),
       u_size: [width, height],
       u_raisingHeight: Number(raisingHeight),
+      u_rotation: this.radian,
       u_opacity: opacity || 1,
       u_texture: this.texture,
     };
     this.textures = [this.texture];
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-
     return commonBufferInfo;
   }
 
