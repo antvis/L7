@@ -51,11 +51,11 @@ export default class FillImageModel extends BaseModel {
      */
 
     const commonOptions = {
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
       u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      u_textSize: [1024, this.iconService.canvasHeight || 128]
-    };
+    };//2+1+1+1
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     
     return commonBufferInfo;
