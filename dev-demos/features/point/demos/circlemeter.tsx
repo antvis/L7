@@ -6,7 +6,7 @@ export default () => {
     useEffect( () => {
 const scene = new Scene({
   id: "map",
-  // renderer: 'device',
+  renderer: 'device',
   map: new GaodeMap({
     style: "light",
     center: [120.099658370018, 30.263445807542666],
@@ -44,15 +44,15 @@ scene.on("loaded", () => {
     pointLayer.on('click', (e) => {
       console.log(e)
     })
-  setTimeout(() => {
-    pointLayer.style({
-      opacity: 0.5,
-    })
-    scene.render();
+  // setTimeout(() => {
+  //   pointLayer.style({
+  //     opacity: 0.5,
+  //   })
+  //   scene.render();
 
-  }, 1000);
+  // }, 1000);
   scene.addLayer(pointLayer);
-  // scene.startAnimate();
+  scene.startAnimate();
 });
 }, []);
 return (
