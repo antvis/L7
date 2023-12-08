@@ -75,7 +75,6 @@ class Scene
     this.container = sceneContainer;
     // 绑定地图服务
     map.setContainer(sceneContainer, id, canvas, hasBaseMap);
-
     // 绑定渲染引擎服务
     sceneContainer
       .bind<IRendererService>(TYPES.IRendererService)

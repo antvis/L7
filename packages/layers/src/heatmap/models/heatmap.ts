@@ -58,14 +58,14 @@ export default class HeatMapModel extends BaseModel {
         stencil: 0,
         framebuffer: this.heatmapFramerBuffer,
       });
-      this.drawIntensityMode();
+      this.drawIntensityMode(); // 密度图
     });
     if (!isEqual(this.preRampColors, rampColors)) {
       this.updateColorTexture();
     }
     this.shapeType === 'heatmap'
-      ? this.drawColorMode(options)
-      : this.draw3DHeatMap(options);
+      ? this.drawHeatMap(options) // 2D
+      : this.draw3DHeatMap(options); // 3D
   }
 
   public getUninforms(): IModelUniform {
@@ -84,7 +84,7 @@ export default class HeatMapModel extends BaseModel {
     // 渲染到屏幕
     this.colorModel =
       shapeType === 'heatmap'
-        ? this.buildHeatmapColor() // 2D
+        ? this.buildHeatmap() // 2D
         : this.build3dHeatMap(); // 3D
 
     const { width, height } = getViewportSize();
@@ -180,7 +180,7 @@ export default class HeatMapModel extends BaseModel {
     return model;
   }
 
-  private buildHeatmapColor(): IModel {
+  private buildHeatmap(): IModel {
     this.shaderModuleService.registerModule('heatmapColor', {
       vs: heatmapColorVert,
       fs: heatmapColorFrag,
@@ -277,7 +277,7 @@ export default class HeatMapModel extends BaseModel {
     this.layer.hooks.afterRender.call();
   }
 
-  private drawColorMode(options: Partial<IRenderOptions>) {
+  private drawHeatMap(options: Partial<IRenderOptions>) {
     const { opacity = 1.0 } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const commonOptions = {
@@ -316,6 +316,7 @@ export default class HeatMapModel extends BaseModel {
         this.cameraService.getViewProjectionMatrixUncentered(),
       u_InverseViewProjectionMatrix: [...invert],
     };
+
     this.heat3DModelUniformBuffer[0].subData({
       offset: 0,
       data: [
@@ -324,7 +325,6 @@ export default class HeatMapModel extends BaseModel {
         opacity,
       ],
     });
-
     const textures = [this.heatmapTexture, this.colorTexture];
     this.colorModel?.draw({
       uniforms: commonOptions,
@@ -361,6 +361,7 @@ export default class HeatMapModel extends BaseModel {
       this.shaderModuleService.getModule('heatmap3dColor');
     const { createAttribute, createElements, createBuffer, createModel } =
       this.rendererService;
+
     return createModel({
       vs,
       fs,
@@ -409,9 +410,7 @@ export default class HeatMapModel extends BaseModel {
       }),
     });
   }
-  private updateStyle() {
-    this.updateColorTexture();
-  }
+
 
   private updateColorTexture() {
     const { createTexture2D } = this.rendererService;
