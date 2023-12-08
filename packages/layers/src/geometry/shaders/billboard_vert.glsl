@@ -3,9 +3,9 @@ layout(location = 11) in vec3 a_Extrude;
 layout(location = 14) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
- mat2 u_RotateMatrix;
  vec2 u_size;
  float u_raisingHeight;
+ float u_rotation;
  float u_opacity;
 };
 
@@ -13,6 +13,7 @@ out vec2 v_uv;
 
 #pragma include "projection"
 #pragma include "picking"
+#pragma include "rotation_2d"
 void main() {
    vec3 extrude = a_Extrude;
    v_uv = a_Uv;
@@ -26,7 +27,7 @@ void main() {
    vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
 
    // 计算绕 z 轴旋转后的偏移
-   vec2 offsetXY = project_pixel(u_RotateMatrix * vec2(extrude.x * u_size.x, 0.0));
+   vec2 offsetXY = project_pixel(rotate_matrix(vec2(extrude.x * u_size.x, 0.0),u_rotation));
    // 绕 z 轴旋转
    float x = project_pos.x + offsetXY.x;
    float y = project_pos.y + offsetXY.y;
