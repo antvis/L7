@@ -252,10 +252,10 @@ export default class DeviceModel implements IModel {
       ? currentFramebuffer['colorRenderTarget']
       : mainColorRT;
     const colorResolveTo = currentFramebuffer ? null : onscreenTexture;
-    const depthStencilAttachment = currentFramebuffer
-      ? currentFramebuffer['depthRenderTarget']
-      : depthEnabled
-      ? mainDepthRT
+    const depthStencilAttachment = depthEnabled
+      ? currentFramebuffer
+        ? currentFramebuffer['depthRenderTarget']
+        : mainDepthRT
       : null;
 
     const { color = [0, 0, 0, 0], depth = 1, stencil = 0 } =

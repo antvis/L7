@@ -45,7 +45,7 @@ export default () => {
             });
           scene.addLayer(layer);
 
-          // scene.startAnimate();
+          scene.startAnimate();
           setTimeout(() => {
             layer.style({
               rampColors: {

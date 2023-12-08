@@ -55,15 +55,21 @@ export default class PickingService implements IPickingService {
     height *= DOM.DPR;
     this.pickBufferScale =
       this.configService.getSceneConfig(id).pickBufferScale || 1;
+
+    width = Math.round(width / this.pickBufferScale);
+    height = Math.round(height / this.pickBufferScale);
     // 创建 picking framebuffer，后续实时 resize
     this.pickingFBO = createFramebuffer({
       color: createTexture2D({
-        width: Math.round(width / this.pickBufferScale),
-        height: Math.round(height / this.pickBufferScale),
+        width,
+        height,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
         usage: TextureUsage.RENDER_TARGET,
       }),
+      depth: true,
+      width,
+      height,
     });
 
     // 监听 hover 事件
