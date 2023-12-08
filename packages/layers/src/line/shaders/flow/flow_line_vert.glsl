@@ -4,7 +4,7 @@ layout(location = 9) in vec2 a_Size;
 layout(location = 12) in vec4 a_Instance;
 layout(location = 13) in vec3 a_Normal;
 
-layout(std140) uniform commonUniorm{
+layout(std140) uniform commonUniorm {
   float u_gap_width: 1.0;
   float u_stroke_width: 1.0;
   float u_stroke_opacity: 1.0;
