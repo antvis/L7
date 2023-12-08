@@ -12,7 +12,7 @@ export default () => {
     };
     const scene = new Scene({
       id: 'map',
-      renderer:'device',
+    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [ 120.15, 30.3 ],
         zoom: 5,
@@ -21,7 +21,7 @@ export default () => {
     });
     const scene2 = new Scene({
       id: 'map2',
-      renderer:'device',
+    renderer: process.env.renderer,
       map: new BaiduMap({
         center: [ 120.15, 30.3 ],
         zoom: 9,

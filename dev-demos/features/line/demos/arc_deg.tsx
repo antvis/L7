@@ -7,12 +7,11 @@ import {
 // @ts-ignore
 import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
-
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer:'device',
+      renderer: process.env.renderer,
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,

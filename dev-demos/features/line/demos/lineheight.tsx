@@ -6,7 +6,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer:'device',
+    renderer: process.env.renderer,
       map: new Mapbox({
         pitch: 40,
         style: 'light',
