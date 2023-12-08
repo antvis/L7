@@ -1,12 +1,14 @@
-uniform sampler2D u_texture;
-uniform sampler2D u_colorTexture;
-
-
 layout(std140) uniform commonUniforms {
   mat4 u_ViewProjectionMatrixUncentered;
   mat4 u_InverseViewProjectionMatrix;
   float u_opacity;
+  float u_common_uniforms_padding1;
+  float u_common_uniforms_padding2;
+  float u_common_uniforms_padding3;
 };
+
+uniform sampler2D u_texture;
+uniform sampler2D u_colorTexture;
 
 in vec2 v_texCoord;
 in float v_intensity;

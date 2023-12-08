@@ -206,7 +206,7 @@ export default class HeatMapModel extends BaseModel {
       ],
       attributes: {
         a_Position: createAttribute({
-          shaderLocation: 0,
+          shaderLocation: ShaderLocation.POSITION,
           buffer: createBuffer({
             data: [-1, 1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0],
             type: gl.FLOAT,
@@ -214,7 +214,7 @@ export default class HeatMapModel extends BaseModel {
           size: 3,
         }),
         a_Uv: createAttribute({
-          shaderLocation: 9,
+          shaderLocation: ShaderLocation.UV,
           buffer: createBuffer({
             data: [0, 1, 1, 1, 0, 0, 1, 0],
             type: gl.FLOAT,
@@ -325,8 +325,10 @@ export default class HeatMapModel extends BaseModel {
       ],
     });
 
+    const textures = [this.heatmapTexture, this.colorTexture];
     this.colorModel?.draw({
       uniforms: commonOptions,
+      textures,
       blend: {
         enable: true,
         func: {
@@ -351,7 +353,7 @@ export default class HeatMapModel extends BaseModel {
     this.heat3DModelUniformBuffer = [
       this.rendererService.createBuffer({
         // opacity
-        data: new Float32Array(36).fill(0), // 长度需要大于等于 4
+        data: new Float32Array(16 * 2 + 4).fill(0), // 长度需要大于等于 4
         isUBO: true,
       }),
     ];
@@ -381,6 +383,10 @@ export default class HeatMapModel extends BaseModel {
         }),
       },
       primitive: gl.TRIANGLES,
+      uniformBuffers: [
+        ...this.heat3DModelUniformBuffer,
+        ...this.rendererService.uniformBuffers,
+      ],
       uniforms: {
         ...uniforms,
       },

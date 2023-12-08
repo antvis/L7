@@ -76,7 +76,7 @@ export default class DeviceRendererService implements IRendererService {
         })
       : new WebGLDeviceContribution({
           // Use WebGL2 first and downgrade to WebGL1 if WebGL2 is not supported.
-          targets: ['webgl1'],
+          targets: ['webgl2', 'webgl1'],
           onContextLost(e) {
             console.warn('context lost', e);
           },
