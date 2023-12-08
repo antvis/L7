@@ -158,10 +158,10 @@ export default () => {
 
     const layer = new RasterLayer({
       zIndex: 2,
-      maskLayers:[polygonLayer,polygonLayer2,polygonLayer3],
+      maskLayers:[polygonLayer],
       enableMask:true,
-      maskInside:true,
-      maskOperation:'or',
+      // maskInside:true,
+      // maskOperation:'or',
     }).source(
       'https://tiles{1-3}.geovisearth.com/base/v1/img/{z}/{x}/{y}?format=webp&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788',
       {
@@ -179,8 +179,8 @@ export default () => {
       // scene.addLayer(fillLayer);
    
       scene.addLayer(polygonLayer);
-      scene.addLayer(polygonLayer2);
-      scene.addLayer(polygonLayer3);
+      // scene.addLayer(polygonLayer2);
+      // scene.addLayer(polygonLayer3);
       scene.addLayer(layer);
 
      

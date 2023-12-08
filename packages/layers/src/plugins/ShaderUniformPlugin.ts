@@ -87,6 +87,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       }
       // For WebGL1. regl
       layer.models.forEach((model) => {
+        
         model.addUniforms({
           ...uniforms,
           // TODO: move these 2 uniforms to PixelPickingPlugin

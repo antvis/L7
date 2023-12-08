@@ -5,10 +5,10 @@ in float v_opacity;
 out vec4 outputColor;
 
 uniform sampler2D u_texture;
-layout(std140) uniform uBlock {
+layout(std140) uniform commonUniform {
   vec2 u_textSize;
-  float u_heightfixed;
-  float u_raisingHeight;
+  float u_heightfixed: 0.0;
+  float u_raisingHeight: 0.0;
   float u_size_unit;
 };
 
