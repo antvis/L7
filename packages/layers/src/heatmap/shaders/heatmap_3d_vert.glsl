@@ -1,13 +1,20 @@
-precision highp float;
-attribute vec3 a_Position;
-attribute vec2 a_Uv;
-uniform sampler2D u_texture;
-varying vec2 v_texCoord;
-uniform mat4 u_ModelMatrix;
-uniform mat4 u_InverseViewProjectionMatrix;
-uniform mat4 u_ViewProjectionMatrixUncentered;
-varying float v_intensity;
+layout(location = 0) in vec3 a_Position;
+layout(location = 14) in vec2 a_Uv;
 
+layout(std140) uniform commonUniforms {
+  mat4 u_ViewProjectionMatrixUncentered;
+  mat4 u_InverseViewProjectionMatrix;
+  float u_opacity;
+  float u_common_uniforms_padding1;
+  float u_common_uniforms_padding2;
+  float u_common_uniforms_padding3;
+};
+
+uniform sampler2D u_texture;
+uniform sampler2D u_colorTexture;
+
+out vec2 v_texCoord;
+out float v_intensity;
 
 vec2 toBezier(float t, vec2 P0, vec2 P1, vec2 P2, vec2 P3) {
     float t2 = t * t;
@@ -18,7 +25,10 @@ vec2 toBezier(float t, vec2 P0, vec2 P1, vec2 P2, vec2 P3) {
 vec2 toBezier(float t, vec4 p){
     return toBezier(t, vec2(0.0, 0.0), vec2(p.x, p.y), vec2(p.z, p.w), vec2(1.0, 1.0));
 }
+
 #pragma include "projection"
+#pragma include "project"
+
 void main() {
   v_texCoord = a_Uv;
 
@@ -39,7 +49,7 @@ void main() {
   vec4 b= vec4(0.5000, 0.0, 1.0, 0.5000);
   float fh;
 
-  v_intensity = texture2D(u_texture, v_texCoord).r;
+  v_intensity = texture(SAMPLER_2D(u_texture), v_texCoord).r;
   fh = toBezier(v_intensity, b).y;
   gl_Position = u_ViewProjectionMatrixUncentered * vec4(position.xy, fh * project_pixel(50.), 1.0);
  

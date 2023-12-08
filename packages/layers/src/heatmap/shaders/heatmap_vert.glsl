@@ -1,8 +1,17 @@
-precision highp float;
-attribute vec3 a_Position;
-attribute vec2 a_Uv;
-varying vec2 v_texCoord;
 
+layout(location = 0) in vec3 a_Position;
+layout(location = 14) in vec2 a_Uv;
+
+layout(std140) uniform commonUniforms {
+  float u_opacity;
+  float u_common_uniforms_padding1;
+  float u_common_uniforms_padding2;
+  float u_common_uniforms_padding3;
+};
+
+#pragma include "scene_uniforms"
+
+out vec2 v_texCoord;
 void main() {
   v_texCoord = a_Uv;
 

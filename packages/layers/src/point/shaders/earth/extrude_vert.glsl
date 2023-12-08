@@ -5,23 +5,30 @@ precision highp float;
 #define diffuseRatio 0.3
 #define specularRatio 0.2
 
-attribute vec3 a_Position;
-attribute vec3 a_Pos;
-attribute vec4 a_Color;
-attribute vec3 a_Size;
-attribute vec3 a_Normal;
 
-uniform float u_heightfixed: 0.0; // 默认不固定
-uniform float u_globel;
-uniform float u_r;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in vec3 a_Size;
+layout(location = 11) in vec3 a_Pos;
+layout(location = 13) in vec3 a_Normal;
 
-varying vec4 v_color;
 
-uniform float u_opacity : 1;
-uniform float u_lightEnable: 1;
-varying float v_lightWeight;
-varying float v_barLinearZ;
+layout(std140) uniform commonUniform {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_linearColor: 0;
+  float u_heightfixed: 0.0; // 默认不固定
+  float u_globel;
+  float u_r;
+  float u_pickLight: 0.0;
+  float u_opacitylinear: 0.0;
+  float u_opacitylinear_dir: 1.0;
+  float u_lightEnable: 1.0;
+};
+
+out vec4 v_color;
+out float v_lightWeight;
+out float v_barLinearZ;
 // 用于将在顶点着色器中计算好的样式值传递给片元
 
 
@@ -47,10 +54,6 @@ float getXRadian(float y, float r) {
 
 void main() {
 
-  
-  float textureOffset = 0.0; // 在 cell 中取值的偏移量
-
-  textureOffset = opacityAndOffset.g;
   // cal style mapping - 数据纹理映射部分的计算
   vec3 size = a_Size * a_Position;
 
@@ -88,7 +91,7 @@ void main() {
   v_lightWeight = lightWeight;
   // 设置圆柱的底色
   if(u_linearColor == 1.0) { // 使用渐变颜色
-    v_color = mix(u_sourceColor, u_targetColor, barLinearZ);
+    v_color = mix(u_sourceColor, u_targetColor, v_barLinearZ);
     v_color.rgb *= lightWeight;
   } else { // 使用 color 方法传入的颜色
      v_color = a_Color;

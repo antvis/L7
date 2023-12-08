@@ -7,11 +7,11 @@ import {
 } from '@antv/l7-core';
 import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import pointExtrudeFrag from '../shaders/extrude/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
@@ -23,10 +23,13 @@ export default class ExtrudeModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
-    
+    };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       animateOption = {
         enable: false,
@@ -92,9 +95,9 @@ export default class ExtrudeModel extends BaseModel {
 
       // 光照计算开关
       u_lightEnable: Number(lightEnable),
-    }
+    };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-    
+
     return commonBufferInfo;
   }
   public async initModels(): Promise<IModel[]> {
@@ -115,7 +118,7 @@ export default class ExtrudeModel extends BaseModel {
       vertexShader: pointExtrudeVert,
       fragmentShader: pointExtrudeFrag,
       triangulation: PointExtrudeTriangulation,
-      inject:this.getInject(),
+      inject: this.getInject(),
       cull: {
         enable: true,
         face: getCullFace(this.mapService.version),

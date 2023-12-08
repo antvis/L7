@@ -14,7 +14,7 @@ export default () => {
         
         const scene = new Scene({
             id: 'point_fillImage',
-            // renderer: 'device',
+            renderer: 'device',
             map: new GaodeMap({
                 style: 'light',
                 center: [120, 30],

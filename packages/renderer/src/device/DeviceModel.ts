@@ -4,6 +4,7 @@ import {
   BlendMode,
   Buffer,
   ChannelWriteMask,
+  colorNewFromRGBA,
   CompareFunction,
   CullMode,
   Device,
@@ -23,6 +24,7 @@ import {
   IUniform,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
+import DeviceRendererService from '.';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -34,6 +36,8 @@ import {
 import DeviceAttribute from './DeviceAttribute';
 import DeviceBuffer from './DeviceBuffer';
 import DeviceElements from './DeviceElements';
+import DeviceFramebuffer from './DeviceFramebuffer';
+import DeviceTexture2D from './DeviceTexture2D';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 export default class DeviceModel implements IModel {
@@ -52,6 +56,7 @@ export default class DeviceModel implements IModel {
   constructor(
     private device: Device,
     private options: IModelInitializationOptions,
+    private service: DeviceRendererService,
   ) {
     const { vs, fs, attributes, uniforms, count, elements } = options;
     this.options = options;
@@ -141,7 +146,7 @@ export default class DeviceModel implements IModel {
       program: this.program,
       topology: primitiveMap[primitive],
       colorAttachmentFormats: [Format.U8_RGBA_RT],
-      depthStencilAttachmentFormat: Format.D24_S8,
+      depthStencilAttachmentFormat: depthEnabled ? Format.D24_S8 : null,
       megaStateDescriptor: {
         attachmentsState: [
           pick
@@ -215,11 +220,12 @@ export default class DeviceModel implements IModel {
   }
 
   draw(options: IModelDrawOptions, pick?: boolean) {
-    const mergedOptions = {
+    const mergedOptions: IModelInitializationOptions & IModelDrawOptions = {
       ...this.options,
       ...options,
     };
     const {
+      depth: { enable: depthEnabled } = {},
       count = 0,
       instances,
       elements,
@@ -233,11 +239,59 @@ export default class DeviceModel implements IModel {
       ...this.extractUniforms(uniforms),
     };
 
-    // @ts-ignore
-    const { width, height, renderPass } = this.device;
+    const {
+      currentFramebuffer,
+      swapChain,
+      mainColorRT,
+      mainDepthRT,
+      width,
+      height,
+    } = this.service;
+    const onscreenTexture = swapChain.getOnscreenTexture();
+    const colorAttachment = currentFramebuffer
+      ? currentFramebuffer['colorRenderTarget']
+      : mainColorRT;
+    const colorResolveTo = currentFramebuffer ? null : onscreenTexture;
+    const depthStencilAttachment = depthEnabled
+      ? currentFramebuffer
+        ? currentFramebuffer['depthRenderTarget']
+        : mainDepthRT
+      : null;
+
+    const { color = [0, 0, 0, 0], depth = 1, stencil = 0 } =
+      // @ts-ignore
+      currentFramebuffer?.clearOptions || {};
+
+    const colorClearColor = colorAttachment
+      ? colorNewFromRGBA(
+          color[0] * 255,
+          color[1] * 255,
+          color[2] * 255,
+          color[3],
+        )
+      : TransparentBlack;
+    const depthClearValue = depthStencilAttachment ? depth : undefined;
+    const stencilClearValue = depthStencilAttachment ? stencil : undefined;
+
+    const renderPass = this.device.createRenderPass({
+      colorAttachment: [colorAttachment],
+      colorResolveTo: [colorResolveTo],
+      colorClearColor: [colorClearColor],
+      depthStencilAttachment,
+      depthClearValue,
+      stencilClearValue,
+    });
+    this.service.renderPasses.push(renderPass);
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
+
+    renderPass.setViewport(
+      0,
+      0,
+      currentFramebuffer?.['width'] || width,
+      currentFramebuffer?.['height'] || height,
+    );
     renderPass.setPipeline(this.pipeline);
     renderPass.setVertexInput(
       this.inputLayout,
@@ -251,7 +305,6 @@ export default class DeviceModel implements IModel {
           }
         : null,
     );
-    renderPass.setViewport(0, 0, width, height);
 
     if (uniformBuffers) {
       this.bindings = this.device.createBindings({
@@ -274,6 +327,16 @@ export default class DeviceModel implements IModel {
     if (this.bindings) {
       renderPass.setBindings(this.bindings);
       // Compatible to WebGL1.
+      Object.keys(this.uniforms).forEach((uniformName) => {
+        const uniform = this.uniforms[uniformName];
+        if (uniform instanceof DeviceTexture2D) {
+          // @ts-ignore
+          this.uniforms[uniformName] = uniform.get();
+        } else if (uniform instanceof DeviceFramebuffer) {
+          // @ts-ignore
+          this.uniforms[uniformName] = uniform.get()['texture'];
+        }
+      });
       this.program.setUniformsLegacy(this.uniforms);
     }
 

@@ -8,10 +8,11 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer: 'device',
       map: new GaodeMap({
         pitch: 80,
         style: 'dark',
-        center: [120, 30],
+        center: [0, 0],
         zoom: 5,
       }),
     });
@@ -54,8 +55,9 @@ export default () => {
           color: '#0ff',
           mix: 0.5,
         });
+        scene.startAnimate();
         scene.addLayer(billboard);
-      };
+               };
       img.src =
         'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*zMw0T6gEIZYAAAAAAAAAAAAAARQnAQ';
     });

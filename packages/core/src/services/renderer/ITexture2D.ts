@@ -1,11 +1,18 @@
 import { gl } from './gl';
 
+export enum TextureUsage {
+  SAMPLED,
+  RENDER_TARGET,
+}
+
 export interface ITexture2DInitializationOptions {
   /**
    * 纹理尺寸
    */
   width: number;
   height: number;
+
+  usage?: TextureUsage;
 
   /**
    * 纹理格式

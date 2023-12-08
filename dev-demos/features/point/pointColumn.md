@@ -4,5 +4,5 @@ group:
   order: 4
 ---
 
-### point - column
+### point - column-device
 <code src="./demos/column.tsx"></code>

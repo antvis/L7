@@ -1,32 +1,36 @@
-varying vec4 v_color;
-uniform float u_opacity: 1.0;
-
-uniform float u_pickLight: 0.0;
+precision highp float;
+in vec4 v_color;
 
 #pragma include "picking"
 
-
-uniform float u_linearColor: 0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
-uniform float u_opacitylinear: 0.0;
-uniform float u_opacitylinear_dir: 1.0;
-varying float v_lightWeight;
-varying float v_barLinearZ;
+layout(std140) uniform commonUniform {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_linearColor: 0;
+  float u_heightfixed: 0.0; // 默认不固定
+  float u_globel;
+  float u_r;
+  float u_pickLight: 0.0;
+  float u_opacitylinear: 0.0;
+  float u_opacitylinear_dir: 1.0;
+  float u_lightEnable: 1.0;
+};
+in float v_lightWeight;
+in float v_barLinearZ;
+out vec4 outputColor;
 void main() {
 
-   gl_FragColor = v_color;
+   outputColor = v_color;
 
   // 开启透明度渐变
   if(u_opacitylinear > 0.0) {
-    gl_FragColor.a *= u_opacitylinear_dir > 0.0 ? (1.0 - v_barLinearZ): v_barLinearZ;
+    outputColor.a *= u_opacitylinear_dir > 0.0 ? (1.0 - v_barLinearZ): v_barLinearZ;
   }
 
   // picking
   if(u_pickLight > 0.0) {
-    gl_FragColor = filterColorAlpha(gl_FragColor, v_lightWeight);
+    outputColor = filterColorAlpha(outputColor, v_lightWeight);
   } else {
-    gl_FragColor = filterColor(gl_FragColor);
+    outputColor = filterColor(outputColor);
   }
 }

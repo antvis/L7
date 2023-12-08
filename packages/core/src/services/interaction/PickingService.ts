@@ -14,6 +14,7 @@ import { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
 import { IFramebuffer } from '../renderer/IFramebuffer';
 import { IRendererService } from '../renderer/IRendererService';
+import { TextureUsage } from '../renderer/ITexture2D';
 import { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
@@ -54,14 +55,21 @@ export default class PickingService implements IPickingService {
     height *= DOM.DPR;
     this.pickBufferScale =
       this.configService.getSceneConfig(id).pickBufferScale || 1;
+
+    width = Math.round(width / this.pickBufferScale);
+    height = Math.round(height / this.pickBufferScale);
     // 创建 picking framebuffer，后续实时 resize
     this.pickingFBO = createFramebuffer({
       color: createTexture2D({
-        width: Math.round(width / this.pickBufferScale),
-        height: Math.round(height / this.pickBufferScale),
+        width,
+        height,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
+        usage: TextureUsage.RENDER_TARGET,
       }),
+      depth: true,
+      width,
+      height,
     });
 
     // 监听 hover 事件
@@ -356,7 +364,6 @@ export default class PickingService implements IPickingService {
     const { clear } = this.rendererService;
     this.resizePickingFBO();
     this.rendererService.useFramebuffer(this.pickingFBO, () => {
-      this.rendererService.beginFrame();
       const layers = this.layerService.getRenderList();
       layers
         .filter((layer) => {
@@ -375,7 +382,6 @@ export default class PickingService implements IPickingService {
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });
-      this.rendererService.endFrame();
     });
   }
   public triggerHoverOnLayer(

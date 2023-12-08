@@ -13,17 +13,31 @@ import heatmapGridVert from '../shaders/hexagon_vert.glsl';
 
 export default class HexagonModel extends BaseModel {
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+  }
+
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const { opacity, coverage, angle } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
-    return {
-      u_opacity: opacity || 1.0,
-      u_coverage: coverage || 0.9,
-      u_angle: angle || 0,
+    const commonOptions = {
       u_radius: [
         this.layer.getSource().data.xOffset,
         this.layer.getSource().data.yOffset,
       ],
+      u_opacity: opacity || 1.0,
+      u_coverage: coverage || 0.9,
+      u_angle: angle || 0,
     };
+  
+   const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+   return commonBufferInfo;
+      
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -31,6 +45,7 @@ export default class HexagonModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapHexagon',
       vertexShader: heatmapGridVert,
@@ -47,6 +62,7 @@ export default class HexagonModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
+        shaderLocation:10,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
