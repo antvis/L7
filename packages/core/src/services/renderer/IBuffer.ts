@@ -24,6 +24,11 @@ export interface IBufferInitializationOptions {
    * UniformBuffer
    */
   isUBO?: boolean;
+
+  /**
+   * Used later in Spector.js.
+   */
+  label?: string;
 }
 
 export interface IBuffer {

@@ -1,4 +1,3 @@
-
 import {
   BlendType,
   IAnimateOption,
@@ -35,12 +34,12 @@ import {
 import { rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
-import { DefaultUniformStyleType, DefaultUniformStyleValue } from './constant'
-import { MultipleOfFourNumber } from './utils'
 import {
   getCommonStyleAttributeOptions,
   ShaderLocation,
 } from './CommonStyleAttribute';
+import { DefaultUniformStyleType, DefaultUniformStyleValue } from './constant';
+import { MultipleOfFourNumber } from './utils';
 export type styleSingle =
   | number
   | string
@@ -76,7 +75,8 @@ const shaderLocationMap: Record<string, ShaderLocation> = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class BaseModel<ChildLayerStyleOptions = {}>
-  implements ILayerModel {
+  implements ILayerModel
+{
   public triangulation: Triangulation;
   public uniformBuffers: IBuffer[] = [];
   public textures: ITexture2D[] = [];
@@ -113,7 +113,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected layerService: ILayerService;
   protected pickingService: IPickingService;
 
-  protected attributeUnifoms: IBuffer; // 支持数据映射的buffer
+  protected attributeUniforms: IBuffer; // 支持数据映射的buffer
   protected commonUnifoms: IBuffer; // 不支持数据映射的buffer
 
   // style texture data mapping
@@ -201,12 +201,16 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     const commoninfo = this.getCommonUniformsInfo();
     const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
     this.updateStyleUnifoms();
-    const result =  {
+    const result = {
       ...attributeInfo.uniformsOption,
-      ...commoninfo.uniformsOption
-    }
+      ...commoninfo.uniformsOption,
+    };
     //如果是regl渲染 需要在uniform中带上u_texture 暂时用this.rendererService.device判断
-    if(!this.rendererService.hasOwnProperty('device')&&this.textures&&this.textures.length===1){
+    if (
+      !this.rendererService.hasOwnProperty('device') &&
+      this.textures &&
+      this.textures.length === 1
+    ) {
       result['u_texture'] = this.textures[0];
     }
     return result;
@@ -271,19 +275,21 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
     const uniforms: string[] = [];
     // 支持数据映射的类型
     this.layer.enableShaderEncodeStyles.forEach((key: string) => {
-      if (encodeStyleAttribute[key]) { // 配置了数据映射的类型
+      if (encodeStyleAttribute[key]) {
+        // 配置了数据映射的类型
         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
       } else {
         uniforms.push(`  ${DefaultUniformStyleType[key]} u_${key};`);
       }
       let location = shaderLocationMap[key];
-      if(!location&&key==='THETA_OFFSET'){
+      if (!location && key === 'THETA_OFFSET') {
         location = 15;
       }
       str += `
           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-          layout(location = ${shaderLocationMap[key]}) in ${DefaultUniformStyleType[key]
-        } a_${key.charAt(0).toUpperCase() + key.slice(1)};
+          layout(location = ${shaderLocationMap[key]}) in ${
+        DefaultUniformStyleType[key]
+      } a_${key.charAt(0).toUpperCase() + key.slice(1)};
         #endif\n
         `;
     });
@@ -300,8 +306,9 @@ ${uniforms.join('\n')}
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       innerStr += `\n
     #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-      ${DefaultUniformStyleType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)
-        };
+      ${DefaultUniformStyleType[key]} ${key}  = a_${
+        key.charAt(0).toUpperCase() + key.slice(1)
+      };
     #else
       ${DefaultUniformStyleType[key]} ${key} = u_${key};
     #endif\n
@@ -326,7 +333,9 @@ ${uniforms.join('\n')}
         const keyValue = this.layer.getLayerConfig()[key];
 
         let value =
-          typeof keyValue === 'undefined' ? DefaultUniformStyleValue[key] : keyValue;
+          typeof keyValue === 'undefined'
+            ? DefaultUniformStyleValue[key]
+            : keyValue;
         if (key === 'stroke') {
           value = rgb2arr(value);
         }
@@ -356,20 +365,25 @@ ${uniforms.join('\n')}
     const attrUniforms = this.getUniformsBufferInfo(this.getStyleAttribute());
     const commonUniforms = this.getCommonUniformsInfo();
     if (attrUniforms.uniformsLength !== 0) {
-      this.attributeUnifoms = this.rendererService.createBuffer({
-        data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)).fill(0), // 长度需要大于等于 4
+      this.attributeUniforms = this.rendererService.createBuffer({
+        data: new Float32Array(
+          MultipleOfFourNumber(attrUniforms.uniformsLength),
+        ).fill(0), // 长度需要大于等于 4
         isUBO: true,
+        label: 'attributeUniforms',
       });
-      this.uniformBuffers.push(this.attributeUnifoms);
+      this.uniformBuffers.push(this.attributeUniforms);
     }
     if (commonUniforms.uniformsLength !== 0) {
       this.commonUnifoms = this.rendererService.createBuffer({
-        data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)).fill(0),
+        data: new Float32Array(
+          MultipleOfFourNumber(commonUniforms.uniformsLength),
+        ).fill(0),
         isUBO: true,
+        label: 'commonUniforms',
       });
       this.uniformBuffers.push(this.commonUnifoms);
     }
-
   }
   // 获取数据映射 uniform 信息
   protected getUniformsBufferInfo(uniformsOption: { [key: string]: any }) {
@@ -379,45 +393,44 @@ ${uniforms.join('\n')}
       if (Array.isArray(value)) {
         uniformsArray.push(...value);
         uniformsLength += value.length;
-      } else if (typeof value === 'number') { // 排除纹理
+      } else if (typeof value === 'number') {
+        // 排除纹理
         uniformsArray.push(value);
         uniformsLength += 1;
       }
-    })
+    });
 
     return {
       uniformsOption,
       uniformsLength,
-      uniformsArray
-    }
-
+      uniformsArray,
+    };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     return {
       uniformsLength: 0,
       uniformsArray: [],
-      uniformsOption: {}
-    }
+      uniformsOption: {},
+    };
   }
 
   // 更新支持数据映射的uniform
   public updateStyleUnifoms() {
-    const { uniformsArray } = this.getUniformsBufferInfo(this.getStyleAttribute());
+    const { uniformsArray } = this.getUniformsBufferInfo(
+      this.getStyleAttribute(),
+    );
     const { uniformsArray: commonUniformsArray } = this.getCommonUniformsInfo();
-    this.attributeUnifoms?.subData({
+    this.attributeUniforms?.subData({
       offset: 0,
-      data: new Uint8Array(
-        new Float32Array(uniformsArray).buffer,
-      ),
+      data: new Uint8Array(new Float32Array(uniformsArray).buffer),
     });
     this.commonUnifoms?.subData({
       offset: 0,
-      data: new Uint8Array(
-        new Float32Array(commonUniformsArray).buffer,
-      ),
-    }
-    );
-
+      data: new Uint8Array(new Float32Array(commonUniformsArray).buffer),
+    });
   }
-
 }

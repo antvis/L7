@@ -9,7 +9,7 @@ layout(location = 9) in float a_Size;
 layout(location = 12) in vec4 a_Instance;
 layout(location = 14) in vec2 a_iconMapUV;
 
-layout(std140) uniform commonUniorm{
+layout(std140) uniform commonUniforms {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
   vec4 u_dash_array: [10.0, 5., 0, 0];
   vec4 u_sourceColor;

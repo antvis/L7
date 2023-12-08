@@ -4,7 +4,7 @@
 #define LineTexture 1.0
 
 uniform sampler2D u_texture;
-layout(std140) uniform commonUniorm{
+layout(std140) uniform commonUniforms {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
   vec4 u_dash_array: [10.0, 5., 0, 0];
   vec4 u_sourceColor;
