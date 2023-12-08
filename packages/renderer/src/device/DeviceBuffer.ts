@@ -14,7 +14,7 @@ export default class DeviceBuffer implements IBuffer {
   private size: number;
 
   constructor(device: Device, options: IBufferInitializationOptions) {
-    const { data, usage, type, isUBO } = options;
+    const { data, usage, type, isUBO, label } = options;
 
     let typed: TypedArray;
     if (isTypedArray(data)) {
@@ -32,6 +32,9 @@ export default class DeviceBuffer implements IBuffer {
       usage: isUBO ? BufferUsage.UNIFORM : BufferUsage.VERTEX,
       hint: hintMap[usage || gl.STATIC_DRAW],
     });
+    if (label) {
+      device.setResourceName(this.buffer, label);
+    }
   }
 
   get() {
