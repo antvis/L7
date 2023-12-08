@@ -8,6 +8,7 @@ export default () => {
     useEffect( () => {
         const scene = new Scene({
             id: 'map',
+            renderer: 'device',
             map: new GaodeMap({
               center: [ 110, 36 ],
               style: 'light',
@@ -29,6 +30,11 @@ export default () => {
                   .shape('circle')
                   .size(5)
                   .color('blue')
+                  .style({
+                    opacity: 1,
+                    strokeWidth: 0,
+                    stroke: '#fff',
+                  });
                 const pointLayer = new PointLayer({})
                   .source(data.list, {
                     parser: {
@@ -56,13 +62,8 @@ export default () => {
                   });
                 scene.addLayer(pointLayer1);
                 scene.addLayer(pointLayer);
-                setTimeout(()=>{
-                  pointLayer.style({
-                    textAnchor:'left'
-                    // textOffset: [ 40, 40 ], // 文本相对锚点的偏移量 [水平, 垂直]
-                  })
-                  scene.render()
-                },2000)
+                scene.startAnimate()
+               
               });
           
           });

@@ -385,6 +385,9 @@ ${uniforms.join('\n')}
   public updateStyleUnifoms() {
     const { uniformsArray } = this.getUniformsBufferInfo(this.getStyleAttribute());
     const { uniformsArray: commonUniformsArray } = this.getCommonUniformsInfo();
+    if (this.attributeUnifoms === undefined && this.commonUnifoms === undefined) {
+      this.initUniformsBuffer();
+    }
     this.attributeUnifoms?.subData({
       offset: 0,
       data: new Uint8Array(
