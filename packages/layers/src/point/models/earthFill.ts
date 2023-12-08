@@ -69,7 +69,6 @@ export default class FillModel extends BaseModel {
       triangulation: GlobelPointFillTriangulation,
       inject:this.getInject(),
       depth: { enable: true },
-
       blend: this.getBlend(),
     });
     return [model];

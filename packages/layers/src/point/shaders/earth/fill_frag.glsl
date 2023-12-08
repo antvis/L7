@@ -17,10 +17,10 @@ out vec4 outputColor;
 void main() {
   int shape = int(floor(v_data.w + 0.5));
 
-  vec4 strokeColor = textrueStroke == vec4(0) ? v_color : textrueStroke;
+  vec4 strokeColor = u_stroke_color == vec4(0) ? v_color : u_stroke_color;
 
   lowp float antialiasblur = v_data.z;
-  float r = v_radius / (v_radius + strokeWidth);
+  float r = v_radius / (v_radius + u_stroke_width);
 
   float outer_df;
   float inner_df;
@@ -58,13 +58,13 @@ void main() {
 
   float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
-  float color_t = strokeWidth < 0.01 ? 0.0 : smoothstep(
+  float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(
     antialiasblur,
     0.0,
     inner_df
   );
 
-  if(strokeWidth < 0.01) {
+  if(u_stroke_width < 0.01) {
     outputColor = vec4(v_color.rgb, v_color.a * u_opacity);
   } else {
     outputColor = mix(vec4(v_color.rgb, v_color.a * u_opacity), u_stroke_color * u_stroke_opacity, color_t);

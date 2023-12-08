@@ -41,8 +41,8 @@ void main() {
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
-
-  gl_Position = u_ViewProjectionMatrix * vec4(a_Position + extrude * newSize * 0.1 + u_offsets, 1.0);
+  vec3 offsetEarth = vec3(u_offsets,0.0);
+  gl_Position = u_ViewProjectionMatrix * vec4(a_Position + extrude * newSize * 0.1 + offsetEarth, 1.0);
 
   setPickingColor(a_PickingColor);
 }
