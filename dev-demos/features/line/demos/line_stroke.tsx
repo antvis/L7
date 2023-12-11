@@ -11,6 +11,7 @@ import {
   // @ts-ignore
   import { Map,GaodeMap } from '@antv/l7-maps';
   import React, { useEffect } from 'react';
+  console.log('process.env.renderer',process.env.renderer)
   
   export default () => {
     useEffect(() => {
@@ -75,12 +76,13 @@ import {
         .shape('line')
         .color('#f00')
         .style({
-            storkeWidth: 0.2,
+            strokeWidth: 0.1,
             stroke: '#00f',
         });
   
    
       scene.on('loaded', () => {
+        scene.startAnimate();
         scene.addLayer(layer);
         
     

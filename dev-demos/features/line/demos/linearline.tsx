@@ -6,7 +6,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-    renderer: process.env.renderer,
+    // renderer: process.env.renderer,
       map: new GaodeMap({
         center: [105, 30.258134],
         zoom: 5,
@@ -54,8 +54,8 @@ export default () => {
       .style({
         rampColors: {
           colors: [
-            '#FF4818',
-            '#206C7C',
+            '#00f',
+            '#0f0',
           ],
           positions: [0., 1.0],
         },

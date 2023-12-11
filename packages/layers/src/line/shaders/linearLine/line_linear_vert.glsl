@@ -7,6 +7,7 @@ layout(location = 11) in float a_Total_Distance;
 layout(location = 10) in vec2 a_DistanceAndIndex;
 
 uniform sampler2D u_texture;
+
 layout(std140) uniform commonUniorm {
  float u_heightfixed: 0.0;
  float u_vertexScale: 1.0;
@@ -39,7 +40,6 @@ void main() {
   }
 
   v_Color = texture(u_texture, vec2(linearRadio, 0.5));
-
   v_Color.a *= opacity; // 全局透明度
 
 

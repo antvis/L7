@@ -29,7 +29,6 @@ export default class LinearLineModel extends BaseModel {
     }
     const commonOptions= {
       // 纹理支持参数
-      // u_texture: this.colorTexture, // 贴图
 
       // 是否固定高度
       u_heightfixed: Number(heightfixed),
@@ -39,6 +38,7 @@ export default class LinearLineModel extends BaseModel {
       u_raisingHeight: Number(raisingHeight),
       u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
     }
+    this.textures = [this.colorTexture]
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
     return commonBufferInfo; 
   }
@@ -75,7 +75,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_DistanceAndIndex',
-        shaderLocation:15,
+        shaderLocation:10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

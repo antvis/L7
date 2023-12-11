@@ -114,6 +114,7 @@ export default class LineModel extends BaseModel {
       }
       // console.log(commonOptions.u_time);
     }
+
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
     return commonBufferInfo;
   }
