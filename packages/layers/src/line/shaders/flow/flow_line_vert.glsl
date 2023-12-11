@@ -1,19 +1,20 @@
-attribute vec4 a_Color;
-attribute vec2 a_Size;
-attribute vec4 a_Instance;
-attribute vec3 a_Normal;
-attribute vec3 a_Position;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in vec2 a_Size;
+layout(location = 12) in vec4 a_Instance;
+layout(location = 13) in vec3 a_Normal;
 
-uniform mat4 u_ModelMatrix;
-
+layout(std140) uniform commonUniorm {
+  float u_gap_width: 1.0;
+  float u_stroke_width: 1.0;
+  float u_stroke_opacity: 1.0;
+};
 
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
-varying vec4 v_color;
-uniform float u_gap_width: 1.0;
-uniform float u_stroke_width: 1.0;
-uniform float u_stroke_opacity: 1.0;
+
+out vec4 v_color;
 
 vec2 project_pixel_offset(vec2 offsets) {
 

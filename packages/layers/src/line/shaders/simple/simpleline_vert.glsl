@@ -1,23 +1,20 @@
-attribute vec4 a_Color;
-attribute vec2 a_Size;
-attribute vec3 a_Position;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in vec2 a_Size;
+layout(location = 14) in float a_Distance;
+layout(location = 13) in float a_Total_Distance;
 
-attribute float a_Total_Distance;
-attribute float a_Distance;
-
-uniform mat4 u_ModelMatrix;
-
-
-uniform float u_vertexScale: 1.0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
-
+layout(std140) uniform commonUniorm {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_vertexScale: 1.0;
+};
 
 #pragma include "projection"
+#pragma include "picking"
 
-varying vec4 v_color;
-varying float v_distanceScale;
+out vec4 v_color;
+out float v_distanceScale;
 
 void main() {
 

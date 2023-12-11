@@ -119,6 +119,16 @@ export default class SpriteModel extends BaseModel {
   };
 
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
     const {
       opacity,
       mapTexture,
@@ -127,19 +137,24 @@ export default class SpriteModel extends BaseModel {
     if (this.mapTexture !== mapTexture) {
       this.mapTexture = mapTexture;
       this.texture?.destroy();
+      this.textures=[];
       this.updateTexture(mapTexture);
     }
-    return {
+    const commonOptions = {
       u_opacity: opacity || 1,
       u_mapFlag: mapTexture ? 1 : 0,
-      u_texture: this.texture,
       u_Scale: spriteScale,
+      u_texture: this.texture,
     };
+    this.textures=[this.texture];
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public clearModels(): void {
     cancelAnimationFrame(this.timer);
     this.texture?.destroy();
+    this.textures=[];
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -149,6 +164,7 @@ export default class SpriteModel extends BaseModel {
       spriteUpdate = 10000,
       spriteAnimate = SPRITE_ANIMATE_DIR.DOWN,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    this.initUniformsBuffer();
     this.mapTexture = mapTexture;
     this.spriteTop = spriteTop;
     this.spriteUpdate = spriteUpdate;
@@ -173,6 +189,7 @@ export default class SpriteModel extends BaseModel {
       vertexShader: spriteVert,
       fragmentShader: spriteFrag,
       triangulation: this.planeGeometryTriangulation,
+      inject:this.getInject(),
       primitive: gl.POINTS,
       depth: { enable: false },
       blend: this.getBlend(),

@@ -5,7 +5,6 @@ import {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
@@ -16,6 +15,7 @@ import { EARTH_RADIUS } from '../../earth/utils';
 // arc3d line layer
 import arc3d_line_frag from '../shaders/line_arc_3d_frag.glsl';
 import arc3d_line_vert from '../shaders/line_arc_3d_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 // arc3d linear layer
 import arc3d_linear_frag from '../shaders/linear/arc3d_linear_frag.glsl';
 import arc3d_linear_vert from '../shaders/linear/arc3d_linear_vert.glsl';
@@ -27,7 +27,7 @@ const lineStyleObj: { [key: string]: number } = {
 export default class Arc3DModel extends BaseModel {
   protected texture: ITexture2D;
   // public enableShaderEncodeStyles = ['opacity'];
-  public getUninforms(): IModelUniform {
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       sourceColor,
       targetColor,
@@ -39,56 +39,75 @@ export default class Arc3DModel extends BaseModel {
       segmentNumber = 30,
       globalArcHeight = 10,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
 
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
 
+
     // 转化渐变色
-    let useLinearColor = 0; // 默认不生效
+    // let useLinearColor = 0; // 默认不生效
     let sourceColorArr = [0, 0, 0, 0];
     let targetColorArr = [0, 0, 0, 0];
     if (sourceColor && targetColor) {
       sourceColorArr = rgb2arr(sourceColor);
       targetColorArr = rgb2arr(targetColor);
-      useLinearColor = 1;
+      // useLinearColor = 1;
     }
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
-    return {
-      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
-      u_globel_radius: EARTH_RADIUS, // 地球半径
-      u_global_height: globalArcHeight,
-      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
-      segmentNumber,
-      u_line_type: lineStyleObj[lineType as string] || 0.0,
-      u_dash_array: dashArray,
-
-      // 纹理支持参数
-      u_texture: this.texture, // 贴图
-      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-      u_icon_step: iconStep,
-      u_textSize: [1024, this.iconService.canvasHeight || 128],
-
-      // 渐变色支持参数
-      u_linearColor: useLinearColor,
-      u_sourceColor: sourceColorArr,
-      u_targetColor: targetColorArr,
-      ...this.getStyleAttribute(),
-    };
+    
+    let commonOptions;
+    if (sourceColor && targetColor) {
+      commonOptions = {
+        u_animate: this.animateOption2Array(animateOption as IAnimateOption),
+        u_dash_array: dashArray,
+        u_sourceColor: sourceColorArr,
+        u_targetColor: targetColorArr,
+        u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+        u_globel_radius: EARTH_RADIUS, // 地球半径
+        u_global_height: globalArcHeight,
+        segmentNumber,
+        u_line_type: lineStyleObj[lineType as string] || 0.0,
+        u_icon_step: iconStep,
+        u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+        u_time: this.layer.getLayerAnimateTime(),
+      };
+    }
+    else{
+      commonOptions = {
+        u_animate: this.animateOption2Array(animateOption as IAnimateOption),
+        u_dash_array: dashArray,
+        u_textSize: [1024, this.iconService.canvasHeight || 128],
+        u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+        u_globel_radius: EARTH_RADIUS, // 地球半径
+        u_global_height: globalArcHeight,
+        segmentNumber,
+        u_line_type: lineStyleObj[lineType as string] || 0.0,
+        u_icon_step: iconStep,
+        u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+        u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
+        u_time: this.layer.getLayerAnimateTime(),
+        // u_texture: this.texture, // 贴图
+      };
+    }
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
+    return commonBufferInfo; 
   }
 
-  public getAnimateUniforms(): IModelUniform {
-    const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-    return {
-      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
-      u_time: this.layer.getLayerAnimateTime(),
-    };
-  }
+  // public getAnimateUniforms(): IModelUniform {
+  //   const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
+  //   return {
+  //     u_animate: this.animateOption2Array(animateOption as IAnimateOption),
+  //     u_time: this.layer.getLayerAnimateTime(),
+  //   };
+  // }
 
   public async initModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     this.updateTexture();
     this.iconService.on('imageUpdate', this.updateTexture);
 
@@ -130,7 +149,7 @@ export default class Arc3DModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       inject: this.getInject(),
-       triangulation: LineArcTriangulation,
+      triangulation: LineArcTriangulation,
       styleOption:{segmentNumber},
     });
     return [model];
@@ -141,6 +160,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -160,6 +180,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
+        shaderLocation:12,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -181,6 +202,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
+        shaderLocation:14,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -214,5 +236,6 @@ export default class Arc3DModel extends BaseModel {
       width: 1024,
       height: this.iconService.canvasHeight || 128,
     });
+    this.textures = [this.texture];
   };
 }

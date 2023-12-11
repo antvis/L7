@@ -12,7 +12,7 @@ export default () => {
         map: new GaodeMap({
           center: [120.188193, 30.292542],
           pitch: 0,
-          zoom: 13,
+          zoom: 16,
         }),
       });
   
@@ -73,89 +73,15 @@ export default () => {
           }
           
         )
-        .size(100)
+        .size(10)
         .color('#f00')
-        .shape('radar')
-        .style({
-          unit:'meter',
-          speed:5
-        })
-        .animate(true)
-        .active(true);
-
-        // const layer2 = new PointLayer()
-        // .source(
-        //   {
-        //     "type": "FeatureCollection",
-        //     "features": [
-        //       {
-        //         "type": "Feature",
-        //         "properties": {},
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": [120.188193, 30.292542]
-        //         }
-        //       },
-        //       {
-        //         "type": "Feature",
-        //         "properties": {},
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": [120.201665, 30.26873]
-        //         }
-        //       },
-        //       {
-        //         "type": "Feature",
-        //         "properties": {},
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": [120.225209, 30.290802]
-        //         }
-        //       },
-        //       {
-        //         "type": "Feature",
-        //         "properties": {},
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": [120.189641, 30.293248]
-        //         }
-        //       },
-        //       {
-        //         "type": "Feature",
-        //         "properties": {},
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": [120.189389, 30.292542]
-        //         }
-        //       },
-        //       {
-        //         "type": "Feature",
-        //         "properties": {},
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": [120.190837, 30.293303]
-        //         }
-        //       }
-        //     ]
-        //   }
-          
-        // )
-        // .size(5)
-        // .color('#0f0')
-        // .shape('circle')
-        // .style({
-        //   unit:'pixel',
-        // })
-        // .active(true);
-      
-      
-     
-
+        .shape('simple')
 
       scene.on('loaded', () => {
         scene.addLayer(layer);
-        // scene.addLayer(layer2);
+        scene.startAnimate();
       });
+      
           
     }, []);
     return (

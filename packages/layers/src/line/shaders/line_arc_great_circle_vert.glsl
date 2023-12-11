@@ -3,56 +3,60 @@
 #define Animate 0.0
 #define LineTexture 1.0
 
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec4 a_Instance;
-attribute float a_Size;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 12) in vec4 a_Instance;
+layout(location = 14) in vec2 a_iconMapUV;
 
-uniform float segmentNumber;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-varying vec4 v_color;
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array: [10.0, 5., 0, 0];
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec2 u_textSize;
+  float segmentNumber;
+  float u_line_type: 0.0;
+  float u_icon_step: 100;
+  float u_line_texture: 0.0;
+  float u_textureBlend;
+  float u_time;
+  float u_linearColor: 0;
+};
 
-varying float v_distance_ratio;
-uniform float u_line_type: 0.0;
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-varying vec4 v_dash_array;
-
-uniform float u_icon_step: 100;
-uniform float u_line_texture: 0.0;
-
-attribute vec2 a_iconMapUV;
-varying vec2 v_iconMapUV;
-varying vec4 v_line_data;
-
+out vec4 v_dash_array;
+out vec4 v_color;
+out vec2 v_iconMapUV;
+out vec4 v_line_data;
+out float v_distance_ratio;
 
 #pragma include "projection"
 #pragma include "project"
 #pragma include "picking"
 
 float maps (float value, float start1, float stop1, float start2, float stop2) {
-    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+  return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
 
 float getSegmentRatio(float index) {
-    return index / (segmentNumber - 1.);
+  return index / (segmentNumber - 1.);
 }
 
 float paraboloid(vec2 source, vec2 target, float ratio) {
-    vec2 x = mix(source, target, ratio);
-    vec2 center = mix(source, target, 0.5);
-    float dSourceCenter = distance(source, center);
-    float dXCenter = distance(x, center);
-    return (dSourceCenter + dXCenter) * (dSourceCenter - dXCenter);
+  vec2 x = mix(source, target, ratio);
+  vec2 center = mix(source, target, 0.5);
+  float dSourceCenter = distance(source, center);
+  float dXCenter = distance(x, center);
+  return (dSourceCenter + dXCenter) * (dSourceCenter - dXCenter);
 }
 
 vec3 getPos(vec2 source, vec2 target, float segmentRatio) {
-     float vertex_height = paraboloid(source, target, segmentRatio);
+  float vertex_height = paraboloid(source, target, segmentRatio);
 
-    return vec3(
-    mix(source, target, segmentRatio),
-    sqrt(max(0.0, vertex_height))
-    );
+  return vec3(
+  mix(source, target, segmentRatio),
+  sqrt(max(0.0, vertex_height))
+  );
 }
 vec2 getExtrusionOffset(vec2 line_clipspace, float offset_direction) {
   // normalized direction of the line
@@ -101,7 +105,8 @@ vec2 interpolate (vec2 source, vec2 target, float angularDist, float t) {
     vec3 x = vec3(source.x, mid.x, target.x);
     vec3 y = vec3(source.y, mid.y, target.y);
     return vec2(bezier3(x ,t), bezier3(y,t));
-  }else {
+  }
+  else {
     if(abs(angularDist - PI) < 0.001) {
       return (1.0 - t) * source + t * target;
     }
@@ -155,7 +160,7 @@ void main() {
   //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
 
-v_line_data.g = a_Position.x; // 该顶点在弧线上的分段排序
+  v_line_data.g = a_Position.x; // 该顶点在弧线上的分段排序
   if(LineTexture == u_line_texture) { // 开启贴图模式  
     // float mapZoomScale = u_CoordinateSystem !== COORDINATE_SYSTEM_P20_2?10000000.0:1.0;
     float d_arcDistrance = length(source - target);
@@ -166,16 +171,14 @@ v_line_data.g = a_Position.x; // 该顶点在弧线上的分段排序
       d_arcDistrance = project_pixel_allmap(d_arcDistrance);
     }
     float d_pixelLen = project_pixel(u_icon_step)/8.0;
-v_line_data.b = floor(d_arcDistrance/d_pixelLen); // 贴图在弧线上重复的数量
+    v_line_data.b = floor(d_arcDistrance/d_pixelLen); // 贴图在弧线上重复的数量
 
     float lineOffsetWidth = length(offset + offset * sign(a_Position.y)); // 线横向偏移的距离
     float linePixelSize = project_pixel(a_Size);  // 定点位置偏移，按地图等级缩放后的距离
-v_line_data.a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
+    v_line_data.a = lineOffsetWidth/linePixelSize;  // 线图层贴图部分的 v 坐标值
 
     v_iconMapUV = a_iconMapUV;
   }
-
-
 
   gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + offset, 0, 1.0));
   setPickingColor(a_PickingColor);

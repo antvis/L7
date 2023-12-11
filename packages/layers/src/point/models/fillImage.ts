@@ -5,7 +5,6 @@ import {
   IElements,
   IEncodeFeature,
   IModel,
-  IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 import { getCullFace } from '@antv/l7-utils';
@@ -22,16 +21,7 @@ export default class FillImageModel extends BaseModel {
   private texture: ITexture2D;
   private isMeter: boolean = false;
   private radian: number = 0; // 旋转的弧度
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-      ...{u_texture:this.texture}
-    }
-  }
+
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       raisingHeight = 0.0,

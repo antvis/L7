@@ -3,7 +3,6 @@ import {
   gl,
   IEncodeFeature,
   IModel,
-  IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 import { generateColorRamp, IColorRamp, lodashUtil } from '@antv/l7-utils';
@@ -12,12 +11,13 @@ import { ILineLayerStyleOptions, LinearDir } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import linear_line_frag from '../shaders/linearLine/line_linear_frag.glsl';
 import linear_line_vert from '../shaders/linearLine/line_linear_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 export default class LinearLineModel extends BaseModel {
   protected colorTexture: ITexture2D;
-  public getUninforms(): IModelUniform {
+
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
-      opacity = 1,
       vertexHeightScale = 20.0,
       raisingHeight = 0,
       heightfixed = false,
@@ -27,11 +27,8 @@ export default class LinearLineModel extends BaseModel {
     if (this.rendererService.getDirty()) {
       this.colorTexture.bind();
     }
-
-    return {
-      u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
+    const commonOptions= {
       // 纹理支持参数
-      u_texture: this.colorTexture, // 贴图
 
       // 是否固定高度
       u_heightfixed: Number(heightfixed),
@@ -39,11 +36,14 @@ export default class LinearLineModel extends BaseModel {
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
-      ...this.getStyleAttribute(),
-    };
+      u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
+    }
+    this.textures = [this.colorTexture]
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
+    return commonBufferInfo; 
   }
-
   public async initModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     this.updateTexture();
     return this.buildModels();
   }
@@ -75,6 +75,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_DistanceAndIndex',
+        shaderLocation:10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -101,6 +102,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Total_Distance',
+        shaderLocation:11,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -123,6 +125,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -143,6 +146,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation:ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -167,6 +171,7 @@ export default class LinearLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Miter',
+        shaderLocation:12,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -203,5 +208,6 @@ export default class LinearLineModel extends BaseModel {
       mag: gl.NEAREST,
       flipY: false,
     });
+    this.textures = [this.colorTexture];
   };
 }

@@ -2,32 +2,31 @@
 #define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
-attribute vec3 a_Position;
-attribute vec4 a_Instance;
-attribute vec4 a_Color;
-attribute float a_Size;
-attribute vec2 a_iconMapUV;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 12) in vec4 a_Instance;
+layout(location = 14) in vec2 a_iconMapUV;
 
-uniform float u_globel;
-uniform float u_globel_radius;
-uniform float u_global_height: 10;
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array: [10.0, 5., 0, 0];
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_globel;
+  float u_globel_radius;
+  float u_global_height: 10;
+  float segmentNumber;
+  float u_line_type: 0.0;
+  float u_icon_step: 100;
+  float u_line_texture: 0.0;
+  float u_time;
+};
 
-uniform float segmentNumber;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
-uniform float u_line_type: 0.0;
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-uniform float u_icon_step: 100;
-uniform float u_line_texture: 0.0;
-varying float v_distance_ratio;
-
-varying vec4 v_dash_array;
-varying vec4 v_color;
-varying vec2 v_iconMapUV;
-varying vec4 v_Color;
+out float v_distance_ratio;
+out vec4 v_dash_array;
+out vec2 v_iconMapUV;
+out vec4 v_Color;
 
 #pragma include "projection"
 #pragma include "project"
@@ -97,7 +96,6 @@ vec3 lglt2xyz(vec2 lnglat) {
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
 
-  v_color = a_Color;
   vec2 source = project_position(vec4(a_Instance.rg, 0, 0)).xy;
   vec2 target = project_position(vec4(a_Instance.ba, 0, 0)).xy;
   float segmentIndex = a_Position.x;

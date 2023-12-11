@@ -6,7 +6,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer: 'device',
+      renderer: process.env.renderer,
       map: new GaodeMap({
         style: 'light',
         center: [120.099658370018, 30.263445807542666],

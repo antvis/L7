@@ -4,7 +4,7 @@ import EarthExtrudeModel from './earthExtrude';
 import EarthFillModel from './earthFill';
 import ExtrudeModel from './extrude';
 import FillModel from './fill';
-import FillImageModel from './fillmage';
+import FillImageModel from './fillImage';
 import IMageModel from './image';
 import NormalModel from './normal';
 import Radar from './radar';
