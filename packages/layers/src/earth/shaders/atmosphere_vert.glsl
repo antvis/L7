@@ -1,18 +1,14 @@
-
-attribute vec3 a_Position;
-attribute vec3 a_Normal;
-attribute vec2 a_Uv;
-attribute vec4 a_Color;
-uniform vec3 u_CameraPosition;
-varying float v_CamreaDistance;
-
-uniform mat4 u_ViewProjectionMatrix;
-uniform mat4 u_ModelMatrix;
-uniform mat4 u_ViewMatrix;
-
-varying vec3 vVertexNormal;
-varying vec4 v_Color;
-varying float v_offset;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) vec4 a_Color;
+layout(location = 13) in vec3 a_Normal;
+layout(location = 14) in vec2 a_Uv;
+layout(std140) uniform commonUniforms {
+ float u_opacity;
+};
+out float v_CamreaDistance;
+out vec3 vVertexNormal;
+out vec4 v_Color;
+out float v_offset;
 
 void main() {
     float EARTH_RADIUS = 100.0;
