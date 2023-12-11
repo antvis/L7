@@ -39,7 +39,7 @@ void main() {
     linearRadio = texV;
   }
 
-  v_Color = texture(u_texture, vec2(linearRadio, 0.5));
+  v_Color = texture(SAMPLER_2D(u_texture), vec2(linearRadio, 0.5));
   v_Color.a *= opacity; // 全局透明度
 
 

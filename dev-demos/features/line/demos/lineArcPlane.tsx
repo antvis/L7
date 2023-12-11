@@ -63,7 +63,7 @@ export default () => {
           })
           .shape('circle')
           .color('#ffed11')
-          // .animate(true)
+          .animate(true)
           .size(40);
         const flyLine = new LineLayer({ blend: 'normal' })
           .source(flydata, {
