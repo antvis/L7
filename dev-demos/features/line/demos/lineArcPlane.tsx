@@ -8,7 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-    renderer: process.env.renderer,
+      renderer: process.env.renderer,
       map: new GaodeMap({
         pitch: 40,
         center: [ 40, 40.16797 ],
@@ -63,7 +63,7 @@ export default () => {
           })
           .shape('circle')
           .color('#ffed11')
-          .animate(true)
+          // .animate(true)
           .size(40);
         const flyLine = new LineLayer({ blend: 'normal' })
           .source(flydata, {
@@ -102,10 +102,10 @@ export default () => {
             dashArray: [ 5, 5 ],
             opacity: 0.5
           });
-        scene.addLayer(worldLine);
+        // scene.addLayer(worldLine);
         scene.addLayer(dotPoint);
-        scene.addLayer(flyLine2);
-        scene.addLayer(flyLine);
+        // scene.addLayer(flyLine2);
+        // scene.addLayer(flyLine);
       });
     });
   }, []);
