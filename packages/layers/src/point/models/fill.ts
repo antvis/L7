@@ -20,7 +20,7 @@ import pointFillFrag from '../shaders/fill_frag.glsl';
 import pointFillVert from '../shaders/fill_vert.glsl';
 
 export default class FillModel extends BaseModel {
-  public getUninforms(): IModelUniform {
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
     const {
       strokeOpacity = 1,
       strokeWidth = 0,
@@ -31,43 +31,21 @@ export default class FillModel extends BaseModel {
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
-    const commonIniform = {
+    const commonOptions = {
       u_blur_height_fixed: [blur, Number(raisingHeight), Number(heightfixed)],
+      u_stroke_width: strokeWidth,
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
-      u_stroke_width: strokeWidth,
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      ...this.getStyleAttribute(),
+      u_time: this.getAnimateUniforms().u_time,
+      u_animate: this.getAnimateUniforms().u_animate
     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
 
-    const attributes = this.getStyleAttribute();
-    this.uniformBuffers[0].subData({
-      offset: 0,
-      data: new Uint8Array(
-        new Float32Array([
-          ...attributes.u_stroke,
-          ...attributes.u_offsets,
-          attributes.u_opacity,
-          attributes.u_rotation,
-        ]).buffer,
-      ),
-    });
+    return commonBufferInfo;
 
-    this.uniformBuffers[1].subData({
-      offset: 0,
-      data: new Uint8Array(
-        new Float32Array([
-          ...commonIniform.u_blur_height_fixed,
-          commonIniform.u_stroke_width,
-          commonIniform.u_additive,
-          commonIniform.u_stroke_opacity,
-          commonIniform.u_size_unit,
-          0,
-        ]).buffer,
-      ),
-    });
-    return commonIniform;
   }
+
   public getAnimateUniforms(): IModelUniform {
     const { animateOption = { enable: false } } =
       this.layer.getLayerConfig() as ILayerConfig;
@@ -100,17 +78,7 @@ export default class FillModel extends BaseModel {
       >;
     const { frag, vert, type } = this.getShaders(animateOption);
     this.layer.triangulation = PointFillTriangulation;
-    const attributeUniformBuffer = this.rendererService.createBuffer({
-      data: new Float32Array(4 + 2 + 1 + 1),
-      isUBO: true,
-    });
-
-    const commonUniforms = this.rendererService.createBuffer({
-      data: new Float32Array(8),
-      isUBO: true,
-    });
-
-    this.uniformBuffers.push(attributeUniformBuffer, commonUniforms);
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: type,
       vertexShader: vert,

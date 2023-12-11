@@ -1,16 +1,22 @@
 
-uniform float u_additive;
+layout(std140) uniform commonUniforms {
+  vec3 u_blur_height_fixed;
+  float u_stroke_width;
+  float u_additive;
+  float u_stroke_opacity;
+  float u_size_unit;
+  float u_time;
+   vec4 u_animate;   
+};
 
 
-varying vec4 v_data;
-varying vec4 v_color;
-varying float v_radius;
-uniform float u_time;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+in vec4 v_data;
+in vec4 v_color;
+in float v_radius;
 
 #pragma include "sdf_2d"
 #pragma include "picking"
-
+out vec4 outputColor;
 void main() {
 
   lowp float antialiasblur = v_data.z;
@@ -35,7 +41,7 @@ void main() {
   float N_RINGS = 3.0;
   float FREQ = 1.0;
 
-  gl_FragColor = v_color;
+  outputColor = v_color;
 
   float d = length(v_data.xy);
   if(d > 0.5) {
@@ -45,11 +51,9 @@ void main() {
   
   // 根据叠加模式选择效果
   if(u_additive > 0.0) {
-    gl_FragColor *= intensity;
-    // 优化水波点 blend additive 模式下有的拾取效果 
-    gl_FragColor = filterColorAlpha(gl_FragColor, gl_FragColor.a);
+    outputColor *= intensity;
   } else {
-    gl_FragColor = vec4(gl_FragColor.xyz, gl_FragColor.a * intensity);
-    gl_FragColor = filterColor(gl_FragColor);
+    outputColor = vec4(outputColor.xyz, outputColor.a * intensity);
   }
+  outputColor = filterColor(outputColor);
 }

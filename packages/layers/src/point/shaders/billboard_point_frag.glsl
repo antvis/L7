@@ -1,12 +1,16 @@
 
-uniform float u_additive;
-uniform float u_stroke_opacity : 1;
+layout(std140) uniform commonUniorm {
+  vec4 u_stroke_color;
+  float u_additive;
+  float u_stroke_opacity;
+  float u_stroke_width;
+};
 
-uniform vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
+in vec4 v_color;
+in float v_blur;
+in float v_innerRadius;
 
-varying vec4 v_color;
-varying float v_blur;
-varying float v_innerRadius;
+out vec4 outputColor;
 
 #pragma include "picking"
 void main() {
@@ -23,24 +27,24 @@ void main() {
     float blurWidth = (1.0 - v_blur)/2.0;
     vec4 stroke = vec4(u_stroke_color.rgb, u_stroke_opacity);
     if(fragmengTocenter > v_innerRadius + blurWidth) {
-      gl_FragColor = stroke;
+      outputColor = stroke;
     } else if(fragmengTocenter > v_innerRadius - blurWidth){
       float mixR = (fragmengTocenter - (v_innerRadius - blurWidth)) / (blurWidth * 2.0);
-      gl_FragColor = mix(v_color, stroke, mixR);
+      outputColor = mix(v_color, stroke, mixR);
     } else {
-      gl_FragColor = v_color;
+      outputColor = v_color;
     }
   } else {
     // 当不存在 stroke 或 stroke <= 0.01
-    gl_FragColor = v_color;
+    outputColor = v_color;
   }
 
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor = filterColor(outputColor);
   
   if(u_additive > 0.0) {
-    gl_FragColor *= circleClipOpacity;
+    outputColor *= circleClipOpacity;
   } else {
-    gl_FragColor.a *= circleClipOpacity;
+    outputColor.a *= circleClipOpacity;
   }
 
 }

@@ -12,6 +12,7 @@ import BaseModel from '../../core/BaseModel';
 import { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/plane_frag.glsl';
 import planeVert from '../shaders/plane_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class PlaneModel extends BaseModel {
   protected texture: ITexture2D;
@@ -108,6 +109,16 @@ export default class PlaneModel extends BaseModel {
   };
 
   public getUninforms(): IModelUniform {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    }
+
+  }
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
     const {
       opacity,
       mapTexture,
@@ -119,18 +130,22 @@ export default class PlaneModel extends BaseModel {
       this.texture?.destroy();
       this.updateTexture(mapTexture);
     }
-    return {
+    const commonOptions =  {
       u_opacity: opacity || 1,
       u_mapFlag: mapTexture ? 1 : 0,
       u_terrainClipHeight: terrainTexture ? terrainClipHeight : -1,
       u_texture: this.texture,
     };
+    this.textures=[this.texture];
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public clearModels(): void {
     // @ts-ignore
     this.terrainImage = null;
     this.texture?.destroy();
+    this.textures=[];
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -145,12 +160,14 @@ export default class PlaneModel extends BaseModel {
     });
 
     this.updateTexture(mapTexture);
+    this.initUniformsBuffer();
 
     const model = await this.layer.buildLayerModel({
       moduleName: 'geometryPlane',
       vertexShader: planeVert,
       fragmentShader: planeFrag,
       triangulation: this.planeGeometryTriangulation,
+      inject:this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: true },
 
@@ -346,6 +363,7 @@ export default class PlaneModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation:ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
