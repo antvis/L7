@@ -15,7 +15,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-    renderer: process.env.renderer,
+      renderer: process.env.renderer,
       map: new Earth({}),
     });
 
