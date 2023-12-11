@@ -16,7 +16,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',      
-      renderer:'device',
+    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,
@@ -119,8 +119,8 @@ export default () => {
           opacity:0.5,
           unit:'meter'
         })
-      scene.addLayer(point);
-      scene.addLayer(point2);
+      // scene.addLayer(point);
+      // scene.addLayer(point2);
 
 
     scene.on('loaded', () => {

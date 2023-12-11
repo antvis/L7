@@ -1,11 +1,14 @@
 import { defineConfig } from 'dumi';
-
 export default defineConfig({
   title: 'L7 开发 Demo',
   favicon: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   outputPath: 'docs-dist',
   base: '/',
+  define:{
+    'process.env.renderer': process.env.renderer?.replace(/\'/g, ''),
+  },
+  
   devServer: {
     port: '6006',
   },

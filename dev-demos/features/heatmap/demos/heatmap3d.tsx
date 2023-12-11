@@ -8,7 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer: 'device',
+      renderer: process.env.renderer,
       map: new Map({
         center: [120, 30],
         pitch: 0,

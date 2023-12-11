@@ -8,7 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer:'device',
+    renderer: process.env.renderer,
       map: new Mapbox({
         center: [116.3956, 39.9392],
         zoom: 10,
