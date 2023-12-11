@@ -8,6 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [122, 28],
         zoom: 5,

@@ -3,9 +3,7 @@ import {
   gl,
   IEncodeFeature,
   IModel,
-  IModelUniform,
 } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineTriangulation } from '../../core/line_trangluation';
@@ -14,25 +12,27 @@ import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
 // linear simple line shader
 
 import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class FlowLineModel extends BaseModel {
-  public getUninforms(): IModelUniform {
+
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       gapWidth = 2,
       strokeWidth = 1,
-      stroke = '#000',
       strokeOpacity = 1,
     } = this.layer.getLayerConfig() as IFlowLineStyleOptions;
 
-    return {
+    const commonOptions = {
       u_gap_width: gapWidth,
       u_stroke_width: strokeWidth,
-      u_stroke: rgb2arr(stroke),
-      u_stroke_opacity: strokeOpacity,
-      ...this.getStyleAttribute(),
+      u_stroke_opacity: strokeOpacity
     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
+    return commonBufferInfo; 
   }
 
   public async initModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     return this.buildModels();
   }
 
@@ -46,7 +46,6 @@ export default class FlowLineModel extends BaseModel {
       styleOption:(this.layer.getLayerConfig()as IFlowLineStyleOptions).symbol,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
-
       pick: false,
     });
     return [modelFill];
@@ -58,6 +57,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size', // 宽度
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -76,6 +76,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
+        shaderLocation:12,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -97,6 +98,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation:ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

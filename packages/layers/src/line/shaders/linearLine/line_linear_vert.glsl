@@ -1,30 +1,26 @@
-
-attribute float a_Miter;
-attribute vec2 a_Size;
-attribute vec3 a_Normal;
-attribute vec3 a_Position;
-
+layout(location = 0) in vec3 a_Position;
+layout(location = 9) in vec2 a_Size;
+layout(location = 12) in float a_Miter;
+layout(location = 13) in vec3 a_Normal;
 // dash line
-attribute float a_Total_Distance;
-attribute vec2 a_DistanceAndIndex;
+layout(location = 11) in float a_Total_Distance;
+layout(location = 10) in vec2 a_DistanceAndIndex;
 
-uniform mat4 u_ModelMatrix;
-
-
-uniform float u_heightfixed: 0.0;
-uniform float u_vertexScale: 1.0;
-uniform float u_raisingHeight: 0.0;
 uniform sampler2D u_texture;
-uniform float u_linearDir: 1.0;
-varying vec4 v_Color;
 
+layout(std140) uniform commonUniorm {
+ float u_heightfixed: 0.0;
+ float u_vertexScale: 1.0;
+ float u_raisingHeight: 0.0;
+ float u_linearDir: 1.0;
+};
+out vec4 v_Color;
 
 #pragma include "projection"
 #pragma include "picking"
 
 
 void main() {
-
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
   
@@ -43,8 +39,7 @@ void main() {
     linearRadio = texV;
   }
 
-  v_Color = texture2D(u_texture, vec2(linearRadio, 0.5));
-
+  v_Color = texture(SAMPLER_2D(u_texture), vec2(linearRadio, 0.5));
   v_Color.a *= opacity; // 全局透明度
 
 

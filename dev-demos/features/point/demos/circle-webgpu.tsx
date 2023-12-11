@@ -9,7 +9,7 @@ export default () => {
     const scene = new Scene({
       id: 'point_circle',
       pickBufferScale: 1.0,
-      renderer: 'device',
+      renderer: process.env.renderer,
       enableWebGPU: true,
       shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
       map: new GaodeMap({

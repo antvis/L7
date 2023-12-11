@@ -20,6 +20,7 @@ export default () => {
     );
     const scene = new Scene({
       id: 'map',
+    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [110.19382669582967, 40.258134],
         pitch: 0,

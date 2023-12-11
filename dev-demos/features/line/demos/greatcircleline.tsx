@@ -1,12 +1,4 @@
-import {
-  LineLayer,
-  Scene,
-  Source,
-  lineAtOffset,
-  lineAtOffsetAsyc,
-  PointLayer,
-  // @ts-ignore
-} from '@antv/l7';
+import { LineLayer, Scene, Source } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -15,6 +7,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer: process.env.renderer,
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,
@@ -68,16 +61,17 @@ export default () => {
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(5)
-      .shape('arc3d')
+      .shape('greatcircle')
       .color('#f00')
       .style({
         //  sourceColor: '#00f',
         //  targetColor: '#0f0',
-         opacity:1,
+        opacity: 1,
       });
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.startAnimate();
     });
   }, []);
   return (

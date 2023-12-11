@@ -1,3 +1,5 @@
+### Line_regl
+```tsx
 // @ts-ignore
 import {
   LineLayer,
@@ -16,7 +18,6 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,
@@ -96,3 +97,4 @@ export default () => {
     />
   );
 };
+```

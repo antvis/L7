@@ -136,6 +136,7 @@ export function getCommonStyleAttributeOptions(
           type: AttributeType.Attribute,
           descriptor: {
             name: 'a_ThetaOffset',
+            shaderLocation: 15,
             buffer: {
               // give the WebGL driver a hint that this buffer may change
               usage: gl.STATIC_DRAW,

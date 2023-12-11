@@ -1,24 +1,27 @@
 #define Animate 0.0
 #define LineTexture 1.0
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 12) in vec4 a_Instance;
+layout(location = 14) in vec2 a_iconMapUV;
 
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec4 a_Instance;
-attribute float a_Size;
-uniform mat4 u_ModelMatrix;
-
-uniform float segmentNumber;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-varying vec4 v_color;
-
-uniform float u_lineDir: 1.0;
-
-uniform float u_icon_step: 100;
-uniform float u_line_texture: 0.0;
-attribute vec2 a_iconMapUV;
-varying vec2 v_iconMapUV;
-varying vec4 v_lineData;
-varying vec2 v_distance_ratio;
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec2 u_textSize;
+  float segmentNumber;
+  float u_lineDir: 1.0;
+  float u_icon_step: 100;
+  float u_line_texture: 0.0;
+  float u_textureBlend;
+  float u_blur : 0.9;
+  float u_line_type: 0.0;
+  float u_time;
+};
+out vec4 v_color;
+out vec2 v_iconMapUV;
+out vec4 v_lineData;
+out vec2 v_distance_ratio;
 
 
 #pragma include "projection"

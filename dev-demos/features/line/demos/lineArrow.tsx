@@ -12,6 +12,7 @@ export default () => {
     };
     const scene = new Scene({
       id: 'map',
+    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [ 120.15, 30.3 ],
         zoom: 5,
@@ -20,6 +21,7 @@ export default () => {
     });
     const scene2 = new Scene({
       id: 'map2',
+    renderer: process.env.renderer,
       map: new BaiduMap({
         center: [ 120.15, 30.3 ],
         zoom: 9,
@@ -142,9 +144,11 @@ export default () => {
       );
     scene.on('loaded', () => {
       scene.addLayer(lineLayer);
+      scene.startAnimate();
     });
     scene2.on('loaded', () => {
       scene2.addLayer(lineLayer2);
+      scene.startAnimate();
     });
   }, []);
   return (

@@ -71,6 +71,7 @@ const shaderLocationMap: Record<string, ShaderLocation> = {
   offsets: ShaderLocation.OFFSETS,
   rotation: ShaderLocation.ROTATION,
   extrusionBase: ShaderLocation.EXTRUSION_BASE,
+  thetaOffset: 15,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -193,8 +194,22 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   public getDefaultStyle(): unknown {
     return {};
   }
+  // public getUninforms(): IModelUniform {
+  //   throw new Error('Method not implemented.');
+  // }
   public getUninforms(): IModelUniform {
-    throw new Error('Method not implemented.');
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    const result =  {
+      ...attributeInfo.uniformsOption,
+      ...commoninfo.uniformsOption
+    }
+    //如果是regl渲染 需要在uniform中带上u_texture 暂时用this.rendererService.device判断
+    if(!this.rendererService.hasOwnProperty('device')&&this.textures&&this.textures.length===1){
+      result['u_texture'] = this.textures[0];
+    }
+    return result;
   }
   public getAnimateUniforms(): IModelUniform {
     return {};
@@ -260,6 +275,10 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
         str += `#define USE_ATTRIBUTE_${key.toUpperCase()} 0.0; \n\n`;
       } else {
         uniforms.push(`  ${DefaultUniformStyleType[key]} u_${key};`);
+      }
+      let location = shaderLocationMap[key];
+      if(!location&&key==='THETA_OFFSET'){
+        location = 15;
       }
       str += `
           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
@@ -348,7 +367,6 @@ ${uniforms.join('\n')}
         data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)).fill(0),
         isUBO: true,
       });
-      console.log(commonUniforms.uniformsLength)
       this.uniformBuffers.push(this.commonUnifoms);
     }
 
