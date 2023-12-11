@@ -1,21 +1,17 @@
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
+layout(location = 12) in vec4 a_Instance;
 
-attribute vec4 a_Color;
-attribute vec3 a_Position;
-attribute vec4 a_Instance;
-attribute float a_Size;
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform commonUniorm {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float segmentNumber;
+  float u_lineDir: 1.0;
+};
 
-uniform float segmentNumber;
-varying vec4 v_color;
-varying float v_segmentIndex;
-
-uniform float u_lineDir: 1.0;
-
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
-
-
+out vec4 v_color;
+out float v_segmentIndex;
 
 #pragma include "projection"
 #pragma include "project"

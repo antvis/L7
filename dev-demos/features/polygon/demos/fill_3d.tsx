@@ -8,7 +8,7 @@ import { GaodeMap,Mapbox } from '@antv/l7-maps';
     useEffect(() => {
         const scene = new Scene({
             id: 'map',
-            renderer: 'device',
+            renderer: process.env.renderer,
             map: new GaodeMap({
               style: 'dark',
               pitch: 50,

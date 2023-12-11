@@ -90,13 +90,17 @@ export default class ReglModel implements IModel {
     const frag = removeDuplicateUniforms(
       preprocessShader_GLSL(vendorInfo, 'frag', fs, null, false),
     );
+
+    const vert = removeDuplicateUniforms(
+      preprocessShader_GLSL(vendorInfo, 'vert', vs, null, false),
+    )
+
+    
     const drawParams: regl.DrawConfig = {
       attributes: reglAttributes,
       frag,
       uniforms: reglUniforms,
-      vert: removeDuplicateUniforms(
-        preprocessShader_GLSL(vendorInfo, 'vert', vs, null, false),
-      ),
+      vert,
       // @ts-ignore
       colorMask: reGl.prop('colorMask'),
       lineWidth: 1,

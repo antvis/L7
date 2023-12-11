@@ -1,33 +1,32 @@
-#define LineTypeSolid 0.0
-#define LineTypeDash 1.0
+
 #define Animate 0.0
 
-attribute float a_Miter;
-attribute vec4 a_Color;
-attribute vec2 a_Size;
-attribute vec3 a_Normal;
-attribute vec3 a_Position;
-
-attribute vec2 a_iconMapUV;
-
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in vec2 a_Size;
+layout(location = 12) in float a_Miter;
+layout(location = 13) in vec3 a_Normal;
+layout(location = 14) in vec2 a_iconMapUV;
 // dash line
-attribute float a_Total_Distance;
-attribute vec2 a_DistanceAndIndex;
-uniform float u_raisingHeight: 0.0;
-uniform float u_heightfixed: 0.0;
+layout(location = 11) in float a_Total_Distance;
+layout(location = 10) in vec2 a_DistanceAndIndex;
 
-uniform mat4 u_ModelMatrix;
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ]; // 控制运动
+  vec4 u_dash_array: [10.0, 5., 0, 0];
+  float u_time;
+  float u_heightfixed: 0.0;
+  float u_vertexScale: 1.0;
+  float u_raisingHeight: 0.0; 
+};
 
-uniform vec4 u_dash_array: [10.0, 5., 0, 0];
-
-uniform float u_vertexScale: 1.0;
 
 #pragma include "projection"
 #pragma include "picking"
 
-varying vec4 v_color;
-varying vec4 v_dash_array;
-varying float v_d_distance_ratio;
+out vec4 v_color;
+out vec4 v_dash_array;
+out float v_d_distance_ratio;
 
 
 void main() {
@@ -42,7 +41,7 @@ void main() {
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
   
- float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况 vertex height
+  float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况 vertex height
   float lineHeight = a_Size.y; // size 第二个参数代表的高度 [linewidth, lineheight]
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x

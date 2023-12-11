@@ -1,10 +1,27 @@
-varying vec4 v_color;
-varying vec4 v_texture_data;
-uniform float u_linearDir: 1.0;
-uniform float u_linearColor: 0;
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-
+in vec4 v_color;
+in vec4 v_texture_data;
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_blur;
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec2 u_textSize;
+  float u_icon_step: 100;
+  float u_heightfixed: 0.0;
+  float u_vertexScale: 1.0;
+  float u_raisingHeight: 0.0;
+  float u_arrow: 0.0;
+  float u_arrowHeight: 3.0;
+  float u_arrowWidth: 2.0;
+  float u_tailWidth: 1.0;
+  float u_strokeWidth: 0.0;
+  float u_textureBlend;
+  float u_line_texture;
+  float u_linearDir: 1.0;
+  float u_linearColor: 0;
+  float u_time;
+};
+out vec4 outputColor;
 #pragma include "picking"
 
 
@@ -15,11 +32,11 @@ void main() {
   }
 
   if(u_linearColor == 1.0) { // 使用渐变颜色
-    gl_FragColor = mix(u_sourceColor, u_targetColor, linearRadio);
-    gl_FragColor.a *= v_color.a;
+    outputColor = mix(u_sourceColor, u_targetColor, linearRadio);
+    outputColor.a *= v_color.a;
   } else { // 使用 color 方法传入的颜色
-     gl_FragColor = v_color;
+     outputColor = v_color;
   }
 
-  gl_FragColor = filterColor(gl_FragColor);
+  outputColor = filterColor(outputColor);
 }

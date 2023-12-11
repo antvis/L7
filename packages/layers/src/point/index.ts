@@ -10,7 +10,7 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
     'offsets',
     'opacity',
     'rotation',
-  ];
+  ];//4+2+1+1
   public enableDataEncodeStyles = ['textOffset', 'textAnchor'];
   public defaultSourceConfig = {
     data: [],
