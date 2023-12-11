@@ -1,16 +1,17 @@
-precision highp float;
-uniform mat4 u_ModelMatrix;
 
-uniform float u_opacity;
-uniform float u_terrainClipHeight;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec3 a_Color;
+layout(location = 14) in vec2 a_Uv;
 
-attribute vec3 a_Position;
-attribute vec2 a_Uv;
-attribute vec3 a_Color;
+layout(std140) uniform commonUniforms {
+  float u_opacity;
+  float u_mapFlag;
+  float u_terrainClipHeight;
+};
 
-varying vec3 v_Color;
-varying vec2 v_uv;
-varying float v_clip;
+out vec3 v_Color;
+out vec2 v_uv;
+out float v_clip;
 
 #pragma include "projection"
 #pragma include "picking"
