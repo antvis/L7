@@ -3,7 +3,6 @@ import {
   gl,
   IEncodeFeature,
   IModel,
-  IModelUniform,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 
@@ -17,15 +16,6 @@ interface IBloomLayerStyleOptions {
 }
 const { isNumber } = lodashUtil;
 export default class EarthBloomSphereModel extends BaseModel {
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption
-    }
-  }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const { opacity = 1 } =
       this.layer.getLayerConfig() as IBloomLayerStyleOptions;

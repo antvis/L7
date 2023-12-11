@@ -6,6 +6,7 @@ in vec3 vVertexNormal;
 in float v_offset;
 in vec4 v_Color;
 
+#pragma include "scene_uniforms"
 out vec4 outputColor;
 void main() {
     

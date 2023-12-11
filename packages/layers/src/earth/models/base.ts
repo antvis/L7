@@ -3,7 +3,6 @@ import {
   gl,
   IEncodeFeature,
   IModel,
-  IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 
@@ -24,16 +23,6 @@ export default class BaseEarthModel extends BaseModel {
   private sunRadius = Math.sqrt(
     this.sunX * this.sunX + this.sunY * this.sunY + this.sunZ * this.sunZ,
   );
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-      ...{u_texture:this.texture}
-    }
-  }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const { animateOption, globalOptions } = this.layer.getLayerConfig();
     if (animateOption?.enable) {
@@ -55,6 +44,7 @@ export default class BaseEarthModel extends BaseModel {
       u_specularRatio: globalOptions?.specularRatio || 0.1, // 高光反射
       // u_texture: this.texture,
     };
+    this.textures = [this.texture];
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
   }

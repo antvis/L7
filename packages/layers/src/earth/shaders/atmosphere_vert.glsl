@@ -5,7 +5,7 @@ layout(location = 14) in vec2 a_Uv;
 layout(std140) uniform commonUniforms {
  float u_opacity;
 };
-out float v_CamreaDistance;
+#pragma include "scene_uniforms"
 out vec3 vVertexNormal;
 out vec4 v_Color;
 out float v_offset;

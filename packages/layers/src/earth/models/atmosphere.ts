@@ -3,7 +3,6 @@ import {
   gl,
   IEncodeFeature,
   IModel,
-  IModelUniform,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -17,19 +16,10 @@ interface IAtmoSphereLayerStyleOptions {
 const { isNumber } = lodashUtil;
 
 export default class EarthAtomSphereModel extends BaseModel {
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption
-    }
-  }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const { opacity = 1 } =
       this.layer.getLayerConfig() as IAtmoSphereLayerStyleOptions;
-      const commonOptions ={
+    const commonOptions ={
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);

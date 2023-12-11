@@ -7,6 +7,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer: process.env.renderer,
       map: new Earth({
         center: [120, 30],
         pitch: 0,
