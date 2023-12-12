@@ -1,4 +1,4 @@
-import { AttributeType, gl, IEncodeFeature, IModel, IModelUniform } from '@antv/l7-core';
+import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ICityBuildLayerStyleOptions } from '../../core/interface';
@@ -9,15 +9,6 @@ import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class CityBuildModel extends BaseModel {
   private cityCenter: [number, number];
   private cityMinSize: number;
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption
-    }
-  }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       opacity = 1,

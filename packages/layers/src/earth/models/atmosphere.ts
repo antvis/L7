@@ -3,28 +3,31 @@ import {
   gl,
   IEncodeFeature,
   IModel,
-  IModelUniform,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 import atmoSphereFrag from '../shaders/atmosphere_frag.glsl';
 import atmoSphereVert from '../shaders/atmosphere_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 interface IAtmoSphereLayerStyleOptions {
   opacity: number;
 }
 const { isNumber } = lodashUtil;
 
 export default class EarthAtomSphereModel extends BaseModel {
-  public getUninforms(): IModelUniform {
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const { opacity = 1 } =
       this.layer.getLayerConfig() as IAtmoSphereLayerStyleOptions;
-    return {
+    const commonOptions ={
       u_opacity: isNumber(opacity) ? opacity : 1.0,
     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     return this.buildModels();
   }
 
@@ -53,6 +56,7 @@ export default class EarthAtomSphereModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -71,6 +75,7 @@ export default class EarthAtomSphereModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation:ShaderLocation.NORMAL,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -94,6 +99,7 @@ export default class EarthAtomSphereModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation:ShaderLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
