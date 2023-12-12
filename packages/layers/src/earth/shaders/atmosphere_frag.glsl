@@ -1,10 +1,13 @@
 
-uniform float u_opacity;
-uniform vec3 u_CameraPosition;
+layout(std140) uniform commonUniforms {
+ float u_opacity;
+};
+in vec3 vVertexNormal;
+in float v_offset;
+in vec4 v_Color;
 
-varying vec3 vVertexNormal;
-varying float v_offset;
-varying vec4 v_Color;
+#pragma include "scene_uniforms"
+out vec4 outputColor;
 void main() {
     
     
@@ -13,5 +16,5 @@ void main() {
     // 去除背面
     if(intensity > 1.0) intensity = 0.0;
 
-    gl_FragColor = vec4(v_Color.rgb, v_Color.a * intensity * u_opacity);
+    outputColor = vec4(v_Color.rgb, v_Color.a * intensity * u_opacity);
 }
