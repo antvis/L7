@@ -21,56 +21,66 @@ export default () => {
         {
           type: 'Feature',
           properties: {
-            offset: 0.3,
-          },
-          geometry: {
-            type: 'MultiLineString',
-            coordinates: [
-              [
-                [99.228515625, 37.43997405227057],
-                [100.72265625, 27.994401411046148],
-              ],
-              [
-                [108.544921875, 37.71859032558816],
-                [112.412109375, 32.84267363195431],
-              ],
-            ],
-          },
-        },
-        {
-          type: 'Feature',
-          properties: {
             offset: 0.8,
           },
           geometry: {
             type: 'MultiLineString',
             coordinates: [
               [
-                [120, 30],
-                [120, 40],
+                [116.371436,39.942372],
+                [121.467025,31.2327],
               ],
             ],
           },
         },
       ],
     };
+
+    const geoData2 = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+            offset: 0.3,
+          },
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+                [112.548194,37.786985],
+                [102.92417,24.9848]
+            ],
+          },
+        },
+      ],
+    };
     const source = new Source(geoData);
+    const source2 = new Source(geoData2);
 
     // scene.on('zoom', e => console.log(e))
-
+    //北京-上海
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(5)
       .shape('greatcircle')
       .color('#f00')
       .style({
-        //  sourceColor: '#00f',
-        //  targetColor: '#0f0',
+        sourceColor: '#00f',
+        targetColor: '#0f0',
         opacity: 1,
       });
-
+    //太原-昆明
+    const layer2 = new LineLayer({ blend: 'normal' })
+      .source(source2)
+      .size(5)
+      .shape('greatcircle')
+      .color('#f00')
+      .style({
+        opacity: 1,
+      });
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      // scene.addLayer(layer2);
       scene.startAnimate();
     });
   }, []);
