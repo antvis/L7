@@ -9,6 +9,8 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       renderer: process.env.renderer,
+      enableWebGPU: true,
+      shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
       map: new GaodeMap({
         pitch: 66.02383,
         style: 'dark',
@@ -45,6 +47,7 @@ export default () => {
             opacity: 1,
           });
         scene.addLayer(pointLayer);
+        scene.startAnimate();
       });
   }, []);
   return (

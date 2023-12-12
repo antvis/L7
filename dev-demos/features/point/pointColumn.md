@@ -4,5 +4,5 @@ group:
   order: 4
 ---
 
-### point - column-device
+### point - column-WebGPU
 <code src="./demos/column.tsx"></code>

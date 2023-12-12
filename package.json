@@ -111,7 +111,7 @@
     "babel-plugin-transform-import-styles": "^0.0.11",
     "clean-webpack-plugin": "^3.0.0",
     "commitizen": "^4.0.3",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^11.0.0",
     "coveralls": "^3.0.7",
     "cross-env": "^7.0.2",
     "css-loader": "^6.7.3",

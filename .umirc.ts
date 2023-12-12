@@ -1,4 +1,5 @@
 import { defineConfig } from 'dumi';
+const CopyPlugin = require("copy-webpack-plugin");
 export default defineConfig({
   title: 'L7 开发 Demo',
   favicon: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
@@ -57,6 +58,9 @@ export default defineConfig({
       title: 'GitHub',
       path: 'https://github.com/antvis/L7',
     },
+  ],
+  copy: [
+    { from:  'node_modules/@antv/g-device-api/dist/pkg/*.wasm', to: 'public' },
   ],
   esbuild: false,
   chainWebpack: (memo, { env, webpack, createCSSRule }) => {
