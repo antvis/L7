@@ -84,17 +84,33 @@ export default class SpriteModel extends BaseModel {
     };
   };
 
-  public updateModel = () => {
-    // @ts-ignore
-    const attributes = this.layer.createAttributes({
-      triangulation: this.planeGeometryUpdateTriangulation,
-    });
-    this.layer.models.map((m) => {
-      m.updateAttributes(attributes);
-    });
+  /**
+   * Recalculate and update position attribute.
+   */
+  private updatePosition = () => {
+    this.planeGeometryUpdateTriangulation();
+    const vertexAttribute =
+      this.styleAttributeService.getLayerStyleAttribute(
+        'position',
+      )?.vertexAttribute;
+    if (vertexAttribute) {
+      // [x1, y1, z1, x2, y2, z2...]
+      const updated: number[] = [];
+      for (let i = 0; i < this.positions.length; i += 5) {
+        updated.push(
+          this.positions[i],
+          this.positions[i + 1],
+          this.positions[i + 2],
+        );
+      }
+      vertexAttribute.updateBuffer({
+        data: updated,
+        offset: 0,
+      });
+    }
     this.layerService.throttleRenderLayers();
 
-    this.timer = requestAnimationFrame(this.updateModel);
+    this.timer = requestAnimationFrame(this.updatePosition);
   };
 
   public planeGeometryTriangulation = () => {
@@ -125,10 +141,13 @@ export default class SpriteModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
-
+    };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       opacity,
       mapTexture,
@@ -137,7 +156,7 @@ export default class SpriteModel extends BaseModel {
     if (this.mapTexture !== mapTexture) {
       this.mapTexture = mapTexture;
       this.texture?.destroy();
-      this.textures=[];
+      this.textures = [];
       this.updateTexture(mapTexture);
     }
     const commonOptions = {
@@ -146,7 +165,7 @@ export default class SpriteModel extends BaseModel {
       u_Scale: spriteScale,
       u_texture: this.texture,
     };
-    this.textures=[this.texture];
+    this.textures = [this.texture];
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
   }
@@ -154,7 +173,7 @@ export default class SpriteModel extends BaseModel {
   public clearModels(): void {
     cancelAnimationFrame(this.timer);
     this.texture?.destroy();
-    this.textures=[];
+    this.textures = [];
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -181,7 +200,7 @@ export default class SpriteModel extends BaseModel {
     this.updateTexture(mapTexture);
 
     setTimeout(() => {
-      this.updateModel();
+      this.updatePosition();
     }, 100);
 
     const model = await this.layer.buildLayerModel({
@@ -189,7 +208,7 @@ export default class SpriteModel extends BaseModel {
       vertexShader: spriteVert,
       fragmentShader: spriteFrag,
       triangulation: this.planeGeometryTriangulation,
-      inject:this.getInject(),
+      inject: this.getInject(),
       primitive: gl.POINTS,
       depth: { enable: false },
       blend: this.getBlend(),
