@@ -1,0 +1,80 @@
+@import 'variables';
+
+.l7-control-swipe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+  transform: translate(-50%, -50%);
+  touch-action: none;
+
+  &_hide {
+    display: none;
+  }
+
+  &:before {
+    position: absolute;
+    top: -5000px;
+    bottom: -5000px;
+    left: 50%;
+    z-index: -1;
+    width: 4px;
+    background: #fff;
+    transform: translate(-2px, 0);
+    content: '';
+  }
+
+  &.horizontal:before {
+    top: 50%;
+    right: -5000px;
+    bottom: auto;
+    left: -5000px;
+    width: auto;
+    height: 4px;
+  }
+
+  &__button {
+    display: block;
+    width: @l7-btn-control-size;
+    height: @l7-btn-control-size;
+    margin: 0;
+    padding: 0;
+    color: @l7-control-font-color;
+    font-weight: bold;
+    font-size: inherit;
+    text-align: center;
+    text-decoration: none;
+    background-color: @l7-control-bg-color;
+    border: none;
+    border-radius: 2px;
+    outline: none;
+  }
+
+  &,
+  &__button {
+    cursor: ew-resize;
+  }
+  &.horizontal,
+  &.horizontal button {
+    cursor: ns-resize;
+  }
+
+  &:after,
+  &__button:before,
+  &__button:after {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    left: 50%;
+    width: 2px;
+    background: currentColor;
+    transform: translate(-1px, 0);
+    content: '';
+  }
+  &__button:after {
+    transform: translateX(4px);
+  }
+  &__button:before {
+    transform: translateX(-6px);
+  }
+}
