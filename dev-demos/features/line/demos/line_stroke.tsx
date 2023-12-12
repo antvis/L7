@@ -76,7 +76,7 @@ import {
         .shape('line')
         .color('#f00')
         .style({
-            strokeWidth: 0.1,
+            strokeWidth: 0.5,
             stroke: '#00f',
         });
   

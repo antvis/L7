@@ -7,6 +7,8 @@ in vec4 v_color;
 uniform sampler2D u_texture;
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
   vec2 u_textSize;
   float segmentNumber;
   float u_lineDir: 1.0;
@@ -16,6 +18,7 @@ layout(std140) uniform commonUniorm {
   float u_blur : 0.9;
   float u_line_type: 0.0;
   float u_time;
+  float u_linearColor: 0.0;
 };
 in vec2 v_iconMapUV;
 in vec4 v_lineData;

@@ -8,6 +8,8 @@ uniform sampler2D u_texture;
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
   vec4 u_dash_array: [10.0, 5., 0, 0];
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
   vec2 u_textSize;
   float u_globel;
   float u_globel_radius;
@@ -18,6 +20,7 @@ layout(std140) uniform commonUniorm {
   float u_line_texture: 0.0;
   float u_textureBlend;
   float u_time;
+  float u_linearColor: 0.0;
 };
 
 // varying vec2 v_normal;

@@ -16,13 +16,11 @@ import {
 } from '../../core/interface';
 // import { LineTriangulation } from '../../core/triangulation';
 // dash line shader
-import line_dash_frag from '../shaders/dash/line_dash_frag.glsl';
-import line_dash_vert from '../shaders/dash/line_dash_vert.glsl';
+import line_dash_frag from '../shaders/line/line_dash_frag.glsl';
+import line_dash_vert from '../shaders/line/line_dash_vert.glsl';
 // basic line shader
-import line_frag from '../shaders/line_frag.glsl';
-import line_vert from '../shaders/line_vert.glsl';
-// other function shaders
-import linear_line_frag from '../shaders/linear/line_linear_frag.glsl';
+import line_frag from '../shaders/line/line_frag.glsl';
+import line_vert from '../shaders/line/line_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 const lineStyleObj: { [key: string]: number } = {
@@ -53,7 +51,7 @@ export default class LineModel extends BaseModel {
       raisingHeight = 0,
       heightfixed = false,
       linearDir = LinearDir.VERTICAL, // 默认纵向
-      blur = [1, 1, 1,0],
+      blur = [1, 1, 1, 0],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
@@ -174,15 +172,7 @@ export default class LineModel extends BaseModel {
         type: 'Dash',
       };
     }
-
-    if (sourceColor && targetColor) {
-      // 分离 linear 功能
-      return {
-        frag: linear_line_frag,
-        vert: line_vert,
-        type: 'Linear',
-      };
-    } 
+    //支持渐变
     else {
       return {
         frag: line_frag,

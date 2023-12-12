@@ -8,6 +8,7 @@ layout(std140) uniform commonUniorm {
   vec4 u_sourceColor;
   vec4 u_targetColor;
   float u_vertexScale: 1.0;
+  float u_linearColor: 0;
 };
 
 #pragma include "projection"

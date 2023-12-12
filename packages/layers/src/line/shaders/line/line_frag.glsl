@@ -36,7 +36,15 @@ out vec4 outputColor;
 void main() {
   float animateSpeed = 0.0; // 运动速度
   float d_distance_ratio = v_texture_data.r; // 当前点位距离占线总长的比例
-  outputColor = v_color;
+  if(u_linearDir < 1.0) {
+    d_distance_ratio = v_texture_data.a;
+  }
+  if(u_linearColor == 1.0) { // 使用渐变颜色
+    outputColor = mix(u_sourceColor, u_targetColor, d_distance_ratio);
+    outputColor.a *= v_color.a;
+  } else { // 使用 color 方法传入的颜色
+     outputColor = v_color;
+  }
   // anti-alias
   // float blur = 1.0 - smoothstep(u_blur, 1., length(v_normal.xy));
   if(u_animate.x == Animate) {

@@ -8,6 +8,8 @@ layout(location = 14) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
   vec2 u_textSize;
   float segmentNumber;
   float u_lineDir: 1.0;
@@ -17,11 +19,11 @@ layout(std140) uniform commonUniorm {
   float u_blur : 0.9;
   float u_line_type: 0.0;
   float u_time;
+  float u_linearColor: 0.0;
 };
 out vec4 v_color;
 out vec2 v_iconMapUV;
 out vec4 v_lineData;
-out vec2 v_distance_ratio;
 
 
 #pragma include "projection"
@@ -79,7 +81,14 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 }
 
 void main() {
-  v_color = a_Color;
+  //vs中计算渐变色
+  if(u_linearColor==1.0){
+    float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
+    v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
+  }
+  else{
+    v_color = a_Color;
+  }
   v_color.a = v_color.a * opacity;
 
   vec2 source = a_Instance.rg;  // 起始点
@@ -98,7 +107,7 @@ void main() {
       }
   }
 
- v_lineData.b = d_distance_ratio;
+  v_lineData.b = d_distance_ratio;
 
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, thetaOffset), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, thetaOffset), 0.0, 1.0));
@@ -108,7 +117,7 @@ void main() {
 
 
   float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
- v_lineData.r = d_segmentIndex;
+  v_lineData.r = d_segmentIndex;
 
   if(LineTexture == u_line_texture) { // 开启贴图模式
 
