@@ -7,11 +7,11 @@ import {
 } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import rasterFrag from '../shaders/raster/raster_2d_frag.glsl';
 import rasterVert from '../shaders/raster/raster_2d_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
@@ -22,11 +22,14 @@ export default class RasterModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
+    };
   }
 
-
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       opacity = 1,
       clampLow = true,
@@ -40,19 +43,18 @@ export default class RasterModel extends BaseModel {
       rampColors,
       newdomain,
     );
-   const commonOptions = {
-    u_domain: newdomain,
-    u_opacity: opacity || 1,
-    u_noDataValue: noDataValue,
-    u_clampLow: clampLow,
-    u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
-    u_texture: this.texture,
-    u_colorTexture: this.colorTexture,
-  };
-  this.textures=[this.texture,this.colorTexture]
-   const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-   return commonBufferInfo;
-      
+    const commonOptions = {
+      u_domain: newdomain,
+      u_opacity: opacity || 1,
+      u_noDataValue: noDataValue,
+      u_clampLow: clampLow,
+      u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
+      u_rasterTexture: this.texture,
+      u_colorTexture: this.colorTexture,
+    };
+    this.textures = [this.texture, this.colorTexture];
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   private async getRasterData(parserDataItem: any) {
@@ -87,11 +89,12 @@ export default class RasterModel extends BaseModel {
     const { data, width, height } = await this.getRasterData(parserDataItem);
 
     this.texture = createTexture2D({
-      data,
+      data: new Uint8Array(data),
       width,
       height,
       format: gl.LUMINANCE,
-      type: gl.FLOAT,
+      type: gl.UNSIGNED_BYTE,
+      alignment: 1,
       // aniso: 4,
     });
 
