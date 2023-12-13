@@ -10,12 +10,11 @@ in float v_distanceScale;
 in vec4 v_color;
 //dash
 in vec4 v_dash_array;
-in float v_d_distance_ratio;
 
 out vec4 outputColor;
 void main() {
   if(u_dash_array!=vec4(0.0)){
-    float dashLength = mod(v_d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
+    float dashLength = mod(v_distanceScale, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
     if(!(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z))) {
       // 虚线部分
       discard;

@@ -103,33 +103,6 @@ export default class SimpleLineModel extends BaseModel {
       },
     });
     this.styleAttributeService.registerStyleAttribute({
-      name: 'distanceAndIndex',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_DistanceAndIndex',
-        shaderLocation:10,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-          normal: number[],
-          vertexIndex?: number,
-        ) => {
-          return vertexIndex === undefined
-            ? [vertex[3], 10]
-            : [vertex[3], vertexIndex];
-        },
-      },
-    });
-    this.styleAttributeService.registerStyleAttribute({
       name: 'total_distance',
       type: AttributeType.Attribute,
       descriptor: {
