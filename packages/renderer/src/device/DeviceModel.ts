@@ -306,7 +306,6 @@ export default class DeviceModel implements IModel {
           }
         : null,
     );
-
     if (uniformBuffers) {
       this.bindings = this.device.createBindings({
         pipeline: this.pipeline,

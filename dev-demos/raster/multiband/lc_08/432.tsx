@@ -4,8 +4,8 @@ import { Select } from 'antd';
 import 'antd/es/select/style/index';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
-import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
+import React, { useEffect } from 'react';
 
 async function getTiffData(url: string) {
   const response = await fetch(url);
@@ -19,6 +19,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer: 'device',
       map: new Map({
         center: [130.5, 47],
         zoom: 10.5,
@@ -29,20 +30,20 @@ export default () => {
       const url2 =
         'https://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&';
 
-      const layer2 = new RasterLayer({
-        zIndex: 1,
-      }).source(url2, {
-        parser: {
-          type: 'rasterTile',
-          tileSize: 256,
-          wmtsOptions: {
-            layer: 'img',
-            tileMatrixset: 'w',
-            format: 'tiles',
-          },
-        },
-      });
-      scene.addLayer(layer2);
+      // const layer2 = new RasterLayer({
+      //   zIndex: 1,
+      // }).source(url2, {
+      //   parser: {
+      //     type: 'rasterTile',
+      //     tileSize: 256,
+      //     wmtsOptions: {
+      //       layer: 'img',
+      //       tileMatrixset: 'w',
+      //       format: 'tiles',
+      //     },
+      //   },
+      // });
+      // scene.addLayer(layer2);
       const url1 =
         'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
       const tiffdata = await getTiffData(url1);

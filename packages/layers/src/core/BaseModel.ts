@@ -379,8 +379,11 @@ ${uniforms.join('\n')}
       if (Array.isArray(value)) {
         uniformsArray.push(...value);
         uniformsLength += value.length;
-      } else if (typeof value === 'number') { // 排除纹理
+      } else if (typeof value === 'number' ) { // 排除纹理
         uniformsArray.push(value);
+        uniformsLength += 1;
+      } else if(typeof value ==='boolean') {
+        uniformsArray.push(Number(value));
         uniformsLength += 1;
       }
     })
