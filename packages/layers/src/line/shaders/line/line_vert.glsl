@@ -13,6 +13,7 @@ layout(location = 10) in vec2 a_DistanceAndIndex;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array;
   vec4 u_blur;
   vec4 u_sourceColor;
   vec4 u_targetColor;
@@ -37,6 +38,9 @@ layout(std140) uniform commonUniorm {
 
 out vec4 v_color;
 out vec4 v_stroke;
+//dash
+out vec4 v_dash_array;
+out float v_d_distance_ratio;
 
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 out vec2 v_iconMapUV;
@@ -85,11 +89,12 @@ vec2 calculateArrow(vec2 offset) {
 }
 
 void main() {
+  //dash输出
+  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
+  v_d_distance_ratio = a_DistanceAndIndex.x / a_Total_Distance;
+
   // cal style mapping - 数据纹理映射部分的计算
-
-  
   float d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
-
   v_iconMapUV = a_iconMapUV;
   d_texPixelLen = project_float_pixel(u_icon_step);
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {

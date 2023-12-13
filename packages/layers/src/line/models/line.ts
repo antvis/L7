@@ -15,10 +15,7 @@ import {
   TextureBlend,
 } from '../../core/interface';
 // import { LineTriangulation } from '../../core/triangulation';
-// dash line shader
-import line_dash_frag from '../shaders/line/line_dash_frag.glsl';
-import line_dash_vert from '../shaders/line/line_dash_vert.glsl';
-// basic line shader
+
 import line_frag from '../shaders/line/line_frag.glsl';
 import line_vert from '../shaders/line/line_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -53,10 +50,13 @@ export default class LineModel extends BaseModel {
       linearDir = LinearDir.VERTICAL, // 默认纵向
       blur = [1, 1, 1, 0],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-    if (dashArray.length === 2) {
-      dashArray.push(0, 0);
+    let u_dash_array = dashArray;
+    if(lineType!=='dash'){
+      u_dash_array = [0,0,0,0];
     }
-
+    if (u_dash_array.length === 2) {
+      u_dash_array.push(0, 0);
+    }
     if (this.rendererService.getDirty() && this.texture) {
       this.texture.bind();
     }
@@ -70,47 +70,31 @@ export default class LineModel extends BaseModel {
       targetColorArr = rgb2arr(targetColor);
       useLinearColor = 1;
     }
-    let commonOptions;
-    if(lineType==='dash'){
-      commonOptions = {
-        u_animate: this.animateOption2Array(animateOption as IAnimateOption),
-        u_dash_array: dashArray,
-        u_time: this.layer.getLayerAnimateTime(),
-        // 是否固定高度
-        u_heightfixed: Number(heightfixed),      
-        // 顶点高度 scale
-        u_vertexScale: vertexHeightScale,
-        u_raisingHeight: Number(raisingHeight),
-      }
-    }
-    else{
-      //因为linear_line_frag和line_frag共用了line_vert 这里uniformBlock中会将所有用到的uniform写进来
-      commonOptions = {
-        u_animate: this.animateOption2Array(animateOption as IAnimateOption),
-        u_blur: blur,
-        u_sourceColor: sourceColorArr,
-        u_targetColor: targetColorArr,
-        u_textSize: [1024, this.iconService.canvasHeight || 128],
-        u_icon_step: iconStep,
-        // 是否固定高度
-        u_heightfixed: Number(heightfixed),      
-        // 顶点高度 scale
-        u_vertexScale: vertexHeightScale,
-        u_raisingHeight: Number(raisingHeight),
-        //箭头相关 shader中有定义 先加上吧 不然上传uniform有问题
-        u_arrow:0.0,
-        u_arrowHeight:3.0,
-        u_arrowWidth:2.0,
-        u_tailWidth:1.0,
-        // line border 参数
-        u_strokeWidth: strokeWidth,
-        u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
-        u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-        u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
-        u_linearColor: useLinearColor,
-        u_time: this.layer.getLayerAnimateTime(),
-      }
-      // console.log(commonOptions.u_time);
+    const commonOptions = {
+      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_dash_array,
+      u_blur: blur,
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr,
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
+      u_icon_step: iconStep,
+      // 是否固定高度
+      u_heightfixed: Number(heightfixed),      
+      // 顶点高度 scale
+      u_vertexScale: vertexHeightScale,
+      u_raisingHeight: Number(raisingHeight),
+      //箭头相关 shader中有定义 先加上吧 不然上传uniform有问题
+      u_arrow:0.0,
+      u_arrowHeight:3.0,
+      u_arrowWidth:2.0,
+      u_tailWidth:1.0,
+      // line border 参数
+      u_strokeWidth: strokeWidth,
+      u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
+      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+      u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
+      u_linearColor: useLinearColor,
+      u_time: this.layer.getLayerAnimateTime(),
     }
 
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
@@ -162,24 +146,11 @@ export default class LineModel extends BaseModel {
    * @returns
    */
   public getShaders(): { frag: string; vert: string; type: string } {
-    const { sourceColor, targetColor, lineType } =
-      this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
-    if (lineType === 'dash') {
-      return {
-        frag: line_dash_frag,
-        vert: line_dash_vert,
-        type: 'Dash',
-      };
-    }
-    //支持渐变
-    else {
-      return {
-        frag: line_frag,
-        vert: line_vert,
-        type: '',
-      };
-    }
+    return {
+      frag: line_frag,
+      vert: line_vert,
+      type: '',
+    };
   }
 
   protected registerBuiltinAttributes() {

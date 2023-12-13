@@ -5,6 +5,7 @@
 uniform sampler2D u_texture;
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array;
   vec4 u_blur;
   vec4 u_sourceColor;
   vec4 u_targetColor;
@@ -29,11 +30,22 @@ in vec4 v_color;
 in vec4 v_stroke;
 in vec2 v_iconMapUV;
 in vec4 v_texture_data;
+// dash
+in vec4 v_dash_array;
+in float v_d_distance_ratio;
+
 out vec4 outputColor;
 #pragma include "picking"
 
 // [animate, duration, interval, trailLength],
 void main() {
+  if(u_dash_array!=vec4(0.0)){
+    float dashLength = mod(v_d_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
+    if(!(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z))) {
+      // 虚线部分
+      discard;
+    };
+  }
   float animateSpeed = 0.0; // 运动速度
   float d_distance_ratio = v_texture_data.r; // 当前点位距离占线总长的比例
   if(u_linearDir < 1.0) {

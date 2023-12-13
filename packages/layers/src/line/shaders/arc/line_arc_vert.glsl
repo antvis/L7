@@ -8,6 +8,7 @@ layout(location = 14) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array;
   vec4 u_sourceColor;
   vec4 u_targetColor;
   vec2 u_textSize;
@@ -24,6 +25,9 @@ layout(std140) uniform commonUniorm {
 out vec4 v_color;
 out vec2 v_iconMapUV;
 out vec4 v_lineData;
+//dash
+out vec4 v_dash_array;
+out float v_distance_ratio;
 
 
 #pragma include "projection"
@@ -93,8 +97,22 @@ void main() {
 
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
+
+
+
   float segmentIndex = a_Position.x;
   float segmentRatio = getSegmentRatio(segmentIndex);
+
+  //计算dashArray和distanceRatio 输出到片元
+  vec2 s = source;
+  vec2 t = target;
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    s = unProjCustomCoord(source);
+    t = unProjCustomCoord(target);
+  }
+  float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / total_Distance;
+  v_distance_ratio = segmentIndex / segmentNumber;
 
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);

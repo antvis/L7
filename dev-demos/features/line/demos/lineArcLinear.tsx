@@ -74,7 +74,7 @@ export default () => {
       .shape('arc')
       .color('#f00')
       .style({
-        // lineType:'dash',
+        lineType:'dash',
         // thetaOffset: 'offset'
         // segmentNumber: 10,
         sourceColor: '#f00',

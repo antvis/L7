@@ -1,12 +1,10 @@
 
 #define Animate 0.0
 #define LineTexture 1.0
-// varying vec2 v_normal;
-in vec4 v_dash_array;
-in vec4 v_color;
 uniform sampler2D u_texture;
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array;
   vec4 u_sourceColor;
   vec4 u_targetColor;
   vec2 u_textSize;
@@ -22,15 +20,23 @@ layout(std140) uniform commonUniorm {
 };
 in vec2 v_iconMapUV;
 in vec4 v_lineData;
+in vec4 v_color;
+//dash
+in vec4 v_dash_array;
+in float v_distance_ratio;
 
 out vec4 outputColor;
 #pragma include "picking"
 
 void main() {
+  if(u_dash_array!=vec4(0.0)){
+    float dashLength = mod(v_distance_ratio, v_dash_array.x + v_dash_array.y + v_dash_array.z + v_dash_array.w);
+    if(!(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z))) {
+      discard;
+    };
+  }
   float animateSpeed = 0.0; // 运动速度
   outputColor = v_color;
-  
-
   if(u_animate.x == Animate && u_line_texture != LineTexture) {
       animateSpeed = u_time / u_animate.y;
       float alpha =1.0 - fract( mod(1.0- v_lineData.b, u_animate.z)* (1.0/ u_animate.z) + u_time / u_animate.y);
