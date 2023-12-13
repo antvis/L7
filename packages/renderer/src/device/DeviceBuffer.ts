@@ -1,7 +1,7 @@
 import { Buffer, BufferUsage, Device } from '@antv/g-device-api';
-import { gl, IBuffer, IBufferInitializationOptions } from '@antv/l7-core';
+import { IBuffer, IBufferInitializationOptions, gl } from '@antv/l7-core';
 import { hintMap, typedArrayCtorMap } from './constants';
-import { isTypedArray, TypedArray } from './utils/typedarray';
+import { TypedArray, isTypedArray } from './utils/typedarray';
 
 /**
  * Use Buffer from @antv/g-device-api
@@ -14,7 +14,7 @@ export default class DeviceBuffer implements IBuffer {
   private size: number;
 
   constructor(device: Device, options: IBufferInitializationOptions) {
-    const { data, usage, type, isUBO } = options;
+    const { data, usage, type, isUBO, label } = options;
 
     let typed: TypedArray;
     if (isTypedArray(data)) {
@@ -32,6 +32,9 @@ export default class DeviceBuffer implements IBuffer {
       usage: isUBO ? BufferUsage.UNIFORM : BufferUsage.VERTEX,
       hint: hintMap[usage || gl.STATIC_DRAW],
     });
+    if (label) {
+      device.setResourceName(this.buffer, label);
+    }
   }
 
   get() {

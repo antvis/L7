@@ -5,7 +5,6 @@ import {
   IElements,
   IEncodeFeature,
   IModel,
-  IModelUniform,
   ITexture2D,
 } from '@antv/l7-core';
 import { getCullFace } from '@antv/l7-utils';
@@ -13,26 +12,20 @@ import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
 import pointFillVert from '../shaders/image/fillImage_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class FillImageModel extends BaseModel {
   private meter2coord: number = 1;
   private texture: ITexture2D;
   private isMeter: boolean = false;
   private radian: number = 0; // 旋转的弧度
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-      
-    }
-  }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       raisingHeight = 0.0,
       heightfixed = false,
@@ -55,11 +48,11 @@ export default class FillImageModel extends BaseModel {
       u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      u_texture:this.texture
+      u_texture: this.texture,
     };
     this.textures = [this.texture];
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-    
+
     return commonBufferInfo;
   }
   public getAttribute(): {
@@ -109,7 +102,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation:ShaderLocation.UV,
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

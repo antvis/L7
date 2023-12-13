@@ -17,6 +17,7 @@ import {
     useEffect(() => {
       const scene = new Scene({
         id: 'map',
+        renderer: process.env.renderer,
         map: new BaiduMap({
           center: [8.654789284720719, 47.412606122294044],
           zoom: 5,

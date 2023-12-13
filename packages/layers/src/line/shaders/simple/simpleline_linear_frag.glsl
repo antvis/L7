@@ -1,8 +1,12 @@
-uniform vec4 u_sourceColor;
-uniform vec4 u_targetColor;
-varying float v_distanceScale;
-varying vec4 v_color;
+in float v_distanceScale;
+in vec4 v_color;
+layout(std140) uniform commonUniorm {
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  float u_vertexScale: 1.0;
+};
+out vec4 outputColor;
 void main() {
-  gl_FragColor = mix(u_sourceColor, u_targetColor, v_distanceScale);
-  gl_FragColor.a *= v_color.a; // 全局透明度
+  outputColor = mix(u_sourceColor, u_targetColor, v_distanceScale);
+  outputColor.a *= v_color.a; // 全局透明度
 }

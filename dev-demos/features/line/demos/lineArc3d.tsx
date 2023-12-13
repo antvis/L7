@@ -13,6 +13,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+    renderer: process.env.renderer,
       map: new GaodeMap({
         pitch: 40,
         center: [3.438, 40.16797],
@@ -81,22 +82,23 @@ export default () => {
               coordinates: 'coord',
             },
           })
-          .color('#ff6b34')
-          .texture('plane')
+          .color('#00ff00')
+          // .texture('plane')
           .shape('arc3d')
-          // .shape('arc')
           .size(20)
           // .active(true)
-          .animate({
-            duration: 10,
-            interval: 0.2,
-            trailLength: 0.05,
-          })
+          // .animate({
+          //   duration: 1,
+          //   interval: 0.2,
+          //   trailLength: 0.05,
+          // })
           .style({
-            textureBlend: 'replace',
+            // textureBlend: 'replace',
             lineTexture: true, // 开启线的贴图功能
             iconStep: 10, // 设置贴图纹理的间距
             opacity: 1,
+            sourceColor: '#f00',
+            targetColor: '#0f0',
           });
 
         const flyLine2 = new LineLayer()
@@ -116,9 +118,9 @@ export default () => {
             dashArray: [5, 5],
             opacity: 0.5,
           });
-        scene.addLayer(worldLine);
-        scene.addLayer(dotPoint);
-        scene.addLayer(flyLine2);
+        // scene.addLayer(worldLine);
+        // scene.addLayer(dotPoint);
+        // scene.addLayer(flyLine2);
         scene.addLayer(flyLine);
   
       });

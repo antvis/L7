@@ -1,13 +1,11 @@
-
 uniform sampler2D u_texture;
 
-varying vec2 v_texCoord;
-varying float v_lightWeight;
-
+in vec2 v_texCoord;
+in float v_lightWeight;
+out vec4 outputColor;
 
 void main() {
-
-    vec4 color = texture2D(u_texture,vec2(v_texCoord.x,v_texCoord.y));
+    vec4 color = texture(SAMPLER_2D(u_texture),vec2(v_texCoord.x,v_texCoord.y));
     color.xyz = color.xyz * v_lightWeight;
-    gl_FragColor = color;
+    outputColor = color;
 }

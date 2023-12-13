@@ -1,25 +1,24 @@
 
-attribute vec3 a_Position;
-uniform mat4 u_ModelMatrix;
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in float a_Size;
 
-attribute float a_Size;
-attribute vec4 a_Color;
-varying vec4 v_color;
+layout(std140) uniform commonUniorm {
+  vec4 u_stroke_color;
+  float u_additive;
+  float u_stroke_opacity;
+  float u_stroke_width;
+};
 
-uniform float u_opacity : 1;
-uniform vec2 u_offsets;
-uniform float u_stroke_width;
-
-varying float v_blur;
-varying float v_innerRadius;
-
-
+out vec4 v_color;
+out float v_blur;
+out float v_innerRadius;
 
 #pragma include "projection"
 #pragma include "picking"
 #pragma include "project"
 void main() {
-  v_color = vec4(a_Color.xyz, a_Color.w * u_opacity);
+  v_color = vec4(a_Color.xyz, a_Color.w * opacity);
   v_blur = 1.0 - max(2.0/a_Size, 0.05);
   v_innerRadius = max((a_Size - u_stroke_width) / a_Size, 0.0);
   

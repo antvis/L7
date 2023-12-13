@@ -5,11 +5,11 @@ import { ICityBuildLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import buildFrag from '../shaders/build_frag.glsl';
 import buildVert from '../shaders/build_vert.glsl';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class CityBuildModel extends BaseModel {
   private cityCenter: [number, number];
   private cityMinSize: number;
-
-  public getUninforms() {
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       opacity = 1,
       baseColor = 'rgb(16,16,16)',
@@ -24,19 +24,23 @@ export default class CityBuildModel extends BaseModel {
         sweepCenter: this.cityCenter,
       },
     } = this.layer.getLayerConfig() as ICityBuildLayerStyleOptions;
-    return {
-      u_cityCenter: sweep.sweepCenter || this.cityCenter,
-      u_cityMinSize: this.cityMinSize * sweep.sweepRadius,
-      u_circleSweep: sweep.enable ? 1.0 : 0.0,
-      u_circleSweepColor: rgb2arr(sweep.sweepColor).slice(0, 3),
-      u_circleSweepSpeed: sweep.sweepSpeed,
 
-      u_opacity: opacity,
+    const commonOptions = {
       u_baseColor: rgb2arr(baseColor),
       u_brightColor: rgb2arr(brightColor),
       u_windowColor: rgb2arr(windowColor),
+      u_circleSweepColor: [...rgb2arr(sweep.sweepColor).slice(0, 3),1.0],
+      u_cityCenter: sweep.sweepCenter || this.cityCenter,
+      u_circleSweep: sweep.enable ? 1.0 : 0.0,
+      u_cityMinSize: this.cityMinSize * sweep.sweepRadius,
+      u_circleSweepSpeed: sweep.sweepSpeed,
+      u_opacity: opacity,
+      u_near : 0,
+      u_far : 1,
       u_time: this.layer.getLayerAnimateTime() || time,
     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public calCityGeo() {
@@ -64,7 +68,7 @@ export default class CityBuildModel extends BaseModel {
 
   public async initModels(): Promise<IModel[]> {
     this.calCityGeo();
-
+    this.initUniformsBuffer();
     this.startModelAnimate();
 
     return this.buildModels();
@@ -77,6 +81,7 @@ export default class CityBuildModel extends BaseModel {
       fragmentShader: buildFrag,
       triangulation: PolygonExtrudeTriangulation,
       depth: { enable: true },
+      inject:this.getInject(),
       cull: {
         enable: true,
         face: gl.BACK,
@@ -92,6 +97,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
+        shaderLocation:ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -116,6 +122,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -134,6 +141,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation:ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

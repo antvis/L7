@@ -85,6 +85,7 @@ export default class ExtrudeModel extends BaseModel {
       moduleName: type,
       vertexShader: vert,
       fragmentShader: frag,
+      depth: { enable: true },
       inject: this.getInject(),
       triangulation: PolygonExtrudeTriangulation,
     });

@@ -3,33 +3,38 @@
 #define Animate 0.0
 #define LineTexture 1.0
 
-uniform float u_textureBlend;
-uniform float u_blur : 0.9;
-uniform float u_line_type: 0.0;
-// varying vec2 v_normal;
-varying vec4 v_dash_array;
-varying vec4 v_color;
-varying vec4 v_line_data;
-
-uniform float u_line_texture: 0.0;
 uniform sampler2D u_texture;
-uniform vec2 u_textSize;
-varying float v_segmentIndex;
-uniform float segmentNumber;
 
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array: [10.0, 5., 0, 0];
+  vec2 u_textSize;
+  float u_globel;
+  float u_globel_radius;
+  float u_global_height: 10;
+  float segmentNumber;
+  float u_line_type: 0.0;
+  float u_icon_step: 100;
+  float u_line_texture: 0.0;
+  float u_textureBlend;
+  float u_time;
+};
 
-varying vec2 v_iconMapUV;
+// varying vec2 v_normal;
+in vec4 v_dash_array;
+in vec4 v_color;
+in vec4 v_line_data;
+in float v_segmentIndex;
+in vec2 v_iconMapUV;
 
-uniform float u_time;
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-
+out vec4 outputColor;
 
 #pragma include "picking"
 
 void main() {
   float animateSpeed = 0.0; // 运动速度
   float d_distance_ratio = v_line_data.g; // 当前点位距离占线总长的比例
-  gl_FragColor = v_color;
+  outputColor = v_color;
 
   if(u_line_type == LineTypeDash) {
     float flag = 0.;
@@ -37,7 +42,7 @@ void main() {
     if(dashLength < v_dash_array.x || (dashLength > (v_dash_array.x + v_dash_array.y) && dashLength <  v_dash_array.x + v_dash_array.y + v_dash_array.z)) {
       flag = 1.;
     }
-    gl_FragColor.a *=flag;
+    outputColor.a *=flag;
   }
 
   if(u_animate.x == Animate && u_line_texture != LineTexture) {
@@ -47,7 +52,7 @@ void main() {
       alpha = (alpha + u_animate.w -1.0) / u_animate.w;
       // alpha = smoothstep(0., 1., alpha);
       alpha = clamp(alpha, 0.0, 1.0);
-      gl_FragColor.a *= alpha;
+      outputColor.a *= alpha;
 
       // u_animate 
       // x enable
@@ -71,7 +76,7 @@ void main() {
 
     float v = v_line_data.a;  // 线图层贴图部分的 v 坐标值
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
-    vec4 pattern = texture2D(u_texture, uv);
+    vec4 pattern = texture(SAMPLER_2D(u_texture), uv);
 
     if(u_animate.x == Animate) {
       float currentPlane = floor(redioCount - time);
@@ -84,18 +89,18 @@ void main() {
 
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
-      gl_FragColor = filterColor(gl_FragColor + pattern);
+      outputColor = filterColor(outputColor + pattern);
     } else { // replace
         pattern.a *= v_color.a;
-        if(gl_FragColor.a <= 0.0) {
+        if(outputColor.a <= 0.0) {
           pattern.a = 0.0;
           discard;
         } else {
-          gl_FragColor = filterColor(pattern);
+          outputColor = filterColor(pattern);
         }
     }
 
   } else {
-    gl_FragColor = filterColor(gl_FragColor);
+    outputColor = filterColor(outputColor);
   }
 }

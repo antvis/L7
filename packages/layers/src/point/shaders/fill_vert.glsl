@@ -1,8 +1,8 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
 layout(location = 9) in float a_Size;
-layout(location = 11) in vec3 a_Extrude;
 layout(location = 10) in float a_Shape;
+layout(location = 11) in vec3 a_Extrude;
 
 layout(std140) uniform commonUniforms {
   vec3 u_blur_height_fixed;
@@ -10,7 +10,8 @@ layout(std140) uniform commonUniforms {
   float u_additive;
   float u_stroke_opacity;
   float u_size_unit;
-  float u_common_uniforms_padding;
+  float u_time;
+  vec4 u_animate;   
 };
 
 out vec4 v_color;

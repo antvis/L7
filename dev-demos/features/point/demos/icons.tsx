@@ -12,6 +12,7 @@ export default () => {
       );
       const scene = new Scene({
         id: 'map',
+        renderer: process.env.renderer,
         map: new GaodeMap({
           center: [121.4, 31.258134],
           zoom: 12,

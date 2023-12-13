@@ -16,6 +16,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,
@@ -71,7 +72,7 @@ export default () => {
     const layer = new LineLayer({ blend: 'normal' })
       .source(source)
       .size(10)
-      .shape('simple')
+      .shape('line')
       .color('#f00')
       .style({
         opacity:1,
@@ -81,6 +82,7 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.startAnimate();
     
     });
   }, []);

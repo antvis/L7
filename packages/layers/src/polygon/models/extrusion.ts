@@ -42,6 +42,7 @@ export default class ExtrusionModel extends BaseModel {
       fragmentShader: frag,
       inject: this.getInject(),
       triangulation: PolygonExtrudeTriangulation,
+      depth: { enable: true },
     });
     return [model];
   }

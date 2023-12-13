@@ -40,6 +40,9 @@ build/Release
 # Dependency directories
 node_modules/
 
+#history
+.history/
+
 jspm_packages/
 
 # Typescript v1 declaration files

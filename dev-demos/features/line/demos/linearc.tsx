@@ -15,7 +15,8 @@ import React, { useEffect } from 'react';
 export default () => {
   useEffect(() => {
     const scene = new Scene({
-      id: 'map',
+      id: 'map',      
+    renderer: process.env.renderer,
       map: new GaodeMap({
         center: [105, 32],
         zoom: 4,
@@ -73,6 +74,7 @@ export default () => {
       .shape('arc')
       .color('#f00')
       .style({
+        lineType:'dash',
         // thetaOffset: 'offset'
         // segmentNumber: 10,
         thetaOffset: 0.5,
@@ -117,12 +119,13 @@ export default () => {
           opacity:0.5,
           unit:'meter'
         })
-      scene.addLayer(point);
-      scene.addLayer(point2);
+      // scene.addLayer(point);
+      // scene.addLayer(point2);
 
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+      scene.startAnimate();
     });
   }, []);
   return (

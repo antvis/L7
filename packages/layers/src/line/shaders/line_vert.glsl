@@ -1,44 +1,46 @@
 
 #define Animate 0.0
 
-attribute float a_Miter;
-attribute vec4 a_Color;
-attribute vec2 a_Size;
-attribute vec3 a_Normal;
-attribute vec3 a_Position;
-
-attribute vec2 a_iconMapUV;
-
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+layout(location = 9) in vec2 a_Size;
+layout(location = 12) in float a_Miter;
+layout(location = 13) in vec3 a_Normal;
+layout(location = 14) in vec2 a_iconMapUV;
 // dash line
-attribute float a_Total_Distance;
-attribute vec2 a_DistanceAndIndex;
+layout(location = 11) in float a_Total_Distance;
+layout(location = 10) in vec2 a_DistanceAndIndex;
 
-uniform mat4 u_ModelMatrix;
-
-uniform vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
-uniform float u_icon_step: 100;
-
-uniform float u_heightfixed: 0.0;
-uniform float u_vertexScale: 1.0;
-uniform float u_raisingHeight: 0.0;
-
+layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_blur;
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
+  vec2 u_textSize;
+  float u_icon_step: 100;
+  float u_heightfixed: 0.0;
+  float u_vertexScale: 1.0;
+  float u_raisingHeight: 0.0;
+  float u_arrow: 0.0;
+  float u_arrowHeight: 3.0;
+  float u_arrowWidth: 2.0;
+  float u_tailWidth: 1.0;
+  float u_strokeWidth: 0.0;
+  float u_textureBlend;
+  float u_line_texture;
+  float u_linearDir: 1.0;
+  float u_linearColor: 0;
+  float u_time;
+};
 #pragma include "projection"
 #pragma include "picking"
 
-varying vec4 v_color;
-varying vec4 v_stroke;
+out vec4 v_color;
+out vec4 v_stroke;
 
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
-varying vec2 v_iconMapUV;
-
-
-uniform float u_linearColor: 0;
-uniform float u_arrow: 0.0;
-uniform float u_arrowHeight: 3.0;
-uniform float u_arrowWidth: 2.0;
-uniform float u_tailWidth: 1.0;
-
-varying vec4 v_texture_data;
+out vec2 v_iconMapUV;
+out vec4 v_texture_data;
 
 vec2 calculateArrow(vec2 offset) {
   /*

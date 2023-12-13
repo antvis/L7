@@ -8,6 +8,7 @@ export default () => {
     useEffect(() => {
         const scene = new Scene({
             id: 'point_wave',
+            renderer: process.env.renderer,
             map: new GaodeMap({
                 style: 'light',
                 center: [120, 30],
@@ -50,7 +51,7 @@ export default () => {
         .select({
             color: 'red',
         })
-        .color('red')
+        .color('blue')
         .animate(true)
         .style({
             raisingHeight: 200,
