@@ -1,4 +1,4 @@
-name: lint
+name: Build & Test
 
 on: [pull_request]
 
@@ -9,10 +9,21 @@ jobs:
       matrix:
         node-version: [18]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: yarn
-    - run: yarn build
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn
+      - run: yarn build
+      - run: yarn test:e2e
+
+      - name: Upload snapshots to GitHub Actions Artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshots
+          path: |
+            __tests__/e2e/snapshots/*-actual.*
+            __tests__/e2e/snapshots/*-diff.*
+          retention-days: 1
