@@ -17,9 +17,17 @@ export default class SimpleLineModel extends BaseModel {
     const {
       sourceColor,
       targetColor,
+      lineType = 'solid',
+      dashArray = [10, 5, 0, 0],
       vertexHeightScale = 20.0,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
+    let u_dash_array = dashArray;
+    if(lineType!=='dash'){
+      u_dash_array = [0,0,0,0];
+    }
+    if (u_dash_array.length === 2) {
+      u_dash_array.push(0, 0);
+    }
     // 转化渐变色
     let useLinearColor = 0; // 默认不生效
     let sourceColorArr = [0, 0, 0, 0];
@@ -31,13 +39,13 @@ export default class SimpleLineModel extends BaseModel {
     }
 
     const commonOptions= {    
-      // 渐变色支持参数
-      // u_linearColor: useLinearColor,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
+      u_dash_array,
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
-      useLinearColor
+      // 渐变色支持参数
+      u_linearColor: useLinearColor
     };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
     return commonBufferInfo;
@@ -48,13 +56,11 @@ export default class SimpleLineModel extends BaseModel {
   }
 
   public getShaders(): { frag: string; vert: string; type: string } {
-    const { sourceColor, targetColor } =
-      this.layer.getLayerConfig() as ILineLayerStyleOptions;
-      return {
-        frag: simple_line_frag,
-        vert: simple_line_vert,
-        type: 'lineSimpleNormal',
-      };
+    return {
+      frag: simple_line_frag,
+      vert: simple_line_vert,
+      type: 'lineSimpleNormal',
+    };
   }
 
   public async buildModels(): Promise<IModel[]> {
@@ -93,6 +99,33 @@ export default class SimpleLineModel extends BaseModel {
           vertex: number[],
         ) => {
           return [vertex[3]];
+        },
+      },
+    });
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'distanceAndIndex',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_DistanceAndIndex',
+        shaderLocation:10,
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+          attributeIdx: number,
+          normal: number[],
+          vertexIndex?: number,
+        ) => {
+          return vertexIndex === undefined
+            ? [vertex[3], 10]
+            : [vertex[3], vertexIndex];
         },
       },
     });

@@ -77,6 +77,8 @@ export default () => {
       .shape('simple')
       .color('#f00')
       .style({
+        lineType:'dash',
+        dashArray:[0.5,0.5],
         opacity:1,
         sourceColor: '#f00',
         targetColor: '#0f0',

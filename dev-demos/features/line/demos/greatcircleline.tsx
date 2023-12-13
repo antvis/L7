@@ -65,6 +65,7 @@ export default () => {
       .shape('greatcircle')
       .color('#f00')
       .style({
+        lineType:'dash',
         sourceColor: '#00f',
         targetColor: '#0f0',
         opacity: 1,

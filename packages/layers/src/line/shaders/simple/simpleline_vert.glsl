@@ -3,10 +3,12 @@ layout(location = 1) in vec4 a_Color;
 layout(location = 9) in vec2 a_Size;
 layout(location = 14) in float a_Distance;
 layout(location = 13) in float a_Total_Distance;
+layout(location = 10) in vec2 a_DistanceAndIndex;
 
 layout(std140) uniform commonUniorm {
   vec4 u_sourceColor;
   vec4 u_targetColor;
+  vec4 u_dash_array;
   float u_vertexScale: 1.0;
   float u_linearColor: 0;
 };
@@ -16,8 +18,14 @@ layout(std140) uniform commonUniorm {
 
 out vec4 v_color;
 out float v_distanceScale;
+//dash
+out vec4 v_dash_array;
+out float v_d_distance_ratio;
 
 void main() {
+  //dash输出
+  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
+  v_d_distance_ratio = a_DistanceAndIndex.x / a_Total_Distance;
 
   v_color = a_Color; 
   v_distanceScale = a_Distance / a_Total_Distance;
