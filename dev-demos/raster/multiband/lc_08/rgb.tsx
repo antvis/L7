@@ -2,8 +2,8 @@
 import { RasterLayer, Scene, metersToLngLat } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
-import React, { useEffect } from 'react';
 import * as GeoTIFF from 'geotiff';
+import React, { useEffect } from 'react';
 
 async function getTiffData(url: string) {
   const response = await fetch(url);
@@ -15,7 +15,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer:'device',
+      renderer: 'device',
       map: new Map({
         center: [130.5, 47],
         zoom: 2,

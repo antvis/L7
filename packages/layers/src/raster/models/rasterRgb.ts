@@ -6,11 +6,11 @@ import {
   ITexture2D,
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import rasterVert from '../shaders/rgb/raster_rgb_vert.glsl';
 import rasterFrag from '../shaders/rgb/raster_rgb_frag.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import rasterVert from '../shaders/rgb/raster_rgb_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected dataOption: any = {};
@@ -22,13 +22,21 @@ export default class RasterModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
+    };
   }
 
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const { opacity = 1, noDataValue = 0 } =
       this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    const { rMinMax = [0,255], gMinMax = [0,255], bMinMax = [0,255] } = this.dataOption;
+    const {
+      rMinMax = [0, 255],
+      gMinMax = [0, 255],
+      bMinMax = [0, 255],
+    } = this.dataOption;
     const commonOptions = {
       u_rminmax: rMinMax,
       u_gminmax: gMinMax,
@@ -37,7 +45,7 @@ export default class RasterModel extends BaseModel {
       u_noDataValue: noDataValue,
       u_texture: this.texture,
     };
-    this.textures = [this.texture]
+    this.textures = [this.texture];
 
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
@@ -79,7 +87,7 @@ export default class RasterModel extends BaseModel {
     const { data, width, height } = await this.getRasterData(parserDataItem);
     this.texture = createTexture2D({
       // @ts-ignore
-      data,
+      data: new Float32Array(data),
       width,
       height,
       format: gl.RGB,
