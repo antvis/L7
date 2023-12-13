@@ -7,8 +7,8 @@ import React, { useEffect } from 'react';
 export default () => {
   useEffect(() => {
     const symbol = {
-      source:'none',
-      target:'halfTriangle',
+      source:'classic',
+      target:'classic',
     };
     const scene = new Scene({
       id: 'map',
@@ -47,34 +47,15 @@ export default () => {
                 ],
                 [
                   120.3401184082,
-                  30.321915039121
+                  30.321915039121 + 0.02 * 1,
                 ]
               ]
             }
-          },
-          // {
-          //   type: 'Feature',
-          //   properties: {},
-          //   geometry: {
-          //     type: 'LineString',
-          //     coordinates: [
-                
-              
-          //       [
-          //         120.3401184082,
-          //         30.321915039121
-          //       ],
-          //       [
-          //         120.1863098144,
-          //         30.321915039121
-          //       ],
-          //     ]
-          //   }
-          // }
+          }
         ]
       }
       )
-      .size(10)
+      .size(20)
       .shape('flowline')
       .color('#00f')
       .style({
@@ -104,7 +85,7 @@ export default () => {
                 ],
                 [
                   120.3401184082,
-                  30.321915039121
+                  30.321915039121 
                 ]
               ]
             }
@@ -148,7 +129,7 @@ export default () => {
     });
     scene2.on('loaded', () => {
       scene2.addLayer(lineLayer2);
-      scene.startAnimate();
+      // scene.startAnimate();
     });
   }, []);
   return (
