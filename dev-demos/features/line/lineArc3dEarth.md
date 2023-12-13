@@ -24,8 +24,7 @@ export default () => {
           },
         },
       )
-      .color('#2E8AE6')
-      .shape('fill')
+      .shape('base')
       .style({
         globalOptions: {
           ambientRatio: 0.6, // 环境光
@@ -48,7 +47,6 @@ export default () => {
 
     scene.on('loaded', () => {
       scene.addLayer(earthlayer);
-
       scene.addLayer(atomLayer);
       scene.addLayer(bloomLayer);
 
@@ -76,13 +74,12 @@ export default () => {
             .style({
               segmentNumber: 60,
               globalArcHeight: 20,
-              // sourceColor: '#f00',
-              // targetColor: '#0f0',
+              sourceColor: '#f00',
+              targetColor: '#0f0',
             });
           scene.addLayer(flyLine);
         });
 
-      // earthlayer.setEarthTime(4.0);
     });
   }, []);
   return (
