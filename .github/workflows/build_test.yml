@@ -3,7 +3,7 @@ name: Build & Test
 on: [pull_request]
 
 jobs:
-  lint:
+  ci:
     runs-on: ubuntu-latest
     strategy:
       matrix:
