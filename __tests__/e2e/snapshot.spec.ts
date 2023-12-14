@@ -31,10 +31,12 @@ describe('Snapshots', () => {
       const dir = `${__dirname}/snapshots`;
 
       const maxError = 0;
-      expect(buffer).toMatchCanvasSnapshot(dir, key, { maxError });
-
-      await context.close();
-      await browser.close();
+      try {
+        expect(buffer).toMatchCanvasSnapshot(dir, key, { maxError });
+      } finally {
+        await context.close();
+        await browser.close();
+      }
     });
   });
 });

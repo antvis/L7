@@ -11,7 +11,6 @@ module.exports = async function (_globalConfig, _projectConfig) {
     });
   });
 
-  console.error('PID', testServerProcess.pid);
   // clean-up the tmp file
   await fs.rm(TMP_DIR, { recursive: true, force: true });
 };
