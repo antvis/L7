@@ -28,5 +28,5 @@ jobs:
         with:
           name: snapshots
           path: |
-            __tests__/e2e/snapshots/*.png
+            __tests__/e2e/snapshots
           retention-days: 1
