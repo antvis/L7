@@ -83,7 +83,6 @@ export default class LineModel extends BaseModel {
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
-      u_tailWidth:1.0,
       // line border 参数
       u_strokeWidth: strokeWidth,
       u_textureBlend: textureBlend === TextureBlend.NORMAL ? 0.0 : 1.0,
@@ -157,7 +156,6 @@ export default class LineModel extends BaseModel {
         name: 'a_Distance',
         shaderLocation:10,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -179,7 +177,6 @@ export default class LineModel extends BaseModel {
         name: 'a_Total_Distance',
         shaderLocation:11,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -223,7 +220,6 @@ export default class LineModel extends BaseModel {
         name: 'a_Normal',
         shaderLocation:ShaderLocation.NORMAL,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -248,7 +244,6 @@ export default class LineModel extends BaseModel {
         name: 'a_Miter',
         shaderLocation:12,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
