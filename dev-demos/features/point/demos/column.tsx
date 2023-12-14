@@ -1,7 +1,7 @@
 // @ts-ignore
 import { PointLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       renderer: process.env.renderer,
-      map: new GaodeMap({
+      map: new (process.env.CI ? Map : GaodeMap)({
         pitch: 66.02383,
         style: 'dark',
         center: [121.400257, 31.25287],

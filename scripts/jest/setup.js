@@ -12,7 +12,9 @@ module.exports = async function (_globalConfig, _projectConfig) {
 
   const testServerProcess = await new Promise((resolve, reject) => {
     // Try to start dumi devserver.
-    const testServerProcess = spawn('npm', ['run', 'dev'], { detached: true });
+    const testServerProcess = spawn('npm', ['run', 'dev:ci'], {
+      detached: true,
+    });
 
     testServerProcess.on('error', (err) => {
       console.log('Failed to start subprocess.', err);

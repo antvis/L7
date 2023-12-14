@@ -1,11 +1,9 @@
 import { chromium, devices } from 'playwright';
+import { tests } from './tests';
 import { sleep } from './utils/sleep';
 import './utils/useSnapshotMatchers';
 
 describe('Snapshots', () => {
-  const tests = {
-    'point-circle': 'features/point/circle',
-  };
   Object.keys(tests).forEach((key) => {
     it(key, async () => {
       // Setup
@@ -15,10 +13,6 @@ describe('Snapshots', () => {
       const context = await browser.newContext(devices['Desktop Chrome']);
       const page = await context.newPage();
 
-      await page.addInitScript(() => {
-        window['USE_PLAYWRIGHT'] = 1;
-      });
-
       // Go to test page served by vite devServer.
       const url = `http://localhost:6006/${tests[key]}`;
       await page.goto(url);
@@ -26,7 +20,7 @@ describe('Snapshots', () => {
       await sleep(300);
 
       // Chart already rendered, capture into buffer.
-      const buffer = await page.locator('canvas').nth(1).screenshot();
+      const buffer = await page.locator('canvas').screenshot();
 
       const dir = `${__dirname}/snapshots`;
 

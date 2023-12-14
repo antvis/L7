@@ -17,7 +17,7 @@
     "dev-device": "export NODE_OPTIONS=--openssl-legacy-provider renderer=device && dumi dev renderer=device",
     "dev_windows": "dumi dev",
     "dev-build": "export NODE_OPTIONS=--openssl-legacy-provider && dumi build",
-    "dev:vite": "vite",
+    "dev:ci": "export NODE_OPTIONS=--openssl-legacy-provider CI=1 && dumi dev CI=1",
     "start": "lerna --scope @antv/l7-site exec yarn run site:develop",
     "site:build": "lerna --scope @antv/l7-site exec yarn run site:build",
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
