@@ -1,7 +1,7 @@
-import * as fs from "fs";
-import * as path from "path";
-import pixelmatch from "pixelmatch";
-import { PNG } from "pngjs";
+import * as fs from 'fs';
+import * as path from 'path';
+import pixelmatch from 'pixelmatch';
+import { PNG } from 'pngjs';
 
 export type ToMatchCanvasSnapshotOptions = {
   maxError?: number;
@@ -15,7 +15,13 @@ function writePNG(buffer: Buffer, path: string) {
 /**
  * diff between PNGs
  */
-function diff(src: string, target: string, diff: string, maxError = 0, showMismatchedPixels = true) {
+function diff(
+  src: string,
+  target: string,
+  diff: string,
+  maxError = 0,
+  showMismatchedPixels = true,
+) {
   const img1 = PNG.sync.read(fs.readFileSync(src));
   const img2 = PNG.sync.read(fs.readFileSync(target));
   const { width, height } = img1;
@@ -40,12 +46,12 @@ function diff(src: string, target: string, diff: string, maxError = 0, showMisma
 }
 
 // @see https://jestjs.io/docs/26.x/expect#expectextendmatchers
-export async function toMatchCanvasSnapshot(
+export function toMatchCanvasSnapshot(
   buffer: Buffer,
   dir: string,
   name: string,
   options: ToMatchCanvasSnapshotOptions = {},
-): Promise<{ message: () => string; pass: boolean }> {
+): { message: () => string; pass: boolean } {
   const { maxError = 0 } = options;
   const namePath = path.join(dir, name);
   const actualPath = path.join(dir, `${name}-actual.png`);
@@ -55,7 +61,7 @@ export async function toMatchCanvasSnapshot(
   try {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     if (!fs.existsSync(expectedPath)) {
-      if (process.env.CI === "true") {
+      if (process.env.CI === 'true') {
         throw new Error(`Please generate golden image for ${namePath}`);
       }
       console.warn(`! generate ${namePath}`);

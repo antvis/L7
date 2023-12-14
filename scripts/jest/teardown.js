@@ -1,10 +1,17 @@
+const terminate = require('terminate');
 const fs = require('fs').promises;
 const { TMP_DIR } = require('./constants');
 
 module.exports = async function (_globalConfig, _projectConfig) {
-  const server = globalThis.VITE_SERVER;
-  await server.close();
+  const testServerProcess = globalThis.testServerProcess;
 
+  await new Promise((resolve) => {
+    terminate(testServerProcess.pid, () => {
+      resolve(undefined);
+    });
+  });
+
+  console.error('PID', testServerProcess.pid);
   // clean-up the tmp file
   await fs.rm(TMP_DIR, { recursive: true, force: true });
 };

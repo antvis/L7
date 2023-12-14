@@ -24,10 +24,11 @@ const sharedConfig = {
 } as Partial<Config>;
 
 const config: Config = {
+  testTimeout: 100000,
   globalSetup: './scripts/jest/setup.js',
   globalTeardown: './scripts/jest/teardown.js',
   testEnvironment: './scripts/jest/environment.js',
-  testMatch: ['**/__tests__/e2e/*.spec.+(ts|tsx|js)'],
+  testMatch: ['<rootDir>/__tests__/e2e/*.spec.ts'],
   coverageReporters: ['html', 'lcov', 'clover'],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageThreshold: {
