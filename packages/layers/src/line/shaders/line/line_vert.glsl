@@ -4,12 +4,11 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
 layout(location = 9) in vec2 a_Size;
+layout(location = 10) in float a_Distance;
+layout(location = 11) in float a_Total_Distance;
 layout(location = 12) in float a_Miter;
 layout(location = 13) in vec3 a_Normal;
 layout(location = 14) in vec2 a_iconMapUV;
-// dash line
-layout(location = 11) in float a_Total_Distance;
-layout(location = 10) in vec2 a_DistanceAndIndex;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
@@ -22,9 +21,6 @@ layout(std140) uniform commonUniorm {
   float u_heightfixed: 0.0;
   float u_vertexScale: 1.0;
   float u_raisingHeight: 0.0;
-  float u_arrow: 0.0;
-  float u_arrowHeight: 3.0;
-  float u_arrowWidth: 2.0;
   float u_tailWidth: 1.0;
   float u_strokeWidth: 0.0;
   float u_textureBlend;
@@ -46,52 +42,10 @@ out float v_d_distance_ratio;
 out vec2 v_iconMapUV;
 out vec4 v_texture_data;
 
-vec2 calculateArrow(vec2 offset) {
-  /*
-  * 在支持箭头的时候，第二、第三组顶点是额外插入用于构建顶点的
-  */
-  float arrowFlag = -1.0;
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // 高德 2.0 的旋转角度不同
-    arrowFlag = 1.0;
-  }
-  float pi = arrowFlag * 3.1415926/2.;
-  if(a_Miter < 0.) {
-    // 根据线的两侧偏移不同、旋转的方向相反
-    pi = -pi;
-  }
-  highp float angle_sin = sin(pi);
-  highp float angle_cos = cos(pi);
-  // 计算垂直与线方向的旋转矩阵
-  mat2 rotation_matrix = mat2(angle_cos, -1.0 * angle_sin, angle_sin, angle_cos);
-  float arrowWidth = u_arrowWidth;
-  float arrowHeight = u_arrowHeight;
-
-  vec2 arrowOffset = vec2(0.0);
-  /*
-  * a_DistanceAndIndex.y 用于标记当前顶点属于哪一组（两个顶点一组，构成线的其实是矩形，最简需要四个顶点、两组顶点构成）
-  */
-  if(a_DistanceAndIndex.y == 0.0) {
-    // 箭头尖部
-    offset = vec2(0.0);
-  } else if(a_DistanceAndIndex.y == 1.0) {
-    // 箭头两侧
-    arrowOffset = rotation_matrix*(offset * arrowHeight);
-    offset += arrowOffset; // 沿线偏移
-    offset = offset * arrowWidth; // 垂直线向外偏移（是构建箭头两侧的顶点）
-  } else if(a_DistanceAndIndex.y == 2.0 || a_DistanceAndIndex.y == 3.0 || a_DistanceAndIndex.y == 4.0) {
-    // 偏移其余的点位（将长度让位给箭头）
-    arrowOffset = rotation_matrix*(offset * arrowHeight) * arrowWidth;
-    offset += arrowOffset;// 沿线偏移
-  }
-
-  return offset;
-}
-
 void main() {
   //dash输出
   v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
-  v_d_distance_ratio = a_DistanceAndIndex.x / a_Total_Distance;
+  v_d_distance_ratio = a_Distance / a_Total_Distance;
 
   // cal style mapping - 数据纹理映射部分的计算
   float d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
@@ -109,17 +63,9 @@ void main() {
   
   vec2 offset = project_pixel(size.xy);
 
-  float lineDistance = a_DistanceAndIndex.x;
+  float lineDistance = a_Distance;
   float currentLinePointRatio = lineDistance / a_Total_Distance;
  
-  if(u_arrow > 0.0) {
-      //  计算箭头
-    offset = calculateArrow(offset);
-
-    if(a_DistanceAndIndex.y > 4.0) {
-      offset *= mix(1.0, u_tailWidth, currentLinePointRatio);
-    }
-  }
 
   float lineOffsetWidth = length(offset + offset * sign(a_Miter)); // 线横向偏移的距离（向两侧偏移的和）
   float linePixelSize = project_pixel(a_Size.x) * 2.0;  // 定点位置偏移，按地图等级缩放后的距离 单侧 * 2

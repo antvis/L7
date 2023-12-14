@@ -83,10 +83,6 @@ export default class LineModel extends BaseModel {
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
-      //箭头相关 shader中有定义 先加上吧 不然上传uniform有问题
-      u_arrow:0.0,
-      u_arrowHeight:3.0,
-      u_arrowWidth:2.0,
       u_tailWidth:1.0,
       // line border 参数
       u_strokeWidth: strokeWidth,
@@ -152,13 +148,13 @@ export default class LineModel extends BaseModel {
       type: '',
     };
   }
-
+  //distance 计算dash用和渐变用
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'distanceAndIndex',
+      name: 'distance',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_DistanceAndIndex',
+        name: 'a_Distance',
         shaderLocation:10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
@@ -166,18 +162,13 @@ export default class LineModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 2,
+        size: 1,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-          normal: number[],
-          vertexIndex?: number,
+          vertex: number[]
         ) => {
-          return vertexIndex === undefined
-            ? [vertex[3], 10]
-            : [vertex[3], vertexIndex];
+          return [vertex[3]]
         },
       },
     });

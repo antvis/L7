@@ -17,7 +17,6 @@ layout(std140) uniform commonUniorm {
 
 out vec4 v_color;
 out float v_distanceScale;
-//dash
 out vec4 v_dash_array;
 
 void main() {

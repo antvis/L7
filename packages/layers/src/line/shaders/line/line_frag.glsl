@@ -14,9 +14,6 @@ layout(std140) uniform commonUniorm {
   float u_heightfixed: 0.0;
   float u_vertexScale: 1.0;
   float u_raisingHeight: 0.0;
-  float u_arrow: 0.0;
-  float u_arrowHeight: 3.0;
-  float u_arrowWidth: 2.0;
   float u_tailWidth: 1.0;
   float u_strokeWidth: 0.0;
   float u_textureBlend;
