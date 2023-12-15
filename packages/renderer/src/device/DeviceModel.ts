@@ -198,19 +198,20 @@ export default class DeviceModel implements IModel {
     });
   }
 
-  updateAttributesAndElements() {
-    // elements: IElements, // attributes: { [key: string]: IAttribute },
-    // TODO: implement
-  }
+  updateAttributesAndElements() {}
 
-  updateAttributes() {
-    // attributes: { [key: string]: IAttribute }
-    // TODO: implement
-    // Object.keys(attributes).forEach((name: string) => {
-    //   const attribute = attributes[name] as DeviceAttribute;
-    //   attribute.updateBuffer();
-    // });
-  }
+  /**
+   * No need to implement this method, you should update data on `Attribute` like this:
+   *
+   * @example
+   * ```ts
+   * attribute.updateBuffer({
+   *   data: [],
+   *   offset: 0,
+   * });
+   * ```
+   */
+  updateAttributes() {}
 
   addUniforms(uniforms: { [key: string]: IUniform }) {
     this.uniforms = {
@@ -305,7 +306,6 @@ export default class DeviceModel implements IModel {
           }
         : null,
     );
-
     if (uniformBuffers) {
       this.bindings = this.device.createBindings({
         pipeline: this.pipeline,

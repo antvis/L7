@@ -56,7 +56,7 @@ export default () => {
         })
         .shape('marker')
         .size(36)
-        .active(true)
+        // .active(true)
         .style({
             rotation: 90
         })

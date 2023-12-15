@@ -83,6 +83,14 @@
         "en": "MapTheme"
       },
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*byM3QZbjqScAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "swipe.ts",
+      "title": {
+        "zh": "Swipe 卷帘",
+        "en": "Swipe"
+      },
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-bMESIfHN9IAAAAAAAAAAAAADmJ7AQ/original"
     }
   ]
 }

@@ -1,6 +1,6 @@
 ---
 group:
-  path: 'image'
+  path: 'image-device'
   title: 图片
 ---
 ### 图片图层

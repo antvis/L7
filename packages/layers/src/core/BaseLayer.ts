@@ -40,8 +40,8 @@ import {
   IPass,
   IPickingService,
   IPostProcessingPass,
-  IRendererService,
   IRenderOptions,
+  IRendererService,
   IScale,
   IScaleOptions,
   IShaderModuleService,
@@ -50,12 +50,12 @@ import {
   IStyleAttributeUpdateOptions,
   ITextureService,
   LayerEventType,
-  lazyInject,
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
-  Triangulation,
   TYPES,
+  Triangulation,
+  lazyInject,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
@@ -282,11 +282,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       enableMask: true,
     });
   }
-  // 将废弃
+
+  /**
+   * 将废弃
+   * @deprecated
+   */
   public addMaskLayer(maskLayer: ILayer) {
     this.masks.push(maskLayer);
   }
-  // 将废弃
+
+  /**
+   * 将废弃
+   * @deprecated
+   */
   public removeMaskLayer(maskLayer: ILayer) {
     const layerIndex = this.masks.indexOf(maskLayer);
     if (layerIndex > -1) {
