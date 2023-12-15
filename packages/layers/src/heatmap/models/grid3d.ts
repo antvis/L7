@@ -8,8 +8,8 @@ import {
 import BaseModel from '../../core/BaseModel';
 import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
-import heatmapGrid3dVert from '../shaders/hexagon_3d_vert.glsl';
-import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
+import grid_3d_vert from '../shaders/grid3d/grid_3d_vert.glsl';
+import grid_3d_frag from '../shaders/grid3d/grid_3d_frag.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class Grid3DModel extends BaseModel {
   public getUninforms(): IModelUniform {
@@ -48,8 +48,8 @@ export default class Grid3DModel extends BaseModel {
     this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapGrid3d',
-      vertexShader: heatmapGrid3dVert,
-      fragmentShader: heatmapGridFrag,
+      vertexShader: grid_3d_vert,
+      fragmentShader: grid_3d_frag,
       triangulation: PointExtrudeTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: true },

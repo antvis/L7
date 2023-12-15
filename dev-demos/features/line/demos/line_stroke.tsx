@@ -11,7 +11,6 @@ import {
   // @ts-ignore
   import { Map,GaodeMap } from '@antv/l7-maps';
   import React, { useEffect } from 'react';
-  console.log('process.env.renderer',process.env.renderer)
   
   export default () => {
     useEffect(() => {
