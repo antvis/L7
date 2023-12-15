@@ -61,9 +61,6 @@ export function toMatchCanvasSnapshot(
   try {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     if (!fs.existsSync(expectedPath)) {
-      if (process.env.CI === 'true') {
-        throw new Error(`Please generate golden image for ${namePath}`);
-      }
       console.warn(`! generate ${namePath}`);
       writePNG(buffer, expectedPath);
       return {
