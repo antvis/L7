@@ -302,14 +302,15 @@ function pushDis(point: number[], n?: number) {
 
 function getSimpleLineVertices(coordinates: number[][],originCoordinates:number[][]) {
   let points = coordinates;
-  let originPoints = originCoordinates;
+  //除了amap2.0以外 coordinates就是经纬度数据
+  let originPoints = originCoordinates||coordinates;
   if (
     Array.isArray(points) &&
     Array.isArray(points[0]) &&
     Array.isArray(points[0][0])
   ) {
     // @ts-ignore
-    points = originCoordinates.flat();
+    points = originCoordinates.flat();    
     // @ts-ignore
     originPoints = originCoordinates.flat();
   }
