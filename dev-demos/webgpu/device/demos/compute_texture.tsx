@@ -55,6 +55,8 @@ export default () => {
             @binding(0) @group(0) var<uniform> params : SimParams;
             @binding(1) @group(0) var<storage, read> particlesA : Particles;
             @binding(2) @group(0) var<storage, read_write> particlesB : Particles;
+            @group(1) @binding(1) var mySampler: sampler;
+            @group(1) @binding(0) var myTexture: texture_2d<f32>;
             
             // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
             @compute @workgroup_size(64)
@@ -62,7 +64,8 @@ export default () => {
               var index = GlobalInvocationID.x;
             
               var vPos = particlesA.particles[index].pos;
-              var vVel = particlesA.particles[index].vel;
+              var vVel2 = particlesA.particles[index].vel;
+              var vVel = textureLoad(myTexture,  vec2<i32>(vVel2), 0).rg;
               var cMass = vec2(0.0);
               var cVel = vec2(0.0);
               var colVel = vec2(0.0);
@@ -152,12 +155,18 @@ export default () => {
           const image = await loadImage('https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*p4PURaZpM-cAAAAAAAAAAAAADmJ7AQ/original')
 
           const texture = device.createTexture({
-              format: Format.U8_RGBA_NORM,
+              format: Format.F32_RGBA,
               width: image.width,
               height: image.height,
-              usage: TextureUsage.SAMPLED
+              usage: TextureUsage.SAMPLED,
+              dimension:TextureDimension.TEXTURE_2D,
+              mipLevelCount:1,
+              
+
+
           });
           texture.setImageData([image]);
+          device.setResourceName(texture,'wind');
 
           const sampler = device.createSampler({
               addressModeU: AddressMode.CLAMP_TO_EDGE,
@@ -201,6 +210,10 @@ export default () => {
                             size: 7 * Float32Array.BYTES_PER_ELEMENT
                         }
                     ],
+                    samplerBindings:[{
+                        texture,
+                        sampler: null
+                    }],
                     storageBufferBindings: [
                         {
                             binding: 1,
@@ -244,7 +257,9 @@ export default () => {
                 ++t;
                 id = requestAnimationFrame(frame);
             };
-
+            // const readback = device.createReadback();
+            // const data = await readback.readBuffer(particleBuffers[1], 0, new Float32Array(numParticles*4));
+            // console.log(data);
             // frame();
 
         }
