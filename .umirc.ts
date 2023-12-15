@@ -6,7 +6,8 @@ export default defineConfig({
   outputPath: 'docs-dist',
   base: '/',
   define:{
-    'process.env.renderer': process.env.renderer?.replace(/\'/g, ''),
+    // 'process.env.renderer': process.env.renderer?.replace(/\'/g, ''),
+    'process.env.renderer': 'device',
   },
   
   devServer: {

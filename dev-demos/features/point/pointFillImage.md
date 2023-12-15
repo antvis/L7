@@ -1,8 +1,3 @@
----
-group:
-  title: 点
-  order: 1
----
 ### point - fillImage
 ```tsx
 import { PointLayer, Scene } from '@antv/l7';

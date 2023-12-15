@@ -5,27 +5,17 @@ import {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  IModelUniform,
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { IPointLayerStyleOptions } from '../../core/interface';
 import { GlobelPointFillTriangulation } from '../../core/triangulation';
 
-import pointFillFrag from '../shaders/earth/fill_frag.glsl';
-import pointFillVert from '../shaders/earth/fill_vert.glsl';
+import pointFillFrag from '../shaders/earthFill/earthFill_frag.glsl';
+import pointFillVert from '../shaders/earthFill/earthFill_vert.glsl';
 
 import { mat4, vec3 } from 'gl-matrix';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class FillModel extends BaseModel {
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption
-    }
-  }
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       strokeOpacity = 1,

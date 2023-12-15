@@ -13,8 +13,8 @@ import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import pointFillFrag from '../shaders/image/fillImage_frag.glsl';
-import pointFillVert from '../shaders/image/fillImage_vert.glsl';
+import pointFillFrag from '../shaders/fillImage/fillImage_frag.glsl';
+import pointFillVert from '../shaders/fillImage/fillImage_vert.glsl';
 
 export default class FillImageModel extends BaseModel {
   private meter2coord: number = 1;
