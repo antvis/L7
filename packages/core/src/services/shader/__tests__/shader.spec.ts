@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { IShaderModuleService } from '../IShaderModuleService';
+import type { IShaderModuleService } from '../IShaderModuleService';
 import ShaderModuleService from '../ShaderModuleService';
 
 describe('ShaderService', () => {

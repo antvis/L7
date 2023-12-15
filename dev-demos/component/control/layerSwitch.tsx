@@ -1,6 +1,7 @@
+import type {
+  ILayer} from '@antv/l7';
 import {
   GaodeMap,
-  ILayer,
   LayerSwitch,
   LineLayer,
   PointLayer,
@@ -9,7 +10,8 @@ import {
 } from '@antv/l7';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
-import { FunctionComponent, useEffect } from 'react';
+import type { FunctionComponent} from 'react';
+import { useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
   const [layers, setLayers] = useState<ILayer[]>([]);

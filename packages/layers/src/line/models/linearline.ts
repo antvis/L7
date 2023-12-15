@@ -1,13 +1,16 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
-import { generateColorRamp, IColorRamp, lodashUtil } from '@antv/l7-utils';
+import type { IColorRamp} from '@antv/l7-utils';
+import { generateColorRamp, lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions, LinearDir } from '../../core/interface';
+import type { ILineLayerStyleOptions} from '../../core/interface';
+import { LinearDir } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import linear_line_frag from '../shaders/linearLine/line_linear_frag.glsl';
 import linear_line_vert from '../shaders/linearLine/line_linear_vert.glsl';

@@ -1,10 +1,11 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   ILayer,
   ILayerPlugin,
-  IStyleAttributeService,
+  IStyleAttributeService} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';

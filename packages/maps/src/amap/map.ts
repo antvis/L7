@@ -2,16 +2,17 @@
 /**
  * AMapService
  */
-import {
-  CoordinateSystem,
+import type {
   IMapCamera,
   IMapService,
-  IViewport,
+  IViewport} from '@antv/l7-core';
+import {
+  CoordinateSystem
 } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { IAMapEvent, IAMapInstance } from '../../typings/index';
+import type { IAMapEvent, IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import AMapLoader from '../utils/amaploader';
 import Viewport from './Viewport';

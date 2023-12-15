@@ -1,14 +1,17 @@
-import { BaseLayer, ILayer, IMercator, ISourceCFG } from '@antv/l7';
-import {
+import type { ILayer, IMercator, ISourceCFG } from '@antv/l7';
+import { BaseLayer } from '@antv/l7';
+import type {
   AnimationMixer,
-  Matrix4,
   Object3D,
-  Scene,
-  Vector3,
-  WebGLRenderer,
-} from 'three';
+  WebGLRenderer} from 'three';
 import {
-  IThreeRenderService,
+  Matrix4,
+  Scene,
+  Vector3
+} from 'three';
+import type {
+  IThreeRenderService} from './threeRenderService';
+import {
   ThreeRenderServiceType,
 } from './threeRenderService';
 type ILngLat = [number, number];

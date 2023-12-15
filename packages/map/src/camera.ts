@@ -1,13 +1,16 @@
 // @ts-ignore
 import { lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { IPaddingOptions } from './geo/edge_insets';
-import LngLat, { LngLatLike } from './geo/lng_lat';
-import LngLatBounds, { LngLatBoundsLike } from './geo/lng_lat_bounds';
-import Point, { PointLike } from './geo/point';
+import type { IPaddingOptions } from './geo/edge_insets';
+import type { LngLatLike } from './geo/lng_lat';
+import LngLat from './geo/lng_lat';
+import type { LngLatBoundsLike } from './geo/lng_lat_bounds';
+import LngLatBounds from './geo/lng_lat_bounds';
+import type { PointLike } from './geo/point';
+import Point from './geo/point';
 import Transform from './geo/transform';
 import { Event } from './handler/events/event';
-import { IMapOptions } from './interface';
+import type { IMapOptions } from './interface';
 import {
   clamp,
   ease as defaultEasing,

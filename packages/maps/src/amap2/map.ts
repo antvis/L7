@@ -4,18 +4,20 @@
  */
 import AMapLoader from '@amap/amap-jsapi-loader';
 
-import {
+import type {
   Bounds,
-  CoordinateSystem,
   IMapCamera,
   IPoint,
-  IViewport,
+  IViewport} from '@antv/l7-core';
+import {
+  CoordinateSystem
 } from '@antv/l7-core';
 import { DOM, amap2Project } from '@antv/l7-utils';
-import { mat4, vec2, vec3 } from 'gl-matrix';
+import type { vec2} from 'gl-matrix';
+import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { IAMapInstance } from '../../typings/index';
+import type { IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import Viewport from './Viewport';
 import './logo.css';

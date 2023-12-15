@@ -1,7 +1,7 @@
 import { lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 import { vec3 } from 'gl-matrix';
-import { IPath } from './Path';
+import type { IPath } from './Path';
 export interface IExtrudeGeomety {
   positions: number[];
   index: number[];

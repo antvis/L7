@@ -1,6 +1,7 @@
 import BaseLayer from '../core/BaseLayer';
-import { IGeometryLayerStyleOptions } from '../core/interface';
-import GeometryModels, { GeometryModelType } from './models';
+import type { IGeometryLayerStyleOptions } from '../core/interface';
+import type { GeometryModelType } from './models';
+import GeometryModels from './models';
 
 export default class GeometryLayer extends BaseLayer<IGeometryLayerStyleOptions> {
   public type: string = 'GeometryLayer';

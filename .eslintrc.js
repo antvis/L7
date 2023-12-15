@@ -17,6 +17,7 @@ module.exports = {
     },
     plugins: ['@typescript-eslint','unused-imports'],
     rules: {
+        '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
         'no-unsafe-optional-chaining':'warn',
         'unused-imports/no-unused-imports': 'error',
         '@typescript-eslint/no-loss-of-precision':0,

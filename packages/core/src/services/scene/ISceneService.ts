@@ -1,6 +1,6 @@
-import EventEmitter from 'eventemitter3';
-import { ISceneConfig } from '../config/IConfigService';
-import { ILayer } from '../layer/ILayerService';
+import type EventEmitter from 'eventemitter3';
+import type { ISceneConfig } from '../config/IConfigService';
+import type { ILayer } from '../layer/ILayerService';
 
 export interface ISceneService extends EventEmitter {
   destroyed: boolean;

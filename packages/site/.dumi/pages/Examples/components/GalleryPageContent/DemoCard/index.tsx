@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocale } from 'dumi';
 import cx from 'classnames';
 import { Badge } from 'antd';
-import { DemoCardProps } from '../../../types';
+import type { DemoCardProps } from '../../../types';
 import { ic } from '@antv/dumi-theme-antv/dist/slots/hooks';
 import styles from '../../../index.module.less';
 

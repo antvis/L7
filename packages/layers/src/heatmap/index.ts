@@ -1,7 +1,8 @@
-import { IAttributeAndElements, IRenderOptions } from '@antv/l7-core';
+import type { IAttributeAndElements, IRenderOptions } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import { IHeatMapLayerStyleOptions } from '../core/interface';
-import HeatMapModels, { HeatMapModelType } from './models';
+import type { IHeatMapLayerStyleOptions } from '../core/interface';
+import type { HeatMapModelType } from './models';
+import HeatMapModels from './models';
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
 

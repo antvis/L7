@@ -1,14 +1,15 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   ILayerConfig,
-  IModel,
+  IModel} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import { IPointLayerStyleOptions } from '../../core/interface';
+import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import pointExtrudeFrag from '../shaders/extrude/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';

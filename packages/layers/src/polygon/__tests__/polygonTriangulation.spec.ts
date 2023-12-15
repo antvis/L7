@@ -1,4 +1,4 @@
-import { IEncodeFeature } from '@antv/l7-core';
+import type { IEncodeFeature } from '@antv/l7-core';
 import { polygonTriangulation } from '../../core/triangulation';
 
 describe('PolygonTriangulation', () => {

@@ -1,5 +1,5 @@
 import { vec3, vec4 } from 'gl-matrix';
-import Frustum from './primitives';
+import type Frustum from './primitives';
 export default class Aabb {
   public min: vec3;
   public max: vec3;

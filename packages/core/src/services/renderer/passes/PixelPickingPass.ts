@@ -1,14 +1,15 @@
 import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
+import type {
+  IInteractionTarget} from '../../interaction/IInteractionService';
 import {
-  IInteractionTarget,
   InteractionEvent,
 } from '../../interaction/IInteractionService';
-import { ILayer } from '../../layer/ILayerService';
-import { ILngLat } from '../../map/IMapService';
+import type { ILayer } from '../../layer/ILayerService';
+import type { ILngLat } from '../../map/IMapService';
 import { gl } from '../gl';
-import { IFramebuffer } from '../IFramebuffer';
+import type { IFramebuffer } from '../IFramebuffer';
 import { PassType } from '../IMultiPassRenderer';
 import BaseNormalPass from './BaseNormalPass';
 

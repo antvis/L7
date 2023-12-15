@@ -1,4 +1,4 @@
-import { IMapCamera, IViewport } from '@antv/l7-core';
+import type { IMapCamera, IViewport } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 
 const DEGREES_TO_RADIANS = Math.PI / 180;

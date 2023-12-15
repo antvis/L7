@@ -1,10 +1,10 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import { lodashUtil } from '@antv/l7-utils';
-import { EarthMap } from '../../earthmap';
-import LngLat from '../../geo/lng_lat';
-import Point from '../../geo/point';
-import { Map } from '../../map';
+import type { EarthMap } from '../../earthmap';
+import type LngLat from '../../geo/lng_lat';
+import type Point from '../../geo/point';
+import type { Map } from '../../map';
 import DOM from '../../utils/dom';
 import { Event } from './event';
 const { merge } = lodashUtil;

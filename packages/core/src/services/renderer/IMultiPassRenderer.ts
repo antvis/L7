@@ -1,6 +1,6 @@
-import { ILayer } from '../layer/ILayerService';
-import { IFramebuffer } from './IFramebuffer';
-import { ITexture2D } from './ITexture2D';
+import type { ILayer } from '../layer/ILayerService';
+import type { IFramebuffer } from './IFramebuffer';
+import type { ITexture2D } from './ITexture2D';
 
 export enum PassType {
   Normal = 'normal',

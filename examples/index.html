@@ -1,0 +1,68 @@
+<html>
+<script>
+  window._AMapSecurityConfig = {
+      securityJsCode: "290ddc4b0d33be7bc9b354bc6a4ca614"
+    }
+</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c"></script>
+<script type="module" src="./main.ts"></script>
+
+<style>
+  body {
+    margin: 0;
+    background: #ffe;
+  }
+
+  .lil-gui.root {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background: black;
+  }
+
+  .lil-gui.main li {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    list-style-type: none !important;
+  }
+
+  .lil-gui li.title {
+    padding-left: 16px !important;
+  }
+
+  .lil-gui .c select {
+    color: black;
+  }
+
+  @keyframes animated-size {
+    0% {
+      width: 10px;
+      height: 500px;
+    }
+
+    50% {
+      width: 800px;
+      height: 500px;
+    }
+
+    100% {
+      width: 10px;
+      height: 500px;
+    }
+  }
+
+  .animatedCanvasSize {
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-name: animated-size;
+    animation-timing-function: ease;
+  }
+
+  #map {
+    height: 100%;
+  }
+</style>
+<div  id="map"></div>
+
+</html>

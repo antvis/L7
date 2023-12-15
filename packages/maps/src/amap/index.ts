@@ -1,4 +1,4 @@
-import { IAMapInstance } from '../../typings/index';
+import type { IAMapInstance } from '../../typings';
 import BaseMapWrapper from '../utils/BaseMapWrapper';
 import AMapService from './map';
 

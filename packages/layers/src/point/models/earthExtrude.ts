@@ -1,10 +1,11 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  IModelUniform,
+  IModelUniform} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import {
   calculateCentroid,
@@ -13,7 +14,7 @@ import {
   rgb2arr,
 } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IPointLayerStyleOptions } from '../../core/interface';
+import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
 import pointExtrudeFrag from '../shaders/earth/extrude_frag.glsl';

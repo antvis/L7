@@ -1,7 +1,7 @@
 /**
  * 生成四边形热力图
  */
-import { IParserData, ITransform } from '@antv/l7-core';
+import type { IParserData, ITransform } from '@antv/l7-core';
 import { aProjectFlat, Satistics } from '@antv/l7-utils';
 
 interface IGridHash {

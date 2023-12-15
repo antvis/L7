@@ -1,9 +1,10 @@
-import {
-  IDebugLog,
+import type {
   ILayer,
   ILayerPlugin,
+  IMapService} from '@antv/l7-core';
+import {
+  IDebugLog,
   ILayerStage,
-  IMapService,
   TYPES,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';

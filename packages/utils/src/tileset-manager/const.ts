@@ -1,4 +1,5 @@
-import { TileBounds, UpdateTileStrategy } from './types';
+import type { TileBounds} from './types';
+import { UpdateTileStrategy } from './types';
 import {
   updateTileStateOverlap,
   updateTileStateRealtime,

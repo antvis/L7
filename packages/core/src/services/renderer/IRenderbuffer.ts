@@ -1,4 +1,4 @@
-import { gl } from './gl';
+import type { gl } from './gl';
 
 export interface IRenderbufferInitializationOptions {
   width: number;

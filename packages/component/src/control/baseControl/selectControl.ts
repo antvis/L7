@@ -1,5 +1,6 @@
 import { DOM } from '@antv/l7-utils';
-import { IPopperControlOption, PopperControl } from './popperControl';
+import type { IPopperControlOption} from './popperControl';
+import { PopperControl } from './popperControl';
 
 type BaseOptionItem = {
   value: string;

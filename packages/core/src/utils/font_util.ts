@@ -1,5 +1,5 @@
-import { IFontMappingOption } from '../services/asset/IFontService';
-import { IIcon, IICONMap } from '../services/asset/IIconService';
+import type { IFontMappingOption } from '../services/asset/IFontService';
+import type { IIcon, IICONMap } from '../services/asset/IIconService';
 /**
  * tiny-sdf 中每个 glyph 的宽度（加上 buffer 24 + 3 + 3 = 30）
  */

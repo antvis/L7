@@ -1,11 +1,12 @@
-import {
+import type {
   ILngLat,
   IMapService,
   IMarkerContainerAndBounds,
   IMarkerOption,
   IPoint,
   IPopup,
-  ISceneService,
+  ISceneService} from '@antv/l7-core';
+import {
   TYPES,
 } from '@antv/l7-core';
 import {
@@ -17,7 +18,7 @@ import {
   isPC,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 //  marker 支持 dragger 未完成
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;

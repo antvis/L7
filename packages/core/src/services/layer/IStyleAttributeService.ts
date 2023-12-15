@@ -1,10 +1,10 @@
-import {
+import type {
   IAttribute,
   IAttributeInitializationOptions,
 } from '../renderer/IAttribute';
-import { IBufferInitializationOptions } from '../renderer/IBuffer';
-import { IElements } from '../renderer/IElements';
-import { ILayer } from './ILayerService';
+import type { IBufferInitializationOptions } from '../renderer/IBuffer';
+import type { IElements } from '../renderer/IElements';
+import type { ILayer } from './ILayerService';
 
 /**
  * 1. 提供各个 Layer 样式属性初始值的注册服务

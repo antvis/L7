@@ -1,6 +1,6 @@
-import { ILayer, IPopupOption } from '@antv/l7-core';
+import type { ILayer, IPopupOption } from '@antv/l7-core';
 import { DOM, lodashUtil } from '@antv/l7-utils';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 import Popup from './popup';
 
 type ElementType = DOM.ElementType;

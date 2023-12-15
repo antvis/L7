@@ -1,4 +1,4 @@
-import { ITileSource } from '../interface';
+import type { ITileSource } from '../interface';
 export default abstract class BaseSource implements ITileSource {
   protected x: number;
   protected y: number;

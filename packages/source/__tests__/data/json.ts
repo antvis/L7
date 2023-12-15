@@ -1,4 +1,4 @@
-import { IJsonData } from '../../src/interface';
+import type { IJsonData } from '../../src/interface';
 const data1: IJsonData = [
   {
     lng: 112.323,

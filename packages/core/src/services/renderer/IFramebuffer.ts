@@ -1,5 +1,5 @@
-import { IRenderbuffer } from './IRenderbuffer';
-import { ITexture2D } from './ITexture2D';
+import type { IRenderbuffer } from './IRenderbuffer';
+import type { ITexture2D } from './ITexture2D';
 
 export interface IFramebufferInitializationOptions {
   width?: number;

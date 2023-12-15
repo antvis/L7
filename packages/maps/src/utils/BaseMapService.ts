@@ -1,9 +1,8 @@
 /**
  * MapboxService
  */
-import {
+import type {
   Bounds,
-  CoordinateSystem,
   ICoordinateSystemService,
   IGlobalConfigService,
   ILngLat,
@@ -14,16 +13,19 @@ import {
   IPoint,
   IStatusOptions,
   IViewport,
-  MapServiceEvent,
   MapStyleConfig,
-  MapStyleName,
+  MapStyleName} from '@antv/l7-core';
+import {
+  CoordinateSystem,
+  MapServiceEvent,
   TYPES,
 } from '@antv/l7-core';
-import { Map } from '@antv/l7-map';
+import type { Map } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { ISimpleMapCoord, SimpleMapCoord } from './simpleMapCoord';
+import type { ISimpleMapCoord} from './simpleMapCoord';
+import { SimpleMapCoord } from './simpleMapCoord';
 import { MapTheme } from './theme';
 const EventMap: {
   [key: string]: any;

@@ -1,5 +1,5 @@
-import { Map } from 'mapbox-gl';
-import { IMapboxInstance } from '../../typings/index';
+import type { Map } from 'mapbox-gl';
+import type { IMapboxInstance } from '../../typings/index';
 import BaseMapWrapper from '../utils/BaseMapWrapper';
 import './logo.css';
 import MapboxService from './map';

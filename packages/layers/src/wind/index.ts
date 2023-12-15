@@ -1,7 +1,8 @@
-import { IRenderOptions } from '@antv/l7-core';
+import type { IRenderOptions } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import { IWindLayerStyleOptions } from '../core/interface';
-import WindModels, { WindModelType } from './models';
+import type { IWindLayerStyleOptions } from '../core/interface';
+import type { WindModelType } from './models';
+import WindModels from './models';
 export default class WindLayer extends BaseLayer<IWindLayerStyleOptions> {
   public type: string = 'WindLayer';
   public async buildModels() {
