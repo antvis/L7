@@ -1,23 +1,27 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-    Device,
-    BufferUsage,
-    BufferFrequencyHint,
-    VertexStepMode,
-    Format,
-    PrimitiveTopology,
-    TextureUsage,
-    TransparentWhite,
-    TransparentBlack,
-    ChannelWriteMask,
-    BlendMode,
-    BlendFactor,
-    CullMode,
-    WebGPUDeviceContribution,
+  Device,
+  Bindings,
+  BufferUsage,
+  Buffer,
+  BufferFrequencyHint,
+  VertexStepMode,
+  Format,
+  TextureDimension,
+  PrimitiveTopology,
+  TextureUsage,
+  TransparentWhite,
+  MipmapFilterMode,
+  AddressMode,
+  FilterMode,
+  ChannelWriteMask,
+  BlendMode,
+  BlendFactor,
+  CullMode,
+  WebGPUDeviceContribution,
 } from '@antv/g-device-api';
 export default () => {
-    const [output, setOutput] = useState<Float32Array>()
     useEffect(() => {
 
         async function main() {
@@ -29,15 +33,17 @@ export default () => {
             const swapChain = await deviceContribution.createSwapChain($canvas);
             swapChain.configureSwapChain($canvas.width, $canvas.height);
             const device = swapChain.getDevice();
+
+      
             const renderProgram = device.createProgram({
                 vertex: {
                     entryPoint: "vert_main",
                     wgsl: `
               struct VertexOutput {
                 @builtin(position) position : vec4<f32>,
-                @location(4) color : vec4<f32>,
               }
-            
+           
+
               @vertex
               fn vert_main(
                 @location(0) a_particlePos : vec2<f32>,
@@ -52,11 +58,6 @@ export default () => {
             
                 var output : VertexOutput;
                 output.position = vec4(pos + a_particlePos, 0.0, 1.0);
-                output.color = vec4(
-                  1.0 - sin(angle + 1.0) - a_particleVel.y,
-                  pos.x * 100.0 - a_particleVel.y + 0.1,
-                  a_particleVel.x + cos(angle + 0.5),
-                  1.0);
                 return output;
               }
               `
@@ -64,9 +65,12 @@ export default () => {
                 fragment: {
                     entryPoint: "frag_main",
                     wgsl: `
+                   
+              @group(0) @binding(0) var myTexture: texture_2d<f32>;
+              @group(0) @binding(1) var mySampler: sampler;
               @fragment
-              fn frag_main(@location(4) color : vec4<f32>) -> @location(0) vec4<f32> {
-                return color;
+              fn frag_main() -> @location(0) vec4<f32> {
+                return textureSample(myTexture, mySampler, vec2(0.5,0.5));;
               }
               `
                 }
@@ -102,6 +106,7 @@ export default () => {
             
               var vPos = particlesA.particles[index].pos;
               var vVel = particlesA.particles[index].vel;
+              // var vVel = textureSample(myTexture, mySampler, vPos);
               var cMass = vec2(0.0);
               var cVel = vec2(0.0);
               var colVel = vec2(0.0);
@@ -172,7 +177,7 @@ export default () => {
                 initialParticleData[4 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
             }
 
-            const particleBuffers = [];
+            const particleBuffers: Buffer[] = [];
             for (let i = 0; i < 2; ++i) {
                 particleBuffers[i] = device.createBuffer({
                     viewOrSize: initialParticleData,
@@ -186,6 +191,33 @@ export default () => {
             const spriteVertexBuffer = device.createBuffer({
                 viewOrSize: vertexBufferData,
                 usage: BufferUsage.VERTEX
+            });
+
+            async function loadImage(url) {
+              const img = new Image();
+              const imgBitmap = await createImageBitmap(await fetch(url).then(response => response.blob()));
+              return imgBitmap;
+            }
+
+          // 创建纹理和纹理视图
+          const image = await loadImage('https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*p4PURaZpM-cAAAAAAAAAAAAADmJ7AQ/original')
+
+          const texture = device.createTexture({
+              format: Format.U8_RGBA_NORM,
+              width: image.width,
+              height: image.height,
+              usage: TextureUsage.SAMPLED
+          });
+          texture.setImageData([image]);
+
+          const sampler = device.createSampler({
+              addressModeU: AddressMode.CLAMP_TO_EDGE,
+              addressModeV: AddressMode.CLAMP_TO_EDGE,
+              minFilter: FilterMode.POINT,
+              magFilter: FilterMode.BILINEAR,
+              mipmapFilter: MipmapFilterMode.LINEAR,
+              lodMinClamp: 0,
+              lodMaxClamp: 0
             });
 
             const uniformBuffer = device.createBuffer({
@@ -236,6 +268,7 @@ export default () => {
                 program: renderProgram,
                 colorAttachmentFormats: [Format.U8_RGBA_RT]
             });
+            device.setResourceName(renderPipeline, "Main Render renderPipeline");
             const computePipeline = device.createComputePipeline({
                 inputLayout: null,
                 program: computeProgram
@@ -251,7 +284,7 @@ export default () => {
                 rule3Scale: 0.005
             };
 
-            const bindings = [];
+            const bindings: Bindings[] = [];
             for (let i = 0; i < 2; ++i) {
                 bindings[i] = device.createBindings({
                     pipeline: computePipeline,
@@ -277,6 +310,17 @@ export default () => {
                 });
             }
 
+    
+            const renderBindings = device.createBindings({
+              pipeline: renderPipeline,
+              samplerBindings: [
+                {
+                  texture,
+                  sampler
+                }
+              ]
+            });
+            device.setResourceName(renderBindings, "renderBindings");
             const renderTarget = device.createRenderTarget({
                 format: Format.U8_RGBA_RT,
                 width: $canvas.width,
@@ -318,6 +362,8 @@ export default () => {
                     colorResolveTo: [onscreenTexture],
                     colorClearColor: [TransparentWhite]
                 });
+          
+  
                 renderPass.setPipeline(renderPipeline);
                 renderPass.setVertexInput(
                     inputLayout,
@@ -331,7 +377,9 @@ export default () => {
                     ],
                     null
                 );
+          
                 renderPass.setViewport(0, 0, $canvas.width, $canvas.height);
+                renderPass.setBindings(renderBindings)
                 renderPass.draw(3, numParticles);
 
                 device.submitPass(renderPass);

@@ -72,7 +72,7 @@ export default defineConfig({
     // 设置 alias
     memo.module
       .rule('lint')
-      .test(/\.glsl$/)
+      .test(/\.(glsl|wgsl)$/)
       .use('babel')
       .loader('ts-shader-loader');
     // 还可以创建具名use (loaders)
