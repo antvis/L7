@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite';
+import Copy from 'vite-plugin-cp';
 import vitePluginString from 'vite-plugin-string';
+
 import path from 'path';
+
 export default defineConfig({
     root: path.resolve('./examples'),
     server: { port: 8080, open: '/' },
@@ -24,6 +27,14 @@ export default defineConfig({
     plugins: [
         vitePluginString({
             compress:false
+        }),
+        Copy({
+            targets: [
+              {
+                src: 'node_modules/@antv/g-device-api/dist/pkg/glsl_wgsl_compiler_bg.wasm',
+                dest: 'examples/public'
+              }
+            ]
         }),
     ],
     esbuild: true,
