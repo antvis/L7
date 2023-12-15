@@ -1,49 +1,52 @@
-import { Scene, PointLayer } from '@antv/l7';
-import { GaodeMap} from '@antv/l7-maps';
+import * as demos from './demos';
+const select = document.createElement('select');
+select.id = 'example-select';
+select.style.margin = '1em';
+select.style.position = 'absolute',
+select.style.top ='10px'
+select.style.zIndex ='2'
+select.onchange = onChange;
+select.style.display = 'block';
+document.body.append(select);
 
-const scene = new Scene({
-  id: 'map',
-  map: new GaodeMap({
-    style: 'light',
-    center: [ 121.435159, 31.256971 ],
-    zoom: 14.89,
-    minZoom: 10
-  })
+const options = Object.keys(demos).map((d) => {
+  const option = document.createElement('option');
+  option.textContent = d;
+  option.value = d;
+  return option;
 });
-console.log(scene);
-scene.on('loaded', () => {
-  fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json'
-  )
-    .then(res => res.json())
-    .then(data => {
-      const pointLayer = new PointLayer({})
-        .source(data, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude'
-          }
-        })
-        .shape('name', [
-          'circle',
-          'triangle',
-          'square',
-          'pentagon',
-          'hexagon',
-          'octogon',
-          'hexagram',
-          'rhombus',
-          'vesica'
-        ])
-        .size('unit_price', [ 10, 25 ])
-        .active(true)
-        .color('name', [ '#5B8FF9', '#5CCEA1', '#5D7092', '#F6BD16', '#E86452' ])
-        .style({
-          opacity: 1,
-          strokeWidth: 2
-        });
+options.forEach((d) => select.append(d));
 
-      scene.addLayer(pointLayer);
-    });
-});
+
+const initialValue = new URL(location as any).searchParams.get(
+  'name',
+) as string;
+if (demos[initialValue]) select.value = initialValue;
+
+const $container = document.getElementById('map')!;
+
+let callback: () => void;
+render();
+
+async function render() {
+  if (callback) {
+    callback();
+  }
+  $container.innerHTML = '';
+
+  const demo = demos[select.value];
+  demo();
+  // callback = await initExample($container, demo);
+
+  // @ts-ignore
+  if (window.screenshot) {
+    // @ts-ignore
+    await window.screenshot();
+  }
+}
+
+function onChange() {
+  const { value } = select;
+  history.pushState({ value }, '', `?name=${value}`);
+  render()
+}
