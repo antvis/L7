@@ -44,7 +44,7 @@
     "test-cover": "jest --coverage",
     "test-cover-viewer": "umi-test --coverage && cd coverage && http-server -p 6001 -o",
     "test-live": "umi-test --watch",
-    "test:e2e": "jest --config ./jest.e2e.config.ts --runInBand --detectOpenHandles",
+    "test:e2e": "jest --config ./jest.e2e.config.ts",
     "tsc": "tsc",
     "bundle-dev": "cross-env BABEL_ENV=bundle yarn rollup -c  build/rollup.config.js  --environment BUILD:production,MINIFY:false",
     "bundle:watch": "cross-env BABEL_ENV=bundle yarn rollup -c build/rollup.config.js --watch",

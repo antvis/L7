@@ -17,7 +17,7 @@ describe('Snapshots', () => {
       const url = `http://localhost:6006/${tests[key]}`;
       await page.goto(url);
 
-      await sleep(300);
+      await sleep(1500);
 
       // Chart already rendered, capture into buffer.
       const buffer = await page.locator('canvas').screenshot();
