@@ -80,67 +80,67 @@ export default class SimpleLineModel extends BaseModel {
     return [model];
   }
   protected registerBuiltinAttributes() {
+    // this.styleAttributeService.registerStyleAttribute({
+    //   name: 'distance',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_Distance',
+    //     shaderLocation: 14,
+    //     buffer: {
+    //       // give the WebGL driver a hint that this buffer may change
+    //       usage: gl.STATIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 1,
+    //     update: (
+    //       feature: IEncodeFeature,
+    //       featureIdx: number,
+    //       vertex: number[],
+    //     ) => {
+    //       return [vertex[3]];
+    //     },
+    //   },
+    // });
+    // this.styleAttributeService.registerStyleAttribute({
+    //   name: 'total_distance',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_Total_Distance',
+    //     shaderLocation: 13,//枚举不够了,先固定写值吧,在shader中location也成一致的并且不与其他的重复就行了
+    //     buffer: {
+    //       // give the WebGL driver a hint that this buffer may change
+    //       usage: gl.STATIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 1,
+    //     update: (
+    //       feature: IEncodeFeature,
+    //       featureIdx: number,
+    //       vertex: number[],
+    //     ) => {
+    //       return [vertex[5]];
+    //     },
+    //   },
+    // });
+    //size.x,size,y,distance,totalDistance
     this.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
+      name: 'sizeDistanceAndTotalDistance',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Distance',
-        shaderLocation: 14,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
-          return [vertex[3]];
-        },
-      },
-    });
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'total_distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Total_Distance',
-        shaderLocation: 13,//枚举不够了,先固定写值吧,在shader中location也成一致的并且不与其他的重复就行了
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
-          return [vertex[5]];
-        },
-      },
-    });
-
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
+        name: 'a_SizeDistanceAndTotalDistance',
         shaderLocation: ShaderLocation.SIZE,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
+          usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 2,
-        update: (feature: IEncodeFeature) => {
+        size: 4,
+        update: (feature: IEncodeFeature,featureIdx:number,vertex: number[]) => {
           const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
+          const a_Size =  Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
+          return [a_Size[0],a_Size[1],vertex[3],vertex[5]]
         },
       },
     });

@@ -3,11 +3,8 @@
 
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec2 a_Size;
-layout(location = 10) in float a_Distance;
-layout(location = 11) in float a_Total_Distance;
-layout(location = 12) in float a_Miter;
-layout(location = 13) in vec3 a_Normal;
+layout(location = 9) in vec4 a_SizeDistanceAndTotalDistance;
+layout(location = 13) in vec4 a_NormalAndMiter;
 layout(location = 14) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
@@ -43,8 +40,8 @@ out vec4 v_texture_data;
 
 void main() {
   //dash输出
-  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
-  v_d_distance_ratio = a_Distance / a_Total_Distance;
+  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_SizeDistanceAndTotalDistance.a;
+  v_d_distance_ratio = a_SizeDistanceAndTotalDistance.b / a_SizeDistanceAndTotalDistance.a;
 
   // cal style mapping - 数据纹理映射部分的计算
   float d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
@@ -58,16 +55,16 @@ void main() {
   v_color.a *= opacity;
   v_stroke = stroke;
 
-  vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
+  vec3 size = a_NormalAndMiter.w * setPickingSize(a_SizeDistanceAndTotalDistance.x) * reverse_offset_normal(a_NormalAndMiter.xyz);
   
   vec2 offset = project_pixel(size.xy);
 
-  float lineDistance = a_Distance;
-  float currentLinePointRatio = lineDistance / a_Total_Distance;
+  float lineDistance = a_SizeDistanceAndTotalDistance.b;
+  float currentLinePointRatio = lineDistance / a_SizeDistanceAndTotalDistance.a;
  
 
-  float lineOffsetWidth = length(offset + offset * sign(a_Miter)); // 线横向偏移的距离（向两侧偏移的和）
-  float linePixelSize = project_pixel(a_Size.x) * 2.0;  // 定点位置偏移，按地图等级缩放后的距离 单侧 * 2
+  float lineOffsetWidth = length(offset + offset * sign(a_NormalAndMiter.w)); // 线横向偏移的距离（向两侧偏移的和）
+  float linePixelSize = project_pixel(a_SizeDistanceAndTotalDistance.x) * 2.0;  // 定点位置偏移，按地图等级缩放后的距离 单侧 * 2
   float texV = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
   
   v_texture_data = vec4(currentLinePointRatio, lineDistance, d_texPixelLen, texV);
@@ -78,13 +75,13 @@ void main() {
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
 
   float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况 vertex height
-  float lineHeight = a_Size.y; // size 第二个参数代表的高度 [linewidth, lineheight]
+  float lineHeight = a_SizeDistanceAndTotalDistance.y; // size 第二个参数代表的高度 [linewidth, lineheight]
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     lineHeight *= 0.2; // 保持和 amap/mapbox 一致的效果
     h *= 0.2;
     if(u_heightfixed < 1.0) {
-      lineHeight = project_pixel(a_Size.y);
+      lineHeight = project_pixel(a_SizeDistanceAndTotalDistance.y);
     }
     gl_Position = u_Mvp * (vec4(project_pos.xy + offset, lineHeight + h + u_raisingHeight, 1.0));
   } else {

@@ -147,84 +147,44 @@ export default class LineModel extends BaseModel {
       type: '',
     };
   }
-  //distance 计算dash用和渐变用
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
+      name: 'sizeDistanceAndTotalDistance',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Distance',
-        shaderLocation:10,
+        name: 'a_SizeDistanceAndTotalDistance',
+        shaderLocation:ShaderLocation.SIZE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[]
-        ) => {
-          return [vertex[3]]
-        },
-      },
-    });
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'total_distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Total_Distance',
-        shaderLocation:11,
-        buffer: {
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
+        size: 4,
+        update:  (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
         ) => {
-          return [vertex[5]];
-        },
-      },
-    });
-
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        shaderLocation:ShaderLocation.SIZE,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (feature: IEncodeFeature) => {
           const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
+          const a_Size =  Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
+          return [a_Size[0],a_Size[1],vertex[3],vertex[5]];
         },
       },
     });
 
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
-      name: 'normal',
+      name: 'normalAndMiter',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Normal',
+        name: 'a_NormalAndMiter',
         shaderLocation:ShaderLocation.NORMAL,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 3,
+        size: 4,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -232,29 +192,7 @@ export default class LineModel extends BaseModel {
           attributeIdx: number,
           normal: number[],
         ) => {
-          return normal;
-        },
-      },
-    });
-
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'miter',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Miter',
-        shaderLocation:12,
-        buffer: {
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
-          return [vertex[4]];
+          return [...normal,vertex[4]];
         },
       },
     });
