@@ -1,1 +1,1 @@
-export { MapRender as WebGLIDW } from './idw';
+export { MapRender as WebGL_IDW } from './idw';

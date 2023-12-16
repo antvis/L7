@@ -31,7 +31,7 @@ export default () => {
     }
     return (<>
         <div style={{ position: 'absolute', left:'20px', zIndex:10, top: '20px' }} >
-            <Cascader defaultValue={['Point', 'PointFill']} options={CascaderOption} onChange={onChange} />
+            <Cascader defaultValue={initState as string[]} options={CascaderOption} onChange={onChange} />
         </div>
         {/* 不同 Demo 可替换 view 模板 */}
          < MapView data={values}/> 

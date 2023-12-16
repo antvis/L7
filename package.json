@@ -152,6 +152,7 @@
     "jest-environment-jsdom": "^29.6.2",
     "jest-text-transformer": "^1.0.4",
     "jsdom": "^22.1.0",
+    "kdbush": "^4.0.2",
     "leaflet": "^1.8.0",
     "lerc": "^3.0.0",
     "lerna": "^3.16.4",
