@@ -1,2 +1,12 @@
-export { MapRender as PointFill } from './point/fill';
-export { MapRender as PointImage } from './point/image';
+import * as PointDemos from './point';
+import * as GPUDemos from './webgpu';
+
+export default [{
+    name: 'Point',
+    demos: PointDemos
+}, {
+    name: 'WebGPU',
+    demos: GPUDemos
+}
+]
+

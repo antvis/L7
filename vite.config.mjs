@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import Copy from 'vite-plugin-cp';
 import vitePluginString from 'vite-plugin-string';
+import react from '@vitejs/plugin-react'
 
 import path from 'path';
 
@@ -25,6 +26,7 @@ export default defineConfig({
 
     },
     plugins: [
+        react(),
         vitePluginString({
             compress:false
         }),

@@ -9,3 +9,8 @@ export const tests = {
   'point-normal-device': 'features/point/point-normal-device',
   'citybuilding-amap1': 'features/citybuilding/amap1',
 };
+
+export const testList = [
+  'PointFill',
+  'PointImage'
+]

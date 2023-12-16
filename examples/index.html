@@ -13,7 +13,7 @@
     }
 </script>
 <script src="https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c"></script>
-<script type="module" src="./main.ts"></script>
+<script type="module" src="./app.tsx"></script>
 
 <style>
   body {
@@ -67,10 +67,11 @@
     animation-timing-function: ease;
   }
 
-  #map {
+  #root {
     height: 100%;
+    width: 100%;
+    position: relative;
   }
 </style>
-<div  id="map"></div>
-
+<div id="root"></div>
 </html>

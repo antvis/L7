@@ -1,4 +1,4 @@
-import * as demos from './demos';
+import DemoList from './demos';
 const select = document.createElement('select');
 select.id = 'example-select';
 select.style.margin = '1em';
@@ -48,5 +48,6 @@ async function render() {
 function onChange() {
   const { value } = select;
   history.pushState({ value }, '', `?name=${value}`);
+
   render()
 }
