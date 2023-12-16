@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect } from 'react';
 import DemoList from '../demos';
 export const MapView = ((props)=>{
     const { data = ['Point','PointFill'] } = props; // 通过解构赋值获取传递的 data 参数
