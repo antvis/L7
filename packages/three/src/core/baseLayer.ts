@@ -125,7 +125,7 @@ export default class ThreeJSLayer
       lnglat,
       // @ts-ignore
       this.threeRenderService.center,
-    );
+    ) || [0,0];
     return [x, y] as ILngLat;
   }
 

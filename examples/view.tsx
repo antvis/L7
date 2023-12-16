@@ -1,27 +1,15 @@
 // @ts-ignore
-import React, { useEffect,useState } from 'react';
+import React, { useState } from 'react';
 import DemoList from './demos';
 import { Cascader } from 'antd';
 import 'antd/dist/antd.css';
-
-const MapView = ((props)=>{
-    const { data = ['Point','PointFill'] } = props; // 通过解构赋值获取传递的 data 参数
-    useEffect(()=>{
-        const group = DemoList.find(d=>d.name === data[0]);
-        group?.demos[data[1]]();
-        return ()=>{
-            const mapElement = document.getElementById('map');
-            if (mapElement) {
-                mapElement.innerHTML = '';
-            }
-        }
-    },[data]);
-
-  return <div id="map" style={{ width: '100%',height:'100%' }}/>
-});
+import { MapView } from './view/map'
 
 export default () => {
-    const [values,setValue] = useState()
+    const searchParams = new URL(location as any).searchParams;
+    const initState =searchParams.size === 0 ? ['Point','PointFill']: [searchParams.get('type'),searchParams.get('name')];
+    const [values,setValue] = useState(initState)
+
     const CascaderOption = DemoList.map((group) => {
         return {
             label: group.name,
@@ -41,14 +29,12 @@ export default () => {
       history.pushState({ value:e }, '', `?type=${e[0]}&name=${e[1]}`);
       setValue(e)
     }
-  
- 
-
     return (<>
         <div style={{ position: 'absolute', left:'20px', zIndex:10, top: '20px' }} >
             <Cascader defaultValue={['Point', 'PointFill']} options={CascaderOption} onChange={onChange} />
         </div>
-         < MapView data={values}/>
+        {/* 不同 Demo 可替换 view 模板 */}
+         < MapView data={values}/> 
     </>
     );
 };
