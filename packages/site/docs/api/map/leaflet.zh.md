@@ -16,7 +16,7 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 
 ### 安装
 
-L7-Leafet 为三方插件 L7本身没有内置，需要独立按照
+L7-Leaflet 为三方插件 L7本身没有内置，需要独立按照
 
 - [L7-Leaflet GitHub](https://github.com/antvis/l7-leaflet)
 - [L7-Leaflet Demo ](https://l7-leaflet.antv.vision/)
@@ -50,7 +50,7 @@ const scene = new Scene({
 });
 ```
 
-### Lealet 种使用 L7
+### Leaflet 种使用 L7
 
 ``` ts
 import * as L from 'leaflet';
