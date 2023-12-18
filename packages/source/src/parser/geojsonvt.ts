@@ -1,19 +1,19 @@
-import {
+import type {
   SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
-import {
+import type {
   Feature,
   FeatureCollection,
   Geometries,
   Properties,
 } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
-import { IParserData, ITileSource } from '../interface';
+import type { IParserData, ITileSource } from '../interface';
 import VtSource from '../source/geojsonvt';
 
-import { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
+import type { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,

@@ -1,4 +1,4 @@
-import { ILayer, IPass, IPostProcessingPass } from '@antv/l7-core';
+import type { ILayer, IPass, IPostProcessingPass } from '@antv/l7-core';
 
 /**
  * 'blurH' -> ['blurH', {}]

@@ -1,5 +1,5 @@
-import TapDragZoomHandler from '../tap/tap_drag_zoom';
-import { TouchRotateHandler, TouchZoomHandler } from '../touch';
+import type TapDragZoomHandler from '../tap/tap_drag_zoom';
+import type { TouchRotateHandler, TouchZoomHandler } from '../touch';
 
 /**
  * The `TouchZoomRotateHandler` allows the user to zoom and rotate the map by

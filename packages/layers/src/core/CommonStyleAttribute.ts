@@ -1,8 +1,9 @@
+import type {
+  IEncodeFeature,
+  IStyleAttribute} from '@antv/l7-core';
 import {
   AttributeType,
-  gl,
-  IEncodeFeature,
-  IStyleAttribute,
+  gl
 } from '@antv/l7-core';
 
 export enum ShaderLocation {

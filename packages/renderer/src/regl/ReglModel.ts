@@ -3,19 +3,20 @@ import {
   preprocessShader_GLSL,
   ViewportOrigin,
 } from '@antv/g-device-api';
-import {
-  gl,
+import type {
   IAttribute,
   IBlendOptions,
   IElements,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
-  IUniform,
+  IUniform} from '@antv/l7-core';
+import {
+  gl,
   removeDuplicateUniforms,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import regl from 'regl';
+import type regl from 'regl';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -25,10 +26,10 @@ import {
   stencilFuncMap,
   stencilOpMap,
 } from './constants';
-import ReglAttribute from './ReglAttribute';
-import ReglElements from './ReglElements';
-import ReglFramebuffer from './ReglFramebuffer';
-import ReglTexture2D from './ReglTexture2D';
+import type ReglAttribute from './ReglAttribute';
+import type ReglElements from './ReglElements';
+import type ReglFramebuffer from './ReglFramebuffer';
+import type ReglTexture2D from './ReglTexture2D';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 /**

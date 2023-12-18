@@ -1,15 +1,16 @@
-import {
-  IDebugLog,
+import type {
   IEncodeFeature,
   IFontService,
   ILayer,
   ILayerPlugin,
-  ILayerStage,
   IMapService,
   IParseDataItem,
   IStyleAttribute,
   IStyleAttributeService,
-  Position,
+  Position} from '@antv/l7-core';
+import {
+  IDebugLog,
+  ILayerStage,
   TYPES,
 } from '@antv/l7-core';
 import { lodashUtil, normalize, rgb2arr } from '@antv/l7-utils';

@@ -1,9 +1,10 @@
-import {
-  gl,
+import type {
   IRenderOptions,
   IStencilOptions,
+  MaskOperationType} from '@antv/l7-core';
+import {
+  gl,
   MaskOperation,
-  MaskOperationType,
   StencilType,
 } from '@antv/l7-core';
 // 掩膜配置

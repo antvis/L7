@@ -1,15 +1,16 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAnimateOption,
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions } from '../../core/interface';
+import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import arc_line_frag from '../shaders/arc/line_arc_frag.glsl';
 import arc_line_vert from '../shaders/arc/line_arc_vert.glsl';

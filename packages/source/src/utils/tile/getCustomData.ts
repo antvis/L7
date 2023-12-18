@@ -1,6 +1,7 @@
 // import { bindCancel } from './request';
-import { formatImage, SourceTile } from '@antv/l7-utils';
-import { IBandsOperation, IRasterFormat } from '../../interface';
+import type { SourceTile } from '@antv/l7-utils';
+import { formatImage } from '@antv/l7-utils';
+import type { IBandsOperation, IRasterFormat } from '../../interface';
 import { processRasterData } from '../bandOperation/bands';
 
 export const getCustomData = async (

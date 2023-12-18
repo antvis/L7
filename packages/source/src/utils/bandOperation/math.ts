@@ -1,4 +1,4 @@
-import { IRasterData } from '../../interface';
+import type { IRasterData } from '../../interface';
 
 // tslint:disable-next-line: jsdoc-format
 /** 数学运算 根据计算表达式进行数学运算

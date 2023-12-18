@@ -1,4 +1,4 @@
-import { SourceTile } from './tile';
+import type { SourceTile } from './tile';
 
 // Bounds [minLng, minLat, maxLng, maxLat]
 export type TileBounds = [number, number, number, number];

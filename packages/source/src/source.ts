@@ -1,6 +1,5 @@
-// @ts-ignore
 import { SyncHook } from '@antv/async-hook';
-import {
+import type {
   IClusterOptions,
   IParseDataItem,
   IParserCfg,
@@ -10,20 +9,21 @@ import {
   ITileParserCFG,
   ITransform,
 } from '@antv/l7-core';
+import type {
+  SourceTile} from '@antv/l7-utils';
 import {
   bBoxToBounds,
   extent,
   lodashUtil,
   padBounds,
-  SourceTile,
   TilesetManager,
 } from '@antv/l7-utils';
-import { BBox } from '@turf/helpers';
+import type { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 const { cloneDeep, isFunction, isString, mergeWith } = lodashUtil;
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import Supercluster from 'supercluster/dist/supercluster';
+import type Supercluster from 'supercluster/dist/supercluster';
 import { getParser, getTransform } from './factory';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';

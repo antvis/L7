@@ -2,14 +2,16 @@
 /**
  * MapboxService
  */
-import {
-  CoordinateSystem,
+import type {
   IEarthService,
   IMercator,
-  IViewport,
+  IViewport} from '@antv/l7-core';
+import {
+  CoordinateSystem,
   MapServiceEvent,
 } from '@antv/l7-core';
-import { EarthMap, Map } from '@antv/l7-map';
+import type { Map } from '@antv/l7-map';
+import { EarthMap } from '@antv/l7-map';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseMapService from '../utils/BaseMapService';

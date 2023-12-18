@@ -1,18 +1,20 @@
-import {
+import type {
   IControlService,
   IGlobalConfigService,
   ILayer,
   ILayerService,
   IMapService,
   IRendererService,
-  ISceneService,
+  ISceneService} from '@antv/l7-core';
+import {
   TYPES,
   createLayerContainer,
 } from '@antv/l7-core';
 import { PolygonLayer } from '@antv/l7-layers';
 import { DOM } from '@antv/l7-utils';
-import { Container } from 'inversify';
-import { Control, IControlOption } from './baseControl';
+import type { Container } from 'inversify';
+import type { IControlOption } from './baseControl';
+import { Control } from './baseControl';
 
 export interface ISwipeControlOption extends IControlOption {
   /**

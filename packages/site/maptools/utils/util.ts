@@ -1,5 +1,5 @@
 import extent from '@turf/envelope';
-import { FeatureCollection } from '@turf/helpers';
+import type { FeatureCollection } from '@turf/helpers';
 // @ts-ignore
 import geojson2svg from 'geojson2svg';
 // @ts-ignore

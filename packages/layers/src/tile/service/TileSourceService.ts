@@ -1,4 +1,4 @@
-import { IParseDataItem } from '@antv/l7-core';
+import type { IParseDataItem } from '@antv/l7-core';
 import * as turf from '@turf/helpers';
 import union from '@turf/union';
 

@@ -1,5 +1,5 @@
-import { IInject } from '../renderer/IModel';
-import { IUniform } from '../renderer/IUniform';
+import type { IInject } from '../renderer/IModel';
+import type { IUniform } from '../renderer/IUniform';
 
 /**
  * 提供 ShaderModule 管理服务

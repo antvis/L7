@@ -96,7 +96,7 @@ export interface IRasterCfg {
   min: number;
 }
 
-import { Feature } from '@turf/helpers';
+import type { Feature } from '@turf/helpers';
 export interface ITileSource {
   getTileData(layer: string): any;
 }

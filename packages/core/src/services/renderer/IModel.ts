@@ -1,9 +1,9 @@
-import { gl } from './gl';
-import { IAttribute } from './IAttribute';
-import { IBuffer } from './IBuffer';
-import { IElements } from './IElements';
-import { ITexture2D } from './ITexture2D';
-import { IUniform } from './IUniform';
+import type { gl } from './gl';
+import type { IAttribute } from './IAttribute';
+import type { IBuffer } from './IBuffer';
+import type { IElements } from './IElements';
+import type { ITexture2D } from './ITexture2D';
+import type { IUniform } from './IUniform';
 
 export interface IBlendOptions {
   // gl.enable(gl.BLEND)

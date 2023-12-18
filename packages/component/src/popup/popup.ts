@@ -1,10 +1,11 @@
-import {
+import type {
   ILayerService,
   ILngLat,
   IMapService,
   IPopup,
   IPopupOption,
-  ISceneService,
+  ISceneService} from '@antv/l7-core';
+import {
   TYPES,
 } from '@antv/l7-core';
 import {
@@ -14,7 +15,7 @@ import {
   DOM,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 import { createL7Icon } from '../utils/icon';
 
 type ElementType = DOM.ElementType;

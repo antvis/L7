@@ -1,14 +1,16 @@
 import { DOM } from '@antv/l7-utils';
-import { Container, injectable } from 'inversify';
+import type { Container} from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
-import { IMapService } from '../map/IMapService';
-import {
+import type { IMapService } from '../map/IMapService';
+import type {
   IControl,
   IControlCorners,
   IControlService,
   IControlServiceCfg,
-  PositionName,
+  PositionName} from './IControlService';
+import {
   PositionType,
 } from './IControlService';
 

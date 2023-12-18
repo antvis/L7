@@ -1,13 +1,13 @@
-import { IAttribute, IAttributeInitializationOptions } from './IAttribute';
-import { IBuffer, IBufferInitializationOptions } from './IBuffer';
-import { IElements, IElementsInitializationOptions } from './IElements';
-import {
+import type { IAttribute, IAttributeInitializationOptions } from './IAttribute';
+import type { IBuffer, IBufferInitializationOptions } from './IBuffer';
+import type { IElements, IElementsInitializationOptions } from './IElements';
+import type {
   IFramebuffer,
   IFramebufferInitializationOptions,
 } from './IFramebuffer';
-import { IModel, IModelInitializationOptions } from './IModel';
-import { IPass } from './IMultiPassRenderer';
-import { ITexture2D, ITexture2DInitializationOptions } from './ITexture2D';
+import type { IModel, IModelInitializationOptions } from './IModel';
+import type { IPass } from './IMultiPassRenderer';
+import type { ITexture2D, ITexture2DInitializationOptions } from './ITexture2D';
 
 export interface IRenderConfig {
   /**

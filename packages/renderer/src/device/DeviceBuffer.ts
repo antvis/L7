@@ -1,7 +1,10 @@
-import { Buffer, BufferUsage, Device } from '@antv/g-device-api';
-import { IBuffer, IBufferInitializationOptions, gl } from '@antv/l7-core';
+import type { Buffer, Device } from '@antv/g-device-api';
+import { BufferUsage } from '@antv/g-device-api';
+import type { IBuffer, IBufferInitializationOptions} from '@antv/l7-core';
+import { gl } from '@antv/l7-core';
 import { hintMap, typedArrayCtorMap } from './constants';
-import { TypedArray, isTypedArray } from './utils/typedarray';
+import type { TypedArray} from './utils/typedarray';
+import { isTypedArray } from './utils/typedarray';
 
 /**
  * Use Buffer from @antv/g-device-api

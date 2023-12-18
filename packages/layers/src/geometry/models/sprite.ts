@@ -1,7 +1,8 @@
-import { gl, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
+import type { IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
+import { gl } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
-import { IGeometryLayerStyleOptions } from '../../core/interface';
+import type { IGeometryLayerStyleOptions } from '../../core/interface';
 import spriteFrag from '../shaders/sprite_frag.glsl';
 import spriteVert from '../shaders/sprite_vert.glsl';
 

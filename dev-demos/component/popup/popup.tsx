@@ -9,7 +9,8 @@ import {
 import { featureCollection, point } from '@turf/turf';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
-import { FunctionComponent, useEffect } from 'react';
+import type { FunctionComponent} from 'react';
+import { useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);

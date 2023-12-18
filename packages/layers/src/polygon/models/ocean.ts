@@ -1,14 +1,15 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
   IModelUniform,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IPolygonLayerStyleOptions } from '../../core/interface';
+import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import ocean_frag from '../shaders/ocean/ocean_frag.glsl';
 import ocean_vert from '../shaders/ocean/ocean_vert.glsl';

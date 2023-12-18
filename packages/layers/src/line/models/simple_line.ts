@@ -1,12 +1,13 @@
+import type {
+  IEncodeFeature,
+  IModel} from '@antv/l7-core';
 import {
   AttributeType,
-  gl,
-  IEncodeFeature,
-  IModel,
+  gl
 } from '@antv/l7-core';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions } from '../../core/interface';
+import type { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
 import simple_line_frag from '../shaders/simple/simpleline_frag.glsl';
 import simple_line_vert from '../shaders/simple/simpleline_vert.glsl';

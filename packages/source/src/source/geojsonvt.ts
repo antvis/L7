@@ -1,5 +1,5 @@
-import { Feature, Properties } from '@turf/helpers';
-import { ITileSource, MapboxVectorTile } from '../interface';
+import type { Feature, Properties } from '@turf/helpers';
+import type { ITileSource, MapboxVectorTile } from '../interface';
 export default class VectorSource implements ITileSource {
   private vectorTile: MapboxVectorTile;
   private vectorLayerCache: {

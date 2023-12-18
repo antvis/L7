@@ -1,13 +1,14 @@
-import {
+import type {
   Bounds,
   ILngLat,
   IMercator,
   IPoint,
   IStatusOptions,
   IViewport,
-  MapServiceEvent,
   MapStyleConfig,
-  Point,
+  Point} from '@antv/l7-core';
+import {
+  MapServiceEvent
 } from '@antv/l7-core';
 import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';

@@ -1,7 +1,8 @@
-import { IParseDataItem } from '@antv/l7-core';
+import type { IParseDataItem } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import { ILineLayerStyleOptions } from '../core/interface';
-import LineModels, { LineModelType } from './models';
+import type { ILineLayerStyleOptions } from '../core/interface';
+import type { LineModelType } from './models';
+import LineModels from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';

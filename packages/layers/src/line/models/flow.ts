@@ -1,11 +1,12 @@
+import type {
+  IEncodeFeature,
+  IModel} from '@antv/l7-core';
 import {
   AttributeType,
-  gl,
-  IEncodeFeature,
-  IModel,
+  gl
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { IFlowLineStyleOptions } from '../../core/interface';
+import type { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineTriangulation } from '../../core/line_trangluation';
 import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
 

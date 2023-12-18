@@ -1,10 +1,10 @@
-import { Buffer, Device } from '@antv/g-device-api';
-import {
+import type { Buffer, Device } from '@antv/g-device-api';
+import type {
   IAttribute,
   IAttributeInitializationOptions,
   IBuffer,
 } from '@antv/l7-core';
-import DeviceBuffer from './DeviceBuffer';
+import type DeviceBuffer from './DeviceBuffer';
 
 interface AttributeConfig {
   shaderLocation?: number;

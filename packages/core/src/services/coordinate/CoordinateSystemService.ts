@@ -3,11 +3,12 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { getDistanceScales } from '../../utils/project';
-import { ICameraService } from '../camera/ICameraService';
+import type { ICameraService } from '../camera/ICameraService';
 // import { IMapService } from '../map/IMapService'
+import type {
+  ICoordinateSystemService} from './ICoordinateSystemService';
 import {
-  CoordinateSystem,
-  ICoordinateSystemService,
+  CoordinateSystem
 } from './ICoordinateSystemService';
 
 const VECTOR_TO_POINT_MATRIX = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0];

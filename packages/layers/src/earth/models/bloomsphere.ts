@@ -1,8 +1,9 @@
+import type {
+  IEncodeFeature,
+  IModel} from '@antv/l7-core';
 import {
   AttributeType,
-  gl,
-  IEncodeFeature,
-  IModel,
+  gl
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 

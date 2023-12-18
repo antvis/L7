@@ -1,12 +1,13 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IBuffer,
   IEncodeFeature,
   ILayer,
   ILayerPlugin,
   IRendererService,
-  IStyleAttributeService,
+  IStyleAttributeService} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import {
   decodePickingColor,

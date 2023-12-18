@@ -1,5 +1,5 @@
-import { MousePanHandler } from '../mouse/';
-import { TouchPanHandler } from '../touch/';
+import type { MousePanHandler } from '../mouse/';
+import type { TouchPanHandler } from '../touch/';
 
 export interface IDragPanOptions {
   linearity?: number;

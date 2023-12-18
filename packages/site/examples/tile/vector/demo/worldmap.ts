@@ -3,8 +3,7 @@ import {
   Scene,
   Source,
   PolygonLayer,
-  LineLayer,
-  PointLayer
+  LineLayer
 } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';

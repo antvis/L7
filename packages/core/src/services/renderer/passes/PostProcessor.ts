@@ -1,11 +1,11 @@
 import { inject, injectable, postConstruct } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../../types';
-import { ILayer } from '../../layer/ILayerService';
-import { IFramebuffer } from '../IFramebuffer';
-import { IPostProcessingPass, IPostProcessor } from '../IMultiPassRenderer';
-import { IRendererService } from '../IRendererService';
-import { ITexture2D } from '../ITexture2D';
+import type { ILayer } from '../../layer/ILayerService';
+import type { IFramebuffer } from '../IFramebuffer';
+import type { IPostProcessingPass, IPostProcessor } from '../IMultiPassRenderer';
+import type { IRendererService } from '../IRendererService';
+import type { ITexture2D } from '../ITexture2D';
 import { gl } from '../gl';
 
 /**

@@ -1,15 +1,16 @@
-import {
-  getData,
-  getURLFromTemplate,
+import type {
   RequestParameters,
   SourceTile,
-  TileLoadParams,
+  TileLoadParams} from '@antv/l7-utils';
+import {
+  getData,
+  getURLFromTemplate
 } from '@antv/l7-utils';
-import { Feature } from '@turf/helpers';
-import { IParserData, ITileSource } from '../interface';
+import type { Feature } from '@turf/helpers';
+import type { IParserData, ITileSource } from '../interface';
 import VtSource from '../source/geojsonvt';
 
-import { ITileParserCFG } from '@antv/l7-core';
+import type { ITileParserCFG } from '@antv/l7-core';
 
 export type MapboxVectorTile = {
   layers: { [key: string]: { features: Feature[] } };
