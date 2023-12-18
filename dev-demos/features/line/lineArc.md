@@ -1,2 +1,2 @@
 ### Line - arc
-<code src="./demos/linearc.tsx"></code>
+<code src="./demos/lineArc.tsx"></code>

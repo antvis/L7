@@ -92,3 +92,6 @@ docs-dist
 /packages/leaflet
 site_temp
 /packages/site/server
+
+*-actual.png
+*-diff.png

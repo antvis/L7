@@ -22,16 +22,16 @@ import 'reflect-metadata';
 import BaseModel from '../../core/BaseModel';
 import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapTriangulation } from '../../core/triangulation';
-import heatmap3DFrag from '../shaders/heatmap_3d_frag.glsl';
-import heatmap3DVert from '../shaders/heatmap_3d_vert.glsl';
+import heatmap_3d_frag from '../shaders/heatmap/heatmap_3d_frag.glsl';
+import heatmap_3d_vert from '../shaders/heatmap/heatmap_3d_vert.glsl';
 
 // 绘制平面热力的 shader
-import heatmapColorFrag from '../shaders/heatmap_frag.glsl';
-import heatmapColorVert from '../shaders/heatmap_vert.glsl';
+import heatmap_frag from '../shaders/heatmap/heatmap_frag.glsl';
+import heatmap_vert from '../shaders/heatmap/heatmap_vert.glsl';
 
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import heatmapFramebufferFrag from '../shaders/heatmap_framebuffer_frag.glsl';
-import heatmapFramebufferVert from '../shaders/heatmap_framebuffer_vert.glsl';
+import heatmap_framebuffer_frag from '../shaders/heatmap/heatmap_framebuffer_frag.glsl';
+import heatmap_framebuffer_vert from '../shaders/heatmap/heatmap_framebuffer_vert.glsl';
 import { heatMap3DTriangulation } from '../triangulation';
 const { isEqual } = lodashUtil;
 @injectable()
@@ -165,8 +165,8 @@ export default class HeatMapModel extends BaseModel {
     this.layer.triangulation = HeatmapTriangulation;
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapIntensity',
-      vertexShader: heatmapFramebufferVert,
-      fragmentShader: heatmapFramebufferFrag,
+      vertexShader: heatmap_framebuffer_vert,
+      fragmentShader: heatmap_framebuffer_frag,
       triangulation: HeatmapTriangulation,
 
       depth: {
@@ -182,8 +182,8 @@ export default class HeatMapModel extends BaseModel {
 
   private buildHeatmap(): IModel {
     this.shaderModuleService.registerModule('heatmapColor', {
-      vs: heatmapColorVert,
-      fs: heatmapColorFrag,
+      vs: heatmap_vert,
+      fs: heatmap_frag,
     });
 
     this.colorModelUniformBuffer = [
@@ -346,8 +346,8 @@ export default class HeatMapModel extends BaseModel {
     const { width, height } = getViewportSize();
     const triangulation = heatMap3DTriangulation(width / 4.0, height / 4.0);
     this.shaderModuleService.registerModule('heatmap3dColor', {
-      vs: heatmap3DVert,
-      fs: heatmap3DFrag,
+      vs: heatmap_3d_vert,
+      fs: heatmap_3d_frag,
     });
 
     this.heat3DModelUniformBuffer = [

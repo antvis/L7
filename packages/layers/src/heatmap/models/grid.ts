@@ -8,8 +8,8 @@ import {
 import BaseModel from '../../core/BaseModel';
 import { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
-import heatmapGridVert from '../shaders/grid_vert.glsl';
-import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
+import grid_vert from '../shaders/grid/grid_vert.glsl';
+import grid_frag from '../shaders/grid/grid_frag.glsl';
 export default class GridModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const commoninfo = this.getCommonUniformsInfo();
@@ -47,8 +47,8 @@ export default class GridModel extends BaseModel {
     this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapGrid',
-      vertexShader: heatmapGridVert,
-      fragmentShader: heatmapGridFrag,
+      vertexShader: grid_vert,
+      fragmentShader: grid_frag,
       triangulation: HeatmapGridTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
