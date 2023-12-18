@@ -6,8 +6,10 @@ import type {
 import {
   Format,
   TextureUsage,
+  TransparentBlack,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
+  colorNewFromRGBA,
 } from '@antv/g-device-api';
 import type {
   IAttribute,
@@ -55,7 +57,7 @@ export default class DeviceRendererService implements IRendererService {
   /**
    * Current render pass.
    */
-  renderPasses: RenderPass[] = [];
+  renderPass: RenderPass;
   mainColorRT: RenderTarget;
   mainDepthRT: RenderTarget;
 
@@ -123,18 +125,46 @@ export default class DeviceRendererService implements IRendererService {
     );
   }
 
-  beginFrame(): void {}
+  beginFrame(): void {
+    const { currentFramebuffer, swapChain, mainColorRT, mainDepthRT } = this;
+
+    const onscreenTexture = swapChain.getOnscreenTexture();
+    const colorAttachment = currentFramebuffer
+      ? currentFramebuffer['colorRenderTarget']
+      : mainColorRT;
+    const colorResolveTo = currentFramebuffer ? null : onscreenTexture;
+    const depthStencilAttachment = currentFramebuffer
+      ? currentFramebuffer['depthRenderTarget']
+      : mainDepthRT;
+
+    const { color = [0, 0, 0, 0], depth = 1, stencil = 0 } =
+      // @ts-ignore
+      currentFramebuffer?.clearOptions || {};
+
+    const colorClearColor = colorAttachment
+      ? colorNewFromRGBA(
+          color[0] * 255,
+          color[1] * 255,
+          color[2] * 255,
+          color[3],
+        )
+      : TransparentBlack;
+    const depthClearValue = depthStencilAttachment ? depth : undefined;
+    const stencilClearValue = depthStencilAttachment ? stencil : undefined;
+
+    const renderPass = this.device.createRenderPass({
+      colorAttachment: [colorAttachment],
+      colorResolveTo: [colorResolveTo],
+      colorClearColor: [colorClearColor],
+      depthStencilAttachment,
+      depthClearValue,
+      stencilClearValue,
+    });
+    this.renderPass = renderPass;
+  }
 
   endFrame(): void {
-    if (this.renderPasses.length) {
-      this.renderPasses.forEach((renderPass, i) => {
-        // FIXME: WebGL2 should support submit multiple render passes.
-        // if (i === 0) {
-        this.device.submitPass(renderPass);
-        // }
-      });
-      this.renderPasses = [];
-    }
+    this.device.submitPass(this.renderPass);
   }
 
   getPointSizeRange() {
