@@ -9,11 +9,11 @@ import {
 } from '@antv/l7-core';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import arc_line_frag from '../shaders/arc/line_arc_frag.glsl';
 import arc_line_vert from '../shaders/arc/line_arc_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -22,7 +22,11 @@ const lineStyleObj: { [key: string]: number } = {
 const { isNumber } = lodashUtil;
 export default class ArcModel extends BaseModel {
   protected texture: ITexture2D;
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       sourceColor,
       targetColor,
@@ -38,8 +42,8 @@ export default class ArcModel extends BaseModel {
 
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     let u_dash_array = dashArray;
-    if(lineType!=='dash'){
-      u_dash_array = [0,0];
+    if (lineType !== 'dash') {
+      u_dash_array = [0, 0];
     }
     if (u_dash_array.length === 2) {
       u_dash_array.push(0, 0);
@@ -71,14 +75,14 @@ export default class ArcModel extends BaseModel {
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       u_blur: 0.9,
       u_line_type: lineStyleObj[lineType || 'solid'],
-      u_time: this.layer.getLayerAnimateTime(),
+      u_time: this.layer.getLayerAnimateTime() || 0,
       // // 纹理支持参数
       // u_texture: this.texture, // 贴图
       // 渐变色支持参数
       u_linearColor: useLinearColor,
     };
-    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
-    return commonBufferInfo; 
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   // public getAnimateUniforms(): IModelUniform {
@@ -105,7 +109,7 @@ export default class ArcModel extends BaseModel {
     return {
       frag: arc_line_frag,
       vert: arc_line_vert,
-      type:''
+      type: '',
     };
   }
 
@@ -119,10 +123,10 @@ export default class ArcModel extends BaseModel {
       moduleName: 'lineArc2d' + type,
       vertexShader: vert,
       fragmentShader: frag,
-      inject:this.getInject(),
+      inject: this.getInject(),
       triangulation: LineArcTriangulation,
       depth: { enable: false },
-      styleOption:{segmentNumber},
+      styleOption: { segmentNumber },
     });
     return [model];
   }
@@ -133,7 +137,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation:ShaderLocation.SIZE,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -153,7 +157,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
-        shaderLocation:12,
+        shaderLocation: 12,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -175,7 +179,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation:14,
+        shaderLocation: 14,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

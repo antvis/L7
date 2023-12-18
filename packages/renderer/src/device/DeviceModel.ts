@@ -4,7 +4,6 @@ import {
   BlendMode,
   Buffer,
   ChannelWriteMask,
-  colorNewFromRGBA,
   CompareFunction,
   CullMode,
   Device,
@@ -17,14 +16,19 @@ import {
   VertexStepMode,
 } from '@antv/g-device-api';
 import {
-  gl,
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
   IUniform,
+  gl,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import DeviceRendererService from '.';
+import DeviceAttribute from './DeviceAttribute';
+import DeviceBuffer from './DeviceBuffer';
+import DeviceElements from './DeviceElements';
+import DeviceFramebuffer from './DeviceFramebuffer';
+import DeviceTexture2D from './DeviceTexture2D';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -33,11 +37,6 @@ import {
   primitiveMap,
   sizeFormatMap,
 } from './constants';
-import DeviceAttribute from './DeviceAttribute';
-import DeviceBuffer from './DeviceBuffer';
-import DeviceElements from './DeviceElements';
-import DeviceFramebuffer from './DeviceFramebuffer';
-import DeviceTexture2D from './DeviceTexture2D';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 export default class DeviceModel implements IModel {
@@ -146,7 +145,7 @@ export default class DeviceModel implements IModel {
       program: this.program,
       topology: primitiveMap[primitive],
       colorAttachmentFormats: [Format.U8_RGBA_RT],
-      depthStencilAttachmentFormat: depthEnabled ? Format.D24_S8 : null,
+      depthStencilAttachmentFormat: Format.D24_S8,
       megaStateDescriptor: {
         attachmentsState: [
           pick
@@ -240,49 +239,7 @@ export default class DeviceModel implements IModel {
       ...this.extractUniforms(uniforms),
     };
 
-    const {
-      currentFramebuffer,
-      swapChain,
-      mainColorRT,
-      mainDepthRT,
-      width,
-      height,
-    } = this.service;
-    const onscreenTexture = swapChain.getOnscreenTexture();
-    const colorAttachment = currentFramebuffer
-      ? currentFramebuffer['colorRenderTarget']
-      : mainColorRT;
-    const colorResolveTo = currentFramebuffer ? null : onscreenTexture;
-    const depthStencilAttachment = depthEnabled
-      ? currentFramebuffer
-        ? currentFramebuffer['depthRenderTarget']
-        : mainDepthRT
-      : null;
-
-    const { color = [0, 0, 0, 0], depth = 1, stencil = 0 } =
-      // @ts-ignore
-      currentFramebuffer?.clearOptions || {};
-
-    const colorClearColor = colorAttachment
-      ? colorNewFromRGBA(
-          color[0] * 255,
-          color[1] * 255,
-          color[2] * 255,
-          color[3],
-        )
-      : TransparentBlack;
-    const depthClearValue = depthStencilAttachment ? depth : undefined;
-    const stencilClearValue = depthStencilAttachment ? stencil : undefined;
-
-    const renderPass = this.device.createRenderPass({
-      colorAttachment: [colorAttachment],
-      colorResolveTo: [colorResolveTo],
-      colorClearColor: [colorClearColor],
-      depthStencilAttachment,
-      depthClearValue,
-      stencilClearValue,
-    });
-    this.service.renderPasses.push(renderPass);
+    const { renderPass, currentFramebuffer, width, height } = this.service;
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);

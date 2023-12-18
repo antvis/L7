@@ -16,9 +16,9 @@ import {
 } from '../../core/interface';
 // import { LineTriangulation } from '../../core/triangulation';
 
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import line_frag from '../shaders/line/line_frag.glsl';
 import line_vert from '../shaders/line/line_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -27,14 +27,15 @@ const lineStyleObj: { [key: string]: number } = {
 export default class LineModel extends BaseModel {
   private textureEventFlag: boolean = false;
   protected texture: ITexture2D = this.createTexture2D({
-    data: [0, 0, 0, 0],
-    mag: gl.NEAREST,
-    min: gl.NEAREST,
-    premultiplyAlpha: false,
+    data: new Uint8Array([0, 0, 0, 0]),
     width: 1,
     height: 1,
   });
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       sourceColor,
       targetColor,
@@ -51,8 +52,8 @@ export default class LineModel extends BaseModel {
       blur = [1, 1, 1, 0],
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     let u_dash_array = dashArray;
-    if(lineType!=='dash'){
-      u_dash_array = [0,0,0,0];
+    if (lineType !== 'dash') {
+      u_dash_array = [0, 0, 0, 0];
     }
     if (u_dash_array.length === 2) {
       u_dash_array.push(0, 0);
@@ -79,7 +80,7 @@ export default class LineModel extends BaseModel {
       u_textSize: [1024, this.iconService.canvasHeight || 128],
       u_icon_step: iconStep,
       // 是否固定高度
-      u_heightfixed: Number(heightfixed),      
+      u_heightfixed: Number(heightfixed),
       // 顶点高度 scale
       u_vertexScale: vertexHeightScale,
       u_raisingHeight: Number(raisingHeight),
@@ -89,10 +90,10 @@ export default class LineModel extends BaseModel {
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
       u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
       u_linearColor: useLinearColor,
-      u_time: this.layer.getLayerAnimateTime(),
-    }
+      u_time: this.layer.getLayerAnimateTime() || 0,
+    };
 
-    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
   }
   // public getAnimateUniforms(): IModelUniform {
@@ -102,7 +103,7 @@ export default class LineModel extends BaseModel {
   //     u_time: this.layer.getLayerAnimateTime(),
   //   };
   // }
-  public async initModels(): Promise<IModel[]> {    
+  public async initModels(): Promise<IModel[]> {
     this.initUniformsBuffer();
     // this.updateTexture();
     // this.iconService.on('imageUpdate', this.updateTexture);
@@ -153,21 +154,23 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_SizeDistanceAndTotalDistance',
-        shaderLocation:ShaderLocation.SIZE,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
         size: 4,
-        update:  (
+        update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
         ) => {
           const { size = 1 } = feature;
-          const a_Size =  Array.isArray(size) ? [size[0], size[1]] : [size as number, 0];
-          return [a_Size[0],a_Size[1],vertex[3],vertex[5]];
+          const a_Size = Array.isArray(size)
+            ? [size[0], size[1]]
+            : [size as number, 0];
+          return [a_Size[0], a_Size[1], vertex[3], vertex[5]];
         },
       },
     });
@@ -178,7 +181,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_NormalAndMiter',
-        shaderLocation:ShaderLocation.NORMAL,
+        shaderLocation: ShaderLocation.NORMAL,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -192,7 +195,7 @@ export default class LineModel extends BaseModel {
           attributeIdx: number,
           normal: number[],
         ) => {
-          return [...normal,vertex[4]];
+          return [...normal, vertex[4]];
         },
       },
     });
@@ -202,7 +205,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation:ShaderLocation.UV,
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -222,7 +225,7 @@ export default class LineModel extends BaseModel {
 
   private updateTexture = () => {
     const { createTexture2D } = this.rendererService;
-    if(this.textures.length===0){
+    if (this.textures.length === 0) {
       this.textures = [this.texture];
     }
     if (this.texture) {
