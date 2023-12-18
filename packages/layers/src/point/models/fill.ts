@@ -1,21 +1,25 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAnimateOption,
   IAttribute,
   IElements,
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  IModelUniform,
+  IModelUniform} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { PointFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
 
 import pointFillFrag from '../shaders/fill/fill_frag.glsl';
 import pointFillVert from '../shaders/fill/fill_vert.glsl';
+
+import type { IPointLayerStyleOptions} from '../../core/interface';
+import { SizeUnitType } from '../../core/interface';
+
 
 export default class FillModel extends BaseModel {
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {

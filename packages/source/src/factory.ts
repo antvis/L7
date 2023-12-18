@@ -1,4 +1,4 @@
-import { IParserData } from './interface';
+import type { IParserData } from './interface';
 
 type ParserFunction = (data: any, cfg?: any) => IParserData;
 type transformFunction = (data: IParserData, cfg?: any) => IParserData;

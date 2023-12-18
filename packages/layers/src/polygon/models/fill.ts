@@ -1,13 +1,14 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
-  Triangulation,
+  Triangulation} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { polygonFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IPolygonLayerStyleOptions } from '../../core/interface';
+import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulationWithCenter } from '../../core/triangulation';
 import polygon_frag from '../shaders/fill/fill_frag.glsl';
 import polygon_linear_frag from '../shaders/fill/fill_linear_frag.glsl';

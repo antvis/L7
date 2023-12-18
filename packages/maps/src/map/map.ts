@@ -2,7 +2,8 @@
 /**
  * MapboxService
  */
-import { CoordinateSystem, IMercator } from '@antv/l7-core';
+import type { IMercator } from '@antv/l7-core';
+import { CoordinateSystem } from '@antv/l7-core';
 import { Map, MercatorCoordinate } from '@antv/l7-map';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';

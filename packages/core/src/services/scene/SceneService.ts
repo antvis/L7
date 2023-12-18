@@ -7,26 +7,27 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { createRendererContainer } from '../../utils/dom';
-import { IFontService } from '../asset/IFontService';
-import { IIconService } from '../asset/IIconService';
-import { ICameraService, IViewport } from '../camera/ICameraService';
-import { IControlService } from '../component/IControlService';
-import { IMarkerService } from '../component/IMarkerService';
-import { IPopupService } from '../component/IPopupService';
-import { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
-import { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
-import { IDebugService } from '../debug/IDebugService';
-import {
+import type { IFontService } from '../asset/IFontService';
+import type { IIconService } from '../asset/IIconService';
+import type { ICameraService, IViewport } from '../camera/ICameraService';
+import type { IControlService } from '../component/IControlService';
+import type { IMarkerService } from '../component/IMarkerService';
+import type { IPopupService } from '../component/IPopupService';
+import type { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
+import type { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
+import type { IDebugService } from '../debug/IDebugService';
+import type {
   IInteractionService,
-  IInteractionTarget,
+  IInteractionTarget} from '../interaction/IInteractionService';
+import {
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { IPickingService } from '../interaction/IPickingService';
-import { ILayer, ILayerService } from '../layer/ILayerService';
-import { IMapService } from '../map/IMapService';
-import { IRenderConfig, IRendererService } from '../renderer/IRendererService';
-import { IShaderModuleService } from '../shader/IShaderModuleService';
-import { ISceneService } from './ISceneService';
+import type { IPickingService } from '../interaction/IPickingService';
+import type { ILayer, ILayerService } from '../layer/ILayerService';
+import type { IMapService } from '../map/IMapService';
+import type { IRenderConfig, IRendererService } from '../renderer/IRendererService';
+import type { IShaderModuleService } from '../shader/IShaderModuleService';
+import type { ISceneService } from './ISceneService';
 
 /**
  * will emit `loaded` `resize` `destroy` event panstart panmove panend

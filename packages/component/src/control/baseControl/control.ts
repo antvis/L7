@@ -1,4 +1,4 @@
-import {
+import type {
   IControl,
   IControlService,
   IGlobalConfigService,
@@ -6,14 +6,15 @@ import {
   IMapService,
   IRendererService,
   ISceneService,
-  PositionName,
+  PositionName} from '@antv/l7-core';
+import {
   PositionType,
   TYPES,
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
-import { Container } from 'inversify';
-import { ControlEvent } from '../../interface';
+import type { Container } from 'inversify';
+import type { ControlEvent } from '../../interface';
 
 export { PositionType } from '@antv/l7-core';
 export { Control };

@@ -1,4 +1,4 @@
-import { IRasterData, SchemaRGBOption, TypedArray } from '../../interface';
+import type { IRasterData, SchemaRGBOption, TypedArray } from '../../interface';
 
 export type operationsType = 'rgb' | 'nd';
 

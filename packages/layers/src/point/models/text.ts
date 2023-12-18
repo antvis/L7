@@ -1,11 +1,12 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IFontMapping,
   IModel,
   IModelUniform,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import {
   boundsContains,
@@ -15,11 +16,12 @@ import {
   rgb2arr,
 } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IPointLayerStyleOptions } from '../../core/interface';
+import type { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
+import type {
+  IGlyphQuad} from '../../utils/symbol-layout';
 import {
   getGlyphQuads,
-  IGlyphQuad,
   shapeText,
 } from '../../utils/symbol-layout';
 import textFrag from '../shaders/text/text_frag.glsl';

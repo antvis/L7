@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../../geo/point';
+import type Point from '../../geo/point';
 import DOM from '../../utils/dom';
 
 export default class TwoTouchHandler {

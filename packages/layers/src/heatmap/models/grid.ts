@@ -1,12 +1,13 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
-  IModelUniform,
+  IModelUniform} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { IHeatMapLayerStyleOptions } from '../../core/interface';
+import type { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
 import grid_vert from '../shaders/grid/grid_vert.glsl';
 import grid_frag from '../shaders/grid/grid_frag.glsl';

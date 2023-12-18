@@ -1,13 +1,14 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IPolygonLayerStyleOptions } from '../../core/interface';
+import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import polygonExtrudeFrag from '../shaders/extrude/polygon_extrude_frag.glsl';
 import polygonExtrudeVert from '../shaders/extrude/polygon_extrude_vert.glsl';

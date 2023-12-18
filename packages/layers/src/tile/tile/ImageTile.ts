@@ -1,4 +1,4 @@
-import { ILayerAttributesOption } from '@antv/l7-core';
+import type { ILayerAttributesOption } from '@antv/l7-core';
 import ImageLayer from '../../image';
 import Tile from './Tile';
 export default class ImageTile extends Tile {

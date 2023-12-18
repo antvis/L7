@@ -1,6 +1,7 @@
-import { Scene } from '@antv/l7';
+import type { Scene } from '@antv/l7';
+import type {
+  IThreeRenderService} from './threeRenderService';
 import {
-  IThreeRenderService,
   ThreeRenderService,
   ThreeRenderServiceType,
 } from './threeRenderService';

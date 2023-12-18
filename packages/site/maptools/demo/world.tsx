@@ -15,7 +15,7 @@ import {
   LineLayer,
   MapThemeControl,
 } from '@antv/larkmap';
-import { FeatureCollection } from '@turf/helpers';
+import type { FeatureCollection } from '@turf/helpers';
 import {
   Button,
   Col,
@@ -31,10 +31,11 @@ import Pbf from 'pbf';
 import { useEffect, useState } from 'react';
 import { downloadData, exportSVG } from '../utils/util';
 import './index.less';
+import type {
+  IDataInfo} from './util';
 import {
   defaultDataInfo,
   downloadDataType,
-  IDataInfo,
   layerOptions,
   lineLayerOptions,
   lineLayerOptions2,

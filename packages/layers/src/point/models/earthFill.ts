@@ -1,13 +1,15 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAnimateOption,
   IEncodeFeature,
   ILayerConfig,
   IModel,
+  IModelUniform} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { IPointLayerStyleOptions } from '../../core/interface';
+import type { IPointLayerStyleOptions } from '../../core/interface';
 import { GlobelPointFillTriangulation } from '../../core/triangulation';
 
 import pointFillFrag from '../shaders/earthFill/earthFill_frag.glsl';

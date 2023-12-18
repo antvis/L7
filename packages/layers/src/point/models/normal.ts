@@ -1,14 +1,17 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
+  IModelUniform} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal/normal_frag.glsl';
 import normalVert from '../shaders/normal/normal_vert.glsl';
+import type { IPointLayerStyleOptions } from '../../core/interface';
+
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];

@@ -1,9 +1,11 @@
-import { IMapService, IMercator, IRendererService, TYPES } from '@antv/l7';
+import type { IMapService, IMercator, IRendererService} from '@antv/l7';
+import { TYPES } from '@antv/l7';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 
+import type {
+  Camera} from 'three';
 import {
-  Camera,
   Matrix4,
   PerspectiveCamera,
   Scene as ThreeScene,

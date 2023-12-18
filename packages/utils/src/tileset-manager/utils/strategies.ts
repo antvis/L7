@@ -1,4 +1,4 @@
-import { SourceTile } from '../tile';
+import type { SourceTile } from '../tile';
 
 // 访问状态
 const TILE_STATE_DEFAULT = 0;

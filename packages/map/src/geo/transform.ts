@@ -2,7 +2,8 @@
 import { mat2, mat4, vec4 } from 'gl-matrix';
 import Point from '../geo/point';
 import { clamp, interpolate, wrap } from '../util';
-import EdgeInsets, { IPaddingOptions } from './edge_insets';
+import type { IPaddingOptions } from './edge_insets';
+import EdgeInsets from './edge_insets';
 import LngLat from './lng_lat';
 import LngLatBounds from './lng_lat_bounds';
 import MercatorCoordinate, {

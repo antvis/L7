@@ -1,12 +1,14 @@
-import {
+import type {
   Device,
-  Format,
   RenderTarget,
-  Texture,
+  Texture} from '@antv/g-device-api';
+import {
+  Format,
   TextureUsage,
 } from '@antv/g-device-api';
-import { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
-import DeviceTexture2D, { isTexture2D } from './DeviceTexture2D';
+import type { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
+import type DeviceTexture2D from './DeviceTexture2D';
+import { isTexture2D } from './DeviceTexture2D';
 
 /**
  * Contains 2 render targets: color and depth.

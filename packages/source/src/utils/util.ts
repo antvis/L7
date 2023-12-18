@@ -1,8 +1,8 @@
 import { lodashUtil } from '@antv/l7-utils';
 // @ts-ignore
 import rewind from '@mapbox/geojson-rewind';
-import { Feature, FeatureCollection, Geometries } from '@turf/helpers';
-import { IRasterFileData, IRasterLayerData } from '../interface';
+import type { Feature, FeatureCollection, Geometries } from '@turf/helpers';
+import type { IRasterFileData, IRasterLayerData } from '../interface';
 
 interface IDataItem {
   [key: string]: any;

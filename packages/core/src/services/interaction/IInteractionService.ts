@@ -1,4 +1,4 @@
-import { ILngLat } from '../map/IMapService';
+import type { ILngLat } from '../map/IMapService';
 export enum InteractionEvent {
   Hover = 'hover',
   Click = 'click',

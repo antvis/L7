@@ -1,15 +1,16 @@
 /**
  * MapboxService
  */
-import { IMercator } from '@antv/l7-core';
+import type { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
-import maplibregl, { Map } from 'maplibre-gl';
+import type { Map } from 'maplibre-gl';
+import maplibregl from 'maplibre-gl';
 import { MapType } from '@antv/l7-utils'
 // tslint:disable-next-line:no-submodule-imports
 import 'maplibre-gl/dist/maplibre-gl.css';
 import 'reflect-metadata';
-import { IMapboxInstance } from '../../typings/index';
+import type { IMapboxInstance } from '../../typings/index';
 import Viewport from '../mapbox/Viewport';
 import BaseMapService from '../utils/BaseMapService';
 

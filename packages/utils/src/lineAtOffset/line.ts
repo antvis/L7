@@ -1,4 +1,4 @@
-import { Point } from './interface';
+import type { Point } from './interface';
 
 export function pathLineAtOffset(coords: Point[], offset: number) {
   let totalDistance = 0;

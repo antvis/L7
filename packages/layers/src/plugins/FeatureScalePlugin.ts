@@ -1,18 +1,19 @@
-import {
-  IDebugLog,
+import type {
   ILayer,
   ILayerPlugin,
-  ILayerStage,
   IScale,
   IScaleOptions,
   IStyleAttribute,
   IStyleAttributeService,
   IStyleScale,
-  ScaleTypeName,
+  ScaleTypeName} from '@antv/l7-core';
+import {
+  IDebugLog,
+  ILayerStage,
   ScaleTypes,
   StyleScaleType,
 } from '@antv/l7-core';
-import { IParseDataItem } from '@antv/l7-source';
+import type { IParseDataItem } from '@antv/l7-source';
 import { lodashUtil } from '@antv/l7-utils';
 import { extent } from 'd3-array';
 import * as d3interpolate from 'd3-interpolate';

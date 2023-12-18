@@ -1,12 +1,12 @@
-import {
+import type {
   IAnimateOption,
   IMapService,
   ITexture2D,
   StyleAttributeField,
   StyleAttributeOption,
 } from '@antv/l7-core';
-import { IColorRamp } from '@antv/l7-utils';
-import { anchorType } from '../utils/symbol-layout';
+import type { IColorRamp } from '@antv/l7-utils';
+import type { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,

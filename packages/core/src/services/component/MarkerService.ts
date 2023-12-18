@@ -1,8 +1,9 @@
-import { Container, injectable } from 'inversify';
+import type { Container} from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
-import { IMapService } from '../map/IMapService';
-import { IMarker, IMarkerLayer, IMarkerService } from './IMarkerService';
+import type { IMapService } from '../map/IMapService';
+import type { IMarker, IMarkerLayer, IMarkerService } from './IMarkerService';
 
 @injectable()
 export default class MarkerService implements IMarkerService {

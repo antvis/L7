@@ -1,6 +1,6 @@
 // @ts-ignore
-import { EarthMap } from '../earthmap';
-import { Map } from '../map';
+import type { EarthMap } from '../earthmap';
+import type { Map } from '../map';
 import { MapMouseEvent } from './events';
 export default class BlockableMapEventHandler {
   private map: Map | EarthMap;

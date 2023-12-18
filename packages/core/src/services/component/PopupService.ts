@@ -1,8 +1,9 @@
-import { Container, injectable } from 'inversify';
+import type { Container} from 'inversify';
+import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
-import { IMapService } from '../map/IMapService';
-import { IPopup, IPopupService } from './IPopupService';
+import type { IMapService } from '../map/IMapService';
+import type { IPopup, IPopupService } from './IPopupService';
 
 @injectable()
 export default class PopupService implements IPopupService {

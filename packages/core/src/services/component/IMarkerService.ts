@@ -1,7 +1,7 @@
-import { anchorType, IBounds } from '@antv/l7-utils';
-import { Container } from 'inversify';
-import { ILngLat, IMapService, IPoint } from '../map/IMapService';
-import { IPopup } from './IPopupService';
+import type { anchorType, IBounds } from '@antv/l7-utils';
+import type { Container } from 'inversify';
+import type { ILngLat, IMapService, IPoint } from '../map/IMapService';
+import type { IPopup } from './IPopupService';
 export interface IMarkerScene {
   getMapService(): IMapService<unknown>;
   [key: string]: any;

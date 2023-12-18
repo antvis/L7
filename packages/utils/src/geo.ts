@@ -1,11 +1,12 @@
 import bbox from '@turf/bbox';
-import {
+import type {
   BBox,
+  Units} from '@turf/helpers';
+import {
   degreesToRadians,
   featureCollection,
   lineString,
-  radiansToLength,
-  Units,
+  radiansToLength
 } from '@turf/helpers';
 import { isNumber } from './math';
 

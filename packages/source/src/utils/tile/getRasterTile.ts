@@ -1,13 +1,14 @@
-import { ITileParserCFG } from '@antv/l7-core';
+import type { ITileParserCFG } from '@antv/l7-core';
+import type {
+  ITileBand,
+  SourceTile,
+  TileLoadParams} from '@antv/l7-utils';
 import {
   getImage,
   getURLFromTemplate,
-  getWMTSURLFromTemplate,
-  ITileBand,
-  SourceTile,
-  TileLoadParams,
+  getWMTSURLFromTemplate
 } from '@antv/l7-utils';
-import { IBandsOperation, IRasterFormat } from '../../interface';
+import type { IBandsOperation, IRasterFormat } from '../../interface';
 import { getRasterFile } from './getRasterData';
 import { getTileUrl } from './request';
 

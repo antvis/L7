@@ -9,15 +9,16 @@ import {
   InfoCircleOutlined,
   PictureOutlined,
 } from '@ant-design/icons';
+import type {
+  LayerPopupProps} from '@antv/larkmap';
 import {
   ChoroplethLayer,
   CustomControl,
   LarkMap,
   LayerPopup,
-  LayerPopupProps,
   MapThemeControl,
 } from '@antv/larkmap';
-import { FeatureCollection } from '@turf/helpers';
+import type { FeatureCollection } from '@turf/helpers';
 import {
   Button,
   Col,
@@ -37,6 +38,8 @@ import { debounce } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { downloadData, exportSVG } from '../utils/util';
 import './index.less';
+import type {
+  IDataInfo} from './util';
 import {
   config,
   defaultDataInfo,
@@ -46,7 +49,6 @@ import {
   getChildrenLevel,
   getChildrenList,
   getRawData,
-  IDataInfo,
   item,
   layerOptions,
 } from './util';

@@ -1,5 +1,6 @@
-import { IMapService, IRendererService } from '@antv/l7-core';
-import { DOM, SourceTile } from '@antv/l7-utils';
+import type { IMapService, IRendererService } from '@antv/l7-core';
+import type { SourceTile } from '@antv/l7-utils';
+import { DOM } from '@antv/l7-utils';
 
 export function readRasterValue(
   tile: SourceTile,

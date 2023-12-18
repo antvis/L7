@@ -4,13 +4,14 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import Clock from '../../utils/clock';
-import { IDebugService } from '../debug/IDebugService';
-import { IMapService } from '../map/IMapService';
-import { IRendererService } from '../renderer/IRendererService';
-import {
+import type { IDebugService } from '../debug/IDebugService';
+import type { IMapService } from '../map/IMapService';
+import type { IRendererService } from '../renderer/IRendererService';
+import type {
   ILayer,
   ILayerService,
-  LayerServiceEvent,
+  LayerServiceEvent} from './ILayerService';
+import {
   MaskOperation,
   StencilType,
 } from './ILayerService';

@@ -1,10 +1,11 @@
-import {
+import type {
   IInteractionTarget,
   ILayer,
   ILayerPickService,
   ILayerService,
   IMapService,
-  IPickingService,
+  IPickingService} from '@antv/l7-core';
+import {
   TYPES,
 } from '@antv/l7-core';
 import { lngLatInExtent } from '@antv/l7-utils';

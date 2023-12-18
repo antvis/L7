@@ -1,6 +1,6 @@
-import { ILayerAttributesOption, ITexture2D } from '@antv/l7-core';
+import type { ILayerAttributesOption, ITexture2D } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
-import { IRasterLayerStyleOptions } from '../../core/interface';
+import type { IRasterLayerStyleOptions } from '../../core/interface';
 import RasterLayer from '../../raster';
 import Tile from './Tile';
 

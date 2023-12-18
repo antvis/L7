@@ -1,5 +1,6 @@
 import { DOM } from '@antv/l7-utils';
-import { Control, IControlOption, PositionType } from './baseControl';
+import type { IControlOption} from './baseControl';
+import { Control, PositionType } from './baseControl';
 
 export interface ILogoControlOption extends IControlOption {
   // Logo 展示的图片 url
