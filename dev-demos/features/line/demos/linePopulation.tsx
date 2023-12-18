@@ -1,16 +1,6 @@
 import { LineLayer, Scene } from '@antv/l7';
-import { GaodeMap} from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
-//加载外部脚本
-function addExternalScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = () => resolve();
-    script.onerror = () => reject();
-    document.body.appendChild(script);
-  });
-}
 /**
  * @private
  * 点数据转线数据
@@ -32,10 +22,16 @@ function processPointToLine(data, minValue = 0) {
   let lines = Object.values(groupedPoints).map((points) => {
     let result = [];
     let lastLon = -500;
-    points = points.filter(v => { return parseFloat(v.properties.value) > minValue })
+    points = points.filter((v) => {
+      return parseFloat(v.properties.value) > minValue;
+    });
     for (let i = 0; i < points.length; i++) {
       if (Math.abs(points[i].geometry.coordinates[0] - lastLon) >= 2) {
-        const line = { type: 'Feature', geometry: { type: 'LineString', coordinates: [] }, properties: { heights: [] } };
+        const line = {
+          type: 'Feature',
+          geometry: { type: 'LineString', coordinates: [] },
+          properties: { heights: [] },
+        };
         result.push(line);
       }
       const line = result[result.length - 1];
@@ -45,10 +41,12 @@ function processPointToLine(data, minValue = 0) {
       line.properties.heights.push(coordinates[2]);
       lastLon = points[i].geometry.coordinates[0];
     }
-    result = result.filter(v => { return v.geometry.coordinates.length > 1 });
+    result = result.filter((v) => {
+      return v.geometry.coordinates.length > 1;
+    });
     return result;
   });
-  lines = lines.flat(1)
+  lines = lines.flat(1);
   // 创建包含多条线的新 GeoJSON 对象
   return {
     type: 'FeatureCollection',
@@ -88,28 +86,31 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-    renderer: process.env.renderer,
+      renderer: process.env.renderer,
       map: new GaodeMap({
         pitch: 40,
         style: 'dark',
         center: [43.686824, -4.665872],
         zoom: 1.2,
-        token:"pk.eyJ1Ijoic2tvcm5vdXMiLCJhIjoiY2s4dDBkNjY1MG13ZTNzcWEyZDYycGkzMyJ9.tjfwvJ8G_VDmXoClOyxufg"
-      })
+        token:
+          'pk.eyJ1Ijoic2tvcm5vdXMiLCJhIjoiY2s4dDBkNjY1MG13ZTNzcWEyZDYycGkzMyJ9.tjfwvJ8G_VDmXoClOyxufg',
+      }),
     });
     const guiConfig = {
       height: 30,
       minValue: 10000,
       color: '#0D5EFF',
       // opacity:1.0,
-      blend: 'additive'
-    }
-    let layer, originData,gui;
+      blend: 'additive',
+    };
+    let layer, originData, gui;
 
     scene.on('loaded', () => {
-      fetch('https://static.observableusercontent.com/files/c517bc4710d3a5daf34549dde51fd3a0e457a62ce3113847cf804dd21b78a95dd0ecc0b975455c4c162f87e74e665e6994bb9bbd457a420e46d6b6179200b47d')
-        .then(res => res.text())
-        .then(data => {
+      fetch(
+        'https://static.observableusercontent.com/files/c517bc4710d3a5daf34549dde51fd3a0e457a62ce3113847cf804dd21b78a95dd0ecc0b975455c4c162f87e74e665e6994bb9bbd457a420e46d6b6179200b47d',
+      )
+        .then((res) => res.text())
+        .then((data) => {
           originData = csvToGeojson(data);
           const dataSource = processPointToLine(originData, guiConfig.minValue);
           layer = new LineLayer({
@@ -125,30 +126,28 @@ export default () => {
             .color(guiConfig.color);
           scene.addLayer(layer);
         });
-      addExternalScript('https://cdn.uino.cn/thing-earth-space/libs/dat.gui.min.js').then(() => {
-        gui = new dat.GUI();
-        gui.domElement.style.position = 'absolute';
-        gui.domElement.style.top = '202px';
-        gui.domElement.style.right = '220px';
-        gui.add(guiConfig, "height", 1, 100, 0.1).onChange((v) => {
-          layer.style({
-            vertexHeightScale: 0.01 * v
-          });
-          scene.render();
+      gui = new dat.GUI();
+      gui.domElement.style.position = 'absolute';
+      gui.domElement.style.top = '202px';
+      gui.domElement.style.right = '220px';
+      gui.add(guiConfig, 'height', 1, 100, 0.1).onChange((v) => {
+        layer.style({
+          vertexHeightScale: 0.01 * v,
         });
-        gui.add(guiConfig, "minValue", 10000, 1000000, 1).onChange((v) => {
-          const dataSource = processPointToLine(originData, guiConfig.minValue);
-          layer.setData(dataSource);
-        });
+        scene.render();
+      });
+      gui.add(guiConfig, 'minValue', 10000, 1000000, 1).onChange((v) => {
+        const dataSource = processPointToLine(originData, guiConfig.minValue);
+        layer.setData(dataSource);
+      });
 
-        gui.add(guiConfig, "blend", ['additive', 'normal']).onChange((v) => {
-          layer.setBlend(v);
-        });
-        gui.addColor(guiConfig, "color").onChange((v) => {
-          layer.color(v);
-          scene.render();
-        });
-      })
+      gui.add(guiConfig, 'blend', ['additive', 'normal']).onChange((v) => {
+        layer.setBlend(v);
+      });
+      gui.addColor(guiConfig, 'color').onChange((v) => {
+        layer.color(v);
+        scene.render();
+      });
     });
     return () => {
       gui.destroy();

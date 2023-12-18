@@ -1,6 +1,5 @@
 uniform sampler2D u_texture;
 layout(std140) uniform commonUniforms {
-    vec4 u_color;
     float u_opacity:1.0;
     float u_brightness:1.0;
     float u_contrast:1.0;
@@ -32,8 +31,6 @@ void main() {
   color.rgb = setSaturation(color.rgb, u_saturation);
   // gamma
   color.rgb = pow(color.rgb, vec3(u_gamma));
-  // colorMix
-  color.rgb = color.rgb * u_color.rgb;
   outputColor = color;
   outputColor.a *= u_opacity;
   if(outputColor.a < 0.01)

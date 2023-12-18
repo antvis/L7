@@ -20,7 +20,6 @@ export default class ImageModel extends BaseModel {
     const { color = 'rgb(255,255,255)',opacity,brightness,contrast,saturation,gamma } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     const colorArry = rgb2arr(color);
     const commonOptions = {
-      u_color:defaultValue(colorArry,[1.0,1.0,1.0,1.0]),
       u_opacity:defaultValue(opacity,1.0),
       u_brightness:defaultValue(brightness,1.0),
       u_contrast:defaultValue(contrast,1.0),

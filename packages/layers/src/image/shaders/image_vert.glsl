@@ -2,7 +2,6 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 14) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
-    vec4 u_color;
     float u_opacity:1.0;
     float u_brightness:1.0;
     float u_contrast:1.0;
