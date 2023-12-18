@@ -1,11 +1,12 @@
-import { ITileParserCFG, RasterTileType } from '@antv/l7-core';
-import {
+import type { ITileParserCFG} from '@antv/l7-core';
+import { RasterTileType } from '@antv/l7-core';
+import type {
   ITileBand,
   SourceTile,
   TileLoadParams,
   TilesetManagerOptions,
 } from '@antv/l7-utils';
-import { IParserData } from '../interface';
+import type { IParserData } from '../interface';
 import { getCustomData, getCustomImageData } from '../utils/tile/getCustomData';
 import {
   defaultFormat,

@@ -1,9 +1,10 @@
 import { DOM } from '@antv/l7-utils';
 import { createL7Icon } from '../utils/icon';
 import ScreenFull from '../utils/screenfull';
-import ButtonControl, {
+import type {
   IButtonControlOption,
 } from './baseControl/buttonControl';
+import ButtonControl from './baseControl/buttonControl';
 
 export interface IFullscreenControlOption extends IButtonControlOption {
   exitBtnText: IButtonControlOption['btnText'];

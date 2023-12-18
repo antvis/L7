@@ -1,9 +1,10 @@
-import { ILayer } from '@antv/l7-core';
+import type { ILayer } from '@antv/l7-core';
 import { createL7Icon } from '../utils/icon';
-import SelectControl, {
+import type {
   ControlOptionItem,
   ISelectControlOption,
 } from './baseControl/selectControl';
+import SelectControl from './baseControl/selectControl';
 
 export type LayerSwitchItem = {
   layer: ILayer;

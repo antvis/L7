@@ -1,17 +1,18 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
   IModelUniform,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IRasterTerrainLayerStyleOptions } from '../../core/interface';
+import type { IRasterTerrainLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import Raster_terrainFrag from '../shaders/raster_terrain_rgb_frag.glsl';
-import Raster_terrainVert from '../shaders/rater_terrain_rgb_vert.glsl';
+import Raster_terrainFrag from '../shaders/terrain/terrain_rgb_frag.glsl';
+import Raster_terrainVert from '../shaders/terrain/terrain_rgb_vert.glsl';
 
 export default class RasterTerrainRGB extends BaseModel {
   protected texture: ITexture2D;

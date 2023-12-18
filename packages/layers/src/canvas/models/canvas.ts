@@ -1,8 +1,9 @@
-import { ILayerConfig } from '@antv/l7-core';
+import type { ILayerConfig } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
+import type {
+  ICanvasLayerStyleOptions} from '../../core/interface';
 import {
-  CanvasUpdateType,
-  ICanvasLayerStyleOptions,
+  CanvasUpdateType
 } from '../../core/interface';
 
 export default class CanvaModel extends BaseModel {

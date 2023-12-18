@@ -7,7 +7,7 @@ import { ThemeAntVContext } from '@antv/dumi-theme-antv/dist/context';
 import { CodeRunner } from '@antv/dumi-theme-antv/dist/slots/CodeRunner';
 import { getDemoInfo } from '@antv/dumi-theme-antv/dist/slots/CodeRunner/utils';
 import { ExampleSider } from '@antv/dumi-theme-antv/dist/slots/ExampleSider';
-import { Demo, ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
+import type { Demo, ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
 import styles from './index.module.less';
 import { getCurrentTitle } from './utils';
 

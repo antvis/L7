@@ -1,20 +1,36 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IRasterLayerStyleOptions } from '../../core/interface';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import type { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import rasterFrag from '../shaders/raster_2d_frag.glsl';
-import rasterVert from '../shaders/raster_2d_vert.glsl';
+import rasterFrag from '../shaders/raster/raster_2d_frag.glsl';
+import rasterVert from '../shaders/raster/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
   public getUninforms() {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    };
+  }
+
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       opacity = 1,
       clampLow = true,
@@ -28,15 +44,18 @@ export default class RasterModel extends BaseModel {
       rampColors,
       newdomain,
     );
-    return {
-      u_opacity: opacity || 1,
-      u_texture: this.texture,
+    const commonOptions = {
       u_domain: newdomain,
+      u_opacity: opacity || 1,
+      u_noDataValue: noDataValue,
       u_clampLow: clampLow,
       u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
-      u_noDataValue: noDataValue,
+      u_rasterTexture: this.texture,
       u_colorTexture: this.colorTexture,
     };
+    this.textures = [this.texture, this.colorTexture];
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   private async getRasterData(parserDataItem: any) {
@@ -59,6 +78,11 @@ export default class RasterModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
+    return this.buildModels();
+  }
+
+  public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
@@ -66,11 +90,12 @@ export default class RasterModel extends BaseModel {
     const { data, width, height } = await this.getRasterData(parserDataItem);
 
     this.texture = createTexture2D({
-      data,
+      data: new Uint8Array(data),
       width,
       height,
       format: gl.LUMINANCE,
-      type: gl.FLOAT,
+      type: gl.UNSIGNED_BYTE,
+      alignment: 1,
       // aniso: 4,
     });
 
@@ -85,10 +110,6 @@ export default class RasterModel extends BaseModel {
     return [model];
   }
 
-  public async buildModels(): Promise<IModel[]> {
-    return this.initModels();
-  }
-
   public clearModels(): void {
     this.texture?.destroy();
     this.colorTexture?.destroy();
@@ -100,6 +121,7 @@ export default class RasterModel extends BaseModel {
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
+        shaderLocation: ShaderLocation.UV,
         name: 'a_Uv',
         buffer: {
           // give the WebGL driver a hint that this buffer may change

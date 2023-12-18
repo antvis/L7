@@ -1,7 +1,7 @@
-import { IModel } from '@antv/l7-core';
+import type { IModel } from '@antv/l7-core';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IMaskLayerStyleOptions } from '../../core/interface';
+import type { IMaskLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import mask_frag from '../../shader/minify_frag.glsl';
 import mask_vert from '../shaders/mask_vert.glsl';

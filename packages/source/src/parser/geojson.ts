@@ -1,4 +1,4 @@
-import {
+import type {
   Feature,
   FeatureCollection,
   Geometries,
@@ -7,7 +7,7 @@ import {
 } from '@turf/helpers';
 import { getCoords } from '@turf/invariant';
 import { flattenEach } from '@turf/meta';
-import { IFeatureKey, IParseDataItem, IParserData } from '../interface';
+import type { IFeatureKey, IParseDataItem, IParserData } from '../interface';
 import { geojsonRewind } from '../utils/util';
 
 interface IParserCFG {

@@ -35,7 +35,7 @@
     "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
     "maplibre-gl": "^3.5.2",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.1",
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {

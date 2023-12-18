@@ -1,6 +1,5 @@
 
-import {
-  BlendType,
+import type {
   IAnimateOption,
   IAttribute,
   IBlendOptions,
@@ -26,10 +25,12 @@ import {
   IStyleAttributeService,
   ITexture2D,
   ITexture2DInitializationOptions,
+  Triangulation} from '@antv/l7-core';
+import {
+  BlendType,
   lazyInject,
   MaskOperation,
   StencilType,
-  Triangulation,
   TYPES,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
@@ -379,8 +380,11 @@ ${uniforms.join('\n')}
       if (Array.isArray(value)) {
         uniformsArray.push(...value);
         uniformsLength += value.length;
-      } else if (typeof value === 'number') { // 排除纹理
+      } else if (typeof value === 'number' ) { // 排除纹理
         uniformsArray.push(value);
+        uniformsLength += 1;
+      } else if(typeof value ==='boolean') {
+        uniformsArray.push(Number(value));
         uniformsLength += 1;
       }
     })

@@ -1,4 +1,4 @@
-import { LngLatBoundsLike } from './geo/lng_lat_bounds';
+import type { LngLatBoundsLike } from './geo/lng_lat_bounds';
 
 export interface IMapOptions {
   hash: boolean;

@@ -1,7 +1,8 @@
 import { PositionType } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { createL7Icon } from '../utils/icon';
-import { Control, IControlOption } from './baseControl';
+import type { IControlOption } from './baseControl';
+import { Control } from './baseControl';
 
 export interface IZoomControlOption extends IControlOption {
   zoomInText: DOM.ELType | string;

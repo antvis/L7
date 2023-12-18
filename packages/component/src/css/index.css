@@ -590,3 +590,75 @@
 .l7-layer-popup__row + .l7-layer-popup__row {
   margin-top: 4px;
 }
+.l7-control-swipe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+  transform: translate(-50%, -50%);
+  touch-action: none;
+}
+.l7-control-swipe_hide {
+  display: none;
+}
+.l7-control-swipe:before {
+  position: absolute;
+  top: -5000px;
+  bottom: -5000px;
+  left: 50%;
+  z-index: -1;
+  width: 4px;
+  background: #fff;
+  transform: translate(-2px, 0);
+  content: '';
+}
+.l7-control-swipe.horizontal:before {
+  top: 50%;
+  right: -5000px;
+  bottom: auto;
+  left: -5000px;
+  width: auto;
+  height: 4px;
+}
+.l7-control-swipe__button {
+  display: block;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  color: #595959;
+  font-weight: bold;
+  font-size: inherit;
+  text-align: center;
+  text-decoration: none;
+  background-color: #fff;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+}
+.l7-control-swipe,
+.l7-control-swipe__button {
+  cursor: ew-resize;
+}
+.l7-control-swipe.horizontal,
+.l7-control-swipe.horizontal button {
+  cursor: ns-resize;
+}
+.l7-control-swipe:after,
+.l7-control-swipe__button:before,
+.l7-control-swipe__button:after {
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  left: 50%;
+  width: 2px;
+  background: currentColor;
+  transform: translate(-1px, 0);
+  content: '';
+}
+.l7-control-swipe__button:after {
+  transform: translateX(4px);
+}
+.l7-control-swipe__button:before {
+  transform: translateX(-6px);
+}

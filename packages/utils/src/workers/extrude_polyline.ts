@@ -1,4 +1,5 @@
-import { vec2, vec3 } from 'gl-matrix';
+import type { vec3 } from 'gl-matrix';
+import { vec2 } from 'gl-matrix';
 import { aProjectFlat } from '../geo';
 const tmp = vec2.create();
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

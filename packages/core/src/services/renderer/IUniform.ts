@@ -1,5 +1,5 @@
-import { IFramebuffer } from './IFramebuffer';
-import { ITexture2D } from './ITexture2D';
+import type { IFramebuffer } from './IFramebuffer';
+import type { ITexture2D } from './ITexture2D';
 
 interface IStruct {
   [structPropName: string]: number | number[] | boolean | IStruct | IStruct[];

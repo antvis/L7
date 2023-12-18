@@ -1,7 +1,7 @@
 // @ts-ignore
-import { EarthMap } from '../earthmap';
-import Point from '../geo/point';
-import { Map } from '../map';
+import type { EarthMap } from '../earthmap';
+import type Point from '../geo/point';
+import type { Map } from '../map';
 import DOM from '../utils/dom';
 import { Event } from './events/event';
 

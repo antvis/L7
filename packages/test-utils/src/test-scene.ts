@@ -1,4 +1,4 @@
-import { IMapOptions } from '@antv/l7-map';
+import type { IMapOptions } from '@antv/l7-map';
 import { Map } from '@antv/l7-maps';
 import { Scene } from '@antv/l7-scene';
 import regl from 'regl';

@@ -1,4 +1,4 @@
-import { MapStyleConfig } from '@antv/l7-core';
+import type { MapStyleConfig } from '@antv/l7-core';
 
 export const MapTheme: MapStyleConfig = {
   normal: 'amap://styles/normal',

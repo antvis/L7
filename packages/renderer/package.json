@@ -24,12 +24,12 @@
     "tsc": "tsc --project tsconfig.build.json"
   },
   "dependencies": {
-    "@antv/g-device-api": "^1.4.3",
+    "@antv/g-device-api": "^1.4.5",
     "@antv/l7-core": "2.20.5",
     "@antv/l7-utils": "2.20.5",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.1",
     "regl": "1.6.1"
   },
   "devDependencies": {

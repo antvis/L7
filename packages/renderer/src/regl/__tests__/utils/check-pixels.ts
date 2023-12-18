@@ -1,4 +1,4 @@
-import regl from 'regl';
+import type regl from 'regl';
 
 // borrow from https://github.com/regl-project/regl/blob/gh-pages/test/attributes.js#L303-L311
 export default function checkPixels(

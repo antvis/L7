@@ -1,12 +1,13 @@
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../../types';
-import { ILayer } from '../../layer/ILayerService';
-import {
+import type { ILayer } from '../../layer/ILayerService';
+import type {
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
-  IPostProcessor,
+  IPostProcessor} from '../IMultiPassRenderer';
+import {
   PassType,
 } from '../IMultiPassRenderer';
 

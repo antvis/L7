@@ -1,11 +1,11 @@
 // @ts-ignore
 // tslint:disable-next-line: no-submodule-imports
 import { lodashUtil } from '@antv/l7-utils';
-import { EarthMap } from '../earthmap';
+import type { EarthMap } from '../earthmap';
 import Point from '../geo/point';
-import { Map } from '../map';
+import type { Map } from '../map';
 import DOM from '../utils/dom';
-import { IHandler, IHandlerResult } from './IHandler';
+import type { IHandler, IHandlerResult } from './IHandler';
 import BlockableMapEventHandler from './blockable_map_event';
 import BoxZoomHandler from './box_zoom';
 import ClickZoomHandler from './click_zoom';

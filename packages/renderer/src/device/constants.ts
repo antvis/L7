@@ -9,7 +9,7 @@ import {
   PrimitiveTopology,
 } from '@antv/g-device-api';
 import { gl } from '@antv/l7-core';
-import { TypedArray } from './utils/typedarray';
+import type { TypedArray } from './utils/typedarray';
 
 export const typedArrayCtorMap: {
   [key: string]: new (data: number[]) => TypedArray;

@@ -1,4 +1,4 @@
-import { ILayerAttributesOption } from '@antv/l7-core';
+import type { ILayerAttributesOption } from '@antv/l7-core';
 import RasterLayer from '../../raster';
 import Tile from './Tile';
 

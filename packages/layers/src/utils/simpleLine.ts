@@ -1,5 +1,6 @@
 import { aProjectFlat } from '@antv/l7-utils';
-import { vec2, vec3 } from 'gl-matrix';
+import type { vec3 } from 'gl-matrix';
+import { vec2 } from 'gl-matrix';
 
 const lineA = vec2.create();
 

@@ -1,6 +1,7 @@
 import BaseLayer from '../core/BaseLayer';
-import { IImageLayerStyleOptions } from '../core/interface';
-import ImageModels, { ImageModelType } from './models/index';
+import type { IImageLayerStyleOptions } from '../core/interface';
+import type { ImageModelType } from './models/index';
+import ImageModels from './models/index';
 export default class ImageLayer extends BaseLayer<IImageLayerStyleOptions> {
   public type: string = 'ImageLayer';
   public async buildModels() {

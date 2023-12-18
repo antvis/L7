@@ -1,4 +1,4 @@
-import {
+import type {
   IBandsOperation,
   IRasterData,
   IRasterFileData,
@@ -9,7 +9,7 @@ import {
 import { calculate } from './math';
 import { operationsSchema } from './operationSchema';
 
-import { ResponseCallback } from '@antv/l7-utils';
+import type { ResponseCallback } from '@antv/l7-utils';
 
 /**
  * 执行波段计算 format + operation

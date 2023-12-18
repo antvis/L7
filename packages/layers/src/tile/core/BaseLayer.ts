@@ -1,14 +1,16 @@
-import {
+import type {
   IInteractionTarget,
   ILayer,
   ILayerService,
   IMapService,
   IPickingService,
   IRendererService,
-  ISource,
+  ISource} from '@antv/l7-core';
+import {
   TYPES,
 } from '@antv/l7-core';
-import { lodashUtil, SourceTile, TilesetManager } from '@antv/l7-utils';
+import type { SourceTile, TilesetManager } from '@antv/l7-utils';
+import { lodashUtil } from '@antv/l7-utils';
 import { TileLayerService } from '../service/TileLayerService';
 import { TilePickService } from '../service/TilePickService';
 import { getTileFactory } from '../tile';

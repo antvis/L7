@@ -2,7 +2,7 @@
  * render w/ regl
  * @see https://github.com/regl-project/regl/blob/gh-pages/API.md
  */
-import {
+import type {
   IAttribute,
   IAttributeInitializationOptions,
   IBuffer,

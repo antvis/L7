@@ -1,8 +1,9 @@
-import {
-  getURLFromTemplate,
+import type {
   ITileBand,
   SourceTile,
-  TileLoadParams,
+  TileLoadParams} from '@antv/l7-utils';
+import {
+  getURLFromTemplate
 } from '@antv/l7-utils';
 
 /**

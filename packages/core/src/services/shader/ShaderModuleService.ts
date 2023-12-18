@@ -2,7 +2,7 @@ import { lodashUtil } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { extractUniforms } from '../../utils/shader-module';
-import { IModuleParams, IShaderModuleService } from './IShaderModuleService';
+import type { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 const { uniq } = lodashUtil;
 
 import common from '../../shaders/common.glsl';

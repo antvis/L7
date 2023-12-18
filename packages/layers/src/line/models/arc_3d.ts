@@ -1,24 +1,22 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAnimateOption,
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions } from '../../core/interface';
+import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import { EARTH_RADIUS } from '../../earth/utils';
 // arc3d line layer
-import arc3d_line_frag from '../shaders/line_arc_3d_frag.glsl';
-import arc3d_line_vert from '../shaders/line_arc_3d_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-// arc3d linear layer
-import arc3d_linear_frag from '../shaders/linear/arc3d_linear_frag.glsl';
-import arc3d_linear_vert from '../shaders/linear/arc3d_linear_vert.glsl';
+import arc3d_line_frag from '../shaders/arc3d/line_arc_3d_frag.glsl';
+import arc3d_line_vert from '../shaders/arc3d/line_arc_3d_vert.glsl';
 
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
@@ -27,7 +25,11 @@ const lineStyleObj: { [key: string]: number } = {
 export default class Arc3DModel extends BaseModel {
   protected texture: ITexture2D;
   // public enableShaderEncodeStyles = ['opacity'];
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       sourceColor,
       targetColor,
@@ -44,58 +46,40 @@ export default class Arc3DModel extends BaseModel {
     if (dashArray.length === 2) {
       dashArray.push(0, 0);
     }
-
-
     // 转化渐变色
-    // let useLinearColor = 0; // 默认不生效
+    let useLinearColor = 0; // 默认不生效
     let sourceColorArr = [0, 0, 0, 0];
     let targetColorArr = [0, 0, 0, 0];
     if (sourceColor && targetColor) {
       sourceColorArr = rgb2arr(sourceColor);
       targetColorArr = rgb2arr(targetColor);
-      // useLinearColor = 1;
+      useLinearColor = 1;
     }
 
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
-    
-    let commonOptions;
-    if (sourceColor && targetColor) {
-      commonOptions = {
-        u_animate: this.animateOption2Array(animateOption as IAnimateOption),
-        u_dash_array: dashArray,
-        u_sourceColor: sourceColorArr,
-        u_targetColor: targetColorArr,
-        u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
-        u_globel_radius: EARTH_RADIUS, // 地球半径
-        u_global_height: globalArcHeight,
-        segmentNumber,
-        u_line_type: lineStyleObj[lineType as string] || 0.0,
-        u_icon_step: iconStep,
-        u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-        u_time: this.layer.getLayerAnimateTime(),
-      };
-    }
-    else{
-      commonOptions = {
-        u_animate: this.animateOption2Array(animateOption as IAnimateOption),
-        u_dash_array: dashArray,
-        u_textSize: [1024, this.iconService.canvasHeight || 128],
-        u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
-        u_globel_radius: EARTH_RADIUS, // 地球半径
-        u_global_height: globalArcHeight,
-        segmentNumber,
-        u_line_type: lineStyleObj[lineType as string] || 0.0,
-        u_icon_step: iconStep,
-        u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
-        u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
-        u_time: this.layer.getLayerAnimateTime(),
-        // u_texture: this.texture, // 贴图
-      };
-    }
-    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
-    return commonBufferInfo; 
+
+    const commonOptions = {
+      u_animate: this.animateOption2Array(animateOption as IAnimateOption),
+      u_dash_array: dashArray,
+      u_sourceColor: sourceColorArr,
+      u_targetColor: targetColorArr,
+      u_textSize: [1024, this.iconService.canvasHeight || 128],
+      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+      u_globel_radius: EARTH_RADIUS, // 地球半径
+      u_global_height: globalArcHeight,
+      segmentNumber,
+      u_line_type: lineStyleObj[lineType as string] || 0.0,
+      u_icon_step: iconStep,
+      u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
+      u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
+      u_time: this.layer.getLayerAnimateTime() || 0,
+      u_linearColor: useLinearColor, //是否使用渐变色
+    };
+
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   // public getAnimateUniforms(): IModelUniform {
@@ -120,23 +104,11 @@ export default class Arc3DModel extends BaseModel {
   }
 
   public getShaders(): { frag: string; vert: string; type: string } {
-    const { sourceColor, targetColor } =
-      this.layer.getLayerConfig() as ILineLayerStyleOptions;
-
-    if (sourceColor && targetColor) {
-      // 分离 linear 功能
-      return {
-        frag: arc3d_linear_frag,
-        vert: arc3d_linear_vert,
-        type: 'Linear',
-      };
-    } else {
-      return {
-        frag: arc3d_line_frag,
-        vert: arc3d_line_vert,
-        type: '',
-      };
-    }
+    return {
+      frag: arc3d_line_frag,
+      vert: arc3d_line_vert,
+      type: '',
+    };
   }
 
   public async buildModels(): Promise<IModel[]> {
@@ -150,7 +122,7 @@ export default class Arc3DModel extends BaseModel {
       fragmentShader: frag,
       inject: this.getInject(),
       triangulation: LineArcTriangulation,
-      styleOption:{segmentNumber},
+      styleOption: { segmentNumber },
     });
     return [model];
   }
@@ -160,7 +132,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation:ShaderLocation.SIZE,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -180,7 +152,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
-        shaderLocation:12,
+        shaderLocation: 12,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -202,7 +174,7 @@ export default class Arc3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation:14,
+        shaderLocation: 14,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

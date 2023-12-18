@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, GeometryLayer } from '@antv/l7';
+import { GeometryLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -8,7 +8,7 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-      renderer: process.env.renderer,
+      renderer: 'device',
       map: new GaodeMap({
         // map: new GaodeMap({
         // map: new Mapbox({
@@ -47,7 +47,7 @@ export default () => {
         .color('#f00');
 
       scene.addLayer(layer);
-      scene.startAnimate()
+      scene.startAnimate();
     });
   }, []);
   return (

@@ -1,12 +1,14 @@
-import {
+import type {
   IMapService,
   IMarker,
-  IMarkerContainerAndBounds,
+  IMarkerContainerAndBounds} from '@antv/l7-core';
+import {
   TYPES,
 } from '@antv/l7-core';
+import type {
+  IBounds} from '@antv/l7-utils';
 import {
   DOM,
-  IBounds,
   Satistics,
   bindAll,
   boundsContains,
@@ -14,11 +16,11 @@ import {
   padBounds,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
-import { IMarkerLayerOption, IMarkerStyleOption } from './interface';
+import type { IMarkerLayerOption, IMarkerStyleOption } from './interface';
 import Marker from './marker';
 const { merge } = lodashUtil;
 

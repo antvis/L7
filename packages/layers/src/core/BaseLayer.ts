@@ -5,15 +5,13 @@ import {
   SyncBailHook,
   SyncHook,
 } from '@antv/async-hook';
-import {
-  BlendType,
+import type {
   IActiveOption,
   IAnimateOption,
   IAttributeAndElements,
   ICameraService,
   ICoordinateSystemService,
   IDataState,
-  IDebugLog,
   IDebugService,
   IEncodeFeature,
   IFontService,
@@ -28,7 +26,6 @@ import {
   ILayerPickService,
   ILayerPlugin,
   ILayerService,
-  ILayerStage,
   ILegend,
   ILegendClassificaItem,
   ILegendSegmentItem,
@@ -40,8 +37,8 @@ import {
   IPass,
   IPickingService,
   IPostProcessingPass,
-  IRendererService,
   IRenderOptions,
+  IRendererService,
   IScale,
   IScaleOptions,
   IShaderModuleService,
@@ -50,17 +47,21 @@ import {
   IStyleAttributeUpdateOptions,
   ITextureService,
   LayerEventType,
-  lazyInject,
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
-  Triangulation,
+  Triangulation} from '@antv/l7-core';
+import {
+  BlendType,
+  IDebugLog,
+  ILayerStage,
   TYPES,
+  lazyInject,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 import { BlendTypes } from '../utils/blend';
 import {
   createMultiPassRenderer,
@@ -282,11 +283,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       enableMask: true,
     });
   }
-  // 将废弃
+
+  /**
+   * 将废弃
+   * @deprecated
+   */
   public addMaskLayer(maskLayer: ILayer) {
     this.masks.push(maskLayer);
   }
-  // 将废弃
+
+  /**
+   * 将废弃
+   * @deprecated
+   */
   public removeMaskLayer(maskLayer: ILayer) {
     const layerIndex = this.masks.indexOf(maskLayer);
     if (layerIndex > -1) {

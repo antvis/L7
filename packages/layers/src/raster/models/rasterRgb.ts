@@ -1,31 +1,55 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { IRasterLayerStyleOptions } from '../../core/interface';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import type { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import rasterVert from '../shaders/raster_2d_vert.glsl';
-import rasterFrag from '../shaders/raster_rgb_frag.glsl';
+import rasterFrag from '../shaders/rgb/raster_rgb_frag.glsl';
+import rasterVert from '../shaders/rgb/raster_rgb_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected texture: ITexture2D;
   protected dataOption: any = {};
 
   public getUninforms() {
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
+    return {
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
+    };
+  }
+
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const { opacity = 1, noDataValue = 0 } =
       this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    const { rMinMax, gMinMax, bMinMax } = this.dataOption;
-    return {
-      u_opacity: opacity || 1,
-      u_texture: this.texture,
-      u_noDataValue: noDataValue,
+    const {
+      rMinMax = [0, 255],
+      gMinMax = [0, 255],
+      bMinMax = [0, 255],
+    } = this.dataOption;
+    const commonOptions = {
       u_rminmax: rMinMax,
       u_gminmax: gMinMax,
       u_bminmax: bMinMax,
+      u_opacity: opacity || 1,
+      u_noDataValue: noDataValue,
+      u_texture: this.texture,
     };
+    this.textures = [this.texture];
+
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   private async getRasterData(parserDataItem: any) {
@@ -57,13 +81,14 @@ export default class RasterModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
     const { data, width, height } = await this.getRasterData(parserDataItem);
     this.texture = createTexture2D({
       // @ts-ignore
-      data,
+      data: new Float32Array(data),
       width,
       height,
       format: gl.RGB,
@@ -96,6 +121,7 @@ export default class RasterModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

@@ -7,15 +7,18 @@ export default defineConfig({
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   outputPath: 'docs-dist',
   base: '/',
-  define:{
+  define: {
     'process.env.renderer': process.env.renderer?.replace(/\'/g, ''),
+    'process.env.CI': process.env.CI?.replace(/\'/g, ''),
   },
-  
+
   devServer: {
     port: '6006',
   },
   resolve: {
     includes: ['dev-demos'],
+    excludes:['examples']
+    
   },
   polyfill: {
     imports: ['element-remove', 'babel-polyfill'],
@@ -86,7 +89,6 @@ export default defineConfig({
     'copy-text-to-clipboard',
   ],
   extraBabelPlugins: [
-    ['transform-import-css-l7'],
     ['babel-plugin-inline-import', { extensions: ['.worker.js'] }],
   ],
   externals: {

@@ -1,7 +1,8 @@
-import { ILayer } from '@antv/l7-core';
+import type { ILayer } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import { ICanvasLayerStyleOptions } from '../core/interface';
-import CanvasModels, { CanvasModelType } from './models/index';
+import type { ICanvasLayerStyleOptions } from '../core/interface';
+import type { CanvasModelType } from './models/index';
+import CanvasModels from './models/index';
 export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
   public type: string = 'CanvasLayer';
   public forceRender: boolean = true;

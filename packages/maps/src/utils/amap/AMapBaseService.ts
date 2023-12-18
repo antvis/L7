@@ -2,9 +2,8 @@
  * AMapService
  */
 import AMapLoader from '@amap/amap-jsapi-loader';
-import {
+import type {
   Bounds,
-  CoordinateSystem,
   ICameraOptions,
   ICoordinateSystemService,
   IGlobalConfigService,
@@ -16,18 +15,21 @@ import {
   IPoint,
   IStatusOptions,
   IViewport,
-  MapServiceEvent,
   MapStyleConfig,
-  MapStyleName,
+  MapStyleName} from '@antv/l7-core';
+import {
+  CoordinateSystem,
+  MapServiceEvent,
   TYPES,
 } from '@antv/l7-core';
 import { DOM,MapType } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { IAMapEvent, IAMapInstance } from '../../../typings/index';
+import type { IAMapEvent, IAMapInstance } from '../../../typings/index';
 import Viewport from '../Viewport';
-import { ISimpleMapCoord, SimpleMapCoord } from '../simpleMapCoord';
+import type { ISimpleMapCoord} from '../simpleMapCoord';
+import { SimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
 import './logo.css';
 import { MapTheme } from './theme';

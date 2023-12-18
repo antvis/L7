@@ -1,22 +1,27 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAnimateOption,
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ILineLayerStyleOptions } from '../../core/interface';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/wall/wall_frag.glsl';
 import line_vert from '../shaders/wall/wall_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class LineWallModel extends BaseModel {
   protected texture: ITexture2D;
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       sourceColor,
       targetColor,
@@ -27,7 +32,7 @@ export default class LineWallModel extends BaseModel {
       iconStepCount = 1,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
-  
+
     if (this.rendererService.getDirty()) {
       this.texture.bind();
     }
@@ -41,7 +46,7 @@ export default class LineWallModel extends BaseModel {
       targetColorArr = rgb2arr(targetColor);
       useLinearColor = 1;
     }
-    const commonOptions =  {
+    const commonOptions = {
       u_animate: this.animateOption2Array(animateOption as IAnimateOption),
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
@@ -53,11 +58,11 @@ export default class LineWallModel extends BaseModel {
       u_line_texture: lineTexture ? 1.0 : 0.0, // 传入线的标识
       u_textureBlend: textureBlend === 'normal' ? 0.0 : 1.0,
       u_iconStepCount: iconStepCount,
-      u_time: this.layer.getLayerAnimateTime(),
+      u_time: this.layer.getLayerAnimateTime() || 0,
     };
-    
-    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
-    return commonBufferInfo; 
+
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
   // public getAnimateUniforms(): IModelUniform {
   //   const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
@@ -98,7 +103,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Distance',
-        shaderLocation:15,
+        shaderLocation: 15,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -120,7 +125,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Total_Distance',
-        shaderLocation:11,
+        shaderLocation: 11,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -143,7 +148,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation:ShaderLocation.SIZE,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -164,7 +169,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation:ShaderLocation.NORMAL,
+        shaderLocation: ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -190,7 +195,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Miter',
-        shaderLocation:10,
+        shaderLocation: 10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -213,7 +218,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation:14,
+        shaderLocation: 14,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

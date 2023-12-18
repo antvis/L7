@@ -1,5 +1,6 @@
 import { DOM } from '@antv/l7-utils';
-import Control, { IControlOption } from './control';
+import type { IControlOption } from './control';
+import Control from './control';
 
 export { ButtonControl };
 

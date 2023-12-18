@@ -3,19 +3,20 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { TYPES } from '../../types';
 import { isEventCrash } from '../../utils/dom';
-import { IGlobalConfigService } from '../config/IConfigService';
-import {
+import type { IGlobalConfigService } from '../config/IConfigService';
+import type {
   IInteractionService,
-  IInteractionTarget,
+  IInteractionTarget} from '../interaction/IInteractionService';
+import {
   InteractionEvent,
 } from '../interaction/IInteractionService';
-import { ILayer, ILayerService } from '../layer/ILayerService';
-import { ILngLat, IMapService } from '../map/IMapService';
+import type { ILayer, ILayerService } from '../layer/ILayerService';
+import type { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
-import { IFramebuffer } from '../renderer/IFramebuffer';
-import { IRendererService } from '../renderer/IRendererService';
+import type { IFramebuffer } from '../renderer/IFramebuffer';
+import type { IRendererService } from '../renderer/IRendererService';
 import { TextureUsage } from '../renderer/ITexture2D';
-import { IPickingService } from './IPickingService';
+import type { IPickingService } from './IPickingService';
 @injectable()
 export default class PickingService implements IPickingService {
   public pickedColors: Uint8Array | undefined;

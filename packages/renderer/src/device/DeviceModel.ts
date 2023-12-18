@@ -1,30 +1,31 @@
-import {
+import type {
   Bindings,
-  BlendFactor,
-  BlendMode,
   Buffer,
-  ChannelWriteMask,
-  colorNewFromRGBA,
-  CompareFunction,
-  CullMode,
   Device,
-  Format,
   InputLayout,
   InputLayoutBufferDescriptor,
   Program,
-  RenderPipeline,
+  RenderPipeline} from '@antv/g-device-api';
+import {
+  BlendFactor,
+  BlendMode,
+  ChannelWriteMask,
+  CompareFunction,
+  CullMode,
+  Format,
   TransparentBlack,
   VertexStepMode,
 } from '@antv/g-device-api';
-import {
-  gl,
+import type {
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
-  IUniform,
+  IUniform} from '@antv/l7-core';
+import {
+  gl
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import DeviceRendererService from '.';
+import type DeviceRendererService from '.';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -33,9 +34,9 @@ import {
   primitiveMap,
   sizeFormatMap,
 } from './constants';
-import DeviceAttribute from './DeviceAttribute';
-import DeviceBuffer from './DeviceBuffer';
-import DeviceElements from './DeviceElements';
+import type DeviceAttribute from './DeviceAttribute';
+import type DeviceBuffer from './DeviceBuffer';
+import type DeviceElements from './DeviceElements';
 import DeviceFramebuffer from './DeviceFramebuffer';
 import DeviceTexture2D from './DeviceTexture2D';
 const { isPlainObject, isTypedArray } = lodashUtil;
@@ -146,7 +147,7 @@ export default class DeviceModel implements IModel {
       program: this.program,
       topology: primitiveMap[primitive],
       colorAttachmentFormats: [Format.U8_RGBA_RT],
-      depthStencilAttachmentFormat: depthEnabled ? Format.D24_S8 : null,
+      depthStencilAttachmentFormat: Format.D24_S8,
       megaStateDescriptor: {
         attachmentsState: [
           pick
@@ -198,19 +199,20 @@ export default class DeviceModel implements IModel {
     });
   }
 
-  updateAttributesAndElements() {
-    // elements: IElements, // attributes: { [key: string]: IAttribute },
-    // TODO: implement
-  }
+  updateAttributesAndElements() {}
 
-  updateAttributes() {
-    // attributes: { [key: string]: IAttribute }
-    // TODO: implement
-    // Object.keys(attributes).forEach((name: string) => {
-    //   const attribute = attributes[name] as DeviceAttribute;
-    //   attribute.updateBuffer();
-    // });
-  }
+  /**
+   * No need to implement this method, you should update data on `Attribute` like this:
+   *
+   * @example
+   * ```ts
+   * attribute.updateBuffer({
+   *   data: [],
+   *   offset: 0,
+   * });
+   * ```
+   */
+  updateAttributes() {}
 
   addUniforms(uniforms: { [key: string]: IUniform }) {
     this.uniforms = {
@@ -239,49 +241,7 @@ export default class DeviceModel implements IModel {
       ...this.extractUniforms(uniforms),
     };
 
-    const {
-      currentFramebuffer,
-      swapChain,
-      mainColorRT,
-      mainDepthRT,
-      width,
-      height,
-    } = this.service;
-    const onscreenTexture = swapChain.getOnscreenTexture();
-    const colorAttachment = currentFramebuffer
-      ? currentFramebuffer['colorRenderTarget']
-      : mainColorRT;
-    const colorResolveTo = currentFramebuffer ? null : onscreenTexture;
-    const depthStencilAttachment = depthEnabled
-      ? currentFramebuffer
-        ? currentFramebuffer['depthRenderTarget']
-        : mainDepthRT
-      : null;
-
-    const { color = [0, 0, 0, 0], depth = 1, stencil = 0 } =
-      // @ts-ignore
-      currentFramebuffer?.clearOptions || {};
-
-    const colorClearColor = colorAttachment
-      ? colorNewFromRGBA(
-          color[0] * 255,
-          color[1] * 255,
-          color[2] * 255,
-          color[3],
-        )
-      : TransparentBlack;
-    const depthClearValue = depthStencilAttachment ? depth : undefined;
-    const stencilClearValue = depthStencilAttachment ? stencil : undefined;
-
-    const renderPass = this.device.createRenderPass({
-      colorAttachment: [colorAttachment],
-      colorResolveTo: [colorResolveTo],
-      colorClearColor: [colorClearColor],
-      depthStencilAttachment,
-      depthClearValue,
-      stencilClearValue,
-    });
-    this.service.renderPasses.push(renderPass);
+    const { renderPass, currentFramebuffer, width, height } = this.service;
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
@@ -305,7 +265,6 @@ export default class DeviceModel implements IModel {
           }
         : null,
     );
-
     if (uniformBuffers) {
       this.bindings = this.device.createBindings({
         pipeline: this.pipeline,
