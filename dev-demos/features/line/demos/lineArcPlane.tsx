@@ -103,8 +103,8 @@ export default () => {
             opacity: 0.5
           });
         // scene.addLayer(worldLine);
-        scene.addLayer(dotPoint);
-        // scene.addLayer(flyLine2);
+        // scene.addLayer(dotPoint);
+        scene.addLayer(flyLine2);
         // scene.addLayer(flyLine);
       });
     });

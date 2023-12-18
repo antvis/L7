@@ -12,6 +12,8 @@ layout(location = 14) in vec2 a_iconMapUV;
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
   vec4 u_dash_array: [10.0, 5., 0, 0];
+  vec4 u_sourceColor;
+  vec4 u_targetColor;
   vec2 u_textSize;
   float u_globel;
   float u_globel_radius;
@@ -22,6 +24,7 @@ layout(std140) uniform commonUniorm {
   float u_line_texture: 0.0;
   float u_textureBlend;
   float u_time;
+  float u_linearColor: 0.0;
 };
 out vec4 v_color;
 out vec4 v_dash_array;
@@ -95,8 +98,14 @@ vec3 lglt2xyz(vec2 lnglat) {
 }
 
 void main() {
-
-  v_color = a_Color;
+  //vs中计算渐变色
+  if(u_linearColor==1.0){
+    float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
+    v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
+  }
+  else{
+    v_color = a_Color;
+  }
   v_color.a = v_color.a * opacity;
   vec2 source = project_position(vec4(a_Instance.rg, 0, 0)).xy;
   vec2 target = project_position(vec4(a_Instance.ba, 0, 0)).xy;

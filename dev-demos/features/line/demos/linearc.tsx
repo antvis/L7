@@ -30,40 +30,41 @@ export default () => {
         {
           type: 'Feature',
           properties: {
-            offset: 0.3,
-          },
-          geometry: {
-            type: 'MultiLineString',
-            coordinates: [
-              [
-                [99.228515625, 37.43997405227057],
-                [100.72265625, 27.994401411046148],
-              ],
-              [
-                [108.544921875, 37.71859032558816],
-                [112.412109375, 32.84267363195431],
-              ],
-            ],
-          },
-        },
-        {
-          type: 'Feature',
-          properties: {
             offset: 0.8,
           },
           geometry: {
             type: 'MultiLineString',
             coordinates: [
               [
-                [116.43,39.97],
-                [108.39,22.91],
+                [116.371436,39.942372],
+                [121.467025,31.2327],
               ],
             ],
           },
         },
       ],
     };
+
+    const geoData2 = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {
+            offset: 0.3,
+          },
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+                [112.548194,37.786985],
+                [102.92417,24.9848]
+            ],
+          },
+        },
+      ],
+    };
     const source = new Source(geoData);
+    const source2 = new Source(geoData2);
 
 
     // scene.on('zoom', e => console.log(e))
@@ -74,12 +75,22 @@ export default () => {
       .shape('arc')
       .color('#f00')
       .style({
+        // lineType:'dash',
+        // thetaOffset: 'offset'
+        // segmentNumber: 10,
+        thetaOffset: 0.5,
+      });
+      const layer2 = new LineLayer({ blend: 'normal' })
+      .source(source2)
+      .size(2)
+      .shape('arc')
+      .color('#f00')
+      .style({
         lineType:'dash',
         // thetaOffset: 'offset'
         // segmentNumber: 10,
         thetaOffset: 0.5,
       });
-
  
       const point = new PointLayer({ blend: 'normal', zIndex: 1 })
         .source([{
@@ -124,7 +135,8 @@ export default () => {
 
 
     scene.on('loaded', () => {
-      scene.addLayer(layer);
+      // scene.addLayer(layer);
+      scene.addLayer(layer2);
       scene.startAnimate();
     });
   }, []);
