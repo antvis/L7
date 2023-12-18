@@ -1,5 +1,6 @@
 import { Scene, PointLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
+
 export function MapRender() {
     const scene = new Scene({
         id: 'map',

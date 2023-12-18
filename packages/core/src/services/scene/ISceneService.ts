@@ -5,9 +5,6 @@ import type { ILayer } from '../layer/ILayerService';
 export interface ISceneService extends EventEmitter {
   destroyed: boolean;
   loaded: boolean;
-  // on(type: string, handle: (...args: any[]) => void): void;
-  // once(type: string, handle: (...args: any[]) => void): void;
-  // off(type: string, handle: (...args: any[]) => void): void;
   removeAllListeners(event?: string): this;
   init(config: ISceneConfig): void;
   initMiniScene(config: ISceneConfig): void;

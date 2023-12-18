@@ -71,12 +71,12 @@ class Scene
   private container: Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, canvas, hasBaseMap, renderer = 'regl' } = config;
+    const { id, map, canvas, renderer = 'regl' } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
     // 绑定地图服务
-    map.setContainer(sceneContainer, id, canvas, hasBaseMap);
+    map.setContainer(sceneContainer, id, canvas);
     // 绑定渲染引擎服务
     sceneContainer
       .bind<IRendererService>(TYPES.IRendererService)

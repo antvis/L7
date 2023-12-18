@@ -38,7 +38,6 @@ export interface IMapWrapper {
     container: Container,
     id: string | HTMLDivElement,
     canvas?: HTMLCanvasElement,
-    hasBaseMap?: boolean,
   ): void;
 }
 

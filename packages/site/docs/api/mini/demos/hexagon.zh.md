@@ -121,7 +121,6 @@ Page({
         id: 'canvas',
         canvas,
         map: miniMap,
-        hasBaseMap: false,
       });
       miniScene.setBgColor('rgb(240, 243, 246)');
 

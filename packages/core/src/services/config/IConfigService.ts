@@ -7,7 +7,6 @@ export interface ISceneConfig extends IRenderConfig {
   id: string | HTMLDivElement;
   canvas?: HTMLCanvasElement;
   gl?: any;
-  hasBaseMap?: boolean;
   map: IMapWrapper;
   logoPosition?: PositionName;
   logoVisible?: boolean;
