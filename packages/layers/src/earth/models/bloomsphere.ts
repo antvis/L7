@@ -9,8 +9,8 @@ import { lodashUtil } from '@antv/l7-utils';
 
 import BaseModel from '../../core/BaseModel';
 import { earthOuterTriangulation } from '../../core/triangulation';
-import bloomSphereFrag from '../shaders/bloomsphere_frag.glsl';
-import bloomSphereVert from '../shaders/bloomsphere_vert.glsl';
+import bloomSphereFrag from '../shaders/bloomshpere/bloomsphere_frag.glsl';
+import bloomSphereVert from '../shaders/bloomshpere/bloomsphere_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 interface IBloomLayerStyleOptions {
   opacity: number;

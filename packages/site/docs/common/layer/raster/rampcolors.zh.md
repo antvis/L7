@@ -53,7 +53,7 @@ rampColors: {
 rampColors: {
   type:'custom',
   colors: ['#f0f9e8','#bae4bc','#7bccc4','#43a2ca','#0868ac'],
-  positions [0,200,1000,4000,8000,10000]
+  positions: [0,200,1000,4000,8000,10000]
 }
 ```
 

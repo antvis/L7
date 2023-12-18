@@ -1,17 +1,34 @@
+#define Animate 0.0
+#define LineTexture 1.0
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
 layout(location = 9) in float a_Size;
 layout(location = 12) in vec4 a_Instance;
+layout(location = 14) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
+  vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
+  vec4 u_dash_array;
   vec4 u_sourceColor;
   vec4 u_targetColor;
+  vec2 u_textSize;
   float segmentNumber;
   float u_lineDir: 1.0;
+  float u_icon_step: 100;
+  float u_line_texture: 0.0;
+  float u_textureBlend;
+  float u_blur : 0.9;
+  float u_line_type: 0.0;
+  float u_time;
+  float u_linearColor: 0.0;
 };
-
 out vec4 v_color;
-out float v_segmentIndex;
+out vec2 v_iconMapUV;
+out vec4 v_lineData;
+//dash
+out vec4 v_dash_array;
+out float v_distance_ratio;
+
 
 #pragma include "projection"
 #pragma include "project"
@@ -39,7 +56,10 @@ vec2 midPoint(vec2 source, vec2 target, float arcThetaOffset) {
   // return mid;
 }
 float getSegmentRatio(float index) {
+    // dash: index / (segmentNumber - 1.);
+    // normal: smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
     return smoothstep(0.0, 1.0, index / (segmentNumber - 1.));
+    //  return index / (segmentNumber - 1.);
 }
 vec2 interpolate (vec2 source, vec2 target, float t, float arcThetaOffset) {
   // if the angularDist is PI, linear interpolation is applied. otherwise, use spherical interpolation
@@ -65,28 +85,78 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
 }
 
 void main() {
-  v_color = a_Color;
+  //vs中计算渐变色
+  if(u_linearColor==1.0){
+    float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
+    v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
+  }
+  else{
+    v_color = a_Color;
+  }
+  v_color.a = v_color.a * opacity;
 
   vec2 source = a_Instance.rg;  // 起始点
   vec2 target =  a_Instance.ba; // 终点
+
+
+
   float segmentIndex = a_Position.x;
   float segmentRatio = getSegmentRatio(segmentIndex);
+
+  //计算dashArray和distanceRatio 输出到片元
+  vec2 s = source;
+  vec2 t = target;
+  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
+    s = unProjCustomCoord(source);
+    t = unProjCustomCoord(target);
+  }
+  float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+  v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / total_Distance;
+  v_distance_ratio = segmentIndex / segmentNumber;
 
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   float d_distance_ratio;
+  
+  if(u_animate.x == Animate) {
+      d_distance_ratio = segmentIndex / segmentNumber;
+      if(u_lineDir != 1.0) {
+        d_distance_ratio = 1.0 - d_distance_ratio;
+      }
+  }
+
+  v_lineData.b = d_distance_ratio;
+
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, thetaOffset), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, thetaOffset), 0.0, 1.0));
-  // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
-  //unProjCustomCoord
+
   
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
 
 
   float d_segmentIndex = a_Position.x + 1.0; // 当前顶点在弧线中所处的分段位置
+  v_lineData.r = d_segmentIndex;
 
-  v_color = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
-  v_color.a *= opacity;
+  if(LineTexture == u_line_texture) { // 开启贴图模式
+
+    float arcDistrance = length(source - target); // 起始点和终点的距离
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20) { // amap
+      arcDistrance *= 1000000.0;
+    }
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) { // mapbox
+      // arcDistrance *= 8.0;
+      arcDistrance = project_pixel_allmap(arcDistrance);
+    }
+    v_iconMapUV = a_iconMapUV;
+
+    float pixelLen = project_pixel_texture(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
+    float texCount = floor(arcDistrance/pixelLen); // 贴图在弧线上重复的数量
+    v_lineData.g = texCount;
+
+    float lineOffsetWidth = length(offset + offset * sign(a_Position.y)); // 线横向偏移的距离
+    float linePixelSize = project_pixel(a_Size); // 定点位置偏移
+    v_lineData.a = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
+  }
 
   gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + offset, 0, 1.0));
 

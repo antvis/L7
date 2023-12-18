@@ -9,8 +9,8 @@ import {
 import BaseModel from '../../core/BaseModel';
 import type { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
-import heatmapGridFrag from '../shaders/hexagon_frag.glsl';
-import heatmapGridVert from '../shaders/hexagon_vert.glsl';
+import hexagon_frag from '../shaders/hexagon/hexagon_frag.glsl';
+import hexagon_vert from '../shaders/hexagon/hexagon_vert.glsl';
 
 export default class HexagonModel extends BaseModel {
   public getUninforms(): IModelUniform {
@@ -49,8 +49,8 @@ export default class HexagonModel extends BaseModel {
     this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'heatmapHexagon',
-      vertexShader: heatmapGridVert,
-      fragmentShader: heatmapGridFrag,
+      vertexShader: hexagon_vert,
+      fragmentShader: hexagon_frag,
       triangulation: HeatmapGridTriangulation,
       depth: { enable: false },
       primitive: gl.TRIANGLES,

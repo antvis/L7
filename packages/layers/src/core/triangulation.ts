@@ -3,6 +3,7 @@ import {
   calculateCentroid,
   calculatePointsCenterAndRadius,
   lngLatToMeters,
+  aProjectFlat
 } from '@antv/l7-utils';
 import earcut from 'earcut';
 // @ts-ignore
@@ -233,7 +234,7 @@ export function FlowLineFillTriangulation(feature: IEncodeFeature) {
 }
 
 export function SimpleLineTriangulation(feature: IEncodeFeature) {
-  const { coordinates } = feature;
+  const { coordinates,originCoordinates } = feature;
   const pos: any[] = [];
   if (!Array.isArray(coordinates[0])) {
     return {
@@ -246,6 +247,7 @@ export function SimpleLineTriangulation(feature: IEncodeFeature) {
   }
   const { results, totalDistance } = getSimpleLineVertices(
     coordinates as IPosition[],
+    originCoordinates as IPosition[]
   );
   results.map((point) => {
     pos.push(point[0], point[1], point[2], point[3], 0, totalDistance);
@@ -300,22 +302,26 @@ function pushDis(point: number[], n?: number) {
   return point;
 }
 
-function getSimpleLineVertices(coordinates: number[][]) {
+function getSimpleLineVertices(coordinates: number[][],originCoordinates:number[][]) {
   let points = coordinates;
+  //除了amap2.0以外 coordinates就是经纬度数据
+  let originPoints = originCoordinates||coordinates;
   if (
     Array.isArray(points) &&
     Array.isArray(points[0]) &&
     Array.isArray(points[0][0])
   ) {
     // @ts-ignore
-    points = coordinates.flat();
+    points = originCoordinates.flat();    
+    // @ts-ignore
+    originPoints = originCoordinates.flat();
   }
-
+  //修改计算距离的方式,与普通线的计算方式保持一致 edit by huyang 20231214
   let distance = 0;
   if (points.length < 2) {
     return {
       results: points,
-      totalDistance: 0,
+      totalDistance: 0
     };
   } else {
     const results: number[][] = [];
@@ -323,7 +329,7 @@ function getSimpleLineVertices(coordinates: number[][]) {
     results.push(point);
 
     for (let i = 1; i < points.length - 1; i++) {
-      const subDistance = lineSegmentDistance(points[i - 1], points[i]);
+      const subDistance = lineSegmentDistance(aProjectFlat(originPoints[i-1]), aProjectFlat(originPoints[i]));
       distance += subDistance;
 
       const mulPoint = pushDis(points[i], distance);
@@ -331,15 +337,16 @@ function getSimpleLineVertices(coordinates: number[][]) {
       results.push(mulPoint);
     }
     const pointDistance = lineSegmentDistance(
-      points[points.length - 2],
-      points[points.length - 1],
+      aProjectFlat(originPoints[originPoints.length - 2]),
+      aProjectFlat(originPoints[originPoints.length - 1])
     );
     distance += pointDistance;
+    
 
     results.push(pushDis(points[points.length - 1], distance));
     return {
       results,
-      totalDistance: distance,
+      totalDistance: distance
     };
   }
 }

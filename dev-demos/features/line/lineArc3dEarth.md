@@ -8,46 +8,47 @@ export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
+      renderer:'device',
       map: new Earth({}),
     });
 
     // 地球模式下背景色默认为 #000 通过 setBgColor 方法我们可以设置可视化层的背景色
     scene.setBgColor('#333');
 
-    // const earthlayer = new EarthLayer()
-    //   .source(
-    //     'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ',
-    //     {
-    //       parser: {
-    //         type: 'image',
-    //       },
-    //     },
-    //   )
-    //   .color('#2E8AE6')
-    //   .shape('fill')
-    //   .style({
-    //     globalOptions: {
-    //       ambientRatio: 0.6, // 环境光
-    //       diffuseRatio: 0.4, // 漫反射
-    //       specularRatio: 0.1, // 高光反射
-    //     },
-    //   })
-    //   .animate(true);
+    const earthlayer = new EarthLayer()
+      .source(
+        'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ',
+        {
+          parser: {
+            type: 'image',
+          },
+        },
+      )
+      .shape('base')
+      .style({
+        globalOptions: {
+          ambientRatio: 0.6, // 环境光
+          diffuseRatio: 0.4, // 漫反射
+          specularRatio: 0.1, // 高光反射
+          // earthTime: 4.0
+          earthTime: 0.1,
+        },
+      })
+      .animate(true);
 
-    // const atomLayer = new EarthLayer().color('#2E8AE6').shape('atomSphere');
+    const atomLayer = new EarthLayer().color('#2E8AE6').shape('atomSphere');
 
-    // const bloomLayer = new EarthLayer()
-    //   .color('#fff')
-    //   .shape('bloomSphere')
-    //   .style({
-    //     opacity: 0.7,
-    //   });
+    const bloomLayer = new EarthLayer()
+      .color('#fff')
+      .shape('bloomSphere')
+      .style({
+        opacity: 0.7,
+      });
 
     scene.on('loaded', () => {
-      // scene.addLayer(earthlayer);
-
-      // scene.addLayer(atomLayer);
-      // scene.addLayer(bloomLayer);
+      scene.addLayer(earthlayer);
+      scene.addLayer(atomLayer);
+      scene.addLayer(bloomLayer);
 
       fetch(
         'https://gw.alipayobjects.com/os/bmw-prod/20a69b46-3d6d-4ab5-b8b5-150b6aa52c88.json',
@@ -73,11 +74,12 @@ export default () => {
             .style({
               segmentNumber: 60,
               globalArcHeight: 20,
+              sourceColor: '#f00',
+              targetColor: '#0f0',
             });
           scene.addLayer(flyLine);
         });
 
-      // earthlayer.setEarthTime(4.0);
     });
   }, []);
   return (

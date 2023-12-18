@@ -12,8 +12,8 @@ import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
-import line_arc_frag from '../shaders/line_arc_great_circle_frag.glsl';
-import line_arc2d_vert from '../shaders/line_arc_great_circle_vert.glsl';
+import line_arc_frag from '../shaders/greatCircle/line_arc_great_circle_frag.glsl';
+import line_arc2d_vert from '../shaders/greatCircle/line_arc_great_circle_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,

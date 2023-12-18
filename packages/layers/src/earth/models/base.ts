@@ -10,8 +10,8 @@ import {
 import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 
-import baseFrag from '../shaders/base_frag.glsl';
-import baseVert from '../shaders/base_vert.glsl';
+import baseFrag from '../shaders/base/base_frag.glsl';
+import baseVert from '../shaders/base/base_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class BaseEarthModel extends BaseModel {
