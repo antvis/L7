@@ -1,6 +1,4 @@
-import {
-  CameraUniform,
-  CoordinateUniform,
+import type {
   IBuffer,
   ICameraService,
   ICoordinateSystemService,
@@ -8,7 +6,10 @@ import {
   ILayerPlugin,
   ILayerService,
   IMapService,
-  IRendererService,
+  IRendererService} from '@antv/l7-core';
+import {
+  CameraUniform,
+  CoordinateUniform,
   TYPES,
 } from '@antv/l7-core';
 import { inject, injectable } from 'inversify';

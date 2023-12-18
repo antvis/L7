@@ -1,4 +1,4 @@
-import { ILayer, ILayerPlugin, IModel } from '@antv/l7-core';
+import type { ILayer, ILayerPlugin, IModel } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 

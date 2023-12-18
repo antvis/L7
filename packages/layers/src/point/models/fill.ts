@@ -1,18 +1,20 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAnimateOption,
   IAttribute,
   IElements,
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  IModelUniform,
+  IModelUniform} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { PointFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
+import type { IPointLayerStyleOptions} from '../../core/interface';
+import { SizeUnitType } from '../../core/interface';
 // animate pointLayer shader - support animate
 import waveFillFrag from '../shaders/animate/wave_frag.glsl';
 // static pointLayer shader - not support animate

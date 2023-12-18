@@ -1,6 +1,7 @@
-import { IEncodeFeature } from '@antv/l7-core';
-import { ILineSymbol } from './interface';
-import { getSymbol, lineArrowPath, IArrowData } from './shape/arrow';
+import type { IEncodeFeature } from '@antv/l7-core';
+import type { ILineSymbol } from './interface';
+import type { IArrowData } from './shape/arrow';
+import { getSymbol, lineArrowPath } from './shape/arrow';
 
 // list all arrow shape
 

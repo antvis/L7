@@ -4,20 +4,23 @@
  */
 import AMapLoader from '@amap/amap-jsapi-loader';
 
-import {
+import type {
   Bounds,
-  CoordinateSystem,
   IMapCamera,
   IPoint,
-  IViewport,
+  IViewport} from '@antv/l7-core';
+import {
+  CoordinateSystem
 } from '@antv/l7-core';
 import { DOM, amap2Project } from '@antv/l7-utils';
-import { mat4, vec2, vec3 } from 'gl-matrix';
+import type { vec2} from 'gl-matrix';
+import { mat4, vec3 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { IAMapInstance } from '../../typings/index';
+import type { IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import Viewport from './Viewport';
+// @ts-ignore
 import './logo.css';
 const DEFAULTMAPCENTER = [108.92361, 34.54083];
 
@@ -369,7 +372,7 @@ export default class AMapService extends AMapBaseService {
       // @ts-ignore
       // left, right, bottom, top
       // @ts-ignore 
-    } = this.map.customCoords?.getCameraParams();
+    } = this.map.customCoords?.getCameraParams() || {};
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
     // // @ts-ignore

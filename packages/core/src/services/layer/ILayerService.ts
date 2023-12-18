@@ -1,44 +1,44 @@
 // @ts-ignore
-import {
+import type {
   AsyncSeriesBailHook,
   AsyncWaterfallHook,
   SyncBailHook,
   SyncHook,
 } from '@antv/async-hook';
-import { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
-import { Container } from 'inversify';
-import Clock from '../../utils/clock';
-import { ITextureService } from '../asset/ITextureService';
-import { ISceneConfig } from '../config/IConfigService';
-import { IInteractionTarget } from '../interaction/IInteractionService';
-import {
+import type { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
+import type { Container } from 'inversify';
+import type Clock from '../../utils/clock';
+import type { ITextureService } from '../asset/ITextureService';
+import type { ISceneConfig } from '../config/IConfigService';
+import type { IInteractionTarget } from '../interaction/IInteractionService';
+import type {
   ILayerPickService,
   IPickingService,
 } from '../interaction/IPickingService';
-import { IMapService } from '../map/IMapService';
-import { IAttribute } from '../renderer/IAttribute';
-import { IBuffer } from '../renderer/IBuffer';
-import {
+import type { IMapService } from '../map/IMapService';
+import type { IAttribute } from '../renderer/IAttribute';
+import type { IBuffer } from '../renderer/IBuffer';
+import type {
   IBlendOptions,
   IModel,
   IModelInitializationOptions,
   IStencilOptions,
 } from '../renderer/IModel';
-import {
+import type {
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
 } from '../renderer/IMultiPassRenderer';
-import { IRendererService } from '../renderer/IRendererService';
-import { ITexture2D } from '../renderer/ITexture2D';
-import { IUniform } from '../renderer/IUniform';
-import {
+import type { IRendererService } from '../renderer/IRendererService';
+import type { ITexture2D } from '../renderer/ITexture2D';
+import type { IUniform } from '../renderer/IUniform';
+import type {
   IParseDataItem,
   ISource,
   ISourceCFG,
   ITransform,
 } from '../source/ISourceService';
-import {
+import type {
   IAnimateOption,
   IEncodeFeature,
   IScale,

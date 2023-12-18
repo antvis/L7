@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, RasterLayer, PolygonLayer, PointLayer } from '@antv/l7';
+import { Scene, RasterLayer, PointLayer } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap } from '@antv/l7-maps';
 

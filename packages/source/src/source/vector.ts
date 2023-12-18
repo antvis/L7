@@ -1,7 +1,7 @@
 import { VectorTile } from '@mapbox/vector-tile';
-import { Feature, Properties } from '@turf/helpers';
+import type { Feature, Properties } from '@turf/helpers';
 import Protobuf from 'pbf';
-import { ITileSource } from '../interface';
+import type { ITileSource } from '../interface';
 export default class VectorSource implements ITileSource {
   private vectorTile: VectorTile;
   private vectorLayerCache: {

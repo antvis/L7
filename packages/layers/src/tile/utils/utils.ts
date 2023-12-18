@@ -1,4 +1,4 @@
-import { ILayer } from '@antv/l7-core';
+import type { ILayer } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 
 export const tileVectorParser = ['mvt', 'geojsonvt', 'testTile'];

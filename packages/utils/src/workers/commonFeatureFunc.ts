@@ -1,4 +1,4 @@
-import { IEncodeFeature } from './interface';
+import type { IEncodeFeature } from './interface';
 
 export function a_Color(feature: IEncodeFeature) {
   const { color } = feature;

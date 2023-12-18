@@ -3,9 +3,10 @@ import type {
   LarkMapProps,
   LineLayerProps,
 } from '@antv/larkmap';
-import { FeatureCollection } from '@turf/turf';
+import type { FeatureCollection } from '@turf/turf';
 import { message } from 'antd';
-import { DataLevel, RDBSource, SourceType } from 'district-data';
+import type { DataLevel, SourceType } from 'district-data';
+import { RDBSource } from 'district-data';
 
 export const layerOptions: Omit<ChoroplethLayerProps, 'source'> = {
   autoFit: true,

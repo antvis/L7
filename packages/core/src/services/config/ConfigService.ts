@@ -3,13 +3,14 @@ import { injectable } from 'inversify';
 
 import { lodashUtil } from '@antv/l7-utils';
 import 'reflect-metadata';
-import {
+import type {
   ILayerAttributesOption,
-  ILayerConfig,
+  ILayerConfig} from '../layer/ILayerService';
+import {
   MaskOperation,
 } from '../layer/ILayerService';
-import { IRenderConfig } from '../renderer/IRendererService';
-import { IGlobalConfigService, ISceneConfig } from './IConfigService';
+import type { IRenderConfig } from '../renderer/IRendererService';
+import type { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import WarnInfo from './warnInfo';
 const { merge } = lodashUtil;
 /**

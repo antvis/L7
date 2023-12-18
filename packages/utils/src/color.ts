@@ -1,5 +1,5 @@
 import * as d3 from 'd3-color';
-import { Context } from 'vm';
+import type { Context } from 'vm';
 export interface IColorRamp {
   type?: 'cat' | 'linear' | 'quantize' | 'custom';
   positions: number[];

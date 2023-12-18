@@ -4,8 +4,9 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 // @ts-ignore
 import { TYPES } from '../../types';
-import { ILngLat, IMapService } from '../map/IMapService';
-import { IInteractionService, InteractionEvent } from './IInteractionService';
+import type { ILngLat, IMapService } from '../map/IMapService';
+import type { IInteractionService,  } from './IInteractionService';
+import {InteractionEvent } from './IInteractionService';
 const DragEventMap: { [key: string]: string } = {
   panstart: 'dragstart',
   panmove: 'dragging',

@@ -5,7 +5,7 @@ import { EventEmitter } from 'eventemitter3';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { buildMapping } from '../../utils/font_util';
-import {
+import type {
   IFontAtlas,
   IFontMapping,
   IFontOptions,

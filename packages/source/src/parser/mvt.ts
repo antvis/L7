@@ -1,15 +1,16 @@
-import { ITileParserCFG } from '@antv/l7-core';
-import {
-  getArrayBuffer,
-  getURLFromTemplate,
+import type { ITileParserCFG } from '@antv/l7-core';
+import type {
   RequestParameters,
   SourceTile,
   TileLoadParams,
-  TilesetManagerOptions,
+  TilesetManagerOptions} from '@antv/l7-utils';
+import {
+  getArrayBuffer,
+  getURLFromTemplate
 } from '@antv/l7-utils';
-import { VectorTileLayer } from '@mapbox/vector-tile';
-import { Feature } from '@turf/helpers';
-import { IParserData, ITileSource } from '../interface';
+import type { VectorTileLayer } from '@mapbox/vector-tile';
+import type { Feature } from '@turf/helpers';
+import type { IParserData, ITileSource } from '../interface';
 import VectorSource from '../source/vector';
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,

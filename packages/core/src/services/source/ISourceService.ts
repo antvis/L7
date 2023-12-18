@@ -1,5 +1,5 @@
-import { RequestParameters, SourceTile, TilesetManager } from '@antv/l7-utils';
-import { BBox } from '@turf/helpers';
+import type { RequestParameters, SourceTile, TilesetManager } from '@antv/l7-utils';
+import type { BBox } from '@turf/helpers';
 export type DataType = string | object[] | object;
 export type SourceEventType = 'inited' | 'sourceUpdate' | 'update';
 // 栅格瓦片解析配置项

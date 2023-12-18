@@ -1,4 +1,4 @@
-import { IParseDataItem } from '@antv/l7-core';
+import type { IParseDataItem } from '@antv/l7-core';
 // @ts-ignore
 import Martini from '@mapbox/martini';
 export function RasterTriangulation(parserData: IParseDataItem) {

@@ -1,14 +1,15 @@
+import type {
+  IEncodeFeature,
+  IModel} from '@antv/l7-core';
 import {
   AttributeType,
-  gl,
-  IEncodeFeature,
-  IModel,
+  gl
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
-import atmoSphereFrag from '../shaders/atmosphere_frag.glsl';
-import atmoSphereVert from '../shaders/atmosphere_vert.glsl';
+import atmoSphereFrag from '../shaders/atmosphere/atmosphere_frag.glsl';
+import atmoSphereVert from '../shaders/atmosphere/atmosphere_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 interface IAtmoSphereLayerStyleOptions {
   opacity: number;

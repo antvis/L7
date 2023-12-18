@@ -1,4 +1,4 @@
-import { ILayerAttributesOption } from '@antv/l7-core';
+import type { ILayerAttributesOption } from '@antv/l7-core';
 import MaskLayer from '../../mask';
 import Tile from './Tile';
 export default class MaskTile extends Tile {

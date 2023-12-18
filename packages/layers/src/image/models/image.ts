@@ -1,13 +1,14 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
   IModelUniform,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { IImageLayerStyleOptions } from '../../core/interface';
+import type { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/image_frag.glsl';
 import ImageVert from '../shaders/image_vert.glsl';

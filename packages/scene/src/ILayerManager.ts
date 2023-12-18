@@ -1,4 +1,4 @@
-import { ILayer } from '@antv/l7-core';
+import type { ILayer } from '@antv/l7-core';
 
 export default interface ILayerManager {
   enableShaderPick: () => void;

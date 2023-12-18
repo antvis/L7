@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../../geo/point';
+import type Point from '../../geo/point';
 import MouseHandler from './mouse_handler';
 import { LEFT_BUTTON, RIGHT_BUTTON } from './util';
 export default class MousePitchHandler extends MouseHandler {

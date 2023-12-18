@@ -1,12 +1,13 @@
-import {
+import type {
   IGlobalConfigService,
   IMapConfig,
   IMapService,
-  IMapWrapper,
+  IMapWrapper} from '@antv/l7-core';
+import {
   lazyInject,
   TYPES,
 } from '@antv/l7-core';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 export default class BaseMapWrapper<RawMap> implements IMapWrapper {
   @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;

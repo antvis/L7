@@ -1,6 +1,5 @@
 
-import {
-  BlendType,
+import type {
   IAnimateOption,
   IAttribute,
   IBlendOptions,
@@ -26,10 +25,12 @@ import {
   IStyleAttributeService,
   ITexture2D,
   ITexture2DInitializationOptions,
+  Triangulation} from '@antv/l7-core';
+import {
+  BlendType,
   lazyInject,
   MaskOperation,
   StencilType,
-  Triangulation,
   TYPES,
 } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';

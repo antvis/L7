@@ -1,7 +1,7 @@
 import { degreesToRadians, radiansToDegrees } from '@turf/helpers';
 import { calDistance } from '../geo';
-import { MapType } from '../interface/map';
-import { Point } from './interface';
+import type { MapType } from '../interface/map';
+import type { Point } from './interface';
 // arc
 export function greatCircleLineAtOffset(
   source: Point,

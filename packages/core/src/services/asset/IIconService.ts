@@ -1,6 +1,6 @@
-import EventEmitter from 'eventemitter3';
-import { ITexture2D } from '../renderer/ITexture2D';
-import { ISceneService } from '../scene/ISceneService';
+import type EventEmitter from 'eventemitter3';
+import type { ITexture2D } from '../renderer/ITexture2D';
+import type { ISceneService } from '../scene/ISceneService';
 export type IImage = HTMLImageElement | File | string;
 export type Listener = (...args: any[]) => void;
 export interface IIconValue {

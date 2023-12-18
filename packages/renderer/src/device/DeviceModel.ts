@@ -1,30 +1,32 @@
-import {
+import type {
   Bindings,
+  Buffer,
+  Device,
+  InputLayout,
+  InputLayoutBufferDescriptor,
+  Program,
+  RenderPipeline} from '@antv/g-device-api';
+import {
   BlendFactor,
   BlendMode,
-  Buffer,
   ChannelWriteMask,
   colorNewFromRGBA,
   CompareFunction,
   CullMode,
-  Device,
   Format,
-  InputLayout,
-  InputLayoutBufferDescriptor,
-  Program,
-  RenderPipeline,
   TransparentBlack,
   VertexStepMode,
 } from '@antv/g-device-api';
-import {
-  gl,
+import type {
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
-  IUniform,
+  IUniform} from '@antv/l7-core';
+import {
+  gl
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import DeviceRendererService from '.';
+import type DeviceRendererService from '.';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -33,9 +35,9 @@ import {
   primitiveMap,
   sizeFormatMap,
 } from './constants';
-import DeviceAttribute from './DeviceAttribute';
-import DeviceBuffer from './DeviceBuffer';
-import DeviceElements from './DeviceElements';
+import type DeviceAttribute from './DeviceAttribute';
+import type DeviceBuffer from './DeviceBuffer';
+import type DeviceElements from './DeviceElements';
 import DeviceFramebuffer from './DeviceFramebuffer';
 import DeviceTexture2D from './DeviceTexture2D';
 const { isPlainObject, isTypedArray } = lodashUtil;

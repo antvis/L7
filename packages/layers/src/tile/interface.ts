@@ -1,11 +1,11 @@
-import {
+import type {
   ILayer,
   IMapService,
   IRendererService,
   ISource,
   ISubLayerInitOptions,
 } from '@antv/l7-core';
-import { SourceTile } from '@antv/l7-utils';
+import type { SourceTile } from '@antv/l7-utils';
 
 export type Timeout = any;
 export type CacheEvent =

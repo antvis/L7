@@ -1,11 +1,11 @@
 import { lodashUtil } from '@antv/l7-utils';
-import {
+import type {
   IAttributeScale,
   IStyleAttribute,
   StyleScaleType,
 } from '../layer/IStyleAttributeService';
-import { IAttribute } from '../renderer/IAttribute';
-import {
+import type { IAttribute } from '../renderer/IAttribute';
+import type {
   AttributeType,
   IEncodeFeature,
   IFeatureRange,

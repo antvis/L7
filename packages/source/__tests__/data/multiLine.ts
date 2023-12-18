@@ -1,4 +1,4 @@
-import { FeatureCollection, Geometries, Properties } from '@turf/helpers';
+import type { FeatureCollection, Geometries, Properties } from '@turf/helpers';
 
 const MultiLine: FeatureCollection<Geometries, Properties> = {
   type: 'FeatureCollection',

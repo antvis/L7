@@ -1,4 +1,5 @@
-import { IDebugLog, ILayer, ILayerPlugin, ILayerStage } from '@antv/l7-core';
+import type { ILayer, ILayerPlugin} from '@antv/l7-core';
+import { IDebugLog, ILayerStage } from '@antv/l7-core';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import TileLayer from '../tile/core/BaseLayer';

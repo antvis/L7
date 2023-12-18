@@ -1,4 +1,4 @@
-import {
+import type {
   Bounds,
   ICameraOptions,
   ILngLat,
@@ -7,9 +7,10 @@ import {
   IPoint,
   IStatusOptions,
   IViewport,
-  MapServiceEvent,
   MapStyleConfig,
-  Point,
+  Point} from '@antv/l7-core';
+import {
+  MapServiceEvent
 } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';

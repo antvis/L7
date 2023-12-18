@@ -1,6 +1,6 @@
 import { DOM, getBBoxFromPoints } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { Scene } from './index';
+import type { Scene } from './index';
 
 export const BoxSelectEventList = ['selectstart', 'selecting', 'selectend'];
 

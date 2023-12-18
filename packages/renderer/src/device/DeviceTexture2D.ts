@@ -1,15 +1,17 @@
-import {
+import type {
   Device,
+  Sampler,
+  Texture} from '@antv/g-device-api';
+import {
   TextureUsage as DeviceTextureUsage,
   FilterMode,
   Format,
-  MipmapFilterMode,
-  Sampler,
-  Texture,
+  MipmapFilterMode
 } from '@antv/g-device-api';
-import {
+import type {
   ITexture2D,
-  ITexture2DInitializationOptions,
+  ITexture2DInitializationOptions} from '@antv/l7-core';
+import {
   TextureUsage,
   gl,
 } from '@antv/l7-core';

@@ -1,12 +1,12 @@
 // @ts-ignore
-import {
+import type {
   IJsonData,
   IParseDataItem,
   IParserCfg,
   IParserData,
 } from '@antv/l7-core';
 // @ts-ignore
-import { Feature, Geometries, Properties } from '@turf/helpers';
+import type { Feature, Geometries, Properties } from '@turf/helpers';
 import { getCoords } from '@turf/invariant';
 import { flattenEach } from '@turf/meta';
 import { geojsonRewind } from '../utils/util';

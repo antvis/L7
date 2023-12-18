@@ -1,4 +1,4 @@
-import { gl } from './gl';
+import type { gl } from './gl';
 
 export interface IElementsInitializationOptions {
   data: number[] | number[][] | Uint8Array | Uint16Array | Uint32Array;

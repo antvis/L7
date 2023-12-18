@@ -1,14 +1,15 @@
-import {
+import type {
   IInteractionTarget,
   ILayer,
   ILayerService,
   IPickingService,
   ITile,
-  ITilePickService,
+  ITilePickService} from '@antv/l7-core';
+import {
   TYPES,
 } from '@antv/l7-core';
 import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
-import { TileLayerService } from './TileLayerService';
+import type { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
 export interface ITilePickServiceOptions {
   layerService: ILayerService;
