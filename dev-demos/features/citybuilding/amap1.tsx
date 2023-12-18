@@ -1,7 +1,7 @@
 // @ts-ignore
-import { Scene,CityBuildingLayer } from '@antv/l7';
+import { CityBuildingLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
     const scene = new Scene({
       id: 'map',
       renderer: process.env.renderer,
-      map: new GaodeMap({
+      map: new (process.env.CI ? Map : GaodeMap)({
         style: 'dark',
         center: [120.145, 30.238915],
         pitch: 60,
@@ -25,7 +25,7 @@ export default () => {
         .size('floor', [0, 500])
         .color('rgba(242,246,250,1.0)')
         .animate({
-          enable: true,
+          enable: !process.env.CI,
         })
         .active({
           color: '#0ff',
