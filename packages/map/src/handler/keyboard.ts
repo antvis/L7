@@ -1,5 +1,5 @@
-import { EarthMap } from '../earthmap';
-import { Map } from '../map';
+import type { EarthMap } from '../earthmap';
+import type { Map } from '../map';
 
 const defaultOptions = {
   panStep: 100,

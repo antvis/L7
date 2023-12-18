@@ -1,4 +1,4 @@
-import { IParserData } from '@antv/l7-core';
+import type { IParserData } from '@antv/l7-core';
 export function map(data: IParserData, options: { [key: string]: any }) {
   const { callback } = options;
   if (callback) {

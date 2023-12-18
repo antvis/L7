@@ -1,5 +1,6 @@
 import { DOM, lnglatDistance } from '@antv/l7-utils';
-import { Control, IControlOption, PositionType } from './baseControl';
+import type { IControlOption} from './baseControl';
+import { Control, PositionType } from './baseControl';
 
 export interface IScaleControlOption extends IControlOption {
   lockWidth: boolean;

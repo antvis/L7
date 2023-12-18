@@ -1,4 +1,4 @@
-import { ILayer } from '@antv/l7-core';
+import type { ILayer } from '@antv/l7-core';
 import { decodePickingColor } from '@antv/l7-utils';
 
 export function clearPickState(layers: ILayer[]) {

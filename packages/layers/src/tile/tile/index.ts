@@ -1,4 +1,5 @@
-import { ILayer, RasterTileType } from '@antv/l7-core';
+import type { ILayer} from '@antv/l7-core';
+import { RasterTileType } from '@antv/l7-core';
 import DebugTile from './DebugTile';
 import ImageTile from './ImageTile';
 import MaskLayer from './MaskTile';

@@ -1,34 +1,31 @@
-import {
+import type {
   Bindings,
-  BlendFactor,
-  BlendMode,
   Buffer,
-  ChannelWriteMask,
-  CompareFunction,
-  CullMode,
   Device,
-  Format,
   InputLayout,
   InputLayoutBufferDescriptor,
   Program,
-  RenderPipeline,
+  RenderPipeline} from '@antv/g-device-api';
+import {
+  BlendFactor,
+  BlendMode,
+  ChannelWriteMask,
+  CompareFunction,
+  CullMode,
+  Format,
   TransparentBlack,
   VertexStepMode,
 } from '@antv/g-device-api';
-import {
+import type {
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
-  IUniform,
-  gl,
+  IUniform} from '@antv/l7-core';
+import {
+  gl
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import DeviceRendererService from '.';
-import DeviceAttribute from './DeviceAttribute';
-import DeviceBuffer from './DeviceBuffer';
-import DeviceElements from './DeviceElements';
-import DeviceFramebuffer from './DeviceFramebuffer';
-import DeviceTexture2D from './DeviceTexture2D';
+import type DeviceRendererService from '.';
 import {
   blendEquationMap,
   blendFuncMap,
@@ -37,6 +34,11 @@ import {
   primitiveMap,
   sizeFormatMap,
 } from './constants';
+import type DeviceAttribute from './DeviceAttribute';
+import type DeviceBuffer from './DeviceBuffer';
+import type DeviceElements from './DeviceElements';
+import DeviceFramebuffer from './DeviceFramebuffer';
+import DeviceTexture2D from './DeviceTexture2D';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
 export default class DeviceModel implements IModel {

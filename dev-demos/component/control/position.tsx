@@ -1,12 +1,14 @@
+import type {
+  IControlOption} from '@antv/l7';
 import {
   GaodeMap,
-  IControlOption,
   Logo,
   MouseLocation,
   Scale,
   Scene,
 } from '@antv/l7';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import type { FunctionComponent} from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);

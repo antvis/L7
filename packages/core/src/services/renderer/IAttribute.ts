@@ -1,4 +1,4 @@
-import { IBuffer } from './IBuffer';
+import type { IBuffer } from './IBuffer';
 
 export interface IAttributeInitializationOptions {
   buffer: IBuffer;

@@ -1,9 +1,10 @@
-import { createLayerContainer, ILayer, ILngLat, ITile } from '@antv/l7-core';
-import { SourceTile } from '@antv/l7-utils';
+import type { ILayer, ILngLat, ITile } from '@antv/l7-core';
+import { createLayerContainer } from '@antv/l7-core';
+import type { SourceTile } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 import PolygonLayer from '../../polygon';
-import BaseTileLayer from '../core/BaseLayer';
+import type BaseTileLayer from '../core/BaseLayer';
 import { isNeedMask } from './util';
 
 export type TileEventType = 'loaded';

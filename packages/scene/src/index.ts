@@ -1,8 +1,6 @@
 import { Logo } from '@antv/l7-component';
-import {
+import type {
   Bounds,
-  createLayerContainer,
-  createSceneContainer,
   ICameraOptions,
   IControl,
   IControlService,
@@ -27,18 +25,22 @@ import {
   ISceneConfig,
   ISceneService,
   IStatusOptions,
-  Point,
+  Point} from '@antv/l7-core';
+import {
+  createLayerContainer,
+  createSceneContainer,
   SceneEventList,
   TYPES,
 } from '@antv/l7-core';
 import { MaskLayer } from '@antv/l7-layers';
 import { DeviceRendererService, ReglRendererService } from '@antv/l7-renderer';
-import { DOM, IProtocolHandler, SceneConifg } from '@antv/l7-utils';
-import { Container } from 'inversify';
+import type { IProtocolHandler} from '@antv/l7-utils';
+import { DOM, SceneConifg } from '@antv/l7-utils';
+import type { Container } from 'inversify';
 import BoxSelect, { BoxSelectEventList } from './boxSelect';
-import ILayerManager from './ILayerManager';
-import IMapController from './IMapController';
-import IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
+import type ILayerManager from './ILayerManager';
+import type IMapController from './IMapController';
+import type IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
 
 /**
  * 暴露 Scene API

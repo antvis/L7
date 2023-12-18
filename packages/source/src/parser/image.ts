@@ -1,5 +1,6 @@
-import { IParserData } from '@antv/l7-core';
-import { RequestParameters, getImage, isImageBitmap } from '@antv/l7-utils';
+import type { IParserData } from '@antv/l7-core';
+import type { RequestParameters} from '@antv/l7-utils';
+import { getImage, isImageBitmap } from '@antv/l7-utils';
 interface IImageCfg {
   extent: [number, number, number, number];
   requestParameters?: Omit<RequestParameters, 'url'>;

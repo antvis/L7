@@ -3,7 +3,7 @@ import Arc3DModel from './arc_3d';
 import FlowLineModel from './flow';
 import GreatCircleModel from './great_circle';
 import LineModel from './line';
-import SimpleLineModel from './simpleLine';
+import SimpleLineModel from './simple_line';
 import LineWallModel from './wall';
 
 export type LineModelType = 

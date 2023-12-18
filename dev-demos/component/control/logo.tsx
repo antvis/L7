@@ -1,7 +1,8 @@
 import { GaodeMap, Logo, Scene } from '@antv/l7';
 import React from 'react';
 // tslint:disable-next-line:no-duplicate-imports
-import { FunctionComponent, useEffect } from 'react';
+import type { FunctionComponent} from 'react';
+import { useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
   useEffect(() => {

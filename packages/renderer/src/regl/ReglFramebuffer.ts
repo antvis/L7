@@ -1,11 +1,11 @@
-import {
+import type {
   IFramebuffer,
   IFramebufferInitializationOptions,
   IRenderbuffer,
   ITexture2D,
 } from '@antv/l7-core';
-import regl from 'regl';
-import ReglTexture2D from './ReglTexture2D';
+import type regl from 'regl';
+import type ReglTexture2D from './ReglTexture2D';
 
 /**
  * adaptor for regl.Framebuffer

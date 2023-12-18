@@ -1,7 +1,8 @@
-import { AttributeType, gl, IEncodeFeature, IModel } from '@antv/l7-core';
+import type { IEncodeFeature, IModel } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ICityBuildLayerStyleOptions } from '../../core/interface';
+import type { ICityBuildLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import buildFrag from '../shaders/build_frag.glsl';
 import buildVert from '../shaders/build_vert.glsl';

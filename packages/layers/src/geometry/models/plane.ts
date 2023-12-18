@@ -1,15 +1,16 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAttributeAndElements,
   IEncodeFeature,
   IModel,
   IModelUniform,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 // import { mat4, vec3 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
-import { IGeometryLayerStyleOptions } from '../../core/interface';
+import type { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/plane_frag.glsl';
 import planeVert from '../shaders/plane_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';

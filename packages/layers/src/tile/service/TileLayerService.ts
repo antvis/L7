@@ -1,11 +1,11 @@
-import {
+import type {
   ILayer,
   ILayerService,
   ILngLat,
   IRendererService,
   ITile,
 } from '@antv/l7-core';
-import { SourceTile } from '@antv/l7-utils';
+import type { SourceTile } from '@antv/l7-utils';
 import 'reflect-metadata';
 
 interface ITileLayerServiceOptions {

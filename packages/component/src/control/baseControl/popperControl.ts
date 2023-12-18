@@ -1,6 +1,8 @@
-import { PositionName } from '@antv/l7-core';
-import { Popper, PopperPlacement, PopperTrigger } from '../../utils/popper';
-import ButtonControl, { IButtonControlOption } from './buttonControl';
+import type { PositionName } from '@antv/l7-core';
+import type { PopperPlacement, PopperTrigger } from '../../utils/popper';
+import { Popper } from '../../utils/popper';
+import type { IButtonControlOption } from './buttonControl';
+import ButtonControl from './buttonControl';
 
 export { PopperControl };
 

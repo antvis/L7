@@ -1,6 +1,6 @@
 import { arcLineAtOffset } from './arc';
 import { greatCircleLineAtOffset } from './greatCircle';
-import { ILineAtOffset, Source } from './interface';
+import type { ILineAtOffset, Source } from './interface';
 import { pathLineAtOffset } from './line';
 
 export function lineAtOffset(source: Source, option: ILineAtOffset) {

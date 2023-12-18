@@ -1,4 +1,5 @@
-import { ILayer, PolygonLayer, Scene } from '@antv/l7';
+import type { ILayer} from '@antv/l7';
+import { PolygonLayer, Scene } from '@antv/l7';
 import { Button } from 'antd';
 
 import { Map } from '@antv/l7-maps';

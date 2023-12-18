@@ -1,5 +1,5 @@
 import { circle } from './Path';
-import { ArrowType, IArrowOptions, ILineSymbol } from '../interface'
+import type { ArrowType, IArrowOptions, ILineSymbol } from '../interface'
 import earcut from 'earcut';
 
 export interface IArrowData {

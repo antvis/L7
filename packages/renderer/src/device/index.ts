@@ -1,16 +1,17 @@
-import {
+import type {
   Device,
-  Format,
   RenderPass,
   RenderTarget,
-  SwapChain,
+  SwapChain} from '@antv/g-device-api';
+import {
+  Format,
   TextureUsage,
   TransparentBlack,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
   colorNewFromRGBA,
 } from '@antv/g-device-api';
-import {
+import type {
   IAttribute,
   IAttributeInitializationOptions,
   IBuffer,

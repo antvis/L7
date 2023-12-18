@@ -1,5 +1,6 @@
-import { gl, IBuffer, IBufferInitializationOptions } from '@antv/l7-core';
-import regl from 'regl';
+import type { IBuffer, IBufferInitializationOptions } from '@antv/l7-core';
+import { gl } from '@antv/l7-core';
+import type regl from 'regl';
 import { dataTypeMap, usageMap } from './constants';
 
 /**

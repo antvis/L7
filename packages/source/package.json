@@ -39,7 +39,7 @@
     "geojson-vt": "^3.2.1",
     "inversify": "^5.0.1",
     "pbf": "^3.2.1",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.1",
     "supercluster": "^7.0.0"
   },
   "devDependencies": {

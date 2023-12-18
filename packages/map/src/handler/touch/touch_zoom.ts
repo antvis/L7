@@ -1,5 +1,5 @@
 // @ts-ignore
-import Point from '../../geo/point';
+import type Point from '../../geo/point';
 import TwoTouchHandler from './two_touch';
 
 const ZOOM_THRESHOLD = 0.1;

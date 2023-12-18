@@ -1,6 +1,6 @@
-import { IInteractionTarget } from '../interaction/IInteractionService';
-import { ILayer } from '../layer/ILayerService';
-import { ILngLat } from '../map/IMapService';
+import type { IInteractionTarget } from '../interaction/IInteractionService';
+import type { ILayer } from '../layer/ILayerService';
+import type { ILngLat } from '../map/IMapService';
 export interface IPickingService {
   pickedColors: Uint8Array | undefined;
   pickedTileLayers: ILayer[];

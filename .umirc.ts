@@ -15,6 +15,8 @@ export default defineConfig({
   },
   resolve: {
     includes: ['dev-demos'],
+    excludes:['examples']
+    
   },
   polyfill: {
     imports: ['element-remove', 'babel-polyfill'],
@@ -78,7 +80,6 @@ export default defineConfig({
     'copy-text-to-clipboard',
   ],
   extraBabelPlugins: [
-    ['transform-import-css-l7'],
     ['babel-plugin-inline-import', { extensions: ['.worker.js'] }],
   ],
   externals: {

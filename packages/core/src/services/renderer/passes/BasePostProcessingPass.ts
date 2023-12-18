@@ -2,18 +2,19 @@
 import { lodashUtil } from '@antv/l7-utils';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
-import { IShaderModuleService } from '../../shader/IShaderModuleService';
-import { IModel } from '../IModel';
-import { IRendererService } from '../IRendererService';
+import type { IShaderModuleService } from '../../shader/IShaderModuleService';
+import type { IModel } from '../IModel';
+import type { IRendererService } from '../IRendererService';
 import { gl } from '../gl';
 const { camelCase, isNil, upperFirst } = lodashUtil;
 
 import quad from '../../../shaders/post-processing/quad.glsl';
 import { TYPES } from '../../../types';
-import { ILayer } from '../../layer/ILayerService';
-import { IPostProcessingPass, PassType } from '../IMultiPassRenderer';
-import { ITexture2D } from '../ITexture2D';
-import { IUniform } from '../IUniform';
+import type { ILayer } from '../../layer/ILayerService';
+import type { IPostProcessingPass} from '../IMultiPassRenderer';
+import { PassType } from '../IMultiPassRenderer';
+import type { ITexture2D } from '../ITexture2D';
+import type { IUniform } from '../IUniform';
 
 /**
  * 后处理 Pass 基类，通过 PostProcessor 驱动。

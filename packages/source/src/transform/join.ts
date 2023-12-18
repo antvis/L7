@@ -1,4 +1,4 @@
-import { IParseDataItem, IParserData } from '@antv/l7-core';
+import type { IParseDataItem, IParserData } from '@antv/l7-core';
 
 interface IJoinOption {
   sourceField: string;

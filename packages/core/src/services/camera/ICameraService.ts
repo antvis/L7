@@ -1,4 +1,4 @@
-import { IMapCamera } from '../map/IMapService';
+import type { IMapCamera } from '../map/IMapService';
 
 // 后续传入 Shader 的变量
 export const CameraUniform = {

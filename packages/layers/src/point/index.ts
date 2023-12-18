@@ -1,7 +1,8 @@
-import { IEncodeFeature } from '@antv/l7-core';
+import type { IEncodeFeature } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import { IPointLayerStyleOptions } from '../core/interface';
-import PointModels, { PointType } from './models/index';
+import type { IPointLayerStyleOptions } from '../core/interface';
+import type { PointType } from './models/index';
+import PointModels from './models/index';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';

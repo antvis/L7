@@ -1,7 +1,8 @@
 import { createL7Icon } from '../utils/icon';
-import ButtonControl, {
+import type {
   IButtonControlOption,
 } from './baseControl/buttonControl';
+import ButtonControl from './baseControl/buttonControl';
 
 export interface IExportImageControlOption extends IButtonControlOption {
   imageType: 'png' | 'jpeg';

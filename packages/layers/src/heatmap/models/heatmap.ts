@@ -1,26 +1,28 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IBuffer,
   IEncodeFeature,
   IFramebuffer,
   IModel,
   IModelUniform,
   IRenderOptions,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl,
   TextureUsage,
 } from '@antv/l7-core';
+import type {
+  IColorRamp} from '@antv/l7-utils';
 import {
   generateColorRamp,
   getCullFace,
-  IColorRamp,
   lodashUtil,
 } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import BaseModel from '../../core/BaseModel';
-import { IHeatMapLayerStyleOptions } from '../../core/interface';
+import type { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapTriangulation } from '../../core/triangulation';
 import heatmap_3d_frag from '../shaders/heatmap/heatmap_3d_frag.glsl';
 import heatmap_3d_vert from '../shaders/heatmap/heatmap_3d_vert.glsl';

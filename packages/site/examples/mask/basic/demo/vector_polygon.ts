@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, RasterLayer, Source, PolygonLayer } from '@antv/l7';
+import { Scene, Source, PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 

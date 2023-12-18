@@ -5,15 +5,13 @@ import {
   SyncBailHook,
   SyncHook,
 } from '@antv/async-hook';
-import {
-  BlendType,
+import type {
   IActiveOption,
   IAnimateOption,
   IAttributeAndElements,
   ICameraService,
   ICoordinateSystemService,
   IDataState,
-  IDebugLog,
   IDebugService,
   IEncodeFeature,
   IFontService,
@@ -28,7 +26,6 @@ import {
   ILayerPickService,
   ILayerPlugin,
   ILayerService,
-  ILayerStage,
   ILegend,
   ILegendClassificaItem,
   ILegendSegmentItem,
@@ -53,14 +50,18 @@ import {
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
+  Triangulation} from '@antv/l7-core';
+import {
+  BlendType,
+  IDebugLog,
+  ILayerStage,
   TYPES,
-  Triangulation,
   lazyInject,
 } from '@antv/l7-core';
 import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 import { BlendTypes } from '../utils/blend';
 import {
   createMultiPassRenderer,

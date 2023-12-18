@@ -1,20 +1,22 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IEncodeFeature,
   IModel,
   IModelUniform,
   IRenderOptions,
   ITexture2D,
-  Point,
+  Point} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { FrequencyController } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IWindLayerStyleOptions } from '../../core/interface';
+import type { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import WindFrag from '../shaders/wind_frag.glsl';
 import WindVert from '../shaders/wind_vert.glsl';
-import { IWind, IWindProps, Wind } from './windRender';
+import type { IWind, IWindProps} from './windRender';
+import { Wind } from './windRender';
 
 const defaultRampColors = {
   0.0: '#3288bd',

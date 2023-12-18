@@ -1,15 +1,17 @@
-import {
-  AttributeType,
-  gl,
+import type {
   IAttribute,
   IElements,
   IEncodeFeature,
   IModel,
-  ITexture2D,
+  ITexture2D} from '@antv/l7-core';
+import {
+  AttributeType,
+  gl
 } from '@antv/l7-core';
 import { getCullFace } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { IPointLayerStyleOptions, SizeUnitType } from '../../core/interface';
+import type { IPointLayerStyleOptions} from '../../core/interface';
+import { SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
 import { ShaderLocation } from '../../core/CommonStyleAttribute';

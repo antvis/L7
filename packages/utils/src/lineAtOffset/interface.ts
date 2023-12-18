@@ -1,4 +1,4 @@
-import { MapType } from '../interface/map';
+import type { MapType } from '../interface/map';
 export type Source = any;
 export type ILineShape = 'line' | 'arc' | 'arc3d' | 'greatcircle';
 export type IThetaOffset = string | number | undefined;

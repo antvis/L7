@@ -1,4 +1,4 @@
-import { ISourceCFG } from '@antv/l7-core';
+import type { ISourceCFG } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import EarthAtomSphereModel from './models/atmosphere';
 import BaseEarthModel from './models/base';

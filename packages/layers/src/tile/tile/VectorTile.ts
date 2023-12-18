@@ -1,5 +1,5 @@
-import { ILayer, ILayerAttributesOption } from '@antv/l7-core';
-import { VectorSource } from '@antv/l7-source';
+import type { ILayer, ILayerAttributesOption } from '@antv/l7-core';
+import type { VectorSource } from '@antv/l7-source';
 import Tile from './Tile';
 import { getTileLayer } from './util';
 

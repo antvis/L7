@@ -1,4 +1,4 @@
-import { IEncodeFeature } from '@antv/l7-core';
+import type { IEncodeFeature } from '@antv/l7-core';
 import {
   calculateCentroid,
   calculatePointsCenterAndRadius,
@@ -16,16 +16,18 @@ import {
   primitiveSphere,
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
+import type {
+  IExtrudeGeomety} from './shape/extrude';
 import extrudePolygon, {
   extrude_PolygonNormal,
-  fillPolygon,
-  IExtrudeGeomety,
+  fillPolygon
 } from './shape/extrude';
-import {
-  geometryShape,
+import type {
   IPosition,
   ShapeType2D,
-  ShapeType3D,
+  ShapeType3D} from './shape/Path';
+import {
+  geometryShape
 } from './shape/Path';
 type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {

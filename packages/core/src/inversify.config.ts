@@ -5,24 +5,25 @@
 import 'reflect-metadata';
 
 import { EventEmitter } from 'eventemitter3';
-import { Container, decorate, injectable, interfaces } from 'inversify';
+import type { interfaces } from 'inversify';
+import { Container, decorate, injectable } from 'inversify';
 import getDecorators from 'inversify-inject-decorators';
 import { TYPES } from './types';
 
 /** Service interfaces */
-import { IFontService } from './services/asset/IFontService';
-import { IIconService } from './services/asset/IIconService';
-import { ICameraService } from './services/camera/ICameraService';
-import { IControlService } from './services/component/IControlService';
-import { IGlobalConfigService } from './services/config/IConfigService';
-import { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
-import { IDebugService } from './services/debug/IDebugService';
-import { IInteractionService } from './services/interaction/IInteractionService';
-import { IPickingService } from './services/interaction/IPickingService';
-import { ILayerService } from './services/layer/ILayerService';
-import { IStyleAttributeService } from './services/layer/IStyleAttributeService';
-import { ISceneService } from './services/scene/ISceneService';
-import { IShaderModuleService } from './services/shader/IShaderModuleService';
+import type { IFontService } from './services/asset/IFontService';
+import type { IIconService } from './services/asset/IIconService';
+import type { ICameraService } from './services/camera/ICameraService';
+import type { IControlService } from './services/component/IControlService';
+import type { IGlobalConfigService } from './services/config/IConfigService';
+import type { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
+import type { IDebugService } from './services/debug/IDebugService';
+import type { IInteractionService } from './services/interaction/IInteractionService';
+import type { IPickingService } from './services/interaction/IPickingService';
+import type { ILayerService } from './services/layer/ILayerService';
+import type { IStyleAttributeService } from './services/layer/IStyleAttributeService';
+import type { ISceneService } from './services/scene/ISceneService';
+import type { IShaderModuleService } from './services/shader/IShaderModuleService';
 
 /** Service implements */
 import FontService from './services/asset/FontService';
@@ -42,9 +43,9 @@ import SceneService from './services/scene/SceneService';
 import ShaderModuleService from './services/shader/ShaderModuleService';
 
 /** PostProcessing passes */
-import { IMarkerService } from './services/component/IMarkerService';
-import { IPopupService } from './services/component/IPopupService';
-import {
+import type { IMarkerService } from './services/component/IMarkerService';
+import type { IPopupService } from './services/component/IPopupService';
+import type {
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,

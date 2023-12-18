@@ -14,7 +14,7 @@ import { ExampleTopicMenu } from '@antv/dumi-theme-antv/dist/pages/Examples/comp
 import { GalleryPageContent } from './components/GalleryPageContent';
 import { usePrevAndNext } from '@antv/dumi-theme-antv/dist/slots/hooks';
 import { ThemeAntVContext } from '@antv/dumi-theme-antv/dist/context';
-import { ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
+import type { ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
 import SelectBar from './components/SelectExampleBar';
 import styles from './index.module.less';
 

@@ -1,6 +1,6 @@
 import { amap2Project, amap2UnProject } from '../geo';
 import { MapType } from '../interface/map';
-import { Point } from './interface';
+import type { Point } from './interface';
 // arc
 export function arcLineAtOffset(
   source: Point,

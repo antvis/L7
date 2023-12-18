@@ -2,8 +2,11 @@ import { Scene, LineLayer } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import React, { useEffect, useState } from 'react';
-import THREE, { AmbientLight, DirectionalLight, Group } from 'three';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import type { Group } from 'three';
+import type THREE from 'three';
+import { AmbientLight, DirectionalLight } from 'three';
+import type { GLTF} from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 const gltfSceneMap: Record<string, GLTF> = {};
 const gltfPromiseMap: Record<string, Promise<Group>> = {};

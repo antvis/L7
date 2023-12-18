@@ -10,3 +10,8 @@ export const tests = {
   'citybuilding-amap1': 'features/citybuilding/amap1',
   'line-arc-plane': 'features/line/line-arc-plane',
 };
+
+export const testList = [
+  'PointFill',
+  'PointImage'
+]
