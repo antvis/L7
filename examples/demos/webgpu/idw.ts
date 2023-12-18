@@ -21,18 +21,6 @@ export async function MapRender() {
   }
   dataIndex.finish();
 
-const ARRAY_TYPES = [
-   Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array,
-   Int32Array, Uint32Array, Float32Array, Float64Array
-];
-
-//   const dataArray = Array.from(new Float64Array(dataIndex.data));
    console.log(dataIndex);
-   const [magic, versionAndType] = new Uint8Array(dataIndex.data, 0, 2);
-   const [nodeSize] = new Uint16Array(dataIndex.data, 2, 1);
-   const [numItems] = new Uint32Array(dataIndex.data, 4, 1);
-   const ArrayType = ARRAY_TYPES[versionAndType & 0x0f];
-   console.log(magic, versionAndType)
-   console.log(nodeSize, numItems,ArrayType)
 
 }
