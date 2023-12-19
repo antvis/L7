@@ -1,8 +1,7 @@
 import type {
   IEncodeFeature,
   ILayerConfig,
-  IModel,
-  IModelUniform} from '@antv/l7-core';
+  IModel} from '@antv/l7-core';
 import {
   AttributeType,
   gl
