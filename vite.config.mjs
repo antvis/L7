@@ -4,7 +4,6 @@ import vitePluginString from 'vite-plugin-string';
 import react from '@vitejs/plugin-react'
 
 import path from 'path';
-
 export default defineConfig({
     root: path.resolve('./examples'),
     server: { port: 8080, open: '/' },
@@ -42,6 +41,8 @@ export default defineConfig({
     esbuild: true,
     define: {
         'process.env.VERSION': JSON.stringify('1.0.0'),
+        'process.env.renderer': JSON.stringify(process.env.VITE_RENDERER),
+        'process.env.CI': process.env.CI?.replace(/'/g, ''),
         global: {
 
         },

@@ -45,6 +45,7 @@ export default () => {
             opacity: 1,
           });
         scene.addLayer(pointLayer);
+        scene.startAnimate();
       });
   }, []);
   return (

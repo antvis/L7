@@ -85,7 +85,6 @@ Page({
         id: 'canvas',
         canvas,
         map: miniMap,
-        hasBaseMap: false,
       });
 
       miniScene.setBgColor('#222');
