@@ -1,5 +1,6 @@
 import { ImageLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
+import dat from 'dat.gui'
 import React, { useEffect } from 'react';
 //加载外部脚本
 function addExternalScript(src) {
