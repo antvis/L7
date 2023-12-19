@@ -11,8 +11,8 @@ import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointImageTriangulation } from '../../core/triangulation';
-import pointImageFrag from '../shaders/image_frag.glsl';
-import pointImageVert from '../shaders/image_vert.glsl';
+import pointImageFrag from '../shaders/image/image_frag.glsl';
+import pointImageVert from '../shaders/image/image_vert.glsl';
 export default class ImageModel extends BaseModel {
   private texture: ITexture2D;
 

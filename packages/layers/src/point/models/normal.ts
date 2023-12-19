@@ -8,9 +8,10 @@ import {
 } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import normalFrag from '../shaders/normal/normal_frag.glsl';
+import normalVert from '../shaders/normal/normal_vert.glsl';
 import type { IPointLayerStyleOptions } from '../../core/interface';
-import normalFrag from '../shaders/normal_frag.glsl';
-import normalVert from '../shaders/normal_vert.glsl';
+
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -27,30 +28,12 @@ export default class NormalModel extends BaseModel {
       blend: 'additive',
     };
   }
-  public getUninforms(): IModelUniform {
-    const attributes = this.getStyleAttribute();
-    // FIXME: No need to update each frame
-    this.uniformBuffers[0].subData({
-      offset: 0,
-      data: new Uint8Array(
-        new Float32Array([
-          ...attributes.u_stroke,
-          ...attributes.u_offsets,
-          attributes.u_opacity,
-          attributes.u_rotation,
-        ]).buffer,
-      ),
-    });
-
-    this.uniformBuffers[1].subData({
-      offset: 0,
-      data: new Uint8Array(new Float32Array([0.5]).buffer),
-    });
-
-    return {
-      u_size_scale: 0.5,
-      ...attributes,
-    };
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+    const commonOptions = {
+      u_size_scale:0.5
+     };
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -59,18 +42,7 @@ export default class NormalModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     this.layer.triangulation = PointTriangulation;
-
-    const uniformBuffer = this.rendererService.createBuffer({
-      data: new Float32Array(4 + 2 + 1 + 1),
-      isUBO: true,
-    });
-
-    const commonBuffer = this.rendererService.createBuffer({
-      data: new Float32Array(4),
-      isUBO: true,
-    });
-
-    this.uniformBuffers.push(uniformBuffer, commonBuffer);
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'pointNormal',
       vertexShader: normalVert,
@@ -79,7 +51,6 @@ export default class NormalModel extends BaseModel {
       inject: this.getInject(),
       depth: { enable: false },
       primitive: gl.POINTS,
-
       pick: false,
     });
     return [model];

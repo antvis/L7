@@ -13,13 +13,13 @@ import {
 import { PointFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
+
+import pointFillFrag from '../shaders/fill/fill_frag.glsl';
+import pointFillVert from '../shaders/fill/fill_vert.glsl';
+
 import type { IPointLayerStyleOptions} from '../../core/interface';
 import { SizeUnitType } from '../../core/interface';
-// animate pointLayer shader - support animate
-import waveFillFrag from '../shaders/animate/wave_frag.glsl';
-// static pointLayer shader - not support animate
-import pointFillFrag from '../shaders/fill_frag.glsl';
-import pointFillVert from '../shaders/fill_vert.glsl';
+
 
 export default class FillModel extends BaseModel {
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
@@ -32,15 +32,18 @@ export default class FillModel extends BaseModel {
       heightfixed = false,
       unit = 'pixel',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
-
+    let u_time = this.getAnimateUniforms().u_time;
+    if(isNaN(u_time as number)){
+      u_time = -1.0;
+    }
     const commonOptions = {
       u_blur_height_fixed: [blur, Number(raisingHeight), Number(heightfixed)],
       u_stroke_width: strokeWidth,
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      u_time: this.getAnimateUniforms().u_time,
-      u_animate: this.getAnimateUniforms().u_animate
+      u_time,
+      u_animate: this.getAnimateUniforms().u_animate,
     };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
 
@@ -101,28 +104,11 @@ export default class FillModel extends BaseModel {
     vert: string;
     type: string;
   } {
-    if (animateOption.enable) {
-      switch (animateOption.type) {
-        case 'wave':
-          return {
-            frag: waveFillFrag,
-            vert: pointFillVert,
-            type: 'pointWave',
-          };
-        default:
-          return {
-            frag: waveFillFrag,
-            vert: pointFillVert,
-            type: 'pointWave',
-          };
-      }
-    } else {
-      return {
-        frag: pointFillFrag,
-        vert: pointFillVert,
-        type: 'pointFill',
-      };
-    }
+    return {
+      frag: pointFillFrag,
+      vert: pointFillVert,
+      type: 'pointFill',
+    };
   }
 
   // overwrite baseModel func
@@ -165,10 +151,10 @@ export default class FillModel extends BaseModel {
 
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
+      name: 'sizeAndShape',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Size',
+        name: 'a_SizeAndShape',
         shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
@@ -176,32 +162,13 @@ export default class FillModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 2,
         update: (feature: IEncodeFeature) => {
           const { size = 5 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size];
-        },
-      },
-    });
-
-    // point layer shape;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'shape',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Shape',
-        shaderLocation: ShaderLocation.SHAPE,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
           const { shape = 2 } = feature;
           const shapeIndex = shape2d.indexOf(shape as string);
-          return [shapeIndex];
+          const a_Size =  Array.isArray(size) ? size[0] : size;
+          return [a_Size,shapeIndex]
         },
       },
     });

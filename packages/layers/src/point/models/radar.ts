@@ -75,10 +75,10 @@ export default class RadarModel extends BaseModel {
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'extrude',
+      name: 'extrudeAndSize',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Extrude',
+        name: 'a_ExtrudeAndSize',
         shaderLocation: ShaderLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
@@ -86,7 +86,7 @@ export default class RadarModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 3,
+        size: 4,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -95,32 +95,14 @@ export default class RadarModel extends BaseModel {
         ) => {
           const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
           const extrudeIndex = (attributeIdx % 4) * 3;
+          const { size = 5 } = feature;
+          const a_Size =  Array.isArray(size) ? size[0] : size as number;
           return [
             extrude[extrudeIndex],
             extrude[extrudeIndex + 1],
             extrude[extrudeIndex + 2],
+            a_Size
           ];
-        },
-      },
-    });
-
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { size = 5 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
         },
       },
     });

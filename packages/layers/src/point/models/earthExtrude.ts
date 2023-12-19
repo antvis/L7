@@ -17,22 +17,14 @@ import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
-import pointExtrudeFrag from '../shaders/earth/extrude_frag.glsl';
-import pointExtrudeVert from '../shaders/earth/extrude_vert.glsl';
+import pointExtrudeFrag from '../shaders/earthExtrude/earthExtrude_frag.glsl';
+import pointExtrudeVert from '../shaders/earthExtrude/earthExtrude_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
   private raiseRepeat: number = 0;
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption
-    }
-  }
+
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {
       animateOption = {
@@ -41,13 +33,10 @@ export default class ExtrudeModel extends BaseModel {
         repeat: false,
       },
       opacity = 1,
-
       sourceColor,
       targetColor,
-
       pickLight = false,
       heightfixed = true,
-
       opacityLinear = {
         enable: false,
         dir: 'up',

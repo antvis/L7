@@ -34,6 +34,7 @@ export default () => {
             .shape('circle')
             .size(16)
             .active(true)
+            // .animate(true)
             .select({
               color: 'red',
             })
