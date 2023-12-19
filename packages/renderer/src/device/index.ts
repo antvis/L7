@@ -2,7 +2,8 @@ import type {
   Device,
   RenderPass,
   RenderTarget,
-  SwapChain} from '@antv/g-device-api';
+  SwapChain,
+} from '@antv/g-device-api';
 import {
   Format,
   TextureUsage,

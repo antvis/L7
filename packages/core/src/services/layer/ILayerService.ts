@@ -82,7 +82,7 @@ export interface ILayerModelInitializationOptions {
   vertexShader: string;
   fragmentShader: string;
   triangulation: Triangulation;
-  styleOption?: unknown,
+  styleOption?: unknown;
   workerEnabled?: boolean;
   workerOptions?: IWorkerOption;
 }
@@ -583,6 +583,16 @@ export interface ILayer {
 
   // 设置当前地球时间 控制太阳角度
   setEarthTime(time: number): void;
+
+  /**
+   * WebGL2 下更新 Layer 级 Uniform
+   */
+  getLayerUniformBuffer(): IBuffer;
+
+  /**
+   * WebGL2 下更新 Layer 级 Uniform
+   */
+  getPickingUniformBuffer(): IBuffer;
 }
 
 /**
