@@ -14,6 +14,7 @@ import {
   CompareFunction,
   CullMode,
   Format,
+  StencilOp,
   TransparentBlack,
   VertexStepMode,
 } from '@antv/g-device-api';
@@ -38,6 +39,8 @@ import {
   depthFuncMap,
   primitiveMap,
   sizeFormatMap,
+  stencilFuncMap,
+  stencilOpMap,
 } from './constants';
 const { isPlainObject, isTypedArray } = lodashUtil;
 
@@ -132,7 +135,7 @@ export default class DeviceModel implements IModel {
   }
 
   private createPipeline(options: IModelInitializationOptions, pick?: boolean) {
-    const { primitive = gl.TRIANGLES, depth, cull, blend } = options;
+    const { primitive = gl.TRIANGLES, depth, cull, blend, stencil } = options;
 
     const depthParams = this.initDepthDrawParams({ depth });
     const depthEnabled = !!(depthParams && depthParams.enable);
@@ -141,6 +144,9 @@ export default class DeviceModel implements IModel {
     // Disable blend when picking.
     const blendParams = this.getBlendDrawParams({ blend });
     const blendEnabled = !!(blendParams && blendParams.enable);
+
+    const stencilParams = this.getStencilDrawParams({ stencil });
+    const stencilEnabled = !!(stencilParams && stencilParams.enable);
 
     return this.device.createRenderPipeline({
       inputLayout: this.inputLayout,
@@ -165,7 +171,11 @@ export default class DeviceModel implements IModel {
                 },
               }
             : {
-                channelWriteMask: ChannelWriteMask.ALL,
+                channelWriteMask:
+                  stencilEnabled &&
+                  stencilParams.opFront.zpass === StencilOp.REPLACE
+                    ? ChannelWriteMask.NONE
+                    : ChannelWriteMask.ALL,
                 rgbBlendState: {
                   blendMode:
                     (blendEnabled && blendParams.equation.rgb) || BlendMode.ADD,
@@ -194,7 +204,19 @@ export default class DeviceModel implements IModel {
         depthCompare:
           (depthEnabled && depthParams.func) || CompareFunction.LESS,
         cullMode: (cullEnabled && cullParams.face) || CullMode.NONE,
-        stencilWrite: false,
+        stencilWrite: stencilEnabled,
+        stencilFront: {
+          compare: stencilEnabled
+            ? stencilParams.func.cmp
+            : CompareFunction.ALWAYS,
+          passOp: stencilParams.opFront.zpass,
+        },
+        stencilBack: {
+          compare: stencilEnabled
+            ? stencilParams.func.cmp
+            : CompareFunction.ALWAYS,
+          passOp: stencilParams.opBack.zpass,
+        },
       },
     });
   }
@@ -227,7 +249,6 @@ export default class DeviceModel implements IModel {
       ...options,
     };
     const {
-      depth: { enable: depthEnabled } = {},
       count = 0,
       instances,
       elements,
@@ -253,6 +274,7 @@ export default class DeviceModel implements IModel {
       currentFramebuffer?.['height'] || height,
     );
     renderPass.setPipeline(this.pipeline);
+    renderPass.setStencilReference(1);
     renderPass.setVertexInput(
       this.inputLayout,
       this.vertexBuffers.map((buffer) => ({
@@ -355,63 +377,50 @@ export default class DeviceModel implements IModel {
     };
   }
 
-  // /**
-  //  * @see https://github.com/regl-project/regl/blob/gh-pages/API.md#stencil
-  //  */
-  // private getStencilDrawParams({
-  //   stencil,
-  // }: Pick<IModelInitializationOptions, 'stencil'>) {
-  //   const {
-  //     enable,
-  //     mask = -1,
-  //     func = {
-  //       cmp: gl.ALWAYS,
-  //       ref: 0,
-  //       mask: -1,
-  //     },
-  //     opFront = {
-  //       fail: gl.KEEP,
-  //       zfail: gl.KEEP,
-  //       zpass: gl.KEEP,
-  //     },
-  //     opBack = {
-  //       fail: gl.KEEP,
-  //       zfail: gl.KEEP,
-  //       zpass: gl.KEEP,
-  //     },
-  //   } = stencil || {};
-  //   return {
-  //     enable: !!enable,
-  //     mask,
-  //     func: {
-  //       ...func,
-  //       cmp: stencilFuncMap[func.cmp],
-  //     },
-  //     opFront: {
-  //       fail: stencilOpMap[opFront.fail],
-  //       zfail: stencilOpMap[opFront.zfail],
-  //       zpass: stencilOpMap[opFront.zpass],
-  //     },
-  //     opBack: {
-  //       fail: stencilOpMap[opBack.fail],
-  //       zfail: stencilOpMap[opBack.zfail],
-  //       zpass: stencilOpMap[opBack.zpass],
-  //     },
-  //   };
-  // }
-
-  // private getColorMaskDrawParams(
-  //   { stencil }: Pick<IModelInitializationOptions, 'stencil'>,
-  //   pick: boolean,
-  // ) {
-  //   // TODO: 重构相关参数
-  //   // 掩膜模式下，颜色通道全部关闭
-  //   const colorMask =
-  //     stencil?.enable && stencil.opFront && !pick
-  //       ? [false, false, false, false]
-  //       : [true, true, true, true]; // 非掩码模式下，颜色通道全部开启
-  //   return colorMask;
-  // }
+  /**
+   * @see https://github.com/regl-project/regl/blob/gh-pages/API.md#stencil
+   */
+  private getStencilDrawParams({
+    stencil,
+  }: Pick<IModelInitializationOptions, 'stencil'>) {
+    const {
+      enable,
+      mask = -1,
+      func = {
+        cmp: gl.ALWAYS,
+        ref: 0,
+        mask: -1,
+      },
+      opFront = {
+        fail: gl.KEEP,
+        zfail: gl.KEEP,
+        zpass: gl.KEEP,
+      },
+      opBack = {
+        fail: gl.KEEP,
+        zfail: gl.KEEP,
+        zpass: gl.KEEP,
+      },
+    } = stencil || {};
+    return {
+      enable: !!enable,
+      mask,
+      func: {
+        ...func,
+        cmp: stencilFuncMap[func.cmp],
+      },
+      opFront: {
+        fail: stencilOpMap[opFront.fail],
+        zfail: stencilOpMap[opFront.zfail],
+        zpass: stencilOpMap[opFront.zpass],
+      },
+      opBack: {
+        fail: stencilOpMap[opBack.fail],
+        zfail: stencilOpMap[opBack.zfail],
+        zpass: stencilOpMap[opBack.zpass],
+      },
+    };
+  }
 
   /**
    * @see https://github.com/regl-project/regl/blob/gh-pages/API.md#culling

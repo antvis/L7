@@ -9,9 +9,7 @@ export const tests = {
   'point-normal-device': 'features/point/point-normal-device',
   'citybuilding-amap1': 'features/citybuilding/amap1',
   'line-arc-plane': 'features/line/line-arc-plane',
+  'mask-single-mask': 'features/mask/single-mask',
 };
 
-export const testList = [
-  'PointFill',
-  'PointImage'
-]
+export const testList = ['PointFill', 'PointImage'];
