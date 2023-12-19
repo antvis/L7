@@ -11,7 +11,6 @@ import BaseMapService from '../utils/BaseMapService';
 import Viewport from '../utils/Viewport';
 import { MapType } from '@antv/l7-utils';
 
-const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * AMapService
  */

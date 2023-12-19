@@ -4,6 +4,7 @@ import { RasterLayer, Scene } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
 import * as GeoTIFF from 'geotiff';
 
+console.log(process.env)
 async function getTiffData() {
     const response = await fetch(
         'https://gw.alipayobjects.com/zos/antvdemo/assets/light_clip/lightF182013.tiff',
