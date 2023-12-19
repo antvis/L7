@@ -1,15 +1,15 @@
 // @ts-ignore
-import { Scene, HeatmapLayer, PolygonLayer } from '@antv/l7';
+import { HeatmapLayer, PolygonLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-     
-      map: new GaodeMap({
+      renderer: process.env.renderer,
+      map: new (process.env.CI ? Map : GaodeMap)({
         center: [120.165, 30.26],
         pitch: 0,
         zoom: 2,
@@ -49,20 +49,20 @@ export default () => {
       ],
     };
 
-   
     scene.on('loaded', () => {
-      
-      
       fetch(
         'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
       )
         .then((res) => res.json())
         .then((data) => {
-          const polygonLayer = new PolygonLayer({visible:true}).source(maskData).shape('fill').color('#f00').style({opacity:0.4});
+          const polygonLayer = new PolygonLayer({ visible: true })
+            .source(maskData)
+            .shape('fill')
+            .color('#f00')
+            .style({ opacity: 0.4 });
           const heatmapLayer = new HeatmapLayer({
             maskLayers: [polygonLayer],
-            mask:false,
-
+            // mask: false,
           })
             .source(data)
             .shape('heatmap') // heatmap3D heatmap
@@ -83,23 +83,20 @@ export default () => {
                 positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
               },
             });
-            scene.addLayer(polygonLayer);
-            scene.addLayer(heatmapLayer);
+          scene.addLayer(polygonLayer);
+          scene.addLayer(heatmapLayer);
 
-            setTimeout(()=>{
-              console.log('add mask');
-              // heatmapLayer.addMask(polygonLayer);
-              // scene.render();
+          // setTimeout(() => {
+          //   console.log('add mask');
+          //   // heatmapLayer.addMask(polygonLayer);
+          //   // scene.render();
 
-              console.log('disable mask');
-              // heatmapLayer.disableMask();
-              // scene.render();
-              heatmapLayer.enableMask();
-              scene.render();
-
-
-            },2000)
-          
+          //   console.log('disable mask');
+          //   // heatmapLayer.disableMask();
+          //   // scene.render();
+          //   heatmapLayer.enableMask();
+          //   scene.render();
+          // }, 2000);
         });
     });
   }, []);

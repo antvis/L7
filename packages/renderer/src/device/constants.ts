@@ -115,6 +115,12 @@ export const stencilOpMap: {
 } = {
   [gl.REPLACE]: StencilOp.REPLACE,
   [gl.KEEP]: StencilOp.KEEP,
+  [gl.ZERO]: StencilOp.ZERO,
+  [gl.INVERT]: StencilOp.INVERT,
+  [gl.INCR]: StencilOp.INCREMENT_CLAMP,
+  [gl.DECR]: StencilOp.DECREMENT_CLAMP,
+  [gl.INCR_WRAP]: StencilOp.INCREMENT_WRAP,
+  [gl.DECR_WRAP]: StencilOp.DECREMENT_WRAP,
 };
 
 export const stencilFuncMap: {
@@ -122,6 +128,12 @@ export const stencilFuncMap: {
 } = {
   [gl.ALWAYS]: CompareFunction.ALWAYS,
   [gl.EQUAL]: CompareFunction.EQUAL,
+  [gl.GEQUAL]: CompareFunction.GEQUAL,
+  [gl.GREATER]: CompareFunction.GREATER,
+  [gl.LEQUAL]: CompareFunction.LEQUAL,
+  [gl.LESS]: CompareFunction.LESS,
+  [gl.NEVER]: CompareFunction.NEVER,
+  [gl.NOTEQUAL]: CompareFunction.NOTEQUAL,
 };
 
 // export const filterMap: {
