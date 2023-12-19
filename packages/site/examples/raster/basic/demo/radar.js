@@ -19,6 +19,12 @@ scene.on('loaded', () => {
         extent: [ 113.1277263548, 32.3464238863, 118.1365790452, 36.4786759137 ]
       }
     }
-  );
+  ).style({
+    brightness: 1,
+    gamma: 1.0,
+    opacity: 1.0,
+    saturation: 10,
+    contrast: 1,
+});
   scene.addLayer(layer);
 });
