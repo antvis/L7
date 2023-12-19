@@ -7,14 +7,8 @@ import Clock from '../../utils/clock';
 import type { IDebugService } from '../debug/IDebugService';
 import type { IMapService } from '../map/IMapService';
 import type { IRendererService } from '../renderer/IRendererService';
-import type {
-  ILayer,
-  ILayerService,
-  LayerServiceEvent} from './ILayerService';
-import {
-  MaskOperation,
-  StencilType,
-} from './ILayerService';
+import type { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
+import { MaskOperation, StencilType } from './ILayerService';
 const { throttle } = lodashUtil;
 @injectable()
 export default class LayerService
