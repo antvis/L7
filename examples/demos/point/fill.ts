@@ -1,9 +1,14 @@
 import { Scene, PointLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
-export function MapRender() {
+import * as allMap from '@antv/l7-maps';
+
+export function MapRender(option:{
+    map:string
+    device:string
+}) {
     const scene = new Scene({
         id: 'map',
-        map: new GaodeMap({
+        renderer: option.device === 'device'? 'device' : 'regl',
+        map: new allMap[option.map || 'Map']({
             style: 'light',
             center: [121.435159, 31.256971],
             zoom: 14.89,

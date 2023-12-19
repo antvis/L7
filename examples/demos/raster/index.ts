@@ -1,0 +1,1 @@
+export { MapRender as RasterTiff } from './tiff';

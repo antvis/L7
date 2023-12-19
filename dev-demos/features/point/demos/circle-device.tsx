@@ -56,7 +56,7 @@ export default () => {
               stroke: '#fff',
             });
           scene.addLayer(pointLayer);
-          scene.startAnimate();
+          // scene.startAnimate();
           //  let i =0;
           // setInterval(() => {
           //     i++ % 2 === 0 ? pointLayer.setBlend('additive') : pointLayer.setBlend('normal');

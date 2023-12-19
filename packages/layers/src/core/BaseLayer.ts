@@ -9,6 +9,7 @@ import type {
   IActiveOption,
   IAnimateOption,
   IAttributeAndElements,
+  IBuffer,
   ICameraService,
   ICoordinateSystemService,
   IDataState,
@@ -50,7 +51,8 @@ import type {
   LegendItems,
   StyleAttributeField,
   StyleAttributeOption,
-  Triangulation} from '@antv/l7-core';
+  Triangulation,
+} from '@antv/l7-core';
 import {
   BlendType,
   IDebugLog,
@@ -247,6 +249,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   private isDestroyed: boolean = false;
 
   // private pickingPassRender: IPass<'pixelPicking'>;
+
+  private uniformBuffers: IBuffer[] = [];
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
     super();
@@ -1306,6 +1310,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         uniformBuffers: [
           ...this.layerModel.uniformBuffers,
           ...this.rendererService.uniformBuffers,
+          this.getLayerUniformBuffer(),
+          this.getPickingUniformBuffer(),
         ],
         textures: this.layerModel.textures,
         ...rest,
@@ -1520,7 +1526,32 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   protected async initLayerModels() {
     this.models.forEach((model) => model.destroy());
     this.models = [];
+    this.uniformBuffers.forEach((buffer) => {
+      buffer.destroy();
+    });
+    this.uniformBuffers = [];
+    // Layer Uniform
+    const layerUniforms = this.rendererService.createBuffer({
+      data: new Float32Array(16 + 4).fill(0), // u_Mvp
+      isUBO: true,
+    });
+    this.uniformBuffers.push(layerUniforms);
+
+    // Picking Uniform
+    const pickingUniforms = this.rendererService.createBuffer({
+      data: new Float32Array(20).fill(0),
+      isUBO: true,
+    });
+    this.uniformBuffers.push(pickingUniforms);
+
     this.models = await this.layerModel.initModels();
+  }
+
+  getLayerUniformBuffer() {
+    return this.uniformBuffers[0];
+  }
+  getPickingUniformBuffer() {
+    return this.uniformBuffers[1];
   }
 
   protected reRender() {
