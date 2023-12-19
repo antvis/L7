@@ -1,5 +1,3 @@
-------
-
 | name            | illustrate                                        | type                                |
 | --------------- | ------------------------------------------------- | ----------------------------------- |
 | popperPlacement | The position of the bubble relative to the button | [PopperPlacement](#PopperPlacement) |
