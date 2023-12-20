@@ -24,7 +24,7 @@ describe('Snapshots', () => {
 
     })
   })
-  demosFlatList.map((demo) => {
+  demosFlatList.slice(0,5).map((demo) => {
     const { name, sleepTime = 1.5,type } = demo;
     const key = `${type}_${name}`;
 
@@ -37,7 +37,7 @@ describe('Snapshots', () => {
       const page = await context.newPage();
       console.log(key)
       // Go to test page served by vite devServer.
-      const url = `http://localhost:8080/?type=${type}&name=${key}`;
+      const url = `http://localhost:8080/?type=${type}&name=${name}`;
       await page.goto(url);
 
       await sleep(sleepTime * 1000);

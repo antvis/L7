@@ -5,6 +5,7 @@ import * as PolygonDemos from './polygon'
 import * as RasterDemos from './raster'
 import * as HeatmapDemos from './heatmap'
 import * as TileDemos from './tile'
+import * as GalleryDemos from './gallery'
 
 export default [{
     name: 'Point',
@@ -34,12 +35,16 @@ export default [{
     name: 'WebGPU',
     demos: GPUDemos,
     snapShot: false,
-},
+},{
+    name:'Gallery',
+    demos:GalleryDemos
+}
 ]
 
 export const MapType = ['Map','GaodeMap','BaiduMap','MapLibre','TencentMap','Mapbox']
 export const InitMapOptions = {
     map: 'Map',
-    device:'device'
+    renderer:'device',
+    animate:false,
 }
 

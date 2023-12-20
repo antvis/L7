@@ -1,16 +1,3 @@
-/**
- * TODO: extract url from dumi md & tsx
- */
-export const tests = {
-    'point-circle': 'features/point/circle',
-    'point-billboard': 'features/point/point-billboard',
-    'point-column': 'features/point/point-column',
-    'point-fill-image': 'features/point/point-fill-image',
-    'point-normal-device': 'features/point/point-normal-device',
-    'citybuilding-amap1': 'features/citybuilding/amap1',
-    'line-arc-plane': 'features/line/line-arc-plane',
-};
-
 export const TestDemoList: Array<{
     type: string,
     demos: Array<{
@@ -20,12 +7,21 @@ export const TestDemoList: Array<{
 }> = [
         {
             type: 'Point',
-            demos: [{
-                name: "PointFill",
+            demos: [
+                {
+                    name:'billboard'
+                },{
+                    name:'column'
+                },
+                {
+                    name:'fill_image'
+                },
+                {
+                name: "fill",
                 sleepTime: 1
 
             }, {
-                name: "PointImage",
+                name: "image",
                 sleepTime: 1
             }]
         },
@@ -35,6 +31,10 @@ export const TestDemoList: Array<{
                 {
                     name: 'arc'
                 },
+                {
+                    name: 'arc_plane'
+                },
+
                 {
                     name: 'flow'
                 }
@@ -71,7 +71,6 @@ export const TestDemoList: Array<{
                     name: 'water'
                 }
             ]
-
         },
         {
             type: 'HeatMap',
@@ -91,6 +90,12 @@ export const TestDemoList: Array<{
             type: 'Raster',
             demos: [{
                 name: "tiff",
+                sleepTime: 2
+            }]
+        },{
+            type: 'Gallery',
+            demos: [{
+                name: "fujian",
                 sleepTime: 2
             }]
         }
