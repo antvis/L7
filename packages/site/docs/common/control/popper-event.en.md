@@ -1,5 +1,3 @@
-------
-
 | name       | illustrate                        | type             |
 | ---------- | --------------------------------- | ---------------- |
 | popperShow | Callback when bubble is displayed | `(this) => void` |

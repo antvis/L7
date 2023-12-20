@@ -1,5 +1,3 @@
-------
-
 | name      | illustrate                                                                                                                              | type                  |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | position  | The location and arrangement of controls when they are added to the map, see details[control slot](/api/component/control/control#slot) | [Position](#position) |

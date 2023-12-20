@@ -1,10 +1,9 @@
 // @ts-ignore
 import { RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { Map } from '@antv/l7-maps';
+import * as allMap from '@antv/l7-maps';
 import * as GeoTIFF from 'geotiff';
 
-console.log(process.env)
 async function getTiffData() {
     const response = await fetch(
         'https://gw.alipayobjects.com/zos/antvdemo/assets/light_clip/lightF182013.tiff',
@@ -22,18 +21,21 @@ async function getTiffData() {
     };
 }
 
-export function MapRender() {
+export function MapRender(option:{
+    map:string
+    renderer:'device' | 'regl'
+}) {
     const scene = new Scene({
         id: 'map',
-        // renderer: 'device',
-        map: new Map({
+        renderer:option.renderer,
+        map: new allMap[option.map || 'Map']({
             center: [105, 37.5],
             zoom: 2.5,
         }),
     });
     scene.on('loaded', () => {
         addLayer();
-        scene.setBgColor('#000')
+        // scene.setBgColor('#aaa')
     });
 
     async function addLayer() {

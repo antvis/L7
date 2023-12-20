@@ -1,5 +1,3 @@
-------
-
 | name         | illustrate                                                                                                  | type                                   |
 | ------------ | ----------------------------------------------------------------------------------------------------------- | -------------------------------------- |
 | setOptions   | Update configuration, parameters need to refer to the corresponding component[Configuration](Configuration) | `(newOption: Partial<Option>) => void` |
