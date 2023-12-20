@@ -1,2 +1,2 @@
-export { MapRender as PointFill } from './fill';
-export { MapRender as PointImage } from './image';
+export { MapRender as fill } from './fill';
+export { MapRender as image } from './image';

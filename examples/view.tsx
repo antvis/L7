@@ -1,5 +1,5 @@
 // @ts-ignore
-import React, { useState, useEffect, useRef, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import DemoList,{ InitMapOptions,MapType } from './demos';
 import { Cascader } from 'antd';
 import 'antd/dist/antd.css';
@@ -8,7 +8,7 @@ import { MapView } from './view/map'
 
 export default () => {
     const searchParams = new URL(location as any).searchParams;
-    const initState = searchParams.size === 0 ? ['Point', 'PointFill'] : [searchParams.get('type'), searchParams.get('name')];
+    const initState = searchParams.size === 0 ? ['Point', 'fill'] : [searchParams.get('type'), searchParams.get('name')];
     const [values, setValue] = useState(initState)
     const [mapOption,setMapOption]= useState(InitMapOptions)
     const onGUIChange = (object) => {
