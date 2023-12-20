@@ -68,7 +68,7 @@ export default defineConfig({
     },
   ],
   copy: [
-    { from:'node_modules/@antv/g-device-api/dist/pkg/*.wasm',  to: '[name].[ext]' },
+    { from:'node_modules/@antv/g-device-api/dist/pkg/glsl_wgsl_compiler_bg.wasm',  to: '[name].[ext]' },
   ],
   esbuild: false,
   chainWebpack: (memo, { env, webpack, createCSSRule }) => {
