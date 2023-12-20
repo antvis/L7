@@ -9,7 +9,8 @@ describe('Snapshots', () => {
   TestDemoList.forEach((groups) => {
     const { type, demos } = groups;
     demos.map((demo) => {
-      const { name: key,sleepTime = 1.5 } = demo;
+      const { name,sleepTime = 1.5 } = demo;
+      const key = `${type}_${name}`
       it(key, async () => {
         // Setup
         const browser = await chromium.launch({

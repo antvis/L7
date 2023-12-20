@@ -1,4 +1,4 @@
-import { Scene, PointLayer } from '@antv/l7';
+import { Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
 
 export function MapRender(option: {
