@@ -1,5 +1,5 @@
 // @ts-ignore
-import React, { useState, useEffect, useRef, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import DemoList,{ InitMapOptions,MapType } from './demos';
 import { Cascader } from 'antd';
 import 'antd/dist/antd.css';
