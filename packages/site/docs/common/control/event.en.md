@@ -1,5 +1,3 @@
----
-
 | Name   | Description                            | Type             |
 | ------ | -------------------------------------- | ---------------- |
 | add    | Event when component is added          | `(this) => void` |

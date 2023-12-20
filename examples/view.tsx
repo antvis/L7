@@ -1,6 +1,6 @@
 // @ts-ignore
 import React, { useState, useEffect, useRef, useReducer } from 'react';
-import DemoList from './demos';
+import DemoList,{ InitMapOptions,MapType } from './demos';
 import { Cascader } from 'antd';
 import 'antd/dist/antd.css';
 import GUI from 'lil-gui';
@@ -10,17 +10,9 @@ export default () => {
     const searchParams = new URL(location as any).searchParams;
     const initState = searchParams.size === 0 ? ['Point', 'PointFill'] : [searchParams.get('type'), searchParams.get('name')];
     const [values, setValue] = useState(initState)
-    const mapOptionRef = useRef({
-        map: 'Map',
-        renderer: 'device'
-    });
-    const [, forceUpdate] = useReducer((x) => x + 1, 0);
-
-
-  
+    const [mapOption,setMapOption]= useState(InitMapOptions)
     const onGUIChange = (object) => {
-        mapOptionRef.current = object;
-        forceUpdate()
+        setMapOption({...object})
     }
     useEffect(() => {
         const gui = new GUI();
@@ -28,8 +20,8 @@ export default () => {
             map: 'Map',
             renderer: 'device'
         }
-        gui.add(option, 'map', ['Map', 'GaodeMap', 'Mapbox', 'BaiduMap', 'TecentMap'])
-        gui.add(option, 'renderer', ['Regl', 'Device'])
+        gui.add(option, 'map', MapType)
+        gui.add(option, 'renderer', ['regl', 'device'])
         gui.onChange((event) => {
             onGUIChange(event.object);
         });
@@ -61,7 +53,7 @@ export default () => {
         </div>
 
         {/* 不同 Demo 可替换 view 模板 */}
-        < MapView data={values} options={mapOptionRef.current} />
+        < MapView data={values} options={mapOption} />
     </>
     );
 };
