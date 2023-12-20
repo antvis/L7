@@ -17,15 +17,6 @@ import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
 export default class ExtrudeModel extends BaseModel {
   private raiseCount: number = 0;
   private raiseRepeat: number = 0;
-  public getUninforms() {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-    };
-  }
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;

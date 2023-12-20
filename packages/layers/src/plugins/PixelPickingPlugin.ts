@@ -4,11 +4,9 @@ import type {
   ILayer,
   ILayerPlugin,
   IRendererService,
-  IStyleAttributeService} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  IStyleAttributeService,
 } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import {
   decodePickingColor,
   encodePickingColor,
@@ -48,24 +46,23 @@ export default class PixelPickingPlugin implements ILayerPlugin {
 
   private updatePickOption(
     options: { [key: string]: number[] | number },
-    uniformBuffer: IBuffer,
     layer: ILayer,
   ) {
-    if (uniformBuffer) {
-      Object.keys(options).forEach((key) => {
-        this.pickingUniformMap.set(key, options[key]);
-      });
+    Object.keys(options).forEach((key) => {
+      this.pickingUniformMap.set(key, options[key]);
+    });
 
-      const u_PickingBuffer = layer.getLayerConfig().pickingBuffer || 0;
-      // Tip: 当前地图是否在拖动
-      const u_shaderPick = Number(layer.getShaderPickStat());
-      this.pickingUniformMap.set('u_PickingBuffer', u_PickingBuffer);
-      this.pickingUniformMap.set('u_shaderPick', u_shaderPick);
-      uniformBuffer.subData({
-        offset: 0,
-        data: this.pickOption2Array(),
-      });
-    }
+    const u_PickingBuffer = layer.getLayerConfig().pickingBuffer || 0;
+    // Tip: 当前地图是否在拖动
+    const u_shaderPick = Number(layer.getShaderPickStat());
+    this.pickingUniformMap.set('u_PickingBuffer', u_PickingBuffer);
+    this.pickingUniformMap.set('u_shaderPick', u_shaderPick);
+
+    const uniformBuffer = layer.getPickingUniformBuffer();
+    uniformBuffer.subData({
+      offset: 0,
+      data: this.pickOption2Array(),
+    });
   }
   public apply(
     layer: ILayer,
@@ -90,26 +87,6 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       ['u_EnableSelect', 0],
       ['u_activeMix', 0],
     ]);
-
-    if (!rendererService.uniformBuffers[1]) {
-      // Create a Uniform Buffer Object(UBO).
-      uniformBuffer = rendererService.createBuffer({
-        // vec4 u_HighlightColor;
-        // vec4 u_SelectColor;
-        // vec3 u_PickingColor;
-        // float u_PickingStage;
-        // vec3 u_CurrentSelectedId;
-        // float u_PickingThreshold;
-        // float u_PickingBuffer;
-        // float u_shaderPick;
-        // float u_EnableSelect;
-        // float u_activeMix;
-        data: new Float32Array(20),
-        isUBO: true,
-      });
-      rendererService.uniformBuffers[1] = uniformBuffer;
-      this.updatePickOption({}, uniformBuffer, layer);
-    }
 
     // TODO: 由于 Shader 目前无法根据是否开启拾取进行内容修改，因此即使不开启也需要生成 a_PickingColor
     layer.hooks.init.tapPromise('PixelPickingPlugin', () => {
@@ -142,7 +119,6 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           {
             u_PickingStage: PickingStage.ENCODE,
           },
-          uniformBuffer,
           layer,
         );
         layer.models.forEach((model) =>
@@ -161,7 +137,6 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           {
             u_PickingStage: PickingStage.HIGHLIGHT,
           },
-          uniformBuffer,
           layer,
         );
         layer.models.forEach((model) =>
@@ -192,7 +167,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           u_HighlightColor: highlightColorInArray.map((c) => c * 255),
           u_activeMix: activeMix,
         };
-        this.updatePickOption(option, uniformBuffer, layer);
+        this.updatePickOption(option, layer);
         layer.models.forEach((model) => model.addUniforms(option));
       },
     );
@@ -218,7 +193,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           u_SelectColor: highlightColorInArray.map((c) => c * 255),
           u_EnableSelect: 1,
         };
-        this.updatePickOption(option, uniformBuffer, layer);
+        this.updatePickOption(option, layer);
         layer.models.forEach((model) => model.addUniforms(option));
       },
     );

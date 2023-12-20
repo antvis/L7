@@ -105,7 +105,6 @@ Page({
         id: 'canvas',
         canvas,
         map: miniMap,
-        hasBaseMap: false,
       });
       getJSON(chinaJSON, function (result, data) {
         if (result) {

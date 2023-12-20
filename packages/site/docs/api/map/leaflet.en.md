@@ -16,7 +16,7 @@ L7 internally resolves the differences between different map basemaps, and at th
 
 ### Install
 
-L7-Leafet is a third-party plug-in. L7 itself is not built-in and needs to be followed independently.
+L7-Leaflet is a third-party plug-in. L7 itself is not built-in and needs to be followed independently.
 
 * [L7-Leaflet GitHub](https://github.com/antvis/l7-leaflet)
 * [L7-Leaflet Demo ](https://l7-leaflet.antv.vision/)

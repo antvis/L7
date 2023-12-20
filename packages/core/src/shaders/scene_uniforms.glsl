@@ -3,7 +3,6 @@ layout(std140) uniform SceneUniforms {
   mat4 u_ProjectionMatrix;
   mat4 u_ViewProjectionMatrix;
   mat4 u_ModelMatrix;
-  mat4 u_Mvp;
   vec4 u_ViewportCenterProjection;
   vec3 u_PixelsPerDegree;
   float u_Zoom;
@@ -15,7 +14,10 @@ layout(std140) uniform SceneUniforms {
   float u_DevicePixelRatio;
   vec2 u_ViewportCenter;
   vec2 u_ViewportSize;
-  vec2 u_sceneCenterMercator;
   float u_FocalDistance;
-  float u_SceneUniformsPadding;
+};
+
+layout(std140) uniform LayerUniforms {
+  mat4 u_Mvp;
+  vec2 u_sceneCenterMercator;
 };

@@ -34,6 +34,7 @@ export default () => {
             .shape('circle')
             .size(16)
             .active(true)
+            // .animate(true)
             .select({
               color: 'red',
             })
@@ -55,7 +56,7 @@ export default () => {
               stroke: '#fff',
             });
           scene.addLayer(pointLayer);
-          scene.startAnimate();
+          // scene.startAnimate();
           //  let i =0;
           // setInterval(() => {
           //     i++ % 2 === 0 ? pointLayer.setBlend('additive') : pointLayer.setBlend('normal');

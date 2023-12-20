@@ -1,7 +1,6 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 10) in float a_Shape;
+layout(location = 9) in vec2 a_SizeAndShape;
 layout(location = 11) in vec3 a_Extrude;
 
 layout(std140) uniform commonUniforms {
@@ -27,12 +26,12 @@ void main() {
   // 透明度计算
    v_stroke = stroke;  
   vec3 extrude = a_Extrude;
-  float shape_type = a_Shape;
+  float shape_type = a_SizeAndShape.y;
   /*
   *  setPickingSize 设置拾取大小
   *  u_meter2coord 在等面积大小的时候设置单位
   */
-  float newSize = setPickingSize(a_Size);
+  float newSize = setPickingSize(a_SizeAndShape.x);
   // float newSize = setPickingSize(a_Size) * 0.00001038445708445579;
 
 

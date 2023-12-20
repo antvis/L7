@@ -1,7 +1,6 @@
 import type {
   IEncodeFeature,
   IModel,
-  IModelUniform,
   ITexture2D} from '@antv/l7-core';
 import {
   AttributeType,
@@ -13,24 +12,19 @@ import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/image_frag.glsl';
 import ImageVert from '../shaders/image_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-
+import { defaultValue, rgb2arr } from '@antv/l7-utils';
 export default class ImageModel extends BaseModel {
   protected texture: ITexture2D;
-  public getUninforms(): IModelUniform {
-    const commoninfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-    return {
-      ...commoninfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-    }
-  }
 
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
-    const { opacity } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+    const { color = 'rgb(255,255,255)',opacity,brightness,contrast,saturation,gamma } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+    const colorArry = rgb2arr(color);
     const commonOptions = {
-      u_opacity: opacity || 1,
-      u_texture: this.texture,
+      u_opacity:defaultValue(opacity,1.0),
+      u_brightness:defaultValue(brightness,1.0),
+      u_contrast:defaultValue(contrast,1.0),
+      u_saturation:defaultValue(saturation,1.0),
+      u_gamma:defaultValue(gamma,1.0)
     };
     this.textures = [this.texture]
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);

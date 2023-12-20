@@ -13,7 +13,7 @@
     "dev-demos/*"
   ],
   "scripts": {
-    "vite-dev": "vite dev",
+    "vite-dev": "VITE_RENDERER='device' vite dev",
     "vite-build": "vite build",
     "dev": "export NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
     "dev-device": "export NODE_OPTIONS=--openssl-legacy-provider renderer=device && dumi dev renderer=device",
@@ -125,7 +125,7 @@
     "babel-plugin-transform-import-styles": "^0.0.11",
     "clean-webpack-plugin": "^3.0.0",
     "commitizen": "^4.0.3",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^11.0.0",
     "coveralls": "^3.0.7",
     "cross-env": "^7.0.2",
     "css-loader": "^6.7.3",
@@ -157,6 +157,7 @@
     "lerc": "^3.0.0",
     "lerna": "^3.16.4",
     "less": "^4.1.3",
+    "lil-gui": "^0.19.1",
     "lint-staged": "^9.2.4",
     "npm-run-all": "^4.1.5",
     "open-cli": "^7.0.1",

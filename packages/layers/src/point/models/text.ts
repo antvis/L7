@@ -24,8 +24,8 @@ import {
   getGlyphQuads,
   shapeText,
 } from '../../utils/symbol-layout';
-import textFrag from '../shaders/text_frag.glsl';
-import textVert from '../shaders/text_vert.glsl';
+import textFrag from '../shaders/text/text_frag.glsl';
+import textVert from '../shaders/text/text_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const { isEqual } = lodashUtil;
 
@@ -228,28 +228,27 @@ export default class TextModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'textOffsets',
+      name: 'textUvAndOffsets',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_textOffsets', // 文字偏移量
-        shaderLocation:15,
+        name: 'a_textUvAndOffsets', // 文字偏移量
+        shaderLocation:ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 2,
+        size: 4,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
         ) => {
-          return [vertex[5], vertex[6]];
+          return [vertex[3], vertex[4],vertex[5], vertex[6]];
         },
       },
     });
-
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
@@ -271,27 +270,7 @@ export default class TextModel extends BaseModel {
       },
     });
 
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'textUv',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_tex',
-        shaderLocation:14,
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
-          return [vertex[3], vertex[4]];
-        },
-      },
-    });
+
   }
 
   private bindEvent() {

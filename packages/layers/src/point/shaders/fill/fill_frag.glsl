@@ -5,7 +5,7 @@ layout(std140) uniform commonUniforms {
   float u_stroke_opacity;
   float u_size_unit;
   float u_time;
-  vec4 u_animate;   
+  vec4 u_animate;
 };
 
 
@@ -65,17 +65,32 @@ void main() {
     inner_df
   );
 
+  float PI = 3.14159;
+  float N_RINGS = 3.0;
+  float FREQ = 1.0;
+
   if(u_stroke_width < 0.01) {
     outputColor = v_color;
   } else {
     outputColor = mix(v_color, v_stroke * u_stroke_opacity, color_t);
   }
+  float intensity = 1.0;
+  if(u_time!=-1.0){
+    //wave相关逻辑
+    float d = length(v_data.xy);
+    if(d > 0.5) {
+      discard;
+    }
+    intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_animate.z - u_animate.y * u_time)), 0.0, 1.0);
+  }
 
   if(u_additive > 0.0) {
     outputColor *= opacity_t;
+    outputColor *= intensity;//wave
     outputColor = filterColorAlpha(outputColor, outputColor.a);
   } else {
     outputColor.a *= opacity_t;
+    outputColor.a *= intensity;//wave 
     outputColor = filterColor(outputColor);
   }
    // 作为 mask 模板时需要丢弃透明的像素

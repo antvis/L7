@@ -95,6 +95,8 @@ export default defineConfig({
     'https://gw.alipayobjects.com/os/lib/antd/4.19.4/dist/antd.js',
     /** lodash */
     'https://gw.alipayobjects.com/os/lib/lodash/4.17.20/lodash.min.js',
+    //dat.gui
+    'https://cdn.uino.cn/thing-earth-space/libs/dat.gui.min.js',
   ],
 
   // more config: https://d.umijs.org/config

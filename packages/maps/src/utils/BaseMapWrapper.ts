@@ -22,14 +22,12 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
     sceneContainer: Container,
     id: string | HTMLDivElement,
     canvas?: HTMLCanvasElement,
-    hasBaseMap?: boolean,
   ) {
     // 绑定用户传入的原始地图参数
     sceneContainer.bind<Partial<IMapConfig>>(TYPES.MapConfig).toConstantValue({
       ...this.config,
       id,
       canvas,
-      hasBaseMap,
     });
     sceneContainer
       .bind<IMapService<RawMap>>(TYPES.IMapService)

@@ -7,7 +7,7 @@ const scene = new Scene({
     style: 'dark',
     pitch: 50,
     center: [ 118.8, 32.056 ],
-    zoom: 10
+    zoom: 8
   })
 });
 const colors = [

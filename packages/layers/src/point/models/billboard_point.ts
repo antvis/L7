@@ -1,7 +1,6 @@
 import type {
   IEncodeFeature,
-  IModel,
-  IModelUniform} from '@antv/l7-core';
+  IModel} from '@antv/l7-core';
 import {
   AttributeType,
   gl
@@ -11,8 +10,8 @@ import type { IPointLayerStyleOptions } from '../../core/interface';
 
 import { rgb2arr } from '@antv/l7-utils';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import simplePointFrag from '../shaders/billboard_point_frag.glsl';
-import simplePointVert from '../shaders/billboard_point_vert.glsl';
+import simplePointFrag from '../shaders/billboard/billboard_point_frag.glsl';
+import simplePointVert from '../shaders/billboard/billboard_point_vert.glsl';
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -29,17 +28,6 @@ export default class SimplePointModel extends BaseModel {
       blend: 'additive',
     };
   }
-  public getUninforms(): IModelUniform {
-    const commonInfo = this.getCommonUniformsInfo();
-    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
-    this.updateStyleUnifoms();
-
-    return {
-      ...commonInfo.uniformsOption,
-      ...attributeInfo.uniformsOption,
-    };
-  }
-
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const {
       blend,

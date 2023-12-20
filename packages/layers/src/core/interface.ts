@@ -22,7 +22,6 @@ export enum TextureBlend {
   NORMAL = 'normal',
   REPLACE = 'replace',
 }
-
 /**
  * 基础图层类型定义
  */
@@ -199,6 +198,10 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   clampHigh?: boolean;
   rampColors?: IColorRamp;
   colorTexture?: ITexture2D;
+  brightness?: number;
+  contrast?: number;
+  saturation ?: number;
+  gamma?: number;
 }
 
 export interface ICityBuildLayerStyleOptions {

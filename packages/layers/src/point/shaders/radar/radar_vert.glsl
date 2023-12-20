@@ -1,7 +1,6 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 11) in vec3 a_Extrude;
+layout(location = 11) in vec4 a_ExtrudeAndSize;
 
 layout(std140) uniform commonUniorm {
   float u_additive;
@@ -19,21 +18,21 @@ out vec2 v_extrude;
 #pragma include "picking"
 
 void main() {
-  vec3 extrude = a_Extrude;
-  float newSize = setPickingSize(a_Size);
+  vec3 extrude = a_ExtrudeAndSize.xyz;
+  float newSize = setPickingSize(a_ExtrudeAndSize.w);
 
   float time = u_time * u_speed;
   mat2 rotateMatrix = mat2( 
     cos(time), sin(time), 
     -sin(time), cos(time)
   );
-  v_extrude = rotateMatrix * a_Extrude.xy;
+  v_extrude = rotateMatrix * a_ExtrudeAndSize.xy;
 
   v_color = a_Color;
   v_color.a *= opacity;
 
   float blur = 0.0;
-  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_Size, blur);
+  float antialiasblur = -max(2.0 / u_DevicePixelRatio / a_ExtrudeAndSize.w, blur);
 
   if(u_size_unit == 1.) {
     newSize = newSize  * u_PixelsPerMeter.z;

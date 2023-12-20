@@ -119,9 +119,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     layer.setEncodedData(encodeData);
 
-    if (dataArray.length === 0 && layer.encodeDataLength === 0) {
-      return false;
-    }
     // 对外暴露事件
     layer.emit('dataUpdate', null);
     return true;

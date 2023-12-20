@@ -1,4 +1,6 @@
 import { defineConfig } from 'dumi';
+import path from 'path';
+const CopyPlugin = require("copy-webpack-plugin");
 export default defineConfig({
   title: 'L7 开发 Demo',
   favicon: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
@@ -57,16 +59,23 @@ export default defineConfig({
       path: '/draw',
     },
     {
+      title: 'WebGPU',
+      path: '/webgpu',
+    },
+    {
       title: 'GitHub',
       path: 'https://github.com/antvis/L7',
     },
+  ],
+  copy: [
+    { from:'node_modules/@antv/g-device-api/dist/pkg/*.wasm',  to: '[name].[ext]' },
   ],
   esbuild: false,
   chainWebpack: (memo, { env, webpack, createCSSRule }) => {
     // 设置 alias
     memo.module
       .rule('lint')
-      .test(/\.glsl$/)
+      .test(/\.(glsl|wgsl)$/)
       .use('babel')
       .loader('ts-shader-loader');
     // 还可以创建具名use (loaders)
