@@ -3,7 +3,8 @@ import * as GPUDemos from './webgpu';
 import * as LineDemos from './line';
 import * as PolygonDemos from './polygon'
 import * as RasterDemos from './raster'
-import * as HeatmapDemps from './heatmap'
+import * as HeatmapDemos from './heatmap'
+import * as TileDemos from './tile'
 
 export default [{
     name: 'Point',
@@ -18,12 +19,16 @@ export default [{
     demos: PolygonDemos
 }, 
 {
-    name: 'heatmap',
-    demos: HeatmapDemps
+    name: 'Heatmap',
+    demos: HeatmapDemos
 },
 {
     name: 'Raster',
     demos: RasterDemos
+},
+{
+    name: 'Tile',
+    demos: TileDemos
 },
 {
     name: 'WebGPU',

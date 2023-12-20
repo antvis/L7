@@ -11,11 +11,11 @@ import * as allMap from '@antv/l7-maps';
 
 export function MapRender(option: {
     map: string
-    device: string
+   renderer: string
 }) {
     const scene = new Scene({
         id: 'map',
-        renderer: option.device === 'device' ? 'device' : 'regl',
+      renderer: option.renderer,
         map: new allMap[option.map || 'Map']({
             style: 'light',
             center: [8.654789284720719, 47.412606122294044],
