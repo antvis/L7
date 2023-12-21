@@ -3,7 +3,7 @@ title: Use Offline
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 at present`L7`Support Gao Dehe`Mapbox`Two base maps, the Amap map is used online`API`Offline deployment is not possible. If you have offline deployment requirements, you can use it.`MapBox`Make a base map.`L7`The interface layer unifies the direct differences between different basemaps, and a set of visualization codes can be run on`L7`On any supported basemap. This article mainly introduces how to use it offline and accelerate its use in China.`MapBox`, and also provides online font services, which you can also download for local use.
 

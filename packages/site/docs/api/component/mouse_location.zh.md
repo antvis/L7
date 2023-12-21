@@ -34,11 +34,11 @@ scene.on('loaded', () => {
 | --------- | ---------------------------- | -------------------------------------------------- |
 | transform | 转换光标所在经纬度的回调函数 | `(position: [number, number]) => [number, number]` |
 
-<embed src="@/docs/common/control/api.zh.md"></embed>
+<embed src="@/docs/api/common/control/api.zh.md"></embed>
 
 ## 方法
 
-<embed src="@/docs/common/control/method.zh.md"></embed>
+<embed src="@/docs/api/common/control/method.zh.md"></embed>
 
 ## 事件
 
@@ -46,4 +46,4 @@ scene.on('loaded', () => {
 | -------------- | ---------------------------- | -------------------------------------- |
 | locationChange | 光标所在经纬度发生变化时触发 | `(position: [number, number]) => void` |
 
-<embed src="@/docs/common/control/event.zh.md"></embed>
+<embed src="@/docs/api/common/control/event.zh.md"></embed>

@@ -1,5 +1,3 @@
-
-`style` 方法用于配制图层的样式，
 - 单通道 绘制结果由是单一的数值控制，如灰度图，数值对应的颜色可以通过表示配置 `rampColors` 色带控制。
 
 ```js
@@ -8,7 +6,7 @@ layer.style({
 });
 ```
 
-### 配置
+### options
 
 | style       | 类型               | 描述                                        | 默认值        |
 | ----------- | ------------------ | ------------------------------------------- | ------------- |
@@ -19,5 +17,4 @@ layer.style({
 | noDataValue | `number`           | 不会显示的值                                | `-9999999`    |
 | rampColors  | `IRampColors`      | 值域映射颜色的色带                          | `/`           |
 
-
-<embed src="@/docs/common/layer/raster/rampcolors.zh.md"></embed>
+<embed src="@/docs/api/common/layer/raster/rampcolors.zh.md"></embed>

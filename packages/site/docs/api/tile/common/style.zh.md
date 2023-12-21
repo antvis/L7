@@ -3,7 +3,7 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 瓦片图层的 `style` 参数和使用的图层相关。如矢量点图层，`style` 的参数就是对应点图层的参数。
 

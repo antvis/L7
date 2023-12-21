@@ -2,7 +2,7 @@
 title: iconfont 标注
 order: 7
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 点图层除了支持绘制文字标注之外还支持通过绘制文字的方式绘制建简单的图标，即绘制 `iconfont`。通过文字方式绘制的简单图标，我们可以 `color` 方法直接修改颜色。
 

@@ -2,7 +2,7 @@
 title: 经典热力图
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 
 热力图是地图可视化场景中十分常见的需求。在区域范围内数据具有的一定热度分级分布情况的聚合面状现象，常用于描述人群分布、密度和变化趋势等。

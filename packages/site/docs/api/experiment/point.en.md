@@ -3,7 +3,7 @@ title: 点图层
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Users do not need to do additional operations when using point layers in earth mode. L7 will automatically recognize the earth mode and perform related conversions.
 

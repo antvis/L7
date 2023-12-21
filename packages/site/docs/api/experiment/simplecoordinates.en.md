@@ -3,7 +3,7 @@ title: 简单坐标系（非地理坐标系）
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 We usually use longitude and latitude to describe geographical location, but in some special scenarios, we tend to use a simpler plane coordinate system (xyz) to describe the relative coordinates of a location. For this reason, L7 provides a simple coordinate system mode.
 

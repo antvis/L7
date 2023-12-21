@@ -2,7 +2,7 @@
 title: 快速 issue
 order: 5
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ### 为什么提 Issue
 

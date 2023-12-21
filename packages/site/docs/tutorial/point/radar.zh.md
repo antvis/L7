@@ -2,7 +2,7 @@
 title: 雷达图
 order: 4
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 点图层还支持一种特殊的图层类型：雷达图。
 

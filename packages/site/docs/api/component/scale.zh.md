@@ -37,12 +37,12 @@ scene.on('loaded', () => {
 | imperial       | 展示**英里**格式的比例尺             | `boolean` | `false` |
 | updateWhenIdle | 是否只在拖拽和缩放结束后才更新比例尺 | `boolean` | `false` |
 
-<embed src="@/docs/common/control/api.zh.md"></embed>
+<embed src="@/docs/api/common/control/api.zh.md"></embed>
 
 ## 方法
 
-<embed src="@/docs/common/control/method.zh.md"></embed>
+<embed src="@/docs/api/common/control/method.zh.md"></embed>
 
 ## 事件
 
-<embed src="@/docs/common/control/event.zh.md"></embed>
+<embed src="@/docs/api/common/control/event.zh.md"></embed>

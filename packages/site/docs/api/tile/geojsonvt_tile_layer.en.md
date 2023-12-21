@@ -3,7 +3,7 @@ title: GeoJsonVT 瓦片
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `L7`In addition to the tile services provided by the backend, vector tiles also provide`geojson-vt`The tile slicing scheme allows the front end to use vector tiles without back-end support.
 

@@ -3,7 +3,7 @@ title: L7Mini 网格热力
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## 案例
 <img width="200px" alt="网格热力" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*7VR6To9TiwsAAAAAAAAAAAAAARQnAQ'>

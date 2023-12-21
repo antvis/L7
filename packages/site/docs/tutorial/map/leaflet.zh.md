@@ -2,7 +2,7 @@
 title: Leaflet 地图
 order: 2
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `L7` 通过提供插件的形式实现了对 `Leaflet` 的支持，实现 `Leaflet` 地图和 `L7` 可视化图层的融合。
 

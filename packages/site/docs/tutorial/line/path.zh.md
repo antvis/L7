@@ -2,7 +2,7 @@
 title: 路径图
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 我们经常需要在地图上绘制诸如道路、行动路线、水系等常见的路径，可以将这些绘制线的统称为路径图，即用一组首尾不闭合的点坐标对来定位的线图层。
 
@@ -69,12 +69,12 @@ layer.size(2); // 绘制宽度为 2 的路径
 ```
 ### style
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/common/features/dash.zh.md"></embed>
+<embed src="@/docs/api/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/common/features/border.zh.md"></embed>
+<embed src="@/docs/api/common/features/border.zh.md"></embed>
 
-<embed src="@/docs/common/features/texture.zh.md"></embed>
+<embed src="@/docs/api/common/features/texture.zh.md"></embed>
 
-<embed src="@/docs/common/features/animate.zh.md"></embed>
+<embed src="@/docs/api/common/features/animate.zh.md"></embed>

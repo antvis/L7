@@ -3,7 +3,7 @@ title: Animate
 order: 7
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Click on the layer to turn it on`animate`The basis points after the method are`2D`Point is still`3D`Points support two different animations: water wave points and growth animation.
 Click on the layer to turn it on`animate`After the method, a special water wave pattern will be obtained. The layer is made up of rings that spread outward.

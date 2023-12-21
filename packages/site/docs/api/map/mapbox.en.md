@@ -3,7 +3,7 @@ title: MapBox 地图
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -54,4 +54,4 @@ const scene = new Scene({
 });
 ```
 
-<embed src="@/docs/common/map.en.md"></embed>
+<embed src="@/docs/api/common/map.en.md"></embed>

@@ -3,7 +3,7 @@ title: 腾讯地图
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -32,4 +32,4 @@ import { TencentMap } from '@antv/l7-maps';
   });
 ```
 
-<embed src="@/docs/common/map.en.md"></embed>
+<embed src="@/docs/api/common/map.en.md"></embed>

@@ -61,4 +61,4 @@ Layer element blending effects
 
 <description> *boolean* **optional** *default:*'false'</description>Layer events, by default only respond to the top layer, setting to true will allow events to be transmitted transparently
 
-<embed src="@/docs/common/layer/mask_options.en.md"></embed>
+<embed src="@/docs/api/common/layer/mask_options.en.md"></embed>

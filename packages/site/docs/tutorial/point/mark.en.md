@@ -3,7 +3,7 @@ title: Marker
 order: 8
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Points on the map can be customized`DOM`, we will customize`DOM`called`Marker`。
 

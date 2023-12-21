@@ -3,7 +3,7 @@ title: 开发者教程
 order: 5
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 这里的开发者，是指开发 L7 的开发者，为 L7 修复 bug、完善文档、升级功能、新功能开发等能力。
 

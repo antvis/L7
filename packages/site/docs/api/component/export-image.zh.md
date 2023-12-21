@@ -64,9 +64,9 @@ scene.on('loaded', () => {
 | imageType | 截图图片的格式                                     | `'png'` \| `'jpeg'`    |
 | onExport  | 截图成功后，用于接收图片 `Base64` 字符串的回调函数 | `(base64: string) => void` |
 
-<embed src="@/docs/common/control/btn-api.zh.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
 
-<embed src="@/docs/common/control/api.zh.md"></embed>
+<embed src="@/docs/api/common/control/api.zh.md"></embed>
 
 ## 方法
 
@@ -74,8 +74,8 @@ scene.on('loaded', () => {
 | -------- | ------------------------ | ----------------------- |
 | getImage | 获取截图的 Base64 字符串 | `() => Promise<string>` |
 
-<embed src="@/docs/common/control/method.zh.md"></embed>
+<embed src="@/docs/api/common/control/method.zh.md"></embed>
 
 ## 事件
 
-<embed src="@/docs/common/control/event.zh.md"></embed>
+<embed src="@/docs/api/common/control/event.zh.md"></embed>

@@ -3,7 +3,7 @@ title: Marker Layer
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 MarkerLayer 不同于 PointLayer 图层
 

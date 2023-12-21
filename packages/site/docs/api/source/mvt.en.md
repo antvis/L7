@@ -3,7 +3,7 @@ title: MVTTile 矢量瓦片
 order: 6
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 When L7 loads the vector tile map, it needs to be`source`Parse the tile service and configure the request parameters of the tile service.
 
@@ -44,7 +44,7 @@ callback parameters
 
 Customize the tile data acquisition method, trial business scenarios require data authentication, or special processing scenarios
 
-<embed src="@/docs/common/source/tile/method.en.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.en.md"></embed>
 
 ## Example
 

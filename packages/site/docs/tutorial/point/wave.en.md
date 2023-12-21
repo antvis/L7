@@ -3,7 +3,7 @@ title: wave
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 When the animation mode is turned on, the plane point layer is a special layer type: water wave point. The layer is made up of rings that spread outward.
 

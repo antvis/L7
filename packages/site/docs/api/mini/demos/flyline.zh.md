@@ -3,7 +3,7 @@ title: L7Mini 飞线
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## 案例
 <img width="200px" alt="飞线" src='https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*GyYeRp1uOIAAAAAAAAAAAAAAARQnAQ'>

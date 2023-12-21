@@ -34,11 +34,11 @@ scene.on('loaded', () => {
 | --------- | --------------------------------------------------------------------- | -------------------------------------------------- |
 | transform | Callback function to convert the longitude and latitude of the cursor | `(position: [number, number]) => [number, number]` |
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
@@ -46,4 +46,4 @@ scene.on('loaded', () => {
 | -------------- | --------------------------------------------------------------- | -------------------------------------- |
 | locationChange | Triggered when the longitude and latitude of the cursor changes | `(position: [number, number]) => void` |
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>

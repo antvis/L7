@@ -2,7 +2,7 @@
 title: 大圆航线
 order: 3
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 把地球看做一个球体，通过地面上任意两点和地心做一平面，平面与地球表面相交看到的圆周就是大圆。两点之间的大圆劣弧线是两点在地面上的最短距离。沿着这一段大圆弧线航行时的航线称为大圆航线。
 
@@ -83,12 +83,12 @@ layer.source(data, {
 为了绘制大圆弧线图，我们需要将 `shape` 的参数设置成 `greatcircle`。
 
 
-<embed src="@/docs/common/features/animate.zh.md"></embed>
+<embed src="@/docs/api/common/features/animate.zh.md"></embed>
 
 ### style
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/common/features/dash.zh.md"></embed>
+<embed src="@/docs/api/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/common/features/texture.zh.md"></embed>
+<embed src="@/docs/api/common/features/texture.zh.md"></embed>

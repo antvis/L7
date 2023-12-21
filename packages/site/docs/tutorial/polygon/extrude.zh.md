@@ -2,7 +2,7 @@
 title: 3D 填充图
 order: 1
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 
 几何体图层在地图上除了平面的填充图，还可以是有高度的几何体块。

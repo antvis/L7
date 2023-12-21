@@ -3,7 +3,7 @@ title: Animate
 order: 7
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 几何体图层在 `shape` 为 `water` 或 `ocean` 的时候会得到流动的水面，此时我们需要使用 `animate` 方法开启动画。
 
