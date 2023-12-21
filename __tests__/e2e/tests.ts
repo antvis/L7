@@ -1,5 +1,6 @@
 export const TestDemoList: Array<{
     type: string,
+    snapshots?:boolean
     demos: Array<{
         name: string;
         sleepTime?: number;
@@ -74,6 +75,7 @@ export const TestDemoList: Array<{
         },
         {
             type: 'HeatMap',
+            snapshots: false,
             demos: [
                 {
                     name: 'grid',

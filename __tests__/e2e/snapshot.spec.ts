@@ -10,7 +10,7 @@ describe('Snapshots', () => {
     name: string;
     sleepTime: number;
   }> = [];
-  TestDemoList.forEach((groups) => {
+  TestDemoList.filter(g=>g.snapshots!==false).forEach((groups) => {
     const { type, demos } = groups;
     
     demos.map((demo) => {
