@@ -192,10 +192,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
             }
             return featureData;
           })
-          .reduce((prev, cur) => {
-            prev.push(...cur);
-            return prev;
-          }, []);
+          .flat();
 
         // 更新底层 IAttribute 中包含的 IBuffer，使用 subdata
         attributeToUpdate.vertexAttribute.updateBuffer({
