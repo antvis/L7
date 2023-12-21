@@ -256,6 +256,13 @@ export class EarthMap extends Camera {
       this.frame = null;
     }
     this.renderTaskQueue.clear();
+    //销毁事件
+    this.handlers.destroy();
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('online', this.onWindowOnline, false);
+      window.removeEventListener('resize', this.onWindowResize, false);
+      window.removeEventListener('orientationchange', this.onWindowResize, false);
+    }
   }
 
   public requestRenderFrame(cb: CallBack): TaskID {
