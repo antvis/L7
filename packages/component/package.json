@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-component",
-  "version": "2.20.8",
+  "version": "2.20.9",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,8 +26,8 @@
   "author": "lzxue",
   "license": "ISC",
   "dependencies": {
-    "@antv/l7-core": "2.20.8",
-    "@antv/l7-utils": "2.20.8",
+    "@antv/l7-core": "2.20.9",
+    "@antv/l7-utils": "2.20.9",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "inversify": "^5.0.1",
@@ -35,8 +35,8 @@
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
-    "@antv/l7-layers": "2.20.8",
-    "@antv/l7-test-utils": "2.20.8",
+    "@antv/l7-layers": "2.20.9",
+    "@antv/l7-test-utils": "2.20.9",
     "gcoord": "^0.3.2",
     "less": "^4.1.3"
   },
