@@ -338,20 +338,12 @@ export default defineConfig({
         order: 4,
       },
       {
-        slug: 'tutorial/demo',
-        title: {
-          zh: '教程示例',
-          en: 'Tutorial demo',
-        },
-        order: 5,
-      },
-      {
         slug: 'tutorial/point',
         title: {
           zh: '点图层 PointLayer',
           en: 'PointLayer',
         },
-        order: 6,
+        order: 5,
       },
       {
         slug: 'tutorial/line',
@@ -359,7 +351,7 @@ export default defineConfig({
           zh: '线图层 LineLayer',
           en: 'LineLayer',
         },
-        order: 7,
+        order: 6,
       },
       {
         slug: 'tutorial/polygon',
@@ -367,7 +359,7 @@ export default defineConfig({
           zh: '面图层 PolygonLayer',
           en: 'PolygonLayer',
         },
-        order: 8,
+        order: 7,
       },
       {
         slug: 'tutorial/heatmap',
@@ -375,7 +367,7 @@ export default defineConfig({
           zh: '热力图层 HeatmapLayer',
           en: 'HeatmapLayer',
         },
-        order: 9,
+        order: 8,
       },
       {
         slug: 'tutorial/tile',
