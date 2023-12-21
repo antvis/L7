@@ -100,6 +100,8 @@ export interface ILayerModel {
   initModels(): Promise<IModel[]>;
   needUpdate(): Promise<boolean>;
   clearModels(refresh?: boolean): void;
+
+  prerender(): void;
   render(renderOptions?: Partial<IRenderOptions>): void;
 
   // canvasLayer
@@ -499,6 +501,7 @@ export interface ILayer {
     passes?: Array<string | [string, { [key: string]: unknown }]>,
   ): ILayer;
   renderLayers(): void;
+  prerender(): void;
   render(options?: Partial<IRenderOptions>): ILayer;
 
   renderMultiPass(): any;

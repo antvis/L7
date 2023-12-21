@@ -141,6 +141,11 @@ export default class LayerService
     this.alreadyInRendering = true;
     this.clear();
 
+    for (const layer of this.layerList) {
+      layer.prerender();
+    }
+
+    // The main render pass, all layers in a whole.
     this.renderService.beginFrame();
     for (const layer of this.layerList) {
       const { enableMask } = layer.getLayerConfig();
@@ -152,7 +157,7 @@ export default class LayerService
         // multiPassRender 不是同步渲染完成的
         await layer.renderMultiPass();
       } else {
-        await layer.render();
+        layer.render();
       }
     }
     this.renderService.endFrame();

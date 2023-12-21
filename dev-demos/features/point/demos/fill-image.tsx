@@ -62,7 +62,7 @@ export default () => {
       )
       .shape('marker')
       .size(36)
-      // .active(true)
+      .active(true)
       .style({
         rotation: 90,
       });
@@ -70,7 +70,7 @@ export default () => {
     scene.on('loaded', () => {
       scene.addLayer(pointLayer);
       scene.addLayer(pointLayer2);
-      scene.startAnimate();
+      // scene.startAnimate();
     });
   }, []);
   return (

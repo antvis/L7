@@ -1,15 +1,15 @@
 // @ts-ignore
-import { Scene, HeatmapLayer } from '@antv/l7';
+import { HeatmapLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-     
-      map: new GaodeMap({
+      // renderer: process.env.renderer,
+      map: new (process.env.CI ? Map : GaodeMap)({
         center: [120.165, 30.26],
         pitch: 0,
         zoom: 2,

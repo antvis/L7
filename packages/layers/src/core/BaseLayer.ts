@@ -779,6 +779,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.rendering = false;
   }
 
+  prerender() {}
+
   public render(options: Partial<IRenderOptions> = {}): ILayer {
     if (this.tileLayer) {
       // 瓦片图层执行单独的 render 渲染队列

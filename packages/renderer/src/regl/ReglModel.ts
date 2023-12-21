@@ -10,11 +10,9 @@ import type {
   IModel,
   IModelDrawOptions,
   IModelInitializationOptions,
-  IUniform} from '@antv/l7-core';
-import {
-  gl,
-  removeDuplicateUniforms,
+  IUniform,
 } from '@antv/l7-core';
+import { gl, removeDuplicateUniforms } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import type regl from 'regl';
 import {
@@ -94,9 +92,8 @@ export default class ReglModel implements IModel {
 
     const vert = removeDuplicateUniforms(
       preprocessShader_GLSL(vendorInfo, 'vert', vs, null, false),
-    )
+    );
 
-    
     const drawParams: regl.DrawConfig = {
       attributes: reglAttributes,
       frag,

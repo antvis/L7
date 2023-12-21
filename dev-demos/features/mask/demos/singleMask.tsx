@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PointLayer, Scene } from '@antv/l7';
+import { PointLayer, PolygonLayer, Scene } from '@antv/l7';
 // @ts-ignore
 import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
@@ -43,15 +43,15 @@ export default () => {
     };
 
     scene.on('loaded', () => {
-      // const polygonLayer = new PolygonLayer()
-      //   .source(maskData)
-      //   .shape('fill')
-      //   .color('#f00')
-      //   .style({ opacity: 0.5 });
+      const polygonLayer = new PolygonLayer()
+        .source(maskData)
+        .shape('fill')
+        .color('#f00')
+        .style({ opacity: 0.5 });
 
       let point1 = new PointLayer({
         zIndex: 1,
-        // maskLayers: [polygonLayer],
+        maskLayers: [polygonLayer],
       })
         .source(
           [
@@ -77,7 +77,7 @@ export default () => {
         .active(true);
 
       let point2 = new PointLayer({
-        // maskLayers: [polygonLayer],
+        maskLayers: [polygonLayer],
       })
         .source(
           [
@@ -101,7 +101,7 @@ export default () => {
         .active(true);
 
       scene.addLayer(point1);
-      // scene.addLayer(polygonLayer);
+      scene.addLayer(polygonLayer);
       scene.addLayer(point2);
       // scene.startAnimate();
     });
