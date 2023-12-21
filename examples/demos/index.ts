@@ -7,8 +7,13 @@ import * as HeatmapDemos from './heatmap'
 import * as TileDemos from './tile'
 import * as MaskDemos from './mask'
 import * as GalleryDemos from './gallery'
+import * as BugFix from './bugfix'
 
 export default [{
+    name: 'BugFix',
+    demos: BugFix
+  },
+    {
     name: 'Point',
     demos: PointDemos
 },
