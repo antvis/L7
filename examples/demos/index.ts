@@ -5,6 +5,7 @@ import * as PolygonDemos from './polygon'
 import * as RasterDemos from './raster'
 import * as HeatmapDemos from './heatmap'
 import * as TileDemos from './tile'
+import * as MaskDemos from './mask'
 import * as GalleryDemos from './gallery'
 
 export default [{
@@ -30,6 +31,10 @@ export default [{
 {
     name: 'Tile',
     demos: TileDemos
+},
+{
+    name: 'Mask',
+    demos: MaskDemos
 },
 {
     name: 'WebGPU',

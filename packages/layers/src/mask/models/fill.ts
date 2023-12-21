@@ -1,19 +1,33 @@
 import type { IModel } from '@antv/l7-core';
-import { lodashUtil, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import type { IMaskLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import mask_frag from '../../shader/minify_frag.glsl';
 import mask_vert from '../shaders/mask_vert.glsl';
-const { isNumber } = lodashUtil;
 export default class MaskModel extends BaseModel {
   public getUninforms() {
-    const { opacity = 1, color = '#000' } =
-      this.layer.getLayerConfig() as IMaskLayerStyleOptions;
+    const commoninfo = this.getCommonUniformsInfo();
+    const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
+    this.updateStyleUnifoms();
     return {
-      u_opacity: isNumber(opacity) ? opacity : 0.0,
-      u_color: rgb2arr(color),
+      ...commoninfo.uniformsOption,
+      ...attributeInfo.uniformsOption,
     };
+  }
+
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
+    const { opacity = 1, color = '#000' } = this.layer.getLayerConfig() as any;
+    const commonOptions = {
+      u_color: rgb2arr(color),
+      u_opacity: opacity || 1,
+    };
+
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -21,6 +35,7 @@ export default class MaskModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
       moduleName: 'mask',
       vertexShader: mask_vert,

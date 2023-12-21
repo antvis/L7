@@ -5,19 +5,11 @@ import type {
   IModel,
   IModelUniform,
   IRenderOptions,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl,
-  TextureUsage,
+  ITexture2D,
 } from '@antv/l7-core';
-import type {
-  IColorRamp} from '@antv/l7-utils';
-import {
-  generateColorRamp,
-  getCullFace,
-  lodashUtil,
-} from '@antv/l7-utils';
+import { AttributeType, TextureUsage, gl } from '@antv/l7-core';
+import type { IColorRamp } from '@antv/l7-utils';
+import { generateColorRamp, getCullFace, lodashUtil } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
@@ -49,10 +41,8 @@ export default class HeatMapModel extends BaseModel {
   private colorModelUniformBuffer: IBuffer[] = [];
   private heat3DModelUniformBuffer: IBuffer[] = [];
 
-  public render(options: Partial<IRenderOptions>) {
+  public prerender() {
     const { clear, useFramebuffer } = this.rendererService;
-    const { rampColors } =
-      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     useFramebuffer(this.heatmapFramerBuffer, () => {
       clear({
         color: [0, 0, 0, 0],
@@ -62,6 +52,12 @@ export default class HeatMapModel extends BaseModel {
       });
       this.drawIntensityMode(); // 密度图
     });
+  }
+
+  public render(options: Partial<IRenderOptions>) {
+    const { rampColors } =
+      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+
     if (!isEqual(this.preRampColors, rampColors)) {
       this.updateColorTexture();
     }
@@ -412,7 +408,6 @@ export default class HeatMapModel extends BaseModel {
       }),
     });
   }
-
 
   private updateColorTexture() {
     const { createTexture2D } = this.rendererService;

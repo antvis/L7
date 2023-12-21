@@ -1,7 +1,7 @@
 // @ts-ignore
-import { Scene, RasterLayer,PolygonLayer,PointLayer } from '@antv/l7';
+import { PointLayer, RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 import * as GeoTIFF from 'geotiff';
@@ -28,11 +28,11 @@ async function getTiffData() {
 
 export default () => {
   // @ts-ignore
-  useEffect( async () => {
+  useEffect(async () => {
     const scene = new Scene({
       id: 'map',
-     
-      map: new GaodeMap({
+      renderer: process.env.renderer,
+      map: new (process.env.CI ? Map : GaodeMap)({
         center: [120.165, 30.26],
         pitch: 0,
         zoom: 2,
@@ -47,109 +47,93 @@ export default () => {
     const tiffdata = await getTiffData();
 
     const maskPointData = {
-        "type": "FeatureCollection",
-        "features": [
-          {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "coordinates": [
-                110.64070700180974,
-                38.725170221383365
-              ],
-              "type": "Point"
-            }
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            coordinates: [110.64070700180974, 38.725170221383365],
+            type: 'Point',
           },
-          {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "coordinates": [
-                117.05859241946035,
-                41.44428218345186
-              ],
-              "type": "Point"
-            }
+        },
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            coordinates: [117.05859241946035, 41.44428218345186],
+            type: 'Point',
           },
-          {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "coordinates": [
-                114.98363698367831,
-                37.113784885036424
-              ],
-              "type": "Point"
-            }
+        },
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            coordinates: [114.98363698367831, 37.113784885036424],
+            type: 'Point',
           },
-          {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "coordinates": [
-                118.77967948635097,
-                37.47208097958061
-              ],
-              "type": "Point"
-            }
+        },
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            coordinates: [118.77967948635097, 37.47208097958061],
+            type: 'Point',
           },
-          {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "coordinates": [
-                113.729012766695,
-                39.22535473120385
-              ],
-              "type": "Point"
-            }
-          }
-        ]
-      }
+        },
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            coordinates: [113.729012766695, 39.22535473120385],
+            type: 'Point',
+          },
+        },
+      ],
+    };
 
-
-        const maskPoint = new PointLayer({
-          visible:false
-        }).source(maskPointData).shape('circle').size(100000).color('#f00').style({
-            opacity:0.5,
-            unit:'meter',
-        });
-        const layer = new RasterLayer({
-           maskLayers: [maskPoint]
-           });
-        const mindata = -0;
-        const maxdata = 8000;
-        layer
-          .source(tiffdata.data, {
-            parser: {
-              type: 'raster',
-              width: tiffdata.width,
-              height: tiffdata.height,
-              extent: [
-                73.482190241,
-                3.82501784112,
-                135.106618732,
-                57.6300459963,
-              ],
-            },
-          })
-          .style({
-            opacity: 0.8,
-            domain: [mindata, maxdata],
-            clampLow: true,
-            rampColors: {
-              colors: [
-                'rgb(166,97,26)',
-                'rgb(223,194,125)',
-                'rgb(245,245,245)',
-                'rgb(128,205,193)',
-                'rgb(1,133,113)',
-              ],
-              positions: [0, 0.25, 0.5, 0.75, 1.0],
-            },
-          });
-        scene.addLayer(layer);
-        scene.addLayer(maskPoint);
+    const maskPoint = new PointLayer({
+      visible: false,
+    })
+      .source(maskPointData)
+      .shape('circle')
+      .size(100000)
+      .color('#f00')
+      .style({
+        opacity: 0.5,
+        unit: 'meter',
+      });
+    const layer = new RasterLayer({
+      maskLayers: [maskPoint],
+    });
+    const mindata = -0;
+    const maxdata = 8000;
+    layer
+      .source(tiffdata.data, {
+        parser: {
+          type: 'raster',
+          width: tiffdata.width,
+          height: tiffdata.height,
+          extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+        },
+      })
+      .style({
+        opacity: 0.8,
+        domain: [mindata, maxdata],
+        clampLow: true,
+        rampColors: {
+          colors: [
+            'rgb(166,97,26)',
+            'rgb(223,194,125)',
+            'rgb(245,245,245)',
+            'rgb(128,205,193)',
+            'rgb(1,133,113)',
+          ],
+          positions: [0, 0.25, 0.5, 0.75, 1.0],
+        },
+      });
+    scene.addLayer(layer);
+    scene.addLayer(maskPoint);
   }, []);
   return (
     <div

@@ -1,0 +1,1 @@
+export { MapRender as single } from "./single";

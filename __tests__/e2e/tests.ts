@@ -100,6 +100,12 @@ export const TestDemoList: Array<{
             }
         ]
         },{
+            type:'Mask',
+            demos:[{
+                name:'single'
+            }]
+        },
+        {
             type: 'Gallery',
             demos: [{
                 name: "fujian",

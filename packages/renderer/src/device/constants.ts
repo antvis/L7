@@ -7,6 +7,7 @@ import {
   CullMode,
   Format,
   PrimitiveTopology,
+  StencilOp,
 } from '@antv/g-device-api';
 import { gl } from '@antv/l7-core';
 import type { TypedArray } from './utils/typedarray';
@@ -107,6 +108,32 @@ export const blendFuncMap: {
   [gl.CONSTANT_ALPHA]: BlendFactor.CONST,
   [gl.ONE_MINUS_CONSTANT_ALPHA]: BlendFactor.ONE_MINUS_CONSTANT,
   [gl.SRC_ALPHA_SATURATE]: BlendFactor.SRC_ALPHA_SATURATE,
+};
+
+export const stencilOpMap: {
+  [key: string]: StencilOp;
+} = {
+  [gl.REPLACE]: StencilOp.REPLACE,
+  [gl.KEEP]: StencilOp.KEEP,
+  [gl.ZERO]: StencilOp.ZERO,
+  [gl.INVERT]: StencilOp.INVERT,
+  [gl.INCR]: StencilOp.INCREMENT_CLAMP,
+  [gl.DECR]: StencilOp.DECREMENT_CLAMP,
+  [gl.INCR_WRAP]: StencilOp.INCREMENT_WRAP,
+  [gl.DECR_WRAP]: StencilOp.DECREMENT_WRAP,
+};
+
+export const stencilFuncMap: {
+  [key: string]: CompareFunction;
+} = {
+  [gl.ALWAYS]: CompareFunction.ALWAYS,
+  [gl.EQUAL]: CompareFunction.EQUAL,
+  [gl.GEQUAL]: CompareFunction.GEQUAL,
+  [gl.GREATER]: CompareFunction.GREATER,
+  [gl.LEQUAL]: CompareFunction.LEQUAL,
+  [gl.LESS]: CompareFunction.LESS,
+  [gl.NEVER]: CompareFunction.NEVER,
+  [gl.NOTEQUAL]: CompareFunction.NOTEQUAL,
 };
 
 // export const filterMap: {

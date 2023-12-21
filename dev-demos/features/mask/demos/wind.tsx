@@ -1,15 +1,15 @@
 // @ts-ignore
-import { Scene, WindLayer,PolygonLayer } from '@antv/l7';
+import { PolygonLayer, Scene, WindLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map',
-     
-      map: new GaodeMap({
+      renderer: process.env.renderer,
+      map: new (process.env.CI ? Map : GaodeMap)({
         center: [105.732421875, 32.24997445586331],
         pitch: 0,
         style: 'light',
@@ -49,7 +49,11 @@ export default () => {
     scene.on('loaded', () => {
       const polygonLayer = new PolygonLayer({
         visible: false,
-      }).source(maskData).shape('fill').color('#f00').style({opacity:0.3});
+      })
+        .source(maskData)
+        .shape('fill')
+        .color('#f00')
+        .style({ opacity: 0.3 });
       const layer = new WindLayer({
         maskLayers: [polygonLayer],
         zIndex: 2,
