@@ -76,13 +76,16 @@ export const TestDemoList: Array<{
             type: 'HeatMap',
             demos: [
                 {
-                    name: 'grid'
+                    name: 'grid',
+                    sleepTime: 2
                 },
                 {
-                    name: 'hexagon'
+                    name: 'hexagon',
+                    sleepTime: 2
                 },
                 {
-                    name: 'normal'
+                    name: 'normal',
+                    sleepTime: 2
                 }
             ]
         },
@@ -91,7 +94,11 @@ export const TestDemoList: Array<{
             demos: [{
                 name: "tiff",
                 sleepTime: 2
-            }]
+            },
+            {
+                name: "image",
+            }
+        ]
         },{
             type: 'Gallery',
             demos: [{

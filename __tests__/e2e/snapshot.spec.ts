@@ -3,7 +3,7 @@ import { sleep } from './utils/sleep';
 import './utils/useSnapshotMatchers';
 import { TestDemoList } from './tests'
 
-
+console.log('TestDemoList', TestDemoList)
 describe('Snapshots', () => {
   const demosFlatList: Array<{
     type: string;
@@ -24,7 +24,7 @@ describe('Snapshots', () => {
 
     })
   })
-  demosFlatList.slice(0,5).map((demo) => {
+  demosFlatList.map((demo) => {
     const { name, sleepTime = 1.5,type } = demo;
     const key = `${type}_${name}`;
 

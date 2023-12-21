@@ -15,6 +15,7 @@ module.exports = async function (_globalConfig, _projectConfig) {
     const testServerProcess = spawn('npm', ['run', 'dev:ci'], {
       detached: true,
     });
+    console.log(`Starting test server with PID ${testServerProcess.pid}`);
 
     testServerProcess.on('error', (err) => {
       console.log('Failed to start subprocess.', err);
@@ -23,10 +24,7 @@ module.exports = async function (_globalConfig, _projectConfig) {
 
     // Make sure dumi devserver already started.
     testServerProcess.stdout.on('data', (data) => {
-      if (data.toString().indexOf('Compiled successfully') > -1) {
-        console.log(`\nTest server running with PID ${testServerProcess.pid}`);
-        resolve(testServerProcess);
-      }
+      resolve(testServerProcess);
     });
   });
   // store the PID so we can teardown it later.
