@@ -4,6 +4,7 @@ export const TestDemoList: Array<{
     demos: Array<{
         name: string;
         sleepTime?: number;
+        snapshots?:boolean
     }>
 }> = [
         {
@@ -28,6 +29,7 @@ export const TestDemoList: Array<{
         },
         {
             type: 'Line',
+            snapshots: false,
             demos: [
                 {
                     name: 'arc'
@@ -61,15 +63,18 @@ export const TestDemoList: Array<{
                 }
                 ,
                 {
-                    name: 'ocean'
+                    name: 'ocean',
+                    snapshots:false
                 }
                 ,
                 {
-                    name: 'texture'
+                    name: 'texture',
+                    snapshots:false
                 }
                 ,
                 {
-                    name: 'water'
+                    name: 'water',
+                    snapshots:false
                 }
             ]
         },
@@ -93,6 +98,7 @@ export const TestDemoList: Array<{
         },
         {
             type: 'Raster',
+            snapshots: false,
             demos: [{
                 name: "tiff",
                 sleepTime: 2

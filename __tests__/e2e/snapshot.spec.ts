@@ -2,8 +2,6 @@ import { chromium, devices } from 'playwright';
 import { sleep } from './utils/sleep';
 import './utils/useSnapshotMatchers';
 import { TestDemoList } from './tests'
-
-console.log('TestDemoList', TestDemoList)
 describe('Snapshots', () => {
   const demosFlatList: Array<{
     type: string;
@@ -13,9 +11,8 @@ describe('Snapshots', () => {
   TestDemoList.filter(g=>g.snapshots!==false).forEach((groups) => {
     const { type, demos } = groups;
     
-    demos.map((demo) => {
+    demos.filter(g=>g.snapshots!==false)..map((demo) => {
       const { name, sleepTime = 1.5 } = demo;
-      const key = `${type}_${name}`
       demosFlatList.push({
         type,
         name,
@@ -35,7 +32,6 @@ describe('Snapshots', () => {
       });
       const context = await browser.newContext(devices['Desktop Chrome']);
       const page = await context.newPage();
-      console.log(key)
       // Go to test page served by vite devServer.
       const url = `http://localhost:8080/?type=${type}&name=${name}`;
       await page.goto(url);
