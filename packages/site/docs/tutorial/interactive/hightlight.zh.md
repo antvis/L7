@@ -2,7 +2,7 @@
 title: 图层高亮
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 地理可视化除了数据展示，还需要用户交互，用户交互一般分为两种。
 

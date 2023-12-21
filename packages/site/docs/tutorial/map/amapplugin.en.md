@@ -3,7 +3,7 @@ title: Amap Plugin
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 When we use Gaode Map as the map base map, we can use the plug-in provided by Gaode Map to achieve our needs.
 

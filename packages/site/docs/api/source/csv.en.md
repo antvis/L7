@@ -3,7 +3,7 @@ title: CSV
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 L7 supports CSV comma delimited CSV data loading.
 

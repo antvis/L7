@@ -3,7 +3,7 @@ title: Chart
 order: 8
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 We are customizing`Marker`When replacing point layer nodes, you can insert a custom chart, such as using a two-dimensional statistical chart instead of point symbols. Commonly used extended graphics in composite chart maps include bar charts, curve charts, rose charts, etc.
 

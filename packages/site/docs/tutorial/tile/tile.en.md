@@ -3,7 +3,7 @@ title: Tile
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Compared with ordinary layers, tile layers have many things to pay attention to when using them.
 

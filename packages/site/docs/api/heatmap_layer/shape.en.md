@@ -3,7 +3,7 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `shape`The method is used to specify the type of heat drawn by the heat layer. Now it supports three types: classic heat, cellular heat, and grid heat.
 

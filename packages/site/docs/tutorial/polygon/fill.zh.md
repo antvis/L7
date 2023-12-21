@@ -2,7 +2,7 @@
 title: 填充图
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 几何体图层在地图上最简单的表现就是填充图，即使用指定的颜色填充指定区域。
 

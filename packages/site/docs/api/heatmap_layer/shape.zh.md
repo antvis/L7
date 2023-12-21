@@ -3,7 +3,7 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `shape` 方法用于指定热力图层绘制热力的类型，现在支持经典热力、蜂窝热力、网格热力三种类型。
 

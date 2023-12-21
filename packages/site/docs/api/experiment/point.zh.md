@@ -3,7 +3,7 @@ title: 点图层
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 用户在地球模式下使用点图层无需做额外的操作，L7 会自动识别地球模式并相关的转化
 

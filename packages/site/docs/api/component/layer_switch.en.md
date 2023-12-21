@@ -41,20 +41,20 @@ scene.on('loaded', () => {
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
 | layers | need to be controlled`layer`Array, supports passing in layer example or layer id. If not passed, all layers in the current L7 will be read by default. | `Array<ILayer \| string>` |
 
-<embed src="@/docs/common/control/popper-api.en.md"></embed>
+<embed src="@/docs/api/common/control/popper-api.en.md"></embed>
 
-<embed src="@/docs/common/control/btn-api.en.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>
 
-<embed src="@/docs/common/control/popper-event.en.md"></embed>
+<embed src="@/docs/api/common/control/popper-event.en.md"></embed>
 
-<embed src="@/docs/common/control/select-event.en.md"></embed>
+<embed src="@/docs/api/common/control/select-event.en.md"></embed>

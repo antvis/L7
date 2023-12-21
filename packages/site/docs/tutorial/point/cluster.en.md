@@ -3,7 +3,7 @@ title: cluster
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Aggregation graphs are usually used to describe the aggregation of data geographically. Similar to heat maps, they can be used to represent the concentration of data points.
 

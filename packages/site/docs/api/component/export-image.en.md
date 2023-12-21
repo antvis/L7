@@ -64,9 +64,9 @@ scene.on('loaded', () => {
 | imageType | Screenshot image format                                                                                       | `'png'`\|`'jpeg'`          |
 | onExport  | After the screenshot is successfully taken, it is used to receive the picture`Base64`String callback function | `(base64: string) => void` |
 
-<embed src="@/docs/common/control/btn-api.zh.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
 
-<embed src="@/docs/common/control/api.zh.md"></embed>
+<embed src="@/docs/api/common/control/api.zh.md"></embed>
 
 ## method
 
@@ -74,8 +74,8 @@ scene.on('loaded', () => {
 | -------- | --------------------------------------- | ----------------------- |
 | getImage | Get the Base64 string of the screenshot | `() => Promise<string>` |
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>

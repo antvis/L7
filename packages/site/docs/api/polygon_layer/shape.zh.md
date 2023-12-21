@@ -3,7 +3,7 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `shape` 方法用于指定面图层绘制图形的类型，如填充图，填充线，挤出集合体等。
 

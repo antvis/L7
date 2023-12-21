@@ -3,7 +3,7 @@ title: threejs 引擎兼容
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 

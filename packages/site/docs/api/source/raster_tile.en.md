@@ -3,7 +3,7 @@ title: RasterTile 栅格瓦片
 order: 7
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 When L7 loads the raster tile map, it needs to be`source`Parse the tile service and configure the request parameters of the tile service.
 
@@ -141,4 +141,4 @@ const rasterSource = new Source(
 );
 ```
 
-<embed src="@/docs/common/source/tile/method.en.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.en.md"></embed>

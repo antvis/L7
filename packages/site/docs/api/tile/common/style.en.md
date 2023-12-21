@@ -3,7 +3,7 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 of tile layer`style`Parameters depend on the layer used. Such as vector point layer,`style`The parameters of are the parameters of the corresponding point layer.
 

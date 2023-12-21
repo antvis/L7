@@ -37,7 +37,7 @@ scene.on('loaded', () => {
 | zoomOutTitle | shrink button`title`Attributes                                                          | `string`            |
 | showZoom     | Whether to display the current real-time zoom value of the map, rounded down by default | `boolean`           |
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
@@ -46,8 +46,8 @@ scene.on('loaded', () => {
 | zoomIn  | Enlarge map    | `() => void` |
 | zoomOut | Reduce basemap | `() => void` |
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>

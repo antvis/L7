@@ -3,7 +3,7 @@ title: Source
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## 简介
 
@@ -271,7 +271,7 @@ source.getFeatureId('name', '张三');
 ```javascript
 layer.setData(data);
 ```
-<embed src="@/docs/common/source/tile/method.zh.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>
 
 ### 数据类型
 

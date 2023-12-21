@@ -2,7 +2,7 @@
 title: 使用无底图模式
 order: 2
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 很多情况下我们只是做些简单的地理可视化，不需要加载地图，本教程就是告诉大家如果在L7中使用无底图模式。
 

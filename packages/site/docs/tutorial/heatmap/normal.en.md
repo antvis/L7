@@ -3,7 +3,7 @@ title: heatmap
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Heat maps are a very common requirement in map visualization scenarios. The aggregate surface phenomenon of a certain degree of heat distribution within a region is often used to describe crowd distribution, density, and changing trends.
 

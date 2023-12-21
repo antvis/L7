@@ -2,7 +2,7 @@
 title: water fill
 order: 2
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 
 几何体图层支持特殊的表现形式，水面图层。

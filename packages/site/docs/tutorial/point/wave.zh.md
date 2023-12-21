@@ -2,7 +2,7 @@
 title: 水波图
 order: 3
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 平面点图层在开启动画模式的情况下，是一种特殊的图层类型：水波点。图层由一圈圈向外扩散的圆环构成。
 

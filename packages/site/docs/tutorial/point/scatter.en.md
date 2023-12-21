@@ -3,7 +3,7 @@ title: Scatter
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 A scatter plot places equal-sized dots over a geographical area to represent the spatial layout or distribution of data over a geographical area.
 

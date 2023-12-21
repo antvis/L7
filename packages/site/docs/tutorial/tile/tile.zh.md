@@ -2,7 +2,7 @@
 title: 瓦片
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 瓦片图层相比于普通的图层而言，在使用上有许多需要注意的地方。
 ### option

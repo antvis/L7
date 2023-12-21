@@ -3,7 +3,7 @@ title: Simple Line
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 The simple line layer provides users with a better choice for large data volumes and can easily render line segments with hundreds of thousands of nodes. However, compared with ordinary line layers, the simple line layer is also lost. some other abilities.
 
@@ -33,6 +33,6 @@ const layer = new LineLayer()
 
 In order to draw a simple line we need to`shape`The parameters are set to`simple`。
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
 🌟 Simple line layer does not support animation and textures

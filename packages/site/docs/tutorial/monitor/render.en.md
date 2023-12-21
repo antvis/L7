@@ -3,7 +3,7 @@ title: Render
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 In map applications, rendering big data geographical data is a very common requirement. In order to ensure the smoothness of the application, it is necessary to pursue the ultimate rendering performance. For this reason, monitoring engine rendering content is of practical significance for optimizing performance and building map visualization application performance indicators. significance.
 

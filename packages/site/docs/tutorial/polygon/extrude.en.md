@@ -3,7 +3,7 @@ title: 3D Extrude
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 In addition to the flat filled map on the map, the geometry layer can also be a geometric block with height.
 

@@ -29,7 +29,7 @@ scene.on('loaded', () => {
 
 ## 配置
 
-<embed src="@/docs/common/control/btn-api.zh.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
 
 | 名称        | 说明                              | 类型                              |
 | ----------- | --------------------------------- | --------------------------------- |
@@ -37,7 +37,7 @@ scene.on('loaded', () => {
 | exitBtnText | 退出全屏按钮的文本                | `string`                          |
 | exitTitle   | 退出全屏按钮的文本的 `title` 属性 | `string`                          |
 
-<embed src="@/docs/common/control/api.zh.md"></embed>
+<embed src="@/docs/api/common/control/api.zh.md"></embed>
 
 ## 方法
 
@@ -45,7 +45,7 @@ scene.on('loaded', () => {
 | ---------------- | ------------------------------- | ------------ |
 | toggleFullscreen | 进入/退出全屏地图部分的全屏状态 | `() => void` |
 
-<embed src="@/docs/common/control/method.zh.md"></embed>
+<embed src="@/docs/api/common/control/method.zh.md"></embed>
 
 ## 事件
 
@@ -53,4 +53,4 @@ scene.on('loaded', () => {
 | ---------------- | ------------------------ | --------------------------------- |
 | fullscreenChange | 当全屏状态发生变化时触发 | `(isFullscreen: boolean) => void` |
 
-<embed src="@/docs/common/control/event.zh.md"></embed>
+<embed src="@/docs/api/common/control/event.zh.md"></embed>

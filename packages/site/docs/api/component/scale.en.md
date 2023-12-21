@@ -37,12 +37,12 @@ scene.on('loaded', () => {
 | imperial       | exhibit**mile**format scale                                              | `boolean` | `false`       |
 | updateWhenIdle | Whether to only update the scale after dragging and zooming are complete | `boolean` | `false`       |
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>

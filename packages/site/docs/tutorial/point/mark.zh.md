@@ -2,7 +2,7 @@
 title: Marker
 order: 8
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 地图上的点可以是自定义的 `DOM`，我们将自定的 `DOM` 称为 `Marker` 。
 

@@ -1,7 +1,5 @@
 ------
 
-`style`Method is used to configure the style of the layer,
-
 * The single-channel drawing result is controlled by a single numerical value, such as a grayscale image. The color corresponding to the numerical value can be configured by expressing`rampColors`Ribbon control.
 
 ```js
@@ -10,7 +8,7 @@ layer.style({
 });
 ```
 
-### Configuration
+### options
 
 | style       | type               | describe                                                    | default value |
 | ----------- | ------------------ | ----------------------------------------------------------- | ------------- |
@@ -21,4 +19,4 @@ layer.style({
 | noDataValue | `number`           | Values ​​that will not be displayed                         | `-9999999`    |
 | rampColors  | `IRampColors`      | The color ramp for the range mapping color                  | `/`           |
 
-<embed src="@/docs/common/layer/raster/rampcolors.en.md"></embed>
+<embed src="@/docs/api/common/layer/raster/rampcolors.en.md"></embed>

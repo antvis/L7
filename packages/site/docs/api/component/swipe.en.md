@@ -46,7 +46,7 @@ scene.on('loaded', () => {
 
 ## Method
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 | name         | illustrate             | type                                                             |
 | ------------ | ---------------------- | ---------------------------------------------------------------- |
@@ -56,7 +56,7 @@ scene.on('loaded', () => {
 
 ## Event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>
 
 | name   | illustrate         | type                                                |
 | ------ | ------------------ | --------------------------------------------------- |

@@ -3,7 +3,7 @@ title: FAQ
 order: 16
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ### Inconsistent versions of each dependent package of L7 in the project lead to error reporting
 

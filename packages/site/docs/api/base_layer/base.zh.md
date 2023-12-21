@@ -3,7 +3,7 @@ title: 图层基类 BaseLayer
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## 简介
 
@@ -27,4 +27,4 @@ const layer = new BaseLayer(option) // option - 传入构造函数的参数对�
 scene.addLayer(layer);
 ```
 
-<embed src="@/docs/common/layer/base.zh.md"></embed>
+<embed src="@/docs/api/common/layer/base.zh.md"></embed>

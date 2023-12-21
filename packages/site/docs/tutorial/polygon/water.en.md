@@ -3,7 +3,7 @@ title: 水面图层
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Geometry layers support a special representation, the water surface layer.
 

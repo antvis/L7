@@ -47,20 +47,20 @@ export type IControlOptionItem = {
 };
 ```
 
-<embed src="@/docs/common/control/popper-api.zh.md"></embed>
+<embed src="@/docs/api/common/control/popper-api.zh.md"></embed>
 
-<embed src="@/docs/common/control/btn-api.en.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>
 
-<embed src="@/docs/common/control/popper-event.en.md"></embed>
+<embed src="@/docs/api/common/control/popper-event.en.md"></embed>
 
-<embed src="@/docs/common/control/select-event.en.md"></embed>
+<embed src="@/docs/api/common/control/select-event.en.md"></embed>
