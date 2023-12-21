@@ -11,7 +11,7 @@ describe('Snapshots', () => {
   TestDemoList.filter(g=>g.snapshots!==false).forEach((groups) => {
     const { type, demos } = groups;
     
-    demos.filter(g=>g.snapshots!==false)..map((demo) => {
+    demos.filter(g=>g.snapshots!==false).map((demo) => {
       const { name, sleepTime = 1.5 } = demo;
       demosFlatList.push({
         type,
