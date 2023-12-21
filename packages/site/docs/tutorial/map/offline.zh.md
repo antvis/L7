@@ -2,7 +2,7 @@
 title: Use Offline
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 目前 `L7` 支持高德和 `Mapbox` 两种底图，高德地图由于使用在线 `API` 不能做离线部署，如果你有离线部署的需求可以采用 `MapBox`做底图。`L7` 在接口层统一了不同底图直接的差异，一套可视化代码可以运行在 `L7` 支持的任意底图上。本文主要介绍如何离线使用，国内加速使用 `MapBox`，同时也提供了在线的字体服务，你也可也下载到本地使用。
 

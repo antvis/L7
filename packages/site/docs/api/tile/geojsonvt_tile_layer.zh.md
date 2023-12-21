@@ -3,7 +3,7 @@ title: GeoJsonVT 瓦片
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `L7` 矢量瓦片除了可以时候后端提供的瓦片服务之外，同时提供了 `geojson-vt` 瓦片切分方案，使得前端在没有后端支持的情况下也能使用矢量瓦片。
 

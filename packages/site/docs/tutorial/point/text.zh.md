@@ -2,7 +2,7 @@
 title: 文本标注
 order: 6
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 点图层支持绘制文本标注。
 

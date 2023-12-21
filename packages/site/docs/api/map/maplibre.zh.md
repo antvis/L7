@@ -3,7 +3,7 @@ title: MapLibre
 order: 5
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## 简介
 
@@ -52,4 +52,4 @@ const scene = new Scene({
 
 ```
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/api/common/map.zh.md"></embed>

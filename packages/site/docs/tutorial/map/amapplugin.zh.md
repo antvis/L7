@@ -2,7 +2,7 @@
 title: 使用高德插件
 order: 3
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 我们在使用高德地图作为地图底图的时候，可以借助高德地图提供的插件实现也中需求。
 

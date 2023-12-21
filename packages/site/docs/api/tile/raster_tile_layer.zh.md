@@ -3,7 +3,7 @@ title: Raster 栅格瓦片
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `L7` 的栅格图层支持加载 `TMS`、`WMS`、`WMTS` 等多种格式的图片瓦片，同时也支持 `Tiff`、`Lerc` 等多种格式的数据栅格瓦片。
 
@@ -207,4 +207,4 @@ const source = new Source(data, {
 
 ## style
 
-<embed src="@/docs/common/layer/raster/style_single.zh.md"></embed>
+<embed src="@/docs/api/common/layer/raster/style_single.zh.md"></embed>

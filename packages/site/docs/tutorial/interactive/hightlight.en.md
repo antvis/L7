@@ -3,7 +3,7 @@ title: HightLight
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 In addition to data display, geographical visualization also requires user interaction. User interaction is generally divided into two types.
 

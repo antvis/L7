@@ -3,7 +3,7 @@ title: RasterLayer 多波段合成
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## 简介
 
@@ -11,11 +11,11 @@ order: 1
 
 ## Option
 
-<embed src="@/docs/common/layer/options.zh.md"></embed>
+<embed src="@/docs/api/common/layer/options.zh.md"></embed>
 
 ## source
 
-<embed src="@/docs/common/source/raster/raster_rgb.zh.md"></embed>
+<embed src="@/docs/api/common/source/raster/raster_rgb.zh.md"></embed>
 
 ## style
 

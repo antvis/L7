@@ -3,7 +3,7 @@ title: Source
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -272,7 +272,7 @@ For details, see[Layer](/api/base_layer/base/#setdata)
 layer.setData(data);
 ```
 
-<embed src="@/docs/common/source/tile/method.zh.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>
 
 ### type of data
 

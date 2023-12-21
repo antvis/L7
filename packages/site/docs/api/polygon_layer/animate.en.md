@@ -3,7 +3,7 @@ title: Animate
 order: 7
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 The geometry layer is`shape`for`water`or`ocean`When you will get a flowing water surface, at this time we need to use`animate`Method to enable animation.
 

@@ -3,7 +3,7 @@ title: Symbol
 order: 5
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 The point layer supports drawing icons and placing different pictures as symbols on geographical areas, usually representing the distribution of different geographical features.
 

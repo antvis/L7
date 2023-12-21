@@ -2,7 +2,7 @@
 title: 聚合图
 order: 2
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 聚合图通常用来描述数据在地理上表现的聚合情况，类似热力图，可以用来表示数据点位的集中。    
 

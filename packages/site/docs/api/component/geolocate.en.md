@@ -43,9 +43,9 @@ scene.on('loaded', () => {
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
 | transform | Format passed`getlocation`The function of the obtained longitude and latitude can be used to convert the geographical coordinate system | `(position: [number, number]) => [number, number]` |
 
-<embed src="@/docs/common/control/btn-api.en.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
@@ -53,8 +53,8 @@ scene.on('loaded', () => {
 | -------------- | ------------------------------------------------------------- | --------------------------------- |
 | getGeoLocation | Get the latitude and longitude of the current user's location | `() => Promise<[number, number]>` |
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>

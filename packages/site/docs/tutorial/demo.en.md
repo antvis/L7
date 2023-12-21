@@ -3,7 +3,7 @@ title: local run
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ### 1. Open the L7demo page
 

@@ -3,7 +3,7 @@ title: Wall
 order: 5
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Geographic fencing gives the concept of height based on the original line layer, and other uses are consistent with ordinary line drawings.
 
@@ -60,15 +60,15 @@ scene.on('loaded', () => {
 
 In order to draw geofences we need to`shape`The parameters are set to`wall`。
 
-<embed src="@/docs/common/features/animate.zh.md"></embed>
+<embed src="@/docs/api/common/features/animate.zh.md"></embed>
 
 ### style
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
 🌟 The current gradient direction is vertically upward
 
-<embed src="@/docs/common/features/texture.zh.md"></embed>
+<embed src="@/docs/api/common/features/texture.zh.md"></embed>
 
 🌟 Geofence supports new style parameter iconStepCount
 

@@ -3,7 +3,7 @@ title: Simple
 order: 9
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Point layers support the simple points of sprite mode. Point layers in sprite mode are more efficient and the points always face the camera.
 

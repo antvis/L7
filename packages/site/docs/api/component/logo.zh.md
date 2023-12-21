@@ -53,12 +53,12 @@ scene.on('loaded', () => {
 | img  | Logo 展示的图片 url                                  | `string` |
 | href | 点击 Logo 跳转的超链接，不传则纯展示图片，点击不跳转 | `string` |
 
-<embed src="@/docs/common/control/api.zh.md"></embed>
+<embed src="@/docs/api/common/control/api.zh.md"></embed>
 
 ## 方法
 
-<embed src="@/docs/common/control/method.zh.md"></embed>
+<embed src="@/docs/api/common/control/method.zh.md"></embed>
 
 ## 事件
 
-<embed src="@/docs/common/control/event.zh.md"></embed>
+<embed src="@/docs/api/common/control/event.zh.md"></embed>

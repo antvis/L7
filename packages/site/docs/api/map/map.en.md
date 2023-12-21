@@ -3,7 +3,7 @@ title: 地图 Map
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -54,4 +54,4 @@ scene.on('loaded', () => {
 });
 ```
 
-<embed src="@/docs/common/map.en.md"></embed>
+<embed src="@/docs/api/common/map.en.md"></embed>

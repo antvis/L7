@@ -3,7 +3,7 @@ title: Bubble
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Dots of different sizes appear above the geographic area of ​​the bubble chart, and the area of ​​the circle is proportional to its value in the data set.
 

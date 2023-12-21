@@ -3,7 +3,7 @@ title: Great Circle
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Consider the earth as a sphere, and draw a plane through any two points on the ground and the center of the earth. The circle seen when the plane intersects the earth's surface is a great circle. The great circle arc between two points is the shortest distance between the two points on the ground. The route along this great arc is called a great circle route.
 
@@ -80,12 +80,12 @@ layer.source(data, {
 
 In order to draw a great arc line graph, we need to`shape`The parameters are set to`greatcircle`。
 
-<embed src="@/docs/common/features/animate.zh.md"></embed>
+<embed src="@/docs/api/common/features/animate.zh.md"></embed>
 
 ### style
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/common/features/dash.zh.md"></embed>
+<embed src="@/docs/api/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/common/features/texture.zh.md"></embed>
+<embed src="@/docs/api/common/features/texture.zh.md"></embed>

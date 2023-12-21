@@ -3,7 +3,7 @@ title: Source
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 It is recommended to use GeoJSON format data for geometry layer data.
 

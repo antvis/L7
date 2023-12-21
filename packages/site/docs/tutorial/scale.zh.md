@@ -2,7 +2,7 @@
 title: Scale 度量
 order: 2
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Scale 简介
 

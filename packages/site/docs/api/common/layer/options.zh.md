@@ -64,7 +64,7 @@ layer 初始化完成之后，地图是否自动缩放到图层范围
 图层事件，默认只响应最上层图层，设置为true 将允许事件透传
 
 
-<embed src="@/docs/common/layer/mask_options.zh.md"></embed>
+<embed src="@/docs/api/common/layer/mask_options.zh.md"></embed>
 
 
 

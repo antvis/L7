@@ -3,7 +3,7 @@ title: JSON
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Although GeoJSON is a universal geographical data format, in specific usage scenarios, data service personnel may not be familiar with GeoJON, or do not have the tools to generate GeoJON. Therefore, L7 defines the concept of Parser for data, and your data can be in any format. , just use the geographic information field corresponding to the specified data.
 

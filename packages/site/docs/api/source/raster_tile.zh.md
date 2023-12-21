@@ -3,7 +3,7 @@ title: RasterTile 栅格瓦片
 order: 7
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 L7 加载栅格瓦片地图的时候需要在 `source` 中对瓦片服务进行解析，同时配置瓦片服务的请求参数。
 
@@ -145,4 +145,4 @@ const rasterSource = new Source(
   },
 );
 ```
-<embed src="@/docs/common/source/tile/method.zh.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>

@@ -2,7 +2,7 @@
 title: 栅格瓦片
 order: 1
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 栅格瓦片图层包括图片栅格和数据栅格，其中图片栅格通常加载 `png/jpg` 图片，数据栅格则加载 `tiff/lerc` 等栅格数据文件.
 
