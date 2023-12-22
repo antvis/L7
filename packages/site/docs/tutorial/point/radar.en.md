@@ -3,7 +3,7 @@ title: Radar
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Point layers also support a special layer type: radar charts.
 

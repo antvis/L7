@@ -3,7 +3,7 @@ title: 3D Column
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `3D`Column charts are columns of varying heights displayed over a geographic area, with the height of the column proportional to its value in the data set.
 

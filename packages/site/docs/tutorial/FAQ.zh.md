@@ -3,7 +3,7 @@ title: FAQ
 order: 16
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ### 项目中 L7 各个依赖包版本不一致导致报错
 

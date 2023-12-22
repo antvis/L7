@@ -2,7 +2,7 @@
 title: 本地运行
 order: 1
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ### 一、打开L7demo页面
 
@@ -57,5 +57,3 @@ yarn start
 
 现在你可以尽情的本地修改代码，添加自己的图层了。    
 `L7` 所有 `demo` 都可以在 `codesandbox` 打开，你可以下载代码。
-
-

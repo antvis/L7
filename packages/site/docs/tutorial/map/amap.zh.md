@@ -2,7 +2,7 @@
 title: 高德地图
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 ## 使用高德地图
 
 ### 注册账号并申请Key

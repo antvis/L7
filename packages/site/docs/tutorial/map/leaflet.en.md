@@ -3,7 +3,7 @@ title: Leaflet Map
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `L7`Implemented by providing plug-ins`Leaflet`support, implementation`Leaflet`map and`L7`Fusion of visualization layers.
 

@@ -3,7 +3,7 @@ title: hexagon heatmap
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Aggregate a set of point data into hexagonal grids of equal size. One hexagonal grid represents the statistical values ​​of all points in the grid. The Honeycomb Heatmap feature is laid out in a hexagonal heatmap grid.
 

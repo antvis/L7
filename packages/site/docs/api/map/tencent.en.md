@@ -3,7 +3,7 @@ title: Tencent Map
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -42,4 +42,4 @@ import { TencentMap } from '@antv/l7-maps';
 
 Tencentmap [Example address](/examples/map/map/#tencentmap)、Tencentmap instantiate[Example address](/examples/map/map/#tmapInstance)
 
-<embed src="@/docs/common/map.en.md"></embed>
+<embed src="@/docs/api/common/map.en.md"></embed>

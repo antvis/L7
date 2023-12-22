@@ -3,7 +3,7 @@ title: Path
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 We often need to draw common paths such as roads, action routes, water systems, etc. on the map. These drawn lines can be collectively called a path map, that is, a line layer positioned with a set of point coordinate pairs that are not closed at the beginning and end.
 
@@ -72,12 +72,12 @@ layer.size(2); // Draw a path with width 2
 
 ### style
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/common/features/dash.zh.md"></embed>
+<embed src="@/docs/api/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/common/features/border.zh.md"></embed>
+<embed src="@/docs/api/common/features/border.zh.md"></embed>
 
-<embed src="@/docs/common/features/texture.zh.md"></embed>
+<embed src="@/docs/api/common/features/texture.zh.md"></embed>
 
-<embed src="@/docs/common/features/animate.zh.md"></embed>
+<embed src="@/docs/api/common/features/animate.zh.md"></embed>

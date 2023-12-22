@@ -1,7 +1,7 @@
 // @ts-ignore
-import { Scene, RasterLayer,PolygonLayer } from '@antv/l7';
+import { PolygonLayer, RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap, Map } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 import * as GeoTIFF from 'geotiff';
@@ -28,11 +28,11 @@ async function getTiffData() {
 
 export default () => {
   // @ts-ignore
-  useEffect( async () => {
+  useEffect(async () => {
     const scene = new Scene({
       id: 'map',
-     
-      map: new GaodeMap({
+      renderer: process.env.renderer,
+      map: new (process.env.CI ? Map : GaodeMap)({
         center: [120.165, 30.26],
         pitch: 0,
         zoom: 2,
@@ -52,11 +52,15 @@ export default () => {
       .then((res) => res.json())
       .then((maskData) => {
         const polygonLayer = new PolygonLayer({
-          visible:false
-        }).source(maskData).shape('fill').color('#f00').style({opacity:0.5});
+          visible: false,
+        })
+          .source(maskData)
+          .shape('fill')
+          .color('#f00')
+          .style({ opacity: 0.5 });
         const layer = new RasterLayer({
-           maskLayers: [polygonLayer]
-           });
+          maskLayers: [polygonLayer],
+        });
         const mindata = -0;
         const maxdata = 8000;
         layer
@@ -66,10 +70,7 @@ export default () => {
               width: tiffdata.width,
               height: tiffdata.height,
               extent: [
-                73.482190241,
-                3.82501784112,
-                135.106618732,
-                57.6300459963,
+                73.482190241, 3.82501784112, 135.106618732, 57.6300459963,
               ],
             },
           })

@@ -3,7 +3,7 @@ title: 高德地图
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## 简介
 
@@ -32,7 +32,7 @@ const L7AMap = new GaodeMap({
   plugin: [], // 可以不设置
 });
 ```
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/api/common/map.zh.md"></embed>
 
 ## 传入外部实例
 
@@ -69,7 +69,7 @@ const scene = new Scene({
 
 
 
-<embed src="@/docs/common/map.zh.md"></embed>
+<embed src="@/docs/api/common/map.zh.md"></embed>
 
 
 ## 注册使用高德插件

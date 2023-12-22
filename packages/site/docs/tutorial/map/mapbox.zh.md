@@ -2,7 +2,7 @@
 title: MapBox 地图
 order: 0
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 ## 使用Mapbox 地图
 
 1、注册MapBox token

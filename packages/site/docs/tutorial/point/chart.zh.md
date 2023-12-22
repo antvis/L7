@@ -2,7 +2,7 @@
 title: 复合图表地图
 order: 8
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 我们在通过自定义 `Marker` 代替点图层节点的时候剋插入实现自定义图表，如使用二维统计图表代替点状符号。复合图表地图中常用扩展图形有柱状图、曲线图、玫瑰图等
 

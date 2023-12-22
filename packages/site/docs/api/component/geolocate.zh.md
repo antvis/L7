@@ -43,9 +43,9 @@ scene.on('loaded', () => {
 | --------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
 | transform | 格式化通过 `getlocation` 获取到的经纬度的函数，可以用于地理坐标系的转换 | `(position: [number, number]) => [number, number]` |
 
-<embed src="@/docs/common/control/btn-api.zh.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
 
-<embed src="@/docs/common/control/api.zh.md"></embed>
+<embed src="@/docs/api/common/control/api.zh.md"></embed>
 
 ## 方法
 
@@ -53,8 +53,8 @@ scene.on('loaded', () => {
 | -------------- | ---------------------- |-----------------------------------|
 | getGeoLocation | 获取当前用户所在经纬度 | `() => Promise<[number, number]>` |
 
-<embed src="@/docs/common/control/method.zh.md"></embed>
+<embed src="@/docs/api/common/control/method.zh.md"></embed>
 
 ## 事件
 
-<embed src="@/docs/common/control/event.zh.md"></embed>
+<embed src="@/docs/api/common/control/event.zh.md"></embed>

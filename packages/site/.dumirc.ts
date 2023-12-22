@@ -338,20 +338,12 @@ export default defineConfig({
         order: 4,
       },
       {
-        slug: 'tutorial/demo',
-        title: {
-          zh: '教程示例',
-          en: 'Tutorial demo',
-        },
-        order: 5,
-      },
-      {
         slug: 'tutorial/point',
         title: {
           zh: '点图层 PointLayer',
           en: 'PointLayer',
         },
-        order: 6,
+        order: 5,
       },
       {
         slug: 'tutorial/line',
@@ -359,7 +351,7 @@ export default defineConfig({
           zh: '线图层 LineLayer',
           en: 'LineLayer',
         },
-        order: 7,
+        order: 6,
       },
       {
         slug: 'tutorial/polygon',
@@ -367,7 +359,7 @@ export default defineConfig({
           zh: '面图层 PolygonLayer',
           en: 'PolygonLayer',
         },
-        order: 8,
+        order: 7,
       },
       {
         slug: 'tutorial/heatmap',
@@ -375,7 +367,7 @@ export default defineConfig({
           zh: '热力图层 HeatmapLayer',
           en: 'HeatmapLayer',
         },
-        order: 9,
+        order: 8,
       },
       {
         slug: 'tutorial/tile',
@@ -714,7 +706,6 @@ export default defineConfig({
   },
   alias: {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
-    '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
     '@antv/l7-maps/lib/map': path.resolve(__dirname, '../maps/src/map'),
     '@antv/l7-core': path.resolve(__dirname, '../core/src'),
     '@antv/l7-component': path.resolve(__dirname, '../component/src'),

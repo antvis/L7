@@ -1,12 +1,9 @@
 import type {
   IRenderOptions,
   IStencilOptions,
-  MaskOperationType} from '@antv/l7-core';
-import {
-  gl,
-  MaskOperation,
-  StencilType,
+  MaskOperationType,
 } from '@antv/l7-core';
+import { MaskOperation, StencilType, gl } from '@antv/l7-core';
 // 掩膜配置
 export function getStencil(
   mask: boolean,

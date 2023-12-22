@@ -3,7 +3,7 @@ title: Dot
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 The brightness map is also called the point density map. The more the number of internal points per unit area, the brighter the brightness will be. The brightness map is generally used to express the distribution of massive point data.
 

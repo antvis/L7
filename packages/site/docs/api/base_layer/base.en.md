@@ -3,7 +3,7 @@ title: BaseLayer
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -27,4 +27,4 @@ const layer = new BaseLayer(option) // option - the parameter object passed into
 scene.addLayer(layer);
 ```
 
-<embed src="@/docs/common/layer/base.en.md"></embed>
+<embed src="@/docs/api/common/layer/base.en.md"></embed>

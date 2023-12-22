@@ -41,8 +41,6 @@ export default defineConfig({
     esbuild: true,
     define: {
         'process.env.VERSION': JSON.stringify('1.0.0'),
-        'process.env.renderer': JSON.stringify(process.env.VITE_RENDERER),
-        'process.env.CI': process.env.CI?.replace(/'/g, ''),
         global: {
 
         },

@@ -3,7 +3,7 @@ title: Source
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `imagelayer`By providing online pictures`url`Specify data via`extent`Specify the image's location on the map.
 

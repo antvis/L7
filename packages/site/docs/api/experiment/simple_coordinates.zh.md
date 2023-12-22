@@ -3,7 +3,7 @@ title: 简单坐标系（非地理坐标系）
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 我们通常使用经纬度来描述地理位置，但是在某些特殊的场景，我们往往倾向于使用更加简单的平面坐标系(xyz)来描述位置的相对坐标，为此 L7 提供了简单坐标系的模式。
 

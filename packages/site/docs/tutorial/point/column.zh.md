@@ -2,7 +2,7 @@
 title: 3D 柱图
 order: 1
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `3D` 柱图是在地理区域上方显示的不同高度的柱体，柱子的高度与其在数据集中的数值会成正比。
 

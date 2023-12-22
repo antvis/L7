@@ -2,7 +2,7 @@
 title: 简单点
 order: 9
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 点图层支持精灵模式的简单点，精灵模式的点图层效率更高，点始终面向相机。
 

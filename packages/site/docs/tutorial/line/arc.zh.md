@@ -2,7 +2,7 @@
 title: 弧线图
 order: 1
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 有时候为了可视化效果，会选择使用弧线连接地图上的两点。同时也可以使用弧线完成一些有趣的效果。
 
@@ -83,16 +83,16 @@ layer.source(data, {
 为了绘制弧线图，我们需要将 `shape` 的参数设置成 `arc`。
 
 
-<embed src="@/docs/common/features/animate.zh.md"></embed>
+<embed src="@/docs/api/common/features/animate.zh.md"></embed>
 
 ### style
 
-<embed src="@/docs/common/features/segment_number.zh.md"></embed>
+<embed src="@/docs/api/common/features/segment_number.zh.md"></embed>
 
-<embed src="@/docs/common/features/theta_offset.zh.md"></embed>
+<embed src="@/docs/api/common/features/theta_offset.zh.md"></embed>
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/common/features/dash.zh.md"></embed>
+<embed src="@/docs/api/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/common/features/texture.zh.md"></embed>
+<embed src="@/docs/api/common/features/texture.zh.md"></embed>

@@ -3,7 +3,7 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `style` 方法用于配制图层的样式，相同图层拥有不同的 `shape` 图形，不同 `shape` 的图层 `style` 方法接受不同的参数。
 
@@ -21,7 +21,7 @@ layer.style({
 | ------- | -------- | ------------ | ------ |
 | opacity | `number` | 图形的透明度 | `1`    |
 
-<embed src="@/docs/common/layer/style_encode.zh.md"></embed>
+<embed src="@/docs/api/common/layer/style_encode.zh.md"></embed>
 
 
 ### 2D shape

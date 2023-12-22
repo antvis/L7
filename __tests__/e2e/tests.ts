@@ -1,17 +1,123 @@
-/**
- * TODO: extract url from dumi md & tsx
- */
-export const tests = {
-  'point-circle': 'features/point/circle',
-  'point-billboard': 'features/point/point-billboard',
-  'point-column': 'features/point/point-column',
-  'point-fill-image': 'features/point/point-fill-image',
-  'point-normal-device': 'features/point/point-normal-device',
-  'citybuilding-amap1': 'features/citybuilding/amap1',
-  'line-arc-plane': 'features/line/line-arc-plane',
-};
+export const TestDemoList: Array<{
+    type: string,
+    snapshots?:boolean
+    demos: Array<{
+        name: string;
+        sleepTime?: number;
+        snapshots?:boolean
+    }>
+}> = [
+        {
+            type: 'Point',
+            demos: [
+                {
+                    name:'billboard'
+                },{
+                    name:'column'
+                },
+                {
+                    name:'fill_image'
+                },
+                {
+                name: "fill",
+                sleepTime: 1
 
-export const testList = [
-  'PointFill',
-  'PointImage'
-]
+            }, {
+                name: "image",
+                sleepTime: 1
+            }]
+        },
+        {
+            type: 'Line',
+            snapshots: false,
+            demos: [
+                {
+                    name: 'arc'
+                },
+                {
+                    name: 'arc_plane'
+                },
+
+                {
+                    name: 'flow'
+                }
+                ,
+                {
+                    name: 'arc'
+                }
+                ,
+                {
+                    name: 'dash'
+                }
+            ]
+
+        },
+        {
+            type: 'Polygon',
+            demos: [
+                {
+                    name: 'extrude'
+                },
+                {
+                    name: 'fill'
+                }
+                ,
+                {
+                    name: 'ocean',
+                    snapshots:false
+                }
+                ,
+                {
+                    name: 'texture',
+                    snapshots:false
+                }
+                ,
+                {
+                    name: 'water',
+                    snapshots:false
+                }
+            ]
+        },
+        {
+            type: 'HeatMap',
+            snapshots: false,
+            demos: [
+                {
+                    name: 'grid',
+                    sleepTime: 2
+                },
+                {
+                    name: 'hexagon',
+                    sleepTime: 2
+                },
+                {
+                    name: 'normal',
+                    sleepTime: 2
+                }
+            ]
+        },
+        {
+            type: 'Raster',
+            snapshots: false,
+            demos: [{
+                name: "tiff",
+                sleepTime: 2
+            },
+            {
+                name: "image",
+            }
+        ]
+        },{
+            type:'Mask',
+            demos:[{
+                name:'single'
+            }]
+        },
+        {
+            type: 'Gallery',
+            demos: [{
+                name: "fujian",
+                sleepTime: 2
+            }]
+        }
+    ]

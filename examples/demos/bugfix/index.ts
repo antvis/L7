@@ -1,0 +1,1 @@
+export { MapRender as color } from './color';

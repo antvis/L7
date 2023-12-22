@@ -3,7 +3,7 @@ title: CSV
 order: 3
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 L7 支持 CSV 以逗号分隔的 CSV 数据加载。
 

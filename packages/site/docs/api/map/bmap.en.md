@@ -3,7 +3,7 @@ title: 百度地图
 order: 2
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -73,4 +73,4 @@ const scene = new Scene({
 
 BaiduMap [Example address](/examples/map/map/#baidumap), external incoming[Example address](/examples/map/map/#bmapInstance)
 
-<embed src="@/docs/common/map.en.md"></embed>
+<embed src="@/docs/api/common/map.en.md"></embed>

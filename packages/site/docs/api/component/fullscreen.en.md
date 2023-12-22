@@ -29,7 +29,7 @@ scene.on('loaded', () => {
 
 ## Configuration
 
-<embed src="@/docs/common/control/btn-api.en.md"></embed>
+<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
 
 | name        | illustrate                                    | type                        |
 | ----------- | --------------------------------------------- | --------------------------- |
@@ -37,7 +37,7 @@ scene.on('loaded', () => {
 | exitBtnText | Text for exit full screen button              | `string`                    |
 | exitTitle   | Exit full screen button text`title`Attributes | `string`                    |
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
@@ -45,7 +45,7 @@ scene.on('loaded', () => {
 | ---------------- | --------------------------------------------------------------- | ------------ |
 | toggleFullscreen | Enter/exit the full screen state of the full screen map section | `() => void` |
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
@@ -53,4 +53,4 @@ scene.on('loaded', () => {
 | ---------------- | -------------------------------------------- | --------------------------------- |
 | fullscreenChange | Triggered when the full screen state changes | `(isFullscreen: boolean) => void` |
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>

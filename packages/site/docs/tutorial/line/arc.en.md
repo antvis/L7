@@ -3,7 +3,7 @@ title: Arc
 order: 1
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 Sometimes for the sake of visualization, you will choose to use arcs to connect two points on the map. At the same time, you can also use arcs to achieve some interesting effects.
 
@@ -83,16 +83,16 @@ layer.source(data, {
 
 In order to draw an arc graph, we need to`shape`The parameters are set to`arc`。
 
-<embed src="@/docs/common/features/animate.zh.md"></embed>
+<embed src="@/docs/api/common/features/animate.zh.md"></embed>
 
 ### style
 
-<embed src="@/docs/common/features/segment_number.zh.md"></embed>
+<embed src="@/docs/api/common/features/segment_number.zh.md"></embed>
 
-<embed src="@/docs/common/features/theta_offset.zh.md"></embed>
+<embed src="@/docs/api/common/features/theta_offset.zh.md"></embed>
 
-<embed src="@/docs/common/features/linear.zh.md"></embed>
+<embed src="@/docs/api/common/features/linear.zh.md"></embed>
 
-<embed src="@/docs/common/features/dash.zh.md"></embed>
+<embed src="@/docs/api/common/features/dash.zh.md"></embed>
 
-<embed src="@/docs/common/features/texture.zh.md"></embed>
+<embed src="@/docs/api/common/features/texture.zh.md"></embed>

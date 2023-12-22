@@ -9,7 +9,6 @@
   "workspaces": [
     "packages/*",
     "!packages/site",
-    "!packages/mini",
     "dev-demos/*"
   ],
   "scripts": {
@@ -19,7 +18,7 @@
     "dev-device": "export NODE_OPTIONS=--openssl-legacy-provider renderer=device && dumi dev renderer=device",
     "dev_windows": "dumi dev",
     "dev-build": "export NODE_OPTIONS=--openssl-legacy-provider && dumi build",
-    "dev:ci": "export NODE_OPTIONS=--openssl-legacy-provider CI=1 && dumi dev CI=1",
+    "dev:ci": "vite dev",
     "start": "lerna --scope @antv/l7-site exec yarn run site:develop",
     "site:build": "lerna --scope @antv/l7-site exec yarn run site:build",
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
@@ -27,7 +26,7 @@
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
     "async-site": "sh ./scripts/site.sh",
     "prebuild": "yarn clean && run-p tsc lint",
-    "build": "lerna run build --ignore @antv/l7-site --ignore @antv/l7-mini",
+    "build": "lerna run build --ignore @antv/l7-site",
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna run tsc --stream --no-bail",
     "lint-fix": "prettier --write  packages/**/src/**/*.ts packages/site/docs/api/**/*.md packages/site/docs/api/*.md  dev-demos/**/**/*.tsx  *.md",
@@ -41,7 +40,7 @@
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
     "prerelease": "yarn build",
-    "release": "lerna publish from-package --ignore @antv/l7-site --ignore @antv/l7-mini  && yarn sync",
+    "release": "lerna publish from-package --ignore @antv/l7-site  && yarn sync",
     "release-beta": "yarn run prerelease && lerna publish --dist-tag beta from-package --force-publish && yarn sync",
     "test": "jest",
     "test-cover": "jest --coverage",

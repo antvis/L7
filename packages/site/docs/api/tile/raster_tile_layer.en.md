@@ -3,7 +3,7 @@ title: Raster 栅格瓦片
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `L7`The raster layer supports loading`TMS`、`WMS`、`WMTS`and other image tiles in various formats, and also supports`Tiff`、`Lerc`Data raster tiles in various formats.
 
@@ -207,4 +207,4 @@ const source = new Source(data, {
 
 ## style
 
-<embed src="@/docs/common/layer/raster/style_single.en.md"></embed>
+<embed src="@/docs/api/common/layer/raster/style_single.en.md"></embed>

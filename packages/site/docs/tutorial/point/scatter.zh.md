@@ -2,7 +2,7 @@
 title: 散点图
 order: 2
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 散点图在地理区域上放置相等大小的圆点，用来表示地域上的空间布局或数据分布。
 

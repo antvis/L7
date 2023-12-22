@@ -53,12 +53,12 @@ scene.on('loaded', () => {
 | img  | Logo display image url                                                                                               | `string` |
 | href | Click the logo to jump to the hyperlink. If it is not uploaded, the image will be displayed. Clicking will not jump. | `string` |
 
-<embed src="@/docs/common/control/api.en.md"></embed>
+<embed src="@/docs/api/common/control/api.en.md"></embed>
 
 ## method
 
-<embed src="@/docs/common/control/method.en.md"></embed>
+<embed src="@/docs/api/common/control/method.en.md"></embed>
 
 ## event
 
-<embed src="@/docs/common/control/event.en.md"></embed>
+<embed src="@/docs/api/common/control/event.en.md"></embed>

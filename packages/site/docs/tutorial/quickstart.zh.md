@@ -2,7 +2,7 @@
 title: 快速上手
 order: 1
 ---
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 `L7` 可以通过在线 `CDN` 以及 `NPM` 包等形式快速接入。通过 `L7` 提供的能力，我们可以快速完成地图可视化的绘制。
 

@@ -3,7 +3,7 @@ title: fill
 order: 0
 ---
 
-<embed src="@/docs/common/style.md"></embed>
+<embed src="@/docs/api/common/style.md"></embed>
 
 The simplest representation of a geometry layer on a map is a fill map, which fills a specified area with a specified color.
 
