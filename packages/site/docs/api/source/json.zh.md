@@ -190,7 +190,7 @@ coordinate 格式 geojson 的 coordinate 字段 支持 LineString, MultiLineStri
 [ 线 coodinates 数据格式](/api/source/geojson#linesring)
 
 ```javascript
-const data = {
+const data = [{
   name: 'path1',
   path: [
     [58.00781249999999, 32.84267363195431],
@@ -199,7 +199,7 @@ const data = {
     [114.9609375, 39.639537564366684],
     [117.42187500000001, 28.613459424004414],
   ],
-};
+}];
 ```
 
 使用时通过 coordinates 指定
