@@ -14,6 +14,7 @@ export type LayerSwitchItem = {
 
 export interface ILayerSwitchOption extends ISelectControlOption {
   layers: Array<ILayer | string | LayerSwitchItem>;
+  multiple: boolean; // 是否多选，默认为true
 }
 
 export { LayerSwitch };
@@ -57,6 +58,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
       title: '图层控制',
       btnIcon: createL7Icon('l7-icon-layer'),
       options: [],
+      multiple: option?.multiple ?? true,
     };
   }
 
@@ -115,14 +117,10 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
       this.controlOption.options = this.getLayerOptions();
     }
     if (!this.controlOption.defaultValue) {
-      // this.multiple ? this.getLayerVisible() : this.getLayerVisible()[0]
-      
-      // const defaultVal = this.getIsMultiple()
-      //   ? this.getLayerVisible()
-      //   : this.getLayerVisible()[0];
-      // this.controlOption.defaultValue = defaultVal;
-      
-      this.controlOption.defaultValue = this.getLayerVisible();
+      const defaultVal = this.controlOption.multiple
+        ? this.getLayerVisible()
+        : this.getLayerVisible()[0];
+      this.controlOption.defaultValue = defaultVal;
     }
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);
@@ -162,6 +160,6 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   };
 
   protected getIsMultiple(): boolean {
-    return true;
+    return this.controlOption.multiple;
   }
 }

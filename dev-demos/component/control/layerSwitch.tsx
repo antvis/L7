@@ -92,17 +92,14 @@ const Demo: FunctionComponent = () => {
                 opacity: 1,
               });
 
-            layer2.hide();
-
             newScene.addLayer(chinaPolygonLayer);
             newScene.addLayer(layer2);
             newLayers.push(chinaPolygonLayer, layer2);
           }),
-      ]).then(() => {
-        console.log('newLayers', newLayers);
-        
+      ]).then(() => {        
         const newControl = new LayerSwitch({
           layers: newLayers,
+          multiple: false
         });
         setControl(newControl);
         newScene.addControl(newControl);

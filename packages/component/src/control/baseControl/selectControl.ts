@@ -58,8 +58,6 @@ export default class SelectControl<
     const button = super.onAdd();
     const { defaultValue } = this.controlOption;
 
-    console.log('defaultValue', defaultValue);
-
     if (defaultValue) {
       this.selectValue = this.transSelectValue(defaultValue);
     }
@@ -75,48 +73,25 @@ export default class SelectControl<
     const finalValue = this.transSelectValue(value);
 
     this.optionDOMList.forEach((optionDOM) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const optionValue = optionDOM.getAttribute(SelectControlConstant.OptionValueAttrKey)!;
+      const checkboxDOM = optionDOM.querySelector('input[type=checkbox]');
+      const radioDOM = optionDOM.querySelector('input[type=radio]');
+      const isActive = finalValue.includes(optionValue);
 
-      const optionValue = optionDOM.getAttribute(
-        SelectControlConstant.OptionValueAttrKey,
-      )!;
-      const checkboxDOM = optionDOM.querySelector(
-        'input[type=checkbox]',
-      ) as DOM.ELType;
-      const radioDOM = optionDOM.querySelector(
-        'input[type=radio]',
-      ) as DOM.ELType;
-
-      if (finalValue.includes(optionValue)) {
-        DOM.addClass(optionDOM, SelectControlConstant.ActiveOptionClassName);
-        if (checkboxDOM) {
-          DOM.setChecked(checkboxDOM, true);
+      // 设置类名和选中状态的函数
+      const setDOMState = (dom: Element | null, active: boolean) => {
+        DOM.toggleClass(
+          optionDOM,
+          SelectControlConstant.ActiveOptionClassName,
+          active,
+        );
+        if (dom) {
+          DOM.setChecked(dom as DOM.ELType, active);
         }
-        if (radioDOM) {
-          DOM.setChecked(radioDOM, true);
-        }
-      } else {
-        DOM.removeClass(optionDOM, SelectControlConstant.ActiveOptionClassName);
-        if (checkboxDOM) {
-          DOM.setChecked(checkboxDOM, false);
-        }
-        if (radioDOM) {
-          DOM.setChecked(radioDOM, false);
-        }
-      }
+      };
 
-      // const isActive = finalValue.includes(optionValue);
-
-      // // 设置类名和选中状态的函数
-      // const setDOMState = (dom: DOM.ELType, active: boolean) => {
-      //   DOM.toggleClass(optionDOM, SelectControlConstant.ActiveOptionClassName, active);
-      //   if (dom) {
-      //     DOM.setChecked(dom, active);
-      //   }
-      // };
-
-      // setDOMState(checkboxDOM, isActive);
-      // setDOMState(radioDOM, isActive);
+      setDOMState(checkboxDOM, isActive);
+      setDOMState(radioDOM, isActive);
     });
 
     this.selectValue = finalValue;
