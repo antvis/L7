@@ -24,7 +24,7 @@
     "tsc": "tsc --project tsconfig.build.json"
   },
   "dependencies": {
-    "@antv/g-device-api": "^1.4.5",
+    "@antv/g-device-api": "^1.4.10",
     "@antv/l7-core": "2.20.9",
     "@antv/l7-utils": "2.20.9",
     "@babel/runtime": "^7.7.7",
