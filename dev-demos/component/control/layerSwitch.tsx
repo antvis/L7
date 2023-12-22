@@ -99,6 +99,8 @@ const Demo: FunctionComponent = () => {
             newLayers.push(chinaPolygonLayer, layer2);
           }),
       ]).then(() => {
+        console.log('newLayers', newLayers);
+        
         const newControl = new LayerSwitch({
           layers: newLayers,
         });

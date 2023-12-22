@@ -1,5 +1,5 @@
 import { DOM } from '@antv/l7-utils';
-import type { IPopperControlOption} from './popperControl';
+import type { IPopperControlOption } from './popperControl';
 import { PopperControl } from './popperControl';
 
 type BaseOptionItem = {
@@ -57,6 +57,9 @@ export default class SelectControl<
   public onAdd() {
     const button = super.onAdd();
     const { defaultValue } = this.controlOption;
+
+    console.log('defaultValue', defaultValue);
+
     if (defaultValue) {
       this.selectValue = this.transSelectValue(defaultValue);
     }
@@ -70,29 +73,54 @@ export default class SelectControl<
 
   public setSelectValue(value: string | string[], emitEvent = true) {
     const finalValue = this.transSelectValue(value);
+
     this.optionDOMList.forEach((optionDOM) => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       const optionValue = optionDOM.getAttribute(
         SelectControlConstant.OptionValueAttrKey,
       )!;
-      const checkboxDOM = this.getIsMultiple()
-        ? optionDOM.querySelector('input[type=checkbox]')
-        : undefined;
+      const checkboxDOM = optionDOM.querySelector(
+        'input[type=checkbox]',
+      ) as DOM.ELType;
+      const radioDOM = optionDOM.querySelector(
+        'input[type=radio]',
+      ) as DOM.ELType;
+
       if (finalValue.includes(optionValue)) {
         DOM.addClass(optionDOM, SelectControlConstant.ActiveOptionClassName);
         if (checkboxDOM) {
-          // @ts-ignore
           DOM.setChecked(checkboxDOM, true);
+        }
+        if (radioDOM) {
+          DOM.setChecked(radioDOM, true);
         }
       } else {
         DOM.removeClass(optionDOM, SelectControlConstant.ActiveOptionClassName);
         if (checkboxDOM) {
-          // @ts-ignore
           DOM.setChecked(checkboxDOM, false);
         }
+        if (radioDOM) {
+          DOM.setChecked(radioDOM, false);
+        }
       }
+
+      // const isActive = finalValue.includes(optionValue);
+
+      // // 设置类名和选中状态的函数
+      // const setDOMState = (dom: DOM.ELType, active: boolean) => {
+      //   DOM.toggleClass(optionDOM, SelectControlConstant.ActiveOptionClassName, active);
+      //   if (dom) {
+      //     DOM.setChecked(dom, active);
+      //   }
+      // };
+
+      // setDOMState(checkboxDOM, isActive);
+      // setDOMState(radioDOM, isActive);
     });
+
     this.selectValue = finalValue;
+
     if (emitEvent) {
       this.emit(
         'selectChange',
@@ -109,6 +137,11 @@ export default class SelectControl<
     return false;
   }
 
+  /**
+   * 渲染弹窗内容
+   * @param options
+   * @returns
+   */
   protected getPopperContent(options: ControlOptionItem[]): HTMLElement {
     const isImageOptions = this.isImageOptions();
     const content = DOM.create(
@@ -150,6 +183,8 @@ export default class SelectControl<
     ) as HTMLElement;
     if (this.getIsMultiple()) {
       optionDOM.appendChild(this.createCheckbox(isSelect));
+    } else {
+      optionDOM.appendChild(this.createRadio(isSelect));
     }
     if (option.icon) {
       optionDOM.appendChild(option.icon);
@@ -193,6 +228,15 @@ export default class SelectControl<
       DOM.setChecked(checkboxDOM, true);
     }
     return checkboxDOM;
+  }
+
+  protected createRadio(isSelect: boolean) {
+    const radioDOM = DOM.create('input') as HTMLElement;
+    radioDOM.setAttribute('type', 'radio');
+    if (isSelect) {
+      DOM.setChecked(radioDOM, true);
+    }
+    return radioDOM;
   }
 
   protected onItemClick = (item: ControlOptionItem) => {

@@ -62,12 +62,8 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
 
   public getLayerVisible() {
     return this.layers
-      .filter((layer) => {
-        return layer.isVisible();
-      })
-      .map((layer) => {
-        return layer.name;
-      });
+      .filter((layer) => layer.isVisible())
+      .map((layer) => layer.name);
   }
 
   public getLayerOptions(): ControlOptionItem[] {
@@ -119,6 +115,13 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
       this.controlOption.options = this.getLayerOptions();
     }
     if (!this.controlOption.defaultValue) {
+      // this.multiple ? this.getLayerVisible() : this.getLayerVisible()[0]
+      
+      // const defaultVal = this.getIsMultiple()
+      //   ? this.getLayerVisible()
+      //   : this.getLayerVisible()[0];
+      // this.controlOption.defaultValue = defaultVal;
+      
       this.controlOption.defaultValue = this.getLayerVisible();
     }
     this.on('selectChange', this.onSelectChange);

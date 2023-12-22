@@ -1,4 +1,4 @@
 {
-    "liveServer.settings.port": 5501
-
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs":"active"
 }

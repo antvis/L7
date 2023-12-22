@@ -322,6 +322,11 @@
   top: 0;
   right: 0;
 }
+.l7-select-control--image .l7-select-control-item input[type='radio'] {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 .l7-select-control--image .l7-select-control-item .l7-select-control-item-row {
   display: flex;
   align-items: center;
