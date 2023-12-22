@@ -706,7 +706,6 @@ export default defineConfig({
   },
   alias: {
     '@antv/l7': path.resolve(__dirname, '../l7/src'),
-    '@antv/l7-mini': path.resolve(__dirname, '../mini/src'),
     '@antv/l7-maps/lib/map': path.resolve(__dirname, '../maps/src/map'),
     '@antv/l7-core': path.resolve(__dirname, '../core/src'),
     '@antv/l7-component': path.resolve(__dirname, '../component/src'),
