@@ -36,7 +36,6 @@ export interface IPopperOption {
   className?: string; // 容器自定义 className
   container: HTMLElement; // 触发气泡的容器
   unique?: boolean; // 当前气泡展示时，是否关闭其他该配置为 true 的气泡
-  isShow?: boolean; // 是否展示
 }
 
 export class Popper extends EventEmitter<'show' | 'hide'> {
