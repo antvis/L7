@@ -112,7 +112,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public setOptions(option: Partial<ILayerSwitchOption>) {
-    const isLayerChange = this.checkUpdateOption(option, ['layers']);
+    const isLayerChange = this.checkUpdateOption(option, ['layers', 'multiple']);
     super.setOptions(option);
     if (isLayerChange) {
       this.selectValue = this.getLayerVisible();
