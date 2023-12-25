@@ -31,6 +31,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
     const { layers } = this.controlOption;
     if (Array.isArray(layers) && layers.length) {
       const layerInstances: ILayer[] = [];
+
       layers.forEach((layer) => {
         if (layer instanceof Object) {
           if (isLayerSwitchItem(layer)) {
@@ -47,6 +48,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
           }
         }
       });
+
       return layerInstances;
     }
     return layerService.getLayers() || [];
@@ -103,7 +105,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public setOptions(option: Partial<ILayerSwitchOption>) {
-    const isLayerChange = this.checkUpdateOption(option, ['layers']);
+    const isLayerChange = this.checkUpdateOption(option, ['layers', 'multiple']);
     super.setOptions(option);
     if (isLayerChange) {
       this.selectValue = this.getLayerVisible();
@@ -113,15 +115,22 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public onAdd(): HTMLElement {
+    // TODO: 单选模式下，目前默认展示第一项，通过用户提供defaultValue展示默认选项的属性待开发
+    // 如果是单选模式，则只显示第一个图层
+    if (this.controlOption.multiple === false) {
+      this.layers.forEach((layer, index) => {
+        index === 0 ? layer.show() : layer.hide();
+      });
+    }
+
     if (!this.controlOption.options?.length) {
       this.controlOption.options = this.getLayerOptions();
     }
+
     if (!this.controlOption.defaultValue) {
-      const defaultVal = this.controlOption.multiple
-        ? this.getLayerVisible()
-        : this.getLayerVisible()[0];
-      this.controlOption.defaultValue = defaultVal;
+      this.controlOption.defaultValue = this.getLayerVisible();
     }
+
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);
     return super.onAdd();

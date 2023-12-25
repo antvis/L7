@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import type { FunctionComponent} from 'react';
 import { useEffect } from 'react';
+import { message } from 'antd';
 
 const Demo: FunctionComponent = () => {
   const [layers, setLayers] = useState<ILayer[]>([]);
@@ -121,8 +122,20 @@ const Demo: FunctionComponent = () => {
           }
         }}
       >
-        切换点图层显隐
+        切换图层显隐
       </button>
+
+      <button
+        onClick={() => {
+          control?.setOptions({
+            multiple: !control.getOptions().multiple,
+          });
+          message.info(`当前图层选择模式：${control?.getOptions().multiple ? '多选' : '单选'}`);
+        }}
+      >
+        切换单选或多选模式
+      </button>
+
       <button
         onClick={() => {
           if (newLayer && control && !layers.includes(newLayer)) {
