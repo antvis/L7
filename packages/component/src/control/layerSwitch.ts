@@ -49,6 +49,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
         }
       });
 
+      // TODO: 单选模式下，目前默认展示第一项，通过用户提供defaultValue展示默认选项的属性待开发
       // 如果是单选，则只显示第一个图层
       if (this.controlOption.multiple === false) {
         layerInstances.forEach((layer, index) => {
