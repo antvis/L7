@@ -49,14 +49,6 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
         }
       });
 
-      // TODO: 单选模式下，目前默认展示第一项，通过用户提供defaultValue展示默认选项的属性待开发
-      // 如果是单选，则只显示第一个图层
-      if (this.controlOption.multiple === false) {
-        layerInstances.forEach((layer, index) => {
-          index === 0 ? layer.show() : layer.hide();
-        });
-      }
-
       return layerInstances;
     }
     return layerService.getLayers() || [];
@@ -123,13 +115,22 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public onAdd(): HTMLElement {
+    // TODO: 单选模式下，目前默认展示第一项，通过用户提供defaultValue展示默认选项的属性待开发
+    // 如果是单选模式，则只显示第一个图层
+    if (this.controlOption.multiple === false) {
+      this.layers.forEach((layer, index) => {
+        index === 0 ? layer.show() : layer.hide();
+      });
+    }
+
     if (!this.controlOption.options?.length) {
       this.controlOption.options = this.getLayerOptions();
     }
-    
+
     if (!this.controlOption.defaultValue) {
       this.controlOption.defaultValue = this.getLayerVisible();
     }
+
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);
     return super.onAdd();
