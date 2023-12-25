@@ -54,6 +54,7 @@ export default class RasterModel extends BaseModel {
 
   private async getRasterData(parserDataItem: any) {
     if (Array.isArray(parserDataItem.data)) {
+ 
       const { data, ...rescfg } = parserDataItem;
       this.dataOption = rescfg;
       return {

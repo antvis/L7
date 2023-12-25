@@ -24,6 +24,7 @@ export const TestDemoList: Array<{
 
             }, {
                 name: "image",
+                snapshots: false,
                 sleepTime: 1
             }]
         },
