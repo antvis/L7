@@ -28,7 +28,8 @@ export interface ITexture2DInitializationOptions {
     | gl.RGB5_A1
     | gl.RGB565
     | gl.DEPTH_COMPONENT
-    | gl.DEPTH_STENCIL;
+    | gl.DEPTH_STENCIL
+    | gl.RED;
 
   /**
    * 纹理数据类型，可能需要引入扩展，例如 ext.HALF_FLOAT_OES

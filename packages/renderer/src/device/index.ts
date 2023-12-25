@@ -67,6 +67,10 @@ export default class DeviceRendererService implements IRendererService {
    */
   currentFramebuffer: DeviceFramebuffer | null;
 
+  queryVerdorInfo = () => {
+    return this.device.queryVendorInfo().platformString;
+  };
+
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
 

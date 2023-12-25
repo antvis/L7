@@ -210,6 +210,7 @@ export enum gl {
   RGBA = 0x1908,
   LUMINANCE = 0x1909,
   LUMINANCE_ALPHA = 0x190a,
+  RED = 0x1903,
 
   /* PixelType */
   /*      UNSIGNED_BYTE */

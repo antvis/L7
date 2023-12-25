@@ -1,11 +1,5 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -84,19 +78,22 @@ export default class RasterModel extends BaseModel {
   public async buildModels(): Promise<IModel[]> {
     this.initUniformsBuffer();
     const source = this.layer.getSource();
-    const { createTexture2D } = this.rendererService;
+    const { createTexture2D, queryVerdorInfo } = this.rendererService;
     const parserDataItem = source.data.dataArray[0];
 
     const { data, width, height } = await this.getRasterData(parserDataItem);
 
     this.texture = createTexture2D({
-      data,
+      // @ts-ignore
+      data: new Float32Array(data),
       width,
       height,
-      format: gl.LUMINANCE,
+      /**
+       * WebGL1 allow the combination of gl.LUMINANCE & gl.FLOAT with OES_texture_float
+       */
+      format: queryVerdorInfo() === 'WebGL1' ? gl.LUMINANCE : gl.RED,
       type: gl.FLOAT,
       alignment: 1,
-      // aniso: 4,
     });
 
     const model = await this.layer.buildLayerModel({

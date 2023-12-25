@@ -1,20 +1,15 @@
-import type {
-  Device,
-  Sampler,
-  Texture} from '@antv/g-device-api';
+import type { Device, Sampler, Texture } from '@antv/g-device-api';
 import {
   TextureUsage as DeviceTextureUsage,
   FilterMode,
   Format,
-  MipmapFilterMode
+  MipmapFilterMode,
 } from '@antv/g-device-api';
 import type {
   ITexture2D,
-  ITexture2DInitializationOptions} from '@antv/l7-core';
-import {
-  TextureUsage,
-  gl,
+  ITexture2DInitializationOptions,
 } from '@antv/l7-core';
+import { TextureUsage, gl } from '@antv/l7-core';
 import { wrapModeMap } from './constants';
 
 export function isTexture2D(t: any): t is ITexture2D {
@@ -60,6 +55,10 @@ export default class DeviceTexture2D implements ITexture2D {
       pixelFormat = Format.U8_LUMINANCE;
     } else if (type === gl.FLOAT && format === gl.RGB) {
       pixelFormat = Format.F32_RGB;
+    } else if (type === gl.FLOAT && format === gl.RGBA) {
+      pixelFormat = Format.F32_RGBA;
+    } else if (type === gl.FLOAT && format === gl.RED) {
+      pixelFormat = Format.F32_R;
     } else {
       throw new Error(`create texture error, type: ${type}, format: ${format}`);
     }
