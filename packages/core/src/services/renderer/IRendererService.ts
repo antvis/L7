@@ -85,4 +85,5 @@ export interface IRendererService {
   destroy(): void;
   beginFrame(): void;
   endFrame(): void;
+  queryVerdorInfo(): string;
 }
