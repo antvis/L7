@@ -42,7 +42,7 @@ function strethRgb2minMax(bandsData: IRasterData[], options?: SchemaRGBOption) {
 
 // https://gis.stackexchange.com/questions/324888/what-does-cumulative-count-cut-actually-do
 
-function percentile(data: TypedArray, minPercent: number, maxPercent: number) {
+export function percentile(data: TypedArray, minPercent: number, maxPercent: number) {
   // 计算效率问题
   const sortData = data.slice().sort((a, b) => a - b);
   const dataLength = sortData.length;
