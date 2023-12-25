@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.20.9",
+  "version": "2.20.10",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -25,7 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-utils": "2.20.9",
+    "@antv/l7-utils": "2.20.10",
     "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.2.5",
     "@turf/helpers": "^6.1.4",
