@@ -31,6 +31,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
     const { layers } = this.controlOption;
     if (Array.isArray(layers) && layers.length) {
       const layerInstances: ILayer[] = [];
+
       layers.forEach((layer) => {
         if (layer instanceof Object) {
           if (isLayerSwitchItem(layer)) {
@@ -47,13 +48,21 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
           }
         }
       });
+
+      // 如果是单选，则只显示第一个图层
+      if (this.controlOption.multiple === false) {
+        layerInstances.forEach((layer, index) => {
+          index === 0 ? layer.show() : layer.hide();
+        });
+      }
+
       return layerInstances;
     }
     return layerService.getLayers() || [];
   }
 
   public getDefault(option?: Partial<ILayerSwitchOption>): ILayerSwitchOption {
-    return {
+        return {
       ...super.getDefault(option),
       title: '图层控制',
       btnIcon: createL7Icon('l7-icon-layer'),
@@ -116,11 +125,9 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
     if (!this.controlOption.options?.length) {
       this.controlOption.options = this.getLayerOptions();
     }
+    
     if (!this.controlOption.defaultValue) {
-      const defaultVal = this.controlOption.multiple
-        ? this.getLayerVisible()
-        : this.getLayerVisible()[0];
-      this.controlOption.defaultValue = defaultVal;
+      this.controlOption.defaultValue = this.getLayerVisible();
     }
     this.on('selectChange', this.onSelectChange);
     this.layerService.on('layerChange', this.onLayerChange);

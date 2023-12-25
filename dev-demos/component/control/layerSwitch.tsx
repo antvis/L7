@@ -123,6 +123,17 @@ const Demo: FunctionComponent = () => {
       >
         切换点图层显隐
       </button>
+
+      <button
+        onClick={() => {
+          control?.setOptions({
+            multiple: !control.getOptions().multiple,
+          });
+        }}
+      >
+        切换单选或多选模式
+      </button>
+
       <button
         onClick={() => {
           if (newLayer && control && !layers.includes(newLayer)) {
