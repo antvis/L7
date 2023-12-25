@@ -29,6 +29,8 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
         return 'raster';
       case 'rasterRgb':
         return 'rasterRgb';
+      case 'rgb':
+        return 'rasterRgb';
       case 'image':
         return 'rasterTerrainRgb';
       default:
