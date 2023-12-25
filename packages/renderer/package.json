@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.20.9",
+  "version": "2.20.10",
   "description": "",
   "license": "ISC",
   "author": "xiaoiver",
@@ -25,15 +25,15 @@
   },
   "dependencies": {
     "@antv/g-device-api": "^1.4.10",
-    "@antv/l7-core": "2.20.9",
-    "@antv/l7-utils": "2.20.9",
+    "@antv/l7-core": "2.20.10",
+    "@antv/l7-utils": "2.20.10",
     "@babel/runtime": "^7.7.7",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.2.1",
     "regl": "1.6.1"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.20.9",
+    "@antv/l7-test-utils": "2.20.10",
     "gl": "^6.0.2"
   },
   "publishConfig": {
