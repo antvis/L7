@@ -62,7 +62,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public getDefault(option?: Partial<ILayerSwitchOption>): ILayerSwitchOption {
-        return {
+    return {
       ...super.getDefault(option),
       title: '图层控制',
       btnIcon: createL7Icon('l7-icon-layer'),
