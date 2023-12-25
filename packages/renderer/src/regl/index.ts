@@ -45,6 +45,10 @@ export default class ReglRendererService implements IRendererService {
   private height: number;
   private isDirty: boolean;
 
+  queryVerdorInfo = () => {
+    return 'WebGL1';
+  };
+
   public async init(
     canvas: HTMLCanvasElement,
     cfg: IRenderConfig,
