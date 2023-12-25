@@ -90,11 +90,11 @@ export default class RasterModel extends BaseModel {
     const { data, width, height } = await this.getRasterData(parserDataItem);
 
     this.texture = createTexture2D({
-      data: new Uint8Array(data),
+      data,
       width,
       height,
       format: gl.LUMINANCE,
-      type: gl.UNSIGNED_BYTE,
+      type: gl.FLOAT,
       alignment: 1,
       // aniso: 4,
     });

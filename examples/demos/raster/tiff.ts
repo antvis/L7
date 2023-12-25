@@ -27,7 +27,7 @@ export function MapRender(option:{
 }) {
     const scene = new Scene({
         id: 'map',
-        renderer:option.renderer,
+        // renderer:option.renderer,
         map: new allMap[option.map || 'Map']({
             center: [105, 37.5],
             zoom: 2.5,
@@ -45,6 +45,7 @@ export function MapRender(option:{
             zIndex: 2,
             visible: true,
         });
+        console.log(tiffdata)
         layer
             .source(tiffdata.data, {
                 parser: {
