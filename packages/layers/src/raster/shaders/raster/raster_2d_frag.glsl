@@ -17,7 +17,7 @@ out vec4 outputColor;
 
 void main() {
   // Can use any component here since u_rasterTexture is under luminance format.
-  float value = texture(SAMPLER_2D(u_rasterTexture), vec2(v_texCoord.x, v_texCoord.y)).r * 255.0;
+  float value = texture(SAMPLER_2D(u_rasterTexture), vec2(v_texCoord.x, v_texCoord.y)).r;
   if (value == u_noDataValue || isnan_emu(value)) {
     discard;
   } else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1])) {

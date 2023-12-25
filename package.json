@@ -12,12 +12,12 @@
     "dev-demos/*"
   ],
   "scripts": {
-    "vite-dev": "VITE_RENDERER='device' vite dev",
-    "vite-build": "vite build",
-    "dev": "export NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
+    "dev": "vite dev",
+    "dev_build": "vite build",
+    "dev-dumo": "export NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
     "dev-device": "export NODE_OPTIONS=--openssl-legacy-provider renderer=device && dumi dev renderer=device",
     "dev_windows": "dumi dev",
-    "dev-build": "export NODE_OPTIONS=--openssl-legacy-provider && dumi build",
+    "dumi-build": "export NODE_OPTIONS=--openssl-legacy-provider && dumi build",
     "dev:ci": "vite dev",
     "start": "lerna --scope @antv/l7-site exec yarn run site:develop",
     "site:build": "lerna --scope @antv/l7-site exec yarn run site:build",
