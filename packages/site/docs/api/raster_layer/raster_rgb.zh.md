@@ -1,6 +1,6 @@
 ---
 title: Raster RGB
-order: 1
+order: 3
 ---
 
 <embed src="@/docs/api/common/style.md"></embed>
@@ -8,10 +8,6 @@ order: 1
 ## 简介
 
 `Raster RGB ` 波段组合可视化，不同波段映射到 R/G/B 通道可视化
-
-## Option
-
-<embed src="@/docs/api/common/layer/options.zh.md"></embed>
 
 ## source
 

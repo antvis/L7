@@ -8,9 +8,11 @@ import * as GeoTIFF from 'geotiff';
 async function getTiffData(url: string) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
-  return arrayBuffer;
+  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+  const image1 = await tiff.getImage();
+  const bandsValues = await image1.readRasters();
+  return bandsValues;
 }
-
 
 const scene = new Scene({
   id: 'map',
@@ -48,29 +50,13 @@ scene.on('loaded', async () => {
 
   layer
     .source(
-      [
-        {
-          data: tiffdata,
-          bands: [4, 5].map((v) => v - 1),
-        },
-      ],
+      tiffdata,
       {
         parser: {
-          type: 'raster',
-          format: async (data, bands) => {
-            const tiff = await GeoTIFF.fromArrayBuffer(data);
-            const image = await tiff.getImage();
-            const width = image.getWidth();
-            const height = image.getHeight();
-            const values = await image.readRasters();
-            return [
-              { rasterData: values[bands[0]], width, height }, // R
-              { rasterData: values[bands[1]], width, height }, // NIR
-            ];
-          },
-          operation: {
-            type: 'nd',
-          },
+          type: 'ndi',
+          width: tiffdata.width,
+          height: tiffdata.height,
+          bands:[3,4],
           extent: [
             130.39565357746957, 46.905730725742366, 130.73364094187343,
             47.10217234153133,

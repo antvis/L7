@@ -1,4 +1,4 @@
-raster-rgb source synthesizes multi-band data into RGB data for display. For example, for LandSat8 data, we can perform RGB combination display according to the 5,4,3 or 4,3,2 bands.
+raster-ndi(Normalized Difference Indices) source is to calculate the normalized index of multi-band data, such as calculating NDVI/NDWI and other indices.
 
 ### demo
 
@@ -8,10 +8,10 @@ layer
       bandsValues,
       {
         parser: {
-          type: 'rgb',
+          type: 'ndi',
           width: bandsValues.width,
           height: bandsValues.height,
-          bands: [4, 3, 2], // 从零开始
+          bands: [4, 3], // start from zero
           extent: [
             130.39565357746957, 46.905730725742366, 130.73364094187343,
             47.10217234153133,
@@ -49,15 +49,13 @@ async function getTiffData(url: string) {
 
 * type parsing type 'rgb'`必选`
 
-* bands `[number,number,number] 指定 R/G/B 通道对应的数据索引,data 数组长度需要大于等于 3  `Required\`
+* bands `[number,number] 指定需要归一化的波段,data 数组长度需要大于等于 2  `Required\`
 
-  Note: The bands serial number starts from zero (bands 5, 4, and 3 in landsat 8 should be set to 4, 3, 2)
+  Note: The bands serial number starts from zero (5, 4 in landsat 8, the band should be set to 4, 3)
 
 * width length`必选`
 
 * height width`必选`
-
-* countCut color stretching depends on`[number,number]`Value is percentage, default value`[2,98]` `可选`
 
 ### Complete example
 

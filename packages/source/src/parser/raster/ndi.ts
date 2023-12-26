@@ -1,6 +1,5 @@
 import type { IParserData } from '@antv/l7-core';
 import type { IRasterCfg } from '../../interface';
-import { percentile } from '../../utils/bandOperation/operationSchema';
 
 
 /**

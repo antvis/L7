@@ -557,8 +557,8 @@ export default defineConfig({
         slug: 'raster',
         icon: 'raster',
         title: {
-          zh: '栅格图层🌟',
-          en: 'Raster Layer🌟',
+          zh: '栅格图层',
+          en: 'Raster Layer',
         },
         order: 7,
       },
@@ -566,8 +566,8 @@ export default defineConfig({
         slug: 'tile',
         icon: 'raster',
         title: {
-          zh: '瓦片图层 🌟',
-          en: 'Tile Layer🌟 ',
+          zh: '瓦片图层',
+          en: 'Tile Layer',
         },
         order: 7,
       },
@@ -575,8 +575,8 @@ export default defineConfig({
         slug: 'Mask',
         icon: 'raster',
         title: {
-          zh: '图层掩膜 🌟',
-          en: 'Layer Mask🌟 ',
+          zh: '图层掩膜',
+          en: 'Layer Mask',
         },
         order: 7,
       },

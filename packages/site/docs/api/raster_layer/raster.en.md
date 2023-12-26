@@ -1,5 +1,5 @@
 ---
-title: Raster
+title: RasterLayer
 order: 0
 ---
 
