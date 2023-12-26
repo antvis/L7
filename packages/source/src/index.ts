@@ -10,7 +10,8 @@ import raster from './parser/raster';
 import rasterTile, { rasterDataTypes } from './parser/raster-tile';
 import rasterRgb from './parser/rasterRgb';
 import testTile from './parser/testTile';
-import rgb from './parser/raster/rgb'
+import rgb from './parser/raster/rgb';
+import ndi from './parser/raster/ndi';
 import Source from './source';
 import { cluster } from './transform/cluster';
 import { filter } from './transform/filter';
@@ -40,6 +41,7 @@ registerParser('json', json);
 registerParser('raster', raster);
 registerParser('rasterRgb', rasterRgb);
 registerParser('rgb', rgb);
+registerParser('ndi', ndi);
 registerTransform('cluster', cluster);
 registerTransform('filter', filter);
 registerTransform('join', join);
