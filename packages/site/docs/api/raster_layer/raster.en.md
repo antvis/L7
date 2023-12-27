@@ -1,23 +1,23 @@
 ---
-title: Raster 栅格
+title: RasterLayer
 order: 0
 ---
 
 <embed src="@/docs/api/common/style.md"></embed>
 
-## 简介
+## Introduction
 
-`RasterLayer` 图层主要实现栅格数据的可视化，栅格数据主要来源是卫星遥感数据，如数字高程图，植被分布图，夜光图。
+`RasterLayer`The layer mainly realizes the visualization of raster data. The main source of raster data is satellite remote sensing data, such as digital elevation map, vegetation distribution map, and night light map.
 
-- L7 本身内部没有提供栅格数据格式, 需要将外部的栅格数据文件解析后或者提供解析方法做传入、如 `tiff`、`lerc`。
-- 栅格图层除了支持简单渲染之外还支持栅格数据的多波段计算，可以用于绘制遥感彩色影像。
+* L7 itself does not provide a raster data format internally. It needs to parse the external raster data file or provide a parsing method to pass it in, such as`tiff`、`lerc`。
+* In addition to supporting simple rendering, the raster layer also supports multi-band calculations of raster data, and can be used to draw remote sensing color images.
 
-### 数据绘制
+### Data plotting
 
-我们可以直接在外部计算出栅格的波段数据后传给栅格图层使用。
+We can directly calculate the band data of the raster externally and then pass it to the raster layer for use.
 
-- 不需要额外提供栅格数据的提取方法，在外部解析传入解析好的栅格数据。
-- 这种方式只支持对单波段数据进行染色，无法进行波段计算。
+* There is no need to provide additional extraction methods for raster data, and the parsed raster data can be parsed externally.
+* This method only supports coloring of single-band data and cannot perform band calculations.
 
 ```js
 const layer = new RasterLayer({})
@@ -48,12 +48,12 @@ const layer = new RasterLayer({})
   });
 ```
 
-### 多波段计算
+### Multi-band calculation
 
-我们可以将请求得到的栅格文件传给栅格图层使用。
+We can pass the requested raster file to the raster layer for use.
 
-- 需要额外提供栅格数据的解析方法，不同格式的栅格文件有需要对应的方法，如 `tiff` 格式的文件我们一般借助 `geotiff.js` 进行解析。
-- 直接传入一（多）个栅格文件的时候，我们可以读取文件中包含的所有波段的栅格数据，同时支持对波段数据进行简单的数学运算。
+* Additional parsing methods for raster data need to be provided. Raster files in different formats require corresponding methods, such as`tiff`For files in the format we generally use`geotiff.js`Perform analysis.
+* When directly importing one (multiple) raster files, we can read the raster data of all bands contained in the file and support simple mathematical operations on the band data.
 
 <div>
   <div style="width:60%;float:left; margin: 10px;">
@@ -61,7 +61,7 @@ const layer = new RasterLayer({})
   </div>
 </div>
 
-#### 计算 NDVI
+#### Calculate NDVI
 
 ```javascript
 async function getTiffData(url: string) {
