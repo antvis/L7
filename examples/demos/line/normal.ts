@@ -70,7 +70,7 @@ export function MapRender(option: {
       const source = new Source(geoData);
       const layer = new LineLayer({ blend: 'normal',autoFit: true})
         .source(source)
-        .size(10)
+        .size(1)
         .shape('line')
         .color('#f00')
         .style({
@@ -80,5 +80,10 @@ export function MapRender(option: {
       scene.on('loaded', () => {
         scene.addLayer(layer);
       });
+
+      setTimeout(() => {
+        layer.size(20)
+        scene.render()
+      },2000)
 
 }
