@@ -1,13 +1,13 @@
 ---
-title: RasterLayer multi band
-order: 2
+title: Raster NDI
+order: 4
 ---
 
 <embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
-Multi-band data overlay calculation coloring.
+`Raster NDI`Normalized Difference Indices Calculation of normalized indices, providing another band for normalized calculation
 
 ## Option
 
@@ -15,7 +15,7 @@ Multi-band data overlay calculation coloring.
 
 ## source
 
-<embed src="@/docs/api/common/source/raster/raster_band_calc.en.md"></embed>
+<embed src="@/docs/api/common/source/raster/raster_ndi.en.md"></embed>
 
 ## style
 
