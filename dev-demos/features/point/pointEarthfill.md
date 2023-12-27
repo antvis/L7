@@ -90,14 +90,11 @@ export default () => {
                   y: 'latitude',
                 },
               })
-              .shape('name', [
-                'cylinder',
-                'triangleColumn',
-                'hexagonColumn',
-                'squareColumn',
-              ])
+              .shape('squareColumn')
               .active(true)
-              .size([1,1,5])
+             .size('unit_price', (h) => {
+            return [6, 6, 100];
+          })
               .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])
               .style({
                 opacity:1,
