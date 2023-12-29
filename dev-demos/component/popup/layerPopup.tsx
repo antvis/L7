@@ -9,7 +9,7 @@ import {
 import { featureCollection, point } from '@turf/turf';
 import React, { useState } from 'react';
 // tslint:disable-next-line:no-duplicate-imports
-import type { FunctionComponent} from 'react';
+import type { FunctionComponent } from 'react';
 import { useEffect } from 'react';
 
 const Demo: FunctionComponent = () => {
@@ -88,7 +88,7 @@ const Demo: FunctionComponent = () => {
         .then((res) => res.json())
         .then((data) => {
           polygonLayer.setData(data);
-        });
+                  });
       newScene.addLayer(pointLayer);
       newScene.addLayer(polygonLayer);
       newScene.addLayer(lineString);
@@ -124,7 +124,7 @@ const Demo: FunctionComponent = () => {
             fields: ['name', 'lines'],
           },
         ],
-        trigger: 'click',
+        trigger: 'hover',
         closeOnClick: true,
       });
       // pointLayer.on('mousemove', (e) => {
