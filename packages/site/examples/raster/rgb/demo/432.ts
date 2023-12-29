@@ -7,7 +7,10 @@ import * as GeoTIFF from 'geotiff';
 async function getTiffData(url: string) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
-  return arrayBuffer;
+  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+  const image1 = await tiff.getImage();
+  const bandsValues = await image1.readRasters();
+  return bandsValues;
 }
 
 const scene = new Scene({
@@ -38,35 +41,18 @@ scene.on('loaded', async () => {
   scene.addLayer(layer2);
   const url1 =
     'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
-  const tiffdata = await getTiffData(url1);
+  const bandsValues = await getTiffData(url1);
 
   const layer = new RasterLayer({ zIndex: 10 });
   layer
     .source(
-      [
-        {
-          data: tiffdata,
-          bands: [5, 4, 3].map((v) => v - 1),
-        },
-      ],
+      bandsValues,
       {
         parser: {
-          type: 'rasterRgb',
-          format: async (data, bands) => {
-            const tiff = await GeoTIFF.fromArrayBuffer(data);
-            const image1 = await tiff.getImage();
-            const value = await image1.readRasters();
-            return bands.map((band) => {
-              return {
-                rasterData: value[band],
-                width: value.width,
-                height: value.height,
-              };
-            });
-          },
-          operation: {
-            type: 'rgb',
-          },
+          type: 'rgb',
+          bands: [3, 2, 1], // 从零开始
+          width: bandsValues.width,
+          height: bandsValues.height,
           extent: [
             130.39565357746957, 46.905730725742366, 130.73364094187343,
             47.10217234153133,

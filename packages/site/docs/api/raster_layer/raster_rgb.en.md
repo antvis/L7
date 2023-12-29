@@ -1,6 +1,6 @@
 ---
 title: RasterLayer Composite band
-order: 1
+order: 3
 ---
 
 <embed src="@/docs/api/common/style.md"></embed>

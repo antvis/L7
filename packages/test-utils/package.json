@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@antv/l7-test-utils",
-  "version": "2.20.10",
+  "version": "2.20.12",
   "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
   "keywords": [],
   "author": "lzxue <lzx199065@gmail.com>",
@@ -39,9 +39,9 @@
     "url": "https://github.com/antvis/L7/issues"
   },
   "devDependencies": {
-    "@antv/l7-map": "2.20.10",
-    "@antv/l7-maps": "2.20.10",
-    "@antv/l7-scene": "2.20.10",
+    "@antv/l7-map": "2.20.12",
+    "@antv/l7-maps": "2.20.12",
+    "@antv/l7-scene": "2.20.12",
     "gl": "^6.0.2",
     "regl": "1.6.1"
   },

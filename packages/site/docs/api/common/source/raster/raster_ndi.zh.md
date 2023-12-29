@@ -1,10 +1,9 @@
-
-raster-rgb source 是将多波段数据合成 RGB数据进行展示，如对 LandSat8 数据我们可以按照 5,4,3 或者 4,3,2 波段进行RGB组合显示
+raster-ndi(Normalized Difference Indices) source 是将多波段数据进行归一化指数计算，比如计算NDVI/NDWI 等指数，
 
 - data  数据
 - option 配置项
   - parser 数据解析参数
-     - type 解析类型 `rgb`
+    - type 解析类型 `ndi`
 
 ```ts
 layer
@@ -12,10 +11,10 @@ layer
       bandsValues,
       {
         parser: {
-          type: 'rgb',
+          type: 'ndi',
           width: bandsValues.width,
           height: bandsValues.height,
-          bands: [4, 3, 2], // 从零开始
+          bands: [4, 3], // 从零开始
           extent: [
             130.39565357746957, 46.905730725742366, 130.73364094187343,
             47.10217234153133,
@@ -56,15 +55,14 @@ async function getTiffData(url: string) {
 ### parser
 
 - type 解析类型  'rgb' `必选`
-- bands `[number,number,number] 指定 R/G/B 通道对应的数据索引,data 数组长度需要大于等于 3  `必选`
+- bands `[number,number] 指定需要归一化的波段,data 数组长度需要大于等于 2  `必选`
   
-  注：bands 序号从零开始（landsat 8 里的 5，4,3 波段这样要设置为 4,3, 2）
+  注：bands 序号从零开始（landsat 8 里的 5，4, 波段这样要设置为 4,3）
 
 - width 长度 `必选`
 - height 宽度 `必选`
-- countCut 颜色拉伸参数 `[number,number]` 数值为百分比，默认值 `[2,98]` `可选`
 
 ### 完整示例
 
-[Raster RGB](../../../../examples/raster/rgb/#543)
+[Raster ndi](../../../../examples/raster/ndi/#ndbi)
 

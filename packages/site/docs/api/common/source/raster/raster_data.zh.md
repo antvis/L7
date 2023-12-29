@@ -1,6 +1,21 @@
+
+Raster data 数据栅格的可视化，栅格数据主要来源是卫星遥感数据，如数字高程图，植被分布图，夜光图。
+
+
+
+- data  数据
+- option 配置项
+  - parser 数据解析参数
+
+
 ### data
 
 data 解析后的数据，为数组
+
+```ts 
+type RasterDataType= Uint8Array | Int8Array | Uint16Array | Int16Array | Uint32Array | Int32Array | Float32Array | Float64Array
+
+```
 
 以 geotiff 为例需要先将数据解析出来，作为 data 输入给 source
 
@@ -56,3 +71,8 @@ layer.source(rasterData, {
   },
 });
 ```
+
+### 完整示例
+
+[Raster ndi](../../../../examples/raster/data/#dem)
+
