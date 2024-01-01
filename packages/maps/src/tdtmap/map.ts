@@ -397,8 +397,8 @@ export default class TdtMapService extends BaseMapService<any> {
   }
 
   public lngLatToCoord([lng, lat]: [number, number]): [number, number] {
-    const mercatorXYZ= this.lngLatToMercator([lng,lat],0.0);
-    return [mercatorXYZ.x,mercatorXYZ.y];
+    const pixelCoord = this.lngLatToPixel([lng, lat]);
+    return [pixelCoord.x,pixelCoord.y];
   }
 
   public lngLatToCoords(list: number[][] | number[][][]): any {
