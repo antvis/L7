@@ -3,19 +3,13 @@ import type {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  ITexture2D,
 } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import type {
-  ILineLayerStyleOptions} from '../../core/interface';
-import {
-  LinearDir,
-  TextureBlend,
-} from '../../core/interface';
+import type { ILineLayerStyleOptions } from '../../core/interface';
+import { LinearDir, TextureBlend } from '../../core/interface';
 // import { LineTriangulation } from '../../core/triangulation';
 
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -269,7 +263,7 @@ export default class LineModel extends BaseModel {
         },
       },
     });
-  
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,

@@ -75,7 +75,8 @@ export default class DeviceTexture2D implements ITexture2D {
         unpackFlipY: flipY,
         packAlignment: alignment,
       },
-      mipLevelCount: usage === TextureUsage.RENDER_TARGET ? 1 : mipmap ? 1 : 0,
+      // mipLevelCount: usage === TextureUsage.RENDER_TARGET ? 1 : mipmap ? 1 : 0,
+      mipLevelCount: 1,
     });
     if (data) {
       // @ts-ignore
