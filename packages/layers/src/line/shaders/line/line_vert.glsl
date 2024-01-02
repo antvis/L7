@@ -3,11 +3,9 @@
 
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
-layout(location = 10) in vec2 a_DistanceAndIndex;
 layout(location = 9) in vec2 a_Size;
-layout(location = 11) in float a_Total_Distance;
-layout(location = 13) in vec3 a_Normal;
-layout(location = 15) in float a_Miter;
+layout(location = 10) in vec3 a_DistanceAndIndexAndMiter;
+layout(location = 13) in vec4 a_Normal_Total_Distance;
 layout(location = 14) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
@@ -28,20 +26,25 @@ layout(std140) uniform commonUniorm {
   float u_linearColor: 0;
   float u_time;
 };
-#pragma include "projection"
-#pragma include "picking"
+
 
 out vec4 v_color;
 out vec4 v_stroke;
 //dash
 out vec4 v_dash_array;
 out float v_d_distance_ratio;
-
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 out vec2 v_iconMapUV;
 out vec4 v_texture_data;
 
+#pragma include "projection"
+#pragma include "picking"
+
 void main() {
+  vec2 a_DistanceAndIndex = a_DistanceAndIndexAndMiter.xy;
+  float a_Miter = a_DistanceAndIndexAndMiter.z;
+  vec3 a_Normal = a_Normal_Total_Distance.xyz;
+  float a_Total_Distance = a_Normal_Total_Distance.w;
   //dash输出
   v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_Total_Distance;
   v_d_distance_ratio = a_DistanceAndIndex.x / a_Total_Distance;

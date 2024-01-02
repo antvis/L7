@@ -11,9 +11,8 @@ export function MapRender(option: { map: string; renderer: string }) {
     shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
     map: new allMap[option.map || 'Map']({
       style: 'light',
-      center: [121.435159, 31.256971],
-      zoom: 14.89,
-      minZoom: 10,
+      center: [121.434765, 31.256735],
+      zoom: 14.83,
     }),
   });
   const geoData = {
