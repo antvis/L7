@@ -81,7 +81,8 @@ export default abstract class Tile extends EventEmitter implements ITile {
   }
 
   protected async addTileMask() {
-    const mask = new PolygonLayer({ visible: false, enablePicking: false })
+
+    const mask = new PolygonLayer({ name:'mask', visible: true, enablePicking: false })
       .source(
         {
           type: 'FeatureCollection',
@@ -93,8 +94,10 @@ export default abstract class Tile extends EventEmitter implements ITile {
             featureId: 'id',
           },
         },
+
       )
       .shape('fill')
+      .color('#0f0')
       .style({
         opacity: 0.5,
       });
@@ -110,7 +113,7 @@ export default abstract class Tile extends EventEmitter implements ITile {
     }
     return mask;
   }
-
+ // 全局 Mask
   protected async addMask(layer: ILayer, mask: ILayer) {
     const container = createLayerContainer(
       this.parent.sceneContainer as Container,

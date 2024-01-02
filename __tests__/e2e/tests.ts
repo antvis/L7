@@ -117,9 +117,11 @@ export const TestDemoList: Array<{
         {
             type:'tile',
             demos:[{
-                name:'normal'
+                name:'image'
             },{
                 name:'rgb'
+            },{
+                name:'vector'
             }]
 
         },
