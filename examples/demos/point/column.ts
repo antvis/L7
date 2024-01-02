@@ -8,7 +8,7 @@ export function MapRender(option: {
 
     const scene = new Scene({
         id: 'map',
-      renderer: option.renderer,
+        renderer: option.renderer,
         map: new allMap[option.map || 'Map']({
             style: 'light',
             center: [121.400257, 31.25287],

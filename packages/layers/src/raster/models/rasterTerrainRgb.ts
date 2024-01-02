@@ -11,12 +11,13 @@ import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IRasterTerrainLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import Raster_terrainFrag from '../shaders/terrain/terrain_rgb_frag.glsl';
 import Raster_terrainVert from '../shaders/terrain/terrain_rgb_vert.glsl';
 
 export default class RasterTerrainRGB extends BaseModel {
   protected texture: ITexture2D;
-  public getUninforms(): IModelUniform {
+  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
     const {
       opacity,
       clampLow = true,
@@ -44,18 +45,23 @@ export default class RasterTerrainRGB extends BaseModel {
         newdomain,
       );
     }
-    return {
-      u_opacity: opacity || 1,
-      u_texture: this.texture,
+    const commonOptions = {
+      u_unpack: [rScaler, gScaler, bScaler, offset],
       u_domain: newdomain,
+      u_opacity: opacity || 1,
+      u_noDataValue: noDataValue,
       u_clampLow: clampLow,
       u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
-      u_noDataValue: noDataValue,
-      u_unpack: [rScaler, gScaler, bScaler, offset],
-      u_colorTexture: texture!,
+      u_rasterTexture: this.texture,
+      u_colorTexture: texture,
     };
+    this.textures = [this.texture,texture!]
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
+
   }
   public async initModels(): Promise<IModel[]> {
+    this.initUniformsBuffer();
     const source = this.layer.getSource();
     const { createTexture2D } = this.rendererService;
     const imageData = await source.data.images;
@@ -92,6 +98,7 @@ export default class RasterTerrainRGB extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
