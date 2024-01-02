@@ -30,17 +30,29 @@ export default class TdtMapService extends BaseMapService<any> {
   protected viewport: IViewport | null = null;
   // @ts-ignore
   private sceneContainer: HTMLElement;
-  private origin: { x: number; y: number };
-
-  // init
+  // 不直接用自带的marker的div，因为会收到天地图缩放时visibility变成hidden的影响
   public addMarkerContainer(): void {
+    const container = this.map.getContainer();
+    const div = (this.markerContainer = document.createElement('div'));
+    container.appendChild(div);
+    // div.classList.add('l7-marker-container');
+    // div.classList.add('leaflet-layer');
+    // div.classList.add('leaflet-zoom-animated');
+    div.setAttribute('tabindex', '-1');
+    div.id = 'tdt-L7-marker';
+    div.style.position = 'absolute';
+    div.style.left = '0px';
+    div.style.top = '0px';
+    div.style.zIndex = '600';
+    div.style.width = '0px';
+    div.style.height = '0px';
+    div.style.overflow = 'visible';
     return;
   }
-
-  // @ts-ignore
-  // public getMarkerContainer(): HTMLElement {
-  //   return;
-  // }
+  
+  public getMarkerContainer(): HTMLElement {
+    return this.markerContainer;
+  }
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
@@ -48,11 +60,8 @@ export default class TdtMapService extends BaseMapService<any> {
   private resize(ev:any){
     this.sceneContainer.style.width = ev.newSize.x+'px';
     this.sceneContainer.style.height = ev.newSize.y+'px';
-    // this.update();
   }
   private update() {
-    // this.sceneContainer.style.width = ev.newSize.width
-    // this.sceneContainer.style.height = ev.newSize.height;
     const bounds = this.map.getBounds();
     const { x, y } = this.map.lngLatToLayerPoint({
       lng: bounds.getSouthWest().lng,
@@ -76,9 +85,12 @@ export default class TdtMapService extends BaseMapService<any> {
     // T._Q :DomUtil
     // this.map.options.IW.qW:map.project
     // GQ:multiply aQ:add DQ:substract
+    // 都是混淆后的方法,后续需要考虑讲这些方法都实现了,避免api更新后方法名发生改变
     const center = ev.center;
     const zoom = ev.zoom;
     const scale = this.getZoomScale(zoom,this.map.getZoom());
+    
+
     // @ts-ignore
     const position = T._Q.getPosition(this.sceneContainer);
     const viewHalf = this.map.getSize().GQ(0.5);
@@ -101,10 +113,9 @@ export default class TdtMapService extends BaseMapService<any> {
     overlayPane.parentElement.appendChild(container);
     container.id = 'tdt-L7';
     const size = this.map.getSize();
-    container.style.zIndex = '200';//至于上层
+    container.style.zIndex = '200';//置于上层
     container.style.width = `${size.x}px`;
-    container.style.height = `${size.y}px`;
-    
+    container.style.height = `${size.y}px`;    
     // @ts-ignore
     this.sceneContainer = container;
     return container;
@@ -190,17 +201,11 @@ export default class TdtMapService extends BaseMapService<any> {
     }
 
     const container = this.map.getContainer();
-    // tdt-pane的zindex是400，去掉
     const tdtPanes = container.querySelector('.tdt-pane');
     tdtPanes.style.zIndex = 1;
     this.handleCameraChanged();
-    const bounds = this.map.getBounds();
-    this.origin = this.map.lngLatToLayerPoint({
-      lng: bounds.getSouthWest().lng,
-      lat: bounds.getNorthEast().lat,
-    });
-
     this.map.on('move', this.update, this);
+    //对应leaflet中的zoomanim
     this.map.on('Ge', this.zoomStartUpdate, this);
     this.map.on('resize', this.resize, this);
   }
@@ -364,7 +369,7 @@ export default class TdtMapService extends BaseMapService<any> {
     scale: [number, number, number],
     origin: IMercator,
   ): number[] {
-    return [];
+    throw new Error('Method not implemented.');
   }
 
   public pixelToLngLat([x, y]: Point): ILngLat {
