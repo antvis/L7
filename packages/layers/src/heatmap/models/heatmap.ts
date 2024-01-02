@@ -421,7 +421,8 @@ export default class HeatMapModel extends BaseModel {
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const imageData = generateColorRamp(rampColors as IColorRamp);
     this.colorTexture = createTexture2D({
-      data: new Uint8Array(imageData.data),
+      data: imageData.data,
+      usage: TextureUsage.SAMPLED,
       width: imageData.width,
       height: imageData.height,
       wrapS: gl.CLAMP_TO_EDGE,
@@ -429,6 +430,7 @@ export default class HeatMapModel extends BaseModel {
       min: gl.NEAREST,
       mag: gl.NEAREST,
       flipY: false,
+      unorm: true,
     });
 
     this.preRampColors = rampColors;

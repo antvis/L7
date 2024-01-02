@@ -40,6 +40,7 @@ export default class DeviceTexture2D implements ITexture2D {
       // premultiplyAlpha = false,
       mag = gl.NEAREST,
       min = gl.NEAREST,
+      unorm = false,
       // colorSpace = gl.BROWSER_DEFAULT_WEBGL,
       // x = 0,
       // y = 0,
@@ -50,7 +51,7 @@ export default class DeviceTexture2D implements ITexture2D {
 
     let pixelFormat: Format = Format.U8_RGBA_RT;
     if (type === gl.UNSIGNED_BYTE && format === gl.RGBA) {
-      pixelFormat = Format.U8_RGBA_RT;
+      pixelFormat = unorm ? Format.U8_RGBA_NORM : Format.U8_RGBA_RT;
     } else if (type === gl.UNSIGNED_BYTE && format === gl.LUMINANCE) {
       pixelFormat = Format.U8_LUMINANCE;
     } else if (type === gl.FLOAT && format === gl.RGB) {
