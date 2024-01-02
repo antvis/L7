@@ -109,7 +109,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
     super.setOptions(option);
     if (isLayerChange) {
       if (this.controlOption.multiple === false) {
-        this.handleSingleSelectionMode();
+        this.handleSingleSelection();
       }
       this.selectValue = this.getLayerVisible();
       this.controlOption.options = this.getLayerOptions();
@@ -119,7 +119,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
 
   // TODO: 单选模式下，目前默认展示第一项，通过用户提供defaultValue展示默认选项的属性待开发
   // 如果是单选模式，则只显示第一个图层
-  private handleSingleSelectionMode() {
+  private handleSingleSelection() {
     this.layers.forEach((layer, index) => {
       index === 0 ? layer.show() : layer.hide();
     });
@@ -127,7 +127,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
 
   public onAdd(): HTMLElement {
     if (this.controlOption.multiple === false) {
-      this.handleSingleSelectionMode()
+      this.handleSingleSelection()
     }
 
     if (!this.controlOption.options?.length) {
