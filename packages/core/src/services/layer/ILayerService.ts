@@ -254,7 +254,7 @@ export interface IBaseTileLayerManager {
 }
 
 export interface ITilePickService {
-  pick(layer: ILayer, target: IInteractionTarget): boolean;
+  pick(layer: ILayer, target: IInteractionTarget): Promise<boolean>;
   pickRender(target: IInteractionTarget): void;
 }
 

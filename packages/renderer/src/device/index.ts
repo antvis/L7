@@ -252,21 +252,23 @@ export default class DeviceRendererService implements IRendererService {
     this.height = height;
   };
 
-  readPixels = (options: IReadPixelsOptions) => {
+  readPixels = async (options: IReadPixelsOptions) => {
     const { framebuffer, x, y, width, height } = options;
 
     const readback = this.device.createReadback();
 
     const texture = (framebuffer as DeviceFramebuffer)['colorTexture'];
 
-    return readback.readTextureSync(
+    const result = (await readback.readTexture(
       texture,
       x,
       y,
       width,
       height,
       new Uint8Array(width * height * 4),
-    ) as Uint8Array;
+    )) as Uint8Array;
+
+    return result;
   };
 
   getViewportSize = () => {

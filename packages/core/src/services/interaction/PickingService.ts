@@ -6,10 +6,9 @@ import { isEventCrash } from '../../utils/dom';
 import type { IGlobalConfigService } from '../config/IConfigService';
 import type {
   IInteractionService,
-  IInteractionTarget} from '../interaction/IInteractionService';
-import {
-  InteractionEvent,
+  IInteractionTarget,
 } from '../interaction/IInteractionService';
+import { InteractionEvent } from '../interaction/IInteractionService';
 import type { ILayer, ILayerService } from '../layer/ILayerService';
 import type { ILngLat, IMapService } from '../map/IMapService';
 import { gl } from '../renderer/gl';
@@ -87,7 +86,7 @@ export default class PickingService implements IPickingService {
   ): Promise<any> {
     const { useFramebuffer, clear } = this.rendererService;
     this.resizePickingFBO();
-    useFramebuffer(this.pickingFBO, () => {
+    useFramebuffer(this.pickingFBO, async () => {
       clear({
         framebuffer: this.pickingFBO,
         color: [0, 0, 0, 0],
@@ -99,12 +98,15 @@ export default class PickingService implements IPickingService {
         ispick: true,
       });
       layer.hooks.afterPickingEncode.call();
-      const features = this.pickBox(layer, box);
+      const features = await this.pickBox(layer, box);
       cb(features);
     });
   }
 
-  public pickBox(layer: ILayer, box: [number, number, number, number]): any[] {
+  public async pickBox(
+    layer: ILayer,
+    box: [number, number, number, number],
+  ): Promise<any[]> {
     const [xMin, yMin, xMax, yMax] = box.map((v) => {
       const tmpV = v < 0 ? 0 : v;
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
@@ -126,7 +128,7 @@ export default class PickingService implements IPickingService {
 
     const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
     const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
-    const pickedColors: Uint8Array | undefined = readPixels({
+    const pickedColors: Uint8Array | undefined = await readPixels({
       x: xMin,
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
       y: Math.floor(height / this.pickBufferScale - (yMax + 1)),
@@ -184,7 +186,7 @@ export default class PickingService implements IPickingService {
     this.pickingFBO = null;
   }
 
-  public pickFromPickingFBO = (
+  public pickFromPickingFBO = async (
     layer: ILayer,
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
@@ -209,7 +211,7 @@ export default class PickingService implements IPickingService {
       return false;
     }
 
-    const pickedColors: Uint8Array | undefined = readPixels({
+    const pickedColors: Uint8Array | undefined = await readPixels({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
       y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
@@ -364,14 +366,14 @@ export default class PickingService implements IPickingService {
   private async pickingLayers(target: IInteractionTarget) {
     const { clear } = this.rendererService;
     this.resizePickingFBO();
-    this.rendererService.useFramebuffer(this.pickingFBO, () => {
+    this.rendererService.useFramebuffer(this.pickingFBO, async () => {
       const layers = this.layerService.getRenderList();
       layers
         .filter((layer) => {
           return layer.needPick(target.type);
         })
         .reverse()
-        .some((layer) => {
+        .some(async (layer) => {
           clear({
             framebuffer: this.pickingFBO,
             color: [0, 0, 0, 0],
@@ -379,7 +381,7 @@ export default class PickingService implements IPickingService {
             depth: 1,
           });
           layer.layerPickService.pickRender(target);
-          const isPicked = this.pickFromPickingFBO(layer, target);
+          const isPicked = await this.pickFromPickingFBO(layer, target);
           this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
           return isPicked && !layer.getLayerConfig().enablePropagation;
         });

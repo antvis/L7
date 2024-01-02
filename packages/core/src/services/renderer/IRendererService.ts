@@ -68,7 +68,7 @@ export interface IRendererService {
   createFramebuffer(options: IFramebufferInitializationOptions): IFramebuffer;
   useFramebuffer(
     framebuffer: IFramebuffer | null,
-    drawCommands: () => void,
+    drawCommands: () => void | Promise<void>,
   ): void;
   getViewportSize(): { width: number; height: number };
   getContainer(): HTMLElement | null;
@@ -76,7 +76,7 @@ export interface IRendererService {
   getGLContext(): WebGLRenderingContext;
   getPointSizeRange(): Float32Array;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
-  readPixels(options: IReadPixelsOptions): Uint8Array;
+  readPixels(options: IReadPixelsOptions): Promise<Uint8Array>;
   setState(): void;
   setBaseState(): void;
   setCustomLayerDefaults(): void;

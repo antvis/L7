@@ -179,7 +179,7 @@ export default class ReglRendererService implements IRendererService {
     this.gl._refresh();
   };
 
-  public readPixels = (options: IReadPixelsOptions) => {
+  public readPixels = async (options: IReadPixelsOptions) => {
     const { framebuffer, x, y, width, height } = options;
     const readPixelsOptions: regl.ReadOptions = {
       x,

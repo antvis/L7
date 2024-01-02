@@ -4,10 +4,9 @@ import type {
   ILayerPickService,
   ILayerService,
   IMapService,
-  IPickingService} from '@antv/l7-core';
-import {
-  TYPES,
+  IPickingService,
 } from '@antv/l7-core';
+import { TYPES } from '@antv/l7-core';
 import { lngLatInExtent } from '@antv/l7-utils';
 export default class BaseLayerPickService implements ILayerPickService {
   private layer: ILayer;
@@ -30,7 +29,7 @@ export default class BaseLayerPickService implements ILayerPickService {
     layer.hooks.afterPickingEncode.call();
   }
 
-  public pick(layer: ILayer, target: IInteractionTarget) {
+  public async pick(layer: ILayer, target: IInteractionTarget) {
     const container = this.layer.getContainer();
     const pickingService = container.get<IPickingService>(
       TYPES.IPickingService,
