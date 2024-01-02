@@ -1,7 +1,7 @@
 import { ImageLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
 
-export function MapRender(option: { map: string; renderer: string }) {
+export function MapRender(option: { map: string; renderer: 'regl' | 'device' }) {
   const scene = new Scene({
     id: 'map',
     renderer: option.renderer,

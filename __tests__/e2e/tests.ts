@@ -115,6 +115,15 @@ export const TestDemoList: Array<{
             }]
         },
         {
+            type:'tile',
+            demos:[{
+                name:'normal'
+            },{
+                name:'rgb'
+            }]
+
+        },
+        {
             type: 'Gallery',
             demos: [{
                 name: "fujian",

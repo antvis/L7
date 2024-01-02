@@ -23,7 +23,7 @@ import {
 import { createTexture, generateTexture } from './utils/common';
 export async function MapRender(option: {
   map: string
-  renderer: string
+  renderer: 'regl' | 'device'
 }) {
   const dom = document.getElementById('map') as HTMLDivElement;
   // 创建 canvas
