@@ -1,7 +1,8 @@
 export async function loadImage(
   url: string,
 ): Promise<HTMLImageElement | ImageBitmap> {
-  if (!!window.createImageBitmap) {
+  // @ts-ignore
+  if (window.createImageBitmap) {
     const response = await fetch(url);
     const imageBitmap = await createImageBitmap(await response.blob());
     return imageBitmap;
