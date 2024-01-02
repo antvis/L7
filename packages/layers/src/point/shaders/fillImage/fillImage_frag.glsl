@@ -1,4 +1,3 @@
-in vec4 v_color;
 in vec2 v_uv;// 本身的 uv 坐标
 in vec2 v_Iconuv;
 in float v_opacity;
