@@ -111,11 +111,22 @@ export default class DeviceRendererService implements IRendererService {
       OES_texture_float: !isWebGL2(gl) && this.device['OES_texture_float'],
     };
 
+    this.createMainColorDepthRT(canvas.width, canvas.height);
+  }
+
+  private createMainColorDepthRT(width: number, height: number) {
+    if (this.mainColorRT) {
+      this.mainColorRT.destroy();
+    }
+    if (this.mainDepthRT) {
+      this.mainDepthRT.destroy();
+    }
+
     this.mainColorRT = this.device.createRenderTargetFromTexture(
       this.device.createTexture({
         format: Format.U8_RGBA_RT,
-        width: canvas.width,
-        height: canvas.height,
+        width,
+        height,
         usage: TextureUsage.RENDER_TARGET,
       }),
     );
@@ -123,8 +134,8 @@ export default class DeviceRendererService implements IRendererService {
     this.mainDepthRT = this.device.createRenderTargetFromTexture(
       this.device.createTexture({
         format: Format.D24_S8,
-        width: canvas.width,
-        height: canvas.height,
+        width,
+        height,
         usage: TextureUsage.RENDER_TARGET,
       }),
     );
@@ -233,13 +244,11 @@ export default class DeviceRendererService implements IRendererService {
     width: number;
     height: number;
   }) => {
-    // use WebGL context directly
-    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#unsafe-escape-hatch
-    // this.gl._gl.viewport(x, y, width, height);
+    // @see https://observablehq.com/@antv/g-device-api#cell-267
+    this.swapChain.configureSwapChain(width, height);
+    this.createMainColorDepthRT(width, height);
     this.width = width;
     this.height = height;
-    // Will be used in `setViewport` from RenderPass later.
-    // this.gl._refresh();
   };
 
   readPixels = (options: IReadPixelsOptions) => {
@@ -272,7 +281,6 @@ export default class DeviceRendererService implements IRendererService {
   };
 
   getCanvas = () => {
-    // return this.$container?.getElementsByTagName('canvas')[0] || null;
     return this.canvas;
   };
 

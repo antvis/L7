@@ -26,14 +26,19 @@ import type { TaskID } from './utils/task_queue';
 import TaskQueue from './utils/task_queue';
 
 (function () {
-  if ( typeof window.CustomEvent === "function" ) return false; //If not IE
+  if (typeof window.CustomEvent === 'function') return false; //If not IE
 
-  function CustomEvent ( event: any, params:any ) {
+  function CustomEvent(event: any, params: any) {
     params = params || { bubbles: false, cancelable: false, detail: undefined };
-    const evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    const evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(
+      event,
+      params.bubbles,
+      params.cancelable,
+      params.detail,
+    );
     return evt;
-   }
+  }
 
   CustomEvent.prototype = window.Event.prototype;
   // @ts-ignore
@@ -303,7 +308,11 @@ export class Map extends Camera {
     if (typeof window !== 'undefined') {
       window.removeEventListener('online', this.onWindowOnline, false);
       window.removeEventListener('resize', this.onWindowResize, false);
-      window.removeEventListener('orientationchange', this.onWindowResize, false);
+      window.removeEventListener(
+        'orientationchange',
+        this.onWindowResize,
+        false,
+      );
     }
   }
 
