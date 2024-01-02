@@ -1,7 +1,6 @@
 import type {
   IEncodeFeature,
   IModel,
-  IModelUniform,
   ITexture2D} from '@antv/l7-core';
 import {
   AttributeType,
@@ -52,7 +51,7 @@ export default class RasterTerrainRGB extends BaseModel {
       u_noDataValue: noDataValue,
       u_clampLow: clampLow,
       u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
-      u_rasterTexture: this.texture,
+      u_texture: this.texture,
       u_colorTexture: texture,
     };
     this.textures = [this.texture,texture!]
