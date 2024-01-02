@@ -1,6 +1,6 @@
 ---
-title: RasterLayer data encode
-order: 0
+title: Raster Data
+order: 2
 ---
 
 <embed src="@/docs/api/common/style.md"></embed>
@@ -17,7 +17,7 @@ Single-band raster data rendering, visual coloring based on raster data
 
 ## source
 
-<embed src="@/docs/api/common/source/raster/raster_single.en.md"></embed>
+<embed src="@/docs/api/common/source/raster/raster_data.en.md"></embed>
 
 ## style
 

@@ -1,5 +1,5 @@
 ---
-title: MVTTile 矢量瓦片
+title: MVT Tile
 order: 6
 ---
 

@@ -25,7 +25,7 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     // 根据 source 的类型判断 model type
     const parserType = this.layerSource.getParserType();
     switch (parserType) {
-      case 'raster':
+      case 'raster' || 'ndi':
         return 'raster';
       case 'rasterRgb':
         return 'rasterRgb';

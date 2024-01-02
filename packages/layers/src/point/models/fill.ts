@@ -149,12 +149,12 @@ export default class FillModel extends BaseModel {
       },
     });
 
-    // point layer size;
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'sizeAndShape',
+     // point layer size;
+     this.styleAttributeService.registerStyleAttribute({
+      name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_SizeAndShape',
+        name: 'a_Size',
         shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
@@ -162,13 +162,32 @@ export default class FillModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 2,
+        size: 1,
         update: (feature: IEncodeFeature) => {
           const { size = 5 } = feature;
+          return Array.isArray(size) ? [size[0]] : [size];
+        },
+      },
+    });
+
+    // point layer shape;
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'shape',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Shape',
+        shaderLocation: ShaderLocation.SHAPE,
+        buffer: {
+          // give the WebGL driver a hint that this buffer may change
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (feature: IEncodeFeature) => {
           const { shape = 2 } = feature;
           const shapeIndex = shape2d.indexOf(shape as string);
-          const a_Size =  Array.isArray(size) ? size[0] : size;
-          return [a_Size,shapeIndex]
+          return [shapeIndex];
         },
       },
     });

@@ -5,16 +5,6 @@
   },
   "demos": [
     {
-      "filename": "543.ts",
-      "title": "标准假彩色",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*uOX7RaIElMsAAAAAAAAAAAAADmJ7AQ/original"
-    },
-    {
-      "filename": "432.ts",
-      "title": "自然色彩",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*JhucSo3pVVAAAAAAAAAAAAAADmJ7AQ/original"
-    },
-    {
       "filename": "ndbi.ts",
       "title": "建筑指数",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Kd59RqRj0V0AAAAAAAAAAAAADmJ7AQ/original"
@@ -29,13 +19,6 @@
       "title": "水体指数",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*L4AcTbE69qcAAAAAAAAAAAAADmJ7AQ/original"
     }
-    ,
-    {
-      "filename": "rgb.ts",
-      "title": "TiFF 正射影像",
-      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*HWiES58tAhYAAAAAAAAAAAAADmJ7AQ/original"
-    }
-
     
   ]
 }
