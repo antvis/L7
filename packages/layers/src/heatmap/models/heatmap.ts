@@ -99,7 +99,9 @@ export default class HeatMapModel extends BaseModel {
     });
     this.heatmapFramerBuffer = createFramebuffer({
       color: this.heatmapTexture,
-      depth: false,
+      depth: true,
+      width: Math.floor(width / 4),
+      height: Math.floor(height / 4),
     });
     this.updateColorTexture();
     return [this.intensityModel, this.colorModel];

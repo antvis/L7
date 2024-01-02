@@ -172,6 +172,7 @@ export default class DeviceRendererService implements IRendererService {
       colorAttachment: [colorAttachment],
       colorResolveTo: [colorResolveTo],
       colorClearColor: [colorClearColor],
+      colorStore: [true],
       depthStencilAttachment,
       depthClearValue,
       stencilClearValue,

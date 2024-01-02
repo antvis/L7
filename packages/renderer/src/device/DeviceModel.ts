@@ -267,12 +267,23 @@ export default class DeviceModel implements IModel {
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
 
+    // const height = this.device['swapChainHeight'];
+    const device = this.service['device'];
+    // @ts-ignore
+    const tmpHeight = device['swapChainHeight'];
+    // @ts-ignore
+    device['swapChainHeight'] = currentFramebuffer?.['height'] || height;
+
     renderPass.setViewport(
       0,
       0,
       currentFramebuffer?.['width'] || width,
       currentFramebuffer?.['height'] || height,
     );
+
+    // @ts-ignore
+    device['swapChainHeight'] = tmpHeight;
+
     renderPass.setPipeline(this.pipeline);
     renderPass.setStencilReference(1);
     renderPass.setVertexInput(
