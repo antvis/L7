@@ -52,13 +52,15 @@ export default class PixelPickingPass<
       this.rendererService;
     const { width, height } = getViewportSize();
     // 创建 picking framebuffer，后续实时 resize
+    const pickingColorTexture = createTexture2D({
+      width,
+      height,
+      wrapS: gl.CLAMP_TO_EDGE,
+      wrapT: gl.CLAMP_TO_EDGE,
+      label: 'Picking Texture',
+    });
     this.pickingFBO = createFramebuffer({
-      color: createTexture2D({
-        width,
-        height,
-        wrapS: gl.CLAMP_TO_EDGE,
-        wrapT: gl.CLAMP_TO_EDGE,
-      }),
+      color: pickingColorTexture,
     });
 
     // 监听 hover 事件

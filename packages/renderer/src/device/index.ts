@@ -1,13 +1,12 @@
-import type {
+import {
   Device,
+  Format,
   RenderPass,
   RenderTarget,
   SwapChain,
-} from '@antv/g-device-api';
-import {
-  Format,
   TextureUsage,
   TransparentBlack,
+  ViewportOrigin,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
   colorNewFromRGBA,
@@ -71,6 +70,8 @@ export default class DeviceRendererService implements IRendererService {
     return this.device.queryVendorInfo().platformString;
   };
 
+  private viewportOrigin: ViewportOrigin;
+
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
 
@@ -103,6 +104,8 @@ export default class DeviceRendererService implements IRendererService {
 
     // Create default RT
     this.currentFramebuffer = null;
+
+    this.viewportOrigin = this.device.queryVendorInfo().viewportOrigin;
 
     // @ts-ignore
     const gl = this.device['gl'];
@@ -256,17 +259,21 @@ export default class DeviceRendererService implements IRendererService {
     const { framebuffer, x, y, width, height } = options;
 
     const readback = this.device.createReadback();
-
     const texture = (framebuffer as DeviceFramebuffer)['colorTexture'];
-
     const result = (await readback.readTexture(
       texture,
       x,
-      y,
+      /**
+       * Origin is at lower-left corner. Width / height is already multiplied by dpr.
+       * WebGPU needs flipY
+       */
+      this.viewportOrigin === ViewportOrigin.LOWER_LEFT ? y : this.height - y,
       width,
       height,
       new Uint8Array(width * height * 4),
     )) as Uint8Array;
+
+    // console.log(texture, result);
 
     return result;
   };

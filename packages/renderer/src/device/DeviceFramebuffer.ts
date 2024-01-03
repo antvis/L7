@@ -1,12 +1,9 @@
+import type { Device, RenderTarget, Texture } from '@antv/g-device-api';
+import { Format, TextureUsage } from '@antv/g-device-api';
 import type {
-  Device,
-  RenderTarget,
-  Texture} from '@antv/g-device-api';
-import {
-  Format,
-  TextureUsage,
-} from '@antv/g-device-api';
-import type { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
+  IFramebuffer,
+  IFramebufferInitializationOptions,
+} from '@antv/l7-core';
 import type DeviceTexture2D from './DeviceTexture2D';
 import { isTexture2D } from './DeviceTexture2D';
 
@@ -29,10 +26,13 @@ export default class DeviceFramebuffer implements IFramebuffer {
     this.createDepthRenderTarget();
   }
 
-  private createColorRenderTarget() {
+  private createColorRenderTarget(resize = false) {
     const { width, height, color } = this.options;
     if (color) {
       if (isTexture2D(color)) {
+        if (resize) {
+          color.resize({ width: width!, height: height! });
+        }
         this.colorTexture = color.get() as Texture;
         this.colorRenderTarget = this.device.createRenderTargetFromTexture(
           this.colorTexture,
@@ -55,11 +55,14 @@ export default class DeviceFramebuffer implements IFramebuffer {
     }
   }
 
-  private createDepthRenderTarget() {
+  private createDepthRenderTarget(resize = false) {
     const { width, height, depth } = this.options;
     // TODO: avoid creating depth texture if not needed
     if (depth) {
       if (isTexture2D(depth)) {
+        if (resize) {
+          depth.resize({ width: width!, height: height! });
+        }
         this.depthTexture = depth.get() as Texture;
         this.depthRenderTarget = this.device.createRenderTargetFromTexture(
           this.depthTexture,
@@ -94,11 +97,16 @@ export default class DeviceFramebuffer implements IFramebuffer {
   public resize({ width, height }: { width: number; height: number }) {
     if (this.width !== width || this.height !== height) {
       this.destroy();
+      // Prevent double free texture.
+      // @ts-ignore
+      this.colorTexture.destroyed = true;
+      // @ts-ignore
+      this.depthTexture.destroyed = true;
 
       this.options.width = width;
       this.options.height = height;
-      this.createColorRenderTarget();
-      this.createDepthRenderTarget();
+      this.createColorRenderTarget(true);
+      this.createDepthRenderTarget(true);
     }
   }
 }

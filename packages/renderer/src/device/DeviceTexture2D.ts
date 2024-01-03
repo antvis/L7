@@ -23,7 +23,35 @@ export default class DeviceTexture2D implements ITexture2D {
   private height: number;
   private isDestroy: boolean = false;
 
-  constructor(device: Device, options: ITexture2DInitializationOptions) {
+  constructor(
+    private device: Device,
+    private options: ITexture2DInitializationOptions,
+  ) {
+    const {
+      wrapS = gl.CLAMP_TO_EDGE,
+      wrapT = gl.CLAMP_TO_EDGE,
+      aniso,
+      mipmap = false,
+      // premultiplyAlpha = false,
+      mag = gl.NEAREST,
+      min = gl.NEAREST,
+    } = options;
+
+    this.createTexture(options);
+
+    this.sampler = device.createSampler({
+      addressModeU: wrapModeMap[wrapS],
+      addressModeV: wrapModeMap[wrapT],
+      minFilter: min === gl.NEAREST ? FilterMode.POINT : FilterMode.BILINEAR,
+      magFilter: mag === gl.NEAREST ? FilterMode.POINT : FilterMode.BILINEAR,
+      mipmapFilter: MipmapFilterMode.NO_MIP,
+      // lodMinClamp: 0,
+      // lodMaxClamp: 0,
+      maxAnisotropy: aniso,
+    });
+  }
+
+  private createTexture(options: ITexture2DInitializationOptions) {
     const {
       data,
       type = gl.UNSIGNED_BYTE,
@@ -31,21 +59,18 @@ export default class DeviceTexture2D implements ITexture2D {
       height,
       flipY = false,
       format = gl.RGBA,
-      wrapS = gl.CLAMP_TO_EDGE,
-      wrapT = gl.CLAMP_TO_EDGE,
       aniso,
       alignment = 1,
       usage = TextureUsage.SAMPLED,
-      mipmap = false,
       // premultiplyAlpha = false,
-      mag = gl.NEAREST,
-      min = gl.NEAREST,
       unorm = false,
       // colorSpace = gl.BROWSER_DEFAULT_WEBGL,
       // x = 0,
       // y = 0,
       // copy = false,
+      label,
     } = options;
+
     this.width = width;
     this.height = height;
 
@@ -64,7 +89,7 @@ export default class DeviceTexture2D implements ITexture2D {
       throw new Error(`create texture error, type: ${type}, format: ${format}`);
     }
 
-    this.texture = device.createTexture({
+    this.texture = this.device.createTexture({
       format: pixelFormat!,
       width,
       height,
@@ -79,21 +104,14 @@ export default class DeviceTexture2D implements ITexture2D {
       // mipLevelCount: usage === TextureUsage.RENDER_TARGET ? 1 : mipmap ? 1 : 0,
       mipLevelCount: 1,
     });
+    if (label) {
+      this.device.setResourceName(this.texture, label);
+    }
+
     if (data) {
       // @ts-ignore
       this.texture.setImageData([data]);
     }
-
-    this.sampler = device.createSampler({
-      addressModeU: wrapModeMap[wrapS],
-      addressModeV: wrapModeMap[wrapT],
-      minFilter: min === gl.NEAREST ? FilterMode.POINT : FilterMode.BILINEAR,
-      magFilter: mag === gl.NEAREST ? FilterMode.POINT : FilterMode.BILINEAR,
-      mipmapFilter: MipmapFilterMode.NO_MIP,
-      // lodMinClamp: 0,
-      // lodMaxClamp: 0,
-      maxAnisotropy: aniso,
-    });
   }
 
   get() {
@@ -110,9 +128,16 @@ export default class DeviceTexture2D implements ITexture2D {
   }
 
   resize({ width, height }: { width: number; height: number }): void {
-    // this.texture.resize(width, height);
-    this.width = width;
-    this.height = height;
+    if (this.width !== width || this.height !== height) {
+      this.destroy();
+    }
+
+    this.options.width = width;
+    this.options.height = height;
+
+    this.createTexture(this.options);
+
+    this.isDestroy = false;
   }
 
   getSize(): [number, number] {
@@ -120,7 +145,8 @@ export default class DeviceTexture2D implements ITexture2D {
   }
 
   destroy() {
-    if (!this.isDestroy) {
+    // @ts-ignore
+    if (!this.isDestroy && !this.texture.destroyed) {
       this.texture?.destroy();
     }
     this.isDestroy = true;

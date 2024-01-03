@@ -104,6 +104,7 @@ export interface ITexture2DInitializationOptions {
   //   height: 10,
   //   copy: true
   // })
+  label?: string;
 }
 
 export interface ITexture2D {

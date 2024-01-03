@@ -59,14 +59,16 @@ export default class PickingService implements IPickingService {
     width = Math.round(width / this.pickBufferScale);
     height = Math.round(height / this.pickBufferScale);
     // 创建 picking framebuffer，后续实时 resize
+    const pickingColorTexture = createTexture2D({
+      width,
+      height,
+      wrapS: gl.CLAMP_TO_EDGE,
+      wrapT: gl.CLAMP_TO_EDGE,
+      usage: TextureUsage.RENDER_TARGET,
+      label: 'Picking Texture',
+    });
     this.pickingFBO = createFramebuffer({
-      color: createTexture2D({
-        width,
-        height,
-        wrapS: gl.CLAMP_TO_EDGE,
-        wrapT: gl.CLAMP_TO_EDGE,
-        usage: TextureUsage.RENDER_TARGET,
-      }),
+      color: pickingColorTexture,
       depth: true,
       width,
       height,
