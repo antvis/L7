@@ -20,14 +20,12 @@ let mapdivCount: number = 0;
 const EventMap: {
   [key: string]: any;
 } = {
-  mapmove: 'moving',
-  camerachange: 'moving',
-  zoomchange: 'zoomend',
-  dragging: 'drag',
+  camerachange: ['move'],
 };
 
 export default class TdtMapService extends BaseMapService<any> {
   protected viewport: IViewport | null = null;
+  protected evtCbProxyMap: Map<string,Map<(...args: any) => any, (...args: any) => any>> = new Map();
   // @ts-ignore
   private sceneContainer: HTMLElement;
   // 不直接用自带的marker的div，因为会收到天地图缩放时visibility变成hidden的影响
@@ -44,8 +42,8 @@ export default class TdtMapService extends BaseMapService<any> {
     div.style.left = '0px';
     div.style.top = '0px';
     div.style.zIndex = '600';
-    div.style.width = '0px';
-    div.style.height = '0px';
+    div.style.width = '100%';
+    div.style.height = '100%';
     div.style.overflow = 'visible';
     return;
   }
@@ -90,7 +88,6 @@ export default class TdtMapService extends BaseMapService<any> {
     const zoom = ev.zoom;
     const scale = this.getZoomScale(zoom,this.map.getZoom());
     
-
     // @ts-ignore
     const position = T._Q.getPosition(this.sceneContainer);
     const viewHalf = this.map.getSize().GQ(0.5);
@@ -219,19 +216,65 @@ export default class TdtMapService extends BaseMapService<any> {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
+      const onProxy = (eventName: string) => {
+        let cbProxyMap = this.evtCbProxyMap.get(eventName);
+
+        if (!cbProxyMap) {
+          this.evtCbProxyMap.set(eventName, (cbProxyMap = new Map()));
+        }
+
+        if (cbProxyMap.get(handle)) {
+          return;
+        }
+
+        const handleProxy = (...args: any[]) => {
+          if (
+            args[0] &&
+            typeof args[0] === 'object' &&
+            !args[0].lngLat &&
+            !args[0].lnglat
+          ) {
+            args[0].lngLat = args[0].latlng || args[0].latLng;
+          }
+          handle(...args);
+        };
+
+        cbProxyMap.set(handle, handleProxy);
+        this.map.on(eventName, handleProxy);
+      }
+
       if (Array.isArray(EventMap[type])) {
         EventMap[type].forEach((eventName: string) => {
-          this.map.on(eventName || type, handle);
+          onProxy(eventName || type);
         });
       } else {
-        this.map.on(EventMap[type] || type, handle);
+        onProxy(EventMap[type] || type);
       }
     }
   }
 
   public off(type: string, handle: (...args: any[]) => void): void {
-    this.map.off(EventMap[type] || type, handle);
-    this.eventEmitter.off(type, handle);
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.off(type, handle);
+      return;
+    }
+
+    const offProxy = (eventName: string) => {
+      const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
+      if (!handleProxy) {
+        return;
+      }
+      this.evtCbProxyMap.get(eventName)?.delete(handle);
+      this.map.off(eventName, handleProxy);
+    }
+
+    if (Array.isArray(EventMap[type])) {
+      EventMap[type].forEach((eventName: string) => {
+        offProxy(eventName || type);
+      });
+    } else {
+      offProxy(EventMap[type] || type);
+    }
   }
 
   public once(type: string, handler: (...args: any[]) => void): void {
