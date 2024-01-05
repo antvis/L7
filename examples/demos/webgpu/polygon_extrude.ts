@@ -43,7 +43,7 @@ export function MapRender(option: { map: string; renderer: string }) {
         })
           .source(data)
           .shape('extrude')
-          // .active(true)
+          .active(true)
           .size('unit_price', (unit_price) => unit_price)
           .color('count', [
             '#f2f0f7',

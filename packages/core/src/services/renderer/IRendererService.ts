@@ -68,8 +68,12 @@ export interface IRendererService {
   createFramebuffer(options: IFramebufferInitializationOptions): IFramebuffer;
   useFramebuffer(
     framebuffer: IFramebuffer | null,
-    drawCommands: () => void | Promise<void>,
+    drawCommands: () => void,
   ): void;
+  useFramebufferAsync(
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => Promise<void>,
+  ): Promise<void>;
   getViewportSize(): { width: number; height: number };
   getContainer(): HTMLElement | null;
   getCanvas(): HTMLCanvasElement | null;

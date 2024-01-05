@@ -33,6 +33,7 @@ export function MapRender(option: { map: string; renderer: string }) {
           })
           .size('sum', [0, 60])
           .shape('squareColumn')
+          .active(true)
           .style({
             opacity: 1,
           })

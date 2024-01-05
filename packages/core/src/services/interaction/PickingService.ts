@@ -11,7 +11,6 @@ import type {
 import { InteractionEvent } from '../interaction/IInteractionService';
 import type { ILayer, ILayerService } from '../layer/ILayerService';
 import type { ILngLat, IMapService } from '../map/IMapService';
-import { gl } from '../renderer/gl';
 import type { IFramebuffer } from '../renderer/IFramebuffer';
 import type { IRendererService } from '../renderer/IRendererService';
 import { TextureUsage } from '../renderer/ITexture2D';
@@ -62,8 +61,8 @@ export default class PickingService implements IPickingService {
     const pickingColorTexture = createTexture2D({
       width,
       height,
-      wrapS: gl.CLAMP_TO_EDGE,
-      wrapT: gl.CLAMP_TO_EDGE,
+      // wrapS: gl.CLAMP_TO_EDGE,
+      // wrapT: gl.CLAMP_TO_EDGE,
       usage: TextureUsage.RENDER_TARGET,
       label: 'Picking Texture',
     });
@@ -86,23 +85,23 @@ export default class PickingService implements IPickingService {
     box: [number, number, number, number],
     cb: (...args: any[]) => void,
   ): Promise<any> {
-    const { useFramebuffer, clear } = this.rendererService;
+    const { useFramebufferAsync, clear } = this.rendererService;
     this.resizePickingFBO();
-    useFramebuffer(this.pickingFBO, async () => {
+    layer.hooks.beforePickingEncode.call();
+    await useFramebufferAsync(this.pickingFBO, async () => {
       clear({
         framebuffer: this.pickingFBO,
         color: [0, 0, 0, 0],
         stencil: 0,
         depth: 1,
       });
-      layer.hooks.beforePickingEncode.call();
       layer.renderModels({
         ispick: true,
       });
-      layer.hooks.afterPickingEncode.call();
-      const features = await this.pickBox(layer, box);
-      cb(features);
     });
+    layer.hooks.afterPickingEncode.call();
+    const features = await this.pickBox(layer, box);
+    cb(features);
   }
 
   public async pickBox(
@@ -366,28 +365,36 @@ export default class PickingService implements IPickingService {
     }
   }
   private async pickingLayers(target: IInteractionTarget) {
-    const { clear } = this.rendererService;
+    const { clear, useFramebufferAsync } = this.rendererService;
     this.resizePickingFBO();
-    this.rendererService.useFramebuffer(this.pickingFBO, async () => {
-      const layers = this.layerService.getRenderList();
-      layers
-        .filter((layer) => {
-          return layer.needPick(target.type);
-        })
-        .reverse()
-        .some(async (layer) => {
-          clear({
-            framebuffer: this.pickingFBO,
-            color: [0, 0, 0, 0],
-            stencil: 0,
-            depth: 1,
-          });
-          layer.layerPickService.pickRender(target);
-          const isPicked = await this.pickFromPickingFBO(layer, target);
-          this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
-          return isPicked && !layer.getLayerConfig().enablePropagation;
+
+    const layers = this.layerService.getRenderList();
+    for (const layer of layers
+      .filter((layer) => layer.needPick(target.type))
+      .reverse()) {
+      if (!layer.tileLayer) {
+        layer.hooks.beforePickingEncode.call();
+      }
+      await useFramebufferAsync(this.pickingFBO, async () => {
+        clear({
+          framebuffer: this.pickingFBO,
+          color: [0, 0, 0, 0],
+          stencil: 0,
+          depth: 1,
         });
-    });
+        layer.layerPickService.pickRender(target);
+      });
+
+      if (!layer.tileLayer) {
+        layer.hooks.afterPickingEncode.call();
+      }
+
+      const isPicked = await this.pickFromPickingFBO(layer, target);
+      this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
+      if (isPicked && !layer.getLayerConfig().enablePropagation) {
+        break;
+      }
+    }
   }
   public triggerHoverOnLayer(
     layer: ILayer,

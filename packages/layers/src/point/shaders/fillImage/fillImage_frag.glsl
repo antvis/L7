@@ -11,9 +11,9 @@ layout(std140) uniform commonUniform {
   float u_size_unit;
 };
 
+#pragma include "scene_uniforms"
 #pragma include "sdf_2d"
 #pragma include "picking"
-
 
 void main() {
   vec2 pos = v_Iconuv / u_textSize + v_uv / u_textSize * 64.;

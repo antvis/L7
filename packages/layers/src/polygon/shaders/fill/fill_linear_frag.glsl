@@ -9,6 +9,7 @@ in vec4 v_color;
 in vec3 v_linear;
 in vec2 v_pos;
 out vec4 outputColor;
+#pragma include "scene_uniforms"
 #pragma include "picking"
 
 void main() {

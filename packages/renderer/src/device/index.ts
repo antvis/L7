@@ -1,9 +1,11 @@
-import {
+import type {
   Device,
-  Format,
   RenderPass,
   RenderTarget,
   SwapChain,
+} from '@antv/g-device-api';
+import {
+  Format,
   TextureUsage,
   TransparentBlack,
   ViewportOrigin,
@@ -58,6 +60,7 @@ export default class DeviceRendererService implements IRendererService {
    * Current render pass.
    */
   renderPass: RenderPass;
+  preRenderPass: RenderPass;
   mainColorRT: RenderTarget;
   mainDepthRT: RenderTarget;
 
@@ -147,11 +150,12 @@ export default class DeviceRendererService implements IRendererService {
   beginFrame(): void {
     const { currentFramebuffer, swapChain, mainColorRT, mainDepthRT } = this;
 
-    const onscreenTexture = swapChain.getOnscreenTexture();
     const colorAttachment = currentFramebuffer
       ? currentFramebuffer['colorRenderTarget']
       : mainColorRT;
-    const colorResolveTo = currentFramebuffer ? null : onscreenTexture;
+    const colorResolveTo = currentFramebuffer
+      ? null
+      : swapChain.getOnscreenTexture();
     const depthStencilAttachment = currentFramebuffer
       ? currentFramebuffer['depthRenderTarget']
       : mainDepthRT;
@@ -175,7 +179,7 @@ export default class DeviceRendererService implements IRendererService {
       colorAttachment: [colorAttachment],
       colorResolveTo: [colorResolveTo],
       colorClearColor: [colorClearColor],
-      colorStore: [true],
+      colorStore: [!!currentFramebuffer],
       depthStencilAttachment,
       depthClearValue,
       stencilClearValue,
@@ -228,6 +232,19 @@ export default class DeviceRendererService implements IRendererService {
     this.currentFramebuffer = null;
   };
 
+  useFramebufferAsync = async (
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => Promise<void>,
+  ) => {
+    this.currentFramebuffer = framebuffer as DeviceFramebuffer;
+    this.preRenderPass = this.renderPass;
+    this.beginFrame();
+    await drawCommands();
+    this.endFrame();
+    this.currentFramebuffer = null;
+    this.renderPass = this.preRenderPass;
+  };
+
   clear = (options: IClearOptions) => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
     const { color, depth, stencil, framebuffer = null } = options;
@@ -235,6 +252,8 @@ export default class DeviceRendererService implements IRendererService {
       // @ts-ignore
       framebuffer.clearOptions = { color, depth, stencil };
     }
+    // Recreate render pass
+    this.beginFrame();
   };
 
   viewport = ({
@@ -273,7 +292,17 @@ export default class DeviceRendererService implements IRendererService {
       new Uint8Array(width * height * 4),
     )) as Uint8Array;
 
-    // console.log(texture, result);
+    // Since we use U8_RGBA_RT format in render target, need to change bgranorm -> rgba here.
+    if (this.viewportOrigin !== ViewportOrigin.LOWER_LEFT) {
+      for (let j = 0; j < result.length; j += 4) {
+        // Switch b and r components.
+        const t = result[j];
+        result[j] = result[j + 2];
+        result[j + 2] = t;
+      }
+    }
+
+    readback.destroy();
 
     return result;
   };

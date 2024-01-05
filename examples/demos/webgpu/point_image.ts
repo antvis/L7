@@ -61,7 +61,7 @@ export function MapRender(option: { map: string; renderer: string }) {
     )
     .shape('marker')
     .size(36)
-    // .active(true)
+    .active(true)
     .style({
       rotation: 90,
     });

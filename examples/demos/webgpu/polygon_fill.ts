@@ -68,7 +68,7 @@ export function MapRender(option: { map: string; renderer: string }) {
     .source(data)
     .shape('fill')
     .color('red')
-    // .active(true)
+    .active(true)
     .style({
       opacity: 0.5,
       opacityLinear: {

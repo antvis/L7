@@ -33,7 +33,7 @@ export function MapRender(option: { map: string; renderer: string }) {
           'hexagonColumn',
           'squareColumn',
         ])
-        // .active(true)
+        .active(true)
         .size('unit_price', (h) => {
           return [6, 6, 100];
         })

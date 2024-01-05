@@ -39,6 +39,7 @@ export function MapRender(option: { map: string; renderer: string }) {
             coverage: 0.8,
             angle: 0,
           })
+          .active(true)
           .color(
             'count',
             [

@@ -14,6 +14,7 @@ in vec4 v_Color;
 in vec3 v_uvs;
 in vec2 v_texture_data;
 
+#pragma include "scene_uniforms"
 #pragma include "picking"
 
 out vec4 outputColor;
