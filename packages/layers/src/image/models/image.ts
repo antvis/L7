@@ -1,32 +1,37 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
+import { defaultValue, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/image_frag.glsl';
 import ImageVert from '../shaders/image_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
-import { defaultValue, rgb2arr } from '@antv/l7-utils';
 export default class ImageModel extends BaseModel {
   protected texture: ITexture2D;
 
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
-    const { color = 'rgb(255,255,255)',opacity,brightness,contrast,saturation,gamma } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
+    const {
+      color = 'rgb(255,255,255)',
+      opacity,
+      brightness,
+      contrast,
+      saturation,
+      gamma,
+    } = this.layer.getLayerConfig() as IImageLayerStyleOptions;
     const colorArry = rgb2arr(color);
     const commonOptions = {
-      u_opacity:defaultValue(opacity,1.0),
-      u_brightness:defaultValue(brightness,1.0),
-      u_contrast:defaultValue(contrast,1.0),
-      u_saturation:defaultValue(saturation,1.0),
-      u_gamma:defaultValue(gamma,1.0)
+      u_opacity: defaultValue(opacity, 1.0),
+      u_brightness: defaultValue(brightness, 1.0),
+      u_contrast: defaultValue(contrast, 1.0),
+      u_saturation: defaultValue(saturation, 1.0),
+      u_gamma: defaultValue(gamma, 1.0),
     };
-    this.textures = [this.texture]
+    this.textures = [this.texture];
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
   }
@@ -43,8 +48,8 @@ export default class ImageModel extends BaseModel {
   private async loadTexture() {
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
-      height: 0,
-      width: 0,
+      height: 1,
+      width: 1,
     });
     const source = this.layer.getSource();
     const imageData = await source.data.images;
@@ -55,7 +60,6 @@ export default class ImageModel extends BaseModel {
       mag: gl.LINEAR,
       min: gl.LINEAR,
     });
-
   }
 
   public async buildModels(): Promise<IModel[]> {
@@ -71,6 +75,7 @@ export default class ImageModel extends BaseModel {
         enable: true,
       },
       depth: { enable: false },
+      pickingEnabled: false,
     });
     return [model];
   }

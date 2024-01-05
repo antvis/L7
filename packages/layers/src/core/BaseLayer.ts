@@ -1286,6 +1286,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       inject,
       triangulation,
       styleOption,
+      pickingEnabled = true,
       ...rest
     } = options;
     this.shaderModuleService.registerModule(moduleName, {
@@ -1302,6 +1303,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           triangulation,
           styleOption,
         );
+
+      const uniformBuffers = [
+        ...this.layerModel.uniformBuffers,
+        ...this.rendererService.uniformBuffers,
+        this.getLayerUniformBuffer(),
+      ];
+      if (pickingEnabled) {
+        uniformBuffers.push(this.getPickingUniformBuffer());
+      }
       const modelOptions = {
         attributes,
         uniforms,
@@ -1309,12 +1319,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         vs,
         elements,
         blend: BlendTypes[BlendType.normal],
-        uniformBuffers: [
-          ...this.layerModel.uniformBuffers,
-          ...this.rendererService.uniformBuffers,
-          this.getLayerUniformBuffer(),
-          this.getPickingUniformBuffer(),
-        ],
+        uniformBuffers,
         textures: this.layerModel.textures,
         ...rest,
       };

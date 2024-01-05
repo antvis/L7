@@ -85,6 +85,10 @@ export interface ILayerModelInitializationOptions {
   styleOption?: unknown;
   workerEnabled?: boolean;
   workerOptions?: IWorkerOption;
+  /**
+   * When disabled, the picking uniform buffer will not be binded. Default to `true`.
+   */
+  pickingEnabled?: boolean;
 }
 
 export interface ILayerModel {

@@ -12,4 +12,7 @@ export { MapRender as polygon_extrude } from './polygon_extrude';
 export { MapRender as polygon_fill } from './polygon_fill';
 export { MapRender as polygon_texture } from './polygon_texture';
 export { MapRender as polygon_water } from './polygon_water';
+// export { MapRender as raster_image } from './raster_image';
+export { MapRender as perf } from './perf';
+export { MapRender as perf_animate } from './perf-animate';
 export { MapRender as texture } from './texture';
