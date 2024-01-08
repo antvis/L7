@@ -32,6 +32,10 @@ export function MapRender(option: { map: string; renderer: string }) {
             textOffset: [0, 20],
           });
         scene.addLayer(imageLayerText);
+
+        if (window['screenshot']) {
+          window['screenshot']();
+        }
       });
   });
 }

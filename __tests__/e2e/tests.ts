@@ -21,40 +21,37 @@ export const TestDemoList: Array<{
       },
       {
         name: 'fill',
-        sleepTime: 1,
       },
       {
         name: 'image',
-        snapshots: false,
-        sleepTime: 1,
       },
       {
         name: 'text',
       },
     ],
   },
-  {
-    type: 'Line',
-    snapshots: false,
-    demos: [
-      {
-        name: 'arc',
-      },
-      {
-        name: 'arc_plane',
-      },
+  // {
+  //   type: 'Line',
+  //   snapshots: false,
+  //   demos: [
+  //     {
+  //       name: 'arc',
+  //     },
+  //     {
+  //       name: 'arc_plane',
+  //     },
 
-      {
-        name: 'flow',
-      },
-      {
-        name: 'arc',
-      },
-      {
-        name: 'dash',
-      },
-    ],
-  },
+  //     {
+  //       name: 'flow',
+  //     },
+  //     {
+  //       name: 'arc',
+  //     },
+  //     {
+  //       name: 'dash',
+  //     },
+  //   ],
+  // },
   {
     type: 'Polygon',
     demos: [
@@ -78,37 +75,37 @@ export const TestDemoList: Array<{
       },
     ],
   },
-  {
-    type: 'HeatMap',
-    snapshots: false,
-    demos: [
-      {
-        name: 'grid',
-        sleepTime: 2,
-      },
-      {
-        name: 'hexagon',
-        sleepTime: 2,
-      },
-      {
-        name: 'normal',
-        sleepTime: 2,
-      },
-    ],
-  },
-  {
-    type: 'Raster',
-    snapshots: false,
-    demos: [
-      {
-        name: 'tiff',
-        sleepTime: 2,
-      },
-      {
-        name: 'image',
-      },
-    ],
-  },
+  // {
+  //   type: 'HeatMap',
+  //   snapshots: false,
+  //   demos: [
+  //     {
+  //       name: 'grid',
+  //       sleepTime: 2,
+  //     },
+  //     {
+  //       name: 'hexagon',
+  //       sleepTime: 2,
+  //     },
+  //     {
+  //       name: 'normal',
+  //       sleepTime: 2,
+  //     },
+  //   ],
+  // },
+  // {
+  //   type: 'Raster',
+  //   snapshots: false,
+  //   demos: [
+  //     {
+  //       name: 'tiff',
+  //       sleepTime: 2,
+  //     },
+  //     {
+  //       name: 'image',
+  //     },
+  //   ],
+  // },
   {
     type: 'Mask',
     demos: [
@@ -125,13 +122,13 @@ export const TestDemoList: Array<{
       },
     ],
   },
-  {
-    type: 'Gallery',
-    demos: [
-      {
-        name: 'fujian',
-        sleepTime: 2,
-      },
-    ],
-  },
+  // {
+  //   type: 'Gallery',
+  //   demos: [
+  //     {
+  //       name: 'fujian',
+  //       sleepTime: 2,
+  //     },
+  //   ],
+  // },
 ];

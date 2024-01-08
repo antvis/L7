@@ -103,5 +103,9 @@ export function MapRender(option: {
     scene.addLayer(point1);
     scene.addLayer(polygonLayer);
     scene.addLayer(point2);
+
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
   });
 }

@@ -68,5 +68,9 @@ export function MapRender(option: { map: string; renderer: string }) {
   scene.on('loaded', () => {
     scene.addLayer(pointLayer);
     scene.addLayer(pointLayer2);
+
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
   });
 }
