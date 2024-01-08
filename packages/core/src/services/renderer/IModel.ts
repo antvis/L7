@@ -239,6 +239,13 @@ export interface IModelInitializationOptions {
     // gl.cullFace
     face: gl.FRONT | gl.BACK;
   };
+
+  /**
+   * When disabled, a global diagnostic filter can be used to apply a diagnostic filter to the entire WGSL module. Default to `true`.
+   * @see https://www.khronos.org/opengl/wiki/Sampler_(GLSL)#Non-uniform_flow_control
+   * @see https://www.w3.org/TR/WGSL/#example-70cf6bac
+   */
+  diagnosticDerivativeUniformityEnabled?: boolean;
 }
 
 export interface IModelDrawOptions {
@@ -255,7 +262,7 @@ export interface IModelDrawOptions {
 
   stencil?: Partial<IStencilOptions>;
 
-  textures?:ITexture2D[]
+  textures?: ITexture2D[];
 }
 
 /**

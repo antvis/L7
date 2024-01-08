@@ -17,6 +17,7 @@ import {
   StencilOp,
   TransparentBlack,
   VertexStepMode,
+  ViewportOrigin,
 } from '@antv/g-device-api';
 import type {
   IModel,
@@ -62,8 +63,23 @@ export default class DeviceModel implements IModel {
     private options: IModelInitializationOptions,
     private service: DeviceRendererService,
   ) {
-    const { vs, fs, attributes, uniforms, count, elements } = options;
+    const {
+      vs,
+      fs,
+      attributes,
+      uniforms,
+      count,
+      elements,
+      diagnosticDerivativeUniformityEnabled,
+    } = options;
     this.options = options;
+
+    const diagnosticDerivativeUniformityHeader =
+      diagnosticDerivativeUniformityEnabled
+        ? ''
+        : this.service['viewportOrigin'] === ViewportOrigin.UPPER_LEFT
+        ? 'diagnostic(off,derivative_uniformity);'
+        : '';
 
     const program = device.createProgram({
       vertex: {
@@ -71,6 +87,7 @@ export default class DeviceModel implements IModel {
       },
       fragment: {
         glsl: fs,
+        postprocess: (fs) => diagnosticDerivativeUniformityHeader + fs,
       },
     });
     this.program = program;

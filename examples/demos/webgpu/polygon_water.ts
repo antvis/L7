@@ -42,9 +42,10 @@ export function MapRender(option: { map: string; renderer: string }) {
     .color('#1E90FF')
     .style({
       speed: 0.4,
-      // waterTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
-    });
-  // .animate(true);
+      // waterTexture:
+      //   'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ',
+    })
+    .animate(true);
 
   scene.on('loaded', () => {
     scene.addLayer(layer);
