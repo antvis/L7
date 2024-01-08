@@ -31,6 +31,7 @@ import type {
   ITexture2D,
   ITexture2DInitializationOptions,
 } from '@antv/l7-core';
+import { lodashUtil } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import DeviceAttribute from './DeviceAttribute';
@@ -40,6 +41,7 @@ import DeviceFramebuffer from './DeviceFramebuffer';
 import DeviceModel from './DeviceModel';
 import DeviceTexture2D from './DeviceTexture2D';
 import { isWebGL2 } from './utils/webgl';
+const { isUndefined } = lodashUtil;
 
 /**
  * Device API renderer
@@ -219,6 +221,25 @@ export default class DeviceRendererService implements IRendererService {
     if (framebuffer) {
       // @ts-ignore
       framebuffer.clearOptions = { color, depth, stencil };
+    } else {
+      const platformString = this.queryVerdorInfo();
+      if (platformString === 'WebGL1') {
+        const gl = this.getGLContext();
+        if (!isUndefined(stencil)) {
+          gl.clearStencil(stencil);
+          gl.clear(gl.STENCIL_BUFFER_BIT);
+        } else if (!isUndefined(depth)) {
+          gl.clearDepth(depth);
+          gl.clear(gl.DEPTH_BUFFER_BIT);
+        }
+      } else if (platformString === 'WebGL2') {
+        const gl = this.getGLContext() as WebGL2RenderingContext;
+        if (!isUndefined(stencil)) {
+          gl.clearBufferiv(gl.STENCIL, 0, [stencil]);
+        } else if (!isUndefined(depth)) {
+          gl.clearBufferfv(gl.DEPTH, 0, [depth]);
+        }
+      }
     }
   };
 

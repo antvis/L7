@@ -215,7 +215,6 @@ export default class LayerService
     }
     // // 瓦片裁剪
     if (layer.tileMask) {
-      // TODO 示例瓦片掩膜多层支持
       layer.tileMask.render({
         isStencil: true,
         stencilType,

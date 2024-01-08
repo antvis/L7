@@ -3,12 +3,12 @@ import * as allMap from '@antv/l7-maps';
 
 export function MapRender(option: {
     map: string
-   renderer: string
+   renderer: 'regl' | 'device'
 }) {
     console.log(option)
     const scene = new Scene({
         id: 'map',
-      renderer: option.renderer,
+        renderer: option.renderer,
         map: new allMap[option.map || 'Map']({
             style: 'light',
             center: [121.434765, 31.256735],
@@ -32,20 +32,11 @@ export function MapRender(option: {
         },
     });
 
-    const layer2 = new RasterLayer({
-        zIndex: 1,
-    }).source(url2, {
-        parser: {
-            type: 'rasterTile',
-            tileSize: 256,
-            zoomOffset: 0,
-        },
-    });
 
 
     scene.on('loaded', () => {
         scene.addLayer(layer1);
-        scene.addLayer(layer2);
+        // scene.startAnimate()
 
     });
 
