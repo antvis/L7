@@ -13,6 +13,11 @@
       "filename": "space_click.js",
       "title": "点击建筑",
       "screenshot":"https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ilK5R4SidkMAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "basic_geometry.js",
+      "title": "基础图形",
+      "screenshot":"https://github.com/antvis/L7/assets/58084743/94f59427-2bd4-4e35-84e9-d27a674200d4"
     }
   ]
 }
