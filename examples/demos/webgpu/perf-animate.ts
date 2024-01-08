@@ -51,7 +51,7 @@ export function MapRender(option: {
       });
 
       // 2400
-      flydata = new Array(50).fill(flydata).flat();
+      flydata = new Array(500).fill(flydata).flat();
 
       const worldLine = new LineLayer()
         .source(world)

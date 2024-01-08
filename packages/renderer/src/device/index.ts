@@ -36,6 +36,7 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import DeviceAttribute from './DeviceAttribute';
 import DeviceBuffer from './DeviceBuffer';
+import { RenderCache } from './DeviceCache';
 import DeviceElements from './DeviceElements';
 import DeviceFramebuffer from './DeviceFramebuffer';
 import DeviceModel from './DeviceModel';
@@ -63,6 +64,8 @@ export default class DeviceRendererService implements IRendererService {
   preRenderPass: RenderPass;
   mainColorRT: RenderTarget;
   mainDepthRT: RenderTarget;
+
+  renderCache: RenderCache;
 
   /**
    * Current FBO.
@@ -104,6 +107,8 @@ export default class DeviceRendererService implements IRendererService {
     swapChain.configureSwapChain(canvas.width, canvas.height);
     this.device = swapChain.getDevice();
     this.swapChain = swapChain;
+
+    this.renderCache = new RenderCache(this.device);
 
     // Create default RT
     this.currentFramebuffer = null;
@@ -394,6 +399,8 @@ export default class DeviceRendererService implements IRendererService {
     });
 
     this.device.destroy();
+
+    this.renderCache.destroy();
 
     // make sure release webgl context
     // this.gl?._gl?.getExtension('WEBGL_lose_context')?.loseContext();

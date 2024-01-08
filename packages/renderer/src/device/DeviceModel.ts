@@ -141,7 +141,8 @@ export default class DeviceModel implements IModel {
       this.indexBuffer = (elements as DeviceElements).get();
     }
 
-    const inputLayout = device.createInputLayout({
+    // const inputLayout = device.createInputLayout({
+    const inputLayout = service.renderCache.createInputLayout({
       vertexBufferDescriptors,
       indexBufferFormat: elements ? Format.U32_R : null,
       program,
@@ -165,7 +166,8 @@ export default class DeviceModel implements IModel {
     const stencilParams = this.getStencilDrawParams({ stencil });
     const stencilEnabled = !!(stencilParams && stencilParams.enable);
 
-    return this.device.createRenderPipeline({
+    // return this.device.createRenderPipeline({
+    return this.service.renderCache.createRenderPipeline({
       inputLayout: this.inputLayout,
       program: this.program,
       topology: primitiveMap[primitive],
@@ -227,12 +229,16 @@ export default class DeviceModel implements IModel {
             ? stencilParams.func.cmp
             : CompareFunction.ALWAYS,
           passOp: stencilParams.opFront.zpass,
+          failOp: stencilParams.opFront.fail,
+          depthFailOp: stencilParams.opFront.zfail,
         },
         stencilBack: {
           compare: stencilEnabled
             ? stencilParams.func.cmp
             : CompareFunction.ALWAYS,
           passOp: stencilParams.opBack.zpass,
+          failOp: stencilParams.opBack.fail,
+          depthFailOp: stencilParams.opBack.zfail,
         },
       },
     });
@@ -279,7 +285,8 @@ export default class DeviceModel implements IModel {
       ...this.extractUniforms(uniforms),
     };
 
-    const { renderPass, currentFramebuffer, width, height } = this.service;
+    const { renderPass, currentFramebuffer, width, height, renderCache } =
+      this.service;
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
@@ -316,7 +323,8 @@ export default class DeviceModel implements IModel {
         : null,
     );
     if (uniformBuffers) {
-      this.bindings = this.device.createBindings({
+      // this.bindings = device.createBindings({
+      this.bindings = renderCache.createBindings({
         pipeline: this.pipeline,
         uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
           const buffer = uniformBuffer as DeviceBuffer;
