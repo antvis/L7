@@ -231,6 +231,7 @@ export default class DeviceModel implements IModel {
           passOp: stencilParams.opFront.zpass,
           failOp: stencilParams.opFront.fail,
           depthFailOp: stencilParams.opFront.zfail,
+          mask: stencilParams.opFront.mask,
         },
         stencilBack: {
           compare: stencilEnabled
@@ -239,6 +240,7 @@ export default class DeviceModel implements IModel {
           passOp: stencilParams.opBack.zpass,
           failOp: stencilParams.opBack.fail,
           depthFailOp: stencilParams.opBack.zfail,
+          mask: stencilParams.opBack.mask,
         },
       },
     });
@@ -449,11 +451,13 @@ export default class DeviceModel implements IModel {
         fail: stencilOpMap[opFront.fail],
         zfail: stencilOpMap[opFront.zfail],
         zpass: stencilOpMap[opFront.zpass],
+        mask: func.mask,
       },
       opBack: {
         fail: stencilOpMap[opBack.fail],
         zfail: stencilOpMap[opBack.zfail],
         zpass: stencilOpMap[opBack.zpass],
+        mask: func.mask,
       },
     };
   }

@@ -7,7 +7,7 @@ import * as allMap from '@antv/l7-maps';
 
 export function MapRender(option: {
     map: string
-    renderer: string
+    renderer: 'regl' | 'device'
 }) {
     console.log(option)
     const scene = new Scene({

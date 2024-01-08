@@ -227,7 +227,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public enableDataEncodeStyles: string[] = [];
 
-  public enablg: string[] = [];
 
   /**
    * 待更新样式属性，在初始化阶段完成注册
