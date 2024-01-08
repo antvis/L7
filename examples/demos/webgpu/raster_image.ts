@@ -1,10 +1,12 @@
 import { ImageLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
 
-export function MapRender(option: { map: string; renderer: 'regl' | 'device' }) {
+export function MapRender(option: { map: string; renderer: string }) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
+    renderer: option.renderer === 'device' ? 'device' : 'regl',
+    enableWebGPU: true,
+    shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
     map: new allMap[option.map || 'Map']({
       style: 'light',
       center: [115.5268, 34.3628],

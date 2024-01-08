@@ -21,7 +21,7 @@ import {
   } from '@antv/g-device-api';
 export async function MapRender(option: {
     map: string
-    renderer: string
+    renderer: 'regl' | 'device'
 }) {
     const dom = document.getElementById('map') as HTMLDivElement;
     // 创建 canvas
