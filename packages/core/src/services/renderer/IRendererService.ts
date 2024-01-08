@@ -80,7 +80,8 @@ export interface IRendererService {
   getGLContext(): WebGLRenderingContext;
   getPointSizeRange(): Float32Array;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
-  readPixels(options: IReadPixelsOptions): Promise<Uint8Array>;
+  readPixels(options: IReadPixelsOptions): Uint8Array;
+  readPixelsAsync(options: IReadPixelsOptions): Promise<Uint8Array>;
   setState(): void;
   setBaseState(): void;
   setCustomLayerDefaults(): void;

@@ -280,7 +280,7 @@ export default class DeviceRendererService implements IRendererService {
       }
     }
     // Recreate render pass
-    this.beginFrame();
+    // this.beginFrame();
   };
 
   viewport = ({
@@ -301,7 +301,27 @@ export default class DeviceRendererService implements IRendererService {
     this.height = height;
   };
 
-  readPixels = async (options: IReadPixelsOptions) => {
+  readPixels = (options: IReadPixelsOptions) => {
+    const { framebuffer, x, y, width, height } = options;
+    const readback = this.device.createReadback();
+    const texture = (framebuffer as DeviceFramebuffer)['colorTexture'];
+    const result = readback.readTextureSync(
+      texture,
+      x,
+      /**
+       * Origin is at lower-left corner. Width / height is already multiplied by dpr.
+       * WebGPU needs flipY
+       */
+      this.viewportOrigin === ViewportOrigin.LOWER_LEFT ? y : this.height - y,
+      width,
+      height,
+      new Uint8Array(width * height * 4),
+    ) as Uint8Array;
+    readback.destroy();
+    return result;
+  };
+
+  readPixelsAsync = async (options: IReadPixelsOptions) => {
     const { framebuffer, x, y, width, height } = options;
 
     const readback = this.device.createReadback();

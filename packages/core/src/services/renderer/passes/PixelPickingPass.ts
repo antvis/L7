@@ -126,7 +126,7 @@ export default class PixelPickingPass<
     if (!this.layer.isVisible() || !this.layer.needPick(type)) {
       return;
     }
-    const { getViewportSize, readPixels, useFramebuffer } =
+    const { getViewportSize, readPixelsAsync, useFramebuffer } =
       this.rendererService;
     const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = this.layer.getLayerConfig();
@@ -144,7 +144,7 @@ export default class PixelPickingPass<
     let pickedColors: Uint8Array | undefined;
     useFramebuffer(this.pickingFBO, async () => {
       // avoid realloc
-      pickedColors = await readPixels({
+      pickedColors = await readPixelsAsync({
         x: Math.round(xInDevicePixel),
         // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
         y: Math.round(height - (y + 1) * DOM.DPR),

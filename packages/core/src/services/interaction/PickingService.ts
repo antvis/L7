@@ -112,7 +112,7 @@ export default class PickingService implements IPickingService {
       const tmpV = v < 0 ? 0 : v;
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
     });
-    const { readPixels, getContainer } = this.rendererService;
+    const { readPixelsAsync, getContainer } = this.rendererService;
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
     );
@@ -129,7 +129,7 @@ export default class PickingService implements IPickingService {
 
     const w = Math.min(width / this.pickBufferScale, xMax) - xMin;
     const h = Math.min(height / this.pickBufferScale, yMax) - yMin;
-    const pickedColors: Uint8Array | undefined = await readPixels({
+    const pickedColors: Uint8Array | undefined = await readPixelsAsync({
       x: xMin,
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
       y: Math.floor(height / this.pickBufferScale - (yMax + 1)),
@@ -192,7 +192,7 @@ export default class PickingService implements IPickingService {
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
     let isPicked = false;
-    const { readPixels, getContainer } = this.rendererService;
+    const { readPixelsAsync, getContainer } = this.rendererService;
     let { width, height } = this.getContainerSize(
       getContainer() as HTMLCanvasElement | HTMLElement,
     );
@@ -212,7 +212,7 @@ export default class PickingService implements IPickingService {
       return false;
     }
 
-    const pickedColors: Uint8Array | undefined = await readPixels({
+    const pickedColors: Uint8Array | undefined = await readPixelsAsync({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
       y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),

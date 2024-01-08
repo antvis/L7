@@ -188,7 +188,7 @@ export default class ReglRendererService implements IRendererService {
     this.gl._refresh();
   };
 
-  public readPixels = async (options: IReadPixelsOptions) => {
+  public readPixels = (options: IReadPixelsOptions) => {
     const { framebuffer, x, y, width, height } = options;
     const readPixelsOptions: regl.ReadOptions = {
       x,
@@ -200,6 +200,10 @@ export default class ReglRendererService implements IRendererService {
       readPixelsOptions.framebuffer = (framebuffer as ReglFramebuffer).get();
     }
     return this.gl.read(readPixelsOptions);
+  };
+
+  public readPixelsAsync = async (options: IReadPixelsOptions) => {
+    return this.readPixels(options);
   };
 
   public getViewportSize = () => {

@@ -340,7 +340,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     } else {
       // 尝试初始化未初始化的图层
       await this.layerService.initLayers();
-      this.layerService.renderLayers();
+      await this.layerService.renderLayers();
     }
 
     // 组件需要等待layer 初始化完成之后添加

@@ -12,6 +12,7 @@ import type {
   RenderPipelineDescriptor,
 } from '@antv/g-device-api';
 import {
+  TransparentBlack,
   bindingsDescriptorCopy,
   bindingsDescriptorEquals,
   inputLayoutDescriptorCopy,
@@ -51,7 +52,7 @@ function colorHash(hash: number, a: Color): number {
 function megaStateDescriptorHash(hash: number, a: MegaStateDescriptor): number {
   for (let i = 0; i < a.attachmentsState.length; i++)
     hash = attachmentStateHash(hash, a.attachmentsState[i]);
-  hash = colorHash(hash, a.blendConstant!);
+  hash = colorHash(hash, a.blendConstant || TransparentBlack);
   hash = hashCodeNumberUpdate(hash, a.depthCompare);
   hash = hashCodeNumberUpdate(hash, a.depthWrite ? 1 : 0);
   hash = hashCodeNumberUpdate(hash, a.stencilFront?.compare);
