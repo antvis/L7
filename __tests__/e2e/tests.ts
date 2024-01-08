@@ -28,6 +28,9 @@ export const TestDemoList: Array<{
         snapshots: false,
         sleepTime: 1,
       },
+      {
+        name: 'text',
+      },
     ],
   },
   {

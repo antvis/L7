@@ -8,6 +8,7 @@ export { MapRender as line_normal } from './line_normal';
 export { MapRender as point_column } from './point_column';
 export { MapRender as point_fill } from './point_fill';
 export { MapRender as point_image } from './point_image';
+export { MapRender as point_text } from './point_text';
 export { MapRender as polygon_extrude } from './polygon_extrude';
 export { MapRender as polygon_fill } from './polygon_fill';
 export { MapRender as polygon_texture } from './polygon_texture';
