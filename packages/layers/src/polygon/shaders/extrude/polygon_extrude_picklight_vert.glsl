@@ -15,10 +15,9 @@ layout(std140) uniform commonUniforms {
   float u_raisingHeight;
 };
 
-out vec2 v_texture_data;
-out vec3 v_uvs;
 out vec4 v_Color;
-
+out vec3 v_uvs;
+out vec2 v_texture_data;
 
 #pragma include "projection"
 #pragma include "light"

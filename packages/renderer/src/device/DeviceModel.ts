@@ -17,6 +17,7 @@ import {
   StencilOp,
   TransparentBlack,
   VertexStepMode,
+  ViewportOrigin,
 } from '@antv/g-device-api';
 import type {
   IModel,
@@ -62,8 +63,23 @@ export default class DeviceModel implements IModel {
     private options: IModelInitializationOptions,
     private service: DeviceRendererService,
   ) {
-    const { vs, fs, attributes, uniforms, count, elements } = options;
+    const {
+      vs,
+      fs,
+      attributes,
+      uniforms,
+      count,
+      elements,
+      diagnosticDerivativeUniformityEnabled,
+    } = options;
     this.options = options;
+
+    const diagnosticDerivativeUniformityHeader =
+      diagnosticDerivativeUniformityEnabled
+        ? ''
+        : this.service['viewportOrigin'] === ViewportOrigin.UPPER_LEFT
+        ? 'diagnostic(off,derivative_uniformity);'
+        : '';
 
     const program = device.createProgram({
       vertex: {
@@ -71,6 +87,7 @@ export default class DeviceModel implements IModel {
       },
       fragment: {
         glsl: fs,
+        postprocess: (fs) => diagnosticDerivativeUniformityHeader + fs,
       },
     });
     this.program = program;
@@ -124,7 +141,8 @@ export default class DeviceModel implements IModel {
       this.indexBuffer = (elements as DeviceElements).get();
     }
 
-    const inputLayout = device.createInputLayout({
+    // const inputLayout = device.createInputLayout({
+    const inputLayout = service.renderCache.createInputLayout({
       vertexBufferDescriptors,
       indexBufferFormat: elements ? Format.U32_R : null,
       program,
@@ -148,7 +166,8 @@ export default class DeviceModel implements IModel {
     const stencilParams = this.getStencilDrawParams({ stencil });
     const stencilEnabled = !!(stencilParams && stencilParams.enable);
 
-    return this.device.createRenderPipeline({
+    // return this.device.createRenderPipeline({
+    return this.service.renderCache.createRenderPipeline({
       inputLayout: this.inputLayout,
       program: this.program,
       topology: primitiveMap[primitive],
@@ -268,10 +287,18 @@ export default class DeviceModel implements IModel {
       ...this.extractUniforms(uniforms),
     };
 
-    const { renderPass, currentFramebuffer, width, height } = this.service;
+    const { renderPass, currentFramebuffer, width, height, renderCache } =
+      this.service;
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
+
+    // const height = this.device['swapChainHeight'];
+    const device = this.service['device'];
+    // @ts-ignore
+    const tmpHeight = device['swapChainHeight'];
+    // @ts-ignore
+    device['swapChainHeight'] = currentFramebuffer?.['height'] || height;
 
     renderPass.setViewport(
       0,
@@ -279,6 +306,10 @@ export default class DeviceModel implements IModel {
       currentFramebuffer?.['width'] || width,
       currentFramebuffer?.['height'] || height,
     );
+
+    // @ts-ignore
+    device['swapChainHeight'] = tmpHeight;
+
     renderPass.setPipeline(this.pipeline);
     renderPass.setStencilReference(1);
     renderPass.setVertexInput(
@@ -294,7 +325,8 @@ export default class DeviceModel implements IModel {
         : null,
     );
     if (uniformBuffers) {
-      this.bindings = this.device.createBindings({
+      // this.bindings = device.createBindings({
+      this.bindings = renderCache.createBindings({
         pipeline: this.pipeline,
         uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
           const buffer = uniformBuffer as DeviceBuffer;

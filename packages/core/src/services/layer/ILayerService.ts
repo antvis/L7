@@ -85,6 +85,10 @@ export interface ILayerModelInitializationOptions {
   styleOption?: unknown;
   workerEnabled?: boolean;
   workerOptions?: IWorkerOption;
+  /**
+   * When disabled, the picking uniform buffer will not be binded. Default to `true`.
+   */
+  pickingEnabled?: boolean;
 }
 
 export interface ILayerModel {
@@ -254,7 +258,7 @@ export interface IBaseTileLayerManager {
 }
 
 export interface ITilePickService {
-  pick(layer: ILayer, target: IInteractionTarget): boolean;
+  pick(layer: ILayer, target: IInteractionTarget): Promise<boolean>;
   pickRender(target: IInteractionTarget): void;
 }
 

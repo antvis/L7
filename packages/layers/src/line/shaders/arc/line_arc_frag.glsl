@@ -18,9 +18,10 @@ layout(std140) uniform commonUniorm {
   float u_time;
   float u_linearColor: 0.0;
 };
+
+in vec4 v_color;
 in vec2 v_iconMapUV;
 in vec4 v_lineData;
-in vec4 v_color;
 //dash
 in vec4 v_dash_array;
 in float v_distance_ratio;

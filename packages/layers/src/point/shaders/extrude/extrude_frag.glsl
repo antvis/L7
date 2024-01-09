@@ -15,6 +15,7 @@ layout(std140) uniform commonUniforms {
   float u_lightEnable;
 };
 
+#pragma include "scene_uniforms"
 #pragma include "picking"
 
 void main() {

@@ -14,6 +14,9 @@ layout(std140) uniform commonUniforms {
 out vec2 v_texCoord;
 void main() {
   v_texCoord = a_Uv;
+  #ifdef VIEWPORT_ORIGIN_TL
+    v_texCoord.y = 1.0 - v_texCoord.y;
+  #endif
 
   gl_Position = vec4(a_Position.xy, 0, 1.);
 }

@@ -202,14 +202,14 @@ describe('ReglRendererService', () => {
       height: 1,
     });
 
-    useFramebuffer(framebuffer, () => {
+    useFramebuffer(framebuffer, async () => {
       clear({
         color: [0, 0, 0, 0],
         framebuffer,
       });
       model.draw({});
 
-      const pixels = readPixels({
+      const pixels = await readPixels({
         x: 0,
         y: 0,
         width: 1,
@@ -220,12 +220,12 @@ describe('ReglRendererService', () => {
     });
 
     // render to screen
-    useFramebuffer(null, () => {
+    useFramebuffer(null, async () => {
       clear({
         color: [0, 0, 0, 0],
       });
       model.draw({});
-      const pixels = readPixels({
+      const pixels = await readPixels({
         x: 0,
         y: 0,
         width: 1,

@@ -125,7 +125,7 @@ export function MapRender(option: {
 
   scene.on('loaded', () => {
     scene.addLayer(layer);
-    scene.startAnimate();
+    // scene.startAnimate();
     // scene.addLayer(boundaries);
     // scene.addLayer(natural);
     // scene.addLayer(buildings);
@@ -133,5 +133,9 @@ export function MapRender(option: {
     // scene.addLayer(roads);
     // scene.addLayer(water);
     // scene.addLayer(point);
+
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
   });
 }

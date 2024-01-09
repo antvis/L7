@@ -240,8 +240,8 @@ export default class SpriteModel extends BaseModel {
       img.src = mapTexture;
     } else {
       this.texture = createTexture2D({
-        width: 0,
-        height: 0,
+        width: 1,
+        height: 1,
       });
     }
   }
