@@ -1,5 +1,6 @@
 import { chromium, devices } from 'playwright';
 import { TestDemoList } from './tests';
+import { sleep } from './utils/sleep';
 import './utils/useSnapshotMatchers';
 describe('Snapshots', () => {
   const demosFlatList: Array<{
@@ -48,6 +49,7 @@ describe('Snapshots', () => {
 
       await page.goto(url);
       await readyPromise;
+      await sleep(2000);
 
       // Chart already rendered, capture into buffer.
       const buffer = await page.locator('canvas').screenshot();
