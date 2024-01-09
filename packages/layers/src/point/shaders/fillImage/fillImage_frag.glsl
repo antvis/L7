@@ -1,4 +1,3 @@
-in vec4 v_color;
 in vec2 v_uv;// 本身的 uv 坐标
 in vec2 v_Iconuv;
 in float v_opacity;
@@ -12,9 +11,9 @@ layout(std140) uniform commonUniform {
   float u_size_unit;
 };
 
+#pragma include "scene_uniforms"
 #pragma include "sdf_2d"
 #pragma include "picking"
-
 
 void main() {
   vec2 pos = v_Iconuv / u_textSize + v_uv / u_textSize * 64.;

@@ -3,19 +3,13 @@ import type {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  ITexture2D,
 } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import type {
-  ILineLayerStyleOptions} from '../../core/interface';
-import {
-  LinearDir,
-  TextureBlend,
-} from '../../core/interface';
+import type { ILineLayerStyleOptions } from '../../core/interface';
+import { LinearDir, TextureBlend } from '../../core/interface';
 // import { LineTriangulation } from '../../core/triangulation';
 
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -155,7 +149,7 @@ export default class LineModel extends BaseModel {
       name: 'distanceAndIndex',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_DistanceAndIndex',
+        name: 'a_DistanceAndIndexAndMiter',
         shaderLocation: 10,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
@@ -163,7 +157,7 @@ export default class LineModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 2,
+        size: 3,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -173,30 +167,8 @@ export default class LineModel extends BaseModel {
           vertexIndex?: number,
         ) => {
           return vertexIndex === undefined
-            ? [vertex[3], 10]
-            : [vertex[3], vertexIndex];
-        },
-      },
-    });
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'total_distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Total_Distance',
-        shaderLocation: 11,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
-          return [vertex[5]];
+            ? [vertex[3], 10, vertex[4]]
+            : [vertex[3], vertexIndex, vertex[4]];
         },
       },
     });
@@ -223,10 +195,10 @@ export default class LineModel extends BaseModel {
 
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
-      name: 'normal',
+      name: 'normal_total_distance',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Normal',
+        name: 'a_Normal_Total_Distance',
         shaderLocation: ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
@@ -234,7 +206,7 @@ export default class LineModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 3,
+        size: 4,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
@@ -242,34 +214,11 @@ export default class LineModel extends BaseModel {
           attributeIdx: number,
           normal: number[],
         ) => {
-          return normal;
+          return [...normal, vertex[5]];
         },
       },
     });
 
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'miter',
-      type: AttributeType.Attribute,
-      descriptor: {
-        shaderLocation: 15,
-        name: 'a_Miter',
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
-          return [vertex[4]];
-        },
-      },
-    });
-  
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,

@@ -24,11 +24,11 @@ layout(std140) uniform commonUniorm {
 
 in vec4 v_color;
 in vec4 v_stroke;
-in vec2 v_iconMapUV;
-in vec4 v_texture_data;
 // dash
 in vec4 v_dash_array;
 in float v_d_distance_ratio;
+in vec2 v_iconMapUV;
+in vec4 v_texture_data;
 
 out vec4 outputColor;
 #pragma include "picking"

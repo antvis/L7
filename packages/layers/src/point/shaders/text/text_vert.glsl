@@ -23,8 +23,6 @@ out vec4 v_color;
 out vec4 v_stroke_color;
 out float v_fontScale;
 
-
-
 #pragma include "projection"
 #pragma include "picking"
 #pragma include "rotation_2d"

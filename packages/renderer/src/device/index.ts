@@ -8,6 +8,7 @@ import {
   Format,
   TextureUsage,
   TransparentBlack,
+  ViewportOrigin,
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
   colorNewFromRGBA,
@@ -36,6 +37,7 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import DeviceAttribute from './DeviceAttribute';
 import DeviceBuffer from './DeviceBuffer';
+import { RenderCache } from './DeviceCache';
 import DeviceElements from './DeviceElements';
 import DeviceFramebuffer from './DeviceFramebuffer';
 import DeviceModel from './DeviceModel';
@@ -61,8 +63,11 @@ export default class DeviceRendererService implements IRendererService {
    * Current render pass.
    */
   renderPass: RenderPass;
+  preRenderPass: RenderPass;
   mainColorRT: RenderTarget;
   mainDepthRT: RenderTarget;
+
+  renderCache: RenderCache;
 
   /**
    * Current FBO.
@@ -72,6 +77,8 @@ export default class DeviceRendererService implements IRendererService {
   queryVerdorInfo = () => {
     return this.device.queryVendorInfo().platformString;
   };
+
+  private viewportOrigin: ViewportOrigin;
 
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
     const { enableWebGPU, shaderCompilerPath } = cfg;
@@ -103,8 +110,12 @@ export default class DeviceRendererService implements IRendererService {
     this.device = swapChain.getDevice();
     this.swapChain = swapChain;
 
+    this.renderCache = new RenderCache(this.device);
+
     // Create default RT
     this.currentFramebuffer = null;
+
+    this.viewportOrigin = this.device.queryVendorInfo().viewportOrigin;
 
     // @ts-ignore
     const gl = this.device['gl'];
@@ -113,11 +124,22 @@ export default class DeviceRendererService implements IRendererService {
       OES_texture_float: !isWebGL2(gl) && this.device['OES_texture_float'],
     };
 
+    this.createMainColorDepthRT(canvas.width, canvas.height);
+  }
+
+  private createMainColorDepthRT(width: number, height: number) {
+    if (this.mainColorRT) {
+      this.mainColorRT.destroy();
+    }
+    if (this.mainDepthRT) {
+      this.mainDepthRT.destroy();
+    }
+
     this.mainColorRT = this.device.createRenderTargetFromTexture(
       this.device.createTexture({
         format: Format.U8_RGBA_RT,
-        width: canvas.width,
-        height: canvas.height,
+        width,
+        height,
         usage: TextureUsage.RENDER_TARGET,
       }),
     );
@@ -125,8 +147,8 @@ export default class DeviceRendererService implements IRendererService {
     this.mainDepthRT = this.device.createRenderTargetFromTexture(
       this.device.createTexture({
         format: Format.D24_S8,
-        width: canvas.width,
-        height: canvas.height,
+        width,
+        height,
         usage: TextureUsage.RENDER_TARGET,
       }),
     );
@@ -135,11 +157,12 @@ export default class DeviceRendererService implements IRendererService {
   beginFrame(): void {
     const { currentFramebuffer, swapChain, mainColorRT, mainDepthRT } = this;
 
-    const onscreenTexture = swapChain.getOnscreenTexture();
     const colorAttachment = currentFramebuffer
       ? currentFramebuffer['colorRenderTarget']
       : mainColorRT;
-    const colorResolveTo = currentFramebuffer ? null : onscreenTexture;
+    const colorResolveTo = currentFramebuffer
+      ? null
+      : swapChain.getOnscreenTexture();
     const depthStencilAttachment = currentFramebuffer
       ? currentFramebuffer['depthRenderTarget']
       : mainDepthRT;
@@ -163,6 +186,8 @@ export default class DeviceRendererService implements IRendererService {
       colorAttachment: [colorAttachment],
       colorResolveTo: [colorResolveTo],
       colorClearColor: [colorClearColor],
+      // colorStore: [!!currentFramebuffer],
+      colorStore: [true],
       depthStencilAttachment,
       depthClearValue,
       stencilClearValue,
@@ -215,6 +240,19 @@ export default class DeviceRendererService implements IRendererService {
     this.currentFramebuffer = null;
   };
 
+  useFramebufferAsync = async (
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => Promise<void>,
+  ) => {
+    this.currentFramebuffer = framebuffer as DeviceFramebuffer;
+    this.preRenderPass = this.renderPass;
+    this.beginFrame();
+    await drawCommands();
+    this.endFrame();
+    this.currentFramebuffer = null;
+    this.renderPass = this.preRenderPass;
+  };
+
   clear = (options: IClearOptions) => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
     const { color, depth, stencil, framebuffer = null } = options;
@@ -241,6 +279,8 @@ export default class DeviceRendererService implements IRendererService {
         }
       }
     }
+    // Recreate render pass
+    // this.beginFrame();
   };
 
   viewport = ({
@@ -254,30 +294,64 @@ export default class DeviceRendererService implements IRendererService {
     width: number;
     height: number;
   }) => {
-    // use WebGL context directly
-    // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#unsafe-escape-hatch
-    // this.gl._gl.viewport(x, y, width, height);
+    // @see https://observablehq.com/@antv/g-device-api#cell-267
+    this.swapChain.configureSwapChain(width, height);
+    this.createMainColorDepthRT(width, height);
     this.width = width;
     this.height = height;
-    // Will be used in `setViewport` from RenderPass later.
-    // this.gl._refresh();
   };
 
   readPixels = (options: IReadPixelsOptions) => {
     const { framebuffer, x, y, width, height } = options;
-
     const readback = this.device.createReadback();
-
     const texture = (framebuffer as DeviceFramebuffer)['colorTexture'];
-
-    return readback.readTextureSync(
+    const result = readback.readTextureSync(
       texture,
       x,
-      y,
+      /**
+       * Origin is at lower-left corner. Width / height is already multiplied by dpr.
+       * WebGPU needs flipY
+       */
+      this.viewportOrigin === ViewportOrigin.LOWER_LEFT ? y : this.height - y,
       width,
       height,
       new Uint8Array(width * height * 4),
     ) as Uint8Array;
+    readback.destroy();
+    return result;
+  };
+
+  readPixelsAsync = async (options: IReadPixelsOptions) => {
+    const { framebuffer, x, y, width, height } = options;
+
+    const readback = this.device.createReadback();
+    const texture = (framebuffer as DeviceFramebuffer)['colorTexture'];
+    const result = (await readback.readTexture(
+      texture,
+      x,
+      /**
+       * Origin is at lower-left corner. Width / height is already multiplied by dpr.
+       * WebGPU needs flipY
+       */
+      this.viewportOrigin === ViewportOrigin.LOWER_LEFT ? y : this.height - y,
+      width,
+      height,
+      new Uint8Array(width * height * 4),
+    )) as Uint8Array;
+
+    // Since we use U8_RGBA_RT format in render target, need to change bgranorm -> rgba here.
+    if (this.viewportOrigin !== ViewportOrigin.LOWER_LEFT) {
+      for (let j = 0; j < result.length; j += 4) {
+        // Switch b and r components.
+        const t = result[j];
+        result[j] = result[j + 2];
+        result[j + 2] = t;
+      }
+    }
+
+    readback.destroy();
+
+    return result;
   };
 
   getViewportSize = () => {
@@ -293,7 +367,6 @@ export default class DeviceRendererService implements IRendererService {
   };
 
   getCanvas = () => {
-    // return this.$container?.getElementsByTagName('canvas')[0] || null;
     return this.canvas;
   };
 
@@ -367,6 +440,8 @@ export default class DeviceRendererService implements IRendererService {
     });
 
     this.device.destroy();
+
+    this.renderCache.destroy();
 
     // make sure release webgl context
     // this.gl?._gl?.getExtension('WEBGL_lose_context')?.loseContext();

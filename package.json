@@ -183,6 +183,7 @@
     "sass": "^1.43.4",
     "sass-loader": "^8.0.2",
     "shp-write": "^0.3.2",
+    "stats.js": "^0.17.0",
     "style-loader": "^1.0.0",
     "styled-components": "^3.4.6",
     "stylelint": "^9.5.0",
