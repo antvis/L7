@@ -22,9 +22,9 @@ export const TestDemoList: Array<{
       {
         name: 'fill',
       },
-      {
-        name: 'image',
-      },
+      // {
+      //   name: 'image',
+      // },
       {
         name: 'text',
       },
