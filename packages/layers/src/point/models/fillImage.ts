@@ -50,9 +50,7 @@ export default class FillImageModel extends BaseModel {
       u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-      u_texture: this.texture,
-    };
-    this.textures = [this.texture];
+    };//2+1+1+1
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
 
     return commonBufferInfo;

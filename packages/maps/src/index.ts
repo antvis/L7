@@ -7,6 +7,7 @@ import Map from './map/';
 import Mapbox from './mapbox/';
 import MapLibre from './maplibre';
 import TencentMap from './tmap';
+import TMap from './tdtmap';
 export * from './utils';
 export {
   BaiduMap,
@@ -19,4 +20,5 @@ export {
   Mapbox,
   TencentMap,
   MapType,
+  TMap
 };
