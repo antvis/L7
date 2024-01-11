@@ -328,14 +328,6 @@ export default class TdtMapService extends BaseMapService<any> {
     return 0;
   }
 
-  public getBounds(): Bounds {
-    const ne = this.map.getBounds().getNorthEast();
-    const sw = this.map.getBounds().getSouthWest();
-    return [
-      [sw.lng, sw.lat],
-      [ne.lng, ne.lat],
-    ];
-  }
 
   public setRotation(rotation: number): void {
     this.map.setBearing(360);
@@ -363,8 +355,7 @@ export default class TdtMapService extends BaseMapService<any> {
   public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
     const [sw, ne] = bound;
     // @ts-ignore
-    const bounds = new window.T.LngLatBounds(sw, ne);
-    this.map.setMaxBounds(bounds);
+    this.map.setViewport([new window.T.LngLat(sw[0],sw[1]),new window.T.LngLat(ne[0],ne[1])]);
   }
 
   public setMaxZoom(max: number): void {
@@ -457,6 +448,17 @@ export default class TdtMapService extends BaseMapService<any> {
     );
   }
 
+  public getBounds(): Bounds {
+    const latlngBound = this.map.getBounds();
+
+    const sw = latlngBound.getSouthWest(),
+      ne = latlngBound.getNorthEast();
+    return [
+      [sw.lng, sw.lat],
+      [ne.lng, ne.lat],
+    ];
+  }
+ 
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,
