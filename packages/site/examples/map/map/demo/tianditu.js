@@ -11,6 +11,11 @@ const scene = new Scene({
   })
 });
   scene.on('loaded', () => {
+    // fetch('https://tile0.tianditu.gov.cn/vts?t=vt&pk=agjda&tk=75f0434f240669f4a2df6359275146d2&v=1.0').then((res) => { 
+    //     res.arrayBuffer().then((arrayBuffer) => {  
+    //         console.log(arrayBuffer);
+    //     });  
+    //  });
     fetch(
       'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json'
     )

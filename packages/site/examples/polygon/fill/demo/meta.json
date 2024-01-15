@@ -23,6 +23,16 @@
       "filename": "ocean.js",
       "title": "拟真水面",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*BiawTbtX-CYAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "linear_in.js",
+      "title": "径向渐变 in",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*pGaoSLHoAnkAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "linear_out.js",
+      "title": "径向渐变 out",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Yc7HQ7CVQ7wAAAAAAAAAAAAADmJ7AQ/original"
     }
   ]
 }
