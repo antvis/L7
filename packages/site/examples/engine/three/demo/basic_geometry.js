@@ -20,18 +20,23 @@ scene.on('loaded', () => {
   const threeJSLayer = new ThreeLayer({
     enableMultiPassRenderer: false,
     onAddMeshes: (threeScene, layer) => {
-      // 环境光照
-      threeScene.add(new THREE.AmbientLight(0xffffff));
-      const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
-      sunlight.position.set(0, 80000000, 100000000);
-      sunlight.matrixWorldNeedsUpdate = true;
-      threeScene.add(sunlight);
 
       // 当前场景的中心
       const center = scene.getCenter();
 
+      // 环境光照
+      threeScene.add(new THREE.AmbientLight(0xffffff, 0.2));
+      const sunlight = new THREE.DirectionalLight(0xff0000, 0.8);
+      layer.setObjectLngLat(sunlight, [center.lng + 0.3, center.lat + 0.08], 1000);
+      sunlight.matrixWorldNeedsUpdate = true;
+      threeScene.add(sunlight);
+
+      const directionalLightHelper = new THREE.DirectionalLightHelper( sunlight, 5 );
+      threeScene.add( directionalLightHelper );
+
       const box = createBoxGeometry();
       box.scale.set(1000, 1000, 1000);
+      box.rotation.set(0, 90, 0)
       layer.setObjectLngLat(box, [center.lng - 0.05, center.lat], 0);
       threeScene.add(box);
 
@@ -92,35 +97,65 @@ scene.on('loaded', () => {
 
 function createBoxGeometry() {
   const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const cube = new THREE.Mesh(geometry, material);
   return cube;
 }
 
 function createCircleGeometry() {
   const geometry = new THREE.CircleGeometry(5, 32);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const circle = new THREE.Mesh(geometry, material);
   return circle;
 }
 
 function createCylinderGeometry() {
   const geometry = new THREE.CylinderGeometry(5, 5, 20, 32);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const cylinder = new THREE.Mesh(geometry, material);
   return cylinder;
 }
 
 function createConeGeometry() {
   const geometry = new THREE.ConeGeometry(5, 20, 32);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const cone = new THREE.Mesh(geometry, material);
   return cone
 }
 
 function createPlaneGeometry() {
   const geometry = new THREE.PlaneGeometry(1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const plane = new THREE.Mesh(geometry, material);
   return plane;
 }
@@ -139,14 +174,26 @@ function createShape() {
   heartShape.bezierCurveTo(x + 7, y, x + 5, y + 5, x + 5, y + 5);
 
   const geometry = new THREE.ShapeGeometry(heartShape);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const mesh = new THREE.Mesh(geometry, material);
   return mesh;
 }
 
 function createSphereGeometry() {
   const geometry = new THREE.SphereGeometry(15, 32, 16);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const sphere = new THREE.Mesh(geometry, material);
   return sphere;
 }
@@ -169,7 +216,13 @@ function createTube() {
 
   const path = new CustomSinCurve(10);
   const geometry = new THREE.TubeGeometry(path, 20, 2, 8, false);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const material = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff,
+    reflectivity: 0.8,
+    shininess: 80,
+    emissive: 0x049ef4,
+    specular: 0x049ef4
+   });
   const mesh = new THREE.Mesh(geometry, material);
   return mesh;
 }
@@ -187,14 +240,14 @@ function createPoints() {
   points.push(new THREE.Vector3(10, 0, 0));
 
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  const material = new THREE.PointsMaterial({ size: 200, color: 0xff0000 });
+  const material = new THREE.PointsMaterial({ size: 200, color: 0x049ef4 });
   const pointsGeometry = new THREE.Points(geometry, material);
   return pointsGeometry;
 }
 
 function createLine() {
   const material = new THREE.LineBasicMaterial({
-    color: 0xff0000,
+    color: 0x049ef4,
     linewidth: 6,
   });
 
