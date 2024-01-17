@@ -81,7 +81,7 @@ export default class DeviceModel implements IModel {
         ? 'diagnostic(off,derivative_uniformity);'
         : '';
 
-    const program = device.createProgram({
+    this.program = service.renderCache.createProgram({
       vertex: {
         glsl: vs,
       },
@@ -90,7 +90,6 @@ export default class DeviceModel implements IModel {
         postprocess: (fs) => diagnosticDerivativeUniformityHeader + fs,
       },
     });
-    this.program = program;
 
     if (uniforms) {
       this.uniforms = this.extractUniforms(uniforms);
@@ -141,11 +140,10 @@ export default class DeviceModel implements IModel {
       this.indexBuffer = (elements as DeviceElements).get();
     }
 
-    // const inputLayout = device.createInputLayout({
     const inputLayout = service.renderCache.createInputLayout({
       vertexBufferDescriptors,
       indexBufferFormat: elements ? Format.U32_R : null,
-      program,
+      program: this.program,
     });
     this.inputLayout = inputLayout;
 

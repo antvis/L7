@@ -125,7 +125,7 @@ export function MapRender(option: {
 
   scene.on('loaded', () => {
     scene.addLayer(layer);
-    scene.startAnimate();
+    // scene.startAnimate();
     scene.addLayer(boundaries);
     scene.addLayer(natural);
     scene.addLayer(buildings);
