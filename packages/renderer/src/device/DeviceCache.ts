@@ -8,6 +8,8 @@ import type {
   InputLayout,
   InputLayoutDescriptor,
   MegaStateDescriptor,
+  Program,
+  ProgramDescriptor,
   RenderPipeline,
   RenderPipelineDescriptor,
 } from '@antv/g-device-api';
@@ -125,6 +127,28 @@ function bindingsDescriptorHash(a: BindingsDescriptor): number {
   return hashCodeNumberFinish(hash);
 }
 
+function programDescriptorEquals(
+  a: ProgramDescriptor,
+  b: ProgramDescriptor,
+): boolean {
+  return (
+    a.vertex?.glsl === b.vertex?.glsl && a.fragment?.glsl === b.fragment?.glsl
+  );
+}
+
+function programDescriptorCopy(
+  a: Readonly<ProgramDescriptor>,
+): ProgramDescriptor {
+  return {
+    vertex: {
+      glsl: a.vertex?.glsl,
+    },
+    fragment: {
+      glsl: a.fragment?.glsl,
+    },
+  };
+}
+
 export class RenderCache {
   constructor(private device: Device) {}
 
@@ -140,6 +164,11 @@ export class RenderCache {
 
   private inputLayoutsCache = new HashMap<InputLayoutDescriptor, InputLayout>(
     inputLayoutDescriptorEquals,
+    nullHashFunc,
+  );
+
+  private programCache = new HashMap<ProgramDescriptor, Program>(
+    programDescriptorEquals,
     nullHashFunc,
   );
 
@@ -184,18 +213,28 @@ export class RenderCache {
     return inputLayout;
   }
 
+  createProgram(descriptor: ProgramDescriptor): Program {
+    let program = this.programCache.get(descriptor);
+    if (program === null) {
+      const descriptorCopy = programDescriptorCopy(descriptor);
+      program = this.device.createProgram(descriptor);
+      this.programCache.add(descriptorCopy, program);
+    }
+    return program;
+  }
+
   destroy(): void {
     for (const bindings of this.bindingsCache.values()) bindings.destroy();
     for (const renderPipeline of this.renderPipelinesCache.values())
       renderPipeline.destroy();
     for (const inputLayout of this.inputLayoutsCache.values())
       inputLayout.destroy();
-    // for (const program of this.programCache.values()) program.destroy();
+    for (const program of this.programCache.values()) program.destroy();
     // for (const sampler of this.samplerCache.values()) sampler.destroy();
     this.bindingsCache.clear();
     this.renderPipelinesCache.clear();
     this.inputLayoutsCache.clear();
-    // this.programCache.clear();
+    this.programCache.clear();
     // this.samplerCache.clear();
   }
 }
