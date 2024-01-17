@@ -50,6 +50,9 @@ export function MapRender(option: {
                         '#CEF8D6'
                     ]);
                 scene.addLayer(layer);
+                if (window['screenshot']) {
+                    window['screenshot']();
+                  }
             });
 
     })

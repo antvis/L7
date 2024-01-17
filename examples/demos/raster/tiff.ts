@@ -76,6 +76,8 @@ export function MapRender(option: {
         },
       });
     scene.addLayer(layer);
-    scene.startAnimate();
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
   }
 }

@@ -25,5 +25,8 @@ export function MapRender(option: { map: string; renderer: 'regl' | 'device' }) 
       },
     );
     scene.addLayer(layer);
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
   });
 }

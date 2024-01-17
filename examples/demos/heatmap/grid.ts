@@ -61,6 +61,9 @@ export function MapRender(option: {
             ].reverse(),
           );
         scene.addLayer(layer);
+        if (window['screenshot']) {
+          window['screenshot']();
+        }
       });
   });
 }

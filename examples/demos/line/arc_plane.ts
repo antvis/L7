@@ -111,6 +111,9 @@ export function MapRender(option: {
             scene.addLayer(dotPoint);
             scene.addLayer(flyLine2);
             scene.addLayer(flyLine);
+            if (window['screenshot']) {
+                window['screenshot']();
+              }
         });
     });
 

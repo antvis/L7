@@ -79,11 +79,11 @@ export function MapRender(option: {
   
       scene.on('loaded', () => {
         scene.addLayer(layer);
+        if (window['screenshot']) {
+          window['screenshot']();
+        }
       });
 
-      setTimeout(() => {
-        layer.size(20)
-        scene.render()
-      },2000)
+
 
 }
