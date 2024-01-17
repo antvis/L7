@@ -155,6 +155,8 @@ export default class DeviceRendererService implements IRendererService {
   }
 
   beginFrame(): void {
+    this.device.beginFrame();
+
     const { currentFramebuffer, swapChain, mainColorRT, mainDepthRT } = this;
 
     const colorAttachment = currentFramebuffer
@@ -197,6 +199,7 @@ export default class DeviceRendererService implements IRendererService {
 
   endFrame(): void {
     this.device.submitPass(this.renderPass);
+    this.device.endFrame();
   }
 
   getPointSizeRange() {
