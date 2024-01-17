@@ -125,6 +125,7 @@ export function MapRender(option: {
   // TODO:Mask 和缩放取消
   scene.on('loaded', () => {
     scene.addLayer(layer);
+    // scene.startAnimate();
     scene.addLayer(boundaries);
     scene.addLayer(natural);
     scene.addLayer(buildings);
