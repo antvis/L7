@@ -126,13 +126,13 @@ export function MapRender(option: {
   scene.on('loaded', () => {
     scene.addLayer(layer);
     // scene.startAnimate();
-    // scene.addLayer(boundaries);
-    // scene.addLayer(natural);
-    // scene.addLayer(buildings);
-    // scene.addLayer(transit);
-    // scene.addLayer(roads);
-    // scene.addLayer(water);
-    // scene.addLayer(point);
+    scene.addLayer(boundaries);
+    scene.addLayer(natural);
+    scene.addLayer(buildings);
+    scene.addLayer(transit);
+    scene.addLayer(roads);
+    scene.addLayer(water);
+    scene.addLayer(point);
 
     if (window['screenshot']) {
       window['screenshot']();
