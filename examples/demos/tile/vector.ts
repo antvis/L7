@@ -122,17 +122,17 @@ export function MapRender(option: {
     .style({
       opacity: 1,
     });
-
+  // TODO:Mask 和缩放取消
   scene.on('loaded', () => {
-    scene.addLayer(layer);
+    // scene.addLayer(layer);
     // scene.startAnimate();
-    scene.addLayer(boundaries);
-    scene.addLayer(natural);
-    scene.addLayer(buildings);
-    scene.addLayer(transit);
+    // scene.addLayer(boundaries);
+    // scene.addLayer(natural);
+    // scene.addLayer(buildings);
+    // scene.addLayer(transit);
     scene.addLayer(roads);
-    scene.addLayer(water);
-    scene.addLayer(point);
+    // scene.addLayer(water);
+    // scene.addLayer(point);
 
     if (window['screenshot']) {
       window['screenshot']();
