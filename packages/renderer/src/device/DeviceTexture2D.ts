@@ -11,6 +11,7 @@ import type {
 } from '@antv/l7-core';
 import { TextureUsage, gl } from '@antv/l7-core';
 import { wrapModeMap } from './constants';
+import { extend3ChannelsTo4 } from './utils/typedarray';
 
 export function isTexture2D(t: any): t is ITexture2D {
   return !!(t && t['texture']);
@@ -53,7 +54,6 @@ export default class DeviceTexture2D implements ITexture2D {
 
   private createTexture(options: ITexture2DInitializationOptions) {
     const {
-      data,
       type = gl.UNSIGNED_BYTE,
       width,
       height,
@@ -70,6 +70,7 @@ export default class DeviceTexture2D implements ITexture2D {
       // copy = false,
       label,
     } = options;
+    let { data } = options;
 
     this.width = width;
     this.height = height;
@@ -80,7 +81,16 @@ export default class DeviceTexture2D implements ITexture2D {
     } else if (type === gl.UNSIGNED_BYTE && format === gl.LUMINANCE) {
       pixelFormat = Format.U8_LUMINANCE;
     } else if (type === gl.FLOAT && format === gl.RGB) {
-      pixelFormat = Format.F32_RGB;
+      // @see https://github.com/antvis/L7/pull/2262
+      if (this.device.queryVendorInfo().platformString === 'WebGPU') {
+        if (data) {
+          // @ts-ignore
+          data = extend3ChannelsTo4(data as unknown as Float32Array, 0);
+        }
+        pixelFormat = Format.F32_RGBA;
+      } else {
+        pixelFormat = Format.F32_RGB;
+      }
     } else if (type === gl.FLOAT && format === gl.RGBA) {
       pixelFormat = Format.F32_RGBA;
     } else if (type === gl.FLOAT && format === gl.RED) {

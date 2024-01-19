@@ -26,3 +26,23 @@ export type TypedArray =
 export function isTypedArray(x: any): x is TypedArray {
   return Object.prototype.toString.call(x) in dtypes;
 }
+
+/**
+ * WebGPU does not support RGB texture, so we need to convert RGB to RGBA
+ * @see https://github.com/antvis/L7/pull/2262
+ */
+export function extend3ChannelsTo4(array: Float32Array, valueToInsert: number) {
+  const originalLength = array.length;
+  const insertCount = Math.ceil(originalLength / 3);
+  const newLength = originalLength + insertCount;
+
+  const newArray = new Float32Array(newLength);
+  for (let i = 0; i < newLength; i += 4) {
+    newArray[i] = array[(i / 4) * 3];
+    newArray[i + 1] = array[(i / 4) * 3 + 1];
+    newArray[i + 2] = array[(i / 4) * 3 + 2];
+    newArray[i + 3] = valueToInsert;
+  }
+
+  return newArray;
+}
