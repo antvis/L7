@@ -6,8 +6,8 @@ layout(std140) uniform commonUniforms {
  vec2 u_domain;
  float u_opacity;
  float u_noDataValue;
- bool u_clampLow;
- bool u_clampHigh;
+ float u_clampLow;
+ float u_clampHigh;
 };
 
 in vec2 v_texCoord;
@@ -31,7 +31,7 @@ void main() {
   float value = getElevation(v_texCoord,0.0);
   if (value == u_noDataValue) {
     outputColor = vec4(0.0, 0, 0, 0.0);
-  } else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1])) {
+  } else if ((u_clampLow < 0.5 && value < u_domain[0]) || (u_clampHigh < 0.5 && value > u_domain[1])) {
      outputColor = vec4(0.0, 0, 0, 0.0);
   } else {
    

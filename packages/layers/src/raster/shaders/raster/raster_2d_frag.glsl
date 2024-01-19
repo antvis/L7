@@ -2,8 +2,8 @@ layout(std140) uniform commonUniforms {
   vec2 u_domain;
   float u_opacity;
   float u_noDataValue;
-  bool u_clampLow;
-  bool u_clampHigh;
+  float u_clampLow;
+  float u_clampHigh;
 };
 
 uniform sampler2D u_rasterTexture;
@@ -20,7 +20,7 @@ void main() {
   float value = texture(SAMPLER_2D(u_rasterTexture), vec2(v_texCoord.x, v_texCoord.y)).r;
   if (value == u_noDataValue || isnan_emu(value)) {
     discard;
-  } else if ((!u_clampLow && value < u_domain[0]) || (!u_clampHigh && value > u_domain[1])) {
+  } else if ((u_clampLow < 0.5 && value < u_domain[0]) || (u_clampHigh < 0.5 && value > u_domain[1])) {
     discard;
   } else {
     float normalisedValue =(value - u_domain[0]) / (u_domain[1] - u_domain[0]);
