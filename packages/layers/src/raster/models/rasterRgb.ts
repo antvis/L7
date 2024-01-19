@@ -1,11 +1,5 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IRasterLayerStyleOptions } from '../../core/interface';
@@ -54,7 +48,6 @@ export default class RasterModel extends BaseModel {
 
   private async getRasterData(parserDataItem: any) {
     if (Array.isArray(parserDataItem.data)) {
- 
       const { data, ...rescfg } = parserDataItem;
       this.dataOption = rescfg;
       return {
@@ -103,6 +96,7 @@ export default class RasterModel extends BaseModel {
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
+      pickingEnabled: false,
     });
     return [model];
   }
