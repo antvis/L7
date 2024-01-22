@@ -7,4 +7,4 @@ order: 5
 
 The Raster layer mainly realizes the visualization of raster data. The main source of raster data is satellite remote sensing data, such as digital elevation map, vegetation distribution map, and night light map.
 
-<embed src="@/docs/api/common/source/raster/raster_single.zh.md"></embed>
+<embed src="@/docs/api/common/source/raster/raster_data.zh.md"></embed>

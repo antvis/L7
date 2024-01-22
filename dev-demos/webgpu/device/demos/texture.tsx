@@ -51,7 +51,8 @@ export default () => {
             `
         },
         fragment: {
-          wgsl: `
+          wgsl: 
+          `
       
           [[location(0)]] var<in> v_uv : vec2<f32>;
           [[location(0)]] var<out> outputColor : vec4<f32>;

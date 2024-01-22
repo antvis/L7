@@ -95,6 +95,8 @@ export function getWMTSURLFromTemplate(
     service = 'WMTS',
     tileMatrixset,
   } = properties;
-  const url = `${template}&SERVICE=${service}&REQUEST=GetTile&VERSION=${version}&LAYER=${layer}&STYLE=${style}&TILEMATRIXSET=${tileMatrixset}&FORMAT=${format}&TILECOL=${x}&TILEROW=${y}&TILEMATRIX=${z}`;
+  const urls = expandUrl(template);
+  const index = Math.abs(x + y) % urls.length;
+  const url = `${urls[index]}&SERVICE=${service}&REQUEST=GetTile&VERSION=${version}&LAYER=${layer}&STYLE=${style}&TILEMATRIXSET=${tileMatrixset}&FORMAT=${format}&TILECOL=${x}&TILEROW=${y}&TILEMATRIX=${z}`;
   return url;
 }

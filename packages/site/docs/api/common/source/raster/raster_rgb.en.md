@@ -1,148 +1,64 @@
+raster-rgb source synthesizes multi-band data into RGB data for display. For example, for LandSat8 data, we can perform RGB combination display according to the 5,4,3 or 4,3,2 bands.
+
+### demo
+
+```ts
+layer
+    .source(
+      bandsValues,
+      {
+        parser: {
+          type: 'rgb',
+          width: bandsValues.width,
+          height: bandsValues.height,
+          bands: [4, 3, 2], // 从零开始
+          extent: [
+            130.39565357746957, 46.905730725742366, 130.73364094187343,
+            47.10217234153133,
+          ],
+        },
+      },
+    )
+```
+
 ### data
 
-Multi-band supports two data methods. The raster data coordinate system only supports 3857 projected raster. In the case of multi-band, data is an array type.
-
-* Single file multiple bands
-* Multiple single-band files form multi-band
-
 ```ts
-[
-    {
-        data: tiffdata, // arraybuffer type raster source data
-        bands: [6, 5, 2].map((v) => v - 1),//Single file with multiple bands does not need to be transmitted, the format function is used
-    },
-    ],
+type RasterDataType= Uint8Array | Int8Array | Uint16Array | Int16Array | Uint32Array | Int32Array | Float32Array | Float64Array
 ```
 
-#### Single file multiple bands
+data is an array type`RasterDataType[]`
 
-data is unparsed tiff arraybuffer data, which is standardized by format in parser.
+* If it is a multi-band Tiff, you can directly use geotiff,js to read all bands.
+* If it is a single file and single band data, it needs to be read separately and merged into one data.
+
+Single file multi-band reading example
 
 ```ts
-const url1 = 'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
-  async function getTiffData(url: string) {
+async function getTiffData(url: string) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
-  return arrayBuffer;
-  }
+  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+  const image1 = await tiff.getImage();
+  const bandsValues = await image1.readRasters();
+  return bandsValues;
 }
-layer.source(
-    [
-    {
-        data: tiffdata,
-        bands: [6, 5, 2].map((v) => v - 1),
-    },
-    ],
-    {
-    parser: {
-        type: 'rasterRgb',
-        format: async (data, bands) => {
-        const tiff = await GeoTIFF.fromArrayBuffer(data);
-        const image1 = await tiff.getImage();
-        const value = await image1.readRasters();
-        return bands.map((band) => {
-            return {
-            rasterData: value[band],
-            width: value.width,
-            height: value.height,
-            };
-        });
-        },
-        operation: {
-        type: 'rgb',
-        },
-        extent: [
-        130.39565357746957, 46.905730725742366, 130.73364094187343,
-        47.10217234153133,
-        ],
-    },
-    },
-)
-```
-
-#### Multiple files and multiple bands
-
-```ts
-const urls = [
-  {
-    url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
-    bands: [0]
-  },
-  {
-    url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff'
-  },
-  ...
-]
-const tileSource = new Source(urls, {...});
 ```
 
 ### parser
 
-#### type:`rasterRgb`
+* type parsing type 'rgb'`必选`
 
-Multi-band data image synthesis
+* bands `[number,number,number] 指定 R/G/B 通道对应的数据索引,data 数组长度需要大于等于 3  `Required\`
 
-#### extent: the latitude and longitude range of the raster \[minlng, minlat,maxLng, maxLat]
+  Note: The bands serial number starts from zero (bands 5, 4, and 3 in landsat 8 should be set to 4, 3, 2)
 
-#### operation synthesis method
+* width length`必选`
 
-rgb will automatically stretch based on the maximum and minimum values
+* height width`必选`
 
-* type `rgb`
+* countCut color stretching depends on`[number,number]`Value is percentage, default value`[2,98]` `可选`
 
-#### format data processing method, raster data parsing method
+### Complete example
 
-* Input parameters:
-
-* data: source passed in parameters
-
-* bands band number
-
-* Return parameters:
-  Return data is array type
-
-```ts
-[{
-        rasterData: value[band],//parsed data
-        width: value.width, // Grid width
-        height: value.height, // grid height
-        };
-      ]
-```
-
-#### Example
-
-```ts
-layer.source(
-    [
-    {
-        data: tiffdata,
-        bands: [6, 5, 2].map((v) => v - 1),
-    },
-    ],
-    {
-    parser: {
-        type: 'rasterRgb',
-        format: async (data, bands) => {
-        const tiff = await GeoTIFF.fromArrayBuffer(data);
-        const image1 = await tiff.getImage();
-        const value = await image1.readRasters();
-        return bands.map((band) => {
-            return {
-            rasterData: value[band],
-            width: value.width,
-            height: value.height,
-            };
-        });
-        },
-        operation: {
-        type: 'rgb',
-        },
-        extent: [
-        130.39565357746957, 46.905730725742366, 130.73364094187343,
-        47.10217234153133,
-        ],
-    },
-    },
-)
-```
+[Raster RGB](../../../../examples/raster/data_raster/#543)

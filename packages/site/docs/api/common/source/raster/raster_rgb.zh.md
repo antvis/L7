@@ -1,144 +1,70 @@
+
+raster-rgb source 是将多波段数据合成 RGB数据进行展示，如对 LandSat8 数据我们可以按照 5,4,3 或者 4,3,2 波段进行RGB组合显示
+
+- data  数据
+- option 配置项
+  - parser 数据解析参数
+     - type 解析类型 `rgb`
+
+```ts
+layer
+    .source(
+      bandsValues,
+      {
+        parser: {
+          type: 'rgb',
+          width: bandsValues.width,
+          height: bandsValues.height,
+          bands: [4, 3, 2], // 从零开始
+          extent: [
+            130.39565357746957, 46.905730725742366, 130.73364094187343,
+            47.10217234153133,
+          ],
+        },
+      },
+    )
+
+```
 ### data
 
-多波段支持两种数据方式，栅格数据坐标系只支持 3857 投影的栅格，多波段情况 data 为数组类型
 
-- 单文件多波段
-- 多个单波段文件组成多波段
-
-```ts
-[
-    {
-        data: tiffdata, // arraybuffer 类型栅格源数据
-        bands: [6, 5, 2].map((v) => v - 1),// 单文件多波段可以不传，format 函数使用
-    },
-    ],
+```ts 
+type RasterDataType= Uint8Array | Int8Array | Uint16Array | Int16Array | Uint32Array | Int32Array | Float32Array | Float64Array
 
 ```
 
-#### 单文件多波段
+data 为数组类型 `RasterDataType[]`
 
-data 为未解析过 tiff arraybuffer 数据，在 parser 中 通过 format 进行数据标准化，
+- 如果是多波段 Tiff 可以直接使用geotiff,js 读取所有波段，
+- 如果是单文件单波段数据，需要单独读取并合并成一个数据。
+
+单文件多波段读取示例
 
 ```ts
-  const url1 = 'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
-  async function getTiffData(url: string) {
+async function getTiffData(url: string) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
-  return arrayBuffer;
-  }
+  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+  const image1 = await tiff.getImage();
+  const bandsValues = await image1.readRasters();
+  return bandsValues;
 }
-layer.source(
-    [
-    {
-        data: tiffdata,
-        bands: [6, 5, 2].map((v) => v - 1),
-    },
-    ],
-    {
-    parser: {
-        type: 'rasterRgb',
-        format: async (data, bands) => {
-        const tiff = await GeoTIFF.fromArrayBuffer(data);
-        const image1 = await tiff.getImage();
-        const value = await image1.readRasters();
-        return bands.map((band) => {
-            return {
-            rasterData: value[band],
-            width: value.width,
-            height: value.height,
-            };
-        });
-        },
-        operation: {
-        type: 'rgb',
-        },
-        extent: [
-        130.39565357746957, 46.905730725742366, 130.73364094187343,
-        47.10217234153133,
-        ],
-    },
-    },
-)
 
 ```
-#### 多文件多波段
 
-```ts
-
-const urls = [
-  {
-    url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff',
-    bands: [0]
-  },
-  {
-    url: 'https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff'
-  },
-  ...
-]
-const tileSource = new Source(urls, {...});
-```
 
 ### parser
 
-#### type: `rasterRgb`
-  多波段数据影像合成
-####  extent: 栅格的经纬度范围 [minlng, minlat,maxLng, maxLat]
-
-####  operation 合成方式
- rgb 会自动根据最大值最小值进行拉伸处理
-
-  - type `rgb`
-
-#### format 数据处理方法，栅格数据解析方式
+- type 解析类型  'rgb' `必选`
+- bands `[number,number,number] 指定 R/G/B 通道对应的数据索引,data 数组长度需要大于等于 3  `必选`
   
-  - 入参数：
-  - data: source 传入参数
-  - bands 波段序号
+  注：bands 序号从零开始（landsat 8 里的 5，4,3 波段这样要设置为 4,3, 2）
 
--  返回参数：
-    返回数据为数组类型
-  ```ts
-      [{
-          rasterData: value[band],// 解析后的数据
-          width: value.width, // 栅格宽度
-          height: value.height, // 栅格高度
-          };
-        ]
-  ```
+- width 长度 `必选`
+- height 宽度 `必选`
+- countCut 颜色拉伸参数 `[number,number]` 数值为百分比，默认值 `[2,98]` `可选`
 
+### 完整示例
 
-#### 示例
-```ts
-layer.source(
-    [
-    {
-        data: tiffdata,
-        bands: [6, 5, 2].map((v) => v - 1),
-    },
-    ],
-    {
-    parser: {
-        type: 'rasterRgb',
-        format: async (data, bands) => {
-        const tiff = await GeoTIFF.fromArrayBuffer(data);
-        const image1 = await tiff.getImage();
-        const value = await image1.readRasters();
-        return bands.map((band) => {
-            return {
-            rasterData: value[band],
-            width: value.width,
-            height: value.height,
-            };
-        });
-        },
-        operation: {
-        type: 'rgb',
-        },
-        extent: [
-        130.39565357746957, 46.905730725742366, 130.73364094187343,
-        47.10217234153133,
-        ],
-    },
-    },
-)
-```
+[Raster RGB](../../../../examples/raster/rgb/#543)
+

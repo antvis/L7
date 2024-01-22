@@ -19,7 +19,6 @@ layout(std140) uniform commonUniforms {
 };
 out vec4 v_color;
 out float v_lightWeight;
-out float v_barLinearZ;
 
 #pragma include "projection"
 #pragma include "light"

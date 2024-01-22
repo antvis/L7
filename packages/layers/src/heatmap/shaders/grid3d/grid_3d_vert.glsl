@@ -5,10 +5,10 @@ layout(location = 10) in vec3 a_Pos;
 layout(location = 13) in vec3 a_Normal;
 
 layout(std140) uniform commonUniforms {
-    vec2 u_radius;
-    float u_opacity;
-    float u_coverage;
-    float u_angle;
+  vec2 u_radius;
+  float u_opacity;
+  float u_coverage;
+  float u_angle;
 };
 
 out vec4 v_color;
@@ -18,11 +18,9 @@ out vec4 v_color;
 #pragma include "light"
 #pragma include "picking"
 
-
 void main() {
   mat2 rotationMatrix = mat2(cos(u_angle), sin(u_angle), -sin(u_angle), cos(u_angle));
   vec2 offset =(vec2(a_Position.xy * u_radius * rotationMatrix * u_coverage));
-
 
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
  
@@ -43,8 +41,6 @@ void main() {
     
     gl_Position = project_common_position_to_clipspace(project_pos);
   }
-
-
 
   setPickingColor(a_PickingColor);
 }

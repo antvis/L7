@@ -1,7 +1,7 @@
+
 in vec4 v_color;
 in float v_lightWeight;
 out vec4 outputColor;
-
 
 layout(std140) uniform commonUniforms {
   float u_pickLight;
@@ -15,6 +15,7 @@ layout(std140) uniform commonUniforms {
   float u_lightEnable;
 };
 
+#pragma include "scene_uniforms"
 #pragma include "picking"
 
 void main() {

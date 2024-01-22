@@ -1,16 +1,10 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  IModelUniform} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IModelUniform } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import type { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
-import grid_vert from '../shaders/grid/grid_vert.glsl';
 import grid_frag from '../shaders/grid/grid_frag.glsl';
+import grid_vert from '../shaders/grid/grid_vert.glsl';
 export default class GridModel extends BaseModel {
   public getUninforms(): IModelUniform {
     const commoninfo = this.getCommonUniformsInfo();
@@ -19,10 +13,14 @@ export default class GridModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
+    };
   }
 
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const { opacity, coverage, angle } =
       this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const commonOptions = {
@@ -34,10 +32,9 @@ export default class GridModel extends BaseModel {
       u_coverage: coverage || 0.9,
       u_angle: angle || 0,
     };
-  
-   const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-   return commonBufferInfo;
-      
+
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -61,7 +58,7 @@ export default class GridModel extends BaseModel {
       name: 'pos', // 顶点经纬度位置
       type: AttributeType.Attribute,
       descriptor: {
-        shaderLocation:10,
+        shaderLocation: 10,
         name: 'a_Pos',
         buffer: {
           usage: gl.DYNAMIC_DRAW,

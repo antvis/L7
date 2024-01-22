@@ -44,6 +44,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
 
     let uniformBuffer: IBuffer;
     if (!this.rendererService.uniformBuffers[0]) {
+   
       // Create a Uniform Buffer Object(UBO).
       uniformBuffer = this.rendererService.createBuffer({
         data: new Float32Array(16 * 4 + 4 * 7),
@@ -57,7 +58,6 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       const offset = layer.getLayerConfig().tileOrigin;
       // 重新计算坐标系参数
       this.coordinateSystemService.refresh(offset);
-
       if (version === 'GAODE2.x') {
         this.setLayerCenter(layer);
         // @ts-ignore
@@ -82,10 +82,10 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         width,
         height,
       );
-
-      if (this.layerService.alreadyInRendering && uniformBuffer) {
+      if (this.layerService.alreadyInRendering && this.rendererService.uniformBuffers[0]) {
+        const renderUniformBuffer = this.rendererService.uniformBuffers[0];
         // Update only once since all models can share one UBO.
-        uniformBuffer.subData({
+        renderUniformBuffer.subData({
           offset: 0,
           data,
         });

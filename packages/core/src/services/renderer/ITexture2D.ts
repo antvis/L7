@@ -28,7 +28,8 @@ export interface ITexture2DInitializationOptions {
     | gl.RGB5_A1
     | gl.RGB565
     | gl.DEPTH_COMPONENT
-    | gl.DEPTH_STENCIL;
+    | gl.DEPTH_STENCIL
+    | gl.RED;
 
   /**
    * 纹理数据类型，可能需要引入扩展，例如 ext.HALF_FLOAT_OES
@@ -71,6 +72,12 @@ export interface ITexture2DInitializationOptions {
   aniso?: number;
 
   /**
+   * unorm means unsigned normalized which is fancy way of saying
+   * the value will be converted from an unsigned byte with values from (0 to 255) to a floating point value with values (0.0 to 1.0).
+   */
+  unorm?: boolean;
+
+  /**
    * 以下为 gl.pixelStorei 参数
    * @see https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext/pixelStorei
    */
@@ -97,6 +104,7 @@ export interface ITexture2DInitializationOptions {
   //   height: 10,
   //   copy: true
   // })
+  label?: string;
 }
 
 export interface ITexture2D {

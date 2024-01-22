@@ -45,6 +45,10 @@ export default class ReglRendererService implements IRendererService {
   private height: number;
   private isDirty: boolean;
 
+  queryVerdorInfo = () => {
+    return 'WebGL1';
+  };
+
   public async init(
     canvas: HTMLCanvasElement,
     cfg: IRenderConfig,
@@ -139,6 +143,15 @@ export default class ReglRendererService implements IRendererService {
     })(drawCommands);
   };
 
+  public useFramebufferAsync = async (
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => Promise<void>,
+  ) => {
+    this.gl({
+      framebuffer: framebuffer ? (framebuffer as ReglFramebuffer).get() : null,
+    })(drawCommands);
+  };
+
   public clear = (options: IClearOptions) => {
     // @see https://github.com/regl-project/regl/blob/gh-pages/API.md#clear-the-draw-buffer
     const { color, depth, stencil, framebuffer = null } = options;
@@ -187,6 +200,10 @@ export default class ReglRendererService implements IRendererService {
       readPixelsOptions.framebuffer = (framebuffer as ReglFramebuffer).get();
     }
     return this.gl.read(readPixelsOptions);
+  };
+
+  public readPixelsAsync = async (options: IReadPixelsOptions) => {
+    return this.readPixels(options);
   };
 
   public getViewportSize = () => {

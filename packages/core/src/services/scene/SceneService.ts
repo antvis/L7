@@ -13,19 +13,24 @@ import type { ICameraService, IViewport } from '../camera/ICameraService';
 import type { IControlService } from '../component/IControlService';
 import type { IMarkerService } from '../component/IMarkerService';
 import type { IPopupService } from '../component/IPopupService';
-import type { IGlobalConfigService, ISceneConfig } from '../config/IConfigService';
+import type {
+  IGlobalConfigService,
+  ISceneConfig,
+} from '../config/IConfigService';
 import type { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
 import type { IDebugService } from '../debug/IDebugService';
 import type {
   IInteractionService,
-  IInteractionTarget} from '../interaction/IInteractionService';
-import {
-  InteractionEvent,
+  IInteractionTarget,
 } from '../interaction/IInteractionService';
+import { InteractionEvent } from '../interaction/IInteractionService';
 import type { IPickingService } from '../interaction/IPickingService';
 import type { ILayer, ILayerService } from '../layer/ILayerService';
 import type { IMapService } from '../map/IMapService';
-import type { IRenderConfig, IRendererService } from '../renderer/IRendererService';
+import type {
+  IRenderConfig,
+  IRendererService,
+} from '../renderer/IRendererService';
 import type { IShaderModuleService } from '../shader/IShaderModuleService';
 import type { ISceneService } from './ISceneService';
 

@@ -228,24 +228,45 @@ export default class TextModel extends BaseModel {
 
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'textUvAndOffsets',
+      name: 'textOffsets',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_textUvAndOffsets', // 文字偏移量
-        shaderLocation:ShaderLocation.UV,
+        shaderLocation:10,
+        name: 'a_textOffsets', // 文字偏移量
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 4,
+        size: 2,
         update: (
           feature: IEncodeFeature,
           featureIdx: number,
           vertex: number[],
         ) => {
-          return [vertex[3], vertex[4],vertex[5], vertex[6]];
+          return [vertex[5], vertex[6]];
+        },
+      },
+    });
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'textUv',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_tex',
+        shaderLocation:ShaderLocation.UV,
+        buffer: {
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (
+          feature: IEncodeFeature,
+          featureIdx: number,
+          vertex: number[],
+        ) => {
+          return [vertex[3], vertex[4]];
         },
       },
     });

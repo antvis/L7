@@ -94,11 +94,11 @@ style({
 });
 ```
 
-[径向渐变 in](/examples/polygon/fill#china_linear_in)
+[径向渐变 in](/examples/polygon//fill/#linear_in)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*XjT5T4cT_CYAAAAAAAAAAAAAARQnAQ">
 
-[径向渐变 out](/examples/polygon/fill#china_linear_out)
+[径向渐变 out](/examples/polygon/fill#linear_out)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Ob62Q7JDpZ4AAAAAAAAAAAAAARQnAQ">
 
