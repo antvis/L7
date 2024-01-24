@@ -253,7 +253,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public getZoom(): number {
-    return this.getMap().getZoom() - 1.75;
+    console.log(this.getMap().getZoom())
+    return this.getMap().getZoom();
   }
 
   public getCenter(options?: ICameraOptions): ILngLat {

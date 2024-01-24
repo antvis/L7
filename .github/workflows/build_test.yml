@@ -16,7 +16,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install Playwright browsers
-        run: npm config set strict-ssl false && npx playwright install --with-deps
+        run: npx playwright install --with-deps
 
       - run: yarn
       - run: yarn build 
