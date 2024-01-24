@@ -48,7 +48,10 @@ export function MapRender(option: {
                 // sidesurface: false,
               });
             scene.addLayer(provincelayerTop);
-            scene.startAnimate();
+           
+        if (window['screenshot']) {
+          window['screenshot']();
+        }
           });
       });
 

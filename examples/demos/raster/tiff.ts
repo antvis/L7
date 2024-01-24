@@ -45,7 +45,6 @@ export function MapRender(option: {
       zIndex: 2,
       visible: true,
     });
-    console.log(tiffdata);
     layer
       .source(tiffdata.data, {
         parser: {
