@@ -200,7 +200,6 @@ export default class PickingService implements IPickingService {
     height *= DOM.DPR;
 
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
-
     const xInDevicePixel = x * DOM.DPR;
     const yInDevicePixel = y * DOM.DPR;
     if (
@@ -248,7 +247,9 @@ export default class PickingService implements IPickingService {
         feature: rawFeature,
         target,
       };
+  
       if (!rawFeature) {
+  
         // this.logger.error(
         //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
         // );
@@ -316,9 +317,11 @@ export default class PickingService implements IPickingService {
   }
   private async pickingAllLayer(target: IInteractionTarget) {
     // 判断是否进行拾取操作
+    console.log(target.type,!this.layerService.needPick(target.type),!this.isPickingAllLayer())
     if (!this.layerService.needPick(target.type) || !this.isPickingAllLayer()) {
       return;
     }
+   
     this.alreadyInPicking = true;
     await this.pickingLayers(target);
     this.layerService.renderLayers();
@@ -327,9 +330,11 @@ export default class PickingService implements IPickingService {
 
   private isPickingAllLayer() {
     // this.alreadyInPicking 避免多次重复拾取
+
     if (this.alreadyInPicking) {
       return false;
     }
+    console.log(1)
     // this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
     if (this.layerService.alreadyInRendering) {
       return false;
@@ -338,6 +343,7 @@ export default class PickingService implements IPickingService {
     if (this.interactionService.indragging) {
       return false;
     }
+
     // 判断当前进行 shader pick 拾取判断
     if (!this.layerService.getShaderPickStat()) {
       return false;
@@ -407,6 +413,7 @@ export default class PickingService implements IPickingService {
       featureId: number | null;
     },
   ) {
+    console.log('target',target)
     // layer.emit(target.type, target);
     // 判断是否发生事件冲突
     if (isEventCrash(target)) {

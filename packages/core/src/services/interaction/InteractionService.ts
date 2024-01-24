@@ -87,6 +87,7 @@ export default class InteractionService
       hammertime.on('panstart panmove panend pancancel', this.onDrag);
       $containter.addEventListener('touchstart', this.onTouch);
       $containter.addEventListener('touchend', this.onTouchEnd);
+      $containter.addEventListener('touchmove', this.onTouchMove);
       // $containter.addEventListener('click', this.onHover);
       $containter.addEventListener('mousedown', this.onHover, true);
       $containter.addEventListener('mouseup', this.onHover);
@@ -146,8 +147,9 @@ export default class InteractionService
     }
 
   }
+  // touch move == drag map 目前会被拦截
   private onTouchMove= (target: TouchEvent)=> {
-
+     
       const touch = target.changedTouches[0];
        // @ts-ignore
       this.onHover({
@@ -192,12 +194,12 @@ export default class InteractionService
       y = y - top - $containter.clientTop;
     }
     const lngLat = this.mapService.containerToLngLat([x, y]);
-
     if (type === 'click') {
       this.isDoubleTap(x, y, lngLat);
       return;
     }
     if (type === 'touch') {
+
       this.isDoubleTap(x, y, lngLat);
       return;
     }

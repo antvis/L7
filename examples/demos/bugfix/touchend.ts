@@ -29,25 +29,26 @@ export function MapRender(option: {
                     .active(true);
           
                 scene.addLayer(layer);
-                layer.on('touchstart',(e)=>{
-                    console.log('touchstart',e)
+                // layer.on('touchstart',(e)=>{
+                //     console.log('touchstart',e)
 
-                })
+                // })
 
-                layer.on('touchend',(e)=>{
-                    console.log('touchend',e)
+                // layer.on('touchend',(e)=>{
+                //     console.log('touchend',e)
 
-                })
-                layer.on('panmove',(e)=>{
+                // })
+                // layer.on('panmove',(e)=>{
+                //     console.log('touchmove',e)
+
+                // })
+                layer.on('touchmove',(e)=>{
                     console.log('touchmove',e)
 
                 })
-                // layer.on('mousedown',()=>{
-                //     console.log('mousedown')
 
-                // })
                 // layer.on('mouseup',()=>{
-                //     console.log('mouseup')
+                //     alert('mouseup')
 
                 // })
     

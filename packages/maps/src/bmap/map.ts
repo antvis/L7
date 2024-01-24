@@ -156,7 +156,6 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       // @ts-ignore
       this.map = map;
       const point = new BMapGL.Point(center[0], center[1]);
-      console.log(zoom)
       this.map.centerAndZoom(point, zoom);
       this.initMapByConfig(this.config);
       // 监听地图相机事件

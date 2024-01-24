@@ -124,6 +124,22 @@ layer.on('uncontextmenu', (e) => console.log(e));
 layer.on('unpick', (e) => console.log(e));
 ```
 
+
+### touchstart
+移动端事件 touchstart
+
+```javascript
+layer.on('touchstart', (e) => console.log(e));
+```
+
+### touchend
+移动端事件 touchend
+
+```javascript
+layer.on('touchend', (e) => console.log(e));
+```
+
+
 使用示例
 
 ```javascript
@@ -143,3 +159,4 @@ layer.on('unmousedown', (ev) => {}); // 图层外单击按下时触发
 layer.on('uncontextmenu', (ev) => {}); // 图层外点击右键
 layer.on('unpick', (ev) => {}); // 图层外的操作的所有事件
 ```
+
