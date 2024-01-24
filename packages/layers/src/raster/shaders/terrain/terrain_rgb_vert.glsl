@@ -2,13 +2,12 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 14) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
- vec4 u_unpack;
- vec2 u_domain;
- float u_opacity;
- float u_noDataValue;
- bool u_clampLow;
- bool u_clampHigh;
-
+   vec4 u_unpack;
+   vec2 u_domain;
+   float u_opacity;
+   float u_noDataValue;
+   float u_clampLow;
+   float u_clampHigh;
 };
 out vec2 v_texCoord;
 #pragma include "projection"
