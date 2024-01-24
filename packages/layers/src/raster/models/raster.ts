@@ -42,8 +42,10 @@ export default class RasterModel extends BaseModel {
       u_domain: newdomain,
       u_opacity: opacity || 1,
       u_noDataValue: noDataValue,
-      u_clampLow: clampLow,
-      u_clampHigh: typeof clampHigh !== 'undefined' ? clampHigh : clampLow,
+      u_clampLow: clampLow ? 1 : 0,
+      u_clampHigh: (typeof clampHigh !== 'undefined' ? clampHigh : clampLow)
+        ? 1
+        : 0,
       u_rasterTexture: this.texture,
       u_colorTexture: this.colorTexture,
     };
@@ -103,6 +105,7 @@ export default class RasterModel extends BaseModel {
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
+      pickingEnabled: false,
     });
     return [model];
   }

@@ -10,7 +10,7 @@ export function MapRender(option: {
   option.animate = true;
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer === 'device' ? 'device' : 'regl',
+    renderer: option.renderer,
     enableWebGPU: true,
     shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
     map: new allMap[option.map || 'Map']({
