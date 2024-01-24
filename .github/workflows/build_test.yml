@@ -16,10 +16,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npm config set strict-ssl false && npx playwright install --with-deps
 
       - run: yarn
-      - run: yarn build
+      - run: yarn build 
       - run: yarn test:e2e
 
       - name: Upload snapshots to GitHub Actions Artifacts
