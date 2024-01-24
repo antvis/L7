@@ -164,8 +164,8 @@ export default class DeviceModel implements IModel {
     const stencilParams = this.getStencilDrawParams({ stencil });
     const stencilEnabled = !!(stencilParams && stencilParams.enable);
 
-    // return this.device.createRenderPipeline({
-    return this.service.renderCache.createRenderPipeline({
+    return this.device.createRenderPipeline({
+      // return this.service.renderCache.createRenderPipeline({
       inputLayout: this.inputLayout,
       program: this.program,
       topology: primitiveMap[primitive],
@@ -421,11 +421,11 @@ export default class DeviceModel implements IModel {
   }: Pick<IModelInitializationOptions, 'stencil'>) {
     const {
       enable,
-      mask = -1,
+      mask = 0xffffffff,
       func = {
         cmp: gl.ALWAYS,
         ref: 0,
-        mask: -1,
+        mask: 0xffffffff,
       },
       opFront = {
         fail: gl.KEEP,
