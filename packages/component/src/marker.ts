@@ -28,7 +28,6 @@ export default class Marker extends EventEmitter {
   private lngLat: ILngLat;
   private scene: Container;
   private added: boolean = false;
-  private isDragging = false;
   private preLngLat = { lng: 0, lat: 0 };
   // tslint:disable-next-line: no-empty
   public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
@@ -260,16 +259,13 @@ export default class Marker extends EventEmitter {
       clickX - containerX,
       clickY - containerY,
     ]);
-    this.isDragging = true;
     this.mapsService.on('mousemove', this.onMarkerDragMove);
     document.addEventListener('mouseup', this.onMarkerDragEnd);
     this.emit('dragstart', this.lngLat);
   };
 
   private onMarkerDragMove = (e: any) => {
-    if (!this.isDragging) {
-      return;
-    }
+
     const { lng: preLng, lat: preLat } = this.preLngLat;
     const { lng: curLng, lat: curLat } = e.lnglat;
     const newLngLat = {
@@ -282,10 +278,6 @@ export default class Marker extends EventEmitter {
   };
 
   private onMarkerDragEnd = (e: MouseEvent) => {
-    if (!this.isDragging) {
-      return;
-    }
-    this.isDragging = false;
     this.mapsService.setMapStatus({
       dragEnable: true,
       zoomEnable: true,
