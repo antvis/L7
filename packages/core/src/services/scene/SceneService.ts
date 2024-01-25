@@ -1,7 +1,7 @@
 // @ts-ignore
 import { AsyncSeriesHook } from '@antv/async-hook';
 import { DOM } from '@antv/l7-utils';
-import elementResizeEvent, { unbind } from 'element-resize-event';
+import elementResizeDetectorMaker from "element-resize-detector";
 import { EventEmitter } from 'eventemitter3';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
@@ -97,7 +97,6 @@ export default class Scene extends EventEmitter implements ISceneService {
    * 是否首次渲染
    */
   private inited: boolean = false;
-  private initPromise: Promise<void>;
 
   // TODO: 改成状态机
   private rendering: boolean = false;
@@ -110,6 +109,8 @@ export default class Scene extends EventEmitter implements ISceneService {
   private canvas: HTMLCanvasElement;
 
   private markerContainer: HTMLElement;
+
+  private resizeDetector: elementResizeDetectorMaker.Erd
 
   private hooks: {
     init: AsyncSeriesHook;
@@ -203,14 +204,18 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.registerContextLost();
         this.initContainer();
 
-        elementResizeEvent(
+        this.resizeDetector = elementResizeDetectorMaker({
+          strategy: "scroll" //<- For ultra performance.
+        });
+        this.resizeDetector.listenTo(
           this.$container as HTMLDivElement,
           this.handleWindowResized,
         );
+
         if (window.matchMedia) {
           window
             .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
-            ?.addListener(this.handleWindowResized);
+            ?.addListener(this.handleWindowResized.bind('screen'));
         }
       } else {
         console.error('容器 id 不存在');
@@ -229,83 +234,6 @@ export default class Scene extends EventEmitter implements ISceneService {
       );
     }
   }
-
-  /**
-   * 小程序环境下初始化 Scene
-   * @param sceneConfig
-   */
-  public initMiniScene(sceneConfig: ISceneConfig) {
-    // 设置场景配置项
-    this.configService.setSceneConfig(this.id, sceneConfig);
-
-    // 初始化 ShaderModule
-    this.shaderModuleService.registerBuiltinModules();
-
-    // 初始化资源管理 图片
-    this.iconService.init();
-    this.iconService.on('imageUpdate', () => this.render());
-    // 字体资源
-    this.fontService.init();
-
-    /**
-     * 初始化底图
-     */
-    this.hooks.init.tapPromise('initMap', async () => {
-      // 等待首次相机同步
-      await new Promise<void>((resolve) => {
-        this.map.onCameraChanged((viewport: IViewport) => {
-          this.cameraService.init();
-          this.cameraService.update(viewport);
-          if (this.map.version !== 'GAODE2.x') {
-            // not amap2
-            resolve();
-          }
-        });
-        // @ts-ignore
-        this.map.initMiniMap();
-      });
-
-      // 重新绑定非首次相机更新事件
-      this.map.onCameraChanged(this.handleMapCameraChanged);
-
-      // 地图初始化之后 才能初始化 container 上的交互
-      this.interactionService.init();
-      this.interactionService.on(
-        InteractionEvent.Drag,
-        this.addSceneEvent.bind(this),
-      );
-    });
-
-    /**
-     * 初始化渲染引擎
-     */
-    this.hooks.init.tapPromise('initRenderer', async () => {
-      // 创建底图之上的 container
-      const $container = sceneConfig.canvas;
-
-      // 添加marker container;
-      this.$container = $container ? $container : null;
-      if (this.$container) {
-        await this.rendererService.init(
-          // @ts-ignore
-          sceneConfig.canvas,
-          this.configService.getSceneConfig(this.id) as IRenderConfig,
-          undefined,
-        );
-      } else {
-        console.error('容器 id 不存在');
-      }
-
-      this.pickingService.init(this.id);
-    });
-    // TODO：init worker, fontAtlas...
-
-    // 执行异步并行初始化任务
-    // @ts-ignore
-    this.initPromise = this.hooks.init.promise();
-    this.render();
-  }
-
   public addLayer(layer: ILayer) {
     this.layerService.sceneService = this;
     this.layerService.add(layer);
@@ -401,12 +329,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.destroyed = true;
       return;
     }
-    unbind(this.$container as HTMLDivElement, this.handleWindowResized);
-    if (window.matchMedia) {
-      window
-        .matchMedia('screen and (min-resolution: 2dppx)')
-        ?.removeListener(this.handleWindowResized);
-    }
+    this.resizeDetector.removeListener(this.$container as HTMLDivElement, this.handleWindowResized);
 
     this.pickingService.destroy();
     this.layerService.destroy();
@@ -441,9 +364,9 @@ export default class Scene extends EventEmitter implements ISceneService {
     // @ts-check
     if (this.$container) {
       this.initContainer();
-      DOM.triggerResize();
+      // 触发 Map， canvas
+      // DOM.triggerResize();
       this.coordinateSystemService.needRefresh = true;
-
       //  repaint layers
       this.render();
     }
@@ -456,8 +379,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     if (canvas) {
       canvas.width = w * pixelRatio;
       canvas.height = h * pixelRatio;
-      // canvas.style.width = `${w}px`;
-      // canvas.style.height = `${h}px`;
     }
     this.rendererService.viewport({
       x: 0,
@@ -474,8 +395,6 @@ export default class Scene extends EventEmitter implements ISceneService {
     const canvas = this.canvas;
     canvas.width = w * pixelRatio;
     canvas.height = h * pixelRatio;
-    // canvas.style.width = `${w}px`;
-    // canvas.style.height = `${h}px`;
     canvas.style.width = '100%';
     canvas.style.height = '100%';
   }

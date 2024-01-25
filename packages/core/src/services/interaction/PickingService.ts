@@ -317,7 +317,6 @@ export default class PickingService implements IPickingService {
   }
   private async pickingAllLayer(target: IInteractionTarget) {
     // 判断是否进行拾取操作
-    console.log(target.type,!this.layerService.needPick(target.type),!this.isPickingAllLayer())
     if (!this.layerService.needPick(target.type) || !this.isPickingAllLayer()) {
       return;
     }
@@ -334,7 +333,6 @@ export default class PickingService implements IPickingService {
     if (this.alreadyInPicking) {
       return false;
     }
-    console.log(1)
     // this.layerService.alreadyInRendering 一个渲染序列中只进行一次拾取操作
     if (this.layerService.alreadyInRendering) {
       return false;
@@ -413,7 +411,6 @@ export default class PickingService implements IPickingService {
       featureId: number | null;
     },
   ) {
-    console.log('target',target)
     // layer.emit(target.type, target);
     // 判断是否发生事件冲突
     if (isEventCrash(target)) {
