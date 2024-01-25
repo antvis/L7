@@ -1,6 +1,6 @@
 ---
 title: MarkerLayer
-order: 1
+order: 2
 ---
 
 <code src="./markerLayer.tsx" compact defaultShowCode></code>
