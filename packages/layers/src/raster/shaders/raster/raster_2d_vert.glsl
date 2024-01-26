@@ -6,8 +6,8 @@ layout(std140) uniform commonUniforms {
   vec2 u_domain;
   float u_opacity;
   float u_noDataValue;
-  bool u_clampLow;
-  bool u_clampHigh;
+  float u_clampLow;
+  float u_clampHigh;
 };
 
 out vec2 v_texCoord;
