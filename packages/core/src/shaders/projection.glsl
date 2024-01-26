@@ -186,7 +186,7 @@ float project_float_meter(float meter) {
   }
 
   // TODO: change the following code to make adaptations for amap
-  return u_FocalDistance * TILE_SIZE * pow(2.0, u_Zoom) * meter / EARTH_CIRCUMFERENCE;
+  // return u_FocalDistance * TILE_SIZE * pow(2.0, u_Zoom) * meter / EARTH_CIRCUMFERENCE;
 }
 
 float project_pixel(float pixel) {

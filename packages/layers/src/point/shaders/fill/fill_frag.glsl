@@ -1,3 +1,4 @@
+
 layout(std140) uniform commonUniforms {
   vec3 u_blur_height_fixed;
   float u_stroke_width;
@@ -7,7 +8,6 @@ layout(std140) uniform commonUniforms {
   float u_time;
   vec4 u_animate;
 };
-
 
 in vec4 v_color;
 in vec4 v_stroke;

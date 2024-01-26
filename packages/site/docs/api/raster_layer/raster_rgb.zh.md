@@ -1,17 +1,13 @@
 ---
-title: RasterLayer 多波段合成
-order: 1
+title: Raster RGB
+order: 3
 ---
 
 <embed src="@/docs/api/common/style.md"></embed>
 
 ## 简介
 
-`RasterLayer` 图层主要实现栅格数据的可视化，栅格数据主要来源是卫星遥感数据，如数字高程图，植被分布图，夜光图。
-
-## Option
-
-<embed src="@/docs/api/common/layer/options.zh.md"></embed>
+`Raster RGB ` 波段组合可视化，不同波段映射到 R/G/B 通道可视化
 
 ## source
 

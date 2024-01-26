@@ -70,6 +70,10 @@ export interface IRendererService {
     framebuffer: IFramebuffer | null,
     drawCommands: () => void,
   ): void;
+  useFramebufferAsync(
+    framebuffer: IFramebuffer | null,
+    drawCommands: () => Promise<void>,
+  ): Promise<void>;
   getViewportSize(): { width: number; height: number };
   getContainer(): HTMLElement | null;
   getCanvas(): HTMLCanvasElement | null;
@@ -77,6 +81,7 @@ export interface IRendererService {
   getPointSizeRange(): Float32Array;
   viewport(size: { x: number; y: number; width: number; height: number }): void;
   readPixels(options: IReadPixelsOptions): Uint8Array;
+  readPixelsAsync(options: IReadPixelsOptions): Promise<Uint8Array>;
   setState(): void;
   setBaseState(): void;
   setCustomLayerDefaults(): void;
@@ -85,4 +90,5 @@ export interface IRendererService {
   destroy(): void;
   beginFrame(): void;
   endFrame(): void;
+  queryVerdorInfo(): string;
 }

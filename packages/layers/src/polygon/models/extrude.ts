@@ -1,11 +1,5 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
@@ -18,9 +12,10 @@ import polygonExtrudeTexFrag from '../shaders/extrude/polygon_extrudetex_frag.gl
 import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.glsl';
 // extrude picking
 
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import { loadImage } from '../../utils/load-image';
 import polygonExtrudePickLightFrag from '../shaders/extrude/polygon_extrude_picklight_frag.glsl';
 import polygonExtrudePickLightVert from '../shaders/extrude/polygon_extrude_picklight_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class ExtrudeModel extends BaseModel {
   protected texture: ITexture2D;
@@ -31,10 +26,15 @@ export default class ExtrudeModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
+    };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
+      mapTexture,
       heightfixed = false,
       raisingHeight = 0,
       topsurface = true,
@@ -53,7 +53,6 @@ export default class ExtrudeModel extends BaseModel {
       useLinearColor = 1;
     }
     const commonOptions = {
-
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
       u_linearColor: useLinearColor,
@@ -62,16 +61,14 @@ export default class ExtrudeModel extends BaseModel {
       u_sidesurface: Number(sidesurface),
       u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
-
-      // 渐变色支持参数
-      u_texture: this.texture,// 纹理
     };
-    if(this.texture){
-      this.textures =[this.texture]
+    if (mapTexture && this.texture) {
+      // @ts-ignore
+      commonOptions.u_texture = this.texture;
+      this.textures = [this.texture];
     }
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
-
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -227,32 +224,19 @@ export default class ExtrudeModel extends BaseModel {
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
-      height: 0,
-      width: 0,
+      height: 1,
+      width: 1,
     });
     if (mapTexture) {
-      return new Promise((resolve, reject) => {
-        const image = new Image();
-        image.crossOrigin = 'anonymous';
-        image.src = mapTexture;
-
-        image.onload = () => {
-          this.texture = createTexture2D({
-            data: image,
-            width: image.width,
-            height: image.height,
-            wrapS: gl.CLAMP_TO_EDGE,
-            wrapT: gl.CLAMP_TO_EDGE,
-            min: gl.LINEAR,
-            mag: gl.LINEAR,
-          });
-          return resolve(null);
-          // this.layerService.reRender();
-        };
-
-        image.onerror = () => {
-          reject(new Error('image load error'));
-        };
+      const image = await loadImage(mapTexture);
+      this.texture = createTexture2D({
+        data: image,
+        width: image.width,
+        height: image.height,
+        wrapS: gl.CLAMP_TO_EDGE,
+        wrapT: gl.CLAMP_TO_EDGE,
+        min: gl.LINEAR,
+        mag: gl.LINEAR,
       });
     }
   }

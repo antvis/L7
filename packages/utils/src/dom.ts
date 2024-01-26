@@ -119,6 +119,31 @@ export function setClass(el: ELType, name: string) {
   }
 }
 
+/**
+ * Toggles a class for a given DOM element.
+ *
+ * @param el - The DOM element to toggle the class for.
+ * @param className - The name of the class to toggle.
+ * @param force - Optional. If true, adds the class. If false, removes the class. If undefined, toggles the class.
+ */
+export function toggleClass(
+  el: ELType,
+  className: string,
+  force?: boolean,
+): void {
+  if (force === undefined) {
+    if (hasClass(el, className)) {
+      removeClass(el, className);
+    } else {
+      addClass(el, className);
+    }
+  } else if (force) {
+    addClass(el, className);
+  } else {
+    removeClass(el, className);
+  }
+}
+
 // @function getClass(el: HTMLElement): String
 // Returns the element's class.
 export function getClass(el: ELType) {

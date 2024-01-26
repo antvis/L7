@@ -2,18 +2,16 @@ import type {
   IEncodeFeature,
   IModel,
   IModelUniform,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  ITexture2D,
 } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import water_frag from '../shaders/water/polygon_water_frag.glsl';
 import water_vert from '../shaders/water/polygon_water_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 export default class WaterModel extends BaseModel {
   private texture: ITexture2D;
@@ -24,10 +22,14 @@ export default class WaterModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
+    };
   }
-  
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const { speed = 0.5 } =
       this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     const commonOptions = {
@@ -36,14 +38,11 @@ export default class WaterModel extends BaseModel {
       u_texture: this.texture,
     };
 
-      // u_opacity: isNumber(opacity) ? opacity : 1.0,
-     this.textures=[this.texture]
-     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-     return commonBufferInfo;
-     
+    // u_opacity: isNumber(opacity) ? opacity : 1.0,
+    this.textures = [this.texture];
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
- 
-
 
   public getAnimateUniforms(): IModelUniform {
     return {
@@ -63,9 +62,11 @@ export default class WaterModel extends BaseModel {
       vertexShader: water_vert,
       fragmentShader: water_frag,
       triangulation: polygonTriangulation,
-      inject:this.getInject(),
+      inject: this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: false },
+      pickingEnabled: false,
+      diagnosticDerivativeUniformityEnabled: false,
     });
     return [model];
   }
@@ -116,8 +117,8 @@ export default class WaterModel extends BaseModel {
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({
-      height: 0,
-      width: 0,
+      height: 1,
+      width: 1,
     });
     const image = new Image();
     image.crossOrigin = '';

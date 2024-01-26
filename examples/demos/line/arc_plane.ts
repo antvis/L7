@@ -3,7 +3,7 @@ import * as allMap from '@antv/l7-maps';
 
 export function MapRender(option: {
     map: string
-    renderer: string,
+    renderer: 'regl' | 'device',
     animate:boolean
 }) {
     console.log(option)

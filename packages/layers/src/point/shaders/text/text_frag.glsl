@@ -12,11 +12,12 @@ layout(std140) uniform commonUniforms {
   float u_halo_blur : 0.5;
 };
 
-in vec4 v_color;
-in vec4 v_stroke_color;
 in vec2 v_uv;
 in float v_gamma_scale;
+in vec4 v_color;
+in vec4 v_stroke_color;
 in float v_fontScale;
+
 out vec4 outputColor;
 
 #pragma include "picking"

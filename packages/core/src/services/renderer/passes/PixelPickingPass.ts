@@ -1,11 +1,8 @@
 import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import type {
-  IInteractionTarget} from '../../interaction/IInteractionService';
-import {
-  InteractionEvent,
-} from '../../interaction/IInteractionService';
+import type { IInteractionTarget } from '../../interaction/IInteractionService';
+import { InteractionEvent } from '../../interaction/IInteractionService';
 import type { ILayer } from '../../layer/ILayerService';
 import type { ILngLat } from '../../map/IMapService';
 import { gl } from '../gl';
@@ -55,13 +52,15 @@ export default class PixelPickingPass<
       this.rendererService;
     const { width, height } = getViewportSize();
     // 创建 picking framebuffer，后续实时 resize
+    const pickingColorTexture = createTexture2D({
+      width,
+      height,
+      wrapS: gl.CLAMP_TO_EDGE,
+      wrapT: gl.CLAMP_TO_EDGE,
+      label: 'Picking Texture',
+    });
     this.pickingFBO = createFramebuffer({
-      color: createTexture2D({
-        width,
-        height,
-        wrapS: gl.CLAMP_TO_EDGE,
-        wrapT: gl.CLAMP_TO_EDGE,
-      }),
+      color: pickingColorTexture,
     });
 
     // 监听 hover 事件
@@ -127,7 +126,7 @@ export default class PixelPickingPass<
     if (!this.layer.isVisible() || !this.layer.needPick(type)) {
       return;
     }
-    const { getViewportSize, readPixels, useFramebuffer } =
+    const { getViewportSize, readPixelsAsync, useFramebuffer } =
       this.rendererService;
     const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = this.layer.getLayerConfig();
@@ -143,9 +142,9 @@ export default class PixelPickingPass<
       return;
     }
     let pickedColors: Uint8Array | undefined;
-    useFramebuffer(this.pickingFBO, () => {
+    useFramebuffer(this.pickingFBO, async () => {
       // avoid realloc
-      pickedColors = readPixels({
+      pickedColors = await readPixelsAsync({
         x: Math.round(xInDevicePixel),
         // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
         y: Math.round(height - (y + 1) * DOM.DPR),

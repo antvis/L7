@@ -88,7 +88,7 @@ layer.style({
 | ------------- | -------- | -------------|--------------------- | ------ |
 | opacity | `number` | 透明度，支持数据映射 |是| `1`   |
 | strokeOpacity | `number` |描边透明度 |否| `30`   |
-| stroke | `number` | 弧线分段，分段越多越平滑，消耗越大 |是| `#000`   |
+| stroke | `number` | 描边颜色 |是| `#000`   |
 | strokeWidth | `number` | 描边宽度 | `1` |否  |
 | gapWidth | `number` | 不同方向两条线间距 | `2` |否  |
 | offsets | `[number,number]` | 两端偏移量，支持数据映射 |是| `[0,0]`   |

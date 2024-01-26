@@ -13,12 +13,14 @@ layout(std140) uniform commonUniforms {
 out vec2 v_extrude;
 out float v_weight;
 
-
 #define GAUSS_COEF  0.3989422804014327
 
 #pragma include "projection"
+#pragma include "picking"
 
 void main(){
+    vec3 picking_color_placeholder = u_PickingColor;
+
     v_weight = a_Size;
     float ZERO = 1.0 / 255.0 / 16.0;
     float extrude_x = a_Dir.x * 2.0 -1.0;
