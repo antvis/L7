@@ -20,7 +20,7 @@ let mapdivCount: number = 0;
 const EventMap: {
   [key: string]: any;
 } = {
-  camerachange: ['move'],
+  zoonAnimate: ['Ge'],
 };
 
 export default class TdtMapService extends BaseMapService<any> {

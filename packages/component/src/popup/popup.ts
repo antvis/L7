@@ -111,6 +111,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.mapsService = scene.get<IMapService>(TYPES.IMapService);
     this.sceneService = scene.get<ISceneService>(TYPES.ISceneService);
     this.layerService = scene.get<ILayerService>(TYPES.ILayerService);
+    //天地图仅监听zoomanim 不注册camerachane,对于平移,在mapsService中实现
+    this.mapsService.on('zoomanim', this.updateWhenZoom);
     this.mapsService.on('camerachange', this.update);
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
@@ -152,6 +154,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       // TODO: mapbox AMap 事件同步
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
+      //天地图的缩放事件
+      this.mapsService.off('zoomanim', this.updateWhenZoom);
       this.updateCloseOnClick(true);
       this.updateCloseOnEsc(true);
       this.updateFollowCursor(true);
@@ -330,9 +334,11 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     if (this.mapsService) {
       // 防止事件重复监听
+      this.mapsService.off('zoonanim', this.updateWhenZoom);
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
 
+      this.mapsService.on('zoonanim', this.updateWhenZoom);
       this.mapsService.on('camerachange', this.update);
       this.mapsService.on('viewchange', this.update);
     }
@@ -382,9 +388,27 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     const { lng, lat } = this.lngLat;
     const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
+
     this.setPopupPosition(x, y);
   };
-
+  //zoom时计算PopUp的位置并更新
+  protected updateLngLatPositionWhenZoom = (ev:any) => {
+    if (!this.mapsService || this.popupOption.followCursor) {
+      return;
+    }
+    const { lng, lat } = this.lngLat;
+    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
+    const map = ev.map;
+    const viewHalf = map.getSize();
+    viewHalf.x=viewHalf.x/2;
+    viewHalf.y=viewHalf.y/2;
+    const center = ev.center;
+    const zoom = ev.zoom;
+    const projectedCenter = map.DE(this.lngLat,zoom,center);
+    projectedCenter.x=Math.round(projectedCenter.x);
+    projectedCenter.y=Math.round(projectedCenter.y);
+    this.setPopupPosition(projectedCenter.x, projectedCenter.y,true);
+  };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
@@ -508,8 +532,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     this.hide();
   };
-
-  protected update = () => {
+  //更新位置 支持zoom时更新
+  private updatePosition = (ev:any,zoom:Boolean = true) => {
     const hasPosition = !!this.lngLat;
     const { className, style, maxWidth, anchor, stopPropagation } =
       this.popupOption;
@@ -545,8 +569,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
       this.container.style.whiteSpace = 'nowrap';
     }
-
-    this.updateLngLatPosition();
+    if(zoom){
+      this.updateLngLatPositionWhenZoom(ev);
+    }
+    else{
+      this.updateLngLatPosition();
+    }
     DOM.setTransform(this.container, `${anchorTranslate[anchor]}`);
     applyAnchorClass(this.container, anchor, 'popup');
 
@@ -558,19 +586,31 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     } else {
       this.container.style.removeProperty('width');
     }
+  }
+  protected updateWhenZoom = (ev:any) => {
+    this.updatePosition(ev,true);
+  }
+  protected update = () => {
+    this.updatePosition(null,false);
   };
-
   /**
    * 设置 Popup 相对于地图容器的 Position
-   * @param left
-   * @param top
+   * @param {Number} left
+   * @param {Number} top
+   * @param {Boolean} [useTransition=false] 是否使用过度效果
    * @protected
    */
-  protected setPopupPosition(left: number, top: number) {
+  protected setPopupPosition(left: number, top: number,useTransition:boolean = false) {
     if (this.container) {
       const { offsets } = this.popupOption;
       this.container.style.left = left + offsets[0] + 'px';
       this.container.style.top = top - offsets[1] + 'px';
+      if(useTransition){
+        this.container.style.transition  = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
+      }
+      else{
+        this.container.style.transition = '';
+      }
     }
   }
 
