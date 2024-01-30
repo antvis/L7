@@ -20,6 +20,7 @@ Marker
 - element    `Dom|string`    自定义 marker Dom 节点，可以是 dom 实例，也可以是 dom id
 - anchor     `string`  锚点位置   支持 center, top, top-left, top-right, bottom, bottom-left,bottom-right,left, right
 - offsets    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量
+- draggable `boolean` 是否支持拖拽调整 Marker 位置
 - extData 用户自定义属性，支持任意数据类型，存储 marker 属性信息
 
 ### 添加到 Scene
@@ -42,7 +43,7 @@ scene.addMarker(marker);
 
 获取 marker dom Element
 
-### setElement
+#### setElement
 
 - element `dom`
 
@@ -52,6 +53,14 @@ scene.addMarker(marker);
 
 获取 marker 经纬度坐标
 
+#### setDraggable
+
+设置是否支持拖拽调整位置
+
+#### getDraggable
+
+获取当前是否支持拖拽调整位置
+
 #### togglePopup
 
 开启或者关闭 marker 弹出框
@@ -60,7 +69,7 @@ scene.addMarker(marker);
 
 打开 Popup
 
-### closePopup
+#### closePopup
 
 关闭 popup
 
@@ -127,6 +136,9 @@ new L7.Marker({
 - contextmenu
 - mouseover
 - mouseout
+- dragstart
+- dragging
+- dragend
 
 事件返回数据
 
