@@ -24,7 +24,6 @@
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
     "site:deploy": "lerna --scope @antv/l7-site exec yarn run site:deploy",
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
-    "async-site": "sh ./scripts/site.sh",
     "prebuild": "yarn clean && run-p tsc lint",
     "build": "lerna run build --ignore @antv/l7-site",
     "postbuild": "yarn build:declarations",
