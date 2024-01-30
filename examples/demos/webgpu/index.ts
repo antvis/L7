@@ -21,5 +21,3 @@ export { MapRender as raster_multiband } from './raster_multiband';
 export { MapRender as raster_ndvi } from './raster_ndvi';
 export { MapRender as raster_tiff } from './raster_tiff';
 export { MapRender as texture } from './texture';
-export { MapRender as tile_image } from './tile_image';
-export { MapRender as tile_vector } from './tile_vector';
