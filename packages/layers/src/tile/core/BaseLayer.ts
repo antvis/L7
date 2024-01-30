@@ -208,13 +208,14 @@ export default class BaseTileLayer {
     }
     const minZoom = this.parent.getMinZoom();
     const maxZoom = this.parent.getMaxZoom();
+
+    const tiles = this.tilesetManager.tiles
+    .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
+    .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
+    .filter((tile: SourceTile) => tile.data) //
+    .filter((tile: SourceTile) => tile.z >= minZoom && tile.z < maxZoom) // 过滤不可见见
     await Promise.all(
-      this.tilesetManager.tiles
-        .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
-        .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
-        .filter((tile: SourceTile) => tile.data) //
-        .filter((tile: SourceTile) => tile.z >= minZoom && tile.z < maxZoom) // 过滤不可见见
-        .map(async (tile: SourceTile) => {
+      tiles.map(async (tile: SourceTile) => {
           // 未加载瓦片
           if (!this.tileLayerService.hasTile(tile.key)) {
             const tileInstance = getTileFactory(this.parent);
@@ -234,6 +235,7 @@ export default class BaseTileLayer {
           }
         }),
     );
+
 
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片

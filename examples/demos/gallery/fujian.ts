@@ -209,6 +209,9 @@ export function MapRender(option: {
         scene.addLayer(river_name);
         scene.addLayer(mountainPoint);
         scene.addLayer(mountainPoint_name);
+        if (window['screenshot']) {
+            window['screenshot']();
+          }
 
     });
 }

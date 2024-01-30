@@ -56,6 +56,9 @@ export function MapRender(option: {
         scene.startAnimate();
         scene.addLayer(layer);
         scene.render();
+        if (window['screenshot']) {
+          window['screenshot']();
+        }
       });
   });
 }

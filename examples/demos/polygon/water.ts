@@ -46,10 +46,14 @@ export function MapRender(option: {
         speed: 0.4,
         // waterTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
       })
-      .animate(true);
+      .animate(false);
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+
+      if (window['screenshot']) {
+        window['screenshot']();
+      }
     });
 
 }

@@ -266,7 +266,7 @@ export default class AMapService extends AMapBaseService {
       id,
       style = 'light',
       minZoom = 0,
-      maxZoom = 18,
+      maxZoom = 24,
       token = AMAP_API_KEY,
       mapInstance,
       plugin = [],

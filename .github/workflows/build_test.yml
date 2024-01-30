@@ -19,7 +19,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - run: yarn
-      - run: yarn build
+      - run: yarn build 
       - run: yarn test:e2e
 
       - name: Upload snapshots to GitHub Actions Artifacts

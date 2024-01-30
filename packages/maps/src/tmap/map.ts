@@ -39,7 +39,6 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   > = new Map();
 
   public handleCameraChanged = () => {
-    console.log('handleCameraChanged');
     // Trigger map change event
     this.emit('mapchange');
     // resync
