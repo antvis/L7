@@ -61,8 +61,8 @@ export default class Marker extends EventEmitter {
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
-    //天地图仅监听zoomanim 不注册camerachane,对于平移,在mapsService中实现
-    this.mapsService.on('zoomanim', this.updatePositionWhenZoom);
+    //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
+    this.mapsService.on('zoomchange', this.updatePositionWhenZoom);
     this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
     this.update();
     this.added = true;
@@ -75,7 +75,7 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('click', this.onMapClick);
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
-      this.mapsService.off('Ge', this.update);
+      this.mapsService.off('zoomchange', this.update);
       this.mapsService.off('camerachange', this.update);
     }
     this.unRegisterMarkerEvent();
