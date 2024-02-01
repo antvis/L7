@@ -61,6 +61,9 @@ export function MapRender(option: { map: string; renderer: 'regl' | 'device' }) 
       });
 
     scene.addLayer(layer);
-    scene.startAnimate();
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
+  
   });
 }

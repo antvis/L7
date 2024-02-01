@@ -67,5 +67,8 @@ export function MapRender(option: {
                 },
               });
         scene.addLayer(layer);
+        if (window['screenshot']) {
+            window['screenshot']();
+          }
     }
 }

@@ -121,6 +121,9 @@ export function MapRender(option: {
               stroke: '#000',
             });
             scene.addLayer(layer);
+            if (window['screenshot']) {
+              window['screenshot']();
+            }
               
         })
 

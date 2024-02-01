@@ -37,7 +37,7 @@ export function MapRender(option: {
   });
   layer
     .source(source)
-    .color('#f00')
+    .color('#ddd')
 
     .style({
       opacity: 0.5,
@@ -122,10 +122,9 @@ export function MapRender(option: {
     .style({
       opacity: 1,
     });
-
+  // TODO:Mask 和缩放取消
   scene.on('loaded', () => {
     scene.addLayer(layer);
-    // scene.startAnimate();
     scene.addLayer(boundaries);
     scene.addLayer(natural);
     scene.addLayer(buildings);

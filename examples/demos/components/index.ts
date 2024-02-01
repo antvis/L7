@@ -1,0 +1,1 @@
+export { MapRender as control } from './control';

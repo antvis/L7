@@ -6,31 +6,29 @@ import type {
   IStatusOptions,
   IViewport,
   MapStyleConfig,
-  Point} from '@antv/l7-core';
-import {
-  MapServiceEvent
+  Point,
 } from '@antv/l7-core';
+import { MapServiceEvent } from '@antv/l7-core';
 import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from '../utils/Viewport';
 import './logo.css';
-import TMapLoader from './maploader';
+import GMapLoader from './maploader';
 
-const TMAP_API_KEY: string = 'OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77';
-const BMAP_VERSION: string = '1.exp';
+const GMAP_API_KEY: string = 'AIzaSyDBDCfl4pvuDtaazdCog3LmhA7CQLhmcRE';
 
 const EventMap: {
   [key: string]: any;
 } = {
   mapmove: 'center_changed',
-  camerachange: ['drag', 'pan', 'rotate', 'pitch', 'zoom'],
-  zoomchange: 'zoom',
+  camerachange: ['drag', 'pan', 'rotate', 'tilt', 'zoom_changed'],
+  zoomchange: 'zoom_changed',
   dragging: 'drag',
 };
 
-export default class TMapService extends BaseMapService<TMap.Map> {
+export default class TMapService extends BaseMapService<any> {
   // @ts-ignore
   protected viewport: IViewport = null;
   protected evtCbProxyMap: Map<
@@ -39,23 +37,22 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   > = new Map();
 
   public handleCameraChanged = () => {
-    // Trigger map change event
     this.emit('mapchange');
-    // resync
     const map = this.map;
-    // @ts-ignore
+
     const { lng, lat } = map.getCenter();
+
     const option = {
-      center: [lng, lat],
-      // @ts-ignore
-      viewportHeight: map.getContainer().clientHeight,
-      // @ts-ignore
-      viewportWidth: map.getContainer().clientWidth,
-      // @ts-ignore
+      center: [lng(), lat()],
+
+      viewportHeight: map.getDiv().clientHeight,
+
+      viewportWidth: map.getDiv().clientWidth,
+
       bearing: map.getHeading(),
-      // @ts-ignore
-      pitch: map.getPitch(),
-      // @ts-ignore
+
+      pitch: map.getTilt(),
+
       zoom: map.getZoom() - 1,
     };
 
@@ -67,14 +64,11 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   public async init(): Promise<void> {
     this.viewport = new Viewport();
 
-    // TODO: Handle initial config
     const {
       id,
       mapInstance,
       center = [121.30654632240122, 31.25744185633306],
-      token = TMAP_API_KEY,
-      version = BMAP_VERSION,
-      libraries = [],
+      token = GMAP_API_KEY,
       minZoom = 3,
       maxZoom = 18,
       rotation = 0,
@@ -84,18 +78,16 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       ...rest
     } = this.config;
 
-    if (!(window.TMap || mapInstance)) {
-      await TMapLoader.load({
+    if (!(window.google?.maps?.Map || mapInstance)) {
+      await GMapLoader.load({
         key: token,
-        version,
-        libraries,
       });
     }
 
     if (mapInstance) {
       // If there's already a map instance, maybe not setting any other configurations
       this.map = mapInstance as any;
-      this.$mapContainer = this.map.getContainer();
+      this.$mapContainer = this.map.getDiv();
       if (logoVisible === false) {
         this.hideLogo();
       }
@@ -105,53 +97,44 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       }
       const mapContainer = DOM.getContainer(id)!;
 
-      const map = new TMap.Map(mapContainer, {
+      const map = new google.maps.Map(mapContainer, {
         maxZoom,
         minZoom,
-        rotation,
-        pitch,
-        showControl: false,
-        // Tencent use (Lat, Lng) while center is (Lng, Lat)
-        center: new TMap.LatLng(center[1], center[0]),
+        zoomControl: false,
+        fullscreenControl: false,
+        center: new google.maps.LatLng(center[1], center[0]),
         ...rest,
       });
 
-      // @ts-ignore
       this.map = map;
-      // @ts-ignore
-      this.$mapContainer = map.getContainer();
+
+      this.$mapContainer = map.getDiv();
       if (logoVisible === false) {
         this.hideLogo();
       }
     }
 
-    // Set tencent map canvas element position as absolute
-    // @ts-ignore
-    this.map.canvasContainer.style.position = 'absolute';
+    // TODO: 拖动快的时候，事件失效
+    google.maps.event.addListener(this.map, 'drag', this.handleCameraChanged);
 
-    // Set tencent map control layer dom index
-    // @ts-ignore
-    const controlParentContainer = this.map.controlManager.controlContainer?.parentNode;
-    if (controlParentContainer) {
-      controlParentContainer.style.zIndex = 2;
-    }
+    google.maps.event.addListener(this.map, 'pan', this.handleCameraChanged);
 
+    google.maps.event.addListener(this.map, 'rotate', this.handleCameraChanged);
 
-    this.simpleMapCoord.setSize(mapSize);
+    // 空闲时间
+    google.maps.event.addListener(this.map, 'idle', this.handleCameraChanged);
 
-    // May be find an integrated event replacing following events
-    this.map.on('drag', this.handleCameraChanged);
-    this.map.on('pan', this.handleCameraChanged);
-    this.map.on('rotate', this.handleCameraChanged);
-    this.map.on('pitch', this.handleCameraChanged);
-    this.map.on('zoom', this.handleCameraChanged);
+    google.maps.event.addListener(
+      this.map,
+      'zoom_changed',
+      this.handleCameraChanged,
+    );
 
-    // Trigger camera change after init
     this.handleCameraChanged();
   }
 
   public destroy(): void {
-    this.map.destroy();
+    this.map.setMap(null);
   }
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
@@ -159,10 +142,10 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   }
 
   public addMarkerContainer(): void {
-    const container = this.map.getContainer();
-    this.markerContainer = DOM.create('div', 'l7-marker-container', container);
-    this.markerContainer.setAttribute('tabindex', '-1');
-    this.markerContainer.style.zIndex = '2';
+    // const container = this.map.getDiv();
+    // this.markerContainer = DOM.create('div', 'l7-marker-container', container);
+    // this.markerContainer.setAttribute('tabindex', '-1');
+    // this.markerContainer.style.zIndex = '2';
   }
 
   public getMarkerContainer(): HTMLElement {
@@ -199,7 +182,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
         cbProxyMap.set(handle, handleProxy);
         this.map.on(eventName, handleProxy);
-      }
+      };
 
       if (Array.isArray(EventMap[type])) {
         EventMap[type].forEach((eventName: string) => {
@@ -224,7 +207,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       }
       this.evtCbProxyMap.get(eventName)?.delete(handle);
       this.map.off(eventName, handleProxy);
-    }
+    };
 
     if (Array.isArray(EventMap[type])) {
       EventMap[type].forEach((eventName: string) => {
@@ -241,28 +224,25 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
   // get dom
   public getContainer(): HTMLElement | null {
-    return this.map.getContainer();
+    return this.map.getDiv();
   }
 
   public getSize(): [number, number] {
-    // @ts-ignore
     return [this.map.width, this.map.height];
   }
 
   // get map status method
   public getMinZoom(): number {
-    // @ts-ignore
     return this.map.transform._minZoom;
   }
 
   public getMaxZoom(): number {
-    // @ts-ignore
     return this.map.transform._maxZoom;
   }
 
   // get map params
   public getType() {
-    return 'tmap';
+    return 'googlemap';
   }
 
   public getZoom(): number {
@@ -271,37 +251,40 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   public getCenter(): ILngLat {
     const { lng, lat } = this.map.getCenter();
     return {
-      lng,
-      lat,
+      lng: lng(),
+      lat: lat(),
     };
   }
   public getPitch(): number {
-    return this.map.getPitch();
+    return this.map.getTilt();
   }
 
   public getRotation(): number {
-    return this.map.getRotation();
+    const rotation = this.map.getHeading();
+    return rotation;
   }
 
   public getBounds(): Bounds {
-    const ne = this.map.getBounds().getNorthEast();
-    const sw = this.map.getBounds().getSouthWest();
+    // TODO
+    // 官网解释：如果地图尚未初始化，或者尚未设置中心位置且未设置缩放，则结果为 undefine
+    const bounds = this.map.getBounds();
+    const ne = bounds?.getNorthEast();
+    const sw = bounds?.getSouthWest();
     return [
-      [sw.lng, sw.lat],
-      [ne.lng, ne.lat],
+      [sw.lng(), sw.lat()],
+      [ne.lng(), ne.lat()],
     ];
   }
 
   public getMapContainer(): HTMLElement {
-    return this.map.getContainer();
+    return this.map.getDiv();
   }
 
   public getMapCanvasContainer(): HTMLElement {
-    return this.map.getContainer()?.getElementsByTagName('canvas')[0];
+    return this.map.getDiv()?.getElementsByTagName('canvas')[0];
   }
 
   public getMapStyleConfig(): MapStyleConfig {
-    // return this.getMap()
     throw new Error('Method not implemented.');
   }
 
@@ -315,47 +298,48 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
   // control with raw map
   public setRotation(rotation: number): void {
-    this.map.setRotation(rotation);
+    this.map.setHeading(rotation);
   }
 
   public zoomIn(): void {
-    this.map.setZoom(this.getZoom() + 1);
+    const currentZoom = this.map.getZoom();
+    this.map.setZoom(currentZoom + 1);
   }
 
   public zoomOut(): void {
-    this.map.setZoom(this.getZoom() - 1);
+    const currentZoom = this.map.getZoom();
+    this.map.setZoom(currentZoom - 1);
   }
 
   public panTo([lng, lat]: Point): void {
-    this.map.panTo(new TMap.LatLng(lat, lng));
+    this.map.panTo({ lat, lng });
   }
 
   public panBy(x: number, y: number): void {
-    this.map.panBy([x, y]);
+    this.map.panBy(x, y);
   }
 
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
     const [sw, ne] = bound;
-    const swLatLng = new TMap.LatLng(sw[1], sw[0]);
-    const neLatLng = new TMap.LatLng(ne[1], ne[0]);
-    const bounds = new TMap.LatLngBounds(swLatLng, neLatLng);
-    // @ts-ignore
+
+    const bounds = new google.maps.LatLngBounds(
+      { lat: sw[1], lng: sw[0] },
+      { lat: ne[1], lng: ne[0] },
+    );
     this.map.fitBounds(bounds, fitBoundsOptions);
   }
 
   public setZoomAndCenter(zoom: number, [lng, lat]: Point): void {
-    this.map.setCenter(new TMap.LatLng(lat, lng));
     this.map.setZoom(zoom);
+    this.map.setCenter({ lat: lat, lng: lng });
   }
 
-  public setCenter(
-    [lng, lat]: [number, number],
-  ): void {
-    this.map.setCenter(new TMap.LatLng(lat, lng));
+  public setCenter([lng, lat]: [number, number]): void {
+    this.map.setCenter({ lat: lat, lng: lng });
   }
 
   public setPitch(pitch: number): any {
-    this.map.setPitch(pitch);
+    this.map.setTilt(pitch);
   }
 
   public setZoom(zoom: number): any {
@@ -364,25 +348,25 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
   public setMapStatus(option: Partial<IStatusOptions>): void {
     (Object.keys(option) as Array<keyof IStatusOptions>).map((status) => {
-      switch (status) {
+      switch (status as keyof IStatusOptions) {
         case 'doubleClickZoom':
-          this.map.setDoubleClickZoom(!!option.doubleClickZoom);
+          this.map.setOptions({
+            gestureHandling: option.doubleClickZoom ? 'auto' : 'none',
+          });
           break;
         case 'dragEnable':
-          this.map.setDraggable(!!option.dragEnable);
+          this.map.setOptions({ draggable: option.dragEnable });
           break;
         case 'rotateEnable':
-          // @ts-ignore
-          this.map.setRotatable(!!option.rotateEnable);
+          // Google Map 默认支持旋转，无需额外设置
           break;
         case 'zoomEnable':
-          this.map.setDoubleClickZoom(!!option.zoomEnable);
-          this.map.setScrollable(!!option.zoomEnable);
+          this.map.setOptions({ zoomControl: option.zoomEnable });
           break;
         case 'keyboardEnable':
         case 'resizeEnable':
         case 'showIndoorMap':
-          throw Error('Options may bot be supported');
+          throw Error('Options may not be supported');
         default:
       }
     });
@@ -393,10 +377,15 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     [centerLon, centerLat]: [number, number],
     [outerLon, outerLat]: [number, number],
   ) {
-    const metreDistance = TMap.geometry.computeDistance([
-      new TMap.LatLng(centerLat, centerLon),
-      new TMap.LatLng(outerLat, outerLon),
-    ]);
+    // @ts-ignore
+    // https://developers.google.com/maps/documentation/javascript/reference/geometry?hl=zh-cn#spherical.computeDistanceBetween
+    const metreDistance = google.maps.geometry.spherical.computeDistanceBetween(
+      [
+        new google.maps.LatLng(centerLat, centerLon),
+
+        new google.maps.LatLng(outerLat, outerLon),
+      ],
+    );
 
     const [x1, y1] = this.lngLatToCoord!([centerLon, centerLat]);
     const [x2, y2] = this.lngLatToCoord!([outerLon, outerLat]);
@@ -408,15 +397,13 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   }
 
   public pixelToLngLat([x, y]: Point): ILngLat {
-    // Since tecent map didn't provide the reverse method for transforming from pixel to lnglat
-    // It had to be done by calculate the relative distance in container coordinates
     const { lng: clng, lat: clat } = this.map.getCenter();
     const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([
-      clng,
-      clat,
+      clng(),
+      clat(),
     ]);
     const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer(
-      [clng, clat],
+      [clng(), clat()],
     );
     const { lng, lat } = this.map.unprojectFromContainer(
       new TMap.Point(
@@ -428,20 +415,23 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   }
 
   public lngLatToPixel([lng, lat]: Point): IPoint {
-    // @ts-ignore
-    const { x, y } = this.map.projectToWorldPlane(new TMap.LatLng(lat, lng));
-    return { x, y };
+    const latLng = new google.maps.LatLng(lat, lng);
+    const point = this.map.getProjection().fromLatLngToPoint(latLng);
+    return { x: point.x, y: point.y };
   }
 
   public containerToLngLat([x, y]: [number, number]): ILngLat {
-    const { lng, lat } = this.map.unprojectFromContainer(new TMap.Point(x, y));
-    return { lng, lat };
+    const pixelCoordinate = new google.maps.Point(x, y);
+    const lngLat = this.map.getProjection()?.fromPointToLatLng(pixelCoordinate);
+    return { lng: lngLat.lng(), lat: lngLat.lat() };
   }
 
   public lngLatToContainer([lng, lat]: [number, number]): IPoint {
-    // @ts-ignore
-    const { x, y } = this.map.projectToContainer(new TMap.LatLng(lat, lng));
-    return { x, y };
+    const latLng = new google.maps.LatLng(lat, lng);
+    const pixel = this.map
+      .getProjection()
+      ?.fromLatLngToContainerPixel?.(latLng);
+    return { x: pixel.x, y: pixel.y };
   }
 
   public lngLatToCoord?([lng, lat]: [number, number]): [number, number] {
@@ -478,7 +468,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     scale: [number, number, number] = [1, 1, 1],
   ): number[] {
     const flat = this.viewport.projectFlat(lnglat);
-    // @ts-ignore
+
     const modelMatrix = mat4.create();
 
     mat4.translate(
@@ -518,7 +508,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   }
 
   private hideLogo() {
-    const container = this.map.getContainer();
+    const container = this.map.getDiv();
     if (!container) {
       return;
     }

@@ -45,7 +45,6 @@ export function MapRender(option: {
       zIndex: 2,
       visible: true,
     });
-    console.log(tiffdata);
     layer
       .source(tiffdata.data, {
         parser: {
@@ -76,6 +75,8 @@ export function MapRender(option: {
         },
       });
     scene.addLayer(layer);
-    scene.startAnimate();
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
   }
 }

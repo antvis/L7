@@ -16,7 +16,7 @@ describe('Marker', () => {
     expect(marker.getDefault().draggable).toEqual(false);
     expect(marker.getDefault().color).toEqual('#5B8FF9');
     expect(marker.getOffset()).toEqual([0, 0]);
-    expect(marker.isDraggable()).toEqual(false);
+    expect(marker.getDraggable()).toEqual(false);
     marker.remove();
     expect(document.querySelector('.l7-marker')).toBeFalsy();
   });

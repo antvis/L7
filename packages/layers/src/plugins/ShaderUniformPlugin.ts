@@ -44,7 +44,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
 
     let uniformBuffer: IBuffer;
     if (!this.rendererService.uniformBuffers[0]) {
-   
+
       // Create a Uniform Buffer Object(UBO).
       uniformBuffer = this.rendererService.createBuffer({
         data: new Float32Array(16 * 4 + 4 * 7),
@@ -90,16 +90,20 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
           data,
         });
       }
-      // For WebGL1. regl
-      layer.models.forEach((model) => {
-        model.addUniforms({
-          ...uniforms,
-          // TODO: move these 2 uniforms to PixelPickingPlugin
-          u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
-          // Tip: 当前地图是否在拖动
-          u_shaderPick: Number(layer.getShaderPickStat()),
+
+      // For WebGL1. regl 
+      const platformString = this.rendererService.queryVerdorInfo();
+      if (platformString === 'WebGL1') {
+        layer.models.forEach((model) => {
+          model.addUniforms({
+            ...uniforms,
+            // TODO: move these 2 uniforms to PixelPickingPlugin
+            u_PickingBuffer: layer.getLayerConfig().pickingBuffer || 0,
+            // Tip: 当前地图是否在拖动
+            u_shaderPick: Number(layer.getShaderPickStat()),
+          });
         });
-      });
+      }
     });
   }
 

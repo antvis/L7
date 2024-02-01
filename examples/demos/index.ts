@@ -8,6 +8,7 @@ import * as TileDemos from './tile'
 import * as MaskDemos from './mask'
 import * as GalleryDemos from './gallery'
 import * as BugFix from './bugfix'
+import * as Components from './components'
 
 export default [{
     name: 'BugFix',
@@ -25,6 +26,10 @@ export default [{
     name: 'Polygon',
     demos: PolygonDemos
 }, 
+{
+    name:'Components',
+    demos: Components
+},
 {
     name: 'Heatmap',
     demos: HeatmapDemos
@@ -51,7 +56,7 @@ export default [{
 }
 ]
 
-export const MapType = ['Map','GaodeMap','BaiduMap','MapLibre','TencentMap','Mapbox','TMap']
+export const MapType = ['Map','GaodeMap','BaiduMap','MapLibre','TencentMap','Mapbox','TMap','GoogleMap']
 export const InitMapOptions = {
     map: 'Map',
     renderer:'device',

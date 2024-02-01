@@ -30,7 +30,7 @@
     "@mapbox/tiny-sdf": "^1.2.5",
     "@turf/helpers": "^6.1.4",
     "ajv": "^6.10.2",
-    "element-resize-event": "^3.0.3",
+    "element-resize-detector": "^1.2.4",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
     "hammerjs": "^2.0.8",
@@ -40,7 +40,7 @@
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
-    "@types/element-resize-event": "^2.0.0",
+    "@types/element-resize-detector": "^1.1.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/hammerjs": "^2.0.36",
     "@types/lodash": "^4.14.138",

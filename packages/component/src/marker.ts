@@ -5,10 +5,9 @@ import type {
   IMarkerOption,
   IPoint,
   IPopup,
-  ISceneService} from '@antv/l7-core';
-import {
-  TYPES,
+  ISceneService,
 } from '@antv/l7-core';
+import { TYPES } from '@antv/l7-core';
 import {
   DOM,
   anchorTranslate,
@@ -29,6 +28,7 @@ export default class Marker extends EventEmitter {
   private lngLat: ILngLat;
   private scene: Container;
   private added: boolean = false;
+  private preLngLat = { lng: 0, lat: 0 };
   // tslint:disable-next-line: no-empty
   public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
 
@@ -63,6 +63,7 @@ export default class Marker extends EventEmitter {
     this.registerMarkerEvent(element as HTMLElement);
     this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
     this.update();
+    this.updateDraggable();
     this.added = true;
     this.emit('added');
     return this;
@@ -126,6 +127,7 @@ export default class Marker extends EventEmitter {
     this.init();
     this.mapsService.getMarkerContainer().appendChild(el as HTMLElement);
     this.registerMarkerEvent(el as HTMLElement);
+    this.updateDraggable();
     this.update();
     return this;
   }
@@ -188,12 +190,12 @@ export default class Marker extends EventEmitter {
     return this.markerOption.offsets;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setDraggable(draggable: boolean) {
-    throw new Error('Method not implemented.');
+    this.markerOption.draggable = draggable;
+    this.updateDraggable();
   }
 
-  public isDraggable() {
+  public getDraggable() {
     return this.markerOption.draggable;
   }
 
@@ -230,6 +232,62 @@ export default class Marker extends EventEmitter {
       bounds: this.mapsService.getBounds(),
     };
   }
+
+  private updateDraggable() {
+    const { element } = this.markerOption;
+    element?.removeEventListener('mousedown', this.onMarkerDragStart);
+    this.mapsService.off('mousemove', this.onMarkerDragMove);
+    document.removeEventListener('mouseup', this.onMarkerDragEnd);
+    if (this.markerOption.draggable) {
+      element?.addEventListener('mousedown', this.onMarkerDragStart);
+    }
+  }
+
+  private onMarkerDragStart = (e: MouseEvent) => {
+    const mapContainer = this.mapsService.getContainer();
+    if (!mapContainer) {
+      return;
+    }
+    this.mapsService.setMapStatus({
+      dragEnable: false,
+      zoomEnable: false,
+    });
+    const { left: containerX, top: containerY } =
+      mapContainer.getClientRects()[0]!;
+    const { x: clickX, y: clickY } = e;
+    this.preLngLat = this.mapsService.containerToLngLat([
+      clickX - containerX,
+      clickY - containerY,
+    ]);
+    this.mapsService.on('mousemove', this.onMarkerDragMove);
+    document.addEventListener('mouseup', this.onMarkerDragEnd);
+    this.emit('dragstart', this.lngLat);
+  };
+
+  private onMarkerDragMove = (e: any) => {
+
+    const { lng: preLng, lat: preLat } = this.preLngLat;
+    const { lng: curLng, lat: curLat } = e.lnglat;
+    const newLngLat = {
+      lng: this.lngLat.lng + curLng - preLng,
+      lat: this.lngLat.lat + curLat - preLat,
+    };
+    this.setLnglat(newLngLat);
+    this.preLngLat = e.lnglat;
+    this.emit('dragging', newLngLat);
+  };
+
+  private onMarkerDragEnd = (e: MouseEvent) => {
+    this.mapsService.setMapStatus({
+      dragEnable: true,
+      zoomEnable: true,
+    });
+
+    this.mapsService.off('mousemove', this.onMarkerDragMove);
+    document.removeEventListener('mouseup', this.onMarkerDragEnd);
+    this.emit('dragend', this.lngLat);
+  };
+
   private updatePosition() {
     if (!this.mapsService) {
       return;

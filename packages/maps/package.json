@@ -42,6 +42,7 @@
     "@types/amap-js-api": "^1.4.6",
     "@types/bmapgl": "^0.0.7",
     "@types/gl-matrix": "^2.4.5",
+    "@types/google.maps": "^3.54.10",
     "@types/mapbox-gl": "^1.11.2",
     "@types/viewport-mercator-project": "^6.1.0",
     "tmap-types-temporary": "0.1.4"

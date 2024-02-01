@@ -49,5 +49,9 @@ export function MapRender(option: {
 
     scene.on('loaded', () => {
       scene.addLayer(layer);
+
+      if (window['screenshot']) {
+        window['screenshot']();
+      }
     });
 }

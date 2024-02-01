@@ -7,7 +7,6 @@ export interface ISceneService extends EventEmitter {
   loaded: boolean;
   removeAllListeners(event?: string): this;
   init(config: ISceneConfig): void;
-  initMiniScene(config: ISceneConfig): void;
   addLayer(layer: ILayer): void;
   addMask(mask: ILayer): void;
   getSceneConfig(): Partial<ISceneConfig>;

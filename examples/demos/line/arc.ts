@@ -135,6 +135,9 @@ export function MapRender(option: {
 
     scene.addLayer(layer);
     scene.addLayer(layer2);
+    if (window['screenshot']) {
+        window['screenshot']();
+      }
 
 
 }

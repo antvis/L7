@@ -56,5 +56,8 @@ export function MapRender(option: {
                 opacity: 1,
             });
         scene.addLayer(layer);
+        if (window['screenshot']) {
+            window['screenshot']();
+          }
     }
 }
