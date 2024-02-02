@@ -1,14 +1,14 @@
 // @ts-ignore
 import { Popup,PointLayer, Marker,Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap, Mapbox } from '@antv/l7-maps';
+import { GaodeMap, Mapbox,TencentMap} from '@antv/l7-maps';
 import React, { useEffect } from 'react';
-  
+
 export default () => {
     useEffect( () => {
       const scene = new Scene({
   id: 'map',
-  map: new GaodeMap({
+  map: new TencentMap({
     style: 'normal',
     center: [ 120.104446,30.261081 ],
     zoom: 19.056
@@ -23,6 +23,9 @@ scene.on('loaded', () => {
   const marker = new Marker()
     .setLnglat([ 120.1047383116185,30.261127905299425 ])
     .setPopup(popup);
+  const marker1 = new Marker()
+  .setLnglat([ 120.1147383116185,30.261127905299425 ])
+  .setPopup(popup);
     const pointLayer = new PointLayer({})
     .source([{
         x:120.1047383116185,
@@ -48,10 +51,12 @@ scene.on('loaded', () => {
     })
 scene.addLayer(pointLayer);
   scene.addMarker(marker);
-  marker.togglePopup()
+  scene.addMarker(marker1);
+  marker.togglePopup();
+  marker1.togglePopup();
 });
 
-          
+
     }, []);
     return (
       <div
@@ -63,4 +68,3 @@ scene.addLayer(pointLayer);
       />
     );
   };
-  
