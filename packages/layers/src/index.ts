@@ -1,6 +1,7 @@
 import type { ILayerPlugin} from '@antv/l7-core';
 import { container, TYPES } from '@antv/l7-core';
 import CanvasLayer from './canvas';
+import CanvasLayer2 from './canvas2';
 import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import BaseModel from './core/BaseModel';
@@ -157,6 +158,7 @@ export {
   CityBuildingLayer,
   GeometryLayer,
   CanvasLayer,
+  CanvasLayer2,
   ImageLayer,
   RasterLayer,
   HeatmapLayer,

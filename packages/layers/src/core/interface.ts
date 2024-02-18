@@ -6,12 +6,12 @@ import type {
   StyleAttributeOption,
 } from '@antv/l7-core';
 import type { IColorRamp } from '@antv/l7-utils';
+import type { CanvasModelType } from '../canvas2/models';
 import type { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,
 }
-
 
 export enum LinearDir {
   VERTICAL = 'vertical',
@@ -200,7 +200,7 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   colorTexture?: ITexture2D;
   brightness?: number;
   contrast?: number;
-  saturation ?: number;
+  saturation?: number;
   gamma?: number;
 }
 
@@ -269,6 +269,11 @@ export interface ICanvasLayerStyleOptions {
   drawingOnCanvas: (option: IDrawingOnCanvas) => void;
 }
 
+export interface ICanvasLayer2Options {
+  zIndex: number;
+  contextType: CanvasModelType;
+}
+
 export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {
   intensity: number;
   radius: number;
@@ -298,7 +303,14 @@ export interface IRasterTerrainLayerStyleOptions
   bScaler?: number;
   offset?: number;
 }
-export type ArrowType = 'circle' | 'triangle' | 'rect'  | 'diamond' | 'classic' | 'halfTriangle' | 'none' ;
+export type ArrowType =
+  | 'circle'
+  | 'triangle'
+  | 'rect'
+  | 'diamond'
+  | 'classic'
+  | 'halfTriangle'
+  | 'none';
 export interface IArrowOptions {
   type: ArrowType;
   width?: number;
