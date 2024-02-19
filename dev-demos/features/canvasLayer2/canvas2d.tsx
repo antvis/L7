@@ -1,6 +1,9 @@
-import { CanvasLayer2, GaodeMap, Scene } from '@antv/l7';
+import { CanvasLayer2, GaodeMap, PointLayer, Scene } from '@antv/l7';
+import * as turf from '@turf/turf';
 import type { FunctionComponent } from 'react';
 import React, { useEffect, useState } from 'react';
+
+const POSITION = [120.104697, 30.260704];
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);
@@ -10,7 +13,7 @@ const Demo: FunctionComponent = () => {
       id: 'map',
       map: new GaodeMap({
         style: 'dark',
-        center: [120.104697, 30.260704],
+        center: POSITION,
         pitch: 0,
         zoom: 15,
       }),
@@ -19,15 +22,24 @@ const Demo: FunctionComponent = () => {
 
     newScene.on('loaded', () => {
       const canvasLayer = new CanvasLayer2({
-        zIndex: 1,
+        zIndex: 100,
         render: ({ canvas, ctx, container, utils }) => {
           ctx.clearRect(0, 0, container.width, container.height);
-          ctx.fillStyle = 'red';
-          const { x, y } = utils.lngLatToContainer([120.104697, 30.260704]);
-          ctx.fillRect(x - 10, y - 10, 20, 20);
+          ctx.fillStyle = 'blue';
+          const { x, y } = utils.lngLatToContainer(POSITION);
+          const size = 20 * window.devicePixelRatio;
+          ctx.fillRect(x - size / 2, y - size / 2, size, size);
         },
       });
       newScene.addLayer(canvasLayer);
+
+      const pointLayer = new PointLayer({});
+      pointLayer
+        .source(turf.featureCollection([turf.point(POSITION)]))
+        .color('red')
+        .shape('circle')
+        .size(20);
+      newScene.addLayer(pointLayer);
     });
   }, []);
 

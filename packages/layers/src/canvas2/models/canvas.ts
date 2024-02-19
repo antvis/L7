@@ -28,7 +28,7 @@ export class CanvasModel extends BaseModel {
     canvas.style.position = 'absolute';
     canvas.style.top = '0';
     canvas.style.left = '0';
-    canvas.style.zIndex = String(zIndex);
+    canvas.style.zIndex = String(zIndex < 3 ? 3 : zIndex);
     this.resetCanvasSize();
     this.mapService.getContainer()?.appendChild(canvas);
     this.ctx = getContext
