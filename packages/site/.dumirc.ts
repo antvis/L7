@@ -1,17 +1,20 @@
 import { defineConfig } from 'dumi';
 const path = require('path');
 const env = process.env.NODE_ENV;
-const GaodeTokenScript = env === 'production' ? [
-  ` window._AMapSecurityConfig = {
+const GaodeTokenScript =
+  env === 'production'
+    ? [
+        ` window._AMapSecurityConfig = {
     securityJsCode: '2653011adeb04230b3a26cc9a780a800',
   }`,
-  'https://webapi.amap.com/maps?v=2.0&key=f59bcf249433f8b05caaee19f349b3d7',
-] : [
-  ` window._AMapSecurityConfig = {
+        'https://webapi.amap.com/maps?v=2.0&key=f59bcf249433f8b05caaee19f349b3d7',
+      ]
+    : [
+        ` window._AMapSecurityConfig = {
     securityJsCode: "290ddc4b0d33be7bc9b354bc6a4ca614"
   }`,
-  'https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c',
-];
+        'https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c',
+      ];
 export default defineConfig({
   locales: [
     { id: 'zh', name: '中文' },
