@@ -7,10 +7,11 @@ import { CanvasModel } from './models';
 export default class CanvasLayer2 extends BaseLayer<ICanvasLayer2Options> {
   public type: string = 'CanvasLayer';
 
-  public getDefaultConfig(): Partial<ICanvasLayer2Options> {
+  protected getDefaultConfig(): Partial<ICanvasLayer2Options> {
     return {
       zIndex: 0,
       contextType: 'canvas2d',
+      trigger: 'change',
     };
   }
 
@@ -20,7 +21,14 @@ export default class CanvasLayer2 extends BaseLayer<ICanvasLayer2Options> {
   }
 
   public getModelType(): CanvasModelType {
-    return this.getLayerConfig().contextType;
+    return this.getLayerConfig().contextType || 'canvas2d';
+  }
+
+  public getLayerConfig() {
+    return {
+      ...super.getLayerConfig(),
+      ...this.getDefaultConfig(),
+    } as any;
   }
 
   // public destroy() {

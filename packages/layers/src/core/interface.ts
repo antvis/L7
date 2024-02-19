@@ -269,9 +269,26 @@ export interface ICanvasLayerStyleOptions {
   drawingOnCanvas: (option: IDrawingOnCanvas) => void;
 }
 
+export interface ICanvasLayer2RenderParams {
+  canvas: HTMLCanvasElement;
+  ctx: RenderingContext;
+  container: {
+    width: number;
+    height: number;
+    bounds: [[number, number], [number, number]];
+  };
+  utils: {
+    lngLatToContainer: IMapService['lngLatToContainer'];
+    mapService: IMapService;
+  };
+}
+
 export interface ICanvasLayer2Options {
   zIndex: number;
   contextType: CanvasModelType;
+  getContext?: (canvas: HTMLCanvasElement) => RenderingContext;
+  trigger: 'end' | 'change';
+  render: (renderParams: ICanvasLayer2RenderParams) => void;
 }
 
 export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {

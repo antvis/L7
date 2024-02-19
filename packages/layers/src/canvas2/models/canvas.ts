@@ -1,31 +1,27 @@
 import BaseModel from '../../core/BaseModel';
 import type { ICanvasLayer2Options } from '../../core/interface';
-import type CanvasLayer2 from '../index';
+import type { CanvasModelType } from './constants';
 import { CanvasContextTypeMap } from './constants';
 
 export class CanvasModel extends BaseModel {
-  protected canvas: HTMLCanvasElement;
-  protected ctx: RenderingContext;
+  protected canvas: HTMLCanvasElement | null = null;
+  protected ctx: any;
   protected ctxType: string;
-  protected prevSize: [number, number];
+  protected viewportSize: [number, number];
 
-  constructor(layer: CanvasLayer2) {
-    super(layer);
-
-    const modelType = layer.getModelType();
-    this.ctxType = CanvasContextTypeMap[modelType];
+  public get layerConfig() {
+    return this.layer.getLayerConfig() as ICanvasLayer2Options;
   }
 
   public async initModels() {
-    this.initCanvas();
     this.renderCanvas();
-    this.bindListeners();
     return [];
   }
 
-  public initCanvas() {
-    const { zIndex } = this.layer.getLayerConfig() as ICanvasLayer2Options;
+  public initCanvas = () => {
+    const { zIndex, getContext } = this.layerConfig;
     const canvas = document.createElement('canvas');
+    const modelType = this.layer.getModelType() as CanvasModelType;
     this.canvas = canvas;
     canvas.classList.add('l7-canvas-layer');
     canvas.style.pointerEvents = 'none';
@@ -35,30 +31,100 @@ export class CanvasModel extends BaseModel {
     canvas.style.zIndex = String(zIndex);
     this.resetCanvasSize();
     this.mapService.getContainer()?.appendChild(canvas);
-    this.ctx = canvas.getContext(this.ctxType)!;
-    this.mapService.on('resize', this.resetCanvasSize.bind(this));
+    this.ctx = getContext
+      ? getContext(canvas)
+      : canvas.getContext(CanvasContextTypeMap[modelType])!;
     if (!this.ctx) {
       console.error('Failed to get rendering context for canvas');
     }
-  }
+    this.bindListeners();
+  };
 
-  public resetCanvasSize() {
-    const canvas = this.canvas;
-    const [width, height] = this.mapService.getSize();
+  public resetViewportSize = () => {
     const { width: viewWidth, height: viewHeight } =
       this.rendererService.getViewportSize();
-    this.prevSize = [viewWidth, viewHeight];
+    this.viewportSize = [viewWidth, viewHeight];
+  };
+
+  public resetCanvasSize = () => {
+    const canvas = this.canvas;
+    if (!canvas) {
+      return;
+    }
+    this.resetViewportSize();
+    const [width, height] = this.mapService.getSize();
+    const [viewWidth, viewHeight] = this.viewportSize;
     canvas.width = viewWidth;
     canvas.height = viewHeight;
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
+  };
+
+  public renderCanvas = () => {
+    if (!this.canvas) {
+      this.initCanvas();
+    }
+    const { render } = this.layerConfig;
+    const [width, height] = this.viewportSize;
+    const bounds = this.mapService.getBounds();
+    render?.({
+      canvas: this.canvas!,
+      ctx: this.ctx,
+      container: {
+        width,
+        height,
+        bounds,
+      },
+      utils: {
+        lngLatToContainer: this.lngLatToContainer,
+        mapService: this.mapService,
+      },
+    });
+  };
+
+  public removeCanvas = () => {
+    if (this.canvas) {
+      this.canvas.parentElement?.removeChild(this.canvas);
+      this.canvas = null;
+    }
+    this.unbindListeners();
+  };
+
+  public onMapResize = () => {
+    requestAnimationFrame(() => {
+      this.resetCanvasSize();
+      this.renderCanvas();
+    });
+  };
+
+  public bindListeners() {
+    this.mapService.on('resize', this.onMapResize);
+    if (this.layerConfig.trigger === 'change') {
+      this.mapService.on('mapchange', this.renderCanvas);
+    } else {
+      this.mapService.on('zoomstart', this.removeCanvas);
+      this.mapService.on('zoomend', this.renderCanvas);
+      this.mapService.on('movestart', this.removeCanvas);
+      this.mapService.on('moveend', this.renderCanvas);
+    }
   }
 
-  public renderCanvas() {}
+  public unbindListeners() {
+    this.mapService.off('resize', this.onMapResize);
+    this.mapService.off('mapchange', this.renderCanvas);
+    this.mapService.off('zoomstart', this.removeCanvas);
+    this.mapService.off('zoomend', this.renderCanvas);
+    this.mapService.off('movestart', this.removeCanvas);
+    this.mapService.off('moveend', this.renderCanvas);
+  }
 
-  public bindListeners() {}
-
-  public unbindListeners() {}
+  public lngLatToContainer = (lngLat: [number, number]) => {
+    const { x, y } = this.mapService.lngLatToContainer(lngLat);
+    return {
+      x: x * window.devicePixelRatio,
+      y: y * window.devicePixelRatio,
+    };
+  };
 
   public registerBuiltinAttributes() {}
 }
