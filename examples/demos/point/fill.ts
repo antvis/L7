@@ -52,6 +52,12 @@ export function MapRender(option: { map: string; renderer: string }) {
           });
 
         scene.addLayer(pointLayer);
+        pointLayer.on('mousemove', (e) => {
+          console.log('mousemove', e);
+        })
+        pointLayer.on('click', (e) => {
+          console.log('click', e);
+        })
 
         if (window['screenshot']) {
           window['screenshot']();
