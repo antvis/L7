@@ -87,6 +87,7 @@ export default class InteractionService
       hammertime.on('panstart panmove panend pancancel', this.onDrag);
       $containter.addEventListener('touchstart', this.onTouch);
       $containter.addEventListener('touchend', this.onTouchEnd);
+      $containter.addEventListener('mousemove', this.onHover);
       $containter.addEventListener('touchmove', this.onTouchMove);
       // $containter.addEventListener('click', this.onHover);
       $containter.addEventListener('mousedown', this.onHover, true);
