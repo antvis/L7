@@ -716,7 +716,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
 
     this.encodeStyle(newOption);
-
     this.updateLayerConfig(newOption);
 
     return this;

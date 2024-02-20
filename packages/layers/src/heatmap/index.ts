@@ -1,8 +1,9 @@
-import type { IAttributeAndElements, IRenderOptions } from '@antv/l7-core';
+import type { IAttributeAndElements, ILegend, IRenderOptions } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import type { IHeatMapLayerStyleOptions } from '../core/interface';
 import type { HeatMapModelType } from './models';
 import HeatMapModels from './models';
+import { rampColor2legend } from '../utils/rampcolor_legend';
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
 
@@ -75,4 +76,21 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     }
     return 'heatmap';
   }
+  public getLegend(name: string): ILegend {
+    if(this.getModelType() === 'heatmap') {
+      if (name !== 'color') return {
+        type: undefined,
+        field: undefined,
+        items: []
+      }
+      const rampColors = this.getLayerConfig().rampColors;
+      return rampColor2legend(rampColors,name);
+    } else {
+      return super.getLegend(name);
+    }
+    
+
+  }
+      
+
 }

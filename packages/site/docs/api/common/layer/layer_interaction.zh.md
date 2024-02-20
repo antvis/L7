@@ -131,6 +131,7 @@ const size1 = sizeScale('n1'); // 40
 const size2 = sizeScale('n2'); // 20
 ```
 ### getLegendItems(type: string)
+不推荐使用，将废弃，
 
 获取图例配置
 
@@ -144,7 +145,9 @@ layer.getLegendItems('size');
 ```
 
 ### getLegend(type: string)
-获取图例 getLegendItems 加强版返回更多信息
+getLegendItems方法的替代方法
+
+该方法需要
 
 返回值
 - type 图例类型
@@ -157,3 +160,4 @@ layer.getLegend('color');
 
 layer.getLegend('size');
 ```
+注：rasterayer 只支持 color 类型

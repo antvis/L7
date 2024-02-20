@@ -53,7 +53,7 @@ layer.on('legend', (ev) => console.log(ev));
 
 ```
 
-### legend:color
+### `legend:color`
 
 数据映射更新，图例发生变化,color 颜色改变
 参数 option
@@ -65,7 +65,7 @@ layer.on('legend:color', (ev) => console.log(ev));
 
 ```
 
-### legend:size
+### `legend:size`
 
 数据映射更新，图例发生变化,size 大小改变
 参数 option
