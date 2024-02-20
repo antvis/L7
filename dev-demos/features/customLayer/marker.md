@@ -2,14 +2,14 @@
 
 ```tsx
 import { Marker, PointLayer, PolygonLayer, Popup, Scene } from '@antv/l7';
-import { GaodeMap, Mapbox,TdtMap } from '@antv/l7-maps';
+import { GaodeMap, Mapbox,TMap } from '@antv/l7-maps';
 import React, { useEffect } from 'react';
 
 export default () => {
   useEffect(() => {
     const scene = new Scene({
       id: 'map-marker',
-      map: new TdtMap({
+      map: new TMap({
         center: [120.184824, 30.248341],
         pitch: 0,
         zoom: 18,

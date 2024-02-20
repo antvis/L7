@@ -10,11 +10,11 @@ import type {
 import { TYPES } from '@antv/l7-core';
 import {
   DOM,
-  anchorTranslate,
   anchorType,
   applyAnchorClass,
   bindAll,
   isPC,
+  anchorTranslate
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import type { Container } from 'inversify';
@@ -38,7 +38,7 @@ export default class Marker extends EventEmitter {
       ...this.getDefault(),
       ...option,
     };
-    bindAll(['update', 'onMove', 'onMapClick'], this);
+    bindAll(['update', 'onMove', 'onMapClick','updatePositionWhenZoom'], this);
     this.init();
   }
 
@@ -61,6 +61,8 @@ export default class Marker extends EventEmitter {
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
+    //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
+    this.mapsService.on('zoomchange', this.updatePositionWhenZoom);
     this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
     this.update();
     this.updateDraggable();
@@ -74,6 +76,7 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('click', this.onMapClick);
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
+      this.mapsService.off('zoomchange', this.update);
       this.mapsService.off('camerachange', this.update);
     }
     this.unRegisterMarkerEvent();
@@ -215,7 +218,57 @@ export default class Marker extends EventEmitter {
     this.updatePosition();
     DOM.setTransform(element as HTMLElement, `${anchorTranslate[anchor]}`);
   }
-
+  //天地图在开始缩放时触发 更新目标位置时添加过渡效果
+  private updatePositionWhenZoom(ev: { map: any; center: any; zoom: any; }) {
+    if (!this.mapsService) {
+      return;
+    }
+    const {element,offsets} = this.markerOption;
+    const { lng, lat } = this.lngLat;
+    if (element) {
+      element.style.display = 'block';
+      element.style.whiteSpace = 'nowrap';
+      const { containerHeight, containerWidth, bounds } =
+      this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
+      if (!bounds) {
+        return;
+      }
+      const map = ev.map;
+      const viewHalf = map.getSize();
+      viewHalf.x=viewHalf.x/2;
+      viewHalf.y=viewHalf.y/2;
+      const center = ev.center;
+      const zoom = ev.zoom;
+      const projectedCenter = map.DE(this.lngLat,zoom,center);
+      projectedCenter.x=Math.round(projectedCenter.x+offsets[0]);
+      projectedCenter.y=Math.round(projectedCenter.y-offsets[1]);
+      // 当前可视区域包含跨日界线
+      if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
+        if (projectedCenter.x > containerWidth) {
+          // 日界线右侧点左移
+          const newPos = this.mapsService.lngLatToContainer([lng - 360, lat]);
+          projectedCenter.x = newPos.x;
+        }
+        if (projectedCenter.x < 0) {
+          // 日界线左侧点右移
+          const newPos = this.mapsService.lngLatToContainer([lng + 360, lat]);
+          projectedCenter.x = newPos.x;
+        }
+      }
+      if (
+        projectedCenter.x > containerWidth ||
+        projectedCenter.x < 0 ||
+        projectedCenter.y > containerHeight ||
+        projectedCenter.y < 0
+      ) {
+        element.style.display = 'none';
+      }
+      element.style.left = projectedCenter.x + 'px';
+      element.style.top = projectedCenter.y + 'px';
+      console.log(projectedCenter);
+      element.style.transition  = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
+    }
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onMapClick(e: MouseEvent) {
     const { element } = this.markerOption;
@@ -326,7 +379,7 @@ export default class Marker extends EventEmitter {
       ) {
         element.style.display = 'none';
       }
-      element.style.left = pos.x + offsets[0] + 'px';
+      element.style.left =  pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
     }
   }

@@ -7,7 +7,8 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
-  Point} from '@antv/l7-core';
+  Point
+} from '@antv/l7-core';
 import {
   MapServiceEvent
 } from '@antv/l7-core';
@@ -20,12 +21,12 @@ let mapdivCount: number = 0;
 const EventMap: {
   [key: string]: any;
 } = {
-  camerachange: ['move'],
+  zoomchange: ['Ge'],
 };
 
 export default class TdtMapService extends BaseMapService<any> {
   protected viewport: IViewport | null = null;
-  protected evtCbProxyMap: Map<string,Map<(...args: any) => any, (...args: any) => any>> = new Map();
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
   // @ts-ignore
   private sceneContainer: HTMLElement;
   // 不直接用自带的marker的div，因为会收到天地图缩放时visibility变成hidden的影响
@@ -39,15 +40,15 @@ export default class TdtMapService extends BaseMapService<any> {
     div.setAttribute('tabindex', '-1');
     div.id = 'tdt-L7-marker';
     div.style.position = 'absolute';
-    div.style.left = '0px';
-    div.style.top = '0px';
+    div.style.left = '';
+    div.style.top = '';
     div.style.zIndex = '600';
-    div.style.width = '100%';
-    div.style.height = '100%';
+    div.style.width = '0px';
+    div.style.height = '0px';
     div.style.overflow = 'visible';
     return;
   }
-  
+
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;
   }
@@ -55,9 +56,9 @@ export default class TdtMapService extends BaseMapService<any> {
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
   }
-  private resize(ev:any){
-    this.sceneContainer.style.width = ev.newSize.x+'px';
-    this.sceneContainer.style.height = ev.newSize.y+'px';
+  private resize(ev: any) {
+    this.sceneContainer.style.width = ev.newSize.x + 'px';
+    this.sceneContainer.style.height = ev.newSize.y + 'px';
   }
   private update() {
     const bounds = this.map.getBounds();
@@ -66,19 +67,23 @@ export default class TdtMapService extends BaseMapService<any> {
       lat: bounds.getNorthEast().lat,
     });
     this.sceneContainer.style.transition = '';
-    this.sceneContainer.style.transformOrigin  = 'center';
+    this.sceneContainer.style.transformOrigin = 'center';
     this.sceneContainer.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1)`;
+    //更新marker容器的位置 实现平移
+    this.markerContainer.style.transition = '';
+    this.markerContainer.style.transformOrigin = 'center';
+    this.markerContainer.style.transform = `translate3d(${-x}px, ${-y}px, 0px) scale(1)`;
     // @ts-ignore
-    this.sceneContainer._tdt_pos = new T.Point(x,y);
+    this.sceneContainer._tdt_pos = new T.Point(x, y);
     this.handleCameraChanged();
   }
-  
-  private getZoomScale (toZoom:number, fromZoom:number):number {
-		// TODO replace with universal implementation after refactoring projections
-		const crs = this.map.options.IW;
-		fromZoom = fromZoom === undefined ? this.map.getZoom() : fromZoom;
-		return crs.scale(toZoom) / crs.scale(fromZoom);
-	}
+
+  private getZoomScale(toZoom: number, fromZoom: number): number {
+    // TODO replace with universal implementation after refactoring projections
+    const crs = this.map.options.IW;
+    fromZoom = fromZoom === undefined ? this.map.getZoom() : fromZoom;
+    return crs.scale(toZoom) / crs.scale(fromZoom);
+  }
   private zoomStartUpdate(ev: any) {
     // T._Q :DomUtil
     // this.map.options.IW.qW:map.project
@@ -86,22 +91,23 @@ export default class TdtMapService extends BaseMapService<any> {
     // 都是混淆后的方法,后续需要考虑讲这些方法都实现了,避免api更新后方法名发生改变
     const center = ev.center;
     const zoom = ev.zoom;
-    const scale = this.getZoomScale(zoom,this.map.getZoom());
-    
+    const scale = this.getZoomScale(zoom, this.map.getZoom());
+
     // @ts-ignore
     const position = T._Q.getPosition(this.sceneContainer);
     const viewHalf = this.map.getSize().GQ(0.5);
     const currentCenterPoint = this.map.options.IW.qW(this.map.getCenter(), zoom);
-    const  destCenterPoint = this.map.options.IW.qW(center, zoom);
+    const destCenterPoint = this.map.options.IW.qW(center, zoom);
     const centerOffset = destCenterPoint.DQ(currentCenterPoint);
     // @ts-ignore
-    const topLeftOffset = new T.Point(viewHalf.x,viewHalf.y).GQ(-scale);
+    const topLeftOffset = new T.Point(viewHalf.x, viewHalf.y).GQ(-scale);
     topLeftOffset.aQ(position);
     topLeftOffset.aQ(viewHalf);
     topLeftOffset.DQ(centerOffset);
-    this.sceneContainer.style.transform  = `translate3d(${topLeftOffset.x}px,${topLeftOffset.y}px,0px) scale(${scale})`;
-    this.sceneContainer.style.transformOrigin  = '0 0';
-    this.sceneContainer.style.transition  = 'transform 0.25s cubic-bezier(0,0,0.25,1)';
+    this.sceneContainer.style.transform = `translate3d(${topLeftOffset.x}px,${topLeftOffset.y}px,0px) scale(${scale})`;
+    this.sceneContainer.style.transformOrigin = '0 0';
+    this.sceneContainer.style.transition = 'transform 0.25s cubic-bezier(0,0,0.25,1)';
+
     this.handleCameraChanged();
   }
   public getOverlayContainer(): HTMLElement | undefined {
@@ -112,7 +118,7 @@ export default class TdtMapService extends BaseMapService<any> {
     const size = this.map.getSize();
     container.style.zIndex = '200';//置于上层
     container.style.width = `${size.x}px`;
-    container.style.height = `${size.y}px`;    
+    container.style.height = `${size.y}px`;
     // @ts-ignore
     this.sceneContainer = container;
     return container;
@@ -168,7 +174,7 @@ export default class TdtMapService extends BaseMapService<any> {
       // @ts-ignore
       this.map.centerAndZoom(new window.T.LngLat(center[0], center[1]), zoom);
       this.$mapContainer = this.map.getContainer();
-      
+
       // @ts-ignore
       const point = new window.T.LngLat(center[0], center[1]);
       this.map.centerAndZoom(point, zoom);
@@ -193,8 +199,8 @@ export default class TdtMapService extends BaseMapService<any> {
       });
       this.map = map;
       // @ts-ignore
-     const control = new window.T.Control.Zoom();
-     map.addControl(control);
+      const control = new window.T.Control.Zoom();
+      map.addControl(control);
     }
 
     const container = this.map.getContainer();
@@ -235,6 +241,7 @@ export default class TdtMapService extends BaseMapService<any> {
             !args[0].lnglat
           ) {
             args[0].lngLat = args[0].latlng || args[0].latLng;
+            args[0].map = this.map;
           }
           handle(...args);
         };
@@ -355,7 +362,7 @@ export default class TdtMapService extends BaseMapService<any> {
   public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
     const [sw, ne] = bound;
     // @ts-ignore
-    this.map.setViewport([new window.T.LngLat(sw[0],sw[1]),new window.T.LngLat(ne[0],ne[1])]);
+    this.map.setViewport([new window.T.LngLat(sw[0], sw[1]), new window.T.LngLat(ne[0], ne[1])]);
   }
 
   public setMaxZoom(max: number): void {
@@ -437,7 +444,7 @@ export default class TdtMapService extends BaseMapService<any> {
 
   public lngLatToCoord([lng, lat]: [number, number]): [number, number] {
     const pixelCoord = this.lngLatToPixel([lng, lat]);
-    return [pixelCoord.x,pixelCoord.y];
+    return [pixelCoord.x, pixelCoord.y];
   }
 
   public lngLatToCoords(list: number[][] | number[][][]): any {
@@ -458,7 +465,7 @@ export default class TdtMapService extends BaseMapService<any> {
       [ne.lng, ne.lat],
     ];
   }
- 
+
   public lngLatToMercator(
     lnglat: [number, number],
     altitude: number,

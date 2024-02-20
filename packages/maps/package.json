@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.20.14",
+  "version": "2.20.16",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -27,9 +27,9 @@
   "license": "ISC",
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@antv/l7-core": "2.20.14",
-    "@antv/l7-map": "2.20.14",
-    "@antv/l7-utils": "2.20.14",
+    "@antv/l7-core": "2.20.16",
+    "@antv/l7-map": "2.20.16",
+    "@antv/l7-utils": "2.20.16",
     "@babel/runtime": "^7.7.7",
     "gl-matrix": "^3.1.0",
     "inversify": "^5.0.1",
