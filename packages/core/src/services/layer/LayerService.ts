@@ -189,7 +189,7 @@ export default class LayerService
   public renderTileLayerMask(layer: ILayer) {
     let maskindex = 0;
     const { enableMask = true } = layer.getLayerConfig();
-    let maskCount = layer.tileMask ? 1 : 0;
+    let maskCount = layer.tileMask ? 1 : 0; // 瓦片裁剪 线图层或者面图层
     const masklayers = layer.masks.filter((m) => m.inited);
 
     maskCount = maskCount + (enableMask ? masklayers.length : 1);

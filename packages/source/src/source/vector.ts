@@ -42,7 +42,6 @@ export default class VectorSource implements ITileSource {
     for (let i = 0; i < vectorTile.length; i++) {
       const vectorTileFeature = vectorTile.feature(i);
       const feature = vectorTileFeature.toGeoJSON(this.x, this.y, this.z);
-
       features.push({
         ...feature,
         properties: {

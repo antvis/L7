@@ -2,8 +2,6 @@ import { LineLayer, PolygonLayer, Scene, Source } from '@antv/l7';
 // @ts-ignore
 import * as allMap from '@antv/l7-maps';
 import { Protocol } from 'pmtiles';
-const protocol = new Protocol();
-Scene.addProtocol('pmtiles', protocol.tile);
 
 export function MapRender(option: {
   map: string;
@@ -41,10 +39,16 @@ export function MapRender(option: {
     // 绿地
     const fill = new PolygonLayer({
       sourceLayer: 'CHN_Districts',
+      featureId:'adcode',
     })
       .source(source)
       .shape('fill')
+      // .color('#f00');
       .color('adcode', getColorByAdcode);
+
+    fill.on('click', (e) => {
+      console.log(e);
+    });
 
     const line = new LineLayer({
       sourceLayer: 'CHN_Districts_L',
@@ -70,9 +74,9 @@ export function MapRender(option: {
       .color('#de2d26');
 
     scene.addLayer(fill);
-    scene.addLayer(line);
-    scene.addLayer(line2);
-    scene.addLayer(line3);
+    // scene.addLayer(line);
+    // scene.addLayer(line2);
+    // scene.addLayer(line3);
     //   scene.addLayer(line2);
     // const debugerLayer = new TileDebugLayer({ usage: 'basemap' });
     // scene.addLayer(debugerLayer);
