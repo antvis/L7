@@ -500,6 +500,14 @@ export default defineConfig({
         },
         order: 13,
       },
+      {
+        slug: 'api/react',
+        title: {
+          zh: 'React 组件库',
+          en: 'React component',
+        },
+        order: 13,
+      },
     ],
     examples: [
       {
@@ -557,6 +565,15 @@ export default defineConfig({
         order: 6,
       },
       {
+        slug: 'component',
+        icon: 'map',
+        title: {
+          zh: '组件',
+          en: 'Component',
+        },
+        order: 7,
+      },
+      {
         slug: 'raster',
         icon: 'raster',
         title: {
@@ -591,15 +608,6 @@ export default defineConfig({
           en: 'CompositeLayers',
         },
         order: 8,
-      },
-      {
-        slug: 'component',
-        icon: 'map',
-        title: {
-          zh: '组件',
-          en: 'Component',
-        },
-        order: 9,
       },
       {
         slug: 'draw',

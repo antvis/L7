@@ -87,15 +87,16 @@
     {
       "filename": "swipe.ts",
       "title": {
-        "zh": "Swipe 卷帘",
+        "zh": "Swipe 卷帘对比",
         "en": "Swipe"
       },
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-bMESIfHN9IAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
       "filename": "syncScene.ts",
+      "new": "true",
       "title": {
-        "zh": "同步地图",
+        "zh": "双屏对比",
         "en": "SyncScene"
       },
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*9ABcToHql7UAAAAAAAAAAAAADmJ7AQ/original"
