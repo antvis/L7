@@ -91,6 +91,14 @@
         "en": "Swipe"
       },
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-bMESIfHN9IAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "syncScene.ts",
+      "title": {
+        "zh": "同步地图",
+        "en": "SyncScene"
+      },
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*zF6eQLHXw4UAAAAAAAAAAAAADmJ7AQ/original"
     }
   ]
 }
