@@ -127,12 +127,12 @@ if (mapDiv) {
   mapDiv.style.cssText = 'display: flex; height: 700px';
   // 创建第一个新div并设置一些属性或内容
   const newMapDiv1 = document.createElement('div');
-  newMapDiv1.style.cssText = 'width: 50%; height: 700px; position: relative;';
+  newMapDiv1.style.cssText = 'width: 50%; height: 700px; position: relative; margin-right: 5px;';
   newMapDiv1.id = 'map1'; // 给新div设置id
 
   // 创建第二个新div并设置一些属性或内容
   const newMapDiv2 = document.createElement('div');
-  newMapDiv2.style.cssText = 'width: 50%; height: 700px; position: relative;';
+  newMapDiv2.style.cssText = 'width: 50%; height: 700px; position: relative;  margin-left: 5px;';
   newMapDiv2.id = 'map2'; // 给新div设置id
 
   mapDiv.appendChild(newMapDiv1);
