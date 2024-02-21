@@ -500,6 +500,14 @@ export default defineConfig({
         },
         order: 13,
       },
+      {
+        slug: 'api/react',
+        title: {
+          zh: 'React 组件库',
+          en: 'React component',
+        },
+        order: 13,
+      },
     ],
     examples: [
       {
