@@ -31,11 +31,11 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PtMUR6hsN9EAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "point.js",
-      "title": "海量点",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*OiQxQKq-P9MAAAAAAAAAAAAAARQnAQ"
-    }
-    ,
+      "filename": "swipe.ts",
+      "title": "卷帘对比-作物长势",
+      "new": true,
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*b1WCRJjht2wAAAAAAAAAAAAADmJ7AQ/original"
+    },
     {
       "filename": "normal.js",
       "title": "亮度图",
