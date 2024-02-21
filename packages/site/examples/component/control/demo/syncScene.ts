@@ -1,4 +1,4 @@
-import { GaodeMap, Scene } from '@antv/l7';
+import { GaodeMap, HeatmapLayer, PointLayer, Scene } from '@antv/l7';
 import { isNumber } from 'lodash';
 
 // 通过 Scene 获取到地图引擎类型
@@ -10,7 +10,7 @@ function getMapType(scene) {
 // 根据不同地图引擎类型，设置地图的状态「缩放层级、地图中心点、旋转角、倾角」
 const updateSceneStatus = (
   scene,
-  status= {
+  status = {
     zoom,
     center,
     pitch,
@@ -122,16 +122,16 @@ export function syncScene(scenes, options = {}) {
   return clearListener;
 }
 
-var mapDiv = document.getElementById('map');
+const mapDiv = document.getElementById('map');
 if (mapDiv) {
   mapDiv.style.cssText = 'display: flex; height: 700px';
   // 创建第一个新div并设置一些属性或内容
-  var newMapDiv1 = document.createElement('div');
+  const newMapDiv1 = document.createElement('div');
   newMapDiv1.style.cssText = 'width: 50%; height: 700px; position: relative;';
   newMapDiv1.id = 'map1'; // 给新div设置id
 
   // 创建第二个新div并设置一些属性或内容
-  var newMapDiv2 = document.createElement('div');
+  const newMapDiv2 = document.createElement('div');
   newMapDiv2.style.cssText = 'width: 50%; height: 700px; position: relative;';
   newMapDiv2.id = 'map2'; // 给新div设置id
 
@@ -143,22 +143,89 @@ if (mapDiv) {
     map: new GaodeMap({
       pitch: 0,
       style: 'normal',
-      center: [120.154672, 30.241095],
-      zoom: 12,
+      center: [114.07737552216226, 22.542656745583486],
+      rotation: 90,
+      zoom: 12.47985,
     }),
     // 关闭默认 L7 Logo
     logoVisible: false,
+  });
+  scene.on('loaded', () => {
+    fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const pointLayer = new PointLayer({})
+          .source(data)
+          .shape('circle')
+          .size('h12', [2, 5])
+          .color(
+            'h12',
+            [
+              '#094D4A',
+              '#146968',
+              '#1D7F7E',
+              '#289899',
+              '#34B6B7',
+              '#4AC5AF',
+              '#5FD3A6',
+              '#7BE39E',
+            ].reverse(),
+          );
+        scene.addLayer(pointLayer);
+      });
   });
   const scene1 = new Scene({
     id: 'map2',
     map: new GaodeMap({
       pitch: 0,
       style: 'normal',
-      center: [120.154672, 30.241095],
-      zoom: 12,
+      center: [114.07737552216226, 22.542656745583486],
+      rotation: 90,
+      zoom: 12.47985,
     }),
     // 关闭默认 L7 Logo
     logoVisible: false,
+  });
+  scene1.on('loaded', () => {
+    fetch(
+      'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const pointLayer = new HeatmapLayer({})
+          .source(data, {
+            transforms: [
+              {
+                type: 'hexagon',
+                size: 400,
+                field: 'h12',
+                method: 'sum',
+              },
+            ],
+          })
+          .shape('hexagon')
+          .style({
+            coverage: 0.9,
+            angle: 0,
+          })
+
+          .color(
+            'sum',
+            [
+              '#094D4A',
+              '#146968',
+              '#1D7F7E',
+              '#289899',
+              '#34B6B7',
+              '#4AC5AF',
+              '#5FD3A6',
+              '#7BE39E',
+            ].reverse(),
+          );
+        scene1.addLayer(pointLayer);
+      });
   });
 
   syncScene([scene, scene1]);
