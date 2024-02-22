@@ -262,7 +262,6 @@ export default class Marker extends EventEmitter {
       }
       element.style.left = projectedCenter.x + 'px';
       element.style.top = projectedCenter.y + 'px';
-      console.log(projectedCenter);
       element.style.transition  = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
     }
   }
@@ -376,8 +375,10 @@ export default class Marker extends EventEmitter {
       ) {
         element.style.display = 'none';
       }
+     
       element.style.left =  pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
+      console.log(element.style.left);
     }
   }
 

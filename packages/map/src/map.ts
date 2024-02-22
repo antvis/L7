@@ -373,15 +373,7 @@ export class Map extends Camera {
       canvasContainer.classList.add('l7-interactive');
     }
   }
-
-  /**
-   * 小程序环境构建容器
-   */
-  private initMiniContainer() {
-    this.container = this.options.canvas as HTMLCanvasElement;
-    this.canvasContainer = this.container;
-  }
-
+  
   private containerDimensions(): [number, number] {
     let width = 0;
     let height = 0;
