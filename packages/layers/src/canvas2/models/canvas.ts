@@ -4,10 +4,10 @@ import type { CanvasModelType } from './constants';
 import { CanvasContextTypeMap } from './constants';
 
 export class CanvasModel extends BaseModel {
-  protected canvas: HTMLCanvasElement | null = null;
-  protected ctx: any;
-  protected ctxType: string;
-  protected viewportSize: [number, number];
+  public canvas: HTMLCanvasElement | null = null;
+  public ctx: any;
+  public ctxType: string;
+  public viewportSize: [number, number];
 
   public get layerConfig() {
     return this.layer.getLayerConfig() as ICanvasLayer2Options;
@@ -28,7 +28,7 @@ export class CanvasModel extends BaseModel {
     canvas.style.position = 'absolute';
     canvas.style.top = '0';
     canvas.style.left = '0';
-    canvas.style.zIndex = String(zIndex < 3 ? 3 : zIndex);
+    canvas.style.zIndex = String((zIndex ?? 0) < 3 ? 3 : zIndex);
     this.resetCanvasSize();
     this.mapService.getContainer()?.appendChild(canvas);
     this.ctx = getContext

@@ -3,7 +3,7 @@ import * as turf from '@turf/turf';
 import type { FunctionComponent } from 'react';
 import React, { useEffect, useState } from 'react';
 
-const POSITION = [120.104697, 30.260704];
+const POSITION = [120.104697, 30.260704] as [number, number];
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);

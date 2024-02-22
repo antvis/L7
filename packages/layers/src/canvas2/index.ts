@@ -26,10 +26,14 @@ export default class CanvasLayer2 extends BaseLayer<ICanvasLayer2Options> {
   }
 
   public getLayerConfig() {
-    return {
+    const config = {
       ...this.getDefaultConfig(),
       ...super.getLayerConfig(),
     } as any;
+    if (config.zIndex < 3) {
+      config.zIndex = 3;
+    }
+    return config as any;
   }
 
   public destroy() {

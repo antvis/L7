@@ -284,11 +284,11 @@ export interface ICanvasLayer2RenderParams {
 }
 
 export interface ICanvasLayer2Options {
-  zIndex: number;
-  contextType: CanvasModelType;
+  zIndex?: number;
+  contextType?: CanvasModelType;
   getContext?: (canvas: HTMLCanvasElement) => RenderingContext;
-  trigger: 'end' | 'change';
-  render: (renderParams: ICanvasLayer2RenderParams) => void;
+  trigger?: 'end' | 'change';
+  render?: (renderParams: ICanvasLayer2RenderParams) => void;
 }
 
 export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {
