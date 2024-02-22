@@ -1,7 +1,6 @@
 import type HandlerManager from '../../src/handler/handler_manager';
 import ScrollZoomHandler from '../../src/handler/scroll_zoom';
 import { Map } from '../../src/map';
-import   BoxZoomHandler from '../../src/handler/box_zoom';
 import Point from '../../src/geo/point';
 
 describe('Map', () => {

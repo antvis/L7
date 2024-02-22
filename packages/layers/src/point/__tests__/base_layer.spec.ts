@@ -56,7 +56,6 @@ describe('pointLayer', () => {
         scene.addLayer(layer);
         layer.on('inited', () => {  
             const data =layer.getEncodedData();
-            console.log(data);
             expect(layer.inited).toBeTruthy();
             expect(data[0]).toEqual({
                 id: 0,
