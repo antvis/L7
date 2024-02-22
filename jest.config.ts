@@ -37,10 +37,10 @@ const config: Config = {
     coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
     coverageThreshold: {
       global: {
-        branches: 9,
-        functions: 11.5,
-        lines: 15,
-        statements: 15,
+        branches: 24,
+        functions: 37,
+        lines: 49,
+        statements: 48,
       },
     },
     ...sharedConfig

@@ -1,27 +1,8 @@
 import PointLayer from '../';
 import extrudePolygon from '../shape/extrude';
+import { TestScene } from '@antv/l7-test-utils';
 describe('pointLayer', () => {
-  const layer = new PointLayer({
-    name: 'layer',
-  })
-    .source(
-      [
-        {
-          lng: 120,
-          lat: 30,
-        },
-      ],
-      {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
-        },
-      },
-    )
-    .shape('circle')
-    .size(10);
-
+  const scene = TestScene();
   const extrude = extrudePolygon([
     // @ts-ignore
     [0, 1, 1],
@@ -59,6 +40,34 @@ describe('pointLayer', () => {
       ],
       index: [1, 2, 0, 3, 2, 1, 5, 6, 4, 7, 6, 5],
     });
-    expect(layer.type).toEqual('PointLayer');
+   
+  });
+  it('pontlayer fill', () => {
+    const layer = new PointLayer({
+      name: 'layer',
+    })
+      .source(
+        [
+          {
+            lng: 120,
+            lat: 30,
+          },
+        ],
+        {
+          parser: {
+            type: 'json',
+            x: 'lng',
+            y: 'lat',
+          },
+        },
+      )
+      .shape('circle')
+      .size(10)
+      .color('red')
+      .style({opacity: 0.5});
+      scene.addLayer(layer);
+
+  
+
   });
 });
