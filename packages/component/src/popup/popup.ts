@@ -112,7 +112,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.sceneService = scene.get<ISceneService>(TYPES.ISceneService);
     this.layerService = scene.get<ILayerService>(TYPES.ILayerService);
     //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
-    this.mapsService.on('zoomchange', this.updateWhenZoom);
+    // this.mapsService.on('zoomchange', this.updateWhenZoom);
     this.mapsService.on('camerachange', this.update);
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
@@ -155,7 +155,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
       //天地图的缩放事件
-      this.mapsService.off('zoomchange', this.updateWhenZoom);
+      // this.mapsService.off('zoomchange', this.updateWhenZoom);
       this.updateCloseOnClick(true);
       this.updateCloseOnEsc(true);
       this.updateFollowCursor(true);
@@ -334,11 +334,11 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     if (this.mapsService) {
       // 防止事件重复监听
-      this.mapsService.off('zoonanim', this.updateWhenZoom);
+      // this.mapsService.off('zoonanim', this.updateWhenZoom);
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
 
-      this.mapsService.on('zoonanim', this.updateWhenZoom);
+      // this.mapsService.on('zoonanim', this.updateWhenZoom);
       this.mapsService.on('camerachange', this.update);
       this.mapsService.on('viewchange', this.update);
     }
