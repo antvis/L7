@@ -28,7 +28,7 @@ const config: Config = {
   globalSetup: './scripts/jest/setup.js',
   globalTeardown: './scripts/jest/teardown.js',
   testEnvironment: './scripts/jest/environment.js',
-  testMatch: ['<rootDir>/__tests__/e2e/*.spec.ts'],
+  testMatch: ['<rootDir>/__tests_e2e__/e2e/*.spec.ts'],
   coverageReporters: ['html', 'lcov', 'clover'],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageThreshold: {

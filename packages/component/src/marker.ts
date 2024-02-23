@@ -62,7 +62,7 @@ export default class Marker extends EventEmitter {
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
     //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
-    this.mapsService.on('zoomchange', this.updatePositionWhenZoom);
+    // this.mapsService.on('zoomchange', this.updatePositionWhenZoom);
     this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
     this.update();
     this.updateDraggable();
@@ -76,7 +76,7 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('click', this.onMapClick);
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
-      this.mapsService.off('zoomchange', this.update);
+      // this.mapsService.off('zoomchange', this.update);
       this.mapsService.off('camerachange', this.update);
     }
     this.unRegisterMarkerEvent();
@@ -234,9 +234,6 @@ export default class Marker extends EventEmitter {
         return;
       }
       const map = ev.map;
-      const viewHalf = map.getSize();
-      viewHalf.x=viewHalf.x/2;
-      viewHalf.y=viewHalf.y/2;
       const center = ev.center;
       const zoom = ev.zoom;
       const projectedCenter = map.DE(this.lngLat,zoom,center);
@@ -265,7 +262,6 @@ export default class Marker extends EventEmitter {
       }
       element.style.left = projectedCenter.x + 'px';
       element.style.top = projectedCenter.y + 'px';
-      console.log(projectedCenter);
       element.style.transition  = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
     }
   }
@@ -379,8 +375,10 @@ export default class Marker extends EventEmitter {
       ) {
         element.style.display = 'none';
       }
+     
       element.style.left =  pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
+      console.log(element.style.left);
     }
   }
 

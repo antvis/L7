@@ -376,9 +376,6 @@ export default class PickingService implements IPickingService {
     for (const layer of layers
       .filter((layer) => layer.needPick(target.type))
       .reverse()) {
-      if (!layer.tileLayer) {
-        layer.hooks.beforePickingEncode.call();
-      }
       await useFramebufferAsync(this.pickingFBO, async () => {
         clear({
           framebuffer: this.pickingFBO,
@@ -386,13 +383,9 @@ export default class PickingService implements IPickingService {
           stencil: 0,
           depth: 1,
         });
+        // 渲染需要拾取的图层
         layer.layerPickService.pickRender(target);
       });
-
-      if (!layer.tileLayer) {
-        layer.hooks.afterPickingEncode.call();
-      }
-
       const isPicked = await this.pickFromPickingFBO(layer, target);
       this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
       if (isPicked && !layer.getLayerConfig().enablePropagation) {

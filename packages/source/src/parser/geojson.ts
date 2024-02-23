@@ -37,7 +37,7 @@ function getFeatureID(feature: Feature<Geometries, Properties>, key?: string) {
   }
 
   // @ts-ignore
-  if (typeof feature.properties[key] * 1 === 'number') {
+  if (typeof (feature.properties[key] * 1) === 'number') {
     // @ts-ignore
     return feature.properties[key] * 1;
   }
@@ -90,7 +90,6 @@ export default function geoJSON(
       if (featureId === null) {
         featureId = featureIndex;
       }
-
       const sortedID = featureId;
 
       const coord = getCoords(currentFeature);

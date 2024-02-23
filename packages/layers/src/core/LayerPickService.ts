@@ -21,10 +21,13 @@ export default class BaseLayerPickService implements ILayerPickService {
     if (layer.tileLayer) {
       return layer.tileLayer.pickRender(target);
     }
+    // 渲染瓦片图层的拾取
+    layer.hooks.beforePickingEncode.call();
     layerService.renderTileLayerMask(layer);
     layer.renderModels({
       ispick: true,
     });
+    layer.hooks.afterPickingEncode.call();
   }
 
   public async pick(layer: ILayer, target: IInteractionTarget) {
