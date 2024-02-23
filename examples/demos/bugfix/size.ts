@@ -49,6 +49,10 @@ export function MapRender(option:{
                     });
 
                 scene.addLayer(pointLayer);
+                scene.on('zoomchange', () => {
+                    console.log('zoomchange')
+                })
+                scene.setZoom(15)
                 setTimeout(() => {
                     console.log('start update')
                     pointLayer.size(30)

@@ -33,11 +33,11 @@ export const ease = bezier(0.25, 0.1, 0.25, 1);
 
 export function prefersReducedMotion(): boolean {
   // Lazily initialize media query
-  if (reducedMotionQuery == null) {
+  if (reducedMotionQuery == null && typeof window !== 'undefined' && window.matchMedia) {
     // @ts-ignore
     reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   }
-  return reducedMotionQuery.matches;
+  return reducedMotionQuery?.matches;
 }
 
 export function pick(

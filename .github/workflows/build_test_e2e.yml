@@ -1,9 +1,9 @@
-name: Build & Test
+name: Build & E2E Test
 
 on: [pull_request]
 
 jobs:
-  ci:
+  e2e-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,7 +19,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - run: yarn
-      - run: yarn build 
+      - run: yarn build
       - run: yarn test:e2e
 
       - name: Upload snapshots to GitHub Actions Artifacts
