@@ -3,6 +3,7 @@ import gl from 'gl';
 // borrow from regl
 // @see https://github.com/regl-project/regl/blob/gh-pages/test/util/create-context.js#L28
 const CONTEXT = gl(400, 300, { preserveDrawingBuffer: true });
+console.log(CONTEXT);
 
 // @ts-ignore
 const RESIZE = CONTEXT.getExtension('STACKGL_resize_drawingbuffer');

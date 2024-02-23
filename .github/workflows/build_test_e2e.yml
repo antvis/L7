@@ -3,7 +3,7 @@ name: Build & E2E Test
 on: [pull_request]
 
 jobs:
-  ci:
+  e2e-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
