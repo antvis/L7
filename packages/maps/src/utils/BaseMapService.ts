@@ -76,6 +76,10 @@ export default abstract class BaseMapService<T>
     this.markerContainer = DOM.create('div', 'l7-marker-container', container);
     this.markerContainer.setAttribute('tabindex', '-1');
   }
+  //需要子类实现 目前只有天地图实现
+  public addZoomListenerWhenAddMarkerOrPopup(object:any): void {}
+  //需要子类实现 目前只有天地图实现
+  public removeZoomListenerWhenRemoveMarkerOrPopup(object:any): void {}
 
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;

@@ -49,6 +49,13 @@ export default class TdtMapService extends BaseMapService<any> {
     return;
   }
 
+  public addZoomListenerWhenAddMarkerOrPopup(object:any): void {
+    //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
+    this.on('zoomchange', object.updatePositionWhenZoom);
+  }
+  public removeZoomListenerWhenRemoveMarkerOrPopup(object:any): void {
+    this.off('zoomchange', object.updatePositionWhenZoom);
+  }
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;
   }

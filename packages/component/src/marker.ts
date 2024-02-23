@@ -61,12 +61,12 @@ export default class Marker extends EventEmitter {
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
-    //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
-    // this.mapsService.on('zoomchange', this.updatePositionWhenZoom);
     this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
     this.update();
     this.updateDraggable();
     this.added = true;
+    // @ts-ignore
+    this.mapsService.addZoomListenerWhenAddMarkerOrPopup(this);
     this.emit('added');
     return this;
   }
@@ -76,8 +76,9 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('click', this.onMapClick);
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
-      // this.mapsService.off('zoomchange', this.update);
       this.mapsService.off('camerachange', this.update);
+      // @ts-ignore
+      this.mapsService.removeZoomListenerWhenRemoveMarkerOrPopup(this);
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
@@ -219,7 +220,7 @@ export default class Marker extends EventEmitter {
     DOM.setTransform(element as HTMLElement, `${anchorTranslate[anchor]}`);
   }
   //天地图在开始缩放时触发 更新目标位置时添加过渡效果
-  private updatePositionWhenZoom(ev: { map: any; center: any; zoom: any; }) {
+  public updatePositionWhenZoom(ev: { map: any; center: any; zoom: any; }) {
     if (!this.mapsService) {
       return;
     }
@@ -375,7 +376,7 @@ export default class Marker extends EventEmitter {
       ) {
         element.style.display = 'none';
       }
-     
+
       element.style.left =  pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
       console.log(element.style.left);
