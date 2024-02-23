@@ -5,7 +5,7 @@ import gl from 'gl';
 const CONTEXT = gl(400, 300, { preserveDrawingBuffer: true });
 
 // @ts-ignore
-// const RESIZE = CONTEXT.getExtension('STACKGL_resize_drawingbuffer');
+const RESIZE = CONTEXT.getExtension('STACKGL_resize_drawingbuffer');
 
 // @ts-ignore
 export default function (width: number, height: number) {
@@ -14,9 +14,9 @@ export default function (width: number, height: number) {
 }
 
 export function resize(width: number, height: number) {
-  // if (RESIZE) {
-  //   RESIZE.resize(width, height);
-  // }
+  if (RESIZE) {
+    RESIZE.resize(width, height);
+  }
 }
 
 export function destroy() {
