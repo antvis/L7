@@ -1,13 +1,13 @@
-name: unit tests
+name: unit-test
 
 on: [pull_request]
 
 jobs:
-  unit-tests:
-    runs-on: ubuntu-latest
+  unit-test:
+    runs-on: macos-latest
     strategy:
       matrix:
-        node-version: [18]
+        node-version: [18.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -15,5 +15,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn
-    - run: yarn build
-    - run: yarn test
+    - run: yarn test-cover
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
