@@ -3,12 +3,10 @@
  */
 import type { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
-import { injectable } from 'inversify';
 import type { Map } from 'mapbox-gl';
 import mapboxgl from 'mapbox-gl';
 // tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
-import 'reflect-metadata';
 import type { IMapboxInstance } from '../../typings/index';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from './Viewport';
@@ -20,7 +18,6 @@ const MAPBOX_API_KEY =
 /**
  * AMapService
  */
-@injectable()
 export default class MapboxService extends BaseMapService<
   Map & IMapboxInstance
 > {

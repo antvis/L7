@@ -5,8 +5,6 @@ import type {
   IPostProcessingPass,
   IRendererService,
 } from '@antv/l7-core';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import { createMultiPassRenderer } from '../utils/multiPassRender';
 
 /**
@@ -22,7 +20,6 @@ import { createMultiPassRenderer } from '../utils/multiPassRender';
  *   ],
  * })
  */
-@injectable()
 export default class MultiPassRendererPlugin implements ILayerPlugin {
   private enabled: boolean;
 

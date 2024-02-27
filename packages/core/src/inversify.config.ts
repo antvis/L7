@@ -1,15 +1,3 @@
-/**
- * Root Container
- * @see /dev-docs/IoC 容器、依赖注入与服务说明.md
- */
-import 'reflect-metadata';
-
-import { EventEmitter } from 'eventemitter3';
-import type { interfaces } from 'inversify';
-import { Container, decorate, injectable } from 'inversify';
-import getDecorators from 'inversify-inject-decorators';
-import { TYPES } from './types';
-
 /** Service interfaces */
 import type { IFontService } from './services/asset/IFontService';
 import type { IIconService } from './services/asset/IIconService';
@@ -18,7 +6,6 @@ import type { IControlService } from './services/component/IControlService';
 import type { IGlobalConfigService } from './services/config/IConfigService';
 import type { ICoordinateSystemService } from './services/coordinate/ICoordinateSystemService';
 import type { IDebugService } from './services/debug/IDebugService';
-import type { IInteractionService } from './services/interaction/IInteractionService';
 import type { IPickingService } from './services/interaction/IPickingService';
 import type { ILayerService } from './services/layer/ILayerService';
 import type { IStyleAttributeService } from './services/layer/IStyleAttributeService';
@@ -45,15 +32,20 @@ import ShaderModuleService from './services/shader/ShaderModuleService';
 /** PostProcessing passes */
 import type { IMarkerService } from './services/component/IMarkerService';
 import type { IPopupService } from './services/component/IPopupService';
+import { IMapConfig, IMapService } from './services/map/IMapService';
 import type {
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
   IPostProcessor,
 } from './services/renderer/IMultiPassRenderer';
+import { IRendererService } from './services/renderer/IRendererService';
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
+import PostProcessor from './services/renderer/passes/PostProcessor';
+import RenderPass from './services/renderer/passes/RenderPass';
+import TAAPass from './services/renderer/passes/TAAPass';
 import BloomPass from './services/renderer/passes/post-processing/BloomPass';
 import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
 import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
@@ -63,239 +55,119 @@ import HexagonalPixelatePass from './services/renderer/passes/post-processing/He
 import InkPass from './services/renderer/passes/post-processing/InkPass';
 import NoisePass from './services/renderer/passes/post-processing/NoisePass';
 import SepiaPass from './services/renderer/passes/post-processing/SepiaPass';
-import PostProcessor from './services/renderer/passes/PostProcessor';
-import RenderPass from './services/renderer/passes/RenderPass';
-import TAAPass from './services/renderer/passes/TAAPass';
 
-// @see https://github.com/inversify/InversifyJS/blob/master/wiki/container_api.md#defaultscope
-const container = new Container();
+export const globalConfigService = new GlobalConfigService();
 
-/**
- * bind global services in root container
- */
-container
-  .bind<IGlobalConfigService>(TYPES.IGlobalConfigService)
-  .to(GlobalConfigService)
-  .inSingletonScope();
-// @see https://github.com/inversify/InversifyJS/blob/master/wiki/inheritance.md#what-can-i-do-when-my-base-class-is-provided-by-a-third-party-module
-decorate(injectable(), EventEmitter);
-container.bind(TYPES.IEventEmitter).to(EventEmitter);
-// 支持 L7 使用 new 而非容器实例化的场景，同时禁止 lazyInject cache
-// @see https://github.com/inversify/inversify-inject-decorators#caching-vs-non-caching-behaviour
-const DECORATORS = getDecorators(container, false);
-
-interface IBabelPropertyDescriptor extends PropertyDescriptor {
-  initializer(): any;
+export interface L7Container {
+  id: string;
+  globalConfigService: IGlobalConfigService;
+  shaderModuleService: IShaderModuleService;
+  layerService: ILayerService;
+  debugService: IDebugService;
+  rendererService: IRendererService;
+  sceneService: ISceneService;
+  cameraService: ICameraService;
+  coordinateSystemService: ICoordinateSystemService;
+  interactionService: InteractionService;
+  mapConfig: Partial<IMapConfig>;
+  mapService: IMapService;
+  fontService: IFontService;
+  iconService: IIconService;
+  markerService: IMarkerService;
+  popupService: IPopupService;
+  controlService: IControlService;
+  pickingService: IPickingService;
+  styleAttributeService: IStyleAttributeService;
+  normalPassFactory: (name: string) => IPass<unknown>;
+  postProcessingPass: Record<string, IPostProcessingPass<unknown>>;
+  postProcessingPassFactory: (named: string) => IPostProcessingPass<unknown>;
+  postProcessor: IPostProcessor;
+  multiPassRenderer: IMultiPassRenderer;
 }
-// Add babel legacy decorators support
-// @see https://github.com/inversify/InversifyJS/issues/1050
-// @see https://github.com/inversify/InversifyJS/issues/1026#issuecomment-504936034
-export const lazyInject = (
-  serviceIdentifier: interfaces.ServiceIdentifier<any>,
-) => {
-  const original = DECORATORS.lazyInject(serviceIdentifier);
-  // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
-  // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
-  return function (
-    this: any,
-    proto: any,
-    key: string,
-    descriptor?: IBabelPropertyDescriptor,
-  ): void {
-    // make it work as usual
-    original.call(this, proto, key);
-    // return link to proto, so own value wont be 'undefined' after component's creation
-    if (descriptor) {
-      descriptor.initializer = () => {
-        return proto[key];
-      };
-    }
-  };
-};
-export const lazyMultiInject = (
-  serviceIdentifier: interfaces.ServiceIdentifier<any>,
-) => {
-  const original = DECORATORS.lazyMultiInject(serviceIdentifier);
-  // the 'descriptor' parameter is actually always defined for class fields for Babel, but is considered undefined for TSC
-  // so we just hack it with ?/! combination to avoid "TS1240: Unable to resolve signature of property decorator when called as an expression"
-  return function (
-    this: any,
-    proto: any,
-    key: string,
-    descriptor?: IBabelPropertyDescriptor,
-  ): void {
-    // make it work as usual
-    original.call(this, proto, key);
-    if (descriptor) {
-      // return link to proto, so own value wont be 'undefined' after component's creation
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      descriptor!.initializer = () => {
-        return proto[key];
-      };
-    }
-  };
-};
-
-export default container;
 
 let sceneIdCounter = 0;
-export function createSceneContainer() {
-  // @see https://github.com/inversify/InversifyJS/blob/master/wiki/hierarchical_di.md#support-for-hierarchical-di-systems
-  const sceneContainer = new Container();
-  sceneContainer.parent = container;
+export function createSceneContainer(): L7Container {
+  const shaderModuleService = new ShaderModuleService();
+  const debugService = new DebugService();
+  const cameraService = new CameraService();
+  const coordinateSystemService = new CoordinateSystemService(cameraService);
+  const fontService = new FontService();
+  const iconService = new IconService();
+  const markerService = new MarkerService();
+  const popupService = new PopupService();
+  const controlService = new ControlService();
 
-  // 生成场景 ID 并保存在容器内
-  sceneContainer
-    .bind<string>(TYPES.SceneID)
-    .toConstantValue(`${sceneIdCounter++}`);
-  sceneContainer
-    .bind<IShaderModuleService>(TYPES.IShaderModuleService)
-    .to(ShaderModuleService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<ILayerService>(TYPES.ILayerService)
-    .to(LayerService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IDebugService>(TYPES.IDebugService)
-    .to(DebugService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<ISceneService>(TYPES.ISceneService)
-    .to(SceneService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<ICameraService>(TYPES.ICameraService)
-    .to(CameraService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<ICoordinateSystemService>(TYPES.ICoordinateSystemService)
-    .to(CoordinateSystemService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IInteractionService>(TYPES.IInteractionService)
-    .to(InteractionService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IPickingService>(TYPES.IPickingService)
-    .to(PickingService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IControlService>(TYPES.IControlService)
-    .to(ControlService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IMarkerService>(TYPES.IMarkerService)
-    .to(MarkerService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IIconService>(TYPES.IIconService)
-    .to(IconService)
-    .inSingletonScope();
-  sceneContainer
-    .bind<IFontService>(TYPES.IFontService)
-    .to(FontService)
-    .inSingletonScope();
+  // @ts-ignore
+  const container: L7Container = {
+    id: `${sceneIdCounter++}`,
+    globalConfigService,
+    shaderModuleService,
+    debugService,
+    cameraService,
+    coordinateSystemService,
+    fontService,
+    iconService,
+    markerService,
+    popupService,
+    controlService,
+  };
 
-  sceneContainer
-    .bind<IPopupService>(TYPES.IPopupService)
-    .to(PopupService)
-    .inSingletonScope();
+  // lazy binding
+  const layerService = new LayerService(container);
+  container.layerService = layerService;
 
-  // 绑定常规 passes
-  sceneContainer
-    .bind<IPass<unknown>>(TYPES.INormalPass)
-    .to(ClearPass)
-    .whenTargetNamed('clear');
-  sceneContainer
-    .bind<IPass<unknown>>(TYPES.INormalPass)
-    .to(PixelPickingPass)
-    .whenTargetNamed('pixelPicking');
-  sceneContainer
-    .bind<IPass<unknown>>(TYPES.INormalPass)
-    .to(RenderPass)
-    .whenTargetNamed('render');
-  sceneContainer
-    .bind<IPass<unknown>>(TYPES.INormalPass)
-    .to(TAAPass)
-    .whenTargetNamed('taa');
-  sceneContainer
-    .bind<interfaces.Factory<IPass<unknown>>>(TYPES.IFactoryNormalPass)
-    .toFactory<IPass<unknown>>(
-      (context) => (named: string) =>
-        context.container.getNamed<IPass<unknown>>(TYPES.INormalPass, named),
-    );
+  const sceneService = new SceneService(container);
+  container.sceneService = sceneService;
 
-  // 绑定 post processing passes
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(CopyPass)
-    .whenTargetNamed('copy');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(BloomPass)
-    .whenTargetNamed('bloom');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(BlurHPass)
-    .whenTargetNamed('blurH');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(BlurVPass)
-    .whenTargetNamed('blurV');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(NoisePass)
-    .whenTargetNamed('noise');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(SepiaPass)
-    .whenTargetNamed('sepia');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(ColorHalfTonePass)
-    .whenTargetNamed('colorHalftone');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(HexagonalPixelatePass)
-    .whenTargetNamed('hexagonalPixelate');
-  sceneContainer
-    .bind<IPostProcessingPass<unknown>>(TYPES.IPostProcessingPass)
-    .to(InkPass)
-    .whenTargetNamed('ink');
+  const interactionService = new InteractionService(container);
+  container.interactionService = interactionService;
 
-  // 绑定工厂方法
-  sceneContainer
-    .bind<interfaces.Factory<IPostProcessingPass<unknown>>>(
-      TYPES.IFactoryPostProcessingPass,
-    )
-    .toFactory<IPostProcessingPass<unknown>>((context) => (named: string) => {
-      const pass = context.container.getNamed<IPostProcessingPass<unknown>>(
-        TYPES.IPostProcessingPass,
-        named,
-      );
-      pass.setName(named);
-      return pass;
-    });
+  const pickingService = new PickingService(container);
+  container.pickingService = pickingService;
 
-  return sceneContainer;
+  const normalPass: Record<string, IPass<unknown>> = {
+    clear: new ClearPass(),
+    pixelPicking: new PixelPickingPass(),
+    render: new RenderPass(),
+    taa: new TAAPass(shaderModuleService),
+  };
+  container.normalPassFactory = (named: string) => {
+    return normalPass[named];
+  };
+
+  const postProcessingPass: Record<string, IPostProcessingPass<unknown>> = {
+    copy: new CopyPass(),
+    bloom: new BloomPass(),
+    blurH: new BlurHPass(),
+    blurV: new BlurVPass(),
+    noise: new NoisePass(),
+    sepia: new SepiaPass(),
+    colorHalftone: new ColorHalfTonePass(),
+    hexagonalPixelate: new HexagonalPixelatePass(),
+    ink: new InkPass(),
+  };
+  container.postProcessingPass = postProcessingPass;
+  container.postProcessingPassFactory = (named: string) => {
+    return postProcessingPass[named];
+  };
+
+  return container;
 }
 
-export function createLayerContainer(sceneContainer: Container) {
-  const layerContainer = new Container();
-  layerContainer.parent = sceneContainer;
+export function createLayerContainer(sceneContainer: L7Container) {
+  const layerContainer = {
+    ...sceneContainer,
+  };
 
-  layerContainer
-    .bind<IStyleAttributeService>(TYPES.IStyleAttributeService)
-    .to(StyleAttributeService)
-    .inSingletonScope();
-  layerContainer
-    .bind<IMultiPassRenderer>(TYPES.IMultiPassRenderer)
-    .to(MultiPassRenderer)
-    .inSingletonScope();
-  layerContainer
-    .bind<IPostProcessor>(TYPES.IPostProcessor)
-    .to(PostProcessor)
-    .inSingletonScope();
+  layerContainer.postProcessor = new PostProcessor(
+    layerContainer.rendererService,
+  );
+  layerContainer.multiPassRenderer = new MultiPassRenderer(
+    layerContainer.postProcessor,
+  );
+  layerContainer.styleAttributeService = new StyleAttributeService(
+    layerContainer.rendererService,
+  );
+
   return layerContainer;
 }

@@ -1,6 +1,5 @@
-import type { ILayer, IPopupOption } from '@antv/l7-core';
+import type { ILayer, IPopupOption, L7Container } from '@antv/l7-core';
 import { DOM, lodashUtil } from '@antv/l7-utils';
-import type { Container } from 'inversify';
 import Popup from './popup';
 
 type ElementType = DOM.ElementType;
@@ -59,7 +58,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     return config ?? items ?? [];
   }
 
-  public addTo(scene: Container) {
+  public addTo(scene: L7Container) {
     super.addTo(scene);
     this.bindLayerEvent();
     this.hide();

@@ -2,7 +2,6 @@ import type { ILayer, ILngLat, ITile } from '@antv/l7-core';
 import { createLayerContainer } from '@antv/l7-core';
 import type { SourceTile } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { Container } from 'inversify';
 import PolygonLayer from '../../polygon';
 import type BaseTileLayer from '../core/BaseLayer';
 import { isNeedMask } from './util';
@@ -81,8 +80,11 @@ export default abstract class Tile extends EventEmitter implements ITile {
   }
 
   protected async addTileMask() {
-
-    const mask = new PolygonLayer({ name:'mask', visible: true, enablePicking: false })
+    const mask = new PolygonLayer({
+      name: 'mask',
+      visible: true,
+      enablePicking: false,
+    })
       .source(
         {
           type: 'FeatureCollection',
@@ -94,17 +96,14 @@ export default abstract class Tile extends EventEmitter implements ITile {
             featureId: 'id',
           },
         },
-
       )
       .shape('fill')
       .color('#0f0')
       .style({
         opacity: 0.5,
       });
-    const container = createLayerContainer(
-      this.parent.sceneContainer as Container,
-    );
-    mask.setContainer(container, this.parent.sceneContainer as Container);
+    const container = createLayerContainer(this.parent.container!);
+    mask.setContainer(container);
     await mask.init();
     this.tileMask = mask;
     const mainLayer = this.getMainLayer();
@@ -113,12 +112,10 @@ export default abstract class Tile extends EventEmitter implements ITile {
     }
     return mask;
   }
- // 全局 Mask
+  // 全局 Mask
   protected async addMask(layer: ILayer, mask: ILayer) {
-    const container = createLayerContainer(
-      this.parent.sceneContainer as Container,
-    );
-    mask.setContainer(container, this.parent.sceneContainer as Container);
+    const container = createLayerContainer(this.parent.container!);
+    mask.setContainer(container);
     await mask.init();
     layer.addMask(mask);
     this.tileMaskLayers.push(mask);
@@ -127,10 +124,8 @@ export default abstract class Tile extends EventEmitter implements ITile {
   protected async addLayer(layer: ILayer) {
     // set flag
     layer.isTileLayer = true;
-    const container = createLayerContainer(
-      this.parent.sceneContainer as Container,
-    );
-    layer.setContainer(container, this.parent.sceneContainer as Container);
+    const container = createLayerContainer(this.parent.container!);
+    layer.setContainer(container);
     this.layers.push(layer);
     await layer.init();
   }

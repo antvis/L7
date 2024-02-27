@@ -33,8 +33,6 @@ import type {
   ITexture2DInitializationOptions,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import DeviceAttribute from './DeviceAttribute';
 import DeviceBuffer from './DeviceBuffer';
 import { RenderCache } from './DeviceCache';
@@ -48,7 +46,6 @@ const { isUndefined } = lodashUtil;
 /**
  * Device API renderer
  */
-@injectable()
 export default class DeviceRendererService implements IRendererService {
   uniformBuffers: IBuffer[] = [];
   extensionObject: IExtensions;

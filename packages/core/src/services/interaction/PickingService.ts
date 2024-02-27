@@ -1,38 +1,40 @@
 import { decodePickingColor, DOM } from '@antv/l7-utils';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
+import { L7Container } from '../../inversify.config';
 import { isEventCrash } from '../../utils/dom';
-import type { IGlobalConfigService } from '../config/IConfigService';
-import type {
-  IInteractionService,
-  IInteractionTarget,
-} from '../interaction/IInteractionService';
+import type { IInteractionTarget } from '../interaction/IInteractionService';
 import { InteractionEvent } from '../interaction/IInteractionService';
-import type { ILayer, ILayerService } from '../layer/ILayerService';
-import type { ILngLat, IMapService } from '../map/IMapService';
+import type { ILayer } from '../layer/ILayerService';
+import type { ILngLat } from '../map/IMapService';
 import type { IFramebuffer } from '../renderer/IFramebuffer';
-import type { IRendererService } from '../renderer/IRendererService';
 import { TextureUsage } from '../renderer/ITexture2D';
 import type { IPickingService } from './IPickingService';
-@injectable()
+
 export default class PickingService implements IPickingService {
+  constructor(private readonly container: L7Container) {}
+
   public pickedColors: Uint8Array | undefined;
   public pickedTileLayers: ILayer[] = [];
-  @inject(TYPES.IMapService)
-  private readonly mapService: IMapService;
 
-  @inject(TYPES.IRendererService)
-  private rendererService: IRendererService;
+  private get mapService() {
+    return this.container.mapService;
+  }
 
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
+  private get rendererService() {
+    return this.container.rendererService;
+  }
 
-  @inject(TYPES.IInteractionService)
-  private interactionService: IInteractionService;
+  private get configService() {
+    return this.container.globalConfigService;
+  }
 
-  @inject(TYPES.ILayerService)
-  private layerService: ILayerService;
+  private get interactionService() {
+    return this.container.interactionService;
+  }
+
+  private get layerService() {
+    return this.container.layerService;
+  }
+
   private pickingFBO: IFramebuffer;
 
   private width: number = 0;
@@ -110,7 +112,7 @@ export default class PickingService implements IPickingService {
       const tmpV = v < 0 ? 0 : v;
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
     });
-    const { readPixelsAsync,getViewportSize } = this.rendererService;
+    const { readPixelsAsync, getViewportSize } = this.rendererService;
     let { width, height } = getViewportSize();
     width *= DOM.DPR;
     height *= DOM.DPR;
@@ -188,8 +190,8 @@ export default class PickingService implements IPickingService {
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
     let isPicked = false;
-    const { readPixelsAsync,getViewportSize } = this.rendererService;
-    let { width, height } = getViewportSize()
+    const { readPixelsAsync, getViewportSize } = this.rendererService;
+    let { width, height } = getViewportSize();
     width *= DOM.DPR;
     height *= DOM.DPR;
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
@@ -239,9 +241,8 @@ export default class PickingService implements IPickingService {
         feature: rawFeature,
         target,
       };
-  
+
       if (!rawFeature) {
-  
         // this.logger.error(
         //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
         // );
@@ -298,7 +299,7 @@ export default class PickingService implements IPickingService {
 
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-      return container.getBoundingClientRect();
+    return container.getBoundingClientRect();
   }
   private async pickingAllLayer(target: IInteractionTarget) {
     // 判断是否进行拾取操作

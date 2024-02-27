@@ -1,6 +1,6 @@
 import { gl } from '@antv/l7-core';
 import { createContext } from '@antv/l7-test-utils';
-import 'reflect-metadata';
+
 import regl from 'regl';
 import quad from '../../../../core/src/shaders/post-processing/quad.glsl';
 import ReglAttribute from '../ReglAttribute';

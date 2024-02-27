@@ -2,11 +2,8 @@ import type {
   IInteractionTarget,
   ILayer,
   ILayerPickService,
-  ILayerService,
   IMapService,
-  IPickingService,
 } from '@antv/l7-core';
-import { TYPES } from '@antv/l7-core';
 import { lngLatInExtent } from '@antv/l7-utils';
 export default class BaseLayerPickService implements ILayerPickService {
   private layer: ILayer;
@@ -15,7 +12,7 @@ export default class BaseLayerPickService implements ILayerPickService {
   }
   public pickRender(target: IInteractionTarget): void {
     const container = this.layer.getContainer();
-    const layerService = container.get<ILayerService>(TYPES.ILayerService);
+    const layerService = container.layerService;
     const layer = this.layer;
     // 瓦片图层的拾取绘制
     if (layer.tileLayer) {
@@ -32,9 +29,7 @@ export default class BaseLayerPickService implements ILayerPickService {
 
   public async pick(layer: ILayer, target: IInteractionTarget) {
     const container = this.layer.getContainer();
-    const pickingService = container.get<IPickingService>(
-      TYPES.IPickingService,
-    );
+    const pickingService = container.pickingService;
     if (layer.type === 'RasterLayer') {
       return this.pickRasterLayer(layer, target);
     }
@@ -50,10 +45,8 @@ export default class BaseLayerPickService implements ILayerPickService {
     parent?: ILayer,
   ) {
     const container = this.layer.getContainer();
-    const pickingService = container.get<IPickingService>(
-      TYPES.IPickingService,
-    );
-    const mapService = container.get<IMapService>(TYPES.IMapService);
+    const pickingService = container.pickingService;
+    const mapService = container.mapService;
     const extent = this.layer.getSource().extent;
     const isPick = lngLatInExtent(target.lngLat, extent);
     const layerTarget = {

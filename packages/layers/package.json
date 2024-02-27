@@ -2,12 +2,14 @@
   "name": "@antv/l7-layers",
   "version": "2.20.19",
   "description": "L7's collection of built-in layers",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "types": "es/index.d.ts",
+  "license": "ISC",
+  "author": "xiaoiver",
   "sideEffects": [
     "./es/index.js"
   ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
   "files": [
     "dist",
     "lib",
@@ -15,16 +17,14 @@
     "README.md"
   ],
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "sync": "tnpm sync"
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "sync": "tnpm sync",
+    "tsc": "tsc --project tsconfig.build.json",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
-  "author": "xiaoiver",
-  "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
     "@antv/l7-core": "2.20.19",
@@ -47,9 +47,7 @@
     "extrude-polyline": "^1.0.6",
     "gl-matrix": "^3.1.0",
     "gl-vec2": "^1.3.0",
-    "inversify": "^5.0.1",
-    "polyline-miter-util": "^1.0.1",
-    "reflect-metadata": "^0.1.13"
+    "polyline-miter-util": "^1.0.1"
   },
   "devDependencies": {
     "@antv/l7-test-utils": "2.20.19",
@@ -61,8 +59,8 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/lodash": "^4.14.138"
   },
-  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
 }

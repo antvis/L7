@@ -6,18 +6,18 @@ import type {
   IPoint,
   IPopup,
   ISceneService,
+  L7Container,
 } from '@antv/l7-core';
-import { TYPES } from '@antv/l7-core';
 import {
   DOM,
+  anchorTranslate,
   anchorType,
   applyAnchorClass,
   bindAll,
   isPC,
-  anchorTranslate
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { Container } from 'inversify';
+
 //  marker 支持 dragger 未完成
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
@@ -26,7 +26,7 @@ export default class Marker extends EventEmitter {
   private mapsService: IMapService<unknown>;
   private sceneSerive: ISceneService;
   private lngLat: ILngLat;
-  private scene: Container;
+  private scene: L7Container;
   private added: boolean = false;
   private preLngLat = { lng: 0, lat: 0 };
   // tslint:disable-next-line: no-empty
@@ -38,7 +38,7 @@ export default class Marker extends EventEmitter {
       ...this.getDefault(),
       ...option,
     };
-    bindAll(['update', 'onMove', 'onMapClick','updatePositionWhenZoom'], this);
+    bindAll(['update', 'onMove', 'onMapClick', 'updatePositionWhenZoom'], this);
     this.init();
   }
 
@@ -52,11 +52,11 @@ export default class Marker extends EventEmitter {
     };
   }
 
-  public addTo(scene: Container) {
+  public addTo(scene: L7Container) {
     // this.remove();
     this.scene = scene;
-    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
-    this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
+    this.mapsService = scene.mapService;
+    this.sceneSerive = scene.sceneService;
     const { element } = this.markerOption;
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
@@ -219,26 +219,26 @@ export default class Marker extends EventEmitter {
     DOM.setTransform(element as HTMLElement, `${anchorTranslate[anchor]}`);
   }
   //天地图在开始缩放时触发 更新目标位置时添加过渡效果
-  private updatePositionWhenZoom(ev: { map: any; center: any; zoom: any; }) {
+  private updatePositionWhenZoom(ev: { map: any; center: any; zoom: any }) {
     if (!this.mapsService) {
       return;
     }
-    const {element,offsets} = this.markerOption;
+    const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
       const { containerHeight, containerWidth, bounds } =
-      this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
+        this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
       if (!bounds) {
         return;
       }
       const map = ev.map;
       const center = ev.center;
       const zoom = ev.zoom;
-      const projectedCenter = map.DE(this.lngLat,zoom,center);
-      projectedCenter.x=Math.round(projectedCenter.x+offsets[0]);
-      projectedCenter.y=Math.round(projectedCenter.y-offsets[1]);
+      const projectedCenter = map.DE(this.lngLat, zoom, center);
+      projectedCenter.x = Math.round(projectedCenter.x + offsets[0]);
+      projectedCenter.y = Math.round(projectedCenter.y - offsets[1]);
       // 当前可视区域包含跨日界线
       if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
         if (projectedCenter.x > containerWidth) {
@@ -262,7 +262,8 @@ export default class Marker extends EventEmitter {
       }
       element.style.left = projectedCenter.x + 'px';
       element.style.top = projectedCenter.y + 'px';
-      element.style.transition  = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
+      element.style.transition =
+        'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
     }
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -314,7 +315,6 @@ export default class Marker extends EventEmitter {
   };
 
   private onMarkerDragMove = (e: any) => {
-
     const { lng: preLng, lat: preLat } = this.preLngLat;
     const { lng: curLng, lat: curLat } = e.lnglat;
     const newLngLat = {
@@ -375,8 +375,8 @@ export default class Marker extends EventEmitter {
       ) {
         element.style.display = 'none';
       }
-     
-      element.style.left =  pos.x + offsets[0] + 'px';
+
+      element.style.left = pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
       console.log(element.style.left);
     }

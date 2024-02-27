@@ -1,9 +1,6 @@
 import { mat4 } from 'gl-matrix';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import type { ICameraService, IViewport } from './ICameraService';
 
-@injectable()
 export default class CameraService implements ICameraService {
   private viewport: IViewport;
 

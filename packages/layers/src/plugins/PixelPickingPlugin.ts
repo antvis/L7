@@ -3,8 +3,7 @@ import type {
   IEncodeFeature,
   ILayer,
   ILayerPlugin,
-  IRendererService,
-  IStyleAttributeService,
+  L7Container,
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import {
@@ -13,8 +12,6 @@ import {
   lodashUtil,
   rgb2arr,
 } from '@antv/l7-utils';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import { ShaderLocation } from '../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 
@@ -24,7 +21,6 @@ const PickingStage = {
   HIGHLIGHT: 2.0,
 };
 
-@injectable()
 export default class PixelPickingPlugin implements ILayerPlugin {
   /**
    * Use map to keep order of insertion.
@@ -64,16 +60,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       data: this.pickOption2Array(),
     });
   }
-  public apply(
-    layer: ILayer,
-    {
-      rendererService,
-      styleAttributeService,
-    }: {
-      rendererService: IRendererService;
-      styleAttributeService: IStyleAttributeService;
-    },
-  ) {
+  public apply(layer: ILayer, { styleAttributeService }: L7Container) {
     let uniformBuffer: IBuffer;
     this.pickingUniformMap = new Map<string, number[] | number>([
       ['u_HighlightColor', [1, 0, 0, 1]],

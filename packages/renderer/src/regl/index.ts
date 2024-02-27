@@ -21,8 +21,6 @@ import type {
   ITexture2D,
   ITexture2DInitializationOptions,
 } from '@antv/l7-core';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import regl from 'regl';
 import ReglAttribute from './ReglAttribute';
 import ReglBuffer from './ReglBuffer';
@@ -34,7 +32,6 @@ import ReglTexture2D from './ReglTexture2D';
 /**
  * regl renderer
  */
-@injectable()
 export default class ReglRendererService implements IRendererService {
   uniformBuffers: IBuffer[] = [];
   public extensionObject: IExtensions;

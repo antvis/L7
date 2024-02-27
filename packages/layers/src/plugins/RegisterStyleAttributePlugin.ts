@@ -2,27 +2,18 @@ import type {
   IEncodeFeature,
   ILayer,
   ILayerPlugin,
-  IStyleAttributeService} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  IStyleAttributeService,
+  L7Container,
 } from '@antv/l7-core';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
+import { AttributeType, gl } from '@antv/l7-core';
 import { ShaderLocation } from '../core/CommonStyleAttribute';
 import { isTileGroup } from '../tile/utils/utils';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
  */
-@injectable()
 export default class RegisterStyleAttributePlugin implements ILayerPlugin {
-  public apply(
-    layer: ILayer,
-    {
-      styleAttributeService,
-    }: { styleAttributeService: IStyleAttributeService },
-  ) {
+  public apply(layer: ILayer, { styleAttributeService }: L7Container) {
     layer.hooks.init.tapPromise('RegisterStyleAttributePlugin', () => {
       // 过滤 tileGroup layer （瓦片图层不需要注册）
       if (isTileGroup(layer)) {

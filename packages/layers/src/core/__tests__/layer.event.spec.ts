@@ -1,21 +1,19 @@
 import { TestScene } from '@antv/l7-test-utils';
 import PolygonLayer from '../../polygon';
-import { TYPES } from '@antv/l7-core';
-import type { IRendererService } from '@antv/l7-core';
 describe('layer event', () => {
   let scene: any;
   let layer: any;
   const data = {
-    "type": "FeatureCollection",
-    "features": [
+    type: 'FeatureCollection',
+    features: [
       {
-        "type": "Feature",
-        "properties": {
+        type: 'Feature',
+        properties: {
           base_height: 100,
         },
-        "geometry": {
-          "type": "Polygon",
-          "coordinates": [
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
             [
               [119.948198, 30.339818],
               [120.344273, 30.513865],
@@ -26,19 +24,18 @@ describe('layer event', () => {
               [119.845646, 30.175339],
               [119.81137, 30.244454],
               [119.807562, 30.352965],
-              [119.948198, 30.339818]
-            ]
-          ]
-        }
-      }
-    ]
-  }
+              [119.948198, 30.339818],
+            ],
+          ],
+        },
+      },
+    ],
+  };
   beforeEach(() => {
     scene = TestScene({
-      center:[120.11114550000002,30.27817071635984],
-      zoom:8.592359444611867
-    })
-
+      center: [120.11114550000002, 30.27817071635984],
+      zoom: 8.592359444611867,
+    });
   });
   it('layer click', async () => {
     layer = new PolygonLayer({
@@ -49,11 +46,6 @@ describe('layer event', () => {
       .active(true)
       .color('red');
     scene.addLayer(layer);
-    // @ts-ignore
-    const render = layer
-        .getContainer().get<IRendererService>(
-          TYPES.IRendererService,
-        );
 
     // layer.on('inited', async (e: any) => {
     //   layer.on('unclick', (e: any) => {
@@ -100,9 +92,6 @@ describe('layer event', () => {
     //   // }
 
     // });
-
-
-
   });
 
   // it('gl render', async () => {
@@ -126,5 +115,4 @@ describe('layer event', () => {
   //     }
   //   }
   // })
-
 });

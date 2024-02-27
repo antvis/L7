@@ -2,36 +2,34 @@
   "name": "@antv/l7-component",
   "version": "2.20.19",
   "description": "",
+  "license": "ISC",
+  "author": "lzxue",
+  "sideEffects": true,
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "sideEffects": true,
   "files": [
     "lib",
     "es",
     "README.md"
   ],
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "less": "lessc src/css/index.less src/css/index.css",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "less": "lessc src/css/index.less src/css/index.css",
     "lint:ts": "run-p -c lint:ts-*",
+    "sync": "tnpm sync",
     "test": "umi-test --passWithNoTests",
-    "sync": "tnpm sync"
+    "tsc": "tsc --project tsconfig.build.json",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
-  "author": "lzxue",
-  "license": "ISC",
   "dependencies": {
     "@antv/l7-core": "2.20.19",
     "@antv/l7-utils": "2.20.19",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
-    "inversify": "^5.0.1",
-    "reflect-metadata": "^0.2.1",
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
@@ -40,8 +38,8 @@
     "gcoord": "^0.3.2",
     "less": "^4.1.3"
   },
-  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
 }

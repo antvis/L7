@@ -1,12 +1,9 @@
-import type { ILayer, ILayerPlugin} from '@antv/l7-core';
+import type { ILayer, ILayerPlugin } from '@antv/l7-core';
 import { IDebugLog, ILayerStage } from '@antv/l7-core';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import TileLayer from '../tile/core/BaseLayer';
 /**
  * Layer Model 初始化，更新，销毁
  */
-@injectable()
 export default class LayerModelPlugin implements ILayerPlugin {
   private async build(layer: ILayer) {
     // 更新Model 配置项 style options

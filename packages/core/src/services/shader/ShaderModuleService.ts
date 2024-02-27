@@ -1,21 +1,22 @@
 import { lodashUtil } from '@antv/l7-utils';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import { extractUniforms } from '../../utils/shader-module';
-import type { IModuleParams, IShaderModuleService } from './IShaderModuleService';
+import type {
+  IModuleParams,
+  IShaderModuleService,
+} from './IShaderModuleService';
 const { uniq } = lodashUtil;
 
 import common from '../../shaders/common.glsl';
-import decode from '../../shaders/decode.glsl';
-import scene_uniforms from '../../shaders/scene_uniforms.glsl';
-import picking_uniforms from '../../shaders/picking_uniforms.glsl';
 import light from '../../shaders/common_light.glsl';
+import decode from '../../shaders/decode.glsl';
 import lighting from '../../shaders/lighting.glsl';
 import pickingFrag from '../../shaders/picking.frag.glsl';
 import pickingVert from '../../shaders/picking.vert.glsl';
+import picking_uniforms from '../../shaders/picking_uniforms.glsl';
 import project from '../../shaders/project.glsl';
 import projection from '../../shaders/projection.glsl';
 import rotation_2d from '../../shaders/rotation_2d.glsl';
+import scene_uniforms from '../../shaders/scene_uniforms.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
@@ -23,7 +24,7 @@ const globalDefaultprecision =
 const includeRegExp = /#pragma include (["^+"]?["[a-zA-Z_0-9](.*)"]*?)/g;
 const REGEX_START_OF_MAIN = /void\s+main\s*\([^)]*\)\s*\{\n?/; // Beginning of main
 const REGEX_END_OF_MAIN = /}\n?[^{}]*$/; // End of main, assumes main is last function
-@injectable()
+
 export default class ShaderModuleService implements IShaderModuleService {
   private moduleCache: { [key: string]: IModuleParams } = {};
   private rawContentCache: { [key: string]: IModuleParams } = {};

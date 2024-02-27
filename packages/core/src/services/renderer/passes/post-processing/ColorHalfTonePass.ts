@@ -1,5 +1,3 @@
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import colorHalftone from '../../../../shaders/post-processing/colorhalftone.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import BasePostProcessingPass from '../BasePostProcessingPass';
@@ -10,7 +8,6 @@ export interface IColorHalftonePassConfig {
   size: number;
 }
 
-@injectable()
 export default class ColorHalftonePass extends BasePostProcessingPass<IColorHalftonePassConfig> {
   protected setupShaders() {
     this.shaderModuleService.registerModule('colorhalftone-pass', {

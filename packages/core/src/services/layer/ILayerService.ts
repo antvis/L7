@@ -6,7 +6,7 @@ import type {
   SyncHook,
 } from '@antv/async-hook';
 import type { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
-import type { Container } from 'inversify';
+import { L7Container } from '../../inversify.config';
 import type Clock from '../../utils/clock';
 import type { ITextureService } from '../asset/ITextureService';
 import type { ISceneConfig } from '../config/IConfigService';
@@ -371,7 +371,7 @@ export interface ILayer {
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
   tileMask?: ILayer | undefined; // 图层的 tileMask;
-  sceneContainer: Container | undefined;
+  container: L7Container | undefined;
   dataState: IDataState; // 数据流状态
   defaultSourceConfig: {
     data: any[];
@@ -426,8 +426,8 @@ export interface ILayer {
   getAttribute(name: string): IStyleAttribute | undefined;
   getLayerConfig<T>(): Partial<ILayerConfig & ISceneConfig & T>;
   getLayerAttributeConfig(): Partial<ILayerAttributesOption>;
-  getContainer(): Container;
-  setContainer(container: Container, sceneContainer: Container): void;
+  getContainer(): L7Container;
+  setContainer(container: L7Container): void;
   setCurrentPickId(id: number | null): void;
   getCurrentPickId(): number | null;
   setCurrentSelectedId(id: number | null): void;
@@ -606,16 +606,7 @@ export interface ILayer {
  * Layer 插件
  */
 export interface ILayerPlugin {
-  apply(
-    layer: ILayer,
-    services: {
-      rendererService: IRendererService;
-      mapService: IMapService;
-      styleAttributeService: IStyleAttributeService;
-      postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>;
-      normalPassFactory: (name: string) => IPass<unknown>;
-    },
-  ): void;
+  apply(layer: ILayer, container: L7Container): void;
 }
 
 /**

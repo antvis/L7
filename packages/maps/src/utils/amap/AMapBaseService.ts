@@ -15,20 +15,17 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
+  L7Container,
   MapStyleConfig,
-  MapStyleName} from '@antv/l7-core';
-import {
-  CoordinateSystem,
-  MapServiceEvent,
-  TYPES,
+  MapStyleName,
 } from '@antv/l7-core';
-import { DOM,MapType } from '@antv/l7-utils';
+import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
+import { DOM, MapType } from '@antv/l7-utils';
+import { EventEmitter } from 'eventemitter3';
 import { mat4, vec3 } from 'gl-matrix';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
 import type { IAMapEvent, IAMapInstance } from '../../../typings/index';
 import Viewport from '../Viewport';
-import type { ISimpleMapCoord} from '../simpleMapCoord';
+import type { ISimpleMapCoord } from '../simpleMapCoord';
 import { SimpleMapCoord } from '../simpleMapCoord';
 import { toPaddingOptions } from '../utils';
 import './logo.css';
@@ -76,7 +73,6 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 /**
  * AMapService
  */
-@injectable()
 export default abstract class AMapBaseService
   implements IMapService<AMap.Map & IAMapInstance>
 {
@@ -90,16 +86,16 @@ export default abstract class AMapBaseService
   // 背景色
   public bgColor: string = 'rgba(0, 0, 0, 0)';
 
-  @inject(TYPES.IGlobalConfigService)
+  constructor(container: L7Container) {
+    this.config = container.mapConfig;
+    this.configService = container.globalConfigService;
+    this.coordinateSystemService = container.coordinateSystemService;
+    this.eventEmitter = new EventEmitter();
+  }
+
   protected readonly configService: IGlobalConfigService;
-
-  @inject(TYPES.MapConfig)
   protected readonly config: Partial<IMapConfig>;
-
-  @inject(TYPES.ICoordinateSystemService)
   protected readonly coordinateSystemService: ICoordinateSystemService;
-
-  @inject(TYPES.IEventEmitter)
   protected eventEmitter: any;
 
   protected markerContainer: HTMLElement;

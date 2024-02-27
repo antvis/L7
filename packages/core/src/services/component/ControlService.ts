@@ -1,18 +1,14 @@
 import { DOM } from '@antv/l7-utils';
-import type { Container} from 'inversify';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
+import { L7Container } from '../../inversify.config';
 import type { IMapService } from '../map/IMapService';
 import type {
   IControl,
   IControlCorners,
   IControlService,
   IControlServiceCfg,
-  PositionName} from './IControlService';
-import {
-  PositionType,
+  PositionName,
 } from './IControlService';
+import { PositionType } from './IControlService';
 
 const ControlDirectionConfig: Record<PositionName, 'column' | 'row'> = {
   topleft: 'column',
@@ -29,23 +25,22 @@ const ControlDirectionConfig: Record<PositionName, 'column' | 'row'> = {
   rightbottom: 'row',
 };
 
-@injectable()
 export default class ControlService implements IControlService {
   public container: HTMLElement;
   public controlCorners: IControlCorners;
   public controlContainer: HTMLElement;
-  public scene: Container;
+  public scene: L7Container;
   public mapsService: IMapService;
   private controls: IControl[] = [];
   private unAddControls: IControl[] = [];
-  public init(cfg: IControlServiceCfg, sceneContainer: Container) {
+  public init(cfg: IControlServiceCfg, sceneContainer: L7Container) {
     this.container = cfg.container;
     this.scene = sceneContainer;
-    this.mapsService = sceneContainer.get<IMapService>(TYPES.IMapService);
+    this.mapsService = sceneContainer.mapService;
     this.initControlPos();
   }
-  public addControl(ctr: IControl, sceneContainer: Container): void {
-    const mapsService = sceneContainer.get<IMapService>(TYPES.IMapService);
+  public addControl(ctr: IControl, sceneContainer: L7Container): void {
+    const mapsService = sceneContainer.mapService;
     if (mapsService.map) {
       ctr.addTo(this.scene); // scene对象
       this.controls.push(ctr);

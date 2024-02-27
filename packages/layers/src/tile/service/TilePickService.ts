@@ -2,11 +2,9 @@ import type {
   IInteractionTarget,
   ILayer,
   ILayerService,
-  IPickingService,
   ITile,
   ITilePickService,
 } from '@antv/l7-core';
-import { TYPES } from '@antv/l7-core';
 import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
 import type { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
@@ -46,9 +44,7 @@ export class TilePickService implements ITilePickService {
 
   public async pick(layer: ILayer, target: IInteractionTarget) {
     const container = this.parent.getContainer();
-    const pickingService = container.get<IPickingService>(
-      TYPES.IPickingService,
-    );
+    const pickingService = container.pickingService;
     if (layer.type === 'RasterLayer') {
       const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
       if (tile && tile.getMainLayer() !== undefined) {
