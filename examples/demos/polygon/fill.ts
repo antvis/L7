@@ -39,30 +39,6 @@ export function MapRender(option: {
     ],
   };
 
-  const data2 = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: {
-          testOpacity: 0.8,
-        },
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [113.8623046875, 30.031055426540206],
-              [115.3232421875, 30.031055426540206],
-              [115.3232421875, 31.090574094954192],
-              [113.8623046875, 31.090574094954192],
-              [113.8623046875, 30.031055426540206],
-            ],
-          ],
-        },
-      },
-    ],
-  };
-
   const layer = new PolygonLayer({
     autoFit: true,
   })

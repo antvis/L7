@@ -54,6 +54,7 @@ export default class LayerService
   }, 16);
 
   public needPick(type: string): boolean {
+    this.updateLayerRenderList();
     return this.layerList.some((layer) => layer.needPick(type));
   }
   public add(layer: ILayer) {
@@ -140,7 +141,6 @@ export default class LayerService
     this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
-
     for (const layer of this.layerList) {
       layer.prerender();
     }

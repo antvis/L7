@@ -1382,6 +1382,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     ) {
       isPick = true;
     }
+   
     return this.isVisible() && isPick;
   }
 

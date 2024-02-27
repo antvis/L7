@@ -7,10 +7,24 @@ import createContext from './create-context';
 export function TestScene(options?: Partial<IMapOptions>) {
   const el = document.createElement('div');
   el.id = 'test-div-id';
+  const width = 400;
+  const height = 300;
+
   const body = document.querySelector('body') as HTMLBodyElement;
   body.appendChild(el);
+  // @ts-ignore
+  el.getBoundingClientRect = jest.fn(() => ({
+    x: 0,
+    y: 0,
+    width: width,
+    height: height,
+    top: 0,
+    right: width,
+    bottom: height,
+    left: 0,
+  }))
 
-  const context = createContext(400, 300);
+  const context = createContext(width, height);
   const reGL = regl({
     gl: context,
     attributes: {
