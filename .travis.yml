@@ -12,7 +12,7 @@ addons:
     - libosmesa6
 
 node_js:
-  - '12'
+  - '18
 
 env:
   - NODE_ENV=test
