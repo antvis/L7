@@ -1,7 +1,7 @@
 // @ts-ignore
 import { TestScene } from '@antv/l7-test-utils';
-import { InteractionEvent, TYPES } from '@antv/l7-core';
-import type { IInteractionService, IRendererService } from '@antv/l7-core';
+import { TYPES } from '@antv/l7-core';
+import type { IRendererService } from '@antv/l7-core';
 import PolygonLayer from '../../layers/src/polygon';
 describe('template', () => {
   const el = document.createElement('div');

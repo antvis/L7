@@ -15,7 +15,6 @@ import type { IFramebuffer } from '../renderer/IFramebuffer';
 import type { IRendererService } from '../renderer/IRendererService';
 import { TextureUsage } from '../renderer/ITexture2D';
 import type { IPickingService } from './IPickingService';
-import { pick } from 'lodash';
 @injectable()
 export default class PickingService implements IPickingService {
   public pickedColors: Uint8Array | undefined;
