@@ -32,14 +32,14 @@ import ShaderModuleService from './services/shader/ShaderModuleService';
 /** PostProcessing passes */
 import type { IMarkerService } from './services/component/IMarkerService';
 import type { IPopupService } from './services/component/IPopupService';
-import { IMapConfig, IMapService } from './services/map/IMapService';
+import type { IMapConfig, IMapService } from './services/map/IMapService';
 import type {
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
   IPostProcessor,
 } from './services/renderer/IMultiPassRenderer';
-import { IRendererService } from './services/renderer/IRendererService';
+import type { IRendererService } from './services/renderer/IRendererService';
 import ClearPass from './services/renderer/passes/ClearPass';
 import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';

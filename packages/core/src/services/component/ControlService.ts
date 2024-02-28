@@ -1,5 +1,5 @@
 import { DOM } from '@antv/l7-utils';
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import type { IMapService } from '../map/IMapService';
 import type {
   IControl,

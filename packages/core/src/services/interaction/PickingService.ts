@@ -1,5 +1,5 @@
 import { decodePickingColor, DOM } from '@antv/l7-utils';
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import { isEventCrash } from '../../utils/dom';
 import type { IInteractionTarget } from '../interaction/IInteractionService';
 import { InteractionEvent } from '../interaction/IInteractionService';

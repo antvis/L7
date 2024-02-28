@@ -39,14 +39,16 @@ describe('template', () => {
     ],
   };
 
-  const layer = new PolygonLayer({
-    autoFit: true,
-  })
-    .source(data)
-    .shape('fill')
-    .active(true)
-    .color('red');
-  scene.addLayer(layer);
+  scene.on('loaded', () => {
+    const layer = new PolygonLayer({
+      autoFit: true,
+    })
+      .source(data)
+      .shape('fill')
+      .active(true)
+      .color('red');
+    scene.addLayer(layer);
+  });
 
   it('scene map status', async () => {
     // expect(scene.getBounds()).toEqual([

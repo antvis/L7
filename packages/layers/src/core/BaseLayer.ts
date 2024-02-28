@@ -51,7 +51,7 @@ import {
 import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { createPlugins } from '..';
+import { createPlugins } from '../plugins';
 import { BlendTypes } from '../utils/blend';
 import {
   createMultiPassRenderer,

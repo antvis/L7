@@ -1,4 +1,4 @@
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 
 export enum PositionType {
   'TOPRIGHT' = 'topright',

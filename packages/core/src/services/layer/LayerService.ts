@@ -1,6 +1,6 @@
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import Clock from '../../utils/clock';
 import type { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 import { MaskOperation, StencilType } from './ILayerService';

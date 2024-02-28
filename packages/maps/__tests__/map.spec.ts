@@ -1,8 +1,9 @@
+import { createSceneContainer } from '@antv/l7-core';
 import AMapService from '../src/amap2/map';
 
 describe('maps', () => {
   it('AMapService', () => {
-    // const sceneContainer = createSceneContainer();
+    const container = createSceneContainer();
     // // 绑定地图服务
 
     // const service = new AMapService({
@@ -12,8 +13,8 @@ describe('maps', () => {
     //     zoom: 13.2
     // });
     // service.ma;
-    // @ts-ignore
-    const map = new AMapService();
+
+    const map = new AMapService(container);
 
     // service.setContainer(sceneContainer, id, canvas);
 

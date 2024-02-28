@@ -3,7 +3,7 @@ import { AsyncSeriesHook } from '@antv/async-hook';
 import { DOM } from '@antv/l7-utils';
 import elementResizeDetectorMaker from 'element-resize-detector';
 import { EventEmitter } from 'eventemitter3';
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import { createRendererContainer } from '../../utils/dom';
 import type { IViewport } from '../camera/ICameraService';
 import type { ISceneConfig } from '../config/IConfigService';

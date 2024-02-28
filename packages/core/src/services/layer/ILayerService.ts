@@ -6,7 +6,7 @@ import type {
   SyncHook,
 } from '@antv/async-hook';
 import type { IColorRamp, SourceTile, TilesetManager } from '@antv/l7-utils';
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import type Clock from '../../utils/clock';
 import type { ITextureService } from '../asset/ITextureService';
 import type { ISceneConfig } from '../config/IConfigService';

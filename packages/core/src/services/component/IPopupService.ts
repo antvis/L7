@@ -1,6 +1,6 @@
 import type { DOM, anchorType } from '@antv/l7-utils';
 import type EventEmitter from 'eventemitter3';
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import type { ILngLat } from '../map/IMapService';
 
 export interface IPopupOption {

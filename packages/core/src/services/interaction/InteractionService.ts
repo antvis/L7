@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import Hammer from 'hammerjs';
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import type { ILngLat } from '../map/IMapService';
 import type { IInteractionService } from './IInteractionService';
 import { InteractionEvent } from './IInteractionService';

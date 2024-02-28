@@ -16,41 +16,6 @@ import EarthLayer from './earth';
 import MaskLayer from './mask';
 import WindLayer from './wind';
 
-// import ConfigSchemaValidationPlugin from './plugins/ConfigSchemaValidationPlugin';
-import DataMappingPlugin from './plugins/DataMappingPlugin';
-import DataSourcePlugin from './plugins/DataSourcePlugin';
-import FeatureScalePlugin from './plugins/FeatureScalePlugin';
-import LayerAnimateStylePlugin from './plugins/LayerAnimateStylePlugin';
-import LayerMaskPlugin from './plugins/LayerMaskPlugin';
-import LayerModelPlugin from './plugins/LayerModelPlugin';
-import LayerStylePlugin from './plugins/LayerStylePlugin';
-import LightingPlugin from './plugins/LightingPlugin';
-import MultiPassRendererPlugin from './plugins/MultiPassRendererPlugin';
-import PixelPickingPlugin from './plugins/PixelPickingPlugin';
-import RegisterStyleAttributePlugin from './plugins/RegisterStyleAttributePlugin';
-import ShaderUniformPlugin from './plugins/ShaderUniformPlugin';
-import UpdateModelPlugin from './plugins/UpdateModelPlugin';
-import UpdateStyleAttributePlugin from './plugins/UpdateStyleAttributePlugin';
-
-export function createPlugins() {
-  return [
-    new DataSourcePlugin(),
-    new RegisterStyleAttributePlugin(),
-    new FeatureScalePlugin(),
-    new DataMappingPlugin(),
-    new LayerStylePlugin(),
-    new LayerMaskPlugin(),
-    new UpdateStyleAttributePlugin(),
-    new UpdateModelPlugin(),
-    new MultiPassRendererPlugin(),
-    new ShaderUniformPlugin(),
-    new LayerAnimateStylePlugin(),
-    new LightingPlugin(),
-    new PixelPickingPlugin(),
-    new LayerModelPlugin(),
-  ];
-}
-
 export * from './core/interface';
 export {
   BaseLayer,

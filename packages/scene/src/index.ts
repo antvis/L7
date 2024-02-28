@@ -25,9 +25,9 @@ import type {
   ISceneService,
   IStatusOptions,
   Point,
-} from '@antv/l7-core';
+
+  L7Container} from '@antv/l7-core';
 import {
-  L7Container,
   SceneEventList,
   createLayerContainer,
   createSceneContainer,

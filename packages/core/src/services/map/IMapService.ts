@@ -1,4 +1,4 @@
-import { L7Container } from '../../inversify.config';
+import type { L7Container } from '../../inversify.config';
 import type { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
 export type Bounds = [[number, number], [number, number]];
