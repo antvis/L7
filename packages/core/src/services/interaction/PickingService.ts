@@ -44,12 +44,10 @@ export default class PickingService implements IPickingService {
   private pickBufferScale: number = 1.0;
 
   public init(id: string) {
-    const { createTexture2D, createFramebuffer, getContainer } =
+    const { createTexture2D, createFramebuffer, getViewportSize } =
       this.rendererService;
 
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
+    let { width, height } = getViewportSize();
     width *= DOM.DPR;
     height *= DOM.DPR;
     this.pickBufferScale =
@@ -112,10 +110,8 @@ export default class PickingService implements IPickingService {
       const tmpV = v < 0 ? 0 : v;
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
     });
-    const { readPixelsAsync, getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
+    const { readPixelsAsync,getViewportSize } = this.rendererService;
+    let { width, height } = getViewportSize();
     width *= DOM.DPR;
     height *= DOM.DPR;
     if (
@@ -192,13 +188,10 @@ export default class PickingService implements IPickingService {
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
     let isPicked = false;
-    const { readPixelsAsync, getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
+    const { readPixelsAsync,getViewportSize } = this.rendererService;
+    let { width, height } = getViewportSize()
     width *= DOM.DPR;
     height *= DOM.DPR;
-
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
     const xInDevicePixel = x * DOM.DPR;
     const yInDevicePixel = y * DOM.DPR;
@@ -210,7 +203,6 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
-
     const pickedColors: Uint8Array | undefined = await readPixelsAsync({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
@@ -306,21 +298,13 @@ export default class PickingService implements IPickingService {
 
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-    if ((container as HTMLCanvasElement).getContext) {
-      return {
-        width: (container as HTMLCanvasElement).width / DOM.DPR,
-        height: (container as HTMLCanvasElement).height / DOM.DPR,
-      };
-    } else {
       return container.getBoundingClientRect();
-    }
   }
   private async pickingAllLayer(target: IInteractionTarget) {
     // 判断是否进行拾取操作
     if (!this.layerService.needPick(target.type) || !this.isPickingAllLayer()) {
       return;
     }
-   
     this.alreadyInPicking = true;
     await this.pickingLayers(target);
     this.layerService.renderLayers();
@@ -352,10 +336,8 @@ export default class PickingService implements IPickingService {
   }
 
   private resizePickingFBO() {
-    const { getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
+    const { getViewportSize } = this.rendererService;
+    let { width, height } = getViewportSize();
     width *= DOM.DPR;
     height *= DOM.DPR;
 
@@ -376,9 +358,6 @@ export default class PickingService implements IPickingService {
     for (const layer of layers
       .filter((layer) => layer.needPick(target.type))
       .reverse()) {
-      if (!layer.tileLayer) {
-        layer.hooks.beforePickingEncode.call();
-      }
       await useFramebufferAsync(this.pickingFBO, async () => {
         clear({
           framebuffer: this.pickingFBO,
@@ -386,13 +365,9 @@ export default class PickingService implements IPickingService {
           stencil: 0,
           depth: 1,
         });
+        // 渲染需要拾取的图层
         layer.layerPickService.pickRender(target);
       });
-
-      if (!layer.tileLayer) {
-        layer.hooks.afterPickingEncode.call();
-      }
-
       const isPicked = await this.pickFromPickingFBO(layer, target);
       this.layerService.pickedLayerId = isPicked ? +layer.id : -1;
       if (isPicked && !layer.getLayerConfig().enablePropagation) {

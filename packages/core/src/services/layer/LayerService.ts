@@ -54,6 +54,7 @@ export default class LayerService
   }, 16);
 
   public needPick(type: string): boolean {
+    this.updateLayerRenderList();
     return this.layerList.some((layer) => layer.needPick(type));
   }
   public add(layer: ILayer) {
@@ -140,7 +141,6 @@ export default class LayerService
     this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
-
     for (const layer of this.layerList) {
       layer.prerender();
     }
@@ -189,7 +189,7 @@ export default class LayerService
   public renderTileLayerMask(layer: ILayer) {
     let maskindex = 0;
     const { enableMask = true } = layer.getLayerConfig();
-    let maskCount = layer.tileMask ? 1 : 0;
+    let maskCount = layer.tileMask ? 1 : 0; // 瓦片裁剪 线图层或者面图层
     const masklayers = layer.masks.filter((m) => m.inited);
 
     maskCount = maskCount + (enableMask ? masklayers.length : 1);

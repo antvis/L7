@@ -95,7 +95,7 @@ export default class DefaultMapService extends BaseMapService<Map> {
     } = this.config;
 
     this.viewport = new Viewport();
-
+ 
     this.version = version;
     this.simpleMapCoord.setSize(mapSize);
     if (version === 'SIMPLE' && rest.center) {

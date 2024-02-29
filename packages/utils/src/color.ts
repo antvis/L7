@@ -90,6 +90,7 @@ export function generateLinearRamp(
   let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
   canvas.height = 1;
+  console.log('colorRamp', canvas);
   // draw linear color
   const gradient = ctx.createLinearGradient(0, 0, 256, 1);
   const step = domain[1] - domain[0];

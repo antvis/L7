@@ -39,12 +39,10 @@ export function readPixel(
   y: number,
   rendererService: IRendererService,
 ) {
-  const { readPixels, getContainer } = rendererService;
+  const { readPixels, getViewportSize } = rendererService;
   const xInDevicePixel = x * DOM.DPR;
   const yInDevicePixel = y * DOM.DPR;
-  let { width, height } = getContainerSize(
-    getContainer() as HTMLCanvasElement | HTMLElement,
-  );
+  let { width, height } = getViewportSize();
   width *= DOM.DPR;
   height *= DOM.DPR;
   if (
@@ -65,15 +63,4 @@ export function readPixel(
     data: new Uint8Array(1 * 1 * 4),
   });
   return pickedColors;
-}
-
-function getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-  if ((container as HTMLCanvasElement).getContext) {
-    return {
-      width: (container as HTMLCanvasElement).width / DOM.DPR,
-      height: (container as HTMLCanvasElement).height / DOM.DPR,
-    };
-  } else {
-    return container.getBoundingClientRect();
-  }
 }

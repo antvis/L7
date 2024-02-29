@@ -39,5 +39,7 @@ describe('popup', () => {
     popup.show();
 
     expect(targetPopup.classList.contains('l7-popup-hide')).toEqual(false);
+
+    scene.setZoom(10);
   });
 });

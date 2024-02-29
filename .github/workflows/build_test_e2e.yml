@@ -1,0 +1,32 @@
+name: Build & E2E Test
+
+on: [pull_request]
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - run: yarn
+      - run: yarn build
+      - run: yarn test:e2e
+
+      - name: Upload snapshots to GitHub Actions Artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshots
+          path: |
+            __tests__/e2e/snapshots
+          retention-days: 1

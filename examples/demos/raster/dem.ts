@@ -26,7 +26,6 @@ export function MapRender(option: { map: string; renderer: 'regl' | 'device' }) 
     const width = image.getWidth();
     const height = image.getHeight();
     const values = await image.readRasters();
-    console.log(values);
 
     const layer = new RasterLayer();
     layer
@@ -60,7 +59,13 @@ export function MapRender(option: { map: string; renderer: 'regl' | 'device' }) 
         },
       });
 
+   
+    layer.on('inited',()=>{
+      console.log(layer.getLegend('color'));
+    })
+
     scene.addLayer(layer);
+  
     if (window['screenshot']) {
       window['screenshot']();
     }
