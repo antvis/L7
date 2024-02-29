@@ -24,13 +24,17 @@ export class CanvasModel extends BaseModel {
     const modelType = this.layer.getModelType() as CanvasModelType;
     this.canvas = canvas;
     canvas.classList.add('l7-canvas-layer');
-    canvas.style.pointerEvents = 'none';
+    // canvas.style.pointerEvents = 'none';
     canvas.style.position = 'absolute';
     canvas.style.top = '0';
     canvas.style.left = '0';
     canvas.style.zIndex = String((zIndex ?? 0) < 3 ? 3 : zIndex);
+
+    canvas.addEventListener('click', (e) => {
+      console.log(e);
+    });
     this.resetCanvasSize();
-    this.mapService.getContainer()?.appendChild(canvas);
+    document.querySelector('.l7-scene')?.appendChild(canvas);
     this.ctx = getContext
       ? getContext(canvas)
       : canvas.getContext(CanvasContextTypeMap[modelType])!;

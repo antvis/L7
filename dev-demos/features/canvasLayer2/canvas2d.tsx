@@ -7,12 +7,13 @@ const POSITION = [120.104697, 30.260704] as [number, number];
 
 const Demo: FunctionComponent = () => {
   const [scene, setScene] = useState<Scene | null>(null);
+  const [layer, setLayer] = useState<CanvasLayer2 | null>(null);
 
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',
       map: new GaodeMap({
-        style: 'dark',
+        style: 'normal',
         center: POSITION,
         pitch: 0,
         zoom: 15,
@@ -21,25 +22,29 @@ const Demo: FunctionComponent = () => {
     });
 
     newScene.on('loaded', () => {
-      const canvasLayer = new CanvasLayer2({
-        zIndex: 100,
-        render: ({ canvas, ctx, container, utils }) => {
-          ctx.clearRect(0, 0, container.width, container.height);
-          ctx.fillStyle = 'blue';
-          const { x, y } = utils.lngLatToContainer(POSITION);
-          const size = 20 * window.devicePixelRatio;
-          ctx.fillRect(x - size / 2, y - size / 2, size, size);
-        },
-      });
-      newScene.addLayer(canvasLayer);
+      // const canvasLayer = new CanvasLayer2({
+      //   zIndex: 100,
+      //   render: ({ canvas, ctx, container, utils }) => {
+      //     ctx.clearRect(0, 0, container.width, container.height);
+      //     ctx.fillStyle = 'blue';
+      //     const { x, y } = utils.lngLatToContainer(POSITION);
+      //     const size = 36 * window.devicePixelRatio;
+      //     ctx.fillRect(x - size / 2, y - size / 2, size, size);
+      //   },
+      // });
+      // newScene.addLayer(canvasLayer);
 
       const pointLayer = new PointLayer({});
       pointLayer
         .source(turf.featureCollection([turf.point(POSITION)]))
         .color('red')
         .shape('circle')
-        .size(20);
+        .size(30);
       newScene.addLayer(pointLayer);
+
+      pointLayer.on('click', (e) => {
+        console.log(e);
+      });
     });
   }, []);
 
