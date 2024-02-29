@@ -709,6 +709,7 @@ export default defineConfig({
   ],
   links: [],
   scripts: [
+    'globalThis=self',
     'https://api.map.baidu.com/api?type=webgl&v=1.0&ak=zLhopYPPERGtpGOgimcdKcCimGRyyIsh',
     ...GaodeTokenScript,
   ],
