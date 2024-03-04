@@ -32,7 +32,7 @@ import {
   createLayerContainer,
   createSceneContainer,
 } from '@antv/l7-core';
-import { MaskLayer } from '@antv/l7-layers';
+import { MaskLayer, TileLayer } from '@antv/l7-layers';
 import { DeviceRendererService, ReglRendererService } from '@antv/l7-renderer';
 import type { IProtocolHandler } from '@antv/l7-utils';
 import { DOM, SceneConifg } from '@antv/l7-utils';
@@ -182,16 +182,17 @@ class Scene
 
     // mask 在 scene loaded 之后执行
     if (layer.inited) {
+      this.initTileLayer(layer);
       const maskInstance = this.initMask(layer);
       this.addMask(maskInstance as ILayer, layer.id);
     } else {
       layer.on('inited', () => {
+        this.initTileLayer(layer);
         const maskInstance = this.initMask(layer); // 初始化 mask
         this.addMask(maskInstance as ILayer, layer.id);
       });
     }
   }
-
   public initMask(layer: ILayer) {
     const {
       mask,
@@ -548,6 +549,13 @@ class Scene
     const { logoVisible, logoPosition } = this.sceneService.getSceneConfig();
     if (logoVisible) {
       this.addControl(new Logo({ position: logoPosition }));
+    }
+  }
+
+  private initTileLayer(layer:ILayer) {
+    if(layer.getSource().isTile) {
+      layer.tileLayer = new TileLayer(layer);
+      // Todo 支持瓦片更新
     }
   }
 }

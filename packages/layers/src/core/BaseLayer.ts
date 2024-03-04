@@ -48,8 +48,8 @@ import {
   ILayerStage,
   globalConfigService,
 } from '@antv/l7-core';
-import Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
+import type Source from '@antv/l7-source';
 import { EventEmitter } from 'eventemitter3';
 import { createPlugins } from '../plugins';
 import { BlendTypes } from '../utils/blend';
@@ -437,6 +437,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     for (const plugin of this.plugins) {
       plugin.apply(this, this.container);
     }
+    // if (this.getSource().isTile) {
+    //   this.tileLayer = new TileLayer(this);
+    // }
 
     // 初始化其他服务
     this.layerPickService = new LayerPickService(this);
@@ -460,7 +463,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
     this.hooks.afterInit.call();
   }
-
   public log(logType: string, step: string = 'init') {
     // @ts-ignore 瓦片、瓦片图层目前不参与日志
     if (this.tileLayer || this.isTileLayer) {
@@ -613,29 +615,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       options,
     };
     this.clusterZoom = 0;
+    
     return this;
   }
 
   public setData(data: any, options?: ISourceCFG) {
+    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
     if (this.inited) {
-      this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
       this.layerSource.setData(data, options);
-      this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     } else {
       this.on('inited', () => {
-        this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
-        const currentSource = this.getSource();
-        if (!currentSource) {
-          // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
-          this.source(new Source(data, options));
-        } else {
-          this.layerSource.setData(data, options);
-        }
-        this.layerSource.once('update', () => {
-          this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
-        });
+        this.layerSource.setData(data, options);
       });
     }
+    this.layerSource.once('update', () => {
+      this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
+    });
     return this;
   }
   public style(
@@ -1140,7 +1135,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           this.mapService.setCoordCenter(layerCenter);
         }
       }
-
       if (type === 'update') {
         if (this.tileLayer) {
           // 瓦片图层独立更新
