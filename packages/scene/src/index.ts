@@ -206,6 +206,7 @@ class Scene
       });
     }
   }
+  // 兼容历史接口
   public initMask(layer: ILayer) {
     const {
       mask,

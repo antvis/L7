@@ -8,7 +8,6 @@ export default class LayerStylePlugin implements ILayerPlugin {
       const { maskLayers, enableMask } = layer.getLayerConfig();
       // mask 初始化
       if (!layer.tileLayer && maskLayers && maskLayers.length > 0) {
-        layer.masks.push(...maskLayers);
         layer.updateLayerConfig({
           mask: true && enableMask,
         });

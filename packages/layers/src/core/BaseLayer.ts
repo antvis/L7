@@ -265,6 +265,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
+    this.masks = config.maskLayers || [];
   }
   public addMask(layer: ILayer): void {
     this.masks.push(layer);

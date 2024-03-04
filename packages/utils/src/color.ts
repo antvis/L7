@@ -90,7 +90,6 @@ export function generateLinearRamp(
   let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
   canvas.height = 1;
-  console.log('colorRamp', canvas);
   // draw linear color
   const gradient = ctx.createLinearGradient(0, 0, 256, 1);
   const step = domain[1] - domain[0];
@@ -211,7 +210,7 @@ function toIEIMageData(ctx: Context, data: Uint8ClampedArray) {
 }
 
 export function getDefaultDomain(rampColors: IColorRamp) {
-  switch (rampColors.type) {
+  switch (rampColors?.type) {
     case 'cat':
       return [0, 255];
     default:
