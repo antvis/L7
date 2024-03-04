@@ -172,8 +172,21 @@ class Scene
     this.mapService.setBgColor(color);
   }
 
-  // layer 管理
   public addLayer(layer: ILayer): void {
+    if(this.loaded) {
+      this.preAddLayer(layer);
+    } else {
+      console.log('layer not loaded');
+      this.once('loaded', () => {
+        console.log('layer loaded');
+        this.preAddLayer(layer);
+      });
+    }
+
+  }
+
+  // layer 管理
+  public preAddLayer(layer: ILayer): void {
     // 为当前图层创建一个容器
     // TODO: 初始化的时候设置 容器
     const layerContainer = createLayerContainer(this.container);
