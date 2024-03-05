@@ -52,12 +52,4 @@ export function MapRender(option: {
         .color('red');
         scene.addLayer(layer);
     })
-        // @ts-ignore
-        // window.scene = scene;
-    // layer.on('inited', (e: any) => { 
-
-    //   console.log(layer.styleAttributeService.getLayerStyleAttribute('position'))
-    // });
-   
-
 }

@@ -1,5 +1,4 @@
 import type {
-  IBuffer,
   IEncodeFeature,
   ILayer,
   ILayerPlugin,
@@ -30,7 +29,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
 
   private pickOption2Array() {
     const array: number[] = [];
-    this.pickingUniformMap.forEach((value, key) => {
+    this.pickingUniformMap.forEach((value) => {
       if (isNumber(value)) {
         array.push(value);
       } else {
@@ -61,7 +60,6 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     });
   }
   public apply(layer: ILayer, { styleAttributeService }: L7Container) {
-    let uniformBuffer: IBuffer;
     this.pickingUniformMap = new Map<string, number[] | number>([
       ['u_HighlightColor', [1, 0, 0, 1]],
       ['u_SelectColor', [1, 0, 0, 1]],

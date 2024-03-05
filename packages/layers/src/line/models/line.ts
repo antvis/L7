@@ -16,10 +16,6 @@ import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import line_frag from '../shaders/line/line_frag.glsl';
 import line_vert from '../shaders/line/line_vert.glsl';
 
-const lineStyleObj: { [key: string]: number } = {
-  solid: 0.0,
-  dash: 1.0,
-};
 export default class LineModel extends BaseModel {
   private textureEventFlag: boolean = false;
   protected texture: ITexture2D = this.createTexture2D({
@@ -120,7 +116,6 @@ export default class LineModel extends BaseModel {
     const { depth = false } =
       this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
-    // console.log(frag)
     this.layer.triangulation = LineTriangulation;
     const model = await this.layer.buildLayerModel({
       moduleName: 'line' + type,

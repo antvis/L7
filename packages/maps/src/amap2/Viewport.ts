@@ -39,22 +39,10 @@ export default class Viewport implements IViewport {
       far,
     );
 
-    // ortho(out, left, right, bottom, top, near, far)
-    // mat4.ortho(this.projectionMatrix, left, right, bottom, top, near, far)
-    // console.log(left, right, bottom, top, near, far)
-    // 计算相机矩阵 viewMatrix
-    // console.log(cameraPosition)
+
     const eyePoint = vec3.fromValues(...cameraPosition);
-    // const eyePoint = vec3.fromValues(cameraPosition[0], cameraPosition[1], 0.1);
-    // 计算相机矩阵 viewMatrix
-
     const lookAtPoint = vec3.fromValues(...lookAt);
-    // const lookAtPoint = vec3.fromValues(...cameraPosition);
-    // const lookAtPoint = vec3.fromValues(cameraPosition[0], cameraPosition[1], -0.1);
-    // const lookAtPoint = vec3.fromValues(0, 0, 0);
-
     const upDirect = vec3.fromValues(...up);
-    // const upDirect = vec3.fromValues(0, 1, 0);
     mat4.lookAt(this.viewMatrix, eyePoint, lookAtPoint, upDirect);
 
     this.viewUncenteredMatrix = mat4.clone(this.viewMatrix);

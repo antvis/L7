@@ -2,7 +2,6 @@ import { TestScene } from '@antv/l7-test-utils';
 import PolygonLayer from '../index';
 describe('PolygonLayer', () => {
   let scene: any;
-  let layer: any;
   const data = {
     type: 'FeatureCollection',
     features: [
@@ -80,7 +79,7 @@ describe('PolygonLayer', () => {
         layer.styleAttributeService.getLayerStyleAttribute('extrusionBase');
       expect(
         (extrusionBase?.descriptor.buffer.data as Array<number>).every(
-          (v) => (v = 1000),
+          (v) => (v === 1000),
         ),
       ).toBe(true);
     });
@@ -97,7 +96,7 @@ describe('PolygonLayer', () => {
       const size = layer.styleAttributeService.getLayerStyleAttribute('size');
       expect(
         (size?.descriptor.buffer.data as Array<number>).every(
-          (v) => (v = 1000),
+          (v) => (v === 1000),
         ),
       ).toBe(true);
     });

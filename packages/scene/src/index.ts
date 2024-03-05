@@ -25,7 +25,6 @@ import type {
   ISceneService,
   IStatusOptions,
   Point,
-
   L7Container} from '@antv/l7-core';
 import {
   SceneEventList,
@@ -495,7 +494,6 @@ class Scene
 
   public registerPostProcessingPass(
     constructor: new (...args: any[]) => IPostProcessingPass<unknown>,
-    name: string,
   ) {
     this.container.postProcessingPass.name = new constructor();
   }

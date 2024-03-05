@@ -3,7 +3,7 @@ import * as allMap from '@antv/l7-maps';
 
 export function MapRender(option: {
     map: string
-   renderer: 'regl' | 'device'
+    renderer: 'regl' | 'device'
 }) {
     console.log(option)
     const scene = new Scene({
@@ -15,8 +15,6 @@ export function MapRender(option: {
             zoom: 2
         })
     });
-
-
 
     const url1 =
         'https://tiles{1-3}.geovisearth.com/base/v1/ter/{z}/{x}/{y}?format=webp&tmsIds=w&token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788';
@@ -32,17 +30,13 @@ export function MapRender(option: {
         },
     });
 
-
-
     scene.on('loaded', () => {
         scene.addLayer(layer1);
         setTimeout(() => {
-            layer1.setData(url2)  
+            layer1.setData(url2)
             console.log('update')
-
-        },1000)
-        // scene.startAnimate()
-
+        },   
+         1000)
     });
 
 }

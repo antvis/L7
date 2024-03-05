@@ -56,10 +56,4 @@ describe('template', () => {
     //   [120.4754836167117, 30.513865000000024]
     // ]);
   });
-  it('scene setBgColor', async () => {
-    const render = scene.getServiceContainer().rendererService;
-    const { width, height } = render.getViewportSize();
-    const pixels = new Uint8Array(width * height * 4);
-    const gl = render.getGLContext();
-  });
 });

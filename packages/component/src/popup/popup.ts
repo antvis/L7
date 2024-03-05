@@ -394,8 +394,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     if (!this.mapsService || this.popupOption.followCursor) {
       return;
     }
-    const { lng, lat } = this.lngLat;
-    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
     const map = ev.map;
     const viewHalf = map.getSize();
     viewHalf.x = viewHalf.x / 2;

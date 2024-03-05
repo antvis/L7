@@ -31,7 +31,6 @@ module.exports = {
         'no-useless-catch': 0,
         '@typescript-eslint/explicit-module-boundary-types': 0,
         '@typescript-eslint/no-explicit-any':0,
-        '@typescript-eslint/no-unused-vars': 0,
         '@typescript-eslint/no-duplicate-enum-values':0,
         'prefer-rest-params':0,
     },

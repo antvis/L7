@@ -149,7 +149,7 @@ export default abstract class Tile extends EventEmitter implements ITile {
   public getMainLayer(): ILayer | undefined {
     return this.layers[0];
   }
-
+ // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getFeatures(sourceLayer: string | undefined): any[] {
     return [];
   }
@@ -159,6 +159,7 @@ export default abstract class Tile extends EventEmitter implements ITile {
    * @param id
    * @returns
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getFeatureById(id: number): any[] {
     return [];
   }

@@ -366,10 +366,6 @@ export default class AMapService extends AMapBaseService {
     } = this.map.customCoords?.getCameraParams() || {};
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
-    // // @ts-ignore
-    // console.log('this.map.customCoords.getCameraParams()', this.map.customCoords.getCameraParams())
-    // const { left, right, bottom, top, near, far, position } = this.map.customCoords.getCameraParams();
-
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     const zoom = this.map.getZoom();

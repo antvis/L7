@@ -14,7 +14,7 @@ describe('maps', () => {
     // });
     // service.ma;
 
-    const map = new AMapService(container);
+    new AMapService(container);
 
     // service.setContainer(sceneContainer, id, canvas);
 

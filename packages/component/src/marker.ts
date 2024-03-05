@@ -326,7 +326,7 @@ export default class Marker extends EventEmitter {
     this.emit('dragging', newLngLat);
   };
 
-  private onMarkerDragEnd = (e: MouseEvent) => {
+  private onMarkerDragEnd = () => {
     this.mapsService.setMapStatus({
       dragEnable: true,
       zoomEnable: true,

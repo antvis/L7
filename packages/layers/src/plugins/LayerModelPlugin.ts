@@ -27,7 +27,6 @@ export default class LayerModelPlugin implements ILayerPlugin {
     layer.hooks.init.tapPromise('LayerModelPlugin', async () => {
       if (layer.getSource().isTile) {
         layer.prepareBuildModel();
-        // layer.tileLayer = new TileLayer(layer);
         return;
       }
       layer.log(IDebugLog.BuildModelStart, ILayerStage.INIT);
@@ -43,7 +42,6 @@ export default class LayerModelPlugin implements ILayerPlugin {
           return false;
         }
         if (layer.getSource().isTile) {
-          // layer.tileLayer = new TileLayer(layer);
           return false;
         }
         layer.log(IDebugLog.BuildModelStart, ILayerStage.UPDATE);

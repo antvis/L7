@@ -1,7 +1,7 @@
 export const load = (options: any) => {
   const { tk } = options;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = `https://api.tianditu.gov.cn/api?v=4.0&tk=${tk}`;

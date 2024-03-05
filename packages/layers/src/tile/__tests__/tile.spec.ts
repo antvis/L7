@@ -2,7 +2,6 @@ import RasterLayer from '../../raster/index';
 import { TestScene } from '@antv/l7-test-utils';
 describe('RasterLayer', () => {
     let scene: any;
-    let layer: any;
     beforeEach(() => {
         scene = TestScene();
 

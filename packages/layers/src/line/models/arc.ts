@@ -8,7 +8,7 @@ import {
   AttributeType,
   gl
 } from '@antv/l7-core';
-import { lodashUtil, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ILineLayerStyleOptions } from '../../core/interface';
@@ -20,7 +20,6 @@ const lineStyleObj: { [key: string]: number } = {
   solid: 0.0,
   dash: 1.0,
 };
-const { isNumber } = lodashUtil;
 export default class ArcModel extends BaseModel {
   protected texture: ITexture2D;
   protected getCommonUniformsInfo(): {

@@ -170,7 +170,6 @@ export default class GreatCircleModel extends BaseModel {
         update: (feature: IEncodeFeature) => {
           const iconMap = this.iconService.getIconMap();
           const { texture } = feature;
-          // console.log('icon feature', feature)
           const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
           return [x, y];
         },

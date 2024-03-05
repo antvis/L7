@@ -212,7 +212,6 @@ export default class AMapService
         offsetOrigin: [position.x, position.y],
       });
       const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
-      // console.log('this.viewport', this.viewport)
       // set coordinate system
       if (this.viewport.getZoom() > offsetZoom) {
         this.coordinateSystemService.setCoordinateSystem(
