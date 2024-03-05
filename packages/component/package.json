@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-component",
-  "version": "2.20.19",
+  "version": "2.20.20",
   "description": "",
   "license": "ISC",
   "author": "lzxue",
@@ -26,15 +26,15 @@
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
   "dependencies": {
-    "@antv/l7-core": "2.20.19",
-    "@antv/l7-utils": "2.20.19",
+    "@antv/l7-core": "2.20.20",
+    "@antv/l7-utils": "2.20.20",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
-    "@antv/l7-layers": "2.20.19",
-    "@antv/l7-test-utils": "2.20.19",
+    "@antv/l7-layers": "2.20.20",
+    "@antv/l7-test-utils": "2.20.20",
     "gcoord": "^0.3.2",
     "less": "^4.1.3"
   },

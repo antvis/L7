@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.20.19",
+  "version": "2.20.20",
   "description": "three for L7 ",
   "keywords": [
     "3D",
@@ -44,7 +44,7 @@
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
   "dependencies": {
-    "@antv/l7": "2.20.19",
+    "@antv/l7": "2.20.20",
     "@babel/runtime": "^7.7.7",
     "three": "0.115.0"
   },

@@ -333,8 +333,6 @@ export default class PickingService implements IPickingService {
   private resizePickingFBO() {
     const { getViewportSize } = this.rendererService;
     const { width, height } = getViewportSize();
-
-
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),
