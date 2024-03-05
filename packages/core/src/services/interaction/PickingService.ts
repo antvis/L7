@@ -48,8 +48,6 @@ export default class PickingService implements IPickingService {
       this.rendererService;
 
     let { width, height } = getViewportSize();
-    width *= DOM.DPR;
-    height *= DOM.DPR;
     this.pickBufferScale =
       this.configService.getSceneConfig(id).pickBufferScale || 1;
 
@@ -111,9 +109,7 @@ export default class PickingService implements IPickingService {
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
     });
     const { readPixelsAsync,getViewportSize } = this.rendererService;
-    let { width, height } = getViewportSize();
-    width *= DOM.DPR;
-    height *= DOM.DPR;
+    const { width, height } = getViewportSize();
     if (
       xMin > ((width - 1) * DOM.DPR) / this.pickBufferScale ||
       xMax < 0 ||
@@ -189,9 +185,8 @@ export default class PickingService implements IPickingService {
   ) => {
     let isPicked = false;
     const { readPixelsAsync,getViewportSize } = this.rendererService;
-    let { width, height } = getViewportSize()
-    width *= DOM.DPR;
-    height *= DOM.DPR;
+    const { width, height } = getViewportSize()
+  
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
     const xInDevicePixel = x * DOM.DPR;
     const yInDevicePixel = y * DOM.DPR;
@@ -337,10 +332,7 @@ export default class PickingService implements IPickingService {
 
   private resizePickingFBO() {
     const { getViewportSize } = this.rendererService;
-    let { width, height } = getViewportSize();
-    width *= DOM.DPR;
-    height *= DOM.DPR;
-
+    const { width, height } = getViewportSize();
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),
