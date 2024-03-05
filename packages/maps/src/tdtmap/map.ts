@@ -1,3 +1,4 @@
+
 import BaseMapService from '../utils/BaseMapService';
 
 import type {
@@ -15,6 +16,8 @@ import {
 import { MercatorCoordinate } from '@antv/l7-map';
 import Viewport from '../utils/Viewport';
 import { load } from './maploader';
+import { DOM, anchorTranslate, applyAnchorClass } from '@antv/l7-utils';
+import { Marker, Popup } from '@antv/l7-component';
 
 let mapdivCount: number = 0;
 
@@ -23,7 +26,6 @@ const EventMap: {
 } = {
   zoomchange: ['Ge'],
 };
-
 export default class TdtMapService extends BaseMapService<any> {
   protected viewport: IViewport | null = null;
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
@@ -34,9 +36,6 @@ export default class TdtMapService extends BaseMapService<any> {
     const container = this.map.getContainer();
     const div = (this.markerContainer = document.createElement('div'));
     container.appendChild(div);
-    // div.classList.add('l7-marker-container');
-    // div.classList.add('leaflet-layer');
-    // div.classList.add('leaflet-zoom-animated');
     div.setAttribute('tabindex', '-1');
     div.id = 'tdt-L7-marker';
     div.style.position = 'absolute';
@@ -49,11 +48,150 @@ export default class TdtMapService extends BaseMapService<any> {
     return;
   }
 
-  public addZoomListenerWhenAddMarkerOrPopup(object:any): void {
-    //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
+  // @ts-ignore
+  public onAddMarkerOrPopup(object: any): void {
+    // 给marker或popup添加更新目标位置时的过渡效果 缩放时使用
+    if (object instanceof Marker) {
+      //@ts-ignore
+      if (!object.updatePositionWhenZoom) {
+        //@ts-ignore
+        object.updatePositionWhenZoom = (ev: { map: any; center: any; zoom: any }) => {
+          //@ts-ignore
+          if (!object.mapsService) {
+            return;
+          }
+          //@ts-ignore
+          const { element, offsets } = object.markerOption;
+          //@ts-ignore
+          const { lng, lat } = object.lngLat;
+          if (element) {
+            element.style.display = 'block';
+            element.style.whiteSpace = 'nowrap';
+            const { containerWidth, bounds } =
+            //@ts-ignore
+              object.getMarkerLayerContainerSize() || object.getCurrentContainerSize();
+            if (!bounds) {
+              return;
+            }
+            const map = ev.map;
+            const center = ev.center;
+            const zoom = ev.zoom;
+            // @ts-ignore
+            const projectedCenter = map.DE(object.lngLat, zoom, center);
+            projectedCenter.x = Math.round(projectedCenter.x + offsets[0]);
+            projectedCenter.y = Math.round(projectedCenter.y - offsets[1]);
+            // 当前可视区域包含跨日界线
+            if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
+              if (projectedCenter.x > containerWidth) {
+                // 日界线右侧点左移
+                //@ts-ignore
+                const newPos = object.mapsService.lngLatToContainer([lng - 360, lat],true);
+                projectedCenter.x = newPos.x;
+              }
+              if (projectedCenter.x < 0) {
+                // 日界线左侧点右移
+                //@ts-ignore
+                const newPos = object.mapsService.lngLatToContainer([lng + 360, lat],true);
+                projectedCenter.x = newPos.x;
+              }
+            }
+            // if (
+            //   projectedCenter.x > containerWidth ||
+            //   projectedCenter.x < 0 ||
+            //   projectedCenter.y > containerHeight ||
+            //   projectedCenter.y < 0
+            // ) {
+            //   element.style.display = 'none';
+            // }
+            element.style.left = projectedCenter.x + 'px';
+            element.style.top = projectedCenter.y + 'px';
+            element.style.transition = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
+          }
+        }
+      }
+      // this._markers.push(object);
+    }
+    else if (object instanceof Popup) {
+      // @ts-ignore
+      object.updatePositionWhenZoom = (ev: { map: any; center: any; zoom: any }) => {
+        // @ts-ignore
+        const hasPosition = !!object.lngLat;
+        // @ts-ignore
+        const { className, style, maxWidth, anchor, stopPropagation } = object.popupOption;
+        // @ts-ignore
+        if (!object.mapsService || !hasPosition || !object.content) {
+          return;
+        }
+        // @ts-ignore
+        const popupContainer = object.mapsService.getMarkerContainer();
+        // 如果当前没有创建 Popup 容器则创建
+        // @ts-ignore
+        if (!object.container && popupContainer) {
+          // @ts-ignore
+          object.container = DOM.create(
+            'div',
+            // @ts-ignore
+            `l7-popup ${className ?? ''} ${!object.isShow ? 'l7-popup-hide' : ''}`,
+            popupContainer as HTMLElement,
+          );
+
+          if (style) {
+            // @ts-ignore
+            object.container.setAttribute('style', style);
+          }
+          // @ts-ignore
+          object.tip = DOM.create('div', 'l7-popup-tip', object.container);
+          // @ts-ignore
+          object.container.appendChild(object.content);
+
+          // 高德地图需要阻止事件冒泡 // 测试mapbox 地图不需要添加
+          if (stopPropagation) {
+            ['mousemove', 'mousedown', 'mouseup', 'click', 'dblclick'].forEach(
+              (type) => {
+                // @ts-ignore
+                object.container.addEventListener(type, (e:any) => {
+                  e.stopPropagation();
+                });
+              },
+            );
+          }
+          // @ts-ignore
+          object.container.style.whiteSpace = 'nowrap';
+        }
+        //更新位置
+        // @ts-ignore
+        if (object.popupOption.followCursor) {
+          return;
+        }
+        const map = ev.map;
+        const center = ev.center;
+        const zoom = ev.zoom;
+        // @ts-ignore
+        const projectedCenter = map.DE(object.lngLat,zoom,center);
+        projectedCenter.x=Math.round(projectedCenter.x);
+        projectedCenter.y=Math.round(projectedCenter.y);
+        // @ts-ignore
+        object.setPopupPosition(projectedCenter.x, projectedCenter.y,true);
+        // @ts-ignore
+        DOM.setTransform(object.container, `${anchorTranslate[anchor]}`);
+        // @ts-ignore
+        applyAnchorClass(object.container, anchor, 'popup');
+        if (maxWidth) {
+          // @ts-ignore
+          const { width } = object.container.getBoundingClientRect();
+          if (width > parseFloat(maxWidth)) {
+            // @ts-ignore
+            object.container.style.width = maxWidth;
+          }
+        } else {
+          // @ts-ignore
+          object.container.style.removeProperty('width');
+        }
+      }
+    }
     this.on('zoomchange', object.updatePositionWhenZoom);
   }
-  public removeZoomListenerWhenRemoveMarkerOrPopup(object:any): void {
+  public onRemoveMarkerOrPopup(object: any): void {
     this.off('zoomchange', object.updatePositionWhenZoom);
   }
   public getMarkerContainer(): HTMLElement {
@@ -440,13 +578,26 @@ export default class TdtMapService extends BaseMapService<any> {
       lat: point.lat,
     };
   }
-
-  public lngLatToContainer([lng, lat]: [number, number]): IPoint {
+  //@ts-ignore
+  /**
+   * @description 经纬度转容器坐标
+   * @ignore
+   * @private
+   * @param {Number[]} param0 经纬度数组
+   * @param {Boolean} [isMarkerOrPopup=false] 是否是marker或popup,这种情况需要加上sceneContainer的偏移
+   * @returns {Object} 容器坐标
+   */
+  public lngLatToContainer([lng, lat]: [number, number],isMarkerOrPopup:boolean=false): IPoint {
     const overlayPixel = this.map.lngLatToContainerPoint({ lat, lng });
-    return {
-      x: overlayPixel.x,
-      y: overlayPixel.y,
-    };
+    if(isMarkerOrPopup){
+      return {
+        //@ts-ignore
+        x: overlayPixel.x+(this.sceneContainer._tdt_pos?.x||0),
+        //@ts-ignore
+        y: overlayPixel.y+(this.sceneContainer._tdt_pos?.y||0),
+      }
+    }
+    return overlayPixel;
   }
 
   public lngLatToCoord([lng, lat]: [number, number]): [number, number] {

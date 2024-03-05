@@ -130,7 +130,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.setTitle(title);
     }
     // @ts-ignore
-    this.mapsService.addZoomListenerWhenAddMarkerOrPopup(this);
+    this.mapsService.onAddMarkerOrPopup(this);
     this.emit('open');
     return this;
   }
@@ -158,7 +158,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.updateCloseOnEsc(true);
       this.updateFollowCursor(true);
       // @ts-ignore
-      this.mapsService.removeZoomListenerWhenRemoveMarkerOrPopup(this);
+      this.mapsService.onAddMarkerOrPopup(this);
       // @ts-ignore
       delete this.mapsService;
     }
@@ -336,13 +336,11 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       // 防止事件重复监听
       this.mapsService.off('camerachange', this.update);
       this.mapsService.off('viewchange', this.update);
-      // @ts-ignore
-      this.mapsService.removeZoomListenerWhenRemoveMarkerOrPopup(this);
+      // this.mapsService.onRemoveMarkerOrPopup(this);
 
       this.mapsService.on('camerachange', this.update);
       this.mapsService.on('viewchange', this.update);
-      // @ts-ignore
-      this.mapsService.addZoomListenerWhenAddMarkerOrPopup(this);
+      // this.mapsService.onAddMarkerOrPopup(this);
     }
     this.update();
     if (this.popupOption.autoPan) {
@@ -389,28 +387,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       return;
     }
     const { lng, lat } = this.lngLat;
-    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
+    //@ts-ignore
+    const { x, y } = this.mapsService.lngLatToContainer([lng, lat],true);
 
     this.setPopupPosition(x, y);
   };
-  //zoom时计算PopUp的位置并更新
-  protected updateLngLatPositionWhenZoom = (ev:any) => {
-    if (!this.mapsService || this.popupOption.followCursor) {
-      return;
-    }
-    const { lng, lat } = this.lngLat;
-    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
-    const map = ev.map;
-    const viewHalf = map.getSize();
-    viewHalf.x = viewHalf.x/2;
-    viewHalf.y = viewHalf.y/2;
-    const center = ev.center;
-    const zoom = ev.zoom;
-    const projectedCenter = map.DE(this.lngLat,zoom,center);
-    projectedCenter.x=Math.round(projectedCenter.x);
-    projectedCenter.y=Math.round(projectedCenter.y);
-    this.setPopupPosition(projectedCenter.x, projectedCenter.y,true);
-  };
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
@@ -534,8 +516,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     }
     this.hide();
   };
-  //更新位置 支持zoom时更新
-  private updatePosition = (ev:any,zoom:Boolean = true) => {
+  private updatePosition = () => {
     const hasPosition = !!this.lngLat;
     const { className, style, maxWidth, anchor, stopPropagation } =
       this.popupOption;
@@ -571,12 +552,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
       this.container.style.whiteSpace = 'nowrap';
     }
-    if(zoom){
-      this.updateLngLatPositionWhenZoom(ev);
-    }
-    else{
-      this.updateLngLatPosition();
-    }
+    this.updateLngLatPosition();
     DOM.setTransform(this.container, `${anchorTranslate[anchor]}`);
     applyAnchorClass(this.container, anchor, 'popup');
 
@@ -589,11 +565,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.container.style.removeProperty('width');
     }
   }
-  protected updatePositionWhenZoom = (ev:any) => {
-    this.updatePosition(ev,true);
-  }
+
   protected update = () => {
-    this.updatePosition(null,false);
+    this.updatePosition();
   };
   /**
    * 设置 Popup 相对于地图容器的 Position
