@@ -40,7 +40,7 @@ export default class GreatCircleModel extends BaseModel {
     }
 
     if (this.rendererService.getDirty()) {
-      this.texture.bind();
+      this.texture?.bind();
     }
 
     // 转化渐变色

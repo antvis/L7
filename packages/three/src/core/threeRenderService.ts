@@ -14,7 +14,6 @@ export interface IThreeRenderService {
   init(): void;
   getRenderCamera(): Camera;
 }
-export const ThreeRenderServiceType = Symbol.for('ThreeJSRenderService');
 
 export class ThreeRenderService implements IThreeRenderService {
   public renderer: WebGLRenderer;
@@ -30,7 +29,10 @@ export class ThreeRenderService implements IThreeRenderService {
   constructor(
     private readonly rendererService: IRendererService,
     private readonly mapService: IMapService,
-  ) {}
+  ) {
+    this.rendererService = rendererService;
+    this.mapService = mapService;
+  }
 
   public init() {
     // 从 L7 的 renderer 中获取可视化层的 canvas/gl

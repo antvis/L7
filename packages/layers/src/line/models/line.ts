@@ -55,7 +55,7 @@ export default class LineModel extends BaseModel {
       u_dash_array.push(0, 0);
     }
     if (this.rendererService.getDirty() && this.texture) {
-      this.texture.bind();
+      this.texture?.bind();
     }
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
     // 转化渐变色

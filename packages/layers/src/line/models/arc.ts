@@ -61,7 +61,7 @@ export default class ArcModel extends BaseModel {
     }
 
     if (this.rendererService.getDirty()) {
-      this.texture.bind();
+      this.texture?.bind();
     }
     const commonOptions = {
       u_animate: this.animateOption2Array(animateOption as IAnimateOption),

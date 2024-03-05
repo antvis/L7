@@ -83,6 +83,9 @@ export interface L7Container {
   postProcessingPassFactory: (named: string) => IPostProcessingPass<unknown>;
   postProcessor: IPostProcessor;
   multiPassRenderer: IMultiPassRenderer;
+  customRenderService: {
+    [key: string]: any;
+  }
 }
 
 let sceneIdCounter = 0;
@@ -110,6 +113,7 @@ export function createSceneContainer(): L7Container {
     markerService,
     popupService,
     controlService,
+    customRenderService:{}
   };
 
   // lazy binding

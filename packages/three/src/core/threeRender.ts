@@ -10,6 +10,8 @@ export default class ThreeRender {
       sceneContainer.rendererService,
       sceneContainer.mapService,
     );
+    sceneContainer.customRenderService['three'] = this.threeRenderService;
+
   }
   public init() {
     this.threeRenderService.init();
