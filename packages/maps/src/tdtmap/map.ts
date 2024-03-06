@@ -49,6 +49,12 @@ export default class TdtMapService extends BaseMapService<any> {
   }
 
   // @ts-ignore
+  /**
+   * @ignore
+   * @private
+   * 给scene中添加marker或者popup时调用 主要是给对象添加缩放时的回调
+   * @param object Marker或者Popup对象
+   */
   public onAddMarkerOrPopup(object: any): void {
     // 给marker或popup添加更新目标位置时的过渡效果 缩放时使用
     if (object instanceof Marker) {

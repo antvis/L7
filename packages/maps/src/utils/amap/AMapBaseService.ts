@@ -585,4 +585,8 @@ export default abstract class AMapBaseService
     $wrapper.appendChild($amapdiv);
     return $amapdiv;
   }
+  //需要子类实现
+  public onAddMarkerOrPopup(object:any): void {}
+  //需要子类实现
+  public onRemoveMarkerOrPopup(object:any): void {}
 }

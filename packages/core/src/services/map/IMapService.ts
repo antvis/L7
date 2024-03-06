@@ -122,7 +122,10 @@ export interface IMapService<RawMap = {}> {
   // lngLatToCoords?(lnglatArray: any): any;
   getCustomCoordCenter?(): [number, number];
   exportMap(type: 'jpg' | 'png'): string;
-
+  // 添加marker或popup时触发
+  onAddMarkerOrPopup(object:any): void;
+  // 添加marker或popup时触发
+  onRemoveMarkerOrPopup(object:any): void;
 
   // 地球模式下的地图方法/属性
   rotateY?(

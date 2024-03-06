@@ -78,7 +78,7 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('moveend', this.update);
       this.mapsService.off('camerachange', this.update);
       // @ts-ignore
-      this.mapsService.onRemoveMarker(this);
+      this.mapsService.onRemoveMarkerOrPopup(this);
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
