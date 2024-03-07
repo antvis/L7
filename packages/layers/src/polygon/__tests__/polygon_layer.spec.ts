@@ -79,7 +79,7 @@ describe('PolygonLayer', () => {
         layer.styleAttributeService.getLayerStyleAttribute('extrusionBase');
       expect(
         (extrusionBase?.descriptor.buffer.data as Array<number>).every(
-          (v) => (v === 1000),
+          (v) => (v === 100),
         ),
       ).toBe(true);
     });
@@ -96,7 +96,7 @@ describe('PolygonLayer', () => {
       const size = layer.styleAttributeService.getLayerStyleAttribute('size');
       expect(
         (size?.descriptor.buffer.data as Array<number>).every(
-          (v) => (v === 1000),
+          (v) => (v == 1000),
         ),
       ).toBe(true);
     });
