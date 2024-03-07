@@ -208,6 +208,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     features: IEncodeFeature[],
     triangulation: Triangulation,
     styleOption: unknown,
+    layer?: ILayer,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -336,6 +337,16 @@ export default class StyleAttributeService implements IStyleAttributeService {
       elements,
       count: vecticesCount,
     };
+
+    Object.values(this.attributes).forEach((attribute) => {
+      const attributeName = attribute.name;
+      // size color 触发更新事件
+      layer?.emit(`legend:${attributeName}`, {
+        type: attributeName,
+        attr: attribute,
+      });
+    });
+
     return this.attributesAndIndices;
   }
 
