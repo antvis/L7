@@ -378,7 +378,6 @@ export default class Marker extends EventEmitter {
      
       element.style.left =  pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
-      console.log(element.style.left);
     }
   }
 
