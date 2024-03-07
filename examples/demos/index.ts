@@ -9,6 +9,7 @@ import * as MaskDemos from './mask'
 import * as GalleryDemos from './gallery'
 import * as BugFix from './bugfix'
 import * as Components from './components'
+import * as CanvasDemos from './canvas'
 
 export default [{
     name: 'BugFix',
@@ -53,6 +54,9 @@ export default [{
 },{
     name:'Gallery',
     demos:GalleryDemos
+},{
+    name:'Canvas',
+    demos:CanvasDemos
 }
 ]
 

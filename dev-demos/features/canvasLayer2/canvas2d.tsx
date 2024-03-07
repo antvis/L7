@@ -1,4 +1,5 @@
-import { CanvasLayer2, GaodeMap, PointLayer, Scene } from '@antv/l7';
+import type { CanvasLayer2 } from '@antv/l7';
+import { GaodeMap, PointLayer, Scene } from '@antv/l7';
 import * as turf from '@turf/turf';
 import type { FunctionComponent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -43,7 +44,7 @@ const Demo: FunctionComponent = () => {
       newScene.addLayer(pointLayer);
 
       pointLayer.on('click', (e) => {
-        console.log(e);
+        console.log('layer click', e);
       });
     });
   }, []);

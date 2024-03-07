@@ -129,6 +129,10 @@ export default class L7EarthService
     return this.$mapContainer;
   }
 
+  public getCanvasOverlays() {
+    return undefined;
+  }
+
   public onCameraChanged(callback: (viewport: IViewport) => void): void {
     this.cameraChangedCallback = callback;
   }
