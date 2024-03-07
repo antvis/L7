@@ -42,9 +42,7 @@ export function readPixel(
   const { readPixels, getViewportSize } = rendererService;
   const xInDevicePixel = x * DOM.DPR;
   const yInDevicePixel = y * DOM.DPR;
-  let { width, height } = getViewportSize();
-  width *= DOM.DPR;
-  height *= DOM.DPR;
+  const { width, height } = getViewportSize();
   if (
     xInDevicePixel > width - 1 * DOM.DPR ||
     xInDevicePixel < 0 ||

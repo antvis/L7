@@ -1,4 +1,4 @@
-import type { Container } from 'inversify';
+import type { L7Container } from '../../inversify.config';
 import type { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
 export type Bounds = [[number, number], [number, number]];
@@ -35,7 +35,7 @@ export type MapStyle = MapStyleName | any;
 
 export interface IMapWrapper {
   setContainer(
-    container: Container,
+    container: L7Container,
     id: string | HTMLDivElement,
     canvas?: HTMLCanvasElement,
   ): void;

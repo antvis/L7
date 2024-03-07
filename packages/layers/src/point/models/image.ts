@@ -19,7 +19,7 @@ export default class ImageModel extends BaseModel {
   public getUninforms(): IModelUniform {
     // ThreeJS 图层兼容
     if (this.rendererService.getDirty()) {
-      this.texture.bind();
+      this.texture?.bind();
     }
     const commonInfo = this.getCommonUniformsInfo();
     const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());

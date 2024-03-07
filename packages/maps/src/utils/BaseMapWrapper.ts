@@ -2,15 +2,11 @@ import type {
   IGlobalConfigService,
   IMapConfig,
   IMapService,
-  IMapWrapper} from '@antv/l7-core';
-import {
-  lazyInject,
-  TYPES,
+  IMapWrapper,
+  L7Container,
 } from '@antv/l7-core';
-import type { Container } from 'inversify';
 export default class BaseMapWrapper<RawMap> implements IMapWrapper {
-  @lazyInject(TYPES.IGlobalConfigService)
-  protected readonly configService: IGlobalConfigService;
+  protected configService: IGlobalConfigService;
 
   protected config: Partial<IMapConfig>;
 
@@ -19,20 +15,20 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
   }
 
   public setContainer(
-    sceneContainer: Container,
+    sceneContainer: L7Container,
     id: string | HTMLDivElement,
     canvas?: HTMLCanvasElement,
   ) {
-    // 绑定用户传入的原始地图参数
-    sceneContainer.bind<Partial<IMapConfig>>(TYPES.MapConfig).toConstantValue({
+    this.configService = sceneContainer.globalConfigService;
+    sceneContainer.mapConfig = {
       ...this.config,
       id,
       canvas,
-    });
-    sceneContainer
-      .bind<IMapService<RawMap>>(TYPES.IMapService)
-      .to(this.getServiceConstructor())
-      .inSingletonScope();
+    };
+    // @ts-ignore
+    sceneContainer.mapService = new (this.getServiceConstructor())(
+      sceneContainer,
+    );
   }
 
   protected getServiceConstructor(): new (

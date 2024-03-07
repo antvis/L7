@@ -7,10 +7,9 @@ import type {
   ILayerService,
   IMapService,
   IRendererService,
+  L7Container,
 } from '@antv/l7-core';
-import { CameraUniform, CoordinateUniform, TYPES } from '@antv/l7-core';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
+import { CameraUniform, CoordinateUniform } from '@antv/l7-core';
 
 /**
  * 在渲染之前需要获取当前 Shader 所需 Uniform，例如：
@@ -19,24 +18,29 @@ import 'reflect-metadata';
  *    @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/doml91
  * 3. 当前 Layer 本身的样式属性
  */
-@injectable()
 export default class ShaderUniformPlugin implements ILayerPlugin {
-  @inject(TYPES.ICameraService)
-  private readonly cameraService: ICameraService;
+  private cameraService: ICameraService;
+  private coordinateSystemService: ICoordinateSystemService;
+  private rendererService: IRendererService;
+  private mapService: IMapService;
+  private layerService: ILayerService;
 
-  @inject(TYPES.ICoordinateSystemService)
-  private readonly coordinateSystemService: ICoordinateSystemService;
+  public apply(
+    layer: ILayer,
+    {
+      rendererService,
+      mapService,
+      layerService,
+      coordinateSystemService,
+      cameraService,
+    }: L7Container,
+  ) {
+    this.rendererService = rendererService;
+    this.mapService = mapService;
+    this.layerService = layerService;
+    this.coordinateSystemService = coordinateSystemService;
+    this.cameraService = cameraService;
 
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
-
-  @inject(TYPES.IMapService)
-  private readonly mapService: IMapService;
-
-  @inject(TYPES.ILayerService)
-  private readonly layerService: ILayerService;
-
-  public apply(layer: ILayer) {
     const version = this.mapService.version;
 
     let mvp = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]; // default matrix (for gaode2.x)
@@ -44,7 +48,6 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
 
     let uniformBuffer: IBuffer;
     if (!this.rendererService.uniformBuffers[0]) {
-
       // Create a Uniform Buffer Object(UBO).
       uniformBuffer = this.rendererService.createBuffer({
         data: new Float32Array(16 * 4 + 4 * 7),
@@ -82,7 +85,10 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         width,
         height,
       );
-      if (this.layerService.alreadyInRendering && this.rendererService.uniformBuffers[0]) {
+      if (
+        this.layerService.alreadyInRendering &&
+        this.rendererService.uniformBuffers[0]
+      ) {
         const renderUniformBuffer = this.rendererService.uniformBuffers[0];
         // Update only once since all models can share one UBO.
         renderUniformBuffer.subData({
@@ -91,7 +97,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         });
       }
 
-      // For WebGL1. regl 
+      // For WebGL1. regl
       const platformString = this.rendererService.queryVerdorInfo();
       if (platformString === 'WebGL1') {
         layer.models.forEach((model) => {

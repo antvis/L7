@@ -1,6 +1,4 @@
 import type { ILayer, ILayerPlugin } from '@antv/l7-core';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 
 const lightTypeUniformMap = {
   directional: {
@@ -103,7 +101,6 @@ export function generateLightingUniforms(
 /**
  * 光照 & Shadow
  */
-@injectable()
 export default class LightingPlugin implements ILayerPlugin {
   public apply(layer: ILayer) {
     layer.hooks.beforeRender.tap('LightingPlugin', () => {

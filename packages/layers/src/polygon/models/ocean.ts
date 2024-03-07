@@ -7,14 +7,13 @@ import {
   AttributeType,
   gl
 } from '@antv/l7-core';
-import { lodashUtil, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import ocean_frag from '../shaders/ocean/ocean_frag.glsl';
 import ocean_vert from '../shaders/ocean/ocean_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-const { isNumber } = lodashUtil;
 export default class OceanModel extends BaseModel {
   private texture1: ITexture2D;
   private texture2: ITexture2D;

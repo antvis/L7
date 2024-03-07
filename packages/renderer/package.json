@@ -28,8 +28,6 @@
     "@antv/l7-core": "2.20.20",
     "@antv/l7-utils": "2.20.20",
     "@babel/runtime": "^7.7.7",
-    "inversify": "^5.0.1",
-    "reflect-metadata": "^0.2.1",
     "regl": "1.6.1"
   },
   "devDependencies": {

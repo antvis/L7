@@ -4,17 +4,14 @@
  */
 import type { IMercator } from '@antv/l7-core';
 import { Map, MercatorCoordinate } from '@antv/l7-map';
+import { MapType } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from '../utils/Viewport';
-import { MapType } from '@antv/l7-utils';
 
 /**
  * AMapService
  */
-@injectable()
 export default class DefaultMapService extends BaseMapService<Map> {
   public version: string = MapType.DEFAULT;
   /**
@@ -95,7 +92,7 @@ export default class DefaultMapService extends BaseMapService<Map> {
     } = this.config;
 
     this.viewport = new Viewport();
- 
+
     this.version = version;
     this.simpleMapCoord.setSize(mapSize);
     if (version === 'SIMPLE' && rest.center) {
@@ -141,5 +138,4 @@ export default class DefaultMapService extends BaseMapService<Map> {
         : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
   }
-
 }

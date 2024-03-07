@@ -181,8 +181,8 @@ export function circleArraw(dir: arrowPosition, options: IArrowOptions): IArrowD
 export function lineArrowPath(coord: number[], indexOffset: number = 0, symbol: ILineSymbol): IArrowData {
     const sourceType = typeof symbol['source'] === 'object' ? symbol['source'].type : symbol['source'];
     const targetType = typeof symbol['target'] === 'object' ? symbol['target'].type : symbol['target'];
-    const { width: sourceWidth = sourceType ? maxArrowWidthMap[sourceType] : 0, height: sourceHeight = 2 } = typeof symbol['source'] === 'object' ? symbol['source'] : {};
-    const { width: targetWidth = targetType ? maxArrowWidthMap[targetType] : 0, height: targetHeight = 2 } = typeof symbol['target'] === 'object' ? symbol['target'] : {};
+    const { width: sourceWidth = sourceType ? maxArrowWidthMap[sourceType] : 0, } = typeof symbol['source'] === 'object' ? symbol['source'] : {};
+    const { width: targetWidth = targetType ? maxArrowWidthMap[targetType] : 0, } = typeof symbol['target'] === 'object' ? symbol['target'] : {};
     return {
         vertices: [
             0, PathHeight, 1 * sourceWidth, ...coord,

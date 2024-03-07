@@ -6,14 +6,12 @@ import type {
   IMapService,
   IRendererService,
   ISceneService,
-  PositionName} from '@antv/l7-core';
-import {
-  PositionType,
-  TYPES,
+  L7Container,
+  PositionName,
 } from '@antv/l7-core';
+import { PositionType } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import EventEmitter from 'eventemitter3';
-import type { Container } from 'inversify';
 import type { ControlEvent } from '../../interface';
 
 export { PositionType } from '@antv/l7-core';
@@ -53,7 +51,7 @@ export default class Control<O extends IControlOption = IControlOption>
    */
   protected isShow: boolean;
 
-  protected sceneContainer: Container;
+  protected sceneContainer: L7Container;
   protected scene: ISceneService;
   protected mapsService: IMapService;
   protected renderService: IRendererService;
@@ -106,20 +104,14 @@ export default class Control<O extends IControlOption = IControlOption>
    * 当 Control 被添加至 Scene 中，被 controlService 调用的方法
    * @param sceneContainer
    */
-  public addTo(sceneContainer: Container) {
+  public addTo(sceneContainer: L7Container) {
     // 初始化各个 Service 实例
-    this.mapsService = sceneContainer.get<IMapService>(TYPES.IMapService);
-    this.renderService = sceneContainer.get<IRendererService>(
-      TYPES.IRendererService,
-    );
-    this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
-    this.controlService = sceneContainer.get<IControlService>(
-      TYPES.IControlService,
-    );
-    this.configService = sceneContainer.get<IGlobalConfigService>(
-      TYPES.IGlobalConfigService,
-    );
-    this.scene = sceneContainer.get<ISceneService>(TYPES.ISceneService);
+    this.mapsService = sceneContainer.mapService;
+    this.renderService = sceneContainer.rendererService;
+    this.layerService = sceneContainer.layerService;
+    this.controlService = sceneContainer.controlService;
+    this.configService = sceneContainer.globalConfigService;
+    this.scene = sceneContainer.sceneService;
     this.sceneContainer = sceneContainer;
     this.isShow = true;
 

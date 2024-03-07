@@ -2,16 +2,6 @@ import { ImageLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import dat from 'dat.gui'
 import React, { useEffect } from 'react';
-//加载外部脚本
-function addExternalScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = () => resolve();
-    script.onerror = () => reject();
-    document.body.appendChild(script);
-  });
-}
 export default () => {
   useEffect(() => {
     const scene = new Scene({

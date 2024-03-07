@@ -57,7 +57,8 @@ export default class Arc3DModel extends BaseModel {
     }
 
     if (this.rendererService.getDirty()) {
-      this.texture.bind();
+      
+      this.texture?.bind();
     }
 
     const commonOptions = {

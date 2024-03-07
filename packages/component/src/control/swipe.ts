@@ -1,18 +1,7 @@
-import type {
-  IControlService,
-  IGlobalConfigService,
-  ILayer,
-  ILayerService,
-  IMapService,
-  IRendererService,
-  ISceneService} from '@antv/l7-core';
-import {
-  TYPES,
-  createLayerContainer,
-} from '@antv/l7-core';
+import type { ILayer, L7Container } from '@antv/l7-core';
+import { createLayerContainer } from '@antv/l7-core';
 import { PolygonLayer } from '@antv/l7-layers';
 import { DOM } from '@antv/l7-utils';
-import type { Container } from 'inversify';
 import type { IControlOption } from './baseControl';
 import { Control } from './baseControl';
 
@@ -75,20 +64,14 @@ export default class Swipe extends Control<ISwipeControlOption> {
     return container;
   }
 
-  public addTo(sceneContainer: Container) {
+  public addTo(sceneContainer: L7Container) {
     // 初始化各个 Service 实例
-    this.mapsService = sceneContainer.get<IMapService>(TYPES.IMapService);
-    this.renderService = sceneContainer.get<IRendererService>(
-      TYPES.IRendererService,
-    );
-    this.layerService = sceneContainer.get<ILayerService>(TYPES.ILayerService);
-    this.controlService = sceneContainer.get<IControlService>(
-      TYPES.IControlService,
-    );
-    this.configService = sceneContainer.get<IGlobalConfigService>(
-      TYPES.IGlobalConfigService,
-    );
-    this.scene = sceneContainer.get<ISceneService>(TYPES.ISceneService);
+    this.mapsService = sceneContainer.mapService;
+    this.renderService = sceneContainer.rendererService;
+    this.layerService = sceneContainer.layerService;
+    this.controlService = sceneContainer.controlService;
+    this.configService = sceneContainer.globalConfigService;
+    this.scene = sceneContainer.sceneService;
     this.sceneContainer = sceneContainer;
     this.isShow = true;
 
@@ -117,7 +100,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
     // 添加掩膜图层到 scene
     const layerContainer = createLayerContainer(sceneContainer);
-    this.maskLayer.setContainer(layerContainer, sceneContainer);
+    this.maskLayer.setContainer(layerContainer);
     this.scene.addLayer(this.maskLayer);
 
     this.emit('add', this);

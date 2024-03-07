@@ -3,7 +3,6 @@ import HeatmapLayer from '../index';
 import { TestScene } from '@antv/l7-test-utils';
 describe('pointLayer', () => {
     let scene: any;
-    let layer: any;
     const data = {
       "type": "FeatureCollection",
       "features": [

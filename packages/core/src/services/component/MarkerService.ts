@@ -1,14 +1,10 @@
-import type { Container} from 'inversify';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
+import type { L7Container } from '../../inversify.config';
 import type { IMapService } from '../map/IMapService';
 import type { IMarker, IMarkerLayer, IMarkerService } from './IMarkerService';
 
-@injectable()
 export default class MarkerService implements IMarkerService {
   public container: HTMLElement;
-  private scene: Container;
+  private scene: L7Container;
   private mapsService: IMapService;
   private markers: IMarker[] = [];
   private markerLayers: IMarkerLayer[] = [];
@@ -71,10 +67,9 @@ export default class MarkerService implements IMarkerService {
     this.destroy();
   }
 
-  public init(scene: Container): void {
-    // this.container = cfg.container;
+  public init(scene: L7Container): void {
     this.scene = scene;
-    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
+    this.mapsService = scene.mapService;
   }
   public destroy(): void {
     this.markers.forEach((marker: IMarker) => {

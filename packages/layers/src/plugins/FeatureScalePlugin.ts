@@ -4,9 +4,10 @@ import type {
   IScale,
   IScaleOptions,
   IStyleAttribute,
-  IStyleAttributeService,
   IStyleScale,
-  ScaleTypeName} from '@antv/l7-core';
+  L7Container,
+  ScaleTypeName,
+} from '@antv/l7-core';
 import {
   IDebugLog,
   ILayerStage,
@@ -18,8 +19,6 @@ import { lodashUtil } from '@antv/l7-utils';
 import { extent } from 'd3-array';
 import * as d3interpolate from 'd3-interpolate';
 import * as d3 from 'd3-scale';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import identity from '../utils/identityScale';
 const { isNil, isString, uniq } = lodashUtil;
 const dateRegex =
@@ -41,16 +40,10 @@ const scaleMap = {
 /**
  * 根据 Source 原始数据为指定字段创建 Scale，保存在 StyleAttribute 上，供下游插件使用
  */
-@injectable()
 export default class FeatureScalePlugin implements ILayerPlugin {
   private scaleOptions: IScaleOptions = {};
 
-  public apply(
-    layer: ILayer,
-    {
-      styleAttributeService,
-    }: { styleAttributeService: IStyleAttributeService },
-  ) {
+  public apply(layer: ILayer, { styleAttributeService }: L7Container) {
     layer.hooks.init.tapPromise('FeatureScalePlugin', async () => {
       layer.log(IDebugLog.ScaleInitStart, ILayerStage.INIT);
       this.scaleOptions = layer.getScaleOptions();
@@ -291,11 +284,11 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       type,
     };
     // quantile domain 需要根据ID 进行去重
-    let values = []
+    let values = [];
     if (type === ScaleTypes.QUANTILE) {
-      // 根据 obejct 属性 _id 进行去重 
+      // 根据 obejct 属性 _id 进行去重
       const idMap = new Map();
-      data?.forEach(obj => {
+      data?.forEach((obj) => {
         idMap.set(obj._id, obj[field]);
       });
       values = Array.from(idMap.values());

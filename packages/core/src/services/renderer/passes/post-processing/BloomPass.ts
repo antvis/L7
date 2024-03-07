@@ -1,6 +1,4 @@
 import { lodashUtil } from '@antv/l7-utils';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import blur from '../../../../shaders/post-processing/bloom.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import type { IUniform } from '../../IUniform';
@@ -12,7 +10,6 @@ export interface IBloomPassConfig {
   bloomIntensity: number;
 }
 
-@injectable()
 export default class BloomPass extends BasePostProcessingPass<IBloomPassConfig> {
   protected setupShaders() {
     this.shaderModuleService.registerModule('blur-pass', {

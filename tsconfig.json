@@ -6,13 +6,11 @@
     "downlevelIteration": true,
     "jsx": "react",
     "target": "es5",
-    "lib": ["es6", "dom","es2019"],
-    "types": ["reflect-metadata", "jest", "node","offscreencanvas"],
+    "lib": ["es6", "dom", "es2019"],
+    "types": ["jest", "node", "offscreencanvas"],
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "rootDir": "./",
     "baseUrl": "./",
@@ -28,7 +26,7 @@
       "@antv/l7-three": ["packages/three/src"],
       "@antv/l7-source": ["packages/source/src"],
       "@antv/l7-utils": ["packages/utils/src"],
-      "@antv/l7-test-utils":["packages/test-utils/src"],
+      "@antv/l7-test-utils": ["packages/test-utils/src"],
       "@antv/l7": ["packages/l7/src"],
       "@antv/l7-leaflet": ["packages/leaflet/src"],
       "*": ["packages", "typings/*"]
@@ -39,12 +37,14 @@
     "esm": true,
     "compilerOptions": {
       "target": "es2019",
-      "types": [
-        "node"
-      ]
+      "types": ["node"]
     }
   },
   "include": ["packages"],
-  "exclude": ["node_modules", "packages/**/dist","packages/site","packages/leaflet/**",]
-
+  "exclude": [
+    "node_modules",
+    "packages/**/dist",
+    "packages/site",
+    "packages/leaflet/**"
+  ]
 }

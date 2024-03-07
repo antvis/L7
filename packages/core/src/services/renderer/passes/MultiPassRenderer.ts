@@ -1,15 +1,11 @@
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../../types';
 import type { ILayer } from '../../layer/ILayerService';
 import type {
   IMultiPassRenderer,
   IPass,
   IPostProcessingPass,
-  IPostProcessor} from '../IMultiPassRenderer';
-import {
-  PassType,
+  IPostProcessor,
 } from '../IMultiPassRenderer';
+import { PassType } from '../IMultiPassRenderer';
 
 /**
  * ported from Three.js EffectComposer
@@ -30,12 +26,8 @@ import {
  * renderer.render();
  * @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/apuvbf#dRM8W
  */
-@injectable()
 export default class MultiPassRenderer implements IMultiPassRenderer {
   private passes: Array<IPass<unknown>> = [];
-
-  @inject(TYPES.IPostProcessor)
-  private postProcessor: IPostProcessor;
 
   private layer: ILayer;
   private renderFlag: boolean;
@@ -43,6 +35,8 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
   private width: number = 0;
 
   private height: number = 0;
+
+  constructor(private postProcessor: IPostProcessor) {}
 
   public setLayer(layer: ILayer) {
     this.layer = layer;

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import type { IShaderModuleService } from '../IShaderModuleService';
 import ShaderModuleService from '../ShaderModuleService';
 

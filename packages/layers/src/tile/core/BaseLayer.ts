@@ -5,9 +5,7 @@ import type {
   IMapService,
   IPickingService,
   IRendererService,
-  ISource} from '@antv/l7-core';
-import {
-  TYPES,
+  ISource,
 } from '@antv/l7-core';
 import type { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { lodashUtil } from '@antv/l7-utils';
@@ -37,12 +35,10 @@ export default class BaseTileLayer {
   constructor(parent: ILayer) {
     this.parent = parent;
     const container = this.parent.getContainer();
-    this.rendererService = container.get<IRendererService>(
-      TYPES.IRendererService,
-    );
-    this.layerService = container.get<ILayerService>(TYPES.ILayerService);
-    this.mapService = container.get<IMapService>(TYPES.IMapService);
-    this.pickingService = container.get<IPickingService>(TYPES.IPickingService);
+    this.rendererService = container.rendererService;
+    this.layerService = container.layerService;
+    this.mapService = container.mapService;
+    this.pickingService = container.pickingService;
 
     // 初始化瓦片管理服务
     this.tileLayerService = new TileLayerService({
@@ -210,32 +206,31 @@ export default class BaseTileLayer {
     const maxZoom = this.parent.getMaxZoom();
 
     const tiles = this.tilesetManager.tiles
-    .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
-    .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
-    .filter((tile: SourceTile) => tile.data) //
-    .filter((tile: SourceTile) => tile.z >= minZoom && tile.z < maxZoom) // 过滤不可见见
+      .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
+      .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
+      .filter((tile: SourceTile) => tile.data) //
+      .filter((tile: SourceTile) => tile.z >= minZoom && tile.z < maxZoom); // 过滤不可见见
     await Promise.all(
       tiles.map(async (tile: SourceTile) => {
-          // 未加载瓦片
-          if (!this.tileLayerService.hasTile(tile.key)) {
-            const tileInstance = getTileFactory(this.parent);
-            const tileLayer = new tileInstance(tile, this.parent);
-            await tileLayer.initTileLayer();
-            this.tilePickService.setPickState();
-            if (tileLayer.getLayers().length !== 0) {
-              this.tileLayerService.addTile(tileLayer);
-              this.tileLayerService.updateTileVisible(tile);
-              this.layerService.reRender();
-            }
-          } else {
-            // 已加载瓦片
+        // 未加载瓦片
+        if (!this.tileLayerService.hasTile(tile.key)) {
+          const tileInstance = getTileFactory(this.parent);
+          const tileLayer = new tileInstance(tile, this.parent);
+          await tileLayer.initTileLayer();
+          this.tilePickService.setPickState();
+          if (tileLayer.getLayers().length !== 0) {
+            this.tileLayerService.addTile(tileLayer);
             this.tileLayerService.updateTileVisible(tile);
-            this.tilePickService.setPickState();
             this.layerService.reRender();
           }
-        }),
+        } else {
+          // 已加载瓦片
+          this.tileLayerService.updateTileVisible(tile);
+          this.tilePickService.setPickState();
+          this.layerService.reRender();
+        }
+      }),
     );
-
 
     if (this.tilesetManager.isLoaded) {
       // 将事件抛出，图层上可以使用瓦片

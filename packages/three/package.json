@@ -7,11 +7,19 @@
     "L7",
     "three"
   ],
-  "author": "thinkinggis <lzx199065@gmail.com>",
+  "homepage": "https://github.com/antvis/L7#readme",
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antvis/L7.git"
+  },
   "license": "ISC",
+  "author": "thinkinggis <lzx199065@gmail.com>",
   "main": "lib/index.js",
-  "module": "es/index.js",
   "unpkg": "dist/l7-three.min.js",
+  "module": "es/index.js",
   "types": "es/index.d.ts",
   "directories": {
     "lib": "lib",
@@ -23,39 +31,29 @@
     "es",
     "README.md"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/antvis/L7.git"
-  },
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "father build",
+    "build:cdn": "yarn rollup -c",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:cdn": "yarn rollup -c",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "lint:ts": "run-p -c lint:ts-*",
+    "sync": "tnpm sync",
     "test": "umi-test --passWithNoTests",
-    "sync": "tnpm sync"
+    "tsc": "tsc --project tsconfig.build.json",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
-  "bugs": {
-    "url": "https://github.com/antvis/L7/issues"
-  },
-  "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
     "@antv/l7": "2.20.20",
     "@babel/runtime": "^7.7.7",
-    "inversify": "^5.0.1",
-    "reflect-metadata": "^0.2.1",
     "three": "0.115.0"
   },
   "devDependencies": {
     "rollup": "^2.3.3",
     "rollup-plugin-less": "^1.1.2"
   },
-  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
 }

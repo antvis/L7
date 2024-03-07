@@ -35,7 +35,7 @@ export default class FillImageModel extends BaseModel {
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     if (this.rendererService.getDirty()) {
-      this.texture.bind();
+      this.texture?.bind();
     }
     /**
      *               rotateFlag

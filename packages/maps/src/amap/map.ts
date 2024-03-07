@@ -2,16 +2,9 @@
 /**
  * AMapService
  */
-import type {
-  IMapCamera,
-  IMapService,
-  IViewport} from '@antv/l7-core';
-import {
-  CoordinateSystem
-} from '@antv/l7-core';
+import type { IMapCamera, IMapService, IViewport } from '@antv/l7-core';
+import { CoordinateSystem } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import type { IAMapEvent, IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import AMapLoader from '../utils/amaploader';
@@ -35,7 +28,6 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 /**
  * AMapService
  */
-@injectable()
 export default class AMapService
   extends AMapBaseService
   implements IMapService<AMap.Map & IAMapInstance>
@@ -220,7 +212,6 @@ export default class AMapService
         offsetOrigin: [position.x, position.y],
       });
       const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
-      // console.log('this.viewport', this.viewport)
       // set coordinate system
       if (this.viewport.getZoom() > offsetZoom) {
         this.coordinateSystemService.setCoordinateSystem(

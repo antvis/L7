@@ -1,18 +1,15 @@
-import type { ILayer, ILayerPlugin, IStyleAttributeService } from '@antv/l7-core';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
+import type {
+  ILayer,
+  ILayerPlugin,
+  IStyleAttributeService,
+  L7Container,
+} from '@antv/l7-core';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
  */
-@injectable()
 export default class UpdateStyleAttributePlugin implements ILayerPlugin {
-  public apply(
-    layer: ILayer,
-    {
-      styleAttributeService,
-    }: { styleAttributeService: IStyleAttributeService },
-  ) {
+  public apply(layer: ILayer, { styleAttributeService }: L7Container) {
     layer.hooks.init.tapPromise('UpdateStyleAttributePlugin', () => {
       this.initStyleAttribute(layer, { styleAttributeService });
     });
