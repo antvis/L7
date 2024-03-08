@@ -1,5 +1,6 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import { sleep } from '../../utils/sleep';
 
 export function MapRender(option: {
   map: string;
@@ -48,14 +49,32 @@ export function MapRender(option: {
           console.log('color legend', layer.getLegend('color'));
         });
 
-        setTimeout(() => {
-          console.log('update data');
-          const newData = {
-            ...data,
-            features: data.features.slice(1, 10),
-          };
-          layer.setData(newData);
-        }, 1000 * 5);
+        sleep(2000)
+          .then(() => {
+            console.log('update data');
+            const newData = {
+              ...data,
+              features: data.features.slice(1, 10),
+            };
+            layer.setData(newData);
+          })
+          .then(() => sleep(2000))
+          .then(() => {
+            console.log('update color');
+            layer.color('unit_price', [
+              '#1A4397',
+              '#2555B7',
+              '#3165D1',
+              '#467BE8',
+              '#6296FE',
+              '#7EA6F9',
+              '#98B7F7',
+              '#BDD0F8',
+              '#DDE6F7',
+              '#F2F5FC',
+            ]);
+            scene.render();
+          });
       });
   });
 }

@@ -196,10 +196,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
           offset: bufferOffsetInBytes,
         });
         // size color 触发更新事件
-        layer?.emit(`legend:${attributeName}`, {
-          type: attributeName,
-          attr: attributeToUpdate,
-        });
+        layer?.emit(`legend:${attributeName}`, layer.getLegend(attributeName));
       }
     }
   }
@@ -338,14 +335,13 @@ export default class StyleAttributeService implements IStyleAttributeService {
       count: vecticesCount,
     };
 
-    Object.values(this.attributes).forEach((attribute) => {
-      const attributeName = attribute.name;
-      // size color 触发更新事件
-      layer?.emit(`legend:${attributeName}`, {
-        type: attributeName,
-        attr: attribute,
+    Object.values(this.attributes)
+      .filter((attribute) => attribute.scale)
+      .forEach((attribute) => {
+        const attributeName = attribute.name;
+        // size color 触发更新事件
+        layer?.emit(`legend:${attributeName}`, layer.getLegend(attributeName));
       });
-    });
 
     return this.attributesAndIndices;
   }

@@ -1172,7 +1172,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const scales = attribute?.scale?.scalers || [];
 
     return {
-      type: scales[0].option?.type,
+      type: scales[0]?.option?.type,
       field: attribute?.scale?.field,
       items: this.getLegendItems(name),
     };
