@@ -4,8 +4,10 @@ import Source from '@antv/l7-source';
 
 export default class DataSourcePlugin implements ILayerPlugin {
   protected mapService: IMapService;
+
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().mapService;
+
     layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
       layer.log(IDebugLog.SourceInitStart, ILayerStage.INIT);
       let source = layer.getSource();

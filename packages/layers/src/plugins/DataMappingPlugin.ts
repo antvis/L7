@@ -8,10 +8,9 @@ import type {
   IStyleAttribute,
   IStyleAttributeService,
   L7Container,
-  Position,
 } from '@antv/l7-core';
 import { IDebugLog, ILayerStage } from '@antv/l7-core';
-import { lodashUtil, normalize, rgb2arr } from '@antv/l7-utils';
+import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 const { cloneDeep } = lodashUtil;
 
 export default class DataMappingPlugin implements ILayerPlugin {
@@ -87,6 +86,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       // layer.emit('remapping', null);
     });
   }
+
   private generateMaping(
     layer: ILayer,
     {
@@ -265,15 +265,5 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
     return mappingResult;
     // return attribute.mapping ? attribute.mapping(params) : [];
-  }
-
-  private getArrowPoints(p1: Position, p2: Position) {
-    const dir = [p2[0] - p1[0], p2[1] - p1[1]];
-    const normalizeDir = normalize(dir);
-    const arrowPoint = [
-      p1[0] + normalizeDir[0] * 0.0001,
-      p1[1] + normalizeDir[1] * 0.0001,
-    ];
-    return arrowPoint;
   }
 }

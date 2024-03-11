@@ -100,6 +100,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
     });
   }
+
   private isNumber(n: any) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
@@ -273,6 +274,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     }
     return type;
   }
+
   // 生成Scale 默认配置
   private createScaleConfig(
     type: ScaleTypeName,
