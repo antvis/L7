@@ -1,12 +1,9 @@
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import type { ILayer } from '../../layer/ILayerService';
 import BaseNormalPass from './BaseNormalPass';
 
 /**
  * ClearPass
  */
-@injectable()
 export default class ClearPass<
   InitializationOptions = {},
 > extends BaseNormalPass<InitializationOptions> {

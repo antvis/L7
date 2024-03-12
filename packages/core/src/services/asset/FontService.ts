@@ -2,8 +2,6 @@ import { LRUCache } from '@antv/l7-utils';
 // @ts-ignore
 import TinySDF from '@mapbox/tiny-sdf';
 import { EventEmitter } from 'eventemitter3';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import { buildMapping } from '../../utils/font_util';
 import type {
   IFontAtlas,
@@ -61,7 +59,6 @@ function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
   }
 }
 
-@injectable()
 export default class FontService extends EventEmitter implements IFontService {
   public get scale() {
     return HEIGHT_SCALE;

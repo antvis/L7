@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { generateLightingUniforms } from '../LightingPlugin';
 
 describe('LightingPlugin', () => {

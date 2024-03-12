@@ -18,7 +18,6 @@ describe('Map', () => {
     // map.resize();
     map.setCenter([121.434765, 31.256735])
     map.setZoom(14.83);
-    console.log(map.transform)
 
     // 验证transform.resize方法是否被正确调用
 

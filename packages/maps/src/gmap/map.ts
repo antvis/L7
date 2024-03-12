@@ -71,9 +71,6 @@ export default class TMapService extends BaseMapService<any> {
       token = GMAP_API_KEY,
       minZoom = 3,
       maxZoom = 18,
-      rotation = 0,
-      pitch = 0,
-      mapSize = 10000,
       logoVisible = true,
       ...rest
     } = this.config;

@@ -26,13 +26,7 @@ import type {
   ITexture2DInitializationOptions,
   Triangulation,
 } from '@antv/l7-core';
-import {
-  BlendType,
-  lazyInject,
-  MaskOperation,
-  StencilType,
-  TYPES,
-} from '@antv/l7-core';
+import { BlendType, MaskOperation, StencilType } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
@@ -94,18 +88,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
   protected DATA_TEXTURE_WIDTH: number; // 默认有多少列（宽度）
   protected dataTextureTest: boolean;
 
-  @lazyInject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
-
-  // @lazyInject(TYPES.IIconService)
-  // protected readonly iconService: IIconService;
-
-  // @lazyInject(TYPES.IFontService)
-  // protected readonly fontService: IFontService;
-
-  // @lazyInject(TYPES.IShaderModuleService)
   protected shaderModuleService: IShaderModuleService;
-
   protected rendererService: IRendererService;
   protected iconService: IIconService;
   protected fontService: IFontService;
@@ -122,33 +106,18 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
 
   constructor(layer: ILayer) {
     this.layer = layer;
-    this.rendererService = layer
-      .getContainer()
-      .get<IRendererService>(TYPES.IRendererService);
-    this.pickingService = layer
-      .getContainer()
-      .get<IPickingService>(TYPES.IPickingService);
+    this.configService = layer.getContainer().globalConfigService;
+    this.rendererService = layer.getContainer().rendererService;
+    this.pickingService = layer.getContainer().pickingService;
 
-    this.shaderModuleService = layer
-      .getContainer()
-      .get<IShaderModuleService>(TYPES.IShaderModuleService);
+    this.shaderModuleService = layer.getContainer().shaderModuleService;
 
-    this.styleAttributeService = layer
-      .getContainer()
-      .get<IStyleAttributeService>(TYPES.IStyleAttributeService);
-    this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
-    this.iconService = layer
-      .getContainer()
-      .get<IIconService>(TYPES.IIconService);
-    this.fontService = layer
-      .getContainer()
-      .get<IFontService>(TYPES.IFontService);
-    this.cameraService = layer
-      .getContainer()
-      .get<ICameraService>(TYPES.ICameraService);
-    this.layerService = layer
-      .getContainer()
-      .get<ILayerService>(TYPES.ILayerService);
+    this.styleAttributeService = layer.getContainer().styleAttributeService;
+    this.mapService = layer.getContainer().mapService;
+    this.iconService = layer.getContainer().iconService;
+    this.fontService = layer.getContainer().fontService;
+    this.cameraService = layer.getContainer().cameraService;
+    this.layerService = layer.getContainer().layerService;
     // 初始化支持数据映射的 Style 属性
 
     this.registerStyleAttribute();

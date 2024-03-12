@@ -5,14 +5,13 @@ import {
   AttributeType,
   gl
 } from '@antv/l7-core';
-import { lodashUtil, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
 import simple_line_frag from '../shaders/simple/simpleline_frag.glsl';
 import simple_line_vert from '../shaders/simple/simpleline_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
-const { isNumber } = lodashUtil;
 export default class SimpleLineModel extends BaseModel {  
   protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
     const {

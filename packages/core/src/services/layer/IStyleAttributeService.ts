@@ -210,6 +210,7 @@ export interface IStyleAttributeService {
     encodedFeatures: IEncodeFeature[],
     triangulation?: Triangulation,
     styleOption?: unknown,
+    layer?: ILayer,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;

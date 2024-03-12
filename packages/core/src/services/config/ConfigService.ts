@@ -1,14 +1,9 @@
-// import Ajv from 'ajv';
-import { injectable } from 'inversify';
-
 import { lodashUtil } from '@antv/l7-utils';
-import 'reflect-metadata';
 import type {
   ILayerAttributesOption,
-  ILayerConfig} from '../layer/ILayerService';
-import {
-  MaskOperation,
+  ILayerConfig,
 } from '../layer/ILayerService';
+import { MaskOperation } from '../layer/ILayerService';
 import type { IRenderConfig } from '../renderer/IRendererService';
 import type { IGlobalConfigService, ISceneConfig } from './IConfigService';
 import WarnInfo from './warnInfo';
@@ -101,7 +96,6 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
 //   verbose: true,
 // });
 
-@injectable()
 export default class GlobalConfigService implements IGlobalConfigService {
   /**
    * 全部场景配置项缓存

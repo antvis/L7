@@ -2,18 +2,10 @@
 /**
  * MapboxService
  */
-import type {
-  IEarthService,
-  IMercator,
-  IViewport} from '@antv/l7-core';
-import {
-  CoordinateSystem,
-  MapServiceEvent,
-} from '@antv/l7-core';
+import type { IEarthService, IMercator, IViewport } from '@antv/l7-core';
+import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
 import type { Map } from '@antv/l7-map';
 import { EarthMap } from '@antv/l7-map';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from './Viewport';
 const EventMap: {
@@ -29,7 +21,6 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * EarthService
  */
-@injectable()
 export default class L7EarthService
   extends BaseMapService<Map>
   implements IEarthService

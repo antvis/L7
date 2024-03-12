@@ -30,7 +30,7 @@
     "build:declarations": "lerna run tsc --stream --no-bail",
     "lint-fix": "prettier --write  packages/**/src/**/*.ts packages/site/docs/api/**/*.md packages/site/docs/api/*.md  dev-demos/**/**/*.tsx  *.md",
     "lint:dev-demo": "eslint dev-demos/ --ext .ts,.tsx --fix",
-    "lint:vite-demo": "eslint examples/ --ext .ts,.tsx --fix",
+    "lint:vite-demo": "eslint examples/ --ext .ts,.tsx",
     "lint:src": "eslint packages/ --ext .js,.ts --fix",
     "lint:examples": "eslint packages/site/examples packages/site/maptools packages/site/.dumi/pages --fix --ext .js,.tsx",
     "lint:css": "stylelint 'packages/**/src/**/*.js{,x}'",

@@ -1,7 +1,5 @@
 // @ts-ignore
 import { TestScene } from '@antv/l7-test-utils';
-import { TYPES } from '@antv/l7-core';
-import type { IRendererService } from '@antv/l7-core';
 import PolygonLayer from '../../layers/src/polygon';
 describe('template', () => {
   const el = document.createElement('div');
@@ -11,18 +9,18 @@ describe('template', () => {
   const scene = TestScene({
     center: [120.11114550000002, 30.27817071635984],
     zoom: 11.592359444611867,
-  })
+  });
   const data = {
-    "type": "FeatureCollection",
-    "features": [
+    type: 'FeatureCollection',
+    features: [
       {
-        "type": "Feature",
-        "properties": {
+        type: 'Feature',
+        properties: {
           base_height: 100,
         },
-        "geometry": {
-          "type": "Polygon",
-          "coordinates": [
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
             [
               [119.948198, 30.339818],
               [120.344273, 30.513865],
@@ -33,37 +31,29 @@ describe('template', () => {
               [119.845646, 30.175339],
               [119.81137, 30.244454],
               [119.807562, 30.352965],
-              [119.948198, 30.339818]
-            ]
-          ]
-        }
-      }
-    ]
-  }
+              [119.948198, 30.339818],
+            ],
+          ],
+        },
+      },
+    ],
+  };
 
-  const layer = new PolygonLayer({
-    autoFit: true,
-  })
-    .source(data)
-    .shape('fill')
-    .active(true)
-    .color('red');
-  scene.addLayer(layer);
-  
+  scene.on('loaded', () => {
+    const layer = new PolygonLayer({
+      autoFit: true,
+    })
+      .source(data)
+      .shape('fill')
+      .active(true)
+      .color('red');
+    scene.addLayer(layer);
+  });
 
   it('scene map status', async () => {
     // expect(scene.getBounds()).toEqual([
     //   [119.74680738328703, 30.041908999999805],
     //   [120.4754836167117, 30.513865000000024]
     // ]);
-  });
-  it('scene setBgColor', async () => {
-    const render = scene.getServiceContainer().get<IRendererService>(
-      TYPES.IRendererService,
-    );
-    const { width, height } = render.getViewportSize();
-    const pixels = new Uint8Array(width * height * 4);
-    const gl = render.getGLContext();
-
   });
 });

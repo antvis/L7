@@ -2,14 +2,12 @@
  * MapboxService
  */
 import type { IMercator } from '@antv/l7-core';
+import { MapType } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
-import { injectable } from 'inversify';
 import type { Map } from 'maplibre-gl';
 import maplibregl from 'maplibre-gl';
-import { MapType } from '@antv/l7-utils'
 // tslint:disable-next-line:no-submodule-imports
 import 'maplibre-gl/dist/maplibre-gl.css';
-import 'reflect-metadata';
 import type { IMapboxInstance } from '../../typings/index';
 import Viewport from '../mapbox/Viewport';
 import BaseMapService from '../utils/BaseMapService';
@@ -21,7 +19,6 @@ let mapdivCount = 0;
 /**
  * AMapService
  */
-@injectable()
 export default class Service extends BaseMapService<Map & IMapboxInstance> {
   public version: string = MapType.MAPBOX;
   // get mapStatus method

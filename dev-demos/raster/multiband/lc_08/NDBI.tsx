@@ -26,23 +26,6 @@ export default () => {
       const url1 =
         'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
       const tiffdata = await getTiffData(url1);
-      const url2 =
-        'https://t0.tianditu.gov.cn/img_w/wmts?tk=b72aa81ac2b3cae941d1eb213499e15e&';
-
-      const layer2 = new RasterLayer({
-        zIndex: 1,
-      }).source(url2, {
-        parser: {
-          type: 'rasterTile',
-          tileSize: 256,
-          zoomOffset: 1,
-          wmtsOptions: {
-            layer: 'img',
-            tileMatrixset: 'w',
-            format: 'tiles',
-          },
-        },
-      });
       // NDBI 6,5
       // NDWI 3,5
       const layer = new RasterLayer({

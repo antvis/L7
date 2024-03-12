@@ -1,15 +1,11 @@
-import type { CanvasLayer2 } from '@antv/l7';
 import { GaodeMap, PointLayer, Scene } from '@antv/l7';
 import * as turf from '@turf/turf';
 import type { FunctionComponent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 const POSITION = [120.104697, 30.260704] as [number, number];
 
 const Demo: FunctionComponent = () => {
-  const [scene, setScene] = useState<Scene | null>(null);
-  const [layer, setLayer] = useState<CanvasLayer2 | null>(null);
-
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',

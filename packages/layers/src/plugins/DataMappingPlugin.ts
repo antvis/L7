@@ -7,31 +7,24 @@ import type {
   IParseDataItem,
   IStyleAttribute,
   IStyleAttributeService,
-  Position} from '@antv/l7-core';
-import {
-  IDebugLog,
-  ILayerStage,
-  TYPES,
+  L7Container,
+  Position,
 } from '@antv/l7-core';
+import { IDebugLog, ILayerStage } from '@antv/l7-core';
 import { lodashUtil, normalize, rgb2arr } from '@antv/l7-utils';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
 const { cloneDeep } = lodashUtil;
 
-@injectable()
 export default class DataMappingPlugin implements ILayerPlugin {
-  @inject(TYPES.IMapService)
-  private readonly mapService: IMapService;
-
-  @inject(TYPES.IFontService)
-  private readonly fontService: IFontService;
+  private mapService: IMapService;
+  private fontService: IFontService;
 
   public apply(
     layer: ILayer,
-    {
-      styleAttributeService,
-    }: { styleAttributeService: IStyleAttributeService },
+    { styleAttributeService, mapService, fontService }: L7Container,
   ) {
+    this.mapService = mapService;
+    this.fontService = fontService;
+
     layer.hooks.init.tapPromise('DataMappingPlugin', async () => {
       layer.log(IDebugLog.MappingStart, ILayerStage.INIT);
       // 初始化重新生成 map
@@ -130,7 +123,6 @@ export default class DataMappingPlugin implements ILayerPlugin {
     data: IParseDataItem[],
     predata?: IEncodeFeature[],
   ): IEncodeFeature[] {
-
     const usedAttributes = attributes
       .filter((attribute) => attribute.scale !== undefined)
       .filter((attribute) => attribute.name !== 'filter');
@@ -180,10 +172,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     layer: ILayer,
   ) {
     // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
-    if (
-      mappedData.length > 0 &&
-      this.mapService.version === 'GAODE2.x'
-    ) {
+    if (mappedData.length > 0 && this.mapService.version === 'GAODE2.x') {
       const layerCenter = layer.coordCenter || layer.getSource().center;
       // 单个的点数据
       // @ts-ignore

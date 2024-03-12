@@ -163,7 +163,6 @@ export default class ExtrudeModel extends BaseModel {
         ) => {
           const lng = vertex[0];
           const lat = vertex[1];
-          // console.log((lng - bounds[0]) / lngLen, (lat - bounds[1]) / latLen, vertex[4])
           // 临时 兼容高德V2
           return [
             (lng - bounds[0]) / lngLen,

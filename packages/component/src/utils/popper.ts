@@ -119,7 +119,6 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     this.isShow = true;
 
     if (this.option.unique) {
-      // console.log(Popper.conflictPopperList.length);
       Popper.conflictPopperList.forEach((popper) => {
         if (popper !== this && popper.isShow) {
           popper.hide();

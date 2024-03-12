@@ -1,13 +1,11 @@
 import { GaodeMap, Scene } from '@antv/l7';
-import React, { useState } from 'react';
+import React from 'react';
 // tslint:disable-next-line:no-duplicate-imports
 import type { FunctionComponent } from 'react';
 import { useEffect } from 'react';
 import { syncScene } from './helper';
 
 const Demo: FunctionComponent = () => {
-  const [scene, setScene] = useState<Scene | null>(null);
-
   useEffect(() => {
     const newScene = new Scene({
       id: 'map',

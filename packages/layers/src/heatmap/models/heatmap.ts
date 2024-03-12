@@ -11,8 +11,6 @@ import { AttributeType, TextureUsage, gl } from '@antv/l7-core';
 import type { IColorRamp } from '@antv/l7-utils';
 import { generateColorRamp, getCullFace, lodashUtil } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import BaseModel from '../../core/BaseModel';
 import type { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapTriangulation } from '../../core/triangulation';
@@ -28,7 +26,7 @@ import heatmap_framebuffer_frag from '../shaders/heatmap/heatmap_framebuffer_fra
 import heatmap_framebuffer_vert from '../shaders/heatmap/heatmap_framebuffer_vert.glsl';
 import { heatMap3DTriangulation } from '../triangulation';
 const { isEqual } = lodashUtil;
-@injectable()
+
 export default class HeatMapModel extends BaseModel {
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;

@@ -1,12 +1,14 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.20.19",
+  "version": "2.20.20",
   "description": "",
+  "license": "ISC",
+  "author": "xiaoiver",
+  "sideEffects": false,
   "main": "lib/index.js",
+  "unpkg": "dist/l7-maps.min.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "unpkg": "dist/l7-maps.min.js",
-  "sideEffects": false,
   "files": [
     "dist",
     "lib",
@@ -15,27 +17,24 @@
     "README.md"
   ],
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "sync": "tnpm sync"
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "sync": "tnpm sync",
+    "tsc": "tsc --project tsconfig.build.json",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
-  "author": "xiaoiver",
-  "license": "ISC",
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@antv/l7-core": "2.20.19",
-    "@antv/l7-map": "2.20.19",
-    "@antv/l7-utils": "2.20.19",
+    "@antv/l7-core": "2.20.20",
+    "@antv/l7-map": "2.20.20",
+    "@antv/l7-utils": "2.20.20",
     "@babel/runtime": "^7.7.7",
+    "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
-    "inversify": "^5.0.1",
     "mapbox-gl": "^1.2.1",
     "maplibre-gl": "^3.5.2",
-    "reflect-metadata": "^0.2.1",
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
@@ -47,8 +46,8 @@
     "@types/viewport-mercator-project": "^6.1.0",
     "tmap-types-temporary": "0.1.4"
   },
-  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
 }

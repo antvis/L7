@@ -17,7 +17,7 @@ describe('exportImage', () => {
 
   it('image', () => {
     const control = new ExportImage({
-      onExport: (base64) => {
+      onExport: () => {
         // tslint:disable-next-line:no-console
         // console.log(base64);
       },

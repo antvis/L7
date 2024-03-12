@@ -9,11 +9,9 @@ import {
   Scene,
   Vector3
 } from 'three';
-import type {
-  IThreeRenderService} from './threeRenderService';
-import {
-  ThreeRenderServiceType,
-} from './threeRenderService';
+import type { IThreeRenderService } from './threeRenderService';
+
+
 type ILngLat = [number, number];
 export default class ThreeJSLayer
   extends BaseLayer<{
@@ -174,10 +172,9 @@ export default class ThreeJSLayer
   }
 
   public async buildModels() {
+    console.log(this.container)
     // @ts-ignore
-    this.threeRenderService = this.getContainer().get<IThreeRenderService>(
-      ThreeRenderServiceType,
-    );
+    this.threeRenderService = this.container.customRenderService['three'];
     const config = this.getLayerConfig();
     if (config && config.onAddMeshes) {
       await config.onAddMeshes(this.scene, this);
