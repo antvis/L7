@@ -14,11 +14,11 @@ export type TabularData = Record<string, Primitive>[];
  * Encode Spec
  * use layer like:
  * {
- *    encode?: Record<ChannelTypes, Encode>
- *    sclae?:...
+ *    encode?: Record<ChannelTypes, EncodeOptions>
+ *    sclae?: Record<string, ScaleOptions>
  * }
  */
-export type Encode =
+export type EncodeOptions =
   | ConstantEncode
   | ConstantEncode['value']
   | FieldEncode
@@ -29,35 +29,34 @@ export type Encode =
 
 export type EncodeTypes = 'constant' | 'field' | 'transform' | 'column';
 
-export type ConstantEncode = {
+type ConstantEncode = {
   type: 'constant';
   value: Primitive;
 };
 
-export type FieldEncode = {
+type FieldEncode = {
   type: 'field';
   value: string;
 };
 
-export type ColumnEncode = {
+type ColumnEncode = {
   type: 'column';
   value: Primitive[];
 };
 
-export type TransformEncode = {
+type TransformEncode = {
   type: 'transform';
-  value: FunctionEncode;
+  value: FunctionEncodeOptions;
 };
 
-export type FunctionEncode = (value: TabularData[number], index: number, array: TabularData) => Primitive;
+export type FunctionEncodeOptions = (value: TabularData[number], index: number, array: TabularData) => Primitive;
 
-// export type ValueEncode = NormalizedEncode | PrimitiveEncode;
+export type NormalizedEncodeOptions = ConstantEncode | FieldEncode | TransformEncode | ColumnEncode;
 
-export type NormalizedEncode = ConstantEncode | FieldEncode | TransformEncode | ColumnEncode;
+// export type ValueEncodeOptions = NormalizedEncodeOptions | PrimitiveEncode;
+// export type PrimitiveEncode = Primitive | FunctionEncodeOptions;
 
-// export type PrimitiveEncode = Primitive | FunctionEncode;
-
-export type ValuedEncode = {
+export type ValuedEncodeOptions = {
   field: string | null;
   type: 'column';
   value: Primitive[];
@@ -66,14 +65,36 @@ export type ValuedEncode = {
 
 export type EncodeMethod = (data: TabularData, value: any) => Primitive[];
 
-// export type ChannelGroups = {
-//   name?: string;
-//   scaleKey?: string;
-//   // @todo
-//   scale?: Record<string, any>;
-//   values?: {
-//     name?: string;
-//     value?: Primitive[];
-//     field?: string;
-//   }[];
-// };
+export type ChannelDescriptor = {
+  name: string;
+  // @todo
+  scale?: string;
+  scaleType?: string;
+  quantitative?: string;
+  ordinal?: string;
+  scaleName?: string;
+  required?: boolean;
+  value?: Primitive[];
+  type?: string;
+  field?: string | string[];
+  visual?: boolean;
+  range?: any[];
+};
+
+export type Channel = {
+  name: string;
+  value: Primitive[];
+  field: string | null;
+  // @todo
+  scale: Record<string, any>;
+};
+
+export type ScaleOptions = {
+  // @todo
+  name?: string;
+  domain?: any[];
+  range?: any[];
+  field?: string | string[];
+  zero?: boolean;
+  [key: string]: any;
+};
