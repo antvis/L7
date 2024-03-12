@@ -8,12 +8,7 @@ import type {
   L7Container,
   ScaleTypeName,
 } from '@antv/l7-core';
-import {
-  IDebugLog,
-  ILayerStage,
-  ScaleTypes,
-  StyleScaleType,
-} from '@antv/l7-core';
+import { IDebugLog, ILayerStage, ScaleTypes, StyleScaleType } from '@antv/l7-core';
 import type { IParseDataItem } from '@antv/l7-source';
 import { lodashUtil } from '@antv/l7-utils';
 import { extent } from 'd3-array';
@@ -25,16 +20,20 @@ const dateRegex =
   /^(?:(?!0000)[0-9]{4}([-/.]+)(?:(?:0?[1-9]|1[0-2])\1(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])\1(?:29|30)|(?:0?[13578]|1[02])\1(?:31))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2\2(?:29))(\s+([01]|([01][0-9]|2[0-3])):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]))?$/;
 
 const scaleMap = {
+  // Continuous
   [ScaleTypes.LINEAR]: d3.scaleLinear,
   [ScaleTypes.POWER]: d3.scalePow,
   [ScaleTypes.LOG]: d3.scaleLog,
   [ScaleTypes.IDENTITY]: identity,
-  [ScaleTypes.SEQUENTIAL]: d3.scaleSequential,
   [ScaleTypes.TIME]: d3.scaleTime,
+  // Distribution
+  [ScaleTypes.THRESHOLD]: d3.scaleThreshold,
   [ScaleTypes.QUANTILE]: d3.scaleQuantile,
   [ScaleTypes.QUANTIZE]: d3.scaleQuantize,
-  [ScaleTypes.THRESHOLD]: d3.scaleThreshold,
+  // Discrete
   [ScaleTypes.CAT]: d3.scaleOrdinal,
+
+  [ScaleTypes.SEQUENTIAL]: d3.scaleSequential,
   [ScaleTypes.DIVERGING]: d3.scaleDiverging,
 };
 /**
@@ -58,26 +57,23 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     });
 
     // 检测数据是否需要更新
-    layer.hooks.beforeRenderData.tapPromise(
-      'FeatureScalePlugin',
-      async (flag: boolean) => {
-        if (!flag) {
-          return flag;
-        }
-        layer.log(IDebugLog.ScaleInitStart, ILayerStage.UPDATE);
-        this.scaleOptions = layer.getScaleOptions();
-        const attributes = styleAttributeService.getLayerStyleAttributes();
-        const dataArray = layer.getSource().data.dataArray;
+    layer.hooks.beforeRenderData.tapPromise('FeatureScalePlugin', async (flag: boolean) => {
+      if (!flag) {
+        return flag;
+      }
+      layer.log(IDebugLog.ScaleInitStart, ILayerStage.UPDATE);
+      this.scaleOptions = layer.getScaleOptions();
+      const attributes = styleAttributeService.getLayerStyleAttributes();
+      const dataArray = layer.getSource().data.dataArray;
 
-        if (Array.isArray(dataArray) && dataArray.length === 0) {
-          return true;
-        }
-        this.caculateScalesForAttributes(attributes || [], dataArray);
-        layer.log(IDebugLog.ScaleInitEnd, ILayerStage.UPDATE);
-        layer.layerModelNeedUpdate = true;
+      if (Array.isArray(dataArray) && dataArray.length === 0) {
         return true;
-      },
-    );
+      }
+      this.caculateScalesForAttributes(attributes || [], dataArray);
+      layer.log(IDebugLog.ScaleInitEnd, ILayerStage.UPDATE);
+      layer.layerModelNeedUpdate = true;
+      return true;
+    });
 
     layer.hooks.beforeRender.tap('FeatureScalePlugin', () => {
       if (layer.layerModelNeedUpdate) {
@@ -91,9 +87,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
         return;
       }
       if (attributes) {
-        const attributesToRescale = attributes.filter(
-          (attribute) => attribute.needRescale,
-        );
+        const attributesToRescale = attributes.filter((attribute) => attribute.needRescale);
         if (attributesToRescale.length) {
           this.caculateScalesForAttributes(attributesToRescale, dataArray);
         }
@@ -105,30 +99,18 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
 
-  private caculateScalesForAttributes(
-    attributes: IStyleAttribute[],
-    dataArray: IParseDataItem[],
-  ) {
+  private caculateScalesForAttributes(attributes: IStyleAttribute[], dataArray: IParseDataItem[]) {
     attributes.forEach((attribute) => {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const fieldValue = attribute!.scale!.field;
-        attributeScale.names = this.parseFields(
-          isNil(fieldValue) ? [] : fieldValue,
-        );
+        attributeScale.names = this.parseFields(isNil(fieldValue) ? [] : fieldValue);
         const scales: IStyleScale[] = [];
         // 为每个字段创建 Scale
         attributeScale.names.forEach((field: string | number) => {
-          scales.push(
-            this.createScale(
-              field,
-              attribute.name,
-              attribute.scale?.values,
-              dataArray,
-            ),
-          );
+          scales.push(this.createScale(field, attribute.name, attribute.scale?.values, dataArray));
         });
 
         // 为scales 设置值区间 Range
@@ -141,13 +123,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                 case ScaleTypes.LOG:
                 case ScaleTypes.LINEAR:
                 case ScaleTypes.POWER:
-                  if (
-                    attributeScale.values &&
-                    attributeScale.values.length > 2
-                  ) {
-                    const tick = scale.scale.ticks(
-                      attributeScale.values.length,
-                    );
+                  if (attributeScale.values && attributeScale.values.length > 2) {
+                    const tick = scale.scale.ticks(attributeScale.values.length);
                     scale.scale.domain(tick);
                   }
                   attributeScale.values
@@ -204,9 +181,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
    * 'w*h' => ['w', 'h']
    * 'w' => ['w']
    */
-  private parseFields(
-    field: string[] | string | number[] | number,
-  ): string[] | number[] {
+  private parseFields(field: string[] | string | number[] | number): string[] | number[] {
     if (Array.isArray(field)) {
       return field;
     }
@@ -251,8 +226,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       styleScale.type = StyleScaleType.CONSTANT;
     } else {
       // 根据数据类型判断 默认等分位，时间，和枚举类型
-      let type =
-        (scaleOption && scaleOption.type) || this.getDefaultType(firstValue);
+      let type = (scaleOption && scaleOption.type) || this.getDefaultType(firstValue);
       if (values === 'text') {
         // text 为内置变 如果是文本则为cat
         type = ScaleTypes.CAT;
@@ -306,10 +280,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       cfg.domain = values;
     } else if (type === ScaleTypes.DIVERGING) {
       const minMax = extent(values);
-      const neutral =
-        scaleOption?.neutral !== undefined
-          ? scaleOption?.neutral
-          : (minMax[0] + minMax[1]) / 2;
+      const neutral = scaleOption?.neutral !== undefined ? scaleOption?.neutral : (minMax[0] + minMax[1]) / 2;
       cfg.domain = [minMax[0], neutral, minMax[1]];
     } else {
       // linear/Power/log

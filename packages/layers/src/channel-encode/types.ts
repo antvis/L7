@@ -92,6 +92,7 @@ export type Channel = {
 export type ScaleOptions = {
   // @todo
   name?: string;
+  type?: string;
   domain?: any[];
   range?: any[];
   field?: string | string[];

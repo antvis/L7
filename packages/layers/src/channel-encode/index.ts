@@ -130,8 +130,3 @@ export function getChannels(
     };
   });
 }
-
-/**
- * infer scale by channel
- */
-export function inferScale() {}
