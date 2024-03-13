@@ -70,10 +70,10 @@ export class CanvasModel extends BaseModel {
     if (!this.canvas) {
       this.initCanvas();
     }
-    const { render, drawingOnCanvas } = this.layerConfig;
+    const { draw, drawingOnCanvas } = this.layerConfig;
     const [width, height] = this.viewportSize;
     const bounds = this.mapService.getBounds();
-    (render ?? drawingOnCanvas)?.({
+    (draw ?? drawingOnCanvas)?.({
       canvas: this.canvas!,
       ctx: this.ctx,
       container: {

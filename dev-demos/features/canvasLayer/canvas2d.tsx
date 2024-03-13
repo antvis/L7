@@ -21,7 +21,7 @@ const Demo: FunctionComponent = () => {
     newScene.on('loaded', () => {
       const canvasLayer = new CanvasLayer({
         zIndex: 100,
-        render: ({ ctx, container, utils }) => {
+        draw: ({ ctx, container, utils }) => {
           ctx.clearRect(0, 0, container.width, container.height);
           ctx.fillStyle = 'blue';
           const { x, y } = utils.lngLatToContainer(POSITION);

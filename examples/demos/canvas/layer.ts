@@ -19,7 +19,7 @@ export function MapRender(option: { map: string; renderer: string }) {
   scene.on('loaded', () => {
     const canvasLayer = new CanvasLayer({
       zIndex: 4,
-      render: ({ canvas, ctx, container, utils }) => {
+      draw: ({ canvas, ctx, container, utils }) => {
         const context = ctx as CanvasRenderingContext2D;
         context.clearRect(0, 0, container.width, container.height);
         context.fillStyle = 'blue';

@@ -289,10 +289,10 @@ export interface ICanvasLayerOptions {
    * @alias trigger
    */
   update?: CanvasUpdateType | string;
-  render?: (renderParams: ICanvasLayerRenderParams) => void;
+  draw?: (renderParams: ICanvasLayerRenderParams) => void;
   /**
    * @deprecated
-   * @alias render
+   * @alias draw
    */
   drawingOnCanvas?: (renderParams: ICanvasLayerRenderParams) => void;
 }

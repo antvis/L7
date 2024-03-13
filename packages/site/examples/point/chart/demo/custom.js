@@ -118,11 +118,11 @@ const scene = new Scene({
   }),
 });
 scene.on('loaded', () => {
-  const layer = new CanvasLayer({}).style({
+  const layer = new CanvasLayer({
     zIndex: 10,
     trigger: 'change',
-    render: draw,
-  });
+    draw,
+  })
 
   scene.addLayer(layer);
 
