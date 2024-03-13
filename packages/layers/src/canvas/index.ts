@@ -25,6 +25,14 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerOptions> {
     return this.getLayerConfig().contextType || 'canvas2d';
   }
 
+  public draw(draw: ICanvasLayerOptions['draw']) {
+    this.updateLayerConfig({
+      draw,
+    });
+    this.render();
+    return this;
+  }
+
   public getLayerConfig() {
     const config = {
       ...this.getDefaultConfig(),
@@ -37,7 +45,7 @@ export default class CanvasLayer extends BaseLayer<ICanvasLayerOptions> {
   }
 
   public render() {
-    this.layerModel.renderCanvas();
+    this.layerModel?.renderCanvas();
     return this;
   }
 

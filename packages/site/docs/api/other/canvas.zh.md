@@ -92,6 +92,18 @@ options: {
 
 ### 方法
 
+#### draw
+
+类型：`() => this`
+
+作用：更新 draw 绘制方法
+
+#### updateLayerConfig
+
+类型：`(options: Partial<ICanvasLayerOptions>) => this`
+
+作用：更新 `CanvasLayer` 的配置
+
 #### render
 
 类型：`() => void`
