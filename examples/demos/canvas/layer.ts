@@ -9,7 +9,7 @@ export function MapRender(option: { map: string; renderer: string }) {
     id: 'map',
     renderer: option.renderer,
     map: new allMap[option.map || 'Map']({
-    // map: new allMap['GoogleMap']({
+      // map: new allMap['GoogleMap']({
       style: 'light',
       center: POSITION,
       zoom: 14.89,
@@ -28,14 +28,7 @@ export function MapRender(option: { map: string; renderer: string }) {
         context.fillRect(x - size / 2, y - size / 2, size, size);
       },
     });
-
     scene.addLayer(canvasLayer);
-
-    canvasLayer.on('add', () => {
-      canvasLayer.layerModel.canvas?.addEventListener('click', (e) => {
-        console.log('canvas click', e);
-      });
-    });
 
     const pointLayer = new PointLayer({});
     pointLayer
@@ -45,8 +38,20 @@ export function MapRender(option: { map: string; renderer: string }) {
       .size(30);
     scene.addLayer(pointLayer);
 
-    pointLayer.on('click', (e) => {
-      console.log('layer click', e);
-    });
+    const showBtn = document.createElement('button');
+    showBtn.innerHTML = 'Show CanvasLayer';
+    showBtn.style = 'position: absolute; left: 20px; z-index: 10; top: 60px;';
+    showBtn.onclick = () => {
+      canvasLayer.show();
+    };
+
+    const hideBtn = document.createElement('button');
+    hideBtn.innerHTML = 'Hide CanvasLayer';
+    hideBtn.style = 'position: absolute; left: 20px; z-index: 10; top: 90px;';
+    hideBtn.onclick = () => {
+      canvasLayer.hide();
+    };
+
+    document.body.append(showBtn, hideBtn);
   });
 }

@@ -6,7 +6,7 @@ import type {
   StyleAttributeOption,
 } from '@antv/l7-core';
 import type { IColorRamp } from '@antv/l7-utils';
-import type { CanvasModelType } from '../canvas2/models';
+import type { CanvasModelType } from '../canvas/models';
 import type { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
@@ -263,13 +263,8 @@ export interface IDrawingOnCanvas {
   mapService: IMapService;
   size: [number, number];
 }
-export interface ICanvasLayerStyleOptions {
-  zIndex: number;
-  update: CanvasUpdateType | string;
-  drawingOnCanvas: (option: IDrawingOnCanvas) => void;
-}
 
-export interface ICanvasLayer2RenderParams {
+export interface ICanvasLayerRenderParams {
   canvas: HTMLCanvasElement;
   ctx: RenderingContext;
   container: {
@@ -277,18 +272,29 @@ export interface ICanvasLayer2RenderParams {
     height: number;
     bounds: [[number, number], [number, number]];
   };
+  size: [number, number];
   utils: {
     lngLatToContainer: IMapService['lngLatToContainer'];
-    mapService: IMapService;
   };
+  mapService: IMapService;
 }
 
-export interface ICanvasLayer2Options {
+export interface ICanvasLayerOptions {
   zIndex?: number;
   contextType?: CanvasModelType;
   getContext?: (canvas: HTMLCanvasElement) => RenderingContext;
   trigger?: 'end' | 'change';
-  render?: (renderParams: ICanvasLayer2RenderParams) => void;
+  /**
+   * @deprecated
+   * @alias trigger
+   */
+  update?: CanvasUpdateType | string;
+  render?: (renderParams: ICanvasLayerRenderParams) => void;
+  /**
+   * @deprecated
+   * @alias render
+   */
+  drawingOnCanvas?: (renderParams: ICanvasLayerRenderParams) => void;
 }
 
 export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {

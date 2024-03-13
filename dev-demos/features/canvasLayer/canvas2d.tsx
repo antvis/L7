@@ -1,4 +1,4 @@
-import { GaodeMap, PointLayer, Scene } from '@antv/l7';
+import { CanvasLayer, GaodeMap, PointLayer, Scene } from '@antv/l7';
 import * as turf from '@turf/turf';
 import type { FunctionComponent } from 'react';
 import React, { useEffect } from 'react';
@@ -19,17 +19,17 @@ const Demo: FunctionComponent = () => {
     });
 
     newScene.on('loaded', () => {
-      // const canvasLayer = new CanvasLayer2({
-      //   zIndex: 100,
-      //   render: ({ canvas, ctx, container, utils }) => {
-      //     ctx.clearRect(0, 0, container.width, container.height);
-      //     ctx.fillStyle = 'blue';
-      //     const { x, y } = utils.lngLatToContainer(POSITION);
-      //     const size = 36 * window.devicePixelRatio;
-      //     ctx.fillRect(x - size / 2, y - size / 2, size, size);
-      //   },
-      // });
-      // newScene.addLayer(canvasLayer);
+      const canvasLayer = new CanvasLayer({
+        zIndex: 100,
+        render: ({ ctx, container, utils }) => {
+          ctx.clearRect(0, 0, container.width, container.height);
+          ctx.fillStyle = 'blue';
+          const { x, y } = utils.lngLatToContainer(POSITION);
+          const realSize = 36 * window.devicePixelRatio;
+          ctx.fillRect(x - realSize / 2, y - realSize / 2, realSize, realSize);
+        },
+      });
+      newScene.addLayer(canvasLayer);
 
       const pointLayer = new PointLayer({});
       pointLayer

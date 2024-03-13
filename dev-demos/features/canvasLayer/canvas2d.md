@@ -1,3 +1,3 @@
-### CanvasLayer2 - canvas2d
+### CanvasLayer - canvas2d
 
 <code src="./canvas2d.tsx" compact defaultShowCode></code>

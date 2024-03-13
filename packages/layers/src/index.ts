@@ -1,5 +1,4 @@
 import CanvasLayer from './canvas';
-import CanvasLayer2 from './canvas2';
 import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import BaseModel from './core/BaseModel';
@@ -23,7 +22,6 @@ export {
   BaseLayer,
   BaseModel,
   CanvasLayer,
-  CanvasLayer2,
   CityBuildingLayer,
   EarthLayer,
   GeometryLayer,
