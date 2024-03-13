@@ -3,7 +3,7 @@ coverage/
 lib/
 dist/
 mocks/
-node_modules/
+node_modules
 demos/
 .cache
 public

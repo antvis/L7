@@ -1,3 +1,7 @@
+import type { EncodeType, ScaleType } from './constants';
+
+export { EncodeType, ScaleType };
+
 export type Primitive = number | string | boolean | Date;
 
 /**
@@ -26,8 +30,6 @@ export type EncodeOptions =
   | TransformEncode
   | TransformEncode['value']
   | ColumnEncode;
-
-export type EncodeTypes = 'constant' | 'field' | 'transform' | 'column';
 
 type ConstantEncode = {
   type: 'constant';
@@ -58,6 +60,7 @@ export type NormalizedEncodeOptions = ConstantEncode | FieldEncode | TransformEn
 
 export type ValuedEncodeOptions = {
   field: string | null;
+  // TODO: type support TypedArray
   type: 'column';
   value: Primitive[];
   isConstant: boolean;
@@ -67,17 +70,14 @@ export type EncodeMethod = (data: TabularData, value: any) => Primitive[];
 
 export type ChannelDescriptor = {
   name: string;
-  // @todo
-  scale?: string;
-  scaleType?: string;
-  quantitative?: string;
-  ordinal?: string;
-  scaleName?: string;
+  // scale type name
+  scaleType?: ScaleType;
+  quantitative?: 'linear' | 'log' | 'pow' | 'time';
   required?: boolean;
-  value?: Primitive[];
-  type?: string;
-  field?: string | string[];
-  visual?: boolean;
+  // value?: Primitive[];
+  // type?: string;
+  // field?: string | string[];
+  // visual?: boolean;
   range?: any[];
 };
 
@@ -85,17 +85,27 @@ export type Channel = {
   name: string;
   value: Primitive[];
   field: string | null;
-  // @todo
-  scale: Record<string, any>;
+  scale: ChannelScaleOptions;
 };
 
+export type ChannelScaleOptions = ScaleOptions & Pick<ChannelDescriptor, 'quantitative'>;
+
 export type ScaleOptions = {
-  // @todo
-  name?: string;
-  type?: string;
+  type?: ScaleType;
   domain?: any[];
   range?: any[];
-  field?: string | string[];
+  field?: string;
   zero?: boolean;
   [key: string]: any;
+};
+
+export type Scale = {
+  map: (x: any) => any;
+  invert: (x: any) => any;
+  getTicks?: () => any[];
+  getBandWidth?: (d?: any) => number;
+  getFormatter?: () => (x: any) => string;
+  getOptions: () => Record<string, any>;
+  update(options: Record<string, any>): void;
+  clone: () => Scale;
 };

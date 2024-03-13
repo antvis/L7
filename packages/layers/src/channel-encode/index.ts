@@ -1,9 +1,10 @@
+import { ENCODE_TYPE, SCALE_TYPE } from './constants';
 import type {
   Channel,
   ChannelDescriptor,
   EncodeMethod,
   EncodeOptions,
-  EncodeTypes,
+  EncodeType,
   FunctionEncodeOptions,
   NormalizedEncodeOptions,
   Primitive,
@@ -11,7 +12,7 @@ import type {
   TabularData,
   ValuedEncodeOptions,
 } from './types';
-import { mapObject } from './utils';
+import { mapObject } from './utils/array';
 
 /**
  * get normalized encode channels by encode channels
@@ -38,13 +39,13 @@ function isTypedEncodeChannel(channel: EncodeOptions): channel is NormalizedEnco
   }
   const { type } = channel;
 
-  return ['constant', 'field', 'transform', 'column'].includes(type);
+  return Object.values(ENCODE_TYPE).includes(type);
 }
 
-function inferEncodeChannelType(data: TabularData, channel: EncodeOptions): EncodeTypes {
-  if (typeof channel === 'function') return 'transform';
-  if (typeof channel === 'string' && isField(data, channel)) return 'field';
-  return 'constant';
+function inferEncodeChannelType(data: TabularData, channel: EncodeOptions): EncodeType {
+  if (typeof channel === 'function') return ENCODE_TYPE.TRANSFORM;
+  if (typeof channel === 'string' && isField(data, channel)) return ENCODE_TYPE.FIELD;
+  return ENCODE_TYPE.CONSTANT;
 }
 
 function isField(data: TabularData, value: string): boolean {
@@ -66,27 +67,27 @@ export function getValuedEncode(data: TabularData, encodeChannels: Record<string
   return valuedEncode;
 }
 
-const encodeMethodMap = new Map<EncodeTypes, EncodeMethod>([
-  ['constant', (data: TabularData, value: Primitive) => new Array(data.length).fill(value)],
-  ['field', (data: TabularData, value: string) => data.map((d) => d[value])],
-  ['transform', (data: TabularData, value: FunctionEncodeOptions) => data.map(value)],
-  ['column', (data: TabularData, value: Primitive[]) => value],
+const ENCODE_METHOD_MAP = new Map<EncodeType, EncodeMethod>([
+  [ENCODE_TYPE.CONSTANT, (data: TabularData, value: Primitive) => new Array(data.length).fill(value)],
+  [ENCODE_TYPE.FIELD, (data: TabularData, value: string) => data.map((d) => d[value])],
+  [ENCODE_TYPE.TRANSFORM, (data: TabularData, value: FunctionEncodeOptions) => data.map(value)],
+  [ENCODE_TYPE.COLUMN, (data: TabularData, value: Primitive[]) => value],
 ]);
 
 function columnOf(data: TabularData, channel: NormalizedEncodeOptions): ValuedEncodeOptions {
-  const encodeMethod = encodeMethodMap.get(channel.type);
+  const encodeMethod = ENCODE_METHOD_MAP.get(channel.type);
   const value = encodeMethod ? encodeMethod(data, channel.value) : [];
   return {
     type: 'column',
     value,
     field: fieldOf(channel),
-    isConstant: channel.type === 'constant',
+    isConstant: channel.type === ENCODE_TYPE.CONSTANT,
   };
 }
 
 function fieldOf(channel: NormalizedEncodeOptions): string | null {
   const { type, value } = channel;
-  if (type === 'field' && typeof value === 'string') return value;
+  if (type === ENCODE_TYPE.FIELD && typeof value === 'string') return value;
   return null;
 }
 
@@ -115,7 +116,7 @@ export function getChannels(
     const scale = scales[channelName] || {};
     const {
       // @todo: visual channel use identity scale.
-      type = encodeChannel.isConstant ? 'constant' : undefined,
+      type = encodeChannel.isConstant ? SCALE_TYPE.CONSTANT : undefined,
       ...scaleOptions
     } = scale;
 
