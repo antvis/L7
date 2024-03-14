@@ -35,15 +35,15 @@ export const SCALE_TYPE = {
   QUANTILE: 'quantile',
   QUANTIZE: 'quantize',
   THRESHOLD: 'threshold',
-  // CUSTOM: 'threshold', // 别名 THRESHOLD
+  // CUSTOM: 'threshold', // TODO:兼容旧版别名 THRESHOLD?
 
   // Discrete Scales 离散类比例尺
   ORDINAL: 'ordinal',
-  // CAT: 'ordinal', // 别名 ORDINAL
+  // CAT: 'ordinal', // TODO:兼容旧版别名 ORDINAL?
 
-  // TODO
+  // Special
   SEQUENTIAL: 'sequential',
-  DIVERGING: 'diverging', // need it?
+  DIVERGING: 'diverging',
   CONSTANT: 'constant',
 } as const;
 
@@ -66,6 +66,7 @@ export const SCALE_MAP: Record<ScaleType, any> = {
   // Discrete
   [SCALE_TYPE.ORDINAL]: OrdinalScale,
 
+  // Special
   [SCALE_TYPE.SEQUENTIAL]: SequentialScale,
   [SCALE_TYPE.DIVERGING]: DivergingScale,
   [SCALE_TYPE.CONSTANT]: ConstantScale,

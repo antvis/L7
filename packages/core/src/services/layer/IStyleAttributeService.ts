@@ -1,7 +1,4 @@
-import type {
-  IAttribute,
-  IAttributeInitializationOptions,
-} from '../renderer/IAttribute';
+import type { IAttribute, IAttributeInitializationOptions } from '../renderer/IAttribute';
 import type { IBufferInitializationOptions } from '../renderer/IBuffer';
 import type { IElements } from '../renderer/IElements';
 import type { ILayer } from './ILayerService';
@@ -98,8 +95,7 @@ export interface IEncodeFeature {
   [key: string]: any;
 }
 
-export interface IVertexAttributeDescriptor
-  extends Omit<IAttributeInitializationOptions, 'buffer'> {
+export interface IVertexAttributeDescriptor extends Omit<IAttributeInitializationOptions, 'buffer'> {
   /**
    * attribute name in vertex shader
    */
@@ -134,12 +130,18 @@ export interface IStyleAttributeInitializationOptions {
   name: string;
   type: AttributeType;
   scale?: {
+    // 映射字段，eg: encode(field)
     field: StyleAttributeField;
+    //  映射数据，eg: encode(field, values)
     values: unknown[] | string;
+    //  常量存储的值，eg: encode(5) or encode('aaa')
     defaultValues: unknown[] | string;
+    //  映射多字段解析值，eg: encode('a*b')
     names: string[] | number[];
     type: StyleScaleType;
+    // 映射函数，eg: encode(field, () => 5)
     callback?: (...args: any[]) => [];
+    // names 创建的 Scale 实例
     scalers?: IAttributeScale[];
   };
   descriptor: IVertexAttributeDescriptor;
@@ -193,9 +195,7 @@ export interface IStyleAttributeService {
     };
     elements: IElements;
   };
-  registerStyleAttribute(
-    options: Partial<IStyleAttributeInitializationOptions>,
-  ): IStyleAttribute;
+  registerStyleAttribute(options: Partial<IStyleAttributeInitializationOptions>): IStyleAttribute;
   unRegisterStyleAttribute(name: string): void;
   updateScaleAttribute(scale: IScaleOptions): void;
   updateStyleAttribute(

@@ -1,4 +1,5 @@
 import { createInterpolateValue } from '@antv/scale';
+import { interpolateRgbBasis } from 'd3-interpolate';
 import { SCALE_MAP, SCALE_TYPE } from './constants';
 import type { Channel, ChannelScaleOptions, Primitive, Scale, ScaleOptions, ScaleType } from './types';
 import { defined } from './utils/helper';
@@ -26,7 +27,7 @@ export function inferScale(channelName: string, value: Primitive[], channelScale
  */
 export function createScaleInstance(channelScale: ChannelScaleOptions) {
   const { type, ...rest } = channelScale;
-  const  Scale = SCALE_MAP[type!]
+  const Scale = SCALE_MAP[type!];
   const scaleInstance = new Scale(rest) as Scale;
 
   return scaleInstance;
@@ -75,13 +76,15 @@ function inferScaleDomain(
     case SCALE_TYPE.POW:
     case SCALE_TYPE.QUANTIZE:
     case SCALE_TYPE.THRESHOLD:
-      return maybeMinMax(inferDomainQ(value, channelScale), channelScale);
+      return maybeMinMax(inferDomainLinear(value, channelScale), channelScale);
     case SCALE_TYPE.ORDINAL:
-      return inferDomainC(value);
+      return inferDomainOrdinal(value);
     case SCALE_TYPE.QUANTILE:
-      return inferDomainO(value);
+      return inferDomainQuantile(value);
     case SCALE_TYPE.SEQUENTIAL:
-      return maybeMinMax(inferDomainS(value), channelScale);
+      return maybeMinMax(inferDomainSequential(value), channelScale);
+    case SCALE_TYPE.DIVERGING:
+      return inferDomainDiverging(value, channelScale);
     default:
       return [];
   }
@@ -93,19 +96,24 @@ function inferScaleRange(
   value: Primitive[],
   channelScale: ChannelScaleOptions,
 ): any[] | undefined {
-  const { range, rangeMin, rangeMax } = channelScale;
+  const { range } = channelScale;
   if (range !== undefined) return range;
   switch (type) {
     case SCALE_TYPE.LINEAR:
     case SCALE_TYPE.TIME:
     case SCALE_TYPE.LOG:
     case SCALE_TYPE.POW:
-      const [r0, r1] = inferRangeQ(channelName);
-      return [rangeMin || r0, rangeMax || r1];
+      const [r0, r1] = inferRangeQuantitative(channelName);
+      const { rangeMin, rangeMax } = channelScale;
+      return [rangeMin ?? r0, rangeMax ?? r1];
     case SCALE_TYPE.ORDINAL:
-      // TODO: categoricalColors?
-      return [];
+      // range 不存在情况，默认使用 domain 做一一映射
+      // 1. 兼容旧版本  {shape: 'text'}, type is SCALE_TYPE.ORDINAL
+      // 2. TODO: 备注是否还有其他情况？
+      const { domain } = channelScale;
+      return domain || [];
     case SCALE_TYPE.SEQUENTIAL:
+    case SCALE_TYPE.DIVERGING:
       return undefined;
     case SCALE_TYPE.CONSTANT:
       return [value[0]];
@@ -120,25 +128,26 @@ function inferScaleOptions(type: ScaleType, channelScale: ChannelScaleOptions): 
     case SCALE_TYPE.TIME:
     case SCALE_TYPE.LOG:
     case SCALE_TYPE.POW:
-      return inferOptionsQ(channelScale);
+      return inferOptionsQuantitative(channelScale);
     case SCALE_TYPE.SEQUENTIAL:
-      return inferOptionsS(channelScale);
+    case SCALE_TYPE.DIVERGING:
+      return inferOptionsSequential(channelScale);
     default:
       return channelScale;
   }
 }
 
-function inferOptionsS(channelScale: ChannelScaleOptions): ChannelScaleOptions {
-  // TODO: interpolator?
-  return channelScale;
-}
-
-function inferOptionsQ(channelScale: ChannelScaleOptions): ChannelScaleOptions {
+function inferOptionsQuantitative(channelScale: ChannelScaleOptions): ChannelScaleOptions {
   const { interpolate = createInterpolateValue, nice = false, tickCount = 5 } = channelScale;
   return { ...channelScale, interpolate, nice, tickCount };
 }
 
-function inferRangeQ(name: string): Primitive[] {
+function inferOptionsSequential(channelScale: ChannelScaleOptions): ChannelScaleOptions {
+  const { range = [], interpolator = interpolateRgbBasis(range), nice = false, tickCount = 5 } = channelScale;
+  return { ...channelScale, interpolator, nice, tickCount };
+}
+
+function inferRangeQuantitative(name: string): Primitive[] {
   // TODO: color get palette by categoricalColors
   // if (name === 'color') return [];
   if (name === 'opacity') return [0, 1];
@@ -158,6 +167,7 @@ function isOrdinal(value: Primitive[]): boolean {
 }
 
 function isTemporal(value: Primitive[]): boolean {
+  // TODO: is support string time, like: '2024:01:12'
   return value.some((v) => v instanceof Date);
 }
 
@@ -178,14 +188,12 @@ function asQuantitativeType(
 
 function maybeMinMax(domain: Primitive[], options: ChannelScaleOptions): Primitive[] {
   if (domain.length === 0) return domain;
-  // TODO: domainMin, domainMax ?
   const { domainMin, domainMax } = options;
   const [d0, d1] = domain;
   return [domainMin ?? d0, domainMax ?? d1];
 }
 
-function inferDomainQ(value: Primitive[], options: ChannelScaleOptions) {
-  const { zero = false } = options;
+function inferDomainExtent(value: Primitive[]) {
   let min = Infinity;
   let max = -Infinity;
   for (const d of value) {
@@ -195,26 +203,31 @@ function inferDomainQ(value: Primitive[], options: ChannelScaleOptions) {
     }
   }
   if (min === Infinity) return [];
+  return [min, max];
+}
+
+function inferDomainLinear(value: Primitive[], options: ChannelScaleOptions) {
+  const { zero = false } = options;
+  const [min, max] = inferDomainExtent(value);
   return zero ? [Math.min(0, min), max] : [min, max];
 }
 
-function inferDomainC(value: Primitive[]) {
+function inferDomainOrdinal(value: Primitive[]) {
   return Array.from(new Set(value));
 }
 
-function inferDomainO(value: Primitive[]) {
-  return inferDomainC(value).sort();
+function inferDomainQuantile(value: Primitive[]) {
+  // TODO: quantile domain 不能直接去重复，muti geo 拆分情况要取原始数据？
+  return inferDomainOrdinal(value).sort();
 }
 
-function inferDomainS(value: Primitive[]) {
-  let min = Infinity;
-  let max = -Infinity;
-  for (const d of value) {
-    if (defined(d)) {
-      min = Math.min(min, +d);
-      max = Math.max(max, +d);
-    }
-  }
-  if (min === Infinity) return [];
+function inferDomainSequential(value: Primitive[]) {
+  const [min, max] = inferDomainExtent(value);
   return [min < 0 ? -max : min, max];
+}
+
+function inferDomainDiverging(value: Primitive[], channelScale: ChannelScaleOptions) {
+  const [min, max] = inferDomainExtent(value);
+  const { neutral = (min + max) / 2 } = channelScale;
+  return [min, neutral, max];
 }

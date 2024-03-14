@@ -32,7 +32,7 @@ const scaleMap = {
   [ScaleTypes.QUANTIZE]: d3.scaleQuantize,
   // Discrete
   [ScaleTypes.CAT]: d3.scaleOrdinal,
-
+  // Special
   [ScaleTypes.SEQUENTIAL]: d3.scaleSequential,
   [ScaleTypes.DIVERGING]: d3.scaleDiverging,
 };
@@ -124,12 +124,14 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                 case ScaleTypes.LINEAR:
                 case ScaleTypes.POWER:
                   if (attributeScale.values && attributeScale.values.length > 2) {
+                    // TODO: 需要 tick 等于输入长度？
                     const tick = scale.scale.ticks(attributeScale.values.length);
                     scale.scale.domain(tick);
                   }
                   attributeScale.values
                     ? scale.scale.range(attributeScale.values)
-                    : scale.scale.range(scale.option.domain);
+                    : // TODO: 这里什么情况需要 设置为 domain
+                      scale.scale.range(scale.option.domain);
                   break;
                 case ScaleTypes.QUANTILE:
                 case ScaleTypes.QUANTIZE:
@@ -265,6 +267,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       // 根据 obejct 属性 _id 进行去重
       const idMap = new Map();
       data?.forEach((obj) => {
+        // TODO: 新版本考虑方案？
         idMap.set(obj._id, obj[field]);
       });
       values = Array.from(idMap.values());
