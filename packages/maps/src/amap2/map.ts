@@ -4,19 +4,11 @@
  */
 import AMapLoader from '@amap/amap-jsapi-loader';
 
-import type {
-  Bounds,
-  IMapCamera,
-  IPoint,
-  IViewport} from '@antv/l7-core';
-import {
-  CoordinateSystem
-} from '@antv/l7-core';
+import type { Bounds, IMapCamera, IPoint, IViewport } from '@antv/l7-core';
+import { CoordinateSystem } from '@antv/l7-core';
 import { DOM, amap2Project } from '@antv/l7-utils';
-import type { vec2} from 'gl-matrix';
+import type { vec2 } from 'gl-matrix';
 import { mat4, vec3 } from 'gl-matrix';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import type { IAMapInstance } from '../../typings/index';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import Viewport from './Viewport';
@@ -42,7 +34,6 @@ const pendingResolveQueue: Array<() => void> = [];
 /**
  * AMapService
  */
-@injectable()
 export default class AMapService extends AMapBaseService {
   public version: string = 'GAODE2.x';
 
@@ -371,14 +362,10 @@ export default class AMapService extends AMapBaseService {
       up,
       // @ts-ignore
       // left, right, bottom, top
-      // @ts-ignore 
+      // @ts-ignore
     } = this.map.customCoords?.getCameraParams() || {};
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
-    // // @ts-ignore
-    // console.log('this.map.customCoords.getCameraParams()', this.map.customCoords.getCameraParams())
-    // const { left, right, bottom, top, near, far, position } = this.map.customCoords.getCameraParams();
-
     // @ts-ignore
     const center = this.map.customCoords.getCenter() as [number, number];
     const zoom = this.map.getZoom();

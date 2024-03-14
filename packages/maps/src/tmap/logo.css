@@ -1,3 +1,7 @@
 img[src*='//mapapi.qq.com/web/jsapi/logo/logo_def.png'],.logo-text {
   display: none !important;
 }
+
+.tencent-map > canvas + div{
+  z-index: 3 !important;
+}

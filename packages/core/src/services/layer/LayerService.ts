@@ -1,16 +1,11 @@
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
+import type { L7Container } from '../../inversify.config';
 import Clock from '../../utils/clock';
-import type { IDebugService } from '../debug/IDebugService';
-import type { IMapService } from '../map/IMapService';
-import type { IRendererService } from '../renderer/IRendererService';
 import type { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 import { MaskOperation, StencilType } from './ILayerService';
 const { throttle } = lodashUtil;
-@injectable()
+
 export default class LayerService
   extends EventEmitter<LayerServiceEvent>
   implements ILayerService
@@ -35,15 +30,19 @@ export default class LayerService
   private shaderPicking: boolean = true;
 
   private enableRender: boolean = true;
+  private get renderService() {
+    return this.container.rendererService;
+  }
+  private get mapService() {
+    return this.container.mapService;
+  }
+  private get debugService() {
+    return this.container.debugService;
+  }
 
-  @inject(TYPES.IRendererService)
-  private readonly renderService: IRendererService;
-
-  @inject(TYPES.IMapService)
-  private readonly mapService: IMapService;
-
-  @inject(TYPES.IDebugService)
-  private readonly debugService: IDebugService;
+  constructor(private container: L7Container) {
+    super();
+  }
 
   public reRender = throttle(() => {
     this.renderLayers();
@@ -54,6 +53,7 @@ export default class LayerService
   }, 16);
 
   public needPick(type: string): boolean {
+    this.updateLayerRenderList();
     return this.layerList.some((layer) => layer.needPick(type));
   }
   public add(layer: ILayer) {
@@ -140,7 +140,6 @@ export default class LayerService
     this.debugService.renderStart(renderUid);
     this.alreadyInRendering = true;
     this.clear();
-
     for (const layer of this.layerList) {
       layer.prerender();
     }

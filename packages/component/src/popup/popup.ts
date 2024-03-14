@@ -4,18 +4,16 @@ import type {
   IMapService,
   IPopup,
   IPopupOption,
-  ISceneService} from '@antv/l7-core';
-import {
-  TYPES,
+  ISceneService,
+  L7Container,
 } from '@antv/l7-core';
 import {
+  DOM,
   anchorTranslate,
   anchorType,
   applyAnchorClass,
-  DOM,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { Container } from 'inversify';
 import { createL7Icon } from '../utils/icon';
 
 type ElementType = DOM.ElementType;
@@ -34,7 +32,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected mapsService: IMapService;
   protected sceneService: ISceneService;
   protected layerService: ILayerService;
-  protected scene: Container;
+  protected scene: L7Container;
 
   /**
    * 关闭按钮对应的 DOM
@@ -107,10 +105,10 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     return this.isShow;
   }
 
-  public addTo(scene: Container) {
-    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
-    this.sceneService = scene.get<ISceneService>(TYPES.ISceneService);
-    this.layerService = scene.get<ILayerService>(TYPES.ILayerService);
+  public addTo(scene: L7Container) {
+    this.mapsService = scene.mapService;
+    this.sceneService = scene.sceneService;
+    this.layerService = scene.layerService;
     this.mapsService.on('camerachange', this.update);
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
@@ -576,15 +574,19 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param {Boolean} [useTransition=false] 是否使用过度效果
    * @protected
    */
-  protected setPopupPosition(left: number, top: number,useTransition:boolean = false) {
+  protected setPopupPosition(
+    left: number,
+    top: number,
+    useTransition: boolean = false,
+  ) {
     if (this.container) {
       const { offsets } = this.popupOption;
       this.container.style.left = left + offsets[0] + 'px';
       this.container.style.top = top - offsets[1] + 'px';
-      if(useTransition){
-        this.container.style.transition  = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
-      }
-      else{
+      if (useTransition) {
+        this.container.style.transition =
+          'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
+      } else {
         this.container.style.transition = '';
       }
     }

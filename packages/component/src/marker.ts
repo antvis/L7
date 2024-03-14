@@ -6,18 +6,18 @@ import type {
   IPoint,
   IPopup,
   ISceneService,
+  L7Container,
 } from '@antv/l7-core';
-import { TYPES } from '@antv/l7-core';
 import {
   DOM,
+  anchorTranslate,
   anchorType,
   applyAnchorClass,
   bindAll,
   isPC,
-  anchorTranslate
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { Container } from 'inversify';
+
 //  marker 支持 dragger 未完成
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
@@ -26,7 +26,7 @@ export default class Marker extends EventEmitter {
   private mapsService: IMapService<unknown>;
   private sceneSerive: ISceneService;
   private lngLat: ILngLat;
-  private scene: Container;
+  private scene: L7Container;
   private added: boolean = false;
   private preLngLat = { lng: 0, lat: 0 };
   // tslint:disable-next-line: no-empty
@@ -52,11 +52,11 @@ export default class Marker extends EventEmitter {
     };
   }
 
-  public addTo(scene: Container) {
+  public addTo(scene: L7Container) {
     // this.remove();
     this.scene = scene;
-    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
-    this.sceneSerive = scene.get<ISceneService>(TYPES.ISceneService);
+    this.mapsService = scene.mapService;
+    this.sceneSerive = scene.sceneService;
     const { element } = this.markerOption;
     // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
@@ -268,7 +268,6 @@ export default class Marker extends EventEmitter {
   };
 
   private onMarkerDragMove = (e: any) => {
-
     const { lng: preLng, lat: preLat } = this.preLngLat;
     const { lng: curLng, lat: curLat } = e.lnglat;
     const newLngLat = {
@@ -280,7 +279,7 @@ export default class Marker extends EventEmitter {
     this.emit('dragging', newLngLat);
   };
 
-  private onMarkerDragEnd = (e: MouseEvent) => {
+  private onMarkerDragEnd = () => {
     this.mapsService.setMapStatus({
       dragEnable: true,
       zoomEnable: true,
@@ -337,7 +336,6 @@ export default class Marker extends EventEmitter {
 
       element.style.left =  pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
-      console.log(element.style.left);
     }
   }
 

@@ -1,4 +1,4 @@
-import type { Container } from 'inversify';
+import type { L7Container } from '../../inversify.config';
 import type { IViewport } from '../camera/ICameraService';
 export type Point = [number, number];
 export type Bounds = [[number, number], [number, number]];
@@ -35,7 +35,7 @@ export type MapStyle = MapStyleName | any;
 
 export interface IMapWrapper {
   setContainer(
-    container: Container,
+    container: L7Container,
     id: string | HTMLDivElement,
     canvas?: HTMLCanvasElement,
   ): void;
@@ -85,6 +85,7 @@ export interface IMapService<RawMap = {}> {
   getMapStyleConfig(): MapStyleConfig; // 获取当前地图类型默认的样式配置
   getMapStyleValue(name: MapStyleName): string | any; // 获取当前地图类型key值对应的样式 value，可能为字符串，也可能为对象
   getMapStyle(): MapStyleName | any; // 获取当期地图
+  getCanvasOverlays(): HTMLElement | undefined | null;
   setMapStyle(style: MapStyleName | any): void;
 
   // control with raw map

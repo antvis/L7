@@ -1,29 +1,17 @@
 import { mat4, vec4 } from 'gl-matrix';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
 import { getDistanceScales } from '../../utils/project';
 import type { ICameraService } from '../camera/ICameraService';
-// import { IMapService } from '../map/IMapService'
-import type {
-  ICoordinateSystemService} from './ICoordinateSystemService';
-import {
-  CoordinateSystem
-} from './ICoordinateSystemService';
+import type { ICoordinateSystemService } from './ICoordinateSystemService';
+import { CoordinateSystem } from './ICoordinateSystemService';
 
 const VECTOR_TO_POINT_MATRIX = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
 
-@injectable()
 export default class CoordinateSystemService
   implements ICoordinateSystemService
 {
-  public needRefresh: boolean = true;
-  @inject(TYPES.ICameraService)
-  private readonly cameraService: ICameraService;
+  constructor(private cameraService: ICameraService) {}
 
-  // map.getCenter
-  // @inject(TYPES.IMapService)
-  // private readonly mapService: IMapService
+  public needRefresh: boolean = true;
 
   /**
    * 1. Web 墨卡托坐标系

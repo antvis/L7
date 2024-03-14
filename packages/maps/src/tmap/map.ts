@@ -128,6 +128,8 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     // Set tencent map canvas element position as absolute
     // @ts-ignore
     this.map.canvasContainer.style.position = 'absolute';
+    // @ts-ignore
+    this.map.drawContainer.classList.add('tencent-map');
 
     // Set tencent map control layer dom index
     // @ts-ignore
@@ -135,7 +137,6 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     if (controlParentContainer) {
       controlParentContainer.style.zIndex = 2;
     }
-
 
     this.simpleMapCoord.setSize(mapSize);
 
@@ -298,6 +299,10 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
   public getMapCanvasContainer(): HTMLElement {
     return this.map.getContainer()?.getElementsByTagName('canvas')[0];
+  }
+
+  public getCanvasOverlays() {
+    return this.getMapCanvasContainer()?.nextSibling?.firstChild as HTMLElement;
   }
 
   public getMapStyleConfig(): MapStyleConfig {

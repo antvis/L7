@@ -1,9 +1,9 @@
-import { inject, injectable, postConstruct } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../../types';
 import type { ILayer } from '../../layer/ILayerService';
 import type { IFramebuffer } from '../IFramebuffer';
-import type { IPostProcessingPass, IPostProcessor } from '../IMultiPassRenderer';
+import type {
+  IPostProcessingPass,
+  IPostProcessor,
+} from '../IMultiPassRenderer';
 import type { IRendererService } from '../IRendererService';
 import type { ITexture2D } from '../ITexture2D';
 import { gl } from '../gl';
@@ -12,10 +12,10 @@ import { gl } from '../gl';
  * ported from Three.js EffectComposer
  * 后处理负责 pingpong read/write framebuffer，最后一个 pass 默认输出到屏幕
  */
-@injectable()
 export default class PostProcessor implements IPostProcessor {
-  @inject(TYPES.IRendererService)
-  protected readonly rendererService: IRendererService;
+  constructor(protected readonly rendererService: IRendererService) {
+    this.init();
+  }
 
   private passes: Array<IPostProcessingPass<unknown>> = [];
   private readFBO: IFramebuffer;
@@ -131,7 +131,6 @@ export default class PostProcessor implements IPostProcessor {
     return this.passes.find((p) => p.getName() === name);
   }
 
-  @postConstruct()
   private init() {
     const { createFramebuffer, createTexture2D } = this.rendererService;
     this.readFBO = createFramebuffer({

@@ -1,38 +1,40 @@
 import { decodePickingColor, DOM } from '@antv/l7-utils';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
+import type { L7Container } from '../../inversify.config';
 import { isEventCrash } from '../../utils/dom';
-import type { IGlobalConfigService } from '../config/IConfigService';
-import type {
-  IInteractionService,
-  IInteractionTarget,
-} from '../interaction/IInteractionService';
+import type { IInteractionTarget } from '../interaction/IInteractionService';
 import { InteractionEvent } from '../interaction/IInteractionService';
-import type { ILayer, ILayerService } from '../layer/ILayerService';
-import type { ILngLat, IMapService } from '../map/IMapService';
+import type { ILayer } from '../layer/ILayerService';
+import type { ILngLat } from '../map/IMapService';
 import type { IFramebuffer } from '../renderer/IFramebuffer';
-import type { IRendererService } from '../renderer/IRendererService';
 import { TextureUsage } from '../renderer/ITexture2D';
 import type { IPickingService } from './IPickingService';
-@injectable()
+
 export default class PickingService implements IPickingService {
+  constructor(private readonly container: L7Container) {}
+
   public pickedColors: Uint8Array | undefined;
   public pickedTileLayers: ILayer[] = [];
-  @inject(TYPES.IMapService)
-  private readonly mapService: IMapService;
 
-  @inject(TYPES.IRendererService)
-  private rendererService: IRendererService;
+  private get mapService() {
+    return this.container.mapService;
+  }
 
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
+  private get rendererService() {
+    return this.container.rendererService;
+  }
 
-  @inject(TYPES.IInteractionService)
-  private interactionService: IInteractionService;
+  private get configService() {
+    return this.container.globalConfigService;
+  }
 
-  @inject(TYPES.ILayerService)
-  private layerService: ILayerService;
+  private get interactionService() {
+    return this.container.interactionService;
+  }
+
+  private get layerService() {
+    return this.container.layerService;
+  }
+
   private pickingFBO: IFramebuffer;
 
   private width: number = 0;
@@ -44,14 +46,10 @@ export default class PickingService implements IPickingService {
   private pickBufferScale: number = 1.0;
 
   public init(id: string) {
-    const { createTexture2D, createFramebuffer, getContainer } =
+    const { createTexture2D, createFramebuffer, getViewportSize } =
       this.rendererService;
 
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
+    let { width, height } = getViewportSize();
     this.pickBufferScale =
       this.configService.getSceneConfig(id).pickBufferScale || 1;
 
@@ -112,12 +110,8 @@ export default class PickingService implements IPickingService {
       const tmpV = v < 0 ? 0 : v;
       return Math.floor((tmpV * DOM.DPR) / this.pickBufferScale);
     });
-    const { readPixelsAsync, getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
+    const { readPixelsAsync, getViewportSize } = this.rendererService;
+    const { width, height } = getViewportSize();
     if (
       xMin > ((width - 1) * DOM.DPR) / this.pickBufferScale ||
       xMax < 0 ||
@@ -192,13 +186,8 @@ export default class PickingService implements IPickingService {
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
     let isPicked = false;
-    const { readPixelsAsync, getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
-
+    const { readPixelsAsync, getViewportSize } = this.rendererService;
+    const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
     const xInDevicePixel = x * DOM.DPR;
     const yInDevicePixel = y * DOM.DPR;
@@ -210,7 +199,6 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
-
     const pickedColors: Uint8Array | undefined = await readPixelsAsync({
       x: Math.floor(xInDevicePixel / this.pickBufferScale),
       // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
@@ -247,9 +235,8 @@ export default class PickingService implements IPickingService {
         feature: rawFeature,
         target,
       };
-  
+
       if (!rawFeature) {
-  
         // this.logger.error(
         //   '未找到颜色编码解码后的原始 feature，请检查 fragment shader 中末尾是否添加了 `gl_FragColor = filterColor(gl_FragColor);`',
         // );
@@ -306,21 +293,13 @@ export default class PickingService implements IPickingService {
 
   // 获取容器的大小 - 兼容小程序环境
   private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-    if ((container as HTMLCanvasElement).getContext) {
-      return {
-        width: (container as HTMLCanvasElement).width / DOM.DPR,
-        height: (container as HTMLCanvasElement).height / DOM.DPR,
-      };
-    } else {
-      return container.getBoundingClientRect();
-    }
+    return container.getBoundingClientRect();
   }
   private async pickingAllLayer(target: IInteractionTarget) {
     // 判断是否进行拾取操作
     if (!this.layerService.needPick(target.type) || !this.isPickingAllLayer()) {
       return;
     }
-   
     this.alreadyInPicking = true;
     await this.pickingLayers(target);
     this.layerService.renderLayers();
@@ -352,13 +331,8 @@ export default class PickingService implements IPickingService {
   }
 
   private resizePickingFBO() {
-    const { getContainer } = this.rendererService;
-    let { width, height } = this.getContainerSize(
-      getContainer() as HTMLCanvasElement | HTMLElement,
-    );
-    width *= DOM.DPR;
-    height *= DOM.DPR;
-
+    const { getViewportSize } = this.rendererService;
+    const { width, height } = getViewportSize();
     if (this.width !== width || this.height !== height) {
       this.pickingFBO.resize({
         width: Math.round(width / this.pickBufferScale),

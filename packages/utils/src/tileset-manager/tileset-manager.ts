@@ -8,7 +8,7 @@ import {
   UPDATE_TILE_STRATEGIES,
 } from './const';
 import { SourceTile } from './tile';
-import type { TileBounds, TilesetManagerOptions} from './types';
+import type { TileBounds, TilesetManagerOptions } from './types';
 import { UpdateTileStrategy } from './types';
 import {
   getLatLonBoundsBuffer,

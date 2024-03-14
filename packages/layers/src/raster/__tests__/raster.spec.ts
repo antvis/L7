@@ -5,7 +5,6 @@ import { raster_data, raster_rgb } from './data'
 import { TestScene } from '@antv/l7-test-utils';
 describe('RasterLayer', () => {
     let scene: any;
-    let layer: any;
    beforeEach(() => {
         scene = TestScene();
     });

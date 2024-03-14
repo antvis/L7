@@ -10,15 +10,9 @@ import type {
   IAnimateOption,
   IAttributeAndElements,
   IBuffer,
-  ICameraService,
-  ICoordinateSystemService,
   IDataState,
-  IDebugService,
   IEncodeFeature,
-  IFontService,
   IGlobalConfigService,
-  IIconService,
-  IInteractionService,
   ILayer,
   ILayerAttributesOption,
   ILayerConfig,
@@ -26,27 +20,22 @@ import type {
   ILayerModelInitializationOptions,
   ILayerPickService,
   ILayerPlugin,
-  ILayerService,
   ILegend,
   ILegendClassificaItem,
   ILegendSegmentItem,
-  IMapService,
   IModel,
   IModelInitializationOptions,
   IMultiPassRenderer,
   IParseDataItem,
-  IPass,
-  IPickingService,
   IPostProcessingPass,
   IRenderOptions,
-  IRendererService,
   IScale,
   IScaleOptions,
-  IShaderModuleService,
   ISourceCFG,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   ITextureService,
+  L7Container,
   LayerEventType,
   LegendItems,
   StyleAttributeField,
@@ -57,13 +46,12 @@ import {
   BlendType,
   IDebugLog,
   ILayerStage,
-  TYPES,
-  lazyInject,
+  globalConfigService,
 } from '@antv/l7-core';
-import Source from '@antv/l7-source';
+import type Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { Container } from 'inversify';
+import { createPlugins } from '../plugins';
 import { BlendTypes } from '../utils/blend';
 import {
   createMultiPassRenderer,
@@ -163,36 +151,55 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values: any;
   };
 
-  // 记录 sceneContainer 供创建子图层的时候使用 如 imageTileLayer
-  public sceneContainer: Container | undefined;
   public tileLayer: any | undefined;
   // 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
 
-  @lazyInject(TYPES.IGlobalConfigService)
-  protected readonly configService: IGlobalConfigService;
+  protected readonly configService: IGlobalConfigService = globalConfigService;
 
-  protected shaderModuleService: IShaderModuleService;
-  protected cameraService: ICameraService;
+  protected get shaderModuleService() {
+    return this.container.shaderModuleService;
+  }
+  protected get cameraService() {
+    return this.container.cameraService;
+  }
 
-  protected coordinateService: ICoordinateSystemService;
+  protected get coordinateService() {
+    return this.container.coordinateSystemService;
+  }
 
-  protected iconService: IIconService;
+  protected get iconService() {
+    return this.container.iconService;
+  }
 
-  protected fontService: IFontService;
+  protected get fontService() {
+    return this.container.fontService;
+  }
 
-  protected pickingService: IPickingService;
+  protected get pickingService() {
+    return this.container.pickingService;
+  }
 
-  protected rendererService: IRendererService;
+  protected get rendererService() {
+    return this.container.rendererService;
+  }
 
-  protected layerService: ILayerService;
+  protected get layerService() {
+    return this.container.layerService;
+  }
 
-  protected debugService: IDebugService;
+  protected get debugService() {
+    return this.container.debugService;
+  }
 
-  protected interactionService: IInteractionService;
+  protected get interactionService() {
+    return this.container.interactionService;
+  }
 
-  protected mapService: IMapService;
+  protected get mapService() {
+    return this.container.mapService;
+  }
 
   public styleAttributeService: IStyleAttributeService;
 
@@ -201,14 +208,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public postProcessingPassFactory: (
     name: string,
   ) => IPostProcessingPass<unknown>;
-  public normalPassFactory: (name: string) => IPass<unknown>;
+
+  public get normalPassFactory() {
+    return this.container.normalPassFactory;
+  }
 
   protected animateOptions: IAnimateOption = { enable: false };
 
   /**
    * 图层容器
    */
-  protected container: Container;
+  container: L7Container;
 
   private encodedData: IEncodeFeature[];
 
@@ -226,7 +236,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   // 数据层数据映射
 
   public enableDataEncodeStyles: string[] = [];
-
 
   /**
    * 待更新样式属性，在初始化阶段完成注册
@@ -256,6 +265,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
+    this.masks = config.maskLayers || [];
   }
   public addMask(layer: ILayer): void {
     this.masks.push(layer);
@@ -333,7 +343,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         ...configToUpdate,
       };
     } else {
-      const sceneId = this.container.get<string>(TYPES.SceneID);
+      const sceneId = this.container.id;
       // @ts-ignore
       // styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
       this.configService.setLayerConfig(sceneId, this.id, {
@@ -351,9 +361,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    *  -> SceneContainer 1.*
    *   -> LayerContainer 1.*
    */
-  public setContainer(container: Container, sceneContainer: Container) {
+  public setContainer(container: L7Container) {
     this.container = container;
-    this.sceneContainer = sceneContainer;
   }
 
   public getContainer() {
@@ -367,7 +376,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public async init(): Promise<void> {
     // 设置配置项
-    const sceneId = this.container.get<string>(TYPES.SceneID);
+    const sceneId = this.container.id;
     this.startInit = true;
     // 初始化图层配置项
     // const { enableMultiPassRenderer = false } = this.rawConfig;
@@ -380,22 +389,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // 全局容器服务
 
     // 场景容器服务
-    this.iconService = this.container.get<IIconService>(TYPES.IIconService);
-    this.fontService = this.container.get<IFontService>(TYPES.IFontService);
-
-    this.rendererService = this.container.get<IRendererService>(
-      TYPES.IRendererService,
-    );
-    this.layerService = this.container.get<ILayerService>(TYPES.ILayerService);
-    this.debugService = this.container.get<IDebugService>(TYPES.IDebugService);
-    this.interactionService = this.container.get<IInteractionService>(
-      TYPES.IInteractionService,
-    );
-
-    this.pickingService = this.container.get<IPickingService>(
-      TYPES.IPickingService,
-    );
-    this.mapService = this.container.get<IMapService>(TYPES.IMapService);
     const { enableMultiPassRenderer, passes } = this.getLayerConfig();
     if (enableMultiPassRenderer && passes?.length && passes.length > 0) {
       // Tip: 兼容 multiPassRender 在 amap1 时存在的图层不同步问题 zoom
@@ -404,29 +397,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       });
     }
 
-    this.cameraService = this.container.get<ICameraService>(
-      TYPES.ICameraService,
-    );
-    this.coordinateService = this.container.get<ICoordinateSystemService>(
-      TYPES.ICoordinateSystemService,
-    );
-    this.shaderModuleService = this.container.get<IShaderModuleService>(
-      TYPES.IShaderModuleService,
-    );
-    this.postProcessingPassFactory = this.container.get(
-      TYPES.IFactoryPostProcessingPass,
-    );
-    this.normalPassFactory = this.container.get(TYPES.IFactoryNormalPass);
+    this.postProcessingPassFactory = this.container.postProcessingPassFactory;
 
     // 图层容器服务
-    this.styleAttributeService = this.container.get<IStyleAttributeService>(
-      TYPES.IStyleAttributeService,
-    );
+    this.styleAttributeService = this.container.styleAttributeService;
     if (enableMultiPassRenderer) {
       // 按需初始化 瓦片频繁报错
-      this.multiPassRenderer = this.container.get<IMultiPassRenderer>(
-        TYPES.IMultiPassRenderer,
-      );
+      this.multiPassRenderer = this.container.multiPassRenderer;
       this.multiPassRenderer.setLayer(this);
     }
     // 完成样式服务注册完成前添加的属性
@@ -456,17 +433,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.pendingStyleAttributes = [];
 
     // 获取插件集
-    this.plugins = this.container.getAll<ILayerPlugin>(TYPES.ILayerPlugin);
+    this.plugins = createPlugins();
     // 完成插件注册，传入场景和图层容器内的服务
     for (const plugin of this.plugins) {
-      plugin.apply(this, {
-        rendererService: this.rendererService,
-        mapService: this.mapService,
-        styleAttributeService: this.styleAttributeService,
-        normalPassFactory: this.normalPassFactory,
-        postProcessingPassFactory: this.postProcessingPassFactory,
-      });
+      plugin.apply(this, this.container);
     }
+    // if (this.getSource().isTile) {
+    //   this.tileLayer = new TileLayer(this);
+    // }
 
     // 初始化其他服务
     this.layerPickService = new LayerPickService(this);
@@ -490,7 +464,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     });
     this.hooks.afterInit.call();
   }
-
   public log(logType: string, step: string = 'init') {
     // @ts-ignore 瓦片、瓦片图层目前不参与日志
     if (this.tileLayer || this.isTileLayer) {
@@ -643,29 +616,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       options,
     };
     this.clusterZoom = 0;
+
     return this;
   }
 
   public setData(data: any, options?: ISourceCFG) {
+    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
     if (this.inited) {
-      this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
       this.layerSource.setData(data, options);
-      this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     } else {
       this.on('inited', () => {
-        this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
-        const currentSource = this.getSource();
-        if (!currentSource) {
-          // 执行 setData 的时候 source 还不存在（还未执行 addLayer）
-          this.source(new Source(data, options));
-        } else {
-          this.layerSource.setData(data, options);
-        }
-        this.layerSource.once('update', () => {
-          this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
-        });
+        this.layerSource.setData(data, options);
       });
     }
+    this.layerSource.once('update', () => {
+      this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
+    });
     return this;
   }
   public style(
@@ -1123,8 +1089,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.removeAllListeners();
     this.isDestroyed = true;
-    // 解绑图层容器中的服务
-    // this.container.unbind(TYPES.IStyleAttributeService);
   }
   public clear() {
     this.styleAttributeService.clearAllAttributes();
@@ -1172,7 +1136,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           this.mapService.setCoordCenter(layerCenter);
         }
       }
-
       if (type === 'update') {
         if (this.tileLayer) {
           // 瓦片图层独立更新
@@ -1209,7 +1172,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const scales = attribute?.scale?.scalers || [];
 
     return {
-      type: scales[0].option?.type,
+      type: scales[0]?.option?.type,
       field: attribute?.scale?.field,
       items: this.getLegendItems(name),
     };
@@ -1300,6 +1263,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           this.encodedData,
           triangulation,
           styleOption,
+          this,
         );
 
       const uniformBuffers = [
@@ -1382,6 +1346,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     ) {
       isPick = true;
     }
+
     return this.isVisible() && isPick;
   }
 

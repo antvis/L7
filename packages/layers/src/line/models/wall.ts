@@ -34,7 +34,7 @@ export default class LineWallModel extends BaseModel {
     const { animateOption } = this.layer.getLayerConfig() as ILayerConfig;
 
     if (this.rendererService.getDirty()) {
-      this.texture.bind();
+      this.texture?.bind();
     }
 
     // 转化渐变色

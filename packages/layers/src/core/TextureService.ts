@@ -4,7 +4,6 @@ import type {
   ITexture2D,
   ITextureService,
 } from '@antv/l7-core';
-import { TYPES } from '@antv/l7-core';
 
 import type { IColorRamp } from '@antv/l7-utils';
 import {
@@ -23,9 +22,7 @@ export default class TextureService implements ITextureService {
   constructor(layer: ILayer) {
     this.layer = layer;
     const container = this.layer.getContainer();
-    this.rendererService = container.get<IRendererService>(
-      TYPES.IRendererService,
-    );
+    this.rendererService = container.rendererService;
   }
   public getColorTexture(colorRamp: IColorRamp, domain?: [number, number]) {
     // TODO 支持传入图片

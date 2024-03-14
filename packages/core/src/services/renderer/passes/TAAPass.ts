@@ -1,9 +1,6 @@
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
 import blendFS from '../../../shaders/post-processing/blend.glsl';
 import copyFS from '../../../shaders/post-processing/copy.glsl';
 import quadVS from '../../../shaders/post-processing/quad.glsl';
-import { TYPES } from '../../../types';
 import type { ILayer } from '../../layer/ILayerService';
 import type { IShaderModuleService } from '../../shader/IShaderModuleService';
 import type { IFramebuffer } from '../IFramebuffer';
@@ -35,12 +32,13 @@ let accumulatingId = 1;
  * 只能使用 TAA
  * @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/ri52hv
  */
-@injectable()
+
 export default class TAAPass<
   InitializationOptions = {},
 > extends BaseNormalPass<InitializationOptions> {
-  @inject(TYPES.IShaderModuleService)
-  protected readonly shaderModuleService: IShaderModuleService;
+  constructor(protected readonly shaderModuleService: IShaderModuleService) {
+    super();
+  }
 
   /**
    * 低差异序列

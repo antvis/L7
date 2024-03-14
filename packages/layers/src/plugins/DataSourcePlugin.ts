@@ -1,21 +1,11 @@
-import type {
-  ILayer,
-  ILayerPlugin,
-  IMapService} from '@antv/l7-core';
-import {
-  IDebugLog,
-  ILayerStage,
-  TYPES,
-} from '@antv/l7-core';
+import type { ILayer, ILayerPlugin, IMapService } from '@antv/l7-core';
+import { IDebugLog, ILayerStage } from '@antv/l7-core';
 import Source from '@antv/l7-source';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 
-@injectable()
 export default class DataSourcePlugin implements ILayerPlugin {
   protected mapService: IMapService;
   public apply(layer: ILayer) {
-    this.mapService = layer.getContainer().get<IMapService>(TYPES.IMapService);
+    this.mapService = layer.getContainer().mapService;
     layer.hooks.init.tapPromise('DataSourcePlugin', async () => {
       layer.log(IDebugLog.SourceInitStart, ILayerStage.INIT);
       let source = layer.getSource();

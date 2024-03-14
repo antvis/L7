@@ -15,7 +15,7 @@ export function hashCodeNumberFinish(hash: number): number {
 
 // Pass this as a hash function to use a one-bucket HashMap (equivalent to linear search in an array),
 // which can be efficient for small numbers of items.
-export function nullHashFunc<T>(k: T): number {
+export function nullHashFunc(): number {
   return 0;
 }
 

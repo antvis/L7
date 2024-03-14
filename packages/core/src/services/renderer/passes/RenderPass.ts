@@ -1,5 +1,3 @@
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import type { ILayer } from '../../layer/ILayerService';
 import { PassType } from '../IMultiPassRenderer';
 import BaseNormalPass from './BaseNormalPass';
@@ -7,7 +5,6 @@ import BaseNormalPass from './BaseNormalPass';
 /**
  * RenderPass，负责输出到后续 PostProcessor 的 readFBO 中
  */
-@injectable()
 export default class RenderPass<
   InitializationOptions = {},
 > extends BaseNormalPass<InitializationOptions> {

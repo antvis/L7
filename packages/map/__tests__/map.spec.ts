@@ -13,10 +13,11 @@ describe('Map', () => {
     });
   });
   it('should resize correctly', () => {
-    // 创建Map的实例，将mock的Map传入
+    // 创建Map的实例，将mock的Map传
 
-
-    map.resize();
+    // map.resize();
+    map.setCenter([121.434765, 31.256735])
+    map.setZoom(14.83);
 
     // 验证transform.resize方法是否被正确调用
 
@@ -168,6 +169,7 @@ describe('Map', () => {
     map.setMaxBounds([[120,30],[121,31]]);
     expect(map.getMaxBounds()?.toArray()).toEqual([[120, 30], [121, 31]]);
   })
+
 
 
 

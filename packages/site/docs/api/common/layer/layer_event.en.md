@@ -4,8 +4,8 @@
 
 Parameter option
 
-* target current layer
-* type event type
+- target current layer
+- type event type
 
 Triggered after layer initialization is completed
 
@@ -19,8 +19,8 @@ Add layer to scene
 
 Parameter option
 
-* target current layer
-* type event type
+- target current layer
+- type event type
 
 ```javascript
 layer.on('add', (type) => console.log(type));
@@ -32,8 +32,8 @@ Fires when a layer is removed
 
 Parameter option
 
-* target current layer
-* type event type
+- target current layer
+- type event type
 
 ```javascript
 layer.on('remove', (type) => console.log(type));
@@ -43,22 +43,14 @@ layer.on('remove', (type) => console.log(type));
 
 Data mapping is updated, the legend changes, mainly color and size
 
-Parameter option
-
-* type mapping channel, legend type
-* attr mapping example
-
-```js
-layer.on('legend', (ev) => console.log(ev));
-```
-
 ### legend:color
 
 The data mapping is updated, the legend changes, and the color changes
 Parameter option
 
-* type mapping channel, legend type
-* attr mapping example
+- type legend type
+- field mapping field
+- items legend items
 
 ```js
 layer.on('legend:color', (ev) => console.log(ev));
@@ -69,8 +61,9 @@ layer.on('legend:color', (ev) => console.log(ev));
 The data mapping is updated, the legend changes, and the size changes
 Parameter option
 
-* type mapping channel, legend type
-* attr mapping example
+- type legend type
+- field mapping field
+- items legend items
 
 ```js
 layer.on('legend:size', (ev) => console.log(ev));
@@ -82,8 +75,8 @@ layer.on('legend:size', (ev) => console.log(ev));
 
 Parameter option
 
-* box \[x1: number, y1: number, x2: number, y2: number] compared to
-* cb (...args: any\[]) => void callback method passed in, returns the feature inside the box selection
+- box \[x1: number, y1: number, x2: number, y2: number] compared to
+- cb (...args: any\[]) => void callback method passed in, returns the feature inside the box selection
 
 ```javascript
 layer.boxSelect(box, cb);

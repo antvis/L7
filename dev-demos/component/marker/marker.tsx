@@ -2,7 +2,6 @@ import { GaodeMap, Marker, Scene } from '@antv/l7';
 import React, { useEffect, useState } from 'react';
 
 export default () => {
-  const [scene, setScene] = useState<Scene | undefined>(undefined);
   const [marker, setMarker] = useState<Marker | undefined>(undefined);
 
   useEffect(() => {
@@ -15,7 +14,7 @@ export default () => {
         style: 'normal',
       }),
     });
-    setScene(scene);
+
 
     scene.on('loaded', () => {
       const marker = new Marker({
