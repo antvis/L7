@@ -122,9 +122,7 @@ scene.on('loaded', () => {
     zIndex: 10,
     trigger: 'change',
   });
-
   layer.draw(draw);
-
   scene.addLayer(layer);
 
   setInterval(() => {

@@ -21,13 +21,13 @@ const Demo: FunctionComponent = () => {
     newScene.on('loaded', () => {
       const canvasLayer = new CanvasLayer({
         zIndex: 100,
-        draw: ({ ctx, container, utils }) => {
-          ctx.clearRect(0, 0, container.width, container.height);
-          ctx.fillStyle = 'blue';
-          const { x, y } = utils.lngLatToContainer(POSITION);
-          const realSize = 36 * window.devicePixelRatio;
-          ctx.fillRect(x - realSize / 2, y - realSize / 2, realSize, realSize);
-        },
+      });
+      canvasLayer.draw(({ ctx, container, utils }) => {
+        ctx.clearRect(0, 0, container.width, container.height);
+        ctx.fillStyle = 'blue';
+        const { x, y } = utils.lngLatToContainer(POSITION);
+        const realSize = 36 * window.devicePixelRatio;
+        ctx.fillRect(x - realSize / 2, y - realSize / 2, realSize, realSize);
       });
       newScene.addLayer(canvasLayer);
 

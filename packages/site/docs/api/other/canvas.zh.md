@@ -18,20 +18,19 @@ const scene = new Scene({
 
 scene.on('loaded', () => {
   const layer = new CanvasLayer({
-    draw: ({ container, ctx, utils }) => {
-      const [width, height] = size;
-
-      // 清空画布
-      ctx.clearRect(0, 0, container.width, container.height);
-
-      // 经纬度 => 像素坐标 的转换
-      const { x, y } = utils.lngLatToContainer([120, 30]);
-      // 设置绘制颜色
-      ctx.fillStyle = 'red';
-      // 绘制一个矩形
-      ctx.fillRect(x, y, 10, 10);
-    },
     trigger: 'change',
+  });
+
+  layer.draw(({ container, ctx, utils }) => {
+    const [width, height] = size;
+    // 清空画布
+    ctx.clearRect(0, 0, container.width, container.height);
+    // 经纬度 => 像素坐标 的转换
+    const { x, y } = utils.lngLatToContainer([120, 30]);
+    // 设置绘制颜色
+    ctx.fillStyle = 'red';
+    // 绘制一个矩形
+    ctx.fillRect(x, y, 10, 10);
   });
 
   scene.addLayer(layer);
@@ -46,10 +45,11 @@ scene.on('loaded', () => {
 
 #### draw
 
-类型：
+类型：`(drawParams: ICanvasLayerRenderParams) => void`
 
-```javascript
-options: {
+
+```typeScript
+type ICanvasLayerRenderParams = {
   canvas: HTMLCanvasELement;
   ctx: RenderingContext;
   container: {
@@ -59,10 +59,10 @@ options: {
       [number, number],
       [number, number],
     ];
-  }
+  };
   utils: {
     lngLatToContainer: IMapService['lngLatToContainer'];
-  }
+  };
   mapService: IMapService;
 }
 ```
@@ -94,7 +94,7 @@ options: {
 
 #### draw
 
-类型：`() => this`
+类型：`(drawCallback: (renderParams: ICanvasLayerRenderParams) => void) => this`
 
 作用：更新 draw 绘制方法
 
