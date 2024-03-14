@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-layers",
-  "version": "2.20.20",
+  "version": "2.21.0",
   "description": "L7's collection of built-in layers",
   "license": "ISC",
   "author": "xiaoiver",
@@ -27,10 +27,10 @@
   },
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-core": "2.20.20",
-    "@antv/l7-maps": "2.20.20",
-    "@antv/l7-source": "2.20.20",
-    "@antv/l7-utils": "2.20.20",
+    "@antv/l7-core": "2.21.0",
+    "@antv/l7-maps": "2.21.0",
+    "@antv/l7-source": "2.21.0",
+    "@antv/l7-utils": "2.21.0",
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.2.0",
     "@turf/clone": "^6.5.0",
@@ -50,7 +50,7 @@
     "polyline-miter-util": "^1.0.1"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.20.20",
+    "@antv/l7-test-utils": "2.21.0",
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
     "@types/d3-interpolate": "1.1.6",

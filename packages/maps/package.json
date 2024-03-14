@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.20.20",
+  "version": "2.21.0",
   "description": "",
   "license": "ISC",
   "author": "xiaoiver",
@@ -27,9 +27,9 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@antv/l7-core": "2.20.20",
-    "@antv/l7-map": "2.20.20",
-    "@antv/l7-utils": "2.20.20",
+    "@antv/l7-core": "2.21.0",
+    "@antv/l7-map": "2.21.0",
+    "@antv/l7-utils": "2.21.0",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",

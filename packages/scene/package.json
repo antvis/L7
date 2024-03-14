@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-scene",
-  "version": "2.20.20",
+  "version": "2.21.0",
   "description": "",
   "license": "ISC",
   "author": "xiaoiver",
@@ -23,18 +23,18 @@
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
   "dependencies": {
-    "@antv/l7-component": "2.20.20",
-    "@antv/l7-core": "2.20.20",
-    "@antv/l7-layers": "2.20.20",
-    "@antv/l7-maps": "2.20.20",
-    "@antv/l7-renderer": "2.20.20",
-    "@antv/l7-utils": "2.20.20",
+    "@antv/l7-component": "2.21.0",
+    "@antv/l7-core": "2.21.0",
+    "@antv/l7-layers": "2.21.0",
+    "@antv/l7-maps": "2.21.0",
+    "@antv/l7-renderer": "2.21.0",
+    "@antv/l7-utils": "2.21.0",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.7",
     "mapbox-gl": "^1.2.1"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.20.20"
+    "@antv/l7-test-utils": "2.21.0"
   },
   "publishConfig": {
     "access": "public"
