@@ -32,8 +32,6 @@ export default class DeviceTexture2D implements ITexture2D {
       wrapS = gl.CLAMP_TO_EDGE,
       wrapT = gl.CLAMP_TO_EDGE,
       aniso,
-      mipmap = false,
-      // premultiplyAlpha = false,
       mag = gl.NEAREST,
       min = gl.NEAREST,
     } = options;
@@ -59,7 +57,6 @@ export default class DeviceTexture2D implements ITexture2D {
       height,
       flipY = false,
       format = gl.RGBA,
-      aniso,
       alignment = 1,
       usage = TextureUsage.SAMPLED,
       // premultiplyAlpha = false,

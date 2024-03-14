@@ -35,8 +35,6 @@ export default class TwoTouchHandler {
   } // eslint-disable-line
 
   public touchstart(e: TouchEvent, points: Point[], mapTouches: Touch[]) {
-    // console.log(e.target, e.targetTouches.length ? e.targetTouches[0].target : null);
-    // log('touchstart', points, e.target.innerHTML, e.targetTouches.length ? e.targetTouches[0].target.innerHTML: undefined);
     if (this.firstTwoTouches || mapTouches.length < 2) {
       return;
     }

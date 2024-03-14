@@ -1,10 +1,5 @@
-import type { IMapService, IMercator, IRendererService} from '@antv/l7';
-import { TYPES } from '@antv/l7';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-
-import type {
-  Camera} from 'three';
+import type { IMapService, IMercator, IRendererService } from '@antv/l7';
+import type { Camera } from 'three';
 import {
   Matrix4,
   PerspectiveCamera,
@@ -19,8 +14,7 @@ export interface IThreeRenderService {
   init(): void;
   getRenderCamera(): Camera;
 }
-export const ThreeRenderServiceType = Symbol.for('ThreeJSRenderService');
-@injectable()
+
 export class ThreeRenderService implements IThreeRenderService {
   public renderer: WebGLRenderer;
   public camera: Camera;
@@ -32,11 +26,13 @@ export class ThreeRenderService implements IThreeRenderService {
   // 初始状态相机变换矩阵
   private cameraTransform: Matrix4;
 
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
-
-  @inject(TYPES.IMapService)
-  private readonly mapService: IMapService;
+  constructor(
+    private readonly rendererService: IRendererService,
+    private readonly mapService: IMapService,
+  ) {
+    this.rendererService = rendererService;
+    this.mapService = mapService;
+  }
 
   public init() {
     // 从 L7 的 renderer 中获取可视化层的 canvas/gl

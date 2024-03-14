@@ -26,15 +26,8 @@ export default () => {
       const url1 =
         'https://gw.alipayobjects.com/zos/raptor/1667920165972/china.tif';
       const tiffdata = await getTiffData(url1);
-      const maskData = await (
-        await fetch(
-          'https://gw.alipayobjects.com/os/basement_prod/d2e0e930-fd44-4fca-8872-c1037b0fee7b.json',
-        )
-      ).json();
       const layer = new RasterLayer({
         zIndex: 10,
-        // mask: true,
-        // maskfence: maskData,
       });
       layer
         .source(

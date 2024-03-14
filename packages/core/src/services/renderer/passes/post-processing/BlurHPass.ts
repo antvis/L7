@@ -1,6 +1,4 @@
 import { lodashUtil } from '@antv/l7-utils';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import blur from '../../../../shaders/post-processing/blur.glsl';
 import quad from '../../../../shaders/post-processing/quad.glsl';
 import type { IUniform } from '../../IUniform';
@@ -10,7 +8,6 @@ export interface IBlurHPassConfig {
   blurRadius: number;
 }
 
-@injectable()
 export default class BlurHPass extends BasePostProcessingPass<IBlurHPassConfig> {
   protected setupShaders() {
     this.shaderModuleService.registerModule('blur-pass', {

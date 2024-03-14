@@ -1,6 +1,3 @@
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
 import type { IAttribute } from '../renderer/IAttribute';
 import type { IElements } from '../renderer/IElements';
 import type { IRendererService } from '../renderer/IRendererService';
@@ -27,8 +24,9 @@ const bytesPerElementMap = {
 /**
  * 每个 Layer 都拥有一个，用于管理样式属性的注册和更新
  */
-@injectable()
 export default class StyleAttributeService implements IStyleAttributeService {
+  constructor(private readonly rendererService: IRendererService) {}
+
   public attributesAndIndices: {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -36,8 +34,6 @@ export default class StyleAttributeService implements IStyleAttributeService {
     elements: IElements;
     count: number | null;
   };
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
 
   private attributes: IStyleAttribute[] = [];
   private triangulation: Triangulation;
@@ -200,10 +196,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
           offset: bufferOffsetInBytes,
         });
         // size color 触发更新事件
-        layer?.emit(`legend:${attributeName}`, {
-          type: attributeName,
-          attr: attributeToUpdate,
-        });
+        layer?.emit(`legend:${attributeName}`, layer.getLegend(attributeName));
       }
     }
   }
@@ -212,6 +205,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     features: IEncodeFeature[],
     triangulation: Triangulation,
     styleOption: unknown,
+    layer?: ILayer,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -340,6 +334,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
       elements,
       count: vecticesCount,
     };
+
+    Object.values(this.attributes)
+      .filter((attribute) => attribute.scale)
+      .forEach((attribute) => {
+        const attributeName = attribute.name;
+        // size color 触发更新事件
+        layer?.emit(`legend:${attributeName}`, layer.getLegend(attributeName));
+      });
+
     return this.attributesAndIndices;
   }
 

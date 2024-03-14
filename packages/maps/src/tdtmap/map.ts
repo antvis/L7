@@ -130,9 +130,8 @@ export default class TdtMapService extends BaseMapService<any> {
     this.sceneContainer = container;
     return container;
   }
-  protected handleCameraChanged = (e?: any) => {
+  protected handleCameraChanged = () => {
     this.emit('mapchange');
-    // console.log('mapchange');
     const map = this.map;
     const { lng, lat } = this.map.getCenter();
     const option = {
@@ -163,12 +162,9 @@ export default class TdtMapService extends BaseMapService<any> {
       mapInstance,
       center = [121.30654632240122, 31.25744185633306],
       token = 'b15e548080c79819617367d3f6095c69',
-      version = '4.0',
       minZoom = 1,
       maxZoom = 18,
-      logoVisible = true,
       zoom = 3,
-      ...rest
     } = this.config;
 
     // @ts-ignore
@@ -290,7 +286,7 @@ export default class TdtMapService extends BaseMapService<any> {
       offProxy(EventMap[type] || type);
     }
   }
-
+ // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public once(type: string, handler: (...args: any[]) => void): void {
     throw new Error('Method not implemented.');
   }
@@ -344,10 +340,8 @@ export default class TdtMapService extends BaseMapService<any> {
 
 
   public setRotation(rotation: number): void {
-    this.map.setBearing(360);
+    this.map.setBearing(rotation);
   }
-
-  //
 
   public zoomIn(option?: any, eventData?: any): void {
     this.map.zoomIn(option, eventData);
@@ -366,7 +360,7 @@ export default class TdtMapService extends BaseMapService<any> {
     this.map.panBy([x, y]);
   }
 
-  public fitBounds(bound: Bounds, fitBoundsOptions?: any): void {
+  public fitBounds(bound: Bounds): void {
     const [sw, ne] = bound;
     // @ts-ignore
     this.map.setViewport([new window.T.LngLat(sw[0], sw[1]), new window.T.LngLat(ne[0], ne[1])]);
@@ -411,11 +405,6 @@ export default class TdtMapService extends BaseMapService<any> {
   // coordinates methods
 
   public getModelMatrix(
-    lnglat: [number, number],
-    altitude: number,
-    rotate: [number, number, number],
-    scale: [number, number, number],
-    origin: IMercator,
   ): number[] {
     throw new Error('Method not implemented.');
   }

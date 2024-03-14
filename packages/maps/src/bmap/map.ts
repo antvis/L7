@@ -8,10 +8,9 @@ import type {
   IStatusOptions,
   IViewport,
   MapStyleConfig,
-  Point} from '@antv/l7-core';
-import {
-  MapServiceEvent
+  Point,
 } from '@antv/l7-core';
+import { MapServiceEvent } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMapService from '../utils/BaseMapService';
@@ -179,6 +178,10 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     return this.map.getPanes().markerPane!;
   }
 
+  public getCanvasOverlays() {
+    return this.getMap().getContainer().querySelector('#platform')?.lastChild as HTMLElement;
+  }
+
   // MapEvent // 定义事件类型
   public on(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
@@ -239,7 +242,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     const size = this.getMap().getSize();
     return [size.width, size.height];
   }
- // 百度地图缩放等级
+  // 百度地图缩放等级
   public getMinZoom(): number {
     return this.map.getMinZoom();
   }

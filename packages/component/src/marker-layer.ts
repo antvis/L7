@@ -1,12 +1,10 @@
 import type {
   IMapService,
   IMarker,
-  IMarkerContainerAndBounds} from '@antv/l7-core';
-import {
-  TYPES,
+  IMarkerContainerAndBounds,
+  L7Container,
 } from '@antv/l7-core';
-import type {
-  IBounds} from '@antv/l7-utils';
+import type { IBounds } from '@antv/l7-utils';
 import {
   DOM,
   Satistics,
@@ -16,7 +14,6 @@ import {
   padBounds,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { Container } from 'inversify';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
@@ -38,7 +35,7 @@ export default class MarkerLayer extends EventEmitter {
   private points: IPointFeature[] = [];
   private clusterMarkers: IMarker[] = []; // 聚合后的marker列表
   private mapsService: IMapService<unknown>;
-  private scene: Container;
+  private scene: L7Container;
   private zoom: number;
   private bbox: IBounds;
   private inited: boolean;
@@ -66,10 +63,10 @@ export default class MarkerLayer extends EventEmitter {
   }
 
   // 执行scene.addMarkerLayer时调用
-  public addTo(scene: Container) {
+  public addTo(scene: L7Container) {
     // this.remove();
     this.scene = scene;
-    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
+    this.mapsService = scene.mapService;
     if (this.markerLayerOption.cluster) {
       this.initCluster();
       this.update();

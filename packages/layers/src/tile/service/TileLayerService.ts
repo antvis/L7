@@ -6,7 +6,6 @@ import type {
   ITile,
 } from '@antv/l7-core';
 import type { SourceTile } from '@antv/l7-utils';
-import 'reflect-metadata';
 
 interface ITileLayerServiceOptions {
   rendererService: IRendererService;

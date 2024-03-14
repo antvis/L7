@@ -40,13 +40,13 @@ export default defineConfig({
     title: 'L7',
     isAntVSite: false,
     footerTheme: 'light', // 白色 底部主题
-    internalSite: {
-      url: 'https://gitee.com/antv/L7',
-      name: {
-        zh: '国内镜像',
-        en: 'China Mirror',
-      },
-    },
+    // internalSite: {
+    //   url: 'https://gitee.com/antv/L7',
+    //   name: {
+    //     zh: '国内镜像',
+    //     en: 'China Mirror',
+    //   },
+    // },
     description:
       'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.antgroup.com/',

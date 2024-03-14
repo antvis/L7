@@ -42,6 +42,8 @@ export function MapRender(option: {
     .style({
       opacity: 0.5,
     });
+
+
   const boundaries = new PolygonLayer({
     //   featureId: 'COLOR',
     sourceLayer: 'boundaries', // woods hillshade contour ecoregions ecoregions2 city
@@ -132,6 +134,10 @@ export function MapRender(option: {
     scene.addLayer(roads);
     scene.addLayer(water);
     scene.addLayer(point);
+    layer.on('inited', () => {
+      console.log(layer.tileLayer?.getLayers())
+    })
+  
 
     if (window['screenshot']) {
       window['screenshot']();

@@ -1,33 +1,26 @@
 // lodashUtil
 import { lodashUtil } from '@antv/l7-utils';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
+import quad from '../../../shaders/post-processing/quad.glsl';
+import type { ILayer } from '../../layer/ILayerService';
 import type { IShaderModuleService } from '../../shader/IShaderModuleService';
 import type { IModel } from '../IModel';
-import type { IRendererService } from '../IRendererService';
-import { gl } from '../gl';
-const { camelCase, isNil, upperFirst } = lodashUtil;
-
-import quad from '../../../shaders/post-processing/quad.glsl';
-import { TYPES } from '../../../types';
-import type { ILayer } from '../../layer/ILayerService';
-import type { IPostProcessingPass} from '../IMultiPassRenderer';
+import type { IPostProcessingPass } from '../IMultiPassRenderer';
 import { PassType } from '../IMultiPassRenderer';
+import type { IRendererService } from '../IRendererService';
 import type { ITexture2D } from '../ITexture2D';
 import type { IUniform } from '../IUniform';
+import { gl } from '../gl';
+const { camelCase, isNil, upperFirst } = lodashUtil;
 
 /**
  * 后处理 Pass 基类，通过 PostProcessor 驱动。
  *
  * 约定使用 u_Texture 传递渲染纹理。
  */
-@injectable()
 export default class BasePostProcessingPass<InitializationOptions = {}>
   implements IPostProcessingPass<InitializationOptions>
 {
-  @inject(TYPES.IShaderModuleService)
   protected shaderModuleService: IShaderModuleService;
-
   protected rendererService: IRendererService;
 
   protected config: Partial<InitializationOptions> | undefined;
@@ -70,12 +63,8 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
 
   public init(layer: ILayer, config?: Partial<InitializationOptions>) {
     this.config = config;
-    this.rendererService = layer
-      .getContainer()
-      .get<IRendererService>(TYPES.IRendererService);
-    this.shaderModuleService = layer
-      .getContainer()
-      .get<IShaderModuleService>(TYPES.IShaderModuleService);
+    this.rendererService = layer.getContainer().rendererService;
+    this.shaderModuleService = layer.getContainer().shaderModuleService;
 
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     const { vs, fs, uniforms } = this.setupShaders();

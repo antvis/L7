@@ -1,4 +1,4 @@
-import type { Container } from 'inversify';
+import type { L7Container } from '../../inversify.config';
 
 export enum PositionType {
   'TOPRIGHT' = 'topright',
@@ -38,7 +38,7 @@ export interface IControlCorners {
 export interface IControl<O = any> {
   controlOption: O;
   setOptions: (newOption: Partial<O>) => void;
-  addTo(sceneContainer: Container): void;
+  addTo(sceneContainer: L7Container): void;
   onAdd(): HTMLElement;
   onRemove(): void;
   hide(): void;
@@ -50,8 +50,8 @@ export interface IControlService {
   controlCorners: IControlCorners;
   controlContainer: HTMLElement;
   addControls(): void;
-  init(cfg: IControlServiceCfg, sceneContainer: Container): void;
-  addControl(ctr: IControl, sceneContainer: Container): void;
+  init(cfg: IControlServiceCfg, sceneContainer: L7Container): void;
+  addControl(ctr: IControl, sceneContainer: L7Container): void;
   getControlByName(name: string | number): IControl | undefined;
   removeControl(ctr: IControl): void;
   destroy(): void;

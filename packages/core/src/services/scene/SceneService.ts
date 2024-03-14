@@ -1,97 +1,89 @@
 // @ts-ignore
 import { AsyncSeriesHook } from '@antv/async-hook';
 import { DOM } from '@antv/l7-utils';
-import elementResizeDetectorMaker from "element-resize-detector";
+import elementResizeDetectorMaker from 'element-resize-detector';
 import { EventEmitter } from 'eventemitter3';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import { TYPES } from '../../types';
+import type { L7Container } from '../../inversify.config';
 import { createRendererContainer } from '../../utils/dom';
-import type { IFontService } from '../asset/IFontService';
-import type { IIconService } from '../asset/IIconService';
-import type { ICameraService, IViewport } from '../camera/ICameraService';
-import type { IControlService } from '../component/IControlService';
-import type { IMarkerService } from '../component/IMarkerService';
-import type { IPopupService } from '../component/IPopupService';
-import type {
-  IGlobalConfigService,
-  ISceneConfig,
-} from '../config/IConfigService';
-import type { ICoordinateSystemService } from '../coordinate/ICoordinateSystemService';
-import type { IDebugService } from '../debug/IDebugService';
-import type {
-  IInteractionService,
-  IInteractionTarget,
-} from '../interaction/IInteractionService';
+import type { IViewport } from '../camera/ICameraService';
+import type { ISceneConfig } from '../config/IConfigService';
+import type { IInteractionTarget } from '../interaction/IInteractionService';
 import { InteractionEvent } from '../interaction/IInteractionService';
-import type { IPickingService } from '../interaction/IPickingService';
-import type { ILayer, ILayerService } from '../layer/ILayerService';
-import type { IMapService } from '../map/IMapService';
-import type {
-  IRenderConfig,
-  IRendererService,
-} from '../renderer/IRendererService';
-import type { IShaderModuleService } from '../shader/IShaderModuleService';
+import type { ILayer } from '../layer/ILayerService';
+import type { IRenderConfig } from '../renderer/IRendererService';
 import type { ISceneService } from './ISceneService';
 
 /**
  * will emit `loaded` `resize` `destroy` event panstart panmove panend
  */
-@injectable()
 export default class Scene extends EventEmitter implements ISceneService {
   public destroyed: boolean = false;
 
   public loaded: boolean = false;
 
-  @inject(TYPES.SceneID)
   private readonly id: string;
   /**
    * 使用各种 Service
    */
-  @inject(TYPES.IIconService)
-  private readonly iconService: IIconService;
+  private get iconService() {
+    return this.container.iconService;
+  }
 
-  @inject(TYPES.IFontService)
-  private readonly fontService: IFontService;
+  private get fontService() {
+    return this.container.fontService;
+  }
 
-  @inject(TYPES.IControlService)
-  private readonly controlService: IControlService;
+  private get controlService() {
+    return this.container.controlService;
+  }
 
-  @inject(TYPES.IGlobalConfigService)
-  private readonly configService: IGlobalConfigService;
+  private get configService() {
+    return this.container.globalConfigService;
+  }
 
-  @inject(TYPES.IMapService)
-  private readonly map: IMapService;
+  private get map() {
+    return this.container.mapService;
+  }
 
-  @inject(TYPES.ICoordinateSystemService)
-  private readonly coordinateSystemService: ICoordinateSystemService;
+  private get coordinateSystemService() {
+    return this.container.coordinateSystemService;
+  }
 
-  @inject(TYPES.IRendererService)
-  private readonly rendererService: IRendererService;
+  private get rendererService() {
+    return this.container.rendererService;
+  }
 
-  @inject(TYPES.ILayerService)
-  private readonly layerService: ILayerService;
+  private get layerService() {
+    return this.container.layerService;
+  }
 
-  @inject(TYPES.IDebugService)
-  private readonly debugService: IDebugService;
+  private get debugService() {
+    return this.container.debugService;
+  }
 
-  @inject(TYPES.ICameraService)
-  private readonly cameraService: ICameraService;
+  private get cameraService() {
+    return this.container.cameraService;
+  }
 
-  @inject(TYPES.IInteractionService)
-  private readonly interactionService: IInteractionService;
+  private get interactionService() {
+    return this.container.interactionService;
+  }
 
-  @inject(TYPES.IPickingService)
-  private readonly pickingService: IPickingService;
+  private get pickingService() {
+    return this.container.pickingService;
+  }
 
-  @inject(TYPES.IShaderModuleService)
-  private readonly shaderModuleService: IShaderModuleService;
+  private get shaderModuleService() {
+    return this.container.shaderModuleService;
+  }
 
-  @inject(TYPES.IMarkerService)
-  private readonly markerService: IMarkerService;
+  private get markerService() {
+    return this.container.markerService;
+  }
 
-  @inject(TYPES.IPopupService)
-  private readonly popupService: IPopupService;
+  private get popupService() {
+    return this.container.popupService;
+  }
 
   /**
    * 是否首次渲染
@@ -110,13 +102,13 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   private markerContainer: HTMLElement;
 
-  private resizeDetector: elementResizeDetectorMaker.Erd
+  private resizeDetector: elementResizeDetectorMaker.Erd;
 
   private hooks: {
     init: AsyncSeriesHook;
   };
 
-  public constructor() {
+  constructor(private container: L7Container) {
     super();
     // @see https://github.com/webpack/tapable#usage
     this.hooks = {
@@ -128,6 +120,8 @@ export default class Scene extends EventEmitter implements ISceneService {
        */
       init: new AsyncSeriesHook(),
     };
+
+    this.id = container.id;
   }
 
   public init(sceneConfig: ISceneConfig) {
@@ -205,7 +199,7 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.initContainer();
 
         this.resizeDetector = elementResizeDetectorMaker({
-          strategy: "scroll" //<- For ultra performance.
+          strategy: 'scroll', //<- For ultra performance.
         });
         this.resizeDetector.listenTo(
           this.$container as HTMLDivElement,
@@ -329,7 +323,10 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.destroyed = true;
       return;
     }
-    this.resizeDetector.removeListener(this.$container as HTMLDivElement, this.handleWindowResized);
+    this.resizeDetector.removeListener(
+      this.$container as HTMLDivElement,
+      this.handleWindowResized,
+    );
 
     this.pickingService.destroy();
     this.layerService.destroy();

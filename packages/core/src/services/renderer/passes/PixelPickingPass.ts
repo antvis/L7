@@ -1,6 +1,4 @@
 import { decodePickingColor, DOM, encodePickingColor } from '@antv/l7-utils';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import type { IInteractionTarget } from '../../interaction/IInteractionService';
 import { InteractionEvent } from '../../interaction/IInteractionService';
 import type { ILayer } from '../../layer/ILayerService';
@@ -14,7 +12,6 @@ import BaseNormalPass from './BaseNormalPass';
  * color-based PixelPickingPass
  * @see https://github.com/antvis/L7/blob/next/dev-docs/PixelPickingEngine.md
  */
-@injectable()
 export default class PixelPickingPass<
   InitializationOptions = {},
 > extends BaseNormalPass<InitializationOptions> {

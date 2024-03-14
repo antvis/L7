@@ -6,7 +6,7 @@ export function MapRender(option: {
    renderer: 'regl' | 'device'
 }) {
 
-    const scene = new Scene({
+    new Scene({
         id: 'map',
       renderer: option.renderer,
         map: new allMap[option.map || 'Map']({

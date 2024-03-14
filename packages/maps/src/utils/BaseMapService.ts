@@ -13,18 +13,15 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
+  L7Container,
   MapStyleConfig,
-  MapStyleName} from '@antv/l7-core';
-import {
-  CoordinateSystem,
-  MapServiceEvent,
-  TYPES,
+  MapStyleName,
 } from '@antv/l7-core';
+import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
 import type { Map } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
-import { inject, injectable } from 'inversify';
-import 'reflect-metadata';
-import type { ISimpleMapCoord} from './simpleMapCoord';
+import { EventEmitter } from 'eventemitter3';
+import type { ISimpleMapCoord } from './simpleMapCoord';
 import { SimpleMapCoord } from './simpleMapCoord';
 import { MapTheme } from './theme';
 const EventMap: {
@@ -40,7 +37,6 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * AMapService
  */
-@injectable()
 export default abstract class BaseMapService<T>
   implements IMapService<Map & T>
 {
@@ -51,17 +47,20 @@ export default abstract class BaseMapService<T>
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
   protected viewport: IViewport | unknown;
 
-  @inject(TYPES.MapConfig)
   protected readonly config: Partial<IMapConfig>;
 
-  @inject(TYPES.IGlobalConfigService)
   protected readonly configService: IGlobalConfigService;
 
-  @inject(TYPES.ICoordinateSystemService)
   protected readonly coordinateSystemService: ICoordinateSystemService;
 
-  @inject(TYPES.IEventEmitter)
   protected eventEmitter: any;
+
+  constructor(container: L7Container) {
+    this.config = container.mapConfig;
+    this.configService = container.globalConfigService;
+    this.coordinateSystemService = container.coordinateSystemService;
+    this.eventEmitter = new EventEmitter();
+  }
 
   protected markerContainer: HTMLElement;
   protected cameraChangedCallback: (viewport: IViewport) => void;
@@ -77,14 +76,20 @@ export default abstract class BaseMapService<T>
     this.markerContainer.setAttribute('tabindex', '-1');
   }
   //需要子类实现 目前只有天地图实现
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public addZoomListenerWhenAddMarkerOrPopup(object:any): void {}
   //需要子类实现 目前只有天地图实现
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public removeZoomListenerWhenRemoveMarkerOrPopup(object:any): void {}
 
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;
   }
   public getOverlayContainer(): HTMLElement | undefined {
+    return undefined;
+  }
+
+  public getCanvasOverlays(): HTMLElement | null | undefined {
     return undefined;
   }
 

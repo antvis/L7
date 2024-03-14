@@ -1,6 +1,4 @@
 import { EventEmitter } from 'eventemitter3';
-import { injectable } from 'inversify';
-import 'reflect-metadata';
 import { buildIconMaping } from '../../utils/font_util';
 import type { ITexture2D } from '../renderer/ITexture2D';
 import type { ISceneService } from '../scene/ISceneService';
@@ -8,7 +6,7 @@ import type { IIcon, IICONMap, IIconService, IImage } from './IIconService';
 const BUFFER = 3;
 const MAX_CANVAS_WIDTH = 1024;
 const imageSize = 64;
-@injectable()
+
 export default class IconService extends EventEmitter implements IIconService {
   public canvasHeight: number = 128;
   private texture: ITexture2D;

@@ -71,9 +71,6 @@ export default class TMapService extends BaseMapService<any> {
       token = GMAP_API_KEY,
       minZoom = 3,
       maxZoom = 18,
-      rotation = 0,
-      pitch = 0,
-      mapSize = 10000,
       logoVisible = true,
       ...rest
     } = this.config;
@@ -150,6 +147,11 @@ export default class TMapService extends BaseMapService<any> {
 
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;
+  }
+
+  public getCanvasOverlays() {
+    // TODO: 由于 Google Map 的 loaded 提前触发，导致 Google Map 的 DOM 结构无法获取
+    return this.map.getDiv() as HTMLElement;
   }
 
   // MapEvent

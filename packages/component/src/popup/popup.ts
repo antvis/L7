@@ -4,18 +4,16 @@ import type {
   IMapService,
   IPopup,
   IPopupOption,
-  ISceneService} from '@antv/l7-core';
-import {
-  TYPES,
+  ISceneService,
+  L7Container,
 } from '@antv/l7-core';
 import {
+  DOM,
   anchorTranslate,
   anchorType,
   applyAnchorClass,
-  DOM,
 } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { Container } from 'inversify';
 import { createL7Icon } from '../utils/icon';
 
 type ElementType = DOM.ElementType;
@@ -34,7 +32,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   protected mapsService: IMapService;
   protected sceneService: ISceneService;
   protected layerService: ILayerService;
-  protected scene: Container;
+  protected scene: L7Container;
 
   /**
    * 关闭按钮对应的 DOM
@@ -107,10 +105,10 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     return this.isShow;
   }
 
-  public addTo(scene: Container) {
-    this.mapsService = scene.get<IMapService>(TYPES.IMapService);
-    this.sceneService = scene.get<ISceneService>(TYPES.ISceneService);
-    this.layerService = scene.get<ILayerService>(TYPES.ILayerService);
+  public addTo(scene: L7Container) {
+    this.mapsService = scene.mapService;
+    this.sceneService = scene.sceneService;
+    this.layerService = scene.layerService;
     this.mapsService.on('camerachange', this.update);
     this.mapsService.on('viewchange', this.update);
     this.scene = scene;
@@ -394,22 +392,20 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.setPopupPosition(x, y);
   };
   //zoom时计算PopUp的位置并更新
-  protected updateLngLatPositionWhenZoom = (ev:any) => {
+  protected updateLngLatPositionWhenZoom = (ev: any) => {
     if (!this.mapsService || this.popupOption.followCursor) {
       return;
     }
-    const { lng, lat } = this.lngLat;
-    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
     const map = ev.map;
     const viewHalf = map.getSize();
-    viewHalf.x = viewHalf.x/2;
-    viewHalf.y = viewHalf.y/2;
+    viewHalf.x = viewHalf.x / 2;
+    viewHalf.y = viewHalf.y / 2;
     const center = ev.center;
     const zoom = ev.zoom;
-    const projectedCenter = map.DE(this.lngLat,zoom,center);
-    projectedCenter.x=Math.round(projectedCenter.x);
-    projectedCenter.y=Math.round(projectedCenter.y);
-    this.setPopupPosition(projectedCenter.x, projectedCenter.y,true);
+    const projectedCenter = map.DE(this.lngLat, zoom, center);
+    projectedCenter.x = Math.round(projectedCenter.x);
+    projectedCenter.y = Math.round(projectedCenter.y);
+    this.setPopupPosition(projectedCenter.x, projectedCenter.y, true);
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDefault(option: Partial<O>): O {
@@ -535,7 +531,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.hide();
   };
   //更新位置 支持zoom时更新
-  private updatePosition = (ev:any,zoom:Boolean = true) => {
+  private updatePosition = (ev: any, zoom: Boolean = true) => {
     const hasPosition = !!this.lngLat;
     const { className, style, maxWidth, anchor, stopPropagation } =
       this.popupOption;
@@ -571,10 +567,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
       this.container.style.whiteSpace = 'nowrap';
     }
-    if(zoom){
+    if (zoom) {
       this.updateLngLatPositionWhenZoom(ev);
-    }
-    else{
+    } else {
       this.updateLngLatPosition();
     }
     DOM.setTransform(this.container, `${anchorTranslate[anchor]}`);
@@ -588,12 +583,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     } else {
       this.container.style.removeProperty('width');
     }
-  }
-  protected updatePositionWhenZoom = (ev:any) => {
-    this.updatePosition(ev,true);
-  }
+  };
+  protected updateWhenZoom = (ev: any) => {
+    this.updatePosition(ev, true);
+  };
   protected update = () => {
-    this.updatePosition(null,false);
+    this.updatePosition(null, false);
   };
   /**
    * 设置 Popup 相对于地图容器的 Position
@@ -602,15 +597,19 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    * @param {Boolean} [useTransition=false] 是否使用过度效果
    * @protected
    */
-  protected setPopupPosition(left: number, top: number,useTransition:boolean = false) {
+  protected setPopupPosition(
+    left: number,
+    top: number,
+    useTransition: boolean = false,
+  ) {
     if (this.container) {
       const { offsets } = this.popupOption;
       this.container.style.left = left + offsets[0] + 'px';
       this.container.style.top = top - offsets[1] + 'px';
-      if(useTransition){
-        this.container.style.transition  = 'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
-      }
-      else{
+      if (useTransition) {
+        this.container.style.transition =
+          'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
+      } else {
         this.container.style.transition = '';
       }
     }

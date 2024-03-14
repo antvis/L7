@@ -77,11 +77,7 @@ export default class FillModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { animateOption = { enable: false } } =
-      this.layer.getLayerConfig() as Partial<
-        ILayerConfig & IPointLayerStyleOptions
-      >;
-    const { frag, vert, type } = this.getShaders(animateOption);
+    const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = PointFillTriangulation;
     this.initUniformsBuffer();
     const model = await this.layer.buildLayerModel({
@@ -99,7 +95,7 @@ export default class FillModel extends BaseModel {
    * 根据 animateOption 的值返回对应的 shader 代码
    * @returns
    */
-  public getShaders(animateOption: Partial<IAnimateOption>): {
+  public getShaders(): {
     frag: string;
     vert: string;
     type: string;

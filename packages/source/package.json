@@ -1,32 +1,32 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.20.19",
+  "version": "2.20.20",
   "description": "",
+  "license": "ISC",
+  "author": "lzxue",
+  "sideEffects": true,
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "sideEffects": true,
   "files": [
     "lib",
     "es",
     "README.md"
   ],
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "sync": "tnpm sync",
     "test": "umi-test --passWithNoTests",
-    "sync": "tnpm sync"
+    "tsc": "tsc --project tsconfig.build.json",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
-  "author": "lzxue",
-  "license": "ISC",
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-core": "2.20.19",
-    "@antv/l7-utils": "2.20.19",
+    "@antv/l7-core": "2.20.20",
+    "@antv/l7-utils": "2.20.20",
     "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.5.2",
     "@mapbox/vector-tile": "^1.3.1",
@@ -37,9 +37,7 @@
     "d3-hexbin": "^0.2.2",
     "eventemitter3": "^4.0.0",
     "geojson-vt": "^3.2.1",
-    "inversify": "^5.0.1",
     "pbf": "^3.2.1",
-    "reflect-metadata": "^0.2.1",
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
@@ -50,8 +48,8 @@
     "@types/mapbox__vector-tile": "^1.3.0",
     "@types/pbf": "^3.0.2"
   },
-  "gitHead": "f63aea6c9140aac41f1e842fd7fef34502bfeec5",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "f63aea6c9140aac41f1e842fd7fef34502bfeec5"
 }

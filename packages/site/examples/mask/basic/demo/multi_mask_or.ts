@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Scene, RasterLayer, Source, PolygonLayer } from '@antv/l7';
+import { Scene, RasterLayer, PolygonLayer } from '@antv/l7';
 // @ts-ignore
 import { Map } from '@antv/l7-maps';
 
@@ -12,15 +12,7 @@ const scene = new Scene({
         zoom: 3,
     }),
 });
-const worldSource = new Source('https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/rs_l7/{z}/{x}/{y}.pbf',
-    {
-        parser: {
-            type: 'mvt',
-            tileSize: 256,
-            maxZoom: 9,
-            extent: [-180, -85.051129, 179, 85.051129],
-        },
-    })
+
 const maskData = {
     "type": "FeatureCollection",
     "features": [
