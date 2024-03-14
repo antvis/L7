@@ -149,6 +149,11 @@ export default class TMapService extends BaseMapService<any> {
     return this.markerContainer;
   }
 
+  public getCanvasOverlays() {
+    // TODO: 由于 Google Map 的 loaded 提前触发，导致 Google Map 的 DOM 结构无法获取
+    return this.map.getDiv() as HTMLElement;
+  }
+
   // MapEvent
   public on(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {

@@ -1,4 +1,4 @@
-  import CanvasLayer from './canvas';
+import CanvasLayer from './canvas';
 import CityBuildingLayer from './citybuliding/building';
 import BaseLayer from './core/BaseLayer';
 import BaseModel from './core/BaseModel';
@@ -9,8 +9,8 @@ import LineLayer from './line/index';
 import PointLayer from './point';
 import PolygonLayer from './polygon';
 import RasterLayer from './raster';
-import TileDebugLayer from './tile/core/TileDebugLayer';
 import TileLayer from './tile/core/BaseLayer';
+import TileDebugLayer from './tile/core/TileDebugLayer';
 
 import EarthLayer from './earth';
 
@@ -32,7 +32,7 @@ export {
   PointLayer,
   PolygonLayer,
   RasterLayer,
-  TileLayer,
   TileDebugLayer,
+  TileLayer,
   WindLayer,
 };

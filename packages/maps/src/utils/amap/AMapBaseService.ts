@@ -148,6 +148,10 @@ export default abstract class AMapBaseService
       ?.getElementsByClassName('amap-maps')[0] as HTMLElement;
   }
 
+  public getCanvasOverlays() {
+    return this.$mapContainer?.querySelector('.amap-overlays') as HTMLElement;
+  }
+
   public getSize(): [number, number] {
     const size = this.map.getSize();
     return [size.getWidth(), size.getHeight()];

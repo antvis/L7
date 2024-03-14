@@ -6,12 +6,12 @@ import type {
   StyleAttributeOption,
 } from '@antv/l7-core';
 import type { IColorRamp } from '@antv/l7-utils';
+import type { CanvasModelType } from '../canvas/models';
 import type { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
   'solid' = 0.0,
   'dash' = 1.0,
 }
-
 
 export enum LinearDir {
   VERTICAL = 'vertical',
@@ -200,7 +200,7 @@ export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   colorTexture?: ITexture2D;
   brightness?: number;
   contrast?: number;
-  saturation ?: number;
+  saturation?: number;
   gamma?: number;
 }
 
@@ -263,10 +263,38 @@ export interface IDrawingOnCanvas {
   mapService: IMapService;
   size: [number, number];
 }
-export interface ICanvasLayerStyleOptions {
-  zIndex: number;
-  update: CanvasUpdateType | string;
-  drawingOnCanvas: (option: IDrawingOnCanvas) => void;
+
+export interface ICanvasLayerRenderParams {
+  canvas: HTMLCanvasElement;
+  ctx: RenderingContext;
+  container: {
+    width: number;
+    height: number;
+    bounds: [[number, number], [number, number]];
+  };
+  size: [number, number];
+  utils: {
+    lngLatToContainer: IMapService['lngLatToContainer'];
+  };
+  mapService: IMapService;
+}
+
+export interface ICanvasLayerOptions {
+  zIndex?: number;
+  contextType?: CanvasModelType;
+  getContext?: (canvas: HTMLCanvasElement) => RenderingContext;
+  trigger?: 'end' | 'change';
+  /**
+   * @deprecated
+   * @alias trigger
+   */
+  update?: CanvasUpdateType | string;
+  draw?: (renderParams: ICanvasLayerRenderParams) => void;
+  /**
+   * @deprecated
+   * @alias draw
+   */
+  drawingOnCanvas?: (renderParams: ICanvasLayerRenderParams) => void;
 }
 
 export interface IHeatMapLayerStyleOptions extends IBaseLayerStyleOptions {
@@ -298,7 +326,14 @@ export interface IRasterTerrainLayerStyleOptions
   bScaler?: number;
   offset?: number;
 }
-export type ArrowType = 'circle' | 'triangle' | 'rect'  | 'diamond' | 'classic' | 'halfTriangle' | 'none' ;
+export type ArrowType =
+  | 'circle'
+  | 'triangle'
+  | 'rect'
+  | 'diamond'
+  | 'classic'
+  | 'halfTriangle'
+  | 'none';
 export interface IArrowOptions {
   type: ArrowType;
   width?: number;

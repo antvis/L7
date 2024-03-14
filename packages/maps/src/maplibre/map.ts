@@ -158,6 +158,10 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
     return this.$mapContainer;
   }
 
+  public getCanvasOverlays() {
+    return this.getMapContainer();
+  }
+
   public meterToCoord(center: [number, number], outer: [number, number]) {
     // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter

@@ -138,4 +138,8 @@ export default class DefaultMapService extends BaseMapService<Map> {
         : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
   }
+
+  public getCanvasOverlays() {
+    return this.getContainer();
+  }
 }

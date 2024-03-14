@@ -1,55 +1,76 @@
-import type { ILayer } from '@antv/l7-core';
+// import type { ILayerConfig } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
-import type { ICanvasLayerStyleOptions } from '../core/interface';
-import type { CanvasModelType } from './models/index';
-import CanvasModels from './models/index';
-export default class CanvasLayer extends BaseLayer<ICanvasLayerStyleOptions> {
+import type { ICanvasLayerOptions } from '../core/interface';
+import type { CanvasModelType } from './models';
+import { CanvasModel } from './models';
+
+export default class CanvasLayer extends BaseLayer<ICanvasLayerOptions> {
   public type: string = 'CanvasLayer';
-  public forceRender: boolean = true;
+  public layerModel: CanvasModel;
+
+  protected getDefaultConfig(): Partial<ICanvasLayerOptions> {
+    return {
+      zIndex: 3,
+      contextType: 'canvas2d',
+      trigger: 'change',
+    };
+  }
+
   public async buildModels() {
-    const modelType = this.getModelType();
-    this.layerModel = new CanvasModels[modelType](this);
+    this.layerModel = new CanvasModel(this);
     await this.initLayerModels();
   }
 
-  public hide(): ILayer {
-    // 清除画布
-    if (this.layerModel.clearCanvas) {
-      this.layerModel.clearCanvas();
-    }
-
-    this.updateLayerConfig({
-      visible: false,
-    });
-    this.reRender();
-    return this;
-  }
-
-  public renderModels() {
-    if (this?.layerModel?.renderUpdate) {
-      this.layerModel.renderUpdate();
-    }
-
-    this.models.forEach((model) => {
-      model.draw(
-        {
-          uniforms: this.layerModel.getUninforms(),
-        },
-        false,
-      );
-    });
-    return this;
-  }
-
-  protected getDefaultConfig() {
-    const type = this.getModelType();
-    const defaultConfig = {
-      canvas: {},
-    };
-    return defaultConfig[type];
-  }
-
   public getModelType(): CanvasModelType {
-    return 'canvas';
+    return this.getLayerConfig().contextType || 'canvas2d';
+  }
+
+  public draw(draw: ICanvasLayerOptions['draw']) {
+    this.updateLayerConfig({
+      draw,
+    });
+    this.render();
+    return this;
+  }
+
+  public getLayerConfig() {
+    const config = {
+      ...this.getDefaultConfig(),
+      ...super.getLayerConfig(),
+    } as any;
+    if (config.zIndex < 3) {
+      config.zIndex = 3;
+    }
+    return config as any;
+  }
+
+  public render() {
+    this.layerModel?.renderCanvas();
+    return this;
+  }
+
+  public getCanvas() {
+    return this.layerModel?.canvas;
+  }
+
+  public show() {
+    const canvas = this.getCanvas();
+    if (canvas) {
+      canvas.style.display = 'unset';
+    }
+    return this;
+  }
+
+  public hide() {
+    const canvas = this.getCanvas();
+    if (canvas) {
+      canvas.style.display = 'none';
+    }
+    return this;
+  }
+
+  public destroy() {
+    this.layerModel.removeCanvas();
+    super.destroy();
   }
 }

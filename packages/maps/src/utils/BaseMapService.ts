@@ -83,6 +83,10 @@ export default abstract class BaseMapService<T>
     return undefined;
   }
 
+  public getCanvasOverlays(): HTMLElement | null | undefined {
+    return undefined;    
+  }
+
   //  map event
   public on(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
