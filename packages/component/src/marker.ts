@@ -21,10 +21,8 @@ import { EventEmitter } from 'eventemitter3';
 //  marker 支持 dragger 未完成
 export default class Marker extends EventEmitter {
   private markerOption: IMarkerOption;
-  private defaultMarker: boolean;
   private popup: IPopup;
   private mapsService: IMapService<unknown>;
-  private sceneSerive: ISceneService;
   private lngLat: ILngLat;
   private scene: L7Container;
   private added: boolean = false;
@@ -53,16 +51,11 @@ export default class Marker extends EventEmitter {
   }
 
   public addTo(scene: L7Container) {
-    // this.remove();
     this.scene = scene;
     this.mapsService = scene.mapService;
-    this.sceneSerive = scene.sceneService;
     const { element } = this.markerOption;
-    // this.sceneSerive.getSceneContainer().appendChild(element as HTMLElement);
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
-    //天地图仅监听zoomchange 不注册camerachane,对于平移,在mapsService中实现
-    // this.mapsService.on('zoomchange', this.updatePositionWhenZoom);
     this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
     this.update();
     this.updateDraggable();
@@ -76,7 +69,6 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('click', this.onMapClick);
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
-      // this.mapsService.off('zoomchange', this.update);
       this.mapsService.off('camerachange', this.update);
     }
     this.unRegisterMarkerEvent();
@@ -385,7 +377,6 @@ export default class Marker extends EventEmitter {
     let { element } = this.markerOption;
     const { color, anchor } = this.markerOption;
     if (!element) {
-      this.defaultMarker = true;
       element = DOM.create('div') as HTMLDivElement;
       this.markerOption.element = element;
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

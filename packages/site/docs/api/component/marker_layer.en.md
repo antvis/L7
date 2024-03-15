@@ -1,80 +1,81 @@
 ---
-title: Marker Layer
+title: Marker 图层
 order: 3
 ---
 
 <embed src="@/docs/api/common/style.md"></embed>
 
-MarkerLayer 不同于 PointLayer 图层
+MarkerLayer is an upgraded version of Marker. Marker is an independent map annotation, while MarkerLayer manages a large amount of Marker data in a unified manner.
 
-**技术差异**
+**technical differences**
 
-- MarkerLayer 地图元素采用 Dom 元素绘制
-- PointLayer 通过 WebGL 绘制元素。
+* Marker Dom draws a map element
+* MarkerLayer manages multiple DomMarkers in a unified manner
+* PointLayer draws elements via WebGL.
 
-**功能差异**
+**Functional differences**
 
-- MarkerLayer 元素的自定义性比较强，任何 HTML+ CSS 的组合都可可以绘制在地图上。
-- PointLayer 自定义性比较弱，实现成本比较高，优势可以绘制大量的数据，性能比交互。
+* The MarkerLayer element is highly customizable, and any combination of HTML+CSS can be drawn on the map.
+* PointLayer is relatively weak in customization and has relatively high implementation costs. It has the advantage of being able to draw a large amount of data and has relatively good performance.
 
-## 使用
+## use
 
 ```javascript
 import { Marker, MarkerLayer } from '@antv/l7';
 ```
 
-### 构造函数
+### Constructor
 
 ```javascript
 const markerLayer = new MarkerLayer(option);
 
-// 调用 addMarker方法 将多个Marker添加到Layer
+//Call the addMarker method to add multiple Markers to the Layer
 
 scene.addMarkerLayer(markerLayer);
 ```
 
 #### option
 
-- cluster 聚合 `boolean` 默认 `false`
+* cluster aggregation`boolean`default`false`
 
-- clusterOption 聚合配置
+* clusterOption aggregation configuration
 
-  - field `string` 聚合统计字段
-  - method `sum| max| min| mean`
-  - element `function` 通过回调函数设置聚合 Marker 的样式，返回 dom 元素
+  * field `string`Aggregate statistical fields
+  * method `sum| max| min| mean`
+  * radius aggregate radius number default 40
+  * minZoom: minimum aggregate zoom level number default 0
+  * maxZoom: maximum aggregate zoom level number default 16
+  * element `function`Set the style of the aggregate Marker through the callback function and return the dom element
+    The callback function contains the following parameters
+    * point\_count defaults to the number of aggregated elements
+    * clusterData `Array`Aggregate raw data of nodes
+    * point\_sum aggregate sum calculated based on field and method
+    * point\_max aggregate maximum value calculated based on field and method
+    * point\_min aggregate minimum value calculated based on field and method
+    * point\_mean aggregated mean calculated based on field and method
 
-    回调函数包含以下参数
-    point_count 默认 聚合元素个数
-    clusterData `Array` 聚合节点的原始数据
-    point_sum 聚合求和 根据 field 和 method 计算
-    point_max 聚合最大值 根据 field 和 method 计算
-    point_min 聚合最小值 根据 field 和 method 计算
-    point_mean 聚合平均值 根据 field 和 method 计算
-
-后续会增加更多配置项目
-
-### 方法
+### method
 
 #### addMarker
 
-参数
+parameter
 
-- marker `IMarker` 需要添加的 Marker
+* marker `IMarker`Markers that need to be added
 
-添加 Marker
+Add Marker
 
-通过 Marker 对象实例化一个 Marker
+Instantiate a Marker through the Marker object
 
 ```javascript
-const marker = new Marker().setLnglat(); // 添加进Marker必须设置经纬度才能添加
+const marker = new Marker().setLnglat(); // To add a Marker, you must set the longitude and latitude before adding it
 markerLayer.addMarker(marker);
 ```
 
-为 Marker 添加属性信息,
+Add attribute information to Marker,
 
-如果聚合参数设置统计配置项 `field| method`需要为 Marker 添加属性信息
+If the aggregation parameter sets the statistics configuration item`field| method`Need to add attribute information to Marker
 
-通过 Marker 的 extData[配置项](/api/component/marker#option)设置 Marker 属性信息
+extData via Marker[Configuration items](/api/complement/marker#options)Set Marker property information
 
 ```javascript
 const marker = new Marker({
@@ -87,15 +88,15 @@ const marker = new Marker({
 
 #### removeMarker
 
-从 MarkerLayer 移除 Marker
+Remove Marker from MarkerLayer
 
 #### getMarkers
 
-获取 MarkerLayer 中的所有 Marker
+Get all Markers in MarkerLayer
 
 #### clear
 
-清除掉所有的 Marker
+Clear all markers
 
 ####
 
@@ -103,7 +104,7 @@ const marker = new Marker({
 
 #### addMarkerLayer
 
-添加 MarkerLayer
+Add MarkerLayer
 
 ```javascript
 scene.addMarkerLayer(layer);
@@ -111,14 +112,14 @@ scene.addMarkerLayer(layer);
 
 #### removeMarkerLayer
 
-移除 MarkerLayer
+Remove MarkerLayer
 
 ```javascript
 scene.removeMarkerLayer(layer);
 ```
 
-### demo 地址
+### demo address
 
 [markerLayer ](/examples/point/marker#markerlayer)
 
-[markerLayer 聚合](/examples/point/marker#clustermarker)
+[markerLayer aggregation](/examples/point/marker#clustermarker)
