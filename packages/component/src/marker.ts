@@ -5,7 +5,6 @@ import type {
   IMarkerOption,
   IPoint,
   IPopup,
-  ISceneService,
   L7Container,
 } from '@antv/l7-core';
 import {

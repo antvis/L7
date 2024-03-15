@@ -7,6 +7,5 @@ layout(std140) uniform PickingUniforms {
   float u_PickingThreshold;
   float u_PickingBuffer;
   float u_shaderPick;
-  float u_EnableSelect;
   float u_activeMix;
 };

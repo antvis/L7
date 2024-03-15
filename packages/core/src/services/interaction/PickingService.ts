@@ -291,10 +291,6 @@ export default class PickingService implements IPickingService {
     return isPicked;
   };
 
-  // 获取容器的大小 - 兼容小程序环境
-  private getContainerSize(container: HTMLCanvasElement | HTMLElement) {
-    return container.getBoundingClientRect();
-  }
   private async pickingAllLayer(target: IInteractionTarget) {
     // 判断是否进行拾取操作
     if (!this.layerService.needPick(target.type) || !this.isPickingAllLayer()) {

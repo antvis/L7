@@ -27,10 +27,25 @@ void setPickingColor(vec3 pickingColor) {
   }
   // compares only in highlight stage
 
-  v_PickingResult.a = float((u_PickingStage == PICKING_HIGHLIGHT) && isVertexPicked(pickingColor));
+  if(u_PickingStage == PICKING_HIGHLIGHT) {
+    if(isVertexPicked(pickingColor)) {
+       v_PickingResult = vec4(pickingColor.rgb * COLOR_SCALE,HIGHLIGHT);
+       return;
+    }
+    if(isVertexSelected(pickingColor)) {
+     v_PickingResult = vec4(u_CurrentSelectedId.rgb * COLOR_SCALE,SELECT);
+      return;
+    }
 
-  // Stores the picking color so that the fragment shader can render it during picking
-  v_PickingResult.rgb = pickingColor * COLOR_SCALE;
+  } else {
+      v_PickingResult= vec4(pickingColor.rgb * COLOR_SCALE,NORMAL);
+      return;
+  }
+
+  // // v_PickingResult.a = float((u_PickingStage == PICKING_HIGHLIGHT) && (isVertexPicked(pickingColor) || isVertexPicked(u_CurrentSelectedId)));
+
+  // // Stores the picking color so that the fragment shader can render it during picking
+  // v_PickingResult.rgb = pickingColor * COLOR_SCALE;
 }
 
 float setPickingSize(float x) {
