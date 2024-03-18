@@ -69,7 +69,6 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       ['u_PickingThreshold', 10],
       ['u_PickingBuffer', 0],
       ['u_shaderPick', 0],
-      ['u_EnableSelect', 0],
       ['u_activeMix', 0],
     ]);
 
@@ -145,12 +144,12 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         layer.updateLayerConfig({
           pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
         });
-
         const option = {
           u_PickingStage: PickingStage.HIGHLIGHT,
           u_PickingColor: pickedColor,
           u_HighlightColor: highlightColorInArray.map((c) => c * 255),
           u_activeMix: activeMix,
+  
         };
         this.updatePickOption(option, layer);
         layer.models.forEach((model) => model.addUniforms(option));
@@ -176,7 +175,6 @@ export default class PixelPickingPlugin implements ILayerPlugin {
           u_activeMix: selectMix,
           u_CurrentSelectedId: pickedColor,
           u_SelectColor: highlightColorInArray.map((c) => c * 255),
-          u_EnableSelect: 1,
         };
         this.updatePickOption(option, layer);
         layer.models.forEach((model) => model.addUniforms(option));

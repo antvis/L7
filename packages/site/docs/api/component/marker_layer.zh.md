@@ -42,6 +42,9 @@ scene.addMarkerLayer(markerLayer);
 
   - field `string` 聚合统计字段
   - method `sum| max| min| mean`
+  - radius 聚合半径 number default 40
+  - minZoom: 最小聚合缩放等级 number default 0
+  - maxZoom: 最大聚合缩放等级 number default 16
   - element `function` 通过回调函数设置聚合 Marker 的样式，返回 dom 元素
     回调函数包含以下参数
     - point_count 默认 聚合元素个数
