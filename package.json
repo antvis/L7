@@ -53,7 +53,7 @@
     "worker": "cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.worker.js --environment BUILD:production",
     "worker:watch": "cross-env BABEL_ENV=bundle NODE_ENV=production yarn rollup -c build/rollup.config.worker.js --environment BUILD:development --watch",
     "clean": "lerna run clean --parallel",
-    "clear-node-modules": "rimraf node_modules && lerna clean -y",
+    "clear-deps": "./scripts/clean-deps.sh",
     "changelog": "auto-changelog --output CHANGELOG.md",
     "translate": "translate  -d",
     "sync": "lerna run sync --parallel"
