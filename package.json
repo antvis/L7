@@ -129,7 +129,6 @@
     "css-loader": "^6.7.3",
     "cz-conventional-changelog": "^3.0.2",
     "dat.gui": "^0.7.2",
-    "district-data": "^0.0.7",
     "dumi": "^1.1.0",
     "element-remove": "^1.0.4",
     "eslint": "^8.54.0",

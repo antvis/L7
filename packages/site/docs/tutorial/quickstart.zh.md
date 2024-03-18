@@ -22,11 +22,17 @@ npm install --save @antv/l7-maps
 <head>
 <! --引入最新版的L7--> 
 <script src = 'https://unpkg.com/@antv/l7'></script>
+
 <! --指定版本号引入L7--> 
 <script src = 'https://unpkg.com/@antv/l7@2.0.11'></script>
 </head>
 ```
 CDN 引用 在使用时通过 L7 命名空间获取所有对象并初始化，如 L7.scene、L7.GaodeMap
+
+
+<!--也可以使用国内镜像 -->
+<script src = 'https://npm.elemecdn.com/@antv/l7'></script>
+
 
 ```javascript
 import { Scene } from '@antv/l7';

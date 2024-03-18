@@ -19,5 +19,5 @@ if (window) {
     window.antd = require('antd');
     window.gcoord = require('gcoord');
     window.pmtiles = require('pmtiles');
-    window.districtData = require('district-data')
+    window.District = require('district-data')
 }

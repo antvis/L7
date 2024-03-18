@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 import { LineLayer, Marker, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
-import { RDBSource } from 'district-data';
+import 'district-data';
 
 const pointData = [
     {
@@ -144,17 +145,16 @@ const pointData = [
       unit: '小时',
     },
   ];
-  
 
-const source = new RDBSource({
+const source = new District.RDBSource({
   version: 2023,
 });
 const scene = new Scene({
   id: 'map',
   map: new Map({
     center: [111.4453125, 32.84267363195431],
-    pitch: 40,
-    zoom: 4,
+    pitch: 35,
+    zoom: 3,
   }),
 });
 
@@ -172,6 +172,8 @@ scene.addImage(
 );
 scene.setBgColor('#131722');
 scene.on('loaded', () => {
+  const map = document.getElementById('map');
+  map.style.background = '#131722';
   for (let i = 0; i < pointData.length; i++) {
     const el = document.createElement('label');
     el.className = 'labelclass';
@@ -196,6 +198,7 @@ scene.on('loaded', () => {
   source
     .getData({
       level: 'province',
+      precision:'low'
     })
     .then((data) => {
       const newFeatures = data.features.filter((item) => {
@@ -205,13 +208,17 @@ scene.on('loaded', () => {
         type: 'FeatureCollection',
         features: newFeatures,
       };
-      const lineDown = new LineLayer()
+      // 省份边界
+      const lineDown = new LineLayer({
+        zIndex:10
+      })
         .source(newData)
         .shape('line')
         .color('#989494')
-        .size(1)
+        .size(0.6)
         .style({
-          raisingHeight: 200000,
+          raisingHeight: 650000,
+          opacity: 0.8,
         });
 
       scene.addLayer(lineDown);
@@ -221,27 +228,29 @@ scene.on('loaded', () => {
   source
     .getData({
       level: 'country',
+      precision:'low'
+      
     })
     .then((data) => {
-      const provincelayer = new PolygonLayer({})
+      // 中国地图填充面
+      const provincelayer = new PolygonLayer({
+        autoFit:true
+      })
         .source(data)
         .size(650000)
         .shape('extrude')
-        .color('#1c355c')
+        .color('#5886CF')
         .style({
           heightfixed: true,
           pickLight: true,
-          sourceColor: '#5886CF',
-          targetColor: '#5886CF',
-          //   raisingHeight: 200000,
           opacity: 0.8,
         });
+     // 国界线 九段线
       const boundaryLine = new LineLayer({ zIndex: 10 })
         .source(data)
         .shape('line')
-        .color('#5dddff')
-        .size(2)
-
+        .color('#5DDDFF')
+        .size(1)
         .style({
           raisingHeight: 650000,
         });
@@ -252,7 +261,9 @@ scene.on('loaded', () => {
 
       return '';
     });
-  const flyLine3 = new LineLayer()
+  const flyLine3 = new LineLayer({
+    blend:'normal'
+  })
     .source(pointData, {
       parser: {
         type: 'json',
@@ -264,14 +275,16 @@ scene.on('loaded', () => {
     })
     .size(2)
     .shape('arc3d')
-    .color(['rgb(0, 191, 255)', 'rgba(255, 255, 255, 1)'])
+    .color('rgb(0, 191, 255)')
     .animate({
-      interval: 2,
-      trailLength: 2,
-      duration: 1,
+      interval: 0.1,
+      trailLength: 0.4,
+      duration: 0.5,
     })
     .style({
-      thetaOffset: 2,
+      sourceColor:'rgb(0, 191, 255)',
+      targetColor:'rgb(57,255,20)',
+      thetaOffset: 1,
       opacity: 1,
     });
   const pointLayer = new PointLayer({
@@ -287,7 +300,7 @@ scene.on('loaded', () => {
       },
     })
     .shape('cylinder')
-    .size([6, 6, 90])
+    .size([4, 4, 90])
     .active(true)
     .color('color')
     .style({
@@ -309,7 +322,7 @@ scene.on('loaded', () => {
     .shape('circle')
     .active(true)
     .animate(true)
-    .size(30)
+    .size(40)
     .color('color');
 
   const textLayer = new PointLayer({ zIndex: 2 })
