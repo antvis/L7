@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 设置目标目录
-target_directory="packages/site/docs"
+target_directory="website/docs"
 
 # 设置合并后的文件名
 merged_file="merged.md"
@@ -13,7 +13,7 @@ rm -f "$merged_file"
 find "$target_directory" -type f -name "*.md" -print0 | while IFS= read -r -d $'\0' file; do
     # 输出当前处理的文件名
     echo "Merging $file"
-    
+
     # 使用cat命令将文件内容追加到合并文件中
     cat "$file" >> "$merged_file"
 done

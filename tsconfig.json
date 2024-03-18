@@ -28,7 +28,6 @@
       "@antv/l7-utils": ["packages/utils/src"],
       "@antv/l7-test-utils": ["packages/test-utils/src"],
       "@antv/l7": ["packages/l7/src"],
-      "@antv/l7-leaflet": ["packages/leaflet/src"],
       "*": ["packages", "typings/*"]
     }
   },
@@ -41,10 +40,5 @@
     }
   },
   "include": ["packages"],
-  "exclude": [
-    "node_modules",
-    "packages/**/dist",
-    "website",
-    "packages/leaflet/**"
-  ]
+  "exclude": ["node_modules", "packages/**/dist", "website"]
 }
