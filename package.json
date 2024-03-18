@@ -8,7 +8,7 @@
   },
   "workspaces": [
     "packages/*",
-    "!packages/site",
+    "website",
     "dev-demos/*"
   ],
   "scripts": {
@@ -28,11 +28,11 @@
     "build": "lerna run build --ignore @antv/l7-site",
     "postbuild": "yarn build:declarations",
     "build:declarations": "lerna run tsc --stream --no-bail",
-    "lint-fix": "prettier --write  packages/**/src/**/*.ts packages/site/docs/api/**/*.md packages/site/docs/api/*.md  dev-demos/**/**/*.tsx  *.md",
+    "lint-fix": "prettier --write  packages/**/src/**/*.ts website/docs/api/**/*.md website/docs/api/*.md  dev-demos/**/**/*.tsx  *.md",
     "lint:dev-demo": "eslint dev-demos/ --ext .ts,.tsx --fix",
     "lint:vite-demo": "eslint examples/ --ext .ts,.tsx",
     "lint:src": "eslint packages/ --ext .js,.ts --fix",
-    "lint:examples": "eslint packages/site/examples packages/site/maptools packages/site/.dumi/pages --fix --ext .js,.tsx",
+    "lint:examples": "eslint website/examples website/maptools website/.dumi/pages --fix --ext .js,.tsx",
     "lint:css": "stylelint 'packages/**/src/**/*.js{,x}'",
     "lint": "run-p -c lint:*",
     "commit": "git-cz",

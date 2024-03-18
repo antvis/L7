@@ -44,7 +44,7 @@
   "exclude": [
     "node_modules",
     "packages/**/dist",
-    "packages/site",
+    "website",
     "packages/leaflet/**"
   ]
 }

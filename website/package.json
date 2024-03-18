@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@antv/l7-site",
   "version": "2.21.1",
   "description": "L7 sites deployed on gh-pages",
@@ -63,6 +62,5 @@
     "stylelint": "^14.4.0",
     "three": "0.115.0",
     "webpack": "^5.20.0"
-  },
-  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
+  }
 }

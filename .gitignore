@@ -9,6 +9,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 yarn.lock
+package-lock.json
 
 # Runtime data
 pids
@@ -77,21 +78,9 @@ es/
 .cache
 .idea
 
-package-lock.json
-git_log.sh
-node_modules/
-packages/l7/package_bak.json
-
-stories/Test
-packages/draw/node_modules/@turf
-packages/district/src/data
-
 .umi-production/
 .umi/
 docs-dist
-/packages/leaflet
-site_temp
-/packages/site/server
 
 *-actual.png
 *-diff.png

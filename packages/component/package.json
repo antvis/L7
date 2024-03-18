@@ -1,9 +1,9 @@
 {
   "name": "@antv/l7-component",
   "version": "2.21.1",
-  "description": "",
-  "license": "ISC",
-  "author": "lzxue",
+  "description": "Component for L7",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "sideEffects": true,
   "main": "lib/index.js",
   "module": "es/index.js",

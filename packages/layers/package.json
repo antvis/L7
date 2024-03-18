@@ -2,8 +2,8 @@
   "name": "@antv/l7-layers",
   "version": "2.21.1",
   "description": "L7's collection of built-in layers",
-  "license": "ISC",
-  "author": "xiaoiver",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "sideEffects": [
     "./es/index.js"
   ],

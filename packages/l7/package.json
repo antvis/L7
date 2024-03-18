@@ -2,11 +2,14 @@
   "name": "@antv/l7",
   "version": "2.21.1",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
+  "repository": "git@github.com:antvis/L7.git",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
+  "sideEffects": true,
   "main": "lib/index.js",
+  "unpkg": "dist/l7.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "unpkg": "dist/l7.js",
-  "sideEffects": true,
   "files": [
     "dist",
     "lib",
@@ -14,17 +17,15 @@
     "README.md"
   ],
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "father build",
     "build-dev": "COMPRESS=none father build",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "sync": "tnpm sync"
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "sync": "tnpm sync",
+    "tsc": "tsc --project tsconfig.build.json",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
-  "author": "antv",
-  "license": "MIT",
   "dependencies": {
     "@antv/l7-component": "2.21.1",
     "@antv/l7-core": "2.21.1",
@@ -36,9 +37,8 @@
     "@babel/runtime": "^7.7.7",
     "webpack-bundle-analyzer": "^4.9.1"
   },
-  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d",
   "publishConfig": {
     "access": "public"
   },
-  "repository": "git@github.com:antvis/L7.git"
+  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
 }

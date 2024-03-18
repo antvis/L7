@@ -1,5 +1,6 @@
 import { defineConfig } from 'dumi';
-const path = require('path');
+import path from 'path';
+
 const env = process.env.NODE_ENV;
 const GaodeTokenScript =
   env === 'production'
@@ -15,6 +16,7 @@ const GaodeTokenScript =
   }`,
         'https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c',
       ];
+
 export default defineConfig({
   locales: [
     { id: 'zh', name: '中文' },
@@ -716,17 +718,16 @@ export default defineConfig({
     baidu: 'cde34c32ff1edfd4f933bfb44ae0e9f3',
   },
   alias: {
-    '@antv/l7': path.resolve(__dirname, '../l7/src'),
-    '@antv/l7-maps/lib/map': path.resolve(__dirname, '../maps/src/map'),
-    '@antv/l7-core': path.resolve(__dirname, '../core/src'),
-    '@antv/l7-component': path.resolve(__dirname, '../component/src'),
-    '@antv/l7-three': path.resolve(__dirname, '../three/src'),
-    '@antv/l7-layers': path.resolve(__dirname, '../layers/src'),
-    '@antv/l7-map': path.resolve(__dirname, '../map/src'),
-    '@antv/l7-maps': path.resolve(__dirname, '../maps/src'),
-    '@antv/l7-renderer': path.resolve(__dirname, '../renderer/src'),
-    '@antv/l7-scene': path.resolve(__dirname, '../scene/src'),
-    '@antv/l7-source': path.resolve(__dirname, '../source/src'),
-    '@antv/l7-utils': path.resolve(__dirname, '../utils/src'),
+    '@antv/l7': path.resolve(__dirname, '../packages/l7/src'),
+    '@antv/l7-core': path.resolve(__dirname, '../packages/core/src'),
+    '@antv/l7-component': path.resolve(__dirname, '../packages/component/src'),
+    '@antv/l7-three': path.resolve(__dirname, '../packages/three/src'),
+    '@antv/l7-layers': path.resolve(__dirname, '../packages/layers/src'),
+    '@antv/l7-map': path.resolve(__dirname, '../packages/map/src'),
+    '@antv/l7-maps': path.resolve(__dirname, '../packages/maps/src'),
+    '@antv/l7-renderer': path.resolve(__dirname, '../packages/renderer/src'),
+    '@antv/l7-scene': path.resolve(__dirname, '../packages/scene/src'),
+    '@antv/l7-source': path.resolve(__dirname, '../packages/source/src'),
+    '@antv/l7-utils': path.resolve(__dirname, '../packages/utils/src'),
   },
 });

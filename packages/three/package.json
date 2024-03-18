@@ -15,8 +15,8 @@
     "type": "git",
     "url": "git+https://github.com/antvis/L7.git"
   },
-  "license": "ISC",
-  "author": "thinkinggis <lzx199065@gmail.com>",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "main": "lib/index.js",
   "unpkg": "dist/l7-three.min.js",
   "module": "es/index.js",

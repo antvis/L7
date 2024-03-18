@@ -3,42 +3,39 @@
   "version": "2.21.1",
   "description": "l7 map",
   "keywords": [],
-  "author": "thinkinggis <lzx199065@gmail.com>",
-  "license": "ISC",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "unpkg": "dist/l7-map.js",
-  "types": "es/index.d.ts",
+  "homepage": "https://github.com/antvis/L7#readme",
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antvis/L7.git"
+  },
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "sideEffects": true,
+  "main": "lib/index.js",
+  "unpkg": "dist/l7-map.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
   "files": [
     "dist",
     "lib",
     "es",
     "README.md"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/antvis/L7.git"
-  },
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
     "build": "father build",
-    "lint:ts": "run-p -c lint:ts-*",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
+    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "lint:ts": "run-p -c lint:ts-*",
     "sync": "tnpm sync",
     "test": "umi-test --passWithNoTests",
-    "test-live": "umi-test --watch"
+    "test-live": "umi-test --watch",
+    "tsc": "tsc --project tsconfig.build.json",
+    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },
-  "bugs": {
-    "url": "https://github.com/antvis/L7/issues"
-  },
-  "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
     "@antv/l7-utils": "2.21.1",
     "@babel/runtime": "^7.7.7",
@@ -47,6 +44,9 @@
     "eventemitter3": "^4.0.4",
     "gl-matrix": "^3.1.0",
     "lodash-es": "^4.17.21"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
 }
