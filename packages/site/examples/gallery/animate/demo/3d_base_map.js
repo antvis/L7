@@ -170,6 +170,7 @@ scene.addImage(
   '02',
   'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*6WGaQKkJppIAAAAAAAAAAAAADmJ7AQ/original',
 );
+scene.setBgColor('#131722');
 scene.on('loaded', () => {
   for (let i = 0; i < pointData.length; i++) {
     const el = document.createElement('label');
