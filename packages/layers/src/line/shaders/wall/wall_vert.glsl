@@ -64,9 +64,9 @@ void main() {
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 
   float originSize = a_Size.x;  // 固定高度
-  if(u_heightfixed < 1.0) {    
-     originSize = project_float_meter(a_Size.x); // 高度随 zoom 调整
-  }
+  // if(u_heightfixed < 1.0) {    
+  //    originSize = project_float_meter(a_Size.x); // 高度随 zoom 调整
+  // }
 
 
   float wallHeight = originSize * miter;
@@ -78,6 +78,21 @@ void main() {
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * (vec4(project_pos.xy, wallHeight, 1.0));
   } else {
+// 兼容 mapbox 在线高度上的效果表现基本一致
+    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+      // mapbox
+      // 保持高度相对不变
+      float mapboxZoomScale = 4.0 / pow(2.0, 21.0 - u_Zoom);
+      if(u_heightfixed > 0.0) {
+        wallHeight *= mapboxZoomScale;
+      }
+      
+    } else {
+      // lineHeight 顶点偏移高度
+      if(u_heightfixed < 1.0) {
+        wallHeight *= pow(2.0, 20.0 - u_Zoom);
+      }
+    }
     gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy, wallHeight, 1.0));
   }
 
