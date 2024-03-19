@@ -191,7 +191,7 @@ export default class ThreeJSLayer
     const gl = this.rendererService.getGLContext();
     this.rendererService.setCustomLayerDefaults();
     const cullFace =
-      this.mapService.constructor.name === 'AMapService' ? gl.BACK : gl.FRONT;
+      this.mapService.version?.indexOf('GAODE')!== -1 ? gl.BACK : gl.FRONT;
     gl.cullFace(cullFace);
 
     // threejs 的 renderer
