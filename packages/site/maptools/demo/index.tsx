@@ -9,8 +9,7 @@ import {
   InfoCircleOutlined,
   PictureOutlined,
 } from '@ant-design/icons';
-import type {
-  LayerPopupProps} from '@antv/larkmap';
+import type { LayerPopupProps } from '@antv/larkmap';
 import {
   ChoroplethLayer,
   CustomControl,
@@ -24,13 +23,13 @@ import {
   Col,
   Descriptions,
   Divider,
-  message,
   Radio,
   Row,
   Select,
   Spin,
   Switch,
   Tooltip,
+  message,
 } from 'antd';
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
@@ -38,8 +37,7 @@ import { debounce } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { downloadData, exportSVG } from '../utils/util';
 import './index.less';
-import type {
-  IDataInfo} from './util';
+import type { IDataInfo } from './util';
 import {
   config,
   defaultDataInfo,
@@ -71,6 +69,7 @@ export default () => {
   const [loading, setLoading] = useState(false);
   const size = 'middle';
   const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
+  const [dataType, setDataType] = useState<'wgs84' | 'gcj02'>('wgs84');
   const [drillList, setDrillList] = useState<any[]>([
     {
       currentLevel: 'country',
@@ -161,6 +160,7 @@ export default () => {
     const { sourceType, sourceVersion } = dataInfo;
     const currentSource = new DataSourceMap[sourceType]({
       version: sourceVersion,
+      type: dataType,
     });
     setLoading(true);
     setDataSource(currentSource);
@@ -185,9 +185,10 @@ export default () => {
           currentSource.getData({ level: 'county' });
         }, 6000);
         // message.info(`${dataInfo.sourceVersion}版加载完成`);
+        setDataInfo(defaultDataInfo);
         setLoading(false);
       });
-  }, [dataInfo.sourceType, dataInfo.sourceVersion]);
+  }, [dataInfo.sourceType, dataInfo.sourceVersion, dataType]);
 
   // 下钻
   const onDblClick = debounce(async (e: any) => {
@@ -330,6 +331,25 @@ export default () => {
                 {dataInfo.currentCode}
               </Descriptions.Item>
             </Descriptions>
+
+            <Row className="row">
+              <Col span={12} className="label">
+                数据格式:
+              </Col>
+              <Col span={12} style={{ textAlign: 'right' }}>
+                <Radio.Group
+                  defaultValue={dataType}
+                  size={size}
+                  value={dataType}
+                  onChange={(e) => {
+                    setDataType(e.target.value);
+                  }}
+                >
+                  <Radio.Button value="wgs84">wgs84</Radio.Button>
+                  <Radio.Button value="gcj02">gcj02</Radio.Button>
+                </Radio.Group>
+              </Col>
+            </Row>
 
             <Row className="row">
               <Col span={12} className="label">

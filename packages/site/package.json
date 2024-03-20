@@ -62,7 +62,7 @@
     "stylelint": "^14.4.0",
     "three": "0.115.0",
     "webpack": "^5.20.0",
-    "district-data": "^0.0.7"
+    "district-data": "^0.0.11"
   },
   "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
 }

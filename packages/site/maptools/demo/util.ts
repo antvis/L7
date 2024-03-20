@@ -165,6 +165,7 @@ export const editionOptions = {
     { value: 'areas_v2', label: 'areas_v2' },
   ],
   RDBSource: [
+    { value: '2024', label: '2024' },
     { value: '2023', label: '2023' },
     { value: '2022', label: '2022' },
     { value: '2021', label: '2021' },
@@ -196,7 +197,7 @@ export interface IDataInfo {
 }
 export const defaultDataInfo: IDataInfo = {
   sourceType: 'RDBSource',
-  sourceVersion: '2023.0.8',
+  sourceVersion: '2024',
   currentLevel: 'country',
   currentName: '中国',
   currentCode: 100000,

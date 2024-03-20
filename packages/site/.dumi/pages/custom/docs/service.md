@@ -14,27 +14,36 @@ nav:
 `https://unpkg.com/xingzhengqu@${version}/data/${level}.pbf`;
 ```
 
+version 为 2024 及以上时也可使用以下数据服务
+
+```ts
+`https://unpkg.com/xingzhengqu@${version}/data/${type}/${level}.pbf`;
+```
 
 #### level 类型
 
- -  'country' 
- -  'province'
- -  'city'
- -  'district'
- -  'jiuduanxian'
+- 'country'
+- 'province'
+- 'city'
+- 'district'
+- 'jiuduanxian'
 
 #### version
 
- - 2023
- - 2022
- - 2021
- - 2020
- - 2019
- - 2018
- - 2017
- - 2016
- - 2015
+- 2023
+- 2022
+- 2021
+- 2020
+- 2019
+- 2018
+- 2017
+- 2016
+- 2015
 
+#### type
+
+- 'wgs84'
+- 'gcj02'
 
 ### 数据获取
 
@@ -69,4 +78,3 @@ fetch(url)
 <code src="../demo/bianjie.tsx"></code>
 
 [数据下载](https://mdn.alipayobjects.com/afts/file/A*zMVuS7mKBI4AAAAAAAAAAAAADrd2AQ/%E5%85%A8%E5%9B%BD%E8%BE%B9%E7%95%8C.json)
-
