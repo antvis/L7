@@ -43,7 +43,7 @@ npm i district-data
 ```ts
 import { RDBSource } from 'district-data';
 const source = new RDBSource({
-  version: 2023,
+  version: 2024,
   type: 'wgs84',
 });
 ```
