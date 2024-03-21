@@ -12,13 +12,13 @@ L7 地理可视化侧重于地理数据的可视化表达，地图层需要依�
 L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管理地图的操作方法。
 
 - [Leaflet 官网](https://leafletjs.com/)
-- [Leaflet GitHub](https://github.com/Leaflet/Leaflet)
+- [Leaflet GitHub](https://github.com/antvis/l7-extensions/tree/master/packages/leaflet)
 
 ### 安装
 
 L7-Leaflet 为三方插件 L7本身没有内置，需要独立按照
 
-- [L7-Leaflet GitHub](https://github.com/antvis/l7-leaflet)
+- [L7-Leaflet GitHub](https://github.com/antvis/l7-extensions/tree/master/packages/leaflet)
 - [L7-Leaflet Demo ](https://l7-leaflet.antv.vision/)
 
 ```ts

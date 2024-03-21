@@ -14,7 +14,7 @@ const Hero: FC = () => {
         },
         {
           text: 'GITHUB',
-          link: 'https://github.com/antvis/l7',
+          link: 'https://github.com/antvis/l7-extensions/tree/master/packages/district-data',
         },
       ],
     },
