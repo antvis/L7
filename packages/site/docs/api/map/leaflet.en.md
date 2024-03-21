@@ -12,13 +12,13 @@ L7 geographical visualization focuses on the visual expression of geographical d
 L7 internally resolves the differences between different map basemaps, and at the same time, L7 manages the operation methods of the map in a unified manner.
 
 * [Leaflet official website](https://leafletjs.com/)
-* [Leaflet GitHub](https://github.com/Leaflet/Leaflet)
+* [Leaflet GitHub](https://github.com/antvis/l7-extensions/tree/master/packages/leaflet)
 
 ### Install
 
 L7-Leaflet is a third-party plug-in. L7 itself is not built-in and needs to be followed independently.
 
-* [L7-Leaflet GitHub](https://github.com/antvis/l7-leaflet)
+* [L7-Leaflet GitHub](https://github.com/antvis/l7-extensions/tree/master/packages/leaflet)
 * [L7-Leaflet Demo ](https://l7-leaflet.antv.vision/)
 
 ```ts
