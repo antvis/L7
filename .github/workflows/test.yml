@@ -18,6 +18,7 @@ jobs:
     - name: Install dependencies
       run: yarn
 
+    # TODO: parallel test(Build/Coverage/Integration)
     - name: Build Test
       run: yarn build
 
