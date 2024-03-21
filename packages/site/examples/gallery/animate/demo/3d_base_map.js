@@ -38,7 +38,6 @@ async function getProvinceCapitalCoordinates(provinceName) {
       return { lng, lat };
     }
   } catch (error) {
-    console.error('请求出错:', error);
     return null;
   }
 }
@@ -81,7 +80,6 @@ scene.on('loaded', () => {
       )
         .then((res) => res.text())
         .then((csvData) => {
-          console.log(csvToJson(csvData));
           const jsonData = csvToJson(csvData)
             .filter(
               (item) =>
@@ -99,8 +97,6 @@ scene.on('loaded', () => {
             });
           Promise.all(jsonData).then((data) => {
             const powerData = data.filter((item) => item.hy_name === '充电');
-
-            console.log(powerData);
             const pointLayer = new PointLayer({
               depth: false,
               zIndex: 11,
@@ -260,7 +256,6 @@ scene.on('loaded', () => {
             scene.addLayer(refuelTextLayer);
             scene.addLayer(refuelImageLayer);
             const stopData = data.filter((item) => item.hy_name === '停车');
-            console.log(stopData);
             for (let i = 0; i < stopData.length; i++) {
               const el = document.createElement('label');
               el.innerHTML = `<div style="display: flex;flex-direction: column;justify-content: flex-end;align-items: center;height: 100%;"><div>${stopData[i].trd_cnt_1d}</div> <div>天</div></div>`;

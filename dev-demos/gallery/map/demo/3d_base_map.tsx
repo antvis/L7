@@ -41,7 +41,6 @@ export default () => {
         return { lng, lat };
       }
     } catch (error) {
-      console.error('请求出错:', error);
       return null;
     }
   }
@@ -82,7 +81,6 @@ export default () => {
           )
             .then((res) => res.text())
             .then((csvData) => {
-              console.log(csvToJson(csvData));
               const jsonData = csvToJson(csvData)
                 .filter(
                   (item) =>
@@ -102,8 +100,6 @@ export default () => {
                 const powerData = data.filter(
                   (item) => item.hy_name === '充电',
                 );
-
-                console.log(powerData);
                 const pointLayer = new PointLayer({
                   depth: false,
                   zIndex: 11,
@@ -266,7 +262,6 @@ export default () => {
                 scene.addLayer(refuelTextLayer);
                 scene.addLayer(refuelImageLayer);
                 const stopData = data.filter((item) => item.hy_name === '停车');
-                console.log(stopData);
                 for (let i = 0; i < stopData.length; i++) {
                   const el = document.createElement('label');
                   el.className = 'labelclass';
