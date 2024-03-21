@@ -18,7 +18,6 @@ tsconfig.json
 CNAME
 LICENSE
 .cache
-website/public
 .history
 es
 dist

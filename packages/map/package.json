@@ -31,8 +31,6 @@
     "clean": "rimraf dist; rimraf es; rimraf lib;",
     "lint:ts": "run-p -c lint:ts-*",
     "sync": "tnpm sync",
-    "test": "umi-test --passWithNoTests",
-    "test-live": "umi-test --watch",
     "tsc": "tsc --project tsconfig.build.json",
     "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
   },

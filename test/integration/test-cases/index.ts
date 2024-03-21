@@ -1,4 +1,4 @@
-export const TestDemoList: Array<{
+type TestCase = {
   type: string;
   snapshots?: boolean;
   demos: Array<{
@@ -6,7 +6,9 @@ export const TestDemoList: Array<{
     sleepTime?: number;
     snapshots?: boolean;
   }>;
-}> = [
+};
+
+export const TEST_CASES: TestCase[] = [
   {
     type: 'Point',
     demos: [

@@ -1,14 +1,15 @@
 import { chromium, devices } from 'playwright';
-import { TestDemoList } from './tests';
+import { TEST_CASES } from './test-cases';
 import { sleep } from './utils/sleep';
 import './utils/useSnapshotMatchers';
+
 describe('Snapshots', () => {
   const demosFlatList: Array<{
     type: string;
     name: string;
     sleepTime: number;
   }> = [];
-  TestDemoList.filter((g) => g.snapshots !== false).forEach((groups) => {
+  TEST_CASES.filter((g) => g.snapshots !== false).forEach((groups) => {
     const { type, demos } = groups;
 
     demos
@@ -23,7 +24,7 @@ describe('Snapshots', () => {
       });
   });
   demosFlatList.map((demo) => {
-    const { name, sleepTime = 1.5, type } = demo;
+    const { name, type } = demo;
     const key = `${type}_${name}`;
 
     it(key, async () => {

@@ -19,8 +19,6 @@
     "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
     "clean": "rimraf dist; rimraf es; rimraf lib;",
     "sync": "tnpm sync",
-    "test": "umi-test --passWithNoTests",
-    "test-live": "umi-test --watch",
     "tsc": "tsc --project tsconfig.build.json"
   },
   "dependencies": {

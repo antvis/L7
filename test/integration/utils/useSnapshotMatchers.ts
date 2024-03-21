@@ -1,4 +1,5 @@
-import { toMatchCanvasSnapshot, ToMatchCanvasSnapshotOptions } from "./toMatchCanvasSnapshot";
+import type { ToMatchCanvasSnapshotOptions } from './toMatchCanvasSnapshot';
+import { toMatchCanvasSnapshot } from './toMatchCanvasSnapshot';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

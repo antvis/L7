@@ -1,6 +1,6 @@
 import type { Config } from 'jest';
 
-const sharedConfig = {
+const sharedConfig: Partial<Config> = {
   transform: {
     // use typescript to convert from esm to cjs
     '[.](m|c)?(ts|js)(x)?$': [
@@ -13,22 +13,23 @@ const sharedConfig = {
     '^.+.(glsl)$': 'jest-text-transformer',
     // '\\.[jt]sx?$': 'esbuild-jest',
   },
-  // any tests that operate on dist files shouldn't compile them again.
 
+  // any tests that operate on dist files shouldn't compile them again.
   transformIgnorePatterns: ['<rootDir>/dist', '^.+\\.js$'],
   modulePathIgnorePatterns: ['<rootDir>/dist'],
+
   moduleNameMapper: {
     '@antv/l7-(.+)$': '<rootDir>packages/$1/src',
     '^.+.(css)$': 'jest-text-transformer',
   },
-} as Partial<Config>;
+};
 
 const config: Config = {
   testTimeout: 100000,
-  globalSetup: './scripts/jest/setup.js',
-  globalTeardown: './scripts/jest/teardown.js',
-  testEnvironment: './scripts/jest/environment.js',
-  testMatch: ['<rootDir>/__tests_e2e__/e2e/*.spec.ts'],
+  globalSetup: './test/integration/lib/setup.js',
+  globalTeardown: './test/integration/lib/teardown.js',
+  testEnvironment: './test/integration/lib/environment.js',
+  testMatch: ['<rootDir>/test/integration/*.spec.ts'],
   coverageReporters: ['html', 'lcov', 'clover'],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageThreshold: {
