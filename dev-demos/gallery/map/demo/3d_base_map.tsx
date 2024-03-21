@@ -4,153 +4,51 @@ import { RDBSource } from 'district-data';
 import React, { useEffect } from 'react';
 
 export default () => {
-  const pointData = [
-    {
-      data: [113.177855, 23.068432],
-      longitude: '113.177855',
-      latitude: '23.068432',
-      to_longitude: '108.484899',
-      to_latitude: '22.826101',
-      text: '广州',
-      color: 'rgb(57,255,20)',
-      value: '1',
-      unit: '天',
-    },
-    {
-      data: [108.484899, 22.826101],
-      longitude: '108.484899',
-      latitude: '22.826101',
-      to_longitude: '106.467366',
-      to_latitude: '26.64921',
-      text: '南宁',
-      color: 'rgb(57,255,20)',
-      value: '6',
-      unit: '小时',
-    },
-    {
-      data: [106.467366, 26.64921],
-      longitude: '106.467366',
-      latitude: '26.64921',
-      text: '贵阳',
-      color: 'rgb(57,255,20)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [106.563516, 29.618267],
-      longitude: '106.563516',
-      latitude: '29.618267',
-      text: '重庆',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [125.403053, 43.907546],
-      longitude: '125.403053',
-      latitude: '43.907546',
-      text: '长春',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [113.607498, 34.794084],
-      longitude: '113.607498',
-      latitude: '34.794084',
-      to_longitude: '125.403053',
-      to_latitude: '43.907546',
-      text: '郑州',
-      color: 'rgb(57,255,20)',
-   value: '1',
-      unit: '天',
-    },
-    {
-      data: [114.63332, 38.174659],
-      longitude: '114.63332',
-      latitude: ' 38.174659',
-      text: '石家庄',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [101.740747, 36.558335],
-      longitude: '101.740747',
-      latitude: '36.558335',
-      text: '西宁',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [111.677604, 40.853815],
-      longitude: '111.677604',
-      latitude: '40.853815',
-      to_longitude: '106.563516',
-      to_latitude: '29.618267',
-      text: '呼和浩特',
-      color: 'rgb(255,255,255)',
-   value: '1',
-      unit: '天',
-    },
-    {
-      data: [120.152667, 30.195612],
-      longitude: '120.152667',
-      latitude: '30.195612',
-      text: '杭州',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [115.804205, 28.766485],
-      longitude: '115.804205',
-      latitude: '28.766485',
-      to_longitude: '120.152667',
-      to_latitude: '30.195612',
-      text: '南昌',
-      color: 'rgb(255,255,255)',
-   value: '1',
-      unit: '天',
-    },
-    {
-      data: [126.520858, 45.842367],
-      longitude: '126.520858',
-      latitude: '45.842367',
-      text: '哈尔滨',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [123.459186, 41.711976],
-      longitude: '123.459186',
-      latitude: '41.711976',
-      to_longitude: '126.520858',
-      to_latitude: '45.842367',
-      text: '沈阳',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-    {
-      data: [117.113981, 36.624459],
-      longitude: '117.113981',
-      latitude: '36.624459',
-      to_longitude: '114.63332',
-      to_latitude: '38.174659',
-      text: '济南',
-      color: 'rgb(255,255,255)',
-      value: '3',
-      unit: '小时',
-    },
-  ];
-  
+  function csvToJson(csv: string) {
+    // 将CSV数据按行分割
+    const lines = csv.split('\n').filter((line) => line.trim() !== '');
+
+    // 假设第一行是列标题
+    const headers = lines[0]
+      .split(',')
+      .filter((header) => header.trim() !== '');
+
+    // 逐行处理CSV数据
+    const result = lines.slice(1).map((line) => {
+      // 将每行按照逗号分割成数组，并过滤掉空字符串
+      const values = line.split(',').filter((value) => value.trim() !== '');
+      // 根据标题和当前行的值创建一个对象
+      const obj = headers.reduce((object, header, index) => {
+        object[header] = values[index];
+        return object;
+      }, {});
+      return obj;
+    });
+    // 将结果转换为JSON字符串
+    return result;
+  }
+
+  async function getProvinceCapitalCoordinates(provinceName) {
+    const url = `https://restapi.amap.com/v3/geocode/geo?key=98d10f05a2da96697313a2ce35ebf1a2&address=${provinceName}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.status === '1' && data.geocodes.length > 0) {
+        const location = data.geocodes[0].location; // "经度,纬度"
+        const [lng, lat] = location.split(',');
+        // 返回经纬度数据
+        return { lng, lat };
+      }
+    } catch (error) {
+      console.error('请求出错:', error);
+      return null;
+    }
+  }
 
   useEffect(() => {
     const source = new RDBSource({
-      version: 2023,
+      version: '2023',
     });
     const scene = new Scene({
       id: 'map',
@@ -174,32 +72,224 @@ export default () => {
       'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*6WGaQKkJppIAAAAAAAAAAAAADmJ7AQ/original',
     );
     scene.on('loaded', () => {
-      for (let i = 0; i < pointData.length; i++) {
-        const el = document.createElement('label');
-        el.className = 'labelclass';
-        el.textContent = pointData[i].value + pointData[i].unit;
-        el.style.background = '#e24c4c8c';
-        el.style.borderRadius = '50%'; // 圆角半径设为半个宽度/高度，形成圆形
-        el.style.width = '40px';
-        el.style.height = '40px';
-        el.style.borderColor = '#e24c4c8c';
-        el.style.textAlign = 'center';
-        el.style.lineHeight = '40px';
-        el.style.color = '#fff';
-        const marker = new Marker({
-          element: el,
-          offsets: [50,10]
-        }).setLnglat({
-          lng: Number(pointData[i].longitude) * 1,
-          lat: Number(pointData[i].latitude),
-        });
-        scene.addMarker(marker);
-      }
       source
         .getData({
           level: 'province',
         })
         .then((data) => {
+          fetch(
+            'https://mass-office.alipay.com/huamei_koqzbu/afts/file/pJFyS4tqW2UAAAAAAAAAABAADnV5AQBr/%E5%A4%A7%E5%B1%8Fmock%E6%95%B0%E6%8D%AE.csv',
+          )
+            .then((res) => res.text())
+            .then((csvData) => {
+              console.log(csvToJson(csvData));
+              const jsonData = csvToJson(csvData)
+                .filter(
+                  (item) =>
+                    item.hy_name !== 'ALL' &&
+                    item.sec_type === 'ALL' &&
+                    item.hy_name !== '高速' &&
+                    item.prov_name !== 'ALL' &&
+                    item.prov_name !== '未知',
+                )
+                .map(async (data) => {
+                  return {
+                    ...data,
+                    ...(await getProvinceCapitalCoordinates(data.prov_name)),
+                  };
+                });
+              Promise.all(jsonData).then((data) => {
+                const powerData = data.filter(
+                  (item) => item.hy_name === '充电',
+                );
+
+                console.log(powerData);
+                const pointLayer = new PointLayer({
+                  depth: false,
+                  zIndex: 11,
+                  heightFixed: true,
+                })
+                  .source(powerData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('cylinder')
+                  .size([6, 6, 90])
+                  .active(true)
+                  .color('rgb(57,255,20)')
+                  .style({
+                    opacity: 1,
+                    opacityLinear: {
+                      enable: true, // true - false
+                      dir: 'up', // up - down
+                    },
+                    lightEnable: false,
+                  });
+                const pointLayer2 = new PointLayer({ zIndex: 10 })
+                  .source(powerData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('circle')
+                  .active(true)
+                  .animate(true)
+                  .size(30)
+                  .color('rgb(57,255,20)');
+                const textLayer = new PointLayer({ zIndex: 2 })
+                  .source(powerData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('trd_cnt_1d', 'text')
+                  .size(14)
+                  .color('#0ff')
+                  .style({
+                    textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+                    spacing: 2, // 字符间距
+                    padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+                    stroke: '#0ff', // 描边颜色
+                    strokeWidth: 0.2, // 描边宽度
+                    raisingHeight: 2551000,
+                    textAllowOverlap: true,
+                    heightFixed: true,
+                  });
+                const imageLayer = new PointLayer({ zIndex: 15 })
+                  .source(powerData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('00')
+                  .size(10)
+                  .style({
+                    raisingHeight: 110,
+                  });
+                scene.addLayer(pointLayer);
+                scene.addLayer(pointLayer2);
+                scene.addLayer(textLayer);
+                scene.addLayer(imageLayer);
+
+                const refuelData = data
+                  .filter(
+                    (item) =>
+                      item.hy_name === '加油',
+                  )
+                  .map((item) => {
+                    return { ...item, lat: +item.lat + 3 };
+                  });
+
+                const refuelPointLayer = new PointLayer({
+                  depth: false,
+                  zIndex: 11,
+                  heightFixed: true,
+                })
+                  .source(refuelData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('cylinder')
+                  .size([6, 6, 90])
+                  .active(true)
+                  .color('#ffffff')
+                  .style({
+                    offsets: [10, 0],
+                    opacity: 1,
+                    opacityLinear: {
+                      enable: true, // true - false
+                      dir: 'up', // up - down
+                    },
+                    lightEnable: false,
+                  });
+                const refuelPointLayer2 = new PointLayer({ zIndex: 10 })
+                  .source(refuelData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('circle')
+                  .active(true)
+                  .animate(true)
+                  .size(30)
+                  .color('#ffffff');
+                const refuelTextLayer = new PointLayer({ zIndex: 2 })
+                  .source(refuelData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('trd_cnt_1d', 'text')
+                  .size(14)
+                  .color('#fff')
+                  .style({
+                    textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+                    spacing: 2, // 字符间距
+                    padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+                    stroke: '#fff', // 描边颜色
+                    strokeWidth: 0.2, // 描边宽度
+                    raisingHeight: 2551000,
+                    textAllowOverlap: true,
+                    heightFixed: true,
+                  });
+                const refuelImageLayer = new PointLayer({ zIndex: 15 })
+                  .source(refuelData, {
+                    parser: {
+                      type: 'json',
+                      x: 'lng',
+                      y: 'lat',
+                    },
+                  })
+                  .shape('01')
+                  .size(10)
+                  .style({
+                    raisingHeight: 110,
+                  });
+                scene.addLayer(refuelPointLayer);
+                scene.addLayer(refuelPointLayer2);
+                scene.addLayer(refuelTextLayer);
+                scene.addLayer(refuelImageLayer);
+                const stopData = data.filter((item) => item.hy_name === '停车');
+                console.log(stopData);
+                for (let i = 0; i < stopData.length; i++) {
+                  const el = document.createElement('label');
+                  el.className = 'labelclass';
+                  el.innerHTML = `<div style="display: flex;flex-direction: column;justify-content: flex-end;align-items: center;height: 100%;"><div>${stopData[i].trd_cnt_1d}</div> <div>天</div></div>`;
+                  el.style.background = '#e24c4c8c';
+                  el.style.borderRadius = '50%'; // 圆角半径设为半个宽度/高度，形成圆形
+                  el.style.width = '50px';
+                  el.style.height = '50px';
+                  el.style.borderColor = '#e24c4c8c';
+                  el.style.textAlign = 'center';
+                  el.style.color = '#fff';
+                  const marker = new Marker({
+                    element: el,
+                    offsets: [50, 10],
+                  }).setLnglat({
+                    lng: Number(stopData[i].lng) * 1,
+                    lat: Number(stopData[i].lat),
+                  });
+                  scene.addMarker(marker);
+                }
+              });
+            });
+
           const newFeatures = data.features.filter((item) => {
             return item.properties.name;
           });
@@ -254,105 +344,6 @@ export default () => {
 
           return '';
         });
-      const flyLine3 = new LineLayer()
-        .source(pointData, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-            x1: 'to_longitude',
-            y1: 'to_latitude',
-          },
-        })
-        .size(2)
-        .shape('arc3d')
-        .color(['rgb(0, 191, 255)', 'rgba(255, 255, 255, 1)'])
-        .animate({
-          interval: 2,
-          trailLength: 2,
-          duration: 1,
-        })
-        .style({
-          thetaOffset: 2,
-          opacity: 1,
-        });
-      const pointLayer = new PointLayer({
-        depth: false,
-        zIndex: 11,
-        heightFixed: true,
-      })
-        .source(pointData, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-          },
-        })
-        .shape('cylinder')
-        .size([6, 6, 90])
-        .active(true)
-        .color('color')
-        .style({
-          opacity: 1,
-          opacityLinear: {
-            enable: true, // true - false
-            dir: 'up', // up - down
-          },
-          lightEnable: false,
-        });
-      const pointLayer2 = new PointLayer({ zIndex: 10 })
-        .source(pointData, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-          },
-        })
-        .shape('circle')
-        .active(true)
-        .animate(true)
-        .size(30)
-        .color('color');
-
-      const textLayer = new PointLayer({ zIndex: 2 })
-        .source(pointData, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-          },
-        })
-        .shape('text', 'text')
-        .size(14)
-        .color('#0ff')
-        .style({
-          textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          spacing: 2, // 字符间距
-          padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-          stroke: '#0ff', // 描边颜色
-          strokeWidth: 0.2, // 描边宽度
-          raisingHeight: 2551000,
-          textAllowOverlap: true,
-          heightFixed: true,
-        });
-      const imageLayer = new PointLayer({ zIndex: 15 })
-        .source(pointData, {
-          parser: {
-            type: 'json',
-            x: 'longitude',
-            y: 'latitude',
-          },
-        })
-        .shape('text', ['00', '01', '02'])
-        .size(10)
-        .style({
-          raisingHeight: 110,
-        });
-      scene.addLayer(textLayer);
-      scene.addLayer(imageLayer);
-      scene.addLayer(pointLayer);
-      scene.addLayer(pointLayer2);
-      scene.addLayer(flyLine3);
       return '';
     });
   }, []);
