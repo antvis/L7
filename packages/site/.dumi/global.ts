@@ -20,5 +20,4 @@ if (window) {
     window.gcoord = require('gcoord');
     window.pmtiles = require('pmtiles');
     window.District = require('district-data')
-    window.turf = require('@turf/turf')
 }
