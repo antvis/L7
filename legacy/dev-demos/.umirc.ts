@@ -1,7 +1,21 @@
 import { defineConfig } from 'dumi';
 import { join } from 'path';
 
+const isLocal = process.env.DPS_ENV === 'local';
 const rootDir = join(__dirname, '../../');
+const alias = {
+  '@antv/l7': join(rootDir, './packages/l7/src'),
+  '@antv/l7-maps': join(rootDir, './packages/maps/src'),
+  '@antv/l7-core': join(rootDir, './packages/core/src'),
+  '@antv/l7-component': join(rootDir, './packages/component/src'),
+  '@antv/l7-three': join(rootDir, './packages/three/src'),
+  '@antv/l7-layers': join(rootDir, './packages/layers/src'),
+  '@antv/l7-map': join(rootDir, './packages/map/src'),
+  '@antv/l7-renderer': join(rootDir, './packages/renderer/src'),
+  '@antv/l7-scene': join(rootDir, './packages/scene/src'),
+  '@antv/l7-source': join(rootDir, './packages/source/src'),
+  '@antv/l7-utils': join(rootDir, './packages/utils/src'),
+};
 
 export default defineConfig({
   title: 'L7 开发 Demo',
@@ -9,19 +23,7 @@ export default defineConfig({
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png',
   outputPath: 'docs-dist',
   base: '/',
-  alias: {
-    '@antv/l7': join(rootDir, './packages/l7/src'),
-    '@antv/l7-maps': join(rootDir, './packages/maps/src'),
-    '@antv/l7-core': join(rootDir, './packages/core/src'),
-    '@antv/l7-component': join(rootDir, './packages/component/src'),
-    '@antv/l7-three': join(rootDir, './packages/three/src'),
-    '@antv/l7-layers': join(rootDir, './packages/layers/src'),
-    '@antv/l7-map': join(rootDir, './packages/map/src'),
-    '@antv/l7-renderer': join(rootDir, './packages/renderer/src'),
-    '@antv/l7-scene': join(rootDir, './packages/scene/src'),
-    '@antv/l7-source': join(rootDir, './packages/source/src'),
-    '@antv/l7-utils': join(rootDir, './packages/utils/src'),
-  },
+  alias: isLocal && alias,
   resolve: {
     includes: ['src'],
   },

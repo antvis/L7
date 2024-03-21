@@ -5,6 +5,7 @@
     "dev-device": "export NODE_OPTIONS=--openssl-legacy-provider renderer=device && dumi dev renderer=device",
     "dev-dumi": "export NODE_OPTIONS=--openssl-legacy-provider && dumi dev",
     "dev-windows": "dumi dev",
+    "dev-local": "cross-env DPS_ENV=local dumi dev ",
     "dumi-build": "export NODE_OPTIONS=--openssl-legacy-provider && dumi build"
   },
   "dependencies": {
@@ -21,6 +22,7 @@
     "@types/dat.gui": "^0.7.1",
     "@types/pngjs": "^6.0.3",
     "babel-plugin-inline-import": "^3.0.0",
+    "cross-env": "^7.0.3",
     "dat.gui": "^0.7.2",
     "dumi": "^1.1.0",
     "element-remove": "^1.0.4",
