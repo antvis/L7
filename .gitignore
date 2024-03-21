@@ -78,9 +78,5 @@ es/
 .cache
 .idea
 
-.umi-production/
-.umi/
-docs-dist
-
 *-actual.png
 *-diff.png
