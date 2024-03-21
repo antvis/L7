@@ -1,5 +1,6 @@
 import inject from '@rollup/plugin-inject';
 import modify from '@rollup/plugin-modify';
+import path from 'path';
 
 const module = '@oasis-engine/miniprogram-adapter ';
 
