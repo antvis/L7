@@ -2,7 +2,8 @@ import type { IParserData } from '@antv/l7-core';
 import type { RequestParameters} from '@antv/l7-utils';
 import { getImage, isImageBitmap } from '@antv/l7-utils';
 interface IImageCfg {
-  extent: [number, number, number, number];
+  extent?: [number, number, number, number];
+  coordinates?:[[number,number],[number,number],[number,number],[number,number]];// 非矩形
   requestParameters?: Omit<RequestParameters, 'url'>;
 }
 export default function image(
@@ -12,6 +13,7 @@ export default function image(
   // 为 extent 赋默认值
   const {
     extent = [121.168, 30.2828, 121.384, 30.4219],
+    coordinates,
     requestParameters = {},
   } = cfg;
   const images = new Promise((resolve) => {
@@ -23,6 +25,16 @@ export default function image(
       });
     }
   });
+  
+  let imageCoord = coordinates;
+  if(!imageCoord) {
+    imageCoord = [
+      [extent[0],extent[3]],
+      [extent[2],extent[3]],
+      [extent[2],extent[1]],
+      [extent[0],extent[1]]]
+  }
+  
   const resultData: IParserData = {
     originData: data,
     images,
@@ -30,10 +42,7 @@ export default function image(
     dataArray: [
       {
         _id: 0,
-        coordinates: [
-          [extent[0], extent[1]],
-          [extent[2], extent[3]],
-        ],
+        coordinates: imageCoord
       },
     ],
   };
