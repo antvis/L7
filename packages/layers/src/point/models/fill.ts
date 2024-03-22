@@ -10,7 +10,7 @@ import {
   AttributeType,
   gl
 } from '@antv/l7-core';
-import { PointFillTriangulation } from '@antv/l7-utils';
+import { PointFillTriangulation } from '../../core/triangulation';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
