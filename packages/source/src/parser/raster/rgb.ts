@@ -1,6 +1,7 @@
 import type { IParserData } from '@antv/l7-core';
 import type { IRasterCfg } from '../../interface';
 import { percentile } from '../../utils/bandOperation/operationSchema';
+import { extentToCoord } from '../../utils/util';
 
 
 /**
@@ -20,7 +21,7 @@ export default function rasterRgb(
     data: RasterDataType[],
     cfg: IRGBParseCfg,
 ): IParserData {
-    const { extent, width, height, ...options } = cfg;
+    const { extent, coordinates, width, height, ...options } = cfg;
     if(data.length<3){
         console.warn('RGB解析需要三个波段的数据')
     }
@@ -36,7 +37,7 @@ export default function rasterRgb(
         rgbdata.push(Math.max(0, bandsData[1][i] - minMaxG[0]));
         rgbdata.push(Math.max(0, bandsData[2][i] - minMaxB[0]));
     }
-
+    const imageCoord = extentToCoord(coordinates,extent!);
     const resultData = {
         _id: 1,
         dataArray: [
@@ -49,10 +50,7 @@ export default function rasterRgb(
                 gMinMax:minMaxG,
                 bMinMax:minMaxB,
                 ...options,
-                coordinates: [
-                    [extent[0], extent[1]],
-                    [extent[2], extent[3]],
-                ],
+                coordinates:imageCoord,
             },
         ],
     };

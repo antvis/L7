@@ -71,7 +71,7 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
       }
       const rewindGeometry = geojsonRewind({
         type,
-        coordinates: col[coordinates],
+        coordinates: col[coordinates as string],
       });
       coords = rewindGeometry.coordinates;
     } else if (x && y && x1 && y1) {
