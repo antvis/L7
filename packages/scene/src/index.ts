@@ -175,9 +175,7 @@ class Scene
     if(this.loaded) {
       this.preAddLayer(layer);
     } else {
-      console.log('layer not loaded');
       this.once('loaded', () => {
-        console.log('layer loaded');
         this.preAddLayer(layer);
       });
     }
@@ -195,6 +193,7 @@ class Scene
     // mask 在 scene loaded 之后执行
     if (layer.inited) {
       this.initTileLayer(layer);
+      // 全局mask
       const maskInstance = this.initMask(layer);
       this.addMask(maskInstance as ILayer, layer.id);
     } else {

@@ -91,18 +91,18 @@ export default class Swipe extends Control<ISwipeControlOption> {
     this.mapsService.getMarkerContainer().appendChild(this.container);
 
     this.maskLayer = this.getMaskLayer();
-    this.updateMask();
+
     this.registerEvent();
 
-    // 给图层挂载掩膜
-    this.addMaskToLayers(layers, false);
-    this.addMaskToLayers(rightLayers, true);
 
     // 添加掩膜图层到 scene
     const layerContainer = createLayerContainer(sceneContainer);
     this.maskLayer.setContainer(layerContainer);
     this.scene.addLayer(this.maskLayer);
 
+    // 给图层挂载掩膜
+    this.addMaskToLayers(layers, false);
+    this.addMaskToLayers(rightLayers, true);
     this.emit('add', this);
     return this;
   }
@@ -414,13 +414,12 @@ export default class Swipe extends Control<ISwipeControlOption> {
   }
 
   private getMaskLayer = () => {
+    console.log(this.getMaskGeoData())
+    
     return new PolygonLayer({
       visible: false,
     })
-      .source({
-        type: 'FeatureCollection',
-        features: [],
-      })
+      .source(this.getMaskGeoData())
       .shape('fill')
       .color('red')
       .style({
