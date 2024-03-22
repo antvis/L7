@@ -2,7 +2,7 @@ import type { IParserData } from '@antv/l7-core';
 import type { RequestParameters} from '@antv/l7-utils';
 import { getImage, isImageBitmap } from '@antv/l7-utils';
 import { extentToCoord } from '../utils/util'
-interface IImageCfg {
+export interface IImageCfg {
   extent?: [number, number, number, number];
   coordinates?:[[number,number],[number,number],[number,number],[number,number]];// 非矩形
   requestParameters?: Omit<RequestParameters, 'url'>;
