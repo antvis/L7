@@ -1,7 +1,19 @@
 import earcut from 'earcut';
 import { calculateCentroid } from '../geo';
 import ExtrudePolyline from './extrude_polyline';
-import type { IEncodeFeature } from './interface';
+type Color = [number, number, number, number];
+type Position = number[];
+
+interface IEncodeFeature {
+  color?: Color;
+  size?: number | number[];
+  shape?: string | number;
+  pattern?: string;
+  id?: number;
+  coordinates: Position | Position[] | Position[][];
+  [key: string]: any;
+}
+
 export function LineTriangulation(feature: IEncodeFeature) {
   const { coordinates, originCoordinates, version } = feature;
   // let path = coordinates as number[][][] | number[][];

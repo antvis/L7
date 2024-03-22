@@ -15,7 +15,7 @@ export * from './lru_cache';
 // export * from './mini-adapter/index';
 export * as Satistics from './statistics';
 export * from './tileset-manager';
-export * from './worker-helper';
+// export * from './worker-helper';
 export * from './workers/triangulation';
 export * from './interface/map'
 export function defaultValue(v1:any,v2:any){
