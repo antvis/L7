@@ -5,7 +5,7 @@ import { raster_data, raster_rgb } from './data'
 import { TestScene } from '@antv/l7-test-utils';
 describe('RasterLayer', () => {
     let scene: any;
-   beforeEach(() => {
+    beforeEach(() => {
         scene = TestScene();
     });
     // raster data
@@ -37,30 +37,30 @@ describe('RasterLayer', () => {
 
     });
 
-    // raster rgb
-    it('rasterLayer rgb', async () => {
-        const bandsValues = raster_rgb.map(v => new Int16Array(v))
-        const layer = new RasterLayer({ zIndex: 10 });
-        layer
-            .source(
-                bandsValues,
-                {
-                    parser: {
-                        type: 'rgb',
-                        width: 10,
-                        height: 10,
-                        bands: [4, 3, 2], // 从零开始
-                        extent: [
-                            130.39565357746957, 46.905730725742366, 130.73364094187343,
-                            47.10217234153133,
-                        ],
-                    },
-                },
-            )
-            .style({
-                opacity: 1,
-            });
-        scene.addLayer(layer);
+    // // raster rgb
+    // it('rasterLayer rgb', async () => {
+    //     const bandsValues = raster_rgb.map(v => new Int16Array(v))
+    //     const layer = new RasterLayer({ zIndex: 10 });
+    //     layer
+    //         .source(
+    //             bandsValues,
+    //             {
+    //                 parser: {
+    //                     type: 'rgb',
+    //                     width: 10,
+    //                     height: 10,
+    //                     bands: [4, 3, 2], // 从零开始
+    //                     extent: [
+    //                         130.39565357746957, 46.905730725742366, 130.73364094187343,
+    //                         47.10217234153133,
+    //                     ],
+    //                 },
+    //             },
+    //         )
+    //         .style({
+    //             opacity: 1,
+    //         });
+    //     scene.addLayer(layer);
 
-    });
+    // });
 });

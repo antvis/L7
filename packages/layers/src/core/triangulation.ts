@@ -26,6 +26,7 @@ import type {
   IPosition,
   ShapeType2D,
   ShapeType3D} from './shape/Path';
+
 import {
   geometryShape
 } from './shape/Path';
@@ -437,7 +438,7 @@ export function HeatmapGridTriangulation(feature: IEncodeFeature) {
  * @param feature 数据
  */
 export function RasterImageTriangulation(feature: IEncodeFeature) {
-  const coordinates = feature.coordinates as IPosition[];
+  const coordinates = feature.coordinates as [number,number][];
   // [ x, y, z. uv.x, uv.y]
   const positions: number[] = [
     ...coordinates[0],

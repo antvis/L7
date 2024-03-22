@@ -1,6 +1,7 @@
 import type { IParserData } from '@antv/l7-core';
 import type { RequestParameters} from '@antv/l7-utils';
 import { getImage, isImageBitmap } from '@antv/l7-utils';
+import { extentToCoord } from '../utils/util'
 interface IImageCfg {
   extent?: [number, number, number, number];
   coordinates?:[[number,number],[number,number],[number,number],[number,number]];// 非矩形
@@ -26,14 +27,7 @@ export default function image(
     }
   });
   
-  let imageCoord = coordinates;
-  if(!imageCoord) {
-    imageCoord = [
-      [extent[0],extent[3]],
-      [extent[2],extent[3]],
-      [extent[2],extent[1]],
-      [extent[0],extent[1]]]
-  }
+  const imageCoord = extentToCoord(coordinates,extent);
   
   const resultData: IParserData = {
     originData: data,
