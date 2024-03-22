@@ -1,5 +1,5 @@
 import RasterLayer from '../index';
-import { raster_data, raster_rgb } from './data'
+import { raster_data } from './data'
 
 
 import { TestScene } from '@antv/l7-test-utils';
