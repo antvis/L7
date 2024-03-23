@@ -70,10 +70,6 @@ jspm_packages/
 
 # End of https://www.gitignore.io/api/node
 
-lib/
-dist/
-es/
-
 .DS_Store
 .cache
 .idea
