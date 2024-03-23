@@ -621,19 +621,27 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setData(data: any, options?: ISourceCFG) {
-    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
+
     if (this.inited) {
+      this.dataUpdatelog();
       this.layerSource.setData(data, options);
     } else {
       this.on('inited', () => {
+        this.dataUpdatelog();
         this.layerSource.setData(data, options);
+        
       });
     }
+    return this;
+  }
+  private dataUpdatelog(){
+    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
     this.layerSource.once('update', () => {
       this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     });
-    return this;
+
   }
+
   public style(
     options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
   ): ILayer {

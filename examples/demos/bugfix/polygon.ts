@@ -50,6 +50,30 @@ export function MapRender(option: {
         .shape('fill')
         .active(true)
         .color('red');
+        layer.setData({
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                base_height: 100,
+              },
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                  [
+                    [119.948198, 30.339818],
+                    [120.344273, 30.513865],
+                    [120.414729, 30.288859],
+                    [119.81137, 30.244454],
+                    [119.807562, 30.352965],
+                    [119.948198, 30.339818]
+                  ]
+                ]
+              }
+            }
+          ]
+        })
         scene.addLayer(layer);
     })
 }

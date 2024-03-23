@@ -6,11 +6,11 @@ import type {
   ITexture2D,
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { LineTriangulation, rgb2arr } from '@antv/l7-utils';
+import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LinearDir, TextureBlend } from '../../core/interface';
-// import { LineTriangulation } from '../../core/triangulation';
+import { LineTriangulation } from '../../core/triangulation';
 
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import line_frag from '../shaders/line/line_frag.glsl';
