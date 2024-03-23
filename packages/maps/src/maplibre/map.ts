@@ -8,7 +8,7 @@ import type { Map } from 'maplibre-gl';
 import maplibregl from 'maplibre-gl';
 // tslint:disable-next-line:no-submodule-imports
 import 'maplibre-gl/dist/maplibre-gl.css';
-import type { IMapboxInstance } from '../../typings/index';
+import type { IMapboxInstance } from '../types';
 import Viewport from '../mapbox/Viewport';
 import BaseMapService from '../utils/BaseMapService';
 
@@ -34,24 +34,14 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
    * @param lnglat
    * @returns
    */
-  public lngLatToCoord(
-    lnglat: [number, number],
-    origin: IMercator = { x: 0, y: 0, z: 0 },
-  ) {
+  public lngLatToCoord(lnglat: [number, number], origin: IMercator = { x: 0, y: 0, z: 0 }) {
     // @ts-ignore
     const { x, y } = this.lngLatToMercator(lnglat, 0);
     return [x - origin.x, y - origin.y] as [number, number];
   }
 
-  public lngLatToMercator(
-    lnglat: [number, number],
-    altitude: number,
-  ): IMercator {
-    const {
-      x = 0,
-      y = 0,
-      z = 0,
-    } = window.maplibregl.MercatorCoordinate.fromLngLat(lnglat, altitude);
+  public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
+    const { x = 0, y = 0, z = 0 } = window.maplibregl.MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
   }
   public getModelMatrix(
@@ -61,8 +51,7 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
     scale: [number, number, number] = [1, 1, 1],
     origin: IMercator = { x: 0, y: 0, z: 0 },
   ): number[] {
-    const modelAsMercatorCoordinate =
-      window.maplibregl.MercatorCoordinate.fromLngLat(lnglat, altitude);
+    const modelAsMercatorCoordinate = window.maplibregl.MercatorCoordinate.fromLngLat(lnglat, altitude);
     // @ts-ignore
     const meters = modelAsMercatorCoordinate.meterInMercatorCoordinateUnits();
     const modelMatrix = mat4.create();
@@ -77,11 +66,7 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
       ),
     );
 
-    mat4.scale(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(meters * scale[0], -meters * scale[1], meters * scale[2]),
-    );
+    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(meters * scale[0], -meters * scale[1], meters * scale[2]));
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
@@ -91,14 +76,7 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
   }
 
   public async init(): Promise<void> {
-    const {
-      id = 'map',
-      attributionControl = false,
-      style = 'light',
-      rotation = 0,
-      mapInstance,
-      ...rest
-    } = this.config;
+    const { id = 'map', attributionControl = false, style = 'light', rotation = 0, mapInstance, ...rest } = this.config;
 
     this.viewport = new Viewport();
 
@@ -183,8 +161,7 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
     const { x: x1, y: y1 } = centerMercator;
     const { x: x2, y: y2 } = outerMercator;
     // Math.pow(2, 22) 4194304
-    const coordDis =
-      Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) * 4194304 * 2;
+    const coordDis = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) * 4194304 * 2;
 
     return coordDis / meterDis;
   }

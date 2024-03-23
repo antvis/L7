@@ -1,1 +1,0 @@
-declare module '@antv/l7-maps/lib/map/';

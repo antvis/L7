@@ -9,7 +9,7 @@ import { CoordinateSystem } from '@antv/l7-core';
 import { DOM, amap2Project } from '@antv/l7-utils';
 import type { vec2 } from 'gl-matrix';
 import { mat4, vec3 } from 'gl-matrix';
-import type { IAMapInstance } from '../../typings/index';
+import type { IAMapInstance } from '../types';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import Viewport from './Viewport';
 // @ts-ignore
@@ -57,15 +57,9 @@ export default class AMapService extends AMapBaseService {
     return this.sceneCenterMercator;
   }
 
-  public lngLatToCoordByLayer(
-    lnglat: number[],
-    layerCenterMercator: [number, number],
-  ) {
+  public lngLatToCoordByLayer(lnglat: number[], layerCenterMercator: [number, number]) {
     const layerCenterFlat = layerCenterMercator || this.sceneCenterMercator;
-    const coord = this._sub(
-      amap2Project(lnglat[0], lnglat[1]),
-      layerCenterFlat,
-    );
+    const coord = this._sub(amap2Project(lnglat[0], lnglat[1]), layerCenterFlat);
     // Z 参数
     if (lnglat[2]) {
       coord.push(lnglat[2]);
@@ -79,25 +73,16 @@ export default class AMapService extends AMapBaseService {
   ): number[][][] | number[][] | number[] {
     const layerCenterMercator = amap2Project(layerCenter[0], layerCenter[1]);
     if (typeof lnglatArray[0] === 'number') {
-      return this.lngLatToCoordByLayer(
-        lnglatArray as number[],
-        layerCenterMercator,
-      );
+      return this.lngLatToCoordByLayer(lnglatArray as number[], layerCenterMercator);
     } else {
       // @ts-ignore
       return lnglatArray.map((lnglats) => {
         if (Array.isArray(lnglats) && typeof lnglats[0] === 'number') {
-          return this.lngLatToCoordByLayer(
-            lnglats as number[],
-            layerCenterMercator,
-          );
+          return this.lngLatToCoordByLayer(lnglats as number[], layerCenterMercator);
         } else {
           // @ts-ignore
           return lnglats.map((lnglat) => {
-            return this.lngLatToCoordByLayer(
-              lnglat as number[],
-              layerCenterMercator,
-            );
+            return this.lngLatToCoordByLayer(lnglat as number[], layerCenterMercator);
           });
         }
       });
@@ -120,18 +105,13 @@ export default class AMapService extends AMapBaseService {
       this.map.customCoords.setCenter(lnglat);
       this.setCustomCoordCenter(lnglat);
     }
-    return this._sub(
-      amap2Project(lnglat[0], lnglat[1]),
-      this.sceneCenterMercator,
-    );
+    return this._sub(amap2Project(lnglat[0], lnglat[1]), this.sceneCenterMercator);
   }
 
   /**
    * 转化线、面类型的点位数据
    */
-  public lngLatToCoords(
-    lnglatArray: number[][][] | number[][],
-  ): number[][][] | number[][] {
+  public lngLatToCoords(lnglatArray: number[][][] | number[][]): number[][][] | number[][] {
     // @ts-ignore
     return lnglatArray.map((lnglats) => {
       if (typeof lnglats[0] === 'number') {
@@ -151,9 +131,7 @@ export default class AMapService extends AMapBaseService {
     }
     const mapContainer = this.map.getContainer();
     if (mapContainer !== null) {
-      const amap = mapContainer.getElementsByClassName(
-        'amap-maps',
-      )[0] as HTMLElement;
+      const amap = mapContainer.getElementsByClassName('amap-maps')[0] as HTMLElement;
       // amap2 的 amap-maps 新增 z-index=0; 样式，让 marker 中 zIndex 失效
       amap.style.zIndex = 'auto';
       this.markerContainer = DOM.create('div', 'l7-marker-container2', amap);
@@ -180,10 +158,7 @@ export default class AMapService extends AMapBaseService {
     // @ts-ignore
     const SW = bounds.getSouthWest();
     const center = this.getCenter();
-    const maxlng =
-      center.lng > NE.getLng() || center.lng < SW.getLng()
-        ? 180 - NE.getLng()
-        : NE.getLng();
+    const maxlng = center.lng > NE.getLng() || center.lng < SW.getLng() ? 180 - NE.getLng() : NE.getLng();
     const minlng = center.lng < SW.getLng() ? SW.getLng() - 180 : SW.getLng();
     // 兼容 Mapbox，统一返回西南、东北
     return [
@@ -234,17 +209,9 @@ export default class AMapService extends AMapBaseService {
     // @ts-ignore
     const modelMatrix = mat4.create();
 
-    mat4.translate(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(flat[0], flat[1], altitude),
-    );
+    mat4.translate(modelMatrix, modelMatrix, vec3.fromValues(flat[0], flat[1], altitude));
 
-    mat4.scale(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(scale[0], scale[1], scale[2]),
-    );
+    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(scale[0], scale[1], scale[2]));
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
@@ -291,9 +258,7 @@ export default class AMapService extends AMapBaseService {
       this.setCustomCoordCenter([mapInitCenter.lng, mapInitCenter.lat]);
       this.map.on('viewchange', this.handleViewChanged);
     } else {
-      this.$mapContainer = this.creatMapContainer(
-        id as string | HTMLDivElement,
-      );
+      this.$mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
       const mapConstructorOptions = {
         mapStyle: this.getMapStyleValue(style as string),
         zooms: [minZoom, maxZoom],

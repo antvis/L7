@@ -1,13 +1,6 @@
-/// <reference types="amap-js-api" />
-/// <reference types="bmapgl" />
-/// <reference types="google.maps" />
-/// <reference types="tmap-types-temporary" />
 import type { IControl } from 'mapbox-gl';
 
-interface Window {
-  initAMap: () => void;
-}
-interface IAMapEvent {
+export interface IAMapEvent {
   camera: {
     fov: number;
     near: number;
@@ -24,34 +17,31 @@ interface CustomCoords {
   getCameraParams(): void;
   getCenter(): void;
   getMVPMatrix(): void;
-  [other:string]:any
+  [other: string]: any;
 }
-interface IAMapInstance {
+
+export interface IAMapInstance {
   get(key: string): unknown;
   getZooms?(): number[];
   customCoords?: CustomCoords;
 }
 
-interface IMapboxInstance {
+export interface IMapboxInstance {
   _controls: IControl[];
   transform: {
     width: number;
     height: number;
   };
 }
-interface IEventEmitter<EventTypes extends string | symbol = string | symbol> {
+
+export interface IEventEmitter<EventTypes extends string | symbol = string | symbol> {
   emit(event: EventTypes, ...args: any[]): boolean;
   /**
    * Add a listener for a given event.
    */
   on(event: EventTypes, handle: (...args: any[]) => void, context?: any): this;
 
-  off(
-    event: EventTypes,
-    handle: (...args: any[]) => void,
-    context?: any,
-    once?: boolean,
-  ): this;
+  off(event: EventTypes, handle: (...args: any[]) => void, context?: any, once?: boolean): this;
 
   /**
    * Remove all listeners, or those of the specified event.

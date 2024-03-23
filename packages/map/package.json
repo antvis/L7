@@ -1,7 +1,7 @@
 {
   "name": "@antv/l7-map",
   "version": "2.21.1",
-  "description": "l7 map",
+  "description": "L7 Map",
   "keywords": [],
   "homepage": "https://github.com/antvis/L7#readme",
   "bugs": {
@@ -15,24 +15,18 @@
   "author": "https://github.com/orgs/antvis/people",
   "sideEffects": true,
   "main": "lib/index.js",
-  "unpkg": "dist/l7-map.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
-    "dist",
     "lib",
-    "es",
-    "README.md"
+    "es"
   ],
   "scripts": {
+    "dev": "father dev",
     "build": "father build",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "lint:ts": "run-p -c lint:ts-*",
-    "sync": "tnpm sync",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "doctor": "father doctor",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
   "dependencies": {
     "@antv/l7-utils": "2.21.1",
@@ -45,6 +39,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
+  }
 }

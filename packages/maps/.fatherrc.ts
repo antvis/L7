@@ -1,49 +1,10 @@
-export default {
-  // more father 4 config:   https://github.com/umijs/father/blob/master/docs/config.md
-  esm: {
-    output:'es'
-  },
-  cjs: {
-    
-    output:'lib'
-  },
-  umd: {
-    output: 'dist',
-    externals:{
-      "mapbox-gl":{
-        root:'mapboxgl',
-        commonjs:'mapbox-gl',
-        commonjs2:'mapbox-gl',
-        amd:'mapbox-gl',
-      },
-      "maplibre-gl":{
-        root:'maplibregl',
-        commonjs:'maplibre-gl',
-        commonjs2:'maplibre-gl',
-        amd:'maplibre-gl',
-      },
-    },
-  },
-  platform:'browser',
-  autoprefixer: {
-    browsers: ['IE 11', 'last 2 versions'],
-  },
-  extraBabelPresets: [
-    '@babel/preset-typescript'
-  ],
-  extraBabelPlugins: [
-    // 开发模式下以原始文本引入，便于调试
-    [
-      // import glsl as raw text
-      'babel-plugin-inline-import',
-      {
-        extensions: [
-          '.glsl'
-        ]
-      }
-    ],
-    [
-      'transform-import-css-l7'
-    ],
-  ],
-};
+import { defineConfig } from 'father';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+export default defineConfig({
+  extends: '../../.fatherrc.base.ts',
+  // 使用 babel 编译 esm/cjs 产物，启用 transform-import-css-l7 插件完成 CSS 内联打包
+  esm: { transformer: 'babel' },
+  cjs: isProduction ? { transformer: 'babel' } : undefined,
+});

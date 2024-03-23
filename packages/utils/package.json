@@ -10,18 +10,14 @@
   "types": "es/index.d.ts",
   "files": [
     "lib",
-    "es",
-    "dist",
-    "README.md"
+    "es"
   ],
   "scripts": {
+    "dev": "father dev",
     "build": "father build",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "sync": "tnpm sync",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "doctor": "father doctor",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
   "dependencies": {
     "@babel/runtime": "^7.7.7",
@@ -41,6 +37,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
+  }
 }

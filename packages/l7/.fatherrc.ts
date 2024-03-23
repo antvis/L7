@@ -1,65 +1,48 @@
-const version = require('./package.json').version;
+import type { IFatherConfig } from 'father';
+import { defineConfig } from 'father';
+import { version } from './package.json';
 
-export default {
-  // more father 4 config: 
+const isProduction = process.env.NODE_ENV === 'production';
 
-  esm: {
-    output:'es'
+const umdConfig: IFatherConfig['umd'] = {
+  name: 'L7',
+  output: {
+    path: './dist',
+    filename: 'l7.js',
   },
-  cjs: {
-    output:'lib'
-  },
-  umd:{
-    name:'L7',
-    output:{
-      path:'./dist',
-      filename:'l7.js',
-      minFile:false
+  platform: 'browser',
+  targets: { ie: 11 },
+  externals: {
+    'mapbox-gl': {
+      root: 'mapboxgl',
+      commonjs: 'mapbox-gl',
+      commonjs2: 'mapbox-gl',
+      amd: 'mapbox-gl',
     },
-    targets:{
-      ie:11
-
-    },
-    platform:'browser',
-    externals:{
-      "mapbox-gl":{
-        root:'mapboxgl',
-        commonjs:'mapbox-gl',
-        commonjs2:'mapbox-gl',
-        amd:'mapbox-gl',
-      },
-      "maplibre-gl":{
-        root:'maplibregl',
-        commonjs:'maplibre-gl',
-        commonjs2:'maplibre-gl',
-        amd:'maplibre-gl',
-      },
+    'maplibre-gl': {
+      root: 'maplibregl',
+      commonjs: 'maplibre-gl',
+      commonjs2: 'maplibre-gl',
+      amd: 'maplibre-gl',
     },
   },
+  chainWebpack(memo) {
+    // 关闭压缩方便调试，默认开启
+    // memo.optimization.minimize(false);
 
-  autoprefixer: {
-    browsers: ['IE 11', 'last 2 versions'],
+    // 打包体积分析
+    memo
+      .plugin('webpack-bundle-analyzer')
+      .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, [{ analyzerMode: 'static', openAnalyzer: false }]);
+
+    return memo;
   },
-  define:{
+};
+
+export default defineConfig({
+  extends: '../../.fatherrc.base.ts',
+  umd: isProduction ? umdConfig : undefined,
+  define: {
     'process.env.VERSION': JSON.stringify(version),
   },
-
-  extraBabelPresets: [
-    '@babel/preset-typescript'
-  ],
-  extraBabelPlugins: [
-    // 开发模式下以原始文本引入，便于调试
-    [
-      // import glsl as raw text
-      'babel-plugin-inline-import',
-      {
-        extensions: [
-          '.glsl'
-        ]
-      }
-    ],
-    [
-      'transform-import-css-l7'
-    ],
-  ],
-};
+});

@@ -21,14 +21,8 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * EarthService
  */
-export default class L7EarthService
-  extends BaseMapService<Map>
-  implements IEarthService
-{
-  public lngLatToMercator(
-    lnglat: [number, number],
-    altitude: number,
-  ): IMercator {
+export default class L7EarthService extends BaseMapService<Map> implements IEarthService {
+  public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     throw new Error('Method not implemented.');
   }
   public getModelMatrix(
@@ -44,7 +38,6 @@ export default class L7EarthService
   // TODO: 判断地图是否正在拖拽
   public dragging: boolean = false;
   public viewport: Viewport;
-  protected cameraChangedCallback: (viewport: IViewport) => void;
 
   // T: 用于记录鼠标对相机的控制
   private handleCameraChanging: boolean;
@@ -166,15 +159,10 @@ export default class L7EarthService
     const rotateStep = 0.02;
     if (e.type && e.originalEvent) {
       if (e.originalEvent.type === 'wheel') {
-        this.viewport.scaleZoom(
-          0.01 * Math.sign(e.originalEvent.wheelDelta) * -1,
-        );
+        this.viewport.scaleZoom(0.01 * Math.sign(e.originalEvent.wheelDelta) * -1);
       }
 
-      if (
-        Math.abs(e.originalEvent.movementX) >
-        Math.abs(e.originalEvent.movementY)
-      ) {
+      if (Math.abs(e.originalEvent.movementX) > Math.abs(e.originalEvent.movementY)) {
         if (e.originalEvent.movementX > 0) {
           this.viewport.rotateY(rotateStep);
         } else if (e.originalEvent.movementX < 0) {
@@ -197,13 +185,8 @@ export default class L7EarthService
       viewportWidth: this.map.transform.width,
     });
     // set coordinate system
-    if (
-      this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD &&
-      offsetCoordinate
-    ) {
-      this.coordinateSystemService.setCoordinateSystem(
-        CoordinateSystem.LNGLAT_OFFSET,
-      );
+    if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD && offsetCoordinate) {
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT_OFFSET);
     } else {
       this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
     }

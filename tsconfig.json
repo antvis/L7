@@ -1,20 +1,27 @@
 {
   "compilerOptions": {
-    "noEmit": true,
-    "strict": true,
-    "strictPropertyInitialization": false,
-    "downlevelIteration": true,
+    // Language and Environment Config
+    "target": "esnext",
     "jsx": "react",
-    "target": "es5",
-    "lib": ["es6", "dom", "es2019"],
-    "types": ["jest", "node", "offscreencanvas"],
+    "experimentalDecorators": true,
+
+    // Type Checking Config
+    "strict": true,
+    "strictPropertyInitialization": false, // @todo: turning on for next refactor
+
+    // Emit Config
+    "declaration": true,
+    "importHelpers": true,
+    "downlevelIteration": true,
+
+    // Modules Config
     "module": "esnext",
     "moduleResolution": "node",
-    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "rootDir": "./",
     "baseUrl": "./",
+    "rootDir": "./",
     "paths": {
+      "@antv/l7": ["packages/l7/src"],
       "@antv/l7-core": ["packages/core/src"],
       "@antv/l7-component": ["packages/component/src"],
       "@antv/l7-layers": ["packages/layers/src"],
@@ -26,11 +33,17 @@
       "@antv/l7-three": ["packages/three/src"],
       "@antv/l7-source": ["packages/source/src"],
       "@antv/l7-utils": ["packages/utils/src"],
-      "@antv/l7-test-utils": ["packages/test-utils/src"],
-      "@antv/l7": ["packages/l7/src"],
-      "*": ["packages", "typings/*"]
-    }
+      "@antv/l7-test-utils": ["packages/test-utils/src"]
+    },
+
+    // Interop Constraints
+    "esModuleInterop": true,
+
+    // Completeness
+    "skipLibCheck": true
   },
+
+  // chcek jest ?
   "ts-node": {
     "experimentalSpecifierResolution": "node",
     "esm": true,
@@ -39,6 +52,7 @@
       "types": ["node"]
     }
   },
+
   "include": ["packages"],
   "exclude": ["node_modules", "packages/**/dist", "website"]
 }
