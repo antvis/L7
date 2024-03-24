@@ -6,7 +6,6 @@ import { MapType } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import type { Map } from 'maplibre-gl';
 import maplibregl from 'maplibre-gl';
-// tslint:disable-next-line:no-submodule-imports
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { IMapboxInstance } from '../types';
 import Viewport from '../mapbox/Viewport';

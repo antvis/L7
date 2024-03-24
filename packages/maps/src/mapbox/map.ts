@@ -5,7 +5,6 @@ import type { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
 import type { Map } from 'mapbox-gl';
 import mapboxgl from 'mapbox-gl';
-// tslint:disable-next-line:no-submodule-imports
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { IMapboxInstance } from '../types';
 import BaseMapService from '../utils/BaseMapService';

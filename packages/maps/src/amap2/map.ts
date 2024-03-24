@@ -12,7 +12,6 @@ import { mat4, vec3 } from 'gl-matrix';
 import type { IAMapInstance } from '../types';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import Viewport from './Viewport';
-// @ts-ignore
 import './logo.css';
 const DEFAULTMAPCENTER = [108.92361, 34.54083];
 
