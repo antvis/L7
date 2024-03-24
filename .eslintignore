@@ -1,15 +1,11 @@
 node_modules
 .cache
-package.json
 .history
-es
-esm
-lib
-dist
 temp
 coverage
 .idea
-*.d.ts
-.eslintrc*
-/scripts/*
+
+packages/*/es/**
+packages/*/lib/**
+packages/*/dist/**
 

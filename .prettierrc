@@ -3,5 +3,9 @@
   "tabWidth": 2,
   "singleQuote": true,
   "trailingComma": "all",
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "overrides": [
+    { "files": ".stylelintrc", "options": { "parser": "json" } },
+    { "files": ".prettierrc", "options": { "parser": "json" } }
+  ]
 }
