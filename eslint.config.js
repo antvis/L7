@@ -3,14 +3,36 @@
 import eslint from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import jestPlugin from 'eslint-plugin-jest';
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
+  // config ignores files, equal `.eslintignore`
+  {
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/fixtures/**',
+      '**/coverage/**',
+      '**/__snapshots__/**',
+      '**/coverage/**',
+      '**/temp/**',
+      '**/.cache/**',
+      '**/.history/**',
+      '**/.idea/**',
+
+      // Files pakasges of the build
+      'packages/*/{es,lib,dist}/**',
+    ],
+  },
+
+  // extends configs
   eslint.configs.recommended,
-  // basic lint config
+
+  // basic config
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -33,7 +55,7 @@ export default tseslint.config(
     },
   },
 
-  // lint ts files
+  // ts files linting
   {
     files: ['**/*.{ts,tsx}'],
     extends: [...tseslint.configs.recommended],
@@ -56,36 +78,54 @@ export default tseslint.config(
     },
   },
 
-  // lint react tsx files
+  // react tsx files linting
   {
     files: ['**/*.{tsx}'],
     ...reactPlugin.configs.recommended,
     plugins: {
-      reactHooksPlugin,
+      'react-hooks': reactHooksPlugin,
+      'jsx-a11y': jsxA11yPlugin,
     },
     rules: {},
   },
 
-  // jest rules on test files
+  //
+  // test file linting
+  //
   {
     files: ['test/**/*.spec.ts', 'packages/*/__tests__/**/*.spec.ts'],
-    globals: {
-      ...globals.jest,
-    },
     ...jestPlugin.configs['flat/recommended'],
     rules: {},
   },
-  // after eslint configs to override.
-  prettierConfig,
 
-  // loose for examples
+  //
+  // examples linting
+  //
   {
     files: ['examples/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn',
-      'unused-imports/no-unused-imports': 'warn',
       '@typescript-eslint/consistent-type-imports': 'warn',
       'prefer-const': 'warn',
     },
   },
+
+  //
+  // website linting
+  //
+  {
+    files: ['website/**/*.{js,ts,tsx}'],
+    rules: {},
+    ignores: [
+      'website/dist/*',
+      'website/.dumi/tmp/*',
+      'website/.dumi/tmp-production/*',
+      'website/dist/*',
+      'website/public/*',
+      'website/public_site/*',
+    ],
+  },
+
+  // after all eslint plugins configs to override, see https://github.com/prettier/eslint-config-prettier
+  prettierConfig,
 );
