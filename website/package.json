@@ -32,7 +32,7 @@
     "site:publish": "gh-pages -d dist",
     "start": "npm run site:develop"
   },
-  "devDependencies": {
+  "dependencies": {
     "@antv/dumi-theme-antv": "^0.4.2",
     "@antv/g2": "^4.2.8",
     "@antv/l7-composite-layers": "^0.15.0",
@@ -40,27 +40,34 @@
     "@antv/l7plot": "^0.x",
     "@antv/util": "^2.0.9",
     "@turf/turf": "^6.5.0",
-    "@types/bmapgl": "^0.0.7",
     "antd": "^4.20.0",
-    "babel-plugin-inline-import": "^3.0.0",
-    "babel-plugin-transform-import-css-l7": "^0.0.6",
-    "cheerio": "^1.0.0-rc.12",
-    "cross-env": "^7.0.3",
     "district-data": "^0.0.11",
-    "dumi": "^2.2.10",
     "gcoord": "^0.3.2",
+    "geojson2svg": "^1.3.3",
     "geotiff": "^2.0.7",
-    "gh-pages": "^2.1.1",
     "lerc": "^3.0.0",
+    "lodash-es": "^4.17.21",
     "pmtiles": "^2.7.2",
     "popmotion": "^11.0.5",
     "react-github-btn": "^1.4.0",
     "react-split-pane": "^0.1.87",
     "react-use": "^17.2.4",
     "read-markdown": "^1.0.2",
-    "rollup": "^2.0.0",
-    "stylelint": "^14.4.0",
+    "shp-write": "^0.3.2",
     "three": "0.115.0",
+    "tokml": "^0.4.0",
+    "topojson": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/bmapgl": "^0.0.7",
+    "@types/lodash-es": "^4.17.9",
+    "babel-plugin-inline-import": "^3.0.0",
+    "babel-plugin-transform-import-css-l7": "^0.0.6",
+    "cheerio": "^1.0.0-rc.12",
+    "cross-env": "^7.0.3",
+    "dumi": "^2.2.10",
+    "gh-pages": "^2.1.1",
+    "rollup": "^2.0.0",
     "webpack": "^5.20.0"
   }
 }

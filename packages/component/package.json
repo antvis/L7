@@ -17,6 +17,7 @@
     "build": "father build",
     "doctor": "father doctor",
     "clean": "rimraf dist es lib",
+    "prebuild": "npm run less",
     "less": "lessc src/css/index.less src/css/index.css",
     "sync": "tnpm sync"
   },
