@@ -1,18 +1,18 @@
 module.exports = {
   root: true,
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
-  plugins: ['@typescript-eslint', 'unused-imports'],
-  parser: '@typescript-eslint/parser',
-  globals: {
-    AMap: true,
-    L7: true,
-  },
   env: {
     browser: true,
     es2021: true,
     node: true,
     jest: true,
   },
+  globals: {
+    AMap: true,
+    L7: true,
+  },
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  plugins: ['@typescript-eslint', 'unused-imports'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',

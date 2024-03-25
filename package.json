@@ -44,18 +44,17 @@
     "sync": "lerna run sync --parallel"
   },
   "lint-staged": {
-    "*.{less,md,json}": [
-      "prettier --write"
-    ],
     "*.md": [
-      "case-police --fix",
+      "case-police --fix"
+    ],
+    "*.less": [
+      "stylelint --syntax less --fix"
+    ],
+    "*.{ts,tsx,js,mjs,jsx,json,md,css,less}": [
       "prettier --write"
     ],
     "*.{js,jsx,tsx,ts}": [
       "eslint --fix"
-    ],
-    "*.less": [
-      "stylelint --syntax less --fix"
     ]
   },
   "resolutions": {
