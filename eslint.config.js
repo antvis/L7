@@ -120,7 +120,6 @@ export default tseslint.config(
       'website/dist/*',
       'website/.dumi/tmp/*',
       'website/.dumi/tmp-production/*',
-      'website/dist/*',
       'website/public/*',
       'website/public_site/*',
     ],

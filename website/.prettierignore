@@ -1,3 +1,5 @@
 dist
-.dumi
-website/public
+.dumi/tmp
+.dumi/tmp-production
+public
+public_site

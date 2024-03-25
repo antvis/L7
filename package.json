@@ -20,13 +20,13 @@
     "site:clean": "lerna --scope @antv/l7-site exec yarn run site:clean",
     "site:deploy": "lerna --scope @antv/l7-site exec yarn run site:deploy",
     "site:publish": "lerna --scope @antv/l7-site exec yarn run site:publish",
-    "lint-fix": "prettier --write  packages/**/src/**/*.ts website/docs/api/**/*.md website/docs/api/*.md *.md",
-    "lint:vite-demo": "eslint examples/ --ext .ts,.tsx",
-    "lint:src": "eslint packages/ --ext .js,.ts --fix",
-    "lint:examples": "eslint website/examples website/maptools website/.dumi/pages --fix --ext .js,.tsx",
+    "lint:examples": "eslint examples/",
+    "lint:packages": "eslint packages/",
+    "lint:website": "eslint website/",
     "lint:css": "stylelint 'packages/**/src/**/*.js{,x}'",
-    "lint:package": "lerna run doctor",
+    "lint:deps": "lerna run doctor",
     "lint": "run-p -c lint:*",
+    "lint-fix": "npx lint --fix",
     "prebuild": "yarn clean && run-p lint",
     "build": "lerna run build --ignore @antv/l7-site",
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
@@ -51,7 +51,7 @@
     "*.less": [
       "stylelint --syntax less --fix"
     ],
-    "*.{ts,tsx,js,jsx,json,md,css,less}": [
+    "*.{ts,tsx,js,jsx,json,md,css,less,glsl}": [
       "prettier --write"
     ],
     "*.{js,jsx,tsx,ts}": [
@@ -108,6 +108,7 @@
     "pmtiles": "^2.7.2",
     "pngjs": "^6.0.0",
     "prettier": "^3.2.5",
+    "prettier-plugin-glsl": "^0.1.3",
     "prettier-plugin-organize-imports": "^3.2.4",
     "rimraf": "^3.0.2",
     "stats.js": "^0.17.0",
