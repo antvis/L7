@@ -7,8 +7,9 @@
 ## 接口设计
 
 目前我们将 Pass 分成两类：
-  1. 渲染相关。例如 ClearPass、RenderPass、PickingPass、ShadowPass
-  2. 后处理相关。例如 CopyPass、BlurPass
+
+1. 渲染相关。例如 ClearPass、RenderPass、PickingPass、ShadowPass
+2. 后处理相关。例如 CopyPass、BlurPass
 
 ```typescript
 export enum PassType {
@@ -18,6 +19,7 @@ export enum PassType {
 ```
 
 每个 Pass 定义两个生命周期节点，初始化和渲染，并将当前 Layer 作为参数传入。因此 Pass 中可以访问 Layer 上的属性及方法：
+
 ```typescript
 export interface IPass {
   getType(): PassType;
@@ -27,6 +29,7 @@ export interface IPass {
 ```
 
 其中后处理相关的 Pass 比较特殊，例如最后一个 PostProcessingPass 需要自动切换 renderTarget 为屏幕：
+
 ```typescript
 export interface IPostProcessingPass extends IPass {
   setRenderToScreen(renderToScreen: boolean): void;
@@ -40,19 +43,20 @@ export interface IPostProcessingPass extends IPass {
 ## 内置 Pass
 
 目前我们仅对外开放 PostProcessing 后处理相关 Pass 的配置。在 L7 内部我们使用如下流程：
+
 ```
 ClearPass -> RenderPass -> [ ...其他后处理 Pass ] -> CopyPass
 ```
 
 目前各内置 Pass 说明如下：
 
-| Pass 名称 | 类型 | 参数 | 说明 |
-| -------- | --- | ------------- | --------- |
-| ClearPass  | normal | 无 | 清除 framebuffer，clearColor 为 [0, 0, 0, 0] |
-| RenderPass | normal | 无 | 渲染到 framebuffer，作为后续后处理的输入 |
-| PickingPass | normal | 无 | 负责拾取，[详见](./PixelPickingEngine.md) |
-| TAAPass | normal | 无 | [详见](./TAA.md) |
-| CopyPass   | post-processing | 无 | 作为后处理最后一个 Pass，负责拷贝 framebuffer 到屏幕输出 |
+| Pass 名称   | 类型            | 参数 | 说明                                                     |
+| ----------- | --------------- | ---- | -------------------------------------------------------- |
+| ClearPass   | normal          | 无   | 清除 framebuffer，clearColor 为 [0, 0, 0, 0]             |
+| RenderPass  | normal          | 无   | 渲染到 framebuffer，作为后续后处理的输入                 |
+| PickingPass | normal          | 无   | 负责拾取，[详见](./PixelPickingEngine.md)                |
+| TAAPass     | normal          | 无   | [详见](./TAA.md)                                         |
+| CopyPass    | post-processing | 无   | 作为后处理最后一个 Pass，负责拷贝 framebuffer 到屏幕输出 |
 
 剩余后处理效果见最后一节。
 后续待实现 Pass 如下：
@@ -62,6 +66,7 @@ ClearPass -> RenderPass -> [ ...其他后处理 Pass ] -> CopyPass
 ## 使用方法
 
 在每个 Layer 中，通过 `enableMultiPassRenderer` 开启之后，可以配置各个 Pass 的参数。配置方法类似 babel 插件：
+
 ```typescript
 const layer = new PolygonLayer({
   enableMultiPassRenderer: true,
@@ -105,7 +110,8 @@ const layer = new PolygonLayer({
 名称：`blurH/blurV`
 
 参数：
-* `blurRadius` 水平/垂直方向模糊半径，默认值为 `8.0`
+
+- `blurRadius` 水平/垂直方向模糊半径，默认值为 `8.0`
 
 效果如下：
 
@@ -118,9 +124,10 @@ CMYK halftone 效果
 名称：`colorHalftone`
 
 参数：
-* `angle` pattern 旋转角度，默认值为 0
-* `size` pattern 大小，默认值为 8
-* `center` `[x, y]` pattern 的中心，默认值为 `[0, 0]`
+
+- `angle` pattern 旋转角度，默认值为 0
+- `size` pattern 大小，默认值为 8
+- `center` `[x, y]` pattern 的中心，默认值为 `[0, 0]`
 
 效果如下：
 
@@ -133,7 +140,8 @@ CMYK halftone 效果
 名称：`noise`
 
 参数：
-* `amount` 噪声程度，范围 `[0, 1]`，默认值为 `0.5`
+
+- `amount` 噪声程度，范围 `[0, 1]`，默认值为 `0.5`
 
 效果如下：
 
@@ -146,8 +154,9 @@ CMYK halftone 效果
 名称：`hexagonalPixelate`
 
 参数：
-* `scale` 六边形大小，默认值为 `10`
-* `center` `[x, y]` pattern 的中心，默认值为 `[0.5, 0.5]`
+
+- `scale` 六边形大小，默认值为 `10`
+- `center` `[x, y]` pattern 的中心，默认值为 `[0.5, 0.5]`
 
 效果如下：
 
@@ -160,7 +169,8 @@ Sepia 颜色映射。
 名称：`sepia`
 
 参数：
-* `amount` 程度，范围 `[0, 1]`，默认值为 `0.5`
+
+- `amount` 程度，范围 `[0, 1]`，默认值为 `0.5`
 
 效果如下：
 

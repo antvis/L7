@@ -17,8 +17,9 @@
 ![](./screenshots/mapbox-MSAA.png)
 
 但是 MSAA 存在一些限制：
-* WebGL1 不支持对 FBO 进行，因此开启 post-processing 后处理时 MSAA 就失效了。当然 WebGL2 支持 🔗。
-* 即使开启，浏览器在某些情况下也不保证应用 🔗。
+
+- WebGL1 不支持对 FBO 进行，因此开启 post-processing 后处理时 MSAA 就失效了。当然 WebGL2 支持 🔗。
+- 即使开启，浏览器在某些情况下也不保证应用 🔗。
 
 因此在需要后处理的场景中（例如 L7 的热力图需要 blur pass、PBR 中的 SSAO 环境光遮蔽），只能采用其他反走样手段。
 
@@ -50,7 +51,8 @@ Anti-Aliasing in INSIDE」[🔗](http://twvideo01.ubm-us.net/o1/vault/gdc2016/Pr
 
 ![](./screenshots/halton.png)
 
-参考 Echarts.GL，我们选择 `Halton(2,3)` 低差异序列：
+参考 ECharts.GL，我们选择 `Halton(2,3)` 低差异序列：
+
 ```typescript
 const offset = this.haltonSequence[this.frame % this.haltonSequence.length];
 this.cameraService.jitterProjectionMatrix(
@@ -74,10 +76,7 @@ useFramebuffer(this.outputRenderTarget, () => {
       u_opacity: layerStyleOptions.opacity || 1,
       u_MixRatio: this.frame === 0 ? 1 : 0.9,
       u_Diffuse1: this.sampleRenderTarget,
-      u_Diffuse2:
-        this.frame === 0
-          ? layer.multiPassRenderer.getPostProcessor().getReadFBO()
-          : this.prevRenderTarget,
+      u_Diffuse2: this.frame === 0 ? layer.multiPassRenderer.getPostProcessor().getReadFBO() : this.prevRenderTarget,
     },
   });
 });
@@ -86,16 +85,13 @@ useFramebuffer(this.outputRenderTarget, () => {
 最后我们将最终的混合结果“拷贝”给后处理模块，实现渐进增强的效果：
 
 ```typescript
-useFramebuffer(
-  layer.multiPassRenderer.getPostProcessor().getReadFBO(),
-  () => {
-    this.copyModel.draw({
-      uniforms: {
-        u_Texture: this.copyRenderTarget,
-      },
-    });
-  },
-);
+useFramebuffer(layer.multiPassRenderer.getPostProcessor().getReadFBO(), () => {
+  this.copyModel.draw({
+    uniforms: {
+      u_Texture: this.copyRenderTarget,
+    },
+  });
+});
 // 调用后处理模块应用后续效果
 layer.multiPassRenderer.getPostProcessor().render(layer);
 ```
@@ -108,11 +104,11 @@ layer.multiPassRenderer.getPostProcessor().render(layer);
 
 ## 参考资料
 
-* 「知乎 - 反走样技术（一）：几何反走样」[🔗](https://zhuanlan.zhihu.com/p/28800047)
-* 「知乎 - Experimentalize TAA with no code」[🔗](https://zhuanlan.zhihu.com/p/41642855)
-* 「ECharts.GL - temporalSuperSampling」[🔗](https://echarts.apache.org/zh/option-gl.html#globe.temporalSuperSampling)
-* 「Mapbox - set custom layers and extrusion examples to use antialias: true」[🔗](https://github.com/mapbox/mapbox-gl-js/pull/8474)
-* 「Three.js - TAA example」[🔗](https://threejs.org/examples/#webgl_postprocessing_taa)
-* 「Paper - Amortized Supersampling」[🔗](http://hhoppe.com/supersample.pdf)
-* 「GDC - Temporal Reprojection Anti-Aliasing in INSIDE」[🔗](http://twvideo01.ubm-us.net/o1/vault/gdc2016/Presentations/Pedersen_LasseJonFuglsang_TemporalReprojectionAntiAliasing.pdf)
-* 「知乎 - 低差异序列（一）- 常见序列的定义及性质」[🔗](https://zhuanlan.zhihu.com/p/20197323)
+- 「知乎 - 反走样技术（一）：几何反走样」[🔗](https://zhuanlan.zhihu.com/p/28800047)
+- 「知乎 - Experimentalize TAA with no code」[🔗](https://zhuanlan.zhihu.com/p/41642855)
+- 「ECharts.GL - temporalSuperSampling」[🔗](https://echarts.apache.org/zh/option-gl.html#globe.temporalSuperSampling)
+- 「Mapbox - set custom layers and extrusion examples to use antialias: true」[🔗](https://github.com/mapbox/mapbox-gl-js/pull/8474)
+- 「Three.js - TAA example」[🔗](https://threejs.org/examples/#webgl_postprocessing_taa)
+- 「Paper - Amortized Supersampling」[🔗](http://hhoppe.com/supersample.pdf)
+- 「GDC - Temporal Reprojection Anti-Aliasing in INSIDE」[🔗](http://twvideo01.ubm-us.net/o1/vault/gdc2016/Presentations/Pedersen_LasseJonFuglsang_TemporalReprojectionAntiAliasing.pdf)
+- 「知乎 - 低差异序列（一）- 常见序列的定义及性质」[🔗](https://zhuanlan.zhihu.com/p/20197323)
