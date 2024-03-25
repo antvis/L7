@@ -52,6 +52,6 @@
     }
   },
 
-  "include": ["packages"],
+  "include": ["packages", "examples", "test", "website"],
   "exclude": ["node_modules", "packages/**/dist", "website"]
 }
