@@ -43,15 +43,15 @@
   },
 
   // chcek jest ?
-  "ts-node": {
-    "experimentalSpecifierResolution": "node",
-    "esm": true,
-    "compilerOptions": {
-      "target": "es2019",
-      "types": ["node"]
-    }
-  },
+  // "ts-node": {
+  //   "experimentalSpecifierResolution": "node",
+  //   "esm": true,
+  //   "compilerOptions": {
+  //     "target": "es2019",
+  //     "types": ["node"]
+  //   }
+  // },
 
   "include": ["packages", "examples", "test", "website"],
-  "exclude": ["node_modules", "packages/**/dist", "website"]
+  "exclude": ["node_modules", "packages/**/dist", "legacy"]
 }

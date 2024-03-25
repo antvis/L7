@@ -9,6 +9,11 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 export default tseslint.config(
   // config ignores files, equal `.eslintignore`
   {
@@ -25,7 +30,9 @@ export default tseslint.config(
       '**/.idea/**',
 
       // Files pakasges of the build
-      'packages/*/{es,lib,dist}/**',
+      'packages/*/es/*',
+      'packages/*/lib/*',
+      'packages/*/dist/*',
     ],
   },
 
@@ -62,7 +69,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.json', './packages/*/tsconfig.json'],
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir: __dirname,
       },
     },
     rules: {
@@ -114,15 +121,16 @@ export default tseslint.config(
   // website linting
   //
   {
-    files: ['website/**/*.{js,ts,tsx}'],
-    rules: {},
-    ignores: [
-      'website/dist/*',
-      'website/.dumi/tmp/*',
-      'website/.dumi/tmp-production/*',
-      'website/public/*',
-      'website/public_site/*',
+    files: [
+      'website/.dumi/pages/**/*.{js,ts,tsx}',
+      'website/.dumi/theme/**/*.{js,ts,tsx}',
+      'website/maptools/**/*.{js,ts,tsx}',
+      'website/sdk/**/*.{js,ts,tsx}',
+      'website/site/**/*.{js,ts,tsx}',
     ],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
   },
 
   // after all eslint plugins configs to override, see https://github.com/prettier/eslint-config-prettier

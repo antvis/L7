@@ -4,7 +4,9 @@
   "description": "Maps for L7",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
@@ -16,6 +18,7 @@
     "dev": "father dev",
     "build": "father build",
     "doctor": "father doctor",
+    "lint": "eslint src __tests__",
     "clean": "rimraf dist es lib",
     "sync": "tnpm sync"
   },

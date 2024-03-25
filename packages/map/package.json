@@ -25,6 +25,7 @@
     "dev": "father dev",
     "build": "father build",
     "doctor": "father doctor",
+    "lint": "eslint src __tests__",
     "clean": "rimraf dist es lib",
     "sync": "tnpm sync"
   },

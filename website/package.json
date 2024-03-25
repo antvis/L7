@@ -23,14 +23,15 @@
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
   "scripts": {
-    "build": "yarn site:build",
-    "lint:fix": "prettier --write docs/api/**/*.md docs/api/*.md *.md",
-    "site:build": "dumi build",
-    "site:clean": "rm -rf ./dumi/tmp && rm -rf ./dumi/tmp-production && rm -rf .umi/ && rm rf ./dist",
-    "site:deploy": "npm run site:build && gh-pages -d dist",
+    "start": "npm run site:develop",
     "site:develop": "dumi dev",
+    "format": "prettier --write \"./**/*.{ts,tsx,js,jsx,json,md,css,less}\"",
+    "lint": "eslint maptools sdk site",
+    "site:clean": "rimraf dumi/tmp dumi/tmp-production .umi dist",
+    "site:build": "dumi build",
+    "site:deploy": "npm run site:build && gh-pages -d dist",
     "site:publish": "gh-pages -d dist",
-    "start": "npm run site:develop"
+    "build": "yarn site:build"
   },
   "dependencies": {
     "@antv/dumi-theme-antv": "^0.4.2",
@@ -68,6 +69,7 @@
     "dumi": "^2.2.10",
     "gh-pages": "^2.1.1",
     "rollup": "^2.0.0",
+    "rimraf": "^3.0.2",
     "webpack": "^5.20.0"
   }
 }
