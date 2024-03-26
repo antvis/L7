@@ -4,6 +4,14 @@
     "noEmit": true
   },
   // paths intend to lint
-  "include": ["packages", "examples", "test", "website", "./*.ts"],
+  "include": [
+    "packages",
+    "examples",
+    "test",
+    "website",
+    "website/.dumi/pages",
+    "website/.dumi/theme",
+    "./*.ts"
+  ],
   "exclude": ["node_modules", "dist", "dist", "es", "lib", "legacy"]
 }

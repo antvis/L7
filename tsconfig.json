@@ -43,15 +43,5 @@
     "skipLibCheck": true
   },
 
-  // chcek jest ?
-  // "ts-node": {
-  //   "experimentalSpecifierResolution": "node",
-  //   "esm": true,
-  //   "compilerOptions": {
-  //     "target": "es2019",
-  //     "types": ["node"]
-  //   }
-  // },
-
   "exclude": ["node_modules", "dist", "es", "lib"]
 }

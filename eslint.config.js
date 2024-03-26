@@ -70,7 +70,12 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         // OOM when many project configs passed to the parser with multi-package monorepos, see https://github.com/typescript-eslint/typescript-eslint/issues/1192
-        project: ['./tsconfig.eslint.json', './packages/*/tsconfig.json'],
+        // project: [
+        //   './tsconfig.eslint.json',
+        //   './packages/*/tsconfig.json',
+        //   './website/tsconfig.json',
+        // ],
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: __dirname,
       },
     },
