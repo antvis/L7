@@ -9,6 +9,7 @@
     "examples",
     "test",
     "website",
+    // special: perfix .xxx directory will be ignored
     "website/.dumi/pages",
     "website/.dumi/theme",
     "./*.ts"

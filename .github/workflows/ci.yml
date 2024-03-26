@@ -3,33 +3,30 @@ name: ci
 on: [pull_request]
 
 jobs:
-  unit-test:
+  ci:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: yarn
+      - name: Install dependencies
+        run: yarn
 
-    - name: Check
-      run: |
-        yarn check-deps
-    #TODO: turn on after format fixd
-    # yarn check-format
+      - name: Check
+        run: |
+          yarn check-deps
+      #TODO: turn on after format fixd
+      # yarn check-format
 
-    - name: Lint
-      run: yarn lint:ts
+      - name: Lint
+        run: yarn lint:ts
 
     #TODO: turn on after fixd
     # - name: Stylelint
     #   run: yarn lint:css
-
-
-

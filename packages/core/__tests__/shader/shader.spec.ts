@@ -1,5 +1,5 @@
-import type { IShaderModuleService } from '../IShaderModuleService';
-import ShaderModuleService from '../ShaderModuleService';
+import type { IShaderModuleService } from '../../src/services/shader/IShaderModuleService';
+import ShaderModuleService from '../../src/services/shader/ShaderModuleService';
 
 describe('ShaderService', () => {
   let shaderService: IShaderModuleService;

@@ -3,44 +3,44 @@ name: test
 on: [pull_request]
 
 jobs:
-  unit-test:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: yarn
+      - name: Install dependencies
+        run: yarn
 
-    # TODO: parallel test(Build/Coverage/Integration)
-    - name: Build Test Without Lint
-      run: yarn lerna run build --ignore @antv/l7-site
+      # TODO: parallel test(Build/Coverage/Integration)
+      - name: Build Test Without Lint
+        run: yarn lerna run build --ignore @antv/l7-site
 
-    - name: Coverage Test
-      run: yarn test-cover
+      - name: Coverage Test
+        run: yarn test-cover
 
-    - name: Upload test coverage
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload test coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install Playwright browsers
-      run: npx playwright install --with-deps
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
 
-    - name: Integration Test
-      run: yarn test:integration
+      - name: Integration Test
+        run: yarn test:integration
 
-    - name: Upload snapshots to GitHub Actions Artifacts
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: snapshots
-        path: |
-          test/integration/snapshots/**/*/*-actual.png
-        retention-days: 1
+      - name: Upload snapshots to GitHub Actions Artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshots
+          path: |
+            test/integration/snapshots/**/*/*-actual.png
+          retention-days: 1

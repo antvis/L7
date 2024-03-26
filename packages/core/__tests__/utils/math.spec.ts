@@ -1,4 +1,4 @@
-import { getAngle } from '../math';
+import { getAngle } from '../../src/utils/math';
 
 describe('util.math', () => {
   it('should clamp angle with `getAngle()`', () => {
