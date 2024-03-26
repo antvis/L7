@@ -4,7 +4,8 @@ on: [pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # TODO: change to ubuntu-latest, gl CONTEXT.getExtension('STACKGL_resize_drawingbuffer') must in macos-latest
+    runs-on: macos-latest
     strategy:
       matrix:
         node-version: [18.x]
