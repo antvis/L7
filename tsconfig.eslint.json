@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  // paths intend to lint
+  "include": ["packages", "examples", "test", "website", "./*.ts"],
+  "exclude": ["node_modules", "dist", "dist", "es", "lib", "legacy"]
+}

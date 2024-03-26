@@ -26,9 +26,9 @@ const sharedConfig: Partial<Config> = {
 
 const config: Config = {
   testTimeout: 100000,
-  globalSetup: './test/integration/lib/setup.js',
-  globalTeardown: './test/integration/lib/teardown.js',
-  testEnvironment: './test/integration/lib/environment.js',
+  globalSetup: './test/integration/environment/setup.js',
+  globalTeardown: './test/integration/environment/teardown.js',
+  testEnvironment: './test/integration/environment/environment.js',
   testMatch: ['<rootDir>/test/integration/*.spec.ts'],
   coverageReporters: ['html', 'lcov', 'clover'],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],

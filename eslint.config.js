@@ -53,12 +53,13 @@ export default tseslint.config(
       },
     },
     rules: {
+      'no-unused-vars': 'warn',
       'no-unsafe-optional-chaining': 'warn',
-      'no-constant-condition': 0,
-      'no-prototype-builtins': 0,
-      'no-case-declarations': 0,
-      'no-useless-catch': 0,
-      'prefer-rest-params': 0,
+      'no-constant-condition': 'off',
+      'no-prototype-builtins': 'off',
+      'no-case-declarations': 'off',
+      'no-useless-catch': 'off',
+      'prefer-rest-params': 'off',
     },
   },
 
@@ -68,7 +69,8 @@ export default tseslint.config(
     extends: [...tseslint.configs.recommended],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+        // OOM when many project configs passed to the parser with multi-package monorepos, see https://github.com/typescript-eslint/typescript-eslint/issues/1192
+        project: ['./tsconfig.eslint.json', './packages/*/tsconfig.json'],
         tsconfigRootDir: __dirname,
       },
     },
@@ -97,7 +99,7 @@ export default tseslint.config(
   },
 
   //
-  // test file linting
+  // test jest file linting
   //
   {
     files: ['test/**/*.spec.ts', 'packages/*/__tests__/**/*.spec.ts'],
@@ -105,8 +107,22 @@ export default tseslint.config(
     rules: {},
   },
 
+  // after all eslint plugins configs to override, see https://github.com/prettier/eslint-config-prettier
+  // @ts-ignore
+  prettierConfig,
+
   //
-  // examples linting
+  // test workspace linting
+  //
+  {
+    files: ['test/**/*.{ts}', 'packages/*/__tests__/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  },
+
+  //
+  // examples workspace linting
   //
   {
     files: ['examples/**/*.{ts,tsx}'],
@@ -118,7 +134,7 @@ export default tseslint.config(
   },
 
   //
-  // website linting
+  // website workspace linting
   //
   {
     files: [
@@ -132,7 +148,4 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
-
-  // after all eslint plugins configs to override, see https://github.com/prettier/eslint-config-prettier
-  prettierConfig,
 );

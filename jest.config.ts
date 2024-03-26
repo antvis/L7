@@ -27,12 +27,10 @@ const sharedConfig: Partial<Config> = {
 const config: Config = {
   testEnvironment: 'jsdom',
   setupFiles: ['jest-canvas-mock'],
-  setupFilesAfterEnv: ['<rootDir>test/unit/lib/browser.ts'],
+  setupFilesAfterEnv: ['<rootDir>test/unit/environment/browser.ts'],
   testMatch: [
-    // '**/packages/layers/src/canvas/__tests__/layer.spec.ts',
-    '**/__tests__/*.spec.+(ts|tsx|js)',
-    '**/*.test.+(ts|tsx|js)',
-    '**/__tests__/*/*.spec.+(ts|tsx|js)',
+    'packages/*/__tests__/**/?(*.).spec.+(ts|tsx|js)',
+    'test/unit/**/?(*.)+spec.(ts|tsx|js)',
   ],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageDirectory: 'coverage',
