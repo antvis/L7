@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     // Language and Environment Config
-    "target": "esnext",
+    "target": "es6",
     "jsx": "react",
     "experimentalDecorators": true,
 
@@ -37,6 +37,7 @@
 
     // Interop Constraints
     "esModuleInterop": true,
+    "isolatedModules": true,
 
     // Completeness
     "skipLibCheck": true

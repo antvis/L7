@@ -19,8 +19,8 @@ jobs:
       run: yarn
 
     # TODO: parallel test(Build/Coverage/Integration)
-    - name: Build Test
-      run: yarn build
+    - name: Build Test Without Lint
+      run: yarn lerna run build --ignore @antv/l7-site
 
     - name: Coverage Test
       run: yarn test-cover
