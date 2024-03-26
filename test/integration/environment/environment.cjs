@@ -1,7 +1,7 @@
-import { readFile } from 'fs/promises';
-import { TestEnvironment as NodeEnvironment } from 'jest-environment-node';
-import path from 'path';
-import { TMP_DIR } from './constants';
+const { readFile } = require('fs').promises;
+const path = require('path');
+const NodeEnvironment = require('jest-environment-node').TestEnvironment;
+const { TMP_DIR } = require('./constants.cjs');
 
 /**
  * @see https://jestjs.io/docs/puppeteer
@@ -17,4 +17,4 @@ class Environment extends NodeEnvironment {
   }
 }
 
-export default Environment;
+module.exports = Environment;
