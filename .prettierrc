@@ -1,11 +1,9 @@
 {
-  "printWidth": 120,
-  "tabWidth": 2,
+  "printWidth": 100,
   "singleQuote": true,
   "trailingComma": "all",
   "arrowParens": "always",
   "overrides": [
-    { "files": ".stylelintrc", "options": { "parser": "json" } },
     { "files": ".prettierrc", "options": { "parser": "json" } }
   ],
   "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-glsl"]
