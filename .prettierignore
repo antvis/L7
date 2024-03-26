@@ -14,9 +14,18 @@ LICENSE
 .cache
 .history
 
+# package output dist
 packages/*/es/**
 packages/*/lib/**
 packages/*/dist/**
 
+# legacy
 legacy/
+
+# website
+website/dist/
+website/.dumi/tmp/
+website/.dumi/tmp-production/
+website/public/
+website/public_site/
 
