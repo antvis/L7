@@ -48,7 +48,7 @@
     "*.{css,less}": [
       "stylelint --fix"
     ],
-    "*.{ts,tsx,js,jsx,json,md,css,less,glsl}": [
+    "*.{ts,tsx,js,jsx,json,md,css,less}": [
       "prettier --write"
     ],
     "*.{js,jsx,tsx,ts}": [
