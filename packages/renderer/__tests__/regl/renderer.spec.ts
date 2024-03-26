@@ -2,8 +2,8 @@ import { gl } from '@antv/l7-core';
 import { createContext } from '@antv/l7-test-utils';
 
 import regl from 'regl';
-import copy from '../../../../core/src/shaders/post-processing/copy.glsl';
-import quad from '../../../../core/src/shaders/post-processing/quad.glsl';
+import copy from '../../../core/src/shaders/post-processing/copy.glsl';
+import quad from '../../../core/src/shaders/post-processing/quad.glsl';
 import { ReglRendererService } from '../../src/index';
 import ReglAttribute from '../../src/regl/ReglAttribute';
 import ReglBuffer from '../../src/regl/ReglBuffer';

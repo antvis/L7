@@ -6,8 +6,8 @@ const sharedConfig: Partial<Config> = {
     '[.](m|c)?(ts|js)(x)?$': [
       'ts-jest',
       {
-        isolatedModules: true,
         tsconfig: 'tsconfig.json',
+        isolatedModules: true,
       },
     ],
     '^.+.(glsl)$': 'jest-text-transformer',
@@ -29,8 +29,10 @@ const config: Config = {
   setupFiles: ['jest-canvas-mock'],
   setupFilesAfterEnv: ['<rootDir>test/unit/environment/browser.ts'],
   testMatch: [
-    'packages/*/__tests__/**/?(*.).spec.+(ts|tsx|js)',
-    'test/unit/**/?(*.)+spec.(ts|tsx|js)',
+    '<rootDir>/packages/*/__tests__/*.spec.+(ts|tsx|js)',
+    '<rootDir>/packages/*/__tests__/**/*/*.spec.+(ts|tsx|js)',
+    '<rootDir>/test/unit/*.spec.+(ts|tsx|js)',
+    '<rootDir>/test/unit/**/*/*.spec.+(ts|tsx|js)',
   ],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
   coverageDirectory: 'coverage',

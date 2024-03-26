@@ -6,8 +6,8 @@ const sharedConfig: Partial<Config> = {
     '[.](m|c)?(ts|js)(x)?$': [
       'ts-jest',
       {
-        isolatedModules: true,
         tsconfig: 'tsconfig.json',
+        isolatedModules: true,
       },
     ],
     '^.+.(glsl)$': 'jest-text-transformer',
