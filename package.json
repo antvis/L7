@@ -101,6 +101,7 @@
     "playwright": "latest",
     "pmtiles": "^2.7.2",
     "pngjs": "^6.0.0",
+    "portfinder": "^1.0.32",
     "postcss-less": "^6.0.0",
     "prettier": "^3.2.5",
     "prettier-plugin-glsl": "^0.1.3",
