@@ -1,8 +1,8 @@
-const terminate = require('terminate');
-const fs = require('fs').promises;
-const { TMP_DIR } = require('./constants');
+import fsPromises from 'fs/promises';
+import terminate from 'terminate';
+import { TMP_DIR } from './constants';
 
-module.exports = async function (_globalConfig, _projectConfig) {
+export default async function (_globalConfig, _projectConfig) {
   const testServerProcess = globalThis.testServerProcess;
 
   await new Promise((resolve) => {
@@ -12,5 +12,5 @@ module.exports = async function (_globalConfig, _projectConfig) {
   });
 
   // clean-up the tmp file
-  await fs.rm(TMP_DIR, { recursive: true, force: true });
-};
+  await fsPromises.rm(TMP_DIR, { recursive: true, force: true });
+}

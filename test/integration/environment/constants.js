@@ -1,5 +1,4 @@
-const os = require('os');
-const path = require('path');
-const TMP_DIR = path.join(os.tmpdir(), 'jest_global_setup');
+import os from 'os';
+import path from 'path';
 
-module.exports = { TMP_DIR };
+export const TMP_DIR = path.join(os.tmpdir(), 'jest_global_setup');

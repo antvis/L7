@@ -1,10 +1,10 @@
-const portfinder = require('portfinder');
-const { mkdir, writeFile } = require('fs').promises;
-const path = require('path');
-const { TMP_DIR } = require('./constants');
-const { spawn } = require('child_process');
+import { spawn } from 'child_process';
+import { mkdir, writeFile } from 'fs/promises';
+import path from 'path';
+import portfinder from 'portfinder';
+import { TMP_DIR } from './constants';
 
-module.exports = async function (_globalConfig, _projectConfig) {
+export default async function (_globalConfig, _projectConfig) {
   const port = await portfinder.getPortPromise();
   // use the file system to expose the port for TestEnvironments
   await mkdir(TMP_DIR, { recursive: true });
@@ -30,4 +30,4 @@ module.exports = async function (_globalConfig, _projectConfig) {
   // store the PID so we can teardown it later.
   // this global is only available in the teardown but not in TestEnvironments
   globalThis.testServerProcess = testServerProcess;
-};
+}

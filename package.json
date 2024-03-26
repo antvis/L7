@@ -64,7 +64,6 @@
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
     "@turf/turf": "^6.5.0",
-    "@types/gl": "^6.0.4",
     "@types/jest": "^29.5.1",
     "@types/offscreencanvas": "^2019.7.0",
     "@types/pixelmatch": "^5.2.5",
