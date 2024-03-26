@@ -19,8 +19,9 @@ jobs:
       run: yarn
 
     - name: Check
-    # TODO: check-format
-      run: yarn check-deps
+      run: |
+        yarn check-deps
+        yarn check-format
 
     - name: Lint
       run: yarn lint:ts
