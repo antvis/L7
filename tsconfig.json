@@ -52,6 +52,6 @@
   //   }
   // },
 
-  "include": ["packages", "examples", "test", "website"],
+  "include": ["packages", "examples", "test", "website", "./vite.config.ts"],
   "exclude": ["node_modules", "packages/**/dist", "legacy"]
 }

@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
-import Copy from 'vite-plugin-cp';
-import vitePluginString from 'vite-plugin-string';
 import react from '@vitejs/plugin-react';
-
 import path from 'path';
+import { defineConfig } from 'vite';
+import copy from 'vite-plugin-cp';
+import vitePluginString from 'vite-plugin-string';
+
 export default defineConfig({
   root: path.resolve('./examples'),
   server: { port: 8080, open: '/' },
@@ -28,7 +28,7 @@ export default defineConfig({
     vitePluginString({
       compress: false,
     }),
-    Copy({
+    copy({
       targets: [
         {
           src: 'node_modules/@antv/g-device-api/dist/pkg/glsl_wgsl_compiler_bg.wasm',
@@ -37,7 +37,7 @@ export default defineConfig({
       ],
     }),
   ],
-  esbuild: true,
+  esbuild: {},
   define: {
     'process.env.VERSION': JSON.stringify('1.0.0'),
     global: {},
