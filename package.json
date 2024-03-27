@@ -28,6 +28,7 @@
     "test:unit": "jest --config ./jest.config.ts",
     "test-cover": "jest --config ./jest.config.ts --coverage",
     "test:integration": "jest --config ./jest.e2e.config.ts",
+    "test:size": "yarn lerna run build --scope @antv/l7 && limit-size",
     "clean-dist": "lerna run clean --parallel --ignore @antv/l7-site",
     "clean-deps": "./scripts/clean-deps.sh",
     "changelog": "auto-changelog --output CHANGELOG.md",
@@ -36,7 +37,7 @@
     "build": "lerna run build --ignore @antv/l7-site",
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
-    "prerelease": "yarn build",
+    "prerelease": "yarn build && limit-size",
     "release": "lerna publish from-package --ignore @antv/l7-site  && yarn sync",
     "release-beta": "yarn run prerelease && lerna publish --dist-tag beta from-package --force-publish && yarn sync",
     "sync": "lerna run sync --parallel"
@@ -53,6 +54,12 @@
       "eslint --fix"
     ]
   },
+  "limit-size": [
+    {
+      "path": "packages/l7/dist/l7.js",
+      "limit": "1.7 Mb"
+    }
+  ],
   "resolutions": {
     "d3-array": "1"
   },
@@ -93,6 +100,7 @@
     "kdbush": "^4.0.2",
     "lerna": "^3.16.4",
     "lil-gui": "^0.19.1",
+    "limit-size": "^0.1.4",
     "lint-staged": "^15.2.2",
     "npm-run-all": "^4.1.5",
     "pixelmatch": "5.3.0",
