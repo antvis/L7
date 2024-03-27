@@ -5,7 +5,7 @@ on: [pull_request]
 jobs:
   test:
     # TODO: change to ubuntu-latest, gl CONTEXT.getExtension('STACKGL_resize_drawingbuffer') must in macos-latest
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       matrix:
         node-version: [18.x]
@@ -23,13 +23,13 @@ jobs:
       - name: Build Test Without Lint
         run: yarn lerna run build --ignore @antv/l7-site
 
-      # - name: Coverage Test
-      #   run: yarn test-cover
+      - name: Coverage Test
+        run: yarn test-cover
 
-      # - name: Upload test coverage
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload test coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
