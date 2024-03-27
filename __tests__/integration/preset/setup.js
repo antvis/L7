@@ -1,16 +1,17 @@
-const { createServer } = require('vite');
-const portfinder = require('portfinder');
-const { mkdir, writeFile } = require('fs').promises;
-const path = require('path');
-const { TMP_DIR } = require('./constants.cjs');
+import { mkdir, writeFile } from 'fs/promises';
+import path from 'path';
+import portfinder from 'portfinder';
+import { createServer } from 'vite';
+import { TMP_DIR } from './constants.js';
 
-module.exports = async function (_globalConfig, _projectConfig) {
+export default async function (_globalConfig, _projectConfig) {
   const port = await portfinder.getPortPromise();
+
   // @see https://vitejs.dev/guide/api-javascript.html#createserver
   const server = await createServer({
-    configFile: './vite.config.js',
+    configFile: './vite.config.ts',
     server: {
-      port,
+      port: port,
       open: false,
     },
   });
@@ -21,7 +22,8 @@ module.exports = async function (_globalConfig, _projectConfig) {
   await writeFile(path.join(TMP_DIR, 'PORT'), port.toString());
 
   server.printUrls();
+
   // store the server instance so we can teardown it later.
   // this global is only available in the teardown but not in TestEnvironments
   globalThis.VITE_SERVER = server;
-};
+}

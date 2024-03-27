@@ -7,7 +7,7 @@
   "include": [
     "packages",
     "examples",
-    "test",
+    "__tests__",
     "website",
     // special: perfix .xxx directory will be ignored
     "website/.dumi/pages",

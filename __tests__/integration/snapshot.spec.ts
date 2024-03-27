@@ -34,8 +34,10 @@ describe('Snapshots', () => {
       });
       const context = await browser.newContext(devices['Desktop Chrome']);
       const page = await context.newPage();
+      const port = (globalThis as any).PORT;
+
       // Go to test page served by vite devServer.
-      const url = `http://localhost:8080/?type=${type}&name=${name}`;
+      const url = `http://localhost:${port}/?type=${type}&name=${name}`;
 
       let resolveReadyPromise: () => void;
       const readyPromise = new Promise((resolve) => {

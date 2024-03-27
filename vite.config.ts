@@ -5,7 +5,7 @@ import copy from 'vite-plugin-cp';
 import vitePluginString from 'vite-plugin-string';
 
 export default defineConfig({
-  root: path.resolve('./examples'),
+  root: './examples/',
   server: { port: 8080, open: '/' },
   base: './',
   resolve: {
