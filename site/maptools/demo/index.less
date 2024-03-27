@@ -1,0 +1,98 @@
+.panel {
+  width: 370px;
+  height: 100%;
+  padding: 10px 15px 15px 0px;
+  overflow: auto;
+  background: #fff;
+  height: calc(100vh - 240px);
+  overflow: scroll;
+  display: flex;
+  .toggle {
+    width: 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    .icon {
+      font-size: 20px;
+      :hover {
+        cursor: pointer;
+        color: #873bf4;
+      }
+    }
+  }
+  .row {
+    align-items: center;
+    height: 40px;
+  }
+  .label {
+    color: #4c4646d9;
+    font-size: 14px;
+  }
+  .source-select {
+    border-bottom: 1px solid #c2bdbdd9;
+
+    .source {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .source-label {
+      margin-bottom: 5px;
+      color: #4c4646d9;
+    }
+
+    .source-flex {
+      padding-bottom: 10px;
+    }
+  }
+
+  .download-check {
+    display: flex;
+    margin-bottom: 10px;
+
+    &-label {
+      color: #4c4646d9;
+    }
+  }
+
+  .layerCity {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c2bdbdd9;
+  }
+
+  .click-label {
+    color: #4c4646d9;
+  }
+
+  .infoText {
+    color: #898787d9;
+    font-size: 12px;
+  }
+
+  .download-content {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c2bdbdd9;
+  }
+
+  .flexCenter {
+    display: flex;
+    align-items: center;
+  }
+
+  .originData {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+  }
+
+  .copy {
+    margin-right: 10px;
+  }
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding: 0;
+}

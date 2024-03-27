@@ -1,0 +1,28 @@
+{
+  "title": {
+    "zh": "弧线",
+    "en": "line"
+  },
+  "demos": [
+    {
+      "filename": "arc_circle.js",
+      "title": "大圆弧线",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*6Qm_QY69sBMAAAAAAAAAAABkARQnAQ"
+    },
+    {
+      "filename": "trip_arc_dark.js",
+      "title": "3D 弧线",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Qg8sQ4H9RVsAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "trip_arc_dark_linear.js",
+      "title": "3D 弧线（渐变）",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*8DYQTZeQyZ4AAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "trip_arc.js",
+      "title": "3D 弧线",
+      "screenshot": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*xvaaQo2c0gMAAAAAAAAAAABkARQnAQ"
+    }
+  ]
+}

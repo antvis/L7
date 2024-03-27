@@ -5,14 +5,19 @@
   },
   // paths intend to lint
   "include": [
+    "./*.ts",
     "packages",
+    // examples workspace lint
     "examples",
+    // test workspace lint
     "__tests__",
-    "website",
+    // website workspace lint
+    "site",
+    "site/.?*.ts",
     // special: perfix .xxx directory will be ignored
-    "website/.dumi/pages",
-    "website/.dumi/theme",
-    "./*.ts"
+    "site/.dumi/pages",
+    "site/.dumi/theme",
+    "site/.dumi/*.ts"
   ],
   "exclude": ["node_modules", "dist", "dist", "es", "lib", "legacy"]
 }

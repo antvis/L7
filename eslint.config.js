@@ -33,6 +33,10 @@ export default tseslint.config(
       'packages/*/es/*',
       'packages/*/lib/*',
       'packages/*/dist/*',
+
+      // Website static files
+      'site/public/*',
+      'site/public_site/*',
     ],
   },
 
@@ -48,8 +52,6 @@ export default tseslint.config(
         ...globals.es2021,
         ...globals.browser,
         ...globals.node,
-        // AMap: true,
-        // L7: true,
       },
     },
     rules: {
@@ -73,7 +75,7 @@ export default tseslint.config(
         // project: [
         //   './tsconfig.eslint.json',
         //   './packages/*/tsconfig.json',
-        //   './website/tsconfig.json',
+        //   './site/tsconfig.json',
         // ],
         project: './tsconfig.eslint.json',
         tsconfigRootDir: __dirname,
@@ -142,15 +144,15 @@ export default tseslint.config(
   // website workspace linting
   //
   {
-    files: [
-      'website/.dumi/pages/**/*.{js,ts,tsx}',
-      'website/.dumi/theme/**/*.{js,ts,tsx}',
-      'website/maptools/**/*.{js,ts,tsx}',
-      'website/sdk/**/*.{js,ts,tsx}',
-      'website/site/**/*.{js,ts,tsx}',
-    ],
+    files: ['site/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  },
+  {
+    files: ['site/**/*.js'],
+    languageOptions: {
+      globals: { AMap: true },
     },
   },
 );

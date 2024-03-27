@@ -1,5 +1,5 @@
 {
-  "packages": ["packages/*", "website"],
+  "packages": ["packages/*", "site"],
   "command": {
     "publish": {
       "ignoreChanges": ["*.md"],

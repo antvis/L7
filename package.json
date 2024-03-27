@@ -8,7 +8,7 @@
   },
   "workspaces": [
     "packages/*",
-    "website"
+    "site"
   ],
   "scripts": {
     "prepare": "husky",
@@ -45,9 +45,7 @@
     "*.md": [
       "case-police --fix"
     ],
-    "*.{css,less}": [
-      "stylelint --fix"
-    ],
+    "*.{css,less}": [],
     "*.{ts,tsx,js,jsx,json,md,css,less}": [
       "prettier --write"
     ],

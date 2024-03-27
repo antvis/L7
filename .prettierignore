@@ -23,9 +23,9 @@ packages/*/dist/**
 legacy/
 
 # website
-website/dist/
-website/.dumi/tmp/
-website/.dumi/tmp-production/
-website/public/
-website/public_site/
+site/dist/
+site/.dumi/tmp/
+site/.dumi/tmp-production/
+site/public/
+site/public_site/
 

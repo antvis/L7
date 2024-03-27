@@ -1,0 +1,13 @@
+{
+  "title": {
+    "zh": "地球模式 - arc3d图层",
+    "en": "Earth Mode - lineLayer/arc3d"
+  },
+  "demos": [
+    {
+      "filename": "flyline.js",
+      "title": "飞线",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hak1RaMjp1MAAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}
