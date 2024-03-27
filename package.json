@@ -26,7 +26,7 @@
     "lint:css-fix": "stylelint --fix 'packages/**/*.{css,less}'",
     "test": "run-p test:unit test:integration",
     "test:unit": "jest --config ./jest.config.ts",
-    "test-cover": "npm run test:unit --coverage",
+    "test-cover": "jest --config ./jest.config.ts --coverage",
     "test:integration": "jest --config ./jest.e2e.config.ts",
     "clean-dist": "lerna run clean --parallel --ignore @antv/l7-site",
     "clean-deps": "./scripts/clean-deps.sh",
