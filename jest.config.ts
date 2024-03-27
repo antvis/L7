@@ -27,7 +27,7 @@ const sharedConfig: Partial<Config> = {
 const config: Config = {
   testEnvironment: 'jsdom',
   setupFiles: ['jest-canvas-mock'],
-  setupFilesAfterEnv: ['<rootDir>test/unit/preset/environment.ts'],
+  setupFilesAfterEnv: ['<rootDir>__tests__/unit/preset/environment.ts'],
   testMatch: [
     '<rootDir>/packages/*/__tests__/*.spec.+(ts|tsx|js)',
     '<rootDir>/packages/*/__tests__/**/*/*.spec.+(ts|tsx|js)',
