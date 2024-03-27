@@ -20,7 +20,7 @@
     "check-deps": "lerna run check-deps --parallel",
     "check-format": "./scripts/format-check.sh",
     "format": "./scripts/format-fix.sh",
-    "lint:ts": "eslint examples/ test/ && lerna run lint --parallel",
+    "lint:ts": "eslint examples/ __tests__/ && lerna run lint --parallel",
     "lint:ts-fix": "npx lint --fix",
     "lint:css": "stylelint 'packages/**/*.{css,less}'",
     "lint:css-fix": "stylelint --fix 'packages/**/*.{css,less}'",
