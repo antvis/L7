@@ -1,0 +1,23 @@
+.labelclass {
+  position: absolute;
+  display: inline;
+  cursor: pointer;
+  background: rgb(255, 228, 120);
+  border: solid 2px #fff;
+  padding: 4px;
+  white-space: nowrap;
+  font:
+    bold 12px/18px arial,
+    sans-serif;
+  color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  line-height: 30px;
+  /* opacity: 0.7; */
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

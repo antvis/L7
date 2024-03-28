@@ -1,0 +1,23 @@
+{
+  "title": {
+    "zh": "第三方引擎",
+    "en": "other engine"
+  },
+  "demos": [
+    {
+      "filename": "amap_ant.js",
+      "title": "高德地图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*mjmxT7DaVQgAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "space_click.js",
+      "title": "点击建筑",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ilK5R4SidkMAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "basic_geometry.js",
+      "title": "基础图形与光照",
+      "screenshot": "https://github.com/antvis/L7/assets/58084743/c22afe38-4d67-4577-a229-5b329b2bd5ef"
+    }
+  ]
+}

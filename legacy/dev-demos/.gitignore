@@ -1,0 +1,10 @@
+/node_modules
+/dist
+/docs-dist
+.dumi/tmp
+.dumi/tmp-production
+.umi-production/
+.umi/
+.DS_Store
+.vscode
+.idea

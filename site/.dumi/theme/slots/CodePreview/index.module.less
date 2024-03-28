@@ -1,0 +1,53 @@
+.preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  padding: 24px;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    :global(.ant-page-header) {
+      padding-left: 0;
+    }
+  }
+
+  .content {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+
+    .playgroundScriptContainer,
+    .playgroundCodeContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      :global(.playgroundCodeContainer) {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      :global(#container) {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    // 盖在 DEMO 运行的 container 上
+    .result {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      background: #fff;
+    }
+  }
+}

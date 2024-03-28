@@ -38,10 +38,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   };
   protected currentStyle: any = 'normal';
   // 事件回调代理
-  protected evtCbProxyMap: Map<
-    string,
-    Map<(...args: any) => any, (...args: any) => any>
-  > = new Map();
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
 
   public getMap() {
     return this.map as any as BMapGL.Map & {
@@ -201,12 +198,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
     // 对事件对象的经纬度进行统一处理l7需要的
     const handleProxy = (...args: any[]) => {
-      if (
-        args[0] &&
-        typeof args[0] === 'object' &&
-        !args[0].lngLat &&
-        !args[0].lnglat
-      ) {
+      if (args[0] && typeof args[0] === 'object' && !args[0].lngLat && !args[0].lnglat) {
         args[0].lngLat = args[0].latlng || args[0].latLng;
       }
       handle(...args);
@@ -264,15 +256,9 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       const originCenter = this.getCenter();
       const padding = toPaddingOptions(options.padding);
       const px = this.lngLatToPixel([originCenter.lng, originCenter.lat]);
-      const offsetPx = [
-        (padding.right - padding.left) / 2,
-        (padding.bottom - padding.top) / 2,
-      ];
+      const offsetPx = [(padding.right - padding.left) / 2, (padding.bottom - padding.top) / 2];
 
-      const newCenter = this.pixelToLngLat([
-        px.x - offsetPx[0],
-        px.y - offsetPx[1],
-      ]);
+      const newCenter = this.pixelToLngLat([px.x - offsetPx[0], px.y - offsetPx[1]]);
       return newCenter;
     }
     const center = this.map.getCenter();
@@ -321,9 +307,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       return;
     }
 
-    const styleVal = Array.isArray(style)
-      ? style
-      : this.styleConfig[style] || style;
+    const styleVal = Array.isArray(style) ? style : this.styleConfig[style] || style;
 
     if (Array.isArray(styleVal)) {
       this.map.setMapStyleV2({
@@ -373,18 +357,12 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom + 1.75);
   }
 
-  public setCenter(
-    [lng, lat]: [number, number],
-    options?: ICameraOptions,
-  ): void {
+  public setCenter([lng, lat]: [number, number], options?: ICameraOptions): void {
     let newCenter = { lng, lat };
     if (options?.padding) {
       const padding = toPaddingOptions(options.padding);
       const px = this.lngLatToPixel([lng, lat]);
-      const offsetPx = [
-        (padding.right - padding.left) / 2,
-        (padding.bottom - padding.top) / 2,
-      ];
+      const offsetPx = [(padding.right - padding.left) / 2, (padding.bottom - padding.top) / 2];
       newCenter = this.pixelToLngLat([px.x + offsetPx[0], px.y + offsetPx[1]]);
     }
     this.getMap().setCenter(new BMapGL.Point(newCenter.lng, newCenter.lat));
@@ -403,9 +381,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     (Object.keys(option) as Array<keyof IStatusOptions>).map((status) => {
       switch (status) {
         case 'doubleClickZoom':
-          option.doubleClickZoom
-            ? map.enableDoubleClickZoom()
-            : map.disableDoubleClickZoom();
+          option.doubleClickZoom ? map.enableDoubleClickZoom() : map.disableDoubleClickZoom();
           break;
         case 'dragEnable':
           option.dragEnable ? map.enableDragging() : map.disableDragging();
@@ -414,9 +390,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
           option.keyboardEnable ? map.enableKeyboard() : map.disableKeyboard();
           break;
         case 'resizeEnable':
-          option.resizeEnable
-            ? map.enableAutoResize()
-            : map.disableAutoResize();
+          option.resizeEnable ? map.enableAutoResize() : map.disableAutoResize();
           break;
         case 'rotateEnable':
           if (option.rotateEnable) {
@@ -450,16 +424,11 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
   // coordinates methods
   public meterToCoord(center: [number, number], outer: [number, number]) {
-    const metreDistance = this.getMap().getDistance(
-      new BMapGL.Point(...center),
-      new BMapGL.Point(...outer),
-    );
+    const metreDistance = this.getMap().getDistance(new BMapGL.Point(...center), new BMapGL.Point(...outer));
 
     const [x1, y1] = this.lngLatToCoord(center);
     const [x2, y2] = this.lngLatToCoord(outer);
-    const coordDistance = Math.sqrt(
-      Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2),
-    );
+    const coordDistance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
     return coordDistance / metreDistance;
   }
@@ -486,9 +455,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public lngLatToContainer([lng, lat]: [number, number]): IPoint {
-    const overlayPixel = this.getMap().pointToOverlayPixel(
-      new BMapGL.Point(lng, lat),
-    );
+    const overlayPixel = this.getMap().pointToOverlayPixel(new BMapGL.Point(lng, lat));
     return {
       x: overlayPixel.x,
       y: overlayPixel.y,
@@ -508,10 +475,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     );
   }
 
-  public lngLatToMercator(
-    [lng, lat]: [number, number],
-    altitude: number,
-  ): IMercator {
+  public lngLatToMercator([lng, lat]: [number, number], altitude: number): IMercator {
     const [McLng, McLat] = this.getMap().lnglatToMercator(lng, lat);
     return {
       x: McLng,
@@ -529,16 +493,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     const flat = this.viewport.projectFlat(lnglat);
     const modelMatrix = mat4.create();
 
-    mat4.translate(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(flat[0], flat[1], altitude),
-    );
-    mat4.scale(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(scale[0], scale[1], scale[2]),
-    );
+    mat4.translate(modelMatrix, modelMatrix, vec3.fromValues(flat[0], flat[1], altitude));
+    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(scale[0], scale[1], scale[2]));
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);

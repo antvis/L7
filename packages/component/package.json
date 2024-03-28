@@ -1,33 +1,31 @@
 {
   "name": "@antv/l7-component",
   "version": "2.21.1",
-  "description": "",
-  "license": "ISC",
-  "author": "lzxue",
+  "description": "Component for L7",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "sideEffects": true,
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
     "lib",
-    "es",
-    "README.md"
+    "es"
   ],
   "scripts": {
-    "build": "father build",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
+    "dev": "father dev",
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "lint": "eslint src __tests__",
+    "clean": "rimraf dist es lib",
+    "prebuild": "npm run less",
     "less": "lessc src/css/index.less src/css/index.css",
-    "lint:ts": "run-p -c lint:ts-*",
-    "sync": "tnpm sync",
-    "test": "umi-test --passWithNoTests",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "sync": "tnpm sync"
   },
   "dependencies": {
     "@antv/l7-core": "2.21.1",
     "@antv/l7-utils": "2.21.1",
+    "@antv/l7-layers": "2.21.1",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "supercluster": "^7.0.0"
@@ -40,6 +38,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
+  }
 }

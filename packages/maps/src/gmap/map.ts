@@ -31,10 +31,7 @@ const EventMap: {
 export default class TMapService extends BaseMapService<any> {
   // @ts-ignore
   protected viewport: IViewport = null;
-  protected evtCbProxyMap: Map<
-    string,
-    Map<(...args: any) => any, (...args: any) => any>
-  > = new Map();
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
 
   public handleCameraChanged = () => {
     this.emit('mapchange');
@@ -121,11 +118,7 @@ export default class TMapService extends BaseMapService<any> {
     // 空闲时间
     google.maps.event.addListener(this.map, 'idle', this.handleCameraChanged);
 
-    google.maps.event.addListener(
-      this.map,
-      'zoom_changed',
-      this.handleCameraChanged,
-    );
+    google.maps.event.addListener(this.map, 'zoom_changed', this.handleCameraChanged);
 
     this.handleCameraChanged();
   }
@@ -171,12 +164,7 @@ export default class TMapService extends BaseMapService<any> {
         }
 
         const handleProxy = (...args: any[]) => {
-          if (
-            args[0] &&
-            typeof args[0] === 'object' &&
-            !args[0].lngLat &&
-            !args[0].lnglat
-          ) {
+          if (args[0] && typeof args[0] === 'object' && !args[0].lngLat && !args[0].lnglat) {
             args[0].lngLat = args[0].latlng || args[0].latLng;
           }
           handle(...args);
@@ -324,10 +312,7 @@ export default class TMapService extends BaseMapService<any> {
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
     const [sw, ne] = bound;
 
-    const bounds = new google.maps.LatLngBounds(
-      { lat: sw[1], lng: sw[0] },
-      { lat: ne[1], lng: ne[0] },
-    );
+    const bounds = new google.maps.LatLngBounds({ lat: sw[1], lng: sw[0] }, { lat: ne[1], lng: ne[0] });
     this.map.fitBounds(bounds, fitBoundsOptions);
   }
 
@@ -375,43 +360,28 @@ export default class TMapService extends BaseMapService<any> {
   }
 
   // coordinates methods
-  public meterToCoord(
-    [centerLon, centerLat]: [number, number],
-    [outerLon, outerLat]: [number, number],
-  ) {
+  public meterToCoord([centerLon, centerLat]: [number, number], [outerLon, outerLat]: [number, number]) {
     // @ts-ignore
     // https://developers.google.com/maps/documentation/javascript/reference/geometry?hl=zh-cn#spherical.computeDistanceBetween
-    const metreDistance = google.maps.geometry.spherical.computeDistanceBetween(
-      [
-        new google.maps.LatLng(centerLat, centerLon),
+    const metreDistance = google.maps.geometry.spherical.computeDistanceBetween([
+      new google.maps.LatLng(centerLat, centerLon),
 
-        new google.maps.LatLng(outerLat, outerLon),
-      ],
-    );
+      new google.maps.LatLng(outerLat, outerLon),
+    ]);
 
     const [x1, y1] = this.lngLatToCoord!([centerLon, centerLat]);
     const [x2, y2] = this.lngLatToCoord!([outerLon, outerLat]);
-    const coordDistance = Math.sqrt(
-      Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2),
-    );
+    const coordDistance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
     return coordDistance / metreDistance;
   }
 
   public pixelToLngLat([x, y]: Point): ILngLat {
     const { lng: clng, lat: clat } = this.map.getCenter();
-    const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([
-      clng(),
-      clat(),
-    ]);
-    const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer(
-      [clng(), clat()],
-    );
+    const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([clng(), clat()]);
+    const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer([clng(), clat()]);
     const { lng, lat } = this.map.unprojectFromContainer(
-      new TMap.Point(
-        centerContainerX + (x - centerPixelX),
-        centerContainerY + (y - centerPixelY),
-      ),
+      new google.maps.Point(centerContainerX + (x - centerPixelX), centerContainerY + (y - centerPixelY)),
     );
     return this.containerToLngLat([lng, lat]);
   }
@@ -430,9 +400,7 @@ export default class TMapService extends BaseMapService<any> {
 
   public lngLatToContainer([lng, lat]: [number, number]): IPoint {
     const latLng = new google.maps.LatLng(lat, lng);
-    const pixel = this.map
-      .getProjection()
-      ?.fromLatLngToContainerPixel?.(latLng);
+    const pixel = this.map.getProjection()?.fromLatLngToContainerPixel?.(latLng);
     return { x: pixel.x, y: pixel.y };
   }
 
@@ -450,16 +418,9 @@ export default class TMapService extends BaseMapService<any> {
     );
   }
 
-  public lngLatToMercator(
-    lnglat: [number, number],
-    altitude: number,
-  ): IMercator {
+  public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     // Use built in mercator tools due to Tencent not provided related methods
-    const {
-      x = 0,
-      y = 0,
-      z = 0,
-    } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
   }
 
@@ -473,16 +434,8 @@ export default class TMapService extends BaseMapService<any> {
 
     const modelMatrix = mat4.create();
 
-    mat4.translate(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(flat[0], flat[1], altitude),
-    );
-    mat4.scale(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(scale[0], scale[1], scale[2]),
-    );
+    mat4.translate(modelMatrix, modelMatrix, vec3.fromValues(flat[0], flat[1], altitude));
+    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(scale[0], scale[1], scale[2]));
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);

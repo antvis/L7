@@ -1,0 +1,33 @@
+{
+  "title": {
+    "zh": "中文分类",
+    "en": "Category"
+  },
+  "demos": [
+    {
+      "filename": "scatter.js",
+      "title": "散点图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hH8lT6AWcqEAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "scatter_style_map.js",
+      "title": "样式映射散点",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*F_QoSr-W0BwAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "blur.js",
+      "title": "模糊点",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*v7v6SacA_5AAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "animatepoint.js",
+      "title": "水波散点",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*N7KDR4kfIDQAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "radarpoint.js",
+      "title": "雷达图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*nfAwRaTOYj0AAAAAAAAAAAAAARQnAQ"
+    }
+  ]
+}

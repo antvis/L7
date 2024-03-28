@@ -14,7 +14,7 @@ export default class MapMouseEvent extends Event {
    * @private
    */
 
-  public type:
+  public declare type:
     | 'mousedown'
     | 'mouseup'
     | 'click'
@@ -51,12 +51,7 @@ export default class MapMouseEvent extends Event {
   /**
    * @private
    */
-  constructor(
-    type: string,
-    map: Map | EarthMap,
-    originalEvent: MouseEvent,
-    data: any = {},
-  ) {
+  constructor(type: string, map: Map | EarthMap, originalEvent: MouseEvent, data: any = {}) {
     const point = DOM.mousePos(map.getCanvasContainer(), originalEvent);
     const lngLat = map.unproject(point);
     super(type, merge({ point, lngLat, originalEvent }, data));

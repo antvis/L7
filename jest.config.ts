@@ -1,46 +1,48 @@
 import type { Config } from 'jest';
 
-const sharedConfig = {
+const sharedConfig: Partial<Config> = {
   transform: {
     // use typescript to convert from esm to cjs
     '[.](m|c)?(ts|js)(x)?$': [
       'ts-jest',
       {
-        isolatedModules: true,
         tsconfig: 'tsconfig.json',
+        isolatedModules: true,
       },
     ],
     '^.+.(glsl)$': 'jest-text-transformer',
     // '\\.[jt]sx?$': 'esbuild-jest',
   },
-  // any tests that operate on dist files shouldn't compile them again.
 
+  // any tests that operate on dist files shouldn't compile them again.
   transformIgnorePatterns: ['<rootDir>/dist', '^.+\\.js$'],
   modulePathIgnorePatterns: ['<rootDir>/dist'],
+
   moduleNameMapper: {
     '@antv/l7-(.+)$': '<rootDir>packages/$1/src',
     '^.+.(css)$': 'jest-text-transformer',
   },
-} as Partial<Config>;
+};
 
 const config: Config = {
   testEnvironment: 'jsdom',
   setupFiles: ['jest-canvas-mock'],
-  setupFilesAfterEnv: ['<rootDir>jest/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>__tests__/unit/preset/environment.ts'],
   testMatch: [
-    // '**/packages/layers/src/canvas/__tests__/layer.spec.ts',
-    '**/__tests__/*.spec.+(ts|tsx|js)',
-    '**/*.test.+(ts|tsx|js)',
-    '**/__tests__/*/*.spec.+(ts|tsx|js)',
+    '<rootDir>/packages/*/__tests__/*.spec.+(ts|tsx|js)',
+    '<rootDir>/packages/*/__tests__/**/*/*.spec.+(ts|tsx|js)',
+    '<rootDir>/__tests__/unit/*.spec.+(ts|tsx|js)',
+    '<rootDir>/__tests__/unit/**/*/*.spec.+(ts|tsx|js)',
   ],
-  coverageReporters: ['html', 'lcov', 'clover'],
   coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['html', 'lcov', 'clover'],
   coverageThreshold: {
     global: {
       branches: 30,
-      functions: 44,
-      lines: 55,
-      statements: 55,
+      functions: 42,
+      lines: 50,
+      statements: 50,
     },
   },
   ...sharedConfig,

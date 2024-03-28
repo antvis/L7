@@ -14,7 +14,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     'offsets',
     'stroke',
   ];
-  public defaultSourceConfig: {
+  public declare defaultSourceConfig: {
     data: [];
     options: {
       parser: {
@@ -29,8 +29,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   }
 
   public getModelType(): PolygonModelType {
-    const shapeAttribute =
-      this.styleAttributeService.getLayerStyleAttribute('shape');
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute('shape');
     const shape = shapeAttribute?.scale?.field as PolygonModelType;
     if (shape === 'fill' || !shape) {
       return 'fill';

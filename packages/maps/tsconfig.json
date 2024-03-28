@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "@types/amap-js-api",
+      "@types/bmapgl",
+      "@types/google.maps",
+      "@map-component/tmap-types"
+    ]
+  }
+}

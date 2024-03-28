@@ -1,44 +1,34 @@
 {
   "name": "@antv/l7-map",
   "version": "2.21.1",
-  "description": "l7 map",
+  "description": "L7 Map",
   "keywords": [],
-  "author": "thinkinggis <lzx199065@gmail.com>",
-  "license": "ISC",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "unpkg": "dist/l7-map.js",
-  "types": "es/index.d.ts",
-  "sideEffects": true,
-  "files": [
-    "dist",
-    "lib",
-    "es",
-    "README.md"
-  ],
-  "publishConfig": {
-    "access": "public"
+  "homepage": "https://github.com/antvis/L7#readme",
+  "bugs": {
+    "url": "https://github.com/antvis/L7/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antvis/L7.git"
   },
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
+  "sideEffects": true,
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "files": [
+    "lib",
+    "es"
+  ],
   "scripts": {
-    "tsc": "tsc --project tsconfig.build.json",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "build": "father build",
-    "lint:ts": "run-p -c lint:ts-*",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "sync": "tnpm sync",
-    "test": "umi-test --passWithNoTests",
-    "test-live": "umi-test --watch"
+    "dev": "father dev",
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "lint": "eslint src __tests__",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
-  "bugs": {
-    "url": "https://github.com/antvis/L7/issues"
-  },
-  "homepage": "https://github.com/antvis/L7#readme",
   "dependencies": {
     "@antv/l7-utils": "2.21.1",
     "@babel/runtime": "^7.7.7",
@@ -48,5 +38,7 @@
     "gl-matrix": "^3.1.0",
     "lodash-es": "^4.17.21"
   },
-  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
+  "publishConfig": {
+    "access": "public"
+  }
 }

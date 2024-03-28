@@ -2,8 +2,8 @@
   "name": "@antv/l7-layers",
   "version": "2.21.1",
   "description": "L7's collection of built-in layers",
-  "license": "ISC",
-  "author": "xiaoiver",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "sideEffects": [
     "./es/index.js"
   ],
@@ -11,19 +11,16 @@
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
-    "dist",
     "lib",
-    "es",
-    "README.md"
+    "es"
   ],
   "scripts": {
-    "build": "father build",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "sync": "tnpm sync",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "dev": "father dev",
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "lint": "eslint src __tests__",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
@@ -61,6 +58,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
+  }
 }
