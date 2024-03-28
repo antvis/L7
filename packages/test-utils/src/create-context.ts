@@ -1,23 +1,24 @@
+import type createContext from 'gl';
 import gl from 'gl';
 
-// borrow from regl
-// @see https://github.com/regl-project/regl/blob/gh-pages/test/util/create-context.js#L28
-const CONTEXT = gl(400, 300, { preserveDrawingBuffer: true });
-// @ts-ignore
-const RESIZE = CONTEXT.getExtension('STACKGL_resize_drawingbuffer');
+let CONTEXT: WebGLRenderingContext & createContext.StackGLExtension;
 
-// @ts-ignore
-export default function (width: number, height: number) {
-  resize(width, height);
+export function createGLContext(width: number, height: number) {
+  if (CONTEXT) return CONTEXT;
+  // borrow from regl
+  // @see https://github.com/regl-project/regl/blob/gh-pages/test/util/create-context.js#L28
+  CONTEXT = gl(width, height, { preserveDrawingBuffer: true });
   return CONTEXT;
 }
 
-export function resize(width: number, height: number) {
+export function resizeGL(width: number, height: number) {
+  // @note: is not support when run CI in ubuntu
+  const RESIZE = CONTEXT.getExtension('STACKGL_resize_drawingbuffer');
   if (RESIZE) {
     RESIZE.resize(width, height);
   }
 }
 
-export function destroy() {
+export function destroGLContexty() {
   //
 }

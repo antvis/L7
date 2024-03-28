@@ -7,8 +7,7 @@ on:
 
 jobs:
   unit-test:
-    # TODO: change to ubuntu-latest, gl CONTEXT.getExtension('STACKGL_resize_drawingbuffer') must in macos-latest
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]

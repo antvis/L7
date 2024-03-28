@@ -1,19 +1,17 @@
 import { gl } from '@antv/l7-core';
-import { createContext } from '@antv/l7-test-utils';
 import regl from 'regl';
 import quad from '../../../core/src/shaders/post-processing/quad.glsl';
 import ReglAttribute from '../../src/regl/ReglAttribute';
 import ReglBuffer from '../../src/regl/ReglBuffer';
 import ReglModel from '../../src/regl/ReglModel';
 import checkPixels from './utils/check-pixels';
+import { glContext } from './utils/gl-context';
 
 describe('ReglAttribute', () => {
-  let context;
   let reGL: regl.Regl;
 
   beforeEach(() => {
-    context = createContext(1, 1);
-    reGL = regl(context);
+    reGL = regl(glContext);
   });
 
   it('should initialize without `size`', () => {

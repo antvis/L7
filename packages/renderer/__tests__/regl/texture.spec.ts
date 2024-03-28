@@ -1,5 +1,4 @@
 import { gl } from '@antv/l7-core';
-import { createContext } from '@antv/l7-test-utils';
 
 import regl from 'regl';
 import copy from '../../../core/src/shaders/post-processing/copy.glsl';
@@ -10,14 +9,13 @@ import ReglModel from '../../src/regl/ReglModel';
 import ReglTexture2D from '../../src/regl/ReglTexture2D';
 import checkPixels from './utils/check-pixels';
 import globalDefaultprecision from './utils/default-precision';
+import { glContext } from './utils/gl-context';
 
 describe('ReglTexture', () => {
-  let context;
   let reGL: regl.Regl;
 
   beforeEach(() => {
-    context = createContext(1, 1);
-    reGL = regl(context);
+    reGL = regl(glContext);
   });
 
   it('should initialize with `data`', () => {

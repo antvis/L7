@@ -1,5 +1,4 @@
 import { gl } from '@antv/l7-core';
-import { createContext } from '@antv/l7-test-utils';
 
 import regl from 'regl';
 import copy from '../../../core/src/shaders/post-processing/copy.glsl';
@@ -9,15 +8,14 @@ import ReglAttribute from '../../src/regl/ReglAttribute';
 import ReglBuffer from '../../src/regl/ReglBuffer';
 import checkPixels from './utils/check-pixels';
 import globalDefaultprecision from './utils/default-precision';
+import { glContext } from './utils/gl-context';
 
 describe('ReglRendererService', () => {
-  let context;
   let reGL: regl.Regl;
   const rendererService = new ReglRendererService();
 
   beforeEach(() => {
-    context = createContext(1, 1);
-    reGL = regl(context);
+    reGL = regl(glContext);
     // @ts-ignore
     rendererService.gl = reGL;
   });

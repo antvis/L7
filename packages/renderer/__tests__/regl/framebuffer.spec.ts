@@ -1,5 +1,4 @@
 import { gl } from '@antv/l7-core';
-import { createContext } from '@antv/l7-test-utils';
 
 import regl from 'regl';
 import quad from '../../../core/src/shaders/post-processing/quad.glsl';
@@ -11,14 +10,13 @@ import ReglModel from '../../src/regl/ReglModel';
 import ReglRenderbuffer from '../../src/regl/ReglRenderbuffer';
 import ReglTexture2D from '../../src/regl/ReglTexture2D';
 import checkPixels from './utils/check-pixels';
+import { glContext } from './utils/gl-context';
 
 describe('ReglFramebuffer', () => {
-  let context;
   let reGL: regl.Regl;
 
   beforeEach(() => {
-    context = createContext(1, 1);
-    reGL = regl(context);
+    reGL = regl(glContext);
   });
 
   it('should initialize correctly', () => {

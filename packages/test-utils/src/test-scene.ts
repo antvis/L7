@@ -2,7 +2,7 @@ import type { IMapOptions } from '@antv/l7-map';
 import { Map } from '@antv/l7-maps';
 import { Scene } from '@antv/l7-scene';
 import regl from 'regl';
-import createContext from './create-context';
+import { createGLContext } from './create-context';
 
 export function TestScene(options?: Partial<IMapOptions>) {
   const el = document.createElement('div');
@@ -22,9 +22,9 @@ export function TestScene(options?: Partial<IMapOptions>) {
     right: width,
     bottom: height,
     left: 0,
-  }))
+  }));
 
-  const context = createContext(width, height);
+  const context = createGLContext(width, height);
   const reGL = regl({
     gl: context,
     attributes: {
@@ -53,6 +53,7 @@ export function TestScene(options?: Partial<IMapOptions>) {
   });
   const scene = new Scene({
     id: el,
+    // TODO: switch to device support canvas
     gl: reGL,
     map: new Map({
       style: 'dark',
