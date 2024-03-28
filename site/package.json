@@ -54,7 +54,7 @@
     "react-use": "^17.2.4",
     "read-markdown": "^1.0.2",
     "shp-write": "^0.3.2",
-    "three": "0.115.0",
+    "three": "0.125.0",
     "tokml": "^0.4.0",
     "topojson": "^3.0.2"
   },
