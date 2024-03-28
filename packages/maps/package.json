@@ -1,35 +1,32 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.20.20",
-  "description": "",
-  "license": "ISC",
-  "author": "xiaoiver",
-  "sideEffects": false,
+  "version": "2.21.1",
+  "description": "Maps for L7",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "main": "lib/index.js",
-  "unpkg": "dist/l7-maps.min.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
-    "dist",
     "lib",
-    "es",
-    "typings/index.d.ts",
-    "README.md"
+    "es"
   ],
   "scripts": {
-    "build": "father build",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "sync": "tnpm sync",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "dev": "father dev",
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "lint": "eslint src __tests__",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@antv/l7-core": "2.20.20",
-    "@antv/l7-map": "2.20.20",
-    "@antv/l7-utils": "2.20.20",
+    "@antv/l7-core": "2.21.1",
+    "@antv/l7-map": "2.21.1",
+    "@antv/l7-utils": "2.21.1",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
@@ -44,10 +41,9 @@
     "@types/google.maps": "^3.54.10",
     "@types/mapbox-gl": "^1.11.2",
     "@types/viewport-mercator-project": "^6.1.0",
-    "tmap-types-temporary": "0.1.4"
+    "@map-component/tmap-types": "^0.1.3"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "684ba4eb806a798713496d3fc0b4d1e17517dc31"
+  }
 }

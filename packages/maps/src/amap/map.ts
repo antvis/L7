@@ -5,7 +5,7 @@
 import type { IMapCamera, IMapService, IViewport } from '@antv/l7-core';
 import { CoordinateSystem } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
-import type { IAMapEvent, IAMapInstance } from '../../typings/index';
+import type { IAMapEvent, IAMapInstance } from '../types';
 import AMapBaseService from '../utils/amap/AMapBaseService';
 import AMapLoader from '../utils/amaploader';
 import Viewport from './Viewport';
@@ -28,10 +28,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 /**
  * AMapService
  */
-export default class AMapService
-  extends AMapBaseService
-  implements IMapService<AMap.Map & IAMapInstance>
-{
+export default class AMapService extends AMapBaseService implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = 'GAODE1.x';
   protected viewport: IViewport;
 
@@ -45,16 +42,8 @@ export default class AMapService
     // @ts-ignore
     const modelMatrix = mat4.create();
 
-    mat4.translate(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(flat[0], flat[1], altitude),
-    );
-    mat4.scale(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(scale[0], scale[1], scale[2]),
-    );
+    mat4.translate(modelMatrix, modelMatrix, vec3.fromValues(flat[0], flat[1], altitude));
+    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(scale[0], scale[1], scale[2]));
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
@@ -86,9 +75,7 @@ export default class AMapService
             resolve();
           }, 30);
         } else {
-          this.$mapContainer = this.creatMapContainer(
-            id as string | HTMLDivElement,
-          );
+          this.$mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
           const mapConstructorOptions = {
             mapStyle: this.getMapStyleValue(style as string),
             zooms: [minZoom, maxZoom],
@@ -153,10 +140,7 @@ export default class AMapService
   public meterToCoord(center: [number, number], outer: [number, number]) {
     // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter
-    const meterDis = AMap.GeometryUtil.distance(
-      new AMap.LngLat(...center),
-      new AMap.LngLat(...outer),
-    );
+    const meterDis = AMap.GeometryUtil.distance(new AMap.LngLat(...center), new AMap.LngLat(...outer));
 
     // Tip: 三维世界坐标距离
     const [x1, y1] = this.lngLatToCoord(center);
@@ -174,9 +158,7 @@ export default class AMapService
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.getContainer()?.getElementsByClassName(
-      'amap-layer',
-    )[0] as HTMLCanvasElement;
+    const renderCanvas = this.getContainer()?.getElementsByClassName('amap-layer')[0] as HTMLCanvasElement;
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)
@@ -189,8 +171,7 @@ export default class AMapService
   }
 
   protected handleCameraChanged = (e: IAMapEvent): void => {
-    const { fov, near, far, height, pitch, rotation, aspect, position } =
-      e.camera;
+    const { fov, near, far, height, pitch, rotation, aspect, position } = e.camera;
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');
@@ -214,9 +195,7 @@ export default class AMapService
       const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
       // set coordinate system
       if (this.viewport.getZoom() > offsetZoom) {
-        this.coordinateSystemService.setCoordinateSystem(
-          CoordinateSystem.P20_OFFSET,
-        );
+        this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20_OFFSET);
       } else {
         this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
       }

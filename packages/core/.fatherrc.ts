@@ -1,29 +1,10 @@
-import { string } from "rollup-plugin-string";
-export default {
-  // more father 4 config:   https://github.com/umijs/father/blob/master/docs/config.md
-  esm: {
-    output:'es',
-  },
-  cjs: {
-    output:'lib',
-  },
-  platform:'browser',
-  autoprefixer: {
-    browsers: ['IE 11', 'last 2 versions'],
-  },
-  extraBabelPlugins: [
-    // 开发模式下以原始文本引入，便于调试
-    [
-      // import glsl as raw text
-      'babel-plugin-inline-import',
-      {
-        extensions: [
-          '.glsl'
-        ]
-      }
-    ],
-    [
-      'transform-import-css-l7'
-    ],
-  ],
-};
+import { defineConfig } from 'father';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+export default defineConfig({
+  extends: '../../.fatherrc.base.ts',
+  // 使用 babel 编译 esm/cjs 产物，启用 babel-plugin-inline-import 插件完成 glsl 内联打包
+  esm: { transformer: 'babel' },
+  cjs: isProduction ? { transformer: 'babel' } : undefined,
+});

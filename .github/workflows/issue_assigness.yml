@@ -14,5 +14,5 @@ jobs:
           actions: 'add-assignees'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-          assignees: 'lzxue,heiyexing,lvise'
+          assignees: 'lzxue,heiyexing,lvisei'
           random-to: 1

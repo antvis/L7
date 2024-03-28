@@ -1,32 +1,29 @@
 {
   "name": "@antv/l7-source",
-  "version": "2.20.20",
+  "version": "2.21.1",
   "description": "",
-  "license": "ISC",
-  "author": "lzxue",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "sideEffects": true,
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
     "lib",
-    "es",
-    "README.md"
+    "es"
   ],
   "scripts": {
-    "build": "father build",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "sync": "tnpm sync",
-    "test": "umi-test --passWithNoTests",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "dev": "father dev",
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "lint": "eslint src __tests__",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-core": "2.20.20",
-    "@antv/l7-utils": "2.20.20",
+    "@antv/l7-core": "2.21.1",
+    "@antv/l7-utils": "2.21.1",
     "@babel/runtime": "^7.7.7",
     "@mapbox/geojson-rewind": "^0.5.2",
     "@mapbox/vector-tile": "^1.3.1",
@@ -50,6 +47,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "f63aea6c9140aac41f1e842fd7fef34502bfeec5"
+  }
 }

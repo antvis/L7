@@ -1,0 +1,23 @@
+{
+  "title": {
+    "zh": "栅格图层",
+    "en": "Gallery"
+  },
+  "demos": [
+    {
+      "filename": "radar.js",
+      "title": "雷达图",
+      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*JDO-R5XU7xwAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "image.js",
+      "title": "矩形图片范围",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*grFnRpfZJYkAAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "image-coord.js",
+      "title": "非矩形范围",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*6HwASIr0HmIAAAAAAAAAAAAADmJ7AQ/original"
+    }
+  ]
+}

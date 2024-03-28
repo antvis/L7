@@ -1,43 +1,39 @@
 {
   "name": "@antv/l7-scene",
-  "version": "2.20.20",
+  "version": "2.21.1",
   "description": "",
-  "license": "ISC",
-  "author": "xiaoiver",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "sideEffects": false,
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
     "lib",
-    "es",
-    "README.md"
+    "es"
   ],
   "scripts": {
-    "build": "father build",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "sync": "tnpm sync",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "dev": "father dev",
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "lint": "eslint src __tests__",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7-component": "2.20.20",
-    "@antv/l7-core": "2.20.20",
-    "@antv/l7-layers": "2.20.20",
-    "@antv/l7-maps": "2.20.20",
-    "@antv/l7-renderer": "2.20.20",
-    "@antv/l7-utils": "2.20.20",
+    "@antv/l7-component": "2.21.1",
+    "@antv/l7-core": "2.21.1",
+    "@antv/l7-layers": "2.21.1",
+    "@antv/l7-maps": "2.21.1",
+    "@antv/l7-renderer": "2.21.1",
+    "@antv/l7-utils": "2.21.1",
     "@babel/runtime": "^7.7.7",
-    "eventemitter3": "^4.0.7",
-    "mapbox-gl": "^1.2.1"
+    "eventemitter3": "^4.0.7"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.20.20"
+    "@antv/l7-test-utils": "2.21.1"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
+  }
 }

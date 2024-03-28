@@ -89,7 +89,8 @@ export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
 export interface IRasterCfg {
   format?: IRasterFormat;
   operation?: IBandsOperation;
-  extent: [number, number, number, number];
+  extent?: [number, number, number, number];
+  coordinates?:[[number,number],[number,number],[number,number],[number,number]];// 非矩形
   width: number;
   height: number;
   max: number;

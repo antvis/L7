@@ -9,7 +9,7 @@ export default class MapTouchEvent extends Event {
   /**
    * The event type.
    */
-  public type: 'touchstart' | 'touchend' | 'touchcancel';
+  public declare type: 'touchstart' | 'touchend' | 'touchcancel';
 
   /**
    * The `Map` object that fired the event.
@@ -55,10 +55,7 @@ export default class MapTouchEvent extends Event {
    * @private
    */
   constructor(type: string, map: Map | EarthMap, originalEvent: TouchEvent) {
-    const touches =
-      type === 'touchend'
-        ? originalEvent.changedTouches
-        : originalEvent.touches;
+    const touches = type === 'touchend' ? originalEvent.changedTouches : originalEvent.touches;
     const points = DOM.touchPos(map.getCanvasContainer(), touches);
     const lngLats = points.map((t: Point) => map.unproject(t));
     const point = points.reduce(

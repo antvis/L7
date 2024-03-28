@@ -78,7 +78,7 @@ export interface IParserCfg {
   y?: string;
   x1?: string;
   y1?: string;
-  coordinates?: string;
+  coordinates?: string | [number,number][];
   geometry?: string;
   [key: string]: any;
 }
@@ -93,7 +93,7 @@ export interface ISourceCFG {
   cluster?: boolean;
   clusterOptions?: Partial<IClusterOptions>;
   autoRender?: boolean;
-  parser?: IParserCfg | ITileParserCFG;
+  parser?: IParserCfg | ITileParserCFG
   transforms?: ITransform[];
 }
 export interface IClusterOptions {

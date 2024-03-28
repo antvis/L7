@@ -48,8 +48,8 @@ import {
   ILayerStage,
   globalConfigService,
 } from '@antv/l7-core';
-import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import type Source from '@antv/l7-source';
+import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { createPlugins } from '../plugins';
 import { BlendTypes } from '../utils/blend';
@@ -616,24 +616,32 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       options,
     };
     this.clusterZoom = 0;
-    
+
     return this;
   }
 
   public setData(data: any, options?: ISourceCFG) {
-    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
+
     if (this.inited) {
+      this.dataUpdatelog();
       this.layerSource.setData(data, options);
     } else {
       this.on('inited', () => {
+        this.dataUpdatelog();
         this.layerSource.setData(data, options);
+        
       });
     }
+    return this;
+  }
+  private dataUpdatelog(){
+    this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
     this.layerSource.once('update', () => {
       this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     });
-    return this;
+
   }
+
   public style(
     options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
   ): ILayer {
@@ -1172,7 +1180,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const scales = attribute?.scale?.scalers || [];
 
     return {
-      type: scales[0].option?.type,
+      type: scales[0]?.option?.type,
       field: attribute?.scale?.field,
       items: this.getLegendItems(name),
     };
@@ -1263,6 +1271,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
           this.encodedData,
           triangulation,
           styleOption,
+          this,
         );
 
       const uniformBuffers = [

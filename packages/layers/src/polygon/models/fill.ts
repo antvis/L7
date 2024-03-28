@@ -6,10 +6,9 @@ import {
   AttributeType,
   gl
 } from '@antv/l7-core';
-import { polygonFillTriangulation } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
-import { polygonTriangulationWithCenter } from '../../core/triangulation';
+import { polygonTriangulationWithCenter, polygonTriangulation } from '../../core/triangulation';
 import polygon_frag from '../shaders/fill/fill_frag.glsl';
 import polygon_linear_frag from '../shaders/fill/fill_linear_frag.glsl';
 import polygon_linear_vert from '../shaders/fill/fill_linear_vert.glsl';
@@ -123,7 +122,7 @@ export default class FillModel extends BaseModel {
         frag: polygon_frag,
         vert: polygon_vert,
         type: 'polygonFill',
-        triangulation: polygonFillTriangulation,
+        triangulation: polygonTriangulation,
       };
     }
   }

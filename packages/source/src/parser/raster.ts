@@ -1,13 +1,13 @@
 import type { IParserData } from '@antv/l7-core';
 import type { IRasterCfg, IRasterFileData, IRasterLayerData } from '../interface';
 import { bandsOperation } from '../utils/bandOperation/bands';
-import { isNumberArray } from '../utils/util';
-
+import { isNumberArray, extentToCoord } from '../utils/util';
 export default function raster(
   data: IRasterLayerData,
   cfg: IRasterCfg,
 ): IParserData {
-  const { extent, width, height, min, max, format, operation } = cfg;
+  const { extent = [121.168, 30.2828, 121.384, 30.4219]
+    , coordinates, width, height, min, max, format, operation } = cfg;
   let bandData;
   let rasterWidth;
   let rasterHeight;
@@ -25,6 +25,8 @@ export default function raster(
     bandData = bandsOperation(imageDataList, format, operation);
   }
 
+  const imageCoord = extentToCoord(coordinates,extent);
+
   const resultData = {
     _id: 1,
     dataArray: [
@@ -35,10 +37,7 @@ export default function raster(
         height: rasterHeight,
         min,
         max,
-        coordinates: [
-          [extent[0], extent[1]],
-          [extent[2], extent[3]],
-        ],
+        coordinates: imageCoord,
       },
     ],
   };

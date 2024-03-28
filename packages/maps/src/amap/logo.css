@@ -1,3 +1,6 @@
 .amap-logo{
  display: none !important;
 }
+.amap-overlays {
+  z-index: 3 !important;
+}

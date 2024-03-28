@@ -1,37 +1,34 @@
-export default {
-  // more father 4 config:   https://github.com/umijs/father/blob/master/docs/config.md
-  esm: {
-    output:'es'
+import type { IFatherConfig } from 'father';
+import { defineConfig } from 'father';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+const umdConfig: IFatherConfig['umd'] = {
+  name: 'L7Three',
+  output: {
+    path: './dist',
+    filename: 'l7-three.min.js',
   },
-  cjs: {
-    output:'lib'
+  platform: 'browser',
+  targets: { ie: 11 },
+  externals: {
+    '@antv/l7': 'L7',
+    three: 'Three',
   },
-  umd: {
-    output: 'dist',
-    externals: {
-      "@antv/l7": "L7",
-      "three": "Three"
-    },
+  chainWebpack(memo) {
+    // 关闭压缩方便调试，默认开启
+    // memo.optimization.minimize(false);
+
+    // 打包体积分析
+    // memo
+    //   .plugin('webpack-bundle-analyzer')
+    //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, [{ analyzerMode: 'static', openAnalyzer: false }]);
+
+    return memo;
   },
-  autoprefixer: {
-    browsers: ['IE 11', 'last 2 versions'],
-  },
-  extraBabelPresets: [
-    '@babel/preset-typescript'
-  ],
-  extraBabelPlugins: [
-    // 开发模式下以原始文本引入，便于调试
-    [
-      // import glsl as raw text
-      'babel-plugin-inline-import',
-      {
-        extensions: [
-          '.glsl'
-        ]
-      }
-    ],
-    [
-      'transform-import-css-l7'
-    ],
-  ],
 };
+
+export default defineConfig({
+  extends: '../../.fatherrc.base.ts',
+  umd: isProduction ? umdConfig : undefined,
+});

@@ -196,10 +196,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
           offset: bufferOffsetInBytes,
         });
         // size color 触发更新事件
-        layer?.emit(`legend:${attributeName}`, {
-          type: attributeName,
-          attr: attributeToUpdate,
-        });
+        layer?.emit(`legend:${attributeName}`, layer.getLegend(attributeName));
       }
     }
   }
@@ -208,6 +205,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     features: IEncodeFeature[],
     triangulation: Triangulation,
     styleOption: unknown,
+    layer?: ILayer,
   ): {
     attributes: {
       [attributeName: string]: IAttribute;
@@ -336,6 +334,15 @@ export default class StyleAttributeService implements IStyleAttributeService {
       elements,
       count: vecticesCount,
     };
+
+    Object.values(this.attributes)
+      .filter((attribute) => attribute.scale)
+      .forEach((attribute) => {
+        const attributeName = attribute.name;
+        // size color 触发更新事件
+        layer?.emit(`legend:${attributeName}`, layer.getLegend(attributeName));
+      });
+
     return this.attributesAndIndices;
   }
 

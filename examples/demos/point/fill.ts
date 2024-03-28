@@ -38,7 +38,8 @@ export function MapRender(option: { map: string; renderer: string }) {
             'vesica',
           ])
           .size('unit_price', [10, 25])
-          .active(true)
+          .active(false)
+          .select(true)
           .color('name', [
             '#5B8FF9',
             '#5CCEA1',
@@ -52,12 +53,6 @@ export function MapRender(option: { map: string; renderer: string }) {
           });
 
         scene.addLayer(pointLayer);
-        pointLayer.on('mousemove', (e) => {
-          console.log('mousemove', e);
-        })
-        pointLayer.on('click', (e) => {
-          console.log('click', e);
-        })
 
         if (window['screenshot']) {
           window['screenshot']();

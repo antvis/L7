@@ -1,0 +1,623 @@
+@import 'antd/es/style/themes/default.less';
+
+// 参考 yuque 右侧 tabOfContent 宽度
+@toc-width: 260px;
+
+.markdown {
+  font-size: 14px;
+  line-height: 2;
+
+  h1 {
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 30px;
+    font-family: Avenir, @font-family, sans-serif;
+    line-height: 38px;
+  }
+
+  h1:first-child {
+    margin-top: 8px;
+  }
+
+  h2 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    clear: both;
+    margin: 1em 0 0.3em;
+    font-weight: 500;
+    font-family: Avenir, @font-family, sans-serif;
+  }
+
+  h3 {
+    font-size: 20px;
+    margin-bottom: 4px;
+    font-weight: 600;
+    line-height: 30px;
+    border-bottom: 1px solid @border-color-split;
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  h5 {
+    font-size: 14px;
+  }
+
+  h6 {
+    font-size: 12px;
+  }
+
+  hr {
+    clear: both;
+    height: 1px;
+    margin: 56px 0;
+    background: @border-color-split;
+    border: 0;
+  }
+
+  p {
+    line-height: 32px;
+  }
+
+  p,
+  pre {
+    margin: 0.6em 0;
+  }
+
+  pre > code[class*='language-'] {
+    line-height: 1.8;
+  }
+
+  pre[class*='language-'] {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  code[class*='language-'] {
+    background: none;
+  }
+
+  code[class*='language-text'] {
+    white-space: break-spaces;
+    word-break: break-word;
+  }
+
+  code.language-sign,
+  pre.language-sign {
+    background: #e6f7ff;
+  }
+
+  pre.language-sign {
+    border: 1px solid #91d5ff;
+  }
+
+  :global(.gatsby-highlight-code-line) {
+    background-color: #f9f0ff;
+    border-left: 2px solid #873bf4;
+  }
+
+  .description {
+    opacity: 0.68;
+  }
+
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul:not(:global(.ant-skeleton-paragraph)) > li {
+    margin-left: 20px;
+    padding-left: 4px;
+    list-style-type: circle;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  ol > li {
+    margin-left: 20px;
+    padding-left: 4px;
+    list-style-type: decimal;
+  }
+
+  ul > li > p,
+  ol > li > p {
+    margin: 0.2em 0;
+  }
+
+  strong,
+  b {
+    font-weight: 500;
+  }
+
+  table {
+    width: 100%;
+    margin: 24px 0;
+    empty-cells: show;
+    border: 1px solid @border-color-split;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  table th {
+    color: #5c6b77;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  table th,
+  table td {
+    padding: 4px 12px;
+    text-align: left;
+    border: 1px solid @border-color-split;
+    line-height: 24px;
+  }
+
+  table img {
+    max-height: 100px;
+  }
+
+  table td:first-child {
+    width: 20%;
+    font-weight: 500;
+    background: #fcfcfc;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  blockquote {
+    margin: 0.5em 0;
+    padding-left: 0.8em;
+    color: @text-color-secondary;
+    font-size: 90%;
+    border-left: 4px solid @border-color-split;
+  }
+
+  blockquote p {
+    margin: 0;
+  }
+
+  > br,
+  > p > br {
+    clear: both;
+  }
+}
+
+.layout {
+  margin: 24px 0 32px;
+  :global {
+    .ant-layout-content {
+      background-color: #ffffff;
+    }
+  }
+}
+
+.main {
+  background-color: #ffffff;
+  width: calc(100% - @toc-width);
+  padding-left: 48px;
+  padding-right: 24px;
+  padding-bottom: 24px;
+  overflow: hidden;
+
+  .meta {
+    margin-bottom: 1.2em;
+  }
+
+  .contentReset() {
+    min-height: 400px;
+
+    > img,
+    > p > img {
+      max-width: 100%;
+      margin: 0.5em 0;
+    }
+
+    > br,
+    > p > br {
+      clear: both;
+    }
+  }
+
+  .content {
+    .contentReset;
+
+    > div {
+      .contentReset;
+    }
+  }
+}
+
+// reference yuque UI
+.toc {
+  width: @toc-width;
+  float: right;
+  font-size: 12px;
+  background: #fff;
+  max-height: 100vh;
+  overflow: hidden;
+
+  position: sticky;
+  top: 0;
+  padding: 8px 0;
+
+  ul > li {
+    list-style: none !important;
+    padding: 0 !important;
+    margin-left: 1em !important;
+
+    // 超出部分省略号显示
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+    a {
+      color: @text-color;
+    }
+  }
+}
+
+.sider {
+  width: 280px !important;
+  height: inherit;
+  background-color: #fff;
+
+  // menu 滚动
+  :global {
+    .ant-layout-sider-children {
+      overflow: hidden;
+
+      &:hover {
+        overflow-y: auto;
+      }
+    }
+  }
+}
+
+.affix {
+  background-color: #fff;
+  & > div {
+    height: 100%;
+  }
+}
+
+.menuIcon {
+  opacity: 0.6;
+  font-size: 16px !important;
+  position: relative;
+  top: 1px;
+  margin-right: 8px !important;
+}
+
+.menuDrawer {
+  :global(.drawer) {
+    z-index: 9;
+  }
+
+  :global(.ant-menu) {
+    border-right: 0;
+  }
+
+  .menuSwitch {
+    position: absolute;
+    top: 72px;
+    right: -40px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 0;
+    text-align: center;
+    line-height: 40px;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    border-radius: 0 4px 4px 0;
+  }
+}
+
+.gallery {
+  display: flex;
+  flex-direction: row-reverse;
+
+  .galleryContent {
+    flex: 1;
+  }
+
+  .anchor {
+    width: @toc-width;
+    padding-left: 24px;
+
+    :global {
+      .ant-anchor {
+        font-size: 12px;
+      }
+
+      .ant-anchor-link {
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+    }
+  }
+
+  .galleryList {
+    list-style: none;
+    margin: 0 -12px !important;
+  }
+
+  .galleryCard {
+    display: inline-block;
+    vertical-align: top;
+    width: 25%;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    .galleryCardLink {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 12px;
+
+      .screenshot {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 100%;
+      }
+
+      > div {
+        border: 1px solid @border-color-split;
+        border-radius: 6px;
+        overflow: hidden;
+        height: calc(100vw / 9 - 20px);
+        min-height: 130px;
+        max-height: 280px;
+        object-fit: cover;
+        transition: all 0.3s;
+        display: flex;
+        justify-content: center;
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: scale-down;
+        }
+      }
+
+      &:hover > div {
+        transform: translateY(-4px);
+        border-color: transparent;
+        box-shadow: 0 6px 16px rgba(107, 147, 224, 0.14);
+      }
+
+      h4 {
+        margin: 16px 0 0;
+        text-align: center;
+        color: #101424;
+        font-size: 16px;
+        line-height: 22px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    // 自定义上新徽章
+    .customRibbon {
+      transform: rotate(45deg) translate(5px, -12px);
+      border-radius: 0;
+      width: 65px;
+      height: 18px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 18px;
+      text-align: center;
+
+      :global {
+        .ant-ribbon-corner {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.apiStructure {
+  padding: 0;
+}
+
+.editOnGtiHubButton {
+  margin-left: 0.5em;
+  font-size: 16px;
+  color: #999;
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
+}
+
+.exampleContent {
+  margin-top: -24px;
+
+  :global {
+    .SplitPane {
+      overflow: auto;
+      left: 0px;
+      height: calc(100vh - 64px) !important;
+    }
+
+    .Pane2 {
+      overflow: auto;
+    }
+
+    .ant-collapse-extra {
+      margin-left: 16px;
+      display: inline-block;
+      float: none !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 1199.99px) {
+  .gallery {
+    .galleryCard {
+      width: 33.3%;
+    }
+  }
+}
+
+@media only screen and (max-width: 991.99px) {
+  .markdown {
+    .main {
+      width: 100vw !important;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+
+    .toc {
+      display: none;
+    }
+  }
+
+  .sider {
+    width: 240px !important;
+  }
+
+  .gallery {
+    .galleryCard {
+      width: 50%;
+    }
+
+    .anchor {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: 767.99px) {
+  .layout {
+    flex-direction: column !important;
+  }
+
+  .sider {
+    width: 100% !important;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #e8e8e8;
+    display: none;
+  }
+
+  .markdown {
+    .main {
+      margin-top: 30px;
+      padding-left: 24px;
+      padding-right: 24px;
+      margin-bottom: 30px;
+    }
+  }
+}
+
+@media only screen and (max-width: 575.99px) {
+  .gallery {
+    .galleryCard {
+      width: 100%;
+    }
+  }
+}
+
+.galleryAnchor {
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  &:hover {
+    overflow-y: auto;
+  }
+
+  :global(.ant-anchor-link) {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  :global(.ant-anchor-ink) {
+    display: none;
+  }
+
+  :global(.ant-anchor-link-title) {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.apiAnchor {
+  padding-left: 14px;
+  overflow: hidden;
+
+  &:hover {
+    overflow-y: auto;
+  }
+
+  :global(.ant-anchor-ink-ball) {
+    width: 2px;
+    height: 24px;
+    background-color: #873bf4;
+    border: none;
+    border-radius: 0;
+    transform: translateX(-50%) translateY(-8px);
+  }
+
+  :global(.anticon) {
+    position: absolute;
+    padding-top: 5px;
+    font-size: 12px;
+    color: red;
+  }
+
+  .parent {
+    padding: 5px 0 5px 14px;
+    font-size: 12px;
+  }
+
+  .children {
+    padding: 5px 0 5px 14px;
+    font-size: 12px;
+  }
+}
+
+.backTop {
+  transition: color 0.3s;
+  color: #868484;
+  background-color: #fff;
+  box-shadow:
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  transition: color 0.3s;
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 22px;
+  border-radius: 50%;
+  text-align: center;
+}

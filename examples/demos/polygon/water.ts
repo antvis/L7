@@ -44,9 +44,9 @@ export function MapRender(option: {
       .color('#1E90FF')
       .style({
         speed: 0.4,
-        // waterTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
+        waterTexture: 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
       })
-      .animate(false);
+      .animate(true);
 
     scene.on('loaded', () => {
       scene.addLayer(layer);

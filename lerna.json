@@ -1,21 +1,14 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*", "site"],
   "command": {
     "publish": {
-      "ignoreChanges": [
-        "*.md"
-      ],
-      "allowBranch": [
-        "publish",
-        "docs"
-      ],
+      "ignoreChanges": ["*.md"],
+      "allowBranch": ["publish", "docs"],
       "message": "chore: publish",
       "registry": "https://registry.npmjs.org"
     }
   },
-  "version": "2.20.20",
+  "version": "2.21.1",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publishConfig": {

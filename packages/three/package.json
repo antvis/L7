@@ -1,7 +1,7 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.20.20",
-  "description": "three for L7 ",
+  "version": "2.21.1",
+  "description": "Three for L7 ",
   "keywords": [
     "3D",
     "L7",
@@ -15,45 +15,32 @@
     "type": "git",
     "url": "git+https://github.com/antvis/L7.git"
   },
-  "license": "ISC",
-  "author": "thinkinggis <lzx199065@gmail.com>",
+  "license": "MIT",
+  "author": "https://github.com/orgs/antvis/people",
   "main": "lib/index.js",
   "unpkg": "dist/l7-three.min.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
   "files": [
     "dist",
     "lib",
     "es",
-    "README.md"
+    "!dist/report.html"
   ],
   "scripts": {
-    "build": "father build",
-    "build:cdn": "yarn rollup -c",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "build:esm": "BABEL_ENV=esm babel src --root-mode upward --out-dir es --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments",
-    "clean": "rimraf dist; rimraf es; rimraf lib;",
-    "lint:ts": "run-p -c lint:ts-*",
-    "sync": "tnpm sync",
-    "test": "umi-test --passWithNoTests",
-    "tsc": "tsc --project tsconfig.build.json",
-    "watch": "BABEL_ENV=cjs babel src --watch --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --delete-dir-on-start --no-comments"
+    "dev": "father dev",
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "lint": "eslint src",
+    "clean": "rimraf dist es lib",
+    "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7": "2.20.20",
+    "@antv/l7": "2.21.1",
     "@babel/runtime": "^7.7.7",
     "three": "0.115.0"
   },
-  "devDependencies": {
-    "rollup": "^2.3.3",
-    "rollup-plugin-less": "^1.1.2"
-  },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "edc5dca4af25650507d1b3b3a649bf6c0cb6089d"
+  }
 }

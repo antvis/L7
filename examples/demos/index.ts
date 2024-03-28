@@ -1,65 +1,80 @@
-import * as PointDemos from './point';
-import * as GPUDemos from './webgpu';
+import * as BugFix from './bugfix';
+import * as CanvasDemos from './canvas';
+import * as Components from './components';
+import * as GalleryDemos from './gallery';
+import * as HeatmapDemos from './heatmap';
 import * as LineDemos from './line';
-import * as PolygonDemos from './polygon'
-import * as RasterDemos from './raster'
-import * as HeatmapDemos from './heatmap'
-import * as TileDemos from './tile'
-import * as MaskDemos from './mask'
-import * as GalleryDemos from './gallery'
-import * as BugFix from './bugfix'
-import * as Components from './components'
+import * as MaskDemos from './mask';
+import * as PointDemos from './point';
+import * as PolygonDemos from './polygon';
+import * as RasterDemos from './raster';
+import * as TileDemos from './tile';
+import * as GPUDemos from './webgpu';
 
-export default [{
+export default [
+  {
     name: 'BugFix',
-    demos: BugFix
+    demos: BugFix,
   },
-    {
+  {
     name: 'Point',
-    demos: PointDemos
-},
-{
+    demos: PointDemos,
+  },
+  {
     name: 'Line',
-    demos: LineDemos
-},
-{
+    demos: LineDemos,
+  },
+  {
     name: 'Polygon',
-    demos: PolygonDemos
-}, 
-{
-    name:'Components',
-    demos: Components
-},
-{
+    demos: PolygonDemos,
+  },
+  {
+    name: 'Components',
+    demos: Components,
+  },
+  {
     name: 'Heatmap',
-    demos: HeatmapDemos
-},
-{
+    demos: HeatmapDemos,
+  },
+  {
     name: 'Raster',
-    demos: RasterDemos
-},
-{
+    demos: RasterDemos,
+  },
+  {
     name: 'Tile',
-    demos: TileDemos
-},
-{
+    demos: TileDemos,
+  },
+  {
     name: 'Mask',
-    demos: MaskDemos
-},
-{
+    demos: MaskDemos,
+  },
+  {
     name: 'WebGPU',
     demos: GPUDemos,
     snapShot: false,
-},{
-    name:'Gallery',
-    demos:GalleryDemos
-}
-]
+  },
+  {
+    name: 'Gallery',
+    demos: GalleryDemos,
+  },
+  {
+    name: 'Canvas',
+    demos: CanvasDemos,
+  },
+];
 
-export const MapType = ['Map','GaodeMap','BaiduMap','MapLibre','TencentMap','Mapbox','TMap','GoogleMap']
+export const MapType = [
+  'Map',
+  'GaodeMap',
+  'BaiduMap',
+  'MapLibre',
+  'TencentMap',
+  'Mapbox',
+  'TMap',
+  'GoogleMap',
+];
 export const InitMapOptions = {
-    map: 'Map',
-    renderer:'device',
-    animate:false,
-}
-
+  map: 'Map',
+  renderer: 'device',
+  animate: false,
+};

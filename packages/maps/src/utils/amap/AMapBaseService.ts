@@ -23,7 +23,7 @@ import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
 import { DOM, MapType } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { mat4, vec3 } from 'gl-matrix';
-import type { IAMapEvent, IAMapInstance } from '../../../typings/index';
+import type { IAMapEvent, IAMapInstance } from '../../types';
 import Viewport from '../Viewport';
 import type { ISimpleMapCoord } from '../simpleMapCoord';
 import { SimpleMapCoord } from '../simpleMapCoord';
@@ -73,9 +73,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 /**
  * AMapService
  */
-export default abstract class AMapBaseService
-  implements IMapService<AMap.Map & IAMapInstance>
-{
+export default abstract class AMapBaseService implements IMapService<AMap.Map & IAMapInstance> {
   public version: string = MapType['GAODE1.x'];
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   /**
@@ -101,7 +99,7 @@ export default abstract class AMapBaseService
   protected markerContainer: HTMLElement;
   protected $mapContainer: HTMLElement | null;
 
-  protected viewport: IViewport;
+  protected abstract viewport: IViewport;
 
   protected cameraChangedCallback: (viewport: IViewport) => void;
 
@@ -112,9 +110,7 @@ export default abstract class AMapBaseService
   public addMarkerContainer(): void {
     const mapContainer = this.map.getContainer();
     if (mapContainer !== null) {
-      const amap = mapContainer.getElementsByClassName(
-        'amap-maps',
-      )[0] as HTMLElement;
+      const amap = mapContainer.getElementsByClassName('amap-maps')[0] as HTMLElement;
       this.markerContainer = DOM.create('div', 'l7-marker-container', amap);
     }
   }
@@ -143,9 +139,11 @@ export default abstract class AMapBaseService
   }
 
   public getMapCanvasContainer(): HTMLElement {
-    return this.map
-      .getContainer()
-      ?.getElementsByClassName('amap-maps')[0] as HTMLElement;
+    return this.map.getContainer()?.getElementsByClassName('amap-maps')[0] as HTMLElement;
+  }
+
+  public getCanvasOverlays() {
+    return this.$mapContainer?.querySelector('.amap-overlays') as HTMLElement;
   }
 
   public getSize(): [number, number] {
@@ -171,15 +169,9 @@ export default abstract class AMapBaseService
       const originCenter = this.getCenter();
       const padding = toPaddingOptions(options.padding);
       const px = this.lngLatToPixel([originCenter.lng, originCenter.lat]);
-      const offsetPx = [
-        (padding.right - padding.left) / 2,
-        (padding.bottom - padding.top) / 2,
-      ];
+      const offsetPx = [(padding.right - padding.left) / 2, (padding.bottom - padding.top) / 2];
 
-      const newCenter = this.pixelToLngLat([
-        px.x - offsetPx[0],
-        px.y - offsetPx[1],
-      ]);
+      const newCenter = this.pixelToLngLat([px.x - offsetPx[0], px.y - offsetPx[1]]);
       return newCenter;
     }
     const center = this.map.getCenter();
@@ -192,14 +184,8 @@ export default abstract class AMapBaseService
     if (options?.padding) {
       const padding = toPaddingOptions(options.padding);
       const px = this.lngLatToPixel(lnglat);
-      const offsetPx = [
-        (padding.right - padding.left) / 2,
-        (padding.bottom - padding.top) / 2,
-      ];
-      const newCenter = this.pixelToLngLat([
-        px.x + offsetPx[0],
-        px.y + offsetPx[1],
-      ]);
+      const offsetPx = [(padding.right - padding.left) / 2, (padding.bottom - padding.top) / 2];
+      const newCenter = this.pixelToLngLat([px.x + offsetPx[0], px.y + offsetPx[1]]);
       this.map.setCenter([newCenter.lng, newCenter.lat]);
     } else {
       this.map.setCenter(lnglat);
@@ -220,10 +206,7 @@ export default abstract class AMapBaseService
     const NE = amapBound.getNorthEast();
     const SW = amapBound.getSouthWest();
     const center = this.getCenter();
-    const maxlng =
-      center.lng > NE.getLng() || center.lng < SW.getLng()
-        ? 180 - NE.getLng()
-        : NE.getLng();
+    const maxlng = center.lng > NE.getLng() || center.lng < SW.getLng() ? 180 - NE.getLng() : NE.getLng();
     const minlng = center.lng < SW.getLng() ? SW.getLng() - 180 : SW.getLng();
     // 兼容 Mapbox，统一返回西南、东北
     return [
@@ -264,9 +247,7 @@ export default abstract class AMapBaseService
   }
 
   public fitBounds(extent: Bounds): void {
-    this.map.setBounds(
-      new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
-    );
+    this.map.setBounds(new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]));
   }
 
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
@@ -351,16 +332,8 @@ export default abstract class AMapBaseService
     // @ts-ignore
     const modelMatrix = mat4.create();
 
-    mat4.translate(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(flat[0], flat[1], altitude),
-    );
-    mat4.scale(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(scale[0], scale[1], scale[2]),
-    );
+    mat4.translate(modelMatrix, modelMatrix, vec3.fromValues(flat[0], flat[1], altitude));
+    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(scale[0], scale[1], scale[2]));
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
@@ -392,9 +365,7 @@ export default abstract class AMapBaseService
             resolve();
           }, 30);
         } else {
-          this.$mapContainer = this.creatMapContainer(
-            id as string | HTMLDivElement,
-          );
+          this.$mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
           const mapConstructorOptions = {
             mapStyle: this.getMapStyleValue(style as string),
             zooms: [minZoom, maxZoom],
@@ -462,10 +433,7 @@ export default abstract class AMapBaseService
   public meterToCoord(center: [number, number], outer: [number, number]) {
     // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter
-    const meterDis = AMap.GeometryUtil.distance(
-      new AMap.LngLat(...center),
-      new AMap.LngLat(...outer),
-    );
+    const meterDis = AMap.GeometryUtil.distance(new AMap.LngLat(...center), new AMap.LngLat(...outer));
 
     // Tip: 三维世界坐标距离
     const [x1, y1] = this.lngLatToCoord(center);
@@ -485,9 +453,7 @@ export default abstract class AMapBaseService
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.getContainer()?.getElementsByClassName(
-      'amap-layer',
-    )[0] as HTMLCanvasElement;
+    const renderCanvas = this.getContainer()?.getElementsByClassName('amap-layer')[0] as HTMLCanvasElement;
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)
@@ -529,8 +495,7 @@ export default abstract class AMapBaseService
   }
 
   protected handleCameraChanged = (e: IAMapEvent): void => {
-    const { fov, near, far, height, pitch, rotation, aspect, position } =
-      e.camera;
+    const { fov, near, far, height, pitch, rotation, aspect, position } = e.camera;
     const { lng, lat } = this.getCenter();
     // Tip: 触发地图变化事件
     this.emit('mapchange');
@@ -555,9 +520,7 @@ export default abstract class AMapBaseService
       const { offsetZoom = LNGLAT_OFFSET_ZOOM_THRESHOLD } = this.config;
       // set coordinate system
       if (this.viewport.getZoom() > offsetZoom) {
-        this.coordinateSystemService.setCoordinateSystem(
-          CoordinateSystem.P20_OFFSET,
-        );
+        this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20_OFFSET);
       } else {
         this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.P20);
       }

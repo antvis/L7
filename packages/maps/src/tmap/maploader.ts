@@ -28,10 +28,10 @@ let Status = {
 
 const onloadCBKs: any[] = [];
 // @ts-ignore
-const onload = (callback: (map: window.AMap) => void) => {
+const onload = (callback: (map: window.TMap) => void) => {
   if (typeof callback === 'function') {
     if (Status.TMap === LoadStatus.loaded) {
-      callback(window.AMap);
+      callback(window.TMap);
       return;
     }
     onloadCBKs.push(callback);

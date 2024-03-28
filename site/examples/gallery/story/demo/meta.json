@@ -1,0 +1,26 @@
+{
+  "title": {
+    "zh": "图库",
+    "en": "Gallery"
+  },
+  "demos": [
+    {
+      "filename": "gaza.js",
+      "title": "加沙",
+      "new": true,
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*VN1hSZkDpg0AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "yidaiyilu.js",
+      "title": "一带一路",
+      "new": true,
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*9UiMQ4FVlS8AAAAAAAAAAAAADmJ7AQ/original"
+    },
+    {
+      "filename": "yidaiyilu2.js",
+      "title": "一带一路GDP",
+      "new": true,
+      "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*wXUpR4OJ4SMAAAAAAAAAAAAADmJ7AQ/original"
+    }
+  ]
+}

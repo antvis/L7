@@ -11,7 +11,7 @@ export default class MapWheelEvent extends Event {
   /**
    * The event type.
    */
-  public type: 'wheel';
+  public declare type: 'wheel';
 
   /**
    * The DOM event which caused the map event.
