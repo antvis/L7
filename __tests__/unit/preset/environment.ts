@@ -1,6 +1,6 @@
 (window as any).URL.createObjectURL = function () {};
 
 (window as any).console = {
-  warn: jest.fn(),
-  log: jest.fn(),
+  warn: function () {},
+  log: function () {},
 };
