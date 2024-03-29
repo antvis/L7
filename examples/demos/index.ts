@@ -62,19 +62,3 @@ export default [
     demos: CanvasDemos,
   },
 ];
-
-export const MapType = [
-  'Map',
-  'GaodeMap',
-  'BaiduMap',
-  'MapLibre',
-  'TencentMap',
-  'Mapbox',
-  'TMap',
-  'GoogleMap',
-];
-export const InitMapOptions = {
-  map: 'Map',
-  renderer: 'device',
-  animate: false,
-};
