@@ -30,7 +30,7 @@
     "clean": "rimraf dist es lib"
   },
   "dependencies": {
-    "gl": "^6.0.2",
+    "gl": "^8.0.2",
     "regl": "1.6.1"
   },
   "peerDependencies": {
@@ -39,7 +39,7 @@
     "@antv/l7-scene": "^2.21.0"
   },
   "devDependencies": {
-    "@types/gl": "^6.0.4"
+    "@types/gl": "^6.0.5"
   },
   "publishConfig": {
     "access": "public",
