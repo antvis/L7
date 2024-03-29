@@ -26,5 +26,6 @@ describe('vector-tile', () => {
       .size(10);
 
     scene.addLayer(layer);
+    scene.setZoom(12);
   });
 });

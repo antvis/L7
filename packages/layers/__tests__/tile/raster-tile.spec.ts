@@ -1,8 +1,9 @@
+import type { Scene } from '@antv/l7-scene';
 import { TestScene } from '@antv/l7-test-utils';
 import RasterLayer from '../../src/raster/index';
 
 describe('raster-tile', () => {
-  let scene: any;
+  let scene: Scene;
   beforeEach(() => {
     scene = TestScene();
   });
@@ -20,5 +21,6 @@ describe('raster-tile', () => {
     });
 
     scene.addLayer(layer1);
+    scene.setZoom(12);
   });
 });
