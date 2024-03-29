@@ -52,7 +52,8 @@ export function TestScene(options?: Partial<IMapOptions>) {
   });
   const scene = new Scene({
     id: el,
-    // TODO: switch to device support canvas
+    // TODO: switch to device support mock canvas
+    // see https://github.com/antvis/g-device-api/blob/master/__tests__/utils.ts#L43C3-L47C6
     gl: reGL,
     map: new Map({
       style: 'dark',
