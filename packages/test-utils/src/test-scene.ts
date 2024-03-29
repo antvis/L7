@@ -2,7 +2,7 @@ import type { IMapOptions } from '@antv/l7-map';
 import { Map } from '@antv/l7-maps';
 import { Scene } from '@antv/l7-scene';
 import regl from 'regl';
-import { createGLContext } from './create-context';
+import { glContext } from './gl-context';
 
 export function TestScene(options?: Partial<IMapOptions>) {
   const el = document.createElement('div');
@@ -24,9 +24,8 @@ export function TestScene(options?: Partial<IMapOptions>) {
     left: 0,
   }));
 
-  const context = createGLContext(width, height);
   const reGL = regl({
-    gl: context,
+    gl: glContext,
     attributes: {
       alpha: true,
       // use TAA instead of MSAA

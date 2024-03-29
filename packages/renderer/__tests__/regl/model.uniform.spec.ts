@@ -1,8 +1,8 @@
+import { glContext } from '@antv/l7-test-utils';
 import regl from 'regl';
 import ReglFramebuffer from '../../src/regl/ReglFramebuffer';
 import ReglModel from '../../src/regl/ReglModel';
 import ReglTexture2D from '../../src/regl/ReglTexture2D';
-import { glContext } from './utils/gl-context';
 
 describe('uniforms in ReglModel', () => {
   let reGL: regl.Regl;

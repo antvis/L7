@@ -1,6 +1,6 @@
+import { glContext } from '@antv/l7-test-utils';
 import regl from 'regl';
 import ReglModel from '../../src/regl/ReglModel';
-import { glContext } from './utils/gl-context';
 
 describe('ReglModel', () => {
   let reGL: regl.Regl;
