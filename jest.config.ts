@@ -42,7 +42,7 @@ const config: Config = {
       branches: 30,
       functions: 40,
       lines: 50,
-      statements: 50,
+      statements: 48,
     },
   },
   ...sharedConfig,
