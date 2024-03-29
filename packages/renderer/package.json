@@ -28,8 +28,7 @@
     "regl": "1.6.1"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.21.1",
-    "gl": "^6.0.2"
+    "@antv/l7-test-utils": "2.21.1"
   },
   "publishConfig": {
     "access": "public"

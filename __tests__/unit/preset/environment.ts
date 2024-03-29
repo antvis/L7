@@ -1,1 +1,1 @@
-(window as any).URL.createObjectURL = function () {};
+(window as any).URL.createObjectURL = jest.fn;

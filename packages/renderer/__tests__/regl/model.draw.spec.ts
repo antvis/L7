@@ -1,6 +1,6 @@
 import { gl } from '@antv/l7-core';
-import { createContext } from '@antv/l7-test-utils';
 
+import { glContext } from '@antv/l7-test-utils';
 import regl from 'regl';
 import quad from '../../../core/src/shaders/post-processing/quad.glsl';
 import ReglAttribute from '../../src/regl/ReglAttribute';
@@ -10,12 +10,10 @@ import checkPixels from './utils/check-pixels';
 import globalDefaultprecision from './utils/default-precision';
 
 describe('Initialization for ReglModel', () => {
-  let context;
   let reGL: regl.Regl;
 
   beforeEach(() => {
-    context = createContext(1, 1);
-    reGL = regl(context);
+    reGL = regl(glContext);
   });
 
   it('should draw a red quad', () => {

@@ -1,17 +1,14 @@
-import { createContext } from '@antv/l7-test-utils';
-
+import { glContext } from '@antv/l7-test-utils';
 import regl from 'regl';
 import ReglFramebuffer from '../../src/regl/ReglFramebuffer';
 import ReglModel from '../../src/regl/ReglModel';
 import ReglTexture2D from '../../src/regl/ReglTexture2D';
 
 describe('uniforms in ReglModel', () => {
-  let gl;
   let reGL: regl.Regl;
 
   beforeEach(() => {
-    gl = createContext(1, 1);
-    reGL = regl(gl);
+    reGL = regl(glContext);
   });
 
   it('should generate model with empty uniforms correctly', () => {
