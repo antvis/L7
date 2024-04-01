@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.21.1",
+  "version": "2.21.2",
   "description": "Maps for L7",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -24,9 +24,9 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@antv/l7-core": "2.21.1",
-    "@antv/l7-map": "2.21.1",
-    "@antv/l7-utils": "2.21.1",
+    "@antv/l7-core": "^2.21.2",
+    "@antv/l7-map": "^2.21.2",
+    "@antv/l7-utils": "^2.21.2",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
@@ -35,13 +35,13 @@
     "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
+    "@map-component/tmap-types": "^0.1.3",
     "@types/amap-js-api": "^1.4.6",
     "@types/bmapgl": "^0.0.7",
     "@types/gl-matrix": "^2.4.5",
     "@types/google.maps": "^3.54.10",
     "@types/mapbox-gl": "^1.11.2",
-    "@types/viewport-mercator-project": "^6.1.0",
-    "@map-component/tmap-types": "^0.1.3"
+    "@types/viewport-mercator-project": "^6.1.0"
   },
   "publishConfig": {
     "access": "public"

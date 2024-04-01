@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-map",
-  "version": "2.21.1",
+  "version": "2.21.2",
   "description": "L7 Map",
   "keywords": [],
   "homepage": "https://github.com/antvis/L7#readme",
@@ -30,7 +30,7 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7-utils": "2.21.1",
+    "@antv/l7-utils": "^2.21.2",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",

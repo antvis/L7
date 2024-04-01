@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.21.1",
+  "version": "2.21.2",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "repository": "git@github.com:antvis/L7.git",
   "license": "MIT",
@@ -25,13 +25,13 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7-component": "2.21.1",
-    "@antv/l7-core": "2.21.1",
-    "@antv/l7-layers": "2.21.1",
-    "@antv/l7-maps": "2.21.1",
-    "@antv/l7-scene": "2.21.1",
-    "@antv/l7-source": "2.21.1",
-    "@antv/l7-utils": "2.21.1",
+    "@antv/l7-component": "^2.21.2",
+    "@antv/l7-core": "^2.21.2",
+    "@antv/l7-layers": "^2.21.2",
+    "@antv/l7-maps": "^2.21.2",
+    "@antv/l7-scene": "^2.21.2",
+    "@antv/l7-source": "^2.21.2",
+    "@antv/l7-utils": "^2.21.2",
     "@babel/runtime": "^7.7.7"
   },
   "publishConfig": {
