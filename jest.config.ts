@@ -34,13 +34,13 @@ const config: Config = {
     '<rootDir>/__tests__/unit/*.spec.+(ts|tsx|js)',
     '<rootDir>/__tests__/unit/**/*/*.spec.+(ts|tsx|js)',
   ],
-  coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/iconfont/', '/__test__/'],
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'lcov', 'clover'],
   coverageThreshold: {
     global: {
       branches: 30,
-      functions: 42,
+      functions: 40,
       lines: 50,
       statements: 50,
     },

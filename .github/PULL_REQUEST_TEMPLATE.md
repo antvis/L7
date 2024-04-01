@@ -31,7 +31,7 @@ Contributors guide: https://github.com/antvis/L7/blob/master/.github/CONTRIBUTIN
 
 <!--
 1. 描述相关需求的来源，如相关的 issue 讨论链接。
-2. 例如 close #xxxx、 fix #xxxx
+2. 例如 close #xxxx、 fixed #xxxx
 -->
 
 ### 💡 需求背景和解决方案

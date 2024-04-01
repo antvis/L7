@@ -2,7 +2,8 @@ import { Cascader } from 'antd';
 import 'antd/dist/antd.css';
 import GUI from 'lil-gui';
 import React, { useEffect, useState } from 'react';
-import DemoList, { InitMapOptions, MapType } from './demos';
+import { DEFAULT_RENDER_OPTIONS, MAP_TYPES } from './constants';
+import DemoList from './demos';
 import { MapView } from './view/map';
 
 export default () => {
@@ -12,7 +13,7 @@ export default () => {
       ? ['Point', 'fill']
       : [searchParams.get('type'), searchParams.get('name')];
   const [values, setValue] = useState(initState);
-  const [mapOption, setMapOption] = useState(InitMapOptions);
+  const [mapOption, setMapOption] = useState(DEFAULT_RENDER_OPTIONS);
   const onGUIChange = (object: any) => {
     setMapOption({ ...object });
   };
@@ -23,7 +24,7 @@ export default () => {
       renderer: 'device',
       animate: false,
     };
-    gui.add(option, 'map', MapType);
+    gui.add(option, 'map', MAP_TYPES);
     gui.add(option, 'renderer', ['regl', 'device']);
     gui.add(option, 'animate');
     gui.onChange((event) => {

@@ -6,10 +6,7 @@ import type { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 import { MaskOperation, StencilType } from './ILayerService';
 const { throttle } = lodashUtil;
 
-export default class LayerService
-  extends EventEmitter<LayerServiceEvent>
-  implements ILayerService
-{
+export default class LayerService extends EventEmitter<LayerServiceEvent> implements ILayerService {
   // pickedLayerId 参数用于指定当前存在被选中的 layer
   public pickedLayerId: number = -1;
   public clock = new Clock();
@@ -107,14 +104,15 @@ export default class LayerService
   public async remove(layer: ILayer, parentLayer?: ILayer): Promise<void> {
     // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {
-      const layerIndex = parentLayer.layerChildren.indexOf(layer);
+      const layerChildren = parentLayer.layerChildren;
+      const layerIndex = layerChildren.indexOf(layer);
       if (layerIndex > -1) {
-        parentLayer.layerChildren.splice(layerIndex, 1);
+        parentLayer.layerChildren = layerChildren.slice().splice(layerIndex, 1);
       }
     } else {
       const layerIndex = this.layers.indexOf(layer);
       if (layerIndex > -1) {
-        this.layers.splice(layerIndex, 1);
+        this.layers = this.layers.slice().splice(layerIndex, 1);
       }
     }
     layer.destroy();
@@ -171,8 +169,7 @@ export default class LayerService
       depth: 1,
       framebuffer: null,
     });
-    const stencilType =
-      masks.length > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
+    const stencilType = masks.length > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
     for (const layer of masks) {
       // 清除上一次的模版缓存
       layer.render({ isStencil: true, stencilType, stencilIndex: maskIndex++ });
@@ -192,8 +189,7 @@ export default class LayerService
     const masklayers = layer.masks.filter((m) => m.inited);
 
     maskCount = maskCount + (enableMask ? masklayers.length : 1);
-    const stencilType =
-      maskCount > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
+    const stencilType = maskCount > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
     //  兼容MaskLayer MaskLayer的掩膜不能clear
     if (layer.tileMask || (masklayers.length && enableMask)) {
       this.renderService.clear({
@@ -289,12 +285,7 @@ export default class LayerService
   }
 
   public clear() {
-    const color = rgb2arr(this.mapService.bgColor) as [
-      number,
-      number,
-      number,
-      number,
-    ];
+    const color = rgb2arr(this.mapService.bgColor) as [number, number, number, number];
     this.renderService.clear({
       color,
       depth: 1,
@@ -305,9 +296,7 @@ export default class LayerService
 
   private runRender() {
     this.renderLayers();
-    this.layerRenderID = window.requestAnimationFrame(
-      this.runRender.bind(this),
-    );
+    this.layerRenderID = window.requestAnimationFrame(this.runRender.bind(this));
   }
 
   private stopRender() {
