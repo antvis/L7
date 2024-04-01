@@ -23,7 +23,11 @@
   height: 30px;
   margin-top: 5px;
   margin-left: 5px;
-  font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font:
+    12px 'Helvetica Neue',
+    Arial,
+    Helvetica,
+    sans-serif;
   text-align: center;
   background-color: rgba(110, 204, 57, 0.6);
   border-radius: 15px;
@@ -53,7 +57,11 @@
   box-sizing: border-box;
 }
 .l7-control-container {
-  font: 12px/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font:
+    12px/1.5 'Helvetica Neue',
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 .l7-control-container .l7-control {
   position: relative;
@@ -318,11 +326,6 @@
   height: 80px;
 }
 .l7-select-control--image .l7-select-control-item input[type='checkbox'] {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-.l7-select-control--image .l7-select-control-item input[type='radio'] {
   position: absolute;
   top: 0;
   right: 0;

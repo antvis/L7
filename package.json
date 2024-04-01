@@ -33,7 +33,6 @@
     "clean-deps": "./scripts/clean-deps.sh",
     "changelog": "auto-changelog --output CHANGELOG.md",
     "translate": "translate  -d",
-    "prebuild": "lerna run lint --ignore @antv/l7-site --parallel",
     "build": "lerna run build --ignore @antv/l7-site",
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
