@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.21.1",
+  "version": "2.21.2",
   "description": "",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -22,13 +22,13 @@
   },
   "dependencies": {
     "@antv/g-device-api": "^1.6.4",
-    "@antv/l7-core": "2.21.1",
-    "@antv/l7-utils": "2.21.1",
+    "@antv/l7-core": "^2.21.2",
+    "@antv/l7-utils": "^2.21.2",
     "@babel/runtime": "^7.7.7",
     "regl": "1.6.1"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.21.1"
+    "@antv/l7-test-utils": "^2.21.2"
   },
   "publishConfig": {
     "access": "public"

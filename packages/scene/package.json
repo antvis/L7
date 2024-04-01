@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-scene",
-  "version": "2.21.1",
+  "version": "2.21.2",
   "description": "",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -21,17 +21,17 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7-component": "2.21.1",
-    "@antv/l7-core": "2.21.1",
-    "@antv/l7-layers": "2.21.1",
-    "@antv/l7-maps": "2.21.1",
-    "@antv/l7-renderer": "2.21.1",
-    "@antv/l7-utils": "2.21.1",
+    "@antv/l7-component": "^2.21.2",
+    "@antv/l7-core": "^2.21.2",
+    "@antv/l7-layers": "^2.21.2",
+    "@antv/l7-maps": "^2.21.2",
+    "@antv/l7-renderer": "^2.21.2",
+    "@antv/l7-utils": "^2.21.2",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.7"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "2.21.1"
+    "@antv/l7-test-utils": "^2.21.2"
   },
   "publishConfig": {
     "access": "public"

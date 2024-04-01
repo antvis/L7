@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.21.1",
+  "version": "2.21.2",
   "description": "Three for L7 ",
   "keywords": [
     "3D",
@@ -36,7 +36,7 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7": "2.21.1",
+    "@antv/l7": "^2.21.2",
     "@babel/runtime": "^7.7.7",
     "three": "0.115.0"
   },
