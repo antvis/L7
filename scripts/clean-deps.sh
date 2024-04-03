@@ -1,7 +1,7 @@
 #!/bin/bash
 
-npx lerna run clean
+pnpm --parallel -r run clean
 
-npx lerna clean --yes
+pnpm --parallel -r exec rm -rf node_modules
 
-rm -rf node_modules yarn.lock package-lock.json
+rm -rf node_modules yarn.lock package-lock.json pnpm-lock.yaml
