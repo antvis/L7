@@ -35,8 +35,7 @@
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",
     "eventemitter3": "^4.0.4",
-    "gl-matrix": "^3.1.0",
-    "lodash-es": "^4.17.21"
+    "gl-matrix": "^3.1.0"
   },
   "publishConfig": {
     "access": "public"

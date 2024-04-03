@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@types/bmapgl": "^0.0.7",
-    "@types/lodash-es": "^4.17.9",
+    "@types/lodash-es": "^4.17.12",
     "babel-plugin-inline-import": "^3.0.0",
     "cheerio": "^1.0.0-rc.12",
     "cross-env": "^7.0.3",

@@ -42,11 +42,11 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
     super();
   }
 
-  public reRender = throttle(() => {
+  public reRender: () => void = throttle(() => {
     this.renderLayers();
   }, 32);
 
-  public throttleRenderLayers = throttle(() => {
+  public throttleRenderLayers: () => void = throttle(() => {
     this.renderLayers();
   }, 16);
 

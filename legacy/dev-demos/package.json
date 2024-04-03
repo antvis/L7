@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/dat.gui": "^0.7.1",
-    "@types/lodash-es": "^4.17.9",
+    "@types/lodash-es": "^4.17.12",
     "babel-plugin-inline-import": "^3.0.0",
     "cross-env": "^7.0.3",
     "dumi": "^1.1.0",
