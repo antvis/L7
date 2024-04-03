@@ -4,6 +4,7 @@ import type { L7Container } from '../../inversify.config';
 import Clock from '../../utils/clock';
 import type { ILayer, ILayerService, LayerServiceEvent } from './ILayerService';
 import { MaskOperation, StencilType } from './ILayerService';
+
 const { throttle } = lodashUtil;
 
 export default class LayerService extends EventEmitter<LayerServiceEvent> implements ILayerService {

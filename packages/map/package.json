@@ -30,7 +30,7 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7-utils": "^2.21.3",
+    "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
     "@mapbox/unitbezier": "^0.0.0",

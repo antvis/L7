@@ -22,13 +22,13 @@
   },
   "dependencies": {
     "@antv/g-device-api": "^1.6.4",
-    "@antv/l7-core": "^2.21.3",
-    "@antv/l7-utils": "^2.21.3",
+    "@antv/l7-core": "workspace:*",
+    "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
     "regl": "1.6.1"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "^2.21.3"
+    "@antv/l7-test-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

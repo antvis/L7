@@ -22,15 +22,15 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7-core": "^2.21.3",
-    "@antv/l7-layers": "^2.21.3",
-    "@antv/l7-utils": "^2.21.3",
+    "@antv/l7-core": "workspace:*",
+    "@antv/l7-layers": "workspace:*",
+    "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.0",
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "^2.21.3",
+    "@antv/l7-test-utils": "workspace:*",
     "gcoord": "^0.3.2",
     "less": "^4.1.3"
   },

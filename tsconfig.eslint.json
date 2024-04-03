@@ -5,8 +5,9 @@
   },
   // paths intend to lint
   "include": [
-    "./*.ts",
+    "./*.?*.ts",
     "packages",
+    "packages/*/.?*.ts",
     // examples workspace lint
     "examples",
     // test workspace lint

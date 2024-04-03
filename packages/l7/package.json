@@ -25,13 +25,13 @@
     "sync": "tnpm sync"
   },
   "dependencies": {
-    "@antv/l7-component": "^2.21.3",
-    "@antv/l7-core": "^2.21.3",
-    "@antv/l7-layers": "^2.21.3",
-    "@antv/l7-maps": "^2.21.3",
-    "@antv/l7-scene": "^2.21.3",
-    "@antv/l7-source": "^2.21.3",
-    "@antv/l7-utils": "^2.21.3",
+    "@antv/l7-component": "workspace:*",
+    "@antv/l7-core": "workspace:*",
+    "@antv/l7-layers": "workspace:*",
+    "@antv/l7-maps": "workspace:*",
+    "@antv/l7-scene": "workspace:*",
+    "@antv/l7-source": "workspace:*",
+    "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7"
   },
   "publishConfig": {

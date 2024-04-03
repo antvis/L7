@@ -34,7 +34,8 @@
   },
   "devDependencies": {
     "@types/d3-color": "^1.2.2",
-    "@types/earcut": "^2.1.0"
+    "@types/earcut": "^2.1.0",
+    "@types/lodash": "^4.14.138"
   },
   "publishConfig": {
     "access": "public"
