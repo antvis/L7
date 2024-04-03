@@ -73,6 +73,12 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     this.markerContainer = DOM.create('div', 'l7-marker-container', container);
     this.markerContainer.setAttribute('tabindex', '-1');
   }
+  //需要子类实现 目前只有天地图实现
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public onAddMarkerOrPopup(object:any): void {}
+  //需要子类实现 目前只有天地图实现
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public onRemoveMarkerOrPopup(object:any): void {}
 
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;

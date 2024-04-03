@@ -35,7 +35,7 @@ export default class Marker extends EventEmitter {
       ...this.getDefault(),
       ...option,
     };
-    bindAll(['update', 'onMove', 'onMapClick', 'updatePositionWhenZoom'], this);
+    bindAll(['update', 'onMove', 'onMapClick'], this);
     this.init();
   }
 
@@ -59,6 +59,8 @@ export default class Marker extends EventEmitter {
     this.update();
     this.updateDraggable();
     this.added = true;
+    // @ts-ignore
+    this.mapsService.onAddMarkerOrPopup(this);
     this.emit('added');
     return this;
   }
@@ -69,6 +71,8 @@ export default class Marker extends EventEmitter {
       this.mapsService.off('move', this.update);
       this.mapsService.off('moveend', this.update);
       this.mapsService.off('camerachange', this.update);
+      // @ts-ignore
+      this.mapsService.onRemoveMarkerOrPopup(this);
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
@@ -209,54 +213,6 @@ export default class Marker extends EventEmitter {
     this.updatePosition();
     DOM.setTransform(element as HTMLElement, `${anchorTranslate[anchor]}`);
   }
-  //天地图在开始缩放时触发 更新目标位置时添加过渡效果
-  private updatePositionWhenZoom(ev: { map: any; center: any; zoom: any }) {
-    if (!this.mapsService) {
-      return;
-    }
-    const { element, offsets } = this.markerOption;
-    const { lng, lat } = this.lngLat;
-    if (element) {
-      element.style.display = 'block';
-      element.style.whiteSpace = 'nowrap';
-      const { containerHeight, containerWidth, bounds } =
-        this.getMarkerLayerContainerSize() || this.getCurrentContainerSize();
-      if (!bounds) {
-        return;
-      }
-      const map = ev.map;
-      const center = ev.center;
-      const zoom = ev.zoom;
-      const projectedCenter = map.DE(this.lngLat, zoom, center);
-      projectedCenter.x = Math.round(projectedCenter.x + offsets[0]);
-      projectedCenter.y = Math.round(projectedCenter.y - offsets[1]);
-      // 当前可视区域包含跨日界线
-      if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
-        if (projectedCenter.x > containerWidth) {
-          // 日界线右侧点左移
-          const newPos = this.mapsService.lngLatToContainer([lng - 360, lat]);
-          projectedCenter.x = newPos.x;
-        }
-        if (projectedCenter.x < 0) {
-          // 日界线左侧点右移
-          const newPos = this.mapsService.lngLatToContainer([lng + 360, lat]);
-          projectedCenter.x = newPos.x;
-        }
-      }
-      if (
-        projectedCenter.x > containerWidth ||
-        projectedCenter.x < 0 ||
-        projectedCenter.y > containerHeight ||
-        projectedCenter.y < 0
-      ) {
-        element.style.display = 'none';
-      }
-      element.style.left = projectedCenter.x + 'px';
-      element.style.top = projectedCenter.y + 'px';
-      element.style.transition =
-        'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
-    }
-  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onMapClick(e: MouseEvent) {
     const { element } = this.markerOption;
@@ -334,7 +290,8 @@ export default class Marker extends EventEmitter {
     }
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
-    const pos = this.mapsService.lngLatToContainer([lng, lat]);
+    //@ts-ignore
+    const pos = this.mapsService.lngLatToContainer([lng, lat],true);
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
@@ -348,26 +305,30 @@ export default class Marker extends EventEmitter {
       if (Math.abs(bounds[0][0]) > 180 || Math.abs(bounds[1][0]) > 180) {
         if (pos.x > containerWidth) {
           // 日界线右侧点左移
-          const newPos = this.mapsService.lngLatToContainer([lng - 360, lat]);
+          //@ts-ignore
+          const newPos = this.mapsService.lngLatToContainer([lng - 360, lat],true);
           pos.x = newPos.x;
         }
         if (pos.x < 0) {
           // 日界线左侧点右移
-          const newPos = this.mapsService.lngLatToContainer([lng + 360, lat]);
+          //@ts-ignore
+          const newPos = this.mapsService.lngLatToContainer([lng + 360, lat],true);
           pos.x = newPos.x;
         }
       }
-      // 不在当前可视区域内隐藏点
+      // 不在当前可视区域内隐藏点 (天地图不处理 因为天地图平移的是父容器,为了避免平移时频繁更新位置,这里就不处理display了)
       if (
+        this.mapsService.getType() !== 'tdtmap'
+        && (
         pos.x > containerWidth ||
         pos.x < 0 ||
         pos.y > containerHeight ||
-        pos.y < 0
+        pos.y < 0)
       ) {
         element.style.display = 'none';
       }
 
-      element.style.left = pos.x + offsets[0] + 'px';
+      element.style.left =  pos.x + offsets[0] + 'px';
       element.style.top = pos.y - offsets[1] + 'px';
     }
   }

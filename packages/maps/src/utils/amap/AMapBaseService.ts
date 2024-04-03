@@ -543,4 +543,10 @@ export default abstract class AMapBaseService implements IMapService<AMap.Map & 
     $wrapper.appendChild($amapdiv);
     return $amapdiv;
   }
+  //需要子类实现
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public onAddMarkerOrPopup(object:any): void {}
+  //需要子类实现
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public onRemoveMarkerOrPopup(object:any): void {}
 }
