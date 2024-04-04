@@ -27,7 +27,6 @@
     "test:size": "pnpm --filter @antv/l7 build && limit-size",
     "clean-dist": "pnpm --parallel -r --filter !@antv/l7-site clean",
     "clean-deps": "./scripts/clean-deps.sh",
-    "translate": "translate  -d",
     "build": "pnpm --parallel -r --filter !@antv/l7-site build",
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
@@ -78,6 +77,7 @@
   },
   "devDependencies": {
     "@antv/translator": "^1.0.1",
+    "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
     "@types/jest": "^29.5.1",

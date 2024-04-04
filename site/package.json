@@ -32,7 +32,8 @@
     "site:build": "npm run clean && dumi build",
     "site:deploy": "npm run site:build && gh-pages -d dist",
     "site:publish": "gh-pages -d dist",
-    "build": "yarn site:build"
+    "build": "yarn site:build",
+    "translate": "translate -d docs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.6",
@@ -72,6 +73,7 @@
     "uri-parse": "^1.0.0"
   },
   "devDependencies": {
+    "@antv/translator": "^1.0.1",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.23",
     "@types/lodash-es": "^4.17.12",
