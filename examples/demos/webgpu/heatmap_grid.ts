@@ -15,9 +15,7 @@ export function MapRender(option: { map: string; renderer: string }) {
   });
 
   scene.on('loaded', () => {
-    fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
-    )
+    fetch('https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json')
       .then((res) => res.json())
       .then((data) => {
         const layer = new HeatmapLayer({ autoFit: true })

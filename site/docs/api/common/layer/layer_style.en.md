@@ -1,5 +1,3 @@
----
-
 ### style
 
 The style method is usually used to describe the specific style of a layer. Most layers will support some more general properties, such as the opacity property. At the same time, each layer will also have properties that are only supported by this layer, such as only

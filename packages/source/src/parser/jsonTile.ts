@@ -1,20 +1,9 @@
-import type {
-  RequestParameters,
-  SourceTile,
-  TileLoadParams} from '@antv/l7-utils';
-import {
-  getData,
-  getURLFromTemplate
-} from '@antv/l7-utils';
-import type { Feature } from '@turf/helpers';
-import type { IParserData, ITileSource } from '../interface';
+import type { RequestParameters, SourceTile, TileLoadParams } from '@antv/l7-utils';
+import { getData, getURLFromTemplate } from '@antv/l7-utils';
+import type { IParserData, ITileSource, MapboxVectorTile } from '../interface';
 import VtSource from '../source/geojsonvt';
 
 import type { ITileParserCFG } from '@antv/l7-core';
-
-export type MapboxVectorTile = {
-  layers: { [key: string]: { features: Feature[] } };
-};
 
 const getVectorTile = async (
   url: string,
@@ -56,12 +45,7 @@ const getVectorTile = async (
                 },
               },
             };
-            const vectorSource = new VtSource(
-              vectorTile,
-              tile.x,
-              tile.y,
-              tile.z,
-            );
+            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
             resolve(vectorSource);
           } else {
             const json = JSON.parse(data);
@@ -72,12 +56,7 @@ const getVectorTile = async (
                 },
               },
             };
-            const vectorSource = new VtSource(
-              vectorTile,
-              tile.x,
-              tile.y,
-              tile.z,
-            );
+            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
             resolve(vectorSource);
           }
         },
@@ -86,10 +65,7 @@ const getVectorTile = async (
   });
 };
 
-export default function jsonTile(
-  url: string,
-  cfg: ITileParserCFG,
-): IParserData {
+export default function jsonTile(url: string, cfg: ITileParserCFG): IParserData {
   const getTileData = (_: TileLoadParams, tile: SourceTile) => {
     return getVectorTile(url, tile, cfg?.requestParameters, cfg.getCustomData);
   };

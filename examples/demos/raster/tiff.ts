@@ -1,8 +1,7 @@
-// @ts-ignore
 import { RasterLayer, Scene } from '@antv/l7';
-// @ts-ignore
 import * as allMap from '@antv/l7-maps';
 import * as GeoTIFF from 'geotiff';
+import type { RenderDemoOptions } from '../../types';
 
 async function getTiffData() {
   const response = await fetch(
@@ -21,14 +20,11 @@ async function getTiffData() {
   };
 }
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'device' | 'regl';
-}) {
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       center: [105, 37.5],
       zoom: 2.5,
     }),
@@ -52,8 +48,7 @@ export function MapRender(option: {
           width: tiffdata.width,
           height: tiffdata.height,
           extent: [
-            73.4821902409999979, 3.8150178409999995, 135.1066187319999869,
-            57.6300459959999998,
+            73.4821902409999979, 3.8150178409999995, 135.1066187319999869, 57.6300459959999998,
           ],
         },
       })

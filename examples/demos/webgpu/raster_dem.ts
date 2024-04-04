@@ -2,10 +2,7 @@ import { RasterLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
 import * as GeoTIFF from 'geotiff';
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'regl' | 'device';
-}) {
+export function MapRender(option: { map: string; renderer: 'regl' | 'device' }) {
   const scene = new Scene({
     id: 'map',
     renderer: option.renderer,

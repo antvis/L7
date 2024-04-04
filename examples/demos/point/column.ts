@@ -1,14 +1,12 @@
 import { PointLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import type { RenderDemoOptions } from '../../types';
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'regl' | 'device';
-}) {
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       style: 'light',
       center: [121.400257, 31.25287],
       zoom: 14.55,
@@ -16,9 +14,7 @@ export function MapRender(option: {
     }),
   });
 
-  fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
-  )
+  fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json')
     .then((res) => res.json())
     .then((data) => {
       const pointLayer = new PointLayer({})
@@ -29,12 +25,7 @@ export function MapRender(option: {
             y: 'latitude',
           },
         })
-        .shape('name', [
-          'cylinder',
-          'triangleColumn',
-          'hexagonColumn',
-          'squareColumn',
-        ])
+        .shape('name', ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'])
         .active(true)
         .size('unit_price', (h) => {
           return [6, 6, 100];

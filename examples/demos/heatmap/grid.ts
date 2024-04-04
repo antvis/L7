@@ -1,14 +1,12 @@
 import { HeatmapLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import type { RenderDemoOptions } from '../../types';
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'regl' | 'device';
-}) {
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       style: 'light',
       center: [121.434765, 31.256735],
       zoom: 14.83,
@@ -16,9 +14,7 @@ export function MapRender(option: {
   });
 
   scene.on('loaded', () => {
-    fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
-    )
+    fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json')
       .then((res) => res.json())
       .then((data) => {
         const layer = new HeatmapLayer({ autoFit: true })

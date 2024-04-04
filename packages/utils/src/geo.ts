@@ -1,15 +1,9 @@
 import bbox from '@turf/bbox';
-import type {
-  BBox,
-  Units} from '@turf/helpers';
-import {
-  degreesToRadians,
-  featureCollection,
-  lineString,
-  radiansToLength
-} from '@turf/helpers';
+import type { BBox, Units } from '@turf/helpers';
+import { degreesToRadians, featureCollection, lineString, radiansToLength } from '@turf/helpers';
 import { isNumber } from './math';
 
+export type { BBox };
 export type IBounds = [[number, number], [number, number]];
 
 interface ILngLat {
@@ -22,12 +16,7 @@ type Point = number[];
 
 export function lngLatInExtent(lngLat: ILngLat, bounds: number[]) {
   const [minLng, minLat, maxLng, maxLat] = bounds;
-  return (
-    lngLat.lng > minLng &&
-    lngLat.lng <= maxLng &&
-    lngLat.lat > minLat &&
-    lngLat.lat <= maxLat
-  );
+  return lngLat.lng > minLng && lngLat.lng <= maxLng && lngLat.lat > minLat && lngLat.lat <= maxLat;
 }
 /**
  * 计算地理数据范围
@@ -85,8 +74,7 @@ export function lngLatToMeters(
   const lng = lnglat[0];
   const lat = lnglat[1];
   let x = (lng * originShift) / 180.0;
-  let y =
-    Math.log(Math.tan(((90 + lat) * Math.PI) / 360.0)) / (Math.PI / 180.0);
+  let y = Math.log(Math.tan(((90 + lat) * Math.PI) / 360.0)) / (Math.PI / 180.0);
   y = (y * originShift) / 180.0;
   if (accuracy.enable) {
     x = Number(x.toFixed(accuracy.decimal));
@@ -100,9 +88,7 @@ export function metersToLngLat(meters: Point, decimal = 6) {
   const y = meters[1];
   let lng = (x / originShift) * 180.0;
   let lat = (y / originShift) * 180.0;
-  lat =
-    (180 / Math.PI) *
-    (2 * Math.atan(Math.exp((lat * Math.PI) / 180.0)) - Math.PI / 2.0);
+  lat = (180 / Math.PI) * (2 * Math.atan(Math.exp((lat * Math.PI) / 180.0)) - Math.PI / 2.0);
   if (decimal !== undefined && decimal !== null) {
     lng = Number(lng.toFixed(decimal));
     lat = Number(lat.toFixed(decimal));
@@ -267,10 +253,7 @@ export function padBounds(b: IBounds, bufferRatio: number): IBounds {
  */
 export function boundsContains(b1: IBounds, b2: IBounds): boolean {
   return (
-    b1[0][0] <= b2[0][0] &&
-    b1[0][1] <= b2[0][1] &&
-    b1[1][0] >= b2[1][0] &&
-    b1[1][1] >= b2[1][1]
+    b1[0][0] <= b2[0][0] && b1[0][1] <= b2[0][1] && b1[1][0] >= b2[1][0] && b1[1][1] >= b2[1][1]
   );
 }
 /**
@@ -303,9 +286,7 @@ function getMod(v: Point) {
 }
 
 export function calAngle(v1: Point, v2: Point) {
-  return (
-    (Math.acos(dotMul(v1, v2) / (getMod(v1) * getMod(v2))) * 180) / Math.PI
-  );
+  return (Math.acos(dotMul(v1, v2) / (getMod(v1) * getMod(v2))) * 180) / Math.PI;
 }
 
 export function getAngle(v1: Point, v2: Point) {
@@ -381,9 +362,7 @@ export function flow(coords: Point[], time: number = 100) {
 
 type Position = number[];
 
-export function calculateCentroid(
-  coord: Position | Position[] | Position[][],
-): Position {
+export function calculateCentroid(coord: Position | Position[] | Position[][]): Position {
   // let pos = coord as Position;
   if (isNumber(coord[0])) {
     return coord as Position;

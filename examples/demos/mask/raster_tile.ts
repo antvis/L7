@@ -1,5 +1,6 @@
 import { PolygonLayer, RasterLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import type { RenderDemoOptions } from '../../types';
 
 const colorList = [
   '#419bdf', // Water
@@ -24,14 +25,11 @@ const colorList = [
 ];
 const positions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'regl' | 'device';
-}) {
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       style: 'light',
       center: [121.434765, 31.256735],
       zoom: 14.83,
@@ -39,9 +37,7 @@ export function MapRender(option: {
   });
 
   scene.on('loaded', () => {
-    fetch(
-      'https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json',
-    )
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json')
       .then((res) => res.json())
       .then((maskData) => {
         const maskPolygon = new PolygonLayer({
@@ -74,14 +70,7 @@ export function MapRender(option: {
             domain: [0, 7000],
             rampColors: {
               type: 'linear',
-              colors: [
-                '#d73027',
-                '#fc8d59',
-                '#fee08b',
-                '#d9ef8b',
-                '#91cf60',
-                '#1a9850',
-              ],
+              colors: ['#d73027', '#fc8d59', '#fee08b', '#d9ef8b', '#91cf60', '#1a9850'],
               positions: [0, 200, 500, 1000, 2000, 7000], // '#1a9850'
             },
           });

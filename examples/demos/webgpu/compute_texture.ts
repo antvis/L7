@@ -1,30 +1,8 @@
-import {
-  Device,
-  Bindings,
-  BufferUsage,
-  Buffer,
-  BufferFrequencyHint,
-  VertexStepMode,
-  Format,
-  TextureDimension,
-  PrimitiveTopology,
-  TextureUsage,
-  TransparentWhite,
-  MipmapFilterMode,
-  AddressMode,
-  FilterMode,
-  ChannelWriteMask,
-  BlendMode,
-  BlendFactor,
-  CullMode,
-  WebGPUDeviceContribution,
-} from '@antv/g-device-api';
-
+import { BufferUsage, WebGPUDeviceContribution } from '@antv/g-device-api';
+import type { RenderDemoOptions } from '../../types';
 import { createTexture, generateTexture } from './utils/common';
-export async function MapRender(option: {
-  map: string
-  renderer: 'regl' | 'device'
-}) {
+
+export async function MapRender(options: RenderDemoOptions) {
   const dom = document.getElementById('map') as HTMLDivElement;
   // 创建 canvas
   const $canvas = document.createElement('canvas');
@@ -40,13 +18,10 @@ export async function MapRender(option: {
 
   const device = swapChain.getDevice();
 
-
-
   // 计算
   const computeProgram = device.createProgram({
     compute: {
-      wgsl:
-     /* wgsl */`
+      wgsl: /* wgsl */ `
     struct windParams {
       u_wind_min : vec2<f32>,
       u_wind_max : vec2<f32>,
@@ -58,7 +33,7 @@ export async function MapRender(option: {
       u_wind_res : vec2<f32>,
 
     }
- 
+
     @binding(0) @group(0) var<uniform> params : windParams;
     @group(1) @binding(2) var u_particles : texture_2d<f32>;;
     @binding(2) @group(1) var u_wind: texture_2d<f32>;
@@ -73,7 +48,7 @@ export async function MapRender(option: {
          let t: f32 = dot(rand_constants.xy, co);
          return t - t;
      }
- 
+
      // WGSL 不使用 "texture2D"，使用 "textureSample" 替代
      fn lookup_wind(uv: vec2<f32>) -> vec2<f32> {
          let px: vec2<f32> = 1.0 / params.u_wind_res;
@@ -85,7 +60,7 @@ export async function MapRender(option: {
          let br: vec2<f32> = textureSample(u_wind, u_sampler, vc + px).rg;
          return mix(mix(tl, tr, f.x), mix(bl, br, f.x), f.y);
      }
-    
+
     // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
     @compute @workgroup_size(64)
     fn main(@builtin(global_invocation_id) GlobalInvocationID : vec3<u32>) {
@@ -93,10 +68,10 @@ export async function MapRender(option: {
       let v_tex_pos:vec2<u32> = vec2(
         fract(f32(a_index)/ params.u_particles_res),
         floor(f32(a_index) / params.u_particles_res) / params.u_particles_res) * params.u_wind_res;
-      
+
         let color = textureLoad(u_particles,v_tex_pos,0);
 
-   
+
 
       // 解码粒子位置
       var pos: vec2<f32> = vec2<f32>(
@@ -131,12 +106,11 @@ export async function MapRender(option: {
       // 将新的粒子位置编码回RGBA
       textureStore(outputTex,  v_tex_pos, vec4(fract(pos * 255.0), floor(pos * 255.0) / 255.0));
     }
-  
-    
-    `
-    }
-  });
 
+
+    `,
+    },
+  });
 
   const numParticles = 65536;
   const particleRes = Math.ceil(Math.sqrt(numParticles));
@@ -153,13 +127,12 @@ export async function MapRender(option: {
 
   const particleBuffer = device.createBuffer({
     viewOrSize: particleIndices,
-    usage: BufferUsage.VERTEX | BufferUsage.STORAGE
+    usage: BufferUsage.VERTEX | BufferUsage.STORAGE,
   });
 
-
-  const imageUrl = 'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*p4PURaZpM-cAAAAAAAAAAAAADmJ7AQ/original';
-  const windTexture = await generateTexture(device, imageUrl)
-
+  const imageUrl =
+    'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*p4PURaZpM-cAAAAAAAAAAAAADmJ7AQ/original';
+  const windTexture = await generateTexture(device, imageUrl);
 
   // const sampler = device.createSampler({
   //   addressModeU: AddressMode.CLAMP_TO_EDGE,
@@ -170,7 +143,6 @@ export async function MapRender(option: {
   //   lodMinClamp: 0,
   //   lodMaxClamp: 0
   // });
-
 
   // const computePipeline = device.createComputePipeline({
   //   inputLayout: null,
@@ -223,8 +195,6 @@ export async function MapRender(option: {
   //   });
   // }
 
-
-
   // uniformBuffer.setSubData(
   //   0,
   //   new Uint8Array(
@@ -255,7 +225,4 @@ export async function MapRender(option: {
   // const data = await readback.readBuffer(particleBuffers[1], 0, new Float32Array(numParticles*4));
   // console.log(data);
   // frame();
-
 }
-
-

@@ -1,11 +1,12 @@
 import { PointLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import type { RenderDemoOptions } from '../../types';
 
-export function MapRender(option: { map: string; renderer: string }) {
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       style: 'light',
       center: [120, 30],
       pitch: 60,

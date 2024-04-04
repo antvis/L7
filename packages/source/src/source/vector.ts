@@ -1,11 +1,10 @@
 import { VectorTile } from '@mapbox/vector-tile';
-import type { Feature, Properties } from '@turf/helpers';
 import Protobuf from 'pbf';
 import type { ITileSource } from '../interface';
 export default class VectorSource implements ITileSource {
   private vectorTile: VectorTile;
   private vectorLayerCache: {
-    [key: string]: Array<Feature<GeoJSON.Geometry, Properties>>;
+    [key: string]: Array<GeoJSON.Feature>;
   } = {};
   private x: number;
   private y: number;
@@ -38,7 +37,7 @@ export default class VectorSource implements ITileSource {
       return vectorTile.features;
     }
 
-    const features: Array<Feature<GeoJSON.Geometry, Properties>> = [];
+    const features: Array<GeoJSON.Feature> = [];
     for (let i = 0; i < vectorTile.length; i++) {
       const vectorTileFeature = vectorTile.feature(i);
       const feature = vectorTileFeature.toGeoJSON(this.x, this.y, this.z);

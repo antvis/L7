@@ -1,5 +1,3 @@
----
-
 `style`Method is used to configure the style of the layer,
 
 - The single-channel drawing result is controlled by a single numerical value, such as a grayscale image. The color corresponding to the numerical value can be configured by expressing`rampColors`Ribbon control.

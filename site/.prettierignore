@@ -1,0 +1,16 @@
+*.svg
+.DS_Store
+.gitignore
+.prettierignore
+node_modules
+CNAME
+LICENSE
+.cache
+.history
+
+dist/
+.dumi/tmp/
+.dumi/tmp-production/
+public/
+public_site/
+

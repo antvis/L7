@@ -1,50 +1,41 @@
-// @ts-ignore
-import {
-    LineLayer,
-    Scene,
-    PointLayer,
-    PolygonLayer,
-
-    // @ts-ignore
-  } from '@antv/l7';
+import { LineLayer, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import type { RenderDemoOptions } from '../../types';
 
-export function MapRender(option: {
-    map: string
-   renderer: 'regl' | 'device'
-}) {
-    const scene = new Scene({
-        id: 'map',
-      renderer: option.renderer,
-        map: new allMap[option.map || 'Map']({
-            style: 'light',
-            center: [8.654789284720719, 47.412606122294044],
-            zoom: 5,
-        })
-    });
+export function MapRender(options: RenderDemoOptions) {
+  const scene = new Scene({
+    id: 'map',
+    renderer: options.renderer,
+    map: new allMap[options.map]({
+      style: 'light',
+      center: [8.654789284720719, 47.412606122294044],
+      zoom: 5,
+    }),
+  });
 
-    fetch('https://mdn.alipayobjects.com/afts/file/A*O7PBQoWAMP4AAAAAAAAAAAAADrd2AQ/locations.json')
-      .then(res => res.json())
-      .then(fill => {
-        const filllayer = new PolygonLayer({
-          autoFit:true,
-        })
+  fetch('https://mdn.alipayobjects.com/afts/file/A*O7PBQoWAMP4AAAAAAAAAAAAADrd2AQ/locations.json')
+    .then((res) => res.json())
+    .then((fill) => {
+      const filllayer = new PolygonLayer({
+        autoFit: true,
+      })
         .source(fill)
         .shape('fill')
-        .color('#aaa')
-        scene.addLayer(filllayer);
+        .color('#aaa');
+      scene.addLayer(filllayer);
 
-        const pointdata = fill.features.map((item:any) => {
-          return item.properties;
-        });
+      const pointdata = fill.features.map((item: any) => {
+        return item.properties;
+      });
 
-        const circleLayer = new PointLayer({
-          zIndex: 1,
-        }).source(pointdata, {
+      const circleLayer = new PointLayer({
+        zIndex: 1,
+      })
+        .source(pointdata, {
           parser: {
             type: 'json',
             coordinates: 'centroid',
-          }
+          },
         })
         .shape('circle')
         .size(10)
@@ -52,45 +43,47 @@ export function MapRender(option: {
         .style({
           stroke: '#fff',
           strokeWidth: 2,
-        }
+        });
+
+      scene.addLayer(circleLayer);
+
+      fetch(
+        'https://mdn.alipayobjects.com/afts/file/A*Q_x7TLOMcrAAAAAAAAAAAAAADrd2AQ/flows-2016.json',
       )
-
-        scene.addLayer(circleLayer);
-
-        fetch('https://mdn.alipayobjects.com/afts/file/A*Q_x7TLOMcrAAAAAAAAAAAAAADrd2AQ/flows-2016.json')
-        .then(res => res.json())
-        .then(lineData => {
-          const pointObj= {};
-          pointdata.forEach((item:any) => {
+        .then((res) => res.json())
+        .then((lineData) => {
+          const pointObj = {};
+          pointdata.forEach((item: any) => {
             pointObj[item.abbr] = item;
-          })
-
-         const oddata = lineData.map((item:any) => {
-            return {
-              ...item,
-              coordinates:[pointObj[item.origin].centroid,pointObj[item.dest].centroid]
-            }
-          }).sort((a:any,b:any) => {
-            return a.count - b.count;
           });
 
-        
+          const oddata = lineData
+            .map((item: any) => {
+              return {
+                ...item,
+                coordinates: [pointObj[item.origin].centroid, pointObj[item.dest].centroid],
+              };
+            })
+            .sort((a: any, b: any) => {
+              return a.count - b.count;
+            });
+
           const layer = new LineLayer({
             zIndex: 0,
-            autoFit:true
+            autoFit: true,
           })
             .source(oddata, {
               parser: {
                 type: 'json',
                 coordinates: 'coordinates',
-              }
+              },
             })
             .scale('count', {
               type: 'quantile',
             })
-            .size('count', [0.5, 1, 2,2,2,6,8, 10])
+            .size('count', [0.5, 1, 2, 2, 2, 6, 8, 10])
             .shape('flowline')
-            .color('count',[
+            .color('count', [
               '#fef6b5',
               '#ffdd9a',
               '#ffc285',
@@ -106,27 +99,24 @@ export function MapRender(option: {
               // },
               opacity: {
                 field: 'count',
-                value: [0.2,0.4,0.6,0.8],
+                value: [0.2, 0.4, 0.6, 0.8],
               },
               // opacity:1,
               gapWidth: 1,
-              offsets:{
+              offsets: {
                 field: 'count',
-                value:()=>{
-                  return [20, 20]
-                }
-              },// 支持数据映射
+                value: () => {
+                  return [20, 20];
+                },
+              }, // 支持数据映射
               strokeWidth: 1,
-              strokeOpacity:1,
+              strokeOpacity: 1,
               stroke: '#000',
             });
-            scene.addLayer(layer);
-            if (window['screenshot']) {
-              window['screenshot']();
-            }
-              
-        })
-
-      })
-
+          scene.addLayer(layer);
+          if (window['screenshot']) {
+            window['screenshot']();
+          }
+        });
+    });
 }

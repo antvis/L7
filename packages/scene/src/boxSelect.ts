@@ -39,11 +39,7 @@ export default class BoxSelect extends EventEmitter {
     });
     this.container.style.cursor = 'crosshair';
     if (!this.box) {
-      const box = DOM.create(
-        'div',
-        undefined,
-        this.container,
-      ) as HTMLDivElement;
+      const box = DOM.create('div', undefined, this.container) as HTMLDivElement;
       box.classList.add('l7-select-box');
       if (className) {
         box.classList.add(className);
@@ -75,12 +71,7 @@ export default class BoxSelect extends EventEmitter {
     this.box.style.display = 'block';
     this.startEvent = this.endEvent = e;
     this.syncBoxBound();
-    this.emit(
-      'selectstart',
-      this.getLngLatBox(),
-      this.startEvent,
-      this.endEvent,
-    );
+    this.emit('selectstart', this.getLngLatBox(), this.startEvent, this.endEvent);
   };
 
   protected onDragging = (e: any) => {
