@@ -28,12 +28,14 @@
     "clean-dist": "pnpm --parallel -r --filter !@antv/l7-site clean",
     "clean-deps": "./scripts/clean-deps.sh",
     "build": "pnpm --parallel -r --filter !@antv/l7-site build",
+    "changeset": "changeset add",
+    "publish-version": "changeset version",
+    "publish-packages": "pnpm build && pnpm limit-size && changeset publish",
     "version": "lerna version --force-publish --conventional-commits --exact --no-changelog",
     "version:prerelease": "lerna version --force-publish --exact --conventional-prerelease",
-    "prerelease": "yarn build && limit-size",
     "release": "lerna publish from-package --ignore @antv/l7-site  && yarn sync",
     "release-beta": "yarn run prerelease && lerna publish --dist-tag beta from-package --force-publish && yarn sync",
-    "sync": "pnpm --parallel -r sync"
+    "sync": "./scripts/intranet-sync.sh"
   },
   "lint-staged": {
     "*.md": [

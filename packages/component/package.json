@@ -18,8 +18,7 @@
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",
     "clean": "rimraf dist es lib",
-    "less": "lessc src/css/index.less src/css/index.css",
-    "sync": "tnpm sync"
+    "less": "lessc src/css/index.less src/css/index.css"
   },
   "dependencies": {
     "@antv/l7-core": "workspace:*",
@@ -36,5 +35,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "repository": "git@github.com:antvis/L7.git"
 }

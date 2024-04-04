@@ -26,8 +26,7 @@
     "build": "npm run clean && father build",
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",
-    "clean": "rimraf dist es lib",
-    "sync": "tnpm sync"
+    "clean": "rimraf dist es lib"
   },
   "dependencies": {
     "@antv/l7-utils": "workspace:*",
