@@ -21,28 +21,31 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm' # caching dependencies to speed up workflows
 
-      # TODO: prepare-install CI To caching dependencies to speed up workflows
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
       - name: Check
         run: |
-          yarn check-deps
+          pnpm check-deps
       #TODO: turn on after format fixd
-      # yarn check-format
+      # pnpm check-format
 
       - name: Lint
-        run: yarn lint:ts
+        run: pnpm lint:ts
 
       #TODO: turn on after fixd
       # - name: Stylelint
-      #   run: yarn lint:css
+      #   run: pnpm lint:css
 
   unit-test:
     runs-on: ubuntu-latest
@@ -50,11 +53,15 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm' # caching dependencies to speed up workflows
 
       - name: Install system dependencies
         # install system dependencies up to date for use headless-gl in ubuntu
@@ -64,11 +71,11 @@ jobs:
           libxi-dev mesa-utils pkg-config
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
       - name: Coverage Test
         # use xvfb-run run in ubuntu
-        run: xvfb-run yarn test-cover
+        run: xvfb-run pnpm test-cover
 
       - name: Upload test coverage
         uses: coverallsapp/github-action@master
@@ -81,20 +88,24 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm' # caching dependencies to speed up workflows
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      - name: Install Playwright chromium browser
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Integration Test
-        run: yarn test:integration
+        run: pnpm test:integration
 
       - name: Upload snapshots to GitHub Actions Artifacts
         if: always()
@@ -111,14 +122,18 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm' # caching dependencies to speed up workflows
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
       - name: Szie Test With Build
-        run: yarn test:size
+        run: pnpm test:size

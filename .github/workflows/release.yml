@@ -7,26 +7,42 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
         with:
-          node-version: 18
-      - run: yarn
-      - run: yarn lint
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm' # caching dependencies to speed up workflows
+      - run: pnpm install
+      - run: pnpm build
 
   publish-site:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
         with:
-          node-version: 18
-      - run: yarn
-      - run: yarn site:build
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm' # caching dependencies to speed up workflows
+      - run: pnpm install
+      - run: pnpm site:build
       - run: |
-          cd packages/site/dist
+          cd site/dist
           git init
           git config --local user.name antv
           git config --local user.email antv@antfin.com
@@ -35,6 +51,6 @@ jobs:
       - uses: ad-m/github-push-action@master
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
-          directory: public
+          directory: site/dist
           branch: gh-pages
           force: true
