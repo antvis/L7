@@ -12,15 +12,10 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm' # caching dependencies to speed up workflows
-      - run: pnpm install
       - run: pnpm build
 
   publish-site:
@@ -31,15 +26,10 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm' # caching dependencies to speed up workflows
-      - run: pnpm install
       - run: pnpm site:build
       - run: |
           cd site/dist

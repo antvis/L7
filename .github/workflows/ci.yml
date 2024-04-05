@@ -22,17 +22,10 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm' # caching dependencies to speed up workflows
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Check
         run: |
@@ -54,14 +47,10 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm' # caching dependencies to speed up workflows
 
       - name: Install system dependencies
         # install system dependencies up to date for use headless-gl in ubuntu
@@ -69,9 +58,6 @@ jobs:
         run: sudo apt-get install -y build-essential libgl1-mesa-dri libglapi-mesa
           libglew-dev libglu1-mesa-dev libosmesa6
           libxi-dev mesa-utils pkg-config
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Coverage Test
         # use xvfb-run run in ubuntu
@@ -89,17 +75,10 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm' # caching dependencies to speed up workflows
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Install Playwright chromium browser
         run: pnpm exec playwright install --with-deps chromium
@@ -123,17 +102,10 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm' # caching dependencies to speed up workflows
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Szie Test With Build
         run: pnpm test:size
