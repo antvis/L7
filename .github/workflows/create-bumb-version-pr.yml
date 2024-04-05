@@ -1,0 +1,55 @@
+name: Create bump version PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      branche:
+        description: Change version of the branch.
+        default: 'master'
+        type: choice
+        options:
+          - master
+          - beta
+          - alpha
+          - next
+      # version:
+      #   description: Version release as.
+      #   default: 'auto'
+      #   type: choice
+      #   options:
+      #     - auto
+      #     - patch
+      #     - minor
+      #     - major
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  bump-version-pr:
+    name: Bump version PR
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.branche }}
+
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Pre build ckeck
+        run: pnpm build
+
+      - name: Create Pull Request
+        uses: changesets/action@v1
+        with:
+          version: changeset version
+          commit: 'chore: bump version'
+          title: 'chore: bump version'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

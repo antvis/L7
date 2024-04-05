@@ -1,0 +1,19 @@
+name: DingTalk Release Notify
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published, edited]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: visiky/dingtalk-release-notify@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DING_TALK_TOKEN: ${{ secrets.DING_TALK_TOKENS}}
+          notify_title: '🎉 L7 发布 release {release_tag} 🎉'
+          notify_body: '## { title } <hr /> { body } <hr />'
+          notify_footer: '前往 [**L7 Releases**]({ release_url }) 查看完整信息.'
+          at_all: false

@@ -1,46 +1,69 @@
-name: release
+name: Release
 
 on:
-  release:
-    types: [created, edited]
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Create bump version PR']
+    types:
+      - completed
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: ./.github/actions/prepare-install
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: pnpm build
 
-  publish-site:
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
     steps:
       - uses: actions/checkout@v4
+
       - name: Install dependencies
         uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-      - run: pnpm site:build
-      - run: |
-          cd site/dist
-          git init
-          git config --local user.name antv
-          git config --local user.email antv@antfin.com
-          git add .
-          git commit -m "update by release action"
-      - uses: ad-m/github-push-action@master
+
+      # 发布开始通知
+      - name: Release start ding talk dev group notify
+        uses: zcong1993/actions-ding@master
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          directory: site/dist
-          branch: gh-pages
-          force: true
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "link",
+              "link": {
+                "title": "🚑 开始自动发布 (${{ github.head_ref || github.ref_name }}) 🚑",
+                "text": "🔗 请点击链接查看详情",
+                "messageUrl": "https://github.com/antvis/L7/actions/workflows/auto-release.yml",
+                "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
+              }
+            }
+
+      - name: Release NPM and Github
+        id: changesets
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
+          publish: |
+            pnpm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+            pnpm publish-packages
+
+      # 发布失败通知开发群
+      - name: Release failed ding talk dev group notify
+        if: ${{ failure() }}
+        uses: zcong1993/actions-ding@master
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "link",
+              "link": {
+                "title": "🚨 自动发布失败 (${{ github.head_ref || github.ref_name }})",
+                "text": "🔗 请点击链接查看具体原因, 及时修复, 尝试点击右上角 [Re-run all jobs] 重试, 或手动发布 🚑",
+                "messageUrl": "https://github.com/antvis/L7/actions/workflows/auto-release.yml",
+                "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
+              }
+            }
