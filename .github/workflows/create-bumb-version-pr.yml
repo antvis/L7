@@ -49,7 +49,8 @@ jobs:
         uses: changesets/action@v1
         with:
           version: changeset version
-          commit: 'chore: bump version'
-          title: 'chore: bump version'
+          commit: 'chore: version'
+          title: 'chore: version'
+          setupGitUser: 'github-actions[changeset]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
