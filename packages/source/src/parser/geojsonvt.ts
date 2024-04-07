@@ -1,16 +1,7 @@
-import type {
-  SourceTile,
-  TileLoadParams,
-  TilesetManagerOptions,
-} from '@antv/l7-utils';
-import type {
-  Feature,
-  FeatureCollection,
-  Geometries,
-  Properties,
-} from '@turf/helpers';
+import type { SourceTile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
+import type { FeatureCollection, Geometries, Properties } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
-import type { IParserData, ITileSource } from '../interface';
+import type { IParserData, ITileSource, MapboxVectorTile } from '../interface';
 import VtSource from '../source/geojsonvt';
 
 import type { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
@@ -71,13 +62,7 @@ function classifyRings(rings: any[]) {
 
 const VectorTileFeatureTypes = ['Unknown', 'Point', 'LineString', 'Polygon'];
 
-function GetGeoJSON(
-  extent: number,
-  x: number,
-  y: number,
-  z: number,
-  vectorTileFeature: any,
-) {
+function GetGeoJSON(extent: number, x: number, y: number, z: number, vectorTileFeature: any) {
   let coords = vectorTileFeature.geometry as any;
   const currenType = vectorTileFeature.type;
 
@@ -101,8 +86,7 @@ function GetGeoJSON(
       }
       const y2 = 180 - ((p[1] + y0) * 360) / size;
       const lng = ((p[0] + x0) * 360) / size - 180;
-      const lat =
-        (360 / Math.PI) * Math.atan(Math.exp((y2 * Math.PI) / 180)) - 90;
+      const lat = (360 / Math.PI) * Math.atan(Math.exp((y2 * Math.PI) / 180)) - 90;
       line[index] = [lng, lat, 0, 1];
     }
   }
@@ -154,10 +138,6 @@ function GetGeoJSON(
   return result;
 }
 
-export type MapboxVectorTile = {
-  layers: { [key: string]: { features: Feature[] } };
-};
-
 const getVectorTile = async (
   tile: SourceTile,
   tileIndex: any,
@@ -169,13 +149,7 @@ const getVectorTile = async (
     // tileData
     const features = tileData
       ? tileData.features.map((vectorTileFeature: any) => {
-          return GetGeoJSON(
-            extent,
-            tileParams.x,
-            tileParams.y,
-            tileParams.z,
-            vectorTileFeature,
-          );
+          return GetGeoJSON(extent, tileParams.x, tileParams.y, tileParams.z, vectorTileFeature);
         })
       : [];
 
@@ -218,8 +192,7 @@ export default function geojsonVTTile(
   data: FeatureCollection<Geometries, Properties>,
   cfg: ITileParserCFG,
 ): IParserData {
-  const geojsonOptions = getOption(cfg) as geojsonvt.Options &
-    IGeojsonvtOptions;
+  const geojsonOptions = getOption(cfg) as geojsonvt.Options & IGeojsonvtOptions;
 
   const extent = geojsonOptions.extent || 4096;
   const tileIndex = geojsonvt(data, geojsonOptions);

@@ -31,10 +31,11 @@ export default defineConfig({
     copy({
       targets: [
         {
-          src: 'node_modules/@antv/g-device-api/dist/pkg/glsl_wgsl_compiler_bg.wasm',
+          src: './node_modules/@antv/g-device-api/dist/pkg/glsl_wgsl_compiler_bg.wasm',
           dest: 'examples/public',
         },
       ],
+      hook: 'buildStart',
     }),
   ],
   esbuild: {},

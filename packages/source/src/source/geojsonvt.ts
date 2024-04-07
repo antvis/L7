@@ -1,9 +1,8 @@
-import type { Feature, Properties } from '@turf/helpers';
 import type { ITileSource, MapboxVectorTile } from '../interface';
 export default class VectorSource implements ITileSource {
   private vectorTile: MapboxVectorTile;
   private vectorLayerCache: {
-    [key: string]: Array<Feature<GeoJSON.Geometry, Properties>>;
+    [key: string]: Array<GeoJSON.Feature>;
   } = {};
   private x: number;
   private y: number;

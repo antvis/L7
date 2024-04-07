@@ -1,5 +1,3 @@
----
-
 `scale`Method sets the data field mapping method, which is used to convert map data values ​​(numbers, dates, categories, etc.) into visual values ​​(color, size, shape). Scales Scales are a fundamental component of data visualization because they determine the nature of the visual encoding.
 
 ### scale(field: string, scaleConfig: IScaleConfig)

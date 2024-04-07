@@ -1,5 +1,5 @@
 import { Cascader } from 'antd';
-import 'antd/dist/antd.css';
+import 'antd/dist/reset.css';
 import GUI from 'lil-gui';
 import React, { useEffect, useState } from 'react';
 import { DEFAULT_RENDER_OPTIONS, MAP_TYPES } from './constants';

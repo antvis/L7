@@ -1,0 +1,5 @@
+packages:
+  # all packages
+  - 'packages/*'
+  # website
+  - 'site'

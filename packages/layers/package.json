@@ -19,15 +19,14 @@
     "build": "npm run clean && father build",
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",
-    "clean": "rimraf dist es lib",
-    "sync": "tnpm sync"
+    "clean": "rimraf dist es lib"
   },
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-core": "^2.21.3",
-    "@antv/l7-maps": "^2.21.3",
-    "@antv/l7-source": "^2.21.3",
-    "@antv/l7-utils": "^2.21.3",
+    "@antv/l7-core": "workspace:*",
+    "@antv/l7-maps": "workspace:*",
+    "@antv/l7-source": "workspace:*",
+    "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
     "@mapbox/martini": "^0.2.0",
     "@turf/clone": "^6.5.0",
@@ -47,16 +46,18 @@
     "polyline-miter-util": "^1.0.1"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "^2.21.3",
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
     "@types/d3-interpolate": "1.1.6",
     "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
-    "@types/gl-matrix": "^2.4.5",
-    "@types/lodash": "^4.14.138"
+    "@types/gl-matrix": "^2.4.5"
+  },
+  "peerDependencies": {
+    "@antv/l7-test-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "repository": "git@github.com:antvis/L7.git"
 }

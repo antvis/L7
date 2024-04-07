@@ -1,16 +1,12 @@
 import { LineLayer, PolygonLayer, Scene, Source } from '@antv/l7';
-// @ts-ignore
 import * as allMap from '@antv/l7-maps';
-import { Protocol } from 'pmtiles';
+import type { RenderDemoOptions } from '../../types';
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'regl' | 'device';
-}) {
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       zoom: 4.5,
       center: [116.412427, 39.303573],
     }),
@@ -39,7 +35,7 @@ export function MapRender(option: {
     // 绿地
     const fill = new PolygonLayer({
       sourceLayer: 'CHN_Districts',
-      featureId:'adcode',
+      featureId: 'adcode',
     })
       .source(source)
       .shape('fill')

@@ -1,29 +1,18 @@
+import type { Bindings, Buffer } from '@antv/g-device-api';
 import {
-  Device,
-  Bindings,
-  BufferUsage,
-  Buffer,
-  BufferFrequencyHint,
-  VertexStepMode,
-  Format,
-  TextureDimension,
-  PrimitiveTopology,
-  TextureUsage,
-  TransparentWhite,
-  MipmapFilterMode,
   AddressMode,
+  BufferUsage,
   FilterMode,
-  ChannelWriteMask,
-  BlendMode,
-  BlendFactor,
-  CullMode,
+  Format,
+  MipmapFilterMode,
+  TransparentWhite,
+  VertexStepMode,
   WebGPUDeviceContribution,
 } from '@antv/g-device-api';
-import { generateTexture } from './utils/common'
-export async function MapRender(option: {
-  map: string
-  renderer: 'regl' | 'device'
-}) {
+import type { RenderDemoOptions } from '../../types';
+import { generateTexture } from './utils/common';
+
+export async function MapRender(options: RenderDemoOptions) {
   const dom = document.getElementById('map') as HTMLDivElement;
   // 创建 canvas
   const $canvas = document.createElement('canvas');
@@ -40,9 +29,8 @@ export async function MapRender(option: {
 
   const renderProgram = device.createProgram({
     vertex: {
-      entryPoint: "vert_main",
-      wgsl:
-          /* wgsl */`
+      entryPoint: 'vert_main',
+      wgsl: /* wgsl */ `
       struct VertexOutput {
         @builtin(position) position : vec4<f32>,
         // @location(0) color : vec4<f32>,
@@ -50,7 +38,7 @@ export async function MapRender(option: {
       }
       @group(1) @binding(0) var myTexture: texture_2d<f32>;
       @group(1) @binding(1) var mySampler: sampler;
-    
+
       @vertex
       fn vert_main(
         @location(0) a_particlePos : vec2<f32>,
@@ -64,7 +52,7 @@ export async function MapRender(option: {
           (a_pos.x * cos(angle)) - (a_pos.y * sin(angle)),
           (a_pos.x * sin(angle)) + (a_pos.y * cos(angle))
         );
-    
+
         var output : VertexOutput;
         output.position = vec4(pos + a_particlePos, 0.0, 1.0);
         // output.color = vec4(
@@ -75,12 +63,11 @@ export async function MapRender(option: {
         output.uv = a_particlePos;
         return output;
       }
-      `
+      `,
     },
     fragment: {
-      entryPoint: "frag_main",
-      wgsl:
-          /* wgsl */`
+      entryPoint: 'frag_main',
+      wgsl: /* wgsl */ `
       @group(1) @binding(0) var myTexture: texture_2d<f32>;
       @group(1) @binding(1) var mySampler: sampler;
       @fragment
@@ -90,14 +77,13 @@ export async function MapRender(option: {
         // return color;
         return textureSample(myTexture, mySampler, uv);
       }
-      `
-    }
+      `,
+    },
   });
 
   const computeProgram = device.createProgram({
     compute: {
-      wgsl:
-          /* wgsl */ `
+      wgsl: /* wgsl */ `
     struct Particle {
       pos : vec2<f32>,
       vel : vec2<f32>,
@@ -121,12 +107,12 @@ export async function MapRender(option: {
 
     @binding(0) @group(2) var<storage, read> particlesA : Particles;
     @binding(1) @group(2) var<storage, read_write> particlesB : Particles;
-    
+
     // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
     @compute @workgroup_size(64)
     fn main(@builtin(global_invocation_id) GlobalInvocationID : vec3<u32>) {
       var index = GlobalInvocationID.x;
-    
+
       var vPos = particlesA.particles[index].pos; // 速度来自纹理
 
       // var vVel = particlesA.particles[index].vel;
@@ -140,12 +126,12 @@ export async function MapRender(option: {
       var vel : vec2<f32>;
       var u_wind_min= vec2(-20.26,23.24);
       var v_wind_max= vec2(-20.41,19.66);
-    
+
       for (var i = 0u; i < arrayLength(&particlesA.particles); i++) {
         if (i == index) {
           continue;
         }
-    
+
         pos = particlesA.particles[i].pos.xy;
         // vel = particlesA.particles[i].vel.xy;
         vVel = textureLoad(myTexture,  vec2<i32>(pos), 0).rg;
@@ -168,7 +154,7 @@ export async function MapRender(option: {
         cVel /= f32(cVelCount);
       }
       vVel += (cMass * params.rule1Scale) + (colVel * params.rule2Scale) + (cVel * params.rule3Scale);
-    
+
       // clamp velocity for a more pleasing simulation
       vVel = normalize(vVel) * clamp(length(vVel), 0.0, 0.1);
       // kinematic update
@@ -190,11 +176,12 @@ export async function MapRender(option: {
       particlesB.particles[index].pos = vPos;
       particlesB.particles[index].vel = vVel;
     }
-    `
-    }
+    `,
+    },
   });
-  const imageUrl ='https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*p4PURaZpM-cAAAAAAAAAAAAADmJ7AQ/original';
-  const windTexture = await generateTexture(device, imageUrl)
+  const imageUrl =
+    'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*p4PURaZpM-cAAAAAAAAAAAAADmJ7AQ/original';
+  const windTexture = await generateTexture(device, imageUrl);
 
   const numParticles = 1500;
   const initialParticleData = new Float32Array(numParticles * 4);
@@ -209,21 +196,19 @@ export async function MapRender(option: {
   for (let i = 0; i < 2; ++i) {
     particleBuffers[i] = device.createBuffer({
       viewOrSize: initialParticleData,
-      usage: BufferUsage.VERTEX | BufferUsage.STORAGE
+      usage: BufferUsage.VERTEX | BufferUsage.STORAGE,
     });
   }
 
-  const vertexBufferData = new Float32Array([
-    -0.01, -0.02, 0.01, -0.02, 0.0, 0.02
-  ]);
+  const vertexBufferData = new Float32Array([-0.01, -0.02, 0.01, -0.02, 0.0, 0.02]);
   const spriteVertexBuffer = device.createBuffer({
     viewOrSize: vertexBufferData,
-    usage: BufferUsage.VERTEX
+    usage: BufferUsage.VERTEX,
   });
 
   const uniformBuffer = device.createBuffer({
     viewOrSize: 7 * Float32Array.BYTES_PER_ELEMENT,
-    usage: BufferUsage.UNIFORM
+    usage: BufferUsage.UNIFORM,
   });
 
   const inputLayout = device.createInputLayout({
@@ -236,15 +221,15 @@ export async function MapRender(option: {
             // instance position
             shaderLocation: 0,
             offset: 0,
-            format: Format.F32_RG
+            format: Format.F32_RG,
           },
           {
             // instance velocity
             shaderLocation: 1,
             offset: 4 * 2,
-            format: Format.F32_RG
-          }
-        ]
+            format: Format.F32_RG,
+          },
+        ],
       },
       {
         arrayStride: 4 * 2,
@@ -254,24 +239,24 @@ export async function MapRender(option: {
             // vertex positions
             shaderLocation: 2,
             offset: 0,
-            format: Format.F32_RG
-          }
-        ]
-      }
+            format: Format.F32_RG,
+          },
+        ],
+      },
     ],
 
     indexBufferFormat: null,
-    program: renderProgram
+    program: renderProgram,
   });
 
   const renderPipeline = device.createRenderPipeline({
     inputLayout,
     program: renderProgram,
-    colorAttachmentFormats: [Format.U8_RGBA_RT]
+    colorAttachmentFormats: [Format.U8_RGBA_RT],
   });
   const computePipeline = device.createComputePipeline({
     inputLayout: null,
-    program: computeProgram
+    program: computeProgram,
   });
 
   const simParams = {
@@ -281,7 +266,7 @@ export async function MapRender(option: {
     rule3Distance: 0.025,
     rule1Scale: 0.02,
     rule2Scale: 0.05,
-    rule3Scale: 0.005
+    rule3Scale: 0.005,
   };
 
   const bindings: Bindings[] = [];
@@ -292,26 +277,28 @@ export async function MapRender(option: {
         {
           binding: 0,
           buffer: uniformBuffer,
-          size: 7 * Float32Array.BYTES_PER_ELEMENT
-        }
+          size: 7 * Float32Array.BYTES_PER_ELEMENT,
+        },
       ],
-      samplerBindings:[{
-        texture:windTexture,
-        sampler:null,
-        samplerBinding: -1
-    }],
+      samplerBindings: [
+        {
+          texture: windTexture,
+          sampler: null,
+          samplerBinding: -1,
+        },
+      ],
       storageBufferBindings: [
         {
           binding: 0,
           buffer: particleBuffers[i],
-          size: initialParticleData.byteLength
+          size: initialParticleData.byteLength,
         },
         {
           binding: 1,
           buffer: particleBuffers[(i + 1) % 2],
-          size: initialParticleData.byteLength
-        }
-      ]
+          size: initialParticleData.byteLength,
+        },
+      ],
     });
   }
   const sampler = device.createSampler({
@@ -321,25 +308,25 @@ export async function MapRender(option: {
     magFilter: FilterMode.BILINEAR,
     mipmapFilter: MipmapFilterMode.LINEAR,
     lodMinClamp: 0,
-    lodMaxClamp: 0
+    lodMaxClamp: 0,
   });
 
   const renderbindings = device.createBindings({
-    pipeline:renderPipeline,
+    pipeline: renderPipeline,
     samplerBindings: [
       {
         texture: windTexture,
-        sampler
-      }
-    ]
+        sampler,
+      },
+    ],
   });
 
   const renderTarget = device.createRenderTarget({
     format: Format.U8_RGBA_RT,
     width: $canvas.width,
-    height: $canvas.height
+    height: $canvas.height,
   });
-  device.setResourceName(renderTarget, "Main Render Target");
+  device.setResourceName(renderTarget, 'Main Render Target');
 
   uniformBuffer.setSubData(
     0,
@@ -351,9 +338,9 @@ export async function MapRender(option: {
         simParams.rule3Distance,
         simParams.rule1Scale,
         simParams.rule2Scale,
-        simParams.rule3Scale
-      ]).buffer
-    )
+        simParams.rule3Scale,
+      ]).buffer,
+    ),
   );
 
   let id;
@@ -373,20 +360,20 @@ export async function MapRender(option: {
     const renderPass = device.createRenderPass({
       colorAttachment: [renderTarget],
       colorResolveTo: [onscreenTexture],
-      colorClearColor: [TransparentWhite]
+      colorClearColor: [TransparentWhite],
     });
     renderPass.setPipeline(renderPipeline);
     renderPass.setVertexInput(
       inputLayout,
       [
         {
-          buffer: particleBuffers[(t + 1) % 2]
+          buffer: particleBuffers[(t + 1) % 2],
         },
         {
-          buffer: spriteVertexBuffer
-        }
+          buffer: spriteVertexBuffer,
+        },
       ],
-      null
+      null,
     );
     renderPass.setViewport(0, 0, $canvas.width, $canvas.height);
     renderPass.setBindings(renderbindings);
@@ -398,8 +385,4 @@ export async function MapRender(option: {
   };
 
   frame();
-
-
 }
-
-

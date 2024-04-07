@@ -17,12 +17,11 @@
     "build": "npm run clean && father build",
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",
-    "clean": "rimraf dist es lib",
-    "sync": "tnpm sync"
+    "clean": "rimraf dist es lib"
   },
   "dependencies": {
     "@antv/async-hook": "^2.2.9",
-    "@antv/l7-utils": "^2.21.3",
+    "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
     "@mapbox/tiny-sdf": "^1.2.5",
     "@turf/helpers": "^6.1.4",
@@ -37,10 +36,10 @@
     "@types/element-resize-detector": "^1.1.6",
     "@types/gl-matrix": "^2.4.5",
     "@types/hammerjs": "^2.0.36",
-    "@types/lodash": "^4.14.138",
     "@types/viewport-mercator-project": "^6.1.0"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "repository": "git@github.com:antvis/L7.git"
 }

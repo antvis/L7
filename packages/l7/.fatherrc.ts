@@ -1,5 +1,6 @@
 import type { IFatherConfig } from 'father';
 import { defineConfig } from 'father';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { version } from './package.json';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -33,7 +34,7 @@ const umdConfig: IFatherConfig['umd'] = {
     // 打包体积分析
     memo
       .plugin('webpack-bundle-analyzer')
-      .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, [{ analyzerMode: 'static', openAnalyzer: false }]);
+      .use(BundleAnalyzerPlugin, [{ analyzerMode: 'static', openAnalyzer: false }]);
 
     return memo;
   },

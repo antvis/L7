@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npx prettier './**/*.{ts,tsx,js,jsx,json,md,css,less}' --check
+pnpm exec prettier './**/*.{ts,tsx,js,jsx,json,md,css,less}' --check

@@ -22,7 +22,7 @@ packages/*/dist/**
 # legacy
 legacy/
 
-# website
+# website for root cli prettier
 site/dist/
 site/.dumi/tmp/
 site/.dumi/tmp-production/

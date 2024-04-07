@@ -21,28 +21,24 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
 
-      # TODO: prepare-install CI To caching dependencies to speed up workflows
-      - name: Install dependencies
-        run: yarn
-
       - name: Check
         run: |
-          yarn check-deps
+          pnpm check-deps
       #TODO: turn on after format fixd
-      # yarn check-format
+      # pnpm check-format
 
       - name: Lint
-        run: yarn lint:ts
+        run: pnpm lint:ts
 
       #TODO: turn on after fixd
       # - name: Stylelint
-      #   run: yarn lint:css
+      #   run: pnpm lint:css
 
   unit-test:
     runs-on: ubuntu-latest
@@ -50,9 +46,9 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -63,12 +59,9 @@ jobs:
           libglew-dev libglu1-mesa-dev libosmesa6
           libxi-dev mesa-utils pkg-config
 
-      - name: Install dependencies
-        run: yarn
-
       - name: Coverage Test
         # use xvfb-run run in ubuntu
-        run: xvfb-run yarn test-cover
+        run: xvfb-run pnpm test-cover
 
       - name: Upload test coverage
         uses: coverallsapp/github-action@master
@@ -81,20 +74,17 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
-        run: yarn
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      - name: Install Playwright chromium browser
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Integration Test
-        run: yarn test:integration
+        run: pnpm test:integration
 
       - name: Upload snapshots to GitHub Actions Artifacts
         if: always()
@@ -102,7 +92,7 @@ jobs:
         with:
           name: snapshots
           path: |
-            test/integration/snapshots/**/*/*-actual.png
+            __tests__/integration/snapshots/*-actual.png
           retention-days: 1
 
   size-test:
@@ -111,14 +101,11 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
-        run: yarn
-
       - name: Szie Test With Build
-        run: yarn test:size
+        run: pnpm test:size

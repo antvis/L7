@@ -1,40 +1,124 @@
-name: release
+name: Release
 
 on:
-  release:
-    types: [created, edited]
+  workflow_dispatch:
+  pull_request_review:
+    types: [submitted]
 
 jobs:
-  build:
+  release:
+    # created version approved PR by changesets bot or manual dispatch
+    if: |
+      (
+        github.event_name == 'pull_request_review' &&
+        github.event.pull_request.user.type == 'Bot' &&
+        startswith(github.event.pull_request.head.ref, 'changeset-release/') &&
+        github.event.review.state == 'APPROVED'
+      ) ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 18
-      - run: yarn
-      - run: yarn lint
+    strategy:
+      matrix:
+        node-version: [18.x]
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
+      publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
 
-  publish-site:
-    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # release start notify, only tigger by bot PR
+      - name: Release start ding talk dev group notify
+        if: github.event_name == 'pull_request_review'
+        uses: zcong1993/actions-ding@master
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "text",
+              "text": {
+                "content": "开始自动发布 (${{ github.head_ref || github.ref_name }})",
+              }
+            }
+
+      - name: Release NPM and Github
+        id: changesets
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.YJ_NPM_TOKEN }}
+        with:
+          publish: pnpm publish-package
+          createGithubReleases: true
+
+  # when release successful
+  release-succeeded:
+    needs: release
+    if: needs.release.outputs.published == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Release succeeded comment
+        if: github.event_name == 'pull_request_review'
+        uses: peter-evans/create-or-update-comment@v4
         with:
-          node-version: 18
-      - run: yarn
-      - run: yarn site:build
-      - run: |
-          cd packages/site/dist
-          git init
-          git config --local user.name antv
-          git config --local user.email antv@antfin.com
-          git add .
-          git commit -m "update by release action"
-      - uses: ad-m/github-push-action@master
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Released to successful 🎉
+
+            - Released [NPM][1]
+            - Released [Github][2]
+
+            `${{ needs.release.outputs.publishedPackages }}`
+
+            [1]: https://www.npmjs.com/package/@antv/l7?activeTab=versions
+            [2]: https://github.com/antvis/L7/releases
+          reactions: 'rocket'
+
+      - name: automerge
+        if: github.event_name == 'pull_request_review'
+        uses: 'pascalgn/automerge-action@v0.16.2'
+        env:
+          MERGE_LABELS: ''
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
+          MERGE_METHOD: 'squash'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # when release failed
+  release-failed:
+    needs: release
+    if: needs.release.outputs.published != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      # release failed notify
+      - name: Release failed ding talk dev group notify
+        uses: zcong1993/actions-ding@master
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          directory: public
-          branch: gh-pages
-          force: true
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "link",
+              "link": {
+                "title": "🚨 自动发布失败 (${{ github.head_ref || github.ref_name }})",
+                "text": "🔗 请点击链接查看具体原因, 及时修复, 尝试点击右上角 [Re-run all jobs] 重试, 或手动发布 🚑",
+                "messageUrl": "https://github.com/antvis/L7/actions/workflows/release.yml",
+                "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
+              }
+            }
+
+      - name: Released err message
+        run: |
+          if [[ ${{ needs.release.outputs.hasChangesets }} == false ]]; then
+            # No changesets
+            echo "::error title=No changesets found::All changesets are empty, not creating PR, please add changeset"
+          else
+            # Released failed
+            echo "::error title=Publish failed::Released NPM or Github failed"
+          fi
+          exit 1

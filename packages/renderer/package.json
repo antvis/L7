@@ -17,20 +17,20 @@
     "build": "npm run clean && father build",
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",
-    "clean": "rimraf dist es lib",
-    "sync": "tnpm sync"
+    "clean": "rimraf dist es lib"
   },
   "dependencies": {
     "@antv/g-device-api": "^1.6.4",
-    "@antv/l7-core": "^2.21.3",
-    "@antv/l7-utils": "^2.21.3",
+    "@antv/l7-core": "workspace:*",
+    "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
     "regl": "1.6.1"
   },
-  "devDependencies": {
-    "@antv/l7-test-utils": "^2.21.3"
+  "peerDependencies": {
+    "@antv/l7-test-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "repository": "git@github.com:antvis/L7.git"
 }

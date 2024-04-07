@@ -705,7 +705,6 @@ export default defineConfig({
       'babel-plugin-inline-import',
       { extensions: ['.glsl', '.worker.js'] },
     ],
-    // ['transform-import-css-l7'],
   ],
   links: [],
   scripts: [

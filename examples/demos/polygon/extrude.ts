@@ -1,15 +1,12 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import type { RenderDemoOptions } from '../../types';
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'regl' | 'device';
-}) {
-  console.log(option);
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       style: 'light',
       center: [121.434765, 31.256735],
       zoom: 14.83,
@@ -32,9 +29,7 @@ export function MapRender(option: {
     '#FF0000',
   ];
   scene.on('loaded', () => {
-    fetch(
-      'https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json',
-    )
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json')
       .then((res) => res.json())
       .then((data) => {
         const filllayer = new PolygonLayer({
@@ -46,14 +41,7 @@ export function MapRender(option: {
           .shape('extrude')
           .active(true)
           .size('unit_price', (unit_price) => unit_price)
-          .color('count', [
-            '#f2f0f7',
-            '#dadaeb',
-            '#bcbddc',
-            '#9e9ac8',
-            '#756bb1',
-            '#54278f',
-          ])
+          .color('count', ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'])
           .style({
             pickLight: true,
 

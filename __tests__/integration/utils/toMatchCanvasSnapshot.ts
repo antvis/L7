@@ -52,6 +52,10 @@ export function toMatchCanvasSnapshot(
   name: string,
   options: ToMatchCanvasSnapshotOptions = {},
 ): { message: () => string; pass: boolean } {
+  //@ts-ignore
+  const { snapshotState } = this;
+  const updateSnapshot = snapshotState._updateSnapshot === 'all';
+
   const { maxError = 0 } = options;
   const namePath = path.join(dir, name);
   const actualPath = path.join(dir, `${name}-actual.png`);
@@ -62,6 +66,13 @@ export function toMatchCanvasSnapshot(
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     if (!fs.existsSync(expectedPath)) {
       console.warn(`! generate ${namePath}`);
+      writePNG(buffer, expectedPath);
+      return {
+        message: () => `generate ${namePath}`,
+        pass: true,
+      };
+    } else if (updateSnapshot) {
+      console.log(`update Snapshot ${namePath}`);
       writePNG(buffer, expectedPath);
       return {
         message: () => `generate ${namePath}`,

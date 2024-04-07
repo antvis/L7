@@ -1,0 +1,24 @@
+name: 'Prepare Install'
+description: 'Prepare repository and install all dependencies'
+
+inputs:
+  node-version:
+    description: 'The node version to setup'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 8
+
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        # cache: 'pnpm' #  pnpm-lock.yaml caching dependencies to speed up workflows
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install

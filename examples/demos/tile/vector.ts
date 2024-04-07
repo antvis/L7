@@ -1,18 +1,16 @@
 import { PointLayer, PolygonLayer, Scene, Source } from '@antv/l7';
-// @ts-ignore
 import * as allMap from '@antv/l7-maps';
 import { Protocol } from 'pmtiles';
+import type { RenderDemoOptions } from '../../types';
+
 const protocol = new Protocol();
 Scene.addProtocol('pmtiles', protocol.tile);
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'regl' | 'device';
-}) {
+export function MapRender(options: RenderDemoOptions) {
   const scene = new Scene({
     id: 'map',
-    renderer: option.renderer,
-    map: new allMap[option.map || 'Map']({
+    renderer: options.renderer,
+    map: new allMap[options.map]({
       style: 'light',
       center: [11.2438, 43.7799],
       zoom: 12.83,
@@ -42,7 +40,6 @@ export function MapRender(option: {
     .style({
       opacity: 0.5,
     });
-
 
   const boundaries = new PolygonLayer({
     //   featureId: 'COLOR',
@@ -135,9 +132,8 @@ export function MapRender(option: {
     scene.addLayer(water);
     scene.addLayer(point);
     layer.on('inited', () => {
-      console.log(layer.tileLayer?.getLayers())
-    })
-  
+      console.log(layer.tileLayer?.getLayers());
+    });
 
     if (window['screenshot']) {
       window['screenshot']();
