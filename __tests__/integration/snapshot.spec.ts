@@ -52,7 +52,7 @@ describe('Snapshots', () => {
 
       await page.goto(url);
       await readyPromise;
-      await sleep(2000);
+      await sleep(1000);
 
       // Chart already rendered, capture into buffer.
       const buffer = await page.locator('canvas').screenshot();

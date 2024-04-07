@@ -1,0 +1,69 @@
+# This workflow's goal is forcing an update of the reference snapshots used
+# by Playwright tests. It runs whenever you post a new pull request comment
+# that strictly matches the "/update-snapshots".
+# From a high-level perspective, it works like this:
+# 1. Because of a GitHub Action limitation, this workflow is triggered on every
+#    comment posted on a issue or pull request. We manually interrupt it unless
+#    the comment content strictly matches "/update-snapshots" and we're in a
+#    pull request.
+# 2. Use the GitHub API to grab the information about the branch name and SHA of
+#    the latest commit of the current pull request.
+# 3. Update the Playwright reference snapshots based on the UI of this branch.
+# 4. Commit the newly generated Playwright reference snapshots into this branch.
+name: Update Snapshots
+
+on:
+  # It looks like you can't target PRs-only comments:
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_comment-use-issue_comment
+  # So we must run this workflow every time a new comment is added to issues
+  # and pull requests
+  issue_comment:
+    types: [created]
+
+jobs:
+  updatesnapshots:
+    # Run this job only on comments of pull requests that strictly match
+    # the "/update-snapshots" string
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/update-snapshots'}}
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      # Get the SHA and branch name of the comment's pull request
+      # We must use the GitHub API to retrieve these information because they're
+      # not accessibile within workflows triggered by "issue_comment"
+      - name: Get SHA and branch name
+        id: branch_sha
+        run: |
+          sha_and_branch=$(\
+            curl \
+              -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+              https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} \
+            | jq -r '.head.sha," ",.head.ref');
+          echo "::set-output name=sha::$(echo $sha_and_branch | cut -d " " -f 1)";
+          echo "::set-output name=branch::$(echo $sha_and_branch | cut -d " " -f 2)"
+
+      # Checkout the comment's branch
+      - uses: actions/checkout@v4
+        with:
+            ref: ${{ steps.branch_sha.outputs.branch }}
+
+      # Setup testing environment
+      - name: Install dependencies
+        uses: ./.github/actions/prepare-install
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Playwright chromium browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Update the snapshots based on the current UI
+      - name: Update snapshots
+        run: pnpm test:integration --updateSnapshot
+
+      # Commit the changes to the pull request branch
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[CI] Update Snapshots"
