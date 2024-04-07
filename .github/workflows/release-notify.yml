@@ -1,7 +1,6 @@
 name: DingTalk Release Notify
 
 on:
-  workflow_dispatch:
   release:
     types: [published, edited]
 

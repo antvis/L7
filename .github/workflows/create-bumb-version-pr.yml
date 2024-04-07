@@ -2,25 +2,25 @@ name: Create bump version PR
 
 on:
   workflow_dispatch:
-    inputs:
-      branche:
-        description: Change version of the branch.
-        default: 'master'
-        type: choice
-        options:
-          - master
-          - beta
-          - alpha
-          - next
-      # version:
-      #   description: Version release as.
-      #   default: 'auto'
-      #   type: choice
-      #   options:
-      #     - auto
-      #     - patch
-      #     - minor
-      #     - major
+    # inputs:
+    #   branche:
+    #     description: Change version of the branch.
+    #     default: 'master'
+    #     type: choice
+    #     options:
+    #       - master
+    #       - beta
+    #       - alpha
+    #       - next
+    # version:
+    #   description: Version release as.
+    #   default: 'auto'
+    #   type: choice
+    #   options:
+    #     - auto
+    #     - patch
+    #     - minor
+    #     - major
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ inputs.branche }}
+          # ref: ${{ inputs.branche }}
 
       - name: Install dependencies
         uses: ./.github/actions/prepare-install
@@ -45,12 +45,25 @@ jobs:
       - name: Pre build ckeck
         run: pnpm build
 
-      - name: Create Pull Request
+      - name: Create Version Pull Request
+        id: changesets
         uses: changesets/action@v1
         with:
           version: changeset version
           commit: 'chore: version'
           title: 'chore: version'
-          setupGitUser: 'github-actions[changeset]'
+          setupGitUser: true
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: After changesets
+        run: |
+          if [[ ${{ steps.changesets.outputs.hasChangesets }} == false ]]; then
+            # No changesets
+            echo "::error title=No changesets found::All changesets are empty, not creating PR, please add changeset"
+            exit 1
+          else
+            # Created Pull Request
+            echo "::notice title=PR is created::Created bump version PR address is: https://github.com/${{github.repository}}/pull/${{steps.changesets.outputs.pullRequestNumber}}"
+          fi

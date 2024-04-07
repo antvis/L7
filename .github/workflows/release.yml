@@ -7,17 +7,22 @@ on:
 
 jobs:
   release:
-    # created chore: bump version PR by changesets bot
+    # created version approved PR by changesets bot or manual dispatch
     if: |
-      github.event.pull_request.user == 'github-actions[changeset]' &&
-      github.event.pull_request.title == 'chore: version' &&
-      github.event.review.state == 'APPROVED'
+      (
+        github.event_name == 'pull_request_review' &&
+        github.event.pull_request.user.type == 'Bot' &&
+        startswith(github.event.pull_request.head.ref, 'changeset-release/') &&
+        github.event.review.state == 'APPROVED'
+      ) ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
     outputs:
       published: ${{ steps.changesets.outputs.published }}
+      hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
       publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
 
     steps:
@@ -27,7 +32,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # 发布开始通知
+      # release start notify
       - name: Release start ding talk dev group notify
         uses: zcong1993/actions-ding@master
         with:
@@ -51,21 +56,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
-          publish: |
-            pnpm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-            pnpm publish-packages
+          publish: pnpm publish-package
           createGithubReleases: true
 
-  # 发布成功
+  # when release successful
   release-succeeded:
     needs: release
     if: needs.release.outputs.published == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Release succeeded comment
+        if: github.event_name == 'pull_request_review'
         uses: peter-evans/create-or-update-comment@v4
         with:
-          issue-number: 1
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             Released to successful 🎉
 
@@ -79,18 +83,21 @@ jobs:
           reactions: 'rocket'
 
       - name: automerge
+        if: github.event_name == 'pull_request_review'
         uses: 'pascalgn/automerge-action@v0.16.2'
         env:
+          MERGE_LABELS: ''
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
           MERGE_METHOD: 'squash'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # 发布失败
+  # when release failed
   release-failed:
     needs: release
     if: needs.release.outputs.published != 'true'
     runs-on: ubuntu-latest
     steps:
-      # 发布失败通知开发群
+      # release failed notify
       - name: Release failed ding talk dev group notify
         uses: zcong1993/actions-ding@master
         with:
@@ -106,3 +113,14 @@ jobs:
                 "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
               }
             }
+
+      - name: Released err message
+        run: |
+          if [[ ${{ needs.release.outputs.hasChangesets }} == false ]]; then
+            # No changesets
+            echo "::error title=No changesets found::All changesets are empty, not creating PR, please add changeset"
+          else
+            # Released failed
+            echo "::error title=Publish failed::Released NPM or Github failed"
+          fi
+          exit 1

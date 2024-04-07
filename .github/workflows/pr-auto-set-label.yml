@@ -1,4 +1,4 @@
-name: 🏷 PR Auto Set Label
+name: PR Auto Set Label
 
 on:
   pull_request_target:
