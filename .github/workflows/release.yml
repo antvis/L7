@@ -32,20 +32,18 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # release start notify
+      # release start notify, only tigger by bot PR
       - name: Release start ding talk dev group notify
+        if: github.event_name == 'pull_request_review'
         uses: zcong1993/actions-ding@master
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
           ignoreError: true
           body: |
             {
-              "msgtype": "link",
-              "link": {
-                "title": "🚑 开始自动发布 (${{ github.head_ref || github.ref_name }}) 🚑",
-                "text": "🔗 请点击链接查看详情",
-                "messageUrl": "https://github.com/antvis/L7/actions/workflows/auto-release.yml",
-                "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
+              "msgtype": "text",
+              "text": {
+                "content": "开始自动发布 (${{ github.head_ref || github.ref_name }})",
               }
             }
 
@@ -54,7 +52,7 @@ jobs:
         uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.YJ_NPM_TOKEN }}
         with:
           publish: pnpm publish-package
           createGithubReleases: true
@@ -109,7 +107,7 @@ jobs:
               "link": {
                 "title": "🚨 自动发布失败 (${{ github.head_ref || github.ref_name }})",
                 "text": "🔗 请点击链接查看具体原因, 及时修复, 尝试点击右上角 [Re-run all jobs] 重试, 或手动发布 🚑",
-                "messageUrl": "https://github.com/antvis/L7/actions/workflows/auto-release.yml",
+                "messageUrl": "https://github.com/antvis/L7/actions/workflows/release.yml",
                 "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
               }
             }

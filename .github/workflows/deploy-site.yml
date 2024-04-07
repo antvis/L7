@@ -1,4 +1,4 @@
-name: Deploy site
+name: Deploy Site
 
 on:
   workflow_dispatch:
@@ -31,3 +31,36 @@ jobs:
           directory: site/dist
           branch: gh-pages
           force: true
+
+      # Deploy site successful notify, only tigger by bot release
+      - name: Deploy site successful notify
+        if: ${{ success() }} && github.event_name == 'release'
+        uses: zcong1993/actions-ding@master
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "text",
+              "text": {
+                "content": "官网部署成功",
+              }
+            }
+
+      # Deploy site failed notify, only tigger by bot release
+      - name: 🔊 Deploy failed notify
+        if: ${{ failure() }} && github.event_name == 'release'
+        uses: zcong1993/actions-ding@master
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "link",
+              "link": {
+                "title": "🚨 官网部署失败",
+                "text": "🔗 请点击链接查看具体原因, 尝试点击右上角 [Re-run all jobs] 重试, 或者手动部署 🚑",
+                "messageUrl": "https://github.com/antvis/L7/actions/workflows/deploy-site.yml",
+                "picUrl": ""
+              }
+            }
