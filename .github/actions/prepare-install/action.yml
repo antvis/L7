@@ -17,7 +17,7 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-        cache: 'pnpm' # caching dependencies to speed up workflows
+        # cache: 'pnpm' #  pnpm-lock.yaml caching dependencies to speed up workflows
 
     - name: Install dependencies
       shell: bash
