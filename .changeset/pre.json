@@ -16,5 +16,5 @@
     "@antv/l7-utils": "2.21.3",
     "@antv/l7-site": "2.21.3"
   },
-  "changesets": []
+  "changesets": ["healthy-trainers-develop"]
 }
