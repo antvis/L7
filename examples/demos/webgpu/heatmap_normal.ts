@@ -15,9 +15,7 @@ export function MapRender(option: { map: string; renderer: string }) {
   });
 
   scene.on('loaded', () => {
-    fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json',
-    )
+    fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json')
       .then((res) => res.json())
       .then((data) => {
         const layer = new HeatmapLayer({ autoFit: true })
@@ -29,14 +27,7 @@ export function MapRender(option: { map: string; renderer: string }) {
             radius: 20,
             opacity: 1.0,
             rampColors: {
-              colors: [
-                '#FF4818',
-                '#F7B74A',
-                '#FFF598',
-                '#91EABC',
-                '#2EA9A1',
-                '#206C7C',
-              ].reverse(),
+              colors: ['#FF4818', '#F7B74A', '#FFF598', '#91EABC', '#2EA9A1', '#206C7C'].reverse(),
               positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
             },
           });

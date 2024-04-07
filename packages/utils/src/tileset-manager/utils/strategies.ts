@@ -61,10 +61,7 @@ export function updateTileStateReplace(tiles: SourceTile[]) {
   sortedTiles.forEach((tile) => {
     tile.isVisible = Boolean(tile.properties.state & TILE_STATE_VISIBLE);
 
-    if (
-      tile.children.length &&
-      (tile.isVisible || tile.properties.state & TILE_STATE_VISITED)
-    ) {
+    if (tile.children.length && (tile.isVisible || tile.properties.state & TILE_STATE_VISITED)) {
       // 如果瓦片可见，隐藏所有的子级瓦片
       tile.children.forEach((child) => {
         child.properties.state = TILE_STATE_VISITED;

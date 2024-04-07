@@ -1,9 +1,9 @@
 import type { Buffer, Device } from '@antv/g-device-api';
 import { BufferUsage } from '@antv/g-device-api';
-import type { IElements, IElementsInitializationOptions} from '@antv/l7-core';
+import type { IElements, IElementsInitializationOptions } from '@antv/l7-core';
 import { gl } from '@antv/l7-core';
 import { typedArrayCtorMap } from './constants';
-import type { TypedArray} from './utils/typedarray';
+import type { TypedArray } from './utils/typedarray';
 import { isTypedArray } from './utils/typedarray';
 
 export default class DeviceElements implements IElements {
@@ -18,9 +18,7 @@ export default class DeviceElements implements IElements {
     if (isTypedArray(data)) {
       typed = data;
     } else {
-      typed = new typedArrayCtorMap[this.type || gl.UNSIGNED_INT](
-        data as number[],
-      );
+      typed = new typedArrayCtorMap[this.type || gl.UNSIGNED_INT](data as number[]);
     }
 
     this.type = type;
@@ -45,9 +43,7 @@ export default class DeviceElements implements IElements {
     if (isTypedArray(data)) {
       typed = data;
     } else {
-      typed = new typedArrayCtorMap[this.type || gl.UNSIGNED_INT](
-        data as number[],
-      );
+      typed = new typedArrayCtorMap[this.type || gl.UNSIGNED_INT](data as number[]);
     }
     this.indexBuffer.setSubData(0, new Uint8Array(typed.buffer));
   }

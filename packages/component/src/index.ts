@@ -7,22 +7,13 @@ import './css/index.css';
 // import './css/index.less';
 
 export * from './control/baseControl';
-export {
-  ExportImage,
-  type IExportImageControlOption,
-} from './control/exportImage';
-export {
-  Fullscreen,
-  type IFullscreenControlOption,
-} from './control/fullscreen';
+export { ExportImage, type IExportImageControlOption } from './control/exportImage';
+export { Fullscreen, type IFullscreenControlOption } from './control/fullscreen';
 export { GeoLocate, type IGeoLocateOption } from './control/geoLocate';
 export { LayerSwitch, type ILayerSwitchOption } from './control/layerSwitch';
 export { Logo, type ILogoControlOption } from './control/logo';
 export { MapTheme } from './control/mapTheme';
-export {
-  MouseLocation,
-  type IMouseLocationControlOption,
-} from './control/mouseLocation';
+export { MouseLocation, type IMouseLocationControlOption } from './control/mouseLocation';
 export { Scale, type IScaleControlOption } from './control/scale';
 export { Swipe, type ISwipeControlOption } from './control/swipe';
 export { Zoom, type IZoomControlOption } from './control/zoom';

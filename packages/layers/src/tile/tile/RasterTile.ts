@@ -15,12 +15,8 @@ export default class RasterTile extends Tile {
     const attributes = this.parent.getLayerAttributeConfig();
     const layerOptions = this.getLayerOptions();
     const sourceOptions = this.getSourceOption();
-    const { rampColors, domain } =
-      this.getLayerOptions() as unknown as IRasterLayerStyleOptions;
-    this.colorTexture = this.parent.textureService.getColorTexture(
-      rampColors,
-      domain,
-    );
+    const { rampColors, domain } = this.getLayerOptions() as unknown as IRasterLayerStyleOptions;
+    this.colorTexture = this.parent.textureService.getColorTexture(rampColors, domain);
     const layer = new RasterLayer({
       ...layerOptions,
       colorTexture: this.colorTexture,
@@ -59,15 +55,12 @@ export default class RasterTile extends Tile {
    * @param arg
    */
   public styleUpdate(...arg: any): void {
-    const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION, domain } =
-      arg as IRasterLayerStyleOptions;
+    const { rampColors = DEFAULT_COLOR_TEXTURE_OPTION, domain } = arg as IRasterLayerStyleOptions;
     this.colorTexture = this.parent.textureService.getColorTexture(
       rampColors,
       domain || getDefaultDomain(rampColors),
     );
-    this.layers.forEach((layer) =>
-      layer.style({ colorTexture: this.colorTexture }),
-    );
+    this.layers.forEach((layer) => layer.style({ colorTexture: this.colorTexture }));
   }
 
   public destroy() {

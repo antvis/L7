@@ -11,10 +11,7 @@ import type Clock from '../../utils/clock';
 import type { ITextureService } from '../asset/ITextureService';
 import type { ISceneConfig } from '../config/IConfigService';
 import type { IInteractionTarget } from '../interaction/IInteractionService';
-import type {
-  ILayerPickService,
-  IPickingService,
-} from '../interaction/IPickingService';
+import type { ILayerPickService, IPickingService } from '../interaction/IPickingService';
 import type { IMapService } from '../map/IMapService';
 import type { IAttribute } from '../renderer/IAttribute';
 import type { IBuffer } from '../renderer/IBuffer';
@@ -32,12 +29,7 @@ import type {
 import type { IRendererService } from '../renderer/IRendererService';
 import type { ITexture2D } from '../renderer/ITexture2D';
 import type { IUniform } from '../renderer/IUniform';
-import type {
-  IParseDataItem,
-  ISource,
-  ISourceCFG,
-  ITransform,
-} from '../source/ISourceService';
+import type { IParseDataItem, ISource, ISourceCFG, ITransform } from '../source/ISourceService';
 import type {
   IAnimateOption,
   IEncodeFeature,
@@ -438,12 +430,10 @@ export interface ILayer {
   rebuildModels(): void;
   getModelType(): string;
   buildLayerModel(
-    options: ILayerModelInitializationOptions &
-      Partial<IModelInitializationOptions>,
+    options: ILayerModelInitializationOptions & Partial<IModelInitializationOptions>,
   ): Promise<IModel>;
   createAttributes(
-    options: ILayerModelInitializationOptions &
-      Partial<IModelInitializationOptions>,
+    options: ILayerModelInitializationOptions & Partial<IModelInitializationOptions>,
   ): {
     [attributeName: string]: IAttribute;
   };
@@ -467,15 +457,9 @@ export interface ILayer {
   // pattern(field: string, value: StyleAttributeOption): ILayer;
   filter(field: string, value: StyleAttributeOption): ILayer;
   active(option: IActiveOption | boolean): ILayer;
-  setActive(
-    id: number | { x: number; y: number },
-    option?: IActiveOption,
-  ): void;
+  setActive(id: number | { x: number; y: number }, option?: IActiveOption): void;
   select(option: IActiveOption | boolean): ILayer;
-  setSelect(
-    id: number | { x: number; y: number },
-    option?: IActiveOption,
-  ): void;
+  setSelect(id: number | { x: number; y: number }, option?: IActiveOption): void;
   setAutoFit(autoFit: boolean): void;
   style(options: unknown): ILayer;
   hide(): ILayer;
@@ -540,10 +524,7 @@ export interface ILayer {
    * 直接调用拾取方法，在非鼠标交互场景中使用
    */
   pick(query: { x: number; y: number }): void;
-  boxSelect(
-    box: [number, number, number, number],
-    cb: (...args: any[]) => void,
-  ): void;
+  boxSelect(box: [number, number, number, number], cb: (...args: any[]) => void): void;
 
   updateLayerConfig(configToUpdate: Partial<ILayerConfig | unknown>): void;
   setAnimateStartTime(): void;

@@ -27,11 +27,7 @@ export default class RasterModel extends BaseModel {
   } {
     const { opacity = 1, noDataValue = 0 } =
       this.layer.getLayerConfig() as IRasterLayerStyleOptions;
-    const {
-      rMinMax = [0, 255],
-      gMinMax = [0, 255],
-      bMinMax = [0, 255],
-    } = this.dataOption;
+    const { rMinMax = [0, 255], gMinMax = [0, 255], bMinMax = [0, 255] } = this.dataOption;
     const commonOptions = {
       u_rminmax: rMinMax,
       u_gminmax: gMinMax,
@@ -124,11 +120,7 @@ export default class RasterModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4]];
         },
       },

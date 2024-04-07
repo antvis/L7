@@ -31,14 +31,7 @@ export default class Viewport implements IViewport {
     this.center = center;
 
     // 计算透视投影矩阵 projectionMatrix
-    mat4.perspective(
-      this.projectionMatrix,
-      (fov / 180) * Math.PI,
-      aspect,
-      near,
-      far,
-    );
-
+    mat4.perspective(this.projectionMatrix, (fov / 180) * Math.PI, aspect, near, far);
 
     const eyePoint = vec3.fromValues(...cameraPosition);
     const lookAtPoint = vec3.fromValues(...lookAt);
@@ -54,16 +47,8 @@ export default class Viewport implements IViewport {
       vec3.fromValues(-offsetOrigin[0], offsetOrigin[1], 0),
     );
 
-    mat4.multiply(
-      this.viewProjectionMatrix,
-      this.projectionMatrix,
-      this.viewMatrix,
-    );
-    mat4.multiply(
-      this.ViewProjectionMatrixUncentered,
-      this.projectionMatrix,
-      this.viewMatrix,
-    );
+    mat4.multiply(this.viewProjectionMatrix, this.projectionMatrix, this.viewMatrix);
+    mat4.multiply(this.ViewProjectionMatrixUncentered, this.projectionMatrix, this.viewMatrix);
   }
 
   public getZoom(): number {

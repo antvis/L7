@@ -149,8 +149,7 @@ export class EarthMap extends Camera {
     return;
   }
   public setMinZoom(minZoom?: number) {
-    minZoom =
-      minZoom === null || minZoom === undefined ? defaultMinZoom : minZoom;
+    minZoom = minZoom === null || minZoom === undefined ? defaultMinZoom : minZoom;
     if (minZoom >= defaultMinZoom && minZoom <= this.transform.maxZoom) {
       this.transform.minZoom = minZoom;
       if (this.getZoom() < minZoom) {
@@ -170,8 +169,7 @@ export class EarthMap extends Camera {
   }
 
   public setMaxZoom(maxZoom?: number) {
-    maxZoom =
-      maxZoom === null || maxZoom === undefined ? defaultMaxZoom : maxZoom;
+    maxZoom = maxZoom === null || maxZoom === undefined ? defaultMaxZoom : maxZoom;
 
     if (maxZoom >= this.transform.minZoom) {
       this.transform.maxZoom = maxZoom;
@@ -189,13 +187,10 @@ export class EarthMap extends Camera {
   }
 
   public setMinPitch(minPitch?: number) {
-    minPitch =
-      minPitch === null || minPitch === undefined ? defaultMinPitch : minPitch;
+    minPitch = minPitch === null || minPitch === undefined ? defaultMinPitch : minPitch;
 
     if (minPitch < defaultMinPitch) {
-      throw new Error(
-        `minPitch must be greater than or equal to ${defaultMinPitch}`,
-      );
+      throw new Error(`minPitch must be greater than or equal to ${defaultMinPitch}`);
     }
 
     if (minPitch >= defaultMinPitch && minPitch <= this.transform.maxPitch) {
@@ -217,13 +212,10 @@ export class EarthMap extends Camera {
   }
 
   public setMaxPitch(maxPitch?: number) {
-    maxPitch =
-      maxPitch === null || maxPitch === undefined ? defaultMaxPitch : maxPitch;
+    maxPitch = maxPitch === null || maxPitch === undefined ? defaultMaxPitch : maxPitch;
 
     if (maxPitch > defaultMaxPitch) {
-      throw new Error(
-        `maxPitch must be less than or equal to ${defaultMaxPitch}`,
-      );
+      throw new Error(`maxPitch must be less than or equal to ${defaultMaxPitch}`);
     }
 
     if (maxPitch >= this.transform.minPitch) {
@@ -296,18 +288,14 @@ export class EarthMap extends Camera {
 
   private initContainer() {
     if (typeof this.options.container === 'string') {
-      this.container = window.document.getElementById(
-        this.options.container,
-      ) as HTMLElement;
+      this.container = window.document.getElementById(this.options.container) as HTMLElement;
       if (!this.container) {
         throw new Error(`Container '${this.options.container}' not found.`);
       }
     } else if (this.options.container instanceof HTMLElement) {
       this.container = this.options.container;
     } else {
-      throw new Error(
-        "Invalid type: 'container' must be a String or HTMLElement.",
-      );
+      throw new Error("Invalid type: 'container' must be a String or HTMLElement.");
     }
 
     const container = this.container;

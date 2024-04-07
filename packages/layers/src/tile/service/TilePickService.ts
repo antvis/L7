@@ -22,11 +22,7 @@ export class TilePickService implements ITilePickService {
   private tileSourceService: TileSourceService;
   private parent: ILayer;
   private tilePickID = new Map();
-  constructor({
-    layerService,
-    tileLayerService,
-    parent,
-  }: ITilePickServiceOptions) {
+  constructor({ layerService, tileLayerService, parent }: ITilePickServiceOptions) {
     this.layerService = layerService;
     this.tileLayerService = tileLayerService;
     this.parent = parent;
@@ -49,11 +45,7 @@ export class TilePickService implements ITilePickService {
       const tile = this.tileLayerService.getVisibleTileBylngLat(target.lngLat);
       if (tile && tile.getMainLayer() !== undefined) {
         const pickLayer = tile.getMainLayer() as ILayer;
-        return pickLayer.layerPickService.pickRasterLayer(
-          pickLayer,
-          target,
-          this.parent,
-        );
+        return pickLayer.layerPickService.pickRasterLayer(pickLayer, target, this.parent);
       }
       return false;
     }
@@ -119,9 +111,7 @@ export class TilePickService implements ITilePickService {
   /** 从瓦片中根据数据 */
   public getFeatureById(pickedFeatureIdx: number) {
     // 提取当前可见瓦片
-    const tiles = this.tileLayerService
-      .getTiles()
-      .filter((tile: ITile) => tile.visible);
+    const tiles = this.tileLayerService.getTiles().filter((tile: ITile) => tile.visible);
     // 提取当前可见瓦片中匹配 ID 的 feature 列表
     const features: any[] = [];
     tiles.forEach((tile: ITile) => {
@@ -138,8 +128,7 @@ export class TilePickService implements ITilePickService {
 
   // Tip: for interface define
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public pickRasterLayer(
-  ) {
+  public pickRasterLayer() {
     return false;
   }
 }

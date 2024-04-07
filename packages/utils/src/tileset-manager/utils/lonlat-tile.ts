@@ -6,10 +6,7 @@ export function osmLonLat2TileXY(lon: number, lat: number, zoom: number) {
   const x = Math.floor(((lon + 180) / 360) * Math.pow(2, zoom));
   const y = Math.floor(
     ((1 -
-      Math.log(
-        Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180),
-      ) /
-        Math.PI) /
+      Math.log(Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)) / Math.PI) /
       2) *
       Math.pow(2, zoom),
   );
@@ -89,8 +86,7 @@ export function getTileIndices({
   // 计算中心瓦片索引
   const centerX = (maxX + minX) / 2;
   const centerY = (maxY + minY) / 2;
-  const distance = (x: number, y: number) =>
-    Math.abs(x - centerX) + Math.abs(y - centerY);
+  const distance = (x: number, y: number) => Math.abs(x - centerX) + Math.abs(y - centerY);
   // 通过离中心瓦片距离排序，越近的排在前面
   indices.sort((a, b) => distance(a.x, a.y) - distance(b.x, b.y));
 
@@ -100,12 +96,7 @@ export function getTileIndices({
 /**
  * Warp 瓦片索引，支持对称子午线瓦片连续
  */
-export const getTileWarpXY = (
-  x: number,
-  y: number,
-  z: number,
-  wrap: boolean = true,
-) => {
+export const getTileWarpXY = (x: number, y: number, z: number, wrap: boolean = true) => {
   const scale = Math.pow(2, z);
   const maxIndex = scale - 1;
   const distance = scale;

@@ -51,9 +51,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     sizePerElement: 0,
     elements: [],
   };
-  public registerStyleAttribute(
-    options: Partial<IStyleAttributeInitializationOptions>,
-  ) {
+  public registerStyleAttribute(options: Partial<IStyleAttributeInitializationOptions>) {
     let attributeToUpdate = this.getLayerStyleAttribute(options.name || '');
     if (attributeToUpdate) {
       attributeToUpdate.setProps(options);
@@ -66,9 +64,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
   }
 
   public unRegisterStyleAttribute(name: string) {
-    const attributeIndex = this.attributes.findIndex(
-      (attribute) => attribute.name === name,
-    );
+    const attributeIndex = this.attributes.findIndex((attribute) => attribute.name === name);
     if (attributeIndex > -1) {
       this.attributes.splice(attributeIndex, 1);
     }
@@ -117,12 +113,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
     return this.attributes;
   }
 
-  public getLayerStyleAttribute(
-    attributeName: string,
-  ): IStyleAttribute | undefined {
-    return this.attributes.find(
-      (attribute) => attribute.name === attributeName,
-    );
+  public getLayerStyleAttribute(attributeName: string): IStyleAttribute | undefined {
+    return this.attributes.find((attribute) => attribute.name === attributeName);
   }
 
   public getLayerAttributeScale(name: string) {
@@ -141,9 +133,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
     endFeatureIdx?: number,
     layer?: ILayer,
   ) {
-    const attributeToUpdate = this.attributes.find(
-      (attribute) => attribute.name === attributeName,
-    );
+    const attributeToUpdate = this.attributes.find((attribute) => attribute.name === attributeName);
     if (attributeToUpdate && attributeToUpdate.descriptor) {
       const { descriptor } = attributeToUpdate;
       const { update, buffer, size = 0 } = descriptor;
@@ -161,14 +151,9 @@ export default class StyleAttributeService implements IStyleAttributeService {
         const bufferOffsetInBytes = offset * size * bytesPerElement;
         const updatedBufferData = featuresToUpdate
           .map(({ featureIdx, vertices, normals }, attributeIdx) => {
-            const verticesNumForCurrentFeature =
-              vertices.length / sizePerElement;
+            const verticesNumForCurrentFeature = vertices.length / sizePerElement;
             const featureData: number[] = [];
-            for (
-              let vertexIdx = 0;
-              vertexIdx < verticesNumForCurrentFeature;
-              vertexIdx++
-            ) {
+            for (let vertexIdx = 0; vertexIdx < verticesNumForCurrentFeature; vertexIdx++) {
               const normal = normals
                 ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                   normals!.slice(vertexIdx * 3, vertexIdx * 3 + 3)
@@ -250,8 +235,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         indices.push(i + verticesNum);
       });
       size = vertexSize;
-      const verticesNumForCurrentFeature =
-        verticesForCurrentFeature.length / vertexSize;
+      const verticesNumForCurrentFeature = verticesForCurrentFeature.length / vertexSize;
 
       // 记录三角化结果，用于后续精确更新指定 feature
       this.featureLayout.sizePerElement = size;
@@ -264,14 +248,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
       verticesNum += verticesNumForCurrentFeature;
       // 根据 position 顶点生成其他顶点数据 // color/size/ui
-      for (
-        let vertexIdx = 0;
-        vertexIdx < verticesNumForCurrentFeature;
-        vertexIdx++
-      ) {
-        const normal =
-          normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) ||
-          [];
+      for (let vertexIdx = 0; vertexIdx < verticesNumForCurrentFeature; vertexIdx++) {
+        const normal = normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) || [];
         const vertice = verticesForCurrentFeature.slice(
           vertexIdx * vertexSize,
           vertexIdx * vertexSize + vertexSize,
@@ -299,8 +277,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         }); // end for each
       } // end for
     }); // end features for Each
-    const { createAttribute, createBuffer, createElements } =
-      this.rendererService;
+    const { createAttribute, createBuffer, createElements } = this.rendererService;
 
     const attributes: {
       [attributeName: string]: IAttribute;
@@ -382,8 +359,7 @@ export default class StyleAttributeService implements IStyleAttributeService {
         indices.push(i + verticesNum);
       });
       size = vertexSize;
-      const verticesNumForCurrentFeature =
-        verticesForCurrentFeature.length / vertexSize;
+      const verticesNumForCurrentFeature = verticesForCurrentFeature.length / vertexSize;
 
       // 记录三角化结果，用于后续精确更新指定 feature
       this.featureLayout.sizePerElement = size;
@@ -396,14 +372,8 @@ export default class StyleAttributeService implements IStyleAttributeService {
 
       verticesNum += verticesNumForCurrentFeature;
       // 根据 position 顶点生成其他顶点数据
-      for (
-        let vertexIdx = 0;
-        vertexIdx < verticesNumForCurrentFeature;
-        vertexIdx++
-      ) {
-        const normal =
-          normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) ||
-          [];
+      for (let vertexIdx = 0; vertexIdx < verticesNumForCurrentFeature; vertexIdx++) {
+        const normal = normalsForCurrentFeature?.slice(vertexIdx * 3, vertexIdx * 3 + 3) || [];
         const vertice = verticesForCurrentFeature.slice(
           vertexIdx * vertexSize,
           vertexIdx * vertexSize + vertexSize,

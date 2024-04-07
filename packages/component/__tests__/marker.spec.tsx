@@ -2,9 +2,7 @@ import { TestScene } from '@antv/l7-test-utils';
 import Marker from '../src/marker';
 import Popup from '../src/popup/popup';
 
-const popup = new Popup({ offsets: [0, 20] }).setHTML(
-  '<h1 onclick= alert("123")>111</h1>',
-);
+const popup = new Popup({ offsets: [0, 20] }).setHTML('<h1 onclick= alert("123")>111</h1>');
 
 const marker = new Marker().setLnglat({ lng: 120, lat: 30 }).setPopup(popup);
 const scene = TestScene({
@@ -65,16 +63,13 @@ describe('Marker', () => {
 
   it('marker zoom', () => {
     console.log(marker.getElement().style.left);
-   
+
     scene.on('zoomchange', () => {
       console.log(1122);
-    }); 
+    });
     scene.setZoomAndCenter(11, [121, 31]);
     setTimeout(() => {
       console.log(marker.getElement().style.left);
-    },1000);
-   
-  
-
+    }, 1000);
   });
 });

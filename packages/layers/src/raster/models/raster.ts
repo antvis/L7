@@ -34,18 +34,13 @@ export default class RasterModel extends BaseModel {
       rampColors,
     } = this.layer.getLayerConfig() as IRasterLayerStyleOptions;
     const newdomain = domain || getDefaultDomain(rampColors);
-    this.colorTexture = this.layer.textureService.getColorTexture(
-      rampColors,
-      newdomain,
-    );
+    this.colorTexture = this.layer.textureService.getColorTexture(rampColors, newdomain);
     const commonOptions = {
       u_domain: newdomain,
       u_opacity: opacity || 1,
       u_noDataValue: noDataValue,
       u_clampLow: clampLow ? 1 : 0,
-      u_clampHigh: (typeof clampHigh !== 'undefined' ? clampHigh : clampLow)
-        ? 1
-        : 0,
+      u_clampHigh: (typeof clampHigh !== 'undefined' ? clampHigh : clampLow) ? 1 : 0,
       u_rasterTexture: this.texture,
       u_colorTexture: this.colorTexture,
     };
@@ -130,11 +125,7 @@ export default class RasterModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4]];
         },
       },

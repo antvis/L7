@@ -20,9 +20,7 @@ export function MapRender(option: { map: string; renderer: string }) {
       {
         parser: {
           type: 'image',
-          extent: [
-            113.1277263548, 32.3464238863, 118.1365790452, 36.4786759137,
-          ],
+          extent: [113.1277263548, 32.3464238863, 118.1365790452, 36.4786759137],
         },
       },
     );

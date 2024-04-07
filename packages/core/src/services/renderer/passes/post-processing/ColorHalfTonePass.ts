@@ -15,8 +15,7 @@ export default class ColorHalftonePass extends BasePostProcessingPass<IColorHalf
       fs: colorHalftone,
     });
 
-    const { vs, fs, uniforms } =
-      this.shaderModuleService.getModule('colorhalftone-pass');
+    const { vs, fs, uniforms } = this.shaderModuleService.getModule('colorhalftone-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {

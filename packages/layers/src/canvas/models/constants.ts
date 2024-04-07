@@ -1,4 +1,3 @@
-
 export type CanvasModelType = 'canvas2d' | 'webgl' | 'webgl2' | 'webgpu';
 
 export const CanvasContextTypeMap: Record<CanvasModelType, string> = {

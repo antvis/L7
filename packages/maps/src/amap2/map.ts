@@ -157,7 +157,8 @@ export default class AMapService extends AMapBaseService {
     // @ts-ignore
     const SW = bounds.getSouthWest();
     const center = this.getCenter();
-    const maxlng = center.lng > NE.getLng() || center.lng < SW.getLng() ? 180 - NE.getLng() : NE.getLng();
+    const maxlng =
+      center.lng > NE.getLng() || center.lng < SW.getLng() ? 180 - NE.getLng() : NE.getLng();
     const minlng = center.lng < SW.getLng() ? SW.getLng() - 180 : SW.getLng();
     // 兼容 Mapbox，统一返回西南、东北
     return [

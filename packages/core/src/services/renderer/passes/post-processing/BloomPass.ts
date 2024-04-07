@@ -17,8 +17,7 @@ export default class BloomPass extends BasePostProcessingPass<IBloomPassConfig> 
       fs: blur,
     });
 
-    const { vs, fs, uniforms } =
-      this.shaderModuleService.getModule('blur-pass');
+    const { vs, fs, uniforms } = this.shaderModuleService.getModule('blur-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {

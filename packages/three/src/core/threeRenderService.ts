@@ -1,11 +1,6 @@
 import type { IMapService, IMercator, IRendererService } from '@antv/l7';
 import type { Camera } from 'three';
-import {
-  Matrix4,
-  PerspectiveCamera,
-  Scene as ThreeScene,
-  WebGLRenderer,
-} from 'three';
+import { Matrix4, PerspectiveCamera, Scene as ThreeScene, WebGLRenderer } from 'three';
 const DEG2RAD = Math.PI / 180;
 export interface IThreeRenderService {
   renderer: WebGLRenderer;
@@ -40,10 +35,7 @@ export class ThreeRenderService implements IThreeRenderService {
     const gl = this.rendererService.getGLContext();
     if (canvas && gl) {
       const center = this.mapService.getCenter();
-      this.center = this.mapService.lngLatToMercator(
-        [center.lng, center.lat],
-        0,
-      );
+      this.center = this.mapService.lngLatToMercator([center.lng, center.lat], 0);
     }
     const { x, y, z } = this.center;
     this.cameraTransform = new Matrix4().makeTranslation(x, y, z);
@@ -95,9 +87,7 @@ export class ThreeRenderService implements IThreeRenderService {
       // @ts-ignore
       this.mapService.map.transform.customLayerMatrix(),
     );
-    this.camera.projectionMatrix = mercatorMatrix.multiply(
-      this.cameraTransform,
-    );
+    this.camera.projectionMatrix = mercatorMatrix.multiply(this.cameraTransform);
     return this.camera;
   }
 
@@ -137,8 +127,7 @@ export class ThreeRenderService implements IThreeRenderService {
     customCoords.getCenter();
 
     const camera = this.camera;
-    const { near, far, fov, up, lookAt, position } =
-      customCoords.getCameraParams();
+    const { near, far, fov, up, lookAt, position } = customCoords.getCameraParams();
     // @ts-ignore
     camera.near = near;
     // @ts-ignore

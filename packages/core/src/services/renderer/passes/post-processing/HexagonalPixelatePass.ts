@@ -14,9 +14,7 @@ export default class HexagonalPixelatePass extends BasePostProcessingPass<IHexag
       fs: hexagonalPixelate,
     });
 
-    const { vs, fs, uniforms } = this.shaderModuleService.getModule(
-      'hexagonalpixelate-pass',
-    );
+    const { vs, fs, uniforms } = this.shaderModuleService.getModule('hexagonalpixelate-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {

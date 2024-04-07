@@ -59,10 +59,7 @@ export class AJAXError extends Error {
   }
 }
 
-function makeXMLHttpRequest(
-  requestParameters: RequestParameters,
-  callback: ResponseCallback<any>,
-) {
+function makeXMLHttpRequest(requestParameters: RequestParameters, callback: ResponseCallback<any>) {
   const xhr = new XMLHttpRequest();
 
   const url = Array.isArray(requestParameters.url)
@@ -86,10 +83,7 @@ function makeXMLHttpRequest(
     callback(new Error(xhr.statusText));
   };
   xhr.onload = () => {
-    if (
-      ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0) &&
-      xhr.response !== null
-    ) {
+    if (((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0) && xhr.response !== null) {
       let data: unknown = xhr.response;
 
       if (requestParameters.type === 'json') {
@@ -132,45 +126,35 @@ export function makeXMLHttpRequestPromise(
   requestParameters: RequestParameters,
 ): Promise<IXhrRequestResult> {
   return new Promise((resolve, reject) => {
-    makeXMLHttpRequest(
-      requestParameters,
-      (error, data, cacheControl, expires, xhr) => {
-        if (error) {
-          reject({
-            err: error,
-            data: null,
-            xhr,
-          });
-        } else {
-          resolve({
-            err: null,
-            data,
-            cacheControl,
-            expires,
-            xhr,
-          });
-        }
-      },
-    );
+    makeXMLHttpRequest(requestParameters, (error, data, cacheControl, expires, xhr) => {
+      if (error) {
+        reject({
+          err: error,
+          data: null,
+          xhr,
+        });
+      } else {
+        resolve({
+          err: null,
+          data,
+          cacheControl,
+          expires,
+          xhr,
+        });
+      }
+    });
   });
 }
 
-function makeRequest(
-  requestParameters: RequestParameters,
-  callback: ResponseCallback<any>,
-) {
+function makeRequest(requestParameters: RequestParameters, callback: ResponseCallback<any>) {
   // TODO: isWorker
   // makeFetchRequest
 
   return makeXMLHttpRequest(requestParameters, callback);
 }
 
-export const getJSON = (
-  requestParameters: RequestParameters,
-  callback: ResponseCallback<any>,
-) => {
-  const action =
-    getProtocolAction(requestParameters.url as string) || makeRequest;
+export const getJSON = (requestParameters: RequestParameters, callback: ResponseCallback<any>) => {
+  const action = getProtocolAction(requestParameters.url as string) || makeRequest;
   return action({ ...requestParameters, type: 'json' }, callback);
 };
 
@@ -178,8 +162,7 @@ export const getArrayBuffer = (
   requestParameters: RequestParameters,
   callback: ResponseCallback<ArrayBuffer>,
 ) => {
-  const action =
-    getProtocolAction(requestParameters.url as string) || makeRequest;
+  const action = getProtocolAction(requestParameters.url as string) || makeRequest;
   return action({ ...requestParameters, type: 'arrayBuffer' }, callback);
 };
 
@@ -201,8 +184,7 @@ export function sameOrigin(url: string) {
   const a = window.document.createElement('a');
   a.href = url;
   return (
-    a.protocol === window.document.location.protocol &&
-    a.host === window.document.location.host
+    a.protocol === window.document.location.protocol && a.host === window.document.location.host
   );
 }
 
@@ -262,17 +244,12 @@ export const getImage = (
 ) => {
   // request the image with XHR to work around caching issues
   // see https://github.com/mapbox/mapbox-gl-js/issues/1470
-  const optionFunc = (
-    err?: Error | Error[] | null,
-    imgData?: ArrayBuffer | null,
-  ) => {
+  const optionFunc = (err?: Error | Error[] | null, imgData?: ArrayBuffer | null) => {
     if (err) {
       callback(err);
     } else if (imgData) {
       const imageBitmapSupported = typeof createImageBitmap === 'function';
-      const transformImgData = transformResponse
-        ? transformResponse(imgData)
-        : imgData;
+      const transformImgData = transformResponse ? transformResponse(imgData) : imgData;
       if (imageBitmapSupported) {
         arrayBufferToImageBitmap(transformImgData, callback);
       } else {

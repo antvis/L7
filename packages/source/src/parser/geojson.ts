@@ -1,10 +1,4 @@
-import type {
-  Feature,
-  FeatureCollection,
-  Geometries,
-  Geometry,
-  Properties,
-} from '@turf/helpers';
+import type { Feature, FeatureCollection, Geometries, Geometry, Properties } from '@turf/helpers';
 import { getCoords } from '@turf/invariant';
 import { flattenEach } from '@turf/meta';
 import type { IFeatureKey, IParseDataItem, IParserData } from '../interface';
@@ -83,24 +77,21 @@ export default function geoJSON(
   }
 
   // multi feature 情况拆分
-  flattenEach(
-    data,
-    (currentFeature: Feature<Geometries, Properties>, featureIndex: number) => {
-      let featureId = getFeatureID(currentFeature, cfg?.featureId);
-      if (featureId === null) {
-        featureId = featureIndex;
-      }
-      const sortedID = featureId;
+  flattenEach(data, (currentFeature: Feature<Geometries, Properties>, featureIndex: number) => {
+    let featureId = getFeatureID(currentFeature, cfg?.featureId);
+    if (featureId === null) {
+      featureId = featureIndex;
+    }
+    const sortedID = featureId;
 
-      const coord = getCoords(currentFeature);
-      const dataItem: IParseDataItem = {
-        ...currentFeature.properties,
-        coordinates: coord,
-        _id: sortedID,
-      };
-      resultData.push(dataItem);
-    },
-  );
+    const coord = getCoords(currentFeature);
+    const dataItem: IParseDataItem = {
+      ...currentFeature.properties,
+      coordinates: coord,
+      _id: sortedID,
+    };
+    resultData.push(dataItem);
+  });
 
   return {
     dataArray: resultData,

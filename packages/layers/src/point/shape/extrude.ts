@@ -26,11 +26,7 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
     normals.push(0, 0, 1);
   }
   positions.push(...flattengeo.vertices);
-  const triangles = earcut(
-    flattengeo.vertices,
-    flattengeo.holes,
-    flattengeo.dimensions,
-  );
+  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   indexArray.push(...triangles);
   for (let i = 0; i < n; i++) {
     const prePoint = flattengeo.vertices.slice(i * 3, i * 3 + 3);
@@ -62,11 +58,7 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
 }
 export function fillPolygon(points: IPath[]) {
   const flattengeo = earcut.flatten(points);
-  const triangles = earcut(
-    flattengeo.vertices,
-    flattengeo.holes,
-    flattengeo.dimensions,
-  );
+  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   return {
     positions: flattengeo.vertices,
     index: triangles,

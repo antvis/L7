@@ -1,10 +1,7 @@
 import type { IAttribute, IAttributeInitializationOptions } from './IAttribute';
 import type { IBuffer, IBufferInitializationOptions } from './IBuffer';
 import type { IElements, IElementsInitializationOptions } from './IElements';
-import type {
-  IFramebuffer,
-  IFramebufferInitializationOptions,
-} from './IFramebuffer';
+import type { IFramebuffer, IFramebufferInitializationOptions } from './IFramebuffer';
 import type { IModel, IModelInitializationOptions } from './IModel';
 import type { IPass } from './IMultiPassRenderer';
 import type { ITexture2D, ITexture2DInitializationOptions } from './ITexture2D';
@@ -66,10 +63,7 @@ export interface IRendererService {
   createElements(options: IElementsInitializationOptions): IElements;
   createTexture2D(options: ITexture2DInitializationOptions): ITexture2D;
   createFramebuffer(options: IFramebufferInitializationOptions): IFramebuffer;
-  useFramebuffer(
-    framebuffer: IFramebuffer | null,
-    drawCommands: () => void,
-  ): void;
+  useFramebuffer(framebuffer: IFramebuffer | null, drawCommands: () => void): void;
   useFramebufferAsync(
     framebuffer: IFramebuffer | null,
     drawCommands: () => Promise<void>,

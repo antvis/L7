@@ -61,11 +61,7 @@ export interface IGlobalConfigService {
    * @param layerId 图层 ID
    * @param config 图层配置项
    */
-  setLayerConfig(
-    sceneId: string,
-    layerId: string,
-    config: Partial<ILayerConfig>,
-  ): void;
+  setLayerConfig(sceneId: string, layerId: string, config: Partial<ILayerConfig>): void;
   /**
    * 获取数据映射
    */
@@ -76,10 +72,7 @@ export interface IGlobalConfigService {
    * @param layerId sh
    * @param attr
    */
-  setAttributeConfig(
-    layerId: string,
-    attr: Partial<ILayerAttributesOption>,
-  ): void;
+  setAttributeConfig(layerId: string, attr: Partial<ILayerAttributesOption>): void;
 
   /**
    * 清除场景和图层配置项 Cache，但是需要保留校验器

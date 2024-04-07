@@ -85,23 +85,9 @@ export default class ExtrudePolyline {
     point: vec3, // 顶点
     distanceRadio: number,
   ) {
-    positions.push(
-      point[0],
-      point[1],
-      point[2] | 0,
-      distanceRadio,
-      0,
-      point[2] | 0,
-    );
+    positions.push(point[0], point[1], point[2] | 0, distanceRadio, 0, point[2] | 0);
     this.complex.indexes.push(this.currentIndex);
-    positions.push(
-      point[0],
-      point[1],
-      point[2] | 0,
-      distanceRadio,
-      0,
-      point[2] | 0,
-    );
+    positions.push(point[0], point[1], point[2] | 0, distanceRadio, 0, point[2] | 0);
     this.complex.indexes.push(this.currentIndex);
     this.currentIndex++;
   }

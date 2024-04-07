@@ -1,11 +1,5 @@
-import type {
-  IEncodeFeature,
-  ILayerConfig,
-  IModel} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, ILayerConfig, IModel } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -40,9 +34,7 @@ export default class ExtrudeModel extends BaseModel {
       },
 
       lightEnable = true,
-    } = this.layer.getLayerConfig() as Partial<
-      ILayerConfig & IPointLayerStyleOptions
-    >;
+    } = this.layer.getLayerConfig() as Partial<ILayerConfig & IPointLayerStyleOptions>;
 
     // 转化渐变色
     let useLinearColor = 0; // 默认不生效
@@ -140,8 +132,7 @@ export default class ExtrudeModel extends BaseModel {
           if (size) {
             let buffersize: number[] = [];
             if (Array.isArray(size)) {
-              buffersize =
-                size.length === 2 ? [size[0], size[0], size[1]] : size;
+              buffersize = size.length === 2 ? [size[0], size[0], size[1]] : size;
             }
             if (!Array.isArray(size)) {
               buffersize = [size, size, size];

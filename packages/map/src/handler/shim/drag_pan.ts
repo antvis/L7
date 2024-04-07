@@ -20,11 +20,7 @@ export default class DragPanHandler {
   /**
    * @private
    */
-  constructor(
-    el: HTMLElement,
-    mousePan: MousePanHandler,
-    touchPan: TouchPanHandler,
-  ) {
+  constructor(el: HTMLElement, mousePan: MousePanHandler, touchPan: TouchPanHandler) {
     this.el = el;
     this.mousePan = mousePan;
     this.touchPan = touchPan;

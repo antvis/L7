@@ -45,11 +45,7 @@ export default class Viewport implements IViewport {
     vec3.multiply(
       this.cameraPosition,
       this.cameraPosition,
-      vec3.fromValues(
-        this.earthCameraRadius,
-        this.earthCameraRadius,
-        this.earthCameraRadius,
-      ),
+      vec3.fromValues(this.earthCameraRadius, this.earthCameraRadius, this.earthCameraRadius),
     );
 
     vec3.scale(this.cameraPosition, this.cameraPosition, this.earthCameraZoom);
@@ -64,16 +60,8 @@ export default class Viewport implements IViewport {
     mat4.lookAt(this.viewMatrix, this.cameraPosition, target, up);
     this.viewUncenteredMatrix = mat4.clone(this.viewMatrix);
 
-    mat4.multiply(
-      this.viewProjectionMatrix,
-      this.projectionMatrix,
-      this.viewMatrix,
-    );
-    mat4.multiply(
-      this.ViewProjectionMatrixUncentered,
-      this.projectionMatrix,
-      this.viewMatrix,
-    );
+    mat4.multiply(this.viewProjectionMatrix, this.projectionMatrix, this.viewMatrix);
+    mat4.multiply(this.ViewProjectionMatrixUncentered, this.projectionMatrix, this.viewMatrix);
   }
 
   /**
@@ -139,10 +127,7 @@ export default class Viewport implements IViewport {
     return 1;
   }
 
-  public projectFlat(
-    lngLat: [number, number],
-    scale?: number | undefined,
-  ): [number, number] {
+  public projectFlat(lngLat: [number, number], scale?: number | undefined): [number, number] {
     return this.viewport.projectFlat(lngLat, scale);
   }
 }

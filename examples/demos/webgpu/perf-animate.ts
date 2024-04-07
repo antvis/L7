@@ -2,11 +2,7 @@ import { LineLayer, PointLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
 import Stats from 'stats.js';
 
-export function MapRender(option: {
-  map: string;
-  renderer: string;
-  animate: boolean;
-}) {
+export function MapRender(option: { map: string; renderer: string; animate: boolean }) {
   option.animate = true;
   const scene = new Scene({
     id: 'map',
@@ -53,13 +49,9 @@ export function MapRender(option: {
       // 2400
       flydata = new Array(50).fill(flydata).flat();
 
-      const worldLine = new LineLayer()
-        .source(world)
-        .color('#41fc9d')
-        .size(0.5)
-        .style({
-          opacity: 0.4,
-        });
+      const worldLine = new LineLayer().source(world).color('#41fc9d').size(0.5).style({
+        opacity: 0.4,
+      });
       const dotPoint = new PointLayer()
         .source(dotData, {
           parser: {

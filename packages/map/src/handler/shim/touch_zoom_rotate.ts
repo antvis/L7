@@ -87,11 +87,7 @@ export default class TouchZoomRotateHandler {
    * @returns {boolean} //eslint-disable-line
    */
   public isActive() {
-    return (
-      this.touchZoom.isActive() ||
-      this.touchRotate.isActive() ||
-      this.tapDragZoom.isActive()
-    );
+    return this.touchZoom.isActive() || this.touchRotate.isActive() || this.tapDragZoom.isActive();
   }
 
   /**

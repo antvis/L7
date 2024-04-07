@@ -1,7 +1,4 @@
-import type {
-  IRenderbuffer,
-  IRenderbufferInitializationOptions,
-} from '@antv/l7-core';
+import type { IRenderbuffer, IRenderbufferInitializationOptions } from '@antv/l7-core';
 import type regl from 'regl';
 import { formatMap } from './constants';
 

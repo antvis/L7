@@ -23,10 +23,7 @@ export interface IViewport {
   getZoomScale(): number;
   getFocalDistance(): number;
   getCenter(): [number, number];
-  projectFlat(
-    lngLat: [number, number],
-    scale?: number | undefined,
-  ): [number, number];
+  projectFlat(lngLat: [number, number], scale?: number | undefined): [number, number];
 }
 
 export interface ICameraService extends Omit<IViewport, 'syncWithMapCamera'> {

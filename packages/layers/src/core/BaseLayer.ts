@@ -1,10 +1,5 @@
 // @ts-ignore
-import {
-  AsyncSeriesBailHook,
-  AsyncWaterfallHook,
-  SyncBailHook,
-  SyncHook,
-} from '@antv/async-hook';
+import { AsyncSeriesBailHook, AsyncWaterfallHook, SyncBailHook, SyncHook } from '@antv/async-hook';
 import type {
   IActiveOption,
   IAnimateOption,
@@ -42,25 +37,16 @@ import type {
   StyleAttributeOption,
   Triangulation,
 } from '@antv/l7-core';
-import {
-  BlendType,
-  IDebugLog,
-  ILayerStage,
-  globalConfigService,
-} from '@antv/l7-core';
+import { BlendType, IDebugLog, ILayerStage, globalConfigService } from '@antv/l7-core';
 import type Source from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { createPlugins } from '../plugins';
 import { BlendTypes } from '../utils/blend';
-import {
-  createMultiPassRenderer,
-  normalizePasses,
-} from '../utils/multiPassRender';
+import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
 import LayerPickService from './LayerPickService';
 import TextureService from './TextureService';
-const { isEqual, isFunction, isNumber, isObject, isPlainObject, isUndefined } =
-  lodashUtil;
+const { isEqual, isFunction, isNumber, isObject, isPlainObject, isUndefined } = lodashUtil;
 /**
  * 分配 layer id
  */
@@ -205,9 +191,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected layerSource: Source;
 
-  public postProcessingPassFactory: (
-    name: string,
-  ) => IPostProcessingPass<unknown>;
+  public postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>;
 
   public get normalPassFactory() {
     return this.container.normalPassFactory;
@@ -322,14 +306,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public getLayerConfig<T = any>() {
-    return this.configService.getLayerConfig<ChildLayerStyleOptions & T>(
-      this.id,
-    );
+    return this.configService.getLayerConfig<ChildLayerStyleOptions & T>(this.id);
   }
 
-  public updateLayerConfig(
-    configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>,
-  ) {
+  public updateLayerConfig(configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>) {
     // 同步 rawConfig
     Object.keys(configToUpdate).map((key) => {
       if (key in this.rawConfig) {
@@ -419,9 +399,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
                 // @ts-ignore
                 attributeValues,
                 // @ts-ignore
-                attributeField
-                  ? undefined
-                  : this.getLayerConfig()[attributeName], // 设置了字段不需要设置默认值
+                attributeField ? undefined : this.getLayerConfig()[attributeName], // 设置了字段不需要设置默认值
               ),
             },
           },
@@ -546,12 +524,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    const flag = this.updateStyleAttribute(
-      'filter',
-      field,
-      values,
-      updateOptions,
-    );
+    const flag = this.updateStyleAttribute('filter', field, values, updateOptions);
     this.dataState.dataSourceNeedUpdate = flag && this.inited;
     return this;
   }
@@ -565,12 +538,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       field,
       values,
     };
-    const flag = this.updateStyleAttribute(
-      'shape',
-      field,
-      values,
-      updateOptions,
-    );
+    const flag = this.updateStyleAttribute('shape', field, values, updateOptions);
     this.dataState.dataSourceNeedUpdate = flag && this.inited;
     return this;
   }
@@ -621,7 +589,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setData(data: any, options?: ISourceCFG) {
-
     if (this.inited) {
       this.dataUpdatelog();
       this.layerSource.setData(data, options);
@@ -629,35 +596,29 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.on('inited', () => {
         this.dataUpdatelog();
         this.layerSource.setData(data, options);
-        
       });
     }
     return this;
   }
-  private dataUpdatelog(){
+  private dataUpdatelog() {
     this.log(IDebugLog.SourceInitStart, ILayerStage.UPDATE);
     this.layerSource.once('update', () => {
       this.log(IDebugLog.SourceInitEnd, ILayerStage.UPDATE);
     });
-
   }
 
-  public style(
-    options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>,
-  ): ILayer {
+  public style(options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>): ILayer {
     const { passes, ...rest } = options;
     // passes 特殊处理
     if (passes) {
-      normalizePasses(passes).forEach(
-        (pass: [string, { [key: string]: unknown }]) => {
-          const postProcessingPass = this.multiPassRenderer
-            .getPostProcessor()
-            .getPostProcessingPassByName(pass[0]);
-          if (postProcessingPass) {
-            postProcessingPass.updateOptions(pass[1]);
-          }
-        },
-      );
+      normalizePasses(passes).forEach((pass: [string, { [key: string]: unknown }]) => {
+        const postProcessingPass = this.multiPassRenderer
+          .getPostProcessor()
+          .getPostProcessingPassByName(pass[0]);
+        if (postProcessingPass) {
+          postProcessingPass.updateOptions(pass[1]);
+        }
+      });
     }
     // 兼容 borderColor borderWidth
     // @ts-ignore
@@ -700,10 +661,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     Object.keys(options).forEach((key: string) => {
       if (
         // 需要数据映射
-        [
-          ...this.enableShaderEncodeStyles,
-          ...this.enableDataEncodeStyles,
-        ].includes(key) &&
+        [...this.enableShaderEncodeStyles, ...this.enableDataEncodeStyles].includes(key) &&
         isPlainObject(options[key]) &&
         (options[key].field || options[key].value) &&
         !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
@@ -803,30 +761,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.updateLayerConfig(activeOption);
     return this;
   }
-  public setActive(
-    id: number | { x: number; y: number },
-    options?: IActiveOption,
-  ): void {
+  public setActive(id: number | { x: number; y: number }, options?: IActiveOption): void {
     if (isObject(id)) {
       const { x = 0, y = 0 } = id;
       this.updateLayerConfig({
-        highlightColor: isObject(options)
-          ? options.color
-          : this.getLayerConfig().highlightColor,
-        activeMix: isObject(options)
-          ? options.mix
-          : this.getLayerConfig().activeMix,
+        highlightColor: isObject(options) ? options.color : this.getLayerConfig().highlightColor,
+        activeMix: isObject(options) ? options.mix : this.getLayerConfig().activeMix,
       });
       this.pick({ x, y });
     } else {
       this.updateLayerConfig({
         pickedFeatureID: id,
-        highlightColor: isObject(options)
-          ? options.color
-          : this.getLayerConfig().highlightColor,
-        activeMix: isObject(options)
-          ? options.mix
-          : this.getLayerConfig().activeMix,
+        highlightColor: isObject(options) ? options.color : this.getLayerConfig().highlightColor,
+        activeMix: isObject(options) ? options.mix : this.getLayerConfig().activeMix,
       });
       this.hooks.beforeHighlight
         .call(encodePickingColor(id as number) as number[])
@@ -857,30 +804,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
 
-  public setSelect(
-    id: number | { x: number; y: number },
-    options?: IActiveOption,
-  ): void {
+  public setSelect(id: number | { x: number; y: number }, options?: IActiveOption): void {
     if (isObject(id)) {
       const { x = 0, y = 0 } = id;
       this.updateLayerConfig({
-        selectColor: isObject(options)
-          ? options.color
-          : this.getLayerConfig().selectColor,
-        selectMix: isObject(options)
-          ? options.mix
-          : this.getLayerConfig().selectMix,
+        selectColor: isObject(options) ? options.color : this.getLayerConfig().selectColor,
+        selectMix: isObject(options) ? options.mix : this.getLayerConfig().selectMix,
       });
       this.pick({ x, y });
     } else {
       this.updateLayerConfig({
         pickedFeatureID: id,
-        selectColor: isObject(options)
-          ? options.color
-          : this.getLayerConfig().selectColor,
-        selectMix: isObject(options)
-          ? options.mix
-          : this.getLayerConfig().selectMix,
+        selectColor: isObject(options) ? options.color : this.getLayerConfig().selectColor,
+        selectMix: isObject(options) ? options.mix : this.getLayerConfig().selectMix,
       });
       this.hooks.beforeSelect
         .call(encodePickingColor(id as number) as number[])
@@ -941,11 +877,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
-    const {
-      visible,
-      minZoom = -Infinity,
-      maxZoom = Infinity,
-    } = this.getLayerConfig();
+    const { visible, minZoom = -Infinity, maxZoom = Infinity } = this.getLayerConfig();
     return !!visible && zoom >= minZoom && zoom < maxZoom;
   }
 
@@ -1109,13 +1041,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public isDirty() {
-    return !!(
-      this.styleAttributeService.getLayerStyleAttributes() || []
-    ).filter(
+    return !!(this.styleAttributeService.getLayerStyleAttributes() || []).filter(
       (attribute) =>
-        attribute.needRescale ||
-        attribute.needRemapping ||
-        attribute.needRegenerateVertices,
+        attribute.needRescale || attribute.needRemapping || attribute.needRegenerateVertices,
     ).length;
   }
   // 外部初始化Source
@@ -1205,14 +1133,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       return items;
     } else if (scale.ticks) {
       // 连续类型 Continuous (Linear, Power, Log, Identity, Time)
-      const items: ILegendClassificaItem[] = scale
-        .ticks()
-        .map((item: string) => {
-          return {
-            value: item,
-            [name]: scale(item),
-          };
-        });
+      const items: ILegendClassificaItem[] = scale.ticks().map((item: string) => {
+        return {
+          value: item,
+          [name]: scale(item),
+        };
+      });
 
       return items;
     } else if (scale?.domain) {
@@ -1237,16 +1163,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.interactionService.triggerHover({ x, y });
   }
 
-  public boxSelect(
-    box: [number, number, number, number],
-    cb: (...args: any[]) => void,
-  ) {
+  public boxSelect(box: [number, number, number, number], cb: (...args: any[]) => void) {
     this.pickingService.boxPickLayer(this, box, cb);
   }
 
   public async buildLayerModel(
-    options: ILayerModelInitializationOptions &
-      Partial<IModelInitializationOptions>,
+    options: ILayerModelInitializationOptions & Partial<IModelInitializationOptions>,
   ): Promise<IModel> {
     const {
       moduleName,
@@ -1266,13 +1188,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
     const { createModel } = this.rendererService;
     return new Promise((resolve) => {
-      const { attributes, elements, count } =
-        this.styleAttributeService.createAttributesAndIndices(
-          this.encodedData,
-          triangulation,
-          styleOption,
-          this,
-        );
+      const { attributes, elements, count } = this.styleAttributeService.createAttributesAndIndices(
+        this.encodedData,
+        triangulation,
+        styleOption,
+        this,
+      );
 
       const uniformBuffers = [
         ...this.layerModel.uniformBuffers,
@@ -1302,8 +1223,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public createAttributes(
-    options: ILayerModelInitializationOptions &
-      Partial<IModelInitializationOptions>,
+    options: ILayerModelInitializationOptions & Partial<IModelInitializationOptions>,
   ) {
     const { triangulation } = options;
     // @ts-ignore
@@ -1336,12 +1256,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public needPick(type: string): boolean {
-    const { enableHighlight = true, enableSelect = true } =
-      this.getLayerConfig();
+    const { enableHighlight = true, enableSelect = true } = this.getLayerConfig();
     // 判断layer是否监听事件;
     let isPick =
-      this.eventNames().indexOf(type) !== -1 ||
-      this.eventNames().indexOf('un' + type) !== -1;
+      this.eventNames().indexOf(type) !== -1 || this.eventNames().indexOf('un' + type) !== -1;
     if ((type === 'click' || type === 'dblclick') && enableSelect) {
       isPick = true;
     }
@@ -1407,17 +1325,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     // 存储 Attribute 瓦片图层使用
-    if (
-      [
-        'color',
-        'size',
-        'texture',
-        'rotate',
-        'filter',
-        'label',
-        'shape',
-      ].indexOf(type) !== -1
-    ) {
+    if (['color', 'size', 'texture', 'rotate', 'filter', 'label', 'shape'].indexOf(type) !== -1) {
       this.configService.setAttributeConfig(this.id, {
         [type]: {
           field,

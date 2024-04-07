@@ -99,10 +99,7 @@ class BoxZoomHandler {
 
     const pos = point;
 
-    if (
-      this.lastPos.equals(pos) ||
-      (!this.box && pos.dist(this.startPos) < this.clickTolerance)
-    ) {
+    if (this.lastPos.equals(pos) || (!this.box && pos.dist(this.startPos) < this.clickTolerance)) {
       return;
     }
 
@@ -145,10 +142,7 @@ class BoxZoomHandler {
     if (p0.x === p1.x && p0.y === p1.y) {
       this.fireEvent('boxzoomcancel', e);
     } else {
-      this.map.emit(
-        'boxzoomend',
-        new Event('boxzoomend', { originalEvent: e }),
-      );
+      this.map.emit('boxzoomend', new Event('boxzoomend', { originalEvent: e }));
       return {
         cameraAnimation: (map: Map) =>
           map.fitScreenCoordinates(p0, p1, this.map.getBearing(), {

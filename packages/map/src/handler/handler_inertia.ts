@@ -132,42 +132,26 @@ export default class HandlerInertia {
     }
 
     if (deltas.zoom) {
-      const result = calculateEasing(
-        deltas.zoom,
-        duration,
-        defaultZoomInertiaOptions,
-      );
+      const result = calculateEasing(deltas.zoom, duration, defaultZoomInertiaOptions);
       easeOptions.zoom = this.map.transform.zoom + result.amount;
       extendDuration(easeOptions, result);
     }
 
     if (deltas.bearing) {
-      const result = calculateEasing(
-        deltas.bearing,
-        duration,
-        defaultBearingInertiaOptions,
-      );
-      easeOptions.bearing =
-        this.map.transform.bearing + clamp(result.amount, -179, 179);
+      const result = calculateEasing(deltas.bearing, duration, defaultBearingInertiaOptions);
+      easeOptions.bearing = this.map.transform.bearing + clamp(result.amount, -179, 179);
       extendDuration(easeOptions, result);
     }
 
     if (deltas.pitch) {
-      const result = calculateEasing(
-        deltas.pitch,
-        duration,
-        defaultPitchInertiaOptions,
-      );
+      const result = calculateEasing(deltas.pitch, duration, defaultPitchInertiaOptions);
       easeOptions.pitch = this.map.transform.pitch + result.amount;
       extendDuration(easeOptions, result);
     }
 
     if (easeOptions.zoom || easeOptions.bearing) {
-      const last =
-        deltas.pinchAround === undefined ? deltas.around : deltas.pinchAround;
-      easeOptions.around = last
-        ? this.map.unproject(last)
-        : this.map.getCenter();
+      const last = deltas.pinchAround === undefined ? deltas.around : deltas.pinchAround;
+      easeOptions.around = last ? this.map.unproject(last) : this.map.getCenter();
     }
 
     this.clear();
@@ -186,17 +170,9 @@ function extendDuration(easeOptions: any, result: any) {
   }
 }
 
-function calculateEasing(
-  amount: number,
-  inertiaDuration: number,
-  inertiaOptions: IInertiaOptions,
-) {
+function calculateEasing(amount: number, inertiaDuration: number, inertiaOptions: IInertiaOptions) {
   const { maxSpeed, linearity, deceleration } = inertiaOptions;
-  const speed = clamp(
-    (amount * linearity) / (inertiaDuration / 1000),
-    -maxSpeed,
-    maxSpeed,
-  );
+  const speed = clamp((amount * linearity) / (inertiaDuration / 1000), -maxSpeed, maxSpeed);
   const duration = Math.abs(speed) / (deceleration * linearity);
   return {
     easing: inertiaOptions.easing,

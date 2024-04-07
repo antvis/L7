@@ -22,12 +22,7 @@ import {
   renderPipelineDescriptorCopy,
   renderPipelineDescriptorEquals,
 } from '@antv/g-device-api';
-import {
-  HashMap,
-  hashCodeNumberFinish,
-  hashCodeNumberUpdate,
-  nullHashFunc,
-} from './utils/HashMap';
+import { HashMap, hashCodeNumberFinish, hashCodeNumberUpdate, nullHashFunc } from './utils/HashMap';
 
 function blendStateHash(hash: number, a: ChannelBlendState): number {
   hash = hashCodeNumberUpdate(hash, a.blendMode);
@@ -44,10 +39,7 @@ function attachmentStateHash(hash: number, a: AttachmentState): number {
 }
 
 function colorHash(hash: number, a: Color): number {
-  hash = hashCodeNumberUpdate(
-    hash,
-    (a.r << 24) | (a.g << 16) | (a.b << 8) | a.a,
-  );
+  hash = hashCodeNumberUpdate(hash, (a.r << 24) | (a.g << 16) | (a.b << 8) | a.a);
   return hash;
 }
 
@@ -75,8 +67,7 @@ function megaStateDescriptorHash(hash: number, a: MegaStateDescriptor): number {
 function renderPipelineDescriptorHash(a: RenderPipelineDescriptor): number {
   let hash = 0;
   hash = hashCodeNumberUpdate(hash, a.program.id);
-  if (a.inputLayout !== null)
-    hash = hashCodeNumberUpdate(hash, a.inputLayout.id);
+  if (a.inputLayout !== null) hash = hashCodeNumberUpdate(hash, a.inputLayout.id);
   hash = megaStateDescriptorHash(hash, a.megaStateDescriptor!);
   for (let i = 0; i < a.colorAttachmentFormats.length; i++)
     hash = hashCodeNumberUpdate(hash, a.colorAttachmentFormats[i] || 0);
@@ -127,18 +118,11 @@ function bindingsDescriptorHash(a: BindingsDescriptor): number {
   return hashCodeNumberFinish(hash);
 }
 
-function programDescriptorEquals(
-  a: ProgramDescriptor,
-  b: ProgramDescriptor,
-): boolean {
-  return (
-    a.vertex?.glsl === b.vertex?.glsl && a.fragment?.glsl === b.fragment?.glsl
-  );
+function programDescriptorEquals(a: ProgramDescriptor, b: ProgramDescriptor): boolean {
+  return a.vertex?.glsl === b.vertex?.glsl && a.fragment?.glsl === b.fragment?.glsl;
 }
 
-function programDescriptorCopy(
-  a: Readonly<ProgramDescriptor>,
-): ProgramDescriptor {
+function programDescriptorCopy(a: Readonly<ProgramDescriptor>): ProgramDescriptor {
   return {
     vertex: {
       glsl: a.vertex?.glsl,
@@ -157,10 +141,10 @@ export class RenderCache {
     bindingsDescriptorHash,
   );
 
-  private renderPipelinesCache = new HashMap<
-    RenderPipelineDescriptor,
-    RenderPipeline
-  >(renderPipelineDescriptorEquals, renderPipelineDescriptorHash);
+  private renderPipelinesCache = new HashMap<RenderPipelineDescriptor, RenderPipeline>(
+    renderPipelineDescriptorEquals,
+    renderPipelineDescriptorHash,
+  );
 
   private inputLayoutsCache = new HashMap<InputLayoutDescriptor, InputLayout>(
     inputLayoutDescriptorEquals,
@@ -177,10 +161,9 @@ export class RenderCache {
     if (bindings === null) {
       const descriptorCopy = bindingsDescriptorCopy(descriptor);
 
-      descriptorCopy.uniformBufferBindings =
-        descriptorCopy.uniformBufferBindings?.filter(
-          ({ size }) => size && size > 0,
-        );
+      descriptorCopy.uniformBufferBindings = descriptorCopy.uniformBufferBindings?.filter(
+        ({ size }) => size && size > 0,
+      );
 
       bindings = this.device.createBindings(descriptorCopy);
       this.bindingsCache.add(descriptorCopy, bindings);
@@ -192,8 +175,9 @@ export class RenderCache {
     let renderPipeline = this.renderPipelinesCache.get(descriptor);
     if (renderPipeline === null) {
       const descriptorCopy = renderPipelineDescriptorCopy(descriptor);
-      descriptorCopy.colorAttachmentFormats =
-        descriptorCopy.colorAttachmentFormats.filter((f) => f);
+      descriptorCopy.colorAttachmentFormats = descriptorCopy.colorAttachmentFormats.filter(
+        (f) => f,
+      );
       renderPipeline = this.device.createRenderPipeline(descriptorCopy);
       this.renderPipelinesCache.add(descriptorCopy, renderPipeline);
     }
@@ -202,8 +186,7 @@ export class RenderCache {
 
   createInputLayout(descriptor: InputLayoutDescriptor): InputLayout {
     // remove hollows
-    descriptor.vertexBufferDescriptors =
-      descriptor.vertexBufferDescriptors.filter((d) => !!d);
+    descriptor.vertexBufferDescriptors = descriptor.vertexBufferDescriptors.filter((d) => !!d);
     let inputLayout = this.inputLayoutsCache.get(descriptor);
     if (inputLayout === null) {
       const descriptorCopy = inputLayoutDescriptorCopy(descriptor);
@@ -225,10 +208,8 @@ export class RenderCache {
 
   destroy(): void {
     for (const bindings of this.bindingsCache.values()) bindings.destroy();
-    for (const renderPipeline of this.renderPipelinesCache.values())
-      renderPipeline.destroy();
-    for (const inputLayout of this.inputLayoutsCache.values())
-      inputLayout.destroy();
+    for (const renderPipeline of this.renderPipelinesCache.values()) renderPipeline.destroy();
+    for (const inputLayout of this.inputLayoutsCache.values()) inputLayout.destroy();
     for (const program of this.programCache.values()) program.destroy();
     // for (const sampler of this.samplerCache.values()) sampler.destroy();
     this.bindingsCache.clear();

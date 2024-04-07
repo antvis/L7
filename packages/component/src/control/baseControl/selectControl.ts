@@ -80,11 +80,7 @@ export default class SelectControl<
 
       // 设置类名和选中状态的函数
       const setDOMState = (dom: Element | null, active: boolean) => {
-        DOM.toggleClass(
-          optionDOM,
-          SelectControlConstant.ActiveOptionClassName,
-          active,
-        );
+        DOM.toggleClass(optionDOM, SelectControlConstant.ActiveOptionClassName, active);
         if (dom) {
           DOM.setChecked(dom as DOM.ELType, active);
         }
@@ -97,10 +93,7 @@ export default class SelectControl<
     this.selectValue = finalValue;
 
     if (emitEvent) {
-      this.emit(
-        'selectChange',
-        this.getIsMultiple() ? finalValue : finalValue[0],
-      );
+      this.emit('selectChange', this.getIsMultiple() ? finalValue : finalValue[0]);
     }
   }
 
@@ -132,14 +125,8 @@ export default class SelectControl<
           this.createImageOption(option)
         : this.createNormalOption(option);
 
-      optionDOM.setAttribute(
-        SelectControlConstant.OptionValueAttrKey,
-        option.value,
-      );
-      optionDOM.setAttribute(
-        SelectControlConstant.OptionIndexAttrKey,
-        window.String(optionIndex),
-      );
+      optionDOM.setAttribute(SelectControlConstant.OptionValueAttrKey, option.value);
+      optionDOM.setAttribute(SelectControlConstant.OptionIndexAttrKey, window.String(optionIndex));
       optionDOM.addEventListener('click', this.onItemClick.bind(this, option));
       return optionDOM;
     });
@@ -152,9 +139,7 @@ export default class SelectControl<
     const isSelect = this.selectValue.includes(option.value);
     const optionDOM = DOM.create(
       'div',
-      `l7-select-control-item ${
-        isSelect ? SelectControlConstant.ActiveOptionClassName : ''
-      }`,
+      `l7-select-control-item ${isSelect ? SelectControlConstant.ActiveOptionClassName : ''}`,
     ) as HTMLElement;
     if (this.getIsMultiple()) {
       optionDOM.appendChild(this.createCheckbox(isSelect));
@@ -174,18 +159,13 @@ export default class SelectControl<
     const isSelect = this.selectValue.includes(option.value);
     const optionDOM = DOM.create(
       'div',
-      `l7-select-control-item ${
-        isSelect ? SelectControlConstant.ActiveOptionClassName : ''
-      }`,
+      `l7-select-control-item ${isSelect ? SelectControlConstant.ActiveOptionClassName : ''}`,
     ) as HTMLElement;
     const imgDOM = DOM.create('img') as HTMLElement;
     imgDOM.setAttribute('src', option.img);
     DOM.setUnDraggable(imgDOM);
     optionDOM.appendChild(imgDOM);
-    const rowDOM = DOM.create(
-      'div',
-      'l7-select-control-item-row',
-    ) as HTMLElement;
+    const rowDOM = DOM.create('div', 'l7-select-control-item-row') as HTMLElement;
     if (this.getIsMultiple()) {
       optionDOM.appendChild(this.createCheckbox(isSelect));
     }
@@ -216,9 +196,7 @@ export default class SelectControl<
 
   protected onItemClick = (item: ControlOptionItem) => {
     if (this.getIsMultiple()) {
-      const targetIndex = this.selectValue.findIndex(
-        (value) => value === item.value,
-      );
+      const targetIndex = this.selectValue.findIndex((value) => value === item.value);
       if (targetIndex > -1) {
         this.selectValue.splice(targetIndex, 1);
       } else {

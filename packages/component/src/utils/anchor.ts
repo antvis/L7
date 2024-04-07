@@ -21,11 +21,7 @@ export const anchorTranslate = {
   right: 'translate(-100%,-50%)',
 };
 
-export function applyAnchorClass(
-  element: HTMLElement,
-  anchor: string,
-  prefix: string,
-) {
+export function applyAnchorClass(element: HTMLElement, anchor: string, prefix: string) {
   const classList = element.classList;
   for (const key in anchorTranslate) {
     if (anchorTranslate.hasOwnProperty(key)) {

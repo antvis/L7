@@ -1,14 +1,14 @@
+import { MapType } from '@antv/l7-utils';
 import GaodeMapV1 from './amap/';
 import { default as GaodeMap, default as GaodeMapV2 } from './amap2/';
-import { MapType } from '@antv/l7-utils'
 import BaiduMap from './bmap/';
 import Earth from './earth/';
+import GoogleMap from './gmap';
 import Map from './map/';
 import Mapbox from './mapbox/';
 import MapLibre from './maplibre';
-import TencentMap from './tmap';
 import TMap from './tdtmap';
-import GoogleMap from './gmap';
+import TencentMap from './tmap';
 export * from './utils';
 export {
   BaiduMap,
@@ -16,11 +16,11 @@ export {
   GaodeMap,
   GaodeMapV1,
   GaodeMapV2,
+  GoogleMap,
   Map,
   MapLibre,
-  Mapbox,
-  TencentMap,
   MapType,
+  Mapbox,
   TMap,
-  GoogleMap
+  TencentMap,
 };

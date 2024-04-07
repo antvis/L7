@@ -3,11 +3,9 @@ import type {
   RequestParameters,
   SourceTile,
   TileLoadParams,
-  TilesetManagerOptions} from '@antv/l7-utils';
-import {
-  getArrayBuffer,
-  getURLFromTemplate
+  TilesetManagerOptions,
 } from '@antv/l7-utils';
+import { getArrayBuffer, getURLFromTemplate } from '@antv/l7-utils';
 import type { VectorTileLayer } from '@mapbox/vector-tile';
 import type { Feature } from '@turf/helpers';
 import type { IParserData, ITileSource } from '../interface';
@@ -76,13 +74,7 @@ export default function mapboxVectorTile(
   // TODO: 后续考虑支持多服务
   const url = Array.isArray(data) ? data[0] : data;
   const getTileData = (tileParams: TileLoadParams, tile: SourceTile) =>
-    getVectorTile(
-      url,
-      tileParams,
-      tile,
-      cfg?.requestParameters,
-      cfg?.getCustomData,
-    );
+    getVectorTile(url, tileParams, tile, cfg?.requestParameters, cfg?.getCustomData);
 
   const tilesetOptions = {
     ...DEFAULT_CONFIG,

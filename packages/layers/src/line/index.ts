@@ -6,12 +6,7 @@ import LineModels from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
   public type: string = 'LineLayer';
-  public enableShaderEncodeStyles = [
-    'stroke',
-    'offsets',
-    'opacity',
-    'thetaOffset',
-  ]; //注意顺序 4+2+1+1
+  public enableShaderEncodeStyles = ['stroke', 'offsets', 'opacity', 'thetaOffset']; //注意顺序 4+2+1+1
   public arrowInsertCount: number = 0;
   public defaultSourceConfig = {
     data: [
@@ -61,8 +56,7 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
       return this.layerType as LineModelType;
     }
 
-    const shapeAttribute =
-      this.styleAttributeService.getLayerStyleAttribute('shape');
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute('shape');
     const shape = shapeAttribute?.scale?.field as LineModelType;
     return shape || 'line';
   }

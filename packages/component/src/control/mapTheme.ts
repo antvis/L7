@@ -1,17 +1,12 @@
 import { GaodeMapStyleConfig, MapboxMapStyleConfig } from '../constants';
 import { createL7Icon } from '../utils/icon';
-import type {
-  ControlOptionItem,
-  ISelectControlOption,
-} from './baseControl/selectControl';
+import type { ControlOptionItem, ISelectControlOption } from './baseControl/selectControl';
 import SelectControl from './baseControl/selectControl';
 
 export { MapTheme };
 
 export default class MapTheme extends SelectControl<ISelectControlOption> {
-  public getDefault(
-    option?: Partial<ISelectControlOption>,
-  ): ISelectControlOption {
+  public getDefault(option?: Partial<ISelectControlOption>): ISelectControlOption {
     return {
       ...super.getDefault(option),
       title: '地图样式',
@@ -22,9 +17,7 @@ export default class MapTheme extends SelectControl<ISelectControlOption> {
 
   public getStyleOptions(): ControlOptionItem[] {
     const mapStyleConfig =
-      this.mapsService.getType() === 'mapbox'
-        ? MapboxMapStyleConfig
-        : GaodeMapStyleConfig;
+      this.mapsService.getType() === 'mapbox' ? MapboxMapStyleConfig : GaodeMapStyleConfig;
     return Object.entries(this.mapsService.getMapStyleConfig())
       .filter(([key, value]) => typeof value === 'string' && key !== 'blank')
       .map(([key, value]) => {
@@ -50,8 +43,7 @@ export default class MapTheme extends SelectControl<ISelectControlOption> {
     if (this.controlOption.defaultValue) {
       const defaultValue = this.controlOption.defaultValue as string;
       this.controlOption.defaultValue =
-        this.controlOption.options.find((item) => item.key === defaultValue)
-          ?.value ?? defaultValue;
+        this.controlOption.options.find((item) => item.key === defaultValue)?.value ?? defaultValue;
     } else {
       const defaultStyle = this.getMapStyle();
       if (defaultStyle) {

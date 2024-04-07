@@ -14,11 +14,7 @@ import RenderFrameEvent from './events/render_event';
 import HandlerInertia from './handler_inertia';
 import KeyboardHandler from './keyboard';
 import MapEventHandler from './map_event';
-import {
-  MousePanHandler,
-  MousePitchHandler,
-  MouseRotateHandler,
-} from './mouse';
+import { MousePanHandler, MousePitchHandler, MouseRotateHandler } from './mouse';
 import ScrollZoomHandler from './scroll_zoom';
 import DoubleClickZoomHandler from './shim/dblclick_zoom';
 import DragPanHandler from './shim/drag_pan';
@@ -26,12 +22,7 @@ import DragRotateHandler from './shim/drag_rotate';
 import TouchZoomRotateHandler from './shim/touch_zoom_rotate';
 import TapDragZoomHandler from './tap/tap_drag_zoom';
 import TapZoomHandler from './tap/tap_zoom';
-import {
-  TouchPanHandler,
-  TouchPitchHandler,
-  TouchRotateHandler,
-  TouchZoomHandler,
-} from './touch';
+import { TouchPanHandler, TouchPitchHandler, TouchRotateHandler, TouchZoomHandler } from './touch';
 
 export type InputEvent = MouseEvent | TouchEvent | KeyboardEvent | WheelEvent;
 const { merge } = lodashUtil;
@@ -83,9 +74,7 @@ class HandlerManager {
   private bearingChanged: boolean;
   private rotateEnabled: boolean;
   private pitchEnabled: boolean;
-  private listeners: Array<
-    [HTMLElement, string, void | { passive?: boolean; capture?: boolean }]
-  >;
+  private listeners: Array<[HTMLElement, string, void | { passive?: boolean; capture?: boolean }]>;
 
   constructor(map: Map | EarthMap, options: IHandlerOptions) {
     this.map = map;
@@ -209,10 +198,7 @@ class HandlerManager {
     this.handleEvent(e, `${e.type}Window`);
   };
 
-  public handleEvent = (
-    e: InputEvent | RenderFrameEvent,
-    eventName?: string,
-  ) => {
+  public handleEvent = (e: InputEvent | RenderFrameEvent, eventName?: string) => {
     if (e.type === 'blur') {
       this.stop();
       return;
@@ -275,15 +261,8 @@ class HandlerManager {
       }
     }
     this.previousActiveHandlers = activeHandlers;
-    if (
-      Object.keys(deactivatedHandlers).length ||
-      hasChange(mergedIHandlerResult)
-    ) {
-      this.changes.push([
-        mergedIHandlerResult,
-        eventsInProgress,
-        deactivatedHandlers,
-      ]);
+    if (Object.keys(deactivatedHandlers).length || hasChange(mergedIHandlerResult)) {
+      this.changes.push([mergedIHandlerResult, eventsInProgress, deactivatedHandlers]);
       this.triggerRenderFrame();
     }
 
@@ -380,12 +359,7 @@ class HandlerManager {
 
     const touchRotate = new TouchRotateHandler();
     const touchZoom = new TouchZoomHandler();
-    map.touchZoomRotate = new TouchZoomRotateHandler(
-      el,
-      touchZoom,
-      touchRotate,
-      tapDragZoom,
-    );
+    map.touchZoomRotate = new TouchZoomRotateHandler(el, touchZoom, touchRotate, tapDragZoom);
     this.add('touchRotate', touchRotate, ['touchPan', 'touchZoom']);
     this.add('touchZoom', touchZoom, ['touchPan', 'touchRotate']);
 
@@ -453,19 +427,15 @@ class HandlerManager {
     const combinedEventsInProgress = {};
     const combinedDeactivatedHandlers = {};
 
-    for (const [change, eventsInProgress, deactivatedHandlers] of this
-      .changes) {
+    for (const [change, eventsInProgress, deactivatedHandlers] of this.changes) {
       if (change.panDelta) {
-        combined.panDelta = (combined.panDelta || new Point(0, 0))._add(
-          change.panDelta,
-        );
+        combined.panDelta = (combined.panDelta || new Point(0, 0))._add(change.panDelta);
       }
       if (change.zoomDelta) {
         combined.zoomDelta = (combined.zoomDelta || 0) + change.zoomDelta;
       }
       if (change.bearingDelta) {
-        combined.bearingDelta =
-          (combined.bearingDelta || 0) + change.bearingDelta;
+        combined.bearingDelta = (combined.bearingDelta || 0) + change.bearingDelta;
       }
       if (change.pitchDelta) {
         combined.pitchDelta = (combined.pitchDelta || 0) + change.pitchDelta;
@@ -484,11 +454,7 @@ class HandlerManager {
       merge(combinedDeactivatedHandlers, deactivatedHandlers);
     }
 
-    this.updateMapTransform(
-      combined,
-      combinedEventsInProgress,
-      combinedDeactivatedHandlers,
-    );
+    this.updateMapTransform(combined, combinedEventsInProgress, combinedDeactivatedHandlers);
     this.changes = [];
   }
 
@@ -503,8 +469,7 @@ class HandlerManager {
     if (!hasChange(combinedResult)) {
       return this.fireEvents(combinedEventsInProgress, deactivatedHandlers);
     }
-    const { panDelta, zoomDelta, bearingDelta, pitchDelta, pinchAround } =
-      combinedResult;
+    const { panDelta, zoomDelta, bearingDelta, pitchDelta, pinchAround } = combinedResult;
     let { around } = combinedResult;
 
     if (pinchAround !== undefined) {
@@ -603,14 +568,10 @@ class HandlerManager {
     const stillMoving = isMoving(this.eventsInProgress);
     if ((wasMoving || nowMoving) && !stillMoving) {
       this.updatingCamera = true;
-      const inertialEase = this.inertia.onMoveEnd(
-        this.map.dragPan.inertiaOptions,
-      );
+      const inertialEase = this.inertia.onMoveEnd(this.map.dragPan.inertiaOptions);
 
       const shouldSnapToNorth = (bearing: number) =>
-        bearing !== 0 &&
-        -this.bearingSnap < bearing &&
-        bearing < this.bearingSnap;
+        bearing !== 0 && -this.bearingSnap < bearing && bearing < this.bearingSnap;
 
       if (inertialEase) {
         if (shouldSnapToNorth(inertialEase.bearing || this.map.getBearing())) {
@@ -618,10 +579,7 @@ class HandlerManager {
         }
         this.map.easeTo(inertialEase, { originalEvent: originalEndEvent });
       } else {
-        this.map.emit(
-          'moveend',
-          new Event('moveend', { originalEvent: originalEndEvent }),
-        );
+        this.map.emit('moveend', new Event('moveend', { originalEvent: originalEndEvent }));
         if (shouldSnapToNorth(this.map.getBearing())) {
           this.map.resetNorth();
         }

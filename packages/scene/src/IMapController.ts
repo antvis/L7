@@ -1,11 +1,4 @@
-import type {
-  Bounds,
-  ICameraOptions,
-  ILngLat,
-  IPoint,
-  IStatusOptions,
-  Point,
-} from '@antv/l7-core';
+import type { Bounds, ICameraOptions, ILngLat, IPoint, IStatusOptions, Point } from '@antv/l7-core';
 
 export default interface IMapController {
   /**

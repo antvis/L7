@@ -11,8 +11,7 @@ export default class DataSourcePlugin implements ILayerPlugin {
       let source = layer.getSource();
       if (!source) {
         // Tip: 用户没有传入 source 的时候使用图层的默认数据
-        const { data, options } =
-          layer.sourceOption || layer.defaultSourceConfig;
+        const { data, options } = layer.sourceOption || layer.defaultSourceConfig;
         source = new Source(data, options);
         layer.setSource(source);
       }

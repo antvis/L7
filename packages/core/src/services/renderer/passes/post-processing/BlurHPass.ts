@@ -15,8 +15,7 @@ export default class BlurHPass extends BasePostProcessingPass<IBlurHPassConfig> 
       fs: blur,
     });
 
-    const { vs, fs, uniforms } =
-      this.shaderModuleService.getModule('blur-pass');
+    const { vs, fs, uniforms } = this.shaderModuleService.getModule('blur-pass');
     const { width, height } = this.rendererService.getViewportSize();
 
     return {

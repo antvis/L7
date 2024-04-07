@@ -6,7 +6,7 @@ import LineModel from './line';
 import SimpleLineModel from './simple_line';
 import LineWallModel from './wall';
 
-export type LineModelType = 
+export type LineModelType =
   | 'arc'
   | 'arc3d'
   | 'greatcircle'
@@ -14,7 +14,7 @@ export type LineModelType =
   | 'wall'
   | 'simple'
   | 'line'
-  | 'earthArc3d'
+  | 'earthArc3d';
 
 const LineModels: { [key in LineModelType]: any } = {
   arc: ArcModel,

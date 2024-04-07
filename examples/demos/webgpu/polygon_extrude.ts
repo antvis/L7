@@ -31,9 +31,7 @@ export function MapRender(option: { map: string; renderer: string }) {
     '#FF0000',
   ];
   scene.on('loaded', () => {
-    fetch(
-      'https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json',
-    )
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json')
       .then((res) => res.json())
       .then((data) => {
         const filllayer = new PolygonLayer({
@@ -45,14 +43,7 @@ export function MapRender(option: { map: string; renderer: string }) {
           .shape('extrude')
           .active(true)
           .size('unit_price', (unit_price) => unit_price)
-          .color('count', [
-            '#f2f0f7',
-            '#dadaeb',
-            '#bcbddc',
-            '#9e9ac8',
-            '#756bb1',
-            '#54278f',
-          ])
+          .color('count', ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'])
           .style({
             pickLight: true,
 

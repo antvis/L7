@@ -1,9 +1,4 @@
-import type {
-  ILayer,
-  IRendererService,
-  ITexture2D,
-  ITextureService,
-} from '@antv/l7-core';
+import type { ILayer, IRendererService, ITexture2D, ITextureService } from '@antv/l7-core';
 
 import type { IColorRamp } from '@antv/l7-utils';
 import {
@@ -50,11 +45,7 @@ export default class TextureService implements ITextureService {
     return texture;
   }
 
-  public setColorTexture(
-    texture: ITexture2D,
-    colorRamp: IColorRamp,
-    domain: [number, number],
-  ) {
+  public setColorTexture(texture: ITexture2D, colorRamp: IColorRamp, domain: [number, number]) {
     this.key = this.getTextureKey(colorRamp, domain);
     this.colorTexture = texture;
   }
@@ -78,10 +69,7 @@ export default class TextureService implements ITextureService {
     }
   }
 
-  private getTextureKey(
-    colorRamp: IColorRamp,
-    domain?: [number, number],
-  ): string {
+  private getTextureKey(colorRamp: IColorRamp, domain?: [number, number]): string {
     return `${colorRamp.colors.join('_')}_${colorRamp?.positions?.join('_')}_${
       colorRamp.type
     }_${domain?.join('_')}`;

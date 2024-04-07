@@ -1,9 +1,7 @@
 import { DOM } from '@antv/l7-utils';
 import { createL7Icon } from '../utils/icon';
 import ScreenFull from '../utils/screenfull';
-import type {
-  IButtonControlOption,
-} from './baseControl/buttonControl';
+import type { IButtonControlOption } from './baseControl/buttonControl';
 import ButtonControl from './baseControl/buttonControl';
 
 export interface IFullscreenControlOption extends IButtonControlOption {
@@ -48,24 +46,16 @@ export default class Fullscreen extends ButtonControl<IFullscreenControlOption> 
     button.addEventListener('click', this.onClick);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.mapContainer = DOM.getContainer(this.scene.getSceneConfig().id!);
-    this.mapContainer.addEventListener(
-      'fullscreenchange',
-      this.onFullscreenChange,
-    );
+    this.mapContainer.addEventListener('fullscreenchange', this.onFullscreenChange);
     return button;
   }
 
   public onRemove() {
     super.onRemove();
-    this.mapContainer.removeEventListener(
-      'fullscreenchange',
-      this.onFullscreenChange,
-    );
+    this.mapContainer.removeEventListener('fullscreenchange', this.onFullscreenChange);
   }
 
-  public getDefault(
-    option?: Partial<IFullscreenControlOption>,
-  ): IFullscreenControlOption {
+  public getDefault(option?: Partial<IFullscreenControlOption>): IFullscreenControlOption {
     return {
       ...super.getDefault(option),
       title: '全屏',
@@ -88,8 +78,7 @@ export default class Fullscreen extends ButtonControl<IFullscreenControlOption> 
   protected onFullscreenChange = () => {
     this.isFullscreen = !!document.fullscreenElement;
 
-    const { btnText, btnIcon, title, exitBtnText, exitBtnIcon, exitTitle } =
-      this.controlOption;
+    const { btnText, btnIcon, title, exitBtnText, exitBtnIcon, exitTitle } = this.controlOption;
     if (this.isFullscreen) {
       this.setBtnTitle(exitTitle);
       this.setBtnText(exitBtnText);

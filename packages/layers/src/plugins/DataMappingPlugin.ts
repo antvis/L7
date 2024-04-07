@@ -18,10 +18,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
   private mapService: IMapService;
   private fontService: IFontService;
 
-  public apply(
-    layer: ILayer,
-    { styleAttributeService, mapService, fontService }: L7Container,
-  ) {
+  public apply(layer: ILayer, { styleAttributeService, mapService, fontService }: L7Container) {
     this.mapService = mapService;
     this.fontService = fontService;
 
@@ -32,22 +29,19 @@ export default class DataMappingPlugin implements ILayerPlugin {
       layer.log(IDebugLog.MappingEnd, ILayerStage.INIT);
     });
 
-    layer.hooks.beforeRenderData.tapPromise(
-      'DataMappingPlugin',
-      async (flag: boolean) => {
-        if (!flag) {
-          return flag;
-        }
+    layer.hooks.beforeRenderData.tapPromise('DataMappingPlugin', async (flag: boolean) => {
+      if (!flag) {
+        return flag;
+      }
 
-        layer.dataState.dataMappingNeedUpdate = false;
-        layer.log(IDebugLog.MappingStart, ILayerStage.UPDATE);
-        const mappingResult = this.generateMaping(layer, {
-          styleAttributeService,
-        });
-        layer.log(IDebugLog.MappingEnd, ILayerStage.UPDATE);
-        return mappingResult;
-      },
-    );
+      layer.dataState.dataMappingNeedUpdate = false;
+      layer.log(IDebugLog.MappingStart, ILayerStage.UPDATE);
+      const mappingResult = this.generateMaping(layer, {
+        styleAttributeService,
+      });
+      layer.log(IDebugLog.MappingEnd, ILayerStage.UPDATE);
+      return mappingResult;
+    });
 
     // remapping before render
     layer.hooks.beforeRender.tap('DataMappingPlugin', () => {
@@ -89,9 +83,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
   }
   private generateMaping(
     layer: ILayer,
-    {
-      styleAttributeService,
-    }: { styleAttributeService: IStyleAttributeService },
+    { styleAttributeService }: { styleAttributeService: IStyleAttributeService },
   ) {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
@@ -167,10 +159,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     return mappedData;
   }
 
-  private adjustData2Amap2Coordinates(
-    mappedData: IEncodeFeature[],
-    layer: ILayer,
-  ) {
+  private adjustData2Amap2Coordinates(mappedData: IEncodeFeature[], layer: ILayer) {
     // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
     if (mappedData.length > 0 && this.mapService.version === 'GAODE2.x') {
       const layerCenter = layer.coordCenter || layer.getSource().center;
@@ -206,9 +195,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
 
   private unProjectCoordinates(coordinates: any) {
     if (typeof coordinates[0] === 'number') {
-      return this.mapService.simpleMapCoord.unproject(
-        coordinates as [number, number],
-      );
+      return this.mapService.simpleMapCoord.unproject(coordinates as [number, number]);
     }
 
     if (coordinates[0] && coordinates[0][0] instanceof Array) {
@@ -218,9 +205,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         // @ts-ignore
         const c1 = [];
         coord.map((co: any) => {
-          c1.push(
-            this.mapService.simpleMapCoord.unproject(co as [number, number]),
-          );
+          c1.push(this.mapService.simpleMapCoord.unproject(co as [number, number]));
         });
         // @ts-ignore
         coords.push(c1);
@@ -232,19 +217,14 @@ export default class DataMappingPlugin implements ILayerPlugin {
       const coords = [];
       // @ts-ignore
       coordinates.map((coord) => {
-        coords.push(
-          this.mapService.simpleMapCoord.unproject(coord as [number, number]),
-        );
+        coords.push(this.mapService.simpleMapCoord.unproject(coord as [number, number]));
       });
       // @ts-ignore
       return coords;
     }
   }
 
-  private applyAttributeMapping(
-    attribute: IStyleAttribute,
-    record: { [key: string]: unknown },
-  ) {
+  private applyAttributeMapping(attribute: IStyleAttribute, record: { [key: string]: unknown }) {
     if (!attribute.scale) {
       return [];
     }
@@ -252,10 +232,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
     const params: unknown[] = [];
 
     scalers.forEach(({ field }) => {
-      if (
-        record.hasOwnProperty(field) ||
-        attribute.scale?.type === 'variable'
-      ) {
+      if (record.hasOwnProperty(field) || attribute.scale?.type === 'variable') {
         // TODO:多字段，常量
         params.push(record[field]);
       }
@@ -270,10 +247,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
   private getArrowPoints(p1: Position, p2: Position) {
     const dir = [p2[0] - p1[0], p2[1] - p1[1]];
     const normalizeDir = normalize(dir);
-    const arrowPoint = [
-      p1[0] + normalizeDir[0] * 0.0001,
-      p1[1] + normalizeDir[1] * 0.0001,
-    ];
+    const arrowPoint = [p1[0] + normalizeDir[0] * 0.0001, p1[1] + normalizeDir[1] * 0.0001];
     return arrowPoint;
   }
 }

@@ -106,11 +106,7 @@ export default class TwoTouchHandler {
   }
 }
 
-function getTouchById(
-  mapTouches: Touch[],
-  points: Point[],
-  identifier: number,
-) {
+function getTouchById(mapTouches: Touch[], points: Point[], identifier: number) {
   for (let i = 0; i < mapTouches.length; i++) {
     if (mapTouches[i].identifier === identifier) {
       return points[i];

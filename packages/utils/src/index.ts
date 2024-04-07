@@ -13,11 +13,11 @@ export * from './lineAtOffset';
 export * from './lodash-adapter';
 export * from './lru_cache';
 // export * from './mini-adapter/index';
+export * from './interface/map';
 export * as Satistics from './statistics';
 export * from './tileset-manager';
-export * from './interface/map'
-export function defaultValue(v1:any,v2:any){
-  if(v1===undefined||v1===null){
+export function defaultValue(v1: any, v2: any) {
+  if (v1 === undefined || v1 === null) {
     return v2;
   }
   return v1;

@@ -54,9 +54,7 @@ export default abstract class Tile extends EventEmitter implements ITile {
       autoFit: false,
       maskLayers: this.getMaskLayer(),
       tileMask: isNeedMask(this.parent.type),
-      mask:
-        options.mask ||
-        (options.maskLayers?.length !== 0 && options.enableMask),
+      mask: options.mask || (options.maskLayers?.length !== 0 && options.enableMask),
     };
   }
   // 获取Mask 图层
@@ -149,7 +147,7 @@ export default abstract class Tile extends EventEmitter implements ITile {
   public getMainLayer(): ILayer | undefined {
     return this.layers[0];
   }
- // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getFeatures(sourceLayer: string | undefined): any[] {
     return [];
   }

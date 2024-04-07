@@ -55,8 +55,7 @@ export default class PopperControl<
     const position = option?.position ?? defaultOption.position!;
     return {
       ...super.getDefault(option),
-      popperPlacement:
-        position instanceof Element ? 'bottom' : PopperPlacementMap[position],
+      popperPlacement: position instanceof Element ? 'bottom' : PopperPlacementMap[position],
       popperTrigger: 'click',
     };
   }
@@ -72,8 +71,7 @@ export default class PopperControl<
   }
 
   public initPopper() {
-    const { popperClassName, popperPlacement, popperTrigger } =
-      this.controlOption;
+    const { popperClassName, popperPlacement, popperTrigger } = this.controlOption;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const popperContainer = this.mapsService.getMapContainer()!;
 
@@ -98,13 +96,7 @@ export default class PopperControl<
   public setOptions(option: Partial<O>) {
     super.setOptions(option);
 
-    if (
-      this.checkUpdateOption(option, [
-        'popperPlacement',
-        'popperTrigger',
-        'popperClassName',
-      ])
-    ) {
+    if (this.checkUpdateOption(option, ['popperPlacement', 'popperTrigger', 'popperClassName'])) {
       const content = this.popper.getContent();
       this.popper.destroy();
       this.initPopper();

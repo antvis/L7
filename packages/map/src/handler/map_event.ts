@@ -40,10 +40,7 @@ export default class MapEventHandler {
   }
 
   public click(e: MouseEvent, point: Point) {
-    if (
-      this.mousedownPos &&
-      this.mousedownPos.dist(point) >= this.clickTolerance
-    ) {
+    if (this.mousedownPos && this.mousedownPos.dist(point) >= this.clickTolerance) {
       return;
     }
     this.map.emit(e.type, new MapMouseEvent(e.type, this.map, e));
@@ -86,9 +83,7 @@ export default class MapEventHandler {
     this.map.emit(e.type, new MapTouchEvent(e.type, this.map, e));
   }
 
-  public firePreventable(
-    mapEvent: MapMouseEvent | MapTouchEvent | MapWheelEvent,
-  ) {
+  public firePreventable(mapEvent: MapMouseEvent | MapTouchEvent | MapWheelEvent) {
     this.map.emit(mapEvent.type, mapEvent);
     if (mapEvent.defaultPrevented) {
       // returning an object marks the handler as active and resets other handlers

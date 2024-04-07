@@ -27,11 +27,7 @@ export default class CollisionIndex {
     this.height = height;
     this.viewportPadding = Math.max(width, height);
     // 创建网格索引
-    this.grid = new GridIndex(
-      width + this.viewportPadding,
-      height + this.viewportPadding,
-      25,
-    );
+    this.grid = new GridIndex(width + this.viewportPadding, height + this.viewportPadding, 25);
 
     this.screenRightBoundary = width + this.viewportPadding;
     this.screenBottomBoundary = height + this.viewportPadding;
@@ -46,19 +42,12 @@ export default class CollisionIndex {
     //   collisionBox.anchorPointY,
     // );
 
-    const tlX =
-      collisionBox.x1 + collisionBox.anchorPointX + this.viewportPadding;
-    const tlY =
-      collisionBox.y1 + collisionBox.anchorPointY + this.viewportPadding;
-    const brX =
-      collisionBox.x2 + collisionBox.anchorPointX + this.viewportPadding;
-    const brY =
-      collisionBox.y2 + collisionBox.anchorPointY + this.viewportPadding;
+    const tlX = collisionBox.x1 + collisionBox.anchorPointX + this.viewportPadding;
+    const tlY = collisionBox.y1 + collisionBox.anchorPointY + this.viewportPadding;
+    const brX = collisionBox.x2 + collisionBox.anchorPointX + this.viewportPadding;
+    const brY = collisionBox.y2 + collisionBox.anchorPointY + this.viewportPadding;
 
-    if (
-      !this.isInsideGrid(tlX, tlY, brX, brY) ||
-      this.grid.hitTest(tlX, tlY, brX, brY)
-    ) {
+    if (!this.isInsideGrid(tlX, tlY, brX, brY) || this.grid.hitTest(tlX, tlY, brX, brY)) {
       return {
         box: [],
       };
@@ -103,11 +92,6 @@ export default class CollisionIndex {
    * @return {Point} isInside
    */
   public isInsideGrid(x1: number, y1: number, x2: number, y2: number) {
-    return (
-      x2 >= 0 &&
-      x1 < this.gridRightBoundary &&
-      y2 >= 0 &&
-      y1 < this.gridBottomBoundary
-    );
+    return x2 >= 0 && x1 < this.gridRightBoundary && y2 >= 0 && y1 < this.gridBottomBoundary;
   }
 }

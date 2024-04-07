@@ -26,14 +26,10 @@ export default class BaseMapWrapper<RawMap> implements IMapWrapper {
       canvas,
     };
     // @ts-ignore
-    sceneContainer.mapService = new (this.getServiceConstructor())(
-      sceneContainer,
-    );
+    sceneContainer.mapService = new (this.getServiceConstructor())(sceneContainer);
   }
 
-  protected getServiceConstructor(): new (
-    ...args: any[]
-  ) => IMapService<RawMap> {
+  protected getServiceConstructor(): new (...args: any[]) => IMapService<RawMap> {
     throw new Error('Method not implemented.');
   }
 }

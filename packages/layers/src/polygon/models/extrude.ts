@@ -91,8 +91,7 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public getShaders() {
-    const { pickLight, mapTexture } =
-      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { pickLight, mapTexture } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     if (mapTexture) {
       return {
         frag: polygonExtrudeTexFrag,
@@ -156,19 +155,11 @@ export default class ExtrudeModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 3,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           const lng = vertex[0];
           const lat = vertex[1];
           // 临时 兼容高德V2
-          return [
-            (lng - bounds[0]) / lngLen,
-            (lat - bounds[1]) / latLen,
-            vertex[4],
-          ];
+          return [(lng - bounds[0]) / lngLen, (lat - bounds[1]) / latLen, vertex[4]];
         },
       },
     });
@@ -218,8 +209,7 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   private async loadTexture() {
-    const { mapTexture } =
-      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { mapTexture } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({

@@ -30,8 +30,7 @@ jobs:
       - name: Check
         run: |
           pnpm check-deps
-      #TODO: turn on after format fixd
-      # pnpm check-format
+          pnpm check-format
 
       - name: Lint
         run: pnpm lint:ts

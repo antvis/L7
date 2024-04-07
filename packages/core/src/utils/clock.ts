@@ -9,9 +9,7 @@ export default class Clock {
     this.autoStart = autoStart;
   }
   public start() {
-    this.startTime = (
-      typeof performance === 'undefined' ? Date : performance
-    ).now();
+    this.startTime = (typeof performance === 'undefined' ? Date : performance).now();
 
     this.oldTime = this.startTime;
     this.elapsedTime = 0;
@@ -36,9 +34,7 @@ export default class Clock {
     }
 
     if (this.running) {
-      const newTime = (
-        typeof performance === 'undefined' ? Date : performance
-      ).now();
+      const newTime = (typeof performance === 'undefined' ? Date : performance).now();
       diff = (newTime - this.oldTime) / 1000;
       this.oldTime = newTime;
       this.elapsedTime += diff;

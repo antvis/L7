@@ -1,16 +1,8 @@
 import type { ILayer, IMercator, ISourceCFG } from '@antv/l7';
 import { BaseLayer } from '@antv/l7';
-import type {
-  AnimationMixer,
-  Object3D,
-  WebGLRenderer} from 'three';
-import {
-  Matrix4,
-  Scene,
-  Vector3
-} from 'three';
+import type { AnimationMixer, Object3D, WebGLRenderer } from 'three';
+import { Matrix4, Scene, Vector3 } from 'three';
 import type { IThreeRenderService } from './threeRenderService';
-
 
 type ILngLat = [number, number];
 export default class ThreeJSLayer
@@ -123,7 +115,7 @@ export default class ThreeJSLayer
       lnglat,
       // @ts-ignore
       this.threeRenderService.center,
-    ) || [0,0];
+    ) || [0, 0];
     return [x, y] as ILngLat;
   }
 
@@ -160,19 +152,14 @@ export default class ThreeJSLayer
    * @param y
    * @param z
    */
-  public setMeshScale(
-    object: Object3D,
-    x: number = 1,
-    y: number = 1,
-    z: number = 1,
-  ) {
+  public setMeshScale(object: Object3D, x: number = 1, y: number = 1, z: number = 1) {
     const scaleMatrix = new Matrix4();
     scaleMatrix.scale(new Vector3(x, y, z));
     object.applyMatrix4(scaleMatrix);
   }
 
   public async buildModels() {
-    console.log(this.container)
+    console.log(this.container);
     // @ts-ignore
     this.threeRenderService = this.container.customRenderService['three'];
     const config = this.getLayerConfig();
@@ -190,8 +177,7 @@ export default class ThreeJSLayer
     // 获取到 L7 的 gl
     const gl = this.rendererService.getGLContext();
     this.rendererService.setCustomLayerDefaults();
-    const cullFace =
-      this.mapService.version?.indexOf('GAODE')!== -1 ? gl.BACK : gl.FRONT;
+    const cullFace = this.mapService.version?.indexOf('GAODE') !== -1 ? gl.BACK : gl.FRONT;
     gl.cullFace(cullFace);
 
     // threejs 的 renderer

@@ -18,12 +18,7 @@ export default class EdgeInsets {
   public left: number;
   public right: number;
 
-  constructor(
-    top: number = 0,
-    bottom: number = 0,
-    left: number = 0,
-    right: number = 0,
-  ) {
+  constructor(top: number = 0, bottom: number = 0, left: number = 0, right: number = 0) {
     if (
       isNaN(top) ||
       top < 0 ||

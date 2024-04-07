@@ -1,10 +1,5 @@
-import type {
-  ITileBand,
-  SourceTile,
-  TileLoadParams} from '@antv/l7-utils';
-import {
-  getURLFromTemplate
-} from '@antv/l7-utils';
+import type { ITileBand, SourceTile, TileLoadParams } from '@antv/l7-utils';
+import { getURLFromTemplate } from '@antv/l7-utils';
 
 /**
  * 根据不同的输入，将对应的 url 路径进行转化
@@ -26,15 +21,10 @@ import {
  * @param tileParams
  * @returns
  */
-export function getTileUrl(
-  url: string | string[] | ITileBand[],
-  tileParams: TileLoadParams,
-) {
+export function getTileUrl(url: string | string[] | ITileBand[], tileParams: TileLoadParams) {
   if (Array.isArray(url)) {
     if (typeof url[0] === 'string') {
-      return (url as string[]).map((src) =>
-        getURLFromTemplate(src, tileParams),
-      );
+      return (url as string[]).map((src) => getURLFromTemplate(src, tileParams));
     } else {
       return (url as ITileBand[]).map((o) => {
         return {
@@ -67,9 +57,7 @@ export function getTileUrl(
  * ]
  * @returns
  */
-export function getTileBandParams(
-  urlBandParam: string | string[] | ITileBand[],
-): ITileBand[] {
+export function getTileBandParams(urlBandParam: string | string[] | ITileBand[]): ITileBand[] {
   if (typeof urlBandParam === 'string') {
     return [
       {

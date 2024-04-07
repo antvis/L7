@@ -13,9 +13,7 @@ describe('scale', () => {
 
     expect(
       /\d+\s?km/i.test(
-        container
-          .querySelector('.l7-control-scale-line')
-          ?.innerHTML.toLowerCase() ?? '',
+        container.querySelector('.l7-control-scale-line')?.innerHTML.toLowerCase() ?? '',
       ),
     ).toEqual(true);
 
@@ -26,9 +24,7 @@ describe('scale', () => {
 
     expect(
       /\d+\s?mi/i.test(
-        container
-          .querySelector('.l7-control-scale-line')
-          ?.innerHTML.toLowerCase() ?? '',
+        container.querySelector('.l7-control-scale-line')?.innerHTML.toLowerCase() ?? '',
       ),
     ).toEqual(true);
 

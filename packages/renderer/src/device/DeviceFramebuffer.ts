@@ -1,9 +1,6 @@
 import type { Device, RenderTarget, Texture } from '@antv/g-device-api';
 import { Format, TextureUsage } from '@antv/g-device-api';
-import type {
-  IFramebuffer,
-  IFramebufferInitializationOptions,
-} from '@antv/l7-core';
+import type { IFramebuffer, IFramebufferInitializationOptions } from '@antv/l7-core';
 import type DeviceTexture2D from './DeviceTexture2D';
 import { isTexture2D } from './DeviceTexture2D';
 
@@ -34,9 +31,7 @@ export default class DeviceFramebuffer implements IFramebuffer {
           color.resize({ width: width!, height: height! });
         }
         this.colorTexture = color.get() as Texture;
-        this.colorRenderTarget = this.device.createRenderTargetFromTexture(
-          this.colorTexture,
-        );
+        this.colorRenderTarget = this.device.createRenderTargetFromTexture(this.colorTexture);
         this.width = (color as DeviceTexture2D)['width'];
         this.height = (color as DeviceTexture2D)['height'];
       } else if (width && height) {
@@ -46,9 +41,7 @@ export default class DeviceFramebuffer implements IFramebuffer {
           width,
           height,
         });
-        this.colorRenderTarget = this.device.createRenderTargetFromTexture(
-          this.colorTexture,
-        );
+        this.colorRenderTarget = this.device.createRenderTargetFromTexture(this.colorTexture);
         this.width = width;
         this.height = height;
       }
@@ -64,9 +57,7 @@ export default class DeviceFramebuffer implements IFramebuffer {
           depth.resize({ width: width!, height: height! });
         }
         this.depthTexture = depth.get() as Texture;
-        this.depthRenderTarget = this.device.createRenderTargetFromTexture(
-          this.depthTexture,
-        );
+        this.depthRenderTarget = this.device.createRenderTargetFromTexture(this.depthTexture);
         this.width = (depth as DeviceTexture2D)['width'];
         this.height = (depth as DeviceTexture2D)['height'];
       } else if (width && height) {
@@ -76,9 +67,7 @@ export default class DeviceFramebuffer implements IFramebuffer {
           width,
           height,
         });
-        this.depthRenderTarget = this.device.createRenderTargetFromTexture(
-          this.depthTexture,
-        );
+        this.depthRenderTarget = this.device.createRenderTargetFromTexture(this.depthTexture);
         this.width = width;
         this.height = height;
       }

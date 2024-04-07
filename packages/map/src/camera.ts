@@ -76,13 +76,7 @@ export default class Camera extends EventEmitter {
     this.bearingSnap = options.bearingSnap;
     this.pitchEnabled = options.pitchEnabled;
     this.rotateEnabled = options.rotateEnabled;
-    this.transform = new Transform(
-      minZoom,
-      maxZoom,
-      minPitch,
-      maxPitch,
-      renderWorldCopies,
-    );
+    this.transform = new Transform(minZoom, maxZoom, minPitch, maxPitch, renderWorldCopies);
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public requestRenderFrame(cb: CallBack): number {
@@ -119,11 +113,7 @@ export default class Camera extends EventEmitter {
     return this.transform.bearing;
   }
 
-  public panTo(
-    lnglat: LngLatLike,
-    options?: IAnimationOptions,
-    eventData?: any,
-  ) {
+  public panTo(lnglat: LngLatLike, options?: IAnimationOptions, eventData?: any) {
     return this.easeTo(
       merge(
         {
@@ -135,17 +125,9 @@ export default class Camera extends EventEmitter {
     );
   }
 
-  public panBy(
-    offset: PointLike,
-    options?: IAnimationOptions,
-    eventData?: any,
-  ) {
+  public panBy(offset: PointLike, options?: IAnimationOptions, eventData?: any) {
     offset = Point.convert(offset).mult(-1);
-    return this.panTo(
-      this.transform.center,
-      extend({ offset }, options || {}),
-      eventData,
-    );
+    return this.panTo(this.transform.center, extend({ offset }, options || {}), eventData);
   }
   public zoomOut(options?: IAnimationOptions, eventData?: any) {
     this.zoomTo(this.getZoom() - 1, options, eventData);
@@ -187,11 +169,7 @@ export default class Camera extends EventEmitter {
     return this;
   }
 
-  public rotateTo(
-    bearing: number,
-    options?: IAnimationOptions,
-    eventData?: any,
-  ) {
+  public rotateTo(bearing: number, options?: IAnimationOptions, eventData?: any) {
     return this.easeTo(
       merge(
         {
@@ -310,8 +288,7 @@ export default class Camera extends EventEmitter {
   }
 
   public easeTo(
-    options: ICameraOptions &
-      IAnimationOptions & { easeId?: string; noMoveStart?: boolean } = {},
+    options: ICameraOptions & IAnimationOptions & { easeId?: string; noMoveStart?: boolean } = {},
     eventData?: any,
   ) {
     options = merge(
@@ -323,10 +300,7 @@ export default class Camera extends EventEmitter {
       options,
     );
 
-    if (
-      options.animate === false ||
-      (!options.essential && prefersReducedMotion())
-    ) {
+    if (options.animate === false || (!options.essential && prefersReducedMotion())) {
       options.duration = 0;
     }
 
@@ -400,18 +374,10 @@ export default class Camera extends EventEmitter {
           tr.setLocationAtPoint(around, aroundPoint);
         } else {
           const scale = tr.zoomScale(tr.zoom - startZoom);
-          const base =
-            zoom > startZoom
-              ? Math.min(2, finalScale)
-              : Math.max(0.5, finalScale);
+          const base = zoom > startZoom ? Math.min(2, finalScale) : Math.max(0.5, finalScale);
           const speedup = Math.pow(base, 1 - k);
-          const newCenter = tr.unproject(
-            from.add(delta.mult(k * speedup)).mult(scale),
-          );
-          tr.setLocationAtPoint(
-            tr.renderWorldCopies ? newCenter.wrap() : newCenter,
-            pointAtOffset,
-          );
+          const newCenter = tr.unproject(from.add(delta.mult(k * speedup)).mult(scale));
+          tr.setLocationAtPoint(tr.renderWorldCopies ? newCenter.wrap() : newCenter, pointAtOffset);
         }
 
         this.fireMoveEvents(eventData);
@@ -455,9 +421,7 @@ export default class Camera extends EventEmitter {
     const startPitch = this.getPitch();
     const startPadding = this.getPadding();
 
-    const zoom = options.zoom
-      ? clamp(+options.zoom, tr.minZoom, tr.maxZoom)
-      : startZoom;
+    const zoom = options.zoom ? clamp(+options.zoom, tr.minZoom, tr.maxZoom) : startZoom;
     const bearing = options.bearing
       ? this.normalizeBearing(options.bearing, startBearing)
       : startBearing;
@@ -485,11 +449,7 @@ export default class Camera extends EventEmitter {
     const u1 = delta.mag();
 
     if ('minZoom' in options) {
-      const minZoom = clamp(
-        Math.min(options.minZoom, startZoom, zoom),
-        tr.minZoom,
-        tr.maxZoom,
-      );
+      const minZoom = clamp(Math.min(options.minZoom, startZoom, zoom), tr.minZoom, tr.maxZoom);
       // w<sub>m</sub>: Maximum visible span, measured in pixels with respect to the initial
       // scale.
       const wMax = w0 / tr.zoomScale(minZoom - startZoom);
@@ -561,8 +521,7 @@ export default class Camera extends EventEmitter {
     if ('duration' in options) {
       options.duration = +options.duration;
     } else {
-      const V =
-        'screenSpeed' in options ? +options.screenSpeed / rho : +options.speed;
+      const V = 'screenSpeed' in options ? +options.screenSpeed / rho : +options.speed;
       options.duration = (1000 * S) / V;
     }
 
@@ -599,13 +558,8 @@ export default class Camera extends EventEmitter {
         }
 
         const newCenter =
-          k === 1
-            ? center
-            : tr.unproject(from.add(delta.mult(u(s))).mult(easeScale));
-        tr.setLocationAtPoint(
-          tr.renderWorldCopies ? newCenter.wrap() : newCenter,
-          pointAtOffset,
-        );
+          k === 1 ? center : tr.unproject(from.add(delta.mult(u(s))).mult(easeScale));
+        tr.setLocationAtPoint(tr.renderWorldCopies ? newCenter.wrap() : newCenter, pointAtOffset);
 
         this.fireMoveEvents(eventData);
       },
@@ -859,10 +813,7 @@ export default class Camera extends EventEmitter {
       return;
     }
 
-    const zoom = Math.min(
-      tr.scaleZoom(tr.scale * Math.min(scaleX, scaleY)),
-      options.maxZoom,
-    );
+    const zoom = Math.min(tr.scaleZoom(tr.scale * Math.min(scaleX, scaleY)), options.maxZoom);
 
     // Calculate center: apply the zoom, the configured offset, as well as offset that exists as a result of padding.
     const offset = Point.convert(options.offset);
@@ -870,17 +821,10 @@ export default class Camera extends EventEmitter {
     const paddingOffsetX = (options.padding.left - options.padding.right) / 2;
     // @ts-ignore
     const paddingOffsetY = (options.padding.top - options.padding.bottom) / 2;
-    const offsetAtInitialZoom = new Point(
-      offset.x + paddingOffsetX,
-      offset.y + paddingOffsetY,
-    );
-    const offsetAtFinalZoom = offsetAtInitialZoom.mult(
-      tr.scale / tr.zoomScale(zoom),
-    );
+    const offsetAtInitialZoom = new Point(offset.x + paddingOffsetX, offset.y + paddingOffsetY);
+    const offsetAtFinalZoom = offsetAtInitialZoom.mult(tr.scale / tr.zoomScale(zoom));
 
-    const center = tr.unproject(
-      p0world.add(p1world).div(2).sub(offsetAtFinalZoom),
-    );
+    const center = tr.unproject(p0world.add(p1world).div(2).sub(offsetAtFinalZoom));
 
     return {
       center,
@@ -903,8 +847,6 @@ export default class Camera extends EventEmitter {
     // Explictly remove the padding field because, calculatedOptions already accounts for padding by setting zoom and center accordingly.
     delete options.padding;
     // @ts-ignore
-    return options.linear
-      ? this.easeTo(options, eventData)
-      : this.flyTo(options, eventData);
+    return options.linear ? this.easeTo(options, eventData) : this.flyTo(options, eventData);
   }
 }

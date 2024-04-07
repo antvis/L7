@@ -73,19 +73,13 @@ export default class Zoom extends Control<IZoomControlOption> {
   }
 
   public zoomIn = () => {
-    if (
-      !this.disabled &&
-      this.mapsService.getZoom() < this.mapsService.getMaxZoom()
-    ) {
+    if (!this.disabled && this.mapsService.getZoom() < this.mapsService.getMaxZoom()) {
       this.mapsService.zoomIn();
     }
   };
 
   public zoomOut = () => {
-    if (
-      !this.disabled &&
-      this.mapsService.getZoom() > this.mapsService.getMinZoom()
-    ) {
+    if (!this.disabled && this.mapsService.getZoom() > this.mapsService.getMinZoom()) {
       this.mapsService.zoomOut();
     }
   };

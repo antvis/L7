@@ -34,21 +34,18 @@ export default class LayerModelPlugin implements ILayerPlugin {
       layer.log(IDebugLog.BuildModelEnd, ILayerStage.INIT);
     });
 
-    layer.hooks.beforeRenderData.tapPromise(
-      'LayerModelPlugin',
-      async (flag: boolean) => {
-        if (!flag) {
-          // TileLayer  不需要rebuilder
-          return false;
-        }
-        if (layer.getSource().isTile) {
-          return false;
-        }
-        layer.log(IDebugLog.BuildModelStart, ILayerStage.UPDATE);
-        await this.prepareLayerModel(layer);
-        layer.log(IDebugLog.BuildModelEnd, ILayerStage.UPDATE);
-        return true;
-      },
-    );
+    layer.hooks.beforeRenderData.tapPromise('LayerModelPlugin', async (flag: boolean) => {
+      if (!flag) {
+        // TileLayer  不需要rebuilder
+        return false;
+      }
+      if (layer.getSource().isTile) {
+        return false;
+      }
+      layer.log(IDebugLog.BuildModelStart, ILayerStage.UPDATE);
+      await this.prepareLayerModel(layer);
+      layer.log(IDebugLog.BuildModelEnd, ILayerStage.UPDATE);
+      return true;
+    });
   }
 }

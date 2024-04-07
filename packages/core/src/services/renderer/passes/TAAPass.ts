@@ -251,16 +251,13 @@ export default class TAAPass<
         });
       });
 
-      useFramebuffer(
-        layer.multiPassRenderer.getPostProcessor().getReadFBO(),
-        () => {
-          this.copyModel.draw({
-            uniforms: {
-              u_Texture: this.copyRenderTarget,
-            },
-          });
-        },
-      );
+      useFramebuffer(layer.multiPassRenderer.getPostProcessor().getReadFBO(), () => {
+        this.copyModel.draw({
+          uniforms: {
+            u_Texture: this.copyRenderTarget,
+          },
+        });
+      });
       layer.multiPassRenderer.getPostProcessor().render(layer);
     }
 
@@ -302,8 +299,7 @@ export default class TAAPass<
       fs: fragmentShader,
     });
 
-    const { vs, fs, uniforms } =
-      this.shaderModuleService.getModule(shaderModuleName);
+    const { vs, fs, uniforms } = this.shaderModuleService.getModule(shaderModuleName);
     const { createAttribute, createBuffer, createModel } = this.rendererService;
     return createModel({
       vs,

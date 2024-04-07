@@ -17,12 +17,7 @@ export function clamp(n: number, min: number, max: number): number {
 export function interpolate(a: number, b: number, t: number) {
   return a * (1 - t) + b * t;
 }
-export function bezier(
-  p1x: number,
-  p1y: number,
-  p2x: number,
-  p2y: number,
-): (t: number) => number {
+export function bezier(p1x: number, p1y: number, p2x: number, p2y: number): (t: number) => number {
   const bez = new UnitBezier(p1x, p1y, p2x, p2y);
   return (t: number) => {
     return bez.solve(t);
@@ -40,10 +35,7 @@ export function prefersReducedMotion(): boolean {
   return reducedMotionQuery?.matches;
 }
 
-export function pick(
-  src: { [key: string]: any },
-  properties: string[],
-): { [key: string]: any } {
+export function pick(src: { [key: string]: any }, properties: string[]): { [key: string]: any } {
   const result: { [key: string]: any } = {};
   for (const name of properties) {
     if (name in src) {
@@ -76,9 +68,7 @@ export const cancel =
   // @ts-ignore
   window.msCancelAnimationFrame;
 
-export function renderframe(
-  fn: (paintStartTimestamp: number) => void,
-): ICancelable {
+export function renderframe(fn: (paintStartTimestamp: number) => void): ICancelable {
   const frame = raf(fn);
   return { cancel: () => cancel(frame) };
 }

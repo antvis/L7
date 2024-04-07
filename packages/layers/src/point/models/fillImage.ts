@@ -1,16 +1,8 @@
-import type {
-  IAttribute,
-  IElements,
-  IEncodeFeature,
-  IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IAttribute, IElements, IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { getCullFace } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import type { IPointLayerStyleOptions} from '../../core/interface';
+import type { IPointLayerStyleOptions } from '../../core/interface';
 import { SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
 // static pointLayer shader - not support animate
@@ -50,7 +42,7 @@ export default class FillImageModel extends BaseModel {
       u_heightfixed: Number(heightfixed),
       u_raisingHeight: Number(raisingHeight),
       u_size_unit: SizeUnitType[unit] as SizeUnitType,
-    };//2+1+1+1
+    }; //2+1+1+1
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
 
     return commonBufferInfo;
@@ -141,11 +133,7 @@ export default class FillImageModel extends BaseModel {
           const extrude = [1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0];
 
           const extrudeIndex = (attributeIdx % 4) * 3;
-          return [
-            extrude[extrudeIndex],
-            extrude[extrudeIndex + 1],
-            extrude[extrudeIndex + 2],
-          ];
+          return [extrude[extrudeIndex], extrude[extrudeIndex + 1], extrude[extrudeIndex + 2]];
         },
       },
     });

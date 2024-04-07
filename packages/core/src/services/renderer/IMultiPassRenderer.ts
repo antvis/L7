@@ -24,8 +24,7 @@ export interface IPass<InitializationOptions> {
  * PostProcessing，自动切换 renderTarget
  * 例如最后一个 PostProcessingPass 自动切换 renderTarget 为屏幕
  */
-export interface IPostProcessingPass<InitializationOptions>
-  extends IPass<InitializationOptions> {
+export interface IPostProcessingPass<InitializationOptions> extends IPass<InitializationOptions> {
   setRenderToScreen(renderToScreen: boolean): void;
   setName(name: string): void;
   isEnabled(): boolean;
@@ -43,9 +42,7 @@ export interface IPostProcessor {
     config?: Partial<InitializationOptions>,
   ): void;
   render(layer: ILayer): Promise<unknown>;
-  getPostProcessingPassByName(
-    name: string,
-  ): IPostProcessingPass<unknown> | undefined;
+  getPostProcessingPassByName(name: string): IPostProcessingPass<unknown> | undefined;
 }
 
 export interface IMultiPassRenderer {

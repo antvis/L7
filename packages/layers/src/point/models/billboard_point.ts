@@ -1,10 +1,5 @@
-import type {
-  IEncodeFeature,
-  IModel} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 
@@ -28,7 +23,11 @@ export default class SimplePointModel extends BaseModel {
       blend: 'additive',
     };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       blend,
       strokeOpacity = 1,
@@ -41,7 +40,7 @@ export default class SimplePointModel extends BaseModel {
       u_additive: blend === 'additive' ? 1.0 : 0.0,
       u_stroke_opacity: strokeOpacity,
       u_stroke_width: strokeWidth,
-    }
+    };
 
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;

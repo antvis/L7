@@ -71,24 +71,14 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         const uniformBuffer = layer.getLayerUniformBuffer();
         uniformBuffer.subData({
           offset: 0,
-          data: new Uint8Array(
-            new Float32Array([...mvp, ...sceneCenterMercator]).buffer,
-          ),
+          data: new Uint8Array(new Float32Array([...mvp, ...sceneCenterMercator]).buffer),
         });
       }
 
       const { width, height } = this.rendererService.getViewportSize();
 
-      const { data, uniforms } = this.generateUBO(
-        mvp,
-        sceneCenterMercator,
-        width,
-        height,
-      );
-      if (
-        this.layerService.alreadyInRendering &&
-        this.rendererService.uniformBuffers[0]
-      ) {
+      const { data, uniforms } = this.generateUBO(mvp, sceneCenterMercator, width, height);
+      if (this.layerService.alreadyInRendering && this.rendererService.uniformBuffers[0]) {
         const renderUniformBuffer = this.rendererService.uniformBuffers[0];
         // Update only once since all models can share one UBO.
         renderUniformBuffer.subData({
@@ -136,16 +126,13 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     const u_ViewMatrix = this.cameraService.getViewMatrix();
     const u_ViewProjectionMatrix = this.cameraService.getViewProjectionMatrix();
     const u_ModelMatrix = this.cameraService.getModelMatrix();
-    const u_ViewportCenterProjection =
-      this.coordinateSystemService.getViewportCenterProjection();
+    const u_ViewportCenterProjection = this.coordinateSystemService.getViewportCenterProjection();
     const u_PixelsPerDegree = this.coordinateSystemService.getPixelsPerDegree();
     const u_Zoom = this.cameraService.getZoom();
-    const u_PixelsPerDegree2 =
-      this.coordinateSystemService.getPixelsPerDegree2();
+    const u_PixelsPerDegree2 = this.coordinateSystemService.getPixelsPerDegree2();
     const u_ZoomScale = this.cameraService.getZoomScale();
     const u_PixelsPerMeter = this.coordinateSystemService.getPixelsPerMeter();
-    const u_CoordinateSystem =
-      this.coordinateSystemService.getCoordinateSystem();
+    const u_CoordinateSystem = this.coordinateSystemService.getCoordinateSystem();
     const u_CameraPosition = this.cameraService.getCameraPosition();
     const u_DevicePixelRatio = window.devicePixelRatio;
     const u_ViewportCenter = this.coordinateSystemService.getViewportCenter();
@@ -188,8 +175,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         // 坐标系参数
         [CoordinateUniform.CoordinateSystem]: u_CoordinateSystem,
         [CoordinateUniform.ViewportCenter]: u_ViewportCenter,
-        [CoordinateUniform.ViewportCenterProjection]:
-          u_ViewportCenterProjection,
+        [CoordinateUniform.ViewportCenterProjection]: u_ViewportCenterProjection,
         [CoordinateUniform.PixelsPerDegree]: u_PixelsPerDegree,
         [CoordinateUniform.PixelsPerDegree2]: u_PixelsPerDegree2,
         [CoordinateUniform.PixelsPerMeter]: u_PixelsPerMeter,

@@ -47,23 +47,11 @@ class GridIndex {
     this.bboxes.push(y2);
   }
 
-  public query(
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number,
-    predicate?: CallBack,
-  ) {
+  public query(x1: number, y1: number, x2: number, y2: number, predicate?: CallBack) {
     return this.queryHitTest(x1, y1, x2, y2, false, predicate);
   }
 
-  public hitTest(
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number,
-    predicate?: CallBack,
-  ) {
+  public hitTest(x1: number, y1: number, x2: number, y2: number, predicate?: CallBack) {
     return this.queryHitTest(x1, y1, x2, y2, true, predicate);
   }
 
@@ -111,16 +99,7 @@ class GridIndex {
       hitTest,
       seenUids: { box: {}, circle: {} },
     };
-    this.forEachCell(
-      x1,
-      y1,
-      x2,
-      y2,
-      this.queryCell,
-      result,
-      queryArgs,
-      predicate,
-    );
+    this.forEachCell(x1, y1, x2, y2, this.queryCell, result, queryArgs, predicate);
     return hitTest ? result.length > 0 : result;
   }
 
@@ -193,17 +172,11 @@ class GridIndex {
   }
 
   private convertToXCellCoord(x: number) {
-    return Math.max(
-      0,
-      Math.min(this.xCellCount - 1, Math.floor(x * this.xScale)),
-    );
+    return Math.max(0, Math.min(this.xCellCount - 1, Math.floor(x * this.xScale)));
   }
 
   private convertToYCellCoord(y: number) {
-    return Math.max(
-      0,
-      Math.min(this.yCellCount - 1, Math.floor(y * this.yScale)),
-    );
+    return Math.max(0, Math.min(this.yCellCount - 1, Math.floor(y * this.yScale)));
   }
 }
 

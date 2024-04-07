@@ -26,13 +26,11 @@ export default class LngLatBounds {
   }
 
   public setNorthEast(ne: LngLatLike) {
-    this.ne =
-      ne instanceof LngLat ? new LngLat(ne.lng, ne.lat) : LngLat.convert(ne);
+    this.ne = ne instanceof LngLat ? new LngLat(ne.lng, ne.lat) : LngLat.convert(ne);
     return this;
   }
   public setSouthWest(sw: LngLatLike) {
-    this.sw =
-      sw instanceof LngLat ? new LngLat(sw.lng, sw.lat) : LngLat.convert(sw);
+    this.sw = sw instanceof LngLat ? new LngLat(sw.lng, sw.lat) : LngLat.convert(sw);
     return this;
   }
 
@@ -79,10 +77,7 @@ export default class LngLatBounds {
     return this;
   }
   public getCenter(): LngLat {
-    return new LngLat(
-      (this.sw.lng + this.ne.lng) / 2,
-      (this.sw.lat + this.ne.lat) / 2,
-    );
+    return new LngLat((this.sw.lng + this.ne.lng) / 2, (this.sw.lat + this.ne.lat) / 2);
   }
 
   public getSouthWest(): LngLat {

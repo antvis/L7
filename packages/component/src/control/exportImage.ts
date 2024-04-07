@@ -1,7 +1,5 @@
 import { createL7Icon } from '../utils/icon';
-import type {
-  IButtonControlOption,
-} from './baseControl/buttonControl';
+import type { IButtonControlOption } from './baseControl/buttonControl';
 import ButtonControl from './baseControl/buttonControl';
 
 export interface IExportImageControlOption extends IButtonControlOption {
@@ -18,9 +16,7 @@ export default class ExportImage extends ButtonControl<IExportImageControlOption
     return button;
   }
 
-  public getDefault(
-    option?: Partial<IExportImageControlOption>,
-  ): IExportImageControlOption {
+  public getDefault(option?: Partial<IExportImageControlOption>): IExportImageControlOption {
     return {
       ...super.getDefault(option),
       title: '导出图片',

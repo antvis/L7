@@ -26,7 +26,6 @@ let Status = {
   AMap: LoadStatus.notload,
 };
 
-
 const onloadCBKs: any[] = [];
 // @ts-ignore
 const onload = (callback: (map: window.AMap) => void) => {

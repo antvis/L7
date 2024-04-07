@@ -1,7 +1,4 @@
-import type {
-  IAttribute,
-  IAttributeInitializationOptions,
-} from '../renderer/IAttribute';
+import type { IAttribute, IAttributeInitializationOptions } from '../renderer/IAttribute';
 import type { IBufferInitializationOptions } from '../renderer/IBuffer';
 import type { IElements } from '../renderer/IElements';
 import type { ILayer } from './ILayerService';
@@ -193,9 +190,7 @@ export interface IStyleAttributeService {
     };
     elements: IElements;
   };
-  registerStyleAttribute(
-    options: Partial<IStyleAttributeInitializationOptions>,
-  ): IStyleAttribute;
+  registerStyleAttribute(options: Partial<IStyleAttributeInitializationOptions>): IStyleAttribute;
   unRegisterStyleAttribute(name: string): void;
   updateScaleAttribute(scale: IScaleOptions): void;
   updateStyleAttribute(

@@ -68,7 +68,7 @@ function mean(x: number[]) {
   return sum(x) / x.length;
 }
 
-export { sum, max, min, mean };
+export { max, mean, min, sum };
 export const statMap: { [key: string]: any } = {
   min,
   max,

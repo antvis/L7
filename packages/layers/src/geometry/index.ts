@@ -32,8 +32,7 @@ export default class GeometryLayer extends BaseLayer<IGeometryLayerStyleOptions>
   }
 
   public getModelType(): GeometryModelType {
-    const shapeAttribute =
-      this.styleAttributeService.getLayerStyleAttribute('shape');
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute('shape');
     const shape = shapeAttribute?.scale?.field as GeometryModelType;
     if (shape === 'plane') {
       return 'plane';

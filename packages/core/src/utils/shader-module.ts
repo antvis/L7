@@ -99,19 +99,16 @@ export function extractUniforms(content: string): {
   // eslint-disable-next-line prefer-const
   let { content: c, uniforms: u } = fillUniforms(content, true);
 
-  c = c.replace(
-    /(\s*uniform\s*.*\s*){((?:\s*.*\s*)*?)};/g,
-    (substr, header, uniforms) => {
-      uniforms = uniforms.trim().replace(/^.*$/gm, (uniform: string) => {
-        return `uniform ${uniform}`;
-      });
+  c = c.replace(/(\s*uniform\s*.*\s*){((?:\s*.*\s*)*?)};/g, (substr, header, uniforms) => {
+    uniforms = uniforms.trim().replace(/^.*$/gm, (uniform: string) => {
+      return `uniform ${uniform}`;
+    });
 
-      const { content: cc, uniforms: uu } = fillUniforms(uniforms);
-      Object.assign(u, uu);
+    const { content: cc, uniforms: uu } = fillUniforms(uniforms);
+    Object.assign(u, uu);
 
-      return `${header}{\n${cc}\n};`;
-    },
-  );
+    return `${header}{\n${cc}\n};`;
+  });
 
   return {
     content: c,

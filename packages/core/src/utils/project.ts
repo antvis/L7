@@ -61,27 +61,11 @@ export function getDistanceScales({
    *
    * Y needs to be flipped when converting delta degree/meter to delta pixels
    */
-  result.pixelsPerMeter = [
-    altPixelsPerMeter,
-    -altPixelsPerMeter,
-    altPixelsPerMeter,
-  ];
-  result.metersPerPixel = [
-    1 / altPixelsPerMeter,
-    -1 / altPixelsPerMeter,
-    1 / altPixelsPerMeter,
-  ];
+  result.pixelsPerMeter = [altPixelsPerMeter, -altPixelsPerMeter, altPixelsPerMeter];
+  result.metersPerPixel = [1 / altPixelsPerMeter, -1 / altPixelsPerMeter, 1 / altPixelsPerMeter];
 
-  result.pixelsPerDegree = [
-    pixelsPerDegreeX,
-    -pixelsPerDegreeY,
-    altPixelsPerMeter,
-  ];
-  result.degreesPerPixel = [
-    1 / pixelsPerDegreeX,
-    -1 / pixelsPerDegreeY,
-    1 / altPixelsPerMeter,
-  ];
+  result.pixelsPerDegree = [pixelsPerDegreeX, -pixelsPerDegreeY, altPixelsPerMeter];
+  result.degreesPerPixel = [1 / pixelsPerDegreeX, -1 / pixelsPerDegreeY, 1 / altPixelsPerMeter];
 
   /**
    * Taylor series 2nd order for 1/latCosine
@@ -90,14 +74,11 @@ export function getDistanceScales({
    *     = DEGREES_TO_RADIANS * tan(lat * DEGREES_TO_RADIANS) / cos(lat * DEGREES_TO_RADIANS) * dLat
    */
   if (highPrecision) {
-    const latCosine2 =
-      (DEGREES_TO_RADIANS * Math.tan(latitude * DEGREES_TO_RADIANS)) /
-      latCosine;
+    const latCosine2 = (DEGREES_TO_RADIANS * Math.tan(latitude * DEGREES_TO_RADIANS)) / latCosine;
     const pixelsPerDegreeY2 = (pixelsPerDegreeX * latCosine2) / 2;
 
     const altPixelsPerDegree2 = (worldSize / EARTH_CIRCUMFERENCE) * latCosine2;
-    const altPixelsPerMeter2 =
-      (altPixelsPerDegree2 / pixelsPerDegreeY) * altPixelsPerMeter;
+    const altPixelsPerMeter2 = (altPixelsPerDegree2 / pixelsPerDegreeY) * altPixelsPerMeter;
 
     result.pixelsPerDegree2 = [0, -pixelsPerDegreeY2, altPixelsPerDegree2];
     result.pixelsPerMeter2 = [altPixelsPerMeter2, 0, altPixelsPerMeter2];

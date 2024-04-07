@@ -1,14 +1,7 @@
-import type {
-  IRenderOptions,
-  IStencilOptions,
-  MaskOperationType,
-} from '@antv/l7-core';
+import type { IRenderOptions, IStencilOptions, MaskOperationType } from '@antv/l7-core';
 import { MaskOperation, StencilType, gl } from '@antv/l7-core';
 // 掩膜配置
-export function getStencil(
-  mask: boolean,
-  maskInside: boolean,
-): Partial<IStencilOptions> {
+export function getStencil(mask: boolean, maskInside: boolean): Partial<IStencilOptions> {
   return {
     enable: mask,
     mask: 0xff,
@@ -23,9 +16,7 @@ interface IStencilMaskOptions extends IRenderOptions {
   maskOperation?: MaskOperationType;
 }
 // 模版配置
-export function getStencilMask(
-  option: Partial<IStencilMaskOptions>,
-): Partial<IStencilOptions> {
+export function getStencilMask(option: Partial<IStencilMaskOptions>): Partial<IStencilOptions> {
   if (option.maskOperation === MaskOperation.OR) {
     return {
       enable: true,
@@ -50,14 +41,9 @@ export function getStencilMask(
         option.stencilType === StencilType.SINGLE // 单层
           ? gl.ALWAYS
           : option.stencilIndex === 0 // 多层
-          ? gl.ALWAYS
-          : gl.LESS,
-      ref:
-        option.stencilType === StencilType.SINGLE
-          ? 1
-          : option.stencilIndex === 0
-          ? 2
-          : 1,
+            ? gl.ALWAYS
+            : gl.LESS,
+      ref: option.stencilType === StencilType.SINGLE ? 1 : option.stencilIndex === 0 ? 2 : 1,
       mask: 0xff,
     },
     opFront: {

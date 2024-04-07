@@ -1,9 +1,4 @@
-import type {
-  ILayer,
-  ILayerPlugin,
-  IStyleAttributeService,
-  L7Container,
-} from '@antv/l7-core';
+import type { ILayer, ILayerPlugin, IStyleAttributeService, L7Container } from '@antv/l7-core';
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
@@ -25,9 +20,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
   }
   private updateStyleAttribute(
     layer: ILayer,
-    {
-      styleAttributeService,
-    }: { styleAttributeService: IStyleAttributeService },
+    { styleAttributeService }: { styleAttributeService: IStyleAttributeService },
   ) {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
@@ -53,9 +46,7 @@ export default class UpdateStyleAttributePlugin implements ILayerPlugin {
 
   private initStyleAttribute(
     layer: ILayer,
-    {
-      styleAttributeService,
-    }: { styleAttributeService: IStyleAttributeService },
+    { styleAttributeService }: { styleAttributeService: IStyleAttributeService },
   ) {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     attributes

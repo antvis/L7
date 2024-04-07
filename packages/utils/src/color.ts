@@ -35,9 +35,7 @@ export function decodePickingColor(color: Uint8Array): number {
   return index;
 }
 
-export function encodePickingColor(
-  featureIdx: number,
-): [number, number, number] {
+export function encodePickingColor(featureIdx: number): [number, number, number] {
   return [
     (featureIdx + 1) & 255,
     ((featureIdx + 1) >> 8) & 255,
@@ -52,9 +50,7 @@ export interface IImagedata {
 }
 
 // 连续型 老版本兼容
-export function generateColorRamp(
-  colorRamp: IColorRamp,
-): ImageData | IImagedata {
+export function generateColorRamp(colorRamp: IColorRamp): ImageData | IImagedata {
   let canvas = window.document.createElement('canvas');
   let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   canvas.width = 256;
@@ -133,9 +129,7 @@ export function generateCatRamp(colorRamp: IColorRamp): ImageData | IImagedata {
 }
 
 // 等间距
-export function generateQuantizeRamp(
-  colorRamp: IColorRamp,
-): ImageData | IImagedata {
+export function generateQuantizeRamp(colorRamp: IColorRamp): ImageData | IImagedata {
   let canvas = window.document.createElement('canvas');
   let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.globalAlpha = 1.0;

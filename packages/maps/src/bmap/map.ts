@@ -38,7 +38,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   };
   protected currentStyle: any = 'normal';
   // 事件回调代理
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
+    new Map();
 
   public getMap() {
     return this.map as any as BMapGL.Map & {
@@ -424,7 +425,10 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
   // coordinates methods
   public meterToCoord(center: [number, number], outer: [number, number]) {
-    const metreDistance = this.getMap().getDistance(new BMapGL.Point(...center), new BMapGL.Point(...outer));
+    const metreDistance = this.getMap().getDistance(
+      new BMapGL.Point(...center),
+      new BMapGL.Point(...outer),
+    );
 
     const [x1, y1] = this.lngLatToCoord(center);
     const [x2, y2] = this.lngLatToCoord(outer);

@@ -1,9 +1,9 @@
 import type { ILegend } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import type { IRasterLayerStyleOptions } from '../core/interface';
+import { rampColor2legend } from '../utils/rampcolor_legend';
 import type { RasterModelType } from './models/index';
 import RasterModels from './models/index';
-import { rampColor2legend } from '../utils/rampcolor_legend';
 export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
   public type: string = 'RasterLayer';
   public async buildModels() {
@@ -40,13 +40,13 @@ export default class RaterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     }
   }
   public getLegend(name: string): ILegend {
-    if (name !== 'color') return {
-      type: undefined,
-      field: undefined,
-      items: []
-    }
+    if (name !== 'color')
+      return {
+        type: undefined,
+        field: undefined,
+        items: [],
+      };
     const rampColors = this.getLayerConfig().rampColors;
-    return rampColor2legend(rampColors,name);
-
-}
+    return rampColor2legend(rampColors, name);
+  }
 }

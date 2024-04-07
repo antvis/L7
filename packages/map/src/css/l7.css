@@ -1,5 +1,9 @@
 .l7-map {
-  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font:
+    12px/20px 'Helvetica Neue',
+    Arial,
+    Helvetica,
+    sans-serif;
   overflow: hidden;
   position: relative;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -60,11 +64,27 @@
 .l7-ctrl-top-left,
 .l7-ctrl-top-right,
 .l7-ctrl-bottom-left,
-.l7-ctrl-bottom-right { position: absolute; pointer-events: none; z-index: 2; }
-.l7-ctrl-top-left     { top: 0; left: 0; }
-.l7-ctrl-top-right    { top: 0; right: 0; }
-.l7-ctrl-bottom-left  { bottom: 0; left: 0; }
-.l7-ctrl-bottom-right { right: 0; bottom: 0; }
+.l7-ctrl-bottom-right {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+.l7-ctrl-top-left {
+  top: 0;
+  left: 0;
+}
+.l7-ctrl-top-right {
+  top: 0;
+  right: 0;
+}
+.l7-ctrl-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+.l7-ctrl-bottom-right {
+  right: 0;
+  bottom: 0;
+}
 
 .l7-ctrl {
   clear: both;
@@ -73,26 +93,37 @@
   /* workaround for a Safari bug https://github.com/mapbox/mapbox-gl-js/issues/8185 */
   transform: translate(0, 0);
 }
-.l7-ctrl-top-left .l7-ctrl     { margin: 10px 0 0 10px; float: left; }
-.l7-ctrl-top-right .l7-ctrl    { margin: 10px 10px 0 0; float: right; }
-.l7-ctrl-bottom-left .l7-ctrl  { margin: 0 0 10px 10px; float: left; }
-.l7-ctrl-bottom-right .l7-ctrl { margin: 0 10px 10px 0; float: right; }
-
+.l7-ctrl-top-left .l7-ctrl {
+  margin: 10px 0 0 10px;
+  float: left;
+}
+.l7-ctrl-top-right .l7-ctrl {
+  margin: 10px 10px 0 0;
+  float: right;
+}
+.l7-ctrl-bottom-left .l7-ctrl {
+  margin: 0 0 10px 10px;
+  float: left;
+}
+.l7-ctrl-bottom-right .l7-ctrl {
+  margin: 0 10px 10px 0;
+  float: right;
+}
 
 .l7-crosshair,
 .l7-crosshair .l7-interactive,
 .l7-crosshair .l7-interactive:active {
-    cursor: crosshair;
+  cursor: crosshair;
 }
 
 .l7-boxzoom {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    background: #fff;
-    border: 2px dotted #202020;
-    opacity: 0.5;
-    z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  background: #fff;
+  border: 2px dotted #202020;
+  opacity: 0.5;
+  z-index: 10;
 }

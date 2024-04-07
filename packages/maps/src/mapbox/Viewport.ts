@@ -5,8 +5,7 @@ export default class Viewport implements IViewport {
   public viewport: WebMercatorViewport;
 
   public syncWithMapCamera(mapCamera: Partial<IMapCamera>) {
-    const { center, zoom, pitch, bearing, viewportHeight, viewportWidth } =
-      mapCamera;
+    const { center, zoom, pitch, bearing, viewportHeight, viewportWidth } = mapCamera;
 
     /**
      * Deck.gl 使用的也是 Mapbox 同步相机，相机参数保持一致
@@ -64,10 +63,7 @@ export default class Viewport implements IViewport {
     return 1;
   }
 
-  public projectFlat(
-    lngLat: [number, number],
-    scale?: number | undefined,
-  ): [number, number] {
+  public projectFlat(lngLat: [number, number], scale?: number | undefined): [number, number] {
     return this.viewport.projectFlat(lngLat, scale);
   }
 }

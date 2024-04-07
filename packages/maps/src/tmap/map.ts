@@ -32,7 +32,8 @@ const EventMap: {
 export default class TMapService extends BaseMapService<TMap.Map> {
   // @ts-ignore
   protected viewport: IViewport = null;
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
+    new Map();
 
   public handleCameraChanged = () => {
     // Trigger map change event
@@ -383,7 +384,10 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   }
 
   // coordinates methods
-  public meterToCoord([centerLon, centerLat]: [number, number], [outerLon, outerLat]: [number, number]) {
+  public meterToCoord(
+    [centerLon, centerLat]: [number, number],
+    [outerLon, outerLat]: [number, number],
+  ) {
     const metreDistance = TMap.geometry.computeDistance([
       new TMap.LatLng(centerLat, centerLon),
       new TMap.LatLng(outerLat, outerLon),

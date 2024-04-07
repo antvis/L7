@@ -35,9 +35,7 @@ export default class LngLat {
     this.lng = +lng;
     this.lat = +lat;
     if (this.lat > 90 || this.lat < -90) {
-      throw new Error(
-        'Invalid LngLat latitude value: must be between -90 and 90',
-      );
+      throw new Error('Invalid LngLat latitude value: must be between -90 and 90');
     }
   }
 

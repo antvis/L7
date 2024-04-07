@@ -60,13 +60,9 @@ export function isNumberArray(data: IRasterLayerData) {
  * @param geojson
  * @returns geojson
  */
-export function geojsonRewind<
-  T extends FeatureCollection | Feature | Geometries,
->(geojson: T) {
+export function geojsonRewind<T extends FeatureCollection | Feature | Geometries>(geojson: T) {
   // rewind 方法会修改原始数据，frozen 的数据，需要深度克隆后才能修改
-  const data = Object.isFrozen(geojson)
-    ? lodashUtil.cloneDeep(geojson)
-    : geojson;
+  const data = Object.isFrozen(geojson) ? lodashUtil.cloneDeep(geojson) : geojson;
 
   // 设置地理多边形方向 If clockwise is true, the outer ring is clockwise, otherwise it is counterclockwise.
   rewind(data, true);
@@ -75,11 +71,16 @@ export function geojsonRewind<
 }
 
 // raster and image layer  extentToCoord
-export function extentToCoord(coord: [number, number][] | undefined, extent: [number, number, number, number]) {
-  return coord ? coord : [
-    [extent[0], extent[3]],
-    [extent[2], extent[3]],
-    [extent[2], extent[1]],
-    [extent[0], extent[1]]]
-
+export function extentToCoord(
+  coord: [number, number][] | undefined,
+  extent: [number, number, number, number],
+) {
+  return coord
+    ? coord
+    : [
+        [extent[0], extent[3]],
+        [extent[2], extent[3]],
+        [extent[2], extent[1]],
+        [extent[0], extent[1]],
+      ];
 }

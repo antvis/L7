@@ -8,12 +8,7 @@ import type {
 import type { SourceTile } from '@antv/l7-utils';
 
 export type Timeout = any;
-export type CacheEvent =
-  | 'click'
-  | 'mousemove'
-  | 'mouseup'
-  | 'mousedown'
-  | 'contextmenu';
+export type CacheEvent = 'click' | 'mousemove' | 'mouseup' | 'mousedown' | 'contextmenu';
 
 export interface ITileFactoryOptions {
   parent: ILayer;

@@ -2,16 +2,10 @@ import type { IClusterOptions, IParserData } from '@antv/l7-core';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import Supercluster from 'supercluster/dist/supercluster';
-export function cluster(
-  data: IParserData,
-  option: Partial<IClusterOptions>,
-): IParserData {
+export function cluster(data: IParserData, option: Partial<IClusterOptions>): IParserData {
   const { radius = 40, maxZoom = 18, minZoom = 0, zoom = 2 } = option;
   if (data.pointIndex) {
-    const clusterData = data.pointIndex.getClusters(
-      data.extent,
-      Math.floor(zoom),
-    );
+    const clusterData = data.pointIndex.getClusters(data.extent, Math.floor(zoom));
     data.dataArray = formatData(clusterData);
     return data;
   }

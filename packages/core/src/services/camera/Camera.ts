@@ -117,10 +117,7 @@ export default class Camera {
     this.setType(type, undefined);
   }
 
-  public setType(
-    type: CAMERA_TYPE,
-    trackingMode: CAMERA_TRACKING_MODE | undefined,
-  ) {
+  public setType(type: CAMERA_TYPE, trackingMode: CAMERA_TRACKING_MODE | undefined) {
     this.type = type;
     if (this.type === CAMERA_TYPE.EXPLORING) {
       this.setWorldRotation(true);
@@ -136,9 +133,7 @@ export default class Camera {
 
   public setTrackingMode(trackingMode: CAMERA_TRACKING_MODE) {
     if (this.type !== CAMERA_TYPE.TRACKING) {
-      throw new Error(
-        'Impossible to set a tracking mode if the camera is not of tracking type',
-      );
+      throw new Error('Impossible to set a tracking mode if the camera is not of tracking type');
     }
     this.trackingMode = trackingMode;
   }
@@ -175,12 +170,7 @@ export default class Camera {
     this._update();
   }
 
-  public setPerspective(
-    near: number,
-    far: number,
-    angle: number,
-    aspect: number,
-  ) {
+  public setPerspective(near: number, far: number, angle: number, aspect: number) {
     this.fov = angle;
     this.near = near;
     this.far = far;
@@ -189,13 +179,7 @@ export default class Camera {
   }
 
   public updatePerspective() {
-    mat4.perspective(
-      this.perspective,
-      this.fov * DEG_2_RAD,
-      this.aspect,
-      this.near,
-      this.far,
-    );
+    mat4.perspective(this.perspective, this.fov * DEG_2_RAD, this.aspect, this.near, this.far);
   }
 
   /**
@@ -228,10 +212,7 @@ export default class Camera {
       up = vec3.transformMat4(vec3.create(), [0, 1, 0], m);
     }
 
-    mat4.invert(
-      this.matrix,
-      mat4.lookAt(mat4.create(), this.position, this.focalPoint, up),
-    );
+    mat4.invert(this.matrix, mat4.lookAt(mat4.create(), this.position, this.focalPoint, up));
 
     this._getAxes();
     this._getDistance();
@@ -295,10 +276,7 @@ export default class Camera {
     this.computeMatrix();
 
     this._getAxes();
-    if (
-      this.type === CAMERA_TYPE.ORBITING ||
-      this.type === CAMERA_TYPE.EXPLORING
-    ) {
+    if (this.type === CAMERA_TYPE.ORBITING || this.type === CAMERA_TYPE.EXPLORING) {
       this._getPosition();
     } else if (this.type === CAMERA_TYPE.TRACKING) {
       this._getFocalPoint();
@@ -319,10 +297,7 @@ export default class Camera {
     this.computeMatrix();
 
     this._getAxes();
-    if (
-      this.type === CAMERA_TYPE.ORBITING ||
-      this.type === CAMERA_TYPE.EXPLORING
-    ) {
+    if (this.type === CAMERA_TYPE.ORBITING || this.type === CAMERA_TYPE.EXPLORING) {
       this._getPosition();
     } else if (this.type === CAMERA_TYPE.TRACKING) {
       this._getFocalPoint();
@@ -339,10 +314,7 @@ export default class Camera {
     this.computeMatrix();
 
     this._getAxes();
-    if (
-      this.type === CAMERA_TYPE.ORBITING ||
-      this.type === CAMERA_TYPE.EXPLORING
-    ) {
+    if (this.type === CAMERA_TYPE.ORBITING || this.type === CAMERA_TYPE.EXPLORING) {
       this._getPosition();
     } else if (this.type === CAMERA_TYPE.TRACKING) {
       this._getFocalPoint();
@@ -373,11 +345,7 @@ export default class Camera {
         (this.rotateWorld ? 1 : -1) * azimuth * DEG_2_RAD,
       );
 
-      const rotZ = quat.setAxisAngle(
-        quat.create(),
-        [0, 0, 1],
-        roll * DEG_2_RAD,
-      );
+      const rotZ = quat.setAxisAngle(quat.create(), [0, 0, 1], roll * DEG_2_RAD);
       let rotQ = quat.multiply(quat.create(), rotY, rotX);
       rotQ = quat.multiply(quat.create(), rotQ, rotZ);
       const rotMatrix = mat4.fromQuat(mat4.create(), rotQ);
@@ -399,10 +367,7 @@ export default class Camera {
     }
 
     this._getAxes();
-    if (
-      this.type === CAMERA_TYPE.ORBITING ||
-      this.type === CAMERA_TYPE.EXPLORING
-    ) {
+    if (this.type === CAMERA_TYPE.ORBITING || this.type === CAMERA_TYPE.EXPLORING) {
       this._getPosition();
     } else if (this.type === CAMERA_TYPE.TRACKING) {
       this._getFocalPoint();
@@ -439,10 +404,7 @@ export default class Camera {
     pos[2] += step * n[2];
 
     this._setPosition(pos);
-    if (
-      this.type === CAMERA_TYPE.ORBITING ||
-      this.type === CAMERA_TYPE.EXPLORING
-    ) {
+    if (this.type === CAMERA_TYPE.ORBITING || this.type === CAMERA_TYPE.EXPLORING) {
       // 重新计算视点距离
       this._getDistance();
     } else if (this.type === CAMERA_TYPE.TRACKING) {
@@ -472,11 +434,7 @@ export default class Camera {
   private computeMatrix() {
     // 使用四元数描述 3D 旋转
     // @see https://xiaoiver.github.io/coding/2018/12/28/Camera-%E8%AE%BE%E8%AE%A1-%E4%B8%80.html
-    const rotZ = quat.setAxisAngle(
-      quat.create(),
-      [0, 0, 1],
-      this.roll * DEG_2_RAD,
-    );
+    const rotZ = quat.setAxisAngle(quat.create(), [0, 0, 1], this.roll * DEG_2_RAD);
 
     mat4.identity(this.matrix);
 
@@ -498,10 +456,7 @@ export default class Camera {
     rotQ = quat.multiply(quat.create(), rotQ, rotZ);
     const rotMatrix = mat4.fromQuat(mat4.create(), rotQ);
 
-    if (
-      this.type === CAMERA_TYPE.ORBITING ||
-      this.type === CAMERA_TYPE.EXPLORING
-    ) {
+    if (this.type === CAMERA_TYPE.ORBITING || this.type === CAMERA_TYPE.EXPLORING) {
       mat4.translate(this.matrix, this.matrix, this.focalPoint);
       mat4.multiply(this.matrix, this.matrix, rotMatrix);
       mat4.translate(this.matrix, this.matrix, [0, 0, this.distance]);
@@ -527,14 +482,8 @@ export default class Camera {
    * Recalculates axes based on the current matrix
    */
   private _getAxes() {
-    vec3.copy(
-      this.right,
-      createVec3(vec4.transformMat4(vec4.create(), [1, 0, 0, 0], this.matrix)),
-    );
-    vec3.copy(
-      this.up,
-      createVec3(vec4.transformMat4(vec4.create(), [0, 1, 0, 0], this.matrix)),
-    );
+    vec3.copy(this.right, createVec3(vec4.transformMat4(vec4.create(), [1, 0, 0, 0], this.matrix)));
+    vec3.copy(this.up, createVec3(vec4.transformMat4(vec4.create(), [0, 1, 0, 0], this.matrix)));
     vec3.copy(
       this.forward,
       createVec3(vec4.transformMat4(vec4.create(), [0, 0, 1, 0], this.matrix)),
@@ -607,11 +556,7 @@ export default class Camera {
    * 重新计算视距
    */
   private _getDistance() {
-    this.distanceVector = vec3.subtract(
-      vec3.create(),
-      this.focalPoint,
-      this.position,
-    );
+    this.distanceVector = vec3.subtract(vec3.create(), this.focalPoint, this.position);
     this.distance = vec3.length(this.distanceVector);
     this.dollyingStep = this.distance / 100;
   }

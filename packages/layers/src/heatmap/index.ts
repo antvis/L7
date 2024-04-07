@@ -1,9 +1,9 @@
 import type { IAttributeAndElements, ILegend, IRenderOptions } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import type { IHeatMapLayerStyleOptions } from '../core/interface';
+import { rampColor2legend } from '../utils/rampcolor_legend';
 import type { HeatMapModelType } from './models';
 import HeatMapModels from './models';
-import { rampColor2legend } from '../utils/rampcolor_legend';
 export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   public type: string = 'HeatMapLayer';
 
@@ -48,23 +48,18 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
 
   public updateModelData(data: IAttributeAndElements) {
     if (data.attributes && data.elements) {
-      this.models[0].updateAttributesAndElements(
-        data.attributes,
-        data.elements,
-      );
+      this.models[0].updateAttributesAndElements(data.attributes, data.elements);
     } else {
       console.warn('data error');
     }
   }
 
   public getModelType(): HeatMapModelType {
-    const shapeAttribute =
-      this.styleAttributeService.getLayerStyleAttribute('shape');
+    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute('shape');
     const { shape3d } = this.getLayerConfig();
     const source = this.getSource();
     const sourceType = source.data.type;
-    const shape =
-      (shapeAttribute?.scale?.field as HeatMapModelType) || 'heatmap';
+    const shape = (shapeAttribute?.scale?.field as HeatMapModelType) || 'heatmap';
     if (shape === 'heatmap' || shape === 'heatmap3d') {
       return 'heatmap';
     }
@@ -77,20 +72,17 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
     return 'heatmap';
   }
   public getLegend(name: string): ILegend {
-    if(this.getModelType() === 'heatmap') {
-      if (name !== 'color') return {
-        type: undefined,
-        field: undefined,
-        items: []
-      }
+    if (this.getModelType() === 'heatmap') {
+      if (name !== 'color')
+        return {
+          type: undefined,
+          field: undefined,
+          items: [],
+        };
       const rampColors = this.getLayerConfig().rampColors;
-      return rampColor2legend(rampColors,name);
+      return rampColor2legend(rampColors, name);
     } else {
       return super.getLegend(name);
     }
-    
-
   }
-      
-
 }

@@ -319,8 +319,7 @@ export interface IRasterLayerStyleOptions extends IBaseRasterLayerStyleOptions {
   channelBMax?: number;
 }
 
-export interface IRasterTerrainLayerStyleOptions
-  extends IBaseRasterLayerStyleOptions {
+export interface IRasterTerrainLayerStyleOptions extends IBaseRasterLayerStyleOptions {
   rScaler?: number;
   gScaler?: number;
   bScaler?: number;
