@@ -92,7 +92,7 @@ jobs:
         with:
           name: snapshots
           path: |
-            test/integration/snapshots/**/*/*-actual.png
+            __tests__/integration/snapshots/**/*/*-actual.png
           retention-days: 1
 
   size-test:
