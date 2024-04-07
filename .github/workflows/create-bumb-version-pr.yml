@@ -48,7 +48,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: changeset version
+          version: pnpm publish-version
           commit: 'chore: version'
           title: 'chore: version'
           setupGitUser: true
