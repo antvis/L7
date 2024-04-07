@@ -8,10 +8,10 @@ import jsonTile from './parser/jsonTile';
 import mapboxVectorTile from './parser/mvt';
 import raster from './parser/raster';
 import rasterTile, { rasterDataTypes } from './parser/raster-tile';
+import ndi from './parser/raster/ndi';
+import rgb from './parser/raster/rgb';
 import rasterRgb from './parser/rasterRgb';
 import testTile from './parser/testTile';
-import rgb from './parser/raster/rgb';
-import ndi from './parser/raster/ndi';
 import Source from './source';
 import { cluster } from './transform/cluster';
 import { filter } from './transform/filter';
@@ -19,12 +19,7 @@ import { aggregatorToGrid } from './transform/grid';
 import { pointToHexbin } from './transform/hexagon';
 import { join } from './transform/join';
 import { map } from './transform/map';
-export {
-  getParser,
-  getTransform,
-  registerParser,
-  registerTransform,
-} from './factory';
+export { getParser, getTransform, registerParser, registerTransform } from './factory';
 export * from './interface';
 export * from './source/index';
 export { rasterDataTypes };

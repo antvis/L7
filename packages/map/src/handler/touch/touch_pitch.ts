@@ -48,11 +48,7 @@ export default class TouchPitchHandler extends TwoTouchHandler {
     };
   }
 
-  public gestureBeginsVertically(
-    vectorA: Point,
-    vectorB: Point,
-    timeStamp: number,
-  ) {
+  public gestureBeginsVertically(vectorA: Point, vectorB: Point, timeStamp: number) {
     if (this.valid !== undefined) {
       return this.valid;
     }

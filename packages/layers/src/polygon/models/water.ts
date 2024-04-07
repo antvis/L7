@@ -1,9 +1,4 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  IModelUniform,
-  ITexture2D,
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -28,8 +23,7 @@ export default class WaterModel extends BaseModel {
     uniformsLength: number;
     uniformsOption: { [key: string]: any };
   } {
-    const { speed = 0.5 } =
-      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { speed = 0.5 } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     const commonOptions = {
       u_speed: speed,
       u_time: this.layer.getLayerAnimateTime(),
@@ -99,9 +93,7 @@ export default class WaterModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const v =
-            feature.version === 'GAODE2.x'
-              ? feature.originCoordinates[0][attributeIdx]
-              : vertex;
+            feature.version === 'GAODE2.x' ? feature.originCoordinates[0][attributeIdx] : vertex;
           const [lng, lat] = v;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },
@@ -110,8 +102,7 @@ export default class WaterModel extends BaseModel {
   }
 
   private loadTexture() {
-    const { waterTexture } =
-      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+    const { waterTexture } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
 
     const { createTexture2D } = this.rendererService;
     this.texture = createTexture2D({

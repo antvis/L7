@@ -3,11 +3,9 @@ import type {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  ITexture2D,
 } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -111,11 +109,7 @@ export default class LineWallModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3]];
         },
       },
@@ -133,11 +127,7 @@ export default class LineWallModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[5]];
         },
       },
@@ -203,11 +193,7 @@ export default class LineWallModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 1,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[4]];
         },
       },

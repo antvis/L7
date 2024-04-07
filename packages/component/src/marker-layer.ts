@@ -1,18 +1,6 @@
-import type {
-  IMapService,
-  IMarker,
-  IMarkerContainerAndBounds,
-  L7Container,
-} from '@antv/l7-core';
+import type { IMapService, IMarker, IMarkerContainerAndBounds, L7Container } from '@antv/l7-core';
 import type { IBounds } from '@antv/l7-utils';
-import {
-  DOM,
-  Satistics,
-  bindAll,
-  boundsContains,
-  lodashUtil,
-  padBounds,
-} from '@antv/l7-utils';
+import { DOM, Satistics, bindAll, boundsContains, lodashUtil, padBounds } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
@@ -219,9 +207,7 @@ export default class MarkerLayer extends EventEmitter {
   }
 
   private removePoint(id: number) {
-    const targetIndex = this.points.findIndex(
-      (point) => point.properties.marker_id === id,
-    );
+    const targetIndex = this.points.findIndex((point) => point.properties.marker_id === id);
     if (targetIndex > -1) {
       this.points.splice(targetIndex, 1);
     }
@@ -235,11 +221,7 @@ export default class MarkerLayer extends EventEmitter {
     if (!this.markerLayerOption.cluster) {
       return;
     }
-    const {
-      radius,
-      minZoom = 0,
-      maxZoom,
-    } = this.markerLayerOption.clusterOption;
+    const { radius, minZoom = 0, maxZoom } = this.markerLayerOption.clusterOption;
     this.clusterIndex = new Supercluster({
       radius,
       minZoom,
@@ -281,11 +263,7 @@ export default class MarkerLayer extends EventEmitter {
     });
   }
 
-  private getLeaves(
-    clusterId: number,
-    limit: number = Infinity,
-    offset: number = 0,
-  ) {
+  private getLeaves(clusterId: number, limit: number = Infinity, offset: number = 0) {
     if (!clusterId) {
       return null;
     }
@@ -295,8 +273,7 @@ export default class MarkerLayer extends EventEmitter {
   private clusterMarker(feature: any) {
     const clusterOption = this.markerLayerOption.clusterOption;
 
-    const { element = this.generateElement.bind(this) } =
-      clusterOption as IMarkerStyleOption;
+    const { element = this.generateElement.bind(this) } = clusterOption as IMarkerStyleOption;
     const marker = new Marker({
       element: element(feature),
     }).setLnglat({
@@ -322,11 +299,7 @@ export default class MarkerLayer extends EventEmitter {
 
     const zoom = this.mapsService.getZoom();
     const bbox = this.mapsService.getBounds();
-    if (
-      !this.bbox ||
-      Math.abs(zoom - this.zoom) >= 1 ||
-      !boundsContains(this.bbox, bbox)
-    ) {
+    if (!this.bbox || Math.abs(zoom - this.zoom) >= 1 || !boundsContains(this.bbox, bbox)) {
       this.bbox = padBounds(bbox, 0.5);
       this.zoom = Math.floor(zoom);
       this.getClusterMarker(this.bbox, this.zoom);

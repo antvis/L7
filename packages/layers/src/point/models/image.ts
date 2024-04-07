@@ -1,12 +1,5 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  IModelUniform,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPointLayerStyleOptions } from '../../core/interface';
@@ -31,18 +24,20 @@ export default class ImageModel extends BaseModel {
     };
   }
 
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
-    const {
-      raisingHeight = 0,
-      heightfixed = false,
-    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
+    const { raisingHeight = 0, heightfixed = false } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     const commonOptions = {
       u_textSize: [1024, this.iconService.canvasHeight || 128],
       u_raisingHeight: Number(raisingHeight),
       u_heightfixed: Number(heightfixed),
       u_texture: this.texture,
-    }
+    };
 
     this.textures = [this.texture];
 

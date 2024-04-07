@@ -40,10 +40,9 @@ export default class VectorTile extends Tile {
   protected getSourceOption() {
     const rawSource = this.parent.getSource();
 
-    const { sourceLayer = 'defaultLayer', featureId = 'id' } =
-      this.parent.getLayerConfig<{
-        featureId: string;
-      }>();
+    const { sourceLayer = 'defaultLayer', featureId = 'id' } = this.parent.getLayerConfig<{
+      featureId: string;
+    }>();
     const features = this.getFeatures(sourceLayer);
     return {
       data: {

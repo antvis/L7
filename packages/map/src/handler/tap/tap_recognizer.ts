@@ -1,9 +1,6 @@
 // @ts-ignore
 import type Point from '../../geo/point';
-import SingleTapRecognizer, {
-  MAX_DIST,
-  MAX_TAP_INTERVAL,
-} from './single_tap_recognizer';
+import SingleTapRecognizer, { MAX_DIST, MAX_TAP_INTERVAL } from './single_tap_recognizer';
 
 export default class TapRecognizer {
   public singleTap: SingleTapRecognizer;

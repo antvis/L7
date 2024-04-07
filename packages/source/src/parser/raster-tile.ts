@@ -1,18 +1,9 @@
-import type { ITileParserCFG} from '@antv/l7-core';
+import type { ITileParserCFG } from '@antv/l7-core';
 import { RasterTileType } from '@antv/l7-core';
-import type {
-  ITileBand,
-  SourceTile,
-  TileLoadParams,
-  TilesetManagerOptions,
-} from '@antv/l7-utils';
+import type { ITileBand, SourceTile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
 import type { IParserData } from '../interface';
 import { getCustomData, getCustomImageData } from '../utils/tile/getCustomData';
-import {
-  defaultFormat,
-  getTileBuffer,
-  getTileImage,
-} from '../utils/tile/getRasterTile';
+import { defaultFormat, getTileBuffer, getTileImage } from '../utils/tile/getRasterTile';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
@@ -64,13 +55,7 @@ export default function rasterTile(
           cfg?.getCustomData,
         );
       case RasterTileType.ARRAYBUFFER:
-        return getTileBuffer(
-          data,
-          tileParams,
-          tile,
-          cfg?.format || defaultFormat,
-          cfg?.operation,
-        );
+        return getTileBuffer(data, tileParams, tile, cfg?.format || defaultFormat, cfg?.operation);
       case RasterTileType.CUSTOMARRAYBUFFER:
       case RasterTileType.CUSTOMRGB:
         return getCustomData(

@@ -1,7 +1,5 @@
 let containerCounter = 0;
-export function createRendererContainer(
-  domId: string | HTMLDivElement,
-): HTMLDivElement | null {
+export function createRendererContainer(domId: string | HTMLDivElement): HTMLDivElement | null {
   let $wrapper = domId as HTMLDivElement;
   if (typeof domId === 'string') {
     $wrapper = document.getElementById(domId) as HTMLDivElement;

@@ -23,15 +23,19 @@ git clone https://github.com/antvis/L7  --depth=1
 1.首先安装>=3.6.0的python版本，可以在[官网](https://www.python.org/downloads/)直接安装，也可以先下载conda等包管理工具后再安装python
 
 2.打开命令行，运行
+
 ```
 where python
 ```
+
 找到自己本机的python安装路径,如
+
 ```
 C:\Users\42297\anaconda3\python.exe
 ```
 
 3.再切换到项目路径下，输入
+
 ```bash
 npm config set python "${path}\python.exe"
 ```
@@ -59,7 +63,6 @@ yarn dev
 ```bash
 yarn start
 ```
-
 
 ## 运行测试
 

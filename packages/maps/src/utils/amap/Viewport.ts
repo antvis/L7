@@ -54,16 +54,8 @@ export default class Viewport implements IViewport {
       vec3.fromValues(-offsetOrigin[0], offsetOrigin[1], 0),
     );
 
-    mat4.multiply(
-      this.viewProjectionMatrix,
-      this.projectionMatrix,
-      this.viewMatrix,
-    );
-    mat4.multiply(
-      this.ViewProjectionMatrixUncentered,
-      this.projectionMatrix,
-      this.viewMatrix,
-    );
+    mat4.multiply(this.viewProjectionMatrix, this.projectionMatrix, this.viewMatrix);
+    mat4.multiply(this.ViewProjectionMatrixUncentered, this.projectionMatrix, this.viewMatrix);
   }
 
   public getZoom(): number {

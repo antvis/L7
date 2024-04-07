@@ -241,8 +241,7 @@ export default class Transform {
     this._maxZoom = maxZoom || 22;
 
     this._minPitch = minPitch === undefined || minPitch === null ? 0 : minPitch;
-    this._maxPitch =
-      maxPitch === undefined || maxPitch === null ? 60 : maxPitch;
+    this._maxPitch = maxPitch === undefined || maxPitch === null ? 60 : maxPitch;
 
     this.setMaxBounds();
 
@@ -300,11 +299,7 @@ export default class Transform {
    * @param {number} t
    * @memberof Transform
    */
-  public interpolatePadding(
-    start: IPaddingOptions,
-    target: IPaddingOptions,
-    t: number,
-  ) {
+  public interpolatePadding(start: IPaddingOptions, target: IPaddingOptions, t: number) {
     this.unmodified = false;
     this.edgeInsets.interpolate(start, target, t);
     this.constrain();
@@ -525,11 +520,7 @@ export default class Transform {
   }
 
   public project(lnglat: LngLat) {
-    const lat = clamp(
-      lnglat.lat,
-      -this.maxValidLatitude,
-      this.maxValidLatitude,
-    );
+    const lat = clamp(lnglat.lat, -this.maxValidLatitude, this.maxValidLatitude);
     return new Point(
       mercatorXfromLng(lnglat.lng) * this.worldSize,
       mercatorYfromLat(lat) * this.worldSize,
@@ -537,20 +528,14 @@ export default class Transform {
   }
 
   public unproject(point: Point): LngLat {
-    return new MercatorCoordinate(
-      point.x / this.worldSize,
-      point.y / this.worldSize,
-    ).toLngLat();
+    return new MercatorCoordinate(point.x / this.worldSize, point.y / this.worldSize).toLngLat();
   }
 
   public setLocationAtPoint(lnglat: LngLat, point: Point) {
     const a = this.pointCoordinate(point);
     const b = this.pointCoordinate(this.centerPoint);
     const loc = this.locationCoordinate(lnglat);
-    const newCenter = new MercatorCoordinate(
-      loc.x - (a.x - b.x),
-      loc.y - (a.y - b.y),
-    );
+    const newCenter = new MercatorCoordinate(loc.x - (a.x - b.x), loc.y - (a.y - b.y));
     this.center = this.coordinateLocation(newCenter);
     if (this._renderWorldCopies) {
       this.center = this.center.wrap();
@@ -647,12 +632,7 @@ export default class Transform {
     }
 
     const coord = this.pointCoordinate(new Point(0, 0));
-    const p = new Float32Array([
-      coord.x * this.worldSize,
-      coord.y * this.worldSize,
-      0,
-      1,
-    ]);
+    const p = new Float32Array([coord.x * this.worldSize, coord.y * this.worldSize, 0, 1]);
     const topPoint = vec4.transformMat4(p, p, this.pixelMatrix);
     return topPoint[3] / this.cameraToCenterDistance;
   }
@@ -717,12 +697,7 @@ export default class Transform {
    * @private
    */
   public coordinatePoint(coord: MercatorCoordinate) {
-    const p = vec4.fromValues(
-      coord.x * this.worldSize,
-      coord.y * this.worldSize,
-      0,
-      1,
-    );
+    const p = vec4.fromValues(coord.x * this.worldSize, coord.y * this.worldSize, 0, 1);
     vec4.transformMat4(p, p, this.pixelMatrix);
     return new Point(p[0] / p[3], p[1] / p[3]);
   }
@@ -849,10 +824,7 @@ export default class Transform {
 
     if (s) {
       this.center = this.unproject(
-        new Point(
-          sx ? (maxX + minX) / 2 : point.x,
-          sy ? (maxY + minY) / 2 : point.y,
-        ),
+        new Point(sx ? (maxX + minX) / 2 : point.x, sy ? (maxY + minY) / 2 : point.y),
       );
 
       this.zoom += this.scaleZoom(s);
@@ -889,10 +861,7 @@ export default class Transform {
     // pan the map if the screen goes off the range
     if (x2 !== undefined || y2 !== undefined) {
       this.center = this.unproject(
-        new Point(
-          x2 !== undefined ? x2 : point.x,
-          y2 !== undefined ? y2 : point.y,
-        ),
+        new Point(x2 !== undefined ? x2 : point.x, y2 !== undefined ? y2 : point.y),
       );
     }
 
@@ -917,17 +886,14 @@ export default class Transform {
     const fovAboveCenter = this._fov * (0.5 + offset.y / this.height);
     const topHalfSurfaceDistance =
       (Math.sin(fovAboveCenter) * this.cameraToCenterDistance) /
-      Math.sin(
-        clamp(Math.PI - groundAngle - fovAboveCenter, 0.01, Math.PI - 0.01),
-      );
+      Math.sin(clamp(Math.PI - groundAngle - fovAboveCenter, 0.01, Math.PI - 0.01));
     const point = this.point;
     const x = point.x;
     const y = point.y;
 
     // Calculate z distance of the farthest fragment that should be rendered.
     const furthestDistance =
-      Math.cos(Math.PI / 2 - this._pitch) * topHalfSurfaceDistance +
-      this.cameraToCenterDistance;
+      Math.cos(Math.PI / 2 - this._pitch) * topHalfSurfaceDistance + this.cameraToCenterDistance;
     // Add a bit extra to avoid precision problems when a fragment's distance is exactly `furthestDistance`
     const farZ = furthestDistance * 1.01;
 
@@ -964,20 +930,11 @@ export default class Transform {
     // The mercatorMatrix can be used to transform points from mercator coordinates
     // ([0, 0] nw, [1, 1] se) to GL coordinates.
     // @ts-ignore
-    this.mercatorMatrix = mat4.scale([], m, [
-      this.worldSize,
-      this.worldSize,
-      this.worldSize,
-    ]);
+    this.mercatorMatrix = mat4.scale([], m, [this.worldSize, this.worldSize, this.worldSize]);
     // scale vertically to meters per pixel (inverse of ground resolution):
 
     // @ts-ignore
-    mat4.scale(m, m, [
-      1,
-      1,
-      mercatorZfromAltitude(1, this.center.lat) * this.worldSize,
-      1,
-    ]);
+    mat4.scale(m, m, [1, 1, mercatorZfromAltitude(1, this.center.lat) * this.worldSize, 1]);
     // @ts-ignore
     this.projMatrix = m;
     // @ts-ignore
@@ -998,11 +955,7 @@ export default class Transform {
     // const alignedM = mat4.clone(m);
     const alignedM = new Float64Array(m);
     // @ts-ignore
-    mat4.translate(alignedM, alignedM, [
-      dx > 0.5 ? dx - 1 : dx,
-      dy > 0.5 ? dy - 1 : dy,
-      0,
-    ]);
+    mat4.translate(alignedM, alignedM, [dx > 0.5 ? dx - 1 : dx, dy > 0.5 ? dy - 1 : dy, 0]);
     // @ts-ignore
     this.alignedProjMatrix = alignedM;
 

@@ -21,14 +21,8 @@ describe('zoom', () => {
 
     zoom.disable();
     const btnList = Array.from(zoom.getContainer().querySelectorAll('button'));
-    expect(btnList.map((item) => item.getAttribute('disabled'))).toEqual([
-      'true',
-      'true',
-    ]);
+    expect(btnList.map((item) => item.getAttribute('disabled'))).toEqual(['true', 'true']);
     zoom.enable();
-    expect(btnList.map((item) => item.getAttribute('disabled'))).toEqual([
-      null,
-      null,
-    ]);
+    expect(btnList.map((item) => item.getAttribute('disabled'))).toEqual([null, null]);
   });
 });

@@ -1,9 +1,6 @@
 import { lodashUtil } from '@antv/l7-utils';
 import { extractUniforms } from '../../utils/shader-module';
-import type {
-  IModuleParams,
-  IShaderModuleService,
-} from './IShaderModuleService';
+import type { IModuleParams, IShaderModuleService } from './IShaderModuleService';
 const { uniq } = lodashUtil;
 
 import common from '../../shaders/common.glsl';
@@ -102,16 +99,8 @@ export default class ShaderModuleService implements IShaderModuleService {
       rawFS = inject?.['fs:#decl'] + rawFS;
     }
 
-    const { content: vs, includeList: vsIncludeList } = this.processModule(
-      rawVS,
-      [],
-      'vs',
-    );
-    const { content: fs, includeList: fsIncludeList } = this.processModule(
-      rawFS,
-      [],
-      'fs',
-    );
+    const { content: vs, includeList: vsIncludeList } = this.processModule(rawVS, [], 'vs');
+    const { content: fs, includeList: fsIncludeList } = this.processModule(rawFS, [], 'fs');
     let compiledFs = '';
     // TODO: extract uniforms and their default values from GLSL
     const uniforms: {

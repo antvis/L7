@@ -19,10 +19,7 @@ export interface IInteractionService {
   indragging: boolean;
   init(): void;
   destroy(): void;
-  on(
-    eventName: InteractionEvent,
-    callback: (params: IInteractionTarget) => void,
-  ): void;
+  on(eventName: InteractionEvent, callback: (params: IInteractionTarget) => void): void;
   triggerHover({ x, y, type }: Partial<IInteractionTarget>): void;
   triggerSelect(id: number): void;
   triggerActive(id: number): void;

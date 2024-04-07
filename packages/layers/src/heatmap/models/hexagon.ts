@@ -1,11 +1,5 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  IModelUniform} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IModelUniform } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import type { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { HeatmapGridTriangulation } from '../../core/triangulation';
@@ -20,25 +14,24 @@ export default class HexagonModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
+    };
   }
 
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
-    const { opacity, coverage, angle } =
-      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
+    const { opacity, coverage, angle } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const commonOptions = {
-      u_radius: [
-        this.layer.getSource().data.xOffset,
-        this.layer.getSource().data.yOffset,
-      ],
+      u_radius: [this.layer.getSource().data.xOffset, this.layer.getSource().data.yOffset],
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 0.9,
       u_angle: angle || 0,
     };
-  
-   const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-   return commonBufferInfo;
-      
+
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -63,7 +56,7 @@ export default class HexagonModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
-        shaderLocation:10,
+        shaderLocation: 10,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -72,9 +65,7 @@ export default class HexagonModel extends BaseModel {
         size: 3,
         update: (feature: IEncodeFeature) => {
           const coordinates = (
-            feature.version === 'GAODE2.x'
-              ? feature.originCoordinates
-              : feature.coordinates
+            feature.version === 'GAODE2.x' ? feature.originCoordinates : feature.coordinates
           ) as number[];
           return [coordinates[0], coordinates[1], 0];
         },

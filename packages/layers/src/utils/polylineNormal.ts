@@ -37,12 +37,7 @@ function extrusions(
   positions.push(point[0], point[1], 0);
 }
 
-function addNext(
-  out: number[],
-  miters: number[],
-  normal: vec2,
-  length: number,
-) {
+function addNext(out: number[], miters: number[], normal: vec2, length: number) {
   out.push(normal[0], normal[1], 0);
   miters.push(length);
 }
@@ -89,10 +84,7 @@ export default function (
     const index = count;
     const last = vec2.fromValues(points[i - 1][0], points[i - 1][1]);
     const cur = vec2.fromValues(points[i][0], points[i][1]);
-    let next =
-      i < points.length - 1
-        ? vec2.fromValues(points[i + 1][0], points[i + 1][1])
-        : null;
+    let next = i < points.length - 1 ? vec2.fromValues(points[i + 1][0], points[i + 1][1]) : null;
     // 如果当前点和前一点相同，跳过
     if (isPointEqual(last, cur)) {
       continue;
@@ -142,13 +134,7 @@ export default function (
       direction(lineB, flatNext, flatCur);
 
       // stores tangent & miter
-      let miterLen = computeMiter(
-        tangent,
-        vec2.fromValues(miter[0], miter[1]),
-        lineA,
-        lineB,
-        1,
-      );
+      let miterLen = computeMiter(tangent, vec2.fromValues(miter[0], miter[1]), lineA, lineB, 1);
 
       // get orientation
       const flip = vec2.dot(tangent, lineNormal) < 0 ? -1 : 1;
@@ -182,9 +168,7 @@ export default function (
 
         // now add the bevel triangle
         attrIndex.push(
-          ...(flip === 1
-            ? [index + 2, index + 4, index + 5]
-            : [index + 4, index + 5, index + 3]),
+          ...(flip === 1 ? [index + 2, index + 4, index + 5] : [index + 4, index + 5, index + 3]),
         );
 
         computeNormal(tmp, lineB);

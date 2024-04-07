@@ -10,10 +10,7 @@ async function getTiffData(url: string) {
   return arrayBuffer;
 }
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'device' | 'regl';
-}) {
+export function MapRender(option: { map: string; renderer: 'device' | 'regl' }) {
   const scene = new Scene({
     id: 'map',
     renderer: option.renderer,
@@ -29,8 +26,7 @@ export function MapRender(option: {
   });
 
   async function addLayer() {
-    const url1 =
-      'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
+    const url1 = 'https://gw.alipayobjects.com/zos/raptor/1667832825992/LC08_3857_clip_2.tif';
     const tiffdata = await getTiffData(url1);
     const layer = new RasterLayer({ zIndex: 10 });
     const tiff = await GeoTIFF.fromArrayBuffer(tiffdata);
@@ -43,10 +39,7 @@ export function MapRender(option: {
           width: value.width,
           height: value.height,
           bands: [5, 4, 3],
-          extent: [
-            130.39565357746957, 46.905730725742366, 130.73364094187343,
-            47.10217234153133,
-          ],
+          extent: [130.39565357746957, 46.905730725742366, 130.73364094187343, 47.10217234153133],
         },
       })
       .style({

@@ -95,19 +95,11 @@ type IExpress = any[];
  * @param dataArray
  * @param index
  */
-export function spellExpress(
-  express: IExpress,
-  dataArray: Uint8Array[],
-  index: number,
-) {
+export function spellExpress(express: IExpress, dataArray: Uint8Array[], index: number) {
   /**
    * 用户直接指定波段数值，无需计算
    */
-  if (
-    express.length === 2 &&
-    express[0] === 'band' &&
-    typeof express[1] === 'number'
-  ) {
+  if (express.length === 2 && express[0] === 'band' && typeof express[1] === 'number') {
     try {
       return dataArray[express[1]][index];
     } catch (err) {

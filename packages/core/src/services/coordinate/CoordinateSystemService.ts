@@ -6,9 +6,7 @@ import { CoordinateSystem } from './ICoordinateSystemService';
 
 const VECTOR_TO_POINT_MATRIX = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
 
-export default class CoordinateSystemService
-  implements ICoordinateSystemService
-{
+export default class CoordinateSystemService implements ICoordinateSystemService {
   constructor(private cameraService: ICameraService) {}
 
   public needRefresh: boolean = true;
@@ -176,9 +174,7 @@ export default class CoordinateSystemService
     );
 
     // 重新计算相机 VP 矩阵
-    this.cameraService.setViewProjectionMatrix(
-      viewProjectionMatrix as unknown as number[],
-    );
+    this.cameraService.setViewProjectionMatrix(viewProjectionMatrix as unknown as number[]);
 
     this.pixelsPerMeter = ppm;
     this.pixelsPerDegree = ppd;

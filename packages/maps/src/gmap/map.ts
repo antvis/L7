@@ -31,7 +31,8 @@ const EventMap: {
 export default class TMapService extends BaseMapService<any> {
   // @ts-ignore
   protected viewport: IViewport = null;
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
+    new Map();
 
   public handleCameraChanged = () => {
     this.emit('mapchange');
@@ -312,7 +313,10 @@ export default class TMapService extends BaseMapService<any> {
   public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
     const [sw, ne] = bound;
 
-    const bounds = new google.maps.LatLngBounds({ lat: sw[1], lng: sw[0] }, { lat: ne[1], lng: ne[0] });
+    const bounds = new google.maps.LatLngBounds(
+      { lat: sw[1], lng: sw[0] },
+      { lat: ne[1], lng: ne[0] },
+    );
     this.map.fitBounds(bounds, fitBoundsOptions);
   }
 
@@ -360,7 +364,10 @@ export default class TMapService extends BaseMapService<any> {
   }
 
   // coordinates methods
-  public meterToCoord([centerLon, centerLat]: [number, number], [outerLon, outerLat]: [number, number]) {
+  public meterToCoord(
+    [centerLon, centerLat]: [number, number],
+    [outerLon, outerLat]: [number, number],
+  ) {
     // @ts-ignore
     // https://developers.google.com/maps/documentation/javascript/reference/geometry?hl=zh-cn#spherical.computeDistanceBetween
     const metreDistance = google.maps.geometry.spherical.computeDistanceBetween([
@@ -381,7 +388,10 @@ export default class TMapService extends BaseMapService<any> {
     const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([clng(), clat()]);
     const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer([clng(), clat()]);
     const { lng, lat } = this.map.unprojectFromContainer(
-      new google.maps.Point(centerContainerX + (x - centerPixelX), centerContainerY + (y - centerPixelY)),
+      new google.maps.Point(
+        centerContainerX + (x - centerPixelX),
+        centerContainerY + (y - centerPixelY),
+      ),
     );
     return this.containerToLngLat([lng, lat]);
   }

@@ -1,10 +1,5 @@
 // @ts-ignore
-import type {
-  IJsonData,
-  IParseDataItem,
-  IParserCfg,
-  IParserData,
-} from '@antv/l7-core';
+import type { IJsonData, IParseDataItem, IParserCfg, IParserData } from '@antv/l7-core';
 // @ts-ignore
 import type { Feature, Geometries, Properties } from '@turf/helpers';
 import { getCoords } from '@turf/invariant';
@@ -35,19 +30,16 @@ export default function json(data: IJsonData, cfg: IParserCfg): IParserData {
       .forEach((col, index) => {
         const rewindGeometry = geojsonRewind(col[geometry]);
         // multi feature 情况拆分
-        flattenEach(
-          rewindGeometry,
-          (currentFeature: Feature<Geometries, Properties>) => {
-            const coord = getCoords(currentFeature);
-            const dataItem = {
-              ...col,
-              _id: index,
-              coordinates: coord,
-            };
+        flattenEach(rewindGeometry, (currentFeature: Feature<Geometries, Properties>) => {
+          const coord = getCoords(currentFeature);
+          const dataItem = {
+            ...col,
+            _id: index,
+            coordinates: coord,
+          };
 
-            resultData.push(dataItem);
-          },
-        );
+          resultData.push(dataItem);
+        });
       });
 
     return {

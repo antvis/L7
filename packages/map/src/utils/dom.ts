@@ -18,10 +18,7 @@ DOM.create = (tagName: string, className?: string, container?: HTMLElement) => {
 };
 
 DOM.createNS = (namespaceURI: string, tagName: string) => {
-  const el = window.document.createElementNS(
-    namespaceURI,
-    tagName,
-  ) as HTMLElement;
+  const el = window.document.createElementNS(namespaceURI, tagName) as HTMLElement;
   return el;
 };
 
@@ -39,12 +36,7 @@ function testProp(props: any) {
   return props[0];
 }
 
-const selectProp = testProp([
-  'userSelect',
-  'MozUserSelect',
-  'WebkitUserSelect',
-  'msUserSelect',
-]);
+const selectProp = testProp(['userSelect', 'MozUserSelect', 'WebkitUserSelect', 'msUserSelect']);
 let userSelect: any;
 
 DOM.disableDrag = () => {
@@ -131,10 +123,7 @@ DOM.suppressClick = () => {
 DOM.mousePos = (el: HTMLElement, e: MouseEvent | Touch) => {
   // 暂时从 el 上获取 top/left， 后面需要动态获取
   const rect = el.getBoundingClientRect();
-  return new Point(
-    e.clientX - rect.left - el.clientLeft,
-    e.clientY - rect.top - el.clientTop,
-  );
+  return new Point(e.clientX - rect.left - el.clientLeft, e.clientY - rect.top - el.clientTop);
 };
 
 DOM.touchPos = (el: HTMLElement, touches: Touch[]) => {

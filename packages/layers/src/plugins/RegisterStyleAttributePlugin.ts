@@ -24,10 +24,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     });
   }
 
-  private registerBuiltinAttributes(
-    styleAttributeService: IStyleAttributeService,
-    layer: ILayer,
-  ) {
+  private registerBuiltinAttributes(styleAttributeService: IStyleAttributeService, layer: ILayer) {
     // MaskLayer 只需要注册 a_Position
     if (layer.type === 'MaskLayer') {
       this.registerPositionAttribute(styleAttributeService);
@@ -40,9 +37,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     this.registerVertexIdAttribute(styleAttributeService);
   }
 
-  private registerPositionAttribute(
-    styleAttributeService: IStyleAttributeService,
-  ) {
+  private registerPositionAttribute(styleAttributeService: IStyleAttributeService) {
     styleAttributeService.registerStyleAttribute({
       name: 'position',
       type: AttributeType.Attribute,
@@ -54,11 +49,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
           type: gl.FLOAT,
         },
         size: 3,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return vertex.length === 2
             ? [vertex[0], vertex[1], 0]
             : [vertex[0], vertex[1], vertex[2]];
@@ -67,9 +58,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     });
   }
 
-  private registerColorAttribute(
-    styleAttributeService: IStyleAttributeService,
-  ) {
+  private registerColorAttribute(styleAttributeService: IStyleAttributeService) {
     styleAttributeService.registerStyleAttribute({
       name: 'color',
       type: AttributeType.Attribute,
@@ -91,9 +80,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     });
   }
 
-  private registerVertexIdAttribute(
-    styleAttributeService: IStyleAttributeService,
-  ) {
+  private registerVertexIdAttribute(styleAttributeService: IStyleAttributeService) {
     styleAttributeService.registerStyleAttribute({
       // 统一注册每个顶点的唯一编号（目前用于样式的数据映射计算使用）
       name: 'vertexId',

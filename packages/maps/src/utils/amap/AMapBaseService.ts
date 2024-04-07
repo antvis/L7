@@ -206,7 +206,8 @@ export default abstract class AMapBaseService implements IMapService<AMap.Map & 
     const NE = amapBound.getNorthEast();
     const SW = amapBound.getSouthWest();
     const center = this.getCenter();
-    const maxlng = center.lng > NE.getLng() || center.lng < SW.getLng() ? 180 - NE.getLng() : NE.getLng();
+    const maxlng =
+      center.lng > NE.getLng() || center.lng < SW.getLng() ? 180 - NE.getLng() : NE.getLng();
     const minlng = center.lng < SW.getLng() ? SW.getLng() - 180 : SW.getLng();
     // 兼容 Mapbox，统一返回西南、东北
     return [
@@ -433,7 +434,10 @@ export default abstract class AMapBaseService implements IMapService<AMap.Map & 
   public meterToCoord(center: [number, number], outer: [number, number]) {
     // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter
-    const meterDis = AMap.GeometryUtil.distance(new AMap.LngLat(...center), new AMap.LngLat(...outer));
+    const meterDis = AMap.GeometryUtil.distance(
+      new AMap.LngLat(...center),
+      new AMap.LngLat(...outer),
+    );
 
     // Tip: 三维世界坐标距离
     const [x1, y1] = this.lngLatToCoord(center);
@@ -453,7 +457,9 @@ export default abstract class AMapBaseService implements IMapService<AMap.Map & 
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.getContainer()?.getElementsByClassName('amap-layer')[0] as HTMLCanvasElement;
+    const renderCanvas = this.getContainer()?.getElementsByClassName(
+      'amap-layer',
+    )[0] as HTMLCanvasElement;
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)

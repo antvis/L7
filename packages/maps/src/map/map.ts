@@ -51,7 +51,11 @@ export default class DefaultMapService extends BaseMapService<Map> {
       ),
     );
 
-    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(meters * scale[0], -meters * scale[1], meters * scale[2]));
+    mat4.scale(
+      modelMatrix,
+      modelMatrix,
+      vec3.fromValues(meters * scale[0], -meters * scale[1], meters * scale[2]),
+    );
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);

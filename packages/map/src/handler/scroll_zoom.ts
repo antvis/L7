@@ -149,10 +149,7 @@ class ScrollZoomHandler {
       return;
     }
     // Remove `any` cast when https://github.com/facebook/flow/issues/4879 is fixed.
-    let value =
-      e.deltaMode === window.WheelEvent.DOM_DELTA_LINE
-        ? e.deltaY * 40
-        : e.deltaY;
+    let value = e.deltaMode === window.WheelEvent.DOM_DELTA_LINE ? e.deltaY * 40 : e.deltaY;
     const nowTime = now();
     const timeDelta = nowTime - (this.lastWheelEventTime || 0);
 
@@ -230,21 +227,15 @@ class ScrollZoomHandler {
           ? this.wheelZoomRate
           : this.defaultZoomRate;
       // Scale by sigmoid of scroll wheel delta.
-      let scale =
-        maxScalePerFrame / (1 + Math.exp(-Math.abs(this.delta * zoomRate)));
+      let scale = maxScalePerFrame / (1 + Math.exp(-Math.abs(this.delta * zoomRate)));
 
       if (this.delta < 0 && scale !== 0) {
         scale = 1 / scale;
       }
 
       const fromScale =
-        typeof this.targetZoom === 'number'
-          ? tr.zoomScale(this.targetZoom)
-          : tr.scale;
-      this.targetZoom = Math.min(
-        tr.maxZoom,
-        Math.max(tr.minZoom, tr.scaleZoom(fromScale * scale)),
-      );
+        typeof this.targetZoom === 'number' ? tr.zoomScale(this.targetZoom) : tr.scale;
+      this.targetZoom = Math.min(tr.maxZoom, Math.max(tr.minZoom, tr.scaleZoom(fromScale * scale)));
 
       // if this is a mouse wheel, refresh the starting zoom and easing
       // function we're using to smooth out the zooming between wheel
@@ -257,8 +248,7 @@ class ScrollZoomHandler {
       this.delta = 0;
     }
 
-    const targetZoom =
-      typeof this.targetZoom === 'number' ? this.targetZoom : tr.zoom;
+    const targetZoom = typeof this.targetZoom === 'number' ? this.targetZoom : tr.zoom;
     const startZoom = this.startZoom;
     const easing = this.easing;
 

@@ -22,13 +22,9 @@ export default class Grid3DModel extends BaseModel {
     uniformsLength: number;
     uniformsOption: { [key: string]: any };
   } {
-    const { opacity, coverage, angle } =
-      this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
+    const { opacity, coverage, angle } = this.layer.getLayerConfig() as IHeatMapLayerStyleOptions;
     const commonOptions = {
-      u_radius: [
-        this.layer.getSource().data.xOffset,
-        this.layer.getSource().data.yOffset,
-      ],
+      u_radius: [this.layer.getSource().data.xOffset, this.layer.getSource().data.yOffset],
       u_opacity: opacity || 1.0,
       u_coverage: coverage || 0.9,
       u_angle: angle || 0,
@@ -111,9 +107,7 @@ export default class Grid3DModel extends BaseModel {
         size: 3,
         update: (feature: IEncodeFeature) => {
           const coordinates = (
-            feature.version === 'GAODE2.x'
-              ? feature.originCoordinates
-              : feature.coordinates
+            feature.version === 'GAODE2.x' ? feature.originCoordinates : feature.coordinates
           ) as number[];
           return [coordinates[0], coordinates[1], 0];
         },

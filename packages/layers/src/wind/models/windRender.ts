@@ -29,31 +29,16 @@ function getColorRamp(colors: { [key: number]: string }) {
   return new Uint8Array(ctx.getImageData(0, 0, 256, 1).data);
 }
 
-function bindAttribute(
-  gl: WebGLRenderingContext,
-  buffer: any,
-  attribute: any,
-  numComponents: any,
-) {
+function bindAttribute(gl: WebGLRenderingContext, buffer: any, attribute: any, numComponents: any) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.enableVertexAttribArray(attribute);
   gl.vertexAttribPointer(attribute, numComponents, gl.FLOAT, false, 0, 0);
 }
 
-function bindFramebuffer(
-  gl: WebGLRenderingContext,
-  framebuffer: any,
-  texture: any,
-) {
+function bindFramebuffer(gl: WebGLRenderingContext, framebuffer: any, texture: any) {
   gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
   if (texture) {
-    gl.framebufferTexture2D(
-      gl.FRAMEBUFFER,
-      gl.COLOR_ATTACHMENT0,
-      gl.TEXTURE_2D,
-      texture,
-      0,
-    );
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
 }
 
@@ -77,12 +62,7 @@ export interface IWind {
   setWind: (windData: IWindData) => void;
   draw: () => { d: Uint8Array; w: number; h: number };
   updateParticelNum: (num: number) => void;
-  updateWindDir: (
-    uMin: number,
-    uMax: number,
-    vMin: number,
-    vMax: number,
-  ) => void;
+  updateWindDir: (uMin: number, uMax: number, vMin: number, vMax: number) => void;
   updateColorRampTexture: (rampColors: { [key: number]: string }) => void;
 
   reSize: (width: number, height: number) => void;
@@ -156,21 +136,13 @@ export class Wind {
     this.dropRate = 0.003; // how often the particles move to a random place
     this.dropRateBump = 0.01; // drop rate increase relative to individual particle speed
 
-    this.drawProgram = glUtils.createProgram(
-      gl,
-      drawVert,
-      drawFrag,
-    ) as WebGLProgram;
+    this.drawProgram = glUtils.createProgram(gl, drawVert, drawFrag) as WebGLProgram;
     this.fullScreenProgram = glUtils.createProgram(
       gl,
       fullScreenVert,
       fullScreenFrag,
     ) as WebGLProgram;
-    this.updateProgram = glUtils.createProgram(
-      gl,
-      updateVert,
-      updateFrag,
-    ) as WebGLProgram;
+    this.updateProgram = glUtils.createProgram(gl, updateVert, updateFrag) as WebGLProgram;
 
     this.quadBuffer = glUtils.createBuffer(
       gl,
@@ -207,9 +179,7 @@ export class Wind {
     );
 
     // we create a square texture where each pixel will hold a particle position encoded as RGBA
-    const particleRes = (this.particleStateResolution = Math.ceil(
-      Math.sqrt(this.numParticles),
-    ));
+    const particleRes = (this.particleStateResolution = Math.ceil(Math.sqrt(this.numParticles)));
     // particleRes size
     this.numParticlesSize = particleRes * particleRes;
 
@@ -242,11 +212,7 @@ export class Wind {
 
   public setWind(windData: IWindData) {
     this.windData = windData;
-    this.windTexture = glUtils.createDataTexture(
-      this.gl,
-      this.gl.LINEAR,
-      windData.image,
-    );
+    this.windTexture = glUtils.createDataTexture(this.gl, this.gl.LINEAR, windData.image);
   }
 
   /**
@@ -259,9 +225,7 @@ export class Wind {
       this.numParticles = num; // params number
 
       // we create a square texture where each pixel will hold a particle position encoded as RGBA
-      const particleRes = (this.particleStateResolution = Math.ceil(
-        Math.sqrt(this.numParticles),
-      ));
+      const particleRes = (this.particleStateResolution = Math.ceil(Math.sqrt(this.numParticles)));
       this.numParticlesSize = particleRes * particleRes;
 
       const particleState = new Uint8Array(this.numParticlesSize * 4);
@@ -352,20 +316,8 @@ export class Wind {
       this.height = height;
       const emptyPixels = new Uint8Array(width * height * 4);
       // screen textures to hold the drawn screen for the previous and the current frame
-      this.backgroundTexture = glUtils.createTexture(
-        gl,
-        gl.NEAREST,
-        emptyPixels,
-        width,
-        height,
-      );
-      this.screenTexture = glUtils.createTexture(
-        gl,
-        gl.NEAREST,
-        emptyPixels,
-        width,
-        height,
-      );
+      this.backgroundTexture = glUtils.createTexture(gl, gl.NEAREST, emptyPixels, width, height);
+      this.screenTexture = glUtils.createTexture(gl, gl.NEAREST, emptyPixels, width, height);
     }
   }
   public draw() {
@@ -397,15 +349,7 @@ export class Wind {
     this.drawParticles();
 
     this.pixels = new Uint8Array(4 * this.width * this.height);
-    gl.readPixels(
-      0,
-      0,
-      this.width,
-      this.height,
-      gl.RGBA,
-      gl.UNSIGNED_BYTE,
-      this.pixels,
-    );
+    gl.readPixels(0, 0, this.width, this.height, gl.RGBA, gl.UNSIGNED_BYTE, this.pixels);
 
     bindFramebuffer(gl, null, null);
     gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -459,12 +403,7 @@ export class Wind {
   public updateParticles() {
     const gl = this.gl;
     bindFramebuffer(gl, this.framebuffer, this.particleStateTexture1);
-    gl.viewport(
-      0,
-      0,
-      this.particleStateResolution,
-      this.particleStateResolution,
-    );
+    gl.viewport(0, 0, this.particleStateResolution, this.particleStateResolution);
 
     const program = this.updateProgram as any;
     gl.useProgram(program);
@@ -475,11 +414,7 @@ export class Wind {
     gl.uniform1i(program.u_particles, 1);
 
     gl.uniform1f(program.u_rand_seed, Math.random());
-    gl.uniform2f(
-      program.u_wind_res,
-      this.windData.image.width * 2,
-      this.windData.image.height * 2,
-    );
+    gl.uniform2f(program.u_wind_res, this.windData.image.width * 2, this.windData.image.height * 2);
     gl.uniform2f(program.u_wind_min, this.windData.uMin, this.windData.vMin);
     gl.uniform2f(program.u_wind_max, this.windData.uMax, this.windData.vMax);
     gl.uniform1f(program.u_speed_factor, this.speedFactor);

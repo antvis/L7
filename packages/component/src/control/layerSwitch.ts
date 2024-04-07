@@ -1,9 +1,6 @@
 import type { ILayer } from '@antv/l7-core';
 import { createL7Icon } from '../utils/icon';
-import type {
-  ControlOptionItem,
-  ISelectControlOption,
-} from './baseControl/selectControl';
+import type { ControlOptionItem, ISelectControlOption } from './baseControl/selectControl';
 import SelectControl from './baseControl/selectControl';
 
 export type LayerSwitchItem = {
@@ -20,9 +17,7 @@ export interface ILayerSwitchOption extends ISelectControlOption {
 export { LayerSwitch };
 
 function isLayerSwitchItem(obj: any): obj is LayerSwitchItem {
-  return Object.keys(obj ?? {}).every((key) =>
-    ['layer', 'name', 'img'].includes(key),
-  );
+  return Object.keys(obj ?? {}).every((key) => ['layer', 'name', 'img'].includes(key));
 }
 
 export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
@@ -41,8 +36,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
           }
         }
         if (typeof layer === 'string') {
-          const targetLayer =
-            layerService.getLayer(layer) || layerService.getLayerByName(layer);
+          const targetLayer = layerService.getLayer(layer) || layerService.getLayerByName(layer);
           if (targetLayer) {
             layerInstances.push(targetLayer);
           }
@@ -65,9 +59,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   }
 
   public getLayerVisible() {
-    return this.layers
-      .filter((layer) => layer.isVisible())
-      .map((layer) => layer.name);
+    return this.layers.filter((layer) => layer.isVisible()).map((layer) => layer.name);
   }
 
   public getLayerOptions(): ControlOptionItem[] {
@@ -83,8 +75,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
           };
         } else if (typeof layer === 'string') {
           const targetLayer =
-            this.layerService.getLayer(layer) ||
-            this.layerService.getLayerByName(layer);
+            this.layerService.getLayer(layer) || this.layerService.getLayerByName(layer);
           return {
             text: targetLayer?.name,
             value: targetLayer?.name,
@@ -127,7 +118,7 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
 
   public onAdd(): HTMLElement {
     if (this.controlOption.multiple === false) {
-      this.handleSingleSelection()
+      this.handleSingleSelection();
     }
 
     if (!this.controlOption.options?.length) {

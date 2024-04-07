@@ -1,8 +1,4 @@
-export function createProgram(
-  gl: WebGLRenderingContext,
-  vshader: string,
-  fshader: string,
-) {
+export function createProgram(gl: WebGLRenderingContext, vshader: string, fshader: string) {
   // Create shader object
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vshader); // 创建顶点着色器对象
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fshader); // 创建片元着色器对象
@@ -55,11 +51,7 @@ export function createProgram(
   return program;
 }
 
-export function loadShader(
-  gl: WebGLRenderingContext,
-  type: number,
-  source: string,
-) {
+export function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
   // Create shader object
   const shader = gl.createShader(type); // 生成着色器对象
   if (shader == null) {
@@ -99,27 +91,13 @@ export function createTexture(
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    0,
-    gl.RGBA,
-    width,
-    height,
-    0,
-    gl.RGBA,
-    gl.UNSIGNED_BYTE,
-    data,
-  );
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 
   gl.bindTexture(gl.TEXTURE_2D, null);
   return texture;
 }
 
-export function createDataTexture(
-  gl: WebGLRenderingContext,
-  filter: any,
-  data: any,
-) {
+export function createDataTexture(gl: WebGLRenderingContext, filter: any, data: any) {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -131,11 +109,7 @@ export function createDataTexture(
   return texture;
 }
 
-export function bindTexture(
-  gl: WebGLRenderingContext,
-  texture: WebGLTexture,
-  unit: number,
-) {
+export function bindTexture(gl: WebGLRenderingContext, texture: WebGLTexture, unit: number) {
   gl.activeTexture(gl.TEXTURE0 + unit);
   gl.bindTexture(gl.TEXTURE_2D, texture);
 }
@@ -246,12 +220,7 @@ export function initFramebuffer(gl: WebGLRenderingContext) {
     OFFER_SCREEN_WIDTH,
     OFFER_SCREEN_HEIGHT,
   );
-  gl.framebufferRenderbuffer(
-    gl.FRAMEBUFFER,
-    gl.DEPTH_ATTACHMENT,
-    gl.RENDERBUFFER,
-    depthbuffer,
-  );
+  gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthbuffer);
 
   const texture = gl.createTexture();
   // @ts-ignore
@@ -279,13 +248,7 @@ export function initFramebuffer(gl: WebGLRenderingContext) {
     gl.UNSIGNED_BYTE,
     null,
   );
-  gl.framebufferTexture2D(
-    gl.FRAMEBUFFER,
-    gl.COLOR_ATTACHMENT0,
-    gl.TEXTURE_2D,
-    texture,
-    0,
-  );
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   gl.bindTexture(gl.TEXTURE_2D, null);
 
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);

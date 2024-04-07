@@ -104,32 +104,29 @@ export default class BasePostProcessingPass<InitializationOptions = {}>
     const postProcessor = layer.multiPassRenderer.getPostProcessor();
     const { useFramebuffer, getViewportSize, clear } = this.rendererService;
     const { width, height } = getViewportSize();
-    useFramebuffer(
-      this.renderToScreen ? null : postProcessor.getWriteFBO(),
-      () => {
-        clear({
-          framebuffer: postProcessor.getWriteFBO(),
-          color: [0, 0, 0, 0],
-          depth: 1,
-          stencil: 0,
-        });
+    useFramebuffer(this.renderToScreen ? null : postProcessor.getWriteFBO(), () => {
+      clear({
+        framebuffer: postProcessor.getWriteFBO(),
+        color: [0, 0, 0, 0],
+        depth: 1,
+        stencil: 0,
+      });
 
-        const uniformOptions: { [key: string]: any } = {
-          u_BloomFinal: 0.0,
-          u_Texture: postProcessor.getReadFBO(),
-          // u_Texture: tex ? tex : postProcessor.getReadFBO(),
-          u_ViewportSize: [width, height],
-          ...this.convertOptionsToUniforms(this.optionsToUpdate),
-        };
-        if (tex) {
-          uniformOptions.u_BloomFinal = 1.0;
-          uniformOptions.u_Texture2 = tex;
-        }
-        this.model.draw({
-          uniforms: uniformOptions,
-        });
-      },
-    );
+      const uniformOptions: { [key: string]: any } = {
+        u_BloomFinal: 0.0,
+        u_Texture: postProcessor.getReadFBO(),
+        // u_Texture: tex ? tex : postProcessor.getReadFBO(),
+        u_ViewportSize: [width, height],
+        ...this.convertOptionsToUniforms(this.optionsToUpdate),
+      };
+      if (tex) {
+        uniformOptions.u_BloomFinal = 1.0;
+        uniformOptions.u_Texture2 = tex;
+      }
+      this.model.draw({
+        uniforms: uniformOptions,
+      });
+    });
   }
 
   public isEnabled() {

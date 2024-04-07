@@ -1,8 +1,5 @@
 import BaseModel from '../../core/BaseModel';
-import {
-  CanvasUpdateType,
-  type ICanvasLayerOptions,
-} from '../../core/interface';
+import { CanvasUpdateType, type ICanvasLayerOptions } from '../../core/interface';
 import type { CanvasModelType } from './constants';
 import { CanvasContextTypeMap } from './constants';
 
@@ -34,8 +31,7 @@ export class CanvasModel extends BaseModel {
 
     this.resetCanvasSize();
     const container =
-      this.mapService.getCanvasOverlays?.() ??
-      this.mapService.getMapCanvasContainer?.();
+      this.mapService.getCanvasOverlays?.() ?? this.mapService.getMapCanvasContainer?.();
     container?.appendChild(canvas);
     this.ctx = getContext
       ? getContext(canvas)
@@ -47,8 +43,7 @@ export class CanvasModel extends BaseModel {
   };
 
   public resetViewportSize = () => {
-    const { width: viewWidth, height: viewHeight } =
-      this.rendererService.getViewportSize();
+    const { width: viewWidth, height: viewHeight } = this.rendererService.getViewportSize();
     this.viewportSize = [viewWidth, viewHeight];
   };
 

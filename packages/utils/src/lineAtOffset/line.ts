@@ -25,8 +25,7 @@ export function pathLineAtOffset(coords: Point[], offset: number) {
     if (currentDistance > offsetDistance) {
       const p1 = point.p1;
       const p2 = point.p2;
-      const radius =
-        (offsetDistance - point.lastTotalDistance) / point.distance;
+      const radius = (offsetDistance - point.lastTotalDistance) / point.distance;
       const offsetPoint = mixPoint(p2, p1, radius);
       lng = offsetPoint[0];
       lat = offsetPoint[1];

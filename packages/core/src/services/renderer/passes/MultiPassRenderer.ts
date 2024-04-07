@@ -72,11 +72,7 @@ export default class MultiPassRenderer implements IMultiPassRenderer {
 
   public add<T>(pass: IPass<T>, config?: Partial<T>) {
     if (pass.getType() === PassType.PostProcessing) {
-      this.postProcessor.add<T>(
-        pass as IPostProcessingPass<T>,
-        this.layer,
-        config,
-      );
+      this.postProcessor.add<T>(pass as IPostProcessingPass<T>, this.layer, config);
     } else {
       pass.init(this.layer, config);
       this.passes.push(pass);

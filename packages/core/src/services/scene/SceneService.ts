@@ -161,10 +161,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.popupService.initPopup();
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
-      this.interactionService.on(
-        InteractionEvent.Drag,
-        this.addSceneEvent.bind(this),
-      );
+      this.interactionService.on(InteractionEvent.Drag, this.addSceneEvent.bind(this));
     });
 
     /**
@@ -183,11 +180,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       // 创建底图之上的 container
       if (this.$container) {
-        this.canvas = DOM.create(
-          'canvas',
-          '',
-          this.$container,
-        ) as HTMLCanvasElement;
+        this.canvas = DOM.create('canvas', '', this.$container) as HTMLCanvasElement;
         this.setCanvas();
         await this.rendererService.init(
           // @ts-ignore
@@ -201,10 +194,7 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.resizeDetector = elementResizeDetectorMaker({
           strategy: 'scroll', //<- For ultra performance.
         });
-        this.resizeDetector.listenTo(
-          this.$container as HTMLDivElement,
-          this.handleWindowResized,
-        );
+        this.resizeDetector.listenTo(this.$container as HTMLDivElement, this.handleWindowResized);
 
         if (window.matchMedia) {
           window
@@ -223,9 +213,7 @@ export default class Scene extends EventEmitter implements ISceneService {
   private registerContextLost() {
     const canvas = this.rendererService.getCanvas();
     if (canvas) {
-      canvas.addEventListener('webglcontextlost', () =>
-        this.emit('webglcontextlost'),
-      );
+      canvas.addEventListener('webglcontextlost', () => this.emit('webglcontextlost'));
     }
   }
   public addLayer(layer: ILayer) {
@@ -306,11 +294,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     // @ts-ignore
     const mapContainer = this.$container.parentElement as HTMLElement;
     if (mapContainer !== null) {
-      this.markerContainer = DOM.create(
-        'div',
-        'l7-marker-container',
-        mapContainer,
-      );
+      this.markerContainer = DOM.create('div', 'l7-marker-container', mapContainer);
     }
   }
 
@@ -323,10 +307,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.destroyed = true;
       return;
     }
-    this.resizeDetector.removeListener(
-      this.$container as HTMLDivElement,
-      this.handleWindowResized,
-    );
+    this.resizeDetector.removeListener(this.$container as HTMLDivElement, this.handleWindowResized);
 
     this.pickingService.destroy();
     this.layerService.destroy();

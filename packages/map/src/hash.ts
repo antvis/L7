@@ -77,9 +77,7 @@ class Hash {
     const center = this.map.getCenter();
     const zoom = Math.round(this.map.getZoom() * 100) / 100;
     // derived from equation: 512px * 2^z / 360 / 10^d < 0.5px
-    const precision = Math.ceil(
-      (zoom * Math.LN2 + Math.log(512 / 360 / 0.5)) / Math.LN10,
-    );
+    const precision = Math.ceil((zoom * Math.LN2 + Math.log(512 / 360 / 0.5)) / Math.LN10);
     const m = Math.pow(10, precision);
     const lng = Math.round(center.lng * m) / m;
     const lat = Math.round(center.lat * m) / m;

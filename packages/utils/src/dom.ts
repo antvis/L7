@@ -3,12 +3,7 @@ const { pull } = lodashUtil;
 
 export type ELType = HTMLElement | SVGElement;
 
-export type ElementType =
-  | HTMLElement
-  | HTMLElement[]
-  | DocumentFragment
-  | Text
-  | string;
+export type ElementType = HTMLElement | HTMLElement[] | DocumentFragment | Text | string;
 
 export function getContainer(domId: string | HTMLDivElement) {
   let $dom = domId as HTMLDivElement;
@@ -41,11 +36,7 @@ function testProp(props: string[]): string {
 
   return props[0];
 }
-export function create(
-  tagName: string,
-  className?: string,
-  container?: HTMLElement,
-) {
+export function create(tagName: string, className?: string, container?: HTMLElement) {
   const el = window.document.createElement(tagName);
   if (className) {
     el.className = className || '';
@@ -88,10 +79,7 @@ export function removeClass(el: ELType, name: string) {
       el.classList.remove(className);
     });
   } else {
-    setClass(
-      el,
-      trim((' ' + getClass(el) + ' ').replace(' ' + name + ' ', ' ')),
-    );
+    setClass(el, trim((' ' + getClass(el) + ' ').replace(' ' + name + ' ', ' ')));
   }
 }
 
@@ -102,10 +90,7 @@ export function hasClass(el: ELType, name: string) {
     return el.classList.contains(name);
   }
   const className = getClass(el);
-  return (
-    className.length > 0 &&
-    new RegExp('(^|\\s)' + name + '(\\s|$)').test(className)
-  );
+  return className.length > 0 && new RegExp('(^|\\s)' + name + '(\\s|$)').test(className);
 }
 
 // @function setClass(el: HTMLElement, name: String)
@@ -126,11 +111,7 @@ export function setClass(el: ELType, name: string) {
  * @param className - The name of the class to toggle.
  * @param force - Optional. If true, adds the class. If false, removes the class. If undefined, toggles the class.
  */
-export function toggleClass(
-  el: ELType,
-  className: string,
-  force?: boolean,
-): void {
+export function toggleClass(el: ELType, className: string, force?: boolean): void {
   if (force === undefined) {
     if (hasClass(el, className)) {
       removeClass(el, className);
@@ -153,9 +134,7 @@ export function getClass(el: ELType) {
     // @ts-ignore
     el = el.correspondingElement;
   }
-  return el.className.baseVal === undefined
-    ? el.className
-    : el.className.baseVal;
+  return el.className.baseVal === undefined ? el.className : el.className.baseVal;
 }
 
 export function empty(el: ELType) {
@@ -278,10 +257,7 @@ export function appendElementType(
   }
 }
 
-export function findParentElement(
-  target: HTMLElement,
-  selector: string | string[],
-) {
+export function findParentElement(target: HTMLElement, selector: string | string[]) {
   const selectors = Array.isArray(selector) ? selector : [selector];
   let current: Element | null = target;
   while (current instanceof Element && current !== window.document.body) {

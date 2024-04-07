@@ -63,9 +63,7 @@ const DEFAULT_SPOT_LIGHT = {
   blur: 5,
 };
 
-export function generateLightingUniforms(
-  lights?: Array<Partial<IDirectionalLight | ISpotLight>>,
-) {
+export function generateLightingUniforms(lights?: Array<Partial<IDirectionalLight | ISpotLight>>) {
   const lightsMap: {
     u_DirectionalLights: Array<Omit<IDirectionalLight, 'type'>>;
     u_NumOfDirectionalLights: number;

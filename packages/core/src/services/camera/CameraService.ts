@@ -105,10 +105,7 @@ export default class CameraService implements ICameraService {
     return this.cameraPosition;
   }
 
-  public projectFlat(
-    lngLat: [number, number],
-    scale?: number | undefined,
-  ): [number, number] {
+  public projectFlat(lngLat: [number, number], scale?: number | undefined): [number, number] {
     return this.viewport.projectFlat(lngLat, scale);
   }
 

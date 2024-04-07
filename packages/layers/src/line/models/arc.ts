@@ -3,11 +3,9 @@ import type {
   IEncodeFeature,
   ILayerConfig,
   IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  ITexture2D,
 } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
@@ -115,8 +113,7 @@ export default class ArcModel extends BaseModel {
 
   public async buildModels(): Promise<IModel[]> {
     this.initUniformsBuffer();
-    const { segmentNumber = 30 } =
-      this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { segmentNumber = 30 } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     //
     const model = await this.layer.buildLayerModel({
@@ -164,11 +161,7 @@ export default class ArcModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 4,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4], vertex[5], vertex[6]];
         },
       },

@@ -3,17 +3,15 @@ import type {
   IEncodeFeature,
   IModel,
   IModelUniform,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
+  ITexture2D,
 } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 // import { mat4, vec3 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/plane_frag.glsl';
 import planeVert from '../shaders/plane_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class PlaneModel extends BaseModel {
   protected texture: ITexture2D;
@@ -52,10 +50,7 @@ export default class PlaneModel extends BaseModel {
         const x = ix * segmentWidth - widthHalf;
         if (this.mapService.version === 'GAODE2.x') {
           // @ts-ignore
-          const [a, b] = this.mapService.lngLatToCoord([x + lng, -y + lat]) as [
-            number,
-            number,
-          ];
+          const [a, b] = this.mapService.lngLatToCoord([x + lng, -y + lat]) as [number, number];
           positions.push(a, b, 0);
         } else {
           positions.push(x + lng, -y + lat, 0);
@@ -116,10 +111,13 @@ export default class PlaneModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
-
+    };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any } } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       opacity,
       mapTexture,
@@ -131,13 +129,13 @@ export default class PlaneModel extends BaseModel {
       this.texture?.destroy();
       this.updateTexture(mapTexture);
     }
-    const commonOptions =  {
+    const commonOptions = {
       u_opacity: opacity || 1,
       u_mapFlag: mapTexture ? 1 : 0,
       u_terrainClipHeight: terrainTexture ? terrainClipHeight : -1,
       u_texture: this.texture,
     };
-    this.textures=[this.texture];
+    this.textures = [this.texture];
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
   }
@@ -146,12 +144,11 @@ export default class PlaneModel extends BaseModel {
     // @ts-ignore
     this.terrainImage = null;
     this.texture?.destroy();
-    this.textures=[];
+    this.textures = [];
   }
 
   public async initModels(): Promise<IModel[]> {
-    const { mapTexture } =
-      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { mapTexture } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     this.mapTexture = mapTexture;
 
     const { createTexture2D } = this.rendererService;
@@ -168,7 +165,7 @@ export default class PlaneModel extends BaseModel {
       vertexShader: planeVert,
       fragmentShader: planeFrag,
       triangulation: this.planeGeometryTriangulation,
-      inject:this.getInject(),
+      inject: this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: true },
 
@@ -195,10 +192,8 @@ export default class PlaneModel extends BaseModel {
       const { widthSegments, heightSegments, width, height } =
         options as IGeometryLayerStyleOptions;
       this.layer.style({
-        widthSegments:
-          widthSegments !== undefined ? widthSegments : oldwidthSegments,
-        heightSegments:
-          heightSegments !== undefined ? heightSegments : oldheightSegments,
+        widthSegments: widthSegments !== undefined ? widthSegments : oldwidthSegments,
+        heightSegments: heightSegments !== undefined ? heightSegments : oldheightSegments,
         width: width !== undefined ? width : oldwidth,
         height: height !== undefined ? height : oldheight,
       });
@@ -288,16 +283,13 @@ export default class PlaneModel extends BaseModel {
     }
 
     const oldFeatures = this.layer.getEncodedData();
-    const modelData = this.styleAttributeService.createAttributesAndIndices(
-      oldFeatures,
-      () => {
-        return {
-          vertices: positions,
-          indices,
-          size: 5,
-        };
-      },
-    );
+    const modelData = this.styleAttributeService.createAttributesAndIndices(oldFeatures, () => {
+      return {
+        vertices: positions,
+        indices,
+        size: 5,
+      };
+    });
     this.layer.updateModelData(modelData as IAttributeAndElements);
     this.layerService.throttleRenderLayers();
   }
@@ -364,7 +356,7 @@ export default class PlaneModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation:ShaderLocation.UV,
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -372,11 +364,7 @@ export default class PlaneModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4]];
         },
       },

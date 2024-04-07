@@ -46,11 +46,7 @@ export default class ReglRendererService implements IRendererService {
     return 'WebGL1';
   };
 
-  public async init(
-    canvas: HTMLCanvasElement,
-    cfg: IRenderConfig,
-    gl?: regl.Regl,
-  ): Promise<void> {
+  public async init(canvas: HTMLCanvasElement, cfg: IRenderConfig, gl?: regl.Regl): Promise<void> {
     // this.$container = $container;
     this.canvas = canvas;
     if (gl) {
@@ -113,28 +109,22 @@ export default class ReglRendererService implements IRendererService {
   public createModel = (options: IModelInitializationOptions): IModel =>
     new ReglModel(this.gl, options);
 
-  public createAttribute = (
-    options: IAttributeInitializationOptions,
-  ): IAttribute => new ReglAttribute(this.gl, options);
+  public createAttribute = (options: IAttributeInitializationOptions): IAttribute =>
+    new ReglAttribute(this.gl, options);
 
   public createBuffer = (options: IBufferInitializationOptions): IBuffer =>
     new ReglBuffer(this.gl, options);
 
-  public createElements = (
-    options: IElementsInitializationOptions,
-  ): IElements => new ReglElements(this.gl, options);
+  public createElements = (options: IElementsInitializationOptions): IElements =>
+    new ReglElements(this.gl, options);
 
-  public createTexture2D = (
-    options: ITexture2DInitializationOptions,
-  ): ITexture2D => new ReglTexture2D(this.gl, options);
+  public createTexture2D = (options: ITexture2DInitializationOptions): ITexture2D =>
+    new ReglTexture2D(this.gl, options);
 
   public createFramebuffer = (options: IFramebufferInitializationOptions) =>
     new ReglFramebuffer(this.gl, options);
 
-  public useFramebuffer = (
-    framebuffer: IFramebuffer | null,
-    drawCommands: () => void,
-  ) => {
+  public useFramebuffer = (framebuffer: IFramebuffer | null, drawCommands: () => void) => {
     this.gl({
       framebuffer: framebuffer ? (framebuffer as ReglFramebuffer).get() : null,
     })(drawCommands);
@@ -159,9 +149,7 @@ export default class ReglRendererService implements IRendererService {
     };
 
     reglClearOptions.framebuffer =
-      framebuffer === null
-        ? framebuffer
-        : (framebuffer as ReglFramebuffer).get();
+      framebuffer === null ? framebuffer : (framebuffer as ReglFramebuffer).get();
 
     this.gl?.clear(reglClearOptions);
   };

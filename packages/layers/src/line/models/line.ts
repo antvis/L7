@@ -113,8 +113,7 @@ export default class LineModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { depth = false } =
-      this.layer.getLayerConfig() as ILineLayerStyleOptions;
+    const { depth = false } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     const { frag, vert, type } = this.getShaders();
     this.layer.triangulation = LineTriangulation;
     const model = await this.layer.buildLayerModel({

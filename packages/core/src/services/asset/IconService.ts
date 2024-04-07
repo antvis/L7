@@ -171,11 +171,7 @@ export default class IconService extends EventEmitter implements IIconService {
    * 计算 icon 在画布上的排布（是否需要换行）
    */
   private updateIconMap() {
-    const { mapping, canvasHeight } = buildIconMaping(
-      this.iconData,
-      BUFFER,
-      MAX_CANVAS_WIDTH,
-    );
+    const { mapping, canvasHeight } = buildIconMaping(this.iconData, BUFFER, MAX_CANVAS_WIDTH);
     this.iconMap = mapping;
     this.canvasHeight = canvasHeight;
   }

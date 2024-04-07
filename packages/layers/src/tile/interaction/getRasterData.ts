@@ -2,12 +2,7 @@ import type { IMapService, IRendererService } from '@antv/l7-core';
 import type { SourceTile } from '@antv/l7-utils';
 import { DOM } from '@antv/l7-utils';
 
-export function readRasterValue(
-  tile: SourceTile,
-  mapService: IMapService,
-  x: number,
-  y: number,
-) {
+export function readRasterValue(tile: SourceTile, mapService: IMapService, x: number, y: number) {
   const bbox = tile?.bboxPolygon?.bbox || [0, 0, 10, -10];
 
   const [minLng = 0, minLat = 0, maxLng = 10, maxLat = -10] = bbox;
@@ -34,11 +29,7 @@ export function readRasterValue(
   return data;
 }
 
-export function readPixel(
-  x: number,
-  y: number,
-  rendererService: IRendererService,
-) {
+export function readPixel(x: number, y: number, rendererService: IRendererService) {
   const { readPixels, getViewportSize } = rendererService;
   const xInDevicePixel = x * DOM.DPR;
   const yInDevicePixel = y * DOM.DPR;

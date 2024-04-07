@@ -1,10 +1,5 @@
-import type {
-  IEncodeFeature,
-  IModel} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import type { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineTriangulation } from '../../core/line_trangluation';
@@ -12,11 +7,14 @@ import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
 
 // linear simple line shader
 
-import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
 export default class FlowLineModel extends BaseModel {
-
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       gapWidth = 2,
       strokeWidth = 1,
@@ -26,10 +24,10 @@ export default class FlowLineModel extends BaseModel {
     const commonOptions = {
       u_gap_width: gapWidth,
       u_stroke_width: strokeWidth,
-      u_stroke_opacity: strokeOpacity
+      u_stroke_opacity: strokeOpacity,
     };
-    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);    
-    return commonBufferInfo; 
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -44,7 +42,7 @@ export default class FlowLineModel extends BaseModel {
       fragmentShader: flow_line_frag,
       inject: this.getInject(),
       triangulation: FlowLineTriangulation,
-      styleOption:(this.layer.getLayerConfig()as IFlowLineStyleOptions).symbol,
+      styleOption: (this.layer.getLayerConfig() as IFlowLineStyleOptions).symbol,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
       pick: false,
@@ -58,7 +56,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size', // 宽度
-        shaderLocation:ShaderLocation.SIZE,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -77,18 +75,14 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
-        shaderLocation:12,
+        shaderLocation: 12,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
         size: 4,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4], vertex[5], vertex[6]];
         },
       },
@@ -99,7 +93,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation:ShaderLocation.NORMAL,
+        shaderLocation: ShaderLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

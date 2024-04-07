@@ -1,8 +1,4 @@
-import {
-  ClipSpaceNearZ,
-  preprocessShader_GLSL,
-  ViewportOrigin,
-} from '@antv/g-device-api';
+import { ClipSpaceNearZ, preprocessShader_GLSL, ViewportOrigin } from '@antv/g-device-api';
 import type {
   IAttribute,
   IBlendOptions,
@@ -45,18 +41,8 @@ export default class ReglModel implements IModel {
 
   constructor(reGl: regl.Regl, options: IModelInitializationOptions) {
     this.reGl = reGl;
-    const {
-      vs,
-      fs,
-      attributes,
-      uniforms,
-      primitive,
-      count,
-      elements,
-      depth,
-      cull,
-      instances,
-    } = options;
+    const { vs, fs, attributes, uniforms, primitive, count, elements, depth, cull, instances } =
+      options;
 
     /**
      * try to compile GLSL 300 to 100
@@ -124,8 +110,7 @@ export default class ReglModel implements IModel {
         // @ts-ignore
         opBack: reGl.prop('stencil.opBack'),
       },
-      primitive:
-        primitiveMap[primitive === undefined ? gl.TRIANGLES : primitive],
+      primitive: primitiveMap[primitive === undefined ? gl.TRIANGLES : primitive],
     };
     if (instances) {
       drawParams.instances = instances;
@@ -179,10 +164,7 @@ export default class ReglModel implements IModel {
   }
 
   public draw(options: IModelDrawOptions, pick?: boolean) {
-    if (
-      this.drawParams.attributes &&
-      Object.keys(this.drawParams.attributes).length === 0
-    ) {
+    if (this.drawParams.attributes && Object.keys(this.drawParams.attributes).length === 0) {
       return;
     }
     const uniforms: {
@@ -209,10 +191,7 @@ export default class ReglModel implements IModel {
         // @ts-ignore
         uniforms[uniformName].BYTES_PER_ELEMENT
       ) {
-        reglDrawProps[uniformName] = uniforms[uniformName] as
-          | number
-          | number[]
-          | boolean;
+        reglDrawProps[uniformName] = uniforms[uniformName] as number | number[] | boolean;
       } else {
         reglDrawProps[uniformName] = (
           uniforms[uniformName] as ReglFramebuffer | ReglTexture2D
@@ -266,9 +245,7 @@ export default class ReglModel implements IModel {
     }
   }
 
-  private getBlendDrawParams({
-    blend,
-  }: Pick<IModelInitializationOptions, 'blend'>) {
+  private getBlendDrawParams({ blend }: Pick<IModelInitializationOptions, 'blend'>) {
     const { enable, func, equation, color = [0, 0, 0, 0] } = blend || {};
     // @ts-ignore
     return {
@@ -277,8 +254,7 @@ export default class ReglModel implements IModel {
         srcRGB: blendFuncMap[(func && func.srcRGB) || gl.SRC_ALPHA],
         srcAlpha: blendFuncMap[(func && func.srcAlpha) || gl.SRC_ALPHA],
         dstRGB: blendFuncMap[(func && func.dstRGB) || gl.ONE_MINUS_SRC_ALPHA],
-        dstAlpha:
-          blendFuncMap[(func && func.dstAlpha) || gl.ONE_MINUS_SRC_ALPHA],
+        dstAlpha: blendFuncMap[(func && func.dstAlpha) || gl.ONE_MINUS_SRC_ALPHA],
       },
       equation: {
         rgb: blendEquationMap[(equation && equation.rgb) || gl.FUNC_ADD],
@@ -290,9 +266,7 @@ export default class ReglModel implements IModel {
   /**
    * @see https://github.com/regl-project/regl/blob/gh-pages/API.md#stencil
    */
-  private getStencilDrawParams({
-    stencil,
-  }: Pick<IModelInitializationOptions, 'stencil'>) {
+  private getStencilDrawParams({ stencil }: Pick<IModelInitializationOptions, 'stencil'>) {
     const {
       enable,
       mask = -1,
@@ -371,12 +345,7 @@ export default class ReglModel implements IModel {
   } {
     const extractedUniforms = {};
     Object.keys(uniforms).forEach((uniformName) => {
-      this.extractUniformsRecursively(
-        uniformName,
-        uniforms[uniformName],
-        extractedUniforms,
-        '',
-      );
+      this.extractUniformsRecursively(uniformName, uniforms[uniformName], extractedUniforms, '');
     });
 
     return extractedUniforms;

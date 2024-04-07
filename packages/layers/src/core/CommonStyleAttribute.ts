@@ -1,10 +1,5 @@
-import type {
-  IEncodeFeature,
-  IStyleAttribute} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IStyleAttribute } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 
 export enum ShaderLocation {
   POSITION = 0,
@@ -22,12 +17,10 @@ export enum ShaderLocation {
   MAX,
   NORMAL,
   UV,
-  LINEAR // Polygon Linear
+  LINEAR, // Polygon Linear
 }
 
-export function getCommonStyleAttributeOptions(
-  name: string,
-): Partial<IStyleAttribute> | undefined {
+export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttribute> | undefined {
   switch (name) {
     // // roate
     case 'rotation':
@@ -45,9 +38,7 @@ export function getCommonStyleAttributeOptions(
           size: 1,
           update: (feature: IEncodeFeature) => {
             const { rotation = 0 } = feature;
-            return Array.isArray(rotation)
-              ? [rotation[0]]
-              : [rotation as number];
+            return Array.isArray(rotation) ? [rotation[0]] : [rotation as number];
           },
         },
       };
@@ -131,26 +122,26 @@ export function getCommonStyleAttributeOptions(
           },
         },
       };
-      case 'thetaOffset':
-        return {
-          name: 'thetaOffset',
-          type: AttributeType.Attribute,
-          descriptor: {
-            name: 'a_ThetaOffset',
-            shaderLocation: 15,
-            buffer: {
-              // give the WebGL driver a hint that this buffer may change
-              usage: gl.STATIC_DRAW,
-              data: [],
-              type: gl.FLOAT,
-            },
-            size: 1,
-            update: (feature: IEncodeFeature) => {
-              const { thetaOffset: op = 1 } = feature;
-              return [op];
-            },
+    case 'thetaOffset':
+      return {
+        name: 'thetaOffset',
+        type: AttributeType.Attribute,
+        descriptor: {
+          name: 'a_ThetaOffset',
+          shaderLocation: 15,
+          buffer: {
+            // give the WebGL driver a hint that this buffer may change
+            usage: gl.STATIC_DRAW,
+            data: [],
+            type: gl.FLOAT,
           },
-        };
+          size: 1,
+          update: (feature: IEncodeFeature) => {
+            const { thetaOffset: op = 1 } = feature;
+            return [op];
+          },
+        },
+      };
     default:
       return undefined;
   }

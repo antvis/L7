@@ -1,6 +1,4 @@
-export async function loadImage(
-  url: string,
-): Promise<HTMLImageElement | ImageBitmap> {
+export async function loadImage(url: string): Promise<HTMLImageElement | ImageBitmap> {
   // @ts-ignore
   if (window.createImageBitmap) {
     const response = await fetch(url);

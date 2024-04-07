@@ -1,22 +1,20 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IRasterTerrainLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import Raster_terrainFrag from '../shaders/terrain/terrain_rgb_frag.glsl';
 import Raster_terrainVert from '../shaders/terrain/terrain_rgb_vert.glsl';
 
 export default class RasterTerrainRGB extends BaseModel {
   protected texture: ITexture2D;
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const {
       opacity,
       clampLow = true,
@@ -33,16 +31,9 @@ export default class RasterTerrainRGB extends BaseModel {
     const newdomain = domain || getDefaultDomain(rampColors);
     let texture: ITexture2D | undefined = colorTexture;
     if (!colorTexture) {
-      texture = this.layer.textureService.getColorTexture(
-        rampColors,
-        newdomain,
-      ) as ITexture2D;
+      texture = this.layer.textureService.getColorTexture(rampColors, newdomain) as ITexture2D;
     } else {
-      this.layer.textureService.setColorTexture(
-        colorTexture,
-        rampColors,
-        newdomain,
-      );
+      this.layer.textureService.setColorTexture(colorTexture, rampColors, newdomain);
     }
     const commonOptions = {
       u_unpack: [rScaler, gScaler, bScaler, offset],
@@ -54,10 +45,9 @@ export default class RasterTerrainRGB extends BaseModel {
       u_texture: this.texture,
       u_colorTexture: texture,
     };
-    this.textures = [this.texture,texture!]
+    this.textures = [this.texture, texture!];
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
-
   }
   public async initModels(): Promise<IModel[]> {
     this.initUniformsBuffer();
@@ -104,11 +94,7 @@ export default class RasterTerrainRGB extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4]];
         },
       },

@@ -1,10 +1,4 @@
-import type {
-  ILayer,
-  ILayerService,
-  ILngLat,
-  IRendererService,
-  ITile,
-} from '@antv/l7-core';
+import type { ILayer, ILayerService, ILngLat, IRendererService, ITile } from '@antv/l7-core';
 import type { SourceTile } from '@antv/l7-utils';
 
 interface ITileLayerServiceOptions {
@@ -22,11 +16,7 @@ export class TileLayerService {
   private parent: ILayer;
 
   private layerTiles: ITile[] = [];
-  constructor({
-    rendererService,
-    layerService,
-    parent,
-  }: ITileLayerServiceOptions) {
+  constructor({ rendererService, layerService, parent }: ITileLayerServiceOptions) {
     this.rendererService = rendererService;
     this.layerService = layerService;
     this.parent = parent;
@@ -117,9 +107,7 @@ export class TileLayerService {
   }
 
   public getRenderLayers() {
-    const tileList = this.layerTiles.filter(
-      (t: ITile) => t.visible && t.isLoaded,
-    );
+    const tileList = this.layerTiles.filter((t: ITile) => t.visible && t.isLoaded);
     const layers: ILayer[] = [];
     tileList.map((tile: ITile) => layers.push(...tile.getLayers()));
     return layers;

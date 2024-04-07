@@ -1,16 +1,10 @@
-import type {
-  IEncodeFeature,
-  IModel} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { ShaderLocation } from '../../core/CommonStyleAttribute';
+import type { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal/normal_frag.glsl';
 import normalVert from '../shaders/normal/normal_vert.glsl';
-import type { IPointLayerStyleOptions } from '../../core/interface';
-
 
 export function PointTriangulation(feature: IEncodeFeature) {
   const coordinates = feature.coordinates as number[];
@@ -27,10 +21,14 @@ export default class NormalModel extends BaseModel {
       blend: 'additive',
     };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const commonOptions = {
-      u_size_scale:0.5
-     };
+      u_size_scale: 0.5,
+    };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
   }

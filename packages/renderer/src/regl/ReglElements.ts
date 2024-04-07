@@ -14,10 +14,7 @@ export default class ReglElements implements IElements {
     this.elements = reGl.elements({
       data,
       usage: usageMap[usage || gl.STATIC_DRAW],
-      type: dataTypeMap[type || gl.UNSIGNED_BYTE] as
-        | 'uint8'
-        | 'uint16'
-        | 'uint32',
+      type: dataTypeMap[type || gl.UNSIGNED_BYTE] as 'uint8' | 'uint16' | 'uint32',
       count,
     });
   }

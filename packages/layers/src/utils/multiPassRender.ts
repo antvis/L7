@@ -3,9 +3,7 @@ import type { ILayer, IPass, IPostProcessingPass } from '@antv/l7-core';
 /**
  * 'blurH' -> ['blurH', {}]
  */
-export function normalizePasses(
-  passes: Array<string | [string, { [key: string]: unknown }]>,
-) {
+export function normalizePasses(passes: Array<string | [string, { [key: string]: unknown }]>) {
   return passes.map((pass: string | [string, { [key: string]: unknown }]) => {
     if (typeof pass === 'string') {
       pass = [pass, {}];
@@ -41,15 +39,10 @@ export function createMultiPassRenderer(
   }
 
   // post processing
-  normalizePasses(passes).forEach(
-    (pass: [string, { [key: string]: unknown }]) => {
-      const [passName, initializationOptions] = pass;
-      multiPassRenderer.add(
-        postProcessingPassFactory(passName),
-        initializationOptions,
-      );
-    },
-  );
+  normalizePasses(passes).forEach((pass: [string, { [key: string]: unknown }]) => {
+    const [passName, initializationOptions] = pass;
+    multiPassRenderer.add(postProcessingPassFactory(passName), initializationOptions);
+  });
 
   // 末尾为固定的 CopyPass
   multiPassRenderer.add(postProcessingPassFactory('copy'));

@@ -33,14 +33,7 @@ export const usageMap: {
 };
 
 export const dataTypeMap: {
-  [key: string]:
-    | 'int8'
-    | 'int16'
-    | 'int32'
-    | 'uint8'
-    | 'uint16'
-    | 'uint32'
-    | 'float';
+  [key: string]: 'int8' | 'int16' | 'int32' | 'uint8' | 'uint16' | 'uint32' | 'float';
 } = {
   [gl.BYTE]: 'int8',
   // [gl.UNSIGNED_INT]: 'int16',

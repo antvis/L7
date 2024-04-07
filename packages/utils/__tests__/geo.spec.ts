@@ -1,4 +1,4 @@
-import type { IBounds} from '../src/geo';
+import type { IBounds } from '../src/geo';
 import { boundsContains, padBounds } from '../src/geo';
 
 describe('geo', () => {

@@ -136,8 +136,7 @@ function shapeLines(
   let maxLineLength = 0;
   const positionedGlyphs = shaping.positionedGlyphs;
 
-  const justify =
-    textJustify === 'right' ? 1 : textJustify === 'left' ? 0 : 0.5;
+  const justify = textJustify === 'right' ? 1 : textJustify === 'left' ? 0 : 0.5;
 
   const lineStartIndex = positionedGlyphs.length;
   lines.forEach((line) => {
@@ -162,13 +161,7 @@ function shapeLines(
     if (positionedGlyphs.length !== lineStartIndex) {
       const lineLength = x - spacing;
       maxLineLength = Math.max(lineLength, maxLineLength);
-      justifyLine(
-        positionedGlyphs,
-        glyphMap,
-        lineStartIndex,
-        positionedGlyphs.length - 1,
-        justify,
-      );
+      justifyLine(positionedGlyphs, glyphMap, lineStartIndex, positionedGlyphs.length - 1, justify);
     }
 
     x = 0;
@@ -213,8 +206,7 @@ function shapeIconFont(
   let maxLineLength = 0;
   const positionedGlyphs = shaping.positionedGlyphs;
 
-  const justify =
-    textJustify === 'right' ? 1 : textJustify === 'left' ? 0 : 0.5;
+  const justify = textJustify === 'right' ? 1 : textJustify === 'left' ? 0 : 0.5;
 
   const lineStartIndex = positionedGlyphs.length;
   iconfonts.forEach((iconfont) => {
@@ -243,13 +235,7 @@ function shapeIconFont(
     if (positionedGlyphs.length !== lineStartIndex) {
       const lineLength = x - spacing;
       maxLineLength = Math.max(lineLength, maxLineLength);
-      justifyLine(
-        positionedGlyphs,
-        glyphMap,
-        lineStartIndex,
-        positionedGlyphs.length - 1,
-        justify,
-      );
+      justifyLine(positionedGlyphs, glyphMap, lineStartIndex, positionedGlyphs.length - 1, justify);
     }
 
     x = 0;
@@ -313,24 +299,8 @@ export function shapeText(
     text,
   };
   isIconFont
-    ? shapeIconFont(
-        shaping,
-        glyphs,
-        lines,
-        lineHeight,
-        textAnchor,
-        textJustify,
-        spacing,
-      )
-    : shapeLines(
-        shaping,
-        glyphs,
-        lines,
-        lineHeight,
-        textAnchor,
-        textJustify,
-        spacing,
-      );
+    ? shapeIconFont(shaping, glyphs, lines, lineHeight, textAnchor, textJustify, spacing)
+    : shapeLines(shaping, glyphs, lines, lineHeight, textAnchor, textJustify, spacing);
   if (!positionedGlyphs.length) {
     return false;
   }
@@ -360,13 +330,9 @@ export function getGlyphQuads(
 
     const builtInOffset = alongLine
       ? [0, 0]
-      : [
-          positionedGlyph.x + halfAdvance + textOffset[0],
-          positionedGlyph.y + textOffset[1],
-        ];
+      : [positionedGlyph.x + halfAdvance + textOffset[0], positionedGlyph.y + textOffset[1]];
 
-    const x1 =
-      (0 - rectBuffer) * positionedGlyph.scale - halfAdvance + builtInOffset[0];
+    const x1 = (0 - rectBuffer) * positionedGlyph.scale - halfAdvance + builtInOffset[0];
     const y1 = (0 - rectBuffer) * positionedGlyph.scale + builtInOffset[1];
     const x2 = x1 + rect.width * positionedGlyph.scale;
     const y2 = y1 + rect.height * positionedGlyph.scale;

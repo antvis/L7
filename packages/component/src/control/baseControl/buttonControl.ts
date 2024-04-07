@@ -52,10 +52,7 @@ export default class ButtonControl<
   }
 
   public createButton(className: string = '') {
-    return DOM.create(
-      'button',
-      `l7-button-control ${className}`,
-    ) as HTMLElement;
+    return DOM.create('button', `l7-button-control ${className}`) as HTMLElement;
   }
 
   public onAdd(): HTMLElement {
@@ -138,9 +135,7 @@ export default class ButtonControl<
       btnText.innerText = newText;
       DOM.addClass(
         this.button,
-        this.controlOption.vertical
-          ? 'l7-button-control--column'
-          : 'l7-button-control--row',
+        this.controlOption.vertical ? 'l7-button-control--column' : 'l7-button-control--row',
       );
     } else if (!newText && this.buttonText) {
       DOM.remove(this.buttonText);

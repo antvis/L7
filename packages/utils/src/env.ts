@@ -14,25 +14,15 @@ export function isWorker(): boolean {
 /* global self */
 export const getReferrer = isWorker()
   ? () => (self as any).worker && (self as any).worker.referrer
-  : () =>
-      (window.location.protocol === 'blob:' ? window.parent : window).location
-        .href;
+  : () => (window.location.protocol === 'blob:' ? window.parent : window).location.href;
 
 const userAgent = navigator?.userAgent;
 
 export const isiOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-export const isAndroid =
-  userAgent.indexOf('Android') > -1 || userAgent.indexOf('Adr') > -1;
+export const isAndroid = userAgent.indexOf('Android') > -1 || userAgent.indexOf('Adr') > -1;
 export function isPC() {
   const userAgentInfo = userAgent;
-  const Agents = [
-    'Android',
-    'iPhone',
-    'SymbianOS',
-    'Windows Phone',
-    'iPad',
-    'iPod',
-  ];
+  const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
   let flag = true;
   for (const v of Agents) {
     if (userAgentInfo.indexOf(v) > 0) {

@@ -29,10 +29,7 @@ function midPoint(source: Point, target: Point) {
   const thetaOffset = 0.314;
   const r2 = r / 2.0 / Math.cos(thetaOffset);
   const theta2 = theta + thetaOffset;
-  const mid = [
-    r2 * Math.cos(theta2) + source[0],
-    r2 * Math.sin(theta2) + source[1],
-  ];
+  const mid = [r2 * Math.cos(theta2) + source[0], r2 * Math.sin(theta2) + source[1]];
   return mid;
 }
 
@@ -46,19 +43,11 @@ function getAngularDist(source: Point, target: Point) {
   const sinHalfDelta = [Math.sin(delta[0] / 2.0), Math.sin(delta[1] / 2.0)]; // Math.sin(delta / 2.0);
   const a =
     sinHalfDelta[1] * sinHalfDelta[1] +
-    Math.cos(source[1]) *
-      Math.cos(target[1]) *
-      sinHalfDelta[0] *
-      sinHalfDelta[0];
+    Math.cos(source[1]) * Math.cos(target[1]) * sinHalfDelta[0] * sinHalfDelta[0];
   return 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));
 }
 
-export function interpolate(
-  s: Point,
-  t: Point,
-  offset: number,
-  mapVersion: string | undefined,
-) {
+export function interpolate(s: Point, t: Point, offset: number, mapVersion: string | undefined) {
   const source = [degreesToRadians(s[0]), degreesToRadians(s[1])];
   const target = [degreesToRadians(t[0]), degreesToRadians(t[1])];
   if (mapVersion === 'GAODE2.x') {

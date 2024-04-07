@@ -5,8 +5,7 @@ export default class Viewport implements IViewport {
   public viewport: WebMercatorViewport;
 
   public syncWithMapCamera(mapCamera: Partial<IMapCamera>) {
-    const { center, zoom, pitch, bearing, viewportHeight, viewportWidth } =
-      mapCamera;
+    const { center, zoom, pitch, bearing, viewportHeight, viewportWidth } = mapCamera;
 
     const preView = this.viewport
       ? {
@@ -81,10 +80,7 @@ export default class Viewport implements IViewport {
    * P20 坐标系，固定 scale
    */
 
-  public projectFlat(
-    lngLat: [number, number],
-    scale?: number | undefined,
-  ): [number, number] {
+  public projectFlat(lngLat: [number, number], scale?: number | undefined): [number, number] {
     return this.viewport.projectFlat(lngLat, scale);
   }
 }

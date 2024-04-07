@@ -7,11 +7,9 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
-  Point
+  Point,
 } from '@antv/l7-core';
-import {
-  MapServiceEvent
-} from '@antv/l7-core';
+import { MapServiceEvent } from '@antv/l7-core';
 import { MercatorCoordinate } from '@antv/l7-map';
 import Viewport from '../utils/Viewport';
 import { load } from './maploader';
@@ -26,7 +24,8 @@ const EventMap: {
 
 export default class TdtMapService extends BaseMapService<any> {
   protected viewport: IViewport | null = null;
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> = new Map();
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
+    new Map();
   // @ts-ignore
   private sceneContainer: HTMLElement;
   // 不直接用自带的marker的div，因为会收到天地图缩放时visibility变成hidden的影响
@@ -116,7 +115,7 @@ export default class TdtMapService extends BaseMapService<any> {
     overlayPane.parentElement.appendChild(container);
     container.id = 'tdt-L7';
     const size = this.map.getSize();
-    container.style.zIndex = '200';//置于上层
+    container.style.zIndex = '200'; //置于上层
     container.style.width = `${size.x}px`;
     container.style.height = `${size.y}px`;
     // @ts-ignore
@@ -181,9 +180,7 @@ export default class TdtMapService extends BaseMapService<any> {
         throw Error('No container id specified');
       }
 
-      this.$mapContainer = this.creatMapContainer(
-        id as string | HTMLDivElement,
-      );
+      this.$mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
       // @ts-ignore
       const map = new T.Map(this.$mapContainer, {
         // @ts-ignore
@@ -230,12 +227,7 @@ export default class TdtMapService extends BaseMapService<any> {
         }
 
         const handleProxy = (...args: any[]) => {
-          if (
-            args[0] &&
-            typeof args[0] === 'object' &&
-            !args[0].lngLat &&
-            !args[0].lnglat
-          ) {
+          if (args[0] && typeof args[0] === 'object' && !args[0].lngLat && !args[0].lnglat) {
             args[0].lngLat = args[0].latlng || args[0].latLng;
             args[0].map = this.map;
           }
@@ -244,7 +236,7 @@ export default class TdtMapService extends BaseMapService<any> {
 
         cbProxyMap.set(handle, handleProxy);
         this.map.on(eventName, handleProxy);
-      }
+      };
 
       if (Array.isArray(EventMap[type])) {
         EventMap[type].forEach((eventName: string) => {
@@ -269,7 +261,7 @@ export default class TdtMapService extends BaseMapService<any> {
       }
       this.evtCbProxyMap.get(eventName)?.delete(handle);
       this.map.off(eventName, handleProxy);
-    }
+    };
 
     if (Array.isArray(EventMap[type])) {
       EventMap[type].forEach((eventName: string) => {
@@ -279,7 +271,7 @@ export default class TdtMapService extends BaseMapService<any> {
       offProxy(EventMap[type] || type);
     }
   }
- // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public once(type: string, handler: (...args: any[]) => void): void {
     throw new Error('Method not implemented.');
   }
@@ -330,7 +322,6 @@ export default class TdtMapService extends BaseMapService<any> {
   public getRotation(): number {
     return 0;
   }
-
 
   public setRotation(rotation: number): void {
     this.map.setBearing(rotation);
@@ -397,8 +388,7 @@ export default class TdtMapService extends BaseMapService<any> {
 
   // coordinates methods
 
-  public getModelMatrix(
-  ): number[] {
+  public getModelMatrix(): number[] {
     throw new Error('Method not implemented.');
   }
 
@@ -455,16 +445,9 @@ export default class TdtMapService extends BaseMapService<any> {
     ];
   }
 
-  public lngLatToMercator(
-    lnglat: [number, number],
-    altitude: number,
-  ): IMercator {
+  public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     // Use built in mercator tools due to Tencent not provided related methods
-    const {
-      x = 0,
-      y = 0,
-      z = 0,
-    } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
   }
 

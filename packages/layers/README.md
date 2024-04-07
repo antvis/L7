@@ -9,6 +9,7 @@ yarn add @antv/l7-layers
 ## Getting Started
 
 Use built-in layers directly:
+
 ```typescript
 import { PointLayer } from '@antv/l7-layers';
 
@@ -18,6 +19,7 @@ const layer = new PointLayer({
 ```
 
 Create a custom layer with the help of `BaseLayer`:
+
 ```typescript
 import { BaseLayer } from '@antv/l7-layers';
 
@@ -32,8 +34,8 @@ const layer = new MyCustomLayer({
 
 ## Current Built-in Layers
 
-* PointLayer
-* PolygonLayer
-* LineLayer
-* HeatmapLayer
-* RasterLayer
+- PointLayer
+- PolygonLayer
+- LineLayer
+- HeatmapLayer
+- RasterLayer

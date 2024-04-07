@@ -195,10 +195,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     const [offsetX, offsetY] = offset;
     const buttonRect = this.button.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
-    const { left, right, top, bottom } = DOM.getDiffRect(
-      buttonRect,
-      containerRect,
-    );
+    const { left, right, top, bottom } = DOM.getDiffRect(buttonRect, containerRect);
     let isTransformX = false;
     let isTransformY = false;
     if (/^(left|right)/.test(placement)) {
@@ -238,20 +235,14 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
 
     const posList = placement.split('-');
     if (posList.length) {
-      DOM.addClass(
-        this.popperDOM,
-        posList.map((pos) => `l7-popper-${pos}`).join(' '),
-      );
+      DOM.addClass(this.popperDOM, posList.map((pos) => `l7-popper-${pos}`).join(' '));
     }
     DOM.addStyle(this.popperDOM, DOM.css2Style(popperStyleObj));
   }
 
   protected createPopper(): HTMLElement {
     const { container, className = '', content } = this.option;
-    const popper = DOM.create(
-      'div',
-      `l7-popper l7-popper-hide ${className}`,
-    ) as HTMLElement;
+    const popper = DOM.create('div', `l7-popper l7-popper-hide ${className}`) as HTMLElement;
     const popperContent = DOM.create('div', 'l7-popper-content') as HTMLElement;
     const popperArrow = DOM.create('div', 'l7-popper-arrow') as HTMLElement;
     popper.appendChild(popperContent);
@@ -275,10 +266,7 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
 
   protected onPopperUnClick = (e: MouseEvent) => {
     if (
-      !DOM.findParentElement(e.target as HTMLElement, [
-        '.l7-button-control',
-        '.l7-popper-content',
-      ])
+      !DOM.findParentElement(e.target as HTMLElement, ['.l7-button-control', '.l7-popper-content'])
     ) {
       this.hide();
     }

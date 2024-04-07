@@ -9,15 +9,8 @@ import type {
   ITileParserCFG,
   ITransform,
 } from '@antv/l7-core';
-import type {
-  SourceTile} from '@antv/l7-utils';
-import {
-  bBoxToBounds,
-  extent,
-  lodashUtil,
-  padBounds,
-  TilesetManager,
-} from '@antv/l7-utils';
+import type { SourceTile } from '@antv/l7-utils';
+import { TilesetManager, bBoxToBounds, extent, lodashUtil, padBounds } from '@antv/l7-utils';
 import type { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 const { cloneDeep, isFunction, isString, mergeWith } = lodashUtil;
@@ -105,10 +98,7 @@ export default class Source extends EventEmitter implements ISource {
 
   public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
-    let data = this.clusterIndex.getClusters(
-      this.caculClusterExtent(2),
-      Math.floor(zoom),
-    );
+    let data = this.clusterIndex.getClusters(this.caculClusterExtent(2), Math.floor(zoom));
     this.clusterOptions.zoom = zoom;
     data.forEach((p: any) => {
       if (!p.id) {
@@ -146,16 +136,10 @@ export default class Source extends EventEmitter implements ISource {
   public getFeatureById(id: number): unknown {
     const { type = 'geojson', geometry } = this.parser as IParserCfg;
     if (type === 'geojson' && !this.cluster) {
-      const feature =
-        id < this.originData.features.length
-          ? this.originData.features[id]
-          : 'null';
+      const feature = id < this.originData.features.length ? this.originData.features[id] : 'null';
       const newFeature = cloneDeep(feature);
 
-      if (
-        newFeature?.properties &&
-        (this.transforms.length !== 0 || this.dataArrayChanged)
-      ) {
+      if (newFeature?.properties && (this.transforms.length !== 0 || this.dataArrayChanged)) {
         // 如果数据进行了transforms 属性会发生改变 或者数据dataArray发生更新
         const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
           return dataItem._id === id;
@@ -170,21 +154,16 @@ export default class Source extends EventEmitter implements ISource {
     }
   }
 
-  public updateFeaturePropertiesById(
-    id: number,
-    properties: Record<string, any>,
-  ) {
-    this.data.dataArray = this.data.dataArray.map(
-      (dataItem: IParseDataItem) => {
-        if (dataItem._id === id) {
-          return {
-            ...dataItem,
-            ...properties,
-          };
-        }
-        return dataItem;
-      },
-    );
+  public updateFeaturePropertiesById(id: number, properties: Record<string, any>) {
+    this.data.dataArray = this.data.dataArray.map((dataItem: IParseDataItem) => {
+      if (dataItem._id === id) {
+        return {
+          ...dataItem,
+          ...properties,
+        };
+      }
+      return dataItem;
+    });
     this.dataArrayChanged = true;
     this.emit('update', {
       type: 'update',
@@ -233,10 +212,7 @@ export default class Source extends EventEmitter implements ISource {
     return this.tileset?.getTileByZXY(z, x, y);
   }
 
-  public reloadTileByExtent(
-    bounds: [number, number, number, number],
-    z: number,
-  ): void {
+  public reloadTileByExtent(bounds: [number, number, number, number], z: number): void {
     this.tileset?.reloadTileByExtent(bounds, z);
   }
 
@@ -309,8 +285,7 @@ export default class Source extends EventEmitter implements ISource {
     // 计算范围
     this.extent = extent(this.data.dataArray);
     this.setCenter(this.extent);
-    this.invalidExtent =
-      this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
+    this.invalidExtent = this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
   }
 
   private setCenter(bbox: BBox) {

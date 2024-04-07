@@ -19,26 +19,10 @@ export interface IHandlerResult {
 export interface IHandler {
   // Handlers can optionally implement these methods.
   // They are called with dom events whenever those dom evens are received.
-  touchstart?: (
-    e: TouchEvent,
-    points: Point[],
-    mapTouches: Touch[],
-  ) => IHandlerResult | void;
-  touchmove?: (
-    e: TouchEvent,
-    points: Point[],
-    mapTouches: Touch[],
-  ) => IHandlerResult | void;
-  touchend?: (
-    e: TouchEvent,
-    points: Point[],
-    mapTouches: Touch[],
-  ) => IHandlerResult | void;
-  touchcancel?: (
-    e: TouchEvent,
-    points: Point[],
-    mapTouches: Touch[],
-  ) => IHandlerResult | void;
+  touchstart?: (e: TouchEvent, points: Point[], mapTouches: Touch[]) => IHandlerResult | void;
+  touchmove?: (e: TouchEvent, points: Point[], mapTouches: Touch[]) => IHandlerResult | void;
+  touchend?: (e: TouchEvent, points: Point[], mapTouches: Touch[]) => IHandlerResult | void;
+  touchcancel?: (e: TouchEvent, points: Point[], mapTouches: Touch[]) => IHandlerResult | void;
   mousedown?: (e: MouseEvent, point: Point) => IHandlerResult | void;
   mousemove?: (e: MouseEvent, point: Point) => IHandlerResult | void;
   mouseup?: (e: MouseEvent, point: Point) => IHandlerResult | void;

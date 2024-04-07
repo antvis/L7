@@ -62,11 +62,7 @@ export default class TouchPanHandler {
     return this.active;
   }
 
-  private calculateTransform(
-    e: TouchEvent,
-    points: Point[],
-    mapTouches: Touch[],
-  ) {
+  private calculateTransform(e: TouchEvent, points: Point[], mapTouches: Touch[]) {
     if (mapTouches.length > 0) {
       this.active = true;
     }

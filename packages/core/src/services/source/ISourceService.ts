@@ -78,7 +78,7 @@ export interface IParserCfg {
   y?: string;
   x1?: string;
   y1?: string;
-  coordinates?: string | [number,number][];
+  coordinates?: string | [number, number][];
   geometry?: string;
   [key: string]: any;
 }
@@ -93,7 +93,7 @@ export interface ISourceCFG {
   cluster?: boolean;
   clusterOptions?: Partial<IClusterOptions>;
   autoRender?: boolean;
-  parser?: IParserCfg | ITileParserCFG
+  parser?: IParserCfg | ITileParserCFG;
   transforms?: ITransform[];
 }
 export interface IClusterOptions {
@@ -161,10 +161,7 @@ export interface ISource {
   ): Array<{ x: number; y: number; z: number }> | undefined;
   getTileByZXY(z: number, x: number, y: number): SourceTile | undefined;
   getClustersLeaves(id: number): any;
-  updateFeaturePropertiesById(
-    id: number,
-    properties: Record<string, any>,
-  ): void;
+  updateFeaturePropertiesById(id: number, properties: Record<string, any>): void;
   destroy(): void;
   // Event
   on(type: SourceEventType | string, handler: (...args: any[]) => void): void;

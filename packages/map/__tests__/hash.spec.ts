@@ -1,5 +1,5 @@
+import Hash from '../src/hash';
 import { Map } from '../src/map';
-import Hash  from '../src/hash';
 describe('Map', () => {
   const el = document.createElement('div');
   el.id = 'test-div-id';
@@ -20,21 +20,19 @@ describe('Map', () => {
     map.setZoom(10);
     map.setBearing(10);
     map.setPitch(10);
-    map.setCenter([0,0]);
-    expect(window.location.hash).toEqual("#map=10/0/0");  
+    map.setCenter([0, 0]);
+    expect(window.location.hash).toEqual('#map=10/0/0');
   });
 
   it('hash remove', () => {
-   hash.remove();
-   // @ts-ignore
-   expect(hash.map).toEqual(undefined);
+    hash.remove();
+    // @ts-ignore
+    expect(hash.map).toEqual(undefined);
   });
-    it('hash onHashChange', () => {
-        window.location.hash = "#map=11/10/10";
-        hash.onHashChange();
-        expect(map.getZoom()).toEqual(11);
-        expect(map.getCenter()).toEqual({lng: 10, lat: 10});
-    });
-  
-
+  it('hash onHashChange', () => {
+    window.location.hash = '#map=11/10/10';
+    hash.onHashChange();
+    expect(map.getZoom()).toEqual(11);
+    expect(map.getCenter()).toEqual({ lng: 10, lat: 10 });
+  });
 });

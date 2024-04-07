@@ -7,14 +7,7 @@ import type {
   IPopup,
   L7Container,
 } from '@antv/l7-core';
-import {
-  DOM,
-  anchorTranslate,
-  anchorType,
-  applyAnchorClass,
-  bindAll,
-  isPC,
-} from '@antv/l7-utils';
+import { DOM, anchorTranslate, anchorType, applyAnchorClass, bindAll, isPC } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 
 //  marker 支持 dragger 未完成
@@ -293,13 +286,9 @@ export default class Marker extends EventEmitter {
       dragEnable: false,
       zoomEnable: false,
     });
-    const { left: containerX, top: containerY } =
-      mapContainer.getClientRects()[0]!;
+    const { left: containerX, top: containerY } = mapContainer.getClientRects()[0]!;
     const { x: clickX, y: clickY } = e;
-    this.preLngLat = this.mapsService.containerToLngLat([
-      clickX - containerX,
-      clickY - containerY,
-    ]);
+    this.preLngLat = this.mapsService.containerToLngLat([clickX - containerX, clickY - containerY]);
     this.mapsService.on('mousemove', this.onMarkerDragMove);
     document.addEventListener('mouseup', this.onMarkerDragEnd);
     this.emit('dragstart', this.lngLat);
@@ -358,12 +347,7 @@ export default class Marker extends EventEmitter {
         }
       }
       // 不在当前可视区域内隐藏点
-      if (
-        pos.x > containerWidth ||
-        pos.x < 0 ||
-        pos.y > containerHeight ||
-        pos.y < 0
-      ) {
+      if (pos.x > containerWidth || pos.x < 0 || pos.y > containerHeight || pos.y < 0) {
         element.style.display = 'none';
       }
 
@@ -384,10 +368,7 @@ export default class Marker extends EventEmitter {
       svg.setAttributeNS(null, 'width', '48px');
       svg.setAttributeNS(null, 'viewBox', '0 0 1024 1024');
 
-      const path = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'path',
-      );
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttributeNS(
         null,
         'd',
@@ -401,8 +382,7 @@ export default class Marker extends EventEmitter {
     Object.keys(this.markerOption.style || {}).forEach(
       // @ts-ignore
       (key: keyof CSSStyleDeclaration) => {
-        const value =
-          this.markerOption?.style && (this.markerOption?.style[key] as string);
+        const value = this.markerOption?.style && (this.markerOption?.style[key] as string);
         if (element) {
           // @ts-ignore
           (element.style as CSSStyleDeclaration)[key] = value;

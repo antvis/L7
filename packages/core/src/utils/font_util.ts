@@ -43,11 +43,7 @@ export function buildMapping({
   };
 }
 
-export function buildIconMaping(
-  icons: IIcon[],
-  buffer: number,
-  maxCanvasWidth: number,
-) {
+export function buildIconMaping(icons: IIcon[], buffer: number, maxCanvasWidth: number) {
   let xOffset = 0;
   let yOffset = 0;
   let rowHeight = 0;

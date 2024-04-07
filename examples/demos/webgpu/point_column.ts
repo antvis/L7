@@ -14,9 +14,7 @@ export function MapRender(option: { map: string; renderer: string }) {
       rotation: 134.9507,
     }),
   });
-  fetch(
-    'https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json',
-  )
+  fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json')
     .then((res) => res.json())
     .then((data) => {
       const pointLayer = new PointLayer({})
@@ -27,12 +25,7 @@ export function MapRender(option: { map: string; renderer: string }) {
             y: 'latitude',
           },
         })
-        .shape('name', [
-          'cylinder',
-          'triangleColumn',
-          'hexagonColumn',
-          'squareColumn',
-        ])
+        .shape('name', ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'])
         .active(true)
         .size('unit_price', (h) => {
           return [6, 6, 100];

@@ -2,10 +2,7 @@ import { guid } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import type { IDebugService, ILog, IRenderInfo } from './IDebugService';
 
-export default class DebugService
-  extends EventEmitter
-  implements IDebugService
-{
+export default class DebugService extends EventEmitter implements IDebugService {
   private renderMap = new Map<string, IRenderInfo>();
 
   private enable: boolean = false;

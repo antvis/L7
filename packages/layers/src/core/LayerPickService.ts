@@ -1,9 +1,4 @@
-import type {
-  IInteractionTarget,
-  ILayer,
-  ILayerPickService,
-  IMapService,
-} from '@antv/l7-core';
+import type { IInteractionTarget, ILayer, ILayerPickService, IMapService } from '@antv/l7-core';
 import { lngLatInExtent } from '@antv/l7-utils';
 export default class BaseLayerPickService implements ILayerPickService {
   private layer: ILayer;
@@ -39,11 +34,7 @@ export default class BaseLayerPickService implements ILayerPickService {
     return pickingService.pickFromPickingFBO(layer, target);
   }
 
-  public pickRasterLayer(
-    layer: ILayer,
-    target: IInteractionTarget,
-    parent?: ILayer,
-  ) {
+  public pickRasterLayer(layer: ILayer, target: IInteractionTarget, parent?: ILayer) {
     const container = this.layer.getContainer();
     const pickingService = container.pickingService;
     const mapService = container.mapService;
@@ -59,19 +50,12 @@ export default class BaseLayerPickService implements ILayerPickService {
     };
     const adviceTarget = parent ? parent : layer;
     if (isPick) {
-      const rasterValue = this.readRasterValue(
-        layer,
-        extent,
-        mapService,
-        target.x,
-        target.y,
-      );
+      const rasterValue = this.readRasterValue(layer, extent, mapService, target.x, target.y);
       layerTarget.rasterValue = rasterValue;
       pickingService.triggerHoverOnLayer(adviceTarget, layerTarget);
       return true;
     } else {
-      layerTarget.type =
-        target.type === 'mousemove' ? 'mouseout' : 'un' + target.type;
+      layerTarget.type = target.type === 'mousemove' ? 'mouseout' : 'un' + target.type;
       pickingService.triggerHoverOnLayer(adviceTarget, {
         ...layerTarget,
         type: 'unpick',

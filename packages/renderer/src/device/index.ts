@@ -1,9 +1,4 @@
-import type {
-  Device,
-  RenderPass,
-  RenderTarget,
-  SwapChain,
-} from '@antv/g-device-api';
+import type { Device, RenderPass, RenderTarget, SwapChain } from '@antv/g-device-api';
 import {
   Format,
   TextureUsage,
@@ -159,9 +154,7 @@ export default class DeviceRendererService implements IRendererService {
     const colorAttachment = currentFramebuffer
       ? currentFramebuffer['colorRenderTarget']
       : mainColorRT;
-    const colorResolveTo = currentFramebuffer
-      ? null
-      : swapChain.getOnscreenTexture();
+    const colorResolveTo = currentFramebuffer ? null : swapChain.getOnscreenTexture();
     const depthStencilAttachment = currentFramebuffer
       ? currentFramebuffer['depthRenderTarget']
       : mainDepthRT;
@@ -171,12 +164,7 @@ export default class DeviceRendererService implements IRendererService {
       currentFramebuffer?.clearOptions || {};
 
     const colorClearColor = colorAttachment
-      ? colorNewFromRGBA(
-          color[0] * 255,
-          color[1] * 255,
-          color[2] * 255,
-          color[3],
-        )
+      ? colorNewFromRGBA(color[0] * 255, color[1] * 255, color[2] * 255, color[3])
       : TransparentBlack;
     const depthClearValue = depthStencilAttachment ? depth : undefined;
     const stencilClearValue = depthStencilAttachment ? stencil : undefined;
@@ -229,10 +217,7 @@ export default class DeviceRendererService implements IRendererService {
   createFramebuffer = (options: IFramebufferInitializationOptions) =>
     new DeviceFramebuffer(this.device, options);
 
-  useFramebuffer = (
-    framebuffer: IFramebuffer | null,
-    drawCommands: () => void,
-  ) => {
+  useFramebuffer = (framebuffer: IFramebuffer | null, drawCommands: () => void) => {
     this.currentFramebuffer = framebuffer as DeviceFramebuffer;
     this.beginFrame();
     drawCommands();

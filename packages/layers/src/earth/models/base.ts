@@ -1,18 +1,12 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 
 import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import baseFrag from '../shaders/base/base_frag.glsl';
 import baseVert from '../shaders/base/base_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 
 export default class BaseEarthModel extends BaseModel {
   protected texture: ITexture2D;
@@ -24,7 +18,11 @@ export default class BaseEarthModel extends BaseModel {
   private sunRadius = Math.sqrt(
     this.sunX * this.sunX + this.sunY * this.sunY + this.sunZ * this.sunZ,
   );
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption:{[key: string]: any}  } {
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
     const { animateOption, globalOptions } = this.layer.getLayerConfig();
     if (animateOption?.enable) {
       // @ts-ignore
@@ -38,8 +36,8 @@ export default class BaseEarthModel extends BaseModel {
       this.sunZ = Math.sin(this.earthTime) * (this.sunRadius - this.sunY);
     }
 
-    const commonOptions= {
-      u_sunLight: [this.sunX, this.sunY, this.sunZ,0.0],
+    const commonOptions = {
+      u_sunLight: [this.sunX, this.sunY, this.sunZ, 0.0],
       u_ambientRatio: globalOptions?.ambientRatio || 0.6, // 环境光
       u_diffuseRatio: globalOptions?.diffuseRatio || 0.4, // 漫反射
       u_specularRatio: globalOptions?.specularRatio || 0.1, // 高光反射
@@ -110,7 +108,7 @@ export default class BaseEarthModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation:ShaderLocation.SIZE,
+        shaderLocation: ShaderLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -129,7 +127,7 @@ export default class BaseEarthModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation:ShaderLocation.NORMAL,
+        shaderLocation: ShaderLocation.NORMAL,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -153,7 +151,7 @@ export default class BaseEarthModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation:ShaderLocation.UV,
+        shaderLocation: ShaderLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -161,11 +159,7 @@ export default class BaseEarthModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-        ) => {
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4]];
         },
       },

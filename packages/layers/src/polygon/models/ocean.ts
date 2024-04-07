@@ -1,19 +1,12 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  IModelUniform,
-  ITexture2D} from '@antv/l7-core';
-import {
-  AttributeType,
-  gl
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
+import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
+import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import ocean_frag from '../shaders/ocean/ocean_frag.glsl';
 import ocean_vert from '../shaders/ocean/ocean_vert.glsl';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 export default class OceanModel extends BaseModel {
   private texture1: ITexture2D;
   private texture2: ITexture2D;
@@ -25,13 +18,15 @@ export default class OceanModel extends BaseModel {
     return {
       ...commoninfo.uniformsOption,
       ...attributeInfo.uniformsOption,
-    }
+    };
   }
-  protected getCommonUniformsInfo(): { uniformsArray: number[]; uniformsLength: number; uniformsOption: { [key: string]: any; }; } {
-    const {
-      watercolor = '#6D99A8',
-      watercolor2 = '#0F121C',
-    } = this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
+  protected getCommonUniformsInfo(): {
+    uniformsArray: number[];
+    uniformsLength: number;
+    uniformsOption: { [key: string]: any };
+  } {
+    const { watercolor = '#6D99A8', watercolor2 = '#0F121C' } =
+      this.layer.getLayerConfig() as IPolygonLayerStyleOptions;
     const commonOptions = {
       u_watercolor: rgb2arr(watercolor),
       u_watercolor2: rgb2arr(watercolor2),
@@ -39,16 +34,14 @@ export default class OceanModel extends BaseModel {
       u_texture1: this.texture1,
       u_texture2: this.texture2,
       u_texture3: this.texture3,
-
     };
 
-      // u_opacity: isNumber(opacity) ? opacity : 1.0,
-     this.textures=[this.texture1,this.texture2,this.texture3]
-     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
-     return commonBufferInfo;
-     
+    // u_opacity: isNumber(opacity) ? opacity : 1.0,
+    this.textures = [this.texture1, this.texture2, this.texture3];
+    const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+    return commonBufferInfo;
   }
- 
+
   public getAnimateUniforms(): IModelUniform {
     return {
       u_time: this.layer.getLayerAnimateTime(),
@@ -66,7 +59,7 @@ export default class OceanModel extends BaseModel {
       moduleName: 'polygonOcean',
       vertexShader: ocean_vert,
       fragmentShader: ocean_frag,
-      inject:this.getInject(),
+      inject: this.getInject(),
       triangulation: polygonTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
@@ -106,9 +99,7 @@ export default class OceanModel extends BaseModel {
           attributeIdx: number,
         ) => {
           const v =
-            feature.version === 'GAODE2.x'
-              ? feature.originCoordinates[0][attributeIdx]
-              : vertex;
+            feature.version === 'GAODE2.x' ? feature.originCoordinates[0][attributeIdx] : vertex;
           const [lng, lat] = v;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },

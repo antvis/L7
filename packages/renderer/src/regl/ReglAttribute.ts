@@ -1,8 +1,4 @@
-import type {
-  IAttribute,
-  IAttributeInitializationOptions,
-  IBuffer,
-} from '@antv/l7-core';
+import type { IAttribute, IAttributeInitializationOptions, IBuffer } from '@antv/l7-core';
 import type regl from 'regl';
 import type ReglBuffer from './ReglBuffer';
 

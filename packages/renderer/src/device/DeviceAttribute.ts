@@ -1,9 +1,5 @@
 import type { Buffer, Device } from '@antv/g-device-api';
-import type {
-  IAttribute,
-  IAttributeInitializationOptions,
-  IBuffer,
-} from '@antv/l7-core';
+import type { IAttribute, IAttributeInitializationOptions, IBuffer } from '@antv/l7-core';
 import type DeviceBuffer from './DeviceBuffer';
 
 interface AttributeConfig {
@@ -29,15 +25,7 @@ export default class DeviceAttribute implements IAttribute {
   private buffer: IBuffer;
 
   constructor(device: Device, options: IAttributeInitializationOptions) {
-    const {
-      buffer,
-      offset,
-      stride,
-      normalized,
-      size,
-      divisor,
-      shaderLocation,
-    } = options;
+    const { buffer, offset, stride, normalized, size, divisor, shaderLocation } = options;
     this.buffer = buffer;
     this.attribute = {
       shaderLocation,

@@ -43,12 +43,7 @@ export async function bandsOperation(
   });
   // 多个栅格数据必须是相同大小才能进行相互之间的运算
   const { width, height } = bandsData[0];
-  type IOperationResult =
-    | HTMLImageElement
-    | Uint8Array
-    | ImageBitmap
-    | null
-    | undefined;
+  type IOperationResult = HTMLImageElement | Uint8Array | ImageBitmap | null | undefined;
   let rasterData: IOperationResult | IOperationResult[] | any;
 
   switch (typeof operation) {
@@ -67,10 +62,7 @@ export async function bandsOperation(
        */
       if (!Array.isArray(operation)) {
         // RGB 三通道
-        rasterData = processSchemaOperation(
-          operation as SchemaOperationType,
-          bandsData,
-        );
+        rasterData = processSchemaOperation(operation as SchemaOperationType, bandsData);
       } else {
         // 数值计算
         rasterData = { rasterData: calculate(operation as any[], bandsData) };
@@ -87,10 +79,7 @@ export async function bandsOperation(
   };
 }
 
-function processSchemaOperation(
-  operation: SchemaOperationType,
-  bandsData: IRasterData[],
-) {
+function processSchemaOperation(operation: SchemaOperationType, bandsData: IRasterData[]) {
   const schema = operationsSchema[operation.type];
 
   if (schema.type === 'function') {

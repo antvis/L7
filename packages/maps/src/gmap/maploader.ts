@@ -66,8 +66,8 @@ const load = (options: ILoadOption) => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.async = false;
-      script.src =`https://maps.googleapis.com/maps/api/js?key=${config.key}&callback=initMap` 
-      
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${config.key}&callback=initMap`;
+
       script.onerror = (e) => {
         Status.GMap = LoadStatus.failed;
         reject(e);

@@ -89,9 +89,11 @@ export default class ControlService implements IControlService {
 
     function createCorner(vSideList: string[] = []) {
       const className = vSideList.map((item) => l + item).join(' ');
-      corners[
-        vSideList.filter((item) => !['row', 'column'].includes(item)).join('')
-      ] = DOM.create('div', className, container);
+      corners[vSideList.filter((item) => !['row', 'column'].includes(item)).join('')] = DOM.create(
+        'div',
+        className,
+        container,
+      );
     }
 
     function getCornerClassList(positionName: PositionName) {

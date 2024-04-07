@@ -85,7 +85,7 @@ export interface L7Container {
   multiPassRenderer: IMultiPassRenderer;
   customRenderService: {
     [key: string]: any;
-  }
+  };
 }
 
 let sceneIdCounter = 0;
@@ -113,7 +113,7 @@ export function createSceneContainer(): L7Container {
     markerService,
     popupService,
     controlService,
-    customRenderService:{}
+    customRenderService: {},
   };
 
   // lazy binding
@@ -163,15 +163,9 @@ export function createLayerContainer(sceneContainer: L7Container) {
     ...sceneContainer,
   };
 
-  layerContainer.postProcessor = new PostProcessor(
-    layerContainer.rendererService,
-  );
-  layerContainer.multiPassRenderer = new MultiPassRenderer(
-    layerContainer.postProcessor,
-  );
-  layerContainer.styleAttributeService = new StyleAttributeService(
-    layerContainer.rendererService,
-  );
+  layerContainer.postProcessor = new PostProcessor(layerContainer.rendererService);
+  layerContainer.multiPassRenderer = new MultiPassRenderer(layerContainer.postProcessor);
+  layerContainer.styleAttributeService = new StyleAttributeService(layerContainer.rendererService);
 
   return layerContainer;
 }

@@ -78,13 +78,11 @@ export default class Control<O extends IControlOption = IControlOption>
    */
   public setOptions(newOptions: Partial<O>): void {
     const defaultOptions = this.getDefault(newOptions);
-    (Object.entries(newOptions) as Array<[keyof O, any]>).forEach(
-      ([key, value]) => {
-        if (value === undefined) {
-          newOptions[key] = defaultOptions[key];
-        }
-      },
-    );
+    (Object.entries(newOptions) as Array<[keyof O, any]>).forEach(([key, value]) => {
+      if (value === undefined) {
+        newOptions[key] = defaultOptions[key];
+      }
+    });
     if ('position' in newOptions) {
       this.setPosition(newOptions.position);
     }
@@ -217,9 +215,7 @@ export default class Control<O extends IControlOption = IControlOption>
    * 设置当前控件位置
    * @param position
    */
-  public setPosition(
-    position: PositionType | IControlOption['position'] = PositionType.TOPLEFT,
-  ) {
+  public setPosition(position: PositionType | IControlOption['position'] = PositionType.TOPLEFT) {
     // 考虑组件的自动布局，需要销毁重建
     const controlService = this.controlService;
     if (controlService) {
@@ -272,11 +268,7 @@ export default class Control<O extends IControlOption = IControlOption>
       position.appendChild(container);
     } else {
       const corner = this.controlService.controlCorners[position];
-      if (
-        ['bottomleft', 'bottomright', 'righttop', 'rightbottom'].includes(
-          position,
-        )
-      ) {
+      if (['bottomleft', 'bottomright', 'righttop', 'rightbottom'].includes(position)) {
         corner.insertBefore(container, corner.firstChild);
       } else {
         corner.appendChild(container);

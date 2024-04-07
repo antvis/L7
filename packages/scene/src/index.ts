@@ -24,13 +24,10 @@ import type {
   ISceneConfig,
   ISceneService,
   IStatusOptions,
+  L7Container,
   Point,
-  L7Container} from '@antv/l7-core';
-import {
-  SceneEventList,
-  createLayerContainer,
-  createSceneContainer,
 } from '@antv/l7-core';
+import { SceneEventList, createLayerContainer, createSceneContainer } from '@antv/l7-core';
 import { MaskLayer, TileLayer } from '@antv/l7-layers';
 import { DeviceRendererService, ReglRendererService } from '@antv/l7-renderer';
 import type { IProtocolHandler } from '@antv/l7-utils';
@@ -52,9 +49,7 @@ import BoxSelect, { BoxSelectEventList } from './boxSelect';
  * scene.addLayer(pointLayer);
  *
  */
-class Scene
-  implements IPostProcessingPassPluggable, IMapController, ILayerManager
-{
+class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManager {
   private sceneService: ISceneService;
   private mapService: IMapService<unknown>;
   private controlService: IControlService;
@@ -172,14 +167,13 @@ class Scene
   }
 
   public addLayer(layer: ILayer): void {
-    if(this.loaded) {
+    if (this.loaded) {
       this.preAddLayer(layer);
     } else {
       this.once('loaded', () => {
         this.preAddLayer(layer);
       });
     }
-
   }
 
   // layer 管理
@@ -206,12 +200,7 @@ class Scene
   }
   // 兼容历史接口
   public initMask(layer: ILayer) {
-    const {
-      mask,
-      maskfence,
-      maskColor = '#000',
-      maskOpacity = 0,
-    } = layer.getLayerConfig();
+    const { mask, maskfence, maskColor = '#000', maskOpacity = 0 } = layer.getLayerConfig();
     if (!mask || !maskfence) {
       return undefined;
     }
@@ -563,8 +552,8 @@ class Scene
     }
   }
 
-  private initTileLayer(layer:ILayer) {
-    if(layer.getSource().isTile) {
+  private initTileLayer(layer: ILayer) {
+    if (layer.getSource().isTile) {
       layer.tileLayer = new TileLayer(layer);
       // Todo 支持瓦片更新
     }

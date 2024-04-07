@@ -15,8 +15,7 @@ export function arcLineAtOffset(
 
   if (autoFit) {
     // Tip: 自动偏移到线的节点位置
-    pointOffset =
-      Math.round(offset * (segmentNumber - 1)) / (segmentNumber - 1);
+    pointOffset = Math.round(offset * (segmentNumber - 1)) / (segmentNumber - 1);
   }
 
   if (!thetaOffset) {
@@ -41,10 +40,7 @@ function midPoint(source: Point, target: Point, thetaOffset: number) {
   const theta = Math.atan2(center[1], center[0]);
   const r2 = r / 2.0 / Math.cos(thetaOffset);
   const theta2 = theta + thetaOffset;
-  const mid = [
-    r2 * Math.cos(theta2) + source[0],
-    r2 * Math.sin(theta2) + source[1],
-  ];
+  const mid = [r2 * Math.cos(theta2) + source[0], r2 * Math.sin(theta2) + source[1]];
   return mid;
 }
 

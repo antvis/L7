@@ -1,12 +1,7 @@
 import bboxPolygon from '@turf/bbox-polygon';
 import { EventEmitter } from 'eventemitter3';
-import type {
-  TileBounds,
-  TileLoadDataOptions,
-  TileOptions} from './types';
-import {
-  LoadTileDataStatus
-} from './types';
+import type { TileBounds, TileLoadDataOptions, TileOptions } from './types';
+import { LoadTileDataStatus } from './types';
 import { getTileWarpXY, tileToBounds } from './utils/lonlat-tile';
 /**
  * 单个瓦片

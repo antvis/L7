@@ -31,8 +31,6 @@ describe('popperControl', () => {
     control.setOptions({
       popperClassName: testClassName,
     });
-    expect(control.getPopper().getPopperDOM().classList).toContain(
-      testClassName,
-    );
+    expect(control.getPopper().getPopperDOM().classList).toContain(testClassName);
   });
 });

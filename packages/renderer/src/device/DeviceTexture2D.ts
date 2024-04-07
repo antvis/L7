@@ -5,10 +5,7 @@ import {
   Format,
   MipmapFilterMode,
 } from '@antv/g-device-api';
-import type {
-  ITexture2D,
-  ITexture2DInitializationOptions,
-} from '@antv/l7-core';
+import type { ITexture2D, ITexture2DInitializationOptions } from '@antv/l7-core';
 import { TextureUsage, gl } from '@antv/l7-core';
 import { wrapModeMap } from './constants';
 import { extend3ChannelsTo4 } from './utils/typedarray';

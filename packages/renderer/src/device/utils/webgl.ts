@@ -2,10 +2,7 @@
 export function isWebGL2(
   gl: WebGL2RenderingContext | WebGLRenderingContext,
 ): gl is WebGL2RenderingContext {
-  if (
-    typeof WebGL2RenderingContext !== 'undefined' &&
-    gl instanceof WebGL2RenderingContext
-  ) {
+  if (typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext) {
     return true;
   }
   // Look for debug contexts, headless gl etc

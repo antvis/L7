@@ -58,8 +58,7 @@ export const PerformanceUtils = {
     ).duration;
     const totalFrames = frameTimes.length;
 
-    const avgFrameTime =
-      frameTimes.reduce((prev, curr) => prev + curr, 0) / totalFrames / 1000;
+    const avgFrameTime = frameTimes.reduce((prev, curr) => prev + curr, 0) / totalFrames / 1000;
     const fps = 1 / avgFrameTime;
 
     // count frames that missed our framerate target
@@ -68,8 +67,7 @@ export const PerformanceUtils = {
       .reduce((acc, curr) => {
         return acc + (curr - frameTimeTarget) / frameTimeTarget;
       }, 0);
-    const percentDroppedFrames =
-      (droppedFrames / (totalFrames + droppedFrames)) * 100;
+    const percentDroppedFrames = (droppedFrames / (totalFrames + droppedFrames)) * 100;
 
     return {
       loadTime,

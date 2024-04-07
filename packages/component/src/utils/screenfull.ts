@@ -112,9 +112,7 @@ let screenfull: any = {
     });
   },
   toggle(element, options) {
-    return screenfull.isFullscreen
-      ? screenfull.exit()
-      : screenfull.request(element, options);
+    return screenfull.isFullscreen ? screenfull.exit() : screenfull.request(element, options);
   },
   onchange(callback) {
     screenfull.on('change', callback);

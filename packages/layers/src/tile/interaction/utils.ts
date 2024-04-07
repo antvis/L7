@@ -11,18 +11,11 @@ export function clearPickState(layers: ILayer[]) {
     });
 }
 
-export function setSelect(
-  layers: ILayer[],
-  pickedColors: any,
-  renderList: ILayer[],
-) {
+export function setSelect(layers: ILayer[], pickedColors: any, renderList: ILayer[]) {
   const selectedId = decodePickingColor(pickedColors);
   let pickColor;
   layers.map((layer) => {
-    if (
-      layer.getCurrentSelectedId() === null ||
-      selectedId !== layer.getCurrentSelectedId()
-    ) {
+    if (layer.getCurrentSelectedId() === null || selectedId !== layer.getCurrentSelectedId()) {
       selectFeature(layer, pickedColors);
       layer.setCurrentSelectedId(selectedId);
       pickColor = pickedColors;
@@ -34,9 +27,7 @@ export function setSelect(
   });
   // unselect normal layer
   renderList
-    .filter(
-      (layer) => layer.inited && layer.isVisible() && layer.needPick('click'),
-    )
+    .filter((layer) => layer.inited && layer.isVisible() && layer.needPick('click'))
     .filter((layer) => layer.getCurrentSelectedId() !== null)
     .map((layer) => {
       selectFeature(layer, new Uint8Array([0, 0, 0, 0]));
@@ -58,10 +49,7 @@ export function setHighlight(layers: ILayer[], pickedColors: any) {
     });
 }
 
-export function setPickState(
-  layers: ILayer[],
-  pickColors: { select: any; active: any },
-) {
+export function setPickState(layers: ILayer[], pickColors: { select: any; active: any }) {
   if (pickColors.select) {
     layers.map((layer) => {
       selectFeature(layer, pickColors.select);
@@ -77,10 +65,7 @@ export function setPickState(
   }
 }
 
-export function selectFeature(
-  layer: ILayer,
-  pickedColors: Uint8Array | undefined,
-) {
+export function selectFeature(layer: ILayer, pickedColors: Uint8Array | undefined) {
   // @ts-ignore
   const [r, g, b] = pickedColors;
   layer.hooks.beforeSelect.call([r, g, b]);

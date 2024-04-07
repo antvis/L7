@@ -23,13 +23,9 @@ describe('mapTheme', () => {
 
     const options = control.getOptions().options;
     expect(options.length).toBeGreaterThan(0);
-    expect(control.getSelectValue()).toEqual(
-      'mapbox://styles/mapbox/streets-v11',
-    );
+    expect(control.getSelectValue()).toEqual('mapbox://styles/mapbox/streets-v11');
 
-    const optionList = (
-      control.getPopper().getContent() as HTMLDivElement
-    ).querySelectorAll(
+    const optionList = (control.getPopper().getContent() as HTMLDivElement).querySelectorAll(
       '.l7-select-control-item',
     ) as unknown as HTMLDivElement[];
     optionList[1].click();

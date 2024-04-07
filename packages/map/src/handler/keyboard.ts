@@ -115,9 +115,7 @@ class KeyboardHandler {
             easeId: 'keyboardHandler',
             easing: easeOut,
 
-            zoom: zoomDir
-              ? Math.round(zoom) + zoomDir * (e.shiftKey ? 2 : 1)
-              : zoom,
+            zoom: zoomDir ? Math.round(zoom) + zoomDir * (e.shiftKey ? 2 : 1) : zoom,
             bearing: map.getBearing() + bearingDir * this.bearingStep,
             pitch: map.getPitch() + pitchDir * this.pitchStep,
             offset: [-xDir * this.panStep, -yDir * this.panStep],

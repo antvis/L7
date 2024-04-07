@@ -54,9 +54,7 @@ export function getURLFromTemplate(
   const urls = expandUrl(template);
   const index = Math.abs(x + y) % urls.length;
   // 兼容其他协议的 URL 模版
-  const url = getProtocolAction(urls[index])
-    ? `${urls[index]}/{z}/{x}/{y}`
-    : urls[index];
+  const url = getProtocolAction(urls[index]) ? `${urls[index]}/{z}/{x}/{y}` : urls[index];
 
   return url
     .replace(/\{x\}/g, x.toString())

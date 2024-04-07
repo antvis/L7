@@ -12,18 +12,8 @@ export interface IBlendOptions {
   func: BlendingFunctionSeparate;
   // gl.blendEquation
   equation: {
-    rgb:
-      | gl.FUNC_ADD
-      | gl.FUNC_SUBTRACT
-      | gl.FUNC_REVERSE_SUBTRACT
-      | gl.MIN_EXT
-      | gl.MAX_EXT;
-    alpha?:
-      | gl.FUNC_ADD
-      | gl.FUNC_SUBTRACT
-      | gl.FUNC_REVERSE_SUBTRACT
-      | gl.MIN_EXT
-      | gl.MAX_EXT;
+    rgb: gl.FUNC_ADD | gl.FUNC_SUBTRACT | gl.FUNC_REVERSE_SUBTRACT | gl.MIN_EXT | gl.MAX_EXT;
+    alpha?: gl.FUNC_ADD | gl.FUNC_SUBTRACT | gl.FUNC_REVERSE_SUBTRACT | gl.MIN_EXT | gl.MAX_EXT;
   };
   // gl.blendColor
   color: [number, number, number, number];
@@ -274,10 +264,7 @@ export interface IModelDrawOptions {
  */
 export interface IModel {
   updateAttributes(attributes: { [key: string]: IAttribute }): void;
-  updateAttributesAndElements(
-    attributes: { [key: string]: IAttribute },
-    elements: IElements,
-  ): void;
+  updateAttributesAndElements(attributes: { [key: string]: IAttribute }, elements: IElements): void;
   addUniforms(uniforms: { [key: string]: IUniform }): void;
   draw(options: IModelDrawOptions, pick?: boolean): void;
   destroy(): void;

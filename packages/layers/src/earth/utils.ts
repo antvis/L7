@@ -66,19 +66,11 @@ export function primitiveSphere(
   const normalArr = [];
   const uvs = [];
 
-  for (
-    let zRotationStep = 0;
-    zRotationStep <= totalZRotationSteps;
-    zRotationStep++
-  ) {
+  for (let zRotationStep = 0; zRotationStep <= totalZRotationSteps; zRotationStep++) {
     const normalizedZ = zRotationStep / totalZRotationSteps;
     const angleZ = normalizedZ * Math.PI;
 
-    for (
-      let yRotationStep = 0;
-      yRotationStep <= totalYRotationSteps;
-      yRotationStep++
-    ) {
+    for (let yRotationStep = 0; yRotationStep <= totalYRotationSteps; yRotationStep++) {
       const normalizedY = yRotationStep / totalYRotationSteps;
       const angleY = normalizedY * Math.PI * 2;
 
@@ -108,22 +100,10 @@ export function primitiveSphere(
     if (zRotationStep > 0) {
       const verticesCount = positions.length;
       let firstIndex = verticesCount - 2 * (totalYRotationSteps + 1);
-      for (
-        ;
-        firstIndex + totalYRotationSteps + 2 < verticesCount;
-        firstIndex++
-      ) {
-        indices.push([
-          firstIndex,
-          firstIndex + 1,
-          firstIndex + totalYRotationSteps + 1,
-        ]);
+      for (; firstIndex + totalYRotationSteps + 2 < verticesCount; firstIndex++) {
+        indices.push([firstIndex, firstIndex + 1, firstIndex + totalYRotationSteps + 1]);
 
-        indicesArr.push(
-          firstIndex,
-          firstIndex + 1,
-          firstIndex + totalYRotationSteps + 1,
-        );
+        indicesArr.push(firstIndex, firstIndex + 1, firstIndex + totalYRotationSteps + 1);
         indices.push([
           firstIndex + totalYRotationSteps + 1,
           firstIndex + 1,

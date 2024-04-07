@@ -5,10 +5,7 @@ export interface IPickingService {
   pickedColors: Uint8Array | undefined;
   pickedTileLayers: ILayer[];
   init(id: string): void;
-  pickFromPickingFBO(
-    layer: ILayer,
-    target: IInteractionTarget,
-  ): Promise<boolean>;
+  pickFromPickingFBO(layer: ILayer, target: IInteractionTarget): Promise<boolean>;
   pickBox(layer: ILayer, box: [number, number, number, number]): Promise<any[]>;
   triggerHoverOnLayer(
     layer: ILayer,
@@ -31,11 +28,7 @@ export interface IPickingService {
 }
 
 export interface ILayerPickService {
-  pickRasterLayer(
-    layer: ILayer,
-    target: IInteractionTarget,
-    parent?: ILayer,
-  ): boolean;
+  pickRasterLayer(layer: ILayer, target: IInteractionTarget, parent?: ILayer): boolean;
   pick(layer: ILayer, target: IInteractionTarget): Promise<boolean>;
   /**
    * 绘制拾取图层

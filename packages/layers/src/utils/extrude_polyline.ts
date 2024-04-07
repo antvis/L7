@@ -146,12 +146,8 @@ export default class ExtrudePolyline {
       // @ts-ignore
       const originCur = originPoints[i] as vec3;
 
-      const next =
-        i < points.length - 1
-          ? [...points[i + 1], originPoints[i + 1][2] ?? 0]
-          : null;
-      const originNext =
-        i < originPoints.length - 1 ? originPoints[i + 1] : null;
+      const next = i < points.length - 1 ? [...points[i + 1], originPoints[i + 1][2] ?? 0] : null;
+      const originNext = i < originPoints.length - 1 ? originPoints[i + 1] : null;
 
       const amt = this.simpleSegment(
         complex,
@@ -203,12 +199,8 @@ export default class ExtrudePolyline {
       // @ts-ignore
       const originCur = originPoints[i] as vec3;
 
-      const next =
-        i < points.length - 1
-          ? [...points[i + 1], originPoints[i + 1][2] ?? 0]
-          : null;
-      const originNext =
-        i < originPoints.length - 1 ? originPoints[i + 1] : null;
+      const next = i < points.length - 1 ? [...points[i + 1], originPoints[i + 1][2] ?? 0] : null;
+      const originNext = i < originPoints.length - 1 ? originPoints[i + 1] : null;
 
       const amt = this.segment_gaode2(
         complex,
@@ -264,13 +256,7 @@ export default class ExtrudePolyline {
     return complex;
   }
 
-  private simpleSegment(
-    complex: any,
-    index: number,
-    last: vec3,
-    cur: vec3,
-    next: vec3,
-  ) {
+  private simpleSegment(complex: any, index: number, last: vec3, cur: vec3, next: vec3) {
     let count = 0;
     const indices = complex.indices;
     const positions = complex.positions;
@@ -307,14 +293,7 @@ export default class ExtrudePolyline {
 
     if (!next) {
       computeNormal(this.normal, lineA);
-      this.extrusions(
-        positions,
-        normals,
-        cur,
-        this.normal,
-        this.thickness,
-        this.totalDistance,
-      );
+      this.extrusions(positions, normals, cur, this.normal, this.thickness, this.totalDistance);
 
       indices.push(
         ...(this.lastFlip === 1
@@ -335,25 +314,12 @@ export default class ExtrudePolyline {
 
       // stores tangent & miter
 
-      const [miterLen, miter] = computeMiter(
-        tangent,
-        vec2.create(),
-        lineA,
-        lineB,
-        this.thickness,
-      );
+      const [miterLen, miter] = computeMiter(tangent, vec2.create(), lineA, lineB, this.thickness);
       // normal(tmp, lineA)
 
       // get orientation
       let flip = vec2.dot(tangent, this.normal) < 0 ? -1 : 1;
-      this.extrusions(
-        positions,
-        normals,
-        cur,
-        miter,
-        miterLen,
-        this.totalDistance,
-      );
+      this.extrusions(positions, normals, cur, miter, miterLen, this.totalDistance);
       indices.push(
         ...(this.lastFlip === 1
           ? [index, index + 2, index + 3]
@@ -386,14 +352,8 @@ export default class ExtrudePolyline {
     const normals = complex.normals;
     const capSquare = this.cap === 'square';
     const joinBevel = this.join === 'bevel';
-    const flatCur = aProjectFlat([originCur[0], originCur[1]]) as [
-      number,
-      number,
-    ];
-    const flatLast = aProjectFlat([originLast[0], originLast[1]]) as [
-      number,
-      number,
-    ];
+    const flatCur = aProjectFlat([originCur[0], originCur[1]]) as [number, number];
+    const flatLast = aProjectFlat([originLast[0], originLast[1]]) as [number, number];
     // @ts-ignore
     direction(lineA, cur as vec3, last as vec3);
     let segmentDistance = 0;
@@ -463,34 +423,13 @@ export default class ExtrudePolyline {
         normals.push(out2[0], out2[1], 0);
         normals.push(out1[0], out1[1], 0);
 
-        positions.push(
-          cur[0],
-          cur[1],
-          cur[2] | 0,
-          this.totalDistance,
-          this.thickness,
-          cur[2] | 0,
-        );
+        positions.push(cur[0], cur[1], cur[2] | 0, this.totalDistance, this.thickness, cur[2] | 0);
         this.complex.indexes.push(this.currentIndex);
-        positions.push(
-          cur[0],
-          cur[1],
-          cur[2] | 0,
-          this.totalDistance,
-          this.thickness,
-          cur[2] | 0,
-        );
+        positions.push(cur[0], cur[1], cur[2] | 0, this.totalDistance, this.thickness, cur[2] | 0);
         this.complex.indexes.push(this.currentIndex);
         this.currentIndex++;
       } else {
-        this.extrusions(
-          positions,
-          normals,
-          cur,
-          this.normal,
-          this.thickness,
-          this.totalDistance,
-        );
+        this.extrusions(positions, normals, cur, this.normal, this.thickness, this.totalDistance);
       }
       indices.push(
         ...(this.lastFlip === 1
@@ -518,13 +457,7 @@ export default class ExtrudePolyline {
       direction(lineB, next as vec2, cur as vec2);
       // stores tangent & miter
 
-      const [miterLen, miter] = computeMiter(
-        tangent,
-        vec2.create(),
-        lineA,
-        lineB,
-        this.thickness,
-      );
+      const [miterLen, miter] = computeMiter(tangent, vec2.create(), lineA, lineB, this.thickness);
       // normal(tmp, lineA)
 
       // get orientation
@@ -584,14 +517,7 @@ export default class ExtrudePolyline {
         this.currentIndex++;
         count += 3;
       } else {
-        this.extrusions(
-          positions,
-          normals,
-          cur,
-          miter,
-          miterLen,
-          this.totalDistance,
-        );
+        this.extrusions(positions, normals, cur, miter, miterLen, this.totalDistance);
         indices.push(
           ...(this.lastFlip === 1
             ? [index, index + 2, index + 3]
@@ -608,13 +534,7 @@ export default class ExtrudePolyline {
     }
     return count;
   }
-  private segment(
-    complex: any,
-    index: number,
-    last: vec3,
-    cur: vec3,
-    next: vec3,
-  ) {
+  private segment(complex: any, index: number, last: vec3, cur: vec3, next: vec3) {
     let count = 0;
     const indices = complex.indices;
     const positions = complex.positions;
@@ -695,34 +615,13 @@ export default class ExtrudePolyline {
         // this.extrusions(positions, normals, cur, out, this.thickness);
         normals.push(out2[0], out2[1], 0);
         normals.push(out1[0], out1[1], 0);
-        positions.push(
-          cur[0],
-          cur[1],
-          cur[2] | 0,
-          this.totalDistance,
-          this.thickness,
-          cur[2] | 0,
-        );
+        positions.push(cur[0], cur[1], cur[2] | 0, this.totalDistance, this.thickness, cur[2] | 0);
         this.complex.indexes.push(this.currentIndex);
-        positions.push(
-          cur[0],
-          cur[1],
-          cur[2] | 0,
-          this.totalDistance,
-          this.thickness,
-          cur[2] | 0,
-        );
+        positions.push(cur[0], cur[1], cur[2] | 0, this.totalDistance, this.thickness, cur[2] | 0);
         this.complex.indexes.push(this.currentIndex);
         this.currentIndex++;
       } else {
-        this.extrusions(
-          positions,
-          normals,
-          cur,
-          this.normal,
-          this.thickness,
-          this.totalDistance,
-        );
+        this.extrusions(positions, normals, cur, this.normal, this.thickness, this.totalDistance);
       }
 
       // this.extrusions(positions, normals, cur, this.normal, this.thickness);
@@ -745,13 +644,7 @@ export default class ExtrudePolyline {
 
       // stores tangent & miter
 
-      const [miterLen, miter] = computeMiter(
-        tangent,
-        vec2.create(),
-        lineA,
-        lineB,
-        this.thickness,
-      );
+      const [miterLen, miter] = computeMiter(tangent, vec2.create(), lineA, lineB, this.thickness);
       // normal(tmp, lineA)
 
       // get orientation
@@ -810,14 +703,7 @@ export default class ExtrudePolyline {
         this.currentIndex++;
         count += 3;
       } else {
-        this.extrusions(
-          positions,
-          normals,
-          cur,
-          miter,
-          miterLen,
-          this.totalDistance,
-        );
+        this.extrusions(positions, normals, cur, miter, miterLen, this.totalDistance);
         indices.push(
           ...(this.lastFlip === 1
             ? [index, index + 2, index + 3]
@@ -844,23 +730,9 @@ export default class ExtrudePolyline {
   ) {
     normals.push(normal[0], normal[1], 0);
     normals.push(normal[0], normal[1], 0);
-    positions.push(
-      point[0],
-      point[1],
-      point[2] | 0,
-      distanceRadio,
-      -thickness,
-      point[2] | 0,
-    );
+    positions.push(point[0], point[1], point[2] | 0, distanceRadio, -thickness, point[2] | 0);
     this.complex.indexes.push(this.currentIndex);
-    positions.push(
-      point[0],
-      point[1],
-      point[2] | 0,
-      distanceRadio,
-      thickness,
-      point[2] | 0,
-    );
+    positions.push(point[0], point[1], point[2] | 0, distanceRadio, thickness, point[2] | 0);
     this.complex.indexes.push(this.currentIndex);
     this.currentIndex++;
   }

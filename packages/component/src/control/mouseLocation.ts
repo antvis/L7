@@ -1,4 +1,4 @@
-import type { ILngLat, Position} from '@antv/l7-core';
+import type { ILngLat, Position } from '@antv/l7-core';
 import { PositionType } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import type { IControlOption } from './baseControl/control';
@@ -17,9 +17,7 @@ export default class MouseLocation extends Control<IMouseLocationControlOption> 
     return this.location;
   }
 
-  public getDefault(
-    option?: Partial<IMouseLocationControlOption>,
-  ): IMouseLocationControlOption {
+  public getDefault(option?: Partial<IMouseLocationControlOption>): IMouseLocationControlOption {
     return {
       ...super.getDefault(option),
       position: PositionType.BOTTOMLEFT,

@@ -1,13 +1,6 @@
 import type { ITileParserCFG } from '@antv/l7-core';
-import type {
-  ITileBand,
-  SourceTile,
-  TileLoadParams} from '@antv/l7-utils';
-import {
-  getImage,
-  getURLFromTemplate,
-  getWMTSURLFromTemplate
-} from '@antv/l7-utils';
+import type { ITileBand, SourceTile, TileLoadParams } from '@antv/l7-utils';
+import { getImage, getURLFromTemplate, getWMTSURLFromTemplate } from '@antv/l7-utils';
 import type { IBandsOperation, IRasterFormat } from '../../interface';
 import { getRasterFile } from './getRasterData';
 import { getTileUrl } from './request';
@@ -65,8 +58,7 @@ export const getTileImage = async (
   let imageUrl: string;
   const templateUrl = Array.isArray(url) ? url[0] : url;
   if (cfg.wmtsOptions) {
-    const getWMTSURLFromTemplateNew =
-      cfg?.getURLFromTemplate || getWMTSURLFromTemplate;
+    const getWMTSURLFromTemplateNew = cfg?.getURLFromTemplate || getWMTSURLFromTemplate;
     imageUrl = getWMTSURLFromTemplateNew(templateUrl, {
       ...tileParams,
       ...cfg.wmtsOptions,

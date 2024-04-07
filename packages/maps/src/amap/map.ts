@@ -28,7 +28,10 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12; // 暂时关闭 fix 统一不同坐标�
 /**
  * AMapService
  */
-export default class AMapService extends AMapBaseService implements IMapService<AMap.Map & IAMapInstance> {
+export default class AMapService
+  extends AMapBaseService
+  implements IMapService<AMap.Map & IAMapInstance>
+{
   public version: string = 'GAODE1.x';
   protected viewport: IViewport;
 
@@ -140,7 +143,10 @@ export default class AMapService extends AMapBaseService implements IMapService<
   public meterToCoord(center: [number, number], outer: [number, number]) {
     // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter
-    const meterDis = AMap.GeometryUtil.distance(new AMap.LngLat(...center), new AMap.LngLat(...outer));
+    const meterDis = AMap.GeometryUtil.distance(
+      new AMap.LngLat(...center),
+      new AMap.LngLat(...outer),
+    );
 
     // Tip: 三维世界坐标距离
     const [x1, y1] = this.lngLatToCoord(center);
@@ -158,7 +164,9 @@ export default class AMapService extends AMapBaseService implements IMapService<
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.getContainer()?.getElementsByClassName('amap-layer')[0] as HTMLCanvasElement;
+    const renderCanvas = this.getContainer()?.getElementsByClassName(
+      'amap-layer',
+    )[0] as HTMLCanvasElement;
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)

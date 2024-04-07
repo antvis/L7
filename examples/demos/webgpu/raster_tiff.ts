@@ -21,10 +21,7 @@ async function getTiffData() {
   };
 }
 
-export function MapRender(option: {
-  map: string;
-  renderer: 'device' | 'regl';
-}) {
+export function MapRender(option: { map: string; renderer: 'device' | 'regl' }) {
   const scene = new Scene({
     id: 'map',
     renderer: option.renderer,
@@ -55,8 +52,7 @@ export function MapRender(option: {
           width: tiffdata.width,
           height: tiffdata.height,
           extent: [
-            73.4821902409999979, 3.8150178409999995, 135.1066187319999869,
-            57.6300459959999998,
+            73.4821902409999979, 3.8150178409999995, 135.1066187319999869, 57.6300459959999998,
           ],
         },
       })

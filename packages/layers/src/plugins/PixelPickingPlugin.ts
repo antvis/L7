@@ -1,16 +1,6 @@
-import type {
-  IEncodeFeature,
-  ILayer,
-  ILayerPlugin,
-  L7Container,
-} from '@antv/l7-core';
+import type { IEncodeFeature, ILayer, ILayerPlugin, L7Container } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import {
-  decodePickingColor,
-  encodePickingColor,
-  lodashUtil,
-  rgb2arr,
-} from '@antv/l7-utils';
+import { decodePickingColor, encodePickingColor, lodashUtil, rgb2arr } from '@antv/l7-utils';
 import { ShaderLocation } from '../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 
@@ -39,10 +29,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
     return array;
   }
 
-  private updatePickOption(
-    options: { [key: string]: number[] | number },
-    layer: ILayer,
-  ) {
+  private updatePickOption(options: { [key: string]: number[] | number }, layer: ILayer) {
     Object.keys(options).forEach((key) => {
       this.pickingUniformMap.set(key, options[key]);
     });
@@ -131,54 +118,45 @@ export default class PixelPickingPlugin implements ILayerPlugin {
       }
     });
 
-    layer.hooks.beforeHighlight.tap(
-      'PixelPickingPlugin',
-      (pickedColor: number[]) => {
-        const { highlightColor, activeMix = 0 } = layer.getLayerConfig();
+    layer.hooks.beforeHighlight.tap('PixelPickingPlugin', (pickedColor: number[]) => {
+      const { highlightColor, activeMix = 0 } = layer.getLayerConfig();
 
-        const highlightColorInArray =
-          typeof highlightColor === 'string'
-            ? rgb2arr(highlightColor)
-            : highlightColor || [1, 0, 0, 1];
+      const highlightColorInArray =
+        typeof highlightColor === 'string'
+          ? rgb2arr(highlightColor)
+          : highlightColor || [1, 0, 0, 1];
 
-        layer.updateLayerConfig({
-          pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
-        });
-        const option = {
-          u_PickingStage: PickingStage.HIGHLIGHT,
-          u_PickingColor: pickedColor,
-          u_HighlightColor: highlightColorInArray.map((c) => c * 255),
-          u_activeMix: activeMix,
-  
-        };
-        this.updatePickOption(option, layer);
-        layer.models.forEach((model) => model.addUniforms(option));
-      },
-    );
+      layer.updateLayerConfig({
+        pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
+      });
+      const option = {
+        u_PickingStage: PickingStage.HIGHLIGHT,
+        u_PickingColor: pickedColor,
+        u_HighlightColor: highlightColorInArray.map((c) => c * 255),
+        u_activeMix: activeMix,
+      };
+      this.updatePickOption(option, layer);
+      layer.models.forEach((model) => model.addUniforms(option));
+    });
 
-    layer.hooks.beforeSelect.tap(
-      'PixelPickingPlugin',
-      (pickedColor: number[]) => {
-        const { selectColor, selectMix = 0 } = layer.getLayerConfig();
-        const highlightColorInArray =
-          typeof selectColor === 'string'
-            ? rgb2arr(selectColor)
-            : selectColor || [1, 0, 0, 1];
-        layer.updateLayerConfig({
-          pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
-        });
+    layer.hooks.beforeSelect.tap('PixelPickingPlugin', (pickedColor: number[]) => {
+      const { selectColor, selectMix = 0 } = layer.getLayerConfig();
+      const highlightColorInArray =
+        typeof selectColor === 'string' ? rgb2arr(selectColor) : selectColor || [1, 0, 0, 1];
+      layer.updateLayerConfig({
+        pickedFeatureID: decodePickingColor(new Uint8Array(pickedColor)),
+      });
 
-        const option = {
-          u_PickingStage: PickingStage.HIGHLIGHT,
-          u_PickingColor: pickedColor,
-          u_HighlightColor: highlightColorInArray.map((c) => c * 255),
-          u_activeMix: selectMix,
-          u_CurrentSelectedId: pickedColor,
-          u_SelectColor: highlightColorInArray.map((c) => c * 255),
-        };
-        this.updatePickOption(option, layer);
-        layer.models.forEach((model) => model.addUniforms(option));
-      },
-    );
+      const option = {
+        u_PickingStage: PickingStage.HIGHLIGHT,
+        u_PickingColor: pickedColor,
+        u_HighlightColor: highlightColorInArray.map((c) => c * 255),
+        u_activeMix: selectMix,
+        u_CurrentSelectedId: pickedColor,
+        u_SelectColor: highlightColorInArray.map((c) => c * 255),
+      };
+      this.updatePickOption(option, layer);
+      layer.models.forEach((model) => model.addUniforms(option));
+    });
   }
 }

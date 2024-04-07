@@ -30,10 +30,7 @@ import { BlendType, MaskOperation, StencilType } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
-import {
-  getCommonStyleAttributeOptions,
-  ShaderLocation,
-} from './CommonStyleAttribute';
+import { getCommonStyleAttributeOptions, ShaderLocation } from './CommonStyleAttribute';
 import { DefaultUniformStyleType, DefaultUniformStyleValue } from './constant';
 import { MultipleOfFourNumber } from './utils';
 export type styleSingle =
@@ -41,14 +38,8 @@ export type styleSingle =
   | string
   | [string, (single: any) => number]
   | [string, [number, number]];
-export type styleOffset =
-  | string
-  | [number, number]
-  | [string, (single: any) => number];
-export type styleColor =
-  | string
-  | [string, (single: any) => string]
-  | [string, [string, string]];
+export type styleOffset = string | [number, number] | [string, (single: any) => number];
+export type styleColor = string | [string, (single: any) => string] | [string, [string, string]];
 export interface IDataTextureFrame {
   data: number[];
   width: number;
@@ -70,17 +61,13 @@ const shaderLocationMap: Record<string, ShaderLocation> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default class BaseModel<ChildLayerStyleOptions = {}>
-  implements ILayerModel
-{
+export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerModel {
   public triangulation: Triangulation;
   public uniformBuffers: IBuffer[] = [];
   public textures: ITexture2D[] = [];
 
   // style texture data mapping
-  public createTexture2D: (
-    options: ITexture2DInitializationOptions,
-  ) => ITexture2D;
+  public createTexture2D: (options: ITexture2DInitializationOptions) => ITexture2D;
   public preStyleAttribute: Record<string, any> = {};
   protected encodeStyleAttribute: Record<string, boolean> = {};
   protected layer: ILayer;
@@ -260,8 +247,8 @@ export default class BaseModel<ChildLayerStyleOptions = {}>
       str += `
           #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
           layout(location = ${shaderLocationMap[key]}) in ${
-        DefaultUniformStyleType[key]
-      } a_${key.charAt(0).toUpperCase() + key.slice(1)};
+            DefaultUniformStyleType[key]
+          } a_${key.charAt(0).toUpperCase() + key.slice(1)};
         #endif\n
         `;
     });
@@ -278,9 +265,7 @@ ${uniforms.join('\n')}
     this.layer.enableShaderEncodeStyles.forEach((key) => {
       innerStr += `\n
     #ifdef USE_ATTRIBUTE_${key.toUpperCase()}
-      ${DefaultUniformStyleType[key]} ${key}  = a_${
-        key.charAt(0).toUpperCase() + key.slice(1)
-      };
+      ${DefaultUniformStyleType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
     #else
       ${DefaultUniformStyleType[key]} ${key} = u_${key};
     #endif\n
@@ -304,10 +289,7 @@ ${uniforms.join('\n')}
         // @ts-ignore
         const keyValue = this.layer.getLayerConfig()[key];
 
-        let value =
-          typeof keyValue === 'undefined'
-            ? DefaultUniformStyleValue[key]
-            : keyValue;
+        let value = typeof keyValue === 'undefined' ? DefaultUniformStyleValue[key] : keyValue;
         if (key === 'stroke') {
           value = rgb2arr(value);
         }
@@ -338,18 +320,14 @@ ${uniforms.join('\n')}
     const commonUniforms = this.getCommonUniformsInfo();
     if (attrUniforms.uniformsLength !== 0) {
       this.attributeUnifoms = this.rendererService.createBuffer({
-        data: new Float32Array(
-          MultipleOfFourNumber(attrUniforms.uniformsLength),
-        ).fill(0), // 长度需要大于等于 4
+        data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)).fill(0), // 长度需要大于等于 4
         isUBO: true,
       });
       this.uniformBuffers.push(this.attributeUnifoms);
     }
     if (commonUniforms.uniformsLength !== 0) {
       this.commonUnifoms = this.rendererService.createBuffer({
-        data: new Float32Array(
-          MultipleOfFourNumber(commonUniforms.uniformsLength),
-        ).fill(0),
+        data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)).fill(0),
         isUBO: true,
       });
       this.uniformBuffers.push(this.commonUnifoms);
@@ -393,9 +371,7 @@ ${uniforms.join('\n')}
 
   // 更新支持数据映射的uniform
   public updateStyleUnifoms() {
-    const { uniformsArray } = this.getUniformsBufferInfo(
-      this.getStyleAttribute(),
-    );
+    const { uniformsArray } = this.getUniformsBufferInfo(this.getStyleAttribute());
     const { uniformsArray: commonUniformsArray } = this.getCommonUniformsInfo();
     this.attributeUnifoms?.subData({
       offset: 0,

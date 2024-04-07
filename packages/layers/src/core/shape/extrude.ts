@@ -32,21 +32,11 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
       positions.push(vertices[j * 3], vertices[j * 3 + 1], 1);
     }
   }
-  const triangles = earcut(
-    flattengeo.vertices,
-    flattengeo.holes,
-    flattengeo.dimensions,
-  );
+  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   indexArray.push(...triangles);
   for (let i = 0; i < n; i++) {
-    const prePoint = flattengeo.vertices.slice(
-      i * dimensions,
-      (i + 1) * dimensions,
-    );
-    let nextPoint = flattengeo.vertices.slice(
-      (i + 1) * dimensions,
-      (i + 2) * dimensions,
-    );
+    const prePoint = flattengeo.vertices.slice(i * dimensions, (i + 1) * dimensions);
+    let nextPoint = flattengeo.vertices.slice((i + 1) * dimensions, (i + 2) * dimensions);
     if (nextPoint.length === 0) {
       nextPoint = flattengeo.vertices.slice(0, dimensions);
     }
@@ -74,11 +64,7 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
 }
 export function fillPolygon(points: IPath[]) {
   const flattengeo = earcut.flatten(points);
-  const triangles = earcut(
-    flattengeo.vertices,
-    flattengeo.holes,
-    flattengeo.dimensions,
-  );
+  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   return {
     positions: flattengeo.vertices,
     index: triangles,
@@ -111,22 +97,12 @@ export function extrude_PolygonNormal(
     );
     normals.push(0, 0, 1);
   }
-  const triangles = earcut(
-    flattengeo.vertices,
-    flattengeo.holes,
-    flattengeo.dimensions,
-  );
+  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
   indexArray.push(...triangles);
   // 设置侧面
   for (let i = 0; i < n; i++) {
-    const prePoint = flattengeo.vertices.slice(
-      i * dimensions,
-      (i + 1) * dimensions,
-    );
-    let nextPoint = flattengeo.vertices.slice(
-      (i + 1) * dimensions,
-      (i + 2) * dimensions,
-    );
+    const prePoint = flattengeo.vertices.slice(i * dimensions, (i + 1) * dimensions);
+    let nextPoint = flattengeo.vertices.slice((i + 1) * dimensions, (i + 2) * dimensions);
     if (nextPoint.length === 0) {
       nextPoint = flattengeo.vertices.slice(0, dimensions);
     }

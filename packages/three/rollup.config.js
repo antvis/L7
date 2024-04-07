@@ -1,47 +1,39 @@
-import pkg from './package.json';
-import typescript from 'rollup-plugin-typescript';
-import resolve from 'rollup-plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import url from 'postcss-url';
 import buble from 'rollup-plugin-buble';
+import resolve from 'rollup-plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
-import url from 'postcss-url';
+import typescript from 'rollup-plugin-typescript';
+import pkg from './package.json';
 export default {
   input: './src/index.ts',
   plugins: [
     // less(),
     typescript({
       exclude: 'node_modules/**',
-      typescript: require('typescript')
+      typescript: require('typescript'),
     }),
     resolve({
-      preferBuiltins: false
+      preferBuiltins: false,
     }),
     postcss({
-      plugins: [
-        url({ url: 'inline' })
-      ]
+      plugins: [url({ url: 'inline' })],
     }),
     commonjs({
       namedExports: {
-        eventemitter3: [ 'EventEmitter' ],
-        lodash: [ 'merge' ]
+        eventemitter3: ['EventEmitter'],
+        lodash: ['merge'],
         // inversify: [ 'inject', 'injectable' ]
       },
-      dynamicRequireTargets: [
-        'node_modules/inversify/lib/syntax/binding_{on,when}_syntax.js'
-      ]
+      dynamicRequireTargets: ['node_modules/inversify/lib/syntax/binding_{on,when}_syntax.js'],
     }),
     buble({
-      transforms: { generator: false }
+      transforms: { generator: false },
     }),
-    terser()
+    terser(),
   ],
-  external: [
-    '@antv/l7-core',
-    '@antv/l7-scene',
-    '@antv/l7-layers'
-  ],
+  external: ['@antv/l7-core', '@antv/l7-scene', '@antv/l7-layers'],
   output: [
     {
       format: 'umd',
@@ -49,9 +41,8 @@ export default {
       file: pkg.unpkg,
       sourcemap: true,
       globals: {
-        '@antv/l7': 'L7'
-      }
-    }
-  ]
+        '@antv/l7': 'L7',
+      },
+    },
+  ],
 };
-

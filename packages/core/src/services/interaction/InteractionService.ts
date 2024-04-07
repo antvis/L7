@@ -14,10 +14,7 @@ const DragEventMap: { [key: string]: string } = {
  * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，事件监听注册在地图底图上。
  * 除此之外，后续如果支持非地图场景，事件监听就需要注册在 L7 canvas 上。
  */
-export default class InteractionService
-  extends EventEmitter
-  implements IInteractionService
-{
+export default class InteractionService extends EventEmitter implements IInteractionService {
   public indragging: boolean = false;
 
   get mapService() {
@@ -119,9 +116,7 @@ export default class InteractionService
   private onDrag = (target: any) => {
     const interactionTarget = this.interactionEvent(target);
     interactionTarget.type = DragEventMap[interactionTarget.type];
-    interactionTarget.type === 'dragging'
-      ? (this.indragging = true)
-      : (this.indragging = false);
+    interactionTarget.type === 'dragging' ? (this.indragging = true) : (this.indragging = false);
     this.emit(InteractionEvent.Drag, interactionTarget);
   };
 
