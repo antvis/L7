@@ -34,9 +34,9 @@
     "regl": "1.6.1"
   },
   "peerDependencies": {
-    "@antv/l7-map": "^2.21.0",
-    "@antv/l7-maps": "^2.21.0",
-    "@antv/l7-scene": "^2.21.0"
+    "@antv/l7-map": "workspace:^",
+    "@antv/l7-maps": "workspace:^",
+    "@antv/l7-scene": "workspace:^"
   },
   "devDependencies": {
     "@types/gl": "^6.0.5"

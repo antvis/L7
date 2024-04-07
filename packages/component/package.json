@@ -29,9 +29,11 @@
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
-    "@antv/l7-test-utils": "workspace:*",
     "gcoord": "^0.3.2",
     "less": "^4.1.3"
+  },
+  "peerDependencies": {
+    "@antv/l7-test-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

@@ -2,24 +2,10 @@
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
   "changelog": ["@changesets/changelog-github", { "repo": "antvis/L7" }],
   "commit": false,
-  "fixed": [
-    [
-      "@antv/component",
-      "@antv/core",
-      "@antv/l7",
-      "@antv/layers",
-      "@antv/map",
-      "@antv/maps",
-      "@antv/renderer",
-      "@antv/scene",
-      "@antv/source",
-      "@antv/three",
-      "@antv/utils"
-    ]
-  ],
+  "fixed": [["@antv/l7", "@antv/l7-*"]],
   "linked": [],
   "access": "restricted",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["@antv/l7-site", "@antv/l7-test-utils"]
+  "ignore": ["@antv/l7-site"]
 }
