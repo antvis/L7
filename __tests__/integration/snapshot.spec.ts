@@ -1,70 +1,63 @@
+import type { Browser, BrowserContext, Page } from 'playwright';
 import { chromium, devices } from 'playwright';
 import { TEST_CASES } from './test-cases';
 import { sleep } from './utils/sleep';
 import './utils/useSnapshotMatchers';
 
 describe('Snapshots', () => {
-  const demosFlatList: Array<{
-    type: string;
-    name: string;
-    sleepTime: number;
-  }> = [];
-  TEST_CASES.filter((g) => g.snapshots !== false).forEach((groups) => {
-    const { type, demos } = groups;
+  const port = (globalThis as any).PORT;
+  let browser: Browser, context: BrowserContext, page: Page;
 
-    demos
-      .filter((g) => g.snapshots !== false)
-      .map((demo) => {
-        const { name, sleepTime = 1.5 } = demo;
-        demosFlatList.push({
-          type,
-          name,
-          sleepTime,
-        });
-      });
+  beforeAll(async () => {
+    // Setup
+    browser = await chromium.launch({
+      args: ['--headless', '--no-sandbox'],
+    });
+    context = await browser.newContext(devices['Desktop Chrome']);
+    page = await context.newPage();
+    await context.exposeFunction('screenshot', () => {});
   });
-  demosFlatList.map((demo) => {
-    const { name, type } = demo;
+
+  afterAll(async () => {
+    await context.close();
+    await browser.close();
+  });
+
+  const demoList = TEST_CASES.filter((g) => g.snapshots !== false)
+    .map((groups) => {
+      const { type, demos } = groups;
+      return demos
+        .filter((g) => g.snapshots !== false)
+        .map((demo) => {
+          const { name, sleepTime = 100 } = demo;
+          return {
+            type,
+            name,
+            sleepTime,
+          };
+        });
+    })
+    .flat();
+
+  demoList.map((demo) => {
+    const { name, type, sleepTime } = demo;
     const key = `${type}_${name}`;
 
     it(key, async () => {
-      // Setup
-      const browser = await chromium.launch({
-        args: ['--headless', '--no-sandbox'],
-      });
-      const context = await browser.newContext(devices['Desktop Chrome']);
-      const page = await context.newPage();
-      const port = (globalThis as any).PORT;
-
       // Go to test page served by vite devServer.
       const url = `http://localhost:${port}/?type=${type}&name=${name}`;
-
-      let resolveReadyPromise: () => void;
-      const readyPromise = new Promise((resolve) => {
-        resolveReadyPromise = () => {
-          resolve(this);
-        };
-      });
-
-      await context.exposeFunction('screenshot', async () => {
-        resolveReadyPromise();
-      });
-
       await page.goto(url);
-      await readyPromise;
-      await sleep(1000);
+      await sleep(sleepTime);
 
       // Chart already rendered, capture into buffer.
       const buffer = await page.locator('canvas').screenshot();
-
       const dir = `${__dirname}/snapshots`;
-
       const maxError = 0;
+
       try {
         expect(buffer).toMatchCanvasSnapshot(dir, key, { maxError });
       } finally {
-        await context.close();
-        await browser.close();
+        //
       }
     });
   });

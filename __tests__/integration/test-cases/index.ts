@@ -41,6 +41,7 @@ export const TEST_CASES: TestCase[] = [
       },
       {
         name: 'arc_plane',
+        sleepTime: 500,
       },
 
       {
@@ -51,6 +52,7 @@ export const TEST_CASES: TestCase[] = [
       },
       {
         name: 'dash',
+        sleepTime: 500,
       },
     ],
   },
@@ -83,15 +85,15 @@ export const TEST_CASES: TestCase[] = [
     demos: [
       {
         name: 'grid',
-        sleepTime: 2,
+        sleepTime: 200,
       },
       {
         name: 'hexagon',
-        sleepTime: 2,
+        sleepTime: 200,
       },
       {
         name: 'normal',
-        sleepTime: 2,
+        sleepTime: 200,
       },
     ],
   },
@@ -101,7 +103,7 @@ export const TEST_CASES: TestCase[] = [
     demos: [
       {
         name: 'tiff',
-        sleepTime: 2,
+        sleepTime: 200,
       },
       {
         name: 'image',
@@ -121,7 +123,7 @@ export const TEST_CASES: TestCase[] = [
     demos: [
       {
         name: 'fujian',
-        sleepTime: 2,
+        sleepTime: 500,
       },
     ],
   },
