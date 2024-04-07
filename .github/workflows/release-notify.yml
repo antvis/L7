@@ -1,4 +1,4 @@
-name: DingTalk Release Notify
+name: Release Notify
 
 on:
   release:
@@ -8,7 +8,8 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - uses: visiky/dingtalk-release-notify@main
+      - name: DingTalk Release Notify
+        uses: visiky/dingtalk-release-notify@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DING_TALK_TOKEN: ${{ secrets.DING_TALK_TOKENS}}
