@@ -1,35 +1,5 @@
 # Change Log
 
-## 2.21.4-beta.1
-
-### Patch Changes
-
-- [`a4ba2ee`](https://github.com/antvis/L7/commit/a4ba2ee3feb7d67d5f99e1bea3337b174dee8edc) Thanks [@lvisei](https://github.com/lvisei)! - chore: build test
-
-- Updated dependencies []:
-  - @antv/l7-component@2.21.4-beta.1
-  - @antv/l7-core@2.21.4-beta.1
-  - @antv/l7-layers@2.21.4-beta.1
-  - @antv/l7-maps@2.21.4-beta.1
-  - @antv/l7-scene@2.21.4-beta.1
-  - @antv/l7-source@2.21.4-beta.1
-  - @antv/l7-utils@2.21.4-beta.1
-
-## 2.21.4-beta.0
-
-### Patch Changes
-
-- [`e4c61d0`](https://github.com/antvis/L7/commit/e4c61d076bc7227f011ad1b105e0acfbec9178c3) Thanks [@lvisei](https://github.com/lvisei)! - chore: code style
-
-- Updated dependencies [[`e4c61d0`](https://github.com/antvis/L7/commit/e4c61d076bc7227f011ad1b105e0acfbec9178c3)]:
-  - @antv/l7-component@2.21.4-beta.0
-  - @antv/l7-core@2.21.4-beta.0
-  - @antv/l7-layers@2.21.4-beta.0
-  - @antv/l7-maps@2.21.4-beta.0
-  - @antv/l7-scene@2.21.4-beta.0
-  - @antv/l7-source@2.21.4-beta.0
-  - @antv/l7-utils@2.21.4-beta.0
-
 ## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
 
 ### Bug Fixes
