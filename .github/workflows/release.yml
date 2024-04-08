@@ -5,6 +5,10 @@ on:
   pull_request_review:
     types: [submitted]
 
+concurrency:
+  group: '${{ github.workflow }} - ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   release:
     # created version approved PR by changesets bot or manual dispatch
@@ -31,21 +35,6 @@ jobs:
         uses: ./.github/actions/prepare-install
         with:
           node-version: ${{ matrix.node-version }}
-
-      # release start notify, only trigger by bot PR
-      - name: Release start ding talk dev group notify
-        if: github.event_name == 'pull_request_review'
-        uses: zcong1993/actions-ding@master
-        with:
-          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
-          ignoreError: true
-          body: |
-            {
-              "msgtype": "text",
-              "text": {
-                "content": "开始自动发布 (${{ github.head_ref || github.ref_name }})",
-              }
-            }
 
       - name: Release NPM and Github
         id: changesets

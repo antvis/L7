@@ -22,7 +22,9 @@ on:
     #     - minor
     #     - major
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency:
+  group: '${{ github.workflow }} - ${{ github.ref }}'
+  cancel-in-progress: true
 
 jobs:
   bump-version-pr:
@@ -34,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         # with:
-          # ref: ${{ inputs.branche }}
+        # ref: ${{ inputs.branche }}
 
       - name: Install dependencies
         uses: ./.github/actions/prepare-install

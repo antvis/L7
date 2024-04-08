@@ -2,11 +2,14 @@ name: Release Notify
 
 on:
   release:
-    # published: latest and pre release will trigger
-    types: [published]
+    # published: latest and prereleased will trigger
+    # released: only latest release will trigger
+    types: [released]
 
 jobs:
   notify:
+    # released only @antv/l7 main package
+    if: startswith(github.event.release.tag_name, '@antv/l7@')
     runs-on: ubuntu-latest
     steps:
       - name: DingTalk Release Notify

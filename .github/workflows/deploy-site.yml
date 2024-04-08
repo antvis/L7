@@ -6,8 +6,19 @@ on:
     # released: only latest release will trigger
     types: [released]
 
+concurrency:
+  group: '${{ github.workflow }} - ${{ github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   publish-site:
+    # manual dispatch or released only @antv/l7 main package
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'release' &&
+        startswith(github.event.release.tag_name, '@antv/l7@')
+      )
     runs-on: ubuntu-latest
     strategy:
       matrix:
