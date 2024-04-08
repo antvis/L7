@@ -1,4 +1,4 @@
-import type { Browser, BrowserContext, Page } from 'playwright';
+import type { Browser, BrowserContext } from 'playwright';
 import { chromium, devices } from 'playwright';
 import { TEST_CASES } from './test-cases';
 import { sleep } from './utils/sleep';
@@ -6,7 +6,7 @@ import './utils/useSnapshotMatchers';
 
 describe('Snapshots', () => {
   const port = (globalThis as any).PORT;
-  let browser: Browser, context: BrowserContext, page: Page;
+  let browser: Browser, context: BrowserContext;
 
   beforeAll(async () => {
     // Setup
@@ -14,7 +14,6 @@ describe('Snapshots', () => {
       args: ['--headless', '--no-sandbox'],
     });
     context = await browser.newContext(devices['Desktop Chrome']);
-    page = await context.newPage();
     await context.exposeFunction('screenshot', () => {});
   });
 
@@ -44,6 +43,7 @@ describe('Snapshots', () => {
     const key = `${type}_${name}`;
 
     it(key, async () => {
+      const page = await context.newPage();
       // Go to test page served by vite devServer.
       const url = `http://localhost:${port}/?type=${type}&name=${name}`;
       await page.goto(url);
@@ -57,7 +57,7 @@ describe('Snapshots', () => {
       try {
         expect(buffer).toMatchCanvasSnapshot(dir, key, { maxError });
       } finally {
-        //
+        page.close();
       }
     });
   });
