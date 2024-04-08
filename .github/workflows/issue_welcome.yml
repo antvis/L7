@@ -15,32 +15,28 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: hi @${{ github.event.issue.user.login }}, welcome!
           labels: 'good first issue'
-          issue-emoji: '+1, -1, eyes'
+          issue-emoji: '+1'
   comment:
     runs-on: ubuntu-latest
     steps:
-        - name: check-star
-          uses: gacts/is-stargazer@v1
-          id: check-star
-        - name: Add need star labels
-          if: steps.check-star.outputs.is-stargazer != 'true'
-          uses: actions-cool/issues-helper@v3
-          with:
-            actions: 'add-labels'
-            token: ${{ secrets.GITHUB_TOKEN }}
-            issue-number: ${{ github.event.issue.number }}
-            labels: '🌟 need star'
-        - name: Create comment
-          if: steps.check-star.outputs.is-stargazer != 'true'
-          uses: actions-cool/issues-helper@v3
-          with:
-            actions: 'create-comment'
-            token: ${{ secrets.GITHUB_TOKEN }}
-            issue-number: ${{ github.event.issue.number }}
-            body: |
-                Hi @${{ github.event.issue.user.login }}, Please star this repo if you find it useful! Thanks :star:!
-                你好 @${{ github.event.issue.user.login }}。如果该仓库对你有用，可以 star 一下，感谢你的 :star:!
-            
-            
-
-
+      - name: check-star
+        uses: gacts/is-stargazer@v1
+        id: check-star
+      - name: Add need star labels
+        if: steps.check-star.outputs.is-stargazer != 'true'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'add-labels'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: '🌟 need star'
+      - name: Create comment
+        if: steps.check-star.outputs.is-stargazer != 'true'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Hi @${{ github.event.issue.user.login }}, Please star this repo if you find it useful! Thanks :star:!
+            你好 @${{ github.event.issue.user.login }}。🌟 给力支持一下吧！如果这个仓库对你有帮助，别忘了献上你的小星星 ⭐！你的每一颗星都是对我们努力的最美好认可！感谢你的闪亮赞赏！🌟
