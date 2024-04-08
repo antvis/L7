@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.21.4-beta.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.4-beta.1
+  - @antv/l7-maps@2.21.4-beta.1
+  - @antv/l7-source@2.21.4-beta.1
+  - @antv/l7-test-utils@2.21.4-beta.1
+  - @antv/l7-utils@2.21.4-beta.1
+
 ## 2.21.4-beta.0
 
 ### Patch Changes
