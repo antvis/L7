@@ -1,5 +1,20 @@
 # Change Log
 
+## 2.21.4-beta.1
+
+### Patch Changes
+
+- [`a4ba2ee`](https://github.com/antvis/L7/commit/a4ba2ee3feb7d67d5f99e1bea3337b174dee8edc) Thanks [@lvisei](https://github.com/lvisei)! - chore: build test
+
+- Updated dependencies []:
+  - @antv/l7-component@2.21.4-beta.1
+  - @antv/l7-core@2.21.4-beta.1
+  - @antv/l7-layers@2.21.4-beta.1
+  - @antv/l7-maps@2.21.4-beta.1
+  - @antv/l7-scene@2.21.4-beta.1
+  - @antv/l7-source@2.21.4-beta.1
+  - @antv/l7-utils@2.21.4-beta.1
+
 ## 2.21.4-beta.0
 
 ### Patch Changes
