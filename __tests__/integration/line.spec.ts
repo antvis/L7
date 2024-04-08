@@ -11,6 +11,7 @@ const TEST_CASES = [
 
   {
     name: 'flow',
+    sleepTime: 500,
   },
   {
     name: 'arc',
