@@ -33,36 +33,9 @@ pnpm install
 
 ## 代码风格
 
-[CODE_GUIDELINES](./CODE_GUIDELINES.md)
+[CODE GUIDELINES](./CODE_GUIDELINES.md)
 
 ## 提交代码
-
-### 提交 Pull Request
-
-如果你有仓库的开发者权限，而且希望贡献代码，那么你可以创建分支修改代码提交 PR，AntV 开发团队会 review 代码合并到主干。
-
-```bash
-# 先创建开发分支开发，分支名应该有含义，避免使用 update、tmp 之类的
-$ git checkout -b branch-name
-
-# 开发完成后跑下测试是否通过，必要时需要新增或修改测试用例
-$ npm test
-
-# 测试通过后，提交代码，message 见下面的规范
-
-$ git add . # git add -u 删除文件
-$ git commit -m "fix: role.use must xxx"
-$ git push origin branch-name
-```
-
-提交后就可以在 [L7](https://github.com/antvis/l7/pulls) 创建 Pull Request 了。
-
-由于谁也无法保证过了多久之后还记得多少，为了后期回溯历史的方便，请在提交 MR 时确保提供了以下信息。
-
-1. 需求点（一般关联 issue 或者注释都算）
-2. 升级原因（不同于 issue，可以简要描述下为什么要处理）
-3. 框架测试点（可以关联到测试文件，不用详细描述，关键点即可）
-4. 关注点（针对用户而言，可以没有，一般是不兼容更新等，需要额外提示）
 
 ### Commit 提交规范
 
@@ -92,7 +65,34 @@ git add .
 git commit -a -m "chore: commit changeset"
 ```
 
-## 发布管理
+### 提交 Pull Request
+
+如果你有仓库的开发者权限，而且希望贡献代码，那么你可以创建分支修改代码提交 PR，AntV 开发团队会 review 代码合并到主干。
+
+```bash
+# 先创建开发分支开发，分支名应该有含义，避免使用 update、tmp 之类的
+$ git checkout -b branch-name
+
+# 开发完成后跑下测试是否通过，必要时需要新增或修改测试用例
+$ npm test
+
+# 测试通过后，提交代码，message 见下面的规范
+
+$ git add . # git add -u 删除文件
+$ git commit -m "fix: role.use must xxx"
+$ git push origin branch-name
+```
+
+提交后就可以在 [L7](https://github.com/antvis/l7/pulls) 创建 Pull Request 了。
+
+由于谁也无法保证过了多久之后还记得多少，为了后期回溯历史的方便，请在提交 MR 时确保提供了以下信息。
+
+1. 需求点（一般关联 issue 或者注释都算）
+2. 升级原因（不同于 issue，可以简要描述下为什么要处理）
+3. 框架测试点（可以关联到测试文件，不用详细描述，关键点即可）
+4. 关注点（针对用户而言，可以没有，一般是不兼容更新等，需要额外提示）
+
+## 版本发布
 
 ![Release](https://github.com/antvis/L7/assets/26923747/edf6b817-c699-4fbf-8168-0da1cb429031)
 

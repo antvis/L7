@@ -33,35 +33,9 @@ pnpm install
 
 ## Style Guide
 
-[CODE_GUIDELINES](./CODE_GUIDELINES.md)
+[CODE GUIDELINES](./CODE_GUIDELINES.md)
 
 ## Submitting Code
-
-### Pull Request Guide
-
-If you are developer of AntV repo and you are willing to contribute, feel free to create a new branch, finish your modification and submit a PR. AntV group will review your work and merge it to master branch.
-
-```bash
-# Create a new branch for development. The name of branch should be semantic, avoiding words like 'update' or 'tmp'. We suggest to use feature/xxx, if the modification is about to implement a new feature.
-$ git checkout -b branch-name
-
-# Run the test after you finish your modification. Add new test cases or change old ones if you feel necessary
-$ npm test
-
-# If your modification pass the tests, congratulations it's time to push your work back to us. Notice that the commit message should be written in the following format.
-$ git add . # git add -u to delete files
-$ git commit -m "fix: role.use must xxx"
-$ git push origin branch-name
-```
-
-Then you can create a Pull Request at [L7](https://github.com/antvis/l7/pulls).
-
-No one can guarantee how much will be remembered about certain PR after some time. To make sure we can easily recap what happened previously, please provide the following information in your PR.
-
-1. Need: What function you want to achieve (Generally, please point out which issue is related).
-2. Updating Reason: Different with issue. Briefly describe your reason and logic about why you need to make such modification.
-3. Related Testing: Briefly describe what part of testing is relevant to your modification.
-4. User Tips: Notice for scale users. You can skip this part, if the PR is not about update in API or potential compatibility problem.
 
 ### Commit Message Format
 
@@ -89,6 +63,32 @@ pnpm run changeset
 git add .
 git commit -a -m "chore: commit changeset"
 ```
+
+### Pull Request Guide
+
+If you are developer of AntV repo and you are willing to contribute, feel free to create a new branch, finish your modification and submit a PR. AntV group will review your work and merge it to master branch.
+
+```bash
+# Create a new branch for development. The name of branch should be semantic, avoiding words like 'update' or 'tmp'. We suggest to use feature/xxx, if the modification is about to implement a new feature.
+$ git checkout -b branch-name
+
+# Run the test after you finish your modification. Add new test cases or change old ones if you feel necessary
+$ npm test
+
+# If your modification pass the tests, congratulations it's time to push your work back to us. Notice that the commit message should be written in the following format.
+$ git add . # git add -u to delete files
+$ git commit -m "fix: role.use must xxx"
+$ git push origin branch-name
+```
+
+Then you can create a Pull Request at [L7](https://github.com/antvis/l7/pulls).
+
+No one can guarantee how much will be remembered about certain PR after some time. To make sure we can easily recap what happened previously, please provide the following information in your PR.
+
+1. Need: What function you want to achieve (Generally, please point out which issue is related).
+2. Updating Reason: Different with issue. Briefly describe your reason and logic about why you need to make such modification.
+3. Related Testing: Briefly describe what part of testing is relevant to your modification.
+4. User Tips: Notice for scale users. You can skip this part, if the PR is not about update in API or potential compatibility problem.
 
 ## Release
 
