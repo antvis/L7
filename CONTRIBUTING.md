@@ -66,17 +66,7 @@ $ git push origin branch-name
 
 ### Commit 提交规范
 
-根据 [angular 规范](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format)提交 commit，这样 history 看起来更加清晰。
-
-```xml
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
-```
-
-（1）type
+根据 [angular 规范](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format) 提交 commit，这样 history 看起来更加清晰。
 
 提交 commit 的类型，包括以下几种
 
@@ -90,42 +80,7 @@ $ git push origin branch-name
 - chore: 修改工具相关（包括但不限于文档、代码生成等）
 - deps: 升级依赖
 
-（2）scope
-
-修改文件的范围
-
-（3）subject
-
-用一句话清楚的描述这次提交做了什么
-
-（4）body
-
-补充 subject，适当增加原因、目的等相关因素，也可不写。
-
-（5）footer
-
-- **当有非兼容修改(Breaking Change)时必须在这里描述清楚**
-- 关联相关 issue，如 `Closes #1, Closes #2, #3`
-
-示例
-
-```bash
-fix($compile): [BREAKING_CHANGE] couple of unit tests for IE9
-
-Older IEs serialize html uppercased, but IE9 does not...
-Would be better to expect case insensitive, unfortunately jasmine does
-not allow to user regexps for throw expectations.
-
-Document change on antvis/g#12
-
-Closes #392
-
-BREAKING CHANGE:
-
-  Breaks foo.bar api, foo.baz should be used instead
-```
-
-查看具体[文档](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit)
+尽量用一句话清楚的描述这次提交做了什么，查看具体参考[文档](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit)。
 
 ### 提交代码变更集
 
@@ -143,23 +98,15 @@ git commit -a -m "chore: commit changeset"
 
 ### 线上自动版本发布
 
-1. 去 [GitHub Action](https://github.com/antvis/L7/actions/workflows/create-bumb-version-pr.yml) 触发 Create bump version PR Action 执行，选择发布分支，触发 Action 执行
+> 详细流程 [版本发布指南](https://www.yuque.com/antv/l7/qqburqndl8g584kw?singleDoc)
 
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/196672/1712567418749-9cd348ec-18ce-412b-a943-5e005d69cb87.png#averageHue=%23f4ca92&clientId=uedbbbfd2-9b30-4&from=paste&height=1090&id=fPXKn&originHeight=1090&originWidth=3334&originalType=binary&ratio=1&rotation=0&showTitle=false&size=302270&status=done&style=stroke&taskId=ua8bba935-a23c-4aea-bf7b-cc6ccbe0bae&title=&width=3334)
+1. 去 [GitHub Action](https://github.com/antvis/L7/actions/workflows/create-bumb-version-pr.yml) 触发 Create bump version PR Action 执行，选择发布分支，触发 Action 执行
 
 2. 等待 Action 执行完成，执行完成会提一个变更版本的 PR
 
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/196672/1712567419188-7caaec0c-4abf-406f-961a-8b290dfd9b24.png#averageHue=%23e3e161&clientId=uedbbbfd2-9b30-4&from=paste&height=1416&id=j2tFP&originHeight=1416&originWidth=3578&originalType=binary&ratio=1&rotation=0&showTitle=false&size=261873&status=done&style=stroke&taskId=u8fc4ab77-a5cd-495a-ad90-95dc46ef00a&title=&width=3578)
-
 3. 去确认 PR 版本变更内容，如果没有问题 approve PR，等待发布版本 Action 执行，期间会发布到 NPM、打 tag 到 Github、创建 GitHub Release
 
-![确认 PR 版本变更内容](https://cdn.nlark.com/yuque/0/2024/png/196672/1712567418838-1efda60d-0f1e-4aa0-bb62-0143ccd2ec74.png#averageHue=%23fefefe&clientId=uedbbbfd2-9b30-4&from=paste&height=1702&id=OkIVa&originHeight=1702&originWidth=2568&originalType=binary&ratio=1&rotation=0&showTitle=true&size=488489&status=done&style=stroke&taskId=u905e9437-d38a-421c-b690-65b2e877bf0&title=%E7%A1%AE%E8%AE%A4%20PR%20%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4%E5%86%85%E5%AE%B9&width=2568 '确认 PR 版本变更内容')
-![Approve PR](https://cdn.nlark.com/yuque/0/2024/png/196672/1712567419178-e830a2bd-2395-42d9-b508-8bea28aad477.png#averageHue=%23a3751a&clientId=uedbbbfd2-9b30-4&from=paste&height=1754&id=CVZvu&originHeight=1754&originWidth=3578&originalType=binary&ratio=1&rotation=0&showTitle=true&size=663654&status=done&style=stroke&taskId=u8a59ffb0-d799-409c-8983-72dbed6bcbf&title=Approve%20PR&width=3578 'Approve PR')
-![Release Action](https://cdn.nlark.com/yuque/0/2024/png/196672/1712567418674-af123ce6-4372-4201-9a67-c8dbf2d42a08.png#averageHue=%23bc9422&clientId=uedbbbfd2-9b30-4&from=paste&height=1256&id=z8Y11&originHeight=1256&originWidth=2322&originalType=binary&ratio=1&rotation=0&showTitle=true&size=340425&status=done&style=stroke&taskId=u515d58b1-cbd4-4491-85ca-3ce6741bc0e&title=Release%20Action&width=2322 'Release Action')
-
 4. 第 3 步成功，会进行钉钉消息通知，机器人自动合并 PR，后台自动部署新官网
-
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/196672/1712567419262-f24c8e03-1db0-4078-a069-9e54bcedc594.png#averageHue=%23e3dd56&clientId=uedbbbfd2-9b30-4&from=paste&height=996&id=dXQ3F&originHeight=996&originWidth=2526&originalType=binary&ratio=1&rotation=0&showTitle=false&size=349299&status=done&style=stroke&taskId=ub9261ebf-b752-4dcc-820c-5953023bf6c&title=&width=2526)
 
 5. 第 3 步失败，会进行钉钉消息通知，去 GtiHub Action 查看失败原因
 

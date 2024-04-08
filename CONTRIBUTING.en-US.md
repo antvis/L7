@@ -67,17 +67,7 @@ No one can guarantee how much will be remembered about certain PR after some tim
 
 You are encouraged to use [angular commit-message-format](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format) to write commit message. In this way, we could have a more trackable history and an automatically generated changelog.
 
-```xml
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
-```
-
-（1）type
-
-Must be one of the following:
+Commit type must be one of the following:
 
 - feat: A new feature
 - fix: A bug fix
@@ -88,42 +78,7 @@ Must be one of the following:
 - test: Adding missing tests
 - chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
 
-（2）scope
-
-The scope could be anything specifying place of the commit change.
-
-（3）subject
-
-Use succinct words to describe what did you do in the commit change.
-
-（4）body
-
-Feel free to add more content in the body, if you think subject is not self-explanatory enough, such as what it is the purpose or reason of you commit.
-
-（5）footer
-
-- **If the commit is a Breaking Change, please note it clearly in this part.**
-- related issues, like `Closes #1, Closes #2, #3`
-
-e.g.
-
-```bash
-fix($compile): [BREAKING_CHANGE] couple of unit tests for IE9
-
-Older IEs serialize html uppercased, but IE9 does not...
-Would be better to expect case insensitive, unfortunately jasmine does
-not allow to user regexps for throw expectations.
-
-Document change on antvis/g#123
-
-Closes #392
-
-BREAKING CHANGE:
-
-  Breaks foo.bar api, foo.baz should be used instead
-```
-
-Look at [these files](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit) for more details.
+Use succinct words to describe what did you do in the commit change. Look at [these files](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit) for more details.
 
 ### Submit code changeset
 
