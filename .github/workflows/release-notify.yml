@@ -2,7 +2,8 @@ name: Release Notify
 
 on:
   release:
-    types: [published, edited]
+    # published: latest and pre release will trigger
+    types: [published]
 
 jobs:
   notify:
@@ -17,3 +18,4 @@ jobs:
           notify_body: '## { title } <hr /> { body } <hr />'
           notify_footer: '前往 [**L7 Releases**]({ release_url }) 查看完整信息.'
           at_all: false
+          enable_prerelease: false

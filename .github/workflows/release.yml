@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # release start notify, only tigger by bot PR
+      # release start notify, only trigger by bot PR
       - name: Release start ding talk dev group notify
         if: github.event_name == 'pull_request_review'
         uses: zcong1993/actions-ding@master
@@ -51,7 +51,10 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # need personal access token when Triggering a workflow from a workflow
+          # triggering release event of Release Notify and Deploy Site
+          # https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
+          GITHUB_TOKEN: ${{ secrets.YJ_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.YJ_NPM_TOKEN }}
         with:
           publish: pnpm publish-packages
@@ -89,7 +92,7 @@ jobs:
           MERGE_METHOD: 'squash'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # release successful notify, only tigger by bot PR
+      # release successful notify, only trigger by bot PR
       - name: Release successful ding talk dev group notify
         if: github.event_name == 'pull_request_review'
         uses: zcong1993/actions-ding@master
