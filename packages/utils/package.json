@@ -37,7 +37,8 @@
     "@types/lodash": "^4.14.138"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "repository": "git@github.com:antvis/L7.git"
 }

@@ -29,11 +29,12 @@
     "@babel/runtime": "^7.7.7",
     "eventemitter3": "^4.0.7"
   },
-  "peerDependencies": {
-    "@antv/l7-test-utils": "workspace:*"
+  "devDependencies": {
+    "@antv/l7-test-utils": "workspace:^"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "repository": "git@github.com:antvis/L7.git"
 }

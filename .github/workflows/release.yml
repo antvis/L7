@@ -5,6 +5,10 @@ on:
   pull_request_review:
     types: [submitted]
 
+concurrency:
+  group: '${{ github.workflow }} - ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   release:
     # created version approved PR by changesets bot or manual dispatch
@@ -32,29 +36,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # release start notify, only tigger by bot PR
-      - name: Release start ding talk dev group notify
-        if: github.event_name == 'pull_request_review'
-        uses: zcong1993/actions-ding@master
-        with:
-          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
-          ignoreError: true
-          body: |
-            {
-              "msgtype": "text",
-              "text": {
-                "content": "开始自动发布 (${{ github.head_ref || github.ref_name }})",
-              }
-            }
-
       - name: Release NPM and Github
         id: changesets
         uses: changesets/action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # need personal access token when Triggering a workflow from a workflow
+          # triggering release event of Release Notify and Deploy Site
+          # https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
+          GITHUB_TOKEN: ${{ secrets.YJ_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.YJ_NPM_TOKEN }}
         with:
-          publish: pnpm publish-package
+          publish: pnpm publish-packages
           createGithubReleases: true
 
   # when release successful
@@ -77,7 +69,7 @@ jobs:
             `${{ needs.release.outputs.publishedPackages }}`
 
             [1]: https://www.npmjs.com/package/@antv/l7?activeTab=versions
-            [2]: https://github.com/antvis/L7/releases
+            [2]: https://github.com/${{github.repository}}/releases
           reactions: 'rocket'
 
       - name: automerge
@@ -88,6 +80,24 @@ jobs:
           PULL_REQUEST: ${{ github.event.pull_request.number }}
           MERGE_METHOD: 'squash'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # release successful notify, only trigger by bot PR
+      - name: Release successful ding talk dev group notify
+        if: github.event_name == 'pull_request_review'
+        uses: zcong1993/actions-ding@master
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "link",
+              "link": {
+                "title": "自动发布成功 (${{ github.head_ref || github.ref_name }})",
+                "text": "🔗 点击链接查看详情",
+                "messageUrl": "https://github.com/${{github.repository}}/pull/${{ github.event.pull_request.number }}",
+                "picUrl": ""
+              }
+            }
 
   # when release failed
   release-failed:
@@ -107,7 +117,7 @@ jobs:
               "link": {
                 "title": "🚨 自动发布失败 (${{ github.head_ref || github.ref_name }})",
                 "text": "🔗 请点击链接查看具体原因, 及时修复, 尝试点击右上角 [Re-run all jobs] 重试, 或手动发布 🚑",
-                "messageUrl": "https://github.com/antvis/L7/actions/workflows/release.yml",
+                "messageUrl": "https://github.com/${{github.repository}}/actions/workflows/release.yml",
                 "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
               }
             }

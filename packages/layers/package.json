@@ -46,6 +46,7 @@
     "polyline-miter-util": "^1.0.1"
   },
   "devDependencies": {
+    "@antv/l7-test-utils": "workspace:^",
     "@types/d3-array": "^2.0.0",
     "@types/d3-color": "^1.2.2",
     "@types/d3-interpolate": "1.1.6",
@@ -53,11 +54,9 @@
     "@types/earcut": "^2.1.0",
     "@types/gl-matrix": "^2.4.5"
   },
-  "peerDependencies": {
-    "@antv/l7-test-utils": "workspace:*"
-  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "repository": "git@github.com:antvis/L7.git"
 }

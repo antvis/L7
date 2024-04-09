@@ -3,10 +3,22 @@ name: Deploy Site
 on:
   workflow_dispatch:
   release:
+    # released: only latest release will trigger
     types: [released]
+
+concurrency:
+  group: '${{ github.workflow }} - ${{ github.ref }}'
+  cancel-in-progress: true
 
 jobs:
   publish-site:
+    # manual dispatch or released only @antv/l7 main package
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'release' &&
+        startswith(github.event.release.tag_name, '@antv/l7@')
+      )
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -32,9 +44,9 @@ jobs:
           branch: gh-pages
           force: true
 
-      # Deploy site successful notify, only tigger by bot release
+      # Deploy site successful notify, only trigger by bot release
       - name: Deploy site successful notify
-        if: ${{ success() }} && github.event_name == 'release'
+        if: ${{ success() && github.event_name == 'release' }}
         uses: zcong1993/actions-ding@master
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
@@ -47,9 +59,9 @@ jobs:
               }
             }
 
-      # Deploy site failed notify, only tigger by bot release
+      # Deploy site failed notify, only trigger by bot release
       - name: 🔊 Deploy failed notify
-        if: ${{ failure() }} && github.event_name == 'release'
+        if: ${{ failure()  && github.event_name == 'release' }}
         uses: zcong1993/actions-ding@master
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
