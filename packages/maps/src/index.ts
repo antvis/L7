@@ -1,4 +1,5 @@
 import { MapType } from '@antv/l7-utils';
+import { default as GaodeMapNext } from './amap-next';
 import GaodeMapV1 from './amap/';
 import { default as GaodeMap, default as GaodeMapV2 } from './amap2/';
 import BaiduMap from './bmap/';
@@ -14,6 +15,7 @@ export {
   BaiduMap,
   Earth,
   GaodeMap,
+  GaodeMapNext,
   GaodeMapV1,
   GaodeMapV2,
   GoogleMap,
