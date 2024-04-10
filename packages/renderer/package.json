@@ -26,8 +26,8 @@
     "@babel/runtime": "^7.7.7",
     "regl": "1.6.1"
   },
-  "peerDependencies": {
-    "@antv/l7-test-utils": "workspace:*"
+  "devDependencies": {
+    "@antv/l7-test-utils": "workspace:^"
   },
   "publishConfig": {
     "access": "public",

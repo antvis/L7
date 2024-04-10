@@ -31,7 +31,7 @@
     "changeset": "changeset add",
     "publish-version": "changeset version",
     "publish-packages": "pnpm build && pnpm limit-size && changeset publish",
-    "sync": "./scripts/intranet-sync.sh"
+    "intranet-sync": "./scripts/intranet-sync.sh"
   },
   "lint-staged": {
     "*.md": [

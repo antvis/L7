@@ -49,11 +49,7 @@ jobs:
       # Checkout the comment's branch
       - uses: actions/checkout@v4
         with:
-          ref: ${{ steps.branch_name.outputs }}
-
-      - name: Checkout branch
-        run: |
-          git checkout -b ${{ steps.branch_name.outputs }}-update-snapshots
+          ref: ${{ steps.branch_name.outputs.result }}
 
       # Setup testing environment
       - name: Install dependencies
@@ -74,7 +70,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: 'chore: update snapshots by CI'
-          branch: ${{ steps.branch_name.outputs }}
+          branch: ${{ steps.branch_name.outputs.result }}-update-snapshots
           delete-branch: true
           title: 'chore(CI): update snapshots'
           body: |

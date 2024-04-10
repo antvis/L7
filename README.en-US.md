@@ -6,7 +6,7 @@
 
 🌍 Large-scale WebGL-powered Geospatial data visualization analysis framework.
 
-[![travis ci](https://travis-ci.com/antvis/L7.svg?branch=master)](https://travis-ci.com/antvis/L7) [![](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![最近提交](https://badgen.net/github/last-commit/antvis/L7)
+[![CI](https://github.com/antvis/L7/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/antvis/L7/actions/workflows/ci.yml) [![NPM](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![last commit](https://badgen.net/github/last-commit/antvis/L7)
 
 <p align="center">
   <a href="https://l7.antv.antgroup.com/tutorial/quickstart">Tutorials</a> •
@@ -85,14 +85,20 @@ const pointLayer = new PointLayer()
 scene.addLayer(pointLayer);
 ```
 
-## 🔗 Links
+## 🔗 Ecosystem
 
 - [L7Draw](https://github.com/antvis/L7Draw)
 - [L7Plot](https://github.com/antvis/L7Plot)
 - [LarkMap](https://github.com/antvis/LarkMap)
 - [L7VP](https://locationinsight.antv.antgroup.com)
-- [L7Editor](https://l7editor.antv.antgroup.com/)
+- [L7Editor](https://l7editor.antv.antgroup.com)
 
-## ✅ License
+## 🤝 Contributing
 
-[MIT license](./LICENSE).
+To become a contributor, please follow our [contributing guide](./CONTRIBUTING.en-US.md). If you are an active contributor, you can apply to be a outside collaborator.
+
+![https://github.com/antvis/l7/graphs/contributors](https://contrib.rocks/image?repo=antvis/l7)
+
+## 📄 License
+
+The scripts and documentation in this project are released under the [MIT license](./LICENSE).

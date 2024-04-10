@@ -6,7 +6,7 @@
 
 🌍 地理空间数据可视分析引擎
 
-[![travis ci](https://travis-ci.com/antvis/L7.svg?branch=master)](https://travis-ci.com/antvis/L7) [![](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![最近提交](https://badgen.net/github/last-commit/antvis/L7)
+[![CI](https://github.com/antvis/L7/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/antvis/L7/actions/workflows/ci.yml) [![NPM](https://flat.badgen.net/npm/v/@antv/l7?icon=npm)](https://www.npmjs.com/package/@antv/l7) ![last commit](https://badgen.net/github/last-commit/antvis/L7)
 
 <p align="center">
   <a href="https://l7.antv.antgroup.com/tutorial/quickstart">教程</a> •
@@ -118,14 +118,20 @@ const pointLayer = new PointLayer()
 scene.addLayer(pointLayer);
 ```
 
-## 🔗 Links
+## 🔗 周边生态
 
 - [L7Draw](https://github.com/antvis/L7Draw)
 - [L7Plot](https://github.com/antvis/L7Plot)
 - [LarkMap](https://github.com/antvis/LarkMap)
 - [L7VP](https://locationinsight.antv.antgroup.com)
-- [L7Editor](https://l7editor.antv.antgroup.com/)
+- [L7Editor](https://l7editor.antv.antgroup.com)
 
-## ✅ License
+## 🤝 参与贡献
 
-[MIT license](./LICENSE).
+如果希望参与到开发中，请遵从我们的[贡献指南](./CONTRIBUTING.md)。
+
+![https://github.com/antvis/l7/graphs/contributors](https://contrib.rocks/image?repo=antvis/l7)
+
+## 📄 开源协议
+
+该项目的代码和文档基于 [MIT license](./LICENSE) 开源协议。
