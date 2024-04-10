@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.21.4-beta.2
+
+### Patch Changes
+
+- [#2394](https://github.com/antvis/L7/pull/2394) [`b40ab11`](https://github.com/antvis/L7/commit/b40ab1190d87bd2d7531a60079dd599d1e248419) Thanks [@github-actions](https://github.com/apps/github-actions)! - feat: cow feat for test
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.4-beta.2
+  - @antv/l7-maps@2.21.4-beta.2
+  - @antv/l7-source@2.21.4-beta.2
+  - @antv/l7-utils@2.21.4-beta.2
+
 ## 2.21.4-beta.1
 
 ### Patch Changes
