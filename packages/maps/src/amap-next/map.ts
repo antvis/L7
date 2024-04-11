@@ -19,10 +19,10 @@ import { MapTheme } from '../utils/amap/theme';
 import { toPaddingOptions } from '../utils/utils';
 import './logo.css';
 
-// @ts-ignore
-window.forceWebGL = true;
+(window as any).forceWebGL = true;
 const AMAP_VERSION = '2.0';
 const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
+const ZOOM_OFFSET = 1;
 
 const AMapEventMapV2: Record<string, string> = {
   contextmenu: 'rightclick',
@@ -76,7 +76,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
 
       if (mapConstructorOptions.zoom) {
         // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
-        mapConstructorOptions.zoom += 1;
+        mapConstructorOptions.zoom += ZOOM_OFFSET;
       }
 
       if (token === AMAP_API_KEY) {
@@ -124,7 +124,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
       viewportHeight: this.map.getContainer()!.clientHeight,
       bearing: -this.map.getRotation(),
       pitch: this.map.getPitch(),
-      zoom: this.map.getZoom() - 1,
+      zoom: this.map.getZoom() - ZOOM_OFFSET,
     };
 
     return option;
@@ -208,17 +208,17 @@ export default class BMapService extends BaseMap<AMap.Map> {
   public getMinZoom(): number {
     // @ts-ignore
     const zooms: [number, number] = this.map.getZooms();
-    return zooms[0] - 1;
+    return zooms[0] - ZOOM_OFFSET;
   }
   public getMaxZoom(): number {
     // @ts-ignore
     const zooms: [number, number] = this.map.getZooms();
-    return zooms[1] - 1;
+    return zooms[1] - ZOOM_OFFSET;
   }
 
   public getZoom(): number {
     // 统一返回 Mapbox 缩放等级
-    return this.map.getZoom() - 1;
+    return this.map.getZoom() - ZOOM_OFFSET;
   }
 
   public getCenter(options?: ICameraOptions): ILngLat {
@@ -311,7 +311,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
   }
 
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
-    this.map.setZoomAndCenter(zoom + 1, center);
+    this.map.setZoomAndCenter(zoom + ZOOM_OFFSET, center);
   }
 
   public setCenter(lnglat: [number, number], options?: ICameraOptions): void {
@@ -332,7 +332,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
 
   public setZoom(zoom: number): void {
     // 统一设置 Mapbox 缩放等级
-    return this.map.setZoom(zoom + 1);
+    return this.map.setZoom(zoom + ZOOM_OFFSET);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
