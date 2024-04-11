@@ -207,12 +207,12 @@ export default class BMapService extends BaseMap<AMap.Map> {
 
   public getMinZoom(): number {
     // @ts-ignore
-    const zooms = this.map.get('zooms') as [number, number];
+    const zooms: [number, number] = this.map.getZooms();
     return zooms[0] - 1;
   }
   public getMaxZoom(): number {
     // @ts-ignore
-    const zooms = this.map.get('zooms') as [number, number];
+    const zooms: [number, number] = this.map.getZooms();
     return zooms[1] - 1;
   }
 
