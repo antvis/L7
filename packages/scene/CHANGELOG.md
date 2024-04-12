@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.21.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-layers@2.21.4
+  - @antv/l7-component@2.21.4
+  - @antv/l7-renderer@2.21.4
+  - @antv/l7-core@2.21.4
+  - @antv/l7-maps@2.21.4
+  - @antv/l7-utils@2.21.4
+
 ## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
 
 ### Bug Fixes
