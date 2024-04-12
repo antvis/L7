@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.21.4
+
+### Patch Changes
+
+- [#2399](https://github.com/antvis/L7/pull/2399) [`f1b8c29`](https://github.com/antvis/L7/commit/f1b8c295c44d15f75ce0f60401cf03cc79e9d96b) Thanks [@Dreammy23](https://github.com/Dreammy23)! - fix: 修复 rastertile 类型对应请求无法自定义请求头参数
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.4
+  - @antv/l7-utils@2.21.4
+
 ## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
 
 **Note:** Version bump only for package @antv/l7-source
