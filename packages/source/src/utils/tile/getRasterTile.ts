@@ -71,6 +71,7 @@ export const getTileImage = async (
   return new Promise((resolve, reject) => {
     const xhr = getImage(
       {
+        ...cfg?.requestParameters,
         url: imageUrl,
         type: cfg?.requestParameters?.type || 'arrayBuffer',
       },
