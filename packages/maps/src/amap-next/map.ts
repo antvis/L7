@@ -73,9 +73,9 @@ export default class BMapService extends BaseMap<AMap.Map> {
         viewMode: '3D',
         ...rest,
         // 地图平移过程中是否使用动画（如调用 panBy、panTo、setCenter、setZoomAndCenter 等函数, 将对地图产生平移操作, 是否使用动画平移的效果）, 默认为 true , 即使用动画
-        animateEnable: false,
+        // animateEnable: false,
         // 地图使用缓动效果
-        jogEnable: false,
+        // jogEnable: false,
       };
 
       if (mapConstructorOptions.zoom) {
