@@ -36,7 +36,7 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   protected abstract viewport: IViewport;
 
-  protected readonly config: Partial<IMapConfig>;
+  protected readonly config: Partial<IMapConfig<T>>;
 
   protected readonly configService: IGlobalConfigService;
 
@@ -51,7 +51,7 @@ export default abstract class BaseMap<T> implements IMapService<T> {
   protected cameraChangedCallback?: (viewport: IViewport) => void;
 
   constructor(container: L7Container) {
-    this.config = container.mapConfig;
+    this.config = container.mapConfig as Partial<IMapConfig<T>>;
     this.configService = container.globalConfigService;
     this.coordinateSystemService = container.coordinateSystemService;
   }

@@ -13,12 +13,12 @@ import { MapServiceEvent } from '@antv/l7-core';
 import { DOM, lodashUtil } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
-import type { IAMapInstance } from '../types';
 import Viewport from '../utils/Viewport';
 import { MapTheme } from '../utils/amap/theme';
 import { toPaddingOptions } from '../utils/utils';
 import './logo.css';
 
+// TODO: 干什么用的？
 (window as any).forceWebGL = true;
 const AMAP_VERSION = '2.0';
 const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
@@ -62,7 +62,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
     }
 
     if (mapInstance) {
-      this.map = mapInstance as AMap.Map & IAMapInstance;
+      this.map = mapInstance;
       this.mapContainer = this.map.getContainer();
 
       this.map.on('viewchange', this.handleCameraChanged);
@@ -72,6 +72,10 @@ export default class BMapService extends BaseMap<AMap.Map> {
         zooms: [minZoom, maxZoom],
         viewMode: '3D',
         ...rest,
+        // 地图平移过程中是否使用动画（如调用 panBy、panTo、setCenter、setZoomAndCenter 等函数, 将对地图产生平移操作, 是否使用动画平移的效果）, 默认为 true , 即使用动画
+        animateEnable: false,
+        // 地图使用缓动效果
+        jogEnable: false,
       };
 
       if (mapConstructorOptions.zoom) {
