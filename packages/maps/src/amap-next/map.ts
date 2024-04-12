@@ -63,7 +63,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
 
     if (mapInstance) {
       this.map = mapInstance as AMap.Map & IAMapInstance;
-      this.$mapContainer = this.map.getContainer();
+      this.mapContainer = this.map.getContainer();
 
       this.map.on('viewchange', this.handleCameraChanged);
     } else {
@@ -94,9 +94,9 @@ export default class BMapService extends BaseMap<AMap.Map> {
         throw Error('No container id specified');
       }
 
-      this.$mapContainer = this.creatMapContainer(id);
+      this.mapContainer = this.creatMapContainer(id);
 
-      const map = new AMap.Map(this.$mapContainer, mapConstructorOptions);
+      const map = new AMap.Map(this.mapContainer, mapConstructorOptions);
 
       this.map = map;
 
@@ -131,32 +131,21 @@ export default class BMapService extends BaseMap<AMap.Map> {
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
-    const $wrapper = super.creatMapContainer(id);
-    const $amapdiv = document.createElement('div');
-    $amapdiv.style.cssText += `
+    const wrapper = super.creatMapContainer(id);
+    const amapdiv = document.createElement('div');
+    amapdiv.style.cssText += `
        position: absolute;
        top: 0;
        height: 100%;
        width: 100%;
      `;
-    $amapdiv.id = lodashUtil.uniqueId('l7_amap_div');
-    $wrapper.appendChild($amapdiv);
-    return $amapdiv;
+    amapdiv.id = lodashUtil.uniqueId('l7_amap_div');
+    wrapper.appendChild(amapdiv);
+    return amapdiv;
   }
 
-  public destroy(): void {
-    super.destroy();
-    // 销毁地图可视化层的容器
-    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
-
-    // @ts-ignore
-    delete window.initAMap;
-
-    const $jsapi = document.getElementById('amap-script');
-    if ($jsapi) {
-      document.head.removeChild($jsapi);
-    }
-    this.map.destroy();
+  public getContainer(): HTMLElement | null {
+    return this.map.getContainer();
   }
 
   public addMarkerContainer(): void {
@@ -176,7 +165,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
   }
 
   public getCanvasOverlays() {
-    return this.$mapContainer?.querySelector('.amap-overlays') as HTMLElement;
+    return this.mapContainer?.querySelector('.amap-overlays') as HTMLElement;
   }
 
   // MapEvent // 定义事件类型
@@ -194,10 +183,6 @@ export default class BMapService extends BaseMap<AMap.Map> {
     } else {
       this.map.off(AMapEventMapV2[type] || type, handler);
     }
-  }
-
-  public getContainer(): HTMLElement | null {
-    return this.map.getContainer();
   }
 
   public getSize(): [number, number] {
@@ -263,7 +248,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
   }
 
   public getMapContainer() {
-    return this.$mapContainer;
+    return this.mapContainer;
   }
 
   public getMapCanvasContainer(): HTMLElement {
@@ -457,5 +442,20 @@ export default class BMapService extends BaseMap<AMap.Map> {
         ? (renderCanvas?.toDataURL('image/jpeg') as string)
         : (renderCanvas?.toDataURL('image/png') as string);
     return layersPng;
+  }
+
+  public destroy(): void {
+    super.destroy();
+    // 销毁地图可视化层的容器
+    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
+
+    // @ts-ignore
+    delete window.initAMap;
+
+    const $jsapi = document.getElementById('amap-script');
+    if ($jsapi) {
+      document.head.removeChild($jsapi);
+    }
+    this.map.destroy();
   }
 }

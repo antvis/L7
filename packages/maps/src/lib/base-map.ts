@@ -16,20 +16,23 @@ import type {
 } from '@antv/l7-core';
 import { CoordinateSystem } from '@antv/l7-core';
 import { EventEmitter } from 'eventemitter3';
-import type { ISimpleMapCoord } from '../utils/simpleMapCoord';
 import { SimpleMapCoord } from '../utils/simpleMapCoord';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
 export default abstract class BaseMap<T> implements IMapService<T> {
-  public version: string = 'DEFAUlTMAP';
+  public version = 'DEFAUlTMAP';
 
   public map: T;
 
-  public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
+  /**
+   * @deprecated
+   * TODO: 基类型不需要实现，只是自定义 Map 使用非地理坐标系才会用到
+   */
+  public simpleMapCoord = new SimpleMapCoord();
 
   // 背景色
-  public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
+  public bgColor = 'rgba(0.0, 0.0, 0.0, 0.0)';
 
   protected abstract viewport: IViewport;
 
@@ -39,26 +42,85 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   protected readonly coordinateSystemService: ICoordinateSystemService;
 
-  protected eventEmitter: any;
+  protected eventEmitter = new EventEmitter();
 
   protected markerContainer: HTMLElement;
 
-  protected $mapContainer: HTMLElement | null;
+  protected mapContainer: HTMLElement | null;
+
+  protected cameraChangedCallback?: (viewport: IViewport) => void;
 
   constructor(container: L7Container) {
     this.config = container.mapConfig;
     this.configService = container.globalConfigService;
     this.coordinateSystemService = container.coordinateSystemService;
-    this.eventEmitter = new EventEmitter();
   }
 
-  protected cameraChangedCallback?: (viewport: IViewport) => void;
+  public abstract init(): Promise<void>;
+
+  public onCameraChanged(callback: (viewport: IViewport) => void): void {
+    this.cameraChangedCallback = callback;
+  }
+
+  protected abstract handleCameraChanged: () => void;
+
+  public updateView(viewOption: Partial<IMapCamera>) {
+    this.emit('mapchange');
+    this.viewport.syncWithMapCamera({
+      bearing: viewOption.bearing,
+      center: viewOption.center,
+      viewportHeight: viewOption.viewportHeight,
+      pitch: viewOption.pitch,
+      viewportWidth: viewOption.viewportWidth,
+      zoom: viewOption.zoom,
+    });
+    this.updateCoordinateSystemService();
+    this.cameraChangedCallback?.(this.viewport);
+  }
+
+  protected updateCoordinateSystemService() {
+    const { offsetCoordinate = true } = this.config;
+    // set coordinate system
+    if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD && offsetCoordinate) {
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT_OFFSET);
+    } else {
+      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
+    }
+  }
+
+  protected creatMapContainer(id: string | HTMLDivElement) {
+    let $wrapper: HTMLDivElement;
+
+    if (typeof id === 'string') {
+      $wrapper = document.getElementById(id) as HTMLDivElement;
+    } else {
+      $wrapper = id;
+    }
+
+    return $wrapper;
+  }
+
+  public abstract getMapStyle(): string;
+
+  public abstract getMapStyleConfig(): MapStyleConfig;
+
+  public getMapStyleValue(name: MapStyleName): any {
+    return this.getMapStyleConfig()[name] ?? name;
+  }
 
   public abstract getType(): string;
 
   public setBgColor(color: string) {
     this.bgColor = color;
   }
+
+  public abstract getContainer(): HTMLElement | null;
+
+  public getMapContainer() {
+    return this.mapContainer;
+  }
+
+  public abstract getMapCanvasContainer(): HTMLElement;
 
   public abstract addMarkerContainer(): void;
 
@@ -78,9 +140,13 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   public abstract off(type: string, handle: (...args: any[]) => void): void;
 
-  public abstract getContainer(): HTMLElement | null;
+  public emit(name: string, ...args: any[]) {
+    this.eventEmitter.emit(name, ...args);
+  }
 
-  public abstract getMapCanvasContainer(): HTMLElement;
+  public once(name: string, handler: (...args: any[]) => void) {
+    this.eventEmitter.once(name, handler);
+  }
 
   public abstract getSize(): [number, number];
 
@@ -149,73 +215,9 @@ export default abstract class BaseMap<T> implements IMapService<T> {
     origin: IMercator,
   ): number[];
 
-  public abstract getMapStyle(): string;
-
-  public abstract getMapStyleConfig(): MapStyleConfig;
-
-  public getMapStyleValue(name: MapStyleName): any {
-    return this.getMapStyleConfig()[name] ?? name;
-  }
-
-  public abstract init(): Promise<void>;
+  public abstract exportMap(type: 'jpg' | 'png'): string;
 
   public destroy() {
     this.eventEmitter.removeAllListeners();
-  }
-
-  public emit(name: string, ...args: any[]) {
-    this.eventEmitter.emit(name, ...args);
-  }
-
-  public once(name: string, ...args: any[]) {
-    this.eventEmitter.once(name, ...args);
-  }
-
-  public getMapContainer() {
-    return this.$mapContainer;
-  }
-
-  public abstract exportMap(type: 'jpg' | 'png'): string;
-
-  public onCameraChanged(callback: (viewport: IViewport) => void): void {
-    this.cameraChangedCallback = callback;
-  }
-
-  protected abstract handleCameraChanged: () => void;
-
-  protected creatMapContainer(id: string | HTMLDivElement) {
-    let $wrapper: HTMLDivElement;
-
-    if (typeof id === 'string') {
-      $wrapper = document.getElementById(id) as HTMLDivElement;
-    } else {
-      $wrapper = id;
-    }
-
-    return $wrapper;
-  }
-
-  public updateView(viewOption: Partial<IMapCamera>) {
-    this.emit('mapchange');
-    this.viewport.syncWithMapCamera({
-      bearing: viewOption.bearing,
-      center: viewOption.center,
-      viewportHeight: viewOption.viewportHeight,
-      pitch: viewOption.pitch,
-      viewportWidth: viewOption.viewportWidth,
-      zoom: viewOption.zoom,
-    });
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback?.(this.viewport);
-  }
-
-  protected updateCoordinateSystemService() {
-    const { offsetCoordinate = true } = this.config;
-    // set coordinate system
-    if (this.viewport.getZoom() > LNGLAT_OFFSET_ZOOM_THRESHOLD && offsetCoordinate) {
-      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT_OFFSET);
-    } else {
-      this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
-    }
   }
 }
