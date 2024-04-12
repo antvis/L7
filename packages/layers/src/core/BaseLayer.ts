@@ -184,7 +184,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   protected get mapService() {
-    return this.container.mapService;
+    return this.container?.mapService;
   }
 
   public styleAttributeService: IStyleAttributeService;
