@@ -15,6 +15,7 @@ layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jp
   },
 });
 ```
+
 也可通过 `coordinates` 指定一系列坐，来定义图片在地图上的不规则形状范围的位置。
 
 ```js
@@ -26,7 +27,7 @@ layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jp
       [101.229887, 41.572654],
       [101.16971, 41.377836],
       [100.900015, 41.424628],
-    ]
+    ],
   },
 });
 ```

@@ -27,7 +27,7 @@ layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jp
       [101.229887, 41.572654],
       [101.16971, 41.377836],
       [100.900015, 41.424628],
-    ]
+    ],
   },
 });
 ```
