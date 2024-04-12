@@ -5,8 +5,7 @@ order: 2
 
 <embed src="@/docs/api/common/style.md"></embed>
 
-`imagelayer`By providing online pictures`url`Specify data via`extent`Specify the image's location on the map, and can also define the irregular shape range position of the image on the map by specifying a series of coordinates via `coordinates`.
-
+`imagelayer`By providing online pictures`url`Specify data via`extent`Specifies the position of the image within a rectangular range on the map.
 
 ```js
 layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg', {
@@ -16,6 +15,8 @@ layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jp
   },
 });
 ```
+
+Also available via`coordinates`Specify a series of locations that define the location of the image within an irregularly shaped range on the map.
 
 ```js
 layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg', {

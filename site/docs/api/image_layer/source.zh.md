@@ -5,7 +5,7 @@ order: 2
 
 <embed src="@/docs/api/common/style.md"></embed>
 
-`imagelayer` 通过提供在线图片的 `url` 指定数据，通过 `extent` 指定图片在地图上的矩形范围的位置，也可通过 `coordinates` 指定一系列坐标来定义图片在地图上的不规则形状范围的位置。
+`imagelayer` 通过提供在线图片的 `url` 指定数据，通过 `extent` 指定图片在地图上的矩形范围的位置。
 
 ```js
 layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg', {
@@ -15,6 +15,7 @@ layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jp
   },
 });
 ```
+也可通过 `coordinates` 指定一系列坐，来定义图片在地图上的不规则形状范围的位置。
 
 ```js
 layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg', {
