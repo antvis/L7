@@ -13,7 +13,7 @@ import { MapServiceEvent } from '@antv/l7-core';
 import { DOM, lodashUtil } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
-import Viewport from '../utils/Viewport';
+import Viewport from '../lib/web-mercator-viewport';
 import { MapTheme } from '../utils/amap/theme';
 import { toPaddingOptions } from '../utils/utils';
 import './logo.css';
@@ -48,8 +48,6 @@ export default class BMapService extends BaseMap<AMap.Map> {
       version = AMAP_VERSION,
       ...rest
     } = this.config;
-
-    this.viewport = new Viewport();
     this.version = version;
 
     if (!(window.AMap || mapInstance)) {

@@ -13,8 +13,8 @@ import type {
 import { MapServiceEvent } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import Viewport from '../lib/web-mercator-viewport';
 import BaseMapService from '../utils/BaseMapService';
-import Viewport from '../utils/Viewport';
 import { toPaddingOptions } from '../utils/utils';
 import BMapGLLoader from './bmapglloader';
 import './logo.css';
