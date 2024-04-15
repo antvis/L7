@@ -18,8 +18,6 @@ import { MapTheme } from '../utils/amap/theme';
 import { toPaddingOptions } from '../utils/utils';
 import './logo.css';
 
-// TODO: 干什么用的？
-(window as any).forceWebGL = true;
 const AMAP_VERSION = '2.0';
 const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
 const ZOOM_OFFSET = 1;
@@ -54,7 +52,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
       plugin.push('Map3D');
       await AMapLoader.load({
         key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
-        version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本å
+        version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本
         plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
       });
     }
@@ -82,8 +80,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
       }
 
       if (token === AMAP_API_KEY) {
-        // @ts-ignore
-        window._AMapSecurityConfig = {
+        (window as any)._AMapSecurityConfig = {
           securityJsCode: '2653011adeb04230b3a26cc9a780a800',
         };
         console.warn(
@@ -95,6 +92,9 @@ export default class BMapService extends BaseMap<AMap.Map> {
       if (!id) {
         throw Error('No container id specified');
       }
+
+      // https://lbs.amap.com/faq/other-product/1000080679/1000080682/1060894069
+      (window as any).forceWebGL = true;
 
       this.mapContainer = this.creatMapContainer(id);
 

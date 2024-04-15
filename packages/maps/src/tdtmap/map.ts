@@ -22,6 +22,7 @@ const EventMap: {
   zoomchange: ['Ge'],
 };
 
+// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class TdtMapService extends BaseMapService<any> {
   protected viewport: IViewport | null = null;
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =

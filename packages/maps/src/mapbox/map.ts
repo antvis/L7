@@ -6,17 +6,16 @@ import { mat4, vec3 } from 'gl-matrix';
 import type { Map } from 'mapbox-gl';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import Viewport from '../lib/web-mercator-viewport';
 import type { IMapboxInstance } from '../types';
 import BaseMapService from '../utils/BaseMapService';
-import Viewport from './Viewport';
 window.mapboxgl = mapboxgl;
 
 let mapdivCount = 0;
 const MAPBOX_API_KEY =
   '101MlGsZ2AmmA&access_token=pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2p0MG01MXRqMW45cjQzb2R6b2ptc3J4MSJ9.zA2W0IkI0c6KaAhJfk9bWg';
-/**
- * AMapService
- */
+
+// TODO: 基于抽象类 BaseMap 实现
 export default class MapboxService extends BaseMapService<Map & IMapboxInstance> {
   public version: string = 'MAPBOX';
   // get mapStatus method

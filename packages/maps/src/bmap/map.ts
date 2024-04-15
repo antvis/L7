@@ -31,6 +31,7 @@ const EventMap: {
 const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
 const BMAP_VERSION: string = '1.0';
 
+// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class BMapService extends BaseMapService<BMapGL.Map> {
   protected viewport: IViewport;
   protected styleConfig: Record<string, any> = {

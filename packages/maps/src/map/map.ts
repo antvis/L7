@@ -9,9 +9,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import Viewport from '../lib/web-mercator-viewport';
 import BaseMapService from '../utils/BaseMapService';
 
-/**
- * AMapService
- */
+// TODO: 基于抽象类 BaseMap 实现
 export default class DefaultMapService extends BaseMapService<Map> {
   public version: string = MapType.DEFAULT;
   /**
