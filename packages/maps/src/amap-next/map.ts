@@ -10,7 +10,7 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { DOM, lodashUtil } from '@antv/l7-utils';
+import { DOM, amap2Project, lodashUtil } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
@@ -43,10 +43,8 @@ export default class BMapService extends BaseMap<AMap.Map> {
       token = AMAP_API_KEY,
       mapInstance,
       plugin = [],
-      version = AMAP_VERSION,
       ...rest
     } = this.config;
-    this.version = version;
 
     if (!(window.AMap || mapInstance)) {
       plugin.push('Map3D');
@@ -337,7 +335,6 @@ export default class BMapService extends BaseMap<AMap.Map> {
   }
 
   public meterToCoord(center: [number, number], outer: [number, number]) {
-    // 统一根据经纬度来转化
     // Tip: 实际米距离 unit meter
     const meterDis = AMap.GeometryUtil.distance(
       new AMap.LngLat(...center),
@@ -345,8 +342,8 @@ export default class BMapService extends BaseMap<AMap.Map> {
     );
 
     // Tip: 三维世界坐标距离
-    const [x1, y1] = this.lngLatToCoord(center);
-    const [x2, y2] = this.lngLatToCoord(outer);
+    const [x1, y1] = amap2Project(...center);
+    const [x2, y2] = amap2Project(...outer);
     const coordDis = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
     return coordDis / meterDis;
@@ -358,8 +355,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
   }
 
   public lngLatToPixel(lnglat: [number, number]): IPoint {
-    const p = this.map.lnglatToPixel(new AMap.LngLat(lnglat[0], lnglat[1]));
-    // lngLatToPixel
+    const p = this.map.lnglatToPixel(lnglat);
     return {
       x: p.getX(),
       y: p.getY(),
@@ -374,33 +370,11 @@ export default class BMapService extends BaseMap<AMap.Map> {
     };
   }
   public lngLatToContainer(lnglat: [number, number]): IPoint {
-    const ll = new AMap.LngLat(lnglat[0], lnglat[1]);
-    const pixel = this.map.lngLatToContainer(ll);
+    const pixel = this.map.lngLatToContainer(lnglat);
     return {
       x: pixel.getX(),
       y: pixel.getY(),
     };
-  }
-
-  public lngLatToCoord(lnglat: [number, number]): any {
-    // @ts-ignore
-    const { x, y } = this.map.lngLatToGeodeticCoord(lnglat);
-    return [x, -y];
-  }
-
-  /**
-   * 转化线、面类型的点位数据
-   */
-  public lngLatToCoords(lnglatArray: number[][][] | number[][]): number[][][] | number[][] {
-    return lnglatArray.map((lnglats) => {
-      if (typeof lnglats[0] === 'number') {
-        return this.lngLatToCoord(lnglats as [number, number]);
-      } else {
-        return lnglats.map((lnglat) => {
-          return this.lngLatToCoord(lnglat as [number, number]);
-        });
-      }
-    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -429,10 +403,6 @@ export default class BMapService extends BaseMap<AMap.Map> {
     mat4.rotateZ(modelMatrix, modelMatrix, rotate[2]);
 
     return modelMatrix as unknown as number[];
-  }
-
-  public getCustomCoordCenter?(): [number, number] {
-    throw new Error('Method not implemented.');
   }
 
   public exportMap(type: 'jpg' | 'png'): string {

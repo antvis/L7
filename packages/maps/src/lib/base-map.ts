@@ -21,8 +21,9 @@ import { SimpleMapCoord } from '../utils/simpleMapCoord';
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
 export default abstract class BaseMap<T> implements IMapService<T> {
-  public version = 'DEFAUlTMAP';
-
+  /**
+   * 地图实例
+   */
   public map: T;
 
   /**
@@ -31,7 +32,9 @@ export default abstract class BaseMap<T> implements IMapService<T> {
    */
   public simpleMapCoord = new SimpleMapCoord();
 
-  // 背景色
+  /**
+   * 背景色
+   */
   public bgColor = 'rgba(0.0, 0.0, 0.0, 0.0)';
 
   protected abstract viewport: IViewport;
