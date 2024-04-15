@@ -361,6 +361,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
       y: p.getY(),
     };
   }
+
   public containerToLngLat(pixel: [number, number]): ILngLat {
     const ll = new AMap.Pixel(pixel[0], pixel[1]);
     const lngLat = this.map.containerToLngLat(ll);
@@ -369,6 +370,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
       lat: lngLat?.getLat(),
     };
   }
+
   public lngLatToContainer(lnglat: [number, number]): IPoint {
     const pixel = this.map.lngLatToContainer(lnglat);
     return {
