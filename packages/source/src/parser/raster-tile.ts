@@ -55,7 +55,7 @@ export default function rasterTile(
           cfg?.getCustomData,
         );
       case RasterTileType.ARRAYBUFFER:
-        return getTileBuffer(data, tileParams, tile, cfg?.format || defaultFormat, cfg?.operation);
+        return getTileBuffer(data, tileParams, tile, cfg);
       case RasterTileType.CUSTOMARRAYBUFFER:
       case RasterTileType.CUSTOMRGB:
         return getCustomData(

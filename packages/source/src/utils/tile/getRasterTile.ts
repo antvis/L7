@@ -1,7 +1,6 @@
 import type { ITileParserCFG } from '@antv/l7-core';
 import type { ITileBand, SourceTile, TileLoadParams } from '@antv/l7-utils';
 import { getImage, getURLFromTemplate, getWMTSURLFromTemplate } from '@antv/l7-utils';
-import type { IBandsOperation, IRasterFormat } from '../../interface';
 import { getRasterFile } from './getRasterData';
 import { getTileUrl } from './request';
 
@@ -18,17 +17,18 @@ export const getTileBuffer = async (
   url: string | string[] | ITileBand[],
   tileParams: TileLoadParams,
   tile: SourceTile,
-  rasterFormat: IRasterFormat,
-  operation?: IBandsOperation,
+  cfg: Partial<ITileParserCFG>,
 ): Promise<HTMLImageElement | ImageBitmap> => {
-  const requestParameters = {
-    // getTileUrl 将原始的 url 路径进行转化（多服务器）
-    url: getTileUrl(url, tileParams),
+  const { format = defaultFormat, operation, requestParameters = {} } = cfg;
+  const reqParams = {
+    ...requestParameters,
+    url: getTileUrl(url, tileParams), // getTileUrl 将原始的 url 路径进行转化（多服务器）
   };
+
   return new Promise((resolve, reject) => {
     getRasterFile(
       tile,
-      requestParameters,
+      reqParams,
       (err: any, img: any) => {
         if (err) {
           reject(err);
@@ -36,11 +36,12 @@ export const getTileBuffer = async (
           resolve(img);
         }
       },
-      rasterFormat,
+      format,
       operation,
     );
   });
 };
+
 /**
  * 获取图片格式的文件 jpg、png 等
  * @param url
