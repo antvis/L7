@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7",
-  "version": "2.21.4",
+  "version": "2.21.5-beat.0",
   "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "repository": "git@github.com:antvis/L7.git",
   "license": "MIT",
