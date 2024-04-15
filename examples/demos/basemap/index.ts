@@ -1,1 +1,1 @@
-export { MapRender as amap2 } from './amap';
+export { MapRender as amapData } from './amap-data';
