@@ -87,7 +87,7 @@ scene.on('loaded', () => {
 
 #### 设置网格聚合参数
 
-布局方法 通过 `source` 的 `tansforms` 属性配置。
+布局方法 通过 `source` 的 `transforms` 属性配置。
 
 - type  数据聚合类型 `hexagon`。
 - size  网格半径 单位 米。

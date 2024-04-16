@@ -1,6 +1,9 @@
 raster-rgb source synthesizes multi-band data into RGB data for display. For example, for LandSat8 data, we can perform RGB combination display according to the 5,4,3 or 4,3,2 bands.
 
-### demo
+- data data
+- option configuration item
+  - parser data parsing parameters
+    - type parsing type`rgb`
 
 ```ts
 layer.source(bandsValues, {
@@ -58,8 +61,8 @@ async function getTiffData(url: string) {
 
 - height width`必选`
 
-- countCut color stretching depends on`[number,number]`Value is percentage, default value`[2,98]` `可选`
+- countCut color stretching parameter`[number,number]`Value is percentage, default value`[2,98]` `可选`
 
 ### Complete example
 
-[Raster RGB](../../../../examples/raster/data_raster/#543)
+[Raster RGB](../../../../examples/raster/rgb/#543)

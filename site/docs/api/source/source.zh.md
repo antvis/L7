@@ -7,7 +7,7 @@ order: 0
 
 ## 简介
 
-source 地理数据处理模块，主要包含数据解析（parser)，和数据处理（transform）。
+source 地理数据处理模块，主要包含数据解析（parser）和数据处理（transforms）。
 
 ```js
 const source = new Source(data, option);
@@ -29,17 +29,15 @@ const source = new Source(data, option);
 
 ## option
 
-`source` 通过 `option` 来描述如果处理数据， 其中主要包括 `parser` 和 `transforms`。
+`source` 通过 `option` 来描述或处理数据， 其中主要包括 `parser` 和 `transforms`。
 
 ### parser
 
-不同数据类型处理成统一数据格式。矢量数据包括 GeoJON， CSV，Json 等不同数据格式，栅格数据，包括 Raster，Image 数据。将来还会支持瓦片格式数据。
+parser 可以将不同类型的空间数据处理成统一数据格式。空间数据分为矢量数据、栅格数据和瓦片服务三大类：
 
-空间数据分矢量数据，栅格数据和瓦片三大类
-
-- 矢量数据 支持 csv，geojson，json 三种数据类型
-- 栅格数据 支持 image，Raster
-- 瓦片服务 支持 mvt、rasterTile、geojsonvt
+- 矢量数据 支持 [GeoJSON](/api/source/geojson)、[CSV](/api/source/csv)、[JSON](/api/source/json) 类型
+- 栅格数据 支持 [Raster](/api/source/raster)、[Image](/api/source/image) 类型
+- 瓦片服务 支持 [MVT](/api/source/mvt)、[RasterTile](/api/source/raster_tile)、GeoJSON VT 类型
 
 ```js
 type IParserType =
@@ -51,6 +49,7 @@ type IParserType =
   | 'rasterTile'
   | 'mvt'
   | 'geojsonvt';
+
 interface IParser {
   type: IParserType;
   x?: string;
@@ -65,7 +64,7 @@ interface IParser {
 
 #### geojson
 
-[geojson](https://www.yuque.com/antv/l7/dm2zll) 数据为默认数据格式，可以 不设置 parser 参数
+[geojson](https://www.yuque.com/antv/l7/dm2zll) 为默认数据格式，可以不设置 parser 参数
 
 ```javascript
 layer.source(data);
@@ -73,8 +72,7 @@ layer.source(data);
 
 ### transforms
 
-tranforms 处理的是的标准化之后的数据，进行数据转换，数据统计，网格布局，数据聚合等数据操作，处理完之后返回的也是标准数据。  
-标准化之后的数据结构包括 coordinates 地理坐标字段，以及其他属性字段。
+transforms 处理的是标准化后的数据，可进行数据转换、数据统计、网格布局、数据聚合等数据操作，处理完后返回的也是标准数据。标准化后的数据结构包括 coordinates 地理坐标字段，以及其他属性字段。
 
 ```json
 [
@@ -88,19 +86,19 @@ tranforms 处理的是的标准化之后的数据，进行数据转换，数据�
 ]
 ```
 
-目前支持两种热力图使用的数据处理方法 grid，hexagon transform 配置项
+目前 grid、hexagon 两种热力图支持使用数据处理方法 transforms 配置项
 
 - type 数据处理类型
-- tansform cfg  数据处理配置项
+- transforms cfg  数据处理配置项
 
 #### grid
 
 生成方格网布局，根据数据字段统计，主要在网格热力图中使用
 
-- type: 'grid',
+- type: 'grid'
 - size: 网格半径
 - field: 数据统计字段
-- method: 聚合方法  count,max,min,sum,mean 5 个统计维度
+- method: 聚合方法，有 count、max、min、sum、mean 5 个统计维度
 
 ```javascript
 layer.source(data, {
@@ -119,10 +117,10 @@ layer.source(data, {
 
 生成六边形网格布局，根据数据字段统计
 
-- type: 'hexagon',
+- type: 'hexagon'
 - size: 网格半径
 - field: 数据统计字段
-- method:聚合方法   count,max,min,sum,mean 5 个统计维度
+- method: 聚合方法，有 count、max、min、sum、mean 5 个统计维度
 
 #### join
 
@@ -131,12 +129,13 @@ layer.source(data, {
 **配置项**
 
 - type: join
-- sourceField 需要连接的业务数据字段名称
-- data 需要连接的数据源 仅支持 json 格式
-- targetField 关联的地理数据字段名称
+- sourceField: 需要连接的业务数据字段名称
+- data: 需要连接的数据源，仅支持 json 格式
+- targetField: 关联的地理数据字段名称
 
 ```javascript
-const data = {
+// geoData 是地理数据
+const geoData = {
   type: 'FeatureCollection',
   features: [
     {
@@ -149,7 +148,8 @@ const data = {
   ],
 };
 
-const data2 = [
+// customData 属性数据或者业务数据
+const customData = [
   {
     name: '北京',
     value: 13,
@@ -159,23 +159,21 @@ const data2 = [
     value: 20,
   },
 ];
-// data 是地理数据
-// data2 属性数据或者业务数据
 
-// 通过join方法我们就可以将两个数据连接到一起
+// 通过 join 方法我们就可以将两个数据连接到一起
 
 layer
-  .source(data, {
+  .source(geoData, {
     transforms: [
       {
         type: 'join',
-        sourceField: 'name', //data1 对应字段名
-        targetField: 'city', // data 对应字段名 绑定到的地理数据
-        data: data2,
+        sourceField: 'name', //customData 对应字段名
+        targetField: 'city', // geoData 对应字段名，绑定到的地理数据
+        data: customData,
       },
     ],
   })
-  .color('value'); // 可以采用data1的value字段进行数据到颜色的映射
+  .color('value'); // 可以采用 customData 的 value 字段进行数据到颜色的映射
 ```
 
 ### cluster
@@ -186,7 +184,7 @@ layer
 
 ### clusterOption 可选
 
-- radius 聚合半径 **number** default 40
+- radius: 聚合半径 **number** default 40
 - minZoom: 最小聚合缩放等级 **number** default 0
 - maxZoom: 最大聚合缩放等级 **number** default 16
 
@@ -213,12 +211,12 @@ layer.on('click', (e) => {
 
 #### 参数
 
-- data 数据同 source 初始化参数
-- option 配置项同 source 初始化参数
+- data: 数据同 source 初始化参数
+- option: 配置项同 source 初始化参数
 
 ### getFeatureById
 
-根据 featurID 获取 feature 要素
+根据 featureID 获取 feature 要素
 
 #### 参数
 

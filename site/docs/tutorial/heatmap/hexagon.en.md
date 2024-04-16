@@ -17,7 +17,7 @@ Aggregate a set of point data into hexagonal grids of equal size. One hexagonal 
 
 Let’s introduce how to draw a simple cellular heat map.
 
-- you can`L7`Found on the official website[Online case](/examples/heatmap/hexagon/#china)
+- you can found [Online case](/examples/heatmap/hexagon/#china) on the `L7` official website
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';
@@ -85,7 +85,7 @@ Grid data only supports point data as the data source, and the data format suppo
 
 #### Set grid aggregation parameters
 
-layout method pass`source`of`tansforms`Property configuration.
+layout method pass`source`of`transforms`Property configuration.
 
 - type data aggregation type`hexagon`。
 - size grid radius in meters.

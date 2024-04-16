@@ -44,7 +44,7 @@ callback parameters
 
 Customize the tile data acquisition method, trial business scenarios require data authentication, or special processing scenarios
 
-<embed src="@/docs/api/common/source/tile/method.en.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>
 
 ## Example
 
