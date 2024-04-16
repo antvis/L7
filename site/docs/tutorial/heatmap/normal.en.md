@@ -17,7 +17,7 @@ Heat maps are a very common requirement in map visualization scenarios. The aggr
 
 Let's introduce how to draw a classic heat map.
 
-- you can`L7`Found on the official website[Online case](/examples/heatmap/heatmap/#heatmap)
+- you can found [Online case](/examples/heatmap/heatmap/#heatmap) on the `L7` official website
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';
@@ -76,7 +76,7 @@ Classic heat map`shape`is a constant`heatmap`。
 
 We need to map the value to`[0, 1]`value range space.
 
-- `field`:Heat map weight field
+- `field`: Heat map weight field
 - `values`: Data mapping interval heat map display`[0, 1]`best effect
 
 ```javascript

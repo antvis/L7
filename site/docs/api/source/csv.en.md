@@ -9,8 +9,8 @@ L7 supports CSV comma delimited CSV data loading.
 
 CSV is a text data structure and it is difficult to express complex geographic data structures, so CSV only supports two data structures.
 
-- Point data requires specifying longitude and latitude coordinates
-- Line segment and arc data need to specify the longitude and latitude coordinates of the starting and ending points
+- Point data: longitude and latitude coordinates need to be specified
+- Line segment and arc data: need to be specified**Starting and ending points**longitude and latitude coordinates
 
 ## parser
 

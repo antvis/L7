@@ -1,6 +1,9 @@
 raster-ndi(Normalized Difference Indices) source is to calculate the normalized index of multi-band data, such as calculating NDVI/NDWI and other indices.
 
-### demo
+- data data
+- option configuration item
+  - parser data parsing parameters
+    - type parsing type`ndi`
 
 ```ts
 layer.source(bandsValues, {
@@ -60,4 +63,4 @@ async function getTiffData(url: string) {
 
 ### Complete example
 
-[Raster RGB](../../../../examples/raster/data_raster/#543)
+[Raster ndi](../../../../examples/raster/ndi/#ndbi)

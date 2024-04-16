@@ -1,5 +1,5 @@
 ---
-title: RasterLayer Composite band
+title: Raster RGB
 order: 3
 ---
 
@@ -7,15 +7,11 @@ order: 3
 
 ## Introduction
 
-`RasterLayer`The layer mainly realizes the visualization of raster data. The main source of raster data is satellite remote sensing data, such as digital elevation map, vegetation distribution map, and night light map.
-
-## Option
-
-<embed src="@/docs/api/common/layer/options.en.md"></embed>
+`Raster RGB `Band combination visualization, different band mapping to R/G/B channel visualization
 
 ## source
 
-<embed src="@/docs/api/common/source/raster/raster_rgb.en.md"></embed>
+<embed src="@/docs/api/common/source/raster/raster_rgb.zh.md"></embed>
 
 ## style
 

@@ -139,4 +139,4 @@ const rasterSource = new Source(
 );
 ```
 
-<embed src="@/docs/api/common/source/tile/method.en.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>

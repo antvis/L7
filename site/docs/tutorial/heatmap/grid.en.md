@@ -17,7 +17,7 @@ Aggregate a set of point data into square grids of equal size. A square grid rep
 
 Let's introduce how to draw a simple grid heat map.
 
-- you can`L7`Found on the official website[Online case](/examples/heatmap/grid#china)
+- you can found [Online case](/examples/heatmap/heatmap/#heatmap) on the `L7` official website
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';
@@ -87,7 +87,7 @@ Grid data only supports point data as the data source, and the data format suppo
 
 #### Set grid aggregation parameters
 
-layout method pass`source`of`tansforms`Property configuration.
+layout method pass`source`of`transforms`Property configuration.
 
 - type data aggregation type`hexagon`。
 - size grid radius in meters.
