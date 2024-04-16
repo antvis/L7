@@ -8,11 +8,14 @@
     "**/*.css"
   ],
   "main": "lib/index.js",
+  "unpkg": "dist/l7-maps.min.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
+    "dist",
     "lib",
-    "es"
+    "es",
+    "!dist/report.html"
   ],
   "scripts": {
     "dev": "father dev",
