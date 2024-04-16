@@ -47,7 +47,10 @@ jobs:
           NPM_TOKEN: ${{ secrets.YJ_NPM_TOKEN }}
         with:
           publish: pnpm publish-packages
-          createGithubReleases: true
+          # 暂时关闭自动创建 Github Releases，待解决以下问题：
+          # 1. 只创建主包 @antv/l7 的 Github Release，并解决同步所有日志到 release body
+          # 2. Github Releases 创建非 Latest，Release Notify action 获取 Latest Release 是上一个版本问题
+          createGithubReleases: false
 
   # when release successful
   release-succeeded:
