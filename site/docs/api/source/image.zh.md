@@ -5,7 +5,7 @@ order: 4
 
 <embed src="@/docs/api/common/style.md"></embed>
 
-Image 数据主要用于在地图根据经纬度范围添加图图片，比如一幅纸制地图扫描版你要放在地图显示。
+Image 数据主要用于在地图上根据经纬度范围添加图片，比如一幅纸制地图扫描版需要显示在地图上。
 
 ## parser
 

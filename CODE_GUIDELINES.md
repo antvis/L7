@@ -233,7 +233,7 @@ class ALayer {
 
 ```typescript
 /**
- * @dedeprecated
+ * @deprecated
  * 描述替代 API 方案
  */
 function getMapCenter() {}

@@ -5,7 +5,7 @@ order: 2
 
 <embed src="@/docs/api/common/style.md"></embed>
 
-GeoJSON 虽然是通用的的地理数据格式，在具体使用场景中，数据服务人员可能并不熟悉 GeoJON,或者没有生成 GeoJON 的工具， 因此 L7 对数据定义了 Parser 的概念，你的数据可以是任何格式，使用指定数据对应的地理信息字段即可。
+GeoJSON 虽然是通用的的地理数据格式，在具体使用场景中，数据服务人员可能并不熟悉 GeoJSON,或者没有生成 GeoJSON 的工具， 因此 L7 对数据定义了 Parser 的概念，你的数据可以是任何格式，使用指定数据对应的地理信息字段即可。
 
 ## JSON
 
@@ -29,7 +29,7 @@ json 数据解析使用对应 JSON parser
 
 如果数据是点数据，只需要设置 x,y 字段即可
 
-如果是线段，弧线数据，需要知道起止点坐标既，x,y,x1,y1
+如果是线段、弧线数据，需要知道起止点坐标，x,y,x1,y1
 
 ```javascript
 layer.source(data, {

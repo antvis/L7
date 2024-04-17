@@ -3,6 +3,7 @@ import { generateCanvasTestCases } from './utils/generator';
 const TEST_CASES = [
   {
     name: 'arc',
+    sleepTime: 500,
   },
   {
     name: 'arc_plane',
@@ -10,6 +11,7 @@ const TEST_CASES = [
   },
   {
     name: 'arc',
+    sleepTime: 600,
   },
   {
     name: 'dash',

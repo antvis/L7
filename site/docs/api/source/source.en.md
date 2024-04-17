@@ -7,7 +7,7 @@ order: 0
 
 ## Introduction
 
-The source geographical data processing module mainly includes data analysis (parser) and data processing (transform).
+source geographical data processing module, mainly includes data analysis (parser) and data processing (transforms).
 
 ```js
 const source = new Source(data, option);
@@ -29,17 +29,15 @@ Different parser types correspond to different data types
 
 ## option
 
-`source`pass`option`to describe how the data is processed, which mainly include`parser`and`transforms`。
+`source`pass`option`to describe or process data, which mainly include`parser`and`transforms`。
 
 ### parser
 
-Different data types are processed into a unified data format. Vector data includes different data formats such as GeoJON, CSV, and JSON, and raster data includes Raster and Image data. Tile format data will also be supported in the future.
+parser can process different types of spatial data into a unified data format. Spatial data is divided into three categories: vector data, raster data and tile services:
 
-Spatial data is divided into three categories: vector data, raster data and tiles
-
-- Vector data supports three data types: csv, geojson, and json.
-- Raster data supports image, Raster
-- Tile service supports mvt, rasterTile, geojsonvt
+- Vector data support[GeoJSON](/api/source/geojson)、[CSV](/api/source/csv)、[JSON](/api/source/json)type
+- Raster data support[Raster](/api/source/raster)、[Image](/api/source/image)type
+- Tile service support[MVT](/api/source/mvt)、[RasterTile](/api/source/raster_tile), GeoJSON VT type
 
 ```js
 type IParserType =
@@ -51,6 +49,7 @@ type IParserType =
   | 'rasterTile'
   | 'mvt'
   | 'geojsonvt';
+
 interface IParser {
   type: IParserType;
   x?: string;
@@ -65,7 +64,7 @@ interface IParser {
 
 #### geojson
 
-[geojson](https://www.yuque.com/antv/l7/dm2zll)The data is in the default data format, and the parser parameter does not need to be set.
+[geojson](https://www.yuque.com/antv/l7/dm2zll)It is the default data format and you do not need to set the parser parameter.
 
 ```javascript
 layer.source(data);
@@ -73,8 +72,7 @@ layer.source(data);
 
 ### transforms
 
-Transforms processes standardized data and performs data operations such as data conversion, data statistics, grid layout, and data aggregation. After processing, standard data is returned.\
-The standardized data structure includes coordinates geographical coordinate fields, and other attribute fields.
+Transforms processes standardized data and can perform data operations such as data conversion, data statistics, grid layout, and data aggregation. After processing, standard data is returned. The standardized data structure includes coordinates geographical coordinate fields, and other attribute fields.
 
 ```json
 [
@@ -88,19 +86,19 @@ The standardized data structure includes coordinates geographical coordinate fie
 ]
 ```
 
-Currently, two data processing methods used in heat maps are supported: grid and hexagon transform configuration items
+Currently, grid and hexagon heat maps support the data processing method transforms configuration item.
 
 - type data processing type
-- tansform cfg data processing configuration items
+- transforms cfg data processing configuration items
 
 #### grid
 
 Generate a square grid layout, based on data field statistics, mainly used in grid heat maps
 
-- type: 'grid',
+- type: 'grid'
 - size: grid radius
 - field: data statistics field
-- method: aggregation method count,max,min,sum,mean 5 statistical dimensions
+- method: aggregation method, with 5 statistical dimensions: count, max, min, sum, mean
 
 ```javascript
 layer.source(data, {
@@ -119,10 +117,10 @@ layer.source(data, {
 
 Generate hexagonal grid layout, statistics based on data fields
 
-- type: 'hexagon',
+- type: 'hexagon'
 - size: grid radius
 - field: data statistics field
-- method: aggregation method count, max, min, sum, mean 5 statistical dimensions
+- method: aggregation method, with 5 statistical dimensions: count, max, min, sum, mean
 
 #### join
 
@@ -131,12 +129,13 @@ Data connection, in many cases in business, geographical data and business data 
 **Configuration items**
 
 - type: join
-- sourceField The name of the business data field that needs to be connected
-- data The data source to be connected only supports json format
-- targetField associated geographic data field name
+- sourceField: the name of the business data field that needs to be connected
+- data: the data source to be connected, only supports json format
+- targetField: associated geographic data field name
 
 ```javascript
-const data = {
+// geoData is geographical data
+const geoData = {
   type: 'FeatureCollection',
   features: [
     {
@@ -149,7 +148,8 @@ const data = {
   ],
 };
 
-const data2 = [
+// customData attribute data or business data
+const customData = [
   {
     name: 'Beijing',
     value: 13,
@@ -159,23 +159,21 @@ const data2 = [
     value: 20,
   },
 ];
-// data is geographical data
-// data2 attribute data or business data
 
-// We can join two data together through the join method
+// Through the join method, we can join the two data together
 
 layer
-  .source(data, {
+  .source(geoData, {
     transforms: [
       {
         type: 'join',
-        sourceField: 'name', //data1 corresponding field name
-        targetField: 'city', // data corresponds to the field name and is bound to the geographical data
-        data: data2,
+        sourceField: 'name', //customData corresponding field name
+        targetField: 'city', // geoData corresponding field name, the geographical data bound to
+        data: customData,
       },
     ],
   })
-  .color('value'); // You can use the value field of data1 to map data to color.
+  .color('value'); // You can use the value field of customData to map data to color.
 ```
 
 ### cluster
@@ -186,7 +184,7 @@ layer
 
 ### clusterOption optional
 
-- radius aggregate radius**number**default 40
+- radius: aggregate radius**number**default 40
 - minZoom: Minimum aggregate zoom level**number**default 0
 - maxZoom: Maximum aggregate zoom level**number** default 16
 
@@ -213,8 +211,8 @@ Update source data
 
 #### parameter
 
-- data data is the same as source initialization parameter
-- option configuration item is the same as source initialization parameter
+- data: data is the same as source initialization parameter
+- option: configuration item is the same as source initialization parameter
 
 ### getFeatureById
 

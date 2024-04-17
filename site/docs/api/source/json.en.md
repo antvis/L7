@@ -5,7 +5,7 @@ order: 2
 
 <embed src="@/docs/api/common/style.md"></embed>
 
-Although GeoJSON is a universal geographical data format, in specific usage scenarios, data service personnel may not be familiar with GeoJON, or do not have the tools to generate GeoJON. Therefore, L7 defines the concept of Parser for data, and your data can be in any format. , just use the geographic information field corresponding to the specified data.
+Although GeoJSON is a universal geographical data format, in specific usage scenarios, data service personnel may not be familiar with GeoJSON, or do not have the tools to generate GeoJSON. Therefore, L7 defines the concept of Parser for data, and your data can be in any format. , just use the geographic information field corresponding to the specified data.
 
 ## JSON
 
@@ -190,16 +190,18 @@ coordinate format The coordinate field of geojson supports LineString, MultiLine
 [Line coodinates data format](/api/source/geojson#linesring)
 
 ```javascript
-const data = {
-  name: 'path1',
-  path: [
-    [58.00781249999999, 32.84267363195431],
-    [85.78125, 25.16517336866393],
-    [101.953125, 41.77131167976407],
-    [114.9609375, 39.639537564366684],
-    [117.42187500000001, 28.613459424004414],
-  ],
-};
+const data = [
+  {
+    name: 'path1',
+    path: [
+      [58.00781249999999, 32.84267363195431],
+      [85.78125, 25.16517336866393],
+      [101.953125, 41.77131167976407],
+      [114.9609375, 39.639537564366684],
+      [117.42187500000001, 28.613459424004414],
+    ],
+  },
+];
 ```
 
 Specify by coordinates when using

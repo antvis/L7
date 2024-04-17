@@ -153,7 +153,7 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
   }
 
   public getCanvasOverlays() {
-    return this.getMapContainer();
+    return this.getMapContainer()?.querySelector('.maplibregl-canvas-container') as HTMLElement;
   }
 
   public meterToCoord(center: [number, number], outer: [number, number]) {

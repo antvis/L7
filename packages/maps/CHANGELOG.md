@@ -1,5 +1,34 @@
 # Change Log
 
+## 2.21.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.6
+  - @antv/l7-map@2.21.6
+  - @antv/l7-utils@2.21.6
+
+## 2.21.5
+
+### Patch Changes
+
+- [#2407](https://github.com/antvis/L7/pull/2407) [`a73f0b6`](https://github.com/antvis/L7/commit/a73f0b6ef8aee79cce346a183e9323dee41176c7) Thanks [@lvisei](https://github.com/lvisei)! - build: mpas 包添加 umd 产物
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.5
+  - @antv/l7-map@2.21.5
+  - @antv/l7-utils@2.21.5
+
+## 2.21.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.4
+  - @antv/l7-map@2.21.4
+  - @antv/l7-utils@2.21.4
+
 ## [2.1.12](https://github.com/antvis/L7/compare/v2.1.11...v2.1.12) (2020-04-10)
 
 ### Bug Fixes

@@ -26,7 +26,6 @@ jobs:
         node-version: [18.x]
     outputs:
       published: ${{ steps.changesets.outputs.published }}
-      hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
       publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
 
     steps:
@@ -47,9 +46,43 @@ jobs:
           NPM_TOKEN: ${{ secrets.YJ_NPM_TOKEN }}
         with:
           publish: pnpm publish-packages
-          createGithubReleases: true
+          # 暂时关闭自动创建 Github Releases，待解决以下问题：
+          # 1. 只创建主包 @antv/l7 的 Github Release，并解决同步所有日志到 release body
+          # 2. Github Releases 创建非 Latest，Release Notify action 获取 Latest Release 是上一个版本问题
+          createGithubReleases: false
 
-  # when release successful
+      # when release not publish
+      - name: Released not publish
+        if: steps.changesets.outputs.published == 'false'
+        run: |
+          if [[ ${{ steps.changesets.outputs.hasChangesets }} == false ]]; then
+            # No changesets
+            echo "::error title=No changesets found::All changesets are empty, please add changeset"
+          else
+            # Released failed
+            echo "::error title=Publish failed::Released NPM or Github failed"
+          fi
+          exit 1
+
+      # release failed notify
+      - name: Release failed ding talk dev group notify
+        if: ${{ failure() }}
+        uses: zcong1993/actions-ding@master
+        with:
+          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
+          ignoreError: true
+          body: |
+            {
+              "msgtype": "link",
+              "link": {
+                "title": "🚨 自动发布失败 (${{ github.head_ref || github.ref_name }})",
+                "text": "🔗 请点击链接查看具体原因, 及时修复, 尝试点击右上角 [Re-run all jobs] 重试, 或手动发布 🚑",
+                "messageUrl": "https://github.com/${{github.repository}}/actions/workflows/release.yml",
+                "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
+              }
+            }
+
+  # when release published successful
   release-succeeded:
     needs: release
     if: needs.release.outputs.published == 'true'
@@ -81,9 +114,20 @@ jobs:
           MERGE_METHOD: 'squash'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # release successful notify, only trigger by bot PR
+      - name: Get main version
+        id: main_version
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const publishedPackages = ${{ fromJSON(needs.release.outputs.publishedPackages) }};
+            const mainPackage = publishedPackages.find((item) => item.name === "@antv/l7");
+            const version = mainPackage ? `@antv/l7@${mainPackage.version}` : '';
+            return version;
+
+      # release successful notify, only trigger by bot PR and not pre release
       - name: Release successful ding talk dev group notify
-        if: github.event_name == 'pull_request_review'
+        if: github.event_name == 'pull_request_review' && !contains(steps.main_version.outputs.result, '-')
         uses: zcong1993/actions-ding@master
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
@@ -92,43 +136,9 @@ jobs:
             {
               "msgtype": "link",
               "link": {
-                "title": "自动发布成功 (${{ github.head_ref || github.ref_name }})",
+                "title": "自动发布成功 (${{ steps.main_version.outputs.result || github.head_ref || github.ref_name }})",
                 "text": "🔗 点击链接查看详情",
                 "messageUrl": "https://github.com/${{github.repository}}/pull/${{ github.event.pull_request.number }}",
                 "picUrl": ""
               }
             }
-
-  # when release failed
-  release-failed:
-    needs: release
-    if: needs.release.outputs.published != 'true'
-    runs-on: ubuntu-latest
-    steps:
-      # release failed notify
-      - name: Release failed ding talk dev group notify
-        uses: zcong1993/actions-ding@master
-        with:
-          dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
-          ignoreError: true
-          body: |
-            {
-              "msgtype": "link",
-              "link": {
-                "title": "🚨 自动发布失败 (${{ github.head_ref || github.ref_name }})",
-                "text": "🔗 请点击链接查看具体原因, 及时修复, 尝试点击右上角 [Re-run all jobs] 重试, 或手动发布 🚑",
-                "messageUrl": "https://github.com/${{github.repository}}/actions/workflows/release.yml",
-                "picUrl": "https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*o40BRo-ANLoAAAAAAAAAAABkARQnAQ"
-              }
-            }
-
-      - name: Released err message
-        run: |
-          if [[ ${{ needs.release.outputs.hasChangesets }} == false ]]; then
-            # No changesets
-            echo "::error title=No changesets found::All changesets are empty, not creating PR, please add changeset"
-          else
-            # Released failed
-            echo "::error title=Publish failed::Released NPM or Github failed"
-          fi
-          exit 1

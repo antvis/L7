@@ -1,6 +1,6 @@
-## 瓦片source 属性
+## 瓦片 source 属性
 
-### tileSet
+### tileset
 
 瓦片数据集，可以获取当前视野内的瓦片信息, 瓦片状态
 
@@ -45,7 +45,7 @@ tileSet.on('tiles-load-finished', () => {
 });
 ```
 
-## 瓦片source 方法
+## 瓦片 source 方法
 
 ### reloadAllTile
 
@@ -63,7 +63,7 @@ source.reloadAllTile();
 
 - z 缩放等级
 - x 瓦片 x 坐标
-- y 瓦片有坐标
+- y 瓦片 y 坐标
 
 ```ts pure
 source.reloadTileById(z, x, y);
@@ -75,7 +75,7 @@ source.reloadTileById(z, x, y);
 
 参数
 
-- extent: 经纬范围 [minLng,minLat,maxLng,maxLat]
+- extent: 经纬范围 [minLng, minLat, maxLng, maxLat]
 - zoom: 缩放等级
 
 ### reloadTileByLnglat

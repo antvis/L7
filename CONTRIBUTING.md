@@ -1,43 +1,49 @@
 <img src="https://gw.alipayobjects.com/zos/antfincdn/R8sN%24GNdh6/language.svg" width="18"> 简体中文 | [English](./CONTRIBUTING.en-US.md)
 
-👍🎉 欢迎向 L7 贡献代码! 🎉👍
+🎉 欢迎向 L7 贡献代码! 🎉
 
 # 代码贡献规范
 
-## 下载源码
+## 1.下载源码
 
 ```bash
 git clone https://github.com/antvis/L7  --depth=1
 ```
 
-## 前置依赖安装
+## 2.前置依赖安装
 
-### 安装 pnpm
+### 2.1.安装 pnpm
 
 由于使用了 pnpm workspace，首先需要安装 [pnpm](https://pnpm.io/installation)
 
-### 安装项目依赖
+### 2.2.安装项目依赖
 
 ```bash
 pnpm install
 ```
 
-## 运行项目
+## 3.运行项目
 
-- `pnpm dev` 运行 DEMO
+```bash
+# 运行 DEMO
+pnpm dev
+```
+
+**其它命令**：
+
 - `pnpm site:dev` 启动本地官网
 - `pnpm test:unit` 运行单元测试
 - `pnpm test-cover` 运行单元测试并查看代码覆盖率
 - `pnpm test:integration` 运行集成测试
 - `pnpm build` 构建源码包, 分别输出 umd, es 和 lib 目录
 
-## 代码风格
+## 4.代码风格
 
 [CODE GUIDELINES](./CODE_GUIDELINES.md)
 
-## 提交代码
+## 5.提交代码
 
-### Commit 提交规范
+### 5.1.Commit 提交规范
 
 根据 [angular 规范](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format) 提交 commit，这样 history 看起来更加清晰。
 
@@ -55,17 +61,17 @@ pnpm install
 
 尽量用一句话清楚的描述这次提交做了什么，查看具体参考[文档](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit)。
 
-### 提交代码变更集
+### 5.2.提交代码变更集
 
 我们使用了 [changesets](https://github.com/changesets/changesets) 进行全自动的语义化发布，当我们开发完成后执行 changeset 并提交变更集。
 
 ```bash
 pnpm run changeset
 git add .
-git commit -a -m "chore: commit changeset"
+git commit -m "chore: commit changeset"
 ```
 
-### 提交 Pull Request
+### 5.3.提交 Pull Request
 
 如果你有仓库的开发者权限，而且希望贡献代码，那么你可以创建分支修改代码提交 PR，AntV 开发团队会 review 代码合并到主干。
 
@@ -73,10 +79,7 @@ git commit -a -m "chore: commit changeset"
 # 先创建开发分支开发，分支名应该有含义，避免使用 update、tmp 之类的
 $ git checkout -b branch-name
 
-# 开发完成后跑下测试是否通过，必要时需要新增或修改测试用例
-$ npm test
-
-# 测试通过后，提交代码，message 见下面的规范
+# 提交代码，message 见下面的规范
 
 $ git add . # git add -u 删除文件
 $ git commit -m "fix: role.use must xxx"
@@ -92,11 +95,11 @@ $ git push origin branch-name
 3. 框架测试点（可以关联到测试文件，不用详细描述，关键点即可）
 4. 关注点（针对用户而言，可以没有，一般是不兼容更新等，需要额外提示）
 
-## 版本发布
+## 6.版本发布
 
 ![Release](https://github.com/antvis/L7/assets/26923747/edf6b817-c699-4fbf-8168-0da1cb429031)
 
-### 线上自动版本发布
+### 6.1.线上自动版本发布
 
 > 详细流程 [版本发布指南](https://www.yuque.com/antv/l7/qqburqndl8g584kw?singleDoc)
 
@@ -110,7 +113,7 @@ $ git push origin branch-name
 
 5. 第 3 步失败，会进行钉钉消息通知，去 GtiHub Action 查看失败原因
 
-### 手动版本发布
+### 6.2.手动版本发布
 
 1. 创建本地 `release` 分支
 2. 若没有要发布的变更集，执行 `pnpm run changeset` 脚本，创建本次版本发布变更集，执行完成 coomit 变更集
@@ -119,7 +122,7 @@ $ git push origin branch-name
 5. 将 `release` 分支变更内容，以提交 PR 方式合并到发布分支
 6. 去 [GitHub Releases](https://github.com/antvis/L7/releases) 创建本次发布的 Release，创建完成后会自动部署新官网
 
-### 预发版 beta/alpha/next 发布流程
+### 6.3.预发版 beta/alpha/next 发布流程
 
 以预发 beta 为例，新增加一个功能，发布 beta 版本：
 
