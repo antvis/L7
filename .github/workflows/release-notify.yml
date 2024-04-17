@@ -12,13 +12,17 @@ jobs:
     if: startswith(github.event.release.tag_name, '@antv/l7@')
     runs-on: ubuntu-latest
     steps:
-      - name: DingTalk Release Notify
-        uses: visiky/dingtalk-release-notify@main
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DING_TALK_TOKEN: ${{ secrets.DING_TALK_ACCESS_TOKEN}}
-          notify_title: '🎉 L7 发布 release {release_tag} 🎉'
-          notify_body: '## { title } <hr /> { body } <hr />'
-          notify_footer: '前往 [**L7 Releases**]({ release_url }) 查看完整信息.'
-          at_all: false
-          enable_prerelease: false
+      - name: After changesets
+        run: |
+          echo "::debug::Event release ${{github.event.release}}"
+      # 暂时关闭 DingTalk Release Notify，待解决以下问题：Release Notify action 获取 Latest Release 是上一个版本问题
+      # - name: DingTalk Release Notify
+      #   uses: visiky/dingtalk-release-notify@main
+      #   with:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     DING_TALK_TOKEN: ${{ secrets.DING_TALK_ACCESS_TOKEN}}
+      #     notify_title: '🎉 L7 发布 release {release_tag} 🎉'
+      #     notify_body: '## { title } <hr /> { body } <hr />'
+      #     notify_footer: '前往 [**L7 Releases**]({ release_url }) 查看完整信息.'
+      #     at_all: false
+      #     enable_prerelease: false
