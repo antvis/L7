@@ -1,43 +1,49 @@
 <img src="https://gw.alipayobjects.com/zos/antfincdn/R8sN%24GNdh6/language.svg" width="18"> [简体中文](./CONTRIBUTING.md)｜English
 
-👍🎉 Welcome to contribute code to L7! 🎉👍
+🎉 Welcome to contribute code to L7! 🎉
 
 # Contribution Guide
 
-## Source Code
+## 1.Source Code
 
 ```bash
 git clone https://github.com/antvis/L7  --depth=1
 ```
 
-## Pre-installation
+## 2.Pre-installation
 
-### Install pnpm
+### 2.1.Install pnpm
 
 Since pnpm workspace is used, [pnpm](https://pnpm.io/installation) needs to be installed first
 
-### Install dependencies
+### 2.2.Install dependencies
 
 ```bash
 pnpm install
 ```
 
-## Run Project
+## 3.Run Project
 
-- `pnpm dev` Run DEMO
+```bash
+# Run DEMO
+pnpm dev
+```
+
+**Other commands**：
+
 - `pnpm site:dev` Run local website
 - `pnpm test:unit` Run unit tests
 - `pnpm test-cover` Run unit tests and view code coverage:
 - `pnpm test:integration` Run integration tests
 - `pnpm build` build source code pakages, output to umd, es and lib directory
 
-## Style Guide
+## 4.Style Guide
 
 [CODE GUIDELINES](./CODE_GUIDELINES.md)
 
-## Submitting Code
+## 5.Submitting Code
 
-### Commit Message Format
+### 5.1.Commit Message Format
 
 You are encouraged to use [angular commit-message-format](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format) to write commit message. In this way, we could have a more trackable history and an automatically generated changelog.
 
@@ -54,17 +60,17 @@ Commit type must be one of the following:
 
 Use succinct words to describe what did you do in the commit change. Look at [these files](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit) for more details.
 
-### Submit code changeset
+### 5.2.Submit code changeset
 
 we use [changesets](https://github.com/changesets/changesets) for fully automated semantic releases. It can automatically create GitHub Releases and automatically associate the release to the corresponding issue. When we complete development, execute changeset and submit the changeset.
 
 ```bash
 pnpm run changeset
 git add .
-git commit -a -m "chore: commit changeset"
+git commit -m "chore: commit changeset"
 ```
 
-### Pull Request Guide
+### 5.3.Pull Request Guide
 
 If you are developer of AntV repo and you are willing to contribute, feel free to create a new branch, finish your modification and submit a PR. AntV group will review your work and merge it to master branch.
 
@@ -72,10 +78,7 @@ If you are developer of AntV repo and you are willing to contribute, feel free t
 # Create a new branch for development. The name of branch should be semantic, avoiding words like 'update' or 'tmp'. We suggest to use feature/xxx, if the modification is about to implement a new feature.
 $ git checkout -b branch-name
 
-# Run the test after you finish your modification. Add new test cases or change old ones if you feel necessary
-$ npm test
-
-# If your modification pass the tests, congratulations it's time to push your work back to us. Notice that the commit message should be written in the following format.
+# Push your work back to us. Notice that the commit message should be written in the following format.
 $ git add . # git add -u to delete files
 $ git commit -m "fix: role.use must xxx"
 $ git push origin branch-name
@@ -90,11 +93,11 @@ No one can guarantee how much will be remembered about certain PR after some tim
 3. Related Testing: Briefly describe what part of testing is relevant to your modification.
 4. User Tips: Notice for scale users. You can skip this part, if the PR is not about update in API or potential compatibility problem.
 
-## Release
+## 6.Release
 
 ![Release](https://github.com/antvis/L7/assets/26923747/edf6b817-c699-4fbf-8168-0da1cb429031)
 
-### Online automatic version release
+### 6.1.Online automatic version release
 
 1. Go to [GitHub Action](https://github.com/antvis/L7/actions/workflows/create-bumb-version-pr.yml) to trigger Create bump version PR Action execution, select the release branch, and trigger Action execution
 
@@ -106,7 +109,7 @@ No one can guarantee how much will be remembered about certain PR after some tim
 
 5. If step 3 fails, a DingTalk message will be notified. Go to GtiHub Action to check the reason for the failure.
 
-### Manual version release
+### 6.2.Manual version release
 
 1. Create a local `release` branch
 2. If there is no change set to be published, execute the `pnpm run changeset` script to create a change set for this version release, and execute the coomit change set
@@ -115,7 +118,7 @@ No one can guarantee how much will be remembered about certain PR after some tim
 5. Merge the changes in the `release` branch to the release branch by submitting a PR
 6. Go to [GitHub Releases](https://github.com/antvis/L7/releases) to create a Release for this release. After the creation is completed, the new official website will be automatically deployed.
 
-### Pre-release beta/alpha/next release process
+### 6.3.Pre-release beta/alpha/next release process
 
 Taking the pre-release beta as an example, a new function is added to release the beta version:
 
