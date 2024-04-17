@@ -46,9 +46,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.YJ_NPM_TOKEN }}
         with:
           publish: pnpm publish-packages
-          # 暂时关闭自动创建 Github Releases，待解决以下问题：
-          # 1. 只创建主包 @antv/l7 的 Github Release，并解决同步所有日志到 release body
-          # 2. Github Releases 创建非 Latest，Release Notify action 获取 Latest Release 是上一个版本问题
+          # 暂时关闭自动创建 Github Releases，待解决问题：
+          # - 只创建主包 @antv/l7 的 Github Release，并解决同步所有日志到 release body
           createGithubReleases: false
 
       # when release not publish
@@ -120,12 +119,12 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const publishedPackages = ${{ fromJSON(needs.release.outputs.publishedPackages) }};
-            const mainPackage = publishedPackages.find((item) => item.name === "@antv/l7");
+            const publishedPackages = JSON.parse(${{ needs.release.outputs.publishedPackages }});
+            const mainPackage = publishedPackages.find((item) => item.name === '@antv/l7');
             const version = mainPackage ? `@antv/l7@${mainPackage.version}` : '';
             return version;
 
-      # release successful notify, only trigger by bot PR and not pre release
+      # release successful notify, only trigger by bot PR and not prerelease (like: @antv/l7@2.21.5-beta.1)
       - name: Release successful ding talk dev group notify
         if: github.event_name == 'pull_request_review' && !contains(steps.main_version.outputs.result, '-')
         uses: zcong1993/actions-ding@master
