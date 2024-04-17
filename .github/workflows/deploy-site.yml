@@ -55,7 +55,7 @@ jobs:
             {
               "msgtype": "text",
               "text": {
-                "content": "官网部署成功",
+                "content": "官网部署成功, 请手动同步雨燕站点",
               }
             }
 

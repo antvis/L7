@@ -9,10 +9,6 @@ order: 4
 
 `Raster NDI`Normalized Difference Indices Calculation of normalized indices, providing another band for normalized calculation
 
-## Option
-
-<embed src="@/docs/api/common/layer/options.en.md"></embed>
-
 ## source
 
 <embed src="@/docs/api/common/source/raster/raster_ndi.en.md"></embed>

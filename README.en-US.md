@@ -12,7 +12,7 @@
   <a href="https://l7.antv.antgroup.com/tutorial/quickstart">Tutorials</a> •
   <a href="https://l7.antv.antgroup.com/api/scene">API documentation</a> •
   <a href="https://l7.antv.antgroup.com/examples">Examples</a> •
-  <a href="./.github/CONTRIBUTING.md">Contributor</a>
+  <a href="./CONTRIBUTING.en-US.md">Contributor</a>
 </p>
 
 ![L7 demo](https://gw.alipayobjects.com/mdn/rms_855bab/afts/img/A*S-73QpO8d0YAAAAAAAAAAABkARQnAQ)

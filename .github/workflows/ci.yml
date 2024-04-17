@@ -3,9 +3,15 @@ name: CI
 on:
   push:
     branches: [master]
+    paths:
+      - 'packages/**'
+      - '__tests__/**'
   pull_request:
     branches:
       - '**'
+    paths:
+      - 'packages/**'
+      - '__tests__/**'
 
 permissions:
   contents: read # to fetch code (actions/checkout)

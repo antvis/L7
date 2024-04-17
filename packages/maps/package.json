@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.21.5-beat.0",
+  "version": "2.21.5",
   "description": "Maps for L7",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -8,11 +8,14 @@
     "**/*.css"
   ],
   "main": "lib/index.js",
+  "unpkg": "dist/l7-maps.min.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
+    "dist",
     "lib",
-    "es"
+    "es",
+    "!dist/report.html"
   ],
   "scripts": {
     "dev": "father dev",
