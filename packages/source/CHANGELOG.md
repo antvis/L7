@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.21.6
+
+### Patch Changes
+
+- [#2412](https://github.com/antvis/L7/pull/2412) [`6c38e3c`](https://github.com/antvis/L7/commit/6c38e3c57b1c1bf876b05199f114f5324cbe070f) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复 arraybuffer 类型数据自定义请求头参数透传逻辑
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.6
+  - @antv/l7-utils@2.21.6
+
 ## 2.21.5
 
 ### Patch Changes
