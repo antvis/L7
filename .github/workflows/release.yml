@@ -125,9 +125,9 @@ jobs:
             const version = mainPackage ? `@antv/l7@${mainPackage.version}` : '';
             return version;
 
-      # release successful notify, only trigger by bot PR
+      # release successful notify, only trigger by bot PR and not pre release
       - name: Release successful ding talk dev group notify
-        if: github.event_name == 'pull_request_review'
+        if: github.event_name == 'pull_request_review' && !contains(steps.main_version.outputs.result, '-')
         uses: zcong1993/actions-ding@master
         with:
           dingToken: ${{ secrets.DING_TALK_ACCESS_TOKEN }}
