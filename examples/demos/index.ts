@@ -1,3 +1,4 @@
+import * as BaseMapDemos from './basemap';
 import * as BugFix from './bugfix';
 import * as CanvasDemos from './canvas';
 import * as Components from './components';
@@ -60,5 +61,9 @@ export default [
   {
     name: 'Canvas',
     demos: CanvasDemos,
+  },
+  {
+    name: 'BaseMap',
+    demos: BaseMapDemos,
   },
 ];

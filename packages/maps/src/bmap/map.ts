@@ -13,8 +13,8 @@ import type {
 import { MapServiceEvent } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import Viewport from '../lib/web-mercator-viewport';
 import BaseMapService from '../utils/BaseMapService';
-import Viewport from '../utils/Viewport';
 import { toPaddingOptions } from '../utils/utils';
 import BMapGLLoader from './bmapglloader';
 import './logo.css';
@@ -31,6 +31,7 @@ const EventMap: {
 const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
 const BMAP_VERSION: string = '1.0';
 
+// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class BMapService extends BaseMapService<BMapGL.Map> {
   protected viewport: IViewport;
   protected styleConfig: Record<string, any> = {

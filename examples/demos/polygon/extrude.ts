@@ -10,6 +10,7 @@ export function MapRender(options: RenderDemoOptions) {
       style: 'light',
       center: [121.434765, 31.256735],
       zoom: 14.83,
+      pitch: 45,
     }),
   });
 

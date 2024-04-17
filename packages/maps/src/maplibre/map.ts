@@ -7,7 +7,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import type { Map } from 'maplibre-gl';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import Viewport from '../mapbox/Viewport';
+import Viewport from '../lib/web-mercator-viewport';
 import type { IMapboxInstance } from '../types';
 import BaseMapService from '../utils/BaseMapService';
 
@@ -15,9 +15,8 @@ import BaseMapService from '../utils/BaseMapService';
 window.maplibregl = maplibregl;
 
 let mapdivCount = 0;
-/**
- * AMapService
- */
+
+// TODO: 基于抽象类 BaseMap 实现
 export default class Service extends BaseMapService<Map & IMapboxInstance> {
   public version: string = MapType.MAPBOX;
   // get mapStatus method

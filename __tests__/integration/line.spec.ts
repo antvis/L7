@@ -9,11 +9,6 @@ const TEST_CASES = [
     name: 'arc_plane',
     sleepTime: 500,
   },
-
-  {
-    name: 'flow',
-    sleepTime: 800,
-  },
   {
     name: 'arc',
     sleepTime: 600,
@@ -21,6 +16,10 @@ const TEST_CASES = [
   {
     name: 'dash',
     sleepTime: 500,
+  },
+  {
+    name: 'flow',
+    sleepTime: 1000,
   },
 ];
 

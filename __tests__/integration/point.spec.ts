@@ -6,6 +6,7 @@ const TEST_CASES = [
   },
   {
     name: 'column',
+    sleepTime: 200,
   },
   {
     name: 'fill_image',

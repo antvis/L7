@@ -34,9 +34,7 @@ const EventMap: {
 };
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
-/**
- * AMapService
- */
+
 export default abstract class BaseMapService<T> implements IMapService<Map & T> {
   public version: string = 'DEFAUlTMAP';
   public map: Map & T;
