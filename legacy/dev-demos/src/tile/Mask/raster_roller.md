@@ -1,7 +1,7 @@
 ---
 group:
   path: 'Mask'
-  title: 掩膜
+  title: 掩模
 title: 地图卷帘
 order: 2
 ---
