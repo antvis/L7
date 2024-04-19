@@ -32,7 +32,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
    */
   private isMoving: boolean = false;
   /**
-   * 掩膜图层实例
+   * 掩模图层实例
    */
   private maskLayer: ILayer;
 
@@ -94,12 +94,12 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
     this.registerEvent();
 
-    // 添加掩膜图层到 scene
+    // 添加掩模图层到 scene
     const layerContainer = createLayerContainer(sceneContainer);
     this.maskLayer.setContainer(layerContainer);
     this.scene.addLayer(this.maskLayer);
 
-    // 给图层挂载掩膜
+    // 给图层挂载掩模
     this.addMaskToLayers(layers, false);
     this.addMaskToLayers(rightLayers, true);
     this.emit('add', this);
@@ -120,7 +120,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
   public show() {
     const container = this.container;
     DOM.removeClass(container, 'l7-control-swipe_hide');
-    // 启用掩膜
+    // 启用掩模
     const { layers, rightLayers } = this.controlOption;
     layers.forEach((layer) => layer.enableMask());
     rightLayers.forEach((layer) => layer.enableMask());
@@ -132,7 +132,7 @@ export default class Swipe extends Control<ISwipeControlOption> {
   public hide() {
     const container = this.container;
     DOM.addClass(container, 'l7-control-swipe_hide');
-    // 禁用掩膜
+    // 禁用掩模
     const { layers, rightLayers } = this.controlOption;
     layers.forEach((layer) => layer.disableMask());
     rightLayers.forEach((layer) => layer.disableMask());

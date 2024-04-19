@@ -124,7 +124,7 @@ export default () => {
 
     layerRef.current = layer3;
 
-    // 栅格图层使用polygon 掩膜
+    // 栅格图层使用polygon 掩模
     const layer1 = new RasterLayer({
       zIndex: 1,
       maskLayers: [layer3],
