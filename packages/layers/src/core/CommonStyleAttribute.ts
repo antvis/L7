@@ -16,8 +16,9 @@ export enum ShaderLocation {
   EXTRUDE,
   MAX,
   NORMAL,
-  UV,
+  // UV,
   LINEAR, // Polygon Linear
+  POSITION_LOW,
 }
 
 export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttribute> | undefined {

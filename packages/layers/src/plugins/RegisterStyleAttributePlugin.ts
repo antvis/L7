@@ -9,6 +9,10 @@ import { AttributeType, gl } from '@antv/l7-core';
 import { ShaderLocation } from '../core/CommonStyleAttribute';
 import { isTileGroup } from '../tile/utils/utils';
 
+function fp64LowPart(x: number) {
+  return x - Math.fround(x);
+}
+
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
  */
@@ -53,6 +57,23 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
           return vertex.length === 2
             ? [vertex[0], vertex[1], 0]
             : [vertex[0], vertex[1], vertex[2]];
+        },
+      },
+    });
+
+    styleAttributeService.registerStyleAttribute({
+      name: 'position64Low',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Position64Low',
+        shaderLocation: ShaderLocation.POSITION_LOW,
+        buffer: {
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [fp64LowPart(vertex[0]), fp64LowPart(vertex[1])];
         },
       },
     });

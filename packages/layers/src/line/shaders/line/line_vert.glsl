@@ -6,7 +6,8 @@ layout(location = 1) in vec4 a_Color;
 layout(location = 9) in vec2 a_Size;
 layout(location = 10) in vec3 a_DistanceAndIndexAndMiter;
 layout(location = 13) in vec4 a_Normal_Total_Distance;
-layout(location = 14) in vec2 a_iconMapUV;
+// layout(location = 14) in vec2 a_iconMapUV;
+layout(location = 15) in vec2 a_Position64Low;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
@@ -51,7 +52,8 @@ void main() {
 
   // cal style mapping - 数据纹理映射部分的计算
   float d_texPixelLen;    // 贴图的像素长度，根据地图层级缩放
-  v_iconMapUV = a_iconMapUV;
+  // v_iconMapUV = a_iconMapUV;
+  v_iconMapUV = vec2(0.0, 0.0);
   d_texPixelLen = project_float_pixel(u_icon_step);
   if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
     d_texPixelLen *= 10.0;
@@ -62,21 +64,21 @@ void main() {
   v_stroke = stroke;
 
   vec3 size = a_Miter * setPickingSize(a_Size.x) * reverse_offset_normal(a_Normal);
-  
+
   vec2 offset = project_pixel(size.xy);
 
   float lineDistance = a_DistanceAndIndex.x;
   float currentLinePointRatio = lineDistance / a_Total_Distance;
- 
+
 
   float lineOffsetWidth = length(offset + offset * sign(a_Miter)); // 线横向偏移的距离（向两侧偏移的和）
   float linePixelSize = project_pixel(a_Size.x) * 2.0;  // 定点位置偏移，按地图等级缩放后的距离 单侧 * 2
   float texV = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
-  
+
   v_texture_data = vec4(currentLinePointRatio, lineDistance, d_texPixelLen, texV);
   // 设置数据集的参数
 
-  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0), a_Position64Low);
 
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
 
@@ -101,7 +103,7 @@ void main() {
       if(u_heightfixed > 0.0) {
         lineHeight *= mapboxZoomScale;
       }
-      
+
     } else {
       // amap
       h += u_raisingHeight;

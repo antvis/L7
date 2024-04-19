@@ -213,27 +213,27 @@ export default class LineModel extends BaseModel {
       },
     });
 
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'uv',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_iconMapUV',
-        shaderLocation: ShaderLocation.UV,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (feature: IEncodeFeature) => {
-          const iconMap = this.iconService.getIconMap();
-          const { texture } = feature;
-          const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
-          return [x, y];
-        },
-      },
-    });
+    // this.styleAttributeService.registerStyleAttribute({
+    //   name: 'uv',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_iconMapUV',
+    //     shaderLocation: ShaderLocation.UV,
+    //     buffer: {
+    //       // give the WebGL driver a hint that this buffer may change
+    //       usage: gl.DYNAMIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 2,
+    //     update: (feature: IEncodeFeature) => {
+    //       const iconMap = this.iconService.getIconMap();
+    //       const { texture } = feature;
+    //       const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
+    //       return [x, y];
+    //     },
+    //   },
+    // });
   }
 
   private updateTexture = () => {
