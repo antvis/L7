@@ -4,10 +4,10 @@ export const MAP_TYPES: RenderDemoMap[] = [
   'Map',
   'GaodeMap',
   'GaodeMapNext',
-  'BaiduMap',
-  'MapLibre',
-  'TencentMap',
   'Mapbox',
+  'MapLibre',
+  'BaiduMap',
+  'TencentMap',
   'TMap',
   'GoogleMap',
 ] as const;
