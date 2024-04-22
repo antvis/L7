@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.21.7
+
+### Patch Changes
+
+- [#2420](https://github.com/antvis/L7/pull/2420) [`bb0af05`](https://github.com/antvis/L7/commit/bb0af057acafeeafd7eb52224ff2863c4a1c302a) Thanks [@lzxue](https://github.com/lzxue)! - fix regl bool uniform
+
 ## 2.21.6
 
 ## 2.21.5
