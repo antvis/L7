@@ -4,20 +4,24 @@ import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
-import polygonExtrudeFrag from '../shaders/extrude/polygon_extrude_frag.glsl';
-import polygonExtrudeVert from '../shaders/extrude/polygon_extrude_vert.glsl';
-// extrude
-import polygonExtrudeTexFrag from '../shaders/extrude/polygon_extrudetex_frag.glsl';
-// texture
-import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.glsl';
-// extrude picking
-
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { loadImage } from '../../utils/load-image';
+import polygonExtrudeFrag from '../shaders/extrude/polygon_extrude_frag.glsl';
 import polygonExtrudePickLightFrag from '../shaders/extrude/polygon_extrude_picklight_frag.glsl';
 import polygonExtrudePickLightVert from '../shaders/extrude/polygon_extrude_picklight_vert.glsl';
+import polygonExtrudeVert from '../shaders/extrude/polygon_extrude_vert.glsl';
+import polygonExtrudeTexFrag from '../shaders/extrude/polygon_extrudetex_frag.glsl';
+import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.glsl';
 
 export default class ExtrudeModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      NORMAL: 10,
+      UV: 11,
+    });
+  }
+
   protected texture: ITexture2D;
   public getUninforms() {
     const commoninfo = this.getCommonUniformsInfo();
@@ -84,6 +88,7 @@ export default class ExtrudeModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       depth: { enable: true },
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: PolygonExtrudeTriangulation,
     });
@@ -147,7 +152,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uvs',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -168,7 +173,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -193,7 +198,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

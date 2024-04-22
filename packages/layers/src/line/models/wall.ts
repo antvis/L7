@@ -8,12 +8,23 @@ import type {
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/wall/wall_frag.glsl';
 import line_vert from '../shaders/wall/wall_vert.glsl';
 export default class LineWallModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      MITER: 10,
+      TOTAL_DISTANCE: 11,
+      INSTANCE: 12,
+      NORMAL: 13,
+      UV: 14,
+      DISTANCE: 15,
+    });
+  }
   protected texture: ITexture2D;
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
@@ -89,6 +100,7 @@ export default class LineWallModel extends BaseModel {
       vertexShader: line_vert,
       fragmentShader: line_frag,
       triangulation: LineTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
       blend: this.getBlend(),
@@ -101,7 +113,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Distance',
-        shaderLocation: 15,
+        shaderLocation: this.attributeLocation.DISTANCE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -119,7 +131,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Total_Distance',
-        shaderLocation: 11,
+        shaderLocation: this.attributeLocation.TOTAL_DISTANCE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -138,7 +150,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -153,13 +165,12 @@ export default class LineWallModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -185,7 +196,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Miter',
-        shaderLocation: 10,
+        shaderLocation: this.attributeLocation.MITER,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -204,7 +215,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation: 14,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

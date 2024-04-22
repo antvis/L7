@@ -2,11 +2,11 @@
 #define EDGE_GAMMA 0.105
 #define FONT_SIZE 24.0
 
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 10) in vec2 a_textOffsets;
-layout(location = 14) in vec2 a_tex;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_TEXT_OFFSETS) in vec2 a_textOffsets;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_tex;
 
 layout(std140) uniform commonUniforms {
   vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
@@ -29,7 +29,7 @@ out float v_fontScale;
 
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
-  
+
   v_uv = a_tex / u_sdf_map_size;
 
 
@@ -45,7 +45,7 @@ void main() {
   // vec4 projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   vec2 offset = rotate_matrix(a_textOffsets,rotation);
-  
+
   // gl_Position = vec4(projected_position.xy / projected_position.w + rotation_matrix * a_textOffsets * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);
 
   float raiseHeight = u_raisingHeight;

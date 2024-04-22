@@ -1,5 +1,5 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec3 a_Color;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec3 a_Color;
 
 layout(std140) uniform commonUniforms {
   float u_opacity;
@@ -13,7 +13,7 @@ out float v_d;
 #pragma include "projection"
 void main() {
    v_Color = a_Color.xyz;
-  
+
    vec4 project_pos = project_position(vec4(a_Position, 1.0));
 
    v_d = a_Position.z;

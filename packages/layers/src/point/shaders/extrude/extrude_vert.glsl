@@ -1,10 +1,10 @@
 #define pi 3.1415926535
 
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec3 a_Size;
-layout(location = 11) in vec3 a_Extrude;
-layout(location = 13) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec3 a_Size;
+layout(location = ATTRIBUTE_LOCATION_EXTRUDE) in vec3 a_Extrude;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
 
 layout(std140) uniform commonUniforms {
   float u_pickLight;
@@ -30,7 +30,7 @@ float getYRadian(float x, float z) {
   } else if(x > 0.0 && z <= 0.0){
     return atan(-z/x) + pi/2.0;
   } else if(x <= 0.0 && z <= 0.0) {
-    return  pi + atan(x/z); //atan(x/z) + 
+    return  pi + atan(x/z); //atan(x/z) +
   } else {
     return atan(z/-x) + pi*3.0/2.0;
   }
@@ -48,7 +48,7 @@ void main() {
   vec3 offset = size; // 控制圆柱体的大小 - 从标准单位圆柱体进行偏移
 
   if(u_heightfixed < 1.0) { // 圆柱体不固定高度
-    
+
     if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
       // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
       offset = offset * pow(2.0, (19.0 - u_Zoom));

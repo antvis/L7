@@ -1,12 +1,19 @@
 import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointImageTriangulation } from '../../core/triangulation';
 import pointImageFrag from '../shaders/image/image_frag.glsl';
 import pointImageVert from '../shaders/image/image_vert.glsl';
 export default class ImageModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      UV: 10,
+    });
+  }
+
   private texture: ITexture2D;
 
   public getUninforms(): IModelUniform {
@@ -63,6 +70,7 @@ export default class ImageModel extends BaseModel {
       vertexShader: pointImageVert,
       fragmentShader: pointImageFrag,
       triangulation: PointImageTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
       primitive: gl.POINTS,
@@ -77,7 +85,7 @@ export default class ImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -98,7 +106,7 @@ export default class ImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

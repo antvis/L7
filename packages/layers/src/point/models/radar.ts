@@ -11,12 +11,18 @@ import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
-
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import pointFillFrag from '../shaders/radar/radar_frag.glsl';
 import pointFillVert from '../shaders/radar/radar_vert.glsl';
 
 export default class RadarModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      EXTRUDE: 10,
+    });
+  }
+
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -64,6 +70,7 @@ export default class RadarModel extends BaseModel {
       vertexShader: pointFillVert,
       fragmentShader: pointFillFrag,
       triangulation: PointFillTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
     });
@@ -80,7 +87,7 @@ export default class RadarModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
-        shaderLocation: ShaderLocation.EXTRUDE,
+        shaderLocation: this.attributeLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -106,7 +113,7 @@ export default class RadarModel extends BaseModel {
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         name: 'a_Size',
         buffer: {
           // give the WebGL driver a hint that this buffer may change

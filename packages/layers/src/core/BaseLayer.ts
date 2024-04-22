@@ -1174,6 +1174,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       moduleName,
       vertexShader,
       fragmentShader,
+      defines,
       inject,
       triangulation,
       styleOption,
@@ -1183,6 +1184,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.shaderModuleService.registerModule(moduleName, {
       vs: vertexShader,
       fs: fragmentShader,
+      defines,
       inject,
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);

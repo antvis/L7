@@ -193,6 +193,7 @@ export default class SpriteModel extends BaseModel {
       vertexShader: spriteVert,
       fragmentShader: spriteFrag,
       triangulation: this.planeGeometryTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       primitive: gl.POINTS,
       depth: { enable: false },

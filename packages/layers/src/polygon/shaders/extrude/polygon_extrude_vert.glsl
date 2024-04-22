@@ -1,8 +1,8 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 13) in vec3 a_Normal;
-layout(location = 14) in vec3 a_uvs;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec3 a_uvs;
 
 layout(std140) uniform commonUniforms {
   vec4 u_sourceColor;
@@ -21,7 +21,7 @@ out vec4 v_Color;
 #pragma include "picking"
 
 void main() {
- 
+
 float isSide = a_Position.z;
  float topU = a_uvs[0];
  float topV = 1.0 - a_uvs[1];

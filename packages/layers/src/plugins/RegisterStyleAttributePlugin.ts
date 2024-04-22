@@ -6,12 +6,12 @@ import type {
   L7Container,
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { ShaderLocation } from '../core/CommonStyleAttribute';
+import { COMMON_ATTRIBUTE_LOCATION } from '../core/CommonStyleAttribute';
 import { isTileGroup } from '../tile/utils/utils';
 
-function fp64LowPart(x: number) {
-  return x - Math.fround(x);
-}
+// function fp64LowPart(x: number) {
+//   return x - Math.fround(x);
+// }
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
@@ -47,7 +47,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Position',
-        shaderLocation: ShaderLocation.POSITION,
+        shaderLocation: COMMON_ATTRIBUTE_LOCATION.POSITION,
         buffer: {
           data: [],
           type: gl.FLOAT,
@@ -61,22 +61,22 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       },
     });
 
-    styleAttributeService.registerStyleAttribute({
-      name: 'position64Low',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Position64Low',
-        shaderLocation: ShaderLocation.POSITION_LOW,
-        buffer: {
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          return [fp64LowPart(vertex[0]), fp64LowPart(vertex[1])];
-        },
-      },
-    });
+    // styleAttributeService.registerStyleAttribute({
+    //   name: 'position64Low',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_Position64Low',
+    //     shaderLocation: COMMON_ATTRIBUTE_LOCATION.POSITION_LOW,
+    //     buffer: {
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 2,
+    //     update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+    //       return [fp64LowPart(vertex[0]), fp64LowPart(vertex[1])];
+    //     },
+    //   },
+    // });
   }
 
   private registerColorAttribute(styleAttributeService: IStyleAttributeService) {
@@ -85,7 +85,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Color',
-        shaderLocation: ShaderLocation.COLOR,
+        shaderLocation: COMMON_ATTRIBUTE_LOCATION.COLOR,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -108,7 +108,7 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_vertexId',
-        shaderLocation: ShaderLocation.VERTEX_ID,
+        shaderLocation: COMMON_ATTRIBUTE_LOCATION.VERTEX_ID,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

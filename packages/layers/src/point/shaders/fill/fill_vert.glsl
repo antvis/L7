@@ -1,8 +1,8 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 10) in float a_Shape;
-layout(location = 11) in vec3 a_Extrude;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_SHAPE) in float a_Shape;
+layout(location = ATTRIBUTE_LOCATION_EXTRUDE) in vec3 a_Extrude;
 
 layout(std140) uniform commonUniforms {
   vec3 u_blur_height_fixed;
@@ -11,7 +11,7 @@ layout(std140) uniform commonUniforms {
   float u_stroke_opacity;
   float u_size_unit;
   float u_time;
-  vec4 u_animate;   
+  vec4 u_animate;
 };
 
 out vec4 v_color;
@@ -25,7 +25,7 @@ out float v_radius;
 
 void main() {
   // 透明度计算
-   v_stroke = stroke;  
+   v_stroke = stroke;
   vec3 extrude = a_Extrude;
   float shape_type = a_Shape;
   /*
@@ -55,7 +55,7 @@ void main() {
 
   offset = project_pixel(offset);
   offset = rotate_matrix(offset,rotation);
-  
+
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
@@ -74,7 +74,7 @@ void main() {
       raisingHeight = u_blur_height_fixed.y * mapboxZoomScale;
     }
   }
-  
+
   gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, raisingHeight, 1.0));
 
   setPickingColor(a_PickingColor);

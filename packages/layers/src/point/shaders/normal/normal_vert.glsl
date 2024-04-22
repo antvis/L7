@@ -1,6 +1,6 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 
 layout(std140) uniform u_Common {
   float u_size_scale;

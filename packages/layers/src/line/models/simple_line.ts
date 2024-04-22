@@ -7,7 +7,14 @@ import type { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
 import simple_line_frag from '../shaders/simple/simpleline_frag.glsl';
 import simple_line_vert from '../shaders/simple/simpleline_vert.glsl';
+
 export default class SimpleLineModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+    });
+  }
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -70,6 +77,7 @@ export default class SimpleLineModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       triangulation: SimpleLineTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       primitive: gl.LINES,
       depth: { enable: false },

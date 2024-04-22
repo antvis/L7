@@ -1,6 +1,6 @@
 import { lodashUtil } from '@antv/l7-utils';
 import { extractUniforms } from '../../utils/shader-module';
-import type { IModuleParams, IShaderModuleService } from './IShaderModuleService';
+import type { IModuleParams, IShaderModuleService, ShaderDefine } from './IShaderModuleService';
 const { uniq } = lodashUtil;
 
 import common from '../../shaders/common.glsl';
@@ -15,6 +15,7 @@ import projection from '../../shaders/projection.glsl';
 import rotation_2d from '../../shaders/rotation_2d.glsl';
 import scene_uniforms from '../../shaders/scene_uniforms.glsl';
 import sdf2d from '../../shaders/sdf_2d.glsl';
+
 const precisionRegExp = /precision\s+(high|low|medium)p\s+float/;
 const globalDefaultprecision =
   '#ifdef GL_FRAGMENT_PRECISION_HIGH\n precision highp float;\n #else\n precision mediump float;\n#endif\n';
@@ -29,14 +30,8 @@ export default class ShaderModuleService implements IShaderModuleService {
     this.destroy();
     this.registerModule('common', { vs: common, fs: common });
     this.registerModule('decode', { vs: decode, fs: '' });
-    this.registerModule('scene_uniforms', {
-      vs: scene_uniforms,
-      fs: scene_uniforms,
-    });
-    this.registerModule('picking_uniforms', {
-      vs: picking_uniforms,
-      fs: picking_uniforms,
-    });
+    this.registerModule('scene_uniforms', { vs: scene_uniforms, fs: scene_uniforms });
+    this.registerModule('picking_uniforms', { vs: picking_uniforms, fs: picking_uniforms });
 
     this.registerModule('projection', { vs: projection, fs: projection });
     this.registerModule('project', { vs: project, fs: '' });
@@ -55,11 +50,13 @@ export default class ShaderModuleService implements IShaderModuleService {
 
     moduleParams.vs = moduleParams.vs.replace(/\r\n/g, '\n'); // 将所有的\r\n替换为\n
     moduleParams.fs = moduleParams.fs.replace(/\r\n/g, '\n'); // 将所有的\r\n替换为\n
-    const { vs, fs, uniforms: declaredUniforms, inject } = moduleParams;
+    const { vs, fs, uniforms: declaredUniforms, defines, inject } = moduleParams;
     const { content: extractedVS, uniforms: vsUniforms } = extractUniforms(vs);
     const { content: extractedFS, uniforms: fsUniforms } = extractUniforms(fs);
+
     this.rawContentCache[moduleName] = {
       fs: extractedFS,
+      defines,
       inject,
       uniforms: {
         ...vsUniforms,
@@ -69,10 +66,7 @@ export default class ShaderModuleService implements IShaderModuleService {
       vs: extractedVS,
     };
   }
-  public destroy() {
-    this.moduleCache = {};
-    this.rawContentCache = {};
-  }
+
   public getModule(moduleName: string): IModuleParams {
     // TODO: cache module
     // if (this.moduleCache[moduleName]) {
@@ -81,27 +75,36 @@ export default class ShaderModuleService implements IShaderModuleService {
 
     let rawVS = this.rawContentCache[moduleName].vs;
     let rawFS = this.rawContentCache[moduleName].fs;
-    const inject = this.rawContentCache[moduleName].inject;
+    const { defines = {}, inject = {} } = this.rawContentCache[moduleName];
+
     let declaredUniforms = {};
-    if (inject?.['vs:#decl']) {
-      // 头部注入
-      rawVS = inject?.['vs:#decl'] + rawVS;
-      declaredUniforms = extractUniforms(inject?.['vs:#decl']).uniforms;
+
+    // vs 头部注入
+    if (inject['vs:#decl']) {
+      rawVS = inject['vs:#decl'] + rawVS;
+      declaredUniforms = extractUniforms(inject['vs:#decl']).uniforms;
     }
-    if (inject?.['vs:#main-start']) {
-      // main
+
+    // vs main
+    if (inject['vs:#main-start']) {
       rawVS = rawVS.replace(REGEX_START_OF_MAIN, (match: string) => {
-        return match + inject?.['vs:#main-start'];
+        return match + inject['vs:#main-start'];
       });
     }
-    if (inject?.['fs:#decl']) {
-      // 头部注入
-      rawFS = inject?.['fs:#decl'] + rawFS;
+
+    // fs 头部注入
+    if (inject['fs:#decl']) {
+      rawFS = inject['fs:#decl'] + rawFS;
     }
+
+    const injectDefines = getInjectDefines(defines);
+
+    // 注入定义的宏
+    rawVS = injectDefines + rawVS;
 
     const { content: vs, includeList: vsIncludeList } = this.processModule(rawVS, [], 'vs');
     const { content: fs, includeList: fsIncludeList } = this.processModule(rawFS, [], 'fs');
-    let compiledFs = '';
+
     // TODO: extract uniforms and their default values from GLSL
     const uniforms: {
       [key: string]: any;
@@ -121,25 +124,29 @@ export default class ShaderModuleService implements IShaderModuleService {
      * set default precision for fragment shader
      * https://stackoverflow.com/questions/28540290/why-it-is-necessary-to-set-precision-for-the-fragment-shader
      */
-    if (!precisionRegExp.test(fs)) {
-      compiledFs = compiledFs + globalDefaultprecision;
-    }
-    compiledFs = compiledFs + fs;
-
-    let compiledVs = '';
-    if (!precisionRegExp.test(vs)) {
-      compiledVs = compiledVs + globalDefaultprecision;
-    }
-    compiledVs = compiledVs + vs;
+    const compiledVs = precisionRegExp.test(fs) ? '' : globalDefaultprecision + vs;
+    console.log('compiledVs: ', compiledVs);
+    const compiledFs = precisionRegExp.test(fs) ? '' : globalDefaultprecision + fs;
 
     this.moduleCache[moduleName] = {
+      vs: compiledVs.trim(),
       fs: compiledFs.trim(),
       uniforms,
-      vs: compiledVs.trim(),
     };
+
     return this.moduleCache[moduleName];
   }
 
+  public destroy() {
+    this.moduleCache = {};
+    this.rawContentCache = {};
+  }
+
+  /**
+   *
+   * 解析定义的内联模块
+   * like: #pragma include "projection"
+   */
   private processModule(
     rawContent: string,
     includeList: string[],
@@ -169,11 +176,12 @@ export default class ShaderModuleService implements IShaderModuleService {
       includeList,
     };
   }
+}
 
-  private injectDefines(defines: Record<string, string | number | boolean>) {
-    const defineStr = Object.keys(defines).reduce((prev, cur) => {
-      return prev + `#define ${cur.toUpperCase()} ${defines[cur]};\n`;
-    }, '\n');
-    return defineStr;
-  }
+/** Generates defines from an object of key value pairs */
+function getInjectDefines(defines: Record<string, ShaderDefine>) {
+  const defineStr = Object.keys(defines).reduce((prev, cur) => {
+    return prev + `#define ${cur.toUpperCase()} ${defines[cur]}\n`;
+  }, '\n');
+  return defineStr;
 }

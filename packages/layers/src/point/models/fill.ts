@@ -9,7 +9,6 @@ import type {
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { PointFillTriangulation } from '../../core/triangulation';
 
 import pointFillFrag from '../shaders/fill/fill_frag.glsl';
@@ -19,6 +18,15 @@ import type { IPointLayerStyleOptions } from '../../core/interface';
 import { SizeUnitType } from '../../core/interface';
 
 export default class FillModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      SHAPE: 10,
+      EXTRUDE: 11,
+    });
+  }
+
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -83,6 +91,7 @@ export default class FillModel extends BaseModel {
       moduleName: type,
       vertexShader: vert,
       fragmentShader: frag,
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: PointFillTriangulation,
       depth: { enable: false },
@@ -119,7 +128,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
-        shaderLocation: ShaderLocation.EXTRUDE,
+        shaderLocation: this.attributeLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -146,7 +155,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -167,7 +176,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Shape',
-        shaderLocation: ShaderLocation.SHAPE,
+        shaderLocation: this.attributeLocation.SHAPE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

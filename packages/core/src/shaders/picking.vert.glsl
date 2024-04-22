@@ -1,4 +1,4 @@
-layout(location = 3) in vec3 a_PickingColor;
+layout(location = ATTRIBUTE_LOCATION_PICKING_COLOR) in vec3 a_PickingColor;
 out vec4 v_PickingResult;
 
 #pragma include "picking_uniforms"

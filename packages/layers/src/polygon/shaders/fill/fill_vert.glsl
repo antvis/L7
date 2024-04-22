@@ -1,5 +1,5 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 
 layout(std140) uniform commonUniforms {
   float u_raisingHeight;
@@ -29,7 +29,7 @@ void main() {
     project_pos.z += u_raisingHeight * mapboxZoomScale;
   }
 
- 
+
   gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xyz, 1.0));
 
   setPickingColor(a_PickingColor);

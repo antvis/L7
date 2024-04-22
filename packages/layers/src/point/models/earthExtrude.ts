@@ -2,7 +2,6 @@ import type { IEncodeFeature, ILayerConfig, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { calculateCentroid, getCullFace, lodashUtil, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import { lglt2xyz } from '../../earth/utils';
@@ -10,6 +9,15 @@ import pointExtrudeFrag from '../shaders/earthExtrude/earthExtrude_frag.glsl';
 import pointExtrudeVert from '../shaders/earthExtrude/earthExtrude_vert.glsl';
 const { isNumber } = lodashUtil;
 export default class ExtrudeModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      POS: 10,
+      NORMAL: 11,
+    });
+  }
+
   private raiseCount: number = 0;
   private raiseRepeat: number = 0;
 
@@ -102,6 +110,7 @@ export default class ExtrudeModel extends BaseModel {
       fragmentShader: pointExtrudeFrag,
       triangulation: PointExtrudeTriangulation,
       depth: { enable: true },
+      defines: this.getDefines(),
       inject: this.getInject(),
       cull: {
         enable: true,
@@ -118,7 +127,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -149,7 +158,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -173,7 +182,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
-        shaderLocation: 15,
+        shaderLocation: this.attributeLocation.POS,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

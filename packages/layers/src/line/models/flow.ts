@@ -4,12 +4,17 @@ import BaseModel from '../../core/BaseModel';
 import type { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineTriangulation } from '../../core/line_trangluation';
 import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
-
-// linear simple line shader
-
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
+
 export default class FlowLineModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      INSTANCE: 10,
+      NORMAL: 11,
+    });
+  }
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -40,6 +45,7 @@ export default class FlowLineModel extends BaseModel {
       moduleName: 'flow_line',
       vertexShader: flow_line_vert,
       fragmentShader: flow_line_frag,
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: FlowLineTriangulation,
       styleOption: (this.layer.getLayerConfig() as IFlowLineStyleOptions).symbol,
@@ -56,7 +62,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size', // 宽度
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -75,7 +81,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
-        shaderLocation: 12,
+        shaderLocation: this.attributeLocation.INSTANCE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -93,9 +99,8 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,

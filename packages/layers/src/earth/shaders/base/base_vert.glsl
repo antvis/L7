@@ -1,5 +1,5 @@
 // attribute vec4 a_Color;
-layout(location = 0) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
 layout(location = 13) in vec3 a_Normal;
 layout(location = 14) in vec2 a_Uv;
 

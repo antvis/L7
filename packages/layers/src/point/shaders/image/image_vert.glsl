@@ -1,7 +1,7 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 14) in vec2 a_Uv;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
   vec2 u_textSize;
@@ -23,7 +23,7 @@ void main() {
   v_opacity = opacity;
   v_uv = a_Uv;
   vec4 project_pos = project_position(vec4(a_Position, 1.0));
-   
+
   vec2 offset = project_pixel(offsets);
 
   float raisingHeight = u_raisingHeight;

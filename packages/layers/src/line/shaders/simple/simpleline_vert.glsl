@@ -1,6 +1,6 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec4 a_SizeDistanceAndTotalDistance;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec4 a_SizeDistanceAndTotalDistance;
 
 layout(std140) uniform commonUniorm {
   vec4 u_sourceColor;
@@ -21,7 +21,7 @@ void main() {
   //dash输出
   v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / a_SizeDistanceAndTotalDistance.a;
 
-  v_color = a_Color; 
+  v_color = a_Color;
   v_distanceScale = a_SizeDistanceAndTotalDistance.b / a_SizeDistanceAndTotalDistance.a;
   v_color.a = v_color.a * opacity;
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));

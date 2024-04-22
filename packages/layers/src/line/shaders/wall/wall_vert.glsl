@@ -1,13 +1,13 @@
 #define Animate 0.0
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec2 a_Size;
-layout(location = 10) in float a_Miter;
-layout(location = 11) in float a_Total_Distance;
-layout(location = 12) in vec4 a_Instance;
-layout(location = 13) in vec3 a_Normal;
-layout(location = 14) in vec2 a_iconMapUV;
-layout(location = 15) in float a_Distance;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec2 a_Size;
+layout(location = ATTRIBUTE_LOCATION_MITER) in float a_Miter;
+layout(location = ATTRIBUTE_LOCATION_TOTAL_DISTANCE) in float a_Total_Distance;
+layout(location = ATTRIBUTE_LOCATION_INSTANCE) in vec4 a_Instance;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_iconMapUV;
+layout(location = ATTRIBUTE_LOCATION_DISTANCE) in float a_Distance;
 
 
 layout(std140) uniform commonUniorm {
@@ -64,7 +64,7 @@ void main() {
   vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
 
   float originSize = a_Size.x;  // 固定高度
-  if(u_heightfixed < 1.0) {    
+  if(u_heightfixed < 1.0) {
      originSize = project_float_meter(a_Size.x); // 高度随 zoom 调整
   }
 
@@ -86,7 +86,7 @@ void main() {
       if(u_heightfixed > 0.0) {
         wallHeight *= mapboxZoomScale;
       }
-      
+
     } else {
       // lineHeight 顶点偏移高度
       if(u_heightfixed < 1.0) {

@@ -165,6 +165,7 @@ export default class PlaneModel extends BaseModel {
       vertexShader: planeVert,
       fragmentShader: planeFrag,
       triangulation: this.planeGeometryTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: true },

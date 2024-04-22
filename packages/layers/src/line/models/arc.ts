@@ -8,7 +8,6 @@ import type {
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import arc_line_frag from '../shaders/arc/line_arc_frag.glsl';
@@ -19,6 +18,15 @@ const lineStyleObj: { [key: string]: number } = {
   dash: 1.0,
 };
 export default class ArcModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      INSTANCE: 10,
+      UV: 11,
+      THETA_OFFSET: 12,
+    });
+  }
   protected texture: ITexture2D;
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
@@ -120,6 +128,7 @@ export default class ArcModel extends BaseModel {
       moduleName: 'lineArc2d' + type,
       vertexShader: vert,
       fragmentShader: frag,
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: LineArcTriangulation,
       depth: { enable: false },
@@ -134,7 +143,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -154,7 +163,7 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
-        shaderLocation: 12,
+        shaderLocation: this.attributeLocation.INSTANCE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -172,9 +181,8 @@ export default class ArcModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation: 14,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
@@ -185,6 +193,25 @@ export default class ArcModel extends BaseModel {
           const { texture } = feature;
           const { x, y } = iconMap[texture as string] || { x: 0, y: 0 };
           return [x, y];
+        },
+      },
+    });
+
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'thetaOffset',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_ThetaOffset',
+        shaderLocation: this.attributeLocation.THETA_OFFSET,
+        buffer: {
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (feature: IEncodeFeature) => {
+          const { thetaOffset: op = 1 } = feature;
+          return [op];
         },
       },
     });

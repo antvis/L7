@@ -1,8 +1,33 @@
 import type { IEncodeFeature, IStyleAttribute } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 
+/**
+ * Attribute Layout Location in Shader
+ */
+export const COMMON_ATTRIBUTE_LOCATION: Record<string, number> = {
+  // Common in RegisterStyleAttributePlugin
+  POSITION: 0,
+  // POSITION_LOW: 1,
+  COLOR: 1,
+  VERTEX_ID: 2,
+  PICKING_COLOR: 3,
+
+  // Common Style Attribute
+  STROKE: 4,
+  OPACITY: 5,
+  OFFSETS: 6,
+  ROTATION: 7,
+
+  // Last Index
+  MAX: 8,
+} as const;
+
+/**
+ * Attribute Layout Location in Shader
+ */
 export enum ShaderLocation {
   POSITION = 0,
+  // POSITION_LOW,
   COLOR,
   VERTEX_ID,
   PICKING_COLOR,
@@ -16,9 +41,8 @@ export enum ShaderLocation {
   EXTRUDE,
   MAX,
   NORMAL,
-  // UV,
+  UV,
   LINEAR, // Polygon Linear
-  POSITION_LOW,
 }
 
 export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttribute> | undefined {
@@ -30,7 +54,7 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Rotation',
-          shaderLocation: ShaderLocation.ROTATION,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.ROTATION,
           buffer: {
             usage: gl.DYNAMIC_DRAW,
             data: [],
@@ -49,7 +73,7 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Stroke',
-          shaderLocation: ShaderLocation.STROKE,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.STROKE,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.DYNAMIC_DRAW,
@@ -69,7 +93,7 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Opacity',
-          shaderLocation: ShaderLocation.OPACITY,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.OPACITY,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,
@@ -83,33 +107,13 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
           },
         },
       };
-    case 'extrusionBase':
-      return {
-        name: 'extrusionBase',
-        type: AttributeType.Attribute,
-        descriptor: {
-          name: 'a_ExtrusionBase',
-          shaderLocation: ShaderLocation.EXTRUSION_BASE,
-          buffer: {
-            // give the WebGL driver a hint that this buffer may change
-            usage: gl.STATIC_DRAW,
-            data: [],
-            type: gl.FLOAT,
-          },
-          size: 1,
-          update: (feature: IEncodeFeature) => {
-            const { extrusionBase: op = 0 } = feature;
-            return [op];
-          },
-        },
-      };
     case 'offsets':
       return {
         name: 'offsets',
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Offsets',
-          shaderLocation: ShaderLocation.OFFSETS,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.OFFSETS,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,
@@ -120,26 +124,6 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
           update: (feature: IEncodeFeature) => {
             const { offsets: epo } = feature;
             return epo;
-          },
-        },
-      };
-    case 'thetaOffset':
-      return {
-        name: 'thetaOffset',
-        type: AttributeType.Attribute,
-        descriptor: {
-          name: 'a_ThetaOffset',
-          shaderLocation: 15,
-          buffer: {
-            // give the WebGL driver a hint that this buffer may change
-            usage: gl.STATIC_DRAW,
-            data: [],
-            type: gl.FLOAT,
-          },
-          size: 1,
-          update: (feature: IEncodeFeature) => {
-            const { thetaOffset: op = 1 } = feature;
-            return [op];
           },
         },
       };

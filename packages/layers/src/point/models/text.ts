@@ -8,7 +8,6 @@ import type {
 import { AttributeType, gl } from '@antv/l7-core';
 import { boundsContains, calculateCentroid, lodashUtil, padBounds, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import CollisionIndex from '../../utils/collision-index';
 import type { IGlyphQuad } from '../../utils/symbol-layout';
@@ -73,6 +72,15 @@ export function TextTrianglation(feature: IEncodeFeature) {
 }
 
 export default class TextModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      TEXT_OFFSETS: 10,
+      UV: 11,
+    });
+  }
+
   public glyphInfo: IEncodeFeature[];
   public glyphInfoMap: {
     [key: string]: {
@@ -154,6 +162,7 @@ export default class TextModel extends BaseModel {
       moduleName: 'pointText',
       vertexShader: textVert,
       fragmentShader: textFrag,
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: TextTrianglation.bind(this),
       depth: { enable: false },
@@ -219,7 +228,7 @@ export default class TextModel extends BaseModel {
       name: 'textOffsets',
       type: AttributeType.Attribute,
       descriptor: {
-        shaderLocation: 10,
+        shaderLocation: this.attributeLocation.TEXT_OFFSETS,
         name: 'a_textOffsets', // 文字偏移量
         buffer: {
           // give the WebGL driver a hint that this buffer may change
@@ -238,7 +247,7 @@ export default class TextModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_tex',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -256,7 +265,7 @@ export default class TextModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -509,6 +518,7 @@ export default class TextModel extends BaseModel {
       vertexShader: textVert,
       fragmentShader: textFrag,
       triangulation: TextTrianglation.bind(this),
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
     });

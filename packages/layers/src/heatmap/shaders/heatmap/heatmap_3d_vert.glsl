@@ -1,4 +1,4 @@
-layout(location = 0) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
 layout(location = 14) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
@@ -52,5 +52,5 @@ void main() {
   v_intensity = texture(SAMPLER_2D(u_texture), v_texCoord).r;
   fh = toBezier(v_intensity, b).y;
   gl_Position = u_ViewProjectionMatrixUncentered * vec4(position.xy, fh * project_pixel(50.), 1.0);
- 
+
 }

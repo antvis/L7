@@ -1,7 +1,6 @@
 import type { IEncodeFeature, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import normalFrag from '../shaders/normal/normal_frag.glsl';
 import normalVert from '../shaders/normal/normal_vert.glsl';
@@ -16,6 +15,13 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 
 export default class NormalModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+    });
+  }
+
   public getDefaultStyle(): Partial<IPointLayerStyleOptions> {
     return {
       blend: 'additive',
@@ -45,6 +51,7 @@ export default class NormalModel extends BaseModel {
       vertexShader: normalVert,
       fragmentShader: normalFrag,
       triangulation: PointTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
       primitive: gl.POINTS,
@@ -63,7 +70,7 @@ export default class NormalModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

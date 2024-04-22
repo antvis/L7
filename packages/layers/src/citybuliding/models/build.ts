@@ -85,6 +85,7 @@ export default class CityBuildModel extends BaseModel {
       fragmentShader: buildFrag,
       triangulation: PolygonExtrudeTriangulation,
       depth: { enable: true },
+      defines: this.getDefines(),
       inject: this.getInject(),
       cull: {
         enable: true,

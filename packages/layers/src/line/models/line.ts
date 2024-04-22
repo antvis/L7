@@ -12,11 +12,20 @@ import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LinearDir, TextureBlend } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import line_frag from '../shaders/line/line_frag.glsl';
 import line_vert from '../shaders/line/line_vert.glsl';
 
 export default class LineModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      SIZE: 9,
+      DISTANCE_INDEX: 10,
+      NORMAL: 11,
+      UV: 12,
+    });
+  }
+
   private textureEventFlag: boolean = false;
   protected texture: ITexture2D = this.createTexture2D({
     data: new Uint8Array([0, 0, 0, 0]),
@@ -121,6 +130,7 @@ export default class LineModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       triangulation: LineTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: depth },
     });
@@ -138,13 +148,14 @@ export default class LineModel extends BaseModel {
       type: '',
     };
   }
+
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
       name: 'distanceAndIndex',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_DistanceAndIndexAndMiter',
-        shaderLocation: 10,
+        shaderLocation: this.attributeLocation.DISTANCE_INDEX,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -172,7 +183,7 @@ export default class LineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -187,13 +198,12 @@ export default class LineModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal_total_distance',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal_Total_Distance',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

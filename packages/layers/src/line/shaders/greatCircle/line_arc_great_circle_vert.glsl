@@ -3,11 +3,11 @@
 #define Animate 0.0
 #define LineTexture 1.0
 
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 12) in vec4 a_Instance;
-layout(location = 14) in vec2 a_iconMapUV;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_INSTANCE) in vec4 a_Instance;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
@@ -137,7 +137,7 @@ void main() {
     v_distance_ratio = segmentIndex / segmentNumber;
     vec2 s = source;
     vec2 t = target;
-    
+
     if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
       s = unProjCustomCoord(source);
       t = unProjCustomCoord(target);
@@ -161,7 +161,7 @@ void main() {
   // gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, curr.z, 1.0));
 
   v_line_data.g = a_Position.x; // 该顶点在弧线上的分段排序
-  if(LineTexture == u_line_texture) { // 开启贴图模式  
+  if(LineTexture == u_line_texture) { // 开启贴图模式
     // float mapZoomScale = u_CoordinateSystem !== COORDINATE_SYSTEM_P20_2?10000000.0:1.0;
     float d_arcDistrance = length(source - target);
     if(u_CoordinateSystem == COORDINATE_SYSTEM_P20) { // amap
