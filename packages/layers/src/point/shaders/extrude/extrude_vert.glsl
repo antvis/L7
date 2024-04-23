@@ -41,8 +41,6 @@ float getXRadian(float y, float r) {
 }
 
 void main() {
-
-
   vec3 size = a_Size * a_Position;
 
   vec3 offset = size; // 控制圆柱体的大小 - 从标准单位圆柱体进行偏移

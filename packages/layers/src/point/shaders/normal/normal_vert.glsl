@@ -1,4 +1,5 @@
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 
@@ -17,7 +18,7 @@ void main() {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
     gl_Position = u_Mvp * vec4(a_Position, 1.0);
   } else {
-    vec4 project_pos = project_position(vec4(a_Position, 1.0)) + vec4(a_Size / 2., -a_Size /2., 0., 0.);
+    vec4 project_pos = project_position(vec4(a_Position, 1.0), a_Position64Low);
     gl_Position = project_common_position_to_clipspace(project_pos);
   }
 

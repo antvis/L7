@@ -1,4 +1,5 @@
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 layout(location = ATTRIBUTE_LOCATION_EXTRUDE) in vec3 a_Extrude;
@@ -39,7 +40,7 @@ void main() {
 
   offset = project_pixel(offset);
 
-  vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
+  vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0), a_Position64Low);
   float raisingHeight = u_raisingHeight;
   if(u_heightfixed < 1.0) { // height fixed
     raisingHeight = project_pixel(u_raisingHeight);
