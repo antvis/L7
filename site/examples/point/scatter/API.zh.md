@@ -1,1 +1,0 @@
-<embed src="@/docs/api/point_layer/scatter.zh.md"></embed>
