@@ -1,6 +1,6 @@
 
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
-layout(location = 14) in vec2 a_Uv;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
  vec2 u_rminmax;

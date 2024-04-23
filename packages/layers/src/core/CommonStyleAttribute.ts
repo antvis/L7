@@ -5,7 +5,7 @@ import { AttributeType, gl } from '@antv/l7-core';
  * Attribute Layout Location in Shader
  */
 export const COMMON_ATTRIBUTE_LOCATION = {
-  // Common in RegisterStyleAttributePlugin
+  // Common attribute in RegisterStyleAttributePlugin
   POSITION: 0,
   // POSITION_LOW: 1,
   COLOR: 1,
@@ -26,23 +26,21 @@ export const COMMON_ATTRIBUTE_LOCATION = {
  * Attribute Layout Location in Shader
  */
 export enum ShaderLocation {
+  // Common attribute in RegisterStyleAttributePlugin
   POSITION = 0,
   // POSITION_LOW,
   COLOR,
   VERTEX_ID,
   PICKING_COLOR,
+
+  // Common Style Attribute
   STROKE,
   OPACITY,
   OFFSETS,
   ROTATION,
-  EXTRUSION_BASE,
-  SIZE,
-  SHAPE,
-  EXTRUDE,
+
+  // Last Index
   MAX,
-  NORMAL,
-  UV,
-  LINEAR, // Polygon Linear
 }
 
 export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttribute> | undefined {

@@ -2,7 +2,6 @@ import type { IEncodeFeature, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
 import simple_line_frag from '../shaders/simple/simpleline_frag.glsl';
@@ -137,7 +136,7 @@ export default class SimpleLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_SizeDistanceAndTotalDistance',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],

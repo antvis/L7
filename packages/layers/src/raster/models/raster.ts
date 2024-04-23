@@ -2,12 +2,18 @@ import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import rasterFrag from '../shaders/raster/raster_2d_frag.glsl';
 import rasterVert from '../shaders/raster/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      UV: 9,
+    });
+  }
+
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
   public getUninforms() {
@@ -117,7 +123,7 @@ export default class RasterModel extends BaseModel {
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         name: 'a_Uv',
         buffer: {
           // give the WebGL driver a hint that this buffer may change

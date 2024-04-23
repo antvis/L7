@@ -28,6 +28,13 @@ const defaultRampColors = {
 };
 
 export default class WindModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      UV: 9,
+    });
+  }
+
   protected texture: ITexture2D;
   private colorModel: IModel;
   private wind: IWind;
@@ -150,6 +157,7 @@ export default class WindModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

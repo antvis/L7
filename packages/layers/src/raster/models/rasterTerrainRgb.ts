@@ -2,13 +2,19 @@ import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IRasterTerrainLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import Raster_terrainFrag from '../shaders/terrain/terrain_rgb_frag.glsl';
 import Raster_terrainVert from '../shaders/terrain/terrain_rgb_vert.glsl';
 
 export default class RasterTerrainRGB extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      UV: 9,
+    });
+  }
+
   protected texture: ITexture2D;
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
@@ -88,7 +94,7 @@ export default class RasterTerrainRGB extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

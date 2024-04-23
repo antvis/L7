@@ -116,7 +116,7 @@ export default class BaseEarthModel extends BaseModel {
     //   type: AttributeType.Attribute,
     //   descriptor: {
     //     name: 'a_Size',
-    //     shaderLocation: ShaderLocation.SIZE,
+    //     shaderLocation: this.attributeLocation.SIZE,
     //     buffer: {
     //       usage: gl.DYNAMIC_DRAW,
     //       data: [],

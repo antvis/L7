@@ -1,7 +1,7 @@
 import type { IEncodeFeature, ILayer, ILayerPlugin, L7Container } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { decodePickingColor, encodePickingColor, lodashUtil, rgb2arr } from '@antv/l7-utils';
-import { ShaderLocation } from '../core/CommonStyleAttribute';
+import { COMMON_ATTRIBUTE_LOCATION } from '../core/CommonStyleAttribute';
 const { isNumber } = lodashUtil;
 
 const PickingStage = {
@@ -67,7 +67,7 @@ export default class PixelPickingPlugin implements ILayerPlugin {
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_PickingColor',
-          shaderLocation: ShaderLocation.PICKING_COLOR,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.PICKING_COLOR,
           buffer: {
             data: [],
             type: gl.FLOAT,

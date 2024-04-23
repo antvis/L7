@@ -1,8 +1,9 @@
 precision highp float;
 uniform mat4 u_ModelMatrix;
 
-attribute vec3 a_Position;
-attribute vec2 a_Uv;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_Uv;
+
 varying vec2 v_texCoord;
 #pragma include "projection"
 void main() {
