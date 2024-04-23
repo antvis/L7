@@ -66,6 +66,7 @@ export default class RasterTerrainRGB extends BaseModel {
       moduleName: 'RasterTileDataImage',
       vertexShader: Raster_terrainVert,
       fragmentShader: Raster_terrainFrag,
+      defines: this.getDefines(),
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },

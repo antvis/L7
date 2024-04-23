@@ -116,6 +116,7 @@ export default class WindModel extends BaseModel {
       moduleName: 'wind',
       vertexShader: WindVert,
       fragmentShader: WindFrag,
+      defines: this.getDefines(),
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },

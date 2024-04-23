@@ -7,6 +7,13 @@ import hexagon_frag from '../shaders/hexagon/hexagon_frag.glsl';
 import hexagon_vert from '../shaders/hexagon/hexagon_vert.glsl';
 
 export default class HexagonModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      POS: 9,
+    });
+  }
+
   public getUninforms(): IModelUniform {
     const commoninfo = this.getCommonUniformsInfo();
     const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
@@ -56,7 +63,7 @@ export default class HexagonModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
-        shaderLocation: 10,
+        shaderLocation: this.attributeLocation.POS,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

@@ -8,12 +8,18 @@ import type {
 import { AttributeType, gl } from '@antv/l7-core';
 // import { mat4, vec3 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/plane_frag.glsl';
 import planeVert from '../shaders/plane_vert.glsl';
 
 export default class PlaneModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: 8,
+      UV: 10,
+    });
+  }
+
   protected texture: ITexture2D;
   protected terrainImage: HTMLImageElement;
   protected terrainImageLoaded: boolean = false;
@@ -357,7 +363,7 @@ export default class PlaneModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

@@ -1,7 +1,7 @@
 // attribute vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
-layout(location = 13) in vec3 a_Normal;
-layout(location = 14) in vec2 a_Uv;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_Uv;
 
 // attribute vec2 a_Extrude;
 // attribute float a_Size;

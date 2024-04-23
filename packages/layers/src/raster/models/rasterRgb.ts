@@ -89,6 +89,7 @@ export default class RasterModel extends BaseModel {
       moduleName: 'rasterImageDataRGBA',
       vertexShader: rasterVert,
       fragmentShader: rasterFrag,
+      defines: this.getDefines(),
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },

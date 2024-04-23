@@ -4,7 +4,7 @@ import { AttributeType, gl } from '@antv/l7-core';
 /**
  * Attribute Layout Location in Shader
  */
-export const COMMON_ATTRIBUTE_LOCATION: Record<string, number> = {
+export const COMMON_ATTRIBUTE_LOCATION = {
   // Common in RegisterStyleAttributePlugin
   POSITION: 0,
   // POSITION_LOW: 1,

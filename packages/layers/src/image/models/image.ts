@@ -61,6 +61,7 @@ export default class ImageModel extends BaseModel {
       moduleName: 'rasterImage',
       vertexShader: ImageVert,
       fragmentShader: ImageFrag,
+      defines: this.getDefines(),
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       blend: {

@@ -1,8 +1,8 @@
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 10) in vec3 a_Pos;
-layout(location = 13) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_POS) in vec3 a_Pos;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
 
 layout(std140) uniform commonUniforms {
   vec2 u_radius;
