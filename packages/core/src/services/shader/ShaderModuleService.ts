@@ -125,7 +125,6 @@ export default class ShaderModuleService implements IShaderModuleService {
      * https://stackoverflow.com/questions/28540290/why-it-is-necessary-to-set-precision-for-the-fragment-shader
      */
     const compiledVs = (precisionRegExp.test(fs) ? '' : globalDefaultprecision) + vs;
-    console.log('compiledVs: ', compiledVs);
     const compiledFs = (precisionRegExp.test(fs) ? '' : globalDefaultprecision) + fs;
 
     this.moduleCache[moduleName] = {
