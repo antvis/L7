@@ -8,7 +8,7 @@ import grid_3d_vert from '../shaders/grid3d/grid_3d_vert.glsl';
 export default class Grid3DModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       POS: 10,
       NORMAL: 11,

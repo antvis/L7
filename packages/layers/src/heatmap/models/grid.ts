@@ -8,7 +8,7 @@ import grid_vert from '../shaders/grid/grid_vert.glsl';
 export default class GridModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       POS: 9,
     });
   }

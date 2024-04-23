@@ -11,7 +11,7 @@ export default class ImageModel extends BaseModel {
   protected texture: ITexture2D;
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       UV: 9,
     });
   }

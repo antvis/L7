@@ -8,7 +8,7 @@ import planeVert from '../shaders/billboard_vert.glsl';
 export default class BillBoardModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       EXTRUDE: 9,
       UV: 10,
     });

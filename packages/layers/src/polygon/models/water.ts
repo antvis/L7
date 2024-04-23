@@ -9,7 +9,7 @@ import water_vert from '../shaders/water/polygon_water_vert.glsl';
 export default class WaterModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       UV: 9,
     });
   }

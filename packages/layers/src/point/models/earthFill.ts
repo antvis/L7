@@ -12,7 +12,7 @@ import { mat4, vec3 } from 'gl-matrix';
 export default class FillModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       SHAPE: 10,
       EXTRUDE: 11,

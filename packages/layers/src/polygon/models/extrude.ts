@@ -15,7 +15,7 @@ import polygonExtrudeTexVert from '../shaders/extrude/polygon_extrudetex_vert.gl
 export default class ExtrudeModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       NORMAL: 10,
       UV: 11,

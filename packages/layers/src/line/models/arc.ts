@@ -20,7 +20,7 @@ const lineStyleObj: { [key: string]: number } = {
 export default class ArcModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       INSTANCE: 10,
       UV: 11,

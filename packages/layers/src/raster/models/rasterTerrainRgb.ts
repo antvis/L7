@@ -10,7 +10,7 @@ import Raster_terrainVert from '../shaders/terrain/terrain_rgb_vert.glsl';
 export default class RasterTerrainRGB extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       UV: 9,
     });
   }

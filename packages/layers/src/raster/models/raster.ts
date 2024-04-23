@@ -9,7 +9,7 @@ import rasterVert from '../shaders/raster/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       UV: 9,
     });
   }

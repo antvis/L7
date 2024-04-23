@@ -8,7 +8,7 @@ import polygonExtrudeVert from '../shaders/extrusion/polygon_extrusion_vert.glsl
 export default class ExtrusionModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       NORMAL: 10,
       EXTRUSION_BASE: 11,

@@ -9,7 +9,7 @@ import ocean_vert from '../shaders/ocean/ocean_vert.glsl';
 export default class OceanModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       UV: 9,
     });
   }

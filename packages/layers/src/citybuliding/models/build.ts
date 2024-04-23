@@ -10,7 +10,7 @@ import buildVert from '../shaders/build_vert.glsl';
 export default class CityBuildModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       NORMAL: 10,
       UV: 11,

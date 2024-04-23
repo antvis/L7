@@ -17,7 +17,7 @@ import pointFillVert from '../shaders/radar/radar_vert.glsl';
 export default class RadarModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       EXTRUDE: 10,
     });

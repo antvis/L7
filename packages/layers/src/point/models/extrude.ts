@@ -10,7 +10,7 @@ import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
 export default class ExtrudeModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       EXTRUDE: 10,
       NORMAL: 11,

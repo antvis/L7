@@ -10,7 +10,7 @@ import simple_line_vert from '../shaders/simple/simpleline_vert.glsl';
 export default class SimpleLineModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
     });
   }

@@ -22,27 +22,6 @@ export const COMMON_ATTRIBUTE_LOCATION = {
   MAX: 8,
 } as const;
 
-/**
- * Attribute Layout Location in Shader
- */
-export enum ShaderLocation {
-  // Common attribute in RegisterStyleAttributePlugin
-  POSITION = 0,
-  // POSITION_LOW,
-  COLOR,
-  VERTEX_ID,
-  PICKING_COLOR,
-
-  // Common Style Attribute
-  STROKE,
-  OPACITY,
-  OFFSETS,
-  ROTATION,
-
-  // Last Index
-  MAX,
-}
-
 export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttribute> | undefined {
   switch (name) {
     // // roate

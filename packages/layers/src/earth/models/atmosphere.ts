@@ -14,7 +14,7 @@ const { isNumber } = lodashUtil;
 export default class EarthAtomSphereModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       NORMAL: 9,
       UV: 10,
     });

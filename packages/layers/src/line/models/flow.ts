@@ -9,7 +9,7 @@ import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
 export default class FlowLineModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       INSTANCE: 10,
       NORMAL: 11,

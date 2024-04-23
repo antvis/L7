@@ -11,7 +11,7 @@ import pointFillVert from '../shaders/fillImage/fillImage_vert.glsl';
 export default class FillImageModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       EXTRUDE: 10,
       UV: 11,

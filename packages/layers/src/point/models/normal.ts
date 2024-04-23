@@ -17,7 +17,7 @@ export function PointTriangulation(feature: IEncodeFeature) {
 export default class NormalModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
     });
   }

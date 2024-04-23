@@ -74,7 +74,7 @@ export function TextTrianglation(feature: IEncodeFeature) {
 export default class TextModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       TEXT_OFFSETS: 10,
       UV: 11,

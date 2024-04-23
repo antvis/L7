@@ -9,7 +9,7 @@ import hexagon_vert from '../shaders/hexagon/hexagon_vert.glsl';
 export default class HexagonModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       POS: 9,
     });
   }

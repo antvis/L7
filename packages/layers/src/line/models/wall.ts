@@ -15,7 +15,7 @@ import line_vert from '../shaders/wall/wall_vert.glsl';
 export default class LineWallModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       MITER: 10,
       TOTAL_DISTANCE: 11,

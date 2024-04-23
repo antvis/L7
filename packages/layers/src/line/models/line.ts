@@ -18,7 +18,7 @@ import line_vert from '../shaders/line/line_vert.glsl';
 export default class LineModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       SIZE: 9,
       DISTANCE_INDEX: 10,
       NORMAL: 11,

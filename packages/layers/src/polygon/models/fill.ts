@@ -10,7 +10,7 @@ import polygon_vert from '../shaders/fill/fill_vert.glsl';
 export default class FillModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
-      MAX: 8,
+      MAX: super.attributeLocation.MAX,
       LINEAR: 9,
     });
   }

@@ -63,7 +63,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
   /**
    * Attribute Layout Location in Shader
    */
-  protected get attributeLocation(): Record<string, number> {
+  protected get attributeLocation(): typeof COMMON_ATTRIBUTE_LOCATION & Record<string, number> {
     return { ...COMMON_ATTRIBUTE_LOCATION };
   }
 
@@ -224,68 +224,11 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
     }
   }
 
-  // 动态注入参与数据映射的 uniform
-  protected getDynamicStyleInject(): ShaderInject {
-    const encodeStyleAttribute = this.layer.encodeStyleAttribute;
-    const enableShaderEncodeStyles = this.layer.enableShaderEncodeStyles;
-
-    const uniforms: string[] = [];
-    let vsDeclInjection = '';
-
-    // 支持数据映射的类型
-    enableShaderEncodeStyles.forEach((key) => {
-      const upperCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase();
-      if (encodeStyleAttribute[key]) {
-        // 配置了数据映射的类型
-        vsDeclInjection += `
-#define USE_ATTRIBUTE_${upperCaseKey} 0.0;
-        `;
-      } else {
-        uniforms.push(`  ${DefaultUniformStyleType[key]} u_${key};`);
-      }
-
-      const shaderDefineName = DEFINE_ATTRIBUTE_LOCATION_PREFIX + upperCaseKey;
-
-      vsDeclInjection += `
-#ifdef USE_ATTRIBUTE_${upperCaseKey}
-layout(location = ${shaderDefineName}) in ${
-        DefaultUniformStyleType[key]
-      } a_${key.charAt(0).toUpperCase() + key.slice(1)};
-#endif
-`;
-    });
-
-    const fsDeclInjection = uniforms.length
-      ? `
-layout(std140) uniform AttributeUniforms {
-${uniforms.join('\n')}
-};
-`
-      : '';
-
-    vsDeclInjection += fsDeclInjection;
-
-    let vsMainInjection = '';
-    enableShaderEncodeStyles.forEach((key) => {
-      const upperCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase();
-      vsMainInjection += `
-    #ifdef USE_ATTRIBUTE_${upperCaseKey}
-      ${DefaultUniformStyleType[key]} ${key}  = a_${key.charAt(0).toUpperCase() + key.slice(1)};
-    #else
-      ${DefaultUniformStyleType[key]} ${key} = u_${key};
-    #endif
-    `;
-    });
-
-    return {
-      'vs:#decl': vsDeclInjection,
-      'fs:#decl': fsDeclInjection,
-      'vs:#main-start': vsMainInjection,
-    };
-  }
-
   protected getInject(): ShaderInject {
-    const shaderInject = this.getDynamicStyleInject();
+    const shaderInject = getDynamicStyleInject(
+      this.layer.enableShaderEncodeStyles,
+      this.layer.encodeStyleAttribute,
+    );
 
     return shaderInject;
   }
@@ -403,4 +346,60 @@ ${uniforms.join('\n')}
       data: new Uint8Array(new Float32Array(commonUniformsArray).buffer),
     });
   }
+}
+
+/**
+ * 获取动态注入参与数据映射 uniform/attribute
+ */
+function getDynamicStyleInject(
+  shaderEncodeStyles: string[],
+  styleAttribute: Record<string, any>,
+): ShaderInject {
+  const uniforms: string[] = [];
+  let vsDeclInjection = '';
+
+  // 支持数据映射的类型
+  shaderEncodeStyles.forEach((key) => {
+    const upperCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase();
+    const shaderDefineName = DEFINE_ATTRIBUTE_LOCATION_PREFIX + upperCaseKey;
+
+    if (styleAttribute[key]) {
+      // 配置了数据映射的类型
+      vsDeclInjection += `#define USE_ATTRIBUTE_${upperCaseKey} 0.0 \n`;
+    } else {
+      uniforms.push(`  ${DefaultUniformStyleType[key]} u_${key};`);
+    }
+
+    vsDeclInjection += `
+#ifdef USE_ATTRIBUTE_${upperCaseKey}
+layout(location = ${shaderDefineName}) in ${DefaultUniformStyleType[key]} a_${key.charAt(0).toUpperCase() + key.slice(1)};
+#endif \n`;
+  });
+
+  const fsDeclInjection = uniforms.length
+    ? `
+layout(std140) uniform AttributeUniforms {
+  ${uniforms.join('\n')}
+};\n`
+    : '';
+
+  vsDeclInjection += fsDeclInjection;
+
+  let vsMainInjection = '';
+  shaderEncodeStyles.forEach((key) => {
+    const upperCaseKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase();
+    vsMainInjection += `
+  #ifdef USE_ATTRIBUTE_${upperCaseKey}
+    ${DefaultUniformStyleType[key]} ${key} = a_${key.charAt(0).toUpperCase() + key.slice(1)};
+  #else
+    ${DefaultUniformStyleType[key]} ${key} = u_${key};
+  #endif
+  `;
+  });
+
+  return {
+    'vs:#decl': vsDeclInjection,
+    'fs:#decl': fsDeclInjection,
+    'vs:#main-start': vsMainInjection,
+  };
 }
