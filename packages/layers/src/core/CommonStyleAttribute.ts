@@ -5,20 +5,20 @@ import { AttributeType, gl } from '@antv/l7-core';
  * Attribute Layout Location in Shader
  */
 export const COMMON_ATTRIBUTE_LOCATION = {
-  // Common attribute in RegisterStyleAttributePlugin
+  // common attribute in RegisterStyleAttributePlugin
   POSITION: 0,
-  // POSITION_LOW: 1,
-  COLOR: 1,
-  VERTEX_ID: 2,
+  // low part for double precision POSITION attribute
+  POSITION_64LOW: 1,
+  COLOR: 2,
   PICKING_COLOR: 3,
 
-  // Common Style Attribute
+  // common style attribute
   STROKE: 4,
   OPACITY: 5,
   OFFSETS: 6,
   ROTATION: 7,
 
-  // Last Index
+  // last index
   MAX: 8,
 } as const;
 

@@ -2,7 +2,7 @@
 #define Animate 0.0
 
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
-// layout(location = xx) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in vec2 a_Size;
 layout(location = ATTRIBUTE_LOCATION_DISTANCE_INDEX) in vec3 a_DistanceAndIndexAndMiter;
@@ -77,8 +77,7 @@ void main() {
   v_texture_data = vec4(currentLinePointRatio, lineDistance, d_texPixelLen, texV);
   // 设置数据集的参数
 
-  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
-  // vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0), a_Position64Low);
+  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0), a_Position64Low);
 
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
 

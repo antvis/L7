@@ -52,6 +52,8 @@ export interface ICellProperty {
   count: number;
 }
 
+type AttributeLayoutLocationType = typeof COMMON_ATTRIBUTE_LOCATION & Record<string, number>;
+
 // 属性索引宏定义前缀，使用命名空间避免 define 名称重复情况
 const DEFINE_ATTRIBUTE_LOCATION_PREFIX = 'ATTRIBUTE_LOCATION_';
 
@@ -63,7 +65,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
   /**
    * Attribute Layout Location in Shader
    */
-  protected get attributeLocation(): typeof COMMON_ATTRIBUTE_LOCATION & Record<string, number> {
+  protected get attributeLocation(): AttributeLayoutLocationType {
     return { ...COMMON_ATTRIBUTE_LOCATION };
   }
 

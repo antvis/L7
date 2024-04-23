@@ -6,12 +6,9 @@ import type {
   L7Container,
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
+import { fp64LowPart } from '@antv/l7-utils';
 import { COMMON_ATTRIBUTE_LOCATION } from '../core/CommonStyleAttribute';
 import { isTileGroup } from '../tile/utils/utils';
-
-// function fp64LowPart(x: number) {
-//   return x - Math.fround(x);
-// }
 
 /**
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
@@ -38,7 +35,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
     this.registerPositionAttribute(styleAttributeService);
     // this.registerFilterAttribute(styleAttributeService);//数据层数据过滤
     this.registerColorAttribute(styleAttributeService);
-    this.registerVertexIdAttribute(styleAttributeService);
   }
 
   private registerPositionAttribute(styleAttributeService: IStyleAttributeService) {
@@ -61,22 +57,24 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
       },
     });
 
-    // styleAttributeService.registerStyleAttribute({
-    //   name: 'position64Low',
-    //   type: AttributeType.Attribute,
-    //   descriptor: {
-    //     name: 'a_Position64Low',
-    //     shaderLocation: COMMON_ATTRIBUTE_LOCATION.POSITION_LOW,
-    //     buffer: {
-    //       data: [],
-    //       type: gl.FLOAT,
-    //     },
-    //     size: 2,
-    //     update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-    //       return [fp64LowPart(vertex[0]), fp64LowPart(vertex[1])];
-    //     },
-    //   },
-    // });
+    // save low part for enabled double precision POSITION attribute
+    styleAttributeService.registerStyleAttribute({
+      name: 'position64Low',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Position64Low',
+        shaderLocation: COMMON_ATTRIBUTE_LOCATION.POSITION_64LOW,
+        buffer: {
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          const enable64bitPosition = true;
+          return enable64bitPosition ? [fp64LowPart(vertex[0]), fp64LowPart(vertex[1])] : [0, 0];
+        },
+      },
+    });
   }
 
   private registerColorAttribute(styleAttributeService: IStyleAttributeService) {
@@ -96,28 +94,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
         update: (feature: IEncodeFeature) => {
           const { color } = feature;
           return !color || !color.length ? [1, 1, 1, 1] : color;
-        },
-      },
-    });
-  }
-
-  private registerVertexIdAttribute(styleAttributeService: IStyleAttributeService) {
-    styleAttributeService.registerStyleAttribute({
-      // 统一注册每个顶点的唯一编号（目前用于样式的数据映射计算使用）
-      name: 'vertexId',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_vertexId',
-        shaderLocation: COMMON_ATTRIBUTE_LOCATION.VERTEX_ID,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number) => {
-          return [featureIdx];
         },
       },
     });
