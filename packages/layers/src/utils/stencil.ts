@@ -1,6 +1,6 @@
 import type { IRenderOptions, IStencilOptions, MaskOperationType } from '@antv/l7-core';
 import { MaskOperation, StencilType, gl } from '@antv/l7-core';
-// 掩膜配置
+// 掩模配置
 export function getStencil(mask: boolean, maskInside: boolean): Partial<IStencilOptions> {
   return {
     enable: mask,

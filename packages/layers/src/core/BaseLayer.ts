@@ -987,7 +987,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.layerChildren.map((child: ILayer) => child.destroy(false));
     this.layerChildren = [];
 
-    // remove mask list maskfence 掩膜需要销毁
+    // remove mask list maskfence 掩模需要销毁
     const { maskfence } = this.getLayerConfig();
     if (maskfence) {
       this.masks.map((mask: ILayer) => mask.destroy(false));

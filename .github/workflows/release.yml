@@ -119,7 +119,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const publishedPackages = JSON.parse(${{ needs.release.outputs.publishedPackages }});
+            const publishedPackages = ${{ needs.release.outputs.publishedPackages }};
             const mainPackage = publishedPackages.find((item) => item.name === '@antv/l7');
             const version = mainPackage ? `@antv/l7@${mainPackage.version}` : '';
             return version;

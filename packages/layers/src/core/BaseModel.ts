@@ -166,6 +166,12 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
       ...attributeInfo.uniformsOption,
       ...commoninfo.uniformsOption,
     };
+    // 兼容 Regl Boolean 类型
+    Object.keys(result).forEach((key) => {
+      if (typeof result[key] === 'boolean') {
+        result[key] = result[key] ? 1 : 0;
+      }
+    });
     //如果是regl渲染 需要在uniform中带上u_texture 暂时用this.rendererService.device判断
     if (
       !this.rendererService.hasOwnProperty('device') &&
