@@ -1,1 +1,0 @@
-<embed src="@/docs/api/point_layer/cluster.en.md"></embed>

@@ -56,7 +56,7 @@ export default defineConfig({
     keywords:
       'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
-    showAPIDoc: true, // 是否在demo页展示API文档
+    showAPIDoc: false, // 是否在demo页展示API文档
     detail: {
       engine: {
         zh: 'L7',
@@ -514,6 +514,7 @@ export default defineConfig({
       {
         slug: 'gallery',
         icon: 'gallery',
+        api: false,
         title: {
           zh: '官方精品库',
           en: 'Featured',
@@ -593,7 +594,7 @@ export default defineConfig({
         order: 7,
       },
       {
-        slug: 'Mask',
+        slug: 'mask',
         icon: 'raster',
         title: {
           zh: '图层掩膜',
@@ -676,6 +677,7 @@ export default defineConfig({
       {
         slug: 'tutorial',
         icon: 'map',
+        order: 12,
         title: {
           zh: '教程示例',
           en: 'Tutorial demo',

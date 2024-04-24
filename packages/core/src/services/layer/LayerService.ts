@@ -184,7 +184,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
 
     maskCount = maskCount + (enableMask ? masklayers.length : 1);
     const stencilType = maskCount > 1 ? StencilType.MULTIPLE : StencilType.SINGLE;
-    //  兼容MaskLayer MaskLayer的掩膜不能clear
+    //  兼容MaskLayer MaskLayer的掩模不能clear
     if (layer.tileMask || (masklayers.length && enableMask)) {
       this.renderService.clear({
         stencil: 0,
