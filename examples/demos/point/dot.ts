@@ -8,26 +8,40 @@ export function MapRender(options: RenderDemoOptions) {
     renderer: options.renderer,
     map: new allMap[options.map]({
       style: 'light',
-      center: [121.435159, 31.256971],
-      zoom: 14.89,
-      minZoom: 10,
+      center: [116.417463, 40.015175],
+      zoom: 8,
+      minZoom: 5,
     }),
   });
   scene.on('loaded', () => {
-    fetch('https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json')
-      .then((res) => res.json())
+    fetch('https://gw.alipayobjects.com/os/antfincdn/8Ps2h%24qgmk/traffic_110000.csv')
+      .then((res) => res.text())
       .then((data) => {
+        const colors = ['#c57f34', '#cbfddf', '#edea70', '#8cc9f1', '#2c7bb6'];
         const pointLayer = new PointLayer({})
           .source(data, {
             parser: {
-              type: 'json',
-              x: 'longitude',
-              y: 'latitude',
+              type: 'csv',
+              y: 'lat',
+              x: 'lng',
             },
           })
           .shape('dot')
-          .size('unit_price', [10, 25])
-          .color('name', ['#5B8FF9', '#5CCEA1', '#5D7092', '#F6BD16', '#E86452']);
+          .size(0.5)
+          .color('type', (type) => {
+            switch (parseInt(type)) {
+              case 3:
+                return colors[0];
+              case 4:
+                return colors[1];
+              case 41:
+                return colors[2];
+              case 5:
+                return colors[3];
+              default:
+                return colors[4];
+            }
+          });
 
         scene.addLayer(pointLayer);
 

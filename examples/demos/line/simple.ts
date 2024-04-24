@@ -58,14 +58,11 @@ export function MapRender(options: RenderDemoOptions) {
     ],
   };
   const source = new Source(geoData);
-  const layer = new LineLayer({ blend: 'normal', autoFit: true })
+  const layer = new LineLayer({ autoFit: true })
     .source(source)
     .size(1)
-    .shape('line')
-    .color('#f00')
-    .style({
-      opacity: 0.6,
-    });
+    .shape('simple')
+    .color('#f00');
 
   scene.on('loaded', () => {
     scene.addLayer(layer);
