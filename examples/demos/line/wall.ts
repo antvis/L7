@@ -10,6 +10,7 @@ export function MapRender(options: RenderDemoOptions) {
       style: 'light',
       center: [121.434765, 31.256735],
       zoom: 14.83,
+      pitch: 45,
     }),
   });
   fetch('https://gw.alipayobjects.com/os/bmw-prod/ec5351c9-d22b-4918-ad6c-1838064d3a64.json')

@@ -17,12 +17,9 @@ export default class LineWallModel extends BaseModel {
     return Object.assign(super.attributeLocation, {
       MAX: super.attributeLocation.MAX,
       SIZE: 9,
-      MITER: 10,
-      TOTAL_DISTANCE: 11,
-      INSTANCE: 12,
-      NORMAL: 13,
-      UV: 14,
-      DISTANCE: 15,
+      NORMAL: 12,
+      UV: 13,
+      DISTANCE_MITER_TOTAL: 15,
     });
   }
   protected texture: ITexture2D;
@@ -109,43 +106,6 @@ export default class LineWallModel extends BaseModel {
   }
   protected registerBuiltinAttributes() {
     this.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Distance',
-        shaderLocation: this.attributeLocation.DISTANCE,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          return [vertex[3]];
-        },
-      },
-    });
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'total_distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Total_Distance',
-        shaderLocation: this.attributeLocation.TOTAL_DISTANCE,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          return [vertex[5]];
-        },
-      },
-    });
-
-    this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
@@ -192,20 +152,21 @@ export default class LineWallModel extends BaseModel {
     });
 
     this.styleAttributeService.registerStyleAttribute({
-      name: 'miter',
+      name: 'distanceAndTotalAndMiter',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Miter',
-        shaderLocation: this.attributeLocation.MITER,
+        name: 'a_Distance_Total_Miter',
+        shaderLocation: this.attributeLocation.DISTANCE_MITER_TOTAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 3,
         update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          return [vertex[4]];
+          // [distance, miter, total_distance]
+          return [vertex[3], vertex[4], vertex[5]];
         },
       },
     });
