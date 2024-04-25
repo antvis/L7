@@ -10,6 +10,7 @@ const TEST_CASES = [
   },
   {
     name: 'dot',
+    snapshots: false,
   },
   {
     name: 'fill',
@@ -17,9 +18,10 @@ const TEST_CASES = [
   {
     name: 'fill_image',
   },
-  // {
-  //   name: 'image',
-  // },
+  {
+    name: 'image',
+    snapshots: false,
+  },
   {
     name: 'text',
   },

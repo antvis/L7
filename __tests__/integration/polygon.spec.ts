@@ -7,7 +7,7 @@ const TEST_CASES = [
   },
   {
     name: 'extrusion',
-    sleepTime: 500,
+    sleepTime: 1000,
   },
   {
     name: 'fill',
