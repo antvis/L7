@@ -3,11 +3,11 @@ import { generateCanvasTestCases } from './utils/generator';
 const TEST_CASES = [
   {
     name: 'fujian',
-    sleepTime: 500,
+    sleepTime: 1000,
   },
   {
     name: 'variFlight',
-    sleepTime: 500,
+    sleepTime: 2000,
   },
 ];
 
