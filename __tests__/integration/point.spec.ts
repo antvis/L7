@@ -9,10 +9,13 @@ const TEST_CASES = [
     sleepTime: 200,
   },
   {
-    name: 'fill_image',
+    name: 'dot',
   },
   {
     name: 'fill',
+  },
+  {
+    name: 'fill_image',
   },
   // {
   //   name: 'image',

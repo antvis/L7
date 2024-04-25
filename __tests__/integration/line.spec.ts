@@ -2,19 +2,31 @@ import { generateCanvasTestCases } from './utils/generator';
 
 const TEST_CASES = [
   {
-    name: 'arc',
-    sleepTime: 500,
+    name: 'simple',
   },
   {
-    name: 'arc_plane',
-    sleepTime: 500,
-  },
-  {
-    name: 'arc',
-    sleepTime: 600,
+    name: 'normal',
   },
   {
     name: 'dash',
+    snapshots: false,
+    sleepTime: 500,
+  },
+  {
+    name: 'wall',
+    sleepTime: 500,
+  },
+  {
+    name: 'arc',
+    sleepTime: 500,
+  },
+  {
+    name: 'arc3D',
+    sleepTime: 500,
+  },
+  {
+    name: 'greatcircle',
+    snapshots: false,
     sleepTime: 500,
   },
   {
