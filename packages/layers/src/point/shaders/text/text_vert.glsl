@@ -3,6 +3,7 @@
 #define FONT_SIZE 24.0
 
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 layout(location = ATTRIBUTE_LOCATION_TEXT_OFFSETS) in vec2 a_textOffsets;
@@ -41,7 +42,7 @@ void main() {
   float fontScale = a_Size / FONT_SIZE;
   v_fontScale = fontScale;
 
-  vec4 project_pos = project_position(vec4(a_Position, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position, 1.0), a_Position64Low);
   // vec4 projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   vec2 offset = rotate_matrix(a_textOffsets,rotation);

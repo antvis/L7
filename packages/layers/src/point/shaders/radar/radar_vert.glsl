@@ -1,4 +1,5 @@
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 layout(location = ATTRIBUTE_LOCATION_EXTRUDE) in vec3 a_Extrude;
@@ -40,13 +41,12 @@ void main() {
   v_radius = newSize;
 
   vec2 offset = (a_Extrude.xy * (newSize));
-  vec3 aPosition = a_Position;
 
   offset = project_pixel(offset);
 
   v_data = vec4(a_Extrude.x, a_Extrude.y, antialiasblur, -1.0);
 
-  vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0), a_Position64Low);
   gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
   setPickingColor(a_PickingColor);
