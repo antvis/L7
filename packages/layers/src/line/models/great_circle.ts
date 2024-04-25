@@ -6,7 +6,7 @@ import type {
   ITexture2D,
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { fp64LowPart, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
@@ -23,7 +23,8 @@ export default class GreatCircleModel extends BaseModel {
       MAX: super.attributeLocation.MAX,
       SIZE: 9,
       INSTANCE: 10,
-      UV: 11,
+      INSTANCE_64LOW: 11,
+      UV: 12,
     });
   }
   protected texture: ITexture2D;
@@ -155,6 +156,30 @@ export default class GreatCircleModel extends BaseModel {
         size: 4,
         update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4], vertex[5], vertex[6]];
+        },
+      },
+    });
+
+    // save low part for enabled double precision INSTANCE attribute
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'instance64Low',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Instance64Low',
+        shaderLocation: this.attributeLocation.INSTANCE_64LOW,
+        buffer: {
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 4,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [
+            fp64LowPart(vertex[3]),
+            fp64LowPart(vertex[4]),
+            fp64LowPart(vertex[5]),
+            fp64LowPart(vertex[6]),
+          ];
         },
       },
     });

@@ -7,6 +7,7 @@ layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 layout(location = ATTRIBUTE_LOCATION_INSTANCE) in vec4 a_Instance;
+layout(location = ATTRIBUTE_LOCATION_INSTANCE_64LOW) in vec4 a_Instance64Low;
 layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
@@ -153,8 +154,10 @@ void main() {
 
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   v_distance_ratio = segmentIndex / segmentNumber;
-  vec4 curr = project_position(vec4(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0, 1.0));
-  vec4 next = project_position(vec4(degrees(interpolate(source, target, angularDist, nextSegmentRatio)), 0.0, 1.0));
+
+  vec4 curr = project_position(vec4(degrees(interpolate(source, target, angularDist, segmentRatio)), 0.0, 1.0), a_Instance64Low.xy);
+  vec4 next = project_position(vec4(degrees(interpolate(source, target, angularDist, nextSegmentRatio)), 0.0, 1.0), a_Instance64Low.zw);
+
   // v_normal = getNormal((next.xy - curr.xy) * indexDir, a_Position.y);
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
   //  vec4 project_pos = project_position(vec4(curr.xy, 0, 1.0));

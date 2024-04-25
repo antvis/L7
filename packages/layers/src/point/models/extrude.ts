@@ -1,6 +1,6 @@
 import type { IEncodeFeature, ILayerConfig, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
+import { calculateCentroid, fp64LowPart, getCullFace, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
@@ -154,7 +154,6 @@ export default class ExtrudeModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
@@ -179,6 +178,7 @@ export default class ExtrudeModel extends BaseModel {
         },
       },
     });
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
@@ -191,10 +191,17 @@ export default class ExtrudeModel extends BaseModel {
           data: [],
           type: gl.FLOAT,
         },
-        size: 3,
+        size: 4,
         update: (feature: IEncodeFeature) => {
           const coordinates = calculateCentroid(feature.coordinates);
-          return [coordinates[0], coordinates[1], 0];
+          // [lng, lat, lowLng, lowLat]
+          // low part for enabled double precision
+          return [
+            coordinates[0],
+            coordinates[1],
+            fp64LowPart(coordinates[0]),
+            fp64LowPart(coordinates[1]),
+          ];
         },
       },
     });

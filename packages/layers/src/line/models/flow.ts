@@ -1,5 +1,6 @@
 import type { IEncodeFeature, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
+import { fp64LowPart } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineTriangulation } from '../../core/line_trangluation';
@@ -12,7 +13,8 @@ export default class FlowLineModel extends BaseModel {
       MAX: super.attributeLocation.MAX,
       SIZE: 9,
       INSTANCE: 10,
-      NORMAL: 11,
+      INSTANCE_64LOW: 11,
+      NORMAL: 12,
     });
   }
   protected getCommonUniformsInfo(): {
@@ -76,6 +78,7 @@ export default class FlowLineModel extends BaseModel {
         },
       },
     });
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
@@ -90,6 +93,30 @@ export default class FlowLineModel extends BaseModel {
         size: 4,
         update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
           return [vertex[3], vertex[4], vertex[5], vertex[6]];
+        },
+      },
+    });
+
+    // save low part for enabled double precision INSTANCE attribute
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'instance64Low',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Instance64Low',
+        shaderLocation: this.attributeLocation.INSTANCE_64LOW,
+        buffer: {
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 4,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [
+            fp64LowPart(vertex[3]),
+            fp64LowPart(vertex[4]),
+            fp64LowPart(vertex[5]),
+            fp64LowPart(vertex[6]),
+          ];
         },
       },
     });
