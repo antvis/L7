@@ -5,6 +5,7 @@ import type {
   IBuffer,
   ICameraService,
   IElements,
+  IEncodeFeature,
   IFontService,
   IGlobalConfigService,
   IIconService,
@@ -27,8 +28,8 @@ import type {
   ShaderInject,
   Triangulation,
 } from '@antv/l7-core';
-import { BlendType, MaskOperation, StencilType } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { AttributeType, BlendType, MaskOperation, StencilType, gl } from '@antv/l7-core';
+import { fp64LowPart, rgb2arr } from '@antv/l7-utils';
 import { BlendTypes } from '../utils/blend';
 import { getStencil, getStencilMask } from '../utils/stencil';
 import { COMMON_ATTRIBUTE_LOCATION, getCommonStyleAttributeOptions } from './CommonStyleAttribute';
@@ -283,6 +284,31 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
       }
     });
   }
+
+  /**
+   * 注册 Position 属性 64 位地位部分，当经纬度数据开启双精度浮点数使用，
+   * 避免大于 20层级以上出现数据偏移
+   */
+  protected registerPosition64LowAttribute(enable64bitPosition = true) {
+    // save low part for enabled double precision POSITION attribute
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'position64Low',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Position64Low',
+        shaderLocation: this.attributeLocation.POSITION_64LOW,
+        buffer: {
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return enable64bitPosition ? [fp64LowPart(vertex[0]), fp64LowPart(vertex[1])] : [0, 0];
+        },
+      },
+    });
+  }
+
   public updateEncodeAttribute(type: string, flag: boolean) {
     this.encodeStyleAttribute[type] = flag;
   }

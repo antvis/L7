@@ -123,6 +123,9 @@ export default class FillModel extends BaseModel {
     // 注册 Style 参与数据映射的内置属性
     const shape2d = this.layer.getLayerConfig().shape2d as string[];
 
+    // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 20层级以上出现数据偏移
+    this.registerPosition64LowAttribute();
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,

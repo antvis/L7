@@ -6,7 +6,6 @@ import type {
   L7Container,
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { fp64LowPart } from '@antv/l7-utils';
 import { COMMON_ATTRIBUTE_LOCATION } from '../core/CommonStyleAttribute';
 import { isTileGroup } from '../tile/utils/utils';
 
@@ -53,25 +52,6 @@ export default class RegisterStyleAttributePlugin implements ILayerPlugin {
           return vertex.length === 2
             ? [vertex[0], vertex[1], 0]
             : [vertex[0], vertex[1], vertex[2]];
-        },
-      },
-    });
-
-    // save low part for enabled double precision POSITION attribute
-    styleAttributeService.registerStyleAttribute({
-      name: 'position64Low',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Position64Low',
-        shaderLocation: COMMON_ATTRIBUTE_LOCATION.POSITION_64LOW,
-        buffer: {
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 2,
-        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          const enable64bitPosition = true;
-          return enable64bitPosition ? [fp64LowPart(vertex[0]), fp64LowPart(vertex[1])] : [0, 0];
         },
       },
     });
