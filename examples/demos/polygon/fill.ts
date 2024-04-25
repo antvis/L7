@@ -8,54 +8,39 @@ export function MapRender(options: RenderDemoOptions) {
     renderer: options.renderer,
     map: new allMap[options.map]({
       style: 'light',
-      center: [121.434765, 31.256735],
-      zoom: 14.83,
+      center: [-96, 37.8],
+      zoom: 3,
     }),
   });
 
-  const data = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: {
-          testOpacity: 0.8,
-        },
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [113.8623046875, 30.031055426540206],
-              [116.3232421875, 30.031055426540206],
-              [116.3232421875, 31.090574094954192],
-              [113.8623046875, 31.090574094954192],
-              [113.8623046875, 30.031055426540206],
-            ],
-          ],
-        },
-      },
-    ],
-  };
-
-  const layer = new PolygonLayer({
-    autoFit: true,
-  })
-    .source(data)
-    .shape('fill')
-    .color('red')
-    .active(true)
-    .style({
-      opacity: 0.5,
-      opacityLinear: {
-        enable: true,
-        dir: 'in',
-      },
-    });
-
   scene.on('loaded', () => {
-    scene.addLayer(layer);
-    if (window['screenshot']) {
-      window['screenshot']();
-    }
+    fetch('https://gw.alipayobjects.com/os/basement_prod/d36ad90e-3902-4742-b8a2-d93f7e5dafa2.json')
+      .then((res) => res.json())
+      .then((data) => {
+        const color = [
+          'rgb(255,255,217)',
+          'rgb(237,248,177)',
+          'rgb(199,233,180)',
+          'rgb(127,205,187)',
+          'rgb(65,182,196)',
+          'rgb(29,145,192)',
+          'rgb(34,94,168)',
+          'rgb(12,44,132)',
+        ];
+        const layer = new PolygonLayer({})
+          .source(data)
+          .scale('density', {
+            type: 'quantile',
+          })
+          .color('density', color)
+          .shape('fill')
+          .active(true);
+
+        scene.addLayer(layer);
+
+        if (window['screenshot']) {
+          window['screenshot']();
+        }
+      });
   });
 }
