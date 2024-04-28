@@ -21,20 +21,59 @@ export function MapRender(options: RenderDemoOptions) {
     id: 'map',
     renderer: options.renderer,
     map: new allMap[options.map]({
-      style: 'normal',
-      center: [121.434765, 31.256735],
-      zoom: 14.83,
+      style: ['MapLibre', 'Mapbox'].includes(options.map)
+        ? 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
+        : 'normal',
+      center: [120.10321541789858, 30.261273569440405],
+      // zoom: 23,
+      zoom: 21.588541277244076,
       maxZoom: 23,
     }),
   });
 
-  const layer = new PointLayer({ autoFit: true })
+  const layer = new PointLayer({ autoFit: false })
     .source(GEO_DATA)
-    .size(10)
-    .color('#f00')
-    .shape('simple');
+    .size(15)
+    .color('rgb(255, 0, 0)')
+    .shape('circle')
+    .style({
+      stroke: '#0083FE',
+      strokeWidth: 2,
+      // unit: 'meter',
+    });
 
   scene.on('loaded', () => {
     scene.addLayer(layer);
+    // scene.setZoomAndCenter(22, [120.10348, 30.261506]);
+
+    // const mapType = scene.getType();
+    // if (!['default', 'mapbox'].includes(mapType)) return;
+    // setTimeout(() => {
+    //   const isMapbox = mapType === 'mapbox';
+    //   const dom = document.querySelector(
+    //     isMapbox ? '.l7-marker-container' : '.l7-canvas-container',
+    //   );
+    //   // console.log('dom: ', dom);
+    //   const wheelEvt = new WheelEvent('wheel', {
+    //     bubbles: true,
+    //     cancelable: true,
+    //     composed: true,
+    //     clientX: 1329,
+    //     clientY: 168,
+    //     deltaY: 200,
+    //   });
+    //   // console.log('wheelEvt: ', wheelEvt);
+    //   dom?.dispatchEvent(wheelEvt);
+
+    //   const wheelEvt2 = new WheelEvent('wheel', {
+    //     bubbles: true,
+    //     cancelable: true,
+    //     composed: true,
+    //     clientX: 1329,
+    //     clientY: 168,
+    //     deltaY: 400,
+    //   });
+    //   dom?.dispatchEvent(wheelEvt2);
+    // }, 1000 * 3);
   });
 }

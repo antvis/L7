@@ -1,5 +1,6 @@
 import { LineLayer, Scene, Source } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import type { Map } from 'maplibre-gl';
 import type { RenderDemoOptions } from '../../types';
 
 export function MapRender(options: RenderDemoOptions) {
@@ -7,10 +8,12 @@ export function MapRender(options: RenderDemoOptions) {
     id: 'map',
     renderer: options.renderer,
     map: new allMap[options.map]({
-      style: 'normal',
+      style: ['MapLibre', 'Mapbox'].includes(options.map)
+        ? 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
+        : 'normal',
       center: [121.434765, 31.256735],
       zoom: 14.83,
-      maxZoom: 25,
+      maxZoom: 23.9,
     }),
   });
   const geoData = {
@@ -22,9 +25,9 @@ export function MapRender(options: RenderDemoOptions) {
         geometry: {
           type: 'LineString',
           coordinates: [
-            [120.104021, 30.262493],
-            [120.103875, 30.262601],
-            [120.103963, 30.262694],
+            [120.10121458655186, 30.269329295915544],
+            [120.10122467185921, 30.2693341645727],
+            [120.10123176240315, 30.269323019911795],
           ],
         },
       },
@@ -44,4 +47,27 @@ export function MapRender(options: RenderDemoOptions) {
   scene.on('loaded', () => {
     scene.addLayer(layer);
   });
+
+  if (scene.getType() === 'mapbox') {
+    const baseMap = scene.map as Map;
+    baseMap.on('load', () => {
+      baseMap.addSource('route', {
+        type: 'geojson',
+        data: geoData,
+      });
+      baseMap.addLayer({
+        id: 'route',
+        type: 'line',
+        source: 'route',
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
+        paint: {
+          'line-color': '#0083FE',
+          'line-width': 2,
+        },
+      });
+    });
+  }
 }

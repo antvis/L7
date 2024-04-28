@@ -248,7 +248,11 @@ export default abstract class AMapBaseService implements IMapService<AMap.Map & 
   }
 
   public fitBounds(extent: Bounds): void {
-    this.map.setBounds(new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]));
+    this.map.setBounds(
+      new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
+      // @ts-expect-error 立即缩放到指定位置
+      true,
+    );
   }
 
   public setZoomAndCenter(zoom: number, center: [number, number]): void {
