@@ -118,13 +118,14 @@ export default class BMapService extends BaseMap<AMap.Map> {
   };
 
   private getViewState() {
+    const { center, zoom } = getMapHighPrecisionState(this.map);
     const option = {
-      center: [this.map.getCenter().getLng(), this.map.getCenter().getLat()] as [number, number],
+      center: center,
       viewportWidth: this.map.getContainer()!.clientWidth,
       viewportHeight: this.map.getContainer()!.clientHeight,
       bearing: -this.map.getRotation(),
       pitch: this.map.getPitch(),
-      zoom: this.map.getZoom() - ZOOM_OFFSET,
+      zoom: zoom - ZOOM_OFFSET,
     };
 
     return option;
@@ -436,4 +437,19 @@ export default class BMapService extends BaseMap<AMap.Map> {
     }
     this.map.destroy();
   }
+}
+
+/**
+ * 访问高精度的地图状态（临时解决方案）
+ * - 解决 map.getCenter() 方法只返回小数点五位有效数据
+ * - 解决 map.getZoom() 方法只返回小数点两位有效数据
+ */
+function getMapHighPrecisionState(map: AMap.Map) {
+  // @ts-expect-error 访问未暴露的内部属性
+  const viewStatus = map._view.getOptions();
+
+  const center: [number, number] = viewStatus.center;
+  const zoom: number = viewStatus.zoom;
+
+  return { center, zoom };
 }
