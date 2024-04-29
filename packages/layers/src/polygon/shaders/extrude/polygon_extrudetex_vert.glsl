@@ -24,14 +24,14 @@ out vec2 v_texture_data;
 #pragma include "picking"
 
 void main() {
- 
+
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
   float lightWeight = calc_lighting(pos);
   vec4 project_pos = project_position(pos);
   v_uvs = a_uvs;
   v_Color = a_Color;
   v_Color.a *= opacity;
-   
+
   v_texture_data = vec2(a_Position.z, lightWeight);
 
   if(u_heightfixed > 0.0) { // 判断几何体是否固定高度
@@ -46,7 +46,7 @@ void main() {
   }
 
 
-    gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xyz, 1.0));
+    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
 
 

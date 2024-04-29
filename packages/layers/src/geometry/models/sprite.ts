@@ -24,7 +24,6 @@ export default class SpriteModel extends BaseModel {
   public initSprite(radius = 10, spriteCount = 100, lng = 120, lat = 30) {
     const indices = [];
     const positions = [];
-    const mapService = this.mapService;
     const heightLimit =
       this.spriteAnimate === SPRITE_ANIMATE_DIR.UP ? -this.spriteTop : this.spriteTop;
     for (let i = 0; i < spriteCount; i++) {
@@ -40,13 +39,8 @@ export default class SpriteModel extends BaseModel {
       const randomY = radius * Math.random();
       const x = -radius / 2 + randomX;
       const y = -radius / 2 + randomY;
-      if (mapService.version === 'GAODE2.x') {
-        // @ts-ignore
-        const [a, b] = mapService.lngLatToCoord([x + lng, -y + lat]) as [number, number];
-        return [a, b, z, 0, 0];
-      } else {
-        return [x + lng, -y + lat, z, 0, 0];
-      }
+
+      return [x + lng, -y + lat, z, 0, 0];
     }
 
     return { indices, positions };

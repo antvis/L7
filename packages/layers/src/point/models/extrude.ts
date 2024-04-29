@@ -89,7 +89,6 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    // GAODE1.x GAODE2.x MAPBOX
     const {
       depth = true,
       animateOption: { repeat = 1 },

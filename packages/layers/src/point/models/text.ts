@@ -398,12 +398,6 @@ export default class TextModel extends BaseModel {
 
       feature.centroid = calculateCentroid(feature.coordinates);
 
-      // 此时地图高德2.0 originCentroid == centroid
-      feature.originCentroid =
-        feature.version === 'GAODE2.x'
-          ? calculateCentroid(feature.originCoordinates)
-          : (feature.originCentroid = feature.centroid);
-
       this.glyphInfoMap[id as number] = {
         shaping,
         glyphQuads,
@@ -443,11 +437,7 @@ export default class TextModel extends BaseModel {
     const collisionIndex = new CollisionIndex(width, height);
     const filterData = this.glyphInfo.filter((feature: IEncodeFeature) => {
       const { shaping, id = 0 } = feature;
-      // const centroid = feature.centroid as [number, number];
-      // const centroid = feature.originCentroid as [number, number];
-      const centroid = (
-        feature.version === 'GAODE2.x' ? feature.originCentroid : feature.centroid
-      ) as [number, number];
+      const centroid = feature.centroid as [number, number];
       const size = feature.size as number;
       const fontScale: number = size / 16;
       const pixels = this.mapService.lngLatToContainer(centroid);

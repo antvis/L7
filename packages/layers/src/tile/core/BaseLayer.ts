@@ -86,17 +86,6 @@ export default class BaseTileLayer {
 
     const { latLonBounds, zoom } = this.getCurrentView();
 
-    if (this.mapService.version === 'GAODE1.x') {
-      const { visible } = this.parent.getLayerConfig();
-      if (zoom < 2 && visible) {
-        this.parent.updateLayerConfig({ visible: false });
-        this.layerService.reRender();
-      } else if (zoom >= 2 && !visible) {
-        this.parent.updateLayerConfig({ visible: true });
-        this.layerService.reRender();
-      }
-    }
-
     if (
       this.lastViewStates &&
       this.lastViewStates.zoom === zoom &&

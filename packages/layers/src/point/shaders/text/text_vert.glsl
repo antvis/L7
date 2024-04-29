@@ -29,7 +29,7 @@ out float v_fontScale;
 
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
-  
+
   v_uv = a_tex / u_sdf_map_size;
 
 
@@ -45,7 +45,7 @@ void main() {
   // vec4 projected_position  = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   vec2 offset = rotate_matrix(a_textOffsets,rotation);
-  
+
   // gl_Position = vec4(projected_position.xy / projected_position.w + rotation_matrix * a_textOffsets * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);
 
   float raiseHeight = u_raisingHeight;
@@ -54,7 +54,7 @@ void main() {
     raiseHeight = u_raisingHeight * mapboxZoomScale;
   }
 
-  vec4 projected_position = project_common_position_to_clipspace_v2(vec4(project_pos.xyz + vec3(0.0, 0.0, raiseHeight), 1.0));
+  vec4 projected_position = project_common_position_to_clipspace(vec4(project_pos.xyz + vec3(0.0, 0.0, raiseHeight), 1.0));
 
   gl_Position = vec4(
     projected_position.xy / projected_position.w + offset * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);

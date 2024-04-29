@@ -30,7 +30,7 @@ void main() {
   if(u_size_unit == 1.0) {
     newSize = newSize  * u_PixelsPerMeter.z;
   }
-  
+
   // vec2 offset = (u_RotateMatrix * extrude.xy * (a_Size) + textrueOffsets);
   vec2 offset = (extrude.xy * (newSize) + offsets);
 
@@ -51,7 +51,7 @@ void main() {
     }
   }
 
-  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, 0.0, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, 0.0, 1.0));
 
   setPickingColor(a_PickingColor);
 }

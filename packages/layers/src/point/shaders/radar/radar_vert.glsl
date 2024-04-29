@@ -22,8 +22,8 @@ void main() {
   float newSize = setPickingSize(a_Size);
 
   float time = u_time * u_speed;
-  mat2 rotateMatrix = mat2( 
-    cos(time), sin(time), 
+  mat2 rotateMatrix = mat2(
+    cos(time), sin(time),
     -sin(time), cos(time)
   );
   v_extrude = rotateMatrix * a_Extrude.xy;
@@ -41,13 +41,13 @@ void main() {
 
   vec2 offset = (a_Extrude.xy * (newSize));
   vec3 aPosition = a_Position;
-  
+
   offset = project_pixel(offset);
-  
+
   v_data = vec4(a_Extrude.x, a_Extrude.y, antialiasblur, -1.0);
 
   vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
-  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
   setPickingColor(a_PickingColor);
 }

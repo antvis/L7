@@ -42,20 +42,20 @@ describe('lineAtOffset', () => {
   const arcOffsetPoint = lineAtOffset(arcSource, {
     shape: 'arc',
     offset: 0.1,
-    mapVersion: MapType['GAODE1.x'],
+    mapVersion: MapType['GAODE'],
   });
 
   const arcOffsetPoint2 = lineAtOffset(arcSource, {
     shape: 'arc',
     offset: 0.1,
-    mapVersion: MapType['GAODE2.x'],
+    mapVersion: MapType['GAODE'],
     thetaOffset: 0.314,
   });
 
   const arcOffsetPoint3 = lineAtOffset(arcSource, {
     shape: 'arc',
     offset: 0.1,
-    mapVersion: MapType['GAODE2.x'],
+    mapVersion: MapType['GAODE'],
     thetaOffset: 0.314,
     featureId: 0,
   });
@@ -63,19 +63,19 @@ describe('lineAtOffset', () => {
   const greatCircleOffsetPoint = lineAtOffset(arcSource, {
     shape: 'greatcircle',
     offset: 0.1,
-    mapVersion: MapType['GAODE1.x'],
+    mapVersion: MapType['GAODE'],
   });
 
   const greatCircleOffsetPoint2 = lineAtOffset(arcSource, {
     shape: 'greatcircle',
     offset: 0.1,
-    mapVersion: MapType['GAODE2.x'],
+    mapVersion: MapType['GAODE'],
   });
 
   const lineOffsetPoint = lineAtOffset(arcSource, {
     shape: 'line',
     offset: 0.1,
-    mapVersion: MapType['GAODE1.x'],
+    mapVersion: MapType['GAODE'],
   });
 
   it('arcOffsetPoint', () => {

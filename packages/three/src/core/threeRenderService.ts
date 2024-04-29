@@ -61,21 +61,20 @@ export class ThreeRenderService implements IThreeRenderService {
   public getRenderCamera(): Camera {
     /**
      * map version
-     * GAODE1.x
-     * GAODE2.x
+     * GAODE
      * MAPBOX
      */
     switch (this.mapService.version) {
-      case 'GAODE1.x':
-        return this.AMapCamera();
-      case 'GAODE2.x':
-        return this.AMap2Camera();
+      case 'GAODE':
+        // TODO: 支持 GAODE 地图
+        throw new Error('不暂时支持 GAODE 地图');
+      // return this.AMapCamera();
       case 'MAPBOX':
         return this.mapboxCamera();
       case 'DEFAULTMAP':
         return this.mapboxCamera();
       default:
-        return this.AMapCamera();
+        return this.mapboxCamera();
     }
     // return this.mapService.constructor.name === 'AMapService'
     //   ? this.AMapCamera()
@@ -118,31 +117,6 @@ export class ThreeRenderService implements IThreeRenderService {
     camera.lookAt(0, 0, 0);
     camera.position.x += mapCamera.position.x;
     camera.position.y += -mapCamera.position.y;
-    return camera;
-  }
-
-  private AMap2Camera(): Camera {
-    // @ts-ignore
-    const customCoords = this.mapService.map.customCoords;
-    customCoords.getCenter();
-
-    const camera = this.camera;
-    const { near, far, fov, up, lookAt, position } = customCoords.getCameraParams();
-    // @ts-ignore
-    camera.near = near;
-    // @ts-ignore
-    camera.far = far;
-    // @ts-ignore
-    camera.fov = fov;
-    // @ts-ignore
-    camera.position.set(...position);
-    // @ts-ignore
-    camera.up.set(...up);
-    // @ts-ignore
-    camera.lookAt(...lookAt);
-    // @ts-ignore
-    camera.updateProjectionMatrix();
-
     return camera;
   }
 }

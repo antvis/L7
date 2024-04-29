@@ -14,9 +14,9 @@ import { DOM, amap2Project, lodashUtil } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
-import { MapTheme } from '../utils/amap/theme';
 import { toPaddingOptions } from '../utils/utils';
 import './logo.css';
+import { MapTheme } from './theme';
 
 const AMAP_VERSION = '2.0';
 const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
@@ -30,8 +30,10 @@ const AMapEventMapV2: Record<string, string> = {
 export default class BMapService extends BaseMap<AMap.Map> {
   protected viewport = new Viewport();
 
+  public version = 'GAODE';
+
   public getType() {
-    return 'amap2_next';
+    return 'amap';
   }
 
   public async init() {

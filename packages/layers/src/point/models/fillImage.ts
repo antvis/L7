@@ -29,13 +29,6 @@ export default class FillImageModel extends BaseModel {
     if (this.rendererService.getDirty()) {
       this.texture?.bind();
     }
-    /**
-     *               rotateFlag
-     * DEFAULT          1
-     * MAPBOX           1
-     * GAODE2.x         -1
-     * GAODE1.x         -1
-     */
 
     const commonOptions = {
       u_textSize: [1024, this.iconService.canvasHeight || 128],

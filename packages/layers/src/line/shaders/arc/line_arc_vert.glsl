@@ -81,7 +81,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
   vec2 dir_screenspace = normalize(line_clipspace);
   // rotate by 90 degrees
    dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
-   return reverse_offset_normal(vec3(dir_screenspace,1.0)).xy * sign(offset_direction);
+   return dir_screenspace.xy * sign(offset_direction);
 }
 
 void main() {
@@ -103,21 +103,15 @@ void main() {
   float segmentIndex = a_Position.x;
   float segmentRatio = getSegmentRatio(segmentIndex);
 
-  //计算dashArray和distanceRatio 输出到片元
-  vec2 s = source;
-  vec2 t = target;
-  if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-    s = unProjCustomCoord(source);
-    t = unProjCustomCoord(target);
-  }
-  float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+  // 计算 dashArray 和 distanceRatio 输出到片元
+  float total_Distance = pixelDistance(source, target) / 2.0 * PI;
   v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / total_Distance;
   v_distance_ratio = segmentIndex / segmentNumber;
 
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
   float nextSegmentRatio = getSegmentRatio(segmentIndex + indexDir);
   float d_distance_ratio;
-  
+
   if(u_animate.x == Animate) {
       d_distance_ratio = segmentIndex / segmentNumber;
       if(u_lineDir != 1.0) {
@@ -130,7 +124,7 @@ void main() {
   vec4 curr = project_position(vec4(interpolate(source, target, segmentRatio, thetaOffset), 0.0, 1.0));
   vec4 next = project_position(vec4(interpolate(source, target, nextSegmentRatio, thetaOffset), 0.0, 1.0));
 
-  
+
   vec2 offset = project_pixel(getExtrusionOffset((next.xy - curr.xy) * indexDir, a_Position.y));
 
 
@@ -138,11 +132,7 @@ void main() {
   v_lineData.r = d_segmentIndex;
 
   if(LineTexture == u_line_texture) { // 开启贴图模式
-
     float arcDistrance = length(source - target); // 起始点和终点的距离
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20) { // amap
-      arcDistrance *= 1000000.0;
-    }
     if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) { // mapbox
       // arcDistrance *= 8.0;
       arcDistrance = project_pixel_allmap(arcDistrance);
@@ -158,7 +148,7 @@ void main() {
     v_lineData.a = lineOffsetWidth/linePixelSize; // 线图层贴图部分的 v 坐标值
   }
 
-  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + offset, 0, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + offset, 0, 1.0));
 
   setPickingColor(a_PickingColor);
 }

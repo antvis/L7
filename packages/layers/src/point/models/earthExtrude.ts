@@ -90,7 +90,6 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    // GAODE1.x GAODE2.x MAPBOX
     const {
       animateOption: { repeat = 1 },
     } = this.layer.getLayerConfig() as ILayerConfig;

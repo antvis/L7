@@ -21,7 +21,7 @@ out vec4 v_Color;
 #pragma include "picking"
 
 void main() {
- 
+
 float isSide = a_Position.z;
  float topU = a_uvs[0];
  float topV = 1.0 - a_uvs[1];
@@ -44,7 +44,7 @@ float isSide = a_Position.z;
   }
 
 
- gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xyz, 1.0));
+ gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   // Tip: 部分机型 GPU 计算精度兼容
   if(isSide < 0.999) {

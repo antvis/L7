@@ -48,14 +48,7 @@ export default class PlaneModel extends BaseModel {
 
       for (let ix = 0; ix < gridX1; ix++) {
         const x = ix * segmentWidth - widthHalf;
-        if (this.mapService.version === 'GAODE2.x') {
-          // @ts-ignore
-          const [a, b] = this.mapService.lngLatToCoord([x + lng, -y + lat]) as [number, number];
-          positions.push(a, b, 0);
-        } else {
-          positions.push(x + lng, -y + lat, 0);
-        }
-
+        positions.push(x + lng, -y + lat, 0);
         positions.push(ix / gridX);
         positions.push(1 - iy / gridY);
       }

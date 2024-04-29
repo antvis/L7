@@ -16,8 +16,3 @@ layout(std140) uniform SceneUniforms {
   vec2 u_ViewportSize;
   float u_FocalDistance;
 };
-
-layout(std140) uniform LayerUniforms {
-  mat4 u_Mvp;
-  vec2 u_sceneCenterMercator;
-};

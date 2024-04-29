@@ -75,7 +75,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
   vec2 dir_screenspace = normalize(line_clipspace);
   // rotate by 90 degrees
   dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
-  return reverse_offset_normal(vec3(dir_screenspace,1.0)).xy * sign(offset_direction);
+  return dir_screenspace.xy * sign(offset_direction);
 }
 
 float torad(float deg) {
@@ -116,14 +116,7 @@ void main() {
   float d_distance_ratio;
    if(u_line_type == LineTypeDash) {
     d_distance_ratio = segmentIndex / segmentNumber;
-    vec2 s = source;
-    vec2 t = target;
-    
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-      s = unProjCustomCoord(source);
-      t = unProjCustomCoord(target);
-    }
-    float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+    float total_Distance = pixelDistance(source, target) / 2.0 * PI;
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
   }
     if(u_animate.x == Animate) {
@@ -139,7 +132,7 @@ void main() {
 
 
   v_segmentIndex = a_Position.x;
-  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式  
+  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式
 
     float arcDistrance = length(source - target);
     float pixelLen =  project_pixel_texture(u_icon_step);
@@ -154,7 +147,7 @@ void main() {
   }
 
 
-  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + project_pixel(offset), curr.z * thetaOffset, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z * thetaOffset, 1.0));
 
   // 地球模式
   if(u_globel > 0.0) {
@@ -173,10 +166,10 @@ void main() {
     float lineHeight = u_global_height * (-4.0*segmentRatio*segmentRatio + 4.0 * segmentRatio) * lnglatLength;
     // 地球点位
     vec3 globalPoint = normalize(mix(startLngLat, endLngLat, segmentRatio)) * (globalRadius + lineHeight) + lnglatOffset * a_Size;
-    
+
     gl_Position = u_ViewProjectionMatrix * vec4(globalPoint, 1.0);
   }
- 
+
 
   setPickingColor(a_PickingColor);
 }

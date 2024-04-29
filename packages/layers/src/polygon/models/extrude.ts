@@ -120,27 +120,9 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    const bbox = this.layer.getSource().extent;
-    let bounds = bbox;
-    const layerCenter = this.layer.coordCenter || this.layer.getSource().center;
-    let lngLen = bounds[2] - bounds[0];
-    let latLen = bounds[3] - bounds[1];
-
-    if (this.mapService.version === 'GAODE2.x') {
-      // @ts-ignore
-      const [minX, minY] = this.mapService.coordToAMap2RelativeCoordinates(
-        [bbox[0], bbox[1]],
-        layerCenter,
-      );
-      // @ts-ignore
-      const [maxX, maxY] = this.mapService.coordToAMap2RelativeCoordinates(
-        [bbox[2], bbox[3]],
-        layerCenter,
-      );
-      lngLen = maxX - minX;
-      latLen = maxY - minY;
-      bounds = [minX, minY, maxX, maxY];
-    }
+    const bounds = this.layer.getSource().extent;
+    const lngLen = bounds[2] - bounds[0];
+    const latLen = bounds[3] - bounds[1];
 
     this.styleAttributeService.registerStyleAttribute({
       name: 'uvs',
