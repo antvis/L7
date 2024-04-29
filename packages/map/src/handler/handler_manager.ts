@@ -319,7 +319,7 @@ class HandlerManager {
       this.frameId = this.map.requestRenderFrame((timeStamp: number) => {
         // @ts-ignore
         delete this.frameId;
-        this.handleEvent(new RenderFrameEvent('renderFrame', { timeStamp }));
+        this.handleEvent(new RenderFrameEvent('renderFrame', timeStamp));
         this.applyChanges();
       });
     }
