@@ -1,13 +1,12 @@
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
-import { lodashUtil } from '@antv/l7-utils';
 import type { EarthMap } from '../../earthmap';
 import type LngLat from '../../geo/lng_lat';
 import type Point from '../../geo/point';
 import type { Map } from '../../map';
 import DOM from '../../utils/dom';
 import { Event } from './event';
-const { merge } = lodashUtil;
+
 export default class MapMouseEvent extends Event {
   /**
    * `true` if `preventDefault` has been called.
@@ -51,10 +50,14 @@ export default class MapMouseEvent extends Event {
   /**
    * @private
    */
-  constructor(type: string, map: Map | EarthMap, originalEvent: MouseEvent, data: any = {}) {
+  constructor(type: string, map: Map | EarthMap, originalEvent: MouseEvent) {
+    super(type);
     const point = DOM.mousePos(map.getCanvasContainer(), originalEvent);
     const lngLat = map.unproject(point);
-    super(type, merge({ point, lngLat, originalEvent }, data));
+
+    this.point = point;
+    this.lngLat = lngLat;
+    this.originalEvent = originalEvent;
     this.defaultPrevented = false;
     this.target = map;
   }

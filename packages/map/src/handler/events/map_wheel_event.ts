@@ -29,7 +29,8 @@ export default class MapWheelEvent extends Event {
    * @private
    */
   constructor(type: string, map: Map | EarthMap, originalEvent: WheelEvent) {
-    super(type, { originalEvent });
+    super(type);
+    this.originalEvent = originalEvent;
     this.defaultPrevented = false;
   }
 
