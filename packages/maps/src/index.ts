@@ -1,4 +1,3 @@
-import { MapType } from '@antv/l7-utils';
 import { default as GaodeMapNext } from './amap-next';
 import BaiduMap from './bmap/';
 import Earth from './earth/';
@@ -8,6 +7,7 @@ import Mapbox from './mapbox/';
 import MapLibre from './maplibre';
 import TMap from './tdtmap';
 import TencentMap from './tmap';
+import type { MapType } from './types';
 export * from './utils';
 
 const GaodeMap = GaodeMapNext;

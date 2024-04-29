@@ -4,9 +4,9 @@
  */
 import type { IMercator } from '@antv/l7-core';
 import { Map, MercatorCoordinate } from '@antv/l7-map';
-import { MapType } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import Viewport from '../lib/web-mercator-viewport';
+import { MapType } from '../types';
 import BaseMapService from '../utils/BaseMapService';
 
 // TODO: 基于抽象类 BaseMap 实现

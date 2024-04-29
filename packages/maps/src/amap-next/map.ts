@@ -14,6 +14,7 @@ import { DOM, amap2Project, lodashUtil } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
+import { MapType } from '../types';
 import { toPaddingOptions } from '../utils/utils';
 import './logo.css';
 import { MapTheme } from './theme';
@@ -30,7 +31,7 @@ const AMapEventMapV2: Record<string, string> = {
 export default class BMapService extends BaseMap<AMap.Map> {
   protected viewport = new Viewport();
 
-  public version = 'GAODE';
+  public version = MapType.GAODE;
 
   public getType() {
     return 'amap';
