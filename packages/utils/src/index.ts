@@ -13,7 +13,6 @@ export * from './lineAtOffset';
 export * from './lodash-adapter';
 export * from './lru_cache';
 // export * from './mini-adapter/index';
-export * from './interface/map';
 export * as Satistics from './statistics';
 export * from './tileset-manager';
 export function defaultValue(v1: any, v2: any) {
