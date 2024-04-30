@@ -2,11 +2,12 @@
 #define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 12) in vec4 a_Instance;
-layout(location = 14) in vec2 a_iconMapUV;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_INSTANCE) in vec4 a_Instance;
+layout(location = ATTRIBUTE_LOCATION_INSTANCE_64LOW) in vec4 a_Instance64Low;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_iconMapUV;
 
 
 layout(std140) uniform commonUniorm {
@@ -107,8 +108,8 @@ void main() {
     v_color = a_Color;
   }
   v_color.a = v_color.a * opacity;
-  vec2 source = project_position(vec4(a_Instance.rg, 0, 0)).xy;
-  vec2 target = project_position(vec4(a_Instance.ba, 0, 0)).xy;
+  vec2 source = project_position(vec4(a_Instance.rg, 0, 0), a_Instance64Low.xy).xy;
+  vec2 target = project_position(vec4(a_Instance.ba, 0, 0), a_Instance64Low.zw).xy;
   float segmentIndex = a_Position.x;
   float segmentRatio = getSegmentRatio(segmentIndex);
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));
@@ -118,7 +119,7 @@ void main() {
     d_distance_ratio = segmentIndex / segmentNumber;
     vec2 s = source;
     vec2 t = target;
-    
+
     if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
       s = unProjCustomCoord(source);
       t = unProjCustomCoord(target);
@@ -139,7 +140,7 @@ void main() {
 
 
   v_segmentIndex = a_Position.x;
-  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式  
+  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { // 开启贴图模式
 
     float arcDistrance = length(source - target);
     float pixelLen =  project_pixel_texture(u_icon_step);
@@ -173,10 +174,10 @@ void main() {
     float lineHeight = u_global_height * (-4.0*segmentRatio*segmentRatio + 4.0 * segmentRatio) * lnglatLength;
     // 地球点位
     vec3 globalPoint = normalize(mix(startLngLat, endLngLat, segmentRatio)) * (globalRadius + lineHeight) + lnglatOffset * a_Size;
-    
+
     gl_Position = u_ViewProjectionMatrix * vec4(globalPoint, 1.0);
   }
- 
+
 
   setPickingColor(a_PickingColor);
 }

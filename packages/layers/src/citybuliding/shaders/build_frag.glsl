@@ -1,16 +1,16 @@
 precision highp float;
 layout(std140) uniform commonUniforms {
-  vec4 u_baseColor : [ 1.0, 0, 0, 1.0 ];
-  vec4 u_brightColor : [ 1.0, 0, 0, 1.0 ];
-  vec4 u_windowColor : [ 1.0, 0, 0, 1.0 ];
+  vec4 u_baseColor: [ 1.0, 0, 0, 1.0 ];
+  vec4 u_brightColor: [ 1.0, 0, 0, 1.0 ];
+  vec4 u_windowColor: [ 1.0, 0, 0, 1.0 ];
   vec4 u_circleSweepColor;
   vec2 u_cityCenter;
   float u_circleSweep;
   float u_cityMinSize;
   float u_circleSweepSpeed;
   float u_opacity: 1.0;
-  float u_near : 0;
-  float u_far : 1;
+  float u_near: 0;
+  float u_far: 1;
   float u_time;
 };
 in vec4 v_Color;
@@ -114,7 +114,7 @@ void main() {
     float r = fract(((v_worldDis/u_cityMinSize) - u_time * u_circleSweepSpeed) * 2.0);
     outputColor.rgb += r * r * u_circleSweepColor.rgb;
   }
-   
+
   outputColor.a *= u_opacity;
   outputColor = filterColor(outputColor);
 }

@@ -41,7 +41,10 @@ export function MapRender(options: RenderDemoOptions) {
           .select(true)
           .color('name', ['#5B8FF9', '#5CCEA1', '#5D7092', '#F6BD16', '#E86452'])
           .style({
-            opacity: 1,
+            opacity: {
+              field: 'unit_price',
+              value: () => 1,
+            },
             strokeWidth: 2,
           });
 

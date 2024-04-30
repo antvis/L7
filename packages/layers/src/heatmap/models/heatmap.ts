@@ -21,13 +21,21 @@ import heatmap_3d_vert from '../shaders/heatmap/heatmap_3d_vert.glsl';
 import heatmap_frag from '../shaders/heatmap/heatmap_frag.glsl';
 import heatmap_vert from '../shaders/heatmap/heatmap_vert.glsl';
 
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import heatmap_framebuffer_frag from '../shaders/heatmap/heatmap_framebuffer_frag.glsl';
 import heatmap_framebuffer_vert from '../shaders/heatmap/heatmap_framebuffer_vert.glsl';
 import { heatMap3DTriangulation } from '../triangulation';
 const { isEqual } = lodashUtil;
 
 export default class HeatMapModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      UV: 10,
+      DIR: 11,
+    });
+  }
+
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
   protected heatmapFramerBuffer: IFramebuffer;
@@ -112,7 +120,7 @@ export default class HeatMapModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Dir',
-        shaderLocation: 10,
+        shaderLocation: this.attributeLocation.DIR,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -130,7 +138,7 @@ export default class HeatMapModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -159,6 +167,7 @@ export default class HeatMapModel extends BaseModel {
       vertexShader: heatmap_framebuffer_vert,
       fragmentShader: heatmap_framebuffer_frag,
       triangulation: HeatmapTriangulation,
+      defines: this.getDefines(),
 
       depth: {
         enable: false,
@@ -192,7 +201,7 @@ export default class HeatMapModel extends BaseModel {
       uniformBuffers: [...this.colorModelUniformBuffer, ...this.rendererService.uniformBuffers],
       attributes: {
         a_Position: createAttribute({
-          shaderLocation: ShaderLocation.POSITION,
+          shaderLocation: this.attributeLocation.POSITION,
           buffer: createBuffer({
             data: [-1, 1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0],
             type: gl.FLOAT,
@@ -200,7 +209,7 @@ export default class HeatMapModel extends BaseModel {
           size: 3,
         }),
         a_Uv: createAttribute({
-          shaderLocation: ShaderLocation.UV,
+          shaderLocation: this.attributeLocation.UV,
           buffer: createBuffer({
             data: [0, 1, 1, 1, 0, 0, 1, 0],
             type: gl.FLOAT,
@@ -344,7 +353,7 @@ export default class HeatMapModel extends BaseModel {
       fs,
       attributes: {
         a_Position: createAttribute({
-          shaderLocation: ShaderLocation.POSITION,
+          shaderLocation: this.attributeLocation.POSITION,
           buffer: createBuffer({
             data: triangulation.vertices,
             type: gl.FLOAT,
@@ -352,7 +361,7 @@ export default class HeatMapModel extends BaseModel {
           size: 3,
         }),
         a_Uv: createAttribute({
-          shaderLocation: ShaderLocation.UV,
+          shaderLocation: this.attributeLocation.UV,
           buffer: createBuffer({
             data: triangulation.uvs,
             type: gl.FLOAT,

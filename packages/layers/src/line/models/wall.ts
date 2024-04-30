@@ -8,12 +8,20 @@ import type {
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineTriangulation } from '../../core/triangulation';
 import line_frag from '../shaders/wall/wall_frag.glsl';
 import line_vert from '../shaders/wall/wall_vert.glsl';
 export default class LineWallModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      NORMAL: 12,
+      UV: 13,
+      DISTANCE_MITER_TOTAL: 15,
+    });
+  }
   protected texture: ITexture2D;
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
@@ -89,6 +97,7 @@ export default class LineWallModel extends BaseModel {
       vertexShader: line_vert,
       fragmentShader: line_frag,
       triangulation: LineTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
       blend: this.getBlend(),
@@ -96,49 +105,15 @@ export default class LineWallModel extends BaseModel {
     return [model];
   }
   protected registerBuiltinAttributes() {
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Distance',
-        shaderLocation: 15,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          return [vertex[3]];
-        },
-      },
-    });
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'total_distance',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Total_Distance',
-        shaderLocation: 11,
-        buffer: {
-          // give the WebGL driver a hint that this buffer may change
-          usage: gl.STATIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          return [vertex[5]];
-        },
-      },
-    });
+    // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 20层级以上出现数据偏移
+    this.registerPosition64LowAttribute();
 
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -153,13 +128,12 @@ export default class LineWallModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -181,20 +155,21 @@ export default class LineWallModel extends BaseModel {
     });
 
     this.styleAttributeService.registerStyleAttribute({
-      name: 'miter',
+      name: 'distanceAndTotalAndMiter',
       type: AttributeType.Attribute,
       descriptor: {
-        name: 'a_Miter',
-        shaderLocation: 10,
+        name: 'a_Distance_Total_Miter',
+        shaderLocation: this.attributeLocation.DISTANCE_MITER_TOTAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 1,
+        size: 3,
         update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          return [vertex[4]];
+          // [distance, miter, total_distance]
+          return [vertex[3], vertex[4], vertex[5]];
         },
       },
     });
@@ -204,7 +179,7 @@ export default class LineWallModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation: 14,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

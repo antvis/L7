@@ -5,13 +5,11 @@ precision highp float;
 #define diffuseRatio 0.3
 #define specularRatio 0.2
 
-
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec3 a_Size;
-layout(location = 11) in vec3 a_Pos;
-layout(location = 13) in vec3 a_Normal;
-
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec3 a_Size;
+layout(location = ATTRIBUTE_LOCATION_POS) in vec3 a_Pos;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
 
 layout(std140) uniform commonUniform {
   vec4 u_sourceColor;
@@ -42,7 +40,7 @@ float getYRadian(float x, float z) {
   } else if(x > 0.0 && z <= 0.0){
     return atan(-z/x) + pi/2.0;
   } else if(x <= 0.0 && z <= 0.0) {
-    return  pi + atan(x/z); //atan(x/z) + 
+    return  pi + atan(x/z); //atan(x/z) +
   } else {
     return atan(z/-x) + pi*3.0/2.0;
   }
@@ -62,7 +60,7 @@ void main() {
 
   vec3 offset = size; // 控制圆柱体的大小 - 从标准单位圆柱体进行偏移
   if(u_heightfixed < 1.0) { // 圆柱体不固定高度
-    
+
     if (u_CoordinateSystem == COORDINATE_SYSTEM_P20 || u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
       // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
       offset = offset * pow(2.0, (19.0 - u_Zoom));
@@ -98,7 +96,7 @@ void main() {
   }
   v_color.a *= u_opacity;
 
-    
+
   // 在地球模式下，将原本垂直于 xy 平面的圆柱调整姿态到适应圆的角度
   //旋转矩阵mx，创建绕x轴旋转矩阵
   float r = sqrt(a_Pos.z*a_Pos.z + a_Pos.x*a_Pos.x);
@@ -106,9 +104,9 @@ void main() {
   float xcos = cos(xRadian);//求解旋转角度余弦值
   float xsin = sin(xRadian);//求解旋转角度正弦值
   mat4 mx = mat4(
-    1,0,0,0,  
-    0,xcos,-xsin,0,  
-    0,xsin,xcos,0,  
+    1,0,0,0,
+    0,xcos,-xsin,0,
+    0,xsin,xcos,0,
     0,0,0,1);
 
   //旋转矩阵my，创建绕y轴旋转矩阵
@@ -116,13 +114,13 @@ void main() {
   float ycos = cos(yRadian);//求解旋转角度余弦值
   float ysin = sin(yRadian);//求解旋转角度正弦值
   mat4 my = mat4(
-    ycos,0,-ysin,0,  
-    0,1,0,0,  
-    ysin,0,ycos,0,  
+    ycos,0,-ysin,0,
+    0,1,0,0,
+    ysin,0,ycos,0,
     0,0,0,1);
 
   gl_Position = u_ViewProjectionMatrix * vec4(( my * mx *  vec4(a_Position * a_Size, 1.0)).xyz + a_Pos, 1.0);
-  
+
 
   setPickingColor(a_PickingColor);
 }

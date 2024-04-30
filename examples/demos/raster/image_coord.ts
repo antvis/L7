@@ -1,4 +1,4 @@
-import { ImageLayer, PolygonLayer, Scene } from '@antv/l7';
+import { ImageLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
 import type { RenderDemoOptions } from '../../types';
 
@@ -13,32 +13,6 @@ export function MapRender(options: RenderDemoOptions) {
     }),
   });
   scene.on('loaded', () => {
-    const fill = new PolygonLayer()
-      .source({
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [-80.425, 46.437],
-                  [-71.516, 46.437],
-                  [-71.516, 37.936],
-                  [-80.425, 37.936],
-                  [-80.425, 46.437],
-                ],
-              ],
-            },
-          },
-        ],
-      })
-      .shape('line')
-      .color('red')
-      .size(1)
-      .style({ opacity: 1 });
     const layer = new ImageLayer({
       autoFit: true,
     });
@@ -58,7 +32,6 @@ export function MapRender(options: RenderDemoOptions) {
       },
     );
     scene.addLayer(layer);
-    scene.addLayer(fill);
     if (window['screenshot']) {
       window['screenshot']();
     }

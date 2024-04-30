@@ -1,6 +1,7 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 15) in vec3 a_linear;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_LINEAR) in vec3 a_linear;
 
 layout(std140) uniform commonUniforms {
   float u_raisingHeight;
@@ -21,7 +22,7 @@ void main() {
     v_pos = a_Position.xy;
   }
   v_color = vec4(a_Color.xyz, a_Color.w * opacity);
-  vec4 project_pos = project_position(vec4(a_Position, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position, 1.0), a_Position64Low);
   project_pos.z += u_raisingHeight;
 
   if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {

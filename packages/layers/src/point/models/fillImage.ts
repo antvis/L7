@@ -5,12 +5,19 @@ import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { SizeUnitType } from '../../core/interface';
 import { PointFillTriangulation } from '../../core/triangulation';
-// static pointLayer shader - not support animate
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import pointFillFrag from '../shaders/fillImage/fillImage_frag.glsl';
 import pointFillVert from '../shaders/fillImage/fillImage_vert.glsl';
 
 export default class FillImageModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      EXTRUDE: 10,
+      UV: 11,
+    });
+  }
+
   private meter2coord: number = 1;
   private texture: ITexture2D;
   private isMeter: boolean = false;
@@ -73,6 +80,7 @@ export default class FillImageModel extends BaseModel {
       fragmentShader: pointFillFrag,
       triangulation: PointFillTriangulation,
       depth: { enable: false },
+      defines: this.getDefines(),
       inject: this.getInject(),
       cull: {
         enable: true,
@@ -89,12 +97,15 @@ export default class FillImageModel extends BaseModel {
 
   // overwrite baseModel func
   protected registerBuiltinAttributes() {
+    // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 20层级以上出现数据偏移
+    this.registerPosition64LowAttribute();
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -116,7 +127,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
-        shaderLocation: ShaderLocation.EXTRUDE,
+        shaderLocation: this.attributeLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -144,7 +155,7 @@ export default class FillImageModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

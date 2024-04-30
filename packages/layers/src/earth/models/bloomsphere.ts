@@ -3,7 +3,6 @@ import { AttributeType, gl } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import { earthOuterTriangulation } from '../../core/triangulation';
 import bloomSphereFrag from '../shaders/bloomshpere/bloomsphere_frag.glsl';
 import bloomSphereVert from '../shaders/bloomshpere/bloomsphere_vert.glsl';
@@ -12,6 +11,14 @@ interface IBloomLayerStyleOptions {
 }
 const { isNumber } = lodashUtil;
 export default class EarthBloomSphereModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      NORMAL: 9,
+      UV: 10,
+    });
+  }
+
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -41,6 +48,7 @@ export default class EarthBloomSphereModel extends BaseModel {
       moduleName: 'earthBloom',
       vertexShader: bloomSphereVert,
       fragmentShader: bloomSphereFrag,
+      defines: this.getDefines(),
       triangulation: earthOuterTriangulation,
       depth: { enable: false },
       blend: this.getBlend(),
@@ -49,31 +57,31 @@ export default class EarthBloomSphereModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
+    // this.styleAttributeService.registerStyleAttribute({
+    //   name: 'size',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_Size',
+    //     shaderLocation: this.attributeLocation.SIZE,
+    //     buffer: {
+    //       usage: gl.DYNAMIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 1,
+    //     update: (feature: IEncodeFeature) => {
+    //       const { size = 1 } = feature;
+    //       return Array.isArray(size) ? [size[0]] : [size as number];
+    //     },
+    //   },
+    // });
 
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -97,7 +105,7 @@ export default class EarthBloomSphereModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

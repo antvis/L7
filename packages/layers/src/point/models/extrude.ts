@@ -1,14 +1,22 @@
 import type { IEncodeFeature, ILayerConfig, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { calculateCentroid, getCullFace, rgb2arr } from '@antv/l7-utils';
+import { calculateCentroid, fp64LowPart, getCullFace, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import pointExtrudeFrag from '../shaders/extrude/extrude_frag.glsl';
 import pointExtrudeVert from '../shaders/extrude/extrude_vert.glsl';
 
 export default class ExtrudeModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      EXTRUDE: 10,
+      NORMAL: 11,
+    });
+  }
+
   private raiseCount: number = 0;
   private raiseRepeat: number = 0;
   protected getCommonUniformsInfo(): {
@@ -102,6 +110,7 @@ export default class ExtrudeModel extends BaseModel {
       vertexShader: pointExtrudeVert,
       fragmentShader: pointExtrudeFrag,
       triangulation: PointExtrudeTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       cull: {
         enable: true,
@@ -120,7 +129,7 @@ export default class ExtrudeModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -145,13 +154,12 @@ export default class ExtrudeModel extends BaseModel {
       },
     });
 
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -170,22 +178,30 @@ export default class ExtrudeModel extends BaseModel {
         },
       },
     });
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'extrude',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
-        shaderLocation: ShaderLocation.EXTRUDE,
+        shaderLocation: this.attributeLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
-        size: 3,
+        size: 4,
         update: (feature: IEncodeFeature) => {
           const coordinates = calculateCentroid(feature.coordinates);
-          return [coordinates[0], coordinates[1], 0];
+          // [lng, lat, lowLng, lowLat]
+          // low part for enabled double precision
+          return [
+            coordinates[0],
+            coordinates[1],
+            fp64LowPart(coordinates[0]),
+            fp64LowPart(coordinates[1]),
+          ];
         },
       },
     });

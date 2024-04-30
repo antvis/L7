@@ -38,22 +38,8 @@ export function MapRender(options: RenderDemoOptions) {
           })
           .shape('name', ['00', '01', '02'])
           .size(10);
-        const imageLayerText = new PointLayer()
-          .source(data, {
-            parser: {
-              type: 'json',
-              x: 'longitude',
-              y: 'latitude',
-            },
-          })
-          .shape('name', 'text')
-          .color('#f00')
-          .size(25)
-          .style({
-            textOffset: [0, 20],
-          });
+
         scene.addLayer(imageLayer);
-        scene.addLayer(imageLayerText);
 
         if (window['screenshot']) {
           window['screenshot']();

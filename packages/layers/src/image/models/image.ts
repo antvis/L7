@@ -2,13 +2,19 @@ import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { defaultValue } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IImageLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import ImageFrag from '../shaders/image_frag.glsl';
 import ImageVert from '../shaders/image_vert.glsl';
+
 export default class ImageModel extends BaseModel {
   protected texture: ITexture2D;
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      UV: 9,
+    });
+  }
 
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
@@ -61,6 +67,7 @@ export default class ImageModel extends BaseModel {
       moduleName: 'rasterImage',
       vertexShader: ImageVert,
       fragmentShader: ImageFrag,
+      defines: this.getDefines(),
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       blend: {
@@ -74,12 +81,15 @@ export default class ImageModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
+    // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 22 层级以上出现数据偏移
+    this.registerPosition64LowAttribute();
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

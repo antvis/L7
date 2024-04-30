@@ -1,12 +1,19 @@
 import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/billboard_frag.glsl';
 import planeVert from '../shaders/billboard_vert.glsl';
 
 export default class BillBoardModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      EXTRUDE: 9,
+      UV: 10,
+    });
+  }
+
   protected texture: ITexture2D;
   private radian: number = 0; // 旋转的弧度
 
@@ -97,6 +104,7 @@ export default class BillBoardModel extends BaseModel {
       vertexShader: planeVert,
       fragmentShader: planeFrag,
       triangulation: this.planeGeometryTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: true },
@@ -136,7 +144,7 @@ export default class BillBoardModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
-        shaderLocation: ShaderLocation.EXTRUDE,
+        shaderLocation: this.attributeLocation.EXTRUDE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -160,7 +168,7 @@ export default class BillBoardModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
