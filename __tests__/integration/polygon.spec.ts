@@ -3,7 +3,7 @@ import { generateCanvasTestCases } from './utils/generator';
 const TEST_CASES = [
   {
     name: 'extrude',
-    sleepTime: 500,
+    sleepTime: 1000,
   },
   {
     name: 'extrusion',

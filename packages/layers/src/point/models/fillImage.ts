@@ -1,6 +1,5 @@
 import type { IAttribute, IElements, IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { getCullFace } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { SizeUnitType } from '../../core/interface';
@@ -77,7 +76,7 @@ export default class FillImageModel extends BaseModel {
       inject: this.getInject(),
       cull: {
         enable: true,
-        face: getCullFace(this.mapService.version),
+        face: gl.FRONT,
       },
     });
     return [model];

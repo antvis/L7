@@ -47,8 +47,7 @@ void main() {
 
   if (u_heightfixed < 1.0) {
     // 圆柱体不固定高度
-  }
-  else {
+  } else {
     // 圆柱体固定高度 （ 处理 mapbox ）
     if (
       u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT ||

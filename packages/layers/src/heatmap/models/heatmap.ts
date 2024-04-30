@@ -9,7 +9,7 @@ import type {
 } from '@antv/l7-core';
 import { AttributeType, TextureUsage, gl } from '@antv/l7-core';
 import type { IColorRamp } from '@antv/l7-utils';
-import { generateColorRamp, getCullFace, lodashUtil } from '@antv/l7-utils';
+import { generateColorRamp, lodashUtil } from '@antv/l7-utils';
 import { mat4 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
 import type { IHeatMapLayerStyleOptions } from '../../core/interface';
@@ -174,7 +174,7 @@ export default class HeatMapModel extends BaseModel {
       },
       cull: {
         enable: true,
-        face: getCullFace(this.mapService.version),
+        face: gl.FRONT,
       },
     });
     return model;

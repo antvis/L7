@@ -83,14 +83,8 @@ void main() {
     if (u_heightfixed > 0.0) {
       wallHeight *= mapboxZoomScale;
     }
-
-  } else {
-    // TODO: amap need ?
-    // lineHeight 顶点偏移高度
-    if (u_heightfixed < 1.0) {
-      wallHeight *= pow(2.0, 20.0 - u_Zoom);
-    }
   }
+
   gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy, wallHeight, 1.0));
 
   setPickingColor(a_PickingColor);

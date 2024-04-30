@@ -91,15 +91,6 @@ void main() {
     if (u_heightfixed > 0.0) {
       lineHeight *= mapboxZoomScale;
     }
-
-  } else {
-    // TODO: amap need ?
-    // amap
-    h += u_raisingHeight;
-    // lineHeight 顶点偏移高度
-    if (u_heightfixed < 1.0) {
-      lineHeight *= pow(2.0, 20.0 - u_Zoom);
-    }
   }
 
   gl_Position = project_common_position_to_clipspace(
