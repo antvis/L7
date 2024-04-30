@@ -387,12 +387,15 @@ export default class BMapService extends BaseMap<AMap.Map> {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  /**
+   * 将经纬度转成墨卡托坐标
+   */
   public lngLatToMercator([lng, lat]: [number, number], altitude: number): IMercator {
+    const [x, y] = amap2Project(lng, lat);
     return {
-      x: 0,
-      y: 0,
-      z: 0,
+      x: x,
+      y: y,
+      z: altitude,
     };
   }
 
