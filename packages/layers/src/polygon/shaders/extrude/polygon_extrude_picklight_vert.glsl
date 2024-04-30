@@ -44,7 +44,7 @@ void main() {
   }
 
   gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
-  float lightWeight = calc_lighting(pos);
+  float lightWeight = calc_lighting(project_pos);
   v_texture_data = vec2(a_Position.z, lightWeight);
 
   v_Color = vec4(a_Color.rgb * lightWeight, a_Color.w * opacity);
