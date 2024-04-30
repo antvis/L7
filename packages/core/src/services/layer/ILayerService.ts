@@ -1,4 +1,3 @@
-// @ts-ignore
 import type {
   AsyncSeriesBailHook,
   AsyncWaterfallHook,
@@ -29,6 +28,7 @@ import type {
 import type { IRendererService } from '../renderer/IRendererService';
 import type { ITexture2D } from '../renderer/ITexture2D';
 import type { IUniform } from '../renderer/IUniform';
+import type { ShaderDefine, ShaderInject } from '../shader/IShaderModuleService';
 import type { IParseDataItem, ISource, ISourceCFG, ITransform } from '../source/ISourceService';
 import type {
   IAnimateOption,
@@ -73,6 +73,10 @@ export interface ILayerModelInitializationOptions {
   moduleName: string;
   vertexShader: string;
   fragmentShader: string;
+  /** Code injections */
+  inject?: ShaderInject;
+  /** Defines to be injected */
+  defines?: Record<string, ShaderDefine>;
   triangulation: Triangulation;
   styleOption?: unknown;
   workerEnabled?: boolean;

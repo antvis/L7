@@ -1,6 +1,8 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
+
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 
 layout(std140) uniform commonUniorm {
   vec4 u_stroke_color;
@@ -23,11 +25,8 @@ void main() {
 
   vec2 offset = project_pixel(u_offsets);
 
-  vec4 project_pos =
-    project_position(vec4(a_Position, 1.0)) + vec4(a_Size / 2.0, -a_Size / 2.0, 0.0, 0.0);
-  gl_Position = project_common_position_to_clipspace(
-    vec4(vec2(project_pos.xy + offset), project_pos.z, project_pos.w)
-  );
+  vec4 project_pos = project_position(vec4(a_Position, 1.0), a_Position64Low);
+  gl_Position = project_common_position_to_clipspace(vec4(vec2(project_pos.xy+offset),project_pos.z,project_pos.w));
 
   gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
   setPickingColor(a_PickingColor);

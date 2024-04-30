@@ -1,6 +1,6 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 9) in float a_Size;
-layout(location = 10) in vec2 a_Dir;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_DIR) in vec2 a_Dir;
 
 layout(std140) uniform commonUniforms {
   float u_radius;

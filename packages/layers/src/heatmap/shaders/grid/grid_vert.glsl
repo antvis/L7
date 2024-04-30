@@ -1,12 +1,12 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 10) in vec3 a_Pos;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location =  ATTRIBUTE_LOCATION_POS) in vec3 a_Pos;
 
 layout(std140) uniform commonUniforms {
-  vec2 u_radius;
-  float u_opacity;
-  float u_coverage;
-  float u_angle;
+    vec2 u_radius;
+    float u_opacity;
+    float u_coverage;
+    float u_angle;
 };
 
 out vec4 v_color;

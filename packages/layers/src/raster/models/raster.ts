@@ -2,12 +2,18 @@ import type { IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { getDefaultDomain } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IRasterLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import rasterFrag from '../shaders/raster/raster_2d_frag.glsl';
 import rasterVert from '../shaders/raster/raster_2d_vert.glsl';
 export default class RasterModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      UV: 9,
+    });
+  }
+
   protected texture: ITexture2D;
   protected colorTexture: ITexture2D;
   public getUninforms() {
@@ -97,6 +103,7 @@ export default class RasterModel extends BaseModel {
       moduleName: 'rasterImageData',
       vertexShader: rasterVert,
       fragmentShader: rasterFrag,
+      defines: this.getDefines(),
       triangulation: RasterImageTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: false },
@@ -111,12 +118,15 @@ export default class RasterModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
+    // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 22 层级以上出现数据偏移
+    this.registerPosition64LowAttribute();
+
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         name: 'a_Uv',
         buffer: {
           // give the WebGL driver a hint that this buffer may change

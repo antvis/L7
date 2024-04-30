@@ -1,8 +1,9 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 13) in vec3 a_Normal;
-layout(location = 14) in vec3 a_uvs;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec3 a_uvs;
 
 layout(std140) uniform commonUniforms {
   vec4 u_sourceColor;
@@ -26,7 +27,7 @@ void main() {
   v_uvs = a_uvs;
   // cal style mapping - 数据纹理映射部分的计算
   vec4 pos = vec4(a_Position.xy, a_Position.z * a_Size, 1.0);
-  vec4 project_pos = project_position(pos);
+  vec4 project_pos = project_position(pos, a_Position64Low);
 
   if (u_heightfixed > 0.0) {
     // 判断几何体是否固定高度

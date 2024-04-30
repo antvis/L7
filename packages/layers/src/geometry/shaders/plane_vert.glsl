@@ -1,7 +1,7 @@
 
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec3 a_Color;
-layout(location = 14) in vec2 a_Uv;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec3 a_Color;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
   float u_opacity;

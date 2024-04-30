@@ -1,4 +1,4 @@
-layout(location = 0) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
 
 layout(std140) uniform commonUniorm {
   vec4 u_color;

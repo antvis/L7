@@ -1,10 +1,10 @@
 #define pi (3.1415926535)
 
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec3 a_Size;
-layout(location = 11) in vec3 a_Extrude;
-layout(location = 13) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec3 a_Size;
+layout(location = ATTRIBUTE_LOCATION_EXTRUDE) in vec4 a_Extrude;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
 
 layout(std140) uniform commonUniforms {
   float u_pickLight;
@@ -58,7 +58,9 @@ void main() {
     }
   }
 
-  vec4 project_pos = project_position(vec4(a_Extrude.xy, 0.0, 1.0));
+  vec2 positions = a_Extrude.xy;
+  vec2 positions64Low = a_Extrude.zw;
+  vec4 project_pos = project_position(vec4(positions, 0.0, 1.0), positions64Low);
 
   // u_r 控制圆柱的生长
   vec4 pos = vec4(project_pos.xy + offset.xy, offset.z * u_r, 1.0);

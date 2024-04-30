@@ -1,6 +1,6 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 11) in vec3 a_Extrude;
-layout(location = 14) in vec2 a_Uv;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_EXTRUDE) in vec3 a_Extrude;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_Uv;
 
 layout(std140) uniform commonUniforms {
   vec2 u_size;

@@ -13,22 +13,6 @@ export function MapRender(options: RenderDemoOptions) {
       pitch: 45,
     }),
   });
-
-  const colors = [
-    '#87CEFA',
-    '#00BFFF',
-
-    '#7FFFAA',
-    '#00FF7F',
-    '#32CD32',
-
-    '#F0E68C',
-    '#FFD700',
-
-    '#FF7F50',
-    '#FF6347',
-    '#FF0000',
-  ];
   scene.on('loaded', () => {
     fetch('https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json')
       .then((res) => res.json())
@@ -45,7 +29,6 @@ export function MapRender(options: RenderDemoOptions) {
           .color('count', ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'])
           .style({
             pickLight: true,
-
             opacity: 1,
           });
         scene.addLayer(filllayer);

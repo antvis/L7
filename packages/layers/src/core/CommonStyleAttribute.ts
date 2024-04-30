@@ -1,24 +1,26 @@
 import type { IEncodeFeature, IStyleAttribute } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 
-export enum ShaderLocation {
-  POSITION = 0,
-  COLOR,
-  VERTEX_ID,
-  PICKING_COLOR,
-  STROKE,
-  OPACITY,
-  OFFSETS,
-  ROTATION,
-  EXTRUSION_BASE,
-  SIZE,
-  SHAPE,
-  EXTRUDE,
-  MAX,
-  NORMAL,
-  UV,
-  LINEAR, // Polygon Linear
-}
+/**
+ * Attribute Layout Location in Shader
+ */
+export const COMMON_ATTRIBUTE_LOCATION = {
+  // common attribute in RegisterStyleAttributePlugin
+  POSITION: 0,
+  // low part for double precision POSITION attribute
+  POSITION_64LOW: 1,
+  COLOR: 2,
+  PICKING_COLOR: 3,
+
+  // common style attribute
+  STROKE: 4,
+  OPACITY: 5,
+  OFFSETS: 6,
+  ROTATION: 7,
+
+  // last index
+  MAX: 8,
+} as const;
 
 export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttribute> | undefined {
   switch (name) {
@@ -29,7 +31,7 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Rotation',
-          shaderLocation: ShaderLocation.ROTATION,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.ROTATION,
           buffer: {
             usage: gl.DYNAMIC_DRAW,
             data: [],
@@ -48,7 +50,7 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Stroke',
-          shaderLocation: ShaderLocation.STROKE,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.STROKE,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.DYNAMIC_DRAW,
@@ -68,7 +70,7 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Opacity',
-          shaderLocation: ShaderLocation.OPACITY,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.OPACITY,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,
@@ -82,33 +84,13 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
           },
         },
       };
-    case 'extrusionBase':
-      return {
-        name: 'extrusionBase',
-        type: AttributeType.Attribute,
-        descriptor: {
-          name: 'a_ExtrusionBase',
-          shaderLocation: ShaderLocation.EXTRUSION_BASE,
-          buffer: {
-            // give the WebGL driver a hint that this buffer may change
-            usage: gl.STATIC_DRAW,
-            data: [],
-            type: gl.FLOAT,
-          },
-          size: 1,
-          update: (feature: IEncodeFeature) => {
-            const { extrusionBase: op = 0 } = feature;
-            return [op];
-          },
-        },
-      };
     case 'offsets':
       return {
         name: 'offsets',
         type: AttributeType.Attribute,
         descriptor: {
           name: 'a_Offsets',
-          shaderLocation: ShaderLocation.OFFSETS,
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.OFFSETS,
           buffer: {
             // give the WebGL driver a hint that this buffer may change
             usage: gl.STATIC_DRAW,
@@ -119,26 +101,6 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
           update: (feature: IEncodeFeature) => {
             const { offsets: epo } = feature;
             return epo;
-          },
-        },
-      };
-    case 'thetaOffset':
-      return {
-        name: 'thetaOffset',
-        type: AttributeType.Attribute,
-        descriptor: {
-          name: 'a_ThetaOffset',
-          shaderLocation: 15,
-          buffer: {
-            // give the WebGL driver a hint that this buffer may change
-            usage: gl.STATIC_DRAW,
-            data: [],
-            type: gl.FLOAT,
-          },
-          size: 1,
-          update: (feature: IEncodeFeature) => {
-            const { thetaOffset: op = 1 } = feature;
-            return [op];
           },
         },
       };

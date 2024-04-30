@@ -1,12 +1,19 @@
 import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import water_frag from '../shaders/water/polygon_water_frag.glsl';
 import water_vert from '../shaders/water/polygon_water_vert.glsl';
+
 export default class WaterModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      UV: 9,
+    });
+  }
+
   private texture: ITexture2D;
   public getUninforms() {
     const commoninfo = this.getCommonUniformsInfo();
@@ -54,6 +61,7 @@ export default class WaterModel extends BaseModel {
       vertexShader: water_vert,
       fragmentShader: water_frag,
       triangulation: polygonTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       primitive: gl.TRIANGLES,
       depth: { enable: false },
@@ -78,7 +86,7 @@ export default class WaterModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

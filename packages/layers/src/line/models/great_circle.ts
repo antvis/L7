@@ -6,9 +6,8 @@ import type {
   ITexture2D,
 } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { rgb2arr } from '@antv/l7-utils';
+import { fp64LowPart, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { LineArcTriangulation } from '../../core/triangulation';
 import line_arc_frag from '../shaders/greatCircle/line_arc_great_circle_frag.glsl';
@@ -19,6 +18,15 @@ const lineStyleObj: { [key: string]: number } = {
 };
 
 export default class GreatCircleModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      INSTANCE: 10,
+      INSTANCE_64LOW: 11,
+      UV: 12,
+    });
+  }
   protected texture: ITexture2D;
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
@@ -107,6 +115,7 @@ export default class GreatCircleModel extends BaseModel {
       fragmentShader: line_arc_frag,
       triangulation: LineArcTriangulation,
       styleOption: { segmentNumber },
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
     });
@@ -118,7 +127,7 @@ export default class GreatCircleModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -138,7 +147,7 @@ export default class GreatCircleModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
-        shaderLocation: 12,
+        shaderLocation: this.attributeLocation.INSTANCE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -151,12 +160,36 @@ export default class GreatCircleModel extends BaseModel {
       },
     });
 
+    // save low part for enabled double precision INSTANCE attribute
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'instance64Low',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Instance64Low',
+        shaderLocation: this.attributeLocation.INSTANCE_64LOW,
+        buffer: {
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 4,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [
+            fp64LowPart(vertex[3]),
+            fp64LowPart(vertex[4]),
+            fp64LowPart(vertex[5]),
+            fp64LowPart(vertex[6]),
+          ];
+        },
+      },
+    });
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_iconMapUV',
-        shaderLocation: 14,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

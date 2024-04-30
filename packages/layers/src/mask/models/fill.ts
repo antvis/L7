@@ -40,6 +40,7 @@ export default class MaskModel extends BaseModel {
       moduleName: 'mask',
       vertexShader: mask_vert,
       fragmentShader: mask_frag,
+      defines: this.getDefines(),
       triangulation: polygonTriangulation,
       depth: { enable: false },
       pick: false,

@@ -1,8 +1,9 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 10) in float a_Shape;
-layout(location = 11) in vec3 a_Extrude;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_SHAPE) in float a_Shape;
+layout(location = ATTRIBUTE_LOCATION_EXTRUDE) in vec3 a_Extrude;
 
 layout(std140) uniform commonUniforms {
   vec3 u_blur_height_fixed;
@@ -51,7 +52,6 @@ void main() {
   float antialiasblur = -max(2.0 / u_DevicePixelRatio / newSize, u_blur_height_fixed.x);
 
   vec2 offset = (extrude.xy * (newSize + u_stroke_width) + u_offsets);
-  vec3 aPosition = a_Position;
 
   offset = project_pixel(offset);
   offset = rotate_matrix(offset,rotation);
@@ -59,9 +59,7 @@ void main() {
   // TODP: /abs(extrude.x) 是为了兼容地球模式
   v_data = vec4(extrude.x/abs(extrude.x), extrude.y/abs(extrude.y), antialiasblur,shape_type);
 
-
-  // vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0));
-  vec4 project_pos = project_position(vec4(aPosition.xy, 0.0, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0), a_Position64Low);
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
   float raisingHeight = u_blur_height_fixed.y;

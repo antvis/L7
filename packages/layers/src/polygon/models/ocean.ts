@@ -2,12 +2,18 @@ import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IPolygonLayerStyleOptions } from '../../core/interface';
 import { polygonTriangulation } from '../../core/triangulation';
 import ocean_frag from '../shaders/ocean/ocean_frag.glsl';
 import ocean_vert from '../shaders/ocean/ocean_vert.glsl';
 export default class OceanModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      UV: 9,
+    });
+  }
+
   private texture1: ITexture2D;
   private texture2: ITexture2D;
   private texture3: ITexture2D;
@@ -59,6 +65,7 @@ export default class OceanModel extends BaseModel {
       moduleName: 'polygonOcean',
       vertexShader: ocean_vert,
       fragmentShader: ocean_frag,
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: polygonTriangulation,
       primitive: gl.TRIANGLES,
@@ -84,7 +91,7 @@ export default class OceanModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,

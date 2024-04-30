@@ -1,6 +1,7 @@
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec4 a_SizeDistanceAndTotalDistance;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec4 a_SizeDistanceAndTotalDistance;
 
 layout(std140) uniform commonUniorm {
   vec4 u_sourceColor;
@@ -24,7 +25,7 @@ void main() {
   v_color = a_Color;
   v_distanceScale = a_SizeDistanceAndTotalDistance.b / a_SizeDistanceAndTotalDistance.a;
   v_color.a = v_color.a * opacity;
-  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0), a_Position64Low);
 
   float h = float(a_Position.z) * u_vertexScale; // 线顶点的高度 - 兼容不存在第三个数值的情况
 

@@ -9,7 +9,7 @@ export function MapRender(options: RenderDemoOptions) {
     map: new allMap[options.map]({
       style: 'light',
       center: [120, 30],
-      pitch: 60,
+      pitch: 0,
       zoom: 14,
     }),
   });
@@ -46,7 +46,7 @@ export function MapRender(options: RenderDemoOptions) {
     .source(
       [
         {
-          lng: 120,
+          lng: 120.01,
           lat: 30,
           name: 'marker',
         },

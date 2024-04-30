@@ -8,8 +8,17 @@ import pointFillFrag from '../shaders/earthFill/earthFill_frag.glsl';
 import pointFillVert from '../shaders/earthFill/earthFill_vert.glsl';
 
 import { mat4, vec3 } from 'gl-matrix';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
+
 export default class FillModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      SHAPE: 10,
+      EXTRUDE: 11,
+    });
+  }
+
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -45,6 +54,7 @@ export default class FillModel extends BaseModel {
       vertexShader: pointFillVert,
       fragmentShader: pointFillFrag,
       triangulation: GlobelPointFillTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: true },
       blend: this.getBlend(),
@@ -62,7 +72,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Extrude',
-        shaderLocation: ShaderLocation.EXTRUDE,
+        shaderLocation: this.attributeLocation.EXTRUDE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -117,7 +127,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -138,7 +148,7 @@ export default class FillModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Shape',
-        shaderLocation: ShaderLocation.SHAPE,
+        shaderLocation: this.attributeLocation.SHAPE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

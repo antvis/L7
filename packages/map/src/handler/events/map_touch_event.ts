@@ -5,6 +5,7 @@ import Point from '../../geo/point';
 import type { Map } from '../../map';
 import DOM from '../../utils/dom';
 import { Event } from './event';
+
 export default class MapTouchEvent extends Event {
   /**
    * The event type.
@@ -55,6 +56,7 @@ export default class MapTouchEvent extends Event {
    * @private
    */
   constructor(type: string, map: Map | EarthMap, originalEvent: TouchEvent) {
+    super(type);
     const touches = type === 'touchend' ? originalEvent.changedTouches : originalEvent.touches;
     const points = DOM.touchPos(map.getCanvasContainer(), touches);
     const lngLats = points.map((t: Point) => map.unproject(t));
@@ -65,7 +67,12 @@ export default class MapTouchEvent extends Event {
       new Point(0, 0),
     );
     const lngLat = map.unproject(point);
-    super(type, { points, point, lngLats, lngLat, originalEvent });
+
+    this.points = points;
+    this.point = point;
+    this.lngLats = lngLats;
+    this.lngLat = lngLat;
+    this.originalEvent = originalEvent;
     this.defaultPrevented = false;
   }
 

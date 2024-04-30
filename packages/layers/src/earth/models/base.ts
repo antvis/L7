@@ -4,11 +4,18 @@ import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
 import { earthTriangulation } from '../../core/triangulation';
 
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import baseFrag from '../shaders/base/base_frag.glsl';
 import baseVert from '../shaders/base/base_vert.glsl';
 
 export default class BaseEarthModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      NORMAL: 9,
+      UV: 10,
+    });
+  }
+
   protected texture: ITexture2D;
   // T: 当前的地球时间 - 控制太阳的方位
   private earthTime: number = 3.4;
@@ -95,6 +102,7 @@ export default class BaseEarthModel extends BaseModel {
       moduleName: 'earthBase',
       vertexShader: baseVert,
       fragmentShader: baseFrag,
+      defines: this.getDefines(),
       triangulation: earthTriangulation,
       depth: { enable: true },
       blend: this.getBlend(),
@@ -103,31 +111,31 @@ export default class BaseEarthModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    this.styleAttributeService.registerStyleAttribute({
-      name: 'size',
-      type: AttributeType.Attribute,
-      descriptor: {
-        name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
-        buffer: {
-          usage: gl.DYNAMIC_DRAW,
-          data: [],
-          type: gl.FLOAT,
-        },
-        size: 1,
-        update: (feature: IEncodeFeature) => {
-          const { size = 1 } = feature;
-          return Array.isArray(size) ? [size[0]] : [size as number];
-        },
-      },
-    });
+    // this.styleAttributeService.registerStyleAttribute({
+    //   name: 'size',
+    //   type: AttributeType.Attribute,
+    //   descriptor: {
+    //     name: 'a_Size',
+    //     shaderLocation: this.attributeLocation.SIZE,
+    //     buffer: {
+    //       usage: gl.DYNAMIC_DRAW,
+    //       data: [],
+    //       type: gl.FLOAT,
+    //     },
+    //     size: 1,
+    //     update: (feature: IEncodeFeature) => {
+    //       const { size = 1 } = feature;
+    //       return Array.isArray(size) ? [size[0]] : [size as number];
+    //     },
+    //   },
+    // });
 
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -151,7 +159,7 @@ export default class BaseEarthModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

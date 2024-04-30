@@ -1,5 +1,14 @@
 # @antv/l7-map
 
+## 2.21.8
+
+### Patch Changes
+
+- [#2436](https://github.com/antvis/L7/pull/2436) [`a57bb39`](https://github.com/antvis/L7/commit/a57bb3997a20b041974baeabd64f2869f0e6559d) Thanks [@lvisei](https://github.com/lvisei)! - fix: map 事件属性丢失
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.8
+
 ## 2.21.7
 
 ### Patch Changes

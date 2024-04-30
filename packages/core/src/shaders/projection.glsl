@@ -11,6 +11,8 @@
 
 #pragma include "scene_uniforms"
 
+const vec2 ZERO_64_XY_LOW = vec2(0.0, 0.0);
+
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
   float x = lnglat.x;
@@ -46,9 +48,13 @@ vec3 project_offset_normal(vec3 vector) {
   return project_normal(vector);
 }
 
-vec4 project_mvt_offset_position(vec4 position) {
+vec4 project_position(vec4 position, vec2 position64xyLow) {
   if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-    return project_offset(vec4(0.0, 0.0, position.z, position.w));
+    float X = position.x - u_ViewportCenter.x;
+    float Y = position.y - u_ViewportCenter.y;
+    return project_offset(
+      vec4(X + position64xyLow.x, Y + position64xyLow.y, position.z, position.w)
+    );
   }
   if (
     u_CoordinateSystem < COORDINATE_SYSTEM_LNGLAT + 0.01 &&
@@ -60,30 +66,12 @@ vec4 project_mvt_offset_position(vec4 position) {
       position.w
     );
   }
+
   return position;
 }
 
 vec4 project_position(vec4 position) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-    float X = position.x - u_ViewportCenter.x;
-    float Y = position.y - u_ViewportCenter.y;
-    return project_offset(vec4(X, Y, position.z, position.w));
-  }
-  if (
-    u_CoordinateSystem < COORDINATE_SYSTEM_LNGLAT + 0.01 &&
-    u_CoordinateSystem > COORDINATE_SYSTEM_LNGLAT - 0.01
-  ) {
-    return vec4(
-      project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale,
-      project_scale(position.z),
-      position.w
-    );
-  }
-
-  return position;
-
-  // TODO: 瓦片坐标系 & 常规世界坐标系
-
+  return project_position(position, ZERO_64_XY_LOW);
 }
 
 vec2 project_pixel_size_to_clipspace(vec2 pixels) {
@@ -117,6 +105,7 @@ float project_float_pixel(float pixel) {
     // mapbox 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
     return pixel * pow(2.0, 19.0 - u_Zoom) * u_FocalDistance;
   }
+
   return pixel * u_FocalDistance;
 }
 

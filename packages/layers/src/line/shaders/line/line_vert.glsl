@@ -1,11 +1,12 @@
 #define Animate (0.0)
 
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec2 a_Size;
-layout(location = 10) in vec3 a_DistanceAndIndexAndMiter;
-layout(location = 13) in vec4 a_Normal_Total_Distance;
-layout(location = 14) in vec2 a_iconMapUV;
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec2 a_Size;
+layout(location = ATTRIBUTE_LOCATION_DISTANCE_INDEX) in vec3 a_DistanceAndIndexAndMiter;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec4 a_Normal_Total_Distance;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_iconMapUV;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
@@ -70,7 +71,7 @@ void main() {
   v_texture_data = vec4(currentLinePointRatio, lineDistance, d_texPixelLen, texV);
   // 设置数据集的参数
 
-  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0), a_Position64Low);
 
   // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, a_Size.y, 1.0));
 

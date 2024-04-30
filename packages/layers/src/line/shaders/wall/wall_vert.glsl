@@ -1,13 +1,11 @@
-#define Animate (0.0)
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in vec2 a_Size;
-layout(location = 10) in float a_Miter;
-layout(location = 11) in float a_Total_Distance;
-layout(location = 12) in vec4 a_Instance;
-layout(location = 13) in vec3 a_Normal;
-layout(location = 14) in vec2 a_iconMapUV;
-layout(location = 15) in float a_Distance;
+#define Animate 0.0
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_POSITION_64LOW) in vec2 a_Position64Low;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in vec2 a_Size;
+layout(location = ATTRIBUTE_LOCATION_NORMAL) in vec3 a_Normal;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_iconMapUV;
+layout(location = ATTRIBUTE_LOCATION_DISTANCE_MITER_TOTAL) in vec3 a_Distance_Total_Miter;
 
 layout(std140) uniform commonUniorm {
   vec4 u_animate: [ 1., 2., 1.0, 0.2 ];
@@ -35,6 +33,10 @@ out float v_radio;
 out vec4 v_dataset;
 
 void main() {
+  float a_Distance = a_Distance_Total_Miter.x;
+  float a_Miter = a_Distance_Total_Miter.y;
+  float a_Total_Distance = a_Distance_Total_Miter.z;
+
   float d_distance_ratio; // 当前点位距离占线总长的比例
   float d_texPixelLen; // 贴图的像素长度，根据地图层级缩放
 
@@ -57,7 +59,7 @@ void main() {
   v_dataset[2] = d_texPixelLen; // 贴图的像素长度，根据地图层级缩放
   v_dataset[3] = miter; // 线图层贴图部分的 v 坐标值 0 - 1
 
-  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0));
+  vec4 project_pos = project_position(vec4(a_Position.xy, 0, 1.0), a_Position64Low);
 
   float originSize = a_Size.x; // 固定高度
   if (u_heightfixed < 1.0) {

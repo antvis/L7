@@ -2,11 +2,13 @@
 #define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 9) in float a_Size;
-layout(location = 12) in vec4 a_Instance;
-layout(location = 14) in vec2 a_iconMapUV;
+
+layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
+layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
+layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
+layout(location = ATTRIBUTE_LOCATION_INSTANCE) in vec4 a_Instance;
+layout(location = ATTRIBUTE_LOCATION_INSTANCE_64LOW) in vec4 a_Instance64Low;
+layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_iconMapUV;
 
 
 layout(std140) uniform commonUniorm {
@@ -107,8 +109,8 @@ void main() {
     v_color = a_Color;
   }
   v_color.a = v_color.a * opacity;
-  vec2 source = project_position(vec4(a_Instance.rg, 0, 0)).xy;
-  vec2 target = project_position(vec4(a_Instance.ba, 0, 0)).xy;
+  vec2 source = project_position(vec4(a_Instance.rg, 0, 0), a_Instance64Low.xy).xy;
+  vec2 target = project_position(vec4(a_Instance.ba, 0, 0), a_Instance64Low.zw).xy;
   float segmentIndex = a_Position.x;
   float segmentRatio = getSegmentRatio(segmentIndex);
   float indexDir = mix(-1.0, 1.0, step(segmentIndex, 0.0));

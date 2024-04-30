@@ -12,7 +12,6 @@ export function MapRender(options: RenderDemoOptions) {
       zoom: 14.83,
     }),
   });
-  console.log(111);
   const geoData = {
     type: 'FeatureCollection',
     features: [
