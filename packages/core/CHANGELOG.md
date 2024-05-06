@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.0.0-beta.0
+
+### Patch Changes
+
+- [#2416](https://github.com/antvis/L7/pull/2416) [`0913661`](https://github.com/antvis/L7/commit/09136611f4521c5ecb892a7ddf67a8e680e74429) Thanks [@lvisei](https://github.com/lvisei)! - fix: Mapbox/Maplibre 20 层级以上数据偏移问题
+  fix: 修复点图层部分 shape 中心点计算有误
+  fix: 修复立体面图层光照计算有误
+- Updated dependencies []:
+  - @antv/l7-utils@3.0.0-beta.0
+
 ## 2.21.8
 
 ### Patch Changes

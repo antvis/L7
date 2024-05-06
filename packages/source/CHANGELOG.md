@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.0.0-beta.0
+
+### Patch Changes
+
+- Updated dependencies [[`0913661`](https://github.com/antvis/L7/commit/09136611f4521c5ecb892a7ddf67a8e680e74429)]:
+  - @antv/l7-core@3.0.0-beta.0
+  - @antv/l7-utils@3.0.0-beta.0
+
 ## 2.21.8
 
 ### Patch Changes
