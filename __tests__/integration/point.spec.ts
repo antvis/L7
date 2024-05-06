@@ -17,6 +17,7 @@ const TEST_CASES = [
   },
   {
     name: 'fill_image',
+    sleepTime: 1000,
   },
   {
     name: 'image',

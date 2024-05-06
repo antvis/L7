@@ -14,7 +14,6 @@ const TEST_CASES = [
   },
   {
     name: 'wall',
-    sleepTime: 1000,
   },
   {
     name: 'arc',
