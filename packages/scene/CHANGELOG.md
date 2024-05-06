@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.21.9-beta.0
+
+### Patch Changes
+
+- Updated dependencies [[`0913661`](https://github.com/antvis/L7/commit/09136611f4521c5ecb892a7ddf67a8e680e74429), [`048c203`](https://github.com/antvis/L7/commit/048c203e6d368733f8b07b55436bd1c2ef52760f)]:
+  - @antv/l7-layers@2.21.9-beta.0
+  - @antv/l7-core@2.21.9-beta.0
+  - @antv/l7-maps@2.21.9-beta.0
+  - @antv/l7-component@2.21.9-beta.0
+  - @antv/l7-renderer@2.21.9-beta.0
+  - @antv/l7-utils@2.21.9-beta.0
+
 ## 2.21.8
 
 ### Patch Changes
