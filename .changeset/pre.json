@@ -16,5 +16,5 @@
     "@antv/l7-utils": "2.21.8",
     "@antv/l7-site": "2.21.3"
   },
-  "changesets": []
+  "changesets": ["slimy-starfishes-joke", "sour-lemons-perform"]
 }
