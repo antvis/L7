@@ -19,31 +19,14 @@ out vec4 v_color;
 
 vec2 project_pixel_offset(vec2 offsets) {
   vec2 data = project_pixel(offsets);
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return data;
-  }
 
   return vec2(data.x, -data.y);
-  ;
 }
 
 vec2 line_dir(vec2 target, vec2 source) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return normalize(target - source);
-  }
   return normalize(ProjectFlat(target) - ProjectFlat(source));
 }
 
-float flag_gap() {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return 1.0;
-  }
-  return -1.0;
-
-}
 
 void main() {
   // 透明度计算
@@ -75,7 +58,7 @@ void main() {
 
   vec2 normalsCommon = u_stroke_width * project_pixel_offset(vec2(a_Normal.x, a_Normal.y)); // mapbox || 高德
 
-  float gapCommon = flag_gap() * project_pixel(u_gap_width);
+  float gapCommon = -1. * project_pixel(u_gap_width);
   vec3 offsetCommon = vec3(
     flowlineDir * (limitedOffsetDistances[1] + normalsCommon.y + endpointOffset * 1.05) -
       perpendicularDir * (limitedOffsetDistances[0] + gapCommon + normalsCommon.x),
@@ -85,15 +68,9 @@ void main() {
   vec4 project_pos = project_position(vec4(position.xy, 0, 1.0), position64Low);
 
   vec4 fillColor = vec4(a_Color.rgb, a_Color.a * opacity);
-  v_color = mix(
-    fillColor,
-    vec4(u_stroke.xyz, u_stroke.w * fillColor.w * u_stroke_opacity),
-    a_Normal.z
-  );
+  v_color = mix(fillColor, vec4(u_stroke.xyz, u_stroke.w * fillColor.w * u_stroke_opacity), a_Normal.z);
 
-  gl_Position = project_common_position_to_clipspace_v2(
-    vec4(project_pos.xy + offsetCommon.xy, 0.0, 1.0)
-  );
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy +  offsetCommon.xy, 0., 1.0));
 
   setPickingColor(a_PickingColor);
 }

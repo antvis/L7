@@ -1,5 +1,6 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import data from '../../data/indoor-3d-map.json';
 import type { RenderDemoOptions } from '../../types';
 
 export function MapRender(options: RenderDemoOptions) {
@@ -17,29 +18,23 @@ export function MapRender(options: RenderDemoOptions) {
   });
 
   scene.on('loaded', () => {
-    fetch(
-      'https://mdn.alipayobjects.com/afts/file/A*CGKZTL6s_ywAAAAAAAAAAAAADrd2AQ/indoor-3d-map.json',
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const provincelayerSide = new PolygonLayer({
-          autoFit: true,
-        })
-          .source(data)
-          .size('height')
-          .shape('extrusion')
-          .color('color')
-          .style({
-            extrusionBase: {
-              field: 'base_height',
-            },
-            opacity: 1.0,
-          });
-        scene.addLayer(provincelayerSide);
+    const provincelayerSide = new PolygonLayer({
+      autoFit: true,
+    })
+      .source(data)
+      .size('height')
+      .shape('extrusion')
+      .color('color')
+      .style({
+        extrusionBase: {
+          field: 'base_height',
+        },
+        opacity: 1.0,
       });
-  });
+    scene.addLayer(provincelayerSide);
 
-  if (window['screenshot']) {
-    window['screenshot']();
-  }
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
+  });
 }

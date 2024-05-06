@@ -1,7 +1,6 @@
 export { MapRender as boids } from './boids';
 export { MapRender as compute_texture } from './compute_texture';
 export { MapRender as heatmap_grid } from './heatmap_grid';
-export { MapRender as heatmap_grid3d } from './heatmap_grid3d';
 export { MapRender as heatmap_normal } from './heatmap_normal';
 export { MapRender as WebGL_IDW } from './idw';
 export { MapRender as line_normal } from './line_normal';

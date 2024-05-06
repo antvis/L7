@@ -59,12 +59,11 @@ export default class BillBoardModel extends BaseModel {
     /**
      *               rotateFlag
      * DEFAULT            1
-     * MAPBOX           1
-     * GAODE2.x         -1
-     * GAODE1.x         -1
+     * MAPBOX             1
+     * AMAP              -1
      */
     let rotateFlag = 1;
-    if (this.mapService.version === 'GAODE2.x' || this.mapService.version === 'GAODE1.x') {
+    if (this.mapService.getType() === 'amap') {
       rotateFlag = -1;
     }
     // 控制图标的旋转角度（绕 Z 轴旋转）

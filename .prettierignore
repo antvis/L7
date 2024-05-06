@@ -29,3 +29,5 @@ site/.dumi/tmp-production/
 site/public/
 site/public_site/
 
+# examples for data
+examples/data/

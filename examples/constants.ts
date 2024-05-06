@@ -3,7 +3,6 @@ import type { RenderDemoMap, RenderDemoOptions } from './types';
 export const MAP_TYPES: RenderDemoMap[] = [
   'Map',
   'GaodeMap',
-  'GaodeMapNext',
   'Mapbox',
   'MapLibre',
   'BaiduMap',

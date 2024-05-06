@@ -115,9 +115,7 @@ export default class Grid3DModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature) => {
-          const coordinates = (
-            feature.version === 'GAODE2.x' ? feature.originCoordinates : feature.coordinates
-          ) as number[];
+          const coordinates = feature.coordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

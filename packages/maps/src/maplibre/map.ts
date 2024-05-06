@@ -2,13 +2,12 @@
  * MapboxService
  */
 import type { IMercator } from '@antv/l7-core';
-import { MapType } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import type { Map } from 'maplibre-gl';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import Viewport from '../lib/web-mercator-viewport';
-import type { IMapboxInstance } from '../types';
+import { MapType, type IMapboxInstance } from '../types';
 import BaseMapService from '../utils/BaseMapService';
 
 // @ts-ignore

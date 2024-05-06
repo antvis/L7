@@ -47,18 +47,6 @@ void main() {
 
   if (u_heightfixed < 1.0) {
     // 圆柱体不固定高度
-
-    if (
-      u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||
-      u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-    ) {
-      // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-      offset = offset * pow(2.0, 19.0 - u_Zoom);
-    }
-    if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-      // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-      offset = offset * pow(2.0, 19.0 - 3.0 - u_Zoom);
-    }
   } else {
     // 圆柱体固定高度 （ 处理 mapbox ）
     if (
@@ -101,7 +89,7 @@ void main() {
     v_color.a *= u_opacitylinear_dir > 0.0 ? 1.0 - a_Position.z : a_Position.z;
   }
 
-  gl_Position = project_common_position_to_clipspace_v2(pos);
+  gl_Position = project_common_position_to_clipspace(pos);
 
   setPickingColor(a_PickingColor);
 }

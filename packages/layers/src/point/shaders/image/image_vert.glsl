@@ -40,9 +40,7 @@ void main() {
     }
   }
 
-  gl_Position = project_common_position_to_clipspace_v2(
-    vec4(project_pos.xy + offset, raisingHeight, 1.0)
-  );
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, raisingHeight, 1.0));
 
   gl_PointSize = a_Size * 2.0 * u_DevicePixelRatio;
   setPickingColor(a_PickingColor);

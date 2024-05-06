@@ -43,7 +43,7 @@ void main() {
     }
   }
 
-  gl_Position = project_common_position_to_clipspace_v2(project_pos);
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
   float lightWeight = calc_lighting(project_pos);
   v_texture_data = vec2(a_Position.z, lightWeight);
 

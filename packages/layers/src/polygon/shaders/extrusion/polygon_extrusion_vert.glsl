@@ -18,7 +18,7 @@ void main() {
   v_Color = a_Color;
   v_Color = vec4(v_Color.rgb * lightWeight, v_Color.w * opacity);
 
-  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xyz, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   setPickingColor(a_PickingColor);
 }

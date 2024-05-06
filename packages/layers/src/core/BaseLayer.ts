@@ -1068,9 +1068,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        if (this.mapService?.setCoordCenter) {
-          this.mapService.setCoordCenter(layerCenter);
-        }
       }
       if (type === 'update') {
         if (this.tileLayer) {
@@ -1200,6 +1197,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       const uniformBuffers = [
         ...this.layerModel.uniformBuffers,
         ...this.rendererService.uniformBuffers,
+        // TODO: 目前未使用
         this.getLayerUniformBuffer(),
       ];
       if (pickingEnabled) {
@@ -1419,7 +1417,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.uniformBuffers = [];
     // Layer Uniform
     const layerUniforms = this.rendererService.createBuffer({
-      data: new Float32Array(16 + 4).fill(0), // u_Mvp
+      // TODO: 不再需要，之前用于 amap2 u_Mvp
+      data: new Float32Array(16 + 4).fill(0),
       isUBO: true,
     });
     this.uniformBuffers.push(layerUniforms);

@@ -11,8 +11,7 @@ import type {
   Position,
 } from '@antv/l7-core';
 import { IDebugLog, ILayerStage } from '@antv/l7-core';
-import { lodashUtil, normalize, rgb2arr } from '@antv/l7-utils';
-const { cloneDeep } = lodashUtil;
+import { normalize, rgb2arr } from '@antv/l7-utils';
 
 export default class DataMappingPlugin implements ILayerPlugin {
   private mapService: IMapService;
@@ -151,35 +150,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
     attributes.forEach((attribute) => {
       attribute.needRemapping = false;
     });
-    // 调整数据兼容 Amap2.0
-    this.adjustData2Amap2Coordinates(mappedData, layer);
 
     // 调整数据兼容 SimpleCoordinates
     this.adjustData2SimpleCoordinates(mappedData);
     return mappedData;
-  }
-
-  private adjustData2Amap2Coordinates(mappedData: IEncodeFeature[], layer: ILayer) {
-    // 根据地图的类型判断是否需要对点位数据进行处理, 若是高德2.0则需要对坐标进行相对偏移
-    if (mappedData.length > 0 && this.mapService.version === 'GAODE2.x') {
-      const layerCenter = layer.coordCenter || layer.getSource().center;
-      // 单个的点数据
-      // @ts-ignore
-      mappedData
-        // TODO: 避免经纬度被重复计算导致坐标位置偏移
-        .filter((d) => !d.originCoordinates)
-        .map((d) => {
-          d.version = 'GAODE2.x';
-          // @ts-ignore
-          d.originCoordinates = cloneDeep(d.coordinates); // 为了兼容高德1.x 需要保存一份原始的经纬度坐标数据（许多上层逻辑依赖经纬度数据）
-          // @ts-ignore
-          // d.coordinates = this.mapService.lngLatToCoord(d.coordinates);
-          d.coordinates = this.mapService.coordToAMap2RelativeCoordinates(
-            d.coordinates,
-            layerCenter,
-          );
-        });
-    }
   }
 
   private adjustData2SimpleCoordinates(mappedData: IEncodeFeature[]) {

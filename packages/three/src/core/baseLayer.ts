@@ -110,12 +110,8 @@ export default class ThreeJSLayer
    * @returns
    */
   public lnglatToCoord(lnglat: ILngLat) {
-    // @ts-ignore
-    const [x, y] = this.mapService?.lngLatToCoord(
-      lnglat,
-      // @ts-ignore
-      this.threeRenderService.center,
-    ) || [0, 0];
+    const { x, y } = this.mapService.lngLatToMercator(lnglat, 0);
+    // const origin = this.threeRenderService.center ||  [0, 0]
     return [x, y] as ILngLat;
   }
 
@@ -159,7 +155,6 @@ export default class ThreeJSLayer
   }
 
   public async buildModels() {
-    console.log(this.container);
     // @ts-ignore
     this.threeRenderService = this.container.customRenderService['three'];
     const config = this.getLayerConfig();

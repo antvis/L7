@@ -60,23 +60,11 @@ export default class CityBuildModel extends BaseModel {
   public calCityGeo() {
     // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
-    if (this.mapService.version === 'GAODE2.x') {
-      // @ts-ignore
-      this.cityCenter = this.mapService.lngLatToCoord([
-        (maxLng + minLng) / 2,
-        (maxLat + minLat) / 2,
-      ]);
-      // @ts-ignore
-      const l1 = this.mapService.lngLatToCoord([maxLng, maxLat]);
-      // @ts-ignore
-      const l2 = this.mapService.lngLatToCoord([minLng, minLat]);
-      this.cityMinSize = Math.sqrt(Math.pow(l1[0] - l2[0], 2) + Math.pow(l1[1] - l2[1], 2)) / 4;
-    } else {
-      const w = maxLng - minLng;
-      const h = maxLat - minLat;
-      this.cityCenter = [(maxLng + minLng) / 2, (maxLat + minLat) / 2];
-      this.cityMinSize = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 4;
-    }
+
+    const w = maxLng - minLng;
+    const h = maxLat - minLat;
+    this.cityCenter = [(maxLng + minLng) / 2, (maxLat + minLat) / 2];
+    this.cityMinSize = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 4;
   }
 
   public async initModels(): Promise<IModel[]> {

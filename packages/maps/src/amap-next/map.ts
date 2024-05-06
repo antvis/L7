@@ -14,9 +14,10 @@ import { DOM, amap2Project, lodashUtil } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
-import { MapTheme } from '../utils/amap/theme';
+import { MapType } from '../types';
 import { toPaddingOptions } from '../utils/utils';
 import './logo.css';
+import { MapTheme } from './theme';
 
 const AMAP_VERSION = '2.0';
 const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
@@ -30,8 +31,10 @@ const AMapEventMapV2: Record<string, string> = {
 export default class BMapService extends BaseMap<AMap.Map> {
   protected viewport = new Viewport();
 
+  public version = MapType.GAODE;
+
   public getType() {
-    return 'amap2_next';
+    return 'amap';
   }
 
   public async init() {
@@ -63,6 +66,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
     } else {
       const mapConstructorOptions: AMap.Map.Options = {
         mapStyle: this.getMapStyleValue(style as string),
+        // 默认取值范围 [2, 20]
         zooms: [minZoom, maxZoom],
         viewMode: '3D',
         ...rest,
@@ -384,12 +388,15 @@ export default class BMapService extends BaseMap<AMap.Map> {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  /**
+   * 将经纬度转成墨卡托坐标
+   */
   public lngLatToMercator([lng, lat]: [number, number], altitude: number): IMercator {
+    const [x, y] = amap2Project(lng, lat);
     return {
-      x: 0,
-      y: 0,
-      z: 0,
+      x: x,
+      y: y,
+      z: altitude,
     };
   }
 

@@ -1,6 +1,5 @@
 import type { IAttribute, IElements, IEncodeFeature, IModel, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { getCullFace } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { SizeUnitType } from '../../core/interface';
@@ -36,13 +35,6 @@ export default class FillImageModel extends BaseModel {
     if (this.rendererService.getDirty()) {
       this.texture?.bind();
     }
-    /**
-     *               rotateFlag
-     * DEFAULT          1
-     * MAPBOX           1
-     * GAODE2.x         -1
-     * GAODE1.x         -1
-     */
 
     const commonOptions = {
       u_textSize: [1024, this.iconService.canvasHeight || 128],
@@ -84,7 +76,7 @@ export default class FillImageModel extends BaseModel {
       inject: this.getInject(),
       cull: {
         enable: true,
-        face: getCullFace(this.mapService.version),
+        face: gl.FRONT,
       },
     });
     return [model];

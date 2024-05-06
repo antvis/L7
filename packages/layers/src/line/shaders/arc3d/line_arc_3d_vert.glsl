@@ -2,6 +2,7 @@
 #define LineTypeDash 1.0
 #define Animate 0.0
 #define LineTexture 1.0
+
 layout(location = ATTRIBUTE_LOCATION_POSITION) in vec3 a_Position;
 layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
@@ -76,7 +77,7 @@ vec2 getNormal(vec2 line_clipspace, float offset_direction) {
   vec2 dir_screenspace = normalize(line_clipspace);
   // rotate by 90 degrees
   dir_screenspace = vec2(-dir_screenspace.y, dir_screenspace.x);
-  return reverse_offset_normal(vec3(dir_screenspace,1.0)).xy * sign(offset_direction);
+  return dir_screenspace.xy * sign(offset_direction);
 }
 
 float torad(float deg) {
@@ -117,14 +118,7 @@ void main() {
   float d_distance_ratio;
    if(u_line_type == LineTypeDash) {
     d_distance_ratio = segmentIndex / segmentNumber;
-    vec2 s = source;
-    vec2 t = target;
-
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) { // gaode2.x
-      s = unProjCustomCoord(source);
-      t = unProjCustomCoord(target);
-    }
-    float total_Distance = pixelDistance(s, t) / 2.0 * PI;
+    float total_Distance = pixelDistance(source, target) / 2.0 * PI;
     v_dash_array = pow(2.0, 20.0 - u_Zoom) * u_dash_array / (total_Distance / segmentNumber * segmentIndex);
   }
     if(u_animate.x == Animate) {
@@ -155,7 +149,7 @@ void main() {
   }
 
 
-  gl_Position = project_common_position_to_clipspace_v2(vec4(curr.xy + project_pixel(offset), curr.z * thetaOffset, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(curr.xy + project_pixel(offset), curr.z * thetaOffset, 1.0));
 
   // 地球模式
   if(u_globel > 0.0) {

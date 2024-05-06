@@ -1,6 +1,6 @@
 import type { IEncodeFeature, ILayerConfig, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-import { calculateCentroid, fp64LowPart, getCullFace, rgb2arr } from '@antv/l7-utils';
+import { calculateCentroid, fp64LowPart, rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
@@ -97,7 +97,6 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    // GAODE1.x GAODE2.x MAPBOX
     const {
       depth = true,
       animateOption: { repeat = 1 },
@@ -114,7 +113,7 @@ export default class ExtrudeModel extends BaseModel {
       inject: this.getInject(),
       cull: {
         enable: true,
-        face: getCullFace(this.mapService.version),
+        face: gl.FRONT,
       },
       depth: {
         enable: depth,

@@ -7,21 +7,14 @@
 #define COORDINATE_SYSTEM_LNGLAT_OFFSET (2.0) // mapbox offset
 #define COORDINATE_SYSTEM_VECTOR_TILE (3.0)
 #define COORDINATE_SYSTEM_IDENTITY (4.0)
-#define COORDINATE_SYSTEM_P20 (5.0) // amap
-#define COORDINATE_SYSTEM_P20_OFFSET (6.0) // amap offset
-#define COORDINATE_SYSTEM_METER_OFFSET (7.0)
+#define COORDINATE_SYSTEM_METER_OFFSET (5.0)
 
-#define COORDINATE_SYSTEM_P20_2 (8.0) // amap2.0
 #pragma include "scene_uniforms"
 
 const vec2 ZERO_64_XY_LOW = vec2(0.0, 0.0);
 
 // web mercator coords -> world coords
 vec2 project_mercator(vec2 lnglat) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // gaode2.0
-    return lnglat;
-  }
   float x = lnglat.x;
   return vec2(radians(x) + PI, PI - log(tan(PI * 0.25 + radians(lnglat.y) * 0.5)));
 }
@@ -54,55 +47,9 @@ vec3 project_offset_normal(vec3 vector) {
   }
   return project_normal(vector);
 }
-// || u_CoordinateSystem < COORDINATE_SYSTEM_P20_OFFSET + 0.01 && u_CoordinateSystem >COORDINATE_SYSTEM_P20_OFFSET - 0.01
-// reverse Y
-vec3 reverse_offset_normal(vec3 vector) {
-  if (
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-  ) {
-    return vector * vec3(1.0, -1.0, 1.0);
-  }
-
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // gaode2.0
-    return vector;
-  }
-  return vector;
-}
-
-vec4 project_mvt_offset_position(vec4 position) {
-  float a = COORDINATE_SYSTEM_LNGLAT_OFFSET;
-  float b = COORDINATE_SYSTEM_P20_OFFSET;
-  float c = COORDINATE_SYSTEM_LNGLAT;
-  if (
-    u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET ||
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-  ) {
-    return project_offset(vec4(0.0, 0.0, position.z, position.w));
-  }
-  if (
-    u_CoordinateSystem < COORDINATE_SYSTEM_LNGLAT + 0.01 &&
-    u_CoordinateSystem > COORDINATE_SYSTEM_LNGLAT - 0.01
-  ) {
-    return vec4(
-      project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale,
-      project_scale(position.z),
-      position.w
-    );
-  }
-  return position;
-}
 
 vec4 project_position(vec4 position, vec2 position64xyLow) {
-  float a = COORDINATE_SYSTEM_LNGLAT_OFFSET;
-  float b = COORDINATE_SYSTEM_P20_OFFSET;
-  float c = COORDINATE_SYSTEM_LNGLAT;
-  if (
-    u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET ||
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-  ) {
-    // Subtract high part of 64 bit value. Convert remainder to float32, preserving precision.
+  if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
     float X = position.x - u_ViewportCenter.x;
     float Y = position.y - u_ViewportCenter.y;
     return project_offset(
@@ -119,26 +66,8 @@ vec4 project_position(vec4 position, vec2 position64xyLow) {
       position.w
     );
   }
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
-    return vec4(
-      (project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale - vec2(215440491.0, 106744817.0)) *
-        vec2(1.0, -1.0),
-      project_scale(position.z),
-      position.w
-    );
-  }
 
-  // if(u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-
-  //    return vec4(
-  //     position.xy,
-  //     project_scale(position.z),
-  //     position.w);
-  // }
   return position;
-
-  // TODO: 瓦片坐标系 & 常规世界坐标系
-
 }
 
 vec4 project_position(vec4 position) {
@@ -164,22 +93,7 @@ float project_pixel_texture(float pixel) {
     return pixel * pow(0.5, u_Zoom) * u_FocalDistance;
   }
 
-  // amap2 zoom > 12
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    return pixel * pow(2.0, 19.0 - 3.0 - u_Zoom) * u_FocalDistance;
-  }
-
-  // amap zoom > 12
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET) {
-    return pixel * pow(0.5, u_Zoom) * u_FocalDistance;
-  }
-
-  // amap zoom < 12
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20) {
-    return pixel * pow(2.0, 20.0 - u_Zoom) * u_FocalDistance;
-  }
   return pixel * 2.0 * u_FocalDistance;
-  ;
 }
 
 // 在不论什么底图下需要统一处理的时候使用
@@ -188,20 +102,10 @@ float project_float_pixel(float pixel) {
     u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT ||
     u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET
   ) {
-    // mapbox P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
+    // mapbox 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
     return pixel * pow(2.0, 19.0 - u_Zoom) * u_FocalDistance;
   }
-  if (
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-  ) {
-    // amap P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, 19.0 - u_Zoom);
-  }
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // amap2 P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, 19.0 - 3.0 - u_Zoom) * u_FocalDistance;
-  }
+
   return pixel * u_FocalDistance;
 }
 
@@ -224,45 +128,14 @@ float project_float_meter(float meter) {
 }
 
 float project_pixel(float pixel) {
-  if (
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-  ) {
-    // amap P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, 19.0 - u_Zoom) * u_FocalDistance;
-  }
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // amap2 P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, 19.0 - 3.0 - u_Zoom) * u_FocalDistance;
-  }
   return pixel * u_FocalDistance;
 }
+
 vec2 project_pixel(vec2 pixel) {
-  if (
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-  ) {
-    // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, 19.0 - u_Zoom) * u_FocalDistance;
-  }
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, 19.0 - 3.0 - u_Zoom) * u_FocalDistance;
-  }
   return pixel * -1.0 * u_FocalDistance;
 }
+
 vec3 project_pixel(vec3 pixel) {
-  if (
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20 ||
-    u_CoordinateSystem == COORDINATE_SYSTEM_P20_OFFSET
-  ) {
-    // P20 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减1
-    return pixel * pow(2.0, 19.0 - u_Zoom) * u_FocalDistance;
-  }
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // P20_2 坐标系下，为了和 Web 墨卡托坐标系统一，zoom 默认减3
-    return pixel * pow(2.0, 19.0 - 3.0 - u_Zoom) * u_FocalDistance;
-  }
   return pixel * -1.0 * u_FocalDistance;
 }
 
@@ -304,12 +177,3 @@ bool isEqual(float a, float b) {
   return a < b + 0.001 && a > b - 0.001;
 }
 
-// 支持 GaodeV2、Mapbox
-vec4 project_common_position_to_clipspace_v2(vec4 position) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // gaode2.x
-    return u_Mvp * position;
-  } else {
-    return project_common_position_to_clipspace(position);
-  }
-}

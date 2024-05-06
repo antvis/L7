@@ -47,7 +47,7 @@ void main() {
   v_data = vec4(a_Extrude.x, a_Extrude.y, antialiasblur, -1.0);
 
   vec4 project_pos = project_position(vec4(a_Position.xy, 0.0, 1.0), a_Position64Low);
-  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy + offset, project_pixel(setPickingOrder(0.0)), 1.0));
 
   setPickingColor(a_PickingColor);
 }

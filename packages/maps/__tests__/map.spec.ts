@@ -1,5 +1,5 @@
 import { createSceneContainer } from '@antv/l7-core';
-import AMapService from '../src/amap2/map';
+import AMapService from '../src/amap-next/map';
 
 describe('maps', () => {
   it('AMapService', () => {

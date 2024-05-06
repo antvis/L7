@@ -20,6 +20,7 @@ layout(std140) uniform commonUniorm {
   float u_iconStepCount;
   float u_time;
 };
+
 #pragma include "projection"
 #pragma include "light"
 #pragma include "picking"
@@ -46,9 +47,6 @@ void main() {
   } else {
     d_texPixelLen = u_icon_step;
   }
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    d_texPixelLen *= 10.0;
-  }
 
   if (u_animate.x == Animate || u_linearColor == 1.0) {
     d_distance_ratio = a_Distance / a_Total_Distance;
@@ -74,30 +72,20 @@ void main() {
   v_blur = min(project_float_pixel(2.0) / originSize, 0.05);
   v_color = vec4(a_Color.rgb * lightWeight, a_Color.w * opacity);
 
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_P20_2) {
-    // gaode2.x
-    gl_Position = u_Mvp * vec4(project_pos.xy, wallHeight, 1.0);
-  } else {
-    // 兼容 mapbox 在线高度上的效果表现基本一致
-    if (
-      u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT ||
-      u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET
-    ) {
-      // mapbox
-      // 保持高度相对不变
-      float mapboxZoomScale = 4.0 / pow(2.0, 21.0 - u_Zoom);
-      if (u_heightfixed > 0.0) {
-        wallHeight *= mapboxZoomScale;
-      }
-
-    } else {
-      // lineHeight 顶点偏移高度
-      if (u_heightfixed < 1.0) {
-        wallHeight *= pow(2.0, 20.0 - u_Zoom);
-      }
+  // 兼容 mapbox 在线高度上的效果表现基本一致
+  if (
+    u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT ||
+    u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET
+  ) {
+    // mapbox
+    // 保持高度相对不变
+    float mapboxZoomScale = 4.0 / pow(2.0, 21.0 - u_Zoom);
+    if (u_heightfixed > 0.0) {
+      wallHeight *= mapboxZoomScale;
     }
-    gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy, wallHeight, 1.0));
   }
+
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xy, wallHeight, 1.0));
 
   setPickingColor(a_PickingColor);
 }

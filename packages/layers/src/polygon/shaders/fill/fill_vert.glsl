@@ -14,11 +14,8 @@ out vec4 v_color;
 void main() {
   // cal style mapping - 数据纹理映射部分的计算
 
-  // cal style mapping - 数据纹理映射部分的计算
-
   v_color = vec4(a_Color.xyz, a_Color.w * opacity);
   vec4 project_pos = project_position(vec4(a_Position, 1.0), a_Position64Low);
-  // gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   project_pos.z += u_raisingHeight;
 
@@ -31,7 +28,7 @@ void main() {
     project_pos.z += u_raisingHeight * mapboxZoomScale;
   }
 
-  gl_Position = project_common_position_to_clipspace_v2(vec4(project_pos.xyz, 1.0));
+  gl_Position = project_common_position_to_clipspace(vec4(project_pos.xyz, 1.0));
 
   setPickingColor(a_PickingColor);
 }

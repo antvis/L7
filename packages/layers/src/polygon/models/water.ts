@@ -94,15 +94,8 @@ export default class WaterModel extends BaseModel {
           type: gl.FLOAT,
         },
         size: 2,
-        update: (
-          feature: IEncodeFeature,
-          featureIdx: number,
-          vertex: number[],
-          attributeIdx: number,
-        ) => {
-          const v =
-            feature.version === 'GAODE2.x' ? feature.originCoordinates[0][attributeIdx] : vertex;
-          const [lng, lat] = v;
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          const [lng, lat] = vertex;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },
       },
