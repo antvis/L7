@@ -66,6 +66,7 @@ export default class BMapService extends BaseMap<AMap.Map> {
     } else {
       const mapConstructorOptions: AMap.Map.Options = {
         mapStyle: this.getMapStyleValue(style as string),
+        // 默认取值范围 [2, 20]
         zooms: [minZoom, maxZoom],
         viewMode: '3D',
         ...rest,
