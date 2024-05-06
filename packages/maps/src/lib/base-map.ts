@@ -15,6 +15,7 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { CoordinateSystem } from '@antv/l7-core';
+import type { EventEmitterStatic } from 'eventemitter3';
 import { EventEmitter } from 'eventemitter3';
 import { SimpleMapCoord } from '../utils/simpleMapCoord';
 
@@ -45,7 +46,7 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   protected readonly coordinateSystemService: ICoordinateSystemService;
 
-  protected eventEmitter = new EventEmitter();
+  protected eventEmitter: InstanceType<EventEmitterStatic>;
 
   protected markerContainer: HTMLElement;
 
@@ -57,6 +58,7 @@ export default abstract class BaseMap<T> implements IMapService<T> {
     this.config = container.mapConfig as Partial<IMapConfig<T>>;
     this.configService = container.globalConfigService;
     this.coordinateSystemService = container.coordinateSystemService;
+    this.eventEmitter = new EventEmitter();
   }
 
   public abstract init(): Promise<void>;
