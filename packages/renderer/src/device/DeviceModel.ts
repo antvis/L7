@@ -352,7 +352,7 @@ export default class DeviceModel implements IModel {
     this.indexBuffer?.destroy();
     this.bindings?.destroy();
     // 不销毁，避免 gl.deleteVertexArray 删除后，后续不能重复使用
-    this.inputLayout.destroy();
+    // this.inputLayout.destroy();
     this.pipeline.destroy();
     this.destroyed = true;
   }
