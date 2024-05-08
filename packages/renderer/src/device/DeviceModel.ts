@@ -346,10 +346,12 @@ export default class DeviceModel implements IModel {
   }
 
   destroy() {
-    this.program.destroy();
+    // 不销毁，方便后续重复使用
+    // this.program.destroy();
     this.vertexBuffers?.forEach((buffer) => buffer.destroy());
     this.indexBuffer?.destroy();
     this.bindings?.destroy();
+    // 不销毁，避免 gl.deleteVertexArray 删除后，后续不能重复使用
     this.inputLayout.destroy();
     this.pipeline.destroy();
     this.destroyed = true;
