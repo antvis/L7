@@ -652,14 +652,6 @@ export interface ILayerConfig {
   activeMix?: number;
   selectMix?: number;
   /**
-   * 开启 TAA
-   */
-  enableTAA: boolean;
-  /**
-   * 相机抖动程度
-   */
-  jitterScale: number;
-  /**
    * 开启光照
    */
   enableLighting: boolean;

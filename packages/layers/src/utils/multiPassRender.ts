@@ -23,20 +23,14 @@ export function createMultiPassRenderer(
   normalPassFactory: (name: string) => IPass<unknown>,
 ) {
   const multiPassRenderer = layer.multiPassRenderer;
-  const { enableTAA } = layer.getLayerConfig();
 
   // picking pass if enabled
   // if (enablePicking) {
   //   multiPassRenderer.add(normalPassFactory('pixelPicking'));
   // }
 
-  // use TAA pass if enabled instead of render pass
-  if (enableTAA) {
-    multiPassRenderer.add(normalPassFactory('taa'));
-  } else {
-    // render all layers in this pass
-    multiPassRenderer.add(normalPassFactory('render'));
-  }
+  // render all layers in this pass
+  multiPassRenderer.add(normalPassFactory('render'));
 
   // post processing
   normalizePasses(passes).forEach((pass: [string, { [key: string]: unknown }]) => {
