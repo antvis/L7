@@ -2,6 +2,7 @@ import * as BaseMapDemos from './basemap';
 import * as BugFix from './bugfix';
 import * as CanvasDemos from './canvas';
 import * as Components from './components';
+import * as ExperimentDemos from './experiment';
 import * as ExtendDemos from './extend';
 import * as GalleryDemos from './gallery';
 import * as HeatmapDemos from './heatmap';
@@ -70,5 +71,9 @@ export default [
   {
     name: 'Extend',
     demos: ExtendDemos,
+  },
+  {
+    name: 'experiment',
+    demos: ExperimentDemos,
   },
 ];

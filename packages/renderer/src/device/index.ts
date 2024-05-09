@@ -402,6 +402,7 @@ export default class DeviceRendererService implements IRendererService {
     // });
     // this.gl._refresh();
   }
+
   setCustomLayerDefaults() {
     // const gl = this.getGLContext();
     // gl.disable(gl.CULL_FACE);

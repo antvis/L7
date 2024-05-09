@@ -64,7 +64,7 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
   private container: L7Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, canvas, renderer = 'regl' } = config;
+    const { id, map, canvas, renderer = 'device' } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;

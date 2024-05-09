@@ -50,25 +50,6 @@ export interface IWindData {
   image: HTMLImageElement;
 }
 
-export interface IWind {
-  width: number;
-  height: number;
-
-  fadeOpacity: number;
-  speedFactor: number;
-  dropRate: number;
-  dropRateBump: number;
-
-  setWind: (windData: IWindData) => void;
-  draw: () => { d: Uint8Array; w: number; h: number };
-  updateParticelNum: (num: number) => void;
-  updateWindDir: (uMin: number, uMax: number, vMin: number, vMax: number) => void;
-  updateColorRampTexture: (rampColors: { [key: number]: string }) => void;
-
-  reSize: (width: number, height: number) => void;
-  destroy: () => void;
-}
-
 export interface IWindProps {
   glContext: WebGLRenderingContext;
   imageWidth: number;

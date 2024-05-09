@@ -1,11 +1,4 @@
-import type {
-  IEncodeFeature,
-  IModel,
-  IModelUniform,
-  IRenderOptions,
-  ITexture2D,
-  Point,
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IRenderOptions, ITexture2D, Point } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { FrequencyController } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -13,7 +6,7 @@ import type { IWindLayerStyleOptions } from '../../core/interface';
 import { RasterImageTriangulation } from '../../core/triangulation';
 import WindFrag from '../shaders/wind_frag.glsl';
 import WindVert from '../shaders/wind_vert.glsl';
-import type { IWind, IWindProps } from './windRender';
+import type { IWindProps } from './windRender';
 import { Wind } from './windRender';
 
 const defaultRampColors = {
@@ -27,6 +20,11 @@ const defaultRampColors = {
   1.0: '#d53e4f',
 };
 
+/**
+ * WindModel
+ * https://mapbox.github.io/webgl-wind/demo/
+ * source: 'http://nomads.ncep.noaa.gov',
+ */
 export default class WindModel extends BaseModel {
   protected get attributeLocation() {
     return Object.assign(super.attributeLocation, {
@@ -34,14 +32,11 @@ export default class WindModel extends BaseModel {
       UV: 9,
     });
   }
-
-  protected texture: ITexture2D;
   private colorModel: IModel;
-  private wind: IWind;
+  private wind: Wind;
   private imageCoords: [Point, Point];
   private sizeScale: number = 0.5;
-  // https://mapbox.github.io/webgl-wind/demo/
-  // source: 'http://nomads.ncep.noaa.gov',
+  protected texture: ITexture2D;
 
   private frequency = new FrequencyController(7.2);
   private cacheZoom: number;
@@ -54,11 +49,23 @@ export default class WindModel extends BaseModel {
     });
   }
 
-  public getUninforms(): IModelUniform {
-    throw new Error('Method not implemented.');
+  public async initModels(): Promise<IModel[]> {
+    return this.buildModels();
   }
 
-  public async initModels(): Promise<IModel[]> {
+  public async buildModels(): Promise<IModel[]> {
+    this.uniformBuffers = [
+      this.rendererService.createBuffer({
+        // opacity
+        data: new Float32Array(4).fill(0), // 长度需要大于等于 4
+        isUBO: true,
+      }),
+    ];
+
+    const source = this.layer.getSource();
+    // getImageDataData
+    const imageData: HTMLImageElement[] = await source.data?.images;
+
     const {
       uMin = -21.32,
       uMax = 26.8,
@@ -72,51 +79,41 @@ export default class WindModel extends BaseModel {
       sizeScale = 0.5,
       // mask
     } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
-    const { createTexture2D } = this.rendererService;
-    const source = this.layer.getSource();
-    this.texture = createTexture2D({
-      height: 0,
-      width: 0,
-    });
-    this.cacheZoom = Math.floor(this.mapService.getZoom());
 
     const glContext = this.rendererService.getGLContext();
+    const { createTexture2D } = this.rendererService;
+
+    this.cacheZoom = Math.floor(this.mapService.getZoom());
     this.imageCoords = source.data?.dataArray[0].coordinates as [Point, Point];
+    this.sizeScale = sizeScale * this.getZoomScale();
 
-    source.data?.images?.then((imageData: HTMLImageElement[]) => {
-      this.sizeScale = sizeScale * this.getZoomScale();
+    const { imageWidth, imageHeight } = this.getWindSize();
 
-      const { imageWidth, imageHeight } = this.getWindSize();
+    const options: IWindProps = {
+      glContext,
+      imageWidth,
+      imageHeight,
+      fadeOpacity,
+      speedFactor,
+      dropRate,
+      dropRateBump,
+      rampColors,
+    };
 
-      const options: IWindProps = {
-        glContext,
-        imageWidth,
-        imageHeight,
-        fadeOpacity,
-        speedFactor,
-        dropRate,
-        dropRateBump,
-        rampColors,
-      };
+    this.wind = new Wind(options);
 
-      this.wind = new Wind(options);
+    this.wind.setWind({
+      uMin,
+      uMax,
+      vMin,
+      vMax,
+      image: imageData[0],
+    });
 
-      // imageData[0] 风场图
-      this.wind.setWind({
-        uMin,
-        uMax,
-        vMin,
-        vMax,
-        image: imageData[0],
-      });
-      this.texture?.destroy();
-
-      this.texture = createTexture2D({
-        width: imageWidth,
-        height: imageHeight,
-      });
-
-      this.layerService.reRender();
+    this.texture = createTexture2D({
+      data: imageData[0],
+      width: imageWidth,
+      height: imageHeight,
     });
 
     const model = await this.layer.buildLayerModel({
@@ -128,21 +125,9 @@ export default class WindModel extends BaseModel {
       primitive: gl.TRIANGLES,
       depth: { enable: false },
     });
+
     this.colorModel = model;
     return [model];
-  }
-
-  public getWindSize() {
-    const p1 = this.mapService.lngLatToPixel(this.imageCoords[0]);
-    const p2 = this.mapService.lngLatToPixel(this.imageCoords[1]);
-
-    const imageWidth = Math.min(Math.floor((p2.x - p1.x) * this.sizeScale), 2048);
-    const imageHeight = Math.min(Math.floor((p1.y - p2.y) * this.sizeScale), 2048);
-    return { imageWidth, imageHeight };
-  }
-
-  public async buildModels(): Promise<IModel[]> {
-    return this.initModels();
   }
 
   public clearModels(): void {
@@ -151,7 +136,6 @@ export default class WindModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'uv',
       type: AttributeType.Attribute,
@@ -172,72 +156,88 @@ export default class WindModel extends BaseModel {
     });
   }
 
+  private getWindSize() {
+    const p1 = this.mapService.lngLatToPixel(this.imageCoords[0]);
+    const p2 = this.mapService.lngLatToPixel(this.imageCoords[1]);
+
+    const imageWidth = Math.min(Math.floor((p2.x - p1.x) * this.sizeScale), 2048);
+    const imageHeight = Math.min(Math.floor((p1.y - p2.y) * this.sizeScale), 2048);
+    return { imageWidth, imageHeight };
+  }
+
   private getZoomScale() {
     return Math.min(((this.cacheZoom + 4) / 30) * 2, 2);
   }
 
   private drawWind() {
-    if (this.wind) {
-      const {
-        uMin = -21.32,
-        uMax = 26.8,
-        vMin = -21.57,
-        vMax = 21.42,
-        numParticles = 65535,
-        fadeOpacity = 0.996,
-        speedFactor = 0.25,
-        dropRate = 0.003,
-        dropRateBump = 0.01,
-        rampColors = defaultRampColors,
-        sizeScale = 0.5,
-      } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
-      let newNumParticles = numParticles;
-      const currentZoom = Math.floor(this.mapService.getZoom());
-      if (
-        (typeof sizeScale === 'number' && sizeScale !== this.sizeScale) ||
-        currentZoom !== this.cacheZoom
-      ) {
-        const zoomScale = this.getZoomScale();
-        this.sizeScale = sizeScale;
-        newNumParticles *= zoomScale;
-        const { imageWidth, imageHeight } = this.getWindSize();
-        this.wind.reSize(imageWidth, imageHeight);
-        this.cacheZoom = currentZoom;
-      }
+    if (!this.wind) return;
 
-      this.wind.updateWindDir(uMin, uMax, vMin, vMax);
+    const {
+      uMin = -21.32,
+      uMax = 26.8,
+      vMin = -21.57,
+      vMax = 21.42,
+      numParticles = 65535,
+      fadeOpacity = 0.996,
+      speedFactor = 0.25,
+      dropRate = 0.003,
+      dropRateBump = 0.01,
+      rampColors = defaultRampColors,
+      sizeScale = 0.5,
+    } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
 
-      this.wind.updateParticelNum(newNumParticles);
-
-      this.wind.updateColorRampTexture(rampColors);
-
-      this.wind.fadeOpacity = fadeOpacity;
-      this.wind.speedFactor = speedFactor;
-      this.wind.dropRate = dropRate;
-      this.wind.dropRateBump = dropRateBump;
-
-      const { d, w, h } = this.wind.draw();
-      // 恢复 L7 渲染流程中 gl 状态
-      this.rendererService.setBaseState();
-      this.texture.update({
-        data: d,
-        width: w,
-        height: h,
-      });
+    let newNumParticles = numParticles;
+    const currentZoom = Math.floor(this.mapService.getZoom());
+    if (
+      (typeof sizeScale === 'number' && sizeScale !== this.sizeScale) ||
+      currentZoom !== this.cacheZoom
+    ) {
+      const zoomScale = this.getZoomScale();
+      this.sizeScale = sizeScale;
+      newNumParticles *= zoomScale;
+      const { imageWidth, imageHeight } = this.getWindSize();
+      this.wind.reSize(imageWidth, imageHeight);
+      this.cacheZoom = currentZoom;
     }
+
+    this.wind.updateWindDir(uMin, uMax, vMin, vMax);
+
+    this.wind.updateParticelNum(newNumParticles);
+
+    this.wind.updateColorRampTexture(rampColors);
+
+    this.wind.fadeOpacity = fadeOpacity;
+    this.wind.speedFactor = speedFactor;
+    this.wind.dropRate = dropRate;
+    this.wind.dropRateBump = dropRateBump;
+
+    const { d, w, h } = this.wind.draw();
+    // 恢复 L7 渲染流程中 gl 状态
+    this.rendererService.setBaseState();
+    this.texture.update({
+      data: d,
+      width: w,
+      height: h,
+    });
   }
 
   private drawColorMode(options: Partial<IRenderOptions> = {}) {
-    const { opacity } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
+    const { opacity = 1.0 } = this.layer.getLayerConfig() as IWindLayerStyleOptions;
+
+    this.uniformBuffers[0].subData({
+      offset: 0,
+      data: [opacity],
+    });
 
     this.layerService.beforeRenderData(this.layer);
     this.layer.hooks.beforeRender.call();
     this.layerService.renderMask(this.layer.masks);
     this.colorModel?.draw({
       uniforms: {
-        u_opacity: opacity || 1.0,
+        u_opacity: opacity,
         u_texture: this.texture,
       },
+      textures: [this.texture],
       blend: this.getBlend(),
       stencil: this.getStencil(options),
     });
