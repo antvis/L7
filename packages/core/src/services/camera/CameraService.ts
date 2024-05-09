@@ -10,16 +10,6 @@ export default class CameraService implements ICameraService {
   private overridedViewProjectionMatrix: number[] | undefined;
 
   /**
-   * 抖动后的 VP 矩阵
-   */
-  private jitteredViewProjectionMatrix: number[] | undefined;
-
-  /**
-   * 抖动后的 Projection 矩阵
-   */
-  private jitteredProjectionMatrix: number[] | undefined;
-
-  /**
    * ViewMatrix 逆矩阵，用于计算相机位置
    */
   // private viewMatrixInverse: number[];
@@ -56,8 +46,7 @@ export default class CameraService implements ICameraService {
   }
 
   public getProjectionMatrix(): number[] {
-    // 优先返回抖动后的 ProjectionMatrix
-    return this.jitteredProjectionMatrix || this.viewport.getProjectionMatrix();
+    return this.viewport.getProjectionMatrix();
   }
 
   public getModelMatrix(): number[] {
@@ -77,11 +66,7 @@ export default class CameraService implements ICameraService {
   }
 
   public getViewProjectionMatrix(): number[] {
-    return (
-      this.overridedViewProjectionMatrix ||
-      this.jitteredViewProjectionMatrix ||
-      this.viewport.getViewProjectionMatrix()
-    );
+    return this.overridedViewProjectionMatrix || this.viewport.getViewProjectionMatrix();
   }
 
   public getZoom(): number {
@@ -114,26 +99,5 @@ export default class CameraService implements ICameraService {
    */
   public setViewProjectionMatrix(viewProjectionMatrix: number[] | undefined) {
     this.overridedViewProjectionMatrix = viewProjectionMatrix;
-  }
-
-  public jitterProjectionMatrix(x: number, y: number) {
-    const translation = mat4.fromTranslation(mat4.create(), [x, y, 0]);
-
-    this.jitteredProjectionMatrix = mat4.multiply(
-      mat4.create(),
-      translation,
-      this.viewport.getProjectionMatrix() as unknown as mat4,
-    ) as unknown as number[];
-
-    this.jitteredViewProjectionMatrix = mat4.multiply(
-      mat4.create(),
-      this.jitteredProjectionMatrix as unknown as mat4,
-      this.viewport.getViewMatrix() as unknown as mat4,
-    ) as unknown as number[];
-  }
-
-  public clearJitterProjectionMatrix() {
-    this.jitteredProjectionMatrix = undefined;
-    this.jitteredViewProjectionMatrix = undefined;
   }
 }
