@@ -3,6 +3,7 @@ import type { IFramebuffer } from '../IFramebuffer';
 import type { IPostProcessingPass, IPostProcessor } from '../IMultiPassRenderer';
 import type { IRendererService } from '../IRendererService';
 import type { ITexture2D } from '../ITexture2D';
+import { TextureUsage } from '../ITexture2D';
 import { gl } from '../gl';
 
 /**
@@ -127,6 +128,7 @@ export default class PostProcessor implements IPostProcessor {
         height: 1,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
+        usage: TextureUsage.RENDER_TARGET,
       }),
     });
     this.writeFBO = createFramebuffer({
@@ -135,6 +137,7 @@ export default class PostProcessor implements IPostProcessor {
         height: 1,
         wrapS: gl.CLAMP_TO_EDGE,
         wrapT: gl.CLAMP_TO_EDGE,
+        usage: TextureUsage.RENDER_TARGET,
       }),
     });
   }

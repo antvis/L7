@@ -579,11 +579,6 @@ export interface ILayer {
   /**
    * WebGL2 下更新 Layer 级 Uniform
    */
-  getLayerUniformBuffer(): IBuffer;
-
-  /**
-   * WebGL2 下更新 Layer 级 Uniform
-   */
   getPickingUniformBuffer(): IBuffer;
 }
 
