@@ -1,5 +1,6 @@
 import { PolygonLayer, Scene } from '@antv/l7';
 import * as allMap from '@antv/l7-maps';
+import data from '../../data/nanjing-city.json';
 import type { RenderDemoOptions } from '../../types';
 
 export function MapRender(options: RenderDemoOptions) {
@@ -14,28 +15,24 @@ export function MapRender(options: RenderDemoOptions) {
     }),
   });
   scene.on('loaded', () => {
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json')
-      .then((res) => res.json())
-      .then((data) => {
-        const filllayer = new PolygonLayer({
-          name: 'fill',
-          zIndex: 3,
-          autoFit: true,
-        })
-          .source(data)
-          .shape('extrude')
-          .active(true)
-          .size('unit_price', (unit_price) => unit_price)
-          .color('count', ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'])
-          .style({
-            pickLight: true,
-            opacity: 1,
-          });
-        scene.addLayer(filllayer);
-
-        if (window['screenshot']) {
-          window['screenshot']();
-        }
+    const filllayer = new PolygonLayer({
+      name: 'fill',
+      zIndex: 3,
+      autoFit: true,
+    })
+      .source(data)
+      .shape('extrude')
+      .active(true)
+      .size('unit_price', (unit_price) => unit_price)
+      .color('count', ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'])
+      .style({
+        pickLight: true,
+        opacity: 1,
       });
+    scene.addLayer(filllayer);
+
+    if (window['screenshot']) {
+      window['screenshot']();
+    }
   });
 }
