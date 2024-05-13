@@ -334,8 +334,24 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
+
+  const positions = vertices.slice();
+  const p: number[] = [];
+  for (let i = 0; i < vertices.length; i += 2) {
+    p[0] = vertices[i];
+    p[1] = vertices[i + 1];
+
+    // earcut is a 2D triangulation algorithm, and handles 3D data as if it was projected onto the XY plane
+    const xy = lngLatToMeters(p, true, { enable: false, decimal: 1 });
+
+    positions[i] = xy[0];
+    positions[i + 1] = xy[1];
+  }
+
+  const triangles = earcut(positions, holes, dimensions);
+
   return {
-    indices: earcut(vertices, holes, dimensions),
+    indices: triangles,
     vertices,
     size: dimensions,
   };
@@ -343,14 +359,12 @@ export function polygonTriangulation(feature: IEncodeFeature) {
 
 // 构建几何图形（带有中心点和大小）
 export function polygonTriangulationWithCenter(feature: IEncodeFeature) {
-  const { coordinates } = feature;
-  const flattengeo = earcut.flatten(coordinates as number[][][]);
-  const { vertices, dimensions, holes } = flattengeo;
+  const { indices, vertices, size } = polygonTriangulation(feature);
 
   return {
-    indices: earcut(vertices, holes, dimensions),
+    indices: indices,
     vertices: getVerticesWithCenter(vertices),
-    size: dimensions + 4,
+    size: size + 4,
   };
 }
 

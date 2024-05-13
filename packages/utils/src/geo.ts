@@ -67,6 +67,11 @@ function transform(item: any[], cb: (item: any[]) => any): any {
 export function lngLatToMeters(lnglat: Point): Point;
 export function lngLatToMeters(
   lnglat: Point,
+  validate?: boolean,
+  accuracy?: { enable: boolean; decimal: number },
+): Point;
+export function lngLatToMeters(
+  lnglat: Point,
   validate: boolean = true,
   accuracy = { enable: true, decimal: 1 },
 ) {
