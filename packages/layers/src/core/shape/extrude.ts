@@ -1,7 +1,9 @@
 import { lngLatToMeters } from '@antv/l7-utils';
 import earcut from 'earcut';
 import { vec3 } from 'gl-matrix';
+import { getPolygonSurfaceIndices } from '../utils';
 import type { IPath } from './Path';
+
 export interface IExtrudeGeomety {
   positions: number[];
   index: number[];
@@ -62,6 +64,7 @@ export default function extrudePolygon(path: IPath[]): IExtrudeGeomety {
     index: indexArray,
   };
 }
+
 export function fillPolygon(points: IPath[]) {
   const flattengeo = earcut.flatten(points);
   const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
@@ -82,7 +85,7 @@ export function extrude_PolygonNormal(
   }
   const n = path[0].length;
   const flattengeo = earcut.flatten(path);
-  const { vertices, dimensions } = flattengeo;
+  const { vertices, dimensions, holes } = flattengeo;
   const positions = [];
   const indexArray = [];
   const normals = [];
@@ -97,8 +100,10 @@ export function extrude_PolygonNormal(
     );
     normals.push(0, 0, 1);
   }
-  const triangles = earcut(flattengeo.vertices, flattengeo.holes, flattengeo.dimensions);
-  indexArray.push(...triangles);
+
+  const indices = getPolygonSurfaceIndices(vertices, holes, dimensions, needFlat);
+  indexArray.push(...indices);
+
   // 设置侧面
   for (let i = 0; i < n; i++) {
     const prePoint = flattengeo.vertices.slice(i * dimensions, (i + 1) * dimensions);
@@ -145,6 +150,7 @@ export function extrude_PolygonNormal(
     normals,
   };
 }
+
 function computeVertexNormals(
   p1: [number, number, number],
   p2: [number, number, number],

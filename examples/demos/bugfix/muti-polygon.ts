@@ -30,6 +30,8 @@ export function MapRender(options: RenderDemoOptions) {
         })
         .color('rgb(22,199,255)')
         .shape('fill')
+        // .shape('extrude')
+        // .size(1200 * 100)
         .active(true)
         .style({
           opacity: 0.5,

@@ -17,10 +17,11 @@ import {
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import type { IPosition, ShapeType2D, ShapeType3D } from './shape/Path';
+import { geometryShape } from './shape/Path';
 import type { IExtrudeGeomety } from './shape/extrude';
 import extrudePolygon, { extrude_PolygonNormal, fillPolygon } from './shape/extrude';
+import { getPolygonSurfaceIndices } from './utils';
 
-import { geometryShape } from './shape/Path';
 type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
@@ -335,23 +336,10 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
 
-  const positions = vertices.slice();
-  const p: number[] = [];
-  for (let i = 0; i < vertices.length; i += 2) {
-    p[0] = vertices[i];
-    p[1] = vertices[i + 1];
-
-    // earcut is a 2D triangulation algorithm, and handles 3D data as if it was projected onto the XY plane
-    const xy = lngLatToMeters(p, true, { enable: false, decimal: 1 });
-
-    positions[i] = xy[0];
-    positions[i + 1] = xy[1];
-  }
-
-  const triangles = earcut(positions, holes, dimensions);
+  const indices = getPolygonSurfaceIndices(vertices, holes, dimensions);
 
   return {
-    indices: triangles,
+    indices,
     vertices,
     size: dimensions,
   };
