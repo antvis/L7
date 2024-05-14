@@ -50,7 +50,7 @@ const scene = new Scene({
 });
 ```
 
-### Leaflet 种使用 L7
+### Leaflet 中使用 L7
 
 ```ts
 import * as L from 'leaflet';
