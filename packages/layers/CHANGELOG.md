@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.21.9
+
+### Patch Changes
+
+- [#2460](https://github.com/antvis/L7/pull/2460) [`8193864`](https://github.com/antvis/L7/commit/8193864e44acf05d92677b2cabb25211ffd628cb) Thanks [@lvisei](https://github.com/lvisei)! - fix: device 渲染模式下 setData 时不生效
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.9
+  - @antv/l7-maps@2.21.9
+  - @antv/l7-source@2.21.9
+  - @antv/l7-utils@2.21.9
+
 ## 2.21.8
 
 ### Patch Changes

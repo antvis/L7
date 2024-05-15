@@ -73,12 +73,11 @@ export default class DeviceRendererService implements IRendererService {
   private viewportOrigin: ViewportOrigin;
 
   async init(canvas: HTMLCanvasElement, cfg: IRenderConfig): Promise<void> {
-    const { enableWebGPU, shaderCompilerPath } = cfg;
+    const { enableWebGPU, shaderCompilerPath, antialias } = cfg;
 
     // this.$container = $container;
     this.canvas = canvas;
 
-    // TODO: use antialias from cfg
     const deviceContribution = enableWebGPU
       ? new WebGPUDeviceContribution({
           shaderCompilerPath,
@@ -86,6 +85,7 @@ export default class DeviceRendererService implements IRendererService {
       : new WebGLDeviceContribution({
           // Use WebGL2 first and downgrade to WebGL1 if WebGL2 is not supported.
           targets: ['webgl2', 'webgl1'],
+          antialias,
           onContextLost(e) {
             console.warn('context lost', e);
           },
