@@ -34,7 +34,7 @@
     "@turf/meta": "^6.0.2",
     "@turf/polygon-to-line": "^6.5.0",
     "@turf/union": "^6.5.0",
-    "d3-array": "1",
+    "d3-array": "2",
     "d3-color": "^1.4.0",
     "d3-interpolate": "1.4.0",
     "d3-scale": "2",
