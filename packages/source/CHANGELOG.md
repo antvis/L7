@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.21.10
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.10
+  - @antv/l7-utils@2.21.10
+
 ## 2.21.9
 
 ### Patch Changes
