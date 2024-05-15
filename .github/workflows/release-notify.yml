@@ -15,6 +15,7 @@ jobs:
       - name: After changesets
         run: |
           echo "::debug::Event release ${{toJson(github.event.release)}}"
+          exit 0
       # 暂时关闭 DingTalk Release Notify，待解决问题：Release Notify action 获取 Latest Release 是上一个版本问题
       # - name: DingTalk Release Notify
       #   uses: visiky/dingtalk-release-notify@main
