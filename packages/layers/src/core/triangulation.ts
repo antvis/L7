@@ -17,10 +17,11 @@ import {
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
 import type { IPosition, ShapeType2D, ShapeType3D } from './shape/Path';
+import { geometryShape } from './shape/Path';
 import type { IExtrudeGeomety } from './shape/extrude';
 import extrudePolygon, { extrude_PolygonNormal, fillPolygon } from './shape/extrude';
+import { getPolygonSurfaceIndices } from './utils';
 
-import { geometryShape } from './shape/Path';
 type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
@@ -334,8 +335,11 @@ export function polygonTriangulation(feature: IEncodeFeature) {
   const { coordinates } = feature;
   const flattengeo = earcut.flatten(coordinates as number[][][]);
   const { vertices, dimensions, holes } = flattengeo;
+
+  const indices = getPolygonSurfaceIndices(vertices, holes, dimensions);
+
   return {
-    indices: earcut(vertices, holes, dimensions),
+    indices,
     vertices,
     size: dimensions,
   };
@@ -343,14 +347,12 @@ export function polygonTriangulation(feature: IEncodeFeature) {
 
 // 构建几何图形（带有中心点和大小）
 export function polygonTriangulationWithCenter(feature: IEncodeFeature) {
-  const { coordinates } = feature;
-  const flattengeo = earcut.flatten(coordinates as number[][][]);
-  const { vertices, dimensions, holes } = flattengeo;
+  const { indices, vertices, size } = polygonTriangulation(feature);
 
   return {
-    indices: earcut(vertices, holes, dimensions),
+    indices: indices,
     vertices: getVerticesWithCenter(vertices),
-    size: dimensions + 4,
+    size: size + 4,
   };
 }
 

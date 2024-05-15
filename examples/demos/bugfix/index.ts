@@ -1,6 +1,7 @@
 export { MapRender as color } from './color';
 export { MapRender as data_shake } from './data-shake';
 export { MapRender as event_legend } from './event_legend';
+export { MapRender as mutiPolygon } from './muti-polygon';
 export { MapRender as polygon } from './polygon';
 export { MapRender as remove_muti_layer } from './remove-muti-layer';
 export { MapRender as size } from './size';
