@@ -2,7 +2,7 @@ name: Add Assigness
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened]
 
 jobs:
   add-assigness:
