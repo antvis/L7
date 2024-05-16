@@ -1,5 +1,19 @@
 # Change Log
 
+## 3.0.0-beta.0
+
+### Patch Changes
+
+- [#2474](https://github.com/antvis/L7/pull/2474) [`3e33888`](https://github.com/antvis/L7/commit/3e33888a56c6efa80be60bc79182644eaccaa500) Thanks [@lvisei](https://github.com/lvisei)! - fix: mapbox 线图层的贴图变形
+
+- [#2453](https://github.com/antvis/L7/pull/2453) [`d408bdb`](https://github.com/antvis/L7/commit/d408bdb4a2a7be57a50f9a88247cf7b690ba4387) Thanks [@lvisei](https://github.com/lvisei)! - fix: mapbox 下部分面数据图层绘制异常
+
+- Updated dependencies []:
+  - @antv/l7-core@3.0.0-beta.0
+  - @antv/l7-maps@3.0.0-beta.0
+  - @antv/l7-source@3.0.0-beta.0
+  - @antv/l7-utils@3.0.0-beta.0
+
 ## 2.21.10
 
 ### Patch Changes

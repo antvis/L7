@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.0.0-beta.0
+
+### Patch Changes
+
+- [#2473](https://github.com/antvis/L7/pull/2473) [`8b72df1`](https://github.com/antvis/L7/commit/8b72df14dc18ba85f66f8e4e09ba9d80d0379ed3) Thanks [@lvisei](https://github.com/lvisei)! - fix: use stencil.func.ref for each pipeline
+
+- Updated dependencies []:
+  - @antv/l7-core@3.0.0-beta.0
+  - @antv/l7-utils@3.0.0-beta.0
+
 ## 2.21.10
 
 ### Patch Changes

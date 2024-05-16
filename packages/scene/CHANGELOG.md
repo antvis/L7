@@ -1,5 +1,21 @@
 # Change Log
 
+## 3.0.0-beta.0
+
+### Minor Changes
+
+- [#2477](https://github.com/antvis/L7/pull/2477) [`05dd5cc`](https://github.com/antvis/L7/commit/05dd5ccf31e12a9440efbebc9fcb803c594b5a44) Thanks [@lvisei](https://github.com/lvisei)! - feat: set default renderer to device, support webgl2.
+
+### Patch Changes
+
+- Updated dependencies [[`3e33888`](https://github.com/antvis/L7/commit/3e33888a56c6efa80be60bc79182644eaccaa500), [`8b72df1`](https://github.com/antvis/L7/commit/8b72df14dc18ba85f66f8e4e09ba9d80d0379ed3), [`d408bdb`](https://github.com/antvis/L7/commit/d408bdb4a2a7be57a50f9a88247cf7b690ba4387)]:
+  - @antv/l7-layers@3.0.0-beta.0
+  - @antv/l7-renderer@3.0.0-beta.0
+  - @antv/l7-component@3.0.0-beta.0
+  - @antv/l7-core@3.0.0-beta.0
+  - @antv/l7-maps@3.0.0-beta.0
+  - @antv/l7-utils@3.0.0-beta.0
+
 ## 2.21.10
 
 ### Patch Changes

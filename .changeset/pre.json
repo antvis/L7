@@ -16,5 +16,12 @@
     "@antv/l7-utils": "2.21.10",
     "@antv/l7-site": "2.21.3"
   },
-  "changesets": ["slimy-starfishes-joke", "sour-lemons-perform"]
+  "changesets": [
+    "clean-beers-try",
+    "proud-flies-change",
+    "slimy-starfishes-joke",
+    "sour-dodos-bake",
+    "sour-lemons-perform",
+    "tiny-seas-camp"
+  ]
 }

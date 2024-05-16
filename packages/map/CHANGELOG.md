@@ -1,5 +1,12 @@
 # @antv/l7-map
 
+## 3.0.0-beta.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@3.0.0-beta.0
+
 ## 2.21.10
 
 ### Patch Changes

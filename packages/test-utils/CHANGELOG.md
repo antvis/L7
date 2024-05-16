@@ -1,5 +1,14 @@
 # @antv/l7-test-utils
 
+## 3.0.0-beta.0
+
+### Patch Changes
+
+- Updated dependencies [[`05dd5cc`](https://github.com/antvis/L7/commit/05dd5ccf31e12a9440efbebc9fcb803c594b5a44)]:
+  - @antv/l7-scene@3.0.0-beta.0
+  - @antv/l7-map@3.0.0-beta.0
+  - @antv/l7-maps@3.0.0-beta.0
+
 ## 2.21.10
 
 ### Patch Changes
