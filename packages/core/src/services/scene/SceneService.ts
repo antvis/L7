@@ -180,7 +180,10 @@ export default class Scene extends EventEmitter implements ISceneService {
 
       // 创建底图之上的 container
       if (this.$container) {
-        this.canvas = DOM.create('canvas', '', this.$container) as HTMLCanvasElement;
+        const { canvas } = sceneConfig;
+        this.canvas = canvas
+          ? canvas
+          : (DOM.create('canvas', '', this.$container) as HTMLCanvasElement);
         this.setCanvas();
         await this.rendererService.init(
           // @ts-ignore

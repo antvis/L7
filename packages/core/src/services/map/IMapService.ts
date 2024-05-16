@@ -34,11 +34,7 @@ export type MapStyleConfig = {
 export type MapStyle = MapStyleName | any;
 
 export interface IMapWrapper {
-  setContainer(
-    container: L7Container,
-    id: string | HTMLDivElement,
-    canvas?: HTMLCanvasElement,
-  ): void;
+  setContainer(container: L7Container, id: string | HTMLDivElement): void;
 }
 
 interface ISimpleMapCoord {

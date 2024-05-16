@@ -1,7 +1,6 @@
 import type { IMapOptions } from '@antv/l7-map';
 import { Map } from '@antv/l7-maps';
 import { Scene } from '@antv/l7-scene';
-import regl from 'regl';
 import { glContext } from './gl-context';
 
 export function TestScene(options?: Partial<IMapOptions>) {
@@ -9,6 +8,16 @@ export function TestScene(options?: Partial<IMapOptions>) {
   el.id = 'test-div-id';
   const width = 400;
   const height = 300;
+
+  const mockCanvas = document.createElement('canvas');
+  // @ts-ignore
+  mockCanvas.getContext = () => {
+    // @ts-ignore
+    glContext.canvas = mockCanvas;
+    // 模拟 DOM API，返回小程序 context，它应当和 CanvasRenderingContext2D 一致
+    // @see https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/getContext
+    return glContext;
+  };
 
   const body = document.querySelector('body') as HTMLBodyElement;
   body.appendChild(el);
@@ -24,37 +33,9 @@ export function TestScene(options?: Partial<IMapOptions>) {
     left: 0,
   }));
 
-  const reGL = regl({
-    gl: glContext,
-    attributes: {
-      alpha: true,
-      // use TAA instead of MSAA
-      // @see https://www.khronos.org/registry/webgl/specs/1.0/#5.2.1
-      antialias: true,
-      premultipliedAlpha: true,
-      preserveDrawingBuffer: false,
-
-      stencil: true,
-    },
-    extensions: [
-      'ANGLE_instanced_arrays',
-      'STACKGL_resize_drawingbuffer',
-      'STACKGL_destroy_context',
-      'OES_element_index_uint',
-      'OES_standard_derivatives',
-      'OES_texture_float',
-      'OES_texture_float_linear',
-      'WEBGL_draw_buffers',
-      'EXT_blend_minmax',
-      'EXT_texture_filter_anisotropic',
-      'OES_vertex_array_object',
-    ],
-  });
   const scene = new Scene({
     id: el,
-    // TODO: switch to device support mock canvas
-    // see https://github.com/antvis/g-device-api/blob/master/__tests__/utils.ts#L43C3-L47C6
-    gl: reGL,
+    canvas: mockCanvas,
     map: new Map({
       style: 'dark',
       center: [110.19382669582967, 30.258134],

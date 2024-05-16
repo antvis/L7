@@ -1,6 +1,3 @@
-/**
- *
- */
 import DeviceRendererService from './device';
 import ReglRendererService from './regl';
 
