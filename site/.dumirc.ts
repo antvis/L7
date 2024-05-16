@@ -203,13 +203,15 @@ export default defineConfig({
           zh: '使用教程',
           en: 'Tutorial',
         },
+        redirect: 'api/quickstart',
       },
       {
-        slug: 'docs/api/scene',
+        slug: 'docs/api',
         title: {
           zh: 'API 文档',
           en: 'Document',
         },
+        redirect: 'api/scene',
       },
       {
         slug: 'examples',
