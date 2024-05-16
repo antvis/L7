@@ -93,6 +93,7 @@ export default class RasterModel extends BaseModel {
       height,
       /**
        * WebGL1 allow the combination of gl.LUMINANCE & gl.FLOAT with OES_texture_float
+       * TODO: https://github.com/antvis/g-device-api/issues/188
        */
       format: queryVerdorInfo() === 'WebGL1' ? gl.LUMINANCE : gl.RED,
       type: gl.FLOAT,

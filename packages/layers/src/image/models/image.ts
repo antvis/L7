@@ -46,10 +46,6 @@ export default class ImageModel extends BaseModel {
 
   private async loadTexture() {
     const { createTexture2D } = this.rendererService;
-    this.texture = createTexture2D({
-      height: 1,
-      width: 1,
-    });
     const source = this.layer.getSource();
     const imageData = await source.data.images;
     this.texture = createTexture2D({
