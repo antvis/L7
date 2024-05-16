@@ -33,7 +33,7 @@ void main() {
   vec2 source_world = a_Instance.rg; // 起点
   vec2 target_world = a_Instance.ba; // 终点
   vec2 flowlineDir = line_dir(target_world, source_world);
-  vec2 perpendicularDir = vec2(-flowlineDir.y, flowlineDir.x); // mapbox || 高德
+  vec2 perpendicularDir = vec2(-flowlineDir.y, flowlineDir.x);
 
   vec2 position = mix(source_world, target_world, a_Position.x);
   vec2 position64Low = mix(a_Instance64Low.rg, a_Instance64Low.ba, a_Position.x);
@@ -56,7 +56,7 @@ void main() {
     a_Position.x
   );
 
-  vec2 normalsCommon = u_stroke_width * project_pixel_offset(vec2(a_Normal.x, a_Normal.y)); // mapbox || 高德
+  vec2 normalsCommon = u_stroke_width * project_pixel_offset(vec2(a_Normal.x, a_Normal.y));
 
   float gapCommon = -1. * project_pixel(u_gap_width);
   vec3 offsetCommon = vec3(

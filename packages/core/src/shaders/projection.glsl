@@ -79,13 +79,6 @@ vec2 project_pixel_size_to_clipspace(vec2 pixels) {
   return offset * u_FocalDistance;
 }
 
-float project_pixel_allmap(float pixel) {
-  if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT) {
-    return pixel * pow(2.0, u_Zoom);
-  }
-  return pixel * u_FocalDistance;
-}
-
 // 适配纹理贴图的等像素大小
 float project_pixel_texture(float pixel) {
   // mapbox zoom > 12

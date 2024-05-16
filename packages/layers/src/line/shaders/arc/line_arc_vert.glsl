@@ -137,10 +137,8 @@ void main() {
 
   if(LineTexture == u_line_texture) { // 开启贴图模式
     float arcDistrance = length(source - target); // 起始点和终点的距离
-    if(u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT || u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) { // mapbox
-      // arcDistrance *= 8.0;
-      arcDistrance = project_pixel_allmap(arcDistrance);
-    }
+    arcDistrance = project_pixel(arcDistrance);
+
     v_iconMapUV = a_iconMapUV;
 
     float pixelLen = project_pixel_texture(u_icon_step); // 贴图沿弧线方向的长度 - 随地图缩放改变
