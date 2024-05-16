@@ -43,7 +43,7 @@ import {
   stencilFuncMap,
   stencilOpMap,
 } from './constants';
-const { isPlainObject, isTypedArray } = lodashUtil;
+const { isPlainObject, isTypedArray, isNil } = lodashUtil;
 
 export default class DeviceModel implements IModel {
   private destroyed: boolean = false;
@@ -156,7 +156,7 @@ export default class DeviceModel implements IModel {
     const stencilParams = this.getStencilDrawParams({ stencil });
     const stencilEnabled = !!(stencilParams && stencilParams.enable);
 
-    return this.device.createRenderPipeline({
+    const pipeline = this.device.createRenderPipeline({
       // return this.service.renderCache.createRenderPipeline({
       inputLayout: this.inputLayout,
       program: this.program,
@@ -219,6 +219,14 @@ export default class DeviceModel implements IModel {
         },
       },
     });
+
+    // Save stencil reference on pipeline for later use.
+    if (stencilEnabled && !isNil(stencil?.func?.ref)) {
+      // @ts-ignore
+      pipeline.stencilFuncReference = stencil.func.ref;
+    }
+
+    return pipeline;
   }
 
   updateAttributesAndElements() {}
@@ -285,7 +293,11 @@ export default class DeviceModel implements IModel {
     device['swapChainHeight'] = tmpHeight;
 
     renderPass.setPipeline(this.pipeline);
-    renderPass.setStencilReference(1);
+    // @ts-ignore
+    if (!isNil(this.pipeline.stencilFuncReference)) {
+      // @ts-ignore
+      renderPass.setStencilReference(this.pipeline.stencilFuncReference);
+    }
     renderPass.setVertexInput(
       this.inputLayout,
       this.vertexBuffers.map((buffer) => ({
