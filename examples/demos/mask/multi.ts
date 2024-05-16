@@ -72,18 +72,6 @@ export function MapRender(options: RenderDemoOptions) {
       )
     ).json();
 
-    // 影像地图图层
-    const baseLayer = new RasterLayer({ zIndex: -1 }).source(
-      'https://www.google.com/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}',
-      {
-        parser: {
-          type: 'rasterTile',
-          tileSize: 256,
-          zoomOffset: 0,
-        },
-      },
-    );
-
     const polygonLayer = new PolygonLayer({
       visible: true,
       name: 'china',
@@ -130,8 +118,6 @@ export function MapRender(options: RenderDemoOptions) {
       });
 
     leftLayer.addMask(maskLayer);
-
-    scene.addLayer(baseLayer);
 
     scene.addLayer(leftLayer);
     scene.addLayer(polygonLayer);
