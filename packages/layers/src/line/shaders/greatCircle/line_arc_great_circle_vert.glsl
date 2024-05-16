@@ -147,13 +147,8 @@ void main() {
   v_line_data.g = a_Position.x; // 该顶点在弧线上的分段排序
   if (LineTexture == u_line_texture) {
     float d_arcDistrance = length(source - target);
-    if (
-      u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT ||
-      u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET
-    ) {
-      // mapbox
-      d_arcDistrance = project_pixel_allmap(d_arcDistrance);
-    }
+    d_arcDistrance = project_pixel(d_arcDistrance);
+
     float d_pixelLen = project_pixel(u_icon_step) / 8.0;
     v_line_data.b = floor(d_arcDistrance / d_pixelLen); // 贴图在弧线上重复的数量
 

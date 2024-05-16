@@ -7,7 +7,7 @@ export function MapRender(options: RenderDemoOptions) {
     id: 'map',
     renderer: options.renderer,
     map: new allMap[options.map]({
-      style: 'light',
+      style: 'dark',
       center: [40, 40.16797],
       zoom: 2.5,
     }),
