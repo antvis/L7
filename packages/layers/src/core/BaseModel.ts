@@ -320,6 +320,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
       this.attributeUnifoms = this.rendererService.createBuffer({
         data: new Float32Array(MultipleOfFourNumber(attrUniforms.uniformsLength)).fill(0), // 长度需要大于等于 4
         isUBO: true,
+        label: 'layerModelAttributeUnifoms',
       });
       this.uniformBuffers.push(this.attributeUnifoms);
     }
@@ -327,6 +328,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
       this.commonUnifoms = this.rendererService.createBuffer({
         data: new Float32Array(MultipleOfFourNumber(commonUniforms.uniformsLength)).fill(0),
         isUBO: true,
+        label: 'layerModelCommonUnifoms',
       });
       this.uniformBuffers.push(this.commonUnifoms);
     }

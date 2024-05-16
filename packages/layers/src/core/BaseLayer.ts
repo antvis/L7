@@ -1194,8 +1194,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       const uniformBuffers = [
         ...this.layerModel.uniformBuffers,
         ...this.rendererService.uniformBuffers,
-        // TODO: 目前未使用
-        this.getLayerUniformBuffer(),
       ];
       if (pickingEnabled) {
         uniformBuffers.push(this.getPickingUniformBuffer());
@@ -1412,29 +1410,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       buffer.destroy();
     });
     this.uniformBuffers = [];
-    // Layer Uniform
-    const layerUniforms = this.rendererService.createBuffer({
-      // TODO: 不再需要，之前用于 amap2 u_Mvp
-      data: new Float32Array(16 + 4).fill(0),
-      isUBO: true,
-    });
-    this.uniformBuffers.push(layerUniforms);
 
     // Picking Uniform
     const pickingUniforms = this.rendererService.createBuffer({
       data: new Float32Array(20).fill(0),
       isUBO: true,
+      label: 'pickingUniforms',
     });
     this.uniformBuffers.push(pickingUniforms);
 
     this.models = await this.layerModel.initModels();
   }
 
-  getLayerUniformBuffer() {
-    return this.uniformBuffers[0];
-  }
   getPickingUniformBuffer() {
-    return this.uniformBuffers[1];
+    return this.uniformBuffers[0];
   }
 
   protected reRender() {

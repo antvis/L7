@@ -47,6 +47,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       uniformBuffer = this.rendererService.createBuffer({
         data: new Float32Array(16 * 4 + 4 * 7),
         isUBO: true,
+        label: 'renderUniformBuffer',
       });
       this.rendererService.uniformBuffers[0] = uniformBuffer;
     }
