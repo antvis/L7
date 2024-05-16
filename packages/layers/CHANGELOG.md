@@ -1,17 +1,26 @@
 # Change Log
 
-## 2.21.9-beta.0
+## 2.21.10
 
 ### Patch Changes
 
-- [#2416](https://github.com/antvis/L7/pull/2416) [`0913661`](https://github.com/antvis/L7/commit/09136611f4521c5ecb892a7ddf67a8e680e74429) Thanks [@lvisei](https://github.com/lvisei)! - fix: Mapbox/Maplibre 20 层级以上数据偏移问题
-  fix: 修复点图层部分 shape 中心点计算有误
-  fix: 修复立体面图层光照计算有误
-- Updated dependencies [[`0913661`](https://github.com/antvis/L7/commit/09136611f4521c5ecb892a7ddf67a8e680e74429), [`048c203`](https://github.com/antvis/L7/commit/048c203e6d368733f8b07b55436bd1c2ef52760f)]:
-  - @antv/l7-core@2.21.9-beta.0
-  - @antv/l7-maps@2.21.9-beta.0
-  - @antv/l7-source@2.21.9-beta.0
-  - @antv/l7-utils@2.21.9-beta.0
+- Updated dependencies []:
+  - @antv/l7-core@2.21.10
+  - @antv/l7-maps@2.21.10
+  - @antv/l7-source@2.21.10
+  - @antv/l7-utils@2.21.10
+
+## 2.21.9
+
+### Patch Changes
+
+- [#2460](https://github.com/antvis/L7/pull/2460) [`8193864`](https://github.com/antvis/L7/commit/8193864e44acf05d92677b2cabb25211ffd628cb) Thanks [@lvisei](https://github.com/lvisei)! - fix: device 渲染模式下 setData 时不生效
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.9
+  - @antv/l7-maps@2.21.9
+  - @antv/l7-source@2.21.9
+  - @antv/l7-utils@2.21.9
 
 ## 2.21.8
 

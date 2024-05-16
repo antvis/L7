@@ -621,15 +621,6 @@ export default defineConfig({
         order: 9,
       },
       {
-        slug: 'wind',
-        icon: 'raster',
-        title: {
-          zh: '风场图层',
-          en: 'Wind Layer',
-        },
-        order: 7,
-      },
-      {
         slug: 'earth',
         icon: 'map',
         title: {

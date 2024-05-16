@@ -55,9 +55,6 @@
     "node": ">=18",
     "pnpm": ">=8"
   },
-  "resolutions": {
-    "d3-array": "1"
-  },
   "dependencies": {
     "@antv/g-device-api": "^1.6.4",
     "@turf/turf": "^6.5.0",

@@ -1,24 +1,24 @@
 # for .github/workflows/release-label.yml
+# These labels can be used in conjunction GitHub's [automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
 
 changelog:
   exclude:
     labels:
       - ignore-for-release
-      - chore
+      - pr(chore)
   categories:
     - title: 🎉 New Features
       labels:
-        - feature
-        - enhancement
+        - pr(feature)
     - title: 📖 Documentation Changes
       labels:
-        - documentation
+        - pr(documentation)
     - title: 🐛 Bug Fixes
       labels:
-        - bugfix
+        - pr(bugfix)
     - title: 🛠 Breaking Changes
       labels:
-        - breaking
+        - pr(breaking)
     - title: Other Changes
       labels:
-        - "*"
+        - '*'

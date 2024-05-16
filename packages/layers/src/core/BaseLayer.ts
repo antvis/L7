@@ -736,9 +736,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (this.multiPassRenderer && this.multiPassRenderer.getRenderFlag()) {
       // multi render 开始执行 multiPassRender 的渲染流程
       await this.multiPassRenderer.render();
-    } else if (this.multiPassRenderer) {
-      // renderPass 触发的渲染
-      this.renderModels();
     } else {
       this.renderModels();
     }

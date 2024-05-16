@@ -88,8 +88,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
   }
 
   protected getDefault(option: Partial<ILayerPopupOption>): ILayerPopupOption {
-    const isHoverTrigger = option.trigger === 'hover';
-
+    const isHoverTrigger = option.trigger !== 'click';
     return {
       ...super.getDefault(option),
       trigger: 'hover',

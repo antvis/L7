@@ -168,6 +168,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
 
   public setOptions(option: Partial<O>) {
     this.show();
+    const { className: oldClassName } = this.popupOption;
     this.popupOption = {
       ...this.popupOption,
       ...option,
@@ -182,8 +183,6 @@ export default class Popup<O extends IPopupOption = IPopupOption>
         'maxWidth',
         'anchor',
         'stopPropagation',
-        'className',
-        'style',
         'lngLat',
         'offsets',
       ])
@@ -215,6 +214,15 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       this.setHTML(option.html);
     } else if (this.checkUpdateOption(option, ['text']) && option.text) {
       this.setText(option.text);
+    }
+    if (this.checkUpdateOption(option, ['className'])) {
+      if (oldClassName) {
+        this.container.classList.remove(oldClassName ?? '');
+      }
+      this.container.classList.add(option.className ?? '');
+    }
+    if (this.checkUpdateOption(option, ['style'])) {
+      DOM.addStyle(this.container, option.style ?? '');
     }
     if (this.checkUpdateOption(option, ['lngLat']) && option.lngLat) {
       this.setLnglat(option.lngLat);

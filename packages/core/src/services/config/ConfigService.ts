@@ -75,8 +75,6 @@ const defaultLayerConfig: Partial<ILayerConfig> = {
   activeMix: 0,
   selectColor: 'blue',
   selectMix: 0,
-  enableTAA: false,
-  jitterScale: 1,
   enableLighting: false,
   animateOption: {
     enable: false,

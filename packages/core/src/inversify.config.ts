@@ -45,7 +45,6 @@ import MultiPassRenderer from './services/renderer/passes/MultiPassRenderer';
 import PixelPickingPass from './services/renderer/passes/PixelPickingPass';
 import PostProcessor from './services/renderer/passes/PostProcessor';
 import RenderPass from './services/renderer/passes/RenderPass';
-import TAAPass from './services/renderer/passes/TAAPass';
 import BloomPass from './services/renderer/passes/post-processing/BloomPass';
 import BlurHPass from './services/renderer/passes/post-processing/BlurHPass';
 import BlurVPass from './services/renderer/passes/post-processing/BlurVPass';
@@ -133,7 +132,6 @@ export function createSceneContainer(): L7Container {
     clear: new ClearPass(),
     pixelPicking: new PixelPickingPass(),
     render: new RenderPass(),
-    taa: new TAAPass(shaderModuleService),
   };
   container.normalPassFactory = (named: string) => {
     return normalPass[named];

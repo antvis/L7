@@ -132,7 +132,7 @@ export default class DeviceModel implements IModel {
       this.indexBuffer = (elements as DeviceElements).get();
     }
 
-    const inputLayout = service.renderCache.createInputLayout({
+    const inputLayout = device.createInputLayout({
       vertexBufferDescriptors,
       indexBufferFormat: elements ? Format.U32_R : null,
       program: this.program,
@@ -346,7 +346,8 @@ export default class DeviceModel implements IModel {
   }
 
   destroy() {
-    this.program.destroy();
+    // 不销毁，方便后续重复使用
+    // this.program.destroy();
     this.vertexBuffers?.forEach((buffer) => buffer.destroy());
     this.indexBuffer?.destroy();
     this.bindings?.destroy();

@@ -1,13 +1,26 @@
 # Change Log
 
-## 2.21.9-beta.0
+## 2.21.10
 
 ### Patch Changes
 
-- Updated dependencies [[`0913661`](https://github.com/antvis/L7/commit/09136611f4521c5ecb892a7ddf67a8e680e74429)]:
-  - @antv/l7-layers@2.21.9-beta.0
-  - @antv/l7-core@2.21.9-beta.0
-  - @antv/l7-utils@2.21.9-beta.0
+- Updated dependencies []:
+  - @antv/l7-layers@2.21.10
+  - @antv/l7-core@2.21.10
+  - @antv/l7-utils@2.21.10
+
+## 2.21.9
+
+### Patch Changes
+
+- [#2457](https://github.com/antvis/L7/pull/2457) [`2d65e05`](https://github.com/antvis/L7/commit/2d65e05863454f3ac3b366d9f0a979a3da810d45) Thanks [@heiyexing](https://github.com/heiyexing)! - popup 更新支持 className 和 style
+
+- [#2460](https://github.com/antvis/L7/pull/2460) [`8193864`](https://github.com/antvis/L7/commit/8193864e44acf05d92677b2cabb25211ffd628cb) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复 LayerPopup followCursor 默认值问题
+
+- Updated dependencies [[`8193864`](https://github.com/antvis/L7/commit/8193864e44acf05d92677b2cabb25211ffd628cb)]:
+  - @antv/l7-layers@2.21.9
+  - @antv/l7-core@2.21.9
+  - @antv/l7-utils@2.21.9
 
 ## 2.21.8
 

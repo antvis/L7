@@ -31,6 +31,4 @@ export interface ICameraService extends Omit<IViewport, 'syncWithMapCamera'> {
   update(viewport: IViewport): void;
   getCameraPosition(): number[];
   setViewProjectionMatrix(viewProjectionMatrix: number[] | undefined): void;
-  jitterProjectionMatrix(x: number, y: number): void;
-  clearJitterProjectionMatrix(): void;
 }
