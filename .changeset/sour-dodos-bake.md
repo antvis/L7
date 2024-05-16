@@ -1,5 +1,5 @@
 ---
-'@antv/l7-scene': minor
+'@antv/l7-scene': patch
 ---
 
-feat: set default renderer to device, support webgl2.
+feat: 设置默认的渲染引擎为 g-device，优先使用 WebGL2
