@@ -1,5 +1,19 @@
 # Change Log
 
+## 2.21.11-beta.1
+
+### Patch Changes
+
+- [#2477](https://github.com/antvis/L7/pull/2477) [`05dd5cc`](https://github.com/antvis/L7/commit/05dd5ccf31e12a9440efbebc9fcb803c594b5a44) Thanks [@lvisei](https://github.com/lvisei)! - feat: 设置默认的渲染引擎为 g-device，优先使用 WebGL2
+
+- Updated dependencies []:
+  - @antv/l7-component@2.21.11-beta.1
+  - @antv/l7-layers@2.21.11-beta.1
+  - @antv/l7-renderer@2.21.11-beta.1
+  - @antv/l7-core@2.21.11-beta.1
+  - @antv/l7-maps@2.21.11-beta.1
+  - @antv/l7-utils@2.21.11-beta.1
+
 ## 2.21.11-beta.0
 
 ### Patch Changes
