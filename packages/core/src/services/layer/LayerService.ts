@@ -1,3 +1,4 @@
+import type { DebouncedFunc } from '@antv/l7-utils';
 import { lodashUtil, rgb2arr } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import type { L7Container } from '../../inversify.config';
@@ -42,11 +43,11 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
     super();
   }
 
-  public reRender = throttle(() => {
+  public reRender: DebouncedFunc<() => void> = throttle(() => {
     this.renderLayers();
   }, 32);
 
-  public throttleRenderLayers = throttle(() => {
+  public throttleRenderLayers: DebouncedFunc<() => void> = throttle(() => {
     this.renderLayers();
   }, 16);
 
