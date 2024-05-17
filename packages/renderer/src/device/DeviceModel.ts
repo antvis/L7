@@ -132,12 +132,14 @@ export default class DeviceModel implements IModel {
       this.indexBuffer = (elements as DeviceElements).get();
     }
 
-    const inputLayout = service.renderCache.createInputLayout({
+    // const inputLayout = service.renderCache.createInputLayout({
+    const inputLayout = device.createInputLayout({
       vertexBufferDescriptors,
       indexBufferFormat: elements ? Format.U32_R : null,
       program: this.program,
     });
     this.inputLayout = inputLayout;
+    console.log('inputLayout: ', inputLayout);
 
     this.pipeline = this.createPipeline(options);
   }
@@ -364,7 +366,7 @@ export default class DeviceModel implements IModel {
     this.indexBuffer?.destroy();
     this.bindings?.destroy();
     // 不能进行销毁，删除 deleteVertexArray
-    // this.inputLayout.destroy();
+    this.inputLayout.destroy();
     this.pipeline.destroy();
     this.destroyed = true;
   }
