@@ -1,10 +1,11 @@
+import type { Scene } from '@antv/l7-scene';
 import { Cascader } from 'antd';
 import 'antd/dist/reset.css';
-import React, { useEffect, useRef, useState } from 'react';
-import { TestCases } from './demos_next';
-
+import type { Controller } from 'lil-gui';
 import GUI from 'lil-gui';
+import React, { useEffect, useRef, useState } from 'react';
 import { DEFAULT_GUI_OPTIONS, MAP_TYPES, SEARCH_PARAMS_KEYS } from './constants';
+import { TestCases } from './demos_next';
 import type { GUIOptions } from './types';
 
 const DEMO_LIST = Array.from(TestCases).map(([namespace, cases]) => {
@@ -16,6 +17,7 @@ const DEMO_LIST = Array.from(TestCases).map(([namespace, cases]) => {
 });
 
 const inintGuiOptions = getParamsFromUrlPath();
+const isSnapshotMode = inintGuiOptions.snapshot;
 
 export const Main = () => {
   const guiRef = useRef<GUI>();
@@ -28,7 +30,7 @@ export const Main = () => {
 
   // GUI
   useEffect(() => {
-    guiRef.current = new GUI();
+    guiRef.current = new GUI({ title: 'Controls', autoPlace: !isSnapshotMode });
     const onChange = (v: Partial<GUIOptions>) => {
       setGuiOptions((pre) => ({ ...pre, ...v }));
     };
@@ -51,16 +53,24 @@ export const Main = () => {
   useEffect(() => {
     const [namespace, name] = viewDemo;
     const TestCase = getDemoFromName(namespace, name);
-    if (!TestCase || !guiRef.current) return;
+    if (!TestCase) return;
 
-    const extendGUIController = TestCase.extendGUI?.(guiRef.current) || [];
-    const scene = TestCase({ ...guiOptions, id: mapContainer.current! });
+    let scene: Scene;
+    let extendGUI: Controller[] | GUI[] = [];
 
-    syncParamsToURLPath({ namespace, name, ...guiOptions });
+    const asyncFun = async () => {
+      scene = await TestCase({ ...guiOptions, id: mapContainer.current! });
+      if (TestCase.extendGUI) {
+        extendGUI = TestCase.extendGUI?.(guiRef.current!);
+      }
+    };
+
+    asyncFun();
+    syncParamsToURLPath({ ...guiOptions, namespace, name });
 
     return () => {
-      scene.then((s) => s.destroy());
-      extendGUIController.forEach((d) => d.destroy());
+      scene?.destroy();
+      extendGUI.forEach((d) => d.destroy());
     };
   }, [viewDemo, guiOptions]);
 
@@ -70,19 +80,25 @@ export const Main = () => {
 
   return (
     <>
-      <div style={{ position: 'absolute', left: '20px', zIndex: 10, top: '20px' }}>
-        <Cascader
-          size="large"
-          defaultValue={viewDemo}
-          options={DEMO_LIST}
-          onChange={onDemoViewChange}
-        />
-      </div>
+      {!isSnapshotMode && (
+        <div style={{ position: 'absolute', left: '20px', zIndex: 10, top: '20px' }}>
+          <Cascader
+            size="large"
+            defaultValue={viewDemo}
+            options={DEMO_LIST}
+            onChange={onDemoViewChange}
+          />
+        </div>
+      )}
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
     </>
   );
 };
 
+/**
+ * get guiOptions(SEARCH_PARAMS_KEYS) from URL path
+ * @returns
+ */
 function getParamsFromUrlPath() {
   const guiOptions = {
     ...DEFAULT_GUI_OPTIONS,
@@ -92,13 +108,16 @@ function getParamsFromUrlPath() {
   SEARCH_PARAMS_KEYS.forEach((key) => {
     const value = searchParams.get(key);
     if (!value) return;
-    if (key === 'animate') guiOptions[key] = value === 'true';
+    if (['animate', 'snapshot'].includes(key)) guiOptions[key] = value === 'true';
     else guiOptions[key] = value;
   });
 
   return guiOptions;
 }
 
+/**
+ * sync guiOptions(SEARCH_PARAMS_KEYS) to URL path
+ */
 function syncParamsToURLPath(guiOptions: GUIOptions) {
   const searchParams = new URLSearchParams(window.location.search);
   Object.entries(guiOptions).forEach(([key, value]) => {

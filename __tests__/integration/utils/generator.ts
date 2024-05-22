@@ -33,7 +33,7 @@ export function generateCanvasTestCases(
 
       it(key, async () => {
         // Go to test page served by vite devServer.
-        const url = `http://localhost:${port}/?namespace=${namespace}&name=${name}`;
+        const url = `http://localhost:${port}/?namespace=${namespace}&name=${name}&snapshot=true`;
         await page.goto(url);
         await sleep(sleepTime);
 

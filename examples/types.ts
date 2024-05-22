@@ -25,5 +25,5 @@ export type TestCaseOptions = GUIOptions & {
 
 export type TestCase = {
   (options: TestCaseOptions): Promise<Scene>;
-  extendGUI?: (gui: GUI) => Controller[];
+  extendGUI?: (gui: GUI) => Controller[] | GUI[];
 };

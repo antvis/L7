@@ -6,7 +6,9 @@ export const DEFAULT_GUI_OPTIONS: GUIOptions = {
   animate: false,
 };
 
-export const SEARCH_PARAMS_KEYS = ['namespace', 'name'].concat(Object.keys(DEFAULT_GUI_OPTIONS));
+export const SEARCH_PARAMS_KEYS = ['namespace', 'name', 'snapshot'].concat(
+  Object.keys(DEFAULT_GUI_OPTIONS),
+);
 
 export const MAP_TYPES: TestCaseBasemap[] = [
   'Map',
