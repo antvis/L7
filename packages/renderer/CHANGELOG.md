@@ -1,5 +1,23 @@
 # Change Log
 
+## 2.21.10
+
+### Patch Changes
+
+- [#2466](https://github.com/antvis/L7/pull/2466) [`4962f65`](https://github.com/antvis/L7/commit/4962f65a27cbd4a1becb09a5c6bab89368099fca) Thanks [@lvisei](https://github.com/lvisei)! - fix: use antialias option in webgl
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.10
+  - @antv/l7-utils@2.21.10
+
+## 2.21.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.9
+  - @antv/l7-utils@2.21.9
+
 ## 2.21.8
 
 ### Patch Changes
