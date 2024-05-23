@@ -15,5 +15,5 @@ const TEST_CASES = [
 ];
 
 describe('Heatmap Snapshot', () => {
-  generateCanvasTestCases('Heatmap', TEST_CASES);
+  generateCanvasTestCases('heatmap', TEST_CASES);
 });

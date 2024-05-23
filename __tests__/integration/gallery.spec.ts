@@ -13,5 +13,5 @@ const TEST_CASES = [
 ];
 
 describe('Gallery Snapshot', () => {
-  generateCanvasTestCases('Gallery', TEST_CASES);
+  generateCanvasTestCases('gallery', TEST_CASES);
 });

@@ -16,7 +16,6 @@ const TEST_CASES = [
   },
   {
     name: 'fill_image',
-    sleepTime: 1000,
   },
   {
     name: 'image',
@@ -28,5 +27,5 @@ const TEST_CASES = [
 ];
 
 describe('Point Snapshot', () => {
-  generateCanvasTestCases('Point', TEST_CASES);
+  generateCanvasTestCases('point', TEST_CASES);
 });

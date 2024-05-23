@@ -1,11 +1,11 @@
 import type { Scene } from '@antv/l7-scene';
-import { Cascader } from 'antd';
+import { Cascader, ConfigProvider } from 'antd';
 import 'antd/dist/reset.css';
 import type { Controller } from 'lil-gui';
 import GUI from 'lil-gui';
 import React, { useEffect, useRef, useState } from 'react';
 import { DEFAULT_GUI_OPTIONS, MAP_TYPES, SEARCH_PARAMS_KEYS } from './constants';
-import { TestCases } from './demos_next';
+import { TestCases } from './demos';
 import type { GUIOptions } from './types';
 
 const DEMO_LIST = Array.from(TestCases).map(([namespace, cases]) => {
@@ -66,6 +66,12 @@ export const Main = () => {
       if (TestCase.extendGUI) {
         extendGUI = TestCase.extendGUI?.(guiRef.current!);
       }
+
+      // @ts-ignore
+      if (isSnapshotMode && window.screenshot) {
+        // @ts-ignore
+        await window.screenshot();
+      }
     };
 
     asyncFun();
@@ -74,6 +80,9 @@ export const Main = () => {
     return () => {
       scene?.destroy();
       extendGUI.forEach((d) => d.destroy());
+      while (mapContainer.current?.firstChild) {
+        mapContainer.current.removeChild(mapContainer.current.lastChild!);
+      }
     };
   }, [viewDemo, guiOptions]);
 
@@ -84,14 +93,15 @@ export const Main = () => {
   return (
     <>
       {!isSnapshotMode && (
-        <div style={{ position: 'absolute', left: '20px', zIndex: 10, top: '20px' }}>
+        <ConfigProvider theme={{ components: { Cascader: { dropdownHeight: 400 } } }}>
           <Cascader
+            style={{ position: 'absolute', left: '20px', zIndex: 10, top: '20px' }}
             size="large"
             defaultValue={viewDemo}
             options={DEMO_LIST}
             onChange={onDemoViewChange}
           />
-        </div>
+        </ConfigProvider>
       )}
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
     </>

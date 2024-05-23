@@ -35,5 +35,5 @@ const TEST_CASES = [
 ];
 
 describe('Line Snapshot', () => {
-  generateCanvasTestCases('Line', TEST_CASES);
+  generateCanvasTestCases('line', TEST_CASES);
 });

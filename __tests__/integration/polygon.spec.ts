@@ -27,5 +27,5 @@ const TEST_CASES = [
 ];
 
 describe('Polygon Snapshot', () => {
-  generateCanvasTestCases('Polygon', TEST_CASES);
+  generateCanvasTestCases('polygon', TEST_CASES);
 });

@@ -45,9 +45,9 @@ export const hexagon: TestCase = async (options) => {
       ].reverse(),
     );
 
-  scene.startAnimate();
+  // scene.startAnimate();
   scene.addLayer(layer);
-  scene.render();
+  // scene.render();
 
   return scene;
 };

@@ -14,8 +14,6 @@ import * as RasterTestCases from './raster';
 import * as TileTestCases from './tile';
 import * as WebgpuTestCases from './webgpu';
 
-export { BasemapTestCases, CanvasTestCases, PointTestCases };
-
 export const TestCases = new Map<string, [string, TestCase][]>([
   ['bugfix', Object.entries(BugfixTestCases)],
   ['point', Object.entries(PointTestCases)],
@@ -32,3 +30,16 @@ export const TestCases = new Map<string, [string, TestCase][]>([
   ['webgpu', Object.entries(WebgpuTestCases)],
   ['extend', Object.entries(ExtendTestCases)],
 ]);
+
+export function geSnapshotTestsFromNamespace(namespace: string) {
+  const testcases = TestCases.get(namespace);
+  if (!testcases) return [];
+  const demo = testcases
+    .filter(([, demo]) => Boolean(demo.snapshot))
+    .map(([name, demo]) => ({
+      name,
+      snapshot: Boolean(demo.snapshot),
+      sleepTime: typeof demo?.snapshot === 'object' ? demo.snapshot?.sleepTime : undefined,
+    }));
+  return demo;
+}
