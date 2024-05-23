@@ -8,6 +8,7 @@ import * as LineTestCases from './line';
 import * as MaskTestCases from './mask';
 import * as PointTestCases from './point';
 import * as PolygonTestCases from './polygon';
+import * as RasterTestCases from './raster';
 
 export { BasemapTestCases, CanvasTestCases, PointTestCases };
 
@@ -16,6 +17,7 @@ export const TestCases = new Map<string, [string, TestCase][]>([
   ['heatmap', Object.entries(HeatmapTestCases)],
   ['line', Object.entries(LineTestCases)],
   ['polygon', Object.entries(PolygonTestCases)],
+  ['raster', Object.entries(RasterTestCases)],
   ['mask', Object.entries(MaskTestCases)],
   ['basemap', Object.entries(BasemapTestCases)],
   ['canvas', Object.entries(CanvasTestCases)],
