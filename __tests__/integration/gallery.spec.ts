@@ -8,7 +8,6 @@ const TEST_CASES = [
   {
     name: 'variFlight',
     sleepTime: 1000,
-    snapshots: false,
   },
 ];
 

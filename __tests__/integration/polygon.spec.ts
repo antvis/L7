@@ -14,15 +14,15 @@ const TEST_CASES = [
   },
   {
     name: 'ocean',
-    snapshots: false,
+    snapshot: false,
   },
   {
     name: 'texture',
-    snapshots: false,
+    snapshot: false,
   },
   {
     name: 'water',
-    snapshots: false,
+    snapshot: false,
   },
 ];
 

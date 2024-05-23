@@ -9,17 +9,17 @@ const TEST_CASES = [
   },
   {
     name: 'dot',
-    snapshots: false,
+    snapshot: false,
   },
   {
     name: 'fill',
   },
   {
-    name: 'fill_image',
+    name: 'fillImage',
   },
   {
     name: 'image',
-    snapshots: false,
+    snapshot: false,
   },
   {
     name: 'text',
