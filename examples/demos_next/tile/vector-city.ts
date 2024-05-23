@@ -1,20 +1,18 @@
 import { PointLayer, PolygonLayer, Scene, Source } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
 import { Protocol } from 'pmtiles';
-import type { RenderDemoOptions } from '../../types';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
 const protocol = new Protocol();
 Scene.addProtocol('pmtiles', protocol.tile);
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const vectorCity: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [11.2438, 43.7799],
       zoom: 12.83,
-    }),
+    },
   });
 
   const source = new Source(
@@ -121,22 +119,18 @@ export function MapRender(options: RenderDemoOptions) {
     .style({
       opacity: 1,
     });
-  // TODO:Mask 和缩放取消
-  scene.on('loaded', () => {
-    scene.addLayer(layer);
-    scene.addLayer(boundaries);
-    scene.addLayer(natural);
-    scene.addLayer(buildings);
-    scene.addLayer(transit);
-    scene.addLayer(roads);
-    scene.addLayer(water);
-    scene.addLayer(point);
-    layer.on('inited', () => {
-      console.log(layer.tileLayer?.getLayers());
-    });
 
-    if (window['screenshot']) {
-      window['screenshot']();
-    }
+  scene.addLayer(layer);
+  scene.addLayer(boundaries);
+  scene.addLayer(natural);
+  scene.addLayer(buildings);
+  scene.addLayer(transit);
+  scene.addLayer(roads);
+  scene.addLayer(water);
+  scene.addLayer(point);
+  layer.on('inited', () => {
+    console.log(layer.tileLayer?.getLayers());
   });
-}
+
+  return scene;
+};

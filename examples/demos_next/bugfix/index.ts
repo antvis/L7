@@ -1,0 +1,10 @@
+export { dataShake } from './data-shake';
+export { legendEvent } from './legend-event';
+export { mutiPolygon } from './muti-polygon';
+export { removeMutiLayer } from './remove-muti-layer';
+export { setColor } from './set-color';
+export { setData } from './set-data';
+export { setSize } from './set-size';
+export { textOffsets } from './text-offsets';
+export { tileUpdate } from './tile-update';
+export { touchEvent } from './touch-event';

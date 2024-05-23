@@ -1,19 +1,18 @@
 import { LineLayer, PolygonLayer, Scene, Source } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
 import { Protocol } from 'pmtiles';
-import type { RenderDemoOptions } from '../../types';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
+
 const protocol = new Protocol();
 Scene.addProtocol('pmtiles', protocol.tile);
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const vectorUSA: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [-82.96875, 37.71024],
       zoom: 5,
-    }),
+    },
   });
 
   const source = new Source(
@@ -48,12 +47,8 @@ export function MapRender(options: RenderDemoOptions) {
     opacity: 0.8,
   });
 
-  scene.on('loaded', () => {
-    scene.addLayer(layer);
-    scene.addLayer(linelayer);
+  scene.addLayer(layer);
+  scene.addLayer(linelayer);
 
-    if (window['screenshot']) {
-      window['screenshot']();
-    }
-  });
-}
+  return scene;
+};
