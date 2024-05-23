@@ -6,11 +6,9 @@ const TEST_CASES = [
   },
   {
     name: 'grid',
-    snapshots: false,
   },
   {
     name: 'hexagon',
-    snapshots: false,
   },
 ];
 

@@ -1,5 +1,4 @@
 import { HeatmapLayer } from '@antv/l7';
-import data from '../../data/globe-earthquake-mag.json';
 import type { TestCase } from '../../types';
 import { CaseScene } from '../../utils';
 
@@ -11,6 +10,10 @@ export const hexagon: TestCase = async (options) => {
       zoom: 14.83,
     },
   });
+
+  const data = await fetch(
+    'https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json',
+  ).then((res) => res.json());
 
   const layer = new HeatmapLayer({ autoFit: true })
     .source(data, {
@@ -24,7 +27,7 @@ export const hexagon: TestCase = async (options) => {
       ],
     })
     .size('sum', [0, 60])
-    .shape('squareColumn')
+    .shape('hexagon')
     .style({
       opacity: 1,
     })
