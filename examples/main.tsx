@@ -30,7 +30,7 @@ export const Main = () => {
 
   // GUI
   useEffect(() => {
-    guiRef.current = new GUI({ title: 'Controls', autoPlace: !isSnapshotMode });
+    guiRef.current = new GUI({ title: 'Scene', autoPlace: !isSnapshotMode });
     const onChange = (v: Partial<GUIOptions>) => {
       setGuiOptions((pre) => ({ ...pre, ...v }));
     };
@@ -40,6 +40,9 @@ export const Main = () => {
     guiRef.current
       .add(inintGuiOptions, 'renderer', ['regl', 'device'])
       .onChange((renderer: GUIOptions['renderer']) => onChange({ renderer }));
+    guiRef.current
+      .add(inintGuiOptions, 'enableWebGPU')
+      .onChange((enableWebGPU: GUIOptions['enableWebGPU']) => onChange({ enableWebGPU }));
     guiRef.current
       .add(inintGuiOptions, 'animate')
       .onChange((animate: GUIOptions['animate']) => onChange({ animate }));
@@ -108,7 +111,7 @@ function getParamsFromUrlPath() {
   SEARCH_PARAMS_KEYS.forEach((key) => {
     const value = searchParams.get(key);
     if (!value) return;
-    if (['animate', 'snapshot'].includes(key)) guiOptions[key] = value === 'true';
+    if (['animate', 'snapshot', 'enableWebGPU'].includes(key)) guiOptions[key] = value === 'true';
     else guiOptions[key] = value;
   });
 

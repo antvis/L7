@@ -6,6 +6,7 @@ export type GUIOptions = {
   map: TestCaseBasemap;
   renderer: ISceneConfig['renderer'];
   animate: boolean;
+  enableWebGPU: boolean;
   [keys: string]: any;
 };
 

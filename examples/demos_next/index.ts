@@ -12,6 +12,7 @@ import * as PointTestCases from './point';
 import * as PolygonTestCases from './polygon';
 import * as RasterTestCases from './raster';
 import * as TileTestCases from './tile';
+import * as WebgpuTestCases from './webgpu';
 
 export { BasemapTestCases, CanvasTestCases, PointTestCases };
 
@@ -24,9 +25,10 @@ export const TestCases = new Map<string, [string, TestCase][]>([
   ['raster', Object.entries(RasterTestCases)],
   ['tile', Object.entries(TileTestCases)],
   ['mask', Object.entries(MaskTestCases)],
-  ['basemap', Object.entries(BasemapTestCases)],
   ['canvas', Object.entries(CanvasTestCases)],
+  ['basemap', Object.entries(BasemapTestCases)],
   ['components', Object.entries(ComponentsTestCases)],
-  ['extend', Object.entries(ExtendTestCases)],
   ['gallery', Object.entries(GalleryTestCases)],
+  ['webgpu', Object.entries(WebgpuTestCases)],
+  ['extend', Object.entries(ExtendTestCases)],
 ]);

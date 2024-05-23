@@ -1,15 +1,30 @@
 import { BufferUsage, WebGPUDeviceContribution } from '@antv/g-device-api';
-import type { RenderDemoOptions } from '../../types';
+import type { Scene } from '@antv/l7-scene';
+import type { TestCase } from '../../types';
 import { createTexture, generateTexture } from './utils/common';
 
-export async function MapRender(options: RenderDemoOptions) {
-  const dom = document.getElementById('map') as HTMLDivElement;
+export const computeTexture: TestCase = async (options) => {
+  const dom = options.id as HTMLDivElement;
   // 创建 canvas
   const $canvas = document.createElement('canvas');
   dom.appendChild($canvas);
   // 设置 canvas 大小
   $canvas.width = dom.clientWidth;
   $canvas.height = dom.clientHeight;
+
+  const device = await render($canvas);
+
+  const scene = {
+    destroy: () => {
+      dom.removeChild($canvas);
+      device.destroy();
+    },
+  };
+
+  return scene as Scene;
+};
+
+async function render($canvas: HTMLCanvasElement) {
   const deviceContribution = new WebGPUDeviceContribution({
     shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
   });
@@ -225,4 +240,6 @@ export async function MapRender(options: RenderDemoOptions) {
   // const data = await readback.readBuffer(particleBuffers[1], 0, new Float32Array(numParticles*4));
   // console.log(data);
   // frame();
+
+  return device;
 }

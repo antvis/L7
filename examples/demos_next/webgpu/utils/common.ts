@@ -1,10 +1,11 @@
 import type { Device } from '@antv/g-device-api';
 import { Format, TextureDimension, TextureUsage } from '@antv/g-device-api';
 
-async function loadImage(url) {
+async function loadImage(url: string) {
   const imgBitmap = await createImageBitmap(await fetch(url).then((response) => response.blob()));
   return imgBitmap;
 }
+
 export async function generateTexture(device: Device, url: string) {
   // 创建纹理和纹理视图
   const image = await loadImage(

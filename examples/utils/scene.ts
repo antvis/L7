@@ -28,6 +28,7 @@ export const CaseScene = (options: CaseSceneOptions) => {
   const scene = new Scene({
     ...options,
     map,
+    shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
   });
 
   return new Promise<Scene>((resolve) => {
