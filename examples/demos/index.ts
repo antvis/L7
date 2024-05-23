@@ -1,74 +1,71 @@
-import * as BaseMapDemos from './basemap';
-import * as BugFix from './bugfix';
-import * as CanvasDemos from './canvas';
-import * as Components from './components';
-import * as ExtendDemos from './extend';
-import * as GalleryDemos from './gallery';
-import * as HeatmapDemos from './heatmap';
-import * as LineDemos from './line';
-import * as MaskDemos from './mask';
-import * as PointDemos from './point';
-import * as PolygonDemos from './polygon';
-import * as RasterDemos from './raster';
-import * as TileDemos from './tile';
-import * as GPUDemos from './webgpu';
+// import * as GalleryDemos from '../demos_next/gallery';
+// import * as BugFix from './bugfix';
+// import * as Components from './components';
+// import * as HeatmapDemos from './heatmap';
+// import * as LineDemos from './line';
+// import * as MaskDemos from './mask';
+// import * as PointDemos from './point';
+// import * as PolygonDemos from './polygon';
+// import * as RasterDemos from './raster';
+// import * as TileDemos from './tile';
+// import * as GPUDemos from './webgpu';
 
-export default [
-  {
-    name: 'BugFix',
-    demos: BugFix,
-  },
-  {
-    name: 'Point',
-    demos: PointDemos,
-  },
-  {
-    name: 'Line',
-    demos: LineDemos,
-  },
-  {
-    name: 'Polygon',
-    demos: PolygonDemos,
-  },
-  {
-    name: 'Components',
-    demos: Components,
-  },
-  {
-    name: 'Heatmap',
-    demos: HeatmapDemos,
-  },
-  {
-    name: 'Raster',
-    demos: RasterDemos,
-  },
-  {
-    name: 'Tile',
-    demos: TileDemos,
-  },
-  {
-    name: 'Mask',
-    demos: MaskDemos,
-  },
-  {
-    name: 'WebGPU',
-    demos: GPUDemos,
-    snapShot: false,
-  },
-  {
-    name: 'Gallery',
-    demos: GalleryDemos,
-  },
-  {
-    name: 'Canvas',
-    demos: CanvasDemos,
-  },
-  {
-    name: 'BaseMap',
-    demos: BaseMapDemos,
-  },
-  {
-    name: 'Extend',
-    demos: ExtendDemos,
-  },
-];
+// export default [
+//   {
+//     name: 'BugFix',
+//     demos: BugFix,
+//   },
+//   {
+//     name: 'Point',
+//     demos: PointDemos,
+//   },
+//   {
+//     name: 'Line',
+//     demos: LineDemos,
+//   },
+//   {
+//     name: 'Polygon',
+//     demos: PolygonDemos,
+//   },
+//   {
+//     name: 'Components',
+//     demos: Components,
+//   },
+//   {
+//     name: 'Heatmap',
+//     demos: HeatmapDemos,
+//   },
+//   {
+//     name: 'Raster',
+//     demos: RasterDemos,
+//   },
+//   {
+//     name: 'Tile',
+//     demos: TileDemos,
+//   },
+//   {
+//     name: 'Mask',
+//     demos: MaskDemos,
+//   },
+//   {
+//     name: 'WebGPU',
+//     demos: GPUDemos,
+//     snapShot: false,
+//   },
+//   {
+//     name: 'Gallery',
+//     demos: GalleryDemos,
+//   },
+//   {
+//     name: 'Canvas',
+//     demos: CanvasDemos,
+//   },
+//   {
+//     name: 'BaseMap',
+//     demos: BaseMapDemos,
+//   },
+//   {
+//     name: 'Extend',
+//     demos: ExtendDemos,
+//   },
+// ];
