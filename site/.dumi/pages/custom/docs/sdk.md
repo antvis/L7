@@ -36,7 +36,7 @@ npm i district-data
 ### option
 
 - version 数据版本
-- type 数据格式 `'wgs84' | 'gcj02'`
+- type 坐标系
 
 **注意在使用 `type` 之前请保证 `version` 为 `2024` 及以上。**
 
@@ -44,7 +44,7 @@ npm i district-data
 import { RDBSource } from 'district-data';
 const source = new RDBSource({
   version: 2024,
-  type: 'wgs84',
+  type: 'gcj02', // 默认
 });
 ```
 
