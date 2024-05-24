@@ -74,6 +74,8 @@ export default class DeviceTexture2D implements ITexture2D {
       pixelFormat = unorm ? Format.U8_RGBA_NORM : Format.U8_RGBA_RT;
     } else if (type === gl.UNSIGNED_BYTE && format === gl.LUMINANCE) {
       pixelFormat = Format.U8_LUMINANCE;
+    } else if (type === gl.FLOAT && format === gl.LUMINANCE) {
+      pixelFormat = Format.F32_LUMINANCE;
     } else if (type === gl.FLOAT && format === gl.RGB) {
       // @see https://github.com/antvis/L7/pull/2262
       if (this.device.queryVendorInfo().platformString === 'WebGPU') {

@@ -8,6 +8,7 @@ import {
   DownloadOutlined,
   InfoCircleOutlined,
   PictureOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import type { LayerPopupProps } from '@antv/larkmap';
 import {
@@ -23,6 +24,7 @@ import {
   Col,
   Descriptions,
   Divider,
+  Popover,
   Radio,
   Row,
   Select,
@@ -34,7 +36,7 @@ import {
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
 import { debounce } from 'lodash-es';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { downloadData, exportSVG } from '../utils/util';
 import './index.less';
 import type { IDataInfo } from './util';
@@ -69,7 +71,7 @@ export default () => {
   const [loading, setLoading] = useState(false);
   const size = 'middle';
   const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
-  const [dataType, setDataType] = useState<'wgs84' | 'gcj02'>('wgs84');
+  const [dataType, setDataType] = useState<'wgs84' | 'gcj02'>('gcj02');
   const [drillList, setDrillList] = useState<any[]>([
     {
       currentLevel: 'country',
@@ -334,7 +336,11 @@ export default () => {
                 数据格式:
               </Col>
               <Col span={12} style={{ textAlign: 'right' }}>
-                <Radio.Group
+                <span style={{ marginRight: 6 }}>GCJ02</span>
+                <Popover content="因政策原因，WGS84 坐标系数据已下线">
+                  <QuestionCircleOutlined />
+                </Popover>
+                {/* <Radio.Group
                   defaultValue={dataType}
                   size={size}
                   value={dataType}
@@ -344,7 +350,7 @@ export default () => {
                 >
                   <Radio.Button value="wgs84">wgs84</Radio.Button>
                   <Radio.Button value="gcj02">gcj02</Radio.Button>
-                </Radio.Group>
+                </Radio.Group> */}
               </Col>
             </Row>
 

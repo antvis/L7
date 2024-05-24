@@ -28,7 +28,7 @@ version 为 2024 及以上时也可使用以下数据服务
 - 'district'
 - 'jiuduanxian'
 
-#### version
+#### version 数据版本
 
 - 2023
 - 2022
@@ -40,9 +40,8 @@ version 为 2024 及以上时也可使用以下数据服务
 - 2016
 - 2015
 
-#### type
+#### type 坐标系
 
-- 'wgs84'
 - 'gcj02'
 
 ### 数据获取
