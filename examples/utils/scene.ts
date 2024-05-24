@@ -14,7 +14,7 @@ export const CaseScene = (options: CaseSceneOptions) => {
 
   const style = isMapbox
     ? 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
-    : 'normal';
+    : 'light';
 
   const map = new Maps[basemap]({
     style,

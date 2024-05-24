@@ -26,7 +26,6 @@ export const hexagon: TestCase = async (options) => {
         },
       ],
     })
-    .size('sum', [0, 60])
     .shape('hexagon')
     .style({
       opacity: 1,
@@ -48,9 +47,7 @@ export const hexagon: TestCase = async (options) => {
       ].reverse(),
     );
 
-  // scene.startAnimate();
   scene.addLayer(layer);
-  // scene.render();
 
   return scene;
 };
