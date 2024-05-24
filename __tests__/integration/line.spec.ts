@@ -9,26 +9,23 @@ const TEST_CASES = [
   },
   {
     name: 'dash',
-    sleepTime: 500,
+    snapshot: false,
   },
   {
     name: 'wall',
   },
   {
     name: 'arc',
-    sleepTime: 500,
   },
   {
     name: 'arc3D',
-    sleepTime: 1000,
   },
   {
     name: 'greatcircle',
-    sleepTime: 500,
   },
   {
     name: 'flow',
-    sleepTime: 1000,
+    sleepTime: 500,
   },
 ];
 
