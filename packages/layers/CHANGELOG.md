@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.21.11-beta.2
+
+### Patch Changes
+
+- [#2500](https://github.com/antvis/L7/pull/2500) [`0754eeb`](https://github.com/antvis/L7/commit/0754eebe5c029c808958a5f29492ed2487263c7f) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复热力蜂窝图层渲染空白
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.2
+  - @antv/l7-maps@2.21.11-beta.2
+  - @antv/l7-source@2.21.11-beta.2
+  - @antv/l7-utils@2.21.11-beta.2
+
 ## 2.21.11-beta.1
 
 ### Patch Changes
