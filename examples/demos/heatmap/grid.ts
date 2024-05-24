@@ -12,27 +12,34 @@ export const grid: TestCase = async (options) => {
   });
 
   const data = await fetch(
-    'https://gw.alipayobjects.com/os/bmw-prod/3dadb1f5-8f54-4449-8206-72db6e142c40.json',
-  ).then((res) => res.json());
+    'https://gw.alipayobjects.com/os/antfincdn/aBQAMIpvPL/qingdao_500m.csv',
+  ).then((res) => res.text());
 
   const layer = new HeatmapLayer({
     autoFit: true,
   })
     .source(data, {
-      transforms: [
-        {
-          type: 'hexagon',
-          size: 5 * 100000,
-        },
-      ],
+      parser: { type: 'csv', x: 'lng', y: 'lat' },
+      transforms: [{ type: 'grid', size: 3000, field: 'count', method: 'sum' }],
     })
-    .shape('circle')
-    .active(false)
-    .color('#aaa')
+    .shape('square')
     .style({
-      coverage: 0.7,
-      angle: 0,
-    });
+      coverage: 0.9,
+    })
+    .color(
+      'count',
+      [
+        '#FF3417',
+        '#FF7412',
+        '#FFB02A',
+        '#FFE754',
+        '#46F3FF',
+        '#02BEFF',
+        '#1A7AFF',
+        '#0A1FB2',
+      ].reverse(),
+    );
+
   scene.addLayer(layer);
 
   return scene;

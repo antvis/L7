@@ -51,6 +51,7 @@ export default class HexagonModel extends BaseModel {
       moduleName: 'heatmapHexagon',
       vertexShader: hexagon_vert,
       fragmentShader: hexagon_frag,
+      defines: this.getDefines(),
       triangulation: HeatmapGridTriangulation,
       depth: { enable: false },
       primitive: gl.TRIANGLES,
