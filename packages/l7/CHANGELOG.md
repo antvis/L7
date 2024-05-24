@@ -1,5 +1,18 @@
 # Change Log
 
+## 2.21.11-beta.2
+
+### Patch Changes
+
+- Updated dependencies [[`0754eeb`](https://github.com/antvis/L7/commit/0754eebe5c029c808958a5f29492ed2487263c7f)]:
+  - @antv/l7-layers@2.21.11-beta.2
+  - @antv/l7-component@2.21.11-beta.2
+  - @antv/l7-scene@2.21.11-beta.2
+  - @antv/l7-core@2.21.11-beta.2
+  - @antv/l7-maps@2.21.11-beta.2
+  - @antv/l7-source@2.21.11-beta.2
+  - @antv/l7-utils@2.21.11-beta.2
+
 ## 2.21.11-beta.1
 
 ### Patch Changes
