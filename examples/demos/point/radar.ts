@@ -1,16 +1,14 @@
-import { PointLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { PointLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const radar: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [120, 30],
       zoom: 13,
-    }),
+    },
   });
 
   const layer = new PointLayer()
@@ -25,7 +23,7 @@ export function MapRender(options: RenderDemoOptions) {
     })
     .animate(true);
 
-  scene.on('loaded', () => {
-    scene.addLayer(layer);
-  });
-}
+  scene.addLayer(layer);
+
+  return scene;
+};

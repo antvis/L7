@@ -1,2 +1,2 @@
-export { MapRender as event } from './event';
-export { MapRender as layer } from './layer';
+export { event } from './event';
+export { layer } from './layer';

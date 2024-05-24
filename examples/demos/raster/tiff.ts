@@ -1,7 +1,56 @@
-import { RasterLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
+import { RasterLayer } from '@antv/l7';
 import * as GeoTIFF from 'geotiff';
-import type { RenderDemoOptions } from '../../types';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
+
+export const tiff: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
+      center: [105, 37.5],
+      zoom: 2.5,
+    },
+  });
+
+  const tiffdata = await getTiffData();
+
+  const layer = new RasterLayer({
+    zIndex: 2,
+    visible: true,
+  });
+  layer
+    .source(tiffdata.data, {
+      parser: {
+        type: 'raster',
+        width: tiffdata.width,
+        height: tiffdata.height,
+        extent: [
+          73.4821902409999979, 3.8150178409999995, 135.1066187319999869, 57.6300459959999998,
+        ],
+      },
+    })
+    .style({
+      clampLow: false,
+      clampHigh: false,
+      domain: [0, 90],
+      nodataValue: 0,
+      rampColors: {
+        colors: [
+          'rgba(92,58,16,0)',
+          'rgba(92,58,16,0)',
+          '#fabd08',
+          '#f1e93f',
+          '#f1ff8f',
+          '#fcfff7',
+        ],
+        positions: [0, 0.05, 0.1, 0.25, 0.5, 1.0],
+      },
+    });
+
+  scene.addLayer(layer);
+
+  return scene;
+};
 
 async function getTiffData() {
   const response = await fetch(
@@ -18,60 +67,4 @@ async function getTiffData() {
     width,
     height,
   };
-}
-
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      center: [105, 37.5],
-      zoom: 2.5,
-    }),
-  });
-  scene.on('loaded', () => {
-    addLayer();
-    // scene.setBgColor('#aaa')
-  });
-
-  async function addLayer() {
-    const tiffdata = await getTiffData();
-
-    const layer = new RasterLayer({
-      zIndex: 2,
-      visible: true,
-    });
-    layer
-      .source(tiffdata.data, {
-        parser: {
-          type: 'raster',
-          width: tiffdata.width,
-          height: tiffdata.height,
-          extent: [
-            73.4821902409999979, 3.8150178409999995, 135.1066187319999869, 57.6300459959999998,
-          ],
-        },
-      })
-      .style({
-        clampLow: false,
-        clampHigh: false,
-        domain: [0, 90],
-        nodataValue: 0,
-        rampColors: {
-          colors: [
-            'rgba(92,58,16,0)',
-            'rgba(92,58,16,0)',
-            '#fabd08',
-            '#f1e93f',
-            '#f1ff8f',
-            '#fcfff7',
-          ],
-          positions: [0, 0.05, 0.1, 0.25, 0.5, 1.0],
-        },
-      });
-    scene.addLayer(layer);
-    if (window['screenshot']) {
-      window['screenshot']();
-    }
-  }
 }

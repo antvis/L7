@@ -8,10 +8,9 @@ const TEST_CASES = [
   {
     name: 'variFlight',
     sleepTime: 1000,
-    snapshots: false,
   },
 ];
 
 describe('Gallery Snapshot', () => {
-  generateCanvasTestCases('Gallery', TEST_CASES);
+  generateCanvasTestCases('gallery', TEST_CASES);
 });

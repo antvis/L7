@@ -1,6 +1,17 @@
-import type { RenderDemoMap, RenderDemoOptions } from './types';
+import type { GUIOptions, TestCaseBasemap } from './types';
 
-export const MAP_TYPES: RenderDemoMap[] = [
+export const DEFAULT_GUI_OPTIONS: GUIOptions = {
+  map: 'Map',
+  renderer: 'device',
+  animate: false,
+  enableWebGPU: false,
+};
+
+export const SEARCH_PARAMS_KEYS = ['namespace', 'name', 'snapshot'].concat(
+  Object.keys(DEFAULT_GUI_OPTIONS),
+);
+
+export const MAP_TYPES: TestCaseBasemap[] = [
   'Map',
   'GaodeMap',
   'Mapbox',
@@ -10,9 +21,3 @@ export const MAP_TYPES: RenderDemoMap[] = [
   'TMap',
   'GoogleMap',
 ] as const;
-
-export const DEFAULT_RENDER_OPTIONS: RenderDemoOptions = {
-  map: 'Map',
-  renderer: 'device',
-  animate: false,
-};

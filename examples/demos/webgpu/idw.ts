@@ -1,12 +1,14 @@
 // import Flatbush from 'flatbush';
 // https://github.com/mourner/kdbush
+import type { Scene } from '@antv/l7-scene';
 import KDBush from 'kdbush';
+import type { TestCase } from '../../types';
 
-export async function MapRender() {
+export const idw: TestCase = async (options) => {
   const rawdata = await (
     await fetch('https://mdn.alipayobjects.com/afts/file/A*yHeJTaQ6iVsAAAAAAAAAAAAADrd2AQ/aqi.json')
   ).json();
-  const data = rawdata.map((row) => {
+  const data = rawdata.map((row: any) => {
     const { CityCode, Area, PositionName, Latitude, Longitude, AQI } = row;
     return {
       CityCode,
@@ -24,4 +26,10 @@ export async function MapRender() {
   dataIndex.finish();
 
   console.log(dataIndex);
-}
+
+  const scene = {
+    destroy: () => {},
+  };
+
+  return scene as Scene;
+};

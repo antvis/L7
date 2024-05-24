@@ -1,1 +1,1 @@
-export { MapRender as threeBasicGeometry } from './three';
+export { threeGeometry } from './three-geometry';

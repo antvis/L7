@@ -1,8 +1,8 @@
-export { MapRender as arc } from './arc';
-export { MapRender as arc3D } from './arc-3d';
-export { MapRender as dash } from './dash';
-export { MapRender as flow } from './flow';
-export { MapRender as greatcircle } from './greatcircle';
-export { MapRender as normal } from './normal';
-export { MapRender as simple } from './simple';
-export { MapRender as wall } from './wall';
+export { arc } from './arc';
+export { arc3D } from './arc-3d';
+export { dash } from './dash';
+export { flow } from './flow';
+export { greatcircle } from './greatcircle';
+export { normal } from './normal';
+export { simple } from './simple';
+export { wall } from './wall';

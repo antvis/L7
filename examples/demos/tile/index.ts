@@ -1,6 +1,6 @@
-export { MapRender as image } from './normal';
-export { MapRender as perf } from './perf';
-export { MapRender as rgb } from './rgb';
-export { MapRender as usa } from './usa';
-export { MapRender as vector } from './vector';
-export { MapRender as worldline } from './world';
+export { rasterTile } from './raster-tile';
+export { terrainRGB } from './terrain-rgb';
+export { vectorCity } from './vector-city';
+export { vectorLine } from './vector-line';
+export { vectorPerf } from './vector-perf';
+export { vectorUSA } from './vector-usa';

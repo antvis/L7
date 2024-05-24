@@ -1,18 +1,17 @@
-import { PointLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { PointLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const billboard: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [120.188193, 30.292542],
       pitch: 0,
       zoom: 16,
-    }),
+    },
   });
+
   const layer = new PointLayer()
     .source({
       type: 'FeatureCollection',
@@ -71,11 +70,7 @@ export function MapRender(options: RenderDemoOptions) {
     .color('#f00')
     .shape('simple');
 
-  scene.on('loaded', () => {
-    scene.addLayer(layer);
+  scene.addLayer(layer);
 
-    if (window['screenshot']) {
-      window['screenshot']();
-    }
-  });
-}
+  return scene;
+};

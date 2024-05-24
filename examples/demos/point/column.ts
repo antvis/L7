@@ -1,18 +1,17 @@
-import { PointLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
+import { PointLayer } from '@antv/l7';
 import data from '../../data/shanghaixi-village.json';
-import type { RenderDemoOptions } from '../../types';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
+export const column: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       style: 'light',
       center: [121.400257, 31.25287],
       zoom: 14.55,
       pitch: 45,
-    }),
+    },
   });
 
   const pointLayer = new PointLayer({})
@@ -32,9 +31,8 @@ export function MapRender(options: RenderDemoOptions) {
     .style({
       opacity: 1,
     });
+
   scene.addLayer(pointLayer);
 
-  if (window['screenshot']) {
-    window['screenshot']();
-  }
-}
+  return scene;
+};

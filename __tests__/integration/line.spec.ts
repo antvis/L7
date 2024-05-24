@@ -9,7 +9,6 @@ const TEST_CASES = [
   },
   {
     name: 'dash',
-    snapshots: false,
     sleepTime: 500,
   },
   {
@@ -25,7 +24,6 @@ const TEST_CASES = [
   },
   {
     name: 'greatcircle',
-    snapshots: false,
     sleepTime: 500,
   },
   {
@@ -35,5 +33,5 @@ const TEST_CASES = [
 ];
 
 describe('Line Snapshot', () => {
-  generateCanvasTestCases('Line', TEST_CASES);
+  generateCanvasTestCases('line', TEST_CASES);
 });

@@ -6,14 +6,12 @@ const TEST_CASES = [
   },
   {
     name: 'grid',
-    snapshots: false,
   },
   {
     name: 'hexagon',
-    snapshots: false,
   },
 ];
 
 describe('Heatmap Snapshot', () => {
-  generateCanvasTestCases('Heatmap', TEST_CASES);
+  generateCanvasTestCases('heatmap', TEST_CASES);
 });

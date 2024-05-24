@@ -1,21 +1,18 @@
-import { LineLayer, Scene, Source } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
+import { LineLayer, Source } from '@antv/l7';
 import type { Map } from 'maplibre-gl';
-import type { RenderDemoOptions } from '../../types';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: ['MapLibre', 'Mapbox'].includes(options.map)
-        ? 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
-        : 'normal',
+export const wgs84Data: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [121.434765, 31.256735],
       zoom: 14.83,
       maxZoom: 23.9,
-    }),
+    },
   });
+
   const geoData = {
     type: 'FeatureCollection',
     features: [
@@ -44,9 +41,7 @@ export function MapRender(options: RenderDemoOptions) {
       opacity: 1,
     });
 
-  scene.on('loaded', () => {
-    scene.addLayer(layer);
-  });
+  scene.addLayer(layer);
 
   if (scene.getType() === 'mapbox') {
     const baseMap = scene.map as Map;
@@ -70,4 +65,6 @@ export function MapRender(options: RenderDemoOptions) {
       });
     });
   }
-}
+
+  return scene;
+};

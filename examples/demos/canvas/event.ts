@@ -1,52 +1,51 @@
-import { CanvasLayer, PointLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
+import { CanvasLayer, PointLayer } from '@antv/l7';
 import * as turf from '@turf/turf';
-import type { RenderDemoOptions } from '../../types';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-const POSITION = [120.104697, 30.260704] as [number, number];
+export const event: TestCase = async (options) => {
+  const POSITION = [120.104697, 30.260704] as [number, number];
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: POSITION,
       zoom: 14.89,
       minZoom: 10,
-    }),
+    },
   });
-  scene.on('loaded', () => {
-    const canvasLayer = new CanvasLayer({
-      zIndex: 4,
-      draw: ({ canvas, ctx, container, utils }) => {
-        const context = ctx as CanvasRenderingContext2D;
-        context.clearRect(0, 0, container.width, container.height);
-        context.fillStyle = 'blue';
-        const { x, y } = utils.lngLatToContainer(POSITION);
-        const size = 36 * window.devicePixelRatio;
-        context.fillRect(x - size / 2, y - size / 2, size, size);
-      },
-    });
 
-    scene.addLayer(canvasLayer);
+  const canvasLayer = new CanvasLayer({
+    zIndex: 4,
+    draw: ({ canvas, ctx, container, utils }) => {
+      const context = ctx as CanvasRenderingContext2D;
+      context.clearRect(0, 0, container.width, container.height);
+      context.fillStyle = 'blue';
+      const { x, y } = utils.lngLatToContainer(POSITION);
+      const size = 36 * window.devicePixelRatio;
+      context.fillRect(x - size / 2, y - size / 2, size, size);
+    },
+  });
 
-    canvasLayer.on('add', () => {
-      canvasLayer.layerModel.canvas?.addEventListener('click', (e) => {
-        console.log('canvas click', e);
-      });
-    });
+  scene.addLayer(canvasLayer);
 
-    const pointLayer = new PointLayer({});
-    pointLayer
-      .source(turf.featureCollection([turf.point(POSITION)]))
-      .color('red')
-      .shape('circle')
-      .size(30);
-    scene.addLayer(pointLayer);
-
-    pointLayer.on('click', (e) => {
-      console.log('layer click', e);
+  canvasLayer.on('add', () => {
+    canvasLayer.layerModel.canvas?.addEventListener('click', (e) => {
+      console.log('canvas click', e);
     });
   });
-}
+
+  const pointLayer = new PointLayer({});
+  pointLayer
+    .source(turf.featureCollection([turf.point(POSITION)]))
+    .color('red')
+    .shape('circle')
+    .size(30);
+  scene.addLayer(pointLayer);
+
+  pointLayer.on('click', (e) => {
+    console.log('layer click', e);
+  });
+
+  return scene;
+};

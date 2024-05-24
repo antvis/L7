@@ -1,17 +1,17 @@
-import { LineLayer, Scene, Source } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { LineLayer, Source } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
+export const simple: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       style: 'light',
       center: [121.434765, 31.256735],
       zoom: 14.83,
-    }),
+    },
   });
+
   const geoData = {
     type: 'FeatureCollection',
     features: [
@@ -64,10 +64,7 @@ export function MapRender(options: RenderDemoOptions) {
     .shape('simple')
     .color('#f00');
 
-  scene.on('loaded', () => {
-    scene.addLayer(layer);
-    if (window['screenshot']) {
-      window['screenshot']();
-    }
-  });
-}
+  scene.addLayer(layer);
+
+  return scene;
+};

@@ -1,23 +1,17 @@
-import { PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { PointLayer, PolygonLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const single: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [120.165, 30.26],
       pitch: 0,
       zoom: 15,
-    }),
+    },
   });
 
-  scene.addImage(
-    '00',
-    'https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg',
-  );
   const maskData = {
     type: 'FeatureCollection',
     features: [
@@ -40,70 +34,66 @@ export function MapRender(options: RenderDemoOptions) {
     ],
   };
 
-  scene.on('loaded', () => {
-    const polygonLayer = new PolygonLayer()
-      .source(maskData)
-      .shape('fill')
-      .color('#f00')
-      .style({ opacity: 0.5 });
+  const polygonLayer = new PolygonLayer()
+    .source(maskData)
+    .shape('fill')
+    .color('#f00')
+    .style({ opacity: 0.5 });
 
-    const point1 = new PointLayer({
-      zIndex: 1,
-      maskLayers: [polygonLayer],
-    })
-      .source(
-        [
-          {
-            name: 'n5',
-            lng: 120.17,
-            lat: 30.255,
-          },
-        ],
+  const point1 = new PointLayer({
+    zIndex: 1,
+    maskLayers: [polygonLayer],
+  })
+    .source(
+      [
         {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
+          name: 'n5',
+          lng: 120.17,
+          lat: 30.255,
         },
-      )
-      .shape('simple')
-      .size(30)
-      .style({
-        opacity: 0.6,
-      })
-      .active(true);
-
-    const point2 = new PointLayer({
-      maskLayers: [polygonLayer],
+      ],
+      {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      },
+    )
+    .shape('simple')
+    .size(30)
+    .style({
+      opacity: 0.6,
     })
-      .source(
-        [
-          {
-            name: 'n4',
-            lng: 120.17,
-            lat: 30.2565,
-          },
-        ],
+    .active(true);
+
+  const point2 = new PointLayer({
+    maskLayers: [polygonLayer],
+  })
+    .source(
+      [
         {
-          parser: {
-            type: 'json',
-            x: 'lng',
-            y: 'lat',
-          },
+          name: 'n4',
+          lng: 120.17,
+          lat: 30.2565,
         },
-      )
-      .shape('simple')
-      .size(30)
-      .color('#0f0')
-      .active(true);
+      ],
+      {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      },
+    )
+    .shape('simple')
+    .size(30)
+    .color('#0f0')
+    .active(true);
 
-    scene.addLayer(point1);
-    scene.addLayer(polygonLayer);
-    scene.addLayer(point2);
+  scene.addLayer(point1);
+  scene.addLayer(polygonLayer);
+  scene.addLayer(point2);
 
-    if (window['screenshot']) {
-      window['screenshot']();
-    }
-  });
-}
+  return scene;
+};
