@@ -31,8 +31,7 @@ describe('RasterLayer', () => {
         },
       });
 
-    // TODO: https://github.com/antvis/g-device-api/issues/188
-    // scene.addLayer(layer);
+    scene.addLayer(layer);
   });
 
   // // raster rgb
