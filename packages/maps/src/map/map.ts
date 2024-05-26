@@ -71,7 +71,6 @@ export default class MapService extends BaseMapService<Map> {
       this.map.on('move', this.handleCameraChanged);
     }
 
-    // 不同于高德地图，需要手动触发首次渲染
     setTimeout(() => {
       this.handleCameraChanged();
     }, 100);

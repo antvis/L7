@@ -1,9 +1,9 @@
 import { BaseMapWrapper } from '@antv/l7-core';
 import type { Map } from 'mapbox-gl';
-import type { IMapboxInstance } from '../types';
 import './logo.css';
 import MapboxService from './map';
-export default class MapboxWrapper extends BaseMapWrapper<Map & IMapboxInstance> {
+
+export default class MapboxWrapper extends BaseMapWrapper<Map> {
   protected getServiceConstructor() {
     return MapboxService;
   }

@@ -5,7 +5,6 @@ import Mapbox from './mapbox/';
 import MapLibre from './maplibre';
 import TMap from './tdtmap';
 import TencentMap from './tmap';
-import type { MapType } from './types';
 export * from './utils';
 
-export { BaiduMap, GaodeMap, GoogleMap, MapLibre, MapType, Mapbox, TMap, TencentMap };
+export { BaiduMap, GaodeMap, GoogleMap, MapLibre, Mapbox, TMap, TencentMap };
