@@ -121,7 +121,7 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
     return this.mapService.getMaxZoom();
   }
   public getType(): string {
-    return this.mapService.getType();
+    return this.mapService.type;
   }
   public getMapContainer(): HTMLElement | null {
     return this.mapService.getMapContainer();

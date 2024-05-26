@@ -39,6 +39,7 @@ export interface IMapWrapper {
 
 export interface IMapService<RawMap = {}> {
   map: RawMap;
+  type: string;
   bgColor: string;
   setBgColor(color: string): void;
   init(): void;

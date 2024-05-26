@@ -22,7 +22,7 @@ const MapEvent: Record<string, string> = {
 };
 
 export default class MaplibreService extends BaseMapService<Map> {
-  public type: string = 'MAPLIBRE';
+  public type: string = 'Maplibre';
 
   public viewport = new WebMercatorViewport();
 
@@ -160,7 +160,17 @@ export default class MaplibreService extends BaseMapService<Map> {
   }
 
   public getMapStyle(): string {
-    return '';
+    try {
+      // @ts-ignore
+      const styleUrl = (this.map.getStyle().sprite as string) ?? '';
+      // 将 Mapbox 返回的样式字符串转成传入 style 保持一致
+      if (/^mapbox:\/\/sprites\/zcxduo\/\w+\/\w+$/.test(styleUrl)) {
+        return styleUrl?.replace(/\/\w+$/, '').replace(/sprites/, 'styles');
+      }
+      return styleUrl;
+    } catch (e) {
+      return '';
+    }
   }
 
   public setMapStyle(style: any): void {

@@ -12,7 +12,7 @@ import type {
 import { BaseMapService, MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
 import { DOM, amap2Project, lodashUtil } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
-import { toPaddingOptions } from '../utils/utils';
+import { toPaddingOptions } from '../utils';
 import './logo.css';
 import { MapTheme } from './theme';
 
@@ -20,7 +20,7 @@ const AMAP_VERSION = '2.0';
 const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
 const ZOOM_OFFSET = 1;
 
-const AMapEventV2: Record<string, string> = {
+const AMapEvent: Record<string, string> = {
   contextmenu: 'rightclick',
   camerachange: 'viewchange',
 };
@@ -28,7 +28,7 @@ const AMapEventV2: Record<string, string> = {
 export default class AMapService extends BaseMapService<AMap.Map> {
   protected viewport = new WebMercatorViewport();
 
-  public type = 'GAODE';
+  public type = 'AMap';
 
   public async init() {
     const {
@@ -171,7 +171,7 @@ export default class AMapService extends BaseMapService<AMap.Map> {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handler);
     } else {
-      this.map.on(AMapEventV2[type] || type, handler);
+      this.map.on(AMapEvent[type] || type, handler);
     }
   }
 
@@ -179,7 +179,7 @@ export default class AMapService extends BaseMapService<AMap.Map> {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handler);
     } else {
-      this.map.off(AMapEventV2[type] || type, handler);
+      this.map.off(AMapEvent[type] || type, handler);
     }
   }
 

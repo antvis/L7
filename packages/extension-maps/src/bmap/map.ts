@@ -6,21 +6,17 @@ import type {
   IMercator,
   IPoint,
   IStatusOptions,
-  IViewport,
   MapStyleConfig,
   Point,
 } from '@antv/l7-core';
-import { MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
+import { BaseMapService, MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
-import BaseMapService from '../utils/BaseMapService';
-import { toPaddingOptions } from '../utils/utils';
+import { toPaddingOptions } from '../utils';
 import BMapGLLoader from './bmapglloader';
 import './logo.css';
 
-const EventMap: {
-  [key: string]: any;
-} = {
+const MapEvent: Record<string, string> = {
   mapmove: 'moving',
   contextmenu: 'rightclick',
   camerachange: 'update',
@@ -29,55 +25,14 @@ const EventMap: {
 
 const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
 const BMAP_VERSION: string = '1.0';
+const ZOOM_OFFSET = 1.75;
 
-// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class BMapService extends BaseMapService<BMapGL.Map> {
-  protected viewport: IViewport;
-  protected styleConfig: Record<string, any> = {
-    normal: [],
-  };
-  protected currentStyle: any = 'normal';
-  // 事件回调代理
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
-    new Map();
+  public type: string = 'BMap';
 
-  public getMap() {
-    return this.map as any as BMapGL.Map & {
-      destroy: () => void;
-      getTilt: () => number;
-      enableRotate: () => void;
-      enableRotateGestures: () => void;
-      disableRotate: () => void;
-      disableRotateGestures: () => void;
-      lnglatToMercator: (lng: number, lat: number) => [number, number];
-      _webglPainter: {
-        _canvas: HTMLCanvasElement;
-      };
-      getHeading: () => number;
-      setDisplayOptions: (options: { indoor?: boolean }) => void;
-    };
-  }
+  public version: string;
 
-  public handleCameraChanged = () => {
-    this.emit('mapchange');
-    const map = this.getMap();
-    const { lng, lat } = map.getCenter();
-    const option = {
-      center: [lng, lat],
-      viewportHeight: map.getContainer().clientHeight,
-      viewportWidth: map.getContainer().clientWidth,
-      bearing: 360 - map.getHeading(),
-      pitch: map.getTilt(),
-      zoom: map.getZoom() - 1.75,
-    };
-    this.viewport.syncWithMapCamera(option as any);
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback(this.viewport);
-  };
-
-  public setBgColor(color: string): void {
-    this.bgColor = color;
-  }
+  public viewport = new WebMercatorViewport();
 
   public async init() {
     const {
@@ -87,14 +42,11 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       token = BMAP_API_KEY,
       mapInstance,
       version = BMAP_VERSION,
-      mapSize = 10000,
       minZoom = 0,
       maxZoom = 21,
       ...rest
     } = this.config;
-    this.viewport = new WebMercatorViewport();
     this.version = version;
-    this.simpleMapCoord.setSize(mapSize);
 
     if (!(window.BMapGL || mapInstance)) {
       await BMapGLLoader.load({
@@ -104,9 +56,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     }
 
     if (mapInstance) {
-      // @ts-ignore
       this.map = mapInstance;
-      this.$mapContainer = this.map.getContainer();
+      this.mapContainer = this.map.getContainer();
       const point = new BMapGL.Point(center[0], center[1]);
       // false，表示用户未执行centerAndZoom进行地图初始渲染
       // @ts-ignore
@@ -114,6 +65,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
         this.map.centerAndZoom(point, zoom);
       }
       this.initMapByConfig(this.config);
+      // @ts-ignore
       this.map.on('update', this.handleCameraChanged);
     } else {
       const mapConstructorOptions = {
@@ -141,10 +93,10 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       let mapChildNodes = [...mapContainer.childNodes];
       // @ts-ignore
       const map = new BMapGL.Map(mapContainer, mapConstructorOptions);
-      this.$mapContainer = map.getContainer();
+      this.mapContainer = map.getContainer();
 
       mapChildNodes.forEach((child) => {
-        this.$mapContainer!.appendChild(child);
+        this.mapContainer!.appendChild(child);
       });
       // @ts-ignore
       mapChildNodes = null;
@@ -160,12 +112,56 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     }
   }
 
-  public destroy(): void {
-    this.getMap().destroy();
+  public handleCameraChanged = () => {
+    const map = this.getMap();
+    const { lng, lat } = map.getCenter();
+    const center: [number, number] = [lng, lat];
+    const option = {
+      center,
+      viewportHeight: map.getContainer().clientHeight,
+      viewportWidth: map.getContainer().clientWidth,
+      bearing: 360 - map.getHeading(),
+      pitch: map.getTilt(),
+      zoom: map.getZoom() - ZOOM_OFFSET,
+    };
+    this.updateView(option);
+  };
+
+  protected styleConfig: Record<string, any> = {
+    normal: [],
+  };
+
+  protected currentStyle: any = 'normal';
+
+  // 事件回调代理
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
+    new Map();
+
+  public getMap() {
+    return this.map as any as BMapGL.Map & {
+      destroy: () => void;
+      getTilt: () => number;
+      enableRotate: () => void;
+      enableRotateGestures: () => void;
+      disableRotate: () => void;
+      disableRotateGestures: () => void;
+      lnglatToMercator: (lng: number, lat: number) => [number, number];
+      _webglPainter: {
+        _canvas: HTMLCanvasElement;
+      };
+      getHeading: () => number;
+      setDisplayOptions: (options: { indoor?: boolean }) => void;
+    };
   }
 
-  public onCameraChanged(callback: (viewport: IViewport) => void): void {
-    this.cameraChangedCallback = callback;
+  public setBgColor(color: string): void {
+    this.bgColor = color;
+  }
+
+  public destroy(): void {
+    super.destroy();
+    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
+    this.getMap().destroy();
   }
 
   // tslint:disable-next-line:no-empty
@@ -205,7 +201,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     };
 
     cbProxyMap.set(handle, handleProxy);
-    this.map.on(EventMap[type] || type, handleProxy);
+    // @ts-ignore
+    this.map.on(MapEvent[type] || type, handleProxy);
   }
 
   public off(type: string, handle: (...args: any[]) => void): void {
@@ -219,7 +216,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       return;
     }
     this.evtCbProxyMap.get(type)?.delete(handle);
-    this.map.off(EventMap[type] || type, handleProxy);
+    // @ts-ignore
+    this.map.off(MapEvent[type] || type, handleProxy);
   }
 
   public once(type: string, handler: (...args: any[]) => void): void {
@@ -234,17 +232,15 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     const size = this.getMap().getSize();
     return [size.width, size.height];
   }
+
   // 百度地图缩放等级
   public getMinZoom(): number {
+    // @ts-ignore
     return this.map.getMinZoom();
   }
   public getMaxZoom(): number {
+    // @ts-ignore
     return this.map.getMaxZoom();
-  }
-
-  // get map params
-  public getType() {
-    return 'bmap';
   }
 
   public getZoom(): number {
@@ -302,6 +298,10 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     return this.styleConfig[name];
   }
 
+  public getMapStyle(): string {
+    return this.currentStyle;
+  }
+
   public setMapStyle(style: any): void {
     if (this.currentStyle === style) {
       return;
@@ -354,7 +354,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public setZoomAndCenter(zoom: number, [lng, lat]: Point): void {
-    this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom + 1.75);
+    this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom + ZOOM_OFFSET);
   }
 
   public setCenter([lng, lat]: [number, number], options?: ICameraOptions): void {
@@ -374,6 +374,14 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
   public setZoom(zoom: number): any {
     this.getMap().setZoom(zoom);
+  }
+
+  public setMaxZoom(max: number): void {
+    this.map.setMaxZoom(max);
+  }
+
+  public setMinZoom(min: number): void {
+    this.map.setMinZoom(min);
   }
 
   public setMapStatus(option: Partial<IStatusOptions>): void {
