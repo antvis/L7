@@ -1,6 +1,6 @@
-import BasePostProcessingPass from './services/renderer/passes/BasePostProcessingPass';
-import { removeDuplicateUniforms } from './utils/shader-module';
-import { packCircleVertex } from './utils/vertex-compression';
+export { default as BasePostProcessingPass } from './services/renderer/passes/BasePostProcessingPass';
+export { removeDuplicateUniforms } from './utils/shader-module';
+export { packCircleVertex } from './utils/vertex-compression';
 
 export * from './services/asset/IFontService';
 export * from './services/asset/IIconService';
@@ -34,4 +34,7 @@ export * from './services/renderer/IUniform';
 export * from './services/scene/ISceneService';
 export * from './services/shader/IShaderModuleService';
 export * from './services/source/ISourceService';
-export { BasePostProcessingPass, packCircleVertex, removeDuplicateUniforms };
+/** 地图类基类 */
+export * from './services/map/base-map';
+export * from './services/map/base-map-wrapper';
+export * from './services/map/web-mercator-viewport';

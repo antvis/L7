@@ -37,16 +37,7 @@ export interface IMapWrapper {
   setContainer(container: L7Container, id: string | HTMLDivElement): void;
 }
 
-interface ISimpleMapCoord {
-  setSize(size: number): void;
-  getSize(): [number, number];
-  project(lnglat: [number, number]): [number, number];
-  unproject(xy: [number, number]): [number, number];
-}
-
 export interface IMapService<RawMap = {}> {
-  version?: string;
-  simpleMapCoord: ISimpleMapCoord;
   map: RawMap;
   bgColor: string;
   setBgColor(color: string): void;
@@ -70,7 +61,6 @@ export interface IMapService<RawMap = {}> {
   getMinZoom(): number;
   getMaxZoom(): number;
   // get map params
-  getType(): string;
   getZoom(): number;
   getCenter(option?: ICameraOptions): ILngLat;
   getPitch(): number;
@@ -131,7 +121,6 @@ export interface IMapService<RawMap = {}> {
 }
 
 export interface IEarthService<RawMap = {}> {
-  version?: string;
   map: RawMap;
   bgColor: string;
   setBgColor(color: string): void;
@@ -153,7 +142,6 @@ export interface IEarthService<RawMap = {}> {
   getMinZoom(): number;
   getMaxZoom(): number;
   // get map params
-  getType(): string;
   getZoom(): number;
   getCenter(option?: ICameraOptions): ILngLat;
   getPitch(): number;
