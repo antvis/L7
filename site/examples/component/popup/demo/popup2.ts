@@ -1,6 +1,4 @@
-// @ts-ignore
 import { PointLayer, Popup, Scene } from '@antv/l7';
-// @ts-ignore
 import { GaodeMap } from '@antv/l7-extension-maps';
 
 async function initMap() {
