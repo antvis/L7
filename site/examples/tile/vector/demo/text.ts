@@ -1,7 +1,4 @@
-// @ts-ignore
-import { PointLayer, Scene } from '@antv/l7';
-// @ts-ignore
-import { Map } from '@antv/l7-extension-maps';
+import { Map, PointLayer, Scene } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

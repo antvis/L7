@@ -674,7 +674,6 @@ export default defineConfig({
       container: '<div style="height: 80vh;justify-content: center; position: relative" id="map"/>',
       dependencies: {
         '@antv/l7': 'latest',
-        '@antv/l7-extension-maps': 'latest',
       },
     },
     mdPlayground: {

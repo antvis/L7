@@ -1,7 +1,4 @@
-// @ts-ignore
-import { PointLayer, PolygonLayer, Scene, Source } from '@antv/l7';
-// @ts-ignore
-import { Map } from '@antv/l7-extension-maps';
+import { Map, PointLayer, PolygonLayer, Scene, Source } from '@antv/l7';
 import { Protocol } from 'pmtiles';
 const protocol = new Protocol();
 Scene.addProtocol('pmtiles', protocol.tile);

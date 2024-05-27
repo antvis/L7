@@ -1,5 +1,5 @@
-import { EarthLayer, LineLayer, Scene } from '@antv/l7';
-import { Earth } from '@antv/l7-extension-maps';
+import { Earth, EarthLayer, LineLayer, Scene } from '@antv/l7';
+
 const scene = new Scene({
   id: 'map',
   map: new Earth({}),

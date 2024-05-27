@@ -1,5 +1,4 @@
-import { RasterLayer, Scene, TileDebugLayer } from '@antv/l7';
-import { Map } from '@antv/l7-extension-maps';
+import { Map, RasterLayer, Scene, TileDebugLayer } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
