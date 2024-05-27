@@ -199,6 +199,15 @@ export default class PickingService implements IPickingService {
       data: new Uint8Array(1 * 1 * 4),
       framebuffer: this.pickingFBO,
     });
+    // const pickedColors: Uint8Array | undefined = readPixels({
+    //   x: Math.floor(xInDevicePixel / this.pickBufferScale),
+    //   // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+    //   y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
+    //   width: 1,
+    //   height: 1,
+    //   data: new Uint8Array(1 * 1 * 4),
+    //   framebuffer: this.pickingFBO,
+    // });
     this.pickedColors = pickedColors;
 
     if (pickedColors[0] !== 0 || pickedColors[1] !== 0 || pickedColors[2] !== 0) {
