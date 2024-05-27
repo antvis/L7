@@ -16,7 +16,6 @@ import { MapTheme } from './theme';
 
 window.mapboxgl = mapboxgl;
 
-let mapdivCount = 0;
 const MAPBOX_API_KEY =
   '101MlGsZ2AmmA&access_token=pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2p0MG01MXRqMW45cjQzb2R6b2ptc3J4MSJ9.zA2W0IkI0c6KaAhJfk9bWg';
 
@@ -111,6 +110,20 @@ export default class MapboxService extends BaseMapService<Map> {
 
     this.updateView(option);
   };
+
+  protected creatMapContainer(id: string | HTMLDivElement) {
+    const wrapper = super.creatMapContainer(id);
+    const mapContainer = document.createElement('div');
+    mapContainer.style.cssText += `
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    `;
+    mapContainer.id = 'l7_mapbox_div';
+    wrapper.appendChild(mapContainer);
+    return mapContainer;
+  }
 
   public getContainer(): HTMLElement | null {
     return this.map.getContainer();
@@ -405,22 +418,5 @@ export default class MapboxService extends BaseMapService<Map> {
       this.map.remove();
       this.mapContainer = null;
     }
-  }
-
-  protected creatMapContainer(id: string | HTMLDivElement) {
-    let wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      wrapper = document.getElementById(id) as HTMLDivElement;
-    }
-    const mapContainer = document.createElement('div');
-    mapContainer.style.cssText += `
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 100%;
-    `;
-    mapContainer.id = 'l7_mapbox_div' + mapdivCount++;
-    wrapper.appendChild(mapContainer);
-    return mapContainer;
   }
 }

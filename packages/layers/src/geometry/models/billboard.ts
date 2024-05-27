@@ -63,7 +63,7 @@ export default class BillBoardModel extends BaseModel {
      * AMAP              -1
      */
     let rotateFlag = 1;
-    if (this.mapService.getType() === 'amap') {
+    if (this.mapService.type === 'AMap') {
       rotateFlag = -1;
     }
     // 控制图标的旋转角度（绕 Z 轴旋转）

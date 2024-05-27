@@ -74,6 +74,20 @@ export default class MaplibreService extends BaseMapService<Map> {
     this.updateView(option);
   };
 
+  protected creatMapContainer(id: string | HTMLDivElement) {
+    const wrapper = super.creatMapContainer(id);
+    const mapContainer = document.createElement('div');
+    mapContainer.style.cssText += `
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    `;
+    mapContainer.id = 'l7_maplibre_div';
+    wrapper.appendChild(mapContainer);
+    return mapContainer;
+  }
+
   public getContainer(): HTMLElement | null {
     return this.map.getContainer();
   }
@@ -364,22 +378,5 @@ export default class MaplibreService extends BaseMapService<Map> {
       this.map.remove();
       this.mapContainer = null;
     }
-  }
-
-  protected creatMapContainer(id: string | HTMLDivElement) {
-    let wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      wrapper = document.getElementById(id) as HTMLDivElement;
-    }
-    const mapContainer = document.createElement('div');
-    mapContainer.style.cssText += `
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 100%;
-    `;
-    mapContainer.id = 'l7_maplibre_div';
-    wrapper.appendChild(mapContainer);
-    return mapContainer;
   }
 }

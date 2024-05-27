@@ -60,10 +60,10 @@ export class ThreeRenderService implements IThreeRenderService {
   }
 
   public getRenderCamera(): Camera {
-    switch (this.mapService.getType()) {
-      case 'amap':
+    switch (this.mapService.type) {
+      case 'AMap':
         return this.AMapCamera();
-      case 'mapbox':
+      case 'Mapbox':
         return this.mapboxCamera();
       case 'default':
         return this.mapboxCamera();

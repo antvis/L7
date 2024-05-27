@@ -349,9 +349,6 @@ export default class MapService extends BaseMapService<Map> {
 
   public destroy(): void {
     super.destroy();
-    // 销毁地图可视化层的容器
-    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
-
     if (this.map) {
       this.map.remove();
       this.mapContainer = null;

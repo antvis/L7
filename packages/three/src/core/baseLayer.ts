@@ -172,7 +172,7 @@ export default class ThreeJSLayer
     // 获取到 L7 的 gl
     const gl = this.rendererService.getGLContext();
     this.rendererService.setCustomLayerDefaults();
-    const cullFace = this.mapService.version?.indexOf('GAODE') !== -1 ? gl.BACK : gl.FRONT;
+    const cullFace = this.mapService.type !== 'AMap' ? gl.BACK : gl.FRONT;
     gl.cullFace(cullFace);
 
     // threejs 的 renderer

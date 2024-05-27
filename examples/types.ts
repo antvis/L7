@@ -17,7 +17,7 @@ export type TestCaseBasemap =
   | 'MapLibre'
   | 'TencentMap'
   | 'Mapbox'
-  | 'TMap'
+  | 'TdtMap'
   | 'GoogleMap';
 
 export type TestCaseOptions = GUIOptions & {

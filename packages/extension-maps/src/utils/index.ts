@@ -1,8 +1,4 @@
-import BaseMapService from './BaseMapService';
-
-export { BaseMapService };
-
-export type IPadding =
+export type Padding =
   | number
   | [number, number, number, number]
   | {
@@ -12,7 +8,7 @@ export type IPadding =
       left?: number;
     };
 
-export function toPaddingOptions(padding: IPadding = {}) {
+export function toPaddingOptions(padding: Padding = {}) {
   const defaultPadding = {
     top: 0,
     right: 0,

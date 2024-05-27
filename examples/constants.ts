@@ -18,6 +18,6 @@ export const MAP_TYPES: TestCaseBasemap[] = [
   'MapLibre',
   'BaiduMap',
   'TencentMap',
-  'TMap',
+  'TdtMap',
   'GoogleMap',
 ] as const;

@@ -17,7 +17,7 @@ export default class MapTheme extends SelectControl<ISelectControlOption> {
 
   public getStyleOptions(): ControlOptionItem[] {
     const mapStyleConfig =
-      this.mapsService.getType() === 'mapbox' ? MapboxMapStyleConfig : GaodeMapStyleConfig;
+      this.mapsService.type === 'Mapbox' ? MapboxMapStyleConfig : GaodeMapStyleConfig;
     return Object.entries(this.mapsService.getMapStyleConfig())
       .filter(([key, value]) => typeof value === 'string' && key !== 'blank')
       .map(([key, value]) => {

@@ -1,10 +1,15 @@
 import GaodeMap from './amap';
-import BaiduMap from './bmap/';
+import BaiduMap from './bmap';
 import GoogleMap from './gmap';
-import Mapbox from './mapbox/';
+import Mapbox from './mapbox';
 import MapLibre from './maplibre';
-import TMap from './tdtmap';
+import TdtMap from './tdtmap';
 import TencentMap from './tmap';
-export * from './utils';
 
-export { BaiduMap, GaodeMap, GoogleMap, MapLibre, Mapbox, TMap, TencentMap };
+/**
+ * @deprecated
+ * 使用 new TdtMap()
+ */
+const TMap = TdtMap;
+
+export { BaiduMap, GaodeMap, GoogleMap, MapLibre, Mapbox, TMap, TdtMap, TencentMap };

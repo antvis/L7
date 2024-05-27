@@ -23,8 +23,8 @@ const MapEvent: Record<string, string> = {
   zoomchange: 'zoomend',
 };
 
-const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
-const BMAP_VERSION: string = '1.0';
+const BMAP_API_KEY = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
+const BMAP_VERSION = '1.0';
 const ZOOM_OFFSET = 1.75;
 
 export default class BMapService extends BaseMapService<BMapGL.Map> {
@@ -86,7 +86,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
         throw Error('No container id specified');
       }
 
-      const mapContainer = DOM.getContainer(id);
+      const mapContainer = this.creatMapContainer(id);
 
       // 存储控件等容器，百度地图实例会被卸载掉，所以实例化后需要重新挂载
       // @ts-ignore
@@ -158,10 +158,30 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     this.bgColor = color;
   }
 
-  public destroy(): void {
-    super.destroy();
-    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
-    this.getMap().destroy();
+  protected creatMapContainer(id: string | HTMLDivElement) {
+    const wrapper = super.creatMapContainer(id);
+    const amapdiv = document.createElement('div');
+    amapdiv.style.cssText += `
+       position: absolute;
+       top: 0;
+       height: 100%;
+       width: 100%;
+     `;
+    amapdiv.id = 'l7_baidu_div';
+    wrapper.appendChild(amapdiv);
+    return amapdiv;
+  }
+
+  public getContainer(): HTMLElement | null {
+    return this.getMap().getContainer();
+  }
+
+  public getMapContainer(): HTMLElement {
+    return this.getMap().getContainer();
+  }
+
+  public getMapCanvasContainer(): HTMLElement {
+    return this.getMap().getContainer();
   }
 
   // tslint:disable-next-line:no-empty
@@ -224,10 +244,6 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     this.eventEmitter.once(type, handler);
   }
 
-  public getContainer(): HTMLElement | null {
-    return this.getMap().getContainer();
-  }
-
   public getSize(): [number, number] {
     const size = this.getMap().getSize();
     return [size.width, size.height];
@@ -280,14 +296,6 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       [sw.lng, sw.lat],
       [ne.lng, ne.lat],
     ];
-  }
-
-  public getMapContainer(): HTMLElement {
-    return this.getMap().getContainer();
-  }
-
-  public getMapCanvasContainer(): HTMLElement {
-    return this.getMap().getContainer();
   }
 
   public getMapStyleConfig(): MapStyleConfig {
@@ -549,5 +557,11 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     if (logoVisible === false) {
       this.hideLogo();
     }
+  }
+
+  public destroy(): void {
+    super.destroy();
+    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
+    this.getMap().destroy();
   }
 }

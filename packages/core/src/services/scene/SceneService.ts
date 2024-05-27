@@ -140,7 +140,7 @@ export default class Scene extends EventEmitter implements ISceneService {
      */
     this.hooks.init.tapPromise('initMap', async () => {
       this.debugService.log('map.mapInitStart', {
-        type: this.map.version,
+        type: this.map.type,
       });
       // 等待首次相机同步
       await new Promise<void>((resolve) => {

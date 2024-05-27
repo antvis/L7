@@ -1,8 +1,8 @@
 import { BaseMapWrapper } from '@antv/l7-core';
-import TMapService from './map';
+import TencentMapService from './map';
 
-export default class TMapWrapper extends BaseMapWrapper<any> {
+export default class TencentMapWrapper extends BaseMapWrapper<TMap.Map> {
   protected getServiceConstructor() {
-    return TMapService;
+    return TencentMapService;
   }
 }

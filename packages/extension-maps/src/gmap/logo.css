@@ -1,4 +1,5 @@
-img[src*='//mapapi.qq.com/web/jsapi/logo/logo_def.png'],.logo-text
-{
-  display: none !important;
+.googlemap-contianer--hide-logo {
+  img[alt='Google'] {
+    /* display: none !important; */
+  }
 }

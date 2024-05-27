@@ -29,7 +29,6 @@
     "@antv/l7-core": "workspace:*",
     "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
-    "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
     "mapbox-gl": "^1.2.1",
     "maplibre-gl": "^3.5.2",

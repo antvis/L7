@@ -10,7 +10,7 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { BaseMapService, MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
-import { DOM, amap2Project, lodashUtil } from '@antv/l7-utils';
+import { DOM, amap2Project } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import { toPaddingOptions } from '../utils';
 import './logo.css';
@@ -137,7 +137,7 @@ export default class AMapService extends BaseMapService<AMap.Map> {
        height: 100%;
        width: 100%;
      `;
-    amapdiv.id = lodashUtil.uniqueId('l7_amap_div');
+    amapdiv.id = 'l7_amap_div';
     wrapper.appendChild(amapdiv);
     return amapdiv;
   }

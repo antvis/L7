@@ -1,33 +1,137 @@
-import BaseMapService from '../utils/BaseMapService';
-
 import type {
   Bounds,
   ILngLat,
   IMercator,
   IPoint,
   IStatusOptions,
-  IViewport,
+  MapStyleConfig,
   Point,
 } from '@antv/l7-core';
-import { MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
+import { BaseMapService, MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
 import { MercatorCoordinate } from '@antv/l7-map';
 import { load } from './maploader';
 
-let mapdivCount: number = 0;
-
-const EventMap: {
-  [key: string]: any;
-} = {
+const MapEvent: Record<string, string[] | string> = {
   zoomchange: ['Ge'],
 };
+const TDT_API_KEY = 'b15e548080c79819617367d3f6095c69';
 
-// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class TdtMapService extends BaseMapService<any> {
-  protected viewport: IViewport | null = null;
+  public type: string = 'TdtMap';
+
+  public viewport = new WebMercatorViewport();
+
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
     new Map();
-  // @ts-ignore
+
   private sceneContainer: HTMLElement;
+
+  public async init(): Promise<void> {
+    const {
+      id,
+      mapInstance,
+      center = [121.30654632240122, 31.25744185633306],
+      token = TDT_API_KEY,
+      minZoom = 1,
+      maxZoom = 18,
+      zoom = 3,
+    } = this.config;
+
+    // @ts-ignore
+    if (!window.T) {
+      await load({ tk: token });
+    }
+
+    if (mapInstance) {
+      this.map = mapInstance;
+      // @ts-ignore
+      this.map.centerAndZoom(new window.T.LngLat(center[0], center[1]), zoom);
+      this.mapContainer = this.map.getContainer();
+
+      // @ts-ignore
+      const point = new window.T.LngLat(center[0], center[1]);
+      this.map.centerAndZoom(point, zoom);
+      this.setMinZoom(minZoom);
+      this.setMaxZoom(maxZoom);
+    } else {
+      if (!id) {
+        throw Error('No container id specified');
+      }
+
+      this.mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
+      // @ts-ignore
+      const map = new T.Map(this.mapContainer, {
+        // @ts-ignore
+        center: window.T.LngLat(center[0], center[1]),
+        minZoom,
+        maxZoom,
+        zoom,
+        projection: 'EPSG:900913',
+      });
+      this.map = map;
+      // @ts-ignore
+      const control = new window.T.Control.Zoom();
+      map.addControl(control);
+    }
+
+    const container = this.map.getContainer();
+    const tdtPanes = container.querySelector('.tdt-pane');
+    tdtPanes.style.zIndex = 1;
+    this.handleCameraChanged();
+    this.map.on('move', this.update);
+    //对应leaflet中的zoomanim
+    this.map.on('Ge', this.zoomStartUpdate);
+    this.map.on('resize', this.resize);
+  }
+
+  protected handleCameraChanged = () => {
+    const map = this.map;
+    const { lng, lat } = this.map.getCenter();
+    const center: [number, number] = [lng, lat];
+    const option = {
+      center,
+      // @ts-ignore
+      viewportHeight: map.getContainer().clientHeight,
+      // @ts-ignore
+      viewportWidth: map.getContainer().clientWidth,
+      // @ts-ignore
+      bearing: 360,
+      // @ts-ignore
+      pitch: 0,
+      // @ts-ignore
+      zoom: map.getZoom() - 1,
+    };
+
+    this.updateView(option);
+  };
+
+  protected creatMapContainer(id: string | HTMLDivElement) {
+    const wrapper = super.creatMapContainer(id);
+    const tdtmapdiv = document.createElement('div');
+    tdtmapdiv.style.cssText += `
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    `;
+    tdtmapdiv.id = 'l7_tdt_div';
+    wrapper.appendChild(tdtmapdiv);
+    return tdtmapdiv;
+  }
+
+  public getContainer(): HTMLElement | null {
+    return this.map.getContainer();
+  }
+
+  public getMapContainer(): HTMLElement {
+    return this.map.getContainer();
+  }
+
+  public getMapCanvasContainer(): HTMLElement {
+    // tdt-container
+    return this.map.getContainer()?.getElementsByClassName('tdt-container')[0];
+  }
+
   // 不直接用自带的marker的div，因为会收到天地图缩放时visibility变成hidden的影响
   public addMarkerContainer(): void {
     const container = this.map.getContainer();
@@ -52,14 +156,12 @@ export default class TdtMapService extends BaseMapService<any> {
     return this.markerContainer;
   }
 
-  public onCameraChanged(callback: (viewport: IViewport) => void): void {
-    this.cameraChangedCallback = callback;
-  }
-  private resize(ev: any) {
+  private resize = (ev: any) => {
     this.sceneContainer.style.width = ev.newSize.x + 'px';
     this.sceneContainer.style.height = ev.newSize.y + 'px';
-  }
-  private update() {
+  };
+
+  private update = () => {
     const bounds = this.map.getBounds();
     const { x, y } = this.map.lngLatToLayerPoint({
       lng: bounds.getSouthWest().lng,
@@ -75,7 +177,7 @@ export default class TdtMapService extends BaseMapService<any> {
     // @ts-ignore
     this.sceneContainer._tdt_pos = new T.Point(x, y);
     this.handleCameraChanged();
-  }
+  };
 
   private getZoomScale(toZoom: number, fromZoom: number): number {
     // TODO replace with universal implementation after refactoring projections
@@ -83,7 +185,8 @@ export default class TdtMapService extends BaseMapService<any> {
     fromZoom = fromZoom === undefined ? this.map.getZoom() : fromZoom;
     return crs.scale(toZoom) / crs.scale(fromZoom);
   }
-  private zoomStartUpdate(ev: any) {
+
+  private zoomStartUpdate = (ev: any) => {
     // T._Q :DomUtil
     // this.map.options.IW.qW:map.project
     // GQ:multiply aQ:add DQ:substract
@@ -108,7 +211,8 @@ export default class TdtMapService extends BaseMapService<any> {
     this.sceneContainer.style.transition = 'transform 0.25s cubic-bezier(0,0,0.25,1)';
 
     this.handleCameraChanged();
-  }
+  };
+
   public getOverlayContainer(): HTMLElement | undefined {
     const overlayPane = this.map.getPanes()?.overlayPane;
     const container = document.createElement('div');
@@ -121,93 +225,6 @@ export default class TdtMapService extends BaseMapService<any> {
     // @ts-ignore
     this.sceneContainer = container;
     return container;
-  }
-  protected handleCameraChanged = () => {
-    this.emit('mapchange');
-    const map = this.map;
-    const { lng, lat } = this.map.getCenter();
-    const option = {
-      center: [lng, lat],
-      // @ts-ignore
-      viewportHeight: map.getContainer().clientHeight,
-      // @ts-ignore
-      viewportWidth: map.getContainer().clientWidth,
-      // @ts-ignore
-      bearing: 360,
-      // @ts-ignore
-      pitch: 0,
-      // @ts-ignore
-      zoom: map.getZoom() - 1,
-    };
-    if (this.viewport) {
-      this.viewport.syncWithMapCamera(option as any);
-      this.updateCoordinateSystemService();
-      this.cameraChangedCallback(this.viewport);
-    }
-  };
-
-  public async init(): Promise<void> {
-    this.viewport = new WebMercatorViewport();
-
-    const {
-      id,
-      mapInstance,
-      center = [121.30654632240122, 31.25744185633306],
-      token = 'b15e548080c79819617367d3f6095c69',
-      minZoom = 1,
-      maxZoom = 18,
-      zoom = 3,
-    } = this.config;
-
-    // @ts-ignore
-    if (!window.T) {
-      await load({ tk: token });
-    }
-
-    if (mapInstance) {
-      this.map = mapInstance;
-      // @ts-ignore
-      this.map.centerAndZoom(new window.T.LngLat(center[0], center[1]), zoom);
-      this.$mapContainer = this.map.getContainer();
-
-      // @ts-ignore
-      const point = new window.T.LngLat(center[0], center[1]);
-      this.map.centerAndZoom(point, zoom);
-      this.setMinZoom(minZoom);
-      this.setMaxZoom(maxZoom);
-    } else {
-      if (!id) {
-        throw Error('No container id specified');
-      }
-
-      this.$mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
-      // @ts-ignore
-      const map = new T.Map(this.$mapContainer, {
-        // @ts-ignore
-        center: window.T.LngLat(center[0], center[1]),
-        minZoom,
-        maxZoom,
-        zoom,
-        projection: 'EPSG:900913',
-      });
-      this.map = map;
-      // @ts-ignore
-      const control = new window.T.Control.Zoom();
-      map.addControl(control);
-    }
-
-    const container = this.map.getContainer();
-    const tdtPanes = container.querySelector('.tdt-pane');
-    tdtPanes.style.zIndex = 1;
-    this.handleCameraChanged();
-    this.map.on('move', this.update, this);
-    //对应leaflet中的zoomanim
-    this.map.on('Ge', this.zoomStartUpdate, this);
-    this.map.on('resize', this.resize, this);
-  }
-
-  public destroy(): void {
-    return;
   }
 
   // MapEvent
@@ -238,12 +255,13 @@ export default class TdtMapService extends BaseMapService<any> {
         this.map.on(eventName, handleProxy);
       };
 
-      if (Array.isArray(EventMap[type])) {
-        EventMap[type].forEach((eventName: string) => {
+      const event = MapEvent[type];
+      if (Array.isArray(event)) {
+        event.forEach((eventName: string) => {
           onProxy(eventName || type);
         });
       } else {
-        onProxy(EventMap[type] || type);
+        onProxy(event || type);
       }
     }
   }
@@ -263,32 +281,19 @@ export default class TdtMapService extends BaseMapService<any> {
       this.map.off(eventName, handleProxy);
     };
 
-    if (Array.isArray(EventMap[type])) {
-      EventMap[type].forEach((eventName: string) => {
+    const event = MapEvent[type];
+    if (Array.isArray(event)) {
+      event.forEach((eventName: string) => {
         offProxy(eventName || type);
       });
     } else {
-      offProxy(EventMap[type] || type);
+      offProxy(event || type);
     }
   }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public once(type: string, handler: (...args: any[]) => void): void {
     throw new Error('Method not implemented.');
-  }
-
-  // get dom
-
-  public getMapContainer(): HTMLElement {
-    return this.map.getContainer();
-  }
-
-  public getType() {
-    return 'tdtmap';
-  }
-
-  public getMapCanvasContainer(): HTMLElement {
-    // tdt-container
-    return this.map.getContainer()?.getElementsByClassName('tdt-container')[0];
   }
 
   // get mapStatus method
@@ -297,10 +302,16 @@ export default class TdtMapService extends BaseMapService<any> {
     return [size.x, size.y];
   }
 
-  // get mapStatus method
-
   public getZoom(): number {
     return this.map.getZoom();
+  }
+
+  public getMinZoom(): number {
+    throw new Error('Method not implemented.');
+  }
+
+  public getMaxZoom(): number {
+    throw new Error('Method not implemented.');
   }
 
   public setZoom(zoom: number) {
@@ -315,12 +326,45 @@ export default class TdtMapService extends BaseMapService<any> {
     this.map.setCenter(lnglat);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public setZoomAndCenter(zoom: number, center: [number, number]): void {
+    throw new Error('Method not implemented.');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public setPitch(pitch: number) {
+    throw new Error('Method not implemented.');
+  }
+
   public getPitch(): number {
     return 0;
   }
 
   public getRotation(): number {
     return 0;
+  }
+
+  public getBounds(): Bounds {
+    const latlngBound = this.map.getBounds();
+
+    const sw = latlngBound.getSouthWest(),
+      ne = latlngBound.getNorthEast();
+    return [
+      [sw.lng, sw.lat],
+      [ne.lng, ne.lat],
+    ];
+  }
+
+  public getMapStyleConfig(): MapStyleConfig {
+    return [];
+  }
+
+  public getMapStyle(): string {
+    return '';
+  }
+
+  public setMapStyle() {
+    throw new Error('Method not implemented.');
   }
 
   public setRotation(rotation: number): void {
@@ -386,8 +430,6 @@ export default class TdtMapService extends BaseMapService<any> {
     }
   }
 
-  // coordinates methods
-
   public getModelMatrix(): number[] {
     throw new Error('Method not implemented.');
   }
@@ -434,45 +476,25 @@ export default class TdtMapService extends BaseMapService<any> {
     );
   }
 
-  public getBounds(): Bounds {
-    const latlngBound = this.map.getBounds();
-
-    const sw = latlngBound.getSouthWest(),
-      ne = latlngBound.getNorthEast();
-    return [
-      [sw.lng, sw.lat],
-      [ne.lng, ne.lat],
-    ];
-  }
-
   public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     // Use built in mercator tools due to Tencent not provided related methods
     const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
   }
 
-  public getCustomCoordCenter?(): [number, number] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public exportMap(type: 'jpg' | 'png'): string {
     throw new Error('Method not implemented.');
   }
 
-  protected creatMapContainer(id: string | HTMLDivElement) {
-    let $wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      $wrapper = document.getElementById(id) as HTMLDivElement;
-    }
-    const $tdtmapdiv = document.createElement('div');
-    $tdtmapdiv.style.cssText += `
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 100%;
-    `;
-    $tdtmapdiv.id = 'l7_tdt_div' + mapdivCount++;
-    $wrapper.appendChild($tdtmapdiv);
-    return $tdtmapdiv;
-  }
+  public destroy(): void {
+    super.destroy();
+    // 销毁地图可视化层的容器
+    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
 
-  // public exportMap() {}
-  //
-  // private hideLogo() {}
+    if (this.map) {
+      // TODO: map destroy
+      this.mapContainer = null;
+    }
+  }
 }
