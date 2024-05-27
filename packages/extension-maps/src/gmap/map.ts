@@ -8,9 +8,9 @@ import type {
   Point,
 } from '@antv/l7-core';
 import { BaseMapService, MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
-import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import { lngLatToMercator } from '../utils';
 import './logo.css';
 import GMapLoader from './maploader';
 
@@ -389,9 +389,9 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
       new google.maps.LatLng(outerLat, outerLon),
     ]);
 
-    const [x1, y1] = this.lngLatToCoord!([centerLon, centerLat]);
-    const [x2, y2] = this.lngLatToCoord!([outerLon, outerLat]);
-    const coordDistance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    const { x: x1, y: y1 } = this.lngLatToPixel([centerLon, centerLat]);
+    const { x: x2, y: y2 } = this.lngLatToPixel([outerLon, outerLat]);
+    const coordDistance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y2 - y1, 2));
 
     return coordDistance / metreDistance;
   }
@@ -429,7 +429,7 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
 
   public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     // Use built in mercator tools due to Tencent not provided related methods
-    const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    const { x = 0, y = 0, z = 0 } = lngLatToMercator(lnglat, altitude);
     return { x, y, z };
   }
 

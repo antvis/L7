@@ -44,3 +44,35 @@ export function toPaddingOptions(padding: Padding = {}) {
 
   return { ...defaultPadding, ...padding };
 }
+
+export function lngLatToMercator(lnglat: [number, number], altitude: number) {
+  const mercatorXfromLng = (lng: number) => {
+    return (180 + lng) / 360;
+  };
+
+  const mercatorYfromLat = (lat: number) => {
+    return (180 - (180 / Math.PI) * Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360))) / 360;
+  };
+
+  const mercatorZfromAltitude = (altitude: number, lat: number) => {
+    /*
+     * The circumference at a line of latitude in meters.
+     */
+    const circumferenceAtLatitude = (latitude: number) => {
+      const earthRadius = 6371008.8;
+      /*
+       * The average circumference of the world in meters.
+       */
+      const earthCircumfrence = 2 * Math.PI * earthRadius; // meters
+      return earthCircumfrence * Math.cos((latitude * Math.PI) / 180);
+    };
+
+    return altitude / circumferenceAtLatitude(lat);
+  };
+
+  const x = mercatorXfromLng(lnglat[0]);
+  const y = mercatorYfromLat(lnglat[1]);
+  const z = mercatorZfromAltitude(altitude, lnglat[1]);
+
+  return { x, y, z };
+}

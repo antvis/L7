@@ -8,9 +8,9 @@ import type {
   Point,
 } from '@antv/l7-core';
 import { BaseMapService, MapServiceEvent, WebMercatorViewport } from '@antv/l7-core';
-import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import { lngLatToMercator } from '../utils';
 import './logo.css';
 import TMapLoader from './maploader';
 
@@ -437,7 +437,7 @@ export default class TencentMapService extends BaseMapService<TMap.Map> {
 
   public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     // Use built in mercator tools due to Tencent not provided related methods
-    const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    const { x = 0, y = 0, z = 0 } = lngLatToMercator(lnglat, altitude);
     return { x, y, z };
   }
 
