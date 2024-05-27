@@ -22,14 +22,14 @@ L7 目前支持的腾讯地图是[JavaScript API GL](https://lbs.qq.com/webApi/j
 ### import
 
 ```javascript
-import { TencentMap } from '@antv/l7-maps';
+import { TencentMap } from '@antv/l7-extension-maps';
 ```
 
 ## 初始化地图
 
 ```ts
 import { Scene, PointLayer } from '@antv/l7';
-import { TencentMap } from '@antv/l7-maps';
+import { TencentMap } from '@antv/l7-extension-maps';
 const scene = new Scene({
   id: 'map',
   map: new TencentMap({

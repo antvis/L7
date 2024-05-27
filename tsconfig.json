@@ -32,7 +32,8 @@
       "@antv/l7-three": ["packages/three/src"],
       "@antv/l7-source": ["packages/source/src"],
       "@antv/l7-utils": ["packages/utils/src"],
-      "@antv/l7-test-utils": ["packages/test-utils/src"]
+      "@antv/l7-test-utils": ["packages/test-utils/src"],
+      "@antv/l7-extension-maps": ["packages/extension-maps/src"]
     },
 
     // Interop Constraints

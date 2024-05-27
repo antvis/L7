@@ -1,5 +1,5 @@
 import { LineLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const mapWrap = document.getElementById('map');
 const { left, top } = mapWrap.getBoundingClientRect();

@@ -11,7 +11,7 @@ at present`L7`Support Gao Dehe`Mapbox`Two base maps, the AMap map is used online
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-extension-maps';
 const scene = new Scene({
   id: 'map',
   map: new Mapbox({
@@ -106,7 +106,7 @@ All service resources have been prepared so that we can use them independently`m
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-extension-maps';
 const scene = new Scene({
   id: 'map',
   map: new Mapbox({

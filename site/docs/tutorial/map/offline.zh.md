@@ -11,7 +11,7 @@ order: 0
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-extension-maps';
 const scene = new Scene({
   id: 'map',
   map: new Mapbox({
@@ -106,7 +106,7 @@ _如果你有新的字体需求可提PR，帮你自动生成在线可用的字�
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-extension-maps';
 const scene = new Scene({
   id: 'map',
   map: new Mapbox({

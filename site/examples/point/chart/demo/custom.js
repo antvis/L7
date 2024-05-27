@@ -1,5 +1,5 @@
 import { CanvasLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 let x = 0;
 function draw(option) {
   const { size, ctx, mapService } = option;

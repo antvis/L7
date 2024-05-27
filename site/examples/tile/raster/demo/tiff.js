@@ -1,5 +1,5 @@
 import { PolygonLayer, RasterLayer, Scene, Source } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 import * as GeoTIFF from 'geotiff';
 
 const colorList = [

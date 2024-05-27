@@ -1,5 +1,5 @@
 import { Control, DOM, LayerPopup, LineLayer, PolygonLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 const styleElement = document.createElement('style');
 
 // 在<style>元素中添加样式规则

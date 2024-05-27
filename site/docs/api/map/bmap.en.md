@@ -22,7 +22,7 @@ Before using Baidu Maps, you need to apply for a Baidu Map key. How to apply for
 ### import
 
 ```javascript
-import { BaiduMap } from '@antv/l7-maps';
+import { BaiduMap } from '@antv/l7-extension-maps';
 ```
 
 ### Instantiate
@@ -34,7 +34,7 @@ It is recommended for new projects to instantiate BaiduMap directly. Existing ma
 #### BaiduMap instantiation
 
 ```js
-import { BaiduMap } from '@antv/l7-maps';
+import { BaiduMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

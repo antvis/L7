@@ -1,7 +1,7 @@
 // @ts-ignore
 import { LineLayer, PolygonLayer, Scene, Source } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const data = [
   { name: '美国', qz: '82404' },

@@ -1,5 +1,5 @@
 import { Scene } from '@antv/l7';
-import { TencentMap } from '@antv/l7-maps';
+import { TencentMap } from '@antv/l7-extension-maps';
 
 new Scene({
   id: 'map',

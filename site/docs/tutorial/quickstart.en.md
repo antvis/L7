@@ -15,7 +15,7 @@ order: 1
 //Install L7 dependencies
 npm install --save @antv/l7
 //Install third-party basemap dependencies
-npm install --save @antv/l7-maps
+npm install --save @antv/l7-extension-maps
 ```
 
 ### Imported via CDN
@@ -33,7 +33,7 @@ CDN reference obtains and initializes all objects through the L7 namespace when 
 
 ```javascript
 import { Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new L7.Scene({
   id: 'map',
@@ -58,7 +58,7 @@ const scene = new L7.Scene({
 2. Initialize Gaode map
 
 ```javascript
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 //Similarly you can also initialize a Mapbox map
 const scene = new Scene({
   id: 'map',

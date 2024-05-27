@@ -22,14 +22,14 @@ Before using Tencent Map, you need to register a Tencent Map account and apply f
 ### import
 
 ```javascript
-import { TencentMap } from '@antv/l7-maps';
+import { TencentMap } from '@antv/l7-extension-maps';
 ```
 
 ## Initialize map
 
 ```ts
 import { Scene, PointLayer } from '@antv/l7';
-import { TencentMap } from '@antv/l7-maps';
+import { TencentMap } from '@antv/l7-extension-maps';
 const scene = new Scene({
   id: 'map',
   map: new TencentMap({

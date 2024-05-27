@@ -1,6 +1,6 @@
 // https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tif
 import { RasterLayer, Scene } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Map } from '@antv/l7-extension-maps';
 import * as GeoTIFF from 'geotiff';
 const scene = new Scene({
   id: 'map',

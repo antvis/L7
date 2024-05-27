@@ -1,13 +1,7 @@
-// https://unpkg.com/xinzhengqu@1.0.0/data/2023_xian.pbf
-
-// @ts-ignore
-import { LineLayer, Scene } from '@antv/l7';
-// @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { LineLayer, Map, Scene } from '@antv/l7';
 import { useEffect } from 'react';
 
 export default () => {
-  // @ts-ignore
   useEffect(() => {
     const scene = new Scene({
       id: 'map',

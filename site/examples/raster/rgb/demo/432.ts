@@ -1,7 +1,7 @@
 // @ts-ignore
 import { RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { Map } from '@antv/l7-extension-maps';
 import * as GeoTIFF from 'geotiff';
 
 async function getTiffData(url: string) {

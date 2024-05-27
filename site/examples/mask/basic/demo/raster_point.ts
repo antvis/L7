@@ -1,7 +1,7 @@
 // @ts-ignore
 import { PointLayer, RasterLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 import * as GeoTIFF from 'geotiff';
 

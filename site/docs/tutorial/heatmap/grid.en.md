@@ -21,7 +21,7 @@ Let's introduce how to draw a simple grid heat map.
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { BaiduMap } from '@antv/l7-maps';
+import { BaiduMap } from '@antv/l7-extension-maps';
 
 function initMap() {
   // 全局加载百度地图API

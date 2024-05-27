@@ -1,21 +1,16 @@
 import { defineConfig } from 'dumi';
 import path from 'path';
 
-const env = process.env.NODE_ENV;
-const GaodeTokenScript =
-  env === 'production'
-    ? [
-        ` window._AMapSecurityConfig = {
-    securityJsCode: '2653011adeb04230b3a26cc9a780a800',
-  }`,
-        'https://webapi.amap.com/maps?v=2.0&key=f59bcf249433f8b05caaee19f349b3d7',
-      ]
-    : [
-        ` window._AMapSecurityConfig = {
-    securityJsCode: "290ddc4b0d33be7bc9b354bc6a4ca614"
-  }`,
-        'https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c',
-      ];
+const isProduction = process.env.NODE_ENV === 'production';
+const GaodeTokenScript = isProduction
+  ? [
+      `window._AMapSecurityConfig = { securityJsCode: '2653011adeb04230b3a26cc9a780a800' }`,
+      'https://webapi.amap.com/maps?v=2.0&key=f59bcf249433f8b05caaee19f349b3d7',
+    ]
+  : [
+      ` window._AMapSecurityConfig = { securityJsCode: "290ddc4b0d33be7bc9b354bc6a4ca614" }`,
+      'https://webapi.amap.com/maps?v=2.0&key=6f025e700cbacbb0bb866712d20bb35c',
+    ];
 
 export default defineConfig({
   locales: [
@@ -23,7 +18,7 @@ export default defineConfig({
     { id: 'en', name: 'English' },
   ],
   mfsu: false,
-  copy: env === 'production' ? ['docs/CNAME'] : [],
+  copy: isProduction ? ['docs/CNAME'] : [],
   // ...(process.env.NODE_ENV === 'development' ? {} : { ssr: {} }),
   metas: [
     {
@@ -679,7 +674,7 @@ export default defineConfig({
       container: '<div style="height: 80vh;justify-content: center; position: relative" id="map"/>',
       dependencies: {
         '@antv/l7': 'latest',
-        '@antv/l7-maps': 'latest',
+        '@antv/l7-extension-maps': 'latest',
       },
     },
     mdPlayground: {

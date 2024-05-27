@@ -22,7 +22,7 @@ L7 internally resolves the differences between different map basemaps, and at th
 
 ```ts
 import { Scene, PointLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

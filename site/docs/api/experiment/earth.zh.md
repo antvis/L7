@@ -12,8 +12,7 @@ l7-maps 提供 `Earth` 地图，相较于高德地图、mapbox 地图，是完�
 ✨ 为了区别普通的地图，l7-maps 提供了全新的 `Earth` 地图类型， L7 提供对应的 `EarthLayer` 图层
 
 ```js
-import { EarthLayer } from '@antv/l7';
-import { Earth } from '@antv/l7-maps';
+import { EarthLayer, Earth } from '@antv/l7';
 ```
 
 ## 目前在地球模式下支持的图层类型
@@ -38,8 +37,7 @@ import { Earth } from '@antv/l7-maps';
 
 ```javascript
 // 1、引入对应模块
-import { Scene, Earth } from '@antv/l7-maps';
-import { EarthLayer } from '@antv/l7-layers';
+import { Scene, Earth, EarthLayer } from '@antv/l7-layers';
 
 // 2、构建 Earth Map
 const scene = new Scene({
@@ -89,7 +87,7 @@ scene.on('loaded', () => {
 - args: **{}**
 
 ```js
-import { Scene, Earth } from '@antv/l7-maps';
+import { Scene, Earth } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
@@ -106,7 +104,7 @@ const scene = new Scene({
   🌟 单位旋转角度 = Math.min(this.earthCameraZoom \* this.earthCameraZoom, 1)
 
 ```js
-import { Scene, Earth } from '@antv/l7-maps';
+import { Scene, Earth } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

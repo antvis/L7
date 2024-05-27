@@ -21,7 +21,7 @@ order: 8
 
 ```javascript
 import { Scene, Marker } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 import * as G2 from '@antv/g2';
 const scene = new Scene({
   id: 'map',
