@@ -325,6 +325,7 @@ export default class TencentMapService extends BaseMapService<TMap.Map> {
   }
 
   public panBy(x: number, y: number): void {
+    // @ts-expect-error
     this.map.panBy([x, y]);
   }
 
