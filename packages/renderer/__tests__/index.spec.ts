@@ -1,4 +1,4 @@
-import { DeviceRendererService } from '../src/index';
+import { DeviceRendererService } from '../src';
 
 describe('template', () => {
   it('DeviceRenderer', () => {
