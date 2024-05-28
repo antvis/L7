@@ -27,11 +27,11 @@ import type {
 } from '@antv/l7-core';
 import { gl } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
-import type DeviceRendererService from '.';
 import type DeviceAttribute from './DeviceAttribute';
 import type DeviceBuffer from './DeviceBuffer';
 import type DeviceElements from './DeviceElements';
 import DeviceFramebuffer from './DeviceFramebuffer';
+import type { DeviceRendererService } from './DeviceRendererService';
 import DeviceTexture2D from './DeviceTexture2D';
 import {
   blendEquationMap,
