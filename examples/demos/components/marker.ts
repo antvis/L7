@@ -20,7 +20,10 @@ export const marker: TestCase = async (options) => {
       continue;
     }
 
-    const markerIns = new Marker().setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
+    const markerIns = new Marker({ draggable: true }).setLnglat({
+      lng: Number(nodes[i].x * 1),
+      lat: Number(nodes[i].y),
+    });
     scene.addMarker(markerIns);
   }
 
