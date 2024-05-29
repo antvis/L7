@@ -1,5 +1,14 @@
 # @antv/l7-test-utils
 
+## 2.21.11-beta.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-scene@2.21.11-beta.3
+  - @antv/l7-map@2.21.11-beta.3
+  - @antv/l7-maps@2.21.11-beta.3
+
 ## 2.21.11-beta.2
 
 ### Patch Changes

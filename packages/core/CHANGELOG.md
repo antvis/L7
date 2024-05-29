@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.21.11-beta.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.3
+
 ## 2.21.11-beta.2
 
 ### Patch Changes
