@@ -335,11 +335,6 @@ export default class TdtMapService extends BaseMapService<any> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setZoomAndCenter(zoom: number, center: [number, number]): void {
-    throw new Error('Method not implemented.');
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setPitch(pitch: number) {
     throw new Error('Method not implemented.');
   }
