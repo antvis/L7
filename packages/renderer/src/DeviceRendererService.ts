@@ -41,7 +41,7 @@ const { isUndefined } = lodashUtil;
 /**
  * Device API renderer
  */
-export default class DeviceRendererService implements IRendererService {
+export class DeviceRendererService implements IRendererService {
   uniformBuffers: IBuffer[] = [];
   extensionObject: IExtensions;
   private device: Device;

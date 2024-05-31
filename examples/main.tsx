@@ -38,9 +38,6 @@ export const Main = () => {
       .add(inintGuiOptions, 'map', MAP_TYPES)
       .onChange((map: GUIOptions['map']) => onChange({ map }));
     guiRef.current
-      .add(inintGuiOptions, 'renderer', ['regl', 'device'])
-      .onChange((renderer: GUIOptions['renderer']) => onChange({ renderer }));
-    guiRef.current
       .add(inintGuiOptions, 'enableWebGPU')
       .onChange((enableWebGPU: GUIOptions['enableWebGPU']) => onChange({ enableWebGPU }));
     guiRef.current
