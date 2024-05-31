@@ -323,7 +323,15 @@ export default class TdtMapService extends BaseMapService<any> {
   }
 
   public setCenter(lnglat: [number, number]): void {
-    this.map.setCenter(lnglat);
+    // @ts-ignore
+    const lngLat = window.T.LngLat(lnglat[0], lnglat[1]);
+    this.map.centerAndZoom(lngLat, this.map.getZoom());
+  }
+
+  public setZoomAndCenter(zoom: number, center: [number, number]) {
+    // @ts-ignore
+    const lngLat = window.T.LngLat(center[0], center[1]);
+    this.map.centerAndZoom(lngLat, zoom);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -28,7 +28,7 @@ type CaseSceneOptions = TestCaseOptions & {
 };
 
 export const CaseScene = (options: CaseSceneOptions) => {
-  const { map: basemap, mapConfig } = options;
+  const { map: basemap, animate, mapConfig } = options;
 
   const isMapbox = ['MapLibre', 'Mapbox'].includes(basemap);
 
@@ -54,6 +54,7 @@ export const CaseScene = (options: CaseSceneOptions) => {
 
   return new Promise<Scene>((resolve) => {
     scene.on('loaded', () => {
+      animate && scene.startAnimate();
       resolve(scene);
     });
   });
