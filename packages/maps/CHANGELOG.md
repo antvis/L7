@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.21.11-beta.4
+
+### Patch Changes
+
+- [#2513](https://github.com/antvis/L7/pull/2513) [`cca16a3`](https://github.com/antvis/L7/commit/cca16a3d72de462afa9d71c386c82f92952d1c47) Thanks [@lvisei](https://github.com/lvisei)! - fix: 天地图 setCenter 方法缺失
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.4
+  - @antv/l7-map@2.21.11-beta.4
+  - @antv/l7-utils@2.21.11-beta.4
+
 ## 2.21.11-beta.3
 
 ### Patch Changes
