@@ -76,9 +76,13 @@ export const Main = () => {
 
     return () => {
       scene?.destroy();
-      extendGUI.forEach((d) => d.destroy());
       while (mapContainer.current?.firstChild) {
         mapContainer.current.removeChild(mapContainer.current.lastChild!);
+      }
+      try {
+        extendGUI.forEach((d) => d.destroy());
+      } catch (error) {
+        console.warn('error: ', error);
       }
     };
   }, [viewDemo, guiOptions]);

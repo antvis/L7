@@ -179,6 +179,7 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
         };
 
         cbProxyMap.set(handle, handleProxy);
+        // @ts-expect-error
         this.map.on(eventName, handleProxy);
       };
 
@@ -205,6 +206,7 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
         return;
       }
       this.evtCbProxyMap.get(eventName)?.delete(handle);
+      // @ts-expect-error
       this.map.off(eventName, handleProxy);
     };
 
@@ -223,14 +225,17 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
   }
 
   public getSize(): [number, number] {
+    // @ts-expect-error
     return [this.map.width, this.map.height];
   }
 
   public getMinZoom(): number {
+    // @ts-expect-error
     return this.map.transform._minZoom;
   }
 
   public getMaxZoom(): number {
+    // @ts-expect-error
     return this.map.transform._maxZoom;
   }
 
@@ -288,6 +293,7 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
   }
 
   public setMapStyle(styleId: any): void {
+    // @ts-expect-error
     this.map.setMapStyleId(styleId);
   }
 
@@ -400,6 +406,7 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
     const { lng: clng, lat: clat } = this.map.getCenter()!;
     const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([clng(), clat()]);
     const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer([clng(), clat()]);
+    // @ts-expect-error
     const { lng, lat } = this.map.unprojectFromContainer(
       new google.maps.Point(
         centerContainerX + (x - centerPixelX),
@@ -423,6 +430,7 @@ export default class GMapService extends BaseMapService<google.maps.Map> {
 
   public lngLatToContainer([lng, lat]: [number, number]): IPoint {
     const latLng = new google.maps.LatLng(lat, lng);
+    // @ts-expect-error
     const pixel = this.map.getProjection()?.fromLatLngToContainerPixel?.(latLng);
     return { x: pixel.x, y: pixel.y };
   }

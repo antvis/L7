@@ -39,6 +39,7 @@ export default class MouseLocation extends Control<IMouseLocationControlOption> 
   }
   protected onMouseMove = (e: any) => {
     let position: Position = this.location;
+    // 适配不同底图，事件返回的数据名称不一致
     const lngLat: ILngLat | undefined = e.lngLat || e.lnglat;
     const { transform } = this.controlOption;
     if (lngLat) {

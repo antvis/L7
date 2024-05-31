@@ -302,7 +302,19 @@ export class DeviceRendererService implements IRendererService {
       height,
       new Uint8Array(width * height * 4),
     ) as Uint8Array;
+
+    // Since we use U8_RGBA_RT format in render target, need to change bgranorm -> rgba here.
+    if (this.viewportOrigin !== ViewportOrigin.LOWER_LEFT) {
+      for (let j = 0; j < result.length; j += 4) {
+        // Switch b and r components.
+        const t = result[j];
+        result[j] = result[j + 2];
+        result[j + 2] = t;
+      }
+    }
+
     readback.destroy();
+
     return result;
   };
 

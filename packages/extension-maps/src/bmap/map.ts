@@ -522,10 +522,6 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     return modelMatrix as unknown as number[];
   }
 
-  public getCustomCoordCenter?(): [number, number] {
-    throw new Error('Method not implemented.');
-  }
-
   public exportMap(type: 'jpg' | 'png'): string {
     const renderCanvas = this.getMap()._webglPainter._canvas;
     const layersPng =
