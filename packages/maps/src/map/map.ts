@@ -77,6 +77,19 @@ export default class MapService extends BaseMapService<Map> {
     this.handleCameraChanged();
   }
 
+  protected creatMapContainer(id: string | HTMLDivElement) {
+    const wrapper = super.creatMapContainer(id);
+    const mapContainer = document.createElement('div');
+    mapContainer.style.cssText += `
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    `;
+    wrapper.appendChild(mapContainer);
+    return mapContainer;
+  }
+
   protected handleCameraChanged = () => {
     const { lat, lng } = this.map.getCenter();
     const center: [number, number] = [lng, lat];
