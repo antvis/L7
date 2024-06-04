@@ -4,7 +4,7 @@
  */
 import type { IEarthService, IMercator, IViewport } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
-import type { MapNext } from '@antv/l7-map';
+import { MapNext } from '@antv/l7-map';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from './Viewport';
 const EventMap: {
@@ -76,10 +76,8 @@ export default class L7EarthService extends BaseMapService<MapNext> implements I
     this.viewport = new Viewport();
 
     this.$mapContainer = this.creatMapContainer(id);
-    // @ts-ignore
-    this.map = new EarthMap({
+    this.map = new MapNext({
       container: this.$mapContainer,
-      style: this.getMapStyleValue(style),
       bearing: rotation,
       ...rest,
     });
