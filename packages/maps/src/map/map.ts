@@ -3,14 +3,14 @@
  * MapboxService
  */
 import type { IMercator } from '@antv/l7-core';
-import { Map, MercatorCoordinate } from '@antv/l7-map';
+import { MapNext, MercatorCoordinate } from '@antv/l7-map';
 import { mat4, vec3 } from 'gl-matrix';
 import Viewport from '../lib/web-mercator-viewport';
 import { MapType } from '../types';
 import BaseMapService from '../utils/BaseMapService';
 
 // TODO: 基于抽象类 BaseMap 实现
-export default class DefaultMapService extends BaseMapService<Map> {
+export default class DefaultMapService extends BaseMapService<MapNext> {
   public version: string = MapType.DEFAULT;
   /**
    * 将经纬度转成墨卡托坐标
@@ -90,9 +90,8 @@ export default class DefaultMapService extends BaseMapService<Map> {
     } else {
       this.$mapContainer = this.creatMapContainer(id);
       // @ts-ignore
-      this.map = new Map({
+      this.map = new MapNext({
         container: this.$mapContainer,
-        style: this.getMapStyleValue(style),
         bearing: rotation,
         ...rest,
       });
@@ -130,12 +129,7 @@ export default class DefaultMapService extends BaseMapService<Map> {
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.map.getCanvas();
-    const layersPng =
-      type === 'jpg'
-        ? (renderCanvas?.toDataURL('image/jpeg') as string)
-        : (renderCanvas?.toDataURL('image/png') as string);
-    return layersPng;
+    return '';
   }
 
   public getCanvasOverlays() {

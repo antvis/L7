@@ -537,7 +537,7 @@ export class Transform {
       this.latRange = [bounds.getSouth(), bounds.getNorth()];
       this._constrain();
     } else {
-      this.lngRange = [-180, 180];
+      this.lngRange = null;
       this.latRange = [-MAX_VALID_LATITUDE, MAX_VALID_LATITUDE];
     }
   }

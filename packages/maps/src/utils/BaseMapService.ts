@@ -18,7 +18,7 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
-import type { Map } from '@antv/l7-map';
+import type { MapNext } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import type { ISimpleMapCoord } from './simpleMapCoord';
@@ -35,9 +35,9 @@ const EventMap: {
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
-export default abstract class BaseMapService<T> implements IMapService<Map & T> {
+export default abstract class BaseMapService<T> implements IMapService<MapNext & T> {
   public version: string = 'DEFAUlTMAP';
-  public map: Map & T;
+  public map: MapNext & T;
   public simpleMapCoord: ISimpleMapCoord = new SimpleMapCoord();
   // 背景色
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
@@ -230,7 +230,8 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   }
 
   public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyleValue(style));
+    // @ts-ignore
+    this.map?.setStyle(this.getMapStyleValue(style));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -307,7 +308,8 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.map.getCanvas();
+    // @ts-ignore
+    const renderCanvas = this.map?.getCanvas();
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)
