@@ -113,6 +113,22 @@ export default class DefaultMapService extends BaseMapService<Map> {
     this.handleCameraChanged();
   }
 
+  protected creatMapContainer(id: string | HTMLDivElement) {
+    let wrapper = id as HTMLDivElement;
+    if (typeof id === 'string') {
+      wrapper = document.getElementById(id) as HTMLDivElement;
+    }
+    const container = document.createElement('div');
+    container.style.cssText += `
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    `;
+    wrapper.appendChild(container);
+    return container;
+  }
+
   public exportMap(type: 'jpg' | 'png'): string {
     const renderCanvas = this.map.getCanvas();
     const layersPng =
