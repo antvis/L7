@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.21.11-beta.5
+
+### Patch Changes
+
+- [#2518](https://github.com/antvis/L7/pull/2518) [`8939e9b`](https://github.com/antvis/L7/commit/8939e9bc0e744d75b5b469c221d6695c7a313e83) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复在 Map 上使用组件事件穿透到图层上的问题
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.5
+  - @antv/l7-map@2.21.11-beta.5
+  - @antv/l7-utils@2.21.11-beta.5
+
 ## 2.21.11-beta.4
 
 ### Patch Changes
