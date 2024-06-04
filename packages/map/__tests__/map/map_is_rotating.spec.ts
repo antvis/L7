@@ -52,13 +52,13 @@ describe('Map#isRotating', () => {
       done();
     });
 
-    simulate.mousedown(map.getCanvas(), { buttons: 2, button: 2 });
+    simulate.mousedown(map.getCanvasContainer(), { buttons: 2, button: 2 });
     map._renderTaskQueue.run();
 
-    simulate.mousemove(map.getCanvas(), { buttons: 2, clientX: 10, clientY: 10 });
+    simulate.mousemove(map.getCanvasContainer(), { buttons: 2, clientX: 10, clientY: 10 });
     map._renderTaskQueue.run();
 
-    simulate.mouseup(map.getCanvas(), { buttons: 0, button: 2 });
+    simulate.mouseup(map.getCanvasContainer(), { buttons: 0, button: 2 });
     map._renderTaskQueue.run();
   });
 });

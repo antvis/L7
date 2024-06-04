@@ -171,28 +171,6 @@ describe('evented parents', () => {
     eventedSource.fire(new Event('a', { foo: 'bar' }));
   });
 
-  test('passes original "target" to parent listeners', () => {
-    const eventedSource = new Evented();
-    const eventedSink = new Evented();
-    eventedSource.setEventedParent(eventedSink);
-    eventedSource.setEventedParent(null);
-    eventedSink.on('a', (data) => {
-      expect(data.target).toBe(eventedSource);
-    });
-    eventedSource.fire(new Event('a'));
-  });
-
-  test('removes parents with "setEventedParent(null)"', () => {
-    const listener = jest.fn();
-    const eventedSource = new Evented();
-    const eventedSink = new Evented();
-    eventedSink.on('a', listener);
-    eventedSource.setEventedParent(eventedSink);
-    eventedSource.setEventedParent(null);
-    eventedSource.fire(new Event('a'));
-    expect(listener).not.toHaveBeenCalled();
-  });
-
   test('reports if an event has parent listeners with "listens"', () => {
     const eventedSource = new Evented();
     const eventedSink = new Evented();

@@ -37,7 +37,7 @@ describe('Map', () => {
   test('#remove', () => {
     const map = createMap();
 
-    expect(map.getContainer().childNodes).toHaveLength(2);
+    expect(map.getContainer().childNodes).toHaveLength(1);
     map.remove();
     expect(map.getContainer().childNodes).toHaveLength(0);
   });

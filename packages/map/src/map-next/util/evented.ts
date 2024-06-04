@@ -158,6 +158,10 @@ export class Evented {
     return this;
   }
 
+  emit(event: Event | string, properties?: any) {
+    return this.fire(event, properties);
+  }
+
   /**
    * Returns a true if this instance of Evented or any forwardeed instances of Evented have a listener for the specified type.
    *

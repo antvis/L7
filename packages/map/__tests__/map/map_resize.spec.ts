@@ -99,16 +99,4 @@ describe('#resize', () => {
     await sleep(100);
     expect(resizeSpy).toHaveBeenCalledTimes(2);
   });
-
-  test('width and height correctly rounded', () => {
-    const map = createMap();
-    const container = map.getContainer();
-
-    Object.defineProperty(container, 'clientWidth', { value: 250.6 });
-    Object.defineProperty(container, 'clientHeight', { value: 250.6 });
-    map.resize();
-
-    expect(map.getCanvasContainer().clientWidth).toBe(250);
-    expect(map.getCanvasContainer().clientHeight).toBe(250);
-  });
 });

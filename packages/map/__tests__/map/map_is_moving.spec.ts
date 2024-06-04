@@ -57,13 +57,13 @@ describe('Map#isMoving', () => {
       done();
     });
 
-    simulate.mousedown(map.getCanvas());
+    simulate.mousedown(map.getCanvasContainer());
     map._renderTaskQueue.run();
 
-    simulate.mousemove(map.getCanvas(), { buttons, clientX: 10, clientY: 10 });
+    simulate.mousemove(map.getCanvasContainer(), { buttons, clientX: 10, clientY: 10 });
     map._renderTaskQueue.run();
 
-    simulate.mouseup(map.getCanvas());
+    simulate.mouseup(map.getCanvasContainer());
     map._renderTaskQueue.run();
   });
 
@@ -90,13 +90,13 @@ describe('Map#isMoving', () => {
       done();
     });
 
-    simulate.mousedown(map.getCanvas(), { buttons: 2, button: 2 });
+    simulate.mousedown(map.getCanvasContainer(), { buttons: 2, button: 2 });
     map._renderTaskQueue.run();
 
-    simulate.mousemove(map.getCanvas(), { buttons: 2, clientX: 10, clientY: 10 });
+    simulate.mousemove(map.getCanvasContainer(), { buttons: 2, clientX: 10, clientY: 10 });
     map._renderTaskQueue.run();
 
-    simulate.mouseup(map.getCanvas(), { buttons: 0, button: 2 });
+    simulate.mouseup(map.getCanvasContainer(), { buttons: 0, button: 2 });
     map._renderTaskQueue.run();
   });
 
@@ -115,7 +115,10 @@ describe('Map#isMoving', () => {
       return now;
     });
 
-    simulate.wheel(map.getCanvas(), { type: 'wheel', deltaY: -simulate.magicWheelZoomDelta });
+    simulate.wheel(map.getCanvasContainer(), {
+      type: 'wheel',
+      deltaY: -simulate.magicWheelZoomDelta,
+    });
     map._renderTaskQueue.run();
 
     now += 400;
@@ -135,7 +138,7 @@ describe('Map#isMoving', () => {
 
     map.on('zoomend', () => {
       expect(map.isMoving()).toBe(true);
-      simulate.mouseup(map.getCanvas());
+      simulate.mouseup(map.getCanvasContainer());
       setTimeout(() => {
         map._renderTaskQueue.run();
         done();
@@ -149,10 +152,10 @@ describe('Map#isMoving', () => {
     // The following should trigger the above events, where a zoomstart/zoomend
     // pair is nested within a dragstart/dragend pair.
 
-    simulate.mousedown(map.getCanvas());
+    simulate.mousedown(map.getCanvasContainer());
     map._renderTaskQueue.run();
 
-    simulate.mousemove(map.getCanvas(), { buttons, clientX: 10, clientY: 10 });
+    simulate.mousemove(map.getCanvasContainer(), { buttons, clientX: 10, clientY: 10 });
     map._renderTaskQueue.run();
 
     let now = 0;
@@ -160,7 +163,10 @@ describe('Map#isMoving', () => {
       return now;
     });
 
-    simulate.wheel(map.getCanvas(), { type: 'wheel', deltaY: -simulate.magicWheelZoomDelta });
+    simulate.wheel(map.getCanvasContainer(), {
+      type: 'wheel',
+      deltaY: -simulate.magicWheelZoomDelta,
+    });
     map._renderTaskQueue.run();
 
     now += 400;

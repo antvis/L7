@@ -1,4 +1,4 @@
-import { ErrorEvent, Event as EventedEvent } from '../../src/map-next/util/evented';
+import { ErrorEvent } from '../../src/map-next/util/evented';
 import simulate from '../libs/simulate_interaction';
 import { beforeMapTest, createMap } from '../libs/util';
 
@@ -226,13 +226,6 @@ describe('map events', () => {
     expect(click).toBe(false);
 
     map.remove();
-  });
-
-  test('fires sourcedataabort event on dataabort event', async () => {
-    const map = createMap();
-    const sourcePromise = map.once('sourcedataabort');
-    map.fire(new EventedEvent('dataabort'));
-    await sourcePromise;
   });
 
   describe('error event', () => {

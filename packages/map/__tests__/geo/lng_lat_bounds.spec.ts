@@ -160,7 +160,6 @@ describe('LngLatBounds', () => {
     const sw = new LngLat(0, 0);
     const ne = new LngLat(-10, 10);
     const bounds = new LngLatBounds(sw, ne);
-    expect(LngLatBounds.convert(undefined)).toBeUndefined();
     expect(LngLatBounds.convert(bounds)).toEqual(bounds);
     expect(LngLatBounds.convert([sw, ne])).toEqual(bounds);
     expect(

@@ -174,7 +174,6 @@ export default abstract class BaseMapService<T> implements IMapService<MapNext &
   }
 
   public panBy(x: number = 0, y: number = 0): void {
-    // @ts-ignore
     this.map.panBy([x, y]);
   }
 

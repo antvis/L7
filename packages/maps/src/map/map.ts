@@ -132,6 +132,8 @@ export default class DefaultMapService extends BaseMapService<MapNext> {
     return '';
   }
 
+  public setMapStyle(style: any): void {}
+
   public getCanvasOverlays() {
     return this.getContainer();
   }
