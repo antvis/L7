@@ -226,15 +226,6 @@ export type MapLibreEvent<TOrig = unknown> = {
 };
 
 /**
- * The style data event
- *
- * @group Event Related
- */
-export type MapStyleDataEvent = MapLibreEvent & {
-  dataType: 'style';
-};
-
-/**
  * `MapMouseEvent` is the event type for mouse-related map events.
  *
  * @group Event Related
@@ -471,35 +462,4 @@ export type MapLibreZoomEvent = {
    * The DOM event that triggered the boxzoom event. Can be a `MouseEvent` or `KeyboardEvent`
    */
   originalEvent: MouseEvent;
-};
-
-/**
- * The terrain event
- *
- * @group Event Related
- */
-export type MapTerrainEvent = {
-  type: 'terrain';
-};
-
-/**
- * An event related to the web gl context
- *
- * @group Event Related
- */
-export type MapContextEvent = {
-  type: 'webglcontextlost' | 'webglcontextrestored';
-  originalEvent: WebGLContextEvent;
-};
-
-/**
- * The style image missing event
- *
- * @group Event Related
- *
- * @see [Generate and add a missing icon to the map](https://maplibre.org/maplibre-gl-js/docs/examples/add-image-missing-generated/)
- */
-export type MapStyleImageMissingEvent = MapLibreEvent & {
-  type: 'styleimagemissing';
-  id: string;
 };
