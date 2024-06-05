@@ -32,8 +32,9 @@ import { extend } from './util/util';
 const isMoving = (p: EventsInProgress) => p.zoom || p.drag || p.pitch || p.rotate;
 
 class RenderFrameEvent extends Event {
-  type: 'renderFrame';
-  timeStamp: number;
+  public type: string = 'renderFrame';
+  public timeStamp: number;
+
   constructor(type: string, timeStamp: number) {
     super(type);
     this.timeStamp = timeStamp;

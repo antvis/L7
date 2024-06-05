@@ -390,6 +390,7 @@ export class MapTouchEvent extends Event implements MapLibreEvent<TouchEvent> {
     );
     const lngLat = map.unproject(point);
 
+    this.target = map;
     this.points = points;
     this.point = point;
     this.lngLats = lngLats;
@@ -404,9 +405,12 @@ export class MapTouchEvent extends Event implements MapLibreEvent<TouchEvent> {
  *
  * @group Event Related
  *
- * type: 'wheel';
  */
 export class MapWheelEvent extends Event {
+  /**
+   * The event type
+   */
+  public declare type: 'wheel';
   /**
    * The `Map` object that fired the event.
    */
