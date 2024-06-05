@@ -1,4 +1,3 @@
-export * from './earthmap';
-export * from './geo/mercator';
-export * from './interface';
-export * from './map';
+export { MercatorCoordinate } from './map/geo/mercator_coordinate';
+export { Map } from './map/map';
+export type { MapOptions } from './map/map';

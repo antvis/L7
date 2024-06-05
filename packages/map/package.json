@@ -32,9 +32,12 @@
     "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
     "@mapbox/point-geometry": "^0.1.0",
-    "@mapbox/unitbezier": "^0.0.0",
+    "@mapbox/unitbezier": "^0.0.1",
     "eventemitter3": "^4.0.4",
     "gl-matrix": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/mapbox__point-geometry": "^0.1.4"
   },
   "publishConfig": {
     "access": "public",

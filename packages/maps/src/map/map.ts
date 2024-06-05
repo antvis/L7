@@ -89,10 +89,8 @@ export default class DefaultMapService extends BaseMapService<Map> {
       this.$mapContainer = this.map.getContainer();
     } else {
       this.$mapContainer = this.creatMapContainer(id);
-      // @ts-ignore
       this.map = new Map({
         container: this.$mapContainer,
-        style: this.getMapStyleValue(style),
         bearing: rotation,
         ...rest,
       });
@@ -130,13 +128,10 @@ export default class DefaultMapService extends BaseMapService<Map> {
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.map.getCanvas();
-    const layersPng =
-      type === 'jpg'
-        ? (renderCanvas?.toDataURL('image/jpeg') as string)
-        : (renderCanvas?.toDataURL('image/png') as string);
-    return layersPng;
+    return '';
   }
+
+  public setMapStyle(style: any): void {}
 
   public getCanvasOverlays() {
     return this.getContainer();
