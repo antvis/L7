@@ -50,8 +50,8 @@ const layer = new GeometryLayer().shape('plane').style({
   terrainTexture:
     'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ',
   rgb2height: (r, g, b) => {
-    let h = -10000.0 + (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
-    h = h / 20 - 127600;
+    let h = (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
+    h = h / 200 - 12750;
     h = Math.max(0, h);
     return h;
   },

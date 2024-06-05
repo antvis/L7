@@ -24,8 +24,8 @@ let layer = new GeometryLayer()
     center: [120, 30],
     spriteCount: 120,
     spriteRadius: 10,
-    spriteTop: 2500000,
-    spriteUpdate: 20000,
+    spriteTop: 300,
+    spriteUpdate: 10,
     spriteScale: 0.6,
   });
 ```
@@ -65,13 +65,11 @@ SpriteGeometry 主要通过 style 方法设置位置、大小以及其他属性�
 
 #### spriteTop: number
 
-粒子运动的高度范围，默认为 5000000.  
-🌟 需要注意的是，在不同的地图底图下，spriteTop/spriteUpdate 的参数值需要进行调整，才能得到较好的效果。默认值是在高德 1.0 的地图上调整的。
+粒子运动的高度范围，默认为 300.
 
 #### spriteUpdate: number
 
-粒子运动刷新的步长，表现为运动速度、默认为 10000。  
-🌟 需要注意的是，在不同的地图底图下，spriteTop/spriteUpdate 的参数值需要进行调整，才能得到较好的效果。默认值是在高德 1.0 的地图上调整的。
+粒子运动刷新的步长，表现为运动速度、默认为 10。
 
 #### spriteScale: number
 
