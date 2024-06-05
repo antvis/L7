@@ -33,7 +33,7 @@
       "@antv/l7-source": ["packages/source/src"],
       "@antv/l7-utils": ["packages/utils/src"],
       "@antv/l7-test-utils": ["packages/test-utils/src"],
-      "@antv/l7-extension-maps": ["packages/extension-maps/src"]
+      "@antv/l7-extension-maps": ["extensions/extension-maps/src"]
     },
 
     // Interop Constraints

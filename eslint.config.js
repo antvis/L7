@@ -33,6 +33,9 @@ export default tseslint.config(
       'packages/*/es/*',
       'packages/*/lib/*',
       'packages/*/dist/*',
+      'extensions/*/es/*',
+      'extensions/*/lib/*',
+      'extensions/*/dist/*',
 
       // Website static files
       'site/public/*',

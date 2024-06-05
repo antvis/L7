@@ -713,6 +713,6 @@ export default defineConfig({
     '@antv/l7-scene': path.resolve(__dirname, '../packages/scene/src'),
     '@antv/l7-source': path.resolve(__dirname, '../packages/source/src'),
     '@antv/l7-utils': path.resolve(__dirname, '../packages/utils/src'),
-    '@antv/l7-extension-maps': path.resolve(__dirname, '../packages/extension-maps/src'),
+    '@antv/l7-extension-maps': path.resolve(__dirname, '../extensions/extension-maps/src'),
   },
 });

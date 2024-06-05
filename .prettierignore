@@ -18,6 +18,9 @@ LICENSE
 packages/*/es/**
 packages/*/lib/**
 packages/*/dist/**
+extensions/*/es/**
+extensions/*/lib/**
+extensions/*/dist/**
 
 # legacy
 legacy/
