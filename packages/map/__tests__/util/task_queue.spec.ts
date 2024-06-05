@@ -1,4 +1,4 @@
-import { TaskQueue } from '../../src/map-next/util/task_queue';
+import { TaskQueue } from '../../src/map/util/task_queue';
 
 describe('TaskQueue', () => {
   test('Calls callbacks, in order', () => {

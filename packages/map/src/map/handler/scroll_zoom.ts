@@ -1,11 +1,14 @@
-// @ts-ignore
-import type { EarthMap } from '../earthmap';
-import LngLat from '../geo/lng_lat';
-import type Point from '../geo/point';
+import { DOM } from '../util/dom';
+
+import { LngLat } from '../geo/lng_lat';
+import { browser } from '../util/browser';
+import { bezier, defaultEasing, interpolates } from '../util/util';
+import { TransformProvider } from './transform-provider';
+
+import type Point from '@mapbox/point-geometry';
+import type { Handler } from '../handler_manager';
 import type { Map } from '../map';
-import { bezier, ease, interpolate, now } from '../util';
-import DOM from '../utils/dom';
-import type HandlerManager from './handler_manager';
+import type { AroundCenterOptions } from './two_fingers_touch';
 
 // deltaY value for mouse scroll wheel identification
 const wheelZoomDelta = 4.000244140625;
@@ -21,82 +24,86 @@ const maxScalePerFrame = 2;
 
 /**
  * The `ScrollZoomHandler` allows the user to zoom the map by scrolling.
+ *
+ * @group Handlers
  */
-class ScrollZoomHandler {
-  private map: Map | EarthMap;
-  private el: HTMLElement;
-  private enabled: boolean;
-  private active: boolean;
-  private zooming: boolean;
-  private aroundCenter: boolean;
-  private around: LngLat;
-  private aroundPoint: Point;
-  private type: 'wheel' | 'trackpad' | null;
-  private lastValue: number;
-  private timeout: number | null; // used for delayed-handling of a single wheel movement
-  private finishTimeout: number; // used to delay final '{move,zoom}end' events
+export class ScrollZoomHandler implements Handler {
+  _map: Map;
+  _tr: TransformProvider;
+  _enabled: boolean;
+  _active: boolean;
+  _zooming: boolean;
+  _aroundCenter: boolean;
+  _around: LngLat;
+  _aroundPoint: Point;
+  _type: 'wheel' | 'trackpad' | null;
+  _lastValue: number;
+  _timeout: ReturnType<typeof setTimeout>; // used for delayed-handling of a single wheel movement
+  _finishTimeout: ReturnType<typeof setTimeout>; // used to delay final '{move,zoom}end' events
 
-  private lastWheelEvent: any;
-  private lastWheelEventTime: number;
+  _lastWheelEvent: any;
+  _lastWheelEventTime: number;
 
-  private startZoom: number;
-  private targetZoom: number;
-  private delta: number;
-  private easing: (time: number) => number;
-  private prevEase: {
+  _startZoom: number;
+  _targetZoom: number;
+  _delta: number;
+  _easing: (a: number) => number;
+  _prevEase: {
     start: number;
     duration: number;
     easing: (_: number) => number;
   };
 
-  private frameId: boolean | null;
-  private handler: HandlerManager;
+  _frameId: boolean;
+  _triggerRenderFrame: () => void;
 
-  private defaultZoomRate: number;
-  private wheelZoomRate: number;
+  _defaultZoomRate: number;
+  _wheelZoomRate: number;
 
-  /**
-   * @private
-   */
-  constructor(map: Map | EarthMap, handler: HandlerManager) {
-    this.map = map;
-    this.el = map.getCanvasContainer();
-    this.handler = handler;
+  /** @internal */
+  constructor(map: Map, triggerRenderFrame: () => void) {
+    this._map = map;
+    this._tr = new TransformProvider(map);
+    this._triggerRenderFrame = triggerRenderFrame;
 
-    this.delta = 0;
-    this.defaultZoomRate = defaultZoomRate;
-    this.wheelZoomRate = wheelZoomRate;
+    this._delta = 0;
+
+    this._defaultZoomRate = defaultZoomRate;
+    this._wheelZoomRate = wheelZoomRate;
   }
 
   /**
    * Set the zoom rate of a trackpad
-   * @param {number} [zoomRate=1/100] The rate used to scale trackpad movement to a zoom value.
+   * @param zoomRate - 1/100 The rate used to scale trackpad movement to a zoom value.
    * @example
-   * // Speed up trackpad zoom
+   * Speed up trackpad zoom
+   * ```ts
    * map.scrollZoom.setZoomRate(1/25);
+   * ```
    */
-  public setZoomRate(zoomRate: number) {
-    this.defaultZoomRate = zoomRate;
+  setZoomRate(zoomRate: number) {
+    this._defaultZoomRate = zoomRate;
   }
 
   /**
    * Set the zoom rate of a mouse wheel
-   * @param {number} [wheelZoomRate=1/450] The rate used to scale mouse wheel movement to a zoom value.
+   * @param wheelZoomRate - 1/450 The rate used to scale mouse wheel movement to a zoom value.
    * @example
-   * // Slow down zoom of mouse wheel
+   * Slow down zoom of mouse wheel
+   * ```ts
    * map.scrollZoom.setWheelZoomRate(1/600);
+   * ```
    */
-  public setWheelZoomRate(zoomRate: number) {
-    this.wheelZoomRate = zoomRate;
+  setWheelZoomRate(wheelZoomRate: number) {
+    this._wheelZoomRate = wheelZoomRate;
   }
 
   /**
    * Returns a Boolean indicating whether the "scroll to zoom" interaction is enabled.
-   *
-   * @returns {boolean} `true` if the "scroll to zoom" interaction is enabled.
+   * @returns `true` if the "scroll to zoom" interaction is enabled.
    */
-  public isEnabled() {
-    return !!this.enabled;
+  isEnabled() {
+    return !!this._enabled;
   }
 
   /*
@@ -104,163 +111,192 @@ class ScrollZoomHandler {
    * render is called, so _active is not a good candidate for determining if a scroll zoom animation is in
    * progress.
    */
-  public isActive() {
-    return !!this.active || this.finishTimeout !== undefined;
+  isActive() {
+    return !!this._active || this._finishTimeout !== undefined;
   }
 
-  public isZooming() {
-    return !!this.zooming;
+  isZooming() {
+    return !!this._zooming;
   }
 
   /**
    * Enables the "scroll to zoom" interaction.
    *
-   * @param {Object} [options] Options object.
-   * @param {string} [options.around] If "center" is passed, map will zoom around center of map
-   *
+   * @param options - Options object.
    * @example
-   *   map.scrollZoom.enable();
-   * @example
-   *  map.scrollZoom.enable({ around: 'center' })
+   * ```ts
+   * map.scrollZoom.enable();
+   * map.scrollZoom.enable({ around: 'center' })
+   * ```
    */
-  public enable(options?: any) {
-    if (this.isEnabled()) {
-      return;
-    }
-    this.enabled = true;
-    this.aroundCenter = options && options.around === 'center';
+  enable(options?: AroundCenterOptions | boolean) {
+    if (this.isEnabled()) return;
+    this._enabled = true;
+    this._aroundCenter = !!options && (options as AroundCenterOptions).around === 'center';
   }
 
   /**
    * Disables the "scroll to zoom" interaction.
    *
    * @example
-   *   map.scrollZoom.disable();
+   * ```ts
+   * map.scrollZoom.disable();
+   * ```
    */
-  public disable() {
-    if (!this.isEnabled()) {
-      return;
-    }
-    this.enabled = false;
+  disable() {
+    if (!this.isEnabled()) return;
+    this._enabled = false;
   }
 
-  public wheel(e: WheelEvent) {
-    if (!this.isEnabled()) {
+  wheel(e: WheelEvent) {
+    if (!this.isEnabled()) return;
+    if (this._map.cooperativeGestures.isEnabled() && !e[this._map.cooperativeGestures._bypassKey]) {
       return;
     }
-    // Remove `any` cast when https://github.com/facebook/flow/issues/4879 is fixed.
-    let value = e.deltaMode === window.WheelEvent.DOM_DELTA_LINE ? e.deltaY * 40 : e.deltaY;
-    const nowTime = now();
-    const timeDelta = nowTime - (this.lastWheelEventTime || 0);
+    let value = e.deltaMode === WheelEvent.DOM_DELTA_LINE ? e.deltaY * 40 : e.deltaY;
+    const now = browser.now(),
+      timeDelta = now - (this._lastWheelEventTime || 0);
 
-    this.lastWheelEventTime = nowTime;
+    this._lastWheelEventTime = now;
 
     if (value !== 0 && value % wheelZoomDelta === 0) {
       // This one is definitely a mouse wheel event.
-      this.type = 'wheel';
+      this._type = 'wheel';
     } else if (value !== 0 && Math.abs(value) < 4) {
       // This one is definitely a trackpad event because it is so small.
-      this.type = 'trackpad';
+      this._type = 'trackpad';
     } else if (timeDelta > 400) {
       // This is likely a new scroll action.
-      this.type = null;
-      this.lastValue = value;
+      this._type = null;
+      this._lastValue = value;
 
       // Start a timeout in case this was a singular event, and dely it by up to 40ms.
-      // @ts-ignore
-      this.timeout = setTimeout(this.onTimeout, 40, e);
-    } else if (!this.type) {
+      this._timeout = setTimeout(this._onTimeout, 40, e);
+    } else if (!this._type) {
       // This is a repeating event, but we don't know the type of event just yet.
       // If the delta per time is small, we assume it's a fast trackpad; otherwise we switch into wheel mode.
-      this.type = Math.abs(timeDelta * value) < 200 ? 'trackpad' : 'wheel';
+      this._type = Math.abs(timeDelta * value) < 200 ? 'trackpad' : 'wheel';
 
       // Make sure our delayed event isn't fired again, because we accumulate
       // the previous event (which was less than 40ms ago) into this event.
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-        this.timeout = null;
-        value += this.lastValue;
+      if (this._timeout) {
+        clearTimeout(this._timeout);
+        this._timeout = null;
+        value += this._lastValue;
       }
     }
 
     // Slow down zoom if shift key is held for more precise zooming
-    if (e.shiftKey && value) {
-      value = value / 4;
-    }
+    if (e.shiftKey && value) value = value / 4;
+
     // Only fire the callback if we actually know what type of scrolling device the user uses.
-    if (this.type) {
-      this.lastWheelEvent = e;
-      this.delta -= value;
-      if (!this.active) {
-        this.start(e);
+    if (this._type) {
+      this._lastWheelEvent = e;
+      this._delta -= value;
+      if (!this._active) {
+        this._start(e);
       }
     }
 
     e.preventDefault();
   }
 
-  public renderFrame() {
-    return this.onScrollFrame();
+  _onTimeout = (initialEvent: MouseEvent) => {
+    this._type = 'wheel';
+    this._delta -= this._lastValue;
+    if (!this._active) {
+      this._start(initialEvent);
+    }
+  };
+
+  _start(e: MouseEvent) {
+    if (!this._delta) return;
+
+    if (this._frameId) {
+      this._frameId = null;
+    }
+
+    this._active = true;
+    if (!this.isZooming()) {
+      this._zooming = true;
+    }
+
+    if (this._finishTimeout) {
+      clearTimeout(this._finishTimeout);
+      delete this._finishTimeout;
+    }
+
+    const pos = DOM.mousePos(this._map.getCanvasContainer(), e);
+    const tr = this._tr;
+
+    if (pos.y > tr.transform.height / 2 - tr.transform.getHorizon()) {
+      this._around = LngLat.convert(this._aroundCenter ? tr.center : tr.unproject(pos));
+    } else {
+      // Do not use current cursor position if above the horizon to avoid 'unproject' this point
+      // as it is not mapped into 'coords' framebuffer or inversible with 'pixelMatrixInverse'.
+      this._around = LngLat.convert(tr.center);
+    }
+
+    this._aroundPoint = tr.transform.locationPoint(this._around);
+    if (!this._frameId) {
+      this._frameId = true;
+      this._triggerRenderFrame();
+    }
   }
 
-  public reset() {
-    this.active = false;
-  }
+  renderFrame() {
+    if (!this._frameId) return;
+    this._frameId = null;
 
-  private onScrollFrame = () => {
-    if (!this.frameId) {
-      return;
-    }
-    this.frameId = null;
-
-    if (!this.isActive()) {
-      return;
-    }
-    const tr = this.map.transform;
+    if (!this.isActive()) return;
+    const tr = this._tr.transform;
 
     // if we've had scroll events since the last render frame, consume the
     // accumulated delta, and update the target zoom level accordingly
-    if (this.delta !== 0) {
+    if (this._delta !== 0) {
       // For trackpad events and single mouse wheel ticks, use the default zoom rate
       const zoomRate =
-        this.type === 'wheel' && Math.abs(this.delta) > wheelZoomDelta
-          ? this.wheelZoomRate
-          : this.defaultZoomRate;
+        this._type === 'wheel' && Math.abs(this._delta) > wheelZoomDelta
+          ? this._wheelZoomRate
+          : this._defaultZoomRate;
       // Scale by sigmoid of scroll wheel delta.
-      let scale = maxScalePerFrame / (1 + Math.exp(-Math.abs(this.delta * zoomRate)));
+      let scale = maxScalePerFrame / (1 + Math.exp(-Math.abs(this._delta * zoomRate)));
 
-      if (this.delta < 0 && scale !== 0) {
+      if (this._delta < 0 && scale !== 0) {
         scale = 1 / scale;
       }
 
       const fromScale =
-        typeof this.targetZoom === 'number' ? tr.zoomScale(this.targetZoom) : tr.scale;
-      this.targetZoom = Math.min(tr.maxZoom, Math.max(tr.minZoom, tr.scaleZoom(fromScale * scale)));
+        typeof this._targetZoom === 'number' ? tr.zoomScale(this._targetZoom) : tr.scale;
+      this._targetZoom = Math.min(
+        tr.maxZoom,
+        Math.max(tr.minZoom, tr.scaleZoom(fromScale * scale)),
+      );
 
       // if this is a mouse wheel, refresh the starting zoom and easing
       // function we're using to smooth out the zooming between wheel
       // events
-      if (this.type === 'wheel') {
-        this.startZoom = tr.zoom;
-        this.easing = this.smoothOutEasing(200);
+      if (this._type === 'wheel') {
+        this._startZoom = tr.zoom;
+        this._easing = this._smoothOutEasing(200);
       }
 
-      this.delta = 0;
+      this._delta = 0;
     }
 
-    const targetZoom = typeof this.targetZoom === 'number' ? this.targetZoom : tr.zoom;
-    const startZoom = this.startZoom;
-    const easing = this.easing;
+    const targetZoom = typeof this._targetZoom === 'number' ? this._targetZoom : tr.zoom;
+    const startZoom = this._startZoom;
+    const easing = this._easing;
 
     let finished = false;
     let zoom;
-    if (this.type === 'wheel' && startZoom && easing) {
-      const t = Math.min((now() - this.lastWheelEventTime) / 200, 1);
+    if (this._type === 'wheel' && startZoom && easing) {
+      const t = Math.min((browser.now() - this._lastWheelEventTime) / 200, 1);
       const k = easing(t);
-      zoom = interpolate(startZoom, targetZoom, k);
+      zoom = interpolates.number(startZoom, targetZoom, k);
       if (t < 1) {
-        if (!this.frameId) {
-          this.frameId = true;
+        if (!this._frameId) {
+          this._frameId = true;
         }
       } else {
         finished = true;
@@ -270,18 +306,15 @@ class ScrollZoomHandler {
       finished = true;
     }
 
-    this.active = true;
+    this._active = true;
 
     if (finished) {
-      this.active = false;
-      // @ts-ignore
-      this.finishTimeout = setTimeout(() => {
-        this.zooming = false;
-        this.handler.triggerRenderFrame();
-        // @ts-ignore
-        delete this.targetZoom;
-        // @ts-ignore
-        delete this.finishTimeout;
+      this._active = false;
+      this._finishTimeout = setTimeout(() => {
+        this._zooming = false;
+        this._triggerRenderFrame();
+        delete this._targetZoom;
+        delete this._finishTimeout;
       }, 200);
     }
 
@@ -289,58 +322,18 @@ class ScrollZoomHandler {
       noInertia: true,
       needsRenderFrame: !finished,
       zoomDelta: zoom - tr.zoom,
-      around: this.aroundPoint,
-      originalEvent: this.lastWheelEvent,
+      around: this._aroundPoint,
+      originalEvent: this._lastWheelEvent,
     };
-  };
-
-  private onTimeout(initialEvent: any) {
-    this.type = 'wheel';
-    this.delta -= this.lastValue;
-    if (!this.active && this.start) {
-      this.start(initialEvent);
-    }
   }
 
-  private start(e: any) {
-    if (!this.delta) {
-      return;
-    }
+  _smoothOutEasing(duration: number) {
+    let easing = defaultEasing;
 
-    if (this.frameId) {
-      this.frameId = null;
-    }
-
-    this.active = true;
-    if (!this.isZooming()) {
-      this.zooming = true;
-    }
-
-    if (this.finishTimeout) {
-      clearTimeout(this.finishTimeout);
-      // @ts-ignore
-      delete this.finishTimeout;
-    }
-
-    const pos = DOM.mousePos(this.el, e);
-
-    this.around = LngLat.convert(
-      this.aroundCenter ? this.map.getCenter() : this.map.unproject(pos),
-    );
-    this.aroundPoint = this.map.transform.locationPoint(this.around);
-    if (!this.frameId) {
-      this.frameId = true;
-      this.handler.triggerRenderFrame();
-    }
-  }
-
-  private smoothOutEasing(duration: number) {
-    let easing = ease;
-
-    if (this.prevEase) {
-      const preEase = this.prevEase;
-      const t = (now() - preEase.start) / preEase.duration;
-      const speed = preEase.easing(t + 0.01) - preEase.easing(t);
+    if (this._prevEase) {
+      const currentEase = this._prevEase;
+      const t = (browser.now() - currentEase.start) / currentEase.duration;
+      const speed = currentEase.easing(t + 0.01) - currentEase.easing(t);
 
       // Quick hack to make new bezier that is continuous with last
       const x = (0.27 / Math.sqrt(speed * speed + 0.0001)) * 0.01;
@@ -349,14 +342,22 @@ class ScrollZoomHandler {
       easing = bezier(x, y, 0.25, 1);
     }
 
-    this.prevEase = {
-      start: now(),
+    this._prevEase = {
+      start: browser.now(),
       duration,
       easing,
     };
 
     return easing;
   }
-}
 
-export default ScrollZoomHandler;
+  reset() {
+    this._active = false;
+    this._zooming = false;
+    delete this._targetZoom;
+    if (this._finishTimeout) {
+      clearTimeout(this._finishTimeout);
+      delete this._finishTimeout;
+    }
+  }
+}

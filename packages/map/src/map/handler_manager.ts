@@ -34,6 +34,10 @@ const isMoving = (p: EventsInProgress) => p.zoom || p.drag || p.pitch || p.rotat
 class RenderFrameEvent extends Event {
   type: 'renderFrame';
   timeStamp: number;
+  constructor(type: string, timeStamp: number) {
+    super(type);
+    this.timeStamp = timeStamp;
+  }
 }
 
 /**
@@ -672,7 +676,7 @@ export class HandlerManager {
     this._map.triggerRepaint();
     return this._map._renderTaskQueue.add((timeStamp) => {
       delete this._frameId;
-      this.handleEvent(new RenderFrameEvent('renderFrame', { timeStamp }));
+      this.handleEvent(new RenderFrameEvent('renderFrame', timeStamp));
       this._applyChanges();
     });
   }

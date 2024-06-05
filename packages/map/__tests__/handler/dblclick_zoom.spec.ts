@@ -1,5 +1,5 @@
-import type { MapOptions } from '../../src/map-next/map';
-import { Map } from '../../src/map-next/map';
+import type { MapOptions } from '../../src/map/map';
+import { Map } from '../../src/map/map';
 import simulate from '../libs/simulate_interaction';
 import { beforeMapTest } from '../libs/util';
 

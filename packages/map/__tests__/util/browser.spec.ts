@@ -1,4 +1,4 @@
-import { browser } from '../../src/map-next/util/browser';
+import { browser } from '../../src/map/util/browser';
 
 describe('browser', () => {
   test('frameAsync', async () => {

@@ -28,8 +28,7 @@ function _removeEventListener(type: string, listener: Listener, listenerList: Li
  * The event class
  */
 export class Event {
-  readonly type: string;
-
+  public readonly type: string;
   constructor(type: string, data: any = {}) {
     extend(this, data);
     this.type = type;
@@ -47,7 +46,8 @@ export class ErrorEvent extends Event {
   error: ErrorLike;
 
   constructor(error: ErrorLike, data: any = {}) {
-    super('error', extend({ error }, data));
+    super('error', data);
+    this.error = error;
   }
 }
 

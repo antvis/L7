@@ -1,4 +1,4 @@
-import { EdgeInsets } from '../../src/map-next/geo/edge_insets';
+import { EdgeInsets } from '../../src/map/geo/edge_insets';
 
 describe('EdgeInsets', () => {
   describe('#constructor', () => {

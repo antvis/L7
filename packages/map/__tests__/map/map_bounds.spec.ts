@@ -1,4 +1,4 @@
-import type { LngLatBoundsLike } from '../../src/map-next/geo/lng_lat_bounds';
+import type { LngLatBoundsLike } from '../../src/map/geo/lng_lat_bounds';
 import { fixedLngLat, fixedNum } from '../libs/fixed';
 import { beforeMapTest, createMap } from '../libs/util';
 

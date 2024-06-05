@@ -1,5 +1,5 @@
-import type { MapOptions } from '../../src/map-next/map';
-import { Map } from '../../src/map-next/map';
+import type { MapOptions } from '../../src/map/map';
+import { Map } from '../../src/map/map';
 import { fixedLngLat } from '../libs/fixed';
 import { beforeMapTest, createMap } from '../libs/util';
 

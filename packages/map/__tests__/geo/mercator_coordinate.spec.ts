@@ -1,5 +1,5 @@
-import { LngLat } from '../../src/map-next/geo/lng_lat';
-import { MercatorCoordinate, mercatorScale } from '../../src/map-next/geo/mercator_coordinate';
+import { LngLat } from '../../src/map/geo/lng_lat';
+import { MercatorCoordinate, mercatorScale } from '../../src/map/geo/mercator_coordinate';
 
 describe('LngLat', () => {
   test('#constructor', () => {

@@ -1,7 +1,7 @@
-import { Map } from '../../src/map-next/map';
-import { browser } from '../../src/map-next/util/browser';
-import { DOM } from '../../src/map-next/util/dom';
-import { extend } from '../../src/map-next/util/util';
+import { Map } from '../../src/map/map';
+import { browser } from '../../src/map/util/browser';
+import { DOM } from '../../src/map/util/dom';
+import { extend } from '../../src/map/util/util';
 import simulate from '../libs/simulate_interaction';
 
 import { beforeMapTest } from '../libs/util';

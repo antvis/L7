@@ -1,29 +1,36 @@
-// @ts-ignore
-import type { EarthMap } from '../earthmap';
-import type Point from '../geo/point';
+import type Point from '@mapbox/point-geometry';
+import type { Handler } from '../handler_manager';
 import type { Map } from '../map';
+import { TransformProvider } from './transform-provider';
 
-export default class ClickZoomHandler {
-  private enabled: boolean;
-  private active: boolean;
+/**
+ * The `ClickZoomHandler` allows the user to zoom the map at a point by double clicking
+ * It is used by other handlers
+ */
+export class ClickZoomHandler implements Handler {
+  _tr: TransformProvider;
+  _enabled: boolean;
+  _active: boolean;
 
-  constructor() {
+  /** @internal */
+  constructor(map: Map) {
+    this._tr = new TransformProvider(map);
     this.reset();
   }
 
-  public reset() {
-    this.active = false;
+  reset() {
+    this._active = false;
   }
 
-  public dblclick(e: MouseEvent, point: Point) {
+  dblclick(e: MouseEvent, point: Point) {
     e.preventDefault();
     return {
-      cameraAnimation: (map: Map | EarthMap) => {
+      cameraAnimation: (map: Map) => {
         map.easeTo(
           {
             duration: 300,
-            zoom: map.getZoom() + (e.shiftKey ? -1 : 1),
-            around: map.unproject(point),
+            zoom: this._tr.zoom + (e.shiftKey ? -1 : 1),
+            around: this._tr.unproject(point),
           },
           { originalEvent: e },
         );
@@ -31,19 +38,20 @@ export default class ClickZoomHandler {
     };
   }
 
-  public enable() {
-    this.enabled = true;
+  enable() {
+    this._enabled = true;
   }
-  public disable() {
-    this.enabled = false;
+
+  disable() {
+    this._enabled = false;
     this.reset();
   }
 
-  public isEnabled() {
-    return this.enabled;
+  isEnabled() {
+    return this._enabled;
   }
 
-  public isActive() {
-    return this.active;
+  isActive() {
+    return this._active;
   }
 }

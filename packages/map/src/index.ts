@@ -1,7 +1,3 @@
-/********** 下一个版本移除，不再导出 *********/
-export * from './map-next';
-export * from './map/earthmap';
-export * from './map/interface';
-/********** 下一个版本移除，不再导出 *********/
-
-export * from './map/map';
+export { MercatorCoordinate } from './map/geo/mercator_coordinate';
+export { Map as MapNext } from './map/map';
+export type { MapOptions } from './map/map';

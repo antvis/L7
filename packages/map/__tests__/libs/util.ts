@@ -1,5 +1,5 @@
-import { Map } from '../../src/map-next/map';
-import { extend } from '../../src/map-next/util/util';
+import { Map } from '../../src/map/map';
+import { extend } from '../../src/map/util/util';
 
 export function createMap(options?, callback?) {
   const container = window.document.createElement('div');

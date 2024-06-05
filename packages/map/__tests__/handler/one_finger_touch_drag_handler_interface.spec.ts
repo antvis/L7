@@ -3,7 +3,7 @@ import Point from '@mapbox/point-geometry';
 import {
   generateOneFingerTouchPitchHandler,
   generateOneFingerTouchRotationHandler,
-} from '../../src/map-next/handler/one_finger_touch_drag';
+} from '../../src/map/handler/one_finger_touch_drag';
 
 const testTouch = { identifier: 0 } as Touch;
 

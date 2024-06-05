@@ -1,5 +1,6 @@
-import type { EarthMap } from '../earthmap';
+import type { Handler } from '../handler_manager';
 import type { Map } from '../map';
+import { TransformProvider } from './transform-provider';
 
 const defaultOptions = {
   panStep: 100,
@@ -20,32 +21,35 @@ const defaultOptions = {
  * - `Shift+⇠`: Decrease the rotation by 15 degrees.
  * - `Shift+⇡`: Increase the pitch by 10 degrees.
  * - `Shift+⇣`: Decrease the pitch by 10 degrees.
+ *
+ * @group Handlers
  */
-class KeyboardHandler {
-  private enabled: boolean;
-  private active: boolean;
-  private panStep: number;
-  private bearingStep: number;
-  private pitchStep: number;
+export class KeyboardHandler implements Handler {
+  _tr: TransformProvider;
+  _enabled: boolean;
+  _active: boolean;
+  _panStep: number;
+  _bearingStep: number;
+  _pitchStep: number;
+  _rotationDisabled: boolean;
 
-  /**
-   * @private
-   */
-  constructor() {
+  /** @internal */
+  constructor(map: Map) {
+    this._tr = new TransformProvider(map);
     const stepOptions = defaultOptions;
-    this.panStep = stepOptions.panStep;
-    this.bearingStep = stepOptions.bearingStep;
-    this.pitchStep = stepOptions.pitchStep;
+    this._panStep = stepOptions.panStep;
+    this._bearingStep = stepOptions.bearingStep;
+    this._pitchStep = stepOptions.pitchStep;
+    this._rotationDisabled = false;
   }
 
-  public reset() {
-    this.active = false;
+  reset() {
+    this._active = false;
   }
 
-  public keydown(e: KeyboardEvent) {
-    if (e.altKey || e.ctrlKey || e.metaKey) {
-      return;
-    }
+  keydown(e: KeyboardEvent) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+
     let zoomDir = 0;
     let bearingDir = 0;
     let pitchDir = 0;
@@ -106,20 +110,25 @@ class KeyboardHandler {
         return;
     }
 
+    if (this._rotationDisabled) {
+      bearingDir = 0;
+      pitchDir = 0;
+    }
+
     return {
-      cameraAnimation: (map: Map | EarthMap) => {
-        const zoom = map.getZoom();
+      cameraAnimation: (map: Map) => {
+        const tr = this._tr;
         map.easeTo(
           {
             duration: 300,
             easeId: 'keyboardHandler',
             easing: easeOut,
 
-            zoom: zoomDir ? Math.round(zoom) + zoomDir * (e.shiftKey ? 2 : 1) : zoom,
-            bearing: map.getBearing() + bearingDir * this.bearingStep,
-            pitch: map.getPitch() + pitchDir * this.pitchStep,
-            offset: [-xDir * this.panStep, -yDir * this.panStep],
-            center: map.getCenter(),
+            zoom: zoomDir ? Math.round(tr.zoom) + zoomDir * (e.shiftKey ? 2 : 1) : tr.zoom,
+            bearing: tr.bearing + bearingDir * this._bearingStep,
+            pitch: tr.pitch + pitchDir * this._pitchStep,
+            offset: [-xDir * this._panStep, -yDir * this._panStep],
+            center: tr.center,
           },
           { originalEvent: e },
         );
@@ -127,26 +136,80 @@ class KeyboardHandler {
     };
   }
 
-  public enable() {
-    this.enabled = true;
+  /**
+   * Enables the "keyboard rotate and zoom" interaction.
+   *
+   * @example
+   * ```ts
+   * map.keyboard.enable();
+   * ```
+   */
+  enable() {
+    this._enabled = true;
   }
 
-  public disable() {
-    this.enabled = false;
+  /**
+   * Disables the "keyboard rotate and zoom" interaction.
+   *
+   * @example
+   * ```ts
+   * map.keyboard.disable();
+   * ```
+   */
+  disable() {
+    this._enabled = false;
     this.reset();
   }
 
-  public isEnabled() {
-    return this.enabled;
+  /**
+   * Returns a Boolean indicating whether the "keyboard rotate and zoom"
+   * interaction is enabled.
+   *
+   * @returns `true` if the "keyboard rotate and zoom"
+   * interaction is enabled.
+   */
+  isEnabled() {
+    return this._enabled;
   }
 
-  public isActive() {
-    return this.active;
+  /**
+   * Returns true if the handler is enabled and has detected the start of a
+   * zoom/rotate gesture.
+   *
+   * @returns `true` if the handler is enabled and has detected the
+   * start of a zoom/rotate gesture.
+   */
+  isActive() {
+    return this._active;
+  }
+
+  /**
+   * Disables the "keyboard pan/rotate" interaction, leaving the
+   * "keyboard zoom" interaction enabled.
+   *
+   * @example
+   * ```ts
+   * map.keyboard.disableRotation();
+   * ```
+   */
+  disableRotation() {
+    this._rotationDisabled = true;
+  }
+
+  /**
+   * Enables the "keyboard pan/rotate" interaction.
+   *
+   * @example
+   * ```ts
+   * map.keyboard.enable();
+   * map.keyboard.enableRotation();
+   * ```
+   */
+  enableRotation() {
+    this._rotationDisabled = false;
   }
 }
 
 function easeOut(t: number) {
   return t * (2 - t);
 }
-
-export default KeyboardHandler;

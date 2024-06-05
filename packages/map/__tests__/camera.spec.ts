@@ -1,14 +1,14 @@
-import type { CameraOptions } from '../src/map-next/camera';
-import { Camera } from '../src/map-next/camera';
-import { Transform } from '../src/map-next/geo/transform';
-import { browser } from '../src/map-next/util/browser';
-import type { TaskID } from '../src/map-next/util/task_queue';
-import { TaskQueue } from '../src/map-next/util/task_queue';
+import type { CameraOptions } from '../src/map/camera';
+import { Camera } from '../src/map/camera';
+import { Transform } from '../src/map/geo/transform';
+import { browser } from '../src/map/util/browser';
+import type { TaskID } from '../src/map/util/task_queue';
+import { TaskQueue } from '../src/map/util/task_queue';
 
-import { LngLat } from '../src/map-next/geo/lng_lat';
-import { LngLatBounds } from '../src/map-next/geo/lng_lat_bounds';
-import { mercatorZfromAltitude } from '../src/map-next/geo/mercator_coordinate';
-import type { Event } from '../src/map-next/util/evented';
+import { LngLat } from '../src/map/geo/lng_lat';
+import { LngLatBounds } from '../src/map/geo/lng_lat_bounds';
+import { mercatorZfromAltitude } from '../src/map/geo/mercator_coordinate';
+import type { Event } from '../src/map/util/evented';
 import { fixedLngLat, fixedNum } from './libs/fixed';
 import { setMatchMedia } from './libs/util';
 

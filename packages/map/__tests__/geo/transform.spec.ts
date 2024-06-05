@@ -1,6 +1,6 @@
 import Point from '@mapbox/point-geometry';
-import { LngLat } from '../../src/map-next/geo/lng_lat';
-import { MAX_VALID_LATITUDE, Transform } from '../../src/map-next/geo/transform';
+import { LngLat } from '../../src/map/geo/lng_lat';
+import { MAX_VALID_LATITUDE, Transform } from '../../src/map/geo/transform';
 import { fixedCoord, fixedLngLat } from '../libs/fixed';
 
 describe('transform', () => {

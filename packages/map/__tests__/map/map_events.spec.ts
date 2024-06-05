@@ -1,4 +1,4 @@
-import { ErrorEvent } from '../../src/map-next/util/evented';
+import { ErrorEvent } from '../../src/map/util/evented';
 import simulate from '../libs/simulate_interaction';
 import { beforeMapTest, createMap } from '../libs/util';
 

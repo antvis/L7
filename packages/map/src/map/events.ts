@@ -2,7 +2,6 @@ import { Event } from './util/evented';
 
 import Point from '@mapbox/point-geometry';
 import { DOM } from './util/dom';
-import { extend } from './util/util';
 
 import type { LngLat } from './geo/lng_lat';
 import type { Map } from './map';
@@ -255,7 +254,7 @@ export class MapMouseEvent extends Event implements MapLibreEvent<MouseEvent> {
   /**
    * The event type
    */
-  type:
+  public declare type:
     | 'mousedown'
     | 'mouseup'
     | 'click'
@@ -310,9 +309,12 @@ export class MapMouseEvent extends Event implements MapLibreEvent<MouseEvent> {
   _defaultPrevented: boolean;
 
   constructor(type: string, map: Map, originalEvent: MouseEvent, data: any = {}) {
+    super(type, data);
     const point = DOM.mousePos(map.getCanvasContainer(), originalEvent);
     const lngLat = map.unproject(point);
-    super(type, extend({ point, lngLat, originalEvent }, data));
+    this.point = point;
+    this.lngLat = lngLat;
+    this.originalEvent = originalEvent;
     this._defaultPrevented = false;
     this.target = map;
   }
@@ -327,7 +329,7 @@ export class MapTouchEvent extends Event implements MapLibreEvent<TouchEvent> {
   /**
    * The event type.
    */
-  type: 'touchstart' | 'touchmove' | 'touchend' | 'touchcancel';
+  public declare type: 'touchstart' | 'touchmove' | 'touchend' | 'touchcancel';
 
   /**
    * The `Map` object that fired the event.
@@ -385,6 +387,7 @@ export class MapTouchEvent extends Event implements MapLibreEvent<TouchEvent> {
   _defaultPrevented: boolean;
 
   constructor(type: string, map: Map, originalEvent: TouchEvent) {
+    super(type);
     const touches = type === 'touchend' ? originalEvent.changedTouches : originalEvent.touches;
     const points = DOM.touchPos(map.getCanvasContainer(), touches);
     const lngLats = points.map((t) => map.unproject(t));
@@ -395,7 +398,12 @@ export class MapTouchEvent extends Event implements MapLibreEvent<TouchEvent> {
       new Point(0, 0),
     );
     const lngLat = map.unproject(point);
-    super(type, { points, point, lngLats, lngLat, originalEvent });
+
+    this.points = points;
+    this.point = point;
+    this.lngLats = lngLats;
+    this.lngLat = lngLat;
+    this.originalEvent = originalEvent;
     this._defaultPrevented = false;
   }
 }
@@ -404,13 +412,10 @@ export class MapTouchEvent extends Event implements MapLibreEvent<TouchEvent> {
  * `MapWheelEvent` is the event type for the `wheel` map event.
  *
  * @group Event Related
+ *
+ * type: 'wheel';
  */
 export class MapWheelEvent extends Event {
-  /**
-   * The event type.
-   */
-  type: 'wheel';
-
   /**
    * The `Map` object that fired the event.
    */
@@ -441,8 +446,10 @@ export class MapWheelEvent extends Event {
 
   /** */
   constructor(type: string, map: Map, originalEvent: WheelEvent) {
-    super(type, { originalEvent });
+    super(type);
+    this.target = map;
     this._defaultPrevented = false;
+    this.originalEvent = originalEvent;
   }
 }
 

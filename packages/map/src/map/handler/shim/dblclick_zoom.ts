@@ -1,59 +1,63 @@
-import type ClickZoomHandler from '../click_zoom';
-import type TapZoomHandler from '../tap/tap_zoom';
+import type { ClickZoomHandler } from '../click_zoom';
+import type { TapZoomHandler } from '../tap_zoom';
 
 /**
  * The `DoubleClickZoomHandler` allows the user to zoom the map at a point by
  * double clicking or double tapping.
+ *
+ * @group Handlers
  */
-export default class DoubleClickZoomHandler {
-  private clickZoom: ClickZoomHandler;
-  private tapZoom: TapZoomHandler;
+export class DoubleClickZoomHandler {
+  _clickZoom: ClickZoomHandler;
+  _tapZoom: TapZoomHandler;
 
-  /**
-   * @private
-   */
+  /** @internal */
   constructor(clickZoom: ClickZoomHandler, TapZoom: TapZoomHandler) {
-    this.clickZoom = clickZoom;
-    this.tapZoom = TapZoom;
+    this._clickZoom = clickZoom;
+    this._tapZoom = TapZoom;
   }
 
   /**
    * Enables the "double click to zoom" interaction.
    *
    * @example
+   * ```ts
    * map.doubleClickZoom.enable();
+   * ```
    */
-  public enable() {
-    this.clickZoom.enable();
-    this.tapZoom.enable();
+  enable() {
+    this._clickZoom.enable();
+    this._tapZoom.enable();
   }
 
   /**
    * Disables the "double click to zoom" interaction.
    *
    * @example
+   * ```ts
    * map.doubleClickZoom.disable();
+   * ```
    */
-  public disable() {
-    this.clickZoom.disable();
-    this.tapZoom.disable();
+  disable() {
+    this._clickZoom.disable();
+    this._tapZoom.disable();
   }
 
   /**
    * Returns a Boolean indicating whether the "double click to zoom" interaction is enabled.
    *
-   * @returns {boolean} `true` if the "double click to zoom" interaction is enabled.
+   * @returns `true` if the "double click to zoom" interaction is enabled.
    */
-  public isEnabled() {
-    return this.clickZoom.isEnabled() && this.tapZoom.isEnabled();
+  isEnabled() {
+    return this._clickZoom.isEnabled() && this._tapZoom.isEnabled();
   }
 
   /**
    * Returns a Boolean indicating whether the "double click to zoom" interaction is active, i.e. currently being used.
    *
-   * @returns {boolean} `true` if the "double click to zoom" interaction is active.
+   * @returns `true` if the "double click to zoom" interaction is active.
    */
-  public isActive() {
-    return this.clickZoom.isActive() || this.tapZoom.isActive();
+  isActive() {
+    return this._clickZoom.isActive() || this._tapZoom.isActive();
   }
 }

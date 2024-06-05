@@ -4,7 +4,7 @@ import {
   generateMousePanHandler,
   generateMousePitchHandler,
   generateMouseRotationHandler,
-} from '../../src/map-next/handler/mouse';
+} from '../../src/map/handler/mouse';
 
 describe('mouse handler tests', () => {
   test('MouseRotateHandler', () => {

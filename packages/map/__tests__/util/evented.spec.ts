@@ -1,4 +1,4 @@
-import { Event, Evented } from '../../src/map-next/util/evented';
+import { Event, Evented } from '../../src/map/util/evented';
 
 describe('Evented', () => {
   test('calls listeners added with "on"', () => {

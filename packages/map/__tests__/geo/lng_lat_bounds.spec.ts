@@ -1,5 +1,5 @@
-import { LngLat } from '../../src/map-next/geo/lng_lat';
-import { LngLatBounds } from '../../src/map-next/geo/lng_lat_bounds';
+import { LngLat } from '../../src/map/geo/lng_lat';
+import { LngLatBounds } from '../../src/map/geo/lng_lat_bounds';
 
 describe('LngLatBounds', () => {
   test('#constructor', () => {
