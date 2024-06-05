@@ -1,4 +1,4 @@
-import { LngLat } from './lng_lat';
+import { LngLat } from '../../src/map/geo/lng_lat';
 
 describe('LngLat', () => {
   test('#constructor', () => {
