@@ -47,7 +47,7 @@ export default class SpriteModel extends BaseModel {
   }
 
   public planeGeometryUpdateTriangulation = () => {
-    const { spriteBottom = -100000 } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { spriteBottom = -10 } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     const updateZ = this.spriteUpdate;
     const bottomZ = spriteBottom;
     const topZ = this.spriteTop;
@@ -158,8 +158,8 @@ export default class SpriteModel extends BaseModel {
   public async initModels(): Promise<IModel[]> {
     const {
       mapTexture,
-      spriteTop = 5000000,
-      spriteUpdate = 10000,
+      spriteTop = 300,
+      spriteUpdate = 10,
       spriteAnimate = SPRITE_ANIMATE_DIR.DOWN,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     this.initUniformsBuffer();

@@ -1,6 +1,6 @@
 import type { IEarthService, IMercator } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { EarthMap } from '@antv/l7-map';
+import { Map } from '@antv/l7-map';
 import MapService from '../map/map';
 import { MapType } from '../types';
 import EarthViewport from './earth-viewport';
@@ -27,13 +27,11 @@ export default class EarthService extends MapService implements IEarthService {
   private handleCameraTimer: any;
 
   public async init(): Promise<void> {
-    const { id = 'map', style = 'light', rotation = 0, ...rest } = this.config;
+    const { id = 'map', rotation = 0, ...rest } = this.config;
 
     this.mapContainer = this.creatMapContainer(id);
-    // @ts-ignore
-    this.map = new EarthMap({
+    this.map = new Map({
       container: this.mapContainer,
-      style: this.getMapStyleValue(style),
       bearing: rotation,
       ...rest,
     });

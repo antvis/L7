@@ -34,7 +34,6 @@ export default class MapService extends BaseMapService<Map> {
   public async init(): Promise<void> {
     const {
       id = 'map',
-      style = 'light',
       rotation = 0,
       mapInstance,
       version = 'DEFAULT',
@@ -57,7 +56,6 @@ export default class MapService extends BaseMapService<Map> {
       this.mapContainer = this.creatMapContainer(id);
       this.map = new Map({
         container: this.mapContainer,
-        style: this.getMapStyleValue(style),
         bearing: rotation,
         ...rest,
       });
@@ -198,9 +196,7 @@ export default class MapService extends BaseMapService<Map> {
     return '';
   }
 
-  public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyleValue(style));
-  }
+  public setMapStyle(): void {}
 
   public setRotation(rotation: number): void {
     this.map.setBearing(rotation);
@@ -351,13 +347,8 @@ export default class MapService extends BaseMapService<Map> {
     return modelMatrix as unknown as number[];
   }
 
-  public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.map.getCanvas();
-    const layersPng =
-      type === 'jpg'
-        ? (renderCanvas?.toDataURL('image/jpeg') as string)
-        : (renderCanvas?.toDataURL('image/png') as string);
-    return layersPng;
+  public exportMap(): string {
+    return '';
   }
 
   public destroy(): void {

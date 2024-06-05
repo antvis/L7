@@ -208,7 +208,6 @@ export default class MaplibreService extends BaseMapService<Map> {
   }
 
   public panBy(x: number = 0, y: number = 0): void {
-    // @ts-ignore
     this.map.panBy([x, y]);
   }
 
@@ -361,7 +360,8 @@ export default class MaplibreService extends BaseMapService<Map> {
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.map.getCanvas();
+    // @ts-ignore
+    const renderCanvas = this.map?.getCanvas();
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)

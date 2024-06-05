@@ -27,8 +27,8 @@ scene.on('loaded', () => {
     terrainTexture:
       'https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ',
     rgb2height: (r, g, b) => {
-      let h = -10000.0 + (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
-      h = h / 20 - 127600;
+      let h = (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
+      h = h / 200 - 12750;
       h = Math.max(0, h);
       return h;
     },
@@ -40,24 +40,24 @@ scene.on('loaded', () => {
     modelData100;
 
   layer.on('terrainImageLoaded', () => {
-    modelData10 = layer.createModelData([], {
+    modelData10 = layer.layerModel.createModelData({
       widthSegments: 10,
       heightSegments: 10,
     });
 
-    modelData20 = layer.createModelData([], {
+    modelData20 = layer.layerModel.createModelData({
       widthSegments: 20,
       heightSegments: 20,
     });
 
-    modelData100 = layer.createModelData([], {
+    modelData100 = layer.layerModel.createModelData({
       widthSegments: 100,
       heightSegments: 100,
     });
   });
 
-  scene.on('zoom', ({ value }) => {
-    const zoom = Math.floor(value);
+  scene.on('zoom', () => {
+    const zoom = Math.floor(scene.getZoom());
     if (currentZoom !== zoom) {
       if (zoom > 13) {
         if (currentModelData !== '100x100') {
@@ -77,6 +77,5 @@ scene.on('loaded', () => {
       }
       currentZoom = zoom;
     }
-    return '';
   });
 });

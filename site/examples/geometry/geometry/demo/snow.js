@@ -21,7 +21,8 @@ scene.on('loaded', () => {
       center: [120, 30],
       spriteCount: 60,
       spriteRadius: 10,
-      spriteTop: 2500000,
+      spriteTop: 300,
+      spriteUpdate: 5,
     });
   scene.addLayer(layer);
 });

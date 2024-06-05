@@ -1,5 +1,41 @@
 # Change Log
 
+## 2.21.11-beta.6
+
+### Patch Changes
+
+- Updated dependencies [[`67647e9`](https://github.com/antvis/L7/commit/67647e95c5b06b593604310c78c6a0ec195c3a01)]:
+  - @antv/l7-layers@2.21.11-beta.6
+  - @antv/l7-component@2.21.11-beta.6
+  - @antv/l7-maps@2.21.11-beta.6
+  - @antv/l7-renderer@2.21.11-beta.6
+  - @antv/l7-core@2.21.11-beta.6
+  - @antv/l7-utils@2.21.11-beta.6
+
+## 2.21.11-beta.5
+
+### Patch Changes
+
+- Updated dependencies [[`8939e9b`](https://github.com/antvis/L7/commit/8939e9bc0e744d75b5b469c221d6695c7a313e83)]:
+  - @antv/l7-maps@2.21.11-beta.5
+  - @antv/l7-layers@2.21.11-beta.5
+  - @antv/l7-component@2.21.11-beta.5
+  - @antv/l7-renderer@2.21.11-beta.5
+  - @antv/l7-core@2.21.11-beta.5
+  - @antv/l7-utils@2.21.11-beta.5
+
+## 2.21.11-beta.4
+
+### Patch Changes
+
+- Updated dependencies [[`cca16a3`](https://github.com/antvis/L7/commit/cca16a3d72de462afa9d71c386c82f92952d1c47)]:
+  - @antv/l7-maps@2.21.11-beta.4
+  - @antv/l7-layers@2.21.11-beta.4
+  - @antv/l7-component@2.21.11-beta.4
+  - @antv/l7-renderer@2.21.11-beta.4
+  - @antv/l7-core@2.21.11-beta.4
+  - @antv/l7-utils@2.21.11-beta.4
+
 ## 2.21.11-beta.3
 
 ### Patch Changes

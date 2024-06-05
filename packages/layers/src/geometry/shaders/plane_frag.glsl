@@ -1,4 +1,3 @@
-
 uniform sampler2D u_texture;
 layout(std140) uniform commonUniforms {
   float u_opacity;
@@ -13,12 +12,10 @@ out vec4 outputColor;
 
 #pragma include "picking"
 void main() {
-  // gl_FragColor = vec4(v_Color, u_opacity);
-  if(u_mapFlag > 0.0) {
+  if (u_mapFlag > 0.0) {
     outputColor = texture(SAMPLER_2D(u_texture), vec2(v_uv.x, 1.0 - v_uv.y));
     outputColor.a *= u_opacity;
   } else {
-    // gl_FragColor = vec4(v_uv, 0.0, u_opacity);
     outputColor = vec4(v_Color, u_opacity);
   }
   outputColor.a *= v_clip;

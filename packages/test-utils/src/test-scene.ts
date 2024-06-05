@@ -1,9 +1,9 @@
-import type { IMapOptions } from '@antv/l7-map';
+import type { IMapConfig } from '@antv/l7-core';
 import { Map } from '@antv/l7-maps';
 import { Scene } from '@antv/l7-scene';
 import { glContext } from './gl-context';
 
-export function TestScene(options?: Partial<IMapOptions>) {
+export function TestScene(options?: Partial<IMapConfig>) {
   const el = document.createElement('div');
   el.id = 'test-div-id';
   const width = 400;

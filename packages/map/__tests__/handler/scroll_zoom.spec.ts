@@ -1,82 +1,296 @@
-import Point from '../../src/geo/point';
-import type HandlerManager from '../../src/handler/handler_manager';
-import ScrollZoomHandler from '../../src/handler/scroll_zoom';
-import { Map } from '../../src/map';
+import { Map } from '../../src/map/map';
+import { browser } from '../../src/map/util/browser';
+import { DOM } from '../../src/map/util/dom';
+import simulate from '../libs/simulate_interaction';
+import { beforeMapTest, setPerformance } from '../libs/util';
 
-describe('Map', () => {
-  const el = document.createElement('div');
-  el.id = 'test-div-id';
-  // el.style.width = '500px';
-  // el.style.height = '500px';
-  el.style.background = '#aaa';
-  let map: Map;
-  let handlerManager: HandlerManager;
-  let scrollZoomHandler: ScrollZoomHandler;
-  document.querySelector('body')?.appendChild(el);
-  beforeEach(() => {
-    map = new Map({
-      container: el,
-      zoom: 10,
+function createMap() {
+  return new Map({
+    container: DOM.create('div', '', window.document.body),
+  });
+}
+
+beforeEach(() => {
+  beforeMapTest();
+});
+
+describe('ScrollZoomHandler', () => {
+  test('Zooms for single mouse wheel tick', () => {
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+
+    const map = createMap();
+    map._renderTaskQueue.run();
+
+    // simulate a single 'wheel' event
+    const startZoom = map.getZoom();
+
+    simulate.wheel(map.getCanvasContainer(), {
+      type: 'wheel',
+      deltaY: -simulate.magicWheelZoomDelta,
     });
-    handlerManager = map.handlers;
-    // @ts-ignore
-    scrollZoomHandler = handlerManager.handlersById['scrollZoom'];
+    map._renderTaskQueue.run();
+
+    now += 400;
+    browserNow.mockReturnValue(now);
+    map._renderTaskQueue.run();
+
+    expect(map.getZoom() - startZoom).toBeCloseTo(0.0285, 3);
+
+    map.remove();
   });
 
-  //  handlerManager isactive
-  it('handlerManager is active', () => {
-    expect(handlerManager.isActive()).toEqual(false);
-  });
+  test('Zooms for single mouse wheel tick with non-magical deltaY', (done) => {
+    const browserNow = jest.spyOn(browser, 'now');
+    const now = 1555555555555;
+    browserNow.mockReturnValue(now);
 
-  it('scrollZoomHandler', () => {
-    expect(scrollZoomHandler).toBeInstanceOf(ScrollZoomHandler);
-  });
-  it('boxZoomHandler box select', () => {
-    // @ts-ignore
-    const boxZoom = handlerManager.handlersById['boxZoom'];
-    boxZoom.disable();
-    boxZoom.enable();
+    const map = createMap();
+    map._renderTaskQueue.run();
 
-    // 模拟鼠标按下事件
-    let e = new MouseEvent('mousedown', {
-      shiftKey: true,
-      button: 0,
-      clientX: 100,
-      clientY: 100,
+    // Simulate a single 'wheel' event without the magical deltaY value.
+    // This requires the handler to briefly wait to see if a subsequent
+    // event is coming in order to guess trackpad vs. mouse wheel
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: -20 });
+    map.on('zoomstart', () => {
+      map.remove();
+      done();
     });
-    // 创建一个 Point 对象
-    const point1 = new Point(0, 0);
-    //@ts-ignore
-    boxZoom.mousedown(e, point1);
-
-    // 模拟鼠标移动事件
-    const point2 = new Point(200, 200);
-    e = new MouseEvent('mousemove', { clientX: 200, clientY: 200 });
-    //@ts-ignore
-    boxZoom.mousemoveWindow(e, point2);
-
-    // 模拟鼠标释放事件
-    const point3 = new Point(200, 200);
-    e = new MouseEvent('mouseup', { clientX: 200, clientY: 200 });
-    //@ts-ignore
-    boxZoom.mouseupWindow(e, point3);
-    expect(map.getZoom()).toEqual(10);
-
-    // 验证结果
-    // 这将取决于你的boxZoomHandler如何处理这些事件
-    // 例如，你可能会检查地图的缩放级别或视口是否已经改变
-  });
-  // wheel
-  it('scrollZoomHandler wheel', () => {
-    const e = new WheelEvent('wheel', { deltaY: -500 });
-    scrollZoomHandler.wheel(e);
-    scrollZoomHandler.renderFrame();
-    expect(map.getZoom()).toEqual(10);
   });
 
-  // disable
-  it('scrollZoomHandler disable', () => {
-    scrollZoomHandler.disable();
-    expect(scrollZoomHandler.isEnabled()).toEqual(false);
+  test('Zooms for multiple mouse wheel ticks', () => {
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+
+    const map = createMap();
+
+    map._renderTaskQueue.run();
+    const startZoom = map.getZoom();
+
+    const events = [
+      [2, { type: 'wheel', deltaY: -simulate.magicWheelZoomDelta }],
+      [7, { type: 'wheel', deltaY: -41 }],
+      [30, { type: 'wheel', deltaY: -169 }],
+      [1, { type: 'wheel', deltaY: -801 }],
+      [5, { type: 'wheel', deltaY: -326 }],
+      [20, { type: 'wheel', deltaY: -345 }],
+      [22, { type: 'wheel', deltaY: -376 }],
+    ] as [number, any][];
+
+    const end = now + 500;
+    let lastWheelEvent = now;
+
+    // simulate the above sequence of wheel events, with render frames
+    // interspersed every 20ms
+    while (now < end) {
+      now += 1;
+      browserNow.mockReturnValue(now);
+      if (events.length && lastWheelEvent + events[0][0] === now) {
+        const [, event] = events.shift();
+        simulate.wheel(map.getCanvasContainer(), event);
+        lastWheelEvent = now;
+      }
+      if (now % 20 === 0) {
+        map._renderTaskQueue.run();
+      }
+    }
+
+    expect(map.getZoom() - startZoom).toBeCloseTo(1.944, 3);
+
+    map.remove();
+  });
+
+  test('Gracefully ignores wheel events with deltaY: 0', () => {
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+
+    const map = createMap();
+    map._renderTaskQueue.run();
+
+    const startZoom = map.getZoom();
+    // simulate  shift+'wheel' events
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: -0, shiftKey: true });
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: -0, shiftKey: true });
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: -0, shiftKey: true });
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: -0, shiftKey: true });
+    map._renderTaskQueue.run();
+
+    now += 400;
+    browserNow.mockReturnValue(now);
+    map._renderTaskQueue.run();
+
+    expect(map.getZoom() - startZoom).toBe(0.0);
+  });
+
+  test('Gracefully handle wheel events that cancel each other out before the first scroll frame', () => {
+    // See also https://github.com/mapbox/mapbox-gl-js/issues/6782
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+
+    const map = createMap();
+    map._renderTaskQueue.run();
+
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: -1 });
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: -1 });
+    now += 1;
+    browserNow.mockReturnValue(now);
+    simulate.wheel(map.getCanvasContainer(), { type: 'wheel', deltaY: 2 });
+
+    map._renderTaskQueue.run();
+
+    now += 400;
+    browserNow.mockReturnValue(now);
+    map._renderTaskQueue.run();
+  });
+
+  test('does not zoom if preventDefault is called on the wheel event', () => {
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+
+    const map = createMap();
+
+    map.on('wheel', (e) => e.preventDefault());
+
+    simulate.wheel(map.getCanvasContainer(), {
+      type: 'wheel',
+      deltaY: -simulate.magicWheelZoomDelta,
+    });
+    map._renderTaskQueue.run();
+
+    now += 400;
+    browserNow.mockReturnValue(now);
+    map._renderTaskQueue.run();
+
+    expect(map.getZoom()).toBe(0);
+
+    map.remove();
+  });
+
+  test('emits one movestart event and one moveend event while zooming', () => {
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+    jest.useFakeTimers();
+    setPerformance();
+    const map = createMap();
+
+    let startCount = 0;
+    map.on('movestart', () => {
+      startCount += 1;
+    });
+
+    let endCount = 0;
+    map.on('moveend', () => {
+      endCount += 1;
+    });
+
+    const events = [
+      [2, { type: 'trackpad', deltaY: -1 }],
+      [7, { type: 'trackpad', deltaY: -2 }],
+      [30, { type: 'wheel', deltaY: -5 }],
+    ] as [number, any][];
+
+    const end = now + 50;
+    let lastWheelEvent = now;
+
+    while (now < end) {
+      now += 1;
+      browserNow.mockReturnValue(now);
+      if (events.length && lastWheelEvent + events[0][0] === now) {
+        const [, event] = events.shift();
+        simulate.wheel(map.getCanvasContainer(), event);
+        lastWheelEvent = now;
+      }
+      if (now % 20 === 0) {
+        map._renderTaskQueue.run();
+      }
+    }
+
+    jest.advanceTimersByTime(200);
+
+    map._renderTaskQueue.run();
+
+    expect(startCount).toBe(1);
+    expect(endCount).toBe(1);
+  });
+
+  test('emits one zoomstart event and one zoomend event while zooming', () => {
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+
+    jest.useFakeTimers();
+    setPerformance();
+    const map = createMap();
+
+    let startCount = 0;
+    map.on('zoomstart', () => {
+      startCount += 1;
+    });
+
+    let endCount = 0;
+    map.on('zoomend', () => {
+      endCount += 1;
+    });
+
+    const events = [
+      [2, { type: 'trackpad', deltaY: -1 }],
+      [7, { type: 'trackpad', deltaY: -2 }],
+      [30, { type: 'wheel', deltaY: -5 }],
+    ] as [number, any][];
+
+    const end = now + 50;
+    let lastWheelEvent = now;
+
+    while (now < end) {
+      now += 1;
+      browserNow.mockReturnValue(now);
+      if (events.length && lastWheelEvent + events[0][0] === now) {
+        const [, event] = events.shift();
+        simulate.wheel(map.getCanvasContainer(), event);
+        lastWheelEvent = now;
+      }
+      if (now % 20 === 0) {
+        map._renderTaskQueue.run();
+      }
+    }
+
+    jest.advanceTimersByTime(200);
+    map._renderTaskQueue.run();
+
+    expect(startCount).toBe(1);
+    expect(endCount).toBe(1);
+  });
+
+  test('Zooms for single mouse wheel tick while not in the center of the map and terrain is on, should zoom according to mouse position', () => {
+    const browserNow = jest.spyOn(browser, 'now');
+    let now = 1555555555555;
+    browserNow.mockReturnValue(now);
+
+    const map = createMap();
+    map._renderTaskQueue.run();
+
+    // simulate a single 'wheel' event
+    simulate.wheel(map.getCanvasContainer(), {
+      type: 'wheel',
+      deltaY: -simulate.magicWheelZoomDelta,
+      clientX: 1000,
+      clientY: 1000,
+    });
+    map._renderTaskQueue.run();
+
+    now += 400;
+    browserNow.mockReturnValue(now);
+    map._renderTaskQueue.run();
+
+    expect(map.getCenter().lat).toBeCloseTo(-11.6371, 3);
+    expect(map.getCenter().lng).toBeCloseTo(11.0286, 3);
+
+    map.remove();
   });
 });

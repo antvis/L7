@@ -14,8 +14,6 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapTheme } from './theme';
 
-window.mapboxgl = mapboxgl;
-
 const MAPBOX_API_KEY =
   '101MlGsZ2AmmA&access_token=pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2p0MG01MXRqMW45cjQzb2R6b2ptc3J4MSJ9.zA2W0IkI0c6KaAhJfk9bWg';
 
@@ -76,7 +74,7 @@ export default class MapboxService extends BaseMapService<Map> {
       this.mapContainer = this.map.getContainer();
     } else {
       this.mapContainer = this.creatMapContainer(id);
-      this.map = new window.mapboxgl.Map({
+      this.map = new (window.mapboxgl || mapboxgl).Map({
         container: this.mapContainer,
         style: this.getMapStyleValue(style),
         attributionControl,
