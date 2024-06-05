@@ -4,7 +4,7 @@
  */
 import type { IEarthService, IMercator, IViewport } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
-import { MapNext } from '@antv/l7-map';
+import { Map } from '@antv/l7-map';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from './Viewport';
 const EventMap: {
@@ -20,7 +20,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * EarthService
  */
-export default class L7EarthService extends BaseMapService<MapNext> implements IEarthService {
+export default class L7EarthService extends BaseMapService<Map> implements IEarthService {
   public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     throw new Error('Method not implemented.');
   }
@@ -76,7 +76,7 @@ export default class L7EarthService extends BaseMapService<MapNext> implements I
     this.viewport = new Viewport();
 
     this.$mapContainer = this.creatMapContainer(id);
-    this.map = new MapNext({
+    this.map = new Map({
       container: this.$mapContainer,
       bearing: rotation,
       ...rest,
