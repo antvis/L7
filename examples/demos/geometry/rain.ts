@@ -1,17 +1,18 @@
-import { GeometryLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GeometryLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-const scene = new Scene({
-  id: 'map',
-  map: new GaodeMap({
-    pitch: 90,
-    style: 'dark',
-    center: [120, 30],
-    zoom: 6,
-  }),
-});
+export const rain: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
+      pitch: 90,
+      style: 'dark',
+      center: [120, 30],
+      zoom: 6,
+    },
+  });
 
-scene.on('loaded', () => {
   const layer = new GeometryLayer()
     .shape('sprite')
     .size(10)
@@ -27,4 +28,6 @@ scene.on('loaded', () => {
       spriteScale: 0.8,
     });
   scene.addLayer(layer);
-});
+
+  return scene;
+};

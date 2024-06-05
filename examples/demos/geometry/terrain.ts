@@ -1,20 +1,22 @@
-import { GeometryLayer, Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GeometryLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-const scene = new Scene({
-  id: 'map',
-  map: new GaodeMap({
-    center: [120.1025, 30.2594],
-    style: 'dark',
-    pitch: 65,
-    rotation: 180,
-    zoom: 14,
-  }),
-});
-let currentZoom = 14,
-  currentModelData = '100x100';
+export const terrain: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
+      center: [120.1025, 30.2594],
+      style: 'dark',
+      pitch: 65,
+      rotation: 180,
+      zoom: 14,
+    },
+  });
 
-scene.on('loaded', () => {
+  let currentZoom = 14,
+    currentModelData = '100x100';
+
   const layer = new GeometryLayer().shape('plane').style({
     width: 0.074,
     height: 0.061,
@@ -33,11 +35,8 @@ scene.on('loaded', () => {
       return h;
     },
   });
-  scene.addLayer(layer);
 
-  let modelData10,
-    modelData20 = null,
-    modelData100;
+  let modelData10: any, modelData20: any, modelData100: any;
 
   layer.on('terrainImageLoaded', () => {
     modelData10 = layer.layerModel.createModelData({
@@ -78,4 +77,8 @@ scene.on('loaded', () => {
       currentZoom = zoom;
     }
   });
-});
+
+  scene.addLayer(layer);
+
+  return scene;
+};

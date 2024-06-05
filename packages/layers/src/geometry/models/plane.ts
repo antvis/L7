@@ -1,12 +1,5 @@
-import type {
-  IAttributeAndElements,
-  IEncodeFeature,
-  IModel,
-  IModelUniform,
-  ITexture2D,
-} from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IModelUniform, ITexture2D } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
-// import { mat4, vec3 } from 'gl-matrix';
 import BaseModel from '../../core/BaseModel';
 import type { IGeometryLayerStyleOptions } from '../../core/interface';
 import planeFrag from '../shaders/plane_frag.glsl';
@@ -54,7 +47,7 @@ export default class PlaneModel extends BaseModel {
 
       for (let ix = 0; ix < gridX1; ix++) {
         const x = ix * segmentWidth - widthHalf;
-        positions.push(x + lng, -y + lat, 0);
+        positions.push(x + lng, -y + lat, 10);
         positions.push(ix / gridX);
         positions.push(1 - iy / gridY);
       }
@@ -83,6 +76,7 @@ export default class PlaneModel extends BaseModel {
       heightSegments = 1,
       center = [120, 30],
       terrainTexture,
+      rgb2height = (r: number, g: number, b: number) => r + g + b,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     const { indices, positions } = this.initPlane(
       width,
@@ -93,7 +87,14 @@ export default class PlaneModel extends BaseModel {
     );
     if (terrainTexture) {
       // 存在地形贴图的时候会根据地形贴图对顶点进行偏移
-      this.loadTerrainTexture(positions, indices);
+      return this.translateVertex(
+        positions,
+        indices,
+        this.terrainImage,
+        widthSegments,
+        heightSegments,
+        rgb2height,
+      );
     }
 
     return {
@@ -147,7 +148,8 @@ export default class PlaneModel extends BaseModel {
   }
 
   public async initModels(): Promise<IModel[]> {
-    const { mapTexture } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { mapTexture, terrainTexture } =
+      this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     this.mapTexture = mapTexture;
 
     const { createTexture2D } = this.rendererService;
@@ -158,6 +160,10 @@ export default class PlaneModel extends BaseModel {
 
     this.updateTexture(mapTexture);
     this.initUniformsBuffer();
+
+    if (terrainTexture) {
+      this.terrainImage = await this.loadTerrainImage(terrainTexture);
+    }
 
     const model = await this.layer.buildLayerModel({
       moduleName: 'geometryPlane',
@@ -282,70 +288,38 @@ export default class PlaneModel extends BaseModel {
       }
     }
 
-    const oldFeatures = this.layer.getEncodedData();
-    const modelData = this.styleAttributeService.createAttributesAndIndices(oldFeatures, () => {
-      return {
-        vertices: positions,
-        indices,
-        size: 5,
-      };
-    });
-    this.layer.updateModelData(modelData as IAttributeAndElements);
-    this.layerService.throttleRenderLayers();
+    return {
+      vertices: positions,
+      indices,
+      size: 5,
+    };
   }
 
-  /**
-   * load terrain texture & offset attribute z
-   */
-  protected loadTerrainTexture(positions: number[], indices: number[]) {
-    const {
-      widthSegments = 1,
-      heightSegments = 1,
-      terrainTexture,
-      rgb2height = (r: number, g: number, b: number) => r + g + b,
-    } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+  private async loadTerrainImage(terrainTexture: string) {
     if (this.terrainImage) {
       // 若当前已经存在 image，直接进行偏移计算（LOD）
       if (this.terrainImageLoaded) {
-        this.translateVertex(
-          positions,
-          indices,
-          this.terrainImage,
-          widthSegments,
-          heightSegments,
-          rgb2height,
-        );
+        return this.terrainImage;
       } else {
-        this.terrainImage.onload = () => {
-          this.translateVertex(
-            positions,
-            indices,
-            this.terrainImage,
-            widthSegments,
-            heightSegments,
-            rgb2height,
-          );
-        };
+        return new Promise<HTMLImageElement>((resolve) => {
+          this.terrainImage.onload = () => {
+            resolve(this.terrainImage);
+          };
+        });
       }
     } else {
       // 加载地形贴图、根据地形贴图对 planeGeometry 进行偏移
       const terrainImage = new Image();
-      this.terrainImage = terrainImage;
       terrainImage.crossOrigin = 'anonymous';
-      terrainImage.onload = () => {
-        this.terrainImageLoaded = true;
-        // 图片加载完，触发事件，可以进行地形图的顶点计算存储
-        setTimeout(() => this.layer.emit('terrainImageLoaded', null));
-        this.translateVertex(
-          positions,
-          indices,
-          terrainImage,
-          widthSegments,
-          heightSegments,
-          rgb2height,
-        );
-      };
-      terrainImage.src = terrainTexture as string;
+      return new Promise<HTMLImageElement>((resolve) => {
+        terrainImage.onload = () => {
+          this.terrainImageLoaded = true;
+          resolve(terrainImage);
+          // 图片加载完，触发事件，可以进行地形图的顶点计算存储
+          setTimeout(() => this.layer.emit('terrainImageLoaded', null));
+        };
+        terrainImage.src = terrainTexture as string;
+      });
     }
   }
 
