@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.21.11-beta.6
+
+### Patch Changes
+
+- [#2523](https://github.com/antvis/L7/pull/2523) [`67647e9`](https://github.com/antvis/L7/commit/67647e95c5b06b593604310c78c6a0ec195c3a01) Thanks [@lvisei](https://github.com/lvisei)! - fix: 解决 GeometryLayer 在不同底图上的渲染不一致情况
+
+- Updated dependencies []:
+  - @antv/l7-maps@2.21.11-beta.6
+  - @antv/l7-core@2.21.11-beta.6
+  - @antv/l7-source@2.21.11-beta.6
+  - @antv/l7-utils@2.21.11-beta.6
+
 ## 2.21.11-beta.5
 
 ### Patch Changes
