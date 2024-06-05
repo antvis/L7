@@ -47,7 +47,7 @@ export default class PlaneModel extends BaseModel {
 
       for (let ix = 0; ix < gridX1; ix++) {
         const x = ix * segmentWidth - widthHalf;
-        positions.push(x + lng, -y + lat, 10);
+        positions.push(x + lng, -y + lat, 0);
         positions.push(ix / gridX);
         positions.push(1 - iy / gridY);
       }

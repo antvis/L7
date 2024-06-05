@@ -22,7 +22,7 @@ scene.on('loaded', () => {
       center: [120, 30],
       spriteCount: 120,
       spriteRadius: 10,
-      spriteTop: 300,
+      spriteTop: 400,
       spriteUpdate: 10,
       spriteScale: 0.8,
     });
