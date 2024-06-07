@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.21.11-beta.7
+
+### Patch Changes
+
+- [#2526](https://github.com/antvis/L7/pull/2526) [`3aa0f32`](https://github.com/antvis/L7/commit/3aa0f32b41ef10efa2e9bab46d695bc87ab950f6) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复 bindings 缓存在 WebGPU 的问题
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.7
+  - @antv/l7-utils@2.21.11-beta.7
+
 ## 2.21.11-beta.6
 
 ### Patch Changes
