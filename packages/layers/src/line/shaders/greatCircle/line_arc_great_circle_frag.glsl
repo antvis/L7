@@ -19,11 +19,11 @@ layout(std140) uniform commonUniorm {
   float u_linearColor: 0;
 };
 
-in vec4 v_line_data;
-in vec2 v_iconMapUV;
 in vec4 v_dash_array;
-in float v_distance_ratio;
 in vec4 v_color;
+in vec2 v_iconMapUV;
+in vec4 v_line_data;
+in float v_distance_ratio;
 
 out vec4 outputColor;
 #pragma include "picking"
@@ -34,7 +34,7 @@ void main() {
 
   float animateSpeed = 0.0;
   float d_segmentIndex = v_line_data.g;
-  
+
   // 设置弧线的底色
   if(u_linearColor == 1.0) { // 使用渐变颜色
     outputColor = mix(u_sourceColor, u_targetColor, d_segmentIndex/segmentNumber);
@@ -65,7 +65,7 @@ void main() {
   }
 
   // 设置弧线的贴图
-  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) { 
+  if(LineTexture == u_line_texture && u_line_type != LineTypeDash) {
     float arcRadio = smoothstep( 0.0, 1.0, (d_segmentIndex / (segmentNumber - 1.0)));
     // float arcRadio = d_segmentIndex / (segmentNumber - 1.0);
     float count = v_line_data.b; // 贴图在弧线上重复的数量
@@ -79,7 +79,7 @@ void main() {
 
     vec2 uv= v_iconMapUV / u_textSize + vec2(u, v) / u_textSize * 64.;
     vec4 pattern = texture(SAMPLER_2D(u_texture), uv);
-    
+
     // 设置贴图和底色的叠加模式
     if(u_textureBlend == 0.0) { // normal
       pattern.a = 0.0;
