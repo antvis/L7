@@ -1,5 +1,27 @@
 # Change Log
 
+## 3.0.0
+
+### Patch Changes
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: mapbox 线图层的贴图变形
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: 解决 GeometryLayer 在不同底图上的渲染不一致情况
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复热力蜂窝图层渲染空白
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: Mapbox/Maplibre 20 层级以上数据偏移问题
+  fix: 修复点图层部分 shape 中心点计算有误
+  fix: 修复立体面图层光照计算有误
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: mapbox 下部分面数据图层绘制异常
+
+- Updated dependencies [[`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8)]:
+  - @antv/l7-maps@3.0.0
+  - @antv/l7-core@3.0.0
+  - @antv/l7-source@3.0.0
+  - @antv/l7-utils@3.0.0
+
 ## 2.21.11-beta.7
 
 ### Patch Changes

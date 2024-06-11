@@ -1,5 +1,14 @@
 # @antv/l7-test-utils
 
+## 3.0.0
+
+### Patch Changes
+
+- Updated dependencies [[`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8)]:
+  - @antv/l7-maps@3.0.0
+  - @antv/l7-map@3.0.0
+  - @antv/l7-scene@3.0.0
+
 ## 2.21.11-beta.7
 
 ### Patch Changes

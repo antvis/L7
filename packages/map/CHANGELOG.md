@@ -1,5 +1,14 @@
 # @antv/l7-map
 
+## 3.0.0
+
+### Patch Changes
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - refactor: 升级新版一方地图交互事件机制，解决抖动问题
+
+- Updated dependencies []:
+  - @antv/l7-utils@3.0.0
+
 ## 2.21.11-beta.7
 
 ### Patch Changes
