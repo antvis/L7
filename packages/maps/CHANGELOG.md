@@ -1,5 +1,34 @@
 # Change Log
 
+## 2.22.0
+
+### Minor Changes
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - refactor: 高德地图联动升级
+
+### Patch Changes
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复在 Map 上使用组件事件穿透到图层上的问题
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: 天地图 setCenter 方法缺失
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: Mapbox/Maplibre 20 层级以上数据偏移问题
+  fix: 修复点图层部分 shape 中心点计算有误
+  fix: 修复立体面图层光照计算有误
+- Updated dependencies [[`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8)]:
+  - @antv/l7-map@2.22.0
+  - @antv/l7-core@2.22.0
+  - @antv/l7-utils@2.22.0
+
+## 2.21.11-beta.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.7
+  - @antv/l7-map@2.21.11-beta.7
+  - @antv/l7-utils@2.21.11-beta.7
+
 ## 2.21.11-beta.6
 
 ### Patch Changes

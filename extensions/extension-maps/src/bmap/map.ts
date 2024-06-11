@@ -27,6 +27,7 @@ const BMAP_API_KEY = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
 const BMAP_VERSION = '1.0';
 const ZOOM_OFFSET = 1.75;
 
+// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class BMapService extends BaseMapService<BMapGL.Map> {
   public type: string = 'BMap';
 

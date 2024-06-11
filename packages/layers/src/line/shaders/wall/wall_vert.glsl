@@ -21,16 +21,15 @@ layout(std140) uniform commonUniorm {
   float u_time;
 };
 
-#pragma include "projection"
-#pragma include "light"
-#pragma include "picking"
-
 // texV 线图层 - 贴图部分的 v 坐标（线的宽度方向）
 out vec2 v_iconMapUV;
 out vec4 v_color;
 out float v_blur;
-out float v_radio;
 out vec4 v_dataset;
+
+#pragma include "projection"
+#pragma include "light"
+#pragma include "picking"
 
 void main() {
   float a_Distance = a_Distance_Total_Miter.x;

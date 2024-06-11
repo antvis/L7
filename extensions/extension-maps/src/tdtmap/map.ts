@@ -16,6 +16,7 @@ const MapEvent: Record<string, string[] | string> = {
 };
 const TDT_API_KEY = 'b15e548080c79819617367d3f6095c69';
 
+// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class TdtMapService extends BaseMapService<any> {
   public type: string = 'TdtMap';
 

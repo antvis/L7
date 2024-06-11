@@ -1,5 +1,31 @@
 # Change Log
 
+## 2.22.0
+
+### Patch Changes
+
+- Updated dependencies [[`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8)]:
+  - @antv/l7-layers@2.22.0
+  - @antv/l7-component@2.22.0
+  - @antv/l7-maps@2.22.0
+  - @antv/l7-core@2.22.0
+  - @antv/l7-scene@2.22.0
+  - @antv/l7-source@2.22.0
+  - @antv/l7-utils@2.22.0
+
+## 2.21.11-beta.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-scene@2.21.11-beta.7
+  - @antv/l7-component@2.21.11-beta.7
+  - @antv/l7-layers@2.21.11-beta.7
+  - @antv/l7-core@2.21.11-beta.7
+  - @antv/l7-maps@2.21.11-beta.7
+  - @antv/l7-source@2.21.11-beta.7
+  - @antv/l7-utils@2.21.11-beta.7
+
 ## 2.21.11-beta.6
 
 ### Patch Changes

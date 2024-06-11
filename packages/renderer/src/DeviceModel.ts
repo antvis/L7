@@ -157,7 +157,6 @@ export default class DeviceModel implements IModel {
     const stencilEnabled = !!(stencilParams && stencilParams.enable);
 
     const pipeline = this.device.createRenderPipeline({
-      // return this.service.renderCache.createRenderPipeline({
       inputLayout: this.inputLayout,
       program: this.program,
       topology: primitiveMap[primitive],
@@ -270,7 +269,7 @@ export default class DeviceModel implements IModel {
       ...this.extractUniforms(uniforms),
     };
 
-    const { renderPass, currentFramebuffer, width, height, renderCache } = this.service;
+    const { renderPass, currentFramebuffer, width, height } = this.service;
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
@@ -311,8 +310,7 @@ export default class DeviceModel implements IModel {
         : null,
     );
     if (uniformBuffers) {
-      // this.bindings = device.createBindings({
-      this.bindings = renderCache.createBindings({
+      this.bindings = device.createBindings({
         pipeline: this.pipeline,
         uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
           const buffer = uniformBuffer as DeviceBuffer;
