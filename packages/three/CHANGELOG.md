@@ -1,11 +1,11 @@
 # @antv/l7-three
 
-## 3.0.0
+## 2.21.11
 
 ### Patch Changes
 
 - Updated dependencies []:
-  - @antv/l7@3.0.0
+  - @antv/l7@2.21.11
 
 ## 2.21.11-beta.7
 

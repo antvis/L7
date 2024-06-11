@@ -1,6 +1,6 @@
 # Change Log
 
-## 3.0.0
+## 2.21.11
 
 ### Patch Changes
 
@@ -10,7 +10,7 @@
   fix: 修复点图层部分 shape 中心点计算有误
   fix: 修复立体面图层光照计算有误
 - Updated dependencies []:
-  - @antv/l7-utils@3.0.0
+  - @antv/l7-utils@2.21.11
 
 ## 2.21.11-beta.7
 

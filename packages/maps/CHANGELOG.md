@@ -1,6 +1,6 @@
 # Change Log
 
-## 3.0.0
+## 2.21.11
 
 ### Minor Changes
 
@@ -16,9 +16,9 @@
   fix: 修复点图层部分 shape 中心点计算有误
   fix: 修复立体面图层光照计算有误
 - Updated dependencies [[`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8), [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8)]:
-  - @antv/l7-map@3.0.0
-  - @antv/l7-core@3.0.0
-  - @antv/l7-utils@3.0.0
+  - @antv/l7-map@2.21.11
+  - @antv/l7-core@2.21.11
+  - @antv/l7-utils@2.21.11
 
 ## 2.21.11-beta.7
 
