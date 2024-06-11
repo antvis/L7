@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.22.0
+
+### Patch Changes
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: 在 WebGL2 拾取事件冒泡延迟问题
+
+- [#2529](https://github.com/antvis/L7/pull/2529) [`ce90571`](https://github.com/antvis/L7/commit/ce90571ba77686790b2476936b9466657e187ae8) Thanks [@lvisei](https://github.com/lvisei)! - fix: Mapbox/Maplibre 20 层级以上数据偏移问题
+  fix: 修复点图层部分 shape 中心点计算有误
+  fix: 修复立体面图层光照计算有误
+- Updated dependencies []:
+  - @antv/l7-utils@2.22.0
+
 ## 2.21.11-beta.7
 
 ### Patch Changes
