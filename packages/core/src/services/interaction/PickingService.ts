@@ -147,9 +147,9 @@ export default class PickingService implements IPickingService {
   public handleCursor(layer: ILayer, type: string) {
     const { cursor = '', cursorEnabled } = layer.getLayerConfig();
     if (cursorEnabled) {
-      const mapType = this.mapService.getType();
+      const mapType = this.mapService.type;
       const domContainer =
-        mapType === 'amap'
+        mapType === 'AMap'
           ? this.mapService.getMapContainer()
           : this.mapService.getMarkerContainer();
       // const domContainer = this.mapService.getMarkerContainer();

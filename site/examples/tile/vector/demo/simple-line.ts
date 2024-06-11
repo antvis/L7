@@ -1,7 +1,7 @@
 // @ts-ignore
 import { LineLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

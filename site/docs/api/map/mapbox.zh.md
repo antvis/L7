@@ -22,7 +22,7 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 
 ```ts
 import { Scene, PointLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
+import { Mapbox } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

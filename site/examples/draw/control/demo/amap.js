@@ -1,7 +1,7 @@
 // https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tif
 import { Scene } from '@antv/l7';
 import { ControlEvent, DrawControl } from '@antv/l7-draw';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

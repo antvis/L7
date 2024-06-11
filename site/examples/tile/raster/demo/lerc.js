@@ -1,5 +1,4 @@
-import { RasterLayer, Scene, Source } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Map, RasterLayer, Scene, Source } from '@antv/l7';
 import * as Lerc from 'lerc';
 
 const colorList = [

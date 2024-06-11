@@ -16,8 +16,7 @@ We usually use longitude and latitude to describe geographical location, but in 
 In order to use a simple coordinate system, we need to use the L7 custom Map map type and specify the version attribute of the map.
 
 ```javascript
-import { Scene, ImageLayer, PointLayer } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Scene, ImageLayer, PointLayer, Map } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

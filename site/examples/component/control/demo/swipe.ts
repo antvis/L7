@@ -1,4 +1,5 @@
-import { GaodeMap, RasterLayer, Scene, Swipe } from '@antv/l7';
+import { RasterLayer, Scene, Swipe } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

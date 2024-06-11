@@ -1,5 +1,6 @@
-import { GaodeMap, Scene } from '@antv/l7';
+import { Scene } from '@antv/l7';
 import { IconImageLayer } from '@antv/l7-composite-layers';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 // 详情可见：https://l7plot.antv.antgroup.com/api/composite-layers/icon-image-layer
 

@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
-import { LineLayer, Marker, PointLayer, PolygonLayer, Scene } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { LineLayer, Map, Marker, PointLayer, PolygonLayer, Scene } from '@antv/l7';
 import 'district-data';
 
 const pointData = [

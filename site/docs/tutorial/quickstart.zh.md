@@ -15,7 +15,7 @@ order: 1
 // 安装L7 依赖
 npm install --save @antv/l7
 // 安装第三方底图依赖
-npm install --save @antv/l7-maps
+npm install --save @antv/l7-extension-maps
 ```
 
 ### 通过 CDN 引入
@@ -37,7 +37,7 @@ CDN 引用 在使用时通过 L7 命名空间获取所有对象并初始化，�
 
 ```javascript
 import { Scene } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new L7.Scene({
   id: 'map',
@@ -62,7 +62,7 @@ const scene = new L7.Scene({
 2. 初始化高德地图
 
 ```javascript
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 // 同样你也可以初始化一个 Mapbox 地图
 const scene = new Scene({
   id: 'map',

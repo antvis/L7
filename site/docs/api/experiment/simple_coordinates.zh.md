@@ -16,8 +16,7 @@ order: 1
 为了使用简单坐标系，我们需要是使用 L7 自定义的 Map 地图类型，同时制定 map 的 version 属性
 
 ```javascript
-import { Scene, ImageLayer, PointLayer } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Scene, ImageLayer, PointLayer, Map } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

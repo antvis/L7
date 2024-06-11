@@ -1,10 +1,8 @@
 import type { Scene } from '@antv/l7';
-import type { ISceneConfig } from '@antv/l7-core';
 import type { Controller, GUI } from 'lil-gui';
 
 export type GUIOptions = {
   map: TestCaseBasemap;
-  renderer: ISceneConfig['renderer'];
   animate: boolean;
   enableWebGPU: boolean;
   [keys: string]: any;
@@ -17,7 +15,7 @@ export type TestCaseBasemap =
   | 'MapLibre'
   | 'TencentMap'
   | 'Mapbox'
-  | 'TMap'
+  | 'TdtMap'
   | 'GoogleMap';
 
 export type TestCaseOptions = GUIOptions & {

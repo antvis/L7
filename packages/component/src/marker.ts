@@ -437,7 +437,7 @@ export default class Marker extends EventEmitter {
    */
   private touchStartTime: number;
   private polyfillEvent(e: MouseEvent | TouchEvent) {
-    if (!this.mapsService || this.mapsService.getType() !== 'amap') {
+    if (!this.mapsService || this.mapsService.type !== 'AMap') {
       return;
     }
     if (!isPC()) {

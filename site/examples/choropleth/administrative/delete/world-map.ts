@@ -1,4 +1,5 @@
-import { GaodeMap, Scene } from '@antv/l7';
+import { Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 import { Choropleth } from '@antv/l7plot';
 
 const scene = new Scene({

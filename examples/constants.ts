@@ -2,7 +2,6 @@ import type { GUIOptions, TestCaseBasemap } from './types';
 
 export const DEFAULT_GUI_OPTIONS: GUIOptions = {
   map: 'Map',
-  renderer: 'device',
   animate: false,
   enableWebGPU: false,
 };
@@ -18,6 +17,6 @@ export const MAP_TYPES: TestCaseBasemap[] = [
   'MapLibre',
   'BaiduMap',
   'TencentMap',
-  'TMap',
+  'TdtMap',
   'GoogleMap',
 ] as const;

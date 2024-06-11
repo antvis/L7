@@ -73,7 +73,7 @@ export default class Arc3DModel extends BaseModel {
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
       u_textSize: [1024, this.iconService.canvasHeight || 128],
-      u_globel: this.mapService.version === 'GLOBEL' ? 1 : 0,
+      u_globel: this.mapService.type === 'Globel' ? 1 : 0,
       u_globel_radius: EARTH_RADIUS, // 地球半径
       u_global_height: globalArcHeight,
       segmentNumber,

@@ -1,7 +1,27 @@
 import { Scene } from '@antv/l7';
 import type { IMapConfig } from '@antv/l7-core';
-import * as Maps from '@antv/l7-maps';
+import {
+  BaiduMap,
+  GaodeMap,
+  GoogleMap,
+  MapLibre,
+  Mapbox,
+  TdtMap,
+  TencentMap,
+} from '@antv/l7-extension-maps';
+import { Map } from '@antv/l7-maps';
 import type { TestCaseOptions } from '../types';
+
+const Maps = {
+  Map,
+  BaiduMap,
+  GaodeMap,
+  GoogleMap,
+  MapLibre,
+  Mapbox,
+  TdtMap,
+  TencentMap,
+};
 
 type CaseSceneOptions = TestCaseOptions & {
   mapConfig?: Partial<IMapConfig>;

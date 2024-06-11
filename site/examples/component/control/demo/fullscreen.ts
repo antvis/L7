@@ -1,4 +1,5 @@
-import { Fullscreen, GaodeMap, Scene } from '@antv/l7';
+import { Fullscreen, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

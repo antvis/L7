@@ -41,6 +41,7 @@
     "@antv/g2": "^4.2.8",
     "@antv/l7-composite-layers": "^0.15.0",
     "@antv/l7-draw": "^3.0.9",
+    "@antv/l7-extension-maps": "workspace:*",
     "@antv/l7plot": "^0.x",
     "@antv/larkmap": "^1.4.13",
     "@antv/util": "^2.0.9",

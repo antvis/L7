@@ -16,8 +16,7 @@ order: 2
 Below we will introduce how to quickly create a map of the sky.
 
 ```js
-import { Scene, RasterLayer } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Scene, RasterLayer, Map } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

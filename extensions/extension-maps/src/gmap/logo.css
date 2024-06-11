@@ -1,0 +1,5 @@
+.googlemap-contianer--hide-logo {
+  img[alt='Google'] {
+    /* display: none !important; */
+  }
+}

@@ -1,5 +1,6 @@
 import * as G2 from '@antv/g2';
-import { GaodeMap, LayerPopup, PointLayer, Scene } from '@antv/l7';
+import { LayerPopup, PointLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const data: any[] = [
   {

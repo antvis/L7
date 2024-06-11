@@ -1,4 +1,5 @@
-import { ExportImage, GaodeMap, PolygonLayer, Scene } from '@antv/l7';
+import { ExportImage, PolygonLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

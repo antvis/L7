@@ -17,14 +17,13 @@ L7 在内部解决了不同地图底图之间差异，同时 L7 层面统一管�
 ## import
 
 ```javascript
-import { Map } from '@antv/l7-maps';
+import { Map } from '@antv/l7';
 ```
 
 ## Map 实例化
 
 ```ts
-import { Scene, PointLayer } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Scene, PointLayer, Map } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

@@ -12,8 +12,7 @@ l7-maps provides`Earth`Maps, compared to AMap and mapbox maps, are a completely 
 ✨ In order to distinguish from ordinary maps, l7-maps provides a brand new`Earth`Map type, L7 provides corresponding`EarthLayer`Layers
 
 ```js
-import { EarthLayer } from '@antv/l7';
-import { Earth } from '@antv/l7-maps';
+import { EarthLayer, Earth } from '@antv/l7';
 ```
 
 ## Currently supported layer types in Earth mode
@@ -38,8 +37,7 @@ import { Earth } from '@antv/l7-maps';
 
 ```javascript
 // 1. Introduce the corresponding module
-import { Scene, Earth } from '@antv/l7-maps';
-import { EarthLayer } from '@antv/l7-layers';
+import { Scene, Earth, EarthLayer } from '@antv/l7-layers';
 
 // 2. Build Earth Map
 const scene = new Scene({
@@ -89,7 +87,7 @@ As the base map type of l7-maps,`Earth`The camera system of the earth system is 
 - args:**{}**
 
 ```js
-import { Scene, Earth } from '@antv/l7-maps';
+import { Scene, Earth } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
@@ -106,7 +104,7 @@ Provides a simple method to control the rotation of the earth system (actually c
   🌟Unit rotation angle = Math.min(this.earthCameraZoom \* this.earthCameraZoom, 1)
 
 ```js
-import { Scene, Earth } from '@antv/l7-maps';
+import { Scene, Earth } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

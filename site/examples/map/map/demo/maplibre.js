@@ -1,5 +1,5 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { MapLibre } from '@antv/l7-maps';
+import { MapLibre } from '@antv/l7-extension-maps';
 
 function initMap() {
   const scene = new Scene({

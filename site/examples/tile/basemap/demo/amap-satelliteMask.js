@@ -1,5 +1,4 @@
-import { RasterLayer, Scene } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Map, RasterLayer, Scene } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

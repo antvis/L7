@@ -8,6 +8,8 @@
     "./*.?*.ts",
     "packages",
     "packages/*/.?*.ts",
+    "extensions",
+    "extensions/*/.?*.ts",
     // examples workspace lint
     "examples",
     // test workspace lint

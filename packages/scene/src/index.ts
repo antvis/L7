@@ -29,7 +29,7 @@ import type {
 } from '@antv/l7-core';
 import { SceneEventList, createLayerContainer, createSceneContainer } from '@antv/l7-core';
 import { MaskLayer, TileLayer } from '@antv/l7-layers';
-import { DeviceRendererService, ReglRendererService } from '@antv/l7-renderer';
+import { DeviceRendererService } from '@antv/l7-renderer';
 import type { IProtocolHandler } from '@antv/l7-utils';
 import { DOM, SceneConifg } from '@antv/l7-utils';
 import type ILayerManager from './ILayerManager';
@@ -64,17 +64,13 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
   private container: L7Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, renderer = 'device' } = config;
+    const { id, map } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
     // 绑定地图服务
     map.setContainer(sceneContainer, id);
-    if (renderer === 'regl') {
-      sceneContainer.rendererService = new ReglRendererService();
-    } else {
-      sceneContainer.rendererService = new DeviceRendererService();
-    }
+    sceneContainer.rendererService = new DeviceRendererService();
 
     // 依赖注入
     this.sceneService = sceneContainer.sceneService;
@@ -121,7 +117,7 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
     return this.mapService.getMaxZoom();
   }
   public getType(): string {
-    return this.mapService.getType();
+    return this.mapService.type;
   }
   public getMapContainer(): HTMLElement | null {
     return this.mapService.getMapContainer();

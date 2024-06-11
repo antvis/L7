@@ -21,7 +21,7 @@ Next we will introduce how to use arcs to draw a simulated wind field.
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

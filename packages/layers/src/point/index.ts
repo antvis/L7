@@ -108,14 +108,14 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
         return 'fillImage';
       }
       if (shape2d?.indexOf(shape as string) !== -1) {
-        if (this.mapService.version === 'GLOBEL') {
+        if (this.mapService.type === 'Globel') {
           return 'earthFill';
         } else {
           return 'fill';
         }
       }
       if (shape3d?.indexOf(shape as string) !== -1) {
-        if (this.mapService.version === 'GLOBEL') {
+        if (this.mapService.type === 'Globel') {
           return 'earthExtrude';
         } else {
           return 'extrude';

@@ -3,7 +3,7 @@
 // @ts-ignore
 import { PolygonLayer, Scene } from '@antv/l7';
 // @ts-ignore
-import { GaodeMap } from '@antv/l7-maps';
+import { GaodeMap } from '@antv/l7-extension-maps';
 import { RDBSource } from 'district-data';
 import React, { useEffect } from 'react';
 

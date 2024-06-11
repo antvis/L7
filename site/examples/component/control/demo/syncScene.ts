@@ -1,4 +1,5 @@
-import { GaodeMap, HeatmapLayer, PointLayer, Scene } from '@antv/l7';
+import { HeatmapLayer, PointLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 import { isNumber } from 'lodash';
 
 // 通过 Scene 获取到地图引擎类型

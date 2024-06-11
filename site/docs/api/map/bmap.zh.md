@@ -22,7 +22,7 @@ L7 目前支持的百度地图是[API GL版本](https://lbsyun.baidu.com/index.p
 ### import
 
 ```javascript
-import { BaiduMap } from '@antv/l7-maps';
+import { BaiduMap } from '@antv/l7-extension-maps';
 ```
 
 ### 实例化
@@ -34,7 +34,7 @@ L7 提供 BaiduMap直接实例化地图，也可外部传入方式实例化地�
 #### BaiduMap 实例化
 
 ```js
-import { BaiduMap } from '@antv/l7-maps';
+import { BaiduMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

@@ -157,7 +157,11 @@ export default class DataMappingPlugin implements ILayerPlugin {
   }
 
   private adjustData2SimpleCoordinates(mappedData: IEncodeFeature[]) {
-    if (mappedData.length > 0 && this.mapService.version === 'SIMPLE') {
+    if (
+      mappedData.length > 0 &&
+      this.mapService.type === 'Map' &&
+      this.mapService?.version === 'SIMPLE'
+    ) {
       mappedData.map((d) => {
         if (!d.simpleCoordinate) {
           d.coordinates = this.unProjectCoordinates(d.coordinates);
@@ -168,7 +172,9 @@ export default class DataMappingPlugin implements ILayerPlugin {
   }
 
   private unProjectCoordinates(coordinates: any) {
-    if (typeof coordinates[0] === 'number') {
+    // @ts-ignore
+    if (typeof coordinates[0] === 'number' && this.mapService['simpleMapCoord']) {
+      // @ts-ignore
       return this.mapService.simpleMapCoord.unproject(coordinates as [number, number]);
     }
 
@@ -179,6 +185,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
         // @ts-ignore
         const c1 = [];
         coord.map((co: any) => {
+          // @ts-ignore
           c1.push(this.mapService.simpleMapCoord.unproject(co as [number, number]));
         });
         // @ts-ignore
@@ -191,6 +198,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       const coords = [];
       // @ts-ignore
       coordinates.map((coord) => {
+        // @ts-ignore
         coords.push(this.mapService.simpleMapCoord.unproject(coord as [number, number]));
       });
       // @ts-ignore

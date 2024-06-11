@@ -1,4 +1,5 @@
-import { GaodeMap, Logo, Scene } from '@antv/l7';
+import { Logo, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

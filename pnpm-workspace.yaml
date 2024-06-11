@@ -1,5 +1,6 @@
 packages:
   # all packages
   - 'packages/*'
+  - 'extensions/*'
   # website
   - 'site'

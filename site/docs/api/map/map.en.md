@@ -17,14 +17,13 @@ L7 internally resolves the differences between different map basemaps, and at th
 ## import
 
 ```javascript
-import { Map } from '@antv/l7-maps';
+import { Map } from '@antv/l7';
 ```
 
 ## Map instantiation
 
 ```ts
-import { Scene, PointLayer } from '@antv/l7';
-import { Map } from '@antv/l7-maps';
+import { Scene, PointLayer, Map } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',

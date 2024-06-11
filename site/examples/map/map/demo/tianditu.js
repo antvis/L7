@@ -1,10 +1,10 @@
 import { PointLayer, Scene } from '@antv/l7';
-import { TMap } from '@antv/l7-maps';
+import { TdtMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',
   logoPosition: 'bottomright',
-  map: new TMap({
+  map: new TdtMap({
     center: [107.054293, 35.246265],
     zoom: 5,
   }),

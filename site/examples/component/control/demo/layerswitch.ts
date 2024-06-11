@@ -1,4 +1,5 @@
-import { GaodeMap, LayerSwitch, LineLayer, PolygonLayer, Scene } from '@antv/l7';
+import { LayerSwitch, LineLayer, PolygonLayer, Scene } from '@antv/l7';
+import { GaodeMap } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

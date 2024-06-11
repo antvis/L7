@@ -1,7 +1,4 @@
-// @ts-ignore
-import { LineLayer, PointLayer, PolygonLayer, Scene, Source } from '@antv/l7';
-// @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { LineLayer, Map, PointLayer, PolygonLayer, Scene, Source } from '@antv/l7';
 
 const colors = {};
 const GDPSpeed = {

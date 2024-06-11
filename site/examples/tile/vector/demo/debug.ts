@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Scene, TileDebugLayer } from '@antv/l7';
 // @ts-ignore
-import { GaodeMapV2 } from '@antv/l7-maps';
+import { GaodeMapV2 } from '@antv/l7-extension-maps';
 
 const scene = new Scene({
   id: 'map',

@@ -1,7 +1,4 @@
-// @ts-ignore
-import { PolygonLayer, RasterLayer, Scene } from '@antv/l7';
-// @ts-ignore
-import { Map } from '@antv/l7-maps';
+import { Map, PolygonLayer, RasterLayer, Scene } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
