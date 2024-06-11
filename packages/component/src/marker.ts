@@ -295,14 +295,16 @@ export default class Marker extends EventEmitter {
   };
 
   private onMarkerDragMove = (e: any) => {
+    // 适配不同底图，事件返回的数据名称不一致
+    const lngLat: ILngLat = e.lngLat || e.lnglat;
     const { lng: preLng, lat: preLat } = this.preLngLat;
-    const { lng: curLng, lat: curLat } = e.lnglat;
+    const { lng: curLng, lat: curLat } = lngLat;
     const newLngLat = {
       lng: this.lngLat.lng + curLng - preLng,
       lat: this.lngLat.lat + curLat - preLat,
     };
     this.setLnglat(newLngLat);
-    this.preLngLat = e.lnglat;
+    this.preLngLat = lngLat;
     this.emit('dragging', newLngLat);
   };
 
@@ -435,7 +437,7 @@ export default class Marker extends EventEmitter {
    */
   private touchStartTime: number;
   private polyfillEvent(e: MouseEvent | TouchEvent) {
-    if (!this.mapsService || this.mapsService.version !== 'GAODE2.x') {
+    if (!this.mapsService || this.mapsService.getType() !== 'amap') {
       return;
     }
     if (!isPC()) {

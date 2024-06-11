@@ -11,5 +11,5 @@ const TEST_CASES = [
 ];
 
 describe('Mask Snapshot', () => {
-  generateCanvasTestCases('Mask', TEST_CASES);
+  generateCanvasTestCases('mask', TEST_CASES);
 });

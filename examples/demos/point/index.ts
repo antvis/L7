@@ -1,6 +1,8 @@
-export { MapRender as billboard } from './billboard';
-export { MapRender as column } from './column';
-export { MapRender as fill } from './fill';
-export { MapRender as fill_image } from './fill_image';
-export { MapRender as image } from './image';
-export { MapRender as text } from './text';
+export { billboard } from './billboard';
+export { column } from './column';
+export { dot } from './dot';
+export { fill } from './fill';
+export { fillImage } from './fill-image';
+export { image } from './image';
+export { radar } from './radar';
+export { text } from './text';

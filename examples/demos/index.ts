@@ -1,64 +1,50 @@
-import * as BugFix from './bugfix';
-import * as CanvasDemos from './canvas';
-import * as Components from './components';
-import * as GalleryDemos from './gallery';
-import * as HeatmapDemos from './heatmap';
-import * as LineDemos from './line';
-import * as MaskDemos from './mask';
-import * as PointDemos from './point';
-import * as PolygonDemos from './polygon';
-import * as RasterDemos from './raster';
-import * as TileDemos from './tile';
-import * as GPUDemos from './webgpu';
+import type { TestCase } from '../types';
+import * as BasemapTestCases from './basemap';
+import * as BugfixTestCases from './bugfix';
+import * as CanvasTestCases from './canvas';
+import * as ComponentsTestCases from './components';
+import * as ExtendTestCases from './extend';
+import * as GalleryTestCases from './gallery';
+import * as GeometryTestCases from './geometry';
+import * as HeatmapTestCases from './heatmap';
+import * as LineTestCases from './line';
+import * as MaskTestCases from './mask';
+import * as PointTestCases from './point';
+import * as PolygonTestCases from './polygon';
+import * as RasterTestCases from './raster';
+import * as TileTestCases from './tile';
+import * as WebgpuTestCases from './webgpu';
 
-export default [
-  {
-    name: 'BugFix',
-    demos: BugFix,
-  },
-  {
-    name: 'Point',
-    demos: PointDemos,
-  },
-  {
-    name: 'Line',
-    demos: LineDemos,
-  },
-  {
-    name: 'Polygon',
-    demos: PolygonDemos,
-  },
-  {
-    name: 'Components',
-    demos: Components,
-  },
-  {
-    name: 'Heatmap',
-    demos: HeatmapDemos,
-  },
-  {
-    name: 'Raster',
-    demos: RasterDemos,
-  },
-  {
-    name: 'Tile',
-    demos: TileDemos,
-  },
-  {
-    name: 'Mask',
-    demos: MaskDemos,
-  },
-  {
-    name: 'WebGPU',
-    demos: GPUDemos,
-    snapShot: false,
-  },
-  {
-    name: 'Gallery',
-    demos: GalleryDemos,
-  },
-  {
-    name: 'Canvas',
-    demos: CanvasDemos,
-  },
-];
+export const TestCases = new Map<string, [string, TestCase][]>([
+  ['bugfix', Object.entries(BugfixTestCases)],
+  ['point', Object.entries(PointTestCases)],
+  ['heatmap', Object.entries(HeatmapTestCases)],
+  ['line', Object.entries(LineTestCases)],
+  ['polygon', Object.entries(PolygonTestCases)],
+  ['raster', Object.entries(RasterTestCases)],
+  ['tile', Object.entries(TileTestCases)],
+  ['mask', Object.entries(MaskTestCases)],
+  ['canvas', Object.entries(CanvasTestCases)],
+  ['basemap', Object.entries(BasemapTestCases)],
+  ['components', Object.entries(ComponentsTestCases)],
+  ['geometry', Object.entries(GeometryTestCases)],
+  ['gallery', Object.entries(GalleryTestCases)],
+  ['webgpu', Object.entries(WebgpuTestCases)],
+  ['extend', Object.entries(ExtendTestCases)],
+]);
+
+/**
+ * ge SnapshotTests from namespace
+ */
+// export function geSnapshotTestsFromNamespace(namespace: string) {
+//   const testcases = TestCases.get(namespace);
+//   if (!testcases) return [];
+//   const demo = testcases
+//     .filter(([, demo]) => Boolean(demo.snapshot))
+//     .map(([name, demo]) => ({
+//       name,
+//       snapshot: Boolean(demo.snapshot),
+//       sleepTime: typeof demo?.snapshot === 'object' ? demo.snapshot?.sleepTime : undefined,
+//     }));
+//   return demo;
+// }

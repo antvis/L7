@@ -184,7 +184,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   protected get mapService() {
-    return this.container.mapService;
+    return this.container?.mapService;
   }
 
   public styleAttributeService: IStyleAttributeService;
@@ -1065,9 +1065,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       if (this.coordCenter === undefined) {
         const layerCenter = this.layerSource.center;
         this.coordCenter = layerCenter;
-        if (this.mapService?.setCoordCenter) {
-          this.mapService.setCoordCenter(layerCenter);
-        }
       }
       if (type === 'update') {
         if (this.tileLayer) {
@@ -1171,6 +1168,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       moduleName,
       vertexShader,
       fragmentShader,
+      defines,
       inject,
       triangulation,
       styleOption,
@@ -1180,6 +1178,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.shaderModuleService.registerModule(moduleName, {
       vs: vertexShader,
       fs: fragmentShader,
+      defines,
       inject,
     });
     const { vs, fs, uniforms } = this.shaderModuleService.getModule(moduleName);
@@ -1195,7 +1194,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       const uniformBuffers = [
         ...this.layerModel.uniformBuffers,
         ...this.rendererService.uniformBuffers,
-        this.getLayerUniformBuffer(),
       ];
       if (pickingEnabled) {
         uniformBuffers.push(this.getPickingUniformBuffer());
@@ -1412,28 +1410,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       buffer.destroy();
     });
     this.uniformBuffers = [];
-    // Layer Uniform
-    const layerUniforms = this.rendererService.createBuffer({
-      data: new Float32Array(16 + 4).fill(0), // u_Mvp
-      isUBO: true,
-    });
-    this.uniformBuffers.push(layerUniforms);
 
     // Picking Uniform
     const pickingUniforms = this.rendererService.createBuffer({
       data: new Float32Array(20).fill(0),
       isUBO: true,
+      label: 'pickingUniforms',
     });
     this.uniformBuffers.push(pickingUniforms);
 
     this.models = await this.layerModel.initModels();
   }
 
-  getLayerUniformBuffer() {
-    return this.uniformBuffers[0];
-  }
   getPickingUniformBuffer() {
-    return this.uniformBuffers[1];
+    return this.uniformBuffers[0];
   }
 
   protected reRender() {

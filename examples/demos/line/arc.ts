@@ -1,16 +1,14 @@
-import { LineLayer, PointLayer, Scene, Source } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { LineLayer, PointLayer, Source } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const arc: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [121.434765, 31.256735],
       zoom: 14.83,
-    }),
+    },
   });
 
   const geoData = {
@@ -25,7 +23,7 @@ export function MapRender(options: RenderDemoOptions) {
           type: 'MultiLineString',
           coordinates: [
             [
-              [116.371436, 39.942372],
+              [116.43, 39.97],
               [121.467025, 31.2327],
             ],
           ],
@@ -55,8 +53,6 @@ export function MapRender(options: RenderDemoOptions) {
   const source = new Source(geoData);
   const source2 = new Source(geoData2);
 
-  // scene.on('zoom', e => console.log(e))
-
   const layer = new LineLayer({ blend: 'normal', autoFit: true })
     .source(source)
     .size(2)
@@ -83,59 +79,20 @@ export function MapRender(options: RenderDemoOptions) {
   const point = new PointLayer({ blend: 'normal', zIndex: 1 })
     .source(
       [
-        {
-          lng: 116.43,
-          lat: 39.97,
-        },
-        {
-          lng: 108.39,
-          lat: 22.91,
-        },
+        { lng: 116.43, lat: 39.97 },
+        { lng: 108.39, lat: 22.91 },
       ],
       {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
-        },
+        parser: { type: 'json', x: 'lng', y: 'lat' },
       },
     )
     .shape('circle')
     .size(10)
     .color('blue');
-  const point2 = new PointLayer({ blend: 'normal', zIndex: 1 })
-    .source(
-      [
-        {
-          lng: 116.43,
-          lat: 39.97,
-        },
-        {
-          lng: 108.39,
-          lat: 22.91,
-        },
-      ],
-      {
-        parser: {
-          type: 'json',
-          x: 'lng',
-          y: 'lat',
-        },
-      },
-    )
-    .shape('circle')
-    .size(100000)
-    .color('blue')
-    .style({
-      opacity: 0.5,
-      unit: 'meter',
-    });
-  scene.addLayer(point);
-  scene.addLayer(point2);
 
+  scene.addLayer(point);
   scene.addLayer(layer);
   scene.addLayer(layer2);
-  if (window['screenshot']) {
-    window['screenshot']();
-  }
-}
+
+  return scene;
+};

@@ -34,11 +34,7 @@ export type MapStyleConfig = {
 export type MapStyle = MapStyleName | any;
 
 export interface IMapWrapper {
-  setContainer(
-    container: L7Container,
-    id: string | HTMLDivElement,
-    canvas?: HTMLCanvasElement,
-  ): void;
+  setContainer(container: L7Container, id: string | HTMLDivElement): void;
 }
 
 interface ISimpleMapCoord {
@@ -53,7 +49,6 @@ export interface IMapService<RawMap = {}> {
   simpleMapCoord: ISimpleMapCoord;
   map: RawMap;
   bgColor: string;
-  setCoordCenter?(center: number[]): void;
   setBgColor(color: string): void;
   init(): void;
   initMiniMap?(): void;
@@ -122,7 +117,6 @@ export interface IMapService<RawMap = {}> {
     lnglatArray: number[][][] | number[][],
   ): number[][][] | number[][] | number[][][] | number[][];
   // lngLatToCoords?(lnglatArray: any): any;
-  getCustomCoordCenter?(): [number, number];
   exportMap(type: 'jpg' | 'png'): string;
 
   // 地球模式下的地图方法/属性
@@ -311,8 +305,6 @@ export interface IMapCamera {
   cameraPosition?: [number, number, number];
   up?: [number, number, number];
   lookAt?: [number, number, number];
-  // 偏移原点，例如 P20 坐标系下
-  offsetOrigin: [number, number];
 }
 export interface ICameraOptions {
   padding:

@@ -147,9 +147,9 @@ export default class PickingService implements IPickingService {
   public handleCursor(layer: ILayer, type: string) {
     const { cursor = '', cursorEnabled } = layer.getLayerConfig();
     if (cursorEnabled) {
-      const version = this.mapService.version;
+      const mapType = this.mapService.getType();
       const domContainer =
-        version === 'GAODE2.x'
+        mapType === 'amap'
           ? this.mapService.getMapContainer()
           : this.mapService.getMarkerContainer();
       // const domContainer = this.mapService.getMarkerContainer();
@@ -177,7 +177,7 @@ export default class PickingService implements IPickingService {
     { x, y, lngLat, type, target }: IInteractionTarget,
   ) => {
     let isPicked = false;
-    const { readPixelsAsync, getViewportSize } = this.rendererService;
+    const { readPixels, readPixelsAsync, getViewportSize, queryVerdorInfo } = this.rendererService;
     const { width, height } = getViewportSize();
     const { enableHighlight, enableSelect } = layer.getLayerConfig();
     const xInDevicePixel = x * DOM.DPR;
@@ -190,15 +190,33 @@ export default class PickingService implements IPickingService {
     ) {
       return false;
     }
-    const pickedColors: Uint8Array | undefined = await readPixelsAsync({
-      x: Math.floor(xInDevicePixel / this.pickBufferScale),
-      // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
-      y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
-      width: 1,
-      height: 1,
-      data: new Uint8Array(1 * 1 * 4),
-      framebuffer: this.pickingFBO,
-    });
+
+    let pickedColors: Uint8Array | undefined;
+
+    // readPixelsAsync 比 readPixels 慢，会造成拾取事件冒泡延迟，优先使用 readPixelsAsync，WebGPU 只支持 readPixelsAsync API
+    const isWebGPU = queryVerdorInfo() === 'WebGPU';
+    if (isWebGPU) {
+      pickedColors = await readPixelsAsync({
+        x: Math.floor(xInDevicePixel / this.pickBufferScale),
+        // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+        y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
+        width: 1,
+        height: 1,
+        data: new Uint8Array(1 * 1 * 4),
+        framebuffer: this.pickingFBO,
+      });
+    } else {
+      pickedColors = readPixels({
+        x: Math.floor(xInDevicePixel / this.pickBufferScale),
+        // 视口坐标系原点在左上，而 WebGL 在左下，需要翻转 Y 轴
+        y: Math.floor((height - (y + 1) * DOM.DPR) / this.pickBufferScale),
+        width: 1,
+        height: 1,
+        data: new Uint8Array(1 * 1 * 4),
+        framebuffer: this.pickingFBO,
+      });
+    }
+
     this.pickedColors = pickedColors;
 
     if (pickedColors[0] !== 0 || pickedColors[1] !== 0 || pickedColors[2] !== 0) {

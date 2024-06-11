@@ -1,57 +1,33 @@
-import { PolygonLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { PolygonLayer } from '@antv/l7';
+import data from '../../data/nanjing-city.json';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const extrude: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [121.434765, 31.256735],
       zoom: 14.83,
-    }),
+      pitch: 45,
+    },
   });
 
-  const colors = [
-    '#87CEFA',
-    '#00BFFF',
+  const filllayer = new PolygonLayer({
+    name: 'fill',
+    zIndex: 3,
+    autoFit: true,
+  })
+    .source(data)
+    .shape('extrude')
+    .active(true)
+    .size('unit_price', (unit_price) => unit_price)
+    .color('count', ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'])
+    .style({
+      pickLight: true,
+      opacity: 1,
+    });
+  scene.addLayer(filllayer);
 
-    '#7FFFAA',
-    '#00FF7F',
-    '#32CD32',
-
-    '#F0E68C',
-    '#FFD700',
-
-    '#FF7F50',
-    '#FF6347',
-    '#FF0000',
-  ];
-  scene.on('loaded', () => {
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json')
-      .then((res) => res.json())
-      .then((data) => {
-        const filllayer = new PolygonLayer({
-          name: 'fill',
-          zIndex: 3,
-          autoFit: true,
-        })
-          .source(data)
-          .shape('extrude')
-          .active(true)
-          .size('unit_price', (unit_price) => unit_price)
-          .color('count', ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'])
-          .style({
-            pickLight: true,
-
-            opacity: 1,
-          });
-        scene.addLayer(filllayer);
-
-        if (window['screenshot']) {
-          window['screenshot']();
-        }
-      });
-  });
-}
+  return scene;
+};

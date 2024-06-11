@@ -1,6 +1,4 @@
-import { MapType } from '@antv/l7-utils';
-import GaodeMapV1 from './amap/';
-import { default as GaodeMap, default as GaodeMapV2 } from './amap2/';
+import { default as GaodeMapNext } from './amap-next';
 import BaiduMap from './bmap/';
 import Earth from './earth/';
 import GoogleMap from './gmap';
@@ -9,7 +7,23 @@ import Mapbox from './mapbox/';
 import MapLibre from './maplibre';
 import TMap from './tdtmap';
 import TencentMap from './tmap';
+import type { MapType } from './types';
 export * from './utils';
+
+const GaodeMap = GaodeMapNext;
+
+/**
+ * @deprecated
+ * 不再支持 GaodeMapV1，自动指向最新版 GaodeMap V2
+ */
+const GaodeMapV1 = GaodeMapNext;
+
+/**
+ * @deprecated
+ * 不再暴露 GaodeMapV2，默认自动指向最新版 GaodeMap
+ */
+const GaodeMapV2 = GaodeMapNext;
+
 export {
   BaiduMap,
   Earth,

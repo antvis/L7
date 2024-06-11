@@ -1,6 +1,6 @@
-import { PolygonLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { PolygonLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
 const data1 = {
   type: 'FeatureCollection',
@@ -271,49 +271,57 @@ const data3 = {
   ],
 };
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const removeMutiLayer: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [120.11155128479004, 30.24868703665976],
       zoom: 11,
-    }),
+    },
   });
-  scene.on('loaded', () => {
-    const layer = new PolygonLayer({})
-      .source(data1)
-      .scale('density', {
-        type: 'quantile',
-      })
-      .color('#1990ff1a')
-      .shape('fill');
-    scene.addLayer(layer);
 
-    const layer2 = new PolygonLayer({})
-      .source(data2)
-      .scale('density', {
-        type: 'quantile',
-      })
-      .color('#1990ff1a')
-      .shape('fill');
-    scene.addLayer(layer2);
+  const layer = new PolygonLayer({})
+    .source(data1)
+    .scale('density', {
+      type: 'quantile',
+    })
+    .color('#1990ff1a')
+    .shape('fill');
+  scene.addLayer(layer);
 
-    const layer3 = new PolygonLayer({})
-      .source(data3)
-      .scale('density', {
-        type: 'quantile',
-      })
-      .color('#1990ff1a')
-      .shape('fill');
-    scene.addLayer(layer3);
+  const layer2 = new PolygonLayer({})
+    .source(data2)
+    .scale('density', {
+      type: 'quantile',
+    })
+    .color('#1990ff1a')
+    .shape('fill');
+  scene.addLayer(layer2);
 
-    setTimeout(() => {
-      const layers = scene.getLayers();
-      for (const layer of layers) {
-        scene.removeLayer(layer);
-      }
-    }, 2000);
-  });
-}
+  const layer3 = new PolygonLayer({})
+    .source(data3)
+    .scale('density', {
+      type: 'quantile',
+    })
+    .color('#1990ff1a')
+    .shape('fill');
+  scene.addLayer(layer3);
+
+  removeMutiLayer.extendGUI = (gui) => {
+    return [
+      gui.add(
+        {
+          removeLayer: () => {
+            const layers = scene.getLayers();
+            for (const layer of layers) {
+              scene.removeLayer(layer);
+            }
+          },
+        },
+        'removeLayer',
+      ),
+    ];
+  };
+
+  return scene;
+};

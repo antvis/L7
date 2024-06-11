@@ -22,9 +22,9 @@ scene.on('loaded', () => {
       center: [120, 30],
       spriteCount: 120,
       spriteRadius: 10,
-      spriteTop: 2500000,
-      spriteUpdate: 20000,
-      spriteScale: 0.6,
+      spriteTop: 400,
+      spriteUpdate: 10,
+      spriteScale: 0.8,
     });
   scene.addLayer(layer);
 });

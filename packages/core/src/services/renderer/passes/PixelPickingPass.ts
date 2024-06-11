@@ -11,6 +11,8 @@ import BaseNormalPass from './BaseNormalPass';
 /**
  * color-based PixelPickingPass
  * @see https://github.com/antvis/L7/blob/next/dev-docs/PixelPickingEngine.md
+ * @deprecated
+ * 目前未使用
  */
 export default class PixelPickingPass<
   InitializationOptions = {},

@@ -24,7 +24,6 @@ export default class SpriteModel extends BaseModel {
   public initSprite(radius = 10, spriteCount = 100, lng = 120, lat = 30) {
     const indices = [];
     const positions = [];
-    const mapService = this.mapService;
     const heightLimit =
       this.spriteAnimate === SPRITE_ANIMATE_DIR.UP ? -this.spriteTop : this.spriteTop;
     for (let i = 0; i < spriteCount; i++) {
@@ -40,20 +39,15 @@ export default class SpriteModel extends BaseModel {
       const randomY = radius * Math.random();
       const x = -radius / 2 + randomX;
       const y = -radius / 2 + randomY;
-      if (mapService.version === 'GAODE2.x') {
-        // @ts-ignore
-        const [a, b] = mapService.lngLatToCoord([x + lng, -y + lat]) as [number, number];
-        return [a, b, z, 0, 0];
-      } else {
-        return [x + lng, -y + lat, z, 0, 0];
-      }
+
+      return [x + lng, -y + lat, z, 0, 0];
     }
 
     return { indices, positions };
   }
 
   public planeGeometryUpdateTriangulation = () => {
-    const { spriteBottom = -100000 } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
+    const { spriteBottom = -10 } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     const updateZ = this.spriteUpdate;
     const bottomZ = spriteBottom;
     const topZ = this.spriteTop;
@@ -164,8 +158,8 @@ export default class SpriteModel extends BaseModel {
   public async initModels(): Promise<IModel[]> {
     const {
       mapTexture,
-      spriteTop = 5000000,
-      spriteUpdate = 10000,
+      spriteTop = 300,
+      spriteUpdate = 10,
       spriteAnimate = SPRITE_ANIMATE_DIR.DOWN,
     } = this.layer.getLayerConfig() as IGeometryLayerStyleOptions;
     this.initUniformsBuffer();
@@ -193,6 +187,7 @@ export default class SpriteModel extends BaseModel {
       vertexShader: spriteVert,
       fragmentShader: spriteFrag,
       triangulation: this.planeGeometryTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       primitive: gl.POINTS,
       depth: { enable: false },

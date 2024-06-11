@@ -1,12 +1,20 @@
 import type { IEncodeFeature, IModel, IModelUniform } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { IHeatMapLayerStyleOptions } from '../../core/interface';
 import { PointExtrudeTriangulation } from '../../core/triangulation';
 import grid_3d_frag from '../shaders/grid3d/grid_3d_frag.glsl';
 import grid_3d_vert from '../shaders/grid3d/grid_3d_vert.glsl';
 export default class Grid3DModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      POS: 10,
+      NORMAL: 11,
+    });
+  }
+
   public getUninforms(): IModelUniform {
     const commoninfo = this.getCommonUniformsInfo();
     const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
@@ -44,6 +52,7 @@ export default class Grid3DModel extends BaseModel {
       moduleName: 'heatmapGrid3d',
       vertexShader: grid_3d_vert,
       fragmentShader: grid_3d_frag,
+      defines: this.getDefines(),
       triangulation: PointExtrudeTriangulation,
       primitive: gl.TRIANGLES,
       depth: { enable: true },
@@ -55,7 +64,7 @@ export default class Grid3DModel extends BaseModel {
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         name: 'a_Size',
         buffer: {
           usage: gl.DYNAMIC_DRAW,
@@ -75,7 +84,7 @@ export default class Grid3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -98,7 +107,7 @@ export default class Grid3DModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
-        shaderLocation: 10,
+        shaderLocation: this.attributeLocation.POS,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -106,9 +115,7 @@ export default class Grid3DModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature) => {
-          const coordinates = (
-            feature.version === 'GAODE2.x' ? feature.originCoordinates : feature.coordinates
-          ) as number[];
+          const coordinates = feature.coordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

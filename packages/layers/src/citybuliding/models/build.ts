@@ -2,12 +2,21 @@ import type { IEncodeFeature, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ICityBuildLayerStyleOptions } from '../../core/interface';
 import { PolygonExtrudeTriangulation } from '../../core/triangulation';
 import buildFrag from '../shaders/build_frag.glsl';
 import buildVert from '../shaders/build_vert.glsl';
+
 export default class CityBuildModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      NORMAL: 10,
+      UV: 11,
+    });
+  }
+
   private cityCenter: [number, number];
   private cityMinSize: number;
   protected getCommonUniformsInfo(): {
@@ -51,23 +60,11 @@ export default class CityBuildModel extends BaseModel {
   public calCityGeo() {
     // @ts-ignore
     const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
-    if (this.mapService.version === 'GAODE2.x') {
-      // @ts-ignore
-      this.cityCenter = this.mapService.lngLatToCoord([
-        (maxLng + minLng) / 2,
-        (maxLat + minLat) / 2,
-      ]);
-      // @ts-ignore
-      const l1 = this.mapService.lngLatToCoord([maxLng, maxLat]);
-      // @ts-ignore
-      const l2 = this.mapService.lngLatToCoord([minLng, minLat]);
-      this.cityMinSize = Math.sqrt(Math.pow(l1[0] - l2[0], 2) + Math.pow(l1[1] - l2[1], 2)) / 4;
-    } else {
-      const w = maxLng - minLng;
-      const h = maxLat - minLat;
-      this.cityCenter = [(maxLng + minLng) / 2, (maxLat + minLat) / 2];
-      this.cityMinSize = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 4;
-    }
+
+    const w = maxLng - minLng;
+    const h = maxLat - minLat;
+    this.cityCenter = [(maxLng + minLng) / 2, (maxLat + minLat) / 2];
+    this.cityMinSize = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 4;
   }
 
   public async initModels(): Promise<IModel[]> {
@@ -85,6 +82,7 @@ export default class CityBuildModel extends BaseModel {
       fragmentShader: buildFrag,
       triangulation: PolygonExtrudeTriangulation,
       depth: { enable: true },
+      defines: this.getDefines(),
       inject: this.getInject(),
       cull: {
         enable: true,
@@ -101,7 +99,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
@@ -126,7 +124,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -145,7 +143,7 @@ export default class CityBuildModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Uv',
-        shaderLocation: ShaderLocation.UV,
+        shaderLocation: this.attributeLocation.UV,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,

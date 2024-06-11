@@ -31,7 +31,7 @@ export function lineAtOffsetAsyc(source: Source, option: ILineAtOffset) {
 }
 
 function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
-  const { offset, shape, thetaOffset, mapVersion, segmentNumber = 30, autoFit = true } = option;
+  const { offset, shape, thetaOffset, segmentNumber = 30, autoFit = true } = option;
   const { coordinates } = feature;
   if (shape === 'line') {
     return pathLineAtOffset(coordinates, offset);
@@ -57,7 +57,6 @@ function getLineOffsetPosition(feature: any, option: ILineAtOffset) {
     target,
     offset,
     linetheatOffset,
-    mapVersion,
     segmentNumber,
     autoFit,
   );

@@ -12,8 +12,8 @@ import { MapServiceEvent } from '@antv/l7-core';
 import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import Viewport from '../lib/web-mercator-viewport';
 import BaseMapService from '../utils/BaseMapService';
-import Viewport from '../utils/Viewport';
 import './logo.css';
 import TMapLoader from './maploader';
 
@@ -29,6 +29,7 @@ const EventMap: {
   dragging: 'drag',
 };
 
+// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class TMapService extends BaseMapService<TMap.Map> {
   // @ts-ignore
   protected viewport: IViewport = null;

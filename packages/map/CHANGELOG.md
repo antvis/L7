@@ -1,5 +1,63 @@
 # @antv/l7-map
 
+## 2.21.11-beta.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.7
+
+## 2.21.11-beta.6
+
+### Patch Changes
+
+- [#2521](https://github.com/antvis/L7/pull/2521) [`7e38a83`](https://github.com/antvis/L7/commit/7e38a83d9324fb9443f5a04e6d2fc9a1fef9c17c) Thanks [@lvisei](https://github.com/lvisei)! - refactor: 升级新版一方地图交互事件机制，解决抖动问题
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.6
+
+## 2.21.11-beta.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.5
+
+## 2.21.11-beta.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.4
+
+## 2.21.11-beta.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.3
+
+## 2.21.11-beta.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.2
+
+## 2.21.11-beta.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.1
+
+## 2.21.11-beta.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.21.11-beta.0
+
 ## 2.21.10
 
 ### Patch Changes

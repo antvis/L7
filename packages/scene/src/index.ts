@@ -64,12 +64,12 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
   private container: L7Container;
 
   public constructor(config: ISceneConfig) {
-    const { id, map, canvas, renderer = 'regl' } = config;
+    const { id, map, renderer = 'device' } = config;
     // 创建场景容器
     const sceneContainer = createSceneContainer();
     this.container = sceneContainer;
     // 绑定地图服务
-    map.setContainer(sceneContainer, id, canvas);
+    map.setContainer(sceneContainer, id);
     if (renderer === 'regl') {
       sceneContainer.rendererService = new ReglRendererService();
     } else {

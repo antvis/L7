@@ -32,6 +32,8 @@ import isUndefined from 'lodash/isUndefined';
 // camelCase
 import camelCase from 'lodash/camelCase';
 
+import uniqueId from 'lodash/uniqueId';
+
 export type { DebouncedFunc } from 'lodash';
 
 export const lodashUtil = {
@@ -56,4 +58,5 @@ export const lodashUtil = {
   isObject,
   isUndefined,
   camelCase,
+  uniqueId,
 };

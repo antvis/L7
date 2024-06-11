@@ -16,7 +16,6 @@ export default class CoordinateSystemService implements ICoordinateSystemService
    * 2. 偏移经纬度，用于解决高精度抖动问题
    * 3. 瓦片坐标，用于数据瓦片
    * 4. 常规世界坐标系，用于常规 2D/3D 可视化场景
-   * 5. P20 坐标系，高德地图使用
    * @see https://yuque.antfin-inc.com/yuqi.pyq/fgetpa/doml91
    */
   private coordinateSystem: CoordinateSystem;
@@ -58,7 +57,6 @@ export default class CoordinateSystemService implements ICoordinateSystemService
     //   return;
     // }
     const zoom = this.cameraService.getZoom();
-    const zoomScale = this.cameraService.getZoomScale();
     const center = offsetCenter ? offsetCenter : this.cameraService.getCenter();
 
     // 计算像素到米以及经纬度之间的转换
@@ -73,16 +71,11 @@ export default class CoordinateSystemService implements ICoordinateSystemService
     this.pixelsPerDegree = pixelsPerDegree;
     this.pixelsPerDegree2 = [0, 0, 0];
 
-    if (
-      this.coordinateSystem === CoordinateSystem.LNGLAT ||
-      this.coordinateSystem === CoordinateSystem.P20
-    ) {
+    if (this.coordinateSystem === CoordinateSystem.LNGLAT) {
       // 继续使用相机服务计算的 VP 矩阵
       this.cameraService.setViewProjectionMatrix(undefined);
     } else if (this.coordinateSystem === CoordinateSystem.LNGLAT_OFFSET) {
       this.calculateLnglatOffset(center, zoom);
-    } else if (this.coordinateSystem === CoordinateSystem.P20_OFFSET) {
-      this.calculateLnglatOffset(center, zoom, zoomScale, true);
     }
     this.needRefresh = false;
 

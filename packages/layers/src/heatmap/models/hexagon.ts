@@ -7,6 +7,13 @@ import hexagon_frag from '../shaders/hexagon/hexagon_frag.glsl';
 import hexagon_vert from '../shaders/hexagon/hexagon_vert.glsl';
 
 export default class HexagonModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      POS: 9,
+    });
+  }
+
   public getUninforms(): IModelUniform {
     const commoninfo = this.getCommonUniformsInfo();
     const attributeInfo = this.getUniformsBufferInfo(this.getStyleAttribute());
@@ -44,6 +51,7 @@ export default class HexagonModel extends BaseModel {
       moduleName: 'heatmapHexagon',
       vertexShader: hexagon_vert,
       fragmentShader: hexagon_frag,
+      defines: this.getDefines(),
       triangulation: HeatmapGridTriangulation,
       depth: { enable: false },
       primitive: gl.TRIANGLES,
@@ -56,7 +64,7 @@ export default class HexagonModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Pos',
-        shaderLocation: 10,
+        shaderLocation: this.attributeLocation.POS,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],
@@ -64,9 +72,7 @@ export default class HexagonModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature) => {
-          const coordinates = (
-            feature.version === 'GAODE2.x' ? feature.originCoordinates : feature.coordinates
-          ) as number[];
+          const coordinates = feature.coordinates as number[];
           return [coordinates[0], coordinates[1], 0];
         },
       },

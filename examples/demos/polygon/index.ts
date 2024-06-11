@@ -1,5 +1,8 @@
-export { MapRender as extrude } from './extrude';
-export { MapRender as fill } from './fill';
-export { MapRender as ocean } from './ocean';
-export { MapRender as texture } from './texture';
-export { MapRender as water } from './water';
+export { extrude } from './extrude';
+export { extrudeCity } from './extrude-city';
+export { extrusion } from './extrusion';
+export { fill } from './fill';
+export { fillLinear } from './fill-linear';
+export { ocean } from './ocean';
+export { texture } from './texture';
+export { water } from './water';

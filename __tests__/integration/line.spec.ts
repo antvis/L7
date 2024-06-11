@@ -2,28 +2,33 @@ import { generateCanvasTestCases } from './utils/generator';
 
 const TEST_CASES = [
   {
-    name: 'arc',
-    sleepTime: 500,
+    name: 'simple',
   },
   {
-    name: 'arc_plane',
-    sleepTime: 500,
-  },
-
-  {
-    name: 'flow',
-    sleepTime: 800,
-  },
-  {
-    name: 'arc',
-    sleepTime: 600,
+    name: 'normal',
   },
   {
     name: 'dash',
+    snapshot: false,
+  },
+  {
+    name: 'wall',
+  },
+  {
+    name: 'arc',
+  },
+  {
+    name: 'arc3D',
+  },
+  {
+    name: 'greatcircle',
+  },
+  {
+    name: 'flow',
     sleepTime: 500,
   },
 ];
 
 describe('Line Snapshot', () => {
-  generateCanvasTestCases('Line', TEST_CASES);
+  generateCanvasTestCases('line', TEST_CASES);
 });

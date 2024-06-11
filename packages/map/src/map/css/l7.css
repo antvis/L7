@@ -1,0 +1,163 @@
+.l7-map {
+  font:
+    12px/20px 'Helvetica Neue',
+    Arial,
+    Helvetica,
+    sans-serif;
+  overflow: hidden;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.l7-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.l7-map:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+.l7-canary {
+  background-color: salmon;
+}
+
+.l7-canvas-container.l7-interactive,
+.l7-ctrl-group button.l7-ctrl-compass {
+  cursor: grab;
+  user-select: none;
+}
+
+.l7-canvas-container.l7-interactive.l7-track-pointer {
+  cursor: pointer;
+}
+
+.l7-canvas-container.l7-interactive:active,
+.l7-ctrl-group button.l7-ctrl-compass:active {
+  cursor: grabbing;
+}
+
+.l7-canvas-container.l7-touch-zoom-rotate,
+.l7-canvas-container.l7-touch-zoom-rotate .l7-canvas {
+  touch-action: pan-x pan-y;
+}
+
+.l7-canvas-container.l7-touch-drag-pan,
+.l7-canvas-container.l7-touch-drag-pan .l7-canvas {
+  touch-action: pinch-zoom;
+}
+
+.l7-canvas-container.l7-touch-zoom-rotate.l7-touch-drag-pan,
+.l7-canvas-container.l7-touch-zoom-rotate.l7-touch-drag-pan .l7-canvas {
+  touch-action: none;
+}
+
+.l7-canvas-container.l7-touch-drag-pan.l7-cooperative-gestures,
+.l7-canvas-container.l7-touch-drag-pan.l7-cooperative-gestures .l7-canvas {
+  touch-action: pan-x pan-y;
+}
+
+.l7-cooperative-gesture-screen {
+  background: rgba(0 0 0 / 40%);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 1rem;
+  font-size: 1.4em;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease 1s;
+  z-index: 99999;
+}
+
+.l7-cooperative-gesture-screen.l7-show {
+  opacity: 1;
+  transition: opacity 0.05s;
+}
+
+.l7-cooperative-gesture-screen .l7-mobile-message {
+  display: none;
+}
+
+@media (hover: none), (width <= 480px) {
+  .l7-cooperative-gesture-screen .l7-desktop-message {
+    display: none;
+  }
+
+  .l7-cooperative-gesture-screen .l7-mobile-message {
+    display: block;
+  }
+}
+
+.l7-ctrl-top-left,
+.l7-ctrl-top-right,
+.l7-ctrl-bottom-left,
+.l7-ctrl-bottom-right {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+.l7-ctrl-top-left {
+  top: 0;
+  left: 0;
+}
+.l7-ctrl-top-right {
+  top: 0;
+  right: 0;
+}
+.l7-ctrl-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+.l7-ctrl-bottom-right {
+  right: 0;
+  bottom: 0;
+}
+
+.l7-ctrl {
+  clear: both;
+  pointer-events: auto;
+
+  /* workaround for a Safari bug https://github.com/mapbox/mapbox-gl-js/issues/8185 */
+  transform: translate(0, 0);
+}
+.l7-ctrl-top-left .l7-ctrl {
+  margin: 10px 0 0 10px;
+  float: left;
+}
+.l7-ctrl-top-right .l7-ctrl {
+  margin: 10px 10px 0 0;
+  float: right;
+}
+.l7-ctrl-bottom-left .l7-ctrl {
+  margin: 0 0 10px 10px;
+  float: left;
+}
+.l7-ctrl-bottom-right .l7-ctrl {
+  margin: 0 10px 10px 0;
+  float: right;
+}
+
+.l7-crosshair,
+.l7-crosshair .l7-interactive,
+.l7-crosshair .l7-interactive:active {
+  cursor: crosshair;
+}
+
+.l7-boxzoom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  background: #fff;
+  border: 2px dotted #202020;
+  opacity: 0.5;
+  z-index: 10;
+}

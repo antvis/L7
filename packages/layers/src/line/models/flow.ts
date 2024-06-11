@@ -1,15 +1,22 @@
 import type { IEncodeFeature, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
+import { fp64LowPart } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
 import type { IFlowLineStyleOptions } from '../../core/interface';
 import { FlowLineTriangulation } from '../../core/line_trangluation';
 import flow_line_frag from '../shaders/flow/flow_line_frag.glsl';
-
-// linear simple line shader
-
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import flow_line_vert from '../shaders/flow/flow_line_vert.glsl';
+
 export default class FlowLineModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+      INSTANCE: 10,
+      INSTANCE_64LOW: 11,
+      NORMAL: 12,
+    });
+  }
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -40,6 +47,7 @@ export default class FlowLineModel extends BaseModel {
       moduleName: 'flow_line',
       vertexShader: flow_line_vert,
       fragmentShader: flow_line_frag,
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: FlowLineTriangulation,
       styleOption: (this.layer.getLayerConfig() as IFlowLineStyleOptions).symbol,
@@ -56,7 +64,7 @@ export default class FlowLineModel extends BaseModel {
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size', // 宽度
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           // give the WebGL driver a hint that this buffer may change
           usage: gl.DYNAMIC_DRAW,
@@ -70,12 +78,13 @@ export default class FlowLineModel extends BaseModel {
         },
       },
     });
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'instance', // 弧线起始点信息
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Instance',
-        shaderLocation: 12,
+        shaderLocation: this.attributeLocation.INSTANCE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],
@@ -88,14 +97,37 @@ export default class FlowLineModel extends BaseModel {
       },
     });
 
+    // save low part for enabled double precision INSTANCE attribute
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'instance64Low',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_Instance64Low',
+        shaderLocation: this.attributeLocation.INSTANCE_64LOW,
+        buffer: {
+          usage: gl.STATIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 4,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [
+            fp64LowPart(vertex[3]),
+            fp64LowPart(vertex[4]),
+            fp64LowPart(vertex[5]),
+            fp64LowPart(vertex[6]),
+          ];
+        },
+      },
+    });
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'normal',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Normal',
-        shaderLocation: ShaderLocation.NORMAL,
+        shaderLocation: this.attributeLocation.NORMAL,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,

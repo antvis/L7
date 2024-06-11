@@ -1,3 +1,4 @@
-export { MapRender as grid } from './grid';
-export { MapRender as hexagon } from './hexagon';
-export { MapRender as normal } from './normal';
+export { grid } from './grid';
+export { hexagon } from './hexagon';
+export { normal } from './normal';
+export { normal3D } from './normal-3d';

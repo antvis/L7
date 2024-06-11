@@ -1,7 +1,7 @@
 import type { IMapService, IMercator, IRendererService } from '@antv/l7';
 import type { Camera } from 'three';
 import { Matrix4, PerspectiveCamera, Scene as ThreeScene, WebGLRenderer } from 'three';
-const DEG2RAD = Math.PI / 180;
+
 export interface IThreeRenderService {
   renderer: WebGLRenderer;
   camera: Camera;
@@ -58,28 +58,18 @@ export class ThreeRenderService implements IThreeRenderService {
     this.aspect = gl.drawingBufferWidth / gl.drawingBufferHeight;
     this.camera = new PerspectiveCamera(45, this.aspect, 1, 20000000);
   }
+
   public getRenderCamera(): Camera {
-    /**
-     * map version
-     * GAODE1.x
-     * GAODE2.x
-     * MAPBOX
-     */
-    switch (this.mapService.version) {
-      case 'GAODE1.x':
+    switch (this.mapService.getType()) {
+      case 'amap':
         return this.AMapCamera();
-      case 'GAODE2.x':
-        return this.AMap2Camera();
-      case 'MAPBOX':
+      case 'mapbox':
         return this.mapboxCamera();
-      case 'DEFAULTMAP':
+      case 'default':
         return this.mapboxCamera();
       default:
-        return this.AMapCamera();
+        throw new Error('不支持其它地图');
     }
-    // return this.mapService.constructor.name === 'AMapService'
-    //   ? this.AMapCamera()
-    //   : this.mapboxCamera();
   }
 
   private mapboxCamera(): Camera {
@@ -92,39 +82,9 @@ export class ThreeRenderService implements IThreeRenderService {
   }
 
   private AMapCamera(): Camera {
-    // @ts-ignore
-    const mapCamera = this.mapService.map.getCameraState();
-    const camera = this.camera;
-    let { pitch, rotation } = mapCamera;
-    const { fov, near, far, height, aspect } = mapCamera;
-    pitch *= DEG2RAD;
-    rotation *= DEG2RAD;
-    // @ts-ignore
-    camera.fov = (180 * fov) / Math.PI;
-    // @ts-ignore
-    camera.aspect = aspect;
-    // @ts-ignore
-    camera.near = near;
-    // @ts-ignore
-    camera.far = far;
-    // @ts-ignore
-    camera.updateProjectionMatrix();
-    camera.position.z = height * Math.cos(pitch);
-    camera.position.x = height * Math.sin(pitch) * Math.sin(rotation);
-    camera.position.y = -height * Math.sin(pitch) * Math.cos(rotation);
-    camera.up.x = -Math.cos(pitch) * Math.sin(rotation);
-    camera.up.y = Math.cos(pitch) * Math.cos(rotation);
-    camera.up.z = Math.sin(pitch);
-    camera.lookAt(0, 0, 0);
-    camera.position.x += mapCamera.position.x;
-    camera.position.y += -mapCamera.position.y;
-    return camera;
-  }
-
-  private AMap2Camera(): Camera {
-    // @ts-ignore
+    // @ts-expect-error
     const customCoords = this.mapService.map.customCoords;
-    customCoords.getCenter();
+    customCoords.setCenter([0, 0]);
 
     const camera = this.camera;
     const { near, far, fov, up, lookAt, position } = customCoords.getCameraParams();

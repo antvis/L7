@@ -132,7 +132,7 @@ export default class DeviceModel implements IModel {
       this.indexBuffer = (elements as DeviceElements).get();
     }
 
-    const inputLayout = device.createInputLayout({
+    const inputLayout = service.renderCache.createInputLayout({
       vertexBufferDescriptors,
       indexBufferFormat: elements ? Format.U32_R : null,
       program: this.program,
@@ -157,7 +157,6 @@ export default class DeviceModel implements IModel {
     const stencilEnabled = !!(stencilParams && stencilParams.enable);
 
     const pipeline = this.device.createRenderPipeline({
-      // return this.service.renderCache.createRenderPipeline({
       inputLayout: this.inputLayout,
       program: this.program,
       topology: primitiveMap[primitive],
@@ -270,7 +269,7 @@ export default class DeviceModel implements IModel {
       ...this.extractUniforms(uniforms),
     };
 
-    const { renderPass, currentFramebuffer, width, height, renderCache } = this.service;
+    const { renderPass, currentFramebuffer, width, height } = this.service;
 
     // TODO: Recreate pipeline only when blend / cull changed.
     this.pipeline = this.createPipeline(mergedOptions, pick);
@@ -311,8 +310,7 @@ export default class DeviceModel implements IModel {
         : null,
     );
     if (uniformBuffers) {
-      // this.bindings = device.createBindings({
-      this.bindings = renderCache.createBindings({
+      this.bindings = device.createBindings({
         pipeline: this.pipeline,
         uniformBufferBindings: uniformBuffers.map((uniformBuffer, i) => {
           const buffer = uniformBuffer as DeviceBuffer;
@@ -363,7 +361,8 @@ export default class DeviceModel implements IModel {
     this.vertexBuffers?.forEach((buffer) => buffer.destroy());
     this.indexBuffer?.destroy();
     this.bindings?.destroy();
-    this.inputLayout.destroy();
+    // 不能进行销毁，删除 deleteVertexArray
+    // this.inputLayout.destroy();
     this.pipeline.destroy();
     this.destroyed = true;
   }

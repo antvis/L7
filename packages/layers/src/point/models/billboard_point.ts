@@ -4,7 +4,6 @@ import BaseModel from '../../core/BaseModel';
 import type { IPointLayerStyleOptions } from '../../core/interface';
 
 import { rgb2arr } from '@antv/l7-utils';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import simplePointFrag from '../shaders/billboard/billboard_point_frag.glsl';
 import simplePointVert from '../shaders/billboard/billboard_point_vert.glsl';
 
@@ -18,6 +17,13 @@ export function PointTriangulation(feature: IEncodeFeature) {
 }
 
 export default class SimplePointModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+    });
+  }
+
   public getDefaultStyle(): Partial<IPointLayerStyleOptions> {
     return {
       blend: 'additive',
@@ -58,6 +64,7 @@ export default class SimplePointModel extends BaseModel {
       moduleName: 'pointSimple',
       vertexShader: simplePointVert,
       fragmentShader: simplePointFrag,
+      defines: this.getDefines(),
       inject: this.getInject(),
       triangulation: PointTriangulation,
       depth: { enable: false },
@@ -67,12 +74,15 @@ export default class SimplePointModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
+    // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 22 层级以上出现数据偏移
+    this.registerPosition64LowAttribute();
+
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_Size',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           usage: gl.DYNAMIC_DRAW,
           data: [],

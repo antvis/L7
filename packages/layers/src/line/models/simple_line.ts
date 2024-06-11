@@ -2,12 +2,18 @@ import type { IEncodeFeature, IModel } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
-import { ShaderLocation } from '../../core/CommonStyleAttribute';
 import type { ILineLayerStyleOptions } from '../../core/interface';
 import { SimpleLineTriangulation } from '../../core/triangulation';
 import simple_line_frag from '../shaders/simple/simpleline_frag.glsl';
 import simple_line_vert from '../shaders/simple/simpleline_vert.glsl';
+
 export default class SimpleLineModel extends BaseModel {
+  protected get attributeLocation() {
+    return Object.assign(super.attributeLocation, {
+      MAX: super.attributeLocation.MAX,
+      SIZE: 9,
+    });
+  }
   protected getCommonUniformsInfo(): {
     uniformsArray: number[];
     uniformsLength: number;
@@ -70,6 +76,7 @@ export default class SimpleLineModel extends BaseModel {
       vertexShader: vert,
       fragmentShader: frag,
       triangulation: SimpleLineTriangulation,
+      defines: this.getDefines(),
       inject: this.getInject(),
       primitive: gl.LINES,
       depth: { enable: false },
@@ -79,57 +86,16 @@ export default class SimpleLineModel extends BaseModel {
     return [model];
   }
   protected registerBuiltinAttributes() {
-    // this.styleAttributeService.registerStyleAttribute({
-    //   name: 'distance',
-    //   type: AttributeType.Attribute,
-    //   descriptor: {
-    //     name: 'a_Distance',
-    //     shaderLocation: 14,
-    //     buffer: {
-    //       // give the WebGL driver a hint that this buffer may change
-    //       usage: gl.STATIC_DRAW,
-    //       data: [],
-    //       type: gl.FLOAT,
-    //     },
-    //     size: 1,
-    //     update: (
-    //       feature: IEncodeFeature,
-    //       featureIdx: number,
-    //       vertex: number[],
-    //     ) => {
-    //       return [vertex[3]];
-    //     },
-    //   },
-    // });
-    // this.styleAttributeService.registerStyleAttribute({
-    //   name: 'total_distance',
-    //   type: AttributeType.Attribute,
-    //   descriptor: {
-    //     name: 'a_Total_Distance',
-    //     shaderLocation: 13,//枚举不够了,先固定写值吧,在shader中location也成一致的并且不与其他的重复就行了
-    //     buffer: {
-    //       // give the WebGL driver a hint that this buffer may change
-    //       usage: gl.STATIC_DRAW,
-    //       data: [],
-    //       type: gl.FLOAT,
-    //     },
-    //     size: 1,
-    //     update: (
-    //       feature: IEncodeFeature,
-    //       featureIdx: number,
-    //       vertex: number[],
-    //     ) => {
-    //       return [vertex[5]];
-    //     },
-    //   },
-    // });
+    // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 20层级以上出现数据偏移
+    this.registerPosition64LowAttribute();
+
     //size.x,size,y,distance,totalDistance
     this.styleAttributeService.registerStyleAttribute({
       name: 'sizeDistanceAndTotalDistance',
       type: AttributeType.Attribute,
       descriptor: {
         name: 'a_SizeDistanceAndTotalDistance',
-        shaderLocation: ShaderLocation.SIZE,
+        shaderLocation: this.attributeLocation.SIZE,
         buffer: {
           usage: gl.STATIC_DRAW,
           data: [],

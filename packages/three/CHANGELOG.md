@@ -1,5 +1,61 @@
 # @antv/l7-three
 
+## 2.21.11-beta.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.7
+
+## 2.21.11-beta.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.6
+
+## 2.21.11-beta.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.5
+
+## 2.21.11-beta.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.4
+
+## 2.21.11-beta.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.3
+
+## 2.21.11-beta.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.2
+
+## 2.21.11-beta.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.1
+
+## 2.21.11-beta.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.21.11-beta.0
+
 ## 2.21.10
 
 ### Patch Changes

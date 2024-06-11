@@ -23,12 +23,11 @@ layout(std140) uniform commonUniorm {
   float u_linearColor: 0.0;
 };
 
-// varying vec2 v_normal;
-in vec4 v_dash_array;
 in vec4 v_color;
-in vec4 v_line_data;
+in vec4 v_dash_array;
 in float v_segmentIndex;
 in vec2 v_iconMapUV;
+in vec4 v_line_data;
 
 out vec4 outputColor;
 
@@ -57,7 +56,7 @@ void main() {
       alpha = clamp(alpha, 0.0, 1.0);
       outputColor.a *= alpha;
 
-      // u_animate 
+      // u_animate
       // x enable
       // y duration
       // z interval

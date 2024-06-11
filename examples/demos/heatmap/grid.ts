@@ -1,65 +1,46 @@
-import { HeatmapLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { HeatmapLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const grid: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [121.434765, 31.256735],
       zoom: 14.83,
-    }),
+    },
   });
 
-  scene.on('loaded', () => {
-    fetch('https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json')
-      .then((res) => res.json())
-      .then((data) => {
-        const layer = new HeatmapLayer({ autoFit: true })
-          .source(data, {
-            transforms: [
-              {
-                type: 'grid',
-                size: 150000,
-                field: 'mag',
-                method: 'sum',
-              },
-            ],
-          })
-          .size('sum', (sum) => {
-            return sum * 2000;
-          })
-          .shape('hexagonColumn')
-          .style({
-            coverage: 0.8,
-            angle: 0,
-          })
-          .active(true)
-          .color(
-            'count',
-            [
-              '#0B0030',
-              '#100243',
-              '#100243',
-              '#1B048B',
-              '#051FB7',
-              '#0350C1',
-              '#0350C1',
-              '#0072C4',
-              '#0796D3',
-              '#2BA9DF',
-              '#30C7C4',
-              '#6BD5A0',
-              '#A7ECB2',
-              '#D0F4CA',
-            ].reverse(),
-          );
-        scene.addLayer(layer);
-        if (window['screenshot']) {
-          window['screenshot']();
-        }
-      });
-  });
-}
+  const data = await fetch(
+    'https://gw.alipayobjects.com/os/antfincdn/aBQAMIpvPL/qingdao_500m.csv',
+  ).then((res) => res.text());
+
+  const layer = new HeatmapLayer({
+    autoFit: true,
+  })
+    .source(data, {
+      parser: { type: 'csv', x: 'lng', y: 'lat' },
+      transforms: [{ type: 'grid', size: 3000, field: 'count', method: 'sum' }],
+    })
+    .shape('square')
+    .style({
+      coverage: 0.9,
+    })
+    .color(
+      'count',
+      [
+        '#FF3417',
+        '#FF7412',
+        '#FFB02A',
+        '#FFE754',
+        '#46F3FF',
+        '#02BEFF',
+        '#1A7AFF',
+        '#0A1FB2',
+      ].reverse(),
+    );
+
+  scene.addLayer(layer);
+
+  return scene;
+};

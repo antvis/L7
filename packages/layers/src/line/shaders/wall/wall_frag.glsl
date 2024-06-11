@@ -17,13 +17,15 @@ layout(std140) uniform commonUniorm {
   float u_iconStepCount;
   float u_time;
 };
+
+
 in vec2 v_iconMapUV;
-in float v_blur;
-in float v_radio;
 in vec4 v_color;
+in float v_blur;
 in vec4 v_dataset;
 
 out vec4 outputColor;
+
 #pragma include "picking"
 
 void main() {
@@ -79,7 +81,7 @@ void main() {
         outputColor = filterColor(pattern);
     }
   }
-  
+
 
   // blur - AA
   if(v < v_blur) {

@@ -34,9 +34,7 @@ const EventMap: {
 };
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
-/**
- * AMapService
- */
+
 export default abstract class BaseMapService<T> implements IMapService<Map & T> {
   public version: string = 'DEFAUlTMAP';
   public map: Map & T;
@@ -176,7 +174,6 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   }
 
   public panBy(x: number = 0, y: number = 0): void {
-    // @ts-ignore
     this.map.panBy([x, y]);
   }
 
@@ -232,7 +229,8 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   }
 
   public setMapStyle(style: any): void {
-    this.map.setStyle(this.getMapStyleValue(style));
+    // @ts-ignore
+    this.map?.setStyle(this.getMapStyleValue(style));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -309,7 +307,8 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
-    const renderCanvas = this.map.getCanvas();
+    // @ts-ignore
+    const renderCanvas = this.map?.getCanvas();
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)

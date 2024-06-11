@@ -1,5 +1,81 @@
 # Change Log
 
+## 2.21.11-beta.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.7
+  - @antv/l7-map@2.21.11-beta.7
+  - @antv/l7-utils@2.21.11-beta.7
+
+## 2.21.11-beta.6
+
+### Patch Changes
+
+- Updated dependencies [[`7e38a83`](https://github.com/antvis/L7/commit/7e38a83d9324fb9443f5a04e6d2fc9a1fef9c17c)]:
+  - @antv/l7-map@2.21.11-beta.6
+  - @antv/l7-core@2.21.11-beta.6
+  - @antv/l7-utils@2.21.11-beta.6
+
+## 2.21.11-beta.5
+
+### Patch Changes
+
+- [#2518](https://github.com/antvis/L7/pull/2518) [`8939e9b`](https://github.com/antvis/L7/commit/8939e9bc0e744d75b5b469c221d6695c7a313e83) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复在 Map 上使用组件事件穿透到图层上的问题
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.5
+  - @antv/l7-map@2.21.11-beta.5
+  - @antv/l7-utils@2.21.11-beta.5
+
+## 2.21.11-beta.4
+
+### Patch Changes
+
+- [#2513](https://github.com/antvis/L7/pull/2513) [`cca16a3`](https://github.com/antvis/L7/commit/cca16a3d72de462afa9d71c386c82f92952d1c47) Thanks [@lvisei](https://github.com/lvisei)! - fix: 天地图 setCenter 方法缺失
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.4
+  - @antv/l7-map@2.21.11-beta.4
+  - @antv/l7-utils@2.21.11-beta.4
+
+## 2.21.11-beta.3
+
+### Patch Changes
+
+- Updated dependencies [[`a5f57ed`](https://github.com/antvis/L7/commit/a5f57eda52dab160fe076f252ad52cd51b8f456a)]:
+  - @antv/l7-core@2.21.11-beta.3
+  - @antv/l7-map@2.21.11-beta.3
+  - @antv/l7-utils@2.21.11-beta.3
+
+## 2.21.11-beta.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.2
+  - @antv/l7-map@2.21.11-beta.2
+  - @antv/l7-utils@2.21.11-beta.2
+
+## 2.21.11-beta.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.1
+  - @antv/l7-map@2.21.11-beta.1
+  - @antv/l7-utils@2.21.11-beta.1
+
+## 2.21.11-beta.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.0
+  - @antv/l7-map@2.21.11-beta.0
+  - @antv/l7-utils@2.21.11-beta.0
+
 ## 2.21.10
 
 ### Patch Changes

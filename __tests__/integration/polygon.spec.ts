@@ -3,24 +3,29 @@ import { generateCanvasTestCases } from './utils/generator';
 const TEST_CASES = [
   {
     name: 'extrude',
+    sleepTime: 500,
+  },
+  {
+    name: 'extrusion',
+    sleepTime: 500,
   },
   {
     name: 'fill',
   },
   {
     name: 'ocean',
-    snapshots: false,
+    snapshot: false,
   },
   {
     name: 'texture',
-    snapshots: false,
+    snapshot: false,
   },
   {
     name: 'water',
-    snapshots: false,
+    snapshot: false,
   },
 ];
 
 describe('Polygon Snapshot', () => {
-  generateCanvasTestCases('Polygon', TEST_CASES);
+  generateCanvasTestCases('polygon', TEST_CASES);
 });

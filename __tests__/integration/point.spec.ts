@@ -8,19 +8,24 @@ const TEST_CASES = [
     name: 'column',
   },
   {
-    name: 'fill_image',
+    name: 'dot',
+    snapshot: false,
   },
   {
     name: 'fill',
   },
-  // {
-  //   name: 'image',
-  // },
+  {
+    name: 'fillImage',
+  },
+  {
+    name: 'image',
+    snapshot: false,
+  },
   {
     name: 'text',
   },
 ];
 
 describe('Point Snapshot', () => {
-  generateCanvasTestCases('Point', TEST_CASES);
+  generateCanvasTestCases('point', TEST_CASES);
 });

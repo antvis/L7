@@ -1,1 +1,2 @@
-export { MapRender as fujian } from './fujian';
+export { fujian } from './fujian';
+export { variFlight } from './vari-flight';

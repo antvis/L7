@@ -1,6 +1,6 @@
-import { PolygonLayer, Scene } from '@antv/l7';
-import * as allMap from '@antv/l7-maps';
-import type { RenderDemoOptions } from '../../types';
+import { PolygonLayer } from '@antv/l7';
+import type { TestCase } from '../../types';
+import { CaseScene } from '../../utils';
 
 const data1 = {
   type: 'FeatureCollection',
@@ -60,35 +60,42 @@ const data2 = {
   ],
 };
 
-export function MapRender(options: RenderDemoOptions) {
-  const scene = new Scene({
-    id: 'map',
-    renderer: options.renderer,
-    map: new allMap[options.map]({
-      style: 'light',
+export const setData: TestCase = async (options) => {
+  const scene = await CaseScene({
+    ...options,
+    mapConfig: {
       center: [120.100535, 30.041909],
       zoom: 14.83,
-    }),
+    },
   });
 
-  scene.on('loaded', () => {
-    const layer = new PolygonLayer({
-      autoFit: false,
-    })
-      .source(data1)
-      .shape('fill')
-      .active(true)
-      .color('red');
+  const layer = new PolygonLayer({
+    autoFit: false,
+  })
+    .source(data1)
+    .shape('fill')
+    .active(true)
+    .color('red');
 
-    layer.once('inited', () => {
-      layer.fitBounds({ animate: false });
-    });
-
-    scene.addLayer(layer);
-
-    setTimeout(() => {
-      console.log('setData: ');
-      layer.setData(data2);
-    }, 2000);
+  layer.once('inited', () => {
+    layer.fitBounds({ animate: false });
   });
-}
+
+  scene.addLayer(layer);
+
+  setData.extendGUI = (gui) => {
+    return [
+      gui.add(
+        {
+          setData: () => {
+            console.log('setData: ');
+            layer.setData(data2);
+          },
+        },
+        'setData',
+      ),
+    ];
+  };
+
+  return scene;
+};
