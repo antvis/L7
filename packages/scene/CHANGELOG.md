@@ -14,105 +14,105 @@
   - @antv/l7-core@2.22.0
   - @antv/l7-utils@2.22.0
 
-## 2.22.0-beta.7
+## 2.21.11-beta.7
 
 ### Patch Changes
 
 - Updated dependencies [[`3aa0f32`](https://github.com/antvis/L7/commit/3aa0f32b41ef10efa2e9bab46d695bc87ab950f6)]:
-  - @antv/l7-renderer@2.22.0-beta.7
-  - @antv/l7-component@2.22.0-beta.7
-  - @antv/l7-layers@2.22.0-beta.7
-  - @antv/l7-core@2.22.0-beta.7
-  - @antv/l7-maps@2.22.0-beta.7
-  - @antv/l7-utils@2.22.0-beta.7
+  - @antv/l7-renderer@2.21.11-beta.7
+  - @antv/l7-component@2.21.11-beta.7
+  - @antv/l7-layers@2.21.11-beta.7
+  - @antv/l7-core@2.21.11-beta.7
+  - @antv/l7-maps@2.21.11-beta.7
+  - @antv/l7-utils@2.21.11-beta.7
 
-## 2.22.0-beta.6
+## 2.21.11-beta.6
 
 ### Patch Changes
 
 - Updated dependencies [[`67647e9`](https://github.com/antvis/L7/commit/67647e95c5b06b593604310c78c6a0ec195c3a01)]:
-  - @antv/l7-layers@2.22.0-beta.6
-  - @antv/l7-component@2.22.0-beta.6
-  - @antv/l7-maps@2.22.0-beta.6
-  - @antv/l7-renderer@2.22.0-beta.6
-  - @antv/l7-core@2.22.0-beta.6
-  - @antv/l7-utils@2.22.0-beta.6
+  - @antv/l7-layers@2.21.11-beta.6
+  - @antv/l7-component@2.21.11-beta.6
+  - @antv/l7-maps@2.21.11-beta.6
+  - @antv/l7-renderer@2.21.11-beta.6
+  - @antv/l7-core@2.21.11-beta.6
+  - @antv/l7-utils@2.21.11-beta.6
 
-## 2.22.0-beta.5
+## 2.21.11-beta.5
 
 ### Patch Changes
 
 - Updated dependencies [[`8939e9b`](https://github.com/antvis/L7/commit/8939e9bc0e744d75b5b469c221d6695c7a313e83)]:
-  - @antv/l7-maps@2.22.0-beta.5
-  - @antv/l7-layers@2.22.0-beta.5
-  - @antv/l7-component@2.22.0-beta.5
-  - @antv/l7-renderer@2.22.0-beta.5
-  - @antv/l7-core@2.22.0-beta.5
-  - @antv/l7-utils@2.22.0-beta.5
+  - @antv/l7-maps@2.21.11-beta.5
+  - @antv/l7-layers@2.21.11-beta.5
+  - @antv/l7-component@2.21.11-beta.5
+  - @antv/l7-renderer@2.21.11-beta.5
+  - @antv/l7-core@2.21.11-beta.5
+  - @antv/l7-utils@2.21.11-beta.5
 
-## 2.22.0-beta.4
+## 2.21.11-beta.4
 
 ### Patch Changes
 
 - Updated dependencies [[`cca16a3`](https://github.com/antvis/L7/commit/cca16a3d72de462afa9d71c386c82f92952d1c47)]:
-  - @antv/l7-maps@2.22.0-beta.4
-  - @antv/l7-layers@2.22.0-beta.4
-  - @antv/l7-component@2.22.0-beta.4
-  - @antv/l7-renderer@2.22.0-beta.4
-  - @antv/l7-core@2.22.0-beta.4
-  - @antv/l7-utils@2.22.0-beta.4
+  - @antv/l7-maps@2.21.11-beta.4
+  - @antv/l7-layers@2.21.11-beta.4
+  - @antv/l7-component@2.21.11-beta.4
+  - @antv/l7-renderer@2.21.11-beta.4
+  - @antv/l7-core@2.21.11-beta.4
+  - @antv/l7-utils@2.21.11-beta.4
 
-## 2.22.0-beta.3
+## 2.21.11-beta.3
 
 ### Patch Changes
 
 - Updated dependencies [[`aca779d`](https://github.com/antvis/L7/commit/aca779dac55ebf9ee1116106d69e71bb872b4ccc), [`a5f57ed`](https://github.com/antvis/L7/commit/a5f57eda52dab160fe076f252ad52cd51b8f456a)]:
-  - @antv/l7-component@2.22.0-beta.3
-  - @antv/l7-core@2.22.0-beta.3
-  - @antv/l7-layers@2.22.0-beta.3
-  - @antv/l7-maps@2.22.0-beta.3
-  - @antv/l7-renderer@2.22.0-beta.3
-  - @antv/l7-utils@2.22.0-beta.3
+  - @antv/l7-component@2.21.11-beta.3
+  - @antv/l7-core@2.21.11-beta.3
+  - @antv/l7-layers@2.21.11-beta.3
+  - @antv/l7-maps@2.21.11-beta.3
+  - @antv/l7-renderer@2.21.11-beta.3
+  - @antv/l7-utils@2.21.11-beta.3
 
-## 2.22.0-beta.2
+## 2.21.11-beta.2
 
 ### Patch Changes
 
 - Updated dependencies [[`0754eeb`](https://github.com/antvis/L7/commit/0754eebe5c029c808958a5f29492ed2487263c7f)]:
-  - @antv/l7-layers@2.22.0-beta.2
-  - @antv/l7-component@2.22.0-beta.2
-  - @antv/l7-renderer@2.22.0-beta.2
-  - @antv/l7-core@2.22.0-beta.2
-  - @antv/l7-maps@2.22.0-beta.2
-  - @antv/l7-utils@2.22.0-beta.2
+  - @antv/l7-layers@2.21.11-beta.2
+  - @antv/l7-component@2.21.11-beta.2
+  - @antv/l7-renderer@2.21.11-beta.2
+  - @antv/l7-core@2.21.11-beta.2
+  - @antv/l7-maps@2.21.11-beta.2
+  - @antv/l7-utils@2.21.11-beta.2
 
-## 2.22.0-beta.1
+## 2.21.11-beta.1
 
 ### Patch Changes
 
 - [#2477](https://github.com/antvis/L7/pull/2477) [`05dd5cc`](https://github.com/antvis/L7/commit/05dd5ccf31e12a9440efbebc9fcb803c594b5a44) Thanks [@lvisei](https://github.com/lvisei)! - feat: 设置默认的渲染引擎为 g-device，优先使用 WebGL2
 
 - Updated dependencies []:
-  - @antv/l7-component@2.22.0-beta.1
-  - @antv/l7-layers@2.22.0-beta.1
-  - @antv/l7-renderer@2.22.0-beta.1
-  - @antv/l7-core@2.22.0-beta.1
-  - @antv/l7-maps@2.22.0-beta.1
-  - @antv/l7-utils@2.22.0-beta.1
+  - @antv/l7-component@2.21.11-beta.1
+  - @antv/l7-layers@2.21.11-beta.1
+  - @antv/l7-renderer@2.21.11-beta.1
+  - @antv/l7-core@2.21.11-beta.1
+  - @antv/l7-maps@2.21.11-beta.1
+  - @antv/l7-utils@2.21.11-beta.1
 
-## 2.22.0-beta.0
+## 2.21.11-beta.0
 
 ### Patch Changes
 
 - [#2477](https://github.com/antvis/L7/pull/2477) [`05dd5cc`](https://github.com/antvis/L7/commit/05dd5ccf31e12a9440efbebc9fcb803c594b5a44) Thanks [@lvisei](https://github.com/lvisei)! - feat: 设置默认的渲染引擎为 g-device，优先使用 WebGL2
 
 - Updated dependencies [[`3e33888`](https://github.com/antvis/L7/commit/3e33888a56c6efa80be60bc79182644eaccaa500), [`8b72df1`](https://github.com/antvis/L7/commit/8b72df14dc18ba85f66f8e4e09ba9d80d0379ed3), [`d408bdb`](https://github.com/antvis/L7/commit/d408bdb4a2a7be57a50f9a88247cf7b690ba4387)]:
-  - @antv/l7-layers@2.22.0-beta.0
-  - @antv/l7-renderer@2.22.0-beta.0
-  - @antv/l7-component@2.22.0-beta.0
-  - @antv/l7-core@2.22.0-beta.0
-  - @antv/l7-maps@2.22.0-beta.0
-  - @antv/l7-utils@2.22.0-beta.0
+  - @antv/l7-layers@2.21.11-beta.0
+  - @antv/l7-renderer@2.21.11-beta.0
+  - @antv/l7-component@2.21.11-beta.0
+  - @antv/l7-core@2.21.11-beta.0
+  - @antv/l7-maps@2.21.11-beta.0
+  - @antv/l7-utils@2.21.11-beta.0
 
 ## 2.21.10
 

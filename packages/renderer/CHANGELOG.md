@@ -12,73 +12,73 @@
   - @antv/l7-core@2.22.0
   - @antv/l7-utils@2.22.0
 
-## 2.22.0-beta.7
+## 2.21.11-beta.7
 
 ### Patch Changes
 
 - [#2526](https://github.com/antvis/L7/pull/2526) [`3aa0f32`](https://github.com/antvis/L7/commit/3aa0f32b41ef10efa2e9bab46d695bc87ab950f6) Thanks [@lvisei](https://github.com/lvisei)! - fix: 修复 bindings 缓存在 WebGPU 的问题
 
 - Updated dependencies []:
-  - @antv/l7-core@2.22.0-beta.7
-  - @antv/l7-utils@2.22.0-beta.7
+  - @antv/l7-core@2.21.11-beta.7
+  - @antv/l7-utils@2.21.11-beta.7
 
-## 2.22.0-beta.6
-
-### Patch Changes
-
-- Updated dependencies []:
-  - @antv/l7-core@2.22.0-beta.6
-  - @antv/l7-utils@2.22.0-beta.6
-
-## 2.22.0-beta.5
+## 2.21.11-beta.6
 
 ### Patch Changes
 
 - Updated dependencies []:
-  - @antv/l7-core@2.22.0-beta.5
-  - @antv/l7-utils@2.22.0-beta.5
+  - @antv/l7-core@2.21.11-beta.6
+  - @antv/l7-utils@2.21.11-beta.6
 
-## 2.22.0-beta.4
+## 2.21.11-beta.5
 
 ### Patch Changes
 
 - Updated dependencies []:
-  - @antv/l7-core@2.22.0-beta.4
-  - @antv/l7-utils@2.22.0-beta.4
+  - @antv/l7-core@2.21.11-beta.5
+  - @antv/l7-utils@2.21.11-beta.5
 
-## 2.22.0-beta.3
+## 2.21.11-beta.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.4
+  - @antv/l7-utils@2.21.11-beta.4
+
+## 2.21.11-beta.3
 
 ### Patch Changes
 
 - Updated dependencies [[`a5f57ed`](https://github.com/antvis/L7/commit/a5f57eda52dab160fe076f252ad52cd51b8f456a)]:
-  - @antv/l7-core@2.22.0-beta.3
-  - @antv/l7-utils@2.22.0-beta.3
+  - @antv/l7-core@2.21.11-beta.3
+  - @antv/l7-utils@2.21.11-beta.3
 
-## 2.22.0-beta.2
-
-### Patch Changes
-
-- Updated dependencies []:
-  - @antv/l7-core@2.22.0-beta.2
-  - @antv/l7-utils@2.22.0-beta.2
-
-## 2.22.0-beta.1
+## 2.21.11-beta.2
 
 ### Patch Changes
 
 - Updated dependencies []:
-  - @antv/l7-core@2.22.0-beta.1
-  - @antv/l7-utils@2.22.0-beta.1
+  - @antv/l7-core@2.21.11-beta.2
+  - @antv/l7-utils@2.21.11-beta.2
 
-## 2.22.0-beta.0
+## 2.21.11-beta.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.21.11-beta.1
+  - @antv/l7-utils@2.21.11-beta.1
+
+## 2.21.11-beta.0
 
 ### Patch Changes
 
 - [#2473](https://github.com/antvis/L7/pull/2473) [`8b72df1`](https://github.com/antvis/L7/commit/8b72df14dc18ba85f66f8e4e09ba9d80d0379ed3) Thanks [@lvisei](https://github.com/lvisei)! - fix: use stencil.func.ref for each pipeline
 
 - Updated dependencies []:
-  - @antv/l7-core@2.22.0-beta.0
-  - @antv/l7-utils@2.22.0-beta.0
+  - @antv/l7-core@2.21.11-beta.0
+  - @antv/l7-utils@2.21.11-beta.0
 
 ## 2.21.10
 
