@@ -49,7 +49,7 @@
     "antd": "^4.20.0",
     "classnames": "^2.5.1",
     "district-data": "^0.0.11",
-    "dumi": "2.2.17",
+    "dumi": "^2.3.8",
     "gcoord": "^0.3.2",
     "geobuf": "^3.0.2",
     "geojson2svg": "^1.3.3",
