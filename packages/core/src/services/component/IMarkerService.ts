@@ -16,6 +16,7 @@ export interface IMarkerOption {
   color: string;
   offsets: number[];
   draggable: boolean;
+  overflowHide?: boolean;
   extData?: any;
   style?: CSSStyleDeclaration;
 }

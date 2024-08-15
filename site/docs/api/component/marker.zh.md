@@ -20,6 +20,7 @@ Marker
 - element    `DOM|string`    自定义 marker DOM 节点，可以是 dom 实例，也可以是 dom id
 - anchor     `string`  锚点位置   支持 center, top, top-left, top-right, bottom, bottom-left,bottom-right,left, right
 - offsets    `Array`  偏移量  [ 0, 0 ] 分别表示 X, Y 的偏移量
+- overflowHide   `boolean`  超出屏幕时是否隐藏 Marker，默认为 true
 - draggable `boolean` 是否支持拖拽调整 Marker 位置
 - extData 用户自定义属性，支持任意数据类型，存储 marker 属性信息
 
