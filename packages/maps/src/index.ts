@@ -32,9 +32,9 @@ export {
   GaodeMapV2,
   GoogleMap,
   Map,
+  Mapbox,
   MapLibre,
   MapType,
-  Mapbox,
-  TMap,
   TencentMap,
+  TMap,
 };
