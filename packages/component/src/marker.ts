@@ -39,6 +39,7 @@ export default class Marker extends EventEmitter {
       offsets: [0, 0],
       color: '#5B8FF9',
       draggable: false,
+      overflowHide: true,
     };
   }
 
@@ -348,9 +349,11 @@ export default class Marker extends EventEmitter {
           pos.x = newPos.x;
         }
       }
-      // 不在当前可视区域内隐藏点
-      if (pos.x > containerWidth || pos.x < 0 || pos.y > containerHeight || pos.y < 0) {
-        element.style.display = 'none';
+      if (this.markerOption.overflowHide) {
+        // 不在当前可视区域内隐藏点
+        if (pos.x > containerWidth || pos.x < 0 || pos.y > containerHeight || pos.y < 0) {
+          element.style.display = 'none';
+        }
       }
 
       element.style.left = pos.x + offsets[0] + 'px';
