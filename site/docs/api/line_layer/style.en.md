@@ -262,7 +262,7 @@ layer.style({
 
 #### IDashArray
 
-`dashArray`only at`ILineType`for`solid`will take effect.
+`dashArray`only at`ILineType`for`dashed`will take effect.
 
 ```js
 // len1 solid line length len2 interval length

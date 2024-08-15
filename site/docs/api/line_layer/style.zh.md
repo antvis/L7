@@ -243,7 +243,7 @@ layer.style({
 
 #### IDashArray
 
-`dashArray` 只有在 `ILineType` 为 `solid` 的时候才会生效。
+`dashArray` 只有在 `ILineType` 为 `dashed` 的时候才会生效。
 
 ```js
 // len1 实线长度 len2 间隔长度
