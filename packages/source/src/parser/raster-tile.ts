@@ -39,10 +39,7 @@ export default function rasterTile(
     throw new Error('tile server url is error');
   }
 
-  const {
-    extent = [Infinity, Infinity, -Infinity, -Infinity],
-    coordinates,
-  } = cfg;
+  const { extent = [Infinity, Infinity, -Infinity, -Infinity], coordinates } = cfg;
 
   let tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
