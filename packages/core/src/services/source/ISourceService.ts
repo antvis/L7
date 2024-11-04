@@ -38,6 +38,7 @@ export interface ITileParserCFG {
     cb: (err: any, data: any) => void,
   ) => void;
   extent?: [number, number, number, number];
+  coordinates?: [[number, number], [number, number], [number, number], [number, number]];
   requestParameters: Partial<RequestParameters>;
   updateStrategy?: 'overlap' | 'replace';
   // 指定 feature 编码 id
