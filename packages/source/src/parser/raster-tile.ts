@@ -38,10 +38,12 @@ export default function rasterTile(
   if (isUrlError(data)) {
     throw new Error('tile server url is error');
   }
+
   const {
     extent = [Infinity, Infinity, -Infinity, -Infinity],
     coordinates,
   } = cfg;
+
   let tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
   // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
   if (tileDataType === RasterTileType.RGB) {
@@ -74,8 +76,8 @@ export default function rasterTile(
         return getTileImage(data as string | string[], tileParams, tile, cfg);
     }
   };
-  const tilesetOptions = { ...DEFAULT_CONFIG, ...cfg, getTileData };
 
+  const tilesetOptions = { ...DEFAULT_CONFIG, ...cfg, getTileData };
   const rasterTileCoord = extentToCoord(coordinates, extent);
 
   return {
