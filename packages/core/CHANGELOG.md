@@ -1,5 +1,18 @@
 # Change Log
 
+## 3.0.0
+
+### Major Changes
+
+- [#2630](https://github.com/antvis/L7/pull/2630) [`1d5c5fa`](https://github.com/antvis/L7/commit/1d5c5fadbe31283cf07a3938193822531e1187ce) Thanks [@XinyueDu](https://github.com/XinyueDu)! - rasterTile support extent
+
+### Patch Changes
+
+- [#2631](https://github.com/antvis/L7/pull/2631) [`8a9413f`](https://github.com/antvis/L7/commit/8a9413fa842397d7eb2beae18e896ffddc9abdf4) Thanks [@lzxue](https://github.com/lzxue)! - raster tile extent
+
+- Updated dependencies [[`8a9413f`](https://github.com/antvis/L7/commit/8a9413fa842397d7eb2beae18e896ffddc9abdf4)]:
+  - @antv/l7-utils@3.0.0
+
 ## 2.22.1
 
 ### Patch Changes
