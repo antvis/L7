@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.22.2
+
+### Patch Changes
+
+- [#2631](https://github.com/antvis/L7/pull/2631) [`8a9413f`](https://github.com/antvis/L7/commit/8a9413fa842397d7eb2beae18e896ffddc9abdf4) Thanks [@lzxue](https://github.com/lzxue)! - raster tile extent
+
 ## 2.22.1
 
 ## 2.22.0
