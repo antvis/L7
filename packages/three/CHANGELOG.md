@@ -1,5 +1,12 @@
 # @antv/l7-three
 
+## 2.22.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7@2.22.3
+
 ## 2.22.2
 
 ### Patch Changes
