@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.22.3
+
+### Patch Changes
+
+- Updated dependencies [[`c9db10a`](https://github.com/antvis/L7/commit/c9db10ab34c269d48db7601f2f624262b61856ee)]:
+  - @antv/l7-layers@2.22.3
+  - @antv/l7-core@2.22.3
+  - @antv/l7-utils@2.22.3
+
 ## 2.22.2
 
 ### Patch Changes
