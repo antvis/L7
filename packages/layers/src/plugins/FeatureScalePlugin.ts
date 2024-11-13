@@ -251,8 +251,12 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     data?: IParseDataItem[],
   ) {
     const cfg: IScale = {
+      ...scaleOption,
       type,
     };
+
+    if (cfg?.domain) return cfg;
+
     // quantile domain 需要根据ID 进行去重
     let values = [];
     if (type === ScaleTypes.QUANTILE) {
@@ -266,9 +270,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       values = data?.map((item) => item[field]) || [];
     }
 
-    if (scaleOption?.domain) {
-      cfg.domain = scaleOption?.domain;
-    } else if (type === ScaleTypes.CAT || type === ScaleTypes.IDENTITY) {
+    if (type === ScaleTypes.CAT || type === ScaleTypes.IDENTITY) {
       cfg.domain = uniq(values);
     } else if (type === ScaleTypes.QUANTILE) {
       cfg.domain = values;
@@ -281,7 +283,8 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       // linear/Power/log
       cfg.domain = extent(values);
     }
-    return { ...cfg, ...scaleOption };
+
+    return cfg;
   }
 
   // 创建Scale 实例
