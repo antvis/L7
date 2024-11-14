@@ -45,7 +45,7 @@ const source = new Source(data, {
 
 `geojsonOptions` 支持如下参数:
 
-| 参数           | 类型        | 默认值   | 描述                                                           |  |
+| 参数           | 类型        | 默认值   | 描述                                                           |                                                         |
 | -------------- | ----------- | -------- | -------------------------------------------------------------- | ------------------------------------------------------- |
 | maxZoom        | `number`    | `14`     | max zoom to preserve detail on                                 |
 | indexMaxZoom   | `number`    | `5`      | max zoom in the tile index                                     |
