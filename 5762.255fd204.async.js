@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_antv_l7_site=self.webpackChunk_antv_l7_site||[]).push([[5762],{35762:function(e,n,t){t.r(n),t.d(n,{default:function(){return u}});var r=t(18675),s=t(90035);class u extends s.Z{decodeBlock(e){return(0,r.rr)(new Uint8Array(e)).buffer}}}}]);
