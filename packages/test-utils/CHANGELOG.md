@@ -1,5 +1,25 @@
 # @antv/l7-test-utils
 
+## 2.22.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-scene@2.22.3
+  - @antv/l7-map@2.22.3
+  - @antv/l7-maps@2.22.3
+
+## 2.22.2
+
+### Patch Changes
+
+- [#2631](https://github.com/antvis/L7/pull/2631) [`8a9413f`](https://github.com/antvis/L7/commit/8a9413fa842397d7eb2beae18e896ffddc9abdf4) Thanks [@lzxue](https://github.com/lzxue)! - raster tile extent
+
+- Updated dependencies [[`8a9413f`](https://github.com/antvis/L7/commit/8a9413fa842397d7eb2beae18e896ffddc9abdf4)]:
+  - @antv/l7-map@2.22.2
+  - @antv/l7-maps@2.22.2
+  - @antv/l7-scene@2.22.2
+
 ## 2.22.1
 
 ### Patch Changes

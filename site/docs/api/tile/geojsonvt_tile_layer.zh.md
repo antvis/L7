@@ -45,7 +45,7 @@ const source = new Source(data, {
 
 `geojsonOptions` 支持如下参数:
 
-| 参数           | 类型        | 默认值   | 描述                                                           |
+| 参数           | 类型        | 默认值   | 描述                                                           |                                                         |
 | -------------- | ----------- | -------- | -------------------------------------------------------------- | ------------------------------------------------------- |
 | maxZoom        | `number`    | `14`     | max zoom to preserve detail on                                 |
 | indexMaxZoom   | `number`    | `5`      | max zoom in the tile index                                     |
@@ -54,6 +54,6 @@ const source = new Source(data, {
 | extent         | `number`    | `4096`   | tile extent                                                    |
 | buffer         | `number`    | `64`     | tile buffer on each side                                       |
 | lineMetrics    | `boolean`   | `false`  | whether to calculate line metrics                              |
-| promoteId      | `string     | null`    | `null`                                                         | name of a feature property to be promoted to feature.id |
+| promoteId      | `string`    | `null`   | `null`                                                         | name of a feature property to be promoted to feature.id |
 | generateId     | `boolean`   | `true`   | whether to generate feature ids. Cannot be used with promoteId |
 | debug          | `0, 1 or 2` | `0`      | logging level (0, 1 or 2)                                      |

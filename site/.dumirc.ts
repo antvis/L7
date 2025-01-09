@@ -57,6 +57,10 @@ export default defineConfig({
       'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
     showAPIDoc: false, // 是否在demo页展示API文档
+    petercat: {
+      show: true,
+      token: 'a1dbc546-2ec1-4aba-853f-56aaf511e23d',
+    },
     detail: {
       engine: {
         zh: 'L7',
