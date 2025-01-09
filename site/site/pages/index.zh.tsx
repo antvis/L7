@@ -1,8 +1,8 @@
+import SEO from '@antv/dumi-theme-antv/dist/common/SEO';
 import Banner from '@antv/gatsby-theme-antv/site/components/Banner';
 import Cases from '@antv/gatsby-theme-antv/site/components/Cases';
 import Companies from '@antv/gatsby-theme-antv/site/components/Companies';
 import Features from '@antv/gatsby-theme-antv/site/components/Features';
-import SEO from '@antv/gatsby-theme-antv/site/components/Seo';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { L7Draw } from '../components/L7Draw';

@@ -1,11 +1,11 @@
 import { VerticalAlignTopOutlined } from '@ant-design/icons';
+import SEO from '@antv/dumi-theme-antv/dist/common/SEO';
 import { ThemeAntVContext } from '@antv/dumi-theme-antv/dist/context';
 import { Article } from '@antv/dumi-theme-antv/dist/pages/Examples/components/Article';
 import { ExampleTopicMenu } from '@antv/dumi-theme-antv/dist/pages/Examples/components/ExampleTopicMenu';
 import { Footer } from '@antv/dumi-theme-antv/dist/slots/Footer';
 import { Header } from '@antv/dumi-theme-antv/dist/slots/Header';
 import NavigatorBanner from '@antv/dumi-theme-antv/dist/slots/Header/Products/NavigatorBanner';
-import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
 import { usePrevAndNext } from '@antv/dumi-theme-antv/dist/slots/hooks';
 import type { ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
 import { Layout as AntLayout, BackTop } from 'antd';

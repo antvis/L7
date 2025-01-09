@@ -13,8 +13,8 @@ import { useMedia } from 'react-use';
 import readingTime from 'reading-time';
 import URI from 'uri-parse';
 
+import SEO from '@antv/dumi-theme-antv/dist/common/SEO';
 import { ContentTable } from '@antv/dumi-theme-antv/dist/slots/ContentTable';
-import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
 import GithubButtonBar from '../GithubButtonBar';
 
 import { NavigatorBanner } from '@antv/dumi-theme-antv/dist/slots/ManualContent/NavigatorBanner';
