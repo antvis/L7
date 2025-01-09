@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_antv_l7_site=self.webpackChunk_antv_l7_site||[]).push([[9167],{11426:function(n,t,e){function i(n,t,e){return n.find((function(n){return n.id===t})).examples.find((function(n){return n.id===e})).title}e.r(t),e.d(t,{getCurrentTitle:function(){return i}})}}]);
