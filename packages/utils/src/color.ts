@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as d3 from 'd3-color';
 import type { Context } from 'vm';
 export interface IColorRamp {

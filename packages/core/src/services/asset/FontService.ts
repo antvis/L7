@@ -241,9 +241,11 @@ export default class FontService extends EventEmitter implements IFontService {
 
     // 3. layout characters
     if (sdf) {
+      // @ts-ignore
       const tinySDF = new TinySDF(fontSize, buffer, radius, cutoff, fontFamily, fontWeight);
       // used to store distance values from tinySDF
       // tinySDF.size equals `fontSize + buffer * 2`
+      // @ts-ignore
       const imageData = ctx.getImageData(0, 0, tinySDF.size, tinySDF.size);
       for (const char of characterSet) {
         if (iconfont) {
@@ -254,8 +256,10 @@ export default class FontService extends EventEmitter implements IFontService {
 
           const icon = String.fromCharCode(parseInt(char.replace('&#x', '').replace(';', ''), 16));
           const iconData = tinySDF.draw(icon);
+          // @ts-ignore
           populateAlphaChannel(iconData, imageData);
         } else {
+          // @ts-ignore
           populateAlphaChannel(tinySDF.draw(char), imageData);
         }
         // populateAlphaChannel(tinySDF.draw(char), imageData);
