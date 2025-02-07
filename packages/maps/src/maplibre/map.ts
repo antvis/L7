@@ -6,6 +6,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import type { Map } from 'maplibre-gl';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { Protocol } from 'pmtiles';
 import Viewport from '../lib/web-mercator-viewport';
 import { MapType, type IMapboxInstance } from '../types';
 import BaseMapService from '../utils/BaseMapService';
@@ -112,6 +113,11 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
       this.$mapContainer = this.map.getContainer();
     } else {
       this.$mapContainer = this.creatMapContainer(id);
+
+      if (typeof style !== 'string') {
+        const protocol = new Protocol();
+        maplibregl.addProtocol('pmtiles', protocol.tile);
+      }
       // @ts-ignore
       this.map = new window.maplibregl.Map({
         container: this.$mapContainer,
