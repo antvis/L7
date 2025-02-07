@@ -97,7 +97,7 @@ jobs:
         with:
           name: snapshots
           path: |
-            __tests__/integration/snapshots/*-actual.png
+            __tests__/integration/snapshots/*.png
           retention-days: 1
           if-no-files-found: error
 
