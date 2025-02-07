@@ -86,7 +86,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install Playwright chromium browser
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm add --frozen-lockfile playwright@latest
 
       - name: Integration Test
         run: pnpm test:integration
