@@ -245,7 +245,7 @@ export class MapMouseEvent extends Event implements MapLibreEvent<MouseEvent> {
   /**
    * The event type
    */
-  public declare type:
+  declare public type:
     | 'mousedown'
     | 'mouseup'
     | 'click'
@@ -320,7 +320,7 @@ export class MapTouchEvent extends Event implements MapLibreEvent<TouchEvent> {
   /**
    * The event type.
    */
-  public declare type: 'touchstart' | 'touchmove' | 'touchend' | 'touchcancel';
+  declare public type: 'touchstart' | 'touchmove' | 'touchend' | 'touchcancel';
 
   /**
    * The `Map` object that fired the event.
@@ -410,7 +410,7 @@ export class MapWheelEvent extends Event {
   /**
    * The event type
    */
-  public declare type: 'wheel';
+  declare public type: 'wheel';
   /**
    * The `Map` object that fired the event.
    */
