@@ -115,6 +115,7 @@ jobs:
             __tests__/integration/snapshots/*-actual.png
           retention-days: 1
           if-no-files-found: ignore
+          include-hidden-files: true
 
   size-test:
     runs-on: ubuntu-latest

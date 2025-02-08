@@ -82,6 +82,7 @@ export function toMatchCanvasSnapshot(
       writePNG(buffer, actualPath);
       const error = diff(actualPath, expectedPath, diffPath, maxError);
       if (error <= maxError) {
+        console.log('toMatchCanvasSnapshot==>', error, maxError);
         if (fs.existsSync(diffPath)) fs.unlinkSync(diffPath);
         fs.unlinkSync(actualPath);
         return {
