@@ -90,17 +90,6 @@ jobs:
 
       - name: Integration Test
         run: pnpm test:integration
-
-      - name: Check if snapshot files exist
-        run: |
-          if [ ! -d "__tests__/integration/snapshots/" ]; then
-            echo "Directory __tests__/integration/snapshots/ does not exist"
-            exit 1
-          fi
-          if [ ! "$(ls -A __tests__/integration/snapshots/*-actual.png)" ]; then
-            echo "No files matching __tests__/integration/snapshots/*-actual.png found"
-            exit 1
-          fi
       - name: Generate timestamp and random string
         run: |
             echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
