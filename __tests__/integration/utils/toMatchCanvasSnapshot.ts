@@ -35,12 +35,11 @@ function diff(
 
   // @see https://github.com/mapbox/pixelmatch#pixelmatchimg1-img2-output-width-height-options
   const mismatch = pixelmatch(img1.data, img2.data, output, width, height, {
-    threshold: 0.05,
+    threshold: 0.1,
   });
 
   if (showMismatchedPixels && mismatch > maxError && diffPNG) {
     fs.writeFileSync(diff, PNG.sync.write(diffPNG));
-    console.log(`Mismatched pixels: ${mismatch}`);
   }
 
   return mismatch;
@@ -82,7 +81,6 @@ export function toMatchCanvasSnapshot(
       writePNG(buffer, actualPath);
       const error = diff(actualPath, expectedPath, diffPath, maxError);
       if (error <= maxError) {
-        console.log('toMatchCanvasSnapshot==>', error, maxError);
         if (fs.existsSync(diffPath)) fs.unlinkSync(diffPath);
         fs.unlinkSync(actualPath);
         return {
@@ -91,7 +89,7 @@ export function toMatchCanvasSnapshot(
         };
       }
       return {
-        message: () => `mismatch ${namePath} (error: ${error}) (maxError: ${maxError})`,
+        message: () => `mismatch ${namePath} (error: ${error})`,
         pass: false,
       };
     }

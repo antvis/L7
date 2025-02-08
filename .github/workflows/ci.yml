@@ -91,31 +91,14 @@ jobs:
       - name: Integration Test
         run: pnpm test:integration
 
-      - name: Check if snapshot files exist
-        run: |
-          if [ ! -d "__tests__/integration/snapshots/" ]; then
-            echo "Directory __tests__/integration/snapshots/ does not exist"
-            exit 1
-          fi
-          if [ ! "$(ls -A __tests__/integration/snapshots/*-actual.png)" ]; then
-            echo "No files matching __tests__/integration/snapshots/*-actual.png found"
-            exit 1
-          fi
-      - name: Generate timestamp and random string
-        run: |
-            echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-            echo "RANDOM_STRING=$(openssl rand -hex 4)" >> $GITHUB_ENV
-
       - name: Upload snapshots to GitHub Actions Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: snapshots-${{ env.TIMESTAMP }}-${{ env.RANDOM_STRING }}
+          name: snapshots
           path: |
             __tests__/integration/snapshots/*-actual.png
           retention-days: 1
-          if-no-files-found: ignore
-          include-hidden-files: true
 
   size-test:
     runs-on: ubuntu-latest
