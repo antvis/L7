@@ -89,7 +89,7 @@ export function toMatchCanvasSnapshot(
         };
       }
       return {
-        message: () => `mismatch ${namePath} (error: ${error}) (maxError: ${maxError})`,
+        message: () => `mismatch ${namePath} (error: ${error})`,
         pass: false,
       };
     }
