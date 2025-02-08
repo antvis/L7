@@ -6,7 +6,7 @@ import { CanvasModel } from './models';
 
 export default class CanvasLayer extends BaseLayer<ICanvasLayerOptions> {
   public type: string = 'CanvasLayer';
-  public declare layerModel: CanvasModel;
+  declare public layerModel: CanvasModel;
 
   protected getDefaultConfig(): Partial<ICanvasLayerOptions> {
     return {

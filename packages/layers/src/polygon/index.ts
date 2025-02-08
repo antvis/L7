@@ -14,7 +14,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
     'offsets',
     'stroke',
   ];
-  public declare defaultSourceConfig: {
+  declare public defaultSourceConfig: {
     data: [];
     options: {
       parser: {
