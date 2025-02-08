@@ -114,7 +114,7 @@ jobs:
           path: |
             __tests__/integration/snapshots/*-actual.png
           retention-days: 1
-          if-no-files-found: error
+          if-no-files-found: ignore
 
   size-test:
     runs-on: ubuntu-latest
