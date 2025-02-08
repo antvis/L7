@@ -40,7 +40,6 @@ function diff(
 
   if (showMismatchedPixels && mismatch > maxError && diffPNG) {
     fs.writeFileSync(diff, PNG.sync.write(diffPNG));
-    console.log(`Mismatched pixels: ${mismatch}`);
   }
 
   return mismatch;
@@ -82,7 +81,6 @@ export function toMatchCanvasSnapshot(
       writePNG(buffer, actualPath);
       const error = diff(actualPath, expectedPath, diffPath, maxError);
       if (error <= maxError) {
-        console.log('toMatchCanvasSnapshot==>', error, maxError);
         if (fs.existsSync(diffPath)) fs.unlinkSync(diffPath);
         fs.unlinkSync(actualPath);
         return {
@@ -90,11 +88,6 @@ export function toMatchCanvasSnapshot(
           pass: true,
         };
       }
-      // else {
-      //   fs.unlinkSync(actualPath);
-      //   writePNG(buffer, expectedPath);
-      // }
-      // 图片发生变化，报错？
       return {
         message: () => `mismatch ${namePath} (error: ${error}) (maxError: ${maxError})`,
         pass: false,
