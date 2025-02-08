@@ -97,8 +97,8 @@ jobs:
             echo "Directory __tests__/integration/snapshots/ does not exist"
             exit 1
           fi
-          if [ ! "$(ls -A __tests__/integration/snapshots/*-actual.png)" ]; then
-            echo "No files matching __tests__/integration/snapshots/*-actual.png found"
+          if [ ! "$(ls -A __tests__/integration/snapshots/*.png)" ]; then
+            echo "No files matching __tests__/integration/snapshots/*.png found"
             exit 1
           fi
       - name: Generate timestamp and random string
@@ -108,11 +108,11 @@ jobs:
 
       - name: Upload snapshots to GitHub Actions Artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: snapshots-${{ env.TIMESTAMP }}-${{ env.RANDOM_STRING }}
           path: |
-            __tests__/integration/snapshots/*-actual.png
+            __tests__/integration/snapshots/*.png
           retention-days: 1
           if-no-files-found: ignore
 
