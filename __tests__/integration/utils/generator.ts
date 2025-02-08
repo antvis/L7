@@ -52,7 +52,7 @@ export function generateCanvasTestCases(
         // Chart already rendered, capture into buffer.
         const buffer = await page.locator('canvas').screenshot();
         const dir = `${__dirname}/../snapshots`;
-        const maxError = 100000;
+        const maxError = 0;
 
         try {
           expect(buffer).toMatchCanvasSnapshot(dir, key, { maxError });
