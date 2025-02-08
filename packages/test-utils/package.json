@@ -30,6 +30,9 @@
     "clean": "rimraf dist es lib"
   },
   "dependencies": {
+    "@antv/l7-map": "workspace:^",
+    "@antv/l7-maps": "workspace:^",
+    "@antv/l7-scene": "workspace:^",
     "gl": "^8.0.2",
     "regl": "1.6.1"
   },

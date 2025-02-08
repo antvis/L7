@@ -19,6 +19,7 @@ export function generateCanvasTestCases(
   });
 
   afterAll(async () => {
+    if (!browser) return;
     await context.close();
     await browser.close();
   });

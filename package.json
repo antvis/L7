@@ -17,7 +17,7 @@
     "check-format": "./scripts/format-check.sh",
     "format": "./scripts/format-fix.sh",
     "lint:ts": "./scripts/eslint-lint.sh",
-    "lint:ts-fix": "/scripts/eslint-fix.sh",
+    "lint:ts-fix": "./scripts/eslint-fix.sh",
     "lint:css": "stylelint 'packages/**/*.{css,less}'",
     "lint:css-fix": "stylelint --fix 'packages/**/*.{css,less}'",
     "test": "run-p test:unit test:integration",
