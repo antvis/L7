@@ -115,8 +115,7 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
       this.$mapContainer = this.creatMapContainer(id);
 
       if (typeof style !== 'string') {
-        const protocol = new Protocol();
-        maplibregl.addProtocol('pmtiles', protocol.tile);
+        this.addProtocol();
       }
       // @ts-ignore
       this.map = new window.maplibregl.Map({
@@ -135,7 +134,10 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
   }
-
+  public addProtocol() {
+    const protocol = new Protocol();
+    maplibregl.addProtocol('pmtiles', protocol.tile);
+  }
   public destroy() {
     // 销毁地图可视化层的容器
     this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
