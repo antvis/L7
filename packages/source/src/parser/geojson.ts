@@ -31,7 +31,7 @@ function getFeatureID(feature: Feature<Geometries, Properties>, key?: string) {
   }
 
   // @ts-ignore
-  if (typeof (feature.properties[key] * 1) === 'number') {
+  if (!isNaN(feature.properties[key] * 1)) {
     // @ts-ignore
     return feature.properties[key] * 1;
   }

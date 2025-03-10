@@ -6,5 +6,6 @@ export { setColor } from './set-color';
 export { setData } from './set-data';
 export { setSize } from './set-size';
 export { textOffsets } from './text-offsets';
+export { tileText } from './tile-text';
 export { tileUpdate } from './tile-update';
 export { touchEvent } from './touch-event';
