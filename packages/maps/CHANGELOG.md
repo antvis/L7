@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.22.5
+
+### Patch Changes
+
+- [#2680](https://github.com/antvis/L7/pull/2680) [`42134f3`](https://github.com/antvis/L7/commit/42134f3aac3f2814e167bedca3c84b98766ebd6e) Thanks [@XinyueDu](https://github.com/XinyueDu)! - update version
+
+- Updated dependencies [[`42134f3`](https://github.com/antvis/L7/commit/42134f3aac3f2814e167bedca3c84b98766ebd6e)]:
+  - @antv/l7-core@2.22.5
+  - @antv/l7-map@2.22.5
+  - @antv/l7-utils@2.22.5
+
 ## 2.22.4
 
 ### Patch Changes

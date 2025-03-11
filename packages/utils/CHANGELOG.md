@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.22.5
+
+### Patch Changes
+
+- [#2680](https://github.com/antvis/L7/pull/2680) [`42134f3`](https://github.com/antvis/L7/commit/42134f3aac3f2814e167bedca3c84b98766ebd6e) Thanks [@XinyueDu](https://github.com/XinyueDu)! - update version
+
 ## 2.22.4
 
 ### Patch Changes
