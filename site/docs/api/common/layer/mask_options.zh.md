@@ -3,6 +3,10 @@
 模板图层：用做模板的图层，PointLayer、LineLayer、PolygonLayer 都可以作为模板
 掩模图层：被模板切割的图层
 
+### enableRelativeCoordinates
+
+图层使用相对坐标系，缩放等级大于 20,室内场景
+
 ### maskLayers
 
 掩模图层生效

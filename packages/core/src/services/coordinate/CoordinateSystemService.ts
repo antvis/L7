@@ -94,6 +94,10 @@ export default class CoordinateSystemService implements ICoordinateSystemService
     return this.viewportCenter;
   }
 
+  public setViewportCenter(center: [number, number]): void {
+    this.refresh(center);
+  }
+
   public getViewportCenterProjection(): [number, number, number, number] {
     return this.viewportCenterProjection;
   }

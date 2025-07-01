@@ -6,10 +6,10 @@ export const fill_indoor: TestCase = async (options) => {
   const scene = await CaseScene({
     ...options,
     mapConfig: {
-      style: 'dark',
-      center: [121.434765, 31.256735],
-      zoom: 14.83,
-      pitch: 45,
+      style: 'light',
+      center: [120.10354090743701, 30.263548119868223],
+      zoom: 18,
+      pitch: 0,
     },
   });
 
@@ -23,15 +23,10 @@ export const fill_indoor: TestCase = async (options) => {
     features: data.features.filter((item: any) => item.geometry.type === 'Polygon'),
   };
 
-  console.log('Original data:', {
-    features: polygonData.features.length,
-    sampleCoordinate: polygonData.features[0]?.geometry.coordinates[0][0],
-    dataType: 'Absolute coordinates',
-  });
-
   // 使用新的Layer层相对坐标功能
   const layer = new PolygonLayer({
     autoFit: true,
+    enableRelativeCoordinates: true,
   })
     .source(polygonData, {
       parser: {
@@ -45,25 +40,17 @@ export const fill_indoor: TestCase = async (options) => {
       opacity: 1.0,
       lineType: 'solid',
       // 启用相对坐标系，Layer会自动处理坐标转换
-      enableRelativeCoordinates: true,
     });
 
   scene.addLayer(layer);
 
   // 监听图层事件
   layer.on('click', (e) => {
-    console.log('Click event:', e);
     // 交互计算会自动使用绝对坐标
   });
 
   layer.on('inited', () => {
     // 图层初始化完成后，可以获取相对坐标信息
-    console.log('Layer relative coordinate info:', {
-      relativeOrigin: layer.getRelativeOrigin(),
-      originalExtent: layer.getOriginalExtent(),
-      hasAbsoluteData: layer.getAbsoluteData().length > 0,
-      coordinateSystem: 'Relative coordinates enabled in layer',
-    });
   });
 
   return scene;

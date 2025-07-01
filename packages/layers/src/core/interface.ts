@@ -48,7 +48,7 @@ export interface IBaseLayerStyleOptions {
 }
 
 export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
-  tileOrigin?: number[];
+  relativeOrigin?: number[];
   coord?: string;
 
   lineType?: keyof typeof lineStyleType; // 可选参数、线类型(all - dash/solid)
@@ -91,7 +91,7 @@ export enum SizeUnitType {
   meter = 1,
 }
 export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
-  tileOrigin?: number[];
+  relativeOrigin?: number[];
   coord?: string;
 
   strokeOpacity: number;
@@ -133,7 +133,7 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
 }
 
 export interface IPolygonLayerStyleOptions extends IBaseLayerStyleOptions {
-  tileOrigin?: number[];
+  relativeOrigin?: number[];
   coord?: string;
   opacityLinear?: {
     enable: boolean;

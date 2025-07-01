@@ -131,7 +131,7 @@ function GetGeoJSON(extent: number, x: number, y: number, z: number, vectorTileF
     },
     properties: currentProperties,
     id: currentId,
-    tileOrigin: [0, 0],
+    relativeOrigin: [0, 0],
     coord: '',
   };
 

@@ -17,6 +17,7 @@ export const extrude: TestCase = async (options) => {
     name: 'fill',
     zIndex: 3,
     autoFit: true,
+    enableRelativeCoordinates: true,
   })
     .source(data)
     .shape('extrude')

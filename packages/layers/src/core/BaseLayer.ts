@@ -1081,6 +1081,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
         // source 初始化不需要处理
         this.sourceEvent();
       }
+      if (type === 'inited') {
+        this.processRelativeCoordinates();
+      }
     });
   }
   public getSource() {
@@ -1418,26 +1421,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.layerSource.data.dataArray = result.dataArray;
     this.relativeOrigin = result.relativeOrigin;
     this.originalExtent = result.originalExtent;
-
-    // 更新source的范围信息
-    if (this.layerSource.extent) {
-      // 相对坐标下范围会变得很小，接近原点
-      const relativeExtent = [
-        result.originalExtent[0] - result.relativeOrigin[0],
-        result.originalExtent[1] - result.relativeOrigin[1],
-        result.originalExtent[2] - result.relativeOrigin[0],
-        result.originalExtent[3] - result.relativeOrigin[1],
-      ];
-      this.layerSource.extent = relativeExtent as any;
-    }
-
-    // 更新center为相对坐标系下的中心
-    if (this.layerSource.center) {
-      this.layerSource.center = [
-        (result.originalExtent[0] + result.originalExtent[2]) / 2 - result.relativeOrigin[0],
-        (result.originalExtent[1] + result.originalExtent[3]) / 2 - result.relativeOrigin[1],
-      ];
-    }
   }
 
   /**
@@ -1463,7 +1446,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   protected sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
-
     // 处理相对坐标转换
     this.processRelativeCoordinates();
 

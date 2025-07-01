@@ -24,6 +24,7 @@ export const CoordinateUniform = {
   PixelsPerDegree: 'u_PixelsPerDegree',
   PixelsPerDegree2: 'u_PixelsPerDegree2',
   PixelsPerMeter: 'u_PixelsPerMeter',
+  RelativeOrigin: 'u_RelativeOrigin',
 };
 
 export interface ICoordinateSystemService {
@@ -32,6 +33,7 @@ export interface ICoordinateSystemService {
   getCoordinateSystem(): CoordinateSystem;
   setCoordinateSystem(coordinateSystem: CoordinateSystem): void;
   getViewportCenter(): [number, number];
+  setViewportCenter(center: [number, number]): void;
   getViewportCenterProjection(): [number, number, number, number];
   getPixelsPerDegree(): [number, number, number];
   getPixelsPerDegree2(): [number, number, number];
