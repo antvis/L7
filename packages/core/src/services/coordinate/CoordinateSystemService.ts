@@ -154,7 +154,7 @@ export default class CoordinateSystemService implements ICoordinateSystemService
     // Always apply uncentered projection matrix if available (shader adds center)
     viewMatrix = this.cameraService.getViewMatrixUncentered() || viewMatrix;
 
-    // Zero out 4th coordinate ("after" model matrix) - avoids further translations
+    // Zero out 4th coordinate ("after" model matrix") - avoids further translations
     viewProjectionMatrix = mat4.multiply(
       [] as unknown as mat4,
       projectionMatrix as unknown as mat4,

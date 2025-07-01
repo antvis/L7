@@ -44,8 +44,9 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     let uniformBuffer: IBuffer;
     if (!this.rendererService.uniformBuffers[0]) {
       // Create a Uniform Buffer Object(UBO).
+      // Size calculation: 4 mat4 (64) + 1 vec4 (4) + 4 vec3->vec4 (16) + 3 vec4 packed (12) = 96 floats
       uniformBuffer = this.rendererService.createBuffer({
-        data: new Float32Array(16 * 4 + 4 * 7),
+        data: new Float32Array(96),
         isUBO: true,
         label: 'renderUniformBuffer',
       });
@@ -143,6 +144,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         [CoordinateUniform.PixelsPerDegree]: u_PixelsPerDegree,
         [CoordinateUniform.PixelsPerDegree2]: u_PixelsPerDegree2,
         [CoordinateUniform.PixelsPerMeter]: u_PixelsPerMeter,
+
         // 其他参数，例如视口大小、DPR 等
         u_ViewportSize: u_ViewportSize,
         u_ModelMatrix,

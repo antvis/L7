@@ -39,6 +39,7 @@ import type {
 } from '@antv/l7-core';
 import { BlendType, IDebugLog, ILayerStage, globalConfigService } from '@antv/l7-core';
 import type Source from '@antv/l7-source';
+import { processRelativeCoordinates } from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { createPlugins } from '../plugins';
@@ -198,6 +199,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   protected animateOptions: IAnimateOption = { enable: false };
+
+  // 相对坐标系支持
+  protected relativeOrigin: [number, number] = [0, 0];
+  protected originalExtent: [number, number, number, number] = [0, 0, 0, 0];
+  protected absoluteDataArray: IParseDataItem[] = []; // 保存绝对坐标数据用于交互
 
   /**
    * 图层容器
@@ -1389,8 +1395,78 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return {};
   }
 
+  /**
+   * 处理相对坐标转换
+   */
+  protected processRelativeCoordinates() {
+    const layerConfig = this.getLayerConfig();
+    const enableRelativeCoordinates = layerConfig.enableRelativeCoordinates;
+
+    if (!enableRelativeCoordinates || !this.layerSource || !this.layerSource.data) {
+      return;
+    }
+
+    // 保存原始绝对坐标数据用于交互
+    this.absoluteDataArray = [...this.layerSource.data.dataArray];
+
+    // 处理相对坐标转换
+    const result = processRelativeCoordinates(this.layerSource.data.dataArray, {
+      enableRelativeCoordinates: true,
+    });
+
+    // 更新source数据为相对坐标
+    this.layerSource.data.dataArray = result.dataArray;
+    this.relativeOrigin = result.relativeOrigin;
+    this.originalExtent = result.originalExtent;
+
+    // 更新source的范围信息
+    if (this.layerSource.extent) {
+      // 相对坐标下范围会变得很小，接近原点
+      const relativeExtent = [
+        result.originalExtent[0] - result.relativeOrigin[0],
+        result.originalExtent[1] - result.relativeOrigin[1],
+        result.originalExtent[2] - result.relativeOrigin[0],
+        result.originalExtent[3] - result.relativeOrigin[1],
+      ];
+      this.layerSource.extent = relativeExtent as any;
+    }
+
+    // 更新center为相对坐标系下的中心
+    if (this.layerSource.center) {
+      this.layerSource.center = [
+        (result.originalExtent[0] + result.originalExtent[2]) / 2 - result.relativeOrigin[0],
+        (result.originalExtent[1] + result.originalExtent[3]) / 2 - result.relativeOrigin[1],
+      ];
+    }
+  }
+
+  /**
+   * 获取绝对坐标数据（用于交互计算）
+   */
+  public getAbsoluteData() {
+    return this.absoluteDataArray;
+  }
+
+  /**
+   * 获取相对坐标原点
+   */
+  public getRelativeOrigin() {
+    return this.relativeOrigin;
+  }
+
+  /**
+   * 获取原始数据范围
+   */
+  public getOriginalExtent() {
+    return this.originalExtent;
+  }
+
   protected sourceEvent = () => {
     this.dataState.dataSourceNeedUpdate = true;
+
+    // 处理相对坐标转换
+    this.processRelativeCoordinates();
+
     const layerConfig = this.getLayerConfig();
     if (layerConfig && layerConfig.autoFit) {
       this.fitBounds(layerConfig.fitBoundsOptions);

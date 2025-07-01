@@ -580,6 +580,13 @@ export interface ILayer {
    * WebGL2 下更新 Layer 级 Uniform
    */
   getPickingUniformBuffer(): IBuffer;
+
+  /**
+   * 相对坐标系支持方法
+   */
+  getAbsoluteData(): IParseDataItem[];
+  getRelativeOrigin(): [number, number];
+  getOriginalExtent(): [number, number, number, number];
 }
 
 /**

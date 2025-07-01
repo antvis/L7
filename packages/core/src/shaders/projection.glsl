@@ -31,6 +31,8 @@ vec4 project_offset(vec4 offset) {
   return vec4(offset.xyz * pixels_per_unit, offset.w);
 }
 
+
+
 vec3 project_normal(vec3 normal) {
   vec4 normal_modelspace = u_ModelMatrix * vec4(normal, 0.0);
   return normalize(normal_modelspace.xyz * u_PixelsPerMeter);

@@ -40,6 +40,9 @@ export interface IBaseLayerStyleOptions {
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
 
+  // 相对坐标系支持
+  enableRelativeCoordinates?: boolean; // 是否启用相对坐标系，用于高精度场景
+
   color?: string;
   size?: number;
 }
