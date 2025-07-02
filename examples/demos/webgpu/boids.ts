@@ -358,7 +358,7 @@ async function render($canvas: HTMLCanvasElement) {
     ),
   );
 
-  let id;
+  // let id;
   let t = 0;
   const frame = () => {
     const computePass = device.createComputePass();

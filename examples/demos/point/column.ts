@@ -24,7 +24,7 @@ export const column: TestCase = async (options) => {
     })
     .shape('name', ['cylinder', 'triangleColumn', 'hexagonColumn', 'squareColumn'])
     .active(true)
-    .size('unit_price', (h) => {
+    .size('unit_price', () => {
       return [6, 6, 100];
     })
     .color('name', ['#739DFF', '#61FCBF', '#FFDE74', '#FF896F'])

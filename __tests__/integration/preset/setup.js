@@ -4,7 +4,7 @@ import portfinder from 'portfinder';
 import { createServer } from 'vite';
 import { TMP_DIR } from './constants.js';
 
-export default async function (_globalConfig, _projectConfig) {
+export default async function () {
   const port = await portfinder.getPortPromise();
 
   // @see https://vitejs.dev/guide/api-javascript.html#createserver

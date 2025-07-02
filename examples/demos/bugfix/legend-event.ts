@@ -39,7 +39,7 @@ export const legendEvent: TestCase = async (options) => {
 
   scene.addLayer(layer);
 
-  layer.on('legend:color', (color) => {
+  layer.on('legend:color', () => {
     console.log('color legend', layer.getLegend('color'));
   });
 

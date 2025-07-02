@@ -45,7 +45,7 @@ export const fill_indoor: TestCase = async (options) => {
   scene.addLayer(layer);
 
   // 监听图层事件
-  layer.on('click', (e) => {
+  layer.on('click', () => {
     // 交互计算会自动使用绝对坐标
   });
 

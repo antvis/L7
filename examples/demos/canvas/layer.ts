@@ -17,7 +17,7 @@ export const layer: TestCase = async (options) => {
 
   const canvasLayer = new CanvasLayer({
     zIndex: 4,
-    draw: ({ canvas, ctx, container, utils }) => {
+    draw: ({ ctx, container, utils }) => {
       const context = ctx as CanvasRenderingContext2D;
       context.clearRect(0, 0, container.width, container.height);
       context.fillStyle = 'blue';
