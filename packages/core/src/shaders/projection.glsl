@@ -51,11 +51,11 @@ vec3 project_offset_normal(vec3 vector) {
 vec4 project_position(vec4 position, vec2 position64xyLow) {
   // 检查是否使用了图层相对坐标转换
   bool usingRelativeCoords = abs(u_RelativeOrigin.x) > 0.0001 || abs(u_RelativeOrigin.y) > 0.0001;
-  
+
   if (usingRelativeCoords) {
     // 相对坐标系的特殊处理：CPU侧已确保ViewportCenter=RelativeOrigin
     // 在高缩放级别时直接使用相对坐标，避免精度问题
-    
+
     if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
       // 高缩放级别：直接使用相对坐标作为偏移
       // 由于ViewportCenter已被设置为RelativeOrigin，可以直接使用position
@@ -85,7 +85,12 @@ vec4 project_position(vec4 position, vec2 position64xyLow) {
     float X = absolutePosition.x - center.x;
     float Y = absolutePosition.y - center.y;
     return project_offset(
-      vec4(X + absolutePosition64xyLow.x, Y + absolutePosition64xyLow.y, absolutePosition.z, absolutePosition.w)
+      vec4(
+        X + absolutePosition64xyLow.x,
+        Y + absolutePosition64xyLow.y,
+        absolutePosition.z,
+        absolutePosition.w
+      )
     );
   }
   if (

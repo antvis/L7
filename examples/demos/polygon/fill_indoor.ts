@@ -6,7 +6,7 @@ export const fill_indoor: TestCase = async (options) => {
   const scene = await CaseScene({
     ...options,
     mapConfig: {
-      style: 'light',
+      style: 'normal',
       center: [120.10354090743701, 30.263548119868223],
       zoom: 18,
       pitch: 0,
@@ -26,7 +26,7 @@ export const fill_indoor: TestCase = async (options) => {
   // 使用新的Layer层相对坐标功能
   const layer = new PolygonLayer({
     autoFit: true,
-    enableRelativeCoordinates: true,
+    enableRelativeCoordinates: false,
   })
     .source(polygonData, {
       parser: {

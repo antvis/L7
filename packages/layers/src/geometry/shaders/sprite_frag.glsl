@@ -1,4 +1,3 @@
-
 layout(std140) uniform commonUniforms {
   float u_opacity;
   float u_mapFlag;
@@ -11,12 +10,11 @@ in float v_d;
 out vec4 outputColor;
 
 void main() {
-
-  if(v_d < 0.0) {
+  if (v_d < 0.0) {
     discard;
   }
 
-  if(u_mapFlag > 0.0) {
+  if (u_mapFlag > 0.0) {
     outputColor = texture(SAMPLER_2D(u_texture), gl_PointCoord);
     outputColor.a *= u_opacity;
   } else {

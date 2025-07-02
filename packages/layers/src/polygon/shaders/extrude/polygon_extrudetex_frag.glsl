@@ -29,7 +29,8 @@ void main() {
 
   outputColor = texture(SAMPLER_2D(u_texture), vec2(topU, topV));
   // Tip: 部分机型 GPU 计算精度兼容
-  if (isSide < 0.999) {// 是否是边缘
+  if (isSide < 0.999) {
+    // 是否是边缘
     // side face
     if (u_sidesurface < 1.0) {
       discard;
@@ -43,12 +44,12 @@ void main() {
       outputColor = v_Color;
     }
   } else {
-     // top face
+    // top face
     if (u_topsurface < 1.0) {
       discard;
     }
   }
-  
+
   outputColor.a *= opacity;
   outputColor = filterColor(outputColor);
 }
