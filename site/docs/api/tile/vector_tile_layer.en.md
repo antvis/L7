@@ -33,7 +33,6 @@ The data service path supports single service and multi-service writing.
 
 - Single server Requests tile data from one server.
 - Multiple servers request tile data for the same service from multiple servers.
-
   - Use braces to request the setting of multiple servers, such as`{1-3}`、`{a-c}`。
 
 ```js

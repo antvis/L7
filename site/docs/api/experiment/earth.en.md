@@ -137,14 +137,12 @@ The earth layer is different from the layers of ordinary Gaode maps and Mapbox m
 ### Earth sphere layer baseLayer
 
 - source: data
-
   - map: The address of the earth's surface texture map
   - parser: Parser, currently you only need to write fixed object values:`{ parser: { type: "image" } }`
 
 - shape: layer type
 
   The default value is`base`, currently supported`shape`Types are:
-
   - base: sphere
   - atomSphere: atmosphere
   - bloomSphere: Shining

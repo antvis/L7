@@ -39,7 +39,6 @@ scene.addMarkerLayer(markerLayer);
 - cluster aggregation`boolean`default`false`
 
 - clusterOption aggregation configuration
-
   - field `string`Aggregate statistical fields
   - method `sum| max| min| mean`
   - radius aggregate radius number default 40
