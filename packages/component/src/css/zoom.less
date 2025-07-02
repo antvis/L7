@@ -1,4 +1,4 @@
-@import 'variables';
+@import url('variables');
 
 @zoom-icon-size: 14px;
 
@@ -6,22 +6,27 @@
   overflow: hidden;
   border-radius: @l7-btn-control-border-radius;
   box-shadow: @l7-control-shadow;
+
   .l7-button-control {
     font-size: @l7-btn-icon-size;
     border-bottom: 1px solid @l7-btn-border-color;
     border-radius: 0;
     box-shadow: 0 0 0;
+
     .l7-iconfont {
       width: @zoom-icon-size;
       height: @zoom-icon-size;
     }
+
     &:last-child {
       border-bottom: 0;
     }
   }
+
   & &__number {
     color: @l7-control-font-color;
     padding: 0;
+
     &:hover {
       background-color: @l7-btn-control-bg-color;
     }

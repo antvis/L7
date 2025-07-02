@@ -1,4 +1,4 @@
-@import 'variables.less';
+@import url('variables.less');
 
 .l7-control-container {
   font:
@@ -14,7 +14,7 @@
     clear: both;
     color: @l7-control-font-color;
     font-size: @l7-control-font-size;
-    pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+    pointer-events: visiblepainted; /* IE 9-10 doesn't have auto */
     pointer-events: auto;
 
     &.l7-control--hide {
@@ -39,14 +39,17 @@
     position: absolute;
     display: flex;
     justify-content: center;
+
     &.l7-top,
     &.l7-bottom {
       width: 100%;
     }
+
     &.l7-left,
     &.l7-right {
       height: 100%;
     }
+
     .l7-control {
       margin-right: @l7-control-space;
       margin-bottom: @l7-control-space;
@@ -55,9 +58,11 @@
 
   .l7-row {
     flex-direction: row;
+
     &.l7-top {
       align-items: flex-start;
     }
+
     &.l7-bottom {
       align-items: flex-end;
     }
@@ -65,9 +70,11 @@
 
   .l7-column {
     flex-direction: column;
+
     &.l7-left {
       align-items: flex-start;
     }
+
     &.l7-right {
       align-items: flex-end;
     }

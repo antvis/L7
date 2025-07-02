@@ -1,4 +1,4 @@
-@import 'variables.less';
+@import url('variables.less');
 
 .l7-marker-container {
   position: absolute;
@@ -18,10 +18,11 @@
 .l7-marker-cluster {
   width: 40px;
   height: 40px;
-  background-color: rgba(181, 226, 140, 0.6);
+  background-color: rgb(181 226 140 / 60%);
   background-clip: padding-box;
   border-radius: 20px;
 }
+
 .l7-marker-cluster div {
   width: 30px;
   height: 30px;
@@ -33,9 +34,10 @@
     Helvetica,
     sans-serif;
   text-align: center;
-  background-color: rgba(110, 204, 57, 0.6);
+  background-color: rgb(110 204 57 / 60%);
   border-radius: 15px;
 }
+
 .l7-marker-cluster span {
   line-height: 30px;
 }
@@ -45,10 +47,11 @@
 .l7-touch .l7-bar {
   box-shadow: none;
 }
+
 .l7-touch .l7-control-layers,
 .l7-touch .l7-bar {
   background-clip: padding-box;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border: 2px solid rgb(0 0 0 / 20%);
 }
 
 // 隐藏底图 Logo

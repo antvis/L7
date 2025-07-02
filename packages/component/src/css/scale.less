@@ -1,8 +1,9 @@
-@import 'variables';
+@import url('variables');
 
 .l7-control-scale {
   display: flex;
   flex-direction: column;
+
   .l7-control-scale-line {
     box-sizing: border-box;
     padding: 2px 5px 1px;
@@ -15,6 +16,7 @@
     border: 2px solid #000;
     border-top: 0;
     transition: width 0.1s;
+
     & + & {
       margin-top: -2px;
       border-top: 2px solid #777;
@@ -27,6 +29,7 @@
   .l7-control-scale {
     display: flex;
     align-items: flex-end;
+
     .l7-control-scale-line {
       text-align: right;
     }
