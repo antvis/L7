@@ -563,7 +563,7 @@ interface ILngLat {
   lat: number;
 }
 
-scene.pixelToLngLat([10, 10]);
+scene.containerToLngLat([10, 10]);
 ```
 
 ### lngLatToContainer(lnglat: ILngLat): IPoint 经纬度转画布坐标
@@ -577,7 +577,7 @@ interface IPoint {
   y: number;
 }
 
-scene.lngLatToPixel([120, 10]);
+scene.lngLatToContainer([120, 10]);
 ```
 
 ### pixelToLngLat(pixel: IPoint): ILngLat 像素坐标转经纬度

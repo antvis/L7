@@ -52,7 +52,7 @@ export default defineConfig({
     description: 'Large-scale WebGL-powered Geospatial data visualization analysis framework',
     siteUrl: 'https://l7.antv.antgroup.com/',
     githubUrl: 'https://github.com/antvis/L7',
-    relativePath: 'packages/site',
+    relativePath: 'site',
     keywords:
       'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换

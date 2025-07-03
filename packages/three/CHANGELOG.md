@@ -1,5 +1,12 @@
 # @antv/l7-three
 
+## 2.22.6
+
+### Patch Changes
+
+- Updated dependencies [[`c357dc8`](https://github.com/antvis/L7/commit/c357dc8520e1d3f53af60e4a325096da2d4e223c)]:
+  - @antv/l7@2.22.6
+
 ## 2.22.5
 
 ### Patch Changes
