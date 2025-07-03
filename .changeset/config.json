@@ -6,6 +6,6 @@
   "linked": [],
   "access": "restricted",
   "baseBranch": "master",
-  "updateInternalDependencies": "minor",
+  "updateInternalDependencies": "patch",
   "ignore": ["@antv/l7-site"]
 }
