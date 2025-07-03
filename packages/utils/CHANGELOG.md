@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.0
+
+### Minor Changes
+
+- [#2726](https://github.com/antvis/L7/pull/2726) [`3826deb`](https://github.com/antvis/L7/commit/3826deb1139bc611ee46f88273d9f4b066b80d19) Thanks [@lzxue](https://github.com/lzxue)! - 图层支持相对坐标系
+
 ## 2.22.5
 
 ### Patch Changes
