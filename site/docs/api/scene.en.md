@@ -563,7 +563,7 @@ interface ILngLat {
   lat: number;
 }
 
-scene.pixelToLngLat([10, 10]);
+scene.containerToLngLat([10, 10]);
 ```
 
 ### lngLatToContainer(lnglat: ILngLat): IPoint latitude and longitude converted to canvas coordinates
@@ -577,7 +577,7 @@ interface IPoint {
   y: number;
 }
 
-scene.lngLatToPixel([120, 10]);
+scene.lngLatToContainer([120, 10]);
 ```
 
 ### pixelToLngLat(pixel: IPoint): ILngLat pixel coordinates converted to longitude and latitude
