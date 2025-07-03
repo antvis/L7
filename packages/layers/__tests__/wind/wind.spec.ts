@@ -1,10 +1,9 @@
-import { TestScene } from '@antv/l7-test-utils';
 import WindLayer from '../../src/wind/index';
 
 describe('WindLayer', () => {
-  let scene: any;
+  // let scene: any;
   beforeEach(() => {
-    scene = TestScene();
+    // scene = TestScene();
   });
   it('WindLayer', () => {
     const layer = new WindLayer({});

@@ -13,13 +13,12 @@ in vec4 v_Color;
 #pragma include "picking"
 out vec4 outputColor;
 void main() {
+  // top face
+  if (u_topsurface < 1.0) {
+    discard;
+  }
 
-     // top face
-    if(u_topsurface < 1.0) {
-      discard;
-    }
+  outputColor = v_Color;
 
-    outputColor = v_Color;
-  
   outputColor = filterColor(outputColor);
 }

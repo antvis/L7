@@ -56,7 +56,6 @@
 ```
 
 - operation 表达式类型
-
   - _`['_', value1, value2]`返回 `value1 \* value2`
   - / `['/', value1, value2]` 返回 `value1 / value2`
   - +`['+', value1, value2]` 返回 `value1 + value2`

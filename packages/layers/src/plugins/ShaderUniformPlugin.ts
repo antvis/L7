@@ -44,8 +44,9 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     let uniformBuffer: IBuffer;
     if (!this.rendererService.uniformBuffers[0]) {
       // Create a Uniform Buffer Object(UBO).
+      // Size calculation: 4 mat4 (64) + 1 vec4 (4) + 4 vec3->vec4 (16) + 3 vec4 packed (12) = 96 floats
       uniformBuffer = this.rendererService.createBuffer({
-        data: new Float32Array(16 * 4 + 4 * 7),
+        data: new Float32Array(96),
         isUBO: true,
         label: 'renderUniformBuffer',
       });
@@ -53,13 +54,27 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     }
 
     layer.hooks.beforeRender.tap('ShaderUniformPlugin', () => {
-      // @ts-ignore
-      const offset = layer.getLayerConfig().tileOrigin;
+      // 获取图层的相对坐标原点
+      const layerRelativeOrigin = layer.getRelativeOrigin && layer.getRelativeOrigin();
+      const relativeOrigin = layerRelativeOrigin || [0, 0];
+
       // 重新计算坐标系参数
-      this.coordinateSystemService.refresh(offset);
+      this.coordinateSystemService.refresh();
+
+      // 特殊处理：如果图层启用了相对坐标，强制设置ViewportCenter为RelativeOrigin
+      // 这样可以避免shader中的精度问题
+      const isUsingRelativeCoords =
+        relativeOrigin &&
+        (Math.abs(relativeOrigin[0]) > 0.0001 || Math.abs(relativeOrigin[1]) > 0.0001);
+      if (isUsingRelativeCoords && this.coordinateSystemService.getCoordinateSystem() === 2) {
+        // COORDINATE_SYSTEM_LNGLAT_OFFSET
+        // 强制设置ViewportCenter为RelativeOrigin，避免shader中的大数计算
+        this.coordinateSystemService.setViewportCenter(relativeOrigin);
+      }
       const { width, height } = this.rendererService.getViewportSize();
 
-      const { data, uniforms } = this.generateUBO(width, height);
+      const { data, uniforms } = this.generateUBO(width, height, relativeOrigin);
+
       if (this.layerService.alreadyInRendering && this.rendererService.uniformBuffers[0]) {
         const renderUniformBuffer = this.rendererService.uniformBuffers[0];
         // Update only once since all models can share one UBO.
@@ -85,7 +100,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     });
   }
 
-  private generateUBO(width: number, height: number) {
+  private generateUBO(width: number, height: number, offset?: number[]) {
     const u_ProjectionMatrix = this.cameraService.getProjectionMatrix();
     const u_ViewMatrix = this.cameraService.getViewMatrix();
     const u_ViewProjectionMatrix = this.cameraService.getViewProjectionMatrix();
@@ -102,6 +117,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     const u_ViewportCenter = this.coordinateSystemService.getViewportCenter();
     const u_ViewportSize = [width, height];
     const u_FocalDistance = this.cameraService.getFocalDistance();
+    const u_RelativeOrigin = offset && offset.length >= 2 ? [offset[0], offset[1]] : [0, 0];
 
     const data: number[] = [
       ...u_ViewMatrix, // 16
@@ -120,9 +136,8 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       ...u_ViewportCenter,
       ...u_ViewportSize, // 4
       u_FocalDistance, // 1
-      0,
-      0,
-      0,
+      ...u_RelativeOrigin, // 2
+      0, // padding
     ];
 
     return {
@@ -143,10 +158,13 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         [CoordinateUniform.PixelsPerDegree]: u_PixelsPerDegree,
         [CoordinateUniform.PixelsPerDegree2]: u_PixelsPerDegree2,
         [CoordinateUniform.PixelsPerMeter]: u_PixelsPerMeter,
+
         // 其他参数，例如视口大小、DPR 等
         u_ViewportSize: u_ViewportSize,
         u_ModelMatrix,
         u_DevicePixelRatio: u_DevicePixelRatio,
+        // 相对原点坐标
+        u_RelativeOrigin: u_RelativeOrigin,
       },
     };
   }

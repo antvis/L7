@@ -45,6 +45,11 @@ const config: Config = {
       statements: 50,
     },
   },
+  // Reduce memory usage and avoid GL context conflicts
+  maxWorkers: 1,
+  workerIdleMemoryLimit: '1GB',
+  // Force serial execution for tests that use GL contexts
+  testSequencer: '@jest/test-sequencer',
   ...sharedConfig,
 };
 

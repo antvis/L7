@@ -1,7 +1,7 @@
 {
   "name": "@antv/l7-test-utils",
   "version": "2.22.5",
-  "private": true,
+  "private": false,
   "description": "Test utils for L7",
   "keywords": [],
   "homepage": "https://github.com/antvis/L7#readme",

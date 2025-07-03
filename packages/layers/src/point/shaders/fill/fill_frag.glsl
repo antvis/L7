@@ -1,4 +1,3 @@
-
 layout(std140) uniform commonUniforms {
   vec3 u_blur_height_fixed;
   float u_stroke_width;
@@ -35,7 +34,7 @@ void main() {
     outer_df = sdEquilateralTriangle(1.1 * v_data.xy);
     inner_df = sdEquilateralTriangle(1.1 / r * v_data.xy);
   } else if (shape == 2) {
-    outer_df = sdBox(v_data.xy, vec2(1.));
+    outer_df = sdBox(v_data.xy, vec2(1.0));
     inner_df = sdBox(v_data.xy, vec2(r));
   } else if (shape == 3) {
     outer_df = sdPentagon(v_data.xy, 0.8);
@@ -59,42 +58,40 @@ void main() {
 
   float opacity_t = smoothstep(0.0, antialiasblur, outer_df);
 
-  float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(
-    antialiasblur,
-    0.0,
-    inner_df
-  );
+  float color_t = u_stroke_width < 0.01 ? 0.0 : smoothstep(antialiasblur, 0.0, inner_df);
 
   float PI = 3.14159;
   float N_RINGS = 3.0;
   float FREQ = 1.0;
 
-  if(u_stroke_width < 0.01) {
+  if (u_stroke_width < 0.01) {
     outputColor = v_color;
   } else {
     outputColor = mix(v_color, v_stroke * u_stroke_opacity, color_t);
   }
   float intensity = 1.0;
-  if(u_time!=-1.0){
+  if (u_time != -1.0) {
     //wave相关逻辑
     float d = length(v_data.xy);
-    if(d > 0.5) {
+    if (d > 0.5) {
       discard;
     }
-    intensity = clamp(cos(d * PI), 0.0, 1.0) * clamp(cos(2.0 * PI * (d * 2.0 * u_animate.z - u_animate.y * u_time)), 0.0, 1.0);
+    intensity =
+      clamp(cos(d * PI), 0.0, 1.0) *
+      clamp(cos(2.0 * PI * (d * 2.0 * u_animate.z - u_animate.y * u_time)), 0.0, 1.0);
   }
 
-  if(u_additive > 0.0) {
+  if (u_additive > 0.0) {
     outputColor *= opacity_t;
-    outputColor *= intensity;//wave
+    outputColor *= intensity; //wave
     outputColor = filterColorAlpha(outputColor, outputColor.a);
   } else {
     outputColor.a *= opacity_t;
-    outputColor.a *= intensity;//wave 
+    outputColor.a *= intensity; //wave
     outputColor = filterColor(outputColor);
   }
-   // 作为 mask 模板时需要丢弃透明的像素
-  if(outputColor.a < 0.01) {
+  // 作为 mask 模板时需要丢弃透明的像素
+  if (outputColor.a < 0.01) {
     discard;
-  } 
+  }
 }

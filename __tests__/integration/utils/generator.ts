@@ -54,6 +54,7 @@ export function generateCanvasTestCases(
         const buffer = await page.locator('canvas').screenshot();
         const dir = `${__dirname}/../snapshots`;
         const maxError = 0;
+        console.log(`\nTesting ${dir}... ${key}`);
 
         try {
           expect(buffer).toMatchCanvasSnapshot(dir, key, { maxError });

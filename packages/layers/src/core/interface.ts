@@ -40,12 +40,15 @@ export interface IBaseLayerStyleOptions {
   mask?: boolean; // 可选参数 时候允许蒙层
   maskInside?: boolean; // 可选参数 控制图层是否显示在蒙层的内部
 
+  // 相对坐标系支持
+  enableRelativeCoordinates?: boolean; // 是否启用相对坐标系，用于高精度场景
+
   color?: string;
   size?: number;
 }
 
 export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
-  tileOrigin?: number[];
+  relativeOrigin?: number[];
   coord?: string;
 
   lineType?: keyof typeof lineStyleType; // 可选参数、线类型(all - dash/solid)
@@ -88,7 +91,7 @@ export enum SizeUnitType {
   meter = 1,
 }
 export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
-  tileOrigin?: number[];
+  relativeOrigin?: number[];
   coord?: string;
 
   strokeOpacity: number;
@@ -130,7 +133,7 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
 }
 
 export interface IPolygonLayerStyleOptions extends IBaseLayerStyleOptions {
-  tileOrigin?: number[];
+  relativeOrigin?: number[];
   coord?: string;
   opacityLinear?: {
     enable: boolean;

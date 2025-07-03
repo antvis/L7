@@ -4,7 +4,7 @@ import type { Scene } from '@antv/l7-scene';
 import KDBush from 'kdbush';
 import type { TestCase } from '../../types';
 
-export const idw: TestCase = async (options) => {
+export const idw: TestCase = async () => {
   const rawdata = await (
     await fetch('https://mdn.alipayobjects.com/afts/file/A*yHeJTaQ6iVsAAAAAAAAAAAAADrd2AQ/aqi.json')
   ).json();

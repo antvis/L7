@@ -137,14 +137,12 @@ scene.on('loaded', () => {
 ### 地球球体图层 baseLayer
 
 - source: 数据
-
   - map: 地球表面纹理贴图的地址
   - parser: 解析器，目前只需要写固定的对象值即可: `{ parser: { type: "image" } }`
 
 - shape: 图层类型
 
   默认值是 `base`, 目前支持的 `shape` 类型有:
-
   - base: 球体
   - atomSphere: 大气层
   - bloomSphere: 辉光

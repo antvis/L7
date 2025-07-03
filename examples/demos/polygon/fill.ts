@@ -22,7 +22,9 @@ export const fill: TestCase = async (options) => {
     'rgb(34,94,168)',
     'rgb(12,44,132)',
   ];
-  const layer = new PolygonLayer({})
+  const layer = new PolygonLayer({
+    enableRelativeCoordinates: true,
+  })
     .source(data)
     .scale('density', {
       type: 'quantile',

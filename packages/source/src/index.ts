@@ -22,6 +22,7 @@ import { map } from './transform/map';
 export { getParser, getTransform, registerParser, registerTransform } from './factory';
 export * from './interface';
 export * from './source/index';
+export * from './utils/relative-coordinates';
 export { rasterDataTypes };
 
 registerParser('rasterTile', rasterTile);

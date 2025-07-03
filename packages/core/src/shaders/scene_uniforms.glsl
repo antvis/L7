@@ -15,4 +15,6 @@ layout(std140) uniform SceneUniforms {
   vec2 u_ViewportCenter;
   vec2 u_ViewportSize;
   float u_FocalDistance;
+  vec2 u_RelativeOrigin;
+  float u_Reserved3;
 };

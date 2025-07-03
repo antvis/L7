@@ -28,7 +28,8 @@ export default class RasterLayer extends BaseLayer<IRasterLayerStyleOptions> {
     // 根据 source 的类型判断 model type
     const parserType = this.layerSource.getParserType();
     switch (parserType) {
-      case 'raster' || 'ndi':
+      case 'raster':
+      case 'ndi':
         return 'raster';
       case 'rasterRgb':
         return 'rasterRgb';

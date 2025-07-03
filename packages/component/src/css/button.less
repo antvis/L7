@@ -1,4 +1,4 @@
-@import 'variables.less';
+@import url('variables.less');
 
 .l7-button-control {
   min-width: @l7-btn-control-size;
@@ -34,9 +34,11 @@
   &.l7-button-control--column {
     height: @l7-btn-column-height;
     flex-direction: column;
+
     .l7-iconfont {
       margin-top: 3px;
     }
+
     .l7-button-control__text {
       margin-top: 3px;
       font-size: 10px;
@@ -48,21 +50,26 @@
     &:hover {
       background-color: @l7-btn-control-bg-hover-color;
     }
+
     &:active {
       background-color: @l7-btn-control-bg-active-color;
     }
   }
+
   &:disabled {
     background-color: @l7-btn-control-disabled-bg-color;
     color: @l7-btn-control-disabled-font-color;
     cursor: not-allowed;
+
     .l7-iconfont {
       fill: @l7-btn-control-disabled-font-color;
       color: @l7-btn-control-disabled-font-color;
     }
+
     &:hover {
       background-color: @l7-btn-control-disabled-bg-color;
     }
+
     &:active {
       background-color: @l7-btn-control-disabled-bg-color;
     }

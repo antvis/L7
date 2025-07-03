@@ -1,8 +1,8 @@
 layout(std140) uniform commonUniforms {
- vec2 u_size;
- float u_raisingHeight;
- float u_rotation;
- float u_opacity;
+  vec2 u_size;
+  float u_raisingHeight;
+  float u_rotation;
+  float u_opacity;
 };
 
 uniform sampler2D u_texture;

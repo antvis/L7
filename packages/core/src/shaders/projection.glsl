@@ -49,25 +49,63 @@ vec3 project_offset_normal(vec3 vector) {
 }
 
 vec4 project_position(vec4 position, vec2 position64xyLow) {
+  // 检查是否使用了图层相对坐标转换
+  bool usingRelativeCoords = abs(u_RelativeOrigin.x) > 0.0001 || abs(u_RelativeOrigin.y) > 0.0001;
+
+  if (usingRelativeCoords) {
+    // 相对坐标系的特殊处理：CPU侧已确保ViewportCenter=RelativeOrigin
+    // 在高缩放级别时直接使用相对坐标，避免精度问题
+
+    if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
+      // 高缩放级别：直接使用相对坐标作为偏移
+      // 由于ViewportCenter已被设置为RelativeOrigin，可以直接使用position
+      float X = position.x;
+      float Y = position.y;
+      return project_offset(
+        vec4(X + position64xyLow.x, Y + position64xyLow.y, position.z, position.w)
+      );
+    } else {
+      // 低缩放级别：转换为绝对坐标后使用墨卡托投影
+      vec2 absolutePos = position.xy + u_RelativeOrigin.xy;
+      return vec4(
+        project_mercator(absolutePos) * WORLD_SCALE * u_ZoomScale,
+        project_scale(position.z),
+        position.w
+      );
+    }
+  }
+
+  // 处理普通坐标系（非相对坐标）
+  vec4 absolutePosition = position;
+  vec2 absolutePosition64xyLow = position64xyLow;
+
   if (u_CoordinateSystem == COORDINATE_SYSTEM_LNGLAT_OFFSET) {
-    float X = position.x - u_ViewportCenter.x;
-    float Y = position.y - u_ViewportCenter.y;
+    // 在偏移坐标系下
+    vec2 center = u_ViewportCenter;
+    float X = absolutePosition.x - center.x;
+    float Y = absolutePosition.y - center.y;
     return project_offset(
-      vec4(X + position64xyLow.x, Y + position64xyLow.y, position.z, position.w)
+      vec4(
+        X + absolutePosition64xyLow.x,
+        Y + absolutePosition64xyLow.y,
+        absolutePosition.z,
+        absolutePosition.w
+      )
     );
   }
   if (
     u_CoordinateSystem < COORDINATE_SYSTEM_LNGLAT + 0.01 &&
     u_CoordinateSystem > COORDINATE_SYSTEM_LNGLAT - 0.01
   ) {
+    // 在经纬度坐标系下使用墨卡托投影
     return vec4(
-      project_mercator(position.xy) * WORLD_SCALE * u_ZoomScale,
-      project_scale(position.z),
-      position.w
+      project_mercator(absolutePosition.xy) * WORLD_SCALE * u_ZoomScale,
+      project_scale(absolutePosition.z),
+      absolutePosition.w
     );
   }
 
-  return position;
+  return absolutePosition;
 }
 
 vec4 project_position(vec4 position) {

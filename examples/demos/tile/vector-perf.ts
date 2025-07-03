@@ -1,4 +1,4 @@
-import { LineLayer, PolygonLayer, Source } from '@antv/l7';
+import { PolygonLayer, Source } from '@antv/l7';
 import type { TestCase } from '../../types';
 import { CaseScene } from '../../utils';
 
@@ -43,28 +43,28 @@ export const vectorPerf: TestCase = async (options) => {
     console.log(e);
   });
 
-  const line = new LineLayer({
-    sourceLayer: 'CHN_Districts_L',
-  })
-    .source(source)
-    .shape('simple')
-    .color('#fee0d2');
+  // const line = new LineLayer({
+  //   sourceLayer: 'CHN_Districts_L',
+  // })
+  //   .source(source)
+  //   .shape('simple')
+  //   .color('#fee0d2');
 
-  const line2 = new LineLayer({
-    sourceLayer: 'CHN_Citys_L',
-  })
-    .source(source)
-    .shape('line')
-    .size(0.6)
-    .color('#fc9272');
+  // const line2 = new LineLayer({
+  //   sourceLayer: 'CHN_Citys_L',
+  // })
+  //   .source(source)
+  //   .shape('line')
+  //   .size(0.6)
+  //   .color('#fc9272');
 
-  const line3 = new LineLayer({
-    sourceLayer: 'CHN_Provinces_L',
-  })
-    .source(source)
-    .shape('line')
-    .size(0.6)
-    .color('#de2d26');
+  // const line3 = new LineLayer({
+  //   sourceLayer: 'CHN_Provinces_L',
+  // })
+  //   .source(source)
+  //   .shape('line')
+  //   .size(0.6)
+  //   .color('#de2d26');
 
   scene.addLayer(fill);
   // scene.addLayer(line);

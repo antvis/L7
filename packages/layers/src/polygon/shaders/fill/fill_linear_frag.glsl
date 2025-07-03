@@ -1,4 +1,3 @@
-
 layout(std140) uniform commonUniforms {
   float u_raisingHeight;
   float u_opacitylinear;
@@ -15,7 +14,10 @@ out vec4 outputColor;
 void main() {
   outputColor = v_color;
   if (u_opacitylinear > 0.0) {
-    outputColor.a *= u_dir == 1.0 ? 1.0 - length(v_pos - v_linear.xy)/v_linear.z : length(v_pos - v_linear.xy)/v_linear.z;
+    outputColor.a *=
+      u_dir == 1.0
+        ? 1.0 - length(v_pos - v_linear.xy) / v_linear.z
+        : length(v_pos - v_linear.xy) / v_linear.z;
   }
   outputColor = filterColor(outputColor);
 }

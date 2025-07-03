@@ -39,7 +39,6 @@ scene.addMarkerLayer(markerLayer);
 - cluster 聚合 `boolean` 默认 `false`
 
 - clusterOption 聚合配置
-
   - field `string` 聚合统计字段
   - method `sum| max| min| mean`
   - radius 聚合半径 number default 40

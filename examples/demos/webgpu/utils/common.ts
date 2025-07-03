@@ -6,7 +6,7 @@ async function loadImage(url: string) {
   return imgBitmap;
 }
 
-export async function generateTexture(device: Device, url: string) {
+export async function generateTexture(device: Device) {
   // 创建纹理和纹理视图
   const image = await loadImage(
     'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*p4PURaZpM-cAAAAAAAAAAAAADmJ7AQ/original',

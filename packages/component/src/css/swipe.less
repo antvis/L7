@@ -1,4 +1,4 @@
-@import 'variables';
+@import url('variables');
 
 .l7-control-swipe {
   position: absolute;
@@ -12,7 +12,7 @@
     display: none;
   }
 
-  &:before {
+  &::before {
     position: absolute;
     top: -5000px;
     bottom: -5000px;
@@ -24,11 +24,8 @@
     content: '';
   }
 
-  &.horizontal:before {
-    top: 50%;
-    right: -5000px;
-    bottom: auto;
-    left: -5000px;
+  &.horizontal::before {
+    inset: 50% -5000px auto;
     width: auto;
     height: 4px;
   }
@@ -54,27 +51,30 @@
   &__button {
     cursor: ew-resize;
   }
+
   &.horizontal,
   &.horizontal button {
     cursor: ns-resize;
   }
 
-  &:after,
-  &__button:before,
-  &__button:after {
+  &::after,
+  &__button::before,
+  &__button::after {
     position: absolute;
     top: 25%;
     bottom: 25%;
     left: 50%;
     width: 2px;
-    background: currentColor;
+    background: currentcolor;
     transform: translate(-1px, 0);
     content: '';
   }
-  &__button:after {
+
+  &__button::after {
     transform: translateX(4px);
   }
-  &__button:before {
+
+  &__button::before {
     transform: translateX(-6px);
   }
 }

@@ -1,5 +1,5 @@
 name: 'AntV OSCP 计划'
-description:  AntV 开源共建计划（AntV Open Source Contribution Plan，简称 AntV OSCP）
+description: AntV 开源共建计划（AntV Open Source Contribution Plan，简称 AntV OSCP）
 body:
   - type: checkboxes
     id: AntV_OSCP_program
@@ -8,7 +8,7 @@ body:
       description: |
         AntV 开源共建计划（AntV Open Source Contribution Plan，简称 AntV OSCP） 期望可以基于 AntV 的开源 Roadmap 开放具体开发任务到社区，以社区共建任务的形式推动“AntV” 的开源发展，也期望有更多社区伙伴各各种形式参与到 AntV 的开源共建中，共同参与数据可视化开源生态的持续建设。
         若有感兴趣想要认领的任务，可直接回复认领，如果你是首次认领可先完成[新手任务](https://www.yuque.com/antv/cyggvg/cwc9kacfvd9aivsp)
-         
+
       options:
         - label: 我同意将这个 Issue 参与 OSCP 计划
     validations:
@@ -28,7 +28,7 @@ body:
     id: oscp_task_description
     attributes:
       label: 任务介绍
-      description: | 
+      description: |
         简单描述任务背景信息，为了解决哪些问题
     validations:
       required: false
@@ -36,8 +36,7 @@ body:
     id: oscp_task_info_description_2
     attributes:
       label: 参考说明
-      description: | 
-       提供一些可参考的demo,相关教程辅助用户解决问题
+      description: |
+        提供一些可参考的demo,相关教程辅助用户解决问题
     validations:
       required: false
-  

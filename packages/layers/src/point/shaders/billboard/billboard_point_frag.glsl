@@ -1,4 +1,3 @@
-
 layout(std140) uniform commonUniorm {
   vec4 u_stroke_color;
   float u_additive;
@@ -21,14 +20,13 @@ void main() {
   // Tip: 片元的剪切成圆形
   float circleClipOpacity = 1.0 - smoothstep(v_blur, 1.0, fragmengTocenter);
 
-
-  if(v_innerRadius < 0.99) {
+  if (v_innerRadius < 0.99) {
     // 当存在 stroke 且 stroke > 0.01
-    float blurWidth = (1.0 - v_blur)/2.0;
+    float blurWidth = (1.0 - v_blur) / 2.0;
     vec4 stroke = vec4(u_stroke_color.rgb, u_stroke_opacity);
-    if(fragmengTocenter > v_innerRadius + blurWidth) {
+    if (fragmengTocenter > v_innerRadius + blurWidth) {
       outputColor = stroke;
-    } else if(fragmengTocenter > v_innerRadius - blurWidth){
+    } else if (fragmengTocenter > v_innerRadius - blurWidth) {
       float mixR = (fragmengTocenter - (v_innerRadius - blurWidth)) / (blurWidth * 2.0);
       outputColor = mix(v_color, stroke, mixR);
     } else {
@@ -40,8 +38,8 @@ void main() {
   }
 
   outputColor = filterColor(outputColor);
-  
-  if(u_additive > 0.0) {
+
+  if (u_additive > 0.0) {
     outputColor *= circleClipOpacity;
   } else {
     outputColor.a *= circleClipOpacity;

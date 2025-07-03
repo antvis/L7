@@ -1,4 +1,3 @@
-
 in vec4 v_color;
 in float v_lightWeight;
 out vec4 outputColor;
@@ -19,11 +18,10 @@ layout(std140) uniform commonUniforms {
 #pragma include "picking"
 
 void main() {
-
   outputColor = v_color;
   // 开启透明度渐变
   // picking
-  if(u_pickLight > 0.0) {
+  if (u_pickLight > 0.0) {
     outputColor = filterColorAlpha(outputColor, v_lightWeight);
   } else {
     outputColor = filterColor(outputColor);
