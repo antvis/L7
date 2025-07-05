@@ -310,8 +310,8 @@ export class MapMouseEvent extends Event implements MapLibreEvent<MouseEvent> {
     this.originalEvent = originalEvent;
     this._defaultPrevented = false;
     this.target = map;
-    if (1) {
-      const simpleMapCoord = new SimpleMapCoord(1000);
+    if (map.version === 'SIMPLE') {
+      const simpleMapCoord = new SimpleMapCoord(map.mapSize);
       const [lng, lat] = simpleMapCoord.project([lngLat.lng, lngLat.lat]);
       this.lngLat = { lng, lat } as LngLat;
     }
