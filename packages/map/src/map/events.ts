@@ -6,6 +6,8 @@ import { DOM } from './util/dom';
 import type { LngLat } from './geo/lng_lat';
 import type { Map } from './map';
 
+import { SimpleMapCoord } from './util/simpleMapCoord';
+
 /**
  * `MapEventType` - a mapping between the event name and the event value.
  * These events are used with the {@link Map#on} method.
@@ -308,6 +310,11 @@ export class MapMouseEvent extends Event implements MapLibreEvent<MouseEvent> {
     this.originalEvent = originalEvent;
     this._defaultPrevented = false;
     this.target = map;
+    if (map.version === 'SIMPLE') {
+      const simpleMapCoord = new SimpleMapCoord(map.mapSize);
+      const [lng, lat] = simpleMapCoord.project([lngLat.lng, lngLat.lat]);
+      this.lngLat = { lng, lat } as LngLat;
+    }
   }
 }
 

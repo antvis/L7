@@ -34,6 +34,8 @@ import type { TaskID } from './util/task_queue';
  * The {@link Map} options object.
  */
 export type MapOptions = {
+  version?: string;
+  mapSize?: number;
   /**
    * If `false`, no mouse, touch, or keyboard listeners will be attached to the map, so it will not respond to interaction.
    * @defaultValue true
@@ -266,6 +268,9 @@ export class Map extends Camera {
   _removed: boolean;
   _clickTolerance: number;
 
+  version: string;
+  mapSize: number;
+
   /**
    * The map's {@link ScrollZoomHandler}, which implements zooming in and out with a scroll wheel or trackpad.
    * Find more details and examples using `scrollZoom` in the {@link ScrollZoomHandler} section.
@@ -362,6 +367,8 @@ export class Map extends Camera {
     this._bearingSnap = resolvedOptions.bearingSnap!;
     this._fadeDuration = resolvedOptions.fadeDuration!;
     this._clickTolerance = resolvedOptions.clickTolerance!;
+    this.version = options.version;
+    this.mapSize = options.mapSize;
 
     if (typeof resolvedOptions.container === 'string') {
       this._container = document.getElementById(resolvedOptions.container)!;
