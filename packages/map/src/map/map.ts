@@ -34,7 +34,15 @@ import type { TaskID } from './util/task_queue';
  * The {@link Map} options object.
  */
 export type MapOptions = {
+  /**
+   * The MapType of the map.
+   * @defaultValue DEFAUlTMAP
+   */
   version?: string;
+  /**
+   * The map size for SIMPLE map.
+   * @defaultValue 10000
+   */
   mapSize?: number;
   /**
    * If `false`, no mouse, touch, or keyboard listeners will be attached to the map, so it will not respond to interaction.
