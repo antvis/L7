@@ -104,11 +104,19 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
   }
 
   public async remove(layer: ILayer, parentLayer?: ILayer): Promise<void> {
-    // Tip: layer.layerChildren 当 layer 存在子图层的情况
     if (parentLayer) {
-      parentLayer.layerChildren = parentLayer.layerChildren.filter((item) => item !== layer);
+      if (!parentLayer.layerChildren) {
+        parentLayer.layerChildren = [];
+      }
+      const index = parentLayer.layerChildren.findIndex((item) => item.id === layer.id);
+      if (index > -1) {
+        parentLayer.layerChildren.splice(index, 1);
+      }
     } else {
-      this.layers = this.layers.filter((item) => item !== layer);
+      const index = this.layers.findIndex((item) => item.id === layer.id);
+      if (index > -1) {
+        this.layers.splice(index, 1);
+      }
     }
     layer.destroy();
     this.reRender();
