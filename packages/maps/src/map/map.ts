@@ -92,6 +92,8 @@ export default class DefaultMapService extends BaseMapService<Map> {
       this.map = new Map({
         container: this.$mapContainer,
         bearing: rotation,
+        version: version,
+        mapSize: mapSize,
         ...rest,
       });
     }
