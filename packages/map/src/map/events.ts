@@ -3,10 +3,9 @@ import { Event } from './util/evented';
 import Point from '@mapbox/point-geometry';
 import { DOM } from './util/dom';
 
+import { SimpleMapCoord } from '@antv/l7-maps';
 import type { LngLat } from './geo/lng_lat';
 import type { Map } from './map';
-
-import { SimpleMapCoord } from './util/simpleMapCoord';
 
 /**
  * `MapEventType` - a mapping between the event name and the event value.
