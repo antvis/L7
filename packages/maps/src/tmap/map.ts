@@ -192,6 +192,12 @@ export default class TMapService extends BaseMapService<TMap.Map> {
         };
 
         cbProxyMap.set(handle, handleProxy);
+        if (eventName === 'mouseover') {
+          this.map.getContainer().addEventListener('mouseover', (e) => {
+            handleProxy(e);
+            // this.map.emit(e.type, new MapMouseEvent(e.type, this.map, e));
+          });
+        }
         this.map.on(eventName, handleProxy);
       };
 
