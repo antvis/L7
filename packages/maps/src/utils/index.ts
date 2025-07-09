@@ -1,3 +1,4 @@
 import BaseMapService from './BaseMapService';
 import BaseMapWrapper from './BaseMapWrapper';
-export { BaseMapService, BaseMapWrapper };
+import { SimpleMapCoord } from './simpleMapCoord';
+export { BaseMapService, BaseMapWrapper, SimpleMapCoord };
