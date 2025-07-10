@@ -13,6 +13,10 @@ export const fillImage: TestCase = async (options) => {
   });
 
   await scene.addImage(
+    'car',
+    'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*AtZnTYIlkbwAAAAAQGAAAAgAemJ7AQ/original',
+  );
+  await scene.addImage(
     'marker',
     'https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ',
   );
@@ -23,7 +27,7 @@ export const fillImage: TestCase = async (options) => {
         {
           lng: 120,
           lat: 30,
-          name: 'marker',
+          name: 'car',
         },
       ],
       {
@@ -35,9 +39,9 @@ export const fillImage: TestCase = async (options) => {
       },
     )
     .style({
-      unit: 'meter',
+      rotation: 0,
     })
-    .shape('marker')
+    .shape('car')
     .size(36);
 
   const pointLayer2 = new PointLayer({ layerType: 'fillImage' })
@@ -58,10 +62,10 @@ export const fillImage: TestCase = async (options) => {
       },
     )
     .shape('marker')
-    .size(36)
+    .size(20)
     .active(true)
     .style({
-      rotation: 90,
+      rotation: 0,
     });
 
   scene.addLayer(pointLayer);

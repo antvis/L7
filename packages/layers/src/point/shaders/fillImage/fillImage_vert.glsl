@@ -23,6 +23,7 @@ out float v_opacity;
 void main() {
   vec3 extrude = a_Extrude;
   v_uv = (a_Extrude.xy + 1.0) / 2.0;
+  v_uv.x = 1.0 - v_uv.x;
   v_uv.y = 1.0 - v_uv.y;
   v_Iconuv = a_Uv;
   v_opacity = opacity;
