@@ -22,6 +22,8 @@ import { MapTheme } from './theme';
 const AMAP_VERSION = '2.0';
 const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
 const ZOOM_OFFSET = 1;
+// @ts-ignore 高德地图强制使用 WebGL,否则支付宝端内无法使用
+window.forceWebGL = true;
 
 const AMapEventMapV2: Record<string, string> = {
   contextmenu: 'rightclick',
