@@ -34,7 +34,9 @@ export const CaseScene = (options: CaseSceneOptions) => {
 
   return new Promise<Scene>((resolve) => {
     scene.on('loaded', () => {
-      animate && scene.startAnimate();
+      if (animate) {
+        scene.startAnimate();
+      }
       resolve(scene);
     });
   });

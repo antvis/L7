@@ -207,7 +207,7 @@ export const fujian: TestCase = async (options) => {
       textAnchor: 'top',
       textOffset: [0, 12],
     });
-  7;
+
   // 县点位
   const countyPoint = new PointLayer({
     minZoom: 8,

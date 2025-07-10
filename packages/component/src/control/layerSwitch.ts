@@ -112,7 +112,11 @@ export default class LayerSwitch extends SelectControl<ILayerSwitchOption> {
   // 如果是单选模式，则只显示第一个图层
   private handleSingleSelection() {
     this.layers.forEach((layer, index) => {
-      index === 0 ? layer.show() : layer.hide();
+      if (index === 0) {
+        layer.show();
+      } else {
+        layer.hide();
+      }
     });
   }
 

@@ -7,7 +7,7 @@ export const fill_indoor: TestCase = async (options) => {
     ...options,
     mapConfig: {
       style: 'normal',
-      center: [120.10354090743701, 30.263548119868223],
+      center: [120.103541, 30.263548],
       zoom: 18,
       pitch: 0,
     },

@@ -380,19 +380,35 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
   public setMapStatus(option: Partial<IStatusOptions>): void {
     const map = this.getMap();
-    (Object.keys(option) as Array<keyof IStatusOptions>).map((status) => {
+    (Object.keys(option) as Array<keyof IStatusOptions>).forEach((status) => {
       switch (status) {
         case 'doubleClickZoom':
-          option.doubleClickZoom ? map.enableDoubleClickZoom() : map.disableDoubleClickZoom();
+          if (option.doubleClickZoom) {
+            map.enableDoubleClickZoom();
+          } else {
+            map.disableDoubleClickZoom();
+          }
           break;
         case 'dragEnable':
-          option.dragEnable ? map.enableDragging() : map.disableDragging();
+          if (option.dragEnable) {
+            map.enableDragging();
+          } else {
+            map.disableDragging();
+          }
           break;
         case 'keyboardEnable':
-          option.keyboardEnable ? map.enableKeyboard() : map.disableKeyboard();
+          if (option.keyboardEnable) {
+            map.enableKeyboard();
+          } else {
+            map.disableKeyboard();
+          }
           break;
         case 'resizeEnable':
-          option.resizeEnable ? map.enableAutoResize() : map.disableAutoResize();
+          if (option.resizeEnable) {
+            map.enableAutoResize();
+          } else {
+            map.disableAutoResize();
+          }
           break;
         case 'rotateEnable':
           if (option.rotateEnable) {
@@ -529,7 +545,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     DOM.addClass(container, 'bmap-contianer--hide-logo');
   }
 
-  private initMapByConfig(config: Partial<IMapConfig<{}>>) {
+  private initMapByConfig(config: Partial<IMapConfig<object>>) {
     const { style, pitch = 0, rotation = 0, logoVisible = true } = config;
     if (style) {
       this.setMapStyle(style);

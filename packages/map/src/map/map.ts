@@ -824,7 +824,7 @@ export class Map extends Camera {
    * @param type - The type of the event.
    * @param listener - The listener callback.
    */
-  on<T extends keyof MapEventType>(type: T, listener: (ev: MapEventType[T] & Object) => void): this;
+  on<T extends keyof MapEventType>(type: T, listener: (ev: MapEventType[T] & object) => void): this;
   /**
    * Overload of the `on` method that allows to listen to events without specifying a layer.
    * @event
@@ -844,7 +844,7 @@ export class Map extends Camera {
    */
   once<T extends keyof MapEventType>(
     type: T,
-    listener?: (ev: MapEventType[T] & Object) => void,
+    listener?: (ev: MapEventType[T] & object) => void,
   ): this | Promise<any>;
   /**
    * Overload of the `once` method that allows to listen to events without specifying a layer.
@@ -865,7 +865,7 @@ export class Map extends Camera {
    */
   off<T extends keyof MapEventType>(
     type: T,
-    listener: (ev: MapEventType[T] & Object) => void,
+    listener: (ev: MapEventType[T] & object) => void,
   ): this;
   /**
    * Overload of the `off` method that allows to listen to events without specifying a layer.

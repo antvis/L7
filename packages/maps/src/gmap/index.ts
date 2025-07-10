@@ -1,4 +1,3 @@
-/* eslint-disable */
 import BaseMapWrapper from '../utils/BaseMapWrapper';
 import GMapService from './map';
 

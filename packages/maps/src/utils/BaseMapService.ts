@@ -233,7 +233,7 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     this.map?.setStyle(this.getMapStyleValue(style));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public meterToCoord(center: [number, number], outer: [number, number]) {
     return 1.0;
   }
@@ -273,7 +273,7 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
         return styleUrl?.replace(/\/\w+$/, '').replace(/sprites/, 'styles');
       }
       return styleUrl;
-    } catch (e) {
+    } catch {
       return '';
     }
   }
@@ -319,7 +319,7 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     this.cameraChangedCallback = callback;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   protected handleCameraChanged = (e?: any) => {
     const { lat, lng } = this.map.getCenter();
     // Tip: 统一触发地图变化事件
