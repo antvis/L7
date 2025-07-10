@@ -233,7 +233,6 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     this.map?.setStyle(this.getMapStyleValue(style));
   }
 
-   
   public meterToCoord(center: [number, number], outer: [number, number]) {
     return 1.0;
   }
@@ -319,7 +318,6 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     this.cameraChangedCallback = callback;
   }
 
-   
   protected handleCameraChanged = (e?: any) => {
     const { lat, lng } = this.map.getCenter();
     // Tip: 统一触发地图变化事件

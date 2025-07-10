@@ -53,7 +53,7 @@ export function uniqueId(): number {
  * @param dest - destination object
  * @param sources - sources from which properties are pulled
  */
- 
+
 export function extend<T extends {}, U>(dest: T, source: U): T & U;
 export function extend<T extends {}, U, V>(dest: T, source1: U, source2: V): T & U & V;
 export function extend<T extends {}, U, V, W>(

@@ -17,7 +17,8 @@ export { Popup };
 
 export default class Popup<O extends IPopupOption = IPopupOption>
   extends EventEmitter
-  implements IPopup {
+  implements IPopup
+{
   /**
    * 配置
    * @protected
@@ -404,7 +405,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     projectedCenter.y = Math.round(projectedCenter.y);
     this.setPopupPosition(projectedCenter.x, projectedCenter.y, true);
   };
-   
+
   protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
