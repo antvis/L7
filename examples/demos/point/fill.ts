@@ -47,6 +47,9 @@ export const fill: TestCase = async (options) => {
     });
 
   scene.addLayer(pointLayer);
+  // scene.on('mousemove', console.log);
+  scene.on('mouseout', console.log);
+  scene.on('mouseover', console.log);
 
   return scene;
 };
