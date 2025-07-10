@@ -405,7 +405,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     projectedCenter.y = Math.round(projectedCenter.y);
     this.setPopupPosition(projectedCenter.x, projectedCenter.y, true);
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   protected getDefault(option: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {
@@ -525,7 +525,7 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.hide();
   };
   //更新位置 支持zoom时更新
-  private updatePosition = (ev: any, zoom: Boolean = true) => {
+  private updatePosition = (ev: any, zoom: boolean = true) => {
     const hasPosition = !!this.lngLat;
     const { className, style, maxWidth, anchor, stopPropagation } = this.popupOption;
     if (!this.mapsService || !hasPosition || !this.content) {

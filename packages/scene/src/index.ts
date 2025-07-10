@@ -364,9 +364,11 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
     }
   }
   public emit(type: string, handle: (...args: any[]) => void): void {
-    SceneEventList.indexOf(type) === -1
-      ? this.mapService.on(type, handle)
-      : this.sceneService.emit(type, handle);
+    if (SceneEventList.includes(type)) {
+      this.sceneService.emit(type, handle);
+    } else {
+      this.mapService.on(type, handle);
+    }
   }
 
   public off(type: string, handle: (...args: any[]) => void): void {

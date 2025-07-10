@@ -2,6 +2,7 @@
   "compilerOptions": {
     // Language and Environment Config
     "target": "es6",
+    "lib": ["es6", "es2019", "dom", "dom.iterable"],
     "jsx": "react",
     "experimentalDecorators": true,
 

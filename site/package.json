@@ -79,7 +79,7 @@
     "@types/react-dom": "^18.2.23",
     "@types/lodash-es": "^4.17.12",
     "babel-plugin-inline-import": "^3.0.0",
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "^1.1.0",
     "cross-env": "^7.0.3",
     "gh-pages": "^2.1.1",
     "rimraf": "^3.0.2",

@@ -1,4 +1,3 @@
-/* eslint-disable */
 if (!window) {
   throw Error('Google Map JSAPI can only be used in Browser.');
 }
