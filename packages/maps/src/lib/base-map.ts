@@ -15,9 +15,9 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { CoordinateSystem } from '@antv/l7-core';
+import { SimpleMapCoord } from '@antv/l7-map';
 import type { EventEmitterStatic } from 'eventemitter3';
 import { EventEmitter } from 'eventemitter3';
-import { SimpleMapCoord } from '../utils/simpleMapCoord';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
