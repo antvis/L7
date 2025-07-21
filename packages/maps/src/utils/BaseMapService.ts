@@ -18,11 +18,9 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
-import type { Map } from '@antv/l7-map';
+import { type ISimpleMapCoord, type Map, SimpleMapCoord } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import type { ISimpleMapCoord } from './simpleMapCoord';
-import { SimpleMapCoord } from './simpleMapCoord';
 import { MapTheme } from './theme';
 const EventMap: {
   [key: string]: any;
