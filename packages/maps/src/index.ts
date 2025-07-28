@@ -8,6 +8,8 @@ import MapLibre from './maplibre';
 import TMap from './tdtmap';
 import TencentMap from './tmap';
 import type { MapType } from './types';
+
+export { default as Viewport } from './lib/web-mercator-viewport';
 export * from './utils';
 
 const GaodeMap = GaodeMapNext;
