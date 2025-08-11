@@ -9,7 +9,7 @@ import type {
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { MercatorCoordinate } from '@antv/l7-map';
+import { MapMouseEvent, MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import Viewport from '../lib/web-mercator-viewport';
@@ -192,6 +192,11 @@ export default class TMapService extends BaseMapService<TMap.Map> {
         };
 
         cbProxyMap.set(handle, handleProxy);
+        if (eventName === 'mouseover') {
+          this.map.getContainer().addEventListener('mouseover', (e) => {
+            this.map.emit(e.type, new MapMouseEvent(e.type, this.map, e));
+          });
+        }
         this.map.on(eventName, handleProxy);
       };
 
