@@ -242,8 +242,8 @@ describe('transform', () => {
     transform.pitch = 67.25;
     transform.center = new LngLat(0.0, 0.0);
     transform._calcMatrices();
-
-    expect(transform.customLayerMatrix()[0].toString().length).toBeGreaterThan(10);
+    console.log('----->1', transform.customLayerMatrix().length);
+    expect(transform.customLayerMatrix().length).toBeGreaterThan(10);
     expect(transform.glCoordMatrix[0].toString().length).toBeGreaterThan(10);
     expect(transform.maxPitchScaleFactor()).toBeCloseTo(2.366025418080343, 5);
   });
