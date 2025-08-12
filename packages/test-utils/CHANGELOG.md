@@ -1,5 +1,16 @@
 # @antv/l7-test-utils
 
+## 2.23.1
+
+### Patch Changes
+
+- [#2749](https://github.com/antvis/L7/pull/2749) [`65789e2`](https://github.com/antvis/L7/commit/65789e26657ed16c3f8395ba37368a8b4bfb4522) Thanks [@lzxue](https://github.com/lzxue)! - 修复一些bug
+
+- Updated dependencies [[`65789e2`](https://github.com/antvis/L7/commit/65789e26657ed16c3f8395ba37368a8b4bfb4522), [`39e418c`](https://github.com/antvis/L7/commit/39e418cc51c7ca70e5eb350c1d42a950f4ea6327)]:
+  - @antv/l7-scene@2.23.1
+  - @antv/l7-maps@2.23.1
+  - @antv/l7-map@2.23.1
+
 ## 2.22.6
 
 ### Patch Changes

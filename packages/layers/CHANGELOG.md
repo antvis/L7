@@ -1,5 +1,19 @@
 # Change Log
 
+## 2.23.1
+
+### Patch Changes
+
+- [#2749](https://github.com/antvis/L7/pull/2749) [`65789e2`](https://github.com/antvis/L7/commit/65789e26657ed16c3f8395ba37368a8b4bfb4522) Thanks [@lzxue](https://github.com/lzxue)! - 修复一些bug
+
+- [#2730](https://github.com/antvis/L7/pull/2730) [`39e418c`](https://github.com/antvis/L7/commit/39e418cc51c7ca70e5eb350c1d42a950f4ea6327) Thanks [@lzxue](https://github.com/lzxue)! - 相对坐标系支持
+
+- Updated dependencies [[`65789e2`](https://github.com/antvis/L7/commit/65789e26657ed16c3f8395ba37368a8b4bfb4522), [`39e418c`](https://github.com/antvis/L7/commit/39e418cc51c7ca70e5eb350c1d42a950f4ea6327)]:
+  - @antv/l7-source@2.23.1
+  - @antv/l7-utils@2.23.1
+  - @antv/l7-core@2.23.1
+  - @antv/l7-maps@2.23.1
+
 ## 2.22.6
 
 ### Patch Changes
