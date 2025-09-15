@@ -48,8 +48,8 @@ export default class Swipe extends Control<ISwipeControlOption> {
 
   public onAdd() {
     const container = DOM.create('div', 'l7-control-swipe');
-    const link = DOM.create('button', 'l7-control-swipe__button', container) as HTMLButtonElement;
-    link.type = 'button';
+    const btn = DOM.create('button', 'l7-control-swipe__button', container) as HTMLButtonElement;
+    btn.type = 'button';
     const { orientation = 'vertical', ratio = 0.5 } = this.controlOption;
 
     if (orientation === 'horizontal') {
