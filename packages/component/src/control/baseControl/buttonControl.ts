@@ -52,7 +52,9 @@ export default class ButtonControl<
   }
 
   public createButton(className: string = '') {
-    return DOM.create('button', `l7-button-control ${className}`) as HTMLElement;
+    const btn = DOM.create('button', `l7-button-control ${className}`) as HTMLButtonElement;
+    btn.type = 'button';
+    return btn as HTMLElement;
   }
 
   public onAdd(): HTMLElement {

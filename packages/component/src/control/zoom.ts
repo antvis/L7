@@ -119,6 +119,7 @@ export default class Zoom extends Control<IZoomControlOption> {
     fn?: (...arg: any[]) => any,
   ) {
     const link = DOM.create('button', className, container) as HTMLLinkElement;
+    link.type = 'button';
     if (typeof html === 'string') {
       link.innerHTML = html;
     } else {
