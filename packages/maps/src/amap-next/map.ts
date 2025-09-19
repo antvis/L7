@@ -331,12 +331,10 @@ export default class BMapService extends BaseMap<AMap.Map> {
     return this.map.setZoom(zoom + ZOOM_OFFSET);
   }
 
-   
   public setMaxZoom(max: number): void {
     throw new Error('Method not implemented.');
   }
 
-   
   public setMinZoom(min: number): void {
     throw new Error('Method not implemented.');
   }
