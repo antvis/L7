@@ -22,6 +22,9 @@ export const CaseScene = (options: CaseSceneOptions) => {
     rotation: 0,
     pitch: 0,
     zoom: 16,
+    WebGLParams: {
+      preserveDrawingBuffer: true,
+    },
     ...mapConfig,
   });
 

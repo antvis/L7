@@ -331,12 +331,12 @@ export default class BMapService extends BaseMap<AMap.Map> {
     return this.map.setZoom(zoom + ZOOM_OFFSET);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public setMaxZoom(max: number): void {
     throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public setMinZoom(min: number): void {
     throw new Error('Method not implemented.');
   }
@@ -425,6 +425,10 @@ export default class BMapService extends BaseMap<AMap.Map> {
     const renderCanvas = this.getContainer()?.getElementsByClassName(
       'amap-layer',
     )[0] as HTMLCanvasElement;
+    console.log('renderCanvas', renderCanvas);
+    if (!renderCanvas) {
+      throw new Error('地图尚未初始化完成，无法导出图片');
+    }
     const layersPng =
       type === 'jpg'
         ? (renderCanvas?.toDataURL('image/jpeg') as string)
