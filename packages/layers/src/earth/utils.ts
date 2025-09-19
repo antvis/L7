@@ -85,11 +85,11 @@ export function primitiveSphere(
 
       vec3.scale(tmpVec3, tmpVec3, -radius);
 
-      positions.push(tmpVec3.slice());
-      positionsArr.push(...tmpVec3.slice());
+      positions.push((tmpVec3 as Array<number>).slice());
+      positionsArr.push(...(tmpVec3 as Array<number>).slice());
 
       vec3.normalize(tmpVec3, tmpVec3);
-      normalArr.push(...tmpVec3.slice());
+      normalArr.push(...(tmpVec3 as Array<number>).slice());
 
       uvs.push([normalizedY, 1 - normalizedZ]);
 

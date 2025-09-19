@@ -104,7 +104,17 @@ export function createDataTexture(gl: WebGLRenderingContext, filter: any, data: 
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+  // 对于 HTMLImageElement，使用正确的 texImage2D 重载
+  if (data instanceof HTMLImageElement) {
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, data);
+  } else {
+    // 对于 ArrayBuffer 或其他数据类型，需要提供宽度和高度
+    const width = Math.sqrt(data.length / 4); // 假设是RGBA格式，每个像素4个值
+    const height = width;
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+  }
+
   gl.bindTexture(gl.TEXTURE_2D, null);
   return texture;
 }

@@ -1,3 +1,5 @@
+export { rasterPmTile } from './pmtile_raster';
+export { vectorPmTile } from './pmtile_vector';
 export { rasterTile } from './raster-tile';
 export { terrainRGB } from './terrain-rgb';
 export { vectorCity } from './vector-city';

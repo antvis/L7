@@ -543,7 +543,7 @@ export class Transform {
   }
 
   customLayerMatrix(): mat4 {
-    return this.mercatorMatrix.slice() as any;
+    return mat4.clone(this.mercatorMatrix);
   }
 
   /**

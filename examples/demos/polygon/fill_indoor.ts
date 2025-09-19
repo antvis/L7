@@ -26,7 +26,7 @@ export const fill_indoor: TestCase = async (options) => {
   // 使用新的Layer层相对坐标功能
   const layer = new PolygonLayer({
     autoFit: true,
-    enableRelativeCoordinates: false,
+    enableRelativeCoordinates: true,
   })
     .source(polygonData, {
       parser: {
