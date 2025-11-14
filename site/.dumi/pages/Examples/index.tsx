@@ -5,7 +5,7 @@ import { ExampleTopicMenu } from '@antv/dumi-theme-antv/dist/pages/Examples/comp
 import { Footer } from '@antv/dumi-theme-antv/dist/slots/Footer';
 import { Header } from '@antv/dumi-theme-antv/dist/slots/Header';
 import NavigatorBanner from '@antv/dumi-theme-antv/dist/slots/Header/Products/NavigatorBanner';
-import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
+// import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
 import { usePrevAndNext } from '@antv/dumi-theme-antv/dist/slots/hooks';
 import type { ExampleTopic } from '@antv/dumi-theme-antv/dist/types';
 import { Layout as AntLayout, BackTop } from 'antd';
@@ -84,7 +84,6 @@ const Example = () => {
   }, []);
   return (
     <>
-      <SEO title={title[locale.id]} />
       <Header isHomePage={false} />
       <AntLayout hasSider className={styles.layout}>
         <ExampleTopicMenu exampleTopics={exampleTopics} />
