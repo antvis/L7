@@ -3,6 +3,7 @@ export { extrudeCity } from './extrude-city';
 export { extrusion } from './extrusion';
 export { fill } from './fill';
 export { fillLinear } from './fill-linear';
+export { fillChina } from './fill_china';
 export { fill_indoor } from './fill_indoor';
 export { ocean } from './ocean';
 export { texture } from './texture';

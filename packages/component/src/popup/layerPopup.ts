@@ -1,5 +1,5 @@
 import type { ILayer, IPopupOption, L7Container } from '@antv/l7-core';
-import { DOM, lodashUtil } from '@antv/l7-utils';
+import { DOM, isPC, lodashUtil } from '@antv/l7-utils';
 import Popup from './popup';
 
 type ElementType = DOM.ElementType;
@@ -21,7 +21,7 @@ export type LayerPopupConfigItem = {
 export interface ILayerPopupOption extends IPopupOption {
   config?: LayerPopupConfigItem[];
   items?: LayerPopupConfigItem[];
-  trigger: 'hover' | 'click';
+  trigger: 'hover' | 'click' | 'touchend' | 'touchstart';
 }
 
 type LayerMapInfo = {
@@ -58,6 +58,19 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     return config ?? items ?? [];
   }
 
+  /**
+   * 根据环境获取实际的触发事件
+   * 当 trigger 为 'click' 时，移动端使用 'touchend'，PC 端使用 'click'
+   * @protected
+   */
+  protected getActualTriggerEvent() {
+    const { trigger } = this.popupOption;
+    if (trigger === 'click') {
+      return isPC() ? 'click' : 'touchend';
+    }
+    return trigger;
+  }
+
   public addTo(scene: L7Container) {
     super.addTo(scene);
     this.bindLayerEvent();
@@ -88,7 +101,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
   }
 
   protected getDefault(option: Partial<ILayerPopupOption>): ILayerPopupOption {
-    const isHoverTrigger = option.trigger !== 'click';
+    const isHoverTrigger = option.trigger === 'hover';
     return {
       ...super.getDefault(option),
       trigger: 'hover',
@@ -111,6 +124,8 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    */
   protected bindLayerEvent() {
     const { trigger, closeOnClick } = this.popupOption;
+    const actualTrigger = this.getActualTriggerEvent();
+
     this.layerConfigItems.forEach((configItem) => {
       const layer = this.getLayerByConfig(configItem);
       if (!layer) {
@@ -131,11 +146,11 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
       } else {
         const onLayerClick = this.onLayerClick.bind(this, layer);
         layerInfo.onClick = onLayerClick;
-        layer?.on('click', onLayerClick);
+        layer?.on(actualTrigger, onLayerClick);
 
         const mapContainer = this.mapsService?.getMapContainer();
         if (mapContainer && closeOnClick) {
-          mapContainer.addEventListener('click', this.onSceneClick);
+          mapContainer.addEventListener(actualTrigger, this.onSceneClick);
         }
       }
       const source = layer?.getSource?.();
@@ -152,6 +167,8 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * @protected
    */
   protected unbindLayerEvent() {
+    const actualTrigger = this.getActualTriggerEvent();
+
     this.layerConfigItems.forEach((configItem) => {
       const layer = this.getLayerByConfig(configItem);
       const layerInfo = layer && this.layerConfigMap.get(layer);
@@ -166,14 +183,14 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
         layer.off('mouseout', onMouseOut);
       }
       if (onClick) {
-        layer.off('click', onClick);
+        layer.off(actualTrigger, onClick);
       }
       if (onSourceUpdate) {
         layer?.getSource()?.off('update', onSourceUpdate);
       }
       const mapContainer = this.mapsService?.getMapContainer();
       if (mapContainer) {
-        mapContainer.removeEventListener('click', this.onSceneClick);
+        mapContainer.removeEventListener(actualTrigger, this.onSceneClick);
       }
     });
   }
@@ -191,8 +208,7 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onLayerMouseOut(layer: ILayer, e: any) {
+  protected onLayerMouseOut(layer: ILayer) {
     this.setDisplayFeatureInfo(undefined);
     if (this.isShow) {
       this.hide();

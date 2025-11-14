@@ -14,7 +14,7 @@ import readingTime from 'reading-time';
 import URI from 'uri-parse';
 
 import { ContentTable } from '@antv/dumi-theme-antv/dist/slots/ContentTable';
-import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
+// import { SEO } from '@antv/dumi-theme-antv/dist/slots/SEO';
 import GithubButtonBar from '../GithubButtonBar';
 
 import { NavigatorBanner } from '@antv/dumi-theme-antv/dist/slots/ManualContent/NavigatorBanner';
@@ -265,7 +265,6 @@ export const ManualContent: React.FC<ManualContent> = ({ children }) => {
 
   return (
     <>
-      <SEO title={linkoTitle[window.location.pathname]} lang={locale.id} />
       <Layout style={{ background: '#fff' }} hasSider className={styles.layout}>
         <Affix
           offsetTop={0}
