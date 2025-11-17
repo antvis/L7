@@ -131,5 +131,13 @@
     "vite-plugin-cp": "^4.0.8",
     "vite-plugin-string": "^1.2.2",
     "webpack-bundle-analyzer": "^4.10.1"
+  },
+  "resolutions": {
+    "@monaco-editor/loader": "1.5.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@monaco-editor/loader": "1.5.0"
+    }
   }
 }

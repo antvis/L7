@@ -1,5 +1,5 @@
-import { Footer } from '@antv/dumi-theme-antv/dist/slots/Footer';
-import { Header } from '@antv/dumi-theme-antv/dist/slots/Header';
+import Footer from '@antv/dumi-theme-antv/dist/slots/Footer';
+import Header from '@antv/dumi-theme-antv/dist/slots/Header';
 import React from 'react';
 import DataTab from '../../../maptools/component/DataTab';
 import Features from '../../../maptools/component/Features';
