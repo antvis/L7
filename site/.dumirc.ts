@@ -40,6 +40,9 @@ export default defineConfig({
   title: 'AntV L7 地理空间数据可视化引擎',
   themeConfig: {
     title: 'L7',
+    metas: {
+      title: 'L7',
+    },
     isAntVSite: false,
     footerTheme: 'light', // 白色 底部主题
     // internalSite: {
@@ -57,10 +60,6 @@ export default defineConfig({
       'l7, L7, antv/l7, 地理, 空间可视化, Webgl, webgl, 地图, webgis, 3d, GIS, gis, Mapbox, deckgl, g2, g6, antv,',
     showChartResize: true, // 是否在demo页展示图表视图切换
     showAPIDoc: false, // 是否在demo页展示API文档
-    petercat: {
-      show: true,
-      token: 'a1dbc546-2ec1-4aba-853f-56aaf511e23d',
-    },
     detail: {
       engine: {
         zh: 'L7',
@@ -109,32 +108,6 @@ export default defineConfig({
       ],
     },
     msfu: false,
-    news: [
-      {
-        type: {
-          zh: '推荐',
-          en: 'News',
-        },
-        title: {
-          zh: '地图站点导航工具',
-          en: 'DipperMap',
-        },
-        date: '2023.12.01',
-        link: 'https://nav.dippermap.com/',
-      },
-      {
-        type: {
-          zh: '推荐',
-          en: 'News',
-        },
-        title: {
-          zh: 'L7VP 地理数据分析工具',
-          en: 'L7VP',
-        },
-        date: '2023.07.07',
-        link: 'https://li.antv.antgroup.com/',
-      },
-    ],
     features: [
       {
         icon: 'https://gw.alipayobjects.com/zos/basement_prod/ca2168d1-ae50-4929-8738-c6df62231de3.svg',
