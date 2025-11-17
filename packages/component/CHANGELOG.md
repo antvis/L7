@@ -1,5 +1,18 @@
 # Change Log
 
+## 2.23.1
+
+### Patch Changes
+
+- [`7932838`](https://github.com/antvis/L7/commit/79328384d8b1deb547ff2422aaa4366201dfe9b2) Thanks [@lzxue](https://github.com/lzxue)! - 更新demo
+
+- [`4f690b8`](https://github.com/antvis/L7/commit/4f690b837a322bc9923baf2b387ea43d37ba1e5d) Thanks [@lzxue](https://github.com/lzxue)! - 移动端事件
+
+- Updated dependencies [[`7932838`](https://github.com/antvis/L7/commit/79328384d8b1deb547ff2422aaa4366201dfe9b2), [`4f690b8`](https://github.com/antvis/L7/commit/4f690b837a322bc9923baf2b387ea43d37ba1e5d)]:
+  - @antv/l7-layers@2.23.1
+  - @antv/l7-utils@2.23.1
+  - @antv/l7-core@2.23.1
+
 ## 2.22.6
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.23.1
+
+### Patch Changes
+
+- [`7932838`](https://github.com/antvis/L7/commit/79328384d8b1deb547ff2422aaa4366201dfe9b2) Thanks [@lzxue](https://github.com/lzxue)! - 更新demo
+
+- [`4f690b8`](https://github.com/antvis/L7/commit/4f690b837a322bc9923baf2b387ea43d37ba1e5d) Thanks [@lzxue](https://github.com/lzxue)! - 移动端事件
+
 ## 2.22.6
 
 ## 2.22.5
