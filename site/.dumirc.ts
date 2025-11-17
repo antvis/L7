@@ -685,6 +685,8 @@ export default defineConfig({
     baidu: 'cde34c32ff1edfd4f933bfb44ae0e9f3',
   },
   alias: {
+    // map @ to site root so docs can import with @/...
+    '@': path.resolve(__dirname),
     '@antv/l7': path.resolve(__dirname, '../packages/l7/src'),
     '@antv/l7-core': path.resolve(__dirname, '../packages/core/src'),
     '@antv/l7-component': path.resolve(__dirname, '../packages/component/src'),
