@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_antv_l7_site=self.webpackChunk_antv_l7_site||[]).push([[2773],{46953:function(s,e,n){n.r(e);var t=n(42241),u=n(42153),a=(n(18262),n(92379),n(5414)),r=n(67431),c=n(651);e.default=function(){return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(u.Z,{}),(0,c.jsx)(a.Z,{}),(0,c.jsx)(r.Z,{url:"../docs/app"}),(0,c.jsx)(t.Z,{})]})}}}]);
