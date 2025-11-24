@@ -50,7 +50,8 @@ export default class Marker extends EventEmitter {
     const { element } = this.markerOption;
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
-    this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
+    // marker 不再在自身注册地图相机事件，以避免为每个 marker 注册大量底层 map 监听器。
+    // 由 MarkerLayer 在 addTo 时统一注册并在相机变化时调用每个 marker.update()。
     this.update();
     this.updateDraggable();
     this.added = true;
@@ -60,10 +61,7 @@ export default class Marker extends EventEmitter {
 
   public remove() {
     if (this.mapsService) {
-      this.mapsService.off('click', this.onMapClick);
-      this.mapsService.off('move', this.update);
-      this.mapsService.off('moveend', this.update);
-      this.mapsService.off('camerachange', this.update);
+      // 不再负责移除地图级别的 update 监听（由 MarkerLayer 管理），移除地图事件请统一通过 layer
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
@@ -222,7 +220,7 @@ export default class Marker extends EventEmitter {
     this.markerOption.extData = data;
   }
 
-  private update() {
+  public update() {
     if (!this.mapsService) {
       return;
     }

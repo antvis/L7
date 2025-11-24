@@ -48,6 +48,11 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   protected readonly coordinateSystemService: ICoordinateSystemService;
 
   protected eventEmitter: any;
+  // map event proxy map to keep track of original handler -> proxy mapping
+  protected evtCbProxyMap: globalThis.Map<
+    string,
+    globalThis.Map<(...args: any[]) => void, (...args: any[]) => void>
+  > = new globalThis.Map();
 
   constructor(container: L7Container) {
     this.config = container.mapConfig;
@@ -81,18 +86,51 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     return undefined;
   }
 
-  //  map event
+  // map event
   public on(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
-    } else {
-      // 统一事件名称
-      this.map.on(EventMap[type] || type, handle);
+      return;
+    }
+    const mapped = EventMap[type] || type;
+    // keep a proxy so we can remove the exact handler when off is called
+    let mapForType = this.evtCbProxyMap.get(mapped);
+    if (!mapForType) {
+      mapForType = new globalThis.Map();
+      this.evtCbProxyMap.set(mapped, mapForType);
+    }
+    if (!mapForType.has(handle)) {
+      const proxy = (...args: any[]) => {
+        try {
+          handle(...args);
+        } catch (e) {
+          // swallow handler errors to avoid breaking the map's internal emitter
+          // but log to console for debugging
+          console.error('Error in map event handler', e);
+        }
+      };
+      mapForType.set(handle, proxy);
+      this.map.on(mapped, proxy);
     }
   }
+
   public off(type: string, handle: (...args: any[]) => void): void {
-    this.map.off(EventMap[type] || type, handle);
-    this.eventEmitter.off(type, handle);
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.off(type, handle);
+      return;
+    }
+    const mapped = EventMap[type] || type;
+    const mapForType = this.evtCbProxyMap.get(mapped);
+    if (mapForType) {
+      const proxy = mapForType.get(handle);
+      if (proxy) {
+        this.map.off(mapped, proxy);
+        mapForType.delete(handle);
+      }
+      if ((mapForType as any).size === 0) {
+        this.evtCbProxyMap.delete(mapped);
+      }
+    }
   }
 
   public getContainer(): HTMLElement | null {

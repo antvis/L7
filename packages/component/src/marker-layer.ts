@@ -62,6 +62,9 @@ export default class MarkerLayer extends EventEmitter {
       this.mapsService.on('camerachange', this.update); // amap1.x 更新事件
       this.mapsService.on('viewchange', this.update); // amap2.0 更新事件
     }
+    // 统一由 layer 管理 marker 的位置更新，避免每个 marker 单独注册地图事件
+    this.mapsService.on('camerachange', this.updateMarkers.bind(this));
+    this.mapsService.on('viewchange', this.updateMarkers.bind(this));
     this.mapsService.on('camerachange', this.setContainerSize.bind(this)); // amap1.x 更新事件
     this.mapsService.on('viewchange', this.setContainerSize.bind(this)); // amap2.0 更新事件
     this.addMarkers();
@@ -159,7 +162,13 @@ export default class MarkerLayer extends EventEmitter {
     // this ensures addMarker works both before and after addTo(scene)
     try {
       if (this.inited && this.scene && typeof marker.addTo === 'function') {
-        marker.addTo(this.scene);
+        // When cluster mode is enabled, defer actual DOM mounting of original markers
+        // to the clustering render pass so that only cluster markers (or the chosen
+        // original marker for single-point clusters) are attached. This prevents
+        // duplicate DOM nodes / missing event handlers caused by pre-mounting originals.
+        if (!this.markerLayerOption.cluster) {
+          marker.addTo(this.scene);
+        }
       }
     } catch (e) {
       // defensive: do not break on addTo errors
@@ -285,6 +294,26 @@ export default class MarkerLayer extends EventEmitter {
     this.mapsService.off('viewchange', this.update);
     this.mapsService.off('camerachange', this.setContainerSize.bind(this));
     this.mapsService.off('viewchange', this.setContainerSize.bind(this));
+    this.mapsService.off('camerachange', this.updateMarkers.bind(this));
+    this.mapsService.off('viewchange', this.updateMarkers.bind(this));
+  }
+
+  private updateMarkers() {
+    // update positions for both origin markers and cluster markers
+    try {
+      this.markers.forEach((m: any) => {
+        if (m && typeof m.update === 'function') {
+          m.update();
+        }
+      });
+      this.clusterMarkers.forEach((m: any) => {
+        if (m && typeof m.update === 'function') {
+          m.update();
+        }
+      });
+    } catch (e) {
+      void e;
+    }
   }
 
   // 将marker数据保存在point中
@@ -359,6 +388,28 @@ export default class MarkerLayer extends EventEmitter {
         }
       }
       const marker = this.clusterMarker(feature);
+      // attach layer-level re-emission so consumers can listen to cluster marker events
+      try {
+        // IMarker type may not declare EventEmitter methods; cast to any for runtime attach
+        const anyMarker = marker as any;
+        if (anyMarker && typeof anyMarker.on === 'function') {
+          anyMarker.on('click', (ev: any) => {
+            try {
+              this.emit('marker:click', {
+                marker: anyMarker,
+                data: anyMarker.getExtData ? anyMarker.getExtData() : null,
+                lngLat: anyMarker.getLnglat ? anyMarker.getLnglat() : null,
+                originalEvent: ev,
+              });
+            } catch (e) {
+              void e;
+            }
+          });
+        }
+      } catch (e) {
+        void e;
+      }
+
       this.clusterMarkers.push(marker);
       marker.addTo(this.scene);
     });
@@ -396,6 +447,14 @@ export default class MarkerLayer extends EventEmitter {
       if (leaf && leaf.properties && typeof leaf.properties.marker_id === 'number') {
         const origin = this.normalMarker(leaf);
         if (origin) {
+          // ensure aggregated properties are available on the original marker
+          try {
+            if (feature && feature.properties && typeof origin.setExtData === 'function') {
+              origin.setExtData(feature.properties);
+            }
+          } catch (e) {
+            void e;
+          }
           return origin;
         }
       }
