@@ -92,6 +92,56 @@ export default class MarkerLayer extends EventEmitter {
     const cluster = this.markerLayerOption.cluster;
     marker.getMarkerLayerContainerSize = this.getContainerSize.bind(this);
 
+    // apply default markerOption if provided by layer
+    try {
+      const mOpt = (this.markerLayerOption as any).markerOption as
+        | undefined
+        | { color?: string; style?: { [k: string]: any }; className?: string };
+      if (mOpt && marker && typeof marker.getElement === 'function') {
+        const el = marker.getElement();
+        if (el) {
+          // apply className
+          if (mOpt.className) {
+            // DOM helper available
+            try {
+              DOM.addClass(el, mOpt.className);
+            } catch (e) {
+              el.className = `${el.className || ''} ${mOpt.className}`.trim();
+            }
+          }
+          // apply style properties
+          if (mOpt.style && typeof mOpt.style === 'object') {
+            Object.keys(mOpt.style).forEach((k) => {
+              try {
+                // @ts-ignore
+                (el.style as any)[k] = mOpt.style![k];
+              } catch (e) {
+                // ignore invalid styles
+              }
+            });
+          }
+          // apply color: try find svg path inside marker element and set fill
+          if (mOpt.color) {
+            try {
+              // querySelector can return SVGPathElement; coerce to any for attribute access
+              const svgPath = el.querySelector ? (el.querySelector('path') as any) : null;
+              if (svgPath && typeof svgPath.setAttribute === 'function') {
+                svgPath.setAttribute('fill', mOpt.color);
+              } else {
+                // fallback: set background color
+                (el.style as any).background = mOpt.color;
+              }
+            } catch (e) {
+              // ignore
+            }
+          }
+        }
+      }
+    } catch (err) {
+      // be defensive — don't block marker addition on errors applying defaults
+      void err;
+    }
+
     if (cluster) {
       this.addPoint(marker, this.markers.length);
       if (this.mapsService) {

@@ -15,4 +15,13 @@ export interface IMarkerStyleOption {
 export interface IMarkerLayerOption {
   cluster: boolean;
   clusterOption: Partial<IMarkerStyleOption>;
+  /**
+   * Default marker options applied to markers added to this layer when not overridden per-marker.
+   * Example: { color: '#ff0000', style: { width: '24px', height: '24px' }, className: 'my-marker' }
+   */
+  markerOption?: Partial<{
+    color?: string;
+    style?: { [key: string]: any };
+    className?: string;
+  }>;
 }
