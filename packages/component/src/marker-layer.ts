@@ -274,8 +274,44 @@ export default class MarkerLayer extends EventEmitter {
     const clusterOption = this.markerLayerOption.clusterOption;
 
     const { element = this.generateElement.bind(this) } = clusterOption as IMarkerStyleOption;
+
+    // determine cluster count
+    let pointCount = feature.properties?.point_count;
+    if (pointCount === undefined && feature.properties?.cluster_id) {
+      const leaves = this.getLeaves(feature.properties.cluster_id, 1, 0) || [];
+      pointCount = leaves.length;
+    }
+
+    // if this cluster effectively contains only one original marker, return the original marker
+    if ((pointCount === 1 || pointCount === '1') && feature.properties) {
+      // try to get the original marker by marker_id from leaves or properties
+      let leaf = null;
+      if (feature.properties.cluster_id) {
+        const leaves = this.getLeaves(feature.properties.cluster_id, 1, 0);
+        leaf = leaves && leaves[0];
+      } else if (feature.properties.marker_id !== undefined) {
+        leaf = feature;
+      }
+      if (leaf && leaf.properties && typeof leaf.properties.marker_id === 'number') {
+        const origin = this.normalMarker(leaf);
+        if (origin) {
+          return origin;
+        }
+      }
+      // fallback: if no marker_id, continue to render cluster element
+    }
+
+    // for real clusters (count > 1) or fallback, create cluster marker element
+    let el: any;
+    try {
+      el = element(feature);
+    } catch (e) {
+      // element may be a DOM node already
+      el = element as any;
+    }
+
     const marker = new Marker({
-      element: element(feature),
+      element: el,
     }).setLnglat({
       lng: feature.geometry.coordinates[0],
       lat: feature.geometry.coordinates[1],
