@@ -154,12 +154,31 @@ export default class MarkerLayer extends EventEmitter {
       }
     }
     this.markers.push(marker);
+
+    // if layer has been added to a scene, immediately add marker's element into scene
+    // this ensures addMarker works both before and after addTo(scene)
+    try {
+      if (this.inited && this.scene && typeof marker.addTo === 'function') {
+        marker.addTo(this.scene);
+      }
+    } catch (e) {
+      // defensive: do not break on addTo errors
+      void e;
+    }
   }
 
   public removeMarker(marker: IMarker) {
     this.markers.indexOf(marker);
     const markerIndex = this.markers.indexOf(marker);
     if (markerIndex > -1) {
+      // remove visual element and unbind handlers
+      try {
+        if (typeof marker.remove === 'function') {
+          marker.remove();
+        }
+      } catch (e) {
+        void e;
+      }
       this.markers.splice(markerIndex, 1);
       if (this.markerLayerOption.cluster) {
         this.removePoint(markerIndex);
