@@ -316,6 +316,17 @@ export default class MarkerLayer extends EventEmitter {
       lng: feature.geometry.coordinates[0],
       lat: feature.geometry.coordinates[1],
     });
+
+    // attach aggregated properties to the cluster marker so getExtData() returns useful info
+    try {
+      if (feature && feature.properties) {
+        // @ts-ignore
+        marker.setExtData(feature.properties);
+      }
+    } catch (e) {
+      // ignore if marker doesn't support setExtData for some reason
+    }
+
     return marker;
   }
 
