@@ -19,6 +19,7 @@ export default class Marker extends EventEmitter {
   private scene: L7Container;
   private added: boolean = false;
   private preLngLat = { lng: 0, lat: 0 };
+  private visible: boolean = true;
   // tslint:disable-next-line: no-empty
   public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
 
@@ -73,6 +74,32 @@ export default class Marker extends EventEmitter {
     if (this.popup) {
       this.popup.remove();
     }
+    return this;
+  }
+
+  /**
+   * Hide the marker visually but keep it in the layer's data structures.
+   */
+  public hide(): this {
+    const { element } = this.markerOption;
+    if (element) {
+      element.style.display = 'none';
+    }
+    this.visible = false;
+    return this;
+  }
+
+  /**
+   * Show the marker if it was hidden.
+   */
+  public show(): this {
+    const { element } = this.markerOption;
+    if (element) {
+      element.style.display = 'block';
+    }
+    this.visible = true;
+    // re-position after showing
+    this.update();
     return this;
   }
 
@@ -210,6 +237,9 @@ export default class Marker extends EventEmitter {
     }
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
+    if (!this.visible) {
+      return;
+    }
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
@@ -251,7 +281,6 @@ export default class Marker extends EventEmitter {
         'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onMapClick(e: MouseEvent) {
     const { element } = this.markerOption;
     if (this.popup && element) {
@@ -327,6 +356,13 @@ export default class Marker extends EventEmitter {
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
+    if (!this.visible) {
+      // remain hidden until show() is called
+      if (element) {
+        element.style.display = 'none';
+      }
+      return;
+    }
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
@@ -457,12 +493,9 @@ export default class Marker extends EventEmitter {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
     return null;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onUp(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }

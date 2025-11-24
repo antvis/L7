@@ -174,12 +174,28 @@ export default class MarkerLayer extends EventEmitter {
    * 隐藏 marker 在每个 marker 上单独修改属性而不是在 markerContainer 上修改（在 markerContainer 修改会有用户在场景加载完之前调用失败的问题）
    */
   public hide() {
-    this.markers.map((m) => {
-      m.getElement().style.opacity = '0';
+    this.markers.forEach((m) => {
+      try {
+        if (typeof m.hide === 'function') {
+          m.hide();
+        } else {
+          m.getElement().style.opacity = '0';
+        }
+      } catch (e) {
+        void e;
+      }
     });
 
-    this.clusterMarkers.map((m) => {
-      m.getElement().style.opacity = '0';
+    this.clusterMarkers.forEach((m) => {
+      try {
+        if (typeof m.hide === 'function') {
+          m.hide();
+        } else {
+          m.getElement().style.opacity = '0';
+        }
+      } catch (e) {
+        void e;
+      }
     });
   }
 
@@ -187,12 +203,28 @@ export default class MarkerLayer extends EventEmitter {
    * 显示 marker
    */
   public show() {
-    this.markers.map((m) => {
-      m.getElement().style.opacity = '1';
+    this.markers.forEach((m) => {
+      try {
+        if (typeof m.show === 'function') {
+          m.show();
+        } else {
+          m.getElement().style.opacity = '1';
+        }
+      } catch (e) {
+        void e;
+      }
     });
 
-    this.clusterMarkers.map((m) => {
-      m.getElement().style.opacity = '1';
+    this.clusterMarkers.forEach((m) => {
+      try {
+        if (typeof m.show === 'function') {
+          m.show();
+        } else {
+          m.getElement().style.opacity = '1';
+        }
+      } catch (e) {
+        void e;
+      }
     });
   }
 
