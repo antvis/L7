@@ -463,11 +463,11 @@ export default class MarkerLayer extends EventEmitter {
 
     // for real clusters (count > 1) or fallback, create cluster marker element
     let el: any;
-    try {
+    if (typeof element === 'function') {
       el = element(feature);
-    } catch (e) {
+    } else {
       // element may be a DOM node already
-      el = element as any;
+      el = element;
     }
 
     const marker = new Marker({
