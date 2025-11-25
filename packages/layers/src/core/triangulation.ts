@@ -86,9 +86,11 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
 /**
  * 线三角化
  * @param feature 映射feature
+ * @param styleOption 样式配置(从 buildLayerModel 传入)
  */
-export function LineTriangulation(feature: IEncodeFeature) {
+export function LineTriangulation(feature: IEncodeFeature, styleOption?: any) {
   const { coordinates } = feature;
+
   // let path = coordinates as number[][][] | number[][];
   // if (!Array.isArray(path[0][0])) {
   //   path = [coordinates] as number[][][];
@@ -108,6 +110,7 @@ export function LineTriangulation(feature: IEncodeFeature) {
   });
 
   const linebuffer = line.complex;
+
   return {
     vertices: linebuffer.positions, // [ x,y,z, distance, miter,total ]
     indices: linebuffer.indices,

@@ -51,6 +51,7 @@ export default class LineModel extends BaseModel {
       heightfixed = false,
       linearDir = LinearDir.VERTICAL, // 默认纵向
       blur = [1, 1, 1, 0],
+      arrow,
     } = this.layer.getLayerConfig() as ILineLayerStyleOptions;
     let u_dash_array = dashArray;
     if (lineType !== 'dash') {
@@ -92,6 +93,12 @@ export default class LineModel extends BaseModel {
       u_linearDir: linearDir === LinearDir.VERTICAL ? 1.0 : 0.0,
       u_linearColor: useLinearColor,
       u_time: this.layer.getLayerAnimateTime() || 0,
+      // 箭头参数
+      u_arrow: arrow?.enable ? 1.0 : 0.0,
+      u_arrow_spacing: arrow?.spacing || 50, // 默认间距 50px
+      u_arrow_width: arrow?.width || 15, // 箭头宽度 15px
+      u_arrow_height: arrow?.height || 20, // 箭头长度 20px
+      u_arrow_strokeWidth: arrow?.strokeWidth || 2, // 箭头线条宽度 2px
     };
 
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);

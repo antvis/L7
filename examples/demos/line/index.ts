@@ -1,5 +1,7 @@
 export { arc } from './arc';
 export { arc3D } from './arc-3d';
+export { arrow } from './arrow';
+export { arrowDebug } from './arrow-debug';
 export { dash } from './dash';
 export { flow } from './flow';
 export { greatcircle } from './greatcircle';
