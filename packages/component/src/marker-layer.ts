@@ -430,7 +430,7 @@ export default class MarkerLayer extends EventEmitter {
     // determine cluster count
     let pointCount = feature.properties?.point_count;
     if (pointCount === undefined && feature.properties?.cluster_id) {
-      const leaves = this.getLeaves(feature.properties.cluster_id, 1, 0) || [];
+      const leaves = this.getLeaves(feature.properties.cluster_id, Infinity, 0) || [];
       pointCount = leaves.length;
     }
 
