@@ -249,3 +249,40 @@ layer.style({
 // len1 实线长度 len2 间隔长度
 type IDashArray = [len1: number, len2: number]
 ```
+
+## 箭头效果（arrow）
+
+支持在线图层上显示方向箭头，常用于导航、路径方向标识。
+
+### 配置项
+
+| 属性        | 类型    | 说明                 |
+| ----------- | ------- | -------------------- |
+| enable      | boolean | 是否显示箭头         |
+| spacing     | number  | 箭头间距（像素）     |
+| width       | number  | 箭头宽度（像素）     |
+| height      | number  | 箭头高度（像素）     |
+| strokeWidth | number  | 箭头线条宽度（像素） |
+| color       | string  | 箭头颜色（CSS 色值） |
+
+### 效果说明
+
+- 箭头为 V 形轮廓，非实心三角。
+- 箭头叠加在线本身之上，线和箭头可分别设置颜色。
+- 适用于导航、路径方向等场景。
+
+### 示例代码
+
+```ts
+layer.style({
+  color: '#0000FF', // 线颜色
+  arrow: {
+    enable: true,
+    spacing: 80,
+    width: 30,
+    height: 40,
+    strokeWidth: 4,
+    color: '#FFFF00', // 箭头颜色
+  },
+});
+```

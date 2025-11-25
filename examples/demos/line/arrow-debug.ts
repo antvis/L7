@@ -2,6 +2,33 @@ import { LineLayer, Source } from '@antv/l7';
 import type { TestCase } from '../../types';
 import { CaseScene } from '../../utils';
 
+/**
+ * Arrow Line Demo
+ *
+ * 该示例演示如何在 L7 中为线图层添加箭头效果，常用于导航、路径方向标识。
+ *
+ * 支持的箭头参数：
+ * - enable: 是否显示箭头
+ * - spacing: 箭头间距（像素）
+ * - width: 箭头宽度（像素）
+ * - height: 箭头高度（像素）
+ * - strokeWidth: 箭头线条宽度（像素）
+ * - color: 箭头颜色（支持 CSS 色值）
+ *
+ * 箭头为 V 形轮廓，非实心三角，叠加在线本身之上。
+ * 线和箭头可分别设置颜色，实现如“蓝色线+黄色箭头”效果。
+ *
+ * 示例配置：
+ * arrow: {
+ *   enable: true,
+ *   spacing: 80,
+ *   width: 30,
+ *   height: 40,
+ *   strokeWidth: 4,
+ *   color: '#FFFF00',
+ * }
+ */
+
 export const arrowDebug: TestCase = async (options) => {
   const scene = await CaseScene({
     ...options,
@@ -34,20 +61,21 @@ export const arrowDebug: TestCase = async (options) => {
 
   const arrowConfig = {
     enable: true,
-    spacing: 40, // 间距 (像素)
-    width: 40, // 宽度 (像素)
-    height: 5, // 长度 (像素)
-    strokeWidth: 10, // 箭头线条宽度 (像素)
+    spacing: 15, // 间距 (像素)
+    width: 15, // 宽度 (像素)
+    height: 3, // 长度 (像素)
+    strokeWidth: 4, // 箭头线条宽度 (像素)
+    color: 'rgba(255, 94, 0, 1)', // 黄色箭头
   };
 
   console.log('Creating line layer with arrow config:', arrowConfig);
 
-  // 蓝色线，带白色箭头
+  // 蓝色线，带黄色箭头
   const lineLayer = new LineLayer({ name: 'debug_arrow' })
     .source(new Source(simpleLineData))
     .shape('line')
     .size(10) // 线宽 10px
-    .color('#0000FF') // 改为蓝色
+    .color('#0000FF') // 蓝色
     .style({
       arrow: arrowConfig,
     });

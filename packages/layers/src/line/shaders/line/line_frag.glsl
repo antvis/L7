@@ -9,6 +9,7 @@ layout(std140) uniform commonUniorm {
   vec4 u_blur;
   vec4 u_sourceColor;
   vec4 u_targetColor;
+  vec4 u_arrow_color;
   vec2 u_textSize;
   float u_icon_step: 100;
   float u_heightfixed: 0.0;
@@ -167,8 +168,10 @@ void main() {
       float alpha = smoothstep(strokeWidth * 0.5 + 0.01, strokeWidth * 0.5 - 0.01, distToEdge);
       
       if(alpha > 0.0) {
-         // 混合箭头颜色 (白色)
-         vec4 arrowColor = vec4(1.0, 1.0, 1.0, 1.0);
+         // DEBUG: 先测试固定颜色是否工作
+         // vec4 arrowColor = vec4(1.0, 1.0, 0.0, 1.0); // 强制黄色
+         // 使用 uniform 的颜色
+         vec4 arrowColor = vec4(u_arrow_color.rgb, u_arrow_color.a * alpha);
          outputColor = mix(outputColor, arrowColor, alpha);
       }
     }

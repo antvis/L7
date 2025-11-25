@@ -85,6 +85,7 @@ export const arrow: TestCase = async (options) => {
         width: 10, // 宽度 (像素)
         height: 5, // 长度 (像素)
         strokeWidth: 5,
+        color: 'rgba(255, 94, 0, 1)', // 黄色箭头
       },
     });
 

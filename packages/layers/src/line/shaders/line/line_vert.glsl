@@ -14,6 +14,7 @@ layout(std140) uniform commonUniorm {
   vec4 u_blur;
   vec4 u_sourceColor;
   vec4 u_targetColor;
+  vec4 u_arrow_color;
   vec2 u_textSize;
   float u_icon_step: 100;
   float u_heightfixed: 0.0;

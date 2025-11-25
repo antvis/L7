@@ -33,6 +33,11 @@
       "filename": "road_dark_dash.js",
       "title": "路径虚线",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*vZFUTaBCGoEAAAAAAAAAAAAAARQnAQ"
+    },
+    {
+      "filename": "line_arrow.js",
+      "title": "路径箭头",
+      "screenshot": "https://mdn.alipayobjects.com/huamei_dxq8v0/afts/img/F5DrRp3Mn5gAAAAATJAAAAgADu43AQFr/original"
     }
   ]
 }

@@ -54,8 +54,8 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785
         opacity: 0.6,
         lineTexture: true, // Enable line mapping function
         iconStep: 10, // Set the spacing of the texture
-        borderWidth: 0.4, //The default value is 0, the maximum valid value is 0.5
-        borderColor: '#fff', // Default is #ccc
+        strokeWidth: 0.4, //The default value is 0, the maximum valid value is 0.5
+        stroke: '#fff', // Default is #ccc
       });
     scene.addLayer(layer);
   });

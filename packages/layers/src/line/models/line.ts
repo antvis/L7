@@ -79,6 +79,7 @@ export default class LineModel extends BaseModel {
       u_blur: blur,
       u_sourceColor: sourceColorArr,
       u_targetColor: targetColorArr,
+      u_arrow_color: arrow?.color ? rgb2arr(arrow.color) : [1, 1, 1, 1], // vec4 必须紧跟其他 vec4
       u_textSize: [1024, this.iconService.canvasHeight || 128],
       u_icon_step: iconStep,
       // 是否固定高度
@@ -102,6 +103,9 @@ export default class LineModel extends BaseModel {
     };
 
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
+
+    // ...existing code...
+
     return commonBufferInfo;
   }
   // public getAnimateUniforms(): IModelUniform {

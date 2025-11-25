@@ -17,8 +17,8 @@ const layer = new LineLayer({})
   .shape('arc')
   .color('#8C1EB2')
   .style({
-    borderWidth: 0.35, //The default value is 0, the maximum valid value is 0.5
-    borderColor: '#888', // Default is #ccc
+    strokeWidth: 0.4,
+    stroke: '#fff',
   });
 ```
 

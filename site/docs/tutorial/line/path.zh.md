@@ -54,8 +54,8 @@ fetch('https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785
         opacity: 0.6,
         lineTexture: true, // 开启线的贴图功能
         iconStep: 10, // 设置贴图纹理的间距
-        borderWidth: 0.4, // 默认文 0，最大有效值为 0.5
-        borderColor: '#fff', // 默认为 #ccc
+        strokeWidth: 0.4, // 默认文 0，最大有效值为 0.5
+        stroke: '#fff', // 默认为 #ccc
       });
     scene.addLayer(layer);
   });
