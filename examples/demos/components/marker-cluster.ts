@@ -29,8 +29,8 @@ export const markerCluster: TestCase = async (options) => {
       style: {
         width: '28px',
         height: '28px',
-      } as any as any,
-    } as any).setLnglat({
+      },
+    }).setLnglat({
       lng: coordinates[0],
       lat: coordinates[1],
     });
