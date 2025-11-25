@@ -41,6 +41,14 @@ export interface IMarker {
   closePopup(): this;
   setElement(el: HTMLElement): this;
   getMarkerLayerContainerSize: () => IMarkerContainerAndBounds | void;
+  /**
+   * Hide the marker visually without removing it from the layer/data.
+   */
+  hide(): void;
+  /**
+   * Show the marker if previously hidden.
+   */
+  show(): void;
 }
 export interface IMarkerService {
   container: HTMLElement;

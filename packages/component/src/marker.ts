@@ -19,6 +19,7 @@ export default class Marker extends EventEmitter {
   private scene: L7Container;
   private added: boolean = false;
   private preLngLat = { lng: 0, lat: 0 };
+  private visible: boolean = true;
   // tslint:disable-next-line: no-empty
   public getMarkerLayerContainerSize(): IMarkerContainerAndBounds | void {}
 
@@ -49,7 +50,8 @@ export default class Marker extends EventEmitter {
     const { element } = this.markerOption;
     this.mapsService.getMarkerContainer().appendChild(element as HTMLElement);
     this.registerMarkerEvent(element as HTMLElement);
-    this.mapsService.on('camerachange', this.update); // 注册高德1.x 的地图事件监听
+    // marker 不再在自身注册地图相机事件，以避免为每个 marker 注册大量底层 map 监听器。
+    // 由 MarkerLayer 在 addTo 时统一注册并在相机变化时调用每个 marker.update()。
     this.update();
     this.updateDraggable();
     this.added = true;
@@ -59,10 +61,7 @@ export default class Marker extends EventEmitter {
 
   public remove() {
     if (this.mapsService) {
-      this.mapsService.off('click', this.onMapClick);
-      this.mapsService.off('move', this.update);
-      this.mapsService.off('moveend', this.update);
-      this.mapsService.off('camerachange', this.update);
+      // 不再负责移除地图级别的 update 监听（由 MarkerLayer 管理），移除地图事件请统一通过 layer
     }
     this.unRegisterMarkerEvent();
     this.removeAllListeners();
@@ -73,6 +72,32 @@ export default class Marker extends EventEmitter {
     if (this.popup) {
       this.popup.remove();
     }
+    return this;
+  }
+
+  /**
+   * Hide the marker visually but keep it in the layer's data structures.
+   */
+  public hide(): this {
+    const { element } = this.markerOption;
+    if (element) {
+      element.style.display = 'none';
+    }
+    this.visible = false;
+    return this;
+  }
+
+  /**
+   * Show the marker if it was hidden.
+   */
+  public show(): this {
+    const { element } = this.markerOption;
+    if (element) {
+      element.style.display = 'block';
+    }
+    this.visible = true;
+    // re-position after showing
+    this.update();
     return this;
   }
 
@@ -195,7 +220,7 @@ export default class Marker extends EventEmitter {
     this.markerOption.extData = data;
   }
 
-  private update() {
+  public update() {
     if (!this.mapsService) {
       return;
     }
@@ -210,6 +235,9 @@ export default class Marker extends EventEmitter {
     }
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
+    if (!this.visible) {
+      return;
+    }
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
@@ -251,7 +279,6 @@ export default class Marker extends EventEmitter {
         'left 0.25s cubic-bezier(0,0,0.25,1), top 0.25s cubic-bezier(0,0,0.25,1)';
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onMapClick(e: MouseEvent) {
     const { element } = this.markerOption;
     if (this.popup && element) {
@@ -327,6 +354,13 @@ export default class Marker extends EventEmitter {
     const { element, offsets } = this.markerOption;
     const { lng, lat } = this.lngLat;
     const pos = this.mapsService.lngLatToContainer([lng, lat]);
+    if (!this.visible) {
+      // remain hidden until show() is called
+      if (element) {
+        element.style.display = 'none';
+      }
+      return;
+    }
     if (element) {
       element.style.display = 'block';
       element.style.whiteSpace = 'nowrap';
@@ -457,12 +491,9 @@ export default class Marker extends EventEmitter {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private addDragHandler(e: MouseEvent) {
     return null;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onUp(e: MouseEvent) {
     throw new Error('Method not implemented.');
   }
