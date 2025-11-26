@@ -10,6 +10,7 @@ export default class MarkerService implements IMarkerService {
   private markerLayers: IMarkerLayer[] = [];
   private unAddMarkers: IMarker[] = [];
   private unAddMarkerLayers: IMarkerLayer[] = [];
+  private mapEventsRegistered: boolean = false;
 
   public addMarkerLayer(markerLayer: IMarkerLayer): void {
     if (this.mapsService.map && this.mapsService.getMarkerContainer()) {
@@ -33,6 +34,7 @@ export default class MarkerService implements IMarkerService {
     if (this.mapsService.map && this.mapsService.getMarkerContainer()) {
       this.markers.push(marker);
       marker.addTo(this.scene);
+      this.registerMapEvents();
     } else {
       this.unAddMarkers.push(marker);
     }
@@ -44,6 +46,7 @@ export default class MarkerService implements IMarkerService {
       this.markers.push(marker);
     });
     this.unAddMarkers = [];
+    this.registerMapEvents();
   }
 
   public addMarkerLayers(): void {
@@ -61,6 +64,10 @@ export default class MarkerService implements IMarkerService {
     if (markerIndex > -1) {
       this.markers.splice(markerIndex, 1);
     }
+    // 如果所有 marker 都被移除，注销地图事件
+    if (this.markers.length === 0) {
+      this.unregisterMapEvents();
+    }
   }
 
   public removeAllMarkers(): void {
@@ -71,7 +78,9 @@ export default class MarkerService implements IMarkerService {
     this.scene = scene;
     this.mapsService = scene.mapService;
   }
+
   public destroy(): void {
+    this.unregisterMapEvents();
     this.markers.forEach((marker: IMarker) => {
       marker.remove();
     });
@@ -80,6 +89,33 @@ export default class MarkerService implements IMarkerService {
       layer.destroy();
     });
     this.markerLayers = [];
+  }
+
+  private updateAllMarkers = () => {
+    this.markers.forEach((marker: IMarker) => {
+      marker.update();
+    });
+  };
+
+  private registerMapEvents(): void {
+    if (this.mapEventsRegistered || !this.mapsService) {
+      return;
+    }
+    this.mapEventsRegistered = true;
+    // 监听地图的相机变化事件（兼容不同底图）
+    // camerachange: 适用于高德1.x、mapbox等
+    // viewchange: 适用于高德2.0
+    this.mapsService.on('camerachange', this.updateAllMarkers);
+    this.mapsService.on('viewchange', this.updateAllMarkers);
+  }
+
+  private unregisterMapEvents(): void {
+    if (!this.mapEventsRegistered || !this.mapsService) {
+      return;
+    }
+    this.mapEventsRegistered = false;
+    this.mapsService.off('camerachange', this.updateAllMarkers);
+    this.mapsService.off('viewchange', this.updateAllMarkers);
   }
 
   private removeMakerLayerMarker(layer: IMarkerLayer) {
