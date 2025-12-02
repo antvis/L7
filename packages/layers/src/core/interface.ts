@@ -85,7 +85,7 @@ export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
     enable?: boolean; // 是否启用箭头
     spacing?: number; // 箭头间距(像素单位)
     width?: number; // 箭头宽度(像素单位)
-    height?: number; // 箭头高度(像素单位)
+    height?: number; // 箭头沿线方向的长度(像素单位)
     strokeWidth?: number; // 箭头线条宽度(像素单位,默认 2)
     color?: string; // 箭头颜色,默认白色
   };
