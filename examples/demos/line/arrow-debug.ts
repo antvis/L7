@@ -11,7 +11,7 @@ import { CaseScene } from '../../utils';
  * - enable: 是否显示箭头
  * - spacing: 箭头间距（像素）
  * - width: 箭头宽度（像素）
- * - height: 箭头高度（像素）
+ * - length: 箭头长度（像素）
  * - strokeWidth: 箭头线条宽度（像素）
  * - color: 箭头颜色（支持 CSS 色值）
  *
@@ -23,7 +23,7 @@ import { CaseScene } from '../../utils';
  *   enable: true,
  *   spacing: 80,
  *   width: 30,
- *   height: 40,
+ *   length: 40,
  *   strokeWidth: 4,
  *   color: '#FFFF00',
  * }
@@ -63,7 +63,7 @@ export const arrowDebug: TestCase = async (options) => {
     enable: true,
     spacing: 15, // 间距 (像素)
     width: 15, // 宽度 (像素)
-    height: 3, // 长度 (像素)
+    length: 3, // 长度 (像素)
     strokeWidth: 4, // 箭头线条宽度 (像素)
     color: 'rgba(255, 94, 0, 1)', // 黄色箭头
   };

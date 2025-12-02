@@ -261,7 +261,7 @@ type IDashArray = [len1: number, len2: number]
 | enable      | boolean | 是否显示箭头         |
 | spacing     | number  | 箭头间距（像素）     |
 | width       | number  | 箭头宽度（像素）     |
-| height      | number  | 箭头高度（像素）     |
+| length      | number  | 箭头长度（像素）     |
 | strokeWidth | number  | 箭头线条宽度（像素） |
 | color       | string  | 箭头颜色（CSS 色值） |
 

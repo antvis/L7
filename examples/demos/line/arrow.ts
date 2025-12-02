@@ -83,7 +83,7 @@ export const arrow: TestCase = async (options) => {
         enable: true,
         spacing: 30, // 间距 (像素)
         width: 10, // 宽度 (像素)
-        height: 5, // 长度 (像素)
+        length: 5, // 长度 (像素)
         strokeWidth: 5,
         color: 'rgba(255, 94, 0, 1)', // 黄色箭头
       },
@@ -113,13 +113,14 @@ export const arrow: TestCase = async (options) => {
     )
     .shape('line')
     .size(6)
-    .color('#ffffff')
+    .color('red')
     .style({
       arrow: {
         enable: true,
-        count: 2,
-        width: 0.003,
-        height: 0.004,
+        spacing: 30, // 间距 (像素)
+        width: 10, // 宽度 (像素)
+        length: 5, // 长度 (像素)
+        strokeWidth: 5,
       },
     });
 

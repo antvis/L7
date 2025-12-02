@@ -166,7 +166,7 @@ Support for displaying direction arrows on line layers, commonly used for naviga
 | enable      | boolean | Whether to show arrows      |
 | spacing     | number  | Arrow spacing (pixels)      |
 | width       | number  | Arrow width (pixels)        |
-| height      | number  | Arrow height (pixels)       |
+| length      | number  | Arrow length (pixels)       |
 | strokeWidth | number  | Arrow stroke width (pixels) |
 | color       | string  | Arrow color (CSS color)     |
 
