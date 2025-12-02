@@ -159,7 +159,7 @@ void main() {
       float halfWidthAtU = (1.0 - u) * 0.5; // [0, 0.5]
       
       // 箭头线条粗细 (归一化单位,相对于箭头宽度)
-      float strokeWidth = u_arrow_strokeWidth / arrowWidthPx;
+      float strokeWidth = u_arrow_strokeWidth / max(arrowWidthPx, 1.0);
       
       // 判断是否在箭头线条上
       float distToEdge = abs(abs(vOffset) - halfWidthAtU);
