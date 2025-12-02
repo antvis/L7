@@ -16,6 +16,7 @@ import {
   primitiveSphere,
 } from '../earth/utils';
 import ExtrudePolyline from '../utils/extrude_polyline';
+import type { ILineLayerStyleOptions } from './interface';
 import type { IPosition, ShapeType2D, ShapeType3D } from './shape/Path';
 import { geometryShape } from './shape/Path';
 import type { IExtrudeGeomety } from './shape/extrude';
@@ -88,13 +89,11 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
  * @param feature 映射feature
  * @param styleOption 样式配置(从 buildLayerModel 传入)
  */
-export function LineTriangulation(feature: IEncodeFeature, styleOption?: any) {
+export function LineTriangulation(
+  feature: IEncodeFeature,
+  styleOption?: Partial<ILineLayerStyleOptions>,
+) {
   const { coordinates } = feature;
-
-  // let path = coordinates as number[][][] | number[][];
-  // if (!Array.isArray(path[0][0])) {
-  //   path = [coordinates] as number[][][];
-  // }
 
   const line = new ExtrudePolyline({
     dash: true,
