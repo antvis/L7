@@ -4,8 +4,10 @@ import type { DragMoveHandler, DragPitchResult, DragRotateResult } from './drag_
 import { DragHandler } from './drag_handler';
 import { OneFingerTouchMoveStateManager } from './drag_move_state_manager';
 
-export interface OneFingerTouchRotateHandler
-  extends DragMoveHandler<DragRotateResult, TouchEvent> {}
+export interface OneFingerTouchRotateHandler extends DragMoveHandler<
+  DragRotateResult,
+  TouchEvent
+> {}
 export interface OneFingerTouchPitchHandler extends DragMoveHandler<DragPitchResult, TouchEvent> {}
 
 const assignEvents = (handler: DragHandler<DragRotateResult, TouchEvent>) => {

@@ -95,8 +95,10 @@ export interface IEncodeFeature {
   [key: string]: any;
 }
 
-export interface IVertexAttributeDescriptor
-  extends Omit<IAttributeInitializationOptions, 'buffer'> {
+export interface IVertexAttributeDescriptor extends Omit<
+  IAttributeInitializationOptions,
+  'buffer'
+> {
   /**
    * attribute name in vertex shader
    */

@@ -211,7 +211,6 @@ export class TwoFingersTouchRotateHandler extends TwoFingersTouchHandler {
     this._minDiameter = points[0].dist(points[1]);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _move(points: [Point, Point], pinchAround: Point | null, _e: TouchEvent): HandlerResult | void {
     const lastVector = this._vector!;
     this._vector = points[0].sub(points[1]);
