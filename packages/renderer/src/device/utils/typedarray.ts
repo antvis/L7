@@ -22,7 +22,6 @@ export type TypedArray =
   | Float32Array
   | Float64Array;
 
-// eslint-disable-next-line
 export function isTypedArray(x: any): x is TypedArray {
   return Object.prototype.toString.call(x) in dtypes;
 }

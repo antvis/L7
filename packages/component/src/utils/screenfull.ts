@@ -73,7 +73,6 @@ const eventNameMap = {
 };
 
 let screenfull: any = {
-  // eslint-disable-next-line default-param-last
   request(element = document.documentElement, options) {
     return new Promise((resolve, reject) => {
       const onFullScreenEntered = () => {

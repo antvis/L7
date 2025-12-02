@@ -113,7 +113,7 @@ export default class BaseTileLayer {
 
   private bindTilesetEvent() {
     // 瓦片数据加载成功
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     this.tilesetManager.on('tile-loaded', (tile: SourceTile) => {
       // 将事件抛出，图层上可以监听使用
     });
@@ -125,7 +125,7 @@ export default class BaseTileLayer {
     });
 
     // 瓦片数据加载失败
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     this.tilesetManager.on('tile-error', (error, tile: SourceTile) => {
       // 将事件抛出，图层上可以监听使用
       this.tileError(error);
@@ -160,7 +160,6 @@ export default class BaseTileLayer {
   //  防抖操作
   public viewchange = debounce(this.mapchange, 24);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public tileLoaded(tile: SourceTile) {
     //
   }
@@ -227,7 +226,6 @@ export default class BaseTileLayer {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setPickState(layers: ILayer[]) {
     return;
   }

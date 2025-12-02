@@ -120,7 +120,7 @@ export default class ThreeJSLayer
    * @param object
    * @returns
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public getObjectLngLat(object: Object3D) {
     return [0, 0] as ILngLat;
   }

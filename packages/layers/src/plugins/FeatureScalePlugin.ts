@@ -99,7 +99,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
         const fieldValue = attribute!.scale!.field;
         attributeScale.names = this.parseFields(isNil(fieldValue) ? [] : fieldValue);
         const scales: IStyleScale[] = [];
@@ -213,7 +213,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       return styleScale;
     }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const firstValue = data!.find((d) => !isNil(d[field]))?.[field];
     // 常量 Scale
     if (this.isNumber(field) || (isNil(firstValue) && !scaleOption)) {

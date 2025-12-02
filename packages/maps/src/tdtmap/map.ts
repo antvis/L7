@@ -272,7 +272,7 @@ export default class TdtMapService extends BaseMapService<any> {
       offProxy(EventMap[type] || type);
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public once(type: string, handler: (...args: any[]) => void): void {
     throw new Error('Method not implemented.');
   }
