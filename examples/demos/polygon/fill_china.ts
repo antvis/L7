@@ -39,20 +39,6 @@ export const fillChina: TestCase = async (options) => {
     }
     return false;
   });
-
-  const color = [
-    '#a50026',
-    '#d73027',
-    '#f46d43',
-    '#fdae61',
-    '#fee090',
-    '#ffffbf',
-    '#e0f3f8',
-    '#abd9e9',
-    '#74add1',
-    '#4575b4',
-    '#313695',
-  ];
   // 行政区划填充色
   const fillLayer = new PolygonLayer({
     autoFit: true,
