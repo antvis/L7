@@ -88,7 +88,7 @@ export function PointImageTriangulation(feature: IEncodeFeature) {
  * @param feature 映射feature
  * @param styleOption 样式配置(从 buildLayerModel 传入)
  */
-export function LineTriangulation(feature: IEncodeFeature, styleOption?: any) {
+export function LineTriangulation(feature: IEncodeFeature, styleOption?: Partial<import('./interface').ILineLayerStyleOptions>) {
   const { coordinates } = feature;
 
   // let path = coordinates as number[][][] | number[][];
