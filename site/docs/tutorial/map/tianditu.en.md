@@ -28,7 +28,7 @@ const scene = new Scene({
 });
 scene.on('loaded', () => {
   // 底图服务
-  const baseLayer = new RasterLayer({ zIndex: 1 });
+  const baseLayer = new RasterLayer({ zIndex: 1 })
   .source(
     'https://t1.tianditu.gov.cn/DataServer?T=vec_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
     {
@@ -39,7 +39,7 @@ scene.on('loaded', () => {
     }
   );
   // 注记服务
-  const annotionLayer = new RasterLayer({ zIndex: 2 });
+  const annotionLayer = new RasterLayer({ zIndex: 2 })
   .source(
     'https://t1.tianditu.gov.cn/DataServer?T=cva_w&X={x}&Y={y}&L={z}&tk=6557fd8a19b09d6e91ae6abf9d13ccbd',
     {
