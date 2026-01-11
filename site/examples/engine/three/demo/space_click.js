@@ -3,7 +3,9 @@ import { GaodeMap } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import { animate, easeInOut } from 'popmotion';
 import * as THREE from 'three';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 function changeValue(startValue, endValue, duration = 500, callback, complete) {
   if (typeof startValue === 'number') {
@@ -109,7 +111,9 @@ scene.on('loaded', () => {
 
         const geometry = new THREE.PlaneGeometry(s, s, 255, 255);
 
-        geometry.vertices.map((v, i) => {
+        const positionAttribute = geometry.attributes.position;
+        const positions = positionAttribute.array;
+        for (let i = 0; i < positionAttribute.count; i++) {
           const r = heightData[i * 4];
           const g = heightData[i * 4 + 1];
           const b = heightData[i * 4 + 2];
@@ -117,9 +121,10 @@ scene.on('loaded', () => {
           h = h / 20 - 127600;
           h = Math.max(0, h);
 
-          v.z = h;
-          return '';
-        });
+          positions[i * 3 + 2] = h;
+        }
+        positionAttribute.needsUpdate = true;
+        geometry.computeVertexNormals();
         const material = new THREE.MeshPhongMaterial({
           transparent: true,
           // opacity: 0.6,
@@ -228,23 +233,22 @@ scene.on('loaded', () => {
           return '';
         },
       );
-      console.log(THREE.FontLoader);
-      const textLoader = new THREE.FontLoader();
+      const textLoader = new FontLoader();
       textLoader.load(
         'https://gw.alipayobjects.com/os/bmw-prod/0a3f46eb-294e-4d95-87f2-052c26ad4bf1.json',
         (font) => {
           const fontOptions = {
             size: 360, // 字号大小，一般为大写字母的高度
-            height: 50, // 文字的厚度
+            depth: 50, // 文字的厚度
             font, // 字体，默认是'helvetiker'，需对应引用的字体文件
             bevelThickness: 10, // 倒角厚度
             bevelSize: 10, // 倒角宽度
             curveSegments: 30, // 弧线分段数，使得文字的曲线更加光滑
             bevelEnabled: true, // 布尔值，是否使用倒角，意为在边缘处斜切
           };
-          const aspaceGeo = new THREE.TextGeometry('ASpace', fontOptions);
+          const aspaceGeo = new TextGeometry('ASpace', fontOptions);
           aspaceGeo.center();
-          const zspaceGeo = new THREE.TextGeometry('ZSpace', fontOptions);
+          const zspaceGeo = new TextGeometry('ZSpace', fontOptions);
           zspaceGeo.center();
 
           const fontMat = new THREE.MeshPhongMaterial({

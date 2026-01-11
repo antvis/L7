@@ -120,7 +120,7 @@ export default class ThreeJSLayer
    * @param object
    * @returns
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public getObjectLngLat(object: Object3D) {
     return [0, 0] as ILngLat;
   }
@@ -177,7 +177,7 @@ export default class ThreeJSLayer
 
     // threejs 的 renderer
     const renderer = this.threeRenderService.renderer;
-    renderer.state.reset();
+    renderer.resetState();
     renderer.autoClear = false;
 
     // 获取相机 （不同的地图获取对应的方式不同）
@@ -200,7 +200,7 @@ export default class ThreeJSLayer
     // gl.cullFace(gl.BACK);
     this.rendererService.setCustomLayerDefaults();
     const renderer = this.threeRenderService.renderer;
-    renderer.state.reset();
+    renderer.resetState();
     renderer.autoClear = false;
     renderer.render(this.scene, this.threeRenderService.getRenderCamera());
     this.animateMixer.forEach((mixer: AnimationMixer) => {

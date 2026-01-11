@@ -1,6 +1,12 @@
 import type { IMapService, IMercator, IRendererService } from '@antv/l7';
 import type { Camera } from 'three';
-import { Matrix4, PerspectiveCamera, Scene as ThreeScene, WebGLRenderer } from 'three';
+import {
+  Matrix4,
+  PerspectiveCamera,
+  SRGBColorSpace,
+  Scene as ThreeScene,
+  WebGLRenderer,
+} from 'three';
 
 export interface IThreeRenderService {
   renderer: WebGLRenderer;
@@ -48,10 +54,10 @@ export class ThreeRenderService implements IThreeRenderService {
     });
 
     this.renderer.autoClear = false;
-    // 是否需要 gamma correction?
-    this.renderer.gammaFactor = 2.2;
+    // 统一输出色彩空间（替代已废弃的 gammaFactor）
+    this.renderer.outputColorSpace = SRGBColorSpace;
     this.renderer.shadowMap.enabled = true;
-    // this.renderer.shadowMap.type = PCFSoftShadowMap;
+    // this.renderer.shadowMap.type = PCFShadowMap;
 
     this.scene = new ThreeScene();
 
@@ -77,7 +83,8 @@ export class ThreeRenderService implements IThreeRenderService {
       // @ts-ignore
       this.mapService.map.transform.customLayerMatrix(),
     );
-    this.camera.projectionMatrix = mercatorMatrix.multiply(this.cameraTransform);
+    this.camera.projectionMatrix.copy(mercatorMatrix.multiply(this.cameraTransform));
+    this.camera.projectionMatrixInverse.copy(this.camera.projectionMatrix).invert();
     return this.camera;
   }
 
@@ -102,6 +109,8 @@ export class ThreeRenderService implements IThreeRenderService {
     camera.lookAt(...lookAt);
     // @ts-ignore
     camera.updateProjectionMatrix();
+    camera.updateMatrixWorld(true);
+    camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
 
     return camera;
   }

@@ -28,7 +28,7 @@ scene.on('loaded', () => {
 
       const center = scene.getCenter();
 
-      const cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
+      const cubeGeometry = new THREE.BoxGeometry(10000, 10000, 10000);
       const cubeMaterial = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide });
       const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
       layer.setObjectLngLat(cube, [center.lng + 0.05, center.lat], 0);
