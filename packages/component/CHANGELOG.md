@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.23.2
+
+### Patch Changes
+
+- [`a3e9a44`](https://github.com/antvis/L7/commit/a3e9a440e43030a297ee8dd32aabb32c10624e7d) Thanks [@lzxue](https://github.com/lzxue)! - rename source
+
+- Updated dependencies [[`a3e9a44`](https://github.com/antvis/L7/commit/a3e9a440e43030a297ee8dd32aabb32c10624e7d)]:
+  - @antv/l7-core@2.23.2
+  - @antv/l7-layers@2.23.2
+  - @antv/l7-utils@2.23.2
+
 ## 2.23.1
 
 ### Patch Changes
