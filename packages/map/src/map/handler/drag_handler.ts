@@ -63,9 +63,10 @@ export type DragMoveHandlerOptions<T, E extends Event> = {
 /**
  * A generic class to create handlers for drag events, from both mouse and touch events.
  */
-export class DragHandler<T extends DragMovementResult, E extends Event>
-  implements DragMoveHandler<T, E>
-{
+export class DragHandler<T extends DragMovementResult, E extends Event> implements DragMoveHandler<
+  T,
+  E
+> {
   // Event handlers that may be assigned by the implementations of this class
   contextmenu?: Handler['contextmenu'];
   mousedown?: Handler['mousedown'];

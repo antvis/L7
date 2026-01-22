@@ -17,9 +17,9 @@ const { camelCase, isNil, upperFirst } = lodashUtil;
  *
  * 约定使用 u_Texture 传递渲染纹理。
  */
-export default class BasePostProcessingPass<InitializationOptions = {}>
-  implements IPostProcessingPass<InitializationOptions>
-{
+export default class BasePostProcessingPass<
+  InitializationOptions = {},
+> implements IPostProcessingPass<InitializationOptions> {
   protected shaderModuleService: IShaderModuleService;
   protected rendererService: IRendererService;
 
