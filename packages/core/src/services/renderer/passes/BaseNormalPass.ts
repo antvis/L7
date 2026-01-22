@@ -10,9 +10,9 @@ import type { IRendererService } from '../IRendererService';
 /**
  * 常规 Pass 基类
  */
-export default class BaseNormalPass<InitializationOptions = {}>
-  implements IPass<InitializationOptions>
-{
+export default class BaseNormalPass<
+  InitializationOptions = {},
+> implements IPass<InitializationOptions> {
   protected shaderModuleService: IShaderModuleService;
 
   protected rendererService: IRendererService;
@@ -41,7 +41,6 @@ export default class BaseNormalPass<InitializationOptions = {}>
     this.shaderModuleService = layer.getContainer().shaderModuleService;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public render(layer: ILayer) {
     //
   }
