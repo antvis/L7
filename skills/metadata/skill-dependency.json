@@ -1,0 +1,122 @@
+{
+  "scene-initialization": {
+    "requires": [],
+    "optional": [],
+    "conflicts": [],
+    "nextSteps": ["point-layer", "line-layer", "polygon-layer"]
+  },
+  "point-layer": {
+    "requires": ["scene-initialization"],
+    "optional": ["source-geojson", "color-mapping", "size-mapping"],
+    "conflicts": [],
+    "nextSteps": ["event-handling", "popup"]
+  },
+  "line-layer": {
+    "requires": ["scene-initialization"],
+    "optional": ["source-geojson", "color-mapping", "trajectory-animation"],
+    "conflicts": [],
+    "nextSteps": ["event-handling", "popup"]
+  },
+  "polygon-layer": {
+    "requires": ["scene-initialization"],
+    "optional": ["source-geojson", "color-mapping"],
+    "conflicts": [],
+    "nextSteps": ["event-handling", "popup", "highlight-select"]
+  },
+  "heatmap-layer": {
+    "requires": ["scene-initialization"],
+    "optional": ["source-geojson", "aggregation"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "event-handling": {
+    "requires": ["scene-initialization"],
+    "optional": ["popup", "marker", "highlight-select"],
+    "conflicts": [],
+    "nextSteps": ["popup", "highlight-select"]
+  },
+  "popup": {
+    "requires": ["scene-initialization"],
+    "optional": ["event-handling"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "marker": {
+    "requires": ["scene-initialization"],
+    "optional": [],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "color-mapping": {
+    "requires": [],
+    "optional": ["categorical-scale", "quantitative-scale"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "size-mapping": {
+    "requires": [],
+    "optional": ["quantitative-scale"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "layer-animation": {
+    "requires": [],
+    "optional": [],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "trajectory-animation": {
+    "requires": ["line-layer"],
+    "optional": ["layer-animation"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "vector-tile": {
+    "requires": ["scene-initialization"],
+    "optional": ["performance-optimization"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "data-filtering": {
+    "requires": [],
+    "optional": [],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "aggregation": {
+    "requires": [],
+    "optional": ["heatmap-layer"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "city-visualization": {
+    "requires": ["scene-initialization", "polygon-layer", "point-layer", "event-handling", "popup"],
+    "optional": ["line-layer", "controls"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "trajectory-visualization": {
+    "requires": ["scene-initialization", "line-layer", "trajectory-animation"],
+    "optional": ["marker", "popup"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "district-visualization": {
+    "requires": ["scene-initialization", "polygon-layer", "event-handling"],
+    "optional": ["popup", "legend", "highlight-select"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "heatmap-analysis": {
+    "requires": ["scene-initialization", "heatmap-layer"],
+    "optional": ["legend", "controls"],
+    "conflicts": [],
+    "nextSteps": []
+  },
+  "od-flow-visualization": {
+    "requires": ["scene-initialization", "line-layer"],
+    "optional": ["trajectory-animation", "point-layer"],
+    "conflicts": [],
+    "nextSteps": []
+  }
+}
