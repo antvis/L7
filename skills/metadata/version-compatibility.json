@@ -1,0 +1,65 @@
+{
+  "l7Version": "2.x",
+  "skills": {
+    "scene-initialization": {
+      "minVersion": "2.0.0",
+      "deprecated": false,
+      "breaking_changes": {
+        "2.0.0": "API 重构，不兼容 1.x 版本"
+      }
+    },
+    "point-layer": {
+      "minVersion": "2.0.0",
+      "deprecated": false,
+      "breaking_changes": {}
+    },
+    "line-layer": {
+      "minVersion": "2.0.0",
+      "deprecated": false,
+      "breaking_changes": {}
+    },
+    "polygon-layer": {
+      "minVersion": "2.0.0",
+      "deprecated": false,
+      "breaking_changes": {}
+    },
+    "heatmap-layer": {
+      "minVersion": "2.0.0",
+      "deprecated": false,
+      "breaking_changes": {}
+    },
+    "mask-layer": {
+      "minVersion": "2.7.2",
+      "deprecated": false,
+      "notes": "需要在 Scene 初始化时设置 stencil: true"
+    },
+    "vector-tile": {
+      "minVersion": "2.5.0",
+      "deprecated": false,
+      "notes": "需要在 Scene 初始化时设置 stencil: true"
+    },
+    "layer-animation": {
+      "minVersion": "2.0.0",
+      "deprecated": false,
+      "breaking_changes": {
+        "2.9.0": "动画配置参数调整"
+      }
+    }
+  },
+  "dependencies": {
+    "@antv/l7": "^2.0.0",
+    "@antv/l7-maps": "^2.0.0"
+  },
+  "browsers": {
+    "chrome": ">=60",
+    "firefox": ">=60",
+    "safari": ">=12",
+    "edge": ">=79"
+  },
+  "notes": [
+    "L7 2.x 版本不兼容 1.x",
+    "建议使用 2.11.0 及以上版本",
+    "WebGL 1.0 最低要求",
+    "部分功能需要 WebGL 2.0 支持"
+  ]
+}
