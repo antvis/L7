@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 
 ## 代码示例
 
@@ -444,10 +444,10 @@ layer.on('click', async (e) => {
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
-- [事件处理](../05-interaction/event-handling.md)
-- [标注组件](./marker.md)
-- [点图层](../03-layers/point-layer.md)
+- [场景初始化](../core/scene.md)
+- [事件处理](./events.md)
+- [标注组件](./components.md)
+- [点图层](../layers/point.md)
 
 ## 在线示例
 

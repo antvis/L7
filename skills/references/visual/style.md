@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 已创建图层实例
 
 ## 代码示例
@@ -571,10 +571,10 @@ scene.addLayer(labelLayer);
 ## 相关技能
 
 - [视觉映射](./mapping.md)
-- [图层动画](../06-animation/layer-animation.md)
-- [点图层](../03-layers/point-layer.md)
-- [线图层](../03-layers/line-layer.md)
-- [面图层](../03-layers/polygon-layer.md)
+- [图层动画](../animation/layer-animation.md)
+- [点图层](../layers/point.md)
+- [线图层](../layers/line.md)
+- [面图层](../layers/polygon.md)
 
 ## 在线示例
 

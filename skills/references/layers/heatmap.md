@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好点位数据（包含经纬度和权重值）
 
 ## 输入参数
@@ -417,10 +417,10 @@ A: 调整地图的 `padding` 或使用 `fitBounds()` 方法
 
 ## 相关技能
 
-- [点图层](./point-layer.md)
-- [面图层](./polygon-layer.md)
-- [数据映射](../04-visual/color-mapping.md)
-- [数据聚合](../02-data/data-aggregation.md)
+- [点图层](./point.md)
+- [面图层](./polygon.md)
+- [数据映射](../visual/mapping.md)
+- [数据聚合](../data/source-parser.md)
 
 ## 在线示例
 
