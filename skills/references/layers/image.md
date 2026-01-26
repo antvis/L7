@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好图片 URL 或 Base64 数据
 - 确定图片的地理边界坐标（四个角点）
 
@@ -522,10 +522,10 @@ const fadeIn = setInterval(() => {
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
-- [栅格图层](./raster-layer.md)
-- [瓦片图层](./tile-layer.md)
-- [事件处理](../05-interaction/event-handling.md)
+- [场景初始化](../core/scene.md)
+- [栅格图层](raster.md)
+- [瓦片图层](raster.md)
+- [事件处理](../interaction/events.md)
 
 ## 在线示例
 

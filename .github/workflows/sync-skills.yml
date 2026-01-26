@@ -76,10 +76,10 @@ jobs:
       - name: Sync skills directory
         run: |
           # 删除目标目录下的旧文件
-          rm -rf target-repo/l7
+          rm -rf target-repo/skills
           
           # 创建目标目录
-          mkdir -p target-repo/l7
+          mkdir -p target-repo/skills
           
           # 只复制允许的文件类型
           rsync -av --include='*/' \
@@ -89,11 +89,11 @@ jobs:
             --include='*.yaml' \
             --include='*.txt' \
             --exclude='*' \
-            skills/ target-repo/l7/
+            skills/ target-repo/skills/
           
           # 显示同步的文件
           echo "✅ 同步的文件:"
-          find target-repo/l7 -type f | sort
+          find target-repo/skills -type f | sort
 
       - name: Create Pull Request
         run: |
@@ -112,7 +112,7 @@ jobs:
           git checkout -b "$BRANCH_NAME"
           
           # 提交变更
-          git add l7/
+          git add skills/
           git commit -m "chore: sync L7 skills from antvis/L7
 
           Auto-synced from https://github.com/antvis/L7/tree/${{ github.sha }}/skills
@@ -143,7 +143,7 @@ jobs:
           
           ## 文件列表
           
-          $(find l7 -type f | sort | sed 's/^/- /')
+          $(find skills -type f | sort | sed 's/^/- /')
           
           ---
           
