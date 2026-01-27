@@ -37,6 +37,56 @@ version: 2.x
 | `water`   | 水面效果 | 湖泊、海洋         |
 | `ocean`   | 海洋效果 | 全球海洋           |
 
+## 通用方法
+
+面图层继承了所有图层的通用能力，以下是最常用的方法：
+
+### 显示控制
+
+```javascript
+// 显示/隐藏图层
+polygonLayer.show();
+polygonLayer.hide();
+
+// 设置图层顺序（面图层通常在底层）
+polygonLayer.setIndex(1);
+
+// 缩放到图层范围
+polygonLayer.fitBounds();
+```
+
+### 事件监听
+
+```javascript
+// 点击区域
+polygonLayer.on('click', (e) => {
+  console.log('区域名称:', e.feature.properties.name);
+  console.log('区域数据:', e.feature);
+});
+
+// 鼠标悬停高亮
+polygonLayer.on('mousemove', (e) => {
+  // 高亮当前区域
+});
+
+polygonLayer.on('mouseout', () => {
+  // 取消高亮
+});
+```
+
+### 数据过滤
+
+```javascript
+// 只显示特定省份
+polygonLayer.filter((feature) => {
+  return ['浙江省', '江苏省', '上海市'].includes(feature.name);
+});
+```
+
+> 📖 **完整文档**：查看 [图层通用方法和事件](./layer-common-api.md) 了解所有通用 API。
+
+---
+
 ## 代码示例
 
 ### 基础用法 - 区域填充
@@ -461,6 +511,7 @@ layer.style({
 
 ## 相关技能
 
+- [图层通用方法和事件](./layer-common-api.md)
 - [场景初始化](../core/scene.md)
 - [线图层（描边）](./line.md)
 - [颜色映射](../visual/mapping.md)
