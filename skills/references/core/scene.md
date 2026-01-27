@@ -346,12 +346,12 @@ scene.on('destroy', () => {
 
 - [场景生命周期管理](./scene-lifecycle.md)
 - [场景方法](./scene-methods.md)
-- [添加图层](../03-layers/point-layer.md)
+- [添加图层](../layers/point.md)
 
 ## 下一步
 
 场景初始化完成后，你可以：
 
-1. [添加点图层显示数据](../03-layers/point-layer.md)
-2. [添加交互控件](../06-components/controls.md)
-3. [处理用户交互事件](../05-interaction/event-handling.md)
+1. [添加点图层显示数据](../layers/point.md)
+2. [添加交互控件](../interaction/components.md)
+3. [处理用户交互事件](../interaction/events.md)

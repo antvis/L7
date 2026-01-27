@@ -476,10 +476,9 @@ layer.on('click', (e) => {
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
-- [高亮选中](./highlight-select.md)
-- [弹窗组件](../06-components/popup.md)
-- [标注组件](../06-components/marker.md)
+- [场景初始化](../core/scene.md)
+- [弹窗组件](./popup.md)
+- [标注组件](./components.md)
 
 ## 在线示例
 

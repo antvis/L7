@@ -25,7 +25,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好面数据（通常是 GeoJSON 格式）
 
 ## 面类型
@@ -36,6 +36,56 @@ version: 2.x
 | `extrude` | 3D 挤出  | 建筑、人口柱状图   |
 | `water`   | 水面效果 | 湖泊、海洋         |
 | `ocean`   | 海洋效果 | 全球海洋           |
+
+## 通用方法
+
+面图层继承了所有图层的通用能力，以下是最常用的方法：
+
+### 显示控制
+
+```javascript
+// 显示/隐藏图层
+polygonLayer.show();
+polygonLayer.hide();
+
+// 设置图层顺序（面图层通常在底层）
+polygonLayer.setIndex(1);
+
+// 缩放到图层范围
+polygonLayer.fitBounds();
+```
+
+### 事件监听
+
+```javascript
+// 点击区域
+polygonLayer.on('click', (e) => {
+  console.log('区域名称:', e.feature.properties.name);
+  console.log('区域数据:', e.feature);
+});
+
+// 鼠标悬停高亮
+polygonLayer.on('mousemove', (e) => {
+  // 高亮当前区域
+});
+
+polygonLayer.on('mouseout', () => {
+  // 取消高亮
+});
+```
+
+### 数据过滤
+
+```javascript
+// 只显示特定省份
+polygonLayer.filter((feature) => {
+  return ['浙江省', '江苏省', '上海市'].includes(feature.name);
+});
+```
+
+> 📖 **完整文档**：查看 [图层通用方法和事件](./layer-common-api.md) 了解所有通用 API。
+
+---
 
 ## 代码示例
 
@@ -461,13 +511,13 @@ layer.style({
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
-- [线图层（描边）](./line-layer.md)
-- [颜色映射](../04-visual/color-mapping.md)
-- [事件交互](../05-interaction/event-handling.md)
-- [高亮选中](../05-interaction/highlight-select.md)
-- [添加弹窗](../06-components/popup.md)
-- [添加图例](../06-components/legend.md)
+- [图层通用方法和事件](./layer-common-api.md)
+- [场景初始化](../core/scene.md)
+- [线图层（描边）](./line.md)
+- [颜色映射](../visual/mapping.md)
+- [事件交互](../interaction/events.md)
+- [添加弹窗](../interaction/popup.md)
+- [添加图例](../interaction/components.md)
 
 ## 在线示例
 

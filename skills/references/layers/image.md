@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好图片 URL 或 Base64 数据
 - 确定图片的地理边界坐标（四个角点）
 
@@ -56,6 +56,50 @@ interface ImageData {
 ## 输出
 
 返回 `ImageLayer` 实例
+
+## 通用方法
+
+图片图层继承了所有图层的通用能力：
+
+### 显示控制
+
+```javascript
+// 显示/隐藏图层
+imageLayer.show();
+imageLayer.hide();
+
+// 检查可见性
+if (imageLayer.isVisible()) {
+  console.log('图片可见');
+}
+
+// 设置图层顺序
+imageLayer.setIndex(5);
+```
+
+### 事件监听
+
+```javascript
+// 点击图片区域
+imageLayer.on('click', (e) => {
+  console.log('点击位置:', e.lngLat);
+});
+```
+
+### 缩放和范围
+
+```javascript
+// 缩放到图片范围
+imageLayer.fitBounds();
+
+// 设置显示的缩放范围
+imageLayer.setMinZoom(8);
+imageLayer.setMaxZoom(16);
+```
+
+> 📖 **完整文档**：查看 [图层通用方法和事件](./layer-common-api.md) 了解所有通用 API。
+
+---
 
 ## 代码示例
 
@@ -522,10 +566,11 @@ const fadeIn = setInterval(() => {
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
-- [栅格图层](./raster-layer.md)
-- [瓦片图层](./tile-layer.md)
-- [事件处理](../05-interaction/event-handling.md)
+- [图层通用方法和事件](./layer-common-api.md)
+- [场景初始化](../core/scene.md)
+- [栅格图层](raster.md)
+- [瓦片图层](raster.md)
+- [事件处理](../interaction/events.md)
 
 ## 在线示例
 

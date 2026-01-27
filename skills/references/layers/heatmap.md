@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好点位数据（包含经纬度和权重值）
 
 ## 输入参数
@@ -53,6 +53,43 @@ interface HeatmapData {
 ## 输出
 
 返回 `HeatmapLayer` 实例
+
+## 通用方法
+
+热力图层继承了所有图层的通用能力：
+
+### 显示控制
+
+```javascript
+// 显示/隐藏图层
+heatmapLayer.show();
+heatmapLayer.hide();
+
+// 设置图层顺序（热力图通常在上层）
+heatmapLayer.setIndex(10);
+```
+
+### 事件监听
+
+```javascript
+// 点击热力区域
+heatmapLayer.on('click', (e) => {
+  console.log('点击位置:', e.lngLat);
+  console.log('热力值:', e.feature);
+});
+```
+
+### 缩放范围
+
+```javascript
+// 只在特定缩放级别显示热力图
+heatmapLayer.setMinZoom(10); // 小于 10 级不显示
+heatmapLayer.setMaxZoom(18); // 大于 18 级不显示
+```
+
+> 📖 **完整文档**：查看 [图层通用方法和事件](./layer-common-api.md) 了解所有通用 API。
+
+---
 
 ## 代码示例
 
@@ -417,10 +454,11 @@ A: 调整地图的 `padding` 或使用 `fitBounds()` 方法
 
 ## 相关技能
 
-- [点图层](./point-layer.md)
-- [面图层](./polygon-layer.md)
-- [数据映射](../04-visual/color-mapping.md)
-- [数据聚合](../02-data/data-aggregation.md)
+- [图层通用方法和事件](./layer-common-api.md)
+- [点图层](./point.md)
+- [面图层](./polygon.md)
+- [数据映射](../visual/mapping.md)
+- [数据聚合](../data/source-parser.md)
 
 ## 在线示例
 

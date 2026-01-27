@@ -556,8 +556,8 @@ fetch('/data/cities.csv')
 - [GeoJSON 数据源](./source-geojson.md)
 - [JSON 数据源](./source-json.md)
 - [数据解析配置](./source-parser.md)
-- [点图层](../03-layers/point-layer.md)
-- [线图层](../03-layers/line-layer.md)
+- [点图层](../layers/point.md)
+- [线图层](../layers/line.md)
 
 ## 参考资源
 

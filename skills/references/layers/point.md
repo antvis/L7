@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好点位数据（包含经纬度）
 
 ## 输入参数
@@ -52,6 +52,66 @@ interface PointData {
 ## 输出
 
 返回 `PointLayer` 实例
+
+## 通用方法
+
+点图层继承了所有图层的通用能力，以下是最常用的方法：
+
+### 显示控制
+
+```javascript
+// 显示/隐藏图层
+pointLayer.show();
+pointLayer.hide();
+
+// 检查可见性
+if (pointLayer.isVisible()) {
+  console.log('图层可见');
+}
+
+// 设置图层绘制顺序（数值越大越在上层）
+pointLayer.setIndex(10);
+```
+
+### 事件监听
+
+```javascript
+// 点击事件
+pointLayer.on('click', (e) => {
+  console.log('点击的点:', e.feature);
+  console.log('经纬度:', e.lngLat);
+});
+
+// 鼠标悬停
+pointLayer.on('mousemove', (e) => {
+  // 显示 tooltip
+});
+
+// 鼠标移出
+pointLayer.on('mouseout', () => {
+  // 隐藏 tooltip
+});
+```
+
+### 数据更新
+
+```javascript
+// 数据过滤
+pointLayer.filter((feature) => {
+  return feature.value > 100;
+});
+
+// 适配到数据范围
+pointLayer.fitBounds();
+
+// 设置缩放范围
+pointLayer.setMinZoom(10); // zoom < 10 时不显示
+pointLayer.setMaxZoom(18); // zoom > 18 时不显示
+```
+
+> 📖 **完整文档**：查看 [图层通用方法和事件](./layer-common-api.md) 了解所有通用 API，包括 source、scale、所有事件类型、聚合方法等。
+
+---
 
 ## 代码示例
 
@@ -400,7 +460,7 @@ layer.source(data.filter((d, i) => i % 10 === 0));
 layer.setMinZoom(10); // 只在 zoom >= 10 时显示
 
 // 3. 使用聚合
-// 参考: ../10-performance/aggregation.md
+// 参考: ../performance/optimization.md
 ```
 
 ### 3. 点的大小不一致
@@ -457,12 +517,13 @@ layer.setMaxZoom(15);
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
-- [GeoJSON 数据处理](../02-data/source-geojson.md)
-- [颜色映射](../04-visual/color-mapping.md)
-- [大小映射](../04-visual/size-mapping.md)
-- [事件交互](../05-interaction/event-handling.md)
-- [添加弹窗](../06-components/popup.md)
+- [图层通用方法和事件](./layer-common-api.md)
+- [场景初始化](../core/scene.md)
+- [GeoJSON 数据处理](../data/source-geojson.md)
+- [颜色映射](../visual/mapping.md)
+- [大小映射](../visual/mapping.md)
+- [事件交互](../interaction/events.md)
+- [添加弹窗](../interaction/popup.md)
 
 ## 在线示例
 

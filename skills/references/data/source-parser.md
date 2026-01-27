@@ -660,7 +660,7 @@ transforms: [
 - [GeoJSON 数据源](./source-geojson.md)
 - [CSV 数据源](./source-csv.md)
 - [JSON 数据源](./source-json.md)
-- [数据过滤](../10-performance/data-filtering.md)
+- [性能优化](../performance/optimization.md)
 
 ## 最佳实践
 

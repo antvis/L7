@@ -24,7 +24,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好瓦片服务 URL（XYZ 或 TMS 格式）
 - 了解瓦片服务的坐标系和缩放级别范围
 
@@ -597,9 +597,8 @@ A: L7 会自动缓存已加载的瓦片，可通过调整地图视角提前触�
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
+- [场景初始化](../core/scene.md)
 - [图片图层](./image.md)
-- [地图配置](../01-core/map-types.md)
 
 ## 在线示例
 

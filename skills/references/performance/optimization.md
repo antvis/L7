@@ -371,5 +371,5 @@ slider.addEventListener('input', (e) => {
 
 ## 相关文档
 
-- [data/parser.md](../data/parser.md) - 数据过滤和转换
+- [data/source-parser.md](../data/source-parser.md) - 数据过滤和转换
 - [layers/heatmap.md](../layers/heatmap.md) - 热力图聚合

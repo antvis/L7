@@ -25,7 +25,7 @@ version: 2.x
 
 ## 前置条件
 
-- 已完成[场景初始化](../01-core/scene-initialization.md)
+- 已完成[场景初始化](../core/scene.md)
 - 准备好线段数据
 
 ## 线类型
@@ -37,6 +37,51 @@ version: 2.x
 | `arc3d`       | 3D 弧线  | 长距离流向、航线 |
 | `greatcircle` | 大圆航线 | 跨越半球的航线   |
 | `wall`        | 墙/幕墙  | 3D 围栏效果      |
+
+## 通用方法
+
+线图层继承了所有图层的通用能力，以下是最常用的方法：
+
+### 显示控制
+
+```javascript
+// 显示/隐藏图层
+lineLayer.show();
+lineLayer.hide();
+
+// 设置图层绘制顺序
+lineLayer.setIndex(5);
+
+// 适配到数据范围
+lineLayer.fitBounds();
+```
+
+### 事件监听
+
+```javascript
+// 点击线段
+lineLayer.on('click', (e) => {
+  console.log('线段数据:', e.feature);
+});
+
+// 鼠标悬停高亮
+lineLayer.on('mousemove', (e) => {
+  lineLayer.setActive(e.feature.id);
+});
+```
+
+### 数据过滤
+
+```javascript
+// 只显示特定类型的线
+lineLayer.filter((feature) => {
+  return ['高速公路', '国道'].includes(feature.type);
+});
+```
+
+> 📖 **完整文档**：查看 [图层通用方法和事件](./layer-common-api.md) 了解所有通用 API。
+
+---
 
 ## 代码示例
 
@@ -525,11 +570,12 @@ scene.render();
 
 ## 相关技能
 
-- [场景初始化](../01-core/scene-initialization.md)
-- [点图层](./point-layer.md)
-- [轨迹动画](../07-animation/trajectory-animation.md)
-- [颜色映射](../04-visual/color-mapping.md)
-- [事件交互](../05-interaction/event-handling.md)
+- [图层通用方法和事件](./layer-common-api.md)
+- [场景初始化](../core/scene.md)
+- [点图层](./point.md)
+- [轨迹动画](../animation/layer-animation.md)
+- [颜色映射](../visual/mapping.md)
+- [事件交互](../interaction/events.md)
 
 ## 在线示例
 
