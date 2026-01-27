@@ -76,10 +76,17 @@ jobs:
       - name: Sync skills directory
         run: |
           # 删除目标目录下的旧文件
+<<<<<<< HEAD
           rm -rf target-repo/skills
           
           # 创建目标目录
           mkdir -p target-repo/skills
+=======
+          rm -rf target-repo/l7
+          
+          # 创建目标目录
+          mkdir -p target-repo/l7
+>>>>>>> b6ba984a767a618a22261ca94945f9dff49ff88a
           
           # 只复制允许的文件类型
           rsync -av --include='*/' \
@@ -89,11 +96,19 @@ jobs:
             --include='*.yaml' \
             --include='*.txt' \
             --exclude='*' \
+<<<<<<< HEAD
             skills/ target-repo/skills/
           
           # 显示同步的文件
           echo "✅ 同步的文件:"
           find target-repo/skills -type f | sort
+=======
+            skills/ target-repo/l7/
+          
+          # 显示同步的文件
+          echo "✅ 同步的文件:"
+          find target-repo/l7 -type f | sort
+>>>>>>> b6ba984a767a618a22261ca94945f9dff49ff88a
 
       - name: Create Pull Request
         run: |
@@ -112,7 +127,11 @@ jobs:
           git checkout -b "$BRANCH_NAME"
           
           # 提交变更
+<<<<<<< HEAD
           git add skills/
+=======
+          git add l7/
+>>>>>>> b6ba984a767a618a22261ca94945f9dff49ff88a
           git commit -m "chore: sync L7 skills from antvis/L7
 
           Auto-synced from https://github.com/antvis/L7/tree/${{ github.sha }}/skills
@@ -143,7 +162,11 @@ jobs:
           
           ## 文件列表
           
+<<<<<<< HEAD
           $(find skills -type f | sort | sed 's/^/- /')
+=======
+          $(find l7 -type f | sort | sed 's/^/- /')
+>>>>>>> b6ba984a767a618a22261ca94945f9dff49ff88a
           
           ---
           
