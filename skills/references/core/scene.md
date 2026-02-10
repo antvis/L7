@@ -256,6 +256,93 @@ const scene = new Scene({
 </html>
 ```
 
+### 纯 HTML CDN 加载方案
+
+直接通过 CDN 引入 L7，无需构建工具，适合快速原型开发和简单应用。
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>L7 CDN 示例</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- 引入 L7 库（自动获取最新版本） -->
+    <script src="https://gw.alipayobjects.com/render/p/hitu_npm/@antv/l7/latest/dist/l7.js"></script>
+
+    <script>
+      // L7 全局变量已自动注册，可以直接访问
+      const { Scene, GaodeMap, PointLayer } = window.L7;
+
+      const scene = new Scene({
+        id: 'map',
+        map: new GaodeMap({
+          style: 'dark',
+          center: [120.19382669582967, 30.258134],
+          pitch: 0,
+          zoom: 12,
+        }),
+      });
+
+      scene.on('loaded', () => {
+        console.log('场景加载完成');
+
+        // 示例：添加点图层
+        const data = [
+          { lng: 120.19, lat: 30.26, value: 10 },
+          { lng: 120.2, lat: 30.27, value: 20 },
+        ];
+
+        const pointLayer = new PointLayer()
+          .source(data, {
+            parser: {
+              type: 'json',
+              x: 'lng',
+              y: 'lat',
+            },
+          })
+          .shape('circle')
+          .size(8)
+          .color('#1890ff');
+
+        scene.addLayer(pointLayer);
+      });
+    </script>
+  </body>
+</html>
+```
+
+**CDN 方案的优点**：
+
+- ✅ 无需 npm 或构建工具
+- ✅ 快速集成到现有项目
+- ✅ 适合简单的数据可视化需求
+- ✅ CDN 提供的版本已包含常用的地图和图层
+
+**使用 CDN 时的注意事项**：
+
+- L7 对象挂载在全局 `window.L7` 下
+- CDN 已自动拉取最新版本，生产环境建议锁定具体版本号
+- 某些高级功能（如自定义着色器）可能需要额外配置
+
 ## 常见问题
 
 **地理地图**（GaodeMap、Mapbox、Maplibre）使用 **WGS84** 坐标系统（经纬度）：
