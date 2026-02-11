@@ -286,7 +286,7 @@ const scene = new Scene({
     <div id="map"></div>
 
     <!-- 引入 L7 库（自动获取最新版本） -->
-    <script src="https://gw.alipayobjects.com/render/p/hitu_npm/@antv/l7/latest/dist/l7.js"></script>
+    <script src="https://gw.alipayobjects.com/render/p/hitu_npm/@antv/l7/2.23.2/dist/l7.js"></script>
 
     <script>
       // L7 全局变量已自动注册，可以直接访问
