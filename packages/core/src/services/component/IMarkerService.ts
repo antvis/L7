@@ -42,6 +42,10 @@ export interface IMarker {
   setElement(el: HTMLElement): this;
   getMarkerLayerContainerSize: () => IMarkerContainerAndBounds | void;
   /**
+   * Update marker position based on current map state.
+   */
+  update(): void;
+  /**
    * Hide the marker visually without removing it from the layer/data.
    */
   hide(): void;

@@ -80,6 +80,16 @@ export interface ILineLayerStyleOptions extends IBaseLayerStyleOptions {
 
   symbol?: ILineSymbol;
 
+  // 箭头配置
+  arrow?: {
+    enable?: boolean; // 是否启用箭头
+    spacing?: number; // 箭头间距(像素单位)
+    width?: number; // 箭头宽度(像素单位)
+    length?: number; // 箭头长度(像素单位)
+    strokeWidth?: number; // 箭头线条宽度(像素单位,默认 2)
+    color?: string; // 箭头颜色,默认白色
+  };
+
   rampColors?: IColorRamp;
   featureId?: string;
   sourceLayer?: string;

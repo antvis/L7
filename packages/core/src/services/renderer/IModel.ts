@@ -56,7 +56,7 @@ type stencilOp =
   | gl.DECR
   | gl.INCR_WRAP
   | gl.DECR_WRAP;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 type BlendingFunctionCombined = Partial<{
   src:
     | gl.ZERO

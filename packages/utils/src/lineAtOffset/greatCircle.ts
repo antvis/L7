@@ -6,7 +6,7 @@ export function greatCircleLineAtOffset(
   target: Point,
   offset: number,
   thetaOffset: number | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   segmentNumber: number = 30,
   autoFit: boolean,
 ) {

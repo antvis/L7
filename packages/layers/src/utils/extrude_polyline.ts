@@ -2,7 +2,7 @@ import { aProjectFlat } from '@antv/l7-utils';
 import type { vec3 } from 'gl-matrix';
 import { vec2 } from 'gl-matrix';
 const tmp = vec2.create();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const capEnd = vec2.create();
 const lineA = vec2.create();
 const lineB = vec2.create();

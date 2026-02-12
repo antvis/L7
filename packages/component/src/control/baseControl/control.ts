@@ -178,7 +178,7 @@ export default class Control<O extends IControlOption = IControlOption>
   /**
    * 获取默认构造器参数
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public getDefault(option?: Partial<O>): O {
     // tslint:disable-next-line:no-object-literal-type-assertion
     return {

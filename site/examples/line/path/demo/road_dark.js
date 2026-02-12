@@ -20,8 +20,8 @@ scene.on('loaded', () => {
         .shape('line')
         .color('标准名称', ['#5B8FF9', '#5CCEA1', '#F6BD16'])
         .style({
-          borderWidth: 0.4,
-          borderColor: '#fff',
+          strokeWidth: 1,
+          stroke: '#fff',
         });
       scene.addLayer(layer);
     });

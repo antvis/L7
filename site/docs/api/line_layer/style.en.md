@@ -34,7 +34,7 @@ Universal`style`Parameters, parameters supported by all graphics.
 | style         | type                       | describe                                   | default value |
 | ------------- | -------------------------- | ------------------------------------------ | ------------- |
 | borderColor   | `string`                   | Graphic border color                       | `#fff`        |
-| borderWidth   | `number`                   | Graphic border radius                      | `0`           |
+| strokeWidth   | `number`                   | Graphic border radius                      | `0`           |
 | blur          | `[number, number, number]` | Graphic fuzzy distribution                 | `[1, 1, 1]`   |
 | raisingHeight | `number`                   | Lifting height                             | `0`           |
 | heightfixed   | `boolean`                  | Does the lifting height vary?`zoom`Variety | `false`       |
@@ -154,6 +154,43 @@ layer.style({
 | arrowWidth  | `number`       | Arrow width      | `2`           |
 | arrowHeight | `number`       | length of arrow  | `3`           |
 | tailWidth   | `number`       | Arrow tail width | `1`           |
+
+## Arrow Effect (`arrow`)
+
+Support for displaying direction arrows on line layers, commonly used for navigation and path indication.
+
+### Options
+
+| Property    | Type    | Description                 |
+| ----------- | ------- | --------------------------- |
+| enable      | boolean | Whether to show arrows      |
+| spacing     | number  | Arrow spacing (pixels)      |
+| width       | number  | Arrow width (pixels)        |
+| length      | number  | Arrow length (pixels)       |
+| strokeWidth | number  | Arrow stroke width (pixels) |
+| color       | string  | Arrow color (CSS color)     |
+
+### Effect Description
+
+- Arrows are V-shaped outlines, not solid triangles.
+- Arrows are overlaid on the line, and line/arrow colors can be set independently.
+- Suitable for navigation, path direction, and similar scenarios.
+
+### Example
+
+```ts
+layer.style({
+  color: '#0000FF', // line color
+  arrow: {
+    enable: true,
+    spacing: 80,
+    width: 30,
+    height: 40,
+    strokeWidth: 4,
+    color: '#FFFF00', // arrow color
+  },
+});
+```
 
 ### linear
 

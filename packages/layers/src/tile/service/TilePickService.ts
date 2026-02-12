@@ -127,7 +127,7 @@ export class TilePickService implements ITilePickService {
   }
 
   // Tip: for interface define
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public pickRasterLayer() {
     return false;
   }
