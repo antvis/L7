@@ -128,7 +128,7 @@ const scaleMap = {};
 
 ```typescript
 class ALayer {
-  private context: Object;
+  private context: object;
 
   private setOptionsAttr() {}
 }
@@ -207,7 +207,7 @@ class ALayer {
    * 我是干什么的
    * 我还能干什么
    */
-  public context: Object;
+  public context: object;
 }
 ```
 
@@ -223,7 +223,7 @@ function getMapCenter() {}
 class ALayer {
   // 我是干什么的
   // xxx
-  public context: Object;
+  public context: object;
 }
 ```
 
