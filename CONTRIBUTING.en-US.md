@@ -35,7 +35,7 @@ pnpm dev
 - `pnpm test:unit` Run unit tests
 - `pnpm test-cover` Run unit tests and view code coverage:
 - `pnpm test:integration` Run integration tests
-- `pnpm build` build source code pakages, output to umd, es and lib directory
+- `pnpm build` build source code packages, output to umd, es and lib directory
 
 ## 4.Style Guide
 
@@ -107,13 +107,13 @@ No one can guarantee how much will be remembered about certain PR after some tim
 
 4. If step 3 is successful, DingTalk will be notified, the robot will automatically merge the PR, and the new official website will be automatically deployed in the background.
 
-5. If step 3 fails, a DingTalk message will be notified. Go to GtiHub Action to check the reason for the failure.
+5. If step 3 fails, a DingTalk message will be notified. Go to GitHub Action to check the reason for the failure.
 
 ### 6.2.Manual version release
 
 1. Create a local `release` branch
-2. If there is no change set to be published, execute the `pnpm run changeset` script to create a change set for this version release, and execute the coomit change set
-3. Execute the `pnpm run version-packages` script, update the version number and Changelog of the package to be released, confirm the content and coomit
+2. If there is no change set to be published, execute the `pnpm run changeset` script to create a change set for this version release, and execute the commit change set
+3. Execute the `pnpm run version-packages` script, update the version number and changelog of the package to be released, confirm the content and commit
 4. Execute the `pnpm run publish-packages` script, which will publish the package to NPM and tag it to GitHub
 5. Merge the changes in the `release` branch to the release branch by submitting a PR
 6. Go to [GitHub Releases](https://github.com/antvis/L7/releases) to create a Release for this release. After the creation is completed, the new official website will be automatically deployed.

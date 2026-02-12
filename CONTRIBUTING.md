@@ -111,13 +111,13 @@ $ git push origin branch-name
 
 4. 第 3 步成功，会进行钉钉消息通知，机器人自动合并 PR，后台自动部署新官网
 
-5. 第 3 步失败，会进行钉钉消息通知，去 GtiHub Action 查看失败原因
+5. 第 3 步失败，会进行钉钉消息通知，去 GitHub Action 查看失败原因
 
 ### 6.2.手动版本发布
 
 1. 创建本地 `release` 分支
-2. 若没有要发布的变更集，执行 `pnpm run changeset` 脚本，创建本次版本发布变更集，执行完成 coomit 变更集
-3. 执行 `pnpm run version-packages` 脚本，更新要发布包的版本号和 Changelog，确认内容并 coomit
+2. 若没有要发布的变更集，执行 `pnpm run changeset` 脚本，创建本次版本发布变更集，执行完成 commit 变更集
+3. 执行 `pnpm run version-packages` 脚本，更新要发布包的版本号和 changelog，确认内容并 commit
 4. 执行 `pnpm run publish-packages` 脚本，会发布包到 NPM、打 tag 到 GitHub
 5. 将 `release` 分支变更内容，以提交 PR 方式合并到发布分支
 6. 去 [GitHub Releases](https://github.com/antvis/L7/releases) 创建本次发布的 Release，创建完成后会自动部署新官网
