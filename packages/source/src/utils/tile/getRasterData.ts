@@ -45,7 +45,8 @@ export const getRasterFile = async (
 };
 
 /**
- * get multi raster files async
+ * get multi raster files async (并行请求优化版本)
+ * 使用 Promise.all 并行请求多个波段文件，减少网络等待时间
  * @param tileBandParams
  * @param requestParameters
  * @returns
@@ -54,30 +55,47 @@ async function getMultiArrayBuffer(
   tileBandParams: ITileBand[],
   requestParameters: RequestParameters,
 ) {
-  const rasterFiles: IRasterFileData[] = [];
-  const xhrList: any[] = [];
-  const errList = [];
-
-  // tslint:disable-next-line: prefer-for-of
-  for (let i = 0; i < tileBandParams.length; i++) {
-    const tileBandParam = tileBandParams[i];
+  // 并行请求所有波段文件
+  const promises = tileBandParams.map(async (tileBandParam) => {
     const params = {
       ...requestParameters,
       url: tileBandParam.url,
     };
 
-    const bands = tileBandParam.bands;
     const { err, data, xhr } = await makeXMLHttpRequestPromise({
       ...params,
       type: 'arrayBuffer',
     });
-    if (err) {
-      errList.push(err);
-    }
-    xhrList.push(xhr);
-    rasterFiles.push({
+
+    return {
+      err,
       data,
-      bands,
+      xhr,
+      bands: tileBandParam.bands,
+    };
+  });
+
+  // 并行执行所有请求
+  const results = await Promise.all(promises);
+
+  const rasterFiles: IRasterFileData[] = [];
+  const xhrList: any[] = [];
+  const errList: Error[] = [];
+
+  // 处理结果
+  for (const result of results) {
+    if (result.err) {
+      // err 可能是单个 Error 或 Error[]
+      if (Array.isArray(result.err)) {
+        errList.push(...result.err);
+      } else {
+        errList.push(result.err);
+      }
+    }
+    xhrList.push(result.xhr);
+    rasterFiles.push({
+      data: result.data,
+      bands: result.bands,
     });
   }
 
