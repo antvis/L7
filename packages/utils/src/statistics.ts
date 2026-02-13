@@ -84,13 +84,18 @@ function mode(x: any[]) {
   return value * 1;
 }
 
-export { max, mean, min, mode, sum };
+function count(x: any[]) {
+  return x.length;
+}
+
+export { count, max, mean, min, mode, sum };
 export const statMap: { [key: string]: any } = {
   min,
   max,
   mean,
   sum,
   mode,
+  count,
 };
 export function getColumn(data: IItemData[], columnName: string) {
   return data.map((item: IItemData) => {
