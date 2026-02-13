@@ -18,7 +18,7 @@ There is no difference from the development of ordinary threejs applications.
 
 4\. L7 itself does not integrate threejs, so you need to install threejs independently when using the L7Three module.
 
-✨ Currently, the threejs compatibility officially provided by L7 is developed based on version 0.115.0. There may be compatibility issues when using other versions of threejs.
+✨ Currently, the threejs compatibility officially provided by L7 is developed based on version 0.182.0. There may be compatibility issues when using other versions of threejs.
 
 ## use
 
@@ -42,7 +42,7 @@ const threeJSLayer = new ThreeLayer({
 
     let center = scene.getCenter();
 
-    let cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
+    let cubeGeometry = new THREE.BoxGeometry(10000, 10000, 10000);
     let cubeMaterial = new THREE.MeshNormalMaterial();
     let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
