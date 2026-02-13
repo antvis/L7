@@ -1,10 +1,4 @@
-import type {
-  IInteractionTarget,
-  ILayer,
-  ILayerService,
-  ITile,
-  ITilePickService,
-} from '@antv/l7-core';
+import type { IInteractionTarget, ILayer, ILayerService, ITilePickService } from '@antv/l7-core';
 import { decodePickingColor, encodePickingColor } from '@antv/l7-utils';
 import type { TileLayerService } from './TileLayerService';
 import { TileSourceService } from './TileSourceService';
@@ -72,7 +66,9 @@ export class TilePickService implements ITilePickService {
   }
 
   public updateHighLight(r: number, g: number, b: number, type: string) {
-    this.tileLayerService.tiles.map((tile: ITile) => {
+    // 只遍历已加载的瓦片，跳过不可见的
+    for (const tile of this.tileLayerService.tiles) {
+      if (!tile.isLoaded) continue;
       const layer = tile.getMainLayer();
       switch (type) {
         case SELECT:
@@ -82,7 +78,7 @@ export class TilePickService implements ITilePickService {
           layer?.hooks.beforeHighlight.call([r, g, b]);
           break;
       }
-    });
+    }
   }
 
   public setPickState() {
@@ -110,13 +106,17 @@ export class TilePickService implements ITilePickService {
 
   /** 从瓦片中根据数据 */
   public getFeatureById(pickedFeatureIdx: number) {
-    // 提取当前可见瓦片
-    const tiles = this.tileLayerService.getTiles().filter((tile: ITile) => tile.visible);
-    // 提取当前可见瓦片中匹配 ID 的 feature 列表
+    // 提取当前可见瓦片并合并 features
     const features: any[] = [];
-    tiles.forEach((tile: ITile) => {
-      features.push(...tile.getFeatureById(pickedFeatureIdx));
-    });
+    for (const tile of this.tileLayerService.tiles) {
+      if (tile.visible && tile.isLoaded) {
+        const tileFeatures = tile.getFeatureById(pickedFeatureIdx);
+        // 直接 push 而非使用扩展操作符
+        for (let i = 0; i < tileFeatures.length; i++) {
+          features.push(tileFeatures[i]);
+        }
+      }
+    }
 
     // 将 feature 列表合并后返回
     // 统一返回成 polygon 的格式 点、线、面可以通用
@@ -127,7 +127,7 @@ export class TilePickService implements ITilePickService {
   }
 
   // Tip: for interface define
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public pickRasterLayer() {
     return false;
   }

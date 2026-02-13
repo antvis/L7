@@ -44,6 +44,9 @@ export class SourceTile extends EventEmitter {
   private abortController: AbortController;
   // 瓦片序号
   private loadDataId = 0;
+  // 缓存 bounds 和 bboxPolygon
+  private _bounds: TileBounds | null = null;
+  private _bboxPolygon: any = null;
 
   constructor(options: TileOptions) {
     super();
@@ -88,30 +91,35 @@ export class SourceTile extends EventEmitter {
     ].includes(this.loadStatus);
   }
 
-  // 瓦片的经纬度边界
+  // 瓦片的经纬度边界（带缓存）
   public get bounds() {
-    return tileToBounds(this.x, this.y, this.z);
+    if (!this._bounds) {
+      this._bounds = tileToBounds(this.x, this.y, this.z);
+    }
+    return this._bounds;
   }
 
-  // 瓦片边界面
+  // 瓦片边界面（带缓存）
   public get bboxPolygon() {
-    const [minLng, minLat, maxLng, maxLat] = this.bounds;
-    const center = [(maxLng - minLng) / 2, (maxLat - minLat) / 2] as const;
+    if (!this._bboxPolygon) {
+      const [minLng, minLat, maxLng, maxLat] = this.bounds;
+      const center = [(maxLng - minLng) / 2, (maxLat - minLat) / 2] as const;
 
-    const polygon = bboxPolygon(this.bounds as TileBounds, {
-      properties: {
-        key: this.key,
-        id: this.key,
-        bbox: this.bounds,
-        center,
-        meta: `
+      this._bboxPolygon = bboxPolygon(this.bounds as TileBounds, {
+        properties: {
+          key: this.key,
+          id: this.key,
+          bbox: this.bounds,
+          center,
+          meta: `
       ${this.key}
       `,
-        // ${this.bbox.slice(0, 2)}
-        // ${this.bbox.slice(2)}
-      },
-    });
-    return polygon;
+          // ${this.bbox.slice(0, 2)}
+          // ${this.bbox.slice(2)}
+        },
+      });
+    }
+    return this._bboxPolygon;
   }
 
   // 瓦片的 key
