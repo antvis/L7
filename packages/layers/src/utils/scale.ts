@@ -15,6 +15,7 @@ function bisect(a: number[], x: number, lo = 0, hi = a.length): number {
 }
 
 function tickIncrement(start: number, stop: number, count: number): number {
+  if (start === stop) return 0;
   const d = stop - start;
   const step = Math.pow(10, Math.floor(Math.log(d / count) / Math.LN10));
   const err = (count / d) * step;
@@ -25,14 +26,26 @@ function tickIncrement(start: number, stop: number, count: number): number {
 }
 
 function tickStep(start: number, stop: number, count: number): number {
+  if (start === stop) return 1;
   const d = stop - start;
-  const step0 = Math.abs(d) / Math.max(0, count);
+  const step0 = Math.abs(d) / Math.max(1, count);
   let step1 = Math.pow(10, Math.floor(Math.log(step0) / Math.LN10));
   const error = step0 / step1;
   if (error >= 10) step1 *= 10;
   else if (error >= 5) step1 *= 5;
   else if (error >= 2) step1 *= 2;
   return d < 0 ? -step1 : step1;
+}
+
+// 处理 domain 中的无效值
+function sanitizeDomain(d: any[]): number[] {
+  const filtered = d.filter((v) => v != null && !Number.isNaN(v) && typeof v === 'number');
+  if (filtered.length === 0) {
+    return [0, 1];
+  } else if (filtered.length === 1) {
+    return [filtered[0], filtered[0]];
+  }
+  return filtered;
 }
 
 // ==================== Linear Scale ====================
@@ -61,6 +74,11 @@ export function scaleLinear(): ScaleLinear {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
+    // 处理相等的 domain
+    if (d0 === d1) {
+      return r0;
+    }
+
     let t = (x - d0) / (d1 - d0);
     if (_clamp) t = Math.max(0, Math.min(1, t));
     return r0 + t * (r1 - r0);
@@ -68,7 +86,7 @@ export function scaleLinear(): ScaleLinear {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return domain.slice();
-    domain = d.slice();
+    domain = sanitizeDomain(d);
     return scale;
   };
 
@@ -89,6 +107,7 @@ export function scaleLinear(): ScaleLinear {
   scale.ticks = function (count = 10): number[] {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) return [d0];
     const step = tickStep(d0, d1, count);
     const ticks: number[] = [];
     let i = Math.floor(d0 / step);
@@ -103,6 +122,7 @@ export function scaleLinear(): ScaleLinear {
   scale.nice = function (count = 10): ScaleLinear {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) return scale;
     const step = tickIncrement(d0, d1, count);
     if (step > 0) {
       domain = [Math.floor(d0 / step) * step, Math.ceil(d1 / step) * step];
@@ -138,6 +158,10 @@ export function scalePow(): ScalePow {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
+    if (d0 === d1) {
+      return r0;
+    }
+
     let t = (x - d0) / (d1 - d0);
     if (_clamp) t = Math.max(0, Math.min(1, t));
     t = Math.pow(t, _exponent);
@@ -146,7 +170,7 @@ export function scalePow(): ScalePow {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return domain.slice();
-    domain = d.slice();
+    domain = sanitizeDomain(d);
     return scale;
   };
 
@@ -169,6 +193,7 @@ export function scalePow(): ScalePow {
   scale.ticks = function (count = 10): number[] {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) return [d0];
     const step = tickStep(d0, d1, count);
     const ticks: number[] = [];
     let i = Math.floor(d0 / step);
@@ -183,6 +208,7 @@ export function scalePow(): ScalePow {
   scale.nice = function (count = 10): ScalePow {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) return scale;
     const step = tickIncrement(d0, d1, count);
     if (step > 0) {
       domain = [Math.floor(d0 / step) * step, Math.ceil(d1 / step) * step];
@@ -232,19 +258,24 @@ export function scaleLog(): ScaleLog {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
-    // 处理负数域
-    const sign = d1 >= d0 ? 1 : -1;
-    const absD0 = Math.abs(d0);
-    const absD1 = Math.abs(d1);
+    if (d0 === d1) {
+      return r0;
+    }
 
-    let t = (log(Math.abs(x), _base) - log(absD0, _base)) / (log(absD1, _base) - log(absD0, _base));
+    const absD0 = Math.abs(d0) || 1;
+    const absD1 = Math.abs(d1) || 1;
+    const absX = Math.abs(x) || 1;
+
+    let t = (log(absX, _base) - log(absD0, _base)) / (log(absD1, _base) - log(absD0, _base));
     if (_clamp) t = Math.max(0, Math.min(1, t));
     return r0 + t * (r1 - r0);
   }
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return domain.slice();
-    domain = d.slice();
+    const sanitized = sanitizeDomain(d);
+    // log scale 需要 正数domain
+    domain = sanitized.map((v) => (v <= 0 ? 1 : v));
     return scale;
   };
 
@@ -260,17 +291,18 @@ export function scaleLog(): ScaleLog {
     const r0 = range[0];
     const r1 = range[range.length - 1];
     const t = (y - r0) / (r1 - r0);
-    const absD0 = Math.abs(d0);
-    const absD1 = Math.abs(d1);
+    const absD0 = Math.abs(d0) || 1;
+    const absD1 = Math.abs(d1) || 1;
     return pow(log(absD0, _base) + t * (log(absD1, _base) - log(absD0, _base)), _base);
   };
 
   scale.ticks = function (count = 10): number[] {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) return [d0];
     const ticks: number[] = [];
-    const startPow = Math.floor(log(Math.abs(d0), _base));
-    const endPow = Math.ceil(log(Math.abs(d1), _base));
+    const startPow = Math.floor(log(Math.abs(d0) || 1, _base));
+    const endPow = Math.ceil(log(Math.abs(d1) || 1, _base));
     for (let i = startPow; i <= endPow; i++) {
       ticks.push(pow(i, _base));
     }
@@ -278,7 +310,6 @@ export function scaleLog(): ScaleLog {
   };
 
   scale.nice = function (): ScaleLog {
-    // Log scale nice 简化实现
     return scale;
   };
 
@@ -318,6 +349,7 @@ export function scaleOrdinal<T = any>(range?: T[]): ScaleOrdinal<T> {
     let i = index.get(x);
     if (i === undefined) {
       if (_unknown !== undefined) return _unknown;
+      if (_range.length === 0) return undefined as T;
       i = domain.push(x) - 1;
       index.set(x, i);
     }
@@ -370,6 +402,9 @@ export function scaleQuantize(): ScaleQuantize {
   function scale(x: number): any {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) {
+      return _range[0];
+    }
     const t = (x - d0) / (d1 - d0);
     const i = Math.max(0, Math.min(n - 1, Math.floor(t * n)));
     return _range[i];
@@ -377,14 +412,14 @@ export function scaleQuantize(): ScaleQuantize {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return domain.slice();
-    domain = d.slice();
+    domain = sanitizeDomain(d);
     return scale;
   };
 
   scale.range = function (r?: any[]): any {
     if (r === undefined) return _range.slice();
     _range = r.slice();
-    n = _range.length;
+    n = Math.max(1, _range.length);
     return scale;
   };
 
@@ -425,7 +460,9 @@ export function scaleQuantile(): ScaleQuantile {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return _domain.slice();
-    _domain = d.filter((x) => !isNaN(x)).sort((a, b) => a - b);
+    _domain = d
+      .filter((x) => x != null && !isNaN(x) && typeof x === 'number')
+      .sort((a, b) => a - b);
     rescale();
     return scale;
   };
@@ -495,7 +532,10 @@ export function scaleThreshold(): ScaleThreshold {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return _domain.slice();
-    _domain = d.slice();
+    _domain = d.filter((v) => v != null && !isNaN(v) && typeof v === 'number');
+    if (_domain.length === 0) {
+      _domain = [0.5];
+    }
     return scale;
   };
 
@@ -533,6 +573,9 @@ export function scaleSequential(): ScaleSequential {
   function scale(x: number): any {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) {
+      return _interpolator(0.5);
+    }
     let t = (x - d0) / (d1 - d0);
     if (_clamp) t = Math.max(0, Math.min(1, t));
     return _interpolator(t);
@@ -540,7 +583,7 @@ export function scaleSequential(): ScaleSequential {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return domain.slice();
-    domain = d.slice();
+    domain = sanitizeDomain(d);
     return scale;
   };
 
@@ -582,10 +625,16 @@ export function scaleDiverging(): ScaleDiverging {
     const d2 = domain[2];
     let t: number;
     if (x < d1) {
+      if (d0 === d1) {
+        return _interpolator(0.5);
+      }
       t = (x - d0) / (d1 - d0);
       t = _clamp ? Math.max(0, t) : t;
       return _interpolator(0.5 - t * 0.5);
     } else {
+      if (d1 === d2) {
+        return _interpolator(0.5);
+      }
       t = (x - d1) / (d2 - d1);
       t = _clamp ? Math.min(1, t) : t;
       return _interpolator(0.5 + t * 0.5);
@@ -594,7 +643,18 @@ export function scaleDiverging(): ScaleDiverging {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return domain.slice();
-    domain = d.slice();
+    // diverging scale 需要 3 个值
+    const sanitized = d.filter((v) => v != null && !isNaN(v) && typeof v === 'number');
+    if (sanitized.length >= 3) {
+      domain = [sanitized[0], sanitized[1], sanitized[2]];
+    } else if (sanitized.length === 2) {
+      const mid = (sanitized[0] + sanitized[1]) / 2;
+      domain = [sanitized[0], mid, sanitized[1]];
+    } else if (sanitized.length === 1) {
+      domain = [sanitized[1], sanitized[0], sanitized[0] + 1];
+    } else {
+      domain = [0, 0.5, 1];
+    }
     return scale;
   };
 
@@ -630,6 +690,10 @@ export function scaleTime(): ScaleTime {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
+    if (d0 === d1) {
+      return r0;
+    }
+
     let t = (x - d0) / (d1 - d0);
     if (_clamp) t = Math.max(0, Math.min(1, t));
     return r0 + t * (r1 - r0);
@@ -637,7 +701,7 @@ export function scaleTime(): ScaleTime {
 
   scale.domain = function (d?: number[]): any {
     if (d === undefined) return domain.slice();
-    domain = d.slice();
+    domain = sanitizeDomain(d);
     return scale;
   };
 
@@ -658,6 +722,7 @@ export function scaleTime(): ScaleTime {
   scale.ticks = function (count = 10): number[] {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) return [d0];
     const step = tickStep(d0, d1, count);
     const ticks: number[] = [];
     let i = Math.floor(d0 / step);
@@ -672,6 +737,7 @@ export function scaleTime(): ScaleTime {
   scale.nice = function (count = 10): ScaleTime {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    if (d0 === d1) return scale;
     const step = tickIncrement(d0, d1, count);
     if (step > 0) {
       domain = [Math.floor(d0 / step) * step, Math.ceil(d1 / step) * step];
