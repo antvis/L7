@@ -1,6 +1,6 @@
 import type { IParseDataItem, IParserData, ITransform } from '@antv/l7-core';
 import { Satistics, aProjectFlat } from '@antv/l7-utils';
-import { hexbin } from 'd3-hexbin';
+import { hexbin } from '../utils/hexbin';
 
 const R_EARTH = 6378000;
 
