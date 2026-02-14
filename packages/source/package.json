@@ -29,7 +29,6 @@
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
     "@turf/meta": "^6.0.2",
-    "d3-dsv": "^1.1.1",
     "d3-hexbin": "^0.2.2",
     "eventemitter3": "^4.0.0",
     "geojson-vt": "^3.2.1",
@@ -37,7 +36,6 @@
     "supercluster": "^7.0.0"
   },
   "devDependencies": {
-    "@types/d3-dsv": "^1.0.36",
     "@types/d3-hexbin": "^0.2.3",
     "@types/geojson": "^7946.0.14",
     "@types/geojson-vt": "3.2.0",
