@@ -58,7 +58,7 @@ export default class DataMappingPlugin implements ILayerPlugin {
       const attributesToRemapping = attributes.filter(
         (attribute) => attribute.needRemapping, // 如果filter变化
       );
-      let filterData = dataArray;
+      let filterData: IParseDataItem[] = dataArray;
       // 数据过滤完 再执行数据映射
       if (filter?.needRemapping && filter?.scale) {
         filterData = dataArray.filter((record: IParseDataItem) => {
@@ -87,19 +87,42 @@ export default class DataMappingPlugin implements ILayerPlugin {
     const attributes = styleAttributeService.getLayerStyleAttributes() || [];
     const filter = styleAttributeService.getLayerStyleAttribute('filter');
     const { dataArray } = layer.getSource().data;
-    let filterData = dataArray;
-    // 数据过滤完 再执行数据映射
-    if (filter?.scale) {
-      filterData = dataArray.filter((record: IParseDataItem) => {
-        return this.applyAttributeMapping(filter, record)[0];
-      });
-    }
-    // Tip: layer 对数据做处理
-    // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
-    // 在各个 layer 中继承
 
-    filterData = layer.processData(filterData); // 目前只有简单线需要处理
-    const encodeData = this.mapping(layer, attributes, filterData, undefined);
+    // 优化：合并过滤和准备阶段为单次遍历
+    const usedAttributes = attributes
+      .filter((attribute) => attribute.scale !== undefined)
+      .filter((attribute) => attribute.name !== 'filter');
+
+    const hasFilter = filter?.scale;
+
+    // 第一阶段：过滤原始数据（需要在 processData 之前）
+    let filterData: IParseDataItem[] = [];
+    if (hasFilter) {
+      for (let i = 0; i < dataArray.length; i++) {
+        const record = dataArray[i];
+        const filterResult = this.applyAttributeMapping(filter, record);
+        if (filterResult[0]) {
+          filterData.push(record);
+        }
+      }
+    } else {
+      filterData = dataArray;
+    }
+
+    // Tip: layer 对数据做处理（需要处理原始数据格式）
+    // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
+    const processedFilterData = layer.processData(filterData);
+
+    // 第二阶段：数据映射
+    const encodeData = this.mapping(layer, usedAttributes, processedFilterData, undefined);
+
+    // 重置属性状态
+    attributes.forEach((attribute) => {
+      attribute.needRemapping = false;
+    });
+
+    // 调整数据兼容 SimpleCoordinates
+    this.adjustData2SimpleCoordinates(encodeData);
 
     layer.setEncodedData(encodeData);
 

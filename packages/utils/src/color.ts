@@ -6,6 +6,27 @@ export interface IColorRamp {
   colors: string[];
 }
 
+/**
+ * 颜色解析缓存
+ * 用于缓存颜色字符串到 RGBA 数组的解析结果，避免重复解析
+ */
+const colorCache = new Map<string, number[]>();
+const COLOR_CACHE_MAX_SIZE = 1000;
+
+/**
+ * 清除颜色缓存（用于测试或内存管理）
+ */
+export function clearColorCache(): void {
+  colorCache.clear();
+}
+
+/**
+ * 获取颜色缓存大小
+ */
+export function getColorCacheSize(): number {
+  return colorCache.size;
+}
+
 export function isColor(str: any) {
   if (typeof str === 'string') {
     return !!(d3.color(str) as d3.RGBColor);
@@ -14,7 +35,19 @@ export function isColor(str: any) {
   }
 }
 
-export function rgb2arr(str: string) {
+/**
+ * 将颜色字符串转换为 RGBA 归一化数组
+ * 使用缓存优化重复颜色解析性能
+ * @param str 颜色字符串，如 '#ff0000', 'rgb(255,0,0)', 'red' 等
+ * @returns RGBA 归一化数组，值范围 [0, 1]
+ */
+export function rgb2arr(str: string): number[] {
+  // 检查缓存
+  const cached = colorCache.get(str);
+  if (cached !== undefined) {
+    return cached;
+  }
+
   const color = d3.color(str) as d3.RGBColor;
   const arr = [0, 0, 0, 0];
   if (color != null) {
@@ -23,6 +56,21 @@ export function rgb2arr(str: string) {
     arr[2] = color.b / 255;
     arr[3] = color.opacity;
   }
+
+  // 限制缓存大小，防止内存泄漏
+  if (colorCache.size >= COLOR_CACHE_MAX_SIZE) {
+    // 删除最早的一半缓存
+    const keys = colorCache.keys();
+    const deleteCount = Math.floor(COLOR_CACHE_MAX_SIZE / 2);
+    for (let i = 0; i < deleteCount; i++) {
+      const key = keys.next().value;
+      if (key) {
+        colorCache.delete(key);
+      }
+    }
+  }
+
+  colorCache.set(str, arr.slice() as unknown as number[]);
   return arr;
 }
 

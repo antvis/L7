@@ -21,6 +21,42 @@ import { EventEmitter } from 'eventemitter3';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
+/**
+ * BaseMap - 地图服务抽象基类 (推荐)
+ *
+ * 这是新的地图服务基类，提供了更清晰的抽象接口设计。
+ * 所有新实现的地图适配器都应该继承此类。
+ *
+ * 实现指南:
+ * 1. 实现 `init()` 方法进行地图初始化
+ * 2. 实现 `handleCameraChanged` 处理相机变化
+ * 3. 实现坐标转换相关方法 (lngLatToMercator, getModelMatrix 等)
+ * 4. 实现地图状态获取/设置方法 (getZoom, setZoom 等)
+ *
+ * @example
+ * ```ts
+ * import BaseMap from '../lib/base-map';
+ *
+ * export default class MyMapService extends BaseMap<MyMapType> {
+ *   protected viewport = new Viewport();
+ *   protected handleCameraChanged = () => {
+ *     const option = {
+ *       center: [lng, lat],
+ *       zoom: this.map.getZoom(),
+ *       pitch: this.map.getPitch(),
+ *       bearing: this.map.getBearing(),
+ *       viewportWidth: this.map.getContainer().clientWidth,
+ *       viewportHeight: this.map.getContainer().clientHeight,
+ *     };
+ *     this.updateView(option);
+ *   };
+ *
+ *   public async init() {
+ *     // 初始化地图...
+ *   }
+ * }
+ * ```
+ */
 export default abstract class BaseMap<T> implements IMapService<T> {
   /**
    * 地图实例
@@ -197,7 +233,7 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   public abstract setMapStyle(name: MapStyleName): void;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public meterToCoord(center: [number, number], outer: [number, number]) {
     return 1.0;
   }

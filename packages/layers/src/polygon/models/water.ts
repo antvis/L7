@@ -76,11 +76,6 @@ export default class WaterModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    const bbox = this.layer.getSource().extent;
-    const [minLng, minLat, maxLng, maxLat] = bbox;
-    const lngLen = maxLng - minLng;
-    const latLen = maxLat - minLat;
-
     this.styleAttributeService.registerStyleAttribute({
       name: 'waterUv',
       type: AttributeType.Attribute,
@@ -88,14 +83,32 @@ export default class WaterModel extends BaseModel {
         name: 'a_uv',
         shaderLocation: this.attributeLocation.UV,
         buffer: {
-          // give the WebGL driver a hint that this buffer may change
           usage: gl.STATIC_DRAW,
           data: [],
           type: gl.FLOAT,
         },
         size: 2,
         update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          const [lng, lat] = vertex;
+          // 当启用 enableRelativeCoordinates 时：需要将相对坐标转换回绝对坐标
+          const originalExtent = this.layer.getOriginalExtent();
+          const relativeOrigin = this.layer.getRelativeOrigin();
+          const isRelativeCoordinates = originalExtent[0] !== 0 || originalExtent[2] !== 0;
+
+          let lng: number, lat: number;
+          let minLng: number, minLat: number, maxLng: number, maxLat: number;
+
+          if (isRelativeCoordinates && relativeOrigin) {
+            lng = vertex[0] + relativeOrigin[0];
+            lat = vertex[1] + relativeOrigin[1];
+            [minLng, minLat, maxLng, maxLat] = originalExtent;
+          } else {
+            lng = vertex[0];
+            lat = vertex[1];
+            [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
+          }
+
+          const lngLen = maxLng - minLng;
+          const latLen = maxLat - minLat;
           return [(lng - minLng) / lngLen, (lat - minLat) / latLen];
         },
       },

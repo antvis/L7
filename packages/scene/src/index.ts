@@ -363,11 +363,11 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
       this.mapService.once(type, handle);
     }
   }
-  public emit(type: string, handle: (...args: any[]) => void): void {
+  public emit(type: string, ...args: any[]): void {
     if (SceneEventList.includes(type)) {
-      this.sceneService.emit(type, handle);
+      this.sceneService.emit(type, ...args);
     } else {
-      this.mapService.on(type, handle);
+      this.mapService.emit(type, ...args);
     }
   }
 
@@ -482,10 +482,18 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
     // TODO: 清理其他 Service 例如 IconService
   }
 
+  /**
+   * 注册自定义后处理效果
+   * @param constructor 后处理效果构造函数
+   * @param name 后处理效果名称，便于在 Layer 中引用
+   */
   public registerPostProcessingPass(
     constructor: new (...args: any[]) => IPostProcessingPass<unknown>,
+    name: string,
   ) {
-    this.container.postProcessingPass.name = new constructor();
+    const instance = new constructor();
+    instance.setName(name);
+    this.container.postProcessingPass[name] = instance;
   }
 
   // 控制 shader pick 计算
@@ -493,7 +501,15 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
     this.layerService.enableShaderPick();
   }
 
+  public disableShaderPick() {
+    this.layerService.disableShaderPick();
+  }
+
+  /**
+   * @deprecated 请使用 disableShaderPick
+   */
   public diasbleShaderPick() {
+    console.warn('diasbleShaderPick 已废弃，请使用 disableShaderPick');
     this.layerService.disableShaderPick();
   }
 

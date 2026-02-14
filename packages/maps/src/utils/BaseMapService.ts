@@ -1,5 +1,23 @@
 /**
- * MapboxService
+ * BaseMapService - 地图服务抽象基类
+ *
+ * @deprecated 请使用 `BaseMap` (lib/base-map.ts) 替代。
+ * 新的 BaseMap 类提供了更清晰的抽象接口设计。
+ *
+ * 迁移指南:
+ * 1. 将 `extends BaseMapService<T>` 改为 `extends BaseMap<T>`
+ * 2. 实现 BaseMap 中的抽象方法
+ * 3. 使用 `handleCameraChanged` 替代直接的相机变化处理
+ *
+ * @example
+ * ```ts
+ * // 旧写法
+ * export default class MyMapService extends BaseMapService<MyMapType> { ... }
+ *
+ * // 新写法
+ * import BaseMap from '../lib/base-map';
+ * export default class MyMapService extends BaseMap<MyMapType> { ... }
+ * ```
  */
 import type {
   Bounds,

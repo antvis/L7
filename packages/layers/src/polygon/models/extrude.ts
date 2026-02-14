@@ -125,10 +125,6 @@ export default class ExtrudeModel extends BaseModel {
   }
 
   protected registerBuiltinAttributes() {
-    const bounds = this.layer.getSource().extent;
-    const lngLen = bounds[2] - bounds[0];
-    const latLen = bounds[3] - bounds[1];
-
     // 注册 Position 属性 64 位地位部分，经纬度数据开启双精度，避免大于 22 层级以上出现数据偏移
     this.registerPosition64LowAttribute();
 
@@ -146,10 +142,32 @@ export default class ExtrudeModel extends BaseModel {
         },
         size: 3,
         update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
-          const lng = vertex[0];
-          const lat = vertex[1];
+          // 当启用 enableRelativeCoordinates 时：
+          // - vertex 是相对坐标（相对于 relativeOrigin 的偏移）
+          // - 需要将相对坐标转换回绝对坐标后，用 originalExtent 计算 UV
+          const originalExtent = this.layer.getOriginalExtent();
+          const relativeOrigin = this.layer.getRelativeOrigin();
+          const isRelativeCoordinates = originalExtent[0] !== 0 || originalExtent[2] !== 0;
+
+          let lng: number, lat: number;
+          let minLng: number, minLat: number, maxLng: number, maxLat: number;
+
+          if (isRelativeCoordinates && relativeOrigin) {
+            // 相对坐标模式：转换回绝对坐标
+            lng = vertex[0] + relativeOrigin[0];
+            lat = vertex[1] + relativeOrigin[1];
+            [minLng, minLat, maxLng, maxLat] = originalExtent;
+          } else {
+            // 绝对坐标模式
+            lng = vertex[0];
+            lat = vertex[1];
+            [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
+          }
+
+          const lngLen = maxLng - minLng;
+          const latLen = maxLat - minLat;
           // 临时 兼容高德V2
-          return [(lng - bounds[0]) / lngLen, (lat - bounds[1]) / latLen, vertex[4]];
+          return [(lng - minLng) / lngLen, (lat - minLat) / latLen, vertex[4]];
         },
       },
     });

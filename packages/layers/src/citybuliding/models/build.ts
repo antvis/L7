@@ -58,8 +58,13 @@ export default class CityBuildModel extends BaseModel {
   }
 
   public calCityGeo() {
-    // @ts-ignore
-    const [minLng, minLat, maxLng, maxLat] = this.layer.getSource().extent;
+    // 当启用 enableRelativeCoordinates 时，使用 originalExtent（原始绝对坐标范围）
+    const originalExtent = this.layer.getOriginalExtent();
+    const extent =
+      originalExtent[0] !== 0 || originalExtent[2] !== 0
+        ? originalExtent
+        : this.layer.getSource().extent;
+    const [minLng, minLat, maxLng, maxLat] = extent;
 
     const w = maxLng - minLng;
     const h = maxLat - minLat;
