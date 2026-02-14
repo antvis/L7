@@ -354,3 +354,77 @@ export function parseColor(colorStr: string): ParsedColor | null {
 
   return null;
 }
+
+/**
+ * RGB 颜色插值器类型
+ */
+export type ColorInterpolator = (t: number) => string;
+
+/**
+ * 在两个 RGB 颜色之间进行线性插值
+ */
+function interpolateRgb(color1: ParsedColor, color2: ParsedColor, t: number): ParsedColor {
+  return {
+    r: Math.round(color1.r + (color2.r - color1.r) * t),
+    g: Math.round(color1.g + (color2.g - color1.g) * t),
+    b: Math.round(color1.b + (color2.b - color1.b) * t),
+    opacity: color1.opacity + (color2.opacity - color1.opacity) * t,
+  };
+}
+
+/**
+ * 将 ParsedColor 转换为 rgb/rgba 字符串
+ */
+function colorToString(color: ParsedColor): string {
+  if (color.opacity === 1) {
+    return `rgb(${color.r}, ${color.g}, ${color.b})`;
+  }
+  return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.opacity})`;
+}
+
+/**
+ * 创建分段线性颜色插值器
+ * 类似于 d3.interpolateRgbBasis 的功能
+ * @param colors 颜色数组
+ * @returns 插值函数，输入 t (0-1)，返回颜色字符串
+ */
+export function interpolateRgbBasis(colors: string[]): ColorInterpolator {
+  if (!colors || colors.length === 0) {
+    return () => 'rgb(0, 0, 0)';
+  }
+
+  // 解析所有颜色
+  const parsedColors = colors.map((c) => parseColor(c));
+
+  // 如果只有一个颜色
+  if (parsedColors.length === 1) {
+    const color = parsedColors[0] || { r: 0, g: 0, b: 0, opacity: 1 };
+    return () => colorToString(color);
+  }
+
+  // 如果有两个颜色，直接线性插值
+  if (parsedColors.length === 2) {
+    const c1 = parsedColors[0] || { r: 0, g: 0, b: 0, opacity: 1 };
+    const c2 = parsedColors[1] || { r: 0, g: 0, b: 0, opacity: 1 };
+    return (t: number) => {
+      t = Math.max(0, Math.min(1, t));
+      return colorToString(interpolateRgb(c1, c2, t));
+    };
+  }
+
+  // 多个颜色：分段线性插值
+  const n = parsedColors.length - 1;
+  return (t: number) => {
+    t = Math.max(0, Math.min(1, t));
+
+    // 找到当前 t 对应的区间
+    const scaledT = t * n;
+    const index = Math.min(Math.floor(scaledT), n - 1);
+    const localT = scaledT - index;
+
+    const c1 = parsedColors[index] || { r: 0, g: 0, b: 0, opacity: 1 };
+    const c2 = parsedColors[index + 1] || { r: 0, g: 0, b: 0, opacity: 1 };
+
+    return colorToString(interpolateRgb(c1, c2, localT));
+  };
+}

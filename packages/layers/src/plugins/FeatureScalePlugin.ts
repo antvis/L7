@@ -10,8 +10,7 @@ import type {
 } from '@antv/l7-core';
 import { IDebugLog, ILayerStage, ScaleTypes, StyleScaleType } from '@antv/l7-core';
 import type { IParseDataItem } from '@antv/l7-source';
-import { lodashUtil } from '@antv/l7-utils';
-import * as d3interpolate from 'd3-interpolate';
+import { interpolateRgbBasis, lodashUtil } from '@antv/l7-utils';
 import * as d3 from 'd3-scale';
 import identity from '../utils/identityScale';
 const { isNil, isString, uniq, extent } = lodashUtil;
@@ -98,7 +97,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
-         
+
         const fieldValue = attribute!.scale!.field;
         attributeScale.names = this.parseFields(isNil(fieldValue) ? [] : fieldValue);
         const scales: IStyleScale[] = [];
@@ -141,7 +140,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                 case ScaleTypes.SEQUENTIAL:
                   scale.scale.interpolator(
                     // @ts-ignore
-                    d3interpolate.interpolateRgbBasis(attributeScale.values),
+                    interpolateRgbBasis(attributeScale.values as string[]),
                   );
                   break;
               }
@@ -212,7 +211,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       return styleScale;
     }
-     
+
     const firstValue = data!.find((d) => !isNil(d[field]))?.[field];
     // 常量 Scale
     if (this.isNumber(field) || (isNil(firstValue) && !scaleOption)) {
