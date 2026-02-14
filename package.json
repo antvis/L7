@@ -27,7 +27,7 @@
     "test:size": "pnpm --filter @antv/l7 build && limit-size",
     "clean-dist": "pnpm --parallel -r --filter !@antv/l7-site clean",
     "clean-deps": "./scripts/clean-deps.sh",
-    "build": "pnpm --parallel -r --filter !@antv/l7-site build",
+    "build": "npm run clean-dist && pnpm --parallel -r --filter !@antv/l7-site exec father build",
     "changeset": "changeset add",
     "publish-version": "changeset version",
     "publish-packages": "pnpm build && pnpm limit-size && changeset publish",

@@ -1,5 +1,5 @@
 import CanvasLayer from './canvas';
-import CityBuildingLayer from './citybuliding/building';
+import CityBuildingLayer from './citybuilding/building';
 import BaseLayer from './core/BaseLayer';
 import BaseModel from './core/BaseModel';
 import GeometryLayer from './geometry'; // 逐步替换为 Geometry

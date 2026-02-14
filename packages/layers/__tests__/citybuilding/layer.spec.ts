@@ -1,5 +1,5 @@
 import { TestScene } from '@antv/l7-test-utils';
-import CityBuildingLayer from '../../src/citybuliding/building';
+import CityBuildingLayer from '../../src/citybuilding/building';
 describe('CityBuildingLayer', () => {
   let scene: any;
   const data = {
