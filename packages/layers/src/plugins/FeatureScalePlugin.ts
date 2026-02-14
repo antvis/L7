@@ -11,24 +11,35 @@ import type {
 import { IDebugLog, ILayerStage, ScaleTypes, StyleScaleType } from '@antv/l7-core';
 import type { IParseDataItem } from '@antv/l7-source';
 import { interpolateRgbBasis, lodashUtil } from '@antv/l7-utils';
-import * as d3 from 'd3-scale';
 import identity from '../utils/identityScale';
+import {
+  scaleDiverging,
+  scaleLinear,
+  scaleLog,
+  scaleOrdinal,
+  scalePow,
+  scaleQuantile,
+  scaleQuantize,
+  scaleSequential,
+  scaleThreshold,
+  scaleTime,
+} from '../utils/scale';
 const { isNil, isString, uniq, extent } = lodashUtil;
 const dateRegex =
   /^(?:(?!0000)[0-9]{4}([-/.]+)(?:(?:0?[1-9]|1[0-2])\1(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])\1(?:29|30)|(?:0?[13578]|1[02])\1(?:31))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2\2(?:29))(\s+([01]|([01][0-9]|2[0-3])):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]))?$/;
 
 const scaleMap = {
-  [ScaleTypes.LINEAR]: d3.scaleLinear,
-  [ScaleTypes.POWER]: d3.scalePow,
-  [ScaleTypes.LOG]: d3.scaleLog,
+  [ScaleTypes.LINEAR]: scaleLinear,
+  [ScaleTypes.POWER]: scalePow,
+  [ScaleTypes.LOG]: scaleLog,
   [ScaleTypes.IDENTITY]: identity,
-  [ScaleTypes.SEQUENTIAL]: d3.scaleSequential,
-  [ScaleTypes.TIME]: d3.scaleTime,
-  [ScaleTypes.QUANTILE]: d3.scaleQuantile,
-  [ScaleTypes.QUANTIZE]: d3.scaleQuantize,
-  [ScaleTypes.THRESHOLD]: d3.scaleThreshold,
-  [ScaleTypes.CAT]: d3.scaleOrdinal,
-  [ScaleTypes.DIVERGING]: d3.scaleDiverging,
+  [ScaleTypes.SEQUENTIAL]: scaleSequential,
+  [ScaleTypes.TIME]: scaleTime,
+  [ScaleTypes.QUANTILE]: scaleQuantile,
+  [ScaleTypes.QUANTIZE]: scaleQuantize,
+  [ScaleTypes.THRESHOLD]: scaleThreshold,
+  [ScaleTypes.CAT]: scaleOrdinal,
+  [ScaleTypes.DIVERGING]: scaleDiverging,
 };
 /**
  * 根据 Source 原始数据为指定字段创建 Scale，保存在 StyleAttribute 上，供下游插件使用
@@ -206,7 +217,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (scaleOption && scaleOption.type) {
         styleScale.scale = this.createDefaultScale(scaleOption);
       } else {
-        styleScale.scale = d3.scaleOrdinal([field]);
+        styleScale.scale = scaleOrdinal([field]);
         styleScale.type = StyleScaleType.CONSTANT;
       }
       return styleScale;
@@ -215,7 +226,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
     const firstValue = data!.find((d) => !isNil(d[field]))?.[field];
     // 常量 Scale
     if (this.isNumber(field) || (isNil(firstValue) && !scaleOption)) {
-      styleScale.scale = d3.scaleOrdinal([field]);
+      styleScale.scale = scaleOrdinal([field]);
       styleScale.type = StyleScaleType.CONSTANT;
     } else {
       // 根据数据类型判断 默认等分位，时间，和枚举类型
