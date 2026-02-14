@@ -1,5 +1,5 @@
-import * as d3 from 'd3-color';
 import type { Context } from 'vm';
+import { parseColor } from './color-parser';
 export interface IColorRamp {
   type?: 'cat' | 'linear' | 'quantize' | 'custom';
   positions: number[];
@@ -29,7 +29,7 @@ export function getColorCacheSize(): number {
 
 export function isColor(str: any) {
   if (typeof str === 'string') {
-    return !!(d3.color(str) as d3.RGBColor);
+    return !!parseColor(str);
   } else {
     return false;
   }
@@ -48,7 +48,7 @@ export function rgb2arr(str: string): number[] {
     return cached;
   }
 
-  const color = d3.color(str) as d3.RGBColor;
+  const color = parseColor(str);
   const arr = [0, 0, 0, 0];
   if (color != null) {
     arr[0] = color.r / 255;

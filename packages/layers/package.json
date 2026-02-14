@@ -34,7 +34,6 @@
     "@turf/meta": "^6.0.2",
     "@turf/polygon-to-line": "^6.5.0",
     "@turf/union": "^6.5.0",
-    "d3-color": "^1.4.0",
     "d3-interpolate": "1.4.0",
     "d3-scale": "^2",
     "earcut": "^2.2.1",
@@ -46,7 +45,6 @@
   },
   "devDependencies": {
     "@antv/l7-test-utils": "workspace:^",
-    "@types/d3-color": "^1.2.2",
     "@types/d3-interpolate": "1.1.6",
     "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
