@@ -449,6 +449,37 @@ const throttle = <T extends (...args: any[]) => any>(
   return throttled;
 };
 
+// extent: 获取数组的最大值和最小值 (来自 d3-array)
+const extent = <T>(array: Iterable<T> | undefined | null): [T | undefined, T | undefined] => {
+  if (!array) {
+    return [undefined, undefined];
+  }
+
+  let min: T | undefined;
+  let max: T | undefined;
+  let defined = false;
+
+  for (const value of array) {
+    if (value == null || Number.isNaN(value)) {
+      continue;
+    }
+    if (!defined) {
+      min = value;
+      max = value;
+      defined = true;
+    } else {
+      if (value < min!) {
+        min = value;
+      }
+      if (value > max!) {
+        max = value;
+      }
+    }
+  }
+
+  return [min, max];
+};
+
 export const lodashUtil = {
   isNil,
   merge,
@@ -472,4 +503,5 @@ export const lodashUtil = {
   isUndefined,
   camelCase,
   uniqueId,
+  extent,
 };
