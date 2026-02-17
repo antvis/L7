@@ -1,4 +1,4 @@
-import type { IEncodeFeature, IModel } from '@antv/l7-core';
+import type { IEncodeFeature, IModel, IModelUniform } from '@antv/l7-core';
 import { AttributeType, gl } from '@antv/l7-core';
 import { rgb2arr } from '@antv/l7-utils';
 import BaseModel from '../../core/BaseModel';
@@ -55,6 +55,12 @@ export default class CityBuildModel extends BaseModel {
     };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
+  }
+
+  public getAnimateUniforms(): IModelUniform {
+    return {
+      u_time: this.layer.getLayerAnimateTime(),
+    };
   }
 
   public calCityGeo() {
