@@ -238,6 +238,16 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (values === undefined) {
         type = ScaleTypes.IDENTITY;
       }
+      if (
+        name === 'color' &&
+        Array.isArray(values) &&
+        values.length &&
+        values.every((value) => isString(value)) &&
+        (type === ScaleTypes.LINEAR || type === ScaleTypes.POWER || type === ScaleTypes.LOG)
+      ) {
+        // Color ramps should use interpolated scales to avoid numeric-only ranges.
+        type = ScaleTypes.SEQUENTIAL;
+      }
       const cfg = this.createScaleConfig(type, field, scaleOption, data);
       styleScale.scale = this.createDefaultScale(cfg);
       styleScale.option = cfg;

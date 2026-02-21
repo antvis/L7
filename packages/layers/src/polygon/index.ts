@@ -29,8 +29,7 @@ export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
   }
 
   public getModelType(): PolygonModelType {
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute('shape');
-    const shape = shapeAttribute?.scale?.field as PolygonModelType;
+    const shape = this.shapeOption?.field as PolygonModelType;
     if (shape === 'fill' || !shape) {
       return 'fill';
     } else if (shape === 'extrude') {

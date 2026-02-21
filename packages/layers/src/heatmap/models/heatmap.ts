@@ -77,8 +77,7 @@ export default class HeatMapModel extends BaseModel {
 
   public async initModels(): Promise<IModel[]> {
     const { createFramebuffer, getViewportSize, createTexture2D } = this.rendererService;
-    const shapeAttr = this.styleAttributeService.getLayerStyleAttribute('shape');
-    const shapeType = shapeAttr?.scale?.field || 'heatmap';
+    const shapeType = this.layer.shapeOption?.field || 'heatmap';
     this.shapeType = shapeType as string;
     // 生成热力图密度图
     this.intensityModel = await this.buildHeatMapIntensity();

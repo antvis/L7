@@ -1112,7 +1112,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     return {
       type: scales[0]?.option?.type,
-      field: attribute?.scale?.field,
+      field: scales[0]?.field,
       items: this.getLegendItems(name),
     };
   }
@@ -1380,7 +1380,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 继承空方法
    * @param time
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public setEarthTime(time: number) {
     console.warn('empty fn');
   }
