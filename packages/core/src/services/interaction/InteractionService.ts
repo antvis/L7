@@ -1,68 +1,124 @@
 import EventEmitter from 'eventemitter3';
 import type { L7Container } from '../../inversify.config';
 import type { ILngLat } from '../map/IMapService';
-import type { IInteractionService } from './IInteractionService';
+import type { IInteractionService, IInteractionTarget } from './IInteractionService';
 import { InteractionEvent } from './IInteractionService';
 
-const DragEventMap: { [key: string]: string } = {
+// 配置常量
+const CLICK_TIMEOUT = 250; // 单击判定超时（毫秒）
+const DOUBLE_CLICK_DISTANCE = 10; // 双击判定距离（像素）
+const PRESS_DURATION = 500; // 长按判定时长（毫秒）
+
+// 拖拽事件映射
+const DragEventMap: Record<string, string> = {
   pointerdown: 'dragstart',
   pointermove: 'dragging',
   pointerup: 'dragend',
   pointercancel: 'dragcancel',
+  pointerleave: 'dragcancel',
 };
 
 /**
- * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，事件监听注册在地图底图上。
- * 除此之外，后续如果支持非地图场景，事件监听就需要注册在 L7 canvas 上。
+ * 交互服务 - 基于 Pointer Events API 统一处理鼠标和触摸事件
+ *
+ * 由于目前 L7 与地图结合的方案为双 canvas 而非共享 WebGL Context，
+ * 事件监听注册在地图底图上。
  */
 export default class InteractionService extends EventEmitter implements IInteractionService {
   public indragging: boolean = false;
 
-  get mapService() {
-    return this.container.mapService;
-  }
-
-  constructor(private readonly container: L7Container) {
-    super();
-  }
-
-  private lastClickTime: number = 0;
-
-  private lastClickXY: number[] = [-1, -1];
-
-  private clickTimer: ReturnType<typeof setTimeout> | null = null;
-
-  private $container: HTMLElement;
+  private readonly container: L7Container;
 
   // 拖拽状态
   private isDragging: boolean = false;
   private pointerId: number | null = null;
 
+  // 单击/双击状态
+  private clickTimer: ReturnType<typeof setTimeout> | null = null;
+  private lastClickTime: number = 0;
+  private lastClickXY: [number, number] = [-1, -1];
+
   // 长按状态
   private pressTimer: ReturnType<typeof setTimeout> | null = null;
-  private pressStartTarget: { x: number; y: number; lngLat: ILngLat; target: PointerEvent } | null =
-    null;
+  private pressStartPosition: {
+    x: number;
+    y: number;
+    lngLat: ILngLat;
+    target: PointerEvent;
+  } | null = null;
 
-  public init() {
-    // 注册事件在地图底图上
-    this.addEventListenerOnMap();
-    this.$container = this.mapService.getMapContainer() as HTMLElement;
+  // 容器引用（用于移除事件监听）
+  private $container: HTMLElement | null = null;
+
+  // 缓存容器边界（性能优化）
+  private containerBounds: {
+    left: number;
+    top: number;
+    clientLeft: number;
+    clientTop: number;
+  } | null = null;
+
+  constructor(container: L7Container) {
+    super();
+    this.container = container;
   }
 
-  public destroy() {
-    this.removeEventListeners();
-    this.off(InteractionEvent.Hover);
-    if (this.clickTimer) {
-      clearTimeout(this.clickTimer);
-      this.clickTimer = null;
-    }
-    if (this.pressTimer) {
-      clearTimeout(this.pressTimer);
-      this.pressTimer = null;
-    }
+  private get mapService() {
+    return this.container.mapService;
   }
 
-  public triggerHover({ x, y }: { x: number; y: number }) {
+  public init(): void {
+    const $container = this.mapService.getMapContainer();
+    if (!$container) return;
+
+    this.$container = $container;
+    this.updateContainerBounds();
+
+    // 使用 Pointer Events 统一处理鼠标和触摸
+    $container.addEventListener('pointerdown', this.onPointerDown);
+    $container.addEventListener('pointermove', this.onPointerMove);
+    $container.addEventListener('pointerup', this.onPointerUp);
+    $container.addEventListener('pointercancel', this.onPointerCancel);
+    $container.addEventListener('pointerleave', this.onPointerLeave);
+
+    // 额外监听 click/dblclick 用于区分单击和双击
+    $container.addEventListener('click', this.onClick);
+    $container.addEventListener('dblclick', this.onDoubleClick);
+
+    // 监听右键菜单
+    $container.addEventListener('contextmenu', this.onContextMenu);
+
+    // 监听窗口滚动时更新容器边界
+    window.addEventListener('scroll', this.updateContainerBounds, true);
+    window.addEventListener('resize', this.updateContainerBounds);
+  }
+
+  public destroy(): void {
+    // 清除所有计时器
+    this.clearClickTimer();
+    this.clearPressTimer();
+
+    // 移除事件监听
+    if (this.$container) {
+      this.$container.removeEventListener('pointerdown', this.onPointerDown);
+      this.$container.removeEventListener('pointermove', this.onPointerMove);
+      this.$container.removeEventListener('pointerup', this.onPointerUp);
+      this.$container.removeEventListener('pointercancel', this.onPointerCancel);
+      this.$container.removeEventListener('pointerleave', this.onPointerLeave);
+      this.$container.removeEventListener('click', this.onClick);
+      this.$container.removeEventListener('dblclick', this.onDoubleClick);
+      this.$container.removeEventListener('contextmenu', this.onContextMenu);
+      this.$container = null;
+    }
+
+    window.removeEventListener('scroll', this.updateContainerBounds, true);
+    window.removeEventListener('resize', this.updateContainerBounds);
+
+    // 移除所有事件监听器
+    this.removeAllListeners();
+  }
+
+  public triggerHover({ x, y }: { x: number; y: number }): void {
     this.emit(InteractionEvent.Hover, { x, y });
   }
 
@@ -74,289 +130,238 @@ export default class InteractionService extends EventEmitter implements IInterac
     this.emit(InteractionEvent.Active, { featureId: id });
   }
 
-  private addEventListenerOnMap() {
-    const $container = this.mapService.getMapContainer();
-    if ($container) {
-      // Pointer events for drag handling
-      $container.addEventListener('pointerdown', this.onPointerDown);
-      $container.addEventListener('pointermove', this.onPointerMove);
-      $container.addEventListener('pointerup', this.onPointerUp);
-      $container.addEventListener('pointercancel', this.onPointerCancel);
+  // ==================== 私有方法 ====================
 
-      // Mouse events for hover
-      $container.addEventListener('mousemove', this.onHover);
-      $container.addEventListener('mousedown', this.onHover, true);
-      $container.addEventListener('mouseup', this.onHover);
-      $container.addEventListener('contextmenu', this.onHover);
+  private updateContainerBounds = (): void => {
+    if (!this.$container) return;
+    const rect = this.$container.getBoundingClientRect();
+    this.containerBounds = {
+      left: rect.left,
+      top: rect.top,
+      clientLeft: this.$container.clientLeft,
+      clientTop: this.$container.clientTop,
+    };
+  };
 
-      // Touch events
-      $container.addEventListener('touchstart', this.onTouch);
-      $container.addEventListener('touchend', this.onTouchEnd);
-      $container.addEventListener('touchmove', this.onTouchMove);
+  /**
+   * 将客户端坐标转换为容器相对坐标
+   */
+  private clientToContainerCoords(clientX: number, clientY: number): { x: number; y: number } {
+    if (!this.containerBounds) {
+      this.updateContainerBounds();
+    }
+    if (!this.containerBounds) {
+      return { x: clientX, y: clientY };
+    }
+    return {
+      x: clientX - this.containerBounds.left - this.containerBounds.clientLeft,
+      y: clientY - this.containerBounds.top - this.containerBounds.clientTop,
+    };
+  }
 
-      // Click and double click
-      $container.addEventListener('click', this.onClick);
-      $container.addEventListener('dblclick', this.onDoubleClick);
+  /**
+   * 创建交互目标对象
+   */
+  private createInteractionTarget(
+    event: PointerEvent | MouseEvent,
+    type: string,
+  ): IInteractionTarget {
+    const { x, y } = this.clientToContainerCoords(event.clientX, event.clientY);
+    const lngLat = this.mapService.containerToLngLat([x, y]);
+    return { x, y, lngLat, type, target: event };
+  }
+
+  /**
+   * 判断两次点击是否为同一位置（双击判定）
+   */
+  private isSamePosition(x: number, y: number): boolean {
+    return (
+      Math.abs(this.lastClickXY[0] - x) < DOUBLE_CLICK_DISTANCE &&
+      Math.abs(this.lastClickXY[1] - y) < DOUBLE_CLICK_DISTANCE
+    );
+  }
+
+  // ==================== 计时器管理 ====================
+
+  private clearClickTimer(): void {
+    if (this.clickTimer) {
+      clearTimeout(this.clickTimer);
+      this.clickTimer = null;
     }
   }
 
-  private removeEventListeners() {
-    const $container = this.mapService.getMapContainer();
-    if ($container) {
-      $container.removeEventListener('pointerdown', this.onPointerDown);
-      $container.removeEventListener('pointermove', this.onPointerMove);
-      $container.removeEventListener('pointerup', this.onPointerUp);
-      $container.removeEventListener('pointercancel', this.onPointerCancel);
-
-      $container.removeEventListener('mousemove', this.onHover);
-      $container.removeEventListener('mousedown', this.onHover);
-      $container.removeEventListener('mouseup', this.onHover);
-      $container.removeEventListener('contextmenu', this.onHover);
-
-      $container.removeEventListener('touchstart', this.onTouch);
-      $container.removeEventListener('touchend', this.onTouchEnd);
-      $container.removeEventListener('touchmove', this.onTouchMove);
-
-      $container.removeEventListener('click', this.onClick);
-      $container.removeEventListener('dblclick', this.onDoubleClick);
+  private clearPressTimer(): void {
+    if (this.pressTimer) {
+      clearTimeout(this.pressTimer);
+      this.pressTimer = null;
     }
+    this.pressStartPosition = null;
   }
 
-  private onPointerDown = (event: PointerEvent) => {
-    // 只处理主指针（避免多点触控问题）
+  // ==================== 事件处理器 ====================
+
+  private onPointerDown = (event: PointerEvent): void => {
+    // 只处理主指针
     if (this.pointerId !== null) return;
 
     this.pointerId = event.pointerId;
     this.isDragging = true;
     this.indragging = true;
 
-    const interactionTarget = this.createInteractionTarget(event, 'pointerdown');
-    interactionTarget.type = DragEventMap['pointerdown'];
-    this.emit(InteractionEvent.Drag, interactionTarget);
+    // 发送拖拽开始事件
+    const target = this.createInteractionTarget(event, DragEventMap['pointerdown']);
+    this.emit(InteractionEvent.Drag, target);
 
-    // 开始长按计时器
+    // 启动长按计时器
     this.startPressTimer(event);
   };
 
-  private onPointerMove = (event: PointerEvent) => {
-    if (this.pointerId !== event.pointerId) return;
-
-    if (this.isDragging) {
-      // 取消长按计时器（因为移动了）
-      this.cancelPressTimer();
-
-      const interactionTarget = this.createInteractionTarget(event, 'pointermove');
-      interactionTarget.type = DragEventMap['pointermove'];
-      this.emit(InteractionEvent.Drag, interactionTarget);
-    }
-  };
-
-  private onPointerUp = (event: PointerEvent) => {
-    if (this.pointerId !== event.pointerId) return;
-
-    if (this.isDragging) {
-      const interactionTarget = this.createInteractionTarget(event, 'pointerup');
-      interactionTarget.type = DragEventMap['pointerup'];
-      this.emit(InteractionEvent.Drag, interactionTarget);
-    }
-
-    this.isDragging = false;
-    this.indragging = false;
-    this.pointerId = null;
-    this.cancelPressTimer();
-  };
-
-  private onPointerCancel = (event: PointerEvent) => {
-    if (this.pointerId !== event.pointerId) return;
-
-    if (this.isDragging) {
-      const interactionTarget = this.createInteractionTarget(event, 'pointercancel');
-      interactionTarget.type = DragEventMap['pointercancel'];
-      this.emit(InteractionEvent.Drag, interactionTarget);
-    }
-
-    this.isDragging = false;
-    this.indragging = false;
-    this.pointerId = null;
-    this.cancelPressTimer();
-  };
-
-  private startPressTimer(event: PointerEvent) {
-    this.cancelPressTimer();
-    const interactionTarget = this.createInteractionTarget(event, 'pointerdown');
-    this.pressStartTarget = {
-      x: interactionTarget.x,
-      y: interactionTarget.y,
-      lngLat: interactionTarget.lngLat,
-      target: event,
-    };
-
-    // 长按 500ms 触发 press 事件
-    this.pressTimer = setTimeout(() => {
-      if (this.pressStartTarget) {
-        this.emit(InteractionEvent.Hover, {
-          x: this.pressStartTarget.x,
-          y: this.pressStartTarget.y,
-          lngLat: this.pressStartTarget.lngLat,
-          type: 'press',
-          target: this.pressStartTarget.target,
-        });
-        this.pressStartTarget = null;
+  private onPointerMove = (event: PointerEvent): void => {
+    // 指针不匹配时忽略
+    if (this.pointerId !== event.pointerId) {
+      // 非拖拽状态下，发送 hover 事件
+      if (!this.isDragging) {
+        const target = this.createInteractionTarget(event, 'mousemove');
+        this.emit(InteractionEvent.Hover, target);
       }
-    }, 500);
-  }
-
-  private cancelPressTimer() {
-    if (this.pressTimer) {
-      clearTimeout(this.pressTimer);
-      this.pressTimer = null;
-    }
-    this.pressStartTarget = null;
-  }
-
-  private createInteractionTarget(event: PointerEvent, type: string) {
-    const $container = this.mapService.getMapContainer();
-    let x = event.clientX;
-    let y = event.clientY;
-
-    if ($container) {
-      const { top, left } = $container.getBoundingClientRect();
-      x = x - left - $container.clientLeft;
-      y = y - top - $container.clientTop;
+      return;
     }
 
-    const lngLat = this.mapService.containerToLngLat([x, y]);
-    return { x, y, lngLat, type, target: event };
-  }
+    if (this.isDragging) {
+      // 移动时取消长按
+      this.clearPressTimer();
 
-  private onClick = (event: MouseEvent) => {
-    event.stopPropagation();
-    const { clientX, clientY } = event;
-    const $container = this.mapService.getMapContainer();
-    let x = clientX;
-    let y = clientY;
-
-    if ($container) {
-      const { top, left } = $container.getBoundingClientRect();
-      x = x - left - $container.clientLeft;
-      y = y - top - $container.clientTop;
+      const target = this.createInteractionTarget(event, DragEventMap['pointermove']);
+      this.emit(InteractionEvent.Drag, target);
     }
-
-    const lngLat = this.mapService.containerToLngLat([x, y]);
-    this.handleSingleDoubleTap(x, y, lngLat, 'click');
   };
 
-  private onDoubleClick = (event: MouseEvent) => {
-    event.stopPropagation();
-    const { clientX, clientY } = event;
-    const $container = this.mapService.getMapContainer();
-    let x = clientX;
-    let y = clientY;
+  private onPointerUp = (event: PointerEvent): void => {
+    if (this.pointerId !== event.pointerId) return;
 
-    if ($container) {
-      const { top, left } = $container.getBoundingClientRect();
-      x = x - left - $container.clientLeft;
-      y = y - top - $container.clientTop;
+    if (this.isDragging) {
+      const target = this.createInteractionTarget(event, DragEventMap['pointerup']);
+      this.emit(InteractionEvent.Drag, target);
     }
 
-    const lngLat = this.mapService.containerToLngLat([x, y]);
-
-    // 清除单击计时器
-    if (this.clickTimer) {
-      clearTimeout(this.clickTimer);
-      this.clickTimer = null;
-    }
-
-    this.emit(InteractionEvent.Hover, { x, y, lngLat, type: 'dblclick', target: event });
+    this.isDragging = false;
+    this.indragging = false;
+    this.pointerId = null;
+    this.clearPressTimer();
   };
 
-  private handleSingleDoubleTap(x: number, y: number, lngLat: ILngLat, type: string) {
-    const nowTime = Date.now();
-    if (
-      nowTime - this.lastClickTime < 400 &&
-      Math.abs(this.lastClickXY[0] - x) < 10 &&
-      Math.abs(this.lastClickXY[1] - y) < 10
-    ) {
+  private onPointerCancel = (event: PointerEvent): void => {
+    if (this.pointerId !== event.pointerId) return;
+    this.endDragging(event, 'pointercancel');
+  };
+
+  private onPointerLeave = (event: PointerEvent): void => {
+    if (this.pointerId !== event.pointerId) return;
+    this.endDragging(event, 'pointerleave');
+  };
+
+  private endDragging(event: PointerEvent, type: string): void {
+    if (this.isDragging) {
+      const target = this.createInteractionTarget(event, DragEventMap[type]);
+      this.emit(InteractionEvent.Drag, target);
+    }
+
+    this.isDragging = false;
+    this.indragging = false;
+    this.pointerId = null;
+    this.clearPressTimer();
+  }
+
+  private startPressTimer(event: PointerEvent): void {
+    this.clearPressTimer();
+
+    const { x, y } = this.clientToContainerCoords(event.clientX, event.clientY);
+    const lngLat = this.mapService.containerToLngLat([x, y]);
+
+    this.pressStartPosition = { x, y, lngLat, target: event };
+
+    this.pressTimer = setTimeout(() => {
+      if (this.pressStartPosition) {
+        this.emit(InteractionEvent.Press, {
+          x: this.pressStartPosition.x,
+          y: this.pressStartPosition.y,
+          lngLat: this.pressStartPosition.lngLat,
+          type: 'press',
+          target: this.pressStartPosition.target,
+        });
+        this.pressStartPosition = null;
+      }
+    }, PRESS_DURATION);
+  }
+
+  private onClick = (event: MouseEvent): void => {
+    event.stopPropagation();
+
+    const { x, y } = this.clientToContainerCoords(event.clientX, event.clientY);
+    const lngLat = this.mapService.containerToLngLat([x, y]);
+    const now = Date.now();
+
+    // 检测双击
+    if (now - this.lastClickTime < CLICK_TIMEOUT * 2 && this.isSamePosition(x, y)) {
+      // 是双击，清除单击计时器
+      this.clearClickTimer();
       this.lastClickTime = 0;
       this.lastClickXY = [-1, -1];
-      if (this.clickTimer) {
-        clearTimeout(this.clickTimer);
-        this.clickTimer = null;
-      }
-      this.emit(InteractionEvent.Hover, { x, y, lngLat, type: 'dblclick' });
-    } else {
-      this.lastClickTime = nowTime;
-      this.lastClickXY = [x, y];
-      // 延迟触发单击，等待可能的第二次点击
-      this.clickTimer = setTimeout(() => {
-        this.emit(InteractionEvent.Hover, { x, y, lngLat, type: 'click' });
-        this.clickTimer = null;
-      }, 400);
-    }
-  }
 
-  private onTouch = (event: TouchEvent) => {
-    const touch = event.touches[0];
-    this.onHover({
-      clientX: touch.clientX,
-      clientY: touch.clientY,
-      type: 'touchstart',
-    } as MouseEvent);
-  };
-
-  private onTouchEnd = (event: TouchEvent) => {
-    if (event.changedTouches.length > 0) {
-      const touch = event.changedTouches[0];
-      this.onHover({
-        clientX: touch.clientX,
-        clientY: touch.clientY,
-        type: 'touchend',
-      } as MouseEvent);
-    }
-  };
-
-  private onTouchMove = (event: TouchEvent) => {
-    const touch = event.changedTouches[0];
-    this.onHover({
-      clientX: touch.clientX,
-      clientY: touch.clientY,
-      type: 'touchmove',
-    } as MouseEvent);
-  };
-
-  private onHover = (event: MouseEvent) => {
-    const { clientX, clientY } = event;
-    let x = clientX;
-    let y = clientY;
-    const type = event.type;
-    const $container = this.mapService.getMapContainer();
-
-    if ($container) {
-      const { top, left } = $container.getBoundingClientRect();
-      x = x - left - $container.clientLeft;
-      y = y - top - $container.clientTop;
-    }
-
-    const lngLat = this.mapService.containerToLngLat([x, y]);
-
-    if (type === 'click') {
-      this.handleSingleDoubleTap(x, y, lngLat, type);
+      // 双击事件由 onDoubleClick 处理，这里不重复发送
       return;
     }
 
-    if (type === 'touch') {
-      this.handleSingleDoubleTap(x, y, lngLat, type);
-      return;
-    }
+    // 记录点击信息
+    this.lastClickTime = now;
+    this.lastClickXY = [x, y];
 
-    if (type !== 'click' && type !== 'dblclick') {
-      this.emit(InteractionEvent.Hover, {
+    // 延迟发送单击事件，等待可能的双击
+    this.clearClickTimer();
+    this.clickTimer = setTimeout(() => {
+      this.emit(InteractionEvent.Click, {
         x,
         y,
         lngLat,
-        type,
+        type: 'click',
         target: event,
       });
-    }
+      this.clickTimer = null;
+    }, CLICK_TIMEOUT);
+  };
+
+  private onDoubleClick = (event: MouseEvent): void => {
+    event.stopPropagation();
+
+    // 清除单击计时器
+    this.clearClickTimer();
+
+    const { x, y } = this.clientToContainerCoords(event.clientX, event.clientY);
+    const lngLat = this.mapService.containerToLngLat([x, y]);
+
+    // 重置双击检测状态
+    this.lastClickTime = 0;
+    this.lastClickXY = [-1, -1];
+
+    this.emit(InteractionEvent.DblClick, {
+      x,
+      y,
+      lngLat,
+      type: 'dblclick',
+      target: event,
+    });
+  };
+
+  private onContextMenu = (event: MouseEvent): void => {
+    const { x, y } = this.clientToContainerCoords(event.clientX, event.clientY);
+    const lngLat = this.mapService.containerToLngLat([x, y]);
+
+    this.emit(InteractionEvent.Hover, {
+      x,
+      y,
+      lngLat,
+      type: 'contextmenu',
+      target: event,
+    });
   };
 }
