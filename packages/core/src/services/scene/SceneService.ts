@@ -199,7 +199,7 @@ export default class Scene extends EventEmitter implements ISceneService {
         if (window.matchMedia) {
           window
             .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
-            ?.addListener(this.handleWindowResized.bind('screen'));
+            ?.addListener(this.handleDPRChange);
         }
       } else {
         console.error('容器 id 不存在');
@@ -349,6 +349,12 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.render();
     }
   };
+
+  private handleDPRChange = () => {
+    // DPR 变化时触发重新渲染
+    this.handleWindowResized([]);
+  };
+
   private initContainer() {
     const pixelRatio = DOM.DPR;
     const w = this.$container?.clientWidth || 400;
