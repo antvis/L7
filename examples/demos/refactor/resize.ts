@@ -45,9 +45,10 @@ export const resizeObserverTest: TestCase = async (options) => {
     const mapContainer = scene.getMapContainer();
     if (mapContainer) {
       const rect = mapContainer.getBoundingClientRect();
+      const canvas = mapContainer.querySelector('canvas');
       statusDiv.innerHTML = `
         <div>容器尺寸: ${Math.round(rect.width)} x ${Math.round(rect.height)}</div>
-        <div>Canvas: ${scene.getCanvas()?.width || 0} x ${scene.getCanvas()?.height || 0}</div>
+        <div>Canvas: ${canvas?.width || 0} x ${canvas?.height || 0}</div>
         <div>DPR: ${window.devicePixelRatio}</div>
       `;
     }
