@@ -26,8 +26,7 @@
     "@turf/helpers": "^6.1.4",
     "earcut": "^2.1.0",
     "eventemitter3": "^4.0.0",
-    "gl-matrix": "^3.1.0",
-    "web-worker-helper": "^0.0.3"
+    "gl-matrix": "^3.1.0"
   },
   "devDependencies": {
     "@types/earcut": "^2.1.0"
