@@ -396,6 +396,10 @@ export interface ILayer {
     data: any;
     options?: ISourceCFG;
   };
+  shapeOption: {
+    field: any;
+    values: any;
+  };
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
