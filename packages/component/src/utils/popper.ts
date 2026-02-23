@@ -187,6 +187,14 @@ export class Popper extends EventEmitter<'show' | 'hide'> {
     this.popperDOM.removeEventListener('mousemove', this.onBtnMouseMove);
     this.popperDOM.removeEventListener('mouseleave', this.onBtnMouseLeave);
     DOM.remove(this.popperDOM);
+
+    // 从 conflictPopperList 中移除当前实例，防止内存泄漏
+    if (this.option.unique) {
+      const index = Popper.conflictPopperList.indexOf(this);
+      if (index > -1) {
+        Popper.conflictPopperList.splice(index, 1);
+      }
+    }
   }
 
   public resetPopperPosition() {

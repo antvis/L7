@@ -71,6 +71,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    */
   protected isShow: boolean = true;
 
+  /**
+   * RAF 节流 ID
+   * @protected
+   */
+  protected rafId: number | null = null;
+
   protected get lngLat() {
     return (
       this.popupOption.lngLat ?? {
@@ -132,6 +138,12 @@ export default class Popup<O extends IPopupOption = IPopupOption>
   public remove() {
     if (!this?.isOpen()) {
       return;
+    }
+
+    // 取消未执行的 RAF
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
     }
 
     if (this.content) {
@@ -579,7 +591,14 @@ export default class Popup<O extends IPopupOption = IPopupOption>
     this.updatePosition(ev, true);
   };
   protected update = () => {
-    this.updatePosition(null, false);
+    // 使用 RAF 节流，避免高频事件导致的性能问题
+    if (this.rafId !== null) {
+      return;
+    }
+    this.rafId = requestAnimationFrame(() => {
+      this.rafId = null;
+      this.updatePosition(null, false);
+    });
   };
   /**
    * 设置 Popup 相对于地图容器的 Position
