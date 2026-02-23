@@ -25,7 +25,7 @@ export const eventsTest: TestCase = async (options) => {
   logPanel.id = 'event-log';
   logPanel.style.cssText = `
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     right: 10px;
     width: 350px;
     max-height: 70vh;

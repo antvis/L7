@@ -23,7 +23,7 @@ export const displayTest: TestCase = async (options) => {
   const controlPanel = document.createElement('div');
   controlPanel.style.cssText = `
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     right: 10px;
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
@@ -82,13 +82,13 @@ export const displayTest: TestCase = async (options) => {
     })
     .shape('circle')
     .size(20)
-    .color('type', ['type', (t: string) => (t === 'A' ? '#ff6600' : '#0066ff')])
+    .color('type', (t: string) => (t === 'A' ? '#ff6600' : '#0066ff'))
     .style({ opacity: 0.8 });
 
   layers['point'] = { layer: pointLayer, visible: true };
   const pointToggle = createLayerToggle('point', '点图层 (circle)');
   pointToggle.onchange = () => {
-    pointLayer.setVisibility(pointToggle.checked);
+    pointToggle.checked ? pointLayer.show() : pointLayer.hide();
   };
   scene.addLayer(pointLayer);
 
@@ -120,7 +120,7 @@ export const displayTest: TestCase = async (options) => {
   layers['line'] = { layer: lineLayer, visible: true };
   const lineToggle = createLayerToggle('line', '线图层 (line)');
   lineToggle.onchange = () => {
-    lineLayer.setVisibility(lineToggle.checked);
+    lineToggle.checked ? lineLayer.show() : lineLayer.hide();
   };
   scene.addLayer(lineLayer);
 
@@ -172,7 +172,7 @@ export const displayTest: TestCase = async (options) => {
   layers['polygon'] = { layer: polygonLayer, visible: true };
   const polygonToggle = createLayerToggle('polygon', '多边形图层 (fill)');
   polygonToggle.onchange = () => {
-    polygonLayer.setVisibility(polygonToggle.checked);
+    polygonToggle.checked ? polygonLayer.show() : polygonLayer.hide();
   };
   scene.addLayer(polygonLayer);
 
@@ -181,7 +181,7 @@ export const displayTest: TestCase = async (options) => {
     'https://gw.alipayobjects.com/os/antfincdn/8Ps2h%24qgmk/traffic_110000.csv',
   ).then((res) => res.text());
 
-  const heatmapLayer = new HeatmapLayer({})
+  const heatmapLayer = new HeatmapLayer({ autoFit: true })
     .source(heatmapData, {
       parser: {
         type: 'csv',
@@ -190,7 +190,7 @@ export const displayTest: TestCase = async (options) => {
       },
     })
     .shape('heatmap')
-    .size('count', [0, 1])
+    .size('type', [0, 1.0])
     .style({
       intensity: 2,
       radius: 20,
@@ -204,7 +204,7 @@ export const displayTest: TestCase = async (options) => {
   layers['heatmap'] = { layer: heatmapLayer, visible: true };
   const heatmapToggle = createLayerToggle('heatmap', '热力图层 (heatmap)');
   heatmapToggle.onchange = () => {
-    heatmapLayer.setVisibility(heatmapToggle.checked);
+    heatmapToggle.checked ? heatmapLayer.show() : heatmapLayer.hide();
   };
   scene.addLayer(heatmapLayer);
 

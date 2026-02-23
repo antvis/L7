@@ -76,6 +76,7 @@
     "three": "0.115.0"
   },
   "devDependencies": {
+    "@antv/l7-draw": "^3.1.5",
     "@antv/translator": "^1.0.1",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
@@ -129,7 +130,7 @@
     "typescript-eslint": "^8.36.0",
     "vite": "^5.0.9",
     "vite-plugin-cp": "^4.0.8",
-    "vite-plugin-string": "^1.2.2",
+    "vite-plugin-string": "^1.2.3",
     "webpack-bundle-analyzer": "^4.10.1"
   },
   "resolutions": {

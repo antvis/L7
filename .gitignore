@@ -79,3 +79,4 @@ jspm_packages/
 *-diff.png
 .agents/*
 .github/skills/*
+.playwright-mcp

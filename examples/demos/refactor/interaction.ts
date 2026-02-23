@@ -26,7 +26,7 @@ export const interactionTest: TestCase = async (options) => {
   logPanel.id = 'interaction-log';
   logPanel.style.cssText = `
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     right: 10px;
     width: 300px;
     max-height: 400px;

@@ -22,7 +22,7 @@ export const animationTest: TestCase = async (options) => {
   const controlPanel = document.createElement('div');
   controlPanel.style.cssText = `
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     right: 10px;
     background: rgba(0, 0, 0, 0.8);
     color: #fff;

@@ -1380,7 +1380,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 继承空方法
    * @param time
    */
-   
+
   public setEarthTime(time: number) {
     console.warn('empty fn');
   }
