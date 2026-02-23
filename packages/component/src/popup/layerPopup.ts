@@ -21,7 +21,7 @@ export type LayerPopupConfigItem = {
 export interface ILayerPopupOption extends IPopupOption {
   config?: LayerPopupConfigItem[];
   items?: LayerPopupConfigItem[];
-  trigger: 'hover' | 'click' | 'touchend' | 'touchstart';
+  trigger?: 'hover' | 'click' | 'touchend' | 'touchstart';
 }
 
 type LayerMapInfo = {
