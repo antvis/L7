@@ -101,10 +101,12 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
   }
 
   protected getDefault(option: Partial<ILayerPopupOption>): ILayerPopupOption {
-    const isHoverTrigger = option.trigger === 'hover';
+    // trigger 默认值为 'hover'
+    const trigger = option.trigger ?? 'hover';
+    const isHoverTrigger = trigger === 'hover';
     return {
       ...super.getDefault(option),
-      trigger: 'hover',
+      trigger,
       followCursor: isHoverTrigger,
       lngLat: {
         lng: 0,
