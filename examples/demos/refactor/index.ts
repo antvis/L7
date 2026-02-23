@@ -7,3 +7,10 @@ export * from './display';
 export * from './events';
 export * from './interaction';
 export * from './resize';
+
+// L7 Draw 绘制测试
+export * from './draw-circle';
+export * from './draw-line';
+export * from './draw-point';
+export * from './draw-polygon';
+export * from './draw-rect';

@@ -212,6 +212,9 @@ export default class InteractionService extends EventEmitter implements IInterac
     const target = this.createInteractionTarget(event, DragEventMap['pointerdown']);
     this.emit(InteractionEvent.Drag, target);
 
+    // 同时发送 mousedown 类型的 Hover 事件，保持向后兼容
+    this.emit(InteractionEvent.Hover, this.createInteractionTarget(event, 'mousedown'));
+
     // 启动长按计时器
     this.startPressTimer(event);
   };
@@ -243,6 +246,9 @@ export default class InteractionService extends EventEmitter implements IInterac
       const target = this.createInteractionTarget(event, DragEventMap['pointerup']);
       this.emit(InteractionEvent.Drag, target);
     }
+
+    // 发送 mouseup 类型的 Hover 事件，保持向后兼容
+    this.emit(InteractionEvent.Hover, this.createInteractionTarget(event, 'mouseup'));
 
     this.isDragging = false;
     this.indragging = false;
@@ -295,7 +301,8 @@ export default class InteractionService extends EventEmitter implements IInterac
   }
 
   private onClick = (event: MouseEvent): void => {
-    event.stopPropagation();
+    // 注意：不要调用 stopPropagation()，否则会阻止事件冒泡到底层地图（如 Mapbox）
+    // 导致 l7-draw 等依赖地图原生事件的库无法正常工作
 
     const { x, y } = this.clientToContainerCoords(event.clientX, event.clientY);
     const lngLat = this.mapService.containerToLngLat([x, y]);
@@ -319,7 +326,16 @@ export default class InteractionService extends EventEmitter implements IInterac
     // 延迟发送单击事件，等待可能的双击
     this.clearClickTimer();
     this.clickTimer = setTimeout(() => {
+      // 发送 Click 事件
       this.emit(InteractionEvent.Click, {
+        x,
+        y,
+        lngLat,
+        type: 'click',
+        target: event,
+      });
+      // 同时通过 Hover 事件发送，保持向后兼容
+      this.emit(InteractionEvent.Hover, {
         x,
         y,
         lngLat,
@@ -331,7 +347,7 @@ export default class InteractionService extends EventEmitter implements IInterac
   };
 
   private onDoubleClick = (event: MouseEvent): void => {
-    event.stopPropagation();
+    // 注意：不要调用 stopPropagation()，否则会阻止事件冒泡到底层地图
 
     // 清除单击计时器
     this.clearClickTimer();
@@ -343,7 +359,16 @@ export default class InteractionService extends EventEmitter implements IInterac
     this.lastClickTime = 0;
     this.lastClickXY = [-1, -1];
 
+    // 发送 DblClick 事件
     this.emit(InteractionEvent.DblClick, {
+      x,
+      y,
+      lngLat,
+      type: 'dblclick',
+      target: event,
+    });
+    // 同时通过 Hover 事件发送，保持向后兼容
+    this.emit(InteractionEvent.Hover, {
       x,
       y,
       lngLat,
