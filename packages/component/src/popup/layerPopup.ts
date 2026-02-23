@@ -63,8 +63,8 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * 当 trigger 为 'click' 时，移动端使用 'touchend'，PC 端使用 'click'
    * @protected
    */
-  protected getActualTriggerEvent() {
-    const { trigger } = this.popupOption;
+  protected getActualTriggerEvent(): 'hover' | 'click' | 'touchend' | 'touchstart' {
+    const trigger = this.popupOption.trigger ?? 'hover';
     if (trigger === 'click') {
       return isPC() ? 'click' : 'touchend';
     }
