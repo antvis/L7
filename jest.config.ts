@@ -20,7 +20,7 @@ const sharedConfig: Partial<Config> = {
 
   moduleNameMapper: {
     '@antv/l7-(.+)$': '<rootDir>packages/$1/src',
-    '^.+.(css)$': 'jest-text-transformer',
+    '^.+.(css|less)$': 'jest-text-transformer',
   },
 };
 

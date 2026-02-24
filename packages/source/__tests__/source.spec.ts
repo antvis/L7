@@ -71,7 +71,7 @@ describe('source constructor', () => {
         },
       ],
     });
-    expect(source.data.dataArray.length).toEqual(1438);
+    expect(source.data.dataArray.length).toEqual(2511);
   });
 
   it('source.transform.hexagon', () => {

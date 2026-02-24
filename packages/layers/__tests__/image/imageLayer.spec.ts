@@ -6,6 +6,11 @@ describe('ImageLayer', () => {
   beforeEach(() => {
     scene = TestScene();
   });
+
+  afterEach(() => {
+    scene.destroy();
+  });
+
   it('ImageLayer test', () => {
     const layer = new ImageLayer({});
     layer

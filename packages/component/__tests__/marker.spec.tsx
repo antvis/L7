@@ -9,7 +9,7 @@ describe('Marker', () => {
 
   beforeEach(() => {
     popup = new Popup({ offsets: [0, 20] }).setHTML('<h1>test</h1>');
-    marker = new Marker().setLnglat({ lng: 120, lat: 30 }).setPopup(popup);
+    marker = new Marker({ overflowHide: false }).setLnglat({ lng: 120, lat: 30 }).setPopup(popup);
     scene = TestScene({
       center: [120, 30],
       zoom: 5,
