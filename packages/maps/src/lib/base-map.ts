@@ -197,7 +197,6 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   public abstract setMapStyle(name: MapStyleName): void;
 
-   
   public meterToCoord(center: [number, number], outer: [number, number]) {
     return 1.0;
   }

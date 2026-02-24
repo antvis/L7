@@ -126,7 +126,7 @@ export default class BaseTileLayer {
 
   private bindTilesetEvent() {
     // 瓦片数据加载成功
-     
+
     this.tilesetManager.on('tile-loaded', (tile: SourceTile) => {
       // 将事件抛出，图层上可以监听使用
     });
@@ -138,7 +138,7 @@ export default class BaseTileLayer {
     });
 
     // 瓦片数据加载失败
-     
+
     this.tilesetManager.on('tile-error', (error, tile: SourceTile) => {
       // 将事件抛出，图层上可以监听使用
       this.tileError(error);
@@ -173,7 +173,6 @@ export default class BaseTileLayer {
   //  防抖操作
   public viewchange = debounce(this.mapchange, 24);
 
-   
   public tileLoaded(tile: SourceTile) {
     //
   }
@@ -244,7 +243,6 @@ export default class BaseTileLayer {
     }
   }
 
-   
   public setPickState(layers: ILayer[]) {
     return;
   }

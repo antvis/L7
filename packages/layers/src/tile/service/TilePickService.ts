@@ -127,7 +127,7 @@ export class TilePickService implements ITilePickService {
   }
 
   // Tip: for interface define
-   
+
   public pickRasterLayer() {
     return false;
   }
