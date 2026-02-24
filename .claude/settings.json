@@ -1,5 +1,14 @@
 {
   "permissions": {
-    "allow": ["Bash(git add:*)", "Bash(git merge:*)"]
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git merge:*)",
+      "Bash(du:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(sort:*)",
+      "Bash(pnpm install)",
+      "Bash(wc:*)"
+    ]
   }
 }
