@@ -55,9 +55,9 @@ interface IBaseMap {
   size: number;
 }
 
-class AMap imimplements IBaseMap {}
+class AMap implements IBaseMap {}
 
-class BMap imimplements IBaseMap {}
+class BMap implements IBaseMap {}
 ```
 
 ### 文件命名
@@ -87,7 +87,7 @@ const { attributes } = options;
 // or
 const attributes = getAttributes();
 
-caculateScales(attributes || []);
+calculateScales(attributes || []);
 ```
 
 ### 常量命名
@@ -128,7 +128,7 @@ const scaleMap = {};
 
 ```typescript
 class ALayer {
-  private contetx: Object;
+  private context: object;
 
   private setOptionsAttr() {}
 }
@@ -138,7 +138,7 @@ class ALayer {
 
 ```typescript
 class ALayer {
-  public _debug: bool;
+  public _debug: boolean;
 }
 ```
 
@@ -207,7 +207,7 @@ class ALayer {
    * 我是干什么的
    * 我还能干什么
    */
-  public contetx: Object;
+  public context: object;
 }
 ```
 
@@ -223,7 +223,7 @@ function getMapCenter() {}
 class ALayer {
   // 我是干什么的
   // xxx
-  public contetx: Object;
+  public context: object;
 }
 ```
 
