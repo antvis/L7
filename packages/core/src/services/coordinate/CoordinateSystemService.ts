@@ -26,15 +26,16 @@ export default class CoordinateSystemService implements ICoordinateSystemService
   private viewportCenter: [number, number];
 
   /**
+   * 屏幕中心点的 fp64 低精度部分，用于高精度坐标偏移计算
+   * fp64LowPart(x) = x - Math.fround(x)
+   */
+  private viewportCenterLow: [number, number] = [0, 0];
+
+  /**
    * 屏幕中心点的最终投影结果，在 CPU 侧计算后传入 Shader
    * @see https://zhuanlan.zhihu.com/p/57469121
    */
   private viewportCenterProjection: [number, number, number, number];
-
-  /**
-   * 像素单位 -> 经纬度 [x, y, z]
-   */
-  private pixelsPerDegree: [number, number, number];
 
   /**
    * 像素单位 -> 经纬度 [lng, lat] 使用泰勒级数展开
@@ -47,6 +48,11 @@ export default class CoordinateSystemService implements ICoordinateSystemService
    * 像素单位 -> 米
    */
   private pixelsPerMeter: [number, number, number];
+
+  /**
+   * 像素单位 -> 经纬度 [x, y, z]
+   */
+  private pixelsPerDegree: [number, number, number];
 
   /**
    * 重新计算当前坐标系参数
@@ -66,6 +72,11 @@ export default class CoordinateSystemService implements ICoordinateSystemService
       zoom,
     });
     this.viewportCenter = center;
+    // 计算 fp64 低精度部分，用于高精度坐标偏移：fp64LowPart(x) = x - Math.fround(x)
+    this.viewportCenterLow = [
+      center[0] - Math.fround(center[0]),
+      center[1] - Math.fround(center[1]),
+    ];
     this.viewportCenterProjection = [0, 0, 0, 0];
     this.pixelsPerMeter = pixelsPerMeter;
     this.pixelsPerDegree = pixelsPerDegree;
@@ -100,6 +111,10 @@ export default class CoordinateSystemService implements ICoordinateSystemService
 
   public getViewportCenterProjection(): [number, number, number, number] {
     return this.viewportCenterProjection;
+  }
+
+  public getViewportCenterLow(): [number, number] {
+    return this.viewportCenterLow;
   }
 
   public getPixelsPerDegree(): [number, number, number] {
