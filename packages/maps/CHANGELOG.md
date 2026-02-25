@@ -1,5 +1,20 @@
 # Change Log
 
+## 3.0.0-beta.0
+
+### Minor Changes
+
+- [#2819](https://github.com/antvis/L7/pull/2819) [`497ef01`](https://github.com/antvis/L7/commit/497ef0123c45c88ad5f36d7a49844dfd974a8c7c) Thanks [@lzxue](https://github.com/lzxue)! - 重构版本预发
+
+- [#2819](https://github.com/antvis/L7/pull/2819) [`497ef01`](https://github.com/antvis/L7/commit/497ef0123c45c88ad5f36d7a49844dfd974a8c7c) Thanks [@lzxue](https://github.com/lzxue)! - 重构三方依赖
+
+### Patch Changes
+
+- Updated dependencies [[`497ef01`](https://github.com/antvis/L7/commit/497ef0123c45c88ad5f36d7a49844dfd974a8c7c), [`497ef01`](https://github.com/antvis/L7/commit/497ef0123c45c88ad5f36d7a49844dfd974a8c7c)]:
+  - @antv/l7-utils@3.0.0-beta.0
+  - @antv/l7-core@3.0.0-beta.0
+  - @antv/l7-map@3.0.0-beta.0
+
 ## 2.23.2
 
 ### Patch Changes
