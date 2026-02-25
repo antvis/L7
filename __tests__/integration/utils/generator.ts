@@ -53,7 +53,8 @@ export function generateCanvasTestCases(
         // Chart already rendered, capture into buffer.
         const buffer = await page.locator('canvas').screenshot();
         const dir = `${__dirname}/../snapshots`;
-        const maxError = 0;
+        // Allow some pixel differences due to cross-platform rendering (macOS vs Linux CI)
+        const maxError = 100;
         console.log(`\nTesting ${dir}... ${key}`);
 
         try {
