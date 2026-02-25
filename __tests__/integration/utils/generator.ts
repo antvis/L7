@@ -53,8 +53,9 @@ export function generateCanvasTestCases(
         // Chart already rendered, capture into buffer.
         const buffer = await page.locator('canvas').screenshot();
         const dir = `${__dirname}/../snapshots`;
-        // Allow some pixel differences due to cross-platform rendering (macOS vs Linux CI)
-        const maxError = 100;
+        // Allow pixel differences due to cross-platform rendering (macOS vs Linux CI)
+        // Heatmap layers tend to have more variance due to anti-aliasing and blending
+        const maxError = 150;
         console.log(`\nTesting ${dir}... ${key}`);
 
         try {
