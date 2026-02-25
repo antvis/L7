@@ -26,6 +26,7 @@ const sharedConfig: Partial<Config> = {
 
 const config: Config = {
   testTimeout: 100000,
+  bail: 0, // 继续运行所有测试，即使有失败
   globalSetup: './__tests__/integration/preset/setup.js',
   globalTeardown: './__tests__/integration/preset/teardown.js',
   testEnvironment: './__tests__/integration/preset/environment.js',
