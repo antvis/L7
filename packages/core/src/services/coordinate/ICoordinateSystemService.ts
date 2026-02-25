@@ -21,6 +21,7 @@ export const CoordinateUniform = {
   CoordinateSystem: 'u_CoordinateSystem',
   ViewportCenter: 'u_ViewportCenter',
   ViewportCenterProjection: 'u_ViewportCenterProjection',
+  ViewportCenterLow: 'u_ViewportCenterLow',
   PixelsPerDegree: 'u_PixelsPerDegree',
   PixelsPerDegree2: 'u_PixelsPerDegree2',
   PixelsPerMeter: 'u_PixelsPerMeter',
@@ -35,6 +36,7 @@ export interface ICoordinateSystemService {
   getViewportCenter(): [number, number];
   setViewportCenter(center: [number, number]): void;
   getViewportCenterProjection(): [number, number, number, number];
+  getViewportCenterLow(): [number, number];
   getPixelsPerDegree(): [number, number, number];
   getPixelsPerDegree2(): [number, number, number];
   getPixelsPerMeter(): [number, number, number];

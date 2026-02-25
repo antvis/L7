@@ -84,10 +84,11 @@ vec4 project_position(vec4 position, vec2 position64xyLow) {
     vec2 center = u_ViewportCenter;
     float X = absolutePosition.x - center.x;
     float Y = absolutePosition.y - center.y;
+    // 减去中心点的低精度部分，实现全双精度坐标计算，解决高缩放级别下坐标偏移问题
     return project_offset(
       vec4(
-        X + absolutePosition64xyLow.x,
-        Y + absolutePosition64xyLow.y,
+        X + absolutePosition64xyLow.x - u_ViewportCenterLow.x,
+        Y + absolutePosition64xyLow.y - u_ViewportCenterLow.y,
         absolutePosition.z,
         absolutePosition.w
       )

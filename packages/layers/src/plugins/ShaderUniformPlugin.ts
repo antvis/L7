@@ -118,6 +118,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     const u_ViewportSize = [width, height];
     const u_FocalDistance = this.cameraService.getFocalDistance();
     const u_RelativeOrigin = offset && offset.length >= 2 ? [offset[0], offset[1]] : [0, 0];
+    const u_ViewportCenterLow = this.coordinateSystemService.getViewportCenterLow();
 
     const data: number[] = [
       ...u_ViewMatrix, // 16
@@ -137,7 +138,8 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
       ...u_ViewportSize, // 4
       u_FocalDistance, // 1
       ...u_RelativeOrigin, // 2
-      0, // padding
+      0, // padding (u_Reserved3)
+      ...u_ViewportCenterLow, // 2
     ];
 
     return {
@@ -155,6 +157,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
         [CoordinateUniform.CoordinateSystem]: u_CoordinateSystem,
         [CoordinateUniform.ViewportCenter]: u_ViewportCenter,
         [CoordinateUniform.ViewportCenterProjection]: u_ViewportCenterProjection,
+        [CoordinateUniform.ViewportCenterLow]: u_ViewportCenterLow,
         [CoordinateUniform.PixelsPerDegree]: u_PixelsPerDegree,
         [CoordinateUniform.PixelsPerDegree2]: u_PixelsPerDegree2,
         [CoordinateUniform.PixelsPerMeter]: u_PixelsPerMeter,
