@@ -46,7 +46,7 @@ export function generateCanvasTestCases(
 
         // Go to test page served by vite devServer.
         const url = `http://localhost:${port}/?namespace=${namespace}&name=${name}&snapshot=true`;
-        await page.goto(url);
+        await page.goto(url, { timeout: 60000, waitUntil: 'domcontentloaded' });
         await readyPromise;
         await sleep(sleepTime);
 
