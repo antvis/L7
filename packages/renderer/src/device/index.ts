@@ -7,6 +7,8 @@ import {
   WebGLDeviceContribution,
   WebGPUDeviceContribution,
   colorNewFromRGBA,
+  copyMegaState,
+  defaultMegaState,
 } from '@antv/g-device-api';
 import type {
   IAttribute,
@@ -374,49 +376,27 @@ export default class DeviceRendererService implements IRendererService {
 
   // TODO: 临时方法
   setState() {
-    // this.gl({
-    //   cull: {
-    //     enable: false,
-    //     face: 'back',
-    //   },
-    //   viewport: {
-    //     x: 0,
-    //     y: 0,
-    //     height: this.width,
-    //     width: this.height,
-    //   },
-    //   blend: {
-    //     enable: true,
-    //     equation: 'add',
-    //   },
-    //   framebuffer: null,
-    // });
-    // this.gl._refresh();
+    // Reset the device's cached GL state to force re-application on the next draw.
+    // This is necessary because Three.js modifies GL state directly without going
+    // through the device's state management, causing the cache to become stale.
+    // @ts-ignore
+    this.device['currentMegaState'] = copyMegaState(defaultMegaState);
+    // Explicitly restore cull face since Three.js may have enabled it,
+    // and the device won't re-disable it if currentMegaState.cullMode is already NONE.
+    const gl = this.getGLContext();
+    gl.disable(gl.CULL_FACE);
   }
 
   setBaseState() {
-    // this.gl({
-    //   cull: {
-    //     enable: false,
-    //     face: 'back',
-    //   },
-    //   viewport: {
-    //     x: 0,
-    //     y: 0,
-    //     height: this.width,
-    //     width: this.height,
-    //   },
-    //   blend: {
-    //     enable: false,
-    //     equation: 'add',
-    //   },
-    //   framebuffer: null,
-    // });
-    // this.gl._refresh();
+    // @ts-ignore
+    this.device['currentMegaState'] = copyMegaState(defaultMegaState);
+    const gl = this.getGLContext();
+    gl.disable(gl.CULL_FACE);
   }
+
   setCustomLayerDefaults() {
-    // const gl = this.getGLContext();
-    // gl.disable(gl.CULL_FACE);
+    const gl = this.getGLContext();
+    gl.disable(gl.CULL_FACE);
   }
 
   setDirty(flag: boolean): void {
