@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git merge:*)",
+      "Bash(du:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(sort:*)",
+      "Bash(pnpm install)",
+      "Bash(wc:*)",
+      "Bash(yarn run test)",
+      "Bash(node -e:*)",
+      "Bash(npm rebuild)",
+      "Bash(pnpm rebuild gl:*)",
+      "Bash(node-gyp rebuild:*)",
+      "Bash(npx jest:*)",
+      "Bash(git checkout:*)",
+      "Bash(yarn run test:unit:*)",
+      "Bash(yarn run test:integration:*)"
+    ]
+  }
+}

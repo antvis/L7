@@ -45,6 +45,21 @@ import {
 } from './constants';
 const { isPlainObject, isTypedArray, isNil } = lodashUtil;
 
+/**
+ * 扩展 RenderPipeline 接口，添加自定义的 stencilFuncReference 属性
+ * 用于在渲染时设置模板引用值
+ */
+interface ExtendedRenderPipeline extends RenderPipeline {
+  stencilFuncReference?: number;
+}
+
+/**
+ * 扩展 Device 接口，添加访问私有属性的声明
+ */
+interface ExtendedDevice extends Device {
+  swapChainHeight?: number;
+}
+
 export default class DeviceModel implements IModel {
   private destroyed: boolean = false;
   private uniforms: {
@@ -57,6 +72,10 @@ export default class DeviceModel implements IModel {
   private indexBuffer: Buffer;
   private vertexBuffers: Buffer[] = [];
   private bindings: Bindings;
+
+  // Pipeline cache to avoid recreating pipeline on every draw call
+  private pipelineCache: Map<string, RenderPipeline> = new Map();
+  private currentPipelineKey: string = '';
 
   constructor(
     private device: Device,
@@ -140,6 +159,70 @@ export default class DeviceModel implements IModel {
     this.inputLayout = inputLayout;
 
     this.pipeline = this.createPipeline(options);
+
+    // 缓存初始 Pipeline
+    const initialKey = this.getPipelineKey(options);
+    this.pipelineCache.set(initialKey, this.pipeline);
+    this.currentPipelineKey = initialKey;
+  }
+
+  /**
+   * 生成 Pipeline 缓存键，用于判断是否需要重新创建 Pipeline
+   * 包含所有影响 Pipeline 创建的参数
+   * 注意：当 blend/stencil 禁用时，使用简化的 key 以避免创建重复 Pipeline
+   */
+  private getPipelineKey(options: IModelInitializationOptions, pick?: boolean): string {
+    const { primitive = gl.TRIANGLES, depth, cull, blend, stencil } = options;
+
+    // 序列化 stencil 相关参数
+    // 当 stencil 禁用时，使用简化 key
+    let stencilKey: string;
+    if (stencil?.enable) {
+      stencilKey = [
+        1, // enabled
+        stencil.mask ?? 0xffffffff,
+        stencil.func?.cmp ?? gl.ALWAYS,
+        stencil.func?.ref ?? 0,
+        stencil.func?.mask ?? 0xffffffff,
+        stencil.opFront?.fail ?? gl.KEEP,
+        stencil.opFront?.zfail ?? gl.KEEP,
+        stencil.opFront?.zpass ?? gl.KEEP,
+        stencil.opBack?.fail ?? gl.KEEP,
+        stencil.opBack?.zfail ?? gl.KEEP,
+        stencil.opBack?.zpass ?? gl.KEEP,
+      ].join(',');
+    } else {
+      // stencil 禁用时使用统一的 key
+      stencilKey = '0';
+    }
+
+    // 序列化 blend 相关参数
+    // 当 blend 禁用时，使用简化 key
+    let blendKey: string;
+    if (blend?.enable) {
+      blendKey = [
+        1, // enabled
+        blend.func?.srcRGB ?? gl.SRC_ALPHA,
+        blend.func?.dstRGB ?? gl.ONE_MINUS_SRC_ALPHA,
+        blend.func?.srcAlpha ?? gl.SRC_ALPHA,
+        blend.func?.dstAlpha ?? gl.ONE_MINUS_SRC_ALPHA,
+        blend.equation?.rgb ?? gl.FUNC_ADD,
+        blend.equation?.alpha ?? gl.FUNC_ADD,
+      ].join(',');
+    } else {
+      // blend 禁用时使用统一的 key
+      blendKey = '0';
+    }
+
+    const parts: string[] = [
+      `primitive:${primitive}`,
+      `pick:${!!pick}`,
+      `depth:${depth?.enable ?? true}:${depth?.func ?? gl.LESS}:${depth?.mask ?? true}`,
+      `cull:${cull?.enable ?? false}:${cull?.face ?? gl.BACK}`,
+      `blend:${blendKey}`,
+      `stencil:${stencilKey}`,
+    ];
+    return parts.join('|');
   }
 
   private createPipeline(options: IModelInitializationOptions, pick?: boolean) {
@@ -221,8 +304,7 @@ export default class DeviceModel implements IModel {
 
     // Save stencil reference on pipeline for later use.
     if (stencilEnabled && !isNil(stencil?.func?.ref)) {
-      // @ts-ignore
-      pipeline.stencilFuncReference = stencil.func.ref;
+      (pipeline as ExtendedRenderPipeline).stencilFuncReference = stencil.func.ref;
     }
 
     return pipeline;
@@ -271,15 +353,25 @@ export default class DeviceModel implements IModel {
 
     const { renderPass, currentFramebuffer, width, height } = this.service;
 
-    // TODO: Recreate pipeline only when blend / cull changed.
-    this.pipeline = this.createPipeline(mergedOptions, pick);
+    // Use cached pipeline if state hasn't changed
+    const pipelineKey = this.getPipelineKey(mergedOptions, pick);
+
+    // 检查缓存中是否有对应的 Pipeline
+    let cachedPipeline = this.pipelineCache.get(pipelineKey);
+    if (!cachedPipeline) {
+      // 创建新的 Pipeline 并缓存
+      cachedPipeline = this.createPipeline(mergedOptions, pick);
+      this.pipelineCache.set(pipelineKey, cachedPipeline);
+    }
+
+    // 更新当前 Pipeline 引用（不销毁任何 Pipeline）
+    this.pipeline = cachedPipeline;
+    this.currentPipelineKey = pipelineKey;
 
     // const height = this.device['swapChainHeight'];
-    const device = this.service['device'];
-    // @ts-ignore
-    const tmpHeight = device['swapChainHeight'];
-    // @ts-ignore
-    device['swapChainHeight'] = currentFramebuffer?.['height'] || height;
+    const device = this.service['device'] as ExtendedDevice;
+    const tmpHeight = device.swapChainHeight;
+    device.swapChainHeight = currentFramebuffer?.['height'] || height;
 
     renderPass.setViewport(
       0,
@@ -288,14 +380,12 @@ export default class DeviceModel implements IModel {
       currentFramebuffer?.['height'] || height,
     );
 
-    // @ts-ignore
-    device['swapChainHeight'] = tmpHeight;
+    device.swapChainHeight = tmpHeight;
 
     renderPass.setPipeline(this.pipeline);
-    // @ts-ignore
-    if (!isNil(this.pipeline.stencilFuncReference)) {
-      // @ts-ignore
-      renderPass.setStencilReference(this.pipeline.stencilFuncReference);
+    const extendedPipeline = this.pipeline as ExtendedRenderPipeline;
+    if (!isNil(extendedPipeline.stencilFuncReference)) {
+      renderPass.setStencilReference(extendedPipeline.stencilFuncReference);
     }
     renderPass.setVertexInput(
       this.inputLayout,
@@ -330,14 +420,17 @@ export default class DeviceModel implements IModel {
     if (this.bindings) {
       renderPass.setBindings(this.bindings);
       // Compatible to WebGL1.
+      // Note: We need to convert DeviceTexture2D and DeviceFramebuffer to their underlying
+      // texture objects for legacy uniform handling. Type assertion is needed because
+      // the IUniform type doesn't include these specific types.
       Object.keys(this.uniforms).forEach((uniformName) => {
         const uniform = this.uniforms[uniformName];
         if (uniform instanceof DeviceTexture2D) {
-          // @ts-ignore
-          this.uniforms[uniformName] = uniform.get();
+          (this.uniforms as Record<string, unknown>)[uniformName] = uniform.get();
         } else if (uniform instanceof DeviceFramebuffer) {
-          // @ts-ignore
-          this.uniforms[uniformName] = uniform.get()['texture'];
+          // Access texture property from RenderTarget
+          const renderTarget = uniform.get() as unknown as { texture: unknown };
+          (this.uniforms as Record<string, unknown>)[uniformName] = renderTarget.texture;
         }
       });
       this.program.setUniformsLegacy(this.uniforms);
@@ -363,7 +456,9 @@ export default class DeviceModel implements IModel {
     this.bindings?.destroy();
     // 不能进行销毁，删除 deleteVertexArray
     // this.inputLayout.destroy();
-    this.pipeline.destroy();
+    // 销毁所有缓存的 Pipeline
+    this.pipelineCache.forEach((pipeline) => pipeline.destroy());
+    this.pipelineCache.clear();
     this.destroyed = true;
   }
 
@@ -478,15 +573,18 @@ export default class DeviceModel implements IModel {
     },
     prefix: string,
   ) {
-    if (
+    // Check for primitive types and special cases
+    const isPrimitiveType =
       uniformValue === null ||
-      typeof uniformValue === 'number' || // u_A: 1
-      typeof uniformValue === 'boolean' || // u_A: false
-      (Array.isArray(uniformValue) && typeof uniformValue[0] === 'number') || // u_A: [1, 2, 3]
-      isTypedArray(uniformValue) || // u_A: Float32Array
-      // @ts-ignore
-      uniformValue === '' ||
-      'resize' in uniformValue
+      typeof uniformValue === 'string' || // 包括空字符串
+      typeof uniformValue === 'number' ||
+      typeof uniformValue === 'boolean' ||
+      (Array.isArray(uniformValue) && typeof uniformValue[0] === 'number') ||
+      isTypedArray(uniformValue);
+
+    if (
+      isPrimitiveType ||
+      (uniformValue !== null && typeof uniformValue === 'object' && 'resize' in uniformValue)
     ) {
       uniforms[`${prefix && prefix + '.'}${uniformName}`] = uniformValue;
       return;
@@ -494,11 +592,11 @@ export default class DeviceModel implements IModel {
 
     // u_Struct.a.b.c
     if (isPlainObject(uniformValue)) {
-      Object.keys(uniformValue).forEach((childName) => {
+      const obj = uniformValue as Record<string, IUniform>;
+      Object.keys(obj).forEach((childName) => {
         this.extractUniformsRecursively(
           childName,
-          // @ts-ignore
-          uniformValue[childName],
+          obj[childName],
           uniforms,
           `${prefix && prefix + '.'}${uniformName}`,
         );
@@ -507,16 +605,19 @@ export default class DeviceModel implements IModel {
 
     // u_Struct[0].a
     if (Array.isArray(uniformValue)) {
-      uniformValue.forEach((child, idx) => {
-        Object.keys(child).forEach((childName) => {
-          this.extractUniformsRecursively(
-            childName,
-            // @ts-ignore
-            child[childName],
-            uniforms,
-            `${prefix && prefix + '.'}${uniformName}[${idx}]`,
-          );
-        });
+      uniformValue.forEach((child: unknown, idx: number) => {
+        // 只处理对象类型的数组元素
+        if (isPlainObject(child)) {
+          const childObj = child as Record<string, IUniform>;
+          Object.keys(childObj).forEach((childName) => {
+            this.extractUniformsRecursively(
+              childName,
+              childObj[childName],
+              uniforms,
+              `${prefix && prefix + '.'}${uniformName}[${idx}]`,
+            );
+          });
+        }
       });
     }
   }

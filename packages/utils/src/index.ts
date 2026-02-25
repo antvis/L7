@@ -1,6 +1,7 @@
 export * from './ajax';
 export * from './anchor';
 export * from './color';
+export * from './color-parser';
 export * from './config';
 export * as DOM from './dom';
 export * from './env';

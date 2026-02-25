@@ -164,7 +164,12 @@ export default class GlobalConfigService implements IGlobalConfigService {
   public setLayerConfig(sceneId: string, layerId: string, config: Partial<ILayerConfig>) {
     // @ts-ignore
     this.layerConfigCache[layerId] = {
-      ...merge({}, this.sceneConfigCache[sceneId], defaultLayerConfig, config),
+      ...merge(
+        {} as Partial<ILayerConfig>,
+        this.sceneConfigCache[sceneId],
+        defaultLayerConfig,
+        config,
+      ),
     };
   }
 

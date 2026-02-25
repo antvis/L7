@@ -36,7 +36,7 @@ export default class MarkerLayer extends EventEmitter {
     this.zoom = this.markerLayerOption.clusterOption?.zoom || -99;
   }
 
-  public getDefault() {
+  public getDefault(): IMarkerLayerOption {
     return {
       cluster: false,
       clusterOption: {

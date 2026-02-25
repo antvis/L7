@@ -17,8 +17,6 @@ import BaseMapService from '../utils/BaseMapService';
 import './logo.css';
 import GMapLoader from './maploader';
 
-const GMAP_API_KEY: string = 'AIzaSyDBDCfl4pvuDtaazdCog3LmhA7CQLhmcRE';
-
 const EventMap: {
   [key: string]: any;
 } = {
@@ -67,7 +65,7 @@ export default class TMapService extends BaseMapService<any> {
       id,
       mapInstance,
       center = [121.30654632240122, 31.25744185633306],
-      token = GMAP_API_KEY,
+      token,
       minZoom = 3,
       maxZoom = 18,
       logoVisible = true,
@@ -75,8 +73,14 @@ export default class TMapService extends BaseMapService<any> {
     } = this.config;
 
     if (!(window.google?.maps?.Map || mapInstance)) {
+      if (!token) {
+        console.warn(
+          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
+          'color: #873bf4;font-weigh:900;font-size: 16px;',
+        );
+      }
       await GMapLoader.load({
-        key: token,
+        key: token || '',
       });
     }
 

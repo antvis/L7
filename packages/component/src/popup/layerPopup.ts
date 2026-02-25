@@ -21,7 +21,7 @@ export type LayerPopupConfigItem = {
 export interface ILayerPopupOption extends IPopupOption {
   config?: LayerPopupConfigItem[];
   items?: LayerPopupConfigItem[];
-  trigger: 'hover' | 'click' | 'touchend' | 'touchstart';
+  trigger?: 'hover' | 'click' | 'touchend' | 'touchstart';
 }
 
 type LayerMapInfo = {
@@ -63,8 +63,8 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
    * 当 trigger 为 'click' 时，移动端使用 'touchend'，PC 端使用 'click'
    * @protected
    */
-  protected getActualTriggerEvent() {
-    const { trigger } = this.popupOption;
+  protected getActualTriggerEvent(): 'hover' | 'click' | 'touchend' | 'touchstart' {
+    const trigger = this.popupOption.trigger ?? 'hover';
     if (trigger === 'click') {
       return isPC() ? 'click' : 'touchend';
     }
@@ -101,10 +101,12 @@ export default class LayerPopup extends Popup<ILayerPopupOption> {
   }
 
   protected getDefault(option: Partial<ILayerPopupOption>): ILayerPopupOption {
-    const isHoverTrigger = option.trigger === 'hover';
+    // trigger 默认值为 'hover'
+    const trigger = option.trigger ?? 'hover';
+    const isHoverTrigger = trigger === 'hover';
     return {
       ...super.getDefault(option),
-      trigger: 'hover',
+      trigger,
       followCursor: isHoverTrigger,
       lngLat: {
         lng: 0,

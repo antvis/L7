@@ -4,7 +4,10 @@
   "description": "Component for L7",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
-  "sideEffects": true,
+  "sideEffects": [
+    "*.css",
+    "*.less"
+  ],
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
@@ -17,8 +20,7 @@
     "build": "npm run clean && father build",
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",
-    "clean": "rimraf dist es lib",
-    "less": "lessc src/css/index.less src/css/index.css"
+    "clean": "rimraf dist es lib"
   },
   "dependencies": {
     "@antv/l7-core": "workspace:*",

@@ -24,17 +24,12 @@
     "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/helpers": "^6.1.4",
-    "d3-color": "^1.4.0",
     "earcut": "^2.1.0",
     "eventemitter3": "^4.0.0",
-    "gl-matrix": "^3.1.0",
-    "lodash": "^4.17.15",
-    "web-worker-helper": "^0.0.3"
+    "gl-matrix": "^3.1.0"
   },
   "devDependencies": {
-    "@types/d3-color": "^1.2.2",
-    "@types/earcut": "^2.1.0",
-    "@types/lodash": "^4.14.138"
+    "@types/earcut": "^2.1.0"
   },
   "publishConfig": {
     "access": "public",

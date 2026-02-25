@@ -20,8 +20,11 @@ import './logo.css';
 import { MapTheme } from './theme';
 
 const AMAP_VERSION = '2.0';
-const AMAP_API_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
 const ZOOM_OFFSET = 1;
+// 默认的高德地图 Key，仅用于开发和演示，生产环境请使用自己的 Key
+// 申请地址: https://lbs.amap.com/api/javascript-web-api/guide/abc/prepare
+const DEFAULT_AMAP_KEY = '6c0e16556c6c774e7bb61bc6089483a5';
+
 // @ts-ignore 高德地图强制使用 WebGL,否则支付宝端内无法使用
 window.forceWebGL = true;
 
@@ -45,16 +48,23 @@ export default class BMapService extends BaseMap<AMap.Map> {
       style = 'light',
       minZoom = 0,
       maxZoom = 24,
-      token = AMAP_API_KEY,
+      token,
       mapInstance,
       plugin = [],
       ...rest
     } = this.config;
 
     if (!(window.AMap || mapInstance)) {
+      const amapKey = token || DEFAULT_AMAP_KEY;
+      if (!token) {
+        console.warn(
+          `%c${this.configService.getSceneWarninfo('MapToken')} 使用默认 Key，生产环境请配置自己的高德地图 Key！`,
+          'color: #873bf4;font-weigh:900;font-size: 14px;',
+        );
+      }
       plugin.push('Map3D');
       await AMapLoader.load({
-        key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
+        key: amapKey, // 申请好的Web端开发者Key，首次调用 load 时必填
         version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本
         plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
       });
@@ -81,16 +91,6 @@ export default class BMapService extends BaseMap<AMap.Map> {
       if (mapConstructorOptions.zoom) {
         // 高德地图在相同大小下需要比 MapBox 多一个 zoom 层级
         mapConstructorOptions.zoom += ZOOM_OFFSET;
-      }
-
-      if (token === AMAP_API_KEY) {
-        (window as any)._AMapSecurityConfig = {
-          securityJsCode: '2653011adeb04230b3a26cc9a780a800',
-        };
-        console.warn(
-          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
-          'color: #873bf4;font-weigh:900;font-size: 16px;',
-        );
       }
 
       if (!id) {

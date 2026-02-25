@@ -10,27 +10,36 @@ import type {
 } from '@antv/l7-core';
 import { IDebugLog, ILayerStage, ScaleTypes, StyleScaleType } from '@antv/l7-core';
 import type { IParseDataItem } from '@antv/l7-source';
-import { lodashUtil } from '@antv/l7-utils';
-import { extent } from 'd3-array';
-import * as d3interpolate from 'd3-interpolate';
-import * as d3 from 'd3-scale';
+import { interpolateRgbBasis, lodashUtil } from '@antv/l7-utils';
 import identity from '../utils/identityScale';
-const { isNil, isString, uniq } = lodashUtil;
+import {
+  scaleDiverging,
+  scaleLinear,
+  scaleLog,
+  scaleOrdinal,
+  scalePow,
+  scaleQuantile,
+  scaleQuantize,
+  scaleSequential,
+  scaleThreshold,
+  scaleTime,
+} from '../utils/scale';
+const { isNil, isString, uniq, extent } = lodashUtil;
 const dateRegex =
   /^(?:(?!0000)[0-9]{4}([-/.]+)(?:(?:0?[1-9]|1[0-2])\1(?:0?[1-9]|1[0-9]|2[0-8])|(?:0?[13-9]|1[0-2])\1(?:29|30)|(?:0?[13578]|1[02])\1(?:31))|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)([-/.]?)0?2\2(?:29))(\s+([01]|([01][0-9]|2[0-3])):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9]))?$/;
 
 const scaleMap = {
-  [ScaleTypes.LINEAR]: d3.scaleLinear,
-  [ScaleTypes.POWER]: d3.scalePow,
-  [ScaleTypes.LOG]: d3.scaleLog,
+  [ScaleTypes.LINEAR]: scaleLinear,
+  [ScaleTypes.POWER]: scalePow,
+  [ScaleTypes.LOG]: scaleLog,
   [ScaleTypes.IDENTITY]: identity,
-  [ScaleTypes.SEQUENTIAL]: d3.scaleSequential,
-  [ScaleTypes.TIME]: d3.scaleTime,
-  [ScaleTypes.QUANTILE]: d3.scaleQuantile,
-  [ScaleTypes.QUANTIZE]: d3.scaleQuantize,
-  [ScaleTypes.THRESHOLD]: d3.scaleThreshold,
-  [ScaleTypes.CAT]: d3.scaleOrdinal,
-  [ScaleTypes.DIVERGING]: d3.scaleDiverging,
+  [ScaleTypes.SEQUENTIAL]: scaleSequential,
+  [ScaleTypes.TIME]: scaleTime,
+  [ScaleTypes.QUANTILE]: scaleQuantile,
+  [ScaleTypes.QUANTIZE]: scaleQuantize,
+  [ScaleTypes.THRESHOLD]: scaleThreshold,
+  [ScaleTypes.CAT]: scaleOrdinal,
+  [ScaleTypes.DIVERGING]: scaleDiverging,
 };
 /**
  * 根据 Source 原始数据为指定字段创建 Scale，保存在 StyleAttribute 上，供下游插件使用
@@ -99,7 +108,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (attribute.scale) {
         // 创建Scale
         const attributeScale = attribute.scale;
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
         const fieldValue = attribute!.scale!.field;
         attributeScale.names = this.parseFields(isNil(fieldValue) ? [] : fieldValue);
         const scales: IStyleScale[] = [];
@@ -142,7 +151,7 @@ export default class FeatureScalePlugin implements ILayerPlugin {
                 case ScaleTypes.SEQUENTIAL:
                   scale.scale.interpolator(
                     // @ts-ignore
-                    d3interpolate.interpolateRgbBasis(attributeScale.values),
+                    interpolateRgbBasis(attributeScale.values as string[]),
                   );
                   break;
               }
@@ -208,16 +217,16 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       if (scaleOption && scaleOption.type) {
         styleScale.scale = this.createDefaultScale(scaleOption);
       } else {
-        styleScale.scale = d3.scaleOrdinal([field]);
+        styleScale.scale = scaleOrdinal([field]);
         styleScale.type = StyleScaleType.CONSTANT;
       }
       return styleScale;
     }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const firstValue = data!.find((d) => !isNil(d[field]))?.[field];
     // 常量 Scale
     if (this.isNumber(field) || (isNil(firstValue) && !scaleOption)) {
-      styleScale.scale = d3.scaleOrdinal([field]);
+      styleScale.scale = scaleOrdinal([field]);
       styleScale.type = StyleScaleType.CONSTANT;
     } else {
       // 根据数据类型判断 默认等分位，时间，和枚举类型
@@ -228,6 +237,16 @@ export default class FeatureScalePlugin implements ILayerPlugin {
       }
       if (values === undefined) {
         type = ScaleTypes.IDENTITY;
+      }
+      if (
+        name === 'color' &&
+        Array.isArray(values) &&
+        values.length &&
+        values.every((value) => isString(value)) &&
+        (type === ScaleTypes.LINEAR || type === ScaleTypes.POWER || type === ScaleTypes.LOG)
+      ) {
+        // Color ramps should use interpolated scales to avoid numeric-only ranges.
+        type = ScaleTypes.SEQUENTIAL;
       }
       const cfg = this.createScaleConfig(type, field, scaleOption, data);
       styleScale.scale = this.createDefaultScale(cfg);

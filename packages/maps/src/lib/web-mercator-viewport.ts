@@ -6,7 +6,6 @@ export default class Viewport implements IViewport {
 
   public syncWithMapCamera(mapCamera: Partial<IMapCamera>) {
     const { center, zoom, pitch, bearing, viewportHeight, viewportWidth } = mapCamera;
-
     const preView = {
       width: this.viewport.width,
       height: this.viewport.height,

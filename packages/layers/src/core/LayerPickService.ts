@@ -38,7 +38,12 @@ export default class BaseLayerPickService implements ILayerPickService {
     const container = this.layer.getContainer();
     const pickingService = container.pickingService;
     const mapService = container.mapService;
-    const extent = this.layer.getSource().extent;
+    // 当启用 enableRelativeCoordinates 时，使用 originalExtent 判断绝对坐标是否在范围内
+    const originalExtent = this.layer.getOriginalExtent();
+    const extent =
+      originalExtent[0] !== 0 || originalExtent[2] !== 0
+        ? originalExtent
+        : this.layer.getSource().extent;
     const isPick = lngLatInExtent(target.lngLat, extent);
     const layerTarget = {
       x: target.x,

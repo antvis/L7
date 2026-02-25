@@ -27,7 +27,7 @@
     "test:size": "pnpm --filter @antv/l7 build && limit-size",
     "clean-dist": "pnpm --parallel -r --filter !@antv/l7-site clean",
     "clean-deps": "./scripts/clean-deps.sh",
-    "build": "pnpm --parallel -r --filter !@antv/l7-site build",
+    "build": "npm run clean-dist && pnpm --parallel -r --filter !@antv/l7-site exec father build",
     "changeset": "changeset add",
     "publish-version": "changeset version",
     "publish-packages": "pnpm build && pnpm limit-size && changeset publish",
@@ -76,12 +76,14 @@
     "three": "0.115.0"
   },
   "devDependencies": {
+    "@antv/l7-draw": "^3.1.5",
     "@antv/translator": "^1.0.1",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
     "@eslint/js": "^9.30.1",
+    "@rollup/rollup-darwin-arm64": "^4.59.0",
     "@types/jest": "^29.5.1",
     "@types/offscreencanvas": "^2019.7.0",
     "@types/pixelmatch": "^5.2.5",
@@ -129,7 +131,7 @@
     "typescript-eslint": "^8.36.0",
     "vite": "^5.0.9",
     "vite-plugin-cp": "^4.0.8",
-    "vite-plugin-string": "^1.2.2",
+    "vite-plugin-string": "^1.2.3",
     "webpack-bundle-analyzer": "^4.10.1"
   },
   "resolutions": {

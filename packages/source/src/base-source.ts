@@ -239,7 +239,9 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   private initCfg(option?: ISourceCFG) {
-    this.cfg = mergeWith(this.cfg, option, mergeCustomizer);
+    if (option) {
+      this.cfg = mergeWith(this.cfg, option, mergeCustomizer);
+    }
     const cfg = this.cfg;
     if (cfg) {
       if (cfg.parser) {

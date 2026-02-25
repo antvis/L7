@@ -55,19 +55,19 @@ export default class HeatMapLayer extends BaseLayer<IHeatMapLayerStyleOptions> {
   }
 
   public getModelType(): HeatMapModelType {
-    const shapeAttribute = this.styleAttributeService.getLayerStyleAttribute('shape');
     const { shape3d } = this.getLayerConfig();
     const source = this.getSource();
-    const sourceType = source.data.type;
-    const shape = (shapeAttribute?.scale?.field as HeatMapModelType) || 'heatmap';
+    const sourceType = source?.data?.type;
+    const shape = (this.shapeOption?.field as HeatMapModelType) || 'heatmap';
+    const isShape3D = Array.isArray(shape3d) && shape3d.includes(shape);
     if (shape === 'heatmap' || shape === 'heatmap3d') {
       return 'heatmap';
     }
     if (sourceType === 'hexagon') {
-      return shape3d?.indexOf(shape) === -1 ? 'hexagon' : 'grid3d';
+      return isShape3D ? 'grid3d' : 'hexagon';
     }
     if (sourceType === 'grid') {
-      return shape3d?.indexOf(shape) === -1 ? 'grid' : 'grid3d';
+      return isShape3D ? 'grid3d' : 'grid';
     }
     return 'heatmap';
   }

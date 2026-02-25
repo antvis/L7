@@ -2,8 +2,18 @@ import { TestScene } from '@antv/l7-test-utils';
 import Popup from '../src/popup/popup';
 
 describe('popup', () => {
-  const scene = TestScene();
+  let scene: ReturnType<typeof TestScene>;
   const className = 'text-class-popup';
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    scene = TestScene();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+    scene.destroy();
+  });
 
   it('life cycle', () => {
     const popup = new Popup({
@@ -20,6 +30,9 @@ describe('popup', () => {
     });
 
     scene.addPopup(popup);
+
+    // Flush requestAnimationFrame queue to trigger popup position update
+    jest.runAllTimers();
 
     const targetPopup = document.querySelector(`.${className}`) as HTMLElement;
 

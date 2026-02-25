@@ -36,6 +36,12 @@ const umdConfig: IFatherConfig['umd'] = {
       .plugin('webpack-bundle-analyzer')
       .use(BundleAnalyzerPlugin, [{ analyzerMode: 'static', openAnalyzer: false }]);
 
+    const styleLoader = require.resolve('@umijs/bundler-webpack/compiled/style-loader');
+
+    // CSS 内联到 JS 中：将 mini-css-extract-loader 替换为 style-loader
+    memo.module.rule('css').use('mini-css-extract').loader(styleLoader).end();
+    memo.module.rule('less').use('mini-css-extract').loader(styleLoader).end();
+
     return memo;
   },
 };

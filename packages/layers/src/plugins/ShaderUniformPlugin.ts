@@ -44,7 +44,7 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     let uniformBuffer: IBuffer;
     if (!this.rendererService.uniformBuffers[0]) {
       // Create a Uniform Buffer Object(UBO).
-      // Size calculation: 4 mat4 (64) + 1 vec4 (4) + 4 vec3->vec4 (16) + 3 vec4 packed (12) = 96 floats
+      // Total size: 93 floats, round up to 96 for safety
       uniformBuffer = this.rendererService.createBuffer({
         data: new Float32Array(96),
         isUBO: true,
@@ -119,26 +119,66 @@ export default class ShaderUniformPlugin implements ILayerPlugin {
     const u_FocalDistance = this.cameraService.getFocalDistance();
     const u_RelativeOrigin = offset && offset.length >= 2 ? [offset[0], offset[1]] : [0, 0];
 
-    const data: number[] = [
-      ...u_ViewMatrix, // 16
-      ...u_ProjectionMatrix, // 16
-      ...u_ViewProjectionMatrix, // 16
-      ...u_ModelMatrix, // 16
-      ...u_ViewportCenterProjection, // 4
-      ...u_PixelsPerDegree, // 4
-      u_Zoom,
-      ...u_PixelsPerDegree2, // 4
-      u_ZoomScale,
-      ...u_PixelsPerMeter, // 4
-      u_CoordinateSystem,
-      ...u_CameraPosition, // 4
-      u_DevicePixelRatio, // 4
-      ...u_ViewportCenter,
-      ...u_ViewportSize, // 4
-      u_FocalDistance, // 1
-      ...u_RelativeOrigin, // 2
-      0, // padding
-    ];
+    // Build UBO data array matching GLSL std140 layout
+    // std140 rules:
+    // - mat4: 16-byte aligned, size 64 bytes (16 floats)
+    // - vec4: 16-byte aligned, size 16 bytes (4 floats)
+    // - vec3: 16-byte aligned, size 12 bytes (3 floats) - next member can follow if aligned
+    // - vec2: 8-byte aligned, size 8 bytes (2 floats)
+    // - float: 4-byte aligned, size 4 bytes (1 float)
+    // Key: vec3 only occupies 3 floats, NOT 4. The alignment requirement is for START position.
+    const floats: number[] = [];
+
+    // mat4 x 4: each 16 floats, all start at multiples of 4 floats (16-byte aligned)
+    floats.push(...u_ViewMatrix); // floats 0-15
+    floats.push(...u_ProjectionMatrix); // floats 16-31
+    floats.push(...u_ViewProjectionMatrix); // floats 32-47
+    floats.push(...u_ModelMatrix); // floats 48-63
+
+    // vec4: 4 floats, starts at float 64 (64 % 4 = 0 ✓)
+    floats.push(...u_ViewportCenterProjection); // floats 64-67
+
+    // vec3: 3 floats only, starts at float 68 (68 % 4 = 0 ✓)
+    floats.push(...u_PixelsPerDegree); // floats 68-70 (NOT 68-71!)
+
+    // float: starts at float 71, any position is fine for 4-byte alignment
+    floats.push(u_Zoom); // float 71
+
+    // vec3: needs 4-float alignment, 72 % 4 = 0 ✓
+    floats.push(...u_PixelsPerDegree2); // floats 72-74
+
+    // float: starts at float 75
+    floats.push(u_ZoomScale); // float 75
+
+    // vec3: needs 4-float alignment, 76 % 4 = 0 ✓
+    floats.push(...u_PixelsPerMeter); // floats 76-78
+
+    // float: starts at float 79
+    floats.push(u_CoordinateSystem); // float 79
+
+    // vec3: needs 4-float alignment, 80 % 4 = 0 ✓
+    floats.push(...u_CameraPosition); // floats 80-82
+
+    // float: starts at float 83
+    floats.push(u_DevicePixelRatio); // float 83
+
+    // vec2: needs 2-float alignment, 84 % 2 = 0 ✓
+    floats.push(...u_ViewportCenter); // floats 84-85
+
+    // vec2: needs 2-float alignment, 86 % 2 = 0 ✓
+    floats.push(...u_ViewportSize); // floats 86-87
+
+    // float: starts at float 88
+    floats.push(u_FocalDistance); // float 88
+
+    // vec2: needs 2-float alignment, 89 % 2 = 1, NOT aligned!
+    floats.push(0); // padding float 89
+    floats.push(...u_RelativeOrigin); // floats 90-91
+
+    // float u_Reserved3
+    floats.push(0); // float 92
+
+    const data = floats;
 
     return {
       data,

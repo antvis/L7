@@ -34,23 +34,12 @@
     "@turf/meta": "^6.0.2",
     "@turf/polygon-to-line": "^6.5.0",
     "@turf/union": "^6.5.0",
-    "d3-array": "^2",
-    "d3-color": "^1.4.0",
-    "d3-interpolate": "1.4.0",
-    "d3-scale": "^2",
     "earcut": "^2.2.1",
     "eventemitter3": "^4.0.0",
-    "extrude-polyline": "^1.0.6",
-    "gl-matrix": "^3.1.0",
-    "gl-vec2": "^1.3.0",
-    "polyline-miter-util": "^1.0.1"
+    "gl-matrix": "^3.1.0"
   },
   "devDependencies": {
     "@antv/l7-test-utils": "workspace:^",
-    "@types/d3-array": "^2",
-    "@types/d3-color": "^1.2.2",
-    "@types/d3-interpolate": "1.1.6",
-    "@types/d3-scale": "^2.1.1",
     "@types/earcut": "^2.1.0",
     "@types/gl-matrix": "^2.4.5"
   },

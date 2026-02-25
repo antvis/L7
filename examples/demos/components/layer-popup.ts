@@ -47,6 +47,7 @@ export const layerPopup: TestCase = async (options) => {
   scene.addLayer(pointLayer);
 
   const layerPopup = new LayerPopup({
+    trigger: 'hover',
     items: [
       {
         layer: 'layer',

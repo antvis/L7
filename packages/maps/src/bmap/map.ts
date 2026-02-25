@@ -28,7 +28,6 @@ const EventMap: {
   zoomchange: 'zoomend',
 };
 
-const BMAP_API_KEY: string = 'zLhopYPPERGtpGOgimcdKcCimGRyyIsh';
 const BMAP_VERSION: string = '1.0';
 
 // TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
@@ -86,7 +85,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       id,
       center = [121.30654632240122, 31.25744185633306],
       zoom = 12,
-      token = BMAP_API_KEY,
+      token,
       mapInstance,
       version = BMAP_VERSION,
       mapSize = 10000,
@@ -99,8 +98,14 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     this.simpleMapCoord.setSize(mapSize);
 
     if (!(window.BMapGL || mapInstance)) {
+      if (!token) {
+        console.warn(
+          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
+          'color: #873bf4;font-weigh:900;font-size: 16px;',
+        );
+      }
       await BMapGLLoader.load({
-        key: token, // 申请好的Web端开发者Key，首次调用 load 时必填
+        key: token || '', // 申请好的Web端开发者Key，首次调用 load 时必填
         version: BMAP_VERSION, // 指定要加载的 JSAPI 的gl版本，缺省时默认为 1.0
       });
     }
@@ -124,13 +129,6 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
         maxZoom,
         ...rest,
       };
-
-      if (token === BMAP_API_KEY) {
-        console.warn(
-          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
-          'color: #873bf4;font-weigh:900;font-size: 16px;',
-        );
-      }
 
       if (!id) {
         throw Error('No container id specified');

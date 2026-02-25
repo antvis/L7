@@ -10,6 +10,7 @@ export default class MarkerService implements IMarkerService {
   private markerLayers: IMarkerLayer[] = [];
   private unAddMarkers: IMarker[] = [];
   private unAddMarkerLayers: IMarkerLayer[] = [];
+  private eventRegistered: boolean = false;
 
   public addMarkerLayer(markerLayer: IMarkerLayer): void {
     if (this.mapsService.map && this.mapsService.getMarkerContainer()) {
@@ -33,6 +34,8 @@ export default class MarkerService implements IMarkerService {
     if (this.mapsService.map && this.mapsService.getMarkerContainer()) {
       this.markers.push(marker);
       marker.addTo(this.scene);
+      // 注册相机变化事件来更新 marker 位置
+      this.registerCameraEvents();
     } else {
       this.unAddMarkers.push(marker);
     }
@@ -44,6 +47,10 @@ export default class MarkerService implements IMarkerService {
       this.markers.push(marker);
     });
     this.unAddMarkers = [];
+    // 注册相机变化事件来更新 marker 位置
+    if (this.markers.length > 0) {
+      this.registerCameraEvents();
+    }
   }
 
   public addMarkerLayers(): void {
@@ -51,7 +58,7 @@ export default class MarkerService implements IMarkerService {
       this.markerLayers.push(markerLayer);
       markerLayer.addTo(this.scene);
     });
-    this.unAddMarkers = [];
+    this.unAddMarkerLayers = [];
   }
 
   public removeMarker(marker: IMarker): void {
@@ -60,6 +67,10 @@ export default class MarkerService implements IMarkerService {
     const markerIndex = this.markers.indexOf(marker);
     if (markerIndex > -1) {
       this.markers.splice(markerIndex, 1);
+    }
+    // 当所有 marker 被移除时，取消注册相机变化事件
+    if (this.markers.length === 0) {
+      this.unregisterCameraEvents();
     }
   }
 
@@ -71,7 +82,36 @@ export default class MarkerService implements IMarkerService {
     this.scene = scene;
     this.mapsService = scene.mapService;
   }
+
+  private registerCameraEvents(): void {
+    if (this.eventRegistered || !this.mapsService) {
+      return;
+    }
+    this.mapsService.on('camerachange', this.updateMarkers);
+    this.mapsService.on('viewchange', this.updateMarkers);
+    this.eventRegistered = true;
+  }
+
+  private unregisterCameraEvents(): void {
+    if (!this.eventRegistered || !this.mapsService) {
+      return;
+    }
+    this.mapsService.off('camerachange', this.updateMarkers);
+    this.mapsService.off('viewchange', this.updateMarkers);
+    this.eventRegistered = false;
+  }
+
+  private updateMarkers = (): void => {
+    this.markers.forEach((marker: IMarker) => {
+      if (marker && typeof (marker as any).update === 'function') {
+        (marker as any).update();
+      }
+    });
+  };
+
   public destroy(): void {
+    // 取消注册相机变化事件
+    this.unregisterCameraEvents();
     this.markers.forEach((marker: IMarker) => {
       marker.remove();
     });

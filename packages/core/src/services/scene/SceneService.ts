@@ -1,7 +1,6 @@
 // @ts-ignore
 import { AsyncSeriesHook } from '@antv/async-hook';
 import { DOM } from '@antv/l7-utils';
-import elementResizeDetectorMaker from 'element-resize-detector';
 import { EventEmitter } from 'eventemitter3';
 import type { L7Container } from '../../inversify.config';
 import { createRendererContainer } from '../../utils/dom';
@@ -102,7 +101,7 @@ export default class Scene extends EventEmitter implements ISceneService {
 
   private markerContainer: HTMLElement;
 
-  private resizeDetector: elementResizeDetectorMaker.Erd;
+  private resizeDetector: ResizeObserver;
 
   private hooks: {
     init: AsyncSeriesHook;
@@ -194,15 +193,13 @@ export default class Scene extends EventEmitter implements ISceneService {
         this.registerContextLost();
         this.initContainer();
 
-        this.resizeDetector = elementResizeDetectorMaker({
-          strategy: 'scroll', //<- For ultra performance.
-        });
-        this.resizeDetector.listenTo(this.$container as HTMLDivElement, this.handleWindowResized);
+        this.resizeDetector = new ResizeObserver(this.handleWindowResized);
+        this.resizeDetector.observe(this.$container as HTMLDivElement);
 
         if (window.matchMedia) {
           window
             .matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)')
-            ?.addListener(this.handleWindowResized.bind('screen'));
+            ?.addListener(this.handleDPRChange);
         }
       } else {
         console.error('容器 id 不存在');
@@ -310,7 +307,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.destroyed = true;
       return;
     }
-    this.resizeDetector.removeListener(this.$container as HTMLDivElement, this.handleWindowResized);
+    this.resizeDetector.disconnect();
 
     this.pickingService.destroy();
     this.layerService.destroy();
@@ -340,7 +337,7 @@ export default class Scene extends EventEmitter implements ISceneService {
     this.emit('destroy');
   }
 
-  private handleWindowResized = () => {
+  private handleWindowResized = (_entries: ResizeObserverEntry[]) => {
     this.emit('resize');
     // @ts-check
     if (this.$container) {
@@ -352,6 +349,12 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.render();
     }
   };
+
+  private handleDPRChange = () => {
+    // DPR 变化时触发重新渲染
+    this.handleWindowResized([]);
+  };
+
   private initContainer() {
     const pixelRatio = DOM.DPR;
     const w = this.$container?.clientWidth || 400;

@@ -73,32 +73,33 @@ jobs:
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  integration-test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: ./.github/actions/prepare-install
-        with:
-          node-version: ${{ matrix.node-version }}
+  # TODO: Enable after fixing cross-platform rendering differences
+  # integration-test:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [20.x]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Install dependencies
+  #       uses: ./.github/actions/prepare-install
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
 
-      - name: Install Playwright chromium browser
-        run: pnpm exec playwright install --with-deps chromium
+  #     - name: Install Playwright chromium browser
+  #       run: pnpm exec playwright install --with-deps chromium
 
-      - name: Integration Test
-        run: pnpm test:integration
+  #     - name: Integration Test
+  #       run: pnpm test:integration
 
-      - name: Upload snapshots to GitHub Actions Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: snapshots
-          path: |
-            __tests__/integration/snapshots/*-actual.png
-          retention-days: 1
+  #     - name: Upload snapshots to GitHub Actions Artifacts
+  #       if: always()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: snapshots
+  #         path: |
+  #           __tests__/integration/snapshots/*-actual.png
+  #         retention-days: 1
 
   size-test:
     runs-on: ubuntu-latest

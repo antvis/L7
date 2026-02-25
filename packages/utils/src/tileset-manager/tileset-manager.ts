@@ -31,14 +31,22 @@ export class TilesetManager extends EventEmitter {
   public get isLoaded() {
     return this.currentTiles.every((tile) => tile.isDone);
   }
-  // 缓存的瓦片数组
+  // 缓存的瓦片数组（带缓存）
+  private sortedTilesCache: SourceTile[] = [];
+  private tilesCacheDirty: boolean = true;
+
   public get tiles() {
-    // 通过 zoom 层级排序，最小的层级在上面
-    const tiles = Array.from(this.cacheTiles.values()).sort((t1, t2) => t1.z - t2.z);
-    return tiles;
+    // 使用缓存，仅在瓦片集合变化时重新排序
+    if (this.tilesCacheDirty) {
+      this.sortedTilesCache = Array.from(this.cacheTiles.values()).sort((t1, t2) => t1.z - t2.z);
+      this.tilesCacheDirty = false;
+    }
+    return this.sortedTilesCache;
   }
   // 当前层级的瓦片
   public currentTiles: SourceTile[] = [];
+  // 当前瓦片的 key Set，用于 O(1) 查找
+  private currentTilesKeySet: Set<string> = new Set();
   // 配置项
   protected options: TilesetManagerOptions;
   // 缓存的瓦片，key 为 {z}-{x}-{y}
@@ -127,7 +135,12 @@ export class TilesetManager extends EventEmitter {
       return tile;
     });
 
+    // 更新当前瓦片的 key Set，用于 O(1) 查找
+    this.currentTilesKeySet = new Set(this.currentTiles.map((t) => t.key));
+
     if (isAddTile) {
+      // 标记 tiles 缓存为脏
+      this.tilesCacheDirty = true;
       // 更新缓存
       this.resizeCacheTiles();
     }
@@ -140,7 +153,8 @@ export class TilesetManager extends EventEmitter {
   // 重新加载瓦片
   public reloadAll() {
     for (const [tileId, tile] of this.cacheTiles) {
-      if (!this.currentTiles.includes(tile)) {
+      // 使用 Set 进行 O(1) 查找
+      if (!this.currentTilesKeySet.has(tile.key)) {
         this.cacheTiles.delete(tileId);
         this.onTileUnload(tile);
         return;
@@ -226,6 +240,9 @@ export class TilesetManager extends EventEmitter {
     this.lastViewStates = undefined;
     this.cacheTiles.clear();
     this.currentTiles = [];
+    this.currentTilesKeySet.clear();
+    this.sortedTilesCache = [];
+    this.tilesCacheDirty = true;
   }
 
   // 摧毁
@@ -237,37 +254,42 @@ export class TilesetManager extends EventEmitter {
   // 更新瓦片显隐状态
   public updateTileVisible() {
     const updateStrategy = this.options.updateStrategy;
-    const beforeVisible = new Map<string, boolean>();
-    // 重置显示状态
+    let isVisibleChange = false;
+
+    // 合并为单次遍历，同时重置状态和记录变化
+    const tiles: SourceTile[] = [];
+    const beforeVisibleMap = new Map<string, boolean>();
+
     for (const tile of this.cacheTiles.values()) {
-      // 存储已经显示的瓦片
-      beforeVisible.set(tile.key, tile.isVisible);
+      // 存储之前的可见状态
+      beforeVisibleMap.set(tile.key, tile.isVisible);
       tile.isCurrent = false;
       tile.isVisible = false;
+      tiles.push(tile);
     }
+
     // 设置当前视野的瓦片为可见
     for (const tile of this.currentTiles) {
       tile.isCurrent = true;
       tile.isVisible = true;
     }
 
-    const tiles = Array.from(this.cacheTiles.values());
+    // 应用更新策略
     if (typeof updateStrategy === 'function') {
       updateStrategy(tiles);
     } else {
       UPDATE_TILE_STRATEGIES[updateStrategy](tiles);
     }
 
-    // 检查瓦片显示状态是否发生改变
-    let isVisibleChange = false;
-    Array.from(this.cacheTiles.values()).forEach((tile) => {
-      if (tile.isVisible !== beforeVisible.get(tile.key)) {
+    // 检查瓦片显示状态是否发生改变（单次遍历）
+    for (const tile of tiles) {
+      if (tile.isVisible !== beforeVisibleMap.get(tile.key)) {
         tile.isVisibleChange = true;
         isVisibleChange = true;
       } else {
         tile.isVisibleChange = false;
       }
-    });
+    }
 
     if (isVisibleChange) {
       this.emit(TileEventType.TileUpdate);
@@ -347,6 +369,8 @@ export class TilesetManager extends EventEmitter {
     });
 
     this.cacheTiles.set(tileId, tile);
+    // 标记 tiles 缓存为脏
+    this.tilesCacheDirty = true;
     tile.loadData({
       getData: this.options.getTileData,
       onLoad: this.onTileLoad,
@@ -364,7 +388,8 @@ export class TilesetManager extends EventEmitter {
 
     if (overflown) {
       for (const [tileId, tile] of this.cacheTiles) {
-        if (!tile.isVisible && !this.currentTiles.includes(tile)) {
+        // 使用 Set 进行 O(1) 查找
+        if (!tile.isVisible && !this.currentTilesKeySet.has(tile.key)) {
           this.cacheTiles.delete(tileId);
           this.onTileUnload(tile);
         }

@@ -17,8 +17,7 @@ import BaseMapService from '../utils/BaseMapService';
 import './logo.css';
 import TMapLoader from './maploader';
 
-const TMAP_API_KEY: string = 'OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77';
-const BMAP_VERSION: string = '1.exp';
+const TMAP_VERSION: string = '1.exp';
 
 const EventMap: {
   [key: string]: any;
@@ -70,8 +69,8 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       id,
       mapInstance,
       center = [121.30654632240122, 31.25744185633306],
-      token = TMAP_API_KEY,
-      version = BMAP_VERSION,
+      token,
+      version = TMAP_VERSION,
       libraries = [],
       minZoom = 3,
       maxZoom = 18,
@@ -83,8 +82,14 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     } = this.config;
 
     if (!(window.TMap || mapInstance)) {
+      if (!token) {
+        console.warn(
+          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
+          'color: #873bf4;font-weigh:900;font-size: 16px;',
+        );
+      }
       await TMapLoader.load({
-        key: token,
+        key: token || '',
         version,
         libraries,
       });

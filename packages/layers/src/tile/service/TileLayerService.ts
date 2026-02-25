@@ -15,41 +15,90 @@ export class TileLayerService {
   private layerService: ILayerService;
   private parent: ILayer;
 
-  private layerTiles: ITile[] = [];
+  /**
+   * 使用 Map 存储瓦片实例，查找复杂度从 O(n) 降为 O(1)
+   */
+  private layerTilesMap: Map<string, ITile> = new Map();
+
+  /**
+   * 待销毁瓦片队列，用于分帧销毁
+   */
+  private pendingDestroyQueue: ITile[] = [];
+  private maxDestroyPerFrame: number = 3;
+
+  /**
+   * 渲染图层缓存
+   */
+  private renderLayersCache: ILayer[] | null = null;
+  private renderCacheDirty: boolean = true;
+
   constructor({ rendererService, layerService, parent }: ITileLayerServiceOptions) {
     this.rendererService = rendererService;
     this.layerService = layerService;
     this.parent = parent;
   }
   get tiles(): ITile[] {
-    return this.layerTiles;
+    return Array.from(this.layerTilesMap.values());
+  }
+
+  /**
+   * 获取待销毁瓦片数量
+   */
+  get pendingDestroyCount(): number {
+    return this.pendingDestroyQueue.length;
   }
 
   public hasTile(tileKey: string): boolean {
-    return this.layerTiles.some((tile) => tile.key === tileKey);
+    return this.layerTilesMap.has(tileKey);
   }
 
   public addTile(tile: ITile) {
-    this.layerTiles.push(tile);
+    this.layerTilesMap.set(tile.key, tile);
+    this.markRenderCacheDirty();
   }
 
   public getTile(tileKey: string): ITile | undefined {
-    return this.layerTiles.find((tile) => tile.key === tileKey);
+    return this.layerTilesMap.get(tileKey);
   }
 
   public getVisibleTileBylngLat(lngLat: ILngLat): ITile | undefined {
     // 加载完成 & 可见 & 鼠标选中
-    return this.layerTiles.find(
-      (tile) => tile.isLoaded && tile.visible && tile.lnglatInBounds(lngLat),
-    );
+    for (const tile of this.layerTilesMap.values()) {
+      if (tile.isLoaded && tile.visible && tile.lnglatInBounds(lngLat)) {
+        return tile;
+      }
+    }
+    return undefined;
   }
 
   public removeTile(tileKey: string) {
-    const index = this.layerTiles.findIndex((t) => t.key === tileKey);
-    const tile = this.layerTiles.splice(index, 1);
-    if (tile[0]) {
-      tile[0].destroy();
+    const tile = this.layerTilesMap.get(tileKey);
+    if (tile) {
+      this.layerTilesMap.delete(tileKey);
+      // 放入待销毁队列，分帧销毁
+      this.pendingDestroyQueue.push(tile);
+      this.markRenderCacheDirty();
     }
+  }
+
+  /**
+   * 分帧销毁待销毁队列中的瓦片
+   */
+  public processPendingDestroys(): void {
+    const count = Math.min(this.pendingDestroyQueue.length, this.maxDestroyPerFrame);
+    for (let i = 0; i < count; i++) {
+      const tile = this.pendingDestroyQueue.shift();
+      if (tile) {
+        tile.destroy();
+      }
+    }
+  }
+
+  /**
+   * 标记渲染缓存为脏
+   */
+  public markRenderCacheDirty(): void {
+    this.renderCacheDirty = true;
   }
   public updateTileVisible(sourceTile: SourceTile) {
     const tile = this.getTile(sourceTile.key);
@@ -70,6 +119,7 @@ export class TileLayerService {
         tile?.updateVisible(false);
       }
     }
+    this.markRenderCacheDirty();
   }
   public isParentLoaded(sourceTile: SourceTile): boolean {
     const parentTile = sourceTile.parent;
@@ -99,6 +149,9 @@ export class TileLayerService {
     });
   }
   public async render() {
+    // 每帧处理部分待销毁瓦片
+    this.processPendingDestroys();
+
     const layers = this.getRenderLayers();
     const renders = layers.map(async (layer) => {
       await this.layerService.renderTileLayer(layer);
@@ -107,25 +160,48 @@ export class TileLayerService {
   }
 
   public getRenderLayers() {
-    const tileList = this.layerTiles.filter((t: ITile) => t.visible && t.isLoaded);
+    // 使用缓存避免每帧重建
+    if (!this.renderCacheDirty && this.renderLayersCache) {
+      return this.renderLayersCache;
+    }
+
     const layers: ILayer[] = [];
-    tileList.map((tile: ITile) => layers.push(...tile.getLayers()));
+    this.layerTilesMap.forEach((tile) => {
+      if (tile.visible && tile.isLoaded) {
+        layers.push(...tile.getLayers());
+      }
+    });
+
+    this.renderLayersCache = layers;
+    this.renderCacheDirty = false;
     return layers;
   }
 
   public getLayers() {
-    const tileList = this.layerTiles.filter((t: ITile) => t.isLoaded);
     const layers: ILayer[] = [];
-    tileList.map((tile) => layers.push(...tile.getLayers()));
+    this.layerTilesMap.forEach((tile) => {
+      if (tile.isLoaded) {
+        layers.push(...tile.getLayers());
+      }
+    });
     return layers;
   }
 
   public getTiles() {
-    return this.layerTiles;
+    return Array.from(this.layerTilesMap.values());
   }
 
   public destroy() {
-    this.layerTiles.forEach((t: ITile) => t.destroy());
+    // 先处理待销毁队列中的残留瓦片
+    while (this.pendingDestroyQueue.length > 0) {
+      const tile = this.pendingDestroyQueue.shift();
+      tile?.destroy();
+    }
+    // 销毁所有已加载的瓦片
+    this.layerTilesMap.forEach((t) => t.destroy());
+    this.layerTilesMap.clear();
+    // 清理缓存
+    this.renderLayersCache = null;
     this.tileResource.clear();
   }
 }

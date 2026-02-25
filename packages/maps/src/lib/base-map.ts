@@ -15,9 +15,9 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { CoordinateSystem } from '@antv/l7-core';
-import { SimpleMapCoord } from '@antv/l7-map';
 import type { EventEmitterStatic } from 'eventemitter3';
 import { EventEmitter } from 'eventemitter3';
+import { SimpleMapCoord } from '../utils/simpleMapCoord';
 
 const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 
@@ -197,7 +197,6 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   public abstract setMapStyle(name: MapStyleName): void;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public meterToCoord(center: [number, number], outer: [number, number]) {
     return 1.0;
   }

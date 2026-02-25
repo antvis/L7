@@ -19,16 +19,21 @@ export enum ShapeType2D {
  * 生成规则多边形顶点个数
  * @param pointCount  顶点个数 3 => 三角形
  * @param start 顶点起始角度 调整图形的方向
+ * @param angleOffset 额外的角度偏移，用于调整六边形方向
  */
-export function polygonPath(pointCount: number, start: number = 0): IPath {
+export function polygonPath(
+  pointCount: number,
+  start: number = 0,
+  angleOffset: number = Math.PI / 4,
+): IPath {
   const step = (Math.PI * 2) / pointCount;
   const line = [];
   for (let i = 0; i < pointCount; i++) {
     line.push(step * i + (start * Math.PI) / 12);
   }
   const path: IPath = line.map((t) => {
-    const x = Math.sin(t + Math.PI / 4);
-    const y = Math.cos(t + Math.PI / 4);
+    const x = Math.sin(t + angleOffset);
+    const y = Math.cos(t + angleOffset);
     return [x, y, 0];
   });
   // path.push(path[0]);
@@ -45,7 +50,12 @@ export function triangle(): IPath {
   return polygonPath(3);
 }
 export function hexagon(): IPath {
-  return polygonPath(6, 1);
+  // 生成 pointy-top 六边形（尖角朝上）
+  // 使用 angleOffset = 0 并翻转 y 方向，以匹配 d3-hexbin 的方向
+  // d3-hexbin 在屏幕坐标系中 y 向下为正，使用 y = -cos(angle)
+  // 我们需要翻转 y 坐标以确保蜂窝网格闭合
+  const path = polygonPath(6, 0, 0);
+  return path.map((p) => [p[0], -p[1], p[2]]) as IPath;
 }
 export function pentagon(): IPath {
   return polygonPath(5);

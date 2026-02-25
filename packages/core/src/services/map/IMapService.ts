@@ -63,6 +63,7 @@ export interface IMapService<RawMap = {}> {
   on(type: string, handler: (...args: any[]) => void): void;
   off(type: string, handler: (...args: any[]) => void): void;
   once(type: string, handler: (...args: any[]) => void): void;
+  emit(type: string, ...args: any[]): void;
   // get dom
   getContainer(): HTMLElement | null;
   getSize(): [number, number];
@@ -146,6 +147,7 @@ export interface IEarthService<RawMap = {}> {
   on(type: string, handler: (...args: any[]) => void): void;
   off(type: string, handler: (...args: any[]) => void): void;
   once(type: string, handler: (...args: any[]) => void): void;
+  emit(type: string, ...args: any[]): void;
   // get dom
   getContainer(): HTMLElement | null;
   getSize(): [number, number];

@@ -29,7 +29,10 @@ export default class BaseTileLayer {
 
   protected lastViewStates: {
     zoom: number;
-    latLonBounds: [number, number, number, number];
+    minLng: number;
+    minLat: number;
+    maxLng: number;
+    maxLat: number;
   };
 
   constructor(parent: ILayer) {
@@ -86,14 +89,24 @@ export default class BaseTileLayer {
 
     const { latLonBounds, zoom } = this.getCurrentView();
 
+    // 使用数值比较替代字符串比较，更高效
     if (
       this.lastViewStates &&
       this.lastViewStates.zoom === zoom &&
-      this.lastViewStates.latLonBounds.toString() === latLonBounds.toString()
+      this.lastViewStates.minLng === latLonBounds[0] &&
+      this.lastViewStates.minLat === latLonBounds[1] &&
+      this.lastViewStates.maxLng === latLonBounds[2] &&
+      this.lastViewStates.maxLat === latLonBounds[3]
     ) {
       return;
     }
-    this.lastViewStates = { zoom, latLonBounds };
+    this.lastViewStates = {
+      zoom,
+      minLng: latLonBounds[0],
+      minLat: latLonBounds[1],
+      maxLng: latLonBounds[2],
+      maxLat: latLonBounds[3],
+    };
 
     this.tilesetManager?.throttleUpdate(zoom, latLonBounds);
   };
@@ -113,7 +126,7 @@ export default class BaseTileLayer {
 
   private bindTilesetEvent() {
     // 瓦片数据加载成功
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     this.tilesetManager.on('tile-loaded', (tile: SourceTile) => {
       // 将事件抛出，图层上可以监听使用
     });
@@ -125,7 +138,7 @@ export default class BaseTileLayer {
     });
 
     // 瓦片数据加载失败
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     this.tilesetManager.on('tile-error', (error, tile: SourceTile) => {
       // 将事件抛出，图层上可以监听使用
       this.tileError(error);
@@ -160,7 +173,6 @@ export default class BaseTileLayer {
   //  防抖操作
   public viewchange = debounce(this.mapchange, 24);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public tileLoaded(tile: SourceTile) {
     //
   }
@@ -194,11 +206,15 @@ export default class BaseTileLayer {
     const minZoom = this.parent.getMinZoom();
     const maxZoom = this.parent.getMaxZoom();
 
-    const tiles = this.tilesetManager.tiles
-      .filter((tile: SourceTile) => tile.isLoaded) // 过滤未加载完成的
-      .filter((tile: SourceTile) => tile.isVisibleChange) // 过滤未发生变化的
-      .filter((tile: SourceTile) => tile.data) //
-      .filter((tile: SourceTile) => tile.z >= minZoom && tile.z < maxZoom); // 过滤不可见见
+    // 合并 filter 操作，减少中间数组创建
+    const tiles = this.tilesetManager.tiles.filter(
+      (tile: SourceTile) =>
+        tile.isLoaded && // 过滤未加载完成的
+        tile.isVisibleChange && // 过滤未发生变化的
+        tile.data && //
+        tile.z >= minZoom &&
+        tile.z < maxZoom, // 过滤不可见层级
+    );
     await Promise.all(
       tiles.map(async (tile: SourceTile) => {
         // 未加载瓦片
@@ -227,7 +243,6 @@ export default class BaseTileLayer {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public setPickState(layers: ILayer[]) {
     return;
   }

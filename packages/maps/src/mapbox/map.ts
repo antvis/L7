@@ -12,8 +12,6 @@ import BaseMapService from '../utils/BaseMapService';
 window.mapboxgl = mapboxgl;
 
 let mapdivCount = 0;
-const MAPBOX_API_KEY =
-  '101MlGsZ2AmmA&access_token=pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2p0MG01MXRqMW45cjQzb2R6b2ptc3J4MSJ9.zA2W0IkI0c6KaAhJfk9bWg';
 
 // TODO: 基于抽象类 BaseMap 实现
 export default class MapboxService extends BaseMapService<Map & IMapboxInstance> {
@@ -84,7 +82,7 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
       id = 'map',
       attributionControl = false,
       style = 'light',
-      token = MAPBOX_API_KEY,
+      token,
       rotation = 0,
       mapInstance,
       ...rest
@@ -104,7 +102,7 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
     }
 
     if (
-      token === MAPBOX_API_KEY &&
+      !token &&
       style !== 'blank' &&
       !window.mapboxgl.accessToken &&
       !mapInstance // 如果用户传递了 mapInstance，应该不去干预实例的 accessToken。
@@ -115,7 +113,7 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
     // 判断是否设置了 accessToken
     if (!mapInstance && !window.mapboxgl.accessToken) {
       // 用户有时传递进来的实例是继承于 mapbox 实例化的，不一定是 mapboxgl 对象。
-      window.mapboxgl.accessToken = token;
+      window.mapboxgl.accessToken = token || '';
     }
 
     if (mapInstance) {

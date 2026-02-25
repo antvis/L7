@@ -490,11 +490,4 @@ export default class Marker extends EventEmitter {
       }
     }
   }
-
-  private addDragHandler(e: MouseEvent) {
-    return null;
-  }
-  private onUp(e: MouseEvent) {
-    throw new Error('Method not implemented.');
-  }
 }

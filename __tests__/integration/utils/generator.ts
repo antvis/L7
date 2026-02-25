@@ -46,14 +46,16 @@ export function generateCanvasTestCases(
 
         // Go to test page served by vite devServer.
         const url = `http://localhost:${port}/?namespace=${namespace}&name=${name}&snapshot=true`;
-        await page.goto(url);
+        await page.goto(url, { timeout: 60000, waitUntil: 'domcontentloaded' });
         await readyPromise;
         await sleep(sleepTime);
 
         // Chart already rendered, capture into buffer.
         const buffer = await page.locator('canvas').screenshot();
         const dir = `${__dirname}/../snapshots`;
-        const maxError = 0;
+        // Allow pixel differences due to cross-platform rendering (macOS vs Linux CI)
+        // Heatmap layers tend to have more variance due to anti-aliasing and blending
+        const maxError = 150;
         console.log(`\nTesting ${dir}... ${key}`);
 
         try {

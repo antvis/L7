@@ -26,6 +26,63 @@ type IShape = ShapeType2D & ShapeType3D;
 interface IGeometryCache {
   [key: string]: IExtrudeGeomety;
 }
+
+/**
+ * 质心计算缓存
+ * 避免对相同坐标的重复计算
+ */
+interface ICentroidCache {
+  [key: string]: number[];
+}
+const centroidCache: ICentroidCache = {};
+const CENTROID_CACHE_MAX_SIZE = 500;
+
+/**
+ * 生成坐标的缓存键
+ */
+function getCoordinateKey(coordinates: number | number[] | number[][] | number[][][]): string {
+  if (typeof coordinates === 'number') {
+    return String(coordinates);
+  }
+  if (Array.isArray(coordinates)) {
+    if (typeof coordinates[0] === 'number') {
+      return (coordinates as number[]).slice(0, 2).join(',');
+    }
+    // 对于嵌套数组，取第一个点
+    return getCoordinateKey(coordinates[0]);
+  }
+  return '';
+}
+
+/**
+ * 带缓存的质心计算
+ */
+function cachedCalculateCentroid(coordinates: IEncodeFeature['coordinates']): number[] {
+  const key = getCoordinateKey(coordinates);
+
+  if (key && centroidCache[key]) {
+    return centroidCache[key].slice();
+  }
+
+  const centroid = calculateCentroid(coordinates as Parameters<typeof calculateCentroid>[0]);
+
+  // 限制缓存大小
+  const keys = Object.keys(centroidCache);
+  if (keys.length >= CENTROID_CACHE_MAX_SIZE) {
+    // 删除一半的缓存
+    const deleteCount = Math.floor(CENTROID_CACHE_MAX_SIZE / 2);
+    for (let i = 0; i < deleteCount; i++) {
+      delete centroidCache[keys[i]];
+    }
+  }
+
+  if (key) {
+    centroidCache[key] = centroid.slice();
+  }
+
+  return centroid;
+}
+
 const GeometryCache: IGeometryCache = {};
 
 /**
@@ -34,7 +91,7 @@ const GeometryCache: IGeometryCache = {};
  */
 
 export function PointFillTriangulation(feature: IEncodeFeature) {
-  const coordinates = calculateCentroid(feature.coordinates);
+  const coordinates = cachedCalculateCentroid(feature.coordinates);
   return {
     vertices: [...coordinates, ...coordinates, ...coordinates, ...coordinates],
     indices: [0, 1, 2, 2, 3, 0],
