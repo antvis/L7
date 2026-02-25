@@ -80,3 +80,4 @@ jspm_packages/
 .agents/*
 .github/skills/*
 .playwright-mcp
+.claude
