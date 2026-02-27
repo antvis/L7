@@ -7,6 +7,7 @@
 '@antv/l7-utils': patch
 '@antv/l7-core': patch
 '@antv/l7-maps': patch
+'@antv/l7': patch
 ---
 
-patch 版本
+beta2
