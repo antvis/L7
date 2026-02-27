@@ -13,5 +13,10 @@
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
+  },
+
+  // Python configuration for terminal
+  "terminal.integrated.env.osx": {
+    "PYTHON": "/usr/local/bin/python3"
   }
 }

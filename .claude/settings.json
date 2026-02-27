@@ -17,7 +17,13 @@
       "Bash(npx jest:*)",
       "Bash(git checkout:*)",
       "Bash(yarn run test:unit:*)",
-      "Bash(yarn run test:integration:*)"
+      "Bash(yarn run test:integration:*)",
+      "Bash(pnpm list:*)",
+      "Bash(pnpm ls webpack style-loader css-loader less-loader postcss-loader)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(NODE_ENV=production pnpm:*)",
+      "Read(//tmp/**)"
     ]
   }
 }
