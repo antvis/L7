@@ -23,7 +23,7 @@ const AMAP_VERSION = '2.0';
 const ZOOM_OFFSET = 1;
 // 默认的高德地图 Key，仅用于开发和演示，生产环境请使用自己的 Key
 // 申请地址: https://lbs.amap.com/api/javascript-web-api/guide/abc/prepare
-const DEFAULT_AMAP_KEY = '6c0e16556c6c774e7bb61bc6089483a5';
+const DEFAULT_AMAP_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
 
 // @ts-ignore 高德地图强制使用 WebGL,否则支付宝端内无法使用
 window.forceWebGL = true;

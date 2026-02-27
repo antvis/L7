@@ -6,7 +6,11 @@ import vitePluginString from 'vite-plugin-string';
 
 export default defineConfig({
   root: './examples/',
-  server: { port: 8080, open: '/' },
+  server: {
+    port: 8080,
+    open: '/',
+    allowedHosts: ['alipay.net'],
+  },
   base: './',
   resolve: {
     alias: {

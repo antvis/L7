@@ -13,6 +13,8 @@ const umdConfig: IFatherConfig['umd'] = {
   },
   platform: 'browser',
   targets: { ie: 11 },
+  // CSS 内联到 JS 中，不提取为单独文件
+  extractCSS: false,
   externals: {
     'mapbox-gl': {
       root: 'mapboxgl',
@@ -35,12 +37,6 @@ const umdConfig: IFatherConfig['umd'] = {
     memo
       .plugin('webpack-bundle-analyzer')
       .use(BundleAnalyzerPlugin, [{ analyzerMode: 'static', openAnalyzer: false }]);
-
-    const styleLoader = require.resolve('@umijs/bundler-webpack/compiled/style-loader');
-
-    // CSS 内联到 JS 中：将 mini-css-extract-loader 替换为 style-loader
-    memo.module.rule('css').use('mini-css-extract').loader(styleLoader).end();
-    memo.module.rule('less').use('mini-css-extract').loader(styleLoader).end();
 
     return memo;
   },
