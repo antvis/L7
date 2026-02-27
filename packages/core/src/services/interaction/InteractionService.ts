@@ -168,7 +168,7 @@ export default class InteractionService extends EventEmitter implements IInterac
   ): IInteractionTarget {
     const { x, y } = this.clientToContainerCoords(event.clientX, event.clientY);
     const lngLat = this.mapService.containerToLngLat([x, y]);
-    return { x, y, lngLat, type, target: event };
+    return { x, y, pixel: { x, y }, lngLat, type, target: event };
   }
 
   /**
@@ -206,14 +206,16 @@ export default class InteractionService extends EventEmitter implements IInterac
 
     this.pointerId = event.pointerId;
     this.isDragging = true;
+    // 先发送 mousedown 类型的 Hover 事件，让 layer 能够拾取到 mousedown 事件
+    // 注意：必须在设置 indragging = true 之前发送，否则 PickingService 会跳过 picking
+    this.emit(InteractionEvent.Hover, this.createInteractionTarget(event, 'mousedown'));
+
+    // 设置 indragging 状态，阻止后续的 picking 操作（性能优化）
     this.indragging = true;
 
     // 发送拖拽开始事件
     const target = this.createInteractionTarget(event, DragEventMap['pointerdown']);
     this.emit(InteractionEvent.Drag, target);
-
-    // 同时发送 mousedown 类型的 Hover 事件，保持向后兼容
-    this.emit(InteractionEvent.Hover, this.createInteractionTarget(event, 'mousedown'));
 
     // 启动长按计时器
     this.startPressTimer(event);

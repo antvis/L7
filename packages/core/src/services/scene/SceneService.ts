@@ -161,6 +161,9 @@ export default class Scene extends EventEmitter implements ISceneService {
       // 地图初始化之后 才能初始化 container 上的交互
       this.interactionService.init();
       this.interactionService.on(InteractionEvent.Drag, this.addSceneEvent.bind(this));
+      this.interactionService.on(InteractionEvent.Hover, this.addSceneEvent.bind(this));
+      this.interactionService.on(InteractionEvent.Click, this.addSceneEvent.bind(this));
+      this.interactionService.on(InteractionEvent.DblClick, this.addSceneEvent.bind(this));
     });
 
     /**
