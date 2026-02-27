@@ -1,5 +1,20 @@
 # Change Log
 
+## 2.23.3-beta.1
+
+### Patch Changes
+
+- 版本更新
+
+- Updated dependencies []:
+  - @antv/l7-component@2.23.3-beta.1
+  - @antv/l7-layers@2.23.3-beta.1
+  - @antv/l7-source@2.23.3-beta.1
+  - @antv/l7-scene@2.23.3-beta.1
+  - @antv/l7-utils@2.23.3-beta.1
+  - @antv/l7-core@2.23.3-beta.1
+  - @antv/l7-maps@2.23.3-beta.1
+
 ## 2.23.3-beta.0
 
 ### Patch Changes

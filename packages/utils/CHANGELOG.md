@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.23.3-beta.1
+
+### Patch Changes
+
+- 版本更新
+
 ## 2.23.3-beta.0
 
 ### Patch Changes
