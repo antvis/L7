@@ -18,7 +18,7 @@ order: 3
 
 4、L7 本身并没有集成 threejs，所以用于在使用 L7Three 模块的时候需要独立安装 threejs。
 
-✨ 目前 L7 官方提供的 threejs 兼容是根据 0.115.0 版本进行开发的，使用其他版本 threejs 可能会存在兼容问题
+✨ 目前 L7 官方提供的 threejs 兼容是根据 0.182.0 版本进行开发的，使用其他版本 threejs 可能会存在兼容问题
 
 ## 使用
 
@@ -42,7 +42,7 @@ const threeJSLayer = new ThreeLayer({
 
     let center = scene.getCenter();
 
-    let cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
+    let cubeGeometry = new THREE.BoxGeometry(10000, 10000, 10000);
     let cubeMaterial = new THREE.MeshNormalMaterial();
     let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 

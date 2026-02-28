@@ -37,7 +37,7 @@
   "dependencies": {
     "@antv/l7": "workspace:*",
     "@babel/runtime": "^7.7.7",
-    "three": "0.115.0"
+    "three": "0.182.0"
   },
   "publishConfig": {
     "access": "public",

@@ -73,7 +73,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "stats.js": "^0.17.0",
-    "three": "0.115.0"
+    "three": "0.182.0"
   },
   "devDependencies": {
     "@antv/l7-draw": "^3.1.5",
@@ -88,6 +88,7 @@
     "@types/offscreencanvas": "^2019.7.0",
     "@types/pixelmatch": "^5.2.5",
     "@types/pngjs": "^6.0.3",
+    "@types/three": "0.182.0",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-transform-import-css-l7": "^0.0.6",
