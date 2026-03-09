@@ -16,5 +16,5 @@
     "@antv/l7-utils": "2.23.3-beta.0",
     "@antv/l7-site": "2.21.4"
   },
-  "changesets": ["fix-interaction-event-compat", "fuzzy-readers-sing"]
+  "changesets": ["fix-interaction-event-compat", "fuzzy-readers-sing", "revert-to-hammerjs"]
 }

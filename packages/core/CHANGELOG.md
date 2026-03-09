@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.23.3-beta.3
+
+### Patch Changes
+
+- revert: 回滚事件系统到 hammerjs 实现，修复移除 hammerjs 后的兼容性问题
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.23.3-beta.3
+
 ## 2.23.3-beta.2
 
 ### Patch Changes
