@@ -118,8 +118,13 @@ export default class InteractionService extends EventEmitter implements IInterac
     this.removeAllListeners();
   }
 
-  public triggerHover({ x, y }: { x: number; y: number }): void {
-    this.emit(InteractionEvent.Hover, { x, y });
+  public triggerHover({
+    x,
+    y,
+    type = 'mousemove',
+  }: Partial<IInteractionTarget> & { x: number; y: number }): void {
+    const lngLat = this.mapService.containerToLngLat([x, y]);
+    this.emit(InteractionEvent.Hover, { x, y, lngLat, type });
   }
 
   public triggerSelect(id: number): void {

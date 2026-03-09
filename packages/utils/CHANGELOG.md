@@ -1,5 +1,7 @@
 # Change Log
 
+## 2.23.3-beta.2
+
 ## 2.23.3-beta.1
 
 ### Patch Changes

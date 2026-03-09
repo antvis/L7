@@ -139,6 +139,14 @@ export default class BMapService extends BaseMap<AMap.Map> {
 
   protected creatMapContainer(id: string | HTMLDivElement) {
     const wrapper = super.creatMapContainer(id);
+    // 确保 wrapper 有定位上下文，避免子元素 absolute 定位脱离预期位置
+    if (wrapper && getComputedStyle(wrapper).position === 'static') {
+      wrapper.style.position = 'relative';
+    }
+    // 如果 wrapper 没有高度，设置默认高度避免地图不显示
+    if (wrapper && wrapper.clientHeight === 0) {
+      wrapper.style.height = '300px';
+    }
     const amapdiv = document.createElement('div');
     amapdiv.style.cssText += `
        position: absolute;

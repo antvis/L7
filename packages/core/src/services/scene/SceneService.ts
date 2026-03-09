@@ -164,6 +164,7 @@ export default class Scene extends EventEmitter implements ISceneService {
       this.interactionService.on(InteractionEvent.Hover, this.addSceneEvent.bind(this));
       this.interactionService.on(InteractionEvent.Click, this.addSceneEvent.bind(this));
       this.interactionService.on(InteractionEvent.DblClick, this.addSceneEvent.bind(this));
+      this.interactionService.on(InteractionEvent.Press, this.addSceneEvent.bind(this));
     });
 
     /**
