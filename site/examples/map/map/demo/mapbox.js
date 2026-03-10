@@ -8,8 +8,7 @@ function initMap() {
       zoom: 10,
       minZoom: 0,
       maxZoom: 18,
-      token:
-        'pk.eyJ1Ijoic2tvcm5vdXMiLCJhIjoiY2s4dDBkNjY1MG13ZTNzcWEyZDYycGkzMyJ9.tjfwvJ8G_VDmXoClOyxufg',
+      token: 'YOUR_MAPBOX_TOKEN', // Replace with your Mapbox public token
     }),
   });
   scene.on('loaded', () => {
