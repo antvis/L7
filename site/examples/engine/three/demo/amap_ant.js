@@ -2,7 +2,6 @@ import { Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
 import { ThreeLayer, ThreeRender } from '@antv/l7-three';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 const scene = new Scene({
   id: 'map',
@@ -35,7 +34,7 @@ scene.on('loaded', () => {
       threeScene.add(cube);
 
       // 使用 Three.js glTFLoader 加载模型
-      const loader = new GLTFLoader();
+      const loader = new window.GLTFLoader();
       loader.load(
         'https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf',
         (gltf) => {
