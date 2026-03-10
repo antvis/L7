@@ -32,7 +32,7 @@ export const CaseScene = (options: CaseSceneOptions) => {
     ...options,
     map,
     shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
-    logoVisible: false,
+    // logoVisible: false,
   });
 
   return new Promise<Scene>((resolve) => {

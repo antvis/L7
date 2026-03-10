@@ -12,8 +12,7 @@ const scene = new Scene({
   }),
 });
 
-const url1 =
-  'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.webp?sku=101ifSAcKcVFs&access_token=pk.eyJ1IjoidW5mb2xkZWRpbmMiLCJhIjoiY2s5ZG90MjMzMDV6eDNkbnh2cDJvbHl4NyJ9.BT2LAvHi31vNNEplsgxucQ';
+const url1 = `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.webp?access_token=${'YOUR_MAPBOX_TOKEN'}`; // Replace YOUR_MAPBOX_TOKEN with your Mapbox public token
 const layer1 = new RasterLayer({
   zIndex: 1,
 }).source(url1, {

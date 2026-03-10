@@ -13,6 +13,8 @@ const umdConfig: IFatherConfig['umd'] = {
   },
   platform: 'browser',
   targets: { ie: 11 },
+  // CSS 内联到 JS 中，不提取为单独文件
+  extractCSS: false,
   externals: {
     'mapbox-gl': {
       root: 'mapboxgl',

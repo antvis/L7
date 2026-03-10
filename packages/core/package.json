@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.23.2",
+  "version": "2.24.0",
   "description": "",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
+    "@types/hammerjs": "^2.0.46",
     "@types/viewport-mercator-project": "^6.1.0"
   },
   "publishConfig": {

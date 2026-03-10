@@ -1,5 +1,35 @@
 # @antv/l7-map
 
+## 2.23.3-beta.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.23.3-beta.3
+
+## 2.23.3-beta.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.23.3-beta.2
+
+## 2.23.3-beta.1
+
+### Patch Changes
+
+- 版本更新
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.23.3-beta.1
+
+## 2.23.3-beta.0
+
+### Patch Changes
+
+- Updated dependencies [[`8248e26`](https://github.com/antvis/L7/commit/8248e264c6cad611547c7f9730540ab0729115ac)]:
+  - @antv/l7-utils@2.23.3-beta.0
+
 ## 2.23.2
 
 ### Patch Changes

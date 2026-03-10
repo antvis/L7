@@ -13,6 +13,8 @@ export enum InteractionEvent {
 export interface IInteractionTarget {
   x: number;
   y: number;
+  /** pixel 兼容 l7-draw 等库的事件格式 */
+  pixel?: { x: number; y: number };
   lngLat: ILngLat;
   type: string;
   featureId?: number;

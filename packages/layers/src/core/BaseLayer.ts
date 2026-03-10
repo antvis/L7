@@ -240,7 +240,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private scaleOptions: IScaleOptions = {};
 
-  private animateStartTime: number;
+  private animateStartTime: number = 0;
 
   private animateStatus: boolean = false;
 
@@ -1403,7 +1403,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    */
   protected processRelativeCoordinates() {
     const layerConfig = this.getLayerConfig();
-    const enableRelativeCoordinates = layerConfig.enableRelativeCoordinates;
+    const enableRelativeCoordinates = layerConfig?.enableRelativeCoordinates;
 
     if (!enableRelativeCoordinates || !this.layerSource || !this.layerSource.data) {
       return;

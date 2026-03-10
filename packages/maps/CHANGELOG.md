@@ -1,5 +1,50 @@
 # Change Log
 
+## 2.23.3-beta.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-core@2.23.3-beta.3
+  - @antv/l7-map@2.23.3-beta.3
+  - @antv/l7-utils@2.23.3-beta.3
+
+## 2.23.3-beta.2
+
+### Patch Changes
+
+- fix: 修复移除 hammerjs 后的事件系统兼容性问题
+  - 修复 triggerHover 方法签名与接口不符，补全 lngLat 和 type 参数，解决 layer.pick() 拾取失效问题
+  - SceneService 补充 Press 事件监听，保持长按事件向后兼容
+  - amap-next: 修复 wrapper 容器定位上下文和高度初始化问题
+
+- Updated dependencies []:
+  - @antv/l7-core@2.23.3-beta.2
+  - @antv/l7-map@2.23.3-beta.2
+  - @antv/l7-utils@2.23.3-beta.2
+
+## 2.23.3-beta.1
+
+### Patch Changes
+
+- 版本更新
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.23.3-beta.1
+  - @antv/l7-core@2.23.3-beta.1
+  - @antv/l7-map@2.23.3-beta.1
+
+## 2.23.3-beta.0
+
+### Patch Changes
+
+- [`8248e26`](https://github.com/antvis/L7/commit/8248e264c6cad611547c7f9730540ab0729115ac) Thanks [@lzxue](https://github.com/lzxue)! - patch 版本
+
+- Updated dependencies [[`8248e26`](https://github.com/antvis/L7/commit/8248e264c6cad611547c7f9730540ab0729115ac)]:
+  - @antv/l7-utils@2.23.3-beta.0
+  - @antv/l7-core@2.23.3-beta.0
+  - @antv/l7-map@2.23.3-beta.0
+
 ## 2.23.2
 
 ### Patch Changes

@@ -23,7 +23,7 @@ const AMAP_VERSION = '2.0';
 const ZOOM_OFFSET = 1;
 // 默认的高德地图 Key，仅用于开发和演示，生产环境请使用自己的 Key
 // 申请地址: https://lbs.amap.com/api/javascript-web-api/guide/abc/prepare
-const DEFAULT_AMAP_KEY = '6c0e16556c6c774e7bb61bc6089483a5';
+const DEFAULT_AMAP_KEY = 'f59bcf249433f8b05caaee19f349b3d7';
 
 // @ts-ignore 高德地图强制使用 WebGL,否则支付宝端内无法使用
 window.forceWebGL = true;
@@ -139,6 +139,14 @@ export default class BMapService extends BaseMap<AMap.Map> {
 
   protected creatMapContainer(id: string | HTMLDivElement) {
     const wrapper = super.creatMapContainer(id);
+    // 确保 wrapper 有定位上下文，避免子元素 absolute 定位脱离预期位置
+    if (wrapper && getComputedStyle(wrapper).position === 'static') {
+      wrapper.style.position = 'relative';
+    }
+    // 如果 wrapper 没有高度，设置默认高度避免地图不显示
+    if (wrapper && wrapper.clientHeight === 0) {
+      wrapper.style.height = '300px';
+    }
     const amapdiv = document.createElement('div');
     amapdiv.style.cssText += `
        position: absolute;

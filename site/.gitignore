@@ -6,3 +6,4 @@ yarn.lock
 dist
 .DS_Store
 yarn-error.log
+public/weather/

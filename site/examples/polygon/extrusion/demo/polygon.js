@@ -8,8 +8,7 @@ const scene = new Scene({
     center: [120, 29.732983],
     zoom: 6.2,
     pitch: 60,
-    token:
-      'pk.eyJ1IjoiZmFrZXVzZXJnaXRodWIiLCJhIjoiY2pwOGlneGI4MDNnaDN1c2J0eW5zb2ZiNyJ9.mALv0tCpbYUPtzT7YysA2g',
+    token: 'YOUR_MAPBOX_TOKEN', // Replace with your Mapbox public token
   }),
 });
 

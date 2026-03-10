@@ -119,7 +119,8 @@ export function extractUniforms(content: string): {
 export function removeDuplicateUniforms(content: string) {
   const uniforms: Record<string, boolean> = {};
   return content.replace(uniformRegExp, (_, type, uniformName) => {
-    const name = uniformName.trim();
+    // Strip default value syntax (e.g. "u_opacity: 1.0" -> "u_opacity")
+    const name = uniformName.split(':')[0].trim();
     if (!uniforms[name]) {
       uniforms[name] = true;
       return `uniform ${type} ${name};\n`;
