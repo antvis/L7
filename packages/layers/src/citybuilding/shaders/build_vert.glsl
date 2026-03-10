@@ -15,18 +15,21 @@ out vec4 v_Color;
 out float v_worldDis;
 
 layout(std140) uniform commonUniforms {
-  vec4 u_baseColor : [ 1.0, 0, 0, 1.0 ];
-  vec4 u_brightColor : [ 1.0, 0, 0, 1.0 ];
-  vec4 u_windowColor : [ 1.0, 0, 0, 1.0 ];
+  vec4 u_baseColor: [ 1.0, 0, 0, 1.0 ];
+  vec4 u_brightColor: [ 1.0, 0, 0, 1.0 ];
+  vec4 u_windowColor: [ 1.0, 0, 0, 1.0 ];
   vec4 u_circleSweepColor;
   vec2 u_cityCenter;
   float u_circleSweep;
   float u_cityMinSize;
   float u_circleSweepSpeed;
   float u_opacity: 1.0;
-  float u_near : 0;
-  float u_far : 1;
+  float u_near: 0;
+  float u_far: 1;
   float u_time;
+  float u_padding1;
+  float u_padding2;
+  float u_padding3;
 };
 #pragma include "projection"
 #pragma include "light"

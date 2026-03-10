@@ -12,6 +12,9 @@ layout(std140) uniform commonUniforms {
   float u_near: 0;
   float u_far: 1;
   float u_time;
+  float u_padding1;
+  float u_padding2;
+  float u_padding3;
 };
 in vec4 v_Color;
 in vec2 v_texCoord;

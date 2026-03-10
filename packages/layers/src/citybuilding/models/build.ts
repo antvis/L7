@@ -52,6 +52,9 @@ export default class CityBuildModel extends BaseModel {
       u_near: 0,
       u_far: 1,
       u_time: this.layer.getLayerAnimateTime() || time,
+      u_padding1: 0,
+      u_padding2: 0,
+      u_padding3: 0,
     };
     const commonBufferInfo = this.getUniformsBufferInfo(commonOptions);
     return commonBufferInfo;
