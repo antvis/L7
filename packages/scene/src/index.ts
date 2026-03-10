@@ -331,6 +331,9 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
     this.markerService.removeAllMarkers();
   }
 
+  /**
+   * @deprecated 请使用 removeAllMarkers
+   */
   public removeAllMakers() {
     console.warn('removeAllMakers 已废弃，请使用 removeAllMarkers');
     this.markerService.removeAllMarkers();
