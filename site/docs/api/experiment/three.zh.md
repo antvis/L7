@@ -18,7 +18,17 @@ order: 3
 
 4、L7 本身并没有集成 threejs，所以用于在使用 L7Three 模块的时候需要独立安装 threejs。
 
-✨ 目前 L7 官方提供的 threejs 兼容是根据 0.115.0 版本进行开发的，使用其他版本 threejs 可能会存在兼容问题
+✨ 目前 L7 官方提供的 threejs 兼容支持 Three.js r163+ 版本。
+
+⚠️ **重要**：Three.js r163+ 版本仅支持 WebGL 2，因此需要在创建 Scene 时配置 `renderer: 'device'` 以启用 WebGL 2 上下文：
+
+```javascript
+const scene = new Scene({
+  id: 'map',
+  map: new Mapbox({ style: 'dark', center: [121.4, 31.2], zoom: 14 }),
+  renderer: 'device', // 必须使用 'device' 渲染器以启用 WebGL 2
+});
+```
 
 ## 使用
 

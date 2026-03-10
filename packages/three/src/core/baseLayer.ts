@@ -83,13 +83,24 @@ export default class ThreeJSLayer
 
   /**
    * 设置当前物体往经纬度和高度方向的移动
+   *
+   * - 默认/Mapbox 地图：通过 getModelMatrix 将 mercator 坐标转为相对场景中心的偏移并做单位换算
+   * - 高德地图：直接设置 amap2Project 绝对坐标（与 AMapCamera setCenter([0,0]) 坐标系一致）
+   *
    * @param object
    * @param lnglat
    * @param altitude
    */
   public applyObjectLngLat(object: Object3D, lnglat: ILngLat, altitude = 0) {
-    const positionMatrix = this.getTranslateMatrix(lnglat, altitude);
-    object.applyMatrix4(positionMatrix);
+    if (this.mapService.getType() === 'amap') {
+      // 高德地图 camera 使用 customCoords.setCenter([0,0])，坐标系 = amap2Project 绝对 Web Mercator
+      // 与 setObjectLngLat 逻辑一致，直接设置绝对坐标
+      this.setObjectLngLat(object, lnglat, altitude);
+    } else {
+      // 默认/Mapbox：通过 applyMatrix4 正确处理 mercator 单位换算和中心偏移
+      const positionMatrix = this.getTranslateMatrix(lnglat, altitude);
+      object.applyMatrix4(positionMatrix);
+    }
   }
 
   /**
@@ -105,14 +116,40 @@ export default class ThreeJSLayer
   }
 
   /**
+   * 将经纬度+高度转为 Three.js BufferGeometry 顶点坐标
+   *
+   * 用于手动管理顶点位置（如 BufferGeometry）时统一处理不同地图的坐标系：
+   * - 默认/Mapbox 地图：返回相对于场景中心的 mercator 偏移坐标
+   * - 高德地图：返回绝对 Web Mercator 坐标（与 AMapCamera setCenter([0,0]) 一致）
+   *
+   * @param lnglat 经纬度
+   * @param altitude 高度（米）
+   * @returns Three.js 世界坐标 [x, y, z]
+   */
+  public lnglatToThreePosition(lnglat: ILngLat, altitude = 0): [number, number, number] {
+    const result = this.mapService.lngLatToMercator(lnglat, altitude);
+    if (this.mapService.getType() === 'amap') {
+      return [result.x, result.y, altitude];
+    }
+    const center = this.threeRenderService.center;
+    return [result.x - center.x, result.y - center.y, (result.z ?? 0) - (center.z ?? 0)];
+  }
+
+  /**
    * 将经纬度转为 three 世界坐标
    * @param lnglat
    * @returns
    */
-  public lnglatToCoord(lnglat: ILngLat) {
-    const { x, y } = this.mapService.lngLatToMercator(lnglat, 0);
-    // const origin = this.threeRenderService.center ||  [0, 0]
-    return [x, y] as ILngLat;
+  public lnglatToCoord(lnglat: ILngLat): [number, number] {
+    try {
+      const result = this.mapService.lngLatToMercator(lnglat, 0);
+      const x = result?.x ?? NaN;
+      const y = result?.y ?? NaN;
+      return [x, y];
+    } catch (e) {
+      console.warn('[L7-Three] lnglatToCoord error:', e);
+      return [NaN, NaN];
+    }
   }
 
   /**
@@ -120,7 +157,7 @@ export default class ThreeJSLayer
    * @param object
    * @returns
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public getObjectLngLat(object: Object3D) {
     return [0, 0] as ILngLat;
   }
@@ -177,7 +214,8 @@ export default class ThreeJSLayer
 
     // threejs 的 renderer
     const renderer = this.threeRenderService.renderer;
-    renderer.state.reset();
+    // resetState() 是 Three.js r163+ 的公开稳定 API，清除 Three.js 内部状态缓存以与共享的 WebGL 上下文同步
+    renderer.resetState();
     renderer.autoClear = false;
 
     // 获取相机 （不同的地图获取对应的方式不同）
@@ -200,7 +238,7 @@ export default class ThreeJSLayer
     // gl.cullFace(gl.BACK);
     this.rendererService.setCustomLayerDefaults();
     const renderer = this.threeRenderService.renderer;
-    renderer.state.reset();
+    renderer.resetState();
     renderer.autoClear = false;
     renderer.render(this.scene, this.threeRenderService.getRenderCamera());
     this.animateMixer.forEach((mixer: AnimationMixer) => {

@@ -68,7 +68,7 @@
     "read-markdown": "^1.0.2",
     "reading-time": "^1.5.0",
     "shp-write": "^0.3.2",
-    "three": "0.115.0",
+    "three": "0.182.0",
     "tokml": "^0.4.0",
     "topojson": "^3.0.2",
     "uri-parse": "^1.0.0"
