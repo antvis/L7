@@ -157,7 +157,7 @@ export default class ThreeJSLayer
    * @param object
    * @returns
    */
-   
+
   public getObjectLngLat(object: Object3D) {
     return [0, 0] as ILngLat;
   }
