@@ -76,6 +76,7 @@
     "three": "0.182.0"
   },
   "devDependencies": {
+    "@antv/async-hook": "^2.2.9",
     "@antv/l7-draw": "^3.1.5",
     "@antv/translator": "^1.0.1",
     "@changesets/changelog-github": "^0.5.0",

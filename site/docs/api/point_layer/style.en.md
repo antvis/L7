@@ -170,12 +170,14 @@ const font2 = 'Times New Roman';
 
 - [icon](/api/point_layer/shape#shapeiconname-string)
 
-| style         | type               | describe                                   | data mapping | default value |
-| ------------- | ------------------ | ------------------------------------------ | ------------ | ------------- |
-| offsets       | `[number, number]` | point offset                               | no           | `[0, 0]`      |
-| raisingHeight | `number`           | Lifting height                             | no           | `0`           |
-| heightfixed   | `boolean`          | Does the lifting height vary?`zoom`Variety | no           | `false`       |
-| rotation      | `number`           | Rotation angle                             | yes          | `0`           |
+| style         | type               | describe                                                                                                                          | data mapping | default value |
+| ------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------- |
+| offsets       | `[number, number]` | point offset                                                                                                                      | no           | `[0, 0]`      |
+| raisingHeight | `number`           | Lifting height                                                                                                                    | no           | `0`           |
+| heightfixed   | `boolean`          | Does the lifting height vary with `zoom`                                                                                          | no           | `false`       |
+| rotation      | `number`           | Rotation angle                                                                                                                    | yes          | `0`           |
+| allowOverlap  | `boolean`          | Whether icons are allowed to overlap. When `false`, collision detection is enabled and overlapping icons are automatically hidden | no           | `true`        |
+| padding       | `[number, number]` | Extra margin `[horizontal, vertical]` applied to the collision bounding box. Only takes effect when `allowOverlap: false`         | no           | `[0, 0]`      |
 
 #### rotation
 
@@ -193,6 +195,21 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
   .size(15)
   .style({
     rotation: 0,
+  });
+```
+
+#### allowOverlap
+
+Controls whether icons on screen are allowed to overlap each other. When set to `false`, L7 runs collision detection across all icons after every map zoom or pan, and automatically hides any icon that would overlap one already placed. The behavior mirrors `textAllowOverlap` on text layers.
+
+```js
+const imageLayer = new PointLayer()
+  .source(data, { parser: { type: 'json', x: 'lng', y: 'lat' } })
+  .shape('icon')
+  .size(15)
+  .style({
+    allowOverlap: false, // enable collision avoidance
+    padding: [4, 4], // keep a 4px gap between icons
   });
 ```
 
