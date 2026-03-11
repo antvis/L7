@@ -6,6 +6,8 @@ import { CaseScene } from '../../utils';
 export const threeGeometry: TestCase = async (options) => {
   const scene = await CaseScene({
     ...options,
+    // Three.js r163+ 需要 WebGL2，必须使用 'device' 渲染器
+    renderer: 'device',
     mapConfig: {
       style: 'dark',
       center: [111.4453125, 32.84267363195431],
