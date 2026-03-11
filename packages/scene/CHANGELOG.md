@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.24.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-component@2.24.2
+  - @antv/l7-core@2.24.2
+  - @antv/l7-layers@2.24.2
+  - @antv/l7-maps@2.24.2
+  - @antv/l7-renderer@2.24.2
+  - @antv/l7-utils@2.24.2
+
 ## 2.23.3-beta.3
 
 ### Patch Changes
