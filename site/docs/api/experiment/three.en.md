@@ -18,7 +18,17 @@ There is no difference from the development of ordinary threejs applications.
 
 4\. L7 itself does not integrate threejs, so you need to install threejs independently when using the L7Three module.
 
-✨ Currently, the threejs compatibility officially provided by L7 is developed based on version 0.115.0. There may be compatibility issues when using other versions of threejs.
+✨ L7 officially supports Three.js r163+ for threejs compatibility.
+
+⚠️ **Important**: Three.js r163+ only supports WebGL 2, so you need to configure `renderer: 'device'` when creating the Scene to enable WebGL 2 context:
+
+```javascript
+const scene = new Scene({
+  id: 'map',
+  map: new Mapbox({ style: 'dark', center: [121.4, 31.2], zoom: 14 }),
+  renderer: 'device', // Must use 'device' renderer to enable WebGL 2
+});
+```
 
 ## use
 

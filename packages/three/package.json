@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-three",
-  "version": "2.24.0",
+  "version": "2.24.1",
   "description": "Three for L7 ",
   "keywords": [
     "3D",
@@ -37,10 +37,13 @@
   "dependencies": {
     "@antv/l7": "workspace:*",
     "@babel/runtime": "^7.7.7",
-    "three": "0.115.0"
+    "three": "0.182.0"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "@types/three": "^0.183.1"
   }
 }

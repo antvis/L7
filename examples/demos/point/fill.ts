@@ -43,6 +43,7 @@ export const fill: TestCase = async (options) => {
         field: 'unit_price',
         value: () => 1,
       },
+
       strokeWidth: 2,
     });
 

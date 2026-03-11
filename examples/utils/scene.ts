@@ -8,7 +8,7 @@ type CaseSceneOptions = TestCaseOptions & {
 };
 
 export const CaseScene = (options: CaseSceneOptions) => {
-  const { map: basemap, animate, mapConfig } = options;
+  const { map: basemap, animate, mapConfig, renderer } = options;
 
   const isMapbox = ['MapLibre', 'Mapbox'].includes(basemap);
 
@@ -31,6 +31,7 @@ export const CaseScene = (options: CaseSceneOptions) => {
   const scene = new Scene({
     ...options,
     map,
+    renderer: renderer || 'regl', // 默认使用 regl，Three.js demo 需要传入 'device'
     shaderCompilerPath: '/glsl_wgsl_compiler_bg.wasm',
     // logoVisible: false,
   });

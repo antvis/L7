@@ -63,7 +63,7 @@ export default class FillModel extends BaseModel {
     const { animateOption = { enable: false } } = this.layer.getLayerConfig() as ILayerConfig;
     return {
       u_animate: this.animateOption2Array(animateOption),
-      u_time: this.layer.getLayerAnimateTime(),
+      u_time: animateOption.enable ? this.layer.getLayerAnimateTime() : -1.0,
     };
   }
 
