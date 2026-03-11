@@ -111,6 +111,7 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   fontWeight?: string;
   fontFamily?: string;
   textAllowOverlap?: boolean;
+  allowOverlap?: boolean; // image 类型图标压盖控制，false 时开启碰撞避让
   // cylinder
   pickLight?: boolean;
 

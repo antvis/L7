@@ -1,4 +1,4 @@
-import type { IEncodeFeature } from '@antv/l7-core';
+import type { IEncodeFeature, ILayer, ILayerConfig } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import type { IPointLayerStyleOptions } from '../core/interface';
 import type { PointType } from './models/index';
@@ -29,6 +29,17 @@ export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   }
   public async rebuildModels() {
     await this.buildModels();
+  }
+
+  public style(options: Partial<IPointLayerStyleOptions> & Partial<ILayerConfig>): ILayer {
+    super.style(options);
+    // allowOverlap 依赖 needUpdate() 感知变化并重建 model，而 needUpdate() 仅在渲染帧的
+    // beforeRender 钩子中被调用。style() 本身不触发渲染，因此在 allowOverlap 出现时
+    // 主动触发一次 reRender，确保静止地图下也能即时生效。
+    if ('allowOverlap' in options) {
+      this.reRender();
+    }
+    return this;
   }
 
   /**

@@ -170,12 +170,14 @@ const font2 = 'Times New Roman';
 
 - [icon](/api/point_layer/shape#shapeiconname-string)
 
-| style         | 类型               | 描述                       | 数据映射 | 默认值   |
-| ------------- | ------------------ | -------------------------- | -------- | -------- |
-| offsets       | `[number, number]` | 点偏移                     | 否       | `[0, 0]` |
-| raisingHeight | `number`           | 抬升高度                   | 否       | `0`      |
-| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化 | 否       | `false`  |
-| rotation      | `number`           | 旋转角度                   | 是       | `0`      |
+| style         | 类型               | 描述                                                                       | 数据映射 | 默认值   |
+| ------------- | ------------------ | -------------------------------------------------------------------------- | -------- | -------- |
+| offsets       | `[number, number]` | 点偏移                                                                     | 否       | `[0, 0]` |
+| raisingHeight | `number`           | 抬升高度                                                                   | 否       | `0`      |
+| heightfixed   | `boolean`          | 抬升高度是否随 `zoom` 变化                                                 | 否       | `false`  |
+| rotation      | `number`           | 旋转角度                                                                   | 是       | `0`      |
+| allowOverlap  | `boolean`          | 图标是否允许压盖，`false` 时开启碰撞避让自动隐藏重叠图标                   | 否       | `true`   |
+| padding       | `[number, number]` | 碰撞检测包围盒的额外边距 `[水平, 垂直]`，仅在 `allowOverlap: false` 时生效 | 否       | `[0, 0]` |
 
 #### rotation
 
@@ -193,6 +195,21 @@ const imageLayer = new PointLayer({ layerType: 'fillImage' })
   .size(15)
   .style({
     rotation: 0,
+  });
+```
+
+#### allowOverlap
+
+控制图标在屏幕上是否允许相互压盖。设置为 `false` 时，L7 会在每次地图缩放或平移后对所有图标执行碰撞检测，自动隐藏与已放置图标重叠的图标，效果与 `textAllowOverlap` 一致。
+
+```js
+const imageLayer = new PointLayer()
+  .source(data, { parser: { type: 'json', x: 'lng', y: 'lat' } })
+  .shape('icon')
+  .size(15)
+  .style({
+    allowOverlap: false, // 开启碰撞避让
+    padding: [4, 4], // 图标之间保留 4px 间距
   });
 ```
 

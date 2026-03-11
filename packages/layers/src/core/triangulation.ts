@@ -132,6 +132,13 @@ export function PointExtrudeTriangulation(feature: IEncodeFeature) {
  * @param feature 映射feature
  */
 export function PointImageTriangulation(feature: IEncodeFeature) {
+  // @ts-ignore
+  const that = this as { imageFilterMap?: { [id: number]: boolean } };
+  const id = feature.id as number;
+  // 当 imageFilterMap 存在且该 feature 未通过碰撞检测时，返回空几何（等效隐藏）
+  if (that?.imageFilterMap && !that.imageFilterMap[id]) {
+    return { vertices: [], indices: [], size: 3 };
+  }
   const coordinates = calculateCentroid(feature.coordinates);
   return {
     vertices: [...coordinates],
