@@ -67,7 +67,7 @@ function run(cmd: string, cwd?: string): void {
  */
 function getCurrentVersion(): string {
   const mainPkg = JSON.parse(
-    fs.readFileSync(path.join(PACKAGES_DIR, 'l7', 'package.json'), 'utf-8')
+    fs.readFileSync(path.join(PACKAGES_DIR, 'l7', 'package.json'), 'utf-8'),
   );
   return mainPkg.version;
 }
