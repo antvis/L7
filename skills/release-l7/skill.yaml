@@ -1,0 +1,33 @@
+name: release-l7
+description: L7 版本发布工具 - 自动化版本更新、构建、发布流程
+author: lzxue
+version: 1.0.0
+
+commands:
+  version:
+    description: 更新所有包版本号到指定版本
+    usage: version <x.y.z>
+    example: version 2.25.2
+
+  build:
+    description: 构建所有包
+    usage: build
+
+  publish:
+    description: 发布到 npm（需要已登录 npm 账户）
+    usage: publish
+
+  release:
+    description: 完整发布流程（版本更新 + 提交 + 标签 + 构建 + 发布 + 推送）
+    usage: release <x.y.z>
+    example: release 2.25.2
+
+requirements:
+  - 需要在 L7 项目根目录运行
+  - 需要有 git 提交权限
+  - 需要有 npm 发布权限（且已登录或配置了 authToken）
+
+notes:
+  - 发布前会自动构建所有包
+  - workspace:* 依赖会在发布时自动替换为具体版本号
+  - 如果启用了 npm 2FA，发布时需要提供 OTP 码
