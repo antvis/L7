@@ -247,8 +247,8 @@ export default class Arc3DModel extends BaseModel {
     }
     this.texture = createTexture2D({
       data: this.iconService.getCanvas(),
-      mag: gl.NEAREST,
-      min: gl.NEAREST,
+      mag: gl.LINEAR,
+      min: gl.LINEAR,
       premultiplyAlpha: false,
       width: 1024,
       height: this.iconService.canvasHeight || 128,

@@ -374,49 +374,27 @@ export default class DeviceRendererService implements IRendererService {
 
   // TODO: 临时方法
   setState() {
-    // this.gl({
-    //   cull: {
-    //     enable: false,
-    //     face: 'back',
-    //   },
-    //   viewport: {
-    //     x: 0,
-    //     y: 0,
-    //     height: this.width,
-    //     width: this.height,
-    //   },
-    //   blend: {
-    //     enable: true,
-    //     equation: 'add',
-    //   },
-    //   framebuffer: null,
-    // });
-    // this.gl._refresh();
+    const gl = this.getGLContext();
+    if (gl) {
+      gl.disable(gl.CULL_FACE);
+      gl.blendEquation(gl.FUNC_ADD);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    }
   }
 
   setBaseState() {
-    // this.gl({
-    //   cull: {
-    //     enable: false,
-    //     face: 'back',
-    //   },
-    //   viewport: {
-    //     x: 0,
-    //     y: 0,
-    //     height: this.width,
-    //     width: this.height,
-    //   },
-    //   blend: {
-    //     enable: false,
-    //     equation: 'add',
-    //   },
-    //   framebuffer: null,
-    // });
-    // this.gl._refresh();
+    const gl = this.getGLContext();
+    if (gl) {
+      gl.disable(gl.CULL_FACE);
+      gl.blendEquation(gl.FUNC_ADD);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    }
   }
   setCustomLayerDefaults() {
-    // const gl = this.getGLContext();
-    // gl.disable(gl.CULL_FACE);
+    const gl = this.getGLContext();
+    if (gl) {
+      gl.disable(gl.CULL_FACE);
+    }
   }
 
   setDirty(flag: boolean): void {

@@ -2,7 +2,7 @@ import { aProjectFlat } from '@antv/l7-utils';
 import type { vec3 } from 'gl-matrix';
 import { vec2 } from 'gl-matrix';
 const tmp = vec2.create();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 const capEnd = vec2.create();
 const lineA = vec2.create();
 const lineB = vec2.create();
@@ -429,9 +429,11 @@ export default class ExtrudePolyline {
   ) {
     normals.push(normal[0], normal[1], 0);
     normals.push(normal[0], normal[1], 0);
-    positions.push(point[0], point[1], point[2] | 0, distanceRadio, -thickness, point[2] | 0);
+    // 修复：正确处理 z 坐标，当 point[2] 不存在时使用 0，但保留传入的高度值
+    const z = point[2] !== undefined ? point[2] : 0;
+    positions.push(point[0], point[1], z, distanceRadio, -thickness, z);
     this.complex.indexes.push(this.currentIndex);
-    positions.push(point[0], point[1], point[2] | 0, distanceRadio, thickness, point[2] | 0);
+    positions.push(point[0], point[1], z, distanceRadio, thickness, z);
     this.complex.indexes.push(this.currentIndex);
     this.currentIndex++;
   }

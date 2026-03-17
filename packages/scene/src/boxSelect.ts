@@ -68,6 +68,10 @@ export default class BoxSelect extends EventEmitter {
   }
 
   protected onDragStart = (e: any) => {
+    // 阻止事件冒泡，防止触发地图拖拽
+    if (e.target && e.stopPropagation) {
+      e.stopPropagation();
+    }
     this.box.style.display = 'block';
     this.startEvent = this.endEvent = e;
     this.syncBoxBound();
@@ -75,12 +79,20 @@ export default class BoxSelect extends EventEmitter {
   };
 
   protected onDragging = (e: any) => {
+    // 阻止事件冒泡，防止触发地图拖拽
+    if (e.target && e.stopPropagation) {
+      e.stopPropagation();
+    }
     this.endEvent = e;
     this.syncBoxBound();
     this.emit('selecting', this.getLngLatBox(), this.startEvent, this.endEvent);
   };
 
   protected onDragEnd = (e: any) => {
+    // 阻止事件冒泡，防止触发地图拖拽
+    if (e.target && e.stopPropagation) {
+      e.stopPropagation();
+    }
     this.endEvent = e;
     this.box.style.display = 'none';
     this.emit('selectend', this.getLngLatBox(), this.startEvent, this.endEvent);
