@@ -131,6 +131,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     this.map.on('rotate', this.handleCameraChanged);
     this.map.on('pitch', this.handleCameraChanged);
     this.map.on('zoom', this.handleCameraChanged);
+    this.map.on('resize', this.handleCameraChanged);// FIX #2751: handle window resize
 
     // Trigger camera change after init
     this.handleCameraChanged();
@@ -464,3 +465,4 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     DOM.addClass(container, 'tmap-contianer--hide-logo');
   }
 }
+
