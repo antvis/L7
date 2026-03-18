@@ -149,6 +149,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     this.map.on('rotate', this.handleCameraChanged);
     this.map.on('pitch', this.handleCameraChanged);
     this.map.on('zoom', this.handleCameraChanged);
+    this.map.on('resize', this.handleCameraChanged);
 
     // Trigger camera change after init
     this.handleCameraChanged();
