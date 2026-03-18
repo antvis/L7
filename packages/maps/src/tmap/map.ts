@@ -1,24 +1,23 @@
-import {
+import type {
   Bounds,
   ILngLat,
   IMercator,
   IPoint,
   IStatusOptions,
   IViewport,
-  MapServiceEvent,
   MapStyleConfig,
   Point,
 } from '@antv/l7-core';
-import { MercatorCoordinate } from '@antv/l7-map';
+import { MapServiceEvent } from '@antv/l7-core';
+import { MapMouseEvent, MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import Viewport from '../lib/web-mercator-viewport';
 import BaseMapService from '../utils/BaseMapService';
-import Viewport from '../utils/Viewport';
 import './logo.css';
 import TMapLoader from './maploader';
 
-const TMAP_API_KEY: string = 'OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77';
-const BMAP_VERSION: string = '1.exp';
+const TMAP_VERSION: string = '1.exp';
 
 const EventMap: {
   [key: string]: any;
@@ -29,9 +28,12 @@ const EventMap: {
   dragging: 'drag',
 };
 
+// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
 export default class TMapService extends BaseMapService<TMap.Map> {
   // @ts-ignore
   protected viewport: IViewport = null;
+  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
+    new Map();
 
   public handleCameraChanged = () => {
     // Trigger map change event
@@ -67,8 +69,8 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       id,
       mapInstance,
       center = [121.30654632240122, 31.25744185633306],
-      token = TMAP_API_KEY,
-      version = BMAP_VERSION,
+      token,
+      version = TMAP_VERSION,
       libraries = [],
       minZoom = 3,
       maxZoom = 18,
@@ -80,8 +82,14 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     } = this.config;
 
     if (!(window.TMap || mapInstance)) {
+      if (!token) {
+        console.warn(
+          `%c${this.configService.getSceneWarninfo('MapToken')}!`,
+          'color: #873bf4;font-weigh:900;font-size: 16px;',
+        );
+      }
       await TMapLoader.load({
-        key: token,
+        key: token || '',
         version,
         libraries,
       });
@@ -123,6 +131,16 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     // Set tencent map canvas element position as absolute
     // @ts-ignore
     this.map.canvasContainer.style.position = 'absolute';
+    // @ts-ignore
+    this.map.drawContainer.classList.add('tencent-map');
+
+    // Set tencent map control layer dom index
+    // @ts-ignore
+    const controlParentContainer = this.map.controlManager.controlContainer?.parentNode;
+    if (controlParentContainer) {
+      controlParentContainer.style.zIndex = 2;
+    }
+
     this.simpleMapCoord.setSize(mapSize);
 
     // May be find an integrated event replacing following events
@@ -131,7 +149,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     this.map.on('rotate', this.handleCameraChanged);
     this.map.on('pitch', this.handleCameraChanged);
     this.map.on('zoom', this.handleCameraChanged);
-    this.map.on('resize', this.handleCameraChanged); // FIX #2751: handle window resize
+    this.map.on('resize', this.handleCameraChanged);
 
     // Trigger camera change after init
     this.handleCameraChanged();
@@ -149,6 +167,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     const container = this.map.getContainer();
     this.markerContainer = DOM.create('div', 'l7-marker-container', container);
     this.markerContainer.setAttribute('tabindex', '-1');
+    this.markerContainer.style.zIndex = '2';
   }
 
   public getMarkerContainer(): HTMLElement {
@@ -160,19 +179,65 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
+      const onProxy = (eventName: string) => {
+        let cbProxyMap = this.evtCbProxyMap.get(eventName);
+
+        if (!cbProxyMap) {
+          this.evtCbProxyMap.set(eventName, (cbProxyMap = new Map()));
+        }
+
+        if (cbProxyMap.get(handle)) {
+          return;
+        }
+
+        const handleProxy = (...args: any[]) => {
+          if (args[0] && typeof args[0] === 'object' && !args[0].lngLat && !args[0].lnglat) {
+            args[0].lngLat = args[0].latlng || args[0].latLng;
+          }
+          handle(...args);
+        };
+
+        cbProxyMap.set(handle, handleProxy);
+        if (eventName === 'mouseover') {
+          this.map.getContainer().addEventListener('mouseover', (e) => {
+            this.map.emit(e.type, new MapMouseEvent(e.type, this.map, e));
+          });
+        }
+        this.map.on(eventName, handleProxy);
+      };
+
       if (Array.isArray(EventMap[type])) {
         EventMap[type].forEach((eventName: string) => {
-          this.map.on(eventName || type, handle);
+          onProxy(eventName || type);
         });
       } else {
-        this.map.on(EventMap[type] || type, handle);
+        onProxy(EventMap[type] || type);
       }
     }
   }
 
   public off(type: string, handle: (...args: any[]) => void): void {
-    this.map.off(EventMap[type] || type, handle);
-    this.eventEmitter.off(type, handle);
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.off(type, handle);
+      return;
+    }
+
+    const offProxy = (eventName: string) => {
+      const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
+      if (!handleProxy) {
+        return;
+      }
+      this.evtCbProxyMap.get(eventName)?.delete(handle);
+      this.map.off(eventName, handleProxy);
+    };
+
+    if (Array.isArray(EventMap[type])) {
+      EventMap[type].forEach((eventName: string) => {
+        offProxy(eventName || type);
+      });
+    } else {
+      offProxy(EventMap[type] || type);
+    }
   }
 
   public once(): void {
@@ -240,6 +305,10 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     return this.map.getContainer()?.getElementsByTagName('canvas')[0];
   }
 
+  public getCanvasOverlays() {
+    return this.getMapCanvasContainer()?.nextSibling?.firstChild as HTMLElement;
+  }
+
   public getMapStyleConfig(): MapStyleConfig {
     // return this.getMap()
     throw new Error('Method not implemented.');
@@ -288,9 +357,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     this.map.setZoom(zoom);
   }
 
-  public setCenter(
-    [lng, lat]: [number, number],
-  ): void {
+  public setCenter([lng, lat]: [number, number]): void {
     this.map.setCenter(new TMap.LatLng(lat, lng));
   }
 
@@ -309,7 +376,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
           this.map.setDoubleClickZoom(!!option.doubleClickZoom);
           break;
         case 'dragEnable':
-          this.map.setDraggable(!!option.doubleClickZoom);
+          this.map.setDraggable(!!option.dragEnable);
           break;
         case 'rotateEnable':
           // @ts-ignore
@@ -340,9 +407,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
     const [x1, y1] = this.lngLatToCoord!([centerLon, centerLat]);
     const [x2, y2] = this.lngLatToCoord!([outerLon, outerLat]);
-    const coordDistance = Math.sqrt(
-      Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2),
-    );
+    const coordDistance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
     return coordDistance / metreDistance;
   }
@@ -351,18 +416,10 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     // Since tecent map didn't provide the reverse method for transforming from pixel to lnglat
     // It had to be done by calculate the relative distance in container coordinates
     const { lng: clng, lat: clat } = this.map.getCenter();
-    const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([
-      clng,
-      clat,
-    ]);
-    const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer(
-      [clng, clat],
-    );
+    const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([clng, clat]);
+    const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer([clng, clat]);
     const { lng, lat } = this.map.unprojectFromContainer(
-      new TMap.Point(
-        centerContainerX + (x - centerPixelX),
-        centerContainerY + (y - centerPixelY),
-      ),
+      new TMap.Point(centerContainerX + (x - centerPixelX), centerContainerY + (y - centerPixelY)),
     );
     return this.containerToLngLat([lng, lat]);
   }
@@ -398,16 +455,9 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     );
   }
 
-  public lngLatToMercator(
-    lnglat: [number, number],
-    altitude: number,
-  ): IMercator {
+  public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     // Use built in mercator tools due to Tencent not provided related methods
-    const {
-      x = 0,
-      y = 0,
-      z = 0,
-    } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
   }
 
@@ -421,16 +471,8 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     // @ts-ignore
     const modelMatrix = mat4.create();
 
-    mat4.translate(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(flat[0], flat[1], altitude),
-    );
-    mat4.scale(
-      modelMatrix,
-      modelMatrix,
-      vec3.fromValues(scale[0], scale[1], scale[2]),
-    );
+    mat4.translate(modelMatrix, modelMatrix, vec3.fromValues(flat[0], flat[1], altitude));
+    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(scale[0], scale[1], scale[2]));
 
     mat4.rotateX(modelMatrix, modelMatrix, rotate[0]);
     mat4.rotateY(modelMatrix, modelMatrix, rotate[1]);
@@ -465,4 +507,3 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     DOM.addClass(container, 'tmap-contianer--hide-logo');
   }
 }
-
