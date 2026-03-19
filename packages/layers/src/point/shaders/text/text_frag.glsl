@@ -34,7 +34,9 @@ void main() {
 
   highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
 
-  outputColor = mix(v_color, v_stroke_color, smoothstep(0., 0.5, 1.- dist));
+  // 根据 stroke 的 alpha 值调整混合权重，避免透明 stroke 影响文本颜色
+  float stroke_mix_factor = smoothstep(0., 0.5, 1.- dist) * v_stroke_color.a;
+  outputColor = mix(v_color, v_stroke_color, stroke_mix_factor);
 
   outputColor.a *= alpha;
    // 作为 mask 模板时需要丢弃透明的像素
