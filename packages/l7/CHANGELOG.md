@@ -1,5 +1,31 @@
 # Change Log
 
+## 2.25.4
+
+### Patch Changes
+
+- fix(scale): return range midpoint when domain min equals max
+
+  When all data values are identical (e.g., all values are 1),
+  .domain([1, 1]).range([0, 1]) would return 0 for all values,
+  making heatmap invisible. Now returns the range midpoint instead.
+
+  Affected scales:
+  - scaleLinear: return (r0 + r1) / 2
+  - scalePow: return (r0 + r1) / 2
+  - scaleLog: return (r0 + r1) / 2
+  - scaleQuantize: return \_range[Math.floor(_range.length / 2)]
+  - scaleTime: return (r0 + r1) / 2
+
+- Updated dependencies []:
+  - @antv/l7-layers@2.25.4
+  - @antv/l7-component@2.25.4
+  - @antv/l7-scene@2.25.4
+  - @antv/l7-core@2.25.4
+  - @antv/l7-maps@2.25.4
+  - @antv/l7-source@2.25.4
+  - @antv/l7-utils@2.25.4
+
 ## 2.23.3-beta.3
 
 ### Patch Changes

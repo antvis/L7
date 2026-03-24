@@ -23,7 +23,11 @@
       "Bash(ls:*)",
       "Bash(cat:*)",
       "Bash(NODE_ENV=production pnpm:*)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Edit(~/.claude/skills/vision-story/**)",
+      "Bash(node ~/.claude/skills/release-l7/index.ts release 2.25.3)",
+      "WebFetch(domain:github.com)",
+      "Bash(.changeset/scale-fix.md:*)"
     ]
   }
 }
