@@ -207,7 +207,7 @@ export default class MarkerLayer extends EventEmitter {
         if (typeof m.hide === 'function') {
           m.hide();
         } else {
-          m.getElement().style.opacity = '0';
+          m.getElement().style.display = 'none';
         }
       } catch (e) {
         void e;
@@ -219,7 +219,7 @@ export default class MarkerLayer extends EventEmitter {
         if (typeof m.hide === 'function') {
           m.hide();
         } else {
-          m.getElement().style.opacity = '0';
+          m.getElement().style.display = 'none';
         }
       } catch (e) {
         void e;
@@ -236,7 +236,7 @@ export default class MarkerLayer extends EventEmitter {
         if (typeof m.show === 'function') {
           m.show();
         } else {
-          m.getElement().style.opacity = '1';
+          m.getElement().style.display = 'block';
         }
       } catch (e) {
         void e;
@@ -248,7 +248,7 @@ export default class MarkerLayer extends EventEmitter {
         if (typeof m.show === 'function') {
           m.show();
         } else {
-          m.getElement().style.opacity = '1';
+          m.getElement().style.display = 'block';
         }
       } catch (e) {
         void e;
