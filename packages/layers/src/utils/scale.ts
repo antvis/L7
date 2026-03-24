@@ -74,9 +74,9 @@ export function scaleLinear(): ScaleLinear {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
-    // 处理相等的 domain
+    // 处理相等的 domain - 返回 range 中值，避免所有值映射到最小值
     if (d0 === d1) {
-      return r0;
+      return (r0 + r1) / 2;
     }
 
     let t = (x - d0) / (d1 - d0);
@@ -158,8 +158,9 @@ export function scalePow(): ScalePow {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
+    // 处理相等的 domain - 返回 range 中值，避免所有值映射到最小值
     if (d0 === d1) {
-      return r0;
+      return (r0 + r1) / 2;
     }
 
     let t = (x - d0) / (d1 - d0);
@@ -258,8 +259,9 @@ export function scaleLog(): ScaleLog {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
+    // 处理相等的 domain - 返回 range 中值，避免所有值映射到最小值
     if (d0 === d1) {
-      return r0;
+      return (r0 + r1) / 2;
     }
 
     const absD0 = Math.abs(d0) || 1;
@@ -402,8 +404,9 @@ export function scaleQuantize(): ScaleQuantize {
   function scale(x: number): any {
     const d0 = domain[0];
     const d1 = domain[domain.length - 1];
+    // 处理相等的 domain - 返回 range 中值，避免所有值映射到最小值
     if (d0 === d1) {
-      return _range[0];
+      return _range[Math.floor(_range.length / 2)];
     }
     const t = (x - d0) / (d1 - d0);
     const i = Math.max(0, Math.min(n - 1, Math.floor(t * n)));
@@ -690,8 +693,9 @@ export function scaleTime(): ScaleTime {
     const r0 = range[0];
     const r1 = range[range.length - 1];
 
+    // 处理相等的 domain - 返回 range 中值，避免所有值映射到最小值
     if (d0 === d1) {
-      return r0;
+      return (r0 + r1) / 2;
     }
 
     let t = (x - d0) / (d1 - d0);
