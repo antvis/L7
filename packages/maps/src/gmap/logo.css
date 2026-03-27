@@ -1,4 +1,4 @@
-img[src*='//mapapi.qq.com/web/jsapi/logo/logo_def.png'],
-.logo-text {
+.tmap-contianer--hide-logo img[src*='//mapapi.qq.com/web/jsapi/logo/logo_def.png'],
+.tmap-contianer--hide-logo .logo-text {
   display: none !important;
 }
