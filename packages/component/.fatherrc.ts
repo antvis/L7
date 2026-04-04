@@ -4,7 +4,16 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
   extends: '../../.fatherrc.base.ts',
-  // 使用 babel 编译 esm/cjs 产物，启用 transform-import-css-l7 插件完成 CSS 内联打包
-  esm: { transformer: 'babel' },
-  cjs: isProduction ? { transformer: 'babel' } : undefined,
+  // Fix: 使用 esbuild transformer 来正确处理 CSS/LESS 导入
+  // esbuild 可以正确地将 .less 导入转换为内联 CSS
+  esm: {
+    transformer: 'esbuild',
+    platform: 'browser',
+  },
+  cjs: isProduction
+    ? {
+        transformer: 'esbuild',
+        platform: 'node',
+      }
+    : undefined,
 });
