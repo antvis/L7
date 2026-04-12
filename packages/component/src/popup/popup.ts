@@ -319,6 +319,8 @@ export default class Popup<O extends IPopupOption = IPopupOption>
    */
   public panToPopup() {
     const { lng, lat } = this.lngLat;
+    // Normalize longitude to valid range [-180, 180]
+    const normalizedLng = ((lng + 180) % 360 + 360) % 360 - 180;
     if (this.popupOption.autoPan) {
       this.mapsService.panTo([lng, lat]);
     }
@@ -397,7 +399,9 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       return;
     }
     const { lng, lat } = this.lngLat;
-    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
+    // Normalize longitude to valid range [-180, 180]
+    const normalizedLng = ((lng + 180) % 360 + 360) % 360 - 180;
+    const { x, y } = this.mapsService.lngLatToContainer([normalizedLng, lat]);
 
     this.setPopupPosition(x, y);
   };
