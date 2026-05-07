@@ -415,3 +415,25 @@ scene.addLayer(imageLayer);
   }
 }
 ```
+
+### rotate
+
+将数据值映射到图形的旋转角度上的方法，用于控制点图层图标/图形的旋转。
+
+```javascript
+layer.rotate(45); // 常量，所有元素旋转 45 度
+layer.rotate('angle'); // 字段映射
+layer.rotate('angle', [0, 360]); // 字段映射到角度范围
+layer.rotate('angle', (angle) => {
+  return angle * (Math.PI / 180); // 回调函数
+});
+```
+
+### label
+
+为图层设置标注（文字标签），将数据字段映射为标注内容显示在图层元素旁边。主要在特定图层类型（如 PointLayer 的文字标注）中生效。
+
+```javascript
+layer.label('name'); // 以 name 字段的值作为标注文本
+layer.label('name', (name) => `${name}市`); // 回调函数处理标注文本
+```

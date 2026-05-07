@@ -77,6 +77,14 @@ layer.on('contextmenu', (e) => console.log(e));
 layer.on('dblclick', (e) => console.log(e));
 ```
 
+### mouseenter
+
+鼠标进入图层要素时触发
+
+```javascript
+layer.on('mouseenter', (e) => console.log(e));
+```
+
 ### unclick
 
 点击未拾取到元素

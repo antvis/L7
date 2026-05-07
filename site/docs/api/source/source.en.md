@@ -122,6 +122,48 @@ Generate hexagonal grid layout, statistics based on data fields
 - field: data statistics field
 - method: aggregation method, with 5 statistical dimensions: count, max, min, sum, mean
 
+#### map
+
+Data mapping, used to transform each data item in the data source.
+
+- type: 'map'
+- callback: `(item: any) => any` - callback function that receives and returns each data item
+
+```javascript
+layer.source(data, {
+  transforms: [
+    {
+      type: 'map',
+      callback: function (item) {
+        item.lat = parseFloat(item.lat);
+        item.lng = parseFloat(item.lng);
+        return item;
+      },
+    },
+  ],
+});
+```
+
+#### filter
+
+Data filtering, used to filter out data items that do not meet the conditions.
+
+- type: 'filter'
+- callback: `(item: any) => boolean` - callback function that returns `true` to keep the item, `false` to remove it
+
+```javascript
+layer.source(data, {
+  transforms: [
+    {
+      type: 'filter',
+      callback: function (item) {
+        return item.value > 10;
+      },
+    },
+  ],
+});
+```
+
 #### join
 
 Data connection, in many cases in business, geographical data and business data are two separate sets of data. We can associate geographical data and business data through the join method.
@@ -192,6 +234,26 @@ layer
 
 ## method
 
+### getClusters(zoom: number)
+
+Get aggregated data at the specified zoom level.
+
+- `zoom` zoom level
+
+```javascript
+const clusters = source.getClusters(zoom);
+```
+
+### updateClusterData(zoom: number)
+
+Update the aggregated data display for the specified zoom level.
+
+- `zoom` zoom level
+
+```javascript
+source.updateClusterData(zoom);
+```
+
 ### getClustersLeaves(cluster_id)
 
 Use the aggregation graph to obtain the original data of the aggregation node
@@ -256,7 +318,44 @@ Obtain the feature L7 encoding featureId based on the key and value of the attri
 
 ```tsx
 const source = layer.getSource();
-source.getFeatureId('name', '张三');
+source.getFeatureId('name', 'zhangsan');
+```
+
+### getSourceCfg()
+
+Get the source configuration object, including parser type and transforms configuration.
+
+```javascript
+const cfg = source.getSourceCfg();
+```
+
+### getParserType()
+
+Get the parser type string of the current source.
+
+```javascript
+const parserType = source.getParserType(); // e.g. 'geojson', 'csv', 'json'
+```
+
+### destroy()
+
+Destroy the source and release related resources.
+
+```javascript
+source.destroy();
+```
+
+## Events
+
+| Event  | Description                                       |
+| ------ | ------------------------------------------------- |
+| inited | Triggered after source initialization is complete |
+| update | Triggered when source data is updated             |
+
+```javascript
+source.on('update', () => {
+  console.log('source data updated');
+});
 ```
 
 ## Source update

@@ -54,9 +54,9 @@ const scene = new L7.Scene({
 
 ### logoPosition
 
-<description> _bottomleft_ **Optional** </description>
+<description> _string_ **Optional** _default: 'bottomleft'_ </description>
 
-`L7`provided by default`Logo`The display position can be configured, and the default is the lower left corner.
+`L7` provided by default `Logo` The display position can be configured, and the default is the lower left corner.
 
 - bottomright
 - topright
@@ -69,29 +69,67 @@ const scene = new L7.Scene({
 
 ### logoVisible Is the logo visible?
 
-<description> _bottomleft_ **Optional** _default: true_ </description>
+<description> _boolean_ **Optional** _default: true_ </description>
 
-Configuration`L7`of`Logo`Whether to display or not, it is displayed by default.
+Configuration `L7` of `Logo` Whether to display or not, it is displayed by default.
 
 ### antialias Whether to enable anti-aliasing
 
 <description> _boolean_ **Optional** _default: true_ </description>
 
-Whether to start anti-aliasing before starting.
+Whether to enable anti-aliasing.
 
 ### stencil whether to enable cutting
 
-<description> _boolean_ **Optional** _default: false_ </description>
+<description> _boolean_ **Optional** _default: true_ </description>
 
-Whether to start cropping.
+Whether to enable stencil. Layer `Mask` masking capabilities as well as vector tiles require this configuration to be enabled.
 
-🌟 Supported from version v2.7.2, layer`Mask`Masking capabilities as well as vector tiles are required to start this configuration.
+🌟 Supported from version v2.7.2.
 
 ### preserveDrawingBuffer
 
 <description> _boolean_ **Optional** _default: false_ </description>
 
-Whether to retain buffer data`boolean` `false`。
+Whether to retain buffer data. When set to `true`, map images can be exported via `canvas.toDataURL()`.
+
+### renderer Renderer
+
+<description> _'regl' | 'device'_ **Optional** _default: 'device'_ </description>
+
+Specifies the renderer type. `regl` is the legacy renderer, `device` is the new renderer (based on `@antv/g-device-api`), which is used by default.
+
+```javascript
+const scene = new Scene({
+  id: 'map',
+  map: new Map({}),
+  renderer: 'device', // or 'regl'
+});
+```
+
+### animate Whether to enable animation
+
+<description> _boolean_ **Optional** _default: undefined_ </description>
+
+Whether to enable animation rendering.
+
+### debug Whether to enable debugging
+
+<description> _boolean_ **Optional** _default: false_ </description>
+
+Whether to enable debug mode, which will output debugging information when enabled.
+
+### pickBufferScale Pick buffer scale
+
+<description> _number_ **Optional** _default: 1.0_ </description>
+
+Sets the scale ratio of the pixel picking buffer.
+
+### fitBoundsOptions Fit bounds options
+
+<description> _object_ **Optional** </description>
+
+Default options configuration when calling the `fitBounds` method, includes `animate` and other parameters.
 
 ## Layer method
 
@@ -143,15 +181,40 @@ scene.removeLayer(layer);
 
 🌟 The layer will be destroyed when removed.
 
-### removeAllLayer(): void removes all layer objects
+### removeAllLayer(): Promise\<void\> removes all layer objects
 
 Remove all layer objects.
 
 ```javascript
-scene.removeAllLayer();
+await scene.removeAllLayer();
 ```
 
 🌟 The layer will be destroyed when removed.
+
+### render(): void Force re-render
+
+Manually trigger a scene re-render.
+
+```javascript
+scene.render();
+```
+
+### setEnableRender(flag: boolean): void Enable/disable rendering
+
+Control whether layer rendering updates are allowed. When set to `false`, layer rendering will be paused.
+
+```javascript
+scene.setEnableRender(false); // Pause rendering
+scene.setEnableRender(true); // Resume rendering
+```
+
+### getPickedLayer(): string Get the currently picked layer
+
+Gets the ID of the layer currently being picked (hover/click).
+
+```javascript
+const layerId = scene.getPickedLayer();
+```
 
 ## Control component methods
 
@@ -250,6 +313,10 @@ Removes all label objects from the scene.
 ```javascript
 scene.removeAllMarkers();
 ```
+
+### removeAllMakers(): void ⚠️ Deprecated
+
+> ⚠️ This method is deprecated, please use `removeAllMarkers()` instead.
 
 ## static method
 
@@ -615,6 +682,174 @@ type IImage = 'png' | 'jpg';
 scene.exportMap('png');
 ```
 
+### exportPng(type?: 'png' | 'jpg'): string Export image
+
+Alias method for `exportMap`, exports the map as an image.
+
+```javascript
+scene.exportPng('png'); // Equivalent to scene.exportMap('png')
+scene.exportPng('jpg'); // Equivalent to scene.exportMap('jpg')
+```
+
+### setBgColor(color: string): void Set background color
+
+Sets the scene background color.
+
+```javascript
+scene.setBgColor('#000000');
+```
+
+### registerPostProcessingPass(constructor: any, name: string): void Register post-processing pass
+
+Registers a post-processing effect pass, used to implement post-processing effects such as Bloom, color correction, etc.
+
+```javascript
+import { Scene, PostProcessingPass } from '@antv/l7';
+
+scene.registerPostProcessingPass(PostProcessingPass, 'bloom');
+```
+
+### enableShaderPick(): void Enable shader picking
+
+Enables shader picking mode.
+
+```javascript
+scene.enableShaderPick();
+```
+
+### disableShaderPick(): void Disable shader picking
+
+Disables shader picking mode.
+
+```javascript
+scene.disableShaderPick();
+```
+
+### diasbleShaderPick(): void ⚠️ Deprecated
+
+> ⚠️ This method name has a typo and is deprecated, please use `disableShaderPick()` instead.
+
+### enableBoxSelect(once?: boolean): void Enable box selection
+
+Enables box selection functionality, allowing users to select an area by dragging a rectangle. The `once` parameter, when `true`, means box selection will automatically close after one trigger.
+
+```javascript
+scene.enableBoxSelect(); // Continuous box selection
+scene.enableBoxSelect(true); // Auto-close after one box selection
+```
+
+Box selection events can be listened to via the `boxselect` event:
+
+```javascript
+scene.on('boxselect', (e) => {
+  console.log(e.bounds); // Bounding box in latitude/longitude
+});
+```
+
+### disableBoxSelect(): void Disable box selection
+
+Disables box selection functionality.
+
+```javascript
+scene.disableBoxSelect();
+```
+
+### boxSelectEnable: boolean Box selection state
+
+Property indicating whether box selection is currently enabled.
+
+### startAnimate(): void Start animation
+
+Starts continuous rendering animation. By default, L7 renders on demand. Calling this method enables a real-time render loop, which is useful for continuous animations or debugging with SpectorJS.
+
+```javascript
+scene.startAnimate();
+```
+
+### stopAnimate(): void Stop animation
+
+Stops the real-time rendering animation and returns to on-demand rendering mode.
+
+```javascript
+scene.stopAnimate();
+```
+
+### getPointSizeRange(): Float32Array Get point sprite size range
+
+Gets the size range of WebGL point sprites supported by the current device.
+
+```javascript
+const range = scene.getPointSizeRange();
+// range[0] minimum, range[1] maximum
+```
+
+### getMapService(): IMapService Get map service
+
+Gets the underlying map service instance, which can be used to directly call basemap-specific methods.
+
+```javascript
+const mapService = scene.getMapService();
+```
+
+### getMapContainer(): HTMLElement Get map container
+
+Gets the main container DOM element of the map.
+
+```javascript
+const container = scene.getMapContainer();
+```
+
+### getMapCanvasContainer(): HTMLElement Get map canvas container
+
+Gets the map canvas container DOM element.
+
+```javascript
+const canvasContainer = scene.getMapCanvasContainer();
+```
+
+### getServiceContainer(): IContainer Get service container
+
+Gets the dependency injection container, which can be used to retrieve registered service instances.
+
+```javascript
+const container = scene.getServiceContainer();
+```
+
+### getType(): string Get map type
+
+Gets the currently used map type.
+
+```javascript
+const mapType = scene.getType(); // e.g., 'gaode', 'mapbox', 'map', etc.
+```
+
+### getMinZoom(): number Get minimum zoom level
+
+Gets the minimum zoom level supported by the map.
+
+```javascript
+const minZoom = scene.getMinZoom();
+```
+
+### getMaxZoom(): number Get maximum zoom level
+
+Gets the maximum zoom level supported by the map.
+
+```javascript
+const maxZoom = scene.getMaxZoom();
+```
+
+### addIconFontGlyphs(fontFamily: string, glyphs: string[]): void Add IconFont glyphs
+
+Adds glyph data for the specified font family, used for SDF text rendering.
+
+- `fontFamily` Font family name
+- `glyphs` Glyph data array
+
+```javascript
+scene.addIconFontGlyphs('iconfont', ['glyph1', 'glyph2']);
+```
+
 ### destroy(): void scene destruction
 
 `scene`Destroy method, leave the page, call when you don’t need to use the map, after calling`scene`The resources and resources in will be destroyed.
@@ -722,39 +957,80 @@ let fontPath = '//at.alicdn.com/t/font_2534097_iiet9d3nekn.woff2?t=1620444089776
 scene.addFontFace(fontFamily, fontPath);
 ```
 
-## other
+## Properties
 
-### getPointSizeRange(): Float32Array
+### loaded: boolean
 
-Get the drawing supported by the current device`WebGL`The size of the point sprite.
+Whether the scene has finished loading.
+
+```javascript
+if (scene.loaded) {
+  console.log('Scene loaded');
+}
+```
+
+### map: IMapInstance
+
+Gets the underlying map instance, which can be used to call basemap-specific APIs.
+
+```javascript
+const mapInstance = scene.map;
+```
 
 ## event
 
 ### on(eventName: string, handler: function): void
 
-exist`scene`Bind event listener.
+Bind event listener on `scene`.
 
-- `eventName`Event name.
-- `handler`Event callback function.
+- `eventName` Event name.
+- `handler` Event callback function.
 
 ### off(eventName: string, handler: function): void
 
-remove in`scene`The event listener bound on.
+Remove event listener bound on `scene`.
 
-- `eventName`Event name.
-- `handler`Event callback function.
+- `eventName` Event name.
+- `handler` Event callback function.
+
+### once(eventName: string, handler: function): void
+
+Bind a one-time event listener on `scene`, which is automatically removed after being triggered once.
+
+- `eventName` Event name.
+- `handler` Event callback function.
 
 ### scene events
 
-`scene`Some common scene events will be triggered, and users can monitor them when needed.
+`scene` Some common scene events will be triggered, and users can monitor them when needed.
 
 #### loaded
 
-`scene`Initialization completion event, we often use`scene`Add after initialization is complete`Layer`。
+`scene` Initialization completion event, we often use `scene` Add after initialization is complete `Layer`。
 
 ```javascript
 scene.on('loaded', () => {
   scene.addLayer(layer);
+});
+```
+
+#### maploaded
+
+Basemap loading completion event.
+
+```javascript
+scene.on('maploaded', () => {
+  console.log('Basemap loaded');
+});
+```
+
+#### fontloaded
+
+Font loading completion event.
+
+```javascript
+scene.on('fontloaded', () => {
+  console.log('Font loaded');
 });
 ```
 
@@ -766,13 +1042,15 @@ Map container change event
 scene.on('resize', () => {}); // Map container size change event
 ```
 
-#### startAnimate
+#### destroy
 
-By default, L7 redraws on demand and enables real-time rendering by starting the animation, which facilitates the SpectorJS plug-in to capture frame rendering.
+Scene destruction event.
 
-#### stopAnimate
-
-Used during debugging to stop real-time rendering
+```javascript
+scene.on('destroy', () => {
+  console.log('Scene destroyed');
+});
+```
 
 ### map events
 
@@ -807,6 +1085,28 @@ scene.on('dragging', (ev) => {}); // Triggered during dragging the map
 scene.on('dragend', (ev) => {}); //Triggered when stopping dragging the map. If the map has a dragging and easing effect, it will be triggered before dragging stops and easing starts.
 
 scene.on('webglcontextlost', () => {}); // webgl context lost
+```
+
+### Drag events
+
+```javascript
+scene.on('dragstart', (ev) => {}); // Triggered when you start dragging the map
+scene.on('dragging', (ev) => {}); // Triggered during dragging the map
+scene.on('dragend', (ev) => {}); // Triggered when stopping dragging the map. If the map has a dragging easing effect, it is triggered before easing starts
+scene.on('dragcancel', (ev) => {}); // Triggered when dragging is cancelled
+```
+
+### Box selection events
+
+When `scene.enableBoxSelect()` is called, box selection operations trigger the following events:
+
+```javascript
+scene.on('boxselect', (ev) => {
+  console.log(ev.bounds); // Bounding box in latitude/longitude [[minLng, minLat], [maxLng, maxLat]]
+});
+scene.on('boxselectstart', (ev) => {}); // Box selection started
+scene.on('boxselecting', (ev) => {}); // Box selection in progress
+scene.on('boxselectend', (ev) => {}); // Box selection ended
 ```
 
 ## Experimental parameters

@@ -7,7 +7,7 @@ order: 0
 
 ## 简介
 
-将图片添加到地图上，同时需要指定图片的经纬度范围和数据解析类型。
+图片图层将图片叠加到地图上，需要指定图片的经纬度范围（`extent`）和数据解析类型。支持 PNG、JPG、WebP 等常见图片格式。
 
 <div>
   <div style="width:40%; margin: 16px;">
@@ -16,6 +16,8 @@ order: 0
 </div>
 
 ```javascript
+import { ImageLayer } from '@antv/l7';
+
 const layer = new ImageLayer({});
 layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jpg', {
   parser: {
@@ -24,3 +26,19 @@ layer.source('https://gw.alipayobjects.com/zos/rmsportal/FnHFeFklTzKDdUESRNDv.jp
   },
 });
 ```
+
+## options
+
+<embed src="@/docs/api/image_layer/options.zh.md"></embed>
+
+## source
+
+<embed src="@/docs/api/image_layer/source.zh.md"></embed>
+
+## style
+
+<embed src="@/docs/api/image_layer/style.zh.md"></embed>
+
+## 图层通用方法
+
+<embed src="@/docs/api/common/layer/base.zh.md"></embed>
