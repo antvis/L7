@@ -72,6 +72,11 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
     globalThis.Map<(...args: any[]) => void, (...args: any[]) => void>
   > = new globalThis.Map();
 
+  /**
+   * 在地图实例初始化之前缓存的事件处理器，init 完成后自动重放绑定
+   */
+  protected pendingHandlers: Array<{ type: string; handler: (...args: any[]) => void }> = [];
+
   constructor(container: L7Container) {
     this.config = container.mapConfig;
     this.configService = container.globalConfigService;
@@ -110,6 +115,11 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
       this.eventEmitter.on(type, handle);
       return;
     }
+    if (!this.map) {
+      // 地图尚未初始化，缓存事件，init 完成后重放
+      this.pendingHandlers.push({ type, handler: handle });
+      return;
+    }
     const mapped = EventMap[type] || type;
     // keep a proxy so we can remove the exact handler when off is called
     let mapForType = this.evtCbProxyMap.get(mapped);
@@ -135,6 +145,13 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   public off(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handle);
+      return;
+    }
+    if (!this.map) {
+      // 地图尚未初始化，从缓存中移除
+      this.pendingHandlers = this.pendingHandlers.filter(
+        (item) => !(item.type === type && item.handler === handle),
+      );
       return;
     }
     const mapped = EventMap[type] || type;
@@ -340,6 +357,19 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   }
 
   public abstract init(): Promise<void>;
+
+  /**
+   * 地图实例初始化完成后，重放缓存的事件绑定
+   * 子类在 init() 末尾应调用此方法
+   */
+  protected bindPendingEvents(): void {
+    if (this.pendingHandlers.length === 0) return;
+    const handlers = this.pendingHandlers.slice();
+    this.pendingHandlers = [];
+    handlers.forEach(({ type, handler }) => {
+      this.on(type, handler);
+    });
+  }
 
   public destroy() {
     this.eventEmitter.removeAllListeners();

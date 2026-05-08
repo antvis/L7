@@ -133,6 +133,7 @@ export default class Service extends BaseMapService<Map & IMapboxInstance> {
 
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged();
+    this.bindPendingEvents();
   }
   public addProtocol() {
     const protocol = new Protocol();

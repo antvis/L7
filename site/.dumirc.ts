@@ -18,6 +18,7 @@ const GaodeTokenScript =
       ];
 
 export default defineConfig({
+  plugins: ['./plugin-redirect.ts'],
   locales: [
     { id: 'zh', name: '中文' },
     { id: 'en', name: 'English' },
@@ -695,9 +696,5 @@ export default defineConfig({
     '@antv/l7-scene': path.resolve(__dirname, '../packages/scene/src'),
     '@antv/l7-source': path.resolve(__dirname, '../packages/source/src'),
     '@antv/l7-utils': path.resolve(__dirname, '../packages/utils/src'),
-  },
-  redirects: {
-    '/api': '/api/scene',
-    '/en/api': '/en/api/scene',
   },
 });

@@ -54,6 +54,11 @@ export default abstract class BaseMap<T> implements IMapService<T> {
 
   protected cameraChangedCallback?: (viewport: IViewport) => void;
 
+  /**
+   * 在地图实例初始化之前缓存的事件处理器，init 完成后自动重放绑定
+   */
+  protected pendingHandlers: Array<{ type: string; handler: (...args: any[]) => void }> = [];
+
   constructor(container: L7Container) {
     this.config = container.mapConfig as Partial<IMapConfig<T>>;
     this.configService = container.globalConfigService;
@@ -144,6 +149,19 @@ export default abstract class BaseMap<T> implements IMapService<T> {
   public abstract on(type: string, handle: (...args: any[]) => void): void;
 
   public abstract off(type: string, handle: (...args: any[]) => void): void;
+
+  /**
+   * 地图实例初始化完成后，重放缓存的事件绑定
+   * 子类在 init() 末尾应调用此方法
+   */
+  protected bindPendingEvents(): void {
+    if (this.pendingHandlers.length === 0) return;
+    const handlers = this.pendingHandlers.slice();
+    this.pendingHandlers = [];
+    handlers.forEach(({ type, handler }) => {
+      this.on(type, handler);
+    });
+  }
 
   public emit(name: string, ...args: any[]) {
     this.eventEmitter.emit(name, ...args);

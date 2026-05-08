@@ -110,6 +110,7 @@ export default class DefaultMapService extends BaseMapService<Map> {
       this.handleCameraChanged();
     }, 100);
     this.handleCameraChanged();
+    this.bindPendingEvents();
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
