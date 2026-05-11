@@ -287,7 +287,7 @@ export default class TdtMapService extends BaseMapService<any> {
       offProxy(EventMap[type] || type);
     }
   }
-   
+
   public once(type: string, handler: (...args: any[]) => void): void {
     throw new Error('Method not implemented.');
   }
