@@ -1122,7 +1122,7 @@ new HeatmapLayer(option?: Partial<ILayerConfig & IHeatMapLayerStyleOptions>)
 ```
 
 **type**: `'HeatMapLayer'`  
-**shape**: `'heatmap'` | `'hexagon'` | `'grid'` | `'circle'` | ...
+**shape**: 'heatmap' | 'heatmap3D' | 'hexagon' | 'grid' | 'square' | 'triangle' | 'cylinder' | ...
 
 **IHeatMapLayerStyleOptions**:
 | 属性 | 类型 | 说明 |
