@@ -250,7 +250,7 @@ export default class FontService extends EventEmitter implements IFontService {
         fontWeight,
       });
       // used to store distance values from tinySDF
-      const sdfSize = fontSize + buffer * 2;
+      const sdfSize = Math.floor(fontSize + buffer * 2);
       const imageData = ctx.getImageData(0, 0, sdfSize, sdfSize);
       for (const char of characterSet) {
         if (iconfont) {

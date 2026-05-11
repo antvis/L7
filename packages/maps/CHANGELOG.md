@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.25.6
+
+### Patch Changes
+
+- Fix FontService sdfSize type error - ensure integer value for getImageData
+
+- Updated dependencies []:
+  - @antv/l7-core@2.25.6
+  - @antv/l7-map@2.25.6
+  - @antv/l7-utils@2.25.6
+
 ## 2.25.5
 
 ### Patch Changes
