@@ -1013,7 +1013,7 @@ new PointLayer(option?: Partial<ILayerConfig & IPointLayerStyleOptions>)
 
 **type**: `'PointLayer'`  
 **默认数据解析**: `{ type: 'json', x: 'lng', y: 'lat' }`  
-**shape**: `'circle'` | `'square'` | `'triangle'` | `'pentagon'` | `'hexagon'` | `'octagon'` | `'diamond'` | `'hexagon'` | `'image'` | `'text'` | `'cylinder'` | ...
+**shape**: 'circle' | 'square' | 'triangle' | 'pentagon' | 'hexagon' | 'octagon' | 'diamond' | 'image' | 'text' | 'cylinder' | ...
 
 **IPointLayerStyleOptions**:
 | 属性 | 类型 | 说明 |
