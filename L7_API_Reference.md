@@ -1094,7 +1094,7 @@ new PolygonLayer(option?: Partial<ILayerConfig & IPolygonLayerStyleOptions>)
 
 **type**: `'PolygonLayer'`  
 **默认数据解析**: `{ type: 'geojson' }`  
-**shape**: `'fill'` | `'extrude'` | `'extrusion'` | `'water'` | `'ocean'` | `'line'` | 内嵌点形状
+**shape**: 'fill' | 'extrude' | 'water' | 'ocean' | 'line' | 内嵌点形状
 
 **IPolygonLayerStyleOptions**:
 | 属性 | 类型 | 说明 |
