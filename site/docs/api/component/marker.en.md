@@ -28,33 +28,86 @@ scene.addMarker(marker);
 
 ## 方法
 
-#### setLnglat
+#### setLnglat(lngLat: ILngLat | [number, number])
 
-设置 marker 经纬度位置
+Set marker longitude and latitude position
 
-#### remove
+```javascript
+marker.setLnglat({ lng: 120, lat: 30 });
+marker.setLnglat([120, 30]);
+```
 
-移除 marker
+#### getLngLat(): ILngLat
 
-#### getElement
+Get marker longitude and latitude coordinates
 
-获取 marker dom Element
+#### remove()
 
-#### getLngLat
+Remove the marker from the map and clean up event bindings
 
-获取 marker 经纬度坐标
+#### hide()
 
-#### togglePopup
+Hide the marker visually without removing it from the map. Use `show()` to restore visibility.
 
-开启或者关闭 marker 弹出框
+```javascript
+marker.hide();
+```
 
-#### setPopup
+#### show()
 
-为 marker 设置 popup
+Show a hidden marker
 
-#### getPopup
+```javascript
+marker.show();
+```
 
-获取 marker 弹出框
+#### getElement(): HTMLElement
+
+Get the marker DOM element
+
+#### setElement(element: HTMLElement)
+
+Set the marker DOM element to update Marker appearance
+
+#### getOffset(): number[]
+
+Get the marker offset `[x, y]`
+
+#### setDraggable(draggable: boolean)
+
+Set whether the marker supports dragging
+
+#### getDraggable(): boolean
+
+Get whether the marker currently supports dragging
+
+#### togglePopup()
+
+Toggle the marker popup open/closed
+
+#### openPopup()
+
+Open the associated Popup
+
+#### closePopup()
+
+Close the associated Popup
+
+#### setPopup(popup: Popup)
+
+Set a popup for the marker
+
+#### getPopup(): Popup
+
+Get the marker popup
+
+#### getExtData(): any
+
+Get user-defined custom data
+
+#### setExtData(data: any)
+
+Set user-defined custom data
 
 ## 示例代码
 

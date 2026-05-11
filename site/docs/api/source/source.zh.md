@@ -176,6 +176,51 @@ layer
   .color('value'); // 可以采用 customData 的 value 字段进行数据到颜色的映射
 ```
 
+#### map
+
+对数据进行映射转换，可对每一个数据元素进行处理并返回新的数据元素。
+
+**配置项**
+
+- type: 'map'
+- callback: `(feature: any) => any` 对每条数据进行处理的回调函数
+
+```javascript
+layer.source(data, {
+  transforms: [
+    {
+      type: 'map',
+      callback: (feature) => {
+        feature.value = feature.value * 2;
+        return feature;
+      },
+    },
+  ],
+});
+```
+
+#### filter
+
+对数据进行过滤，仅保留满足条件的数据元素。
+
+**配置项**
+
+- type: 'filter'
+- callback: `(feature: any) => boolean` 过滤条件回调函数，返回 `true` 时保留该条数据
+
+```javascript
+layer.source(data, {
+  transforms: [
+    {
+      type: 'filter',
+      callback: (feature) => {
+        return feature.value > 10; // 仅保留 value 大于 10 的数据
+      },
+    },
+  ],
+});
+```
+
 ### cluster
 
 - cluster: `boolean`
@@ -192,49 +237,48 @@ layer
 
 ## 方法
 
-### getClustersLeaves(cluster_id)
+### setData(data, options?) 更新数据
 
-聚合图使用，获取聚合节点的原始数据
+更新 source 数据，会触发图层重新渲染。
 
-参数：
-id 聚合节点的 cluster_id
+- `data` 数据，同 source 初始化参数
+- `options` 配置项，同 source 初始化参数
 
 ```javascript
-layer.on('click', (e) => {
-  console.log(source.getClustersLeaves(e.feature.cluster_id));
-});
+const source = new Source(data, { parser: { type: 'json', x: 'lng', y: 'lat' } });
+// 更新数据
+source.setData(newData);
 ```
 
-### setData
+### getFeatureById(id: number) 根据 ID 获取要素
 
-更新 source 数据
+根据 featureID 获取 feature 要素。
 
-#### 参数
-
-- data: 数据同 source 初始化参数
-- option: 配置项同 source 初始化参数
-
-### getFeatureById
-
-根据 featureID 获取 feature 要素
-
-#### 参数
-
-- id featureId，L7 内部编码的唯一要素 ID
+- `id` featureId，L7 内部编码的唯一要素 ID
 
 ```tsx
 const source = layer.getSource();
-source.getFeatureById(1);
+const feature = source.getFeatureById(1);
 ```
 
-### updateFeaturePropertiesById
+### getFeatureId(field: string, value: any) 根据属性获取要素 ID
 
-根据 ID 更新 source 的属性数据，会触发从新渲染
+根据属性的 key、value 获取要素 L7 编码 featureId，确保该属性的 value 是唯一值，如存在多个返回第一个。
 
-#### 参数
+- `field` 属性字段
+- `value` 对应的值
 
-- id featureId，L7 内部编码的唯一要素 ID
-- Properties 需要更新属性数据，merge 操作
+```tsx
+const source = layer.getSource();
+const featureId = source.getFeatureId('name', '张三');
+```
+
+### updateFeaturePropertiesById(id, properties) 更新要素属性
+
+根据 ID 更新 source 的属性数据，会触发重新渲染。
+
+- `id` featureId，L7 内部编码的唯一要素 ID
+- `properties` 需要更新属性数据，进行 merge 操作
 
 ```tsx
 const source = layer.getSource();
@@ -245,18 +289,62 @@ layer.on('click', (e) => {
 });
 ```
 
-### getFeatureId
+### getClusters(zoom: number) 获取聚合数据
 
-根据属性的 key、value 获取要素 L7 编码 featureId，确保该属性的 value 是唯一值，如存在多个返回第一个。
+聚合图使用，获取指定缩放等级下的聚合数据。
 
-#### 参数
+- `zoom` 缩放等级
 
-- key: 属性字段
-- value: 对应的值
+```javascript
+const clusters = source.getClusters(scene.getZoom());
+```
 
-```tsx
-const source = layer.getSource();
-source.getFeatureId('name', '张三');
+### getClustersLeaves(cluster_id) 获取聚合节点原始数据
+
+聚合图使用，获取聚合节点的原始数据。
+
+- `id` 聚合节点的 cluster_id
+
+```javascript
+layer.on('click', (e) => {
+  console.log(source.getClustersLeaves(e.feature.cluster_id));
+});
+```
+
+### updateClusterData(zoom: number) 更新聚合数据
+
+更新聚合数据，在地图缩放后需要调用以刷新聚合结果。
+
+- `zoom` 当前缩放等级
+
+```javascript
+scene.on('zoomchange', () => {
+  source.updateClusterData(scene.getZoom());
+});
+```
+
+### getSourceCfg() 获取 source 配置
+
+获取 source 的初始化配置项。
+
+```javascript
+const cfg = source.getSourceCfg();
+```
+
+### getParserType() 获取解析器类型
+
+获取当前 source 使用的数据解析器类型。
+
+```javascript
+const parserType = source.getParserType(); // 如 'geojson', 'json', 'csv', 'mvt' 等
+```
+
+### destroy() 销毁 source
+
+销毁 source，释放相关资源。
+
+```javascript
+source.destroy();
 ```
 
 ## Source 更新
@@ -287,3 +375,25 @@ layer.setData(data);
 #### image
 
 [Image 数据格式解析](/api/source/image)
+
+## 事件
+
+Source 继承自 EventEmitter，支持 `on`/`off`/`once`/`emit` 等事件方法。
+
+### update
+
+数据更新事件，在以下情况触发：
+
+- source 初始化完成后（`type: 'inited'`）
+- 调用 `setData` 或 `updateFeaturePropertiesById` 后（`type: 'update'`）
+
+```javascript
+const source = layer.getSource();
+source.on('update', (e) => {
+  if (e.type === 'inited') {
+    console.log('source 初始化完成');
+  } else if (e.type === 'update') {
+    console.log('source 数据已更新');
+  }
+});
+```

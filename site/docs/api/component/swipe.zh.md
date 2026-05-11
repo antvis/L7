@@ -39,8 +39,8 @@ scene.on('loaded', () => {
 | ----------- | ------------------------------------------- | -------------------------- |
 | orientation | 卷帘方向设置，默认 'vertical'               | `'vertical'｜'horizontal'` |
 | ratio       | 卷帘的位置，值域为 0 到 1, 默认正中间为 0.5 | `number`                   |
-| layers      | 卷帘左侧的图层                              | `ILayer[]`                 |
-| rightLayers | 卷帘左侧的图层                              | `ILayer[]`                 |
+| layers      | 卷帘左侧（竖向）或顶部（横向）的图层        | `ILayer[]`                 |
+| rightLayers | 卷帘右侧（竖向）或底部（横向）的图层        | `ILayer[]`                 |
 | className   | 自定义样式名                                | `string`                   |
 | style       | 自定义样式                                  | `string`                   |
 

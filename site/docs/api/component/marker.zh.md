@@ -32,63 +32,141 @@ scene.addMarker(marker);
 
 ## 方法
 
-#### setLnglat
+#### setLnglat(lngLat: ILngLat | [number, number])
 
 设置 marker 经纬度位置
 
-#### remove
+```javascript
+marker.setLnglat({ lng: 120, lat: 30 });
+// 或数组形式
+marker.setLnglat([120, 30]);
+```
 
-移除 marker
-
-#### getElement
-
-获取 marker dom Element
-
-#### setElement
-
-- element `dom`
-
-设置 element 通过此方法更新 Marker 样式
-
-#### getLngLat
+#### getLngLat(): ILngLat
 
 获取 marker 经纬度坐标
 
-#### setDraggable
+```javascript
+const { lng, lat } = marker.getLngLat();
+```
+
+#### remove()
+
+移除 marker，从地图上删除并释放事件绑定
+
+```javascript
+marker.remove();
+```
+
+#### hide()
+
+隐藏 marker，不从地图中删除，可通过 `show()` 恢复显示
+
+```javascript
+marker.hide();
+```
+
+#### show()
+
+显示已隐藏的 marker
+
+```javascript
+marker.show();
+```
+
+#### getElement(): HTMLElement
+
+获取 marker 的 DOM 元素
+
+```javascript
+const el = marker.getElement();
+```
+
+#### setElement(element: HTMLElement)
+
+设置 marker 的 DOM 元素，通过此方法可更新 Marker 样式
+
+```javascript
+const el = document.createElement('div');
+marker.setElement(el);
+```
+
+#### getOffset(): number[]
+
+获取 marker 的偏移量 `[x, y]`
+
+```javascript
+const [x, y] = marker.getOffset();
+```
+
+#### setDraggable(draggable: boolean)
 
 设置是否支持拖拽调整位置
 
-#### getDraggable
+```javascript
+marker.setDraggable(true);
+```
+
+#### getDraggable(): boolean
 
 获取当前是否支持拖拽调整位置
 
-#### togglePopup
+```javascript
+const draggable = marker.getDraggable();
+```
+
+#### togglePopup()
 
 开启或者关闭 marker 弹出框
 
-#### openPopup
+#### openPopup()
 
-打开 Popup
+打开关联的 Popup
 
-#### closePopup
+```javascript
+marker.openPopup();
+```
 
-关闭 popup
+#### closePopup()
 
-#### setPopup
+关闭关联的 Popup
+
+```javascript
+marker.closePopup();
+```
+
+#### setPopup(popup: Popup)
 
 为 marker 设置 popup
 
-#### getPopup
+```javascript
+const popup = new Popup({ anchor: 'left' }).setText('Hello');
+marker.setPopup(popup);
+```
 
-获取 marker 弹出框
+#### getPopup(): Popup
 
-#### getExtData()
+获取 marker 关联的 popup
+
+```javascript
+const popup = marker.getPopup();
+```
+
+#### getExtData(): any
 
 获取用户自定义数据
 
-#### setExtData(data)
+```javascript
+const data = marker.getExtData();
+```
+
+#### setExtData(data: any)
 
 设置用户自定义数据
+
+```javascript
+marker.setExtData({ name: 'test', value: 42 });
+```
 
 ## 示例代码
 

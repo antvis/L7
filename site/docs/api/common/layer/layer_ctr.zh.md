@@ -52,16 +52,34 @@ layer.setMinZoom(zoom);
 
 设置图层最大缩放等级
 
-```javascript
-layer.setMinZoom(zoom);
-```
-
-设置图层最大缩放等级
-
 参数
 
 - zoom {number}
 
 ```javascript
-layer.setMinZoom(zoom);
+layer.setMaxZoom(zoom);
+```
+
+### getMinZoom(): number
+
+获取图层最小缩放等级
+
+```javascript
+const minZoom = layer.getMinZoom();
+```
+
+### getMaxZoom(): number
+
+获取图层最大缩放等级
+
+```javascript
+const maxZoom = layer.getMaxZoom();
+```
+
+### destroy()
+
+销毁图层，释放相关资源。场景调用 `removeLayer` 时会自动销毁图层，一般不需要手动调用。
+
+```javascript
+layer.destroy();
 ```

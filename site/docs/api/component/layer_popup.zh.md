@@ -67,10 +67,10 @@ scene.on('loaded', () => {
 
 ## 配置
 
-| 名称    | 说明                                                                                          | 类型                          | 默认值    |
-| ------- | --------------------------------------------------------------------------------------------- | ----------------------------- | --------- |
-| items   | 需要展示 Popup 的图层配置数组，每个选项类型可见 [LayerPopupConfigItem](#layerpopupconfigitem) | `Array<LayerPopupConfigItem>` | `[]`      |
-| trigger | 鼠标触发 Popup 展示的方式                                                                     | `'hover' \| 'click'`          | `'hover'` |
+| 名称    | 说明                                                                                          | 类型                                               | 默认值    |
+| ------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------- | --------- |
+| items   | 需要展示 Popup 的图层配置数组，每个选项类型可见 [LayerPopupConfigItem](#layerpopupconfigitem) | `Array<LayerPopupConfigItem>`                      | `[]`      |
+| trigger | 鼠标触发 Popup 展示的方式，`'click'` 在移动端会自动转换为 `'touchend'`                        | `'hover' \| 'click' \| 'touchend' \| 'touchstart'` | `'hover'` |
 
 ### LayerPopupConfigItem
 

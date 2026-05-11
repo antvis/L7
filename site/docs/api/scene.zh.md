@@ -54,7 +54,7 @@ const scene = new L7.Scene({
 
 ### logoPosition
 
-<description> _bottomleft_ **可选** </description>
+<description> _string_ **可选** _default: 'bottomleft'_ </description>
 
 `L7` 默认提供的 `Logo` 可以配置显示位置，默认在左下角。
 
@@ -69,7 +69,7 @@ const scene = new L7.Scene({
 
 ### logoVisible logo 是否可见
 
-<description> _bottomleft_ **可选** _default: true_ </description>
+<description> _boolean_ **可选** _default: true_ </description>
 
 配置 `L7` 的 `Logo` 是否显示，默认显示。
 
@@ -77,21 +77,59 @@ const scene = new L7.Scene({
 
 <description> _boolean_ **可选** _default: true_ </description>
 
-是否开始前抗锯齿。
+是否开启抗锯齿。
 
-### stencil 是否开启裁减
+### stencil 是否开启裁剪
 
-<description> _boolean_ **可选** _default: false_ </description>
+<description> _boolean_ **可选** _default: true_ </description>
 
-是否开始开启裁剪。
+是否开启裁剪（stencil）。图层 `Mask` 掩模能力以及矢量瓦片需要开启该配置。
 
-🌟 从 v2.7.2 版本开始支持， 图层 `Mask` 掩模能力以及矢量瓦片需要开始该配置。
+🌟 从 v2.7.2 版本开始支持。
 
 ### preserveDrawingBuffer
 
 <description> _boolean_ **可选** _default: false_ </description>
 
-是否保留缓冲区数据 `boolean` `false`。
+是否保留缓冲区数据。设置为 `true` 时可通过 `canvas.toDataURL()` 导出地图图片。
+
+### renderer 渲染器
+
+<description> _'regl' | 'device'_ **可选** _default: 'device'_ </description>
+
+指定渲染器类型。`regl` 为旧版渲染器，`device` 为新版渲染器（基于 `@antv/g-device-api`），默认使用 `device` 渲染器。
+
+```javascript
+const scene = new Scene({
+  id: 'map',
+  map: new Map({}),
+  renderer: 'device', // 或 'regl'
+});
+```
+
+### animate 是否启用动画
+
+<description> _boolean_ **可选** _default: undefined_ </description>
+
+是否启用动画渲染。
+
+### debug 是否开启调试
+
+<description> _boolean_ **可选** _default: false_ </description>
+
+是否开启调试模式，开启后会输出调试信息。
+
+### pickBufferScale 选取缓冲区缩放比
+
+<description> _number_ **可选** _default: 1.0_ </description>
+
+设置像素选取（picking）缓冲区的缩放比。
+
+### fitBoundsOptions 适配边界选项
+
+<description> _object_ **可选** </description>
+
+当调用 `fitBounds` 方法时默认的选项配置，包含 `animate` 等参数。
 
 ## Layer 方法
 
@@ -143,15 +181,40 @@ scene.removeLayer(layer);
 
 🌟 移除的同时会将图层进行销毁。
 
-### removeAllLayer(): void 移除所有的图层对象
+### removeAllLayer(): Promise\<void\> 移除所有的图层对象
 
 移除所有的图层对象。
 
 ```javascript
-scene.removeAllLayer();
+await scene.removeAllLayer();
 ```
 
 🌟 移除的同时会将图层进行销毁。
+
+### render(): void 手动触发渲染
+
+手动触发场景重新渲染。
+
+```javascript
+scene.render();
+```
+
+### setEnableRender(flag: boolean): void 设置是否启用渲染
+
+控制是否允许图层渲染更新。当设置为 `false` 时，图层的渲染将被暂停。
+
+```javascript
+scene.setEnableRender(false); // 暂停渲染
+scene.setEnableRender(true); // 恢复渲染
+```
+
+### getPickedLayer(): string 获取当前拾取的图层
+
+获取当前被鼠标拾取（hover/click）的图层 ID。
+
+```javascript
+const layerId = scene.getPickedLayer();
+```
 
 ## 控制组件方法
 
@@ -250,6 +313,10 @@ scene.removeMarkerLayer(markerLayer);
 ```javascript
 scene.removeAllMarkers();
 ```
+
+### removeAllMakers(): void ⚠️ 已废弃
+
+> ⚠️ 此方法已废弃，请使用 `removeAllMarkers()` 替代。
 
 ## 静态方法
 
@@ -615,6 +682,174 @@ type IImage = 'png' | 'jpg';
 scene.exportMap('png');
 ```
 
+### exportPng(type?: 'png' | 'jpg'): string 导出图片
+
+`exportMap` 的别名方法，导出地图为图片。
+
+```javascript
+scene.exportPng('png'); // 等同于 scene.exportMap('png')
+scene.exportPng('jpg'); // 等同于 scene.exportMap('jpg')
+```
+
+### setBgColor(color: string): void 设置背景色
+
+设置场景背景颜色。
+
+```javascript
+scene.setBgColor('#000000');
+```
+
+### registerPostProcessingPass(constructor: any, name: string): void 注册后处理通道
+
+注册后处理特效通道，用于实现如泛光（Bloom）、色彩校正等后处理效果。
+
+```javascript
+import { Scene, PostProcessingPass } from '@antv/l7';
+
+scene.registerPostProcessingPass(PostProcessingPass, 'bloom');
+```
+
+### enableShaderPick(): void 启用着色器拾取
+
+启用着色器拾取模式。
+
+```javascript
+scene.enableShaderPick();
+```
+
+### disableShaderPick(): void 禁用着色器拾取
+
+禁用着色器拾取模式。
+
+```javascript
+scene.disableShaderPick();
+```
+
+### diasbleShaderPick(): void ⚠️ 已废弃
+
+> ⚠️ 此方法名拼写错误已废弃，请使用 `disableShaderPick()` 替代。
+
+### enableBoxSelect(once?: boolean): void 启用框选
+
+启用框选功能，允许用户通过拖拽矩形框来选择区域。`once` 参数为 `true` 时表示只触发一次框选后自动关闭。
+
+```javascript
+scene.enableBoxSelect(); // 持续框选
+scene.enableBoxSelect(true); // 框选一次后自动关闭
+```
+
+框选事件可通过 `boxselect` 事件监听：
+
+```javascript
+scene.on('boxselect', (e) => {
+  console.log(e.bounds); // 框选的经纬度范围
+});
+```
+
+### disableBoxSelect(): void 禁用框选
+
+禁用框选功能。
+
+```javascript
+scene.disableBoxSelect();
+```
+
+### boxSelectEnable: boolean 框选状态
+
+属性，表示当前框选是否启用。
+
+### startAnimate(): void 启动动画
+
+启动持续渲染动画。默认情况下 L7 按需渲染，调用此方法可开启实时渲染循环，在需要持续动画或使用 SpectorJS 调试时非常有用。
+
+```javascript
+scene.startAnimate();
+```
+
+### stopAnimate(): void 停止动画
+
+停止实时渲染动画，恢复按需渲染模式。
+
+```javascript
+scene.stopAnimate();
+```
+
+### getPointSizeRange(): Float32Array 获取点精灵大小范围
+
+获取当前设备支持绘制的 `WebGL` 点精灵的大小范围。
+
+```javascript
+const range = scene.getPointSizeRange();
+// range[0] 最小值, range[1] 最大值
+```
+
+### getMapService(): IMapService 获取地图服务
+
+获取底层地图服务实例，可用于直接调用底图特有方法。
+
+```javascript
+const mapService = scene.getMapService();
+```
+
+### getMapContainer(): HTMLElement 获取地图容器
+
+获取地图的主容器 DOM 元素。
+
+```javascript
+const container = scene.getMapContainer();
+```
+
+### getMapCanvasContainer(): HTMLElement 获取地图画布容器
+
+获取地图画布容器的 DOM 元素。
+
+```javascript
+const canvasContainer = scene.getMapCanvasContainer();
+```
+
+### getServiceContainer(): IContainer 获取服务容器
+
+获取依赖注入容器，可用于获取注册的服务实例。
+
+```javascript
+const container = scene.getServiceContainer();
+```
+
+### getType(): string 获取地图类型
+
+获取当前使用的地图类型。
+
+```javascript
+const mapType = scene.getType(); // 如 'gaode', 'mapbox', 'map' 等
+```
+
+### getMinZoom(): number 获取最小缩放等级
+
+获取地图支持的最小缩放等级。
+
+```javascript
+const minZoom = scene.getMinZoom();
+```
+
+### getMaxZoom(): number 获取最大缩放等级
+
+获取地图支持的最大缩放等级。
+
+```javascript
+const maxZoom = scene.getMaxZoom();
+```
+
+### addIconFontGlyphs(fontFamily: string, glyphs: string[]): void 添加 IconFont 字形
+
+为指定字体族添加字形数据，用于 SDF 文本渲染。
+
+- `fontFamily` 字体族名称
+- `glyphs` 字形数据数组
+
+```javascript
+scene.addIconFontGlyphs('iconfont', ['glyph1', 'glyph2']);
+```
+
 ### destroy(): void 场景销毁
 
 `scene` 销毁方法，离开页面，不需要使用地图的时候调用，调用后 `scene` 中的资源和都会被销毁。
@@ -722,11 +957,25 @@ let fontPath = '//at.alicdn.com/t/font_2534097_iiet9d3nekn.woff2?t=1620444089776
 scene.addFontFace(fontFamily, fontPath);
 ```
 
-## 其他
+## 属性
 
-### getPointSizeRange(): Float32Array
+### loaded: boolean
 
-获取当前设备支持绘制的 `WebGL` 点精灵的大小。
+场景是否加载完成。
+
+```javascript
+if (scene.loaded) {
+  console.log('场景已加载');
+}
+```
+
+### map: IMapInstance
+
+获取底层地图实例，可用于调用底图特有的 API。
+
+```javascript
+const mapInstance = scene.map;
+```
 
 ## 事件
 
@@ -740,6 +989,13 @@ scene.addFontFace(fontFamily, fontPath);
 ### off(eventName: string, handler: function): void
 
 移除在 `scene` 上绑定的事件监听。
+
+- `eventName` 事件名。
+- `handler` 事件回调函数。
+
+### once(eventName: string, handler: function): void
+
+在 `scene` 上绑定一次性事件监听，触发一次后自动移除。
 
 - `eventName` 事件名。
 - `handler` 事件回调函数。
@@ -758,12 +1014,42 @@ scene.on('loaded', () => {
 });
 ```
 
+#### maploaded
+
+底层地图加载完成事件。
+
+```javascript
+scene.on('maploaded', () => {
+  console.log('底图加载完成');
+});
+```
+
+#### fontloaded
+
+字体加载完成事件。
+
+```javascript
+scene.on('fontloaded', () => {
+  console.log('字体加载完成');
+});
+```
+
 #### resize
 
 地图容器变化事件
 
 ```javascript
 scene.on('resize', () => {}); // 地图容器大小改变事件
+```
+
+#### destroy
+
+场景销毁事件。
+
+```javascript
+scene.on('destroy', () => {
+  console.log('场景已销毁');
+});
 ```
 
 #### startAnimate
@@ -808,6 +1094,28 @@ scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
 scene.on('dragend', (ev) => {}); //停止拖拽地图时触发。如地图有拖拽缓动效果，则在拽停止，缓动开始前触发
 
 scene.on('webglcontextlost', () => {}); // webgl 上下文丢失
+```
+
+### 拖拽事件
+
+```javascript
+scene.on('dragstart', (ev) => {}); // 开始拖拽地图时触发
+scene.on('dragging', (ev) => {}); // 拖拽地图过程中触发
+scene.on('dragend', (ev) => {}); // 停止拖拽地图时触发。如地图有拖拽缓动效果，则在拖拽停止，缓动开始前触发
+scene.on('dragcancel', (ev) => {}); // 拖拽取消时触发
+```
+
+### 框选事件
+
+当调用 `scene.enableBoxSelect()` 后，框选操作会触发以下事件：
+
+```javascript
+scene.on('boxselect', (ev) => {
+  console.log(ev.bounds); // 框选的经纬度范围 [[minLng, minLat], [maxLng, maxLat]]
+});
+scene.on('boxselectstart', (ev) => {}); // 框选开始
+scene.on('boxselecting', (ev) => {}); // 框选中
+scene.on('boxselectend', (ev) => {}); // 框选结束
 ```
 
 ## 实验参数

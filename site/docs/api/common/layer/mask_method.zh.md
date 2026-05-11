@@ -28,6 +28,6 @@ scene.render();
 ### enableMask
 
 ```ts
-layer.disableMask();
+layer.enableMask();
 scene.render();
 ```
