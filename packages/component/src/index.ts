@@ -1,7 +1,7 @@
 import Marker from './marker';
 import MarkerLayer from './marker-layer';
 
-import './assets/iconfont/iconfont.js';
+import './assets/iconfont/iconfont';
 // 引入样式（预编译的 CSS，构建时由 transform-import-css-l7 内联到 JS，用户无需安装 less）
 import './css/index.css';
 

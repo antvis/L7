@@ -6,7 +6,9 @@
   "author": "https://github.com/orgs/antvis/people",
   "sideEffects": [
     "*.css",
-    "*.less"
+    "*.less",
+    "*.js",
+    "*/iconfont/*"
   ],
   "main": "lib/index.js",
   "module": "es/index.js",
