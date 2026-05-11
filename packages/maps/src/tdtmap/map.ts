@@ -209,7 +209,15 @@ export default class TdtMapService extends BaseMapService<any> {
   }
 
   public destroy(): void {
-    return;
+    // map 实例可能尚未初始化完成（如 React StrictMode 双重渲染场景下提前 destroy）
+    if (this.map) {
+      this.map.remove();
+    }
+
+    // 清理 marker container（如果存在）
+    if (this.markerContainer && this.markerContainer.parentNode) {
+      this.markerContainer.parentNode.removeChild(this.markerContainer);
+    }
   }
 
   // MapEvent

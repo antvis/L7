@@ -162,7 +162,15 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public destroy(): void {
-    this.getMap().destroy();
+    // map 实例可能尚未初始化完成（如 React StrictMode 双重渲染场景下提前 destroy）
+    if (this.map) {
+      this.getMap().destroy();
+    }
+
+    // 清理 marker container（如果存在）
+    if (this.markerContainer && this.markerContainer.parentNode) {
+      this.markerContainer.parentNode.removeChild(this.markerContainer);
+    }
   }
 
   public onCameraChanged(callback: (viewport: IViewport) => void): void {

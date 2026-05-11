@@ -460,6 +460,11 @@ export default class AMapService extends BaseMap<AMap.Map> {
     // 销毁地图可视化层的容器
     this.mapContainer?.parentNode?.removeChild(this.mapContainer);
 
+    // 清理 marker container
+    if (this.markerContainer && this.markerContainer.parentNode) {
+      this.markerContainer.parentNode.removeChild(this.markerContainer);
+    }
+
     // @ts-ignore
     delete window.initAMap;
 
@@ -467,7 +472,10 @@ export default class AMapService extends BaseMap<AMap.Map> {
     if ($jsapi) {
       document.head.removeChild($jsapi);
     }
-    this.map.destroy();
+    // map 实例可能尚未初始化完成（如 React StrictMode 双重渲染场景下提前 destroy）
+    if (this.map) {
+      this.map.destroy();
+    }
   }
 }
 
