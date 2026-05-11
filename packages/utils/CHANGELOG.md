@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.25.5
+
+### Patch Changes
+
+- Release version 2.25.5
+
 ## 2.25.4
 
 ## 2.23.3-beta.3

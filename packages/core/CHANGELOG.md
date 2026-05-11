@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.25.5
+
+### Patch Changes
+
+- Release version 2.25.5
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.25.5
+
 ## 2.25.4
 
 ### Patch Changes

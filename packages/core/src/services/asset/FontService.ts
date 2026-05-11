@@ -52,7 +52,7 @@ function setTextStyle(
   // ctx.textAlign = 'left';
 }
 
-function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
+function populateAlphaChannel(alphaChannel: Uint8ClampedArray, imageData: ImageData) {
   // populate distance value from tinySDF to image alpha channel
   for (let i = 0; i < alphaChannel.length; i++) {
     imageData.data[4 * i + 3] = alphaChannel[i];
@@ -241,10 +241,17 @@ export default class FontService extends EventEmitter implements IFontService {
 
     // 3. layout characters
     if (sdf) {
-      const tinySDF = new TinySDF(fontSize, buffer, radius, cutoff, fontFamily, fontWeight);
+      const tinySDF = new TinySDF({
+        fontSize,
+        buffer,
+        radius,
+        cutoff,
+        fontFamily,
+        fontWeight,
+      });
       // used to store distance values from tinySDF
-      // tinySDF.size equals `fontSize + buffer * 2`
-      const imageData = ctx.getImageData(0, 0, tinySDF.size, tinySDF.size);
+      const sdfSize = fontSize + buffer * 2;
+      const imageData = ctx.getImageData(0, 0, sdfSize, sdfSize);
       for (const char of characterSet) {
         if (iconfont) {
           // @ts-ignore
@@ -254,9 +261,9 @@ export default class FontService extends EventEmitter implements IFontService {
 
           const icon = String.fromCharCode(parseInt(char.replace('&#x', '').replace(';', ''), 16));
           const iconData = tinySDF.draw(icon);
-          populateAlphaChannel(iconData, imageData);
+          populateAlphaChannel(iconData.data, imageData);
         } else {
-          populateAlphaChannel(tinySDF.draw(char), imageData);
+          populateAlphaChannel(tinySDF.draw(char).data, imageData);
         }
         // populateAlphaChannel(tinySDF.draw(char), imageData);
 
