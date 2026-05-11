@@ -307,7 +307,7 @@ const source = new Source(data: any, cfg?: ISourceCFG);
 | **Raster**     | `'raster'`     | `number[] \| IRasterFileData \| IRasterFileData[]`      | `{ type: 'raster', extent?: [number,number,number,number], coordinates?: [...], width: number, height: number, min?: number, max?: number, format?: IRasterFormat, operation?: IBandsOperation }`                          |
 | **RasterTile** | `'rasterTile'` | `string \| string[] \| ITileBand[]`                     | `{ type: 'rasterTile', dataType?: RasterTileType, extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, format?: IRasterFormat, operation?: IBandsOperation }`                       |
 | **MVT**        | `'mvt'`        | Vector Tile URL                                         | `{ type: 'mvt', extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, sourceLayer?: string }`                                                                                        |
-| **GeoJSONVT**  | `'geojsonvt'`  | GeoJSON FeatureCollection                               | `{ type: 'geojsonvt', extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, maxZoom?: number, indexMaxZoom?: number, indexMaxPoints?: number, tolerance?: number, buffer?: number }` |
+| **GeoJSONVT**  | 'geojsonvt'  | GeoJSON FeatureCollection                               | { type: 'geojsonvt', extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, indexMaxZoom?: number, indexMaxPoints?: number, tolerance?: number, buffer?: number } |
 | **JSON Tile**  | `'jsonTile'`   | JSON Tile URL                                           | `{ type: 'jsonTile', zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, requestParameters?: object }`                                                                                             |
 | **RasterRgb**  | `'rasterRgb'`  | `number[] \| IRasterFileData \| IRasterFileData[]`      | 同 raster 类型                                                                                                                                                                                                             |
 | **RGB**        | `'rgb'`        | `RasterDataType[]`                                      | `{ type: 'rgb', extent?: [...], width: number, height: number, bands?: [number,number,number], countCut?: [number,number], RMinMax?: [number,number], GMinMax?: [number,number], BMinMax?: [number,number] }`              |
@@ -1013,7 +1013,7 @@ new PointLayer(option?: Partial<ILayerConfig & IPointLayerStyleOptions>)
 
 **type**: `'PointLayer'`  
 **默认数据解析**: `{ type: 'json', x: 'lng', y: 'lat' }`  
-**shape**: `'circle'` | `'square'` | `'triangle'` | `'pentagon'` | `'hexagon'` | `'octagon'` | `'diamond'` | `'hexagon'` | `'image'` | `'text'` | `'cylinder'` | ...
+**shape**: 'circle' | 'square' | 'triangle' | 'pentagon' | 'hexagon' | 'octagon' | 'diamond' | 'image' | 'text' | 'cylinder' | ...
 
 **IPointLayerStyleOptions**:
 | 属性 | 类型 | 说明 |
@@ -1094,7 +1094,7 @@ new PolygonLayer(option?: Partial<ILayerConfig & IPolygonLayerStyleOptions>)
 
 **type**: `'PolygonLayer'`  
 **默认数据解析**: `{ type: 'geojson' }`  
-**shape**: `'fill'` | `'extrude'` | `'extrusion'` | `'water'` | `'ocean'` | `'line'` | 内嵌点形状
+**shape**: 'fill' | 'extrude' | 'water' | 'ocean' | 'line' | 内嵌点形状
 
 **IPolygonLayerStyleOptions**:
 | 属性 | 类型 | 说明 |
@@ -1122,7 +1122,7 @@ new HeatmapLayer(option?: Partial<ILayerConfig & IHeatMapLayerStyleOptions>)
 ```
 
 **type**: `'HeatMapLayer'`  
-**shape**: `'heatmap'` | `'hexagon'` | `'grid'` | `'circle'` | ...
+**shape**: 'heatmap' | 'heatmap3D' | 'hexagon' | 'grid' | 'square' | 'triangle' | 'cylinder' | ...
 
 **IHeatMapLayerStyleOptions**:
 | 属性 | 类型 | 说明 |
