@@ -697,8 +697,9 @@ export default defineConfig({
     '@antv/l7-source': path.resolve(__dirname, '../packages/source/src'),
     '@antv/l7-utils': path.resolve(__dirname, '../packages/utils/src'),
   },
-  redirects: {
-    '/api': '/api/scene',
-    '/en/api': '/en/api/scene',
-  },
+  // redirects config is not supported by dumi v2.4.x
+  // redirects: {
+  //   '/api': '/api/scene',
+  //   '/en/api': '/en/api/scene',
+  // },
 });
