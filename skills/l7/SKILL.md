@@ -71,6 +71,7 @@ L7 的典型开发流程：
 - **[csv.md](references/data/csv.md)** - CSV 数据加载和处理
 - **[json.md](references/data/json.md)** - JSON 数据、OD 数据、路径数据
 - **[parser.md](references/data/parser.md)** - Parser 配置、Transform 转换
+- **[source-raster.md](references/data/source-raster.md)** - 栅格数据源（GeoTIFF、多波段、遥感影像）
 
 ### 图层类型 (references/layers/)
 
@@ -79,7 +80,9 @@ L7 的典型开发流程：
 - **[polygon.md](references/layers/polygon.md)** - 面图层：填充、3D 建筑、choropleth
 - **[heatmap.md](references/layers/heatmap.md)** - 热力图：密度分布、网格热力
 - **[image.md](references/layers/image.md)** - 图片图层：卫星图、航拍图、平面图
-- **[raster.md](references/layers/raster.md)** - 栅格瓦片图层：XYZ/TMS 瓦片服务
+- **[raster.md](references/layers/raster.md)** - 栅格图层：单张栅格图片
+- **[tile-raster.md](references/layers/tile-raster.md)** - 栅格瓦片图层：TMS/WMS/WMTS 瓦片服务
+- **[base-layer.md](references/layers/base-layer.md)** - 图层通用方法和事件
 - **[other-layers.md](references/layers/other-layers.md)** - 其他图层类型
 
 ### 视觉映射 (references/visual/)
@@ -90,7 +93,11 @@ L7 的典型开发流程：
 ### 交互组件 (references/interaction/)
 
 - **[events.md](references/interaction/events.md)** - 点击、悬停、选中事件
-- **[components.md](references/interaction/components.md)** - Popup、Marker、Controls、Legend
+- **[popup.md](references/interaction/popup.md)** - Popup 弹窗组件
+- **[layer-popup.md](references/interaction/layer-popup.md)** - LayerPopup 图层弹窗
+- **[components.md](references/interaction/components.md)** - Marker、MarkerLayer、Controls、Legend
+- **[marker-layer.md](references/interaction/marker-layer.md)** - MarkerLayer 标注图层
+- **[controls.md](references/interaction/controls.md)** - 地图控件（Zoom、Scale、Fullscreen 等）
 
 ### 动画效果 (references/animation/)
 
@@ -104,14 +111,17 @@ L7 的典型开发流程：
 
 ### 按用户需求选择文档
 
-| 用户请求示例   | 加载的文档                       |
-| -------------- | -------------------------------- |
-| "创建一个地图" | core/scene.md                    |
-| "显示点位数据" | layers/point.md, data/geojson.md |
-| "绘制路径"     | layers/line.md                   |
-| "热力图"       | layers/heatmap.md                |
-| "添加点击事件" | interaction/events.md            |
-| "显示弹窗"     | interaction/components.md        |
+| 用户请求示例   | 加载的文档                                             |
+| -------------- | ------------------------------------------------------ |
+| "创建一个地图" | core/scene.md, core/map-types.md                       |
+| "显示点位数据" | layers/point.md, data/geojson.md                       |
+| "绘制路径"     | layers/line.md                                         |
+| "热力图"       | layers/heatmap.md                                      |
+| "加载卫星影像" | layers/tile-raster.md, data/source-raster.md           |
+| "添加点击事件" | interaction/events.md                                  |
+| "显示弹窗"     | interaction/popup.md, interaction/layer-popup.md       |
+| "添加标注"     | interaction/components.md, interaction/marker-layer.md |
+| "添加控件"     | interaction/controls.md                                |
 
 ### 技能组合模式
 

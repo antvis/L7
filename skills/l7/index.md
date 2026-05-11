@@ -15,6 +15,7 @@
 - [csv.md](references/data/csv.md) - CSV 数据加载
 - [json.md](references/data/json.md) - JSON 数据源
 - [parser.md](references/data/parser.md) - 数据解析配置
+- [source-raster.md](references/data/source-raster.md) - 栅格数据源（GeoTIFF、多波段、遥感影像）
 
 ### 3. 图层类型 Layers
 
@@ -23,7 +24,9 @@
 - [polygon.md](references/layers/polygon.md) - 面图层
 - [heatmap.md](references/layers/heatmap.md) - 热力图
 - [image.md](references/layers/image.md) - 图片图层
-- [raster.md](references/layers/raster.md) - 栅格瓦片图层
+- [raster.md](references/layers/raster.md) - 栅格图层
+- [tile-raster.md](references/layers/tile-raster.md) - 栅格瓦片图层（TMS/WMS/WMTS）
+- [base-layer.md](references/layers/base-layer.md) - 图层通用方法和事件
 - [other-layers.md](references/layers/other-layers.md) - 其他图层
 
 ### 4. 视觉映射 Visual
@@ -35,7 +38,10 @@
 
 - [events.md](references/interaction/events.md) - 事件处理
 - [popup.md](references/interaction/popup.md) - Popup 弹窗
-- [components.md](references/interaction/components.md) - Marker、Controls、Legend
+- [layer-popup.md](references/interaction/layer-popup.md) - LayerPopup 图层弹窗
+- [components.md](references/interaction/components.md) - Marker、MarkerLayer、Controls、Legend
+- [marker-layer.md](references/interaction/marker-layer.md) - MarkerLayer 标注图层
+- [controls.md](references/interaction/controls.md) - 地图控件（Zoom、Scale、Fullscreen 等）
 
 ### 6. 动画效果 Animation
 
@@ -47,17 +53,20 @@
 
 ### 🎯 按场景查找
 
-| 用户需求 | 推荐文档                                                                          | 难度   |
-| -------- | --------------------------------------------------------------------------------- | ------ |
-| 创建地图 | [scene.md](references/core/scene.md)                                              | ⭐     |
-| 显示点位 | [point.md](references/layers/point.md) + [geojson.md](references/data/geojson.md) | ⭐     |
-| 绘制路径 | [line.md](references/layers/line.md)                                              | ⭐     |
-| 区域填充 | [polygon.md](references/layers/polygon.md)                                        | ⭐     |
-| 热力图   | [heatmap.md](references/layers/heatmap.md)                                        | ⭐⭐   |
-| 点击事件 | [events.md](references/interaction/events.md)                                     | ⭐⭐   |
-| 显示弹窗 | [popup.md](references/interaction/popup.md)                                       | ⭐⭐   |
-| 轨迹动画 | [layer-animation.md](references/animation/layer-animation.md)                     | ⭐⭐   |
-| 性能优化 | [optimization.md](references/performance/optimization.md)                         | ⭐⭐⭐ |
+| 用户需求     | 推荐文档                                                                                                  | 难度   |
+| ------------ | --------------------------------------------------------------------------------------------------------- | ------ |
+| 创建地图     | [scene.md](references/core/scene.md) + [map-types.md](references/core/map-types.md)                       | ⭐     |
+| 显示点位     | [point.md](references/layers/point.md) + [geojson.md](references/data/geojson.md)                         | ⭐     |
+| 绘制路径     | [line.md](references/layers/line.md)                                                                      | ⭐     |
+| 区域填充     | [polygon.md](references/layers/polygon.md)                                                                | ⭐     |
+| 热力图       | [heatmap.md](references/layers/heatmap.md)                                                                | ⭐⭐   |
+| 加载卫星影像 | [tile-raster.md](references/layers/tile-raster.md) + [source-raster.md](references/data/source-raster.md) | ⭐⭐   |
+| 点击事件     | [events.md](references/interaction/events.md)                                                             | ⭐⭐   |
+| 显示弹窗     | [layer-popup.md](references/interaction/layer-popup.md)                                                   | ⭐⭐   |
+| 添加标注     | [marker-layer.md](references/interaction/marker-layer.md)                                                 | ⭐⭐   |
+| 添加控件     | [controls.md](references/interaction/controls.md)                                                         | ⭐⭐   |
+| 轨迹动画     | [layer-animation.md](references/animation/layer-animation.md)                                             | ⭐⭐   |
+| 性能优化     | [optimization.md](references/performance/optimization.md)                                                 | ⭐⭐⭐ |
 
 ---
 

@@ -1077,7 +1077,7 @@ new LineLayer(option?: Partial<ILayerConfig & ILineLayerStyleOptions>)
 | `borderWidth` | `number` | 线边框宽度 |
 | `borderColor` | `string` | 线边框颜色 |
 | `strokeWidth` | `number` | 描边宽度 |
-| `storke` | `string` | 描边颜色 |
+| `stroke` | `string` | 描边颜色 |
 | `blur` | `[number, number, number]` | 模糊分布 |
 | `symbol` | `ILineSymbol` | 箭头符号配置 |
 | `rampColors` | `IColorRamp` | 色带颜色 |
