@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.25.4",
+  "version": "2.25.7",
   "description": "",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -23,7 +23,7 @@
     "@antv/async-hook": "^2.2.9",
     "@antv/l7-utils": "workspace:*",
     "@babel/runtime": "^7.7.7",
-    "@mapbox/tiny-sdf": "^1.2.5",
+    "@mapbox/tiny-sdf": "1.2.5",
     "@turf/helpers": "^6.1.4",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
