@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.25.9
+
+### Patch Changes
+
+- fix: revert to version 2.25.4 and fix text rendering issue
+
 ## 2.25.4
 
 ## 2.23.3-beta.3

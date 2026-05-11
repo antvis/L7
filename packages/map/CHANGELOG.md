@@ -1,5 +1,14 @@
 # @antv/l7-map
 
+## 2.25.9
+
+### Patch Changes
+
+- fix: revert to version 2.25.4 and fix text rendering issue
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.25.9
+
 ## 2.25.4
 
 ### Patch Changes
