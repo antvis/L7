@@ -3,7 +3,7 @@ import MarkerLayer from './marker-layer';
 
 import './assets/iconfont/iconfont.js';
 // 引入样式
-import './css/index.less';
+// import './css/index.less'; /* 注释掉以避免消费者必须安装 less */
 
 export * from './control/baseControl';
 export { ExportImage, type IExportImageControlOption } from './control/exportImage';
