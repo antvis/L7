@@ -6,7 +6,9 @@
   "author": "https://github.com/orgs/antvis/people",
   "sideEffects": [
     "*.css",
-    "*.less"
+    "*.less",
+    "*.js",
+    "*/iconfont/*"
   ],
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -17,7 +19,8 @@
   ],
   "scripts": {
     "dev": "father dev",
-    "build": "npm run clean && father build",
+    "prebuild:css": "lessc src/css/index.less src/css/index.css --source-map=none",
+    "build": "npm run prebuild:css && npm run clean && father build",
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",
     "clean": "rimraf dist es lib"

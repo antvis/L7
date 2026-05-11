@@ -298,21 +298,21 @@ const source = new Source(data: any, cfg?: ISourceCFG);
 
 所有解析器通过 `parser` 配置项进行选择：
 
-| 解析器类型     | parser.type    | 数据格式                                                | 配置项                                                                                                                                                                                                                     |
-| -------------- | -------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **GeoJSON**    | `'geojson'`    | `FeatureCollection`                                     | `{ type: 'geojson', featureId?: string }`                                                                                                                                                                                  |
-| **JSON**       | `'json'`       | `Array<Object>`                                         | `{ type: 'json', x?: string, y?: string, x1?: string, y1?: string, coordinates?: string, geometry?: string }`                                                                                                              |
-| **CSV**        | `'csv'`        | CSV 字符串                                              | `{ type: 'csv', x?: string, y?: string, x1?: string, y1?: string, coordinates?: string, geometry?: string }`                                                                                                               |
-| **Image**      | `'image'`      | `string \| string[] \| HTMLImageElement \| ImageBitmap` | `{ type: 'image', extent?: [number,number,number,number], coordinates?: [[number,number],[number,number],[number,number],[number,number]], requestParameters?: object }`                                                   |
-| **Raster**     | `'raster'`     | `number[] \| IRasterFileData \| IRasterFileData[]`      | `{ type: 'raster', extent?: [number,number,number,number], coordinates?: [...], width: number, height: number, min?: number, max?: number, format?: IRasterFormat, operation?: IBandsOperation }`                          |
-| **RasterTile** | `'rasterTile'` | `string \| string[] \| ITileBand[]`                     | `{ type: 'rasterTile', dataType?: RasterTileType, extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, format?: IRasterFormat, operation?: IBandsOperation }`                       |
-| **MVT**        | `'mvt'`        | Vector Tile URL                                         | `{ type: 'mvt', extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, sourceLayer?: string }`                                                                                        |
-| **GeoJSONVT**  | `'geojsonvt'`  | GeoJSON FeatureCollection                               | `{ type: 'geojsonvt', extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, maxZoom?: number, indexMaxZoom?: number, indexMaxPoints?: number, tolerance?: number, buffer?: number }` |
-| **JSON Tile**  | `'jsonTile'`   | JSON Tile URL                                           | `{ type: 'jsonTile', zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, requestParameters?: object }`                                                                                             |
-| **RasterRgb**  | `'rasterRgb'`  | `number[] \| IRasterFileData \| IRasterFileData[]`      | 同 raster 类型                                                                                                                                                                                                             |
-| **RGB**        | `'rgb'`        | `RasterDataType[]`                                      | `{ type: 'rgb', extent?: [...], width: number, height: number, bands?: [number,number,number], countCut?: [number,number], RMinMax?: [number,number], GMinMax?: [number,number], BMinMax?: [number,number] }`              |
-| **NDI**        | `'ndi'`        | `RasterDataType[]`                                      | `{ type: 'ndi', extent?: [...], width: number, height: number, bands?: [number,number] }`                                                                                                                                  |
-| **TestTile**   | `'testTile'`   | -                                                       | 内部测试用                                                                                                                                                                                                                 |
+| 解析器类型     | parser.type    | 数据格式                                                | 配置项                                                                                                                                                                                                        |
+| -------------- | -------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **GeoJSON**    | `'geojson'`    | `FeatureCollection`                                     | `{ type: 'geojson', featureId?: string }`                                                                                                                                                                     |
+| **JSON**       | `'json'`       | `Array<Object>`                                         | `{ type: 'json', x?: string, y?: string, x1?: string, y1?: string, coordinates?: string, geometry?: string }`                                                                                                 |
+| **CSV**        | `'csv'`        | CSV 字符串                                              | `{ type: 'csv', x?: string, y?: string, x1?: string, y1?: string, coordinates?: string, geometry?: string }`                                                                                                  |
+| **Image**      | `'image'`      | `string \| string[] \| HTMLImageElement \| ImageBitmap` | `{ type: 'image', extent?: [number,number,number,number], coordinates?: [[number,number],[number,number],[number,number],[number,number]], requestParameters?: object }`                                      |
+| **Raster**     | `'raster'`     | `number[] \| IRasterFileData \| IRasterFileData[]`      | `{ type: 'raster', extent?: [number,number,number,number], coordinates?: [...], width: number, height: number, min?: number, max?: number, format?: IRasterFormat, operation?: IBandsOperation }`             |
+| **RasterTile** | `'rasterTile'` | `string \| string[] \| ITileBand[]`                     | `{ type: 'rasterTile', dataType?: RasterTileType, extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, format?: IRasterFormat, operation?: IBandsOperation }`          |
+| **MVT**        | `'mvt'`        | Vector Tile URL                                         | `{ type: 'mvt', extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, sourceLayer?: string }`                                                                           |
+| **GeoJSONVT**  | `'geojsonvt'`  | GeoJSON FeatureCollection                               | `{ type: 'geojsonvt', extent?: [...], zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, indexMaxZoom?: number, indexMaxPoints?: number, tolerance?: number, buffer?: number }`      |
+| **JSON Tile**  | `'jsonTile'`   | JSON Tile URL                                           | `{ type: 'jsonTile', zoomOffset?: number, minZoom?: number, maxZoom?: number, tileSize?: number, requestParameters?: object }`                                                                                |
+| **RasterRgb**  | `'rasterRgb'`  | `number[] \| IRasterFileData \| IRasterFileData[]`      | 同 raster 类型                                                                                                                                                                                                |
+| **RGB**        | `'rgb'`        | `RasterDataType[]`                                      | `{ type: 'rgb', extent?: [...], width: number, height: number, bands?: [number,number,number], countCut?: [number,number], RMinMax?: [number,number], GMinMax?: [number,number], BMinMax?: [number,number] }` |
+| **NDI**        | `'ndi'`        | `RasterDataType[]`                                      | `{ type: 'ndi', extent?: [...], width: number, height: number, bands?: [number,number] }`                                                                                                                     |
+| **TestTile**   | `'testTile'`   | -                                                       | 内部测试用                                                                                                                                                                                                    |
 
 ### 数据变换 (Transforms)
 
@@ -1013,7 +1013,7 @@ new PointLayer(option?: Partial<ILayerConfig & IPointLayerStyleOptions>)
 
 **type**: `'PointLayer'`  
 **默认数据解析**: `{ type: 'json', x: 'lng', y: 'lat' }`  
-**shape**: `'circle'` | `'square'` | `'triangle'` | `'pentagon'` | `'hexagon'` | `'octagon'` | `'diamond'` | `'hexagon'` | `'image'` | `'text'` | `'cylinder'` | ...
+**shape**: `'circle'` | `'square'` | `'triangle'` | `'pentagon'` | `'hexagon'` | `'octagon'` | `'diamond'` | `'image'` | `'text'` | `'cylinder'` | ...
 
 **IPointLayerStyleOptions**:
 | 属性 | 类型 | 说明 |
@@ -1077,7 +1077,7 @@ new LineLayer(option?: Partial<ILayerConfig & ILineLayerStyleOptions>)
 | `borderWidth` | `number` | 线边框宽度 |
 | `borderColor` | `string` | 线边框颜色 |
 | `strokeWidth` | `number` | 描边宽度 |
-| `storke` | `string` | 描边颜色 |
+| `stroke` | `string` | 描边颜色 |
 | `blur` | `[number, number, number]` | 模糊分布 |
 | `symbol` | `ILineSymbol` | 箭头符号配置 |
 | `rampColors` | `IColorRamp` | 色带颜色 |
@@ -1122,7 +1122,7 @@ new HeatmapLayer(option?: Partial<ILayerConfig & IHeatMapLayerStyleOptions>)
 ```
 
 **type**: `'HeatMapLayer'`  
-**shape**: `'heatmap'` | `'hexagon'` | `'grid'` | `'circle'` | ...
+**shape**: `'heatmap'` | `'heatmap3D'` | `'hexagon'` | `'grid'` | `'square'` | `'triangle'` | `'cylinder'` | `'circle'` | ...
 
 **IHeatMapLayerStyleOptions**:
 | 属性 | 类型 | 说明 |

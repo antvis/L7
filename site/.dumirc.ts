@@ -18,6 +18,7 @@ const GaodeTokenScript =
       ];
 
 export default defineConfig({
+  plugins: ['./plugin-redirect.ts'],
   locales: [
     { id: 'zh', name: '中文' },
     { id: 'en', name: 'English' },

@@ -158,6 +158,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       // @ts-ignore
       map.on('update', this.handleCameraChanged);
     }
+    this.bindPendingEvents();
   }
 
   public destroy(): void {
@@ -186,6 +187,12 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       return;
     }
 
+    if (!this.map) {
+      // 地图尚未初始化，缓存事件，init 完成后重放
+      this.pendingHandlers.push({ type, handler: handle });
+      return;
+    }
+
     let cbProxyMap = this.evtCbProxyMap.get(type);
     if (!cbProxyMap) {
       this.evtCbProxyMap.set(type, (cbProxyMap = new Map()));
@@ -211,6 +218,14 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   public off(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.off(type, handle);
+      return;
+    }
+
+    if (!this.map) {
+      // 地图尚未初始化，从缓存中移除
+      this.pendingHandlers = this.pendingHandlers.filter(
+        (item) => !(item.type === type && item.handler === handle),
+      );
       return;
     }
 

@@ -124,6 +124,13 @@ export default class Scene extends EventEmitter implements ISceneService {
   }
 
   public init(sceneConfig: ISceneConfig) {
+    // 防止重复初始化：如果已经在初始化中或已初始化完成，跳过重复注册 hooks
+    if (this.inited || this.rendering) {
+      return;
+    }
+    // 允许 destroy 后重新初始化
+    this.destroyed = false;
+
     // 设置场景配置项
     this.configService.setSceneConfig(this.id, sceneConfig);
     // 初始化 ShaderModule
@@ -142,13 +149,17 @@ export default class Scene extends EventEmitter implements ISceneService {
         type: this.map.version,
       });
       // 等待首次相机同步
-      await new Promise<void>((resolve) => {
+      await new Promise<void>((resolve, reject) => {
         this.map.onCameraChanged((viewport: IViewport) => {
           this.cameraService.init();
           this.cameraService.update(viewport);
           resolve();
         });
-        this.map.init();
+        const initResult = this.map.init() as Promise<void> | void;
+        // init() 实际返回 Promise<void>，需要捕获异步错误避免 Promise 挂死
+        if (typeof (initResult as any)?.catch === 'function') {
+          (initResult as Promise<void>).catch(reject);
+        }
       });
 
       // 重新绑定非首次相机更新事件
@@ -308,6 +319,8 @@ export default class Scene extends EventEmitter implements ISceneService {
   public destroy() {
     if (!this.inited) {
       this.destroyed = true;
+      // 即使未完成初始化也重置 hooks，防止 tasks 累积
+      this.hooks.init = new AsyncSeriesHook();
       return;
     }
     this.resizeDetector.disconnect();
@@ -325,6 +338,10 @@ export default class Scene extends EventEmitter implements ISceneService {
 
     this.removeAllListeners();
     this.inited = false;
+    this.loaded = false;
+    this.destroyed = true;
+    // 重置 hooks，防止 destroy 后重新 init 时 hooks 中的 tasks 累积
+    this.hooks.init = new AsyncSeriesHook();
 
     this.map.destroy();
     setTimeout(() => {

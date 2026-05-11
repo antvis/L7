@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * MapboxService
  */
@@ -47,11 +46,24 @@ export default class L7EarthService extends BaseMapService<Map> implements IEart
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
+      if (!this.map) {
+        // 地图尚未初始化，缓存事件，init 完成后重放
+        this.pendingHandlers.push({ type, handler: handle });
+        return;
+      }
       // 统一事件名称
       this.map.on(EventMap[type] || type, handle);
     }
   }
   public off(type: string, handle: (...args: any[]) => void): void {
+    if (!this.map) {
+      // 地图尚未初始化，从缓存中移除
+      this.pendingHandlers = this.pendingHandlers.filter(
+        (item) => !(item.type === type && item.handler === handle),
+      );
+      this.eventEmitter.off(type, handle);
+      return;
+    }
     this.map.off(EventMap[type] || type, handle);
     this.eventEmitter.off(type, handle);
   }
@@ -87,6 +99,7 @@ export default class L7EarthService extends BaseMapService<Map> implements IEart
 
     // 不同于高德地图，需要手动触发首次渲染
     this.handleCameraChanged({});
+    this.bindPendingEvents();
   }
 
   public destroy() {
