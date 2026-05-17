@@ -37,6 +37,10 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     normal: [],
   };
   protected currentStyle: any = 'normal';
+
+  // Zoom 偏移量，用于对齐不同地图的显示层级
+  protected zoomOffset: number = 1.75;
+
   // 事件回调代理
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
     new Map();
@@ -68,7 +72,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       viewportWidth: map.getContainer().clientWidth,
       bearing: 360 - map.getHeading(),
       pitch: map.getTilt(),
-      zoom: map.getZoom() - 1.75,
+      zoom: this.getZoom(),
     };
     this.viewport.syncWithMapCamera(option as any);
     this.updateCoordinateSystemService();
@@ -377,7 +381,8 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
   }
 
   public setZoomAndCenter(zoom: number, [lng, lat]: Point): void {
-    this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom + 1.75);
+    // L7 的 zoom 值是统一的，传给百度地图时需要加上偏移量
+    this.getMap().centerAndZoom(new BMapGL.Point(lng, lat), zoom + this.zoomOffset);
   }
 
   public setCenter([lng, lat]: [number, number], options?: ICameraOptions): void {

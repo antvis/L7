@@ -59,6 +59,13 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   public bgColor: string = 'rgba(0.0, 0.0, 0.0, 0.0)';
   protected abstract viewport: IViewport | unknown;
 
+  /**
+   * Zoom 偏移量，用于对齐不同地图的显示层级
+   * 子类可以覆盖此值以指定特定的偏移量
+   * @default 0
+   */
+  protected zoomOffset: number = 0;
+
   protected readonly config: Partial<IMapConfig>;
 
   protected readonly configService: IGlobalConfigService;
@@ -191,11 +198,11 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
   }
 
   public getZoom(): number {
-    return this.map.getZoom();
+    return this.map.getZoom() - this.zoomOffset;
   }
 
   public setZoom(zoom: number) {
-    return this.map.setZoom(zoom);
+    return this.map.setZoom(zoom + this.zoomOffset);
   }
 
   public getCenter(): ILngLat {
@@ -413,7 +420,7 @@ export default abstract class BaseMapService<T> implements IMapService<Map & T> 
       viewportHeight: this.map.transform.height,
       pitch: this.map.getPitch(),
       viewportWidth: this.map.transform.width,
-      zoom: this.map.getZoom(),
+      zoom: this.map.getZoom() - this.zoomOffset,
       // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
       cameraHeight: 0,
     });

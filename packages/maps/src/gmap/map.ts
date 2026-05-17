@@ -5,7 +5,6 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
-  MapStyleConfig,
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
@@ -30,6 +29,10 @@ const EventMap: {
 export default class TMapService extends BaseMapService<any> {
   // @ts-ignore
   protected viewport: IViewport = null;
+
+  // Zoom 偏移量，用于对齐不同地图的显示层级
+  protected zoomOffset: number = 1;
+
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
     new Map();
 
@@ -50,7 +53,7 @@ export default class TMapService extends BaseMapService<any> {
 
       pitch: map.getTilt(),
 
-      zoom: map.getZoom() - 1,
+      zoom: this.getZoom(),
     };
 
     this.viewport.syncWithMapCamera(option as any);
@@ -303,16 +306,19 @@ export default class TMapService extends BaseMapService<any> {
     return this.map.getDiv()?.getElementsByTagName('canvas')[0];
   }
 
-  public getMapStyleConfig(): MapStyleConfig {
-    throw new Error('Method not implemented.');
-  }
-
   public setBgColor(color: string): void {
     this.bgColor = color;
   }
 
-  public setMapStyle(styleId: any): void {
-    this.map.setMapStyleId(styleId);
+  public setMapStyle(style: any): void {
+    // Google Maps 使用 setOptions 设置地图样式
+    if (typeof style === 'string') {
+      // 如果是字符串，可能是 MapType ID
+      this.map.setMapTypeId(style);
+    } else if (Array.isArray(style)) {
+      // 如果是数组，则是自定义样式配置
+      this.map.setOptions({ styles: style });
+    }
   }
 
   // control with raw map
