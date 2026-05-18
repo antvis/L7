@@ -3,20 +3,16 @@ interface IPoint {
   y: number;
 }
 export type anchorType =
-  | 'right'
-  | 'top-right'
-  | 'left'
-  | 'bottom-right'
-  | 'left'
-  | 'top-left'
-  | 'bottom-left'
-  | 'bottom'
-  | 'bottom-right'
-  | 'bottom-left'
+  | 'center'
   | 'top'
   | 'top-right'
+  | 'right'
+  | 'bottom-right'
+  | 'bottom'
+  | 'bottom-left'
+  | 'left'
   | 'top-left'
-  | 'center';
+  | 'bottom-center';
 export interface IGlyphQuad {
   tr: IPoint;
   tl: IPoint;
@@ -56,14 +52,15 @@ function getAnchorAlignment(anchor: anchorType) {
   }
 
   switch (anchor) {
-    case 'bottom':
-    case 'bottom-right':
-    case 'bottom-left':
-      verticalAlign = 1;
-      break;
     case 'top':
     case 'top-right':
     case 'top-left':
+      verticalAlign = 1;
+      break;
+    case 'bottom':
+    case 'bottom-right':
+    case 'bottom-left':
+    case 'bottom-center':
       verticalAlign = 0;
       break;
     default:
@@ -108,9 +105,16 @@ function align(
   maxLineLength: number,
   lineHeight: number,
   lineCount: number,
+  yOffset: number,
 ) {
   const shiftX = (justify - horizontalAlign) * maxLineLength;
-  const shiftY = (-verticalAlign * lineCount + 0.5) * lineHeight;
+  let shiftY = (-verticalAlign * lineCount + 0.5) * lineHeight;
+
+  // 对于垂直居中情况，补偿 yOffset 使文字视觉中心对齐到坐标点
+  // yOffset 是 baseline 的初始偏移，center 时需要抵消它
+  if (verticalAlign === 0.5) {
+    shiftY -= yOffset;
+  }
 
   for (const glyphs of positionedGlyphs) {
     glyphs.x += shiftX;
@@ -177,6 +181,7 @@ function shapeLines(
     maxLineLength,
     lineHeight,
     lines.length,
+    yOffset,
   );
 
   // 计算包围盒
@@ -251,6 +256,7 @@ function shapeIconFont(
     maxLineLength,
     lineHeight,
     iconfonts.length,
+    yOffset,
   );
 
   // 计算包围盒

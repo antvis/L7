@@ -6,7 +6,7 @@ import PointModels from './models/index';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
   public type: string = 'PointLayer';
-  public enableShaderEncodeStyles = ['stroke', 'offsets', 'opacity', 'rotation']; //4+2+1+1
+  public enableShaderEncodeStyles = ['stroke', 'offsets', 'opacity', 'rotation', 'anchor']; //4+2+1+1+1
   public enableDataEncodeStyles = ['textOffset', 'textAnchor'];
   public defaultSourceConfig = {
     data: [],

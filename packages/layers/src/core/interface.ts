@@ -101,6 +101,9 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   blur?: number;
   billboard?: boolean; // 图片符号地图支持
 
+  // anchor
+  anchor?: anchorType;
+
   // text
   textOffset?: [number, number];
   textAnchor?: anchorType;

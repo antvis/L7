@@ -1,3 +1,4 @@
+export { anchor } from './anchor';
 export { billboard } from './billboard';
 export { column } from './column';
 export { dot } from './dot';

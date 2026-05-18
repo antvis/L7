@@ -35,6 +35,37 @@ import { getStencil, getStencilMask } from '../utils/stencil';
 import { COMMON_ATTRIBUTE_LOCATION, getCommonStyleAttributeOptions } from './CommonStyleAttribute';
 import { DefaultUniformStyleType, DefaultUniformStyleValue } from './constant';
 import { MultipleOfFourNumber } from './utils';
+
+function anchorToNumber(anchor: string | number | undefined): number {
+  if (typeof anchor === 'number') {
+    return anchor;
+  }
+  switch (anchor) {
+    case 'center':
+      return 0;
+    case 'top':
+      return 1;
+    case 'top-right':
+      return 2;
+    case 'right':
+      return 3;
+    case 'bottom-right':
+      return 4;
+    case 'bottom':
+      return 5;
+    case 'bottom-left':
+      return 6;
+    case 'left':
+      return 7;
+    case 'top-left':
+      return 8;
+    case 'bottom-center':
+      return 9;
+    default:
+      return 0;
+  }
+}
+
 export type styleSingle =
   | number
   | string
@@ -58,7 +89,7 @@ type AttributeLayoutLocationType = typeof COMMON_ATTRIBUTE_LOCATION & Record<str
 // 属性索引宏定义前缀，使用命名空间避免 define 名称重复情况
 const DEFINE_ATTRIBUTE_LOCATION_PREFIX = 'ATTRIBUTE_LOCATION_';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerModel {
   public triangulation: Triangulation;
   public uniformBuffers: IBuffer[] = [];
@@ -190,15 +221,15 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
   public async needUpdate(): Promise<boolean> {
     return false;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public async buildModels(): Promise<IModel[]> {
     throw new Error('Method not implemented.');
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public async initModels(): Promise<IModel[]> {
     throw new Error('Method not implemented.');
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public clearModels(refresh = true) {
     return;
   }
@@ -211,7 +242,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
     throw new Error('Method not implemented.');
   }
   public prerender(): void {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   public render(renderOptions?: Partial<IRenderOptions>): void {
     throw new Error('Method not implemented.');
   }
@@ -268,6 +299,9 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
         let value = typeof keyValue === 'undefined' ? DefaultUniformStyleValue[key] : keyValue;
         if (key === 'stroke') {
           value = rgb2arr(value);
+        }
+        if (key === 'anchor') {
+          value = anchorToNumber(value);
         }
         options['u_' + key] = value;
       }

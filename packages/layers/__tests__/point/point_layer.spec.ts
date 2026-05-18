@@ -192,4 +192,76 @@ describe('pointLayer', () => {
       .style({ opacity: 0.6 });
     scene.addLayer(layer);
   });
+
+  // anchor
+  it('pointlayer anchor', () => {
+    layer = new PointLayer({
+      name: 'layer',
+    })
+      .source(data, {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(100)
+      .active(true)
+      .color('red')
+      .style({
+        anchor: 'bottom',
+        opacity: 0.6,
+      });
+    scene.addLayer(layer);
+  });
+
+  // anchor with data mapping
+  it('pointlayer anchor data mapping', () => {
+    layer = new PointLayer({
+      name: 'layer',
+    })
+      .source(data, {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(100)
+      .active(true)
+      .color('red')
+      .style({
+        anchor: {
+          field: 'value',
+          value: ['center', 'bottom', 'top', 'left', 'right'],
+        },
+        opacity: 0.6,
+      });
+    scene.addLayer(layer);
+  });
+
+  // anchor bottom-center
+  it('pointlayer anchor bottom-center', () => {
+    layer = new PointLayer({
+      name: 'layer',
+    })
+      .source(data, {
+        parser: {
+          type: 'json',
+          x: 'lng',
+          y: 'lat',
+        },
+      })
+      .shape('circle')
+      .size(100)
+      .active(true)
+      .color('red')
+      .style({
+        anchor: 'bottom-center',
+        opacity: 0.6,
+      });
+    scene.addLayer(layer);
+  });
 });
