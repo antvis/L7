@@ -110,9 +110,12 @@ function align(
   const shiftX = (justify - horizontalAlign) * maxLineLength;
   let shiftY = (-verticalAlign * lineCount + 0.5) * lineHeight;
 
-  // 对于垂直居中情况，补偿 yOffset 使文字视觉中心对齐到坐标点
-  // yOffset 是 baseline 的初始偏移，center 时需要抵消它
-  if (verticalAlign === 0.5) {
+  // 补偿 yOffset 使 top/bottom 锚点正确对齐
+  // top: 文字往下移 |yOffset| 像素（远离坐标点）
+  // bottom: 文字往上移 |yOffset| 像素（远离坐标点）
+  if (verticalAlign === 1) {
+    shiftY += yOffset;
+  } else if (verticalAlign === 0) {
     shiftY -= yOffset;
   }
 
