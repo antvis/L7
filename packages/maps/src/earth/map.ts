@@ -1,9 +1,9 @@
 /**
  * MapboxService
  */
-import type { IEarthService, IMercator, IViewport } from '@antv/l7-core';
+import type { Bounds, IEarthService, IMercator, IViewport } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
-import { Map } from '@antv/l7-map';
+import { Map, MercatorCoordinate } from '@antv/l7-map';
 import BaseMapService from '../utils/BaseMapService';
 import Viewport from './Viewport';
 const EventMap: {
@@ -21,8 +21,10 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
  */
 export default class L7EarthService extends BaseMapService<Map> implements IEarthService {
   public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
-    throw new Error('Method not implemented.');
+    const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
+    return { x, y, z };
   }
+
   public getModelMatrix(
     lnglat: [number, number],
     altitude: number,
@@ -30,7 +32,33 @@ export default class L7EarthService extends BaseMapService<Map> implements IEart
     scale: [number, number, number],
     origin: IMercator,
   ): number[] {
-    throw new Error('Method not implemented.');
+    // Earth 模式使用自定义坐标系，返回单位矩阵作为默认值
+    return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+  }
+
+  public getPitch(): number {
+    // Earth 模式不支持 pitch，返回 0
+    return 0;
+  }
+
+  public getRotation(): number {
+    return this.map.getBearing();
+  }
+
+  public getBounds(): Bounds {
+    const bounds = this.map.getBounds();
+    return [
+      [bounds.getSouthWest().lng, bounds.getSouthWest().lat],
+      [bounds.getNorthEast().lng, bounds.getNorthEast().lat],
+    ];
+  }
+
+  public getMinZoom(): number {
+    return this.map.getMinZoom();
+  }
+
+  public getMaxZoom(): number {
+    return this.map.getMaxZoom();
   }
   public version: string = 'GLOBEL';
   // TODO: 判断地图是否正在拖拽

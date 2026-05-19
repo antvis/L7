@@ -5,7 +5,6 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
-  MapStyleConfig,
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
@@ -32,6 +31,10 @@ const EventMap: {
 export default class TMapService extends BaseMapService<TMap.Map> {
   // @ts-ignore
   protected viewport: IViewport = null;
+
+  // Zoom 偏移量，用于对齐不同地图的显示层级
+  protected zoomOffset: number = 1;
+
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
     new Map();
 
@@ -52,8 +55,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       bearing: map.getHeading(),
       // @ts-ignore
       pitch: map.getPitch(),
-      // @ts-ignore
-      zoom: map.getZoom() - 1,
+      zoom: this.getZoom(),
     };
 
     this.viewport.syncWithMapCamera(option as any);
@@ -330,11 +332,6 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
   public getCanvasOverlays() {
     return this.getMapCanvasContainer()?.nextSibling?.firstChild as HTMLElement;
-  }
-
-  public getMapStyleConfig(): MapStyleConfig {
-    // return this.getMap()
-    throw new Error('Method not implemented.');
   }
 
   public setBgColor(color: string): void {

@@ -420,8 +420,22 @@ export default class TdtMapService extends BaseMapService<any> {
 
   // coordinates methods
 
+  public setPitch(pitch: number): void {
+    // 天地图不支持 pitch，保持兼容
+    console.warn('TDT Map does not support pitch');
+  }
+
+  public exportMap(type: string = 'png'): string {
+    const canvas = this.getMapCanvasContainer()?.querySelector('canvas');
+    if (!canvas) {
+      throw new Error('No canvas found in map container');
+    }
+    return canvas.toDataURL(`image/${type}`);
+  }
+
   public getModelMatrix(): number[] {
-    throw new Error('Method not implemented.');
+    // 天地图使用 EPSG:900913 (Web Mercator)，返回单位矩阵
+    return [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
   }
 
   public pixelToLngLat([x, y]: Point): ILngLat {

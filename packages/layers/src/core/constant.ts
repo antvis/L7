@@ -6,6 +6,7 @@ export const DefaultUniformStyleValue: { [key: string]: any } = {
   extrusionBase: 0,
   strokeOpacity: 1,
   thetaOffset: 0.314,
+  anchor: 0,
 };
 
 export const DefaultUniformStyleType: { [key: string]: any } = {
@@ -17,4 +18,5 @@ export const DefaultUniformStyleType: { [key: string]: any } = {
   extrusionBase: 'float',
   strokeOpacity: 'float',
   thetaOffset: 'float',
+  anchor: 'float',
 };

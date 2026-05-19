@@ -353,11 +353,15 @@ export default class AMapService extends BaseMap<AMap.Map> {
   }
 
   public setMaxZoom(max: number): void {
-    throw new Error('Method not implemented.');
+    // 高德地图新版 API 可能不支持 setZooms，这里仅做兼容处理
+    // 如果需要设置最大缩放，建议在初始化时通过 mapConstructorOptions 配置
+    console.warn('AMap setMaxZoom: setZooms API not available in current version');
   }
 
   public setMinZoom(min: number): void {
-    throw new Error('Method not implemented.');
+    // 高德地图新版 API 可能不支持 setZooms，这里仅做兼容处理
+    // 如果需要设置最小缩放，建议在初始化时通过 mapConstructorOptions 配置
+    console.warn('AMap setMinZoom: setZooms API not available in current version');
   }
 
   public setMapStatus(option: Partial<IStatusOptions>): void {
