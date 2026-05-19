@@ -89,7 +89,6 @@ type AttributeLayoutLocationType = typeof COMMON_ATTRIBUTE_LOCATION & Record<str
 // 属性索引宏定义前缀，使用命名空间避免 define 名称重复情况
 const DEFINE_ATTRIBUTE_LOCATION_PREFIX = 'ATTRIBUTE_LOCATION_';
 
- 
 export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerModel {
   public triangulation: Triangulation;
   public uniformBuffers: IBuffer[] = [];
@@ -221,15 +220,15 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
   public async needUpdate(): Promise<boolean> {
     return false;
   }
-   
+
   public async buildModels(): Promise<IModel[]> {
     throw new Error('Method not implemented.');
   }
-   
+
   public async initModels(): Promise<IModel[]> {
     throw new Error('Method not implemented.');
   }
-   
+
   public clearModels(refresh = true) {
     return;
   }
@@ -242,7 +241,7 @@ export default class BaseModel<ChildLayerStyleOptions = {}> implements ILayerMod
     throw new Error('Method not implemented.');
   }
   public prerender(): void {}
-   
+
   public render(renderOptions?: Partial<IRenderOptions>): void {
     throw new Error('Method not implemented.');
   }
