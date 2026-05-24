@@ -116,6 +116,7 @@ export default class TdtMapService extends BaseMapService<any> {
     overlayPane.parentElement.appendChild(container);
     container.id = 'tdt-L7';
     const size = this.map.getSize();
+    container.style.position = 'relative'; // 修复天地图图层被覆盖的问题
     container.style.zIndex = '200'; //置于上层
     container.style.width = `${size.x}px`;
     container.style.height = `${size.y}px`;
