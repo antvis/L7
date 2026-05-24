@@ -397,7 +397,14 @@ export default class Popup<O extends IPopupOption = IPopupOption>
       return;
     }
     const { lng, lat } = this.lngLat;
-    const { x, y } = this.mapsService.lngLatToContainer([lng, lat]);
+    // Normalize longitude to -180 ~ 180 range
+    let normalizedLng = lng;
+    if (lng > 180) {
+      normalizedLng = lng - 360 * Math.floor((lng + 180) / 360);
+    } else if (lng < -180) {
+      normalizedLng = lng + 360 * Math.floor((-lng + 180) / 360);
+    }
+    const { x, y } = this.mapsService.lngLatToContainer([normalizedLng, lat]);
 
     this.setPopupPosition(x, y);
   };
