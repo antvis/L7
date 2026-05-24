@@ -7,4 +7,14 @@ export default defineConfig({
   // 使用 babel 编译 esm/cjs 产物，启用 transform-import-css-l7 插件完成 CSS 内联打包
   esm: { transformer: 'babel' },
   cjs: isProduction ? { transformer: 'babel' } : undefined,
+  // 确保 CSS 被打包到产物中而不是直接引用 less 源文件
+  extraBabelPlugins: [
+    [
+      // import glsl as raw text
+      'babel-plugin-inline-import',
+      { extensions: '.glsl' },
+    ],
+    // import css as inline
+    'transform-import-css-l7',
+  ],
 });
