@@ -5,5 +5,6 @@ export { dot } from './dot';
 export { fill } from './fill';
 export { fillImage } from './fill-image';
 export { image } from './image';
+export { imageTextAnchor } from './image-text-anchor';
 export { radar } from './radar';
 export { text } from './text';
