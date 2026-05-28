@@ -72,7 +72,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       viewportWidth: map.getContainer().clientWidth,
       bearing: 360 - map.getHeading(),
       pitch: map.getTilt(),
-      zoom: map.getZoom() - 1.75,
+      zoom: this.getZoom(),
     };
     if (this.viewport) {
       this.viewport.syncWithMapCamera(option as any);
