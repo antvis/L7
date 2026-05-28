@@ -10,6 +10,16 @@ import * as HeatmapTestCases from './heatmap';
 import * as LineTestCases from './line';
 import * as MaskTestCases from './mask';
 import * as PointTestCases from './point';
+import { anchor } from './point/anchor';
+import { billboard } from './point/billboard';
+import { column } from './point/column';
+import { dot } from './point/dot';
+import { fill } from './point/fill';
+import { fillImage } from './point/fill-image';
+import { iconfont } from './point/iconfont';
+import { image } from './point/image';
+import { imageTextAnchor } from './point/image-text-anchor';
+import { radar } from './point/radar';
 import * as PolygonTestCases from './polygon';
 import * as RasterTestCases from './raster';
 import * as RefactorTestCases from './refactor';
@@ -50,3 +60,16 @@ export const TestCases = new Map<string, [string, TestCase][]>([
 //     }));
 //   return demo;
 // }
+
+export const point = {
+  ...anchor,
+  ...billboard,
+  ...column,
+  ...dot,
+  ...fill,
+  ...fillImage,
+  ...iconfont,
+  ...image,
+  ...imageTextAnchor,
+  ...radar,
+};

@@ -72,11 +72,13 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       viewportWidth: map.getContainer().clientWidth,
       bearing: 360 - map.getHeading(),
       pitch: map.getTilt(),
-      zoom: this.getZoom(),
+      zoom: map.getZoom() - 1.75,
     };
-    this.viewport.syncWithMapCamera(option as any);
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback(this.viewport);
+    if (this.viewport) {
+      this.viewport.syncWithMapCamera(option as any);
+      this.updateCoordinateSystemService();
+      this.cameraChangedCallback(this.viewport);
+    }
   };
 
   public setBgColor(color: string): void {
@@ -482,6 +484,9 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
   public pixelToLngLat([x, y]: Point): ILngLat {
     const lngLat = this.getMap().pixelToPoint(new BMapGL.Pixel(x, y));
+    if (!lngLat) {
+      return { lng: 0, lat: 0 };
+    }
     return { lng: lngLat.lng, lat: lngLat.lat };
   }
 
@@ -495,6 +500,9 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
   public containerToLngLat([x, y]: [number, number]): ILngLat {
     const point = this.getMap().overlayPixelToPoint(new BMapGL.Pixel(x, y));
+    if (!point) {
+      return { lng: 0, lat: 0 };
+    }
     return {
       lng: point.lng,
       lat: point.lat,

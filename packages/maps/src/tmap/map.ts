@@ -8,7 +8,7 @@ import type {
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { MapMouseEvent, MercatorCoordinate } from '@antv/l7-map';
+import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import Viewport from '../lib/web-mercator-viewport';
@@ -55,12 +55,14 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       bearing: map.getHeading(),
       // @ts-ignore
       pitch: map.getPitch(),
-      zoom: this.getZoom(),
+      zoom: map.getZoom() - 1,
     };
 
-    this.viewport.syncWithMapCamera(option as any);
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback(this.viewport);
+    if (this.viewport) {
+      this.viewport.syncWithMapCamera(option as any);
+      this.updateCoordinateSystemService();
+      this.cameraChangedCallback(this.viewport);
+    }
   };
 
   public async init(): Promise<void> {
@@ -217,7 +219,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
         cbProxyMap.set(handle, handleProxy);
         if (eventName === 'mouseover') {
           this.map.getContainer().addEventListener('mouseover', (e) => {
-            this.map.emit(e.type, new MapMouseEvent(e.type, this.map, e));
+            handleProxy({ type: e.type, originalEvent: e });
           });
         }
         this.map.on(eventName, handleProxy);
@@ -438,10 +440,13 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     const { lng: clng, lat: clat } = this.map.getCenter();
     const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([clng, clat]);
     const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer([clng, clat]);
-    const { lng, lat } = this.map.unprojectFromContainer(
+    const result = this.map.unprojectFromContainer(
       new TMap.Point(centerContainerX + (x - centerPixelX), centerContainerY + (y - centerPixelY)),
     );
-    return this.containerToLngLat([lng, lat]);
+    if (!result) {
+      return { lng: 0, lat: 0 };
+    }
+    return this.containerToLngLat([result.lng, result.lat]);
   }
 
   public lngLatToPixel([lng, lat]: Point): IPoint {
@@ -451,8 +456,11 @@ export default class TMapService extends BaseMapService<TMap.Map> {
   }
 
   public containerToLngLat([x, y]: [number, number]): ILngLat {
-    const { lng, lat } = this.map.unprojectFromContainer(new TMap.Point(x, y));
-    return { lng, lat };
+    const result = this.map.unprojectFromContainer(new TMap.Point(x, y));
+    if (!result) {
+      return { lng: 0, lat: 0 };
+    }
+    return { lng: result.lng, lat: result.lat };
   }
 
   public lngLatToContainer([lng, lat]: [number, number]): IPoint {

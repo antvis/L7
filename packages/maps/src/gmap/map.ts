@@ -25,41 +25,112 @@ const EventMap: {
   dragging: 'drag',
 };
 
-// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
-export default class TMapService extends BaseMapService<any> {
+export default class GMapService extends BaseMapService<any> {
   // @ts-ignore
   protected viewport: IViewport = null;
 
-  // Zoom 偏移量，用于对齐不同地图的显示层级
-  protected zoomOffset: number = 1;
+  // Google Map 和 L7 内置 Map 均使用 Web Mercator，zoom level 定义一致，无需偏移
+  protected zoomOffset: number = 0;
 
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
     new Map();
 
+  // 存储 Google Maps 事件监听器引用，用于移除
+  private gmapListeners: Map<string, Map<(...args: any) => any, google.maps.MapsEventListener>> =
+    new Map();
+  // OverlayView 用于获取 MapCanvasProjection（支持 fractional zoom 计算）
+  private overlayView: google.maps.OverlayView | null = null;
+
+  /** 获取 OverlayView 的 MapCanvasProjection，仅在 onAdd 之后可用 */
+  private getOverlayProjection(): google.maps.MapCanvasProjection | null {
+    return this.overlayView?.getProjection() ?? null;
+  }
+
   public handleCameraChanged = () => {
+    this.syncCamera();
+  };
+
+  private syncCamera() {
     this.emit('mapchange');
     const map = this.map;
+    if (!map) {
+      return;
+    }
 
-    const { lng, lat } = map.getCenter();
+    const { width, height } = this.getMapSize();
+    let zoom = map.getZoom() - 1;
+    let longitude: number;
+    let latitude: number;
+    const bearing = map.getHeading() || 0;
+
+    // 通过 OverlayView projection 计算真实视口中心和 fractional zoom（参考 deck.gl）
+    const projection = this.getOverlayProjection();
+    if (projection) {
+      // 用 OverlayView projection 获取当前视口中心像素对应的经纬度
+      // 这在缩放动画期间比 map.getCenter() 更准确
+      const centerLatLng = projection.fromContainerPixelToLatLng(
+        new google.maps.Point(width / 2, height / 2),
+      );
+      if (centerLatLng) {
+        longitude = centerLatLng.lng();
+        latitude = centerLatLng.lat();
+      } else {
+        const center = map.getCenter();
+        if (!center) return;
+        longitude = center.lng();
+        latitude = center.lat();
+      }
+
+      // 计算 fractional zoom
+      const bounds = map.getBounds();
+      if (bounds) {
+        const ne = bounds.getNorthEast();
+        const sw = bounds.getSouthWest();
+        const topRight = projection.fromLatLngToDivPixel(ne);
+        const bottomLeft = projection.fromLatLngToDivPixel(sw);
+        if (topRight && bottomLeft) {
+          let scale: number | undefined;
+          if (bearing === 0) {
+            scale = height ? (bottomLeft.y - topRight.y) / height : 1;
+          } else {
+            const viewDiag = Math.sqrt(
+              Math.pow(topRight.x - bottomLeft.x, 2) + Math.pow(topRight.y - bottomLeft.y, 2),
+            );
+            const mapDiag = Math.sqrt(width * width + height * height);
+            scale = mapDiag ? viewDiag / mapDiag : 1;
+          }
+          zoom += Math.log2(scale || 1);
+        }
+      }
+    } else {
+      const center = map.getCenter();
+      if (!center) return;
+      longitude = center.lng();
+      latitude = center.lat();
+    }
 
     const option = {
-      center: [lng(), lat()],
-
-      viewportHeight: map.getDiv().clientHeight,
-
-      viewportWidth: map.getDiv().clientWidth,
-
-      bearing: map.getHeading(),
-
-      pitch: map.getTilt(),
-
-      zoom: this.getZoom(),
+      center: [longitude!, latitude!],
+      viewportHeight: height,
+      viewportWidth: width,
+      bearing,
+      pitch: map.getTilt() || 0,
+      zoom,
     };
+    if (this.viewport) {
+      this.viewport.syncWithMapCamera(option as any);
+      this.updateCoordinateSystemService();
+      this.cameraChangedCallback(this.viewport);
+    }
+  }
 
-    this.viewport.syncWithMapCamera(option as any);
-    this.updateCoordinateSystemService();
-    this.cameraChangedCallback(this.viewport);
-  };
+  private getMapSize(): { width: number; height: number } {
+    const container = this.map.getDiv().firstChild as HTMLElement | null;
+    return {
+      width: container?.offsetWidth ?? this.map.getDiv().clientWidth,
+      height: container?.offsetHeight ?? this.map.getDiv().clientHeight,
+    };
+  }
 
   public async init(): Promise<void> {
     this.viewport = new Viewport();
@@ -69,9 +140,15 @@ export default class TMapService extends BaseMapService<any> {
       mapInstance,
       center = [121.30654632240122, 31.25744185633306],
       token,
+      zoom = 15,
       minZoom = 3,
       maxZoom = 18,
       logoVisible = true,
+      // 过滤掉 L7 特有的参数，不透传给 Google Maps
+      style: _style,
+      rotation: _rotation,
+      pitch: _pitch,
+      WebGLParams: _webglParams,
       ...rest
     } = this.config;
 
@@ -88,7 +165,6 @@ export default class TMapService extends BaseMapService<any> {
     }
 
     if (mapInstance) {
-      // If there's already a map instance, maybe not setting any other configurations
       this.map = mapInstance as any;
       this.$mapContainer = this.map.getDiv();
       if (logoVisible === false) {
@@ -101,45 +177,55 @@ export default class TMapService extends BaseMapService<any> {
       const mapContainer = DOM.getContainer(id)!;
 
       const map = new google.maps.Map(mapContainer, {
+        zoom,
         maxZoom,
         minZoom,
-        zoomControl: false,
-        fullscreenControl: false,
+        disableDefaultUI: true,
+        gestureHandling: 'greedy',
         center: new google.maps.LatLng(center[1], center[0]),
         ...rest,
       });
 
       this.map = map;
-
       this.$mapContainer = map.getDiv();
       if (logoVisible === false) {
         this.hideLogo();
       }
     }
 
-    // TODO: 拖动快的时候，事件失效
-    google.maps.event.addListener(this.map, 'drag', this.handleCameraChanged);
+    // 创建 OverlayView —— 核心同步机制（参考 deck.gl）
+    // draw() 在 Google Map 每次重绘时调用（包括缩放/平移动画的每一帧）
+    const overlayView = new google.maps.OverlayView();
+    overlayView.onAdd = () => {};
+    overlayView.onRemove = () => {};
+    overlayView.draw = () => {
+      this.handleCameraChanged();
+    };
+    overlayView.setMap(this.map);
+    this.overlayView = overlayView;
 
-    google.maps.event.addListener(this.map, 'pan', this.handleCameraChanged);
-
-    google.maps.event.addListener(this.map, 'rotate', this.handleCameraChanged);
-
-    // 空闲时间
+    // idle 兜底：动画结束后确保最终状态同步
     google.maps.event.addListener(this.map, 'idle', this.handleCameraChanged);
-
-    google.maps.event.addListener(this.map, 'zoom_changed', this.handleCameraChanged);
 
     this.handleCameraChanged();
     this.bindPendingEvents();
   }
 
   public destroy(): void {
-    // map 实例可能尚未初始化完成（如 React StrictMode 双重渲染场景下提前 destroy）
-    if (this.map) {
-      this.map.setMap(null);
+    if (this.styleObserver) {
+      this.styleObserver.disconnect();
+      this.styleObserver = null;
     }
 
-    // 清理 marker container（如果存在）
+    if (this.overlayView) {
+      this.overlayView.setMap(null);
+      this.overlayView = null;
+    }
+
+    if (this.map) {
+      google.maps.event.clearInstanceListeners(this.map);
+    }
+
     if (this.markerContainer && this.markerContainer.parentNode) {
       this.markerContainer.parentNode.removeChild(this.markerContainer);
     }
@@ -149,41 +235,64 @@ export default class TMapService extends BaseMapService<any> {
     this.cameraChangedCallback = callback;
   }
 
+  private styleObserver: MutationObserver | null = null;
+
   public addMarkerContainer(): void {
-    // const container = this.map.getDiv();
-    // this.markerContainer = DOM.create('div', 'l7-marker-container', container);
-    // this.markerContainer.setAttribute('tabindex', '-1');
-    // this.markerContainer.style.zIndex = '2';
+    const container = this.$mapContainer!;
+    this.markerContainer = DOM.create('div', 'l7-marker-container', container);
+    this.markerContainer.setAttribute('tabindex', '-1');
+    this.markerContainer.style.zIndex = '2';
+    this.markerContainer.style.pointerEvents = 'none';
   }
 
   public getMarkerContainer(): HTMLElement {
     return this.markerContainer;
   }
 
-  public getCanvasOverlays() {
-    // TODO: 由于 Google Map 的 loaded 提前触发，导致 Google Map 的 DOM 结构无法获取
-    return this.map.getDiv() as HTMLElement;
+  public getCanvasOverlays(): HTMLElement {
+    return this.$mapContainer as HTMLElement;
   }
 
-  // MapEvent
+  public getMapContainer(): HTMLElement {
+    // 首次调用时设置 MutationObserver，
+    // 防止 Hammer.js 在此元素上设置 touch-action: none 阻止 Google Map 原生手势
+    if (!this.styleObserver && this.$mapContainer) {
+      this.styleObserver = new MutationObserver(() => {
+        if (this.$mapContainer!.style.touchAction === 'none') {
+          this.$mapContainer!.style.touchAction = 'auto';
+        }
+        if (this.$mapContainer!.style.userSelect === 'none') {
+          this.$mapContainer!.style.userSelect = '';
+        }
+      });
+      this.styleObserver.observe(this.$mapContainer, {
+        attributes: true,
+        attributeFilter: ['style'],
+      });
+    }
+    return this.$mapContainer as HTMLElement;
+  }
+
+  public getMapCanvasContainer(): HTMLElement {
+    return this.$mapContainer as HTMLElement;
+  }
+
+  // MapEvent — Google Maps 使用 google.maps.event.addListener/removeListener
   public on(type: string, handle: (...args: any[]) => void): void {
     if (MapServiceEvent.indexOf(type) !== -1) {
       this.eventEmitter.on(type, handle);
     } else {
       if (!this.map) {
-        // 地图尚未初始化，缓存事件，init 完成后重放
         this.pendingHandlers.push({ type, handler: handle });
         return;
       }
 
-      const onProxy = (eventName: string) => {
-        let cbProxyMap = this.evtCbProxyMap.get(eventName);
-
-        if (!cbProxyMap) {
-          this.evtCbProxyMap.set(eventName, (cbProxyMap = new Map()));
+      const bindEvent = (eventName: string) => {
+        let listenerMap = this.gmapListeners.get(eventName);
+        if (!listenerMap) {
+          this.gmapListeners.set(eventName, (listenerMap = new Map()));
         }
-
-        if (cbProxyMap.get(handle)) {
+        if (listenerMap.has(handle)) {
           return;
         }
 
@@ -194,16 +303,16 @@ export default class TMapService extends BaseMapService<any> {
           handle(...args);
         };
 
-        cbProxyMap.set(handle, handleProxy);
-        this.map.on(eventName, handleProxy);
+        const listener = google.maps.event.addListener(this.map, eventName, handleProxy);
+        listenerMap.set(handle, listener);
       };
 
       if (Array.isArray(EventMap[type])) {
         EventMap[type].forEach((eventName: string) => {
-          onProxy(eventName || type);
+          bindEvent(eventName || type);
         });
       } else {
-        onProxy(EventMap[type] || type);
+        bindEvent(EventMap[type] || type);
       }
     }
   }
@@ -215,33 +324,39 @@ export default class TMapService extends BaseMapService<any> {
     }
 
     if (!this.map) {
-      // 地图尚未初始化，从缓存中移除
       this.pendingHandlers = this.pendingHandlers.filter(
         (item) => !(item.type === type && item.handler === handle),
       );
       return;
     }
 
-    const offProxy = (eventName: string) => {
-      const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
-      if (!handleProxy) {
+    const unbindEvent = (eventName: string) => {
+      const listenerMap = this.gmapListeners.get(eventName);
+      if (!listenerMap) {
         return;
       }
-      this.evtCbProxyMap.get(eventName)?.delete(handle);
-      this.map.off(eventName, handleProxy);
+      const listener = listenerMap.get(handle);
+      if (listener) {
+        google.maps.event.removeListener(listener);
+        listenerMap.delete(handle);
+      }
     };
 
     if (Array.isArray(EventMap[type])) {
       EventMap[type].forEach((eventName: string) => {
-        offProxy(eventName || type);
+        unbindEvent(eventName || type);
       });
     } else {
-      offProxy(EventMap[type] || type);
+      unbindEvent(EventMap[type] || type);
     }
   }
 
-  public once(): void {
-    throw new Error('Method not implemented.');
+  public once(type: string, handle: (...args: any[]) => void): void {
+    const onceHandler = (...args: any[]) => {
+      handle(...args);
+      this.off(type, onceHandler);
+    };
+    this.on(type, onceHandler);
   }
 
   // get dom
@@ -250,16 +365,17 @@ export default class TMapService extends BaseMapService<any> {
   }
 
   public getSize(): [number, number] {
-    return [this.map.width, this.map.height];
+    const container = this.map.getDiv();
+    return [container.clientWidth, container.clientHeight];
   }
 
   // get map status method
   public getMinZoom(): number {
-    return this.map.transform._minZoom;
+    return this.config.minZoom ?? 3;
   }
 
   public getMaxZoom(): number {
-    return this.map.transform._maxZoom;
+    return this.config.maxZoom ?? 18;
   }
 
   // get map params
@@ -287,8 +403,6 @@ export default class TMapService extends BaseMapService<any> {
   }
 
   public getBounds(): Bounds {
-    // TODO
-    // 官网解释：如果地图尚未初始化，或者尚未设置中心位置且未设置缩放，则结果为 undefine
     const bounds = this.map.getBounds();
     const ne = bounds?.getNorthEast();
     const sw = bounds?.getSouthWest();
@@ -296,14 +410,6 @@ export default class TMapService extends BaseMapService<any> {
       [sw.lng(), sw.lat()],
       [ne.lng(), ne.lat()],
     ];
-  }
-
-  public getMapContainer(): HTMLElement {
-    return this.map.getDiv();
-  }
-
-  public getMapCanvasContainer(): HTMLElement {
-    return this.map.getDiv()?.getElementsByTagName('canvas')[0];
   }
 
   public setBgColor(color: string): void {
@@ -375,23 +481,29 @@ export default class TMapService extends BaseMapService<any> {
     (Object.keys(option) as Array<keyof IStatusOptions>).map((status) => {
       switch (status as keyof IStatusOptions) {
         case 'doubleClickZoom':
-          this.map.setOptions({
-            gestureHandling: option.doubleClickZoom ? 'auto' : 'none',
-          });
+          this.map.setOptions({ disableDoubleClickZoom: !option.doubleClickZoom });
           break;
         case 'dragEnable':
-          this.map.setOptions({ draggable: option.dragEnable });
+          this.map.setOptions({
+            gestureHandling: option.dragEnable ? 'greedy' : 'none',
+          });
           break;
         case 'rotateEnable':
           // Google Map 默认支持旋转，无需额外设置
           break;
         case 'zoomEnable':
-          this.map.setOptions({ zoomControl: option.zoomEnable });
+          this.map.setOptions({
+            scrollwheel: option.zoomEnable,
+            zoomControl: option.zoomEnable,
+          });
           break;
         case 'keyboardEnable':
+          this.map.setOptions({ keyboardShortcuts: option.keyboardEnable });
+          break;
         case 'resizeEnable':
         case 'showIndoorMap':
-          throw Error('Options may not be supported');
+          // Google Map 不支持这些选项
+          break;
         default:
       }
     });
@@ -418,16 +530,13 @@ export default class TMapService extends BaseMapService<any> {
   }
 
   public pixelToLngLat([x, y]: Point): ILngLat {
-    const { lng: clng, lat: clat } = this.map.getCenter();
-    const { x: centerPixelX, y: centerPixelY } = this.lngLatToPixel([clng(), clat()]);
-    const { x: centerContainerX, y: centerContainerY } = this.lngLatToContainer([clng(), clat()]);
-    const { lng, lat } = this.map.unprojectFromContainer(
-      new google.maps.Point(
-        centerContainerX + (x - centerPixelX),
-        centerContainerY + (y - centerPixelY),
-      ),
-    );
-    return this.containerToLngLat([lng, lat]);
+    const projection = this.map.getProjection();
+    if (!projection) {
+      return { lng: 0, lat: 0 };
+    }
+    const point = new google.maps.Point(x, y);
+    const latLng = projection.fromPointToLatLng(point);
+    return { lng: latLng.lng(), lat: latLng.lat() };
   }
 
   public lngLatToPixel([lng, lat]: Point): IPoint {
@@ -437,19 +546,71 @@ export default class TMapService extends BaseMapService<any> {
   }
 
   public containerToLngLat([x, y]: [number, number]): ILngLat {
-    const pixelCoordinate = new google.maps.Point(x, y);
-    const lngLat = this.map.getProjection()?.fromPointToLatLng(pixelCoordinate);
-    return { lng: lngLat.lng(), lat: lngLat.lat() };
+    // 优先使用 OverlayView 的 MapCanvasProjection（精确，动画期间也正确）
+    const overlayProjection = this.getOverlayProjection();
+    if (overlayProjection) {
+      const point = new google.maps.Point(x, y);
+      const latLng = overlayProjection.fromContainerPixelToLatLng(point);
+      if (latLng) {
+        return { lng: latLng.lng(), lat: latLng.lat() };
+      }
+    }
+    // fallback: 使用 map.getProjection() + bounds 手动计算
+    const projection = this.map.getProjection();
+    if (!projection) {
+      return { lng: 0, lat: 0 };
+    }
+    const bounds = this.map.getBounds();
+    if (!bounds) {
+      return { lng: 0, lat: 0 };
+    }
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
+    const topRight = projection.fromLatLngToPoint(ne);
+    const bottomLeft = projection.fromLatLngToPoint(sw);
+    const { width, height } = this.getMapSize();
+    let worldWidth = topRight.x - bottomLeft.x;
+    if (worldWidth <= 0) worldWidth += 256;
+    const worldX = bottomLeft.x + (x / width) * worldWidth;
+    const worldY = topRight.y + (y / height) * (bottomLeft.y - topRight.y);
+    const latLng = projection.fromPointToLatLng(new google.maps.Point(worldX, worldY));
+    return { lng: latLng.lng(), lat: latLng.lat() };
   }
 
   public lngLatToContainer([lng, lat]: [number, number]): IPoint {
-    const latLng = new google.maps.LatLng(lat, lng);
-    const pixel = this.map.getProjection()?.fromLatLngToContainerPixel?.(latLng);
-    return { x: pixel.x, y: pixel.y };
+    // 优先使用 OverlayView 的 MapCanvasProjection
+    const overlayProjection = this.getOverlayProjection();
+    if (overlayProjection) {
+      const latLng = new google.maps.LatLng(lat, lng);
+      const pixel = overlayProjection.fromLatLngToContainerPixel(latLng);
+      if (pixel) {
+        return { x: pixel.x, y: pixel.y };
+      }
+    }
+    // fallback
+    const projection = this.map.getProjection();
+    if (!projection) {
+      return { x: 0, y: 0 };
+    }
+    const latLngObj = new google.maps.LatLng(lat, lng);
+    const worldPoint = projection.fromLatLngToPoint(latLngObj);
+    const bounds = this.map.getBounds();
+    if (!bounds) {
+      return { x: 0, y: 0 };
+    }
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
+    const topRight = projection.fromLatLngToPoint(ne);
+    const bottomLeft = projection.fromLatLngToPoint(sw);
+    const { width, height } = this.getMapSize();
+    let worldWidth = topRight.x - bottomLeft.x;
+    if (worldWidth <= 0) worldWidth += 256;
+    const x = ((worldPoint.x - bottomLeft.x) / worldWidth) * width;
+    const y = ((worldPoint.y - topRight.y) / (bottomLeft.y - topRight.y)) * height;
+    return { x, y };
   }
 
   public lngLatToCoord?([lng, lat]: [number, number]): [number, number] {
-    // TODO: Perhaps need to check the three.js coordinates
     const { x, y } = this.lngLatToPixel([lng, lat]);
     return [x, -y];
   }
@@ -489,7 +650,8 @@ export default class TMapService extends BaseMapService<any> {
   }
 
   public getCustomCoordCenter?(): [number, number] {
-    throw new Error('Method not implemented.');
+    const { lng, lat } = this.getCenter();
+    return [lng, lat];
   }
 
   public exportMap(type: 'jpg' | 'png'): string {
@@ -501,9 +663,9 @@ export default class TMapService extends BaseMapService<any> {
     return layersPng;
   }
 
-  // Method on earth mode
+  // Method on earth mode — Google Map 不支持地球模式
   public rotateY?(): void {
-    throw new Error('Method not implemented.');
+    // noop: Google Map does not support earth mode rotation
   }
 
   private hideLogo() {
@@ -511,6 +673,6 @@ export default class TMapService extends BaseMapService<any> {
     if (!container) {
       return;
     }
-    DOM.addClass(container, 'tmap-contianer--hide-logo');
+    DOM.addClass(container, 'gmap-container--hide-logo');
   }
 }

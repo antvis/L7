@@ -11,13 +11,26 @@ export const CaseScene = (options: CaseSceneOptions) => {
   const { map: basemap, animate, mapConfig, renderer } = options;
 
   const isMapbox = ['MapLibre', 'Mapbox'].includes(basemap);
+  const isGoogleMap = basemap === 'GoogleMap';
+  const isBaiduMap = basemap === 'BaiduMap';
+  const isTencentMap = basemap === 'TencentMap';
+  const isTdtMap = basemap === 'TMap';
 
   const style = isMapbox
     ? 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
     : 'light';
 
-  const map = new Maps[basemap]({
-    style,
+  const DEFAULT_TOKENS: Record<string, string> = {
+    GoogleMap: 'AIzaSyA6U7oKLKbPVUicuCaGQ25_zIMep-zGBcU',
+    BaiduMap: 'ShSrOHgrilK8rvaXV6kHC8vwxgnvF3CV',
+    TencentMap: 'VZ2BZ-EZ7KZ-D4RXM-TZQDP-Q3PQH-TVF5L',
+    TMap: 'b15e548080c79819617367d3f6095c69',
+  };
+
+  const defaultToken = DEFAULT_TOKENS[basemap];
+
+  const mapOptions: Partial<IMapConfig> = {
+    style: isGoogleMap ? undefined : style,
     center: [120.188193, 30.292542],
     rotation: 0,
     pitch: 0,
@@ -25,8 +38,11 @@ export const CaseScene = (options: CaseSceneOptions) => {
     WebGLParams: {
       preserveDrawingBuffer: true,
     },
+    ...(defaultToken ? { token: mapConfig?.token || defaultToken } : {}),
     ...mapConfig,
-  });
+  };
+
+  const map = new Maps[basemap](mapOptions);
 
   const scene = new Scene({
     ...options,

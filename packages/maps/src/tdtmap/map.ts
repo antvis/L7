@@ -70,25 +70,22 @@ export default class TdtMapService extends BaseMapService<any> {
     this.sceneContainer.style.transformOrigin = 'center';
     this.sceneContainer.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1)`;
     //更新marker容器的位置 实现平移
-    this.markerContainer.style.transition = '';
-    this.markerContainer.style.transformOrigin = 'center';
-    this.markerContainer.style.transform = `translate3d(${-x}px, ${-y}px, 0px) scale(1)`;
+    if (this.markerContainer) {
+      this.markerContainer.style.transition = '';
+      this.markerContainer.style.transformOrigin = 'center';
+      this.markerContainer.style.transform = `translate3d(${-x}px, ${-y}px, 0px) scale(1)`;
+    }
     // @ts-ignore
     this.sceneContainer._tdt_pos = new T.Point(x, y);
     this.handleCameraChanged();
   }
 
   private getZoomScale(toZoom: number, fromZoom: number): number {
-    // TODO replace with universal implementation after refactoring projections
     const crs = this.map.options.IW;
     fromZoom = fromZoom === undefined ? this.map.getZoom() : fromZoom;
     return crs.scale(toZoom) / crs.scale(fromZoom);
   }
   private zoomStartUpdate(ev: any) {
-    // T._Q :DomUtil
-    // this.map.options.IW.qW:map.project
-    // GQ:multiply aQ:add DQ:substract
-    // 都是混淆后的方法,后续需要考虑讲这些方法都实现了,避免api更新后方法名发生改变
     const center = ev.center;
     const zoom = ev.zoom;
     const scale = this.getZoomScale(zoom, this.map.getZoom());
@@ -112,11 +109,17 @@ export default class TdtMapService extends BaseMapService<any> {
   }
   public getOverlayContainer(): HTMLElement | undefined {
     const overlayPane = this.map.getPanes()?.overlayPane;
+    if (!overlayPane || !overlayPane.parentElement) {
+      return undefined;
+    }
     const container = document.createElement('div');
     overlayPane.parentElement.appendChild(container);
     container.id = 'tdt-L7';
     const size = this.map.getSize();
-    container.style.zIndex = '200'; //置于上层
+    container.style.position = 'absolute';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.zIndex = '500';
     container.style.width = `${size.x}px`;
     container.style.height = `${size.y}px`;
     // @ts-ignore
@@ -192,17 +195,16 @@ export default class TdtMapService extends BaseMapService<any> {
         projection: 'EPSG:900913',
       });
       this.map = map;
-      // @ts-ignore
-      const control = new window.T.Control.Zoom();
-      map.addControl(control);
     }
 
     const container = this.map.getContainer();
+    // 将天地图所有 pane 的 z-index 降低，确保 L7 overlay 在上层
     const tdtPanes = container.querySelector('.tdt-pane');
-    tdtPanes.style.zIndex = 1;
+    if (tdtPanes) {
+      (tdtPanes as HTMLElement).style.zIndex = '1';
+    }
     this.handleCameraChanged();
     this.map.on('move', this.update, this);
-    //对应leaflet中的zoomanim
     this.map.on('Ge', this.zoomStartUpdate, this);
     this.map.on('resize', this.resize, this);
     this.bindPendingEvents();
