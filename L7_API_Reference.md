@@ -1023,6 +1023,7 @@ new PointLayer(option?: Partial<ILayerConfig & IPointLayerStyleOptions>)
 | `strokeWidth` | `number` | 描边宽度 |
 | `stroke` | `string` | 描边颜色 |
 | `blur` | `number` | 模糊度 |
+| `anchor` | `anchorType` | 图形锚点位置，控制 2D 图形相对于坐标点的对齐方式（支持数据映射） |
 | `billboard` | `boolean` | 图片是否始终朝向相机 |
 | `textOffset` | `[number, number]` | 文本偏移 |
 | `textAnchor` | `anchorType` | 文本锚点 |

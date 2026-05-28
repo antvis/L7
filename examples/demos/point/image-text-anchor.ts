@@ -47,9 +47,9 @@ export const imageTextAnchor: TestCase = async (options) => {
       parser: { type: 'json', x: 'longitude', y: 'latitude' },
     })
     .shape('name', ['00', '01', '02'])
-    .size(20)
+    .size(16)
     .style({
-      anchor: 'center',
+      anchor: 'bottom',
     });
 
   // 文字图层 - 使用 textAnchor 控制文字锚点
@@ -62,7 +62,7 @@ export const imageTextAnchor: TestCase = async (options) => {
     .size(12)
     .style({
       textAnchor: 'top',
-      textOffset: [0, 5],
+      textOffset: [0, 0],
       stroke: '#fff',
       strokeWidth: 2,
     });
@@ -74,7 +74,7 @@ export const imageTextAnchor: TestCase = async (options) => {
   // GUI 交互控制
   imageTextAnchor.extendGUI = (gui) => {
     const config = {
-      imageAnchor: 'center',
+      imageAnchor: 'bottom',
       textAnchor: 'top',
     };
 

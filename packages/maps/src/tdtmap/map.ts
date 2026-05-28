@@ -376,7 +376,7 @@ export default class TdtMapService extends BaseMapService<any> {
     this.map.panBy([x, y]);
   }
 
-  public fitBounds(bound: Bounds): void {
+  public fitBounds(bound: Bounds, fitBoundsOptions?: unknown): void {
     const [sw, ne] = bound;
     // @ts-ignore
     this.map.setViewport([new window.T.LngLat(sw[0], sw[1]), new window.T.LngLat(ne[0], ne[1])]);

@@ -319,11 +319,15 @@ export default class AMapService extends BaseMap<AMap.Map> {
     this.map.panBy(x, y);
   }
 
-  public fitBounds(extent: Bounds): void {
+  public fitBounds(extent: Bounds, fitBoundsOptions?: unknown): void {
+    const immediate =
+      !fitBoundsOptions || typeof fitBoundsOptions !== 'object' || !('animate' in fitBoundsOptions)
+        ? true
+        : !(fitBoundsOptions as { animate?: boolean }).animate;
     this.map.setBounds(
       new AMap.Bounds([extent[0][0], extent[0][1], extent[1][0], extent[1][1]]),
       // @ts-expect-error 立即缩放到指定位置
-      true,
+      immediate,
     );
   }
 
