@@ -8,20 +8,30 @@ layout(location = ATTRIBUTE_LOCATION_COLOR) in vec4 a_Color;
 layout(location = ATTRIBUTE_LOCATION_SIZE) in float a_Size;
 layout(location = ATTRIBUTE_LOCATION_TEXT_OFFSETS) in vec2 a_textOffsets;
 layout(location = ATTRIBUTE_LOCATION_UV) in vec2 a_tex;
+layout(location = ATTRIBUTE_LOCATION_TEXT_QUAD_TYPE) in float a_textQuadType;
+layout(location = ATTRIBUTE_LOCATION_TEXT_BACKGROUND_UV) in vec2 a_backgroundUV;
+layout(location = ATTRIBUTE_LOCATION_TEXT_BACKGROUND_SIZE) in vec2 a_backgroundSize;
 
 layout(std140) uniform commonUniforms {
   vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
+  vec4 u_background_color : [0.0, 0.0, 0.0, 0.0];
   vec2 u_sdf_map_size;
   float u_raisingHeight: 0.0;
   float u_stroke_width : 2;
+  float u_background_radius : 0.0;
+  float u_background_shape : 0.0;
   float u_gamma_scale : 0.5;
   float u_halo_blur : 0.5;
 };
 
 out vec2 v_uv;
+out vec2 v_backgroundUV;
+out vec2 v_backgroundSize;
 out float v_gamma_scale;
+out float v_textQuadType;
 out vec4 v_color;
 out vec4 v_stroke_color;
+out vec4 v_background_color;
 out float v_fontScale;
 
 #pragma include "projection"
@@ -32,11 +42,15 @@ void main() {
   // cal style mapping - 数据纹理映射部分的计算
 
   v_uv = a_tex / u_sdf_map_size;
+  v_backgroundUV = a_backgroundUV;
+  v_backgroundSize = a_backgroundSize;
+  v_textQuadType = a_textQuadType;
 
 
 
   v_color = vec4(a_Color.xyz, a_Color.w * opacity);
   v_stroke_color = vec4(u_stroke_color.xyz, u_stroke_color.w * opacity);
+  v_background_color = vec4(u_background_color.xyz, u_background_color.w * opacity);
 
   // 文本缩放比例
   float fontScale = a_Size / FONT_SIZE;

@@ -16,58 +16,191 @@ import textFrag from '../shaders/text/text_frag.glsl';
 import textVert from '../shaders/text/text_vert.glsl';
 const { isEqual } = lodashUtil;
 
-export function TextTrianglation(feature: IEncodeFeature) {
+const TEXT_BACKGROUND_SHAPE: Record<string, number> = {
+  rect: 0,
+  circle: 1,
+  'circle-rect': 2,
+};
+
+interface ITextBackgroundQuad {
+  tl: { x: number; y: number };
+  tr: { x: number; y: number };
+  br: { x: number; y: number };
+  bl: { x: number; y: number };
+  size: [number, number];
+}
+
+interface ITextRenderInfo {
+  shaping: any;
+  glyphQuads: IGlyphQuad[];
+  backgroundQuad?: ITextBackgroundQuad;
+  centroid: number[];
+}
+
+function normalizePadding(padding: number | [number, number] = [0, 0]): [number, number] {
+  return Array.isArray(padding) ? padding : [padding, padding];
+}
+
+function hasBackground(backgroundColor?: string) {
+  return rgb2arr(backgroundColor || '')[3] > 0;
+}
+
+function getBackgroundQuad(
+  glyphQuads: IGlyphQuad[],
+  backgroundPadding: [number, number],
+  backgroundShape: 'rect' | 'circle' | 'circle-rect',
+): ITextBackgroundQuad {
+  const x1Bounds = Math.min(...glyphQuads.map((quad) => Math.min(quad.tl.x, quad.bl.x)));
+  const y1Bounds = Math.min(...glyphQuads.map((quad) => Math.min(quad.tl.y, quad.tr.y)));
+  const x2Bounds = Math.max(...glyphQuads.map((quad) => Math.max(quad.tr.x, quad.br.x)));
+  const y2Bounds = Math.max(...glyphQuads.map((quad) => Math.max(quad.bl.y, quad.br.y)));
+
+  let x1 = x1Bounds - backgroundPadding[0];
+  let y1 = y1Bounds - backgroundPadding[1];
+  let x2 = x2Bounds + backgroundPadding[0];
+  let y2 = y2Bounds + backgroundPadding[1];
+
+  if (backgroundShape === 'circle') {
+    const centerX = (x1 + x2) / 2;
+    const centerY = (y1 + y2) / 2;
+    const diameter = Math.max(x2 - x1, y2 - y1);
+    x1 = centerX - diameter / 2;
+    x2 = centerX + diameter / 2;
+    y1 = centerY - diameter / 2;
+    y2 = centerY + diameter / 2;
+  }
+
+  return {
+    tl: { x: x1, y: y1 },
+    tr: { x: x2, y: y1 },
+    br: { x: x2, y: y2 },
+    bl: { x: x1, y: y2 },
+    size: [x2 - x1, y2 - y1],
+  };
+}
+
+export function TextTrianglation(this: TextModel, feature: IEncodeFeature) {
+  return buildTextTriangles.call(this, feature, 'all');
+}
+
+export function TextBackgroundTrianglation(this: TextModel, feature: IEncodeFeature) {
+  return buildTextTriangles.call(this, feature, 'background');
+}
+
+export function TextGlyphTrianglation(this: TextModel, feature: IEncodeFeature) {
+  return buildTextTriangles.call(this, feature, 'glyph');
+}
+
+function buildTextTriangles(
+  this: TextModel,
+  feature: IEncodeFeature,
+  mode: 'all' | 'background' | 'glyph',
+) {
   // @ts-ignore
   const that = this as TextModel;
   const id = feature.id as number;
   const vertices: number[] = [];
   const indices: number[] = [];
+  const pushQuad = (
+    quad:
+      | IGlyphQuad
+      | (ITextBackgroundQuad & {
+          tex?: { x: number; y: number; width: number; height: number };
+          quadType: number;
+        }),
+    index: number,
+    coord: number[],
+  ) => {
+    const baseIndex = index * 4;
+    const tex = 'tex' in quad && quad.tex ? quad.tex : { x: 0, y: 0, width: 0, height: 0 };
+    const bgUV =
+      'quadType' in quad && quad.quadType > 0
+        ? [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+          ]
+        : [
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+          ];
+    const bgSize = 'size' in quad ? quad.size : [0, 0];
+    const quadType = 'quadType' in quad ? quad.quadType : 0;
+
+    vertices.push(
+      ...coord,
+      tex.x,
+      tex.y + tex.height,
+      quad.tl.x,
+      quad.tl.y,
+      quadType,
+      bgUV[0][0],
+      bgUV[0][1],
+      bgSize[0],
+      bgSize[1],
+      ...coord,
+      tex.x + tex.width,
+      tex.y + tex.height,
+      quad.tr.x,
+      quad.tr.y,
+      quadType,
+      bgUV[1][0],
+      bgUV[1][1],
+      bgSize[0],
+      bgSize[1],
+      ...coord,
+      tex.x + tex.width,
+      tex.y,
+      quad.br.x,
+      quad.br.y,
+      quadType,
+      bgUV[2][0],
+      bgUV[2][1],
+      bgSize[0],
+      bgSize[1],
+      ...coord,
+      tex.x,
+      tex.y,
+      quad.bl.x,
+      quad.bl.y,
+      quadType,
+      bgUV[3][0],
+      bgUV[3][1],
+      bgSize[0],
+      bgSize[1],
+    );
+    indices.push(baseIndex, baseIndex + 1, baseIndex + 2, baseIndex + 2, baseIndex + 3, baseIndex);
+  };
 
   if (!that.glyphInfoMap || !that.glyphInfoMap[id]) {
     return {
       vertices: [], // [ x, y, z, tex.x,tex.y, offset.x. offset.y]
       indices: [],
-      size: 7,
+      size: 12,
     };
   }
-  const centroid = that.glyphInfoMap[id].centroid as number[]; // 计算中心点
+  const textRenderInfo = that.glyphInfoMap[id] as ITextRenderInfo;
+  const centroid = textRenderInfo.centroid as number[]; // 计算中心点
   const coord = centroid.length === 2 ? [centroid[0], centroid[1], 0] : centroid;
-  that.glyphInfoMap[id].glyphQuads.forEach((quad: IGlyphQuad, index: number) => {
-    vertices.push(
-      ...coord,
-      quad.tex.x,
-      quad.tex.y + quad.tex.height,
-      quad.tl.x,
-      quad.tl.y,
-      ...coord,
-      quad.tex.x + quad.tex.width,
-      quad.tex.y + quad.tex.height,
-      quad.tr.x,
-      quad.tr.y,
-      ...coord,
-      quad.tex.x + quad.tex.width,
-      quad.tex.y,
-      quad.br.x,
-      quad.br.y,
-      ...coord,
-      quad.tex.x,
-      quad.tex.y,
-      quad.bl.x,
-      quad.bl.y,
-    );
-    indices.push(
-      0 + index * 4,
-      1 + index * 4,
-      2 + index * 4,
-      2 + index * 4,
-      3 + index * 4,
-      0 + index * 4,
-    );
-  });
+  let quadIndex = 0;
+  if (mode !== 'glyph' && textRenderInfo.backgroundQuad) {
+    pushQuad({ ...textRenderInfo.backgroundQuad, quadType: 1 }, quadIndex, coord);
+    quadIndex += 1;
+  }
+
+  if (mode !== 'background') {
+    textRenderInfo.glyphQuads.forEach((quad: IGlyphQuad) => {
+      pushQuad(quad, quadIndex, coord);
+      quadIndex += 1;
+    });
+  }
   return {
     vertices, // [ x, y, z, tex.x,tex.y, offset.x. offset.y]
     indices,
-    size: 7,
+    size: 12,
   };
 }
 
@@ -78,16 +211,15 @@ export default class TextModel extends BaseModel {
       SIZE: 9,
       TEXT_OFFSETS: 10,
       UV: 11,
+      TEXT_QUAD_TYPE: 12,
+      TEXT_BACKGROUND_UV: 13,
+      TEXT_BACKGROUND_SIZE: 14,
     });
   }
 
   public glyphInfo: IEncodeFeature[];
   public glyphInfoMap: {
-    [key: string]: {
-      shaping: any;
-      glyphQuads: IGlyphQuad[];
-      centroid: number[];
-    };
+    [key: string]: ITextRenderInfo;
   } = {};
   private rawEncodeData: IEncodeFeature[];
   private texture: ITexture2D;
@@ -113,7 +245,11 @@ export default class TextModel extends BaseModel {
   } {
     const {
       stroke = '#fff',
+      strokeOpacity = 1,
       strokeWidth = 0,
+      backgroundColor = 'rgba(0, 0, 0, 0)',
+      backgroundRadius = 0,
+      backgroundShape = 'rect',
       halo = 0.5,
       gamma = 2.0,
       raisingHeight = 0,
@@ -128,6 +264,7 @@ export default class TextModel extends BaseModel {
     this.preTextStyle = this.getTextStyle();
 
     const strokeColor = rgb2arr(stroke);
+    const bgColor = rgb2arr(backgroundColor);
     const commonOptions = {
       u_stroke_color: [
         strokeColor[0],
@@ -135,9 +272,12 @@ export default class TextModel extends BaseModel {
         strokeColor[2],
         strokeColor[3] * strokeOpacity,
       ],
+      u_background_color: bgColor,
       u_sdf_map_size: [canvas?.width || 1, canvas?.height || 1],
       u_raisingHeight: Number(raisingHeight),
       u_stroke_width: strokeWidth,
+      u_background_radius: backgroundRadius,
+      u_background_shape: TEXT_BACKGROUND_SHAPE[backgroundShape] ?? TEXT_BACKGROUND_SHAPE.rect,
       u_gamma_scale: gamma,
       u_halo_blur: halo,
     };
@@ -156,7 +296,8 @@ export default class TextModel extends BaseModel {
   }
 
   public async buildModels(): Promise<IModel[]> {
-    const { textAllowOverlap = false } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const { textAllowOverlap = false, backgroundColor } =
+      this.layer.getLayerConfig() as IPointLayerStyleOptions;
 
     //  this.mapping(); 重复调用
     this.initGlyph(); //
@@ -164,16 +305,31 @@ export default class TextModel extends BaseModel {
     if (!textAllowOverlap) {
       this.filterGlyphs();
     }
-    const model = await this.layer.buildLayerModel({
+    const textModel = await this.layer.buildLayerModel({
       moduleName: 'pointText',
       vertexShader: textVert,
       fragmentShader: textFrag,
       defines: this.getDefines(),
       inject: this.getInject(),
-      triangulation: TextTrianglation.bind(this),
+      triangulation: TextGlyphTrianglation.bind(this),
       depth: { enable: false },
     });
-    return [model];
+
+    if (!hasBackground(backgroundColor)) {
+      return [textModel];
+    }
+
+    const backgroundModel = await this.layer.buildLayerModel({
+      moduleName: 'pointText',
+      vertexShader: textVert,
+      fragmentShader: textFrag,
+      defines: this.getDefines(),
+      inject: this.getInject(),
+      triangulation: TextBackgroundTrianglation.bind(this),
+      depth: { enable: false },
+    });
+
+    return [backgroundModel, textModel];
   }
   // 需要更新的场景
   // 1. 文本偏移量发生改变
@@ -187,11 +343,17 @@ export default class TextModel extends BaseModel {
       textAnchor = 'center',
       textOffset,
       padding,
+      backgroundColor,
+      backgroundPadding,
+      backgroundShape,
       fontFamily,
       fontWeight,
     } = this.getTextStyle() as IPointLayerStyleOptions;
     if (
       !isEqual(padding, this.preTextStyle.padding) ||
+      backgroundColor !== this.preTextStyle.backgroundColor ||
+      !isEqual(backgroundPadding, this.preTextStyle.backgroundPadding) ||
+      backgroundShape !== this.preTextStyle.backgroundShape ||
       !isEqual(textOffset, this.preTextStyle.textOffset) ||
       !isEqual(textAnchor, this.preTextStyle.textAnchor) ||
       !isEqual(fontFamily, this.preTextStyle.fontFamily) ||
@@ -270,6 +432,60 @@ export default class TextModel extends BaseModel {
       },
     });
 
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'textQuadType',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_textQuadType',
+        shaderLocation: this.attributeLocation.TEXT_QUAD_TYPE,
+        buffer: {
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 1,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [vertex[7]];
+        },
+      },
+    });
+
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'textBackgroundUv',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_backgroundUV',
+        shaderLocation: this.attributeLocation.TEXT_BACKGROUND_UV,
+        buffer: {
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [vertex[8], vertex[9]];
+        },
+      },
+    });
+
+    this.styleAttributeService.registerStyleAttribute({
+      name: 'textBackgroundSize',
+      type: AttributeType.Attribute,
+      descriptor: {
+        name: 'a_backgroundSize',
+        shaderLocation: this.attributeLocation.TEXT_BACKGROUND_SIZE,
+        buffer: {
+          usage: gl.DYNAMIC_DRAW,
+          data: [],
+          type: gl.FLOAT,
+        },
+        size: 2,
+        update: (feature: IEncodeFeature, featureIdx: number, vertex: number[]) => {
+          return [vertex[10], vertex[11]];
+        },
+      },
+    });
+
     // point layer size;
     this.styleAttributeService.registerStyleAttribute({
       name: 'size',
@@ -300,9 +516,11 @@ export default class TextModel extends BaseModel {
   }
 
   private mapping = async (): Promise<void> => {
+    this.rawEncodeData = this.layer.getEncodedData();
     this.initGlyph(); //
     this.updateTexture();
     await this.reBuildModel();
+    this.layer.renderLayers();
   };
 
   private textExtent(): [[number, number], [number, number]] {
@@ -364,6 +582,10 @@ export default class TextModel extends BaseModel {
       padding = [0, 0],
       textAnchor = 'center',
       textOffset = [0, 0],
+      backgroundColor = 'rgba(0, 0, 0, 0)',
+      backgroundPadding = [0, 0],
+      backgroundRadius = 0,
+      backgroundShape = 'rect',
       opacity = 1,
       strokeOpacity = 1,
       strokeWidth = 0,
@@ -374,6 +596,10 @@ export default class TextModel extends BaseModel {
       fontFamily,
       textAllowOverlap,
       padding,
+      backgroundColor,
+      backgroundPadding: normalizePadding(backgroundPadding),
+      backgroundRadius,
+      backgroundShape,
       textAnchor,
       textOffset,
       opacity,
@@ -392,6 +618,9 @@ export default class TextModel extends BaseModel {
       spacing = 2,
       textAnchor = 'center',
       textOffset,
+      backgroundColor,
+      backgroundPadding = [0, 0],
+      backgroundShape = 'rect',
     } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     const data = this.rawEncodeData;
     this.glyphInfo = data.map((feature: IEncodeFeature) => {
@@ -412,6 +641,9 @@ export default class TextModel extends BaseModel {
       );
 
       const glyphQuads = getGlyphQuads(shaping, offset, false);
+      const backgroundQuad = hasBackground(backgroundColor)
+        ? getBackgroundQuad(glyphQuads, normalizePadding(backgroundPadding), backgroundShape)
+        : undefined;
       feature.shaping = shaping;
       feature.glyphQuads = glyphQuads;
       // feature.centroid = calculteCentroid(coordinates);
@@ -421,6 +653,7 @@ export default class TextModel extends BaseModel {
       this.glyphInfoMap[id as number] = {
         shaping,
         glyphQuads,
+        backgroundQuad,
         centroid: calculateCentroid(feature.coordinates),
       };
       return feature;
@@ -444,12 +677,18 @@ export default class TextModel extends BaseModel {
    * 文字避让 depend on originCentorid
    */
   private filterGlyphs() {
-    const { padding = [0, 0], textAllowOverlap = false } =
-      this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    const {
+      padding = [0, 0],
+      backgroundColor,
+      backgroundPadding = [0, 0],
+      textAllowOverlap = false,
+    } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
     if (textAllowOverlap) {
       // 如果允许文本覆盖
       return;
     }
+    const collisionPadding = normalizePadding(backgroundPadding);
+    const extraPadding = hasBackground(backgroundColor) ? collisionPadding : [0, 0];
     this.glyphInfoMap = {};
     this.currentZoom = this.mapService.getZoom();
     this.extent = this.textExtent();
@@ -462,10 +701,10 @@ export default class TextModel extends BaseModel {
       const fontScale: number = size / 16;
       const pixels = this.mapService.lngLatToContainer(centroid);
       const { box } = collisionIndex.placeCollisionBox({
-        x1: shaping.left * fontScale - padding[0],
-        x2: shaping.right * fontScale + padding[0],
-        y1: shaping.top * fontScale - padding[1],
-        y2: shaping.bottom * fontScale + padding[1],
+        x1: shaping.left * fontScale - padding[0] - extraPadding[0],
+        x2: shaping.right * fontScale + padding[0] + extraPadding[0],
+        y1: shaping.top * fontScale - padding[1] - extraPadding[1],
+        y2: shaping.bottom * fontScale + padding[1] + extraPadding[1],
         anchorPointX: pixels.x,
         anchorPointY: pixels.y,
       });
@@ -513,17 +752,34 @@ export default class TextModel extends BaseModel {
   }
 
   private async reBuildModel() {
+    const { backgroundColor } = this.layer.getLayerConfig() as IPointLayerStyleOptions;
+    this.rawEncodeData = this.layer.getEncodedData();
     this.filterGlyphs();
-    const model = await this.layer.buildLayerModel({
+    const textModel = await this.layer.buildLayerModel({
       moduleName: 'pointText',
       vertexShader: textVert,
       fragmentShader: textFrag,
-      triangulation: TextTrianglation.bind(this),
+      triangulation: TextGlyphTrianglation.bind(this),
+      defines: this.getDefines(),
+      inject: this.getInject(),
+      depth: { enable: false },
+    });
+
+    if (!hasBackground(backgroundColor)) {
+      this.layer.models = [textModel];
+      return;
+    }
+
+    const backgroundModel = await this.layer.buildLayerModel({
+      moduleName: 'pointText',
+      vertexShader: textVert,
+      fragmentShader: textFrag,
+      triangulation: TextBackgroundTrianglation.bind(this),
       defines: this.getDefines(),
       inject: this.getInject(),
       depth: { enable: false },
     });
     // TODO 渲染流程待修改
-    this.layer.models = [model];
+    this.layer.models = [backgroundModel, textModel];
   }
 }

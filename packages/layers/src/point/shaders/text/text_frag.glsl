@@ -5,17 +5,24 @@
 uniform sampler2D u_sdf_map;
 layout(std140) uniform commonUniforms {
   vec4 u_stroke_color : [0.0, 0.0, 0.0, 0.0];
+  vec4 u_background_color : [0.0, 0.0, 0.0, 0.0];
   vec2 u_sdf_map_size;
   float u_raisingHeight: 0.0;
   float u_stroke_width : 2;
+  float u_background_radius : 0.0;
+  float u_background_shape : 0.0;
   float u_gamma_scale : 0.5;
   float u_halo_blur : 0.5;
 };
 
 in vec2 v_uv;
+in vec2 v_backgroundUV;
+in vec2 v_backgroundSize;
 in float v_gamma_scale;
+in float v_textQuadType;
 in vec4 v_color;
 in vec4 v_stroke_color;
+in vec4 v_background_color;
 in float v_fontScale;
 
 out vec4 outputColor;
@@ -23,6 +30,26 @@ out vec4 outputColor;
 #pragma include "picking"
 void main() {
   // get style data mapping
+
+  if (v_textQuadType > 0.5) {
+    vec2 halfSize = v_backgroundSize * 0.5;
+    float radius = clamp(u_background_radius, 0.0, min(halfSize.x, halfSize.y));
+    if (u_background_shape > 0.5) {
+      radius = min(halfSize.x, halfSize.y);
+    }
+
+    vec2 centered = (v_backgroundUV - 0.5) * v_backgroundSize;
+    vec2 q = abs(centered) - (halfSize - vec2(radius));
+    float signedDistance = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
+    float aa = max(fwidth(signedDistance), 1.0);
+    float backgroundAlpha = (1.0 - smoothstep(0.0, aa, signedDistance)) * v_background_color.a;
+    outputColor = vec4(v_background_color.rgb, backgroundAlpha);
+    if (outputColor.a < 0.01) {
+      discard;
+    }
+    outputColor = filterColor(outputColor);
+    return;
+  }
 
   // get sdf from atlas
   float dist = texture(SAMPLER_2D(u_sdf_map), v_uv).a;

@@ -20,6 +20,7 @@ import { iconfont } from './point/iconfont';
 import { image } from './point/image';
 import { imageTextAnchor } from './point/image-text-anchor';
 import { radar } from './point/radar';
+import { text } from './point/text';
 import * as PolygonTestCases from './polygon';
 import * as RasterTestCases from './raster';
 import * as RefactorTestCases from './refactor';
@@ -72,4 +73,5 @@ export const point = {
   ...image,
   ...imageTextAnchor,
   ...radar,
+  ...text,
 };

@@ -109,6 +109,10 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   textAnchor?: anchorType;
   spacing?: number;
   padding?: [number, number];
+  backgroundColor?: string;
+  backgroundPadding?: number | [number, number];
+  backgroundRadius?: number;
+  backgroundShape?: 'rect' | 'circle' | 'circle-rect';
   halo?: number;
   gamma?: number;
   fontWeight?: string;
