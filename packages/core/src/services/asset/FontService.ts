@@ -59,6 +59,10 @@ function populateAlphaChannel(alphaChannel: number[], imageData: ImageData) {
   }
 }
 
+function normalizeIconFontChar(char: string) {
+  return String.fromCharCode(parseInt(char.replace('&#x', '').replace(';', ''), 16));
+}
+
 export default class FontService extends EventEmitter implements IFontService {
   public get scale() {
     return HEIGHT_SCALE;
@@ -219,7 +223,7 @@ export default class FontService extends EventEmitter implements IFontService {
 
     // 1. build mapping
     const { mapping, canvasHeight, xOffset, yOffset } = buildMapping({
-      getFontWidth: (char) => ctx.measureText(char).width,
+      getFontWidth: (char) => ctx.measureText(iconfont ? normalizeIconFontChar(char) : char).width,
       fontHeight: fontSize * HEIGHT_SCALE,
       buffer,
       characterSet,
@@ -247,12 +251,7 @@ export default class FontService extends EventEmitter implements IFontService {
       const imageData = ctx.getImageData(0, 0, tinySDF.size, tinySDF.size);
       for (const char of characterSet) {
         if (iconfont) {
-          // @ts-ignore
-          // const icon = eval(
-          //   '("' + char.replace('&#x', '\\u').replace(';', '') + '")',
-          // );
-
-          const icon = String.fromCharCode(parseInt(char.replace('&#x', '').replace(';', ''), 16));
+          const icon = normalizeIconFontChar(char);
           const iconData = tinySDF.draw(icon);
           populateAlphaChannel(iconData, imageData);
         } else {

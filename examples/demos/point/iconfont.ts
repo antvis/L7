@@ -56,6 +56,21 @@ export const iconfont: TestCase = async (options) => {
     },
   ];
 
+  // 参考点位图层 - 红色小圆点标记原始坐标
+  const referenceLayer = new PointLayer({ zIndex: 10 })
+    .source(originData, {
+      parser: {
+        type: 'json',
+        x: 'lng',
+        y: 'lat',
+      },
+    })
+    .shape('circle')
+    .size(3)
+    .active(false)
+    .color('#FF4D4F')
+    .style({ opacity: 1 });
+
   const pointIconFontLayer = new PointLayer({})
     .source(originData, {
       parser: {
@@ -65,15 +80,16 @@ export const iconfont: TestCase = async (options) => {
       },
     })
     .shape('iconType', 'text') // 使用 iconType 字段来指定图标名称
-    .size(40)
+    .size(20)
     .color('iconColor') // 使用 iconColor 字段来指定图标颜色
     .style({
-      textAnchor: 'center',
+      textAnchor: 'bottom', // 图标中心点对齐到坐标位置
       fontFamily,
       iconfont: true, // 开启 iconfont 模式
       textAllowOverlap: true,
     });
 
+  scene.addLayer(referenceLayer);
   scene.addLayer(pointIconFontLayer);
 
   return scene;
