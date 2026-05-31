@@ -27,18 +27,31 @@ void main() {
   // get sdf from atlas
   float dist = texture(SAMPLER_2D(u_sdf_map), v_uv).a;
 
-  lowp float buff = (6.0 - u_stroke_width / v_fontScale) / SDF_PX;
+  lowp float fill_buff = 6.0 / SDF_PX;
+  lowp float stroke_buff = (6.0 - u_stroke_width / v_fontScale) / SDF_PX;
   highp float gamma = (u_halo_blur * 1.19 / SDF_PX + EDGE_GAMMA) / (v_fontScale * u_gamma_scale) / 1.0;
 
   highp float gamma_scaled = gamma * v_gamma_scale;
 
-  highp float alpha = smoothstep(buff - gamma_scaled, buff + gamma_scaled, dist);
+  highp float fill_alpha = smoothstep(
+    fill_buff - gamma_scaled,
+    fill_buff + gamma_scaled,
+    dist
+  ) * v_color.a;
+  highp float outer_alpha = smoothstep(
+    stroke_buff - gamma_scaled,
+    stroke_buff + gamma_scaled,
+    dist
+  );
+  highp float stroke_alpha = max(outer_alpha - fill_alpha / max(v_color.a, 0.0001), 0.0) * v_stroke_color.a;
 
-  // 根据 stroke 的 alpha 值调整混合权重，避免透明 stroke 影响文本颜色
-  float stroke_mix_factor = smoothstep(0., 0.5, 1.- dist) * v_stroke_color.a;
-  outputColor = mix(v_color, v_stroke_color, stroke_mix_factor);
+  float out_alpha = clamp(fill_alpha + stroke_alpha, 0.0, 1.0);
+  vec3 out_rgb = vec3(0.0);
+  if (out_alpha > 0.0) {
+    out_rgb = (v_color.rgb * fill_alpha + v_stroke_color.rgb * stroke_alpha) / out_alpha;
+  }
 
-  outputColor.a *= alpha;
+  outputColor = vec4(out_rgb, out_alpha);
    // 作为 mask 模板时需要丢弃透明的像素
   if (outputColor.a < 0.01) {
     discard;

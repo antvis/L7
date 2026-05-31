@@ -127,8 +127,14 @@ export default class TextModel extends BaseModel {
 
     this.preTextStyle = this.getTextStyle();
 
+    const strokeColor = rgb2arr(stroke);
     const commonOptions = {
-      u_stroke_color: rgb2arr(stroke),
+      u_stroke_color: [
+        strokeColor[0],
+        strokeColor[1],
+        strokeColor[2],
+        strokeColor[3] * strokeOpacity,
+      ],
       u_sdf_map_size: [canvas?.width || 1, canvas?.height || 1],
       u_raisingHeight: Number(raisingHeight),
       u_stroke_width: strokeWidth,

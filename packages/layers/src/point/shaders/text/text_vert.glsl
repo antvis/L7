@@ -59,7 +59,7 @@ void main() {
 
   gl_Position = vec4(
     projected_position.xy / projected_position.w + offset * fontScale / u_ViewportSize * 2.0 * u_DevicePixelRatio, 0.0, 1.0);
-  v_gamma_scale = gl_Position.w;
+  v_gamma_scale = projected_position.w;
   setPickingColor(a_PickingColor);
 
 }
