@@ -1,5 +1,37 @@
 # Change Log
 
+## 2.28.12
+
+### Patch Changes
+
+- 支持按需加载，添加子路径入口
+
+  新增各地图独立入口文件，支持通过子路径导入实现按需加载：
+  - `@antv/l7-maps/gaode` - 高德地图
+  - `@antv/l7-maps/baidu` - 百度地图
+  - `@antv/l7-maps/google` - Google 地图
+  - `@antv/l7-maps/mapbox` - Mapbox
+  - `@antv/l7-maps/maplibre` - MapLibre
+  - `@antv/l7-maps/tencent` - 腾讯地图
+  - `@antv/l7-maps/tianditu` - 天地图
+  - `@antv/l7-maps/earth` - Earth 地球模式
+  - `@antv/l7-maps/simple` - 默认 SimpleMap
+
+  使用方式：
+
+  ```ts
+  // 按需加载（推荐）
+  import { GaodeMap } from '@antv/l7-maps/gaode';
+
+  // 全量导入（向后兼容）
+  import { GaodeMap } from '@antv/l7-maps';
+  ```
+
+- Updated dependencies []:
+  - @antv/l7-core@2.28.12
+  - @antv/l7-map@2.28.12
+  - @antv/l7-utils@2.28.12
+
 ## 2.25.9
 
 ### Patch Changes
