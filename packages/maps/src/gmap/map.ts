@@ -596,6 +596,9 @@ export default class GMapService extends BaseMapService<any> {
     const worldPoint = projection.fromLatLngToPoint(latLngObj);
     const bounds = this.map.getBounds();
     if (!bounds) {
+    const worldPoint = projection.fromLatLngToPoint(latLngObj);
+    const bounds = this.map.getBounds();
+    if (!bounds) {
       return { x: 0, y: 0 };
     }
     const ne = bounds.getNorthEast();
