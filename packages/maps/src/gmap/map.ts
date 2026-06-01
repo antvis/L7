@@ -536,6 +536,9 @@ export default class GMapService extends BaseMapService<any> {
     }
     const point = new google.maps.Point(x, y);
     const latLng = projection.fromPointToLatLng(point);
+    if (!latLng) {
+      return { lng: 0, lat: 0 };
+    }
     return { lng: latLng.lng(), lat: latLng.lat() };
   }
 
