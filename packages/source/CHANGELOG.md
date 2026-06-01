@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.28.13
+
+### Patch Changes
+
+- Release 2.28.13.
+
+- Updated dependencies []:
+  - @antv/l7-core@2.28.13
+  - @antv/l7-utils@2.28.13
+
 ## 2.28.12
 
 ### Patch Changes
