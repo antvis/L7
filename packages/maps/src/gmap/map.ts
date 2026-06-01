@@ -602,6 +602,9 @@ export default class GMapService extends BaseMapService<any> {
     const sw = bounds.getSouthWest();
     const topRight = projection.fromLatLngToPoint(ne);
     const bottomLeft = projection.fromLatLngToPoint(sw);
+    if (!worldPoint || !topRight || !bottomLeft) {
+      return { x: 0, y: 0 };
+    }
     const { width, height } = this.getMapSize();
     let worldWidth = topRight.x - bottomLeft.x;
     if (worldWidth <= 0) worldWidth += 256;
