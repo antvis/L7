@@ -277,6 +277,10 @@ const merge = <T extends object = Record<string, unknown>>(
 
   if (isPlainObject(target) && isPlainObject(source)) {
     for (const key in source) {
+      // 防止原型污染：跳过 __proto__、constructor 和 prototype 键
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        continue;
+      }
       if (isPlainObject(source[key])) {
         if (!(key in target)) {
           Object.assign(target, { [key]: {} });
@@ -310,6 +314,10 @@ const mergeWith = <T extends object>(
   for (const src of sources) {
     if (isPlainObject(target) && isPlainObject(src)) {
       for (const key in src) {
+        // 防止原型污染：跳过 __proto__、constructor 和 prototype 键
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          continue;
+        }
         const targetValue = (target as Record<string, unknown>)[key];
         const sourceValue = (src as Record<string, unknown>)[key];
 
