@@ -18,9 +18,7 @@ import { LngLat } from './lng_lat';
  * ```
  */
 export type LngLatBoundsLike =
-  | LngLatBounds
-  | [LngLatLike, LngLatLike]
-  | [number, number, number, number];
+  LngLatBounds | [LngLatLike, LngLatLike] | [number, number, number, number];
 
 /**
  * A `LngLatBounds` object represents a geographical bounding box,

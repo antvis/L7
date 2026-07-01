@@ -413,9 +413,7 @@ layer.style({
 // 数据抽样，适合超大数据集
 const sampledData = data.filter((_, index) => index % 10 === 0);
 
-layer.source(sampledData, {
-  /* config */
-});
+layer.source(sampledData, {/* config */});
 ```
 
 ## 注意事项
@@ -428,7 +426,7 @@ layer.source(sampledData, {
 
 ⚠️ **权重字段**：如果数据没有权重字段，系统会为每个点赋予默认权重 1
 
-⚠️ **坐标系统**：确保经纬度数据正确，经度范围 -180~180，纬度范围 -90~90
+⚠️ **坐标系统**：确保经纬度数据正确，经度范围 -180~~180，纬度范围 -90~~90
 
 ## 常见问题
 

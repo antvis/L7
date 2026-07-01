@@ -89,15 +89,16 @@ constructor(config: ISceneConfig)
 | `getContainer`          | `(): HTMLElement \| null`                                    | 获取地图容器         |
 
 **IStatusOptions 选项**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `showIndoorMap` | `boolean` | 是否显示室内地图 |
-| `resizeEnable` | `boolean` | 是否允许缩放 |
-| `dragEnable` | `boolean` | 是否允许拖拽 |
-| `keyboardEnable` | `boolean` | 是否允许键盘操作 |
+
+| 属性              | 类型      | 说明             |
+| ----------------- | --------- | ---------------- |
+| `showIndoorMap`   | `boolean` | 是否显示室内地图 |
+| `resizeEnable`    | `boolean` | 是否允许缩放     |
+| `dragEnable`      | `boolean` | 是否允许拖拽     |
+| `keyboardEnable`  | `boolean` | 是否允许键盘操作 |
 | `doubleClickZoom` | `boolean` | 是否允许双击缩放 |
-| `zoomEnable` | `boolean` | 是否允许缩放 |
-| `rotateEnable` | `boolean` | 是否允许旋转 |
+| `zoomEnable`      | `boolean` | 是否允许缩放     |
+| `rotateEnable`    | `boolean` | 是否允许旋转     |
 
 #### 坐标转换方法
 
@@ -801,17 +802,18 @@ new MarkerLayer(option?: Partial<IMarkerLayerOption>)
 | `markerOption`  | `{ color?, style?, className? }` | -       | 默认 Marker 选项 |
 
 `IMarkerStyleOption`:
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `element` | `Function` | - | 聚合元素生成函数 |
-| `style` | `object \| Function` | `{}` | 聚合样式 |
-| `className` | `string` | `''` | 自定义类名 |
-| `field` | `string` | - | 聚合统计字段 |
-| `method` | `'sum' \| 'max' \| 'min' \| 'mean'` | `'sum'` | 统计方法 |
-| `radius` | `number` | `80` | 聚合半径 |
-| `maxZoom` | `number` | `20` | 最大聚合级别 |
-| `minZoom` | `number` | `0` | 最小聚合级别 |
-| `zoom` | `number` | `-99` | 当前缩放级别 |
+
+| 属性        | 类型                                | 默认值  | 说明             |
+| ----------- | ----------------------------------- | ------- | ---------------- |
+| `element`   | `Function`                          | -       | 聚合元素生成函数 |
+| `style`     | `object \| Function`                | `{}`    | 聚合样式         |
+| `className` | `string`                            | `''`    | 自定义类名       |
+| `field`     | `string`                            | -       | 聚合统计字段     |
+| `method`    | `'sum' \| 'max' \| 'min' \| 'mean'` | `'sum'` | 统计方法         |
+| `radius`    | `number`                            | `80`    | 聚合半径         |
+| `maxZoom`   | `number`                            | `20`    | 最大聚合级别     |
+| `minZoom`   | `number`                            | `0`     | 最小聚合级别     |
+| `zoom`      | `number`                            | `-99`   | 当前缩放级别     |
 
 方法:
 
@@ -1016,36 +1018,37 @@ new PointLayer(option?: Partial<ILayerConfig & IPointLayerStyleOptions>)
 **shape**: `'circle'` | `'square'` | `'triangle'` | `'pentagon'` | `'hexagon'` | `'octagon'` | `'diamond'` | `'image'` | `'text'` | `'cylinder'` | ...
 
 **IPointLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `opacity` | `number` | 整体透明度 |
-| `strokeOpacity` | `number` | 描边透明度 |
-| `strokeWidth` | `number` | 描边宽度 |
-| `stroke` | `string` | 描边颜色 |
-| `blur` | `number` | 模糊度 |
-| `anchor` | `anchorType` | 图形锚点位置，控制 2D 图形相对于坐标点的对齐方式（支持数据映射） |
-| `billboard` | `boolean` | 图片是否始终朝向相机 |
-| `textOffset` | `[number, number]` | 文本偏移 |
-| `textAnchor` | `anchorType` | 文本锚点 |
-| `spacing` | `number` | 字间距 |
-| `padding` | `[number, number]` | 文本内边距 |
-| `halo` | `number` | 文本光晕 |
-| `gamma` | `number` | 文本伽马 |
-| `fontWeight` | `string` | 字体粗细 |
-| `fontFamily` | `string` | 字体 |
-| `textAllowOverlap` | `boolean` | 文本是否允许重叠 |
-| `allowOverlap` | `boolean` | 图标是否允许压盖 |
-| `pickLight` | `boolean` | 是否开启光照拾取 |
-| `sourceColor` | `string` | 渐变起始色 |
-| `targetColor` | `string` | 渐变终止色 |
-| `opacityLinear` | `{enable: boolean, dir: string}` | 线性透明度 |
-| `lightEnable` | `boolean` | 是否开启光照 |
-| `offsets` | `[number, number]` | 偏移量 |
-| `unit` | `SizeUnitType` | 尺寸单位 (pixel/meter) |
-| `rotation` | `number` | 旋转角度 |
-| `speed` | `number` | 速度 |
-| `featureId` | `string` | 要素 ID 字段 |
-| `sourceLayer` | `string` | 瓦片源图层名 |
+
+| 属性               | 类型                             | 说明                                                             |
+| ------------------ | -------------------------------- | ---------------------------------------------------------------- |
+| `opacity`          | `number`                         | 整体透明度                                                       |
+| `strokeOpacity`    | `number`                         | 描边透明度                                                       |
+| `strokeWidth`      | `number`                         | 描边宽度                                                         |
+| `stroke`           | `string`                         | 描边颜色                                                         |
+| `blur`             | `number`                         | 模糊度                                                           |
+| `anchor`           | `anchorType`                     | 图形锚点位置，控制 2D 图形相对于坐标点的对齐方式（支持数据映射） |
+| `billboard`        | `boolean`                        | 图片是否始终朝向相机                                             |
+| `textOffset`       | `[number, number]`               | 文本偏移                                                         |
+| `textAnchor`       | `anchorType`                     | 文本锚点                                                         |
+| `spacing`          | `number`                         | 字间距                                                           |
+| `padding`          | `[number, number]`               | 文本内边距                                                       |
+| `halo`             | `number`                         | 文本光晕                                                         |
+| `gamma`            | `number`                         | 文本伽马                                                         |
+| `fontWeight`       | `string`                         | 字体粗细                                                         |
+| `fontFamily`       | `string`                         | 字体                                                             |
+| `textAllowOverlap` | `boolean`                        | 文本是否允许重叠                                                 |
+| `allowOverlap`     | `boolean`                        | 图标是否允许压盖                                                 |
+| `pickLight`        | `boolean`                        | 是否开启光照拾取                                                 |
+| `sourceColor`      | `string`                         | 渐变起始色                                                       |
+| `targetColor`      | `string`                         | 渐变终止色                                                       |
+| `opacityLinear`    | `{enable: boolean, dir: string}` | 线性透明度                                                       |
+| `lightEnable`      | `boolean`                        | 是否开启光照                                                     |
+| `offsets`          | `[number, number]`               | 偏移量                                                           |
+| `unit`             | `SizeUnitType`                   | 尺寸单位 (pixel/meter)                                           |
+| `rotation`         | `number`                         | 旋转角度                                                         |
+| `speed`            | `number`                         | 速度                                                             |
+| `featureId`        | `string`                         | 要素 ID 字段                                                     |
+| `sourceLayer`      | `string`                         | 瓦片源图层名                                                     |
 
 ---
 
@@ -1059,31 +1062,32 @@ new LineLayer(option?: Partial<ILayerConfig & ILineLayerStyleOptions>)
 **shape**: `'line'` | `'arc'` | `'arc3d'` | `'greatcircle'` | `'wall'` | `'flowline'` | `'arrow'` | `'dash'` | ...
 
 **ILineLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `lineType` | `'solid' \| 'dash'` | 线类型 |
-| `dashArray` | `[number, number]` | 虚线间隔 |
-| `segmentNumber` | `number` | 弧线段数 |
-| `forward` | `boolean` | 是否反向 (arcLine) |
-| `lineTexture` | `boolean` | 是否开启纹理 |
-| `iconStep` | `number` | 纹理步长 |
-| `iconStepCount` | `number` | 纹理间隔 |
-| `textureBlend` | `TextureBlend` | 纹理混合模式 |
-| `linearDir` | `LinearDir` | 渐变方向 |
-| `sourceColor` | `string` | 渐变起始色 |
-| `targetColor` | `string` | 渐变终止色 |
-| `thetaOffset` | `number` | 弧线偏移量 |
-| `globalArcHeight` | `number` | 地球模式弧线高度 |
-| `vertexHeightScale` | `number` | 顶点高度缩放 |
-| `borderWidth` | `number` | 线边框宽度 |
-| `borderColor` | `string` | 线边框颜色 |
-| `strokeWidth` | `number` | 描边宽度 |
-| `stroke` | `string` | 描边颜色 |
-| `blur` | `[number, number, number]` | 模糊分布 |
-| `symbol` | `ILineSymbol` | 箭头符号配置 |
-| `rampColors` | `IColorRamp` | 色带颜色 |
-| `enablePicking` | `boolean` | 是否启用拾取 |
-| `workerEnabled` | `boolean` | 是否启用 Worker |
+
+| 属性                | 类型                       | 说明               |
+| ------------------- | -------------------------- | ------------------ |
+| `lineType`          | `'solid' \| 'dash'`        | 线类型             |
+| `dashArray`         | `[number, number]`         | 虚线间隔           |
+| `segmentNumber`     | `number`                   | 弧线段数           |
+| `forward`           | `boolean`                  | 是否反向 (arcLine) |
+| `lineTexture`       | `boolean`                  | 是否开启纹理       |
+| `iconStep`          | `number`                   | 纹理步长           |
+| `iconStepCount`     | `number`                   | 纹理间隔           |
+| `textureBlend`      | `TextureBlend`             | 纹理混合模式       |
+| `linearDir`         | `LinearDir`                | 渐变方向           |
+| `sourceColor`       | `string`                   | 渐变起始色         |
+| `targetColor`       | `string`                   | 渐变终止色         |
+| `thetaOffset`       | `number`                   | 弧线偏移量         |
+| `globalArcHeight`   | `number`                   | 地球模式弧线高度   |
+| `vertexHeightScale` | `number`                   | 顶点高度缩放       |
+| `borderWidth`       | `number`                   | 线边框宽度         |
+| `borderColor`       | `string`                   | 线边框颜色         |
+| `strokeWidth`       | `number`                   | 描边宽度           |
+| `stroke`            | `string`                   | 描边颜色           |
+| `blur`              | `[number, number, number]` | 模糊分布           |
+| `symbol`            | `ILineSymbol`              | 箭头符号配置       |
+| `rampColors`        | `IColorRamp`               | 色带颜色           |
+| `enablePicking`     | `boolean`                  | 是否启用拾取       |
+| `workerEnabled`     | `boolean`                  | 是否启用 Worker    |
 
 ---
 
@@ -1098,21 +1102,22 @@ new PolygonLayer(option?: Partial<ILayerConfig & IPolygonLayerStyleOptions>)
 **shape**: `'fill'` | `'extrude'` | `'extrusion'` | `'water'` | `'ocean'` | `'line'` | 内嵌点形状
 
 **IPolygonLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `opacityLinear` | `{enable: boolean, dir: string}` | 线性透明度 |
-| `topsurface` | `boolean` | 是否显示顶面 |
-| `sidesurface` | `boolean` | 是否显示侧面 |
-| `mapTexture` | `string` | 挤出几何体顶面贴图 |
-| `sourceColor` | `string` | 渐变起始色 |
-| `targetColor` | `string` | 渐变终止色 |
-| `pickLight` | `boolean` | 是否开启光照 |
-| `waterTexture` | `string` | 水面纹理 |
-| `speed` | `number` | 动画速度 |
-| `watercolor` | `string` | 海面颜色1 |
-| `watercolor2` | `string` | 海面颜色2 |
-| `featureId` | `string` | 要素 ID 字段 |
-| `sourceLayer` | `string` | 瓦片源图层名 |
+
+| 属性            | 类型                             | 说明               |
+| --------------- | -------------------------------- | ------------------ |
+| `opacityLinear` | `{enable: boolean, dir: string}` | 线性透明度         |
+| `topsurface`    | `boolean`                        | 是否显示顶面       |
+| `sidesurface`   | `boolean`                        | 是否显示侧面       |
+| `mapTexture`    | `string`                         | 挤出几何体顶面贴图 |
+| `sourceColor`   | `string`                         | 渐变起始色         |
+| `targetColor`   | `string`                         | 渐变终止色         |
+| `pickLight`     | `boolean`                        | 是否开启光照       |
+| `waterTexture`  | `string`                         | 水面纹理           |
+| `speed`         | `number`                         | 动画速度           |
+| `watercolor`    | `string`                         | 海面颜色1          |
+| `watercolor2`   | `string`                         | 海面颜色2          |
+| `featureId`     | `string`                         | 要素 ID 字段       |
+| `sourceLayer`   | `string`                         | 瓦片源图层名       |
 
 ---
 
@@ -1126,13 +1131,14 @@ new HeatmapLayer(option?: Partial<ILayerConfig & IHeatMapLayerStyleOptions>)
 **shape**: `'heatmap'` | `'heatmap3D'` | `'hexagon'` | `'grid'` | `'square'` | `'triangle'` | `'cylinder'` | `'circle'` | ...
 
 **IHeatMapLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `intensity` | `number` | 热力强度 |
-| `radius` | `number` | 热力半径 |
-| `angle` | `number` | 角度 |
+
+| 属性         | 类型         | 说明     |
+| ------------ | ------------ | -------- |
+| `intensity`  | `number`     | 热力强度 |
+| `radius`     | `number`     | 热力半径 |
+| `angle`      | `number`     | 角度     |
 | `rampColors` | `IColorRamp` | 色带颜色 |
-| `coverage` | `number` | 覆盖度 |
+| `coverage`   | `number`     | 覆盖度   |
 
 ---
 
@@ -1145,18 +1151,19 @@ new ImageLayer(option?: Partial<ILayerConfig & IImageLayerStyleOptions>)
 **type**: `'ImageLayer'`
 
 **IImageLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `domain` | `[number, number]` | 值域范围 |
-| `noDataValue` | `number` | 无数据值 |
-| `clampLow` | `boolean` | 是否限制低值 |
-| `clampHigh` | `boolean` | 是否限制高值 |
-| `rampColors` | `IColorRamp` | 色带颜色 |
-| `colorTexture` | `ITexture2D` | 颜色纹理 |
-| `brightness` | `number` | 亮度 |
-| `contrast` | `number` | 对比度 |
-| `saturation` | `number` | 饱和度 |
-| `gamma` | `number` | 伽马值 |
+
+| 属性           | 类型               | 说明         |
+| -------------- | ------------------ | ------------ |
+| `domain`       | `[number, number]` | 值域范围     |
+| `noDataValue`  | `number`           | 无数据值     |
+| `clampLow`     | `boolean`          | 是否限制低值 |
+| `clampHigh`    | `boolean`          | 是否限制高值 |
+| `rampColors`   | `IColorRamp`       | 色带颜色     |
+| `colorTexture` | `ITexture2D`       | 颜色纹理     |
+| `brightness`   | `number`           | 亮度         |
+| `contrast`     | `number`           | 对比度       |
+| `saturation`   | `number`           | 饱和度       |
+| `gamma`        | `number`           | 伽马值       |
 
 ---
 
@@ -1171,17 +1178,18 @@ new RasterLayer(option?: Partial<ILayerConfig & IRasterLayerStyleOptions>)
 根据 parser 类型自动选择模型: `'raster'` / `'rasterRgb'` / `'rasterTerrainRgb'`
 
 **IRasterLayerStyleOptions** (继承 `IBaseRasterLayerStyleOptions`):
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `domain` | `[number, number]` | 值域范围 |
-| `noDataValue` | `number` | 无数据值 |
-| `clampLow` | `boolean` | 是否限制低值 |
-| `clampHigh` | `boolean` | 是否限制高值 |
-| `rampColors` | `IColorRamp` | 色带颜色 |
-| `colorTexture` | `ITexture2D` | 颜色纹理 |
-| `channelRMax` | `number` | R 通道最大值 |
-| `channelGMax` | `number` | G 通道最大值 |
-| `channelBMax` | `number` | B 通道最大值 |
+
+| 属性           | 类型               | 说明         |
+| -------------- | ------------------ | ------------ |
+| `domain`       | `[number, number]` | 值域范围     |
+| `noDataValue`  | `number`           | 无数据值     |
+| `clampLow`     | `boolean`          | 是否限制低值 |
+| `clampHigh`    | `boolean`          | 是否限制高值 |
+| `rampColors`   | `IColorRamp`       | 色带颜色     |
+| `colorTexture` | `ITexture2D`       | 颜色纹理     |
+| `channelRMax`  | `number`           | R 通道最大值 |
+| `channelGMax`  | `number`           | G 通道最大值 |
+| `channelBMax`  | `number`           | B 通道最大值 |
 
 ---
 
@@ -1195,10 +1203,11 @@ new MaskLayer(option?: Partial<ILayerConfig & IMaskLayerStyleOptions>)
 **shape**: `'fill'`
 
 **IMaskLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `opacity` | `number` | 透明度 |
-| `color` | `string` | 蒙层颜色 |
+
+| 属性          | 类型     | 说明         |
+| ------------- | -------- | ------------ |
+| `opacity`     | `number` | 透明度       |
+| `color`       | `string` | 蒙层颜色     |
 | `sourceLayer` | `string` | 瓦片源图层名 |
 
 ---
@@ -1239,14 +1248,15 @@ new CityBuildingLayer(option?: Partial<ILayerConfig & ICityBuildLayerStyleOption
 **type**: `'CityBuildingLayer'`
 
 **ICityBuildLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `opacity` | `number` | 透明度 |
-| `baseColor` | `string` | 基础颜色 |
-| `brightColor` | `string` | 亮面颜色 |
-| `windowColor` | `string` | 窗户颜色 |
-| `time` | `number` | 时间(动画) |
-| `sweep` | `{enable, sweepRadius, sweepColor, sweepSpeed, sweepCenter?}` | 扫描光配置 |
+
+| 属性          | 类型                                                          | 说明       |
+| ------------- | ------------------------------------------------------------- | ---------- |
+| `opacity`     | `number`                                                      | 透明度     |
+| `baseColor`   | `string`                                                      | 基础颜色   |
+| `brightColor` | `string`                                                      | 亮面颜色   |
+| `windowColor` | `string`                                                      | 窗户颜色   |
+| `time`        | `number`                                                      | 时间(动画) |
+| `sweep`       | `{enable, sweepRadius, sweepColor, sweepSpeed, sweepCenter?}` | 扫描光配置 |
 
 方法: `setLight(t: number): void`
 
@@ -1262,19 +1272,20 @@ new WindLayer(option?: Partial<ILayerConfig & IWindLayerStyleOptions>)
 **shape**: `'wind'`
 
 **IWindLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `uMin` | `number` | U 分量最小值 |
-| `uMax` | `number` | U 分量最大值 |
-| `vMin` | `number` | V 分量最小值 |
-| `vMax` | `number` | V 分量最大值 |
-| `fadeOpacity` | `number` | 轨迹消失透明度 |
-| `speedFactor` | `number` | 速度因子 |
-| `dropRate` | `number` | 粒子丢失率 |
-| `dropRateBump` | `number` | 粒子丢失率增量 |
-| `numParticles` | `number` | 粒子数量 |
-| `rampColors` | `{[key: number]: string}` | 色带颜色 |
-| `sizeScale` | `number` | 尺寸缩放 |
+
+| 属性           | 类型                      | 说明           |
+| -------------- | ------------------------- | -------------- |
+| `uMin`         | `number`                  | U 分量最小值   |
+| `uMax`         | `number`                  | U 分量最大值   |
+| `vMin`         | `number`                  | V 分量最小值   |
+| `vMax`         | `number`                  | V 分量最大值   |
+| `fadeOpacity`  | `number`                  | 轨迹消失透明度 |
+| `speedFactor`  | `number`                  | 速度因子       |
+| `dropRate`     | `number`                  | 粒子丢失率     |
+| `dropRateBump` | `number`                  | 粒子丢失率增量 |
+| `numParticles` | `number`                  | 粒子数量       |
+| `rampColors`   | `{[key: number]: string}` | 色带颜色       |
+| `sizeScale`    | `number`                  | 尺寸缩放       |
 
 ---
 
@@ -1287,13 +1298,14 @@ new CanvasLayer(option?: Partial<ILayerConfig & ICanvasLayerOptions>)
 **type**: `'CanvasLayer'`
 
 **ICanvasLayerOptions**:
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `zIndex` | `number` | `3` | 层级 |
-| `contextType` | `'canvas2d'` | `'canvas2d'` | Canvas 上下文类型 |
-| `getContext` | `(canvas: HTMLCanvasElement) => RenderingContext` | - | 获取上下文函数 |
-| `trigger` | `'end' \| 'change'` | `'change'` | 渲染触发时机 |
-| `draw` | `(params: ICanvasLayerRenderParams) => void` | - | 绘制回调 |
+
+| 属性          | 类型                                              | 默认值       | 说明              |
+| ------------- | ------------------------------------------------- | ------------ | ----------------- |
+| `zIndex`      | `number`                                          | `3`          | 层级              |
+| `contextType` | `'canvas2d'`                                      | `'canvas2d'` | Canvas 上下文类型 |
+| `getContext`  | `(canvas: HTMLCanvasElement) => RenderingContext` | -            | 获取上下文函数    |
+| `trigger`     | `'end' \| 'change'`                               | `'change'`   | 渲染触发时机      |
+| `draw`        | `(params: ICanvasLayerRenderParams) => void`      | -            | 绘制回调          |
 
 方法:
 
@@ -1326,24 +1338,25 @@ new GeometryLayer(option?: Partial<ILayerConfig & IGeometryLayerStyleOptions>)
 **shape**: `'plane'` | `'sprite'` | `'billboard'`
 
 **IGeometryLayerStyleOptions**:
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `mapTexture` | `string` | 地图纹理 |
-| `terrainTexture` | `string` | 地形纹理 |
-| `center` | `[number, number]` | 平面中心 |
-| `width` | `number` | 平面宽度 |
-| `height` | `number` | 平面高度 |
-| `widthSegments` | `number` | 宽度段数 |
-| `heightSegments` | `number` | 高度段数 |
-| `terrainClipHeight` | `number` | 地形裁剪高度 |
-| `rgb2height` | `(r, g, b) => number` | RGB 转高度函数 |
-| `canvasWidth` | `number` | Canvas 宽度 |
-| `canvasHeight` | `number` | Canvas 高度 |
-| `drawCanvas` | `(canvas: HTMLCanvasElement) => void` | Canvas 绘制回调 |
-| `spriteAnimate` | `string` | 精灵动画类型 |
-| `spriteRadius` | `number` | 精灵半径 |
-| `spriteCount` | `number` | 精灵数量 |
-| `spriteSpeed` | `number` | 精灵速度 |
+
+| 属性                | 类型                                  | 说明            |
+| ------------------- | ------------------------------------- | --------------- |
+| `mapTexture`        | `string`                              | 地图纹理        |
+| `terrainTexture`    | `string`                              | 地形纹理        |
+| `center`            | `[number, number]`                    | 平面中心        |
+| `width`             | `number`                              | 平面宽度        |
+| `height`            | `number`                              | 平面高度        |
+| `widthSegments`     | `number`                              | 宽度段数        |
+| `heightSegments`    | `number`                              | 高度段数        |
+| `terrainClipHeight` | `number`                              | 地形裁剪高度    |
+| `rgb2height`        | `(r, g, b) => number`                 | RGB 转高度函数  |
+| `canvasWidth`       | `number`                              | Canvas 宽度     |
+| `canvasHeight`      | `number`                              | Canvas 高度     |
+| `drawCanvas`        | `(canvas: HTMLCanvasElement) => void` | Canvas 绘制回调 |
+| `spriteAnimate`     | `string`                              | 精灵动画类型    |
+| `spriteRadius`      | `number`                              | 精灵半径        |
+| `spriteCount`       | `number`                              | 精灵数量        |
+| `spriteSpeed`       | `number`                              | 精灵速度        |
 
 ---
 

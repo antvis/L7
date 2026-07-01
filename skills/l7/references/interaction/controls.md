@@ -227,9 +227,7 @@ import { Logo } from '@antv/l7';
 // 隐藏默认 Logo
 const scene = new Scene({
   id: 'map',
-  map: new GaodeMap({
-    /* ... */
-  }),
+  map: new GaodeMap({/* ... */}),
   logoVisible: false, // 关闭默认 L7 Logo
 });
 
@@ -388,9 +386,7 @@ import { Scene, Zoom, Scale, Fullscreen, Logo } from '@antv/l7';
 
 const scene = new Scene({
   id: 'map',
-  map: new GaodeMap({
-    /* ... */
-  }),
+  map: new GaodeMap({/* ... */}),
   logoVisible: false,
 });
 
@@ -585,9 +581,7 @@ A: 在 Scene 初始化时配置：
 ```javascript
 const scene = new Scene({
   id: 'map',
-  map: new GaodeMap({
-    /* ... */
-  }),
+  map: new GaodeMap({/* ... */}),
   logoVisible: false, // 关闭默认 Logo
 });
 ```
