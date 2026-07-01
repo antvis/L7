@@ -22,8 +22,7 @@ let Status = {
 };
 
 const onloadCBKs: any[] = [];
-// @ts-ignore
-const onload = (callback: (map: window.AMap) => void) => {
+const onload = (callback: (map: typeof google.maps.Map) => void) => {
   if (typeof callback === 'function') {
     if (Status.GMap === LoadStatus.loaded) {
       // @ts-ignore

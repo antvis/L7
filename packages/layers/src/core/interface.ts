@@ -9,8 +9,8 @@ import type { IColorRamp } from '@antv/l7-utils';
 import type { CanvasModelType } from '../canvas/models';
 import type { anchorType } from '../utils/symbol-layout';
 export enum lineStyleType {
-  'solid' = 0.0,
-  'dash' = 1.0,
+  solid = 0.0,
+  dash = 1.0,
 }
 
 export enum LinearDir {
@@ -109,6 +109,10 @@ export interface IPointLayerStyleOptions extends IBaseLayerStyleOptions {
   textAnchor?: anchorType;
   spacing?: number;
   padding?: [number, number];
+  backgroundColor?: string;
+  backgroundPadding?: number | [number, number];
+  backgroundRadius?: number;
+  backgroundShape?: 'rect' | 'circle' | 'circle-rect';
   halo?: number;
   gamma?: number;
   fontWeight?: string;
@@ -260,8 +264,8 @@ export interface IGeometryLayerStyleOptions extends IBaseLayerStyleOptions {
 }
 
 export enum CanvasUpdateType {
-  'ALWAYS' = 'always',
-  'DRAGEND' = 'dragend',
+  ALWAYS = 'always',
+  DRAGEND = 'dragend',
 }
 
 export interface IDrawingOnCanvas {
@@ -333,13 +337,7 @@ export interface IRasterTerrainLayerStyleOptions extends IBaseRasterLayerStyleOp
   offset?: number;
 }
 export type ArrowType =
-  | 'circle'
-  | 'triangle'
-  | 'rect'
-  | 'diamond'
-  | 'classic'
-  | 'halfTriangle'
-  | 'none';
+  'circle' | 'triangle' | 'rect' | 'diamond' | 'classic' | 'halfTriangle' | 'none';
 export interface IArrowOptions {
   type: ArrowType;
   width?: number;

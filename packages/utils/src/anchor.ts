@@ -1,14 +1,14 @@
 export enum anchorType {
-  'CENTER' = 'center',
-  'TOP' = 'top',
+  CENTER = 'center',
+  TOP = 'top',
   'TOP-LEFT' = 'top-left',
   'TOP-RIGHT' = 'top-right',
-  'BOTTOM' = 'bottom',
+  BOTTOM = 'bottom',
   'BOTTOM-LEFT' = 'bottom-left',
   'BOTTOM-RIGHT' = 'bottom-right',
   'BOTTOM-CENTER' = 'bottom-center',
-  'LEFT' = 'left',
-  'RIGHT' = 'right',
+  LEFT = 'left',
+  RIGHT = 'right',
 }
 
 export const anchorTranslate: { [key: string]: string } = {

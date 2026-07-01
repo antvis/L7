@@ -1,18 +1,18 @@
 import type { L7Container } from '../../inversify.config';
 
 export enum PositionType {
-  'TOPRIGHT' = 'topright',
-  'TOPLEFT' = 'topleft',
-  'BOTTOMRIGHT' = 'bottomright',
-  'BOTTOMLEFT' = 'bottomleft',
-  'TOPCENTER' = 'topcenter',
-  'BOTTOMCENTER' = 'bottomcenter',
-  'LEFTCENTER' = 'leftcenter',
-  'RIGHTCENTER' = 'rightcenter',
-  'LEFTTOP' = 'lefttop',
-  'RIGHTTOP' = 'righttop',
-  'LEFTBOTTOM' = 'leftbottom',
-  'RIGHTBOTTOM' = 'rightbottom',
+  TOPRIGHT = 'topright',
+  TOPLEFT = 'topleft',
+  BOTTOMRIGHT = 'bottomright',
+  BOTTOMLEFT = 'bottomleft',
+  TOPCENTER = 'topcenter',
+  BOTTOMCENTER = 'bottomcenter',
+  LEFTCENTER = 'leftcenter',
+  RIGHTCENTER = 'rightcenter',
+  LEFTTOP = 'lefttop',
+  RIGHTTOP = 'righttop',
+  LEFTBOTTOM = 'leftbottom',
+  RIGHTBOTTOM = 'rightbottom',
 }
 
 export type PositionName =

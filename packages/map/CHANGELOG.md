@@ -1,5 +1,30 @@
 # @antv/l7-map
 
+## 2.28.14
+
+### Patch Changes
+
+- Release 2.28.14.
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.28.14
+
+## 2.28.13
+
+### Patch Changes
+
+- Release 2.28.13.
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.28.13
+
+## 2.28.12
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @antv/l7-utils@2.28.12
+
 ## 2.25.9
 
 ### Patch Changes

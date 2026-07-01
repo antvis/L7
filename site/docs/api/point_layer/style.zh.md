@@ -29,16 +29,17 @@ layer.style({
 
 - [IFillShape](/api/point_layer/shape#shapefillshape-ifillshape)
 
-| style         | 类型               | 是否支持数据映射 | 描述           | 默认值   |
-| ------------- | ------------------ | ---------------- | -------------- | -------- |
-| stroke        | `string`           | 是               | 图形边框颜色   | `#fff`   |
-| strokeWidth   | `number`           | 否               | 图形边框宽度   | `0`      |
-| strokeOpacity | `number`           | 否               | 图形边框透明度 | `1`      |
-| blur          | `number`           | 否               | 图形模糊半径   | `0`      |
-| offsets       | `[number, number]` | 是               | 点偏移         | `[0, 0]` |
-| rotation      | `number`           | 是               | 旋转角度       | `0`      |
-| raisingHeight | `number`           | 否               | 抬升高度       | `0`      |
-| heightfixed   | `boolean`          | 否               | 点大小单位     | `pixel`  |
+| style         | 类型                                            | 是否支持数据映射 | 描述                                         | 默认值   |
+| ------------- | ----------------------------------------------- | ---------------- | -------------------------------------------- | -------- |
+| stroke        | `string`                                        | 是               | 图形边框颜色                                 | `#fff`   |
+| strokeWidth   | `number`                                        | 否               | 图形边框宽度                                 | `0`      |
+| strokeOpacity | `number`                                        | 否               | 图形边框透明度                               | `1`      |
+| blur          | `number`                                        | 否               | 图形模糊半径                                 | `0`      |
+| offsets       | `[number, number]`                              | 是               | 点偏移                                       | `[0, 0]` |
+| rotation      | `number`                                        | 是               | 旋转角度                                     | `0`      |
+| anchor        | [anchorType](/api/point_layer/style#anchortype) | 是               | 图形锚点位置，控制图形相对于坐标点的对齐方式 | `center` |
+| raisingHeight | `number`                                        | 否               | 抬升高度                                     | `0`      |
+| heightfixed   | `boolean`                                       | 否               | 点大小单位                                   | `pixel`  |
 
 #### unit
 
@@ -127,7 +128,10 @@ interface IOpcityLinear = {
 
 #### anchorType
 
-文字对齐锚点
+图形/文字对齐锚点，用于控制图形或文字相对于坐标点的对齐方式。
+
+- 在 2D shape（如 `circle`、`square` 等）中通过 `anchor` 属性使用，控制图形相对于坐标点的位置
+- 在 text shape 中通过 `textAnchor` 属性使用，控制文字相对于坐标点的位置
 
 ```javascript
 export enum anchorType {
@@ -136,10 +140,43 @@ export enum anchorType {
   'TOP-LEFT' = 'top-left',
   'TOP-RIGHT' = 'top-right',
   'BOTTOM' = 'bottom',
+  'BOTTOM-CENTER' = 'bottom-center',
   'BOTTOM-LEFT' = 'bottom-left',
+  'BOTTOM-RIGHT' = 'bottom-right',
   'LEFT' = 'left',
   'RIGHT' = 'right',
 }
+```
+
+**anchor 使用示例（2D shape）**
+
+```javascript
+// 气泡底部对齐到坐标位置，常用于地图标注场景
+const bubbleLayer = new PointLayer()
+  .source(data, {
+    parser: { type: 'json', x: 'lng', y: 'lat' },
+  })
+  .shape('circle')
+  .size(30)
+  .color('#5B8FF9')
+  .style({
+    anchor: 'bottom',
+  });
+
+// anchor 支持数据映射
+const layer = new PointLayer()
+  .source(data, {
+    parser: { type: 'json', x: 'lng', y: 'lat' },
+  })
+  .shape('circle')
+  .size(20)
+  .color('#5B8FF9')
+  .style({
+    anchor: {
+      field: 'type',
+      value: ['center', 'bottom', 'top'],
+    },
+  });
 ```
 
 #### font

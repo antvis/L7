@@ -7,8 +7,8 @@ import spriteFrag from '../shaders/sprite_frag.glsl';
 import spriteVert from '../shaders/sprite_vert.glsl';
 
 enum SPRITE_ANIMATE_DIR {
-  'UP' = 'up',
-  'DOWN' = 'down',
+  UP = 'up',
+  DOWN = 'down',
 }
 
 export default class SpriteModel extends BaseModel {

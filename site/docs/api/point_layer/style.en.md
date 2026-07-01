@@ -29,16 +29,17 @@ Universal`style`Parameters, parameters supported by all graphics.
 
 - [IFillShape](/api/point_layer/shape#shapefillshape-ifillshape)
 
-| style         | type               | Whether to support data mapping | describe                    | default value |
-| ------------- | ------------------ | ------------------------------- | --------------------------- | ------------- |
-| stroke        | `string`           | yes                             | Graphic border color        | `#fff`        |
-| strokeWidth   | `number`           | no                              | Graphic border width        | `0`           |
-| strokeOpacity | `number`           | no                              | Graphic border transparency | `1`           |
-| blur          | `number`           | no                              | Graphic blur radius         | `0`           |
-| offsets       | `[number, number]` | yes                             | point offset                | `[0, 0]`      |
-| rotation      | `number`           | yes                             | Rotation angle              | `0`           |
-| raisingHeight | `number`           | no                              | Lifting height              | `0`           |
-| heightfixed   | `boolean`          | no                              | Point size unit             | `pixel`       |
+| style         | type                                            | Whether to support data mapping | describe                                                               | default value |
+| ------------- | ----------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------- | ------------- |
+| stroke        | `string`                                        | yes                             | Graphic border color                                                   | `#fff`        |
+| strokeWidth   | `number`                                        | no                              | Graphic border width                                                   | `0`           |
+| strokeOpacity | `number`                                        | no                              | Graphic border transparency                                            | `1`           |
+| blur          | `number`                                        | no                              | Graphic blur radius                                                    | `0`           |
+| offsets       | `[number, number]`                              | yes                             | point offset                                                           | `[0, 0]`      |
+| rotation      | `number`                                        | yes                             | Rotation angle                                                         | `0`           |
+| anchor        | [anchorType](/api/point_layer/style#anchortype) | yes                             | Anchor position, controls alignment of the shape relative to the point | `center`      |
+| raisingHeight | `number`                                        | no                              | Lifting height                                                         | `0`           |
+| heightfixed   | `boolean`                                       | no                              | Point size unit                                                        | `pixel`       |
 
 #### unit
 
@@ -127,7 +128,10 @@ interface IOpcityLinear = {
 
 #### anchorType
 
-text alignment anchor
+Anchor point for shape/text alignment, controls the alignment of the shape or text relative to the coordinate point.
+
+- For 2D shapes (e.g. `circle`, `square`), use the `anchor` property to control the shape's position relative to the coordinate point
+- For text shapes, use the `textAnchor` property to control the text's position relative to the coordinate point
 
 ```javascript
 export enum anchorType {
@@ -136,10 +140,43 @@ export enum anchorType {
   'TOP-LEFT' = 'top-left',
   'TOP-RIGHT' = 'top-right',
   'BOTTOM' = 'bottom',
+  'BOTTOM-CENTER' = 'bottom-center',
   'BOTTOM-LEFT' = 'bottom-left',
+  'BOTTOM-RIGHT' = 'bottom-right',
   'LEFT' = 'left',
   'RIGHT' = 'right',
 }
+```
+
+**anchor usage example (2D shape)**
+
+```javascript
+// Align the bottom of the bubble to the coordinate position, commonly used for map annotation
+const bubbleLayer = new PointLayer()
+  .source(data, {
+    parser: { type: 'json', x: 'lng', y: 'lat' },
+  })
+  .shape('circle')
+  .size(30)
+  .color('#5B8FF9')
+  .style({
+    anchor: 'bottom',
+  });
+
+// anchor supports data mapping
+const layer = new PointLayer()
+  .source(data, {
+    parser: { type: 'json', x: 'lng', y: 'lat' },
+  })
+  .shape('circle')
+  .size(20)
+  .color('#5B8FF9')
+  .style({
+    anchor: {
+      field: 'type',
+      value: ['center', 'bottom', 'top'],
+    },
+  });
 ```
 
 #### font
