@@ -211,6 +211,12 @@ function addReferenceOverlay(scene: Scene, container: HTMLDivElement) {
   updateReference();
   scene.on('mapchange', updateReference);
   window.addEventListener('resize', updateReference);
+
+  const destroyScene = scene.destroy.bind(scene);
+  scene.destroy = () => {
+    window.removeEventListener('resize', updateReference);
+    destroyScene();
+  };
 }
 
 function addDrawValidation(scene: Scene, container: HTMLDivElement) {
@@ -365,6 +371,7 @@ function addDrawValidation(scene: Scene, container: HTMLDivElement) {
   const destroyScene = scene.destroy.bind(scene);
   scene.destroy = () => {
     container.removeEventListener('click', recordClick, true);
+    drawTools.forEach((tool) => tool.destroy());
     destroyScene();
   };
 
