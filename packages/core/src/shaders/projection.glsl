@@ -31,6 +31,24 @@ vec4 project_offset(vec4 offset) {
   return vec4(offset.xyz * pixels_per_unit, offset.w);
 }
 
+// Keep fp64 low parts in explicit branches so GLSL compilers do not fold them
+// back into large lng/lat arithmetic where sub-ULP values can be rounded away.
+vec4 project_offset_with_low(vec4 offset, vec2 offset64xyLow) {
+  float dy = offset.y;
+  dy = clamp(dy, -1.0, 1.0);
+  vec3 pixels_per_unit = u_PixelsPerDegree + u_PixelsPerDegree2 * dy;
+  vec4 projected = vec4(offset.xyz * pixels_per_unit, offset.w);
+
+  if (offset64xyLow.x != 0.0) {
+    projected.x += offset64xyLow.x * pixels_per_unit.x;
+  }
+  if (offset64xyLow.y != 0.0) {
+    projected.y += offset64xyLow.y * pixels_per_unit.y;
+  }
+
+  return projected;
+}
+
 vec3 project_normal(vec3 normal) {
   vec4 normal_modelspace = u_ModelMatrix * vec4(normal, 0.0);
   return normalize(normal_modelspace.xyz * u_PixelsPerMeter);
@@ -61,9 +79,7 @@ vec4 project_position(vec4 position, vec2 position64xyLow) {
       // 由于ViewportCenter已被设置为RelativeOrigin，可以直接使用position
       float X = position.x;
       float Y = position.y;
-      return project_offset(
-        vec4(X + position64xyLow.x, Y + position64xyLow.y, position.z, position.w)
-      );
+      return project_offset_with_low(vec4(X, Y, position.z, position.w), position64xyLow);
     } else {
       // 低缩放级别：转换为绝对坐标后使用墨卡托投影
       vec2 absolutePos = position.xy + u_RelativeOrigin.xy;
@@ -84,13 +100,9 @@ vec4 project_position(vec4 position, vec2 position64xyLow) {
     vec2 center = u_ViewportCenter;
     float X = absolutePosition.x - center.x;
     float Y = absolutePosition.y - center.y;
-    return project_offset(
-      vec4(
-        X + absolutePosition64xyLow.x,
-        Y + absolutePosition64xyLow.y,
-        absolutePosition.z,
-        absolutePosition.w
-      )
+    return project_offset_with_low(
+      vec4(X, Y, absolutePosition.z, absolutePosition.w),
+      absolutePosition64xyLow
     );
   }
   if (
@@ -207,4 +219,3 @@ vec4 unproject_clipspace_to_position(vec4 clipspacePos, mat4 u_InverseViewProjec
 bool isEqual(float a, float b) {
   return a < b + 0.001 && a > b - 0.001;
 }
-
