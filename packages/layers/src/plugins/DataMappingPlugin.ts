@@ -74,10 +74,10 @@ export default class DataMappingPlugin implements ILayerPlugin {
           layer.getEncodedData(), // TODO 优化
         );
         layer.setEncodedData(encodeData);
-      }
 
-      // 处理文本更新，更新文字形状
-      // layer.emit('remapping', null);
+        // Text/iconfont models listen to remapping to rebuild glyph layout and buffers.
+        layer.emit('remapping', null);
+      }
     });
   }
   private generateMaping(

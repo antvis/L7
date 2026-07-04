@@ -3,20 +3,16 @@ interface IPoint {
   y: number;
 }
 export type anchorType =
-  | 'right'
-  | 'top-right'
-  | 'left'
-  | 'bottom-right'
-  | 'left'
-  | 'top-left'
-  | 'bottom-left'
-  | 'bottom'
-  | 'bottom-right'
-  | 'bottom-left'
+  | 'center'
   | 'top'
   | 'top-right'
+  | 'right'
+  | 'bottom-right'
+  | 'bottom'
+  | 'bottom-left'
+  | 'left'
   | 'top-left'
-  | 'center';
+  | 'bottom-center';
 export interface IGlyphQuad {
   tr: IPoint;
   tl: IPoint;
@@ -56,14 +52,15 @@ function getAnchorAlignment(anchor: anchorType) {
   }
 
   switch (anchor) {
-    case 'bottom':
-    case 'bottom-right':
-    case 'bottom-left':
-      verticalAlign = 1;
-      break;
     case 'top':
     case 'top-right':
     case 'top-left':
+      verticalAlign = 1;
+      break;
+    case 'bottom':
+    case 'bottom-right':
+    case 'bottom-left':
+    case 'bottom-center':
       verticalAlign = 0;
       break;
     default:
@@ -108,9 +105,19 @@ function align(
   maxLineLength: number,
   lineHeight: number,
   lineCount: number,
+  yOffset: number,
 ) {
   const shiftX = (justify - horizontalAlign) * maxLineLength;
-  const shiftY = (-verticalAlign * lineCount + 0.5) * lineHeight;
+  let shiftY = (-verticalAlign * lineCount + 0.5) * lineHeight;
+
+  // 补偿 yOffset 使 top/bottom 锚点正确对齐
+  // top: 文字往下移 |yOffset| 像素（远离坐标点）
+  // bottom: 文字往上移 |yOffset| 像素（远离坐标点）
+  if (verticalAlign === 1) {
+    shiftY += yOffset;
+  } else if (verticalAlign === 0) {
+    shiftY -= yOffset;
+  }
 
   for (const glyphs of positionedGlyphs) {
     glyphs.x += shiftX;
@@ -177,6 +184,7 @@ function shapeLines(
     maxLineLength,
     lineHeight,
     lines.length,
+    yOffset,
   );
 
   // 计算包围盒
@@ -211,31 +219,29 @@ function shapeIconFont(
   const lineStartIndex = positionedGlyphs.length;
   iconfonts.forEach((iconfont) => {
     const glyph = glyphMap[iconfont];
-    const baselineOffset = 0;
 
     if (glyph) {
+      // iconfont 的锚点应由 align 阶段统一处理，这里只保留纹理 buffer 补偿，避免 left/right 被预居中抵消
       positionedGlyphs.push({
         glyph: iconfont,
-        // x,
+        x: x + 4,
+        y: 4 - glyph.height / 2,
         /**
          * iconfont
          * 在计算大小的时候计算的是 unicode 字符 如 &#xe6d4;
          * 在布局计算 icon 位置的时候应该始终保持居中（且 icon 只占一个字符的位置）
          */
-        x: glyph.advance / 2,
-        y: y + baselineOffset,
         vertical: false, // TODO：目前只支持水平方向
         scale: 1,
         metrics: glyph,
       });
-      x += glyph.advance + spacing;
+      x += glyph.width + spacing;
     }
 
-    // 左右对齐
+    // iconfont 单独按字形纹理宽度计算布局，避免再次按文本 advance 做 justify 产生额外偏移
     if (positionedGlyphs.length !== lineStartIndex) {
       const lineLength = x - spacing;
       maxLineLength = Math.max(lineLength, maxLineLength);
-      justifyLine(positionedGlyphs, glyphMap, lineStartIndex, positionedGlyphs.length - 1, justify);
     }
 
     x = 0;
@@ -251,6 +257,7 @@ function shapeIconFont(
     maxLineLength,
     lineHeight,
     iconfonts.length,
+    yOffset,
   );
 
   // 计算包围盒

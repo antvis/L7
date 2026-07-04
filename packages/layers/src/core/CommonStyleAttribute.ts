@@ -17,9 +17,10 @@ export const COMMON_ATTRIBUTE_LOCATION = {
   OPACITY: 5,
   OFFSETS: 6,
   ROTATION: 7,
+  ANCHOR: 8,
 
   // last index
-  MAX: 8,
+  MAX: 9,
 } as const;
 
 export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttribute> | undefined {
@@ -101,6 +102,25 @@ export function getCommonStyleAttributeOptions(name: string): Partial<IStyleAttr
           update: (feature: IEncodeFeature) => {
             const { offsets: epo } = feature;
             return epo;
+          },
+        },
+      };
+    case 'anchor':
+      return {
+        name: 'anchor',
+        type: AttributeType.Attribute,
+        descriptor: {
+          name: 'a_Anchor',
+          shaderLocation: COMMON_ATTRIBUTE_LOCATION.ANCHOR,
+          buffer: {
+            usage: gl.STATIC_DRAW,
+            data: [],
+            type: gl.FLOAT,
+          },
+          size: 1,
+          update: (feature: IEncodeFeature) => {
+            const { anchor = 0 } = feature;
+            return [anchor as number];
           },
         },
       };

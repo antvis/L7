@@ -326,6 +326,29 @@ layer.style({
 });
 ```
 
+### 锚点样式（anchor）
+
+`anchor` 用于控制 2D 图形（如 `circle`、`square` 等）相对于坐标点的对齐方式。默认值为 `'center'`，即图形中心对齐到坐标点。
+
+支持的值：`center` | `top` | `top-left` | `top-right` | `bottom` | `bottom-center` | `bottom-left` | `bottom-right` | `left` | `right`
+
+```javascript
+// 基础用法 - 气泡底部对齐到坐标位置
+layer.style({
+  anchor: 'bottom',
+});
+
+// 数据映射 - 根据数据字段动态设置锚点
+layer.style({
+  anchor: {
+    field: 'type',
+    value: ['center', 'bottom', 'top'],
+  },
+});
+```
+
+> 💡 `anchor` 和 `textAnchor` 的区别：`anchor` 用于 2D 图形（circle、square 等），`textAnchor` 用于文字图层（shape 为 text 时）。
+
 ### 文本样式
 
 ```javascript

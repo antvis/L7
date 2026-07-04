@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     port: 8080,
     open: '/',
-    allowedHosts: ['alipay.net'],
+    allowedHosts: ['alipay.net', 'dev.alipay.net'],
   },
   base: './',
   resolve: {

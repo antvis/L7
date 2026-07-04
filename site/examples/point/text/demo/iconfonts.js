@@ -14,11 +14,11 @@ const fontFamily = 'iconfont';
 const fontPath = '//at.alicdn.com/t/font_2534097_ao9soua2obv.woff2?t=1622021146076';
 scene.addFontFace(fontFamily, fontPath);
 scene.addIconFonts([
-  ['smallRain', '&#xe6f7;'],
-  ['middleRain', '&#xe61c;'],
-  ['hugeRain', '&#xe6a6;'],
-  ['sun', '&#xe6da;'],
-  ['cloud', '&#xe8da;'],
+  ['smallRain', '\ue6f7'],
+  ['middleRain', '\ue61c'],
+  ['hugeRain', '\ue6a6'],
+  ['sun', '\ue6da'],
+  ['cloud', '\ue8da'],
 ]);
 
 scene.on('loaded', () => {

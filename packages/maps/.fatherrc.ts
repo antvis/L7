@@ -42,6 +42,7 @@ const umdConfig: IFatherConfig['umd'] = {
 export default defineConfig({
   extends: '../../.fatherrc.base.ts',
   // 使用 babel 编译 esm/cjs 产物，启用 transform-import-css-l7 插件完成 CSS 内联打包
+  // father 默认会编译 src 下所有文件，包括新增的子路径入口
   esm: { transformer: 'babel' },
   cjs: isProduction ? { transformer: 'babel' } : undefined,
   umd: isProduction ? umdConfig : undefined,

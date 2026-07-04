@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-component",
-  "version": "2.25.10",
+  "version": "2.28.14",
   "description": "Component for L7",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -11,15 +11,19 @@
     "*/iconfont/*"
   ],
   "main": "lib/index.js",
+  "browser": "dist/l7-component.min.js",
+  "unpkg": "dist/l7-component.min.js",
+  "jsdelivr": "dist/l7-component.min.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
+    "dist",
     "lib",
     "es"
   ],
   "scripts": {
     "dev": "father dev",
-    "prebuild:css": "lessc src/css/index.less src/css/index.css --source-map=none",
+    "prebuild:css": "lessc src/css/index.less src/css/index.css",
     "build": "npm run prebuild:css && npm run clean && father build",
     "check-deps": "father doctor",
     "lint": "eslint src __tests__",

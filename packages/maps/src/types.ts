@@ -1,11 +1,11 @@
 import type { IControl } from 'mapbox-gl';
 
 export enum MapType {
-  'GAODE' = 'GAODE',
-  'MAPBOX' = 'MAPBOX',
-  'DEFAULT' = 'DEFAUlTMAP',
-  'SIMPLE' = 'SIMPLE',
-  'GLOBEL' = 'GLOBEL',
+  GAODE = 'GAODE',
+  MAPBOX = 'MAPBOX',
+  DEFAULT = 'DEFAUlTMAP',
+  SIMPLE = 'SIMPLE',
+  GLOBEL = 'GLOBEL',
 }
 
 export interface IAMapEvent {

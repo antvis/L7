@@ -1,8 +1,11 @@
+export { anchor } from './anchor';
 export { billboard } from './billboard';
 export { column } from './column';
 export { dot } from './dot';
 export { fill } from './fill';
-export { fillImage } from './fill-image';
-export { image } from './image';
+export * from './fill-image';
+export * from './iconfont';
+export * from './image';
+export * from './image-text-anchor';
 export { radar } from './radar';
 export { text } from './text';

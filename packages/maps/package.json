@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-maps",
-  "version": "2.25.10",
+  "version": "2.28.14",
   "description": "Maps for L7",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -11,6 +11,63 @@
   "unpkg": "dist/l7-maps.min.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./es/index.js",
+      "require": "./lib/index.js",
+      "types": "./es/index.d.ts"
+    },
+    "./gaode": {
+      "import": "./es/gaode.js",
+      "require": "./lib/gaode.js",
+      "types": "./es/gaode.d.ts"
+    },
+    "./baidu": {
+      "import": "./es/baidu.js",
+      "require": "./lib/baidu.js",
+      "types": "./es/baidu.d.ts"
+    },
+    "./google": {
+      "import": "./es/google.js",
+      "require": "./lib/google.js",
+      "types": "./es/google.d.ts"
+    },
+    "./mapbox": {
+      "import": "./es/mapbox-entry.js",
+      "require": "./lib/mapbox-entry.js",
+      "types": "./es/mapbox-entry.d.ts"
+    },
+    "./maplibre": {
+      "import": "./es/maplibre-entry.js",
+      "require": "./lib/maplibre-entry.js",
+      "types": "./es/maplibre-entry.d.ts"
+    },
+    "./tencent": {
+      "import": "./es/tencent.js",
+      "require": "./lib/tencent.js",
+      "types": "./es/tencent.d.ts"
+    },
+    "./tianditu": {
+      "import": "./es/tianditu.js",
+      "require": "./lib/tianditu.js",
+      "types": "./es/tianditu.d.ts"
+    },
+    "./earth": {
+      "import": "./es/earth-entry.js",
+      "require": "./lib/earth-entry.js",
+      "types": "./es/earth-entry.d.ts"
+    },
+    "./simple": {
+      "import": "./es/simple.js",
+      "require": "./lib/simple.js",
+      "types": "./es/simple.d.ts"
+    },
+    "./utils": {
+      "import": "./es/utils/index.js",
+      "require": "./lib/utils/index.js",
+      "types": "./es/utils/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "lib",
