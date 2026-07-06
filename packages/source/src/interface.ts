@@ -79,10 +79,7 @@ export type SchemaBandOperation = {
 };
 
 export type IBandsOperation =
-  | ((bands: IRasterData[]) => Uint8Array | number[])
-  | any[]
-  | IRgbOperation
-  | SchemaOperationType;
+  ((bands: IRasterData[]) => Uint8Array | number[]) | any[] | IRgbOperation | SchemaOperationType;
 
 export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
 
