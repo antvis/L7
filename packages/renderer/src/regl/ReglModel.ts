@@ -175,12 +175,7 @@ export default class ReglModel implements IModel {
     };
     const reglDrawProps: {
       [key: string]:
-        | regl.Framebuffer
-        | regl.Texture2D
-        | number
-        | number[]
-        | Partial<IBlendOptions>
-        | boolean;
+        regl.Framebuffer | regl.Texture2D | number | number[] | Partial<IBlendOptions> | boolean;
     } = {};
     Object.keys(uniforms).forEach((uniformName: string) => {
       const type = typeof uniforms[uniformName];

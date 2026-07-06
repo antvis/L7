@@ -25,14 +25,7 @@ export interface IStencilOptions {
   mask: number;
   func: {
     cmp:
-      | gl.NEVER
-      | gl.ALWAYS
-      | gl.LESS
-      | gl.LEQUAL
-      | gl.GREATER
-      | gl.GEQUAL
-      | gl.EQUAL
-      | gl.NOTEQUAL;
+      gl.NEVER | gl.ALWAYS | gl.LESS | gl.LEQUAL | gl.GREATER | gl.GEQUAL | gl.EQUAL | gl.NOTEQUAL;
     ref: number;
     mask: number;
   };
@@ -48,14 +41,7 @@ export interface IStencilOptions {
   };
 }
 type stencilOp =
-  | gl.ZERO
-  | gl.KEEP
-  | gl.REPLACE
-  | gl.INVERT
-  | gl.INCR
-  | gl.DECR
-  | gl.INCR_WRAP
-  | gl.DECR_WRAP;
+  gl.ZERO | gl.KEEP | gl.REPLACE | gl.INVERT | gl.INCR | gl.DECR | gl.INCR_WRAP | gl.DECR_WRAP;
 
 type BlendingFunctionCombined = Partial<{
   src:
@@ -189,14 +175,7 @@ export interface IModelInitializationOptions {
     mask: boolean;
     // gl.depthFunc
     func:
-      | gl.NEVER
-      | gl.ALWAYS
-      | gl.LESS
-      | gl.LEQUAL
-      | gl.GREATER
-      | gl.GEQUAL
-      | gl.EQUAL
-      | gl.NOTEQUAL;
+      gl.NEVER | gl.ALWAYS | gl.LESS | gl.LEQUAL | gl.GREATER | gl.GEQUAL | gl.EQUAL | gl.NOTEQUAL;
     // gl.depthRange
     range: [0, 1];
   }>;
