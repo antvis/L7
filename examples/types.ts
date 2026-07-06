@@ -11,7 +11,14 @@ export type GUIOptions = {
 };
 
 export type TestCaseBasemap =
-  'Map' | 'GaodeMap' | 'BaiduMap' | 'MapLibre' | 'TencentMap' | 'Mapbox' | 'TMap' | 'GoogleMap';
+  | 'Map'
+  | 'GaodeMap'
+  | 'BaiduMap'
+  | 'MapLibre'
+  | 'TencentMap'
+  | 'Mapbox'
+  | 'TMap'
+  | 'GoogleMap';
 
 export type TestCaseOptions = GUIOptions & {
   id: string | HTMLDivElement;

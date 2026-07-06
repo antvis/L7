@@ -111,7 +111,14 @@ export const colorSpaceMap: {
 
 export const depthFuncMap: {
   [key: string]:
-    'never' | 'always' | 'less' | 'lequal' | 'greater' | 'gequal' | 'equal' | 'notequal';
+    | 'never'
+    | 'always'
+    | 'less'
+    | 'lequal'
+    | 'greater'
+    | 'gequal'
+    | 'equal'
+    | 'notequal';
 } = {
   [gl.NEVER]: 'never',
   [gl.ALWAYS]: 'always',

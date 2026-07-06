@@ -337,7 +337,13 @@ export interface IRasterTerrainLayerStyleOptions extends IBaseRasterLayerStyleOp
   offset?: number;
 }
 export type ArrowType =
-  'circle' | 'triangle' | 'rect' | 'diamond' | 'classic' | 'halfTriangle' | 'none';
+  | 'circle'
+  | 'triangle'
+  | 'rect'
+  | 'diamond'
+  | 'classic'
+  | 'halfTriangle'
+  | 'none';
 export interface IArrowOptions {
   type: ArrowType;
   width?: number;

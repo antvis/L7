@@ -6,4 +6,11 @@ interface IStruct {
 }
 
 export type IUniform =
-  number | number[] | ArrayBufferView | boolean | IFramebuffer | ITexture2D | IStruct | null;
+  | number
+  | number[]
+  | ArrayBufferView
+  | boolean
+  | IFramebuffer
+  | ITexture2D
+  | IStruct
+  | null;
