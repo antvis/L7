@@ -1,4 +1,5 @@
 export { dataShake } from './data-shake';
+export { issue1578CoordinatePrecision } from './issue-1578-coordinate-precision';
 export { legendEvent } from './legend-event';
 export { mutiPolygon } from './muti-polygon';
 export { removeMutiLayer } from './remove-muti-layer';

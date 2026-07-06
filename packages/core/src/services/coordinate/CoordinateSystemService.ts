@@ -52,7 +52,7 @@ export default class CoordinateSystemService implements ICoordinateSystemService
    * 重新计算当前坐标系参数
    * TODO: 使用 memoize 缓存参数以及计算结果
    */
-  public refresh(offsetCenter?: [number, number]): void {
+  public refresh(offsetCenter?: [number, number], exactCenterProjection = false): void {
     // if (!this.needRefresh) {
     //   return;
     // }
@@ -75,7 +75,7 @@ export default class CoordinateSystemService implements ICoordinateSystemService
       // 继续使用相机服务计算的 VP 矩阵
       this.cameraService.setViewProjectionMatrix(undefined);
     } else if (this.coordinateSystem === CoordinateSystem.LNGLAT_OFFSET) {
-      this.calculateLnglatOffset(center, zoom);
+      this.calculateLnglatOffset(center, zoom, undefined, undefined, exactCenterProjection);
     }
     this.needRefresh = false;
 
@@ -95,7 +95,7 @@ export default class CoordinateSystemService implements ICoordinateSystemService
   }
 
   public setViewportCenter(center: [number, number]): void {
-    this.refresh(center);
+    this.refresh(center, true);
   }
 
   public getViewportCenterProjection(): [number, number, number, number] {
@@ -119,6 +119,7 @@ export default class CoordinateSystemService implements ICoordinateSystemService
     zoom: number,
     scale?: number,
     flipY?: boolean,
+    exactCenterProjection = false,
   ) {
     // http://uber-common.github.io/viewport-mercator-project/docs/api-reference/web-mercator-utils#code-classlanguage-textgetdistancescalesviewportcode
     const {
@@ -143,10 +144,10 @@ export default class CoordinateSystemService implements ICoordinateSystemService
     );
 
     // 经纬度投影到 Web 墨卡托坐标系
-    const positionPixels = this.cameraService.projectFlat(
-      [Math.fround(center[0]), Math.fround(center[1])],
-      Math.pow(2, zoom),
-    );
+    const projectionCenter = exactCenterProjection
+      ? center
+      : ([Math.fround(center[0]), Math.fround(center[1])] as [number, number]);
+    const positionPixels = this.cameraService.projectFlat(projectionCenter, Math.pow(2, zoom));
 
     // Web 墨卡托坐标系通过 VP 矩阵变换到世界坐标系
     this.viewportCenterProjection = vec4.transformMat4(

@@ -29,7 +29,7 @@ export const CoordinateUniform = {
 
 export interface ICoordinateSystemService {
   needRefresh: boolean;
-  refresh(offset?: [number, number]): void;
+  refresh(offset?: [number, number], exactCenterProjection?: boolean): void;
   getCoordinateSystem(): CoordinateSystem;
   setCoordinateSystem(coordinateSystem: CoordinateSystem): void;
   getViewportCenter(): [number, number];
