@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-git", { "repo": "antvis/L7" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "antvis/L7" }],
   "commit": false,
   "fixed": [["@antv/l7", "@antv/l7-*"]],
   "linked": [],
