@@ -67,10 +67,7 @@ function anchorToNumber(anchor: string | number | undefined): number {
 }
 
 export type styleSingle =
-  | number
-  | string
-  | [string, (single: any) => number]
-  | [string, [number, number]];
+  number | string | [string, (single: any) => number] | [string, [number, number]];
 export type styleOffset = string | [number, number] | [string, (single: any) => number];
 export type styleColor = string | [string, (single: any) => string] | [string, [string, string]];
 export interface IDataTextureFrame {
