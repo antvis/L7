@@ -1,6 +1,6 @@
 import { lodashUtil } from '../src/lodash-adapter';
 
-const { extent, uniq, clamp, isEqual, cloneDeep } = lodashUtil;
+const { extent, uniq, clamp, isEqual, cloneDeep, merge, mergeWith } = lodashUtil;
 
 describe('lodash-adapter', () => {
   describe('extent', () => {
@@ -73,6 +73,61 @@ describe('lodash-adapter', () => {
       expect(cloned).toEqual(obj);
       expect(cloned).not.toBe(obj);
       expect(cloned.b).not.toBe(obj.b);
+    });
+  });
+
+  describe('merge - prototype pollution protection', () => {
+    afterEach(() => {
+      // Clean up any prototype pollution that may have occurred
+      // @ts-ignore
+      delete Object.prototype['polluted'];
+    });
+
+    it('should not pollute Object.prototype via __proto__', () => {
+      const malicious = JSON.parse('{"__proto__":{"polluted":"PWNED"}}');
+      merge({}, malicious);
+      expect(({} as any).polluted).toBeUndefined();
+      expect(Object.prototype.hasOwnProperty.call(Object.prototype, 'polluted')).toBe(false);
+    });
+
+    it('should not pollute Object.prototype via constructor', () => {
+      const malicious = JSON.parse('{"constructor":{"prototype":{"polluted":"PWNED"}}}');
+      merge({}, malicious);
+      expect(({} as any).polluted).toBeUndefined();
+    });
+
+    it('should still merge normal properties correctly', () => {
+      const target = { a: 1 };
+      const source = { b: 2, c: { d: 3 } };
+      const result = merge(target, source);
+      expect(result).toEqual({ a: 1, b: 2, c: { d: 3 } });
+    });
+  });
+
+  describe('mergeWith - prototype pollution protection', () => {
+    afterEach(() => {
+      // @ts-ignore
+      delete Object.prototype['polluted'];
+    });
+
+    it('should not pollute Object.prototype via __proto__', () => {
+      const malicious = JSON.parse('{"__proto__":{"polluted":"PWNED"}}');
+      mergeWith({}, malicious, (targetVal: unknown, srcVal: unknown) => srcVal);
+      expect(({} as any).polluted).toBeUndefined();
+      expect(Object.prototype.hasOwnProperty.call(Object.prototype, 'polluted')).toBe(false);
+    });
+
+    it('should still merge normal properties with customizer', () => {
+      const target = { a: 1, b: [1, 2] };
+      const source = { b: [3, 4], c: 5 };
+      const result = mergeWith(target, source, (targetVal: unknown, srcVal: unknown) => {
+        if (Array.isArray(targetVal) && Array.isArray(srcVal)) {
+          return targetVal.concat(srcVal);
+        }
+        return undefined;
+      });
+      expect(result.b).toEqual([1, 2, 3, 4]);
+      expect(result.c).toBe(5);
     });
   });
 });
