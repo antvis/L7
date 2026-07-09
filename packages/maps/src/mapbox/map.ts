@@ -85,6 +85,7 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
       token,
       rotation = 0,
       mapInstance,
+      preserveDrawingBuffer,
       ...rest
     } = this.config;
 
@@ -128,7 +129,7 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
         style: this.getMapStyleValue(style),
         attributionControl,
         bearing: rotation,
-        ...rest,
+        preserveDrawingBuffer: preserveDrawingBuffer ?? undefined,
       });
     }
     this.map.on('load', () => {
