@@ -2,6 +2,7 @@
   "name": "l7-monorepo",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@8.15.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/antvis/L7"
