@@ -3,6 +3,9 @@ packages:
   - 'packages/*'
   # website
   - 'site'
+overrides:
+  '@monaco-editor/loader': 1.5.0
+
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true

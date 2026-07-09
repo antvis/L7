@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@monaco-editor/loader': 1.5.0
+
 importers:
 
   .:
@@ -66,9 +69,12 @@ importers:
       '@antv/async-hook':
         specifier: ^2.2.9
         version: 2.2.9
+      '@antv/l7':
+        specifier: workspace:*
+        version: link:packages/l7
       '@antv/l7-draw':
         specifier: ^3.1.5
-        version: 3.1.5(@antv/l7@2.28.14)
+        version: 3.1.5(@antv/l7@packages+l7)
       '@antv/translator':
         specifier: ^1.0.1
         version: 1.0.1
@@ -650,18 +656,21 @@ importers:
       '@antv/g2':
         specifier: ^4.2.8
         version: 4.2.12
+      '@antv/l7':
+        specifier: workspace:*
+        version: link:../packages/l7
       '@antv/l7-composite-layers':
         specifier: ^0.15.0
-        version: 0.15.3(@antv/l7@2.28.14)
+        version: 0.15.3(@antv/l7@packages+l7)
       '@antv/l7-draw':
         specifier: ^3.0.9
-        version: 3.1.5(@antv/l7@2.28.14)
+        version: 3.1.5(@antv/l7@packages+l7)
       '@antv/l7plot':
         specifier: ^0.x
-        version: 0.5.11(@antv/l7@2.28.14)
+        version: 0.5.11(@antv/l7@packages+l7)
       '@antv/larkmap':
         specifier: ^1.4.13
-        version: 1.5.1(@antv/l7@2.28.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.5.1(@antv/l7@packages+l7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@antv/util':
         specifier: ^2.0.9
         version: 2.0.17
@@ -973,45 +982,15 @@ packages:
   '@antv/g2@4.2.12':
     resolution: {integrity: sha512-kTg6ftJol+0hYRM2eMwJKq3JThdq4UAKgCoQalUPjwyF6SSKkWz2QdrIAxfLE7LSTwcIE+L8So1jMaOVVbEi6w==}
 
-  '@antv/l7-component@2.28.14':
-    resolution: {integrity: sha512-ABIxMJsLFplkUy2PTKdfdKt1Hf8wJKcp4lknSGVXp6SQ5O1g4dL8Sqx9UOMdhSDbvd2ToyXeWX7Yyw3BdFJYMg==}
-
   '@antv/l7-composite-layers@0.15.3':
     resolution: {integrity: sha512-oZJB3hGMM75mGJa/LpYPAgiGDFQ2QrpO4enOqIL+7ltx+0Wlr/+4kBig/WPG3f/twK7RncpfC0w3Vp1falitUA==}
     peerDependencies:
       '@antv/l7': ^2.11.5
 
-  '@antv/l7-core@2.28.14':
-    resolution: {integrity: sha512-w6CcCOtLA3ClqMJbufpdFvkMssE71ahauFm+YnGvDig1Vlz/EsKSs651vRwhDiOjxBvKwicnoeCmVUwVqRjF+Q==}
-
   '@antv/l7-draw@3.1.5':
     resolution: {integrity: sha512-0HtxnfbuCiFkRwXkUYN/MezAHaKCFrMeq5ZsN9HyhIkSatBR6MTelj4QJenSXc5FJ6zEssULJIr2zom5dySCTA==}
     peerDependencies:
       '@antv/l7': ^2.21.8
-
-  '@antv/l7-layers@2.28.14':
-    resolution: {integrity: sha512-3bdL+Q9VwexFX3rV9t9AK7wtP8P2556UUwvy01CLZrDytbXzL+D07blTGYYw0FV3CWwym8L+trKj89KJH+71+Q==}
-
-  '@antv/l7-map@2.28.14':
-    resolution: {integrity: sha512-9vnV//LFl+kNy/oMIDK3imfg4Td5oKIiXsvbMVVIjPOjqA/ZuWTFqcq4i0ZXiKOhsFYrmS7diCE7ijxn/CH7kQ==}
-
-  '@antv/l7-maps@2.28.14':
-    resolution: {integrity: sha512-dB2bXUjPOnOnXjwqTqcY2LcJ7SwDDCo0WzY2r37/ShS4KZAxXu99r+T9VTcAH7s6cNmC/0HneNqGe/xFEod2Dg==}
-
-  '@antv/l7-renderer@2.28.14':
-    resolution: {integrity: sha512-nmV9oMzmNHpeVeJXUKiD+BzkbbbRbvKC8fPV5ttwJqSSBO/tB33u4GJ0waZC+HaODXQT3q54LFo3eR7TBT90jw==}
-
-  '@antv/l7-scene@2.28.14':
-    resolution: {integrity: sha512-3HU4nOpmTVfxSsM4frJP/QIKTe4lqhVBjBAOLYGe3hGPSLLf5ec3iftzQurrrzZyKYra0xoj1f4sJcBIoI+/hg==}
-
-  '@antv/l7-source@2.28.14':
-    resolution: {integrity: sha512-iSnGEu550XPX5mITtoH0JEdlUsEzvCIbU1UlcEgllLaFNalWspFGldH+8BRbQeVp5P0TCRU2t1up6F6cxfOCpQ==}
-
-  '@antv/l7-utils@2.28.14':
-    resolution: {integrity: sha512-vaVLHt5Y3sBqsN75vkxYED2jLBSXWiOvvHnE1kIY4Z73zyRDgmDsHCU0JD0Fvzy0SpouGRRsxAp2fV0eSO6LHA==}
-
-  '@antv/l7@2.28.14':
-    resolution: {integrity: sha512-DknjyAfS5F/HDqNJafvWqt0AsuauLSFh5MTbTxPOYpKE/aDLGqX/FksTvCJdWTtpZJ3MzfAxqZ1tU/RMFqoF/w==}
 
   '@antv/l7plot-component@0.0.11':
     resolution: {integrity: sha512-aIl9K6I5MwMIU+Xxq/oOKXn0roAg5c73RjCXNmbTu8kxFEUUvCqU/35EDtfhWY7JKJeKnWRcl0fgDmTrD0t4iA==}
@@ -13617,163 +13596,45 @@ snapshots:
       '@antv/util': 2.0.17
       tslib: 2.8.1
 
-  '@antv/l7-component@2.28.14':
-    dependencies:
-      '@antv/l7-core': 2.28.14
-      '@antv/l7-layers': 2.28.14
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      eventemitter3: 4.0.7
-      supercluster: 7.1.5
-
-  '@antv/l7-composite-layers@0.15.3(@antv/l7@2.28.14)':
+  '@antv/l7-composite-layers@0.15.3(@antv/l7@packages+l7)':
     dependencies:
       '@antv/event-emitter': 0.1.3
-      '@antv/l7': 2.28.14
+      '@antv/l7': link:packages/l7
       '@antv/scale': 0.4.16
       '@antv/util': 2.0.17
       kdbush: 3.0.0
       lodash-es: 4.18.1
       reselect: 4.1.8
 
-  '@antv/l7-core@2.28.14':
+  '@antv/l7-draw@3.1.5(@antv/l7@packages+l7)':
     dependencies:
-      '@antv/async-hook': 2.2.9
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      '@mapbox/tiny-sdf': 1.2.5
-      '@turf/helpers': 6.5.0
-      eventemitter3: 4.0.7
-      gl-matrix: 3.4.4
-      hammerjs: 2.0.8
-      viewport-mercator-project: 6.2.3
-
-  '@antv/l7-draw@3.1.5(@antv/l7@2.28.14)':
-    dependencies:
-      '@antv/l7': 2.28.14
+      '@antv/l7': link:packages/l7
       '@turf/turf': 6.5.0
       eventemitter3: 4.0.7
       lodash: 4.18.1
       mousetrap: 1.6.5
       tippy.js: 6.3.7
 
-  '@antv/l7-layers@2.28.14':
-    dependencies:
-      '@antv/async-hook': 2.2.9
-      '@antv/l7-core': 2.28.14
-      '@antv/l7-maps': 2.28.14
-      '@antv/l7-source': 2.28.14
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      '@mapbox/martini': 0.2.0
-      '@turf/clone': 6.5.0
-      '@turf/helpers': 6.5.0
-      '@turf/meta': 6.5.0
-      '@turf/polygon-to-line': 6.5.0
-      '@turf/union': 6.5.0
-      earcut: 2.2.4
-      eventemitter3: 4.0.7
-      gl-matrix: 3.4.4
-
-  '@antv/l7-map@2.28.14':
-    dependencies:
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      '@mapbox/point-geometry': 0.1.0
-      '@mapbox/unitbezier': 0.0.1
-      eventemitter3: 4.0.7
-      gl-matrix: 3.4.4
-
-  '@antv/l7-maps@2.28.14':
-    dependencies:
-      '@amap/amap-jsapi-loader': 1.0.1
-      '@antv/l7-core': 2.28.14
-      '@antv/l7-map': 2.28.14
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      eventemitter3: 4.0.7
-      gl-matrix: 3.4.4
-      mapbox-gl: 1.13.3
-      maplibre-gl: 3.6.2
-      pmtiles: 2.11.0
-      viewport-mercator-project: 6.2.3
-
-  '@antv/l7-renderer@2.28.14':
-    dependencies:
-      '@antv/g-device-api': 1.6.13
-      '@antv/l7-core': 2.28.14
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      regl: 1.6.1
-
-  '@antv/l7-scene@2.28.14':
-    dependencies:
-      '@antv/l7-component': 2.28.14
-      '@antv/l7-core': 2.28.14
-      '@antv/l7-layers': 2.28.14
-      '@antv/l7-maps': 2.28.14
-      '@antv/l7-renderer': 2.28.14
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      eventemitter3: 4.0.7
-
-  '@antv/l7-source@2.28.14':
-    dependencies:
-      '@antv/async-hook': 2.2.9
-      '@antv/l7-core': 2.28.14
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-      '@mapbox/geojson-rewind': 0.5.2
-      '@mapbox/vector-tile': 1.3.1
-      '@turf/helpers': 6.5.0
-      '@turf/invariant': 6.5.0
-      '@turf/meta': 6.5.0
-      eventemitter3: 4.0.7
-      geojson-vt: 3.2.1
-      pbf: 3.3.0
-      supercluster: 7.1.5
-
-  '@antv/l7-utils@2.28.14':
-    dependencies:
-      '@babel/runtime': 7.29.2
-      '@turf/bbox': 6.5.0
-      '@turf/bbox-polygon': 6.5.0
-      '@turf/helpers': 6.5.0
-      earcut: 2.2.4
-      eventemitter3: 4.0.7
-      gl-matrix: 3.4.4
-
-  '@antv/l7@2.28.14':
-    dependencies:
-      '@antv/l7-component': 2.28.14
-      '@antv/l7-core': 2.28.14
-      '@antv/l7-layers': 2.28.14
-      '@antv/l7-maps': 2.28.14
-      '@antv/l7-scene': 2.28.14
-      '@antv/l7-source': 2.28.14
-      '@antv/l7-utils': 2.28.14
-      '@babel/runtime': 7.29.2
-
   '@antv/l7plot-component@0.0.11':
     dependencies:
       '@antv/dom-util': 2.0.4
       '@antv/util': 2.0.17
 
-  '@antv/l7plot@0.5.11(@antv/l7@2.28.14)':
+  '@antv/l7plot@0.5.11(@antv/l7@packages+l7)':
     dependencies:
       '@antv/event-emitter': 0.1.3
-      '@antv/l7': 2.28.14
+      '@antv/l7': link:packages/l7
       '@antv/l7plot-component': 0.0.11
       '@antv/util': 2.0.17
       lodash-es: 4.18.1
       topojson-client: 3.1.0
 
-  '@antv/larkmap@1.5.1(@antv/l7@2.28.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@antv/larkmap@1.5.1(@antv/l7@packages+l7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@antv/event-emitter': 0.1.3
-      '@antv/l7': 2.28.14
-      '@antv/l7-composite-layers': 0.15.3(@antv/l7@2.28.14)
-      '@antv/l7-draw': 3.1.5(@antv/l7@2.28.14)
+      '@antv/l7': link:packages/l7
+      '@antv/l7-composite-layers': 0.15.3(@antv/l7@packages+l7)
+      '@antv/l7-draw': 3.1.5(@antv/l7@packages+l7)
       ahooks: 3.9.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       classnames: 2.5.1
       color: 4.2.3
