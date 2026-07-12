@@ -4,6 +4,8 @@ import type { Controller, GUI } from 'lil-gui';
 export type GUIOptions = {
   map: TestCaseBasemap;
   animate: boolean;
+  renderer?: 'regl' | 'device';
+  enableWebGPU?: boolean;
   [keys: string]: any;
 };
 

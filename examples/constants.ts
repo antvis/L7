@@ -3,6 +3,8 @@ import type { GUIOptions, TestCaseBasemap } from './types';
 export const DEFAULT_GUI_OPTIONS: GUIOptions = {
   map: 'Map',
   animate: false,
+  renderer: 'regl',
+  enableWebGPU: false,
 };
 
 export const SEARCH_PARAMS_KEYS = ['namespace', 'name', 'snapshot'].concat(
