@@ -186,22 +186,6 @@ export interface IMaskLayerStyleOptions extends IBaseLayerStyleOptions {
   sourceLayer?: string;
 }
 
-export interface IWindLayerStyleOptions extends IBaseLayerStyleOptions {
-  uMin?: number;
-  uMax?: number;
-  vMin?: number;
-  vMax?: number;
-  fadeOpacity?: number;
-  speedFactor?: number;
-  dropRate?: number;
-  dropRateBump?: number;
-  numParticles?: number;
-  rampColors?: {
-    [key: number]: string;
-  };
-  sizeScale?: number;
-}
-
 export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   domain?: [number, number];
   noDataValue?: number;
@@ -337,7 +321,13 @@ export interface IRasterTerrainLayerStyleOptions extends IBaseRasterLayerStyleOp
   offset?: number;
 }
 export type ArrowType =
-  'circle' | 'triangle' | 'rect' | 'diamond' | 'classic' | 'halfTriangle' | 'none';
+  | 'circle'
+  | 'triangle'
+  | 'rect'
+  | 'diamond'
+  | 'classic'
+  | 'halfTriangle'
+  | 'none';
 export interface IArrowOptions {
   type: ArrowType;
   width?: number;
