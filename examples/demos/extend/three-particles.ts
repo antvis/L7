@@ -11,7 +11,6 @@ export const threeParticles: TestCase = async (options) => {
   const scene = await CaseScene({
     ...options,
     // Three.js r163+ 需要 WebGL2，必须使用 'device' 渲染器
-    renderer: 'device',
     mapConfig: {
       style: 'dark',
       center: [112, 28],

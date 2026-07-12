@@ -17,9 +17,9 @@ export interface ISceneConfig extends IRenderConfig {
   stencil?: boolean;
   debug?: boolean;
   /**
-   * Support regl & @antv/g-device-api now
+   * Renderer engine
    */
-  renderer?: 'regl' | 'device';
+  renderer?: 'device';
 }
 
 export interface IGlobalConfigService {
