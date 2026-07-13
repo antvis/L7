@@ -188,7 +188,7 @@ With holes:
 }
 ```
 
-[geojson detailed documentation]()
+[geojson detailed documentation](<>)
 
 ## GeoJSON related JS libraries
 

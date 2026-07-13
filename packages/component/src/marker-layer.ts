@@ -98,8 +98,7 @@ export default class MarkerLayer extends EventEmitter {
     // apply default markerOption if provided by layer
     try {
       const mOpt = (this.markerLayerOption as any).markerOption as
-        | undefined
-        | { color?: string; style?: { [k: string]: any }; className?: string };
+        undefined | { color?: string; style?: { [k: string]: any }; className?: string };
       if (mOpt && marker && typeof marker.getElement === 'function') {
         const el = marker.getElement();
         if (el) {
