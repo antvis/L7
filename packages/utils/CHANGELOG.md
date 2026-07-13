@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.29.1
+
+### Patch Changes
+
+- chore: upgrade deprecated dependencies and pnpm to v11
+
 ## 2.28.14
 
 ### Patch Changes

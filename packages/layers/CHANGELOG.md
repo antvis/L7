@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.29.1
+
+### Patch Changes
+
+- chore: upgrade deprecated dependencies and pnpm to v11
+- Updated dependencies []:
+  - @antv/l7-core@2.29.1
+  - @antv/l7-maps@2.29.1
+  - @antv/l7-source@2.29.1
+  - @antv/l7-utils@2.29.1
+
 ## 2.28.14
 
 ### Patch Changes
