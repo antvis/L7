@@ -1,7 +1,12 @@
 import type { IUniform } from '../renderer/IUniform';
 
 export type ShaderInjectType =
-  'vs:#decl' | 'vs:#main-start' | 'vs:#main-end' | 'fs:#decl' | 'fs:#main-start' | 'fs:#main-end';
+  | 'vs:#decl'
+  | 'vs:#main-start'
+  | 'vs:#main-end'
+  | 'fs:#decl'
+  | 'fs:#main-start'
+  | 'fs:#main-end';
 
 export type ShaderInject = Partial<Record<ShaderInjectType, string>>;
 

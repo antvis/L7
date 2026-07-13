@@ -413,7 +413,9 @@ layer.style({
 // 数据抽样，适合超大数据集
 const sampledData = data.filter((_, index) => index % 10 === 0);
 
-layer.source(sampledData, {/* config */});
+layer.source(sampledData, {
+  /* config */
+});
 ```
 
 ## 注意事项
