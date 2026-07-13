@@ -53,7 +53,7 @@
     }
   ],
   "engines": {
-    "node": ">=18",
+    "node": ">=22",
     "pnpm": ">=9"
   },
   "dependencies": {
