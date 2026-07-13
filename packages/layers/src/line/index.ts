@@ -34,6 +34,10 @@ export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
     await this.initLayerModels();
   }
 
+  public async rebuildModels() {
+    await this.buildModels();
+  }
+
   protected getDefaultConfig() {
     const type = this.getModelType();
     const defaultConfig = {
