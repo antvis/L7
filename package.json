@@ -2,6 +2,7 @@
   "name": "l7-monorepo",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.12.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/antvis/L7"
@@ -25,7 +26,7 @@
     "test-cover": "cross-env NODE_OPTIONS='--max-old-space-size=8192' jest --config ./jest.config.ts --coverage",
     "test:integration": "cross-env NODE_OPTIONS='--max-old-space-size=8192' jest --config ./jest.e2e.config.ts",
     "test:size": "pnpm --filter @antv/l7 build && limit-size",
-    "clean-dist": "pnpm --parallel -r --filter !@antv/l7-site clean",
+    "clean-dist": "pnpm --parallel -r --filter !@antv/l7-site run clean",
     "clean-deps": "./scripts/clean-deps.sh",
     "build": "npm run clean-dist && pnpm --parallel -r --filter !@antv/l7-site exec father build",
     "changeset": "changeset add",
@@ -52,8 +53,8 @@
     }
   ],
   "engines": {
-    "node": ">=18",
-    "pnpm": ">=8"
+    "node": ">=22",
+    "pnpm": ">=9"
   },
   "dependencies": {
     "@antv/g-device-api": "^1.6.4",
@@ -77,6 +78,7 @@
   },
   "devDependencies": {
     "@antv/async-hook": "^2.2.9",
+    "@antv/l7": "workspace:*",
     "@antv/l7-draw": "^3.1.5",
     "@antv/translator": "^1.0.1",
     "@changesets/changelog-github": "^0.5.0",
@@ -120,7 +122,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-glsl": "^0.1.3",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "rimraf": "^3.0.2",
+    "rimraf": "^5.0.0",
     "stylelint": "^16.3.0",
     "stylelint-config-standard": "^36.0.0",
     "stylelint-declaration-block-no-ignored-properties": "^2.8.0",
@@ -137,10 +139,5 @@
   },
   "resolutions": {
     "@monaco-editor/loader": "1.5.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "@monaco-editor/loader": "1.5.0"
-    }
   }
 }

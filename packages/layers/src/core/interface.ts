@@ -186,22 +186,6 @@ export interface IMaskLayerStyleOptions extends IBaseLayerStyleOptions {
   sourceLayer?: string;
 }
 
-export interface IWindLayerStyleOptions extends IBaseLayerStyleOptions {
-  uMin?: number;
-  uMax?: number;
-  vMin?: number;
-  vMax?: number;
-  fadeOpacity?: number;
-  speedFactor?: number;
-  dropRate?: number;
-  dropRateBump?: number;
-  numParticles?: number;
-  rampColors?: {
-    [key: number]: string;
-  };
-  sizeScale?: number;
-}
-
 export interface IImageLayerStyleOptions extends IBaseLayerStyleOptions {
   domain?: [number, number];
   noDataValue?: number;

@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-renderer",
-  "version": "2.28.14",
+  "version": "2.29.0",
   "description": "",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -23,8 +23,7 @@
     "@antv/g-device-api": "^1.6.4",
     "@antv/l7-core": "workspace:*",
     "@antv/l7-utils": "workspace:*",
-    "@babel/runtime": "^7.7.7",
-    "regl": "1.6.1"
+    "@babel/runtime": "^7.7.7"
   },
   "devDependencies": {
     "@antv/l7-test-utils": "workspace:^"

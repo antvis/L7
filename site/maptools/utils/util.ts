@@ -3,11 +3,9 @@ import type { FeatureCollection } from '@turf/helpers';
 // @ts-ignore
 import geojson2svg from 'geojson2svg';
 // @ts-ignore
-import shpWrite from 'shp-write';
-// @ts-ignore
 import tokml from 'tokml';
 // @ts-ignore
-import * as topojson from 'topojson';
+import { topology } from 'topojson-server';
 
 export function exportSVG(data: FeatureCollection) {
   const bbox = extent(data).bbox || [-180, -90, 180, 90];
@@ -42,21 +40,8 @@ export function exportSVG(data: FeatureCollection) {
   return `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg"> ${svgStrings}</svg>`;
 }
 
-export function exportShpfile(data: FeatureCollection, name: string) {
-  const options = {
-    folder: name,
-    types: {
-      point: `${name}points`,
-      polygon: `${name}polygons`,
-      line: `${name}lines`,
-    },
-  };
-
-  shpWrite.download(data, options);
-}
-
 export function exportTopoJSON(data: FeatureCollection) {
-  return JSON.stringify(topojson.topology({ data }));
+  return JSON.stringify(topology({ data }));
 }
 
 export function exportGeoJSON(data: FeatureCollection): string {

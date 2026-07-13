@@ -15,7 +15,6 @@ import TileDebugLayer from './tile/core/TileDebugLayer';
 import EarthLayer from './earth';
 
 import MaskLayer from './mask';
-import WindLayer from './wind';
 
 export * from './core/interface';
 export {
@@ -34,5 +33,4 @@ export {
   RasterLayer,
   TileDebugLayer,
   TileLayer,
-  WindLayer,
 };

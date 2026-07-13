@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-test-utils",
-  "version": "2.28.14",
+  "version": "2.29.0",
   "private": true,
   "description": "Test utils for L7",
   "keywords": [],

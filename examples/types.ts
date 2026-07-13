@@ -1,12 +1,11 @@
 import type { Scene } from '@antv/l7';
-import type { ISceneConfig } from '@antv/l7-core';
 import type { Controller, GUI } from 'lil-gui';
 
 export type GUIOptions = {
   map: TestCaseBasemap;
-  renderer: ISceneConfig['renderer'];
   animate: boolean;
-  enableWebGPU: boolean;
+  renderer?: 'regl' | 'device';
+  enableWebGPU?: boolean;
   [keys: string]: any;
 };
 

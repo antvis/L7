@@ -2,8 +2,8 @@ import type { GUIOptions, TestCaseBasemap } from './types';
 
 export const DEFAULT_GUI_OPTIONS: GUIOptions = {
   map: 'Map',
-  renderer: 'device',
   animate: false,
+  renderer: 'regl',
   enableWebGPU: false,
 };
 
