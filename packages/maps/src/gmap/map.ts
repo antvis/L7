@@ -8,10 +8,10 @@ import type {
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import Viewport from '../lib/web-mercator-viewport';
+import { MercatorCoordinate } from '../mapbase';
 import BaseMapService from '../utils/BaseMapService';
 import './logo.css';
 import GMapLoader from './maploader';

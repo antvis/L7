@@ -38,11 +38,11 @@ import type {
   Triangulation,
 } from '@antv/l7-core';
 import { BlendType, IDebugLog, ILayerStage, globalConfigService } from '@antv/l7-core';
-import type Source from '@antv/l7-source';
-import { processRelativeCoordinates } from '@antv/l7-source';
 import { encodePickingColor, lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { createPlugins } from '../plugins';
+import type Source from '../source';
+import { processRelativeCoordinates } from '../source';
 import { BlendTypes } from '../utils/blend';
 import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
 import LayerPickService from './LayerPickService';

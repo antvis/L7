@@ -36,9 +36,9 @@ import type {
   MapStyleName,
 } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
-import { type ISimpleMapCoord, type Map, SimpleMapCoord } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
+import { type ISimpleMapCoord, type Map, SimpleMapCoord } from '../mapbase';
 import { MapTheme } from './theme';
 const EventMap: {
   [key: string]: any;

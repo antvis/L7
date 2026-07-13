@@ -13,6 +13,7 @@ import TileLayer from './tile/core/BaseLayer';
 import TileDebugLayer from './tile/core/TileDebugLayer';
 
 import EarthLayer from './earth';
+import Source from './source';
 
 import MaskLayer from './mask';
 
@@ -31,6 +32,7 @@ export {
   PointLayer,
   PolygonLayer,
   RasterLayer,
+  Source,
   TileDebugLayer,
   TileLayer,
 };

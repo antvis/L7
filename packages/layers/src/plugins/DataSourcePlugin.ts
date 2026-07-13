@@ -1,6 +1,6 @@
 import type { ILayer, ILayerPlugin, IMapService } from '@antv/l7-core';
 import { IDebugLog, ILayerStage } from '@antv/l7-core';
-import Source from '@antv/l7-source';
+import Source from '../source';
 
 export default class DataSourcePlugin implements ILayerPlugin {
   protected mapService: IMapService;

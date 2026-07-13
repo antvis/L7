@@ -1,40 +1,38 @@
 {
-  "name": "@antv/l7",
-  "version": "2.29.1",
-  "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
-  "repository": "git@github.com:antvis/L7.git",
-  "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
-  "sideEffects": true,
-  "main": "lib/index.js",
-  "unpkg": "dist/l7.js",
-  "module": "es/index.js",
-  "types": "es/index.d.ts",
+  "dependencies": {
+    "@antv/l7-core": "workspace:*",
+    "@antv/l7-layers": "workspace:*",
+    "@antv/l7-maps": "workspace:*",
+    "@antv/l7-scene": "workspace:*",
+    "@antv/l7-utils": "workspace:*",
+    "@babel/runtime": "^7.7.7"
+  },
+  "description": "A Large-scale WebGL-powered Geospatial Data Visualization",
   "files": [
     "dist",
     "lib",
     "es",
     "!dist/report.html"
   ],
-  "scripts": {
-    "dev": "father dev",
-    "build": "npm run clean && father build",
-    "check-deps": "father doctor",
-    "lint": "eslint src",
-    "clean": "rimraf dist es lib"
-  },
-  "dependencies": {
-    "@antv/l7-component": "workspace:*",
-    "@antv/l7-core": "workspace:*",
-    "@antv/l7-layers": "workspace:*",
-    "@antv/l7-maps": "workspace:*",
-    "@antv/l7-scene": "workspace:*",
-    "@antv/l7-source": "workspace:*",
-    "@antv/l7-utils": "workspace:*",
-    "@babel/runtime": "^7.7.7"
-  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "name": "@antv/l7",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
-  }
+  },
+  "repository": "git@github.com:antvis/L7.git",
+  "scripts": {
+    "build": "npm run clean && father build",
+    "check-deps": "father doctor",
+    "clean": "rimraf dist es lib",
+    "dev": "father dev",
+    "lint": "eslint src"
+  },
+  "sideEffects": true,
+  "types": "es/index.d.ts",
+  "unpkg": "dist/l7.js",
+  "version": "2.29.1"
 }

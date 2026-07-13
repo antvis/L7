@@ -235,34 +235,6 @@ importers:
         specifier: ^4.10.1
         version: 4.10.2
 
-  packages/component:
-    dependencies:
-      '@antv/l7-core':
-        specifier: workspace:*
-        version: link:../core
-      '@antv/l7-layers':
-        specifier: workspace:*
-        version: link:../layers
-      '@antv/l7-utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@babel/runtime':
-        specifier: ^7.7.7
-        version: 7.29.7
-      eventemitter3:
-        specifier: ^4.0.0
-        version: 4.0.7
-      supercluster:
-        specifier: ^7.0.0
-        version: 7.1.5
-    devDependencies:
-      '@antv/l7-test-utils':
-        specifier: workspace:^
-        version: link:../test-utils
-      less:
-        specifier: ^4.1.3
-        version: 4.6.7
-
   packages/core:
     dependencies:
       '@antv/async-hook':
@@ -305,9 +277,6 @@ importers:
 
   packages/l7:
     dependencies:
-      '@antv/l7-component':
-        specifier: workspace:*
-        version: link:../component
       '@antv/l7-core':
         specifier: workspace:*
         version: link:../core
@@ -320,9 +289,6 @@ importers:
       '@antv/l7-scene':
         specifier: workspace:*
         version: link:../scene
-      '@antv/l7-source':
-        specifier: workspace:*
-        version: link:../source
       '@antv/l7-utils':
         specifier: workspace:*
         version: link:../utils
@@ -341,23 +307,29 @@ importers:
       '@antv/l7-maps':
         specifier: workspace:*
         version: link:../maps
-      '@antv/l7-source':
-        specifier: workspace:*
-        version: link:../source
       '@antv/l7-utils':
         specifier: workspace:*
         version: link:../utils
       '@babel/runtime':
         specifier: ^7.7.7
         version: 7.29.7
+      '@mapbox/geojson-rewind':
+        specifier: ^0.5.2
+        version: 0.5.2
       '@mapbox/martini':
         specifier: ^0.2.0
         version: 0.2.0
+      '@mapbox/vector-tile':
+        specifier: ^1.3.1
+        version: 1.3.1
       '@turf/clone':
         specifier: ^6.5.0
         version: 6.5.0
       '@turf/helpers':
         specifier: ^6.1.4
+        version: 6.5.0
+      '@turf/invariant':
+        specifier: ^6.1.2
         version: 6.5.0
       '@turf/meta':
         specifier: ^6.0.2
@@ -374,9 +346,18 @@ importers:
       eventemitter3:
         specifier: ^4.0.0
         version: 4.0.7
+      geojson-vt:
+        specifier: ^3.2.1
+        version: 3.2.1
       gl-matrix:
         specifier: ^3.1.0
         version: 3.4.4
+      pbf:
+        specifier: ^3.2.1
+        version: 3.3.0
+      supercluster:
+        specifier: ^7.0.0
+        version: 7.1.5
     devDependencies:
       '@antv/l7-test-utils':
         specifier: workspace:^
@@ -384,12 +365,30 @@ importers:
       '@types/earcut':
         specifier: ^2.1.0
         version: 2.1.4
+      '@types/geojson':
+        specifier: ^7946.0.14
+        version: 7946.0.16
+      '@types/geojson-vt':
+        specifier: 3.2.0
+        version: 3.2.0
       '@types/gl-matrix':
         specifier: ^2.4.5
         version: 2.4.5
+      '@types/mapbox__vector-tile':
+        specifier: ^1.3.0
+        version: 1.3.4
+      '@types/pbf':
+        specifier: ^3.0.2
+        version: 3.0.5
 
-  packages/map:
+  packages/maps:
     dependencies:
+      '@amap/amap-jsapi-loader':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@antv/l7-core':
+        specifier: workspace:*
+        version: link:../core
       '@antv/l7-utils':
         specifier: workspace:*
         version: link:../utils
@@ -402,34 +401,6 @@ importers:
       '@mapbox/unitbezier':
         specifier: ^0.0.1
         version: 0.0.1
-      eventemitter3:
-        specifier: ^4.0.4
-        version: 4.0.7
-      gl-matrix:
-        specifier: ^3.1.0
-        version: 3.4.4
-    devDependencies:
-      '@types/mapbox__point-geometry':
-        specifier: ^0.1.4
-        version: 0.1.4
-
-  packages/maps:
-    dependencies:
-      '@amap/amap-jsapi-loader':
-        specifier: ^1.0.1
-        version: 1.0.1
-      '@antv/l7-core':
-        specifier: workspace:*
-        version: link:../core
-      '@antv/l7-map':
-        specifier: workspace:*
-        version: link:../map
-      '@antv/l7-utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@babel/runtime':
-        specifier: ^7.7.7
-        version: 7.29.7
       eventemitter3:
         specifier: ^4.0.0
         version: 4.0.7
@@ -467,34 +438,18 @@ importers:
       '@types/mapbox-gl':
         specifier: ^1.11.2
         version: 1.13.10
+      '@types/mapbox__point-geometry':
+        specifier: ^0.1.4
+        version: 0.1.4
       '@types/viewport-mercator-project':
         specifier: ^6.1.0
         version: 6.1.6
 
-  packages/renderer:
+  packages/scene:
     dependencies:
       '@antv/g-device-api':
         specifier: ^1.6.4
         version: 1.6.13
-      '@antv/l7-core':
-        specifier: workspace:*
-        version: link:../core
-      '@antv/l7-utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@babel/runtime':
-        specifier: ^7.7.7
-        version: 7.29.7
-    devDependencies:
-      '@antv/l7-test-utils':
-        specifier: workspace:^
-        version: link:../test-utils
-
-  packages/scene:
-    dependencies:
-      '@antv/l7-component':
-        specifier: workspace:*
-        version: link:../component
       '@antv/l7-core':
         specifier: workspace:*
         version: link:../core
@@ -504,9 +459,6 @@ importers:
       '@antv/l7-maps':
         specifier: workspace:*
         version: link:../maps
-      '@antv/l7-renderer':
-        specifier: workspace:*
-        version: link:../renderer
       '@antv/l7-utils':
         specifier: workspace:*
         version: link:../utils
@@ -516,71 +468,16 @@ importers:
       eventemitter3:
         specifier: ^4.0.7
         version: 4.0.7
+      supercluster:
+        specifier: ^7.0.0
+        version: 7.1.5
     devDependencies:
       '@antv/l7-test-utils':
         specifier: workspace:^
         version: link:../test-utils
 
-  packages/source:
-    dependencies:
-      '@antv/async-hook':
-        specifier: ^2.2.9
-        version: 2.2.9
-      '@antv/l7-core':
-        specifier: workspace:*
-        version: link:../core
-      '@antv/l7-utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@babel/runtime':
-        specifier: ^7.7.7
-        version: 7.29.7
-      '@mapbox/geojson-rewind':
-        specifier: ^0.5.2
-        version: 0.5.2
-      '@mapbox/vector-tile':
-        specifier: ^1.3.1
-        version: 1.3.1
-      '@turf/helpers':
-        specifier: ^6.1.4
-        version: 6.5.0
-      '@turf/invariant':
-        specifier: ^6.1.2
-        version: 6.5.0
-      '@turf/meta':
-        specifier: ^6.0.2
-        version: 6.5.0
-      eventemitter3:
-        specifier: ^4.0.0
-        version: 4.0.7
-      geojson-vt:
-        specifier: ^3.2.1
-        version: 3.2.1
-      pbf:
-        specifier: ^3.2.1
-        version: 3.3.0
-      supercluster:
-        specifier: ^7.0.0
-        version: 7.1.5
-    devDependencies:
-      '@types/geojson':
-        specifier: ^7946.0.14
-        version: 7946.0.16
-      '@types/geojson-vt':
-        specifier: 3.2.0
-        version: 3.2.0
-      '@types/mapbox__vector-tile':
-        specifier: ^1.3.0
-        version: 1.3.4
-      '@types/pbf':
-        specifier: ^3.0.2
-        version: 3.0.5
-
   packages/test-utils:
     dependencies:
-      '@antv/l7-map':
-        specifier: workspace:^
-        version: link:../map
       '@antv/l7-maps':
         specifier: workspace:^
         version: link:../maps

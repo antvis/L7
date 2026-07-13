@@ -40,3 +40,7 @@ export {
   TencentMap,
   TMap,
 };
+
+// Re-exported from merged @antv/l7-map (mapbase) — abstract map primitives.
+export { MapMouseEvent, MercatorCoordinate, SimpleMapCoord } from './mapbase';
+export type { ISimpleMapCoord, MapOptions } from './mapbase';
