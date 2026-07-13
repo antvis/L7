@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.29.1
+
+### Patch Changes
+
+- chore: upgrade deprecated dependencies and pnpm to v11
+  EOF; __aone_exit=$?; pwd -P > '/var/folders/94/kysz739j6m10xq2dwb7jyklc0000gp/T/aone-copilot-cwd-1783927475957-2yg36tbl3k.txt' 2>/dev/null; exit $__aone_exit
+- Updated dependencies []:
+  - @antv/l7-core@2.29.1
+  - @antv/l7-utils@2.29.1
+
 ## 2.28.14
 
 ### Patch Changes
