@@ -5,14 +5,16 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
+  MapStyleConfig,
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
 import { MercatorCoordinate } from '../mapbase';
-import BaseMapService from '../utils/BaseMapService';
+import { MapTheme } from '../utils/theme';
 import './logo.css';
 import GMapLoader from './maploader';
 
@@ -25,7 +27,7 @@ const EventMap: {
   dragging: 'drag',
 };
 
-export default class GMapService extends BaseMapService<any> {
+export default class GMapService extends BaseMap<any> {
   // @ts-ignore
   protected viewport: IViewport = null;
 
@@ -120,7 +122,7 @@ export default class GMapService extends BaseMapService<any> {
     if (this.viewport) {
       this.viewport.syncWithMapCamera(option as any);
       this.updateCoordinateSystemService();
-      this.cameraChangedCallback(this.viewport);
+      this.cameraChangedCallback?.(this.viewport);
     }
   }
 
@@ -166,7 +168,7 @@ export default class GMapService extends BaseMapService<any> {
 
     if (mapInstance) {
       this.map = mapInstance as any;
-      this.$mapContainer = this.map.getDiv();
+      this.mapContainer = this.map.getDiv();
       if (logoVisible === false) {
         this.hideLogo();
       }
@@ -187,7 +189,7 @@ export default class GMapService extends BaseMapService<any> {
       });
 
       this.map = map;
-      this.$mapContainer = map.getDiv();
+      this.mapContainer = map.getDiv();
       if (logoVisible === false) {
         this.hideLogo();
       }
@@ -238,7 +240,7 @@ export default class GMapService extends BaseMapService<any> {
   private styleObserver: MutationObserver | null = null;
 
   public addMarkerContainer(): void {
-    const container = this.$mapContainer!;
+    const container = this.mapContainer!;
     this.markerContainer = DOM.create('div', 'l7-marker-container', container);
     this.markerContainer.setAttribute('tabindex', '-1');
     this.markerContainer.style.zIndex = '2';
@@ -250,31 +252,31 @@ export default class GMapService extends BaseMapService<any> {
   }
 
   public getCanvasOverlays(): HTMLElement {
-    return this.$mapContainer as HTMLElement;
+    return this.mapContainer as HTMLElement;
   }
 
   public getMapContainer(): HTMLElement {
     // 首次调用时设置 MutationObserver，
     // 防止 Hammer.js 在此元素上设置 touch-action: none 阻止 Google Map 原生手势
-    if (!this.styleObserver && this.$mapContainer) {
+    if (!this.styleObserver && this.mapContainer) {
       this.styleObserver = new MutationObserver(() => {
-        if (this.$mapContainer!.style.touchAction === 'none') {
-          this.$mapContainer!.style.touchAction = 'auto';
+        if (this.mapContainer!.style.touchAction === 'none') {
+          this.mapContainer!.style.touchAction = 'auto';
         }
-        if (this.$mapContainer!.style.userSelect === 'none') {
-          this.$mapContainer!.style.userSelect = '';
+        if (this.mapContainer!.style.userSelect === 'none') {
+          this.mapContainer!.style.userSelect = '';
         }
       });
-      this.styleObserver.observe(this.$mapContainer, {
+      this.styleObserver.observe(this.mapContainer, {
         attributes: true,
         attributeFilter: ['style'],
       });
     }
-    return this.$mapContainer as HTMLElement;
+    return this.mapContainer as HTMLElement;
   }
 
   public getMapCanvasContainer(): HTMLElement {
-    return this.$mapContainer as HTMLElement;
+    return this.mapContainer as HTMLElement;
   }
 
   // MapEvent — Google Maps 使用 google.maps.event.addListener/removeListener
@@ -360,6 +362,33 @@ export default class GMapService extends BaseMapService<any> {
   }
 
   // get dom
+  // 以下方法原先继承自 BaseMapService（mapbox 通用实现），迁移到 BaseMap 后显式补全，
+  // 方法体与原继承实现保持一致，行为不变。
+  public getMapStyle(): string {
+    try {
+      // @ts-ignore
+      const styleUrl = this.map.getStyle().sprite ?? '';
+      if (/^mapbox:\/\/sprites\/zcxduo\/\w+\/\w+$/.test(styleUrl)) {
+        return styleUrl?.replace(/\/\w+$/, '').replace(/sprites/, 'styles');
+      }
+      return styleUrl;
+    } catch {
+      return '';
+    }
+  }
+
+  public getMapStyleConfig(): MapStyleConfig {
+    return MapTheme;
+  }
+
+  public setMaxZoom(max: number): void {
+    this.map.setMaxZoom(max);
+  }
+
+  public setMinZoom(min: number): void {
+    this.map.setMinZoom(min);
+  }
+
   public getContainer(): HTMLElement | null {
     return this.map.getDiv();
   }
