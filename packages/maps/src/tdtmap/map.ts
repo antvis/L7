@@ -520,16 +520,7 @@ export default class TdtMapService extends BaseMap<any> {
   }
 
   public getMapStyle(): string {
-    try {
-      // @ts-ignore
-      const styleUrl = this.map.getStyle().sprite ?? '';
-      if (/^mapbox:\/\/sprites\/zcxduo\/\w+\/\w+$/.test(styleUrl)) {
-        return styleUrl?.replace(/\/\w+$/, '').replace(/sprites/, 'styles');
-      }
-      return styleUrl;
-    } catch {
-      return '';
-    }
+    return this.config.style ?? '';
   }
 
   public getMapStyleConfig(): MapStyleConfig {
@@ -537,8 +528,9 @@ export default class TdtMapService extends BaseMap<any> {
   }
 
   public setMapStyle(style: MapStyleName): void {
-    // @ts-ignore
-    this.map?.setStyle(this.getMapStyleValue(style));
+    if (this.map && typeof this.map.setStyle === 'function') {
+      this.map.setStyle(this.getMapStyleValue(style));
+    }
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
