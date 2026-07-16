@@ -28,8 +28,7 @@ const EventMap: {
 };
 
 export default class GMapService extends BaseMap<any> {
-  // @ts-ignore
-  protected viewport: IViewport = null;
+  protected viewport: IViewport = new Viewport();
 
   // Google Map 和 L7 内置 Map 均使用 Web Mercator，zoom level 定义一致，无需偏移
   protected zoomOffset: number = 0;
