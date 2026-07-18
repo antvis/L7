@@ -23,7 +23,6 @@ import type {
   IMercator,
   IPoint,
   IStatusOptions,
-  IViewport,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
 import { type Map } from '@antv/l7-map';
@@ -313,9 +312,7 @@ export default abstract class MapboxBaseMap<T>
     // @ts-ignore
     const renderCanvas = this.map?.getCanvas();
     const layersPng =
-      type === 'jpg'
-        ? renderCanvas?.toDataURL('image/jpeg')
-        : renderCanvas?.toDataURL('image/png');
+      type === 'jpg' ? renderCanvas?.toDataURL('image/jpeg') : renderCanvas?.toDataURL('image/png');
     return layersPng || '';
   }
 
