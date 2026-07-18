@@ -341,7 +341,7 @@ export default abstract class MapboxBaseMap<T>
   };
 
   public destroy() {
-    this.eventEmitter.removeAllListeners();
+    super.destroy();
     if (this.map) {
       this.map.remove();
       this.mapContainer = null;
