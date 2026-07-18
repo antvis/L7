@@ -314,9 +314,9 @@ export default abstract class MapboxBaseMap<T>
     const renderCanvas = this.map?.getCanvas();
     const layersPng =
       type === 'jpg'
-        ? (renderCanvas?.toDataURL('image/jpeg') as string)
-        : (renderCanvas?.toDataURL('image/png') as string);
-    return layersPng;
+        ? renderCanvas?.toDataURL('image/jpeg')
+        : renderCanvas?.toDataURL('image/png');
+    return layersPng || '';
   }
 
   // ====== 相机同步回调 (默认 mapbox 实现, earth 覆盖) ======
