@@ -1,4 +1,5 @@
-import BaseMapService from '../utils/BaseMapService';
+import BaseMap from '../lib/base-map';
+import { MapTheme } from '../utils/theme';
 
 import type {
   Bounds,
@@ -7,6 +8,8 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
+  MapStyleConfig,
+  MapStyleName,
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
@@ -22,9 +25,8 @@ const EventMap: {
   zoomchange: ['Ge'],
 };
 
-// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
-export default class TdtMapService extends BaseMapService<any> {
-  protected viewport: IViewport | null = null;
+export default class TdtMapService extends BaseMap<any> {
+  protected viewport: IViewport = new Viewport();
   protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
     new Map();
   // @ts-ignore
@@ -146,7 +148,7 @@ export default class TdtMapService extends BaseMapService<any> {
     if (this.viewport) {
       this.viewport.syncWithMapCamera(option as any);
       this.updateCoordinateSystemService();
-      this.cameraChangedCallback(this.viewport);
+      this.cameraChangedCallback?.(this.viewport);
     }
   };
 
@@ -172,7 +174,7 @@ export default class TdtMapService extends BaseMapService<any> {
       this.map = mapInstance;
       // @ts-ignore
       this.map.centerAndZoom(new window.T.LngLat(center[0], center[1]), zoom);
-      this.$mapContainer = this.map.getContainer();
+      this.mapContainer = this.map.getContainer();
 
       // @ts-ignore
       const point = new window.T.LngLat(center[0], center[1]);
@@ -184,9 +186,9 @@ export default class TdtMapService extends BaseMapService<any> {
         throw Error('No container id specified');
       }
 
-      this.$mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
+      this.mapContainer = this.creatMapContainer(id as string | HTMLDivElement);
       // @ts-ignore
-      const map = new T.Map(this.$mapContainer, {
+      const map = new T.Map(this.mapContainer, {
         // @ts-ignore
         center: window.T.LngLat(center[0], center[1]),
         minZoom,
@@ -501,6 +503,34 @@ export default class TdtMapService extends BaseMapService<any> {
 
   public getCustomCoordCenter?(): [number, number] {
     throw new Error('Method not implemented.');
+  }
+
+  // 以下方法原先继承自 BaseMapService（mapbox 通用实现），迁移到 BaseMap 后显式补全，
+  // 方法体与原继承实现保持一致，行为不变。
+  public getContainer(): HTMLElement | null {
+    return this.map.getContainer();
+  }
+
+  public getMinZoom(): number {
+    return this.map.getMinZoom();
+  }
+
+  public getMaxZoom(): number {
+    return this.map.getMaxZoom();
+  }
+
+  public getMapStyle(): string {
+    return this.config.style ?? '';
+  }
+
+  public getMapStyleConfig(): MapStyleConfig {
+    return MapTheme;
+  }
+
+  public setMapStyle(style: MapStyleName): void {
+    if (this.map && typeof this.map.setStyle === 'function') {
+      this.map.setStyle(this.getMapStyleValue(style));
+    }
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
