@@ -325,7 +325,7 @@ export default abstract class MapboxBaseMap<T>
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
     // resync
-    (this.viewport as IViewport).syncWithMapCamera({
+    this.viewport.syncWithMapCamera({
       bearing: this.map.getBearing(),
       center: [lng, lat],
       viewportHeight: this.map.transform.height,
@@ -337,7 +337,7 @@ export default abstract class MapboxBaseMap<T>
     });
 
     this.updateCoordinateSystemService();
-    this.cameraChangedCallback?.(this.viewport as IViewport);
+    this.cameraChangedCallback?.(this.viewport);
   };
 
   public destroy() {
