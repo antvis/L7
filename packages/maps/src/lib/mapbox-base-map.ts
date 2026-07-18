@@ -243,7 +243,7 @@ export default abstract class MapboxBaseMap<T>
     if (option.rotateEnable === false) {
       this.map.dragRotate.disable();
     }
-    if (option.dragEnable === true) {
+    if (option.rotateEnable === true) {
       this.map.dragRotate.enable();
     }
     if (option.keyboardEnable === false) {
