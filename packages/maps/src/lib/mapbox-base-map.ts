@@ -127,7 +127,7 @@ export default abstract class MapboxBaseMap<T>
         this.map.off(mapped, proxy);
         mapForType.delete(handle);
       }
-      if ((mapForType as any).size === 0) {
+      if (mapForType.size === 0) {
         this.evtCbProxyMap.delete(mapped);
       }
     }
