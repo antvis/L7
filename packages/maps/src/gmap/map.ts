@@ -232,10 +232,6 @@ export default class GMapService extends BaseMap<any> {
     }
   }
 
-  public onCameraChanged(callback: (viewport: IViewport) => void): void {
-    this.cameraChangedCallback = callback;
-  }
-
   private styleObserver: MutationObserver | null = null;
 
   public addMarkerContainer(): void {
@@ -438,10 +434,6 @@ export default class GMapService extends BaseMap<any> {
       [sw.lng(), sw.lat()],
       [ne.lng(), ne.lat()],
     ];
-  }
-
-  public setBgColor(color: string): void {
-    this.bgColor = color;
   }
 
   public setMapStyle(style: any): void {

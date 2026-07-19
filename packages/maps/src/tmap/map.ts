@@ -267,10 +267,6 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     }
   }
 
-  public once(): void {
-    throw new Error('Method not implemented.');
-  }
-
   // get dom
   public getContainer(): HTMLElement | null {
     return this.map.getContainer();
