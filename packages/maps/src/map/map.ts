@@ -113,10 +113,7 @@ export default class DefaultMapService extends MapboxBaseMap<Map> {
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
-    let wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      wrapper = document.getElementById(id) as HTMLDivElement;
-    }
+    const wrapper = super.creatMapContainer(id);
     const container = document.createElement('div');
     container.style.cssText += `
       position: absolute;
