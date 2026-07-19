@@ -55,9 +55,6 @@ export default class TdtMapService extends BaseMap<any> {
     return this.markerContainer;
   }
 
-  public onCameraChanged(callback: (viewport: IViewport) => void): void {
-    this.cameraChangedCallback = callback;
-  }
   private resize(ev: any) {
     this.sceneContainer.style.width = ev.newSize.x + 'px';
     this.sceneContainer.style.height = ev.newSize.y + 'px';
@@ -298,10 +295,6 @@ export default class TdtMapService extends BaseMap<any> {
     } else {
       offProxy(EventMap[type] || type);
     }
-  }
-
-  public once(type: string, handler: (...args: any[]) => void): void {
-    throw new Error('Method not implemented.');
   }
 
   // get dom
