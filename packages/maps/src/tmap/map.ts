@@ -5,14 +5,16 @@ import type {
   IPoint,
   IStatusOptions,
   IViewport,
+  MapStyleConfig,
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
 import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
-import BaseMapService from '../utils/BaseMapService';
+import { MapTheme } from '../utils/theme';
 import './logo.css';
 import TMapLoader from './maploader';
 
@@ -27,8 +29,7 @@ const EventMap: {
   dragging: 'drag',
 };
 
-// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
-export default class TMapService extends BaseMapService<TMap.Map> {
+export default class TMapService extends BaseMap<TMap.Map> {
   // @ts-ignore
   protected viewport: IViewport = null;
 
@@ -102,7 +103,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     if (mapInstance) {
       // If there's already a map instance, maybe not setting any other configurations
       this.map = mapInstance as any;
-      this.$mapContainer = this.map.getContainer();
+      this.mapContainer = this.map.getContainer();
       if (logoVisible === false) {
         this.hideLogo();
       }
@@ -126,7 +127,7 @@ export default class TMapService extends BaseMapService<TMap.Map> {
       // @ts-ignore
       this.map = map;
       // @ts-ignore
-      this.$mapContainer = map.getContainer();
+      this.mapContainer = map.getContainer();
       if (logoVisible === false) {
         this.hideLogo();
       }
@@ -288,6 +289,14 @@ export default class TMapService extends BaseMapService<TMap.Map> {
     return this.map.transform._maxZoom;
   }
 
+  public setMaxZoom(max: number): void {
+    (this.map as any).setMaxZoom?.(max);
+  }
+
+  public setMinZoom(min: number): void {
+    (this.map as any).setMinZoom?.(min);
+  }
+
   // get map params
   public getType() {
     return 'tmap';
@@ -334,6 +343,14 @@ export default class TMapService extends BaseMapService<TMap.Map> {
 
   public setBgColor(color: string): void {
     this.bgColor = color;
+  }
+
+  public getMapStyle(): string {
+    return '';
+  }
+
+  public getMapStyleConfig(): MapStyleConfig {
+    return MapTheme;
   }
 
   public setMapStyle(styleId: any): void {
