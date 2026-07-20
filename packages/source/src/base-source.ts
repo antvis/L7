@@ -12,6 +12,7 @@ import type { SourceTile, TilesetManager } from '@antv/l7-utils';
 import { extent, lodashUtil } from '@antv/l7-utils';
 import type { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
+import { Bounds } from './bounds';
 import { ClusterManager } from './cluster-manager';
 import { getParser, getTransform } from './factory';
 import { FeatureIndex } from './feature-index';
@@ -28,9 +29,6 @@ export default class Source extends EventEmitter implements ISource {
   public type: string = 'source';
   public inited: boolean = false;
   public data: IParserData;
-  public center: [number, number];
-  // 数据范围
-  public extent: BBox;
   // 生命周期钩子
   public hooks = {
     init: new SyncHook(),
@@ -84,8 +82,23 @@ export default class Source extends EventEmitter implements ISource {
   private readonly featureIndex: FeatureIndex;
   // ────────────────────────────────────────────────────────────────
 
-  // 是否有效范围
-  private invalidExtent: boolean = false;
+  // ─── 数据范围 value object（阶段 1.4）───────────────────────────
+  // extent / center / invalidExtent 三态从 Source 字段搬到 Bounds。
+  // 对外通过 getter 透明转发：ISource.extent / .center 仍可读，
+  // ClusterManager 的 getExtent / getInvalidExtent 闭包改读 bounds。
+  // 状态由 `bounds.update(bbox)` 原子写入，Source 不再分散赋值。
+  private readonly bounds: Bounds = new Bounds();
+
+  public get extent(): BBox {
+    return this.bounds.extent;
+  }
+  public get center(): [number, number] {
+    return this.bounds.center;
+  }
+  public get invalidExtent(): boolean {
+    return this.bounds.invalidExtent;
+  }
+  // ────────────────────────────────────────────────────────────────
 
   // 原始数据
   protected originData: any;
@@ -100,8 +113,8 @@ export default class Source extends EventEmitter implements ISource {
     this.originData = data;
     // delegate 必须先于 initCfg 创建：initCfg 会通过 setter 写 cluster 字段
     this.clusterManager = new ClusterManager(
-      () => this.extent,
-      () => this.invalidExtent,
+      () => this.bounds.extent,
+      () => this.bounds.invalidExtent,
     );
     this.tilesetAdapter = new TilesetAdapter();
     this.featureIndex = new FeatureIndex(
@@ -260,19 +273,8 @@ export default class Source extends EventEmitter implements ISource {
       return;
     }
 
-    // 计算范围
-    this.extent = extent(this.data.dataArray);
-    this.setCenter(this.extent);
-    this.invalidExtent = this.extent[0] === this.extent[2] || this.extent[1] === this.extent[3];
-  }
-
-  private setCenter(bbox: BBox) {
-    this.center = [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2];
-    if (isNaN(this.center[0]) || isNaN(this.center[1])) {
-      // this.center = [NaN, NaN] // Infinity - Infinity = NaN
-      // 默认设置为大地原点
-      this.center = [108.92361111111111, 34.54083333333333];
-    }
+    // 计算范围（extent + center + invalidExtent 一次更新，阶段 1.4）
+    this.bounds.update(extent(this.data.dataArray));
   }
 
   /**

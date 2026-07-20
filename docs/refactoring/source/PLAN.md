@@ -57,7 +57,7 @@ utils/           bandOperation/ tile/ csv/hexbin/relative-coordinates/statistics
 - 1.1 `ClusterManager`：封装 Supercluster + `clusterOptions` + `updateClusterData` + `getClusters*` + `calcClusterExtent`，搬出 ~150 行 ☑
 - 1.2 `TilesetAdapter`：包 `initTileset` + 7 个 `reload*/getTile*` 方法 ☑
 - 1.3 `FeatureIndex`：`getFeatureById/getFeatureId/updateFeaturePropertiesById` + `dataArrayChanged` 状态 ☑
-- 1.4 `Bounds` value object：`extent/center/setCenter/invalidExtent`
+- 1.4 `Bounds` value object：`extent/center/setCenter/invalidExtent` ☑
 
 收益：`base-source.ts` 从 358 行降到 ~120 行的「协调者」。
 

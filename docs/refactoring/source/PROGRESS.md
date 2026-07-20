@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 1.4**：抽 `Bounds` value object —— 把 `base-source.ts` 中的 `extent` / `center` / `setCenter()` / `invalidExtent`（约 20 行）抽成 `Bounds` 类，封装范围计算与中心点推导。`Source.extent` / `Source.center` 改 getter 转发 `bounds.extent` / `.center`，`executeParser` 末尾的 `this.extent = ...; this.setCenter(...); this.invalidExtent = ...` 改调 `this.bounds.update(...)`。`ClusterManager` 的 `getExtent` / `getInvalidExtent` 闭包改为读 `this.bounds.extent` / `.invalidExtent`。详见 [PLAN.md § 阶段 1.4](./PLAN.md)。
+**阶段 2.1**：定义统一 `interface Parser<TData, TCfg, TResult extends IParserData>`，逐步给每个 parser 标注泛型。目标：parser 函数签名从「`any` 进 `IParserData` 出」收敛为强类型契约，为阶段 2.2（`PARSERS/TRANSFORMS` 全局 Map → `ParserRegistry` class）和 2.3（`getParser` 抛 `ParserNotFoundError`）打基础。详见 [PLAN.md § 阶段 2.1](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,40 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 1.4] 抽 Bounds value object（commit <SHA 待回填>）
+
+- **改了什么**：
+  - 新增 `src/bounds.ts`（50 行）从 `base-source.ts` 抽出数据范围 / 中心点计算职责：
+    - `public extent: BBox` / `public center: [number, number]` / `public invalidExtent: boolean` 三字段
+    - `public update(bbox: BBox): void` 原子写入 —— 合并原 `executeParser` 末尾三行（`extent` 计算 + `setCenter` + `invalidExtent` 判定）
+    - `private setCenter(bbox)` 含 NaN→大地原点兜底（保留原行为）
+  - `base-source.ts`（290 → 292 行，+2 行净增但语义收敛）：
+    - 删除 `public extent: BBox`、`public center: [number, number]`、`private invalidExtent: boolean = false` 三字段
+    - 删除 `private setCenter(bbox)` 方法（整段搬到 Bounds）
+    - 新增 `private readonly bounds: Bounds = new Bounds()` + 3 个 getter（`extent`/`center`/`invalidExtent`）转发 `bounds.*`
+    - `executeParser` 末尾 `this.extent = ...; this.setCenter(...); this.invalidExtent = ...` 三行收敛为 `this.bounds.update(extent(...))` 一行
+    - `ClusterManager` 构造闭包：`() => this.extent` → `() => this.bounds.extent`、`() => this.invalidExtent` → `() => this.bounds.invalidExtent`
+    - import 增加 `Bounds`（value import）
+- **设计取舍**：
+  - **三 getter 转发保留 `ISource.extent`/`.center` 可读语义**：外部直读 `source.extent` / `source.center` 不变（layers 包未见直接写 extent，但 ISource 字段契约保留 getter）。
+  - **`invalidExtent` 同样 getter 转发**：原为 `private`，仅 `ClusterManager.calcExtent` 经闭包读。getter 是 public（TS 需要外部访问），但无 setter 实质只读，与原 private 字段语义等价。
+  - **行数微增的原因**：新增 3 个 getter（每个 3 行）+ import + 字段块注释 + bounds 字段，合计 +14 行；移除实现部分（3 字段 + setCenter 7 行 + executeParser 3 行 = ~12 行）→ 净 +2 行。但**状态写入从 3 处分散赋值收敛为 1 处原子 `bounds.update`**，且语义封装到 value object。
+  - **`Bounds` 是 value object 而非 delegate**：与 1.1-1.3 的 delegate 不同，Bounds 没有对 Source 状态的访问需求（不读 parser/cluster/data），它自己持有 extent/center，`update` 是纯写入。这是 stage 1 里第一个「自洽状态对象」，为阶段 2 状态机类（ParserRegistry 等）铺路。
+- **偏离 PLAN 的说明**：PLAN 估算阶段 1 完成后 `base-source.ts` ~120 行「协调者」目标。实际阶段 1.1-1.4 完成后 292 行（起点 358，-66 行）。原因：各 delegate 的 getter/转发占大量行（84 行 accessor 转发 + 7 方法转发 + 构造期 4 delegate 实例化），而 PLAN 只估算了「搬走」的净收益。阶段 2 抽 ParserRegistry 后 base-source 的 `executeParser`/`executeTrans` 本身可进一步收敛，届时再评估。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source/src 自身 0 错误，总错误 31（基线不变，全 core `.glsl` 噪音）。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 个 pre-existing 错误（基线不变），ClusterManager 闭包改读 `bounds.extent`/`.invalidExtent` 后 `calcClusterExtent` 链路仍 work。
+  - `eslint`：通过（`bounds.ts` + `base-source.ts` 干净，`Bounds` 作 statement-scope value import 不违反 `consistent-type-imports`）。
+  - `prettier --check`：通过。
+  - `jest packages/source/__tests__`：5 suites / 27 tests 全通过。
+- **风险/注意**：
+  - **`extent` 同名歧义**：`@antv/l7-utils` 导出的 `extent()` 函数与 `Source.extent` getter 同名。getter 里 `this.bounds.extent` 是 Bounds 实例的 public 字段，不调用 l7-utils 函数；`executeParser` 里 `extent(this.data.dataArray)` 是 l7-utils 函数。闭包 `() => this.bounds.extent` 也走 getter 路径，无递归。验证后 tsc 无歧义报错。
+  - **NaN 兜底中心点保留**：`[108.92361111111111, 34.54083333333]` 大地原点（原代码默认值）原样搬到 `Bounds.setCenter`，与迁移前 `Source.setCenter` 数值精度一致。
+  - **`cancelExtent` 早返回路径**：`executeParser` 在 `parser.cancelExtent` 时 `return`，`bounds.update` 不被调用 —— `bounds` 三字段保持 `undefined`/`false` 初值。原代码同样不赋值 extent/center/invalidExtent，语义等价。
+- **遗留**：→ 阶段 2.1 定义统一 `interface Parser<TData, TCfg, TResult>`，给每个 parser 标注泛型。阶段 1 God Class 拆解完赛（4 delegate + 1 value object），下一步转入 Parser 注册机制现代化。
+
+---
 
 ## [阶段 1.3] 拆 FeatureIndex delegate（commit 755becf）
 
