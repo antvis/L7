@@ -6,9 +6,9 @@
 
 ## 📍 下一步
 
-**阶段 0.4**：合并 `parser/rasterRgb.ts` ↔ `parser/raster/rgb.ts`（同名 function `rasterRgb`），ndi 同理；统一为 `parser/rgb.ts`、`parser/ndi.ts`。
+**阶段 0.5**：`testTile` parser 移出生产 entry，改为 dev-only 注册（确认无下游依赖后）。
 
-详见 [PLAN.md § 阶段 0.4](./PLAN.md)。完成后在本节下方追加记录，并更新「下一步」为 0.5。
+详见 [PLAN.md § 阶段 0.5](./PLAN.md)。完成后在本节下方追加记录，并更新「下一步」为 0.6。
 
 ---
 
@@ -60,7 +60,7 @@
 
 ---
 
-## [阶段 0.3] 为 transform 加严格 cfg interface（commit 待回填）
+## [阶段 0.3] 为 transform 加严格 cfg interface（commit a41999c）
 
 - **改了什么**：
   - 新增 `src/transform/types.ts`，定义 `StatMethod` 及 6 个内置 transform 的严格 cfg：`IFilterTransformCfg` / `IMapTransformCfg` / `IJoinTransformCfg` / `IAggregatorTransformCfg`（grid/hexagon 共用，别名 `IGridTransformCfg`/`IHexagonTransformCfg`）。
@@ -79,5 +79,24 @@
   - 纯类型/局部变量改动，运行时行为不变（`as` 断言不产生运行时代码）。
   - 类型 narrow 后若调用方传了不符合结构的 cfg，运行时仍会按原逻辑报错（如 `Satistics.statMap[invalid]`），未新增校验 —— 符合本阶段"零行为变化"原则。
 - **遗留**：→ 阶段 2 注册机制现代化时，让 transform 签名直接用具体 cfg，移除 `as` 断言。
+
+---
+
+## [阶段 0.4] 扁平化 parser/raster 子目录 + 修正函数名（commit 待回填）
+
+- **改了什么**：
+  - `git mv` `parser/raster/rgb.ts` → `parser/rgb.ts`、`parser/raster/ndi.ts` → `parser/ndi.ts`，删除空的 `parser/raster/` 子目录。
+  - 修正新文件 import 相对路径（`../../` → `../`）。
+  - **修正函数名**（复制粘贴遗留 bug）：`parser/rgb.ts` 的 `export default function rasterRgb` → `rgb`；`parser/ndi.ts` 的 `export default function rasterRgb` → `ndi`。函数名此前三者都叫 `rasterRgb`，仅模块 default export 的局部名，导入侧用注册名，运行时无影响，但调试/栈追踪会更准确。
+  - `src/index.ts` 更新两条 import 路径，prettier 顺带重排 import 顺序。
+- **PLAN 修正**：PLAN 原写「合并两个同名 rasterRgb（重复）」，实际三个 `raster*Rgb` parser（`rasterRgb` / `rgb` / `ndi`）注册名与功能均不同，是命名巧合相同而非重复。本次改为「命名/位置整理」。
+- **怎么验证**：
+  - `tsc --noEmit`：source/src 自身 0 错误，总错误 31（基线不变）。
+  - `prettier --check`：通过。
+  - `jest packages/source`：27/27 通过。
+- **风险/注意**：
+  - `git mv` 保留文件历史。default export 函数名改动对导入方无影响（import 名独立）。
+  - `parser/raster.ts`（无斜杠）是另一个独立 parser，未误改。
+- **遗留**：→ `RasterDataType` / `IRGBParseCfg` 在 `rgb.ts` 与 `ndi.ts` 重复定义，且 ndi 用 IRGBParseCfg 名不副实，留待后续统一（记 BACKLOG）。
 
 ---

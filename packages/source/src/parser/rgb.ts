@@ -1,7 +1,7 @@
 import type { IParserData } from '@antv/l7-core';
-import type { IRasterCfg } from '../../interface';
-import { percentile } from '../../utils/bandOperation/operationSchema';
-import { extentToCoord } from '../../utils/util';
+import type { IRasterCfg } from '../interface';
+import { percentile } from '../utils/bandOperation/operationSchema';
+import { extentToCoord } from '../utils/util';
 
 /**
  * @description: 栅格数据解析
@@ -24,7 +24,7 @@ export interface IRGBParseCfg extends IRasterCfg {
   BMinMax?: [number, number];
 }
 
-export default function rasterRgb(data: RasterDataType[], cfg: IRGBParseCfg): IParserData {
+export default function rgb(data: RasterDataType[], cfg: IRGBParseCfg): IParserData {
   const { extent, coordinates, width, height, ...options } = cfg;
   if (data.length < 3) {
     console.warn('RGB解析需要三个波段的数据');

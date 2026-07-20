@@ -48,3 +48,15 @@
 ---
 
 <!-- 以下为重构过程中新增的遗留项，倒序追加 -->
+
+### [独立小项] RasterDataType / IRGBParseCfg 重复定义
+
+- **位置**：
+  - `packages/source/src/parser/rgb.ts:9-24`（`RasterDataType`）+ `:26-33`（`IRGBParseCfg`）
+  - `packages/source/src/parser/ndi.ts:9-24`（`RasterDataType`）+ `:26-33`（`IRGBParseCfg`）
+- **问题**：两个文件各自定义完全相同的 `RasterDataType` 与 `IRGBParseCfg`。ndi 用 `IRGBParseCfg` 名不副实（ndi 只用 `bands` 2 元素，不用 countCut/R/G/B MinMax）。
+- **建议**：抽到 `parser/raster-types.ts` 或 `interface.ts` 共享；ndi 的 cfg 接口独立命名为 `INDIParseCfg`（仅 `bands?: [number, number]`）。
+- **状态**：open
+- **发现于**：阶段 0.4
+
+---

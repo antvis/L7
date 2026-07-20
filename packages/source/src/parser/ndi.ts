@@ -1,6 +1,6 @@
 import type { IParserData } from '@antv/l7-core';
-import type { IRasterCfg } from '../../interface';
-import { extentToCoord } from '../../utils/util';
+import type { IRasterCfg } from '../interface';
+import { extentToCoord } from '../utils/util';
 
 /**
  * @description: 栅格数据解析
@@ -23,7 +23,7 @@ export interface IRGBParseCfg extends IRasterCfg {
   BMinMax?: [number, number];
 }
 
-export default function rasterRgb(data: RasterDataType[], cfg: IRGBParseCfg): IParserData {
+export default function ndi(data: RasterDataType[], cfg: IRGBParseCfg): IParserData {
   const {
     extent = [121.168, 30.2828, 121.384, 30.4219],
     coordinates,
