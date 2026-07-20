@@ -49,6 +49,24 @@
 
 <!-- 以下为重构过程中新增的遗留项，倒序追加 -->
 
+### [阶段 3.x] 瓦片 parser / loader 单元测试覆盖缺口
+
+- **位置**：
+  - `packages/source/__tests__/loader/json-tile-loader.spec.ts`（阶段 3.1.1 首次补，6 case，`jest.mock('@antv/l7-utils')` 文件级 mock 模式）
+  - `packages/source/src/parser/mvt.ts` / `geojsonvt.ts` / `raster-tile.ts` / `image.ts`（4 个瓦片/影像 parser 此前 0 单测）
+  - 后续 `MVTLoader` / `GeoJSONVTLoader` / `RasterTileLoader` / `ImageLoader` 抽取（阶段 3.1.2 / 3.1.3 / 3.2 / 3.3）
+- **问题**：source 包 `jest packages/source/__tests__` 在阶段 3.1.1 前仅 7 suites 覆盖非瓦片路径（`source` / `create-source` / `parser-registry` / `parser/{csv,geojson,json}` / `utils/statistics`）—— **瓦片解析/加载路径（mvt / jsonTile / geojsonvt / raster-tile / image）0 单元测试**。阶段 3「Parser 与 Loader 解耦」触及 ⚠️ 瓦片生命周期，无测试网时 refactors 靠类型检查 + layers 集成测试兜底，回归风险高。
+- **建议**：每个 loader 抽取增量（3.1.2 MVTLoader / 3.1.3 GeoJSONVTLoader / 3.2 RasterTileLoader / 3.3 ImageLoader）必须配套补 loader 单测，沿用阶段 3.1.1 建立的 `jest.mock('@antv/l7-utils')` 文件级 mock 模式：
+  - mock `getData` / `getArrayBuffer` / `getImage` / `getURLFromTemplate` 等 fetch 函数；
+  - 注入成功/失败/空数据/自定义数据（`getCustomData`）四类桩；
+  - 断言 fetch 调用入参（url 模板插值、`requestParameters` 透传、`getCustomData` 入参）+ `src.getTileData('defaultLayer')` 返回值 + 取消语义（`tile.xhrCancel` 被设）；
+  - `jest.mock` 默认 per-test-file scope，不污染其他 spec，`beforeEach(jest.clearAllMocks())` 清计数。
+  - 影像 parser（`image.ts`）的 `getImage` / `getCustomImageData` 同模式 mock。
+- **状态**：部分 done（阶段 3.1.1 已补 `JsonTileLoader` 6 case）；剩余 mvt / geojsonvt / raster-tile / image 待补
+- **发现于**：阶段 3.1.1（JsonTileLoader 抽取时首次建立瓦片 loader 单测，暴露此前 0 覆盖）
+
+---
+
 ### [阶段 2.x / 文档] 消费方按需子集注册的 README / CHANGELOG 文档化
 
 - **位置**：`packages/source/README.md`（若有）/ monorepo `CHANGELOG` / `docs/refactoring/source/` 重构存档。

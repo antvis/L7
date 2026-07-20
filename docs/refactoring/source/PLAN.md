@@ -73,7 +73,7 @@ utils/           bandOperation/ tile/ csv/hexbin/relative-coordinates/statistics
 
 核心思想：**parser = 数据形状转换（纯函数）；loader = 数据获取（fetch/decode）**。
 
-- 3.1 抽象 `TileLoader` 接口 `loadTile(params, tile): Promise<ITileSource>`。把 `mvt.ts`/`jsonTile.ts`/`geojsonvt.ts` 里的 `getVectorTile` 闭包抽成 `MVTLoader`/`JsonTileLoader`/`GeoJSONVTLoader`，parser 只组装 `tilesetOptions.getTileData = (p,t) => loader.loadTile(p,t)`
+- 3.1 抽象 `TileLoader` 接口 `loadTile(params, tile): Promise<ITileSource | undefined>`。把 `mvt.ts`/`jsonTile.ts`/`geojsonvt.ts` 里的 `getVectorTile` 闭包抽成 `MVTLoader`/`JsonTileLoader`/`GeoJSONVTLoader`，parser 只组装 `tilesetOptions.getTileData = (p,t) => loader.loadTile(p,t)`（3.1.1 jsonTile ☑ — 接口签名 undefined 化以兼容 mvt 失败 resolve undefined 路径）
 - 3.2 `RasterTileLoader` 把 `raster-tile.ts` 的大 switch（IMAGE / ARRAYBUFFER / CUSTOMIMAGE / CUSTOMARRAYBUFFER / CUSTOMRGB / CUSTOMTERRAINRGB 6 分支）拆成分发器 + 6 个小 loader
 - 3.3 `image.ts` parser 不再自己 `getImage()` fetch；返回 `imageRef`（url/template），由 layer 侧或独立 ImageLoader 异步取数（保留 `images` Promise 字段作兼容）
 - 3.4 `getCustomData/getCustomImageData` 作为 `CustomDataProvider` loader 统一到 loader 接口

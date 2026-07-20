@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 3**：Parser 与 Loader 解耦（⚠️触及瓦片生命周期）。核心思想：**parser = 数据形状转换（纯函数）；loader = 数据获取（fetch/decode）**。子步骤：3.1 抽象 `TileLoader` 接口 `loadTile(params, tile): Promise<ITileSource>`，把 `mvt.ts`/`jsonTile.ts`/`geojsonvt.ts` 里的 `getVectorTile` 闭包抽成 `MVTLoader`/`JsonTileLoader`/`GeoJSONVTLoader`，parser 只组装 `tilesetOptions.getTileData = (p,t) => loader.loadTile(p,t)`；3.2 `RasterTileLoader` 把 `raster-tile.ts` 的大 switch（IMAGE / ARRAYBUFFER / CUSTOMIMAGE / CUSTOMARRAYBUFFER / CUSTOMRGB / CUSTOMTERRAINRGB 6 分支）拆成分发器 + 6 个小 loader；3.3 `image.ts` parser 不再自己 `getImage()` fetch，返回 `imageRef`，由 layer 侧或独立 ImageLoader 异步取数（保留 `images` Promise 字段作兼容）；3.4 `getCustomData/getCustomImageData` 统一到 `CustomDataProvider` loader。收益：parser 全部纯函数可单测，loader 可 mock，`tile.xhrCancel` 取消逻辑收敛到 loader。⚠️风险：触及瓦片生命周期，需保证瓦片加载/取消/缓存行为等价 —— 建议分小步独立 commit，每步回归 `jest packages/source/__tests__` + `tsc source` 31 / `tsc layers` 229 基线。详见 [PLAN.md § 阶段 3](./PLAN.md)。
+**阶段 3.1.2**：`MVTLoader` 抽取（阶段 3.1 Parser/Loader 解耦第 2 增量）。把 `parser/mvt.ts` 的模块级 `getVectorTile` 闭包（含 `getArrayBuffer` 异步取数 + `tile.xhrCancel = () => xhr.cancel()` 取消语义 + `getCustomData` 分支 + 失败 `resolve(undefined)`）抽取为实现 `TileLoader` 接口的 `MVTLoader` 类。关键注意：① mvt 失败时 `resolve(undefined)`（非空 tile），`TileLoader.loadTile` 接口签名已 `undefined` 化（阶段 3.1.1），MVTLoader 直接返回 `Promise<ITileSource | undefined>`；② 必须在 `loadTile` 内设 `tile.xhrCancel = () => xhr.cancel()`（仅 `getArrayBuffer` 分支，`getCustomData` 分支无 xhr 句柄，保持等价）；③ mvt 用 `tileParams`（`TileLoadParams`）做 URL 模板插值、`tile.x/y/z` 做 `getCustomData` 入参（与 jsonTile 用 `tile.x/y/z` 不同，MVTLoader 必须保留此差异）；④ 沿用阶段 3.1.1 建立的 `jest.mock('@antv/l7-utils')` 文件级 mock 模式补 `MVTLoader` 单测（`getArrayBuffer` 成功/失败 + `getCustomData` 成功/失败 + `xhrCancel` 被设 + URL 模板插值用 `tileParams`）。⚠️触及瓦片取消语义，需保证 `tile.xhrCancel` 调用时机与迁移前等价。详见 [PLAN.md § 阶段 3.1](./PLAN.md)。
 ---
 
 ## 记录模板
@@ -22,6 +22,33 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 3.1.1] JsonTileLoader 抽取（commit <SHA 待回填>）
+
+- **改了什么**：
+  - 新增 `src/loader/tile-loader.ts`（26 行）：`export interface TileLoader { loadTile(tileParams: TileLoadParams, tile: SourceTile): Promise<ITileSource | undefined>; }` —— 瓦片加载器契约。接口签名 `undefined` 化以兼容 mvt 失败时 `resolve(undefined)` 的既有路径（jsonTile/geojsonvt 始终 resolve `ITileSource`，`undefined` 是合法但不使用的值）。JSDoc 说明 parser=形状转换 / loader=数据获取解耦思想、返回 undefined 语义、取消语义（mvt 需设 `tile.xhrCancel`，jsonTile/geojsonvt 不设，保持等价）。
+  - 新增 `src/loader/json-tile-loader.ts`（84 行）：`export class JsonTileLoader implements TileLoader`。构造器持 `url` / `requestParameters?` / `getCustomData?`；`loadTile(_tileParams, tile): Promise<ITileSource>` 内含原 `getVectorTile` 函数体（机械搬运，零行为改动）。保持 jsonTile 历史行为：① 忽略 `TileLoadParams`（第一参 `_`），用 `SourceTile.x/y/z` 生成 url 模板参数 + `getCustomData` 入参；② `getCustomData` 优先（err/无数据 resolve 空 defaultLayer），否则 `getData` 回调（err/无数据 resolve 空 defaultLayer，成功 `JSON.parse` 入 defaultLayer）；③ err 永不 reject；④ 不设 `tile.xhrCancel`（原 jsonTile 无取消逻辑）。
+  - 重写 `src/parser/jsonTile.ts`（83 → 30 行，-53）：删 `getVectorTile` 闭包 + 5 个相关 import（`getData` / `getURLFromTemplate` / `GeoJSONVTTileSource` / `MapboxVectorTile` / `RequestParameters` 悉数下沉到 loader）；`import { JsonTileLoader } from '../loader/json-tile-loader'`；构造 `loader`，`getTileData = (_, tile) => loader.loadTile(_, tile)`。default export 签名 `jsonTile(url, cfg): IParserData` 不变，`builtins.ts` 的 `registerParser('jsonTile', jsonTile)` 零影响。
+  - 新增 `__tests__/loader/json-tile-loader.spec.ts`（110 行 / 6 tests）：文件级 `jest.mock('@antv/l7-utils')`（`getData` / `getURLFromTemplate`）—— 首次为瓦片加载器建立单元测试网（source 包此前 0 瓦片 parser/loader 单测）。6 case：① `getData` 成功（断言 `getURLFromTemplate` 入参 `{x:1,y:2,z:3}` + `getData` 收到模板插值后的 url `http://t/3/1/2.json` + `src.getTileData('defaultLayer') === features`）；② `getData` err → 空 defaultLayer；③ `getData` 空数据 → 空 defaultLayer；④ `getCustomData` 成功（断言走 `getCustomData` 不走 `getData` + features）；⑤ `getCustomData` err → 空 defaultLayer；⑥ `requestParameters` 透传（headers 进 `getData` 入参）。
+- **设计取舍**：
+  - **接口签名 `Promise<ITileSource | undefined>` 而非 `Promise<ITileSource>`**：mvt 的 `getVectorTile` 失败时 `resolve(undefined)`（与迁移前等价，tileset-manager 状态机已处理 undefined）。强制 `ITileSource` 会让 mvt loader 被迫改 resolve 空 tile —— 行为变更，违反渐进等价原则。jsonTile loader 始终 resolve `ITileSource`，`Promise<ITileSource>` 协变赋值给 `Promise<ITileSource | undefined>`，零类型回归（mvt 已是 `| undefined` 且 layers tsc 229 基线不变）。
+  - **`jest.mock('@antv/l7-utils')` 文件级 mock 而非 DI 注入 fetch**：保持 loader 生产代码与抽取前 100% 字面等价（直接 `import { getData, getURLFromTemplate }`），测试通过 jest 模块 mock 注入桩。避免 DI 让 loader 构造签名多一个 fetch 参数、偏离「机械抽取」原则。mock 文件级隔离（jest.mock 默认 per-test-file scope），不影响其他 spec。
+  - **`getTileData` 返回类型从 `Promise<ITileSource>` 扩宽到 `Promise<ITileSource | undefined>`**：经 mvt 已验证 `| undefined` 是 `tilesetOptions.getTileData` 合法返回值；扩宽后 layers tsc 229 基线不变。运行时 jsonTile loader 始终 resolve 非 undefined，0 行为变化。
+  - **下沉 5 个 import 到 loader，parser 只留类型 import + JsonTileLoader**：`parser/jsonTile.ts` 职责收敛为「组装 `tilesetOptions` 指向 loader」，纯调度，从 83 行降到 30 行。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source 总 31 错基线不变（全 core `.glsl` 噪音，0 非 glsl 错）—— `TileLoader` 接口 + `JsonTileLoader implements` + `jsonTile.ts` 委托 loader 对类型检查零回归；`getTileData` 返回类型扩宽 `| undefined` 经 mvt 既有路径已验证合法。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 pre-existing 不变 —— layers 经 registry 拿到的 `jsonTile` parser default export 签名 + `tilesetOptions` 结构全不变，`getTileData` 返回 `| undefined` 与 mvt 同处理路径零回归。
+  - `eslint`：通过（4 文件 tile-loader / json-tile-loader / jsonTile / json-tile-loader.spec）。
+  - `prettier --check`：通过（spec 经 `prettier --write` 重排，纯 whitespace）。
+  - `jest packages/source/__tests__`：8 suites / 51 tests 全通过（旧 45 + 新 6 `JsonTileLoader`）；新 loader spec 经 `jest.mock('@antv/l7-utils')` 注入桩，断言 `getURLFromTemplate` / `getData` / `getCustomData` 调用入参 + `src.getTileData('defaultLayer')` 返回值，覆盖 fetch 成功/失败/自定义数据/参数透传四类路径。
+- **风险/注意**：
+  - **⚠️ 阶段 3 触及瓦片生命周期**：source 包此前 0 瓦片 parser 单测，本增量首次为 `JsonTileLoader` 建立单元测试网（6 case）。后续 `MVTLoader`（3.1.2）/ `GeoJSONVTLoader`（3.1.3）/ `RasterTileLoader`（3.2）/ `ImageLoader`（3.3）抽取应沿用同 `jest.mock('@antv/l7-utils')` 文件级 mock 模式补 loader 单测（已记 BACKLOG：瓦片 parser/loader 单测覆盖缺口）。
+  - **`JsonTileLoader` 不设 `tile.xhrCancel`**：与原 `jsonTile` 等价（`getData` 回调风格未暴露取消句柄）。若未来 jsonTile 需取消能力，需 `getData` 改返回 xhr 句柄 + loader 在 `loadTile` 设 `tile.xhrCancel` —— 阶段 3.x 评估。
+  - **`jest.mock('@antv/l7-utils')` 文件级隔离**：jest.mock 默认 per-test-file scope，`json-tile-loader.spec.ts` 的 mock 不污染其他 spec（`source.spec.ts` / `parser-registry.spec.ts` 等不被 mock）。`beforeEach(jest.clearAllMocks())` 清调用计数，跨 case 独立。
+  - **`getTileData(_, tile)` 忽略 `TileLoadParams`**：jsonTile 历史行为，`JsonTileLoader.loadTile` 保留（用 `tile.x/y/z`）。MVTLoader（3.1.2）将改用 `tileParams` 做 URL 插值 —— 两者差异必须在各自 loader 内保留，不可统一。
+- **遗留**：→ 阶段 3.1.2 `MVTLoader` 抽取（含 `tile.xhrCancel` 取消语义 + `resolve(undefined)` 路径 + `tileParams` 做 URL 插值）；阶段 3.1.3 `GeoJSONVTLoader` 抽取；阶段 3.2 `RasterTileLoader` 大 switch 拆分；阶段 3.3 `image.ts` parser 去 fetch；阶段 2.x `Transform<TIn,TCfg,TOut>` 契约抽取 / 领域错误抽 `errors.ts` / 消费方按需子集注册文档化（BACKLOG 既有）；**新增 BACKLOG：瓦片 parser/loader 单测覆盖缺口**（本增量首次补 JsonTileLoader 6 case，mvt/geojsonvt/raster-tile/image 待补）。
+
+---
 
 ## [阶段 2.5] createSource 工厂 + registry 注入（commit c154d20）
 
