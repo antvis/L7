@@ -18,13 +18,13 @@
 ### [阶段 0.4] MapboxVectorTile 4 处重复定义需统一
 
 - **位置**：
-  - `packages/source/src/interface.ts:96`（基础定义，`{ features: GeoJSON.Feature[] }`）
-  - `packages/source/src/parser/mvt.ts:21`（`VectorTileLayer & { features: Feature[] }`，死 export，包内无人 import）
-  - `packages/source/src/parser/testTile.ts:14`（local 使用，同 mvt.ts 形态）
-  - `packages/source/src/parser/geojsonvt.ts` / `jsonTile.ts` / `source/geojsonvt.ts` 均 import 自 interface
-- **问题**：4 个定义形态不一致（interface 用 `GeoJSON.Feature[]`，mvt/testTile 用 `VectorTileLayer & { features: Feature[] }`），存在类型语义漂移。mvt.ts 的 `export type` 是死导出。
-- **建议**：阶段 0.4 一并清理。统一到 interface.ts 的定义（或更精确的 union），删 mvt.ts/testTile.ts 的本地重复定义。处理时需注意 `VectorTileLayer` 来自 `@mapbox/vector-tile`，与 `GeoJSON.Feature` 结构不同，可能需调整 source/geojsonvt.ts 的消费方式。
-- **状态**：open
+  - `packages/source/src/interface.ts:106`（基础定义，`{ features: GeoJSON.Feature[] }`，阶段 0.1 后行号移到 106）
+  - ~~`packages/source/src/parser/mvt.ts:21`（`VectorTileLayer & { features: Feature[] }`，死 export）~~ —— **阶段 3.1.2 已删**（MVTLoader 抽取时 parser/mvt 瘦身，死 export 一并清理）
+  - `packages/source/src/parser/testTile.ts:14`（local 使用，同原 mvt.ts 形态）
+  - `packages/source/src/parser/geojsonvt.ts` / `jsonTile.ts` / `tile-source/geojsonvt.ts` 均 import 自 interface
+- **问题**：原 4 个定义形态不一致（interface 用 `GeoJSON.Feature[]`，mvt/testTile 用 `VectorTileLayer & { features: Feature[] }`），存在类型语义漂移。mvt.ts 的死导出已在阶段 3.1.2 清理；剩 testTile.ts 本地定义与 interface 形态不一致。
+- **建议**：统一到 interface.ts 的定义（或更精确的 union），删 testTile.ts 的本地重复定义。处理时需注意 `VectorTileLayer` 来自 `@mapbox/vector-tile`，与 `GeoJSON.Feature` 结构不同，可能需调整 tile-source/geojsonvt.ts 的消费方式。
+- **状态**：部分 done（mvt.ts 死 export 已删，阶段 3.1.2）；testTile.ts 本地定义仍待统一
 - **发现于**：阶段 0.1
 
 ### [阶段 0.4 或独立] IRasterCfg 两版定义需统一
@@ -62,7 +62,7 @@
   - 断言 fetch 调用入参（url 模板插值、`requestParameters` 透传、`getCustomData` 入参）+ `src.getTileData('defaultLayer')` 返回值 + 取消语义（`tile.xhrCancel` 被设）；
   - `jest.mock` 默认 per-test-file scope，不污染其他 spec，`beforeEach(jest.clearAllMocks())` 清计数。
   - 影像 parser（`image.ts`）的 `getImage` / `getCustomImageData` 同模式 mock。
-- **状态**：部分 done（阶段 3.1.1 已补 `JsonTileLoader` 6 case）；剩余 mvt / geojsonvt / raster-tile / image 待补
+- **状态**：部分 done（阶段 3.1.1 `JsonTileLoader` 6 case、阶段 3.1.2 `MVTLoader` 6 case）；剩余 geojsonvt / raster-tile / image 待补
 - **发现于**：阶段 3.1.1（JsonTileLoader 抽取时首次建立瓦片 loader 单测，暴露此前 0 覆盖）
 
 ---
