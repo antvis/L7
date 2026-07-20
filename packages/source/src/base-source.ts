@@ -1,7 +1,6 @@
 import { SyncHook } from '@antv/async-hook';
 import type {
   IClusterOptions,
-  IParseDataItem,
   IParserCfg,
   IParserData,
   ISource,
@@ -15,8 +14,9 @@ import type { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { ClusterManager } from './cluster-manager';
 import { getParser, getTransform } from './factory';
+import { FeatureIndex } from './feature-index';
 import { TilesetAdapter } from './tileset-adapter';
-const { cloneDeep, mergeWith } = lodashUtil;
+const { mergeWith } = lodashUtil;
 
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
@@ -76,10 +76,16 @@ export default class Source extends EventEmitter implements ISource {
   }
   // ────────────────────────────────────────────────────────────────
 
+  // ─── Feature 查询/更新（delegate，阶段 1.3）─────────────────────
+  // getFeatureById / getFeatureId / updateFeaturePropertiesById +
+  // dataArrayChanged 状态从 Source 搬到 FeatureIndex。delegate 通过
+  // 构造期注入的 5 个 getter 闭包读取 Source 状态（parser / cluster /
+  // originData / transforms / data），dataArrayChanged 自持。
+  private readonly featureIndex: FeatureIndex;
+  // ────────────────────────────────────────────────────────────────
+
   // 是否有效范围
   private invalidExtent: boolean = false;
-
-  private dataArrayChanged: boolean = false;
 
   // 原始数据
   protected originData: any;
@@ -98,6 +104,13 @@ export default class Source extends EventEmitter implements ISource {
       () => this.invalidExtent,
     );
     this.tilesetAdapter = new TilesetAdapter();
+    this.featureIndex = new FeatureIndex(
+      () => this.parser,
+      () => this.cluster,
+      () => this.originData,
+      () => this.transforms,
+      () => this.data,
+    );
     this.initCfg(cfg);
 
     this.init().then(() => {
@@ -126,52 +139,23 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getFeatureById(id: number): unknown {
-    const { type = 'geojson', geometry } = this.parser as IParserCfg;
-    if (type === 'geojson' && !this.cluster) {
-      const feature = id < this.originData.features.length ? this.originData.features[id] : 'null';
-      const newFeature = cloneDeep(feature);
-
-      if (newFeature?.properties && (this.transforms.length !== 0 || this.dataArrayChanged)) {
-        // 如果数据进行了transforms 属性会发生改变 或者数据dataArray发生更新
-        const item = this.data.dataArray.find((dataItem: IParseDataItem) => {
-          return dataItem._id === id;
-        });
-        newFeature.properties = item;
-      }
-      return newFeature;
-    } else if (type === 'json' && geometry) {
-      return this.data.dataArray.find((dataItem) => dataItem._id === id);
-    } else {
-      return id < this.data.dataArray.length ? this.data.dataArray[id] : 'null';
-    }
+    return this.featureIndex.getById(id);
   }
 
   public updateFeaturePropertiesById(id: number, properties: Record<string, any>) {
-    this.data.dataArray = this.data.dataArray.map((dataItem: IParseDataItem) => {
-      if (dataItem._id === id) {
-        return {
-          ...dataItem,
-          ...properties,
-        };
-      }
-      return dataItem;
-    });
-    this.dataArrayChanged = true;
+    this.featureIndex.updateProperties(id, properties);
     this.emit('update', {
       type: 'update',
     });
   }
 
   public getFeatureId(field: string, value: any): number | undefined {
-    const feature = this.data.dataArray.find((dataItem: IParseDataItem) => {
-      return dataItem[field] === value;
-    });
-    return feature?._id;
+    return this.featureIndex.getIdByField(field, value);
   }
 
   public setData(data: any, options?: ISourceCFG) {
     this.originData = data;
-    this.dataArrayChanged = false;
+    this.featureIndex.reset();
     this.initCfg(options);
 
     this.init().then(() => {

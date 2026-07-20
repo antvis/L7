@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 1.3**：拆 `FeatureIndex` delegate —— 把 `base-source.ts` 中的 `getFeatureById` / `getFeatureId` / `updateFeaturePropertiesById` + `dataArrayChanged` 状态（约 30 行）抽成 `FeatureIndex`，`Source` 持有它，公开成员全部保留为转发方法/getter，`ISource` 接口不动。`getFeatureById` 内部读 `this.parser.type` / `this.cluster` / `this.originData` / `this.transforms` / `this.data`，需通过构造期注入闭包或方法参数传入，注意 delegate 不应持有 Source 全部状态。详见 [PLAN.md § 阶段 1.3](./PLAN.md)。
+**阶段 1.4**：抽 `Bounds` value object —— 把 `base-source.ts` 中的 `extent` / `center` / `setCenter()` / `invalidExtent`（约 20 行）抽成 `Bounds` 类，封装范围计算与中心点推导。`Source.extent` / `Source.center` 改 getter 转发 `bounds.extent` / `.center`，`executeParser` 末尾的 `this.extent = ...; this.setCenter(...); this.invalidExtent = ...` 改调 `this.bounds.update(...)`。`ClusterManager` 的 `getExtent` / `getInvalidExtent` 闭包改为读 `this.bounds.extent` / `.invalidExtent`。详见 [PLAN.md § 阶段 1.4](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,38 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 1.3] 拆 FeatureIndex delegate（commit 待回填）
+
+- **改了什么**：
+  - 新增 `src/feature-index.ts`（115 行）从 `base-source.ts` 抽出 feature 查询/更新职责：
+    - 持有 private `dataArrayChanged: boolean`（状态自持，不暴露）
+    - 构造期注入 5 个 getter 闭包：`getParser` / `isClusterEnabled` / `getOriginData` / `getTransforms` / `getData`
+    - 方法：`getById(id)`（替代原 `getFeatureById`，含三分支语义）/ `updateProperties(id, props)`（替代 `updateFeaturePropertiesById` 主体，**不含 emit**）/ `getIdByField(field, value)`（替代 `getFeatureId`）/ `reset()`
+  - `base-source.ts`（306 → 290 行，-16 行）：
+    - 删除 `private dataArrayChanged: boolean = false` 字段
+    - 3 个方法体收敛为转发：`getFeatureById` → `featureIndex.getById`、`getFeatureId` → `featureIndex.getIdByField`、`updateFeaturePropertiesById` → `featureIndex.updateProperties` + 保留 `emit('update')`
+    - `setData` 的 `this.dataArrayChanged = false` → `this.featureIndex.reset()`
+    - 构造期 `new FeatureIndex(5 个闭包)`
+    - import 清理：`cloneDeep` 从 lodashUtil 解构移除（搬到 feature-index），`mergeWith` 保留（initCfg 仍用）
+- **设计取舍**：
+  - **`emit('update')` 留在 Source 转发端**：delegate 不持有 EventEmitter，职责单一。`updateFeaturePropertiesById` 在 Source 上仍负责 emit，delegate.updateProperties 只做数据 map + dataArrayChanged=true。
+  - **5 个 getter 闭包延迟求值**：getFeatureById 读 `originData`/`data`/`transforms` 等均在 setData/executeParser 后变化，闭包每次调用拿最新值，与原字段直读语义一致。
+  - **`dataArrayChanged` 不暴露 getter**：原为 private，仅 Source 内部用（getFeatureById 读、updateFeaturePropertiesById 写、setData 重置），delegate 内部闭环，Source 不再直接访问。
+- **偏离 PLAN 的说明**：PLAN 估「~30 行」，实际 base-source 净减 16 行（306→290）。delegate 115 行含 ~50 行注释 + ~65 行逻辑。`getFeatureById` 三分支逻辑较密，delegate 行数偏高，但 base-source 收益实在。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source/src 自身 0 错误，总错误 31（基线不变）。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 个 pre-existing 错误（基线不变），`getFeatureById` / `getFeatureId` / `updateFeaturePropertiesById` / `FeatureIndex` 相关 0 错误 —— `LayerPickService.ts:116 this.layer.getSource().getFeatureById(...)` 经转发仍 work。
+  - `eslint`：通过（`feature-index.ts` + `base-source.ts` 干净，`cloneDeep` 移到 feature-index 后 `consistent-type-imports` / `no-unused-vars` 规则均满足）。
+  - `prettier --check`：通过。
+  - `jest packages/source/__tests__`：5 suites / 27 tests 全通过。
+- **风险/注意**：
+  - `getFeatureById` 的 `cloneDeep(feature)` 行为保留：geojson+未聚合分支仍深拷贝原 feature，避免调用方修改污染 originData。
+  - `'null'` 字符串占位（原代码 `id < length ? features[id] : 'null'`）：保留原行为，未改为 null/undefined —— 避免破坏既有调用方对「越界返回 'null' 字符串」的隐式依赖。
+  - `ITransform` / `IParserData` / `IParseDataItem` 类型从 `@antv/l7-core` import 到 feature-index（与 base-source 一致，未走 source/interface re-export 避免循环）。
+- **遗留**：→ 阶段 1.4 拆 `Bounds` value object（`extent` / `center` / `setCenter` / `invalidExtent`，约 20 行）。完成后 base-source.ts 约 270 行，接近 PLAN 估的「~120 行协调者」目标的中间里程碑（实际 1.x 全做完预计 ~250 行，PLAN 的 ~120 偏乐观）。
+
+---
 
 ## [阶段 1.2] 拆 TilesetAdapter delegate（commit 6c6e372）
 
