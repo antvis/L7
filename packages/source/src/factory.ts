@@ -13,6 +13,6 @@ export const registerParser = (type: string, parserFunction: ParserFunction): vo
   PARSERS[type] = parserFunction;
 };
 export const getTransform = (type: string) => TRANSFORMS[type];
-export const registerTransform = (type: string, transFunction: transformFunction): void => {
-  TRANSFORMS[type] = transFunction;
+export const registerTransform = (type: string, transformFn: transformFunction): void => {
+  TRANSFORMS[type] = transformFn;
 };

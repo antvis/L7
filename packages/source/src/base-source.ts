@@ -85,7 +85,7 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getClusters(zoom: number): any {
-    return this.clusterIndex.getClusters(this.caculClusterExtent(2), zoom);
+    return this.clusterIndex.getClusters(this.calcClusterExtent(2), zoom);
   }
 
   public getClustersLeaves(id: number): any {
@@ -98,7 +98,7 @@ export default class Source extends EventEmitter implements ISource {
 
   public updateClusterData(zoom: number): void {
     const { method = 'sum', field } = this.clusterOptions;
-    let data = this.clusterIndex.getClusters(this.caculClusterExtent(2), Math.floor(zoom));
+    let data = this.clusterIndex.getClusters(this.calcClusterExtent(2), Math.floor(zoom));
     this.clusterOptions.zoom = zoom;
     data.forEach((p: any) => {
       if (!p.id) {
@@ -228,7 +228,7 @@ export default class Source extends EventEmitter implements ISource {
   private async processData() {
     return new Promise((resolve, reject) => {
       try {
-        this.excuteParser();
+        this.executeParser();
         this.initCluster();
         this.executeTrans();
         resolve({});
@@ -270,7 +270,7 @@ export default class Source extends EventEmitter implements ISource {
   /**
    * 数据解析
    */
-  private excuteParser(): void {
+  private executeParser(): void {
     // 耗时计算测试
     const parser = this.parser as IParserCfg;
     const type: string = parser.type || 'geojson';
@@ -344,7 +344,7 @@ export default class Source extends EventEmitter implements ISource {
     this.clusterIndex = cluster(this.data, clusterOptions);
   }
 
-  private caculClusterExtent(bufferRatio: number): any {
+  private calcClusterExtent(bufferRatio: number): any {
     let newBounds = [
       [-Infinity, -Infinity],
       [Infinity, Infinity],
