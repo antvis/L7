@@ -23,7 +23,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 2.5] createSource 工厂 + registry 注入（commit <SHA 待回填>）
+## [阶段 2.5] createSource 工厂 + registry 注入（commit c154d20）
 
 - **改了什么**：
   - 新增 `src/create-source.ts`（33 行）：`export function createSource(data: any | Source, cfg?: ISourceCFG, registry: ParserRegistry = defaultRegistry): Source { return new Source(data, cfg, registry); }` —— `new Source(...)` 的函数式包装，推荐入口，便于未来扩展（默认 cfg 合并 / registry 校验 / 异步初始化钩子）而不破坏构造器兼容签名。`registry` 省略走 `defaultRegistry` 单例（`index.ts` 经 `registerBuiltins()` 自动注册全 13 内置 parser），与迁移前 `new Source(data, cfg)` 完全等价；注入自定义 `new ParserRegistry()` 可隔离注册表（按需子集 tree-shaking / 测试隔离 / 多源异构 parser 集合）。
