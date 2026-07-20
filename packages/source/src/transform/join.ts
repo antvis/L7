@@ -1,18 +1,12 @@
-import type { IParseDataItem, IParserData } from '@antv/l7-core';
-
-interface IJoinOption {
-  sourceField: string;
-  targetField: string;
-  data: any[];
-}
+import type { IParseDataItem, IParserData, ITransform } from '@antv/l7-core';
+import type { IJoinTransformCfg } from './types';
 
 /**
- *
- * @param data
- * @param options
+ * 按字段将外部属性数据 join 到当前数据
+ * options: { sourceField, targetField, data }
  */
-export function join(geoData: IParserData, options: IJoinOption) {
-  const { sourceField, targetField, data } = options;
+export function join(geoData: IParserData, options: ITransform) {
+  const { sourceField, targetField, data } = options as unknown as IJoinTransformCfg;
   const dataObj: { [key: string]: any } = {};
   data.forEach((element: { [key: string]: any }) => {
     // 属性数据
