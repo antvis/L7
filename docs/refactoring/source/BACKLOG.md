@@ -56,7 +56,7 @@
 - **建议**：当领域错误类 ≥3 个时，抽 `packages/source/src/errors.ts` 收口统一导出；`parser-registry.ts` / `factory.ts` / `index.ts` 改为 re-export（保持公共 API 向后兼容）。同步评估是否引入 `SourceError` 抽象基类（统一 `name` / `code` 字段约定）。
 - **触发条件**：Source 层新增第 3 个领域错误类时启动。
 - **状态**：open（条件触发，当前不急）
-- **发现于**：阶段 2.3（commit 待回填）
+- **发现于**：阶段 2.3（commit 6ffdcf5）
 
 ### [阶段 2.x] Transform 函数契约 `Transform<TIn, TCfg, TOut>` 抽取
 

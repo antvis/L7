@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 2.3] ParserNotFoundError + getParser/getTransform 未注册改抛错（commit <SHA 待回填>）
+## [阶段 2.3] ParserNotFoundError + getParser/getTransform 未注册改抛错（commit 6ffdcf5）
 
 - **改了什么**：
   - `src/parser-registry.ts`（45 → 97 行）新增两个 Error 子类 + `getParser` / `getTransform` 改抛错：
