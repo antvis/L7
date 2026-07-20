@@ -23,7 +23,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 3.1.1] JsonTileLoader 抽取（commit <SHA 待回填>）
+## [阶段 3.1.1] JsonTileLoader 抽取（commit 2b4728a）
 
 - **改了什么**：
   - 新增 `src/loader/tile-loader.ts`（26 行）：`export interface TileLoader { loadTile(tileParams: TileLoadParams, tile: SourceTile): Promise<ITileSource | undefined>; }` —— 瓦片加载器契约。接口签名 `undefined` 化以兼容 mvt 失败时 `resolve(undefined)` 的既有路径（jsonTile/geojsonvt 始终 resolve `ITileSource`，`undefined` 是合法但不使用的值）。JSDoc 说明 parser=形状转换 / loader=数据获取解耦思想、返回 undefined 语义、取消语义（mvt 需设 `tile.xhrCancel`，jsonTile/geojsonvt 不设，保持等价）。
