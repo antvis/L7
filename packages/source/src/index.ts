@@ -23,9 +23,11 @@ export {
   defaultRegistry,
   getParser,
   getTransform,
+  ParserNotFoundError,
   ParserRegistry,
   registerParser,
   registerTransform,
+  TransformNotFoundError,
 } from './factory';
 export * from './interface';
 export * from './tile-source/index';

@@ -6,16 +6,24 @@
  * 推荐改用 `defaultRegistry.getParser(...)` / `defaultRegistry.registerParser(...)`
  * 或自定义 `new ParserRegistry()` 实例（阶段 2.5 `createSource` 工厂可选注入）。
  *
- * 阶段 2.3 引入 `ParserNotFoundError`，`getParser` 未注册时改抛错；
+ * 错误语义（阶段 2.3）：未注册 type 经 wrapper 转发到 `defaultRegistry.getParser`
+ * / `getTransform`，自动享受抛 `ParserNotFoundError` / `TransformNotFoundError`
+ * 的新语义 —— 旧调用方无需改动即可从「残报 TypeError」升级为「显式命名错误」。
+ *
  * 阶段 2.4 `index.ts` 副作用注册抽取为 `registerBuiltins()` + `sideEffects: false`；
  * 阶段 2.5 创建 `createSource(data, cfg, registry?)` 工厂可选注入自定义 registry。
  *
- * 重构参考：docs/refactoring/source/PLAN.md › 阶段 2.2
+ * 重构参考：docs/refactoring/source/PLAN.md › 阶段 2.3
  */
 import type { IParserData, Parser } from './interface';
 import { defaultRegistry } from './parser-registry';
 
-export { defaultRegistry, ParserRegistry } from './parser-registry';
+export {
+  defaultRegistry,
+  ParserNotFoundError,
+  ParserRegistry,
+  TransformNotFoundError,
+} from './parser-registry';
 
 /** Transform 函数契约（与 `parser-registry.ts` 内部 `TransformFn` 等价） */
 type TransformFn = (data: IParserData, cfg?: any) => IParserData;

@@ -49,6 +49,26 @@
 
 <!-- 以下为重构过程中新增的遗留项，倒序追加 -->
 
+### [阶段 2.x] 领域错误抽 `errors.ts` 收口（条件触发）
+
+- **位置**：`packages/source/src/parser-registry.ts`（`ParserNotFoundError` / `TransformNotFoundError` 当前与 `ParserRegistry` class 同文件）。
+- **问题**：阶段 2.3 把两个领域错误类就近放 `parser-registry.ts`，因为当前 source 包仅此一个领域错误场景，独立 `errors.ts` 过度分层。但若后续 `Source` 层（如 `base-source.ts` 的数据加载 / extent 计算 / cluster 生命周期）引入更多领域错误，`parser-registry.ts` 会逐渐变成「registry + 错误大杂烩」。
+- **建议**：当领域错误类 ≥3 个时，抽 `packages/source/src/errors.ts` 收口统一导出；`parser-registry.ts` / `factory.ts` / `index.ts` 改为 re-export（保持公共 API 向后兼容）。同步评估是否引入 `SourceError` 抽象基类（统一 `name` / `code` 字段约定）。
+- **触发条件**：Source 层新增第 3 个领域错误类时启动。
+- **状态**：open（条件触发，当前不急）
+- **发现于**：阶段 2.3（commit 待回填）
+
+### [阶段 2.x] Transform 函数契约 `Transform<TIn, TCfg, TOut>` 抽取
+
+- **位置**：
+  - `packages/source/src/parser-registry.ts`（内部 `type TransformFn = (data: IParserData, cfg?: any) => IParserData`）
+  - `packages/source/src/factory.ts`（同名 `TransformFn` 字面量类型，与 parser-registry 内部等价）
+  - `packages/source/src/transform/*.ts`（13 个 transform 实现，各自具名签名，未对齐到统一契约）
+- **问题**：阶段 2.1 抽了 `Parser<TData, TCfg, TResult>` 契约但未抽 `Transform` —— transform 仍是字面量 `(data, cfg?) => IParserData`，缺少泛型推导支持。阶段 2.2/2.3 在 `parser-registry.ts` / `factory.ts` 各保留一份 `TransformFn` 字面量（重复定义）。
+- **建议**：仿 `Parser` 在 `interface.ts` 抽 `export type Transform<TIn = IParserData, TCfg = any, TOut extends IParserData = IParserData> = (data: TIn, cfg?: TCfg) => TOut`；新增 `KnownTransforms` 弱契约（`cluster` / `filter` / `join` / `map` / `grid` / `hexagon` 6 个键名 -> Transform 契约映射）+ `KnownTransformType` 联合类型；`parser-registry.ts` / `factory.ts` 的 `TransformFn` 改 import；transform 实现文件签名可渐进对齐（实现由本地签名保证，契约是弱保留，与 `KnownParsers` 同策略）。
+- **状态**：open（不阻塞当前阶段，PLAN 阶段 2.x further split）
+- **发现于**：阶段 2.2（首次记入 BACKLOG）
+
 ### [独立小项] RasterDataType / IRGBParseCfg 重复定义
 
 - **位置**：

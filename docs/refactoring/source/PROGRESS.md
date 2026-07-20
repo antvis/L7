@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 2.3**：`getParser(type)` / `getTransform(type)` 在未注册时改抛 `ParserNotFoundError(type)`（替代当前返回 `undefined`、调用方残报 TypeError 的语义）。新增 `ParserNotFoundError` class（继承 Error，含 `type` 字段）从 `parser-registry.ts` 或 `errors.ts` 导出。`ParserRegistry.getParser` 返回 `Parser | undefined` 配合 `orThrow`，旧 `getParser` 函数（同 `defaultRegistry.getParser`）也享受抛错语义。注意向后兼容：未注册的 parser 在迁移前只是慢报 TypeError，迁移后是显式 Error，对正常使用 (注册过的 parser) 0 影响。详见 [PLAN.md § 阶段 2.3](./PLAN.md)。
+**阶段 2.4**：`package.json` 设 `sideEffects: false`，把当前 `index.ts` 的内置 parser/transform 注册显式化为 `registerBuiltins(registry = defaultRegistry)` 函数（保留旧 `index.ts` 自动注册行为以兼容，但明确分离 registration 入口）。验证 tree-shaking 友好性（消费方可通过 `new ParserRegistry()` + 自定义 `registerBuiltins` 子集，避免一次性拉满 13 个 parser）。注意阶段 2.5 `createSource(data, cfg, registry?)` 工厂落地后，`registerBuiltins` + registry 注入共同支持按需注册。详见 [PLAN.md § 阶段 2.4](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,40 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 2.3] ParserNotFoundError + getParser/getTransform 未注册改抛错（commit <SHA 待回填>）
+
+- **改了什么**：
+  - `src/parser-registry.ts`（45 → 97 行）新增两个 Error 子类 + `getParser` / `getTransform` 改抛错：
+    - `ParserNotFoundError extends Error`：含 `readonly type: string` 字段；`constructor(type)` 设 `this.name = 'ParserNotFoundError'`，消息 `ParserNotFoundError: parser not registered for type "<type>"`。仿 `packages/utils/src/ajax.ts` 的 `AJAXError` 风格（target es6 下 `extends Error` 原型链无需 `Object.setPrototypeOf` 修补）。
+    - `TransformNotFoundError extends Error`：与 `ParserNotFoundError` 对称，覆盖 transform 注册表的等价错误路径。
+    - `getParser(type)`：内部取 `Record<string, Parser>[type]`（运行期可能 `undefined`），`undefined` 即抛 `ParserNotFoundError(type)`；签名保持 `: Parser`（不带 `| undefined`）—— 抛错路径由 Error 表达，调用方仍可链式 `getParser('geojson')({...})` 无 null 守卫。
+    - `getTransform(type)`：对称抛 `TransformNotFoundError(type)`，签名保持 `: TransformFn`。
+  - `src/factory.ts`（37 → 45 行）：`export { ... } from './parser-registry'` 块新增 `ParserNotFoundError` / `TransformNotFoundError`，4 个 `@deprecated` wrapper 函数无改动 —— 经 `defaultRegistry.getParser/getTransform` 转发自动享受抛错语义。模块头注释更新到阶段 2.3 错误治理。
+  - `src/index.ts`（55 → 57 行）：`export { ... } from './factory'` 块新增 `ParserNotFoundError` / `TransformNotFoundError`，包入口暴露这两个新错误类（消费方可 `catch (e instanceof ParserNotFoundError)`）。
+  - 新增 `__tests__/parser-registry.spec.ts`（100 行 / 10 tests）：
+    - fresh `new ParserRegistry()` 抛 `ParserNotFoundError` / `TransformNotFoundError`，含 `name` / `type` / `message` / `instanceof Error` 断言。
+    - `registerParser` / `registerTransform` 后 `getParser` / `getTransform` 返回原引用。
+    - `defaultRegistry`（`import '../src'` 触发 `index.ts` 副作用注册）含全部 13 parser + 6 transform，未注册 type 抛对应命名错误。
+- **设计取舍**：
+  - **偏离 PLAN / 上一步「下一步」字面方案**：原方案「`getParser` 返 `Parser | undefined` 配合 `orThrow`」会要求调用方加 null 守卫，破坏 `cluster-manager.ts:102 getParser('geojson')({...})` 与 `base-source.ts:266/288 getParser(type)(...) / getTransform(type)(...)` 的直接链式调用 —— 与「严格行为等价」相悖。改为「`getParser` 直接抛错、签名保持 `Parser`」：未注册路径由 Error 表达（替代旧 `undefined → TypeError`），已注册路径 0 影响，调用方签名零变更，对 IDE 自动补全与 tsc 链式推断全友好。`Parser | undefined` + `tryGet*` 变体若后续真有「探测是否注册」需求再加，本阶段不预留 API surface（YAGNI）。
+  - **`TransformNotFoundError` 单独定义而非复用 `ParserNotFoundError`**：transform 与 parser 是两条独立注册表，错误类型隔离便于 `catch (e)` 精确分支处理（消费方分别 catch parser 缺失 vs transform 缺失），不牺牲任何复杂度。
+  - **`ParserNotFoundError` 放 `parser-registry.ts` 而非新 `errors.ts`**：当前 source 包仅此一个领域错误，独立 `errors.ts` 过度分层；与 `ParserRegistry` class 同文件就近维护。若后续 `Source` 层引入更多领域错误，再抽 `errors.ts` 收口（BACKLOG: 跨阶段评估）。
+  - **向后兼容性**：迁移前未注册 parser 在 `base-source`/`cluster-manager` 调用链下表现为 `undefined(...)` → `TypeError: xxx is not a function`（运行期延迟报错）；迁移后改抛命名 `ParserNotFoundError`（注册表边界即时报错）。正常使用（已注册 13 个内置 type）0 影响 —— `jest 27/27` 既有测试全过即证。外部消费方若曾依赖 `getParser(unknown)` 返 `undefined` 做能力探测（grep `packages/layers/src` / `packages/core/src` 无此用法）则需改为 `try/catch`，但无此存在用例。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source 自身 0 错，总 31 基线不变（全 core `.glsl` 噪音）—— `ParserNotFoundError` / `TransformNotFoundError extends Error` 在 target es6 下原型链稳；`getParser`/`getTransform` 签名保持 `Parser`/`TransformFn` 不破调用方 tsc 链式推断。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 pre-existing 不变 —— layers 不直接 import registry error 类，经包出口 `export * from './interface'` 与 `./factory` re-export 全透明。
+  - `eslint`：通过（4 文件 `parser-registry.ts` / `factory.ts` / `index.ts` / `parser-registry.spec.ts`）。
+  - `prettier --check`：通过（spec 长行 import 经 `prettier --write` 重排为多行 import，纯 whitespace）。
+  - `jest packages/source/__tests__`：6 suites / 37 tests 全通过（旧 27 + 新 10）；新 spec 含「fresh registry 抛错」「defaultRegistry 内置全注册」「instanceof Error + name/type/message」三类断言。
+- **风险/注意**：
+  - **错误语义从「延迟 TypeError」改为「即时命名 Error」**：虽然对正常路径 0 影响，但理论上若有第三方代码 `try { getParser(x) } catch (e if TypeError)` 做兜底分支，现在 `e` 变成 `ParserNotFoundError`（仍 `extends Error`/`instanceof Error` 真，但 `instanceof TypeError` 假）。grep l7 monorepo 无此用法，外部下游风险记 BACKLOG。
+  - **`defaultRegistry` 单例在测试间共享**：jest 同 worker 内同模块图共用单例，`parser-registry.spec.ts` 的「fresh registry 抛错」用 `new ParserRegistry()` 而非篡改 `defaultRegistry`，避免污染其他 spec。`defaultRegistry` 只读断言（取已注册 type），不写入。
+  - **`import '../src'` 副作用触发整包图**：spec 顶部 bare import 触发 `index.ts` 全量注册 + 拉 `base-source`/`tile-source` 子图，测试初始化开销 ↑ 但验证的是真实注册路径。ts-jest `isolatedModules` 下模块图在每个 spec 文件独立求值，跨 spec 无干扰。
+  - **`ParserNotFoundError` / `TransformNotFoundError` 现已进入包公共 API**：阶段 2.4+ 若抽 `errors.ts`，需保留 `parser-registry.ts` / `factory.ts` / `index.ts` 的 re-export 不删（向后兼容）。
+- **遗留**：→ 阶段 2.4 `sideEffects: false` + `registerBuiltins()` 抽取；阶段 2.5 `createSource(data, cfg, registry?)` 工厂；阶段 2.x 抽 `errors.ts` 收口领域错误（若 Source 层引入更多错误类型）；阶段 2.x `Transform<TIn,TCfg,TOut>` 契约抽取（BACKLOG 既有项）。
+
+---
 
 ## [阶段 2.2] ParserRegistry class + defaultRegistry 单例（commit c27b598）
 
