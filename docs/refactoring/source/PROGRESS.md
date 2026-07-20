@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 2.1] 定义 Parser 契约 + 去重栅格 parser 类型（commit <SHA 待回填>）
+## [阶段 2.1] 定义 Parser 契约 + 去重栅格 parser 类型（commit 9f11ef6）
 
 - **改了什么**：
   - `interface.ts`（102 → 200 行，+98）新增 Parser 契约与去重栅格类型：

@@ -60,6 +60,6 @@
   IRGBParseCfg 名不副实（仅用 bands），独立命名 INDIParseCfg 留到阶段 2.x
   further split.
 - **发现于**：阶段 0.4
-- **闭环于**：阶段 2.1（commit <SHA 待回填>）
+- **闭环于**：阶段 2.1（commit 9f11ef6）
 
 ---
