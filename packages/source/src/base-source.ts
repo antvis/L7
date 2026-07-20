@@ -9,12 +9,13 @@ import type {
   ITileParserCFG,
   ITransform,
 } from '@antv/l7-core';
-import type { SourceTile } from '@antv/l7-utils';
-import { TilesetManager, extent, lodashUtil } from '@antv/l7-utils';
+import type { SourceTile, TilesetManager } from '@antv/l7-utils';
+import { extent, lodashUtil } from '@antv/l7-utils';
 import type { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { ClusterManager } from './cluster-manager';
 import { getParser, getTransform } from './factory';
+import { TilesetAdapter } from './tileset-adapter';
 const { cloneDeep, mergeWith } = lodashUtil;
 
 function mergeCustomizer(objValue: any, srcValue: any) {
@@ -25,7 +26,6 @@ function mergeCustomizer(objValue: any, srcValue: any) {
 //
 export default class Source extends EventEmitter implements ISource {
   public type: string = 'source';
-  public isTile: boolean = false;
   public inited: boolean = false;
   public data: IParserData;
   public center: [number, number];
@@ -62,7 +62,20 @@ export default class Source extends EventEmitter implements ISource {
   // ────────────────────────────────────────────────────────────────
 
   // 瓦片数据管理器
-  public tileset: TilesetManager | undefined;
+  // ─── 瓦片管理器（delegate，阶段 1.2）────────────────────────────
+  // tileset / isTile 从 Source 字段搬到 TilesetAdapter。对外通过 getter
+  // 透明转发：layers 包 `source.tileset as TilesetManager` 仍拿到同一个
+  // TilesetManager 实例（adapter.manager），行为与迁移前完全等价。
+  private readonly tilesetAdapter: TilesetAdapter;
+
+  public get tileset(): TilesetManager | undefined {
+    return this.tilesetAdapter.manager;
+  }
+  public get isTile(): boolean {
+    return this.tilesetAdapter.isTile;
+  }
+  // ────────────────────────────────────────────────────────────────
+
   // 是否有效范围
   private invalidExtent: boolean = false;
 
@@ -84,6 +97,7 @@ export default class Source extends EventEmitter implements ISource {
       () => this.extent,
       () => this.invalidExtent,
     );
+    this.tilesetAdapter = new TilesetAdapter();
     this.initCfg(cfg);
 
     this.init().then(() => {
@@ -168,39 +182,39 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public reloadAllTile() {
-    this.tileset?.reloadAll();
+    this.tilesetAdapter.reloadAllTile();
   }
 
   public reloadTilebyId(z: number, x: number, y: number): void {
-    this.tileset?.reloadTileById(z, x, y);
+    this.tilesetAdapter.reloadTilebyId(z, x, y);
   }
 
   public reloadTileByLnglat(lng: number, lat: number, z: number): void {
-    this.tileset?.reloadTileByLnglat(lng, lat, z);
+    this.tilesetAdapter.reloadTileByLnglat(lng, lat, z);
   }
 
   public getTileExtent(
     e: [number, number, number, number],
     zoom: number,
   ): Array<{ x: number; y: number; z: number }> | undefined {
-    return this.tileset?.getTileExtent(e, zoom);
+    return this.tilesetAdapter.getTileExtent(e, zoom);
   }
 
   public getTileByZXY(z: number, x: number, y: number): SourceTile | undefined {
-    return this.tileset?.getTileByZXY(z, x, y);
+    return this.tilesetAdapter.getTileByZXY(z, x, y);
   }
 
   public reloadTileByExtent(bounds: [number, number, number, number], z: number): void {
-    this.tileset?.reloadTileByExtent(bounds, z);
+    this.tilesetAdapter.reloadTileByExtent(bounds, z);
   }
 
   public destroy() {
     this.removeAllListeners();
     this.originData = null;
     this.clusterManager.destroy();
+    this.tilesetAdapter.destroy();
     // @ts-ignore
     this.data = null;
-    this.tileset?.destroy();
   }
 
   private async processData() {
@@ -255,7 +269,7 @@ export default class Source extends EventEmitter implements ISource {
     const sourceParser = getParser(type);
     this.data = sourceParser(this.originData, parser);
     // 为瓦片图层的父图层创建数据瓦片金字塔管理器
-    this.tileset = this.initTileset();
+    this.tilesetAdapter.init(this.data);
 
     // 判断当前 source 是否需要计算范围
     if (parser.cancelExtent) {
@@ -275,26 +289,6 @@ export default class Source extends EventEmitter implements ISource {
       // 默认设置为大地原点
       this.center = [108.92361111111111, 34.54083333333333];
     }
-  }
-
-  /**
-   * 瓦片数据管理器
-   */
-  private initTileset() {
-    const { tilesetOptions } = this.data;
-    if (!tilesetOptions) {
-      return;
-    }
-    this.isTile = true;
-    if (this.tileset) {
-      this.tileset.updateOptions(tilesetOptions);
-      return this.tileset;
-    }
-
-    const tileset = new TilesetManager({
-      ...tilesetOptions,
-    });
-    return tileset;
   }
 
   /**

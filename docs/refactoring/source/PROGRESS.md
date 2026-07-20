@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 1.2**：拆 `TilesetAdapter` delegate —— 把 `base-source.ts` 中的 `initTileset()` + 7 个 `reload*/getTile*` 方法（`reloadAllTile`/`reloadTilebyId`/`reloadTileByLnglat`/`reloadTileByExtent`/`getTileExtent`/`getTileByZXY` + `tileset` 字段，约 40 行）抽成 `TilesetAdapter`，`Source` 持有它，公开成员全部保留为转发方法/getter，`ISource` 接口不动。详见 [PLAN.md § 阶段 1.2](./PLAN.md)。
+**阶段 1.3**：拆 `FeatureIndex` delegate —— 把 `base-source.ts` 中的 `getFeatureById` / `getFeatureId` / `updateFeaturePropertiesById` + `dataArrayChanged` 状态（约 30 行）抽成 `FeatureIndex`，`Source` 持有它，公开成员全部保留为转发方法/getter，`ISource` 接口不动。`getFeatureById` 内部读 `this.parser.type` / `this.cluster` / `this.originData` / `this.transforms` / `this.data`，需通过构造期注入闭包或方法参数传入，注意 delegate 不应持有 Source 全部状态。详见 [PLAN.md § 阶段 1.3](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,36 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 1.2] 拆 TilesetAdapter delegate（commit 待回填）
+
+- **改了什么**：
+  - 新增 `src/tileset-adapter.ts`（88 行）从 `base-source.ts` 抽出瓦片管理职责：
+    - 持有 `manager: TilesetManager | undefined`（**public**，非 private）+ `isTile: boolean`
+    - 方法：`init(data)`（替代原 `initTileset`，复用「已存在则 updateOptions、否则新建」语义）、7 个转发方法（`reloadAllTile` / `reloadTilebyId` / `reloadTileByLnglat` / `reloadTileByExtent` / `getTileExtent` / `getTileByZXY`）、`destroy()`
+  - `base-source.ts`（314 → 306 行，-8 行）：
+    - `tileset` / `isTile` 字段 → getter 转发 `tilesetAdapter.manager` / `.isTile`（满足 `ISource` 字段契约）
+    - 删除 `private initTileset()`（14 行），`executeParser` 改调 `this.tilesetAdapter.init(this.data)`
+    - 7 个 `reload*/getTile*` 方法实现体从 `this.tileset?.xxx()` 改为 `this.tilesetAdapter.xxx()`
+    - `destroy()` 改调 `this.tilesetAdapter.destroy()`
+    - 构造函数 `new TilesetAdapter()`（无依赖闭包，直接 new）
+    - import 清理：`TilesetManager` 从 value import 改 type import（base-source 不再 `new TilesetManager`，只用 getter 返回类型）；`TilesetAdapter` 新增 value import
+- **偏离 PLAN 的说明**：PLAN 估「搬出 ~40 行」，实际 base-source 净减仅 8 行（314→306）。差异主因：7 个 reload/getTile **方法签名仍在 Source 上**（ISource 接口要求），只是实现体从 `this.tileset?.xxx()` 换成 `this.tilesetAdapter.xxx()`，每个方法仍占 3 行；真正删的是 `initTileset`（14 行）+ 2 个字段（2 行），新增 getter 块（8 行）+ adapter 声明 + import。`base-source.ts` 显著瘦身要等 1.4 抽完 Bounds 后做一次方法体收敛。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source/src 自身 0 错误，总错误 31（基线不变）。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 个 pre-existing 错误（基线不变），`tileset` / `TilesetAdapter` / `isTile` / `getTileBy` / `reloadTile` 相关 0 错误。
+  - `eslint`：通过（`tileset-adapter.ts` + `base-source.ts` 干净，`TilesetManager` 改 type import 后 `consistent-type-imports` 规则满足）。
+  - `prettier --check`：通过。
+  - `jest packages/source/__tests__`：5 suites / 27 tests 全通过。
+  - `jest packages/source/__tests__ + packages/layers/__tests__`：81 passed / 1 skipped / 0 failed —— 瓦片图层运行时路径覆盖，`tile/core/BaseLayer.ts` 读 `source.tileset as TilesetManager` 借用实例（update/on/destroy/tiles.filter/currentTiles）行为等价。
+- **风险/注意**：
+  - **`tileset` getter 返回 adapter.manager 是关键设计**：layers 的 `tile/core/BaseLayer.ts:68` 直接 `this.tilesetManager = source.tileset as TilesetManager` 后**自由操作实例**（调 update/throttleUpdate/on('tile-loaded' 等)/destroy/clear/tiles.filter/isLoaded/currentTiles）。delegate 的 `manager` 必须 public 且就是 Source 原来持有的同一个 `TilesetManager` 实例 —— 本次用 getter 转发 `adapter.manager`，layers 拿到的实例与迁移前完全相同，所有方法/事件订阅/属性读取均透明。
+  - `tileset` / `isTile` 从字段改 getter only：`ISource` 接口字段契约由 getter 满足；Source 内部不再写 `this.tileset = ...` / `this.isTile = ...`（改调 adapter.init），所以不需要 setter。layers 只读，无写入路径。
+  - `isTile` 不主动重置：原 `initTileset` 仅在 `tilesetOptions` 存在时 `this.isTile = true`，从不重置回 false；`adapter.init` 保留同样行为（setData 切回非瓦片数据时 isTile 保持旧值）—— 与原行为一致。
+  - `reloadTilebyId`（小写 b）沿用原拼写：ISource 接口签名如此，不改名避免破坏接口。
+- **遗留**：→ 阶段 1.3 拆 `FeatureIndex`（`getFeatureById` / `getFeatureId` / `updateFeaturePropertiesById` + `dataArrayChanged` 状态，约 30 行）。
+
+---
 
 ## [阶段 1.1] 拆 ClusterManager delegate（commit 2dcd055）
 
