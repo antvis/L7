@@ -1,4 +1,25 @@
-export type DataType = string | object[] | object;
+/**
+ * @antv/l7-source 类型定义
+ *
+ * 与 `@antv/l7-core` 重复的类型此处改为 re-export（单一来源在 core），
+ * 仅 @antv/l7-source 专有类型（栅格波段运算、瓦片数据源等）在此定义。
+ *
+ * 重构参考：docs/refactoring/source/PLAN.md › 阶段 0.1
+ */
+
+// 与 @antv/l7-core 重复的类型 —— 单一来源在 core，此处仅作 re-export 透传
+export type {
+  DataType,
+  IDictionary,
+  IFeatureKey,
+  IJsonData,
+  IJsonItem,
+  IParseDataItem,
+  IParserData,
+} from '@antv/l7-core';
+
+// ===== @antv/l7-source 专有类型 =====
+
 export type TypedArray =
   | Int8Array
   | Uint8Array
@@ -9,32 +30,6 @@ export type TypedArray =
   | Uint8ClampedArray
   | Float32Array
   | Float64Array;
-export interface IDictionary<TValue> {
-  [key: string]: TValue;
-}
-export interface IFeatureKey {
-  [key: string]: {
-    index: number;
-    idField: any;
-  };
-}
-// 解析后返回数据类型
-export interface IParseDataItem {
-  coordinates: any[];
-  _id: number;
-  [key: string]: any;
-}
-export interface IParserData {
-  [key: string]: any;
-  dataArray: IParseDataItem[];
-  // 瓦片地图数据字典
-  featureKeys?: IFeatureKey;
-}
-
-export interface IJsonItem {
-  [key: string]: any;
-}
-export type IJsonData = IJsonItem[];
 
 export interface IRasterData {
   rasterData: HTMLImageElement | Uint8Array | ImageBitmap | null | undefined;
@@ -56,7 +51,6 @@ export type IRgbOperation = {
   g?: any[];
   b?: any[];
 };
-export type SchemaOperationType = SchemaRGBOperation | SchemaBandOperation;
 export type SchemaRGBOption = {
   countCut?: [number, number]; // 百分比
   RMinMax?: [number, number];
@@ -81,8 +75,14 @@ export type SchemaBandOperation = {
 export type IBandsOperation =
   ((bands: IRasterData[]) => Uint8Array | number[]) | any[] | IRgbOperation | SchemaOperationType;
 
+export type SchemaOperationType = SchemaRGBOperation | SchemaBandOperation;
+
 export type IRasterLayerData = number[] | IRasterFileData | IRasterFileData[];
 
+/**
+ * 注意：@antv/l7-core 也定义了 IRasterCfg，但那是简化版（extent 必需、无 coordinates/format/operation）。
+ * 此处保留 source 的完整版本供 parser 使用。后续统一见 BACKLOG。
+ */
 export interface IRasterCfg {
   format?: IRasterFormat;
   operation?: IBandsOperation;
