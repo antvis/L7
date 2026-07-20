@@ -6,9 +6,9 @@
 
 ## 📍 下一步
 
-**阶段 0.5**：`testTile` parser 移出生产 entry，改为 dev-only 注册（确认无下游依赖后）。
+**阶段 0.6**：重命名 `src/source/` → `src/tile-source/`；两个 `VectorSource` 改名 `MVTSource` / `GeoJSONVTTileSource`；评估删除未被使用的 `BaseSource` 抽象类或让其被真实继承。涉及 layers 包 import 调整。
 
-详见 [PLAN.md § 阶段 0.5](./PLAN.md)。完成后在本节下方追加记录，并更新「下一步」为 0.6。
+详见 [PLAN.md § 阶段 0.6](./PLAN.md)。本次为跨包改动（layers 包 import），需配 changeset。
 
 ---
 
@@ -82,7 +82,7 @@
 
 ---
 
-## [阶段 0.4] 扁平化 parser/raster 子目录 + 修正函数名（commit 待回填）
+## [阶段 0.4] 扁平化 parser/raster 子目录 + 修正函数名（commit e83ea40）
 
 - **改了什么**：
   - `git mv` `parser/raster/rgb.ts` → `parser/rgb.ts`、`parser/raster/ndi.ts` → `parser/ndi.ts`，删除空的 `parser/raster/` 子目录。
@@ -98,5 +98,17 @@
   - `git mv` 保留文件历史。default export 函数名改动对导入方无影响（import 名独立）。
   - `parser/raster.ts`（无斜杠）是另一个独立 parser，未误改。
 - **遗留**：→ `RasterDataType` / `IRGBParseCfg` 在 `rgb.ts` 与 `ndi.ts` 重复定义，且 ndi 用 IRGBParseCfg 名不副实，留待后续统一（记 BACKLOG）。
+
+---
+
+## [阶段 0.5] testTile 移出生产 entry — wontfix（计划前提有误）
+
+- **调研结果**：`testTile` parser 有真实下游使用，并非 dev/demo 死代码：
+  - `packages/layers/src/tile/core/TileDebugLayer.ts:11` —— `TileDebugLayer`（瓦片调试图层）的 `defaultSourceConfig.parser.type = 'testTile'`
+  - `packages/layers/src/tile/utils/utils.ts:3` —— `tileVectorParser = ['mvt', 'geojsonvt', 'testTile']`，用于 `isTileGroup` 判断
+  - `packages/layers/src/tile/tile/DebugTile.ts:42` —— 读取 `sourceTile.data.layers.testTile.features`
+- **决定**：**不动**。PLAN 阶段 0.5「移出生产 entry」的前提（"dev/test 代码进了生产 bundle"）错误，testTile 是调试功能的合法组成部分。
+- **怎么验证**：跨包 grep 确认 3 处下游依赖（见上），均为调试图层正式 API。
+- **遗留**：无代码改动。后续如需做 tree-shaking，可在阶段 2 的 `registerBuiltins()` 机制里把 testTile 标记为"仅 debug bundle 需要"，但属优化而非清理。
 
 ---

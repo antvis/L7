@@ -43,7 +43,7 @@
 
 - `Satistics`（拼写错误）位于 `@antv/l7-utils`，需跨包修改，留到 utils 包独立重构时处理。
 - source 包 `tsconfig.json` 引用 core 源码导致 31 个 `.glsl` 模块 TSError，属 pre-existing 噪音，不阻塞本次重构。可考虑给 core 加 `*.glsl` 模块声明，但属 core 包议题。
-- `testTile` 注册到生产 entry 属于历史 demo 代码，移除前需确认无下游依赖（阶段 0.5）。
+- `testTile` parser 是 `TileDebugLayer` 调试图层的合法默认 parser（非死代码），阶段 0.5 已确认 wontfix，不移出生产 entry。
 
 ---
 
