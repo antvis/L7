@@ -2,6 +2,7 @@ import Source from './base-source';
 import { registerBuiltins } from './builtins';
 import { rasterDataTypes } from './parser/raster-tile';
 export { registerBuiltins } from './builtins';
+export { createSource } from './create-source';
 export {
   defaultRegistry,
   getParser,

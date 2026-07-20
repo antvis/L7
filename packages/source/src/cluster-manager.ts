@@ -4,7 +4,8 @@ import type { BBox } from '@turf/helpers';
 // @ts-ignore
 // tslint:disable-next-line:no-submodule-imports
 import type Supercluster from 'supercluster/dist/supercluster';
-import { getParser } from './factory';
+import type { ParserRegistry } from './parser-registry';
+import { defaultRegistry } from './parser-registry';
 import { cluster } from './transform/cluster';
 import { statMap } from './utils/statistics';
 import { getColumn } from './utils/util';
@@ -48,6 +49,12 @@ export class ClusterManager {
     private readonly getExtent: () => BBox,
     /** 读取范围是否失效（单点 / 退化数据） */
     private readonly getInvalidExtent: () => boolean,
+    /**
+     * Parser 注册表（阶段 2.5）。聚合数据 re-parse 经 `registry.getParser('geojson')`
+     * 而非旧全局 `getParser`，注入自定义 registry 可与 Source 共用同一注册表实例。
+     * 默认 `defaultRegistry` 单例，与迁移前等价。
+     */
+    private readonly registry: ParserRegistry = defaultRegistry,
   ) {}
 
   /**
@@ -99,7 +106,7 @@ export class ClusterManager {
         return item;
       });
     }
-    return getParser('geojson')({
+    return this.registry.getParser('geojson')({
       type: 'FeatureCollection',
       features: data,
     });

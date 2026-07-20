@@ -14,8 +14,9 @@ import type { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
 import { Bounds } from './bounds';
 import { ClusterManager } from './cluster-manager';
-import { getParser, getTransform } from './factory';
 import { FeatureIndex } from './feature-index';
+import type { ParserRegistry } from './parser-registry';
+import { defaultRegistry } from './parser-registry';
 import { TilesetAdapter } from './tileset-adapter';
 const { mergeWith } = lodashUtil;
 
@@ -89,6 +90,17 @@ export default class Source extends EventEmitter implements ISource {
   // 状态由 `bounds.update(bbox)` 原子写入，Source 不再分散赋值。
   private readonly bounds: Bounds = new Bounds();
 
+  /**
+   * Parser/Transform 注册表（阶段 2.5）。
+   *
+   * 默认 `defaultRegistry` 单例（与迁移前等价）；经 `createSource(data, cfg,
+   * registry)` 工厂或 `new Source(data, cfg, registry)` 构造器注入自定义
+   * `new ParserRegistry()` 可隔离注册表，支持按需子集注册 / 测试隔离。
+   * `executeParser` / `executeTrans` 与 `ClusterManager` 的 parser 调用均走本字段
+   * 而非旧全局 `getParser` / `getTransform` 函数。
+   */
+  private readonly registry: ParserRegistry = defaultRegistry;
+
   public get extent(): BBox {
     return this.bounds.extent;
   }
@@ -107,14 +119,16 @@ export default class Source extends EventEmitter implements ISource {
     autoRender: true,
   };
 
-  constructor(data: any | ISource, cfg?: ISourceCFG) {
+  constructor(data: any | ISource, cfg?: ISourceCFG, registry: ParserRegistry = defaultRegistry) {
     super();
+    this.registry = registry;
     // this.rawData = cloneDeep(data);
     this.originData = data;
     // delegate 必须先于 initCfg 创建：initCfg 会通过 setter 写 cluster 字段
     this.clusterManager = new ClusterManager(
       () => this.bounds.extent,
       () => this.bounds.invalidExtent,
+      registry,
     );
     this.tilesetAdapter = new TilesetAdapter();
     this.featureIndex = new FeatureIndex(
@@ -263,7 +277,7 @@ export default class Source extends EventEmitter implements ISource {
     // 耗时计算测试
     const parser = this.parser as IParserCfg;
     const type: string = parser.type || 'geojson';
-    const sourceParser = getParser(type);
+    const sourceParser = this.registry.getParser(type);
     this.data = sourceParser(this.originData, parser);
     // 为瓦片图层的父图层创建数据瓦片金字塔管理器
     this.tilesetAdapter.init(this.data);
@@ -285,7 +299,7 @@ export default class Source extends EventEmitter implements ISource {
     trans.forEach((tran: ITransform) => {
       const { type } = tran;
 
-      const data = getTransform(type)(this.data, tran);
+      const data = this.registry.getTransform(type)(this.data, tran);
       Object.assign(this.data, data);
     });
   }

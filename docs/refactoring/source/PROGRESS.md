@@ -6,8 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 2.5**：提供工厂 `createSource(data, cfg, registry?)` —— 旧 `new Source(data, cfg)` 内部仍经 `defaultRegistry`（自动注册内置 parser），新工厂可选注入自定义 `registry`（消费方 `new ParserRegistry()` + 手工 `registerParser` 子集 或 `registerBuiltins(myRegistry)`），让「注册表隔离 + 按需子集」正式成为对外能力。实现要点：`Source` 构造器增可选 `registry` 参数注入 `base-source` 的 `getParser/getTransform` 调用路径（默认 `defaultRegistry`，对老调用路径零影响）；`createSource` 包装 `new Source(data, cfg, registry)`。需评估 `base-source.ts:266/288` 的 `getParser`/`getTransform` 旧全局函数调用改为走注入的 registry（保留旧全局 wrapper 作为 `defaultRegistry` 转发）。详见 [PLAN.md § 阶段 2.5](./PLAN.md)。
-
+**阶段 3**：Parser 与 Loader 解耦（⚠️触及瓦片生命周期）。核心思想：**parser = 数据形状转换（纯函数）；loader = 数据获取（fetch/decode）**。子步骤：3.1 抽象 `TileLoader` 接口 `loadTile(params, tile): Promise<ITileSource>`，把 `mvt.ts`/`jsonTile.ts`/`geojsonvt.ts` 里的 `getVectorTile` 闭包抽成 `MVTLoader`/`JsonTileLoader`/`GeoJSONVTLoader`，parser 只组装 `tilesetOptions.getTileData = (p,t) => loader.loadTile(p,t)`；3.2 `RasterTileLoader` 把 `raster-tile.ts` 的大 switch（IMAGE / ARRAYBUFFER / CUSTOMIMAGE / CUSTOMARRAYBUFFER / CUSTOMRGB / CUSTOMTERRAINRGB 6 分支）拆成分发器 + 6 个小 loader；3.3 `image.ts` parser 不再自己 `getImage()` fetch，返回 `imageRef`，由 layer 侧或独立 ImageLoader 异步取数（保留 `images` Promise 字段作兼容）；3.4 `getCustomData/getCustomImageData` 统一到 `CustomDataProvider` loader。收益：parser 全部纯函数可单测，loader 可 mock，`tile.xhrCancel` 取消逻辑收敛到 loader。⚠️风险：触及瓦片生命周期，需保证瓦片加载/取消/缓存行为等价 —— 建议分小步独立 commit，每步回归 `jest packages/source/__tests__` + `tsc source` 31 / `tsc layers` 229 基线。详见 [PLAN.md § 阶段 3](./PLAN.md)。
 ---
 
 ## 记录模板
@@ -23,6 +22,39 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 2.5] createSource 工厂 + registry 注入（commit <SHA 待回填>）
+
+- **改了什么**：
+  - 新增 `src/create-source.ts`（33 行）：`export function createSource(data: any | Source, cfg?: ISourceCFG, registry: ParserRegistry = defaultRegistry): Source { return new Source(data, cfg, registry); }` —— `new Source(...)` 的函数式包装，推荐入口，便于未来扩展（默认 cfg 合并 / registry 校验 / 异步初始化钩子）而不破坏构造器兼容签名。`registry` 省略走 `defaultRegistry` 单例（`index.ts` 经 `registerBuiltins()` 自动注册全 13 内置 parser），与迁移前 `new Source(data, cfg)` 完全等价；注入自定义 `new ParserRegistry()` 可隔离注册表（按需子集 tree-shaking / 测试隔离 / 多源异构 parser 集合）。
+  - 重写 `src/base-source.ts`（+13 行）：
+    - import 块：`import { getParser, getTransform } from './factory'` → `import type { ParserRegistry } from './parser-registry'` + `import { defaultRegistry } from './parser-registry'`（不再依赖 factory 的旧全局函数）。
+    - 新增 `private readonly registry: ParserRegistry = defaultRegistry` 字段（JSDoc 说明注入语义）。
+    - 构造器签名 `constructor(data, cfg?)` → `constructor(data, cfg?, registry: ParserRegistry = defaultRegistry)`，构造体首行 `this.registry = registry`，并把 `registry` 透传给 `new ClusterManager(getExtent, getInvalidExtent, registry)`。
+    - `executeParser`：`getParser(type)` → `this.registry.getParser(type)`（line ~280）。
+    - `executeTrans`：`getTransform(type)(...)` → `this.registry.getTransform(type)(...)`（line ~302）。
+  - 重写 `src/cluster-manager.ts`（+9 行）：import 同 base-source 切换；构造器增第 3 参 `private readonly registry: ParserRegistry = defaultRegistry`；`getParser('geojson')({...})` → `this.registry.getParser('geojson')({...})`（聚合 re-parse 经注入 registry 而非旧全局函数，与 Source 共用同一 registry 实例）。
+  - `src/index.ts`（+1 行）：新增 `export { createSource } from './create-source'`，包入口暴露 `createSource` 工厂。
+  - 新增 `__tests__/create-source.spec.ts`（71 行 / 5 tests）：① factory 返 `Source` 实例 + extent 正确；② `createSource(Polygon)` ≡ `new Source(Polygon)`（extent + dataArray.length 等价）；③ 默认 registry 下 cluster `updateClusterData(2)` 端到端（110 聚合点）；④ **关键**：`jest.spyOn(customRegistry, 'getParser')` 证明 Source 构造期 `executeParser` 拉 geojson parser 从注入的 `customRegistry`（非单例），且 `updateClusterData(2)` 后 spy 调用次数增加（ClusterManager 共用同一注入 registry）；⑤ 自定义 registry 注册 `custom-only` parser 后 `defaultRegistry.getParser('custom-only')` 抛 `ParserNotFoundError`（注册表状态隔离，不污染单例）。
+- **设计取舍**：
+  - **构造器增可选第 3 参而非新子类**：`registry = defaultRegistry` 默认参让所有既有 `new Source(data, cfg)` 调用零行为变化。`createSource` 仅函数式包装，无新类继承。monorepo grep 仅 1 处 `new Source(data, options)` 在 `packages/layers/src/plugins/DataSourcePlugin.ts:15` + 9 处测试，全 `new Source(data, cfg?)` 无第 3 参 —— 100% 向后兼容。
+  - **cluster-manager 共享同一注入 registry**：base-source 构造 cluster-manager 时传 `registry`，保证 cluster re-parse 也走注入的 registry（不仅仅是 `executeParser`/`executeTrans`）。spec 用 `jest.spyOn(customRegistry, 'getParser')` 验证 `updateClusterData(2)` 后 spy 调用次数增加，证明全链路注入闭环。
+  - **`create-source.ts` 独立文件不并入 `factory.ts`**：`factory.ts` 是 `@deprecated` wrapper 入口（4 函数 `getParser`/`registerParser`/`getTransform`/`registerTransform` 均弃用转发）；`createSource` 是新推荐入口，职责分离让 factory.ts 保持 thin wrapper 定位、create-source.ts 独立演进。
+  - **`factory.ts` 4 个 `@deprecated` wrapper 不动**：阶段 2.5 后 `getParser`/`registerParser`/`getTransform`/`registerTransform` 全局函数仍 re-export（外部可能 `registerParser('custom', fn)` 注册自定义 parser 到 `defaultRegistry`）；base-source/cluster-manager 不再用它们但保留兼容出口，留给未来 major 版本评估移除。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source 总 31 错基线不变（全 core `.glsl` 噪音，0 非 glsl 错）—— `Source` 构造器增 optional 第 3 参 + registry 字段 + `this.registry.getParser/getTransform` 对类型检查零回归；新 `create-source.ts` 纯转发签名对调用方零影响。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 pre-existing 不变 —— layers 经 `import Source from '@antv/l7-source'` 拉 `index.ts`，`registry` 默认参零影响；`DataSourcePlugin.ts:15 new Source(data, options)` 2 参调用对增参构造器零类型回归。
+  - `eslint`：通过（5 文件 base-source / cluster-manager / create-source / index / create-source.spec）。
+  - `prettier --check`：通过（4 文件经 `prettier --write` 重排 import 顺序 + 多行 extent，纯 whitespace）。
+  - `jest packages/source/__tests__`：7 suites / 45 tests 全通过（旧 40 + 新 5 `createSource`）；spec 经 `import '../src'` 触发 `index.ts` 副作用注册全 13 内置 parser，验证默认 registry 路径 + 自定义 registry 注入路径双通，spy 断言证明 parser + cluster re-parse 全链路走注入的 registry。
+- **风险/注意**：
+  - **`registry` 是构造期注入、运行期不可变**：`private readonly registry` 仅在构造器赋值，构造后不可替换。若运行期需切 registry，需重建 Source（与既有 bounds/cluster 状态一致 —— 均构造期定型）。未来若有热切换需求，阶段 4 异步生命周期再评估。
+  - **字段初始化器 `= defaultRegistry` 与构造器赋值 `this.registry = registry` 略冗余但必要**：`readonly` 字段需声明初始化器（TS 要求），构造器再赋注入值。默认参 `registry = defaultRegistry` 保证构造器传入值恒等价于字段初始化器，无语义分歧。
+  - **`defaultRegistry` 单例在测试间共享**：spec ④⑤ 用 `new ParserRegistry()` 创建独立实例避免污染单例；spec ⑤ 在 `customRegistry` 注册 `custom-only` 后断言 `defaultRegistry.getParser('custom-only')` 抛错 —— 验证隔离但不写入单例。`defaultRegistry` 只读断言，0 写入。
+  - **`cluster-manager` 默认参 `registry = defaultRegistry`**：若未来消费方直接 `new ClusterManager(getExtent, getInvalidExtent)` 不传 registry，走 defaultRegistry 单例（与迁移前等价）。当前 ClusterManager 仅由 Source 内部构造，无外部直接 new，0 风险。
+- **遗留**：→ 阶段 3 Parser 与 Loader 解耦（触及瓦片生命周期）；阶段 2.x `Transform<TIn,TCfg,TOut>` 契约抽取（BACKLOG 既有）；阶段 2.x 领域错误抽 `errors.ts`（BACKLOG 既有，条件触发）；阶段 2.x 消费方按需子集注册 README/CHANGELOG 文档化（BACKLOG 既有，2.5 工厂落地后对外能力正式成型，文档可统一补）。
+
+---
 
 ## [阶段 2.4] registerBuiltins() 抽取 + sideEffects 收紧白名单（commit dd39acd）
 
