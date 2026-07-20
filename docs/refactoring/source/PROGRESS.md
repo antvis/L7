@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 1.2] 拆 TilesetAdapter delegate（commit 待回填）
+## [阶段 1.2] 拆 TilesetAdapter delegate（commit 6c6e372）
 
 - **改了什么**：
   - 新增 `src/tileset-adapter.ts`（88 行）从 `base-source.ts` 抽出瓦片管理职责：
