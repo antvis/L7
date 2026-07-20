@@ -58,7 +58,7 @@
   - 阶段 2.5 `createSource(data, cfg, registry?)` 工厂落地后，按需子集注册成为对外正式能力的推荐入口。
 - **建议**：在源包 README 或重构存档新增「注册表使用姿势」小节，对照说明三种模式（默认全量 / 自定义 registry 全量 / 自定义 registry 子集）与对应 tree-shaking 收益。CHANGELOG 在 2.4 / 2.5 落地后统一说明「sideEffects 白名单 + registerBuiltins + createSource 工厂」三项彼此配合的对外能力。
 - **状态**：open（不阻塞代码进度，文档可在 2.5 落地后统一补）
-- **发现于**：阶段 2.4（commit 待回填）
+- **发现于**：阶段 2.4（commit dd39acd）
 
 ### [阶段 2.x] 领域错误抽 `errors.ts` 收口（条件触发）
 

@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 2.4] registerBuiltins() 抽取 + sideEffects 收紧白名单（commit <SHA 待回填>）
+## [阶段 2.4] registerBuiltins() 抽取 + sideEffects 收紧白名单（commit dd39acd）
 
 - **改了什么**：
   - 新增 `src/builtins.ts`（74 行）：`export function registerBuiltins(registry: ParserRegistry = defaultRegistry): void`，把原 `index.ts` 顶层 13 个 `registerParser(...)` + 6 个 `registerTransform(...)` 收敛为单一函数。参数默认 `defaultRegistry` 单例；传入自定义 `new ParserRegistry()` 可隔离注册表（按需子集化 / 测试隔离）。模块头注释明确两种消费方使用方式（默认零改动 vs 按需子集 tree-shaking 友好）。
