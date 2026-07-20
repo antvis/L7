@@ -3,8 +3,9 @@ import {
   defaultRegistry,
   ParserNotFoundError,
   ParserRegistry,
+  registerBuiltins,
   TransformNotFoundError,
-} from '../src/parser-registry';
+} from '../src';
 
 describe('ParserRegistry', () => {
   describe('registerParser / getParser', () => {
@@ -102,6 +103,51 @@ describe('ParserRegistry', () => {
       expect(() => defaultRegistry.getTransform('not-a-real-transform')).toThrow(
         TransformNotFoundError,
       );
+    });
+  });
+  describe('registerBuiltins', () => {
+    it('registers all 13 parsers + 6 transforms on a fresh registry', () => {
+      const registry = new ParserRegistry();
+      registerBuiltins(registry);
+      const parserTypes = [
+        'csv',
+        'geojson',
+        'geojsonvt',
+        'image',
+        'json',
+        'jsonTile',
+        'mvt',
+        'ndi',
+        'raster',
+        'rasterTile',
+        'rasterRgb',
+        'rgb',
+        'testTile',
+      ];
+      parserTypes.forEach((t) => {
+        expect(typeof registry.getParser(t)).toBe('function');
+      });
+      const transformTypes = ['cluster', 'filter', 'join', 'map', 'grid', 'hexagon'];
+      transformTypes.forEach((t) => {
+        expect(typeof registry.getTransform(t)).toBe('function');
+      });
+    });
+
+    it('defaults to defaultRegistry when called with no argument', () => {
+      // defaultRegistry already populated by index.ts side-effect import;
+      // calling registerBuiltins() with no arg is idempotent re-registration.
+      expect(() => registerBuiltins()).not.toThrow();
+      expect(typeof defaultRegistry.getParser('geojson')).toBe('function');
+      expect(typeof defaultRegistry.getTransform('cluster')).toBe('function');
+    });
+
+    it('does not pollute the singleton when registering on a fresh registry', () => {
+      const registry = new ParserRegistry();
+      registerBuiltins(registry);
+      // Fresh registry has builtins; singleton's state is independent.
+      expect(() => registry.getParser('geojson')).not.toThrow();
+      // The fresh registry and singleton are distinct instances.
+      expect(registry).not.toBe(defaultRegistry);
     });
   });
 });

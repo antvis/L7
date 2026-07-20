@@ -4,7 +4,9 @@
   "description": "",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
-  "sideEffects": true,
+  "sideEffects": [
+    "./es/index.js"
+  ],
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",

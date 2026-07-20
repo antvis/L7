@@ -49,6 +49,17 @@
 
 <!-- 以下为重构过程中新增的遗留项，倒序追加 -->
 
+### [阶段 2.x / 文档] 消费方按需子集注册的 README / CHANGELOG 文档化
+
+- **位置**：`packages/source/README.md`（若有）/ monorepo `CHANGELOG` / `docs/refactoring/source/` 重构存档。
+- **问题**：阶段 2.4 把 `sideEffects` 收紧为白名单 `["./es/index.js"]` + 抽出 `registerBuiltins(registry = defaultRegistry)`，让「`new ParserRegistry()` + 手工 `registerParser` 子集 / `registerBuiltins(myRegistry)`」成为消费方按需 tree-shaking 的合法姿势。但当前无文档明示：
+  - 默认 `import { Source } from '@antv/l7-source'` 自动注册全 13 内置 parser（零配置）。
+  - 若消费方经子路径 `import { ParserRegistry } from '@antv/l7-source/es/parser-registry'` 绕开 `index.ts`，则 `defaultRegistry` 不会被自动注册，`new Source({type:'csv'})` 会抛 `ParserNotFoundError`。
+  - 阶段 2.5 `createSource(data, cfg, registry?)` 工厂落地后，按需子集注册成为对外正式能力的推荐入口。
+- **建议**：在源包 README 或重构存档新增「注册表使用姿势」小节，对照说明三种模式（默认全量 / 自定义 registry 全量 / 自定义 registry 子集）与对应 tree-shaking 收益。CHANGELOG 在 2.4 / 2.5 落地后统一说明「sideEffects 白名单 + registerBuiltins + createSource 工厂」三项彼此配合的对外能力。
+- **状态**：open（不阻塞代码进度，文档可在 2.5 落地后统一补）
+- **发现于**：阶段 2.4（commit 待回填）
+
 ### [阶段 2.x] 领域错误抽 `errors.ts` 收口（条件触发）
 
 - **位置**：`packages/source/src/parser-registry.ts`（`ParserNotFoundError` / `TransformNotFoundError` 当前与 `ParserRegistry` class 同文件）。

@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 2.4**：`package.json` 设 `sideEffects: false`，把当前 `index.ts` 的内置 parser/transform 注册显式化为 `registerBuiltins(registry = defaultRegistry)` 函数（保留旧 `index.ts` 自动注册行为以兼容，但明确分离 registration 入口）。验证 tree-shaking 友好性（消费方可通过 `new ParserRegistry()` + 自定义 `registerBuiltins` 子集，避免一次性拉满 13 个 parser）。注意阶段 2.5 `createSource(data, cfg, registry?)` 工厂落地后，`registerBuiltins` + registry 注入共同支持按需注册。详见 [PLAN.md § 阶段 2.4](./PLAN.md)。
+**阶段 2.5**：提供工厂 `createSource(data, cfg, registry?)` —— 旧 `new Source(data, cfg)` 内部仍经 `defaultRegistry`（自动注册内置 parser），新工厂可选注入自定义 `registry`（消费方 `new ParserRegistry()` + 手工 `registerParser` 子集 或 `registerBuiltins(myRegistry)`），让「注册表隔离 + 按需子集」正式成为对外能力。实现要点：`Source` 构造器增可选 `registry` 参数注入 `base-source` 的 `getParser/getTransform` 调用路径（默认 `defaultRegistry`，对老调用路径零影响）；`createSource` 包装 `new Source(data, cfg, registry)`。需评估 `base-source.ts:266/288` 的 `getParser`/`getTransform` 旧全局函数调用改为走注入的 registry（保留旧全局 wrapper 作为 `defaultRegistry` 转发）。详见 [PLAN.md § 阶段 2.5](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,42 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 2.4] registerBuiltins() 抽取 + sideEffects 收紧白名单（commit <SHA 待回填>）
+
+- **改了什么**：
+  - 新增 `src/builtins.ts`（74 行）：`export function registerBuiltins(registry: ParserRegistry = defaultRegistry): void`，把原 `index.ts` 顶层 13 个 `registerParser(...)` + 6 个 `registerTransform(...)` 收敛为单一函数。参数默认 `defaultRegistry` 单例；传入自定义 `new ParserRegistry()` 可隔离注册表（按需子集化 / 测试隔离）。模块头注释明确两种消费方使用方式（默认零改动 vs 按需子集 tree-shaking 友好）。
+  - 重写 `src/index.ts`（57 → 29 行，-28 行）：
+    - 删除 13 个 parser default import + 6 个 transform named import（全部下沉到 `builtins.ts`），仅保留 `rasterDataTypes` named import（包公共 re-export `export { rasterDataTypes }`）。
+    - 删除 `registerParser, registerTransform` 从 `./factory` 的本地 import（不再直接调用）。
+    - 新增 `import { registerBuiltins } from './builtins'` + `export { registerBuiltins } from './builtins'`（包入口暴露给消费方）。
+    - 模块底部 19 行 `registerParser(...)`/`registerTransform(...)` 收敛为单行 `registerBuiltins();`（默认参数注入 `defaultRegistry`，行为完全等价）。
+    - 注释说明 `sideEffects: ["./es/index.js"]` 与子路径 tree-shaking 的契约。
+  - `packages/source/package.json`：`"sideEffects": true` → `"sideEffects": ["./es/index.js"]`。沿用 `packages/layers` 既有约定（layers 同样在 `index.ts` 自动注册全部图层类型）。仅在 `es/index.js` 标记副作用，其余子路径（`es/parser-registry.js`、`es/builtins.js`、`es/parser/*.js` 等）对 bundler 视作 tree-shakeable。
+  - `__tests__/parser-registry.spec.ts`（100 → 152 行，+3 tests）：
+    - import 块新增 `registerBuiltins`（从 `'../src'`）。
+    - 新增 `describe('registerBuiltins')` 3 tests：① fresh `new ParserRegistry()` 经 `registerBuiltins(registry)` 注册全部 13 parser + 6 transform；② `registerBuiltins()` 无参默认走 `defaultRegistry`，幂等不抛；③ fresh registry 与 `defaultRegistry` 单例独立（`not.toBe`）。
+- **设计取舍**：
+  - **偏离 PLAN 字面 `sideEffects: false`，改用白名单 `["./es/index.js"]`**：PLAN 写「设 `sideEffects: false`」，但 `index.ts` 模块顶层仍调用 `registerBuiltins()` 对 `defaultRegistry` 单例产生写入副作用 —— 设 `false` 是对 bundler 撒谎，会致 bundler 误判 `index.ts` 无副作用而 tree-shake 掉 `registerBuiltins()` 调用，最终 `new Source({type:'csv'})` 在消费方抛 `ParserNotFoundError: csv`（致命回归）。白名单 `["./es/index.js"]` 既保 `index.ts` 副作用被尊重（零行为回归），又明示其余子路径 tree-shakeable（消费方经 `@antv/l7-source/es/parser-registry` 等子路径 import 可 tree-shake 不用的 parser 实现）。沿用 `packages/layers` 既有约定（同场景同方案），repo 内一致。严格 `sideEffects: false` 需把 `registerBuiltins()` 调用从 `index.ts` 移除（改由消费方显式调用），破坏「`import { Source } from '@antv/l7-source'` 即可用」的零配置契约，与「对外 API 完全兼容」核心原则相悖 —— 留给未来 major 版本评估（BACKLOG）。
+  - **`registerBuiltins` 独立 `builtins.ts` 而非并入 `parser-registry.ts`**：`parser-registry.ts` 当前 97 行（registry class + 2 错误类）保持「registry 机制」单一职责；`builtins.ts` 是「内置注册目录」依赖全部 13 parser + 6 transform 实现，职责分离让 `parser-registry.ts` 不被 19 个 import 污染、保持可被 bundler tree-shake 友好（消费方经子路径 import `ParserRegistry` 时不被迫拉满 13 parser）。
+  - **`registerBuiltins` 不放 `factory.ts`**：`factory.ts` 是「`defaultRegistry` 薄转发 wrapper」的弃用入口（4 函数均 `@deprecated`），把依赖 13 parser 实现的 `registerBuiltins` 放进去会破坏「thin wrapper」定位、且让 factory.ts 不再 tree-shakeable。从 `index.ts` 直接 re-export `./builtins` 更清晰。
+  - **保留 `export { registerParser, registerTransform } from './factory'`**：阶段 2.5 `createSource` 工厂落地前，外部仍可能通过 `registerParser('custom', fn)` 注册自定义 parser 到 `defaultRegistry`（旧 API 路径），保留兼容入口。`factory.ts` 4 个 `@deprecated` wrapper 不在本阶段动。
+  - **`rasterDataTypes` re-export 保留在 `index.ts`**：阶段 0.x 曾评估移出，但它是包公共 export（虽 monorepo 内 grep 仅 source 自身使用，跨包外部下游可能消费）；本阶段不动以缩窄 diff。后续若确认无外部消费，可独立小项移入 BACKLOG。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source 自身 0 错，总 31 基线不变 —— `index.ts` 删 19 import + `builtins.ts` 加 19 import 的搬迁对类型检查零影响；`registerBuiltins(registry=defaultRegistry)` 默认参数与 `void` 返回签名对调用方零回归。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 pre-existing 不变 —— layers 经 `import Source from '@antv/l7-source'` 拉的是 `index.ts`，`registerBuiltins()` 副作用照常触发，运行期注册全 13 内置 parser。
+  - `tsc --noEmit -p packages/l7/tsconfig.json`：346 pre-existing 不变 —— l7 入口经 `import Source from '@antv/l7-source'` 同上。grep 确认 346 错全为 core `.glsl` 模块噪音，无 `source/src/{index,builtins,factory,parser-registry}.ts` 新错。
+  - `eslint`：通过（3 文件 `builtins.ts` / `index.ts` / `parser-registry.spec.ts`）。
+  - `prettier --check`：通过（`index.ts` 长注释块经 `prettier --write` 重排，纯 whitespace）。
+  - `jest packages/source/__tests__`：6 suites / 40 tests 全通过（旧 37 + 新 3 `registerBuiltins`）；spec 通过 `import '../src'` 触发 `index.ts` 副作用，验证 `defaultRegistry` 自动注册路径 + `registerBuiltins(newRegistry)` 显式注册路径双通。
+- **风险/注意**：
+  - **`sideEffects` 白名单仅声明 `es/index.js`**：bundler（webpack 5+/rollup）按 `package.json` `module` 字段（`es/index.js`）+ sideEffects 白名单联合判断。commonjs `lib/index.js` 路径不在白名单但不影响 —— Node/ssr 通用保留全部副作用，sideEffects 主要服务 bundler tree-shaking（走 module 字段）。father 构建产物若改输出路径（如未来加 `dist/`），需同步更新白名单。
+  - **`registerBuiltins` 是 idempotent**：重复调用对同一 registry 等价于覆盖注册（`this.parsers[type] = parser`），无副作用累积。消费方 `registerBuiltins(myRegistry)` 多次安全。但若 registry 已注册自定义同名 type，会被内置实现覆盖 —— 阶段 2.5 `createSource` 工厂建议消费方先 `registerBuiltins` 再 `registerParser('custom', fn)` 覆盖，或完全自定义不经 `registerBuiltins`。
+  - **消费方子路径 import 需自行注册**：如果下游未来改用 `import { Source, ParserRegistry } from '@antv/l7-source/es/parser-registry'`（绕开 index），则 `defaultRegistry` 不会被自动注册，`new Source({type:'csv'})` 会抛 `ParserNotFoundError`。当前 monorepo grep 6 处 `@antv/l7-source` import 全走默认入口（无子路径），0 风险。外部下游若误用子路径需文档提示 —— 留 BACKLOG 评估 README/CHANGELOG 说明。
+  - **`builtins.ts` 依赖全部 13 parser + 6 transform**：消费方 `import { registerBuiltins } from '@antv/l7-source'` 仍拉满全部实现（与原 `index.ts` 等价）。真正 tree-shaking 收益仅在消费方完全不走 `index.ts` / `builtins.ts`，自行 `new ParserRegistry()` + 手工 `myRegistry.registerParser('csv', csv)` 子集注册时获得。阶段 2.5 `createSource(data, cfg, registry?)` 工厂落地后，此模式才成为「对外正式能力」。
+- **遗留**：→ 阶段 2.5 `createSource(data, cfg, registry?)` 工厂 + `Source` 构造器可选注入 registry；阶段 2.x 评估「消费方按需子集注册」README/CHANGELOG 文档化（BACKLOG 新增）；阶段 2.x `Transform<TIn,TCfg,TOut>` 契约抽取（BACKLOG 既有）；阶段 2.x 领域错误抽 `errors.ts`（BACKLOG 既有，条件触发）。未来 major 版本可评估严格 `sideEffects: false`（移除 `index.ts` 自动注册，破坏性变更）。
+
+---
 
 ## [阶段 2.3] ParserNotFoundError + getParser/getTransform 未注册改抛错（commit 6ffdcf5）
 
