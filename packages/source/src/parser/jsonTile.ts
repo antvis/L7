@@ -1,7 +1,7 @@
 import type { RequestParameters, SourceTile, TileLoadParams } from '@antv/l7-utils';
 import { getData, getURLFromTemplate } from '@antv/l7-utils';
 import type { IParserData, ITileSource, MapboxVectorTile } from '../interface';
-import VtSource from '../source/geojsonvt';
+import GeoJSONVTTileSource from '../tile-source/geojsonvt';
 
 import type { ITileParserCFG } from '@antv/l7-core';
 
@@ -20,13 +20,13 @@ const getVectorTile = async (
           const vectorTile: MapboxVectorTile = {
             layers: { defaultLayer: { features: [] } },
           };
-          const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+          const vectorSource = new GeoJSONVTTileSource(vectorTile, tile.x, tile.y, tile.z);
           resolve(vectorSource);
         } else {
           const vectorTile: MapboxVectorTile = {
             layers: { defaultLayer: { features: data.features } },
           };
-          const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+          const vectorSource = new GeoJSONVTTileSource(vectorTile, tile.x, tile.y, tile.z);
           resolve(vectorSource);
         }
       });
@@ -45,7 +45,7 @@ const getVectorTile = async (
                 },
               },
             };
-            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+            const vectorSource = new GeoJSONVTTileSource(vectorTile, tile.x, tile.y, tile.z);
             resolve(vectorSource);
           } else {
             const json = JSON.parse(data);
@@ -56,7 +56,7 @@ const getVectorTile = async (
                 },
               },
             };
-            const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+            const vectorSource = new GeoJSONVTTileSource(vectorTile, tile.x, tile.y, tile.z);
             resolve(vectorSource);
           }
         },

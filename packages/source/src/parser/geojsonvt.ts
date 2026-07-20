@@ -2,7 +2,7 @@ import type { SourceTile, TileLoadParams, TilesetManagerOptions } from '@antv/l7
 import type { FeatureCollection, Geometries, Properties } from '@turf/helpers';
 import geojsonvt from 'geojson-vt';
 import type { IParserData, ITileSource, MapboxVectorTile } from '../interface';
-import VtSource from '../source/geojsonvt';
+import GeoJSONVTTileSource from '../tile-source/geojsonvt';
 
 import type { IGeojsonvtOptions, ITileParserCFG } from '@antv/l7-core';
 
@@ -161,7 +161,7 @@ const getVectorTile = async (
         },
       },
     };
-    const vectorSource = new VtSource(vectorTile, tile.x, tile.y, tile.z);
+    const vectorSource = new GeoJSONVTTileSource(vectorTile, tile.x, tile.y, tile.z);
     resolve(vectorSource);
   });
 };

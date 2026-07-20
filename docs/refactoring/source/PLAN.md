@@ -48,7 +48,7 @@ utils/           bandOperation/ tile/ csv/hexbin/relative-coordinates/statistics
 | 0.3  | 给每个 transform 加严格 cfg interface（`IFilterCfg/IJoinCfg/IGridCfg/...`），保留 `ITransform` 的 index signature 作过渡兼容                                | ☑    |
 | 0.4  | 合并 `parser/rasterRgb.ts` ↔ `parser/raster/rgb.ts`（同名 function），ndi 同理；统一为 `parser/rgb.ts`、`parser/ndi.ts`                                     | ☑    |
 | 0.5  | `testTile` 移出生产 entry — **wontfix**（TileDebugLayer 合法默认 parser，非 dev 代码）                                                                      | ✗    |
-| 0.6  | 重命名 `src/source/` → `src/tile-source/`；两个 `VectorSource` 改名 `MVTSource` / `GeoJSONVTTileSource`；删除未被使用的 `BaseSource` 抽象类或让其被真实继承 | ☐    |
+| 0.6  | 重命名 `src/source/` → `src/tile-source/`；两个 `VectorSource` 改名 `MVTSource` / `GeoJSONVTTileSource`；删除未被使用的 `BaseSource` 抽象类或让其被真实继承 | ☑    |
 
 ### 阶段 1 — 拆解 God Class（内部 delegate，对外透明）
 

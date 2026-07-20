@@ -6,9 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 0.6**：重命名 `src/source/` → `src/tile-source/`；两个 `VectorSource` 改名 `MVTSource` / `GeoJSONVTTileSource`；评估删除未被使用的 `BaseSource` 抽象类或让其被真实继承。涉及 layers 包 import 调整。
-
-详见 [PLAN.md § 阶段 0.6](./PLAN.md)。本次为跨包改动（layers 包 import），需配 changeset。
+**阶段 1.1**：拆 `ClusterManager` —— 把 `base-source.ts` 中的 cluster 状态机（`initCluster`/`updateClusterData`/`getClusters`/`getClustersLeaves`/`calcClusterExtent` + `clusterIndex`/`clusterOptions`/`cluster` 字段，约 150 行）抽成 `ClusterManager` delegate class，`Source` 持有它，公开成员全部保留为转发方法/getter，`ISource` 接口不动。详见 [PLAN.md § 阶段 1.1](./PLAN.md)。
 
 ---
 
@@ -25,6 +23,29 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 0.6] 重命名 source/ → tile-source/ + class 改名（commit 待回填）
+
+- **改了什么**：
+  - `git mv` 三个文件保留历史：`source/vector.ts → tile-source/mvt.ts`、`source/geojsonvt.ts → tile-source/geojsonvt.ts`、`source/index.ts → tile-source/index.ts`
+  - `git rm source/baseSource.ts`（抽象类死代码，确认无继承者）
+  - class 重命名：`VectorSource → MVTSource`（`tile-source/mvt.ts`，处理 MVT/PBF 矢量瓦片）、`VectorSource → GeoJSONVTTileSource`（`tile-source/geojsonvt.ts`，处理 geojson-vt 内存切瓦片，jsonTile 复用）
+  - 新 `tile-source/index.ts`：`export { MVTSource }`、`export { GeoJSONVTTileSource }`，保留 `export { default as VectorSource } from './mvt'` 作 `@deprecated` 兼容别名（= MVTSource）
+  - `src/index.ts`：`export * from './tile-source/index'`（原 `export * from './source/index'`）
+  - 更新 3 个 parser（`parser/mvt.ts`、`parser/geojsonvt.ts`、`parser/jsonTile.ts`）的 import 路径与 new 的类名（`VtSource/VectorSource → MVTSource/GeoJSONVTTileSource`）
+- **偏离 PLAN 的说明**：PLAN 写「删除 `BaseSource` 或让它被真实继承」，实际 `source/baseSource.ts`（小写 b）是抽象类死代码、**无任何继承者**，直接删除。注意：删除的是 `src/source/baseSource.ts`，**不是** `src/base-source.ts`（连字符，主 `Source` 类，阶段 1 的主战场，绝对不动）。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source/src 自身 0 错误，总错误 31（全是 pre-existing core `.glsl` 噪音，基线不变）。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 个 pre-existing 错误（基线不变），`VectorSource`/`MVTSource`/`GeoJSONVTTileSource` 相关 0 错误（兼容别名生效，`VectorTile.ts` 的 `import type { VectorSource }` 仍可用）。
+  - `prettier --check packages/source/src`：通过。
+  - `jest packages/source/__tests__`：5 suites / 27 tests 全通过。
+- **风险/注意**：
+  - `git mv` 保留文件历史，blame 可追溯。
+  - 兼容别名 `VectorSource = MVTSource` 让 layers 包 `import { VectorSource } from '@antv/l7-source'` 零改动继续可用，跨包影响为零。
+  - 兼容别名标 `@deprecated`，正式移除留待阶段 7（届时同步 layers 改用 `MVTSource`）。
+- **遗留**：→ 阶段 7 移除 `VectorSource` 兼容别名 + 同步 layers 改名；`MapboxVectorTile` 4 处重复定义仍未清理（阶段 0.1 已记 BACKLOG，留阶段 2 统一）。
+
+---
 
 ## [阶段 0.1] interface.ts 与 l7-core 去重（commit d4d3e36）
 

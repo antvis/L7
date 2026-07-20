@@ -9,7 +9,7 @@ import { getArrayBuffer, getURLFromTemplate } from '@antv/l7-utils';
 import type { VectorTileLayer } from '@mapbox/vector-tile';
 import type { Feature } from '@turf/helpers';
 import type { IParserData, ITileSource } from '../interface';
-import VectorSource from '../source/vector';
+import MVTSource from '../tile-source/mvt';
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
   tileSize: 256,
   minZoom: 0,
@@ -42,7 +42,7 @@ const getVectorTile = async (
           if (err || !data) {
             resolve(undefined);
           } else {
-            const vectorSource = new VectorSource(data, tile.x, tile.y, tile.z);
+            const vectorSource = new MVTSource(data, tile.x, tile.y, tile.z);
             resolve(vectorSource);
           }
         },
@@ -57,7 +57,7 @@ const getVectorTile = async (
           if (err || !data) {
             resolve(undefined);
           } else {
-            const vectorSource = new VectorSource(data, tile.x, tile.y, tile.z);
+            const vectorSource = new MVTSource(data, tile.x, tile.y, tile.z);
             resolve(vectorSource);
           }
         },

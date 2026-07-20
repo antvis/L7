@@ -1,7 +1,7 @@
 import { VectorTile } from '@mapbox/vector-tile';
 import Protobuf from 'pbf';
 import type { ITileSource } from '../interface';
-export default class VectorSource implements ITileSource {
+export default class MVTSource implements ITileSource {
   private vectorTile: VectorTile;
   private vectorLayerCache: {
     [key: string]: Array<GeoJSON.Feature>;

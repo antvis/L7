@@ -1,5 +1,5 @@
 import type { ITileSource, MapboxVectorTile } from '../interface';
-export default class VectorSource implements ITileSource {
+export default class GeoJSONVTTileSource implements ITileSource {
   private vectorTile: MapboxVectorTile;
   private vectorLayerCache: {
     [key: string]: Array<GeoJSON.Feature>;
