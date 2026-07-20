@@ -56,7 +56,10 @@
   - `packages/source/src/parser/ndi.ts:9-24`（`RasterDataType`）+ `:26-33`（`IRGBParseCfg`）
 - **问题**：两个文件各自定义完全相同的 `RasterDataType` 与 `IRGBParseCfg`。ndi 用 `IRGBParseCfg` 名不副实（ndi 只用 `bands` 2 元素，不用 countCut/R/G/B MinMax）。
 - **建议**：抽到 `parser/raster-types.ts` 或 `interface.ts` 共享；ndi 的 cfg 接口独立命名为 `INDIParseCfg`（仅 `bands?: [number, number]`）。
-- **状态**：open
+- **状态**：部分 done（阶段 2.1 已抽到 interface.ts 单一定义）；剩余：ndi 用
+  IRGBParseCfg 名不副实（仅用 bands），独立命名 INDIParseCfg 留到阶段 2.x
+  further split.
 - **发现于**：阶段 0.4
+- **闭环于**：阶段 2.1（commit <SHA 待回填>）
 
 ---

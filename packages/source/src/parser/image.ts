@@ -1,12 +1,8 @@
 import type { IParserData } from '@antv/l7-core';
 import type { RequestParameters } from '@antv/l7-utils';
 import { getImage, isImageBitmap } from '@antv/l7-utils';
+import type { IImageCfg } from '../interface';
 import { extentToCoord } from '../utils/util';
-export interface IImageCfg {
-  extent?: [number, number, number, number];
-  coordinates?: [[number, number], [number, number], [number, number], [number, number]]; // 非矩形
-  requestParameters?: Omit<RequestParameters, 'url'>;
-}
 export default function image(
   data: string | string[] | HTMLImageElement | ImageBitmap,
   cfg: IImageCfg,

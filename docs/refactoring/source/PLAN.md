@@ -63,7 +63,7 @@ utils/           bandOperation/ tile/ csv/hexbin/relative-coordinates/statistics
 
 ### 阶段 2 — Parser 接口标准化 + 注册机制现代化
 
-- 2.1 定义统一 `interface Parser<TData, TCfg, TResult extends IParserData>`，逐步给每个 parser 标注泛型
+- 2.1 定义统一 `interface Parser<TData, TCfg, TResult extends IParserData>`，逐步给每个 parser 标注泛型 ☑
 - 2.2 `PARSERS/TRANSFORMS` 全局 Map → `ParserRegistry` class。默认导出 `defaultRegistry`（已注册内置 parser），同时导出 class。旧的全局 `getParser/registerParser` 作为 `defaultRegistry` 的 deprecation wrapper 保留
 - 2.3 `getParser(type)` 未注册时抛 `ParserNotFoundError(type)`（替代当前 undefined 直接 call 的 TypeError）
 - 2.4 `package.json` 设 `sideEffects: false`，副作用注册显式化为 `registerBuiltins()`，验证 tree-shaking

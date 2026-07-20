@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 2.1**：定义统一 `interface Parser<TData, TCfg, TResult extends IParserData>`，逐步给每个 parser 标注泛型。目标：parser 函数签名从「`any` 进 `IParserData` 出」收敛为强类型契约，为阶段 2.2（`PARSERS/TRANSFORMS` 全局 Map → `ParserRegistry` class）和 2.3（`getParser` 抛 `ParserNotFoundError`）打基础。详见 [PLAN.md § 阶段 2.1](./PLAN.md)。
+**阶段 2.2**：把 `PARSERS` / `TRANSFORMS` 全局可变 Map 收敛为 `ParserRegistry` class（泛型 `<K extends KnownParserType = KnownParserType>`）。`defaultRegistry`（预设内置 parser/transform）作为 module 单例，旧 `getParser`/`registerParser`/`getTransform`/`registerTransform` 函数保留为 `defaultRegistry` 的 deprecation wrapper —— 对外 API 完全等价，APP-external 调用无需改动。后续 2.3 `ParserNotFoundError` / 2.4 `sideEffects:false` + `registerBuiltins()` / 2.5 `createSource` 工厂都在此 registry 之上落地。详见 [PLAN.md § 阶段 2.2](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,45 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 2.1] 定义 Parser 契约 + 去重栅格 parser 类型（commit <SHA 待回填>）
+
+- **改了什么**：
+  - `interface.ts`（102 → 200 行，+98）新增 Parser 契约与去重栅格类型：
+    - 新增 `export type Parser<TData = any, TCfg = any, TResult extends IParserData = IParserData>`：统一 parser 函数契约 `(data, cfg?) => TResult`，3 泛型参数对应「原始数据 / 配置 / 返回」。
+    - 新增 `export interface KnownParsers`：13 个内置 parser 的「注册键名 → Parser 契约」映射（csv/geojson/geojsonvt/image/json/jsonTile/mvt/ndi/raster/rasterTile/rasterRgb/rgb/testTile），shape 取各 parser default export 的实际签名。
+    - 新增 `export type KnownParserType = keyof KnownParsers`：注册键名联合类型。
+    - **去重**：把 `RasterDataType` 与 `IRGBParseCfg` 从 `parser/rgb.ts` / `parser/ndi.ts`（两文件各定义一份、形状完全相同）收敛到 `interface.ts` 单一来源 —— 闭环 BACKLOG 项「独立小项 RasterDataType / IRGBParseCfg 重复定义」。
+    - **去重**：把 `IImageCfg` 从 `parser/image.ts` 收敛到 `interface.ts`（前无外部使用，单一来源）。
+    - 新增 import：`{ IJsonData, IParserCfg, ITileParserCFG }` from `@antv/l7-core`、`{ ITileBand, RequestParameters }` from `@antv/l7-utils`、`{ FeatureCollection, Geometries, Properties }` from `@turf/helpers`（`import type`，无运行时副作用）。
+  - `factory.ts`（18 → 47 行，+29）：
+    - `type ParserFunction = Parser`（替代字面量 `(data: any, cfg?: any) => IParserData`），导入 `Parser` 契约。是契约的「类型擦除」版本（`Parser<any, any, IParserData>`），用于按 string 分发的可变注册表。
+    - 新增模块头注释，指明阶段 2.2/2.3/2.4 的演进路径。
+  - `parser/rgb.ts`（27 → 6 行，-21）：删本地 `RasterDataType` / `IRGBParseCfg` / `IRasterCfg` import，改为 `import type { IRGBParseCfg, RasterDataType } from '../interface'`。
+  - `parser/ndi.ts`（26 → 5 行，-21）：同上。
+  - `parser/image.ts`（先删本地 `IImageCfg` 后补回 `RequestParameters` import）：本地 `IImageCfg` 定义删，改 `import type { IImageCfg } from '../interface'`；`RequestParameters` 因 `loadData` 仍用而保留 type import。
+  - `BACKLOG.md`：将「RasterDataType / IRGBParseCfg 重复定义」状态从 `open` 改为「部分 done（阶段 2.1 已抽到 interface.ts 单一定义）」，剩余：ndi 用 `IRGBParseCfg` 名不副实（仅用 bands），独立命名 `INDIParseCfg` 留阶段 2.x 进一步拆分。
+- **设计取舍**：
+  - **`Parser` 用 `type` 而非 PLAN 字面的 `interface`**：PLAN 写「定义统一 `interface Parser`」，但函数契约用 `type` 别名更地道且对 `cfg?` 可选更简洁。语义等价（call signature），PLAN 文案以「统一 Parser 契约」为准。
+  - **`cfg?` 在契约里是 optional**：与现状 `ParserFunction = (data: any, cfg?: any) => IParserData` 一致。预先验证「TS 允许 required-cfg 的具名 parser（如 `csv(data: string, cfg: IParserCfg)`）赋值到 optional-cfg 类型当 cfg 形参是 any」（隔离 TS 严格模式实测通过），所以所有现有 parser 可作 `Parser<KnownParserType>` 兼容赋值，无需改 13 个 parser 文件。
+  - **`KnownParsers` 是弱契约，不参与 tsc 检查 parser 实现**：本接口仅作「注册键名 → 契约」的查表入口，**不强制** parser 文件实现形态与本接口一致（实现仍由本地签名保证正确）。强制对齐留阶段 2.2 `ParserRegistry<K>` 用 `KnownParserType` 泛型约束的 getParser / registerParser 签名时再做。
+  - **去重 `IImageCfg` / `RasterDataType` / `IRGBParseCfg` 是顺手闭环**：阶段 0.1 列了 GAP-3 的「各定义一处」，本阶段才真正抽考对应类型（之前只动了 `MapboxVectorTile` 一部分）。scope 控制在「类型搬移，行为不动」，无运行时改动。
+  - **`ndi` 的 `IRGBParseCfg` 名不副实但保留**：`ndi.ts` 只用 `IRGBParseCfg.bands`（2 元素），但本阶段不做 cfg 命名细分（避免触碰 parser 内部实现），留 BACKLOG 标记「`INDIParseCfg` 独立命名」候选。
+- **怎么验证**：
+  - 隔离 TS 严格模式实测：`(data: string, cfg: IParserCfg) => IParserData` 可赋值为 `Record<string, (data: any, cfg?: any) => IParserData>` 的值 —— `Parser<any, any>` 契约的「类型擦除」对具名 parser 兼容。
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source/src 自身 0 错，总错误 31 基线不变（全 core `.glsl` 噪音）。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 pre-existing 不变 —— layers 包不见直接 import `IImageCfg`/`RasterDataType`/`IRGBParseCfg`，去重无跨包影响。
+  - `eslint`：通过（`factory.ts` + `interface.ts` + 3 parser 文件）。
+  - `prettier --check`：通过（5 文件）。
+  - `jest packages/source/__tests__`：5 suites / 27 tests 全通过。
+- **风险/注意**：
+  - **`Parser` 的 cfg 是 `optional`，与个别 parser 实际 cfg `required` 不完全一致**：契约是「上层分发的擦除类型」，不是「下游实现的强约束」。具名 parser 函数内部签名仍按其真实 cfg 形态声明（required/optional 都允许），赋值到 `Parser<any, any>` 时 TS 通过 bivariant 语义接受（已验证）。这是「兼容擦除」式的演进路径，不是「严格统一」，阶段 2.2 引入 `ParserRegistry<K>` 才会使 cfg 形状参与类型推导。
+  - **`KnownParsers` 的 `geojson` cfg 用 `IParserCfg`**（core），不与 `parser/geojson.ts` 的本地 `IParserCFG`（`{ idField?; featureId?; [key]: any }`）逐字对齐 —— 这是文档型的弱契约，本地签名保留。
+  - **`geojson` 的 TData 用 `FeatureCollection<Geometries, Properties>`**：与 `parser/geojson.ts` signature 一致。但 Source 执行期 `executeParser` 的 `this.originData` 是 `any`（用户传任意对象经结构化面向后端类型擦除入库）。KnownParsers 仅约束「按 name 字符串配 cfg 形状」的下游类型推导，不约束运行时入参 polymorphism。
+  - **去重是低风险**：`RasterDataType` / `IRGBParseCfg` 仅在 rgb/ndi 内部使用，`IImageCfg` 仅在 image.ts 内部使用 —— grep 确认无外部 importers，单一化定义不会破坏其他包消费。
+- **遗留**：→ 阶段 2.2 `ParserRegistry` class（`defaultRegistry` 单例 + 旧 `getParser`/`registerParser`/`getTransform`/`registerTransform` 作 wrapper 保留）；剩余 `INDIParseCfg` 命名细分公司 BACKLOG。
+
+---
 
 ## [阶段 1.4] 抽 Bounds value object（commit ff55e85）
 
