@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 1.3] 拆 FeatureIndex delegate（commit 待回填）
+## [阶段 1.3] 拆 FeatureIndex delegate（commit 755becf）
 
 - **改了什么**：
   - 新增 `src/feature-index.ts`（115 行）从 `base-source.ts` 抽出 feature 查询/更新职责：
