@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 1.4] 抽 Bounds value object（commit <SHA 待回填>）
+## [阶段 1.4] 抽 Bounds value object（commit ff55e85）
 
 - **改了什么**：
   - 新增 `src/bounds.ts`（50 行）从 `base-source.ts` 抽出数据范围 / 中心点计算职责：
