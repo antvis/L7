@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 0.6] 重命名 source/ → tile-source/ + class 改名（commit 待回填）
+## [阶段 0.6] 重命名 source/ → tile-source/ + class 改名（commit 1654221）
 
 - **改了什么**：
   - `git mv` 三个文件保留历史：`source/vector.ts → tile-source/mvt.ts`、`source/geojsonvt.ts → tile-source/geojsonvt.ts`、`source/index.ts → tile-source/index.ts`
