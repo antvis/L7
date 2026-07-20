@@ -23,7 +23,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 3.1.2] MVTLoader 抽取（commit 待补）
+## [阶段 3.1.2] MVTLoader 抽取（commit 0ec0c65）
 
 - **改了什么**：
   - 新增 `src/loader/mvt-loader.ts`（72 行）：`export class MVTLoader implements TileLoader`。构造器持 `url`（单 url，多服务取 `data[0]` 仍在 parser 解析）/ `requestParameters?` / `getCustomData?`；`loadTile(tileParams, tile): Promise<ITileSource | undefined>` 内含原 `getVectorTile` 函数体（机械搬运，零行为改动）。**关键等价点全部保留**：① URL 模板用 `tileParams`（`TileLoadParams`）插值 —— `getURLFromTemplate(this.url, tileParams)`，与 jsonTile 用 `tile.x/y/z` 不同；② `getCustomData` 分支入参用 `tile.x/y/z`（`{x: tile.x, y: tile.y, z: tile.z}`）；③ `MVTSource` 构造用 `tile.x/y/z`（`new MVTSource(data, tile.x, tile.y, tile.z)`）；④ 失败（err/无数据）统一 `resolve(undefined)`（非空 tile），err 永不 reject；⑤ **取消语义**：仅 `getArrayBuffer` 分支在 `loadTile` 内同步设 `tile.xhrCancel = () => xhr.cancel()`（赋值发生在 `getArrayBuffer` 返回后、回调触发前的同步窗口，故任何 fetch 错误到达前 xhrCancel 已就位）；`getCustomData` 分支无 xhr 句柄，保持等价 —— 不设 `xhrCancel`。
