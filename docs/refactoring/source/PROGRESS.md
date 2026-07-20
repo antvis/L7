@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 1.1] 拆 ClusterManager delegate（commit 待回填）
+## [阶段 1.1] 拆 ClusterManager delegate（commit 2dcd055）
 
 - **改了什么**：
   - 新增 `src/cluster-manager.ts`（138 行）从 `base-source.ts` 抽出 cluster 状态机：
