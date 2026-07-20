@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 1.1**：拆 `ClusterManager` —— 把 `base-source.ts` 中的 cluster 状态机（`initCluster`/`updateClusterData`/`getClusters`/`getClustersLeaves`/`calcClusterExtent` + `clusterIndex`/`clusterOptions`/`cluster` 字段，约 150 行）抽成 `ClusterManager` delegate class，`Source` 持有它，公开成员全部保留为转发方法/getter，`ISource` 接口不动。详见 [PLAN.md § 阶段 1.1](./PLAN.md)。
+**阶段 1.2**：拆 `TilesetAdapter` delegate —— 把 `base-source.ts` 中的 `initTileset()` + 7 个 `reload*/getTile*` 方法（`reloadAllTile`/`reloadTilebyId`/`reloadTileByLnglat`/`reloadTileByExtent`/`getTileExtent`/`getTileByZXY` + `tileset` 字段，约 40 行）抽成 `TilesetAdapter`，`Source` 持有它，公开成员全部保留为转发方法/getter，`ISource` 接口不动。详见 [PLAN.md § 阶段 1.2](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,37 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 1.1] 拆 ClusterManager delegate（commit 待回填）
+
+- **改了什么**：
+  - 新增 `src/cluster-manager.ts`（138 行）从 `base-source.ts` 抽出 cluster 状态机：
+    - 持有 `enabled: boolean` / `options: Partial<IClusterOptions>`（含运行时 zoom）/ private `index: Supercluster | null`
+    - 方法：`init(data)`（替代原 `initCluster`）、`updateData(zoom): IParserData`（原 `updateClusterData` 主体）、`getClusters(zoom)`、`getClustersLeaves(id)`、`destroy()`、private `calcExtent(bufferRatio)`
+    - 构造期注入 getter 闭包 `() => this.extent` / `() => this.invalidExtent`，delegate 不拥有 extent 状态（留待阶段 1.4 抽 Bounds value object）
+  - `base-source.ts`（358 → 314 行，-44 行）：
+    - `cluster` / `clusterOptions` 字段 → accessor 透明转发 `clusterManager.enabled` / `.options`（满足 `ISource` 字段契约）
+    - 删除 private `clusterIndex: Supercluster` 字段
+    - `getClusters` / `getClustersLeaves` / `updateClusterData` 改为转发 delegate：`updateClusterData` 负责把返回的 `IParserData` 赋给 `this.data` 并 `executeTrans()`，delegate 与 transform 链解耦
+    - 删除 `initCluster()` / `calcClusterExtent()`，`processData()` 改调 `this.clusterManager.init(this.data)`
+    - `destroy()` 改调 `this.clusterManager.destroy()`
+    - 构造函数 first thing `new ClusterManager(...)`（必须先于 `initCfg`，因 initCfg 通过 setter 写 `cluster` 字段）
+  - import 清理：`bBoxToBounds` / `padBounds` / `Supercluster` / `cluster` transform / `statMap` / `getColumn` 从 `base-source.ts` 迁到 `cluster-manager.ts`；`isFunction` / `isString` 解构删除（搬走后未用）
+- **偏离 PLAN 的说明**：PLAN 估「搬出 ~150 行」，实际搬出 ~90 行逻辑 + ~50 行注释 = 138 行新文件，`base-source.ts` 净减 44 行（358→314）。差异主因：`updateClusterData` 末尾 `this.data = getParser('geojson')(...); this.executeTrans()` 拆成「delegate 返回 + Source 转发赋值」多 2 行；4 个 accessor 也比原 2 个字段声明多几行。`base-source.ts` 降到 PLAN 估的 ~120 行要等 1.2/1.3/1.4 全部完成。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source/src 自身 0 错误，总错误 31（全是 pre-existing core `.glsl` 噪音，基线不变）。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 个 pre-existing 错误（基线不变），`cluster` / `ClusterManager` 相关 0 错误（accessor 转发对 layers 完全透明）。
+  - `prettier --check`：通过。
+  - `eslint`：通过（`cluster-manager.ts` + `base-source.ts` 干净）。
+  - `jest packages/source/__tests__`：5 suites / 27 tests 全通过，其中 `source.spec.ts` 的 `source.transform.cluster` case 调用 `source.updateClusterData(2/3)`，覆盖了 delegate `updateData` 路径，等价性有单测兜底。
+- **风险/注意**：
+  - `cluster` / `clusterOptions` 从**字段**改为 **accessor**：TypeScript 接口字段契约由 accessor 满足，运行时读写语义不变（`source.cluster = true` → setter → `clusterManager.enabled = true`）；`source.clusterOptions.zoom` 在 `DataSourcePlugin` 中读取仍 OK。
+  - **构造期顺序敏感**：`this.clusterManager = new ClusterManager(...)` 必须先于 `this.initCfg(cfg)`，否则 setter 写 `clusterManager` 为 undefined 会 throw。已在构造函数中按序排列并加注释。
+  - **extent 闭包延迟求值**：`calcExtent` 调用时取最新 `this.extent`（executeParser 后才赋值），与原 `this.calcClusterExtent` 直接读字段语义一致；`invalidExtent` 同理。
+  - **未启用时的错误时机保留**：`enabled = false` 时 `init` 不建索引、`index = null`；此时调 `getClusters` / `updateClusterData` 仍抛 `TypeError`（null 上调 getClusters），与原行为完全一致。不加额外 guard，避免改变错误时机（这是 `DataSourcePlugin` 先检查 `source.cluster` 才调用的契约前提）。
+- **遗留**：→ 阶段 1.2 拆 `TilesetAdapter`（包 `initTileset` + 7 个 `reload*/getTile*` 方法，预计再搬出 ~40 行）。
+
+---
 
 ## [阶段 0.6] 重命名 source/ → tile-source/ + class 改名（commit 1654221）
 

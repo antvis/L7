@@ -10,17 +10,12 @@ import type {
   ITransform,
 } from '@antv/l7-core';
 import type { SourceTile } from '@antv/l7-utils';
-import { TilesetManager, bBoxToBounds, extent, lodashUtil, padBounds } from '@antv/l7-utils';
+import { TilesetManager, extent, lodashUtil } from '@antv/l7-utils';
 import type { BBox } from '@turf/helpers';
 import { EventEmitter } from 'eventemitter3';
-const { cloneDeep, isFunction, isString, mergeWith } = lodashUtil;
-// @ts-ignore
-// tslint:disable-next-line:no-submodule-imports
-import type Supercluster from 'supercluster/dist/supercluster';
+import { ClusterManager } from './cluster-manager';
 import { getParser, getTransform } from './factory';
-import { cluster } from './transform/cluster';
-import { statMap } from './utils/statistics';
-import { getColumn } from './utils/util';
+const { cloneDeep, mergeWith } = lodashUtil;
 
 function mergeCustomizer(objValue: any, srcValue: any) {
   if (Array.isArray(srcValue)) {
@@ -45,14 +40,26 @@ export default class Source extends EventEmitter implements ISource {
   }
   public parser: IParserCfg | ITileParserCFG = { type: 'geojson' };
   public transforms: ITransform[] = [];
-  public cluster: boolean = false;
-  public clusterOptions: Partial<IClusterOptions> = {
-    enable: false,
-    radius: 40,
-    maxZoom: 20,
-    zoom: -99,
-    method: 'count',
-  };
+
+  // ─── Cluster 状态机（delegate，阶段 1.1）─────────────────────────
+  // cluster: boolean、clusterOptions、Supercluster 索引从 Source 类搬到
+  // ClusterManager。对外通过 accessor 透明转发，满足 ISource 字段契约，
+  // 行为与迁移前完全等价。
+  private readonly clusterManager: ClusterManager;
+
+  public get cluster(): boolean {
+    return this.clusterManager.enabled;
+  }
+  public set cluster(value: boolean) {
+    this.clusterManager.enabled = value;
+  }
+  public get clusterOptions(): Partial<IClusterOptions> {
+    return this.clusterManager.options;
+  }
+  public set clusterOptions(value: Partial<IClusterOptions>) {
+    this.clusterManager.options = value;
+  }
+  // ────────────────────────────────────────────────────────────────
 
   // 瓦片数据管理器
   public tileset: TilesetManager | undefined;
@@ -68,12 +75,15 @@ export default class Source extends EventEmitter implements ISource {
     autoRender: true,
   };
 
-  private clusterIndex: Supercluster;
-
   constructor(data: any | ISource, cfg?: ISourceCFG) {
     super();
     // this.rawData = cloneDeep(data);
     this.originData = data;
+    // delegate 必须先于 initCfg 创建：initCfg 会通过 setter 写 cluster 字段
+    this.clusterManager = new ClusterManager(
+      () => this.extent,
+      () => this.invalidExtent,
+    );
     this.initCfg(cfg);
 
     this.init().then(() => {
@@ -85,11 +95,11 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public getClusters(zoom: number): any {
-    return this.clusterIndex.getClusters(this.calcClusterExtent(2), zoom);
+    return this.clusterManager.getClusters(zoom);
   }
 
   public getClustersLeaves(id: number): any {
-    return this.clusterIndex.getLeaves(id, Infinity);
+    return this.clusterManager.getClustersLeaves(id);
   }
 
   public getParserType() {
@@ -97,39 +107,7 @@ export default class Source extends EventEmitter implements ISource {
   }
 
   public updateClusterData(zoom: number): void {
-    const { method = 'sum', field } = this.clusterOptions;
-    let data = this.clusterIndex.getClusters(this.calcClusterExtent(2), Math.floor(zoom));
-    this.clusterOptions.zoom = zoom;
-    data.forEach((p: any) => {
-      if (!p.id) {
-        p.properties.point_count = 1;
-      }
-    });
-    if (field || isFunction(method)) {
-      data = data.map((item: any) => {
-        const id = item.id as number;
-        if (id) {
-          const points = this.clusterIndex.getLeaves(id, Infinity);
-          const properties = points.map((d: any) => d.properties);
-          let statNum;
-          if (isString(method) && field) {
-            const column = getColumn(properties, field);
-            statNum = statMap[method](column);
-          }
-          if (isFunction(method)) {
-            statNum = method(properties);
-          }
-          item.properties.stat = statNum;
-        } else {
-          item.properties.point_count = 1;
-        }
-        return item;
-      });
-    }
-    this.data = getParser('geojson')({
-      type: 'FeatureCollection',
-      features: data,
-    });
+    this.data = this.clusterManager.updateData(zoom);
     this.executeTrans();
   }
 
@@ -219,7 +197,7 @@ export default class Source extends EventEmitter implements ISource {
   public destroy() {
     this.removeAllListeners();
     this.originData = null;
-    this.clusterIndex = null;
+    this.clusterManager.destroy();
     // @ts-ignore
     this.data = null;
     this.tileset?.destroy();
@@ -229,7 +207,7 @@ export default class Source extends EventEmitter implements ISource {
     return new Promise((resolve, reject) => {
       try {
         this.executeParser();
-        this.initCluster();
+        this.clusterManager.init(this.data);
         this.executeTrans();
         resolve({});
       } catch (err) {
@@ -330,29 +308,5 @@ export default class Source extends EventEmitter implements ISource {
       const data = getTransform(type)(this.data, tran);
       Object.assign(this.data, data);
     });
-  }
-
-  /**
-   * 数据聚合
-   */
-  private initCluster() {
-    if (!this.cluster) {
-      return;
-    }
-
-    const clusterOptions = this.clusterOptions || {};
-    this.clusterIndex = cluster(this.data, clusterOptions);
-  }
-
-  private calcClusterExtent(bufferRatio: number): any {
-    let newBounds = [
-      [-Infinity, -Infinity],
-      [Infinity, Infinity],
-    ];
-
-    if (!this.invalidExtent) {
-      newBounds = padBounds(bBoxToBounds(this.extent), bufferRatio);
-    }
-    return newBounds[0].concat(newBounds[1]);
   }
 }
