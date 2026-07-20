@@ -6,7 +6,7 @@
 
 ## 📍 下一步
 
-**阶段 2.2**：把 `PARSERS` / `TRANSFORMS` 全局可变 Map 收敛为 `ParserRegistry` class（泛型 `<K extends KnownParserType = KnownParserType>`）。`defaultRegistry`（预设内置 parser/transform）作为 module 单例，旧 `getParser`/`registerParser`/`getTransform`/`registerTransform` 函数保留为 `defaultRegistry` 的 deprecation wrapper —— 对外 API 完全等价，APP-external 调用无需改动。后续 2.3 `ParserNotFoundError` / 2.4 `sideEffects:false` + `registerBuiltins()` / 2.5 `createSource` 工厂都在此 registry 之上落地。详见 [PLAN.md § 阶段 2.2](./PLAN.md)。
+**阶段 2.3**：`getParser(type)` / `getTransform(type)` 在未注册时改抛 `ParserNotFoundError(type)`（替代当前返回 `undefined`、调用方残报 TypeError 的语义）。新增 `ParserNotFoundError` class（继承 Error，含 `type` 字段）从 `parser-registry.ts` 或 `errors.ts` 导出。`ParserRegistry.getParser` 返回 `Parser | undefined` 配合 `orThrow`，旧 `getParser` 函数（同 `defaultRegistry.getParser`）也享受抛错语义。注意向后兼容：未注册的 parser 在迁移前只是慢报 TypeError，迁移后是显式 Error，对正常使用 (注册过的 parser) 0 影响。详见 [PLAN.md § 阶段 2.3](./PLAN.md)。
 
 ---
 
@@ -23,6 +23,40 @@
 ---
 
 <!-- 以下为已完成记录，倒序追加 -->
+
+## [阶段 2.2] ParserRegistry class + defaultRegistry 单例（commit <SHA 待回填>）
+
+- **改了什么**：
+  - 新增 `src/parser-registry.ts`（45 行）：定义 `ParserRegistry` class + `defaultRegistry` 单例。
+    - class 持有 `parsers: Record<string, Parser>` 与 `transforms: Record<string, TransformFn>` 两个私有字典（替代旧 `PARSERS` / `TRANSFORMS` 模块级可变对象）。
+    - 公开方法：`registerParser(type, p)` / `registerTransform(type, t)` / `getParser(type)` / `getTransform(type)`。
+    - `getParser` 返回 `Parser`（不带 `| undefined`）：与迁移前 `PARSERS[type]` 在 `noUncheckedIndexedAccess: false` 下的类型语义一致 —— 调用方仍可链式 `getParser('geojson')({...})`，无 null 守卫回归。
+    - `defaultRegistry` 单例：模块初始化时由 `index.ts` 通过 `registerParser('csv', csv)` 等填入内置 parser/transform。
+  - 重写 `src/factory.ts`（阶段 2.1 后的 47 → 37 行）：
+    - 删除内部 `PARSERS` / `TRANSFORMS` 字典与字面量私有类型。
+    - `getParser` / `registerParser` / `getTransform` / `registerTransform` 4 函数保留为 `defaultRegistry` 的薄转发 wrapper，加 `@deprecated` JSDoc 指向 `defaultRegistry.xxx`。
+    - 转出口 `export { ParserRegistry, defaultRegistry } from './parser-registry'`，让消费者可从 `'./factory'` 入口拿到 class 与单例（与 `index.ts` re-export 也对齐）。
+  - `src/index.ts`（46 → 55 行）：替换单行 export 为多行 export 块，显式 re-export `ParserRegistry` 与 `defaultRegistry`（外部消费者可从 `@antv/l7-source` 包入口拿到这两个新 API）。
+- **设计取舍**：
+  - **`ParserRegistry` 用对象字典而非 `Map`**：`Map.get()` 返回 `T | undefined`，会让现有 `getParser(type)(arg)` 链式调用失效（TS 强制 null 守卫）。用 `Record<string, X>` 在 `noUncheckedIndexedAccess: false` 下保持原 `X`（不带 undefined），行为完全等价。`Map` 的迭代/size 优势对当前消费无价值。
+  - **TRANSFORMS 与 PARSERS 合并到一个 class**：CLI/registry 边界统一 — 阶段 2.5 `createSource(data, cfg, registry?)` 工厂可注入单个 registry 同时承载 parser/transform。PLAN 2.2 字面是「`PARSERS/TRANSFORMS` 全局 Map → `ParserRegistry` class」，两者合并是正向执行。
+  - **`TransformFn` 类型暂未抽 `Transform<TIn, TCfg, TOut>` 契约**：PLAN 2.1 仅定义 `Parser`，未定义 `Transform`。本阶段保持 `TransformFn = (data: IParserData, cfg?: any) => IParserData` 字面量，避免 scope 蔓延。`Transform` 契约抽取留阶段 2.x further split（BACKLOG 跟进）。
+  - **wrapper 函数加 `@deprecated` 但不开 lint 规则**：保留兼容入口直至阶段 2.5 工厂落地，外部消费者（layers/core 无人直接 import，但 `index.ts` re-export 了给 SDK）可平滑迁移。lint-level deprecation 警告留 PLAN 2.x。
+  - **保留 `getParser(type): Parser` 不返 `| undefined`**：阶段 2.3 才改抛 `ParserNotFoundError`，本阶段严格「行为等价」。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：source/src 自身 0 错，总错误 31 基线不变（全 core `.glsl` 噪音）—— `base-source.ts:267 sourceParser(...)` / `cluster-manager.ts:102 getParser('geojson')({...})` / `base-source.ts:288 getTransform(...)` 经 wrapper 转发 + Record<string, Parser> 字典均零类型回归。
+  - `tsc --noEmit -p packages/layers/tsconfig.json`：229 pre-existing 不变 —— layers 包不直接 import factory 的项，只通过 `'./factory'` 的外部 re-export 拿 `getParser` 等，wrapper 转发对它全透明。
+  - `eslint`：通过（3 文件 `parser-registry.ts` / `factory.ts` / `index.ts`）。
+  - `prettier --check`：通过。
+  - `jest packages/source/__tests__`：5 suites / 27 tests 全通过 —— factory 在运行期通过 `index.ts` 仍正确注册内置 parser/transform 到 `defaultRegistry` 单例，cluster/source 实际调用路径不变。
+- **风险/注意**：
+  - **回归测试覆盖弱**：`__tests__` 仅覆盖 geojson/csv/json/statistics，未直接覆盖 factory 的「未注册时 undefined」行为。本阶段未加入 factory 单测（与现状一致），新增 `createParserRegistry.spec.ts` 留阶段 2.3（与 `ParserNotFoundError` 一起，方便用抛错新语义做断言）。
+  - **`defaultRegistry` 单例被多次模块导入**：ES module 模块图保证单例稳定（每个 import 引用同一实例），与原 `PARSERS`/`TRANSFORMS` 模块级 dict 语义等价。
+  - **wrapper 名 `getParser` 与 class 方法 `getParser` 同名**：是设计意图 —— `export const getParser = (type) => defaultRegistry.getParser(type)`，对外保留函数式调用 vs 类方法调用两种风格。不冲突。
+  - **消费者迁移路径**：外部消费者（若存在）从直接调 `getParser('xxx')` 逐步迁移到 `defaultRegistry.getParser('xxx')` 或注入 `new ParserRegistry()`，由阶段 2.5 `createSource(data, cfg, registry?)` 工厂收口。
+- **遗留**：→ 阶段 2.3 `ParserNotFoundError` + `getParser` 未注册改抛错；阶段 2.4 `sideEffects: false` + `registerBuiltins()` 抽取 index.ts 副作用；阶段 2.5 `createSource` 工厂；阶段 2.x `Transform<T>` 契约抽取（BACKLOG）+ `INDIParseCfg` 独立命名（BACKLOG）。
+
+---
 
 ## [阶段 2.1] 定义 Parser 契约 + 去重栅格 parser 类型（commit 9f11ef6）
 

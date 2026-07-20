@@ -19,7 +19,14 @@ import { aggregatorToGrid } from './transform/grid';
 import { pointToHexbin } from './transform/hexagon';
 import { join } from './transform/join';
 import { map } from './transform/map';
-export { getParser, getTransform, registerParser, registerTransform } from './factory';
+export {
+  defaultRegistry,
+  getParser,
+  getTransform,
+  ParserRegistry,
+  registerParser,
+  registerTransform,
+} from './factory';
 export * from './interface';
 export * from './tile-source/index';
 export * from './utils/relative-coordinates';
