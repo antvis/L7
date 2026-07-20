@@ -24,7 +24,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 2.2] ParserRegistry class + defaultRegistry 单例（commit <SHA 待回填>）
+## [阶段 2.2] ParserRegistry class + defaultRegistry 单例（commit c27b598）
 
 - **改了什么**：
   - 新增 `src/parser-registry.ts`（45 行）：定义 `ParserRegistry` class + `defaultRegistry` 单例。
