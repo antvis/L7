@@ -6,12 +6,37 @@
 
 ## 📍 下一步
 
-**阶段 3 渐进收尾后**：3.1（3 矢量 loader）/ 3.2.1（raster 分发器）/ 3.3（image 去 fetch）/ 3.4（CustomDataProvider 统一）全完成 —— parser 与 loader 解耦目标已达。可选后续：
+**阶段 4.1a 完成（source 侧 async 基础设施就绪）**：`Source.create` async 工厂 + `ready` getter + `initPromise` 捕获 —— 纯叠加，`new Source` 零行为变化。阶段 3（parser/loader 解耦）全完成。下一价值高地：
 
-- **阶段 3.2.2**（边际收益补丁）：3.2.1 的 `RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 引入 `RasterTileLoader` 接口。3.4 后 CUSTOM\* 已下沉 `loadCustomImageData`/`loadCustomRasterData` 私有方法，拆分主要是「interface 化 + 分文件」整洁收益，无行为变化。可作收尾补丁。
-- **阶段 4（异步生命周期）**：`Source.create` async 工厂 / `await source.ready` 消除 layers 侧 `source.data` race / `setData` 版本号增量 —— 中风险中收益，是 3 之后下一价值高地。
+- **阶段 4.2（layers 侧迁移）**：layers 包内 `new Source` 消费方改 `await Source.create(...)` / `await source.ready`，消除 `'inited'` 事件时序依赖 + init 失败吞错。`ready` getter infra 已在 4.1 落地，4.2 主要是 layers 包改动（触及 BaseLayer 等，中风险需逐 layer 渐进）。
+- **阶段 4.1b（deprecation 收尾）**：待 4.2 layers 迁移后，给 `new Source` 加 `console.warn` deprecation 推动 `create`/`new Source` 退役。
+- **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。3.4 后 CUSTOM\* 已下沉私有方法，拆分主要是「interface 化 + 分文件」整洁收益，无行为变化。
+- **阶段 4.3 / 4.4**：`setData` async + 版本号增量 / cluster 双路径合并 —— 中收益，4.2 后推进。
 
-详见 [PLAN.md § 阶段 4 / 3.2.2](./PLAN.md)。
+详见 [PLAN.md § 阶段 4](./PLAN.md)。
+
+---
+
+## [阶段 4.1] Source.create async 工厂 + ready getter — 纯叠加消除 source.data race（commit 待补）
+
+- **改了什么**：
+  - `src/base-source.ts`：① 新增 `private readonly initPromise: Promise<void>` 字段，构造器把原 `this.init().then(() => { this.inited = true; this.emit('update', {type:'inited'}) })` 改为 `this.initPromise = this.init().then(...)`（**仅捕获 Promise 引用，cb 体 + 时序零变化**）。② 新增 `public get ready(): Promise<void>` 返回 `initPromise`。③ 新增 `public static async create(data, cfg?, registry=defaultRegistry): Promise<Source>`：内部 `const source = new Source(data, cfg, registry); await source.initPromise; return source`。
+  - **方案（纯叠加，`new Source` 零行为变化）**：`initPromise` 捕获不改 `init()` 时序 —— `new Source` 路径不 await 本字段，init 成功仍 `.then` cb 设 inited+emit、init 失败仍 fire-and-forget unhandled rejection（保留现状吞错）。`Source.create` 通过 `await source.initPromise` 让 init 失败**显式 reject 抛错**（parse/cluster init/transform 错，对比旧路径吞错）+ 保证返回时 `inited===true`（消除同步 `new Source` 时 `inited===false` race —— init 在微任务里才置 true）。`ready` getter 给 `new Source` 用户补 await 能力（additive，旧用户不调用则零影响）。
+  - **`console.warn` deprecation 推迟**（4.1b 切片）：PLAN 原 4.1 含「`new Source` 走旧路径并 `console.warn`」，本切片**不加** warn —— 加 warn 会改变所有现有 `new Source` 调用方的控制台输出（minor 级行为变化），违反「纯叠加零行为变化」渐进纪律。待 layers 包迁移到 `Source.create` / `await source.ready` 后，4.1b 再加 warn 推动 `new Source` 退役。
+  - **与阶段 2.5 `createSource(data, cfg, registry?)` 互补**：`createSource` 是 sync 函数工厂（`return new Source(...)`，仍 fire-and-forget init）；`Source.create` 是 async 工厂（await init）。两者不冲突、不替代，对应「sync 取数同步已可用」vs「await init 完成 + 错误 surface」两种消费模式。
+  - **关键事实（PLAN 诊断 #7 再核）**：`processData` 的 `new Promise(executor)` 执行器**同步**跑，故 `executeParser` 在构造器返回前就同步设了 `this.data` —— 现有 `source.spec.ts` 同步读 `extent`/`data.dataArray` 即依赖此。故 `source.data` 的「undefined race」对 GeoJSON/CSV 等 sync parser **实际不存在**（data 同步已设）；race 主要是 ① `inited` 标志（微任务里才 true）② `'inited'` 事件时序 ③ init 失败吞错。`Source.create` 三者一并收敛。tile/image parser 的 async 取数（loader/tileset/images Promise）不在 init 关键路径，`create` 不 await 之（与 `new Source` 等价）。
+  - 新增 `__tests__/create-async.spec.ts`（7 tests）：① happy path（sync `new Source.inited===false` → `await Source.create` `inited===true` + extent 断言）；② 等价性（create vs new+ready 的 extent/dataArray）；③ cluster 端到端（create+await 后 updateClusterData(2)=110）；④ **失败 reject**（`parser:{type:'nonexistent'}` → `rejects.toThrow(ParserNotFoundError)`，锁错误 surface 契约）；⑤ 自定义 registry 端到端（spy getParser('geojson') + cluster re-parse 走 injected registry）；⑥ `ready` getter on new Source（`await source.ready` → inited true）；⑦ **'inited' 事件时序**（同步 attach listener → await ready → 事件必已触发，锁 ready 在 emit 之后 resolve）。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：31 错基线不变（全 core `.glsl` 噪音）—— `initPromise` 字段 `readonly` 构造器赋值满足 definite assignment、`static async create` 访问 instance private `initPromise` 合法（同类 body）、`ready` getter 返回类型 `Promise<void>`。`tsc layers` 229 pre-existing 不变（layers 仍 `new Source`，零接触 create/ready）。
+  - `eslint --max-warnings 0` + `prettier --check`：base-source.ts + create-async.spec.ts 0 错 0 警（spec 经 `--write` 重排纯 whitespace）。
+  - `jest packages/source/__tests__ + packages/layers/__tests__`：**153 passed / 1 skipped / 0 failed**（旧 146 + 7 create-async）—— 7 case 全过；现有 source.spec.ts（sync `new Source` 读 extent/data/cluster/transform）+ create-source.spec.ts（2.5 sync 工厂）零回归，证明 `new Source` 路径零行为变化。
+- **风险/注意**：
+  - **⚠️ `new Source` 失败路径仍 unhandled rejection**：`initPromise` 捕获但 `new Source` 路径不 await，parse 失败时仍是 fire-and-forget unhandled rejection（inited 留 false、无 emit）—— **保留现状**（4.1 不动旧路径）。`Source.create` 路径因 `await` 消费 rejection 故不产生 unhandled。若未来想让 `new Source` 也 surface 错误，需在构造器加 `.catch` 或引导用户迁 `create`（4.1b/4.2 范畴）。
+  - **`init()` 内冗余 `this.inited = true`**：`init()` 末尾 + 构造器 `.then` cb 都设 `inited=true`（双设）。迁移前既有，4.1 保留不动（改之会动 init 内部时序，违反零行为变化）。记 BACKLOG 清理候选。
+  - **`processData` 的 `new Promise` 同步包装**：PLAN 诊断 #7 标「无意义」（包同步代码）。4.1 不动（改之改变微任务时序）。记 BACKLOG 清理候选。
+  - **`setData` 的 `init().then` 不动**：`setData` 也有 `this.init().then(cb)`（type:'update'），4.1 只改构造器的。`setData` 仍 fire-and-forget（与现状等价）。`setData` 的 async 化属 4.3（版本号+增量）范畴。
+  - **tile/image async 取数不在 create 关键路径**：`await Source.create` 不等瓦片/影像实际加载（那些在 loader/tileset 异步）。`create` 只保证 init（parse+cluster init+transforms）完成。消费方仍需按现有方式听瓦片/影像 update。与 `new Source` 等价，非回归。
+- **遗留**：→ 4.1b `console.warn` deprecation on `new Source`（待 layers 迁移后）；4.2 layers 侧 `await source.ready` 消费迁移 + `once('inited')` 标准化（`ready` infra 已在 4.1 落地，剩 layers 改动）；4.3 `setData` async + 版本号增量；4.4 cluster 双路径合并；`init()` inited 双设 + `processData` Promise 同步包装清理记 BACKLOG。**阶段 4.1a（纯叠加切片）完成 —— source 包侧 async lifecycle 基础设施就绪，等 layers 侧迁移（4.2）释放价值。**
 
 ---
 

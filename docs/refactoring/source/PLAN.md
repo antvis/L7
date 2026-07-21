@@ -82,8 +82,8 @@ utils/           bandOperation/ tile/ csv/hexbin/relative-coordinates/statistics
 
 ### 阶段 4 — 异步生命周期与状态
 
-- 4.1 推荐 `Source.create(data, cfg): Promise<Source>` async 工厂；保留 `new Source` 走旧路径并 `console.warn`
-- 4.2 标准化 `await source.ready` / `source.once('inited')`，消除 layers 侧 `source.data` race
+- 4.1 ☑ `Source.create(data, cfg): Promise<Source>` async 工厂（**4.1a 纯叠加切片**）：`initPromise` 捕获构造期 `init().then(cb)` + `get ready()` getter 返回 `initPromise` + `static async create(data, cfg?, registry?)` 内部 `await source.initPromise` 后返回 —— `new Source` 路径零行为变化（捕获引用不改时序，失败仍 fire-and-forget unhandled rejection 保留现状）；`create` 消除 `inited` race + init 失败显式 reject 抛错；`console.warn` deprecation 推迟 4.1b（待 layers 迁移后加，避免改现有调用方控制台输出）；与阶段 2.5 sync `createSource` 互补；spec 7 case 锁 inited race 消除 / 等价 / cluster / 自定义 registry / 失败 reject / ready getter / 'inited' 事件时序
+- 4.2 ⏳ 标准化 `await source.ready` / `source.once('inited')`，消除 layers 侧 `source.data` race —— **`ready` getter infra 已在 4.1 落地**（`new Source` 用户可 `await source.ready`）；剩余 = layers 包消费方迁移（`new Source`+读 data → `await Source.create`/`await source.ready`）+ `once('inited')` 标准化。注：sync parser 的 data 因 processData executor 同步执行本就无 undefined race，4.2 主要收敛 `'inited'` 事件时序 + init 失败吞错。触及 layers 包（BaseLayer 等）中风险
 - 4.3 `setData/updateFeaturePropertiesById` 引入「版本号 + 增量」机制；同 schema 的 `setData` 不重新 parse
 - 4.4 删 `clusterOptions.enable` 死字段；合并 `cluster: boolean` 与 `transforms:[{type:'cluster'}]` 两条路径为一条（推荐 `cluster` cfg，transform 内 cluster 标 deprecated）
 

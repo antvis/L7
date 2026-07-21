@@ -37,6 +37,53 @@ export default class Source extends EventEmitter implements ISource {
   public getSourceCfg() {
     return this.cfg;
   }
+  // ─── 异步生命周期（阶段 4.1）────────────────────────────────────
+  // `initPromise` 捕获构造期 `init().then(cb)` 的结果：cb 设 `inited=true` 并
+  // emit `'update' {type:'inited'}`，与迁移前等价。`new Source` 路径不 await 本
+  // 字段，故 init 失败仍 fire-and-forget（unhandled rejection，保留现状）。`Source.create`
+  // async 工厂 / `ready` getter 通过 await 本字段消除 layers 侧 `source.data` race
+  // （PLAN 诊断 #7）：成功时 `inited===true` 且 `data` 已 parse；失败时 reject 抛错
+  // （显式 surface，对比旧路径吞错）。
+  private readonly initPromise: Promise<void>;
+
+  /**
+   * init 完成 Promise：resolve 时 `inited===true` 且已 emit `'update' {type:'inited'}`；
+   * init 失败时 reject（parse / cluster init / transform 错）。`new Source` 消费方可
+   * `await source.ready` 消除 `source.data` race；`Source.create` 内部即 `await source.initPromise`。
+   * 新增 API，对 `new Source` 路径零行为变化。
+   */
+  public get ready(): Promise<void> {
+    return this.initPromise;
+  }
+
+  /**
+   * async 工厂（阶段 4.1）：返回 init 完成的 Source 实例，消除 `source.data` race。
+   *
+   * 与 `new Source(data, cfg)` 区别：`create` await init（parse + cluster init +
+   * transforms）后再返回，消费方直接读 `source.data` / `source.inited` 无 race；
+   * init 失败时 reject 抛错（旧 `new Source` 路径 init 失败为 fire-and-forget
+   * unhandled rejection，`inited` 留 false、`'update' {type:'inited'}` 不 emit）。
+   *
+   * `new Source(data, cfg)` 路径**零行为变化**（仍 fire-and-forget init + emit）；
+   * 本阶段不加 `console.warn` deprecation（推迟 4.1b 切片，待 layers 迁移后再加）。
+   *
+   * 与阶段 2.5 `createSource(data, cfg, registry?)`（sync 函数工厂，仍 fire-and-forget
+   * init）互补：`createSource` 是同步包装，`Source.create` 是异步等 init。
+   *
+   * @example
+   *   const source = await Source.create(data, { parser: { type: 'geojson' } });
+   *   console.log(source.data); // 已 parse，无 undefined race
+   */
+  public static async create(
+    data: any | ISource,
+    cfg?: ISourceCFG,
+    registry: ParserRegistry = defaultRegistry,
+  ): Promise<Source> {
+    const source = new Source(data, cfg, registry);
+    await source.initPromise;
+    return source;
+  }
+  // ────────────────────────────────────────────────────────────────
   public parser: IParserCfg | ITileParserCFG = { type: 'geojson' };
   public transforms: ITransform[] = [];
 
@@ -140,7 +187,7 @@ export default class Source extends EventEmitter implements ISource {
     );
     this.initCfg(cfg);
 
-    this.init().then(() => {
+    this.initPromise = this.init().then(() => {
       this.inited = true;
       this.emit('update', {
         type: 'inited',

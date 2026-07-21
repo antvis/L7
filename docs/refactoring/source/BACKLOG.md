@@ -155,3 +155,35 @@
 - **建议**：保持现状（well-formed 输入 100% 等价；malformed 输入既已 broken/nondeterministic，不修正）。若未来想稳健化，raster-buffer consumer `.then` 可加 `if (!data) reject(undefined)` 前置 guard 防 `.length` 抛 —— 但会改变 empty-no-err 行为（与「零行为变化」相悖），应单独立项不在渐进重构内。
 - **状态**：wontfix（既存 latent bug，well-formed 等价）
 - **发现于**：阶段 3.4
+
+### [阶段 4.1b] `new Source` 的 `console.warn` deprecation 推迟
+
+- **位置**：`packages/source/src/base-source.ts` `constructor`
+- **问题**：PLAN 阶段 4.1 原含「保留 `new Source` 走旧路径并 `console.warn`」。4.1a 纯叠加切片**不加** warn —— 加 warn 会改变所有现有 `new Source` 调用方的控制台输出（minor 级行为变化），违反「纯叠加零行为变化」渐进纪律。`new Source` 当前仍零警告（与迁移前等价）。
+- **建议**：待阶段 4.2 layers 包迁移到 `Source.create` / `await source.ready` 后，4.1b 给 `new Source` 构造器加 `console.warn('[L7] new Source() is deprecated, use await Source.create() / await source.ready')` 推动 `new Source` 退役。届时需评估 warn 是否影响 layers 现有 `new Source` 调用的测试快照 / 控制台断言。
+- **状态**：open（推迟到 4.2 后）
+- **发现于**：阶段 4.1
+
+### [阶段 4.x cleanup] `init()` 内 `this.inited = true` 与构造器 `.then` cb 双设冗余
+
+- **位置**：`packages/source/src/base-source.ts` —— `private async init()` 末尾 `this.inited = true` + 构造器 `this.initPromise = this.init().then(() => { this.inited = true; ... })`
+- **问题**：`init()` 内 `await this.processData()` 后设 `inited=true`，构造器 `.then` cb 又设一次。双设冗余（无害，第二次是 no-op）。迁移前既有。**注意** `setData` 调 `init()` 但不经 `.then` cb（setData 用自己的 `.then` type:'update'），故 `init()` 内的 `inited=true` **不可删**（setData 路径依赖）。
+- **建议**：4.1 保留不动（改之会动 `init()` 内部时序，违反零行为变化）。未来清理仅删构造器 `.then` cb 内的 `this.inited = true`（保留 emit），保留 `init()` 内的 true。低优先。
+- **状态**：open（低优先清理，需同时验 setData 路径）
+- **发现于**：阶段 4.1
+
+### [阶段 4.x cleanup] `processData` 的 `new Promise` 同步包装无意义
+
+- **位置**：`packages/source/src/base-source.ts` `private async processData()` —— `return new Promise((resolve, reject) => { try { this.executeParser(); this.clusterManager.init(this.data); this.executeTrans(); resolve({}); } catch (err) { reject(err); } })`
+- **问题**：PLAN 诊断 #7 标「`processData` 用 `new Promise` 包同步代码无意义」—— executor 同步跑，executeParser/cluster init/executeTrans 全同步，Promise 包装把同步 throw 转 reject（异步化一拍）。4.1 不动（改之改变微任务时序：当前 `await this.processData()` 至少等一拍微任务；若去 Promise 直 sync，`init()` 的 `inited=true` 时序提前，可能影响 `'inited'` 事件相对其他微任务的顺序）。
+- **建议**：未来清理需先核所有 `await init()` / `initPromise` / `.then` 消费方对「init 在微任务边界完成」的隐式依赖（layers 听 'inited' 事件 + 同 tick 其他 Promise）。若安全可改 `processData` 为直 sync throw 或 `async` + 直执行。低优先，收益小（去掉无意义包装），风险中（时序）。
+- **状态**：open（低优先，需时序审计）
+- **发现于**：阶段 4.1
+
+### [流程] 新写 spec 文件须 `prettier --write` 预格式化
+
+- **位置**：新增 `__tests__/**.spec.ts` 流程
+- **问题**：4.1 `create-async.spec.ts` 写后 `prettier --check` 报 code style issues（行宽/缩进）。lint-staged pre-commit 会自动 `prettier --write` 修（无需手动 re-add，lint-staged 自动 re-stage），但提前 `--write` 可避免 commit 时「Applying modifications」的隐形改动、保持 pre-commit 验证与提交内容一致。
+- **建议**：写完新 spec 后 `npx prettier --write <spec>` 再跑 jest/tsc/eslint，而非依赖 lint-staged 兜底。与 3.3「写 spec 后须重跑 tsc source」并列。
+- **状态**：done（4.1 已实践，记档供后续）
+- **发现于**：阶段 4.1
