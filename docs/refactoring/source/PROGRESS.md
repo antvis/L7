@@ -15,7 +15,7 @@
 
 ---
 
-## [阶段 3.4] CustomDataProvider 统一 — mvt/raster CUSTOM\* 走 loader 接口（commit 待补）
+## [阶段 3.4] CustomDataProvider 统一 — mvt/raster CUSTOM\* 走 loader 接口（commit 9500f6c）
 
 - **改了什么**：
   - 新增 `src/loader/custom-data-provider.ts`（70 行）：`export class CustomDataProvider`。构造器持用户 `getCustomData` 回调（`ITileParserCFG['getCustomData']`）。`fetch(tile: SourceTile): Promise<unknown>` 内含原三处消费点共享的「调用户回调 + Promise 包装」1 行原语 —— `fn({x:tile.x,y:tile.y,z:tile.z}, (err,data) => err ? reject(err) : resolve(data))`。**方案 A（薄 provider，零行为变化）**：provider **只在 `err` 真值时 reject(err)**，`err` falsy 时**无条件 resolve(data)**（即使 data 为 undefined / 空数组 / 空缓冲）。**不在 provider 层做 empty 判定** —— 因三消费点 empty 语义不同（mvt / raster-image 用 `!data`；raster-buffer 用 `data.length===0`，对 ArrayBuffer `.length` 恒 undefined 故不触发，但对空 TypedArray/空数组会 reject），统一 empty 判定会改变 raster-buffer 空 TypedArray 的 reject 行为，违反渐进等价。empty 检查 + 解码后处理仍由各消费点 `.then` 内各自保留。
