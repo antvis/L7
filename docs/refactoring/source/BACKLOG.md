@@ -124,3 +124,34 @@
 - **闭环于**：阶段 2.1（commit 9f11ef6）
 
 ---
+
+<!-- 倒序追加：阶段 3.4 新增遗留项 -->
+
+### [阶段 3.4 / 流程教训] l7-utils mock + l7-core 值导入共存须 requireActual 展开
+
+- **位置**：
+  - `packages/source/__tests__/loader/raster-tile-loader.spec.ts`（阶段 3.4 重写后用 `jest.mock('@antv/l7-utils', () => ({ ...jest.requireActual('@antv/l7-utils'), formatImage: jest.fn() }))`）
+  - 对比 `packages/source/__tests__/loader/mvt-loader.spec.ts`（`jest.mock('@antv/l7-utils', () => ({ getArrayBuffer, getURLFromTemplate }))` 窄 mock 合法）
+- **问题**：raster spec 经 `import { RasterTileType } from '@antv/l7-core'`（**值**导入，非 type）拉起 `packages/core/src/index.ts` → `BasePostProcessingPass.ts:13` `const { camelCase, isNil, upperFirst } = lodashUtil;` 从 l7-utils 解构。若 `jest.mock('@antv/l7-utils')` 只导 formatImage（窄 mock），core 侧 `lodashUtil` undefined → `TypeError: Cannot destructure property 'camelCase'`，spec suite failed to run。mvt spec 不踩此坑：mvt-loader 仅 type-import l7-core（`ITileParserCFG` type），不拉起 core/index。
+- **建议**：任何 spec 若 **既** mock l7-utils **又** 值导入 l7-core（或经其他路径拉起 core/index），必须 `jest.mock('@antv/l7-utils', () => ({ ...jest.requireActual('@antv/l7-utils'), <overridden>: jest.fn() }))` 展开 —— 保留真实 l7-utils（lodashUtil/gl/getImage 等）仅覆盖 loader 直接消费的导出。与阶段 3.3 `jest.resetAllMocks` 教训同档，列入新 spec 流程检查清单。
+- **状态**：done（阶段 3.4 已用 requireActual 展开修复）；教训记录供后续 spec 参考
+- **发现于**：阶段 3.4
+
+### [阶段 3.4 / 边缘] CustomDataProvider empty-no-err 路径 reject 值 null-vs-undefined 微差异
+
+- **位置**：
+  - `packages/source/src/loader/raster-tile-loader.ts` `loadCustomRasterData`（`data.length===0` 时 `reject(undefined)`）/ `loadCustomImageData`（`!data` 时 `reject(undefined)`）
+  - 对比迁移前 `packages/source/src/utils/tile/getCustomData.ts`（`if (err || data.length===0) reject(err)` —— empty-no-err 时 err 为用户 cb 传的 falsy 值，常为 `null`）
+- **问题**：provider 路径下 consumer `.then` 内 `reject(undefined)` 是固定值；迁移前 `reject(err)` 的 err 是用户 cb 传入的 falsy（`cb(null, [])` → err=null / `cb(undefined, [])` → err=undefined）。故 `cb(null, [])`（Node 风格成功回调最常见）时迁移前 reject(null)、新路径 reject(undefined) —— **reject 值有 null-vs-undefined 差异**。err-passthrough 路径（err 真值）reject 值字字等价（provider reject(err) → catch → reject(err)）。
+- **影响评估**：经核消费链 `SourceTile.loadData`（`tile.ts:154` try/catch）→ `onTileError`（`tileset-manager.ts:326`）→ `emit(TileEventType.TileError, { error, tile })`。error 值仅 emit 给 layers 订阅者，**无 layer 做 `error === null` vs `=== undefined` 区分**（结构性行为 TileError 触发 / loadFinished / loadStatus=Failure 完全一致）。故此差异**不可观测**。
+- **建议**：保持现状（reject undefined 固定值更简洁）；若未来某 layer 显式区分 null/undefined error 值，再回头让 consumer 透传 err（需 provider 额外暴露 err 给 empty 路径，如 resolve `{err, data}` —— 代价是 provider Promise 模型变脏，不推荐）。
+- **状态**：wontfix（不可观测 + 修正代价 > 收益）
+- **发现于**：阶段 3.4
+
+### [阶段 3.4 / 边缘] raster-buffer `cb(null, undefined)` async 路径「挂起」隐患
+
+- **位置**：`packages/source/src/loader/raster-tile-loader.ts` `loadCustomRasterData`（`(data as any).length === 0` 判定）
+- **问题**：CUSTOMARRAYBUFFER/CUSTOMRGB 的 `getCustomData` 回调若用户传 `cb(null, undefined)`（无 err 也无 data），`(data as any).length` = `undefined.length` 抛 TypeError。迁移前 `utils/tile/getCustomData.ts` 同样 `data.length` 抛 TypeError —— **sync cb**（Promise executor 内同步调用）两者都 reject(TypeError) 等价；**async cb**（setTimeout/fetch 后异步调用）迁移前 throw 在异步任务中 uncaught → Promise 永不 settle（挂起），新路径 `.then` 回调抛错 → reject(TypeError)（不挂起）。故 async 路径有「迁移前挂起 / 新路径 reject」差异。属既存隐患（用户传 undefined 给 raster-buffer 自定义回调本就是用法错误）。
+- **建议**：保持现状（well-formed 输入 100% 等价；malformed 输入既已 broken/nondeterministic，不修正）。若未来想稳健化，raster-buffer consumer `.then` 可加 `if (!data) reject(undefined)` 前置 guard 防 `.length` 抛 —— 但会改变 empty-no-err 行为（与「零行为变化」相悖），应单独立项不在渐进重构内。
+- **状态**：wontfix（既存 latent bug，well-formed 等价）
+- **发现于**：阶段 3.4
