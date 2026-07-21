@@ -527,10 +527,7 @@ export default class TdtMapService extends BaseMap<any> {
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
-    let $wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      $wrapper = document.getElementById(id) as HTMLDivElement;
-    }
+    const $wrapper = super.creatMapContainer(id);
     const $tdtmapdiv = document.createElement('div');
     $tdtmapdiv.style.cssText += `
       position: absolute;

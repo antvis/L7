@@ -189,10 +189,7 @@ export default class Service extends MapboxBaseMap<Map & IMapboxInstance> {
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
-    let $wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      $wrapper = document.getElementById(id) as HTMLDivElement;
-    }
+    const $wrapper = super.creatMapContainer(id);
     const $amapdiv = document.createElement('div');
     $amapdiv.style.cssText += `
       position: absolute;
