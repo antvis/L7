@@ -23,7 +23,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 3.1.3] GeoJSONVTLoader 抽取（commit 待补）
+## [阶段 3.1.3] GeoJSONVTLoader 抽取（commit 335476d）
 
 - **改了什么**：
   - 新增 `src/loader/geojsonvt-loader.ts`（199 行）：`export class GeoJSONVTLoader implements TileLoader`。构造器持 `data: FeatureCollection` + `options: geojsonvt.Options`，**构造期一次性建索引** `this.tileIndex = geojsonvt(data, options)` + `this.extent = options.extent || 4096`。`loadTile(tileParams, tile): Promise<ITileSource>` 内含原 `getVectorTile` 闭包体（机械搬运，零行为改动）。**4 个投影助手随闭包下沉**：`VectorTileFeatureTypes` / `signedArea` / `classifyRings` / `GetGeoJSON`（仅服务 `loadTile`，parser 不再需要）。**关键等价点全部保留**：① `tileIndex.getTile(tile.z, tile.x, tile.y)` —— **用 `tile`**（SourceTile）做索引查表；② `GetGeoJSON(this.extent, tileParams.x, tileParams.y, tileParams.z, ...)` —— **用 `tileParams`**（TileLoadParams）做坐标投影（`x0 = extent * tileParams.x` 等 Web Mercator 反投影）；③ `new GeoJSONVTTileSource(vectorTile, tile.x, tile.y, tile.z)` —— **用 `tile`** 做数据源构造；④ `getTile` 返回 null 时 `features = []`（空 defaultLayer），**始终 resolve `ITileSource`**（非 undefined —— 与 mvt 失败 resolve undefined 不同，与 jsonTile 同形态）；⑤ **无 `tile.xhrCancel`**（全同步内存切瓦片，无 xhr 句柄）；⑥ 保留 `// @ts-ignore`（`GetGeoJSON` 产出的 feature 含 `relativeOrigin`/`coord` 额外字段，与 `MapboxVectorTile.layers[k].features: GeoJSON.Feature[]` 不完全匹配 —— 原实现即有此 ts-ignore，机械保留）。
