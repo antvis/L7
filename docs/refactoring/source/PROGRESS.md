@@ -50,7 +50,7 @@
   - **取数 utils mock 的局限**：spec 不覆盖 `getRasterFile`/`processRasterData`/`formatImage` 真实解码（mock 在 `getRasterTile`/`getCustomData` 模块层截断），那部分由 utils 自身 + layers 集成测试兜底。loader spec 只保证「按 dataType 路由到正确取数 utils + 入参正确」。若未来补取数 utils 单测，应在 `utils/tile/__tests__/` 独立建立。
 - **遗留**：→ 阶段 3.2.2 `RasterTileLoader` 6 分支拆成 4 小 loader + 引入 `RasterTileLoader` 接口（评估收益边际，可合并 3.2 收尾或推迟）；阶段 3.3 `image.ts` parser 去 fetch（更高价值 —— image.ts 仍自取数，未抽 loader）；阶段 2.x `Transform<TIn,TCfg,TOut>` 契约抽取 / 领域错误抽 `errors.ts` / 消费方按需子集注册文档化（BACKLOG 既有）；BACKLOG 瓦片 parser/loader 单测覆盖缺口剩 image 待补。**阶段 3.2 渐进第一步完成**。
 
-## [阶段 3.3] ImageLoader 抽取 — image.ts parser 去 fetch（commit 待补）
+## [阶段 3.3] ImageLoader 抽取 — image.ts parser 去 fetch（commit 20afaf9）
 
 - **改了什么**：
   - 新增 `src/loader/image-loader.ts`（86 行）：`export class ImageLoader`。构造器持 `data`（`string | string[] | HTMLImageElement | ImageBitmap`）/ `requestParameters`（`Omit<RequestParameters,'url'>`）。`load(): Promise<Array<HTMLImageElement | ImageBitmap>>` 内含原 `image()` top-level 的 `images = new Promise(...)` 体（机械搬运）：① `HTMLImageElement | isImageBitmap(data)` → `resolve([data])` 同步短路（不走 getImage）；② 否则 `fetchUrls(data, rp, resolve)` —— 私有方法搬自原 `loadData`（string 走单次 `getImage`、string[] 走 `forEach`+计数 `imageindex`/`imageCount`）。**变量名原样保留**（`imageDatas` / `imageindex` 原拼写非 imageIndex / `imageCount`）。**死代码 `return image;` 丢弃**（原 `loadData` 末尾引用模块级 hoisted 默认导出函数名，调用方 `loadData(data, rp, resolve)` 不取返回值 → 死代码；迁入类方法后该引用消失，机械丢弃零行为变化）。
