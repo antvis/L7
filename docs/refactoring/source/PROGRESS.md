@@ -23,7 +23,7 @@
 
 <!-- 以下为已完成记录，倒序追加 -->
 
-## [阶段 3.2.1] RasterTileLoader 分发器抽取（commit 待补）
+## [阶段 3.2.1] RasterTileLoader 分发器抽取（commit 7649fbf）
 
 - **改了什么**：
   - 新增 `src/loader/raster-tile-loader.ts`（76 行）：`export class RasterTileLoader`。构造器持 `data`（`string | string[] | ITileBand[]`）/ `tileDataType`（已 RGB→ARRAYBUFFER 归并后的 `RasterTileType`）/ `cfg`（`Partial<ITileParserCFG>`）。`loadTile(tileParams, tile)` 内含原 `getTileData` 的 6 分支 switch（机械搬运，**零行为改动**：保留 `// @ts-ignore`、`data as string | string[]` 向下转型、`cfg?.format || defaultFormat`、`cfg?.operation`）。**不实现 `TileLoader` 接口** —— 因 raster 与矢量瓦片本质不同：① 返回影像/缓冲/栅格数据（非 `ITileSource`）；② 失败 **reject**（非 mvt 的 resolve `undefined`）。经核消费层 `SourceTile.loadData`（`@antv/l7-utils`）把 `getData` 包在 try/catch，**reject 与 resolve 空值都走 `onError`**（`if (error || !tileData) → onError`），故 raster 的 reject 在消费层与「resolve 空」等价 —— 但本类机械保留 reject 以零行为变化。**第 4 种 tile/tileParams 混用形态保留**：IMAGE/ARRAYBUFFER 双用 `tileParams`（URL 模板 / `getTileUrl`）+ `tile`（xhrCancel 经 `getImage`/`getRasterFile`→`bindCancel` 在 utils 内部设置）；CUSTOMIMAGE/CUSTOMTERRAINRGB/CUSTOMARRAYBUFFER/CUSTOMRGB 只用 `tile`（`{x,y,z}` 传用户 `getCustomData` 回调），不传 tileParams。
