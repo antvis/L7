@@ -17,7 +17,7 @@
 
 ---
 
-## [阶段 4.1] Source.create async 工厂 + ready getter — 纯叠加消除 source.data race（commit 待补）
+## [阶段 4.1] Source.create async 工厂 + ready getter — 纯叠加消除 source.data race（commit 99e7094）
 
 - **改了什么**：
   - `src/base-source.ts`：① 新增 `private readonly initPromise: Promise<void>` 字段，构造器把原 `this.init().then(() => { this.inited = true; this.emit('update', {type:'inited'}) })` 改为 `this.initPromise = this.init().then(...)`（**仅捕获 Promise 引用，cb 体 + 时序零变化**）。② 新增 `public get ready(): Promise<void>` 返回 `initPromise`。③ 新增 `public static async create(data, cfg?, registry=defaultRegistry): Promise<Source>`：内部 `const source = new Source(data, cfg, registry); await source.initPromise; return source`。
