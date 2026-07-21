@@ -29,7 +29,7 @@ describe('ImageLoader (stage 3.3)', () => {
 
   it('ImageBitmap 直传（isImageBitmap=true）→ resolve [data]，不调 getImage', async () => {
     const bitmap = {} as ImageBitmap;
-    (isImageBitmap as jest.Mock).mockReturnValue(true);
+    (isImageBitmap as unknown as jest.Mock).mockReturnValue(true);
     const result = await new ImageLoader(bitmap, {}).load();
     expect(isImageBitmap).toHaveBeenCalledWith(bitmap);
     expect(result).toEqual([bitmap]);

@@ -65,6 +65,18 @@
 - **状态**：部分 done（阶段 3.1.1 `JsonTileLoader` 6 case、阶段 3.1.2 `MVTLoader` 6 case、阶段 3.1.3 `GeoJSONVTLoader` 6 case —— 阶段 3.1 收尾，三个瓦片矢量 loader 全覆盖；阶段 3.2.1 `RasterTileLoader` 6 case —— raster 分发器单测建立；阶段 3.3 `ImageLoader` 7 case —— image.ts parser 去 fetch，含「永不 resolve」失败语义锁定）；剩余 raster-tile 的 4 小 loader 拆分（3.2.2，边际收益）待配套各自单测
 - **发现于**：阶段 3.1.1（JsonTileLoader 抽取时首次建立瓦片 loader 单测，暴露此前 0 覆盖）
 
+### [阶段 3.x / 测试] jest.mock spec 的 TS2352 type-guard 强转坑
+
+- **位置**：
+  - `packages/source/__tests__/loader/geojsonvt-loader.spec.ts`（阶段 3.1.3）—— `geojson-vt` default export 是「函数 + namespace」合并类型，`(geojsonvt as jest.Mock)` 报 TS2352，用 `as unknown as jest.Mock` 两步转换（已记录于该 spec 注释）
+  - `packages/source/__tests__/loader/image-loader.spec.ts`（阶段 3.3）—— `isImageBitmap` 在 `@antv/l7-utils` 声明为 type guard `(image: any) => image is ImageBitmap`，`(isImageBitmap as jest.Mock)` 报 TS2352，同样需 `as unknown as jest.Mock`（post-commit 修复）
+- **问题**：mock type-guard 函数 / namespace-合并类型时，直接 `as jest.Mock` 触发 TS2352（「neither type sufficiently overlaps」）。规律：**凡 mock 对象的源类型是 type guard（`x is T`）或 namespace 合并类型，cast 必须两步 `as unknown as jest.Mock`**；普通函数 / class 直 cast 合法（`MVTSource as jest.Mock` / `getArrayBuffer as jest.Mock` OK）。
+- **建议**：后续 loader spec mock `@antv/l7-utils` 的函数时，先查其 `.d.ts` 声明是否 type guard —— 是则用 `as unknown as jest.Mock`。可在 spec 顶部建别名（如 `const isImageBitmapMock = isImageBitmap as unknown as jest.Mock`）统一引用。
+- **状态**：open（规律已记，3.1.3 geojsonvt + 3.3 image 两案例；后续 loader spec 需沿用）
+- **发现于**：阶段 3.3（image-loader spec post-commit tsc 暴露；漏检根因 = 写 spec 后未重跑 tsc，流程教训已记 PROGRESS 3.3 坑修复③）
+
+---
+
 ---
 
 ### [阶段 2.x / 文档] 消费方按需子集注册的 README / CHANGELOG 文档化
