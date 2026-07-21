@@ -62,7 +62,7 @@
   - 断言 fetch 调用入参（url 模板插值、`requestParameters` 透传、`getCustomData` 入参）+ `src.getTileData('defaultLayer')` 返回值 + 取消语义（`tile.xhrCancel` 被设）；
   - `jest.mock` 默认 per-test-file scope，不污染其他 spec，`beforeEach(jest.clearAllMocks())` 清计数。
   - 影像 parser（`image.ts`）的 `getImage` / `getCustomImageData` 同模式 mock。
-- **状态**：部分 done（阶段 3.1.1 `JsonTileLoader` 6 case、阶段 3.1.2 `MVTLoader` 6 case）；剩余 geojsonvt / raster-tile / image 待补
+- **状态**：部分 done（阶段 3.1.1 `JsonTileLoader` 6 case、阶段 3.1.2 `MVTLoader` 6 case、阶段 3.1.3 `GeoJSONVTLoader` 6 case —— 阶段 3.1 收尾，三个瓦片矢量 loader 全覆盖）；剩余 raster-tile / image 待补
 - **发现于**：阶段 3.1.1（JsonTileLoader 抽取时首次建立瓦片 loader 单测，暴露此前 0 覆盖）
 
 ---
