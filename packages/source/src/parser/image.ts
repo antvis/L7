@@ -1,7 +1,6 @@
 import type { IParserData } from '@antv/l7-core';
-import type { RequestParameters } from '@antv/l7-utils';
-import { getImage, isImageBitmap } from '@antv/l7-utils';
 import type { IImageCfg } from '../interface';
+import { ImageLoader } from '../loader/image-loader';
 import { extentToCoord } from '../utils/util';
 export default function image(
   data: string | string[] | HTMLImageElement | ImageBitmap,
@@ -13,15 +12,11 @@ export default function image(
     coordinates,
     requestParameters = {},
   } = cfg;
-  const images = new Promise((resolve) => {
-    if (data instanceof HTMLImageElement || isImageBitmap(data)) {
-      resolve([data]);
-    } else {
-      loadData(data, requestParameters, (res: any) => {
-        resolve(res);
-      });
-    }
-  });
+
+  // 取数下沉 loader（阶段 3.3）；parser 不再 import getImage（满足 PLAN 3.3
+  // 「image.ts parser 不再自己 getImage() fetch」）。images Promise 字段形状
+  // 不变，消费方 `await source.data.images` 零改动
+  const images = new ImageLoader(data, requestParameters).load();
 
   const imageCoord = extentToCoord(coordinates, extent);
 
@@ -37,35 +32,4 @@ export default function image(
     ],
   };
   return resultData;
-}
-
-function loadData(
-  url: string | string[],
-  requestParameters: Omit<RequestParameters, 'url'>,
-  done: any,
-) {
-  const imageDatas: Array<HTMLImageElement | ImageBitmap> = [];
-  if (typeof url === 'string') {
-    getImage({ ...requestParameters, url }, (err, img) => {
-      if (img) {
-        imageDatas.push(img);
-        done(imageDatas);
-      }
-    });
-  } else {
-    const imageCount = url.length;
-    let imageindex = 0;
-    url.forEach((item) => {
-      getImage({ ...requestParameters, url: item }, (err, img) => {
-        imageindex++;
-        if (img) {
-          imageDatas.push(img);
-        }
-        if (imageindex === imageCount) {
-          done(imageDatas);
-        }
-      });
-    });
-  }
-  return image;
 }
