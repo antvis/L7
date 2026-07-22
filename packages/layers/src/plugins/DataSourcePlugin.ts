@@ -19,15 +19,12 @@ export default class DataSourcePlugin implements ILayerPlugin {
         this.updateClusterData(layer);
         layer.log(IDebugLog.SourceInitEnd, ILayerStage.INIT);
       } else {
-        await new Promise((resolve) => {
-          source.on('update', (e) => {
-            if (e.type === 'inited') {
-              this.updateClusterData(layer);
-              layer.log(IDebugLog.SourceInitEnd, ILayerStage.INIT);
-            }
-            resolve(null);
-          });
-        });
+        // 阶段 4.2：`source.ready`（4.1 infra）取代旧 `'update' {type:'inited'}` 手写
+        // Promise 监听 —— 修复「任意 update 类型即 premature resolve」bug；init 失败
+        // 由静默 hang 改 reject surface（minor 行为变化，见 BACKLOG）。
+        await source.ready;
+        this.updateClusterData(layer);
+        layer.log(IDebugLog.SourceInitEnd, ILayerStage.INIT);
       }
     });
 

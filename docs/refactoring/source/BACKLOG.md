@@ -187,3 +187,19 @@
 - **建议**：写完新 spec 后 `npx prettier --write <spec>` 再跑 jest/tsc/eslint，而非依赖 lint-staged 兜底。与 3.3「写 spec 后须重跑 tsc source」并列。
 - **状态**：done（4.1 已实践，记档供后续）
 - **发现于**：阶段 4.1
+
+### [阶段 4.2] init 失败 hang→reject 行为变化（已实施，需发布说明）
+
+- **位置**：`packages/layers/src/plugins/DataSourcePlugin.ts` init else 分支 `await source.ready`
+- **问题**：4.2 把 source init 失败的 layer 行为从「静默 hang（`layer.init()` 永不 resolve）」改为「reject（`layer.init()` 抛错）」。这是 **strictly better**（hang 是最坏静默失败，reject 让错误 surface），但属 minor 级行为变化：若有上游 `await layer.init()` 不 catch 的点，会从「卡住」变「unhandled rejection」。
+- **建议**：changeset 标 minor；发布说明提及「source init 失败不再静默 hang 而是 reject」。若后续发现上游不 catch 导致 regression，可在调用方加 catch + 日志（而非回退到 hang）。
+- **状态**：done（4.2 已实施，记档供发布/changeset 参考）
+- **发现于**：阶段 4.2
+
+### [阶段 4.2 后续] BaseLayer.ts:1070 `layerSource.on('update')` 是否迁 `ready`/标准化
+
+- **位置**：`packages/layers/src/core/BaseLayer.ts:1070` —— `this.layerSource.on('update', ({ type }) => { ... if (type === 'update') ...; if (type === 'inited') this.processRelativeCoordinates(); })`
+- **问题**：这是 layers 包内**另一处** `'update'` 事件监听（与 DataSourcePlugin 的 init 监听不同）：响应 `type==='inited'` 调 `processRelativeCoordinates`、`type==='update'` 调 `sourceEvent`/tile reload。4.2 只迁了 DataSourcePlugin 的 init 监听，**本处未动**（避免一次触及太多 + BaseLayer 时序更敏感）。本处监听的是 source 生命周期事件（inited + 后续 setData update），与 DataSourcePlugin 的「等 init 完成」语义不同 —— 不能简单替换为 `await source.ready`（ready 只 resolve 一次，本处需持续听 update）。
+- **建议**：评估是否① `type==='inited'` 分支改用 `await source.ready` 一次性触发（需确认 BaseLayer 此处执行时机在 source 构造之后、且只需触发一次）；② `type==='update'` 分支保留事件监听（setData 多次触发）。或保持现状（事件监听对「持续 update」语义正确）。需读 BaseLayer 该方法的调用上下文（`sourceEvent` / `processRelativeCoordinates` 时序）再定。中风险，单独切片。
+- **状态**：open（待评估，4.2 后续）
+- **发现于**：阶段 4.2

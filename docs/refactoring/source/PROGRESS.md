@@ -6,14 +6,40 @@
 
 ## 📍 下一步
 
-**阶段 4.1a 完成（source 侧 async 基础设施就绪）**：`Source.create` async 工厂 + `ready` getter + `initPromise` 捕获 —— 纯叠加，`new Source` 零行为变化。阶段 3（parser/loader 解耦）全完成。下一价值高地：
+**阶段 4.2 完成（layers 侧 DataSourcePlugin 迁移）**：`DataSourcePlugin` init else 分支 `source.on('update')` 手写 Promise → `await source.ready`，修复 premature-resolve bug + init 失败 hang→reject surface；`ISource` 加 `readonly ready` 契约；spec 3 case。阶段 4.1+4.2 = async lifecycle 串联打通。下一价值高地：
 
-- **阶段 4.2（layers 侧迁移）**：layers 包内 `new Source` 消费方改 `await Source.create(...)` / `await source.ready`，消除 `'inited'` 事件时序依赖 + init 失败吞错。`ready` getter infra 已在 4.1 落地，4.2 主要是 layers 包改动（触及 BaseLayer 等，中风险需逐 layer 渐进）。
-- **阶段 4.1b（deprecation 收尾）**：待 4.2 layers 迁移后，给 `new Source` 加 `console.warn` deprecation 推动 `create`/`new Source` 退役。
-- **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。3.4 后 CUSTOM\* 已下沉私有方法，拆分主要是「interface 化 + 分文件」整洁收益，无行为变化。
-- **阶段 4.3 / 4.4**：`setData` async + 版本号增量 / cluster 双路径合并 —— 中收益，4.2 后推进。
+- **阶段 4.2 后续（BaseLayer.ts:1070 评估）**：`BaseLayer` 另一处 `this.layerSource.on('update', ({type}) => ...)` 监听（inited 时 processRelativeCoordinates、update 时 sourceEvent）是否也迁 `ready`/标准化 —— 待评估，见 BACKLOG。
+- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役（4.2 layers 主路径已迁，可推进）。
+- **阶段 4.3 / 4.4**：`setData` async + 版本号增量 / cluster 双路径合并 —— 中收益，下一主推进。
+- **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
 
 详见 [PLAN.md § 阶段 4](./PLAN.md)。
+
+---
+
+## [阶段 4.2] DataSourcePlugin 迁移 await source.ready — 修复 premature-resolve bug + init 失败 hang→reject（commit 待补）
+
+- **改了什么**：
+  - `packages/layers/src/plugins/DataSourcePlugin.ts`：init `else` 分支（`source.inited===false` 路径）由旧手写 `await new Promise(resolve => source.on('update', e => { if(e.type==='inited'){...} resolve(null) }))` 改为 `await source.ready; this.updateClusterData(layer); layer.log(SourceInitEnd, INIT)`。`if (source.inited)` fast-path 分支**不动**（外部预存已 inited source 走 sync，零时序变化）。
+  - `packages/core/src/services/source/ISourceService.ts`：`ISource` interface 加 `readonly ready: Promise<void>`（4.1 `base-source.ts` 的 `ready` getter 已满足契约，无需再改 source）。
+  - 新增 `packages/layers/__tests__/plugins/data-source-plugin.spec.ts`（3 tests）。
+- **方案（minor：新增 interface 字段 + strictly-better 行为变化）**：
+  - **修复 bug**：旧 `resolve(null)` 在 `if (e.type==='inited')` 块**外** → 首个**任意类型** update 即 resolve Promise。对 fresh `new Source`（首事件即 inited）恰好蒙对；对外部预存未 inited source 先发他类 update（如 'sourceUpdate'）会 **premature resolve + 跳过 updateClusterData**。`await source.ready` 只在 init 真正完成（`initPromise` resolve）时 resume，根除该 bug。
+  - **失败路径 hang→reject（minor 行为变化，见 BACKLOG）**：旧路径 source init 失败不 emit 'inited' → Promise 永不 resolve → layer init 静默 hang。`await source.ready` 在 init 失败时 reject（`initPromise` reject）→ tapPromise reject → `BaseLayer await this.hooks.init.promise()` 抛 → `layer.init()` reject。**strictly better**（错误 surface vs 静默 hang），非回归，但属行为变化需显式记档。
+  - **时序等价（成功路径）**：`initPromise = init().then(cb)`，cb 内先 `inited=true` 再 `emit('update',{type:'inited'})` 后 resolve。`await source.ready` 恢复时 `inited===true` 必然成立，与旧 `resolve(null)`（同在 inited emit 的微任务链）时序等价 —— updateClusterData + log 仍在 layer init 完成前执行。
+  - **fast-path 保留**：`if (source.inited)` 分支零改动，外部预存已 inited source 不 await、sync 调 updateClusterData + log。
+  - **`'update' {type:'inited'}` 事件仍 emit**（4.1 不动 base-source 构造器 cb）：`BaseLayer.ts:1070` 另一处 `layerSource.on('update')` 监听仍依赖之，本切片不动该监听（留 4.2 后续评估，见 BACKLOG）。
+- **怎么验证**：
+  - `tsc --noEmit -p packages/source/tsconfig.json`：31 错基线不变；`tsc layers`：229 pre-existing 不变（`ISource` 加字段不引入新错 —— `Source` 已有 `ready` getter，唯一 ISource 实现者）。
+  - `eslint --max-warnings 0` + `prettier --check`：DataSourcePlugin.ts + ISourceService.ts + data-source-plugin.spec.ts 0 错 0 警。
+  - `jest packages/layers/__tests__/plugins`：6 passed（3 新 + 3 lighting）；`jest packages/source`：99 passed 0 failed（ISource 加字段未破坏 source）。
+  - 新 spec 3 case：① fresh `new Source`（geojson）→ `await source.ready` 后 `inited===true` + `log` 调 2 次（start+end）；② 预存已 inited fake source（`ready: new Promise(()=>{})` 永不 resolve）→ fast-path，initTap 在超时内 resolve（证明未 await neverReady）+ `log` 2 次；③ `parser:{type:'nonexistent'}` → `initTap()` `rejects.toThrow` + `log` 仅 1 次（start，end 未到达）—— 锁 reject surface 契约。
+  - **不直接断言 `IDebugLog`/`ILayerStage` 枚举值**：`IDebugLog` 为 `const enum`，`isolatedModules:true` 下运行时表示不稳定，改用 `layer.log` 调用次数判分支（成功 2 / 失败 1）。
+- **风险/注意**：
+  - **minor 行为变化：init 失败 hang→reject**：旧路径 `layer.init()` 永不 resolve（hang）；新路径 `layer.init()` reject。若上游有 `await layer.init()` 不 catch 的点会从 hang 变 unhandled rejection。**strictly better**（hang 是最坏静默失败），但需 changeset 标 minor + 发布说明提及。已记 BACKLOG。
+  - **`DataSourcePlugin` 是 layers 包内唯一 `new Source` 构造点**（grep 确认 `packages/layers/src/plugins/DataSourcePlugin.ts:15`）—— 本切片覆盖 layers 主路径。其他 `'update'` 监听（`BaseLayer.ts:1070`）不构造 source，仅响应事件，留后续。
+  - **fast-path 对外部预存 source 的 `updateClusterData` 仍调用**（与旧代码一致）：旧 fast-path 也调，零变化。
+- **遗留**：→ 4.2 后续评估 `BaseLayer.ts:1070` `layerSource.on('update')` 是否迁 `ready`/标准化（见 BACKLOG）；4.1b `new Source` deprecation warn（layers 主路径已迁 4.2，可推进）；4.3 `setData` async + 版本号增量；4.4 cluster 双路径合并。**阶段 4.2 完成 —— layers 侧 DataSourcePlugin init 路径迁移到 `await source.ready`，async lifecycle 串联打通（4.1 infra + 4.2 消费），premature-resolve bug 修复 + init 失败错误 surface。**
 
 ---
 

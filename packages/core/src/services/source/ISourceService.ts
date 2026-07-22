@@ -135,6 +135,12 @@ export type IJsonData = IJsonItem[];
 
 export interface ISource {
   inited: boolean;
+  /**
+   * init 完成 Promise（阶段 4.1 infra）：resolve 时 `inited===true` 且已 emit
+   * `'update' {type:'inited'}`；init 失败时 reject。layers 侧消费方可
+   * `await source.ready` 取代 `'update' {type:'inited'}` 手写监听（阶段 4.2）。
+   */
+  readonly ready: Promise<void>;
   isTile: boolean;
   data: IParserData;
   center: [number, number];
