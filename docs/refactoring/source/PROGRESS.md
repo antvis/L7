@@ -17,7 +17,7 @@
 
 ---
 
-## [阶段 4.2] DataSourcePlugin 迁移 await source.ready — 修复 premature-resolve bug + init 失败 hang→reject（commit 待补）
+## [阶段 4.2] DataSourcePlugin 迁移 await source.ready — 修复 premature-resolve bug + init 失败 hang→reject（commit 1ef39aa）
 
 - **改了什么**：
   - `packages/layers/src/plugins/DataSourcePlugin.ts`：init `else` 分支（`source.inited===false` 路径）由旧手写 `await new Promise(resolve => source.on('update', e => { if(e.type==='inited'){...} resolve(null) }))` 改为 `await source.ready; this.updateClusterData(layer); layer.log(SourceInitEnd, INIT)`。`if (source.inited)` fast-path 分支**不动**（外部预存已 inited source 走 sync，零时序变化）。
