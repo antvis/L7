@@ -17,7 +17,7 @@
 
 ---
 
-## [阶段 4.2 后续] BaseLayer.ts:1070 `on('update')` 评估 — 结论保持现状（commit 待补）
+## [阶段 4.2 后续] BaseLayer.ts:1070 `on('update')` 评估 — 结论保持现状（commit f20b3e6）
 
 - **评估什么**：4.2 迁了 `DataSourcePlugin` 的 init 等待（`source.on('update')` 手写 Promise → `await source.ready`）。本步评估 layers 包**另一处** `'update'` 监听 `BaseLayer.ts:1070`（`setSource` 内：`'inited'`→`processRelativeCoordinates`、`'update'`→`sourceEvent`/tile reload）是否同样迁 `ready`/标准化。
 - **结论：保持现状，不迁**。三条理由：
