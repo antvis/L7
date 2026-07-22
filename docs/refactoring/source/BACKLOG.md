@@ -196,10 +196,25 @@
 - **状态**：done（4.2 已实施，记档供发布/changeset 参考）
 - **发现于**：阶段 4.2
 
-### [阶段 4.2 后续] BaseLayer.ts:1070 `layerSource.on('update')` 是否迁 `ready`/标准化
+### [阶段 4.2 后续] BaseLayer.ts:1070 `layerSource.on('update')` — 评估结论：保持现状，不迁 `ready`
 
-- **位置**：`packages/layers/src/core/BaseLayer.ts:1070` —— `this.layerSource.on('update', ({ type }) => { ... if (type === 'update') ...; if (type === 'inited') this.processRelativeCoordinates(); })`
-- **问题**：这是 layers 包内**另一处** `'update'` 事件监听（与 DataSourcePlugin 的 init 监听不同）：响应 `type==='inited'` 调 `processRelativeCoordinates`、`type==='update'` 调 `sourceEvent`/tile reload。4.2 只迁了 DataSourcePlugin 的 init 监听，**本处未动**（避免一次触及太多 + BaseLayer 时序更敏感）。本处监听的是 source 生命周期事件（inited + 后续 setData update），与 DataSourcePlugin 的「等 init 完成」语义不同 —— 不能简单替换为 `await source.ready`（ready 只 resolve 一次，本处需持续听 update）。
-- **建议**：评估是否① `type==='inited'` 分支改用 `await source.ready` 一次性触发（需确认 BaseLayer 此处执行时机在 source 构造之后、且只需触发一次）；② `type==='update'` 分支保留事件监听（setData 多次触发）。或保持现状（事件监听对「持续 update」语义正确）。需读 BaseLayer 该方法的调用上下文（`sourceEvent` / `processRelativeCoordinates` 时序）再定。中风险，单独切片。
-- **状态**：open（待评估，4.2 后续）
-- **发现于**：阶段 4.2
+- **位置**：`packages/layers/src/core/BaseLayer.ts:1070`（`setSource` 内）—— `this.layerSource.on('update', ({ type }) => { ... if (type === 'update') this.sourceEvent() / tileLayer.reload(); if (type === 'inited') this.processRelativeCoordinates(); })`
+- **评估结论**：**保持现状，不迁移 `source.ready`**。`ready` 是一次性 await 原语，不适合替换本处的双语义事件监听。三条具体理由：
+  1. **同步 ordering 是 load-bearing**：`processRelativeCoordinates`（就地把 `data.dataArray` 转相对坐标）在 `'inited'` emit 时**同步**执行（EventEmitter 同步派发）。而 `base-source` 的 `initPromise = init().then(cb)` 中 cb 依次 `inited=true → emit('update',{type:'inited'}) → cb 返回 → initPromise resolve`。故 `DataSourcePlugin` 的 `await source.ready` 恢复（→ `updateClusterData`）严格**晚于** `processRelativeCoordinates`。改成 `ready.then(processRelativeCoordinates)` 会把 `processRelativeCoordinates` 推迟到 ready resolve 后的微任务 —— 在 DSP 路径虽依赖 `.then` 挂载序（setSource@16 先于 await@else），但**预 inited 路径**（外部 `data.type==='source'` 经 `source(:584)→setSource`，source 已 inited，走 `if(source.inited) sourceEvent()` 同步 fast-path）会从同步变异步，破坏 `sourceEvent` 内 autoFit/autoRender 的同步预期。同步 emit 保证不变量，`.then` 打破之。
+  2. **双语义监听器不可拆**：`'inited'`（一次性）与 `'update'`（`setData` 反复触发）共用同一 attached handler。`ready` 一次性无法承接反复 `'update'`；只把 `'inited'` 拆出会变成「listener 听 update + ready.then 听 inited」两套机制，复杂度增、收益零。
+  3. **`setSource` 是同步方法**：改 `await ready` 需异步化级联所有调用方（DSP:16、`source(:584)`）。
+- **建议**：保持现状。若未来要统一，应先抽 source 生命周期抽象（one-shot `inited` + recurring `dataUpdate` 分离为两个明确事件），而非用 `ready` 混搭。
+- **状态**：wontfix（已评估，保持现状）—— 评估完成记档，避免后续重复考据
+- **发现于**：阶段 4.2，评估于阶段 4.2 后续
+
+### [阶段 4.x cleanup] `setSource`/`destroy` 的 `off('update', this.sourceEvent)` 是空操作
+
+- **位置**：
+  - `packages/layers/src/core/BaseLayer.ts:1002`（destroy 前）—— `this.layerSource.off('update', this.sourceEvent)`
+  - `packages/layers/src/core/BaseLayer.ts:1056`（`setSource` 替换旧 source 时）—— `this.layerSource.off('update', this.sourceEvent)`
+  - 挂载点 `BaseLayer.ts:1070` —— `this.layerSource.on('update', ({ type }) => {...})` 是**inline arrow**，引用 ≠ `this.sourceEvent`
+- **问题**：两处 `.off('update', this.sourceEvent)` 试图移除 `sourceEvent` handler，但 1070 实际挂的是 inline arrow（`(({type}) => {...})`），引用不匹配 → **off 永不命中，均为空操作**。inline listener 从不被显式移除，仅靠 source 被 GC 回收清掉。pre-existing refactor 残留（listener 曾是 `sourceEvent`，被内联后 off 引用未同步更新）。`'update'` 分支内部调 `this.sourceEvent()` 提示该内联曾是 `sourceEvent` 本体。
+- **影响**：低风险 —— source 通常在 layer 销毁/替换时一并丢弃，listener 随之 GC；旧 source 被外部保留 + 继续 emit update 时才会触发已分离 layer 的 handler（边界场景）。非 4.2 引入，pre-existing。
+- **建议**：cleanup 时① 把 1070 inline arrow 提取为 `this.onSourceUpdate = ({type}) => {...}` 实例方法，on/off 统一引用；或② 若内联逻辑确需保留，把 off 改为移除实际引用。低优先，需确认无其他代码依赖现状。
+- **状态**：open（低优先清理）
+- **发现于**：阶段 4.2 后续评估

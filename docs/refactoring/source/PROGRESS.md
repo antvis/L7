@@ -6,14 +6,27 @@
 
 ## 📍 下一步
 
-**阶段 4.2 完成（layers 侧 DataSourcePlugin 迁移）**：`DataSourcePlugin` init else 分支 `source.on('update')` 手写 Promise → `await source.ready`，修复 premature-resolve bug + init 失败 hang→reject surface；`ISource` 加 `readonly ready` 契约；spec 3 case。阶段 4.1+4.2 = async lifecycle 串联打通。下一价值高地：
+**阶段 4.2 全部结案**：`DataSourcePlugin` init 迁 `await source.ready`（修复 premature-resolve bug + init 失败 hang→reject）；`ISource` 加 `readonly ready` 契约；4.2 后续评估完成 —— `BaseLayer.ts:1070` 因「同步 ordering load-bearing + 双语义监听不可拆」结论**保持现状**（见 BACKLOG），另发现 `off('update', this.sourceEvent)` 空操作残留（低优先清理）。async lifecycle 阶段（4.1+4.2）收尾。下一价值高地：
 
-- **阶段 4.2 后续（BaseLayer.ts:1070 评估）**：`BaseLayer` 另一处 `this.layerSource.on('update', ({type}) => ...)` 监听（inited 时 processRelativeCoordinates、update 时 sourceEvent）是否也迁 `ready`/标准化 —— 待评估，见 BACKLOG。
-- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役（4.2 layers 主路径已迁，可推进）。
-- **阶段 4.3 / 4.4**：`setData` async + 版本号增量 / cluster 双路径合并 —— 中收益，下一主推进。
+- **阶段 4.4（cluster 双路径合并）**：删 `clusterOptions.enable` 死字段；合并 `cluster: boolean` 与 `transforms:[{type:'cluster'}]` 两条路径为一条（推荐 `cluster` cfg，transform 内 cluster 标 deprecated）—— 中收益，下一主推进。
+- **阶段 4.3（setData async + 版本号增量）**：同 schema 的 `setData` 不重新 parse —— 中收益但风险偏高（setData 运行时热路径），4.4 后推进。
+- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌（可能不弃 `new Source` 本身，仅文档推荐 `create`）。
 - **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
 
 详见 [PLAN.md § 阶段 4](./PLAN.md)。
+
+---
+
+## [阶段 4.2 后续] BaseLayer.ts:1070 `on('update')` 评估 — 结论保持现状（commit 待补）
+
+- **评估什么**：4.2 迁了 `DataSourcePlugin` 的 init 等待（`source.on('update')` 手写 Promise → `await source.ready`）。本步评估 layers 包**另一处** `'update'` 监听 `BaseLayer.ts:1070`（`setSource` 内：`'inited'`→`processRelativeCoordinates`、`'update'`→`sourceEvent`/tile reload）是否同样迁 `ready`/标准化。
+- **结论：保持现状，不迁**。三条理由：
+  1. **同步 ordering load-bearing**：`processRelativeCoordinates`（就地转 `data.dataArray` 相对坐标）在 `'inited'` emit 时**同步**跑，严格早于 `DataSourcePlugin` 的 `await source.ready`→`updateClusterData`（`initPromise=init().then(cb)`，cb 内 `emit` 后才 resolve）。改 `ready.then` 会推迟到 ready resolve 后微任务，破坏预-inited 路径（`source(:584)` 外部 `data.type==='source'`）的 `sourceEvent` 同步 fast-path 预期，且对 clustering+相对坐标交互引入时序风险。
+  2. **双语义监听不可拆**：`'inited'`（一次性）+ `'update'`（`setData` 反复）共用一 handler；`ready` 一次性无法承接反复 `'update'`，只拆 `'inited'` 会变两套机制、零收益。
+  3. **`setSource` 同步**：改 `await` 需异步化级联调用方。
+- **新发现（记 BACKLOG）**：`BaseLayer.ts:1002/1056` 的 `off('update', this.sourceEvent)` 是**空操作** —— 1070 挂的是 inline arrow（引用 ≠ `sourceEvent`），off 永不命中，listener 仅靠 source GC 清理。pre-existing refactor 残留，低风险，低优先 cleanup。
+- **怎么验证**：纯评估 + 文档，无代码改动 —— 基线（tsc source 31 / layers 229 / jest 105 passed）零接触、零回归。
+- **遗留**：4.2 阶段全部结案（4.1 infra + 4.2 迁移 + 4.2 后续评估）。→ 4.4 cluster 双路径合并（下一主推进）；4.3 setData async + 版本号增量；4.1b deprecation（范围需斟酌：`new Source`+`await ready` 是合法模式，可能不弃 `new Source`）；`off('update',sourceEvent)` 空操作 cleanup（BACKLOG）。**async lifecycle 阶段收尾 —— 转入 cluster 路径合并（4.4）。**
 
 ---
 
