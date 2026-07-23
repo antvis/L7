@@ -51,7 +51,6 @@ export class MouseMoveStateManager implements DragMoveStateManager<MouseEvent> {
     this._eventButton = eventButton;
   }
 
-   
   endMove(_e?: MouseEvent) {
     delete this._eventButton;
   }
@@ -96,7 +95,6 @@ export class OneFingerTouchMoveStateManager implements DragMoveStateManager<Touc
     this._firstTouch = firstTouch;
   }
 
-   
   endMove(_e?: TouchEvent) {
     delete this._firstTouch;
   }

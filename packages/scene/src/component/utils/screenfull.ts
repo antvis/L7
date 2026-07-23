@@ -73,7 +73,6 @@ const eventNameMap = {
 };
 
 let screenfull: any = {
-   
   request(element = document.documentElement, options) {
     return new Promise((resolve, reject) => {
       const onFullScreenEntered = () => {

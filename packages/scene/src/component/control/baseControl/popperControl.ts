@@ -51,7 +51,7 @@ export default class PopperControl<
    */
   public getDefault(option?: Partial<O>): O {
     const defaultOption = super.getDefault(option);
-     
+
     const position = option?.position ?? defaultOption.position!;
     return {
       ...super.getDefault(option),
@@ -72,10 +72,9 @@ export default class PopperControl<
 
   public initPopper() {
     const { popperClassName, popperPlacement, popperTrigger } = this.controlOption;
-     
+
     const popperContainer = this.mapsService.getMapContainer()!;
 
-     
     this.popper = new Popper(this.button!, {
       className: popperClassName,
       placement: popperPlacement,

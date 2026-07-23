@@ -44,7 +44,7 @@ export default class Fullscreen extends ButtonControl<IFullscreenControlOption> 
   public onAdd(): HTMLElement {
     const button = super.onAdd();
     button.addEventListener('click', this.onClick);
-     
+
     this.mapContainer = DOM.getContainer(this.scene.getSceneConfig().id!);
     this.mapContainer.addEventListener('fullscreenchange', this.onFullscreenChange);
     return button;
