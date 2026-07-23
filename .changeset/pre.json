@@ -1,0 +1,41 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@antv/l7-component": "2.29.1",
+    "@antv/l7-core": "2.29.1",
+    "@antv/l7": "2.29.1",
+    "@antv/l7-layers": "2.29.1",
+    "@antv/l7-map": "2.29.1",
+    "@antv/l7-maps": "2.29.1",
+    "@antv/l7-renderer": "2.29.1",
+    "@antv/l7-scene": "2.29.1",
+    "@antv/l7-source": "2.29.1",
+    "@antv/l7-test-utils": "2.29.1",
+    "@antv/l7-three": "2.29.1",
+    "@antv/l7-utils": "2.29.1",
+    "@antv/l7-site": "2.21.4"
+  },
+  "changesets": [
+    "fix-maps-bmap-tmap-types",
+    "fix-test-utils-redundant-peerdeps",
+    "refactor-source-01",
+    "refactor-source-02",
+    "refactor-source-03",
+    "refactor-source-04",
+    "refactor-source-06",
+    "refactor-source-07",
+    "refactor-source-08",
+    "refactor-source-09",
+    "refactor-source-10",
+    "refactor-source-11",
+    "refactor-source-12",
+    "refactor-source-13",
+    "refactor-source-14",
+    "refactor-source-15",
+    "refactor-source-16",
+    "refactor-source-17",
+    "refactor-source-18",
+    "refactor-source-19"
+  ]
+}

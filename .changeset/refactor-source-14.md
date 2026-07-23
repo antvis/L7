@@ -1,5 +1,5 @@
 ---
-'@antv/l7-source': patch
+'@antv/l7-source': minor
 ---
 
 refactor(source): extract registerBuiltins() + tighten sideEffects whitelist (stage 2.4)

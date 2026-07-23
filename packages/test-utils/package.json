@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-test-utils",
-  "version": "2.29.1",
+  "version": "2.30.0-beta.0",
   "private": true,
   "description": "Test utils for L7",
   "keywords": [],
@@ -35,11 +35,6 @@
     "@antv/l7-scene": "workspace:^",
     "gl": "^8.0.2",
     "regl": "1.6.1"
-  },
-  "peerDependencies": {
-    "@antv/l7-map": "workspace:^",
-    "@antv/l7-maps": "workspace:^",
-    "@antv/l7-scene": "workspace:^"
   },
   "devDependencies": {
     "@types/gl": "^6.0.5"

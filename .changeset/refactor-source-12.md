@@ -1,5 +1,5 @@
 ---
-'@antv/l7-source': patch
+'@antv/l7-source': minor
 ---
 
 refactor(source): extract ParserRegistry class + defaultRegistry singleton (stage 2.2)

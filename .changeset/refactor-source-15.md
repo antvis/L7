@@ -1,5 +1,5 @@
 ---
-'@antv/l7-source': patch
+'@antv/l7-source': minor
 ---
 
 refactor(source): add createSource factory + registry injection (stage 2.5)

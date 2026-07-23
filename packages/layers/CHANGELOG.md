@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.30.0-beta.0
+
+### Patch Changes
+
+- Updated dependencies [[`9a455f4`](https://github.com/antvis/L7/commit/9a455f42ec057482646a49fde2f5ecd16dd9713a), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f), [`cd654c1`](https://github.com/antvis/L7/commit/cd654c1c16610636a2986e0ffd4ed2224930fc7f)]:
+  - @antv/l7-maps@2.30.0-beta.0
+  - @antv/l7-source@2.30.0-beta.0
+  - @antv/l7-core@2.30.0-beta.0
+  - @antv/l7-utils@2.30.0-beta.0
+
 ## 2.29.1
 
 ### Patch Changes
