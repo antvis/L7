@@ -34,7 +34,7 @@ import rasterTile from './parser/raster-tile';
 import rasterRgb from './parser/rasterRgb';
 import rgb from './parser/rgb';
 import testTile from './parser/testTile';
-import { cluster } from './transform/cluster';
+import { clusterTransform } from './transform/cluster';
 import { filter } from './transform/filter';
 import { aggregatorToGrid } from './transform/grid';
 import { pointToHexbin } from './transform/hexagon';
@@ -65,7 +65,7 @@ export function registerBuiltins(registry: ParserRegistry = defaultRegistry): vo
   registry.registerParser('rasterRgb', rasterRgb);
   registry.registerParser('rgb', rgb);
   registry.registerParser('ndi', ndi);
-  registry.registerTransform('cluster', cluster);
+  registry.registerTransform('cluster', clusterTransform);
   registry.registerTransform('filter', filter);
   registry.registerTransform('join', join);
   registry.registerTransform('map', map);

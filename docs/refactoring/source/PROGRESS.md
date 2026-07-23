@@ -6,14 +6,44 @@
 
 ## 📍 下一步
 
-**阶段 4.2 全部结案**：`DataSourcePlugin` init 迁 `await source.ready`（修复 premature-resolve bug + init 失败 hang→reject）；`ISource` 加 `readonly ready` 契约；4.2 后续评估完成 —— `BaseLayer.ts:1070` 因「同步 ordering load-bearing + 双语义监听不可拆」结论**保持现状**（见 BACKLOG），另发现 `off('update', this.sourceEvent)` 空操作残留（低优先清理）。async lifecycle 阶段（4.1+4.2）收尾。下一价值高地：
+**阶段 4.4 完成（cluster 双路径合并）**：删 `clusterOptions.enable` 死字段（literal `false`，零消费）；`cluster` transform（Path B，broken——Supercluster 被 `Object.assign` 腐蚀 `source.data`，全仓零使用）改注册为 `clusterTransform` deprecation wrapper（warn + delegate，once-guard）；`ClusterManager.init` 仍直调 `cluster()`（Path A 零 warning）；spec 3 case。cluster 逻辑分裂（PLAN P2 诊断 #6）收敛。下一价值高地：
 
-- **阶段 4.4（cluster 双路径合并）**：删 `clusterOptions.enable` 死字段；合并 `cluster: boolean` 与 `transforms:[{type:'cluster'}]` 两条路径为一条（推荐 `cluster` cfg，transform 内 cluster 标 deprecated）—— 中收益，下一主推进。
-- **阶段 4.3（setData async + 版本号增量）**：同 schema 的 `setData` 不重新 parse —— 中收益但风险偏高（setData 运行时热路径），4.4 后推进。
-- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌（可能不弃 `new Source` 本身，仅文档推荐 `create`）。
+- **阶段 4.3（setData async + 版本号增量）**：同 schema 的 `setData` 不重新 parse —— 中收益但风险偏高（setData 运行时热路径），下一主推进。
+- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌。
+- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major。
 - **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
+- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装。
 
 详见 [PLAN.md § 阶段 4](./PLAN.md)。
+
+---
+
+## [阶段 4.4] cluster 双路径合并 — 删 enable 死字段 + cluster transform 标 deprecated（commit 待补）
+
+- **改了什么**：
+  - `packages/core/src/services/source/ISourceService.ts`：`IClusterOptions` 删 `enable: false;`（literal `false` 死字段，零 set/read —— `ClusterManager` 用独立 `this.enabled` boolean，不读 `options.enable`）。
+  - `packages/source/src/cluster-manager.ts`：`options` 默认删 `enable: false,`。
+  - `packages/source/src/transform/cluster.ts`：新增 `clusterTransform(data, option)` —— once-guard `console.warn`（deprecation）+ delegate 到 `cluster()`；保留 `cluster()` 工厂不变。
+  - `packages/source/src/builtins.ts`：`registerTransform('cluster', cluster)` → `registerTransform('cluster', clusterTransform)`；import 同步更新。`cluster-manager.ts` 仍直 `import { cluster }`（Path A 不经注册表，零 warning）。
+  - 新增 `packages/source/__tests__/cluster-deprecation.spec.ts`（3 tests）。
+- **方案（minor：删死字段 patch + deprecation warning 新行为）**：
+  - **双路径诊断**：`cluster()` 实为 Supercluster 工厂，两条消费路径：
+    - **Path A（live 正用）**：`cluster:true` cfg → `ClusterManager.init()` 直调 `cluster()` 建 index 存储。`source.spec.ts` 的 `'source.transform.cluster'` 用此路径（历史命名误导，实际是 cfg.cluster）。
+    - **Path B（broken footgun）**：`transforms:[{type:'cluster'}]` → `executeTrans` 调注册的 transform = `cluster()` → 返回 Supercluster 实例 → `Object.assign(this.data, supercluster)` 腐蚀 `source.data`。全仓 grep `transforms:.*cluster` / `{type:'cluster'}` **零使用**（仅 refactor 文档提及），故未爆发。
+  - **合并方向（保留 Path A 为唯一入口）**：不删 `cluster` transform 注册（会破坏 `parser-registry.spec` 3 处断言 + PLAN 说"标 deprecated"非"删"），改注册为 `clusterTransform` deprecation wrapper：warn（once-guard）+ delegate 旧行为。`ClusterManager.init` 直调 `cluster()`（不经注册表）故 Path A 零 warning、零行为变化。
+  - **`enable` 死字段**：`IClusterOptions.enable` 类型是 literal `false`（设 `true` 本就是 tsc 错），`ClusterManager` 用 `this.enabled` 不读 `options.enable`。删除是纯 patch（零行为变化）。
+  - **行为变化（minor）**：Path B 用户（零存在）首次调 `clusterTransform` 得 `console.warn` deprecation。strictly better（broken 路径从静默腐蚀 → 显式 warn + 旧行为兼容）。Changeset minor。
+- **怎么验证**：
+  - `tsc source 31 / core 0 / layers 229` 基线全不变（`enable` 删除零 tsc 错——`cluster-manager` 用 `this.enabled`，`IClusterOptions` 删字段不影响已注册 transform 签名）。
+  - `eslint --max-warnings 0` + `prettier --check`：5 文件 0 错 0 警（`no-console` disable 删除——rule 不活跃；`require` 改直调避免 `no-require-imports`）。
+  - `jest packages/source`：**102 passed**（99 baseline + 3 cluster-deprecation）。`parser-registry.spec` 6 transform 断言（含 'cluster'）全绿——`clusterTransform` 仍注册为 function；`source.spec` 的 `'source.transform.cluster'`（Path A）零 warning 零回归。
+  - 新 spec 3 case：① `'cluster'` transform 仍注册（getTransform 不抛、typeof function）；② `clusterTransform` 首调 emit warn（once-guard 二次静默）；③ `cluster` 直调无 warn（Path A 零噪音）。
+- **风险/注意**：
+  - **once-guard 模块级**：`clusterTransformDeprecationWarned` 模块 flag，jest 文件级模块隔离保证测试 fresh。生产环境 Path B（如有）首触发即 warn 一次，避免 render 循环 spam。
+  - **`cluster()` 返回类型松**：`cluster()` 无 `pointIndex` 时返 Supercluster（非 `IParserData`），但已注册为 `TransformFn`（`=> IParserData`）—— tsc 宽容（Supercluster 结构兼容或隐式）。4.4 不动此松签名（预存），仅加 wrapper。
+  - **不删 transform 注册**：删会使 `transforms:[{type:'cluster'}]` 抛 `TransformNotFoundError`（2.3）——虽 strictly better 但破坏 parser-registry.spec 断言 + 属 major 级 removal。留 4.5（未来 major）。
+  - **`enable` 删除无外部影响**：全仓零 `clusterOptions.enable` 消费；interface 字段删除对 `Partial<IClusterOptions>` 消费方零影响（无人设 `enable`）。
+- **遗留**：→ 4.5（未来 major）移除 `cluster` transform 注册 + `clusterTransform` wrapper，`transforms:[{type:'cluster'}]` → `TransformNotFoundError`；4.3 setData async + 版本号增量（下一主推进）；4.1b deprecation 收尾。**阶段 4.4 完成 —— cluster 逻辑分裂（PLAN P2 诊断 #6）收敛：死字段清除 + broken Path B 标 deprecated，`cluster:true` cfg 确立为唯一聚合入口。**
 
 ---
 

@@ -218,3 +218,12 @@
 - **建议**：cleanup 时① 把 1070 inline arrow 提取为 `this.onSourceUpdate = ({type}) => {...}` 实例方法，on/off 统一引用；或② 若内联逻辑确需保留，把 off 改为移除实际引用。低优先，需确认无其他代码依赖现状。
 - **状态**：open（低优先清理）
 - **发现于**：阶段 4.2 后续评估
+
+### [阶段 4.5 / 未来 major] 移除 `cluster` transform 注册（`clusterTransform` wrapper 退役）
+
+- **位置**：`packages/source/src/builtins.ts:68` `registry.registerTransform('cluster', clusterTransform)` + `packages/source/src/transform/cluster.ts` 的 `clusterTransform` wrapper
+- **问题**：4.4 把 broken 的 `cluster` transform（Path B，`Object.assign` 腐蚀 `source.data`）改注册为 `clusterTransform` deprecation wrapper（warn + delegate 旧行为），保留向后兼容。但旧行为本身是 broken 的（delegate 仍腐蚀 data），wrapper 只是加 warn 不改 broken 本质。
+- **建议**：未来 major 版本直接移除 `registerTransform('cluster', ...)` —— 届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`（2.3 显式错误），彻底消灭 Path B。需同步更新 `parser-registry.spec.ts` 3 处断言（L92/130/141 的 'cluster' 从 transform 列表移除）。changeset 标 major，发布说明提及。
+- **前置**：4.4 的 deprecation warn 已给消费方迁移信号（`transforms:[{type:'cluster'}]` → `cluster: true` cfg）。观察 1-2 个 minor 周期无人申诉后再 major 移除。
+- **状态**：open（待 major 周期）
+- **发现于**：阶段 4.4

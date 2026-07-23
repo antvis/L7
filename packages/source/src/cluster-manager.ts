@@ -34,7 +34,6 @@ export class ClusterManager {
 
   /** 聚合配置（对应 ISource.clusterOptions，含运行时 zoom 字段） */
   public options: Partial<IClusterOptions> = {
-    enable: false,
     radius: 40,
     maxZoom: 20,
     zoom: -99,

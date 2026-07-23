@@ -98,7 +98,6 @@ export interface ISourceCFG {
   transforms?: ITransform[];
 }
 export interface IClusterOptions {
-  enable: false;
   radius: number;
   maxZoom: number;
   minZoom: number;
