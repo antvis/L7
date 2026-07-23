@@ -24,7 +24,7 @@ TileLoader / 3.2 raster / 3.3 image / 3.4 CustomDataProvider）全部完成**；
 
 详见 [PLAN.md § 阶段 3/4/5](./PLAN.md)。
 
-## [阶段 3.2.2] RasterTileLoader 6 分支 switch 拆 4 loader + 接口化（commit 待补）
+## [阶段 3.2.2] RasterTileLoader 6 分支 switch 拆 4 loader + 接口化（commit 0ce4700）
 
 - **改了什么（5 文件）**：
   - 新增 `packages/source/src/loader/raster/image-raster-loader.ts` — `ImageRasterLoader`
