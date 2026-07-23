@@ -345,18 +345,103 @@ Destroy the source and release related resources.
 source.destroy();
 ```
 
+### create(data, cfg?) Async Factory
+
+`Source.create` is an async factory method that internally `await`s source initialization (parse + cluster init + transforms) before returning. Unlike `new Source(data, cfg)` (fire-and-forget init), the instance returned by `create` has `data` already resolved and ready to read, eliminating the race where `source.data` could be `undefined`.
+
+- `data` data, same as source initialization parameter
+- `cfg` config, same as source initialization parameter
+- Returns `Promise<Source>`
+
+```javascript
+const source = await Source.create(data, { parser: { type: 'json', x: 'lng', y: 'lat' } });
+// source.data is now parsed, no undefined race
+```
+
+### createSource(data, cfg?, registry?) Sync Factory
+
+`createSource` is a sync factory function behaviorally equivalent to `new Source`, returning a source instance (init remains fire-and-forget). The optional third `registry` parameter injects a custom `ParserRegistry` instance for subset registration or test isolation.
+
+- `data` data, same as source initialization parameter
+- `cfg` config, same as source initialization parameter
+- `registry` (optional) custom parser/transform registry, defaults to the built-in `defaultRegistry`
+
+```javascript
+import { createSource } from '@antv/l7-source';
+
+const source = createSource(data, { parser: { type: 'geojson' } });
+```
+
+### ready Readonly Property
+
+`source.ready` is a `Promise<void>` that resolves when source initialization is complete (`inited === true` and data parsed). Consumers can `await source.ready` to eliminate the `source.data` race.
+
+```javascript
+const source = new Source(data);
+await source.ready;
+// source.data is ready
+```
+
+### stats() Get Data Snapshot
+
+Returns a read-only snapshot of the current source data, useful for debugging and size monitoring. Does not affect internal state.
+
+Returns an `ISourceStats` object:
+
+- `rows: number` parsed data row count (`data.dataArray.length`)
+- `bbox: BBox` data bounds `[minLng, minLat, maxLng, maxLat]`
+- `parserType: string` current parser type (e.g. `'geojson'`, `'mvt'`)
+- `tileCount: number` loaded tile count (`0` for non-tile sources or before viewport update)
+- `isTile: boolean` whether this is a tile data source
+- `cluster: boolean` whether clustering is enabled
+- `dataVersion: number` data generation (see below)
+
+```javascript
+const stats = source.stats();
+console.log(stats.rows, stats.parserType, stats.tileCount);
+```
+
+### dataVersion Data Version
+
+`dataVersion` is a monotonically increasing data generation counter, incremented on each operation that may change the data:
+
+- `+1` after `setData` (full data replacement)
+- `+1` after `updateFeaturePropertiesById` (in-place property mutation)
+- NOT bumped by `updateClusterData` (zoom-driven cluster view recompute, origin data unchanged)
+- Initial parse on construction is generation `0`
+
+Useful for detecting whether data has changed and avoiding redundant processing.
+
+```javascript
+const v1 = source.dataVersion;
+source.setData(newData);
+const v2 = source.dataVersion; // v2 === v1 + 1
+```
+
 ## Events
 
-| Event  | Description                                       |
-| ------ | ------------------------------------------------- |
-| inited | Triggered after source initialization is complete |
-| update | Triggered when source data is updated             |
+| Event  | Description                                          |
+| ------ | ---------------------------------------------------- |
+| inited | Triggered after source initialization is complete    |
+| update | Triggered when source data is updated                |
+| error  | Triggered when data init or `setData` re-parse fails |
 
 ```javascript
 source.on('update', () => {
   console.log('source data updated');
 });
 ```
+
+Listen to `error` to surface `setData` failures (previously silently hung):
+
+```javascript
+source.on('error', (err) => {
+  console.error('source data update failed', err);
+});
+source.setData(newData);
+```
+
+> Note: `new Source(data, cfg)` construction-time init failure remains fire-and-forget (unhandled rejection, old behavior preserved). To observe construction-time failures, use `await Source.create(...)` or `await source.ready` (rejects on failure).
 
 ## Source update
 

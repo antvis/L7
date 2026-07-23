@@ -347,6 +347,79 @@ const parserType = source.getParserType(); // 如 'geojson', 'json', 'csv', 'mvt
 source.destroy();
 ```
 
+### create(data, cfg?) 异步工厂方法
+
+`Source.create` 是异步工厂方法，内部 `await` source 初始化（parse + cluster 初始化 + transforms）完成后返回。相比 `new Source(data, cfg)` 的 fire-and-forget 初始化，`create` 返回的实例 `data` 已就绪，可直接读取，消除 `source.data` 可能为 `undefined` 的竞态。
+
+- `data` 数据，同 source 初始化参数
+- `cfg` 配置项，同 source 初始化参数
+- 返回 `Promise<Source>`
+
+```javascript
+const source = await Source.create(data, { parser: { type: 'json', x: 'lng', y: 'lat' } });
+// 此时 source.data 已解析完成，无 undefined 竞态
+```
+
+### createSource(data, cfg?, registry?) 同步工厂
+
+`createSource` 与 `new Source` 行为等价的同步工厂函数，返回 source 实例（初始化仍为 fire-and-forget）。第三个可选参数 `registry` 可注入自定义 `ParserRegistry` 实例，按需子集注册 parser / transform 或做测试隔离。
+
+- `data` 数据，同 source 初始化参数
+- `cfg` 配置项，同 source 初始化参数
+- `registry`（可选）自定义 parser / transform 注册表，默认使用内置 `defaultRegistry`
+
+```javascript
+import { createSource } from '@antv/l7-source';
+
+const source = createSource(data, { parser: { type: 'geojson' } });
+```
+
+### ready 只读属性
+
+`source.ready` 是一个 `Promise<void>`，resolve 时 source 初始化完成（`inited === true` 且数据已解析）。可在消费侧 `await source.ready` 消除 `source.data` 竞态。
+
+```javascript
+const source = new Source(data);
+await source.ready;
+// source.data 已就绪
+```
+
+### stats() 获取数据快照
+
+返回 source 当前数据的只读快照，便于调试与大小监控。不影响 source 内部状态。
+
+返回 `ISourceStats` 对象：
+
+- `rows: number` 已解析数据行数（`data.dataArray.length`）
+- `bbox: BBox` 数据范围 `[minLng, minLat, maxLng, maxLat]`
+- `parserType: string` 当前解析器类型（如 `'geojson'`、`'mvt'`）
+- `tileCount: number` 已加载瓦片数（非瓦片源或未触发视口更新时为 `0`）
+- `isTile: boolean` 是否为瓦片数据源
+- `cluster: boolean` 是否开启聚合
+- `dataVersion: number` 数据 generation（见下）
+
+```javascript
+const stats = source.stats();
+console.log(stats.rows, stats.parserType, stats.tileCount);
+```
+
+### dataVersion 数据版本号
+
+`dataVersion` 是单调递增的数据 generation 计数器，每次「数据可能变化」的操作 `+1`：
+
+- `setData`（全量数据替换）后 `+1`
+- `updateFeaturePropertiesById`（原地属性变更）后 `+1`
+- `updateClusterData`（zoom 驱动的聚合视图重算，原始数据未变）**不** bump
+- 构造期首次解析为 generation `0`
+
+可用于判断数据是否已变化、避免重复处理。
+
+```javascript
+const v1 = source.dataVersion;
+source.setData(newData);
+const v2 = source.dataVersion; // v2 === v1 + 1
+```
+
 ## Source 更新
 
 如果数据发生改变，可以需要更新数据。
@@ -397,3 +470,17 @@ source.on('update', (e) => {
   }
 });
 ```
+
+### error
+
+数据初始化或更新失败事件。当 `setData` 触发的 re-parse / cluster 初始化 / transform 执行失败时触发，payload 为错误对象。使用 `setData` 时建议监听 `error` 事件以感知失败（旧版本失败会静默 hang，现为显式 surfacing）。
+
+```javascript
+const source = layer.getSource();
+source.on('error', (err) => {
+  console.error('source 数据更新失败', err);
+});
+source.setData(newData);
+```
+
+> 注：`new Source(data, cfg)` 构造期 init 失败仍为 fire-and-forget（未捕获 rejection，保留旧行为）。若需感知构造期失败，使用 `await Source.create(...)` 或 `await source.ready`（失败时 reject）。
