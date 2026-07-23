@@ -34,5 +34,5 @@
   "sideEffects": true,
   "types": "es/index.d.ts",
   "unpkg": "dist/l7.js",
-  "version": "2.29.1"
+  "version": "2.30.0-beta.0"
 }

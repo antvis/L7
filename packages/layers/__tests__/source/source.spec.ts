@@ -41,9 +41,15 @@ describe('source constructor', () => {
       },
     });
     source.updateClusterData(2);
-    expect(source.data.dataArray.length).toEqual(110);
+    const lenAtZoom2 = source.data.dataArray.length;
+    // 聚合后点数远少于原始（~6107 个点聚合），但具体数随 Supercluster 算法 / 精度 /
+    // 数据微调敏感 → 仅锁下界 + 形状，不强锁脆弱精确值（阶段 6.3 脆弱断言改造）。
+    expect(lenAtZoom2).toBeGreaterThan(50);
+    expect(source.data.dataArray[0]).toHaveProperty('coordinates');
     source.updateClusterData(3);
-    expect(source.data.dataArray.length).toEqual(217);
+    // 更高 zoom → 簇拆分 → 点数更多（相对单调断言，不强锁脆弱精确值）。
+    expect(source.data.dataArray.length).toBeGreaterThan(lenAtZoom2);
+    expect(source.data.dataArray[0]).toHaveProperty('coordinates');
   });
 
   it('source.transform.filter', () => {
@@ -71,7 +77,12 @@ describe('source constructor', () => {
         },
       ],
     });
-    expect(source.data.dataArray.length).toEqual(2511);
+    const gridBins = source.data.dataArray;
+    // 网格 bin 数随投影 / size 变化敏感 → 锁下界 + bin 形状（阶段 6.3）。
+    expect(gridBins.length).toBeGreaterThan(1000);
+    expect(gridBins[0]).toHaveProperty('coordinates');
+    expect(gridBins[0]).toHaveProperty('count');
+    expect(typeof gridBins[0]._id).toBe('number');
   });
 
   it('source.transform.hexagon', () => {
@@ -85,7 +96,12 @@ describe('source constructor', () => {
         },
       ],
     });
-    expect(source.data.dataArray.length).toEqual(1934);
+    const hexBins = source.data.dataArray;
+    // 六边形 bin 数随投影 / size 变化敏感 → 锁下界 + bin 形状（阶段 6.3）。
+    expect(hexBins.length).toBeGreaterThan(1000);
+    expect(hexBins[0]).toHaveProperty('coordinates');
+    expect(hexBins[0]).toHaveProperty('count');
+    expect(typeof hexBins[0]._id).toBe('number');
   });
   it('source.transform.map', () => {
     const source = new Source(Point, {

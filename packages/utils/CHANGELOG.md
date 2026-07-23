@@ -1,5 +1,7 @@
 # Change Log
 
+## 2.30.0-beta.0
+
 ## 2.29.1
 
 ### Patch Changes

@@ -1,10 +1,10 @@
 /**
  * MapboxService
  */
-import type { Bounds, IEarthService, IMercator, IViewport } from '@antv/l7-core';
+import type { Bounds, IEarthService, IMercator } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
+import MapboxBaseMap from '../lib/mapbox-base-map';
 import { Map, MercatorCoordinate } from '../mapbase';
-import BaseMapService from '../utils/BaseMapService';
 import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;
@@ -19,7 +19,7 @@ const LNGLAT_OFFSET_ZOOM_THRESHOLD = 12;
 /**
  * EarthService
  */
-export default class L7EarthService extends BaseMapService<Map> implements IEarthService {
+export default class L7EarthService extends MapboxBaseMap<Map> implements IEarthService {
   public lngLatToMercator(lnglat: [number, number], altitude: number): IMercator {
     const { x = 0, y = 0, z = 0 } = MercatorCoordinate.fromLngLat(lnglat, altitude);
     return { x, y, z };
@@ -115,9 +115,9 @@ export default class L7EarthService extends BaseMapService<Map> implements IEart
 
     this.viewport = new Viewport();
 
-    this.$mapContainer = this.creatMapContainer(id);
+    this.mapContainer = this.creatMapContainer(id);
     this.map = new Map({
-      container: this.$mapContainer,
+      container: this.mapContainer,
       bearing: rotation,
       ...rest,
     });
@@ -132,31 +132,17 @@ export default class L7EarthService extends BaseMapService<Map> implements IEart
 
   public destroy() {
     // 销毁地图可视化层的容器
-    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
 
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();
-      this.$mapContainer = null;
+      this.mapContainer = null;
     }
-  }
-  public emit(name: string, ...args: any[]) {
-    this.eventEmitter.emit(name, ...args);
-  }
-  public once(name: string, ...args: any[]) {
-    this.eventEmitter.once(name, ...args);
-  }
-
-  public getMapContainer() {
-    return this.$mapContainer;
   }
 
   public getCanvasOverlays() {
     return undefined;
-  }
-
-  public onCameraChanged(callback: (viewport: IViewport) => void): void {
-    this.cameraChangedCallback = callback;
   }
 
   /**
@@ -178,7 +164,7 @@ export default class L7EarthService extends BaseMapService<Map> implements IEart
         viewportWidth: this.map.transform.width,
       });
 
-      this.cameraChangedCallback(this.viewport);
+      this.cameraChangedCallback?.(this.viewport);
     }
   }
 
@@ -229,6 +215,6 @@ export default class L7EarthService extends BaseMapService<Map> implements IEart
       this.coordinateSystemService.setCoordinateSystem(CoordinateSystem.LNGLAT);
     }
 
-    this.cameraChangedCallback(this.viewport);
+    this.cameraChangedCallback?.(this.viewport);
   };
 }

@@ -13,8 +13,8 @@ import type {
 import { MapServiceEvent } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
+import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
-import BaseMapService from '../utils/BaseMapService';
 import { toPaddingOptions } from '../utils/utils';
 import BMapGLLoader from './bmapglloader';
 import './logo.css';
@@ -30,13 +30,14 @@ const EventMap: {
 
 const BMAP_VERSION: string = '1.0';
 
-// TODO: 基于抽象类 BaseMap 实现，补全缺失方法，解决类型问题
-export default class BMapService extends BaseMapService<BMapGL.Map> {
+export default class BMapService extends BaseMap<BMapGL.Map> {
   protected viewport: IViewport;
   protected styleConfig: Record<string, any> = {
     normal: [],
   };
   protected currentStyle: any = 'normal';
+
+  public version: string = BMAP_VERSION;
 
   // Zoom 偏移量，用于对齐不同地图的显示层级
   protected zoomOffset: number = 1.75;
@@ -77,7 +78,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     if (this.viewport) {
       this.viewport.syncWithMapCamera(option as any);
       this.updateCoordinateSystemService();
-      this.cameraChangedCallback(this.viewport);
+      this.cameraChangedCallback?.(this.viewport);
     }
   };
 
@@ -119,7 +120,7 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     if (mapInstance) {
       // @ts-ignore
       this.map = mapInstance;
-      this.$mapContainer = this.map.getContainer();
+      this.mapContainer = this.map.getContainer();
       const point = new BMapGL.Point(center[0], center[1]);
       // false，表示用户未执行centerAndZoom进行地图初始渲染
       // @ts-ignore
@@ -147,10 +148,10 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
       let mapChildNodes = [...mapContainer.childNodes];
       // @ts-ignore
       const map = new BMapGL.Map(mapContainer, mapConstructorOptions);
-      this.$mapContainer = map.getContainer();
+      this.mapContainer = map.getContainer();
 
       mapChildNodes.forEach((child) => {
-        this.$mapContainer!.appendChild(child);
+        this.mapContainer!.appendChild(child);
       });
       // @ts-ignore
       mapChildNodes = null;
@@ -271,6 +272,14 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
     return this.map.getMaxZoom();
   }
 
+  public setMaxZoom(max: number): void {
+    this.map.setMaxZoom?.(max);
+  }
+
+  public setMinZoom(min: number): void {
+    this.map.setMinZoom?.(min);
+  }
+
   // get map params
   public getType() {
     return 'bmap';
@@ -321,6 +330,10 @@ export default class BMapService extends BaseMapService<BMapGL.Map> {
 
   public getMapCanvasContainer(): HTMLElement {
     return this.getMap().getContainer();
+  }
+
+  public getMapStyle(): string {
+    return '';
   }
 
   public getMapStyleConfig(): MapStyleConfig {

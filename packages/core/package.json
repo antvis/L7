@@ -1,6 +1,6 @@
 {
   "name": "@antv/l7-core",
-  "version": "2.29.1",
+  "version": "2.30.0-beta.0",
   "description": "",
   "license": "MIT",
   "author": "https://github.com/orgs/antvis/people",
@@ -27,13 +27,11 @@
     "@turf/helpers": "^6.1.4",
     "eventemitter3": "^4.0.0",
     "gl-matrix": "^3.1.0",
-    "hammerjs": "^2.0.8",
-    "viewport-mercator-project": "^6.2.1"
+    "hammerjs": "^2.0.8"
   },
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
-    "@types/hammerjs": "^2.0.46",
-    "@types/viewport-mercator-project": "^6.1.0"
+    "@types/hammerjs": "^2.0.46"
   },
   "publishConfig": {
     "access": "public",

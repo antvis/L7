@@ -3,13 +3,12 @@
  */
 import type { IMercator } from '@antv/l7-core';
 import { mat4, vec3 } from 'gl-matrix';
+import MapboxBaseMap from '../lib/mapbox-base-map';
 import Viewport from '../lib/web-mercator-viewport';
 import { Map, MercatorCoordinate } from '../mapbase';
 import { MapType } from '../types';
-import BaseMapService from '../utils/BaseMapService';
 
-// TODO: 基于抽象类 BaseMap 实现
-export default class DefaultMapService extends BaseMapService<Map> {
+export default class DefaultMapService extends MapboxBaseMap<Map> {
   public version: string = MapType.DEFAULT;
   /**
    * 将经纬度转成墨卡托坐标
@@ -85,11 +84,11 @@ export default class DefaultMapService extends BaseMapService<Map> {
     if (mapInstance) {
       // @ts-ignore
       this.map = mapInstance;
-      this.$mapContainer = this.map.getContainer();
+      this.mapContainer = this.map.getContainer();
     } else {
-      this.$mapContainer = this.creatMapContainer(id);
+      this.mapContainer = this.creatMapContainer(id);
       this.map = new Map({
-        container: this.$mapContainer,
+        container: this.mapContainer,
         bearing: rotation,
         version: version,
         mapSize: mapSize,
@@ -114,10 +113,7 @@ export default class DefaultMapService extends BaseMapService<Map> {
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
-    let wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      wrapper = document.getElementById(id) as HTMLDivElement;
-    }
+    const wrapper = super.creatMapContainer(id);
     const container = document.createElement('div');
     container.style.cssText += `
       position: absolute;
@@ -135,8 +131,8 @@ export default class DefaultMapService extends BaseMapService<Map> {
 
   public setBgColor(color: string) {
     this.bgColor = color;
-    if (this.$mapContainer) {
-      this.$mapContainer.style.backgroundColor = color;
+    if (this.mapContainer) {
+      this.mapContainer.style.backgroundColor = color;
     }
   }
 

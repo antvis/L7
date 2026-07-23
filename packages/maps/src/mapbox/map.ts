@@ -6,15 +6,14 @@ import { mat4, vec3 } from 'gl-matrix';
 import type { Map } from 'mapbox-gl';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import MapboxBaseMap from '../lib/mapbox-base-map';
 import Viewport from '../lib/web-mercator-viewport';
 import type { IMapboxInstance } from '../types';
-import BaseMapService from '../utils/BaseMapService';
 window.mapboxgl = mapboxgl;
 
 let mapdivCount = 0;
 
-// TODO: 基于抽象类 BaseMap 实现
-export default class MapboxService extends BaseMapService<Map & IMapboxInstance> {
+export default class MapboxService extends MapboxBaseMap<Map & IMapboxInstance> {
   public version: string = 'MAPBOX';
   // get mapStatus method
 
@@ -119,12 +118,12 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
     if (mapInstance) {
       // @ts-ignore
       this.map = mapInstance;
-      this.$mapContainer = this.map.getContainer();
+      this.mapContainer = this.map.getContainer();
     } else {
-      this.$mapContainer = this.creatMapContainer(id);
+      this.mapContainer = this.creatMapContainer(id);
       // @ts-ignore
       this.map = new window.mapboxgl.Map({
-        container: this.$mapContainer,
+        container: this.mapContainer,
         style: this.getMapStyleValue(style),
         attributionControl,
         bearing: rotation,
@@ -143,23 +142,13 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
 
   public destroy() {
     // 销毁地图可视化层的容器
-    this.$mapContainer?.parentNode?.removeChild(this.$mapContainer);
+    this.mapContainer?.parentNode?.removeChild(this.mapContainer);
 
     this.eventEmitter.removeAllListeners();
     if (this.map) {
       this.map.remove();
-      this.$mapContainer = null;
+      this.mapContainer = null;
     }
-  }
-  public emit(name: string, ...args: any[]) {
-    this.eventEmitter.emit(name, ...args);
-  }
-  public once(name: string, ...args: any[]) {
-    this.eventEmitter.once(name, ...args);
-  }
-
-  public getMapContainer() {
-    return this.$mapContainer;
   }
 
   public getCanvasOverlays() {
@@ -202,10 +191,7 @@ export default class MapboxService extends BaseMapService<Map & IMapboxInstance>
   }
 
   protected creatMapContainer(id: string | HTMLDivElement) {
-    let $wrapper = id as HTMLDivElement;
-    if (typeof id === 'string') {
-      $wrapper = document.getElementById(id) as HTMLDivElement;
-    }
+    const $wrapper = super.creatMapContainer(id);
     const $amapdiv = document.createElement('div');
     $amapdiv.style.cssText += `
       position: absolute;

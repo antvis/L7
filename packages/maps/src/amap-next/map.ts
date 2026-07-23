@@ -275,10 +275,6 @@ export default class AMapService extends BaseMap<AMap.Map> {
     ];
   }
 
-  public getMapContainer() {
-    return this.mapContainer;
-  }
-
   public getMapCanvasContainer(): HTMLElement {
     return this.map.getContainer()?.getElementsByClassName('amap-maps')[0] as HTMLElement;
   }

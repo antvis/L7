@@ -4,6 +4,7 @@
  */
 import type { IParseDataItem, IParserData, ITransform } from '@antv/l7-core';
 import { Satistics, aProjectFlat } from '@antv/l7-utils';
+import type { IGridTransformCfg } from './types';
 
 interface IGridHash {
   [key: string]: { count: number; points: IParseDataItem[] };
@@ -13,8 +14,9 @@ const R_EARTH = 6378000;
 const SQRT2 = Math.sqrt(2);
 
 export function aggregatorToGrid(data: IParserData, option: ITransform) {
+  const cfg = option as IGridTransformCfg;
   const dataArray = data.dataArray;
-  const { size = 10, method = 'sum' } = option;
+  const { size = 10, method = 'sum' } = cfg;
 
   // 计算网格的像素大小（与 hexagon 一致的计算方式）
   const pixlSize = ((size / (2 * Math.PI * R_EARTH)) * (256 << 20)) / 2;
@@ -51,8 +53,8 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
     const [colIdx, rowIdx] = key.split('-').map(Number);
     const item: Record<string, any> = {};
 
-    if (option.field && method) {
-      const columns = Satistics.getColumn(gridData.points, option.field);
+    if (cfg.field && method) {
+      const columns = Satistics.getColumn(gridData.points, cfg.field);
       item[method] = Satistics.statMap[method](columns);
     }
 
@@ -62,7 +64,7 @@ export function aggregatorToGrid(data: IParserData, option: ITransform) {
 
     return {
       ...item,
-      [option.method || 'sum']: item[method],
+      [cfg.method || 'sum']: item[method],
       count: gridData.count,
       rawData: gridData.points,
       coordinates: [centerX, centerY],
