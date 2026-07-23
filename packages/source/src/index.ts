@@ -1,6 +1,13 @@
 import Source from './base-source';
 import { registerBuiltins } from './builtins';
 import { rasterDataTypes } from './parser/raster-tile';
+export {
+  calculateRelativeOrigin,
+  convertToAbsoluteCoordinates,
+  convertToRelativeCoordinates,
+  processRelativeCoordinates,
+} from '@antv/l7-utils';
+export type { IRelativeCoordinateOptions, IRelativeCoordinateResult } from '@antv/l7-utils';
 export { registerBuiltins } from './builtins';
 export { createSource } from './create-source';
 export {
@@ -15,7 +22,6 @@ export {
 } from './factory';
 export * from './interface';
 export * from './tile-source/index';
-export * from './utils/relative-coordinates';
 export { rasterDataTypes };
 
 // 模块初始化副作用：注册全部 13 内置 parser + 6 内置 transform 到 defaultRegistry

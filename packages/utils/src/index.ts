@@ -12,6 +12,7 @@ export * from './lineAtOffset';
 export * from './lodash-adapter';
 export * from './lru_cache';
 export * from './math';
+export * from './relative-coordinates';
 export * as Satistics from './statistics';
 export * from './tileset-manager';
 

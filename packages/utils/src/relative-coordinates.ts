@@ -1,17 +1,25 @@
 /**
  * 相对坐标系工具
- * 用于在Layer层实现高精度坐标转换
+ * 用于在 Layer 层实现高精度坐标转换
+ *
+ * 阶段 5.1 从 `@antv/l7-source` 迁入 `@antv/l7-utils`（解耦 `IParseDataItem` 类型依赖：
+ * utils 无 `@antv/l7-core` 依赖，`core→utils` 故 utils→core 会循环）。用泛型
+ * `<T extends { coordinates?: any[] }>` 解耦 —— 函数仅用 `item.coordinates`，不改其形状，
+ * 故 `T` 透传到返回类型 `IRelativeCoordinateResult<T>.dataArray: T[]`，消费方（如
+ * `BaseLayer` 传 `IParseDataItem[]`）获 `T = IParseDataItem`，`result.dataArray` 仍是
+ * `IParseDataItem[]`，可安全赋回 `data.dataArray: IParseDataItem[]`（零 type 涟漪）。
+ * `coordinates` 内部仍按 `any[]` 处理（与迁移前 `IParseDataItem.coordinates: any[]` 同），
+ * 递归 `coords[0]`/`coords[1]`/`Array.isArray` 等零摩擦。`@antv/l7-source` 仍 re-export
+ * 过渡一个 minor（保公开 API），未来 major 移除。
  */
-
-import type { IParseDataItem } from '../interface';
 
 export interface IRelativeCoordinateOptions {
   enableRelativeCoordinates?: boolean;
   relativeOrigin?: [number, number];
 }
 
-export interface IRelativeCoordinateResult {
-  dataArray: IParseDataItem[];
+export interface IRelativeCoordinateResult<T> {
+  dataArray: T[];
   relativeOrigin: [number, number];
   originalExtent: [number, number, number, number];
 }
@@ -19,7 +27,9 @@ export interface IRelativeCoordinateResult {
 /**
  * 计算数据的边界框中心点作为相对坐标原点
  */
-export function calculateRelativeOrigin(dataArray: IParseDataItem[]): [number, number] {
+export function calculateRelativeOrigin<T extends { coordinates?: any[] }>(
+  dataArray: T[],
+): [number, number] {
   let minLng = Infinity;
   let maxLng = -Infinity;
   let minLat = Infinity;
@@ -58,10 +68,10 @@ export function calculateRelativeOrigin(dataArray: IParseDataItem[]): [number, n
 /**
  * 将坐标转换为相对坐标
  */
-export function convertToRelativeCoordinates(
-  dataArray: IParseDataItem[],
+export function convertToRelativeCoordinates<T extends { coordinates?: any[] }>(
+  dataArray: T[],
   relativeOrigin: [number, number],
-): IParseDataItem[] {
+): T[] {
   const [originLng, originLat] = relativeOrigin;
 
   return dataArray.map((item) => {
@@ -91,10 +101,10 @@ export function convertToRelativeCoordinates(
 /**
  * 将相对坐标转换回绝对坐标（用于交互计算）
  */
-export function convertToAbsoluteCoordinates(
-  dataArray: IParseDataItem[],
+export function convertToAbsoluteCoordinates<T extends { coordinates?: any[] }>(
+  dataArray: T[],
   relativeOrigin: [number, number],
-): IParseDataItem[] {
+): T[] {
   const [originLng, originLat] = relativeOrigin;
 
   return dataArray.map((item) => {
@@ -124,10 +134,10 @@ export function convertToAbsoluteCoordinates(
 /**
  * 处理相对坐标转换的主函数
  */
-export function processRelativeCoordinates(
-  dataArray: IParseDataItem[],
+export function processRelativeCoordinates<T extends { coordinates?: any[] }>(
+  dataArray: T[],
   options: IRelativeCoordinateOptions = {},
-): IRelativeCoordinateResult {
+): IRelativeCoordinateResult<T> {
   const { enableRelativeCoordinates = false, relativeOrigin: customOrigin } = options;
 
   if (!enableRelativeCoordinates) {

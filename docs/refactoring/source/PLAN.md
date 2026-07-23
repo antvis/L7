@@ -90,10 +90,10 @@ utils/           bandOperation/ tile/ csv/hexbin/relative-coordinates/statistics
 
 ### 阶段 5 — 包边界修复
 
-- 5.1 `relative-coordinates.ts` 迁出 `@antv/l7-source`（**scoping 评估已完成，方案修订，见 PROGRESS [阶段 5.1 scoping]**）。**关键发现（依赖图勘探）**：`core→utils`、`source→{core,utils}`、`layers→{core,source,utils}`。
+- 5.1 ☑ `relative-coordinates.ts` 迁出 `@antv/l7-source`（**scoping 评估已完成，方案修订，见 PROGRESS [阶段 5.1 scoping]；执行完成见 PROGRESS [阶段 5.1]**）。**关键发现（依赖图勘探）**：`core→utils`、`source→{core,utils}`、`layers→{core,source,utils}`。
   - **Approach A（target=`@antv/l7-layers`）**：layers 已有 core（拿 `IParseDataItem`），唯一消费方 `BaseLayer.ts:42` 在 layers → 改本地 import。**但 source→layers re-export 循环**（layers→source 已存在）→ 「type re-export 过渡」**不可能** → source 公开导出须**彻底移除** = breaking（major 级 API 移除），与「major removal 留未来」纪律冲突。❌
   - **Approach B（target=`@antv/l7-utils`，推荐）**：utils 无 l7 依赖（`core→utils` 故 utils→core 会循环）→ 须**解耦 `IParseDataItem` 类型依赖**（函数仅用 `item.coordinates`，改泛型 `<T extends {coordinates?: unknown}>` 或本地 minimal interface `IRelativeDataItem`）。source `export {...} from '@antv/l7-utils'` re-export（source→utils 已存在，**过渡保公开 API**，minor-safe）✓；BaseLayer 改 `import from '@antv/l7-utils'`（layers→utils）✓。**代价**：`IRelativeCoordinateResult.dataArray` 类型由 `IParseDataItem[]` 变 `T[]`/`IRelativeDataItem[]`（公开 type 涟漪，需 `IRelativeCoordinateResult<T=...>` 默认值或接受 type 收窄；BaseLayer 消费 `result.dataArray`/`relativeOrigin`/`originalExtent` 结构访问不受影响）。**推荐 B**：保 minor-safe + 符合 PLAN 原「re-export 过渡」意图。
-- 5.2 source 只关心「数据结构 + 坐标语义」，`processRelativeCoordinates` 改由 layer 拿到 dataArray 后自行调用（5.1 Approach B 落地后，`BaseLayer.processRelativeCoordinates()` 已自 `@antv/l7-utils` 取函数 = layer 自调；source 不再持有 layer-concern 坐标变换逻辑）
+- 5.2 ☑ source 只关心「数据结构 + 坐标语义」，`processRelativeCoordinates` 改由 layer 拿到 dataArray 后自行调用（5.1 Approach B 落地后，`BaseLayer.processRelativeCoordinates()` 已自 `@antv/l7-utils` 取函数 = layer 自调；source 不再持有 layer-concern 坐标变换逻辑 —— **阶段 5 收尾**）
 
 ### 阶段 6 — 测试 & 性能 & 不可变（持续）
 

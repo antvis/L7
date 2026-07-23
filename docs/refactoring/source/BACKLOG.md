@@ -263,7 +263,7 @@
 - **状态**：open（待 major 周期）
 - **发现于**：阶段 4.4
 
-### [阶段 5.1 scoping] relative-coordinates 迁出 source — Approach B 类型设计待决
+### [阶段 5.1 scoping→exec] relative-coordinates 迁出 source — Approach B 已执行（泛型取代 minimal interface）
 
 - **位置**：`packages/source/src/utils/relative-coordinates.ts`（待迁出）→ 目标
   `@antv/l7-utils/src/relative-coordinates.ts`；消费方 `packages/layers/src/core/BaseLayer.ts:42`。
@@ -284,5 +284,13 @@
   BaseLayer 消费 `result.dataArray`/`relativeOrigin`/`originalExtent` 均结构访问不受影响。
   source re-export `export { ... } from '@antv/l7-utils'` + `export type { ... }` 过渡一个 minor，
   未来 major 可移除 re-export（届时 `@antv/l7-source` 不再导出 relative-coordinates）。
-- **状态**：scoping done（方案修订记 PLAN/PROGRESS）；执行待下一「继续」
-- **发现于**：阶段 5.1 scoping
+- **状态**：已执行（阶段 5.1，Approach B 落地）。**类型设计最终 = 泛型 `<T extends { coordinates?: any[] }>`**（非 scoping 草拟的 minimal interface —— 执行期发现 BaseLayer:1423 把 result.dataArray 赋回 `IParseDataItem[]` 字段，minimal `IRelativeDataItem[]` 缺 `_id` 会 tsc 失败，故改泛型保 `T=IParseDataItem` 零涟漪）。source re-export 过渡保公开 API（minor-safe），未来退役见下方新条目。
+- **发现于**：阶段 5.1 scoping → exec
+
+### [阶段 5.1 / 未来 minor·major] source re-export relative-coordinates 退役（transitional）
+
+- **位置**：`packages/source/src/index.ts` 的 `export { calculateRelativeOrigin, convertToAbsoluteCoordinates, convertToRelativeCoordinates, processRelativeCoordinates } from '@antv/l7-utils'; export type { IRelativeCoordinateOptions, IRelativeCoordinateResult } from '@antv/l7-utils';`
+- **问题**：5.1 把 `relative-coordinates` 迁 `@antv/l7-utils` 后，source 仍 re-export 该 4 函数 + 2 interface 作 transitional 公开 API（保 `@antv/l7-source` 既有导出面，minor-safe）。此 re-export 是过渡桥，长期不应留（source 不该导出 utils 的内容）。
+- **建议**：未来 minor（若经 changeset 评估外部 `from '@antv/l7-source'` 取 relative-coordinates 的消费方为零/可迁）或 major 周期移除 source 的这 6 行 re-export ——届时 `from '@antv/l7-source'` 取 relative-coordinates 的外部代码须改 `from '@antv/l7-utils'`。需 changeset 记 minor/major + 发布说明提及。
+- **状态**：open（transitional，待评估外部采用后退役）
+- **发现于**：阶段 5.1 执行

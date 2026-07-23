@@ -6,26 +6,65 @@
 
 ## 📍 下一步
 
-**阶段 3.2.2 完成（= 阶段 3 loader 解耦弧全程收敛）**：`RasterTileLoader` 6 分支 switch
-拆 4 独立小 loader + `IRasterTileLoader` 接口（见下方条目）。**阶段 3 主题（3.1 矢量
-TileLoader / 3.2 raster / 3.3 image / 3.4 CustomDataProvider）全部完成**；阶段 4 主题
-亦已于 4.1b 收敛。下一价值高地：
+**阶段 5.1/5.2 完成（= 阶段 5 包边界修复收尾）**：`relative-coordinates.ts` 迁出
+source → `@antv/l7-utils`（泛型解耦 + source re-export 过渡 + BaseLayer 自 utils 取函数，
+见下方条目）。**阶段 5 主题全部完成**；阶段 3/4 亦已全程收敛。至此 PLAN 阶段 0-5 的
+实质性重构点（0.x 命名/统一、2.x transform/registry、3.x parser-loader 解耦、4.x
+Source 生命周期、5.x 包边界）全部落地。下一价值高地：
 
-- **阶段 5.1/5.2（推荐下一主推进，包边界，新价值区）**：`relative-coordinates.ts` 迁
-  出 source —— **scoping 已完成（见下方条目），方案修订**：依赖图勘探发现
-  source↔layers 循环令 layers 目标 + re-export 过渡不可能，原「type re-export 过渡」
-  纪律冲突。**推荐 Approach B**（target=`@antv/l7-utils` + 解耦 `IParseDataItem` 类型
-  依赖 + source re-export 过渡保公开 API，minor-safe）。下一「继续」执行 B：utils 落地
-  函数 + source re-export + BaseLayer 改 import + 删 source 本地文件。跨包，中等风险。
+- **阶段 6（持续，测试 & 性能 & 不可变）**：6.1 transform 不可变（filter/map/join 不再
+  改入参对象）；6.2 补单测（image/raster/raster-tile/mvt/geojsonvt/jsonTile mock loader
+  happy + error）；6.3 脆弱断言改造（`expect(length).toEqual(110)` → `> X` + 形状断言）。
+  此为质量/健壮性增强，可按子项渐进。
 - **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
   wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需
   changeset major，defer。
 - **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；
-  `init()` inited 双设；`processData` Promise 同步包装（可改 sync throw 等价）；setData
-  失败后 `dataVersion` 已 bump 但 `this.data` stale（recovery 未做，4.3b 遗留）；
-  raster-tile loader 直接单测覆盖缺口（4 小 loader 行为已由 16 case spec 间接锁）。
+  `init()` inited 双设；`processData` Promise 同步包装；setData 失败后 stale-data/inited/
+  dataVersion recovery（4.3b 遗留）；raster-tile 4 小 loader 直接 per-loader 单测覆盖缺口；
+  source re-export 退役（5.1 transitional，未来 minor/major 移除）。
 
-详见 [PLAN.md § 阶段 3/4/5](./PLAN.md)。
+详见 [PLAN.md § 阶段 3/4/5/6](./PLAN.md)。
+
+## [阶段 5.1] relative-coordinates 迁出 source → @antv/l7-utils（Approach B 执行，commit 待补）
+
+- **改了什么（4 文件跨 3 包）**：
+  - 新增 `packages/utils/src/relative-coordinates.ts`（189 行）—— 4 函数 + 2 interface
+    迁入，**泛型化解耦**：`<T extends { coordinates?: any[] }>` 替 `IParseDataItem[]` 参数、
+    `IRelativeCoordinateResult<T>` 替 `IRelativeCoordinateResult`。无 `@antv/l7-core` 依赖。
+  - `packages/utils/src/index.ts`：加 `export * from './relative-coordinates';`（无命名碰撞）。
+  - 重构 `packages/source/src/index.ts`：`export * from './utils/relative-coordinates';` →
+    命名 re-export 自 `@antv/l7-utils`（4 函数 `export {}` + 2 interface `export type {}`）——
+    **transitional 保公开 API**（minor-safe，未来 major 退役）。
+  - `packages/source/src/utils/relative-coordinates.ts`：**删除**（git rm，逻辑移入 utils）。
+  - `packages/layers/src/core/BaseLayer.ts:42`：`import { processRelativeCoordinates } from
+'@antv/l7-source'` → 合并入既有 `@antv/l7-utils` import（去重，避免 duplicate-import lint）。
+- **方案（minor：包边界修复，source re-export 过渡保公开 API；唯一消费方改 import 源）**：
+  - **类型设计最终选择 = 泛型（非 scoping 草拟的 minimal interface）**：scoping 阶段 BACKLOG
+    草拟 `IRelativeDataItem { coordinates?: unknown }` minimal interface。**执行期发现推翻**：
+    `BaseLayer.ts:1423` 把 `result.dataArray` **赋回** `this.layerSource.data.dataArray`
+    （`IParserData.dataArray: IParseDataItem[]`）。minimal `IRelativeDataItem[]` → `IParseDataItem[]`
+    会因缺 `_id: number` + index signature 兼容性 **tsc 失败**。泛型 `<T extends { coordinates?: any[] }>`
+    令 `T = IParseDataItem`（BaseLayer 入参推断），`result.dataArray: IParseDataItem[]` 直接赋回
+    零涟漪。**代价**：`IRelativeCoordinateResult` 变 `IRelativeCoordinateResult<T>`（泛型，
+    source `export type` re-export 泛型 interface 合法）；`coordinates` 内部仍 `any[]`（与
+    迁移前 `IParseDataItem.coordinates: any[]` 同，递归 `coords[0]` 零摩擦）。
+  - **Approach A（layers 目标）弃用**：source↔layers re-export 循环（layers→source 已存在）→
+    re-export 过渡不可能 → 须 breaking 移除（major 级，程式冲突）。见 PROGRESS [阶段 5.1 scoping]。
+  - **行为零变化**：函数逻辑字节级搬运（仅加泛型 type 参数，运行时擦除）；import 源 l7-source →
+    l7-utils（re-export 等价，运行时同函数）。
+- **验证（7 项全过，含严格 baseline 对比）**：prettier ✓ / eslint --max-warnings 0 ✓ /
+  tsc utils 0（新 home 编译） / tsc source 0（去 glsl；re-export + 泛型 interface re-export）/
+  tsc layers 229（baseline 不变，**BaseLayer:1421 泛型 T 推断 IParseDataItem 正确、result.dataArray
+  赋回零错**；无新增非 TMap 错误）/ jest source 110 / **jest layers 57 passed 1 skipped —— 与
+  改前 stash 对比 baseline 完全一致（57/1-skip），严格无回归证明**。
+- **风险 / 边界**：source re-export 为 transitional（未来 minor/major 退役，记 BACKLOG）；
+  泛型 `IRelativeCoordinateResult<T>` 公开 type 形状变化（`<T>` 参数化），但 source re-export
+  保留可消费性、BaseLayer 不受影响；`coordinates: any[]` 约束保留迁移前宽松类型（未收紧）。
+- **遗留**：① source re-export 退役（BACKLOG，未来 major）；② 4 函数无直接单测（行为由
+  BaseLayer 集成间接覆盖，BACKLOG 低优先）。
+
+---
 
 ## [阶段 5.1 scoping] relative-coordinates 迁出 source — 依赖图勘探 + 方案修订（commit 4eab778）
 
