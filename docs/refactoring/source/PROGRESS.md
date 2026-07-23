@@ -26,7 +26,7 @@ Source 生命周期、5.x 包边界）全部落地。下一价值高地：
 
 详见 [PLAN.md § 阶段 3/4/5/6](./PLAN.md)。
 
-## [阶段 5.1] relative-coordinates 迁出 source → @antv/l7-utils（Approach B 执行，commit 待补）
+## [阶段 5.1] relative-coordinates 迁出 source → @antv/l7-utils（Approach B 执行，commit c4dd0de）
 
 - **改了什么（4 文件跨 3 包）**：
   - 新增 `packages/utils/src/relative-coordinates.ts`（189 行）—— 4 函数 + 2 interface
