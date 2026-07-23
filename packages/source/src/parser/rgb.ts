@@ -1,30 +1,9 @@
 import type { IParserData } from '@antv/l7-core';
-import type { IRasterCfg } from '../../interface';
-import { percentile } from '../../utils/bandOperation/operationSchema';
-import { extentToCoord } from '../../utils/util';
+import type { IRGBParseCfg, RasterDataType } from '../interface';
+import { percentile } from '../utils/bandOperation/operationSchema';
+import { extentToCoord } from '../utils/util';
 
-/**
- * @description: 栅格数据解析
- */
-export type RasterDataType =
-  | Uint8Array
-  | Int8Array
-  | Uint16Array
-  | Int16Array
-  | Uint32Array
-  | Int32Array
-  | Float32Array
-  | Float64Array;
-
-export interface IRGBParseCfg extends IRasterCfg {
-  bands?: [number, number, number];
-  countCut?: [number, number];
-  RMinMax?: [number, number];
-  GMinMax?: [number, number];
-  BMinMax?: [number, number];
-}
-
-export default function rasterRgb(data: RasterDataType[], cfg: IRGBParseCfg): IParserData {
+export default function rgb(data: RasterDataType[], cfg: IRGBParseCfg): IParserData {
   const { extent, coordinates, width, height, ...options } = cfg;
   if (data.length < 3) {
     console.warn('RGB解析需要三个波段的数据');

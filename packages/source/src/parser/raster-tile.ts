@@ -2,8 +2,7 @@ import type { ITileParserCFG } from '@antv/l7-core';
 import { RasterTileType } from '@antv/l7-core';
 import type { ITileBand, SourceTile, TileLoadParams, TilesetManagerOptions } from '@antv/l7-utils';
 import type { IParserData } from '../interface';
-import { getCustomData, getCustomImageData } from '../utils/tile/getCustomData';
-import { defaultFormat, getTileBuffer, getTileImage } from '../utils/tile/getRasterTile';
+import { RasterTileLoader } from '../loader/raster-tile-loader';
 import { extentToCoord } from '../utils/util';
 
 const DEFAULT_CONFIG: Partial<TilesetManagerOptions> = {
@@ -42,37 +41,17 @@ export default function rasterTile(
   const { extent = [Infinity, Infinity, -Infinity, -Infinity], coordinates } = cfg;
 
   let tileDataType: RasterTileType = cfg?.dataType || RasterTileType.IMAGE;
-  // Tip: RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
+  // Tip, RasterTileType.RGB 是彩色多通道的数据纹理，同样走数据纹理的请求
   if (tileDataType === RasterTileType.RGB) {
     tileDataType = RasterTileType.ARRAYBUFFER;
   }
-  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) => {
-    switch (tileDataType) {
-      case RasterTileType.IMAGE:
-        return getTileImage(data as string | string[], tileParams, tile, cfg);
-      case RasterTileType.CUSTOMIMAGE:
-      case RasterTileType.CUSTOMTERRAINRGB:
-        return getCustomImageData(
-          // 自定义地形请求方式数据
-          tile,
-          // @ts-ignore
-          cfg?.getCustomData,
-        );
-      case RasterTileType.ARRAYBUFFER:
-        return getTileBuffer(data, tileParams, tile, cfg);
-      case RasterTileType.CUSTOMARRAYBUFFER:
-      case RasterTileType.CUSTOMRGB:
-        return getCustomData(
-          tile,
-          // @ts-ignore
-          cfg?.getCustomData,
-          cfg?.format || defaultFormat,
-          cfg?.operation,
-        );
-      default:
-        return getTileImage(data as string | string[], tileParams, tile, cfg);
-    }
-  };
+
+  // 取数分发下沉 loader（阶段 3.2.1）；parser 只做 config 形状组装（isUrlError
+  // guard / RGB→ARRAYBUFFER 归并 / DEFAULT_CONFIG 合并 / extent·coordinates）
+  // — 与 mvt/jsonTile/geojsonvt 同构：parser=形状转换、loader=数据获取
+  const loader = new RasterTileLoader(data, tileDataType, cfg);
+  const getTileData = (tileParams: TileLoadParams, tile: SourceTile) =>
+    loader.loadTile(tileParams, tile);
 
   const tilesetOptions = { ...DEFAULT_CONFIG, ...cfg, getTileData };
   const rasterTileCoord = extentToCoord(coordinates, extent);

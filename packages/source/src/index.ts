@@ -1,48 +1,36 @@
 import Source from './base-source';
-import { registerParser, registerTransform } from './factory';
-import csv from './parser/csv';
-import geojson from './parser/geojson';
-import geojsonVTTile from './parser/geojsonvt';
-import image from './parser/image';
-import json from './parser/json';
-import jsonTile from './parser/jsonTile';
-import mapboxVectorTile from './parser/mvt';
-import raster from './parser/raster';
-import rasterTile, { rasterDataTypes } from './parser/raster-tile';
-import ndi from './parser/raster/ndi';
-import rgb from './parser/raster/rgb';
-import rasterRgb from './parser/rasterRgb';
-import testTile from './parser/testTile';
-import { cluster } from './transform/cluster';
-import { filter } from './transform/filter';
-import { aggregatorToGrid } from './transform/grid';
-import { pointToHexbin } from './transform/hexagon';
-import { join } from './transform/join';
-import { map } from './transform/map';
-export { getParser, getTransform, registerParser, registerTransform } from './factory';
+import { registerBuiltins } from './builtins';
+import { rasterDataTypes } from './parser/raster-tile';
+export {
+  calculateRelativeOrigin,
+  convertToAbsoluteCoordinates,
+  convertToRelativeCoordinates,
+  processRelativeCoordinates,
+} from '@antv/l7-utils';
+export type { IRelativeCoordinateOptions, IRelativeCoordinateResult } from '@antv/l7-utils';
+export { registerBuiltins } from './builtins';
+export { createSource } from './create-source';
+export {
+  defaultRegistry,
+  getParser,
+  getTransform,
+  ParserNotFoundError,
+  ParserRegistry,
+  registerParser,
+  registerTransform,
+  TransformNotFoundError,
+} from './factory';
 export * from './interface';
-export * from './source/index';
-export * from './utils/relative-coordinates';
+export * from './tile-source/index';
 export { rasterDataTypes };
 
-registerParser('rasterTile', rasterTile);
-registerParser('mvt', mapboxVectorTile);
-registerParser('geojsonvt', geojsonVTTile);
-registerParser('testTile', testTile);
-registerParser('geojson', geojson);
-registerParser('jsonTile', jsonTile);
-registerParser('image', image);
-registerParser('csv', csv);
-registerParser('json', json);
-registerParser('raster', raster);
-registerParser('rasterRgb', rasterRgb);
-registerParser('rgb', rgb);
-registerParser('ndi', ndi);
-registerTransform('cluster', cluster);
-registerTransform('filter', filter);
-registerTransform('join', join);
-registerTransform('map', map);
-registerTransform('grid', aggregatorToGrid);
-registerTransform('hexagon', pointToHexbin);
+// 模块初始化副作用：注册全部 13 内置 parser + 6 内置 transform 到 defaultRegistry
+// 单例（阶段 2.4：原顶层 19 行 registerParser/registerTransform 收敛到
+// `registerBuiltins()`，便于显式调用 / 子集化 / 测试覆盖）。
+//
+// `package.json sideEffects: ["./es/index.js"]` 明示 bundler 仅本入口有 side
+// effect —— 消费方经子路径 import（`@antv/l7-source/es/parser-registry` 等）
+// 可 tree-shake 本调用，按需自行 `new ParserRegistry()` + 手工注册子集。
+registerBuiltins();
 
 export default Source;

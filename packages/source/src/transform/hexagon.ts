@@ -1,6 +1,7 @@
 import type { IParseDataItem, IParserData, ITransform } from '@antv/l7-core';
 import { Satistics, aProjectFlat } from '@antv/l7-utils';
 import { hexbin } from '../utils/hexbin';
+import type { IHexagonTransformCfg } from './types';
 
 const R_EARTH = 6378000;
 
@@ -15,8 +16,9 @@ interface IRawData {
 }
 
 export function pointToHexbin(data: IParserData, option: ITransform) {
+  const cfg = option as IHexagonTransformCfg;
   const dataArray = data.dataArray;
-  const { size = 10, method = 'sum' } = option;
+  const { size = 10, method = 'sum' } = cfg;
   // pixlSize 是 d3-hexbin 的外接圆半径 r
   const pixlSize = ((size / (2 * Math.PI * R_EARTH)) * (256 << 20)) / 2;
   const screenPoints: IRawData[] = dataArray.map((point: IParseDataItem) => {
@@ -58,12 +60,12 @@ export function pointToHexbin(data: IParserData, option: ITransform) {
 
   const result: IParserData = {
     dataArray: hexbinBins.map((hex: IHexBinItem<IRawData>, index: number) => {
-      if (option.field && method) {
-        const columns = Satistics.getColumn(hex, option.field);
+      if (cfg.field && method) {
+        const columns = Satistics.getColumn(hex, cfg.field);
         hex[method] = Satistics.statMap[method](columns);
       }
       return {
-        [option.method]: hex[method],
+        [cfg.method || 'sum']: hex[method],
         count: hex.length,
         rawData: hex,
         coordinates: [hex.x, hex.y],
