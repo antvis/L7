@@ -18,7 +18,7 @@
 
 ---
 
-## [阶段 4.4] cluster 双路径合并 — 删 enable 死字段 + cluster transform 标 deprecated（commit 待补）
+## [阶段 4.4] cluster 双路径合并 — 删 enable 死字段 + cluster transform 标 deprecated（commit 00502f9）
 
 - **改了什么**：
   - `packages/core/src/services/source/ISourceService.ts`：`IClusterOptions` 删 `enable: false;`（literal `false` 死字段，零 set/read —— `ClusterManager` 用独立 `this.enabled` boolean，不读 `options.enable`）。
