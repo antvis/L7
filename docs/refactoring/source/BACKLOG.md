@@ -294,3 +294,42 @@
 - **建议**：未来 minor（若经 changeset 评估外部 `from '@antv/l7-source'` 取 relative-coordinates 的消费方为零/可迁）或 major 周期移除 source 的这 6 行 re-export ——届时 `from '@antv/l7-source'` 取 relative-coordinates 的外部代码须改 `from '@antv/l7-utils'`。需 changeset 记 minor/major + 发布说明提及。
 - **状态**：open（transitional，待评估外部采用后退役）
 - **发现于**：阶段 5.1 执行
+
+### [阶段 6.1 defer] `cluster()` pointIndex 分支不可变改造
+
+- **位置**：`packages/source/src/transform/cluster.ts` `cluster()` 的 `if (data.pointIndex)` 分支 ——
+  `data.dataArray = formatData(clusterData); return data;`（原地改入参 dataArray）。
+- **问题**：6.1 主体改了 filter/map/join 三处「原地改入参」为返回新对象。cluster 的 pointIndex 分支
+  同属原地改 + 返回同引用模式，但 6.1 **主动 defer 未改**：
+  ① cluster transform 路径已 @deprecated（`clusterTransform` wrapper warn + delegate，Path B broken，
+  4.4 合并双路径后 transform 消费已成本应迁移的废弃路径）；
+  ② `cluster()` no-pointIndex 分支返回 Supercluster 实例（非 IParserData），由 `ClusterManager.init`
+  直调（Path A，live）存储为索引，shape 与 filter/map/join 纯数据 transform 完全异构；
+  ③ pointIndex 分支在现网 live 路径中不被触发（ClusterManager.init 传入的 parser 输出无 pointIndex、
+  clusterTransform 经 executeTrans 传入的 this.data 亦无 pointIndex）→ 属 legacy dead branch，
+  改它收益≈0、触及 deprecated 代码风险 > 收益。
+- **建议**：若未来做 cluster transform 彻底退役（4.5 major 移除 `clusterTransform` 注册）时一并清理
+  pointIndex 分支（改为 `return { ...data, dataArray: formatData(clusterData) }` 或整段删除）。
+  不建议单独动它（deprecated 域、dead branch）。
+- **状态**：open（低优先，捆绑 4.5 major 一起做）
+- **发现于**：阶段 6.1 勘探
+
+### [阶段 6.1 defer / 另一优化面] `executeTrans` 改 `this.data = data` 直装
+
+- **位置**：`packages/source/src/base-source.ts:367-373` `executeTrans()`：
+  ```ts
+  trans.forEach((tran: ITransform) => {
+    const data = this.registry.getTransform(type)(this.data, tran);
+    Object.assign(this.data, data);
+  });
+  ```
+- **问题**：6.1 仅让 transform 返回新对象而不改 `executeTrans`（`Object.assign(this.data, data)` 对新对象
+  语义已正确等价）。理论上若所有 transform 都返回「完整新对象」（而非部分字段），`executeTrans` 可简化为
+  `this.data = this.registry.getTransform(type)(this.data, tran);` 直装（去掉 Object.assign）。
+  但这会**换 `this.data` 引用**（当前 Object.assign 保持引用稳定）—— 需先确认无消费方在 init 后缓存
+  `source.data` 引用并期望其语义稳定（feature-index、tilesetAdapter、layers 持引用情况）。
+- **建议**：非 6.1 范畴（6.1 = patch 纯内部，不动 executeTrans）。若未来阶段做 source pipeline 重构
+  （阶段 7.2 raw→parser→transforms→output 显式化）时，evaluate `this.data` 引用稳定性后决定是否换为
+  直装。须有单测兜底（`this.data is` oldRef after transforms 之类）。
+- **状态**：open（优化面，非回归类，低优先）
+- **发现于**：阶段 6.1 勘探

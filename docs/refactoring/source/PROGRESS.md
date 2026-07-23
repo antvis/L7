@@ -6,25 +6,67 @@
 
 ## 📍 下一步
 
-**阶段 5.1/5.2 完成（= 阶段 5 包边界修复收尾）**：`relative-coordinates.ts` 迁出
-source → `@antv/l7-utils`（泛型解耦 + source re-export 过渡 + BaseLayer 自 utils 取函数，
-见下方条目）。**阶段 5 主题全部完成**；阶段 3/4 亦已全程收敛。至此 PLAN 阶段 0-5 的
-实质性重构点（0.x 命名/统一、2.x transform/registry、3.x parser-loader 解耦、4.x
-Source 生命周期、5.x 包边界）全部落地。下一价值高地：
+**阶段 6.1 完成（transform 不可变）**：`filter/map/join` 三处「原地改 `data.dataArray`
 
-- **阶段 6（持续，测试 & 性能 & 不可变）**：6.1 transform 不可变（filter/map/join 不再
-  改入参对象）；6.2 补单测（image/raster/raster-tile/mvt/geojsonvt/jsonTile mock loader
-  happy + error）；6.3 脆弱断言改造（`expect(length).toEqual(110)` → `> X` + 形状断言）。
+- 返回同引用」→ 返回新对象 `{ ...data, dataArray: ... }`，不再改入参，利于缓存/diff
+  （见下方条目）。grid/hexagon 本就返回新对象（已不可变）；cluster transform 已
+  @deprecated（pointIndex 分支 mutation 留 BACKLOG）。**阶段 5 主题全部完成**；阶段 3/4
+  亦已全程收敛。至此 PLAN 阶段 0-5 的实质性重构点全部落地，6.1 起进入阶段 6（测试 &
+  性能 & 不可变，持续）。下一价值高地：
+
+* **阶段 6（持续，测试 & 性能 & 不可变）**：6.2 补单测（image/raster/raster-tile/
+  mvt/geojsonvt/jsonTile mock loader happy + error）；6.3 脆弱断言改造
+  （`expect(length).toEqual(110)` → `> X` + 形状断言）；6.4 `Source.stats()`。
   此为质量/健壮性增强，可按子项渐进。
-- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
+* **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
   wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需
   changeset major，defer。
-- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；
+* **BACKLOG**：`cluster()` pointIndex 分支 `data.dataArray` 原地改不可变（6.1 defer，
+  deprecated 路径）；`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；
   `init()` inited 双设；`processData` Promise 同步包装；setData 失败后 stale-data/inited/
   dataVersion recovery（4.3b 遗留）；raster-tile 4 小 loader 直接 per-loader 单测覆盖缺口；
   source re-export 退役（5.1 transitional，未来 minor/major 移除）。
 
 详见 [PLAN.md § 阶段 3/4/5/6](./PLAN.md)。
+
+---
+
+## [阶段 6.1] transform 不可变 — filter/map/join 返回新对象（commit 待补）
+
+- **改了什么（3 文件，纯内部重构）**：
+  - `packages/source/src/transform/filter.ts`：`data.dataArray = data.dataArray.filter(callback); return data;`
+    → `return { ...data, dataArray: data.dataArray.filter(callback) };`（无 callback 时原样返回 `data`）。
+  - `packages/source/src/transform/map.ts`：同型改 `data.dataArray = data.dataArray.map(callback); return data;`
+    → `return { ...data, dataArray: data.dataArray.map(callback) };`。
+  - `packages/source/src/transform/join.ts`：`geoData.dataArray = geoData.dataArray.map(...); return geoData;`
+    → `return { ...geoData, dataArray: geoData.dataArray.map(...) };`。
+- **为什么是零行为变化（executeTrans 等价性证明）**：`base-source.ts:367-373` `executeTrans()` 对每个
+  transform 执行 `Object.assign(this.data, getTransform(type)(this.data, tran))`。改前 filter/map/join
+  原地改 `data.dataArray`（data === this.data）+ 返回同引用，`Object.assign(this.data, this.data)` = no-op
+  （dataArray 已就地改）。改后返回 `B = {...A, dataArray: newArr}`（A = this.data 未被改），`Object.assign(A, B)`
+  把 B 的 own enumerable props 回写 A：`A.dataArray = B.dataArray`（新数组），其余 props `B[p] === A[p]` 故
+  `A[p] = A[p]` no-op → 最终态与原地改**逐字段等价**，且 `this.data` 引用保持稳定（Object.assign 不换引用，
+  消费方持引用安全）。callback 执行期间 `data.dataArray`（RHS 读取）在两种实现下均为原始数组，对闭包读
+  `data.dataArray` 的 callback 亦等价。
+- **切片边界（为何不含 grid/hexagon/cluster）**：PLAN line 100 明确写「filter/map/join」。
+  ① **grid/hexagon**：本就返回全新对象（`aggregatorToGrid`/`pointToHexbin` 不改入参 dataArray），**已不可变**，
+  无需改；② **cluster**：transform 路径已 @deprecated（`clusterTransform` wrapper warn + delegate，Path B
+  broken），且 `cluster()` no-pointIndex 分支返回 Supercluster 实例（非 IParserData，ClusterManager 直调
+  Path A），pointIndex 分支的 `data.dataArray = formatData(...)` mutation 在 deprecated/legacy 领域，
+  纳入 6.1 风险 > 收益 → **defer BACKLOG**。
+- **方案（patch：纯内部重构，零公开 API 变化，零行为变化）**：不动 `executeTrans`（`Object.assign` 对新对象
+  语义已正确，无须改 `this.data = data` 直装——后者会换 `this.data` 引用，属另一风险面，非 6.1 范畴）。
+  不动 builtins.ts 注册、不动 transform/types.ts cfg 契约。
+- **验证（6 项全过，回归网 = 5 transform spec）**：prettier ✓（3 文件 unchanged）/ eslint 0 ✓ /
+  tsc source 0（去 glsl）✓ / tsc layers 229（baseline 不变，全 maps/TMap pre-existing）✓ /
+  jest source **110 passed**（= 基线；`source.transform.filter/grid/hexagon/map/join` 5 case 全过 =
+  transform 行为等价证明）✓ / jest layers **57 passed 1 skipped**（= 基线）✓。
+- **风险 / 边界**：零公开 API 变化、零行为变化（legacy「input 是否被 mutate」契约非公开——filter/map/join
+  仅经 builtins 注册消费，无外部直接 import，git grep 确认）。`{...data}` 浅拷贝成本可忽略（ dataArray 数组
+  本就 filter/map 产生新数组）。未引入新类型。
+- **遗留**：① `cluster()` pointIndex 分支不可变（BACKLOG，deprecated 路径，低优先）；② `executeTrans` 改
+  `this.data = data` 直装（另一优化面，非 6.1 范畴，留 BACKLOG）；③ 6.2 transform 单测补充（filter/map/join
+  直接 unit 调用 currently 无独立 spec，仅经 Source 集成覆盖）。
 
 ## [阶段 5.1] relative-coordinates 迁出 source → @antv/l7-utils（Approach B 执行，commit c4dd0de）
 
