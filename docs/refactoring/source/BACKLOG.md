@@ -333,3 +333,22 @@
   直装。须有单测兜底（`this.data is` oldRef after transforms 之类）。
 - **状态**：open（优化面，非回归类，低优先）
 - **发现于**：阶段 6.1 勘探
+
+### [阶段 6.2 发现 / 严格性 minor] `rgb`/`ndi` 既存无 guard 隐患缺失 extent 默认值 + 波段不足不 guard
+
+- **位置**：`packages/source/src/parser/rgb.ts`（`const imageCoord = extentToCoord(coordinates, extent!);`
+  非空断言，无默认值；不足 3 波段仅 `console.warn` 后仍 `percentile(bandsData[2], ...)` 会崩）+
+  `packages/source/src/parser/ndi.ts`（`extent` 有默认值故 extent 侧安全；不足 2 波段仅 `console.warn`
+  后循环读 `bandsData[1][i]` 会崩）。
+- **问题**：6.2 补单测时发现两条既存隐患：
+  ① **`rgb` 的 `extent` 无默认值**（与 `raster`/`ndi` 不同——后两者 `extent = [121.168,...]` 默认）。
+  当既无 `extent` 又无 `coordinates` 时 `extentToCoord(coordinates!, extent!)` 读 `extent[0]` →
+  `TypeError: Cannot read properties of undefined`。属 cfg 缺校验。
+  ② **`rgb`/`ndi` 波段不足仅 warn 不 guard**：`rgb` warn 后第 `bandsData[2]=undefined`，`percentile(undefined,...)`
+  读 `undefined.length` 崩；`ndi` warn 后循环读 `bandsData[1][i]` 崩（`ndi` 需 ≥2 波段）。warn 不拦后续访问。
+- **建议**：strictly-better minor（零签名变化、加 guard）。① `rgb` 给 `extent` 默认值（与 raster/ndi 对齐
+  `[121.168, 30.2828, 121.384, 30.4219]`）；② `rgb`/`ndi` 波段不足时 warn 后 early-return 空 dataArray
+  （或 throw 明确错误）。需 changeset 记 minor（行为变化：崩 → 不崩/明确错）+ 发布说明提及。6.2 的 spec
+  已把当前「warn + throw」建模为锁现状断言；修 guard 时同步改 spec 为「warn + 空/明确错」断言。
+- **状态**：open（严格性增强，低风险，可独立 minor）
+- **发现于**：阶段 6.2 补单测

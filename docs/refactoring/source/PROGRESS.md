@@ -6,23 +6,22 @@
 
 ## 📍 下一步
 
-**阶段 6.1 完成（transform 不可变）**：`filter/map/join` 三处「原地改 `data.dataArray`
+**阶段 6.1/6.2 完成（transform 不可变 + raster 家族补单测）**：6.1 把
+`filter/map/join` 改为返回新对象（不再原地改入参）；6.2 补 `parser/raster.spec.ts` +
+`parser/rgb.spec.ts` 16 case（raster/rasterRgb/rgb/ndi 纯函数 happy + error）。image/
+mvt/geojsonvt/jsonTile/raster-tile 已由阶段 3 loader spec 覆盖（happy + error）。grid/
+hexagon 本就返回新对象（已不可变）；cluster transform 已 @deprecated（pointIndex 分支
+mutation 留 BACKLOG）。**至此阶段 6 的 6.1/6.2 完成**。下一价值高地：
 
-- 返回同引用」→ 返回新对象 `{ ...data, dataArray: ... }`，不再改入参，利于缓存/diff
-  （见下方条目）。grid/hexagon 本就返回新对象（已不可变）；cluster transform 已
-  @deprecated（pointIndex 分支 mutation 留 BACKLOG）。**阶段 5 主题全部完成**；阶段 3/4
-  亦已全程收敛。至此 PLAN 阶段 0-5 的实质性重构点全部落地，6.1 起进入阶段 6（测试 &
-  性能 & 不可变，持续）。下一价值高地：
-
-* **阶段 6（持续，测试 & 性能 & 不可变）**：6.2 补单测（image/raster/raster-tile/
-  mvt/geojsonvt/jsonTile mock loader happy + error）；6.3 脆弱断言改造
-  （`expect(length).toEqual(110)` → `> X` + 形状断言）；6.4 `Source.stats()`。
-  此为质量/健壮性增强，可按子项渐进。
-* **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
+- **阶段 6（持续，测试 & 性能 & 不可变）**：6.3 脆弱断言改造
+  （`expect(length).toEqual(110)` → `> X` + 形状断言）；6.4 `Source.stats()`。此为质量/
+  健壮性增强，可按子项渐进。
+- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
   wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需
   changeset major，defer。
-* **BACKLOG**：`cluster()` pointIndex 分支 `data.dataArray` 原地改不可变（6.1 defer，
-  deprecated 路径）；`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；
+- **BACKLOG**：`cluster()` pointIndex 分支 `data.dataArray` 原地改不可变（6.1 defer，
+  deprecated 路径）；`rgb`/`ndi` 既存的 extent 无默认值 + 解项缺失无 guard 致崩风险（6.2
+  发现，见 BACKLOG）；`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；
   `init()` inited 双设；`processData` Promise 同步包装；setData 失败后 stale-data/inited/
   dataVersion recovery（4.3b 遗留）；raster-tile 4 小 loader 直接 per-loader 单测覆盖缺口；
   source re-export 退役（5.1 transitional，未来 minor/major 移除）。
@@ -30,6 +29,34 @@
 详见 [PLAN.md § 阶段 3/4/5/6](./PLAN.md)。
 
 ---
+
+## [阶段 6.2] raster 家族补单测 — raster/rasterRgb/rgb/ndi 纯函数 spec（commit 待补）
+
+- **改了什么（2 新 spec 文件，16 case，零生产代码改动）**：
+  - 新增 `packages/source/__tests__/parser/raster.spec.ts`（10 case）：`raster` 7 case
+    （number[] 直传 happy：data=Array.from / width-height-min-max 透传 / 默认 extent 4 角派生 /
+    自定义 extent / 自定义 coordinates 非矩形 / format 提供但 isNumberArray 优先走直传 / ArrayBuffer
+    路径 bandsOperation 产 Promise 进 data 异步契约 / ArrayBuffer[] 包装走同路径）+ `rasterRgb` 3 case
+    （number[] 直传 + rest 字段透传 / coordinates 透传）。
+  - 新增 `packages/source/__tests__/parser/rgb.spec.ts`（6 case… 实为 9 case：rgb 5 + ndi 4）：
+    `rgb` 5 case（显式 R/G/BMinMax 交错 RGB 输出 / 负值钳 0 / 自定义 bands 通道序 / 缺 MinMax 走
+    percentile / 不足 3 波段 warn-only 无 guard 致崩）+ `ndi` 4 case（归一化差值 / 自定义 bands /
+    rest 透传 / 不足 2 波段 warn-only 无 guard 致崩）。
+- **为什么 6.2 真实缺口是 raster 家族（而非PLAN 字面 6 项）**：阶段 3 已为 `image`（ImageLoader 7
+  case）、`mvt`（MVTLoader 6 case）、`geojsonvt`（GeoJSONVTLoader 6 case）、`jsonTile`(JsonTileLoader
+  6 case）、`raster-tile`（RasterTileLoader 16 case）落 loader spec（happy + error，mock 取数 utils）；
+  另 `CustomDataProvider` 6 case。**唯一无 spec 的 parser = `raster`/`rasterRgb`/`rgb`/`ndi`**（同步
+  纯函数：band 操作 + 坐标投影，无需 mock loader，直接断言）。故 6.2 实际补这 4 个纯函数 parser。
+- **发现既存隐患（记 BACKLOG，未在本步修——6.2 是补测试不改行为）**：① `rgb.ts` 的 `extent` 用非空
+  断言 `extent!`（无默认值），缺 extent + coordinates 时 `extentToCoord` 读 `extent[0]` 崩；
+  ② `rgb`/`ndi` 不足波段时仅 `console.warn` **不 guard**，warn 后仍访问缺失波段致崩（percentile
+  读 `undefined.length` / 循环读 `undefined[0]`）。spec 把这建模为「warn + throw（既存无 guard 行为）」
+  断言，锁住现状避免回归。修复留 BACKLOG（加 guard 是 strictly-better minor，但非 6.2 范畴）。
+- **验证（4 项全过）**：prettier ✓（2 spec unchanged after patch）/ eslint 0 ✓ /
+  tsc source 0（去 glsl，spec 在 tsconfig include 内故需补 `IRGBParseCfg` required `min/max`）✓ /
+  jest source **126 passed**（110 baseline + 16 新增，19 suites，全绿）✓。
+- **风险 / 边界**：零生产代码改动（纯补测试），无行为变化、无公开 API 变化。新 spec 不引入新依赖
+  （仅 jest + 既有 parser import）。
 
 ## [阶段 6.1] transform 不可变 — filter/map/join 返回新对象（commit 215b2ea）
 
