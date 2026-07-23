@@ -4,17 +4,65 @@
 
 ---
 
+## [阶段 6.4] `Source.stats()` 只读快照 — `ISourceStats` 类型 + stats() 方法 + 7 case spec（commit 待补）
+
+- **改了什么（1 新 API + 1 新类型 + 1 新 spec，纯增量，零行为变化）**：
+  - **新类型 `ISourceStats`**（`packages/source/src/interface.ts`）：7 字段只读快照 ——
+    `rows: number`（`data.dataArray.length`）、`bbox: BBox`（`extent`）、`parserType: string`
+    （`parser.type`，默认 `'geojson'`）、`tileCount: number`（`tileset.currentTiles.length`，
+    非瓦片源 / 无视口更新时 `0`）、`isTile: boolean`、`cluster: boolean`、`dataVersion: number`。
+    经 `export * from './interface'` 由 index 透出；`BBox` 加进 turf import。
+  - **新方法 `Source.stats(): ISourceStats`**（`packages/source/src/base-source.ts`，置于
+    `getParserType()` 之后）：纯只读，不变 Source 状态。`rows` 用 `this.data?.dataArray?.length ??
+0` 兜底（init 未完成时 `data` 可能为 `undefined`）；`tileCount` 用 `this.tileset?.
+currentTiles.length ?? 0`；`parserType` 用 `(this.parser as IParserCfg).type || 'geojson'`
+    与 `executeParser` 的默认逻辑一致。对 `new Source` / `Source.create` / `setData` /
+    `updateFeaturePropertiesById` 路径**零行为变化**（minor-safe 新增 API，未触及 `ISource`
+    核心契约，未加 deprecation）。
+  - **新 spec `packages/source/__tests__/source-stats.spec.ts`**（7 case）：非瓦片 geojson 源
+    全字段快照（rows=`dataArray.length`=`Polygon.features.length`、bbox=`extent`、
+    parserType=`'geojson'`、tileCount=0、isTile=false、cluster=false、dataVersion=0）；
+    parserType 与 `getParserType()` 一致；聚合源 cluster=true 且初始未 zoom 时 rows=全量 feature；
+    瓦片源（mvt，`Source.create('http://t/{z}/{x}/{y}.pbf', {parser:{type:'mvt'}})`）isTile=true /
+    parserType=`'mvt'` / tileCount=0 / rows=0（mvt parser `dataArray=[]`）；`setData` 后 stats
+    反映新 rows + dataVersion bump（用 `once('update')` 等 re-parse 完成而非 `ready`——`ready`
+    只 resolve 构造期 initPromise，setData 不重置）；`updateFeaturePropertiesById` bump dataVersion
+    行数不变；`stats()` 幂等且不改 Source 状态。
+- **为什么 6.4 是纯增量但仍有价值**：L7 source 一直把「当前行数 / bbox / parser 类型 / 瓦片数」
+  分散在 `data.dataArray.length` / `extent` getter / `getParserType()` / `tileset.currentTiles`
+  四处，调试与 size 监控需各自手取。`stats()` 收敛为一次只读调用，且 `dataVersion` 字段
+  （阶段 4.3a 新增，之前无公开读取面）一并暴露，便于消费方判断数据是否已变化。不改任何现有
+  成员语义，故 minor-safe。
+- **实现细节 / 边界**：
+  - `ISourceStats` 放 source 包 `interface.ts`（source 专有类型）而非 core `ISourceService.ts`
+    的 `ISource` 契约 —— 避免触及 layers 依赖的核心接口（minor 纪律）。未来若要把 `stats()` 提到
+    `ISource` 契约可作 minor/major 切片。
+  - mvt 瓦片源构造不触发网络（mvt parser 仅同步组装 `tilesetOptions.getTileData` 闭包指向
+    `MVTLoader`，实际取数在 `tileset.update` 视口驱动时懒加载），故 `Source.create` 完成后
+    `tileCount=0` 是真实快照，测试无需 mock 取数。
+  - `extent([])` 返回 `[Infinity, Infinity, -Infinity, -Infinity]`（非抛错），故 mvt 源
+    `bbox` 为退化值——spec 不锁瓦片源 bbox 精确值，符合「瓦片源无全局 bbox」语义。
+  - spec 必须 `import Source from '../src/'`（index，触发 `registerBuiltins()` 副作用注册
+    13 parser + 6 transform）；从 `'../src/base-source'` 直引会因 registry 空抛
+    `ParserNotFoundError`（与 `set-data.spec.ts` 同模式：顶部 `import '../src'`）。
+- **验证（5 项全过，零回归）**：prettier ✓（3 文件）/ eslint 0 ✓（interface + base-source +
+  spec）/ tsc source 0（去 glsl）✓ / jest source **133 passed**（= 6.2/6.3 后 126 baseline +
+  7 新 case）✓ / tsc layers **229**（baseline，`error TS` 计数；零 `stats`/`ISourceStats`/
+  `base-source` 关联错误）✓ / jest layers 57 passed 1 skipped（baseline）✓。
+- **风险 / 边界**：纯增量 API，无现有成员语义改动、无核心 `ISource` 契约改动、无 deprecation。
+  下界/兜底（`?? 0`、`|| 'geojson'`）保证 init 未完成 / 取数未触发时不抛错，仅返回 `0` / 默认值。
+- **遗留**：无新增 BACKLOG。`stats()` 仅读现有公开成员与 `data`，未发现新隐患。
+
 ## 📍 下一步
 
-**阶段 6.1/6.2/6.3 完成（transform 不可变 + raster 补单测 + 脆弱断言改造）**：6.1 把
-`filter/map/join` 改为返回新对象（不再原地改入参）；6.2 补 `parser/raster.spec.ts` +
-`parser/rgb.spec.ts` 16 case（raster/rasterRgb/rgb/ndi 纯函数 happy + error）。image/
-mvt/geojsonvt/jsonTile/raster-tile 已由阶段 3 loader spec 覆盖（happy + error）。grid/
-hexagon 本就返回新对象（已不可变）；cluster transform 已 @deprecated（pointIndex 分支
-mutation 留 BACKLOG）。**至此阶段 6 的 6.1/6.2/6.3 完成**（6.4 待续）。下一价值高地：
+**阶段 6 全部收敛（6.1 transform 不可变 + 6.2 raster 补单测 + 6.3 脆弱断言改造 + 6.4 `Source.stats()`）**。
+6.1 把 `filter/map/join` 改为返回新对象（不再原地改入参）；6.2 补 `parser/raster.spec.ts` +
+`parser/rgb.spec.ts` 19 case（raster/rasterRgb/rgb/ndi 纯函数 happy + error）；6.3 把
+cluster/grid/hexagon 脆弱大数断言改下界+形状；6.4 新增 `ISourceStats` 类型 + `Source.stats()`
+只读快照方法（7 字段：rows/bbox/parserType/tileCount/isTile/cluster/dataVersion）+ 7 case spec。
+**至此 PLAN 阶段 0-6 全部落地**，阶段 6 完整收敛。阶段 7（class 层级 / pipeline / geojsonvt-decoder）
+显式标「可选，长期」，不计入完成门槛。后续可选价值高地：
 
-- **阶段 6（持续，测试 & 性能 & 不可变）**：6.4 `Source.stats()`（暴露行数 / bbox /
-  parser 类型 / tile 数）。此为质量/健壮性增强，可按子项渐进。
 - **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
   wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需
   changeset major，defer。
@@ -23,9 +71,10 @@ mutation 留 BACKLOG）。**至此阶段 6 的 6.1/6.2/6.3 完成**（6.4 待续
   发现，见 BACKLOG）；`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；
   `init()` inited 双设；`processData` Promise 同步包装；setData 失败后 stale-data/inited/
   dataVersion recovery（4.3b 遗留）；raster-tile 4 小 loader 直接 per-loader 单测覆盖缺口；
-  source re-export 退役（5.1 transitional，未来 minor/major 移除）。
+  source re-export 退役（5.1 transitional，未来 minor/major 移除）；`stats()` 上提 `ISource`
+  核心契约（minor/major 切片，当前仅 `Source` 类方法）。
 
-详见 [PLAN.md § 阶段 3/4/5/6](./PLAN.md)。
+详见 [PLAN.md § 阶段 3/4/5/6/7](./PLAN.md)。
 
 ---
 

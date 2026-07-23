@@ -15,6 +15,7 @@ import { EventEmitter } from 'eventemitter3';
 import { Bounds } from './bounds';
 import { ClusterManager } from './cluster-manager';
 import { FeatureIndex } from './feature-index';
+import type { ISourceStats } from './interface';
 import type { ParserRegistry } from './parser-registry';
 import { defaultRegistry } from './parser-registry';
 import { TilesetAdapter } from './tileset-adapter';
@@ -214,6 +215,32 @@ export default class Source extends EventEmitter implements ISource {
 
   public getParserType() {
     return this.parser.type;
+  }
+
+  /**
+   * 数据只读快照（阶段 6.4）。
+   *
+   * 暴露 rows / bbox / parserType / tileCount / isTile / cluster / dataVersion，
+   * 便于调试与 size 监控。纯只读，不变 Source 状态，对 `new Source` /
+   * `Source.create` / `setData` 路径**零行为变化**（minor-safe 新增 API）。
+   *
+   * - `rows` = `data.dataArray.length`（init 未完成时 `data` 可能为
+   *   `undefined`，`?? 0` 兜底）；瓦片源此处为子瓦片解析结果条数。
+   * - `tileCount` = `tileset.currentTiles.length`（瓦片随视口动态加载，
+   *   未 `tileset.update` 时为 `0`）；非瓦片源为 `0`，配合 `isTile` 区分。
+   * - `bbox` 直接返回 `extent`（未计算范围时为 `Bounds.extent` 初值
+   *   `undefined`，与公开 getter `extent` 一致）。
+   */
+  public stats(): ISourceStats {
+    return {
+      rows: this.data?.dataArray?.length ?? 0,
+      bbox: this.extent,
+      parserType: (this.parser as IParserCfg).type || 'geojson',
+      tileCount: this.tileset?.currentTiles.length ?? 0,
+      isTile: this.isTile,
+      cluster: this.cluster,
+      dataVersion: this.dataVersion,
+    };
   }
 
   public updateClusterData(zoom: number): void {

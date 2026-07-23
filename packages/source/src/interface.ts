@@ -10,7 +10,7 @@
 // 阶段 2.1: Parser 契约 + 已注册 parser 键名所需运行时类型
 import type { IJsonData, IParserCfg, IParserData, ITileParserCFG } from '@antv/l7-core';
 import type { ITileBand, RequestParameters } from '@antv/l7-utils';
-import type { FeatureCollection, Geometries, Properties } from '@turf/helpers';
+import type { BBox, FeatureCollection, Geometries, Properties } from '@turf/helpers';
 
 // 与 @antv/l7-core 重复的类型 —— 单一来源在 core，此处仅作 re-export 透传
 export type {
@@ -24,6 +24,30 @@ export type {
 } from '@antv/l7-core';
 
 // ===== @antv/l7-source 专有类型 =====
+
+/**
+ * 数据只读快照（阶段 6.4 `Source.stats()`）。
+ *
+ * 暴露已解析数据行数 / 数据范围 / parser 类型 / 已加载瓦片数 /
+ * 是否瓦片源 / 是否聚合 / 数据 generation，便于调试与 size 监控。
+ * 纯只读，不变 Source 状态。
+ */
+export interface ISourceStats {
+  /** 已解析数据行数（`data.dataArray.length`） */
+  rows: number;
+  /** 数据范围 [minLng, minLat, maxLng, maxLat] */
+  bbox: BBox;
+  /** 当前 parser 类型（`parser.type`），默认 `'geojson'` */
+  parserType: string;
+  /** 已加载瓦片数（`tileset.currentTiles.length`）；非瓦片源为 `0` */
+  tileCount: number;
+  /** 是否为瓦片数据源 */
+  isTile: boolean;
+  /** 是否开启聚合（`cluster`） */
+  cluster: boolean;
+  /** 数据 generation（`setData` / `updateFeaturePropertiesById` 递增） */
+  dataVersion: number;
+}
 
 export type TypedArray =
   | Int8Array
