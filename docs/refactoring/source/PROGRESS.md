@@ -4,7 +4,7 @@
 
 ---
 
-## [阶段 6.4] `Source.stats()` 只读快照 — `ISourceStats` 类型 + stats() 方法 + 7 case spec（commit 待补）
+## [阶段 6.4] `Source.stats()` 只读快照 — `ISourceStats` 类型 + stats() 方法 + 7 case spec（commit 0c37617）
 
 - **改了什么（1 新 API + 1 新类型 + 1 新 spec，纯增量，零行为变化）**：
   - **新类型 `ISourceStats`**（`packages/source/src/interface.ts`）：7 字段只读快照 ——
