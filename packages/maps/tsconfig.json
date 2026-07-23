@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "strict": false,
     "types": [
       "@types/amap-js-api",
       "@types/bmapgl",

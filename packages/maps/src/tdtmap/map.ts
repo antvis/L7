@@ -13,8 +13,8 @@ import type {
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { MercatorCoordinate } from '@antv/l7-map';
 import Viewport from '../lib/web-mercator-viewport';
+import { MercatorCoordinate } from '../mapbase';
 import { load } from './maploader';
 
 let mapdivCount: number = 0;

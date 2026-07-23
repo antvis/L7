@@ -1,4 +1,4 @@
-import Source from '@antv/l7-source';
+import { Source } from '@antv/l7-layers';
 import DataSourcePlugin from '../../src/plugins/DataSourcePlugin';
 
 /**

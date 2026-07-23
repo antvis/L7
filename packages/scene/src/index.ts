@@ -1,4 +1,3 @@
-import { Logo } from '@antv/l7-component';
 import type {
   Bounds,
   ICameraOptions,
@@ -29,13 +28,14 @@ import type {
 } from '@antv/l7-core';
 import { SceneEventList, createLayerContainer, createSceneContainer } from '@antv/l7-core';
 import { MaskLayer, TileLayer } from '@antv/l7-layers';
-import { DeviceRendererService } from '@antv/l7-renderer';
 import type { IProtocolHandler } from '@antv/l7-utils';
 import { DOM, SceneConifg } from '@antv/l7-utils';
 import type ILayerManager from './ILayerManager';
 import type IMapController from './IMapController';
 import type IPostProcessingPassPluggable from './IPostProcessingPassPluggable';
 import BoxSelect, { BoxSelectEventList } from './boxSelect';
+import { Logo } from './component';
+import { DeviceRendererService } from './renderer';
 
 /**
  * 暴露 Scene API
@@ -577,4 +577,5 @@ class Scene implements IPostProcessingPassPluggable, IMapController, ILayerManag
   }
 }
 
+export * from './component';
 export { Scene };

@@ -80,3 +80,5 @@ jspm_packages/
 .github/skills/*
 .playwright-mcp
 .claude
+# local pnpm store cache
+.pnpm-store/

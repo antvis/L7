@@ -9,11 +9,11 @@ import type {
   Point,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { MercatorCoordinate } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
 import Viewport from '../lib/web-mercator-viewport';
+import { MercatorCoordinate } from '../mapbase';
 import { MapTheme } from '../utils/theme';
 import './logo.css';
 import GMapLoader from './maploader';

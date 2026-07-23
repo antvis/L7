@@ -2,10 +2,10 @@
  * MapboxService
  */
 import type { IMercator } from '@antv/l7-core';
-import { Map, MercatorCoordinate } from '@antv/l7-map';
 import { mat4, vec3 } from 'gl-matrix';
 import MapboxBaseMap from '../lib/mapbox-base-map';
 import Viewport from '../lib/web-mercator-viewport';
+import { Map, MercatorCoordinate } from '../mapbase';
 import { MapType } from '../types';
 
 export default class DefaultMapService extends MapboxBaseMap<Map> {

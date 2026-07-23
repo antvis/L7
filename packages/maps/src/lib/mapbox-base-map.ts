@@ -25,8 +25,8 @@ import type {
   IStatusOptions,
 } from '@antv/l7-core';
 import { MapServiceEvent } from '@antv/l7-core';
-import { type Map } from '@antv/l7-map';
 import { DOM } from '@antv/l7-utils';
+import { type Map } from '../mapbase';
 import { MapTheme } from '../utils/theme';
 import BaseMap from './base-map';
 

@@ -3,8 +3,8 @@
  */
 import type { Bounds, IEarthService, IMercator } from '@antv/l7-core';
 import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
-import { Map, MercatorCoordinate } from '@antv/l7-map';
 import MapboxBaseMap from '../lib/mapbox-base-map';
+import { Map, MercatorCoordinate } from '../mapbase';
 import Viewport from './Viewport';
 const EventMap: {
   [key: string]: any;

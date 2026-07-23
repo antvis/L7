@@ -9,8 +9,8 @@ import type {
   ScaleTypeName,
 } from '@antv/l7-core';
 import { IDebugLog, ILayerStage, ScaleTypes, StyleScaleType } from '@antv/l7-core';
-import type { IParseDataItem } from '@antv/l7-source';
 import { interpolateRgbBasis, lodashUtil } from '@antv/l7-utils';
+import type { IParseDataItem } from '../source';
 import identity from '../utils/identityScale';
 import {
   scaleDiverging,
