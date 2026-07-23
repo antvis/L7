@@ -13,9 +13,11 @@
 
 ## 当前状态
 
-- **工作分支**：`refactor/source-progressive`（基于 `master` @ `3f81df9`）
 - **起始日期**：2026-07-20
-- **当前阶段**：阶段 0 — 低风险清理
+- **合并状态**：PR #2882 已合并到 `master`（merge commit `cd654c1`，2026-07-23）
+- **当前阶段**：阶段 0–6 全部落地并合并；阶段 7（class 层级 / pipeline / geojsonvt-decoder）为可选长期项
+- **文档同步**：API 文档 `source.{zh,en}.md` 已补全新公开方法与兼容性说明（commit `1831635`）；本轮再补兼容性 / 弃用提示 + 修 en 文档 embed 引用
+- **测试基线**：jest source 133 + layers 57 passed 1 skipped = 零回归；tsc source 0 / layers 229（基线）
 - **进度概览**：见 [PROGRESS.md](./PROGRESS.md) 顶部
 
 ## 重构原则

@@ -4,6 +4,41 @@
 
 ---
 
+## [合并] PR #2882 — 阶段 0–6 渐进式重构合入 master（merge `cd654c1`）
+
+- **事件**：PR #2882 `refactor(source): @antv/l7-source 渐进式重构（阶段 0-6，happy path 零行为变化）`
+  由作者本人合并，merge commit `cd654c1`（2026-07-23 07:43）。
+- **范围**：阶段 0（清理）/ 1（拆 God Class：`ClusterManager` / `ParserRegistry`）/ 2（注册机制 +
+  `@deprecated` wrapper）/ 3（raster 4 loader 集成测试）/ 4（异步生命周期 `ready` + `error` 事件 +
+  `dataVersion` + premature-resolve 修复）/ 5（包边界 re-export transitional）/ 6（transform 不可变 +
+  raster 单测 + 脆弱断言改造 + `stats()` 快照）。
+- **兼容性结论（逐项代码核查）**：旧 `new Source(data, cfg)` / `cluster: true` / 全局 `getParser` 等
+  全部兼容（见下条「兼容性核查」）。4 处 strictly-better minor 行为变化（ParserNotFoundError 精准化、
+  premature-resolve 修复、`error` 事件、clusterTransform deprecation warn）均非回归。
+- **验证基线**：jest source 133 + layers 57 passed 1 skipped = 零回归；tsc source 0 / layers 229（基线）。
+
+## [文档] API 文档补全 — 新公开方法 + error 事件（commit `1831635`）
+
+- **改了什么**：`site/docs/api/source/source.{zh,en}.md` 补全重构引入的公开 API —— `create` /
+  `createSource` / `ready` / `stats()` / `dataVersion` / `error` 事件，与代码签名严格对齐。
+- **注**：本 commit 在 PR 合并后直接推 `master`（作者本人合 PR 与补文档为连续动作），非常规 PR 流程，
+  最终状态正确（`origin/master` 顶部 `1831635` → `cd654c1`）。
+
+## [文档] 兼容性说明 + 弃用提示 + en embed 修正（本轮 `docs/source-post-merge` 分支）
+
+- **改了什么**：
+  - `source.{zh,en}.md` 新增「兼容性 / Compatibility」小节：明确旧 `new Source(data, cfg)` /
+    `cluster: true` / `ISourceCFG` 旧字段 / `'update'` 事件全部向后兼容，新 API 为可选迁移路径。
+  - `cluster` 段补弃用提示：`transforms: [{ type: 'cluster' }]` 已弃用，改用 `cluster: true`。
+  - 修正 en 文档 embed 引用 bug：`source.en.md` / `mvt.en.md` / `raster_tile.en.md` 原嵌入
+    `method.zh.md`（中文）→ 改为 `method.en.md`（英文版早已存在）。该 bug 为既有问题（commit
+    `1d5c5fa`），非本次重构引入，本轮顺手修正。
+- **为什么**：用户反复确认「兼容原来写法」—— 文档需给出明确可查的兼容性结论，而非仅靠口头核查；
+  弃用项需在 API 文档留痕，避免用户见 warn 不知所措。
+- **验证**：纯文档改动，零代码 / 测试影响。
+
+---
+
 ## [阶段 6.4] `Source.stats()` 只读快照 — `ISourceStats` 类型 + stats() 方法 + 7 case spec（commit 0c37617）
 
 - **改了什么（1 新 API + 1 新类型 + 1 新 spec，纯增量，零行为变化）**：

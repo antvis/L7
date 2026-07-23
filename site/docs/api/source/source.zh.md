@@ -20,6 +20,19 @@ const source = new Source(data, option);
   - parser 数据解析配置
   - transforms 数据处理配置
 
+## 兼容性
+
+本次渐进式重构（阶段 0–6）保证**对外 API 完全向后兼容**，旧写法无需改动即可继续工作：
+
+- `new Source(data, cfg)` 与 `new Source(data)` 写法保持不变（`cfg` 与 `registry` 均可选）。
+- `cluster: true` 配置静默走新 `ClusterManager` 直调路径，**无任何 warning**。
+- `ISourceCFG` 旧字段（`cluster` / `clusterOptions` / `parser` / `transforms` / `autoRender`）全部保留。
+- 事件 `'update' { type: 'inited' | 'update' }` 行为不变；新增 `'error'` 事件仅用于显式 surfacing 失败（无监听即静默）。
+
+新增的 `Source.create` / `createSource` / `source.ready` / `source.stats()` / `source.dataVersion` 为可选的更优路径，旧代码可按需逐步迁移，非强制。
+
+> `transforms` 配置项中 `{ type: 'cluster' }` 已弃用（运行时会 warn 一次，但仍可工作）。聚合请改用顶层 `cluster: true` 配置项，详见下方 [cluster](#cluster)。
+
 ## data
 
 不同 parser 类型对应不同 data 类型
@@ -226,6 +239,9 @@ layer.source(data, {
 - cluster: `boolean`
 
 `cluster` 表示是否对数据进行聚合操作， 目前只有点图层支持。
+
+> 推荐使用 `cluster: true` 顶层配置项开启聚合。
+> `transforms: [{ type: 'cluster' }]` 已弃用（会破坏 `source.data` 语义并 warn），仅为向后兼容保留。
 
 ### clusterOption 可选
 
