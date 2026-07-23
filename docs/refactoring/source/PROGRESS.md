@@ -31,7 +31,7 @@
 
 ---
 
-## [阶段 6.1] transform 不可变 — filter/map/join 返回新对象（commit 待补）
+## [阶段 6.1] transform 不可变 — filter/map/join 返回新对象（commit 215b2ea）
 
 - **改了什么（3 文件，纯内部重构）**：
   - `packages/source/src/transform/filter.ts`：`data.dataArray = data.dataArray.filter(callback); return data;`
