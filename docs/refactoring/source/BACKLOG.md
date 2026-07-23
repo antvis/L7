@@ -262,3 +262,27 @@
 - **前置**：4.4 的 deprecation warn 已给消费方迁移信号（`transforms:[{type:'cluster'}]` → `cluster: true` cfg）。观察 1-2 个 minor 周期无人申诉后再 major 移除。
 - **状态**：open（待 major 周期）
 - **发现于**：阶段 4.4
+
+### [阶段 5.1 scoping] relative-coordinates 迁出 source — Approach B 类型设计待决
+
+- **位置**：`packages/source/src/utils/relative-coordinates.ts`（待迁出）→ 目标
+  `@antv/l7-utils/src/relative-coordinates.ts`；消费方 `packages/layers/src/core/BaseLayer.ts:42`。
+- **问题**：5.1 原 PLAN「迁 layers/utils + source type re-export 过渡」经依赖图勘探
+  **部分推翻**（详见 PROGRESS [阶段 5.1 scoping]）：source↔layers 循环令 layers 目标 +
+  re-export 过渡不可能；utils 目标须解耦 `IParseDataItem`（utils 无 l7 依赖、`core→utils`
+  故 utils→core 循环）。推荐 **Approach B**：迁 utils + 解耦类型 + source re-export 过渡
+  （minor-safe）。
+- **待决（执行前须定）**：解耦后 4 函数 + `IRelativeCoordinateResult` 的类型设计 ——
+  泛型 `<T extends {coordinates?: unknown}>` 还是本地 `IRelativeDataItem` minimal interface。
+  `IRelativeCoordinateResult.dataArray` 现为 `IParseDataItem[]`，迁 utils 后变 `T[]` /
+  `IRelativeDataItem[]`（公开 type 涟漪）—— `IRelativeCoordinateResult<T>` 默认值选取
+  （无 core 依赖下无天然默认）或接受 `dataArray` type 收窄。须 tsc 验证 `IParseDataItem`
+  与 minimal interface 结构兼容（IParseDataItem 无 index signature，minimal interface 须不含
+  冲突必填字段，否则 `IParseDataItem[] → IRelativeDataItem[]` 赋值失败）。
+- **建议**：执行 Approach B 时，先用本地 `IRelativeDataItem { coordinates?: unknown }`
+  minimal interface（非泛型，ripple 最小），`IRelativeCoordinateResult.dataArray: IRelativeDataItem[]`。
+  BaseLayer 消费 `result.dataArray`/`relativeOrigin`/`originalExtent` 均结构访问不受影响。
+  source re-export `export { ... } from '@antv/l7-utils'` + `export type { ... }` 过渡一个 minor，
+  未来 major 可移除 re-export（届时 `@antv/l7-source` 不再导出 relative-coordinates）。
+- **状态**：scoping done（方案修订记 PLAN/PROGRESS）；执行待下一「继续」
+- **发现于**：阶段 5.1 scoping

@@ -12,8 +12,11 @@ TileLoader / 3.2 raster / 3.3 image / 3.4 CustomDataProvider）全部完成**；
 亦已于 4.1b 收敛。下一价值高地：
 
 - **阶段 5.1/5.2（推荐下一主推进，包边界，新价值区）**：`relative-coordinates.ts` 迁
-  `@antv/l7-layers`/`utils`，从 source 公开导出移除（re-export 过渡一个 minor）；
-  `processRelativeCoordinates` 改 layer 自调。跨包，中等风险。开新价值区，进入 stage-5。
+  出 source —— **scoping 已完成（见下方条目），方案修订**：依赖图勘探发现
+  source↔layers 循环令 layers 目标 + re-export 过渡不可能，原「type re-export 过渡」
+  纪律冲突。**推荐 Approach B**（target=`@antv/l7-utils` + 解耦 `IParseDataItem` 类型
+  依赖 + source re-export 过渡保公开 API，minor-safe）。下一「继续」执行 B：utils 落地
+  函数 + source re-export + BaseLayer 改 import + 删 source 本地文件。跨包，中等风险。
 - **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
   wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需
   changeset major，defer。
@@ -23,6 +26,41 @@ TileLoader / 3.2 raster / 3.3 image / 3.4 CustomDataProvider）全部完成**；
   raster-tile loader 直接单测覆盖缺口（4 小 loader 行为已由 16 case spec 间接锁）。
 
 详见 [PLAN.md § 阶段 3/4/5](./PLAN.md)。
+
+## [阶段 5.1 scoping] relative-coordinates 迁出 source — 依赖图勘探 + 方案修订（纯评估，无代码）
+
+- **评估什么**：5.1 原 PLAN 拟「`relative-coordinates.ts` 迁 layers/utils + source 保 type
+  re-export 过渡一个 minor」。本步勘探依赖图 + call sites 判定目标可行性 + re-export 过渡
+  是否成立。
+- **勘探结论**：
+  - **`IParseDataItem` 定义在 `@antv/l7-core`**（`core/src/services/source/ISourceService.ts:119`）；
+    source 的 `interface.ts:22` 仅 re-export（阶段 0.1 已统一）。
+  - **依赖图**：`core→utils`、`source→{core,utils}`、`layers→{core,source,utils}`（各 package.json deps 确认）。
+  - **唯一函数消费方**：`packages/layers/src/core/BaseLayer.ts:42` `import { processRelativeCoordinates
+} from '@antv/l7-source'`（+ 同类 `1404-1422` `processRelativeCoordinates()` 方法）。其余 `relativeOrigin`
+    /`enableRelativeCoordinates` 命中均为 layers 内 config 字段 / 本地变量，与函数迁出无关。
+    `source/loader/geojsonvt-loader.ts:155` 的 `relativeOrigin:[0,0]` 是无关瓦片字段。
+    examples/dev/docs **零代码 import**（仅 BACKLOG/PLAN/PROGRESS 文档引用）。
+  - **`@antv/l7-utils` 无任何 `@antv/*` 依赖**（deps: @babel/runtime/@turf/earcut/eventemitter3/gl-matrix）。
+- **两方案**：
+  - **Approach A（target=layers）❌**：layers 已有 core（拿类型），消费方改本地 import；
+    **但 source→layers re-export 循环**（layers→source 已存在）→ re-export 过渡**不可能** →
+    source 公开导出须**彻底移除** = breaking（major 级 API 移除），与「major removal 留未来」纪律冲突。
+  - **Approach B（target=utils，推荐）✓**：utils 无 l7 依赖 → 须**解耦 `IParseDataItem` 类型依赖**
+    （4 个函数 + `IRelativeCoordinateResult` 仅用 `item.coordinates`，改泛型
+    `<T extends {coordinates?: unknown}>` 或本地 `IRelativeDataItem` minimal interface）。
+    source `export {...} from '@antv/l7-utils'` re-export（source→utils 已存在，**过渡保公开 API**，
+    minor-safe）；BaseLayer 改 `import from '@antv/l7-utils'`。**代价**：`IRelativeCoordinateResult.dataArray`
+    类型 `IParseDataItem[]` → `T[]`/`IRelativeDataItem[]`（公开 type 涟漪，需泛型默认值或接受收窄；
+    BaseLayer 结构访问不受影响）。**推荐 B**：保 minor-safe + 符合 PLAN 原「re-export 过渡」意图。
+- **纯评估切片，无代码改动**（同 4.1b / 4.2 后续评估模式）。PLAN 5.1/5.2 已据发现修订
+  （记 Approach A/B + 推荐 B）。下一「继续」执行 Approach B。
+- **风险 / 待决**：Approach B 的 `IRelativeCoordinateResult<T>` 默认值选取（无 core 依赖下无天然默认
+  → `T = {coordinates?: unknown}` 或接受 `dataArray` type 收窄）；`IRelativeDataItem` 与 `IParseDataItem`
+  结构兼容性须 tsc 验证（IParseDataItem 无 index signature，minimal interface 须不含冲突必填字段）。
+- **基线**：无代码改，jest source 110 baseline 不变（docs only）。
+
+---
 
 ## [阶段 3.2.2] RasterTileLoader 6 分支 switch 拆 4 loader + 接口化（commit 0ce4700）
 
