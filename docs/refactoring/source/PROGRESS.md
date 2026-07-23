@@ -17,7 +17,7 @@
 
 ---
 
-## [阶段 4.1b 评估] `new Source` deprecation — 勘探结案 wontfix（commit 待补）
+## [阶段 4.1b 评估] `new Source` deprecation — 勘探结案 wontfix（commit efe236d）
 
 - **评估什么**：阶段 4.1 原含「保留 `new Source` 走旧路径并 `console.warn` deprecation」，4.1a 纯叠加切片推迟到 4.1b。本步勘探全仓 call sites 判定 deprecation 是否可行 / 有无 bad-pattern 可推。
 - **勘探结论（git grep 全仓 `new Source(` / `Source.create(` / `createSource(` —— `-- packages`）**：
