@@ -27,7 +27,7 @@ TileLoader / 3.2 raster / 3.3 image / 3.4 CustomDataProvider）全部完成**；
 
 详见 [PLAN.md § 阶段 3/4/5](./PLAN.md)。
 
-## [阶段 5.1 scoping] relative-coordinates 迁出 source — 依赖图勘探 + 方案修订（纯评估，无代码）
+## [阶段 5.1 scoping] relative-coordinates 迁出 source — 依赖图勘探 + 方案修订（commit 4eab778）
 
 - **评估什么**：5.1 原 PLAN 拟「`relative-coordinates.ts` 迁 layers/utils + source 保 type
   re-export 过渡一个 minor」。本步勘探依赖图 + call sites 判定目标可行性 + re-export 过渡
