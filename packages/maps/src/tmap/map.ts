@@ -62,7 +62,7 @@ export default class TMapService extends BaseMap<TMap.Map> {
     if (this.viewport) {
       this.viewport.syncWithMapCamera(option as any);
       this.updateCoordinateSystemService();
-      this.cameraChangedCallback(this.viewport);
+      this.cameraChangedCallback?.(this.viewport);
     }
   };
 
