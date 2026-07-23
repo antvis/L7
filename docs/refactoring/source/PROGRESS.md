@@ -6,15 +6,39 @@
 
 ## 📍 下一步
 
-**阶段 4.3a 完成（dataVersion 版本号 infra）**：`ISource` + `Source` 新增 `dataVersion` 单调递增计数器（纯叠加，零行为变化）。bump 点 = `setData`（全量 reseat）+ `updateFeaturePropertiesById`（原地属性变更）；不 bump = `updateClusterData`（zoom 驱动聚合视图重算，originData 未变）+ 构造期首次 parse（generation 0 = 初始数据）。setData 的 bump 在 reseat 同步阶段即生效（先于 `'update'` fire），下游可据此判断「新版本 in-flight，缓存已过期」。spec 5 case。下一价值高地：
+**阶段 4.3b 完成（setData 失败 surfacing）**：`setData` 的 `init().then(emit 'update')` 旧路径无 `.catch` → re-parse 失败时 `'update'` 不 fire（消费方 hang）+ 未捕获 rejection（吞错，同 4.2 为构造期 initPromise 修的 swallow/hang 模式）。现加 `.catch(emit 'error')`：失败由 `'error'` 事件 surface（eventemitter3 无 Node 'error' 抛错语义，无监听即静默，安全）；成功路径字节级不变、`'update'` 契约不变。零签名变化（void→void）。spec 3 case（成功基线锁 + 失败 surfacing + 无 unhandled rejection）。**原 4.3b「同 schema skip re-parse」经勘探判定 dead-end**（parse / tilesetAdapter.init / bounds.update / clusterManager.init / executeTrans 全 data-dependent，setData 本质即换 data，skip 无收益）→ 结案记 BACKLOG。下一价值高地：
 
-- **阶段 4.3b（setData 同 schema skip re-parse，行为变更）**：依赖 4.3a 版本号 + setData 调用链画像（layer.setData → BaseLayer.setData → source.setData）+ initCfg/executeParser 二次调用副作用 + 对照 spec；高风险（setData 运行时热路径），单切片，下一主推进。
+- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌。
+- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major。
+- **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
+- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装；setData 失败后 `dataVersion` 已 bump 但 `this.data` stale（recovery 未做）。
 - **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌。
 - **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major。
 - **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
 - **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装。
 
 详见 [PLAN.md § 阶段 4](./PLAN.md)。
+
+---
+
+## [阶段 4.3b] setData 失败 surfacing — swallow/hang → 'error' 事件（commit 待补）
+
+- **改了什么**：
+  - `packages/source/src/base-source.ts` `setData`：`this.init().then(emit 'update')` → 追加 `.catch((err) => this.emit('error', err))`。零签名变化（仍 `void`），零调用方影响（BaseLayer/swipe/examples 均事件消费，不 await）。
+  - 新增 `packages/source/__tests__/set-data.spec.ts`（3 tests）。
+- **方案（minor：strictly-better 行为，零签名变化）**：
+  - **诊断**：setData 旧路径 `init().then(emit 'update')` 无 `.catch`。re-parse/cluster/transform 失败 → `processData` reject → `init()` async reject → `.then` 不执行 → `'update'` **不 fire**（事件消费方 hang，如 BaseLayer.dataUpdatelog 的 `once('update')` debug-log 收尾不闭合）+ fire-and-forget **未捕获 rejection**（吞错）。这正是 4.2 为构造期 `initPromise` 修的 swallow/hang 模式在 setData 路径的复刻。
+  - **fix**：`.catch((err) => this.emit('error', err))`。`'update'` 仍仅成功时 fire（契约不变）；失败由 `'error'` surface。eventemitter3（Source 所用）无 Node `EventEmitter` 的「'error' 无监听即抛」语义 → 无监听即静默，**安全**（不会 crash）。
+  - **为何不 return Promise（opt-in await surfacing，同 ready）**：虽 `no-floating-promises` 未在 eslint.config 启用（call-site 不会 lint 报错），但 void+事件是 setData 既有契约；return Promise 属 API 变更，留待未来切片单独评估。本切片仅修 swallow（最小 strictly-better）。
+- **4.3b 原构想（同 schema skip re-parse）dead-end 结案**：
+  - 勘探 executeParser / clusterManager.init / executeTrans 的 data-vs-schema 依赖：parse（`sourceParser(originData, parser)`）、`tilesetAdapter.init(this.data)`、`bounds.update(extent(data.dataArray))`、clusterManager.init（`cluster(data)` 重建 Supercluster 索引）、executeTrans（transforms on `this.data`）**全 data-dependent**。唯一 schema-dependent 步骤是 `registry.getParser(type)` 查表（微秒级）。
+  - setData 本质即换 `originData` —— 「同 schema + 不同 data」仍须全量 re-parse（data 变了）；「同 schema + 同 data」是退化 no-op。故 skip re-parse 无收益，dead-end。结案记 BACKLOG（wontfix）。
+- **风险 / 边界**：
+  - 成功路径字节级不变（`.then` 链仅在失败时多走 `.catch`），tsc layers 229 / jest layers-plugins 6 baseline 不变佐证零回归。
+  - 失败时 `dataVersion` 已 bump（reseat 已发生，4.3a 语义）但 `this.data` 为旧 parse 结果（stale）；`inited` 留 false。recovery（回滚 originData / 恢复 parser / 重置 dataVersion）不在 4.3b 范围 → BACKLOG 记档。
+  - 无消费方当前监听 `'error'`（git grep 确认 source/layers 零 `'error'` 监听）—— 纯 additive surfacing，不破坏既有行为。
+- **基线**：tsc core 0 / tsc source 0（去 glsl 31 噪音）/ tsc layers 229（不变）/ jest source 110（107+3）/ jest layers-plugins 6 / eslint 0。
+- **遗留**：① setData 失败后 stale-data/inited/dataVersion recovery（BACKLOG）；② return-Promise opt-in await surfacing（未来切片评估）；③ 原 skip-reparse dead-end（BACKLOG wontfix）。
 
 ---
 

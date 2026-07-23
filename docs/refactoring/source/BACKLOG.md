@@ -15,17 +15,18 @@
 - **状态**：open
 -->
 
-### [阶段 4.3b] setData 同 schema skip re-parse（行为变更，高风险）
+### [阶段 4.3b 原构想] setData 同 schema skip re-parse — 勘探判定 dead-end（wontfix）
 
-- **位置**：`packages/source/src/base-source.ts` `setData`(L239) / `initCfg`(L302) / `processData`(L284) / `executeParser`(L325)
-- **问题**：`setData` 每次全量 re-parse（executeParser）+ 重建 cluster index（clusterManager.init）+ 重跑 transforms。对「同 schema 换数据行」场景（用户动态换数据最常见路径），re-parse + re-cluster 全量开销可能浪费。
-- **前置勘探（4.3a 已完成部分）**：
-  - setData 调用链已画像：`layer.setData(data,opt)` → `BaseLayer.setData:597`（inited fast-path / 否则 on('inited') 延迟）→ `this.layerSource.setData:600/604` → `base-source.setData:230`。`swipe.ts:387` maskLayer、examples 经 layer.setData。
-  - source.spec 现状：**无 setData 直接覆盖**（仅 updateFeaturePropertiesById / updateClusterData）—— 4.3b 前须补 setData 对照 spec 锁基线。
-  - 待补：initCfg 二次调用副作用（mergeWith cfg + 重设 parser/transforms/cluster）、executeParser data-dependent 初始化（tilesetAdapter.init(this.data) / bounds.update —— 这些依赖 _data_ 非 schema，skip 风险点）。
-- **建议**：基于 4.3a `dataVersion`，在 `initCfg` 后判断「parser schema 未变 + transforms 未变 + cluster 配置未变」→ 跳过 executeParser 的 schema-resolution 部分，但仍须重跑 data-dependent 初始化（tilesetAdapter.init + bounds.update + clusterManager.init）。**风险高**：data-dependent 与 schema-dependent 的边界需逐一验证，漏判 = 运行时回归。单切片，需完整对照 spec。
-- **状态**：open（待 4.3b 切片，前置勘探 + spec 补齐后）
-- **发现于**：阶段 4.3a
+- **位置**：`packages/source/src/base-source.ts` `setData` / `executeParser` / `clusterManager.init` / `executeTrans`
+- **原构想**：setData 每次全量 re-parse + 重建 cluster index + 重跑 transforms；「同 schema 换数据行」场景可能浪费，设想 skip re-parse。
+- **勘探结论（4.3b 完成 setData 失败 surfacing 时一并完成）**：**dead-end，不实施**。逐一分类 executeParser / clusterManager.init / executeTrans 的 data-vs-schema 依赖：
+  - `executeParser`：① `registry.getParser(type)` 查表 = **schema-dependent**（微秒级，skip 无收益）；② `this.data = sourceParser(this.originData, parser)` = **data-dependent**（originData 变了必须重 parse）；③ `tilesetAdapter.init(this.data)` = **data-dependent**；④ `bounds.update(extent(this.data.dataArray))` = **data-dependent**。
+  - `clusterManager.init`：未启用早返回（no-op）；启用则 `cluster(data)` 重建 Supercluster 索引 = **data-dependent**。
+  - `executeTrans`：transforms 作用于 `this.data` = **data-dependent**。
+  - 结论：昂贵步骤**全 data-dependent**。setData 本质即换 `originData`——「同 schema + 不同 data」仍须全量 re-parse（data 变了）；「同 schema + 同 data」是退化 no-op。skip re-parse 无收益，dead-end。
+- **4.3b 实际切片**：改为 `setData` 失败 surfacing（swallow/hang → `'error'` 事件，strictly-better），见 PROGRESS [阶段 4.3b]。
+- **状态**：wontfix（已勘探判定 dead-end，结案记档避免重复考据）
+- **发现于**：阶段 4.3a，结案于阶段 4.3b
 
 ### [阶段 4.3a review] `updateClusterData` 不 bump `dataVersion` 的语义选择
 
@@ -35,6 +36,15 @@
 - **建议**：未来若下游需区分「聚合视图变」，另设 `clusterViewVersion`（bump on updateClusterData）而非污染 `dataVersion`。4.3b/后续消费方接入时 review 此选择。
 - **状态**：open（低优先，待消费方接入时 review）
 - **发现于**：阶段 4.3a
+
+### [阶段 4.3b 后续] setData 失败后 stale-data / inited / dataVersion recovery 未做
+
+- **位置**：`packages/source/src/base-source.ts` `setData`（4.3b 加 `.catch(emit 'error')`）
+- **问题**：4.3b 仅 surface 失败（emit `'error'`），不做 recovery。setData 失败后source 状态：① `originData` 已换为新 data（reseat 已发生）；② `dataVersion` 已 bump（4.3a reseat 语义，与 parse 成败无关）；③ `this.data` 为**旧 parse 结果**（stale —— executeParser 抛错前未赋值成功，或 tilesetAdapter/bounds 未更新）；④ `inited` 留 `false`（`init()` 首行置 false，失败未恢复 true）；⑤ `this.parser` 可能已被 initCfg 改为坏 type。
+- **影响**：失败后 source 处于半坏状态，后续读 `source.data` 得 stale、`inited===false`。当前无消费方监听 `'error'`（4.3b 纯 additive），实际触发面小；但消费方接入 `'error'` 后需知 recovery 未做。
+- **建议**：未来若要 recovery，须定义回滚策略——至少恢复 `inited` 语义 + 决定 `dataVersion` 是否 un-bump（reseat 已发生但 data 未变，语义两难）+ 是否回滚 `originData`/`parser`。复杂且语义需斟酌，非 strictly-better，留待消费方实际接入 `'error'` 后按需评估。
+- **状态**：open（低优先，待 `'error'` 消费方接入后评估）
+- **发现于**：阶段 4.3b
 
 ### [阶段 0.4] MapboxVectorTile 4 处重复定义需统一
 

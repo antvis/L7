@@ -243,11 +243,23 @@ export default class Source extends EventEmitter implements ISource {
     this.featureIndex.reset();
     this.initCfg(options);
 
-    this.init().then(() => {
-      this.emit('update', {
-        type: 'update',
+    // 阶段 4.3b：setData 失败 surfacing（strictly-better，零签名变化）。
+    // 旧路径 `init().then(emit 'update')` 无 catch → re-parse/cluster/transform
+    // 失败时 'update' 不 fire（事件消费方 hang）+ 未捕获 rejection（fire-and-
+    // forget 吞错，同 4.2 为构造期 initPromise 修的 swallow/hang 模式）。现
+    // `.catch` 后 emit `'error'`：eventemitter3 无 Node 'error' 抛错语义（无监
+    // 听即静默，安全）。'update' 仍仅成功时 fire（契约不变）；失败由 'error'
+    // surface。注：失败时 `dataVersion` 已 bump（reseat 已发生）、`this.data`
+    // 为旧 parse 结果（stale）—— recovery 不在 4.3b 范围，见 BACKLOG。
+    this.init()
+      .then(() => {
+        this.emit('update', {
+          type: 'update',
+        });
+      })
+      .catch((err) => {
+        this.emit('error', err);
       });
-    });
   }
 
   public reloadAllTile() {
