@@ -142,6 +142,15 @@ export interface ISource {
   readonly ready: Promise<void>;
   isTile: boolean;
   data: IParserData;
+  /**
+   * 数据版本计数器（阶段 4.3a infra）：单调递增，每次「数据可能变化」操作 +1，
+   * 供下游缓存 / diff / skip 消费方判断缓存是否过期。bump 点：
+   *   - `setData`（全量 reseat：originData 换 + re-parse + re-cluster + re-transform）
+   *   - `updateFeaturePropertiesById`（原地属性变更）
+   * 不 bump：`updateClusterData`（zoom 驱动聚合视图重算，originData 未变）+ 构造期首次
+   * parse（generation 0 = 初始数据）。纯叠加，零行为变化；未来 4.3b 据此做同 schema skip。
+   */
+  dataVersion: number;
   center: [number, number];
   parser: IParserCfg;
   transforms: ITransform[];

@@ -30,6 +30,15 @@ export default class Source extends EventEmitter implements ISource {
   public type: string = 'source';
   public inited: boolean = false;
   public data: IParserData;
+  // ─── 数据版本计数器（阶段 4.3a，纯叠加 infra）──────────────────
+  // 单调递增 generation：每次「数据可能变化」操作 +1。bump 点：setData
+  // （全量 reseat）、updateFeaturePropertiesById（原地属性变更）。不 bump：
+  // updateClusterData（zoom 驱动聚合视图重算，originData 未变，属派生视图）、
+  // 构造期首次 parse（generation 0 = 初始数据）。
+  // 对 `new Source` / `Source.create` / `setData` / `updateFeaturePropertiesById`
+  // 路径**零行为变化**（仅新增只读语义字段）。未来 4.3b 用本字段做「同 schema
+  // skip re-parse」优化前先补 setData 调用链 + 副作用画像 + 对照 spec。
+  public dataVersion: number = 0;
   // 生命周期钩子
   public hooks = {
     init: new SyncHook(),
@@ -218,6 +227,7 @@ export default class Source extends EventEmitter implements ISource {
 
   public updateFeaturePropertiesById(id: number, properties: Record<string, any>) {
     this.featureIndex.updateProperties(id, properties);
+    this.dataVersion++; // 阶段 4.3a：原地属性变更，bump generation
     this.emit('update', {
       type: 'update',
     });
@@ -229,6 +239,7 @@ export default class Source extends EventEmitter implements ISource {
 
   public setData(data: any, options?: ISourceCFG) {
     this.originData = data;
+    this.dataVersion++; // 阶段 4.3a：数据 reseat，bump generation
     this.featureIndex.reset();
     this.initCfg(options);
 

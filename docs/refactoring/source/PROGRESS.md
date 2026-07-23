@@ -6,15 +6,38 @@
 
 ## 📍 下一步
 
-**阶段 4.4 完成（cluster 双路径合并）**：删 `clusterOptions.enable` 死字段（literal `false`，零消费）；`cluster` transform（Path B，broken——Supercluster 被 `Object.assign` 腐蚀 `source.data`，全仓零使用）改注册为 `clusterTransform` deprecation wrapper（warn + delegate，once-guard）；`ClusterManager.init` 仍直调 `cluster()`（Path A 零 warning）；spec 3 case。cluster 逻辑分裂（PLAN P2 诊断 #6）收敛。下一价值高地：
+**阶段 4.3a 完成（dataVersion 版本号 infra）**：`ISource` + `Source` 新增 `dataVersion` 单调递增计数器（纯叠加，零行为变化）。bump 点 = `setData`（全量 reseat）+ `updateFeaturePropertiesById`（原地属性变更）；不 bump = `updateClusterData`（zoom 驱动聚合视图重算，originData 未变）+ 构造期首次 parse（generation 0 = 初始数据）。setData 的 bump 在 reseat 同步阶段即生效（先于 `'update'` fire），下游可据此判断「新版本 in-flight，缓存已过期」。spec 5 case。下一价值高地：
 
-- **阶段 4.3（setData async + 版本号增量）**：同 schema 的 `setData` 不重新 parse —— 中收益但风险偏高（setData 运行时热路径），下一主推进。
+- **阶段 4.3b（setData 同 schema skip re-parse，行为变更）**：依赖 4.3a 版本号 + setData 调用链画像（layer.setData → BaseLayer.setData → source.setData）+ initCfg/executeParser 二次调用副作用 + 对照 spec；高风险（setData 运行时热路径），单切片，下一主推进。
 - **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌。
 - **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major。
 - **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
 - **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装。
 
 详见 [PLAN.md § 阶段 4](./PLAN.md)。
+
+---
+
+## [阶段 4.3a] dataVersion 版本号计数器 — 纯叠加 infra（commit 待补）
+
+- **改了什么**：
+  - `packages/core/src/services/source/ISourceService.ts`：`ISource` 新增 `dataVersion: number` 契约字段（after `data`，doc 注明 bump 点 / 不 bump 点 / 纯叠加 / 4.3b 展望）。
+  - `packages/source/src/base-source.ts`：
+    - 新增 `public dataVersion: number = 0`（after `data`，doc 同上）。
+    - `setData`：`this.originData = data` 后 `this.dataVersion++`（reseat 同步阶段 bump，先于 init / `'update'` fire）。
+    - `updateFeaturePropertiesById`：`featureIndex.updateProperties` 后、`emit('update')` 前 `this.dataVersion++`（原地变更同步 bump）。
+  - 新增 `packages/source/__tests__/data-version.spec.ts`（5 tests）。
+- **方案（minor：纯叠加 infra，零行为变化）**：
+  - **契约定义**：`dataVersion` = 单调递增 generation。bump 点 = 用户发起的、改变数据语义的操作（`setData` 全量 reseat + `updateFeaturePropertiesById` 原地属性变更，二者均 emit `'update' {type:'update'}`）。不 bump = `updateClusterData`（zoom 驱动聚合视图重算，originData 未变，属派生视图，不 emit）+ 构造期首次 parse（generation 0 = 初始数据）。
+  - **setData bump 时机**：bump 在 `this.originData = data` 之后**同步**执行（init 仍 async）。故 `setData` 调用返回时 `dataVersion` 已 +1，而 `'update'` 事件仍 in-flight —— 下游可读 version 判断「新版本 loading，缓存已过期」，`'update'` fire 时 data 已 re-parse 且 version 仍为该 generation。
+  - **为何不直接做 4.3b（同 schema skip re-parse）**：setData = 运行时热路径 + 用户动态换数据核心 API，改错即运行时回归。4.3a 先铺版本号 infra（与 4.1 infra→4.2 消费模式一致），4.3b 单切片在版本号基础上做 skip，需先补① setData 调用链（已勘探：`layer.setData` → `BaseLayer.setData:597` → `this.layerSource.setData:600/604` → `base-source.setData:230`；swipe.ts:387 / examples 经 layer.setData）② initCfg 二次调用副作用 ③ executeParser data-dependent 初始化（tilesetAdapter.init / bounds.update）④ 对照 spec（source.spec 现无 setData 直接覆盖）。
+  - **为何不 bump updateClusterData**：cluster 下 `source.data` 随 zoom 变（`updateClusterData` 重算），但这是 originData 的*派生视图*而非数据源变更；bump 会令 version 语义混入 zoom 噪音，掩盖真正的 setData 变更。未来若下游需区分「聚合视图变」可另设 `clusterViewVersion`，不在 4.3a 引入。
+- **风险 / 边界**：
+  - 纯叠加：无任何消费方读 `dataVersion`（仅 ISource 契约 + Source 字段 + spec），所有现有路径行为字节级不变。
+  - ISource 新增 required `dataVersion` —— 验证 `implements ISource` 仅 `Source` 一处（git grep 确认无其他 implementor / Source 无 subclass），契约无破坏；tsc layers 229 baseline 不变。
+  - setData 连续调用（`setData(A); setData(B);` before any await）：两次同步 bump → version +2，两次 init() 排队，`'update'` 可能 fire 2 次（既有行为，4.3a 不改）。version 单调性仍成立。
+- **基线**：tsc core 0 / tsc source 0（去 glsl 31 噪音）/ tsc layers 229（不变）/ jest source 107（102+5）/ jest layers-plugins 6 / eslint 0。
+- **遗留**：4.3b 行为切片（同 schema skip re-parse）BACKLOG 记档；`updateClusterData` 不 bump 的语义选择记档供未来 review。
 
 ---
 
