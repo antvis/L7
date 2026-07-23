@@ -6,18 +6,34 @@
 
 ## 📍 下一步
 
-**阶段 4.3b 完成（setData 失败 surfacing）**：`setData` 的 `init().then(emit 'update')` 旧路径无 `.catch` → re-parse 失败时 `'update'` 不 fire（消费方 hang）+ 未捕获 rejection（吞错，同 4.2 为构造期 initPromise 修的 swallow/hang 模式）。现加 `.catch(emit 'error')`：失败由 `'error'` 事件 surface（eventemitter3 无 Node 'error' 抛错语义，无监听即静默，安全）；成功路径字节级不变、`'update'` 契约不变。零签名变化（void→void）。spec 3 case（成功基线锁 + 失败 surfacing + 无 unhandled rejection）。**原 4.3b「同 schema skip re-parse」经勘探判定 dead-end**（parse / tilesetAdapter.init / bounds.update / clusterManager.init / executeTrans 全 data-dependent，setData 本质即换 data，skip 无收益）→ 结案记 BACKLOG。下一价值高地：
+**阶段 4.1b 评估完成（= wontfix 结案）**：勘探 `new Source` / `Source.create` / `createSource` 全仓 call sites（git grep）—— 生产代码仅 1 处 `new Source` 消费方 `DataSourcePlugin.ts:15`，用的正是 4.2 确立的合法 `new Source` + `await source.ready` race-free 模式（非 `Source.create`）；`Source.create` / `createSource` 生产零采用。故 4.1b「`new Source` 加 `console.warn` deprecation」自相矛盾（warn 会 nag 唯一合法站点）+ 无 bad-pattern call site 可迁（4.2 已清掉唯一真实 race）+ `new Source` 是公开构造器（doc/examples 大量用，deprecate 需 major，不该 minor 推）→ **wontfix 结案**，阶段 4 主题全部收敛。下一价值高地：
 
-- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌。
-- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major。
-- **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
-- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装；setData 失败后 `dataVersion` 已 bump 但 `this.data` stale（recovery 未做）。
-- **阶段 4.1b（deprecation 收尾）**：`new Source` 加 `console.warn` deprecation 推动 `create`/`ready` 退役。注：`DataSourcePlugin` 仍用 `new Source` + `await ready`（合法模式），deprecation 范围需斟酌。
-- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major。
-- **阶段 3.2.2**（边际收益补丁，可选）：`RasterTileLoader` 6 分支 switch 拆 4 独立小 loader + 接口化。
-- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装。
+- **阶段 3.2.2（推荐下一主推进，延续 stage-3 loader 解耦弧）**：`RasterTileLoader` 6 分支 switch 拆 6 独立小 loader + 引入 `RasterTileLoader` 接口由分发器按 dataType 选 loader。3.2.1 已抽分发器（类持 `data`/`tileDataType`/`cfg`，6 分支机械搬入 `loadTile`），3.2.2 是进一步拆。中等工作量（6 个 loader + interface），可能需拆多个「继续」。
+- **阶段 5.1/5.2（包边界，新价值区）**：`relative-coordinates.ts` 迁 `@antv/l7-layers`/`utils`，从 source 公开导出移除（re-export 过渡一个 minor）；`processRelativeCoordinates` 改 layer 自调。跨包，中等风险。
+- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major，defer。
+- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装（可改 sync throw 等价）；setData 失败后 `dataVersion` 已 bump 但 `this.data` stale（recovery 未做，4.3b 遗留）。
 
-详见 [PLAN.md § 阶段 4](./PLAN.md)。
+详见 [PLAN.md § 阶段 3/4/5](./PLAN.md)。
+
+---
+
+## [阶段 4.1b 评估] `new Source` deprecation — 勘探结案 wontfix（commit 待补）
+
+- **评估什么**：阶段 4.1 原含「保留 `new Source` 走旧路径并 `console.warn` deprecation」，4.1a 纯叠加切片推迟到 4.1b。本步勘探全仓 call sites 判定 deprecation 是否可行 / 有无 bad-pattern 可推。
+- **勘探结论（git grep 全仓 `new Source(` / `Source.create(` / `createSource(` —— `-- packages`）**：
+  - **生产代码 `new Source(` 仅 1 处**：`packages/layers/src/plugins/DataSourcePlugin.ts:15`（`source = new Source(data, options)`）—— 正是阶段 4.2 迁移到 `new Source` + `await source.ready` 的合法 race-free 模式（`if (source.inited)` fast-path + `else await source.ready`，已读确认 L10-36）。非 `Source.create`，而是借 4.1 的 `ready` getter 消除 race。
+  - **`Source.create(` 生产零消费**：仅 spec 文件（`create-async` / `data-version` / `set-data`）+ `base-source.ts` 内部定义/doc 注释。
+  - **`createSource(` 生产零消费**：仅 spec（`create-source.spec`）+ source 包内 doc 注释与自身定义（`base-source.ts` / `create-source.ts` / `factory.ts` / `builtins.ts` / `interface.ts`）。
+  - source 包内其余 `new Source(` 命中均为工厂内部（`base-source.ts` `Source.create` 内部 `new Source`、`create-source.ts` `createSource` 包装 `new Source`）—— 非消费 call site。
+  - examples/demos 多处 `new Source(geoData)`，但属 demo 代码 + 经 layer 包装（`layer.setData` 路径），非直接 race 场景。
+- **wontfix 五条理由**：
+  1. **自相矛盾**：4.1b「`new Source` 加 `console.warn`」会 nag 唯一生产消费方 `DataSourcePlugin` —— 而它用的正是 4.2 确立的合法 `new Source` + `await ready` 模式。warn 一个合法站点是错误的。
+  2. **零 bad-pattern call site**：4.2 已清掉唯一真实 race（DataSourcePlugin 旧 `'update'` 手写 Promise premature-resolve + init 失败 hang）。全仓无「`new Source` + 同步读 `source.data` / `inited`」的 race 残留。
+  3. **`Source.create` / `createSource` 生产零采用 → 无迁移可「推」**：deprecation 推动退役的目标 API 没有消费方，deprecation 无对象。
+  4. **`new Source` 是公开构造器**：doc + examples 大量使用，是主流入口。deprecate 它属 major 级 API 劝退，不该在 minor 周期推进。
+  5. **race 已在消费侧解决**：4.1 的 `ready` getter 已提供 opt-in await surface（`new Source` + `await source.ready`）；非 await 路径的 unhandled rejection 是 4.1 明确保留的现状（fire-and-forget 语义）。`Source.create` 仅是 sugar，非必需。
+- **纯评估切片，无代码改动**（同 4.2 后续 BaseLayer:1070 评估 `f20b3e6` 模式）。阶段 4 主题（4.1 infra + 4.2 迁移 + 4.2 后续评估 + 4.3a 版本号 + 4.3b 失败 surfacing + 4.4 cluster 合并 + 4.1b deprecation 评估）全部收敛。后续应转向 stage 3.2.2（loader 解耦弧延续）或 stage 5（包边界）。
+- **基线**：无代码改，jest source 110 baseline 不变（docs only，lint-staged case-police 仅碰 `*.md`）。
 
 ---
 

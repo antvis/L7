@@ -187,13 +187,17 @@
 - **状态**：wontfix（既存 latent bug，well-formed 等价）
 - **发现于**：阶段 3.4
 
-### [阶段 4.1b] `new Source` 的 `console.warn` deprecation 推迟
+### [阶段 4.1b] `new Source` 的 `console.warn` deprecation — 勘探结案 wontfix
 
 - **位置**：`packages/source/src/base-source.ts` `constructor`
-- **问题**：PLAN 阶段 4.1 原含「保留 `new Source` 走旧路径并 `console.warn`」。4.1a 纯叠加切片**不加** warn —— 加 warn 会改变所有现有 `new Source` 调用方的控制台输出（minor 级行为变化），违反「纯叠加零行为变化」渐进纪律。`new Source` 当前仍零警告（与迁移前等价）。
-- **建议**：待阶段 4.2 layers 包迁移到 `Source.create` / `await source.ready` 后，4.1b 给 `new Source` 构造器加 `console.warn('[L7] new Source() is deprecated, use await Source.create() / await source.ready')` 推动 `new Source` 退役。届时需评估 warn 是否影响 layers 现有 `new Source` 调用的测试快照 / 控制台断言。
-- **状态**：open（推迟到 4.2 后）
-- **发现于**：阶段 4.1
+- **原计划**：PLAN 阶段 4.1 原含「保留 `new Source` 走旧路径并 `console.warn` deprecation」。4.1a 纯叠加切片**不加** warn（违反纯叠加零行为变化纪律），推迟到 4.1b 评估实施。
+- **勘探结论（4.1b 评估，git grep 全仓 `new Source(` / `Source.create(` / `createSource(` —— `-- packages`）**：
+  - 生产代码 `new Source(` 仅 1 处：`packages/layers/src/plugins/DataSourcePlugin.ts:15` —— 正是 4.2 确立的合法 `new Source` + `await source.ready` race-free 模式（`if (source.inited)` fast-path + `else await source.ready`）。非 `Source.create`，而是借 4.1 `ready` getter 消除 race。
+  - `Source.create(` / `createSource(` 生产零消费（仅 spec + source 包内定义/doc）；source 包内其余 `new Source(` 命中均为工厂内部；examples/demos 经 layer 包装非直接 race。
+- **wontfix 五条理由**：① 自相矛盾 —— warn 会 nag 唯一生产消费方 `DataSourcePlugin`，而它正是 4.2 合法的 `new Source` + `await ready` 模式；② 零 bad-pattern call site —— 4.2 已清掉唯一真实 race（旧 `'update'` 手写 Promise premature-resolve + init 失败 hang），全仓无 `new Source` + 同步读 `source.data`/`inited` race 残留；③ `Source.create`/`createSource` 生产零采用 → 无迁移可「推」，deprecation 无对象；④ `new Source` 是公开构造器（doc + examples 大量用，主流入口），deprecate 属 major 级 API 劝退，不该 minor 推；⑤ race 已由 4.1 `ready` getter 在消费侧解决（`new Source` + `await source.ready`），非 await 路径 unhandled rejection 是 4.1 明确保留现状，`Source.create` 仅 sugar 非必需。
+- **结论**：**wontfix，不实施 deprecation**。`new Source` 保持公开主流入口地位；`Source.create` / `ready` getter 作为 opt-in 增强 infra 留存（4.1/4.2 已落地），不强制退役 `new Source`。阶段 4 deprecation 主题收敛。
+- **状态**：wontfix（已勘探结案，记档避免重复考据）
+- **发现于**：阶段 4.1，评估结案于阶段 4.1b
 
 ### [阶段 4.x cleanup] `init()` 内 `this.inited = true` 与构造器 `.then` cb 双设冗余
 
