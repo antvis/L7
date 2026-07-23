@@ -37,6 +37,8 @@ export default class BMapService extends BaseMap<BMapGL.Map> {
   };
   protected currentStyle: any = 'normal';
 
+  public version: string = BMAP_VERSION;
+
   // Zoom 偏移量，用于对齐不同地图的显示层级
   protected zoomOffset: number = 1.75;
 
@@ -76,7 +78,7 @@ export default class BMapService extends BaseMap<BMapGL.Map> {
     if (this.viewport) {
       this.viewport.syncWithMapCamera(option as any);
       this.updateCoordinateSystemService();
-      this.cameraChangedCallback(this.viewport);
+      this.cameraChangedCallback?.(this.viewport);
     }
   };
 
