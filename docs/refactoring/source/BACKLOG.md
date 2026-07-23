@@ -93,7 +93,7 @@
   - 断言 fetch 调用入参（url 模板插值、`requestParameters` 透传、`getCustomData` 入参）+ `src.getTileData('defaultLayer')` 返回值 + 取消语义（`tile.xhrCancel` 被设）；
   - `jest.mock` 默认 per-test-file scope，不污染其他 spec，`beforeEach(jest.clearAllMocks())` 清计数。
   - 影像 parser（`image.ts`）的 `getImage` / `getCustomImageData` 同模式 mock。
-- **状态**：部分 done（阶段 3.1.1 `JsonTileLoader` 6 case、阶段 3.1.2 `MVTLoader` 6 case、阶段 3.1.3 `GeoJSONVTLoader` 6 case —— 阶段 3.1 收尾，三个瓦片矢量 loader 全覆盖；阶段 3.2.1 `RasterTileLoader` 6 case —— raster 分发器单测建立；阶段 3.3 `ImageLoader` 7 case —— image.ts parser 去 fetch，含「永不 resolve」失败语义锁定）；剩余 raster-tile 的 4 小 loader 拆分（3.2.2，边际收益）待配套各自单测
+- **状态**：部分 done（阶段 3.1.1 `JsonTileLoader` 6 case、阶段 3.1.2 `MVTLoader` 6 case、阶段 3.1.3 `GeoJSONVTLoader` 6 case —— 阶段 3.1 收尾，三个瓦片矢量 loader 全覆盖；阶段 3.2.1 `RasterTileLoader` 6 case —— raster 分发器单测建立；阶段 3.3 `ImageLoader` 7 case —— image.ts parser 去 fetch，含「永不 resolve」失败语义锁定）；阶段 3.2.2 6 分支 switch 拆 4 独立小 loader + `IRasterTileLoader` 接口 —— 拆分完成，4 小 loader 行为由现有 raster-tile-loader.spec 16 case 间接锁定（分发路由 + 各分支 empty/decode 语义），不做新增 spec（边际收益低）；4 小 loader 的直接 per-loader 单测留作低优先（行为已间接锁，无回归缺口）
 - **发现于**：阶段 3.1.1（JsonTileLoader 抽取时首次建立瓦片 loader 单测，暴露此前 0 覆盖）
 
 ### [阶段 3.x / 测试] jest.mock spec 的 TS2352 type-guard 强转坑

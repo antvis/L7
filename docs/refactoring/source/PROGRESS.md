@@ -6,14 +6,77 @@
 
 ## 📍 下一步
 
-**阶段 4.1b 评估完成（= wontfix 结案）**：勘探 `new Source` / `Source.create` / `createSource` 全仓 call sites（git grep）—— 生产代码仅 1 处 `new Source` 消费方 `DataSourcePlugin.ts:15`，用的正是 4.2 确立的合法 `new Source` + `await source.ready` race-free 模式（非 `Source.create`）；`Source.create` / `createSource` 生产零采用。故 4.1b「`new Source` 加 `console.warn` deprecation」自相矛盾（warn 会 nag 唯一合法站点）+ 无 bad-pattern call site 可迁（4.2 已清掉唯一真实 race）+ `new Source` 是公开构造器（doc/examples 大量用，deprecate 需 major，不该 minor 推）→ **wontfix 结案**，阶段 4 主题全部收敛。下一价值高地：
+**阶段 3.2.2 完成（= 阶段 3 loader 解耦弧全程收敛）**：`RasterTileLoader` 6 分支 switch
+拆 4 独立小 loader + `IRasterTileLoader` 接口（见下方条目）。**阶段 3 主题（3.1 矢量
+TileLoader / 3.2 raster / 3.3 image / 3.4 CustomDataProvider）全部完成**；阶段 4 主题
+亦已于 4.1b 收敛。下一价值高地：
 
-- **阶段 3.2.2（推荐下一主推进，延续 stage-3 loader 解耦弧）**：`RasterTileLoader` 6 分支 switch 拆 6 独立小 loader + 引入 `RasterTileLoader` 接口由分发器按 dataType 选 loader。3.2.1 已抽分发器（类持 `data`/`tileDataType`/`cfg`，6 分支机械搬入 `loadTile`），3.2.2 是进一步拆。中等工作量（6 个 loader + interface），可能需拆多个「继续」。
-- **阶段 5.1/5.2（包边界，新价值区）**：`relative-coordinates.ts` 迁 `@antv/l7-layers`/`utils`，从 source 公开导出移除（re-export 过渡一个 minor）；`processRelativeCoordinates` 改 layer 自调。跨包，中等风险。
-- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform` wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需 changeset major，defer。
-- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；`init()` inited 双设；`processData` Promise 同步包装（可改 sync throw 等价）；setData 失败后 `dataVersion` 已 bump 但 `this.data` stale（recovery 未做，4.3b 遗留）。
+- **阶段 5.1/5.2（推荐下一主推进，包边界，新价值区）**：`relative-coordinates.ts` 迁
+  `@antv/l7-layers`/`utils`，从 source 公开导出移除（re-export 过渡一个 minor）；
+  `processRelativeCoordinates` 改 layer 自调。跨包，中等风险。开新价值区，进入 stage-5。
+- **阶段 4.5（未来 major）**：移除 `cluster` transform 注册（`clusterTransform`
+  wrapper），届时 `transforms:[{type:'cluster'}]` → `TransformNotFoundError`。需
+  changeset major，defer。
+- **BACKLOG 低优先**：`BaseLayer` 的 `off('update', this.sourceEvent)` 空操作 cleanup；
+  `init()` inited 双设；`processData` Promise 同步包装（可改 sync throw 等价）；setData
+  失败后 `dataVersion` 已 bump 但 `this.data` stale（recovery 未做，4.3b 遗留）；
+  raster-tile loader 直接单测覆盖缺口（4 小 loader 行为已由 16 case spec 间接锁）。
 
 详见 [PLAN.md § 阶段 3/4/5](./PLAN.md)。
+
+## [阶段 3.2.2] RasterTileLoader 6 分支 switch 拆 4 loader + 接口化（commit 待补）
+
+- **改了什么（5 文件）**：
+  - 新增 `packages/source/src/loader/raster/image-raster-loader.ts` — `ImageRasterLoader`
+    （IMAGE + 未命中兜底，保 3.2.1 `default` 分支语义；双用 tileParams+tile）。
+  - 新增 `packages/source/src/loader/raster/buffer-raster-loader.ts` — `BufferRasterLoader`
+    （ARRAYBUFFER；RGB 在 parser 侧已归并 ARRAYBUFFER 故共用；双用 tileParams+tile）。
+  - 新增 `packages/source/src/loader/raster/custom-image-raster-loader.ts` —
+    `CustomImageRasterLoader`（CUSTOMIMAGE/CUSTOMTERRAINRGB 共享，tile-only）。
+  - 新增 `packages/source/src/loader/raster/custom-raster-loader.ts` — `CustomRasterLoader`
+    （CUSTOMARRAYBUFFER/CUSTOMRGB 共享，tile-only，format/operation 构造期注入）。
+  - 重构 `packages/source/src/loader/raster-tile-loader.ts` — 导出 `IRasterTileLoader`
+    接口（`loadTile(tileParams, tile): Promise<unknown>`）+ `RasterTileLoader` 分发器持
+    `Map<RasterTileType, IRasterTileLoader>` 按 tileDataType 选 loader、未命中走
+    `ImageRasterLoader` 兜底；删原 `loadCustomImageData`/`loadCustomRasterData` 私有方法
+    （逻辑移入对应小 loader）。唯一消费方 `parser/raster-tile.ts` 零改动。
+- **方案（patch 级纯内部重构，零行为变化；公开 API `ctor(data, tileDataType, cfg)` +
+  `loadTile(tileParams, tile)` 不变）**：
+  - **PLAN 偏差（6→4 loader）**：原 PLAN 拟拆 6 独立小 loader，但 6 个 `RasterTileType`
+    enum 仅 **4 种取数行为** —— CUSTOMIMAGE/CUSTOMTERRAINRGB 共享 `CustomImageRasterLoader`、
+    CUSTOMARRAYBUFFER/CUSTOMRGB 共享 `CustomRasterLoader`；拆 6 会成对重复（同一段
+    `provider.fetch(tile).then(decode)` 逻辑复制两份），故拆 4。Map 仍列 6 key（映射到
+    4 loader 实例），未命中落 image 兜底（保 default 分支：TERRAINRGB/未知 → getTileImage）。
+  - **构造期 resolve**：tileDataType 构造期固定，故 loader 在 ctor 内
+    `loaders.get(tileDataType) ?? image` resolve 一次（等价原 `loadTile` 每次 call 重判
+    switch，略省）。CUSTOM\* 4 分支仍共用一个 `CustomDataProvider` 实例（与 3.4 同；provider
+    无状态故按 enum 拆无行为差异）。
+  - **fewer-params 失败回退教训**：初版 CUSTOM\* loader 试省 `tileParams`（CUSTOM\* 只用
+    `tile`）改单参 `loadTile(tile)` —— **tsc 失败**：TS 从左对齐参数，省第一个 `tileParams`
+    会令实参 `tile` 对齐 interface 第一参 `tileParams`，类型不匹配。已回退完整 2-param
+    `loadTile(tileParams, tile)`；未用的 `tileParams` 依赖 `@typescript-eslint/no-unused-vars`
+    默认 `args:'after-used'`（不检查末位使用参数前的位置参数）零告警。**无
+    `argsIgnorePattern`**，`_` 前缀无效，故不省参。custom-image loader 注释一度残留
+    fewer-params 措辞（截断句 + 自相矛盾）本次修复。
+  - **`import type` 坑**：分发器 `import type { CustomDataProvider }` 但 ctor
+    `new CustomDataProvider(...)` 作值用 → tsc TS1361（cannot be used as a value）。改回
+    值 import `import { CustomDataProvider }`（与迁移前同）。**此错上一轮交接未捕获**
+    （推断因 fewer-params 回退后未重跑 tsc），本轮重跑 5 项验证发现并修复。
+  - **分支等价性逐条核对**（vs 迁移前 switch）：IMAGE→getTileImage / ARRAYBUFFER→
+    getTileBuffer / CUSTOMIMAGE·TERRAINRGB→ loadCustomImageData 逻辑（provider.fetch→
+    !data reject / ArrayBuffer formatImage / HTMLImage 直传 / else reject）/
+    CUSTOMARRAYBUFFER·RGB→ loadCustomRasterData 逻辑（provider.fetch→ data.length===0
+    reject / else processRasterData；format=cfg.format||defaultFormat 构造期注入）/
+    default→getTileImage 兜底。全部字节级等价。
+- **验证（5 项全过）**：prettier ✓ / eslint --max-warnings 0 ✓（after-used 不告警未用
+  tileParams，确认无 argsIgnorePattern 依赖成立）/ tsc source 0（去 glsl 31 噪音）/
+  tsc layers 229 不变 / jest source 110 passed（含 raster-tile-loader.spec **16 case
+  全过** = 行为等价唯一证明，零新增 spec）。
+- **风险 / 边界**：公开 API 不变 → 零回归；CUSTOM\* 4 分支共用一个 provider 实例
+  （provider 无状态，按 enum 拆 provider 无收益）；CUSTOM-image 的 async-cb「挂起」
+  既存隐患（迁移前既有，见 3.4）本阶段不修正（BACKLOG）。
+- **遗留**：① 4 小 loader 缺直接单测（行为已由 16 case 间接锁，BACKLOG 记档）；
+  ② CUSTOM-image async-cb 挂起隐患（3.4 既存，defer）。
 
 ---
 
