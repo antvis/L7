@@ -34,7 +34,12 @@
     "dev": "father dev",
     "lint": "eslint src __tests__"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css",
+    "*.less",
+    "*.js",
+    "*/iconfont/*"
+  ],
   "types": "es/index.d.ts",
   "version": "2.30.0-beta.0"
 }
