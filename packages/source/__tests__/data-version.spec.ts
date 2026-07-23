@@ -89,11 +89,13 @@ describe('source.dataVersion counter (stage 4.3a infra)', () => {
     expect(source.dataVersion).toBe(0);
 
     source.updateClusterData(2);
-    expect(source.data.dataArray.length).toEqual(110);
+    // 聚合生效（点数 > 下界）但 dataVersion 不 bump —— 本断言锁的是后者契约，
+    // 点数精确值随算法 / 数据敏感（阶段 6.3 脆弱断言改造）。
+    expect(source.data.dataArray.length).toBeGreaterThan(50);
     expect(source.dataVersion).toBe(0); // 聚合视图重算，originData 未变 → 不 bump
 
     source.updateClusterData(3);
-    expect(source.data.dataArray.length).toEqual(217);
+    expect(source.data.dataArray.length).toBeGreaterThan(50);
     expect(source.dataVersion).toBe(0);
   });
 });

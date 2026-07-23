@@ -100,7 +100,7 @@ utils/           bandOperation/ tile/ csv/hexbin/relative-coordinates/statistics
 - 6.1 ☑ parser/transform 改不可变（`filter/map/join` 返回新对象，不再原地改入参；grid/hexagon 已不可变；cluster deprecated 见 BACKLOG）
 - 6.2 ☑ 补单测：`image/raster/raster-tile/mvt/geojsonvt/jsonTile` 用 mock loader 各加 happy + error case
   - 阶段 3 已为 image/mvt/geojsonvt/jsonTile/raster-tile 落地 loader spec（happy + error，mock 取数 utils）；本步补 raster 家族纯函数 spec（16 case）
-- 6.3 把 `expect(length).toEqual(110)` 这类脆弱断言改为 `> X` + 形状断言
+- 6.3 ☑ 把 `expect(length).toEqual(脆强大数)` 这类脆弱断言改为 `> X` + 形状断言（cluster 110/217、grid 2511、hexagon 1934 散布 4 spec 全替换；纯数 parser 小断言保留）
 - 6.4 `Source.stats()` 暴露行数/bbox/parser 类型/tile 数，便于调试与 size 监控
 
 ### 阶段 7（可选, 长期）— API 演进
