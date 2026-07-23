@@ -18,7 +18,7 @@
 
 ---
 
-## [阶段 4.3a] dataVersion 版本号计数器 — 纯叠加 infra（commit 待补）
+## [阶段 4.3a] dataVersion 版本号计数器 — 纯叠加 infra（commit 9aff994）
 
 - **改了什么**：
   - `packages/core/src/services/source/ISourceService.ts`：`ISource` 新增 `dataVersion: number` 契约字段（after `data`，doc 注明 bump 点 / 不 bump 点 / 纯叠加 / 4.3b 展望）。
