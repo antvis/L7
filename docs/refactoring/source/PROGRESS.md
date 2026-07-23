@@ -4,6 +4,42 @@
 
 ---
 
+## [发布] 2.30.0-beta.0 — beta 预发布（commit `471662a`，dist-tag `beta`）
+
+- **事件**：`@antv/l7` 全组 11 个公开包发布 `2.30.0-beta.0`（`@antv/l7-test-utils` private 不发），
+  npm dist-tag `beta` 指向 `2.30.0-beta.0`，`latest` 仍为 `2.29.1`。git tags `@antv/l7-*@2.30.0-beta.0`
+  共 11 个推送到 origin。
+- **内容**：PR #2882（source 阶段 0–6 重构）+ #2883（docs 兼容性/弃用说明）+ #2884（maps BMap/TMap
+  dts 修复）+ test-utils peerDependencies 清理（见下条）。20 个 changeset（18 refactor-source
+  5 minor + 13 patch、1 maps patch、1 test-utils patch）经 `changeset version` 消费。
+- **关键根因修复（阻塞 beta 的硬前置）**：changeset 最初把全组算成 `3.0.0-beta.0`（major），
+  根因**不是** changesets/cli bug，而是 `@antv/l7-test-utils` 同时在 `dependencies` **和**
+  `peerDependencies` 声明了 `@antv/l7-map`/`@antv/l7-maps`/`@antv/l7-scene`（`workspace:^`）。
+  changesets 默认 `onlyUpdatePeerDependentsWhenOutOfRange=false`，任一 peer 获 non-patch release
+  时强制把 peer dependent 提升为 major；fixed group `["@antv/l7","@antv/l7-*"]` 随之把全组拉到 major。
+  **修复**：删除 test-utils 的 `peerDependencies`（三包已在 `dependencies`，行为等价且对内部兄弟包更
+  正确——test-utils 是开发工具，不该对兄弟包声明 peer）。修后 `@changesets/get-release-plan` 实证：
+  `major=0 minor=12`，全组正确算 `2.30.0-beta.0`。`.changeset/config.json` **未改**（无需 experimental
+  option）。正式版发布时此 bug **不会再现**。
+- **验证基线**：`getReleasePlan` major=0/minor=12 → source `newVersion 2.30.0-beta.0`；`changeset version`
+  全组 12 包 `2.30.0-beta.0`（无 `3.0.0`）；`pnpm build` 通过；`pnpm limit-size` exit 0（l7.js 1.4MB < 1.7MB）；
+  npm 发布后 `npm view @antv/l7 dist-tags` → `beta: 2.30.0-beta.0` / `latest: 2.29.1`。
+- **后续（正式版）**：灰度观察后 `npx changeset pre exit` → `changeset version` → `2.30.0`（test-utils
+  peerDeps 已修，此步不会再现 3.0.0）。具体步骤见 BACKLOG「[已解决] test-utils 冗余 peerDependencies」。
+- **状态**：done（beta 已发布）
+
+## [修复] test-utils 移除冗余 peerDependencies — 修复 changeset 版本误判 major（commit `471662a` 内）
+
+- **位置**：`packages/test-utils/package.json`（删 `peerDependencies` 5 行：`@antv/l7-map`/`@antv/l7-maps`/`@antv/l7-scene` `workspace:^`）。
+- **问题**：见上条「关键根因修复」。peerDependencies 对内部兄弟包语义错误（test-utils 是开发工具，
+  被测试包实际上是它的 dependency 而非 peer），且触发 changesets 的 peer-dependent major bump
+  把 fixed group 全组误判 major。
+- **修复**：删 `peerDependencies`。三包已在 `dependencies`，运行时行为等价（test-utils build 通过，
+  3 files，无运行时变更）。
+- **验证**：`@changesets/get-release-plan` 修前 `major=13` 全组 `3.0.0-beta.0` → 修后 `major=0` 全组
+  `2.30.0-beta.0`。jest 基线不变（test-utils 无单测，依赖它的 source/layers spec 全绿）。
+- **状态**：done（随 beta 发布 commit 一并合入 master `471662a`）
+
 ## [合并] PR #2882 — 阶段 0–6 渐进式重构合入 master（merge `cd654c1`）
 
 - **事件**：PR #2882 `refactor(source): @antv/l7-source 渐进式重构（阶段 0-6，happy path 零行为变化）`

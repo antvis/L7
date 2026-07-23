@@ -352,3 +352,24 @@
   已把当前「warn + throw」建模为锁现状断言；修 guard 时同步改 spec 为「warn + 空/明确错」断言。
 - **状态**：open（严格性增强，低风险，可独立 minor）
 - **发现于**：阶段 6.2 补单测
+
+---
+
+### [已解决] changeset 把全组误算 3.0.0（major）— 根因：test-utils 冗余 peerDependencies
+
+- **位置**：`packages/test-utils/package.json`（原 `peerDependencies` 声明 `@antv/l7-map`/`@antv/l7-maps`/`@antv/l7-scene` `workspace:^`）
+- **问题**：beta 预发布时 `changeset version` 把 fixed group `["@antv/l7","@antv/l7-*"]` 全组算成
+  `3.0.0-beta.0`（major），而非预期的 `2.30.0-beta.0`（minor）。**根因不是 changesets/cli bug**：
+  `@antv/l7-test-utils` 同时在 `dependencies` 与 `peerDependencies` 声明了三个兄弟包。changesets 默认
+  `onlyUpdatePeerDependentsWhenOutOfRange=false`，任一 peer 获 non-patch release 时强制把 peer dependent
+  提升为 major → fixed group 全组被拉到 major。
+- **修复**：删除 test-utils 的 `peerDependencies`（三包已在 `dependencies`，运行时等价且更正确——
+  test-utils 是开发工具，对内部兄弟包声明 peer 语义错误）。修后 `@changesets/get-release-plan` 实证
+  `major=0 minor=12`，全组正确 `2.30.0-beta.0`。`.changeset/config.json` 未改（无需 experimental option）。
+- **验证手段（可复用）**：`node` + `require('@changesets/get-release-plan/dist/changesets-get-release-plan.cjs.js')`
+  直算 plan（不调 changelog-github、不联网）。注意 pre.json 的 `changesets` 数组若被 `changeset version`
+  填满会让 get-release-plan 把所有 changeset 当已应用 → releases 为空，测试前须 reset 成 `[]`。
+- **正式版发布提示**：`npx changeset pre exit` → `changeset version` → 全组应算 `2.30.0`（minor），
+  **不会再现 3.0.0**。若再现，先查是否有包重新声明了对兄弟包的 peerDependencies。
+- **状态**：done（commit `471662a` 随 beta 发布合入 master）
+- **发现于**：2.30.0-beta.0 预发布
