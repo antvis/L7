@@ -21,7 +21,7 @@
 
 ---
 
-## [阶段 4.3b] setData 失败 surfacing — swallow/hang → 'error' 事件（commit 待补）
+## [阶段 4.3b] setData 失败 surfacing — swallow/hang → 'error' 事件（commit 4796148）
 
 - **改了什么**：
   - `packages/source/src/base-source.ts` `setData`：`this.init().then(emit 'update')` → 追加 `.catch((err) => this.emit('error', err))`。零签名变化（仍 `void`），零调用方影响（BaseLayer/swipe/examples 均事件消费，不 await）。
