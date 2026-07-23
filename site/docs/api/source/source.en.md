@@ -20,6 +20,19 @@ const source = new Source(data, option);
   - parser data parsing configuration
   - transforms data processing configuration
 
+## Compatibility
+
+This progressive refactor (phases 0–6) keeps the **public API fully backward compatible** — existing code works unchanged:
+
+- `new Source(data, cfg)` and `new Source(data)` keep working (`cfg` and `registry` are both optional).
+- `cluster: true` silently uses the new `ClusterManager` direct path — **no warning**.
+- Legacy `ISourceCFG` fields (`cluster` / `clusterOptions` / `parser` / `transforms` / `autoRender`) are all preserved.
+- The `'update' { type: 'inited' | 'update' }` event behavior is unchanged; the new `'error'` event only surfaces failures explicitly (silent when no listener).
+
+`Source.create` / `createSource` / `source.ready` / `source.stats()` / `source.dataVersion` are optional, better paths — existing code can migrate gradually, not required.
+
+> `{ type: 'cluster' }` in the `transforms` option is deprecated (warns once at runtime, but still works). Use the top-level `cluster: true` option for aggregation, see [cluster](#cluster) below.
+
 ## data
 
 Different parser types correspond to different data types
@@ -223,6 +236,9 @@ layer
 - cluster:`boolean`
 
 `cluster`Indicates whether to aggregate data. Currently, only point layers support it.
+
+> Prefer the top-level `cluster: true` option to enable aggregation.
+> `transforms: [{ type: 'cluster' }]` is deprecated (corrupts `source.data` semantics and warns); kept only for backward compatibility.
 
 ### clusterOption optional
 
@@ -454,7 +470,7 @@ For details, see[Layer](/api/base_layer/base/#setdata)
 layer.setData(data);
 ```
 
-<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>
+<embed src="@/docs/api/common/source/tile/method.en.md"></embed>
 
 ### type of data
 
