@@ -47,6 +47,7 @@ import { createPlugins } from '../plugins';
 import type Source from '../source';
 import { BlendTypes } from '../utils/blend';
 import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
+import LayerMaskManager from './LayerMaskManager';
 import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
 import TextureService from './TextureService';
@@ -141,6 +142,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   // 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];
+
+  /**
+   * 遮罩管理 delegate（阶段 1.7）。`masks[]` 保持公开字段供外部
+   * （`LayerService`/`BaseModel`）直接读取；delegate 持数组引用就地 mutate。
+   * 在 ctor 内 `this.masks` 赋值后实例化，以保证引用指向正确数组。
+   */
+  public maskManager!: LayerMaskManager;
 
   protected readonly configService: IGlobalConfigService = globalConfigService;
 
@@ -251,35 +259,22 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.zIndex = config.zIndex || 0;
     this.rawConfig = config;
     this.masks = config.maskLayers || [];
+    this.maskManager = new LayerMaskManager(this, this.masks);
   }
   public addMask(layer: ILayer): void {
-    this.masks.push(layer);
-    this.updateLayerConfig({
-      maskLayers: this.masks,
-    });
-    this.enableMask();
+    this.maskManager.addMask(layer);
   }
 
   public removeMask(layer: ILayer): void {
-    const layerIndex = this.masks.indexOf(layer);
-    if (layerIndex > -1) {
-      this.masks.splice(layerIndex, 1);
-    }
-    this.updateLayerConfig({
-      maskLayers: this.masks,
-    });
+    this.maskManager.removeMask(layer);
   }
 
   public disableMask(): void {
-    this.updateLayerConfig({
-      enableMask: false,
-    });
+    this.maskManager.disableMask();
   }
 
   public enableMask(): void {
-    this.updateLayerConfig({
-      enableMask: true,
-    });
+    this.maskManager.enableMask();
   }
 
   /**
@@ -287,7 +282,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * @deprecated
    */
   public addMaskLayer(maskLayer: ILayer) {
-    this.masks.push(maskLayer);
+    this.maskManager.addMaskLayer(maskLayer);
   }
 
   /**
@@ -295,11 +290,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * @deprecated
    */
   public removeMaskLayer(maskLayer: ILayer) {
-    const layerIndex = this.masks.indexOf(maskLayer);
-    if (layerIndex > -1) {
-      this.masks.splice(layerIndex, 1);
-    }
-    maskLayer.destroy();
+    this.maskManager.removeMaskLayer(maskLayer);
   }
 
   public getAttribute(name: string) {
