@@ -316,8 +316,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     // 同步 rawConfig
     Object.keys(configToUpdate).map((key) => {
       if (key in this.rawConfig) {
-        // @ts-ignore
-        this.rawConfig[key] = configToUpdate[key];
+        (this.rawConfig as Record<string, unknown>)[key] = (
+          configToUpdate as Record<string, unknown>
+        )[key];
       }
     });
     if (!this.startInit) {
@@ -327,8 +328,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       };
     } else {
       const sceneId = this.container.id;
-      // @ts-ignore
-      // styleDataMapping(configToUpdate, this); // 处理 style 中进行数据映射的属性字段
       this.configService.setLayerConfig(sceneId, this.id, {
         ...this.configService.getLayerConfig(this.id),
         ...this.needUpdateConfig,
@@ -439,7 +438,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.hooks.afterInit.call();
   }
   public log(logType: string, step: string = 'init') {
-    // @ts-ignore 瓦片、瓦片图层目前不参与日志
+    // 瓦片、瓦片图层目前不参与日志（isTileLayer 仅子类/动态存在）
+    // @ts-ignore
     if (this.tileLayer || this.isTileLayer) {
       return;
     }
@@ -605,6 +605,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public style(options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>): ILayer {
     const { passes, ...rest } = options;
+    const styleRest = rest as Record<string, any>;
     // passes 特殊处理
     if (passes) {
       normalizePasses(passes).forEach((pass: [string, { [key: string]: unknown }]) => {
@@ -617,22 +618,17 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       });
     }
     // 兼容 borderColor borderWidth
-    // @ts-ignore
-    if (rest.borderColor) {
-      // @ts-ignore
-      rest.stroke = rest.borderColor;
+    if (styleRest.borderColor) {
+      styleRest.stroke = styleRest.borderColor;
     }
-    // @ts-ignore
-    if (rest.borderWidth) {
-      // @ts-ignore
-      rest.strokeWidth = rest.borderWidth;
+    if (styleRest.borderWidth) {
+      styleRest.strokeWidth = styleRest.borderWidth;
     }
 
     // 兼容老版本的写法 ['field, 'value']
     const newOption: { [key: string]: any } = rest;
     Object.keys(rest).forEach((key: string) => {
-      // @ts-ignore
-      const values = rest[key];
+      const values = styleRest[key];
       if (
         Array.isArray(values) &&
         values.length === 2 &&
@@ -928,7 +924,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public get(name: string) {
     const cfg = this.getLayerConfig();
-    // @ts-ignore
     return cfg[name];
   }
 
