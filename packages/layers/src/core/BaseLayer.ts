@@ -41,7 +41,7 @@ import type {
 import { BlendType, IDebugLog, ILayerStage, globalConfigService } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
-import { createPlugins } from '../plugins';
+import { LayerPluginRegistry } from '../plugins/registry';
 import type Source from '../source';
 import { BlendTypes } from '../utils/blend';
 import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
@@ -131,6 +131,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   // 注入插件
   public plugins: ILayerPlugin[];
+  /**
+   * 插件注册表（阶段 2.1）。每实例独立，init 时 `registerBuiltinDefaults`
+   * 注册默认 14 插件（全新实例，顺序与原 `createPlugins` 一致）。外部可在
+   * init 前 `registerBuiltinDefaults()` + `register`/`reorder` 自定义默认集。
+   * `addPlugin`（init 后追加）与本 registry 解耦，行为不变。
+   */
+  protected pluginRegistry: LayerPluginRegistry = new LayerPluginRegistry();
 
   public startInit: boolean = false;
 
@@ -414,8 +421,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     );
     this.pendingStyleAttributes = [];
 
-    // 获取插件集
-    this.plugins = createPlugins();
+    // 获取插件集（阶段 2.1：来源迁入 pluginRegistry，registerBuiltinDefaults 幂等）
+    this.pluginRegistry.registerBuiltinDefaults();
+    this.plugins = this.pluginRegistry.getAll();
     // 完成插件注册，传入场景和图层容器内的服务
     for (const plugin of this.plugins) {
       plugin.apply(this, this.container);
