@@ -213,7 +213,7 @@ export function amap2UnProject(x: number, y: number): [number, number] {
 export function lnglatDistance(
   coordinates1: [number, number],
   coordinates2: [number, number],
-  units?: Units,
+  units: Units = 'meters',
 ): number {
   const dLat = degreesToRadians(coordinates2[1] - coordinates1[1]);
   const dLon = degreesToRadians(coordinates2[0] - coordinates1[0]);
@@ -223,11 +223,7 @@ export function lnglatDistance(
     Math.pow(Math.sin(dLat / 2), 2) +
     Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
 
-  return radiansToLength(
-    2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (units = 'meters'),
-  );
+  return radiansToLength(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
 }
 
 export function project(lnglat: [number, number]) {
