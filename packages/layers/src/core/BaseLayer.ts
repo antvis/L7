@@ -41,7 +41,7 @@ import type {
   Triangulation,
 } from '@antv/l7-core';
 import { BlendType, IDebugLog, ILayerStage, globalConfigService } from '@antv/l7-core';
-import { lodashUtil, processRelativeCoordinates } from '@antv/l7-utils';
+import { lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { createPlugins } from '../plugins';
 import type Source from '../source';
@@ -50,6 +50,7 @@ import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRend
 import LayerMaskManager from './LayerMaskManager';
 import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
+import LayerRelativeCoords from './LayerRelativeCoords';
 import LayerVisibilityZoom from './LayerVisibilityZoom';
 import TextureService from './TextureService';
 const { isEqual, isFunction, isNumber, isObject, isPlainObject, isUndefined } = lodashUtil;
@@ -217,9 +218,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   protected animateOptions: IAnimateOption = { enable: false };
 
   // 相对坐标系支持
-  protected relativeOrigin: [number, number] = [0, 0];
-  protected originalExtent: [number, number, number, number] = [0, 0, 0, 0];
-  protected absoluteDataArray: IParseDataItem[] = []; // 保存绝对坐标数据用于交互
+  /**
+   * 相对坐标状态与转换 delegate（阶段 1.4）。原 protected 字段搬入；
+   * 外部经 ILayer getter 访问，`processRelativeCoordinates` 经 protected 薄转发。
+   */
+  protected relativeCoordsManager: LayerRelativeCoords = new LayerRelativeCoords(this);
 
   /**
    * 图层容器
@@ -1249,46 +1252,28 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 处理相对坐标转换
    */
   protected processRelativeCoordinates() {
-    const layerConfig = this.getLayerConfig();
-    const enableRelativeCoordinates = layerConfig?.enableRelativeCoordinates;
-
-    if (!enableRelativeCoordinates || !this.layerSource || !this.layerSource.data) {
-      return;
-    }
-
-    // 保存原始绝对坐标数据用于交互
-    this.absoluteDataArray = [...this.layerSource.data.dataArray];
-
-    // 处理相对坐标转换
-    const result = processRelativeCoordinates(this.layerSource.data.dataArray, {
-      enableRelativeCoordinates: true,
-    });
-
-    // 更新source数据为相对坐标
-    this.layerSource.data.dataArray = result.dataArray;
-    this.relativeOrigin = result.relativeOrigin;
-    this.originalExtent = result.originalExtent;
+    this.relativeCoordsManager.processRelativeCoordinates();
   }
 
   /**
    * 获取绝对坐标数据（用于交互计算）
    */
   public getAbsoluteData() {
-    return this.absoluteDataArray;
+    return this.relativeCoordsManager.getAbsoluteData();
   }
 
   /**
    * 获取相对坐标原点
    */
   public getRelativeOrigin() {
-    return this.relativeOrigin;
+    return this.relativeCoordsManager.getRelativeOrigin();
   }
 
   /**
    * 获取原始数据范围
    */
   public getOriginalExtent() {
-    return this.originalExtent;
+    return this.relativeCoordsManager.getOriginalExtent();
   }
 
   protected sourceEvent = () => {
