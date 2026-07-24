@@ -87,7 +87,7 @@ citybuilding/ geometry/ — 12 个具体图层 extends BaseLayer（各自只 ove
 
 - 2.1 `createPlugins()` 从 `init()` 内联 → 抽 `LayerPluginRegistry`（默认注册内置 14 插件，支持外部追加/替换/排序），`BaseLayer.plugins` 来自 registry。旧全局 `createPlugins` 作 deprecation wrapper（参考 source `ParserRegistry` 模式）。 **（☑ 已完成；`replace(name)` 基于元数据的精确替换归 2.2）**
 - 2.2 `ILayerPlugin` 补可选元数据：`name?: string` / `order?: number` / `initStage?: 'init'|'afterInit'`，便于声明式排序与调试（`addPlugin` 现仅 push 无序）。 **（☑ 已完成；`LayerPluginRegistry.replace(name,plugin)`/`sortByOrder()`/`getByName(name)` 落地；14 内置插件各声明唯一 `name`；均未声明 `order`/`initStage`，apply 时序与 2.1 字节级一致；顺带修正 `LayerMaskPlugin.ts` 类名 typo）**
-- 2.3 11 个 `protected get xxxService()` 懒 getter 收敛为一个 `protected services: LayerServices` 访问器对象（仍懒解析，零行为变化），减少 11 段重复样板；同时供 delegate 共享同一引用。
+- 2.3 11 个 `protected get xxxService()` 懒 getter 收敛为一个 `protected services: LayerServices` 访问器对象（仍懒解析，零行为变化），减少 11 段重复样板；同时供 delegate 共享同一引用。 **（⏸ 暂缓归阶段 3 重估：经厘清，11 getter 均为 `this.container.X` 透传，收敛为 `return this.services.X` 仅增一层间接、无净样板删减（getter 须为子类/外部兼容保留）；且 `coordinateService`→`container.coordinateSystemService` 名不匹配、`mapService`→`container?.mapService` optional-chain 两处 quirk 使「零行为变化」非平凡。待阶段 3 delegate 真需共享 `services` 窄口时再做，避免早产间接层。）**
 - 2.4 修复阶段 1.2 发现的事件泄漏：`mapService.on('mapAfterFrameChange')` 匿名回调解构为具名方法 + `destroy()` 内 `mapService.off(...)`（strictly-better，零接口变化）。 **（☑ 已完成）**
 
 ### 阶段 3 — 配置模型与类型强化
