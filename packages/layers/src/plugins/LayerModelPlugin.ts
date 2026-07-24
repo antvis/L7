@@ -5,6 +5,9 @@ import { IDebugLog, ILayerStage } from '@antv/l7-core';
  * Layer Model 初始化，更新，销毁
  */
 export default class LayerModelPlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'layer-model';
+
   private async build(layer: ILayer) {
     // 更新Model 配置项 style options
     layer.prepareBuildModel();

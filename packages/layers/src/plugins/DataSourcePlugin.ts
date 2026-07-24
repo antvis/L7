@@ -3,6 +3,9 @@ import { IDebugLog, ILayerStage } from '@antv/l7-core';
 import Source from '../source';
 
 export default class DataSourcePlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'data-source';
+
   protected mapService: IMapService;
   public apply(layer: ILayer) {
     this.mapService = layer.getContainer().mapService;

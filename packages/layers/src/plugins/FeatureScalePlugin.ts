@@ -45,6 +45,9 @@ const scaleMap = {
  * 根据 Source 原始数据为指定字段创建 Scale，保存在 StyleAttribute 上，供下游插件使用
  */
 export default class FeatureScalePlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'feature-scale';
+
   private scaleOptions: IScaleOptions = {};
 
   public apply(layer: ILayer, { styleAttributeService }: L7Container) {

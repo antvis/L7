@@ -4,6 +4,9 @@ import type { ILayer, ILayerPlugin, IStyleAttributeService, L7Container } from '
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
  */
 export default class UpdateStyleAttributePlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'update-style-attribute';
+
   public apply(layer: ILayer, { styleAttributeService }: L7Container) {
     layer.hooks.init.tapPromise('UpdateStyleAttributePlugin', () => {
       this.initStyleAttribute(layer, { styleAttributeService });

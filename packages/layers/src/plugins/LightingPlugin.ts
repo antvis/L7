@@ -100,6 +100,9 @@ export function generateLightingUniforms(lights?: Array<Partial<IDirectionalLigh
  * 光照 & Shadow
  */
 export default class LightingPlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'lighting';
+
   public apply(layer: ILayer) {
     layer.hooks.beforeRender.tap('LightingPlugin', () => {
       const { enableLighting } = layer.getLayerConfig();

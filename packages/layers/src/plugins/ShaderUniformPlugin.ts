@@ -19,6 +19,9 @@ import { CameraUniform, CoordinateUniform } from '@antv/l7-core';
  * 3. 当前 Layer 本身的样式属性
  */
 export default class ShaderUniformPlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'shader-uniform';
+
   private cameraService: ICameraService;
   private coordinateSystemService: ICoordinateSystemService;
   private rendererService: IRendererService;

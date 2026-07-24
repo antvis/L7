@@ -14,6 +14,9 @@ import { IDebugLog, ILayerStage } from '@antv/l7-core';
 import { normalize, rgb2arr } from '@antv/l7-utils';
 
 export default class DataMappingPlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'data-mapping';
+
   private mapService: IMapService;
   private fontService: IFontService;
 

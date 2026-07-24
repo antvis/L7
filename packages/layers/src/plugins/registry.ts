@@ -34,9 +34,10 @@ import UpdateStyleAttributePlugin from './UpdateStyleAttributePlugin';
  * layer.init(); // registerBuiltinDefaults 幂等跳过，使用上面配置
  * ```
  *
- * `replace(name, plugin)` 等基于元数据的替换留待 2.2（`ILayerPlugin` 补
- * `name?`/`order?`/`initStage?` 元数据后，按 name 精确替换）。当前 2.1 仅提供
- * register 追加 + reorder 重排 + 幂等 registerBuiltinDefaults。
+ * `replace(name, plugin)` / `sortByOrder()` / `getByName(name)` 基于 2.2 引入的
+ * `ILayerPlugin` 元数据（`name?`/`order?`/`initStage?`）提供按名精确替换、
+ * 声明式稳定排序与按名查询。当前 2.2 仅暴露 API，不改 `BaseLayer.init` 内的
+ * apply 时序（14 内置插件均未声明 `order`/`initStage`，`sortByOrder()` 为 no-op）。
  *
  * 与 `addPlugin` 关系：`BaseLayer.addPlugin` 是 init 后追加到 `this.plugins`
  * 的低频 API，**不**同步本 registry（历史行为保留）；registry 是 init 前配置
@@ -101,6 +102,53 @@ export class LayerPluginRegistry {
   public reorder(compareFn: (a: ILayerPlugin, b: ILayerPlugin) => number): this {
     this.plugins.sort(compareFn);
     return this;
+  }
+
+  /**
+   * 按 `name` 精确替换已注册插件（阶段 2.2）。
+   *
+   * 仅替换第一个 `name` 匹配项；未匹配则抛错（显式 fail，避免静默吞掉拼写
+   * 错误）。返回 this 以便链式：
+   * `registry.registerBuiltinDefaults().replace('data-source', new MyDS())`。
+   *
+   * 替换发生在 `getAll()` 前的任意时点；若在 `registerBuiltinDefaults()` 前
+   * 该 name 不存在则抛错——先注册默认集再替换。替换保留被替换项的数组下标
+   * （apply 序位不变），便于在不打乱顺序的前提下替换实现。
+   */
+  public replace(name: string, plugin: ILayerPlugin): this {
+    const idx = this.plugins.findIndex((p) => p.name === name);
+    if (idx === -1) {
+      throw new Error(`LayerPluginRegistry.replace: no plugin named "${name}" is registered`);
+    }
+    this.plugins[idx] = plugin;
+    return this;
+  }
+
+  /**
+   * 按 `order` 升序稳定排序（阶段 2.2）。
+   *
+   * 缺省 `order`（undefined）视 `Infinity` 兜底，排在所有显式 order 之后；
+   * 相同 order（含均为 undefined）保持插入序（现代引擎 `Array.prototype.sort`
+   * 稳定）。当前 14 内置插件均未声明 `order`，故调用本方法为 no-op——
+   * 仅服务于显式声明 `order` 的自定义插件集。
+   */
+  public sortByOrder(): this {
+    this.plugins.sort((a, b) => {
+      const ao = a.order ?? Infinity;
+      const bo = b.order ?? Infinity;
+      if (ao === bo) {
+        return 0;
+      }
+      return ao - bo;
+    });
+    return this;
+  }
+
+  /**
+   * 按 `name` 取插件（未匹配返回 undefined，阶段 2.2）。
+   */
+  public getByName(name: string): ILayerPlugin | undefined {
+    return this.plugins.find((p) => p.name === name);
   }
 
   /**

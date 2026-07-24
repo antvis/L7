@@ -11,6 +11,9 @@ const PickingStage = {
 };
 
 export default class PixelPickingPlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'pixel-picking';
+
   /**
    * Use map to keep order of insertion.
    * @see https://stackoverflow.com/questions/5525795/does-javascript-guarantee-object-property-order

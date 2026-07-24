@@ -603,6 +603,31 @@ export interface ILayer {
  * Layer 插件
  */
 export interface ILayerPlugin {
+  /**
+   * 插件名（kebab-case，唯一标识符，阶段 2.2）。
+   *
+   * 供 `LayerPluginRegistry.replace(name, plugin)` / `getByName(name)` 按名
+   * 精确索引，亦便于调试日志与 `addPlugin` 顺序观测。内置 14 插件各自
+   * 声明唯一名（见 `LayerPluginRegistry.registerBuiltinDefaults`）；外部
+   * 自定义插件可选声明。
+   */
+  name?: string;
+  /**
+   * 声明式排序优先级（升序，阶段 2.2）。
+   *
+   * `LayerPluginRegistry.sortByOrder()` 据此稳定排序；缺省（undefined）视
+   * `Infinity` 兜底，排在所有显式 order 之后，相同 order（含均为 undefined）
+   * 保持插入序。不声明时 `getAll()` 维持插入序（与 2.1 行为一致）。
+   */
+  order?: number;
+  /**
+   * 初始化阶段标记（阶段 2.2 仅声明，不改 apply 时序）。
+   *
+   * `'init'`（默认，在 `BaseLayer.init` hooks.init 阶段 apply）或
+   * `'afterInit'`（init 完成后 apply）。内置 14 插件当前均为 `'init'`，
+   * 字段为未来按阶段分流的 registry 改造预留。
+   */
+  initStage?: 'init' | 'afterInit';
   apply(layer: ILayer, container: L7Container): void;
 }
 

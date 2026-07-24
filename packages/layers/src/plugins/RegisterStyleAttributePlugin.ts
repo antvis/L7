@@ -13,6 +13,9 @@ import { isTileGroup } from '../tile/utils/utils';
  * 在初始化阶段完成属性的注册，以及首次根据 Layer 指定的三角化方法完成 indices 和 attribute 的创建
  */
 export default class RegisterStyleAttributePlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'register-style-attribute';
+
   public apply(layer: ILayer, { styleAttributeService }: L7Container) {
     layer.hooks.init.tapPromise('RegisterStyleAttributePlugin', () => {
       // 过滤 tileGroup layer （瓦片图层不需要注册）

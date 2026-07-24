@@ -21,6 +21,9 @@ import { createMultiPassRenderer } from '../utils/multiPassRender';
  * })
  */
 export default class MultiPassRendererPlugin implements ILayerPlugin {
+  /** 阶段 2.2 元数据：插件名，供 `LayerPluginRegistry` 按 name 索引。 */
+  public readonly name = 'multi-pass-renderer';
+
   private enabled: boolean;
 
   public apply(
