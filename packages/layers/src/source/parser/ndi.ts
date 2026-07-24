@@ -12,6 +12,7 @@ export default function ndi(data: RasterDataType[], cfg: IRGBParseCfg): IParserD
   } = cfg;
   if (data.length < 2) {
     console.warn('RGB解析需要2个波段的数据');
+    return { _id: 1, dataArray: [] };
   }
   const [n, d] = options.bands || [0, 1];
   const bandsData = [data[n], data[d]];

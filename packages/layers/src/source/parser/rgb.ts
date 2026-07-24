@@ -4,9 +4,16 @@ import { percentile } from '../utils/bandOperation/operationSchema';
 import { extentToCoord } from '../utils/util';
 
 export default function rgb(data: RasterDataType[], cfg: IRGBParseCfg): IParserData {
-  const { extent, coordinates, width, height, ...options } = cfg;
+  const {
+    extent = [121.168, 30.2828, 121.384, 30.4219],
+    coordinates,
+    width,
+    height,
+    ...options
+  } = cfg;
   if (data.length < 3) {
     console.warn('RGB解析需要三个波段的数据');
+    return { _id: 1, dataArray: [] };
   }
   const [r, g, b] = options.bands || [0, 1, 2];
   const bandsData = [data[r], data[g], data[b]];
@@ -20,7 +27,7 @@ export default function rgb(data: RasterDataType[], cfg: IRGBParseCfg): IParserD
     rgbdata.push(Math.max(0, bandsData[1][i] - minMaxG[0]));
     rgbdata.push(Math.max(0, bandsData[2][i] - minMaxB[0]));
   }
-  const imageCoord = extentToCoord(coordinates, extent!);
+  const imageCoord = extentToCoord(coordinates, extent);
   const resultData = {
     _id: 1,
     dataArray: [

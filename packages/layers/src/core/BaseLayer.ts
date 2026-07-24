@@ -998,7 +998,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
     this.hooks.beforeDestroy.call();
     // 清除sources事件
-    this.layerSource.off('update', this.sourceEvent);
+    this.layerSource.off('update', this.onSourceUpdate);
 
     this.multiPassRenderer?.destroy();
 
@@ -1052,7 +1052,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public setSource(source: Source) {
     // 解除原 sources 事件
     if (this.layerSource) {
-      this.layerSource.off('update', this.sourceEvent);
+      this.layerSource.off('update', this.onSourceUpdate);
     }
     this.layerSource = source;
     this.clusterZoom = 0;
@@ -1066,24 +1066,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       this.sourceEvent();
     }
     // this.layerSource.inited 为 true update 事件不会再触发
-    this.layerSource.on('update', ({ type }) => {
-      if (this.coordCenter === undefined) {
-        const layerCenter = this.layerSource.center;
-        this.coordCenter = layerCenter;
-      }
-      if (type === 'update') {
-        if (this.tileLayer) {
-          // 瓦片图层独立更新
-          this.tileLayer.reload();
-          return;
-        }
-        // source 初始化不需要处理
-        this.sourceEvent();
-      }
-      if (type === 'inited') {
-        this.processRelativeCoordinates();
-      }
-    });
+    this.layerSource.on('update', this.onSourceUpdate);
   }
   public getSource() {
     return this.layerSource;
@@ -1457,6 +1440,33 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
       setTimeout(() => {
         this.reRender();
       }, 10);
+    }
+  };
+
+  /**
+   * source 'update' 事件监听器（稳定实例引用，供 on/off 配对解绑）。
+   *
+   * 修复历史遗留：原先 setSource 内以 inline arrow 注册监听，而 destroy / setSource
+   * 替换旧 source 时调用 `off('update', this.sourceEvent)`，引用不匹配令 off 永不
+   * 命中（空操作），监听器泄漏至 source GC。提取为具名实例箭头方法后 on/off 统一
+   * 引用，解绑真实生效。
+   */
+  protected readonly onSourceUpdate = ({ type }: { type: string }): void => {
+    if (this.coordCenter === undefined) {
+      const layerCenter = this.layerSource.center;
+      this.coordCenter = layerCenter;
+    }
+    if (type === 'update') {
+      if (this.tileLayer) {
+        // 瓦片图层独立更新
+        this.tileLayer.reload();
+        return;
+      }
+      // source 初始化不需要处理
+      this.sourceEvent();
+    }
+    if (type === 'inited') {
+      this.processRelativeCoordinates();
     }
   };
 

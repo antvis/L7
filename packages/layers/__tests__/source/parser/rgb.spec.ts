@@ -1,9 +1,8 @@
 import ndi from '../../../src/source/parser/ndi';
 import rgb from '../../../src/source/parser/rgb';
 
-// rgb.ts 的 extent 用非空断言 `extent!`（无默认值），缺 extent + coordinates 时
-// extentToCoord 读 extent[0] 会崩。故 rgb 测试一律显式提供 coordinates（与
-// raster/ndi 不同——后两者 extent 有默认）。
+// rgb.ts 已补 extent 默认值（与 raster/ndi 一致），缺 coordinates 时由默认 extent
+// 经 extentToCoord 推导坐标，不再读 extent! 崩。
 const COORDS: [[number, number], [number, number], [number, number], [number, number]] = [
   [0, 1],
   [1, 1],
@@ -76,23 +75,40 @@ describe('parser.rgb (stage 6.2)', () => {
     expect(result.dataArray[0].data.length).toEqual(4 * 3);
   });
 
-  it('不足 3 波段 → 仅 warn 不 guard：warn 后仍访问缺失波段致 percentile 抛错（既存无 guard 行为）', () => {
+  it('不足 3 波段 → warn 后 early-return 空 dataArray（strictly-better guard，不再访问缺失波段致崩）', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     try {
-      // 仅 2 波段，data[2]=undefined → percentile(undefined) 读 .length 崩
-      expect(() =>
-        rgb([Float32Array.from([1]), Float32Array.from([2])], {
-          width: 1,
-          height: 1,
-          coordinates: COORDS,
-          min: 0,
-          max: 255,
-        }),
-      ).toThrow(TypeError);
+      const result = rgb([Float32Array.from([1]), Float32Array.from([2])], {
+        width: 1,
+        height: 1,
+        coordinates: COORDS,
+        min: 0,
+        max: 255,
+      });
       expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('三个波段'));
+      expect(result.dataArray).toEqual([]);
     } finally {
       warnSpy.mockRestore();
     }
+  });
+
+  it('未提供 coordinates → 经 extent 默认值推导坐标（rgb 补 extent 默认值）', () => {
+    const band = Float32Array.from([10]);
+    const result = rgb([band, Float32Array.from([1]), Float32Array.from([1])], {
+      width: 1,
+      height: 1,
+      min: 0,
+      max: 255,
+      RMinMax: [0, 100] as [number, number],
+      GMinMax: [0, 100] as [number, number],
+      BMinMax: [0, 100] as [number, number],
+    });
+    expect(result.dataArray[0].coordinates).toEqual([
+      [121.168, 30.4219],
+      [121.384, 30.4219],
+      [121.384, 30.2828],
+      [121.168, 30.2828],
+    ]);
   });
 });
 
@@ -131,14 +147,12 @@ describe('parser.ndi (stage 6.2)', () => {
     expect(result.dataArray[0].max).toEqual(1);
   });
 
-  it('不足 2 波段 → 仅 warn 不 guard：warn 后访问缺失波段致循环抛错（既存无 guard 行为）', () => {
+  it('不足 2 波段 → warn 后 early-return 空 dataArray（strictly-better guard，不再访问缺失波段致崩）', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     try {
-      // 仅 1 波段，bandsData[1]=undefined → 循环读 bandsData[1][0] 崩
-      expect(() =>
-        ndi([Float32Array.from([1])], { width: 1, height: 1, min: 0, max: 255 }),
-      ).toThrow();
+      const result = ndi([Float32Array.from([1])], { width: 1, height: 1, min: 0, max: 255 });
       expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('2'));
+      expect(result.dataArray).toEqual([]);
     } finally {
       warnSpy.mockRestore();
     }
