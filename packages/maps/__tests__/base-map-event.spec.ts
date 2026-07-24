@@ -159,8 +159,8 @@ function makeInstance<T extends TestBaseMap>(Ctor: new () => T, map: any): T {
   return inst;
 }
 
-describe.skip('BaseMap 事件绑定契约 (P2)', () => {
-  // TODO(P2b): unskip once BaseMap on/off lifted into base class
+describe('BaseMap 事件绑定契约 (P2)', () => {
+  // P2b: BaseMap on/off 已提升为具体方法，本契约现已激活
   it('MapServiceEvent 走 eventEmitter，不调用原生 map.on', () => {
     const mockMap = makeMockMap();
     const inst = makeInstance(TestBaseMap, mockMap);

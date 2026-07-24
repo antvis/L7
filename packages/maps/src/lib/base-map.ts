@@ -14,7 +14,7 @@ import type {
   MapStyleConfig,
   MapStyleName,
 } from '@antv/l7-core';
-import { CoordinateSystem } from '@antv/l7-core';
+import { CoordinateSystem, MapServiceEvent } from '@antv/l7-core';
 import type { EventEmitterStatic } from 'eventemitter3';
 import { EventEmitter } from 'eventemitter3';
 import { SimpleMapCoord } from '../utils/simpleMapCoord';
@@ -59,10 +59,20 @@ export default abstract class BaseMap<T> implements IMapService<T> {
    */
   protected pendingHandlers: Array<{ type: string; handler: (...args: any[]) => void }> = [];
 
-  constructor(container: L7Container) {
-    this.config = container.mapConfig as Partial<IMapConfig<T>>;
-    this.configService = container.globalConfigService;
-    this.coordinateSystemService = container.coordinateSystemService;
+  /**
+   * 事件代理映射: 原生 eventName -> (原始 handler -> 代理 handler)
+   * off 时以原生 eventName 为键精确解绑（修复 tmap/tdtmap 历史以 L7 type 为键
+   * 导致 off 空操作的泄漏 bug，与 P1b 同类）
+   */
+  protected evtCbProxyMap: globalThis.Map<
+    string,
+    globalThis.Map<(...args: any[]) => void, (...args: any[]) => void>
+  > = new globalThis.Map();
+
+  constructor(container?: L7Container) {
+    this.config = container?.mapConfig as Partial<IMapConfig<T>>;
+    this.configService = container?.globalConfigService;
+    this.coordinateSystemService = container?.coordinateSystemService;
     this.eventEmitter = new EventEmitter();
   }
 
@@ -146,9 +156,103 @@ export default abstract class BaseMap<T> implements IMapService<T> {
     return undefined;
   }
 
-  public abstract on(type: string, handle: (...args: any[]) => void): void;
+  /**
+   * L7 事件名 -> 原生事件名映射（单值或数组）。
+   * 子类按需 override，返回本适配器特定的事件名映射表。
+   */
+  protected getEventMap(): Record<string, any> {
+    return {};
+  }
 
-  public abstract off(type: string, handle: (...args: any[]) => void): void;
+  /**
+   * 构造代理 handler，默认对事件参数做 lngLat 归一化
+   * （latlng || lngLat || lnglat -> lngLat）。
+   * 子类可 override 以注入额外字段（如 tdtmap 注入 args[0].map）。
+   */
+  protected buildProxy(handle: (...args: any[]) => void): (...args: any[]) => void {
+    return (...args: any[]) => {
+      const e = args[0];
+      if (e && typeof e === 'object' && !e.lngLat) {
+        e.lngLat = e.latlng || e.lngLat || e.lnglat;
+      }
+      handle(...args);
+    };
+  }
+
+  /**
+   * 向原生 map 注册监听。默认 this.map.on(eventName, proxy)。
+   * 子类可 override（如 tmap mouseover 走 container.addEventListener）。
+   */
+  protected registerNative(eventName: string, proxy: (...args: any[]) => void): void {
+    (this.map as any).on(eventName, proxy);
+  }
+
+  /**
+   * 从原生 map 注销监听。默认 this.map.off(eventName, proxy)。
+   */
+  protected unregisterNative(eventName: string, proxy: (...args: any[]) => void): void {
+    (this.map as any).off(eventName, proxy);
+  }
+
+  /**
+   * 绑定事件：MapServiceEvent 走 eventEmitter；原生事件经 EventMap 解析后注册代理。
+   * map 未就绪时缓存到 pendingHandlers，init 后由 bindPendingEvents() 重放。
+   */
+  public on(type: string, handle: (...args: any[]) => void): void {
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.on(type, handle);
+      return;
+    }
+    if (!this.map) {
+      this.pendingHandlers.push({ type, handler: handle });
+      return;
+    }
+    const mapped = this.getEventMap()[type] || type;
+    const nativeNames: string[] = Array.isArray(mapped) ? mapped : [mapped];
+    for (const nativeName of nativeNames) {
+      let mapForType = this.evtCbProxyMap.get(nativeName);
+      if (!mapForType) {
+        mapForType = new globalThis.Map();
+        this.evtCbProxyMap.set(nativeName, mapForType);
+      }
+      if (!mapForType.has(handle)) {
+        const proxy = this.buildProxy(handle);
+        mapForType.set(handle, proxy);
+        this.registerNative(nativeName, proxy);
+      }
+    }
+  }
+
+  /**
+   * 解绑事件：以原生 eventName 为键精确移除代理（修复历史 off-key 泄漏）。
+   */
+  public off(type: string, handle: (...args: any[]) => void): void {
+    if (MapServiceEvent.indexOf(type) !== -1) {
+      this.eventEmitter.off(type, handle);
+      return;
+    }
+    if (!this.map) {
+      this.pendingHandlers = this.pendingHandlers.filter(
+        (item) => !(item.type === type && item.handler === handle),
+      );
+      return;
+    }
+    const mapped = this.getEventMap()[type] || type;
+    const nativeNames: string[] = Array.isArray(mapped) ? mapped : [mapped];
+    for (const nativeName of nativeNames) {
+      const mapForType = this.evtCbProxyMap.get(nativeName);
+      if (mapForType) {
+        const proxy = mapForType.get(handle);
+        if (proxy) {
+          this.unregisterNative(nativeName, proxy);
+          mapForType.delete(handle);
+        }
+        if (mapForType.size === 0) {
+          this.evtCbProxyMap.delete(nativeName);
+        }
+      }
+    }
+  }
 
   /**
    * 地图实例初始化完成后，重放缓存的事件绑定
