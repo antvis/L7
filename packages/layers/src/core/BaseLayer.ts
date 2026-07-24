@@ -383,9 +383,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const { enableMultiPassRenderer, passes } = this.getLayerConfig();
     if (enableMultiPassRenderer && passes?.length && passes.length > 0) {
       // Tip: 兼容 multiPassRender 在 amap1 时存在的图层不同步问题 zoom
-      this.mapService.on('mapAfterFrameChange', () => {
-        this.renderLayers();
-      });
+      this.mapService.on('mapAfterFrameChange', this.onMapAfterFrameChange);
     }
 
     this.postProcessingPassFactory = this.container.postProcessingPassFactory;
@@ -871,6 +869,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     this.hooks.beforeDestroy.call();
+    // 解除 mapAfterFrameChange 监听（修复历史匿名回调泄漏，与 onSourceUpdate 对称）
+    this.mapService.off('mapAfterFrameChange', this.onMapAfterFrameChange);
     // 清除sources事件
     this.layerSource.off('update', this.onSourceUpdate);
 
@@ -1261,6 +1261,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     if (type === 'inited') {
       this.processRelativeCoordinates();
     }
+  };
+
+  /**
+   * `mapAfterFrameChange` 事件监听器（稳定实例引用，供 on/off 配对解绑）。
+   *
+   * 修复历史泄漏：原先在 init 内以 inline arrow 注册，destroy 时无法 off
+   * （引用不匹配），监听器随图层销毁后仍挂在 mapService 上泄漏。提取为具名
+   * 实例箭头方法后 on/off 统一引用，解绑真实生效。仅在 enableMultiPassRenderer
+   * + passes 下注册；destroy 内无条件 off（未注册时 off 为空操作，无害）。
+   */
+  protected readonly onMapAfterFrameChange = (): void => {
+    this.renderLayers();
   };
 
   protected async initLayerModels() {
