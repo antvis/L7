@@ -47,6 +47,7 @@ import { createPlugins } from '../plugins';
 import type Source from '../source';
 import { BlendTypes } from '../utils/blend';
 import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
+import LayerAnimateState from './LayerAnimateState';
 import LayerMaskManager from './LayerMaskManager';
 import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
@@ -215,7 +216,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.container.normalPassFactory;
   }
 
-  protected animateOptions: IAnimateOption = { enable: false };
+  /**
+   * 动画运行态 delegate（阶段 1.5）。原 private `animateStartTime` /
+   * `animateStatus` 字段搬入；`animateStatus` 经 public getter 桥接，
+   * 保留 `LayerAnimateStylePlugin` 经 `@ts-ignore` 的 `layer.animateStatus` 读取。
+   */
+  protected animateState: LayerAnimateState = new LayerAnimateState(this);
 
   // 相对坐标系支持
   /**
@@ -256,10 +262,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }> = [];
 
   private scaleOptions: IScaleOptions = {};
-
-  private animateStartTime: number = 0;
-
-  private animateStatus: boolean = false;
 
   private isDestroyed: boolean = false;
 
@@ -474,11 +476,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
 
     // 启动动画
-    const { animateOption } = this.getLayerConfig();
-    if (animateOption?.enable) {
-      this.layerService.startAnimate();
-      this.animateStatus = true;
-    }
+    this.animateState.prepareAnimate();
   }
   public color(
     field: StyleAttributeField,
@@ -1098,25 +1096,20 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return attributes;
   }
 
+  public get animateStatus(): boolean {
+    return this.animateState.getAnimateStatus();
+  }
   public getTime() {
-    return this.layerService.clock.getDelta();
+    return this.animateState.getTime();
   }
   public setAnimateStartTime() {
-    this.animateStartTime = this.layerService.clock.getElapsedTime();
+    this.animateState.setAnimateStartTime();
   }
   public stopAnimate() {
-    if (this.animateStatus) {
-      this.layerService.stopAnimate();
-      this.animateStatus = false;
-      this.updateLayerConfig({
-        animateOption: {
-          enable: false,
-        },
-      });
-    }
+    this.animateState.stopAnimate();
   }
   public getLayerAnimateTime(): number {
-    return this.layerService.clock.getElapsedTime() - this.animateStartTime;
+    return this.animateState.getLayerAnimateTime();
   }
 
   public needPick(type: string): boolean {
