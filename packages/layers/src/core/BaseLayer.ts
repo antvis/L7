@@ -47,6 +47,7 @@ import { createPlugins } from '../plugins';
 import type Source from '../source';
 import { BlendTypes } from '../utils/blend';
 import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
+import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
 import TextureService from './TextureService';
 const { isEqual, isFunction, isNumber, isObject, isPlainObject, isUndefined } = lodashUtil;
@@ -71,7 +72,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public inited: boolean = false;
   public layerModelNeedUpdate: boolean = false;
   public pickedFeatureID: number | null = null;
-  public selectedFeatureID: number | null = null;
   public styleNeedUpdate: boolean = false;
   public rendering: boolean;
   public forceRender: boolean = false;
@@ -79,6 +79,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public layerType?: string | undefined;
   public triangulation?: Triangulation | undefined;
   public layerPickService: ILayerPickService;
+
+  /**
+   * 拾取状态与查询 delegate（阶段 1.3a）。外部经 ILayer 方法访问。
+   * 编排（active/setActive/select/setSelect）暂留本类，1.3b 搬入。
+   */
+  public pickingManager: LayerPickingManager = new LayerPickingManager(this);
   public textureService: ITextureService;
 
   public defaultSourceConfig: IDefaultSourceConfig = {
@@ -204,8 +210,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   container: L7Container;
 
   private encodedData: IEncodeFeature[];
-
-  private currentPickId: number | null = null;
 
   protected rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
@@ -850,19 +854,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setCurrentPickId(id: number) {
-    this.currentPickId = id;
+    this.pickingManager.setCurrentPickId(id);
   }
 
   public getCurrentPickId(): number | null {
-    return this.currentPickId;
+    return this.pickingManager.getCurrentPickId();
   }
 
   public setCurrentSelectedId(id: number) {
-    this.selectedFeatureID = id;
+    this.pickingManager.setCurrentSelectedId(id);
   }
 
   public getCurrentSelectedId(): number | null {
-    return this.selectedFeatureID;
+    return this.pickingManager.getCurrentSelectedId();
   }
   public isVisible(): boolean {
     const zoom = this.mapService.getZoom();
@@ -1131,11 +1135,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public pick({ x, y }: { x: number; y: number }) {
-    this.interactionService.triggerHover({ x, y });
+    this.pickingManager.pick({ x, y });
   }
 
   public boxSelect(box: [number, number, number, number], cb: (...args: any[]) => void) {
-    this.pickingService.boxPickLayer(this, box, cb);
+    this.pickingManager.boxSelect(box, cb);
   }
 
   public async buildLayerModel(
@@ -1228,24 +1232,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public needPick(type: string): boolean {
-    const { enableHighlight = true, enableSelect = true } = this.getLayerConfig();
-    // 判断layer是否监听事件;
-    let isPick =
-      this.eventNames().indexOf(type) !== -1 || this.eventNames().indexOf('un' + type) !== -1;
-    if ((type === 'click' || type === 'dblclick') && enableSelect) {
-      isPick = true;
-    }
-    if (
-      type === 'mousemove' &&
-      (enableHighlight ||
-        this.eventNames().indexOf('mouseenter') !== -1 ||
-        this.eventNames().indexOf('unmousemove') !== -1 ||
-        this.eventNames().indexOf('mouseout') !== -1)
-    ) {
-      isPick = true;
-    }
-
-    return this.isVisible() && isPick;
+    return this.pickingManager.needPick(type);
   }
 
   public async buildModels() {
