@@ -12,7 +12,6 @@ import type {
   MapStyleName,
   Point,
 } from '@antv/l7-core';
-import { MapServiceEvent } from '@antv/l7-core';
 import Viewport from '../lib/web-mercator-viewport';
 import { MercatorCoordinate } from '../mapbase';
 import { load } from './maploader';
@@ -27,8 +26,6 @@ const EventMap: {
 
 export default class TdtMapService extends BaseMap<any> {
   protected viewport: IViewport = new Viewport();
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
-    new Map();
   // @ts-ignore
   private sceneContainer: HTMLElement;
   // 不直接用自带的marker的div，因为会收到天地图缩放时visibility变成hidden的影响
@@ -221,80 +218,21 @@ export default class TdtMapService extends BaseMap<any> {
     }
   }
 
-  // MapEvent
-  public on(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.on(type, handle);
-    } else {
-      if (!this.map) {
-        // 地图尚未初始化，缓存事件，init 完成后重放
-        this.pendingHandlers.push({ type, handler: handle });
-        return;
-      }
-
-      const onProxy = (eventName: string) => {
-        let cbProxyMap = this.evtCbProxyMap.get(eventName);
-
-        if (!cbProxyMap) {
-          this.evtCbProxyMap.set(eventName, (cbProxyMap = new Map()));
-        }
-
-        if (cbProxyMap.get(handle)) {
-          return;
-        }
-
-        const handleProxy = (...args: any[]) => {
-          if (args[0] && typeof args[0] === 'object' && !args[0].lngLat && !args[0].lnglat) {
-            args[0].lngLat = args[0].latlng || args[0].latLng;
-            args[0].map = this.map;
-          }
-          handle(...args);
-        };
-
-        cbProxyMap.set(handle, handleProxy);
-        this.map.on(eventName, handleProxy);
-      };
-
-      if (Array.isArray(EventMap[type])) {
-        EventMap[type].forEach((eventName: string) => {
-          onProxy(eventName || type);
-        });
-      } else {
-        onProxy(EventMap[type] || type);
-      }
-    }
+  protected getEventMap(): Record<string, any> {
+    return EventMap;
   }
 
-  public off(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.off(type, handle);
-      return;
-    }
-
-    if (!this.map) {
-      // 地图尚未初始化，从缓存中移除
-      this.pendingHandlers = this.pendingHandlers.filter(
-        (item) => !(item.type === type && item.handler === handle),
-      );
-      return;
-    }
-
-    const offProxy = (eventName: string) => {
-      const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
-      if (!handleProxy) {
-        return;
+  protected buildProxy(handle: (...args: any[]) => void): (...args: any[]) => void {
+    return (...args: any[]) => {
+      const e = args[0];
+      if (e && typeof e === 'object' && !e.lngLat && !e.lnglat) {
+        e.lngLat = e.latlng || e.latLng;
       }
-      this.evtCbProxyMap.get(eventName)?.delete(handle);
-      this.map.off(eventName, handleProxy);
+      if (e && typeof e === 'object') {
+        e.map = this.map;
+      }
+      handle(...args);
     };
-
-    if (Array.isArray(EventMap[type])) {
-      EventMap[type].forEach((eventName: string) => {
-        offProxy(eventName || type);
-      });
-    } else {
-      offProxy(EventMap[type] || type);
-    }
   }
 
   // get dom

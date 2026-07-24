@@ -10,7 +10,6 @@ import type {
   MapStyleConfig,
   Point,
 } from '@antv/l7-core';
-import { MapServiceEvent } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
@@ -41,10 +40,6 @@ export default class BMapService extends BaseMap<BMapGL.Map> {
 
   // Zoom 偏移量，用于对齐不同地图的显示层级
   protected zoomOffset: number = 1.75;
-
-  // 事件回调代理
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
-    new Map();
 
   public getMap() {
     return this.map as any as BMapGL.Map & {
@@ -195,65 +190,8 @@ export default class BMapService extends BaseMap<BMapGL.Map> {
     return this.getMap().getContainer().querySelector('#platform')?.lastChild as HTMLElement;
   }
 
-  // MapEvent // 定义事件类型
-  public on(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.on(type, handle);
-      return;
-    }
-
-    if (!this.map) {
-      // 地图尚未初始化，缓存事件，init 完成后重放
-      this.pendingHandlers.push({ type, handler: handle });
-      return;
-    }
-
-    let cbProxyMap = this.evtCbProxyMap.get(type);
-    if (!cbProxyMap) {
-      this.evtCbProxyMap.set(type, (cbProxyMap = new Map()));
-    }
-
-    // 忽略重复监听回调
-    if (cbProxyMap.get(handle)) {
-      return;
-    }
-
-    // 对事件对象的经纬度进行统一处理l7需要的
-    const handleProxy = (...args: any[]) => {
-      if (args[0] && typeof args[0] === 'object' && !args[0].lngLat && !args[0].lnglat) {
-        args[0].lngLat = args[0].latlng || args[0].latLng;
-      }
-      handle(...args);
-    };
-
-    cbProxyMap.set(handle, handleProxy);
-    this.map.on(EventMap[type] || type, handleProxy);
-  }
-
-  public off(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.off(type, handle);
-      return;
-    }
-
-    if (!this.map) {
-      // 地图尚未初始化，从缓存中移除
-      this.pendingHandlers = this.pendingHandlers.filter(
-        (item) => !(item.type === type && item.handler === handle),
-      );
-      return;
-    }
-
-    const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
-    if (!handleProxy) {
-      return;
-    }
-    this.evtCbProxyMap.get(type)?.delete(handle);
-    this.map.off(EventMap[type] || type, handleProxy);
-  }
-
-  public once(type: string, handler: (...args: any[]) => void): void {
-    this.eventEmitter.once(type, handler);
+  protected getEventMap(): Record<string, any> {
+    return EventMap;
   }
 
   public getContainer(): HTMLElement | null {

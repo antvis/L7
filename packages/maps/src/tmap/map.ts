@@ -8,7 +8,6 @@ import type {
   MapStyleConfig,
   Point,
 } from '@antv/l7-core';
-import { MapServiceEvent } from '@antv/l7-core';
 import { DOM } from '@antv/l7-utils';
 import { mat4, vec3 } from 'gl-matrix';
 import BaseMap from '../lib/base-map';
@@ -35,9 +34,6 @@ export default class TMapService extends BaseMap<TMap.Map> {
 
   // Zoom 偏移量，用于对齐不同地图的显示层级
   protected zoomOffset: number = 1;
-
-  protected evtCbProxyMap: Map<string, Map<(...args: any) => any, (...args: any) => any>> =
-    new Map();
 
   public handleCameraChanged = () => {
     // Trigger map change event
@@ -188,84 +184,17 @@ export default class TMapService extends BaseMap<TMap.Map> {
     return this.markerContainer;
   }
 
-  // MapEvent
-  public on(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.on(type, handle);
-    } else {
-      if (!this.map) {
-        // 地图尚未初始化，缓存事件，init 完成后重放
-        this.pendingHandlers.push({ type, handler: handle });
-        return;
-      }
-
-      const onProxy = (eventName: string) => {
-        let cbProxyMap = this.evtCbProxyMap.get(eventName);
-
-        if (!cbProxyMap) {
-          this.evtCbProxyMap.set(eventName, (cbProxyMap = new Map()));
-        }
-
-        if (cbProxyMap.get(handle)) {
-          return;
-        }
-
-        const handleProxy = (...args: any[]) => {
-          if (args[0] && typeof args[0] === 'object' && !args[0].lngLat && !args[0].lnglat) {
-            args[0].lngLat = args[0].latlng || args[0].latLng;
-          }
-          handle(...args);
-        };
-
-        cbProxyMap.set(handle, handleProxy);
-        if (eventName === 'mouseover') {
-          this.map.getContainer().addEventListener('mouseover', (e) => {
-            handleProxy({ type: e.type, originalEvent: e });
-          });
-        }
-        this.map.on(eventName, handleProxy);
-      };
-
-      if (Array.isArray(EventMap[type])) {
-        EventMap[type].forEach((eventName: string) => {
-          onProxy(eventName || type);
-        });
-      } else {
-        onProxy(EventMap[type] || type);
-      }
-    }
+  protected getEventMap(): Record<string, any> {
+    return EventMap;
   }
 
-  public off(type: string, handle: (...args: any[]) => void): void {
-    if (MapServiceEvent.indexOf(type) !== -1) {
-      this.eventEmitter.off(type, handle);
-      return;
-    }
-
-    if (!this.map) {
-      // 地图尚未初始化，从缓存中移除
-      this.pendingHandlers = this.pendingHandlers.filter(
-        (item) => !(item.type === type && item.handler === handle),
-      );
-      return;
-    }
-
-    const offProxy = (eventName: string) => {
-      const handleProxy = this.evtCbProxyMap.get(type)?.get(handle);
-      if (!handleProxy) {
-        return;
-      }
-      this.evtCbProxyMap.get(eventName)?.delete(handle);
-      this.map.off(eventName, handleProxy);
-    };
-
-    if (Array.isArray(EventMap[type])) {
-      EventMap[type].forEach((eventName: string) => {
-        offProxy(eventName || type);
+  protected registerNative(eventName: string, proxy: (...args: any[]) => void): void {
+    if (eventName === 'mouseover') {
+      (this.map as any).getContainer().addEventListener('mouseover', (e: any) => {
+        proxy({ type: e.type, originalEvent: e });
       });
-    } else {
-      offProxy(EventMap[type] || type);
     }
+    (this.map as any).on(eventName, proxy);
   }
 
   // get dom
