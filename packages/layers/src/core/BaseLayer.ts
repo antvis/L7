@@ -41,7 +41,7 @@ import type {
   Triangulation,
 } from '@antv/l7-core';
 import { BlendType, IDebugLog, ILayerStage, globalConfigService } from '@antv/l7-core';
-import { encodePickingColor, lodashUtil, processRelativeCoordinates } from '@antv/l7-utils';
+import { lodashUtil, processRelativeCoordinates } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { createPlugins } from '../plugins';
 import type Source from '../source';
@@ -84,7 +84,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 拾取状态与查询 delegate（阶段 1.3a）。外部经 ILayer 方法访问。
    * 编排（active/setActive/select/setSelect）暂留本类，1.3b 搬入。
    */
-  public pickingManager: LayerPickingManager = new LayerPickingManager(this);
+  public pickingManager: LayerPickingManager = new LayerPickingManager(this, () => this.reRender());
   public textureService: ITextureService;
 
   public defaultSourceConfig: IDefaultSourceConfig = {
@@ -737,89 +737,19 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     }
   }
 
-  public active(options: IActiveOption | boolean) {
-    const activeOption: Partial<ILayerConfig> = {};
-    activeOption.enableHighlight = isObject(options) ? true : options;
-    if (isObject(options)) {
-      activeOption.enableHighlight = true;
-      if (options.color) {
-        activeOption.highlightColor = options.color;
-      }
-      if (options.mix) {
-        activeOption.activeMix = options.mix;
-      }
-    } else {
-      activeOption.enableHighlight = !!options;
-    }
-    this.updateLayerConfig(activeOption);
-    return this;
+  public active(options: IActiveOption | boolean): ILayer {
+    return this.pickingManager.active(options);
   }
   public setActive(id: number | { x: number; y: number }, options?: IActiveOption): void {
-    if (isObject(id)) {
-      const { x = 0, y = 0 } = id;
-      this.updateLayerConfig({
-        highlightColor: isObject(options) ? options.color : this.getLayerConfig().highlightColor,
-        activeMix: isObject(options) ? options.mix : this.getLayerConfig().activeMix,
-      });
-      this.pick({ x, y });
-    } else {
-      this.updateLayerConfig({
-        pickedFeatureID: id,
-        highlightColor: isObject(options) ? options.color : this.getLayerConfig().highlightColor,
-        activeMix: isObject(options) ? options.mix : this.getLayerConfig().activeMix,
-      });
-      this.hooks.beforeHighlight
-        .call(encodePickingColor(id as number) as number[])
-        // @ts-ignore
-        .then(() => {
-          setTimeout(() => {
-            this.reRender();
-          }, 1);
-        });
-    }
+    this.pickingManager.setActive(id, options);
   }
 
   public select(option: IActiveOption | boolean): ILayer {
-    const activeOption: Partial<ILayerConfig> = {};
-    activeOption.enableSelect = isObject(option) ? true : option;
-    if (isObject(option)) {
-      activeOption.enableSelect = true;
-      if (option.color) {
-        activeOption.selectColor = option.color;
-      }
-      if (option.mix) {
-        activeOption.selectMix = option.mix;
-      }
-    } else {
-      activeOption.enableSelect = !!option;
-    }
-    this.updateLayerConfig(activeOption);
-    return this;
+    return this.pickingManager.select(option);
   }
 
   public setSelect(id: number | { x: number; y: number }, options?: IActiveOption): void {
-    if (isObject(id)) {
-      const { x = 0, y = 0 } = id;
-      this.updateLayerConfig({
-        selectColor: isObject(options) ? options.color : this.getLayerConfig().selectColor,
-        selectMix: isObject(options) ? options.mix : this.getLayerConfig().selectMix,
-      });
-      this.pick({ x, y });
-    } else {
-      this.updateLayerConfig({
-        pickedFeatureID: id,
-        selectColor: isObject(options) ? options.color : this.getLayerConfig().selectColor,
-        selectMix: isObject(options) ? options.mix : this.getLayerConfig().selectMix,
-      });
-      this.hooks.beforeSelect
-        .call(encodePickingColor(id as number) as number[])
-        // @ts-ignore
-        .then(() => {
-          setTimeout(() => {
-            this.reRender();
-          }, 1);
-        });
-    }
+    this.pickingManager.setSelect(id, options);
   }
   public setBlend(type: keyof typeof BlendType): ILayer {
     this.updateLayerConfig({
