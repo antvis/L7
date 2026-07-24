@@ -1,4 +1,3 @@
-// import ConfigSchemaValidationPlugin from './ConfigSchemaValidationPlugin';
 import DataMappingPlugin from './DataMappingPlugin';
 import DataSourcePlugin from './DataSourcePlugin';
 import FeatureScalePlugin from './FeatureScalePlugin';

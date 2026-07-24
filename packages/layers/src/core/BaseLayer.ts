@@ -245,8 +245,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private isDestroyed: boolean = false;
 
-  // private pickingPassRender: IPass<'pixelPicking'>;
-
   private uniformBuffers: IBuffer[] = [];
 
   constructor(config: Partial<ILayerConfig & ChildLayerStyleOptions> = {}) {
@@ -364,10 +362,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const sceneId = this.container.id;
     this.startInit = true;
     // 初始化图层配置项
-    // const { enableMultiPassRenderer = false } = this.rawConfig;
-    // this.configService.setLayerConfig(sceneId, this.id, {
-    //   enableMultiPassRenderer,
-    // });
     this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
     this.layerType = this.rawConfig.layerType;
 
@@ -421,9 +415,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     for (const plugin of this.plugins) {
       plugin.apply(this, this.container);
     }
-    // if (this.getSource().isTile) {
-    //   this.tileLayer = new TileLayer(this);
-    // }
 
     // 初始化其他服务
     this.layerPickService = new LayerPickService(this);
@@ -714,6 +705,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.rendering = false;
   }
 
+  /**
+   * 渲染前的预处理钩子，由 LayerService 在每帧 render 前调用。
+   * 默认空实现；子类可按需 override（如 HeatMap 走独立渲染流程）。
+   */
   prerender() {}
 
   public render(options: Partial<IRenderOptions> = {}): ILayer {
@@ -732,7 +727,9 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   /**
-   * renderMultiPass 专门用于渲染支持 multipass 的 layer
+   * multipass 图层的公共渲染入口：有 multiPassRenderer 时委托其编排渲染，
+   * 否则回退到 {@link renderModels} 单 pass 渲染。与已废弃的
+   * {@link renderMulPass}（单个 renderer 的薄封装）区分。
    */
   public async renderMultiPass() {
     if (this.encodeDataLength <= 0 && !this.forceRender) {
@@ -1269,6 +1266,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     await this.buildModels();
   }
 
+  /**
+   * @deprecated 该方法不在 `ILayer` 公共接口中，且无内部调用方，仅为单个
+   * multipass renderer 的薄封装。新代码请使用 {@link renderMultiPass}（整图层
+   * 多 pass 渲染入口）。将在渲染管线收敛（阶段 4）时并入 `renderMultiPass`。
+   */
   public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {
     await multiPassRenderer.render();
   }
@@ -1359,16 +1361,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   /**
-   * 继承空方法
+   * 设置地球时间。基础图层为空实现（仅打印占位 warn）；需要响应的子类
+   * （如 `EarthLayer`）可 override 转发至 layerModel。
    * @param time
    */
-
   public setEarthTime(time: number) {
     console.warn('empty fn');
   }
 
-  // 数据处理 在数据进行 mapping 生成 encodeData 之前对数据进行处理
-  // 在各个 layer 中继承
+  /**
+   * 数据在 mapping 生成 encodeData 之前的预处理钩子，默认透传。
+   * 各具体图层可 override 以做字段裁剪/转换。
+   */
   public processData(filterData: IParseDataItem[]) {
     return filterData;
   }
