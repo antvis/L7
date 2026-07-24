@@ -51,12 +51,6 @@ export default abstract class MapboxBaseMap<T>
    */
   protected zoomOffset: number = 0;
 
-  // 事件代理映射: 原始 handler -> 代理 handler (用于 off 时精确解绑)
-  protected evtCbProxyMap: globalThis.Map<
-    string,
-    globalThis.Map<(...args: any[]) => void, (...args: any[]) => void>
-  > = new globalThis.Map();
-
   // ====== 子类必须实现的抽象方法 (沿用 BaseMap 的 abstract 声明) ======
   public abstract init(): Promise<void>;
   public abstract lngLatToMercator(lnglat: [number, number], altitude: number): IMercator;
