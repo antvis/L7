@@ -50,6 +50,7 @@ import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRend
 import LayerMaskManager from './LayerMaskManager';
 import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
+import LayerVisibilityZoom from './LayerVisibilityZoom';
 import TextureService from './TextureService';
 const { isEqual, isFunction, isNumber, isObject, isPlainObject, isUndefined } = lodashUtil;
 /**
@@ -149,6 +150,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 在 ctor 内 `this.masks` 赋值后实例化，以保证引用指向正确数组。
    */
   public maskManager!: LayerMaskManager;
+
+  /**
+   * 可见性/缩放管理 delegate（阶段 1.8）。`reRender`（protected）经
+   * ctor 注入 `rerender` 回调桥接（同 `LayerPickingManager` 1.3b 先例）。
+   */
+  public visibilityZoomManager: LayerVisibilityZoom = new LayerVisibilityZoom(this, () =>
+    this.reRender(),
+  );
 
   protected readonly configService: IGlobalConfigService = globalConfigService;
 
@@ -751,27 +760,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this;
   }
   public show(): ILayer {
-    this.updateLayerConfig({
-      visible: true,
-    });
-    this.reRender();
-    this.emit('show');
-    return this;
+    return this.visibilityZoomManager.show();
   }
 
   public hide(): ILayer {
-    this.updateLayerConfig({
-      visible: false,
-    });
-    this.reRender();
-    this.emit('hide');
-    return this;
+    return this.visibilityZoomManager.hide();
   }
   public setIndex(index: number): ILayer {
-    this.zIndex = index;
-    this.layerService.updateLayerRenderList();
-    this.layerService.renderLayers();
-    return this;
+    return this.visibilityZoomManager.setIndex(index);
   }
 
   public setCurrentPickId(id: number) {
@@ -790,9 +786,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.pickingManager.getCurrentSelectedId();
   }
   public isVisible(): boolean {
-    const zoom = this.mapService.getZoom();
-    const { visible, minZoom = -Infinity, maxZoom = Infinity } = this.getLayerConfig();
-    return !!visible && zoom >= minZoom && zoom < maxZoom;
+    return this.visibilityZoomManager.isVisible();
   }
 
   public setMultiPass(
@@ -825,20 +819,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setMinZoom(minZoom: number): ILayer {
-    this.updateLayerConfig({
-      minZoom,
-    });
-    return this;
+    return this.visibilityZoomManager.setMinZoom(minZoom);
   }
 
   public getMinZoom(): number {
-    const { minZoom } = this.getLayerConfig();
-    return minZoom as number;
+    return this.visibilityZoomManager.getMinZoom();
   }
 
   public getMaxZoom(): number {
-    const { maxZoom } = this.getLayerConfig();
-    return maxZoom as number;
+    return this.visibilityZoomManager.getMaxZoom();
   }
 
   public get(name: string) {
@@ -847,43 +836,18 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public setMaxZoom(maxZoom: number): ILayer {
-    this.updateLayerConfig({
-      maxZoom,
-    });
-    return this;
+    return this.visibilityZoomManager.setMaxZoom(maxZoom);
   }
 
   public setAutoFit(autoFit: boolean): ILayer {
-    this.updateLayerConfig({
-      autoFit,
-    });
-    return this;
+    return this.visibilityZoomManager.setAutoFit(autoFit);
   }
 
   /**
    * zoom to layer Bounds
    */
   public fitBounds(fitBoundsOptions?: unknown): ILayer {
-    if (!this.inited) {
-      this.updateLayerConfig({
-        autoFit: true,
-      });
-      return this;
-    }
-    const source = this.getSource();
-    const extent = source.extent;
-    const isValid = extent.some((v) => Math.abs(v) === Infinity);
-    if (isValid) {
-      return this;
-    }
-    this.mapService.fitBounds(
-      [
-        [extent[0], extent[1]],
-        [extent[2], extent[3]],
-      ],
-      fitBoundsOptions,
-    );
-    return this;
+    return this.visibilityZoomManager.fitBounds(fitBoundsOptions);
   }
 
   public destroy(refresh = true) {
