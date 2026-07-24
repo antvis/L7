@@ -6,6 +6,7 @@ import type {
   IAttributeAndElements,
   IBuffer,
   IDataState,
+  IDefaultSourceConfig,
   IEncodeFeature,
   IGlobalConfigService,
   ILayer,
@@ -26,7 +27,9 @@ import type {
   IRenderOptions,
   IScale,
   IScaleOptions,
+  IShapeOption,
   ISourceCFG,
+  ISourceOption,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
   ITextureService,
@@ -78,10 +81,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public layerPickService: ILayerPickService;
   public textureService: ITextureService;
 
-  public defaultSourceConfig: {
-    data: any[];
-    options: ISourceCFG | undefined;
-  } = {
+  public defaultSourceConfig: IDefaultSourceConfig = {
     data: [],
     options: {
       parser: {
@@ -125,17 +125,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public startInit: boolean = false;
 
-  public sourceOption: {
-    data: any;
-    options?: ISourceCFG;
-  };
+  public sourceOption: ISourceOption;
 
   public layerModel: ILayerModel;
 
-  public shapeOption: {
-    field: any;
-    values: any;
-  };
+  public shapeOption: IShapeOption;
 
   public tileLayer: any | undefined;
   // 用于保存子图层对象

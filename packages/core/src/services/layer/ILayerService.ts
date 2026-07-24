@@ -65,6 +65,21 @@ export interface IDataState {
   StyleAttrNeedUpdate: boolean;
 }
 
+export interface IDefaultSourceConfig {
+  data: any[];
+  options: ISourceCFG | undefined;
+}
+
+export interface ISourceOption {
+  data: any;
+  options?: ISourceCFG;
+}
+
+export interface IShapeOption {
+  field: any;
+  values: any;
+}
+
 export interface IWorkerOption {
   modelType: string;
   [key: string]: any;
@@ -369,10 +384,7 @@ export interface ILayer {
   tileMask?: ILayer | undefined; // 图层的 tileMask;
   container: L7Container | undefined;
   dataState: IDataState; // 数据流状态
-  defaultSourceConfig: {
-    data: any[];
-    options: ISourceCFG | undefined;
-  };
+  defaultSourceConfig: IDefaultSourceConfig;
   encodeDataLength: number;
   encodeStyleAttribute: Record<string, any>;
   pickedFeatureID: number | null;
@@ -392,14 +404,8 @@ export interface ILayer {
     afterDestroy: SyncHook;
   };
   models: IModel[];
-  sourceOption: {
-    data: any;
-    options?: ISourceCFG;
-  };
-  shapeOption: {
-    field: any;
-    values: any;
-  };
+  sourceOption: ISourceOption;
+  shapeOption: IShapeOption;
   multiPassRenderer: IMultiPassRenderer;
   // 初始化 layer 的时候指定 layer type 类型（）兼容空数据的情况
   layerType?: string | undefined;
