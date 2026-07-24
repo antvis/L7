@@ -17,8 +17,6 @@ import type {
   ILayerPickService,
   ILayerPlugin,
   ILegend,
-  ILegendClassificaItem,
-  ILegendSegmentItem,
   IModel,
   IModelInitializationOptions,
   IMultiPassRenderer,
@@ -52,9 +50,10 @@ import LayerMaskManager from './LayerMaskManager';
 import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
 import LayerRelativeCoords from './LayerRelativeCoords';
+import LayerScaleLegend from './LayerScaleLegend';
 import LayerVisibilityZoom from './LayerVisibilityZoom';
 import TextureService from './TextureService';
-const { isEqual, isFunction, isNumber, isObject, isPlainObject, isUndefined } = lodashUtil;
+const { isEqual, isFunction, isNumber, isObject, isPlainObject } = lodashUtil;
 /**
  * 分配 layer id
  */
@@ -261,7 +260,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     updateOptions?: Partial<IStyleAttributeUpdateOptions>;
   }> = [];
 
-  private scaleOptions: IScaleOptions = {};
+  /**
+   * Scale 配置与 Legend 读取 delegate（阶段 1.6）。原 private `scaleOptions`
+   * 字段搬入；`getScaleOptions()` 返回引用供 `FeatureScalePlugin` 缓存，语义不变。
+   */
+  protected scaleLegendManager: LayerScaleLegend = new LayerScaleLegend(this);
 
   private isDestroyed: boolean = false;
 
@@ -673,20 +676,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
-    const preOption = { ...this.scaleOptions };
-    if (isObject(field)) {
-      this.scaleOptions = {
-        ...this.scaleOptions,
-        ...field,
-      };
-    } else {
-      this.scaleOptions[field] = cfg;
-    }
-    if (this.styleAttributeService && !isEqual(preOption, this.scaleOptions)) {
-      const scaleOptions = isObject(field) ? field : { [field]: cfg };
-      this.styleAttributeService.updateScaleAttribute(scaleOptions);
-    }
-
+    this.scaleLegendManager.scale(field, cfg);
     return this;
   }
 
@@ -949,7 +939,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public getScaleOptions() {
-    return this.scaleOptions;
+    return this.scaleLegendManager.getScaleOptions();
   }
   public encodeDataLength: number = 0;
   public setEncodedData(encodedData: IEncodeFeature[]) {
@@ -961,63 +951,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public getScale(name: string): any {
-    return this.styleAttributeService.getLayerAttributeScale(name);
+    return this.scaleLegendManager.getScale(name);
   }
 
   public getLegend(name: string): ILegend {
-    const attribute = this.styleAttributeService.getLayerStyleAttribute(name);
-    const scales = attribute?.scale?.scalers || [];
-
-    return {
-      type: scales[0]?.option?.type,
-      field: scales[0]?.field,
-      items: this.getLegendItems(name),
-    };
+    return this.scaleLegendManager.getLegend(name);
   }
 
   public getLegendItems(name: string): LegendItems {
-    const scale = this.styleAttributeService.getLayerAttributeScale(name);
-    // 函数自定义映射，没有 scale 返回为空数组
-    if (!scale) {
-      return [];
-    }
-
-    if (scale.invertExtent) {
-      // 分段类型  Quantize、Quantile、Threshold
-      const items: ILegendSegmentItem[] = scale.range().map((item: number) => {
-        return {
-          value: scale.invertExtent(item),
-          [name]: item,
-        };
-      });
-
-      return items;
-    } else if (scale.ticks) {
-      // 连续类型 Continuous (Linear, Power, Log, Identity, Time)
-      const items: ILegendClassificaItem[] = scale.ticks().map((item: string) => {
-        return {
-          value: item,
-          [name]: scale(item),
-        };
-      });
-
-      return items;
-    } else if (scale?.domain) {
-      // 枚举类型 Cat
-      const items: ILegendClassificaItem[] = scale
-        .domain()
-        .filter((item: string | number | undefined) => !isUndefined(item))
-        .map((item: string | number) => {
-          return {
-            value: item,
-            [name]: scale(item) as string,
-          };
-        });
-
-      return items;
-    }
-
-    return [];
+    return this.scaleLegendManager.getLegendItems(name);
   }
 
   public pick({ x, y }: { x: number; y: number }) {
