@@ -55,13 +55,13 @@ citybuilding/ geometry/ — 12 个具体图层 extends BaseLayer（各自只 ove
 
 ### 阶段 0 — 低风险清理（无行为变更）
 
-| 步骤 | 动作                                                                                                                                                                                                    | 状态 |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
-| 0.1  | 删死代码/注释：plugins/index.ts 注释 import、BaseLayer:425 `tileLayer=new TileLayer` 注释、367 旧 config 注释、248 `pickingPassRender` 注释字段                                                         | ☐    |
-| 0.2  | 命名收口：`renderMulPass`（727，public 但不在 ILayer）→ 重命名为 `renderMultiPassRenderer(renderer)` 或降级 `protected`；与 `renderMultiPass()`（731）区分清楚；保留 `renderMultiPass()` 作 public 入口 | ☐    |
-| 0.3  | 收敛 `@ts-ignore`：逐处补类型（`encodeStyle`/`splitValuesAndCallbackInAttribute`/`hooks.beforeHighlight.then` 等），目标 22 → ≤5（仅留 `ChildLayerStyleOptions` 泛型擦除处）                            | ☐    |
-| 0.4  | `dataState`/`defaultSourceConfig`/`sourceOption`/`shapeOption` 从内联字面量抽到 `core/interface.ts` 已有类型，统一引用而非散落字面量                                                                    | ☐    |
-| 0.5  | 占位方法标 `abstract` 或加默认实现注释：`setEarthTime`(`console.warn`)/`prerender`(`{}`)/`processData`(透传) 统一为「子类可选 override」约定并在 JSDoc 标注                                             | ☐    |
+| 步骤 | 动作                                                                                                                                                                         | 状态 |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| 0.1  | 删死代码/注释：plugins/index.ts 注释 import、BaseLayer:425 `tileLayer=new TileLayer` 注释、367 旧 config 注释、248 `pickingPassRender` 注释字段                              | ☑    |
+| 0.2  | 命名收口：`renderMulPass`（1272，public 但不在 ILayer）本轮标 `@deprecated` + JSDoc 区分（非破坏）；实际可见性/命名收敛留阶段 4；`renderMultiPass()` 保留为 public 入口      | ☑    |
+| 0.3  | 收敛 `@ts-ignore`：逐处补类型（`encodeStyle`/`splitValuesAndCallbackInAttribute`/`hooks.beforeHighlight.then` 等），目标 22 → ≤5（仅留 `ChildLayerStyleOptions` 泛型擦除处） | ☐    |
+| 0.4  | `dataState`/`defaultSourceConfig`/`sourceOption`/`shapeOption` 从内联字面量抽到 `core/interface.ts` 已有类型，统一引用而非散落字面量                                         | ☐    |
+| 0.5  | 占位方法加默认实现 JSDoc：`setEarthTime`/`prerender`/`processData` 标注「子类可选 override」约定                                                                             | ☑    |
 
 ### 阶段 1 — 拆解 God Class（内部 delegate，对外透明）
 
