@@ -98,7 +98,7 @@ citybuilding/ geometry/ — 12 个具体图层 extends BaseLayer（各自只 ove
 
 ### 阶段 4 — 渲染管线收敛
 
-- 4.1 厘清 6 入口：`render()`（总入口，分流 tile/multipass/single）→ `renderModels()`（single-pass model.draw）+ `renderMultiPass()`（multipass 编排）；`renderMulPass`（阶段 0.2 已改名/降级）收为 `renderMultiPass` 内部助手；`renderLayers()`/`prerender()` 边界文档化。
+- 4.1 ✅ 厘清入口：`render()`（单 pass 入口，tile 短路 + 空数据早退 + `renderModels`）与 `renderMultiPass()`（multipass 入口，`LayerService` 按 `enableMultiPassRenderer` 分流）边界 JSDoc 文档化；`renderModels()` 共享 `model.draw` 执行器、`renderLayers()` 重渲信号、`prerender()` 帧前钩子文档化；移除无调用方/非 `ILayer` 的 `@deprecated` `renderMulPass`（0.2 预告收口）。
 - 4.2 `multiPassRenderer/postProcessingPassFactory/normalPassFactory` 初始化收敛到 `LayerModelManager`（阶段 1.2），消除 `init()` 与 `setMultiPass()` 两处分散初始化。
 - 4.3 `renderModels` 的 `encodeDataLength <= 0 && !forceRender` 空数据早退逻辑（1277）下沉到 manager 并加 spec（当前仅 TODO 注释保护 texture 超限）。
 

@@ -689,7 +689,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   /**
-   * 渲染所有的图层
+   * 触发 `layerService.reRender()` 批量重渲信号（非即时逐帧绘制），
+   * 前后标记 `rendering` 防重入。供外部/插件请求重绘时使用。
    */
   public renderLayers(): void {
     this.rendering = true;
@@ -704,6 +705,13 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    */
   prerender() {}
 
+  /**
+   * 单 pass 渲染入口（`LayerService` 在未启用 `enableMultiPassRenderer`
+   * 时调用）。分流顺序：瓦片图层短路委托 `tileLayer.render()`；否则经
+   * `beforeRenderData` 通知 + 空数据早退（避免数据纹理空数据导致 texture
+   * 超限），最后委托 {@link renderModels} 执行 `model.draw`。multipass
+   * 路径由 `LayerService` 直接调用 {@link renderMultiPass}，不经此方法。
+   */
   public render(options: Partial<IRenderOptions> = {}): ILayer {
     if (this.tileLayer) {
       // 瓦片图层执行单独的 render 渲染队列
@@ -720,9 +728,10 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   /**
-   * multipass 图层的公共渲染入口：有 multiPassRenderer 时委托其编排渲染，
-   * 否则回退到 {@link renderModels} 单 pass 渲染。与已废弃的
-   * {@link renderMulPass}（单个 renderer 的薄封装）区分。
+   * multipass 图层的公共渲染入口（`LayerService` 在启用
+   * `enableMultiPassRenderer` 时调用）：有 `multiPassRenderer` 且其
+   * `getRenderFlag()` 为真时委托其编排多 pass 渲染，否则回退到
+   * {@link renderModels} 单 pass 渲染。空数据同样早退。
    */
   public async renderMultiPass() {
     if (this.encodeDataLength <= 0 && !this.forceRender) {
@@ -1076,14 +1085,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   /**
-   * @deprecated 该方法不在 `ILayer` 公共接口中，且无内部调用方，仅为单个
-   * multipass renderer 的薄封装。新代码请使用 {@link renderMultiPass}（整图层
-   * 多 pass 渲染入口）。将在渲染管线收敛（阶段 4）时并入 `renderMultiPass`。
+   * 单 pass 渲染的共享 `model.draw` 执行器：空数据早退并 `clearModels()`
+   * 释放（同 texture 超限保护），否则触发 `hooks.beforeRender` 后逐
+   * `model.draw`（uniforms/blend/stencil/textures 取自 `layerModel`）。
+   * 被 {@link render}（单 pass）与 {@link renderMultiPass}（回退）复用。
    */
-  public async renderMulPass(multiPassRenderer: IMultiPassRenderer) {
-    await multiPassRenderer.render();
-  }
-
   public renderModels(options: Partial<IRenderOptions> = {}) {
     // TODO: this.getEncodedData().length > 0 这个判断是为了解决在 2.5.x 引入数据纹理后产生的 空数据渲染导致 texture 超出上限问题
     if (this.encodeDataLength <= 0 && !this.forceRender) {
