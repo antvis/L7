@@ -5,6 +5,7 @@ import type {
   IActiveOption,
   IAnimateOption,
   IAttributeAndElements,
+  IBaseTileLayer,
   IBuffer,
   IDataState,
   IDefaultSourceConfig,
@@ -151,7 +152,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public shapeOption: IShapeOption;
 
-  public tileLayer: any | undefined;
+  public tileLayer: IBaseTileLayer | undefined;
   // 用于保存子图层对象
   public layerChildren: ILayer[] = [];
   public masks: ILayer[] = [];

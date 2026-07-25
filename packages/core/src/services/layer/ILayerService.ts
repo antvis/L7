@@ -337,6 +337,7 @@ export interface IBaseTileLayer {
   selectFeature(pickedColors: Uint8Array | undefined): void;
   highlightPickedFeature(pickedColors: Uint8Array | undefined): void;
   render(isPicking?: boolean): void;
+  reload(): void;
   destroy(): void;
 }
 export interface ITileLayer extends IBaseTileLayer {
@@ -418,7 +419,7 @@ export interface ILayer {
   layerModelNeedUpdate: boolean;
   styleNeedUpdate: boolean;
   layerModel: ILayerModel;
-  tileLayer: IBaseTileLayer;
+  tileLayer: IBaseTileLayer | undefined;
   layerChildren: ILayer[]; // 在图层中添加子图层
   masks: ILayer[]; // 图层的 mask 列表
   tileMask?: ILayer | undefined; // 图层的 tileMask;
