@@ -113,7 +113,7 @@ citybuilding/ geometry/ — 12 个具体图层 extends BaseLayer（各自只 ove
 
 - 6.1 为每个 delegate（1.1–1.9）补独立 spec（mock container + 插件），不再仅靠子类间接覆盖。
 - 6.2 交互编码开关（`enableShaderEncodeStyles/enableDataEncodeStyles`）补 spec，锁定 shader/data 编码分流。
-- 6.3 相对坐标、animate 状态机补纯单测（已从 `@antv/l7-utils` 解耦，可脱离 map 测试）。
+- 6.3 ✅ 相对坐标、animate 状态机补纯单测：为阶段 1.4 `LayerRelativeCoords` 与 1.5 `LayerAnimateState` 两个 delegate 补独立特征化 spec（`__tests__/core/relative-coords.spec.ts` 8 cases + `animate-state.spec.ts` 9 cases），以满足窄依赖面的 mock layer 直连 delegate，锁定 guard/默认初值/wiring/快照时序/control flow/时钟透传/副作用等可观测契约；此前仅经 BaseLayer 子类渲染路径间接覆盖。纯测试刀，零产线改动。
 - 6.4 `BaseLayer` 的 delegate 转发用「接口契约 spec」模式（类似 maps `base-map-event.spec.ts`）锁定对外透明。
 
 ### 阶段 7（可选, 长期）— API 演进
