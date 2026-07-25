@@ -1,5 +1,5 @@
 import type { IBounds } from '../src/geo';
-import { boundsContains, padBounds } from '../src/geo';
+import { boundsContains, lnglatDistance, padBounds } from '../src/geo';
 
 describe('geo', () => {
   it('padBounds', () => {
@@ -29,5 +29,16 @@ describe('geo', () => {
     ];
     expect(boundsContains(bounds, b2)).toEqual(true);
     expect(boundsContains(bounds, b3)).toEqual(false);
+  });
+
+  it('lnglatDistance defaults to meters', () => {
+    const meters = lnglatDistance([116, 39], [117, 39]);
+    expect(meters).toBeCloseTo(86414.37, 1);
+  });
+
+  it('lnglatDistance respects the units parameter', () => {
+    const meters = lnglatDistance([116, 39], [117, 39], 'meters');
+    const kilometers = lnglatDistance([116, 39], [117, 39], 'kilometers');
+    expect(kilometers).toBeCloseTo(meters / 1000, 5);
   });
 });
