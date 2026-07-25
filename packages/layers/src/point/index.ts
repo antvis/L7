@@ -5,9 +5,13 @@ import type { PointType } from './models/index';
 import PointModels from './models/index';
 
 export default class PointLayer extends BaseLayer<IPointLayerStyleOptions> {
+  constructor(config: Partial<ILayerConfig & IPointLayerStyleOptions> = {}) {
+    super(config);
+    this.setEncodeStyles('shader', ['stroke', 'offsets', 'opacity', 'rotation', 'anchor']);
+    this.setEncodeStyles('data', ['textOffset', 'textAnchor']);
+  }
+
   public type: string = 'PointLayer';
-  public enableShaderEncodeStyles = ['stroke', 'offsets', 'opacity', 'rotation', 'anchor']; //4+2+1+1+1
-  public enableDataEncodeStyles = ['textOffset', 'textAnchor'];
   public defaultSourceConfig = {
     data: [],
     options: {

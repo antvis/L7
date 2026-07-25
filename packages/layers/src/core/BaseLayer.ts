@@ -1,6 +1,7 @@
 // @ts-ignore
 import { AsyncSeriesBailHook, AsyncWaterfallHook, SyncBailHook, SyncHook } from '@antv/async-hook';
 import type {
+  EncodeStyleKind,
   IActiveOption,
   IAnimateOption,
   IAttributeAndElements,
@@ -219,6 +220,15 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public postProcessingPassFactory: (name: string) => IPostProcessingPass<unknown>;
 
+  /**
+   * 批量声明编码样式分类（阶段 3.3）。供子类构造期填充 `encodeStyles` Map；
+   * 同名键后写覆盖先写（`shader` 与 `data` 互斥，以最后声明为准——历史无同名
+   * 跨轨声明，保留语义）。空 keys 数组为 no-op。
+   */
+  protected setEncodeStyles(kind: EncodeStyleKind, keys: string[]): void {
+    keys.forEach((key) => this.encodeStyles.set(key, kind));
+  }
+
   public get normalPassFactory() {
     return this.container.normalPassFactory;
   }
@@ -250,12 +260,23 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   public encodeStyleAttribute: IEncodedStyleMap = {};
 
-  // Shader 的数据映射
-  public enableShaderEncodeStyles: string[] = [];
+  /**
+   * 编码样式分类（阶段 3.3：单一真源，替代原两个平行数组
+   * `enableShaderEncodeStyles` / `enableDataEncodeStyles`）。
+   *
+   * 键为样式属性名（`color`/`size`/...），值标其参与映射的通道：
+   * `'shader'`（shader 端 uniform 注入）或 `'data'`（数据层数据映射）。
+   * 子类构造期经 `setEncodeStyles(kind, keys)` 填充；运行时不 mutate。
+   */
+  protected encodeStyles: Map<string, EncodeStyleKind> = new Map();
 
-  // 数据层数据映射
+  public get enableShaderEncodeStyles(): string[] {
+    return [...this.encodeStyles].filter(([, kind]) => kind === 'shader').map(([key]) => key);
+  }
 
-  public enableDataEncodeStyles: string[] = [];
+  public get enableDataEncodeStyles(): string[] {
+    return [...this.encodeStyles].filter(([, kind]) => kind === 'data').map(([key]) => key);
+  }
 
   /**
    * 待更新样式属性，在初始化阶段完成注册
@@ -662,7 +683,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     Object.keys(options).forEach((key: string) => {
       if (
         // 需要数据映射
-        [...this.enableShaderEncodeStyles, ...this.enableDataEncodeStyles].includes(key) &&
+        this.encodeStyles.has(key) &&
         isPlainObject(options[key]) &&
         (options[key].field || options[key].value) &&
         !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算

@@ -1,19 +1,16 @@
-import type { IEncodeFeature } from '@antv/l7-core';
+import type { IEncodeFeature, ILayerConfig } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import type { IPolygonLayerStyleOptions } from '../core/interface';
 import type { PolygonModelType } from './models/';
 import PolygonModels from './models/';
 
 export default class PolygonLayer extends BaseLayer<IPolygonLayerStyleOptions> {
+  constructor(config: Partial<ILayerConfig & IPolygonLayerStyleOptions> = {}) {
+    super(config);
+    this.setEncodeStyles('shader', ['opacity', 'extrusionBase', 'rotation', 'offsets', 'stroke']);
+  }
+
   public type: string = 'PolygonLayer';
-  public enableShaderEncodeStyles = [
-    'opacity',
-    'extrusionBase',
-    // shape 为文本时
-    'rotation',
-    'offsets',
-    'stroke',
-  ];
   declare public defaultSourceConfig: {
     data: [];
     options: {

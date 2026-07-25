@@ -94,7 +94,7 @@ citybuilding/ geometry/ — 12 个具体图层 extends BaseLayer（各自只 ove
 
 - 3.1 定义 `LayerConfigModel` 收敛三轨：`rawConfig`（入参快照）/ `needUpdateConfig`（diff 暂存）/ `getLayerConfig()`（`globalConfigService` 读回）→ 统一为 `LayerConfigModel.read()` 单一读路径 + `apply(patch)` 单一写路径，`prepareBuildModel` 消费 diff。`ILayer.getLayerConfig<T>()` 签名不变。
 - 3.2 给 `defaultSourceConfig/sourceOption/shapeOption/encodeStyleAttribute` 补严格类型（替 `any`）：引入 `ILayerSourceOption/IShapeOption/IEncodedStyleMap`，`get(name)`/`getScale(name)` 标泛型或返回联合类型。 **（☑ 部分完成；`defaultSourceConfig`/`sourceOption`/`shapeOption`/`get(name)` 历史已各自定型为 `IDefaultSourceConfig`/`ISourceOption`/`IShapeOption`/`number`，本刀补齐 `encodeStyleAttribute` → `IEncodedStyleMap`（core 新增 `IEncodedStyleValue`+`IEncodedStyleMap`）；剩 `getScale(name):any` 泛型化归后续 scale delegate 专属刀。）**
-- 3.3 `enableShaderEncodeStyles/enableDataEncodeStyles: string[]` → 收敛为 `encodeStyles: Map<string,'shader'|'data'>`（内部），公开数组 getter 保留过渡；补 spec 锁定编码开关行为。
+- 3.3 `enableShaderEncodeStyles/enableDataEncodeStyles: string[]` → 收敛为 `encodeStyles: Map<string,'shader'|'data'>`（内部），公开数组 getter 保留过渡；补 spec 锁定编码开关行为。 **（☑ 已完成；BaseLayer 加 `encodeStyles:Map`+`EncodeStyleKind`(core)+`setEncodeStyles` helper+数组 getter；point/line/polygon 子类字段初始化器改 constructor 调 `setEncodeStyles`；`encodeStyle()` 读改 `Map.has`；新 `encode-styles.spec.ts` 7 cases 锁定；公开 `ILayer` 数组契约保留）**
 
 ### 阶段 4 — 渲染管线收敛
 

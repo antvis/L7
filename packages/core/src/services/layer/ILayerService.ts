@@ -100,6 +100,14 @@ export interface IEncodedStyleValue {
  */
 export type IEncodedStyleMap = Record<string, IEncodedStyleValue>;
 
+/**
+ * 编码样式分类（阶段 3.3）：样式属性参与映射的通道。
+ *
+ * `'shader'`：shader 端 uniform 注入（原 `enableShaderEncodeStyles`）；
+ * `'data'`：数据层数据映射（原 `enableDataEncodeStyles`）。
+ */
+export type EncodeStyleKind = 'shader' | 'data';
+
 export interface IWorkerOption {
   modelType: string;
   [key: string]: any;
@@ -383,7 +391,18 @@ export interface ILayer {
   layerPickService: ILayerPickService;
   textureService: ITextureService;
   sourceLayer?: string;
+  /**
+   * 参与 shader 端数据映射的样式属性名（阶段 3.3：公开数组 getter 桥接，
+   * 内部单一真源为 `encodeStyles: Map<string,EncodeStyleKind>`）。
+   *
+   * 外部 `layer.enableShaderEncodeStyles` 读取维持数组契约；写入须经子类
+   * 构造期 `setEncodeStyles('shader', [...])`，运行时不应直接 mutate。
+   */
   enableShaderEncodeStyles: string[];
+  /**
+   * 参与数据层数据映射的样式属性名（阶段 3.3：公开数组 getter 桥接，
+   * 内部单一真源为 `encodeStyles: Map<string,EncodeStyleKind>`）。
+   */
   enableDataEncodeStyles: string[];
   parent: ILayer;
   id: string; // 一个场景中同一类型 Layer 可能存在多个

@@ -1,12 +1,16 @@
-import type { IParseDataItem } from '@antv/l7-core';
+import type { ILayerConfig, IParseDataItem } from '@antv/l7-core';
 import BaseLayer from '../core/BaseLayer';
 import type { ILineLayerStyleOptions } from '../core/interface';
 import type { LineModelType } from './models';
 import LineModels from './models';
 
 export default class LineLayer extends BaseLayer<ILineLayerStyleOptions> {
+  constructor(config: Partial<ILayerConfig & ILineLayerStyleOptions> = {}) {
+    super(config);
+    this.setEncodeStyles('shader', ['stroke', 'offsets', 'opacity', 'thetaOffset']);
+  }
+
   public type: string = 'LineLayer';
-  public enableShaderEncodeStyles = ['stroke', 'offsets', 'opacity', 'thetaOffset']; //注意顺序 4+2+1+1
   public arrowInsertCount: number = 0;
   public defaultSourceConfig = {
     data: [
