@@ -106,7 +106,8 @@ citybuilding/ geometry/ — 12 个具体图层 extends BaseLayer（各自只 ove
 
 - 5.1 ✅ `tileLayer: any` → `IBaseTileLayer | undefined`（实现层 `BaseLayer` 对齐 `ILayer` 契约；顺带修正 `ILayer.tileLayer` 非可选→可选如实反映运行时，并向 `IBaseTileLayer` 补 `reload()` 契约）。
 - 5.2 ✅ `BaseTileLayer`(tile/core) 容器服务去重：`mapService`/`layerService`/`rendererService` 三个 protected 字段改为经 `this.parent.getContainer()` 解析的 protected getter（统一解析路径、消除与父级双份引用）；移除死字段 `pickingService`（存储后无任何读取，`TilePickService` 自取 container.pickingService）；ctor 同步精简。运行时零行为变化。
-- 5.3 `layerChildren/isTileLayer/tileMask` 子图层关系文档化 + `addSubLayer/removeSubLayer` 路径统一（当前 `layerChildren` 仅 `destroy` 时遍历，无 add 入口规范化）。
+- 5.3 ✅（文档化部分）`layerChildren`/`isTileLayer`/`tileMask` 子图层关系文档化：`layerChildren` JSDoc 标注其生命周期不对称（destroy 遍历 + `remove(parentLayer)` splice，源码无 add 路径）；`isTileLayer`/`tileMask` 由接口隐式收敛为 BaseLayer 显式可选字段声明 + JSDoc（类型面收紧、文档锚点）。
+  - ⏳ 路径统一（`addSubLayer`/对称 `addLayer(parentLayer)` + `IBaseTileLayerManager` 死接口 `addChild/addChildren/removeChild/clearChild/hasChild` 收口）推迟阶段 7：`layerChildren` 源码内 write-never（仅 destroy/splice），新增公共 add 入口若无消费者即死 API，属 API 设计而非内部重构。
 
 ### 阶段 6 — 测试 & 文档（持续）
 

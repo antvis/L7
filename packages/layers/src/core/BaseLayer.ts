@@ -153,8 +153,30 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   public shapeOption: IShapeOption;
 
   public tileLayer: IBaseTileLayer | undefined;
-  // 用于保存子图层对象
+  /**
+   * 子图层注册表（`ILayer.layerChildren`）。当前生命周期不对称：
+   * 仅在 `destroy()` 时遍历销毁、在 `LayerService.remove(layer,
+   * parentLayer)` 时按 id splice 移除；源码内**无 add 路径**——子图层
+   * 经 `Scene.addLayer` 独立加入 scene，并不自动登记到此数组。
+   * 公共 `addLayer(layer, parentLayer?)` 对称入口与 `IBaseTileLayerManager`
+   * 声明的 `addChild/addChildren/removeChild/clearChild/hasChild`（均未
+   * 实现、无调用方）的统一归阶段 7（可选 API 收口）重估，本刀仅文档化。
+   */
   public layerChildren: ILayer[] = [];
+  /**
+   * 瓦片实例标记：由 `Tile.addLayer` 在创建瓦片子图层时置 `true`
+   * （`Tile.ts: layer.isTileLayer = true`），区分「瓦片宿主图层」
+   * （持 `tileLayer`）与「瓦片实例子图层」（持本标记）。`DataSourcePlugin`
+   * /text 模型/`log()` 据此短路瓦片路径。
+   */
+  public isTileLayer?: boolean;
+  /**
+   * 瓦片图层逐瓦片 mask：由 `Tile.addTileMask` 在瓦片 mainLayer 上置
+   * （`mainLayer.tileMask = mask`），供 `BaseModel` mask 模式与
+   * `LayerService` mask 渲染（`layer.tileMask.render()`）按瓦片裁剪。
+   * 非瓦片图层保持 `undefined`。
+   */
+  public tileMask?: ILayer | undefined;
   public masks: ILayer[] = [];
 
   /**
