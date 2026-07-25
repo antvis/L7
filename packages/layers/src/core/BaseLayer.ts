@@ -8,6 +8,7 @@ import type {
   IDataState,
   IDefaultSourceConfig,
   IEncodeFeature,
+  IEncodedStyleMap,
   IGlobalConfigService,
   ILayer,
   ILayerAttributesOption,
@@ -247,7 +248,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
 
-  public encodeStyleAttribute: Record<string, any> = {};
+  public encodeStyleAttribute: IEncodedStyleMap = {};
 
   // Shader 的数据映射
   public enableShaderEncodeStyles: string[] = [];

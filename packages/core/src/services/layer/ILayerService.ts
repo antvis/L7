@@ -80,6 +80,26 @@ export interface IShapeOption {
   values: any;
 }
 
+/**
+ * 单条数据映射样式值（阶段 3.2：替 `encodeStyleAttribute: Record<string, any>`）。
+ *
+ * `BaseLayer.encodeStyleAttribute[key]` 存储该结构，对齐 `updateStyleAttribute`
+ * 的 `field`/`values` 形参（值键名历史为 `value` 单数）。两者均可选，由
+ * `encodeStyle()` 的 `field || value` guard 保证至少存在其一；保留索引签名
+ * `[key: string]: any` 以兼容历史透传的额外字段（不做破坏性收窄）。
+ */
+export interface IEncodedStyleValue {
+  field?: StyleAttributeField;
+  value?: StyleAttributeOption;
+  [key: string]: any;
+}
+
+/**
+ * 数据映射样式表（阶段 3.2）。键为样式属性名（`color`/`size`/...），值详见
+ * `IEncodedStyleValue`。
+ */
+export type IEncodedStyleMap = Record<string, IEncodedStyleValue>;
+
 export interface IWorkerOption {
   modelType: string;
   [key: string]: any;
@@ -386,7 +406,7 @@ export interface ILayer {
   dataState: IDataState; // 数据流状态
   defaultSourceConfig: IDefaultSourceConfig;
   encodeDataLength: number;
-  encodeStyleAttribute: Record<string, any>;
+  encodeStyleAttribute: IEncodedStyleMap;
   pickedFeatureID: number | null;
   hooks: {
     init: AsyncSeriesBailHook;
