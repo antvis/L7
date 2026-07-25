@@ -105,7 +105,7 @@ citybuilding/ geometry/ — 12 个具体图层 extends BaseLayer（各自只 ove
 ### 阶段 5 — 瓦片/子图层边界理顺
 
 - 5.1 ✅ `tileLayer: any` → `IBaseTileLayer | undefined`（实现层 `BaseLayer` 对齐 `ILayer` 契约；顺带修正 `ILayer.tileLayer` 非可选→可选如实反映运行时，并向 `IBaseTileLayer` 补 `reload()` 契约）。
-- 5.2 `BaseTileLayer`(tile/core, 285) 的 5 个重复容器服务 getter 改为复用 `parent.getContainer()` 统一解析路径（与阶段 2.3 `LayerServices` 协同）。
+- 5.2 ✅ `BaseTileLayer`(tile/core) 容器服务去重：`mapService`/`layerService`/`rendererService` 三个 protected 字段改为经 `this.parent.getContainer()` 解析的 protected getter（统一解析路径、消除与父级双份引用）；移除死字段 `pickingService`（存储后无任何读取，`TilePickService` 自取 container.pickingService）；ctor 同步精简。运行时零行为变化。
 - 5.3 `layerChildren/isTileLayer/tileMask` 子图层关系文档化 + `addSubLayer/removeSubLayer` 路径统一（当前 `layerChildren` 仅 `destroy` 时遍历，无 add 入口规范化）。
 
 ### 阶段 6 — 测试 & 文档（持续）

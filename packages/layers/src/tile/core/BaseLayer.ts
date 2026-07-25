@@ -3,7 +3,6 @@ import type {
   ILayer,
   ILayerService,
   IMapService,
-  IPickingService,
   IRendererService,
   ISource,
 } from '@antv/l7-core';
@@ -19,11 +18,18 @@ export default class BaseTileLayer {
   private parent: ILayer;
 
   public tileLayerService: TileLayerService;
-  protected mapService: IMapService;
-  protected layerService: ILayerService;
-  protected rendererService: IRendererService;
-  protected pickingService: IPickingService;
   protected tilePickService: TilePickService;
+  // 容器服务经父图层统一解析（阶段 5.2）：不再缓存父级已持有的副本，
+  // 避免双份引用；parent.getContainer() 返回非可选 L7Container。
+  protected get mapService(): IMapService {
+    return this.parent.getContainer().mapService;
+  }
+  protected get layerService(): ILayerService {
+    return this.parent.getContainer().layerService;
+  }
+  protected get rendererService(): IRendererService {
+    return this.parent.getContainer().rendererService;
+  }
   public tilesetManager: TilesetManager; // 瓦片数据管理器
   public initedTileset: boolean = false; // 瓦片是否加载成功
 
@@ -37,11 +43,6 @@ export default class BaseTileLayer {
 
   constructor(parent: ILayer) {
     this.parent = parent;
-    const container = this.parent.getContainer();
-    this.rendererService = container.rendererService;
-    this.layerService = container.layerService;
-    this.mapService = container.mapService;
-    this.pickingService = container.pickingService;
 
     // 初始化瓦片管理服务
     this.tileLayerService = new TileLayerService({
