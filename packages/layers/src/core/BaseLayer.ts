@@ -49,6 +49,7 @@ import type Source from '../source';
 import { BlendTypes } from '../utils/blend';
 import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
 import LayerAnimateState from './LayerAnimateState';
+import LayerConfigModel from './LayerConfigModel';
 import LayerMaskManager from './LayerMaskManager';
 import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
@@ -255,9 +256,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
 
   private encodedData: IEncodeFeature[];
 
-  protected rawConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
-
-  private needUpdateConfig: Partial<ILayerConfig & ChildLayerStyleOptions>;
+  protected configModel: LayerConfigModel<ChildLayerStyleOptions>;
 
   public encodeStyleAttribute: IEncodedStyleMap = {};
 
@@ -304,7 +303,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     super();
     this.name = config.name || this.id;
     this.zIndex = config.zIndex || 0;
-    this.rawConfig = config;
+    this.configModel = new LayerConfigModel(this, config, this.configService);
     this.masks = config.maskLayers || [];
     this.maskManager = new LayerMaskManager(this, this.masks);
   }
@@ -345,32 +344,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public getLayerConfig<T = any>() {
-    return this.configService.getLayerConfig<ChildLayerStyleOptions & T>(this.id);
+    return this.configModel.read<T>();
   }
 
   public updateLayerConfig(configToUpdate: Partial<ILayerConfig | ChildLayerStyleOptions>) {
-    // 同步 rawConfig
-    Object.keys(configToUpdate).map((key) => {
-      if (key in this.rawConfig) {
-        (this.rawConfig as Record<string, unknown>)[key] = (
-          configToUpdate as Record<string, unknown>
-        )[key];
-      }
-    });
-    if (!this.startInit) {
-      this.needUpdateConfig = {
-        ...this.needUpdateConfig,
-        ...configToUpdate,
-      };
-    } else {
-      const sceneId = this.container.id;
-      this.configService.setLayerConfig(sceneId, this.id, {
-        ...this.configService.getLayerConfig(this.id),
-        ...this.needUpdateConfig,
-        ...configToUpdate,
-      });
-      this.needUpdateConfig = {};
-    }
+    this.configModel.apply(configToUpdate);
   }
 
   /**
@@ -397,8 +375,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     const sceneId = this.container.id;
     this.startInit = true;
     // 初始化图层配置项
-    this.configService.setLayerConfig(sceneId, this.id, this.rawConfig);
-    this.layerType = this.rawConfig.layerType;
+    this.configService.setLayerConfig(sceneId, this.id, this.configModel.rawConfig);
+    this.layerType = this.configModel.rawConfig.layerType;
 
     // 全局容器服务
 
@@ -503,7 +481,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * Model初始化前需要更新Model样式
    */
   public prepareBuildModel() {
-    if (Object.keys(this.needUpdateConfig || {}).length !== 0) {
+    if (this.configModel.hasPending()) {
       this.updateLayerConfig({});
     }
 
