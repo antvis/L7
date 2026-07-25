@@ -39,6 +39,7 @@ import type {
   IStyleAttribute,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
+  IStyleScale,
   ScaleTypeName,
   StyleAttrField,
   StyleAttributeField,
@@ -499,7 +500,7 @@ export interface ILayer {
   setLayerPickService(layerPickService: ILayerPickService): void;
   init(): Promise<void>;
   scale(field: string | number | IScaleOptions, cfg?: IScale): ILayer;
-  getScale(name: string): any;
+  getScale<T = IStyleScale>(name: string): T;
   size(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   color(field: StyleAttrField, value?: StyleAttributeOption): ILayer;
   rotate(field: StyleAttrField, value?: StyleAttributeOption): ILayer;

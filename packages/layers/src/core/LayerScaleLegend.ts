@@ -4,6 +4,7 @@ import type {
   ILegendSegmentItem,
   IScale,
   IScaleOptions,
+  IStyleScale,
   LegendItems,
 } from '@antv/l7-core';
 import { lodashUtil } from '@antv/l7-utils';
@@ -54,8 +55,8 @@ export default class LayerScaleLegend {
     return this.scaleOptions;
   }
 
-  public getScale(name: string): any {
-    return this.layer.styleAttributeService.getLayerAttributeScale(name);
+  public getScale<T = IStyleScale>(name: string): T {
+    return this.layer.styleAttributeService.getLayerAttributeScale(name) as T;
   }
 
   public getLegend(name: string): ILegend {

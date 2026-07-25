@@ -32,6 +32,7 @@ import type {
   ISourceOption,
   IStyleAttributeService,
   IStyleAttributeUpdateOptions,
+  IStyleScale,
   ITextureService,
   L7Container,
   LayerEventType,
@@ -980,8 +981,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     return this.encodedData;
   }
 
-  public getScale(name: string): any {
-    return this.scaleLegendManager.getScale(name);
+  public getScale<T = IStyleScale>(name: string): T {
+    return this.scaleLegendManager.getScale<T>(name);
   }
 
   public getLegend(name: string): ILegend {
