@@ -43,12 +43,11 @@ import type {
   Triangulation,
 } from '@antv/l7-core';
 import { BlendType, IDebugLog, ILayerStage, globalConfigService } from '@antv/l7-core';
-import { lodashUtil } from '@antv/l7-utils';
 import { EventEmitter } from 'eventemitter3';
 import { LayerPluginRegistry } from '../plugins/registry';
 import type Source from '../source';
 import { BlendTypes } from '../utils/blend';
-import { createMultiPassRenderer, normalizePasses } from '../utils/multiPassRender';
+import { createMultiPassRenderer } from '../utils/multiPassRender';
 import LayerAnimateState from './LayerAnimateState';
 import LayerConfigModel from './LayerConfigModel';
 import LayerMaskManager from './LayerMaskManager';
@@ -56,9 +55,9 @@ import LayerPickingManager from './LayerPickingManager';
 import LayerPickService from './LayerPickService';
 import LayerRelativeCoords from './LayerRelativeCoords';
 import LayerScaleLegend from './LayerScaleLegend';
+import LayerStyleFluent from './LayerStyleFluent';
 import LayerVisibilityZoom from './LayerVisibilityZoom';
 import TextureService from './TextureService';
-const { isEqual, isFunction, isNumber, isObject, isPlainObject } = lodashUtil;
 /**
  * 分配 layer id
  */
@@ -93,6 +92,14 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
    * 编排（active/setActive/select/setSelect）暂留本类，1.3b 搬入。
    */
   public pickingManager: LayerPickingManager = new LayerPickingManager(this, () => this.reRender());
+
+  /**
+   * 流式样式 API delegate（阶段 1.1）。
+   * 收口 color/size/texture/rotate/filter/shape/label/animate/style
+   * + updateStyleAttribute/encodeStyle/splitValuesAndCallbackInAttribute。
+   */
+  public styleFluent!: LayerStyleFluent<ChildLayerStyleOptions>;
+
   public textureService: ITextureService;
 
   public defaultSourceConfig: IDefaultSourceConfig = {
@@ -329,6 +336,12 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     this.configModel = new LayerConfigModel(this, config, this.configService);
     this.masks = config.maskLayers || [];
     this.maskManager = new LayerMaskManager(this, this.masks);
+    this.styleFluent = new LayerStyleFluent(
+      this,
+      () => this.configService,
+      () => this.pendingStyleAttributes,
+      () => this.encodeStyles,
+    );
   }
   public addMask(layer: ILayer): void {
     this.maskManager.addMask(layer);
@@ -516,7 +529,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.updateStyleAttribute('color', field, values, updateOptions);
+    this.styleFluent.color(field, values, updateOptions);
     return this;
   }
 
@@ -526,7 +539,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.updateStyleAttribute('texture', field, values, updateOptions);
+    this.styleFluent.texture(field, values, updateOptions);
     return this;
   }
 
@@ -535,7 +548,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.updateStyleAttribute('rotate', field, values, updateOptions);
+    this.styleFluent.rotate(field, values, updateOptions);
     return this;
   }
   public size(
@@ -543,7 +556,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.updateStyleAttribute('size', field, values, updateOptions);
+    this.styleFluent.size(field, values, updateOptions);
     return this;
   }
   // 对mapping后的数据过滤，scale保持不变
@@ -552,8 +565,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    const flag = this.updateStyleAttribute('filter', field, values, updateOptions);
-    this.dataState.dataSourceNeedUpdate = flag && this.inited;
+    this.styleFluent.filter(field, values, updateOptions);
     return this;
   }
 
@@ -562,12 +574,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.shapeOption = {
-      field,
-      values,
-    };
-    const flag = this.updateStyleAttribute('shape', field, values, updateOptions);
-    this.dataState.dataSourceNeedUpdate = flag && this.inited;
+    this.styleFluent.shape(field, values, updateOptions);
     return this;
   }
   public label(
@@ -575,28 +582,11 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ) {
-    this.pendingStyleAttributes.push({
-      attributeName: 'label',
-      attributeField: field,
-      attributeValues: values,
-      updateOptions,
-    });
+    this.styleFluent.label(field, values, updateOptions);
     return this;
   }
   public animate(options: IAnimateOption | boolean) {
-    let rawAnimate: Partial<IAnimateOption> = {};
-    if (isObject(options)) {
-      rawAnimate.enable = true;
-      rawAnimate = {
-        ...rawAnimate,
-        ...options,
-      };
-    } else {
-      rawAnimate.enable = options;
-    }
-    this.updateLayerConfig({
-      animateOption: rawAnimate,
-    });
+    this.styleFluent.animate(options);
     return this;
   }
 
@@ -636,73 +626,8 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
   }
 
   public style(options: Partial<ChildLayerStyleOptions> & Partial<ILayerConfig>): ILayer {
-    const { passes, ...rest } = options;
-    const styleRest = rest as Record<string, any>;
-    // passes 特殊处理
-    if (passes) {
-      normalizePasses(passes).forEach((pass: [string, { [key: string]: unknown }]) => {
-        const postProcessingPass = this.multiPassRenderer
-          .getPostProcessor()
-          .getPostProcessingPassByName(pass[0]);
-        if (postProcessingPass) {
-          postProcessingPass.updateOptions(pass[1]);
-        }
-      });
-    }
-    // 兼容 borderColor borderWidth
-    if (styleRest.borderColor) {
-      styleRest.stroke = styleRest.borderColor;
-    }
-    if (styleRest.borderWidth) {
-      styleRest.strokeWidth = styleRest.borderWidth;
-    }
-
-    // 兼容老版本的写法 ['field, 'value']
-    const newOption: { [key: string]: any } = rest;
-    Object.keys(rest).forEach((key: string) => {
-      const values = styleRest[key];
-      if (
-        Array.isArray(values) &&
-        values.length === 2 &&
-        !isNumber(values[0]) &&
-        !isNumber(values[1])
-      ) {
-        newOption[key] = {
-          field: values[0],
-          value: values[1],
-        };
-      }
-    });
-
-    this.encodeStyle(newOption);
-    this.updateLayerConfig(newOption);
-
+    this.styleFluent.style(options);
     return this;
-  }
-
-  // 参与数据映射的字段 encodeing
-  private encodeStyle(options: { [key: string]: any }) {
-    Object.keys(options).forEach((key: string) => {
-      if (
-        // 需要数据映射
-        this.encodeStyles.has(key) &&
-        isPlainObject(options[key]) &&
-        (options[key].field || options[key].value) &&
-        !isEqual(this.encodeStyleAttribute[key], options[key]) // 防止计算属性重复计算
-      ) {
-        this.encodeStyleAttribute[key] = options[key];
-        this.updateStyleAttribute(key, options[key].field, options[key].value);
-        if (this.inited) {
-          this.dataState.dataMappingNeedUpdate = true;
-        }
-      } else {
-        // 不需要数据映射
-        if (this.encodeStyleAttribute[key]) {
-          delete this.encodeStyleAttribute[key]; // 删除已经存在的属性
-          this.dataState.dataSourceNeedUpdate = true;
-        }
-      }
-    });
   }
 
   public scale(field: string | number | IScaleOptions, cfg?: IScale) {
@@ -1141,52 +1066,7 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     values?: StyleAttributeOption,
     updateOptions?: Partial<IStyleAttributeUpdateOptions>,
   ): boolean {
-    // encode diff
-    const preAttribute = this.configService.getAttributeConfig(this.id) || {};
-    // @ts-ignore
-    if (isEqual(preAttribute[type], { field, values })) {
-      // 检测是否发生更新
-      return false;
-    }
-
-    // 存储 Attribute 瓦片图层使用
-    if (['color', 'size', 'texture', 'rotate', 'filter', 'label', 'shape'].indexOf(type) !== -1) {
-      this.configService.setAttributeConfig(this.id, {
-        [type]: {
-          field,
-          values,
-        },
-      });
-    }
-
-    if (!this.startInit) {
-      // 开始初始化执行
-      this.pendingStyleAttributes.push({
-        attributeName: type,
-        attributeField: field,
-        attributeValues: values,
-        updateOptions,
-      });
-    } else {
-      this.styleAttributeService.updateStyleAttribute(
-        type,
-        {
-          // @ts-ignore
-          scale: {
-            field,
-            ...this.splitValuesAndCallbackInAttribute(
-              // @ts-ignore
-              values,
-              // @ts-ignore
-              this.getLayerConfig()[field],
-            ),
-          },
-        },
-        // @ts-ignore
-        updateOptions,
-      );
-    }
-    return true;
+    return this.styleFluent.updateStyleAttribute(type, field, values, updateOptions);
   }
 
   public getLayerAttributeConfig(): Partial<ILayerAttributesOption> {
@@ -1337,9 +1217,6 @@ export default class BaseLayer<ChildLayerStyleOptions = {}>
     valuesOrCallback?: unknown[],
     // defaultValues?: unknown[],
   ) {
-    return {
-      values: isFunction(valuesOrCallback) ? undefined : valuesOrCallback,
-      callback: isFunction(valuesOrCallback) ? valuesOrCallback : undefined,
-    };
+    return this.styleFluent.splitValuesAndCallbackInAttribute(valuesOrCallback);
   }
 }
