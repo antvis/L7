@@ -1,5 +1,141 @@
 # Change Log
 
+## 3.0.0-beta.1
+
+### Minor Changes
+
+- [`af62247`](https://github.com/antvis/L7/commit/af622479123a01437e6d498bf4b06402f99de57f) Thanks [@lzxue](https://github.com/lzxue)! - refactor(core): add EncodeStyleKind type for encode-style channels (stage-3 3.3)
+
+  P4 阶段 3 第二刀（3.3，core 侧，minor）。
+
+  新增 `export type EncodeStyleKind = 'shader' | 'data'`
+  （`services/layer/ILayerService.ts`），标样式属性参与数据映射的通道：
+
+  - `'shader'`：shader 端 uniform 注入（历史 `enableShaderEncodeStyles`）
+  - `'data'`：数据层数据映射（历史 `enableDataEncodeStyles`）
+
+  `ILayer.enableShaderEncodeStyles` / `enableDataEncodeStyles` 公开数组契约
+  **保留不变**（外部 `layer.enableShaderEncodeStyles` 读取维持数组），补 JSDoc
+  指明其为「公开数组 getter 桥接，内部单一真源 `encodeStyles: Map`」。
+
+  配套 layers 侧声明同步见 `refactor-layers-encode-styles-converge` changeset。
+  验证：core eslint 0 error、prettier 通过、core father build 98 files。
+
+- [`15c19a3`](https://github.com/antvis/L7/commit/15c19a3a0b297cac02533dccb8b11f00a374e047) Thanks [@lzxue](https://github.com/lzxue)! - refactor(core): type encodeStyleAttribute via IEncodedStyleMap (stage-3 3.2)
+
+  P4 阶段 3 第一刀（3.2，core 侧 typing 子集，minor）。
+
+  PLAN 3.2 列举四项替 `any`：经审 `sourceOption`/`shapeOption`/`defaultSourceConfig`
+  已在历史阶段各自定型为 `ISourceOption`/`IShapeOption`/`IDefaultSourceConfig`
+  （PLAN 草拟时未及同步），故本轮仅收编真正剩余的 `encodeStyleAttribute:
+Record<string, any>` 缺口。
+
+  新增（`services/layer/ILayerService.ts`，minor 依据）：
+
+  - `export interface IEncodedStyleValue` — 单条数据映射样式值，对齐
+    `updateStyleAttribute` 的 `field`/`values` 形参（值键名历史为 `value`
+    单数）；`field?: StyleAttributeField`、`value?: StyleAttributeOption`，
+    保留 `[key: string]: any` 索引签名兼容历史透传的额外字段（非破坏性收窄）。
+  - `export type IEncodedStyleMap = Record<string, IEncodedStyleValue>`。
+
+  `ILayer.encodeStyleAttribute: Record<string, any>` → `IEncodedStyleMap`。
+
+  **向后兼容**：`any`→具名类型是收窄但非破坏——写入侧 `encodeStyle(options: {[k]:any})`
+  的 `options[key]`（`any`）仍可赋值 `IEncodedStyleValue`；读取侧 `getDynamicStyleInject`
+  形参 `Record<string, any>` 接受 `IEncodedStyleMap`。
+
+  配套 layers 侧声明同步见 `refactor-layers-encoded-style-map` changeset。
+  `getScale(name)` 泛型化归后续 scale delegate 专属刀（3.2 剩余子项），本刀聚焦
+  `encodeStyleAttribute` 缺口。
+
+  验证：core eslint 0 error、prettier 通过、core father build 98 files（d.ts 类型检查）。
+
+- [`8ce2a7a`](https://github.com/antvis/L7/commit/8ce2a7aeb0cba7d82f405d3ae38bf80154efabfc) Thanks [@lzxue](https://github.com/lzxue)! - refactor(core): genericize ILayer.getScale with IStyleScale default (stage-3 3.2)
+
+  P4 阶段 3 第二刀收尾（3.2，core 侧，minor）。
+
+  `ILayer.getScale(name: string): any` →
+  `getScale<T = IStyleScale>(name: string): T`（`ILayerService.ts`）。
+  默认 `IStyleScale` 为该返回路径的实际语义结构
+  （`scale`/`field`/`type`/`option`，见 `IStyleAttributeService`），
+  比 `any` 严格且对未指定 `T` 的调用方保持类型安全；调用方可显式 opt-in
+  泛型。底层 `styleAttributeService.getLayerAttributeScale(name)` 仍返
+  `any`（scaler 结构未具名，归后续 scale service 专属刀），经 `as T`
+  透传不引入类型错误。
+
+  运行时零行为变化，仅类型面收紧。配套 layers 侧实现同步见
+  `refactor-layers-getscale-generic` changeset。
+
+  验证：core eslint 0 error、prettier 通过、core father build 98 files
+  （d.ts 生成、类型检查通过）。
+
+- [`a642560`](https://github.com/antvis/L7/commit/a64256031aead81f30d6c4cea6ab78d3d365f14a) Thanks [@lzxue](https://github.com/lzxue)! - refactor(core): add optional metadata to ILayerPlugin (stage-2 2.2)
+
+  P4 阶段 2 第二刀（2.2，跨包 core 侧，minor）。
+
+  给 `ILayerPlugin` 接口（`services/layer/ILayerService.ts`）补三个可选元数据字段，
+  为 `LayerPluginRegistry`（2.1）的声明式排序与按名替换提供契约基础：
+
+  - `name?: string` — 插件名（kebab-case，唯一标识符）。供 `LayerPluginRegistry.replace(name, plugin)` / `getByName(name)` 按名索引，亦便于调试日志与 `addPlugin` 顺序观测。
+  - `order?: number` — 声明式排序优先级（升序）。`LayerPluginRegistry.sortByOrder()` 据此稳定排序；缺省视 `Infinity` 兜底，相同 order（含均为 undefined）保持插入序。
+  - `initStage?: 'init' | 'afterInit'` — 初始化阶段标记。当前 14 内置插件均为 `'init'`，字段为未来按阶段分流的 registry 改造预留（2.2 仅声明，不改 apply 时序）。
+
+  **向后兼容**：三字段均为可选，既有 `implements ILayerPlugin` 类不声明元数据也编译通过。
+  配套 layers 侧改动见 `refactor-layers-p4-stage2-plugin-metadata` changeset。
+
+  验证：core eslint 0 error、prettier 通过、core father build 98 files（含 declaration d.ts 真实类型检查）。
+
+- [`fa33b9d`](https://github.com/antvis/L7/commit/fa33b9dbd9efd52dda38c741e8e7f47951167086) Thanks [@lzxue](https://github.com/lzxue)! - refactor(core): tighten IBaseTileLayer + make ILayer.tileLayer optional (stage-5 5.1)
+
+  P4 阶段 5 第一刀（5.1，core 侧，minor）。
+
+  `ILayer.tileLayer` 原声明为非可选 `IBaseTileLayer`，但运行时
+  对非瓦片图层始终为 `undefined`（`Scene.initTileLayer` 仅在
+  `source.isTile` 时赋值；mock 一律传 `undefined`）。非可选契约被
+  实现侧 `any | undefined` 长期掩盖。本刀将其改为
+  `tileLayer: IBaseTileLayer | undefined`，使接口如实反映「瓦片图层
+  才有、其余为 undefined」的语义。
+
+  同时向 `IBaseTileLayer` 补 `reload(): void` —— `BaseTileLayer` 已
+  实现该方法且 `BaseLayer.onSourceUpdate` 经 `this.tileLayer.reload()`
+  外部调用，属公共能力，补入接口使其成为正式契约（additive，非破坏）。
+
+  下游实现侧（`@antv/l7-layers` `BaseLayer.tileLayer`）由 `any` 对齐
+  为 `IBaseTileLayer | undefined`，见 `refactor-layers-tilelayer-type`
+  changeset。
+
+  运行时零行为变化，仅类型面收紧/修正。所有 `.tileLayer` 消费点均经
+  真值守护或可选链（`LayerPickService` / `BaseLayer.render|destroy|
+onSourceUpdate` / `Tile.getMaskLayer` / `DataSourcePlugin` /
+  `LayerMaskPlugin`），可选化不引入新空指针面。
+
+  验证：core eslint 0 error、prettier 通过、core father build 98
+  files（d.ts OK）。layers + scene father build 均通过（279 / 66
+  files），非 GL jest 子集 25 suites / 158 passed 与基线一致。
+
+### Patch Changes
+
+- [`c9e995d`](https://github.com/antvis/L7/commit/c9e995d57d82122ccee496966cad582fa3ae61ae) Thanks [@lzxue](https://github.com/lzxue)! - refactor(layers,core): BaseLayer stage-0 抽内联字面量类型为命名接口（0.4）
+
+  P4 阶段 0 第三刀（0.4，零行为/零 API 变更，纯类型 DRY）。`BaseLayer.ts` 的
+  `defaultSourceConfig`/`sourceOption`/`shapeOption` 此前以内联字面量类型声明，
+  且同样的字面量在 `core/src/services/layer/ILayerService.ts` 的 `ILayer` 接口里
+  重复声明一次（散落字面量）。本轮在 `IDataState` 旁新增三个命名接口统一引用：
+
+  - `IDefaultSourceConfig { data: any[]; options: ISourceCFG | undefined }`
+  - `ISourceOption { data: any; options?: ISourceCFG }`
+  - `IShapeOption { field: any; values: any }`
+
+  `ILayer` 接口与 `BaseLayer` 字段声明均改为引用命名接口（形状完全一致）。
+  `dataState` 此前已使用 `IDataState`，本轮无需改动。精确保留 `shape()` /
+  `source()` 运行时赋值点的可赋值性（`any` 字段双向兼容）。
+
+  验证：eslint 0 error、prettier 通过、core father build（98 files，含 declaration）、
+  layers father build（271 files，含 declaration d.ts 类型检查）、jest 40 suites / 191 passed。
+
+- Updated dependencies [[`d45cb50`](https://github.com/antvis/L7/commit/d45cb50516a57be2b63237385050a9716901211f)]:
+  - @antv/l7-utils@3.0.0-beta.1
+
 ## 2.30.0-beta.0
 
 ### Patch Changes
