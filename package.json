@@ -132,7 +132,7 @@
     "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.36.0",
-    "vite": "^5.0.9",
+    "vite": "^6.4.3",
     "vite-plugin-cp": "^4.0.8",
     "vite-plugin-string": "^1.2.3",
     "webpack-bundle-analyzer": "^4.10.1"
