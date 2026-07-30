@@ -1,15 +1,5 @@
 # Change Log
 
-## 3.0.0-beta.1
-
-### Patch Changes
-
-- Updated dependencies [[`d45cb50`](https://github.com/antvis/L7/commit/d45cb50516a57be2b63237385050a9716901211f), [`af62247`](https://github.com/antvis/L7/commit/af622479123a01437e6d498bf4b06402f99de57f), [`15c19a3`](https://github.com/antvis/L7/commit/15c19a3a0b297cac02533dccb8b11f00a374e047), [`8ce2a7a`](https://github.com/antvis/L7/commit/8ce2a7aeb0cba7d82f405d3ae38bf80154efabfc), [`a642560`](https://github.com/antvis/L7/commit/a64256031aead81f30d6c4cea6ab78d3d365f14a), [`fa33b9d`](https://github.com/antvis/L7/commit/fa33b9dbd9efd52dda38c741e8e7f47951167086), [`5445cc6`](https://github.com/antvis/L7/commit/5445cc6fea19da223b2c5cb06495255040814edc), [`af62247`](https://github.com/antvis/L7/commit/af622479123a01437e6d498bf4b06402f99de57f), [`15c19a3`](https://github.com/antvis/L7/commit/15c19a3a0b297cac02533dccb8b11f00a374e047), [`8ce2a7a`](https://github.com/antvis/L7/commit/8ce2a7aeb0cba7d82f405d3ae38bf80154efabfc), [`a534e62`](https://github.com/antvis/L7/commit/a534e62a7cadfd6548820c797d208562de28f082), [`c9e995d`](https://github.com/antvis/L7/commit/c9e995d57d82122ccee496966cad582fa3ae61ae), [`7454f96`](https://github.com/antvis/L7/commit/7454f96ae278823a4f4ac68d36676417cedefba3), [`274f3c8`](https://github.com/antvis/L7/commit/274f3c81ccfcd5dd2d56e4e980e9e8dddb2144a4), [`d9510d7`](https://github.com/antvis/L7/commit/d9510d796bc9afe6173d51656df4115a40cad1fa), [`4a6ff65`](https://github.com/antvis/L7/commit/4a6ff6594ff031eecf9295b80f24b1d6d5f2d391), [`ba1394c`](https://github.com/antvis/L7/commit/ba1394caf4cbc26191ed5c360630652f8bc49e56), [`ea11251`](https://github.com/antvis/L7/commit/ea11251213ae20caf6e75771441918c831ca3e7a), [`556c8fc`](https://github.com/antvis/L7/commit/556c8fc0c556f02e80ca22cbe9641289913bfeea), [`1c07545`](https://github.com/antvis/L7/commit/1c075459dc4a7e50dedf303ea211b1b054ce130d), [`0a3aa4d`](https://github.com/antvis/L7/commit/0a3aa4d85768603909bbe6df21aaf4a72ec96edc), [`a642560`](https://github.com/antvis/L7/commit/a64256031aead81f30d6c4cea6ab78d3d365f14a), [`7861576`](https://github.com/antvis/L7/commit/78615761933c500d99cfc8d097b0770597997221), [`1530598`](https://github.com/antvis/L7/commit/153059820fb36b8eb3c684f06bb9245940f67743), [`8dc6ef0`](https://github.com/antvis/L7/commit/8dc6ef07a86c36bf6db9f3e11bd28b8f5ad856dd), [`cd3bf40`](https://github.com/antvis/L7/commit/cd3bf40bde46b10f6f167e4f39e81e8b6b802a3d), [`fa33b9d`](https://github.com/antvis/L7/commit/fa33b9dbd9efd52dda38c741e8e7f47951167086), [`541a7ea`](https://github.com/antvis/L7/commit/541a7ea19d79205dc82f1667cfbcc24530e21dc3), [`541a7ea`](https://github.com/antvis/L7/commit/541a7ea19d79205dc82f1667cfbcc24530e21dc3)]:
-  - @antv/l7-utils@3.0.0-beta.1
-  - @antv/l7-core@3.0.0-beta.1
-  - @antv/l7-layers@3.0.0-beta.1
-  - @antv/l7-maps@3.0.0-beta.1
-
 ## 2.30.0-beta.0
 
 ### Patch Changes
