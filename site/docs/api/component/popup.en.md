@@ -11,6 +11,8 @@ Popup is a bubble used to specify the latitude and longitude location on the map
 
 The anchor point position of Popup is expressed by longitude and latitude. When the map is zoomed/panned, Popup will automatically calculate the coordinates relative to the current map and automatically shift. In other words, if a developer needs to**Specify latitude and longitude location**To display information bubbles, you can consider using the Popup component to achieve the corresponding effect.
 
+> **Version Note**: Starting from version `2.28.14`, the `Popup` component has been split into the `@antv/l7-component` package. If using modular subpackages on demand, you can import via `import { Popup } from '@antv/l7-component'`; the full bundle `@antv/l7` also re-exports this component.
+
 Developers can customize the main display content of Popup:
 
 - Plain text can pass`text`configure or`setText`Method controls the Popup's display text.
@@ -22,6 +24,8 @@ Developers can customize the main display content of Popup:
 
 ```ts
 import { Scene, Popup } from '@antv/l7';
+// If using subpackages on demand, you can import from '@antv/l7-component':
+// import { Popup } from '@antv/l7-component';
 
 const scene = new Scene({
   id: 'map',
