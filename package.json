@@ -67,7 +67,7 @@
     "geotiff": "^2.0.1",
     "kdbush": "^4.0.2",
     "lil-gui": "^0.19.1",
-    "maplibre-gl": "^3.5.2",
+    "maplibre-gl": "^6.4.1",
     "pixelmatch": "5.3.0",
     "pmtiles": "^2.7.2",
     "pngjs": "^6.0.0",
