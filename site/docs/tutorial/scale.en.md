@@ -3,8 +3,6 @@ title: Scale
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction to Scale
 
 Scale measures are used to convert map data values ​​(numbers, dates, categories, etc.) into visual variables (color, size, shape). Scales are fundamental elements of data visualization because they determine how data is visually encoded. L7 currently supports common Scales such as continuous, discrete, and enumerated types.

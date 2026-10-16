@@ -3,8 +3,6 @@ title: water fill
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 几何体图层支持特殊的表现形式，水面图层。
 
 <div>
@@ -17,9 +15,9 @@ order: 2
 
 下面我们来介绍如何绘制水面。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/polygon/fill#ocean)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/polygon/fill/ocean/)
 
-🌟 从 v2.8.1 版本开始支持简单水面。  
+🌟 从 v2.8.1 版本开始支持简单水面。<br />
 🌟 从 v2.8.4 版本开始支持拟真水面。
 
 ### 拟真水面
@@ -48,7 +46,7 @@ layer.aniamte(true);
 
 - `watercolor2` 深水区域的颜色 默认为 '#0F121C'。
 
-[在线案例](/examples/polygon/fill#ocean)
+[在线案例](/zh/examples/polygon/fill/ocean/)
 
 ### 简单水面
 
@@ -80,7 +78,7 @@ style({
 });
 ```
 
-- `waterTexture` 我们可以通过设置该属性来替换水面的纹理。  
+- `waterTexture` 我们可以通过设置该属性来替换水面的纹理。<br />
   默认值是 'https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ'
 
-[在线案例](/examples/polygon/fill#water)
+[在线案例](/zh/examples/polygon/fill/water/)

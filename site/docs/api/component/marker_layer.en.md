@@ -3,8 +3,6 @@ title: Marker 图层
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 MarkerLayer is an upgraded version of Marker. Marker is an independent map annotation, while MarkerLayer manages a large amount of Marker data in a unified manner.
 
 **technical differences**
@@ -74,7 +72,7 @@ Add attribute information to Marker,
 
 If the aggregation parameter sets the statistics configuration item`field| method`Need to add attribute information to Marker
 
-extData via Marker[Configuration items](/api/complement/marker#options)Set Marker property information
+extData via Marker[Configuration items](/en/api/component/marker#options)Set Marker property information
 
 ```javascript
 const marker = new Marker({
@@ -119,6 +117,6 @@ scene.removeMarkerLayer(layer);
 
 ### demo address
 
-[markerLayer ](/examples/point/marker#markerlayer)
+[markerLayer ](/en/examples/component/marker/markerlayer/)
 
-[markerLayer aggregation](/examples/point/marker#clustermarker)
+[markerLayer aggregation](/en/examples/component/marker/clustermarker/)

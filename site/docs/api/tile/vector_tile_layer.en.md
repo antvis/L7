@@ -3,8 +3,6 @@ title: Vector 矢量瓦片
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ### Introduction
 
 `L7`The vector tile layer reuses the data visualization capabilities of ordinary layers and supports data mapping of layer styles. Currently, vector tiles support point, line, surface, mask and other layers.
@@ -21,7 +19,7 @@ Other configuration items of the tile layer are consistent with the basic layers
 
 ### options
 
-<embed src="@/docs/api/tile/common/options.en.md"></embed>
+<!-- include: ./common/options.en.md -->
 
 ### source(url: string, option: IOption)
 

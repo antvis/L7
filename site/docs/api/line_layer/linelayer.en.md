@@ -3,8 +3,6 @@ title: LineLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 The line layer describes one or more paths on the map through a set of longitude and latitude data sets. By the type of path, it is divided into path, arc, 3D arc and other types.\

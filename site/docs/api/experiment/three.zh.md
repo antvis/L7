@@ -3,8 +3,6 @@ title: threejs 引擎兼容
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 1、L7 支持允许用户接入第三方的渲染引擎对地图场景进行开发，threejs 作为当前最广泛使用的通用 3D 渲染引擎，L7 将其集成后可以满足

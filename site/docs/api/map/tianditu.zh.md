@@ -3,8 +3,6 @@ title: 天地图
 order: 10
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 L7 地理可视化侧重于地理数据的可视化表达，地图层需要依赖第三方地图，第三方地图通过 Scene 统一创建管理，只需要通过 Scene 传入地图配置项即可。
@@ -54,4 +52,4 @@ scene.on('loaded', () => {
 | maxZoom     | 地图最大缩放等级     | `number`           | `18`                             |
 | mapInstance | 传入已有的天地图实例 | `T.Map`            | -                                |
 
-<embed src="@/docs/api/common/map.zh.md"></embed>
+<!-- include: ../common/map.zh.md -->

@@ -9,7 +9,7 @@ order: 3
 
 ## 使用
 
-[示例](/examples/component/control#zoom)
+[示例](/zh/examples/component/control/zoom/)
 
 ```ts
 import { Scene, Zoom } from '@antv/l7';
@@ -37,7 +37,7 @@ scene.on('loaded', () => {
 | zoomOutTitle | 缩小按钮的 `title` 属性                      | `string`              |
 | showZoom     | 是否展示地图当前实时 zoom 数值，默认向下取整 | `boolean`             |
 
-<embed src="@/docs/api/common/control/api.zh.md"></embed>
+<!-- include: ../common/control/api.zh.md -->
 
 ## 方法
 
@@ -46,8 +46,8 @@ scene.on('loaded', () => {
 | zoomIn  | 放大地图 | `() => void` |
 | zoomOut | 缩小底图 | `() => void` |
 
-<embed src="@/docs/api/common/control/method.zh.md"></embed>
+<!-- include: ../common/control/method.zh.md -->
 
 ## 事件
 
-<embed src="@/docs/api/common/control/event.zh.md"></embed>
+<!-- include: ../common/control/event.zh.md -->

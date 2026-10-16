@@ -13,7 +13,7 @@ order: 8
 
 ## 使用
 
-[示例](/examples/component/control#layerswitch)
+[示例](/zh/examples/component/control/layerswitch/)
 
 ```ts
 import { Scene, LayerSwitch } from '@antv/l7';
@@ -50,20 +50,20 @@ scene.on('loaded', () => {
 | name  | 展示的图层名称            | `string \| undefined` |
 | img   | 展示的图层图片 `URL`      | `string \| undefined` |
 
-<embed src="@/docs/api/common/control/popper-api.zh.md"></embed>
+<!-- include: ../common/control/popper-api.zh.md -->
 
-<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
+<!-- include: ../common/control/btn-api.zh.md -->
 
-<embed src="@/docs/api/common/control/api.zh.md"></embed>
+<!-- include: ../common/control/api.zh.md -->
 
 ## 方法
 
-<embed src="@/docs/api/common/control/method.zh.md"></embed>
+<!-- include: ../common/control/method.zh.md -->
 
 ## 事件
 
-<embed src="@/docs/api/common/control/event.zh.md"></embed>
+<!-- include: ../common/control/event.zh.md -->
 
-<embed src="@/docs/api/common/control/popper-event.zh.md"></embed>
+<!-- include: ../common/control/popper-event.zh.md -->
 
-<embed src="@/docs/api/common/control/select-event.zh.md"></embed>
+<!-- include: ../common/control/select-event.zh.md -->

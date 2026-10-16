@@ -3,8 +3,6 @@ title: DebugService
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 L7 provides external debugging services in the form of debugService. Through debugService, users can obtain some information that is helpful for performance monitoring.

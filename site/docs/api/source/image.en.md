@@ -3,8 +3,6 @@ title: Image
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Image data is mainly used to add images to the map based on longitude and latitude ranges. For example, a scanned version of a paper map needs to be displayed on the map.
 
 ## parser

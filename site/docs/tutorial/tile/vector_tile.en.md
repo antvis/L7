@@ -3,8 +3,6 @@ title: Vector Tile
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Vector tiles can usually be used to render large amounts of geographical data. The characteristics of tiles are used to distribute request rendering data, thereby reducing the waiting time of requests and loading times and optimizing the user experience. At the same time, in scenarios that do not require full loading of data, vector tiles can effectively reduce the amount of data rendering and reduce rendering pressure while ensuring the experience.
 
 ### Draw vector tiles - point

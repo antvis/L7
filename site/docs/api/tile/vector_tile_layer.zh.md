@@ -3,8 +3,6 @@ title: Vector 矢量瓦片
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ### 简介
 
 `L7` 的矢量瓦片图层复用了普通图层的数据可视化能力，支持对图层的样式进行数据映射。目前矢量瓦片支持了点、线、面、掩模等图层
@@ -21,7 +19,7 @@ order: 0
 
 ### options
 
-<embed src="@/docs/api/tile/common/options.zh.md"></embed>
+<!-- include: ./common/options.zh.md -->
 
 ### source(url: string, option: IOption)
 

@@ -1,6 +1,6 @@
 ### name
 
-<description> _string_ **optional** *default:*automatic numbering</description>
+_string_ **optional** *default:*automatic numbering
 
 Set the layer name, you can get the layer based on name
 
@@ -10,13 +10,13 @@ scene.getLayerByName(name);
 
 ### visible
 
-<description> _bool_ **optional** _default:_ true</description>
+_bool_ **optional** _default:_ true
 
 Is the layer visible?
 
 ### zIndex
 
-<description> _int_ **optional** *default:*0</description>
+_int_ **optional** *default:*0
 
 Layer drawing order, larger values ​​are drawn on the upper layer, and you can control the upper and lower levels of layer drawing.
 
@@ -24,31 +24,31 @@ L7 uses a queue rendering mechanism. All layers are stored in an array internall
 
 ### minZoom
 
-<description> _number_ **optional** *default:*Mapbox (0-24) Gaode (2-19)</description>
+_number_ **optional** *default:*Mapbox (0-24) Gaode (2-19)
 
 Layer shows minimum zoom level
 
 ### maxZoom
 
-<description> _number_ **optional** *default:*Mapbox (0-24) Gaode (2-19)</description>
+_number_ **optional** *default:*Mapbox (0-24) Gaode (2-19)
 
 Layer shows maximum zoom level
 
 ### autoFit
 
-<description> _bool_ **optional** _default:_ false</description>
+_bool_ **optional** _default:_ false
 
 After layer initialization is completed, whether the map will automatically zoom to the layer range.
 
 ### pickingBuffer
 
-<description> _bool_ **optional** *default:*0</description>
+_bool_ **optional** *default:*0
 
 The layer picking cache mechanism, for example, a 1px width line is difficult to pick up (click) with the mouse. By setting this parameter, you can expand the picking range (enlarge the size of the layer object)
 
 ### blend
 
-<description> _string_ **optional** _default:_'normal'</description>
+_string_ **optional** _default:_'normal'
 
 Layer element blending effects
 
@@ -59,6 +59,6 @@ Layer element blending effects
 
 ### enablePropagation
 
-<description> _boolean_ **optional** _default:_'false'</description>Layer events, by default only respond to the top layer, setting to true will allow events to be transmitted transparently
+_boolean_ **optional** _default:_'false'Layer events, by default only respond to the top layer, setting to true will allow events to be transmitted transparently
 
-<embed src="@/docs/api/common/layer/mask_options.en.md"></embed>
+<!-- include: ./mask_options.en.md -->

@@ -1,5 +1,5 @@
 import { GaodeMap, HeatmapLayer, PointLayer, Scene } from '@antv/l7';
-import { isNumber } from 'lodash';
+import { isNumber } from 'lodash-es';
 
 // 通过 Scene 获取到地图引擎类型
 function getMapType(scene) {

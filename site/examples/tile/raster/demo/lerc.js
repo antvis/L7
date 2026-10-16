@@ -1,6 +1,6 @@
 import { RasterLayer, Scene, Source } from '@antv/l7';
 import { Map } from '@antv/l7-maps';
-import * as Lerc from 'lerc';
+import Lerc from 'lerc';
 
 const colorList = [
   '#fff7fb',

@@ -3,8 +3,6 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `shape`Method used to specify what kind of lines the line layer draws.
 
 ### shape('line')

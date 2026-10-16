@@ -3,8 +3,6 @@ title: Earth Mode
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 l7-maps provides`Earth`Maps, compared to AMap and mapbox maps, are a completely different form of expression, providing visual display capabilities from a global perspective and providing users with more visual expressions of geographical information.

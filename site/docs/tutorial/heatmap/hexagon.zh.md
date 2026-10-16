@@ -3,8 +3,6 @@ title: 蜂窝热力图
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 将一组点数据按照等大小的六边形网格进行聚合，一个六边形网格代表网格内所有点的统计值。蜂窝热力图特点以六边形热力图网格布局。
 
 <div>
@@ -17,7 +15,7 @@ order: 2
 
 下面我们来介绍如何绘制一个简单的蜂窝热力图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/heatmap/hexagon/#china)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/heatmap/hexagon/china/)
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';

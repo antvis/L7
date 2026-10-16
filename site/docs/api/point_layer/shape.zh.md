@@ -3,8 +3,6 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `shape` 方法用于指定点图层绘制什么样的图形，如绘制三角形或者是正方形，还是文字、图标之类的。
 
 ### shape(fillShape: IFillShape)

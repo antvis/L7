@@ -3,11 +3,9 @@ title: Source
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 几何体图层数据推荐使用 GeoJSON 格式的数据。
 
-- [GeoJSON](/api/source/geojson/#point)
+- [GeoJSON](/zh/api/source/geojson/#point)
 
 ### GeoJSON
 

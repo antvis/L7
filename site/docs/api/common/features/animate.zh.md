@@ -30,4 +30,4 @@ L7 目前动画参数为相对单位，我们默认一条线段的长度为 1
 
 <img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*mo_7Q6sTqOIAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/examples/gallery/animate#plane_animate2)
+[在线案例](/zh/examples/line/animate/plane-animate2/)

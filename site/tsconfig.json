@@ -1,5 +1,9 @@
 {
-  "extends": "../tsconfig.json",
-  "include": [".dumirc.ts", "**/*"],
-  "exclude": ["public_site", "public", "node_modules"]
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "node_modules"]
 }

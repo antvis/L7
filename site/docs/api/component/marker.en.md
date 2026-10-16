@@ -3,8 +3,6 @@ title: Marker
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Marker 地图标注 目前只支持 2D dom 标注
 
 ## 构造函数
@@ -141,4 +139,4 @@ new L7.Marker({
   .setPopup(popup);
 ```
 
-[demo1](/examples/tutorial/marker#amap)
+[demo1](/en/examples/tutorial/marker/amap/)

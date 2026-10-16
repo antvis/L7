@@ -3,8 +3,6 @@ title: Heatmap
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 热力图以特殊高亮的形式显示数据在地理区域的聚集程度，L7 提供了多种表现形式的热力图，通过切换 `shape` 参数，用户可以得到不同类型的热力图。
@@ -45,15 +43,15 @@ const layer = new HeatmapLayer()
 
 ## options
 
-<embed src="@/docs/api/heatmap_layer/options.zh.md"></embed>
+<!-- include: ./options.zh.md -->
 
 ## source
 
-<embed src="@/docs/api/heatmap_layer/source.zh.md"></embed>
+<!-- include: ./source.zh.md -->
 
 ## shape
 
-<embed src="@/docs/api/heatmap_layer/shape.zh.md"></embed>
+<!-- include: ./shape.zh.md -->
 
 ## size
 
@@ -70,12 +68,12 @@ layer.size('weight', [0, 1.0]);
 
 ## scale
 
-<embed src="@/docs/api/heatmap_layer/scale.zh.md"></embed>
+<!-- include: ./scale.zh.md -->
 
 ## style
 
-<embed src="@/docs/api/heatmap_layer/style.zh.md"></embed>
+<!-- include: ./style.zh.md -->
 
 ## 图层通用方法
 
-<embed src="@/docs/api/common/layer/base.zh.md"></embed>
+<!-- include: ../common/layer/base.zh.md -->

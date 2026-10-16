@@ -3,8 +3,6 @@ title: PolygonLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 面图层用于绘制 2D 多边形以及沿 Z 轴拉伸后的 3D 图形，支持 GeoJSON Polygon / MultiPolygon 数据。
@@ -42,36 +40,36 @@ const layer = new PolygonLayer()
 
 ## options
 
-<embed src="@/docs/api/polygon_layer/options.zh.md"></embed>
+<!-- include: ./options.zh.md -->
 
 ## source
 
-<embed src="@/docs/api/polygon_layer/source.zh.md"></embed>
+<!-- include: ./source.zh.md -->
 
 ## shape
 
-<embed src="@/docs/api/polygon_layer/shape.zh.md"></embed>
+<!-- include: ./shape.zh.md -->
 
 ## color
 
-<embed src="@/docs/api/polygon_layer/color.zh.md"></embed>
+<!-- include: ./color.zh.md -->
 
 ## size
 
-<embed src="@/docs/api/polygon_layer/size.zh.md"></embed>
+<!-- include: ./size.zh.md -->
 
 ## scale
 
-<embed src="@/docs/api/polygon_layer/scale.zh.md"></embed>
+<!-- include: ./scale.zh.md -->
 
 ## style
 
-<embed src="@/docs/api/polygon_layer/style.zh.md"></embed>
+<!-- include: ./style.zh.md -->
 
 ## animate
 
-<embed src="@/docs/api/polygon_layer/animate.zh.md"></embed>
+<!-- include: ./animate.zh.md -->
 
 ## 图层通用方法
 
-<embed src="@/docs/api/common/layer/base.zh.md"></embed>
+<!-- include: ../common/layer/base.zh.md -->

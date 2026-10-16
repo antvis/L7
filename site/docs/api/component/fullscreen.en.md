@@ -9,7 +9,7 @@ Used to control map areas**full screen**and**Exit Full Screen**control button co
 
 ## use
 
-[Example](/examples/component/control#fullscreen)
+[Example](/en/examples/component/control/fullscreen/)
 
 ```ts
 import { Scene, Fullscreen } from '@antv/l7';
@@ -29,7 +29,7 @@ scene.on('loaded', () => {
 
 ## Configuration
 
-<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
+<!-- include: ../common/control/btn-api.en.md -->
 
 | name        | illustrate                                    | type                        |
 | ----------- | --------------------------------------------- | --------------------------- |
@@ -37,7 +37,7 @@ scene.on('loaded', () => {
 | exitBtnText | Text for exit full screen button              | `string`                    |
 | exitTitle   | Exit full screen button text`title`Attributes | `string`                    |
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
@@ -45,7 +45,7 @@ scene.on('loaded', () => {
 | ---------------- | --------------------------------------------------------------- | ------------ |
 | toggleFullscreen | Enter/exit the full screen state of the full screen map section | `() => void` |
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
@@ -53,4 +53,4 @@ scene.on('loaded', () => {
 | ---------------- | -------------------------------------------- | --------------------------------- |
 | fullscreenChange | Triggered when the full screen state changes | `(isFullscreen: boolean) => void` |
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

@@ -9,7 +9,7 @@ Used to display the longitude and latitude corresponding to the current cursor o
 
 ## use
 
-[Example](/examples/component/control#mouselocation)
+[Example](/en/examples/component/control/mouselocation/)
 
 ```ts
 import { Scene, MouseLocation } from '@antv/l7';
@@ -34,11 +34,11 @@ scene.on('loaded', () => {
 | --------- | --------------------------------------------------------------------- | -------------------------------------------------- |
 | transform | Callback function to convert the longitude and latitude of the cursor | `(position: [number, number]) => [number, number]` |
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
@@ -46,4 +46,4 @@ scene.on('loaded', () => {
 | -------------- | --------------------------------------------------------------- | -------------------------------------- |
 | locationChange | Triggered when the longitude and latitude of the cursor changes | `(position: [number, number]) => void` |
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

@@ -3,8 +3,6 @@ title: Raster Tile
 order: 7
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 When L7 loads the raster tile map, it needs to be`source`Parse the tile service and configure the request parameters of the tile service.
 
 ## data
@@ -70,33 +68,33 @@ const layer1 = new RasterLayer({
 
 ### type
 
-<description> _string_ **required** _default:_ rasterTile</description>The fixed value is`rasterTile`
+_string_ **required** _default:_ rasterTileThe fixed value is`rasterTile`
 
 ### tileSize `number`
 
-<description> _number_ **Optional** _default:_ 256</description>Request tile size optional
+_number_ **Optional** _default:_ 256Request tile size optional
 
 ### zoomOffset
 
-<description> number **Optional** *default:*0</description>Tile request tile level offset
+number **Optional** *default:*0Tile request tile level offset
 
 ### maxZoom
 
-<description> _number_ **Optional** *default:*0</description>
+_number_ **Optional** *default:*0
 
 Maximum tile zoom level`20`
 
 ### minZoom tile minimum zoom, etc.
 
-<description> _number_ **Optional** _default:_ 2-</description>
+_number_ **Optional** _default:_ 2-
 
 ### extent `[number, number, number, number]`Map display range
 
-<description> _number\[]_ **Optional**not limited:\_</description>
+_number\[]_ **Optional**not limited:\_
 
 ### dataType
 
-<description> _string_ **Optional** _default:_ image</description>
+_string_ **Optional** _default:_ image
 
 Tile data type
 
@@ -105,25 +103,25 @@ Tile data type
 
 ### format function,
 
-<description> _func_ **Optional**\_default:</description>
+_func_ **Optional**\_default:
 
 Used when data raster is used to format raster data into standard data and customize data processing functions
 
 ### wmtsOptions wmsts configuration
 
-<description> _Object_ **Optional** _default:_ null</description>
+_Object_ **Optional** _default:_ null
 
 #### layer
 
-<description> _string_ **required** _default:_ img</description>Layers
+_string_ **required** _default:_ imgLayers
 
 #### tileMatrixset
 
-<description> _string_ **required** _default:_ w</description>
+_string_ **required** _default:_ w
 
 #### format
 
-<description> _string_ **required** _default:_ tiles</description>Service type
+_string_ **required** _default:_ tilesService type
 
 ```javascript
 const rasterSource = new Source(
@@ -139,4 +137,4 @@ const rasterSource = new Source(
 );
 ```
 
-<embed src="@/docs/api/common/source/tile/method.en.md"></embed>
+<!-- include: ../common/source/tile/method.en.md -->

@@ -3,8 +3,6 @@ title: ImageLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 When adding a picture to the map, you need to specify the latitude and longitude range of the picture and the data parsing type.

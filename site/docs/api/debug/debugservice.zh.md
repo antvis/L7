@@ -3,8 +3,6 @@ title: DebugService
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 L7 在通过 debugService 的形式对外提供调试服务，通过 debugService 用户可以获得一些有助于性能监控的信息。

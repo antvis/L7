@@ -15,42 +15,42 @@
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*m32ARZNA1mQAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "raster_vector.ts",
+      "filename": "raster-vector.ts",
       "title": "栅格瓦片-矢量瓦片掩模",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*Kkn2TYXvX6UAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "vector_polygon.ts",
+      "filename": "vector-polygon.ts",
       "title": "矢量瓦片-多边形掩模",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*0mVdRZs08HsAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "raster_polygon.js",
+      "filename": "raster-polygon.js",
       "title": "栅格瓦片-多边形掩模",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*n0y_TZ2gr5AAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "multi_mask_or.ts",
+      "filename": "multi-mask-or.ts",
       "title": "栅格瓦片-多个Plolygon掩模-并集",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*09_KQZqe8L8AAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "multi_mask_and.ts",
+      "filename": "multi-mask-and.ts",
       "title": "栅格瓦片-多个Polygon掩模-交集",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*n4nwQ7ZgbDYAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "multi_mask_or_not.ts",
+      "filename": "multi-mask-or-not.ts",
       "title": "栅格瓦片-多个Plolygon掩模-并集取反",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*bytjT7JNtekAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "rastertile_raster.ts",
+      "filename": "rastertile-raster.ts",
       "title": "栅格瓦片-栅格掩模",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*vde4QYTTVhUAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "raster_point.ts",
+      "filename": "raster-point.ts",
       "title": "栅格-点图层",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*d2DcTbImPOwAAAAAAAAAAAAADmJ7AQ/original"
     }

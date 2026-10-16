@@ -9,7 +9,7 @@ using browser environment`nagigator`of`getlocation`Method, use the browser to tu
 
 ## illustrate
 
-[Example](/examples/component/control#geolocate)
+[Example](/en/examples/component/control/geolocate/)
 
 **Notice:**
 
@@ -43,9 +43,9 @@ scene.on('loaded', () => {
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
 | transform | Format passed`getlocation`The function of the obtained longitude and latitude can be used to convert the geographical coordinate system | `(position: [number, number]) => [number, number]` |
 
-<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
+<!-- include: ../common/control/btn-api.en.md -->
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
@@ -53,8 +53,8 @@ scene.on('loaded', () => {
 | -------------- | ------------------------------------------------------------- | --------------------------------- |
 | getGeoLocation | Get the latitude and longitude of the current user's location | `() => Promise<[number, number]>` |
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

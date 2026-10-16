@@ -3,11 +3,7 @@ title: 场景 Scene
 description: 地图场景初始
 keywords: 地图 Scene
 order: 0
-redirect_from:
-  - /zh/docs/api
 ---
-
-<embed src="@/docs/api/common/style.md"></embed>
 
 ## Introduction
 
@@ -23,13 +19,13 @@ scene object`scene`It is a global object that contains maps, map controls, compo
 
 ### id
 
-<description> _string | HTMLElement_ **required** </description>
+_string | HTMLElement_ **required**
 
 You need to pass in the dom container or container id.
 
 ### map
 
-<description> MapInstance **required** </description>
+MapInstance **required**
 
 The map instance can be obtained through the scene map attribute.
 
@@ -54,7 +50,7 @@ const scene = new L7.Scene({
 
 ### logoPosition
 
-<description> _string_ **Optional** _default: 'bottomleft'_ </description>
+_string_ **Optional** _default: 'bottomleft'_
 
 `L7` provided by default `Logo` The display position can be configured, and the default is the lower left corner.
 
@@ -69,19 +65,19 @@ const scene = new L7.Scene({
 
 ### logoVisible Is the logo visible?
 
-<description> _boolean_ **Optional** _default: true_ </description>
+_boolean_ **Optional** _default: true_
 
 Configuration `L7` of `Logo` Whether to display or not, it is displayed by default.
 
 ### antialias Whether to enable anti-aliasing
 
-<description> _boolean_ **Optional** _default: true_ </description>
+_boolean_ **Optional** _default: true_
 
 Whether to enable anti-aliasing.
 
 ### stencil whether to enable cutting
 
-<description> _boolean_ **Optional** _default: true_ </description>
+_boolean_ **Optional** _default: true_
 
 Whether to enable stencil. Layer `Mask` masking capabilities as well as vector tiles require this configuration to be enabled.
 
@@ -89,13 +85,13 @@ Whether to enable stencil. Layer `Mask` masking capabilities as well as vector t
 
 ### preserveDrawingBuffer
 
-<description> _boolean_ **Optional** _default: false_ </description>
+_boolean_ **Optional** _default: false_
 
 Whether to retain buffer data. When set to `true`, map images can be exported via `canvas.toDataURL()`.
 
 ### renderer Renderer
 
-<description> _'regl' | 'device'_ **Optional** _default: 'device'_ </description>
+_'regl' | 'device'_ **Optional** _default: 'device'_
 
 Specifies the renderer type. `regl` is the legacy renderer, `device` is the new renderer (based on `@antv/g-device-api`), which is used by default.
 
@@ -109,25 +105,25 @@ const scene = new Scene({
 
 ### animate Whether to enable animation
 
-<description> _boolean_ **Optional** _default: undefined_ </description>
+_boolean_ **Optional** _default: undefined_
 
 Whether to enable animation rendering.
 
 ### debug Whether to enable debugging
 
-<description> _boolean_ **Optional** _default: false_ </description>
+_boolean_ **Optional** _default: false_
 
 Whether to enable debug mode, which will output debugging information when enabled.
 
 ### pickBufferScale Pick buffer scale
 
-<description> _number_ **Optional** _default: 1.0_ </description>
+_number_ **Optional** _default: 1.0_
 
 Sets the scale ratio of the pixel picking buffer.
 
 ### fitBoundsOptions Fit bounds options
 
-<description> _object_ **Optional** </description>
+_object_ **Optional**
 
 Default options configuration when calling the `fitBounds` method, includes `animate` and other parameters.
 
@@ -510,7 +506,7 @@ export interface ICameraOptions {
 }
 ```
 
-[Online case](/examples/point/bubble#point)
+[Online case](/en/examples/point/bubble/point/)
 
 ### setZoomAndCenter(zoom: number, center: ICenter): void Set the map zoom level and center point
 
@@ -926,7 +922,7 @@ type IImage = HTMLImageElement | string | File；
 scene.addImage( '02','https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg');
 ```
 
-[Example address](/examples/gallery/animate#animate_path_texture)
+[Example address](/en/examples/gallery/animate/animate-path-texture/)
 
 ### hasImage(id: string): boolean determines global image resources
 

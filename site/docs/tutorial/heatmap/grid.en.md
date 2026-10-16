@@ -3,8 +3,6 @@ title: Grid Heatmap
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Aggregate a set of point data into square grids of equal size. A square grid represents the statistical values ​​of all points in the grid. The grid heat map features a grid layout.
 
 <div>
@@ -17,7 +15,7 @@ Aggregate a set of point data into square grids of equal size. A square grid rep
 
 Let's introduce how to draw a simple grid heat map.
 
-- you can found [Online case](/examples/heatmap/heatmap/#heatmap) on the `L7` official website
+- you can found [Online case](/en/examples/heatmap/heatmap/heatmap/) on the `L7` official website
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';

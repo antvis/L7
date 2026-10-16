@@ -3,8 +3,6 @@ title: Simple
 order: 9
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Point layers support the simple points of sprite mode. Point layers in sprite mode are more efficient and the points always face the camera.
 
 <div>
@@ -17,7 +15,7 @@ Point layers support the simple points of sprite mode. Point layers in sprite mo
 
 Let's introduce how to draw a simple point layer.
 
-- you can`L7`Found on the official website[Online case](/examples/point/simple#simple)
+- you can`L7`Found on the official website[Online case](/en/examples/point/simple/simple/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

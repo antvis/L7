@@ -3,8 +3,6 @@ title: Quick Start
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `L7`Available online`CDN`as well as`NPM`Quick access in the form of packages. pass`L7`With the capabilities provided, we can quickly complete map visualization.
 
 ## Installation introduction

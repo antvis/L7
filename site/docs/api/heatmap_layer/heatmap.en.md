@@ -3,8 +3,6 @@ title: Heatmap
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 Heat maps display the degree of aggregation of data in geographical areas in a special highlighted form. L7 provides heat maps in a variety of presentation forms. By switching`shape`parameters, users can get different heat maps

@@ -24,7 +24,7 @@ const scene = new Scene({
 
 ## use
 
-[Example](/examples/component/control#logo)
+[Example](/en/examples/component/control/logo/)
 
 ```ts
 import { Scene, Logo } from '@antv/l7';
@@ -52,12 +52,12 @@ scene.on('loaded', () => {
 | img  | Logo display image url                                                                                               | `string` |
 | href | Click the logo to jump to the hyperlink. If it is not uploaded, the image will be displayed. Clicking will not jump. | `string` |
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

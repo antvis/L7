@@ -39,7 +39,7 @@ scene.on('loaded', () => {
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hUmNQJ1sAb8AAAAAAAAAAAAAARQnAQ'/>
 
-[在线案例](/examples/point/chart#custom)
+[在线案例](/zh/examples/point/chart/custom/)
 
 ### 属性
 
@@ -129,7 +129,7 @@ type ICanvasLayerRenderParams = {
 
 ### 事件
 
-图层基础事件可见 [图层事件](/api/base_layer/base#图层事件)
+图层基础事件可见 [图层事件](/zh/api/base_layer/base#图层事件)
 
 **注意**：如需监听 `canvas` 画布相关事件，需要在 `CanvasLayer` 触发 `add` 事件后（`canvas` DOM 初始化并挂载完成后），方可监听相应事件。
 

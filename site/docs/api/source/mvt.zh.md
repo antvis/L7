@@ -3,44 +3,42 @@ title: MVT Tile
 order: 6
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 L7 加载矢量瓦片地图的时候需要在 `source` 中对瓦片服务进行解析，同时配置瓦片服务的请求参数。
 
 ## parser
 
 ### type
 
-<description> _string_ **必选** _default:_ mvt</description>
+_string_ **必选** _default:_ mvt
 
 ### tileSize `number`
 
-<description> _number_ **可选** _default:_ 256</description>
+_number_ **可选** _default:_ 256
 请求瓦片的大小
 
 ### zoomOffset
 
-<description> number **可选** _default:_ 0</description>
+number **可选** _default:_ 0
 瓦片请求瓦片层级的偏移
 
 ### maxZoom
 
-<description> _number_ **可选** _default:_ 0</description>
+_number_ **可选** _default:_ 0
 瓦片最大缩放等级 `20`
 
 ### minZoom
 
-<description> _number_ **可选** _default:_ 2-</description>
+_number_ **可选** _default:_ 2-
 瓦片最小缩放等
 
 ### extent `[number, number, number, number]`
 
-<description> _number[]_ **可选** 不限制:\_ </description>
+_number[]_ **可选** 不限制:\_
 地图显示范围
 
 ### getCustomData `(tile: { x: number, y: number, z: number }, callback: (err: any, data: any) => void) => void,`
 
-<description> \_\_ **可选**</description>
+\_\_ **可选**
 
 callback 参数
 
@@ -49,7 +47,7 @@ callback 参数
 
 自定义瓦片数据获取方法,试用业务场景需要数据鉴权，或者特殊处理的场景
 
-<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>
+<!-- include: ../common/source/tile/method.zh.md -->
 
 ## 示例
 

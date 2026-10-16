@@ -3,8 +3,6 @@ title: iconfont 标注
 order: 7
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 点图层除了支持绘制文字标注之外还支持通过绘制文字的方式绘制建简单的图标，即绘制 `iconfont`。通过文字方式绘制的简单图标，我们可以 `color` 方法直接修改颜色。
 
 <div>
@@ -17,7 +15,7 @@ order: 7
 
 下面我们来介绍如何绘制一个简单的 `iconfont` 图标点图层。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/point/text#iconfont)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/text/iconfont/)
 
 ```javascript
 // 指定 iconfont 映射为字体样式的名称

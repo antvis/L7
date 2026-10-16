@@ -3,8 +3,6 @@ title: 城市建筑
 order: 6
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 `CityBuildingLayer` 用于构建城市建筑 3D 模型, 展示城市建筑
@@ -29,7 +27,7 @@ layer.animatte({
 });
 ```
 
-✨ 在开启 animate 后默认会打开点亮窗户的动画  
+✨ 在开启 animate 后默认会打开点亮窗户的动画<br />
 🌟 开启 animate 动画是打开扫光动画的前提
 
 ### style
@@ -47,7 +45,7 @@ layer.animatte({
 
 其他 style 配置项同
 
-[baselayer#style](/api/base_layer/base#style)
+[baselayer#style](/zh/api/base_layer/base#style)
 
 ## 自定义动画频率
 
@@ -119,4 +117,4 @@ scene.on('loaded', () => {
 });
 ```
 
-[在线案例](/examples/gallery/animate#build_sweep)
+[在线案例](/zh/examples/gallery/animate/build-sweep/)

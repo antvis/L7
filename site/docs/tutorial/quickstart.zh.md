@@ -3,8 +3,6 @@ title: 快速上手
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `L7` 可以通过在线 `CDN` 以及 `NPM` 包等形式快速接入。通过 `L7` 提供的能力，我们可以快速完成地图可视化的绘制。
 
 ## 安装引入
@@ -33,7 +31,10 @@ npm install --save @antv/l7-maps
 CDN 引用 在使用时通过 L7 命名空间获取所有对象并初始化，如 L7.scene、L7.GaodeMap
 
 <!--也可以使用国内镜像 -->
-<script src = 'https://npm.elemecdn.com/@antv/l7'></script>
+
+```html
+<script src="https://npm.elemecdn.com/@antv/l7"></script>
+```
 
 ```javascript
 import { Scene } from '@antv/l7';

@@ -3,8 +3,6 @@ title: 水波图
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 平面点图层在开启动画模式的情况下，是一种特殊的图层类型：水波点。图层由一圈圈向外扩散的圆环构成。
 
 <div>
@@ -17,9 +15,9 @@ order: 3
 
 根据下面的代码可以实现一个简单的水波点案例。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/point/scatter#animatepoint)。
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/scatter/animatepoint/)。
 
-- 具体的使用可以查看[详细文档](/api/point_layer/animate#水波点)。
+- 具体的使用可以查看[详细文档](/zh/api/point_layer/animate#水波点)。
 
 ```js
 import { Scene, PointLayer } from '@antv/l7';

@@ -3,20 +3,18 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 瓦片图层的 `style` 参数和使用的图层相关。如矢量点图层，`style` 的参数就是对应点图层的参数。
 
 ### raster tile
 
 #### domain: [number, number]
 
-设置数据映射的定义域。  
+设置数据映射的定义域。<br />
 ps：固定值域为 `[0, 1]`，我们将传入的值（domain） 映射到值域 `[0, 1]` 后从 `rampColor` 构建的色带上取颜色，rgb 多通道栅格不支持。
 
 #### clampLow/clampHigh: boolean
 
-`clampLow` 的默认值为 `false`，设置为 `true`，低于 `domain` 的数据将不显示。  
+`clampLow` 的默认值为 `false`，设置为 `true`，低于 `domain` 的数据将不显示。<br />
 `clampHigh` 的默认值为 `false`，设置为 `true`，高于 `domain` 的数据将不显示。
 
 ps：rgb 多通道栅格不支持

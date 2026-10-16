@@ -3,8 +3,6 @@ title: PointLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 The point layer is a set of longitude and latitude data to describe the location of a series of points on the map. These points can be ordinary dots, or text, icons, pillars, etc.\

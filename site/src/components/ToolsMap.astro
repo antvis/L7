@@ -1,0 +1,8 @@
+---
+import ChinaMap from '../../maptools/demo';
+import WorldMap from '../../maptools/demo/world';
+interface Props { world?: boolean }
+const { world = false } = Astro.props;
+---
+
+{world ? <WorldMap client:only="react" /> : <ChinaMap client:only="react" />}

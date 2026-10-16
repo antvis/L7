@@ -3,8 +3,6 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `shape`The method is used to specify what kind of graphics the point layer draws, such as drawing triangles or squares, text, icons, etc.
 
 ### shape(fillShape: IFillShape)

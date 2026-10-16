@@ -3,8 +3,6 @@ title: Size
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `size` 方法用于设置 Polygon 的高度
 
 ### IPointSize: number ｜[number, number] | [number, number, number]

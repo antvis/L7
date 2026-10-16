@@ -3,8 +3,6 @@ title: Style
 order: 8
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `style` 方法用于配制图层的样式，相同图层拥有不同的 `shape` 图形，不同 `shape` 的图层 `style` 方法接受不同的参数。
 
 ```js
@@ -25,10 +23,10 @@ layer.style({
 
 `shape` 为 `line` 的普通线图层。
 
-- [line](/api/line_layer/shape#shapeline)
-- [支持渐变](/api/line_layer/style#linear)
-- [支持纹理](/api/line_layer/style#texture)
-- [支持虚线](/api/line_layer/style#dash)
+- [line](/zh/api/line_layer/shape#shapeline)
+- [支持渐变](/zh/api/line_layer/style#linear)
+- [支持纹理](/zh/api/line_layer/style#texture)
+- [支持虚线](/zh/api/line_layer/style#dash)
 
 | style         | 类型                       | 描述                       | 支持数据映射 | 默认值      |
 | ------------- | -------------------------- | -------------------------- | ------------ | ----------- |
@@ -42,10 +40,10 @@ layer.style({
 
 `shape` 为 `arc` 平面的弧线。
 
-- [arc](/api/line_layer/shape#shapearc)
-- [支持渐变](/api/line_layer/style#linear)
-- [支持纹理](/api/line_layer/style#texture)
-- [支持虚线](/api/line_layer/style#dash)
+- [arc](/zh/api/line_layer/shape#shapearc)
+- [支持渐变](/zh/api/line_layer/style#linear)
+- [支持纹理](/zh/api/line_layer/style#texture)
+- [支持虚线](/zh/api/line_layer/style#dash)
 
 | style         | 类型     | 描述                               | 支持数据映射 | 默认值  |
 | ------------- | -------- | ---------------------------------- | ------------ | ------- |
@@ -57,10 +55,10 @@ layer.style({
 
 `shape` 为 `arc3d` 的弧线图层。
 
-- [arc3d](/api/line_layer/shape#shapearc3d)
-- [支持渐变](/api/line_layer/style#linear)
-- [支持纹理](/api/line_layer/style#texture)
-- [支持虚线](/api/line_layer/style#dash)
+- [arc3d](/zh/api/line_layer/shape#shapearc3d)
+- [支持渐变](/zh/api/line_layer/style#linear)
+- [支持纹理](/zh/api/line_layer/style#texture)
+- [支持虚线](/zh/api/line_layer/style#dash)
 
 | style         | 类型     | 描述                               | 支持数据映射 | 默认值 |
 | ------------- | -------- | ---------------------------------- | ------------ | ------ |
@@ -72,10 +70,10 @@ layer.style({
 
 `shape` 为大圆弧线图层。
 
-- [greatcircle](/api/line_layer/shape#shapegreatcircle)
-- [支持渐变](/api/line_layer/style#linear)
-- [支持纹理](/api/line_layer/style#texture)
-- [支持虚线](/api/line_layer/style#dash)
+- [greatcircle](/zh/api/line_layer/shape#shapegreatcircle)
+- [支持渐变](/zh/api/line_layer/style#linear)
+- [支持纹理](/zh/api/line_layer/style#texture)
+- [支持虚线](/zh/api/line_layer/style#dash)
 
 | style         | 类型     | 描述                               | 支持数据映射 | 默认值 |
 | ------------- | -------- | ---------------------------------- | ------------ | ------ |
@@ -124,16 +122,16 @@ layer.style({
 
 `shape` 为 `wall` 地理围栏弧线图层。
 
-- [wall](/api/line_layer/shape#shapewall)
-- [支持渐变](/api/line_layer/style#linear)
-- [支持纹理](/api/line_layer/style#texture)
+- [wall](/zh/api/line_layer/shape#shapewall)
+- [支持渐变](/zh/api/line_layer/style#linear)
+- [支持纹理](/zh/api/line_layer/style#texture)
 
 ### simple
 
 `shape` 为 `simple` 简单线图层。
 
-- [simple](/api/line_layer/shape#shapesimple)
-- [支持渐变](/api/line_layer/style#linear)
+- [simple](/zh/api/line_layer/shape#shapesimple)
+- [支持渐变](/zh/api/line_layer/style#linear)
 
 ### linear
 
@@ -188,7 +186,7 @@ type ITextureBlend = 'normal' | 'replace';
 
 #### texture advance
 
-✨ animate  
+✨ animate<br />
 当线图层 (shape 为 arc/arc3d) 开启动画模式的时候，纹理在线图层上的分布还会和 animate 的参数相关
 
 线图层上排列的纹理的数量大致为 duration/interval
@@ -203,7 +201,7 @@ type ITextureBlend = 'normal' | 'replace';
 // 此时 纹理贴图数量为  duration / interval = 5
 ```
 
-✨ textureBlend 参数  
+✨ textureBlend 参数<br />
 通过控制 style 方法中的 textureBlend 参数，我们可以控制纹理图层和线图层的混合情况
 
 - normal

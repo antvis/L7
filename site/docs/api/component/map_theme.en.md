@@ -13,7 +13,7 @@ MapTheme will display the corresponding default theme options by default based o
 
 ## use
 
-[Example](/examples/component/control#maptheme)
+[Example](/en/examples/component/control/maptheme/)
 
 ```ts
 import { Scene, MapTheme } from '@antv/l7';
@@ -47,20 +47,20 @@ export type IControlOptionItem = {
 };
 ```
 
-<embed src="@/docs/api/common/control/popper-api.zh.md"></embed>
+<!-- include: ../common/control/popper-api.zh.md -->
 
-<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
+<!-- include: ../common/control/btn-api.en.md -->
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->
 
-<embed src="@/docs/api/common/control/popper-event.en.md"></embed>
+<!-- include: ../common/control/popper-event.en.md -->
 
-<embed src="@/docs/api/common/control/select-event.en.md"></embed>
+<!-- include: ../common/control/select-event.en.md -->

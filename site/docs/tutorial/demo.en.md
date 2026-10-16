@@ -3,8 +3,6 @@ title: local run
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ### 1. Open the L7demo page
 
 Choose any one you want to see`demo`。

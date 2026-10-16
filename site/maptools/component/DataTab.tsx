@@ -19,7 +19,7 @@ const App: React.FC = () => {
     setSelectTab(key);
   };
   const onDataLoad = (data: any) => {
-    setDistrictData({ ...districtData, ...data });
+    setDistrictData((previous) => ({ ...previous, ...data }));
   };
   const items: TabsProps['items'] = [
     {
@@ -56,8 +56,7 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="dumi-default-features">
-      <h1>数据字段</h1>
+    <div className="my-10 min-w-0">
       <Tabs
         tabBarExtraContent={{
           right: (
@@ -76,7 +75,7 @@ const App: React.FC = () => {
             </Dropdown>
           ),
         }}
-        defaultActiveKey="1"
+        defaultActiveKey="province"
         items={items}
         size={'large'}
         style={{ height: '650px' }}

@@ -3,8 +3,6 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `style`The method is used to configure the style of the layer. The same layer has different`shape`graphics, different`shape`layer`style`Methods accept different parameters.
 
 ```js
@@ -21,25 +19,25 @@ Universal`style`Parameters, parameters supported by all graphics.
 | ------- | -------- | -------------------- | ------------- |
 | opacity | `number` | Graphic transparency | `1`           |
 
-<embed src="@/docs/api/common/layer/style_encode.en.md"></embed>
+<!-- include: ../common/layer/style_encode.en.md -->
 
 ### 2D shape
 
 `shape`For plane figures, such as triangles, squares, etc.
 
-- [IFillShape](/api/point_layer/shape#shapefillshape-ifillshape)
+- [IFillShape](/en/api/point_layer/shape#shapefillshape-ifillshape)
 
-| style         | type                                            | Whether to support data mapping | describe                                                               | default value |
-| ------------- | ----------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------- | ------------- |
-| stroke        | `string`                                        | yes                             | Graphic border color                                                   | `#fff`        |
-| strokeWidth   | `number`                                        | no                              | Graphic border width                                                   | `0`           |
-| strokeOpacity | `number`                                        | no                              | Graphic border transparency                                            | `1`           |
-| blur          | `number`                                        | no                              | Graphic blur radius                                                    | `0`           |
-| offsets       | `[number, number]`                              | yes                             | point offset                                                           | `[0, 0]`      |
-| rotation      | `number`                                        | yes                             | Rotation angle                                                         | `0`           |
-| anchor        | [anchorType](/api/point_layer/style#anchortype) | yes                             | Anchor position, controls alignment of the shape relative to the point | `center`      |
-| raisingHeight | `number`                                        | no                              | Lifting height                                                         | `0`           |
-| heightfixed   | `boolean`                                       | no                              | Point size unit                                                        | `pixel`       |
+| style         | type                                               | Whether to support data mapping | describe                                                               | default value |
+| ------------- | -------------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------- | ------------- |
+| stroke        | `string`                                           | yes                             | Graphic border color                                                   | `#fff`        |
+| strokeWidth   | `number`                                           | no                              | Graphic border width                                                   | `0`           |
+| strokeOpacity | `number`                                           | no                              | Graphic border transparency                                            | `1`           |
+| blur          | `number`                                           | no                              | Graphic blur radius                                                    | `0`           |
+| offsets       | `[number, number]`                                 | yes                             | point offset                                                           | `[0, 0]`      |
+| rotation      | `number`                                           | yes                             | Rotation angle                                                         | `0`           |
+| anchor        | [anchorType](/en/api/point_layer/style#anchortype) | yes                             | Anchor position, controls alignment of the shape relative to the point | `center`      |
+| raisingHeight | `number`                                           | no                              | Lifting height                                                         | `0`           |
+| heightfixed   | `boolean`                                          | no                              | Point size unit                                                        | `pixel`       |
 
 #### unit
 
@@ -66,7 +64,7 @@ const layer = PointLayer().source(data).shape('circle').size(100).color('#f00').
 
 `shape`is a 3D column chart.
 
-- [IColumn](/api/point_layer/shape#shapecolumn-icolumn)
+- [IColumn](/en/api/point_layer/shape#shapecolumn-icolumn)
 
 | style       | type      | describe                                              | default value |
 | ----------- | --------- | ----------------------------------------------------- | ------------- |
@@ -106,25 +104,25 @@ interface IOpcityLinear = {
 
 `shape`for text.
 
-- [text](/api/point_layer/shape#shapefield-string-text)
+- [text](/en/api/point_layer/shape#shapefield-string-text)
 
-| style            | type                                            | describe                                   | Whether to support data mapping | default value |
-| ---------------- | ----------------------------------------------- | ------------------------------------------ | ------------------------------- | ------------- |
-| opacity          | `number`                                        | transparency                               | yes                             | `#fff`        |
-| stroke           | `string`                                        | Graphic border color                       | yes                             | `#fff`        |
-| strokeWidth      | `number`                                        | Graphic border color                       | no                              | `0`           |
-| textOffset       | `[number, number]`                              | text offset                                | yes                             | `[0, 0]`      |
-| textAnchor       | [anchorType](/api/point_layer/style#anchortype) | text alignment anchor`text`                | yes                             | `center`      |
-| spacing          | `number`                                        | text spacing                               | no                              | `2`           |
-| rotation         | `number`                                        | Rotation angle                             | yes                             | `0`           |
-| padding          | `number`                                        | Text inner border width                    | no                              | `2`           |
-| halo             | `number`                                        | Text edge glow width                       | no                              | `0.5`         |
-| gamma            | `number`                                        | Text color parameters                      | no                              | `2`           |
-| fontWeight       | `string`                                        | text size                                  | no                              | `400`         |
-| fontFamily       | [font](/api/point_layer/style#font)             | font                                       | no                              | `sans-serif`  |
-| textAllowOverlap | `boolean`                                       | Whether text is allowed to be overwritten  | no                              | `false`       |
-| raisingHeight    | `number`                                        | Lifting height                             | no                              | `0`           |
-| heightfixed      | `boolean`                                       | Does the lifting height vary?`zoom`Variety | no                              | `false`       |
+| style            | type                                               | describe                                   | Whether to support data mapping | default value |
+| ---------------- | -------------------------------------------------- | ------------------------------------------ | ------------------------------- | ------------- |
+| opacity          | `number`                                           | transparency                               | yes                             | `#fff`        |
+| stroke           | `string`                                           | Graphic border color                       | yes                             | `#fff`        |
+| strokeWidth      | `number`                                           | Graphic border color                       | no                              | `0`           |
+| textOffset       | `[number, number]`                                 | text offset                                | yes                             | `[0, 0]`      |
+| textAnchor       | [anchorType](/en/api/point_layer/style#anchortype) | text alignment anchor`text`                | yes                             | `center`      |
+| spacing          | `number`                                           | text spacing                               | no                              | `2`           |
+| rotation         | `number`                                           | Rotation angle                             | yes                             | `0`           |
+| padding          | `number`                                           | Text inner border width                    | no                              | `2`           |
+| halo             | `number`                                           | Text edge glow width                       | no                              | `0.5`         |
+| gamma            | `number`                                           | Text color parameters                      | no                              | `2`           |
+| fontWeight       | `string`                                           | text size                                  | no                              | `400`         |
+| fontFamily       | [font](/en/api/point_layer/style#font)             | font                                       | no                              | `sans-serif`  |
+| textAllowOverlap | `boolean`                                          | Whether text is allowed to be overwritten  | no                              | `false`       |
+| raisingHeight    | `number`                                           | Lifting height                             | no                              | `0`           |
+| heightfixed      | `boolean`                                          | Does the lifting height vary?`zoom`Variety | no                              | `false`       |
 
 #### anchorType
 
@@ -192,7 +190,7 @@ const font2 = 'Times New Roman';
 
 `shape`For simple point graphics (elves).
 
-- [simple](/api/point_layer/shape#shapesimple)
+- [simple](/en/api/point_layer/shape#shapesimple)
 
 | style         | type               | describe             | default value |
 | ------------- | ------------------ | -------------------- | ------------- |
@@ -205,7 +203,7 @@ const font2 = 'Times New Roman';
 
 `shape`is the icon type.
 
-- [icon](/api/point_layer/shape#shapeiconname-string)
+- [icon](/en/api/point_layer/shape#shapeiconname-string)
 
 | style         | type               | describe                                                                                                                          | data mapping | default value |
 | ------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------- |
@@ -254,7 +252,7 @@ const imageLayer = new PointLayer()
 
 `shape`is a radar chart.
 
-- [radar](/api/point_layer/shape#shaperadar)
+- [radar](/en/api/point_layer/shape#shaperadar)
 
 | style | type     | describe                                   | default value |
 | ----- | -------- | ------------------------------------------ | ------------- |

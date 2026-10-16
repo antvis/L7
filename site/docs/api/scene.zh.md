@@ -3,11 +3,7 @@ title: 场景 Scene
 description: 地图场景初始
 keywords: 地图 Scene
 order: 0
-redirect_from:
-  - /zh/docs/api
 ---
-
-<embed src="@/docs/api/common/style.md"></embed>
 
 ## 简介
 
@@ -23,13 +19,13 @@ redirect_from:
 
 ### id
 
-<description> _string | HTMLElement_ **必选** </description>
+_string | HTMLElement_ **必选**
 
 需传入 dom 容器或者容器 id。
 
 ### map
 
-<description> MapInstance **必选** </description>
+MapInstance **必选**
 
 可以通过 scene map 属性获取 map 实例。
 
@@ -54,7 +50,7 @@ const scene = new L7.Scene({
 
 ### logoPosition
 
-<description> _string_ **可选** _default: 'bottomleft'_ </description>
+_string_ **可选** _default: 'bottomleft'_
 
 `L7` 默认提供的 `Logo` 可以配置显示位置，默认在左下角。
 
@@ -69,19 +65,19 @@ const scene = new L7.Scene({
 
 ### logoVisible logo 是否可见
 
-<description> _boolean_ **可选** _default: true_ </description>
+_boolean_ **可选** _default: true_
 
 配置 `L7` 的 `Logo` 是否显示，默认显示。
 
 ### antialias 是否开启抗锯齿
 
-<description> _boolean_ **可选** _default: true_ </description>
+_boolean_ **可选** _default: true_
 
 是否开启抗锯齿。
 
 ### stencil 是否开启裁剪
 
-<description> _boolean_ **可选** _default: true_ </description>
+_boolean_ **可选** _default: true_
 
 是否开启裁剪（stencil）。图层 `Mask` 掩模能力以及矢量瓦片需要开启该配置。
 
@@ -89,13 +85,13 @@ const scene = new L7.Scene({
 
 ### preserveDrawingBuffer
 
-<description> _boolean_ **可选** _default: false_ </description>
+_boolean_ **可选** _default: false_
 
 是否保留缓冲区数据。设置为 `true` 时可通过 `canvas.toDataURL()` 导出地图图片。
 
 ### renderer 渲染器
 
-<description> _'regl' | 'device'_ **可选** _default: 'device'_ </description>
+_'regl' | 'device'_ **可选** _default: 'device'_
 
 指定渲染器类型。`regl` 为旧版渲染器，`device` 为新版渲染器（基于 `@antv/g-device-api`），默认使用 `device` 渲染器。
 
@@ -109,25 +105,25 @@ const scene = new Scene({
 
 ### animate 是否启用动画
 
-<description> _boolean_ **可选** _default: undefined_ </description>
+_boolean_ **可选** _default: undefined_
 
 是否启用动画渲染。
 
 ### debug 是否开启调试
 
-<description> _boolean_ **可选** _default: false_ </description>
+_boolean_ **可选** _default: false_
 
 是否开启调试模式，开启后会输出调试信息。
 
 ### pickBufferScale 选取缓冲区缩放比
 
-<description> _number_ **可选** _default: 1.0_ </description>
+_number_ **可选** _default: 1.0_
 
 设置像素选取（picking）缓冲区的缩放比。
 
 ### fitBoundsOptions 适配边界选项
 
-<description> _object_ **可选** </description>
+_object_ **可选**
 
 当调用 `fitBounds` 方法时默认的选项配置，包含 `animate` 等参数。
 
@@ -510,7 +506,7 @@ export interface ICameraOptions {
 }
 ```
 
-[在线案例](/examples/point/bubble#point)
+[在线案例](/zh/examples/point/bubble/point/)
 
 ### setZoomAndCenter(zoom: number, center: ICenter): void 设置地图缩放等级和中心点
 
@@ -926,7 +922,7 @@ type IImage = HTMLImageElement | string | File；
 scene.addImage( '02','https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg');
 ```
 
-[示例地址](/examples/gallery/animate#animate_path_texture)
+[示例地址](/zh/examples/gallery/animate/animate-path-texture/)
 
 ### hasImage(id: string): boolean 判断全局图片资源
 

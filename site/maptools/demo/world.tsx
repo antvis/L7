@@ -1,7 +1,3 @@
-/**
- * compact: true
- * inline: true
- */
 import {
   CopyOutlined,
   DoubleLeftOutlined,
@@ -14,8 +10,8 @@ import { Button, Col, Descriptions, Divider, Row, Select, Spin, message } from '
 import geobuf from 'geobuf';
 import Pbf from 'pbf';
 import { useEffect, useState } from 'react';
+import '../../src/demo/amap';
 import { downloadData, exportSVG } from '../utils/util';
-import './index.less';
 import type { IDataInfo } from './util';
 import {
   defaultDataInfo,
@@ -49,7 +45,9 @@ export default () => {
     data: { type: 'FeatureCollection', features: [] },
     parser: { type: 'geojson' },
   });
-  const [panelInfo, setPanelInfo] = useState(openPanel);
+  const [panelInfo, setPanelInfo] = useState(() =>
+    window.matchMedia('(min-width: 768px)').matches ? openPanel : closePanel,
+  );
   const [loading, setLoading] = useState(false);
   const size = 'middle';
   const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
@@ -60,14 +58,8 @@ export default () => {
       [type]: value,
     });
   };
-  useEffect(() => {
-    const width = document.body.clientWidth;
-    if (width < 768) {
-      setPanelInfo(closePanel);
-    }
-  }, []);
 
-  const getDownloadData = async (type?: string = 'fill') => {
+  const getDownloadData = async (type: string = 'fill') => {
     return type === 'line' ? linedata : layerSource.data;
   };
 
@@ -131,17 +123,11 @@ export default () => {
 
   return (
     <Spin spinning={loading} tip={'数据加载中……'}>
-      <div
-        style={{
-          display: 'flex',
-        }}
-      >
+      <div className="relative flex">
         <LarkMap
           {...worldConfig}
-          style={{
-            height: 'calc(100vh - 240px)',
-            width: `calc(100% - ${panelInfo.width}px)`,
-          }}
+          className="min-w-0 flex-1"
+          style={{ height: 'calc(100dvh - 240px)' }}
         >
           <ChoroplethLayer {...layerOptions} source={layerSource} id="myChoroplethLayer" />
           <LineLayer {...lineLayerOptions} source={lineLayerSource} id="lineLayer"></LineLayer>
@@ -169,20 +155,23 @@ export default () => {
           />
           <MapThemeControl position="bottomright" />
         </LarkMap>
-        <div className="panel" style={{ width: panelInfo.width }}>
-          <div className="toggle">
+        <div
+          className="absolute right-0 top-0 z-10 flex h-[calc(100dvh-240px)] max-w-full shrink-0 overflow-auto bg-white pb-4 pt-2.5 md:static"
+          style={{ width: panelInfo.width }}
+        >
+          <div className="flex h-full w-5 shrink-0 items-center">
             <DoubleLeftOutlined
               title="展开收起"
               rotate={panelInfo.rotate}
-              className="icon"
+              className="cursor-pointer text-xl hover:text-[var(--brand)]"
               onClick={() => {
                 setPanelInfo(panelInfo.width === 20 ? openPanel : closePanel);
               }}
             />
           </div>
-          <div style={{ paddingLeft: '10px', display: panelInfo.display }}>
-            {/* <Row className="row">
-              <Col span={8} className="label">
+          <div className="min-w-0 flex-1 px-2.5" style={{ display: panelInfo.display }}>
+            {/* <Row className="h-10 items-center">
+              <Col span={8} className="text-sm text-[#4c4646d9]">
                 版本：
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
@@ -203,8 +192,8 @@ export default () => {
               <Descriptions.Item label="adcode">{dataInfo.currentCode}</Descriptions.Item>
             </Descriptions>
 
-            <Row className="row">
-              <Col span={6} className="label">
+            <Row className="h-10 items-center">
+              <Col span={6} className="text-sm text-[#4c4646d9]">
                 面数据:
               </Col>
               <Col span={18} style={{ textAlign: 'right' }}>
@@ -233,8 +222,8 @@ export default () => {
                 />
               </Col>
             </Row>
-            <Row className="row">
-              <Col span={6} className="label">
+            <Row className="h-10 items-center">
+              <Col span={6} className="text-sm text-[#4c4646d9]">
                 国界数据:
               </Col>
               <Col span={18} style={{ textAlign: 'right' }}>
@@ -263,8 +252,8 @@ export default () => {
                 />
               </Col>
             </Row>
-            <Row className="row">
-              <Col span={6} className="label">
+            <Row className="h-10 items-center">
+              <Col span={6} className="text-sm text-[#4c4646d9]">
                 SVG下载:
               </Col>
               <Col span={18} style={{ textAlign: 'right' }}>
@@ -291,7 +280,7 @@ export default () => {
             </Row>
 
             {/* 全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素 */}
-            <div className="originData" style={{}}>
+            <div className="mt-6 flex text-xs">
               <div>
                 <div>数据来源：</div>
                 <a href={`https://lbs.amap.com/api/jsapi-v2/guide/layers/districtlayer`}>

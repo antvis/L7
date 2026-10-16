@@ -3,8 +3,6 @@ title: Scatter
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 A scatter plot places equal-sized dots over a geographical area to represent the spatial layout or distribution of data over a geographical area.
 
 <div>
@@ -17,7 +15,7 @@ A scatter plot places equal-sized dots over a geographical area to represent the
 
 Let's introduce how to draw a common scatter plot.
 
-- you can`L7`Found on the official website[Online case](/examples/point/scatter/#scatter)
+- you can`L7`Found on the official website[Online case](/en/examples/point/scatter/scatter/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

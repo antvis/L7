@@ -9,7 +9,7 @@ Used to control the map**enlarge**and**zoom out**control, and when the map reach
 
 ## use
 
-[Example](/examples/component/control#zoom)
+[Example](/en/examples/component/control/zoom/)
 
 ```ts
 import { Scene, Zoom } from '@antv/l7';
@@ -37,7 +37,7 @@ scene.on('loaded', () => {
 | zoomOutTitle | shrink button`title`Attributes                                                          | `string`            |
 | showZoom     | Whether to display the current real-time zoom value of the map, rounded down by default | `boolean`           |
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
@@ -46,8 +46,8 @@ scene.on('loaded', () => {
 | zoomIn  | Enlarge map    | `() => void` |
 | zoomOut | Reduce basemap | `() => void` |
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

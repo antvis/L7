@@ -3,8 +3,6 @@ title: Scale 度量
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Scale 简介
 
 Scale 度量是用于将地图数据值（数字、日期、类别等数据）转成视觉变量（颜色、大小、形状）。Scale 是数据可视化的基本元素，因为它们决定了数据视觉编码的方式。L7 目前支持连续、离散、枚举类型等常用的 Scale。

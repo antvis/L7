@@ -3,8 +3,6 @@ title: Animate
 order: 7
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 线图层图层在开启 `animate` 方法后会得到沿线方向的线动画。
 
 <div>
@@ -35,4 +33,4 @@ interface IAnimateOption {
 }
 ```
 
-<embed src="@/docs/api/common/features/animate.zh.md"></embed>
+<!-- include: ../common/features/animate.zh.md -->

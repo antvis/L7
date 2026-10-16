@@ -3,8 +3,6 @@ title: Source
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 source 地理数据处理模块，主要包含数据解析（parser）和数据处理（transforms）。
@@ -48,9 +46,9 @@ const source = new Source(data, option);
 
 parser 可以将不同类型的空间数据处理成统一数据格式。空间数据分为矢量数据、栅格数据和瓦片服务三大类：
 
-- 矢量数据 支持 [GeoJSON](/api/source/geojson)、[CSV](/api/source/csv)、[JSON](/api/source/json) 类型
-- 栅格数据 支持 [Raster](/api/source/raster)、[Image](/api/source/image) 类型
-- 瓦片服务 支持 [MVT](/api/source/mvt)、[RasterTile](/api/source/raster_tile)、GeoJSON VT 类型
+- 矢量数据 支持 [GeoJSON](/zh/api/source/geojson)、[CSV](/zh/api/source/csv)、[JSON](/zh/api/source/json) 类型
+- 栅格数据 支持 [Raster](/zh/api/source/raster)、[Image](/zh/api/source/image) 类型
+- 瓦片服务 支持 [MVT](/zh/api/source/mvt)、[RasterTile](/zh/api/source/raster_tile)、GeoJSON VT 类型
 
 ```js
 type IParserType =
@@ -249,7 +247,7 @@ layer.source(data, {
 - minZoom: 最小聚合缩放等级 **number** default 0
 - maxZoom: 最大聚合缩放等级 **number** default 16
 
-[聚合图使用案例](/examples/point/cluster#cluster)
+[聚合图使用案例](/zh/examples/point/cluster/cluster/)
 
 ## 方法
 
@@ -441,29 +439,29 @@ const v2 = source.dataVersion; // v2 === v1 + 1
 如果数据发生改变，可以需要更新数据。
 可以通过调用 `layer` 的 `setData` 方法实现数据的更新。
 
-具体见 [Layer](/api/base_layer/base/#setdata)
+具体见 [Layer](/zh/api/base_layer/base/#setdata)
 
 ```javascript
 layer.setData(data);
 ```
 
-<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>
+<!-- include: ../common/source/tile/method.zh.md -->
 
 ### 数据类型
 
 #### JSON
 
-[JSON 数据格式解析](/api/source/json)
+[JSON 数据格式解析](/zh/api/source/json)
 
 #### csv
 
-[CSV 数据格式解析](/api/source/csv)
+[CSV 数据格式解析](/zh/api/source/csv)
 
 栅格数据类型
 
 #### image
 
-[Image 数据格式解析](/api/source/image)
+[Image 数据格式解析](/zh/api/source/image)
 
 ## 事件
 

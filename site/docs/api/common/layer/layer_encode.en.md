@@ -9,7 +9,7 @@ Set layer data and parsing configuration`source(data, config)`。
   - parser data analysis, the default is the parsing layer geojson
   - transforms \[transform, transform ] Multiple data processing transformations can be set
 
-`parser`and `transforms` [See source documentation](/api/source/source)。
+`parser`and `transforms` [See source documentation](/en/api/source/source)。
 
 ```javascript
 layer.source(data, {
@@ -399,7 +399,7 @@ scene.addLayer(imageLayer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oVyHT5S3sv0AAAAAAAAAAABkARQnAQ'>
 
-[Online case](/examples/point/image#image)
+[Online case](/en/examples/point/image/image/)
 
 **shape(field, callback)**
 

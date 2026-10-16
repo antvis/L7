@@ -1,23 +1,23 @@
 ## options
 
-<embed src="@/docs/api/common/layer/options.zh.md"></embed>
+<!-- include: ./options.zh.md -->
 
 ## 数据方法
 
-<embed src="@/docs/api/common/layer/layer_encode.zh.md"></embed>
+<!-- include: ./layer_encode.zh.md -->
 
-<embed src="@/docs/api/common/layer/layer_style.zh.md"></embed>
+<!-- include: ./layer_style.zh.md -->
 
-<embed src="@/docs/api/common/layer/layer_texture.zh.md"></embed>
+<!-- include: ./layer_texture.zh.md -->
 
-<embed src="@/docs/api/common/layer/layer_update.zh.md"></embed>
+<!-- include: ./layer_update.zh.md -->
 
-<embed src="@/docs/api/common/layer/layer_ctr.zh.md"></embed>
+<!-- include: ./layer_ctr.zh.md -->
 
-<embed src="@/docs/api/common/layer/layer_interaction.zh.md"></embed>
+<!-- include: ./layer_interaction.zh.md -->
 
-<embed src="@/docs/api/common/layer/mask_method.zh.md"></embed>
+<!-- include: ./mask_method.zh.md -->
 
-<embed src="@/docs/api/common/layer/mouse_event.zh.md"></embed>
+<!-- include: ./mouse_event.zh.md -->
 
-<embed src="@/docs/api/common/layer/layer_event.zh.md"></embed>
+<!-- include: ./layer_event.zh.md -->

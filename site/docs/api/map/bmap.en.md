@@ -3,8 +3,6 @@ title: 百度地图
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 L7 geographical visualization focuses on the visual expression of geographical data. The map layer needs to rely on third-party maps. Third-party maps are created and managed uniformly through Scene. You only need to pass in map configuration items through Scene.
@@ -71,6 +69,6 @@ const scene = new Scene({
 });
 ```
 
-BaiduMap [Example address](/examples/map/map/#baidumap), external incoming[Example address](/examples/map/map/#bmapInstance)
+BaiduMap [Example address](#baidumap-实例化), external incoming[Example address](#外部传入实例化)
 
-<embed src="@/docs/api/common/map.en.md"></embed>
+<!-- include: ../common/map.en.md -->

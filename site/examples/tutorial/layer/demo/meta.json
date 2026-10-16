@@ -5,12 +5,12 @@
   },
   "demos": [
     {
-      "filename": "layer_highlight.js",
+      "filename": "layer-highlight.js",
       "title": "交互高亮图层",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*CnSaSaPwyX8AAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "layer_boxselect.js",
+      "filename": "layer-boxselect.js",
       "title": "框选图层",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*5kzJQYS_N20AAAAAAAAAAAAADmJ7AQ/original"
     }

@@ -9,7 +9,7 @@ order: 7
 
 ## 说明
 
-[示例](/examples/component/control#exportimage)
+[示例](/zh/examples/component/control/exportimage/)
 
 截图时被截取的目标仅包含：
 
@@ -64,9 +64,9 @@ scene.on('loaded', () => {
 | imageType | 截图图片的格式                                     | `'png'` \| `'jpeg'`        |
 | onExport  | 截图成功后，用于接收图片 `Base64` 字符串的回调函数 | `(base64: string) => void` |
 
-<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
+<!-- include: ../common/control/btn-api.zh.md -->
 
-<embed src="@/docs/api/common/control/api.zh.md"></embed>
+<!-- include: ../common/control/api.zh.md -->
 
 ## 方法
 
@@ -74,8 +74,8 @@ scene.on('loaded', () => {
 | -------- | ------------------------ | ----------------------- |
 | getImage | 获取截图的 Base64 字符串 | `() => Promise<string>` |
 
-<embed src="@/docs/api/common/control/method.zh.md"></embed>
+<!-- include: ../common/control/method.zh.md -->
 
 ## 事件
 
-<embed src="@/docs/api/common/control/event.zh.md"></embed>
+<!-- include: ../common/control/event.zh.md -->

@@ -2,7 +2,7 @@
 
 ### zoom initialize zoom level
 
-<description> _number_ </description>
+_number_
 
 Initial map display level {number} Mapbox (0-24) AMap (2-19)
 
@@ -28,7 +28,7 @@ Whether the map can be rotated {Boolean} default true
 
 ## map events
 
-Scene unified agent, see[Scene document](/api/scene)
+Scene unified agent, see[Scene document](/en/api/scene)
 
 or
 
