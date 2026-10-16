@@ -22,7 +22,7 @@ layer.color('id', ['#f00', '#ff0'])
 
 ### ScaleTypeName
 
-`scale` 的类型可以分为 `3` 类 `11` 种，不同 `Scale` 的差异在于 `domain->range` 的转换方法的不同。  
+`scale` 的类型可以分为 `3` 类 `11` 种，不同 `Scale` 的差异在于 `domain->range` 的转换方法的不同。<br />
 `range` 和 `domain` 是 `Scale` 中非常重要的两个参数。
 
 - domain: 地图数据值的定义区间

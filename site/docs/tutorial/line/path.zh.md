@@ -3,8 +3,6 @@ title: 路径图
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 我们经常需要在地图上绘制诸如道路、行动路线、水系等常见的路径，可以将这些绘制线的统称为路径图，即用一组首尾不闭合的点坐标对来定位的线图层。
 
 <div>
@@ -17,7 +15,7 @@ order: 0
 
 下面我们来介绍如何绘制一个常见的路径图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/gallery/animate#animate_path_texture)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/gallery/animate/animate-path-texture/)
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
@@ -75,12 +73,12 @@ layer.size(2); // 绘制宽度为 2 的路径
 
 ### style
 
-<embed src="@/docs/api/common/features/linear.zh.md"></embed>
+<!-- include: ../../api/common/features/linear.zh.md -->
 
-<embed src="@/docs/api/common/features/dash.zh.md"></embed>
+<!-- include: ../../api/common/features/dash.zh.md -->
 
-<embed src="@/docs/api/common/features/border.zh.md"></embed>
+<!-- include: ../../api/common/features/border.zh.md -->
 
-<embed src="@/docs/api/common/features/texture.zh.md"></embed>
+<!-- include: ../../api/common/features/texture.zh.md -->
 
-<embed src="@/docs/api/common/features/animate.zh.md"></embed>
+<!-- include: ../../api/common/features/animate.zh.md -->

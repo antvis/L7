@@ -9,7 +9,7 @@ Take a screenshot of the current map part and generate a picture`Base64`String.
 
 ## illustrate
 
-[Example](/examples/component/control#exportimage)
+[Example](/en/examples/component/control/exportimage/)
 
 The captured targets when taking screenshots only include:
 
@@ -64,9 +64,9 @@ scene.on('loaded', () => {
 | imageType | Screenshot image format                                                                                       | `'png'`\|`'jpeg'`          |
 | onExport  | After the screenshot is successfully taken, it is used to receive the picture`Base64`String callback function | `(base64: string) => void` |
 
-<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
+<!-- include: ../common/control/btn-api.zh.md -->
 
-<embed src="@/docs/api/common/control/api.zh.md"></embed>
+<!-- include: ../common/control/api.zh.md -->
 
 ## method
 
@@ -74,8 +74,8 @@ scene.on('loaded', () => {
 | -------- | --------------------------------------- | ----------------------- |
 | getImage | Get the Base64 string of the screenshot | `() => Promise<string>` |
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

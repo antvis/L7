@@ -15,7 +15,7 @@ LayerPopup will listen to the mouse events of the target layer by itself. When t
 
 ## use
 
-[Example](/examples/component/popup#layerpopup)[Custom content examples](/zh/examples/component/popup/#customContent)
+[Example](/en/examples/component/popup/layerpopup/)[Custom content examples](/zh/examples/component/popup/customcontent/)
 
 ```ts
 import { Scene, LayerPopup, PointLayer } from '@antv/l7';

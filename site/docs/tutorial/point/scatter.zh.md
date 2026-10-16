@@ -3,8 +3,6 @@ title: 散点图
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 散点图在地理区域上放置相等大小的圆点，用来表示地域上的空间布局或数据分布。
 
 <div>
@@ -17,7 +15,7 @@ order: 2
 
 下面我们来介绍如何绘制一个常见的散点图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/point/scatter/#scatter)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/scatter/scatter/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

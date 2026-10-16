@@ -3,8 +3,6 @@ title: PlaneGeometry
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 PlaneGeometry 是 L7 提供的通用的平面几何体图形，表现为可以自定义为位置，大小和分段数的贴地矩形。
@@ -31,7 +29,7 @@ scene.addLayer(layer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*7DpqRrE0LM4AAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/examples/geometry/geometry#plane)
+[在线案例](/zh/examples/geometry/geometry/plane/)
 
 设置 3D 地形模式
 
@@ -61,7 +59,7 @@ scene.addLayer(layer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*mkPtQJVN8eQAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/examples/geometry/geometry#terrain)
+[在线案例](/zh/examples/geometry/geometry/terrain/)
 
 ### source
 

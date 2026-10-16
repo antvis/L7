@@ -59,7 +59,7 @@ let pointLayer = new PointLayer({
 ```
 
 - enableMultiPassRenderer 配置该图层是否开始后处理能力
-- passes 后处理配置列表  
+- passes 后处理配置列表<br />
   🌟 passes 需要根据一定的规则配置
 
 ### 单图层后处理
@@ -151,7 +151,7 @@ const bloomPass = [
 
 辉光后处理
 
-- bloomBaseRadio  
+- bloomBaseRadio<br />
   设置保持图形原本样式的比例，值在 0 - 1 之间，值为 1 时完全保存本身的样式
 - bloomRadius
   设置 bloom 的半径，值越大，bloom 范围越大

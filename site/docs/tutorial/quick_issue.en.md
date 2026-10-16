@@ -3,8 +3,6 @@ title: Quick Issue
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ### Why issue
 
 - Issues are open, and students who see them can answer them, put forward ideas, and improve the efficiency of solving Issues.

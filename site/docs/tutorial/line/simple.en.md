@@ -3,8 +3,6 @@ title: Simple Line
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 The simple line layer provides users with a better choice for large data volumes and can easily render line segments with hundreds of thousands of nodes. However, compared with ordinary line layers, the simple line layer is also lost. some other abilities.
 
 <div>
@@ -17,7 +15,7 @@ The simple line layer provides users with a better choice for large data volumes
 
 Let's introduce how to draw a simple line.
 
-- you can`L7`Found on the official website[Online case](/examples/gallery/animate#grid)
+- you can`L7`Found on the official website[Online case](/en/examples/gallery/animate/grid/)
 
 ```javascript
 import { LineLayer } from '@antv/l7';
@@ -33,6 +31,6 @@ const layer = new LineLayer()
 
 In order to draw a simple line we need to`shape`The parameters are set to`simple`。
 
-<embed src="@/docs/api/common/features/linear.zh.md"></embed>
+<!-- include: ../../api/common/features/linear.zh.md -->
 
 🌟 Simple line layer does not support animation and textures

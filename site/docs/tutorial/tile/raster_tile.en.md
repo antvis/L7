@@ -3,8 +3,6 @@ title: Raster Tile
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Raster tile layers include image rasters and data rasters, where image rasters are usually loaded`png/jpg`Images, data rasters are loaded`tiff/lerc`and other raster data files.
 
 ### Draw picture raster - TMS

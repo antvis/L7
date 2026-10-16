@@ -3,8 +3,6 @@ title: 3D 填充图
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 几何体图层在地图上除了平面的填充图，还可以是有高度的几何体块。
 
 <div>
@@ -17,7 +15,7 @@ order: 1
 
 下面我们来介绍如何绘制一个简单的 `3D` 填充图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/polygon/3d/#polygonstylemap)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/polygon/3d/polygon-stylemap/)
 
 ```javascript
 import { Scene, PolygonLayer } from '@antv/l7';
@@ -119,16 +117,16 @@ style({
 
 🌟 在 v2.7.6 版本开始支持。
 
-[在线案例](/examples/react/covid#covid_extrude)
+[在线案例](/zh/examples/polygon/extrusion/polygon/)
 
 - `raisingHeight` 设置 `3D` 填充图的抬升高度。
 
-🌟 设置抬升高度的前提是 `heightfixed` 为 `true`。  
+🌟 设置抬升高度的前提是 `heightfixed` 为 `true`。<br />
 🌟 在 v2.8.17 版本开始支持。
 
 <img width="40%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*D8GeSKNZxWIAAAAAAAAAAAAAARQnAQ">
 
-[在线案例](/examples/polygon/3d#floatmap)
+[在线案例](/zh/examples/polygon/3d/floatmap/)
 
 - `mapTexture` 设置 `3D` 填充图的顶面纹理。
   🌟 在设置 `mapTexture` 的时候允许用户配置侧面的渐变色。
@@ -159,4 +157,4 @@ const provincelayer = new PolygonLayer({})
 - `sidesurface`: `boolean`
   控制侧面的显隐，默认为 `true`。
 
-[在线案例](/examples/polygon/3d#texture3D)
+[在线案例](/zh/examples/polygon/3d/polygon/)

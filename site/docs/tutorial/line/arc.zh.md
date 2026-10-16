@@ -3,8 +3,6 @@ title: 弧线图
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 有时候为了可视化效果，会选择使用弧线连接地图上的两点。同时也可以使用弧线完成一些有趣的效果。
 
 <div>
@@ -17,7 +15,7 @@ order: 1
 
 下面我们来介绍如何使用弧线绘制一个模拟的风场。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/line/animate/#wind)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/line/animate/animate-line/)
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
@@ -86,16 +84,16 @@ layer.source(data, {
 
 为了绘制弧线图，我们需要将 `shape` 的参数设置成 `arc`。
 
-<embed src="@/docs/api/common/features/animate.zh.md"></embed>
+<!-- include: ../../api/common/features/animate.zh.md -->
 
 ### style
 
-<embed src="@/docs/api/common/features/segment_number.zh.md"></embed>
+<!-- include: ../../api/common/features/segment_number.zh.md -->
 
-<embed src="@/docs/api/common/features/theta_offset.zh.md"></embed>
+<!-- include: ../../api/common/features/theta_offset.zh.md -->
 
-<embed src="@/docs/api/common/features/linear.zh.md"></embed>
+<!-- include: ../../api/common/features/linear.zh.md -->
 
-<embed src="@/docs/api/common/features/dash.zh.md"></embed>
+<!-- include: ../../api/common/features/dash.zh.md -->
 
-<embed src="@/docs/api/common/features/texture.zh.md"></embed>
+<!-- include: ../../api/common/features/texture.zh.md -->

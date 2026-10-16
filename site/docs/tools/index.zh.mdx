@@ -1,0 +1,37 @@
+---
+title: 行政区划数据
+template: page
+order: 0
+---
+
+import ToolsNav from "../../src/components/ToolsNav.astro";
+import DataTab from '../../maptools/component/DataTab';
+
+<div className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8">
+
+<ToolsNav locale="zh" />
+
+
+# 行政区划
+
+一站式行政区划数据下载、应用平台。
+
+[地图下载](/zh/tools/map/) · [GitHub](https://github.com/antvis/l7-extensions/tree/master/packages/district-data)
+
+## 特性
+
+- **数据下载**：符合民政部数据规格，省、市、县三级数据，提供历史版本数据。
+- **完备**：提供在线可视化下载、服务 SDK、服务和可视化组件。
+- **方便**：支持 GeoJSON、JSON、TopoJSON、CSV、KML 数据及 SVG 图像下载。
+
+## 数据字段
+
+选择省、市、县或世界地图，查看字段并导出 CSV 或 JSON。
+
+<DataTab client:load />
+
+## 谁在使用
+
+[AntV](https://antv.antgroup.com) · [L7](https://l7.antv.antgroup.com) · [L7Draw](https://l7draw.antv.antgroup.com) · [LarkMap](https://larkmap.antv.antgroup.com) · [L7VP](https://li.antv.antgroup.com)
+
+</div>

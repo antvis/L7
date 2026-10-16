@@ -3,8 +3,6 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `imagelayer` 的 `style` 参数只支持 `opacity`。
 
 | style      | 类型     | 描述         | 默认值 |

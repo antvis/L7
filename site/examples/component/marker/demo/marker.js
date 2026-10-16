@@ -1,5 +1,6 @@
 import { Marker, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
+import '../../../../src/demo/markers.css';
 
 const scene = new Scene({
   id: 'map',

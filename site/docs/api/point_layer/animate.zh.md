@@ -3,8 +3,6 @@ title: Animate
 order: 7
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 点图层在开启 `animate` 方法后根据点是 `2D` 点还是 `3D` 点支持两种不同的动画：水波点和生长动画。
 点图层在开启 `animate` 方法后会得到特殊的水波图形。图层由一圈圈向外扩散的圆环构成。
 
@@ -60,7 +58,6 @@ interface IAnimateOptions: {
 
 ```
 #### IAnimateOptions
-
 
 
 `animate` 方法的参数：

@@ -5,13 +5,12 @@
   },
   "demos": [
     {
-      "filename": "province_map.ts",
+      "filename": "province-map.ts",
       "title": "福建省地图",
-      "new": true,
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*HyCxTKbk-lsAAAAAAAAAAAAADmJ7AQ/original"
     },
     {
-      "filename": "column_dark.js",
+      "filename": "column-dark.js",
       "title": "3D柱图深色",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*FGjMT4CenkkAAAAAAAAAAAAAARQnAQ"
     },
@@ -21,7 +20,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hX_VQ5q77xMAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "bus_dark.js",
+      "filename": "bus-dark.js",
       "title": "公交线路深色",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*cvU2R7WFfeAAAAAAAAAAAAAAARQnAQ"
     },
@@ -33,7 +32,6 @@
     {
       "filename": "swipe.ts",
       "title": "卷帘对比-作物长势",
-      "new": true,
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*b1WCRJjht2wAAAAAAAAAAAAADmJ7AQ/original"
     },
     {

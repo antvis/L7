@@ -3,9 +3,7 @@ title: Source
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
-<embed src="@/docs/api/common/layer/source.zh.md"></embed>
+<!-- include: ../common/layer/source.zh.md -->
 
 ### GeoJSON
 

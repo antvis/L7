@@ -1,7 +1,3 @@
-/**
- * compact: true
- * inline: true
- */
 import {
   CopyOutlined,
   DoubleLeftOutlined,
@@ -36,9 +32,9 @@ import {
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
 import { debounce } from 'lodash-es';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import '../../src/demo/amap';
 import { downloadData, exportSVG } from '../utils/util';
-import './index.less';
 import type { IDataInfo } from './util';
 import {
   config,
@@ -67,7 +63,9 @@ export default () => {
     data: { type: 'FeatureCollection', features: [] },
     parser: { type: 'geojson' },
   });
-  const [panelInfo, setPanelInfo] = useState(openPanel);
+  const [panelInfo, setPanelInfo] = useState(() =>
+    window.matchMedia('(min-width: 768px)').matches ? openPanel : closePanel,
+  );
   const [loading, setLoading] = useState(false);
   const size = 'middle';
   const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
@@ -88,12 +86,6 @@ export default () => {
       [type]: value,
     });
   };
-  useEffect(() => {
-    const width = document.body.clientWidth;
-    if (width < 768) {
-      setPanelInfo(closePanel);
-    }
-  }, []);
   const [dataSource, setDataSource] = useState<BaseSource>();
 
   const getDownloadData = async () => {
@@ -256,18 +248,8 @@ export default () => {
   }, [dataInfo.sourceType, dataInfo.currentLevel]);
   return (
     <Spin spinning={loading} tip={'数据加载中……'}>
-      <div
-        style={{
-          display: 'flex',
-        }}
-      >
-        <LarkMap
-          {...config}
-          style={{
-            height: 'calc(100vh - 240px)',
-            width: `calc(100% - ${panelInfo.width}px)`,
-          }}
-        >
+      <div className="relative flex">
+        <LarkMap {...config} className="min-w-0 flex-1" style={{ height: 'calc(100dvh - 240px)' }}>
           <ChoroplethLayer
             {...layerOptions}
             source={layerSource}
@@ -285,7 +267,6 @@ export default () => {
           <MapThemeControl position="bottomright" />
           <CustomControl
             position="bottomleft"
-            className="custom-control-class"
             style={{
               background: '#fff',
               borderRadius: 4,
@@ -297,20 +278,23 @@ export default () => {
             <div>上卷: 双击非行政区划区域</div>
           </CustomControl>
         </LarkMap>
-        <div className="panel" style={{ width: panelInfo.width }}>
-          <div className="toggle">
+        <div
+          className="absolute right-0 top-0 z-10 flex h-[calc(100dvh-240px)] max-w-full shrink-0 overflow-auto bg-white pb-4 pt-2.5 md:static"
+          style={{ width: panelInfo.width }}
+        >
+          <div className="flex h-full w-5 shrink-0 items-center">
             <DoubleLeftOutlined
               title="展开收起"
               rotate={panelInfo.rotate}
-              className="icon"
+              className="cursor-pointer text-xl hover:text-[var(--brand)]"
               onClick={() => {
                 setPanelInfo(panelInfo.width === 20 ? openPanel : closePanel);
               }}
             />
           </div>
-          <div style={{ paddingLeft: '10px', display: panelInfo.display }}>
-            <Row className="row">
-              <Col span={8} className="label">
+          <div className="min-w-0 flex-1 px-2.5" style={{ display: panelInfo.display }}>
+            <Row className="h-10 items-center">
+              <Col span={8} className="text-sm text-[#4c4646d9]">
                 版本：
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
@@ -331,8 +315,8 @@ export default () => {
               <Descriptions.Item label="adcode">{dataInfo.currentCode}</Descriptions.Item>
             </Descriptions>
 
-            <Row className="row">
-              <Col span={12} className="label">
+            <Row className="h-10 items-center">
+              <Col span={12} className="text-sm text-[#4c4646d9]">
                 数据格式:
               </Col>
               <Col span={12} style={{ textAlign: 'right' }}>
@@ -354,8 +338,8 @@ export default () => {
               </Col>
             </Row>
 
-            <Row className="row">
-              <Col span={12} className="label">
+            <Row className="h-10 items-center">
+              <Col span={12} className="text-sm text-[#4c4646d9]">
                 包含子区域:
               </Col>
               <Col span={12} style={{ textAlign: 'right' }}>
@@ -368,8 +352,8 @@ export default () => {
             </Row>
 
             {dataInfo.hasSubChildren && (
-              <Row className="row">
-                <Col span={10} className="label">
+              <Row className="h-10 items-center">
+                <Col span={10} className="text-sm text-[#4c4646d9]">
                   子区域级别:
                 </Col>
                 <Col span={14} style={{ textAlign: 'right' }}>
@@ -393,8 +377,8 @@ export default () => {
               </Row>
             )}
 
-            <Row className="row">
-              <Col span={6} className="label">
+            <Row className="h-10 items-center">
+              <Col span={6} className="text-sm text-[#4c4646d9]">
                 数据下载:
               </Col>
               <Col span={18} style={{ textAlign: 'right' }}>
@@ -423,8 +407,8 @@ export default () => {
                 />
               </Col>
             </Row>
-            <Row className="row">
-              <Col span={6} className="label">
+            <Row className="h-10 items-center">
+              <Col span={6} className="text-sm text-[#4c4646d9]">
                 SVG下载:
               </Col>
               <Col span={18} style={{ textAlign: 'right' }}>
@@ -450,8 +434,8 @@ export default () => {
               </Col>
             </Row>
             <h3>其他下载</h3>
-            <Row className="row">
-              <Col span={12} className="label">
+            <Row className="h-10 items-center">
+              <Col span={12} className="text-sm text-[#4c4646d9]">
                 中国边界下载{' '}
                 <Tooltip
                   placement="top"
@@ -475,8 +459,8 @@ export default () => {
                 />
               </Col>
             </Row>
-            <Row className="row">
-              <Col span={12} className="label">
+            <Row className="h-10 items-center">
+              <Col span={12} className="text-sm text-[#4c4646d9]">
                 高精度数据下载{' '}
                 <Tooltip
                   placement="top"
@@ -509,7 +493,7 @@ export default () => {
             </Row>
 
             {/* 全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素 */}
-            <div className="originData" style={{}}>
+            <div className="mt-6 flex text-xs">
               <div>
                 <div>数据来源：</div>
                 <a href={`${dataSource?.info?.desc?.href}`}>{`${dataSource?.info?.desc?.text}`}</a>

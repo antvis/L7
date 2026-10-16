@@ -3,8 +3,6 @@ title: 使用高德插件
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 我们在使用高德地图作为地图底图的时候，可以借助高德地图提供的插件实现也中需求。
 
 ### AMap.LineSearch
@@ -24,7 +22,7 @@ const scene = new Scene({
 });
 ```
 
-[在线案例](/examples/amapplugin/bus#busstop)
+[在线案例](/zh/examples/amap-plugin/bus/busstop/)
 
 ### AMap.ToolBar
 
@@ -43,7 +41,7 @@ scene.on('loaded', () => {
     });
 ```
 
-[在线案例](/examples/amapplugin/bus#busstop)
+[在线案例](/zh/examples/amap-plugin/bus/busstop/)
 
 ### AMap.TileLayer
 
@@ -60,7 +58,7 @@ scene.on('loaded', () => {
 });
 ```
 
-[在线案例](/examples/amapplugin/bus#xyztile)
+[在线案例](/zh/examples/amap-plugin/bus/xyztile/)
 
 ### AMap.TileLayer.Satellite
 
@@ -72,4 +70,4 @@ scene.on('loaded', () => {
 });
 ```
 
-[在线案例](/examples/amapplugin/bus#satellite)
+[在线案例](/zh/examples/amap-plugin/bus/satellite/)

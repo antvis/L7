@@ -3,8 +3,6 @@ title: RasterLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 `RasterLayer` 图层主要实现栅格数据的可视化，栅格数据主要来源是卫星遥感数据，如数字高程图、植被分布图、夜光图等。L7 支持三种栅格可视化模式：
@@ -38,20 +36,20 @@ const layer = new RasterLayer()
 
 ## options
 
-<embed src="@/docs/api/raster_layer/options.zh.md"></embed>
+<!-- include: ./options.zh.md -->
 
 ## Raster Data
 
-<embed src="@/docs/api/raster_layer/raster_data.zh.md"></embed>
+<!-- include: ./raster_data.zh.md -->
 
 ## Raster RGB
 
-<embed src="@/docs/api/raster_layer/raster_rgb.zh.md"></embed>
+<!-- include: ./raster_rgb.zh.md -->
 
 ## Raster NDI
 
-<embed src="@/docs/api/raster_layer/raster_ndi.zh.md"></embed>
+<!-- include: ./raster_ndi.zh.md -->
 
 ## 图层通用方法
 
-<embed src="@/docs/api/common/layer/base.zh.md"></embed>
+<!-- include: ../common/layer/base.zh.md -->

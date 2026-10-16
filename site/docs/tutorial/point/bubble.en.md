@@ -3,8 +3,6 @@ title: Bubble
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Dots of different sizes appear above the geographic area of ​​the bubble chart, and the area of ​​the circle is proportional to its value in the data set.
 
 <div>
@@ -17,7 +15,7 @@ Dots of different sizes appear above the geographic area of ​​the bubble cha
 
 Let’s introduce how to draw a common bubble chart.
 
-- you can`L7`Found on the official website[Online case](/examples/point/bubble/#point)
+- you can`L7`Found on the official website[Online case](/en/examples/point/bubble/point/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

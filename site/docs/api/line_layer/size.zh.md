@@ -3,8 +3,6 @@ title: Size
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 线图层的 `size` 方法可以设置线的宽度和高度。
 
 ### ILineSize: number | [number, number]

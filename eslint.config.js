@@ -36,7 +36,8 @@ export default tseslint.config(
 
       // Website static files
       'site/public/*',
-      'site/public_site/*',
+      'site/.astro/**',
+      'site/.antv-site/**',
     ],
   },
 

@@ -3,8 +3,6 @@ title: AMap Plugin
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 When we use Gaode Map as the map base map, we can use the plug-in provided by Gaode Map to achieve our needs.
 
 ### AMap.LineSearch
@@ -24,7 +22,7 @@ const scene = new Scene({
 });
 ```
 
-[Online case](/examples/amapplugin/bus#busstop)
+[Online case](/en/examples/amap-plugin/bus/busstop/)
 
 ### MP.Tulbar
 
@@ -43,7 +41,7 @@ scene.on('loaded', () => {
     });
 ```
 
-[Online case](/examples/amapplugin/bus#busstop)
+[Online case](/en/examples/amap-plugin/bus/busstop/)
 
 ### AMap.TileLayer
 
@@ -60,7 +58,7 @@ scene.on('loaded', () => {
 });
 ```
 
-[Online case](/examples/amapplugin/bus#xyztile)
+[Online case](/en/examples/amap-plugin/bus/xyztile/)
 
 ### AMap.TileLayer.Satellite
 
@@ -72,4 +70,4 @@ scene.on('loaded', () => {
 });
 ```
 
-[Online case](/examples/amapplugin/bus#satellite)
+[Online case](/en/examples/amap-plugin/bus/satellite/)

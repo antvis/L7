@@ -3,8 +3,6 @@ title: Raster 栅格瓦片
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `L7`The raster layer supports loading`TMS`、`WMS`、`WMTS`and other image tiles in various formats, and also supports`Tiff`、`Lerc`Data raster tiles in various formats.
 
 | Classification | Layer         | parserType   | dataType      | describe                          |
@@ -171,7 +169,7 @@ The set value is used to change the level of requested tile data. Usually on the
 
 ##### format: IRasterFormat
 
-<description> _IFormat_ **required** </description>
+_IFormat_ **required**
 
 `format`Method used to extract band data from the incoming raster file binary data.
 
@@ -206,4 +204,4 @@ const source = new Source(data, {
 
 ## style
 
-<embed src="@/docs/api/common/layer/raster/style_single.en.md"></embed>
+<!-- include: ../common/layer/raster/style_single.en.md -->

@@ -22,7 +22,7 @@ const layer = new CanvasLayer({}).style({
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*hUmNQJ1sAb8AAAAAAAAAAAAAARQnAQ'/>
 
-[Online case](/examples/point/chart#custom)
+[Online case](/en/examples/point/chart/custom/)
 
 ### source
 
@@ -40,7 +40,7 @@ When the user is drawing a canvas animation, in order to update the animation, t
 layer.animate(true);
 ```
 
-[Online case](/examples/point/chart#custom)
+[Online case](/en/examples/point/chart/custom/)
 
 ### style
 

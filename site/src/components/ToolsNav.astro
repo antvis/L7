@@ -1,0 +1,14 @@
+---
+const { locale = 'zh' } = Astro.props;
+const links = [
+  ['', '行政区划', 'District data'],
+  ['map/', '中国地图', 'China map'],
+  ['worldmap/', '世界地图', 'World map'],
+  ['sdk/', '数据 SDK', 'Data SDK'],
+  ['service/', '数据服务', 'Data service'],
+  ['app/', '应用', 'Applications'],
+];
+---
+<nav aria-label={locale === 'zh' ? '地图工具' : 'Map tools'} class="mb-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-[var(--border)] pb-4">
+  {links.map(([path, zh, en]) => <a href={`${import.meta.env.BASE_URL}${locale}/tools/${path}`} class="text-[var(--brand)] hover:underline focus-visible:outline-2 focus-visible:outline-[var(--brand)]">{locale === 'zh' ? zh : en}</a>)}
+</nav>

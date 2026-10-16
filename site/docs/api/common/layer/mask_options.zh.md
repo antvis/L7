@@ -11,7 +11,7 @@
 
 掩模图层生效
 
-<description> _array Layer_ **optional** _default:_ []</description>
+_array Layer_ **optional** _default:_ []
 
 ### enableMask
 
@@ -19,13 +19,13 @@
 
 是否开启掩模，默认开启 maskLayers 不为空时生效
 
-<description> _bool_ **optional** _default:_ true</description>
+_bool_ **optional** _default:_ true
 
 ### maskInside
 
     掩模图层生效
 
-<description> _boolean_ **optional** _default:_ true</description>
+_boolean_ **optional** _default:_ true
 
 用来描述当前图层的内容与掩模边界显示。
 
@@ -35,7 +35,7 @@
 ### maskOpetation 掩模方式
 
 模板图层生效
-<description> _枚举_ **optional** _default:_ and</description>
+_枚举_ **optional** _default:_ and
 maskLayers 为多个时失效，需要在模板图层设置
 
 - or 交集

@@ -3,8 +3,6 @@ title: Raster 栅格瓦片
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `L7` 的栅格图层支持加载 `TMS`、`WMS`、`WMTS` 等多种格式的图片瓦片，同时也支持 `Tiff`、`Lerc` 等多种格式的数据栅格瓦片。
 
 | 分类     | Layer         | parserType   | dataType      | 描述             |
@@ -115,7 +113,7 @@ interface IWmtsOptions {
 
 ##### type: string
 
-用于指定瓦片服务的解析方式，值为 `rasterTile` 和 `mvt`。  
+用于指定瓦片服务的解析方式，值为 `rasterTile` 和 `mvt`。<br />
 `rasterTile` 用于栅格瓦片的解析，`mvt` 用于矢量瓦片的解析。
 
 ##### dataType: string
@@ -150,14 +148,14 @@ layer.source({
 
 ##### minZoom/maxZoom: number
 
-设置瓦片数据的请求层级。当地图的缩放层级 `zoom` 小于 `minZoom` 后，或 `zoom` 大于 `maxZoom` 后将不再请求新的瓦片。  
-`minZoom` 的默认值为 `-Infinity`。  
+设置瓦片数据的请求层级。当地图的缩放层级 `zoom` 小于 `minZoom` 后，或 `zoom` 大于 `maxZoom` 后将不再请求新的瓦片。<br />
+`minZoom` 的默认值为 `-Infinity`。<br />
 `maxZoom` 的默认值为 `Infinity`。
 
 ##### tileSize: number
 
-设置的值是瓦片服务返回的瓦片大小。  
-`tileSize` 的默认值为 256。  
+设置的值是瓦片服务返回的瓦片大小。<br />
+`tileSize` 的默认值为 256。<br />
 ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要和瓦片服务返回的保持一致。
 
 ##### extent: [number, number, number, number]
@@ -171,7 +169,7 @@ ps： 该值在生产瓦片的时候确定，我们设置的 `tileSize` 需要�
 
 ##### format: IRasterFormat
 
-<description> _IFormat_ **必选** </description>
+_IFormat_ **必选**
 
 `format` 方法用于从传入的栅格文件二进制数据中提取波段数据。
 
@@ -206,4 +204,4 @@ const source = new Source(data, {
 
 ## style
 
-<embed src="@/docs/api/common/layer/raster/style_single.zh.md"></embed>
+<!-- include: ../common/layer/raster/style_single.zh.md -->

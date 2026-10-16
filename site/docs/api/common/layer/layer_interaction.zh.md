@@ -80,7 +80,7 @@ layer.setSelect(featureId);
 
 ### setAutoFit(autoFit: boolean)
 
-让用户可以主动设置图层的 autoFit 参数  
+让用户可以主动设置图层的 autoFit 参数<br />
 🌟 设置完该方法后会在图层发生更新的时候生效，如在 setData 之后触发
 
 ```javascript

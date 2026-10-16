@@ -3,8 +3,6 @@ title: 高德地图
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 L7 geographical visualization focuses on the visual expression of geographical data. The map layer needs to rely on third-party maps. Third-party maps are created and managed uniformly through Scene. You only need to pass in map configuration items through Scene.
@@ -33,7 +31,7 @@ const L7AMap = new GaodeMap({
 });
 ```
 
-<embed src="@/docs/api/common/map.en.md"></embed>
+<!-- include: ../common/map.en.md -->
 
 ## Pass in external instance
 
@@ -62,11 +60,11 @@ const scene = new Scene({
 });
 ```
 
-[Example address](/examples/tutorial/map#amapInstance)[code address](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
+[Example address](/en/examples/map/map/amapinstance/)[code address](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
-[Example address (2D)](/examples/tutorial/map#amapInstance2d)[code address](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
+[Example address (2D)](/en/examples/map/map/gaodemap/)[code address](https://github.com/antvis/L7/blob/master/examples/tutorial/map/demo/amapInstance.js)
 
-<embed src="@/docs/api/common/map.en.md"></embed>
+<!-- include: ../common/map.en.md -->
 
 ## Register to use Gaode plug-in
 
@@ -107,4 +105,4 @@ scene.on('loaded', () => {
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ag-nSrIPPEUAAAAAAAAAAAAAARQnAQ'>
 
-[Online case](/examples/amapplugin/bus#busstop)
+[Online case](/en/examples/amap-plugin/bus/busstop/)

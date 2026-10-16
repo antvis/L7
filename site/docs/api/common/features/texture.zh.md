@@ -31,11 +31,11 @@ const layer = new LineLayer()
 - lineTexture 指定是否开启纹理贴图能力
 - iconStep 指定贴图在线图层上面排布的间隔
 
-[在线案例](/examples/gallery/animate/#animate_path_texture)
+[在线案例](/zh/examples/gallery/animate/animate-path-texture/)
 
 #### texture advance
 
-✨ animate  
+✨ animate<br />
 当线图层 (`shape` 为 `arc`/`arc3d`) 开启动画模式的时候，纹理在线图层上的分布还会和 `animate` 的参数相关.
 
 线图层上排列的纹理的数量大致为 duration/interval
@@ -50,7 +50,7 @@ const layer = new LineLayer()
 // 此时 纹理贴图数量为  duration / interval = 5
 ```
 
-✨ textureBlend 参数  
+✨ textureBlend 参数<br />
 通过控制 style 方法中的 textureBlend 参数，我们可以控制纹理图层和线图层的混合情况
 
 - normal

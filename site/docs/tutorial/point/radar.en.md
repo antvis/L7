@@ -3,8 +3,6 @@ title: Radar
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Point layers also support a special layer type: radar charts.
 
 <div>
@@ -17,7 +15,7 @@ Point layers also support a special layer type: radar charts.
 
 Let’s introduce how to draw a common radar chart.
 
-- you can`L7`Found on the official website[Online case](/examples/point/scatter#radarpoint)
+- you can`L7`Found on the official website[Online case](/en/examples/point/scatter/radarpoint/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

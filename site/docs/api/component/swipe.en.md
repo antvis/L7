@@ -13,7 +13,7 @@ Layers can be added to left (top) or right (bottom) side of the map. Layers that
 
 ## Use
 
-[Example](/examples/component/control#swipe)
+[Example](/en/examples/component/control/swipe/)
 
 ```ts
 import { Scene, Swipe } from '@antv/l7';
@@ -46,7 +46,7 @@ scene.on('loaded', () => {
 
 ## Method
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 | name         | illustrate             | type                                                             |
 | ------------ | ---------------------- | ---------------------------------------------------------------- |
@@ -56,7 +56,7 @@ scene.on('loaded', () => {
 
 ## Event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->
 
 | name   | illustrate         | type                                                |
 | ------ | ------------------ | --------------------------------------------------- |

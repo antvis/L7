@@ -3,8 +3,6 @@ title: text
 order: 6
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Point layers support drawing text labels.
 
 <div>
@@ -17,7 +15,7 @@ Point layers support drawing text labels.
 
 Let's introduce how to draw a common text annotation map.
 
-- you can`L7`Found on the official website[Online case](/examples/point/text/#point_text)
+- you can`L7`Found on the official website[Online case](/en/examples/point/text/point-text/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

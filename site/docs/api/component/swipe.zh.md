@@ -13,7 +13,7 @@ order: 12
 
 ## 使用
 
-[示例](/examples/component/control#swipe)
+[示例](/zh/examples/component/control/swipe/)
 
 ```ts
 import { Scene, Swipe } from '@antv/l7';
@@ -46,7 +46,7 @@ scene.on('loaded', () => {
 
 ## 方法
 
-<embed src="@/docs/api/common/control/method.zh.md"></embed>
+<!-- include: ../common/control/method.zh.md -->
 
 | 名称         | 说明             | 类型                                                             |
 | ------------ | ---------------- | ---------------------------------------------------------------- |
@@ -56,7 +56,7 @@ scene.on('loaded', () => {
 
 ## 事件
 
-<embed src="@/docs/api/common/control/event.zh.md"></embed>
+<!-- include: ../common/control/event.zh.md -->
 
 | 名称   | 说明         | 类型                                                |
 | ------ | ------------ | --------------------------------------------------- |

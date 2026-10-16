@@ -31,7 +31,7 @@ const layer = new LineLayer()
 - lineTexture specifies whether to enable texture mapping capabilities
 - iconStep specifies the interval at which the texture is arranged on the line layer
 
-[Online case](/examples/gallery/animate/#animate_path_texture)
+[Online case](/en/examples/gallery/animate/animate-path-texture/)
 
 #### texture advance
 

@@ -9,7 +9,7 @@ This control displays the ratio of distances on the map to the corresponding dis
 
 ## use
 
-[Example](/examples/component/control#scale)
+[Example](/en/examples/component/control/scale/)
 
 ```ts
 import { Scene, Scale } from '@antv/l7';
@@ -37,12 +37,12 @@ scene.on('loaded', () => {
 | imperial       | exhibit**mile**format scale                                              | `boolean` | `false`       |
 | updateWhenIdle | Whether to only update the scale after dragging and zooming are complete | `boolean` | `false`       |
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

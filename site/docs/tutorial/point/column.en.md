@@ -3,8 +3,6 @@ title: 3D Column
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `3D`Column charts are columns of varying heights displayed over a geographic area, with the height of the column proportional to its value in the data set.
 
 <div>
@@ -17,7 +15,7 @@ order: 1
 
 Below we will introduce how to draw a common`3D`Column chart.
 
-- you can`L7`Found on the official website[Online case](/examples/point/column/#clumn_shape)
+- you can`L7`Found on the official website[Online case](/en/examples/point/column/clumn-shape/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';
@@ -82,7 +80,7 @@ layer.size('unit_price', (h) => {
 
 ### animate
 
-`3D`Column chart supports growth animation, through`animate`Method to set, specific usage can be viewed[Detailed documentation](</api/point_layer/animate#Growth animation>)
+`3D`Column chart supports growth animation, through`animate`Method to set, specific usage can be viewed[Detailed documentation](/en/api/point_layer/animate/#growth-animation)
 
 <div>
   <div style="width:60%;float:left; margin: 10px;">
@@ -92,4 +90,4 @@ layer.size('unit_price', (h) => {
 
 ### style
 
-`3D`Column charts have special`style`Attributes, specific usage can be found[Detailed documentation](/api/point_layer/style#3d-column)
+`3D`Column charts have special`style`Attributes, specific usage can be found[Detailed documentation](/en/api/point_layer/style#3d-column)

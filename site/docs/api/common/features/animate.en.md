@@ -29,4 +29,4 @@ If interval = 0.2, a trajectory will be divided into 5 segments, if interval = 0
 
 <img width="450px" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*mo_7Q6sTqOIAAAAAAAAAAAAAARQnAQ'>
 
-[Online case](/examples/gallery/animate#plane_animate2)
+[Online case](/en/examples/line/animate/plane-animate2/)

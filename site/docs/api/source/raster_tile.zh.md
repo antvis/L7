@@ -3,8 +3,6 @@ title: Raster Tile
 order: 7
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 L7 加载栅格瓦片地图的时候需要在 `source` 中对瓦片服务进行解析，同时配置瓦片服务的请求参数。
 
 ## data
@@ -70,36 +68,36 @@ const layer1 = new RasterLayer({
 
 ### type
 
-<description> _string_ **必选** _default:_ rasterTile</description>
+_string_ **必选** _default:_ rasterTile
 固定值为 `rasterTile`
 
 ### tileSize `number`
 
-<description> _number_ **可选** _default:_ 256</description>
+_number_ **可选** _default:_ 256
 请求瓦片的大小 optional
 
 ### zoomOffset
 
-<description> number **可选** _default:_ 0</description>
+number **可选** _default:_ 0
 瓦片请求瓦片层级的偏移
 
 ### maxZoom
 
-<description> _number_ **可选** _default:_ 0</description>
+_number_ **可选** _default:_ 0
 
 瓦片最大缩放等级 `20`
 
 ### minZoom 瓦片最小缩放等
 
-<description> _number_ **可选** _default:_ 2-</description>
+_number_ **可选** _default:_ 2-
 
 ### extent `[number, number, number, number]` 地图显示范围
 
-<description> _number[]_ **可选** 不限制:\_ </description>
+_number[]_ **可选** 不限制:\_
 
 ### dataType
 
-<description> _string_ **可选** _default:_ image</description>
+_string_ **可选** _default:_ image
 
 瓦片数据类型
 
@@ -108,26 +106,26 @@ const layer1 = new RasterLayer({
 
 ### format func,
 
-<description> _func_ **可选** \_default:</description>
+_func_ **可选** \_default:
 
 数据栅格时使用,用于将栅格数据格式化为标准数据,自定义数据处理函数
 
 ### wmtsOptions wmsts 配置
 
-<description> _Object_ **可选** _default:_ null</description>
+_Object_ **可选** _default:_ null
 
 #### layer
 
-<description> _string_ **必选** _default:_ img</description>
+_string_ **必选** _default:_ img
 图层
 
 #### tileMatrixset
 
-<description> _string_ **必选** _default:_ w</description>
+_string_ **必选** _default:_ w
 
 #### format
 
-<description> _string_ **必选** _default:_ tiles</description>
+_string_ **必选** _default:_ tiles
 服务类型
 
 ```javascript
@@ -144,4 +142,4 @@ const rasterSource = new Source(
 );
 ```
 
-<embed src="@/docs/api/common/source/tile/method.zh.md"></embed>
+<!-- include: ../common/source/tile/method.zh.md -->

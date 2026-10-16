@@ -9,7 +9,7 @@ order: 4
 
 ## 使用
 
-[示例](/examples/component/control#scale)
+[示例](/zh/examples/component/control/scale/)
 
 ```ts
 import { Scene, Scale } from '@antv/l7';
@@ -37,12 +37,12 @@ scene.on('loaded', () => {
 | imperial       | 展示**英里**格式的比例尺             | `boolean` | `false` |
 | updateWhenIdle | 是否只在拖拽和缩放结束后才更新比例尺 | `boolean` | `false` |
 
-<embed src="@/docs/api/common/control/api.zh.md"></embed>
+<!-- include: ../common/control/api.zh.md -->
 
 ## 方法
 
-<embed src="@/docs/api/common/control/method.zh.md"></embed>
+<!-- include: ../common/control/method.zh.md -->
 
 ## 事件
 
-<embed src="@/docs/api/common/control/event.zh.md"></embed>
+<!-- include: ../common/control/event.zh.md -->

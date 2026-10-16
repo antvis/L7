@@ -3,8 +3,6 @@ title: Source
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `imagelayer`By providing online pictures`url`Specify data via`extent`Specifies the position of the image within a rectangular range on the map.
 
 ```js

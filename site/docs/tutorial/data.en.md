@@ -3,8 +3,6 @@ title: Data
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## data
 
 Currently, the data formats supported by L7 are:`GeoJSON`，`CSV`，`JSON`，`Image`。

@@ -18,7 +18,7 @@ Developers can customize the main display content of Popup:
 
 ## use
 
-[Example](/examples/component/popup#popup)
+[Example](/en/examples/component/popup/popup/)
 
 ```ts
 import { Scene, Popup } from '@antv/l7';

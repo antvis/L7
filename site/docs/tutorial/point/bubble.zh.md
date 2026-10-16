@@ -3,8 +3,6 @@ title: 气泡图
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 气泡图地理区域上方会显示不同大小的圆点，圆形面积与其在数据集中的数值会成正比。
 
 <div>
@@ -17,7 +15,7 @@ order: 0
 
 下面我们来介绍如何绘制一个常见的气泡图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/point/bubble/#point)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/bubble/point/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

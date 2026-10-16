@@ -3,8 +3,6 @@ title: 地理围墙
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 地理围墙在原有线图层的基础上赋予了高度的概念，其他的使用和普通的线图保持一致。
 
 <div>
@@ -17,7 +15,7 @@ order: 5
 
 下面我们来介绍如何绘制简单的地理围墙。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/line/wall/#hangzhou_wall)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/line/wall/hangzhou-wall/)
 
 ## 使用
 
@@ -54,15 +52,15 @@ scene.on('loaded', () => {
 
 为了绘制地理围墙，我们需要将 `shape` 的参数设置成 `wall`。
 
-<embed src="@/docs/api/common/features/animate.zh.md"></embed>
+<!-- include: ../../api/common/features/animate.zh.md -->
 
 ### style
 
-<embed src="@/docs/api/common/features/linear.zh.md"></embed>
+<!-- include: ../../api/common/features/linear.zh.md -->
 
 🌟 目前渐变色的方向为垂直向上
 
-<embed src="@/docs/api/common/features/texture.zh.md"></embed>
+<!-- include: ../../api/common/features/texture.zh.md -->
 
 🌟 地理围栏支持了新的样式参数 iconStepCount
 

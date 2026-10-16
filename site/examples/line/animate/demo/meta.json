@@ -5,27 +5,22 @@
   },
   "demos": [
     {
-      "filename": "wind_animate.js",
-      "title": "风场动画",
-      "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*wH50SZfOywcAAAAAAAAAAAAAARQnAQ"
-    },
-    {
-      "filename": "line_animate.js",
+      "filename": "line-animate.js",
       "title": "直线动画",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*eckNS70gTfwAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "plane_animate2.js",
+      "filename": "plane-animate2.js",
       "title": "航向图",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*2wDIS5hXKYwAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "trip_animate.js",
+      "filename": "trip-animate.js",
       "title": "3D 弧线动画",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*cmB1SLuyB1cAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "animate_line.js",
+      "filename": "animate-line.js",
       "title": "轨迹动画",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*d7PjSo0izNAAAAAAAAAAAAAAARQnAQ"
     }

@@ -1,8 +1,8 @@
-| name      | illustrate                                                                                                                              | type                  |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| position  | The location and arrangement of controls when they are added to the map, see details[control slot](/api/component/control/control#slot) | [Position](#position) |
-| className | Custom style name                                                                                                                       | `string`              |
-| style     | Custom style                                                                                                                            | `string`              |
+| name      | illustrate                                                                                                                         | type                  |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| position  | The location and arrangement of controls when they are added to the map, see details[control slot](/en/api/component/control#slot) | [Position](#position) |
+| className | Custom style name                                                                                                                  | `string`              |
+| style     | Custom style                                                                                                                       | `string`              |
 
 ### Position
 

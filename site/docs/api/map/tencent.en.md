@@ -3,8 +3,6 @@ title: Tencent Map
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 L7 geographical visualization focuses on the visual expression of geographical data. The map layer needs to rely on third-party maps. Third-party maps are created and managed uniformly through Scene. You only need to pass in map configuration items through Scene.
@@ -40,6 +38,6 @@ const scene = new Scene({
 });
 ```
 
-Tencentmap [Example address](/examples/map/map/#tencentmap)、Tencentmap instantiate[Example address](/examples/map/map/#tmapInstance)
+Tencentmap [Example address](/en/examples/map/map/tencentmap/)、Tencentmap instantiate[Example address](/en/examples/map/map/tmapinstance/)
 
-<embed src="@/docs/api/common/map.en.md"></embed>
+<!-- include: ../common/map.en.md -->

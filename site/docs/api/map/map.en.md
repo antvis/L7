@@ -3,8 +3,6 @@ title: 地图 Map
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 L7 geographical visualization focuses on the visual expression of geographical data. The map layer needs to rely on third-party maps. The third-party maps are created and managed uniformly through Scene.
@@ -53,4 +51,4 @@ scene.on('loaded', () => {
 });
 ```
 
-<embed src="@/docs/api/common/map.en.md"></embed>
+<!-- include: ../common/map.en.md -->

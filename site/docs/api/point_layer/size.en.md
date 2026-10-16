@@ -3,8 +3,6 @@ title: Size
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `size`Method used to set the size of point layer graphics.
 
 ### IPointSize: number ｜\[number, number] | \[number, number, number]

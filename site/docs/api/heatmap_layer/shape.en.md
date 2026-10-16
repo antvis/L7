@@ -3,8 +3,6 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `shape`The method is used to specify the type of heat drawn by the heat layer. Now it supports three types: classic heat, cellular heat, and grid heat.
 
 ### shape('heatmap')
@@ -17,7 +15,7 @@ order: 3
 
 ### transforms
 
-Implementation of Grid Thermal and Cellular Thermal depends on configuration`transforms`parameters,[Specific instructions for use](/api/source/source/#transforms)。
+Implementation of Grid Thermal and Cellular Thermal depends on configuration`transforms`parameters,[Specific instructions for use](/en/api/source/source/#transforms)。
 
 ```js
 fetch('https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json')

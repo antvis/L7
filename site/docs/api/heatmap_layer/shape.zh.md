@@ -3,8 +3,6 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `shape` 方法用于指定热力图层绘制热力的类型，支持经典热力、蜂窝热力、网格热力等多种类型。
 
 ```js
@@ -49,7 +47,7 @@ layer.shape('heatmap');
 
 ### transforms
 
-网格热力和蜂窝热力的实现依赖配置 `transforms` 的参数，[具体说明使用](/api/source/source/#transforms)。
+网格热力和蜂窝热力的实现依赖配置 `transforms` 的参数，[具体说明使用](/zh/api/source/source/#transforms)。
 
 ```js
 fetch('https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json')

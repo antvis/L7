@@ -1,5 +1,6 @@
 import { PointLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
+import AMap from '../../../../src/demo/amap';
 
 function initMap() {
   // 全局加载高德地图API

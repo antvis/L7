@@ -3,8 +3,6 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `style` 方法用于配制图层的样式，相同图层拥有不同的 `shape` 图形，不同 `shape` 的图层 `style` 方法接受不同的参数。
 
 ```js
@@ -21,25 +19,25 @@ layer.style({
 | ------- | -------- | ------------ | ------ |
 | opacity | `number` | 图形的透明度 | `1`    |
 
-<embed src="@/docs/api/common/layer/style_encode.zh.md"></embed>
+<!-- include: ../common/layer/style_encode.zh.md -->
 
 ### 2D shape
 
 `shape` 为平面图形、如三角形、正方等。
 
-- [IFillShape](/api/point_layer/shape#shapefillshape-ifillshape)
+- [IFillShape](/zh/api/point_layer/shape#shapefillshape-ifillshape)
 
-| style         | 类型                                            | 是否支持数据映射 | 描述                                         | 默认值   |
-| ------------- | ----------------------------------------------- | ---------------- | -------------------------------------------- | -------- |
-| stroke        | `string`                                        | 是               | 图形边框颜色                                 | `#fff`   |
-| strokeWidth   | `number`                                        | 否               | 图形边框宽度                                 | `0`      |
-| strokeOpacity | `number`                                        | 否               | 图形边框透明度                               | `1`      |
-| blur          | `number`                                        | 否               | 图形模糊半径                                 | `0`      |
-| offsets       | `[number, number]`                              | 是               | 点偏移                                       | `[0, 0]` |
-| rotation      | `number`                                        | 是               | 旋转角度                                     | `0`      |
-| anchor        | [anchorType](/api/point_layer/style#anchortype) | 是               | 图形锚点位置，控制图形相对于坐标点的对齐方式 | `center` |
-| raisingHeight | `number`                                        | 否               | 抬升高度                                     | `0`      |
-| heightfixed   | `boolean`                                       | 否               | 点大小单位                                   | `pixel`  |
+| style         | 类型                                               | 是否支持数据映射 | 描述                                         | 默认值   |
+| ------------- | -------------------------------------------------- | ---------------- | -------------------------------------------- | -------- |
+| stroke        | `string`                                           | 是               | 图形边框颜色                                 | `#fff`   |
+| strokeWidth   | `number`                                           | 否               | 图形边框宽度                                 | `0`      |
+| strokeOpacity | `number`                                           | 否               | 图形边框透明度                               | `1`      |
+| blur          | `number`                                           | 否               | 图形模糊半径                                 | `0`      |
+| offsets       | `[number, number]`                                 | 是               | 点偏移                                       | `[0, 0]` |
+| rotation      | `number`                                           | 是               | 旋转角度                                     | `0`      |
+| anchor        | [anchorType](/zh/api/point_layer/style#anchortype) | 是               | 图形锚点位置，控制图形相对于坐标点的对齐方式 | `center` |
+| raisingHeight | `number`                                           | 否               | 抬升高度                                     | `0`      |
+| heightfixed   | `boolean`                                          | 否               | 点大小单位                                   | `pixel`  |
 
 #### unit
 
@@ -66,7 +64,7 @@ const layer = PointLayer().source(data).shape('circle').size(100).color('#f00').
 
 `shape` 为 3D 柱图。
 
-- [IColumn](/api/point_layer/shape#shapecolumn-icolumn)
+- [IColumn](/zh/api/point_layer/shape#shapecolumn-icolumn)
 
 | style       | 类型      | 描述                 | 默认值  |
 | ----------- | --------- | -------------------- | ------- |
@@ -106,25 +104,25 @@ interface IOpcityLinear = {
 
 `shape` 为文字。
 
-- [text](/api/point_layer/shape#shapefield-string-text)
+- [text](/zh/api/point_layer/shape#shapefield-string-text)
 
-| style            | 类型                                            | 描述                       | 是否支持数据映射 | 默认值       |
-| ---------------- | ----------------------------------------------- | -------------------------- | ---------------- | ------------ |
-| opacity          | `number`                                        | 透明度                     | 是               | `#fff`       |
-| stroke           | `string`                                        | 图形边框颜色               | 是               | `#fff`       |
-| strokeWidth      | `number`                                        | 图形边框颜色               | 否               | `0`          |
-| textOffset       | `[number, number]`                              | 文字的偏移                 | 是               | `[0, 0]`     |
-| textAnchor       | [anchorType](/api/point_layer/style#anchortype) | 文字对齐锚点 `text`        | 是               | `center`     |
-| spacing          | `number`                                        | 文字间隔                   | 否               | `2`          |
-| rotation         | `number`                                        | 旋转角度                   | 是               | `0`          |
-| padding          | `number`                                        | 文字内边框宽度             | 否               | `2`          |
-| halo             | `number`                                        | 文字边缘光晕宽度           | 否               | `0.5`        |
-| gamma            | `number`                                        | 文字的颜色参数             | 否               | `2`          |
-| fontWeight       | `string`                                        | 文字的大小                 | 否               | `400`        |
-| fontFamily       | [font](/api/point_layer/style#font)             | 字体                       | 否               | `sans-serif` |
-| textAllowOverlap | `boolean`                                       | 文字是否允许覆盖           | 否               | `false`      |
-| raisingHeight    | `number`                                        | 抬升高度                   | 否               | `0`          |
-| heightfixed      | `boolean`                                       | 抬升高度是否随 `zoom` 变化 | 否               | `false`      |
+| style            | 类型                                               | 描述                       | 是否支持数据映射 | 默认值       |
+| ---------------- | -------------------------------------------------- | -------------------------- | ---------------- | ------------ |
+| opacity          | `number`                                           | 透明度                     | 是               | `#fff`       |
+| stroke           | `string`                                           | 图形边框颜色               | 是               | `#fff`       |
+| strokeWidth      | `number`                                           | 图形边框颜色               | 否               | `0`          |
+| textOffset       | `[number, number]`                                 | 文字的偏移                 | 是               | `[0, 0]`     |
+| textAnchor       | [anchorType](/zh/api/point_layer/style#anchortype) | 文字对齐锚点 `text`        | 是               | `center`     |
+| spacing          | `number`                                           | 文字间隔                   | 否               | `2`          |
+| rotation         | `number`                                           | 旋转角度                   | 是               | `0`          |
+| padding          | `number`                                           | 文字内边框宽度             | 否               | `2`          |
+| halo             | `number`                                           | 文字边缘光晕宽度           | 否               | `0.5`        |
+| gamma            | `number`                                           | 文字的颜色参数             | 否               | `2`          |
+| fontWeight       | `string`                                           | 文字的大小                 | 否               | `400`        |
+| fontFamily       | [font](/zh/api/point_layer/style#font)             | 字体                       | 否               | `sans-serif` |
+| textAllowOverlap | `boolean`                                          | 文字是否允许覆盖           | 否               | `false`      |
+| raisingHeight    | `number`                                           | 抬升高度                   | 否               | `0`          |
+| heightfixed      | `boolean`                                          | 抬升高度是否随 `zoom` 变化 | 否               | `false`      |
 
 #### anchorType
 
@@ -192,7 +190,7 @@ const font2 = 'Times New Roman';
 
 `shape` 为简单点图形（精灵)。
 
-- [simple](/api/point_layer/shape#shapesimple)
+- [simple](/zh/api/point_layer/shape#shapesimple)
 
 | style         | 类型               | 描述         | 默认值   |
 | ------------- | ------------------ | ------------ | -------- |
@@ -205,7 +203,7 @@ const font2 = 'Times New Roman';
 
 `shape` 为图标类型。
 
-- [icon](/api/point_layer/shape#shapeiconname-string)
+- [icon](/zh/api/point_layer/shape#shapeiconname-string)
 
 | style         | 类型               | 描述                                                                       | 数据映射 | 默认值   |
 | ------------- | ------------------ | -------------------------------------------------------------------------- | -------- | -------- |
@@ -254,7 +252,7 @@ const imageLayer = new PointLayer()
 
 `shape` 为雷达图。
 
-- [radar](/api/point_layer/shape#shaperadar)
+- [radar](/zh/api/point_layer/shape#shaperadar)
 
 | style | 类型     | 描述             | 默认值 |
 | ----- | -------- | ---------------- | ------ |

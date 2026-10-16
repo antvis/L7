@@ -3,8 +3,6 @@ title: Source
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 source geographical data processing module, mainly includes data analysis (parser) and data processing (transforms).
@@ -48,9 +46,9 @@ Different parser types correspond to different data types
 
 parser can process different types of spatial data into a unified data format. Spatial data is divided into three categories: vector data, raster data and tile services:
 
-- Vector data support[GeoJSON](/api/source/geojson)、[CSV](/api/source/csv)、[JSON](/api/source/json)type
-- Raster data support[Raster](/api/source/raster)、[Image](/api/source/image)type
-- Tile service support[MVT](/api/source/mvt)、[RasterTile](/api/source/raster_tile), GeoJSON VT type
+- Vector data support[GeoJSON](/en/api/source/geojson)、[CSV](/en/api/source/csv)、[JSON](/en/api/source/json)type
+- Raster data support[Raster](/en/api/source/raster)、[Image](/en/api/source/image)type
+- Tile service support[MVT](/en/api/source/mvt)、[RasterTile](/en/api/source/raster_tile), GeoJSON VT type
 
 ```js
 type IParserType =
@@ -246,7 +244,7 @@ layer
 - minZoom: Minimum aggregate zoom level**number**default 0
 - maxZoom: Maximum aggregate zoom level**number** default 16
 
-[Aggregation graph use cases](/examples/point/cluster#cluster)
+[Aggregation graph use cases](/en/examples/point/cluster/cluster/)
 
 ## method
 
@@ -464,26 +462,26 @@ source.setData(newData);
 If the data changes, the data may need to be updated.
 This can be done by calling`layer`of`setData`Method to update data.
 
-For details, see[Layer](/api/base_layer/base/#setdata)
+For details, see[Layer](/en/api/base_layer/base/#setdata)
 
 ```javascript
 layer.setData(data);
 ```
 
-<embed src="@/docs/api/common/source/tile/method.en.md"></embed>
+<!-- include: ../common/source/tile/method.en.md -->
 
 ### type of data
 
 #### JSON
 
-[JSON data format parsing](/api/source/json)
+[JSON data format parsing](/en/api/source/json)
 
 #### csv
 
-[CSV data format analysis](/api/source/csv)
+[CSV data format analysis](/en/api/source/csv)
 
 Raster data type
 
 #### image
 
-[Image data format analysis](/api/source/image)
+[Image data format analysis](/en/api/source/image)

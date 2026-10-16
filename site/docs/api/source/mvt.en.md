@@ -3,39 +3,37 @@ title: MVT Tile
 order: 6
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 When L7 loads the vector tile map, it needs to be`source`Parse the tile service and configure the request parameters of the tile service.
 
 ## parser
 
 ### type
 
-<description> _string_ **required** _default:_ mvt</description>
+_string_ **required** _default:_ mvt
 
 ### tileSize `number`
 
-<description> _number_ **Optional** _default:_ 256</description>Request tile size
+_number_ **Optional** _default:_ 256Request tile size
 
 ### zoomOffset
 
-<description> number **Optional** *default:*0</description>Tile request tile level offset
+number **Optional** *default:*0Tile request tile level offset
 
 ### maxZoom
 
-<description> _number_ **Optional** *default:*0</description>Maximum tile zoom level`20`
+_number_ **Optional** *default:*0Maximum tile zoom level`20`
 
 ### minZoom
 
-<description> _number_ **Optional** _default:_ 2-</description>Tile minimum scaling, etc.
+_number_ **Optional** _default:_ 2-Tile minimum scaling, etc.
 
 ### extent `[number, number, number, number]`
 
-<description> _number\[]_ **Optional**not limited:\_</description>Map display range
+_number\[]_ **Optional**not limited:\_Map display range
 
 ### getCustomData `(tile: { x: number, y: number, z: number }, callback: (err: any, data: any) => void) => void,`
 
-<description>\_\_**Optional**</description>
+\_\_**Optional**
 
 callback parameters
 
@@ -44,7 +42,7 @@ callback parameters
 
 Customize the tile data acquisition method, trial business scenarios require data authentication, or special processing scenarios
 
-<embed src="@/docs/api/common/source/tile/method.en.md"></embed>
+<!-- include: ../common/source/tile/method.en.md -->
 
 ## Example
 

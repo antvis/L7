@@ -3,8 +3,6 @@ title: Arc
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Sometimes for the sake of visualization, you will choose to use arcs to connect two points on the map. At the same time, you can also use arcs to achieve some interesting effects.
 
 <div>
@@ -17,7 +15,7 @@ Sometimes for the sake of visualization, you will choose to use arcs to connect 
 
 Next we will introduce how to use arcs to draw a simulated wind field.
 
-- you can`L7`Found on the official website[Online case](/examples/line/animate/#wind)
+- you can`L7`Found on the official website[Online case](/en/examples/line/animate/animate-line/)
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
@@ -86,16 +84,16 @@ layer.source(data, {
 
 In order to draw an arc graph, we need to`shape`The parameters are set to`arc`。
 
-<embed src="@/docs/api/common/features/animate.zh.md"></embed>
+<!-- include: ../../api/common/features/animate.zh.md -->
 
 ### style
 
-<embed src="@/docs/api/common/features/segment_number.zh.md"></embed>
+<!-- include: ../../api/common/features/segment_number.zh.md -->
 
-<embed src="@/docs/api/common/features/theta_offset.zh.md"></embed>
+<!-- include: ../../api/common/features/theta_offset.zh.md -->
 
-<embed src="@/docs/api/common/features/linear.zh.md"></embed>
+<!-- include: ../../api/common/features/linear.zh.md -->
 
-<embed src="@/docs/api/common/features/dash.zh.md"></embed>
+<!-- include: ../../api/common/features/dash.zh.md -->
 
-<embed src="@/docs/api/common/features/texture.zh.md"></embed>
+<!-- include: ../../api/common/features/texture.zh.md -->

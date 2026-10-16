@@ -3,8 +3,6 @@ title: heatmap
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Heat maps are a very common requirement in map visualization scenarios. The aggregate surface phenomenon of a certain degree of heat distribution within a region is often used to describe crowd distribution, density, and changing trends.
 
 <div>
@@ -17,7 +15,7 @@ Heat maps are a very common requirement in map visualization scenarios. The aggr
 
 Let's introduce how to draw a classic heat map.
 
-- you can found [Online case](/examples/heatmap/heatmap/#heatmap) on the `L7` official website
+- you can found [Online case](/en/examples/heatmap/heatmap/heatmap/) on the `L7` official website
 
 ```javascript
 import { Scene, HeatmapLayer } from '@antv/l7';

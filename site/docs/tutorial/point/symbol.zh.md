@@ -3,8 +3,6 @@ title: 符号图
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 点图层支持绘制图标，在地理区域上放置不同图片作为符号，通常表示不同地理要素分布情况
 
 <div>
@@ -17,7 +15,7 @@ order: 5
 
 下面我们来介绍如何绘制一个常见的符号地图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/point/image/#image)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/image/image/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';
@@ -116,7 +114,7 @@ const scatter = new PointLayer()
 
 ⚠️ 为了得到更好的现实效果（图片清晰，无明显锯齿），我们在选择图片以及设置图标大小的时候应保持相当，或者在 L7 图层中设置的图标大小略小于实际图片的像素大小。
 
-[在线案例](/examples/point/image#image)
+[在线案例](/zh/examples/point/image/image/)
 
 ### style
 
@@ -182,7 +180,7 @@ layer.style({
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1kBZTaains4AAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/examples/point/image#fillimage)
+[在线案例](/zh/examples/point/image/image/)
 
 符号图的 非 billboard 模式支持 `rotation` 方法根据数据映射旋转角度。
 
@@ -203,4 +201,4 @@ const imageLayer = new PointLayer()
 scene.addLayer(imageLayer);
 ```
 
-[在线案例](/examples/point/image#monsoon)
+[在线案例](/zh/examples/point/image/monsoon/)

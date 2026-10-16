@@ -3,8 +3,6 @@ title: 水面图层
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Geometry layers support a special representation, the water surface layer.
 
 <div>
@@ -17,7 +15,7 @@ Geometry layers support a special representation, the water surface layer.
 
 Next we will introduce how to draw water surface.
 
-- you can`L7`Found on the official website[Online case](/examples/polygon/fill#ocean)
+- you can`L7`Found on the official website[Online case](/en/examples/polygon/fill/ocean/)
 
 🌟 Simple water surface is supported starting from v2.8.1.\
 🌟 Supports realistic water surfaces starting from version v2.8.4.
@@ -48,7 +46,7 @@ layer.animate(true);
 
 - `watercolor2`The color of deep water areas defaults to '#0F121C'.
 
-[Online case](/examples/polygon/fill#ocean)
+[Online case](/en/examples/polygon/fill/ocean/)
 
 ### simple water surface
 
@@ -83,4 +81,4 @@ style({
 - `waterTexture`We can replace the texture of the water surface by setting this property.\
   The default value is '<https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*EojwT4VzSiYAAAAAAAAAAAAAARQnAQ>'
 
-[Online case](/examples/polygon/fill#water)
+[Online case](/en/examples/polygon/fill/water/)

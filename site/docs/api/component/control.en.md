@@ -55,12 +55,12 @@ When initializing all control classes, you can pass in`position`Parameters to se
 
 ## Configuration
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->

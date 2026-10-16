@@ -10,7 +10,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*C4BvT5gcclMAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "amapInstance.js",
+      "filename": "amapinstance.js",
       "title": "高德地图实例化",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*A4BOR4hBNcUAAAAAAAAAAAAAARQnAQ"
     },
@@ -20,7 +20,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*C4BvT5gcclMAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "tmapInstance.js",
+      "filename": "tmapinstance.js",
       "title": "腾讯地图实例化",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*2v8KSpMdVK0AAAAAAAAAAAAADmJ7AQ/original"
     },
@@ -37,7 +37,6 @@
     {
       "filename": "tianditu.js",
       "title": "天地图",
-      "new": true,
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*10TuSJ9OF7EAAAAAAAAAAAAADmJ7AQ/original"
     }
   ]

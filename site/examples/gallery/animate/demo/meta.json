@@ -10,12 +10,12 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*h-AMQodd7s4AAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "build_sweep.js",
+      "filename": "build-sweep.js",
       "title": "圆形扫光城市",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*TVs2R4bBH6wAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "animate_path_texture.js",
+      "filename": "animate-path-texture.js",
       "title": "路径贴图",
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*0DwvSIHihVEAAAAAAAAAAAAAARQnAQ"
     },
@@ -25,7 +25,7 @@
       "screenshot": "https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*P1o6R7jm0JsAAAAAAAAAAAAAARQnAQ"
     },
     {
-      "filename": "3d_base_map.js",
+      "filename": "3d-base-map.js",
       "title": "3D底图",
       "screenshot": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*4fj2TY9qGq4AAAAAAAAAAAAADmJ7AQ/original"
     }

@@ -1,0 +1,65 @@
+---
+import { Carousel } from '@antv/astro-theme-antv/components';
+interface Props { locale: 'zh' | 'en' }
+const { locale } = Astro.props;
+const zh = locale === 'zh';
+const cases = [
+  {
+    "logo": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*-kafQrA1ky4AAAAAAAAAAAAADmJ7AQ/fmt.webp",
+    "title": {
+      "zh": "L7React 空间数据可视分析组件库",
+      "en": "L7React "
+    },
+    "description": {
+      "zh": "新一代 React 地图可视分析组件库，提供丰富/高效/专业/易用的可视化组件，一站式满足地理可视化需求。",
+      "en": "The new generation of React map visual analysis component library provides rich/efficient/professional/easy-to-use visual components to meet the needs of geographic visualization in a one-stop manner."
+    },
+    "link": "https://larkmap.antv.antgroup.com/",
+    "image": "https://mdn.alipayobjects.com/mdn/huamei_qa8qxu/afts/img/A*5iCQSqov5p4AAAAAAAAAAAAADmJ7AQ/fmt.webp"
+  },
+  {
+    "logo": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*yaEWT706NFoAAAAAAAAAAAAADmJ7AQ/original",
+    "title": {
+      "zh": "L7VP 地理空间数据可视分析工具",
+      "en": "L7VP"
+    },
+    "description": {
+      "zh": "下一代地理空间数据可视分析工具&研发平台，可配置出丰富的地理可视化效果提供洞察分析、地图应用搭建、开放扩展能力",
+      "en": "The next generation geospatial data visual analysis platform can be configured with rich geographic visualization effects to provide insight analysis, map application construction, and open expansion capabilities"
+    },
+    "link": "https://li.antv.antgroup.com",
+    "image": "https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*tR2BTIG6Bz8AAAAAAAAAAAAADmJ7AQ/original"
+  },
+  {
+    "logo": "https://mdn.alipayobjects.com/huamei_k6sfo0/afts/img/A*RSdESJd70P8AAAAAAAAAAAAADjWqAQ/original",
+    "title": {
+      "zh": "L7Editor 空间数据可视编辑工具",
+      "en": "L7Editor"
+    },
+    "description": {
+      "zh": "支持 GeoJSON、WKT 等 GIS 格式的地理数据可视编辑工具，支持从 数据 & 地图 双视角编辑数据。 ",
+      "en": "Support GeoJSON, WKT and other GIS format geographic data visual editing tools, support data editing from the data and map dual perspectives."
+    },
+    "link": "https://l7editor.antv.antgroup.com/",
+    "image": "https://mdn.alipayobjects.com/huamei_k6sfo0/afts/img/A*NAC-RpA0KNUAAAAAAAAAAAAADjWqAQ/original"
+  }
+];
+---
+
+<section aria-label={zh ? '地理可视化生态' : 'Geospatial ecosystem'} class="bg-[#f9fafb] px-6 py-20 max-md:py-12">
+  <div class="mx-auto max-w-[1238px] [--carousel-controls-space:0px] [--carousel-controls-bottom:80px] max-md:[--carousel-controls-space:72px] max-md:[--carousel-controls-bottom:0px] max-md:[--carousel-controls-left:calc(50%_-_48px)]">
+    <Carousel locale={locale} label={zh ? 'L7 生态产品' : 'L7 ecosystem products'} effect="fade" pagination={false} arrows>
+      {cases.map((item) => <article class="grid min-h-[560px] max-md:min-h-0 grid-cols-[minmax(240px,0.7fr)_minmax(0,1.7fr)] items-center gap-10 max-md:grid-cols-1 max-md:gap-8">
+        <div class="self-stretch pt-8 pb-28 max-md:order-2 max-md:py-0 max-md:text-center">
+          <img src={item.logo} alt="" width="80" height="80" loading="lazy" class="size-20 object-contain drop-shadow-[0_12px_12px_rgb(105_123_140/25%)] max-md:mx-auto" />
+          <h2 class="mt-12 mb-0 text-lg font-semibold leading-7 text-[var(--text-strong)] max-md:mt-7">{item.title[locale]}</h2>
+          <p class="mt-4 mb-0 text-sm leading-[1.8] text-[#5d6f80]">{item.description[locale]}</p>
+          <a href={item.link} class="mt-5 inline-flex min-h-11 items-center text-sm text-[var(--brand)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand)]">{zh ? '查看详情' : 'Learn more'}<span class="sr-only">: {item.title[locale]}</span></a>
+        </div>
+        <a href={item.link} aria-label={item.title[locale]} tabindex="-1" class="block min-w-0 focus-visible:outline-2 focus-visible:outline-[var(--brand)] max-md:order-1">
+          <img src={item.image} alt={item.title[locale]} width="1200" height="720" loading="lazy" class="block aspect-[5/3] h-auto w-full object-contain" />
+        </a>
+      </article>)}
+    </Carousel>
+  </div>
+</section>

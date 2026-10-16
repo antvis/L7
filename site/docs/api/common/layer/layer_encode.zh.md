@@ -7,7 +7,7 @@
   - parser 数据解析，默认是解析层 geojson
   - transforms [transform，transform ]  数据处理转换可设置多个
 
-`parser` 和  `transforms` [见 source 文档](/api/source/source)。
+`parser` 和  `transforms` [见 source 文档](/zh/api/source/source)。
 
 ```javascript
 layer.source(data, {
@@ -400,7 +400,7 @@ scene.addLayer(imageLayer);
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oVyHT5S3sv0AAAAAAAAAAABkARQnAQ'>
 
-[在线案例](/examples/point/image#image)
+[在线案例](/zh/examples/point/image/image/)
 
 **shape(field, callback)**
 

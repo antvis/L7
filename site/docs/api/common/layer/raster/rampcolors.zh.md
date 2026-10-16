@@ -44,7 +44,6 @@ rampColors: {
 ⚠️ 兼容 2.13.0 之前版本，未设置type 时，position 值域为 0-1。
 
 
-
 ```
 
 #### custom 自定义分段色带

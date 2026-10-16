@@ -3,8 +3,6 @@ title: Develop
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 The developers here refer to developers who develop L7 and have the ability to fix bugs, improve documentation, upgrade functions, and develop new functions for L7.
 
 ### Fork warehouse

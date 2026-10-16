@@ -1,0 +1,37 @@
+---
+title: District data
+template: page
+order: 0
+---
+
+import ToolsNav from "../../src/components/ToolsNav.astro";
+import DataTab from '../../maptools/component/DataTab';
+
+<div className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8">
+
+<ToolsNav locale="en" />
+
+
+# Administrative divisions
+
+Download and explore administrative boundary data.
+
+[Download maps](/en/tools/map/) · [GitHub](https://github.com/antvis/l7-extensions/tree/master/packages/district-data)
+
+## Features
+
+- **Data downloads**: Province, city and county boundaries, including historical versions.
+- **Complete**: Explore maps online or use the data SDK and visualization components.
+- **Convenient**: Export GeoJSON, JSON, TopoJSON, CSV, KML and SVG.
+
+## Data fields
+
+Select provinces, cities, counties or the world map, then export CSV or JSON.
+
+<DataTab client:load />
+
+## Used by
+
+[AntV](https://antv.antgroup.com) · [L7](https://l7.antv.antgroup.com) · [L7Draw](https://l7draw.antv.antgroup.com) · [LarkMap](https://larkmap.antv.antgroup.com) · [L7VP](https://li.antv.antgroup.com)
+
+</div>

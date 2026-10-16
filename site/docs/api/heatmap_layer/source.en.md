@@ -3,9 +3,7 @@ title: Source
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
-<embed src="@/docs/api/common/layer/source.en.md"></embed>
+<!-- include: ../common/layer/source.en.md -->
 
 🌟 The data usage of heat map is consistent with that of point layer.
 
