@@ -1,5 +1,6 @@
 ---
-import { Carousel } from '@antv/astro-theme-antv/components';
+import arrowLeft from '@tabler/icons/outline/arrow-left.svg?raw';
+import arrowRight from '@tabler/icons/outline/arrow-right.svg?raw';
 interface Props { locale: 'zh' | 'en' }
 const { locale } = Astro.props;
 const zh = locale === 'zh';
@@ -53,19 +54,135 @@ const cases = [
 ---
 
 <section aria-label={zh ? '地理可视化生态' : 'Geospatial ecosystem'} class="bg-[#f9fafb] px-6 py-20 max-md:py-12">
-  <div class="mx-auto max-w-[1360px] [--carousel-controls-space:0px] [--carousel-controls-bottom:80px] max-md:[--carousel-controls-space:72px] max-md:[--carousel-controls-bottom:0px] max-md:[--carousel-controls-left:calc(50%_-_48px)]">
-    <Carousel locale={locale} label={zh ? 'L7 生态产品' : 'L7 ecosystem products'} effect="fade" pagination={false} arrows>
-      {cases.map((item) => <article class="grid min-h-[560px] max-md:min-h-0 grid-cols-[minmax(240px,0.7fr)_minmax(0,1.7fr)] items-center gap-10 max-md:grid-cols-1 max-md:gap-8">
-        <div class="self-stretch pt-8 pb-28 max-md:order-2 max-md:py-0 max-md:text-center">
-          <img src={item.logo} alt="" width="80" height="80" loading="lazy" class="size-20 rounded-[15px] bg-white object-contain shadow-[0_12px_24px_#ced4d9] max-md:mx-auto" />
-          <h2 class="mt-12 mb-0 text-lg font-semibold leading-7 text-[var(--text-strong)] max-md:mt-7">{item.title[locale]}</h2>
-          <p class="mt-4 mb-0 text-sm leading-[1.8] text-[#5d6f80]">{item.description[locale]}</p>
-          <a href={item.link} class="mt-5 inline-flex min-h-11 items-center text-sm text-[var(--brand)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand)]">{zh ? '查看详情' : 'Learn more'}<span class="sr-only">: {item.title[locale]}</span></a>
-        </div>
-        <a href={item.link} aria-label={item.title[locale]} tabindex="-1" class="block min-w-0 focus-visible:outline-2 focus-visible:outline-[var(--brand)] max-md:order-1">
-          <img src={item.image} alt={item.title[locale]} width={item.imageWidth} height={item.imageHeight} loading="lazy" class="block h-auto max-h-[667px] w-full object-contain object-right max-md:object-center" />
-        </a>
-      </article>)}
-    </Carousel>
+  <div class="mx-auto max-w-[1360px]">
+    <l7-ecosystem-carousel role="group" aria-label={zh ? 'L7 生态产品' : 'L7 ecosystem products'} aria-roledescription={zh ? '轮播图' : 'carousel'} tabindex="0" class="relative block min-w-0 touch-pan-y max-md:pb-[72px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand)]">
+      <div class="grid grid-cols-1">
+        {cases.map((item, index) => <article data-ecosystem-slide data-active={String(index === 0)} inert={index !== 0} aria-hidden={index !== 0 ? 'true' : undefined} role="group" aria-roledescription={zh ? '幻灯片' : 'slide'} aria-label={`${index + 1} / ${cases.length}`} class="grid min-h-[560px] max-md:min-h-0 grid-cols-[minmax(240px,0.7fr)_minmax(0,1.7fr)] items-center gap-10 max-md:grid-cols-1 max-md:gap-8">
+          <div class="self-stretch pt-8 pb-28 max-md:order-2 max-md:py-0 max-md:text-center">
+            <img src={item.logo} alt="" width="80" height="80" loading="lazy" class="size-20 rounded-[15px] bg-white object-contain shadow-[0_12px_24px_#ced4d9] max-md:mx-auto" />
+            <h2 class="mt-12 mb-0 text-lg font-semibold leading-7 text-[var(--text-strong)] max-md:mt-7">{item.title[locale]}</h2>
+            <p class="mt-4 mb-0 text-sm leading-[1.8] text-[#5d6f80]">{item.description[locale]}</p>
+            <a href={item.link} class="mt-5 inline-flex min-h-11 items-center text-sm text-[var(--brand)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand)]">{zh ? '查看详情' : 'Learn more'}<span class="sr-only">: {item.title[locale]}</span></a>
+          </div>
+          <a href={item.link} aria-label={item.title[locale]} tabindex="-1" class="block min-w-0 focus-visible:outline-2 focus-visible:outline-[var(--brand)] max-md:order-1">
+            <img src={item.image} alt={item.title[locale]} width={item.imageWidth} height={item.imageHeight} loading="lazy" class="block h-auto max-h-[667px] w-full object-contain object-right max-md:object-center" />
+          </a>
+        </article>)}
+      </div>
+      <div data-ecosystem-controls hidden class="absolute bottom-20 left-0 z-2 flex max-md:bottom-0 max-md:left-[calc(50%_-_48px)] [&[hidden]]:hidden">
+        {[-1, 1].map((direction) => <button type="button" data-ecosystem-direction={direction} aria-label={zh ? (direction < 0 ? '上一项' : '下一项') : (direction < 0 ? 'Previous slide' : 'Next slide')} class="grid size-12 cursor-pointer place-items-center border border-[#a3b1bf] bg-transparent text-[#a3b1bf] last:-ml-px transition-colors duration-300 hover:z-1 hover:border-[#ced4d9] hover:text-[#ced4d9] motion-reduce:transition-none focus-visible:z-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)]">
+          <span class="size-5 [&_svg]:size-full" aria-hidden="true" set:html={direction < 0 ? arrowLeft : arrowRight}></span>
+        </button>)}
+      </div>
+    </l7-ecosystem-carousel>
   </div>
 </section>
+
+<script>
+  class L7EcosystemCarousel extends HTMLElement {
+    private dispose?: () => void;
+
+    connectedCallback() {
+      this.dispose?.();
+      const slides = [...this.querySelectorAll<HTMLElement>('[data-ecosystem-slide]')];
+      const controls = this.querySelector<HTMLElement>('[data-ecosystem-controls]')!;
+      controls.hidden = slides.length < 2;
+      if (slides.length < 2) return;
+      const listeners = new AbortController();
+      const options = { signal: listeners.signal };
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      let current = 0;
+      let timer: number | undefined;
+      let visible = false;
+      let hovered = this.matches(':hover');
+      let focused = this.matches(':focus-within');
+      let touchStart: { x: number; y: number } | undefined;
+
+      const show = (index: number) => {
+        current = (index + slides.length) % slides.length;
+        slides.forEach((slide, i) => {
+          const active = i === current;
+          slide.dataset.active = String(active);
+          slide.inert = !active;
+          if (active) slide.removeAttribute('aria-hidden');
+          else slide.setAttribute('aria-hidden', 'true');
+        });
+      };
+      const stop = () => { window.clearInterval(timer); timer = undefined; };
+      const resume = () => {
+        stop();
+        if (visible && !hovered && !focused && !touchStart && !document.hidden && !reducedMotion.matches) {
+          timer = window.setInterval(() => show(current + 1), 3000);
+        }
+      };
+      const navigate = (index: number) => { show(index); resume(); };
+      controls.querySelectorAll<HTMLButtonElement>('[data-ecosystem-direction]').forEach(button => {
+        button.addEventListener('click', () => navigate(current + Number(button.dataset.ecosystemDirection)), options);
+      });
+      this.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        const direction = event.key === 'ArrowLeft' ? -1 : 1;
+        // Move focus off a slide before making it inert.
+        if (slides[current].contains(document.activeElement)) {
+          controls.querySelector<HTMLButtonElement>(`[data-ecosystem-direction="${direction}"]`)!.focus();
+        }
+        navigate(current + direction);
+      }, options);
+      this.addEventListener('pointerenter', () => { hovered = true; stop(); }, options);
+      this.addEventListener('pointerleave', () => { hovered = false; resume(); }, options);
+      this.addEventListener('focusin', () => { focused = true; stop(); }, options);
+      this.addEventListener('focusout', event => {
+        if (event.relatedTarget instanceof Node && this.contains(event.relatedTarget)) return;
+        focused = false;
+        resume();
+      }, options);
+      this.addEventListener('pointerdown', event => {
+        if (event.pointerType === 'mouse') return;
+        touchStart = { x: event.clientX, y: event.clientY };
+        stop();
+      }, options);
+      this.addEventListener('pointerup', event => {
+        if (!touchStart) return;
+        const dx = event.clientX - touchStart.x;
+        const dy = event.clientY - touchStart.y;
+        touchStart = undefined;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) navigate(current + (dx < 0 ? 1 : -1));
+        else resume();
+      }, options);
+      this.addEventListener('pointercancel', () => { touchStart = undefined; resume(); }, options);
+      reducedMotion.addEventListener('change', resume, options);
+      document.addEventListener('visibilitychange', resume, options);
+      const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; resume(); }, { threshold: 0.2 });
+      observer.observe(this);
+      show(0);
+      this.dispose = () => { listeners.abort(); observer.disconnect(); stop(); };
+    }
+
+    disconnectedCallback() {
+      this.dispose?.();
+      this.dispose = undefined;
+    }
+  }
+  if (!customElements.get('l7-ecosystem-carousel')) customElements.define('l7-ecosystem-carousel', L7EcosystemCarousel);
+</script>
+
+<style>
+  [data-ecosystem-slide] {
+    grid-area: 1 / 1;
+    min-width: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 500ms linear, visibility 500ms;
+  }
+  [data-ecosystem-slide][data-active="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-ecosystem-slide] { transition: none; }
+  }
+</style>
