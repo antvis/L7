@@ -1,10 +1,15 @@
 name: Deploy Site
 
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
   release:
     # released: only latest release will trigger
     types: [released]
+
+permissions:
+  contents: write
 
 concurrency:
   group: '${{ github.workflow }} - ${{ github.ref }}'
@@ -12,8 +17,9 @@ concurrency:
 
 jobs:
   publish-site:
-    # manual dispatch or released only @antv/l7 main package
+    # push to master, manual dispatch, or release of the @antv/l7 main package
     if: |
+      github.event_name == 'push' ||
       github.event_name == 'workflow_dispatch' ||
       (
         github.event_name == 'release' &&
@@ -36,7 +42,7 @@ jobs:
           git config --local user.name antv
           git config --local user.email antv@antfin.com
           git add .
-          git commit -m "update by release action"
+          git commit -m "update by deploy site action"
       - uses: ad-m/github-push-action@master
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
