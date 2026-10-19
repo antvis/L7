@@ -12,7 +12,8 @@ import County from './county';
 import Province from './province';
 import World from './world';
 
-const App: React.FC = () => {
+const App: React.FC<{ locale?: 'zh' | 'en' }> = ({ locale = 'zh' }) => {
+  const isZh = locale === 'zh';
   const [selectTab, setSelectTab] = useState('province');
   const [districtData, setDistrictData] = useState({});
   const onChange = (key: string) => {
@@ -24,22 +25,22 @@ const App: React.FC = () => {
   const items: TabsProps['items'] = [
     {
       key: 'province',
-      label: `省级`,
+      label: isZh ? '省级' : 'Provinces',
       children: <Province onDataLoad={onDataLoad} />,
     },
     {
       key: 'city',
-      label: `市级`,
+      label: isZh ? '市级' : 'Cities',
       children: <City onDataLoad={onDataLoad} />,
     },
     {
       key: 'county',
-      label: `县级`,
+      label: isZh ? '县级' : 'Counties',
       children: <County onDataLoad={onDataLoad} />,
     },
     {
       key: 'world',
-      label: `世界地图`,
+      label: isZh ? '世界地图' : 'World',
       children: <World onDataLoad={onDataLoad} />,
     },
   ];
@@ -47,16 +48,16 @@ const App: React.FC = () => {
   const dropDownItems: MenuProps['items'] = [
     {
       key: 'CSV',
-      label: 'CSV 格式',
+      label: isZh ? 'CSV 格式' : 'CSV',
     },
     {
       key: 'JSON',
-      label: 'JSON 格式',
+      label: isZh ? 'JSON 格式' : 'JSON',
     },
   ];
 
   return (
-    <div className="my-10 min-w-0">
+    <div className="min-w-0">
       <Tabs
         tabBarExtraContent={{
           right: (
@@ -69,8 +70,14 @@ const App: React.FC = () => {
               }}
               placement="bottom"
             >
-              <Button type="primary" shape="round" icon={<DownloadOutlined />} size={'middle'}>
-                导出数据
+              <Button
+                className="bg-[var(--brand)] hover:bg-[var(--brand-strong)]"
+                type="primary"
+                shape="round"
+                icon={<DownloadOutlined />}
+                size={'middle'}
+              >
+                {isZh ? '导出数据' : 'Export data'}
               </Button>
             </Dropdown>
           ),

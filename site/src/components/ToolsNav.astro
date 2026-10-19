@@ -1,7 +1,8 @@
 ---
+interface Props { locale?: 'zh' | 'en' }
 const { locale = 'zh' } = Astro.props;
+const root = `${import.meta.env.BASE_URL}${locale}/tools/`;
 const links = [
-  ['', '行政区划', 'District data'],
   ['map/', '中国地图', 'China map'],
   ['worldmap/', '世界地图', 'World map'],
   ['sdk/', '数据 SDK', 'Data SDK'],
@@ -9,6 +10,14 @@ const links = [
   ['app/', '应用', 'Applications'],
 ];
 ---
-<nav aria-label={locale === 'zh' ? '地图工具' : 'Map tools'} class="mb-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-[var(--border)] pb-4">
-  {links.map(([path, zh, en]) => <a href={`${import.meta.env.BASE_URL}${locale}/tools/${path}`} class="text-[var(--brand)] hover:underline focus-visible:outline-2 focus-visible:outline-[var(--brand)]">{locale === 'zh' ? zh : en}</a>)}
+<nav aria-label={locale === 'zh' ? '地图工具' : 'Map tools'} class="relative z-1 bg-[#f7f9fb]/90">
+  <div class="mx-auto flex min-h-[60px] max-w-[1440px] items-center gap-8 px-12 max-sm:flex-wrap max-sm:gap-2 max-sm:px-6 max-sm:py-3">
+    <a href={root} aria-label={locale === 'zh' ? 'GISDATA 行政区划首页' : 'GISDATA home'} class="inline-flex shrink-0 items-center gap-2.5 text-[22px] font-semibold text-[#30363f] no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand)]">
+      <img src="https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*uQbXRLw_Q2UAAAAAAAAAAAAADmJ7AQ/original" alt="" width="51" height="40" class="h-10 w-auto" />
+      GISDATA
+    </a>
+    <ul class="m-0 flex min-w-0 flex-wrap items-center gap-x-10 gap-y-2 p-0 text-base leading-6 list-none max-sm:w-full max-sm:gap-x-5 max-sm:text-sm">
+      {links.map(([path, zh, en]) => <li><a href={`${root}${path}`} aria-current={Astro.url.pathname === `${root}${path}` ? 'page' : undefined} class="block py-2 text-[#4f5866] no-underline hover:text-[var(--brand)] aria-[current=page]:text-[var(--brand)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand)]">{locale === 'zh' ? zh : en}</a></li>)}
+    </ul>
+  </div>
 </nav>
