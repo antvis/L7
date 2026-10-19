@@ -1,4 +1,3 @@
-import AMap from '../../../../src/demo/amap';
 // https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tif
 import { Scene } from '@antv/l7';
 import { ControlEvent, DrawControl } from '@antv/l7-draw';

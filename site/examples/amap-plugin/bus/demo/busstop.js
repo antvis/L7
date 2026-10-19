@@ -1,6 +1,5 @@
 import { LineLayer, PointLayer, Scene } from '@antv/l7';
 import { GaodeMap } from '@antv/l7-maps';
-import AMap from '../../../../src/demo/amap';
 
 const scene = new Scene({
   id: 'map',
