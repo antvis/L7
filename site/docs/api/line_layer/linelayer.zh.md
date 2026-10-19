@@ -3,11 +3,9 @@ title: LineLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
-线图层通过一组经纬度数据组来描述地图上的一条或者多条路径。通过路径的类型，将其区分为路径、弧线、3D 弧线以及其他的类型。  
+线图层通过一组经纬度数据组来描述地图上的一条或者多条路径。通过路径的类型，将其区分为路径、弧线、3D 弧线以及其他的类型。<br />
 用户可以通过配置 `shape` 参数来选择线的类型，同时通过 `style`、`size`、`color` 方法调整线的样式。
 
 <div>
@@ -36,40 +34,40 @@ const layer = new LineLayer()
 
 ## options
 
-<embed src="@/docs/api/line_layer/options.zh.md"></embed>
+<!-- include: ./options.zh.md -->
 
 ## source
 
-<embed src="@/docs/api/line_layer/source.zh.md"></embed>
+<!-- include: ./source.zh.md -->
 
 ## shape
 
-<embed src="@/docs/api/line_layer/shape.zh.md"></embed>
+<!-- include: ./shape.zh.md -->
 
 ## color
 
-<embed src="@/docs/api/line_layer/color.zh.md"></embed>
+<!-- include: ./color.zh.md -->
 
 ## size
 
-<embed src="@/docs/api/line_layer/size.zh.md"></embed>
+<!-- include: ./size.zh.md -->
 
 ## scale
 
-<embed src="@/docs/api/line_layer/scale.zh.md"></embed>
+<!-- include: ./scale.zh.md -->
 
 ## style
 
-<embed src="@/docs/api/line_layer/style.zh.md"></embed>
+<!-- include: ./style.zh.md -->
 
 ## animate
 
-<embed src="@/docs/api/line_layer/animate.zh.md"></embed>
+<!-- include: ./animate.zh.md -->
 
 ## texture
 
-<embed src="@/docs/api/line_layer/texture.zh.md"></embed>
+<!-- include: ./texture.zh.md -->
 
 ## 图层通用方法
 
-<embed src="@/docs/api/common/layer/base.zh.md"></embed>
+<!-- include: ../common/layer/base.zh.md -->

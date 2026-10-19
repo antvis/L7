@@ -1,0 +1,83 @@
+---
+import type { HomeSlotProps, LocalizedText } from '@antv/astro-theme-antv';
+import { Updates } from '@antv/astro-theme-antv/components';
+import sendIcon from '@tabler/icons/outline/send.svg?raw';
+import bookIcon from '@tabler/icons/outline/book-2.svg?raw';
+import githubIcon from '@tabler/icons/filled/brand-github.svg?raw';
+
+type Props = HomeSlotProps;
+const { locale, config, slotName } = Astro.props;
+const zh = locale === 'zh';
+const home = config.home;
+const localize = (value: LocalizedText) => typeof value === 'string' ? value : value[locale] ?? value.zh;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const title = localize(home.title);
+const actionClass = 'inline-flex h-[54px] items-center justify-center gap-2 rounded-xl border px-8 text-lg font-normal no-underline shadow-[0_8px_28px_rgb(0_0_0/5%)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand)] max-sm:px-5 max-sm:text-base';
+const updateClass = 'relative flex h-32 flex-col justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-raised)] px-5 py-3 text-center shadow-[0_8px_28px_rgb(0_0_0/5%)] max-md:h-40';
+---
+
+{slotName === 'hero' && (
+  <section aria-labelledby="l7-home-title" class="relative isolate h-[clamp(586px,calc(80.3vh_-_64px),836px)] max-xl:h-auto">
+    <div class="pointer-events-none absolute inset-x-0 top-0 bottom-[90px] -z-1 bg-[linear-gradient(225deg,#fff,#f0f5ff)]"></div>
+    <div class="relative mx-auto h-full w-[calc(100%_-_80px)] max-w-[1440px] max-xl:w-full max-xl:px-6">
+      <div class="relative z-1 ml-[4.5%] pt-[clamp(105px,calc(20.9vh_-_64px),170px)] max-xl:ml-0 max-xl:pt-14 max-xl:text-center">
+        <h1 id="l7-home-title" class="m-0 max-w-[78%] text-[clamp(32px,3.3vw,52px)] font-semibold leading-[1.57] tracking-normal text-[var(--text-strong)] max-xl:mx-auto max-xl:max-w-[760px] max-sm:text-[32px] max-sm:leading-[1.35]">
+          <span class="text-[var(--brand)]">{config.site.title}</span>{title.slice(config.site.title.length)}
+        </h1>
+        <p class="mt-[11px] mb-0 max-w-[520px] text-lg leading-[1.5715] text-[#424e66] max-xl:mx-auto max-sm:text-sm">{localize(home.description)}</p>
+        <div class="mt-10 flex flex-wrap items-center gap-5 max-xl:justify-center max-sm:grid max-sm:grid-cols-2 max-sm:gap-3">
+          {home.actions.map((action, index) => (
+            <a href={`${base}/${locale}${action.href}`} class:list={[actionClass, index === 0 ? 'border-[var(--brand)] bg-[var(--brand)] text-white hover:bg-[var(--brand-strong)] hover:text-white' : 'border-[#e8e8e8] bg-[var(--surface-raised)] text-[var(--text-strong)] hover:text-[var(--brand)]']}>
+              {index < 2 && <span class="size-5 [&_svg]:size-full" aria-hidden="true" set:html={index === 0 ? sendIcon : bookIcon}></span>}
+              {localize(action.text)}
+            </a>
+          ))}
+          <a href={config.site.repository} class:list={[actionClass, 'min-w-26 border-[#e8e8e8] bg-[var(--surface-raised)] px-4 text-[var(--text-strong)] hover:text-[var(--brand)]']}>
+            <span class="size-5 [&_svg]:size-full" aria-hidden="true" set:html={githubIcon}></span>
+            <span data-l7-stars>GitHub</span>
+            <span class="sr-only">{zh ? '在 GitHub 上关注 L7' : 'Star L7 on GitHub'}</span>
+          </a>
+        </div>
+      </div>
+      <img src={home.image} alt={zh ? 'L7 蚂蚁吉祥物' : 'L7 ant mascot'} width="760" height="1000" fetchpriority="high" class="pointer-events-none absolute top-[68px] right-0 block h-auto w-[26.4%] object-contain max-xl:relative max-xl:top-auto max-xl:mx-auto max-xl:mt-8 max-xl:w-56" />
+      <div class="absolute inset-x-[4.5%] bottom-[30px] [--l7-updates-gap:26px] max-xl:relative max-xl:inset-auto max-xl:mt-10 max-xl:pb-6 max-md:[--l7-updates-gap:14px]">
+        <Updates locale={locale} style="min-height:128px;--carousel-gap:var(--l7-updates-gap);--carousel-pagination-margin:16px">
+          <Fragment slot="skeleton">
+            {[0, 1, 2].map(() => <div class:list={[updateClass, 'items-center gap-3']} aria-hidden="true"><span class="h-6 w-2/3 rounded bg-[var(--surface)]"></span><span class="h-10 w-full rounded bg-[var(--surface)]"></span></div>)}
+          </Fragment>
+          <a slot="card" target="_blank" rel="noreferrer" class:list={[updateClass, 'group text-inherit no-underline transition-[box-shadow,translate] duration-250 hover:-translate-y-2 hover:shadow-[0_8px_20px_rgb(0_0_0/10%)] focus-visible:-translate-y-2 focus-visible:shadow-[0_8px_20px_rgb(0_0_0/10%)] motion-reduce:transition-none motion-reduce:hover:translate-none motion-reduce:focus-visible:translate-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--brand)]']}>
+            <div><img alt="" width="24" height="24" loading="lazy" decoding="async" class="mr-1.5 inline-block size-6 object-contain align-middle [&[hidden]]:hidden" /><strong class="text-xl font-semibold leading-7 text-[var(--text-strong)] group-hover:text-[var(--brand)] group-focus-visible:text-[var(--brand)]"></strong></div>
+            <span data-update-description class="mt-1.5 line-clamp-3 text-sm leading-[22px] text-[#424e66]"></span>
+          </a>
+        </Updates>
+      </div>
+    </div>
+  </section>
+)}
+
+{slotName === 'features' && (
+  <section aria-label={zh ? 'L7 产品特性' : 'L7 features'} class="px-6 pt-24 pb-[120px] max-xl:py-14">
+    <div class="mx-auto grid w-full max-w-[1238px] grid-cols-3 gap-7 max-md:grid-cols-1">
+      {home.features.map(feature => <article class="flex min-h-[266px] flex-col items-center rounded-2xl border border-[var(--border)] bg-[var(--surface-raised)] px-[clamp(24px,4.8vw,70px)] py-9 text-center shadow-[0_8px_28px_rgb(0_0_0/3%)]">
+        <img src={feature.icon} alt="" width="60" height="60" loading="lazy" />
+        <h2 class="mt-7 mb-5 text-2xl font-semibold leading-8 text-[var(--text-strong)]">{localize(feature.title)}</h2>
+        <p class="m-0 text-sm leading-[1.8] text-[#5d6f80]">{localize(feature.description)}</p>
+      </article>)}
+    </div>
+  </section>
+)}
+
+<script>
+  const stars = document.querySelector('[data-l7-stars]');
+  if (stars) {
+    fetch('https://api.github.com/repos/antvis/L7', { signal: AbortSignal.timeout(5000) })
+      .then(response => response.ok ? response.json() : null)
+      .then(repository => {
+        if (Number.isInteger(repository?.stargazers_count)) {
+          stars.textContent = String(repository.stargazers_count);
+        }
+      })
+      .catch(() => { /* The GitHub link remains usable if the public API is unavailable. */ });
+  }
+</script>
+

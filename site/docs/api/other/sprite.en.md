@@ -3,8 +3,6 @@ title: SpriteGeometry
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 SpriteGeometry is a universal particle layer provided by L7, which can be used to draw various particle effects.
@@ -32,7 +30,7 @@ let layer = new GeometryLayer()
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PEd7RasIpiEAAAAAAAAAAAAAARQnAQ'>
 
-[Online case](/examples/geometry/geometry#snow)
+[Online case](/en/examples/geometry/geometry/snow/)
 
 ### source
 

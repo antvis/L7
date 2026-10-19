@@ -9,7 +9,7 @@ order: 6
 
 ## 说明
 
-[示例](/examples/component/control#geolocate)
+[示例](/zh/examples/component/control/geolocate/)
 
 **注意：**
 
@@ -43,9 +43,9 @@ scene.on('loaded', () => {
 | --------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
 | transform | 格式化通过 `getlocation` 获取到的经纬度的函数，可以用于地理坐标系的转换 | `(position: [number, number]) => [number, number]` |
 
-<embed src="@/docs/api/common/control/btn-api.zh.md"></embed>
+<!-- include: ../common/control/btn-api.zh.md -->
 
-<embed src="@/docs/api/common/control/api.zh.md"></embed>
+<!-- include: ../common/control/api.zh.md -->
 
 ## 方法
 
@@ -53,8 +53,8 @@ scene.on('loaded', () => {
 | -------------- | ---------------------- | --------------------------------- |
 | getGeoLocation | 获取当前用户所在经纬度 | `() => Promise<[number, number]>` |
 
-<embed src="@/docs/api/common/control/method.zh.md"></embed>
+<!-- include: ../common/control/method.zh.md -->
 
 ## 事件
 
-<embed src="@/docs/api/common/control/event.zh.md"></embed>
+<!-- include: ../common/control/event.zh.md -->

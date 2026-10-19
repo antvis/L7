@@ -3,8 +3,6 @@ title: 聚合图
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 聚合图通常用来描述数据在地理上表现的聚合情况，类似热力图，可以用来表示数据点位的集中。
 
 🌟 目前 `L7` 只有点数据支持聚合图，聚类方法主要从数据层聚合数据，在 `Source` 方法配置 `cluster` 参数。
@@ -19,7 +17,7 @@ order: 2
 
 下面我们来介绍如何绘制一个常见的聚合图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/point/cluster/#cluster)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/cluster/cluster/)
 
 ```js
 import { Scene, PointLayer } from '@antv/l7';
@@ -84,7 +82,7 @@ interface IClusterOption {
 }
 ```
 
-[在线案例](/examples/point/cluster#cluster)
+[在线案例](/zh/examples/point/cluster/cluster/)
 
 ### shape
 
@@ -94,4 +92,4 @@ interface IClusterOption {
 
 `PointLayer` 的聚合图采用 `WebGL` 绘制，不支持自定义具体聚合样式，如果有自定义的需求可以使用 `MarkerLayer` 的聚合功能，你可以通过 `DOM` 完全自定义样式。
 
-[MarkerLayer 聚合](/api/component/markerlayer)
+[MarkerLayer 聚合](/zh/api/component/marker_layer)

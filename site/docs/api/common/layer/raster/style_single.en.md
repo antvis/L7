@@ -17,4 +17,4 @@ layer.style({
 | noDataValue | `number`           | Values ​​that will not be displayed                         | `-9999999`    |
 | rampColors  | `IRampColors`      | The color ramp for the range mapping color                  | `/`           |
 
-<embed src="@/docs/api/common/layer/raster/rampcolors.en.md"></embed>
+<!-- include: ./rampcolors.en.md -->

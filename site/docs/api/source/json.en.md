@@ -3,8 +3,6 @@ title: JSON
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Although GeoJSON is a universal geographical data format, in specific usage scenarios, data service personnel may not be familiar with GeoJSON, or do not have the tools to generate GeoJSON. Therefore, L7 defines the concept of Parser for data, and your data can be in any format. , just use the geographic information field corresponding to the specified data.
 
 ## JSON
@@ -41,7 +39,7 @@ layer.source(data, {
 });
 ```
 
-[JSON data demo example](/examples/gallery/animate#animate_path_texture)
+[JSON data demo example](/en/examples/gallery/animate/animate-path-texture/)
 
 ### Universal parsing method
 
@@ -94,7 +92,7 @@ layer.source(data, {
 
 #### general analysis
 
-[Point coodinates data format](/api/source/geojson##point)
+[Point coodinates data format](/en/api/source/geojson##point)
 
 ```javascript
 const data = [
@@ -187,7 +185,7 @@ If you need to use drawing trajectory data, you need to specify the point sequen
 
 coordinate format The coordinate field of geojson supports LineString, MultiLineString
 
-[Line coodinates data format](/api/source/geojson#linesring)
+[Line coodinates data format](/en/api/source/geojson#linesring)
 
 ```javascript
 const data = [
@@ -223,7 +221,7 @@ The coordinates field of surface data is relatively complex and does not support
 
 The coordinates field needs to be specified. The format is the same as the coordinates field of GeoJSON.
 
-[Face codinates data format](/api/source/geojson/#polygon)
+[Face codinates data format](/en/api/source/geojson/#polygon)
 
 **Note that surface data coord is a three-layer data structure**
 

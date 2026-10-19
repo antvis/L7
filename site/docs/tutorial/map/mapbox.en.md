@@ -3,8 +3,6 @@ title: MapBox Map
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Using Mapbox Maps
 
 1\. Register MapBox token

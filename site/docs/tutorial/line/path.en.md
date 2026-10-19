@@ -3,8 +3,6 @@ title: Path
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 We often need to draw common paths such as roads, action routes, water systems, etc. on the map. These drawn lines can be collectively called a path map, that is, a line layer positioned with a set of point coordinate pairs that are not closed at the beginning and end.
 
 <div>
@@ -17,7 +15,7 @@ We often need to draw common paths such as roads, action routes, water systems, 
 
 Let's introduce how to draw a common path diagram.
 
-- you can`L7`Found on the official website[Online case](/examples/gallery/animate#animate_path_texture)
+- you can`L7`Found on the official website[Online case](/en/examples/gallery/animate/animate-path-texture/)
 
 ```javascript
 import { Scene, LineLayer } from '@antv/l7';
@@ -75,12 +73,12 @@ layer.size(2); // Draw a path with width 2
 
 ### style
 
-<embed src="@/docs/api/common/features/linear.zh.md"></embed>
+<!-- include: ../../api/common/features/linear.zh.md -->
 
-<embed src="@/docs/api/common/features/dash.zh.md"></embed>
+<!-- include: ../../api/common/features/dash.zh.md -->
 
-<embed src="@/docs/api/common/features/border.zh.md"></embed>
+<!-- include: ../../api/common/features/border.zh.md -->
 
-<embed src="@/docs/api/common/features/texture.zh.md"></embed>
+<!-- include: ../../api/common/features/texture.zh.md -->
 
-<embed src="@/docs/api/common/features/animate.zh.md"></embed>
+<!-- include: ../../api/common/features/animate.zh.md -->

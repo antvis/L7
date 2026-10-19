@@ -51,7 +51,7 @@ const App: React.FC<IProps> = (props: IProps) => {
       .then((data) => {
         // 数据解码为geojson
         const gejson = geobuf.decode(new Pbf(data));
-        props?.onDataLoad({ city: gejson });
+        props?.onDataLoad({ world: gejson });
         // @ts-ignore
         const results = gejson.features.map((feature: any) => {
           return feature.properties;

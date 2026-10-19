@@ -3,8 +3,6 @@ title: cluster
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Aggregation graphs are usually used to describe the aggregation of data geographically. Similar to heat maps, they can be used to represent the concentration of data points.
 
 🌟 Currently`L7`Only point data supports aggregated graphs. The clustering method mainly aggregates data from the data layer. In`Source`Method configuration`cluster`parameter.
@@ -19,7 +17,7 @@ Aggregation graphs are usually used to describe the aggregation of data geograph
 
 Let's introduce how to draw a common aggregation chart.
 
-- you can`L7`Found on the official website[Online case](/examples/point/cluster/#cluster)
+- you can`L7`Found on the official website[Online case](/en/examples/point/cluster/cluster/)
 
 ```js
 import { Scene, PointLayer } from '@antv/l7';
@@ -84,7 +82,7 @@ interface IClusterOption {
 }
 ```
 
-[Online case](/examples/point/cluster#cluster)
+[Online case](/en/examples/point/cluster/cluster/)
 
 ### shape
 
@@ -94,4 +92,4 @@ Aggregation graphs use common aggregation styles,`shape`Just use the point layer
 
 `PointLayer`The aggregation graph uses`WebGL`Drawing does not support customizing specific aggregation styles. You can use it if you have customized requirements.`MarkerLayer`The aggregation function, you can pass`DOM`Fully customizable styling.
 
-[MarkerLayer Aggregation](/api/component/markerlayer)
+[MarkerLayer Aggregation](/en/api/component/marker_layer)

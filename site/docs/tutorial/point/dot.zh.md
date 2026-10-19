@@ -3,8 +3,6 @@ title: 亮度图
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 亮度图又称点密度图，单位面积的内点的个数越多，亮度会越亮，亮度图一般用来表达海量点数据分布情况
 
 <div>
@@ -17,7 +15,7 @@ order: 4
 
 下面我们来介绍如何绘制一个简单的亮度图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/gallery/basic#normal)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/gallery/basic/normal/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

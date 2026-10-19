@@ -3,8 +3,6 @@ title: Symbol
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 The point layer supports drawing icons and placing different pictures as symbols on geographical areas, usually representing the distribution of different geographical features.
 
 <div>
@@ -17,7 +15,7 @@ The point layer supports drawing icons and placing different pictures as symbols
 
 Let's introduce how to draw a common symbol map.
 
-- you can`L7`Found on the official website[Online case](/examples/point/image/#image)
+- you can`L7`Found on the official website[Online case](/en/examples/point/image/image/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';
@@ -116,7 +114,7 @@ const scatter = new PointLayer()
 
 ⚠️ In order to get a better realistic effect (the picture is clear and has no obvious aliasing), we should keep it consistent when selecting the picture and setting the icon size, or the icon size set in the L7 layer is slightly smaller than the pixel size of the actual picture.
 
-[Online case](/examples/point/image#image)
+[Online case](/en/examples/point/image/image/)
 
 ### style
 
@@ -182,7 +180,7 @@ layer.style({
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*1kBZTaains4AAAAAAAAAAAAAARQnAQ'>
 
-[Online case](/examples/point/image#fillimage)
+[Online case](/en/examples/point/image/image/)
 
 Non-billboard mode support for symbol graphs`rotation`Method maps rotation angle based on data.
 
@@ -203,4 +201,4 @@ const imageLayer = new PointLayer()
 scene.addLayer(imageLayer);
 ```
 
-[Online case](/examples/point/image#monsoon)
+[Online case](/en/examples/point/image/monsoon/)

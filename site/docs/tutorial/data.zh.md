@@ -3,8 +3,6 @@ title: 数据
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 数据
 
 目前L7支持的数据格式有 `GeoJSON`，`CSV`，`JSON`，`Image`。

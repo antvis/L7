@@ -3,8 +3,6 @@ title: 简单点
 order: 9
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 点图层支持精灵模式的简单点，精灵模式的点图层效率更高，点始终面向相机。
 
 <div>
@@ -17,7 +15,7 @@ order: 9
 
 下面我们来介绍如何绘制一个简单点图层。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/point/simple#simple)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/point/simple/simple/)
 
 ```javascript
 import { Scene, PointLayer } from '@antv/l7';

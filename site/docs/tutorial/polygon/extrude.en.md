@@ -3,8 +3,6 @@ title: 3D Extrude
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 In addition to the flat filled map on the map, the geometry layer can also be a geometric block with height.
 
 <div>
@@ -17,7 +15,7 @@ In addition to the flat filled map on the map, the geometry layer can also be a 
 
 Below we will introduce how to draw a simple`3D`Fill in the figure.
 
-- you can`L7`Found on the official website[Online case](/examples/polygon/3d/#polygonstylemap)
+- you can`L7`Found on the official website[Online case](/en/examples/polygon/3d/polygon-stylemap/)
 
 ```javascript
 import { Scene, PolygonLayer } from '@antv/l7';
@@ -118,7 +116,7 @@ style({
 
 🌟 Supported starting from v2.7.6.
 
-[Online case](/examples/react/covid#covid_extrude)
+[Online case](/en/examples/polygon/extrusion/polygon/)
 
 - `raisingHeight`set up`3D`The elevation of the fill pattern.
 
@@ -127,7 +125,7 @@ style({
 
 <img width="40%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*D8GeSKNZxWIAAAAAAAAAAAAAARQnAQ">
 
-[Online case](/examples/polygon/3d#floatmap)
+[Online case](/en/examples/polygon/3d/floatmap/)
 
 - `mapTexture`set up`3D`The top texture of the fill image.
   🌟 Setting up`mapTexture`allows the user to configure the gradient color on the side.
@@ -156,4 +154,4 @@ const provincelayer = new PolygonLayer({})
 
 - `sidesurface`:`boolean`Control the visibility of the sides, the default is`true`。
 
-[Online case](/examples/polygon/3d#texture3D)
+[Online case](/en/examples/polygon/3d/polygon/)

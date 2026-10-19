@@ -3,8 +3,6 @@ title: Chart
 order: 8
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 We are customizing`Marker`When replacing point layer nodes, you can insert a custom chart, such as using a two-dimensional statistical chart instead of point symbols. Commonly used extended graphics in composite chart maps include bar charts, curve charts, rose charts, etc.
 
 <div>
@@ -17,7 +15,7 @@ We are customizing`Marker`When replacing point layer nodes, you can insert a cus
 
 Let's introduce how to draw a simple map composite chart.
 
-- you can`L7`Found on the official website[Online case](/examples/point/chart#bar)
+- you can`L7`Found on the official website[Online case](/en/examples/point/chart/bar/)
 
 ```javascript
 import { Scene, Marker } from '@antv/l7';

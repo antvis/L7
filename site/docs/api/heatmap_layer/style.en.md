@@ -3,8 +3,6 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `style`The method is used to configure the style of the layer. The same layer has different`shape`graphics, different`shape`layer`style`Methods accept different parameters.
 
 🌟 Honeycomb heat map and grid heat map`style`The style can refer to the actual drawn layer.

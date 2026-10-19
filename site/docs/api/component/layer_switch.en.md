@@ -13,7 +13,7 @@ Used to control the target layer group**show**and**hide**operate.
 
 ## use
 
-[Example](/examples/component/control#layerswitch)
+[Example](/en/examples/component/control/layerswitch/)
 
 ```ts
 import { Scene, LayerSwitch } from '@antv/l7';
@@ -41,20 +41,20 @@ scene.on('loaded', () => {
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
 | layers | need to be controlled`layer`Array, supports passing in layer example or layer id. If not passed, all layers in the current L7 will be read by default. | `Array<ILayer \| string>` |
 
-<embed src="@/docs/api/common/control/popper-api.en.md"></embed>
+<!-- include: ../common/control/popper-api.en.md -->
 
-<embed src="@/docs/api/common/control/btn-api.en.md"></embed>
+<!-- include: ../common/control/btn-api.en.md -->
 
-<embed src="@/docs/api/common/control/api.en.md"></embed>
+<!-- include: ../common/control/api.en.md -->
 
 ## method
 
-<embed src="@/docs/api/common/control/method.en.md"></embed>
+<!-- include: ../common/control/method.en.md -->
 
 ## event
 
-<embed src="@/docs/api/common/control/event.en.md"></embed>
+<!-- include: ../common/control/event.en.md -->
 
-<embed src="@/docs/api/common/control/popper-event.en.md"></embed>
+<!-- include: ../common/control/popper-event.en.md -->
 
-<embed src="@/docs/api/common/control/select-event.en.md"></embed>
+<!-- include: ../common/control/select-event.en.md -->

@@ -3,8 +3,6 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `style` 方法用于配制图层的样式，相同图层拥有不同的 `shape` 图形，不同 `shape` 的图层 `style` 方法接受不同的参数。
 
 ```js
@@ -25,7 +23,7 @@ layer.style({
 
 `shape` 为平面填充几何体。
 
-- [fill](/api/polygon_layer/shape#shapefill)
+- [fill](/zh/api/polygon_layer/shape#shapefill)
 
 | style         | 类型             | 描述     | 默认值 |
 | ------------- | ---------------- | -------- | ------ |
@@ -47,7 +45,7 @@ interface IOpacityLinear {
 
 `shape` 为挤出几何体。
 
-- [extrude](/api/polygon_layer/shape#shapeextrude)
+- [extrude](/zh/api/polygon_layer/shape#shapeextrude)
 
 | style         | 类型      | 描述                       | 默认值  |
 | ------------- | --------- | -------------------------- | ------- |
@@ -62,7 +60,7 @@ interface IOpacityLinear {
 
 `shape` 为挤出几何体。
 
-- [extrusion](/api/polygon_layer/shape#extrusion)
+- [extrusion](/zh/api/polygon_layer/shape#extrusion)
 
 | style         | 类型     | 描述             | 是否支持数据映射 | 默认值 |
 | ------------- | -------- | ---------------- | ---------------- | ------ |
@@ -76,7 +74,7 @@ interface IOpacityLinear {
 
 `shape` 为水体表面几何体。
 
-- [water](/api/polygon_layer/shape#shapewater)
+- [water](/zh/api/polygon_layer/shape#shapewater)
 
 | style        | 类型     | 描述     | 默认值 |
 | ------------ | -------- | -------- | ------ |
@@ -89,7 +87,7 @@ interface IOpacityLinear {
 
 `shape` 为海洋表面几何体。
 
-- [ocean](/api/polygon_layer/shape#shapeocean)
+- [ocean](/zh/api/polygon_layer/shape#shapeocean)
 
 | style       | 类型     | 描述     | 默认值    |
 | ----------- | -------- | -------- | --------- |

@@ -3,8 +3,6 @@ title: PolygonLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 Draws 2D polygons and 3D shapes stretched along the Z axis.

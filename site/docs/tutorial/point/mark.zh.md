@@ -3,8 +3,6 @@ title: Marker
 order: 8
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 地图上的点可以是自定义的 `DOM`，我们将自定的 `DOM` 称为 `Marker` 。
 
 <div>
@@ -17,7 +15,7 @@ order: 8
 
 下面我们来介绍如何绘制一个简单的 `Marker` 图层。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/component/marker#marker)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/component/marker/marker/)
 
 ```javascript
 import { Scene, Marker } from '@antv/l7';
@@ -76,6 +74,6 @@ function getColor(v) {
 
 ### 使用文档
 
-[Marker 文档](/api/component/marker/marker)
+[Marker 文档](/zh/api/component/marker)
 
-[MarkerLayer 文档](/api/component/marker/markerlayer)
+[MarkerLayer 文档](/zh/api/component/marker_layer)

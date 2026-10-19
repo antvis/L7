@@ -3,8 +3,6 @@ title: Style
 order: 4
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `style`The method is used to configure the style of the layer. The same layer has different`shape`graphics, different`shape`layer`style`Methods accept different parameters.
 
 ```js
@@ -25,7 +23,7 @@ Universal`style`Parameters, parameters supported by all graphics.
 
 `shape`Fills the plane with geometry.
 
-- [fill](/api/polygon_layer/shape#shapefill)
+- [fill](/en/api/polygon_layer/shape#shapefill)
 
 | style         | type             | describe             | default value |
 | ------------- | ---------------- | -------------------- | ------------- |
@@ -47,7 +45,7 @@ interface IOpacityLinear {
 
 `shape`for extruded geometry.
 
-- [extrude](/api/polygon_layer/shape#shapeextrude)
+- [extrude](/en/api/polygon_layer/shape#shapeextrude)
 
 | style         | type      | describe                                   | default value |
 | ------------- | --------- | ------------------------------------------ | ------------- |
@@ -62,7 +60,7 @@ interface IOpacityLinear {
 
 `shape`for extruded geometry.
 
-- [extrusion](/api/polygon_layer/shape#extrusion)
+- [extrusion](/en/api/polygon_layer/shape#extrusion)
 
 | style         | type     | describe              | Whether to support data mapping | default value |
 | ------------- | -------- | --------------------- | ------------------------------- | ------------- |
@@ -76,7 +74,7 @@ The geometry layer supports configuring gradient effects (sourceColor, targetCol
 
 `shape`is the water surface geometry.
 
-- [water](/api/polygon_layer/shape#shapewater)
+- [water](/en/api/polygon_layer/shape#shapewater)
 
 | style        | type     | describe              | default value |
 | ------------ | -------- | --------------------- | ------------- |
@@ -89,7 +87,7 @@ The geometry layer supports configuring gradient effects (sourceColor, targetCol
 
 `shape`is the ocean surface geometry.
 
-- [ocean](/api/polygon_layer/shape#shapeocean)
+- [ocean](/en/api/polygon_layer/shape#shapeocean)
 
 | style       | type     | describe    | default value |
 | ----------- | -------- | ----------- | ------------- |

@@ -1,6 +1,5 @@
 import type { ChoroplethLayerProps, LarkMapProps, LineLayerProps } from '@antv/larkmap';
 import type { FeatureCollection } from '@turf/turf';
-import { message } from 'antd';
 import type { DataLevel, SourceType } from 'district-data';
 import { RDBSource } from 'district-data';
 
@@ -85,30 +84,6 @@ export const worldConfig: LarkMapProps = {
   },
 };
 
-export const DrillingType: Record<any, any> = {
-  country: 'province',
-  province: 'city',
-  city: 'district',
-};
-
-export const RollupType: Record<any, any> = {
-  district: 'city',
-  city: 'province',
-  province: 'country',
-  country: '',
-  jiuduanxian: '',
-};
-
-export const copy = (data: any) => {
-  const oInput = document.createElement('input');
-  oInput.value = data;
-  document.body.appendChild(oInput);
-  oInput.select();
-  document.execCommand('Copy');
-  oInput.style.display = 'none';
-  message.success('复制成功');
-};
-
 export const item = () => {
   return [
     {
@@ -126,11 +101,6 @@ export const item = () => {
     },
   ];
 };
-
-export const sourceOptions = [
-  { value: 'DataVSource', label: 'dataV数据源' },
-  { value: 'RDBSource', label: '数据源' },
-];
 
 export type DataType =
   | 'GeoJSON'
@@ -174,12 +144,6 @@ export const editionOptions = {
   ],
 };
 
-export const accuracyOption = [
-  { value: 'low', label: '低' },
-  { value: 'middle', label: '中' },
-  { value: 'high', label: '高' },
-];
-
 export interface IDataInfo {
   sourceType: SourceType;
   sourceVersion: string;
@@ -201,21 +165,6 @@ export const defaultDataInfo: IDataInfo = {
   childrenLevel: 'province',
   datatype: 'GeoJSON',
   dataLevel: 'country',
-};
-
-export const getParentLevel = (level: DataLevel): DataLevel | undefined => {
-  switch (level) {
-    case 'country':
-      return 'country';
-    case 'province':
-      return 'country';
-    case 'city':
-      return 'province';
-    case 'county':
-      return 'city';
-    default:
-      return undefined;
-  }
 };
 
 export const getChildrenLevel = (level: DataLevel): DataLevel | undefined => {

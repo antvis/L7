@@ -3,8 +3,6 @@ title: 3D 弧线图
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 除了 2D 的弧线，我们还指出 3D 的弧线，在使用上只要改变 `shape` 的参数即可。
 
 <div>
@@ -17,7 +15,7 @@ order: 2
 
 下面我们来介绍如何绘制一个简单的 `3D` 弧线图。
 
-- 你可以在 `L7` 官网上找到[在线案例](/examples/line/arc#trip_arc)
+- 你可以在 `L7` 官网上找到[在线案例](/zh/examples/line/arc/trip-arc/)
 
 ```javascript
 import { LineLayer } from '@antv/l7';
@@ -67,12 +65,12 @@ layer.source(data, {
 
 为了绘制弧线图，我们需要将 `shape` 的参数设置成 `arc3d`。
 
-<embed src="@/docs/api/common/features/animate.zh.md"></embed>
+<!-- include: ../../api/common/features/animate.zh.md -->
 
 ### style
 
-<embed src="@/docs/api/common/features/linear.zh.md"></embed>
+<!-- include: ../../api/common/features/linear.zh.md -->
 
-<embed src="@/docs/api/common/features/dash.zh.md"></embed>
+<!-- include: ../../api/common/features/dash.zh.md -->
 
-<embed src="@/docs/api/common/features/texture.zh.md"></embed>
+<!-- include: ../../api/common/features/texture.zh.md -->

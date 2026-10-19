@@ -3,8 +3,6 @@ title: GeoJSON
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 GeoJSON is a format for encoding various geographic data structures. GeoJSON objects can represent geometries, features, or collections of features. GeoJSON supports the following geometry types: point, line, polygon, multipoint, multiline, polygon, and geometry collection. A feature in GeoJSON contains a geometric object and other attributes, and a feature collection represents a series of features.[The GeoJSON Format](https://tools.ietf.org/html/draft-butler-geojson-06)

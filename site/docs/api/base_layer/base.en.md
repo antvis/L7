@@ -3,8 +3,6 @@ title: BaseLayer
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 The L7 Layer interface design follows graphics syntax, and all layers inherit from the base class (baseLayer).
@@ -27,4 +25,4 @@ const layer = new BaseLayer(option) // option - the parameter object passed into
 scene.addLayer(layer);
 ```
 
-<embed src="@/docs/api/common/layer/base.en.md"></embed>
+<!-- include: ../common/layer/base.en.md -->

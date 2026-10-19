@@ -3,8 +3,6 @@ title: GaodeMap
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Use AMap
 
 ### Register an account and apply for a Key

@@ -3,8 +3,6 @@ title: Shape
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `shape` 方法用于指定线图层绘制什么样的线。
 
 ### shape('line')

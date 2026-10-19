@@ -1,23 +1,23 @@
 ## options
 
-<embed src="@/docs/api/common/layer/options.en.md"></embed>
+<!-- include: ./options.en.md -->
 
 ## data method
 
-<embed src="@/docs/api/common/layer/layer_encode.en.md"></embed>
+<!-- include: ./layer_encode.en.md -->
 
-<embed src="@/docs/api/common/layer/layer_style.en.md"></embed>
+<!-- include: ./layer_style.en.md -->
 
-<embed src="@/docs/api/common/layer/layer_texture.en.md"></embed>
+<!-- include: ./layer_texture.en.md -->
 
-<embed src="@/docs/api/common/layer/layer_update.en.md"></embed>
+<!-- include: ./layer_update.en.md -->
 
-<embed src="@/docs/api/common/layer/layer_ctr.en.md"></embed>
+<!-- include: ./layer_ctr.en.md -->
 
-<embed src="@/docs/api/common/layer/layer_interaction.en.md"></embed>
+<!-- include: ./layer_interaction.en.md -->
 
-<embed src="@/docs/api/common/layer/mask_method.en.md"></embed>
+<!-- include: ./mask_method.en.md -->
 
-<embed src="@/docs/api/common/layer/mouse_event.en.md"></embed>
+<!-- include: ./mouse_event.en.md -->
 
-<embed src="@/docs/api/common/layer/layer_event.en.md"></embed>
+<!-- include: ./layer_event.en.md -->

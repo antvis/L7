@@ -3,11 +3,9 @@ title: Options
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 #### sourceLayer
 
-<description> _string_ **required** </description>
+_string_ **required**
 
 Only valid for vector layers, used to set the data source of vector layers.
 
@@ -21,7 +19,7 @@ const layer = new PointLayer({
 
 #### featureId
 
-<description> _string_ **optional** *default:*automatic numbering</description>
+_string_ **optional** *default:*automatic numbering
 
 Only vector layers take effect, used to specify the encoding of vector layers.`id`。
 

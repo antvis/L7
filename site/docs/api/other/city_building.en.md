@@ -3,8 +3,6 @@ title: City Build
 order: 6
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 `CityBuildingLayer`Used to build 3D models of urban buildings and display urban buildings
@@ -47,7 +45,7 @@ layer.animatte({
 
 Other style configuration items are the same as
 
-[baselayer#style](/api/base_layer/base#style)
+[baselayer#style](/en/api/base_layer/base#style)
 
 ## Custom animation frequency
 
@@ -119,4 +117,4 @@ scene.on('loaded', () => {
 });
 ```
 
-[Online case](/examples/gallery/animate#build_sweep)
+[Online case](/en/examples/gallery/animate/build-sweep/)

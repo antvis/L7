@@ -3,8 +3,6 @@ title: wave
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 When the animation mode is turned on, the plane point layer is a special layer type: water wave point. The layer is made up of rings that spread outward.
 
 <div>
@@ -17,9 +15,9 @@ When the animation mode is turned on, the plane point layer is a special layer t
 
 A simple water wave point case can be implemented according to the following code.
 
-- you can`L7`Found on the official website[Online case](/examples/point/scatter#animatepoint)。
+- you can`L7`Found on the official website[Online case](/en/examples/point/scatter/animatepoint/)。
 
-- Specific usage can be viewed[Detailed documentation](</api/point_layer/animate#Water wave point>)。
+- Specific usage can be viewed[Detailed documentation](/en/api/point_layer/animate/#water-wave-point)。
 
 ```js
 import { Scene, PointLayer } from '@antv/l7';

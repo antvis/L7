@@ -24,7 +24,7 @@ const scene = new Scene({
 
 ## 使用
 
-[示例](/examples/component/control#logo)
+[示例](/zh/examples/component/control/logo/)
 
 ```ts
 import { Scene, Logo } from '@antv/l7';
@@ -52,12 +52,12 @@ scene.on('loaded', () => {
 | img  | Logo 展示的图片 url                                  | `string` |
 | href | 点击 Logo 跳转的超链接，不传则纯展示图片，点击不跳转 | `string` |
 
-<embed src="@/docs/api/common/control/api.zh.md"></embed>
+<!-- include: ../common/control/api.zh.md -->
 
 ## 方法
 
-<embed src="@/docs/api/common/control/method.zh.md"></embed>
+<!-- include: ../common/control/method.zh.md -->
 
 ## 事件
 
-<embed src="@/docs/api/common/control/event.zh.md"></embed>
+<!-- include: ../common/control/event.zh.md -->

@@ -3,8 +3,6 @@ title: iconfont
 order: 7
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 In addition to supporting drawing text annotations, the point layer also supports drawing and building simple icons by drawing text, that is, drawing`iconfont`. Through simple icons drawn with text, we can`color`Method to directly modify the color.
 
 <div>
@@ -17,7 +15,7 @@ In addition to supporting drawing text annotations, the point layer also support
 
 Below we will introduce how to draw a simple`iconfont`Icon point layer.
 
-- you can`L7`Found on the official website[Online case](/examples/point/text#iconfont)
+- you can`L7`Found on the official website[Online case](/en/examples/point/text/iconfont/)
 
 ```javascript
 // Specify iconfont to be mapped to the name of the font style

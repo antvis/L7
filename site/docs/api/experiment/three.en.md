@@ -3,8 +3,6 @@ title: threejs 引擎兼容
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 1\. L7 supports allowing users to access third-party rendering engines to develop map scenes. ThreeJS is currently the most widely used general-purpose 3D rendering engine. L7 can meet the requirements after integrating it.

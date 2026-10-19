@@ -3,11 +3,9 @@ title: Options
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 #### sourceLayer
 
-<description> _string_ **required** </description>
+_string_ **required**
 
 只有矢量图层生效，用于设置矢量图层的数据源。
 
@@ -21,7 +19,7 @@ const layer = new PointLayer({
 
 #### featureId
 
-<description> _string_ **optional** _default:_ 自动数字编号</description>
+_string_ **optional** _default:_ 自动数字编号
 
 只有矢量图层生效，用于指定矢量图层的编码 `id`。
 

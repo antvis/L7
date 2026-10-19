@@ -3,8 +3,6 @@ title: Size
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `size` 方法用于设置点图层图形的大小。
 
 ### IPointSize: number ｜[number, number] | [number, number, number]

@@ -3,8 +3,6 @@ title: SpriteGeometry
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 SpriteGeometry 是 L7 提供的通用的粒子图层，可以用来绘制各种粒子效果。
@@ -32,7 +30,7 @@ let layer = new GeometryLayer()
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*PEd7RasIpiEAAAAAAAAAAAAAARQnAQ'>
 
-[在线案例](/examples/geometry/geometry#snow)
+[在线案例](/zh/examples/geometry/geometry/snow/)
 
 ### source
 
@@ -52,7 +50,7 @@ SpriteGeometry 主要通过 style 方法设置位置、大小以及其他属性�
 
 #### spriteRadius: number
 
-粒子的作用半径，默认为 10。  
+粒子的作用半径，默认为 10。<br />
 🌟 单个粒子会在图层位置半径范围内随机分布。
 
 #### spriteAnimate: string

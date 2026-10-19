@@ -3,8 +3,6 @@ title: fill
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 The simplest representation of a geometry layer on a map is a fill map, which fills a specified area with a specified color.
 
 <div>
@@ -17,7 +15,7 @@ The simplest representation of a geometry layer on a map is a fill map, which fi
 
 Let's introduce how to draw a simple filled diagram.
 
-- you can`L7`Found on the official website[Online case](/examples/polygon/fill#usa)
+- you can`L7`Found on the official website[Online case](/en/examples/polygon/fill/usa/)
 
 ```javascript
 import { Scene, PolygonLayer, LineLayer, Popup } from '@antv/l7';
@@ -95,11 +93,11 @@ style({ opacity Linear: { enable: true, // true - false dir: 'in', // n - out },
 });
 ```
 
-[radial gradient in](/examples/polygon/fill#linear_in)
+[radial gradient in](/en/examples/polygon/fill/linear-in/)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*XjT5T4cT_CYAAAAAAAAAAAAAARQnAQ">
 
-[radial gradient out](/examples/polygon/fill#linear_out)
+[radial gradient out](/en/examples/polygon/fill/linear-out/)
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="面图层填充图" src="https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*Ob62Q7JDpZ4AAAAAAAAAAAAAARQnAQ">
 

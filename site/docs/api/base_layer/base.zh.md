@@ -3,8 +3,6 @@ title: 图层基类 BaseLayer
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
 L7 Layer 接口设计遵循图形语法，所有图层都继承于基类（baseLayer）。
@@ -27,4 +25,4 @@ const layer = new BaseLayer(option) // option - 传入构造函数的参数对�
 scene.addLayer(layer);
 ```
 
-<embed src="@/docs/api/common/layer/base.zh.md"></embed>
+<!-- include: ../common/layer/base.zh.md -->

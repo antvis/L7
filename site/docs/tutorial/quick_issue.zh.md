@@ -3,8 +3,6 @@ title: 快速 issue
 order: 5
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ### 为什么提 Issue
 
 - Issue 是开放的，看到的同学可以解答，提出想法，提升 Issue 的解决效率

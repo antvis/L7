@@ -3,11 +3,9 @@ title: PointLayer
 order: 0
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## 简介
 
-点图层通过一组经纬度数据来描述一系列点在地图上的位置，这些点可以是普通的圆点，也可以是文字、图标、柱子等。  
+点图层通过一组经纬度数据来描述一系列点在地图上的位置，这些点可以是普通的圆点，也可以是文字、图标、柱子等。<br />
 用户可以通过配置 `shape` 参数来选择点的类型，同时通过 `style`、`size`、`color` 方法调整点的样式。
 
 ```javascript
@@ -39,36 +37,36 @@ const layer = new PointLayer({
 
 ## options
 
-<embed src="@/docs/api/point_layer/options.zh.md"></embed>
+<!-- include: ./options.zh.md -->
 
 ## source
 
-<embed src="@/docs/api/point_layer/source.zh.md"></embed>
+<!-- include: ./source.zh.md -->
 
 ## shape
 
-<embed src="@/docs/api/point_layer/shape.zh.md"></embed>
+<!-- include: ./shape.zh.md -->
 
 ## color
 
-<embed src="@/docs/api/point_layer/color.zh.md"></embed>
+<!-- include: ./color.zh.md -->
 
 ## size
 
-<embed src="@/docs/api/point_layer/size.zh.md"></embed>
+<!-- include: ./size.zh.md -->
 
 ## scale
 
-<embed src="@/docs/api/point_layer/scale.zh.md"></embed>
+<!-- include: ./scale.zh.md -->
 
 ## style
 
-<embed src="@/docs/api/point_layer/style.zh.md"></embed>
+<!-- include: ./style.zh.md -->
 
 ## animate
 
-<embed src="@/docs/api/point_layer/animate.zh.md"></embed>
+<!-- include: ./animate.zh.md -->
 
 ## 图层通用方法
 
-<embed src="@/docs/api/common/layer/base.zh.md"></embed>
+<!-- include: ../common/layer/base.zh.md -->

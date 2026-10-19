@@ -3,8 +3,6 @@ title: FAQ
 order: 16
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ### Inconsistent versions of each dependent package of L7 in the project lead to error reporting
 
 ```js
@@ -24,7 +22,7 @@ delete`node_modules`Download all different versions of`L7`package, reinstall and
 - mapbox <https://docs.mapbox.com/mapbox-gl-js/api/#map>
 
 2. Set after loading is complete
-   transfer`scene`of[setMapStatus](/api/scene/scene/#setmapstatus)method
+   transfer`scene`of[setMapStatus](/en/api/scene/#setmapstatus)method
 
 ### webcontext lost
 

@@ -9,8 +9,7 @@ LICENSE
 .history
 
 dist/
-.dumi/tmp/
-.dumi/tmp-production/
 public/
-public_site/
 
+.astro/
+.antv-site/

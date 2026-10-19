@@ -3,8 +3,6 @@ title: Animate
 order: 7
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 The line layer is on`animate`After the method, you will get the line animation along the line direction.
 
 <div>
@@ -35,4 +33,4 @@ interface IAnimateOption {
 }
 ```
 
-<embed src="@/docs/api/common/features/animate.en.md"></embed>
+<!-- include: ../common/features/animate.en.md -->

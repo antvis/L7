@@ -3,8 +3,6 @@ title: 本地运行
 order: 1
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ### 一、打开L7demo页面
 
 选择一个任意一个你想看的 `demo`。
@@ -55,5 +53,5 @@ yarn start
 
 <img src="https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*oQQ2RbOzx0oAAAAAAAAAAABkARQnAQ" alt="L7 地理可视化" width = "50%" height = "100%">
 
-现在你可以尽情的本地修改代码，添加自己的图层了。  
+现在你可以尽情的本地修改代码，添加自己的图层了。<br />
 `L7` 所有 `demo` 都可以在 `codesandbox` 打开，你可以下载代码。

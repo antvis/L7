@@ -3,8 +3,6 @@ title: No Map
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 In many cases we just do simple geographical visualization without loading a map. This tutorial will tell you how to use basemapless mode in L7.
 
 - `L7`Added a baseless map style at the map style level`blank`No basemap mode.

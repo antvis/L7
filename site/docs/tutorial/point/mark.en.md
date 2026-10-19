@@ -3,8 +3,6 @@ title: Marker
 order: 8
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 Points on the map can be customized`DOM`, we will customize`DOM`called`Marker`ã€‚
 
 <div>
@@ -17,7 +15,7 @@ Points on the map can be customized`DOM`, we will customize`DOM`called`Marker`ã€
 
 Below we will introduce how to draw a simple`Marker`layers.
 
-- you can`L7`Found on the official website[Online case](/examples/component/marker#marker)
+- you can`L7`Found on the official website[Online case](/en/examples/component/marker/marker/)
 
 ```javascript
 import { Scene, Marker } from '@antv/l7';
@@ -76,6 +74,6 @@ function getColor(v) {
 
 ### Use documentation
 
-[Marker documentation](/api/component/marker/marker)
+[Marker documentation](/en/api/component/marker)
 
-[MarkerLayer documentation](/api/component/marker/markerlayer)
+[MarkerLayer documentation](/en/api/component/marker_layer)

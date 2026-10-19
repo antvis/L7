@@ -3,8 +3,6 @@ title: CSV
 order: 3
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 L7 supports CSV comma delimited CSV data loading.
 
 CSV is a text data structure and it is difficult to express complex geographic data structures, so CSV only supports two data structures.
@@ -32,7 +30,7 @@ layer.source(data, {
 });
 ```
 
-[CSV data demo example](/examples/point/bubble#scatter)
+[CSV data demo example](/en/examples/point/bubble/scatter/)
 
 ### Segment arc data is loaded via CSV
 
@@ -48,4 +46,4 @@ layer.source(data, {
 });
 ```
 
-[CSV line segment data demo example](/examples/gallery/basic#arccircle)
+[CSV line segment data demo example](/en/examples/gallery/basic/arc-circle/)

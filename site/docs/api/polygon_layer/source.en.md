@@ -3,11 +3,9 @@ title: Source
 order: 2
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 It is recommended to use GeoJSON format data for geometry layer data.
 
-- [GeoJSON](/api/source/geojson/#point)
+- [GeoJSON](/en/api/source/geojson/#point)
 
 ### GeoJSON
 

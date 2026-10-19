@@ -48,7 +48,7 @@ const layer = new PointLayer()
 scene.addLayer(layer);
 ```
 
-[Online case](/examples/point/text#stylemap)
+[Online case](/en/examples/point/text/style-map/)
 
 from`L7 2.5`Starting from the beginning, each layer style will gradually support style data mapping. Currently, all layer styles support style data mapping.`style`The parameters are as follows:
 
@@ -68,4 +68,4 @@ from`L7 2.5`Starting from the beginning, each layer style will gradually support
 
 <img width="60%" style="display: block;margin: 0 auto;" alt="案例" src='https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*iz3ERZdg2SkAAAAAAAAAAAAAARQnAQ'>
 
-[Online case](/examples/point/scatter#scatterstylemap)
+[Online case](/en/examples/point/scatter/scatter-style-map/)

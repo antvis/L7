@@ -3,8 +3,6 @@ title: 天地图
 order: 10
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 ## Introduction
 
 L7 geographical visualization focuses on the visual expression of geographical data. The map layer needs to rely on third-party maps. Third-party maps are created and managed uniformly through Scene. You only need to pass in map configuration items through Scene.
@@ -54,4 +52,4 @@ scene.on('loaded', () => {
 | maxZoom     | Maximum zoom level                        | `number`           | `18`                                        |
 | mapInstance | Pass in an existing Tianditu map instance | `T.Map`            | -                                           |
 
-<embed src="@/docs/api/common/map.en.md"></embed>
+<!-- include: ../common/map.en.md -->

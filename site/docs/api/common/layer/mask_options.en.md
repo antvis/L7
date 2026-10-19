@@ -7,7 +7,7 @@ Mask layer: the layer cut by the template
 
 Mask layer takes effect
 
-<description> _array Layer_ **optional** _default:_\[]</description>
+_array Layer_ **optional** _default:_\[]
 
 ### enableMask
 
@@ -15,7 +15,7 @@ Mask layer takes effect
 
 Whether to enable the mask. It is enabled by default. It will take effect when maskLayers is not empty.
 
-<description> _bool_ **optional** _default:_ true</description>
+_bool_ **optional** _default:_ true
 
 ### maskInside
 
@@ -23,7 +23,7 @@ Whether to enable the mask. It is enabled by default. It will take effect when m
 Mask layer takes effect
 ```
 
-<description> _boolean_ **optional** _default:_ true</description>
+_boolean_ **optional** _default:_ true
 
 Used to describe the content of the current layer and mask boundary display.
 
@@ -32,7 +32,7 @@ Used to describe the content of the current layer and mask boundary display.
 
 ### maskOpetation mask method
 
-Template layer takes effect<description> _enumerate_ **optional** _default:_ and</description>It is invalid when there are multiple maskLayers and needs to be set on the template layer.
+Template layer takes effect _enumerate_ **optional** _default:_ andIt is invalid when there are multiple maskLayers and needs to be set on the template layer.
 
 - or intersection
 - and union

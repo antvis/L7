@@ -1,0 +1,27 @@
+---
+import ToolsNav from './ToolsNav.astro';
+
+interface Props { locale: 'zh' | 'en' }
+const { locale } = Astro.props;
+const sectionClass = '[&_h2]:m-0 [&_h2]:mb-3.5 [&_h2]:text-[28px] [&_h2]:font-medium [&_h2]:leading-[1.5715]';
+---
+
+<div class="isolate bg-[var(--surface-raised)] text-[var(--text-strong)]">
+  <ToolsNav locale={locale} />
+  <header class="relative min-h-[676px] px-6 pt-[124px] text-center max-sm:min-h-[480px] max-sm:pt-20 [&_h1]:m-0 [&_h1]:bg-linear-to-r [&_h1]:from-[#8ed8ff] [&_h1]:to-[#5e9fff] [&_h1]:bg-clip-text [&_h1]:text-[clamp(44px,6.25vw,90px)] [&_h1]:font-bold [&_h1]:leading-none [&_h1]:text-transparent [&_p]:mx-auto [&_p]:mt-16 [&_p]:mb-0 [&_p]:max-w-4xl [&_p]:text-xl [&_p]:leading-8 [&_p]:text-[#4f5866] max-sm:[&_p]:mt-8 max-sm:[&_p]:text-base [&_[data-tools-actions]]:mt-12 [&_[data-tools-actions]]:flex [&_[data-tools-actions]]:justify-center [&_[data-tools-actions]]:gap-12 max-sm:[&_[data-tools-actions]]:gap-4 [&_a]:inline-flex [&_a]:h-[52px] [&_a]:min-w-[168px] [&_a]:items-center [&_a]:justify-center [&_a]:rounded-full [&_a]:border [&_a]:border-[#1677ff] [&_a]:px-6 [&_a]:text-lg [&_a]:text-[#1677ff] [&_a]:no-underline [&_a]:transition-colors [&_a:first-child]:bg-[#1677ff] [&_a:first-child]:text-white [&_a:hover]:bg-[#e6f4ff] [&_a:first-child:hover]:bg-[#4096ff] [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-[#1677ff] max-sm:[&_a]:min-w-0 max-sm:[&_a]:text-base">
+    <div aria-hidden="true" class="pointer-events-none absolute -top-24 inset-x-6 -z-1 h-[932px] bg-cover bg-center bg-no-repeat max-sm:inset-x-0 max-sm:top-0 max-sm:h-[480px]" style="background-image: url('https://gw.alipayobjects.com/zos/bmw-prod/a6c3488a-994c-4dd3-8e92-2324d9a1ca48/l9dmd9wl_w2858_h1864.png');"></div>
+    <slot name="hero" />
+  </header>
+  <div class="relative mx-auto max-w-[1440px] space-y-12 px-12 pb-[88px] max-sm:px-6 max-sm:pb-12">
+    <section class:list={[sectionClass, '[&_ul]:mt-[26px] [&_ul]:mb-0 [&_ul]:grid [&_ul]:list-none [&_ul]:grid-cols-3 [&_ul]:gap-10 [&_ul]:p-0 [&_ul]:pb-3 max-sm:[&_ul]:grid-cols-1 max-sm:[&_ul]:gap-6 [&_li]:min-w-0 [&_span]:block [&_span]:text-[64px] [&_span]:leading-[100px] [&_h3]:my-1 [&_h3]:text-xl [&_h3]:font-normal [&_h3]:leading-[1.5715] [&_p]:my-3 [&_p]:text-base [&_p]:leading-[1.475] [&_p]:text-[#4f5866]']}>
+      <slot name="features" />
+    </section>
+    <section class={sectionClass}>
+      <slot name="data" />
+    </section>
+    <section class:list={[sectionClass, '[&_ul]:mt-4 [&_ul]:mb-0 [&_ul]:grid [&_ul]:list-none [&_ul]:grid-cols-5 [&_ul]:gap-7 [&_ul]:p-0 max-lg:[&_ul]:grid-cols-3 max-sm:[&_ul]:grid-cols-2 max-sm:[&_ul]:gap-4 [&_li]:min-w-0 [&_a]:flex [&_a]:h-[78px] [&_a]:items-center [&_a]:justify-center [&_a]:gap-3 [&_a]:rounded [&_a]:border [&_a]:border-[var(--border-soft)] [&_a]:px-3 [&_a]:text-lg [&_a]:font-bold [&_a]:text-[var(--text-strong)] [&_a]:no-underline [&_a]:transition-[transform,box-shadow] [&_a:hover]:-translate-y-px [&_a:hover]:shadow-sm [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-[var(--brand)] max-sm:[&_a]:h-16 max-sm:[&_a]:gap-2 max-sm:[&_a]:text-[15px] motion-reduce:[&_a]:transition-none [&_img]:m-0 [&_img]:max-h-[42px] [&_img]:max-w-[42px] [&_img]:object-contain max-sm:[&_img]:max-h-9 max-sm:[&_img]:max-w-9']}>
+      <slot name="users" />
+    </section>
+  </div>
+</div>
+

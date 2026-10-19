@@ -3,8 +3,6 @@ title: Style
 order: 8
 ---
 
-<embed src="@/docs/api/common/style.md"></embed>
-
 `style`The method is used to configure the style of the layer. The same layer has different`shape`graphics, different`shape`layer`style`Methods accept different parameters.
 
 ```js
@@ -25,11 +23,11 @@ Universal`style`Parameters, parameters supported by all graphics.
 
 `shape`for`line`normal line layer.
 
-- [line](/api/line_layer/shape#shapeline)
-- [Support gradient](/api/line_layer/style#linear)
-- [Supports textures](/api/line_layer/style#texture)
-- [Support dashed lines](/api/line_layer/style#dash)
-- [Support arrows](/api/line_layer/style#arrow)
+- [line](/en/api/line_layer/shape#shapeline)
+- [Support gradient](/en/api/line_layer/style#linear)
+- [Supports textures](/en/api/line_layer/style#texture)
+- [Support dashed lines](/en/api/line_layer/style#dash)
+- [Support arrows](/en/api/line_layer/style#arrow)
 
 | style         | type                       | describe                                   | default value |
 | ------------- | -------------------------- | ------------------------------------------ | ------------- |
@@ -43,10 +41,10 @@ Universal`style`Parameters, parameters supported by all graphics.
 
 `shape`for`arc`Plane arc.
 
-- [arc](/api/line_layer/shape#shapearc)
-- [Support gradient](/api/line_layer/style#linear)
-- [Supports textures](/api/line_layer/style#texture)
-- [Support dashed lines](/api/line_layer/style#dash)
+- [arc](/en/api/line_layer/shape#shapearc)
+- [Support gradient](/en/api/line_layer/style#linear)
+- [Supports textures](/en/api/line_layer/style#texture)
+- [Support dashed lines](/en/api/line_layer/style#dash)
 
 | style         | type     | describe                                                                           | default value |
 | ------------- | -------- | ---------------------------------------------------------------------------------- | ------------- |
@@ -57,10 +55,10 @@ Universal`style`Parameters, parameters supported by all graphics.
 
 `shape`for`arc3d`arc layer.
 
-- [arc3d](/api/line_layer/shape#shapearc3d)
-- [Support gradient](/api/line_layer/style#linear)
-- [Supports textures](/api/line_layer/style#texture)
-- [Support dashed lines](/api/line_layer/style#dash)
+- [arc3d](/en/api/line_layer/shape#shapearc3d)
+- [Support gradient](/en/api/line_layer/style#linear)
+- [Supports textures](/en/api/line_layer/style#texture)
+- [Support dashed lines](/en/api/line_layer/style#dash)
 
 | style         | type     | describe                                                                           | default value |
 | ------------- | -------- | ---------------------------------------------------------------------------------- | ------------- |
@@ -70,10 +68,10 @@ Universal`style`Parameters, parameters supported by all graphics.
 
 `shape`It is a large arc layer.
 
-- [greatcircle](/api/line_layer/shape#shapegreatcircle)
-- [Support gradient](/api/line_layer/style#linear)
-- [Supports textures](/api/line_layer/style#texture)
-- [Support dashed lines](/api/line_layer/style#dash)
+- [greatcircle](/en/api/line_layer/shape#shapegreatcircle)
+- [Support gradient](/en/api/line_layer/style#linear)
+- [Supports textures](/en/api/line_layer/style#texture)
+- [Support dashed lines](/en/api/line_layer/style#dash)
 
 | style         | type     | describe                                                                           | default value |
 | ------------- | -------- | ---------------------------------------------------------------------------------- | ------------- |
@@ -120,20 +118,20 @@ layer.style({
 
 `shape`for`wall`Geofence arc layer.
 
-- [wall](/api/line_layer/shape#shapewall)
-- [Support gradient](/api/line_layer/style#linear)
-- [Supports textures](/api/line_layer/style#texture)
+- [wall](/en/api/line_layer/shape#shapewall)
+- [Support gradient](/en/api/line_layer/style#linear)
+- [Supports textures](/en/api/line_layer/style#texture)
 
 ### simple
 
 `shape`for`simple`Simple line layer.
 
-- [simple](/api/line_layer/shape#shapesimple)
-- [Support gradient](/api/line_layer/style#linear)
+- [simple](/en/api/line_layer/shape#shapesimple)
+- [Support gradient](/en/api/line_layer/style#linear)
 
 ### arrow
 
-- [line](/api/line_layer/shape#shapeline)
+- [line](/en/api/line_layer/shape#shapeline)
 
 Line layers support configuring arrows, which have additional styles.
 
