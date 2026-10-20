@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>component/popup/popup2</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/component/popup/popup2/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="component/popup/popup2" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>component/popup/popup2</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/component/popup/popup2/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>// @ts-ignore
+import { PointLayer, Popup, Scene } from &#39;@antv/l7&#39;;
+// @ts-ignore
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+async function initMap() {
+  const response = await fetch(
+    &#39;https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json&#39;,
+  );
+  const scene = new Scene({
+    id: &#39;map&#39;,
+    map: new GaodeMap({
+      center: [121.4, 31.258134],
+      zoom: 12,
+      pitch: 0,
+      style: &#39;normal&#39;,
+    }),
+  });
+  scene.addImage(
+    &#39;00&#39;,
+    &#39;https://gw.alipayobjects.com/mdn/rms_fcd5b3/afts/img/A*g8cUQ7pPT9YAAAAAAAAAAAAAARQnAQ&#39;,
+  );
+  scene.addImage(
+    &#39;01&#39;,
+    &#39;https://gw.alipayobjects.com/mdn/rms_fcd5b3/afts/img/A*LTcXTLBM7kYAAAAAAAAAAAAAARQnAQ&#39;,
+  );
+  scene.addImage(
+    &#39;02&#39;,
+    &#39;https://gw.alipayobjects.com/zos/bmw-prod/904d047a-16a5-461b-a921-98fa537fc04a.svg&#39;,
+  );
+  const data = await response.json();
+  const newData = data.map((item: any) =&gt; {
+    item.type = [&#39;00&#39;, &#39;01&#39;, &#39;02&#39;][Math.floor(Math.random() * 3)];
+    return item;
+  });
+  const imageLayer = new PointLayer({})
+    .source(newData, {
+      parser: {
+        type: &#39;json&#39;,
+        x: &#39;longitude&#39;,
+        y: &#39;latitude&#39;,
+      },
+    })
+    .shape(&#39;type&#39;, (v: any) =&gt; {
+      return v;
+    })
+    .active(false)
+    .size(20);
+  scene.addLayer(imageLayer);
+  imageLayer.on(&#39;mousedown&#39;, (e) =&gt; {
+    console.log(&#39;mousedown&#39;, e);
+  });
+  const popup = new Popup({});
+
+  scene.addPopup(popup);
+  imageLayer.on(&#39;click&#39;, (e) =&gt; {
+    console.log(e);
+    const { lng, lat } = e.lngLat;
+
+    popup.setOptions({
+      title: e.feature.name,
+      html: e.feature.name,
+      lngLat: {
+        lng,
+        lat,
+      },
+    });
+  });
+}
+
+initMap();
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

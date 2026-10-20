@@ -1,0 +1,1 @@
+import{f as e,t}from"./src.CdhVPrPk.js";import{a as n,t as r}from"./src.C_EuEovZ.js";import{t as i}from"./l7-draw.min.CfR1m1uw.js";r();var a=i();t();var o=new n({id:`map`,map:new e({style:`light`,center:[120.211944,30.288946],zoom:7.05})});o.on(`loaded`,()=>{let e=new a.DrawPolygon(o,{areaOptions:{}});e.enable(),e.on(a.DrawEvent.Change,e=>{console.log(e)})});

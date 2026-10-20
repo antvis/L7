@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/image/monsoon</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/image/monsoon/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/image/monsoon" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/image/monsoon</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/image/monsoon/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;dark&#39;,
+    center: [105, 35],
+    zoom: 2.5,
+  }),
+});
+
+scene.addImage(
+  &#39;arrRed&#39;,
+  &#39;https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*KWGqT6Oz50EAAAAAAAAAAAAAARQnAQ&#39;,
+);
+scene.addImage(
+  &#39;arrBlue&#39;,
+  &#39;https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*ZKhURq53OgIAAAAAAAAAAAAAARQnAQ&#39;,
+);
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/4c02515b-cb7a-47be-93cf-5596731ef982.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((monsoon) =&gt; {
+      const { data, borderData } = monsoon;
+      const imageLayer = new PointLayer()
+        .source(data)
+        .shape(&#39;wind&#39;, (wind) =&gt; {
+          if (wind === &#39;up&#39;) {
+            return &#39;arrBlue&#39;;
+          }
+          return &#39;arrRed&#39;;
+        })
+        .size(15)
+        .style({
+          rotation: {
+            field: &#39;r&#39;,
+            value: [0, 90, 180, 270],
+          },
+          billboard: false, // 图片图层只有非精灵模式支持旋转
+        });
+      scene.addLayer(imageLayer);
+
+      const border = new LineLayer()
+        .source(borderData)
+        .size(1.5)
+        .color(&#39;#575757&#39;)
+        .style({
+          lineType: &#39;dash&#39;,
+          dashArray: [5, 5],
+        });
+      scene.addLayer(border);
+
+      const text = new PointLayer({ zIndex: 2 })
+        .source(
+          [
+            { lng: 90, lat: 35, n: &#39;非季风区&#39; },
+            { lng: 125, lat: 30, n: &#39;季风区&#39; },
+          ],
+          {
+            parser: {
+              type: &#39;json&#39;,
+              x: &#39;lng&#39;,
+              y: &#39;lat&#39;,
+            },
+          },
+        )
+        .shape(&#39;n&#39;, &#39;text&#39;)
+        .size(25)
+        .color(&#39;#575757&#39;)
+        .style({
+          spacing: 20,
+        });
+
+      scene.addLayer(text);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

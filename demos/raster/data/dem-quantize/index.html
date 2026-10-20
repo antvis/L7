@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>raster/data/dem-quantize</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/raster/data/dem-quantize/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="raster/data/dem-quantize" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>raster/data/dem-quantize</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/raster/data/dem-quantize/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>// https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tif
+import { RasterLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+import * as GeoTIFF from &#39;geotiff&#39;;
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [121.268, 30.3628],
+    zoom: 3,
+  }),
+});
+async function getTiffData() {
+  const response = await fetch(
+    &#39;https://gw.alipayobjects.com/os/rmsportal/XKgkjjGaAzRyKupCBiYW.dat&#39;,
+  );
+  const arrayBuffer = await response.arrayBuffer();
+  return arrayBuffer;
+}
+scene.on(&#39;loaded&#39;, async () =&gt; {
+  const tiffdata = await getTiffData();
+  const tiff = await GeoTIFF.fromArrayBuffer(tiffdata);
+  const image = await tiff.getImage();
+  const width = image.getWidth();
+  const height = image.getHeight();
+  const values = await image.readRasters();
+
+  const layer = new RasterLayer();
+  layer
+    .source(values[0], {
+      parser: {
+        type: &#39;raster&#39;,
+        width,
+        height,
+        extent: [73.482190241, 3.82501784112, 135.106618732, 57.6300459963],
+      },
+    })
+    .style({
+      opacity: 1,
+      clampLow: false,
+      clampHigh: false,
+      domain: [0, 10000],
+      rampColors: {
+        type: &#39;quantize&#39;, // 等间距 不需要设置 position
+        colors: [
+          &#39;#b2182b&#39;,
+          &#39;#d6604d&#39;,
+          &#39;#f4a582&#39;,
+          &#39;#fddbc7&#39;,
+          &#39;#f7f7f7&#39;,
+          &#39;#d1e5f0&#39;,
+          &#39;#92c5de&#39;,
+          &#39;#4393c3&#39;,
+          &#39;#2166ac&#39;,
+        ],
+      },
+    });
+
+  scene.addLayer(layer);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

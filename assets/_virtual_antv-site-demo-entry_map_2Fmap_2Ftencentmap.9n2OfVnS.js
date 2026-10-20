@@ -1,0 +1,1 @@
+import{n as e,t}from"./src.CdhVPrPk.js";import{a as n,t as r}from"./src.C_EuEovZ.js";r(),t(),new n({id:`map`,map:new e({style:`style1`,center:[107.054293,35.246265],zoom:4.056})});

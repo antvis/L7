@@ -1,0 +1,1 @@
+import{f as e}from"./src.CdhVPrPk.js";import{E as t,a as n,t as r}from"./src.C_EuEovZ.js";r();var i=new n({id:`map`,map:new e({pitch:0,style:`normal`,center:[120.154672,30.241095],zoom:12})});i.on(`loaded`,()=>{let e=new t({position:`bottomright`});i.addControl(e)});

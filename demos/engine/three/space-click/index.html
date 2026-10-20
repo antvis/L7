@@ -1,0 +1,402 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>engine/three/space-click</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/engine/three/space-click/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="engine/three/space-click" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>engine/three/space-click</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/engine/three/space-click/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+import { ThreeLayer, ThreeRender } from &#39;@antv/l7-three&#39;;
+import { animate, easeInOut } from &#39;popmotion&#39;;
+import * as THREE from &#39;three&#39;;
+import { FBXLoader } from &#39;three/examples/jsm/loaders/FBXLoader.js&#39;;
+import { GLTFLoader } from &#39;three/examples/jsm/loaders/GLTFLoader.js&#39;;
+function changeValue(startValue, endValue, duration = 500, callback, complete) {
+  if (typeof startValue === &#39;number&#39;) {
+    animate({
+      from: {
+        v: startValue,
+      },
+      to: {
+        v: endValue,
+      },
+      ease: easeInOut,
+      duration,
+      onUpdate: (o) =&gt; {
+        callback(o.v);
+        return &#39;&#39;;
+      },
+      onComplete: () =&gt; {
+        complete &amp;&amp; complete();
+        return &#39;&#39;;
+      },
+    });
+  } else {
+    animate({
+      from: {
+        lng: startValue.lng,
+        lat: startValue.lat,
+        pitch: startValue.pitch,
+        rotation: startValue.rotation,
+        zoom: startValue.zoom,
+      },
+      to: {
+        lng: endValue.lng,
+        lat: endValue.lat,
+        pitch: endValue.pitch,
+        rotation: endValue.rotation,
+        zoom: endValue.zoom,
+      },
+      ease: easeInOut,
+      duration,
+      onUpdate: (o) =&gt; {
+        callback(o);
+        return &#39;&#39;;
+      },
+      onComplete: () =&gt; {
+        complete &amp;&amp; complete();
+        return &#39;&#39;;
+      },
+    });
+  }
+  return &#39;&#39;;
+}
+
+const raycaster = new THREE.Raycaster();
+const lng = 120.1;
+const lat = 30.265;
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [lng, lat],
+    pitch: 70,
+    rotation: 220,
+    zoom: 16,
+  }),
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const mouse = new THREE.Vector2();
+  let zspace, aspace, ASpaceTextMesh, ZSpaceTextMesh;
+
+  scene.registerRenderService(ThreeRender);
+
+  const center = scene.getCenter();
+
+  const threeJSLayer = new ThreeLayer({
+    enableMultiPassRenderer: false,
+    // @ts-ignore
+    onAddMeshes: (threeScene, layer) =&gt; {
+      threeScene.add(new THREE.AmbientLight(0xffffff));
+      const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
+      sunlight.position.set(0, 80000000, 100000000);
+      sunlight.matrixWorldNeedsUpdate = true;
+      threeScene.add(sunlight);
+
+      // map
+      // https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ
+
+      // height
+      // https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ
+
+      const image = new Image();
+      image.crossOrigin = &#39;&#39;;
+      image.src =
+        &#39;https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*eYFaRYlnnOUAAAAAAAAAAAAAARQnAQ&#39;;
+      image.onload = () =&gt; {
+        const canvas = document.createElement(&#39;canvas&#39;);
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const ctx = canvas.getContext(&#39;2d&#39;);
+        ctx.drawImage(image, 0, 0, image.width, image.height);
+        const heightData = ctx.getImageData(0, 0, image.width, image.height).data;
+
+        const s = 53000;
+
+        const geometry = new THREE.PlaneGeometry(s, s, 255, 255);
+
+        geometry.vertices.map((v, i) =&gt; {
+          const r = heightData[i * 4];
+          const g = heightData[i * 4 + 1];
+          const b = heightData[i * 4 + 2];
+          let h = -10000.0 + (r * 255.0 * 256.0 * 256.0 + g * 255.0 * 256.0 + b * 255.0) * 0.1;
+          h = h / 20 - 127600;
+          h = Math.max(0, h);
+
+          v.z = h;
+          return &#39;&#39;;
+        });
+        const material = new THREE.MeshPhongMaterial({
+          transparent: true,
+          // opacity: 0.6,
+          map: new THREE.TextureLoader().load(
+            &#39;https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*gA0NRbuOF5cAAAAAAAAAAAAAARQnAQ&#39;,
+          ),
+          side: THREE.DoubleSide,
+        });
+        const plane = new THREE.Mesh(geometry, material);
+        layer.setObjectLngLat(plane, [120.1008, 30.2573], 0);
+        plane.position.z = 10;
+        threeScene.add(plane);
+
+        return &#39;&#39;;
+      };
+
+      // 使用 Three.js glTFLoader 加载模型
+      const loader = new GLTFLoader();
+      loader.load(
+        &#39;https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf&#39;,
+        (gltf) =&gt; {
+          const antModel = gltf.scene;
+          setDouble(antModel);
+          // antModel.children[0].material.side = THREE.DoubleSide
+          layer.adjustMeshToMap(antModel);
+          layer.setMeshScale(antModel, 20, 20, 20);
+          layer.setObjectLngLat(antModel, [center.lng - 0.002, center.lat], 0);
+
+          const animations = gltf.animations;
+          if (animations &amp;&amp; animations.length) {
+            const mixer = new THREE.AnimationMixer(antModel);
+            const animation = animations[1];
+            const action = mixer.clipAction(animation);
+            action.play();
+            layer.addAnimateMixer(mixer);
+          }
+          antModel.rotation.y = Math.PI;
+          // 向场景中添加模型
+          threeScene.add(antModel);
+          // 重绘图层
+          layer.render();
+          return &#39;&#39;;
+        },
+      );
+
+      const v = `
+      varying vec2 vUv;
+      varying vec4 worldPosition;
+      void main() {
+          vUv = uv;
+          worldPosition = modelMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`;
+      const f = `
+      varying vec2 vUv;
+      varying vec4 worldPosition;
+      uniform vec3 color;
+      void main() {
+        gl_FragColor = vec4(color, fract(worldPosition.z / 50.0));
+      }`;
+      const shadermaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          color: {
+            value: new THREE.Vector3(0.21372549, 0.34705882, 0.56470588),
+          },
+        },
+        vertexShader: v,
+        fragmentShader: f,
+        side: THREE.DoubleSide,
+      });
+
+      const fbxLoaded = new FBXLoader();
+      // load ZSpace
+      fbxLoaded.load(
+        &#39;https://gw.alipayobjects.com/os/bmw-prod/af1652c9-3c4f-4e73-ac4c-1f78fefbaf6a.fbx&#39;,
+        (gltf) =&gt; {
+          zspace = gltf;
+          layer.adjustMeshToMap(zspace);
+          // @ts-ignore
+          zspace.children[0].material = shadermaterial;
+          layer.setMeshScale(zspace, 10, 10, 10);
+
+          layer.setObjectLngLat(zspace, [120.1015, 30.2661], 0);
+          zspace.rotation.x = Math.PI * 2;
+          zspace.rotation.z = -Math.PI * (-2 / 15);
+          threeScene.add(zspace);
+
+          return &#39;&#39;;
+        },
+      );
+
+      fbxLoaded.load(
+        &#39;https://gw.alipayobjects.com/os/bmw-prod/11d6e4c1-bd5b-4dc1-bae5-ac51c14e9056.fbx&#39;,
+        (model) =&gt; {
+          aspace = model;
+          layer.adjustMeshToMap(aspace);
+          // @ts-ignore
+          aspace.children[0].material = shadermaterial;
+
+          layer.setMeshScale(aspace, 8, 8, 8);
+          layer.setObjectLngLat(aspace, [120.099, 30.261], 0);
+          aspace.rotation.x = Math.PI * 2;
+          aspace.rotation.z = -Math.PI * (3 / 15);
+          threeScene.add(aspace);
+
+          return &#39;&#39;;
+        },
+      );
+      console.log(THREE.FontLoader);
+      const textLoader = new THREE.FontLoader();
+      textLoader.load(
+        &#39;https://gw.alipayobjects.com/os/bmw-prod/0a3f46eb-294e-4d95-87f2-052c26ad4bf1.json&#39;,
+        (font) =&gt; {
+          const fontOptions = {
+            size: 360, // 字号大小，一般为大写字母的高度
+            height: 50, // 文字的厚度
+            font, // 字体，默认是&#39;helvetiker&#39;，需对应引用的字体文件
+            bevelThickness: 10, // 倒角厚度
+            bevelSize: 10, // 倒角宽度
+            curveSegments: 30, // 弧线分段数，使得文字的曲线更加光滑
+            bevelEnabled: true, // 布尔值，是否使用倒角，意为在边缘处斜切
+          };
+          const aspaceGeo = new THREE.TextGeometry(&#39;ASpace&#39;, fontOptions);
+          aspaceGeo.center();
+          const zspaceGeo = new THREE.TextGeometry(&#39;ZSpace&#39;, fontOptions);
+          zspaceGeo.center();
+
+          const fontMat = new THREE.MeshPhongMaterial({
+            color: 0xcccccc,
+            shininess: 60,
+            specular: 0xcccccc,
+            side: THREE.DoubleSide,
+          });
+
+          const testHeight = 900;
+
+          ASpaceTextMesh = new THREE.Mesh(aspaceGeo, fontMat);
+          ASpaceTextMesh.rotation.x = Math.PI / 2;
+          ASpaceTextMesh.rotation.y = (-Math.PI * 3) / 4;
+          layer.setObjectLngLat(ASpaceTextMesh, [120.099, 30.261], testHeight);
+          threeScene.add(ASpaceTextMesh);
+
+          ZSpaceTextMesh = new THREE.Mesh(zspaceGeo, fontMat);
+          ZSpaceTextMesh.rotation.x = Math.PI / 2;
+          ZSpaceTextMesh.rotation.y = (-Math.PI * 3) / 4;
+          layer.setObjectLngLat(ZSpaceTextMesh, [120.103, 30.2661], testHeight);
+          threeScene.add(ZSpaceTextMesh);
+
+          getH(0, 200);
+          function getH(h1, h2) {
+            changeValue(
+              h1,
+              h2,
+              1000,
+              (h) =&gt; {
+                ASpaceTextMesh.position.z = testHeight + h;
+                ZSpaceTextMesh.position.z = testHeight + h;
+                return &#39;&#39;;
+              },
+              () =&gt; {
+                setTimeout(() =&gt; getH(h2, h1), 10);
+                return &#39;&#39;;
+              },
+            );
+          }
+
+          return &#39;&#39;;
+        },
+      );
+    },
+  }).animate(true);
+  scene.addLayer(threeJSLayer);
+  // @ts-ignore
+  let currentCamera = threeJSLayer.threeRenderService?.getRenderCamera();
+  const currentView = {
+    lng: center.lng,
+    lat: center.lat,
+    pitch: 70,
+    rotation: 220,
+    zoom: 16,
+  };
+
+  scene.on(&#39;zoom&#39;, () =&gt; {
+    const cen = scene.getCenter();
+    currentView.lng = cen.lng;
+    currentView.lat = cen.lat;
+    currentView.pitch = scene.getPitch();
+    currentView.zoom = scene.getZoom();
+    return &#39;&#39;;
+  });
+
+  scene.map.on(&#39;mapchange&#39;, () =&gt; {
+    // @ts-ignore
+    currentCamera = threeJSLayer.getRenderCamera();
+    currentView.pitch = scene.getPitch();
+    return &#39;&#39;;
+  });
+
+  const ASpaceView = {
+    lng: 120.109509,
+    lat: 30.251529,
+    pitch: 83,
+    rotation: 225,
+    zoom: 15,
+  };
+  const ZSpaceView = {
+    lng: 120.112026,
+    lat: 30.256881,
+    pitch: 80,
+    rotation: 220,
+    zoom: 15,
+  };
+
+  scene.on(&#39;click&#39;, (ev) =&gt; {
+    // @ts-ignore
+    const size = scene?.map?.getSize();
+    mouse.x = (ev.pixel.x / size.width) * 2 - 1;
+    mouse.y = -(ev.pixel.y / size.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, currentCamera);
+    const intersects = raycaster.intersectObjects([zspace, aspace], true);
+    if (intersects.length &gt; 0) {
+      const object = intersects[0].object;
+      if (object.name === &#39;Z空间&#39;) {
+        selectSpace(currentView, ZSpaceView, ZSpaceTextMesh);
+      } else {
+        selectSpace(currentView, ASpaceView, ASpaceTextMesh);
+      }
+    }
+    return &#39;&#39;;
+  });
+
+  function selectSpace(currentView, targetView, spaceText) {
+    if (spaceText) {
+      changeValue(spaceText.rotation.y, spaceText.rotation.y + Math.PI * 2, 500, (r) =&gt; {
+        spaceText.rotation.y = r;
+        return &#39;&#39;;
+      });
+    }
+
+    changeValue(currentView, targetView, 500, (view) =&gt; {
+      scene.setCenter([view.lng, view.lat]);
+      scene.setPitch(view.pitch);
+      scene.setRotation(view.rotation);
+      scene.setZoom(view.zoom);
+
+      currentView.lng = view.lng;
+      currentView.lat = view.lat;
+      currentView.pitch = view.pitch;
+      currentView.rotation = view.rotation;
+      currentView.zoom = view.zoom;
+
+      return &#39;&#39;;
+    });
+  }
+  return &#39;&#39;;
+});
+
+function setDouble(object) {
+  if (object.children &amp;&amp; object.children.length &amp;&amp; object.children.length &gt; 0) {
+    object.children.map((child) =&gt; setDouble(child));
+  } else if (object.material) {
+    object.material.side = THREE.DoubleSide;
+  }
+}
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

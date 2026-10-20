@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>line/wall/bus-wall</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/line/wall/bus-wall/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="line/wall/bus-wall" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>line/wall/bus-wall</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/line/wall/bus-wall/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [121.461531, 31.096775],
+    zoom: 8.64,
+    rotation: 358.78,
+    pitch: 45.42056074766357,
+    style: &#39;dark&#39;,
+  }),
+});
+
+scene.addImage(
+  &#39;02&#39;,
+  &#39;https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg&#39;,
+);
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/0290a972-eedd-42f6-b69e-50a35e8a0824.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const layer = new LineLayer({})
+        .source(data.slice(0, 50), {
+          parser: {
+            type: &#39;json&#39;,
+            coordinates: &#39;coordinates&#39;,
+          },
+        })
+        .animate({
+          interval: 1, // 间隔
+          duration: 1, // 持续时间，延时
+          trailLength: 2, // 流线长度
+        })
+        .size(20)
+        .shape(&#39;wall&#39;)
+        .texture(&#39;02&#39;)
+        .style({
+          opacity: 1,
+          lineTexture: true, // 开启线的贴图功能
+          iconStep: 40, // 设置贴图纹理的间距
+          iconStepCount: 4,
+          sourceColor: &#39;#00BCD2&#39;,
+          targetColor: &#39;#0074d0&#39;,
+        });
+      scene.addLayer(layer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

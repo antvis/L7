@@ -1,0 +1,1 @@
+var e=document.querySelector(`[data-l7-stars]`);e&&fetch(`https://api.github.com/repos/antvis/L7`,{signal:AbortSignal.timeout(5e3)}).then(e=>e.ok?e.json():null).then(t=>{Number.isInteger(t?.stargazers_count)&&(e.textContent=String(t.stargazers_count))}).catch(()=>{});

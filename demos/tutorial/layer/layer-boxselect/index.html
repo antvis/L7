@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tutorial/layer/layer-boxselect</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/tutorial/layer/layer-boxselect/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="tutorial/layer/layer-boxselect" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>tutorial/layer/layer-boxselect</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/tutorial/layer/layer-boxselect/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, PolygonLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [120.13618469238281, 30.247352897833554],
+    zoom: 9,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://mdn.alipayobjects.com/afts/file/A*nNheQL3Z-FUAAAAAAAAAAAAADrd2AQ/330100_full.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const fillLayer = new PolygonLayer({
+        name: &#39;fill&#39;,
+        autoFit: true,
+      })
+        .source(data)
+        .shape(&#39;fill&#39;)
+        .color(&#39;adcode&#39;, [&#39;#f0f9e8&#39;, &#39;#ccebc5&#39;, &#39;#a8ddb5&#39;, &#39;#7bccc4&#39;, &#39;#43a2ca&#39;, &#39;#0868ac&#39;]);
+
+      const lineLayer = new LineLayer({
+        zIndex: 1,
+        name: &#39;line&#39;,
+      })
+        .source(data)
+        .shape(&#39;line&#39;)
+        .size(1)
+        .color(&#39;#fff&#39;);
+
+      const selectLayer = new LineLayer({
+        zIndex: 2,
+        name: &#39;select&#39;,
+      })
+        .source([])
+        .shape(&#39;line&#39;)
+        .size(2)
+        .color(&#39;#f00&#39;);
+
+      scene.addLayer(fillLayer);
+      scene.addLayer(lineLayer);
+      scene.addLayer(selectLayer);
+
+      scene.enableBoxSelect(false);
+
+      const onBoxSelect = (bbox, startEvent, endEvent) =&gt; {
+        const { x: x1, y: y1 } = startEvent;
+        const { x: x2, y: y2 } = endEvent;
+        fillLayer.boxSelect(
+          [Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2)],
+          (features) =&gt; {
+            selectLayer.setData({
+              type: &#39;FeatureCollection&#39;,
+              features: features ?? [],
+            });
+          },
+        );
+      };
+
+      scene.on(&#39;selecting&#39;, onBoxSelect);
+      scene.on(&#39;selectend&#39;, onBoxSelect);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>gallery/story/yidaiyilu</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/gallery/story/yidaiyilu/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="gallery/story/yidaiyilu" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>gallery/story/yidaiyilu</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/gallery/story/yidaiyilu/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, PointLayer, PolygonLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [60.268, 30.3628],
+    zoom: 1.5,
+  }),
+});
+scene.on(&#39;loaded&#39;, async () =&gt; {
+  scene.addImage(&#39;local&#39;, &#39;https://gw.alipayobjects.com/zos/rmsportal/xZXhTxbglnuTmZEwqQrE.png&#39;);
+  const belt = await (
+    await fetch(&#39;https://gw.alipayobjects.com/os/rmsportal/UpapMomPYUeiBjbHNAma.json&#39;)
+  ).json();
+  const line = await (
+    await fetch(&#39;https://gw.alipayobjects.com/os/rmsportal/kwUdcXnxQtexeGRvTGtA.json&#39;)
+  ).json();
+  const line2 = await (
+    await fetch(&#39;https://gw.alipayobjects.com/os/rmsportal/dzpMOiLYBKxpdmsgBLoE.json&#39;)
+  ).json();
+  const point = await (
+    await fetch(&#39;https://gw.alipayobjects.com/os/rmsportal/opYqFyDGyGUAUXkLUhBV.json&#39;)
+  ).json();
+  const fillLayer = new PolygonLayer({
+    autoFit: false,
+  })
+    .source(belt)
+    .color(&#39;cname&#39;, function (value) {
+      return value == &#39;中国&#39; ? &#39;rgba(46,149,169,0.45)&#39; : &#39;rgba(227,244,244,1)&#39;;
+    })
+    .shape(&#39;fill&#39;);
+
+  const linelayer = new LineLayer().source(line).color(&#39;rgb(79,147,234)&#39;).size(1.5).shape(&#39;line&#39;);
+
+  const linelayer2 = new LineLayer()
+    .source(line2)
+    .color(&#39;rgb(11,94,69)&#39;)
+    .size(1.5)
+    .shape(&#39;line&#39;)
+    .style({
+      // &#39;lineType&#39;:&#39;solid&#39;
+    });
+
+  const pointlayer = new PointLayer({}).source(point).size(12.0).shape(&#39;local&#39;);
+
+  const textlayer = new PointLayer({})
+    .source(point)
+    .size(12.0)
+    .shape(&#39;name&#39;, &#39;text&#39;)
+    .color(&#39;#027aff&#39;)
+    .style({
+      textOffset: [0, -42],
+      stroke: &#39;#fff&#39;,
+      strokeWidth: 2,
+      textAnchor: &#39;bottom&#39;,
+    });
+  scene.addLayer(fillLayer);
+  scene.addLayer(linelayer);
+  scene.addLayer(linelayer2);
+  scene.addLayer(pointlayer);
+  scene.addLayer(textlayer);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

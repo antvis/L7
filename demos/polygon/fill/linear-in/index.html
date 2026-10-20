@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>polygon/fill/linear-in</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/polygon/fill/linear-in/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="polygon/fill/linear-in" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>polygon/fill/linear-in</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/polygon/fill/linear-in/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, PolygonLayer, Popup, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [-96, 37.8],
+    zoom: 3,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/d36ad90e-3902-4742-b8a2-d93f7e5dafa2.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const color = [
+        &#39;rgb(255,255,217)&#39;,
+        &#39;rgb(237,248,177)&#39;,
+        &#39;rgb(199,233,180)&#39;,
+        &#39;rgb(127,205,187)&#39;,
+        &#39;rgb(65,182,196)&#39;,
+        &#39;rgb(29,145,192)&#39;,
+        &#39;rgb(34,94,168)&#39;,
+        &#39;rgb(12,44,132)&#39;,
+      ];
+      const layer = new PolygonLayer({})
+        .source(data)
+        .scale(&#39;density&#39;, {
+          type: &#39;quantile&#39;,
+        })
+        .color(&#39;density&#39;, color)
+        .shape(&#39;fill&#39;)
+        .active(true)
+        .style({
+          opacityLinear: {
+            enable: true, // true - false
+            dir: &#39;in&#39;, // in - out
+          },
+        });
+      const layer2 = new LineLayer({
+        zIndex: 2,
+      })
+        .source(data)
+        .color(&#39;#fff&#39;)
+        .active(true)
+        .size(1)
+        .style({
+          lineType: &#39;dash&#39;,
+          dashArray: [2, 2],
+        });
+      scene.addLayer(layer);
+      scene.addLayer(layer2);
+
+      layer.on(&#39;mousemove&#39;, (e) =&gt; {
+        const popup = new Popup({
+          offsets: [0, 0],
+          closeButton: false,
+        })
+          .setLnglat(e.lngLat)
+          .setHTML(`&lt;span&gt;${e.feature.properties.name}: ${e.feature.properties.density}&lt;/span&gt;`);
+        scene.addPopup(popup);
+      });
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

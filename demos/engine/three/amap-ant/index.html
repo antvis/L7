@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>engine/three/amap-ant</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/engine/three/amap-ant/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="engine/three/amap-ant" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>engine/three/amap-ant</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/engine/three/amap-ant/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+import { ThreeLayer, ThreeRender } from &#39;@antv/l7-three&#39;;
+import * as THREE from &#39;three&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [111.4453125, 32.84267363195431],
+    pitch: 45,
+    rotation: 30,
+    zoom: 12,
+  }),
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  scene.registerRenderService(ThreeRender);
+
+  const threeJSLayer = new ThreeLayer({
+    enableMultiPassRenderer: false,
+    onAddMeshes: (threeScene, layer) =&gt; {
+      threeScene.add(new THREE.AmbientLight(0xffffff));
+      const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
+      sunlight.position.set(0, 80000000, 100000000);
+      sunlight.matrixWorldNeedsUpdate = true;
+      threeScene.add(sunlight);
+
+      const center = scene.getCenter();
+
+      const cubeGeometry = new THREE.BoxBufferGeometry(10000, 10000, 10000);
+      const cubeMaterial = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide });
+      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      layer.setObjectLngLat(cube, [center.lng + 0.05, center.lat], 0);
+      threeScene.add(cube);
+
+      // 使用 Three.js glTFLoader 加载模型
+      const loader = new window.GLTFLoader();
+      loader.load(
+        &#39;https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf&#39;,
+        (gltf) =&gt; {
+          const gltfScene = gltf.scene;
+          setDouble(gltfScene);
+          layer.adjustMeshToMap(gltfScene);
+          // gltfScene.scale.set(1000, 1000, 1000)
+          layer.setMeshScale(gltfScene, 1000, 1000, 1000);
+
+          layer.setObjectLngLat(gltfScene, [center.lng, center.lat], 0);
+
+          const animations = gltf.animations;
+          if (animations &amp;&amp; animations.length) {
+            const mixer = new THREE.AnimationMixer(gltfScene);
+
+            const animation = animations[2];
+
+            const action = mixer.clipAction(animation);
+
+            action.play();
+            layer.addAnimateMixer(mixer);
+          }
+          // layer.setObjectLngLat(gltfScene, [center.lng + 0.05, center.lat] as ILngLat, 0)
+          let t = 0;
+          setInterval(() =&gt; {
+            t += 0.01;
+            layer.setObjectLngLat(gltfScene, [center.lng, center.lat + Math.sin(t) * 0.1], 0);
+          }, 16);
+
+          // 向场景中添加模型
+          threeScene.add(gltfScene);
+          // 重绘图层
+          layer.render();
+        },
+      );
+    },
+  }).animate(true);
+  scene.addLayer(threeJSLayer);
+});
+
+function setDouble(object) {
+  if (object.children &amp;&amp; object.children.length &amp;&amp; object.children.length &gt; 0) {
+    object.children.map((child) =&gt; setDouble(child));
+  } else if (object.material) {
+    object.material.side = THREE.DoubleSide;
+  }
+}
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/image/allowoverlap</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/image/allowoverlap/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/image/allowoverlap" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/image/allowoverlap</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/image/allowoverlap/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [104.0, 36.0],
+    zoom: 4,
+  }),
+});
+
+scene.addImage(
+  &#39;marker&#39;,
+  &#39;https://gw.alipayobjects.com/zos/basement_prod/604b5e7f-309e-40db-b95b-4fac746c5153.svg&#39;,
+);
+
+// 在中国范围内生成密集随机点，使压盖效果明显
+function generateData(count) {
+  const points = [];
+  for (let i = 0; i &lt; count; i++) {
+    points.push({
+      lng: 99 + Math.random() * 20,
+      lat: 25 + Math.random() * 18,
+      id: i,
+    });
+  }
+  return points;
+}
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const data = generateData(300);
+
+  const layer = new PointLayer()
+    .source(data, {
+      parser: { type: &#39;json&#39;, x: &#39;lng&#39;, y: &#39;lat&#39; },
+    })
+    .shape(&#39;marker&#39;)
+    .size(15)
+    .style({
+      allowOverlap: false, // 默认关闭压盖，开启碰撞避让
+    });
+
+  scene.addLayer(layer);
+
+  // 控制面板
+  const panel = document.createElement(&#39;div&#39;);
+  panel.style.cssText =
+    &#39;position:absolute;top:10px;left:10px;z-index:100;background:#fff;padding:12px 16px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:13px;&#39;;
+
+  panel.innerHTML = `
+    &lt;div style=&quot;margin-bottom:10px;font-weight:600;&quot;&gt;Image allowOverlap&lt;/div&gt;
+    &lt;label style=&quot;display:flex;align-items:center;gap:8px;cursor:pointer;&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; id=&quot;overlap-toggle&quot; /&gt;
+      &lt;span id=&quot;overlap-label&quot;&gt;allowOverlap: false（碰撞避让开启）&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;div style=&quot;margin-top:8px;color:#888;font-size:12px;&quot;&gt;
+      点数量：300 &amp;nbsp;|&amp;nbsp; 缩放地图可触发重新计算
+    &lt;/div&gt;
+  `;
+
+  document.getElementById(&#39;map&#39;).appendChild(panel);
+
+  const checkbox = document.getElementById(&#39;overlap-toggle&#39;);
+  const label = document.getElementById(&#39;overlap-label&#39;);
+
+  checkbox.addEventListener(&#39;change&#39;, () =&gt; {
+    const allowOverlap = checkbox.checked;
+    label.textContent = allowOverlap
+      ? &#39;allowOverlap: true（允许压盖，全部显示）&#39;
+      : &#39;allowOverlap: false（碰撞避让开启）&#39;;
+    layer.style({ allowOverlap });
+  });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

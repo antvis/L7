@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tutorial/control/amap</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/tutorial/control/amap/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="tutorial/control/amap" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>tutorial/control/amap</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/tutorial/control/amap/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LayerSwitch, PointLayer, Scale, Scene, Zoom } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [121.4316962, 31.26082325],
+    zoom: 15.056,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const pointLayer = new PointLayer({})
+        .source(data, {
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;longitude&#39;,
+            y: &#39;latitude&#39;,
+          },
+        })
+        .shape(&#39;circle&#39;)
+        .size(&#39;unit_price&#39;, [5, 25])
+        .color(&#39;name&#39;, [&#39;#49B5AD&#39;, &#39;#5B8FF9&#39;])
+        .style({
+          opacity: 0.3,
+          strokeWidth: 1,
+        });
+
+      scene.addLayer(pointLayer);
+    });
+
+  const layerSwitch = new LayerSwitch({
+    position: &#39;rightcenter&#39;,
+  });
+  scene.addControl(layerSwitch);
+
+  const zoomControl = new Zoom({
+    position: &#39;rightcenter&#39;,
+  });
+
+  const scaleControl = new Scale({
+    position: &#39;bottomright&#39;,
+  });
+  scene.addControl(zoomControl);
+  scene.addControl(scaleControl);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

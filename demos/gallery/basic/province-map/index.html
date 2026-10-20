@@ -1,0 +1,279 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>gallery/basic/province-map</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/gallery/basic/province-map/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="gallery/basic/province-map" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>gallery/basic/province-map</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/gallery/basic/province-map/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, PolygonLayer, Scene } from &#39;@antv/l7&#39;;
+import { Map } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new Map({
+    pitch: 0,
+    style: &#39;light&#39;,
+    center: [118, 24.8],
+    zoom: 6,
+  }),
+});
+scene.on(&#39;loaded&#39;, async () =&gt; {
+  scene.addImage(
+    &#39;province&#39;,
+    &#39;https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*hvqeQa9I6ccAAAAAAAAAAAAADmJ7AQ/original&#39;,
+  );
+  scene.addImage(
+    &#39;city&#39;,
+    &#39;https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*sBlgRp8Ah7sAAAAAAAAAAAAADmJ7AQ/original&#39;,
+  );
+  scene.addImage(
+    &#39;county&#39;,
+    &#39;https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*ufrWTqCNCScAAAAAAAAAAAAADmJ7AQ/original&#39;,
+  );
+  // 获取数据
+  const dataList = [
+    // 市级行政区
+    &#39;https://mdn.alipayobjects.com/afts/file/A*jPjCTad_s24AAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA.json&#39;,
+    // 市级行政区一级群列岛名
+    &#39;https://mdn.alipayobjects.com/afts/file/A*HW8yQb2joA8AAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E4%B8%80%E7%BA%A7%E7%BE%A4%E5%88%97%E5%B2%9B%E5%90%8D.json&#39;,
+    ///市级行政区一级河流名.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*EjtNRrENGToAAAAAAAAAAAAADrd2AQ/市级行政区一级河流名.json&#39;,
+    //市级行政区一级港湾名.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*lqxATobbMLwAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E4%B8%80%E7%BA%A7%E6%B8%AF%E6%B9%BE%E5%90%8D.json&#39;,
+    //市级行政区一级岛屿名.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*xyeHRZCF8DsAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E4%B8%80%E7%BA%A7%E5%B2%9B%E5%B1%BF%E5%90%8D.json&#39;,
+    //市级行政区县级行政中心.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*vrDfSrB8J4sAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%8E%BF%E7%BA%A7%E8%A1%8C%E6%94%BF%E4%B8%AD%E5%BF%83.json&#39;,
+    //市级行政区县级行政区.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*lfffQ5ej7AEAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%8E%BF%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA.json&#39;,
+    // 市级行政区省级行政中心.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*jtlsTqxTJkoAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E7%9C%81%E7%BA%A7%E8%A1%8C%E6%94%BF%E4%B8%AD%E5%BF%83.json&#39;,
+    //市级行政区山峰.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*DRSfRqBs9qsAAAAAAAAAAAAADrd2AQ/市级行政区山峰.json&#39;,
+    //市级行政区色带.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*KRD4QbjkZCMAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E8%89%B2%E5%B8%A6.json&#39;,
+    //市级行政区面状水域.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*3e9nSJwXqu0AAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E9%9D%A2%E7%8A%B6%E6%B0%B4%E5%9F%9F.json&#39;,
+    //市级行政区境界线.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*tA8nSqhulQQAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%A2%83%E7%95%8C%E7%BA%BF.json&#39;,
+    //市级行政区河流.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*2vGmRrYpTjEAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E6%B2%B3%E6%B5%81.json&#39;,
+    //市级行政区海岸线.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*juI9TpBcQ74AAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E6%B5%B7%E5%B2%B8%E7%BA%BF.json&#39;,
+    //市级行政区二级群列岛名.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*E4ReSqdYq-cAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E4%BA%8C%E7%BA%A7%E7%BE%A4%E5%88%97%E5%B2%9B%E5%90%8D.json&#39;,
+    //市级行政区地级市行政中心.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*I3HSQaYyQ_UAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%9C%B0%E7%BA%A7%E5%B8%82%E8%A1%8C%E6%94%BF%E4%B8%AD%E5%BF%83.json&#39;,
+    //市级行政区大型水库名.json
+    &#39;https://mdn.alipayobjects.com/afts/file/A*xxXKTpte0VUAAAAAAAAAAAAADrd2AQ/%E5%B8%82%E7%BA%A7%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%A4%A7%E5%9E%8B%E6%B0%B4%E5%BA%93%E5%90%8D.json&#39;,
+  ];
+
+  const result = await Promise.all(dataList.map(async (url) =&gt; await (await fetch(url)).json()));
+  const cityLayer = new PolygonLayer({
+    autoFit: true,
+  })
+    .source(result[6])
+    .shape(&#39;fill&#39;)
+    .scale(&#39;COLOR&#39;, {
+      type: &#39;cat&#39;,
+      domain: [&#39;Y&#39;, &#39;P&#39;, &#39;G&#39;, &#39;R&#39;],
+    })
+    .color(&#39;COLOR&#39;, [&#39;#f7f6c6&#39;, &#39;#fceaea&#39;, &#39;#e0e7d5&#39;, &#39;#f3e4cf&#39;]);
+
+  // 陆上轮廓
+  const layer2 = new PolygonLayer().source(result[9]).shape(&#39;fill&#39;).color(&#39;#b4cad7&#39;);
+
+  // 水域
+  const waterLayer = new PolygonLayer().source(result[10]).shape(&#39;fill&#39;).color(&#39;#bcebfe&#39;);
+  // 面状河流线
+  const waterLayerLine = new PolygonLayer()
+    .source(result[10])
+    .shape(&#39;line&#39;)
+    .size(0.5)
+    .color(&#39;#50aac8&#39;);
+
+  // 线河流线
+  const river_Line = new PolygonLayer().source(result[12]).shape(&#39;line&#39;).size(0.5).color(&#39;#50aac8&#39;);
+  // 群岛标注图层
+  const island_name = new PointLayer({
+    minZoom: 8,
+  })
+    .source(result[1])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(15)
+    .color(&#39;#3b474e&#39;);
+
+  // 河流标注图层
+  const river_name = new PointLayer({ minZoom: 5 })
+    .source(result[2])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(15)
+    .color(&#39;#4aa1bd&#39;)
+    .style({
+      fontWeight: 800,
+    });
+  // 港湾标注
+  const gangwan_name = new PointLayer({
+    minZoom: 6,
+  })
+    .source(result[3])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(15)
+    .color(&#39;#4eaed9&#39;)
+    .style({
+      fontWeight: 800,
+    });
+  // 群岛
+  const island_name1 = new PointLayer({
+    minZoom: 8,
+  })
+    .source(result[4])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(15)
+    .color(&#39;#3b474e&#39;)
+    .style({
+      fontWeight: 600,
+    });
+
+  // 县界
+  const county_Line = new PolygonLayer({
+    minZoom: 5,
+  })
+    .source(result[11])
+    .shape(&#39;line&#39;)
+    .size(0.3)
+    .color(&#39;#a59f97&#39;);
+  // 城市界
+  const city_Line = new PolygonLayer().source(result[0]).shape(&#39;line&#39;).size(0.5).color(&#39;#787269&#39;);
+
+  // 海岸线
+  const sea_Line = new PolygonLayer().source(result[13]).shape(&#39;line&#39;).size(0.5).color(&#39;#50aac8&#39;);
+
+  // 城市标注
+  const cityName = new PointLayer({
+    maxZoom: 8,
+    minZoom: 5,
+  })
+    .source(result[15])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(14)
+    .color(&#39;#000&#39;)
+    .style({
+      fontWeight: 800,
+      textAnchor: &#39;top&#39;,
+      textAllowOverlap: true,
+      textOffset: [0, 12],
+    });
+
+  // 城市点位
+
+  const cityPoint = new PointLayer({
+    maxZoom: 7,
+    minZoom: 5,
+  })
+    .source(result[15])
+    .shape(&#39;city&#39;)
+    .size(5);
+
+  // 省级市标注
+  const provinceCityName = new PointLayer({
+    minZoom: 5,
+    maxZoom: 7,
+  })
+    .source(result[7])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(14)
+    .color(&#39;#000&#39;)
+    .style({
+      fontWeight: 800,
+      textAnchor: &#39;top&#39;,
+      textOffset: [0, 12],
+    });
+
+  // 省级市点位
+  const provincePoint = new PointLayer({
+    minZoom: 5,
+    maxZoom: 7,
+  })
+    .source(result[7])
+    .shape(&#39;province&#39;)
+    .size(5);
+
+  // 县标注
+  const countyName = new PointLayer({
+    minZoom: 8,
+  })
+    .source(result[5])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(14)
+    .color(&#39;#333&#39;)
+    .style({
+      fontWeight: 600,
+      textAnchor: &#39;top&#39;,
+      textOffset: [0, 12],
+    });
+  7;
+  // 县点位
+  const countyPoint = new PointLayer({
+    minZoom: 8,
+  })
+    .source(result[5])
+    .shape(&#39;county&#39;)
+    .size(5);
+
+  // 县标注
+  const mountainPoint = new PointLayer({
+    minZoom: 6,
+  })
+    .source(result[8])
+    .shape(&#39;triangle&#39;)
+    .size(6)
+    .color(&#39;#326648&#39;);
+
+  // 山标注
+  const mountainPoint_name = new PointLayer({
+    minZoom: 6,
+  })
+    .source(result[8])
+    .shape(&#39;NAME&#39;, &#39;text&#39;)
+    .size(14)
+    .color(&#39;#326648&#39;)
+    .style({
+      fontWeight: 800,
+      textAnchor: &#39;top&#39;,
+      textOffset: [0, 12],
+    });
+
+  scene.addLayer(cityLayer);
+  scene.addLayer(layer2);
+  scene.addLayer(waterLayer);
+  scene.addLayer(waterLayerLine);
+  scene.addLayer(river_Line);
+  scene.addLayer(county_Line);
+
+  scene.addLayer(city_Line);
+  scene.addLayer(sea_Line);
+
+  scene.addLayer(cityName);
+  scene.addLayer(cityPoint);
+  scene.addLayer(countyName);
+  scene.addLayer(countyPoint);
+  scene.addLayer(provinceCityName);
+  scene.addLayer(provincePoint);
+  scene.addLayer(island_name);
+  scene.addLayer(island_name1);
+  scene.addLayer(gangwan_name);
+  scene.addLayer(river_name);
+  scene.addLayer(mountainPoint);
+  scene.addLayer(mountainPoint_name);
+  console.log(result);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

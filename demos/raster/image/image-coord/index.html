@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>raster/image/image-coord</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/raster/image/image-coord/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="raster/image/image-coord" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>raster/image/image-coord</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/raster/image/image-coord/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { ImageLayer, PolygonLayer, RasterLayer, Scene } from &#39;@antv/l7&#39;;
+import { Map } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new Map({
+    center: [121.268, 30.3628],
+    zoom: 10,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const baseLayer = new RasterLayer({
+    zIndex: 0,
+  });
+  baseLayer.source(&#39;https://webst0{1-4}.is.autonavi.com/appmaptile?style=6&amp;x={x}&amp;y={y}&amp;z={z}&#39;, {
+    parser: {
+      type: &#39;rasterTile&#39;,
+      tileSize: 256,
+      zoomOffset: 0,
+    },
+  });
+
+  const fill = new PolygonLayer()
+    .source({
+      type: &#39;FeatureCollection&#39;,
+      features: [
+        {
+          type: &#39;Feature&#39;,
+          properties: {},
+          geometry: {
+            type: &#39;Polygon&#39;,
+            coordinates: [
+              [
+                [100.959388, 41.619522],
+                [101.229887, 41.572654],
+                [101.16971, 41.377836],
+                [100.900015, 41.424628],
+                [100.959388, 41.619522],
+              ],
+            ],
+          },
+        },
+      ],
+    })
+    .shape(&#39;line&#39;)
+    .color(&#39;red&#39;)
+    .size(1)
+    .style({ opacity: 1 });
+  const layer = new ImageLayer({
+    autoFit: true,
+  });
+  layer.source(
+    &#39;https://mdn.alipayobjects.com/huamei_gjo0cl/afts/img/A*vm_9S64uA0UAAAAAAAAAAAAADjDHAQ/original&#39;,
+
+    {
+      parser: {
+        type: &#39;image&#39;,
+        coordinates: [
+          [100.959388, 41.619522],
+          [101.229887, 41.572654],
+          [101.16971, 41.377836],
+          [100.900015, 41.424628],
+        ],
+      },
+    },
+  );
+  scene.addLayer(baseLayer);
+  scene.addLayer(layer);
+  scene.addLayer(fill);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

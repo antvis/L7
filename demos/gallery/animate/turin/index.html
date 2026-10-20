@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>gallery/animate/turin</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/gallery/animate/turin/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="gallery/animate/turin" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>gallery/animate/turin</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/gallery/animate/turin/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [7.65, 45.053],
+    zoom: 12,
+    style: &#39;dark&#39;,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/98a5d9ec-be97-44bd-bff0-5742d929c003.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const layer = new LineLayer({})
+        .source(data)
+        .shape(&#39;line&#39;)
+        .color(&#39;highway&#39;, (v) =&gt; {
+          switch (v) {
+            case &#39;motorway&#39;:
+              return &#39;#F9D371&#39;;
+            case &#39;motorway_link&#39;:
+              return &#39;#3DB2FF&#39;;
+            case &#39;trunk&#39;:
+              return &#39;green&#39;;
+            case &#39;trunk_link&#39;:
+              return &#39;#6E85B2&#39;;
+            case &#39;primary&#39;:
+              return &#39;#F47340&#39;;
+            case &#39;primary_link&#39;:
+              return &#39;#F6A9A9&#39;;
+            case &#39;secondary&#39;:
+              return &#39;#EF2F88&#39;;
+            case &#39;secondary_link&#39;:
+              return &#39;#5F7A61&#39;;
+            case &#39;tertiary&#39;:
+              return &#39;#1ee3cf&#39;;
+            case &#39;tertiary_link&#39;:
+              return &#39;#C2F784&#39;;
+            case &#39;pedestrian&#39;:
+              return &#39;#FFF89A&#39;;
+            case &#39;residential&#39;:
+              return &#39;rgba(22, 119, 255, .5)&#39;;
+            case &#39;road&#39;:
+              return &#39;#93FFD8&#39;;
+            case &#39;path&#39;:
+              return &#39;#BAFFB4&#39;;
+            case &#39;unclassified&#39;:
+              return &#39;#D3DEDC&#39;;
+            case &#39;service&#39;:
+              return &#39;#AEFEFF&#39;;
+            case &#39;living_street&#39;:
+              return &#39;#9B0000&#39;;
+            case &#39;track&#39;:
+              return &#39;#F5F5F5&#39;;
+            case &#39;highway&#39;:
+              return &#39;red&#39;;
+            case &#39;rail&#39;:
+              return &#39;#08ffc8&#39;;
+            default:
+              return &#39;#FFE3E3&#39;;
+          }
+        })
+        .animate({
+          interval: 1, // 间隔
+          duration: 1, // 持续时间，延时
+          trailLength: 2, // 流线长度
+        });
+      scene.addLayer(layer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

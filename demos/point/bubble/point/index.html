@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/bubble/point</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/bubble/point/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/bubble/point" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/bubble/point</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/bubble/point/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [140.067171, 36.26186],
+    zoom: 5.32,
+    maxZoom: 10,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const plane = initPlane();
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const pointLayer = new PointLayer({})
+        .source(data)
+        .shape(&#39;circle&#39;)
+        .size(&#39;mag&#39;, [1, 25])
+        .color(&#39;mag&#39;, (mag) =&gt; {
+          return mag &gt; 4.5 ? &#39;#5B8FF9&#39; : &#39;#5CCEA1&#39;;
+        })
+        .active(true)
+        .style({
+          opacity: 0.3,
+          strokeWidth: 1,
+        });
+      scene.addLayer(pointLayer);
+      pointLayer.on(&#39;click&#39;, (e) =&gt; {
+        const { lng, lat } = e.lngLat;
+        scene.setCenter([lng, lat], {
+          padding: {
+            right: 120,
+          },
+        });
+        plane.style.right = &#39;0px&#39;;
+        plane.innerHTML = `
+          &lt;p&gt;click info&lt;/&gt;
+          &lt;p&gt;featureId: ${e.featureId}&lt;/p&gt;
+          &lt;p&gt;lng: ${lng}&lt;/p&gt;
+          &lt;p&gt;lat: ${lat}&lt;/p&gt;
+        `;
+      });
+      pointLayer.on(&#39;unclick&#39;, () =&gt; {
+        plane.style.right = &#39;-120px&#39;;
+        scene.setCenter([140.067171, 36.26186], {
+          padding: {
+            right: 0,
+          },
+        });
+      });
+    });
+});
+
+function initPlane() {
+  const el = document.createElement(&#39;div&#39;);
+  el.style.background = &#39;#fff&#39;;
+  el.style.position = &#39;absolute&#39;;
+  el.style.padding = &#39;10px&#39;;
+  el.style.top = &#39;0&#39;;
+  el.style.right = &#39;-120px&#39;;
+  el.style.width = &#39;100px&#39;;
+  el.style.height = &#39;100%&#39;;
+  el.style.zIndex = &#39;10&#39;;
+  el.style.transition = &#39;0.5s&#39;;
+  // el.innerText = &#39;123&#39;
+  const wrap = document.getElementById(&#39;map&#39;);
+  wrap.appendChild(el);
+  return el;
+}
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>map/map/maplibre</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/map/map/maplibre/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="map/map/maplibre" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>map/map/maplibre</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/map/map/maplibre/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { MapLibre } from &#39;@antv/l7-maps&#39;;
+
+function initMap() {
+  const scene = new Scene({
+    id: &#39;map&#39;,
+    map: new MapLibre({
+      zoom: 10,
+      style: &#39;https://api.maptiler.com/maps/streets/style.json?key=YbCPLULzWdf1NplssEIc&#39;, // style URL
+      minZoom: 0,
+      maxZoom: 18,
+    }),
+  });
+  scene.on(&#39;loaded&#39;, () =&gt; {
+    fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/893d1d5f-11d9-45f3-8322-ee9140d288ae.json&#39;)
+      .then((res) =&gt;
+        res.json({
+          autoFit: true,
+        }),
+      )
+      .then((data) =&gt; {
+        const pointLayer = new PointLayer({
+          autoFit: true,
+        })
+          .source(data, {
+            parser: {
+              type: &#39;json&#39;,
+              x: &#39;longitude&#39;,
+              y: &#39;latitude&#39;,
+            },
+          })
+          .shape(&#39;name&#39;, [
+            &#39;circle&#39;,
+            &#39;triangle&#39;,
+            &#39;square&#39;,
+            &#39;pentagon&#39;,
+            &#39;hexagon&#39;,
+            &#39;octogon&#39;,
+            &#39;hexagram&#39;,
+            &#39;rhombus&#39;,
+            &#39;vesica&#39;,
+          ])
+          .size(&#39;unit_price&#39;, [10, 25])
+          .color(&#39;name&#39;, [&#39;#5B8FF9&#39;, &#39;#5CCEA1&#39;, &#39;#5D7092&#39;, &#39;#F6BD16&#39;, &#39;#E86452&#39;])
+          .style({
+            opacity: 1,
+            strokeWidth: 2,
+          });
+        scene.addLayer(pointLayer);
+      });
+  });
+}
+initMap();
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

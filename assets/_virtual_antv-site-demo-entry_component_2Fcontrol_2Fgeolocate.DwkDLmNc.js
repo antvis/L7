@@ -1,0 +1,1 @@
+import{f as e}from"./src.CdhVPrPk.js";import{P as t,a as n,t as r}from"./src.C_EuEovZ.js";import{t as i}from"./gcoord.esm.DGx-8iCa.js";r();var a=new n({id:`map`,map:new e({pitch:0,style:`normal`,center:[120.154672,30.241095],zoom:12})});a.on(`loaded`,()=>{let e=new t({transform:e=>i.transform(e,i.WGS84,i.GCJ02)});a.addControl(e)});

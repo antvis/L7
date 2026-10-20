@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/text/point-text</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/text/point-text/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/text/point-text" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/text/point-text</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/text/point-text/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [110, 36],
+    style: &#39;dark&#39;,
+    zoom: 3,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/rmsportal/oVTMqfzuuRFKiDwhPSFL.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const pointLayer = new PointLayer({})
+        .source(data.list, {
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;j&#39;,
+            y: &#39;w&#39;,
+          },
+        })
+        .shape(&#39;m&#39;, &#39;text&#39;)
+        .size(12)
+        .color(&#39;#084081&#39;)
+        .style({
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+          spacing: 2, // 字符间距
+          padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: &#39;#ffffff&#39;, // 描边颜色
+          strokeWidth: 2, // 描边宽度
+          strokeOpacity: 1.0,
+          // rotation: 60, // 常量旋转
+          rotation: {
+            // 字段映射旋转
+            field: &#39;t&#39;,
+            value: [30, 270],
+          },
+        });
+
+      scene.addLayer(pointLayer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

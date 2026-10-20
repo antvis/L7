@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>gallery/animate/animate-path-texture</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/gallery/animate/animate-path-texture/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="gallery/animate/animate-path-texture" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>gallery/animate/animate-path-texture</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/gallery/animate/animate-path-texture/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, PolygonLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [120.15, 30.246],
+    zoom: 13.5,
+    style: &#39;dark&#39;,
+    pitchEnable: false,
+    rotation: -90,
+  }),
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  scene.addImage(
+    &#39;arrow&#39;,
+    &#39;https://gw.alipayobjects.com/zos/bmw-prod/ce83fc30-701f-415b-9750-4b146f4b3dd6.svg&#39;,
+  );
+
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/67130c6c-7f49-4680-915c-54e69730861d.json&#39;)
+    .then((data) =&gt; data.json())
+    .then(({ lakeBorderData, lakeData, landData }) =&gt; {
+      const lakeLayer = new PolygonLayer()
+        .source(lakeData)
+        .shape(&#39;fill&#39;)
+        .color(&#39;#1E90FF&#39;)
+        .style({
+          opacity: 0.4,
+          opacityLinear: {
+            enable: true,
+            dir: &#39;out&#39;, // in - out
+          },
+        });
+      const landLayer = new PolygonLayer()
+        .source(landData)
+        .shape(&#39;fill&#39;)
+        .color(&#39;#3CB371&#39;)
+        .style({
+          opacity: 0.4,
+          opacityLinear: {
+            enable: true,
+            dir: &#39;in&#39;, // in - out
+          },
+        });
+
+      const lakeBorderLayer = new PolygonLayer()
+        .source(lakeBorderData)
+        .shape(&#39;fill&#39;)
+        .color(&#39;#ccc&#39;)
+        .style({
+          opacity: 0.5,
+          opacityLinear: {
+            enable: true,
+            dir: &#39;in&#39;, // in - out
+          },
+        });
+
+      scene.addLayer(lakeLayer);
+      scene.addLayer(lakeBorderLayer);
+      scene.addLayer(landLayer);
+    });
+
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/40ef2173-df66-4154-a8c0-785e93a5f18e.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const layer = new LineLayer({})
+        .source(data)
+        .size(3)
+        .shape(&#39;line&#39;)
+        .texture(&#39;arrow&#39;)
+        .color(&#39;rgb(22,119,255)&#39;)
+        .animate({
+          interval: 1, // 间隔
+          duration: 1, // 持续时间，延时
+          trailLength: 2, // 流线长度
+        })
+        .style({
+          opacity: 0.6,
+          lineTexture: true, // 开启线的贴图功能
+          iconStep: 10, // 设置贴图纹理的间距
+          borderWidth: 0.4, // 默认文 0，最大有效值为 0.5
+          borderColor: &#39;#fff&#39;, // 默认为 #ccc
+        });
+      scene.addLayer(layer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

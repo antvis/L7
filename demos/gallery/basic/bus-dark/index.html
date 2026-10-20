@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>gallery/basic/bus-dark</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/gallery/basic/bus-dark/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="gallery/basic/bus-dark" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>gallery/basic/bus-dark</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/gallery/basic/bus-dark/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;dark&#39;,
+    center: [103.83735604457024, 1.360253881403068],
+    pitch: 4.00000000000001,
+    zoom: 10.210275860702593,
+    rotation: 19.313180925794313,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/ee07641d-5490-4768-9826-25862e8019e1.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const layer = new LineLayer({})
+        .source(data, {
+          parser: {
+            coordinates: &#39;path&#39;,
+            type: &#39;json&#39;,
+          },
+        })
+        .size(&#39;level&#39;, (level) =&gt; {
+          return [1.0, level * 1];
+        })
+        .shape(&#39;line&#39;)
+        .color(
+          &#39;level&#39;,
+          [
+            &#39;#312B60&#39;,
+            &#39;#4A457E&#39;,
+            &#39;#615C99&#39;,
+            &#39;#816CAD&#39;,
+            &#39;#A67FB5&#39;,
+            &#39;#C997C7&#39;,
+            &#39;#DEB8D4&#39;,
+            &#39;#F5D4E6&#39;,
+            &#39;#FAE4F1&#39;,
+            &#39;#FFF3FC&#39;,
+          ].slice(0, 8),
+        );
+      scene.addLayer(layer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

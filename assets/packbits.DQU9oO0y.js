@@ -1,0 +1,1 @@
+import{t as e}from"./basedecoder.B9MSveFr.js";var t=class extends e{decodeBlock(e){let t=new DataView(e),n=[];for(let r=0;r<e.byteLength;++r){let e=t.getInt8(r);if(e<0){let i=t.getUint8(r+1);e=-e;for(let t=0;t<=e;++t)n.push(i);r+=1}else{for(let i=0;i<=e;++i)n.push(t.getUint8(r+i+1));r+=e+1}}return new Uint8Array(n).buffer}};export{t as default};

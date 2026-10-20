@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>component/control/syncscene</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/component/control/syncscene/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="component/control/syncscene" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>component/control/syncscene</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/component/control/syncscene/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { GaodeMap, HeatmapLayer, PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { isNumber } from &#39;lodash-es&#39;;
+
+// 通过 Scene 获取到地图引擎类型
+function getMapType(scene) {
+  const mapVersion = scene.getMapService().version;
+  return mapVersion?.includes(&#39;MAPBOX&#39;) ? &#39;Mapbox&#39; : &#39;Gaode&#39;;
+}
+
+// 根据不同地图引擎类型，设置地图的状态「缩放层级、地图中心点、旋转角、倾角」
+const updateSceneStatus = (
+  scene,
+  status = {
+    zoom,
+    center,
+    pitch,
+    rotation,
+  },
+) =&gt; {
+  const mapType = getMapType(scene);
+  const { zoom, center, pitch, rotation } = status;
+  if (mapType === &#39;Gaode&#39;) {
+    const map = scene?.map;
+    // 高德地图关闭动画效果
+    if (center) map.setCenter(center, true);
+    if (isNumber(zoom)) map?.setZoom(zoom + 1, true);
+    if (isNumber(rotation)) map?.setRotation(360 - rotation, true);
+    if (isNumber(pitch)) map?.setPitch(pitch, true);
+  } else {
+    if (isNumber(zoom)) scene?.setZoom(zoom);
+    if (center) scene?.setCenter(center);
+    if (isNumber(rotation)) scene.setRotation(rotation);
+    if (isNumber(pitch)) scene?.setPitch(pitch);
+  }
+};
+
+export function syncScene(scenes, options = {}) {
+  const { zoomGap = 0, mainIndex = 0 } = options ?? {};
+  const listeners = [];
+  let handlers = [];
+
+  // 添加地图事件监听
+  const listen = (index) =&gt; {
+    const scene = scenes[index];
+    scene.on(&#39;mapmove&#39;, handlers[index]);
+    // Gaode 地图调整倾角和旋转角的事件
+    scene.on(&#39;dragging&#39;, handlers[index]);
+    // Mapbox 地图调整倾角和旋转角的事件
+    scene.on(&#39;rotate&#39;, handlers[index]);
+    scene.on(&#39;zoomchange&#39;, handlers[index]);
+
+    return () =&gt; {
+      scene.off(&#39;mapmove&#39;, handlers[index]);
+      scene.off(&#39;dragging&#39;, handlers[index]);
+      scene.off(&#39;zoomchange&#39;, handlers[index]);
+      scene.off(&#39;rotate&#39;, handlers[index]);
+    };
+  };
+
+  const clearListener = () =&gt; {
+    listeners?.forEach((call) =&gt; call());
+    listeners.length = 0;
+  };
+
+  // 根据指定索引的 scene 同步其他 scene 状态
+  const moveScenePosition = (index) =&gt; {
+    const movedScene = scenes[index];
+    const center = movedScene.getCenter();
+    const zoom = movedScene.getZoom();
+    const rotation = movedScene.getRotation();
+    const pitch = movedScene.getPitch();
+    /**
+     * 根据当前地图是否为主地图，分两种情况
+     * 1. 非主地图，则其他非主地图 zoom 设置当前 zoom ，主地图设置为 zoom - zoomGap
+     * 2. 主地图，则其他非主地图 zoom 设置为 zoom + zoomGap
+     */
+    const isMovedMainScene = index === mainIndex;
+    scenes.forEach((scene, num) =&gt; {
+      if (num !== index) {
+        // 当前需要同步的状态是不是主地图
+        const sceneZoom = isMovedMainScene
+          ? zoom + zoomGap
+          : num === mainIndex
+            ? zoom - zoomGap
+            : zoom;
+        updateSceneStatus(scene, {
+          zoom: sceneZoom,
+          center: [center.lng, center.lat],
+          rotation,
+          pitch,
+        });
+      }
+    });
+  };
+
+  const syncHandler = (index) =&gt; {
+    clearListener();
+    moveScenePosition(index);
+    initListener();
+  };
+
+  function initListener() {
+    handlers = scenes.map((value, index) =&gt; {
+      // 每个地图有自己的状态同步函数
+      return syncHandler.bind(null, index);
+    });
+    scenes.forEach((scene, index) =&gt; {
+      // 给每个地图绑定监听
+      listeners.push(listen(index));
+    });
+  }
+
+  // 初始化,先将所有地图状态同步。
+  scenes.forEach((value, index) =&gt; {
+    moveScenePosition(index);
+  });
+
+  // 添加地图事件监听
+  initListener();
+
+  // 返回清除绑定的监听事件函数
+  return clearListener;
+}
+
+const mapDiv = document.getElementById(&#39;map&#39;);
+if (mapDiv) {
+  mapDiv.style.cssText = &#39;display: flex; height: 700px&#39;;
+  // 创建第一个新div并设置一些属性或内容
+  const newMapDiv1 = document.createElement(&#39;div&#39;);
+  newMapDiv1.style.cssText = &#39;width: 50%; height: 700px; position: relative; margin-right: 5px;&#39;;
+  newMapDiv1.id = &#39;map1&#39;; // 给新div设置id
+
+  // 创建第二个新div并设置一些属性或内容
+  const newMapDiv2 = document.createElement(&#39;div&#39;);
+  newMapDiv2.style.cssText = &#39;width: 50%; height: 700px; position: relative;  margin-left: 5px;&#39;;
+  newMapDiv2.id = &#39;map2&#39;; // 给新div设置id
+
+  mapDiv.appendChild(newMapDiv1);
+  mapDiv.appendChild(newMapDiv2);
+
+  const scene = new Scene({
+    id: &#39;map1&#39;,
+    map: new GaodeMap({
+      pitch: 0,
+      style: &#39;normal&#39;,
+      center: [114.07737552216226, 22.542656745583486],
+      rotation: 90,
+      zoom: 12.47985,
+    }),
+    // 关闭默认 L7 Logo
+    logoVisible: false,
+  });
+  scene.on(&#39;loaded&#39;, () =&gt; {
+    fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json&#39;)
+      .then((res) =&gt; res.json())
+      .then((data) =&gt; {
+        const pointLayer = new PointLayer({})
+          .source(data)
+          .shape(&#39;circle&#39;)
+          .size(&#39;h12&#39;, [2, 5])
+          .color(
+            &#39;h12&#39;,
+            [
+              &#39;#094D4A&#39;,
+              &#39;#146968&#39;,
+              &#39;#1D7F7E&#39;,
+              &#39;#289899&#39;,
+              &#39;#34B6B7&#39;,
+              &#39;#4AC5AF&#39;,
+              &#39;#5FD3A6&#39;,
+              &#39;#7BE39E&#39;,
+            ].reverse(),
+          );
+        scene.addLayer(pointLayer);
+      });
+  });
+  const scene1 = new Scene({
+    id: &#39;map2&#39;,
+    map: new GaodeMap({
+      pitch: 0,
+      style: &#39;normal&#39;,
+      center: [114.07737552216226, 22.542656745583486],
+      rotation: 90,
+      zoom: 12.47985,
+    }),
+    // 关闭默认 L7 Logo
+    logoVisible: false,
+  });
+  scene1.on(&#39;loaded&#39;, () =&gt; {
+    fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json&#39;)
+      .then((res) =&gt; res.json())
+      .then((data) =&gt; {
+        const pointLayer = new HeatmapLayer({})
+          .source(data, {
+            transforms: [
+              {
+                type: &#39;hexagon&#39;,
+                size: 400,
+                field: &#39;h12&#39;,
+                method: &#39;sum&#39;,
+              },
+            ],
+          })
+          .shape(&#39;hexagon&#39;)
+          .style({
+            coverage: 0.9,
+            angle: 0,
+          })
+
+          .color(
+            &#39;sum&#39;,
+            [
+              &#39;#094D4A&#39;,
+              &#39;#146968&#39;,
+              &#39;#1D7F7E&#39;,
+              &#39;#289899&#39;,
+              &#39;#34B6B7&#39;,
+              &#39;#4AC5AF&#39;,
+              &#39;#5FD3A6&#39;,
+              &#39;#7BE39E&#39;,
+            ].reverse(),
+          );
+        scene1.addLayer(pointLayer);
+      });
+  });
+
+  syncScene([scene, scene1]);
+}
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

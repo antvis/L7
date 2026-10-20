@@ -1,0 +1,6 @@
+import{a as e}from"./rolldown-runtime.BWaJ3C7D.js";import{t,u as n}from"./src.CdhVPrPk.js";import{Ft as r,a as i,ot as a,t as o}from"./src.C_EuEovZ.js";import{t as s}from"./LercDecode.WHw6Uy7J.js";o(),t();var c=e(s()),l=[`#fff7fb`,`#ece7f2`,`#d0d1e6`,`#a6bddb`,`#74a9cf`,`#3690c0`,`#0570b0`,`#045a8d`,`#023858`],u=[0,.2,.3,.4,.5,.6,.7,.8,1],d=new i({id:`map`,map:new n({center:[90.268,35.3628],zoom:3})});d.on(`loaded`,()=>{let e=new a,t=new r(`https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer/tile/{z}/{y}/{x}`,{parser:{type:`rasterTile`,dataType:`arraybuffer`,tileSize:256,format:async e=>{let t=c.default.decode(e);return{rasterData:t.pixels[0],width:t.width,height:t.height}}}});return e.source(t).style({domain:[0,1024],clampLow:!0,rampColors:{colors:l,positions:u}}),d.addLayer(e),``});var f=document.getElementById(`map`),p=document.createElement(`div`),m=[];for(let e=0;e<l.length;e++)m.push({color:l[e],text:u[e]});var h=[];m.map(({color:e,text:t})=>(h.push(`  <div style="display:inline-block;background:#fff;padding:5px;">
+  <div style="fontSize:12px;lineHeight:12px;">
+    ${t}
+  </div>
+  <div style="width: 30px;height:8px; background: ${e};"></div>
+  </div>`),``)),p.innerHTML=h.join(``),p.style.position=`absolute`,p.style.left=`10px`,p.style.bottom=`30px`,p.style.background=`#fff`,p.style.zIndex=10,f.appendChild(p);

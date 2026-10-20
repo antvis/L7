@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>heatmap/grid/world</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/heatmap/grid/world/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="heatmap/grid/world" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>heatmap/grid/world</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/heatmap/grid/world/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { HeatmapLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;dark&#39;,
+    center: [110.097892, 33.853662],
+    zoom: 4.056,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/7359a5e9-3c5e-453f-b207-bc892fb23b84.csv&#39;)
+    .then((res) =&gt; res.text())
+    .then((data) =&gt; {
+      const layer = new HeatmapLayer({})
+        .source(data, {
+          parser: {
+            type: &#39;csv&#39;,
+            x: &#39;lng&#39;,
+            y: &#39;lat&#39;,
+          },
+          transforms: [
+            {
+              type: &#39;grid&#39;,
+              size: 10000,
+              field: &#39;v&#39;,
+              method: &#39;sum&#39;,
+            },
+          ],
+        })
+        .shape(&#39;square&#39;)
+        .style({
+          coverage: 1,
+          angle: 0,
+        })
+        .color(
+          &#39;count&#39;,
+          [
+            &#39;#FF3417&#39;,
+            &#39;#FF7412&#39;,
+            &#39;#FFB02A&#39;,
+            &#39;#FFE754&#39;,
+            &#39;#46F3FF&#39;,
+            &#39;#02BEFF&#39;,
+            &#39;#1A7AFF&#39;,
+            &#39;#0A1FB2&#39;,
+          ].reverse(),
+        );
+      scene.addLayer(layer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

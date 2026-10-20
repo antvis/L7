@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tile/vector/chinamap</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/tile/vector/chinamap/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="tile/vector/chinamap" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>tile/vector/chinamap</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/tile/vector/chinamap/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>// @ts-ignore
+import { LineLayer, PointLayer, PolygonLayer, Scene, Source } from &#39;@antv/l7&#39;;
+// @ts-ignore
+import { Map } from &#39;@antv/l7-maps&#39;;
+
+const colors = {};
+const GDPSpeed = {
+  &#39;520000&#39;: 10, //贵州
+  &#39;540000&#39;: 10, //西藏
+  &#39;530000&#39;: 8.5, //云南
+  &#39;500000&#39;: 8.5, //重庆
+  &#39;360000&#39;: 8.5, //江西
+  &#39;340000&#39;: 8.0, //安徽
+  &#39;510000&#39;: 7.5, //四川
+  &#39;350000&#39;: 8.5, //福建
+  &#39;430000&#39;: 8.0, //湖南
+  &#39;420000&#39;: 7.5, //湖北
+  &#39;410000&#39;: 7.5, //河南
+  &#39;330000&#39;: 7.0, //浙江
+  &#39;640000&#39;: 7.5, //宁夏
+  &#39;650000&#39;: 7.0, //新疆
+  &#39;440000&#39;: 7.0, //广东
+  &#39;370000&#39;: 7.0, //山东
+  &#39;450000&#39;: 7.3, //广西
+  &#39;630000&#39;: 7.0, //青海
+  &#39;320000&#39;: 7.0, //江苏
+  &#39;140000&#39;: 6.5, //山西
+  &#39;460000&#39;: 7, // 海南
+  &#39;310000&#39;: 6.5, //上海
+  &#39;110000&#39;: 6.5, // 北京
+  &#39;130000&#39;: 6.5, // 河北
+  &#39;230000&#39;: 6, // 黑龙江
+  &#39;220000&#39;: 6, // 吉林
+  &#39;210000&#39;: 6.5, //辽宁
+  &#39;150000&#39;: 6.5, //内蒙古
+  &#39;120000&#39;: 5, // 天津
+  &#39;620000&#39;: 6, // 甘肃
+  &#39;610000&#39;: 8.5, // 甘肃
+  &#39;710000&#39;: 6.64, //台湾
+  &#39;810000&#39;: 6.0, //香港
+  &#39;820000&#39;: 6.7, //澳门
+};
+const getColorByDGP = function (adcode) {
+  if (!colors[adcode]) {
+    const gdp = GDPSpeed[adcode];
+    if (!gdp) {
+      colors[adcode] = &#39;rgb(227,227,227)&#39;;
+    } else {
+      const rg = 255 - Math.floor(((gdp - 5) / 5) * 255);
+      colors[adcode] = &#39;rgb(&#39; + rg + &#39;,&#39; + rg + &#39;,255)&#39;;
+    }
+  }
+  return colors[adcode];
+};
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+
+  map: new Map({
+    center: [112, 30],
+
+    // zoom: 12,
+    zoom: 3,
+  }),
+});
+
+const url =
+  &#39;https://mvt.amap.com/district/CHN2/{z}/{x}/{y}/4096?key=309f07ac6bc48160e80b480ae511e1e9&amp;version=&#39;;
+const source = new Source(url, {
+  parser: {
+    type: &#39;mvt&#39;,
+    tileSize: 256,
+    warp: false,
+  },
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  // 绿地
+  const fill = new PolygonLayer({
+    sourceLayer: &#39;CHN_Cities&#39;,
+  })
+    .source(source)
+    .shape(&#39;fill&#39;)
+    .color(&#39;adcode_pro&#39;, getColorByDGP);
+
+  const line = new LineLayer({
+    sourceLayer: &#39;CHN_Cities_L&#39;,
+  })
+    .source(source)
+    .shape(&#39;line&#39;)
+    .color(&#39;#FFA500&#39;);
+
+  const line2 = new LineLayer({
+    sourceLayer: &#39;CHN_L&#39;,
+  })
+    .source(source)
+    .shape(&#39;line&#39;)
+    .size(0.6)
+    .color(&#39;#053061&#39;);
+
+  const text = new PointLayer({
+    sourceLayer: &#39;CHN_Cities&#39;,
+    blend: &#39;normal&#39;,
+  })
+    .source(source)
+    .shape(&#39;id&#39;, &#39;text&#39;)
+    .size(12)
+    .color(&#39;#000&#39;);
+  scene.addLayer(fill);
+  scene.addLayer(line);
+  scene.addLayer(line2);
+  scene.addLayer(text);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

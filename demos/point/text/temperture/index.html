@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/text/temperture</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/text/temperture/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/text/temperture" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/text/temperture</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/text/temperture/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, PointLayer, PolygonLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;dark&#39;,
+    pitch: 40,
+    center: [118.8, 32.056],
+    zoom: 12.5,
+  }),
+});
+const fontFamily = &#39;iconfont&#39;;
+const fontPath = &#39;//at.alicdn.com/t/font_2534097_x6rsov3i1g.woff2?t=1622107341225&#39;;
+scene.addIconFont(&#39;icon&#39;, &#39;&amp;#xe69e;&#39;);
+scene.addFontFace(fontFamily, fontPath);
+
+const colors = [
+  &#39;#87CEFA&#39;,
+  &#39;#00BFFF&#39;,
+
+  &#39;#7FFFAA&#39;,
+  &#39;#00FF7F&#39;,
+  &#39;#32CD32&#39;,
+
+  &#39;#F0E68C&#39;,
+  &#39;#FFD700&#39;,
+
+  &#39;#FF7F50&#39;,
+  &#39;#FF6347&#39;,
+  &#39;#FF0000&#39;,
+];
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/94763191-2816-4c1a-8d0d-8bcf4181056a.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const filllayer = new PolygonLayer({
+        name: &#39;fill&#39;,
+        zIndex: 3,
+      })
+        .source(data)
+        .shape(&#39;fill&#39;)
+        .color(&#39;count&#39;, [&#39;#f2f0f7&#39;, &#39;#dadaeb&#39;, &#39;#bcbddc&#39;, &#39;#9e9ac8&#39;, &#39;#756bb1&#39;, &#39;#54278f&#39;])
+        .style({
+          opacity: 0.6,
+          opacityLinear: {
+            enable: true,
+            dir: &#39;out&#39;, // in - out
+          },
+        });
+      scene.addLayer(filllayer);
+
+      const linelayer = new LineLayer({
+        zIndex: 5,
+        name: &#39;line2&#39;,
+      })
+        .source(data)
+        .shape(&#39;line&#39;)
+        .size(1)
+        .color(&#39;#fff&#39;)
+        .style({
+          opacity: 0.3,
+        });
+      scene.addLayer(linelayer);
+
+      const pointLayer = new PointLayer({
+        zIndex: 10,
+      })
+        .source(data)
+        .shape(&#39;icon&#39;, &#39;text&#39;)
+        .size(25)
+        .color(&#39;count&#39;, (t) =&gt; {
+          const c = Number(t.replace(&#39;℃&#39;, &#39;&#39;));
+          return colors[Math.floor(((c - 18) / 16) * 10)];
+        })
+        .style({
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [-25, 15],
+          padding: [2, 2],
+          fontFamily,
+          iconfont: true,
+          textAllowOverlap: true,
+        });
+      scene.addLayer(pointLayer);
+
+      const tempertureLayer = new PointLayer({
+        zIndex: 10,
+      })
+        .source(data)
+        .shape(&#39;count&#39;, &#39;text&#39;)
+        .size(12)
+        .color(&#39;count&#39;, (t) =&gt; {
+          const c = Number(t.replace(&#39;℃&#39;, &#39;&#39;));
+          return colors[Math.floor(((c - 18) / 16) * 10)];
+        })
+        .style({
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [35, 30],
+          padding: [1, 1],
+        });
+      scene.addLayer(tempertureLayer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

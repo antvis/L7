@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tile/vector/chinadistrictmap</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/tile/vector/chinadistrictmap/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="tile/vector/chinadistrictmap" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>tile/vector/chinadistrictmap</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/tile/vector/chinadistrictmap/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>// @ts-ignore
+import { LineLayer, PolygonLayer, Scene, Source } from &#39;@antv/l7&#39;;
+// @ts-ignore
+import { Map } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+
+  map: new Map({
+    zoom: 4.5,
+    center: [116.412427, 39.303573],
+  }),
+});
+
+const url =
+  &#39;https://mvt.amap.com/district/CHN3/{z}/{x}/{y}/4096?key=309f07ac6bc48160e80b480ae511e1e9&amp;version=&#39;;
+const source = new Source(url, {
+  parser: {
+    type: &#39;mvt&#39;,
+    tileSize: 256,
+    warp: false,
+  },
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const colors = {};
+  const getColorByAdcode = function (adcode) {
+    if (!colors[adcode]) {
+      const gb = Math.floor(Math.random() * 155 + 50);
+      colors[adcode] = &#39;rgb(&#39; + gb + &#39;,&#39; + gb + &#39;,255)&#39;;
+    }
+
+    return colors[adcode];
+  };
+  // 绿地
+  const fill = new PolygonLayer({
+    sourceLayer: &#39;CHN_Districts&#39;,
+  })
+    .source(source)
+    .shape(&#39;fill&#39;)
+    .color(&#39;adcode&#39;, getColorByAdcode);
+
+  const line = new LineLayer({
+    sourceLayer: &#39;CHN_Districts_L&#39;,
+  })
+    .source(source)
+    .shape(&#39;simple&#39;)
+    .color(&#39;#fee0d2&#39;);
+
+  const line2 = new LineLayer({
+    sourceLayer: &#39;CHN_Citys_L&#39;,
+  })
+    .source(source)
+    .shape(&#39;line&#39;)
+    .size(0.6)
+    .color(&#39;#fc9272&#39;);
+
+  const line3 = new LineLayer({
+    sourceLayer: &#39;CHN_Provinces_L&#39;,
+  })
+    .source(source)
+    .shape(&#39;line&#39;)
+    .size(0.6)
+    .color(&#39;#de2d26&#39;);
+
+  scene.addLayer(fill);
+  scene.addLayer(line);
+  scene.addLayer(line2);
+  scene.addLayer(line3);
+  //   scene.addLayer(line2);
+  // const debugerLayer = new TileDebugLayer({ usage: &#39;basemap&#39; });
+  // scene.addLayer(debugerLayer);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

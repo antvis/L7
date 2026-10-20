@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>earth/arc3d/flyline</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/earth/arc3d/flyline/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="earth/arc3d/flyline" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>earth/arc3d/flyline</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/earth/arc3d/flyline/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { EarthLayer, LineLayer, Scene } from &#39;@antv/l7&#39;;
+import { Earth } from &#39;@antv/l7-maps&#39;;
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new Earth({}),
+});
+
+// 地球模式下背景色默认为 #000 通过 setBgColor 方法我们可以设置可视化层的背景色
+scene.setBgColor(&#39;#333&#39;);
+
+const earthlayer = new EarthLayer()
+  .source(&#39;https://gw.alipayobjects.com/mdn/rms_23a451/afts/img/A*3-3NSpqRqUoAAAAAAAAAAAAAARQnAQ&#39;, {
+    parser: {
+      type: &#39;image&#39;,
+    },
+  })
+  .color(&#39;#2E8AE6&#39;)
+  .shape(&#39;fill&#39;)
+  .style({
+    globalOptions: {
+      ambientRatio: 0.6, // 环境光
+      diffuseRatio: 0.4, // 漫反射
+      specularRatio: 0.1, // 高光反射
+    },
+  })
+  .animate(true);
+
+const atomLayer = new EarthLayer().color(&#39;#2E8AE6&#39;).shape(&#39;atomSphere&#39;);
+
+const bloomLayer = new EarthLayer().color(&#39;#fff&#39;).shape(&#39;bloomSphere&#39;).style({
+  opacity: 0.7,
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  scene.addLayer(earthlayer);
+
+  scene.addLayer(atomLayer);
+  scene.addLayer(bloomLayer);
+
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/20a69b46-3d6d-4ab5-b8b5-150b6aa52c88.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((flydata) =&gt; {
+      const flyLine = new LineLayer({ blend: &#39;normal&#39; })
+        .source(flydata, {
+          parser: {
+            type: &#39;json&#39;,
+            coordinates: &#39;coord&#39;,
+          },
+        })
+        .color(&#39;#b97feb&#39;)
+        .shape(&#39;arc3d&#39;)
+        .size(0.5)
+        .active(true)
+        .animate({
+          interval: 2,
+          trailLength: 2,
+          duration: 1,
+        })
+        .style({
+          segmentNumber: 60,
+          globalArcHeight: 20,
+        });
+      scene.addLayer(flyLine);
+    });
+
+  earthlayer.setEarthTime(4.0);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

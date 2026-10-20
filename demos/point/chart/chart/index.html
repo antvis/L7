@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/chart/chart</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/chart/chart/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/chart/chart" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/chart/chart</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/chart/chart/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import * as G2 from &#39;@antv/g2&#39;;
+import { Marker, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [2.6125016864608597, 49.359131],
+    zoom: 4.19,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  addChart();
+  scene.render();
+});
+function addChart() {
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/0b96cca4-7e83-449a-93d0-2a77053e74ab.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      data.nodes.forEach(function (item) {
+        const el = document.createElement(&#39;div&#39;);
+        const total = item.gdp.Agriculture + item.gdp.Industry + item.gdp.Service;
+
+        const size = Math.min(parseInt(total / 30000, 10), 70);
+        if (size &lt; 30) {
+          return;
+        }
+        const itemData = [
+          {
+            item: &#39;Agriculture&#39;,
+            count: item.gdp.Agriculture,
+            percent: item.gdp.Agriculture / total,
+          },
+          {
+            item: &#39;Industry&#39;,
+            count: item.gdp.Industry,
+            percent: item.gdp.Industry / total,
+          },
+          {
+            item: &#39;Service&#39;,
+            count: item.gdp.Service,
+            percent: item.gdp.Service / total,
+          },
+        ];
+
+        const chart = new G2.Chart({
+          container: el,
+          width: size,
+          height: size,
+          render: &#39;svg&#39;,
+          padding: 0,
+        });
+        console.log(chart);
+        chart.legend(false);
+        chart.data(itemData);
+        chart.coord(&#39;theta&#39;, {
+          innerRadius: 0.6,
+        });
+        chart.tooltip(false);
+        chart
+          .interval()
+          .adjust(&#39;stack&#39;)
+          .position(&#39;percent&#39;)
+          .color(&#39;item&#39;, [&#39;#5CCEA1&#39;, &#39;#5D7092&#39;, &#39;#5B8FF9&#39;])
+          .shape(&#39;sliceShape&#39;);
+        chart.render();
+        const marker = new Marker({
+          element: el,
+        }).setLnglat({
+          lng: item.coordinates[0],
+          lat: item.coordinates[1],
+        });
+        scene.addMarker(marker);
+      });
+    });
+}
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

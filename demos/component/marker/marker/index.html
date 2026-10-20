@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>component/marker/marker</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/component/marker/marker/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="component/marker/marker" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>component/marker/marker</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/component/marker/marker/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { Marker, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [105.790327, 36.495636],
+    zoom: 4,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  addMarkers();
+  scene.render();
+});
+function addMarkers() {
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/67f47049-8787-45fc-acfe-e19924afe032.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((nodes) =&gt; {
+      for (let i = 0; i &lt; nodes.length; i++) {
+        if (nodes[i].g !== &#39;1&#39; || nodes[i].v === &#39;&#39;) {
+          continue;
+        }
+        const el = document.createElement(&#39;label&#39;);
+        el.className = &#39;labelclass&#39;;
+        el.textContent = nodes[i].v + &#39;℃&#39;;
+        el.style.background = getColor(nodes[i].v);
+        el.style.borderColor = getColor(nodes[i].v);
+        const marker = new Marker({
+          element: el,
+        }).setLnglat({ lng: nodes[i].x * 1, lat: nodes[i].y });
+        scene.addMarker(marker);
+      }
+    });
+}
+
+function getColor(v) {
+  return v &gt; 50
+    ? &#39;#800026&#39;
+    : v &gt; 40
+      ? &#39;#BD0026&#39;
+      : v &gt; 30
+        ? &#39;#E31A1C&#39;
+        : v &gt; 20
+          ? &#39;#FC4E2A&#39;
+          : v &gt; 10
+            ? &#39;#FD8D3C&#39;
+            : v &gt; 5
+              ? &#39;#FEB24C&#39;
+              : v &gt; 0
+                ? &#39;#FED976&#39;
+                : &#39;#FFEDA0&#39;;
+}
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

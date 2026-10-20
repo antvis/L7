@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>raster/data/light</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/raster/data/light/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="raster/data/light" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>raster/data/light</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/raster/data/light/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>// https://gw.alipayobjects.com/zos/antvdemo/assets/2019_clip/ndvi_201905.tif
+import { RasterLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+import * as GeoTIFF from &#39;geotiff&#39;;
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;dark&#39;,
+    center: [105, 37.5],
+    zoom: 2.5,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  addLayer();
+});
+async function getTiffData() {
+  const response = await fetch(
+    &#39;https://gw.alipayobjects.com/zos/antvdemo/assets/light_clip/lightF182013.tiff&#39;,
+  );
+  const arrayBuffer = await response.arrayBuffer();
+  const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+  const image = await tiff.getImage();
+  const width = image.getWidth();
+  const height = image.getHeight();
+  const values = await image.readRasters();
+  return {
+    data: values[0],
+    width,
+    height,
+  };
+}
+
+async function addLayer() {
+  const tiffdata = await getTiffData();
+
+  const layer = new RasterLayer({});
+  layer
+    .source(tiffdata.data, {
+      parser: {
+        type: &#39;raster&#39;,
+        width: tiffdata.width,
+        height: tiffdata.height,
+        extent: [
+          73.4821902409999979, 3.8150178409999995, 135.1066187319999869, 57.6300459959999998,
+        ],
+      },
+    })
+    .style({
+      clampLow: false,
+      clampHigh: false,
+      domain: [0, 90],
+      noDataValue: 0,
+      rampColors: {
+        type: &#39;linear&#39;, // 2.13.0 及以后版本支持
+        colors: [
+          &#39;rgba(92,58,16,0)&#39;,
+          &#39;rgba(92,58,16,0)&#39;,
+          &#39;#fabd08&#39;,
+          &#39;#f1e93f&#39;,
+          &#39;#f1ff8f&#39;,
+          &#39;#fcfff7&#39;,
+        ],
+        positions: [0, 3, 9, 22.5, 45, 90],
+      },
+    });
+
+  scene.addLayer(layer);
+}
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

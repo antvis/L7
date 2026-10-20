@@ -1,0 +1,1 @@
+export{t as FBXLoader}from"./FBXLoader.BHjSED4I.js";

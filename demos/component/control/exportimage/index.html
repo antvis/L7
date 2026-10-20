@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>component/control/exportimage</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/component/control/exportimage/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="component/control/exportimage" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>component/control/exportimage</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/component/control/exportimage/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { ExportImage, GaodeMap, PolygonLayer, Scene } from &#39;@antv/l7&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    pitch: 0,
+    style: &#39;normal&#39;,
+    center: [120.154672, 30.241095],
+    zoom: 12,
+    WebGLParams: {
+      preserveDrawingBuffer: true,
+    },
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const polygonLayer = new PolygonLayer({});
+  polygonLayer
+    .source({
+      type: &#39;FeatureCollection&#39;,
+      features: [
+        {
+          type: &#39;Feature&#39;,
+          properties: {},
+          geometry: {
+            type: &#39;Polygon&#39;,
+            coordinates: [
+              [
+                [120.143575, 30.239811],
+                [120.143575, 30.247856],
+                [120.151213, 30.247856],
+                [120.151213, 30.239811],
+                [120.143575, 30.239811],
+              ],
+            ],
+          },
+        },
+      ],
+    })
+    .color(&#39;#ff0000&#39;)
+    .style({
+      opacity: 0.5,
+    });
+  scene.addLayer(polygonLayer);
+  const exportImage = new ExportImage({
+    onExport: (base64) =&gt; {
+      alert(base64);
+    },
+  });
+  scene.addControl(exportImage);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

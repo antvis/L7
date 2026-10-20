@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tile/raster/terrain</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/tile/raster/terrain/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="tile/raster/terrain" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>tile/raster/terrain</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/tile/raster/terrain/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>//@ts-ignore
+import { RasterLayer, Scene } from &#39;@antv/l7&#39;;
+//@ts-ignore
+import { Map } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new Map({
+    center: [130, 30],
+    pitch: 0,
+    zoom: 1.5,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const layer = new RasterLayer()
+    .source(
+      &#39;https://tiles{1-3}.geovisearth.com/base/v1/terrain_rgb/{z}/{x}/{y}?format=png&amp;tmsIds=w&amp;token=b2a0cfc132cd60b61391b9dd63c15711eadb9b38a9943e3f98160d5710aef788&#39;,
+      {
+        parser: {
+          type: &#39;rasterTile&#39;,
+          dataType: &#39;terrainRGB&#39;,
+          tileSize: 256,
+          zoomOffset: 0,
+        },
+      },
+    )
+    .style({
+      clampLow: false,
+      clampHigh: false,
+      domain: [0, 7000],
+      rampColors: {
+        colors: [&#39;#d73027&#39;, &#39;#fc8d59&#39;, &#39;#fee08b&#39;, &#39;#d9ef8b&#39;, &#39;#91cf60&#39;, &#39;#1a9850&#39;],
+        positions: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+      },
+    });
+
+  scene.addLayer(layer);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

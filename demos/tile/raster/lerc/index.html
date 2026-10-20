@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tile/raster/lerc</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/tile/raster/lerc/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="tile/raster/lerc" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>tile/raster/lerc</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/tile/raster/lerc/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { RasterLayer, Scene, Source } from &#39;@antv/l7&#39;;
+import { Map } from &#39;@antv/l7-maps&#39;;
+import Lerc from &#39;lerc&#39;;
+
+const colorList = [
+  &#39;#fff7fb&#39;,
+  &#39;#ece7f2&#39;,
+  &#39;#d0d1e6&#39;,
+  &#39;#a6bddb&#39;,
+  &#39;#74a9cf&#39;,
+  &#39;#3690c0&#39;,
+  &#39;#0570b0&#39;,
+  &#39;#045a8d&#39;,
+  &#39;#023858&#39;,
+];
+const positions = [0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0];
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new Map({
+    center: [90.268, 35.3628],
+    zoom: 3,
+  }),
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const layer = new RasterLayer();
+  const tileSource = new Source(
+    &#39;https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer/tile/{z}/{y}/{x}&#39;,
+    {
+      parser: {
+        type: &#39;rasterTile&#39;,
+        dataType: &#39;arraybuffer&#39;,
+        tileSize: 256,
+        format: async (data) =&gt; {
+          const image = Lerc.decode(data);
+          return {
+            rasterData: image.pixels[0],
+            width: image.width,
+            height: image.height,
+          };
+        },
+      },
+    },
+  );
+
+  layer.source(tileSource).style({
+    domain: [0, 1024],
+    clampLow: true,
+    rampColors: {
+      colors: colorList,
+      positions,
+    },
+  });
+
+  scene.addLayer(layer);
+  return &#39;&#39;;
+});
+
+const wrap = document.getElementById(&#39;map&#39;);
+const legend = document.createElement(&#39;div&#39;);
+
+const data = [];
+for (let i = 0; i &lt; colorList.length; i++) {
+  data.push({
+    color: colorList[i],
+    text: positions[i],
+  });
+}
+const strArr = [];
+data.map(({ color, text }) =&gt; {
+  strArr.push(`  &lt;div style=&quot;display:inline-block;background:#fff;padding:5px;&quot;&gt;
+  &lt;div style=&quot;fontSize:12px;lineHeight:12px;&quot;&gt;
+    ${text}
+  &lt;/div&gt;
+  &lt;div style=&quot;width: 30px;height:8px; background: ${color};&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;`);
+  return &#39;&#39;;
+});
+legend.innerHTML = strArr.join(&#39;&#39;);
+legend.style.position = &#39;absolute&#39;;
+legend.style.left = &#39;10px&#39;;
+legend.style.bottom = &#39;30px&#39;;
+legend.style.background = &#39;#fff&#39;;
+legend.style.zIndex = 10;
+
+wrap.appendChild(legend);
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

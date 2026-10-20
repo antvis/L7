@@ -1,0 +1,407 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>gallery/animate/grid</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/gallery/animate/grid/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="gallery/animate/grid" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>gallery/animate/grid</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/gallery/animate/grid/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { LineLayer, PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+import { ThreeLayer, ThreeRender } from &#39;@antv/l7-three&#39;;
+import * as THREE from &#39;three&#39;;
+
+function getImageData(img) {
+  const canvas = document.createElement(&#39;canvas&#39;);
+  const ctx = canvas.getContext(&#39;2d&#39;);
+  const { width, height } = img;
+  canvas.width = width;
+  canvas.height = height;
+
+  ctx.drawImage(img, 0, 0, width, height);
+  const imageData = ctx.getImageData(0, 0, width, height);
+
+  return imageData;
+}
+
+function getLatData(data) {
+  const size = Math.floor(Math.sqrt(data.length));
+
+  const arr = [];
+  const startLng = 110,
+    lngStep = 5 / (size - 1);
+  const startLat = 30,
+    latStep = -5 / (size - 1);
+  for (let i = 0; i &lt; size; i++) {
+    const arr2 = [];
+    for (let j = 0; j &lt; size; j++) {
+      const index = i + j * size;
+      const x = startLng + lngStep * i;
+      const y = startLat + latStep * j;
+
+      arr2.push([x, y, data[index]]);
+    }
+    arr.push(arr2);
+  }
+  return arr;
+}
+
+function getLngData(data) {
+  const size = Math.floor(Math.sqrt(data.length));
+  const arr = [];
+  const startLng = 110,
+    lngStep = 5 / (size - 1);
+  const startLat = 30,
+    latStep = -5 / (size - 1);
+
+  for (let i = 0; i &lt; size; i++) {
+    const arr2 = [];
+    for (let j = 0; j &lt; size; j++) {
+      const index = i * size + j;
+      const x = startLng + lngStep * j;
+      const y = startLat + latStep * i;
+
+      arr2.push([x, y, data[index]]);
+    }
+    arr.push(arr2);
+  }
+  return arr;
+}
+
+function getR(data) {
+  const arr = [];
+  for (let i = 0; i &lt; data.length; i += 4) {
+    arr.push(data[i]);
+  }
+  return arr;
+}
+
+function setMaterial(object) {
+  if (object.children &amp;&amp; object.children.length &amp;&amp; object.children.length &gt; 0) {
+    object.children.map((child) =&gt; setMaterial(child));
+  } else if (object.material) {
+    object.material.wireframe = true;
+    object.material.opacity = 0.6;
+  }
+}
+
+const airPorts = [
+  {
+    name: &#39;常德桃花源机场&#39;,
+    lng: 111.641101,
+    lat: 28.91165,
+  },
+  {
+    name: &#39;芷江机场&#39;,
+    lng: 109.709699,
+    lat: 27.442172,
+  },
+  {
+    name: &#39;铜仁凤凰机场&#39;,
+    lng: 109.313971,
+    lat: 27.880629,
+  },
+  {
+    name: &#39;永州零陵机场&#39;,
+    lng: 111.616049,
+    lat: 26.335053,
+  },
+  {
+    name: &#39;桂林两江国际机场&#39;,
+    lng: 110.049256,
+    lat: 25.210065,
+  },
+  {
+    name: &#39;长沙黄花国际机场&#39;,
+    lng: 113.216412,
+    lat: 28.183613,
+  },
+  {
+    name: &#39;井冈山机场&#39;,
+    lng: 114.745845,
+    lat: 26.852646,
+  },
+];
+const planeTarget = {
+  lng2: 111.616049,
+  lat2: 26.335053,
+};
+const airLineData = [
+  {
+    name: &#39;常德桃花源机场&#39;,
+    lng: 111.641101,
+    lat: 28.91165,
+    ...planeTarget,
+  },
+  {
+    name: &#39;芷江机场&#39;,
+    lng: 109.709699,
+    lat: 27.442172,
+    ...planeTarget,
+  },
+  {
+    name: &#39;铜仁凤凰机场&#39;,
+    lng: 109.313971,
+    lat: 27.880629,
+    ...planeTarget,
+  },
+  {
+    name: &#39;桂林两江国际机场&#39;,
+    lng: 110.049256,
+    lat: 25.210065,
+    ...planeTarget,
+  },
+  {
+    name: &#39;长沙黄花国际机场&#39;,
+    lng: 113.216412,
+    lat: 28.183613,
+    ...planeTarget,
+  },
+  {
+    name: &#39;井冈山机场&#39;,
+    lng: 114.745845,
+    lat: 26.852646,
+    ...planeTarget,
+  },
+];
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [113, 29],
+    pitch: 70,
+    zoom: 7.5,
+    rotation: 170,
+    style: &#39;blank&#39;,
+  }),
+});
+scene.setBgColor(&#39;#000&#39;);
+
+scene.registerRenderService(ThreeRender);
+
+const threeJSLayer = new ThreeLayer({
+  enableMultiPassRenderer: false,
+  // @ts-ignore
+  onAddMeshes: (threeScene, layer) =&gt; {
+    threeScene.add(new THREE.AmbientLight(0xffffff));
+    const sunlight = new THREE.DirectionalLight(0xffffff, 0.25);
+    sunlight.position.set(0, 800000, 1000000);
+    sunlight.matrixWorldNeedsUpdate = true;
+    threeScene.add(sunlight);
+
+    // 使用 Three.js glTFLoader 加载模型
+    const loader = new window.GLTFLoader();
+    loader.load(
+      &#39;https://gw.alipayobjects.com/os/bmw-prod/3ca0a546-92d8-4ba0-a89c-017c218d5bea.gltf&#39;,
+      (gltf) =&gt; {
+        const antModel = gltf.scene;
+        setMaterial(antModel);
+        layer.adjustMeshToMap(antModel);
+        layer.setMeshScale(antModel, 2000, 2000, 2000);
+        layer.setObjectLngLat(antModel, [113, 29], 0);
+
+        const animations = gltf.animations;
+        if (animations &amp;&amp; animations.length) {
+          const mixer = new THREE.AnimationMixer(antModel);
+          const animation = animations[1];
+          const action = mixer.clipAction(animation);
+          action.timeScale = 1;
+          action.play();
+          layer.addAnimateMixer(mixer);
+        }
+        antModel.rotation.y = Math.PI;
+        threeScene.add(antModel);
+        layer.render();
+        return &#39;&#39;;
+      },
+    );
+  },
+  zIndex: 1,
+});
+
+scene.addImage(
+  &#39;plane&#39;,
+  &#39;https://gw.alipayobjects.com/zos/bmw-prod/96327aa6-7fc5-4b5b-b1d8-65771e05afd8.svg&#39;,
+);
+const airPrtsLayer = new PointLayer()
+  .source(airPorts, {
+    parser: {
+      type: &#39;json&#39;,
+      x: &#39;lng&#39;,
+      y: &#39;lat&#39;,
+    },
+  })
+  .shape(&#39;name&#39;, &#39;text&#39;)
+  .color(&#39;rgb(22,119,255)&#39;)
+  .size(10);
+
+const airLineLayer = new LineLayer({ blend: &#39;normal&#39; })
+  .source(airLineData, {
+    parser: {
+      type: &#39;json&#39;,
+      x: &#39;lng&#39;,
+      y: &#39;lat&#39;,
+      x1: &#39;lng2&#39;,
+      y1: &#39;lat2&#39;,
+    },
+  })
+  .shape(&#39;arc3d&#39;)
+  .size(1)
+  .color(&#39;#f00&#39;)
+  .style({
+    sourceColor: &#39;rgb(22,119,255)&#39;,
+    targetColor: &#39;rgba(242,246,250,0.1)&#39;,
+  });
+
+const airPlaneLayer = new LineLayer({ blend: &#39;normal&#39;, zIndex: 1 })
+  .source(airLineData, {
+    parser: {
+      type: &#39;json&#39;,
+      x: &#39;lng2&#39;,
+      y: &#39;lat2&#39;,
+      x1: &#39;lng&#39;,
+      y1: &#39;lat&#39;,
+    },
+  })
+  .shape(&#39;arc3d&#39;)
+  .texture(&#39;plane&#39;)
+  .size(30)
+  .color(&#39;#f00&#39;)
+  .animate({
+    duration: 0.2,
+    interval: 0.2,
+    trailLength: 0.2,
+  })
+  .style({
+    textureBlend: &#39;replace&#39;,
+    lineTexture: true, // 开启线的贴图功能
+    iconStep: 6, // 设置贴图纹理的间距
+  });
+
+fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/ec5351c9-d22b-4918-ad6c-1838064d3a64.json&#39;)
+  .then((res) =&gt; res.json())
+  .then((data) =&gt; {
+    const layer = new LineLayer({}).source(data).size(10000).shape(&#39;wall&#39;).style({
+      opacity: 0.4,
+      sourceColor: &#39;#0DCCFF&#39;,
+      targetColor: &#39;rbga(255,255,255, 0)&#39;,
+      heightfixed: true,
+    });
+    scene.addLayer(layer);
+
+    const nameLayer = new PointLayer({ zIndex: 3 })
+      .source(data)
+      .color(&#39;rgb(22,119,255)&#39;)
+      .size(15)
+      .shape(&#39;name&#39;, &#39;text&#39;);
+    scene.addLayer(nameLayer);
+  });
+
+const img = new Image();
+img.crossOrigin = &#39;none&#39;;
+img.src = &#39;https://gw.alipayobjects.com/mdn/rms_816329/afts/img/A*UkvYRYS5jTAAAAAAAAAAAAAAARQnAQ&#39;;
+img.onload = function () {
+  const data = getImageData(img);
+  const rData = getR(data.data);
+  const d1 = getLngData(rData);
+  const d2 = getLatData(rData);
+  const geoData = {
+    type: &#39;FeatureCollection&#39;,
+    features: [
+      {
+        type: &#39;Feature&#39;,
+        properties: {},
+        geometry: {
+          type: &#39;MultiLineString&#39;,
+          coordinates: d1,
+        },
+      },
+      {
+        type: &#39;Feature&#39;,
+        properties: {},
+        geometry: {
+          type: &#39;MultiLineString&#39;,
+          coordinates: d2,
+        },
+      },
+    ],
+  };
+  const layer = new LineLayer({})
+    .source(geoData)
+    .size(1)
+    .shape(&#39;simple&#39;)
+    .color(&#39;rgb(22, 119, 255)&#39;)
+    .style({
+      vertexHeightScale: 2000,
+      opacity: 0.4,
+    });
+  scene.addLayer(layer);
+};
+const pointData = [
+  { lng: 113, lat: 29, size: 10000 },
+  { lng: 113.5, lat: 29.5, size: 30000 },
+  { lng: 110.23681640625, lat: 29.64509464986076, size: 74020.50373907911 },
+  { lng: 115.01586914062499, lat: 26.88777988202911, size: 22908.885529976185 },
+  { lng: 111.181640625, lat: 28.724313406473463, size: 73359.37302978932 },
+  { lng: 112.686767578125, lat: 29.257648503615542, size: 18500.90838085843 },
+  { lng: 114.664306640625, lat: 28.98892237190413, size: 20293.183968726793 },
+  { lng: 113.90075683593749, lat: 28.17855984939698, size: 18051.412077639496 },
+  { lng: 111.51123046875, lat: 27.45466493898314, size: 37645.94186119526 },
+  { lng: 110.67626953125, lat: 28.004101830368654, size: 4214.588023703825 },
+  { lng: 114.43359375, lat: 29.477861195816843, size: 61722.01580332115 },
+  { lng: 110.445556640625, lat: 26.96124577052697, size: 70806.75519747598 },
+  { lng: 113.75244140624999, lat: 27.88278388425912, size: 70930.24993464859 },
+];
+const waveLayer = new PointLayer({ zIndex: 2, blend: &#39;additive&#39; })
+  .source(pointData, {
+    parser: {
+      type: &#39;json&#39;,
+      x: &#39;lng&#39;,
+      y: &#39;lat&#39;,
+    },
+  })
+  .shape(&#39;circle&#39;)
+  .color(&#39;rgb(22, 119, 255)&#39;)
+  .size(&#39;size&#39;, (v) =&gt; v)
+  .animate(true)
+  .style({
+    unit: &#39;meter&#39;,
+  });
+
+const barLayer = new PointLayer({ zIndex: 2, depth: false })
+  .source(pointData, {
+    parser: {
+      type: &#39;json&#39;,
+      x: &#39;lng&#39;,
+      y: &#39;lat&#39;,
+    },
+  })
+  .shape(&#39;cylinder&#39;)
+  .color(&#39;rgb(22, 119, 255)&#39;)
+  .size(&#39;size&#39;, (v) =&gt; [5, 5, v / 350])
+  .animate(true)
+  .style({
+    opacityLinear: {
+      enable: true,
+      dir: &#39;up&#39;,
+    },
+    lightEnable: false,
+  });
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  scene.addLayer(waveLayer);
+  scene.addLayer(barLayer);
+  scene.addLayer(threeJSLayer);
+
+  scene.addLayer(airPrtsLayer);
+  scene.addLayer(airLineLayer);
+  scene.addLayer(airPlaneLayer);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

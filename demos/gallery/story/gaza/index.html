@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>gallery/story/gaza</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/gallery/story/gaza/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="gallery/story/gaza" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>gallery/story/gaza</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/gallery/story/gaza/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, PolygonLayer, RasterLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;light&#39;,
+    center: [121.268, 30.3628],
+    zoom: 10,
+  }),
+});
+scene.on(&#39;loaded&#39;, async () =&gt; {
+  const googleurl = &#39;https://www.google.com/maps/vt?lyrs=s@820&amp;gl=cn&amp;x={x}&amp;y={y}&amp;z={z}&#39;;
+  const gazafill = await (
+    await fetch(
+      &#39;https://mdn.alipayobjects.com/afts/file/A*7h8hS5hqXkcAAAAAAAAAAAAADrd2AQ/gaza.geo.json&#39;,
+    )
+  ).json();
+  const gazacity = await (
+    await fetch(
+      &#39;https://mdn.alipayobjects.com/afts/file/A*3xTGQ6ZeTIcAAAAAAAAAAAAADrd2AQ/gazacity.json&#39;,
+    )
+  ).json();
+
+  const fillLayer = new PolygonLayer({
+    visible: false,
+  })
+    .source(gazafill)
+    .shape(&#39;fill&#39;)
+    .color(&#39;red&#39;);
+
+  const googleMap = new RasterLayer({
+    zIndex: -1,
+    maskLayers: [fillLayer],
+    zoomOffset: 1,
+    updateStrategy: &#39;overlap&#39;,
+  }).source(googleurl, {
+    parser: {
+      type: &#39;rasterTile&#39;,
+      tileSize: 256,
+    },
+  });
+
+  const fillLine = new PolygonLayer({
+    autoFit: true,
+  })
+    .source(gazafill)
+    .shape(&#39;line&#39;)
+    .color(&#39;red&#39;)
+    .size(1);
+  const cityLayer = new PointLayer()
+    .source(gazacity)
+    .shape(&#39;circle&#39;)
+    .size(5)
+    .color(&#39;#027aff&#39;)
+    .style({ opacity: 1, stroke: &#39;#fff&#39;, strokeWidth: 2 });
+  const cityLayerName = new PointLayer()
+    .source(gazacity)
+    .shape(&#39;city&#39;, &#39;text&#39;)
+    .size(12)
+    .color(&#39;#027aff&#39;)
+    .style({
+      textAnchor: &#39;top&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+      spacing: 2, // 字符间距
+      fontWeight: &#39;800&#39;,
+      textOffset: [0, 30],
+      padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+      stroke: &#39;#ffffff&#39;, // 描边颜色
+      strokeWidth: 2, // 描边宽度
+      textAllowOverlap: true,
+    });
+  scene.addLayer(googleMap);
+  scene.addLayer(fillLine);
+  scene.addLayer(fillLayer);
+  scene.addLayer(cityLayer);
+  scene.addLayer(cityLayerName);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

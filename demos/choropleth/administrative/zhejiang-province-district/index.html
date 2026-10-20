@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>choropleth/administrative/zhejiang-province-district</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/choropleth/administrative/zhejiang-province-district/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="choropleth/administrative/zhejiang-province-district" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>choropleth/administrative/zhejiang-province-district</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/choropleth/administrative/zhejiang-province-district/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { GaodeMap, Scene } from &#39;@antv/l7&#39;;
+import { Choropleth } from &#39;@antv/l7plot&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;blank&#39;,
+    center: [120.19382669582967, 30.258134],
+    zoom: 3,
+  }),
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/alisis/geo-data-v0.1.1/administrative-data/area-list.json&#39;)
+    .then((response) =&gt; response.json())
+    .then((list) =&gt; {
+      const data = list
+        .filter(({ level }) =&gt; level === &#39;district&#39;)
+        .map((item) =&gt; ({ ...item, value: Math.random() * 5000 }));
+
+      const choropleth = new Choropleth({
+        source: {
+          data,
+          joinBy: {
+            sourceField: &#39;adcode&#39;,
+            geoField: &#39;adcode&#39;,
+          },
+        },
+        viewLevel: {
+          level: &#39;province&#39;,
+          adcode: 330000,
+          granularity: &#39;district&#39;,
+        },
+        autoFit: true,
+        color: {
+          field: &#39;value&#39;,
+          value: [&#39;#B8E1FF&#39;, &#39;#7DAAFF&#39;, &#39;#3D76DD&#39;, &#39;#0047A5&#39;, &#39;#001D70&#39;],
+          scale: { type: &#39;quantize&#39; },
+        },
+        style: {
+          opacity: 1,
+          stroke: &#39;#ccc&#39;,
+          lineWidth: 0.6,
+          lineOpacity: 1,
+        },
+        label: {
+          visible: true,
+          field: &#39;name&#39;,
+          style: {
+            fill: &#39;#000&#39;,
+            opacity: 0.8,
+            fontSize: 10,
+            stroke: &#39;#fff&#39;,
+            strokeWidth: 1.5,
+            textAllowOverlap: false,
+            padding: [5, 5],
+          },
+        },
+        state: {
+          active: { stroke: &#39;black&#39;, lineWidth: 1 },
+        },
+        tooltip: {
+          items: [&#39;name&#39;, &#39;adcode&#39;, &#39;value&#39;],
+        },
+        zoom: {
+          position: &#39;bottomright&#39;,
+        },
+        legend: {
+          position: &#39;bottomleft&#39;,
+        },
+      });
+
+      choropleth.addToScene(scene);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

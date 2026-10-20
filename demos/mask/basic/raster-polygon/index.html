@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>mask/basic/raster-polygon</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/mask/basic/raster-polygon/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="mask/basic/raster-polygon" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>mask/basic/raster-polygon</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/mask/basic/raster-polygon/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PolygonLayer, RasterLayer, Scene, Source } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+import * as GeoTIFF from &#39;geotiff&#39;;
+
+const colorList = [
+  &#39;#419bdf&#39;, // Water
+
+  &#39;#358221&#39;, // Tree
+
+  &#39;#88b053&#39;, // Grass
+
+  &#39;#7a87c6&#39;, // vegetation
+
+  &#39;#e49635&#39;, // Crops
+
+  &#39;#dfc35a&#39;, // shrub
+
+  &#39;#ED022A&#39;, // Built Area
+
+  &#39;#EDE9E4&#39;, // Bare ground
+
+  &#39;#F2FAFF&#39;, // Snow
+
+  &#39;#C8C8C8&#39;, // Clouds
+];
+const positions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+
+  map: new GaodeMap({
+    center: [116, 27],
+    zoom: 6,
+    style: &#39;dark&#39;,
+  }),
+});
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/fccd80c0-2611-49f9-9a9f-e2a4dd12226f.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((maskData) =&gt; {
+      const maskPolygon = new PolygonLayer({
+        visible: false, // 隐藏maskPolygon
+      })
+        .source(maskData)
+        .shape(&#39;fill&#39;)
+        .color(&#39;#f00&#39;)
+        .style({
+          opacity: 0.5,
+        });
+      const layer = new RasterLayer({
+        maskLayers: [maskPolygon],
+      });
+
+      const tileSource = new Source(
+        &#39;https://ganos.oss-cn-hangzhou.aliyuncs.com/m2/l7/tiff_jx/{z}/{x}/{y}.tiff&#39;,
+        {
+          parser: {
+            type: &#39;rasterTile&#39;,
+            dataType: &#39;arraybuffer&#39;,
+            tileSize: 256,
+            maxZoom: 13.1,
+            format: async (data) =&gt; {
+              const tiff = await GeoTIFF.fromArrayBuffer(data);
+              const image = await tiff.getImage();
+              const width = image.getWidth();
+              const height = image.getHeight();
+              const values = await image.readRasters();
+              return { rasterData: values[0], width, height };
+            },
+          },
+        },
+      );
+
+      layer.source(tileSource).style({
+        domain: [0, 255], // 枚举类型domain 必须为0-255
+        clampLow: false,
+        rampColors: {
+          type: &#39;cat&#39;,
+          colors: colorList,
+          positions,
+        },
+      });
+
+      scene.addLayer(layer);
+      scene.addLayer(maskPolygon);
+      return &#39;&#39;;
+    });
+  return &#39;&#39;;
+});
+
+const wrap = document.getElementById(&#39;map&#39;);
+const legend = document.createElement(&#39;div&#39;);
+
+const data = [];
+for (let i = 0; i &lt; colorList.length; i += 1) {
+  data.push({
+    color: colorList[i],
+    text: [
+      &#39;Water&#39;,
+      &#39;Trees&#39;,
+      &#39;Grass&#39;,
+      &#39;Vegetation&#39;,
+      &#39;Crops&#39;,
+      &#39;Shrub&#39;,
+      &#39;Built Area&#39;,
+      &#39;Bare ground&#39;,
+      &#39;Snow&#39;,
+      &#39;Clouds&#39;,
+    ][i],
+  });
+}
+const strArr = [];
+data.map(({ color, text }) =&gt; {
+  strArr.push(`  &lt;div style=&quot;display:inline-block;background:#fff:padding:5px;&quot;&gt;
+  &lt;div style=&quot;fontSize:12px;lineHeight:12px;color: #fff&quot;&gt;
+    ${text}
+  &lt;/div&gt;
+  &lt;div style=&quot;height:8px; background: ${color};&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;`);
+  return &#39;&#39;;
+});
+legend.innerHTML = strArr.join(&#39;&#39;);
+legend.style.position = &#39;absolute&#39;;
+legend.style.left = &#39;10px&#39;;
+legend.style.bottom = &#39;30px&#39;;
+legend.style.zIndex = 10;
+
+wrap.appendChild(legend);
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

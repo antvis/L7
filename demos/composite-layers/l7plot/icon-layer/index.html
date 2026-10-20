@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>composite-layers/l7plot/icon-layer</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/composite-layers/l7plot/icon-layer/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="composite-layers/l7plot/icon-layer" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>composite-layers/l7plot/icon-layer</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/composite-layers/l7plot/icon-layer/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { GaodeMap, Scene } from &#39;@antv/l7&#39;;
+import { IconFontLayer } from &#39;@antv/l7-composite-layers&#39;;
+
+// 详情可见：https://l7plot.antv.antgroup.com/api/composite-layers/icon-font-layer
+
+fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/9eb3f1b5-0c3b-49b2-8221-191d4ba8aa5e.json&#39;)
+  .then((response) =&gt; response.json())
+  .then((data) =&gt; {
+    const scene = new Scene({
+      id: &#39;map&#39;,
+      map: new GaodeMap({
+        pitch: 0,
+        style: &#39;dark&#39;,
+        zoom: 3,
+        center: [120.19660949707033, 30.234747338474293],
+      }),
+    });
+    scene.on(&#39;loaded&#39;, () =&gt; {
+      const iconLayer = new IconFontLayer({
+        id: &#39;iconImageLayer1&#39;,
+        autoFit: true,
+        source: {
+          data,
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;lng&#39;,
+            y: &#39;lat&#39;,
+          },
+        },
+        // color:{
+        //   value:&#39;red&#39;,
+        // },
+        iconAtlas: {
+          fontFamily: &#39;iconfont&#39;,
+          fontPath: &#39;//at.alicdn.com/t/font_2534097_ao9soua2obv.woff2?t=1622021146076&#39;,
+          iconFonts: [
+            [&#39;smallRain&#39;, &#39;&amp;#xe6f7;&#39;],
+            [&#39;middleRain&#39;, &#39;&amp;#xe61c;&#39;],
+            [&#39;hugeRain&#39;, &#39;&amp;#xe6a6;&#39;],
+            [&#39;sun&#39;, &#39;&amp;#xe6da;&#39;],
+            [&#39;cloud&#39;, &#39;&amp;#xe8da;&#39;],
+          ],
+        },
+        icon: {
+          field: &#39;iconType&#39;,
+          value: &#39;text&#39;,
+        },
+        iconStyle: {
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [-10, 10], // 文本相对锚点的偏移量 [水平, 垂直]
+          fontFamily: &#39;iconfont&#39;,
+          textAllowOverlap: true,
+          iconfont: true,
+        },
+        fillColor: &#39;blue&#39;,
+        radius: 40,
+        opacity: 1,
+        label: {
+          visible: false,
+          field: &#39;weather&#39;,
+          style: {
+            fill: &#39;#fff&#39;,
+            opacity: 0.6,
+            fontSize: 12,
+            textAnchor: &#39;top&#39;,
+            textOffset: [0, 20],
+            spacing: 1,
+            padding: [5, 5],
+            stroke: &#39;#ffffff&#39;,
+            strokeWidth: 0.3,
+            strokeOpacity: 1.0,
+          },
+        },
+        state: {
+          active: {
+            color: &#39;red&#39;,
+          },
+          select: {
+            radius: 20,
+            opacity: 1,
+          },
+        },
+      });
+      scene &amp;&amp; iconLayer.addTo(scene);
+    });
+  });
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/chart/custom</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/chart/custom/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/chart/custom" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/chart/custom</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/chart/custom/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { CanvasLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+let x = 0;
+function draw(option) {
+  const { size, ctx, mapService } = option;
+  const [width, height] = size;
+
+  const radius = 30,
+    rectWidth = radius * 2;
+  const rectHeight = rectWidth;
+
+  ctx.clearRect(0, 0, width, height);
+
+  const points = [
+    {
+      lng: 108.544921875,
+      lat: 30.977609093348686,
+      level: 85,
+      color: &#39;rgba(	220,20,60, 0.6)&#39;,
+    },
+    {
+      lng: 110.654296875,
+      lat: 31.090574094954192,
+      level: 75,
+      color: &#39;rgba(	255,140,0, 0.6)&#39;,
+    },
+    {
+      lng: 112.5,
+      lat: 29.80251790576445,
+      level: 65,
+      color: &#39;rgba(255,165,0, 0.6)&#39;,
+    },
+    {
+      lng: 114.78515624999999,
+      lat: 30.64867367928756,
+      level: 40,
+      color: &#39;rgba(30,144,255, 0.6)&#39;,
+    },
+    {
+      lng: 116.49902343749999,
+      lat: 29.84064389983441,
+      level: 50,
+      color: &#39;rgba(30,144,255, 0.6)&#39;,
+    },
+    {
+      lng: 118.21289062499999,
+      lat: 31.16580958786196,
+      level: 20,
+      color: &#39;rgba(	127,255,0, 0.6)&#39;,
+    },
+    {
+      lng: 119.091796875,
+      lat: 32.509761735919426,
+      level: 50,
+      color: &#39;rgba(30,144,255, 0.6)&#39;,
+    },
+    {
+      lng: 121.0693359374999,
+      lat: 31.80289258670676,
+      level: 45,
+      color: &#39;rgba(30,144,255, 0.6)&#39;,
+    },
+  ];
+  ctx.fillStyle = &#39;rgb(35,75,225)&#39;;
+  ctx.font = &#39;normal small-caps bold 14px arial&#39;;
+  ctx.textAlign = &#39;center&#39;;
+  ctx.textBaseline = &#39;middle&#39;;
+
+  points.map((point) =&gt; {
+    const pixelCenter = mapService.lngLatToContainer([point.lng, point.lat]);
+    pixelCenter.x *= window.devicePixelRatio;
+    pixelCenter.y *= window.devicePixelRatio;
+    const rectStartX = pixelCenter.x - radius;
+    const rectStartY = pixelCenter.y - radius;
+
+    ctx.save();
+
+    ctx.fillText(point.level + &#39;%&#39;, pixelCenter.x, pixelCenter.y);
+
+    ctx.beginPath();
+    ctx.arc(pixelCenter.x, pixelCenter.y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = &#39;rgba(135,206,250,0.2)&#39;;
+    ctx.closePath();
+    ctx.fill();
+    ctx.clip();
+
+    ctx.beginPath();
+    ctx.fillStyle = point.color;
+    ctx.moveTo(rectStartX, pixelCenter.y);
+
+    const waterheight = rectStartY + ((100 - point.level) / 100) * rectHeight;
+    for (let i = 0; i &lt;= rectWidth; i += 10) {
+      ctx.lineTo(rectStartX + i, waterheight + Math.sin(Math.PI * 2 * (i / rectWidth) + x) * 3 + 1);
+    }
+
+    ctx.lineTo(pixelCenter.x + radius, pixelCenter.y + radius);
+    ctx.lineTo(rectStartX, pixelCenter.y + radius);
+    ctx.lineTo(rectStartX, pixelCenter.y);
+    ctx.closePath();
+
+    ctx.fill();
+
+    ctx.restore();
+    return &#39;&#39;;
+  });
+  return &#39;&#39;;
+}
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    style: &#39;fresh&#39;,
+    center: [115, 31],
+    zoom: 5.0,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  const layer = new CanvasLayer({
+    zIndex: 10,
+    trigger: &#39;change&#39;,
+  });
+  layer.draw(draw);
+  scene.addLayer(layer);
+
+  setInterval(() =&gt; {
+    x += 0.1;
+    scene.render();
+    return &#39;&#39;;
+  }, 30);
+
+  layer.on(&#39;add&#39;, () =&gt; {
+    layer.getCanvas().addEventListener(&#39;click&#39;, (e) =&gt; {
+      console.log(e);
+    });
+  });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

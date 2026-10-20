@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/text/iconfont</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/text/iconfont/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/text/iconfont" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/text/iconfont</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/text/iconfont/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [110, 30],
+    style: &#39;amap://styles/453e2f8e11603fc8f7548fe18959e9e9&#39;,
+    zoom: 5,
+  }),
+});
+const fontFamily = &#39;iconfont&#39;;
+const fontPath = &#39;//at.alicdn.com/t/font_2534097_fcae9o2mxbv.woff2?t=1622200439140&#39;;
+scene.addFontFace(fontFamily, fontPath);
+scene.addIconFont(&#39;icon1&#39;, &#39;&amp;#xe6d4;&#39;);
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/70408903-80db-4278-a318-461604acb2df.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const pointLayer = new PointLayer({})
+        .source(data.list, {
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;j&#39;,
+            y: &#39;w&#39;,
+          },
+        })
+        .shape(&#39;icon&#39;, &#39;text&#39;)
+        .size(20)
+        .color(&#39;w&#39;, [&#39;#a6cee3&#39;, &#39;#1f78b4&#39;, &#39;#b2df8a&#39;, &#39;#33a02c&#39;, &#39;#fb9a99&#39;])
+        .style({
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          padding: [0, 0], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: &#39;#ffffff&#39;, // 描边颜色
+          fontFamily,
+          iconfont: true,
+          textAllowOverlap: true,
+        });
+      scene.addLayer(pointLayer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>line/animate/plane-animate2</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/line/animate/plane-animate2/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="line/animate/plane-animate2" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>line/animate/plane-animate2</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/line/animate/plane-animate2/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps> 
+import { LineLayer, PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    pitch: 40,
+    center: [40, 40.16797],
+    style: &#39;dark&#39;,
+    zoom: 2.5,
+  }),
+});
+scene.addImage(
+  &#39;plane&#39;,
+  &#39;https://gw.alipayobjects.com/zos/bmw-prod/0ca1668e-38c2-4010-8568-b57cb33839b9.svg&#39;,
+);
+scene.on(&#39;loaded&#39;, () =&gt; {
+  Promise.all([
+    fetch(
+      &#39;https://gw.alipayobjects.com/os/bmw-prod/2960e1fc-b543-480f-a65e-d14c229dd777.json&#39;,
+    ).then((d) =&gt; d.json()),
+    fetch(
+      &#39;https://gw.alipayobjects.com/os/basement_prod/4472780b-fea1-4fc2-9e4b-3ca716933dc7.json&#39;,
+    ).then((d) =&gt; d.text()),
+    fetch(
+      &#39;https://gw.alipayobjects.com/os/basement_prod/a5ac7bce-181b-40d1-8a16-271356264ad8.json&#39;,
+    ).then((d) =&gt; d.text()),
+  ]).then(function onLoad([world, dot, flyline]) {
+    const dotData = eval(dot);
+    // @ts-ignore
+    const flydata = eval(flyline).map((item) =&gt; {
+      // @ts-ignore
+      const latlng1 = item.from.split(&#39;,&#39;).map((e) =&gt; {
+        return e * 1;
+      });
+      // @ts-ignore
+      const latlng2 = item.to.split(&#39;,&#39;).map((e) =&gt; {
+        return e * 1;
+      });
+      return { coord: [latlng1, latlng2] };
+    });
+
+    const worldLine = new LineLayer().source(world).color(&#39;#41fc9d&#39;).size(0.5).style({
+      opacity: 0.4,
+    });
+    const dotPoint = new PointLayer()
+      .source(dotData, {
+        parser: {
+          type: &#39;json&#39;,
+          x: &#39;lng&#39;,
+          y: &#39;lat&#39;,
+        },
+      })
+      .shape(&#39;circle&#39;)
+      .color(&#39;#ffed11&#39;)
+      .animate(true)
+      .size(40);
+    const flyLine = new LineLayer({ blend: &#39;normal&#39; })
+      .source(flydata, {
+        parser: {
+          type: &#39;json&#39;,
+          coordinates: &#39;coord&#39;,
+        },
+      })
+      .color(&#39;#ff6b34&#39;)
+      .texture(&#39;plane&#39;)
+      .shape(&#39;arc&#39;)
+      .size(15)
+      .animate({
+        duration: 1,
+        interval: 0.2,
+        trailLength: 0.05,
+      })
+      .style({
+        textureBlend: &#39;replace&#39;,
+        lineTexture: true, // 开启线的贴图功能
+        iconStep: 10, // 设置贴图纹理的间距
+      });
+
+    const flyLine2 = new LineLayer()
+      .source(flydata, {
+        parser: {
+          type: &#39;json&#39;,
+          coordinates: &#39;coord&#39;,
+        },
+      })
+      .color(&#39;#ff6b34&#39;)
+      .shape(&#39;arc&#39;)
+      .size(1)
+      .style({
+        lineType: &#39;dash&#39;,
+        dashArray: [5, 5],
+        opacity: 0.5,
+      });
+    scene.addLayer(worldLine);
+    scene.addLayer(dotPoint);
+    scene.addLayer(flyLine2);
+    scene.addLayer(flyLine);
+  });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

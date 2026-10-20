@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/text/iconfonts</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/text/iconfonts/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/text/iconfonts" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/text/iconfonts</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/text/iconfonts/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    center: [120.5, 30.2],
+    style: &#39;dark&#39;,
+    zoom: 8.5,
+    zooms: [8, 10],
+  }),
+});
+const fontFamily = &#39;iconfont&#39;;
+const fontPath = &#39;//at.alicdn.com/t/font_2534097_ao9soua2obv.woff2?t=1622021146076&#39;;
+scene.addFontFace(fontFamily, fontPath);
+scene.addIconFonts([
+  [&#39;smallRain&#39;, &#39;\ue6f7&#39;],
+  [&#39;middleRain&#39;, &#39;\ue61c&#39;],
+  [&#39;hugeRain&#39;, &#39;\ue6a6&#39;],
+  [&#39;sun&#39;, &#39;\ue6da&#39;],
+  [&#39;cloud&#39;, &#39;\ue8da&#39;],
+]);
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/bmw-prod/9eb3f1b5-0c3b-49b2-8221-191d4ba8aa5e.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((originData) =&gt; {
+      const layer = new PointLayer()
+        .source(originData, {
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;lng&#39;,
+            y: &#39;lat&#39;,
+          },
+        })
+        .shape(&#39;circle&#39;)
+        .color(&#39;backgoundColor&#39;)
+        .size(42);
+      scene.addLayer(layer);
+
+      const pointIconFontLayer = new PointLayer({})
+        .source(originData, {
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;lng&#39;,
+            y: &#39;lat&#39;,
+          },
+        })
+        .shape(&#39;iconType&#39;, &#39;text&#39;)
+        .size(30)
+        .color(&#39;iconColor&#39;)
+        .style({
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [-10, 10], // 文本相对锚点的偏移量 [水平, 垂直]
+          fontFamily,
+          iconfont: true,
+          textAllowOverlap: true,
+        });
+      scene.addLayer(pointIconFontLayer);
+
+      const textLayer = new PointLayer({})
+        .source(originData, {
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;lng&#39;,
+            y: &#39;lat&#39;,
+          },
+        })
+        .shape(&#39;temperature&#39;, &#39;text&#39;)
+        .size(10)
+        .color(&#39;#ffffff&#39;)
+        .style({
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [5, -55], // 文本相对锚点的偏移量 [水平, 垂直]
+          spacing: 2, // 字符间距
+          padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: &#39;#ffffff&#39;, // 描边颜色
+          strokeWidth: 0.3, // 描边宽度
+          strokeOpacity: 1.0,
+          fontFamily: &#39;Times New Roman&#39;,
+          textAllowOverlap: true,
+        });
+      scene.addLayer(textLayer);
+
+      const textLayer2 = new PointLayer({})
+        .source(originData, {
+          parser: {
+            type: &#39;json&#39;,
+            x: &#39;lng&#39;,
+            y: &#39;lat&#39;,
+          },
+        })
+        .shape(&#39;weather&#39;, &#39;text&#39;)
+        .size(14)
+        .color(&#39;#ffffff&#39;)
+        .style({
+          textAnchor: &#39;center&#39;, // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [5, -15], // 文本相对锚点的偏移量 [水平, 垂直]
+          spacing: 2, // 字符间距
+          padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: &#39;#ffffff&#39;, // 描边颜色
+          strokeWidth: 0.3, // 描边宽度
+          strokeOpacity: 1.0,
+          fontFamily: &#39;Times New Roman&#39;,
+          textAllowOverlap: true,
+        });
+      scene.addLayer(textLayer2);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

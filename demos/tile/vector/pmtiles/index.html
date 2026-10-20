@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tile/vector/pmtiles</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/tile/vector/pmtiles/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="tile/vector/pmtiles" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>tile/vector/pmtiles</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/tile/vector/pmtiles/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>// @ts-ignore
+import { PointLayer, PolygonLayer, Scene, Source } from &#39;@antv/l7&#39;;
+// @ts-ignore
+import { Map } from &#39;@antv/l7-maps&#39;;
+import { Protocol } from &#39;pmtiles&#39;;
+const protocol = new Protocol();
+Scene.addProtocol(&#39;pmtiles&#39;, protocol.tile);
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new Map({
+    center: [11.2438, 43.7799],
+    zoom: 12,
+  }),
+});
+
+const source = new Source(
+  &#39;pmtiles://https://mdn.alipayobjects.com/afts/file/A*HYvHSZ-wQmIAAAAAAAAAAAAADrd2AQ/protomaps(vector)ODbL_firenze.bin&#39;,
+  {
+    parser: {
+      type: &#39;mvt&#39;,
+      tileSize: 256,
+      maxZoom: 14,
+      extent: [-180, -85.051129, 179, 85.051129],
+    },
+  },
+);
+
+const layer = new PolygonLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;earth&#39;, // woods hillshade contour ecoregions ecoregions2 city
+});
+layer
+  .source(source)
+  .color(&#39;#f7f7f7&#39;)
+
+  .style({
+    opacity: 0.5,
+  });
+const boundaries = new PolygonLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;boundaries&#39;, // woods hillshade contour ecoregions ecoregions2 city
+})
+  .source(source)
+  .color(&#39;#ffffbf&#39;)
+  .shape(&#39;line&#39;)
+  .size(1)
+  .style({
+    opacity: 1,
+  });
+
+const buildings = new PolygonLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;buildings&#39;, // woods hillshade contour ecoregions ecoregions2 city
+})
+  .source(source)
+  .color(&#39;#f1b6da&#39;)
+  .shape(&#39;fill&#39;)
+  .style({
+    opacity: 1,
+  });
+
+const natural = new PolygonLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;natural&#39;, // woods hillshade contour ecoregions ecoregions2 city
+})
+  .source(source)
+  .color(&#39;#e6f5d0&#39;)
+  .shape(&#39;fill&#39;)
+
+  .style({
+    opacity: 1,
+  });
+
+const water = new PolygonLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;water&#39;, // woods hillshade contour ecoregions ecoregions2 city
+})
+  .source(source)
+  .color(&#39;#92c5de&#39;)
+  .shape(&#39;fill&#39;)
+
+  .style({
+    opacity: 1,
+  });
+const roads = new PolygonLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;roads&#39;, // woods hillshade contour ecoregions ecoregions2 city
+})
+  .source(source)
+  .color(&#39;#bababa&#39;)
+  .shape(&#39;line&#39;)
+  .size(0.5)
+  .style({
+    opacity: 1,
+  });
+const transit = new PolygonLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;transit&#39;, // woods hillshade contour ecoregions ecoregions2 city
+})
+  .source(source)
+  .color(&#39;#542788&#39;)
+  .shape(&#39;line&#39;)
+  .size(0.5)
+  .style({
+    opacity: 1,
+  });
+
+const point = new PointLayer({
+  //   featureId: &#39;COLOR&#39;,
+  sourceLayer: &#39;places&#39;, // woods hillshade contour ecoregions ecoregions2 city
+})
+  .source(source)
+  .color(&#39;#542788&#39;)
+  .shape(&#39;circle&#39;)
+  .size(5)
+  .style({
+    opacity: 1,
+  });
+
+scene.on(&#39;loaded&#39;, () =&gt; {
+  scene.addLayer(layer);
+  scene.addLayer(boundaries);
+  scene.addLayer(natural);
+  scene.addLayer(buildings);
+  scene.addLayer(transit);
+  scene.addLayer(roads);
+  scene.addLayer(water);
+  scene.addLayer(point);
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>

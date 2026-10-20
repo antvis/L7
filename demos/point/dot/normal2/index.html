@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-vacxi5ps><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>point/dot/normal2</title><link rel="canonical" href="https://l7.antv.antgroup.com/zh/examples/point/dot/normal2/"><script>
+      // Set the embedded layout before parsing the readable source below.
+      if (window.parent !== window) document.documentElement.classList.add('embedded-demo');
+    </script><style>/* Shared by initial previews, edited previews and exported projects.
+ * Keep this unscoped: demo nodes are created after the Astro document renders. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #fff;
+  color: #1d2129;
+  font: 14px/1.5715 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+#container canvas, #container svg { display: block; }
+</style><link rel="stylesheet" href="/assets/_..BK_oCODq.css"></head><body data-demo-key="point/dot/normal2" data-astro-cid-vacxi5ps><section id="demo-source" data-astro-cid-vacxi5ps><h1 data-astro-cid-vacxi5ps>point/dot/normal2</h1><p data-astro-cid-vacxi5ps><a href="/zh/examples/point/dot/normal2/" data-astro-cid-vacxi5ps>Example page</a></p><pre data-astro-cid-vacxi5ps><code data-astro-cid-vacxi5ps>import { PointLayer, Scene } from &#39;@antv/l7&#39;;
+import { GaodeMap } from &#39;@antv/l7-maps&#39;;
+
+const scene = new Scene({
+  id: &#39;map&#39;,
+  map: new GaodeMap({
+    pitch: 64.88,
+    style: &#39;dark&#39;,
+    center: [114.060288, 22.53684],
+    zoom: 15.63,
+  }),
+});
+scene.on(&#39;loaded&#39;, () =&gt; {
+  fetch(&#39;https://gw.alipayobjects.com/os/basement_prod/513add53-dcb2-4295-8860-9e7aa5236699.json&#39;)
+    .then((res) =&gt; res.json())
+    .then((data) =&gt; {
+      const pointLayer = new PointLayer({})
+        .source(data)
+        .size(2)
+        .color(&#39;h8&#39;, [
+          &#39;#0A3663&#39;,
+          &#39;#1558AC&#39;,
+          &#39;#3771D9&#39;,
+          &#39;#4D89E5&#39;,
+          &#39;#64A5D3&#39;,
+          &#39;#72BED6&#39;,
+          &#39;#83CED6&#39;,
+          &#39;#A6E1E0&#39;,
+          &#39;#B8EFE2&#39;,
+          &#39;#D7F9F0&#39;,
+        ]);
+
+      scene.addLayer(pointLayer);
+    });
+});
+</code></pre></section><div id="container" data-astro-cid-vacxi5ps></div><pre id="demo-error" hidden data-astro-cid-vacxi5ps></pre><script type="module" src="/assets/_...key_.astro_astro_type_script_index_0_lang.CR2bw3cK.js"></script></body></html>
