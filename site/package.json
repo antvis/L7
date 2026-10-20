@@ -39,7 +39,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@ant-design/icons": "^5.3.6",
-    "@antv/astro-theme-antv": "^0.1.0-beta.14",
+    "@antv/astro-theme-antv": "^0.1.0-beta.15",
     "@antv/g2": "^4.2.8",
     "@antv/l7": "workspace:*",
     "@antv/l7-composite-layers": "^0.15.0",
