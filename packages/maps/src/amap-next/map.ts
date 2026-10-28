@@ -51,6 +51,7 @@ export default class AMapService extends BaseMap<AMap.Map> {
       token,
       mapInstance,
       plugin = [],
+      version = AMAP_VERSION,
       ...rest
     } = this.config;
 
@@ -65,7 +66,7 @@ export default class AMapService extends BaseMap<AMap.Map> {
       plugin.push('Map3D');
       await AMapLoader.load({
         key: amapKey, // 申请好的Web端开发者Key，首次调用 load 时必填
-        version: AMAP_VERSION, // 指定要加载的 JSAPI 的版本
+        version: version, // 指定要加载的 JSAPI 的版本
         plugins: plugin, // 需要使用的的插件列表，如比例尺'AMap.Scale'等
       });
     }
