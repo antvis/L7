@@ -35,6 +35,9 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
   private get mapService() {
     return this.container.mapService;
   }
+  private get cameraService() {
+    return this.container.cameraService;
+  }
   private get debugService() {
     return this.container.debugService;
   }
@@ -147,7 +150,7 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
 
     const subViewports = this.cameraService.getSubViewports
       ? this.cameraService.getSubViewports()
-      : [this.cameraService];
+      : [];
 
     // The main render pass, all layers in a whole.
     this.renderService.beginFrame();
