@@ -24,6 +24,8 @@ export interface IViewport {
   getFocalDistance(): number;
   getCenter(): [number, number];
   projectFlat(lngLat: [number, number], scale?: number | undefined): [number, number];
+  subViewports?: IViewport[];
+  getSubViewports?(): IViewport[];
 }
 
 export interface ICameraService extends Omit<IViewport, 'syncWithMapCamera'> {
@@ -31,4 +33,7 @@ export interface ICameraService extends Omit<IViewport, 'syncWithMapCamera'> {
   update(viewport: IViewport): void;
   getCameraPosition(): number[];
   setViewProjectionMatrix(viewProjectionMatrix: number[] | undefined): void;
+  getSubViewports?(): IViewport[];
+  setViewport?(viewport: IViewport): void;
+  resetViewport?(): void;
 }

@@ -145,6 +145,10 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
       layer.prerender();
     }
 
+    const subViewports = this.cameraService.getSubViewports
+      ? this.cameraService.getSubViewports()
+      : [this.cameraService];
+
     // The main render pass, all layers in a whole.
     this.renderService.beginFrame();
     for (const layer of this.layerList) {
@@ -153,11 +157,23 @@ export default class LayerService extends EventEmitter<LayerServiceEvent> implem
         // 清除上一次的模版缓存
         this.renderMask(layer.masks);
       }
-      if (layer.getLayerConfig().enableMultiPassRenderer) {
-        // multiPassRender 不是同步渲染完成的
-        await layer.renderMultiPass();
+      if (subViewports.length > 1) {
+        for (let i = 0; i < subViewports.length; i++) {
+          this.cameraService.setViewport?.(subViewports[i]);
+          if (layer.getLayerConfig().enableMultiPassRenderer) {
+            await layer.renderMultiPass();
+          } else {
+            layer.render();
+          }
+        }
+        this.cameraService.resetViewport?.();
       } else {
-        layer.render();
+        if (layer.getLayerConfig().enableMultiPassRenderer) {
+          // multiPassRender 不是同步渲染完成的
+          await layer.renderMultiPass();
+        } else {
+          layer.render();
+        }
       }
     }
     this.renderService.endFrame();

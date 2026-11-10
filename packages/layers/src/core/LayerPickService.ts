@@ -16,9 +16,22 @@ export default class BaseLayerPickService implements ILayerPickService {
     // 渲染瓦片图层的拾取
     layer.hooks.beforePickingEncode.call();
     layerService.renderTileLayerMask(layer);
-    layer.renderModels({
-      ispick: true,
-    });
+
+    const cameraService = container.cameraService;
+    const subViewports = cameraService?.getSubViewports ? cameraService.getSubViewports() : [];
+    if (subViewports && subViewports.length > 1) {
+      for (const subViewport of subViewports) {
+        cameraService.setViewport?.(subViewport);
+        layer.renderModels({
+          ispick: true,
+        });
+      }
+      cameraService.resetViewport?.();
+    } else {
+      layer.renderModels({
+        ispick: true,
+      });
+    }
     layer.hooks.afterPickingEncode.call();
   }
 

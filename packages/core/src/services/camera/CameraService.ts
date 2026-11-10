@@ -3,6 +3,7 @@ import type { ICameraService, IViewport } from './ICameraService';
 
 export default class CameraService implements ICameraService {
   private viewport: IViewport;
+  private primaryViewport: IViewport;
 
   /**
    * 不使用 Viewport 计算的 VP 矩阵，例如偏移坐标系场景
@@ -28,12 +29,12 @@ export default class CameraService implements ICameraService {
    * 同步根据相机参数创建的视口
    */
   public update(viewport: IViewport) {
-    this.viewport = viewport;
+    this.primaryViewport = viewport;
+    this.setViewport(viewport);
+  }
 
-    // 计算逆矩阵
-    // this.viewMatrixInverse = (mat4.invert(
-    //   mat4.create(), (this.getViewMatrix() as unknown) as mat4,
-    // ) as unknown) as number[];
+  public setViewport(viewport: IViewport) {
+    this.viewport = viewport;
 
     this.viewMatrixInverse = mat4.create();
     mat4.invert(this.viewMatrixInverse, viewport.getViewMatrix() as mat4);
@@ -43,6 +44,22 @@ export default class CameraService implements ICameraService {
       this.viewMatrixInverse[13],
       this.viewMatrixInverse[14],
     ];
+  }
+
+  public resetViewport() {
+    if (this.primaryViewport && this.viewport !== this.primaryViewport) {
+      this.setViewport(this.primaryViewport);
+    }
+  }
+
+  public getSubViewports(): IViewport[] {
+    if (this.primaryViewport?.getSubViewports) {
+      return this.primaryViewport.getSubViewports();
+    }
+    if (this.primaryViewport?.subViewports && this.primaryViewport.subViewports.length > 0) {
+      return this.primaryViewport.subViewports;
+    }
+    return [this.primaryViewport || this.viewport];
   }
 
   public getProjectionMatrix(): number[] {
