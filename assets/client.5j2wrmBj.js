@@ -1,0 +1,1 @@
+import{t as e}from"./rolldown-runtime.BWaJ3C7D.js";import{t}from"./react-dom.DJvt7cJf.js";var n=e((e=>{var n=t();e.createRoot=n.createRoot,e.hydrateRoot=n.hydrateRoot}));export{n as t};

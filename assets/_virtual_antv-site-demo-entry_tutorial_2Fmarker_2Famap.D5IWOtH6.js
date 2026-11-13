@@ -1,0 +1,1 @@
+import{X as e,a as t,t as n,v as r}from"./src.BjoRE84l.js";import{f as i,t as a}from"./src.qO5FRARK.js";n(),a();var o=new t({id:`map`,map:new i({style:`light`,center:[121.4316962,31.26082325],zoom:12.056})});o.on(`loaded`,()=>{let t=new r({offsets:[0,20]}).setText(`hello`),n=new e().setLnglat([121.4316962,31.26082325]).setPopup(t);o.addMarker(n)});

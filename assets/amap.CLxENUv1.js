@@ -1,0 +1,1 @@
+import{a as e}from"./rolldown-runtime.BWaJ3C7D.js";import{t}from"./dist.CtyH9v3e.js";var n=e(t()),r={key:`f59bcf249433f8b05caaee19f349b3d7`,securityJsCode:`2653011adeb04230b3a26cc9a780a800`};window._AMapSecurityConfig={securityJsCode:r.securityJsCode},await n.default.load({key:r.key,version:`2.0`,plugins:[`Map3D`]});

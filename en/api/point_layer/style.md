@@ -1,0 +1,281 @@
+---
+title: "Style"
+description: "Style"
+language: "en"
+canonical: "https://l7.antv.antgroup.com/en/api/point_layer/style/"
+---
+
+[Resource index](/llms.txt)
+
+`style`The method is used to configure the style of the layer. The same layer has different`shape`graphics, different`shape`layer`style`Methods accept different parameters.
+
+```js
+layer.style({
+  opacity: 0.5,
+});
+```
+
+### common
+
+Universal`style`Parameters, parameters supported by all graphics.
+
+| style   | type     | describe             | default value |
+| ------- | -------- | -------------------- | ------------- |
+| opacity | `number` | Graphic transparency | `1`           |
+
+#### style data mapping
+
+The default style configuration is a constant value. Some configurations also support data mapping. The mapping definition is the same as the color and size parameters.
+
+- field: mapping field
+- value: mapping interval or custom callback function
+
+like:
+
+```ts
+layer.style({
+    opacity:{
+        field:'name'
+        value:[0.1,0.5,1],
+
+    }
+})
+```
+
+
+### 2D shape
+
+`shape`For plane figures, such as triangles, squares, etc.
+
+- [IFillShape](/en/api/point_layer/shape#shapefillshape-ifillshape)
+
+| style         | type                                               | Whether to support data mapping | describe                                                               | default value |
+| ------------- | -------------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------- | ------------- |
+| stroke        | `string`                                           | yes                             | Graphic border color                                                   | `#fff`        |
+| strokeWidth   | `number`                                           | no                              | Graphic border width                                                   | `0`           |
+| strokeOpacity | `number`                                           | no                              | Graphic border transparency                                            | `1`           |
+| blur          | `number`                                           | no                              | Graphic blur radius                                                    | `0`           |
+| offsets       | `[number, number]`                                 | yes                             | point offset                                                           | `[0, 0]`      |
+| rotation      | `number`                                           | yes                             | Rotation angle                                                         | `0`           |
+| anchor        | [anchorType](/en/api/point_layer/style#anchortype) | yes                             | Anchor position, controls alignment of the shape relative to the point | `center`      |
+| raisingHeight | `number`                                           | no                              | Lifting height                                                         | `0`           |
+| heightfixed   | `boolean`                                          | no                              | Point size unit                                                        | `pixel`       |
+
+#### unit
+
+- pixel default value
+- meter unit is meter
+
+```js
+type IUnit = 'pixel' | 'meter';
+```
+
+The point layer supports equal-area points. The unit of point size is meters. The size is also set through the size method.
+
+```javascript
+import { PointLayer } from '@antv/l7';
+
+const layer = PointLayer().source(data).shape('circle').size(100).color('#f00').style({
+  unit: 'meter',
+});
+```
+
+🌟 Starting from version v2.7.9, AMap, AMap 2.0, and Mapbox maps are supported
+
+### 3D column
+
+`shape`is a 3D column chart.
+
+- [IColumn](/en/api/point_layer/shape#shapecolumn-icolumn)
+
+| style       | type      | describe                                              | default value |
+| ----------- | --------- | ----------------------------------------------------- | ------------- |
+| depth       | `boolean` | Whether depth detection is enabled for graphics       | `true`        |
+| pickLight   | `boolean` | Whether to calculate lighting when picking highlights | `false`       |
+| lightEnable | `boolean` | Whether color participates in lighting calculations   | `true`        |
+| heightfixed | `boolean` | Is it a fixed height?                                 | `false`       |
+
+### 3D column linear
+
+The column chart supports configuring gradient colors, which will be overwritten after configuring the gradient effect.`layer.color`Method to set the color.
+
+| style         | type            | describe                         | default value |
+| ------------- | --------------- | -------------------------------- | ------------- |
+| sourceColor   | `color`         | Column bottom color              | `/`           |
+| targetColor   | `color`         | Column top color                 | `/`           |
+| opacityLinear | `IOpcityLinear` | Transparency gradient of pillars | `/`           |
+
+#### color
+
+```js
+const color = `rgb(200, 100, 50)`;
+const color2 = '#ff0';
+```
+
+#### opacityLinear
+
+```js
+type IDir = 'up' | 'down';
+interface IOpcityLinear = {
+  enable: boolean;
+  dir: IDir;
+}
+```
+
+### text
+
+`shape`for text.
+
+- [text](/en/api/point_layer/shape#shapefield-string-text)
+
+| style            | type                                               | describe                                   | Whether to support data mapping | default value |
+| ---------------- | -------------------------------------------------- | ------------------------------------------ | ------------------------------- | ------------- |
+| opacity          | `number`                                           | transparency                               | yes                             | `#fff`        |
+| stroke           | `string`                                           | Graphic border color                       | yes                             | `#fff`        |
+| strokeWidth      | `number`                                           | Graphic border color                       | no                              | `0`           |
+| textOffset       | `[number, number]`                                 | text offset                                | yes                             | `[0, 0]`      |
+| textAnchor       | [anchorType](/en/api/point_layer/style#anchortype) | text alignment anchor`text`                | yes                             | `center`      |
+| spacing          | `number`                                           | text spacing                               | no                              | `2`           |
+| rotation         | `number`                                           | Rotation angle                             | yes                             | `0`           |
+| padding          | `number`                                           | Text inner border width                    | no                              | `2`           |
+| halo             | `number`                                           | Text edge glow width                       | no                              | `0.5`         |
+| gamma            | `number`                                           | Text color parameters                      | no                              | `2`           |
+| fontWeight       | `string`                                           | text size                                  | no                              | `400`         |
+| fontFamily       | [font](/en/api/point_layer/style#font)             | font                                       | no                              | `sans-serif`  |
+| textAllowOverlap | `boolean`                                          | Whether text is allowed to be overwritten  | no                              | `false`       |
+| raisingHeight    | `number`                                           | Lifting height                             | no                              | `0`           |
+| heightfixed      | `boolean`                                          | Does the lifting height vary?`zoom`Variety | no                              | `false`       |
+
+#### anchorType
+
+Anchor point for shape/text alignment, controls the alignment of the shape or text relative to the coordinate point.
+
+- For 2D shapes (e.g. `circle`, `square`), use the `anchor` property to control the shape's position relative to the coordinate point
+- For text shapes, use the `textAnchor` property to control the text's position relative to the coordinate point
+
+```javascript
+export enum anchorType {
+  'CENTER' = 'center',
+  'TOP' = 'top',
+  'TOP-LEFT' = 'top-left',
+  'TOP-RIGHT' = 'top-right',
+  'BOTTOM' = 'bottom',
+  'BOTTOM-CENTER' = 'bottom-center',
+  'BOTTOM-LEFT' = 'bottom-left',
+  'BOTTOM-RIGHT' = 'bottom-right',
+  'LEFT' = 'left',
+  'RIGHT' = 'right',
+}
+```
+
+**anchor usage example (2D shape)**
+
+```javascript
+// Align the bottom of the bubble to the coordinate position, commonly used for map annotation
+const bubbleLayer = new PointLayer()
+  .source(data, {
+    parser: { type: 'json', x: 'lng', y: 'lat' },
+  })
+  .shape('circle')
+  .size(30)
+  .color('#5B8FF9')
+  .style({
+    anchor: 'bottom',
+  });
+
+// anchor supports data mapping
+const layer = new PointLayer()
+  .source(data, {
+    parser: { type: 'json', x: 'lng', y: 'lat' },
+  })
+  .shape('circle')
+  .size(20)
+  .color('#5B8FF9')
+  .style({
+    anchor: {
+      field: 'type',
+      value: ['center', 'bottom', 'top'],
+    },
+  });
+```
+
+#### font
+
+css font Family。
+
+```js
+const font = 'sans-serif';
+const font2 = 'Times New Roman';
+```
+
+### simple
+
+`shape`For simple point graphics (elves).
+
+- [simple](/en/api/point_layer/shape#shapesimple)
+
+| style         | type               | describe             | default value |
+| ------------- | ------------------ | -------------------- | ------------- |
+| stroke        | `string`           | Graphic border color | `#fff`        |
+| strokeWidth   | `number`           | Graphic border color | `0`           |
+| strokeOpacity | `number`           | Graphic border width | `1`           |
+| offsets       | `[number, number]` | point offset         | `[0, 0]`      |
+
+### icon
+
+`shape`is the icon type.
+
+- [icon](/en/api/point_layer/shape#shapeiconname-string)
+
+| style         | type               | describe                                                                                                                          | data mapping | default value |
+| ------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------- |
+| offsets       | `[number, number]` | point offset                                                                                                                      | no           | `[0, 0]`      |
+| raisingHeight | `number`           | Lifting height                                                                                                                    | no           | `0`           |
+| heightfixed   | `boolean`          | Does the lifting height vary with `zoom`                                                                                          | no           | `false`       |
+| rotation      | `number`           | Rotation angle                                                                                                                    | yes          | `0`           |
+| allowOverlap  | `boolean`          | Whether icons are allowed to overlap. When `false`, collision detection is enabled and overlapping icons are automatically hidden | no           | `true`        |
+| padding       | `[number, number]` | Extra margin `[horizontal, vertical]` applied to the collision bounding box. Only takes effect when `allowOverlap: false`         | no           | `[0, 0]`      |
+
+#### rotation
+
+The rotation angle of the icon.
+
+```js
+const imageLayer = new PointLayer({ layerType: 'fillImage' })
+  .source(data)
+  .shape('wind', (wind) => {
+    if (wind === 'up') {
+      return 'arrBlue';
+    }
+    return 'arrRed';
+  })
+  .size(15)
+  .style({
+    rotation: 0,
+  });
+```
+
+#### allowOverlap
+
+Controls whether icons on screen are allowed to overlap each other. When set to `false`, L7 runs collision detection across all icons after every map zoom or pan, and automatically hides any icon that would overlap one already placed. The behavior mirrors `textAllowOverlap` on text layers.
+
+```js
+const imageLayer = new PointLayer()
+  .source(data, { parser: { type: 'json', x: 'lng', y: 'lat' } })
+  .shape('icon')
+  .size(15)
+  .style({
+    allowOverlap: false, // enable collision avoidance
+    padding: [4, 4], // keep a 4px gap between icons
+  });
+```
+
+### radar
+
+`shape`is a radar chart.
+
+- [radar](/en/api/point_layer/shape#shaperadar)
+
+| style | type     | describe                                   | default value |
+| ----- | -------- | ------------------------------------------ | ------------- |
+| speed | `number` | The speed at which the radar chart rotates | `1`           |

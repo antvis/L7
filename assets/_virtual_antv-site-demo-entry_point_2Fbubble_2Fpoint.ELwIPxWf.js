@@ -1,0 +1,6 @@
+import{a as e,t,ut as n}from"./src.BjoRE84l.js";import{f as r,t as i}from"./src.qO5FRARK.js";t(),i();var a=new e({id:`map`,map:new r({style:`light`,center:[140.067171,36.26186],zoom:5.32,maxZoom:10})});a.on(`loaded`,()=>{let e=o();fetch(`https://gw.alipayobjects.com/os/basement_prod/d3564b06-670f-46ea-8edb-842f7010a7c6.json`).then(e=>e.json()).then(t=>{let r=new n({}).source(t).shape(`circle`).size(`mag`,[1,25]).color(`mag`,e=>e>4.5?`#5B8FF9`:`#5CCEA1`).active(!0).style({opacity:.3,strokeWidth:1});a.addLayer(r),r.on(`click`,t=>{let{lng:n,lat:r}=t.lngLat;a.setCenter([n,r],{padding:{right:120}}),e.style.right=`0px`,e.innerHTML=`
+          <p>click info</>
+          <p>featureId: ${t.featureId}</p>
+          <p>lng: ${n}</p>
+          <p>lat: ${r}</p>
+        `}),r.on(`unclick`,()=>{e.style.right=`-120px`,a.setCenter([140.067171,36.26186],{padding:{right:0}})})})});function o(){let e=document.createElement(`div`);return e.style.background=`#fff`,e.style.position=`absolute`,e.style.padding=`10px`,e.style.top=`0`,e.style.right=`-120px`,e.style.width=`100px`,e.style.height=`100%`,e.style.zIndex=`10`,e.style.transition=`0.5s`,document.getElementById(`map`).appendChild(e),e}

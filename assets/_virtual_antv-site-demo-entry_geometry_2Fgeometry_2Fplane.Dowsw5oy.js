@@ -1,0 +1,1 @@
+import{a as e,t,vt as n}from"./src.BjoRE84l.js";import{f as r,t as i}from"./src.qO5FRARK.js";t(),i();var a=new e({id:`map`,map:new r({center:[120.1025,30.2594],style:`dark`,zoom:10})});a.on(`loaded`,()=>{let e=new n().shape(`plane`).style({opacity:.8,width:.074,height:.061,center:[120.1025,30.2594]}).active(!0).color(`#ff0`);a.addLayer(e)});

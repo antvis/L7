@@ -1,0 +1,1 @@
+import{a as e,t}from"./src.BjoRE84l.js";import{f as n,t as r}from"./src.qO5FRARK.js";t(),r();var i=new e({id:`map`,map:new n({center:[105,30],zoom:2})});i.on(`loaded`,()=>{i.map.add(new window.AMap.TileLayer.Satellite)});

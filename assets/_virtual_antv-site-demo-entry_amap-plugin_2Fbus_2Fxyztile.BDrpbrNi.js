@@ -1,0 +1,1 @@
+import{a as e,t}from"./src.BjoRE84l.js";import{f as n,t as r}from"./src.qO5FRARK.js";t(),r();var i=new e({id:`map`,map:new n({center:[105,30],zoom:2})});i.on(`loaded`,()=>{let e=new window.AMap.TileLayer({getTileUrl:`https://wprd0{1,2,3,4}.is.autonavi.com/appmaptile?x=[x]&y=[y]&z=[z]&size=1&scl=1&style=8&ltype=11`,zIndex:100});i.map.add(e)});

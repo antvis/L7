@@ -1,0 +1,1 @@
+import{a as e,t,ut as n}from"./src.BjoRE84l.js";import{f as r,t as i}from"./src.qO5FRARK.js";t(),i();var a=new e({id:`map`,map:new r({center:[120,30],zoom:13})}),o=new n().source([{lng:120,lat:30}],{parser:{type:`json`,x:`lng`,y:`lat`}}).shape(`radar`).size(100).color(`#d00`).style({speed:5}).animate(!0);a.on(`loaded`,()=>{a.addLayer(o)});

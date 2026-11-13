@@ -1,0 +1,1 @@
+import{a as e,t}from"./src.BjoRE84l.js";import{f as n,t as r}from"./src.qO5FRARK.js";t(),r(),new e({id:`map`,map:new n({style:`light`,center:[107.054293,35.246265],zoom:4.056})});
