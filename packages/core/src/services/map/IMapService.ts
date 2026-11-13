@@ -307,6 +307,7 @@ export interface IMapCamera {
   cameraPosition?: [number, number, number];
   up?: [number, number, number];
   lookAt?: [number, number, number];
+  renderWorldCopies?: boolean;
 }
 export interface ICameraOptions {
   padding:

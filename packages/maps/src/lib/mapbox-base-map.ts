@@ -315,6 +315,10 @@ export default abstract class MapboxBaseMap<T>
     const { lat, lng } = this.map.getCenter();
     // Tip: 统一触发地图变化事件
     this.emit('mapchange');
+    const renderWorldCopies =
+      typeof (this.map as any).getRenderWorldCopies === 'function'
+        ? (this.map as any).getRenderWorldCopies()
+        : ((this.config as any)?.renderWorldCopies ?? true);
     // resync
     this.viewport.syncWithMapCamera({
       bearing: this.map.getBearing(),
@@ -325,6 +329,7 @@ export default abstract class MapboxBaseMap<T>
       zoom: this.map.getZoom() - this.zoomOffset,
       // mapbox 中固定相机高度为 viewport 高度的 1.5 倍
       cameraHeight: 0,
+      renderWorldCopies,
     });
 
     this.updateCoordinateSystemService();
