@@ -11,6 +11,8 @@ Popup 是用于在地图上指定经纬度位置，展示自定义内容的气�
 
 Popup 的锚点位置是由经纬度来表达的，当地图缩放/平移时，Popup 会自动计算相对于当前地图的坐标并且自动位移。换句话说，如果开发者需要在地图的**指定经纬度位置**展示信息气泡，可以考虑使用 Popup 组件来实现对应效果。
 
+> **版本说明**：自 `2.28.14` 版本起，`Popup` 组件拆分至 `@antv/l7-component` 包中。若在项目中采用子包按需引入，可使用 `import { Popup } from '@antv/l7-component'`；全量主包 `@antv/l7` 亦统一导出该组件。
+
 开发者可以自定义 Popup 主体展示内容：
 
 - 纯文本可以通过 `text` 配置或者 `setText` 方法控制 Popup 的展示文本。
@@ -22,6 +24,8 @@ Popup 的锚点位置是由经纬度来表达的，当地图缩放/平移时，P
 
 ```ts
 import { Scene, Popup } from '@antv/l7';
+// 若采用子包按需引入，可从 '@antv/l7-component' 导入：
+// import { Popup } from '@antv/l7-component';
 
 const scene = new Scene({
   id: 'map',
